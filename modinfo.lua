@@ -1,4 +1,4 @@
-name = "[BETA]󰀕 Uncompromising Mode"
+name = "[BETA]󰀀 Uncompromising Mode"
 description = 
 [[
 󰀔 [ Version 1.0.0.1 : "Calm Before the Storm" ]
