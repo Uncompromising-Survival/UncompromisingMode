@@ -1,24 +1,23 @@
-name = "[DEV] 󰀕 Uncompromising Mode"
+name = "[BETA] 󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.1.5 : "The Hooded Forest" ]
+󰀔 [ Version 1-b: "Under The Weather, Part I: Calm Before The Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
-Prominent features:
-- Rebalances and tweaks to nearly everything
-- Random Night Events
-- New seasonal weather events
-- A new overworld biome
-- Character tweaks and rebalances
-- More nightmare creatures
-- A bunch of new mobs, items, and bosses
+Prominent beta features:
+- A couple of boss reworks
+- A new Veterans Curse item for one of the reworked bosses.
+- New tools for sailing (and ocean related activities).
+- Visual updates for the Hooded Forest.
+- Other mystery changes that set up our next big update, "Under the Weather, Part 1".
+- And the usual miscellaneous changes and features.
 
-󰀏 NEXT UPDATE: The Combat Update, which overhauls day-to-day fighting.]]
+󰀏 NEXT UPDATE: Under the Weather, Part II.]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "1.1.5"
+version = "Under The Weather Beta v1-b"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -178,7 +177,7 @@ configuration_options =
 	BinaryConfig("wormwood_fire", "Extra Flamable Wormwood", "Wormwood is highly flameable, like in Hamlet.", false),
 	BinaryConfig("wormwood_plants", "Prevent Infinite Sanity Loop", "Increases the sanity loss from digging plants.", true),
 	BinaryConfig("wendy", "Nerfed Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
-	BinaryConfig("wx78", "Tweaked WX-78", "No longer heals from lightning", false),
+	BinaryConfig("wx78", "Tweaked WX-78", "No longer heals from lightning", true),
 	BinaryConfig("woodie", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
 	SkipSpace(),
 ------------------------------
@@ -365,7 +364,6 @@ configuration_options =
 		},
 		default = 1,
 	},
-	--BinaryConfig("boatturning", "Boat Turning", "Enables the boat turning logic, where the whole boat turns, instead of just the masts.", false), -- :(
 -----------------------------
 -- Food --
 -----------------------------
@@ -535,7 +533,6 @@ configuration_options =
 	BinaryConfig("hungryfrogs", "Hungry Frogs", "Frogs eat anything left on the floor.", true),
 	BinaryConfig("cowardfrogs", "Frog Anti-cheese", "Frogs flee from bosses to prevent cheesing.", true),
 	BinaryConfig("toads", "Toads", "Toads replace frogs in the second autumn and release poisonous clouds on death.", true),
-	BinaryConfig("fiendforcedmetodothis", "Slurtle Tweaks", "Slurtles attack faster, have less health and drop Shellmets more often.", true),
 	SkipSpace(),
 
 -----------------------------
@@ -560,7 +557,7 @@ configuration_options =
 	BinaryConfig("harder_dragonfly", "Harder Dragonfly", "Dragonfly now has knockback on hit.", true),
 	BinaryConfig("harder_lavae", "Exploding Lavae", "Lavae will now leave exploding paste upon death, knocks holes in walls.", true),
 	BinaryConfig("harder_beequeen", "Harder Bee Queen", "Bee Queen now has AOE attached to her main attack.", true),
-	BinaryConfig("rework_minotaur", "Ancient Guardian Rework", "The Ancient Guardian's fight is expanded, includes more attacks.", true),
+	BinaryConfig("rework_minotaur_disabled", "Ancient Guardian Rework", "[CURRENTLY BROKEN] The Ancient Guardian's fight is reworked, includes more attacks and a stunning mechanic.", false),
 	BinaryConfig("reworked_eyes", "Reworked Eyes of Terror", "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
 	SkipSpace(),
 
