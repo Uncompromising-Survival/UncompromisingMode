@@ -110,7 +110,7 @@ end
 
 -- Clears biomes, selects main biomes and then creates inactive biomes.
 function AreaHandler:FullGenerate()
-    self:Clear()
+    --self:Clear()
     self:SelectMainBiomes()
     self:GenerateInactiveBiomes()
 end

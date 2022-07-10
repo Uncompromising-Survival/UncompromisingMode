@@ -6,9 +6,9 @@ description =
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Prominent features:
-- Winky, The Vile Vermin! April Fools... or so we thought.
-- Reworked Rat Raids, Reworked Rat AI, New Rats, and Items.
-- New Night Terrors (RNE), with new Shadow Creatures, Music, collectible masks.
+- Reworks to the Bee Queen and Ancient Guardian. New Vets Curse item from Bee Queen.
+- New setpieces, and mysteries at sea.
+- Reed Armor, Shark Suit Armor, Harpoons, Magnerang, Fishing Net, and much more!
 - Tooltips for Character and Item changes.
 - Alternate Skins available for the Cursed Antler, Feather Frock, Plague Mask, and Soul Amulet.
 - Brand New custom attacks for all Eye of Terror bosses.

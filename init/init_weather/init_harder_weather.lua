@@ -44,7 +44,7 @@ local function GenerateBiomes()
 end
 
 local function GenerateInactiveBiomes()
-	TheWorld.components.um_areahandler:GenerateInactiveBiomes()
+	TheWorld.components.um_areahandler:FullGenerate()
 end
 
 -----------------------------------------------------------------
@@ -80,8 +80,8 @@ env.AddPrefabPostInit("forest", function(inst)
 		inst:AddComponent("snowstorminitiator")
 	end
 
-	inst:WatchWorldState("isspring", GenerateBiomes)
-	inst:WatchWorldState("issummer", GenerateInactiveBiomes)
+	--inst:WatchWorldState("isspring", GenerateBiomes)
+	--inst:WatchWorldState("issummer", GenerateInactiveBiomes)
 
 	inst:DoTaskInTime(0.1, GenerateInactiveBiomes)
 end)
