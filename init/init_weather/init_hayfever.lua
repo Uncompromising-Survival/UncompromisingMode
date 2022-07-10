@@ -25,7 +25,7 @@ env.AddPrefabPostInit("forest", function(inst)
         return
     end
 	
-	--inst:AddComponent("UM_springweather")
+	inst:AddComponent("hayfever_tracker")
 	--inst:AddComponent("monsoons")
 	--inst:WatchWorldState("isspring", RandomThreatSpring)
 	--inst:WatchWorldState("issummer", UndoRandomThreatSpring)
@@ -36,7 +36,7 @@ env.AddPrefabPostInit("cave", function(inst)
         return
     end
 	
-	--inst:AddComponent("UM_springweather") --Shouldn't do this, need to add the receiver component instead
+	inst:AddComponent("hayfever_tracker")
 	
 end)
 
@@ -48,8 +48,8 @@ local function HayFeverEater(inst, data)
 		0
 	
 	if data.food ~= nil and data.food:HasTag("antihistamine") and inst.components.hayfever and inst.components.hayfever.enabled then
-		print(SugarBuff)
-		print(Antihistamine)
+		--print(SugarBuff)
+		--print(Antihistamine)
 		
 		inst.components.hayfever:SetNextSneezeTime(Antihistamine + SugarBuff)			
 	end	

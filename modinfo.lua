@@ -1,23 +1,24 @@
-name = "[BETA] 󰀀 Uncompromising Mode"
-description =
+name = "[BETA]󰀕 Uncompromising Mode"
+description = 
 [[
-󰀔 [ Version 1-b: "Under The Weather, Part I: Calm Before The Storm" ]
+󰀔 [ Version 1.0.0.1 : "Calm Before the Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
-Prominent beta features:
-- A couple of boss reworks
-- A new Veterans Curse item for one of the reworked bosses.
-- New tools for sailing (and ocean related activities).
-- Visual updates for the Hooded Forest.
-- Other mystery changes that set up our next big update, "Under the Weather, Part 1".
-- And the usual miscellaneous changes and features.
+Prominent features:
+- Winky, The Vile Vermin! April Fools... or so we thought.
+- Reworked Rat Raids, Reworked Rat AI, New Rats, and Items.
+- New Night Terrors (RNE), with new Shadow Creatures, Music, collectible masks.
+- Tooltips for Character and Item changes.
+- Alternate Skins available for the Cursed Antler, Feather Frock, Plague Mask, and Soul Amulet.
+- Brand New custom attacks for all Eye of Terror bosses.
+- And many more changes, there are too many to list!
 
-󰀏 NEXT UPDATE: Under the Weather, Part II.]]
+󰀏 NEXT UPDATE: Under the Weather, Part I.]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under The Weather Beta v1-b"
+version = "Calm Before the Storm v1.0.0.1"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 

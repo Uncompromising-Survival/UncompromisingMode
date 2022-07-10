@@ -119,10 +119,10 @@ local require = GLOBAL.require
 		modimport("init/init_weather/init_snowstorm")
 	end
 	
-	--if GetModConfigData("hayfever_") then
-		modimport("init/init_weather/init_springweather")
-		--modimport("init/init_creatures/init_sneeze_hitters")
-	--end
+	if GetModConfigData("hayfever") then
+		modimport("init/init_weather/init_hayfever")
+		modimport("init/init_creatures/init_sneeze_hitters")
+	end
 	
 	modimport("init/init_durability")
 	
@@ -178,10 +178,10 @@ local require = GLOBAL.require
 		modimport("init/init_character_changes/wanda")
 		modimport("init/init_character_changes/wortox")
 	
+		modimport("init/init_character_changes/wormwood")
 	if GetModConfigData("waxwell") then
 		modimport("init/init_character_changes/waxwell")
 	end
-	
 	if GetModConfigData("hardcore") then
 		modimport("init/init_gamemodes/init_hardcore")
 	end
