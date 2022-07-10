@@ -326,11 +326,11 @@ local states =
         },
     },
     State{
-        name = "death",
+        name = "death_true",
         tags = {"busy"},
         
         onenter = function(inst)
-			TheNet:Announce("Code Ran")
+			--TheNet:Announce("Code Ran")
             inst.SoundEmitter:PlaySound("UCSounds/Scorpion/death")
 			inst.Physics:Stop()
             inst.AnimState:PlayAnimation("death_pre")
@@ -414,12 +414,10 @@ CommonStates.AddCombatStates(states,
         TimeEvent(3*FRAMES, function(inst) inst:PushEvent("wingdown")	end),
     },
 
-    --[[deathtimeline =
+    deathtimeline =
     {
-        TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/death") end),
-        TimeEvent(4*FRAMES, function(inst) inst:PushEvent("wingdown")	end),
-		TimeEvent(45*FRAMES, Explode),
-    },]]
+        TimeEvent(0*FRAMES, function(inst) inst.sg:GoToState("death_true") end),
+    },
 })
 
 CommonStates.AddFrozenStates(states)
