@@ -39,8 +39,8 @@ end
 local actionhandlers =
 {
     ActionHandler(ACTIONS.GOHOME, "flybackup"),
-    ActionHandler(ACTIONS.EAT, "eat_enter"),
-    ActionHandler(ACTIONS.PICKUP, "eat_enter")
+    ActionHandler(ACTIONS.EAT, "eat"),
+    ActionHandler(ACTIONS.PICKUP, "eat")
 }
 
 local events=
@@ -206,7 +206,7 @@ local states =
 
     State{
         name = "eat",
-        tags = {"busy"},
+        tags = {"busy","INLIMBO", "notarget"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -325,24 +325,6 @@ local states =
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end)
         },
     },
-    State{
-        name = "death_true",
-        tags = {"busy"},
-        
-        onenter = function(inst)
-			--TheNet:Announce("Code Ran")
-            inst.SoundEmitter:PlaySound("UCSounds/Scorpion/death")
-			inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("death_pre")
-			inst.AnimState:PushAnimation("death_loop")
-        end,
-		timeline = {
-			TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/death") end),
-			TimeEvent(4*FRAMES, function(inst) inst:PushEvent("wingdown")	end),
-			TimeEvent(45*FRAMES, Explode),			
-		},
-
-    },	
 }
 
 local walkanims = 
@@ -403,8 +385,8 @@ CommonStates.AddCombatStates(states,
         TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
         TimeEvent(8* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/bite") end),
         TimeEvent(14*FRAMES, function(inst) 
-        inst.components.combat:DoAttack()
-        inst:PushEvent("wingdown")
+			inst.components.combat:DoAttack()
+			inst:PushEvent("wingdown")
         end),
     },
 
@@ -416,7 +398,9 @@ CommonStates.AddCombatStates(states,
 
     deathtimeline =
     {
-        TimeEvent(0*FRAMES, function(inst) inst.sg:GoToState("death_true") end),
+        TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/death") end),
+        TimeEvent(4*FRAMES, function(inst) inst:PushEvent("wingdown")	end),
+		TimeEvent(45*FRAMES, Explode),
     },
 })
 
