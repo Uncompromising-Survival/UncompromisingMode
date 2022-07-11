@@ -192,8 +192,6 @@ local function fn(type_name, is_large)
 
     inst.AnimState:PlayAnimation("idle")
 
-    MakeInventoryFloatable(inst, "med", 0.33, {1.1, 0.9, 1.1})
-    inst.components.floater.bob_percent = 0
 
     inst:SetPrefabNameOverride("DRIFTWOOD_TREE")
 
