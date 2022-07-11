@@ -162,6 +162,8 @@ if GetModConfigData("worldgenmastertoggle") then
             else
                 return math.random(min, max)
             end
+        else
+            return 0
         end
     end
 
