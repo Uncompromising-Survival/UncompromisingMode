@@ -400,7 +400,7 @@ ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
 AddRecipe2(
     "winona_toolbox",
-    {Ingredient("um_copper_pipe", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
+    {Ingredient("boards", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
     TECH.NONE,
     {builder_tag = "handyperson"},
     {"CONTAINERS", "CHARACTER"}
@@ -642,6 +642,7 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
+--[[
 AddRecipe2(
     "steeringwheel_copper",
     {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
@@ -665,7 +666,7 @@ AddRecipe2(--unsure...
     {numtogive = 2},
     {"REFINE"}
 )
-ChangeSortKey("trinket_6", "transistor", "REFINE", true)
+ChangeSortKey("trinket_6", "transistor", "REFINE", true)]]
 
 STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
