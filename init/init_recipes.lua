@@ -355,7 +355,7 @@ ChangeSortKey("uncompromising_harpoon", "uncompromising_fishingnet", "TOOLS", tr
 
 AddRecipe2(
     "uncompromising_harpoon_heavy",
-    {Ingredient("twigs", 2), Ingredient("gold", 3), Ingredient("flint", 1)},
+    {Ingredient("twigs", 2), Ingredient("goldnugget", 3), Ingredient("flint", 1)},
     TECH.SCIENCE_TWO,
     nil,
     {"TOOLS", "FISHING"}
