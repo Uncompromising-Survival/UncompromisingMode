@@ -189,6 +189,10 @@ local function slobberfn()
 	
 	inst.lobber = nil
 	
+    if inst.type == "sludge" then
+        inst:SetPrefabNameOverride("BURNING_SLUDGE")
+    end
+
 	inst.coolingtime = 8
 
     return inst
@@ -344,5 +348,6 @@ end
 
 return Prefab( "lavaspit", fn, assets),
 		Prefab( "lavaspit_slobber", slobberfn, assets),
+        Prefab("lavaspit_sludge", slobberfn, assets), --because FOR SOME REASON I can't use SetPrefabNameOverride...
 		Prefab("lavaspit_projectile", projectilefn),
 		Prefab("lavaspit_target", projectiletargetfn)
