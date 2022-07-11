@@ -19,7 +19,7 @@ local function StartCollide(inst)
 end
 
 local function ArtificialLocomote(inst,destination,speed)
-	if destination and speed then
+	if destination and speed and inst:IsValid() then
 		speed = speed*FRAMES
 		local hypoten = math.sqrt(inst:GetDistanceSqToPoint(destination))
 		local x,y,z = inst.Transform:GetWorldPosition()
@@ -260,7 +260,7 @@ local states = {
 					stabbed.components.combat:GetAttacked(inst,mult*75)
 				end
 			end
-			if inst:GetDistanceSqToPoint(inst.chargePoint) < 1 then
+			if inst:IsValid() and inst:GetDistanceSqToPoint(inst.chargePoint) < 1 then
 				inst.holdPoint = inst.chargePoint
 				inst.sg:GoToState("hold_position")
 			end
@@ -320,7 +320,7 @@ local states = {
 			end]]
 			local queen = inst.components.entitytracker:GetEntity("queen")
 			local x,y,z = inst.Transform:GetWorldPosition()
-			if inst.beeHolder and queen and math.sqrt(queen:GetDistanceSqToInst(inst.beeHolder)) < 20 then
+			if inst.beeHolder and queen and queen:IsValid() and math.sqrt(queen:GetDistanceSqToInst(inst.beeHolder)) < 20 then
 				local x,y,z = inst.beeHolder.Transform:GetWorldPosition()
 				if x == x and z == z then
 					inst.Transform:SetPosition(x,y,z)
@@ -353,13 +353,13 @@ local states = {
 				local position = inst.beeHolder:GetPosition()
 				inst:ForceFacePoint(inst.beeHolder:GetPosition())
 				ArtificialLocomote(inst,position,inst.chargeSpeed)
-				if inst:GetDistanceSqToPoint(position) < 1 then
+				if inst:IsValid() and inst:GetDistanceSqToPoint(position) < 1 then
 					inst.sg:GoToState("hold_position_ring")
 				end			
 			else
 				inst:ForceFacePoint(inst.rallyPoint)
 				ArtificialLocomote(inst,inst.rallyPoint,inst.chargeSpeed)
-				if inst.rallyPoint and inst:GetDistanceSqToPoint(inst.rallyPoint) and inst:GetDistanceSqToPoint(inst.rallyPoint) < 1 then
+				if inst.rallyPoint and inst:IsValid() and inst:GetDistanceSqToPoint(inst.rallyPoint) and inst:GetDistanceSqToPoint(inst.rallyPoint) < 1 then
 					inst.holdPoint = inst.rallyPoint
 					inst.sg:GoToState("hold_position")
 				end
@@ -369,7 +369,7 @@ local states = {
 		onexit = function(inst)
 			StartCollide(inst)
 			inst.brain:Start()
-			if inst.rallyPoint and inst:GetDistanceSqToPoint(inst.rallyPoint) > 1 then
+			if inst.rallyPoint and inst:IsValid() and inst:GetDistanceSqToPoint(inst.rallyPoint) > 1 then
 				--inst:DoTaskInTime(0.05,function(inst) TheNet:Announce("Tried to go to"..inst.sg.currentstate.name) end)
 				inst:DoTaskInTime(0.1,function(inst) 
 				inst.sg:GoToState("rally_at_point") end)
