@@ -9,10 +9,7 @@ Prominent features:
 - Reworks to the Bee Queen and Ancient Guardian. New Vets Curse item from Bee Queen.
 - New setpieces, and mysteries at sea.
 - Reed Armor, Shark Suit Armor, Harpoons, Magnerang, Fishing Net, and much more!
-- Tooltips for Character and Item changes.
-- Alternate Skins available for the Cursed Antler, Feather Frock, Plague Mask, and Soul Amulet.
-- Brand New custom attacks for all Eye of Terror bosses.
-- And many more changes, there are too many to list!
+- Remember, most of the new content is using placeholder images and animations!
 
 󰀏 NEXT UPDATE: Under the Weather, Part I.]]
 
