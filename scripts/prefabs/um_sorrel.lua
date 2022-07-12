@@ -100,10 +100,13 @@ local function fn()
 
     inst:WatchWorldState("cycles", bloom)
 
-    inst:AddComponent("workable")
+    MakeMediumBurnable(inst)
+    MakeSmallPropagator(inst)
+
+    --[[inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(onworkfinished)
+    inst.components.workable:SetOnFinishCallback(onworkfinished)]]
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('sorrel')
