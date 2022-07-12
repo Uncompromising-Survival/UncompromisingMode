@@ -5,7 +5,11 @@ env.AddPrefabPostInit("minerhat", function(inst)
     if inst.components.upgradeable ~= nil then
         local numupgrades = inst.components.upgradeable.numupgrades
         if numupgrades > 0 then
-            inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
+            inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")
+            inst.components.upgradeable.upgradetype = nil
+            inst.components.fueled.accepting = false
+            inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
+            inst:AddTag("electricaltool")
         end
     end
 
@@ -28,10 +32,15 @@ env.AddPrefabPostInit("minerhat", function(inst)
 
         inst.components.equippable.onunequipfn = function(inst, owner)
             if owner.components.upgrademoduleowner == nil then
-                local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-
-                if (item ~= nil and not item:HasTag("electricaltool")) or item == nil then
-                    owner:RemoveTag("batteryuser")
+                local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HAMDS)
+                if item ~= nil then
+                    if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
+                        owner:RemoveTag("batteryuser")
+                    end
+                else
+                    if owner:HasTag("batteryuser") then
+                        owner:RemoveTag("batteryuser")
+                    end
                 end
             end
 
@@ -40,7 +49,7 @@ env.AddPrefabPostInit("minerhat", function(inst)
             end
         end
     end
-    
+
     local function OnUpgrade(inst)
         if inst ~= nil then
             inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")

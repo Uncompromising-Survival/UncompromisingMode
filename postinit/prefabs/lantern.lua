@@ -30,9 +30,14 @@ env.AddPrefabPostInit("lantern", function(inst)
 
             if owner.components.upgrademoduleowner == nil then
                 local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-
-                if (item ~= nil and not item:HasTag("electricaltool")) or item == nil then
-                    owner:RemoveTag("batteryuser")
+                if item ~= nil then
+                    if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
+                        owner:RemoveTag("batteryuser")
+                    end
+                else
+                    if owner:HasTag("batteryuser") then
+                        owner:RemoveTag("batteryuser")
+                    end
                 end
             end
 

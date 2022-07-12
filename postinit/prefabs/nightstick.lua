@@ -135,7 +135,16 @@ local function onunequip(inst, owner)
 	owner:ListenForEvent("lightningstrike", nil)
 
 	if owner.components.upgrademoduleowner == nil then
-		owner:RemoveTag("batteryuser")          -- from batteryuser component
+		local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+		if item ~= nil then
+			if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
+				owner:RemoveTag("batteryuser")
+			end
+		else
+			if owner:HasTag("batteryuser") then
+				owner:RemoveTag("batteryuser")
+			end
+		end
 	end
 end
 
