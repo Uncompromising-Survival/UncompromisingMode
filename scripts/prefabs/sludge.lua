@@ -52,7 +52,7 @@ local function sludge_fn()
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
-    inst.components.fuel:SetOnTakenFn(ontaken)-- :)
+    --inst.components.fuel:SetOnTakenFn(ontaken)-- :)
 
     inst:AddComponent("boatpatch")
     inst.components.boatpatch.patch_type = "sludge"
