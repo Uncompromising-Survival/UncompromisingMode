@@ -431,9 +431,9 @@ ChangeSortKey("wardrobe", "icebox", "CONTAINERS", false)
 
 AddRecipe2(
     "boatpatch_sludge",
-    {Ingredient("sludge", 1), Ingredient("driftwood_log", 1)},
+    {Ingredient("sludge_oil", 1), Ingredient("driftwood_log", 2)},
     TECH.NONE,
-    {numtogive = 3},
+    nil,
     {"SEAFARING"}
 )
 ChangeSortKey("boatpatch_sludge", "boatpatch", "SEAFARING", false)
@@ -475,7 +475,13 @@ ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "WEAPONS", true)
 --)
 --ChangeSortKey("sludge_oil", false)
 
-AddRecipe2("armor_reed_um", {Ingredient("cutreeds", 8), Ingredient("twigs", 3)}, TECH.NONE, nil, {"ARMOUR", "RAIN"})
+AddRecipe2(
+    "armor_reed_um",
+    {Ingredient("cutreeds", 8), Ingredient("twigs", 3)},
+    TECH.NONE,
+    nil,
+    {"ARMOUR", "RAIN"}
+)
 ChangeSortKey("armor_reed_um", "armorgrass", "ARMOUR", true)
 ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
 
