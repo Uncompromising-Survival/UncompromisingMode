@@ -9,7 +9,7 @@ end
 local function CalculateNextHoleTime(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local scorpionHoles = #TheSim:FindEntities(x,y,z,30,{"scorpionhole"})
-	local timermult = 8*60*1+8*60*2*scorpionHoles
+	local timermult = 12*60*1+8*60*2*scorpionHoles
 	inst.components.timer:StartTimer("moreden", timermult)
 end
 
@@ -122,7 +122,7 @@ local function scorpionhole_organizer_fn()
 	
 	inst.CreateScorpzone = CreateScorpzone
 	
-	inst:DoTaskInTime(0,CreateScorpzone)
+	--inst:DoTaskInTime(0,CreateScorpzone)
 	
     return inst
 end
