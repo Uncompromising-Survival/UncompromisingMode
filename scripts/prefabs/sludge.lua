@@ -3,6 +3,25 @@ local assets =
     Asset("ANIM", "anim/charcoal.zip"),
 }
 
+local function ontaken(inst, taker)
+    print("ontaken")--THIS ISNT EVEN PRINTING, WHAT.
+    local bottle = SpawnPrefab("messagebottleempty")
+
+    local owner = taker ~= nil and 
+					taker.components.inventoryitem and 
+					taker.components.inventoryitem:GetGrandOwner() or nil
+	
+	if owner ~= nil and owner.components.inventory ~= nil then
+		local x,y,z = owner.Transform:GetWorldPosition()
+		bottle.Transform:SetPosition(x,y,z)
+        owner.components.inventory:GiveItem(bottle)
+	else
+		Launch2(bottle, taker, 1.5, 1, 3, .75)
+	end
+
+    --inst:Remove()
+end
+
 local function sludge_fn()
     local inst = CreateEntity()
 
@@ -33,6 +52,7 @@ local function sludge_fn()
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+    inst.components.fuel:SetOnTakenFn(ontaken)-- :)
 
     inst:AddComponent("boatpatch")
     inst.components.boatpatch.patch_type = "sludge"
@@ -54,20 +74,6 @@ local function sludge_fn()
     inst:AddComponent("inventoryitem")
 
     return inst
-end
-
-local function ontaken(inst, taker)
-    print("ontaken")--THIS ISNT EVEN PRINTING, WHAT.
-    local owner = inst.components.inventoryitem:GetGrandOwner()
-    print(owner)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local bottle = SpawnPrefab("messagebottleempty")
-
-    bottle.Transform:SetPosition(x,y,z)
-    if owner ~= nil then
-        owner.components.inventory:GiveItem(bottle)
-    end
-    --inst:Remove()
 end
 
 local function onactiveitem(item, inst)
@@ -103,7 +109,7 @@ local function oil_fn()
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
     inst.components.fuel.fueltype = FUELTYPE.CAVE
-    inst.components.fuel:SetOnTakenFn(ontaken)--on taken isn't working, why?!
+    inst.components.fuel:SetOnTakenFn(ontaken)-- :)
 
     MakeSmallBurnable(inst, TUNING.LARGE_BURNTIME)
     MakeSmallPropagator(inst)

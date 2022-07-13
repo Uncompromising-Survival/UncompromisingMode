@@ -38,53 +38,70 @@ local function UpdateLight(inst)
 	local boat = TheWorld.Map:GetPlatformAtPoint(x, z)
 	
 	if boat ~= nil and boat:HasTag("boat") and boat.components ~= nil and boat.components.boatphysics ~= nil then
-		velocity = boat.components.boatphysics:GetVelocity() * 2.5
+		velocity = boat.components.boatphysics:GetVelocity()
 	end
 	
 	if TheWorld.components.sandstorms then
-		sandstorm = (TheWorld.components.sandstorms ~= nil and TheWorld.components.sandstorms:IsSandstormActive()) and TheWorld.Map:FindVisualNodeAtPoint(x, y, z, "sandstorm") and 5 or 0
+		sandstorm = (TheWorld.components.sandstorms ~= nil and TheWorld.components.sandstorms:IsSandstormActive()) and TheWorld.Map:FindVisualNodeAtPoint(x, y, z, "sandstorm") and 2 or 0
 	end
 	
-	local snowstorm = ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and 5 or 0
+	local snowstorm = ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and 2 or 0
+	
+	print(velocity)
 	
 	local finalnums = velocity + sandstorm + snowstorm
 	
-	if inst.lightlevel > finalnums then
-		inst.lightlevel = inst.lightlevel - 0.05
-	elseif inst.lightlevel < finalnums then
-		inst.lightlevel = inst.lightlevel + 0.05
+	if finalnums >= 1.5 then
+		if not inst.AnimState:IsCurrentAnimation("spin") then
+			inst.AnimState:PlayAnimation("spin", true)
+		end
+		if inst.powerlevel > 1000 then
+			inst.powerlevel = 1000
+		elseif inst.powerlevel < 400 then
+			inst.powerlevel = inst.powerlevel + finalnums
+		elseif inst.powerlevel > 400 and finalnums >= 3 then
+			inst.powerlevel = inst.powerlevel + finalnums
+		end
+	elseif inst.powerlevel > 0 then
+		if not inst.AnimState:IsCurrentAnimation("idle") then
+			inst.AnimState:PlayAnimation("idle")
+		end
+		
+		inst.powerlevel = inst.powerlevel - .5
+	elseif inst.powerlevel < 0 then
+		inst.powerlevel = 0
+	end
+	
+	if inst.powerlevel < 0 then
+		inst.lightlevel = 0
+	else
+		inst.lightlevel = inst.powerlevel / 800
 	end
 	
 	if inst.lightlevel < 0 then
 		inst.lightlevel = 0
+	elseif inst.lightlevel > 1 then
+		inst.lightlevel = 1
 	end
 	
-	local lerpval = Lerp(.4, .7, inst.lightlevel / 7)
-	
+	local lerpval = Lerp(.4, .7, inst.lightlevel)
+	print(lerpval)
 	if lerpval > .7 then
 		lerpval = .7
 	end
 	
 	if inst.lightlevel > 0 then
 		inst.Light:SetIntensity(lerpval)
-		inst.Light:SetRadius(inst.lightlevel * 1.5)
+		inst.Light:SetRadius(inst.lightlevel * 5)
 		inst.Light:SetFalloff(.9)
-		
-		if not inst.AnimState:IsCurrentAnimation("spin") then
-			inst.AnimState:PlayAnimation("spin", true)
-		end
 	else
 		--inst.Light:Enable(false)
 		inst.Light:SetIntensity(lerpval)
-		inst.Light:SetRadius(inst.lightlevel * 1.5)
+		inst.Light:SetRadius(inst.lightlevel * 5)
 		inst.Light:SetFalloff(.9)
-	
-		if not inst.AnimState:IsCurrentAnimation("idle") then
-			inst.AnimState:PlayAnimation("idle")
-		end
 	end
 	
-	
+	print(inst.powerlevel)
 end
 
 local function fn()
@@ -115,6 +132,9 @@ local function fn()
     end
 	
 	inst.lightlevel = 0
+	inst.powerlevel = 0
+	inst.lightlevel = 0
+	inst.maxlevel = 0
 	
     inst:AddComponent("lootdropper")
 	
