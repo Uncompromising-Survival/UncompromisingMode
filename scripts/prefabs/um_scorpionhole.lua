@@ -14,7 +14,7 @@ local function set_stage(inst, workleft, play_grow_sound)
             or LARGE
 
     inst.components.childspawner:SetMaxChildren(3)
-    inst.components.childspawner:SetMaxEmergencyChildren(2)
+    inst.components.childspawner:SetMaxEmergencyChildren(1)
     inst.components.childspawner:SetEmergencyRadius(TUNING.MOONSPIDERDEN_EMERGENCY_RADIUS[new_stage])
 
     if inst._stage ~= nil and inst._stage == (new_stage - 1) then
@@ -277,7 +277,7 @@ local function scorpionhole_fn()
 	
     --inst.MiniMapEntity:SetIcon("spidermoonden.png")
 
-	inst:AddTag("scorpionhole")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -285,7 +285,7 @@ local function scorpionhole_fn()
     end
 
     inst:AddComponent("inspectable")
-
+	inst:AddTag("scorpionhole")
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetMaxWork(4)
