@@ -467,12 +467,12 @@ AddRecipe2(
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "SEAFARING", true)
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "WEAPONS", true)
 
---AddRecipe2(
---  "sludge_oil",
---  {Ingredient("sludge", 4), Ingredient("cutstone", 1)},
---  TECH.SCIENCE_TWO,
---  {"REFINE"}
---)
+AddRecipe2(
+  "sludge_oil",
+  {Ingredient("sludge", 3), Ingredient("messagebottleempty", 1)},
+  TECH.SCIENCE_TWO,
+  {"REFINE"}
+)
 --ChangeSortKey("sludge_oil", false)
 
 AddRecipe2(
