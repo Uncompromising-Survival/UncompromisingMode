@@ -18,7 +18,7 @@ local function getanimthreshold(inst, percent)
 end
 
 local function onhealthchange(inst, old_percent, new_percent)
-    if inst.sg:HasStateTag("dead") then
+    if inst == nil or not inst:IsValid() or inst.sg:HasStateTag("dead") then
         return
     end
 
@@ -143,8 +143,7 @@ function MakeBumperType(data)
         end
 
         if boat ~= nil then
-
-            SnapToBoatEdge(inst, data.pos)
+            SnapToBoatEdge(inst, boat, data.pos)
             boat.components.boatring:AddBumper(inst)
         end
 
