@@ -1,223 +1,276 @@
---------------------------------------------Define your prefab tables here, if you use the devcapture, check your log! it'll print it out there!
-local testTable = {
-	{x = 2, z = 2, prefab = "researchlab"},
-	{x = -2, z = -2, prefab = "grass"},
-}
 
-local testTable2 = {
-	{x = 2, z = 2, prefab = "evergreen"},
-	{x = -2, z = -2, prefab = "pighouse"},
-}
-
------ Oasis Sand
-
-local scorpionOutskirts1 = {{x = 0.80648803710938, z = -1.0161743164063, prefab = "um_scorpionhole", ocean = false, tile = 31},	{x = 1.2992553710938, z = 3.7647094726563, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -4, z = 0, prefab = "um_devcap_tileflag", ocean = false, tile = 31},	{x = 0.65771484375, z = -4.3348999023438, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -3.7640075683594, z = 2.9808349609375, prefab = "um_sandhill", ocean = false, tile = 31},	{x = 5.3029174804688, z = 0.2110595703125, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -4.8436889648438, z = -4.345947265625, prefab = "um_sandrock", ocean = false, tile = 4},	{x = 4.635009765625, z = 4.8201904296875, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = 5.4644470214844, z = -4.5859985351563, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -7.1056823730469, z = -0.9014892578125, prefab = "um_bugbabiesrock", ocean = false, tile = 31},}
-
-local scorpionOutskirts2 = {{x = 2.7774658203125, z = -1.972900390625, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = -3.1998901367188, z = 1.5770874023438, prefab = "um_scorpionhole", ocean = false, tile = 31},	{x = -0.17999267578125, z = 4.8800048828125, prefab = "houndbone", ocean = false, tile = 31},	{x = 2.4586181640625, z = 4.39501953125, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -3.1300048828125, z = -4.3800048828125, prefab = "houndbone", ocean = false, tile = 31},}
-
-local scorpionOutskirts3 = {{x = -1.0017700195313, z = -3.3369750976563, prefab = "um_scorpionhole", ocean = false, tile = 4},	{x = 2.2579040527344, z = 2.7068481445313, prefab = "um_scorpionhole", ocean = false, tile = 4},	{x = 3.6600036621094, z = -0.72998046875, prefab = "marsh_bush", ocean = false, tile = 4},	{x = -3.2725524902344, z = 1.8900146484375, prefab = "um_sandrock", ocean = false, tile = 4},	{x = 3.5009155273438, z = -2.6364135742188, prefab = "um_sandrock", ocean = false, tile = 31},}
-
-local scorpionOutskirts4 = {{x = 0.3543701171875, z = -1.3401489257813, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 1.3885498046875, z = 1.7627563476563, prefab = "um_scorpionhole", ocean = false, tile = 31},	{x = -2.8422241210938, z = -1.4293823242188, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -2.814697265625, z = 1.5543823242188, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = -0.13079833984375, z = 3.6194458007813, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 1.056640625, z = -3.819091796875, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = 3.9771728515625, z = 1.0255126953125, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -0.9481201171875, z = -4.5048828125, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -5.5150146484375, z = 0.9581298828125, prefab = "um_sandrock", ocean = false, tile = 31},}
-
-
-
-local scorpionCenter1 = {{x = -3.3084106445313, z = -3.0513305664063, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -1.3362121582031, z = 6.0682373046875, prefab = "um_sandhill", ocean = false, tile = 31},	{x = 1.9549255371094, z = -7.1528930664063, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -7.5201110839844, z = 2.76953125, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 7.9502868652344, z = 3.0804443359375, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 7.6878662109375, z = -4.7418212890625, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -9.0185852050781, z = -0.71197509765625, prefab = "um_scorpionhole", ocean = false, tile = 31},	{x = -7.9920349121094, z = -4.2824096679688, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -4.451904296875, z = -8.0829467773438, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -9.1752624511719, z = -1.186767578125, prefab = "um_scorpion", ocean = false, tile = 31},	{x = 7.7371520996094, z = 5.2159423828125, prefab = "um_sandhill", ocean = false, tile = 31},	{x = -4.4400024414063, z = 8.75, prefab = "rock_flintless", ocean = false, tile = 31},	{x = 9.2548522949219, z = -3.5371704101563, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 9.9812316894531, z = -0.29425048828125, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = -0.15438842773438, z = 10.044677734375, prefab = "um_sandrock", ocean = false, tile = 4},	{x = -1.8798217773438, z = -10.261047363281, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = 2.216064453125, z = 10.210571289063, prefab = "um_scorpionhole", ocean = false, tile = 4},	{x = 5.3019714355469, z = 9.0045166015625, prefab = "um_sandrock", ocean = false, tile = 4},	{x = -7.5289916992188, z = 7.4535522460938, prefab = "um_bugbabiesrock", ocean = false, tile = 31},	{x = 8.3438720703125, z = -6.7360229492188, prefab = "um_scorpionhole", ocean = false, tile = 31},	{x = 6.285888671875, z = -8.9968872070313, prefab = "um_sandrock", ocean = false, tile = 31},	{x = -11.147888183594, z = -0.20159912109375, prefab = "um_sandrock", ocean = false, tile = 31},	{x = 8.9993591308594, z = 6.7954711914063, prefab = "um_sandrock", ocean = false, tile = 4},	{x = -0.22000122070313, z = -11.419982910156, prefab = "rock_flintless", ocean = false, tile = 31},}
-
------ CBTS Ocean biomes. AKA Crappier ver. of what we have planned ;)
-
-
-local inactivebiome_cbts_sludge = {{x=-1.9659423828125,z=0.74212646484375,prefab="waterplant",ocean=true},{x=0.196533203125,z=2.4937438964844,prefab="sludgestack",ocean=true},{x=2.3081665039063,z=-1.7903137207031,prefab="waterplant",ocean=true},{x=2.21875,z=1.9744873046875,prefab="kelpstack",ocean=true},{x=4.16552734375,z=0.33798217773438,prefab="kelpstack",ocean=true},{x=3.4912719726563,z=2.6694030761719,prefab="sludgestack",ocean=true},{x=1.28662109375,z=5.1331329345703,prefab="sludgestack",ocean=true},{x=-1.9873657226563,z=5.4573059082031,prefab="waterplant",ocean=true},{x=6.3197631835938,z=0.69619750976563,prefab="sludgestack",ocean=true},{x=7.1372680664063,z=-1.2660293579102,prefab="waterplant",ocean=true},{x=5.88330078125,z=5.1320495605469,prefab="sludgestack",ocean=true},{x=1.8677368164063,z=8.2219390869141,prefab="waterplant",ocean=true},{x=4.3599243164063,z=7.3352432250977,prefab="kelpstack",ocean=true},{x=8.6908569335938,z=2.9179077148438,prefab="waterplant",ocean=true},{x=7.9817504882813,z=4.8246078491211,prefab="kelpstack",ocean=true},{x=-8.9734497070313,z=-3.973876953125,prefab="seastack",ocean=true},{x=7.8306884765625,z=7.2848968505859,prefab="waterplant",ocean=true},{x=-4.079345703125,z=-15.789337158203,prefab="seastack",ocean=true},{x=1.8873291015625,z=-17.540100097656,prefab="seastack",ocean=true},{x=-8.1747436523438,z=16.371147155762,prefab="kelpstack",ocean=true},{x=-9.5435791015625,z=-16.002655029297,prefab="seastack",ocean=true},{x=-6.3945922851563,z=-18.062805175781,prefab="seastack",ocean=true},{x=-14.835754394531,z=12.140640258789,prefab="seastack",ocean=true},{x=-18.971740722656,z=-5.3286437988281,prefab="seastack",ocean=true},{x=-19.31884765625,z=4.2856750488281,prefab="seastack",ocean=true},{x=-18.179382324219,z=-7.8709869384766,prefab="sludgestack",ocean=true},{x=-16.700073242188,z=-11.494659423828,prefab="seastack",ocean=true},{x=-0.2734375,z=-20.513870239258,prefab="kelpstack",ocean=true},{x=10.297729492188,z=-18.592010498047,prefab="seastack",ocean=true},{x=-3.18701171875,z=-21.078643798828,prefab="sludgestack",ocean=true},{x=-18.1259765625,z=12.124267578125,prefab="seastack",ocean=true},{x=20.3154296875,z=-8.0070648193359,prefab="seastack",ocean=true},{x=-15.936706542969,z=-15.150634765625,prefab="seastack",ocean=true},{x=-13.226318359375,z=17.885330200195,prefab="seastack",ocean=true},{x=-19.722534179688,z=10.442054748535,prefab="seastack",ocean=true},{x=-8.71044921875,z=-20.918975830078,prefab="seastack",ocean=true},{x=0.588623046875,z=-22.865234375,prefab="seastack",ocean=true},{x=3.3910522460938,z=-22.91552734375,prefab="seastack",ocean=true},{x=-18.854125976563,z=14.613464355469,prefab="seastack",ocean=true},{x=-22.779174804688,z=-7.3387069702148,prefab="seastack",ocean=true},{x=-6.3438110351563,z=23.136436462402,prefab="sludgestack",ocean=true},{x=-24.333190917969,z=-1.4363479614258,prefab="seastack",ocean=true},{x=-12.05908203125,z=21.275436401367,prefab="seastack",ocean=true},{x=21.092041015625,z=-13.42756652832,prefab="kelpstack",ocean=true},{x=-15.026245117188,z=20.555267333984,prefab="seastack",ocean=true},{x=14.401550292969,z=-21.76904296875,prefab="seastack",ocean=true},{x=12.265991210938,z=-23.244369506836,prefab="seastack",ocean=true},{x=25.05029296875,z=8.1575622558594,prefab="seastack",ocean=true},{x=20.965881347656,z=-16.484252929688,prefab="seastack",ocean=true},{x=24.507446289063,z=-10.945007324219,prefab="sludgestack",ocean=true},{x=26.317138671875,z=-5.7873382568359,prefab="seastack",ocean=true},{x=-4.7620849609375,z=27.030029296875,prefab="seastack",ocean=true},{x=13.765319824219,z=23.929412841797,prefab="seastack",ocean=true},{x=4.71728515625,z=27.213821411133,prefab="seastack",ocean=true},{x=27.929138183594,z=0.26416015625,prefab="kelpstack",ocean=true},{x=16.738952636719,z=22.516326904297,prefab="seastack",ocean=true},{x=-2.0292358398438,z=28.36262512207,prefab="seastack",ocean=true},{x=21.18994140625,z=-19.33039855957,prefab="seastack",ocean=true},{x=27.343994140625,z=-8.6952514648438,prefab="seastack",ocean=true},{x=26.855773925781,z=10.197235107422,prefab="seastack",ocean=true},{x=24.289123535156,z=15.48168182373,prefab="seastack",ocean=true},{x=21.744140625,z=19.772033691406,prefab="seastack",ocean=true},{x=23.947021484375,z=-17.371673583984,prefab="seastack",ocean=true},{x=29.018920898438,z=6.0524597167969,prefab="sludgestack",ocean=true},{x=7.2939453125,z=-29.074279785156,prefab="seastack",ocean=true},{x=6.523681640625,z=29.3193359375,prefab="seastack",ocean=true},{x=16.974670410156,z=25.320220947266,prefab="seastack",ocean=true},{x=30.351409912109,z=2.9007797241211,prefab="seastack",ocean=true},{x=29.017517089844,z=9.4150085449219,prefab="kelpstack",ocean=true},{x=23.73046875,z=19.554344177246,prefab="seastack",ocean=true},{x=-28.085388183594,z=13.772567749023,prefab="seastack",ocean=true},{x=31.812347412109,z=-11.261917114258,prefab="seastack",ocean=true}}
-
-local activebiome_cbts_bb = {{x=2.9873733520508,z=1.5834045410156,prefab="bullkelp_plant",ocean=true},{x=-0.38864135742188,z=-4.2022094726563,prefab="siren_bird_nest",ocean=true},{x=-7.4652404785156,z=-1.5970153808594,prefab="mossstack",ocean=true},{x=3.1924896240234,z=-8.1691284179688,prefab="driftwood_waterlogged",ocean=true},{x=1.5517425537109,z=8.7890625,prefab="bullkelp_plant",ocean=true},{x=-6.6587066650391,z=-6.98779296875,prefab="mossstack",ocean=true},{x=7.3232040405273,z=-7.1375427246094,prefab="mossstack",ocean=true},{x=-9.1365203857422,z=6.7471008300781,prefab="bullkelp_plant",ocean=true},{x=-12.232620239258,z=-4.7474670410156,prefab="oceantree",ocean=true},{x=-3.9013824462891,z=-13.943542480469,prefab="bullkelp_plant",ocean=true},{x=-10.072578430176,z=11.6337890625,prefab="bullkelp_plant",ocean=true},{x=-12.326385498047,z=9.3130798339844,prefab="bullkelp_plant",ocean=true},{x=-5.1518783569336,z=15.187255859375,prefab="bullkelp_plant",ocean=true},{x=2.0152435302734,z=-16.083190917969,prefab="driftwood_waterlogged",ocean=true},{x=15.47526550293,z=-5.1588439941406,prefab="bullkelp_plant",ocean=true},{x=-14.640068054199,z=-7.6819152832031,prefab="mossstack",ocean=true},{x=8.2721710205078,z=14.871948242188,prefab="bullkelp_plant",ocean=true},{x=12.026062011719,z=13.113220214844,prefab="bullkelp_plant",ocean=true},{x=-9.9748916625977,z=-15.088287353516,prefab="saltstack",ocean=true},{x=1.9783325195313,z=18.806610107422,prefab="bullkelp_plant",ocean=true},{x=-7.8368072509766,z=-17.306335449219,prefab="saltstack",ocean=true},{x=14.110763549805,z=-14.845458984375,prefab="mossstack",ocean=true},{x=-19.793106079102,z=-6.7286071777344,prefab="bullkelp_plant",ocean=true},{x=-14.715759277344,z=-15.722747802734,prefab="bullkelp_plant",ocean=true},{x=-22.138198852539,z=0.54742431640625,prefab="bullkelp_plant",ocean=true},{x=-11.099739074707,z=-19.743316650391,prefab="saltstack",ocean=true},{x=-11.559867858887,z=19.807922363281,prefab="bullkelp_plant",ocean=true},{x=9.984977722168,z=-21.009399414063,prefab="bullkelp_plant",ocean=true},{x=-9.7649993896484,z=-22.136352539063,prefab="bullkelp_plant",ocean=true},{x=3.0834808349609,z=-24.10693359375,prefab="mossstack",ocean=true},{x=22.479293823242,z=-12.324066162109,prefab="bullkelp_plant",ocean=true},{x=25.266288757324,z=-6.9571838378906,prefab="bullkelp_plant",ocean=true},{x=-3.0937652587891,z=-26.051391601563,prefab="oceantree",ocean=true},{x=-26.1953125,z=7.3030700683594,prefab="mossstack",ocean=true},{x=18.050201416016,z=20.410583496094,prefab="mossstack",ocean=true},{x=3.7231750488281,z=-27.996337890625,prefab="driftwood_waterlogged",ocean=true},{x=15.223220825195,z=24.138427734375,prefab="oceantree",ocean=true},{x=-18.031173706055,z=-23.113861083984,prefab="mossstack",ocean=true},{x=-15.330383300781,z=-25.821502685547,prefab="oceantree",ocean=true},{x=9.3791198730469,z=-30.615875244141,prefab="mossstack",ocean=true},{x=-27.752593994141,z=16.125366210938,prefab="bullkelp_plant",ocean=true},{x=24.589370727539,z=21.408325195313,prefab="mossstack",ocean=true},{x=-28.621459960938,z=-15.867584228516,prefab="bullkelp_plant",ocean=true},{x=14.358917236328,z=29.713806152344,prefab="mossstack",ocean=true},{x=-32.171325683594,z=7.4119262695313,prefab="driftwood_waterlogged",ocean=true},{x=16.927314758301,z=28.348083496094,prefab="saltstack",ocean=true},{x=-8.9514312744141,z=-32.261688232422,prefab="mossstack",ocean=true},{x=30.923950195313,z=-13.14306640625,prefab="bullkelp_plant",ocean=true},{x=-33.828186035156,z=2.1429138183594,prefab="mossstack",ocean=true},{x=26.567596435547,z=-22.226593017578,prefab="bullkelp_plant",ocean=true},{x=-23.272171020508,z=-26.267913818359,prefab="bullkelp_plant",ocean=true},{x=18.180801391602,z=-30.142456054688,prefab="bullkelp_plant",ocean=true},{x=-14.118629455566,z=-32.481719970703,prefab="bullkelp_plant",ocean=true},{x=23.010444641113,z=27.037078857422,prefab="oceantree",ocean=true},{x=20.216598510742,z=29.534912109375,prefab="mossstack",ocean=true},{x=12.289108276367,z=-34.547180175781,prefab="oceantree",ocean=true},{x=1.4040374755859,z=-37.024047851563,prefab="bullkelp_plant",ocean=true},{x=15.382637023926,z=-34.02294921875,prefab="mossstack",ocean=true},{x=8.5019226074219,z=-36.620361328125,prefab="saltstack",ocean=true},{x=-37.251602172852,z=7.4248962402344,prefab="mossstack",ocean=true},{x=26.470031738281,z=-28.303985595703,prefab="bullkelp_plant",ocean=true},{x=-6.0282745361328,z=-38.571228027344,prefab="driftwood_waterlogged",ocean=true},{x=-39.093200683594,z=-7.7718505859375,prefab="bullkelp_plant",ocean=true},{x=8.2881164550781,z=-39.706665039063,prefab="saltstack",ocean=true},{x=0.88232421875,z=-41.275390625,prefab="mossstack",ocean=true},{x=18.508499145508,z=37.246673583984,prefab="oceantree",ocean=true},{x=-37.122100830078,z=-19.473846435547,prefab="bullkelp_plant",ocean=true},{x=41.182754516602,z=-14.428680419922,prefab="mossstack",ocean=true},{x=39.586883544922,z=-20.467468261719,prefab="mossstack",ocean=true},{x=40.952087402344,z=-18.574249267578,prefab="driftwood_waterlogged",ocean=true},{x=-36.945892333984,z=-26.6572265625,prefab="bullkelp_plant",ocean=true},{x=-35.924865722656,z=-29.974182128906,prefab="saltstack",ocean=true},{x=43.633560180664,z=-19.225250244141,prefab="mossstack",ocean=true},{x=18.061325073242,z=-45.600158691406,prefab="oceantree",ocean=true},{x=-35.70671081543,z=-34.105285644531,prefab="mossstack",ocean=true},{x=-40.279846191406,z=-28.743774414063,prefab="mossstack",ocean=true},{x=43.274482727051,z=-25.051574707031,prefab="oceantree",ocean=true},{x=-47.720062255859,z=-15.019805908203,prefab="bullkelp_plant",ocean=true},{x=47.254791259766,z=-18.256042480469,prefab="saltstack",ocean=true},{x=-39.897537231445,z=-33.265686035156,prefab="oceantree",ocean=true},{x=22.296775817871,z=-50.804077148438,prefab="mossstack",ocean=true}}
-
-local activebiome_cbts_ss = {{x=-1.4070129394531,z=1.2489929199219,prefab="siren_throne",ocean=true},{x=-0.36700439453125,z=3.4309997558594,prefab="seastack",ocean=true},{x=-4.5481262207031,z=0.44454956054688,prefab="searock_ring",ocean=true},{x=1.31298828125,z=5.3330078125,prefab="specter_shipwreck",ocean=true},{x=-3.1050109863281,z=5.4150085449219,prefab="specter_shipwreck",ocean=true},{x=-1.6229858398438,z=8.4410095214844,prefab="seastack",ocean=true},{x=15.5419921875,z=-7.5289916992188,prefab="seastack",ocean=true},{x=6.98046875,z=18.40966796875,prefab="boatfragment03",ocean=true},{x=-19.611999511719,z=5.8729858398438,prefab="seastack",ocean=true},{x=20.28515625,z=4.3739318847656,prefab="boatfragment03",ocean=true},{x=19.359008789063,z=-8.0239868164063,prefab="seastack",ocean=true},{x=18.459014892578,z=-11.352996826172,prefab="kelpstack",ocean=true},{x=-21.242004394531,z=7.0390014648438,prefab="kelpstack",ocean=true},{x=-14.483001708984,z=-17.378997802734,prefab="seastack",ocean=true},{x=-19.245910644531,z=-12.630462646484,prefab="boatfragment03",ocean=true},{x=-22.920013427734,z=4.6059875488281,prefab="seastack",ocean=true},{x=20.994995117188,z=-10.963012695313,prefab="seastack",ocean=true},{x=22.436004638672,z=-8.2860107421875,prefab="kelpstack",ocean=true},{x=-8.9374084472656,z=-22.626007080078,prefab="boatfragment03",ocean=true},{x=12.009002685547,z=21.191986083984,prefab="specter_shipwreck",ocean=true},{x=6.2980041503906,z=23.605987548828,prefab="seastack",ocean=true},{x=21.925994873047,z=-12.696990966797,prefab="seastack",ocean=true},{x=-11.738006591797,z=22.678009033203,prefab="seastack",ocean=true},{x=-8.8510131835938,z=24.135986328125,prefab="kelpstack",ocean=true},{x=-24.834991455078,z=7.2340087890625,prefab="seastack",ocean=true},{x=23.976989746094,z=-10.408996582031,prefab="seastack",ocean=true},{x=-17.674011230469,z=-19.993011474609,prefab="kelpstack",ocean=true},{x=12.495056152344,z=23.876281738281,prefab="boatfragment04",ocean=true},{x=-19.489990234375,z=-18.734008789063,prefab="seastack",ocean=true},{x=-26.696990966797,z=5.1470031738281,prefab="kelpstack",ocean=true},{x=22.903015136719,z=-14.968994140625,prefab="seastack",ocean=true},{x=-14.105010986328,z=23.966003417969,prefab="seastack",ocean=true},{x=-26.700012207031,z=8.6579895019531,prefab="seastack",ocean=true},{x=26.398986816406,z=-9.6860046386719,prefab="seastack",ocean=true},{x=-28.120300292969,z=1.9888916015625,prefab="boatfragment03",ocean=true},{x=-12.098999023438,z=26.015991210938,prefab="seastack",ocean=true},{x=-23.161987304688,z=17.319000244141,prefab="specter_shipwreck",ocean=true},{x=-22.566986083984,z=-18.476013183594,prefab="seastack",ocean=true},{x=25.976989746094,z=-13.669006347656,prefab="specter_shipwreck",ocean=true},{x=-21.566986083984,z=20.668884277344,prefab="boatfragment04",ocean=true},{x=-5.9812622070313,z=-30.186065673828,prefab="boatfragment03",ocean=true},{x=-25.313995361328,z=-17.585998535156,prefab="seastack",ocean=true},{x=-24.886077880859,z=18.295684814453,prefab="boatfragment03",ocean=true},{x=-8.8720092773438,z=-29.622009277344,prefab="specter_shipwreck",ocean=true},{x=-30.322998046875,z=6.8970031738281,prefab="seastack",ocean=true},{x=-9.1329956054688,z=29.809997558594,prefab="specter_shipwreck",ocean=true},{x=-23.463012695313,z=-20.807006835938,prefab="seastack",ocean=true},{x=-31.415985107422,z=0.43099975585938,prefab="kelpstack",ocean=true},{x=-15.290161132813,z=27.524658203125,prefab="boatfragment03",ocean=true},{x=-29.930999755859,z=9.93701171875,prefab="seastack",ocean=true},{x=-13.079986572266,z=29.907012939453,prefab="kelpstack",ocean=true},{x=30.531341552734,z=-11.962524414063,prefab="boatfragment03",ocean=true},{x=-26.423004150391,z=-21.307006835938,prefab="seastack",ocean=true},{x=-33.264007568359,z=7.9320068359375,prefab="seastack",ocean=true},{x=-25.467010498047,z=-22.976013183594,prefab="kelpstack",ocean=true},{x=-26.992736816406,z=-23.629577636719,prefab="boatfragment03",ocean=true},{x=-29.596984863281,z=-20.777008056641,prefab="specter_shipwreck",ocean=true},{x=-36.587158203125,z=4.3616943359375,prefab="boatfragment03",ocean=true},{x=-37.347991943359,z=-0.12298583984375,prefab="specter_shipwreck",ocean=true}}
-
-local activebiome_test_rr = {{x=0,z=0,prefab="ocean_speaker",ocean=true},{x=-6.1649475097656,z=0.20672607421875,prefab="sludgestack",ocean=true},{x=5.3078002929688,z=-4.256103515625,prefab="seastack",ocean=true},{x=-0.13284301757813,z=8.5574035644531,prefab="seastack",ocean=true},{x=7.7579040527344,z=5.0638732910156,prefab="seastack",ocean=true},{x=-7.1172485351563,z=5.9371643066406,prefab="seastack",ocean=true},{x=-6.7734069824219,z=-7.7589721679688,prefab="seastack",ocean=true},{x=10.345916748047,z=-2.3374633789063,prefab="seastack",ocean=true},{x=5.2626953125,z=9.7409362792969,prefab="sludgestack",ocean=true},{x=-11.609710693359,z=-2.4739685058594,prefab="seastack",ocean=true},{x=6.6630554199219,z=-10.873016357422,prefab="sludgestack",ocean=true},{x=-4.8073120117188,z=12.179046630859,prefab="sludgestack",ocean=true},{x=14.265502929688,z=-0.23281860351563,prefab="sludgestack",ocean=true},{x=0.30673217773438,z=-15.218627929688,prefab="seastack",ocean=true},{x=-7.7417602539063,z=-17.601776123047,prefab="seastack",ocean=true},{x=12.153930664063,z=-15.535766601563,prefab="seastack",ocean=true},{x=8.7621154785156,z=19.030029296875,prefab="seastack",ocean=true},{x=-17.744171142578,z=11.772033691406,prefab="seastack",ocean=true},{x=-2.523681640625,z=21.3193359375,prefab="seastack",ocean=true},{x=-12.974700927734,z=17.320220947266,prefab="seastack",ocean=true},{x=22.1259765625,z=4.124267578125,prefab="seastack",ocean=true},{x=19.026245117188,z=12.555267333984,prefab="seastack",ocean=true},{x=-22.855773925781,z=2.1972351074219,prefab="seastack",ocean=true},{x=23.318817138672,z=-3.7143249511719,prefab="seastack",ocean=true},{x=-24.942657470703,z=-7.8161315917969,prefab="seastack",ocean=true},{x=22.971740722656,z=-13.328643798828,prefab="seastack",ocean=true},{x=-23.343963623047,z=-16.695251464844,prefab="seastack",ocean=true},{x=19.936676025391,z=-23.150634765625,prefab="seastack",ocean=true},{x=0.60894775390625,z=-30.91552734375,prefab="seastack",ocean=true},{x=-10.401519775391,z=-29.76904296875,prefab="seastack",ocean=true},{x=12.710418701172,z=-28.918975830078,prefab="seastack",ocean=true},{x=-19.947052001953,z=-25.371673583984,prefab="seastack",ocean=true}}
--- WACKY PLEASE HURRY I NEED PLACEHOLDER PREFABS UUUUUOOOOOOOAAAAHHHHHH
-
-local inactivebiome_test = { 	{x = 0, z = 0, prefab = "searock_ring", ocean = true},	{x = -6.1649475097656, z = 0.20672607421875, prefab = "sludgestack", ocean = true},	{x = 5.3078002929688, z = -4.256103515625, prefab = "seastack", ocean = true},	{x = -0.13284301757813, z = 8.5574035644531, prefab = "seastack", ocean = true},	{x = 7.7579040527344, z = 5.0638732910156, prefab = "seastack", ocean = true},	{x = -7.1172485351563, z = 5.9371643066406, prefab = "seastack", ocean = true},	{x = -6.7734069824219, z = -7.7589721679688, prefab = "seastack", ocean = true},	{x = 10.345916748047, z = -2.3374633789063, prefab = "seastack", ocean = true},	{x = 5.2626953125, z = 9.7409362792969, prefab = "sludgestack", ocean = true},	{x = -11.609710693359, z = -2.4739685058594, prefab = "seastack", ocean = true},	{x = 6.6630554199219, z = -10.873016357422, prefab = "sludgestack", ocean = true},	{x = -4.8073120117188, z = 12.179046630859, prefab = "sludgestack", ocean = true},	{x = 14.265502929688, z = -0.23281860351563, prefab = "sludgestack", ocean = true},	{x = 0.30673217773438, z = -15.218627929688, prefab = "seastack", ocean = true},	{x = -7.7417602539063, z = -17.601776123047, prefab = "seastack", ocean = true},	{x = 12.153930664063, z = -15.535766601563, prefab = "seastack", ocean = true},	{x = 8.7621154785156, z = 19.030029296875, prefab = "seastack", ocean = true},	{x = -17.744171142578, z = 11.772033691406, prefab = "seastack", ocean = true},	{x = -2.523681640625, z = 21.3193359375, prefab = "seastack", ocean = true},	{x = -12.974700927734, z = 17.320220947266, prefab = "seastack", ocean = true},	{x = 22.1259765625, z = 4.124267578125, prefab = "seastack", ocean = true},	{x = 19.026245117188, z = 12.555267333984, prefab = "seastack", ocean = true},	{x = -22.855773925781, z = 2.1972351074219, prefab = "seastack", ocean = true},	{x = 23.318817138672, z = -3.7143249511719, prefab = "seastack", ocean = true},	{x = -24.942657470703, z = -7.8161315917969, prefab = "seastack", ocean = true},	{x = 22.971740722656, z = -13.328643798828, prefab = "seastack", ocean = true},	{x = -23.343963623047, z = -16.695251464844, prefab = "seastack", ocean = true},	{x = 19.936676025391, z = -23.150634765625, prefab = "seastack", ocean = true},	{x = 0.60894775390625, z = -30.91552734375, prefab = "seastack", ocean = true},	{x = -10.401519775391, z = -29.76904296875, prefab = "seastack", ocean = true},	{x = 12.710418701172, z = -28.918975830078, prefab = "seastack", ocean = true},	{x = -19.947052001953, z = -25.371673583984, prefab = "seastack", ocean = true},}
-
-local activebiome_test_ss = { 	{x = 0, z = 0, prefab = "siren_throne", ocean = true},	{x = -6.1649475097656, z = 0.20672607421875, prefab = "sludgestack", ocean = true},	{x = 5.3078002929688, z = -4.256103515625, prefab = "seastack", ocean = true},	{x = -0.13284301757813, z = 8.5574035644531, prefab = "seastack", ocean = true},	{x = 7.7579040527344, z = 5.0638732910156, prefab = "seastack", ocean = true},	{x = -7.1172485351563, z = 5.9371643066406, prefab = "seastack", ocean = true},	{x = -6.7734069824219, z = -7.7589721679688, prefab = "seastack", ocean = true},	{x = 10.345916748047, z = -2.3374633789063, prefab = "seastack", ocean = true},	{x = 5.2626953125, z = 9.7409362792969, prefab = "sludgestack", ocean = true},	{x = -11.609710693359, z = -2.4739685058594, prefab = "seastack", ocean = true},	{x = 6.6630554199219, z = -10.873016357422, prefab = "sludgestack", ocean = true},	{x = -4.8073120117188, z = 12.179046630859, prefab = "sludgestack", ocean = true},	{x = 14.265502929688, z = -0.23281860351563, prefab = "sludgestack", ocean = true},	{x = 0.30673217773438, z = -15.218627929688, prefab = "seastack", ocean = true},	{x = -7.7417602539063, z = -17.601776123047, prefab = "seastack", ocean = true},	{x = 12.153930664063, z = -15.535766601563, prefab = "seastack", ocean = true},	{x = 8.7621154785156, z = 19.030029296875, prefab = "seastack", ocean = true},	{x = -17.744171142578, z = 11.772033691406, prefab = "seastack", ocean = true},	{x = -2.523681640625, z = 21.3193359375, prefab = "seastack", ocean = true},	{x = -12.974700927734, z = 17.320220947266, prefab = "seastack", ocean = true},	{x = 22.1259765625, z = 4.124267578125, prefab = "seastack", ocean = true},	{x = 19.026245117188, z = 12.555267333984, prefab = "seastack", ocean = true},	{x = -22.855773925781, z = 2.1972351074219, prefab = "seastack", ocean = true},	{x = 23.318817138672, z = -3.7143249511719, prefab = "seastack", ocean = true},	{x = -24.942657470703, z = -7.8161315917969, prefab = "seastack", ocean = true},	{x = 22.971740722656, z = -13.328643798828, prefab = "seastack", ocean = true},	{x = -23.343963623047, z = -16.695251464844, prefab = "seastack", ocean = true},	{x = 19.936676025391, z = -23.150634765625, prefab = "seastack", ocean = true},	{x = 0.60894775390625, z = -30.91552734375, prefab = "seastack", ocean = true},	{x = -10.401519775391, z = -29.76904296875, prefab = "seastack", ocean = true},	{x = 12.710418701172, z = -28.918975830078, prefab = "seastack", ocean = true},	{x = -19.947052001953, z = -25.371673583984, prefab = "seastack", ocean = true},}
-
-local activebiome_test_bb = { 	{x = 0, z = 0, prefab = "siren_bird_nest", ocean = true},	{x = -6.1649475097656, z = 0.20672607421875, prefab = "sludgestack", ocean = true},	{x = 5.3078002929688, z = -4.256103515625, prefab = "seastack", ocean = true},	{x = -0.13284301757813, z = 8.5574035644531, prefab = "seastack", ocean = true},	{x = 7.7579040527344, z = 5.0638732910156, prefab = "seastack", ocean = true},	{x = -7.1172485351563, z = 5.9371643066406, prefab = "seastack", ocean = true},	{x = -6.7734069824219, z = -7.7589721679688, prefab = "seastack", ocean = true},	{x = 10.345916748047, z = -2.3374633789063, prefab = "seastack", ocean = true},	{x = 5.2626953125, z = 9.7409362792969, prefab = "sludgestack", ocean = true},	{x = -11.609710693359, z = -2.4739685058594, prefab = "seastack", ocean = true},	{x = 6.6630554199219, z = -10.873016357422, prefab = "sludgestack", ocean = true},	{x = -4.8073120117188, z = 12.179046630859, prefab = "sludgestack", ocean = true},	{x = 14.265502929688, z = -0.23281860351563, prefab = "sludgestack", ocean = true},	{x = 0.30673217773438, z = -15.218627929688, prefab = "seastack", ocean = true},	{x = -7.7417602539063, z = -17.601776123047, prefab = "seastack", ocean = true},	{x = 12.153930664063, z = -15.535766601563, prefab = "seastack", ocean = true},	{x = 8.7621154785156, z = 19.030029296875, prefab = "seastack", ocean = true},	{x = -17.744171142578, z = 11.772033691406, prefab = "seastack", ocean = true},	{x = -2.523681640625, z = 21.3193359375, prefab = "seastack", ocean = true},	{x = -12.974700927734, z = 17.320220947266, prefab = "seastack", ocean = true},	{x = 22.1259765625, z = 4.124267578125, prefab = "seastack", ocean = true},	{x = 19.026245117188, z = 12.555267333984, prefab = "seastack", ocean = true},	{x = -22.855773925781, z = 2.1972351074219, prefab = "seastack", ocean = true},	{x = 23.318817138672, z = -3.7143249511719, prefab = "seastack", ocean = true},	{x = -24.942657470703, z = -7.8161315917969, prefab = "seastack", ocean = true},	{x = 22.971740722656, z = -13.328643798828, prefab = "seastack", ocean = true},	{x = -23.343963623047, z = -16.695251464844, prefab = "seastack", ocean = true},	{x = 19.936676025391, z = -23.150634765625, prefab = "seastack", ocean = true},	{x = 0.60894775390625, z = -30.91552734375, prefab = "seastack", ocean = true},	{x = -10.401519775391, z = -29.76904296875, prefab = "seastack", ocean = true},	{x = 12.710418701172, z = -28.918975830078, prefab = "seastack", ocean = true},	{x = -19.947052001953, z = -25.371673583984, prefab = "seastack", ocean = true},}
-
-
------ Misc.
-
-local moonOil= {{x = 2.3026733398438, z = -1.0947265625, prefab = "berrybush2", barren = true}, {x = 0.20166015625, z = 2.874267578125, prefab = "diseasecurebomb"}, {x = 0.12664794921875, z = -3.0437316894531, prefab = "berrybush2", barren = true}, {x = -2.5693359375, z = 2.8862609863281, prefab = "skeleton"}, {x = 2.6016540527344, z = -3.5547180175781, prefab = "berrybush2", barren = true}, {x = 4.4106750488281, z = -1.0917358398438, prefab = "berrybush2", barren = true}, {x = 1.545654296875, z = -5.4557189941406, prefab = "berrybush2", barren = true}, {x = 5.70166015625, z = -3.125732421875, prefab = "berrybush2", barren = true}, {x = 4.70166015625, z = -5.125732421875, prefab = "berrybush2", barren = true}}
-
-local failedFisherman = {{x = 0.25729179382324, z = 0.0169677734375, prefab = "boat"}, {x = 0.26235771179199, z = 0.0379638671875, prefab = "oceanfishingrod"}, {x = -0.73764228820801, z = 0.0379638671875, prefab = "spoiled_fish_small"}, {x = 0.26235771179199, z = 1.0379638671875, prefab = "oar_driftwood"}, {x = -0.73764228820801, z = -0.9620361328125, prefab = "rainhat"}, {x = 1.262357711792, z = 0.0379638671875, prefab = "spoiled_fish"}, {x = 1.262357711792, z = -0.9620361328125, prefab = "oceanfishingbobber_crow"}, {x = 0.26235771179199, z = -1.9620361328125, prefab = "spoiled_fish_small"}, {x = -0.73764228820801, z = -1.9620361328125, prefab = "oceanfishinglure_spoon_blue"}, {x = -1.8909931182861, z = -1.2286071777344, prefab = "skeleton"}, {x = 1.762357711792, z = -1.4620361328125, prefab = "anchor"}, {x = 1.262357711792, z = 2.0379638671875, prefab = "steeringwheel"}, {x = -0.60257911682129, z = 2.4951782226563, prefab = "spoiled_fish"}, {x = -2.237642288208, z = 1.5379638671875, prefab = "fish_box"}, {x = -2.737642288208, z = 0.0379638671875, prefab = "reflectivevest"}, {x = 3.2787704467773, z = 0.67807006835938, prefab = "mast"}, {x = 2.0960941314697, z = -2.6328430175781, prefab = "spoiled_fish_small"},}
-
-local tridentTrap = {{x = -0.11500549316406, z = 0.022003173828125, prefab = "boat"},{x = 0.082992553710938, z = -0.53201293945313, prefab = "skeleton"},{x = -2.5630035400391, z = -0.38201904296875, prefab = "trident"},{x = -1.9049987792969, z = -3.052001953125, prefab = "kelphat"},{x = -5.0675048828125, z = -3.3525085449219, prefab = "waterplant"},{x = 5.9154357910156, z = -1.4754943847656, prefab = "seastack"},{x = 5.6349945068359, z = 5.0979919433594, prefab = "waterplant"},{x = -0.02606201171875, z = -8.1777648925781, prefab = "seastack"},{x = -5.6940002441406, z = -6.3179931640625, prefab = "waterplant"},{x = -8.6000061035156, z = -0.291015625, prefab = "waterplant"},{x = 7.7899932861328, z = -3.9909973144531, prefab = "waterplant"},{x = -5.8800048828125, z = 6.5719909667969, prefab = "waterplant"},{x = -9.2021789550781, z = 4.3088073730469, prefab = "seastack"},{x = -10.143005371094, z = -2.2720031738281, prefab = "waterplant"},{x = 10.478988647461, z = 0.014984130859375, prefab = "waterplant"},{x = 10.060989379883, z = 3.8970031738281, prefab = "seastack"},{x = 2.6760406494141, z = 10.781585693359, prefab = "waterplant"},{x = -4.1473693847656, z = 11.030029296875, prefab = "waterplant"},{x = 8.2198028564453, z = 12.277801513672, prefab = "seastack"},{x = -0.41177368164063, z = -15.673431396484, prefab = "waterplant"},{x = -17.333633422852, z = 4.5759887695313, prefab = "waterplant"},{x = 16.108764648438, z = 8.3994140625, prefab = "waterplant"}}
-
-local impactfulDiscovery = {{x = 0.65742111206055, z = 1.0276489257813, prefab = "armorgrass"},	{x = 1.5654220581055, z = 0.0556640625, prefab = "skeleton"},	{x = -0.34257888793945, z = 2.0276489257813, prefab = "wall_hay"},	{x = 0.90542030334473, z = -1.9273681640625, prefab = "cutstone"},	{x = 1.1044216156006, z = -2.0253295898438, prefab = "twigs"},	{x = 1.1014213562012, z = -2.0663452148438, prefab = "charcoal"},	{x = 1.7684211730957, z = -1.9203491210938, prefab = "twigs"},	{x = 1.3524208068848, z = -2.2423706054688, prefab = "cutstone"},	{x = 2.3867664337158, z = 1.4175415039063, prefab = "rocks"},	{x = 2.2564220428467, z = 1.8826293945313, prefab = "rocks"},	{x = 2.2004203796387, z = 1.9896240234375, prefab = "rocks"},	{x = -0.34257888793945, z = -2.9723510742188, prefab = "wall_hay"},	{x = 0.65742111206055, z = -2.9723510742188, prefab = "wall_hay"},	{x = 1.873420715332, z = -2.4243774414063, prefab = "charcoal"},	{x = 3.1004219055176, z = 0.1966552734375, prefab = "rock_moon"},	{x = 2.6574211120605, z = 3.0276489257813, prefab = "wall_hay"},	{x = 3.7427005767822, z = 1.4929809570313, prefab = "rocks"},	{x = 4.0204219818115, z = 1.888671875, prefab = "rocks"},	{x = 4.5804214477539, z = -1.9083251953125, prefab = "boards"},	{x = 4.6944217681885, z = 2.1366577148438, prefab = "rocks"},	{x = 4.6574211120605, z = -2.9723510742188, prefab = "wall_hay"},	{x = 5.6574211120605, z = -2.9723510742188, prefab = "wall_hay"},	{x = 6.6574211120605, z = -0.97235107421875, prefab = "wall_hay"},	{x = 6.6574211120605, z = -1.9723510742188, prefab = "wall_hay"},	{x = 6.6574211120605, z = -2.9723510742188, prefab = "wall_hay"},	{x = 6.6574211120605, z = 3.0276489257813, prefab = "wall_hay"},}
---funny reference to that one streamer.
-
-local baseFrag_rattyStorage = {{x = 2.5805172920227, z = 0.28851318359375, prefab = "treasurechest"},	{x = 0.85051727294922, z = -2.9224853515625, prefab = "wardrobe"},	{x = 1.850549697876, z = 3.2639770507813, prefab = "uncompromising_rat"},	{x = 3.784517288208, z = -0.760498046875, prefab = "treasurechest"},	{x = 3.8845171928406, z = 1.573486328125, prefab = "treasurechest"},	{x = 5.0455174446106, z = 0.489501953125, prefab = "treasurechest"},	{x = 5.2435173988342, z = 2.8895263671875, prefab = "treasurechest"},	{x = 4.4615173339844, z = -4.6304931640625, prefab = "fence"},	{x = 6.2955173254013, z = 1.7335205078125, prefab = "treasurechest"},	{x = 1.4615173339844, z = 6.3695068359375, prefab = "wall_wood"},	{x = 5.4615173339844, z = -3.6304931640625, prefab = "wall_wood"},	{x = 5.4615173339844, z = 4.3695068359375, prefab = "wall_wood"},	{x = 3.4615173339844, z = 6.3695068359375, prefab = "fence"},	{x = 6.4615173339844, z = 3.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = 0.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -0.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 1.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -1.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 2.3695068359375, prefab = "wall_wood"},}	
-
-local baseFrag_smellyKitchen = {{x = 0.6150016784668, z = -0.224853515625, prefab = "icebox"},	{x = 0.53242874145508, z = 1.4286499023438, prefab = "spoiled_food"},	{x = -1.3295230865479, z = -0.76336669921875, prefab = "spoiled_food"},	{x = -0.2314338684082, z = -1.6725463867188, prefab = "spoiled_food"},	{x = 2.3709182739258, z = -1.2103881835938, prefab = "spoiled_food"},	{x = 1.3190021514893, z = -2.3378295898438, prefab = "cookpot"},	{x = 2.9960021972656, z = -0.71282958984375, prefab = "pottedfern"},	{x = -3.0359973907471, z = 0.619140625, prefab = "pottedfern"},	{x = -0.2299976348877, z = -3.3738403320313, prefab = "endtable"},	{x = -2.4419975280762, z = -2.4668579101563, prefab = "meatrack"},}	
-
-local sunkenboat = {{x = 0.19911193847656, z = -1.0543212890625, prefab = "silk"},	{x = 0.38343811035156, z = 1.3286743164063, prefab = "goggleshat"},	{x = -0.31075286865234, z = -1.7542114257813, prefab = "rope"},	{x = 2.1990814208984, z = -1.0543212890625, prefab = "silk"},	{x = 1.5685577392578, z = 2.0890502929688, prefab = "rope"},	{x = -2.6165618896484, z = -0.67132568359375, prefab = "driftwoodfishingrod"},	{x = 3.4628524780273, z = -0.2178955078125, prefab = "charcoal"},	{x = 1.9804992675781, z = -2.9429321289063, prefab = "boatfragment03"},	{x = 3.5671081542969, z = 0.10784912109375, prefab = "rope"},	{x = -1.8933792114258, z = 3.0784301757813, prefab = "boatfragment04"},	{x = -2.0137176513672, z = -3.0451049804688, prefab = "boatfragment03"},	{x = 0.23040008544922, z = -4.2789916992188, prefab = "boneshard"},	{x = 0.69646453857422, z = -4.405517578125, prefab = "driftwood_log"},	{x = 3.0724182128906, z = 3.4102783203125, prefab = "boatfragment05"},}	
-
-local demoTable = { 	{x = 0.75909423828125, z = -1.0461730957031, prefab = "log"}, 	{x = -0.3468017578125, z = -1.5800933837891, prefab = "log"}, 	{x = -0.52099609375, z = 1.6518249511719, prefab = "log"}, 	{x = -1.7550659179688, z = 0.57977294921875, prefab = "log"}, 	{x = 1.7808227539063, z = -1.3889923095703, prefab = "log"}, 	{x = -1.9171752929688, z = -1.6593780517578, prefab = "seastack"}, 	{x = 2.6639404296875, z = 0.544677734375, prefab = "log"}, 	{x = 0.17535400390625, z = -2.7806091308594, prefab = "log"}, 	{x = 1.5282592773438, z = 2.39404296875, prefab = "seastack"}, 	{x = -2.5726318359375, z = 1.4523315429688, prefab = "log"}, 	{x = -1.505126953125, z = 2.6280517578125, prefab = "log"}, 	{x = 0.27471923828125, z = 3.4244842529297, prefab = "log"}, 	{x = 3.203857421875, z = 1.6869049072266, prefab = "log"}, 	{x = 3.5248413085938, z = -0.87544250488281, prefab = "seastack"}, 	{x = -0.51788330078125, z = 3.9206237792969, prefab = "log"}, 	{x = 1.7034912109375, z = 3.7448883056641, prefab = "log"}, 	{x = -4.234619140625, z = 0.46084594726563, prefab = "seastack"}, 	{x = -3.4193725585938, z = 2.6381988525391, prefab = "log"}, 	{x = -2.8687744140625, z = 3.2518157958984, prefab = "log"}, 	{x = -2.4285888671875, z = 4.8321075439453, prefab = "seastack"}, 	{x = 3.6779174804688, z = 5.6669464111328, prefab = "splash"}, }
-
-local testTable3 = { 	{x = -0.09600830078125, z = -1.112060546875, prefab = "driftwood_log", ocean = true, tile = 204},	{x = 3.0816040039063, z = -2.0603332519531, prefab = "um_devcap_tileflag", ocean = true, tile = 204},	{x = -3.4259033203125, z = 2.6483154296875, prefab = "um_devcap_tileflag", ocean = true, tile = 203},	{x = -3.66357421875, z = -3.4009704589844, prefab = "um_devcap_tileflag", ocean = true, tile = 203},	{x = -0.90301513671875, z = -5.21630859375, prefab = "driftwood_log", ocean = true, tile = 204},	{x = 3.9368286132813, z = 4.3008422851563, prefab = "um_devcap_tileflag", ocean = true, tile = 204},	{x = 8.499267578125, z = 3.5470886230469, prefab = "driftwood_log", ocean = true, tile = 204},	{x = -14.640563964844, z = -12.691955566406, prefab = "dock_kit", ocean = true, tile = 203},}
-
+local umss_tables = require("umss_tables")
+--Reworked tables, place them in umss_tables.lua
+--may make them write themselves there now.
+--reference with
 --Place the next table above MEEEE^
 --------------------------------------------
-local function UncompromisingSpawnGOOOOO(inst,data)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	
-	if inst.tile_centered then
-		local tile_x, tile_y, tile_z = TheWorld.Map:GetTileCenterPoint(x, 0, z)
-		inst.Transform:SetPosition(tile_x,tile_y,tile_z)
-		x,y,z = inst.Transform:GetWorldPosition()
-	end
-	
-	local rotx = 1
-	local rotz = 1
-	
-	if inst.rotatable then --This rotates the vvhole 
-		if math.random() > 0.5 then
-			rotx = -1
-		end
-		if math.random() > 0.5 then
-			rotz = -1
-		end
-	end
-	--TheNet:Announce("code ran") --For Troubleshooting
-	for i,v in ipairs(data) do
-		--TheNet:Announce(i) --For Troubleshooting
-		--TheNet:Announce("Prefab: "..v.prefab) --For Troubleshooting
-		if (v.prefab ~= "um_devcap_tileflag" or v.prefab ~= "seeds") then
-			local prefab = SpawnPrefab(v.prefab)
-			--TheNet:Announce("spawninwater_prefab: ")
-			--TheNet:Announce(inst.spawninwater_prefab)
 
-			--for area handlers, so they can find all things created by a especific SS.
-			if inst.tags then
-				for k, v in ipairs(inst.tags) do
-					prefab:AddTag("umss_"..v)
-				end
-				prefab.umss_tags = inst.tags
-			end
-
-			if inst.spawninwater_prefab or inst.spawninwater_prefab == nil then
-				prefab.Transform:SetPosition(x+v.x*rotx,(v.y and v.y+y) or 0,z+v.z*rotz)
-			else
-				if not TheWorld.Map:IsOceanTileAtPoint(x+v.x*rotx, (v.y and v.y+y) or 0, z+v.z*rotz) then
-					--TheNet:Announce("not ocean tile, setting pos!")
-					prefab.Transform:SetPosition(x+v.x*rotx,(v.y and v.y+y) or 0,z+v.z*rotz)
-				else
-					--TheNet:Announce("ocean tile! removing!")
-					prefab:Remove()
-				end
-			end
-			if v.diseased then
-				--If vve ever add back acid rain I guess vve could have this, vvhatever
-			end
-			if v.barren and prefab.components.pickable then
-				prefab.components.pickable:MakeBarren()
-			end
-			if v.withered and prefab.components.witherable then
-				prefab.components.witherable:ForceWither()
-			end
-		end
-		if v.tile and v.tile ~= TheWorld.Map:GetTileAtPoint(x+v.x*rotx,(v.y and v.y+y) or 0,z+v.z*rotz) then
-			local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x+v.x*rotx,(v.y and v.y+y) or 0,z+v.z*rotz)
-			--TheNet:Announce("spawninwater_tile:")
-			--TheNet:Announce(inst.spawninwater_tile)
-			if inst.spawninwater_tile or inst.spawninwater_tile == nil then
-				--TheNet:Announce("spawninwater true!")
-				print(v.tile)
-				TheWorld.Map:SetTile(tile_x,tile_z,v.tile)
-			else
-				if 	TheWorld.Map:IsOceanTileAtPoint(x+v.x*rotx, (v.y and v.y+y) or 0, z+v.z*rotz) then
-					--TheNet:Announce("water at point!")
-				else
-					--TheNet:Announce("not water!")
-					if v.tile == 257 then
-						TheWorld.components.dockmanager:CreateDockAtPoint(tile_x, (v.y and v.y+y) or 0, tile_z, v.tile)
-					else
-						TheWorld.Map:SetTile(tile_x,tile_z,v.tile)
-					end
-				end
-			end
-		end
-	end
+--for the fences...
+local ROT_SIDES = 8
+local function CalcRotationEnum(rot)
+    return math.floor((math.floor(rot + 0.5) / 45) % ROT_SIDES)
 end
 
-local function superspawner(extension,data,rotatable,tile_centered, spawninwater_tile, spawninwater_prefab, tags)
+local function CalcFacingAngle(rot)
+    return CalcRotationEnum(rot) * 45
+end
 
-	local function makefn()
+local function IsNarrow(inst)
+    return CalcRotationEnum(inst.Transform:GetRotation()) % 2 == 0
+end
+
+local function SetOffset(inst, offset)
+    if inst.dooranim ~= nil then
+        inst.dooranim.Transform:SetPosition(offset, 0, 0)
+    end
+end
+
+local function ApplyDoorOffset(inst)
+    SetOffset(inst, inst.offsetdoor and 0.45 or 0)
+end
+
+local function GetAnimState(inst)
+    return (inst.dooranim or inst).AnimState
+end
+
+local function SetOrientation(inst, rotation)
+    --rotation = CalcFacingAngle(rotation)
+
+    inst.Transform:SetRotation(rotation)
+
+    if inst.anims.narrow then
+
+        if IsNarrow(inst) then
+            if not inst.bank_narrow_set then
+                inst.bank_narrow_set = true
+                inst.bank_wide_set = nil
+                GetAnimState(inst):SetBank(inst.anims.narrow)
+            end
+        else
+            if not inst.bank_wide_set then
+                inst.bank_wide_set = true
+                inst.bank_narrow_set = nil
+                GetAnimState(inst):SetBank(inst.anims.wide)
+            end
+        end
+
+        if inst.isdoor then
+            ApplyDoorOffset(inst)
+        end
+    end
+end
+
+local function UncompromisingSpawnGOOOOO(inst, data)
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    if inst.tile_centered then
+        local tile_x, tile_y, tile_z = TheWorld.Map:GetTileCenterPoint(x, 0, z)
+        inst.Transform:SetPosition(tile_x, tile_y, tile_z)
+        x, y, z = inst.Transform:GetWorldPosition()
+    end
+
+    local rotx = 1
+    local rotz = 1
+
+    if inst.rotatable then -- This rotates the vvhole 
+        if math.random() > 0.5 then rotx = -1 end
+        if math.random() > 0.5 then rotz = -1 end
+    end
+    -- TheNet:Announce("code ran") --For Troubleshooting
+    for i, v in ipairs(data) do
+        -- TheNet:Announce(i) --For Troubleshooting
+        -- TheNet:Announce("Prefab: "..v.prefab) --For Troubleshooting
+        if v.prefab ~= "um_dynlayout_tileflag" and v.prefab ~= "seeds" --[[hecking birds man]]then
+            local prefab = SpawnPrefab(v.prefab)
+            -- TheNet:Announce("spawninwater_prefab: ")
+            -- TheNet:Announce(inst.spawninwater_prefab)
+
+            -- for area handlers, so they can find all things created by a especific SS.
+            if inst.tags then
+                for k, v in ipairs(inst.tags) do
+                    prefab:AddTag("dynlayout_" .. v)
+                end
+                prefab.dynlayout_tags = inst.tags
+            end
+
+            if inst.spawninwater_prefab or inst.spawninwater_prefab == nil then
+                prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+            else
+                if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+                    -- TheNet:Announce("not ocean tile, setting pos!")
+                    prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+                else
+                    -- TheNet:Announce("ocean tile! removing!")
+                    prefab:Remove()
+                end
+            end
+            if v.diseased then
+                -- If vve ever add back acid rain I guess vve could have this, vvhatever
+            end
+            if v.barren and prefab.components.pickable then
+                prefab.components.pickable:MakeBarren()
+            end
+            if v.withered and prefab.components.witherable then
+                prefab.components.witherable:ForceWither()
+            end
+            if v.ocean then
+                if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+                    prefab:Remove()
+                end
+            end
+            if v.health and prefab.components.health then
+                prefab.components.health:SetPercent(v.health)
+            end
+            if v.contents and prefab.components.container then
+                print(v.contents) -- just testing!
+            end
+            if v.burnt and prefab.components.burnable then
+                prefab.components.burnable.onburnt(prefab)
+            end
+            if v.uses and prefab.components.finiteuses then
+                prefab.components.finiteuses:SetUses(v.uses)
+            end
+            if v.fuel and prefab.components.fueled then
+                prefab.components.fueled:SetPercent(v.fuel)
+            end
+            if v.scenario then
+                if prefab.components.scenariorunner == nil then
+                    prefab:AddComponent("scenariorunner")
+                end
+                prefab.components.scenariorunner:SetScript(v.scenario)
+            end
+            if v.rotation and (prefab.prefab == "fence" or prefab.prefab == "fence_gate") then
+				SetOrientation(prefab, (v.rotation*rotx)*rotz)
+			elseif v.rotation and v.rotation ~= 0 then
+                prefab.Transform:SetRotation((v.rotation*rotx)*rotz)
+			end
+
+            if v.tile and v.tile ~= TheWorld.Map:GetTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+                local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+                -- TheNet:Announce("spawninwater_tile:")
+                -- TheNet:Announce(inst.spawninwater_tile)
+                if inst.spawninwater_tile or inst.spawninwater_tile == nil then
+                    -- TheNet:Announce("spawninwater true!")
+                    print(v.tile)
+                    TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
+                else
+                    if TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+                        -- TheNet:Announce("water at point!")
+                    else
+                        -- TheNet:Announce("not water!")
+                        if v.tile == 257 then
+                            TheWorld.components.dockmanager:CreateDockAtPoint(tile_x, (v.y and v.y + y) or 0, tile_z, v.tile)
+                        else
+                            TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+--name and table are required. Others are optional.
+--name,table [,rotate,tile_centered, spawninwater_tile, spawninwater_prefab, tags, spawnfn]
+local function superspawner(data)
+    local function makefn()
 		local inst = CreateEntity()
 		inst.entity:AddTransform()
 		inst.entity:AddNetwork()
 		inst.entity:SetPristine()
-			
+
 		if not TheWorld.ismastersim then
 			return inst
 		end
 
-		inst.tags = tags
-		inst.spawnTable = data
-		inst.rotatable = rotatable
-		inst.tile_centered = tile_centered
-		inst.spawninwater_tile = spawninwater_tile
-		inst.spawninwater_prefab = spawninwater_prefab
+		inst.tags = data.tags
+		inst.spawnTable = data.table
+		inst.rotatable = data.rotate or false
+		inst.tile_centered = data.tile_centered or false
+		inst.spawninwater_tile = data.spawninwater_tile or true
+		inst.spawninwater_prefab = data.spawninwater_prefab or true
+        inst.SpawnFn = data.spawnfn
+
 		--TheNet:Announce("INIT") --For Troubleshooting
 		inst:DoTaskInTime(0,
 			function(inst)
 				--TheNet:Announce("Code Ran") --For Troubleshooting
 				UncompromisingSpawnGOOOOO(inst,inst.spawnTable)
-				inst:Remove() 
+                if data.spawnfn == nil then--would except the spawn fn to remove the thing 
+				    inst:Remove()
+                else
+                    if inst.SpawnFn ~= nil then
+                        inst.SpawnFn(inst)
+                    end
+                end
 			end)
 		return inst
 	end
-	
-	return Prefab("umss_"..extension, makefn)
+    if data.name ~= nil and data.table ~= nil then--camel case won't work but at least we can write with it in here.
+        return Prefab("umss_"..string.lower(data.name), makefn)
+    end
 end
 
 
+--Version 1.3
+--[[
+    Create your spawners by filling out the spawners table!
+    @name(str) - The name of prefab that will spawn the captured tiles/prefabs. Has the "umss_" prefix in-game. REQUIRED
+    @table(table) - The result of devcapture, this has all the data of things to be spawned. Defined on scripts/umss_tables.lua (call it with umss_tables.your_table_nane) REQUIRED
+    @rotate(bool) - Whether the setpiece will rotate when spawning.
+    @tile_centered(bool) - Whether the spawner will center itself on a tile before spawning things. Useful/Required for setpieces using tiles.
+    @spawninwater_prefab(bool) - Whether the spawned prefabs will spawn in water. (For the oposite, prefabs captured on water already do not spawn on land.)
+    @spawninwater_tile(bool) - Similar to spawninwater_prefab, but for tiles instead.
+    @tags(table) - Tags to be applied to spawned prefabs, useful for removing/finding prefabs spawned by the setpiece.
+    @spawnfn(fn) - Function, runs any function defined here on spawn, DISABLES SELF-REMOVING - ADD REMOVAL ON THE FUNCTION ITSELF.
+]]
 
---Version 1.1
--- Return your spavvners by filling out superspawner("extension", definedTable,rotatable(binary),centered(binary)), 
---"extension" shovvs hovv your spavvner is named, definedTable is the table defined above at the top of the file
---The third paramater is vvhether or not you allovv rotation... setting it to true vvill mean the spavvner can also rotate the vvhole 
---preset before spavving about the center, setting it to false means it *ALVVAYS* spavvns at the same orientation.
+local spawner_data = {
+    --{name = "name", table = umss_tables.table, rotate = true/false, tile_centered = true/false, spawninwater_tile = true/false, spawninwater_prefab = true/false, tags = {"tag1", "tag2"}, spawnfn = function}
+    {name = "test1", table = umss_tables.testTable3, rotate = true, tile_centered = true},
+    {name = "test2", table = umss_tables.testTable2, rotate = true},
+    --don't ask what happened to test3
+    {name = "test3", table = umss_tables.testTable4, rotate = true, tile_centered = true},
 
---Updated, added tile support and 4th parameter, if the table data contains tile data, then tiles vvill be placed too.
---Fourth parameter added, determines if the UMSS moves itself to the center of a tile before spavvning objects.
---5th parameter added, determines whether TILES will be placed in water, defaults to true if empty.
---6th is the same but for PREFABS, also defaults to true.
---7th is tags, every prefab spawned will have these tags. Useful for removing via FindEntities.
+    {name = "demoTable", table = umss_tables.demoTable, rotate = true},
 
---IMPORTANT NOTE: DO NOT USE CAMEL CASE FOR THE EXTENSION, FOR SOME REASON THE GAME VVOULD NOT CREATE PREFABS IN CAMEL CASE I HAVE NO IDEA VVHY IT'S ABSURD
---FYI CAMEL CASE EXAMPLES": "logCamp","oceanZone","seaGore","moonGut","moonFested",moonMavv","beMooned"
+    {name = "scorpionOutskirts1", table = umss_tables.scorpionOutskirts1, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "scorpionOutskirts2", table = umss_tables.scorpionOutskirts2, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "scorpionOutskirts3", table = umss_tables.scorpionOutskirts3, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "scorpionOutskirts4", table = umss_tables.scorpionOutskirts4, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "scorpionCenter4", table = umss_tables.scorpionCenter1, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
 
---name, table, rotateable, tile_centered, spawninwater_tiles, spawninwater_prefabs, tags
-return superspawner("test1", testTable3,true,true), --Novv demos tile and ocean tile usage
-	superspawner("test2", testTable2,true),
-	superspawner("demotable", demoTable,true),
-	superspawner("moonoil", moonOil, true, false, false, false),
-	superspawner("failedfisherman", failedFisherman, false),
-	superspawner("tridenttrap", tridentTrap, false),
-	superspawner("impactfuldiscovery", impactfulDiscovery, true, false, false, false),
-	superspawner("basefrag_rattystorage", baseFrag_rattyStorage, true, false, false, false),
-	superspawner("basefrag_smellykitchen", baseFrag_smellyKitchen, true, false, false, false),
-	superspawner("sunkenboat", sunkenboat, true),
+    {name = "basefrag_rattyStorage", table = umss_tables.baseFrag_rattyStorage, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "basefrag_rattySmellyKitchen", table = umss_tables.baseFrag_smellyKitchen, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
 
-	superspawner("scorpionoutskirts1",scorpionOutskirts1,true,true),
-	superspawner("scorpionoutskirts2",scorpionOutskirts2,true,true),
-	superspawner("scorpionoutskirts3",scorpionOutskirts3,true,true),
-	superspawner("scorpionoutskirts4",scorpionOutskirts4,true,true),
-	superspawner("scorpioncenter1",scorpionCenter1,true,true),
+    {name = "moonOil", table = umss_tables.moonOil, rotate = true, spawninwater_prefab = false},
+    {name = "failedFisherman", table = umss_tables.failedFisherman},
+    {name = "tridentTrap", table = umss_tables.tridentTrap},
+    {name = "impactfulDiscovery", table = umss_tables.impactfulDiscovery, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "sunkenboat", table = umss_tables.sunkenboat, rotate = true},
 
-	superspawner("inactivebiome_test", inactivebiome_test, true, true, true, true, {"utw_inactivebiome"}),
-	superspawner("activebiome_test_rr", activebiome_test_rr, true, true, true, true, {"utw_activebiome"}),
-	superspawner("activebiome_test_ss", activebiome_test_ss, true, true, true, true, {"utw_activebiome"}),
-	superspawner("activebiome_test_bb", activebiome_test_bb, true, true, true, true, {"utw_activebiome"}),
+    {name = "inactiveBiome_test", table = umss_tables.inactivebiome_test, rotate = true, tile_centered = true, tags = {"utw_inactivebiome"}},
+    {name = "activeBiome_test_rr", table = umss_tables.activebiome_test_rr, rotate = true, tile_centered = true, tags = {"utw_activebiome"}},
+    {name = "activeBiome_test_ss", table = umss_tables.activebiome_test_ss, rotate = true, tile_centered = true, tags = {"utw_activebiome"}},
+    {name = "activeBiome_test_bb", table = umss_tables.activebiome_test_bb, rotate = true, tile_centered = true, tags = {"utw_activebiome"}},
 
-	superspawner("activebiome_cbts_bb", activebiome_cbts_bb, true, true, true, true, {"utw_activebiome"}),
-	superspawner("activebiome_cbts_ss", activebiome_cbts_ss, true, true, true, true, {"utw_activebiome"}),
-	superspawner("inactivebiome_cbts_sludge", inactivebiome_cbts_sludge, true, true, true, true, {"utw_inactivebiome"})
+    {name = "activeBiome_cbts_ss", table = umss_tables.activebiome_cbts_ss, rotate = true, tile_centered = true, tags = {"utw_activebiome"}},
+    {name = "activeBiome_cbts_bb", table = umss_tables.activebiome_cbts_bb, rotate = true, tile_centered = true, tags = {"utw_activebiome"}},
+    {name = "inactiveBiome_cbts_1", table = umss_tables.inactivebiome_cbts_1, rotate = true, tile_centered = true, tags = {"utw_inactivebiome"}},
+    {name = "inactiveBiome_cbts_2", table = umss_tables.inactivebiome_cbts_2, rotate = true, tile_centered = true, tags = {"utw_inactivebiome"}},
+    {name = "inactiveBiome_cbts_3", table = umss_tables.inactivebiome_cbts_3, rotate = true, tile_centered = true, tags = {"utw_inactivebiome"}},
+
+    {name = "megabaseRuins_intersection", table = umss_tables.megabaseruins_intersection, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "megabaseRuins_centerpiece", table = umss_tables.megabaseruins_centerpiece, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "megabaseRuins_road", table = umss_tables.megabaseruins_road, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+}
+
+local spawner_prefabs = {}
+
+for i, v in ipairs(spawner_data) do
+    local spawner = superspawner(v)
+    table.insert(spawner_prefabs, spawner)
+end
+
+return unpack(spawner_prefabs)
