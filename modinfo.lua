@@ -45,6 +45,13 @@ server_filter_tags = {
 	"hardcore"
 }
 
+
+mod_dependencies = {
+    {--WIXIE, only for beta build.
+        workshop = "workshop-2758491764",
+    },
+}
+
 priority = -10
 
 ------------------------------
