@@ -25,37 +25,40 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 	function self:BeginOpening()
 		_OldBeginOpening(self)
 	
-		if self.inst.item ~= nil then
-			self.inst.item.netweight = 1
-		end
-	
-		local my_x, my_y, my_z = self.inst.Transform:GetWorldPosition()
-		local fishies = TheSim:FindEntities(my_x,my_y,my_z, self.collect_radius, {"oceanfishable"})
-		for k, v in pairs(fishies) do
-			if k < 3 then
-				local fish = SpawnPrefab(v.prefab.."_inv")
-				if self.inst.item ~= nil and v.components.weighable ~= nil then
-					local minweight = v.components.weighable.min_weight
-				
-					if minweight < 100 then
-						self.inst.item.netweight = self.inst.item.netweight + 2
-					elseif minweight >= 100 and minweight < 200 then
-						self.inst.item.netweight = self.inst.item.netweight + 4
-					elseif minweight >= 200 then
-						self.inst.item.netweight = self.inst.item.netweight + 6
+		if self.inst:HasTag("uncompromising_fishingnetvisualizer") then
+			print("extra netty")
+			if self.inst.item ~= nil then
+				self.inst.item.netweight = 1
+			end
+		
+			local my_x, my_y, my_z = self.inst.Transform:GetWorldPosition()
+			local fishies = TheSim:FindEntities(my_x,my_y,my_z, self.collect_radius, {"oceanfishable"})
+			for k, v in pairs(fishies) do
+				if k < 3 then
+					local fish = SpawnPrefab(v.prefab.."_inv")
+					if self.inst.item ~= nil and v.components.weighable ~= nil then
+						local minweight = v.components.weighable.min_weight
+					
+						if minweight < 100 then
+							self.inst.item.netweight = self.inst.item.netweight + 2
+						elseif minweight >= 100 and minweight < 200 then
+							self.inst.item.netweight = self.inst.item.netweight + 4
+						elseif minweight >= 200 then
+							self.inst.item.netweight = self.inst.item.netweight + 6
+						end
 					end
-				end
-				
-				v:Remove()
-				fish.Transform:SetPosition(my_x, my_y, my_z)
-				fish.components.weighable:SetWeight(fish.components.weighable.min_weight)
+					
+					v:Remove()
+					fish.Transform:SetPosition(my_x, my_y, my_z)
+					fish.components.weighable:SetWeight(fish.components.weighable.min_weight)
 
-				if fish:IsValid() then
-					fish:RemoveFromScene()
+					if fish:IsValid() then
+						fish:RemoveFromScene()
+					end
+					
+					table.insert(self.captured_entities, fish)
+					self.captured_entities_collect_distance[fish] = 0
 				end
-				
-				table.insert(self.captured_entities, fish)
-				self.captured_entities_collect_distance[fish] = 0
 			end
 		end
 		
@@ -63,52 +66,57 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 	end
 	
 	function self:DropItem(item, last_dir_x, last_dir_z, idx)
-		local thrower_x, thrower_y, thrower_z = self.thrower.Transform:GetWorldPosition()
+		if self.inst:HasTag("uncompromising_fishingnetvisualizer") then
+			print("droppy drop")
+			local thrower_x, thrower_y, thrower_z = self.thrower.Transform:GetWorldPosition()
 
-		local time_between_drops = 0.25
-		local initial_delay = 0.15
-		item:DoTaskInTime(idx * time_between_drops + initial_delay, function(inst)
+			local time_between_drops = 0.25
+			local initial_delay = 0.15
+			item:DoTaskInTime(idx * time_between_drops + initial_delay, function(inst)
 
-			item:ReturnToScene()
-			item:PushEvent("on_release_from_net")
+				item:ReturnToScene()
+				item:PushEvent("on_release_from_net")
 
-			local drop_vec_x = TheCamera:GetRightVec().x
-			local drop_vec_z = TheCamera:GetRightVec().z
+				local drop_vec_x = TheCamera:GetRightVec().x
+				local drop_vec_z = TheCamera:GetRightVec().z
 
-			local camera_up_vec_x, camera_up_vec_z = -TheCamera:GetDownVec().x, -TheCamera:GetDownVec().z
+				local camera_up_vec_x, camera_up_vec_z = -TheCamera:GetDownVec().x, -TheCamera:GetDownVec().z
 
-			if VecUtil_Dot(last_dir_x, last_dir_z, drop_vec_x, drop_vec_z) < 0 then
-				drop_vec_x = -drop_vec_x
-				drop_vec_z = -drop_vec_z
-			end
-
-			local up_offset_dist = 0.1
-
-			local drop_offset = GetRandomWithVariance(1, 0.2)
-			local pt_x = drop_vec_x * drop_offset + thrower_x + camera_up_vec_x * up_offset_dist
-			local pt_z = drop_vec_z * drop_offset + thrower_z + camera_up_vec_z * up_offset_dist
-
-			local physics = item.Physics
-			
-			if not TheWorld.Map:IsOceanAtPoint(pt_x, 0, pt_z) then
-				if physics ~= nil then
-					local drop_height = GetRandomWithVariance(0.65, 0.2)
-					local pt_y = drop_height + thrower_y
-					item.Transform:SetPosition(pt_x, pt_y, pt_z)
-					physics:SetVel(0, -0.25, 0)
-				else
-					item.Transform:SetPosition(pt_x, 0, pt_z)
+				if VecUtil_Dot(last_dir_x, last_dir_z, drop_vec_x, drop_vec_z) < 0 then
+					drop_vec_x = -drop_vec_x
+					drop_vec_z = -drop_vec_z
 				end
-			else
-				if physics ~= nil then
-					local drop_height = GetRandomWithVariance(0.65, 0.2)
-					local pt_y = drop_height + thrower_y
-					item.Transform:SetPosition(thrower_x, pt_y, thrower_z)
-					physics:SetVel(0, -0.25, 0)
+
+				local up_offset_dist = 0.1
+
+				local drop_offset = GetRandomWithVariance(1, 0.2)
+				local pt_x = drop_vec_x * drop_offset + thrower_x + camera_up_vec_x * up_offset_dist
+				local pt_z = drop_vec_z * drop_offset + thrower_z + camera_up_vec_z * up_offset_dist
+
+				local physics = item.Physics
+				
+				if not TheWorld.Map:IsOceanAtPoint(pt_x, 0, pt_z) then
+					if physics ~= nil then
+						local drop_height = GetRandomWithVariance(0.65, 0.2)
+						local pt_y = drop_height + thrower_y
+						item.Transform:SetPosition(pt_x, pt_y, pt_z)
+						physics:SetVel(0, -0.25, 0)
+					else
+						item.Transform:SetPosition(pt_x, 0, pt_z)
+					end
 				else
-					item.Transform:SetPosition(thrower_x, 0, thrower_z)
+					if physics ~= nil then
+						local drop_height = GetRandomWithVariance(0.65, 0.2)
+						local pt_y = drop_height + thrower_y
+						item.Transform:SetPosition(thrower_x, pt_y, thrower_z)
+						physics:SetVel(0, -0.25, 0)
+					else
+						item.Transform:SetPosition(thrower_x, 0, thrower_z)
+					end
 				end
-			end
-		end)
+			end)
+		else 
+			_OldBeginOpening(self)
+		end
 	end
 end)

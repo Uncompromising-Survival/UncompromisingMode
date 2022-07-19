@@ -20,6 +20,7 @@ local function fn()
 
     inst.Transform:SetFourFaced()
 
+    inst:AddTag("uncompromising_fishingnetvisualizer")
     inst:AddTag("NOCLICK")
 
     inst.AnimState:SetBank("boat_net")
