@@ -1,7 +1,7 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description = 
 [[
-󰀔 [ Version 1.3 : "Calm Before the Storm" ]
+󰀔 [ Version 1.4 : "Calm Before the Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
