@@ -44,7 +44,7 @@ local function do_bomb(inst, thrower, target, no_hit_tags, damage, break_boats)
         if platform ~= nil then
             local dsq_to_boat = platform:GetDistanceSqToPoint(bx, by, bz)
             if dsq_to_boat < TUNING.GOOD_LEAKSPAWN_PLATFORM_RADIUS then
-                platform:PushEvent("spawnnewboatleak", {pt = Vector3(bx, by, bz), leak_size = "small_leak", playsoundfx = true})
+                platform:PushEvent("spawnnewboatleak", {pt = Vector3(bx, by, bz), leak_size = "small_leak", playsoundfx = true, cause = "waterplant_bomb"})
             end
         end
     end
