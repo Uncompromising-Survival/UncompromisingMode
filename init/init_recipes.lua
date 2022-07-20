@@ -568,7 +568,7 @@ AddRecipe2(
     "hermitshop_patch",
     {Ingredient("messagebottleempty", 1)},
     TECH.HERMITCRABSHOP_ONE,
-    {nounlock = true, product = "boatpatch_sludge", sg_state = "give", numtogive = 4}
+    {nounlock = true, product = "boatpatch", sg_state = "give", numtogive = 3}
 )
 ChangeSortKey("hermitshop_patch", "hermitshop_steeringwheel", "CRAFTING_STATION", true)
 
