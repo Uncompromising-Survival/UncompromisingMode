@@ -26,30 +26,58 @@ local function ClearActiveBiome(inst)
 end
 
 local function SpawnSiren(inst)
-	ClearInactiveBiome(inst)--for replacing
-	ClearActiveBiome(inst)
-	--TheNet:Announce("spawn siren")
-	local x,y,z = inst.Transform:GetWorldPosition()
+	print("spawned siren:",inst.spawned_siren)
+    if not inst.spawned_siren then
+        ClearInactiveBiome(inst) -- for replacing
+        ClearActiveBiome(inst)
+        -- TheNet:Announce("spawn siren")
+        local x, y, z = inst.Transform:GetWorldPosition()
 
-	if inst.sirenpoint == "ocean_speaker" then
-		local biome = SpawnPrefab("umss_activebiome_test_rr")
-		biome.Transform:SetPosition(x,y,z)
-	elseif inst.sirenpoint == "siren_bird_nest" then
-		local biome = SpawnPrefab("umss_activebiome_cbts_bb")
-		biome.Transform:SetPosition(x,y,z)
-	elseif inst.sirenpoint == "siren_throne" then
-		local biome = SpawnPrefab("umss_activebiome_cbts_ss")
-		biome.Transform:SetPosition(x,y,z)
+        if inst.sirenpoint == "ocean_speaker" then
+            local biome = SpawnPrefab("umss_activebiome_test_rr")
+            biome.Transform:SetPosition(x, y, z)
+        elseif inst.sirenpoint == "siren_bird_nest" then
+            local biome = SpawnPrefab("umss_activebiome_cbts_bb")
+            biome.Transform:SetPosition(x, y, z)
+        elseif inst.sirenpoint == "siren_throne" then
+            local biome = SpawnPrefab("umss_activebiome_cbts_ss")
+            biome.Transform:SetPosition(x, y, z)
+        end
+        inst.spawned_siren = true
+    end
+end
+
+
+local function SpawnInactive(inst)
+	print("spawned inactive:",inst.spawned_inactive)
+	if not inst.spawned_inactive then --just for beta, while we don't nessesarily need biomes to reroll.
+		ClearActiveBiome(inst)--for replacing
+		ClearInactiveBiome(inst)
+		--TheNet:Announce("spawn innactive")
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local test = SpawnPrefab("umss_inactivebiome_cbts_sludge")
+		test.Transform:SetPosition(x,y,z)
+		
+		inst.spawned_inactive = true
 	end
 end
 
-local function SpawnInactive(inst)
-	ClearActiveBiome(inst)--for replacing
-	ClearInactiveBiome(inst)
-	--TheNet:Announce("spawn innactive")
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local test = SpawnPrefab("umss_inactivebiome_cbts_sludge")
-	test.Transform:SetPosition(x,y,z)
+local function OnSave(inst, data)
+	if data ~= nil then
+		data.spawned_siren = inst.spawned_siren
+		data.spawned_inactive = inst.spawned_inactive
+	end
+end
+
+local function OnLoad(inst, data)
+	if data ~= nil then
+		if data.spawned_siren ~= nil then
+			inst.spawned_siren = data.spawned_siren
+		end
+		if data.spawned_inactive ~= nil then
+			inst.spawned_inactive = data.spawned_inactive
+		end
+	end
 end
 
 local function fn()
@@ -68,6 +96,9 @@ local function fn()
     end
 
 	inst.sirenpoint = nil
+
+	inst.OnSave = OnSave
+	inst.OnLoad = OnLoad
 
 	inst:ListenForEvent("generate_inactive", SpawnInactive)
 	inst:ListenForEvent("generate_main", SpawnSiren)
