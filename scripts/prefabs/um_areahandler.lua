@@ -56,6 +56,11 @@ local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
+
+	inst:AddTag("areahandler")
+	inst:AddTag("CLASSIFIED")
+	inst:AddTag("ignorewalkableplatforms")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
