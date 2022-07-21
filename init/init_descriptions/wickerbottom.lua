@@ -379,6 +379,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I believe I might have misread the recipe book."
+	DESCRIBE.UM_DEVILED_EGGS = "Aptly named."
 	DESCRIBE.LUSH_ENTRANCE = "Curious. It smells strongly of bryophyta."
 	DESCRIBE.CRITTER_FIGGY = "An Eriosomatinae out here? And a... particularly round one."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Oh dear. I don't except its mother to come back for it."

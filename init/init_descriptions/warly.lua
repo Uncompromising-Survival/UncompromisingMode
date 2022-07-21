@@ -372,6 +372,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.MINERHAT_ELECTRICAL = "help"
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I... think I misheard the order."
+	DESCRIBE.UM_DEVILED_EGGS = "Hors d'evil."
 	DESCRIBE.LUSH_ENTRANCE = "There's a very strong aroma coming from down there."
 	DESCRIBE.CRITTER_FIGGY = "What was your name again? Figgy, like the fruit, right?"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The food's delivering itself now!"

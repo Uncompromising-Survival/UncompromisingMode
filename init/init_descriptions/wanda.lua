@@ -368,6 +368,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.MINERHAT_ELECTRICAL = "help"
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Even the food is watching me."
+	DESCRIBE.UM_DEVILED_EGGS = "Not in a hundred years."
 	DESCRIBE.LUSH_ENTRANCE = "I should explore this later. Or earlier."
 	DESCRIBE.CRITTER_FIGGY = "You're a little cosmic horror across timelines, you know that?"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What, you eggs?"

@@ -372,6 +372,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "This definitely won't go down right."
+	DESCRIBE.UM_DEVILED_EGGS = "The birds true nature is revealed."
 	DESCRIBE.LUSH_ENTRANCE = "Ya think there's something worth explorin' for, Lucy?"
 	DESCRIBE.CRITTER_FIGGY = "I ain't go no beef with ya' so long as you keep away from the trees, ya' hear?"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "I've got the perfect opportunity to snuff it out is sitting right there."

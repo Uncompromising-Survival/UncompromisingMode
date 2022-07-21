@@ -372,6 +372,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.MINERHAT_ELECTRICAL = "help"
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "The remains of a valiant foe watch with disgust!"
+	DESCRIBE.UM_DEVILED_EGGS = "I hath hatched pure evil!"
 	DESCRIBE.LUSH_ENTRANCE = "I've no time to dig when there's hunts to be had!"
 	DESCRIBE.CRITTER_FIGGY = "A blight spawned warrior!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The start of many mighty warriors!"

@@ -386,6 +386,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Aww, they are looking right at me!"
+	DESCRIBE.UM_DEVILED_EGGS = "Yuck! I hate runny eggs!"
 	DESCRIBE.LUSH_ENTRANCE = "Oh, I bet there's all sorts of stuff to burn down there!"
 	DESCRIBE.CRITTER_FIGGY = "Awwh! So fluffy, I wouldn't burn a hair on your lil' body!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Think if I light the nest on fire the eggs'll fry?"

@@ -439,6 +439,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	
     DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Little gooey bits I love these!"
+	DESCRIBE.UM_DEVILED_EGGS = "Yummy eggs, they smell good!"
 	DESCRIBE.LUSH_ENTRANCE = "Just another hole. Actually I have not seen this one before."
 	DESCRIBE.CRITTER_FIGGY = "."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "It seems they came to me!"

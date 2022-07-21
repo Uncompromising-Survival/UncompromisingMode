@@ -378,6 +378,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "This feels like a good way to get food poisoning."
+	DESCRIBE.UM_DEVILED_EGGS = "They've been sitting in the back of the fridge for too long."
 	DESCRIBE.LUSH_ENTRANCE = "I've learnt my lesson poking around ominous doorways."
 	DESCRIBE.CRITTER_FIGGY = "I know a hard worker when I see 'em!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Hah! I'm impressed those shells didn't crack from that fall."

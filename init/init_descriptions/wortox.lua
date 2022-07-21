@@ -373,6 +373,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "The mortals surely can't like this."
+	DESCRIBE.UM_DEVILED_EGGS = "You're yolking me!"
 	DESCRIBE.LUSH_ENTRANCE = "Oh my, hoho! What an ominous hole!"
 	DESCRIBE.CRITTER_FIGGY = "We could be companions, I feel that'd be ideal!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The nest of a bird, or so I've been told."

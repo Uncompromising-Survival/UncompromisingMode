@@ -459,6 +459,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I'll have to keep an eye on these eyes."
+	DESCRIBE.UM_DEVILED_EGGS = "They smell fowl."
 	DESCRIBE.LUSH_ENTRANCE = "What a perfectly innocent looking ominous hole in the ground."
 	DESCRIBE.CRITTER_FIGGY = "Hmm. I think I'll call you Figgy Newton Fluffybottom the Fourteenth."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What an eggscellent find!"
