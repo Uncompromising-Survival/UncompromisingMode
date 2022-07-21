@@ -315,14 +315,21 @@ AddRecipe2(
 )
 ChangeSortKey("mutator_trapdoor", "mutator_warrior", "CHARACTER", true)
 
-AddRecipe2(
-    "book_rain",
-    {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)},
-    TECH.MAGIC_THREE,
-    {builder_tag = "bookbuilder"},
-    {"CHARACTER"}
-)
-ChangeSortKey("book_rain", "book_tentacles", "CHARACTER", true)
+if not TUNING.DSTU.UPDATE_CHECK then
+    AddRecipe2(
+        "book_rain_um",
+        {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)},
+        TECH.MAGIC_THREE,
+        {builder_tag = "bookbuilder"},
+        {"CHARACTER"}
+    )
+    ChangeSortKey("book_rain_um", "book_tentacles", "CHARACTER", true)
+else
+    if GetModConfigData("legacy_book_rain_recipe") then
+        AllRecipes["book_rain"].ingredients = {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)}
+        AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
+    end
+end
 
 AddRecipe2(
     "driftwoodfishingrod",
@@ -708,7 +715,7 @@ STRINGS.RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
 STRINGS.RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
 STRINGS.RECIPE_DESC.UNCOMPROMISING_HARPOON_HEAVY = "Up for a Chain'ge?"
 STRINGS.RECIPE_DESC.UM_MAGNERANG = "Mutual Attraction!"
-STRINGS.RECIPE_DESC.BOOK_RAIN = "A catalogue of weather effects."
+STRINGS.RECIPE_DESC.BOOK_RAIN_UM = "A catalogue of weather effects."
 STRINGS.RECIPE_DESC.RAIN_HORN = "Drown the world."
 STRINGS.RECIPE_DESC.HAT_RATMASK = "Sniff out some vermin!"
 STRINGS.RECIPE_DESC.FLORAL_BANDAGE = "Sweetened healing!"
