@@ -20,7 +20,7 @@ local component_post = {
 	"perishable",
 	--"carnivalevent",
 	"lootdropper",
-	--"ambientsound",
+	"ambientsound",
 	"foodaffinity",
 	"eater",
 	"edible",
