@@ -377,6 +377,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.MINERHAT_ELECTRICAL = "help"
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I have lost my appetite."
+	DESCRIBE.UM_DEVILED_EGGS = "Everything I touch seems to turn out this way."
 	DESCRIBE.LUSH_ENTRANCE = "Hmpf, I know better than to go poking my nose in places I shouldn't."
 	DESCRIBE.CRITTER_FIGGY = "Mandibles off the suit, pal."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "It's just begging to be stomped on."

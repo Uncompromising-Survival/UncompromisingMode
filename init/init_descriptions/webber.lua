@@ -374,5 +374,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I think we might have gone too far."
 	DESCRIBE.LUSH_ENTRANCE = "I'm not sure I want to go down there... but he wants to!"
+	DESCRIBE.UM_DEVILED_EGGS = "We love these!"
 	DESCRIBE.CRITTER_FIGGY = "Yay!! A new bug friend!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "He says he thinks our nest is safer."

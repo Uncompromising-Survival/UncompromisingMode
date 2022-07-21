@@ -339,6 +339,7 @@ return {
 	"eyeofterror_mini_ally",
 	"eyeofterror_mini_projectile_ally",
 	"stuffed_peeper_poppers",
+	"um_deviled_eggs",
 	
 	"siren_bird_nest",
 	"um_scorpionhole",

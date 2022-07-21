@@ -120,7 +120,7 @@ recipes.frognewton.test = function(cooker, names, tags) return (names.fig or nam
 -----------------------------------------------------------------
 
 if TUNING.DSTU.CROCKPOTMONSTMEAT then
-recipes.monsterlasagna.test = function(cooker, names, tags) return tags.monster and tags.meat and (tags.monster > tags.meat or tags.monster >= 3) and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1) and LimitIceTestFn(tags, RECIPE_ICE_LIMIT) end 
+recipes.monsterlasagna.test = function(cooker, names, tags) return tags.monster and (tags.meat and tags.monster > tags.meat or tags.monster >= 3) and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1) and LimitIceTestFn(tags, RECIPE_ICE_LIMIT) end 
 recipes.monsterlasagna.priority = 51
 -- Original:           test = function(cooker, names, tags) return tags.monster and tags.monster >= 2 and not tags.inedible end,    
 end
@@ -728,6 +728,31 @@ if TUNING.DSTU.NEWRECIPES then
     AddCookerRecipe("archive_cookpot", stuffed_peeper_poppers)
 end
 RegisterInventoryItemAtlas("images/inventoryimages/stuffed_peeper_poppers.xml", "stuffed_peeper_poppers.tex")
+
+local um_deviled_eggs =
+{
+    name = "um_deviled_eggs",
+    test = function(cooker, names, tags) return tags.monster and tags.egg and not tags.meat and not tags.inedible end,
+
+    priority = 52,
+    weight = 1,
+    foodtype = "MEAT",
+    secondaryfoodtype = "MONSTER",
+	health = -TUNING.HEALING_MED,
+	hunger = TUNING.CALORIES_LARGE,
+	perishtime = TUNING.PERISH_FAST,
+	sanity = -TUNING.SANITY_MEDLARGE,
+	oneat_desc = "Sinner side up",
+	cooktime = .5,
+	tags = {"monstermeat"},
+	floater = {"med", nil, 0.58},
+}
+if TUNING.DSTU.NEWRECIPES then
+    AddCookerRecipe("cookpot", um_deviled_eggs)
+    AddCookerRecipe("portablecookpot", um_deviled_eggs)
+    AddCookerRecipe("archive_cookpot", um_deviled_eggs)
+end
+RegisterInventoryItemAtlas("images/inventoryimages/um_deviled_eggs.xml", "um_deviled_eggs.tex")
 
 --sailing rebalance related food changes.
 recipes.surfnturf.test = function(cooker, names, tags) return tags.meat and tags.meat >= 2.5 and tags.fish and tags.fish >= 2.0 and not tags.frozen end
