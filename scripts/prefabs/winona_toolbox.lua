@@ -69,7 +69,6 @@ local function MakeTackleContainer(name, bank, build, assets)
         end
 
 		inst:AddComponent("inspectable")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 
         inst:AddComponent("container")
         inst.components.container:WidgetSetup("winona_toolbox")
@@ -81,6 +80,7 @@ local function MakeTackleContainer(name, bank, build, assets)
 
 		inst:AddComponent("inventoryitem")
 		inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 
 		inst:AddComponent("lootdropper")
 
