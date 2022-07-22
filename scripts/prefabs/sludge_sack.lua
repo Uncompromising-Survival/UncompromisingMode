@@ -26,7 +26,7 @@ end
 local function ItemLost(inst, data)
     if data ~= nil and data.prev_item ~= nil then
         data.prev_item:RemoveTag("nosteal")
-        data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD)
+        data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
         data.prev_item.wet_task:Cancel()
         data.prev_item.wet_task = nil
     end
