@@ -81,6 +81,8 @@ local function ValidRepairFn(inst)
     return true
 end
 
+local BUMPER_DEPLOY_IGNORE_TAGS = { "NOBLOCK", "player", "FX", "INLIMBO", "DECOR", "walkableplatform", "structure"}
+
 local function CanDeployAtBoatEdge(inst, pt, mouseover, deployer, rot)
     local boat = mouseover ~= nil and mouseover:HasTag("boat") and mouseover or nil
     if boat == nil then
@@ -104,7 +106,7 @@ local function CanDeployAtBoatEdge(inst, pt, mouseover, deployer, rot)
     local boatangle = boat.Transform:GetRotation()
 
     local snap_point = GetCircleEdgeSnapTransform(boatsegments, radius, boatpos, pt, boatangle)
-    return TheWorld.Map:CanDeployWalkablePeripheralAtPoint(snap_point, inst)
+    return TheWorld.Map:IsDeployPointClear(snap_point, nil, inst.replica.inventoryitem:DeploySpacingRadius(), nil, nil, nil, BUMPER_DEPLOY_IGNORE_TAGS)
 end
 
 function MakeBumperType(data)
