@@ -516,6 +516,13 @@ AddRecipe2(
 )
 ChangeSortKey("um_saltsalve", "floral_bandage", "RESTORATION", true)
 
+AddRecipe2(
+    "sludge_cork",
+    {Ingredient("driftwood_log", 2), Ingredient("rope", 1)},
+    TECH.SCIENCE_ONE,
+    nil,
+    {"TOOLS"}
+)
 --[[
 AddRecipe2(
     "steeringwheel_copper",

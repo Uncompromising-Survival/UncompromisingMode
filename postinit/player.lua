@@ -16,6 +16,8 @@ env.AddPlayerPostInit(function(inst)
         end --help I can't get this stupid thing to work!!
     end
 
+    inst:AddTag("SLUDGE_CORK_upgradeuser")
+
     local function ChargeItem(item)
         if item ~= nil then
             if item.components.fueled ~= nil then

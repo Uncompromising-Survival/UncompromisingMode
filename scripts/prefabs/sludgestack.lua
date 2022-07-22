@@ -22,11 +22,9 @@ SetSharedLootTable( 'sludgestack',
     {'rocks',  1.00},
     {'rocks',  1.00},
     {'sludge',  1.00},
-    {'sludge',  1.00},
-    {'sludge',  1.00},
-    {'sludge',  1.00},
-    {'sludge',  0.50},
+    {'sludge',  0.5},
 })
+
 local function Generate(pt)
 	local prefab = "sludgestack"
 
@@ -37,9 +35,10 @@ local function Generate(pt)
 	end
 	return stack
 end
+
 local function createStacks(inst)
     local pos = inst:GetPosition()
-    
+
     for i = 1, math.random(4,8) do
         Generate(pos).Transform:SetPosition(pos.x + math.random(-15, 15), pos.y, pos.z + math.random(-15, 15))
     end
@@ -59,6 +58,77 @@ local function OnWork(inst, worker, workleft)
         loot_dropper:DropLoot(pt)
 
         inst:Remove()
+    end
+end
+
+local function fling_loot(loot)
+    loot:ReturnToScene()
+    Launch2(loot, loot, 2, 2, 5, 0, 10)
+end
+
+local function OnUpgraded(inst)
+    inst.components.harvestable:Disable()
+    --play anim of cork topping off the 
+    inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
+end
+
+local function CanUpgrade(inst)
+    if inst.components.harvestable:CanBeHarvested() then
+        return false, "NOT_HARVESTED"
+    elseif inst.components.timer:TimerExists("pop_cork") then
+        return false
+    else
+        return true
+    end
+end
+
+local function TimerDone(inst, data)
+    if data.name == "pop_cork" then
+        local MAX_LOOTFLING_DELAY = 0.8
+
+        local cork_pop_loot =
+        {
+            "sludge",
+            "sludge",
+            "sludge",
+            "sludge",
+            "sludge",--2 extra sludge compared to just harvesting normally, daily.
+            "sludge",
+            "sludge_cork"
+        }
+
+        if math.random() > 0.66 then
+            table.insert(cork_pop_loot, "nitre")
+            table.insert(cork_pop_loot, "nitre")
+            table.insert(cork_pop_loot, "nitre")
+        end
+
+        if math.random() > 0.5 then
+            if math.random() > 0.5 then
+                table.insert(cork_pop_loot, "redgem")
+            else
+                table.insert(cork_pop_loot, "bluegem")
+            end
+        end
+
+        for i,v in ipairs(cork_pop_loot) do
+            local loot = SpawnPrefab(v)
+            loot:RemoveFromScene()
+            loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            loot:DoTaskInTime(MAX_LOOTFLING_DELAY * math.random(), fling_loot)
+        end
+
+        inst.components.upgradeable.numupgrades = 0
+        --revert the art back, play an animation of the cork popping off
+
+        inst.components.harvestable:Enable()
+        inst.components.harvestable:Grow()
+
+        inst:RemoveComponent("upgradeable")--to reset the upgradeable component, so you can re-add the cork.
+        inst:AddComponent("upgradeable")
+        inst.components.upgradeable.upgradetype = UPGRADETYPES.SLUDGE_CORK
+        inst.components.upgradeable.onupgradefn = OnUpgraded
+        inst.components.upgradeable.canupgradefn = CanUpgrade
     end
 end
 
@@ -111,6 +181,7 @@ local function fn()
 
     inst:AddComponent("harvestable")
     inst.components.harvestable:SetUp("sludge", nil, TUNING.GRASS_REGROW_TIME, nil, nil)
+    --inst.components.harvestable:Grow()
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
@@ -118,15 +189,19 @@ local function fn()
     inst.components.workable:SetOnWorkCallback(OnWork)
     inst.components.workable.savestate = true
 
-    --inst:AddComponent("upgradeable")
-    --inst.components.upgradeable.upgradetype = --UPGRADETYPES.BUCKET have to learn how to upgrade component stuff!!!
-    --inst.components.upgradeable.onupgradefn = on_upgraded
+    inst:AddComponent("upgradeable")
+    inst.components.upgradeable.upgradetype = UPGRADETYPES.SLUDGE_CORK
+    inst.components.upgradeable.onupgradefn = OnUpgraded
+    inst.components.upgradeable.canupgradefn = CanUpgrade
 
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", TimerDone)
     MakeHauntableWork(inst)
 
-    --------SaveLoad might need it idk
-    --inst.OnSave = onsave
-    --inst.OnLoad = onload
+    --------SaveLoad 
+    --upgradeable already handles onsave/load for upgrades
+    --inst.OnSave = OnSave
+    --inst.OnLoad = OnLoad
 
     return inst
 end

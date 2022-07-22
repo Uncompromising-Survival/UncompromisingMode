@@ -168,3 +168,12 @@ if TUNING.DSTU.WICKERNERF then
 		return _ReadFn(act)
 	end
 end
+
+local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
+
+GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
+	if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK.."_upgradeable") then
+		return "SLUDGE_CORK"
+	end
+	return _UpgradeStrFn(act)
+end

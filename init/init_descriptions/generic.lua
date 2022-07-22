@@ -463,3 +463,4 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.LUSH_ENTRANCE = "What a perfectly innocent looking ominous hole in the ground."
 	DESCRIBE.CRITTER_FIGGY = "Hmm. I think I'll call you Figgy Newton Fluffybottom the Fourteenth."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What an eggscellent find!"
+	ACTIONFAIL.UPGRADE.NOT_HARVESTED = "Yuck, I gotta clean that first!"

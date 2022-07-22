@@ -46,7 +46,6 @@ local function sludge_fn()
         return inst
     end
 
-
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
@@ -89,10 +88,9 @@ local function oil_fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("charcoal")
-    inst.AnimState:SetBuild("charcoal")
+    inst.AnimState:SetBank("bottle")
+    inst.AnimState:SetBuild("bottle")
     inst.AnimState:PlayAnimation("idle")
-
 
     MakeInventoryFloatable(inst, "med", 0.05, 0.6)
 
@@ -101,7 +99,6 @@ local function oil_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
@@ -127,4 +124,51 @@ local function oil_fn()
     return inst
 end
 
-return Prefab("sludge", sludge_fn, assets), Prefab("sludge_oil", oil_fn, assets)
+local function bucket_fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("driftwood_log")
+    inst.AnimState:SetBuild("driftwood_log")
+    inst.AnimState:PlayAnimation("idle")
+
+    inst:AddTag("allow_action_on_impassable")
+
+    MakeInventoryFloatable(inst, "med", 0.05, 0.6)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+
+    MakeSmallBurnable(inst, TUNING.LARGE_BURNTIME)
+    MakeSmallPropagator(inst)
+
+    MakeHauntableLaunchAndIgnite(inst)
+
+    ---------------------
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_cork.xml"
+
+    inst:AddComponent("tradable")
+
+    inst:AddComponent("upgrader")
+    inst.components.upgrader.upgradetype = UPGRADETYPES.SLUDGE_CORK
+    inst.components.upgrader.upgradevalue = 2--hm
+
+    return inst
+end
+
+return Prefab("sludge", sludge_fn, assets), Prefab("sludge_oil", oil_fn, assets), Prefab("sludge_cork", bucket_fn, assets)

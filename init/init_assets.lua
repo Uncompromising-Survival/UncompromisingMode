@@ -180,9 +180,9 @@ local inventoryitems =
 	"yellowgem_cracked",
 	"zaspberry",
 	"zaspberryparfait",
-	
-	
+
 	"sludge",
+	"sludge_cork",
 	"sludge_sack",
 	"boatpatch_sludge",
 	"uncompromising_harpoon_heavy",
@@ -1070,5 +1070,7 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/grassgekko.xml"),
     --Asset("ANIM", "anim/crabapple_tree_build.zip"),
 	Asset("ANIM", "anim/sorrel.zip"),
-	Asset("ANIM", "anim/driftwood_normal.zip")
+	Asset("ANIM", "anim/driftwood_normal.zip"),
+    Asset("IMAGE", "images/inventoryimages/sludge_cork.tex"),
+	Asset("ATLAS", "images/inventoryimages/sludge_cork.xml"),
 }
