@@ -6,8 +6,6 @@ local assets =
 }
 
 local function onequip(inst, owner)
-
-
     owner.AnimState:OverrideSymbol("swap_body", "swap_piggyback", "swap_body")
     inst.components.container:Open(owner)
 end
@@ -19,15 +17,20 @@ end
 local function ItemGained(inst, data)
     if data ~= nil and data.item ~= nil then
         data.item:AddTag("nosteal")
+        data.item.wet_task = data.item:DoPeriodicTask(10, function(inst)
+            inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+        end)
     end
 end
 
 local function ItemLost(inst, data)
     if data ~= nil and data.prev_item ~= nil then
         data.prev_item:RemoveTag("nosteal")
+        data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD)
+        data.prev_item.wet_task:Cancel()
+        data.prev_item.wet_task = nil
     end
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -49,9 +52,10 @@ local function fn()
     inst.foleysound = "dontstarve/movement/foley/backpack"
 
     inst:AddTag("backpack")
+    inst:AddTag("wet")
 
     --waterproofer (from waterproofer component) added to pristine state for optimization
-    inst:AddTag("waterproofer")
+    --inst:AddTag("waterproofer")
 
     MakeInventoryFloatable(inst, "small", 0.1, 0.85)
 
@@ -68,12 +72,13 @@ local function fn()
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
+    inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
 
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("waterproofer")
-    inst.components.waterproofer:SetEffectiveness(0)
+    --inst:AddComponent("waterproofer")
+    --inst.components.waterproofer:SetEffectiveness(0)
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("sludge_sack")
@@ -81,9 +86,10 @@ local function fn()
     inst.components.container.skipopensnd = true
 
     MakeHauntableLaunchAndDropFirstItem(inst)
-    
+
     inst:ListenForEvent("itemlose", ItemLost)
     inst:ListenForEvent("itemget", ItemGained)
+
     return inst
 end
 
