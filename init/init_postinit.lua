@@ -148,6 +148,7 @@ local prefab_post = {
 	"stinger",
 	"boat_pirate",
 	"trident",--for giving the leak a cause.
+	"boat_bumpers",
 }
 
 local stategraph_post = {
