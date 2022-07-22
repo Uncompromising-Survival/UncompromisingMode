@@ -17,17 +17,23 @@ end
 local function ItemGained(inst, data)
     if data ~= nil and data.item ~= nil then
         data.item:AddTag("nosteal")
-        data.item.wet_task = data.item:DoPeriodicTask(10, function(inst)
-            inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
-        end)
+        if data.item.components.inventoryitemmoisture ~= nil then
+            data.item.wet_task = data.item:DoPeriodicTask(10, function(inst)
+                inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+            end)
+        end
     end
 end
 
 local function ItemLost(inst, data)
     if data ~= nil and data.prev_item ~= nil then
         data.prev_item:RemoveTag("nosteal")
-        data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
-        data.prev_item.wet_task:Cancel()
+        if data.prev_item.wet_task ~= nil then
+            data.prev_item.wet_task:Cancel()
+        end
+        if data.prev_item.components.inventoryitemmoisture ~= nil then
+            data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+        end
         data.prev_item.wet_task = nil
     end
 end
