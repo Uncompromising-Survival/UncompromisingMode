@@ -351,6 +351,7 @@ AddRecipe2(
 ChangeSortKey("uncompromising_fishingnet", "driftwoodfishingrod", "TOOLS", true)
 ChangeSortKey("uncompromising_fishingnet", "driftwoodfishingrod", "FISHING", true)
 
+--[[
 AddRecipe2(
     "uncompromising_harpoon",
     {Ingredient("twigs", 2), Ingredient("rope", 2), Ingredient("flint", 1)},
@@ -367,7 +368,7 @@ AddRecipe2(
     nil,
     {"TOOLS", "FISHING"}
 )
-ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS", true)
+ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS", true)]]
 
 AddRecipe2(
     "um_magnerang",
@@ -426,7 +427,7 @@ ChangeSortKey("powercell", "winona_battery_high", "CHARACTER", true)
 
 AddRecipe2(
     "winona_upgradekit_electrical",
-    {Ingredient("goldnugget", 6), Ingredient("sewing_tape", 2), Ingredient("trinket_6", 1)},
+    {Ingredient("goldnugget", 6), Ingredient("sewing_tape", 2), Ingredient("trinket_6", 2)},
     TECH.SCIENCE_TWO,
     {builder_tag = "handyperson"},
     {"CHARACTER", "LIGHT"}
@@ -447,7 +448,7 @@ ChangeSortKey("boatpatch_sludge", "boatpatch", "SEAFARING", false)
 
 AddRecipe2(
     "sludge_sack",
-    {Ingredient("sludge", 6), Ingredient("rockjawleather", 1), Ingredient("rope", 3)},
+    {Ingredient("sludge", 4), Ingredient("rockjawleather", 2), Ingredient("rope", 3)},
     TECH.SCIENCE_TWO,
     nil,
     {"CONTAINERS", "CLOTHING"}
@@ -466,7 +467,7 @@ ChangeSortKey("boat_bumper_sludge_kit", "boat_bumper_shell_kit", "SEAFARING", tr
 
 AddRecipe2(
     "cannonball_sludge_item",
-    {Ingredient("sludge", 2), Ingredient("nitre", 1)},
+    {Ingredient("sludge", 2), Ingredient("nitre", 1), Ingredient("charcoal", 1)},
     TECH.SEAFARING_ONE,
     {numtogive = 4},
     {"WEAPONS", "SEAFARING"}
@@ -484,7 +485,7 @@ AddRecipe2(
 
 AddRecipe2(
     "armor_reed_um",
-    {Ingredient("cutreeds", 8), Ingredient("twigs", 3)},
+    {Ingredient("cutreeds", 6), Ingredient("twigs", 3)},
     TECH.NONE,
     nil,
     {"ARMOUR", "RAIN"}
@@ -497,7 +498,7 @@ ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
 
 AddRecipe2(
     "armor_sharksuit_um",
-    {Ingredient("armorwood", 1), Ingredient("rockjawleather", 2), Ingredient("sludge", 8)},
+    {Ingredient("armorwood", 1), Ingredient("rockjawleather", 1), Ingredient("sludge", 2)},
     TECH.SCIENCE_TWO,
     nil,
     {"SEAFARING", "ARMOUR", "RAIN"}
@@ -505,7 +506,6 @@ AddRecipe2(
 ChangeSortKey("armor_sharksuit_um", "armordragonfly", "ARMOUR", true)
 ChangeSortKey("armor_sharksuit_um", "balloonvest", "SEAFARING", true)
 ChangeSortKey("armor_sharksuit_um", "armor_reed_um", "RAIN", true)
-
 
 AddRecipe2(
     "um_saltsalve",
@@ -516,9 +516,35 @@ AddRecipe2(
 )
 ChangeSortKey("um_saltsalve", "floral_bandage", "RESTORATION", true)
 
+--[[
+AddRecipe2(
+    "steeringwheel_copper",
+    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
+    TECH.LOST,
+    nil,
+    {"SEAFARING"}
+)
+AddRecipe2(
+    "steeringwheel_copper_item",
+    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
+    TECH.SEAFARING_ONE,
+    nil,
+    {"SEAFARING"}
+)
+ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
+
+AddRecipe2(--unsure...
+    "trinket_6",
+    {Ingredient("um_copper_pipe", 3)},
+    TECH.SCIENCE_TWO,
+    {numtogive = 2},
+    {"REFINE"}
+)
+ChangeSortKey("trinket_6", "transistor", "REFINE", true)]]
+
 --deconstruct recipes
 AddDeconstructRecipe("cursed_antler", {Ingredient("boneshard", 8), Ingredient("nightmarefuel", 2)})
-AddDeconstructRecipe("beargerclaw", {Ingredient("boneshard", 2), Ingredient("furtuft", 2)})
+AddDeconstructRecipe("beargerclaw", {Ingredient("boneshard", 4), Ingredient("furtuft", 8)})
 AddDeconstructRecipe("klaus_amulet", {Ingredient("cutstone", 1), Ingredient("nightmarefuel", 6)})
 AddDeconstructRecipe("feather_frock", {Ingredient("goose_feather", 6)})
 AddDeconstructRecipe("gore_horn_hat", {Ingredient("meat", 2), Ingredient("nightmarefuel", 4)})
@@ -655,32 +681,6 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
---[[
-AddRecipe2(
-    "steeringwheel_copper",
-    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
-    TECH.LOST,
-    nil,
-    {"SEAFARING"}
-)
-AddRecipe2(
-    "steeringwheel_copper_item",
-    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
-    TECH.SEAFARING_ONE,
-    nil,
-    {"SEAFARING"}
-)
-ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
-
-AddRecipe2(--unsure...
-    "trinket_6",
-    {Ingredient("um_copper_pipe", 3)},
-    TECH.SCIENCE_TWO,
-    {numtogive = 2},
-    {"REFINE"}
-)
-ChangeSortKey("trinket_6", "transistor", "REFINE", true)]]
-
 STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
 STRINGS.RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
@@ -724,6 +724,7 @@ STRINGS.RECIPE_DESC.POWERCELL = "Portable electricity!"
 STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat needs a little more than a bit of fixing."
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
+STRINGS.RECIPE_DESC.SLUDGE_SACK = "Sticky storage for protection against pesky theives."
 STRINGS.RECIPE_DESC.UM_SALTSALVE = "Put salt in your wounds."
 STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "He likes to put holes in things."
 STRINGS.RECIPE_DESC.BOAT_BUMBER_SLUDGE_KIT = "Sticky protection."
