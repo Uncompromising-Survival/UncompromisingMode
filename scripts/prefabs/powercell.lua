@@ -11,25 +11,23 @@ end
 local function OnBurnt(inst)
     --DO NOT BURN BATTERIES.
     local x, y, z = inst.Transform:GetWorldPosition()
-    
+
 	SpawnPrefab("electric_explosion").Transform:SetPosition(x,0,z)
 	SpawnPrefab("bishop_charge_hit").Transform:SetPosition(inst.Transform:GetWorldPosition())
-	
+
 	local ents = TheSim:FindEntities(x, 0, z, 5, {"_health"}, { "shadow", "INLIMBO", "chess" })
-	
+
 	if #ents > 0 then
-		for i, v in ipairs(ents) do			
+		for i, v in ipairs(ents) do
 			if v.components.health ~= nil and not v.components.health:IsDead() then
 				if not (v.components.inventory ~= nil and v.components.inventory:IsInsulated()) then
 					if v.sg ~= nil then
 						v.sg:GoToState("electrocute")
 					end
-
 					v.components.health:DoDelta(-30*inst.components.stackable:StackSize(), nil, inst.prefab, nil, inst) --From the onhit stuff...
 				else
 					v.components.health:DoDelta(-15*inst.components.stackable:StackSize(), nil, inst.prefab, nil, inst)
 				end
-					
 			else
 				if not inst:HasTag("electricdamageimmune") and v.components.health ~= nil then
 					v.components.health:DoDelta(-30*inst.components.stackable:StackSize(), nil, inst.prefab, nil, inst) --From the onhit stuff...
@@ -37,7 +35,6 @@ local function OnBurnt(inst)
 			end
 		end
     end
-	
     inst:Remove()
 end
 
@@ -45,9 +42,11 @@ end
 --without having to mess with actions.
 local function ondeploy(inst, pt, deployer)
     local cell = (inst.components.stackable and inst.components.stackable:Get(1)) or inst
+
     if deployer:HasTag("batteryuser") then
         deployer.components.batteryuser:ChargeFrom(cell)
     else
+        deployer.components.inventory:GiveItem(cell)
         return false
     end
 end
@@ -71,7 +70,8 @@ local function fn()
 
     inst:AddTag("battery")
     inst:AddTag("powercell")
-    
+    inst:AddTag("toolbox_item")
+
     if not TheWorld.ismastersim then
         return inst
     end

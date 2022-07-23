@@ -21,7 +21,7 @@ function CheckMush(container, item, slot)
 end
 
 function CheckWardrobeItem(container, item, slot)
-    return item:HasTag("_equippable") or item:HasTag("slingshotammo") or item:HasTag("tool") or (item.components.finiteuses or item.components.fueled or item.prefab == "razor" or item.prefab == "beef_bell") or (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler")
+    return item:HasTag("_equippable") or item:HasTag("slingshotammo") or item:HasTag("tool") or (item.components.finiteuses or item.components.fueled or item.prefab == "razor" or item.prefab == "beef_bell") or (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or item:HasTag("toolbox_item") or item.prefab == "sewing_tape"
 end
 
 function CheckEquipItem(container, item, slot)

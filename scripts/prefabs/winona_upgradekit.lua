@@ -28,6 +28,8 @@ local function itemfn()
 
     MakeInventoryFloatable(inst, "med", nil, 0.68)
 
+    inst:AddTag("toolbox_item")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

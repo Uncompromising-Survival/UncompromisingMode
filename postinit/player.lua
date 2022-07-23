@@ -50,24 +50,24 @@ env.AddPlayerPostInit(function(inst)
         local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         print(item)
 
-        if item == nil then
+        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
             print("no handslot item - using headslot")
             item =  inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
             print(item)
         end
 
-        if item == nil then
+        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
             print("no headslot item - using bodyslot")
             item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             print(item)
         end
 
-        if item == nil and (inst.components.upgrademoduleowner ~= nil and inst.components.upgrademoduleowner:ChargeIsMaxed()) then
+        if (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() > 0.99))) then
             return false, "CHARGE_FULL"
         end
 
         if inst.components.upgrademoduleowner == nil then
-            if (item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.995) then
+            if (item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.99) then
                 return false, "CHARGE_FULL"
             else
                 if item ~= nil and item:HasTag("electricaltool") then
