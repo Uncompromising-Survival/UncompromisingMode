@@ -19,7 +19,7 @@ local function ItemGained(inst, data)
         data.item:AddTag("nosteal")
         if data.item.components.inventoryitemmoisture ~= nil then
             data.item.wet_task = data.item:DoPeriodicTask(10, function(inst)
-                inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+                inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+40)
             end)
         end
     end
@@ -32,7 +32,7 @@ local function ItemLost(inst, data)
             data.prev_item.wet_task:Cancel()
         end
         if data.prev_item.components.inventoryitemmoisture ~= nil then
-            data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+            data.prev_item.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+40)
         end
         data.prev_item.wet_task = nil
     end
@@ -75,16 +75,25 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.cangoincontainer = false
-
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
-    inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
-
+    --inst.components.equippable.dapperness = TUNING.MOISTURE_SANITY_PENALTY_MAX
+    
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 
     --inst:AddComponent("waterproofer")
     --inst.components.waterproofer:SetEffectiveness(0)
+
+    if inst.components.inventoryitemmoisture ~= nil then
+        inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+    end
+
+    inst:DoPeriodicTask(10, function(inst)
+        if inst.components.inventoryitemmoisture ~= nil then
+            inst.components.inventoryitemmoisture:SetMoisture(TUNING.MOISTURE_WET_THRESHOLD+10)
+        end
+    end)
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("sludge_sack")
