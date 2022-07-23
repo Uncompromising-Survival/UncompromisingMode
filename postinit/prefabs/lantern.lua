@@ -60,8 +60,9 @@ env.AddPrefabPostInit("lantern", function(inst)
         if inst.upgraded then
             data.upgraded = inst.upgraded
         end
-
-        _OnSave(inst, data)
+        if _OnSave ~= nil then
+            _OnSave(inst, data)
+        end
     end
 
     local _OnLoad = inst.OnLoad
@@ -70,8 +71,9 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst.upgraded = true
             OnUpgrade(inst)
         end
-
-        _OnLoad(inst, data)
+        if _OnLoad ~= nil then
+            _OnLoad(inst, data)
+        end
     end
 
     inst.OnSave = OnSave
