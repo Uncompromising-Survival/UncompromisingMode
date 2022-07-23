@@ -2,24 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddPrefabPostInit("minerhat", function(inst)
-    if inst.components.upgradeable ~= nil then
-        local numupgrades = inst.components.upgradeable.numupgrades
-        if numupgrades > 0 then
-            inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")
-            inst.components.upgradeable.upgradetype = nil
-            inst.components.fueled.accepting = false
-            inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
-            inst:AddTag("electricaltool")
-        end
-    end
-
     if inst.components.equippable ~= nil then
         local OnEquip_old = inst.components.equippable.onequipfn
-
         inst.components.equippable.onequipfn = function(inst, owner)
-            local numupgrades = inst.components.upgradeable.numupgrades
-            print(numupgrades)
-            if numupgrades > 0 then
+            if inst.upgraded then
                 owner:AddTag("batteryuser")
             end
 
@@ -29,10 +15,10 @@ env.AddPrefabPostInit("minerhat", function(inst)
         end
 
         local OnUnequip_old = inst.components.equippable.onunequipfn
-
         inst.components.equippable.onunequipfn = function(inst, owner)
             if owner.components.upgrademoduleowner == nil then
                 local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HAMDS)
+
                 if item ~= nil then
                     if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then
                         owner:RemoveTag("batteryuser")
@@ -52,13 +38,44 @@ env.AddPrefabPostInit("minerhat", function(inst)
 
     local function OnUpgrade(inst)
         if inst ~= nil then
+            inst.upgraded = true
             inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
             inst.components.fueled.accepting = false
             inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
             inst:AddTag("electricaltool")
+
+            local owner = inst.components.inventoryitem:GetGrandOwner()
+
+            if owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) == inst then
+                owner:AddTag("batteryuser")
+            end
         end --but wait! won't that fuck everything up?
     end     --maybe I could alter in onequip instead too.
+
+    local _OnSave = inst.OnSave
+    local function OnSave(inst, data)
+        if inst.upgraded then
+            data.upgraded = inst.upgraded
+        end
+        if _OnSave ~= nil then
+            _OnSave(inst, data)
+        end
+    end
+
+    local _OnLoad = inst.OnLoad
+    local function OnLoad(inst, data)
+        if data ~= nil and data.upgraded then
+            inst.upgraded = true
+            OnUpgrade(inst)
+        end
+        if _OnLoad ~= nil then
+            _OnLoad(inst, data)
+        end
+    end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
 
     inst:AddComponent("upgradeable")
     inst.components.upgradeable.upgradetype = UPGRADETYPES.ELECTRICAL

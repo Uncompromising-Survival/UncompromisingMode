@@ -2,20 +2,11 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddPrefabPostInit("lantern", function(inst)
-    if inst.components.upgradeable ~= nil then
-        local numupgrades = inst.components.upgradeable.numupgrades
-        if numupgrades > 0 then
-            inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
-        end
-    end
-
     if inst.components.equippable ~= nil then
         local OnEquip_old = inst.components.equippable.onequipfn
 
         inst.components.equippable.onequipfn = function(inst, owner)
-            local numupgrades = inst.components.upgradeable.numupgrades
-            print(numupgrades)
-            if numupgrades > 0 then
+            if inst.upgraded then
                 owner:AddTag("batteryuser")
             end
 
@@ -49,13 +40,42 @@ env.AddPrefabPostInit("lantern", function(inst)
 
     local function OnUpgrade(inst)
         if inst ~= nil then
+            inst.upgraded = true
             inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
             inst.components.fueled.accepting = false
             inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
             inst:AddTag("electricaltool")
+
+            local owner = inst.components.inventoryitem:GetGrandOwner()
+
+            if owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) == inst then
+                owner:AddTag("batteryuser")
+            end
         end --but wait! won't that fuck everything up?
     end     --maybe I could alter in onequip instead too.
+
+    local _OnSave = inst.OnSave
+    local function OnSave(inst, data)
+        if inst.upgraded then
+            data.upgraded = inst.upgraded
+        end
+
+        _OnSave(inst, data)
+    end
+
+    local _OnLoad = inst.OnLoad
+    local function OnLoad(inst, data)
+        if data ~= nil and data.upgraded then
+            inst.upgraded = true
+            OnUpgrade(inst)
+        end
+
+        _OnLoad(inst, data)
+    end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
 
     inst:AddComponent("upgradeable")
     inst.components.upgradeable.upgradetype = UPGRADETYPES.ELECTRICAL
