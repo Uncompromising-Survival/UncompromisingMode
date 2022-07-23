@@ -485,7 +485,7 @@ AddRecipe2(
 
 AddRecipe2(
     "armor_reed_um",
-    {Ingredient("cutreeds", 6), Ingredient("twigs", 3)},
+    {Ingredient("cutreeds", 8), Ingredient("twigs", 3)},
     TECH.NONE,
     nil,
     {"ARMOUR", "RAIN"}
@@ -498,7 +498,7 @@ ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
 
 AddRecipe2(
     "armor_sharksuit_um",
-    {Ingredient("armorwood", 1), Ingredient("rockjawleather", 1), Ingredient("sludge", 2)},
+    {Ingredient("armorwood", 1), Ingredient("rockjawleather", 1), Ingredient("sludge", 4)},
     TECH.SCIENCE_TWO,
     nil,
     {"SEAFARING", "ARMOUR", "RAIN"}
