@@ -10,23 +10,25 @@ local normalsounds =
     death = "dontstarve/creatures/together/bee_queen/beeguard/death",
 }
 
-local function MortarAttack(inst)
-	if inst.components.health and not inst.components.health:IsDead() and inst.components.combat and inst.components.combat.target then
-		inst.stabtarget = inst.components.combat.target --This is actually the fallback, we want them to attack the closest target
-		local x,y,z = inst.Transform:GetWorldPosition()
-		local combat = TheSim:FindEntities(x,y,z,12,{"_combat"},{"playerghost","bee","epic"})
-		if math.random() > 0.25 then --Occasionally make the bee just keep going after the intended player, EVEN IF they're not actually the closest option.
-			for i,ent in ipairs(combat) do
-			local distance = 1000000
-				if (ent.components.combat and ent.components.combat.target) or ent:HasTag("player") then --Target is fighting nearby (or they are a player), try for the closest option
-					if inst ~= nil and inst:IsValid() and ent:GetDistanceSqToInst(inst) < distance then
-						distance = ent:GetDistanceSqToInst(inst)
-						inst.stabtarget = ent
-					end
-				end
+local function MortarAttack(inst,again)
+	if not inst.sg:HasStateTag("mortar") then
+		local target = FindEntity(inst,20^2,nil,{"_combat"},{"playerghost","bee"})
+		if target then
+			inst.stabtarget = target
+			inst.sg:GoToState("flyup")
+		else
+			if again then
+				local queen = inst.components.entitytracker:GetEntity("queen")
+				if queen then
+					inst.Transform:SetPosition(queen.Transform:GetWorldPosition())
+					inst.sg:GoToState("idle")
+				else
+					inst:Remove()
+				end				
+			else
+				inst:DoTaskInTime(math.random(1,3),function(inst) MortarAttack(inst,1) end)
 			end
 		end
-		inst.sg:GoToState("flyup")
 	end
 end
 
@@ -104,8 +106,21 @@ local function BeeHold(inst)
 end
 
 local function IHaveDied(inst)
-	if inst.beeHolder then
-		inst.beeHolder.bee = nil
+	local queen = inst.components.entitytracker:GetEntity("queen")
+	if queen and not queen.sg:HasStateTag("busy") then
+		if inst.components.health:GetPercent() < 0.75 then
+			if math.random() > 0.75 then
+				queen.sg:GoToState("spavvn_support")
+			else
+				if math.random() > 0.75 then
+					queen.sg:GoToState("screech")
+				end
+			end
+		else
+			if math.random() > 0.75 then
+				queen.sg:GoToState("screech")
+			end
+		end
 	end
 end
 
@@ -120,7 +135,7 @@ env.AddPrefabPostInit("beeguard", function(inst)
 	inst.BeeFree = BeeFree
 	inst.armorcrunch = false
 	inst:ListenForEvent("onhitother", OnHitOther)
-	inst:ListenForEvent("ondeath",IHaveDied)
+	inst:ListenForEvent("death",IHaveDied)
 	
 	local _FocusTarget = inst.FocusTarget
 	

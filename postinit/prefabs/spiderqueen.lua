@@ -123,7 +123,6 @@ local function LaunchWeb(inst, target)
 end
 
 env.AddPrefabPostInit("spiderqueen", function(inst)
-	inst.entity:AddGroundCreepEntity()
 	
 	if not TheWorld.ismastersim then
 		return
@@ -132,7 +131,6 @@ env.AddPrefabPostInit("spiderqueen", function(inst)
 	--inst:AddComponent("inventory")
     --inst.weaponitems = {}
 	--EquipWeapons(inst)
-	inst.GroundCreepEntity:SetRadius(2)
 	if TUNING.DSTU.MOON_TRANSFORMATIONS then
 		inst:ListenForEvent("death", OnDead)
 	end

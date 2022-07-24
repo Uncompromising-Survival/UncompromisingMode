@@ -124,7 +124,6 @@ local function shardring_fn()
 end
 
 local function pipethrown(inst)
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:PlayAnimation(inst.anim)
     inst:AddTag("NOCLICK")
     inst.persists = false

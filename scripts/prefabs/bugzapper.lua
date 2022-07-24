@@ -164,7 +164,7 @@ local function onattack(inst, attacker, target)
 
 			for i, v in ipairs(ents) do
 				if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-					if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) then
+					if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) and not v.sg:HasStateTag("noattack") then
 						v.components.combat:GetAttacked(attacker, 10, nil)
 						SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
 					end
