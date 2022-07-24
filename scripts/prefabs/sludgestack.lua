@@ -67,17 +67,20 @@ local function fling_loot(loot)
 end
 
 local function OnUpgraded(inst)
-    inst.components.harvestable:Disable()
-    --play anim of cork topping off the 
-    inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
+    inst.upgraded = true
+    --upgradedable onsave/load is aparently, from what I've learnt from the winona stuff, unreliable.
+    --so I'll use this variable instead.
+    inst.components.pickable:Pause()
+    --play anim of cork topping off the vent
+    if not inst.components.timer:TimerExists("pop_cork") then
+        inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
+    end
 end
 
 local function CanUpgrade(inst)
-    if inst.components.harvestable:CanBeHarvested() then
+    if inst.components.pickable:CanBePicked()  then
         return false, "NOT_HARVESTED"
-    elseif inst.components.timer:TimerExists("pop_cork") then
-        return false
-    else
+    elseif not inst.upgraded then
         return true
     end
 end
@@ -118,18 +121,35 @@ local function TimerDone(inst, data)
             loot:DoTaskInTime(MAX_LOOTFLING_DELAY * math.random(), fling_loot)
         end
 
-        inst.components.upgradeable.numupgrades = 0
         --revert the art back, play an animation of the cork popping off
 
-        inst.components.harvestable:Enable()
-        inst.components.harvestable:Grow()
+        inst.components.pickable:Resume()
+        inst.components.pickable:Regen()
 
-        inst:RemoveComponent("upgradeable")--to reset the upgradeable component, so you can re-add the cork.
-        inst:AddComponent("upgradeable")
-        inst.components.upgradeable.upgradetype = UPGRADETYPES.SLUDGE_CORK
-        inst.components.upgradeable.onupgradefn = OnUpgraded
-        inst.components.upgradeable.canupgradefn = CanUpgrade
+        inst.upgraded = false
     end
+end
+
+local function OnSave(inst, data)
+    if data ~= nil then
+        data.upgraded = inst.upgraded
+
+        data.paused = inst.components.pickable.paused
+    end
+end
+
+local function OnLoad(inst, data)
+    if data ~= nil then
+        if data.upgraded ~= nil then
+            OnUpgraded(inst)
+        end
+        if data.paused then
+            inst.components.pickable:Pause()
+        else
+            inst.components.pickable:Resume()
+        end
+    end
+    inst:AddTag("SLUDGE_CORK_upgradeable")--GOD DAMNIT KEEP THE DAMN TAG!!!
 end
 
 local function fn()
@@ -163,6 +183,9 @@ local function fn()
         inst.components.floater:OnLandedServer()
     end)
 
+    --Have to add to pristine state.
+    inst:AddTag("SLUDGE_CORK_upgradeable")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -179,9 +202,8 @@ local function fn()
 
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("harvestable")
-    inst.components.harvestable:SetUp("sludge", nil, TUNING.GRASS_REGROW_TIME, nil, nil)
-    --inst.components.harvestable:Grow()
+    inst:AddComponent("pickable")
+    inst.components.pickable:SetUp("sludge", TUNING.GRASS_REGROW_TIME)
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
@@ -199,9 +221,8 @@ local function fn()
     MakeHauntableWork(inst)
 
     --------SaveLoad 
-    --upgradeable already handles onsave/load for upgrades
-    --inst.OnSave = OnSave
-    --inst.OnLoad = OnLoad
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
 
     return inst
 end

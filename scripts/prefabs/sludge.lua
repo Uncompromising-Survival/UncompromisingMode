@@ -159,11 +159,13 @@ local function bucket_fn()
 
     inst:AddComponent("inspectable")
 
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
+
     inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_cork.xml"
 
     inst:AddComponent("tradable")
-
     inst:AddComponent("upgrader")
     inst.components.upgrader.upgradetype = UPGRADETYPES.SLUDGE_CORK
     inst.components.upgrader.upgradevalue = 2--hm
