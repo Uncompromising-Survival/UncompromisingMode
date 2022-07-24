@@ -350,6 +350,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.UNCOMPROMISING_PACKRAT = "Think you're clever, do you?"
 	
 	ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "If I drown, I'm leaving you behind."
+	
 	ACTIONFAIL.CHARGE_FROM =
 	{
 		NOT_ENOUGH_CHARGE = "No power, what a shame.",
@@ -364,20 +365,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "You know, I used to be king. Here I am unable to recognize half the stuff I find in these wretched waters."
 	--DESCRIBE.UM_SIREN = "How grotesque. Yet somewhat alluring... hrmpf."
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_TENTACLE = "Inky black and probably tastes like ink too."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "I'm not sure if the eye makes it less or more appetizing."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "Nice and grilled now at least."
 	
-	DESCRIBE.REEDSUIT_UM = "At least it'll keep my suit clean."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "At least it'll keep my suit clean."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "Do I really need to wear clothes made from a fish?"
+	DESCRIBE.ROCKJAWLEATHER = "It's already starting to smell bad."
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "How can I help if I can't get inside?"
+	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
+	DESCRIBE.MINERHAT_ELECTRICAL = "I guess that solves the firefly problem."
+	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I have lost my appetite."
 	DESCRIBE.UM_DEVILED_EGGS = "Everything I touch seems to turn out this way."
 	DESCRIBE.LUSH_ENTRANCE = "Hmpf, I know better than to go poking my nose in places I shouldn't."
 	DESCRIBE.CRITTER_FIGGY = "Mandibles off the suit, pal."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "It's just begging to be stomped on."
+	
+    DESCRIBE.SLUDGE = "Disgusting, it sticks to everything."
+    DESCRIBE.SLUDGE_SACK = "."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = "Where else did you think they come from around here?"
+    DESCRIBE.UM_SALTSALVE  = "Rather not rub salt in my wounds."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Teach a man to catch a dozen fish and he can feed everyone."
+	DESCRIBE.UM_AMBER = "?"
+	DESCRIBE.UM_DREAMCATCHER = "."
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

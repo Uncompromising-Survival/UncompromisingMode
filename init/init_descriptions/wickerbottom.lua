@@ -365,17 +365,19 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "My, not something you'd expect to see all the way out here."
 	--DESCRIBE.UM_SIREN = "My, she appears to carry a very maniuplative frequency."
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	DESCRIBE.OCUPUS_BEAK = "The beak of a large unidentified cephalopod."
+	DESCRIBE.OCUPUS_TENTACLE = "It's rather inedible in this state."
+	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "Chewing is very important."
 	
-	DESCRIBE.REEDSUIT_UM = "Surprisngly effective when bundled close enough."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "Surprisngly effective when bundled close enough."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = "Unfortunatly it's easier to examine it dead."
 
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "I'm no handywoman myself, I do know a thing or two however."
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "The whole is greater than the sum of its parts."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Now that it's electric it will be quite beneficial."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I believe I might have misread the recipe book."
@@ -383,4 +385,30 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.LUSH_ENTRANCE = "Curious. It smells strongly of bryophyta."
 	DESCRIBE.CRITTER_FIGGY = "An Eriosomatinae out here? And a... particularly round one."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Oh dear. I don't except its mother to come back for it."
-	DESCRIBE.GIANT_TREE_BIRDNEST = "Oh dear. I don't except its mother to come back for it."
+	
+    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE_SACK = ""
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Wouldn't want to be on the receiving end of this one."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "Any debris should bounce right off!"
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Good for keeping debris away from my boat."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = "I don't believe copper grows..."
+    DESCRIBE.UM_SALTSALVE  = "A painful antiseptic."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+	DESCRIBE.UM_AMBER = ""
+	DESCRIBE.UM_DREAMCATCHER = ""
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "Must be full of riches."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

@@ -357,21 +357,23 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	
 	----UNDER THE WEATHER----
 	
-	DESCRIBE.WINONA_TOOLBOX = "Not needed, I have every tool for battle I require."
+	DESCRIBE.WINONA_TOOLBOX = "Wolfgang did not leave dumbbells in there."
 	DESCRIBE.OCEAN_SPEAKER = "Is speaker! Had many in circus!"
 	--DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
 	
-	 --DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	DESCRIBE.OCUPUS_BEAK = "Mouth is as big as Wolfgang!"
+	DESCRIBE.OCUPUS_TENTACLE = "Now is floppy ha ha."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "Big floppy eye ha ha!"
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "Chewy? Bah! I Eat them with no problems."
 	
-	DESCRIBE.REEDSUIT_UM = "Smooth and hollow tube suit."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "Smooth and hollow tube suit."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = ""
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "Wolfgang did not leave dumbbells in there."
+	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Head lamp is now electric head lamp."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Ha! Small eyeball think it can scare Wolfgang still!"
@@ -379,3 +381,30 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	DESCRIBE.LUSH_ENTRANCE = "Is scary hole!"
 	DESCRIBE.CRITTER_FIGGY = "Is Figgy! Mightiest bug!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Is handful of puny eggs!"
+	
+    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE_SACK = "."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Fiery kaboom ball."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "Will keep boat strong, very good."
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Sticky smelly goo will keep boat safe."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = "Bend pipes no problem."
+    DESCRIBE.UM_SALTSALVE  = "No pain, no gain."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Big net for big fish."
+	DESCRIBE.UM_AMBER = "?"
+	DESCRIBE.UM_DREAMCATCHER = "Is net for catching dreams."
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

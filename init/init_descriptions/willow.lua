@@ -372,17 +372,19 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "What's this big dumb machine doing all the way out here?"
 	--DESCRIBE.UM_SIREN = "Oh yeah!? I can blow bubbles twice as big! Watch!"
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	--DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_TENTACLE = "I'm not sinking my teeth into that."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "That still looks rubbery."
 	
-	DESCRIBE.REEDSUIT_UM = "Well that was fun to make, time to burn it."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "Well that was fun to make, time to burn it."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = "I don't want gross fish skin."
 
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "Hey, at least let me take a peak."
+	DESCRIBE.POWERCELL = "yeah, yeah, it's nice, but how well does it burn."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Why cant I energize it with fire!"
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Aww, they are looking right at me!"
@@ -390,3 +392,30 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.LUSH_ENTRANCE = "Oh, I bet there's all sorts of stuff to burn down there!"
 	DESCRIBE.CRITTER_FIGGY = "Awwh! So fluffy, I wouldn't burn a hair on your lil' body!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Think if I light the nest on fire the eggs'll fry?"
+	
+    DESCRIBE.SLUDGE = "Burning this gross stuff would be easy."
+    DESCRIBE.SLUDGE_SACK = "The grossest backpack known to man."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "A beautiful chunk of fiery destruction."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Burning it would have been better."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = ""
+    DESCRIBE.UM_SALTSALVE  = "A different kind of burning, I can get used to this."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+	DESCRIBE.UM_AMBER = "Pretty."
+	DESCRIBE.UM_DREAMCATCHER = "."
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

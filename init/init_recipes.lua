@@ -82,6 +82,16 @@ AllRecipes["goggleshat"].ingredients = {Ingredient("goldnugget", 4), Ingredient(
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 
+--magnets and dock 
+if GetModConfigData("no4crafts") then --:desolate:
+    AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 3), Ingredient("palmconetree_scale", 4)}
+    AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("gears", 1), Ingredient("transistor", 2), Ingredient("steelwool", 2)}
+    AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("messagebottleempty", 1), Ingredient("transistor", 1), Ingredient("steelwool", 1)}
+
+    --Wickers book case
+    --AllRecipes["Wickerbookcaseidk"].ingredients = {Ingredient("boards", 4), Ingredient("goldnugget", 4), Ingredient("papyrus", 6)}
+end
+
 AllRecipes["fish_box"].testfn = function(pt) return GLOBAL.TheWorld.Map:GetPlatformAtPoint(pt.x, 0, pt.z, -0.5) ~= nil or GLOBAL.TheWorld.Map:GetTileAtPoint(pt.x, 0, pt.z) == GLOBAL.WORLD_TILES.MONKEY_DOCK end
 
 AllRecipes["boat_bumper_shell_kit"].numtogive = 4--8
@@ -263,7 +273,7 @@ ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
 
 AddRecipe2(
     "turf_hoodedmoss",
-    {Ingredient("twigs", 1), Ingredient("foliage", 1), Ingredient("moonrocknugget", 1)},
+    {Ingredient("twigs", 1), Ingredient("greenfoliage", 4)},
     TECH.TURFCRAFTING_TWO,
     {numtogive = 4},
     {"DECOR"}
@@ -272,7 +282,7 @@ ChangeSortKey("turf_hoodedmoss", "turf_deciduous", "DECOR", true)
 
 AddRecipe2(
     "turf_ancienthoodedturf",
-    {Ingredient("turf_hoodedmoss", 1), Ingredient("moonrocknugget", 1), Ingredient("thulecite_pieces", 1)},
+    {Ingredient("turf_hoodedmoss", 2), Ingredient("moonrocknugget", 1)},
     TECH.TURFCRAFTING_TWO,
     {numtogive = 4},
     {"DECOR"}
@@ -372,7 +382,7 @@ ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS",
 
 AddRecipe2(
     "um_magnerang",
-    {Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("trinket_6", 1)},
+    {Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 1)},
     TECH.SCIENCE_TWO,
     nil,
     {"TOOLS", "FISHING"}
@@ -448,7 +458,7 @@ ChangeSortKey("boatpatch_sludge", "boatpatch", "SEAFARING", false)
 
 AddRecipe2(
     "sludge_sack",
-    {Ingredient("sludge", 4), Ingredient("rockjawleather", 2), Ingredient("rope", 3)},
+    {Ingredient("sludge", 6), Ingredient("rockjawleather", 2), Ingredient("rope", 3)},
     TECH.SCIENCE_TWO,
     nil,
     {"CONTAINERS", "CLOTHING"}
@@ -458,7 +468,7 @@ ChangeSortKey("sludge_sack", "piggyback", "CLOTHING", true)
 
 AddRecipe2(
     "boat_bumper_sludge_kit",
-    {Ingredient("sludge", 4), Ingredient("driftwood_log", 1)},
+    {Ingredient("sludge", 4), Ingredient("driftwood_log", 2)},
     TECH.SEAFARING_ONE,
     {numtogive = 2},
     {"SEAFARING"}
@@ -557,11 +567,12 @@ AddDeconstructRecipe("feather_frock", {Ingredient("goose_feather", 6)})
 AddDeconstructRecipe("gore_horn_hat", {Ingredient("meat", 2), Ingredient("nightmarefuel", 4)})
 AddDeconstructRecipe("crabclaw", {Ingredient("rocks", 4), Ingredient("cutstone", 1)})
 AddDeconstructRecipe("slobberlobber", {Ingredient("dragon_scales", 1), Ingredient("meat", 2)})
+AddDeconstructRecipe("um_beegun", {Ingredient("honeycomb", 6),Ingredient("royal_jelly", 2)})
 
 --Sailing Rebalance related recipes.
 
 --trident buff
-AllRecipes["trident"].ingredients = {Ingredient("boneshard", 2), Ingredient("gnarwail_horn", 1), Ingredient("twigs", 2)}
+AllRecipes["trident"].ingredients = {Ingredient("boneshard", 2), Ingredient("gnarwail_horn", 1), Ingredient("twigs", 4)}
 
 --hermitshop expansion
 AddRecipe2(
@@ -711,7 +722,7 @@ STRINGS.RECIPE_DESC.BUGZAPPER = "Bite back with electricity!"
 STRINGS.RECIPE_DESC.ANCIENT_AMULET_RED = "Recalls your lost soul."
 STRINGS.RECIPE_DESC.RAT_WHIP = "Hunger strike!"
 STRINGS.RECIPE_DESC.TURF_HOODEDMOSS = "Mossy ground with a hint of lunar magic."
-STRINGS.RECIPE_DESC.TURF_ANCIENTHOODEDTURF = "The hooded forest's younger years."
+STRINGS.RECIPE_DESC.TURF_ANCIENTHOODEDTURF = "The hooded forests younger years."
 STRINGS.RECIPE_DESC.SKULLCHEST_CHILD = "Interdimensional item storage."
 STRINGS.RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
 STRINGS.RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
@@ -728,11 +739,12 @@ STRINGS.RECIPE_DESC.HAT_RATMASK = "Sniff out some vermin!"
 STRINGS.RECIPE_DESC.FLORAL_BANDAGE = "Sweetened healing!"
 STRINGS.RECIPE_DESC.WINONA_TOOLBOX = "An engineer is always prepared."
 STRINGS.RECIPE_DESC.POWERCELL = "Portable electricity!"
+STRINGS.RECIPE_DESC.WINONA_UPGRADEKIT_ELECTRICAL = "Any old light source can be electric now."
 STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat needs a little more than a bit of fixing."
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
-STRINGS.RECIPE_DESC.SLUDGE_SACK = "Sticky storage for protection against pesky theives."
-STRINGS.RECIPE_DESC.UM_SALTSALVE = "Put salt in your wounds."
+STRINGS.RECIPE_DESC.SLUDGE_SACK = "Theives turn up with nothing but sticky hands."
+STRINGS.RECIPE_DESC.UM_SALTSALVE = "Rub salt in the wounds."
 STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "He likes to put holes in things."
 STRINGS.RECIPE_DESC.BOAT_BUMBER_SLUDGE_KIT = "Sticky protection."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"

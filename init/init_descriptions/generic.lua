@@ -438,24 +438,27 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED = "OW! What a shocking result!"
 	
 	----UNDER THE WEATHER----
+	
 	DESCRIBE.WINONA_TOOLBOX = "I had one like this for all of my scientific tools."
 	DESCRIBE.OCEAN_SPEAKER = "Well this seems awfully out of place." --Lame guy. Lame quote.
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	DESCRIBE.OCUPUS_BEAK = "Better that I ate you, than you eat me."
+	--DESCRIBE.OCUPUS_TENTACLE = ""
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "Everyone around here seems to be watching me."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 	
-	DESCRIBE.REEDSUIT_UM = "I'll still be light on my feet with it on."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "I'll still be light on my feet with it on."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me feel like the alpha predator."
+	DESCRIBE.ROCKJAWLEATHER = "It's cold and surprinsgly smooth."
 	
 	--DESCRIBE.UM_SIREN = "Science says we may be able to \"help\" each other."
 	--WHAT THE FUCK VARIANT
 	--DESCRIBE.UM_SIREN = "Science says she may not be from around here."
 
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "Well, I never said these were my tools."
+    DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Of course I know how this works! I could've made one myself."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I'll have to keep an eye on these eyes."
@@ -464,3 +467,30 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.CRITTER_FIGGY = "Hmm. I think I'll call you Figgy Newton Fluffybottom the Fourteenth."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What an eggscellent find!"
 	ACTIONFAIL.UPGRADE.NOT_HARVESTED = "Yuck, I gotta clean that first!"
+
+    DESCRIBE.SLUDGE = "It reeks like eggs, but doesn't look nearly as appetizing."
+    DESCRIBE.SLUDGE_SACK = "I hope it doesn't stick to my back."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "It's crude, but it blows things up all the same."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "It'll bounce back whatever hits it."
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "A softer cushion for something hitting my boat."
+    DESCRIBE.BOATPATCH_SLUDGE = "Another way to plug up any leaks."
+    DESCRIBE.UM_COPPER_PIPE = "Metal tubes, from a tree?"
+    DESCRIBE.UM_SALTSALVE  = "It keeps wounds fresh. No wait, that's not right."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+	DESCRIBE.UM_AMBER = "There's something inside of it?"
+	DESCRIBE.UM_DREAMCATCHER = "It's not easy having a good nights rest anymore, I hope this helps."
+	DESCRIBE.UM_BEEGUN = "Bees love being shot out of cannons, right?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal." -- I think he already has a quote that's exactly like this
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

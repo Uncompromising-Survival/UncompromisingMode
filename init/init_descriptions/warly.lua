@@ -359,20 +359,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "I never was one for machines."
 	--DESCRIBE.UM_SIREN = "Apologies Mademoiselle Wigfrid, but it she the supperior singer!"
 	
-    --DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+    DESCRIBE.OCUPUS_BEAK = "An oversized bowl at best."
+	DESCRIBE.OCUPUS_TENTACLE = "Some prefer to eat it raw."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "Hhmm I can work this."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "."
 	
-	DESCRIBE.REEDSUIT_UM = "I can still feel the breeze going through it..."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "I can still feel the breeze going through it..."
+	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = "I uhh... Don't think I have any recipes on shark skin."
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "Not full of utensils I presume."
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = "I could use a battery charged... well, everything."
+	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I... think I misheard the order."
 	DESCRIBE.UM_DEVILED_EGGS = "Hors d'evil."
 	DESCRIBE.LUSH_ENTRANCE = "There's a very strong aroma coming from down there."
 	DESCRIBE.CRITTER_FIGGY = "What was your name again? Figgy, like the fruit, right?"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The food's delivering itself now!"
+	
+    DESCRIBE.SLUDGE = "Repugnant!"
+    DESCRIBE.SLUDGE_SACK = "Not fit for storing ingredients."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = "."
+    DESCRIBE.UM_SALTSALVE  = "A powerful concoction of salty reagents."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+	DESCRIBE.UM_AMBER = "N."
+	DESCRIBE.UM_DREAMCATCHER = "."
+    DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "magnifique!"
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

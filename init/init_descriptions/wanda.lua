@@ -344,6 +344,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 
 	ACTIONFAIL.CHARGE_FROM =
 	{
+	    NOT_ENOUGH_CHARGE = "It's pointless to sit here and wait.",
 		CHARGE_FULL = "It doesn't need a re-charge!",
 	}
 	ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_INSULATED = "Clearly the constructor didn't have the time to make it safe!"
@@ -355,20 +356,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "I remember these! I can't quite... remember what they do though..."
 	--DESCRIBE.UM_SIREN = "Oh botheration! Its YOU again."
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	--DESCRIBE.OCUPUS_BEAK = ""
+	--DESCRIBE.OCUPUS_TENTACLE = ""
+	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	--DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 	
-	DESCRIBE.REEDSUIT_UM = "It's sturdier, but this isn't what I meant."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "It's sturdier, but this isn't what I meant."
+	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = ""
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "What could I possibly need from here."
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = "Not bad for just wires with no clockwork."
+	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Even the food is watching me."
 	DESCRIBE.UM_DEVILED_EGGS = "Not in a hundred years."
 	DESCRIBE.LUSH_ENTRANCE = "I should explore this later. Or earlier."
 	DESCRIBE.CRITTER_FIGGY = "You're a little cosmic horror across timelines, you know that?"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What, you eggs?"
+	
+    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE_SACK = "Putting my watches inside will only gunk them up."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "The crudeness only makes it more dangerous."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = ""
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = ""
+    DESCRIBE.UM_SALTSALVE  = "No thanks, time heals all wounds."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Catching fish this way is much more time efficient."
+	DESCRIBE.UM_AMBER = "Something got caught inside there a long time ago."
+	DESCRIBE.UM_DREAMCATCHER = ""
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "You are from another timeline, merged into this one."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

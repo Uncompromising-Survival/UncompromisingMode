@@ -359,20 +359,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "It echoes songs unfit for battle!"
 	--DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	--DESCRIBE.OCUPUS_BEAK = ""
+	--DESCRIBE.OCUPUS_TENTACLE = ""
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "Eye for an eye!"
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "I see food, I eat it!"
 	
-	DESCRIBE.REEDSUIT_UM = "Rush Protection, It won't last long."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "Rush protection, It won't last long."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "The Armor of a vicious warrior."
+	DESCRIBE.ROCKJAWLEATHER = "Spoils from the deep."
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "Encore! It hath no tools of war!"
+	DESCRIBE.POWERCELL = "She has harenessed thors might into a box."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She has harenessed thors might into a box."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Thors boons are without doubt."
+	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "The remains of a valiant foe watch with disgust!"
 	DESCRIBE.UM_DEVILED_EGGS = "I hath hatched pure evil!"
 	DESCRIBE.LUSH_ENTRANCE = "I've no time to dig when there's hunts to be had!"
 	DESCRIBE.CRITTER_FIGGY = "A blight spawned warrior!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The start of many mighty warriors!"
+	
+    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE_SACK = "."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "It will take the brunt of any blows."
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Squishy armor for my vessel."
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = ""
+    DESCRIBE.UM_SALTSALVE  = "."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "This will bring me a bountiful feast of fish."
+	DESCRIBE.UM_AMBER = ""
+	DESCRIBE.UM_DREAMCATCHER = "I only dream of battle and a glorius death."
+    DESCRIBE.UM_BEEGUN = "A volley of bees!"
+	DESCRIBE.SUNKENCHEST_ROYAL = "."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

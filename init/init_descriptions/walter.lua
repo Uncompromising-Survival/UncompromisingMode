@@ -362,17 +362,19 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "I wonder if Woby can hear its frequency?"
 	--DESCRIBE.UM_SIREN = "Woah!! A REAL sea monster!!"
 	
-	--DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+	--DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_TENTACLE = ""
+	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 	
-	DESCRIBE.REEDSUIT_UM = "It just might help me blend in."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "It just might help me blend in."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	--DESCRIBE.ROCKJAWLEATHER = ""
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "I don't have a badge for this yet."
+	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = "This makes refueling a lot easier."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "If I close my eyes and swallow, maybe it will taste better!"
@@ -380,3 +382,30 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.LUSH_ENTRANCE = "I'm not sure I want to go down there just yet, Woby..."
 	DESCRIBE.CRITTER_FIGGY = "Woby wants to play with you, Figgy!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Woby, leave those eggs alone!" --Woby you bitch don't eat the eggsssss
+	
+    DESCRIBE.SLUDGE = "."
+    DESCRIBE.SLUDGE_SACK = "."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Maybe this is what solid fire is."
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
+    DESCRIBE.BOATPATCH_SLUDGE = "The best kind of hole is a plugged one."
+    DESCRIBE.UM_COPPER_PIPE = "."
+    DESCRIBE.UM_SALTSALVE  = "M-maybe I should just stick to bandaids."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+	DESCRIBE.UM_AMBER = "."
+	DESCRIBE.UM_DREAMCATCHER = "."
+    DESCRIBE.UM_BEEGUN = "?" --please make Walter lose 20 sanity per minute with this equipped I think that would be a cool flavour perk
+	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""

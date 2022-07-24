@@ -298,6 +298,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	ANNOUNCE.ANNOUNCE_DETACH_BUFF_HYPERCOURAGE = "Everything's getting scary again!!"
 	--StantonStuff
 	
+	
 	DESCRIBE.ARMORLAVAE = DESCRIBE.LAVAE
 	
 	DESCRIBE.THEATERCORN = "We like to watch things fight when we eat it."
@@ -359,21 +360,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "I want to get closer but he seems weary."
 	--DESCRIBE.UM_SIREN = "Her songs make our head all fuzzy..."
 	
-    --DESCRIBE.OCUPUS_BEAK = "",
-	--DESCRIBE.OCUPUS_TENTACLE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = "",
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = "",
+    DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_TENTACLE = "We'd shake yoru hand but it's, well..."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "My, what a big eye you had."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 	
-	DESCRIBE.REEDSUIT_UM = "We can barely feel it over our body."
-	--DESCRIBE.SHARKSUIT_UM = "",
-	--DESCRIBE.ROCKJAWLEATHER = "",
+	DESCRIBE.ARMOR_REED_UM = "We can barely feel it over our body."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "We feel more monstrous with it on."
+	DESCRIBE.ROCKJAWLEATHER = "Skin with a nice fin."
 	
-	ACTIONFAIL.WINONATOOLBOX = "wacky, help!"
-	DESCRIBE.MINERHAT_ELECTRICAL = "help"
+	ACTIONFAIL.WINONATOOLBOX = "We should be respectful."
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = "Now We can charge it too."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I think we might have gone too far."
-	DESCRIBE.LUSH_ENTRANCE = "I'm not sure I want to go down there... but he wants to!"
 	DESCRIBE.UM_DEVILED_EGGS = "We love these!"
+	DESCRIBE.LUSH_ENTRANCE = "I'm not sure I want to go down there... but he wants to!"
 	DESCRIBE.CRITTER_FIGGY = "Yay!! A new bug friend!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "He says he thinks our nest is safer."
+	
+    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE_SACK = ""
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = ""
+    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.UM_COPPER_PIPE = "We can look through it and pretend it's a spyglass."
+    DESCRIBE.UM_SALTSALVE  = "It hurts, but it's good for us."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "s"
+	DESCRIBE.UM_AMBER = ""
+	DESCRIBE.UM_DREAMCATCHER = ""
+	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.SUNKENCHEST_ROYAL = "Yay! A fancy treasure chest!"
+	DESCRIBE.STEERINGWHEEL_COPPER = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.SLUDGE_CORK = ""
+	
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
+	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANGREEL = ""
