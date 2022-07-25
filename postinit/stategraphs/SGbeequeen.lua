@@ -124,6 +124,31 @@ local function MortarCommand(inst)
 	end
 end
 
+local function HasShootersOrSeekers(inst)
+	if inst.shooterbees then
+		for i,bee in ipairs(inst.shooterbees) do
+			if bee.components.health and not bee.components.health:IsDead() then
+				return false
+			end
+		end
+	end
+	if inst.extrabees then
+		for i,bee in ipairs(inst.extrabees) do
+			if bee.components.health and not bee.components.health:IsDead() then
+				return false
+			end
+		end
+	end
+	if inst.shooterbeeline then
+		for i,bee in ipairs(inst.shooterbeeline) do
+			if bee.components.health and not bee.components.health:IsDead() then
+				return false
+			end
+		end		
+	end
+	return true
+end
+
 env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
 	
 	local _OldOnExit 
@@ -165,7 +190,7 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 		if _OldOnAtk then
 			_OldOnAtk(inst)
 		end
-		if inst.should_final then
+		if inst.should_final and not HasShootersOrSeekers(inst) then
 			if inst.should_seeker_rage then
 				inst.should_seeker_rage = nil
 			end
@@ -249,7 +274,7 @@ local states = {
 					return true
 				end
 				local x,y,z = inst.Transform:GetWorldPosition()
-				local ents = TheSim:FindEntities(x,y,z,3,"_combat")
+				local ents = TheSim:FindEntities(x,y,z,8,"_combat")
 				for i,ent in ipairs(ents) do
 					if (isvalid(ent)) and ent.components.health and not ent.components.health:IsDead() and ent.components.combat then --Support for the other sort of bees
 						ent.components.combat:GetAttacked(inst,200)

@@ -29,11 +29,9 @@ local function StompHandler(inst,data)
 			inst.AnimState:PlayAnimation("tired_hit")
 			inst.AnimState:PushAnimation("tired_loop",true)
 		end
-		if inst.mode == "aggressive" then
-			inst.stomprage = inst.stomprage + 0.25
-		else
-			inst.stomprage = inst.stomprage + 2
-		end
+
+		inst.stomprage = inst.stomprage + 1
+
 		if data.attacker and data.attacker.components.combat and inst.stompready then
 			inst.prioritytarget = data.attacker
 			if inst.components.combat.target ~= nil then
@@ -49,7 +47,7 @@ local function StompHandler(inst,data)
 				inst:ForceFacePoint(x,y,z)
 				inst.stomprage = 0
 				inst.stompready = false
-				inst:DoTaskInTime(math.random(8,10),function(inst) inst.stompready = true end)
+				inst:DoTaskInTime(math.random(3,5),function(inst) inst.stompready = true end)
 				inst.sg:GoToState("stomp")
 			end
 		end
@@ -228,7 +226,7 @@ local function SpawnDefensiveBeesII(inst)
 		inst.defensebees[i].components.linearcircler.clockwise = false
 		inst.defensebees[i].components.linearcircler.distance_limit = LIMIT
 		inst.defensebees[i].components.linearcircler.setspeed = 0.05
-		inst.defensebees[i].components.timer:StartTimer("natural_death", math.random(30,40))
+		inst.defensebees[i].components.timer:StartTimer("natural_death", math.random(60,75))
 		inst.defensebees[i].components.entitytracker:TrackEntity("queen", inst)
 		--inst.lavae[i].AnimState:PushAnimation("hover",true)
 	end
@@ -247,7 +245,7 @@ local function SpawnDefensiveBees(inst)
 		inst.defensebees[i].components.linearcircler.clockwise = false
 		inst.defensebees[i].components.linearcircler.distance_limit = LIMIT
 		inst.defensebees[i].components.linearcircler.setspeed = 0
-		inst.defensebees[i].components.timer:StartTimer("natural_death", math.random(30,40))
+		inst.defensebees[i].components.timer:StartTimer("natural_death", math.random(60,75))
 		inst.defensebees[i].components.entitytracker:TrackEntity("queen", inst)
 		--inst.lavae[i].AnimState:PushAnimation("hover",true)
 	end
