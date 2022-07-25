@@ -24,7 +24,7 @@ local function ArtificialLocomote(inst,destination,speed)
 		local hypoten = math.sqrt(inst:GetDistanceSqToPoint(destination))
 		local x,y,z = inst.Transform:GetWorldPosition()
 		local x_final,y_final,z_final
-		if x ~= nil and y ~= nil and z ~- nil then
+		if x ~= nil and y ~= nil and z ~= nil then
 		x_final = ((destination.x-x)/hypoten)*speed+x
 		z_final = ((destination.z-z)/hypoten)*speed+z
 		
