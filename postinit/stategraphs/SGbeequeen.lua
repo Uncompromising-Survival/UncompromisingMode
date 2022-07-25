@@ -755,8 +755,10 @@ local states = {
 							if not seeker.sg:HasStateTag("mortar") then
 								local x,y,z = seeker.Transform:GetWorldPosition()
 								seeker:RemoveComponent("linearcircler")
-								seeker.Transform:SetPosition(x,y,z)
-								seeker:MortarAttack(seeker,inst.components.combat.target,0.5)
+                                if x ~= nil and y ~= nil and z ~= nil then 
+                                    seeker.Transform:SetPosition(x,y,z)
+                                end
+                                seeker:MortarAttack(seeker,inst.components.combat.target,0.5)
 							end
 						end
 					end
