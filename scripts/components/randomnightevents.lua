@@ -2081,15 +2081,15 @@ end
 
 function self:OnLoad(data)
 	if data ~= nil then
-		if data.storedrne ~= nil then
+		if data.storedrne then
 			self.storedrne = data.storedrne
 		end
 
-		if data.LastNewMoonRNE ~= nil then
+		if data.LastNewMoonRNE then
 			self.LastNewMoonRNE = data.LastNewMoonRNE
 		end
 		
-		if data.moontear_available ~= nil then
+		if data.moontear_available then
 			self.moontear_available = data.moontear_available
 		end
 		if data.rnequeued then

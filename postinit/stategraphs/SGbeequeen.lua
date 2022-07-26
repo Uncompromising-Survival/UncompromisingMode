@@ -222,23 +222,6 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 		end
 	end
 	
-	
-	local function TrySpawnBigLeak(inst)
-		local x,y,z = inst.Transform:GetWorldPosition()
-		local boat = inst:GetCurrentPlatform()
-		if boat then
-			local leak = SpawnPrefab("boat_leak")
-            if x ~= nil and y ~= nil and z ~= nil then 
-			    leak.Transform:SetPosition(x, y, z)
-            end
-			leak.components.boatleak.isdynamic = true
-			leak.components.boatleak:SetBoat(boat)
-			leak.components.boatleak:SetState(4, true)
-
-			table.insert(boat.components.hullhealth.leak_indicators_dynamic, leak)
-		end
-
-	end
 
 local events=
 	{        
@@ -280,7 +263,6 @@ local states = {
 						ent.components.combat:GetAttacked(inst,200)
 					end
 				end
-				TrySpawnBigLeak(inst)
 				inst.components.groundpounder:GroundPound()
             end),
         },

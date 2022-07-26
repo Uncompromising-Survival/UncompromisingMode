@@ -36,7 +36,7 @@ local function StompHandler(inst,data)
 			inst.prioritytarget = data.attacker
 			if inst.components.combat.target ~= nil then
 				if data.attacker ~= inst.components.combat.target then
-					inst.stomprage = inst.stomprage + 1
+					inst.stomprage = inst.stomprage + 4
 				end
 			end
 			local x,y,z = data.attacker.Transform:GetWorldPosition()
@@ -190,7 +190,7 @@ local function SpawnShooterBeesCircle(inst)
 			inst.shooterbees[i].components.linearcircler.clockwise = false
 			inst.shooterbees[i].components.linearcircler.distance_limit = LIMIT
 			inst.shooterbees[i].components.linearcircler.setspeed = 0.05
-			inst.shooterbees[i].time = 2+0.5*i
+			inst.shooterbees[i].time = 1+0.5*i
 			if inst.defensivecircle then
 				inst.shooterbees[i].components.timer:StartTimer("epic",2+0.5*i)
 			end

@@ -74,7 +74,7 @@ local function DigHole(inst)
 	SpawnPrefab("sinkhole_warn_fx_"..math.random(3)).Transform:SetPosition(x+math.random(-0.5,0.5), y, z+math.random(-0.5,0.5))
 	SpawnPrefab("sinkhole_warn_fx_"..math.random(3)).Transform:SetPosition(x+math.random(-0.5,0.5), y, z+math.random(-0.5,0.5))
 	SpawnPrefab("sinkhole_warn_fx_"..math.random(3)).Transform:SetPosition(x+math.random(-0.5,0.5), y, z+math.random(-0.5,0.5))
-	CalculateNextHoleTime(inst)
+	--CalculateNextHoleTime(inst)
 end
 
 local function CreateScorpzone(inst)
@@ -90,6 +90,18 @@ local function CreateScorpzone(inst)
 		SpawnPrefab("umss_scorpionoutskirts"..math.random(1,4)).Transform:SetPosition(x1,y,z1)
 	end
 	SpawnPrefab("umss_scorpioncenter1").Transform:SetPosition(x,y,z)
+end
+
+local function SummerDigging(inst)
+	if TheWorld.state.issummer then
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local scorpionHoles = #TheSim:FindEntities(x,y,z,30,{"scorpionhole"})
+		if scorpionHoles < 10 then
+			for i = 1,(10-scorpionHoles) do
+				DigHole(inst)
+			end
+		end
+	end
 end
 
 local function scorpionhole_organizer_fn()
@@ -121,7 +133,7 @@ local function scorpionhole_organizer_fn()
 	end
 	
 	inst.CreateScorpzone = CreateScorpzone
-	
+	inst:WatchWorldState("issummer", SummerDigging)
 	--inst:DoTaskInTime(0,CreateScorpzone)
 	
     return inst

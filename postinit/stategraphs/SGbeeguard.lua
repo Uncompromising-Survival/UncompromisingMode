@@ -72,7 +72,7 @@ local function UpdateShadow(inst)
 				end
 				inst.bee:ForceFacePoint(inst:GetPosition())
 				local x1,y1,z1 = inst.Transform:GetWorldPosition()
-				inst.bee.Transform:SetPosition(x1,y,z1)
+				inst.bee.Transform:SetPosition(x1,y-1,z1)
 			end
 		else
 			inst:Remove()
@@ -93,7 +93,7 @@ local function UpdateShadowShooter(inst)
 			inst.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
 			if not inst.circle then
 				local x1,y1,z1 = inst.Transform:GetWorldPosition()
-				inst.bee.Transform:SetPosition(x1,y,z1)
+				inst.bee.Transform:SetPosition(x1,y-1,z1)
 			end
 		else
 			inst:Remove()
@@ -216,11 +216,9 @@ local states = {
 				shadow.bee = inst
 				shadow.updatetask = shadow:DoPeriodicTask(FRAMES, UpdateShadow, nil, 5)
 			end
-            inst.sg.statemem.vel = Vector3(0, -verticalVel, 0)
         end,
 
 		onupdate = function(inst)
-			inst.Physics:SetMotorVel(inst.sg.statemem.vel:Get())
 			local x,y,z = inst.Transform:GetWorldPosition()
 			if y < 1 then
 				if TheWorld.Map:IsOceanAtPoint(x, 0, z) then
@@ -272,11 +270,9 @@ local states = {
 				shadow.bee = inst
 				shadow.updatetask = shadow:DoPeriodicTask(FRAMES, UpdateShadowShooter, nil, 5)
 			end
-            inst.sg.statemem.vel = Vector3(0, -verticalVel, 0)
         end,
 
 		onupdate = function(inst)
-			inst.Physics:SetMotorVel(inst.sg.statemem.vel:Get())
 			local x,y,z = inst.Transform:GetWorldPosition()
 			if y < 1 then
 				inst.DynamicShadow:Enable(true)
