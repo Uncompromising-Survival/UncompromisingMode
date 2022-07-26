@@ -82,6 +82,10 @@ AllRecipes["goggleshat"].ingredients = {Ingredient("goldnugget", 4), Ingredient(
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 
+AllRecipes["battlesong_fireresistance"].ingredients = {Ingredient("papyrus", 1), Ingredient("featherpencil", 1), Ingredient("dragon_scales", 1)}
+
+--AllRecipes["book_fish"].ingredients = Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}
+
 --magnets and dock 
 if GetModConfigData("no4crafts") then --:desolate:
     AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 3), Ingredient("palmconetree_scale", 4)}
@@ -754,7 +758,7 @@ STRINGS.RECIPE_DESC.WINONA_UPGRADEKIT_ELECTRICAL = "Any old light source can be 
 STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat needs a little more than a bit of fixing."
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
-STRINGS.RECIPE_DESC.SLUDGE_SACK = "Theives turn up with nothing but sticky hands."
+STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky hands."
 STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
 STRINGS.RECIPE_DESC.UM_SALTSALVE = "Rub salt in the wounds."
