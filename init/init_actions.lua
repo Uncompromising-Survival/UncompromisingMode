@@ -164,7 +164,7 @@ if TUNING.DSTU.WICKERNERF then
 				return false
 			end
 		end
-		
+
 		return _ReadFn(act)
 	end
 end
@@ -176,4 +176,22 @@ GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
 		return "SLUDGE_CORK"
 	end
 	return _UpgradeStrFn(act)
+end
+
+local _AddFuelFn = GLOBAL.ACTIONS.ADDFUEL.fn
+
+GLOBAL.ACTIONS.ADDFUEL.fn = function(act)
+    if act.doer.components.inventory and act.invobject.components.finiteuses ~= nil and act.invobject:HasTag("sludge_oil") then
+		local fuel = act.invobject
+        if fuel then
+            if act.target.components.fueled and act.target.components.fueled:TakeFuelItem(fuel, act.doer) then
+                return true
+            else
+                --print("False")
+                act.doer.components.inventory:GiveItem(fuel)
+            end
+        end
+	else
+		return _AddFuelFn(act)
+	end
 end

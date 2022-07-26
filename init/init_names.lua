@@ -327,7 +327,7 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.SUNKENCHEST_ROYAL = "Royal Sunken Chest"
 	STRINGS.SLUDGE = "Sulfuric Sludge"
 	STRINGS.SLUDGE_OIL = "Sulfur Extract"
-	STRINGS.BOATPATCH_SLUDGE = "Driftwood Boat Cork"
+	STRINGS.BOATPATCH_SLUDGE = "Driftwood Boat Corks"
 	STRINGS.SLUDGESTACK = "Thermal Vent"
 	STRINGS.SLUDGE_SACK = "Sludge Sack"
 

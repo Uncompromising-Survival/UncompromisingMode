@@ -22,6 +22,22 @@ local function ontaken(inst, taker)
     --inst:Remove()
 end
 
+local function onfinished(inst)
+    local bottle = SpawnPrefab("messagebottleempty")
+
+    local owner = inst.components.inventoryitem:GetGrandOwner()
+	
+	if owner ~= nil and owner.components.inventory ~= nil then
+		local x,y,z = owner.Transform:GetWorldPosition()
+		bottle.Transform:SetPosition(x,y,z)
+        owner.components.inventory:GiveItem(bottle)
+	else
+		Launch2(bottle, inst, 1.5, 1, 3, .75)
+	end
+
+    inst:Remove()
+end
+
 local function sludge_fn()
     local inst = CreateEntity()
 
@@ -51,6 +67,8 @@ local function sludge_fn()
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+    inst.components.fuel.fueltype = FUELTYPE.SLUDGE
+
     --inst.components.fuel:SetOnTakenFn(ontaken)-- :)
 
     inst:AddComponent("boatpatch")
@@ -94,19 +112,23 @@ local function oil_fn()
 
     MakeInventoryFloatable(inst, "med", 0.05, 0.6)
 
+    inst:AddTag("sludge_oil")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
-
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
-    inst.components.fuel.fueltype = FUELTYPE.CAVE
-    inst.components.fuel:SetOnTakenFn(ontaken)-- :)
+    inst.components.fuel.fueltype = FUELTYPE.SLUDGE
+
+    inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetMaxUses(10)
+    inst.components.finiteuses:SetUses(10)
+    inst.components.finiteuses:SetOnFinished(onfinished)
+
 
     MakeSmallBurnable(inst, TUNING.LARGE_BURNTIME)
     MakeSmallPropagator(inst)
@@ -160,7 +182,7 @@ local function bucket_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
 
     inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_cork.xml"
