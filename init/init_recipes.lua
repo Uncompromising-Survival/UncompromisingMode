@@ -451,7 +451,7 @@ AddRecipe2(
     "boatpatch_sludge",
     {Ingredient("sludge_oil", 1), Ingredient("driftwood_log", 2)},
     TECH.NONE,
-    nil,
+     nil, --{numtogive = 2},
     {"SEAFARING"}
 )
 ChangeSortKey("boatpatch_sludge", "boatpatch", "SEAFARING", false)
@@ -528,28 +528,39 @@ ChangeSortKey("um_saltsalve", "floral_bandage", "RESTORATION", true)
 
 AddRecipe2(
     "sludge_cork",
-    {Ingredient("driftwood_log", 2), Ingredient("rope", 1)},
+    {Ingredient("driftwood_log", 2), Ingredient("rope", 2)},
     TECH.SCIENCE_ONE,
     nil,
     {"TOOLS"}
 )
---[[
+
+AddRecipe2(
+    "boat_bumper_copper_kit",
+    {Ingredient("um_copper_pipe", 14)},
+    TECH.SEAFARING_ONE,
+    {numtogive = 2},
+    {"SEAFARING"}
+)
+ChangeSortKey("boat_bumper_sludge_kit", "boat_bumper_shell_kit", "SEAFARING", true)
+
+
 AddRecipe2(
     "steeringwheel_copper",
-    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
+    {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)},
     TECH.LOST,
     nil,
     {"SEAFARING"}
 )
 AddRecipe2(
     "steeringwheel_copper_item",
-    {Ingredient("um_copper_pipe", 2), Ingredient("steeringwheel_item", 1), Ingredient("trinket_6", 1)},
+    {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)},
     TECH.SEAFARING_ONE,
     nil,
     {"SEAFARING"}
 )
 ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
 
+--[[
 AddRecipe2(--unsure...
     "trinket_6",
     {Ingredient("um_copper_pipe", 3)},
@@ -686,7 +697,7 @@ AddRecipe2(
     {Ingredient("moonglass_charged", 1), Ingredient("moonstorm_spark", 2), Ingredient("lightbulb", 1)},
     TECH.LOST,
     nil,
-    {"LIGHT"}
+    {"LIGHT", "REFINE"}
 )
 
 AddDeconstructRecipe("alterguardianhat", {Ingredient("alterguardianhatshard", 5), Ingredient("alterguardianhatshard_blueprint", 1)})
@@ -744,10 +755,12 @@ STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat needs a little more t
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
 STRINGS.RECIPE_DESC.SLUDGE_SACK = "Theives turn up with nothing but sticky hands."
+STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
+STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
 STRINGS.RECIPE_DESC.UM_SALTSALVE = "Rub salt in the wounds."
 STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "He likes to put holes in things."
 STRINGS.RECIPE_DESC.BOAT_BUMBER_SLUDGE_KIT = "Sticky protection."
-STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
+STRINGS.RECIPE_DESC.BOAT_BUMPER_COPPER_KIT = "Sturdy protection."
 STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 

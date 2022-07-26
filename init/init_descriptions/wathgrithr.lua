@@ -356,6 +356,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "Not needed, I have every tool for battle I require."
+	ACTIONFAIL.WINONATOOLBOX = "Encore! It hath no tools of war!"
+	DESCRIBE.POWERCELL = "She has harenessed thors might into a box."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She has harenessed thors might into a box."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Thors boons are without doubt."
 	DESCRIBE.OCEAN_SPEAKER = "It echoes songs unfit for battle!"
 	--DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
 	
@@ -368,11 +372,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.ARMOR_SHARKSUIT_UM = "The Armor of a vicious warrior."
 	DESCRIBE.ROCKJAWLEATHER = "Spoils from the deep."
 	
-	ACTIONFAIL.WINONATOOLBOX = "Encore! It hath no tools of war!"
-	DESCRIBE.POWERCELL = "She has harenessed thors might into a box."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She has harenessed thors might into a box."
-	DESCRIBE.MINERHAT_ELECTRICAL = "Thors boons are without doubt."
-	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "The remains of a valiant foe watch with disgust!"
 	DESCRIBE.UM_DEVILED_EGGS = "I hath hatched pure evil!"
@@ -380,24 +379,25 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.CRITTER_FIGGY = "A blight spawned warrior!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The start of many mighty warriors!"
 	
-    DESCRIBE.SLUDGE = ""
+    DESCRIBE.SLUDGE = "Vile ichor from hel!"
+	DESCRIBE.SLUDGE_OIL = ""
     DESCRIBE.SLUDGE_SACK = "."
-	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "A ball of brimstone!"
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It will take the brunt of any blows."
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Squishy armor for my vessel."
     DESCRIBE.BOATPATCH_SLUDGE = ""
-    DESCRIBE.UM_COPPER_PIPE = ""
-    DESCRIBE.UM_SALTSALVE  = "."
+    DESCRIBE.UM_COPPER_PIPE = "Material for the blacksmith."
+    DESCRIBE.UM_SALTSALVE  = "My constitution shall triumph."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "This will bring me a bountiful feast of fish."
 	DESCRIBE.UM_AMBER = ""
-	DESCRIBE.UM_DREAMCATCHER = "I only dream of battle and a glorius death."
     DESCRIBE.UM_BEEGUN = "A volley of bees!"
-	DESCRIBE.SUNKENCHEST_ROYAL = "."
+	DESCRIBE.SUNKENCHEST_ROYAL = "Treasures for our hall!"
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Plate mail for thine vessel."
+	DESCRIBE.UM_DREAMCATCHER = "I only dream of glorius death in battle!"
+	DESCRIBE.UM_BRINEISHMOSS = "Damp moss."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = ""
 	

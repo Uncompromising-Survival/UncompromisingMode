@@ -440,6 +440,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "I had one like this for all of my scientific tools."
+	ACTIONFAIL.WINONATOOLBOX = "Well, I never said these were my tools."
+    DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Of course I know how this works! I could've made one myself."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"
 	DESCRIBE.OCEAN_SPEAKER = "Well this seems awfully out of place." --Lame guy. Lame quote.
 	
 	DESCRIBE.OCUPUS_BEAK = "Better that I ate you, than you eat me."
@@ -455,11 +459,6 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	--WHAT THE FUCK VARIANT
 	--DESCRIBE.UM_SIREN = "Science says she may not be from around here."
 
-	ACTIONFAIL.WINONATOOLBOX = "Well, I never said these were my tools."
-    DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Of course I know how this works! I could've made one myself."
-	DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"
-	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I'll have to keep an eye on these eyes."
 	DESCRIBE.UM_DEVILED_EGGS = "They smell fowl."
@@ -469,6 +468,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	ACTIONFAIL.UPGRADE.NOT_HARVESTED = "Yuck, I gotta clean that first!"
 
     DESCRIBE.SLUDGE = "It reeks like eggs, but doesn't look nearly as appetizing."
+	DESCRIBE.SLUDGE_OIL = "It belongs in my old laboratory."
     DESCRIBE.SLUDGE_SACK = "I hope it doesn't stick to my back."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "It's crude, but it blows things up all the same."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It'll bounce back whatever hits it."
@@ -478,16 +478,18 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
     DESCRIBE.UM_SALTSALVE  = "It keeps wounds fresh. No wait, that's not right."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
 	DESCRIBE.UM_AMBER = "There's something inside of it?"
-	DESCRIBE.UM_DREAMCATCHER = "It's not easy having a good nights rest anymore, I hope this helps."
 	DESCRIBE.UM_BEEGUN = "Bees love being shot out of cannons, right?"
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
-	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "It's mechanical, and that means it's better."
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "It's better because it's mechanical."
+	DESCRIBE.BOAT_BUMPER_COPPER = "It will take a lot more hits before it breaks done."
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Metal tubes stuck to one another."
+	DESCRIBE.UM_DREAMCATCHER = "It's not easy having a good nights rest anymore, I hope this helps."
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGE_CORK = "It's too big for a boat. Maybe it can plug something else."
+	DESCRIBE.SLUDGESTACK = "Is that where that awful smell is coming from?"
+	DESCRIBE.SPECTER_SHIPWRECK = "It's been ship wrecked." --TM
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."

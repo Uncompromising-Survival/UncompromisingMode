@@ -356,6 +356,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "A place to put the tools of trade."
+	ACTIONFAIL.WINONATOOLBOX = "My tools of trade are in another type of box."
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = "I can fill it with shock and awe, hyuyuyuyu!"
 	DESCRIBE.OCEAN_SPEAKER = "It plays a tune that could spell our doom. Hyuyu!" --Oh gee oh fuck I'm out of luck!!!!!
 	--DESCRIBE.UM_SIREN = "My, is that a siren on the horizon?"
 
@@ -366,12 +370,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	
 	DESCRIBE.ARMOR_REED_UM = "It'll fall apart in a small breeze!"
 	DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me as sleek as some ocean freak."
-	DESCRIBE.ROCKJAWLEATHER = ""
-
-	ACTIONFAIL.WINONATOOLBOX = "My tools of trade are in another type of box."
-	DESCRIBE.POWERCELL = ""
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
-	DESCRIBE.MINERHAT_ELECTRICAL = "I can fill it with shock and awe, hyuyuyuyu!"
+	DESCRIBE.ROCKJAWLEATHER = "Just a flesh wound."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "The mortals surely can't like this."
@@ -380,8 +379,9 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	DESCRIBE.CRITTER_FIGGY = "We could be companions, I feel that'd be ideal!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The nest of a bird, or so I've been told."
 	
-    DESCRIBE.SLUDGE = "."
-    DESCRIBE.SLUDGE_SACK = "."
+    DESCRIBE.SLUDGE = "A slick of slime."
+	DESCRIBE.SLUDGE_OIL = ""
+    DESCRIBE.SLUDGE_SACK = "Icky, sticky and somewhat fishy."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
@@ -390,15 +390,15 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
     DESCRIBE.UM_SALTSALVE  = ""
     DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
 	DESCRIBE.UM_AMBER = "."
-	DESCRIBE.UM_DREAMCATCHER = "."
     DESCRIBE.UM_BEEGUN = "?"
-	DESCRIBE.SUNKENCHEST_ROYAL = "s."
+	DESCRIBE.SUNKENCHEST_ROYAL = "A king's ransom!"
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_DREAMCATCHER = "O me, O my, A door into your mind."
 	DESCRIBE.UM_BRINEISHMOSS = ""
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "What is it that lurks in the minds of men?"
 	DESCRIBE.SLUDGE_CORK = ""
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

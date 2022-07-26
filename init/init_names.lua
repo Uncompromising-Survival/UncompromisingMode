@@ -326,8 +326,8 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.OCEAN_SPEAKER = "Dilapidated Speaker" --Kinda lame dunno what else though.
 	STRINGS.SUNKENCHEST_ROYAL = "Royal Sunken Chest"
 	STRINGS.SLUDGE = "Sulfuric Sludge"
-	STRINGS.SLUDGE_OIL = "Sulfuric Extract"
-	STRINGS.BOATPATCH_SLUDGE = "Boat Repair Kit"
+	STRINGS.SLUDGE_OIL = "Sulfur Extract"
+	STRINGS.BOATPATCH_SLUDGE = "Driftwood Boat Cork"
 	STRINGS.SLUDGESTACK = "Thermal Vent"
 	STRINGS.SLUDGE_SACK = "Sludge Sack"
 
@@ -342,8 +342,8 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.LANTERN_ELECTRICAL = "Electrical Lantern"
 	STRINGS.MINERHAT_ELECTRICAL = "Electrical Miner Hat"
 
-	STRINGS.POWERCELL = "Power Cell"--Single-Use Battery
-	
+	STRINGS.POWERCELL = "Energy Cell"--Single-Use Battery
+
 	STRINGS.SEAROCK_RING = "Sea Stack"
 	STRINGS.RR_POWERLINE = "Powerline"
 	STRINGS.EYEOFTERROR_MINI_ALLY = "Hardy Peeper"
@@ -376,9 +376,9 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.KELPSTACK = "Kelpy Seastack"
 	STRINGS.MOSSSTACK = "Mossy Seastack"
 
-	STRINGS.SPECTER_SHIPWRECK = "Shipwreck"
+	STRINGS.SPECTER_SHIPWRECK = "Abandoned Shipwreck"
 	STRINGS.UM_DREAMCATCHER = "Dream Catcher"
-	STRINGS.UM_BRINEISHMOSS = "Brine Moss"
+	STRINGS.UM_BRINEISHMOSS = "Brineish Moss"
 	STRINGS.UM_COALESCED_NIGHTMARE = "Coalesced Nightmare"
 	STRINGS.UM_SALTSALVE = "Brine Balm"
-	STRINGS.SLUDGE_CORK = "Driftwood Cork"
+	STRINGS.SLUDGE_CORK = "Sludge Plug"

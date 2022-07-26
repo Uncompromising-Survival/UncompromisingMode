@@ -75,6 +75,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
     DESCRIBE.MONSTERSMALLMEAT = "A small piece of juicy meat."
     DESCRIBE.COOKEDMONSTERSMALLMEAT = "The flavour is nice."
     DESCRIBE.MONSTERSMALLMEAT_DRIED = "You must chew a lot to get the flavour out."
+	DESCRIBE.UM_MONSTEREGG = ""
+    DESCRIBE.UM_MONSTEREGG_COOKED = ""
 
     DESCRIBE.MUSHROOMSPROUT_OVERWORLD = "That! That is where the melting rain is from!"
     DESCRIBE.TOADLING = "Stop getting in my way."
@@ -93,11 +95,11 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 		"I am greasy from this hotness.",
 	}
 	ANNOUNCE.ANNOUNCE_ROOTING = "I'm stuck!"
-	ANNOUNCE.ANNOUNCE_SNOWSTORM = "The winds picking up..."
+	ANNOUNCE.ANNOUNCE_SNOWSTORM = "I hear the howling of the wind."
 	ANNOUNCE.ANNOUNCE_OVER_EAT =
 	{
 		STUFFED = "my belly is so big! Squeek!",
-		OVERSTUFFED = "I am so big and round!",
+		OVERSTUFFED = "I am too big and round!",
     }
     ANNOUNCE.CURSED_ITEM_EQUIP = "GAHH!"
 	DESCRIBE.VETSITEM = "It whispers, It wants me to talk to that bone head!"
@@ -248,8 +250,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 	DESCRIBE.DURABILITY_LEVEL = 
 	{
 		QUARTER = "Smelly rags now.",
-		HALF = "It is getting very smelly.",
-		THREEQUARTER = "It is starting to stink.",
+		HALF = "It is getting very stinky, and bad.",
+		THREEQUARTER = "It is starting to smell more.",
 		FULL = "This is nice.",
 	}
 
@@ -318,7 +320,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	
 	DESCRIBE.SLOBBERLOBBER = "Yucky spatty thing."
 	DESCRIBE.GORE_HORN_HAT = "Run away from me! WINKY."
-	DESCRIBE.BEARGERCLAW = "New Nails, not mine."
+	DESCRIBE.BEARGERCLAW = "New Nails, they are nice."
 	DESCRIBE.FEATHER_FROCK = "Dusty ugly bird cape."
 	
 	DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM.."\nDeformed Jewel."
@@ -432,6 +434,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "Let me see what is in there."
+	ACTIONFAIL.WINONATOOLBOX = "It is mine I tell you! Mine!"
+	DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Thing with wires to put on other things."
+	DESCRIBE.MINERHAT_ELECTRICAL = "It is all wired up now."
 	DESCRIBE.OCEAN_SPEAKER = "loud terrible thing."
 	--DESCRIBE.UM_SIREN = "Smells fishy to me."
 	
@@ -444,11 +450,6 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.ARMOR_SHARKSUIT_UM = "Wearing it does not make me feel safer, just cold and weird."
 	DESCRIBE.ROCKJAWLEATHER = "Cold and bumpy to touch."
 	
-	ACTIONFAIL.WINONATOOLBOX = "It is mine I tell you! Mine!"
-	DESCRIBE.POWERCELL = ""
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Thing with wires to put on other things."
-	DESCRIBE.MINERHAT_ELECTRICAL = "It is all wired up now."
-	
     DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Little gooey bits I love these!"
 	DESCRIBE.UM_DEVILED_EGGS = "Yummy eggs, they smell good!"
@@ -457,28 +458,31 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.GIANT_TREE_BIRDNEST = "It seems they came to me!"
 	
 	DESCRIBE.SLUDGE = "This has an interesting fragance to it, I like."
+	DESCRIBE.SLUDGE_OIL = ""
     DESCRIBE.SLUDGE_SACK = "Slimey gooey carrier, It is my style."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = ""
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.BOATPATCH_SLUDGE = "I want it, But I do not want boat holes."
     DESCRIBE.UM_COPPER_PIPE = ""
-    DESCRIBE.UM_SALTSALVE  = "I am not rubbing this into my fur."
+    DESCRIBE.UM_SALTSALVE  = "I am not hurting myself to help myself."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
 	DESCRIBE.UM_AMBER = ""
-	DESCRIBE.UM_DREAMCATCHER = "Give me my dream back. It is mine!"
 	DESCRIBE.UM_BEEGUN = ""
 	DESCRIBE.SUNKENCHEST_ROYAL = "I need more rats to bring this back to my hole."
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_DREAMCATCHER = "Give me my dream back. It is mine!"
+	DESCRIBE.UM_BRINEISHMOSS = "I have eaten enough moss to know how it tastes."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGESTACK = "Oooh new smells!"
+	DESCRIBE.SPECTER_SHIPWRECK = ""
 	
-	DESCRIBE.UNCOMPROMISING_HARPOON = ""
-	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = ""
+	DESCRIBE.UNCOMPROMISING_HARPOON = "Why would I want to throw it? This is mine now."
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Why would I want to throw it? This is mine now."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "" 
 	DESCRIBE.UM_MAGNERANG = ""
 	DESCRIBE.UM_MAGNERANGREEL = ""

@@ -353,22 +353,21 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "I keep everything I need on me."
-	DESCRIBE.OCEAN_SPEAKER = "I remember these! I can't quite... remember what they do though..."
-	--DESCRIBE.UM_SIREN = "Oh botheration! Its YOU again."
-	
-	--DESCRIBE.OCUPUS_BEAK = ""
-	--DESCRIBE.OCUPUS_TENTACLE = ""
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
-	
-	DESCRIBE.ARMOR_REED_UM = "It's sturdier, but this isn't what I meant."
-	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
-	DESCRIBE.ROCKJAWLEATHER = ""
-	
 	ACTIONFAIL.WINONATOOLBOX = "What could I possibly need from here."
 	DESCRIBE.POWERCELL = ""
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
 	DESCRIBE.MINERHAT_ELECTRICAL = "Not bad for just wires with no clockwork."
+	DESCRIBE.OCEAN_SPEAKER = "I remember these! I can't quite... remember what they do though..."
+	--DESCRIBE.UM_SIREN = "Oh botheration! Its YOU again."
+	
+	--DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_TENTACLE = "Hands off."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "This is what happens when you keep staring."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "You are best as sashimi."
+	
+	DESCRIBE.ARMOR_REED_UM = "It's sturdier, but this isn't what I meant."
+	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ROCKJAWLEATHER = ""
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Even the food is watching me."
@@ -378,25 +377,26 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.GIANT_TREE_BIRDNEST = "What, you eggs?"
 	
     DESCRIBE.SLUDGE = ""
+	DESCRIBE.SLUDGE_OIL = ""
     DESCRIBE.SLUDGE_SACK = "Putting my watches inside will only gunk them up."
-	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "The crudeness only makes it more dangerous."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "The crudeness only made it more dangerous."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = ""
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.BOATPATCH_SLUDGE = "Pop it in a hole and forget about it."
     DESCRIBE.UM_COPPER_PIPE = ""
     DESCRIBE.UM_SALTSALVE  = "No thanks, time heals all wounds."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "Catching fish this way is much more time efficient."
 	DESCRIBE.UM_AMBER = "Something got caught inside there a long time ago."
-	DESCRIBE.UM_DREAMCATCHER = ""
 	DESCRIBE.UM_BEEGUN = "?"
 	DESCRIBE.SUNKENCHEST_ROYAL = "You are from another timeline, merged into this one."
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
-	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = "This should last long enough."
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "."
+	DESCRIBE.UM_DREAMCATCHER = ""
+	DESCRIBE.UM_BRINEISHMOSS = "Moss, it grows everywhere."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGE_CORK = "This should speed things up with that sludge."
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."

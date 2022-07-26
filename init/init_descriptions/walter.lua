@@ -359,6 +359,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "I wonder what kind of gadgets and do-hickeys are inside."
+	ACTIONFAIL.WINONATOOLBOX = "I don't have a badge for this yet."
+	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "It'd be more useful powering something."
+	DESCRIBE.MINERHAT_ELECTRICAL = "This makes refueling a lot easier."
 	DESCRIBE.OCEAN_SPEAKER = "I wonder if Woby can hear its frequency?"
 	--DESCRIBE.UM_SIREN = "Woah!! A REAL sea monster!!"
 	
@@ -371,11 +375,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
 	--DESCRIBE.ROCKJAWLEATHER = ""
 	
-	ACTIONFAIL.WINONATOOLBOX = "I don't have a badge for this yet."
-	DESCRIBE.POWERCELL = "."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
-	DESCRIBE.MINERHAT_ELECTRICAL = "This makes refueling a lot easier."
-	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "If I close my eyes and swallow, maybe it will taste better!"
 	DESCRIBE.UM_DEVILED_EGGS = "It's pretty fowl! Get it? ...You get it."
@@ -384,8 +383,9 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Woby, leave those eggs alone!" --Woby you bitch don't eat the eggsssss
 	
     DESCRIBE.SLUDGE = "."
-    DESCRIBE.SLUDGE_SACK = "."
-	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Maybe this is what solid fire is."
+	DESCRIBE.SLUDGE_OIL = ""
+    DESCRIBE.SLUDGE_SACK = "It'll keep stuff I don't want stolen!"
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Maybe this is what solid fire looks like."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
     DESCRIBE.BOATPATCH_SLUDGE = "The best kind of hole is a plugged one."
@@ -393,16 +393,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
     DESCRIBE.UM_SALTSALVE  = "M-maybe I should just stick to bandaids."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
 	DESCRIBE.UM_AMBER = "."
-	DESCRIBE.UM_DREAMCATCHER = "."
     DESCRIBE.UM_BEEGUN = "?" --please make Walter lose 20 sanity per minute with this equipped I think that would be a cool flavour perk
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_DREAMCATCHER = "."
+	DESCRIBE.UM_BRINEISHMOSS = "It looks like a caterpillar."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGE_CORK = "A plug for an oversized bathtub!"
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."

@@ -356,6 +356,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "Not meant for pots and pans, but I can make do."
+	ACTIONFAIL.WINONATOOLBOX = "Not full of utensils I presume."
+	DESCRIBE.POWERCELL = "Food for the batteries, I suppose."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "I could use a battery charged... well, everything."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Would make cooking in the dark easier."
 	DESCRIBE.OCEAN_SPEAKER = "I never was one for machines."
 	--DESCRIBE.UM_SIREN = "Apologies Mademoiselle Wigfrid, but it she the supperior singer!"
 	
@@ -368,11 +372,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
 	DESCRIBE.ROCKJAWLEATHER = "I uhh... Don't think I have any recipes on shark skin."
 	
-	ACTIONFAIL.WINONATOOLBOX = "Not full of utensils I presume."
-	DESCRIBE.POWERCELL = ""
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
-	DESCRIBE.MINERHAT_ELECTRICAL = "I could use a battery charged... well, everything."
-	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "I... think I misheard the order."
 	DESCRIBE.UM_DEVILED_EGGS = "Hors d'evil."
@@ -381,25 +380,26 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.GIANT_TREE_BIRDNEST = "The food's delivering itself now!"
 	
     DESCRIBE.SLUDGE = "Repugnant!"
+	DESCRIBE.SLUDGE_OIL = "It's been boiled down to a base."
     DESCRIBE.SLUDGE_SACK = "Not fit for storing ingredients."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.BOATPATCH_SLUDGE = "A plug that stays put."
     DESCRIBE.UM_COPPER_PIPE = "."
     DESCRIBE.UM_SALTSALVE  = "A powerful concoction of salty reagents."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Time to make the catch of the day."
 	DESCRIBE.UM_AMBER = "N."
-	DESCRIBE.UM_DREAMCATCHER = "."
     DESCRIBE.UM_BEEGUN = "?"
 	DESCRIBE.SUNKENCHEST_ROYAL = "magnifique!"
 	DESCRIBE.STEERINGWHEEL_COPPER = ""
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_BRINEISHMOSS = ""
+	DESCRIBE.UM_DREAMCATCHER = "."
+	DESCRIBE.UM_BRINEISHMOSS = "Salted moss"
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGE_CORK = "Not a cork for wine, unfortunatly."
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."

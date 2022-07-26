@@ -369,6 +369,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	----UNDER THE WEATHER----
 	
 	DESCRIBE.WINONA_TOOLBOX = "Do I have to carry everything around?"
+	ACTIONFAIL.WINONATOOLBOX = "Hey, at least let me take a peak."
+	DESCRIBE.POWERCELL = "yeah, yeah, it's nice, but how well does it burn."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Why cant I energize it with fire!"
 	DESCRIBE.OCEAN_SPEAKER = "What's this big dumb machine doing all the way out here?"
 	--DESCRIBE.UM_SIREN = "Oh yeah!? I can blow bubbles twice as big! Watch!"
 	
@@ -380,11 +384,6 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.ARMOR_REED_UM = "Well that was fun to make, time to burn it."
 	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
 	DESCRIBE.ROCKJAWLEATHER = "I don't want gross fish skin."
-
-	ACTIONFAIL.WINONATOOLBOX = "Hey, at least let me take a peak."
-	DESCRIBE.POWERCELL = "yeah, yeah, it's nice, but how well does it burn."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
-	DESCRIBE.MINERHAT_ELECTRICAL = "Why cant I energize it with fire!"
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Aww, they are looking right at me!"
@@ -394,25 +393,26 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Think if I light the nest on fire the eggs'll fry?"
 	
     DESCRIBE.SLUDGE = "Burning this gross stuff would be easy."
+	DESCRIBE.SLUDGE_OIL = ""
     DESCRIBE.SLUDGE_SACK = "The grossest backpack known to man."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "A beautiful chunk of fiery destruction."
-	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "Well, it better save my boat from sinking."
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Burning it would have been better."
     DESCRIBE.BOATPATCH_SLUDGE = ""
-    DESCRIBE.UM_COPPER_PIPE = ""
+    DESCRIBE.UM_COPPER_PIPE = "These won't burn at all."
     DESCRIBE.UM_SALTSALVE  = "A different kind of burning, I can get used to this."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = ""
 	DESCRIBE.UM_AMBER = "Pretty."
-	DESCRIBE.UM_DREAMCATCHER = "."
 	DESCRIBE.UM_BEEGUN = "?"
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "Now the whole boats spinning!"
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "I still need one of these."
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.UM_DREAMCATCHER = "."
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = ""
+	DESCRIBE.SLUDGE_CORK = "Atleast now I can plug that sludge up!"
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
