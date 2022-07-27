@@ -55,8 +55,8 @@ local function SpawnInactive(inst)
 		ClearInactiveBiome(inst)
 		--TheNet:Announce("spawn innactive")
 		local x,y,z = inst.Transform:GetWorldPosition()
-		local test = SpawnPrefab("umss_inactivebiome_cbts_sludge")
-		test.Transform:SetPosition(x,y,z)
+		local biome = SpawnPrefab("umss_inactivebiome_cbts_1")--..math.random(3))
+		biome.Transform:SetPosition(x,y,z)
 		
 		inst.spawned_inactive = true
 	end

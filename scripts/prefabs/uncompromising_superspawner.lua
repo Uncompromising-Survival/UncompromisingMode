@@ -84,7 +84,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
         if v.prefab ~= "um_dynlayout_tileflag" and v.prefab ~= "seeds" --[[hecking birds man]]then
             local prefab = SpawnPrefab(v.prefab)
             -- TheNet:Announce("spawninwater_prefab: ")
-            -- TheNet:Announce(inst.spawninwater_prefab)
+            -- TheNet:Announce(tostring(inst.spawninwater_prefab))
 
             -- for area handlers, so they can find all things created by a especific SS.
             if inst.tags then
@@ -94,7 +94,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
                 prefab.dynlayout_tags = inst.tags
             end
 
-            if inst.spawninwater_prefab or inst.spawninwater_prefab == nil then
+            if inst.spawninwater_prefab then
                 prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
             else
                 if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
@@ -105,6 +105,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
                     prefab:Remove()
                 end
             end
+
             if v.diseased then
                 -- If vve ever add back acid rain I guess vve could have this, vvhatever
             end
@@ -148,12 +149,12 @@ local function UncompromisingSpawnGOOOOO(inst, data)
 
             if v.tile and v.tile ~= TheWorld.Map:GetTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
                 local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
-                -- TheNet:Announce("spawninwater_tile:")
-                -- TheNet:Announce(inst.spawninwater_tile)
-                if inst.spawninwater_tile or inst.spawninwater_tile == nil then
+                -- :Announce("spawninwater_tile:")
+                -- TheNet:Announce(tostring(inst.spawninwater_tile))
+                if inst.spawninwater_tile then
                     -- TheNet:Announce("spawninwater true!")
-                    print(v.tile)
-                    TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
+                    -- print(v.tile)
+                    -- TheWorld.Map:SetTile(tile_x, tile_z, v.tile)
                 else
                     if TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
                         -- TheNet:Announce("water at point!")
@@ -186,10 +187,10 @@ local function superspawner(data)
 
 		inst.tags = data.tags
 		inst.spawnTable = data.table
-		inst.rotatable = data.rotate or false
-		inst.tile_centered = data.tile_centered or false
-		inst.spawninwater_tile = data.spawninwater_tile or true
-		inst.spawninwater_prefab = data.spawninwater_prefab or true
+		inst.rotatable = data.rotate == nil and false or data.rotate
+		inst.tile_centered = data.tile_centered == nil and false or data.tile_centered
+		inst.spawninwater_tile = data.spawninwater_tile == nil and true or data.spawninwater_tile
+		inst.spawninwater_prefab = data.spawninwater_prefab == nil and true or data.spawninwater_prefab
         inst.SpawnFn = data.spawnfn
 
 		--TheNet:Announce("INIT") --For Troubleshooting
@@ -209,6 +210,8 @@ local function superspawner(data)
 	end
     if data.name ~= nil and data.table ~= nil then--camel case won't work but at least we can write with it in here.
         return Prefab("umss_"..string.lower(data.name), makefn)
+    else
+        print("!!! UMSS FAILED TO GENERATE !!!\nname: "..data.name.." table: "..tostring(data.table))
     end
 end
 
