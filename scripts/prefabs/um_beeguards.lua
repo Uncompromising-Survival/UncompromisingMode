@@ -152,9 +152,11 @@ local function MortarAttack(inst)
 end
 
 local function Shoot(inst)
-	local queen = inst.components.entitytracker:GetEntity("queen")
-	if not inst.circle and queen and queen.prioritytarget and queen.prioritytarget.components.health and not queen.prioritytarget.components.health:IsDead() then
-		inst.target = queen.prioritytarget
+	if not inst.target then
+		local queen = inst.components.entitytracker:GetEntity("queen")
+		if not inst.circle and queen and queen.prioritytarget and queen.prioritytarget.components.health and not queen.prioritytarget.components.health:IsDead() then
+			inst.target = queen.prioritytarget
+		end
 	end
 	if inst.target then
 		inst.AnimState:Hide("stinger")

@@ -18,9 +18,9 @@ end)
 
 local function StompHandler(inst,data)
 	--TheNet:Announce(inst.stomprage)
-	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
+	if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
-	end]]
+	end
 	if inst.components.health and inst.components.health:GetPercent() < 0.5 then
 		inst.should_shooter_rage = inst.should_shooter_rage -1
 	end
@@ -170,12 +170,16 @@ local function SpavvnShooterBeesLine(inst,time,back)
 	end
 end
 
-local function SpawnShooterBeesCircle(inst)
+local function SpawnShooterBeesCircle(inst, prioritytarget)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local LIMIT = 4
 	local target = FindEntity(inst,40^2,nil,{"player"},{"playerghost"})
 	if not target then
 		target = FindEntity(inst,40^2,nil,{"_combat"},{"playerghost"})
+	end
+	if prioritytarget then
+		TheNet:Announce("setting priority target")
+		target = prioritytarget
 	end
 	if target then
 		inst.shooterbees = {}

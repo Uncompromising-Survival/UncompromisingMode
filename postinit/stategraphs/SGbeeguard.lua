@@ -254,10 +254,6 @@ local states = {
 			inst.AnimState:PushAnimation("walk_loop",true)
 			local horizVel = 3
 			local verticalVel = 40
-			local queen = inst.components.entitytracker:GetEntity("queen")
-			if queen.prioritytarget and queen.prioritytarget.components.health and not queen.prioritytarget.components.health:IsDead() then
-				inst.target = queen.prioritytarget
-			end
 			if inst.target then
 				local shadow = SpawnPrefab("warningshadow")
 				if inst.circle then

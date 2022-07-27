@@ -213,8 +213,15 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 			end
 			if inst.ShouldChase(inst) and inst.should_shooter_rage and inst.should_shooter_rage < 1 and not inst.should_seeker_rage then
 				inst.should_shooter_rage = 30
+				
 				if math.random() > 0.25 then
-					inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_shooter_circle") end)
+					inst:DoTaskInTime(0,function(inst) 
+					
+						local x,y,z = inst.Transform:GetWorldPosition()
+						local targets = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost","bee"})
+						inst.shoottargets = targets
+						inst.sg:GoToState("spawnguards_shooter_circle") 
+					end)
 				else
 					inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker") end)
 				end
@@ -631,7 +638,9 @@ local states = {
         timeline =
         {
             TimeEvent(16 * FRAMES, function(inst)
-				inst.SpawnShooterBeesCircle(inst)
+				local priotarget = inst.shoottargets[1]
+				table.remove(inst.shoottargets,1)
+				inst.SpawnShooterBeesCircle(inst,priotarget)
             end),
             CommonHandlers.OnNoSleepTimeEvent(32 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
@@ -644,6 +653,11 @@ local states = {
         {
             CommonHandlers.OnNoSleepAnimOver("idle"),
         },
+		onexit = function(inst) --Unfinished business, need to shoot more ppl.
+			if inst.shoottargets[1] then
+				inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_shooter_circle") end)
+			end
+		end,
     },
     State{
         name = "spawnguards_shooter_line",
