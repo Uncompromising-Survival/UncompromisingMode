@@ -445,6 +445,7 @@ if GetModConfigData("wanda_nerf") then
 end
 
 TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / TUNING.DSTU.SLEEPINGBUFF
+TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 
 --Sailing Rebalance related tuning changes
 --trident buff
