@@ -55,7 +55,7 @@ local function stinger_fn()
     inst.AnimState:SetBank("um_beestinger_projectile")
     inst.AnimState:SetBuild("um_beestinger_projectile")
 
-
+	inst.AnimState:SetMultColour(1,0,0,1)
 	
     inst:AddTag("NOCLICK")
     inst:AddTag("sharp")
