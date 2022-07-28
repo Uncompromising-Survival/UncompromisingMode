@@ -34,27 +34,37 @@ local function ArtificialLocomote(inst,destination,speed)
 end
 
 local function FindSpotForShadow(inst,target,shadow,distance)
-	local x,y,z = target.Transform:GetWorldPosition()
-	x = x + math.random(-distance,distance)
-	z = z + math.random(-distance,distance)
-	local redo = false
-	
-	local shadows = TheSim:FindEntities(x,y,z,3,{"FX"})
-	if shadows then
-		for i,v in ipairs(shadows) do  --For later, finding the location vvhere the shadovv should spavvn.
-			if v.prefab == "warningshadow" then
-				redo = true
+	if not (target and target:IsValid()) then
+		local queen = inst.components.entitytracker:GetEntity("queen")
+		if queen and queen.prioritytarget and queen.prioritytarget.components.health and not queen.prioritytarget.components.health:IsDead() then
+			target = queen.prioritytarget
+		end		
+	end
+	if target and target:IsValid() then
+		local x,y,z = target.Transform:GetWorldPosition()
+		x = x + math.random(-distance,distance)
+		z = z + math.random(-distance,distance)
+		local redo = false
+		
+		local shadows = TheSim:FindEntities(x,y,z,3,{"FX"})
+		if shadows then
+			for i,v in ipairs(shadows) do  --For later, finding the location vvhere the shadovv should spavvn.
+				if v.prefab == "warningshadow" then
+					redo = true
+				end
 			end
 		end
-	end
-	if redo == false then
-		shadow.Transform:SetPosition(x,0,z)
-	else
-		if inst.prefab == "um_beeguard_seeker" then
-			FindSpotForShadow(inst,target,shadow,distance+5)
+		if redo == false then
+			shadow.Transform:SetPosition(x,0,z)
 		else
-			FindSpotForShadow(inst,target,shadow,distance+3)
+			if inst.prefab == "um_beeguard_seeker" then
+				FindSpotForShadow(inst,target,shadow,distance+5)
+			else
+				FindSpotForShadow(inst,target,shadow,distance+3)
+			end
 		end
+	else
+		inst:Remove()
 	end
 end
 
