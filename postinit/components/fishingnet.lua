@@ -34,17 +34,20 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 			local my_x, my_y, my_z = self.inst.Transform:GetWorldPosition()
 			local fishies = TheSim:FindEntities(my_x,my_y,my_z, self.collect_radius, {"oceanfishable"})
 			for k, v in pairs(fishies) do
-				if k < 3 then
-					local fish = SpawnPrefab(v.prefab.."_inv")
+				local fishdef = v.fish_def.prefab ~= nil and v.fish_def.prefab
+				local fish = SpawnPrefab(fishdef.."_inv") ~= nil and SpawnPrefab(fishdef.."_inv") or SpawnPrefab(fishdef.."_land") ~= nil and SpawnPrefab(fishdef.."_land")
+				
+				if fish ~= nil and k < 3 then
+					--local fish = SpawnPrefab(fishtype)
 					if self.inst.item ~= nil and v.components.weighable ~= nil then
 						local minweight = v.components.weighable.min_weight
 					
 						if minweight < 100 then
 							self.inst.item.netweight = self.inst.item.netweight + 2
 						elseif minweight >= 100 and minweight < 200 then
-							self.inst.item.netweight = self.inst.item.netweight + 4
+							self.inst.item.netweight = self.inst.item.netweight + 3
 						elseif minweight >= 200 then
-							self.inst.item.netweight = self.inst.item.netweight + 6
+							self.inst.item.netweight = self.inst.item.netweight + 4
 						end
 					end
 					
@@ -113,6 +116,10 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 					else
 						item.Transform:SetPosition(thrower_x, 0, thrower_z)
 					end
+				end
+				
+				if item:HasTag("stunnedbybomb") then
+					item.sg:GoToState("stunned", false)
 				end
 			end)
 		else 
