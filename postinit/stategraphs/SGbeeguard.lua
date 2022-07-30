@@ -40,6 +40,7 @@ local function FindSpotForShadow(inst,target,shadow)
 			target = queen.prioritytarget
 		end		
 	end
+	local distance = 7
 	if target and target:IsValid() then
 		local x,y,z = target.Transform:GetWorldPosition()
 		x = x + math.random(-distance,distance)
