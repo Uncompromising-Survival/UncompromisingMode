@@ -358,6 +358,4 @@ return {
 	"um_dreamcatcher",
 	"um_beeguards",
 	"um_beestinger_projectile",
-	
-	"um_frog_ocean",
 }
