@@ -562,6 +562,8 @@ Assets = {
 	Asset("ATLAS", "images/vetskull.xml"),
 	Asset("IMAGE", "images/UM_TT.tex"),
 	Asset("ATLAS", "images/UM_TT.xml"),
+	Asset("IMAGE", "images/PP_TT.tex"),
+	Asset("ATLAS", "images/PP_TT.xml"),
 	--Asset("IMAGE", "images/inventoryimages/liceloaf.tex"),
 	--Asset("ATLAS", "images/inventoryimages/liceloaf.xml"),
 	--Asset("ANIM", "anim/liceloaf.zip"),

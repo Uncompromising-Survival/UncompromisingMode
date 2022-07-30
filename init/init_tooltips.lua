@@ -59,7 +59,22 @@ STRINGS.UNCOMP_TOOLTIP = {
     DISEASECUREBOMB = "- Restores sickly plants."
 }
 
+STRINGS.PINETREE_TOOLTIP = {
+	WALTERHAT = "- Wearing it makes scrapes and bruises feel less scary!",
+	HEALINGSALVE = "- My first aid training helps me get more out of this!",
+	TILLWEEDSALVE = "- My first aid training helps me get more out of this!",
+	BANDAGE = "- Restores a bit of extra health over time.\n- My first aid training helps me get more out of this!",
+    FLORAL_BANDAGE = "- Restores extra health over time.\n- My first aid training helps me get more out of this!",
+    BEDROLL_STRAW = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    BEDROLL_FURRY = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    TENT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    SIESTAHUT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    PORTABLETENT_ITEM = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    MEATRACK_HAT = "- If I go fast enough, it will dry even faster!"
+}
+
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
+local PINETREETOOLTIP = STRINGS.PINETREE_TOOLTIP
 
 if GetModConfigData("beebox_nerf") then
 	TOOLTIP.BEEBOX = "- Reduced yield per stage.\n- Reduced maximum active bees."
@@ -120,10 +135,19 @@ end
 
 if TUNING.DSTU.GOTOBED then
 	TOOLTIP.BEDROLL_STRAW = "- May restore maximum health."
+	PINETREETOOLTIP.BEDROLL_STRAW = "- May restore maximum health.\n"..PINETREETOOLTIP.BEDROLL_STRAW
+	
 	TOOLTIP.BEDROLL_FURRY = "- May restore maximum health."
+	PINETREETOOLTIP.BEDROLL_FURRY = "- May restore maximum health.\n"..PINETREETOOLTIP.BEDROLL_FURRY
+	
 	TOOLTIP.TENT = "- May restore maximum health."
+	PINETREETOOLTIP.TENT = "- May restore maximum health.\n"..PINETREETOOLTIP.TENT
+	
     TOOLTIP.PORTABLETENT_ITEM = "- May restore maximum health."
+	PINETREETOOLTIP.PORTABLETENT_ITEM = "- May restore maximum health.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
+	
 	TOOLTIP.SIESTAHUT = "- A bit less efficient.\n- May restore maximum health."
+	PINETREETOOLTIP.SIESTAHUT = "- May restore maximum health.\n"..PINETREETOOLTIP.SIESTAHUT
 else
 	TOOLTIP.SIESTAHUT = "- A bit less efficient."
 end
@@ -131,16 +155,34 @@ end
 if TUNING.DSTU.SLEEPINGBUFF > 1 then
 	if TUNING.DSTU.GOTOBED then
 		TOOLTIP.BEDROLL_STRAW = TOOLTIP.BEDROLL_STRAW.."\n- Faster healing rate."
+		PINETREETOOLTIP.BEDROLL_STRAW = "- Faster healing rate.\n"..PINETREETOOLTIP.BEDROLL_STRAW
+		
 		TOOLTIP.BEDROLL_FURRY = TOOLTIP.BEDROLL_FURRY.."\n- Faster healing rate."
+		PINETREETOOLTIP.BEDROLL_FURRY = "- Faster healing rate.\n"..PINETREETOOLTIP.BEDROLL_FURRY
+		
 		TOOLTIP.TENT = TOOLTIP.TENT.."\n- Faster healing rate."
+		PINETREETOOLTIP.TENT = "- Faster healing rate.\n"..PINETREETOOLTIP.TENT
+		
 		TOOLTIP.SIESTAHUT = TOOLTIP.SIESTAHUT.."\n- Faster healing rate."
+		PINETREETOOLTIP.SIESTAHUT = "- Faster healing rate.\n"..PINETREETOOLTIP.SIESTAHUT
+		
 		TOOLTIP.PORTABLETENT_ITEM = TOOLTIP.PORTABLETENT_ITEM.."\n- Faster healing rate."
+		PINETREETOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
 	else
 		TOOLTIP.BEDROLL_STRAW = "- Faster healing rate."
+		PINETREETOOLTIP.BEDROLL_STRAW = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
+		
 		TOOLTIP.BEDROLL_FURRY = "- Faster healing rate."
+		PINETREETOOLTIP.BEDROLL_FURRY = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
+		
 		TOOLTIP.TENT = "- Faster healing rate."
+		PINETREETOOLTIP.TENT = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
+		
 		TOOLTIP.SIESTAHUT = "- Faster healing rate."
+		PINETREETOOLTIP.SIESTAHUT = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
+		
 		TOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate."
+		PINETREETOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
 	end
 end
 
