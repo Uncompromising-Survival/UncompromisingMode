@@ -136,51 +136,49 @@ end
 if TUNING.DSTU.GOTOBED then
 	TOOLTIP.BEDROLL_STRAW = "- May restore maximum health."
 	PINETREETOOLTIP.BEDROLL_STRAW = "- May restore maximum health.\n"..PINETREETOOLTIP.BEDROLL_STRAW
-	
+
 	TOOLTIP.BEDROLL_FURRY = "- May restore maximum health."
 	PINETREETOOLTIP.BEDROLL_FURRY = "- May restore maximum health.\n"..PINETREETOOLTIP.BEDROLL_FURRY
-	
+
 	TOOLTIP.TENT = "- May restore maximum health."
 	PINETREETOOLTIP.TENT = "- May restore maximum health.\n"..PINETREETOOLTIP.TENT
-	
+
     TOOLTIP.PORTABLETENT_ITEM = "- May restore maximum health."
 	PINETREETOOLTIP.PORTABLETENT_ITEM = "- May restore maximum health.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
-	
+
 	TOOLTIP.SIESTAHUT = "- A bit less efficient.\n- May restore maximum health."
 	PINETREETOOLTIP.SIESTAHUT = "- May restore maximum health.\n"..PINETREETOOLTIP.SIESTAHUT
-else
-	TOOLTIP.SIESTAHUT = "- A bit less efficient."
 end
 
 if TUNING.DSTU.SLEEPINGBUFF > 1 then
 	if TUNING.DSTU.GOTOBED then
 		TOOLTIP.BEDROLL_STRAW = TOOLTIP.BEDROLL_STRAW.."\n- Faster healing rate."
 		PINETREETOOLTIP.BEDROLL_STRAW = "- Faster healing rate.\n"..PINETREETOOLTIP.BEDROLL_STRAW
-		
+
 		TOOLTIP.BEDROLL_FURRY = TOOLTIP.BEDROLL_FURRY.."\n- Faster healing rate."
 		PINETREETOOLTIP.BEDROLL_FURRY = "- Faster healing rate.\n"..PINETREETOOLTIP.BEDROLL_FURRY
-		
+
 		TOOLTIP.TENT = TOOLTIP.TENT.."\n- Faster healing rate."
 		PINETREETOOLTIP.TENT = "- Faster healing rate.\n"..PINETREETOOLTIP.TENT
-		
+
 		TOOLTIP.SIESTAHUT = TOOLTIP.SIESTAHUT.."\n- Faster healing rate."
 		PINETREETOOLTIP.SIESTAHUT = "- Faster healing rate.\n"..PINETREETOOLTIP.SIESTAHUT
-		
+
 		TOOLTIP.PORTABLETENT_ITEM = TOOLTIP.PORTABLETENT_ITEM.."\n- Faster healing rate."
 		PINETREETOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
 	else
 		TOOLTIP.BEDROLL_STRAW = "- Faster healing rate."
 		PINETREETOOLTIP.BEDROLL_STRAW = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
-		
+
 		TOOLTIP.BEDROLL_FURRY = "- Faster healing rate."
 		PINETREETOOLTIP.BEDROLL_FURRY = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
-		
+
 		TOOLTIP.TENT = "- Faster healing rate."
 		PINETREETOOLTIP.TENT = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
-		
+
 		TOOLTIP.SIESTAHUT = "- Faster healing rate."
 		PINETREETOOLTIP.SIESTAHUT = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
-		
+
 		TOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate."
 		PINETREETOOLTIP.PORTABLETENT_ITEM = "- Faster healing rate.\n"..PINETREETOOLTIP.PORTABLETENT_ITEM
 	end
