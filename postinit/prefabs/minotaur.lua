@@ -108,6 +108,16 @@ local function OrganUpdate(inst)
 	end
 end
 
+local function HomeCheck(inst)
+	if inst.spawnlocation then
+		local dist = math.sqrt(inst:GetDistanceSqToPoint(inst.spawnlocation:Get()))
+		TheNet:Announce(dist)
+		if dist > 32 then
+			inst.sg:GoToState("arena_return_pre")
+		end
+	end
+end
+
 env.AddPrefabPostInit("minotaur", function(inst)
 	if not TheWorld.ismastersim then
 		return
@@ -149,4 +159,5 @@ env.AddPrefabPostInit("minotaur", function(inst)
 		inst.have_a_heart = true
 	end)
 	
+	inst:DoPeriodicTask(5,HomeCheck)
 end)

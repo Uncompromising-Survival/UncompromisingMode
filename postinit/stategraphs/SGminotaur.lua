@@ -53,7 +53,7 @@ env.AddStategraphPostInit("minotaur", function(inst)
 		if inst.forcebelch and inst.components.combat and inst.components.combat.target and not inst.sg:HasStateTag("running") then
 			inst.sg:GoToState("belch")
 		else
-			if inst.forceleap and inst.components.combat and inst.components.combat.target then
+			if inst.forceleap and inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and inst:GetDistanceSqToInst(inst.components.combat.target) < 15^2 then
 				inst.sg:GoToState("leap_attack_pre",inst.components.combat.target)
 			else
 				_OldAttackEvent(inst, data)
@@ -251,6 +251,63 @@ State{ --This state is for the guardian belching a bunch of shadow goo out! It's
 				end),
 			},
 		},
+	
+    State{
+        name = "arena_return_pre",
+        tags = {"busy", "leapattack"},
+        
+        onenter = function(inst)
+			inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("jump_atk_pre",false)
+			inst.sg:SetTimeout(1.5)
+        end,
+		
+		ontimeout = function(inst)
+			inst.sg:GoToState("arena_return")
+		end,
+    },	
+    State{
+        name = "arena_return",
+        tags = {"attack", "busy", "leapattack"},
+        
+        onenter = function(inst)
+            inst.AnimState:PushAnimation("jump_atk_loop",false)
+            inst.components.locomotor:Stop()
+            
+			inst.Physics:SetMotorVelOverride(0,40,0)
+
+            inst.Physics:ClearCollisionMask()
+            inst.Physics:CollidesWith(COLLISION.WORLD)
+			inst.ascended = false
+        end,
+		
+		onupdate = function(inst)
+			if inst:IsValid() then
+				local x,y,z = inst.Transform:GetWorldPosition()
+				if inst.ascended then
+					inst.Physics:SetMotorVelOverride(0,-40,0)
+					if y < 1 then
+						inst.Transform:SetPosition(x,0,z)
+						inst.components.groundpounder:GroundPound()
+						BounceStuff(inst)
+						inst.OnChangeToObstacle(inst)
+						inst.sg:GoToState("leap_attack_pst")
+					end
+				else
+					if y > 50 then
+						if inst.spawnlocation then
+							local point = inst.spawnlocation
+							inst.Transform:SetPosition(point.x,y,point.z)
+							inst.ascended = true
+						else
+							inst:Remove()
+						end
+					end
+					inst.Physics:SetMotorVelOverride(0,40,0)
+				end
+			end
+        end,
+    },
 	}
 
 for k, v in pairs(states) do
