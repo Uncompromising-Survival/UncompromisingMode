@@ -59,7 +59,7 @@ function Uncompromising_Tooltip:RefreshTooltips()
 		self.icon1:SetTooltip(STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)])
 		self.icon1:Show()
 		
-		self.icon2:Show()
+		self.icon2:Hide()
 	else
 		self.icon1:Hide()
 		self.icon2:Hide()
