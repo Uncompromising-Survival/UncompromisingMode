@@ -111,7 +111,6 @@ end
 local function HomeCheck(inst)
 	if inst.spawnlocation then
 		local dist = math.sqrt(inst:GetDistanceSqToPoint(inst.spawnlocation:Get()))
-		TheNet:Announce(dist)
 		if dist > 32 then
 			inst.sg:GoToState("arena_return_pre")
 		end

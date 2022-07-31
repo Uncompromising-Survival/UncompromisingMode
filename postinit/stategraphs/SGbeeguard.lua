@@ -47,7 +47,7 @@ local function FindSpotForShadow(inst,target,shadow)
 		z = z + math.random(-distance,distance)
 		shadow.Transform:SetPosition(x,0,z)
 	else
-		TheNet:Announce("removing")
+		--TheNet:Announce("removing")
 		inst:Remove()
 	end
 end

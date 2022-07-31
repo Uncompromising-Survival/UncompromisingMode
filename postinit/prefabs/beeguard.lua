@@ -108,12 +108,17 @@ end
 local function IHaveDied(inst)
 	local queen = inst.components.entitytracker:GetEntity("queen")
 	if queen and not queen.sg:HasStateTag("busy") then
-		if inst.components.health:GetPercent() < 0.75 then
-			if math.random() > 0.75 then
-				queen.sg:GoToState("spavvn_support")
+		if queen.components.health:GetPercent() < 0.75 then
+			if queen.components.health:GetPercent() < 0.5 and queen.should_focus and math.random() < 0.25 then
+				queen.should_focus = nil
+				queen.sg:GoToState("focustarget")
 			else
 				if math.random() > 0.75 then
-					queen.sg:GoToState("screech")
+					queen.sg:GoToState("spavvn_support")
+				else
+					if math.random() > 0.75 then
+						queen.sg:GoToState("screech")
+					end
 				end
 			end
 		else
@@ -140,11 +145,11 @@ env.AddPrefabPostInit("beeguard", function(inst)
 	local _FocusTarget = inst.FocusTarget
 	
 	local function FocusTarget(inst,target)
-		--TheNet:Announce("triedfocus")
-		if inst.beeHolder == nil then
-			--TheNet:Announce("nobeeHolder")
-			_FocusTarget(inst,target)
+		if inst.sg:HasStateTag("stuck") then
+			inst.stuckcount = 1000
+			inst.AnimState:PlayAnimation("stuck_pst",false)
 		end
+		_FocusTarget(inst,target)
 	end
 	
 	inst.FocusTarget = FocusTarget

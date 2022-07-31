@@ -149,6 +149,11 @@ local function HasShootersOrSeekers(inst)
 	return true
 end
 
+local function MakeSeekerHitlist(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local players = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost"})
+	inst.seeker_hitlist = players
+end
 env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
 	
 	local _OldOnExit 
@@ -156,15 +161,16 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 		_OldOnExit = inst.states["spawnguards"].onexit
 	end
 	inst.states["spawnguards"].onexit = function(inst)
+		inst.should_focus = true
 		if _OldOnExit then
 			_OldOnExit(inst)
 		end
 		if inst.components.health and inst.components.health:GetPercent() < 1 then
 			if ShouldVVall(inst) then --Should I spavvn vvall bees
-				if math.random() < 0.75 then --Should I fake out the player and vvait a moment to do my thing
+				if math.random() < 0.9 then --Should I fake out the player and vvait a moment to do my thing
 					inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_vvall") end)
 				else
-					inst:DoTaskInTime(math.random(3,10),function(inst) 
+					inst:DoTaskInTime(math.random(3,6),function(inst) 
 						if inst.components.health and not inst.components.health:IsDead() then
 							inst.sg:GoToState("spawnguards_vvall")
 						end
@@ -172,10 +178,10 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 				end
 			else
 				if inst.components.health:GetPercent() < 1 then
-					if math.random() < 0.75 then --Should I fake out the player and vvait a moment to 
+					if math.random() < 0.9 then --Should I fake out the player and vvait a moment to 
 						inst:DoTaskInTime(0,MortarCommand)
 					else
-						inst:DoTaskInTime(math.random(3,10),MortarCommand)
+						inst:DoTaskInTime(math.random(3,6),MortarCommand)
 					end
 				end
 			end
@@ -190,7 +196,8 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 		if _OldOnAtk then
 			_OldOnAtk(inst)
 		end
-		if inst.should_final and not HasShootersOrSeekers(inst) then
+        local soldiers = inst.components.commander:GetAllSoldiers()
+		if inst.should_final then
 			if inst.should_seeker_rage then
 				inst.should_seeker_rage = nil
 			end
@@ -207,6 +214,7 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 				if inst.ShouldChase(inst) and inst.should_seeker_rage then
 					if not inst.seekerrage and inst.components.health and inst.components.health:GetPercent() < 0.75 then
 						inst.should_seeker_rage = nil
+						MakeSeekerHitlist(inst)
 						inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end)
 					end
 				end
@@ -342,124 +350,6 @@ local states = {
             CommonHandlers.OnNoSleepAnimOver("idle"),
         },
 
-    },
-	
-    State{
-        name = "command_charge_loop",
-        tags = { "busy", "nosleep", "nofreeze",  "ability"  },
-
-        onenter = function(inst)
-            FaceTarget(inst)
-			inst.SpavvnShooterBeesLine(inst)
-            inst.components.sanityaura.aura = -TUNING.SANITYAURA_HUGE
-            inst.components.locomotor:StopMoving()
-			inst.AnimState:PushAnimation("idle_loop",true)
-        end,
-
-        timeline =
-        {
-			TimeEvent(12 * FRAMES, function(inst)
-				inst.AnimState:PlayAnimation("command2")
-				inst.AnimState:PushAnimation("idle_loop",true)
-			end),	
-			--Finish the 1st Charge
-            TimeEvent(20 * FRAMES, function(inst)
-                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/attack_pre")
-				DoScreech(inst)
-				DoScreechAlert(inst)
-            end),
-			
-			
-			--2nd Charge
-            TimeEvent(50 * FRAMES, function(inst)
-				inst.direction2 = "back"
-                inst.SpavvnShooterBeesLine(inst)
-            end),
-			
-			TimeEvent(72 * FRAMES, function(inst)
-				inst.AnimState:PlayAnimation("command2")
-				inst.AnimState:PushAnimation("idle_loop",true)
-			end),	
-				
-            TimeEvent(80 * FRAMES, function(inst)
-				DoScreech(inst)
-				DoScreechAlert(inst)
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/attack_pre")
-            end),
-	
-			--3rd Charge
-            TimeEvent(102 * FRAMES, function(inst)
-				inst.SpavvnShooterBeesLine(inst)
-            end),
-			
-			TimeEvent(120 * FRAMES, function(inst)
-				inst.AnimState:PlayAnimation("command2")
-				inst.AnimState:PushAnimation("idle_loop",true)
-			end),	
-            TimeEvent(130 * FRAMES, function(inst)
-				AdjustGuardSpeeds(inst,20)
-				DoScreech(inst)
-				DoScreechAlert(inst)
-                inst:TellSoldiersToCharge(inst)
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/attack_pre")
-            end),	
-
-			--4th Charge
-            TimeEvent(160 * FRAMES, function(inst)
-				--TheNet:Announce("Starting Fourth")
-				inst.direction2 = "back"
-				AdjustGuardSpeeds(inst,20)
-                inst:CrossChargeRepeat(inst)
-            end),
-			
-			TimeEvent(182 * FRAMES, function(inst)
-				inst.AnimState:PlayAnimation("command2")
-				inst.AnimState:PushAnimation("idle_loop",true)
-			end),	
-			
-            TimeEvent(190 * FRAMES, function(inst)
-				AdjustGuardSpeeds(inst,20)
-				DoScreech(inst)
-				DoScreechAlert(inst)
-                inst:TellSoldiersToCharge(inst)
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/attack_pre")
-            end),	
-
-			--5th Charge
-            TimeEvent(220 * FRAMES, function(inst)
-				--TheNet:Announce("Starting Fifth")
-				inst.direction2 = "forth"
-				AdjustGuardSpeeds(inst,20)
-                inst:CrossChargeRepeat(inst)
-            end),
-
-			TimeEvent(240 * FRAMES, function(inst)
-				inst.AnimState:PlayAnimation("command2")
-				inst.AnimState:PushAnimation("idle_loop",true)
-			end),	
-			
-            TimeEvent(250 * FRAMES, function(inst)
-				AdjustGuardSpeeds(inst,20)
-				DoScreech(inst)
-				DoScreechAlert(inst)
-                inst:TellSoldiersToCharge(inst)
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/attack_pre")
-            end),	
-			
-            TimeEvent(300 * FRAMES, function(inst)
-                inst.sg:AddStateTag("caninterrupt")
-                inst.sg:RemoveStateTag("nosleep")
-                inst.sg:RemoveStateTag("nofreeze")
-				inst.sg:GoToState("tired")
-            end),
-        },
-		
-        onexit = function(inst)
-			inst.components.sanityaura.aura = 0
-			inst:ReleaseArmyFromState(inst)
-			PutArmyToSleep(inst)
-			inst.components.timer:StartTimer("cross_atk", math.random(40,60))
-        end,
     },
 	
     State{
@@ -773,7 +663,23 @@ local states = {
             CommonHandlers.OnNoSleepAnimOver("idle"),
         },
 		onexit = function(inst)
-				local target = inst.components.combat.target
+				local target 
+				if inst.seeker_hitlist then
+					local possibletarget = inst.seeker_hitlist[inst.seekercount + 1]
+					if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() then
+						target = possibletarget
+					else
+						local choice = math.random(1,#inst.seeker_hitlist)
+						possibletarget = inst.seeker_hitlist[choice]
+						if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() then
+							target = possibletarget
+						else
+							target = inst.components.combat.target
+						end
+					end
+				else
+					target = inst.components.combat.target
+				end
 				if target then
 					if inst.seekerbees then
 						for i,seeker in ipairs(inst.seekerbees) do

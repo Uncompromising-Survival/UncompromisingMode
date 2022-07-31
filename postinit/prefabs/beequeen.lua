@@ -21,7 +21,11 @@ local function StompHandler(inst,data)
 	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
 	end]]
-	if inst.components.health and inst.components.health:GetPercent() < 0.5 then
+	if inst.components.health and inst.components.health:GetPercent() < 0.5 and not inst.sg:HasStateTag("busy") then
+		local soldiers = inst.components.commander:GetAllSoldiers()
+		if #soldiers > 0 then
+			inst.sg:GoToState("focustarget")
+		end
 		inst.should_shooter_rage = inst.should_shooter_rage -1
 	end
 	if inst.components.health and inst.components.health:GetPercent() < 0.75 then
@@ -178,7 +182,7 @@ local function SpawnShooterBeesCircle(inst, prioritytarget)
 		target = FindEntity(inst,40^2,nil,{"_combat"},{"playerghost"})
 	end
 	if prioritytarget then
-		TheNet:Announce("setting priority target")
+		--TheNet:Announce("setting priority target")
 		target = prioritytarget
 	end
 	if target then
