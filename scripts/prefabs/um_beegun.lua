@@ -180,6 +180,7 @@ local function fn()
     inst:AddTag("rangedweapon")
     inst:AddTag("beegun")
     inst:AddTag("allow_action_on_impassable")
+	inst:AddTag("vetcurse_item")
 
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
@@ -290,6 +291,7 @@ local function common(anim, beetype, sound)
     --inst:AddTag("weapon")
 
     inst:AddTag("projectile")
+	inst:AddTag("vetcurse_item")
 
 	RemovePhysicsColliders(inst)
 
