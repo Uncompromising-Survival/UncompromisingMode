@@ -488,7 +488,7 @@ local function DoSpawnTrap(x,y,z)
 end
 
 local function Spawntrap(inst)
-	TheNet:Announce("spavvntrap")
+	--TheNet:Announce("spavvntrap")
 	if TheWorld.state.iswinter then
 		local x,y,z = inst.Transform:GetWorldPosition()         --If the area is heavily lived in, bear traps will become a nuisance rather than a danger, know when to stop.
 		if #TheSim:FindEntities(x,y,z,10,{"bear_trap"}) < 7 and #TheSim:FindEntities(x,y,z,30,{"structure"},{"webbedcreature"}) < 20 and #TheSim:FindEntities(x,y,z,40,{"player"}) == 0 then
