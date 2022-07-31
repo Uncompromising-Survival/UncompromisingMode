@@ -18,9 +18,9 @@ end)
 
 local function StompHandler(inst,data)
 	--TheNet:Announce(inst.stomprage)
-	if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
+	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
-	end
+	end]]
 	if inst.components.health and inst.components.health:GetPercent() < 0.5 then
 		inst.should_shooter_rage = inst.should_shooter_rage -1
 	end
