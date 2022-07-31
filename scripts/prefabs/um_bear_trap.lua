@@ -472,27 +472,30 @@ end
 end
 
 local function DoSpawnTrap(x,y,z)
-local spawned = false
-if VacantSpotNearby(x,y,z) then --For spawning behind certain prefabs
-print("boutaruncode")
-SpawnNearVacantSpot(x,y,z)
-end
-local xi = x+math.random(-7,7)
-local zi = z+math.random(-7,7)															--Prevent traps from being placed inside things. Add more things to list as you please
-if spawned == false and TheWorld.Map:IsAboveGroundAtPoint(xi, 0, zi) and #TheSim:FindEntities(xi,y,zi,1.5,{"giant_tree"}) and #TheSim:FindEntities(xi,y,zi,1.5,{"bear_trap"}) == 0 and #TheSim:FindEntities(xi,y,zi,5,{"bear_trap"}) < 2 then
-local trap = SpawnPrefab("um_bear_trap_old")
-trap.Transform:SetPosition(xi,y,zi)
-else
-DoSpawnTrap(x,y,z)
-end
+	local spawned = false
+	if VacantSpotNearby(x,y,z) then --For spawning behind certain prefabs
+		print("boutaruncode")
+		SpawnNearVacantSpot(x,y,z)
+	end
+	local xi = x+math.random(-7,7)
+	local zi = z+math.random(-7,7)															--Prevent traps from being placed inside things. Add more things to list as you please
+	if spawned == false and TheWorld.Map:IsAboveGroundAtPoint(xi, 0, zi) and #TheSim:FindEntities(xi,y,zi,1.5,{"giant_tree"}) and #TheSim:FindEntities(xi,y,zi,1.5,{"bear_trap"}) == 0 and #TheSim:FindEntities(xi,y,zi,5,{"bear_trap"}) < 2 then
+		local trap = SpawnPrefab("um_bear_trap_old")
+		trap.Transform:SetPosition(xi,y,zi)
+	else
+		DoSpawnTrap(x,y,z)
+	end
 end
 
 local function Spawntrap(inst)
-local x,y,z = inst.Transform:GetWorldPosition()         --If the area is heavily lived in, bear traps will become a nuisance rather than a danger, know when to stop.
-if #TheSim:FindEntities(x,y,z,10,{"bear_trap"}) < 3 and #TheSim:FindEntities(x,y,z,30,{"structure"},{"webbedcreature"}) < 20 and #TheSim:FindEntities(x,y,z,40,{"player"}) == 0 then
-DoSpawnTrap(x,y,z)
-end
-inst.components.timer:StartTimer("spawntrap", 200+math.random(1000,2000))
+	TheNet:Announce("spavvntrap")
+	if TheWorld.state.iswinter then
+		local x,y,z = inst.Transform:GetWorldPosition()         --If the area is heavily lived in, bear traps will become a nuisance rather than a danger, know when to stop.
+		if #TheSim:FindEntities(x,y,z,10,{"bear_trap"}) < 7 and #TheSim:FindEntities(x,y,z,30,{"structure"},{"webbedcreature"}) < 20 and #TheSim:FindEntities(x,y,z,40,{"player"}) == 0 then
+			DoSpawnTrap(x,y,z)
+		end
+		inst.components.timer:StartTimer("spawntrap", 600+math.random(0,300))
+	end
 end
 local function ghost_walrusfn() --ghost walrus
     local inst = CreateEntity()
@@ -514,9 +517,17 @@ local function ghost_walrusfn() --ghost walrus
 	inst:AddTag("CLASSIFIED")
 
 	inst:AddComponent("timer")
-	if not inst.components.timer:TimerExists("spawntrap") then
-	inst.components.timer:StartTimer("spawntrap", 2000+math.random(100,1000)) --ghost walrus leaves bear traps in the player's fridge
+	if not inst.components.timer:TimerExists("spawntrap") and TheWorld.state.iswinter then
+		inst.components.timer:StartTimer("spawntrap", 600+math.random(0,300)) --ghost walrus leaves bear traps in the player's fridge
 	end
+	
+	inst:WatchWorldState("iswinter", function(inst)
+		if TheWorld.state.iswinter then
+			if not inst.components.timer:TimerExists("spawntrap") and TheWorld.state.iswinter then
+				inst.components.timer:StartTimer("spawntrap", 600+math.random(0,300)) --ghost walrus leaves bear traps in the player's fridge
+			end		
+		end
+	end)
     if TUNING.DSTU.GHOSTWALRUS == "enabled" then
         inst:ListenForEvent("timerdone", Spawntrap)
     end

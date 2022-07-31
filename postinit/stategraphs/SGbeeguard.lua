@@ -67,6 +67,8 @@ local function UpdateShadow(inst)
 				inst.bee:ForceFacePoint(inst:GetPosition())
 				local x1,y1,z1 = inst.Transform:GetWorldPosition()
 				inst.bee.Transform:SetPosition(x1,y-1,z1)
+			else
+				inst.bee.Transform:SetPosition(x,y-1,z)
 			end
 		else
 			inst:Remove()
