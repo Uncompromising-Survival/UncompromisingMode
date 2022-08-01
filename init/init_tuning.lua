@@ -408,6 +408,7 @@ TUNING.DSTU =
 
     ISLAND_ADVENTURES = ia_check,
 }
+-- [              DST Related Overrides                  ]
 
 if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 2
@@ -480,10 +481,4 @@ TUNING.MESSAGEBOTTLE_NOTE_CHANCE = 0.66
 --nautopilot buff
 TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE = TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE*2
 TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY*10--No matter the boatspeed, nautopilots should be able to keep up.
-TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED = TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED*2
-
--- [              DST Related Overrides                  ]
-
-if TUNING.DSTU.ISLAND_ADVENTURES then --IA check just in case...
-    TUNING.DSTU.RNE_CHANCE = 100 --rnes probably would be funky with the water.
-end
+TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED = TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED*100

@@ -19,7 +19,7 @@ AddComponentPostInit("sewing", DoSewing)
 --]]
 -------------Torches only smolder objects now---------------
 local _OldLightAction = GLOBAL.ACTIONS.LIGHT.fn
-if TUNING.DSTU.WINTER_BURNING and not TUNING.DSTU.ISLAND_ADVENTURES then
+if TUNING.DSTU.WINTER_BURNING and not GLOBAL:TestForIA() then
 	GLOBAL.ACTIONS.LIGHT.fn = function(act)
     	if act.invobject ~= nil and act.invobject.components.lighter ~= nil then
 			if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable then
@@ -34,6 +34,7 @@ if TUNING.DSTU.WINTER_BURNING and not TUNING.DSTU.ISLAND_ADVENTURES then
 		end
 	end
 end
+
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -52,11 +53,13 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    if TUNING.DSTU.CAVECLOPS then
-    inst:AddComponent("cavedeerclopsspawner")
-	end
-    inst:AddComponent("randomnighteventscaves")
-	inst:AddComponent("ratacombs_junk_manager")
+	inst:DoTaskInTime(0, function(inst)
+    	if TUNING.DSTU.CAVECLOPS then
+    		inst:AddComponent("cavedeerclopsspawner")
+		end
+    	inst:AddComponent("randomnighteventscaves")
+		inst:AddComponent("ratacombs_junk_manager")
+	end)
 end)
 
 env.AddPrefabPostInit("forest", function(inst)
@@ -64,26 +67,33 @@ env.AddPrefabPostInit("forest", function(inst)
         return
     end
 
-	if not TUNING.DSTU.ISLAND_ADVENTURES then
-		inst:RemoveComponent("deerclopsspawner")
-		inst:AddComponent("uncompromising_deerclopsspawner")
+	inst:DoTaskInTime(0, function(inst)--so TestForIA runs the TheWorld check instead of mod check failsafe.
+		if not TestForIA() then
+			inst:RemoveComponent("deerclopsspawner")
+			inst:AddComponent("uncompromising_deerclopsspawner")
 
-		inst:AddComponent("toadrain")
-		--inst:AddComponent("hayfever_tracker")
-		inst:AddComponent("firefallwarning")
-		inst:AddComponent("pollenmitedenspawner")
-		inst:AddComponent("randomnightevents")
-		inst:AddComponent("um_areahandler")
+			inst:AddComponent("toadrain")
+			--inst:AddComponent("hayfever_tracker")
+			inst:AddComponent("firefallwarning")
+			inst:AddComponent("pollenmitedenspawner")
+			inst:AddComponent("randomnightevents")
+			inst:AddComponent("um_areahandler")
+			if TUNING.DSTU.SPAWNMOTHERGOOSE then
+				inst:AddComponent("gmoosespawner")
+			end
+			if TUNING.DSTU.SPAWNWILTINGFLY then
+				inst:AddComponent("mock_dragonflyspawner")
+			end
+			--inst:WatchWorldState("isspring", GenerateBiomes)
+			--inst:WatchWorldState("issummer", GenerateInactiveBiomes)
+
+			inst:DoTaskInTime(0.1, GenerateInactiveBiomes)
+
+			if TUNING.DSTU.SNOWSTORMS and not TUNING.DSTU.ISLAND_ADVENTURES then
+				inst:AddComponent("snowstorminitiator")
+			end
+		end
 	end
-
-	if TUNING.DSTU.SNOWSTORMS and not TUNING.DSTU.ISLAND_ADVENTURES then
-		inst:AddComponent("snowstorminitiator")
-	end
-
-	--inst:WatchWorldState("isspring", GenerateBiomes)
-	--inst:WatchWorldState("issummer", GenerateInactiveBiomes)
-
-	inst:DoTaskInTime(0.1, GenerateInactiveBiomes)
 end)
 
 if TUNING.DSTU.SPAWNMOTHERGOOSE and not TUNING.DSTU.ISLAND_ADVENTURES then
@@ -91,23 +101,9 @@ if TUNING.DSTU.SPAWNMOTHERGOOSE and not TUNING.DSTU.ISLAND_ADVENTURES then
 		if not TheWorld.ismastersim then
 			return
 		end
-		inst:AddComponent("gmoosespawner")
-	end)
-end
 
-if TUNING.DSTU.SPAWNWILTINGFLY and not TUNING.DSTU.ISLAND_ADVENTURES then
-	env.AddPrefabPostInit("forest", function(inst)
-		if not TheWorld.ismastersim then
-			return
+		if TUNING.DSTU.SNOWSTORMS and not TestForIA() then
+			inst:AddComponent("snowstorminitiator")
 		end
-		inst:AddComponent("mock_dragonflyspawner")
 	end)
-end
-
-env.AddPrefabPostInit("cave", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-	
-	--inst.OnLoad = OnLoad
 end)

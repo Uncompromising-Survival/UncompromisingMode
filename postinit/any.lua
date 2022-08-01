@@ -169,7 +169,7 @@ env.AddReplicableComponent("hayfever")
 
 --I don't know where else to put this
 env.AddPrefabPostInit("aphid", function(inst)
-	if TUNING.DSTU.ISLAND_ADVENTURES then
+	if TestForIA() then
 		inst:AddComponent("appeasement")
 		inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
 	end
