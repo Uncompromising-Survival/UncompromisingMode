@@ -112,19 +112,18 @@ function TrySpawning(v)
 		if math.random() <= 0.25 - playervalue2 then
 				--local spawn_pt = GetSpawnPoint(origin_pt, PLAYER_CHECK_DISTANCE + 5)
 				
-			local ents5 = TheSim:FindEntities(x1, y1, z1, 3, nil, nil, { "snowpileradius"})
-			local ents6 = TheSim:FindEntities(x1, y1, z1, 8, nil, nil, { "fire" })
-			local ents7 = TheSim:FindEntities(x1, y1, z1, 2, nil, nil, { "snowpiledin"})
-				--local ents = TheSim:FindEntities(x, y, z, 40, {"wall" "player" "campfire"})
-			if #ents5 < 1 and #ents6 < 1 and #ents7 < 1 and not INVALID_TILES[TheWorld.Map:GetTileAtPoint(x1, 0, z1)] then
-			if #TheSim:FindEntities(x1, y1, z1,5,{"snowpileblocker"}) == 0 then --Using this specifically for salt here, we can combine it with others if wanted
-				local snowpilespawn = SpawnPrefab("snowpile")
-				snowpilespawn.Transform:SetPosition(x1, 0.05, z1)
-			end
+				local ents5 = TheSim:FindEntities(x1, y1, z1, 3, nil, nil, { "snowpileradius"})
+				local ents6 = TheSim:FindEntities(x1, y1, z1, 8, nil, nil, { "fire" })
+				local ents7 = TheSim:FindEntities(x1, y1, z1, 2, nil, nil, { "snowpiledin"})
+					--local ents = TheSim:FindEntities(x, y, z, 40, {"wall" "player" "campfire"})
+				if #ents5 < 1 and #ents6 < 1 and #ents7 < 1 and not INVALID_TILES[TheWorld.Map:GetTileAtPoint(x1, 0, z1)] then
+				if #TheSim:FindEntities(x1, y1, z1,5,{"snowpileblocker"}) == 0 then --Using this specifically for salt here, we can combine it with others if wanted
+					local snowpilespawn = SpawnPrefab("snowpile")
+					snowpilespawn.Transform:SetPosition(x1, 0.05, z1)
+				end
 			end
 		end
 	end
-		
 end
 
 local NOTAGS = { "playerghost", "HASHEATER" }
