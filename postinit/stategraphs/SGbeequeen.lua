@@ -666,12 +666,12 @@ local states = {
 				local target 
 				if inst.seeker_hitlist then
 					local possibletarget = inst.seeker_hitlist[inst.seekercount + 1]
-					if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() then
+					if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() and not possibletarget:HasTag("playerghost") then
 						target = possibletarget
 					else
 						local choice = math.random(1,#inst.seeker_hitlist)
 						possibletarget = inst.seeker_hitlist[choice]
-						if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() then
+						if possibletarget and possibletarget.components.health and not possibletarget.components.health:IsDead() and not possibletarget:HasTag("playerghost") then
 							target = possibletarget
 						else
 							target = inst.components.combat.target
