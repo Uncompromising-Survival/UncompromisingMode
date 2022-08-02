@@ -105,11 +105,11 @@ local function fn()
 	--inst:ListenForEvent("clear", Clear)
 
 	inst:DoTaskInTime(0,ClearSeastacks)
-
-	if not table.contains(TheWorld.components.um_areahandler.handlers, inst) then
-		table.insert(TheWorld.components.um_areahandler.handlers, inst)
-	end
-
+	inst:DoTaskInTime(1,function(inst)
+		if not table.contains(TheWorld.components.um_areahandler.handlers, inst) then
+			table.insert(TheWorld.components.um_areahandler.handlers, inst)
+		end
+	end)
     return inst
 end
 

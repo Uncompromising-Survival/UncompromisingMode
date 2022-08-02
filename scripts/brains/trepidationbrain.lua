@@ -81,6 +81,14 @@ local function ShouldChase_UM(self)
 	end
 end
 
+local function GetFaceTargetFn(inst)
+    return inst.components.combat.target
+end
+
+local function KeepFaceTargetFn(inst, target)
+    return inst.components.combat:TargetIs(target)
+end
+
 
 function TrepidationBrain:OnStart()
     local root = PriorityNode(
@@ -93,10 +101,9 @@ function TrepidationBrain:OnStart()
                 end)),
         WhileNode(function() return ShouldChase_UM(self) end, "Attack", ChaseAndAttack(self.inst)),
 		
-		--WhileNode(function() return WithinDomain(self.inst) end, "Follow",
-		--Follow(self.inst, function() return self.inst.harassplayer end, 1, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),--),
+		FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
 		
-        WhileNode(function() return self.inst.harassplayer == nil end, "Home",
+        WhileNode(function() return self.inst.components.combat and not self.inst.components.combat.target end, "Home",
 		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, 20)),
     }, .25)
 
