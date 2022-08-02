@@ -361,4 +361,7 @@ return {
 	"um_dreamcatcher",
 	"um_beeguards",
 	"um_beestinger_projectile",
+	"phantom",
+	"um_specter_amulet",
+	"um_walls",
 }
