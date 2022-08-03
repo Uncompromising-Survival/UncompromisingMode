@@ -10,7 +10,7 @@ return {
 	--"whoppermeal",
 	--"wackytobackey",
 	--"wonaldmcronald
-	
+
 	"deathstick",
 	"uncompromising_toad",
 	"mushroomsprout_overworld",
@@ -25,11 +25,11 @@ return {
 	"antlionwarning",
 	"gasmask",
 	"spiderqueencorpse",
-	"flamegeyser",
+	--"flamegeyser",
 	"lavae2",
 	"mock_monsterwarningsounds",
 	"mock_dragonfly",
-	
+
 	"moonmaw_dragonfly",
 	"moonmaw_glass",
 	"moonmaw_lavae",
@@ -38,7 +38,7 @@ return {
 	"armor_glassmail_shards",
 	"moonmaw_trap",
 	"moonmaw_glassshards",
-	
+
 	"lavaspit",
 	"um_sandhill",
 	"snowpile",
