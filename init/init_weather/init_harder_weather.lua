@@ -89,21 +89,9 @@ env.AddPrefabPostInit("forest", function(inst)
 
 			inst:DoTaskInTime(0.1, GenerateInactiveBiomes)
 
-			if TUNING.DSTU.SNOWSTORMS and not TUNING.DSTU.ISLAND_ADVENTURES then
+			if TUNING.DSTU.SNOWSTORMS then
 				inst:AddComponent("snowstorminitiator")
 			end
-		end
-	end
-end)
-
-if TUNING.DSTU.SPAWNMOTHERGOOSE and not TUNING.DSTU.ISLAND_ADVENTURES then
-	env.AddPrefabPostInit("forest", function(inst)
-		if not TheWorld.ismastersim then
-			return
-		end
-
-		if TUNING.DSTU.SNOWSTORMS and not TestForIA() then
-			inst:AddComponent("snowstorminitiator")
 		end
 	end)
 end)
