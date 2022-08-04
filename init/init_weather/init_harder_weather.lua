@@ -45,7 +45,9 @@ local function GenerateBiomes()
 end
 
 local function GenerateInactiveBiomes()
-	TheWorld.components.um_areahandler:FullGenerate()
+	if TheWorld.components.um_areahandler ~= nil then
+		TheWorld.components.um_areahandler:FullGenerate()
+	end
 end
 
 -----------------------------------------------------------------
