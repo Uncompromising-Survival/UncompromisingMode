@@ -714,6 +714,23 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
+--recipe postinits
+
+AddRecipePostInitAny(function(recipe)
+    if recipe.FindAndConvertIngredient ~= nil then
+        local tar = recipe:FindAndConvertIngredient("tar")--tar/sludge can replace eachother!
+        local sludge = recipe:FindAndConvertIngredient("sludge")
+
+        if tar and tar.AddDictionaryPrefab ~= nil then
+            tar:AddDictionaryPrefab("sludge")
+        end
+
+        if sludge and sludge.AddDictionaryPrefab ~= nil then
+            sludge:AddDictionaryPrefab("tar")
+        end
+    end
+end)
+
 STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
 STRINGS.RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
