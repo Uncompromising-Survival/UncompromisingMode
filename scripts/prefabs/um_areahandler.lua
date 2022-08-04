@@ -106,7 +106,7 @@ local function fn()
 
 	inst:DoTaskInTime(0,ClearSeastacks)
 	inst:DoTaskInTime(1,function(inst)
-		if not table.contains(TheWorld.components.um_areahandler.handlers, inst) then
+		if TheWorld.components.um_areahandler ~= nil and not table.contains(TheWorld.components.um_areahandler.handlers, inst) then
 			table.insert(TheWorld.components.um_areahandler.handlers, inst)
 		end
 	end)
