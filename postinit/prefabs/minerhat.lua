@@ -59,7 +59,7 @@ env.AddPrefabPostInit("minerhat", function(inst)
             data.upgraded = inst.upgraded
         end
         if inst.components.fueled ~= nil then
-            inst.saved_fuel_value = inst.components.fueled:GetPercent()
+            data.saved_fuel_value = inst.components.fueled:GetPercent()
         end
         if _OnSave ~= nil then
             _OnSave(inst, data)
@@ -71,8 +71,8 @@ env.AddPrefabPostInit("minerhat", function(inst)
         if data ~= nil and data.upgraded then
             inst.upgraded = true
             OnUpgrade(inst)
-            if inst.saved_fuel_value ~= nil and inst.components.fueled ~= nil then
-                inst.components.fueled:SetPercent(inst.saved_fuel_value)
+            if data.saved_fuel_value ~= nil and inst.components.fueled ~= nil then
+                inst.components.fueled:SetPercent(data.saved_fuel_value)
             end
         end
         if _OnLoad ~= nil then
