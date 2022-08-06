@@ -248,6 +248,7 @@ local function fnmain(bee)
     inst:AddTag("scarytoprey")
     inst:AddTag("flying")
     inst:AddTag("ignorewalkableplatformdrowning")
+    inst:AddTag("soulless")--Overload for vvortox..
 
     MakeInventoryFloatable(inst)
 
@@ -337,8 +338,7 @@ local function fnmain(bee)
 	inst:AddComponent("linearcircler")
 	inst.persists = false
 	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnin") end)
-	
-	inst:AddTag("soullesss") --Overload for vvortox..
+
     return inst
 end
 
