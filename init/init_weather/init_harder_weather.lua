@@ -45,9 +45,9 @@ local function GenerateBiomes()
 end
 
 local function GenerateInactiveBiomes()
-	if TheWorld.components.um_areahandler ~= nil then
+	--if TheWorld.components.um_areahandler ~= nil then
 		TheWorld.components.um_areahandler:FullGenerate()
-	end
+	--end
 end
 
 -----------------------------------------------------------------
@@ -89,8 +89,8 @@ env.AddPrefabPostInit("forest", function(inst)
 			--inst:WatchWorldState("isspring", GenerateBiomes)
 			--inst:WatchWorldState("issummer", GenerateInactiveBiomes)
 
-			inst:DoTaskInTime(0.1, GenerateInactiveBiomes)
-
+			inst:DoTaskInTime(TUNING.TOTAL_DAY_TIME/2, GenerateInactiveBiomes)
+							--exagerated time but should handle any funky cases ig
 			if TUNING.DSTU.SNOWSTORMS then
 				inst:AddComponent("snowstorminitiator")
 			end
