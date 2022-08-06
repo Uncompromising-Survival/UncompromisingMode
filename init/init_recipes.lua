@@ -465,7 +465,7 @@ ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
 
 AddRecipe2(
     "boatpatch_sludge",
-    {Ingredient("sludge_oil", 1), Ingredient("driftwood_log", 2)},
+    {Ingredient("sludge", 3), Ingredient("driftwood_log", 2)},
     TECH.NONE,
      nil, --{numtogive = 2},
     {"SEAFARING"}

@@ -8,6 +8,7 @@ local prefabs =
 {
     "fishingnetvisualizer"
 }
+
 local function onfinished(inst)
     local owner = inst.components.inventoryitem:GetGrandOwner()
     local x,y,z = inst.Transform:GetWorldPosition()
@@ -61,7 +62,7 @@ local function fn()
     --inst.components.finiteuses:SetConsumption(ACTIONS.REPAIR_LEAK, 1)
     inst.components.finiteuses:SetMaxUses(5)
     inst.components.finiteuses:SetUses(5)
-    inst.components.finiteuses:SetOnFinished(onfinished)
+    inst.components.finiteuses:SetOnFinished(inst.Remove)--onfinished
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.onactiveitemfn = onactiveitem
