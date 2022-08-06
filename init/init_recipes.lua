@@ -454,6 +454,15 @@ ChangeSortKey("wardrobe", "icebox", "CONTAINERS", false)
 AddRecipeToFilter("tophat", "MAGIC")
 ChangeSortKey("tophat", "armorslurper", "MAGIC", true)
 
+AddRecipeToFilter("wall_hay_item", "WINTER")
+ChangeSortKey("wall_hay_item", "dragonflyfurnace", "WINTER", true)
+AddRecipeToFilter("wall_wood_item", "WINTER")
+ChangeSortKey("wall_wood_item", "wall_hay_item", "WINTER", true)
+AddRecipeToFilter("wall_stone_item", "WINTER")
+ChangeSortKey("wall_stone_item", "wall_wood_item", "WINTER", true)
+AddRecipeToFilter("wall_moonrock_item", "WINTER")
+ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
+
 AddRecipe2(
     "boatpatch_sludge",
     {Ingredient("sludge_oil", 1), Ingredient("driftwood_log", 2)},
