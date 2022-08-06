@@ -36,7 +36,11 @@ local function on_blueberry_dug_up(inst, digger)
 			inst.AnimState:PlayAnimation("dig")
 			inst.AnimState:PushAnimation("spawn")
 			inst.AnimState:PushAnimation("trap_idle")
-		else	
+			inst.components.workable:SetWorkable(false)
+			inst:DoTaskInTime(5, function(inst)
+				inst.components.workable:SetWorkable(true)
+			end)
+		else
 			inst:Remove()
 		end
 	else

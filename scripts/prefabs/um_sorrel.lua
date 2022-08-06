@@ -98,7 +98,7 @@ local function fn()
     --inst:AddComponent("harvestable")
     --inst.components.harvestable:SetUp("greenfoliage", 100, TUNING.GRASS_REGROW_TIME/2, onharvest, ongrow)
 
-    inst:WatchWorldState("cycles", bloom)
+    inst:WatchWorldState("isspring", bloom)
 
     MakeMediumBurnable(inst)
     MakeSmallPropagator(inst)
