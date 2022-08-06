@@ -385,7 +385,7 @@ local states = {
 			end
 			inst.AnimState:PlayAnimation("shoot_pre",true)
 
-			inst:DoTaskInTime(0.5,function(inst) inst.Shoot(inst) end)
+			inst:DoTaskInTime(1,function(inst) inst.Shoot(inst) end)
         end,
 		
 		onupdate = function(inst)

@@ -1,6 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+require("stategraphs/commonstates")
 
 env.AddStategraphActionHandler("frog", ActionHandler(ACTIONS.EAT, "eat"))
 
@@ -60,6 +61,36 @@ local states = {
 		},
     }
 }
+
+CommonStates.AddAmphibiousCreatureHopStates(states, 
+{ -- config
+	swimming_clear_collision_frame = 9 * FRAMES,
+},
+{ -- anims
+},
+{ -- timeline
+	hop_pre =
+	{
+		TimeEvent(0, function(inst) 
+			if inst:HasTag("swimming") then 
+				SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition()) 
+			end
+		end),
+	},
+	hop_pst = {
+		TimeEvent(4 * FRAMES, function(inst) 
+			if inst:HasTag("swimming") then 
+				inst.components.locomotor:Stop()
+				SpawnPrefab("splash_green").Transform:SetPosition(inst.Transform:GetWorldPosition()) 
+			end
+		end),
+		TimeEvent(6 * FRAMES, function(inst) 
+			if not inst:HasTag("swimming") then 
+                inst.components.locomotor:StopMoving()
+			end
+		end),
+	}
+})
 
 for k, v in pairs(states) do
     assert(v:is_a(State), "Non-state added in mod state table!")

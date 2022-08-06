@@ -1,6 +1,41 @@
-local assets = {Asset("ANIM", "anim/snowpile.zip")}
+local assets = 
+{
+	Asset("ANIM", "anim/snowpile.zip"),
+}
 
-local prefabs = {"sand"}
+local anims = {"low", "med", "full"}
+
+
+local function DoColdMenace(inst)
+    local snowattack = SpawnPrefab("snowmong")
+    local spawnpoint = inst.Transform:GetWorldPosition()
+	snowattack.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    snowattack.sg:GoToState("enter")
+	snowattack.SetTier(snowattack)
+    inst:DoTaskInTime(0.1, SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition()))
+    inst:DoTaskInTime(0.2, inst:Remove())
+end
+
+local function TryColdMenace(inst)
+	if math.random() > 0.9 and (inst.components.workable.workleft > 2 or inst.components.pickable.cycles_left > 2) and not inst.mongproof then	--This chance could be adjusted or scale vvith time.
+		inst:DoColdMenace(inst)
+		local x,y,z = inst.Transform:GetWorldPosition()
+		if math.random() > 0.3 then --Have a good chance of spavvning buddies vvith them.
+			local sno = TheSim:FindEntities(x,y,z,10,{"snowpile"})
+			local nummongs = math.random(1,3)
+			for i,pile in ipairs(sno) do
+				if nummongs > 0 then
+					nummongs = nummongs - 1
+					pile:DoColdMenace(pile)
+				end
+			end
+		end
+		local sno = TheSim:FindEntities(x,y,z,20,{"snowpile"})
+		for i,pile in ipairs(sno) do
+			pile.mongproof = true
+		end
+	end
+end
 
 TUNING.SNOW_X_SCALE = 0 + math.random(0.3, 0.5)
 TUNING.SNOW_Y_SCALE = 0 + math.random(0.1, 0.3)
@@ -16,51 +51,54 @@ local INVALID_TILES = table.invert({GROUND.SCALE})
 
 local startregen
 
--- these should match the animation names to the workleft
-local anims = {"low", "med", "full"}
+
+local function FindSpreadSpot(inst,angle)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	if (not angle) or inst.count > 4 then
+		angle = math.random(0,2*PI)
+	end
+	x = x + 4 * math.cos(angle)
+	z = z + 4 * math.sin(angle)
+	if TheSim:FindEntities(x,y,z,2,{"snowpile"}) then --Don't vvant to be close to a single pile
+		inst.redo = true
+	end
+	if #TheSim:FindEntities(x,y,z,3,{"snowpile"}) > 3 then -- Don't vvant to clog the piles all in one location either
+		inst.redo = true
+	end
+	if inst.count > 7 or not inst.redo then -- If vve've been going at it forever... then maybe just return this anyhovv
+		return x,y,z,angle
+	else
+		inst.redo = nil
+		inst.count = inst.count + 1
+		return FindSpreadSpot(inst,angle)
+	end
+end
+
+local function SpreadSno(inst)
+	inst.count = 0
+	inst.redo = nil
+	local x,y,z,angle = FindSpreadSpot(inst,inst.angle and inst.angle+math.random(-1,1)*0.05 or nil)
+	inst.components.workable.workleft = 2
+	inst.components.pickable.cycles_left = 2
+	inst.AnimState:PlayAnimation(anims[inst.components.workable.workleft])
+	local sno = SpawnPrefab("snowpile")
+	sno.Transform:SetPosition(x,y,z)
+	sno.angle = angle
+end
 
 local function onregen(inst)
-    -- print("anothertry")
-    --[[
-	if inst.Transform:GetWorldPosition() ~= nil then
-		local ents2 = TheSim:FindEntities(x1, y1, z1, 8, { "fire" })
-	end--]]
-
-    -- if inst ~= nil then
     local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
-
-    local abominamoles = TheSim:FindEntities(my_x, my_y, my_z, 40, {"snowish"})
 
     if TheWorld.state.iswinter and
         not INVALID_TILES[TheWorld.Map:GetTileAtPoint(my_x, my_y, my_z)] then -- or ents2 ~= nil and #ents2 < 0 then
         if inst.components.workable.workleft < 3 then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(
-                inst.Transform:GetWorldPosition())
-            inst.components.workable:SetWorkLeft(
-                inst.components.workable.workleft + 1)
-            inst.components.pickable.cycles_left =
-                inst.components.pickable.cycles_left + 1
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            inst.components.workable:SetWorkLeft(inst.components.workable.workleft + 1)
+            inst.components.pickable.cycles_left = inst.components.pickable.cycles_left + 1
             startregen(inst)
-        elseif abominamoles ~= nil and #abominamoles < 2 and not inst.nospawning and
-            inst.components.workable.workleft == 3 and math.random() <= 0.25 and
-            not TheWorld.Map:GetPlatformAtPoint(my_x, my_z) then
-            local x1, y1, z1 = inst.Transform:GetWorldPosition()
-            local ents2 = TheSim:FindEntities(x1, y1, z1, 45, {"player"})
-            if #ents2 > 0 then
-                -- print("Snowball Fight!")
-                inst.nospawning = true
-                local snowattack = SpawnPrefab("snowmong")
-                local spawnpoint = inst.Transform:GetWorldPosition()
-                snowattack.Transform:SetPosition(
-                    inst.Transform:GetWorldPosition())
-                snowattack.sg:GoToState("enter")
-                inst:DoTaskInTime(0.1, SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition()))
-                inst:DoTaskInTime(0.2, inst:Remove())
-            else
-                startregen(inst)
-            end
-        else
-            startregen(inst)
+		else
+			SpreadSno(inst)
+			startregen(inst)
         end
     else
         if inst.components.workable.workleft > 1 then
@@ -129,10 +167,8 @@ startregen = function(inst, regentime)
 end
 
 local function workcallback(inst, worker, workleft)
-    -- print('trying to spawn SNOW', inst, worker, workleft)
-    if math.random() >= 0.5 then
-        inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
-    end
+
+    inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
 
     if worker ~= nil and worker:HasTag("wereplayer") and worker.components.moisture then
 		worker.components.moisture:DoDelta(5) 
@@ -149,7 +185,8 @@ local function workcallback(inst, worker, workleft)
     elseif inst.components.workable.workleft > 2 and inst.components.workable.workleft < 3 then
         inst.components.workable.workleft = 2
     end
-
+	
+	TryColdMenace(inst)
     if inst.components.pickable.cycles_left > 0 then
         if inst.Transform:GetWorldPosition() ~= nil then
             SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -161,7 +198,6 @@ local function workcallback(inst, worker, workleft)
         end
         inst:Remove()
     end
-    -- inst.SoundEmitter:PlaySound("dontstarve_DLC002/common/sandpile")
     if inst.components.workable.workleft <= 0 then
         inst:Remove()
     else
@@ -177,74 +213,43 @@ local function onsave(inst, data)
         end
         data.cycles_left = inst.components.pickable.cycles_left
         data.workleft = inst.components.workable.workleft
-        -- print('sandhill onsave', data.workleft)
     end
 end
-local function onload(inst, data)
 
+local function onload(inst, data)
     if data and data.workleft then
         inst.components.workable.workleft = data.workleft
-
-        --[[if data.workleft <= 0 then
-			inst.components.activatable.inactive = true
-		end--]]
-
     end
 
     if data and data.cycles_left then
         inst.components.pickable.cycles_left = data.cycles_left
     end
-    -- print('sandhill onload', inst.components.workable.workleft)
+	
     if data and data.time then
 		startregen(inst, data.time)
 	end
 end
 
--- note: this doesn't really handle skipping 2 regens in a long update
 local function LongUpdate(inst, dt)
-
     if inst.targettime then
-
         local time = GetTime()
         if inst.targettime > time + dt then
-            -- resechedule
             local time_to_regen = inst.targettime - time - dt
-            -- print ("LongUpdate resechedule", time_to_regen)
-
             startregen(inst, time_to_regen)
         else
-            -- skipped a regen, do it now
-            -- print ("LongUpdate skipped regen")
             onregen(inst)
-            --[[
-			inst.components.workable:SetWorkLeft(inst.components.workable.workleft+1)
-			startregen(inst)
-			--]]
         end
     end
 end
 
 local function onwake(inst)
-    --[[if TheWorld.state.isspring and TheWorld.state.israining then
-		if math.random() < TUNING.SNOW_DEPLETE_CHANCE and inst.components.workable.workleft > 0 then
-			-- the rain made this sandhill shrink
-			inst.components.workable.workleft = inst.components.workable.workleft - math.random(0, inst.components.workable.workleft)
-			startregen(inst)
-		end
-	end--]]
+
 end
 
 local function TryColdness(v)
-
-    if v.components.moisture ~= nil then v.components.moisture:DoDelta(3) end
-    --[[
-	if v.components.temperature ~= nil then
-		v.components.temperature:SetTemperature(v.components.temperature:GetCurrent() + 1)
-	end--]]
-    --[[
-	if v.components.temperature ~= nil then
-		v.components.temperature:DoDelta(-1.5)
-	end--]]
+	if v.components.moisture ~= nil then 
+		v.components.moisture:DoDelta(3) 
+	end
 end
 
 local NOTAGS = {"playerghost", "INLIMBO", "wall"}
@@ -278,13 +283,12 @@ local function onpickedfn(inst, picker)
     end
 
     if picker.components.temperature ~= nil then
-        picker.components.temperature:DoDelta(-15)
+		picker.components.temperature:DoDelta(-20)
+		if picker.components.temperature.current > -3 then
+			picker.components.temperature:SetTemperature(-3)
+		end
     end
-
-    if picker.components.health ~= nil and not picker.components.health:IsDead() then
-        picker.components.health:DoDelta(-2)
-    end
-
+	TryColdMenace(inst)
     if inst.components.workable.workleft > 0 then
         if inst.Transform:GetWorldPosition() ~= nil then
             SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -296,7 +300,8 @@ local function onpickedfn(inst, picker)
         end
         inst:Remove()
     end
-
+	
+	
     startregen(inst)
 
 end
@@ -304,9 +309,6 @@ end
 local function makefullfn(inst)
     if inst.components.pickable.cycles_left <= 0 then
         inst.components.workable:SetWorkLeft(1)
-        inst:AddTag("dungpile")
-        -- inst.AnimState:PushAnimation("dead_to_idle")
-        -- inst.AnimState:PushAnimation("idle")
     end
 end
 
@@ -317,7 +319,7 @@ local function on_anim_over(inst)
         if inst.components.workable.workleft ~= 3 then
             inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
         else
-            if math.random() < 0.85 then
+            if math.random() < 0.95 or inst.mongproof then
                 inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
             else
                 if math.random() > 0.33 then
@@ -335,9 +337,7 @@ local function on_anim_over(inst)
 end
 
 local function Init(inst)
-    print("1")
-    if FindEntity(inst, 5, nil, {"snowpileblocker"}) ~= nil then
-        print("2")
+    if FindEntity(inst, 5, nil, {"snowpileblocker"}) then
         if inst.Transform:GetWorldPosition() ~= nil then
             SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
         end
@@ -395,9 +395,6 @@ local function snowpilefn(Sim)
 
     if not TheWorld.ismastersim then return inst end
 
-    -- local xscale = 0 + math.random(0.3,0.5)
-    -- local yscale = 0 + math.random(0.1,0.3)
-
     inst.nospawning = false
 
     inst:AddComponent("aura")
@@ -407,8 +404,8 @@ local function snowpilefn(Sim)
     inst.components.aura:Enable(true)
     inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod / 2, DoAreaColdness, inst.components.aura.tickperiod / 2)
 
-    -- inst:AddComponent("unevenground")
-    -- inst.components.unevenground.radius = 2
+    inst:AddComponent("unevenground")
+    inst.components.unevenground.radius = 2
 
     inst.OnLongUpdate = LongUpdate
     ----------------------
@@ -445,6 +442,7 @@ local function snowpilefn(Sim)
 
     startregen(inst)
     inst:DoTaskInTime(0, Init)
+	inst.DoColdMenace = DoColdMenace
 
     return inst
 end

@@ -82,6 +82,8 @@ local function stinger_fn()
     inst.components.projectile:SetLaunchOffset(Vector3(0, 0.5, 0))
 	inst:DoTaskInTime(5,function(inst) inst:Remove() end)
 	inst:DoPeriodicTask(FRAMES,PhysTest)
+	
+	inst.Transform:SetScale(1.2,1.2,1.2)
     inst.persists = false
 
     return inst

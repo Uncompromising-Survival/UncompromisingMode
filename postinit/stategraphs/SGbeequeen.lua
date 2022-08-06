@@ -272,7 +272,7 @@ local states = {
 					return true
 				end
 				local x,y,z = inst.Transform:GetWorldPosition()
-				local ents = TheSim:FindEntities(x,y,z,8,"_combat")
+				local ents = TheSim:FindEntities(x,y,z,6,"_combat")
 				for i,ent in ipairs(ents) do
 					if (isvalid(ent)) and ent.components.health and not ent.components.health:IsDead() and ent.components.combat then --Support for the other sort of bees
 						ent.components.combat:GetAttacked(inst,200)

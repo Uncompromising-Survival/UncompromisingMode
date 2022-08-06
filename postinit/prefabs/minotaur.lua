@@ -21,7 +21,7 @@ local function CheckForceJump(inst,data) -- Secondary means to force the leap if
 	
 	--This is actually the only way the belch happens
 	if data.name == "forcebelch" and Health_And_Combat_Check(inst,0.6) then
-		if Health_And_Combat_Check(inst,0.4) and not inst:HasTag("forcefield") then
+		if Health_And_Combat_Check(inst,0.3) and not inst:HasTag("forcefield") then
 			inst.have_a_heart = true --AG Must give some love
 		end
 		inst.forcebelch = true
