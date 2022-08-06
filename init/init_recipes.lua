@@ -451,6 +451,9 @@ ChangeSortKey("winona_upgradekit_electrical", "winona_toolbox", "CHARACTER", tru
 AddRecipeToFilter("wardrobe", "CONTAINERS")
 ChangeSortKey("wardrobe", "icebox", "CONTAINERS", false)
 
+AddRecipeToFilter("tophat", "MAGIC")
+ChangeSortKey("tophat", "armorslurper", "MAGIC", true)
+
 AddRecipe2(
     "boatpatch_sludge",
     {Ingredient("sludge_oil", 1), Ingredient("driftwood_log", 2)},
