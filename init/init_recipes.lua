@@ -738,7 +738,9 @@ AddRecipePostInitAny(function(recipe)
         end
 
         if sludge and sludge.AddDictionaryPrefab ~= nil then
-            sludge:AddDictionaryPrefab("tar")
+            if GLOBAL.Prefabs["tar"] ~= nil then
+                sludge:AddDictionaryPrefab("tar")
+            end
         end
     end
 end)
