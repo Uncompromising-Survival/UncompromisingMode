@@ -66,7 +66,7 @@ local function SkipSpace()
 end
 
 local function BinaryConfig(name, label, hover, default)
-    return { name = name, label = label, hover = hover, options = { {description = "Enabled", data = true}, {description = "Disabled", data = false}, }, default = default, }
+    return { name = name, label = label, hover = hover, options = { {description = "Enabled", data = true, hover = "Enabled."}, {description = "Disabled", data = false, hover = "Disabled."}, }, default = default, }
 end
 ------------------------------
 
@@ -79,6 +79,7 @@ configuration_options =
 	--BinaryConfig("beta_compatibility", "March QoL Beta", "This will enable proper compatibility for the beta Crafting, Ancient Guardian, and Varg Waves features.", false),
 
 	Header("Mod Compatibility"),
+	BinaryConfig("worldgenmastertoggle", "Master Toggle", "Toggles ALL worldgen.", true),
 	BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods.", true),
 	BinaryConfig("hungry_void", "Anti-Voidwalk", "Disable this if you are using any mods that allow flight or traversal over the cave void.", true),
 	SkipSpace(),
@@ -99,7 +100,7 @@ configuration_options =
 			{description = "80%", data = 0.2},
 			{description = "INSANITY", data = 0},
 		},
-		default = 0.8,
+		default = 0.6,
 	},
     BinaryConfig("harder_shadows", "Harder Nightmare Creatures", "Insanity is a big threat now. Those who pass the brink may never return.", true),
     BinaryConfig("rat_raids", "Rat Raids", "Rats will periodically be attracted to your base.", true),
@@ -153,16 +154,16 @@ configuration_options =
     Header("Characters"),
 ------------------------------
 	BinaryConfig("funny rat", "Winky", "The Vile Vermin", true),
-    BinaryConfig("willow", "UM Willow", "Willow's Lighter now lasts forever when she holds it, she will retaliate when attacked by shadows.", true),
+    BinaryConfig("willow", "Willow", "Willow's Lighter now lasts forever when she holds it, she will retaliate when attacked by shadows.", true),
     --BinaryConfig("bernie", "Big Bernie", "Enable Big BERNIE!!", true),
-    BinaryConfig("warly", "UM Warly", "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.", true),
-	BinaryConfig("waxwell", "UM Maxwell", "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!", true),
+    BinaryConfig("warly", "Warly", "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.", true),
+	BinaryConfig("waxwell", "Maxwell", "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!", true),
 	--BinaryConfig("wolfgang", "Improved/Balanced Wolfgang", "Wolfgang gains new perks and downsides. Read the patch notes included in the mod folder or workshop for details.", false),
-	BinaryConfig("wigfrid", "UM Wigfrid", "Reduced Wigfrids combat leeching effect to more balanced levels.", true),
-	BinaryConfig("wolfgang", "Experimental UM Wolfgang", "Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
-	BinaryConfig("winonaworker", "UM Winona", "Winona now scales her work/picking efficiency, and tool/weapon durability, off of her hunger level. Drains hunger when taking actions.", true),
-	BinaryConfig("winonawackycats", "Experimental UM Winona Catapults", "Catapults no longer regenerate, have reduced health, and 34 AOE damage.", false),
-	BinaryConfig("winona_gen", "UM Winona Generators", "Limits access to Winona's Generators to only allow her to use them", true),
+	BinaryConfig("wigfrid", "Wigfrid", "Reduced Wigfrids combat leeching effect to more balanced levels.", true),
+	BinaryConfig("wolfgang", "Experimental Wolfgang", "Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
+	BinaryConfig("winonaworker", "Winona: Faster Working", "Winona now scales her work/picking efficiency, and tool/weapon durability, off of her hunger level. Drains hunger when taking actions.", true),
+	BinaryConfig("winonawackycats", "Experimental Winona Catapults", "Catapults no longer regenerate, have reduced health, and 34 AOE damage.", false),
+	BinaryConfig("winona_gen", "Winona: Generators", "Limits access to Winona's Generators to only allow her to use them", true),
 		{
 		name = "wortox",
 		label = "UM Wortox",
@@ -175,18 +176,16 @@ configuration_options =
 		},
 		default = "UMNERF",
 	},
-
-
-	BinaryConfig("wickerbottom", "UM Wickerbottom: Sane Reading", "Wickerbottom/Maxwell can no longer read books while insane.", true),
-	BinaryConfig("on tentacles", "UM Wickerbottom: On Tentacles", "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
-	BinaryConfig("applied horticulture", "UM Wickerbottom: Horticulture, Abridged", "Horticulture, Abridged now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.", true),
-	BinaryConfig("legacy_book_rain_recipe", "UM Wickerbottom: Old Rain Book Recipe", "Uncompromising Mode added a rain book before Klei did. This option returns the old recipe.", true),
-	BinaryConfig("wanda_nerf", "Experimental UM Wanda", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", false),
+	BinaryConfig("wickerbottom", "Wickerbottom: Sane Reading", "Wickerbottom/Maxwell can no longer read books while insane.", true),
+	BinaryConfig("on tentacles", "Wickerbottom: On Tentacles", "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
+	BinaryConfig("applied horticulture", "Wickerbottom: Horticulture", "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.", true),
+	BinaryConfig("legacy_book_rain_recipe", "Wickerbottom: Rain Book Recipe", "Uncompromising Mode added a rain book before Klei did. This option returns the old recipe.", true),
+	BinaryConfig("wanda_nerf", "Experimental Wanda", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", false),
 	--BinaryConfig("wormwood_fire", "Extra Flamable Wormwood", "Wormwood is highly flameable, like in Hamlet.", false),
-	BinaryConfig("wormwood_extrafiredmg", "UM Wormwood: Fire Damage Increase", "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x", true),
-	BinaryConfig("wormwood_plants", "UM Wormwood: Planting Sanity", "Increases the sanity loss from digging plants.", true),
-	BinaryConfig("wendy", "UM Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
-	BinaryConfig("wx78", "UM WX-78", "No longer heals from lightning", true),
+	BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage", "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x", true),
+	BinaryConfig("wormwood_plants", "Wormwood: Planting Sanity", "Increases the sanity loss from digging plants.", true),
+	BinaryConfig("wendy", "Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
+	BinaryConfig("wx78", "WX-78", "No longer heals from lightning", true),
 	--BinaryConfig("woodie", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
 	SkipSpace(),
 ------------------------------
@@ -262,7 +261,6 @@ configuration_options =
 
 	SkipSpace(),
 	Header("World Gen"),
-	BinaryConfig("worldgenmastertoggle", "Master Toggle", "Toggles ALL worldgen.", true),
 	BinaryConfig("hoodedforest", "Hooded Forest", "Hooded Forest replaces the Moon Base forest, with brand new things to explore, including a new boss!", true),
 	{
 		name = "ghostwalrus",
