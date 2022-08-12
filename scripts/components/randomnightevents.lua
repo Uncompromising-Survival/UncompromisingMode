@@ -1960,7 +1960,7 @@ local function CheckPlayers(forced)
 		
 		local days_survived = player.components.age ~= nil and player.components.age:GetAgeInDays()
 		
-		if self.rnequeued or forced or theworldfullmoon or theworldnewmoon then
+		if self.rnequeued or forced or TheWorld.state.isfullmoon or TheWorld.state.isnewmoon then
 			--TheNet:Announce("commencingrne")
 			if inst.punish and inst.punish > 0 then
 				inst.punish = inst.punish - 0.3 -- <-- This changes hovv many rnes it takes to cool dovvn the punishment 
