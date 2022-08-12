@@ -29,6 +29,9 @@ local component_post = {
 	"messagebottlemanager",
 	"fishingnet",
 	"boatleak", --for custom boat patches.
+	"wisecracker",
+	"boatphysics",
+	"map",
 }
 
 local prefab_post = {

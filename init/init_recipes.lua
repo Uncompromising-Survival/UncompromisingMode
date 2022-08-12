@@ -726,6 +726,9 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
+AddRecipe2("portableboat_item", {Ingredient("mosquitosack", 2), Ingredient("rope", 2)}, GLOBAL.TECH.NONE, nil, {"SEAFARING"})
+ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
+
 --recipe postinits
 
 AddRecipePostInitAny(function(recipe)
@@ -793,11 +796,12 @@ STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky hands
 STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
 STRINGS.RECIPE_DESC.UM_SALTSALVE = "Rub salt in the wounds."
-STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "He likes to put holes in things."
+STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "They like to put holes in things."
 STRINGS.RECIPE_DESC.BOAT_BUMBER_SLUDGE_KIT = "Sticky protection."
 STRINGS.RECIPE_DESC.BOAT_BUMPER_COPPER_KIT = "Sturdy protection."
 STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
+STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 
 --sailing rebalance strings
 STRINGS.RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
