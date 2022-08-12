@@ -14,6 +14,7 @@ function TestForIA()
         print("mod check")
         return true
     else
+        print("all checks passed.")
         return false
     end
 end
