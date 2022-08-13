@@ -683,6 +683,7 @@ local function giant_treefn()
 	inst:AddTag("tree")
 	inst:AddTag("giant_tree")
 	inst:AddTag("shadecanopysmall")
+	inst:AddTag("antlion_sinkhole_blocker")
 	
     if not TheNet:IsDedicated() then
         inst:AddComponent("distancefade")
