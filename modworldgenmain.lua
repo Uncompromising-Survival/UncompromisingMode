@@ -461,13 +461,13 @@ if GetModConfigData("worldgenmastertoggle") then
     LOCKS_KEYS[LOCKS.RICE] = { KEYS.RICE }
     LOCKS_KEYS[LOCKS.HF] = { KEYS.HF }
 
-    if GetModConfigData("rice") and not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+    if GetModConfigData("rice") then
         AddTaskPreInit("Squeltch", function(task)
             task.room_choices["ricepatch"] = 1 --Comment to test task based rice worldgen
             task.room_choices["densericepatch"] = 1 --Comment to test task based rice worldgen
         end)
     end
-    if GetModConfigData("hoodedforest") and not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+    if GetModConfigData("hoodedforest") then
         GLOBAL.require("map/tasks/gianttrees")
     end
     --[[GLOBAL.require("map/tasks/ratacombs")
@@ -489,7 +489,7 @@ if GetModConfigData("worldgenmastertoggle") then
                 task.room_choices["RattySinkhole"] = 1
             end)
         end]]
-    if GetModConfigData("hoodedforest") and not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+    if GetModConfigData("hoodedforest") then
         AddTaskPreInit("Forest hunters",
             function(task) --Leave Forest Hunters in incase someone adds something to its setpieces.
                 task.room_choices = {
@@ -504,7 +504,7 @@ if GetModConfigData("worldgenmastertoggle") then
         if tasksetdata.location ~= "forest" then
             return
         end
-        if GetModConfigData("hoodedforest") and not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+        if GetModConfigData("hoodedforest") then
             table.insert(tasksetdata.tasks, "GiantTrees")
         end
         if GetModConfigData("rice") then
@@ -551,7 +551,7 @@ if GetModConfigData("worldgenmastertoggle") then
         scale = 0.1
     }
 
-    if GetModConfigData("hoodedforest") and not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+    if GetModConfigData("hoodedforest") then
         AddRoomPreInit("HoodedTown", function(room)
             if not room.contents.countstaticlayouts then
                 room.contents.countstaticlayouts = {}
