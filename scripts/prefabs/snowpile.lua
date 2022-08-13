@@ -88,9 +88,10 @@ end
 
 local function onregen(inst)
     local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
+	local tile = TheWorld.Map:GetTileAtPoint(my_x, my_y, my_z)
 
     if TheWorld.state.iswinter and
-        not INVALID_TILES[TheWorld.Map:GetTileAtPoint(my_x, my_y, my_z)] then -- or ents2 ~= nil and #ents2 < 0 then
+        not (tile ~= nil and INVALID_TILES[tile]) then -- or ents2 ~= nil and #ents2 < 0 then
         if inst.components.workable.workleft < 3 then
             SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
             inst.components.workable:SetWorkLeft(inst.components.workable.workleft + 1)
