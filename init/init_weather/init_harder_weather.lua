@@ -20,10 +20,10 @@ AddComponentPostInit("sewing", DoSewing)
 
 -------------Torches only smolder objects now---------------
 local _OldLightAction = GLOBAL.ACTIONS.LIGHT.fn
-if TUNING.DSTU.WINTER_BURNING and not GLOBAL:TestForIA() then
+if TUNING.DSTU.WINTER_BURNING  then
 	GLOBAL.ACTIONS.LIGHT.fn = function(act)
 		if act.invobject ~= nil and act.invobject.components.lighter ~= nil then
-			if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable and not (GLOBAL.TheWorld:HasTag("island") or GLOBAL.TheWorld:HasTag("volcano")) then
+			if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable and not GLOBAL:TestForIA() then
 				if act.invobject.components.fueled then
 					act.invobject.components.fueled:DoDelta(-5, act.doer) --Hornet: Made it take fuel away because.... The snow and cold takes some of the fire? probably will change
 				end

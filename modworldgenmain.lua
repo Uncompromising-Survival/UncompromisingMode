@@ -77,7 +77,18 @@ ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 
 ------
-if GetModConfigData("worldgenmastertoggle") then
+
+local function TestForIA()
+    if (TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))) or GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+        print("TestForIA: is IA world!")
+        return true
+    else
+        print("TestForIA: not IA world!")
+        return false
+    end
+end
+
+if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
     -- <<Cave Update WIP: Toggle at your own risk you buffoons! (That means you atoba, don't leak it please eh?)>>
     -- I became a dev :sunglasses: - Atobá
 
@@ -128,7 +139,7 @@ if GetModConfigData("worldgenmastertoggle") then
         --Ruins Split
         ]]
     if GetModConfigData("caved") == false then
-        AddTaskSetPreInitAny(function(tasksetdata)
+        AddTaskSetPreInit("forest", function(tasksetdata)
             if tasksetdata.location ~= "forest" then
                 return
             end
@@ -165,7 +176,7 @@ if GetModConfigData("worldgenmastertoggle") then
         end
     end
 
-    AddTaskSetPreInitAny(function(tasksetdata)
+    AddTaskSetPreInit("forest", function(tasksetdata)
         if tasksetdata.location ~= "forest" then
             return
         end
@@ -500,7 +511,7 @@ if GetModConfigData("worldgenmastertoggle") then
     end
 
 
-    AddTaskSetPreInitAny(function(tasksetdata)
+    AddTaskSetPreInit("forest", function(tasksetdata)
         if tasksetdata.location ~= "forest" then
             return
         end
