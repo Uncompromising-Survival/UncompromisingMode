@@ -6,8 +6,9 @@ GLOBAL.setfenv(1, GLOBAL)
 
 --improved check for IA, instead of just checking for the mod, it checks for the world tags *and* the mod.
 --returns true if IA.
+
 function TestForIA()
-    if (TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))) or KnownModIndex:IsModEnabled("workshop-1467214795") then
+    if TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) and KnownModIndex:IsModEnabled("workshop-1467214795") then
         print("TestForIA: is IA world!")
         return true
     else
