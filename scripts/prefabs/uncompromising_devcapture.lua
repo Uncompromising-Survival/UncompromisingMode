@@ -57,7 +57,7 @@ local function onclose(inst)
 
 	for i,v in ipairs(itemsinside) do
 		if v.prefab == "log" then
-			range = range + v.components.stackableackSize()
+			range = range + v.components.stackable:StackSize()
 		end --since each log is 1, 4 logs = 1 tile!
 		if v.prefab == "boards" then
 			range = range + (v.components.stackable:StackSize()*TILE_SCALE)
@@ -124,8 +124,8 @@ local function Capture(inst)
 	end
 	--TheNet:Announce(range)
 	local ents = TheSim:FindEntities(x,y,z,range,nil,{"DEVBEHOLDER","player","bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
-
-	local totaltable = "local returnedTable = { "
+	local totaltable_number = tostring(math.random(1000))
+	local totaltable = "returnedTable"..totaltable_number.." = { "
 	--print("	{x = 2, z = 2, prefab = \"evergreen\"},")
 	for i,v in ipairs(ents) do
 		local px,py,pz = v.Transform:GetWorldPosition()
@@ -172,16 +172,24 @@ local function Capture(inst)
 		end
 		totaltable = totaltable.."},"
 	end
-	totaltable = totaltable.."}"
+	totaltable = totaltable.."},\n"
 	--print("captured prefabs:", totaltable)
 
-	local file_name = TUNING.DSTU.MODROOT.."/devcapture_output.lua"
+	local file_name = TUNING.DSTU.MODROOT.."scripts/umss_tables.lua"
+
 	print(file_name)
-	local file = io.open(file_name, "w")--for some reason, I couldn't use "append" modes.
+	print(totaltable_number)
+
+	local file = io.open(file_name, "r+")
 	if file then
-		TheNet:Announce("Prefabs Captured! Check your mod folder's devcapture_output.lua!")
+		local file_string = file:read("*a")
+		file_string = string.gsub(file_string, "} return UMSS_TABLES", "")
+		totaltable = file_string.."\n    "..totaltable.."} return UMSS_TABLES"
+		file:close()
+		file = io.open(file_name, "w")
 		local data = file:write(totaltable)
 		file:close()
+		TheNet:Announce("Successfully captured! Saved as returnedTable"..totaltable_number.." in "..file_name.."\nWe suggest renaming it!")--TODO: AUTO ADD UMSS PREFAB STUFF TOO!
 		inst:Remove()
 		return data
 	else
@@ -189,6 +197,7 @@ local function Capture(inst)
 	end
 	--now supports ludicrously sized setpieces!
 	--had to write the result on a new file, print can only fit so much.
+	--now self writing!!!
 end
 
 local function fn()
