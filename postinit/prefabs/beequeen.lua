@@ -16,11 +16,70 @@ env.AddPrefabPostInit("beeguard", function(inst)
 	inst:AddTag("ignorewalkableplatforms")
 end)
 
+local function VVallcheck(inst)
+	if inst.defensebees then
+		for i,bee in ipairs(inst.defensebees) do
+			if bee.components.health and not bee.components.health:IsDead() then
+				return true
+			end
+		end
+	end
+end
+
+local function AbilityRage(inst) --Reserved for those trying to kill BQ vvithout her having all bees dead, not a punishment, an alternative. (So that her special bees actually do stuff)
+	local percent = inst.components.health:GetPercent()
+	if percent > 0.75 then
+		inst.sg:GoToState("spawnguards") --No ability yet, I'll just spavvn guards.
+	end
+	if percent < 0.75 and percent > 0.5 then
+		if math.random() > 0.5 then --AHA I have some abilities. 
+			if VVallcheck(inst) then
+				inst.sg:GoToState("defensive_spin")
+			else
+				inst.sg:GoToState("spawnguards_vvall")
+			end
+		else
+			inst.sg:GoToState("spawnguards_seeker_quick")
+		end
+	end
+	if percent < 0.5 and percent > 0.25 then
+		if math.random() > 0.5 then --VVall or shooters...
+			if VVallcheck(inst) then
+				inst.sg:GoToState("defensive_spin")
+			else
+				inst.sg:GoToState("spawnguards_vvall")
+			end
+		else
+			inst.sg:GoToState("spawnguards_shooter_circle")
+		end
+	end
+	if percent < 0.25 then
+		if math.random() > 0.66 then
+			inst.sg:GoToState("spawnguards_shooter_circle")
+		else
+			if math.random() > 0.5 then
+				inst.sg:GoToState("spawnguards_seeker_quick")
+			else
+				inst.FinalFormation(inst)
+			end
+		end
+	end
+end
+
 local function StompHandler(inst,data)
 	--TheNet:Announce(inst.stomprage)
 	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
 	end]]
+	local soldiers = inst.components.commander:GetAllSoldiers()
+	if #soldiers > 0 then --This is added if the player is exploiting BQ having only like... one bee, and preventing the natural proc for any sort of ability to happen.
+		inst.abilityrage = inst.abilityrage + 1
+		if inst.abilityrage > 15 then --This number is the threshold of hits, vve don't necessarily need to make them NOT like attacking her like this, just not allovv her to bee cheesed.
+			inst.abilityrage = 0
+			AbilityRage(inst)
+		end
+	end
+	
 	if inst.components.health and inst.components.health:GetPercent() < 0.5 and not inst.sg:HasStateTag("busy") then
 		local soldiers = inst.components.commander:GetAllSoldiers()
 		if #soldiers > 0 then
@@ -265,15 +324,11 @@ local function SpawnSeekerBees(inst)
 	if not inst.seekerbees then
 		inst.seekerbees = {}
 	end
-	local totalseekers = 6
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local players = TheSim:FindEntities(x,y,z,30,{"player"},{"playerghost"}) --more bees for more players
-	if players then
-		if inst.components.health:GetPercent() < 0.5 then
-			totalseekers = 8 + 4 * #players
-		else
-			totalseekers = 4 + 2 * #players
-		end
+	local totalseekers
+	if inst.components.health:GetPercent() < 0.5 then
+		totalseekers = 12
+	else
+		totalseekers = 8
 	end
 	for i = 1,totalseekers do
 		inst.seekerbees[i] = SpawnPrefab("um_beeguard_seeker")
@@ -454,6 +509,7 @@ env.AddPrefabPostInit("beequeen", function(inst)
 	inst.defensivespincount = math.random(3,5)
 	inst.spawnguards_threshold = 20
 	inst.should_shooter_rage = 20
+	inst.abilityrage = 0
 	inst.SpawnShooterBeesCircle = SpawnShooterBeesCircle
 	inst.SpawnSupport = SpawnSupport
 	inst.SpavvnShooterBeesLine = SpavvnShooterBeesLine

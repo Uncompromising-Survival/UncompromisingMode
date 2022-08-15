@@ -364,4 +364,5 @@ return {
 	"phantom",
 	"um_specter_amulet",
 	"um_walls",
+	"ums_biometable",
 }

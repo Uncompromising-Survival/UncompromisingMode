@@ -293,7 +293,11 @@ local states = {
 			end			
 			StopBuzz(inst)
 			inst.components.locomotor:StopMoving()
-            inst.AnimState:PlayAnimation("stab_pst",false)
+			if inst.prefab == "um_beeguard_seeker" then
+				inst.AnimState:PlayAnimation("stab_death",false)
+			else
+				inst.AnimState:PlayAnimation("stab_pst",false)
+			end
         end,
 		
 		timeline = {

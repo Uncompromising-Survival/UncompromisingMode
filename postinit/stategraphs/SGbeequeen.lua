@@ -701,7 +701,9 @@ local states = {
 						if inst.components.health:GetPercent() < 0.25 then
 							inst:DoTaskInTime(math.random(12,20),function(inst) inst.should_final = true end)
 						end
-						inst.seekercount = math.random(4,5)
+						local x,y,z = inst.Transform:GetWorldPosition()
+						local players = TheSim:FindEntities(x,y,z,30,{"player"},{"playerghost"}) --more bees for more players
+						inst.seekercount = math.random(4,5) + 2*#players
 						inst.tiredcount = 10
 						inst.sg:GoToState("tired")
 					end

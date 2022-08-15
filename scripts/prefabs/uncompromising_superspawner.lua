@@ -85,68 +85,68 @@ local function UncompromisingSpawnGOOOOO(inst, data)
             local prefab = SpawnPrefab(v.prefab)
             -- TheNet:Announce("spawninwater_prefab: ")
             -- TheNet:Announce(tostring(inst.spawninwater_prefab))
-
+			if prefab then
             -- for area handlers, so they can find all things created by a especific SS.
-            if inst.tags then
-                for k, v in ipairs(inst.tags) do
-                    prefab:AddTag("dynlayout_" .. v)
-                end
-                prefab.dynlayout_tags = inst.tags
-            end
+				if inst.tags then
+					for k, v in ipairs(inst.tags) do
+						prefab:AddTag("dynlayout_" .. v)
+					end
+					prefab.dynlayout_tags = inst.tags
+				end
 
-            if inst.spawninwater_prefab then
-                prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
-            else
-                if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
-                    -- TheNet:Announce("not ocean tile, setting pos!")
-                    prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
-                else
-                    -- TheNet:Announce("ocean tile! removing!")
-                    prefab:Remove()
-                end
-            end
+				if inst.spawninwater_prefab then
+					prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+				else
+					if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+						-- TheNet:Announce("not ocean tile, setting pos!")
+						prefab.Transform:SetPosition(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+					else
+						-- TheNet:Announce("ocean tile! removing!")
+						prefab:Remove()
+					end
+				end
 
-            if v.diseased then
-                -- If vve ever add back acid rain I guess vve could have this, vvhatever
-            end
-            if v.barren and prefab.components.pickable then
-                prefab.components.pickable:MakeBarren()
-            end
-            if v.withered and prefab.components.witherable then
-                prefab.components.witherable:ForceWither()
-            end
-            if v.ocean then
-                if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
-                    prefab:Remove()
-                end
-            end
-            if v.health and prefab.components.health then
-                prefab.components.health:SetPercent(v.health)
-            end
-            if v.contents and prefab.components.container then
-                print(v.contents) -- just testing!
-            end
-            if v.burnt and prefab.components.burnable then
-                prefab.components.burnable.onburnt(prefab)
-            end
-            if v.uses and prefab.components.finiteuses then
-                prefab.components.finiteuses:SetUses(v.uses)
-            end
-            if v.fuel and prefab.components.fueled then
-                prefab.components.fueled:SetPercent(v.fuel)
-            end
-            if v.scenario then
-                if prefab.components.scenariorunner == nil then
-                    prefab:AddComponent("scenariorunner")
-                end
-                prefab.components.scenariorunner:SetScript(v.scenario)
-            end
-            if v.rotation and (prefab.prefab == "fence" or prefab.prefab == "fence_gate") then
-				SetOrientation(prefab, (v.rotation*rotx)*rotz)
-			elseif v.rotation and v.rotation ~= 0 then
-                prefab.Transform:SetRotation((v.rotation*rotx)*rotz)
+				if v.diseased then
+					-- If vve ever add back acid rain I guess vve could have this, vvhatever
+				end
+				if v.barren and prefab.components.pickable then
+					prefab.components.pickable:MakeBarren()
+				end
+				if v.withered and prefab.components.witherable then
+					prefab.components.witherable:ForceWither()
+				end
+				if v.ocean then
+					if not TheWorld.Map:IsOceanTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
+						prefab:Remove()
+					end
+				end
+				if v.health and prefab.components.health then
+					prefab.components.health:SetPercent(v.health)
+				end
+				if v.contents and prefab.components.container then
+					print(v.contents) -- just testing!
+				end
+				if v.burnt and prefab.components.burnable then
+					prefab.components.burnable.onburnt(prefab)
+				end
+				if v.uses and prefab.components.finiteuses then
+					prefab.components.finiteuses:SetUses(v.uses)
+				end
+				if v.fuel and prefab.components.fueled then
+					prefab.components.fueled:SetPercent(v.fuel)
+				end
+				if v.scenario then
+					if prefab.components.scenariorunner == nil then
+						prefab:AddComponent("scenariorunner")
+					end
+					prefab.components.scenariorunner:SetScript(v.scenario)
+				end
+				if v.rotation and (prefab.prefab == "fence" or prefab.prefab == "fence_gate") then
+					SetOrientation(prefab, (v.rotation*rotx)*rotz)
+				elseif v.rotation and v.rotation ~= 0 then
+					prefab.Transform:SetRotation((v.rotation*rotx)*rotz)
+				end
 			end
-
             if v.tile and v.tile ~= TheWorld.Map:GetTileAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz) then
                 local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
                 -- :Announce("spawninwater_tile:")
@@ -267,6 +267,18 @@ local spawner_data = {
     {name = "megabaseRuins_intersection", table = umss_tables.megabaseruins_intersection, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
     {name = "megabaseRuins_centerpiece", table = umss_tables.megabaseruins_centerpiece, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
     {name = "megabaseRuins_road", table = umss_tables.megabaseruins_road, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
+	
+    {name = "ancientwalrusTable", table = umss_tables.ancientwalrusTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "fooltrap1Table", table = umss_tables.fooltrap1Table, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "sussyTable", table = umss_tables.sussyTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "badfarmerTable", table = umss_tables.badfarmerTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "shyTable", table = umss_tables.shyTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "moxTable", table = umss_tables.moxTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "walterifgoodTable", table = umss_tables.walterifgoodTable, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "swamplake", table = umss_tables.swamplake, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    {name = "singlefather", table = umss_tables.singlefather, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+	{name = "sos", table = umss_tables.sos, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},		
+	
 }
 
 local spawner_prefabs = {}

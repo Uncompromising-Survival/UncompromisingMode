@@ -155,6 +155,7 @@ local prefab_post = {
 	"slurtle_shellpieces",
 	"sludge_fueled",
 	"nightsword",
+	"bigshadowtentacle",
 }
 
 local stategraph_post = {

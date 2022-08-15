@@ -52,6 +52,9 @@ local function onhit(inst, attacker, target)
 		
 		if ground or boat then
 			local reel = SpawnPrefab("um_magnerangreel")
+			if inst.uses then
+				reel.uses = inst.uses
+			end
 			reel.Transform:SetPosition(inst.x, inst.y, inst.z)
 			reel.target = target
 			reel.AnimState:PlayAnimation("place")
@@ -90,10 +93,18 @@ local function spawntornado(inst, target)
 	end
 	
 	local proj = SpawnPrefab("um_magnerang_projectile")
+	if inst.components.finiteuses and inst.components.finiteuses.current then
+		proj.uses = inst.components.finiteuses.current
+	end	
 	proj.Transform:SetPosition(x, y, z)
 	proj.components.projectile:Throw(owner, target)
 	
 	inst:Remove()
+end
+
+local function OnFinished(inst)
+    inst.AnimState:PlayAnimation("used")
+    inst:ListenForEvent("animover", inst.Remove)
 end
 
 local function fncommon()
@@ -148,7 +159,12 @@ local function fncommon()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-
+	
+	inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetMaxUses(TUNING.BOOMERANG_USES/2)
+    inst.components.finiteuses:SetUses(TUNING.BOOMERANG_USES/2)
+    inst.components.finiteuses:SetOnFinished(OnFinished)
+	
     MakeHauntableLaunch(inst)
 
     return inst
@@ -158,6 +174,12 @@ local function onhit_return(inst, attacker, target)
 	if target ~= nil then
 		local x, y, z = target.Transform:GetWorldPosition()
 		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
 		magnerang.Transform:SetPosition(x, 1.5, z)
 		magnerang.target = target
 	end
@@ -218,7 +240,9 @@ local function harpoon()
     inst.components.projectile:SetLaunchOffset(Vector3(3, 2, 0))
     inst.components.projectile:SetSpeed(10)
     inst.components.projectile:SetOnHitFn(onhit)
+	
 
+	
     inst.persists = false
 
     return inst
@@ -234,12 +258,13 @@ end
 
 local function Vac(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	if inst ~= nil and inst:IsValid() and inst.target ~= nil and inst.target:IsValid() then
+	if inst.magnet_damage < 200 and inst ~= nil and inst:IsValid() and inst.target ~= nil and inst.target:IsValid() then
 		local px, py, pz = inst.target.Transform:GetWorldPosition()
 			
 		local distmult = (inst:GetDistanceSqToInst(inst.target) / 200)
-		print(distmult)
-		
+		local tuningmultiplier = 1.25
+		inst.magnet_damage = inst.magnet_damage + distmult * tuningmultiplier
+		TheNet:Announce(inst.magnet_damage)
 		if distmult >= 0.15 then
 			local platform = inst:GetCurrentPlatform()
 				
@@ -278,6 +303,20 @@ local function Vac(inst)
 	end
 end
 
+local function Link(inst,option)
+	if inst.target then
+		if option == "link" then
+			if inst.target.magnerang then --If there's already a magnerang, replace it vvith this nevv one.
+				inst.target.magnerang:KillRopes(inst.target.magnerang)
+			end
+			inst.target.magnerang = inst
+		end
+		if option == "remove" then
+			inst.target.magnerang = nil
+		end
+	end
+end
+
 local function KillRopes(inst)
 	inst.SoundEmitter:PlaySound("UCSounds/harpoon/break")
 
@@ -285,17 +324,20 @@ local function KillRopes(inst)
 	
 	inst.components.updatelooper:RemoveOnUpdateFn(Vac)
 	
-	if inst.hitfx ~= nil then
+	if inst.hitfx then
 		inst.hitfx:Remove()
 	end
 	
-	if inst.target ~= nil then
+	if inst.target then
 		local x, y, z = inst.target.Transform:GetWorldPosition()
 	
 		local proj = SpawnPrefab("um_magnerang_projectile")
 		if x ~= nil then
 			proj.Transform:SetPosition(x, 1.5, z)
 			proj.components.projectile:Throw(inst.target, inst)
+			if inst.uses then --Pass the uses from the magnerang
+				proj.uses = inst.uses
+			end
 			proj.components.projectile:SetOnHitFn(onhit_return)
 			proj.components.projectile:SetOnMissFn(onmiss_return)
 			proj.reel = inst
@@ -309,10 +351,13 @@ local function KillRopes(inst)
 	else
 		SpawnPrefab("um_magnerang_projectile").Transform:SetPosition(inst.Transform:GetWorldPosition())
 	end
+	Link(inst,"remove")
 end
 
 local function InitializeRope(inst)
-	if inst.target ~= nil and inst.target:IsValid() then
+	if inst.target and inst.target:IsValid() then
+		Link(inst,"link")
+		
 		local hitfx = SpawnPrefab("um_magneranghitfx")
 		hitfx.Transform:SetPosition(inst.target.Transform:GetWorldPosition())
 		
@@ -370,6 +415,8 @@ local function reel()
     if not TheWorld.ismastersim then
         return inst
     end
+	
+	inst.magnet_damage = 0
 	
 	inst.target = nil
 
