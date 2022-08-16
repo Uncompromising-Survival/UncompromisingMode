@@ -154,7 +154,11 @@ local function fncommon(ropetype)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/uncompromising_harpoon.xml"
+	if inst.tensionmax ~= nil and inst.tensionmax > 150 then
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/uncompromising_harpoon_heavy.xml"
+	else
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/uncompromising_harpoon.xml"
+	end
 	
     inst:AddComponent("spellcaster")
     inst.components.spellcaster.canuseontargets = true

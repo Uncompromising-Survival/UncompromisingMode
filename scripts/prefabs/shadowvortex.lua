@@ -30,7 +30,6 @@ local function Vac(inst)
 	
 	for i, v in ipairs(damageents) do
 		if v.components.health ~= nil then
-			print(inst.Transform:GetScale())
 			v.components.health:DoDelta((-1 * inst.Transform:GetScale()) * inst.Transform:GetScale(), false, inst.prefab)
 		end
 	end
@@ -66,12 +65,7 @@ local function Vac(inst)
 			local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
 			local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
 			if dx ~= nil and (ground or boat) then
-				--v.Transform:SetPosition(dx, dy, dz)
-				v.Physics:Teleport(dx, dy, dz)
-				if v:HasTag("player") then
-					print("move prediction disable pls")
-					v:EnableMovementPrediction(inst, false)
-				end
+				v.Transform:SetPosition(dx, dy, dz)
 			end
 		end
 	end

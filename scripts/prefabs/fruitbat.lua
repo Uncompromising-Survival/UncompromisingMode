@@ -209,7 +209,7 @@ local function fn()
     inst.components.eater:SetOnEatFn(OnEat)   
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(100)
-     
+    inst.components.health.destroytime = 4
 
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(25)

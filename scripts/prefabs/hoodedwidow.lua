@@ -224,7 +224,10 @@ local function fn()
     ------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.DSTU.WIDOW_HEALTH)
-
+    inst:AddComponent("healthtrigger")
+    inst.components.healthtrigger:AddTrigger(0.5, function(inst)
+		inst.sg:GoToState("tired")
+	end)
     ------------------
     inst:AddComponent("knownlocations")
     inst:AddComponent("combat")
