@@ -335,7 +335,7 @@ local function KillRopes(inst)
 		if x ~= nil then
 			proj.Transform:SetPosition(x, 1.5, z)
 			proj.components.projectile:Throw(inst.target, inst)
-			if inst.uses then --Pass the uses from the magnerang
+			if inst.target.components ~= nil and inst.target.components.combat ~= nil and inst.uses then --Pass the uses from the magnerang
 				proj.uses = inst.uses
 			end
 			proj.components.projectile:SetOnHitFn(onhit_return)
