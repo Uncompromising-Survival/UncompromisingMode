@@ -277,7 +277,7 @@ local function Vac(inst)
 						
 					local boat_physics = platform.components.boatphysics
 					
-					boat_physics:ApplyForce(row_dir_x, row_dir_z, .15 * distmult)
+					boat_physics:ApplyForce(row_dir_x, row_dir_z, .35 * distmult)
 				end
 			end
 				
@@ -358,16 +358,21 @@ local function InitializeRope(inst)
 	if inst.target and inst.target:IsValid() then
 		Link(inst,"link")
 		
+		local x, y, z = inst.target.Transform:GetWorldPosition()
+		
 		local hitfx = SpawnPrefab("um_magneranghitfx")
-		hitfx.Transform:SetPosition(inst.target.Transform:GetWorldPosition())
+		hitfx.Transform:SetPosition(x, y, z)
 		
 		inst.hitfx = hitfx
 		
-		hitfx.entity:SetParent(inst.target.entity)
-		
-		if hitfx ~= nil and inst.target.components.combat then
-			local follower = hitfx.entity:AddFollower()
-			follower:FollowSymbol(inst.target.GUID, inst.target.components.combat.hiteffectsymbol, 0, 0, 0)
+		if hitfx ~= nil  then
+			if inst.target.components.combat then
+				local follower = hitfx.entity:AddFollower()
+				hitfx.entity:SetParent(inst.target.entity)
+				follower:FollowSymbol(inst.target.GUID, inst.target.components.combat.hiteffectsymbol, 0, 0, 0)
+			else
+				hitfx.Transform:SetPosition(x, 1.5, z)
+			end
 		end
 	end
 end
