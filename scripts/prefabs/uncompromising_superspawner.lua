@@ -81,7 +81,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
     for i, v in ipairs(data) do
         -- TheNet:Announce(i) --For Troubleshooting
         -- TheNet:Announce("Prefab: "..v.prefab) --For Troubleshooting
-        if v.prefab ~= "um_dynlayout_tileflag" and v.prefab ~= "seeds" --[[hecking birds man]]then
+        if v.prefab ~= "umdc_tileflag" and v.prefab ~= "seeds" --[[hecking birds man]]then
             local prefab = SpawnPrefab(v.prefab)
             -- TheNet:Announce("spawninwater_prefab: ")
             -- TheNet:Announce(tostring(inst.spawninwater_prefab))

@@ -195,34 +195,6 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
             return
         end
 
-        tasksetdata.set_pieces["basefrag_smellykitchen"] = { count = chance_and_count(1, 1),
-            tasks = {
-                "Great Plains",
-                "Speak to the king",
-                "Forest hunters",
-                "Guarded Squeltch",
-                "Merms ahoy",
-                "Sane-Blocked Swamp",
-                "Squeltch",
-                "Swamp start",
-                "Tentacle-Blocked Spider Swamp"
-            }
-        }
-
-        tasksetdata.set_pieces["basefrag_rattystorage"] = { count = chance_and_count(0.33, 1),
-            tasks = {
-                "Befriend the pigs",
-                "Kill the spiders",
-                "Forest hunters",
-                "The hunters",
-                "Merms ahoy",
-                "Sane-Blocked Swamp",
-                "Squeltch",
-                "Swamp start",
-                "Tentacle-Blocked Spider Swamp"
-            }
-        }
-
 
         tasksetdata.set_pieces["moonfrag"] = { count = chance_and_count(0.33, 1, 3),
             tasks = {
@@ -250,31 +222,6 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
             }
         }
 
-        tasksetdata.set_pieces["boon_moonoil"] = { count = chance_and_count(0.5, 1),
-            tasks = {
-                "Make a pick",
-                "Dig that rock",
-                "Great Plains",
-                "Squeltch",
-                "Beeeees!",
-                "Speak to the king",
-                "Forest hunters",
-                "For a nice walk",
-                "Badlands",
-                "Lightning Bluff",
-                "Befriend the pigs",
-                "Kill the spiders",
-                "Killer bees!",
-                "Make a Beehat",
-                "The hunters",
-                "Magic meadow",
-                "Frogs and bugs",
-                "Mole Colony Deciduous",
-                "Mole Colony Rocks",
-                "MooseBreedingTask",
-                "Speak to the king classic",
-            }
-        }
 		
         tasksetdata.set_pieces["umss_biometable"] = { count = math.random(3,5),
             tasks = {

@@ -326,7 +326,7 @@ end
 
 modparams.skullchest = containers.params.shadowchester
 modparams.winkyburrow = containers.params.shadowchester
-modparams.uncompromising_devcapture = containers.params.shadowchester
+modparams.um_devcapture = containers.params.shadowchester
 
 
 modparams.sludge_sack = containers.params.piggyback

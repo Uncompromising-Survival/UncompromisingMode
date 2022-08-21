@@ -316,7 +316,7 @@ return {
 	"beequeen_beering",
 	"cave_entrance_lush",
 	"uncompromising_rocks",
-	"uncompromising_superspawner",
+	--"uncompromising_superspawner",
 	"uncompromising_devcapture",
 	"driftwood_waterlogged",
 	"kelpstack",
@@ -365,4 +365,5 @@ return {
 	"um_specter_amulet",
 	"um_walls",
 	"ums_biometable",
+	"umss_general",
 }

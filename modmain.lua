@@ -7,7 +7,7 @@ PreloadAssets = {
 }
 ReloadPreloadAssets()
 --Start the game mode
-
+SignFiles = require("uncompromising_writeables")
 modimport("init/init_gamemodes/init_uncompromising_mode")
 
 if GetModConfigData("funny rat") then

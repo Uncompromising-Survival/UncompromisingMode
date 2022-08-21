@@ -55,14 +55,14 @@ return {
         objects = {
           {
             name = "",
-            type = "umss_basefrag_smellykitchen",
+            type = "umss_general",
             shape = "rectangle",
             x = 63,
             y = 64,
             width = 0,
             height = 0,
             visible = true,
-            properties = {}
+            properties = {["data.table"] = "basefrag_smellykitchen"}
           },
         }
       }

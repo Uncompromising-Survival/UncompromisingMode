@@ -1,81 +1,123 @@
 local DecidTable = {
 	
-	umss_shyTable = 1,
-	umss_moxTable = 0.25,
+	shyTable = 1,
 	
 }
 local DesertTable = {
 
-	umss_sussyTable = 1,
+	sussyTable = 1,
 
 }
 local MarshTable = {
 
-	umss_fooltrap1Table = 1,
-	umss_swamplake = 1,
+	fooltrap1Table = 1,
 	
 }
 local HoodedTable = {
 
-	umss_ancientwalrusTable = 1,
+	ancientwalrusTable = 1,
 	
 }
 local DarkForestTable = {
 
-	umss_walterifgoodTable = 1,
+	walterifgoodTable = 1,
 	
 }
 local RockyTable = {
 
-	umss_singlefather = 1,
-	
+	singlefather = 1,
+
 }
 local SavannaTable = {
 
-	umss_sos = 1,
-	umss_moxTable = 0.25,
-
-}
-local GeneralTable = {
-
-	umss_badfarmerTable = 1,
-	umss_moxTable = 0.25,
-	umss_sos = 0.1,
+	sos = 1,
+	moxTable = 0.25,
+	deadBodies = 2,
 	
 }
+local GeneralTable = {
+	badfarmerTable = 1,
+	baseFrag_smellyKitchen = 0.5,
+	baseFrag_rattyStorage = 0.5,
+	moonOil = 1,
+}
+
+local function AddToTheWorld(inst,umss)
+	table.insert(TheWorld.umsetpieces,umss)
+end
+
+local function FinalizeSpavvn(inst,umss,x,y,z)
+	local spavvner = SpawnPrefab("umss_general")
+	spavvner.DefineTable(spavvner,umss)
+	spavvner.Transform:SetPosition(x,y,z)
+	AddToTheWorld(inst,umss)
+	inst:Remove()
+end
 
 local function SpavvnBiomeUMSS(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local tile = TheWorld.Map:GetTileAtPoint(x, y, z)
 	local umss
+	local Table
 	
-	if tile == WORLD_TILES.MARSH then
-		umss = weighted_random_choice(MarshTable)
+	if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
+		Table = inst.MarshTable
+		umss = weighted_random_choice(Table) 
 	end
-	if tile == WORLD_TILES.HOODEDFOREST then
-	
-		umss = weighted_random_choice(HoodedTable)
+	if tile == WORLD_TILES.HOODEDFOREST and weighted_random_choice(inst.HoodedTable) then
+		Table = inst.HoodedTable
+		umss = weighted_random_choice(Table)
 	end
-	if tile == WORLD_TILES.DESERT_DIRT then
-		umss = weighted_random_choice(DesertTable)
+	if tile == WORLD_TILES.DESERT_DIRT and weighted_random_choice(inst.DesertTable) then
+		Table = inst.DesertTable
+		umss = weighted_random_choice(Table)
 	end
-	if tile == WORLD_TILES.DECIDUOUS then
-		umss = weighted_random_choice(DecidTable)
+	if tile == WORLD_TILES.DECIDUOUS and weighted_random_choice(inst.DecidTable) then
+		Table = inst.DecidTable
+		umss = weighted_random_choice(Table)
 	end
-	if tile == WORLD_TILES.FOREST then
-		umss = weighted_random_choice(DarkForestTable)
+	if tile == WORLD_TILES.FOREST and weighted_random_choice(inst.DarkForestTable)then
+		Table = inst.DarkForestTable
+		umss = weighted_random_choice(Table)
 	end
-	if tile == WORLD_TILES.SAVANNA then
-		umss = weighted_random_choice(SavannaTable)
+	if tile == WORLD_TILES.SAVANNA and weighted_random_choice(inst.SavannaTable) then
+		Table = inst.SavannaTable
+		umss = weighted_random_choice(Table)
 	end
-	if tile == WORLD_TILES.ROCKY then
-		umss = weighted_random_choice(RockyTable)
+	if tile == WORLD_TILES.ROCKY and weighted_random_choice(inst.RockyTable) then
+		Table = inst.RockyTable
+		umss = weighted_random_choice(Table)
 	end	
 	if not umss then
-		umss = weighted_random_choice(GeneralTable)
+		Table = inst.GeneralTable
+		umss = weighted_random_choice(Table)
 	end
-	SpawnPrefab(umss).Transform:SetPosition(x,y,z)
-	inst:Remove()
+	if not TheWorld.umsetpieces then
+		TheWorld.umsetpieces = {}
+	end
+	
+	
+	for i,v in ipairs(TheWorld.umsetpieces) do
+		if v == umss then
+			for i,v in ipairs(Table) do
+				if v == umss then
+					table.remove(Table,i)
+				end
+			end
+			if inst.count > 3 then
+				inst:Remove()
+			else				
+				inst.fail = true
+				inst.count = inst.count+1
+			end
+		end
+	end
+	if not inst.fail then
+		FinalizeSpavvn(inst,umss,x,y,z)
+	else
+		inst.fail = nil
+		SpavvnBiomeUMSS(inst)
+	end
 end
 
 
@@ -89,6 +131,17 @@ local function makefn()
     if not TheWorld.ismastersim then
         return inst
     end
+	inst.DecidTable = DecidTable
+	inst.DesertTable = DesertTable
+	inst.MarshTable = MarshTable
+	inst.HoodedTable = HoodedTable
+	inst.DarkForestTable = DarkForestTable
+	inst.RockyTable = RockyTable
+	inst.SavannaTable = SavannaTable
+	inst.GeneralTable = GeneralTable
+	
+	
+	inst.count = 0
 	inst:DoTaskInTime(0,SpavvnBiomeUMSS)
     return inst
 end

@@ -110,3 +110,38 @@ function c_settile(tile)
 
     print("setting tile "..tile.." at "..tile_x..", "..tile_z)
 end
+
+--cheap little shortcut to respawn ocean biomes...
+function c_regenerateoceanbiomes()
+    local um_areahandler = TheWorld.components.um_areahandler
+    if um_areahandler ~= nil then
+        --[[if TheWorld.state.isspring then
+            um_areahandler:FullGenerate()
+        else
+            um_areahandler:GenerateInactiveBiomes()
+        end]]
+        um_areahandler:FullGenerate()
+        print("Regenerated UM ocean biomes.")
+    else
+        print("Failed to regenerate UM ocean biomes. - um_areahandler is nil!")
+    end
+end
+
+--quick umss spawn command shortcut
+--umss is string!
+function c_umss(umss)
+    if type(umss) ~= "string" then
+        print("Failed to spawn! Defined value must be a string.")
+        return
+    end
+
+    local pos = ConsoleWorldPosition()
+    local setpiece = SpawnPrefab("umss_general")
+    setpiece.DefineTable(setpiece, umss)
+    setpiece.Transform:SetPosition(pos.x, 0, pos.z)
+    setpiece:AddTag("NOCLICK")
+    setpiece.AnimState:SetMultColour(0,0,0,0)
+    setpiece:DoTaskInTime(1, setpiece.Remove)
+
+    print("Spawning umss setpiece "..umss.." at "..tostring(pos.x)..","..tostring(pos.z)..".")
+end

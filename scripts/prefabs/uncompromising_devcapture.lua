@@ -2,7 +2,37 @@ require "prefabutil"
 
 local io = require("io")
 
-local scale = 1/5
+local function CheckValidEntities(inst, capture)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x,y,z,inst.range,nil,{"DEVBEHOLDER","player","bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
+	local itemsinside = inst.components.container:GetAllItems()
+
+	inst.range = 0
+
+	for i,v in ipairs(itemsinside) do
+		if v.prefab == "log" then
+			inst.range = inst.range + v.components.stackable:StackSize()
+		end --since each log is 1, 4 logs = 1 tile!
+		if v.prefab == "boards" then
+			inst.range = inst.range + (v.components.stackable:StackSize()*TILE_SCALE)
+		end
+		v:AddTag("DEVBEHOLDER")
+	end
+
+	if capture then
+		return ents
+	else
+		for k,v in ipairs(ents) do
+			if v.AnimState ~= nil then
+				local r,g,b,a = v.AnimState:GetMultColour()
+				v.previous_rgba = {}
+				v.previous_rgba.r, v.previous_rgba.g, v.previous_rgba.b, v.previous_rgba.a = r,g,b,a
+				v.AnimState:SetMultColour(0,1,0,a)
+			end
+		end
+	end
+end
+
 
 local function onopen(inst)
 	if not inst:HasTag("burnt") then
@@ -10,37 +40,7 @@ local function onopen(inst)
         inst.SoundEmitter:PlaySound("dontstarve/wilson/chest_open")
     end
 
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local itemsinside = inst.components.container:GetAllItems()
-	local range = 0
-	
-	local range_indicator = SpawnPrefab("um_dynlayout_range")
-
-	for i,v in ipairs(itemsinside) do
-		if v.prefab == "log" then
-			range = range + v.components.stackable:StackSize()
-		end --since each log is 1, 4 logs = 1 tile!
-		if v.prefab == "boards" then
-			range = range + (v.components.stackable:StackSize()*TILE_SCALE)
-		end
-	end
---[[
-	local indicator = TheSim:FindEntities(x,y,z,5,{"DYNLAYOUT_INDICATOR"})
-
-	if indicator ~= nil then
-		print("indicator not nil")
-		print(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))
-
-		for i, v in ipairs(indicator) do--THIS IS NOT RUNNING, WHY?!
-			print("FOR LOOP")
-			v.Transform:SetPosition(x,y,z)
-			v.Transform:SetScale(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))--help I failed math.
-		end
-	else
-		print("indicator nil")
-		range_indicator.Transform:SetPosition(x,y,z)
-		range_indicator.Transform:SetScale(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))--help I failed math.
-	end]]
+	CheckValidEntities(inst)
 end
 
 local function onclose(inst)
@@ -50,36 +50,7 @@ local function onclose(inst)
         inst.SoundEmitter:PlaySound("dontstarve/wilson/chest_close")
     end
 
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local itemsinside = inst.components.container:GetAllItems()
-	local range = 0
-	local range_indicator = SpawnPrefab("um_dynlayout_range")
-
-	for i,v in ipairs(itemsinside) do
-		if v.prefab == "log" then
-			range = range + v.components.stackable:StackSize()
-		end --since each log is 1, 4 logs = 1 tile!
-		if v.prefab == "boards" then
-			range = range + (v.components.stackable:StackSize()*TILE_SCALE)
-		end--1 BOARD = 1 TILE
-	end
-	--[[
-	local indicator = TheSim:FindEntities(x,y,z,5,{"DYNLAYOUT_INDICATOR"})
-
-	if indicator ~= nil then
-		print("indicator not nil")
-		print(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))
-
-		for i, v in ipairs(indicator) do--THIS IS NOT RUNNING, WHY?!
-			print("FOR LOOP")
-			v.Transform:SetPosition(x,y,z)
-			v.Transform:SetScale(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))--help I failed math.
-		end
-	else
-		print("indicator nil")
-		range_indicator.Transform:SetPosition(x,y,z)
-		range_indicator.Transform:SetScale(RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5), RoundBiasedUp(math.pow(range, scale)*math.pow(range, scale), 5))--help I failed math.
-	end]]
+	CheckValidEntities(inst)
 end
 
 local function onhammered(inst, worker)
@@ -97,37 +68,42 @@ local function onbuilt(inst)
 end
 
 local function OnStopChanneling(inst)
-	if inst.channeler ~= nil then
-		--inst.channeler.sg:GoToState("idle")P
-	end
 	inst.channeler = nil
 end
 
 local function Capture(inst)
+	local rotation = nil
+
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local itemsinside = inst.components.container:GetAllItems()
-	local range = 0
-	local no_tiles = nil
-	local rotation = nil
 
 	for i,v in ipairs(itemsinside) do
 		if v.prefab == "log" then
-			range = range + v.components.stackable:StackSize()
-		end --since each log is 0.5 - 8 logs = 1 tile!
+			inst.range = inst.range + v.components.stackable:StackSize()
+		end --since each log is 1, 4 logs = 1 tile!
+		if v.prefab == "boards" then
+			inst.range = inst.range + (v.components.stackable:StackSize()*TILE_SCALE)
+		end
 		v:AddTag("DEVBEHOLDER")
-		if v.prefab == "pitchfork" then
-			no_tiles = true
-		end
-		if v.prefab == "boat_rotator_kit" then
-			rotation = true
-		end
 	end
-	--TheNet:Announce(range)
-	local ents = TheSim:FindEntities(x,y,z,range,nil,{"DEVBEHOLDER","player","bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
+
+	local ents = TheSim:FindEntities(x,y,z,inst.range,nil,{"DEVBEHOLDER","player","bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
 	local totaltable_number = tostring(math.random(1000))
-	local totaltable = "returnedTable"..totaltable_number.." = { "
-	--print("	{x = 2, z = 2, prefab = \"evergreen\"},")
+	local tableName = inst.components.writeable.text or not inst.components.writeable.text and "returnedTable"..totaltable_number
+	local totaltable = tableName.." = { \n	"
+
+	if inst.components.writeable.text then
+		totaltable = totaltable.."	name = \""..inst.components.writeable.text.."\","
+	else
+		totaltable = totaltable.."	name = \"returnedTable"..totaltable_number.."\","
+	end
+
+	totaltable = totaltable.." rotate = true, tile_centered = true, \n		content = {"
 	for i,v in ipairs(ents) do
+		if v.previous_rgba ~= nil then
+			local rgb = v.previous_rgba
+			v.AnimState:SetMultColour(rgb.r,rgb.g,rgb.b,rgb.a)
+		end
 		local px,py,pz = v.Transform:GetWorldPosition()
 		local vx = px-x
 		local vy = py-y
@@ -144,7 +120,7 @@ local function Capture(inst)
 		else
 			totaltable = totaltable..", ocean = false"
 		end
-		if (TheWorld.Map:GetTileAtPoint(px,py,pz) and not no_tiles) or (v.prefab == "um_dynlayout_tileflag" and TheWorld.Map:GetTileAtPoint(px,py,pz)) then
+		if (v.prefab == "umdc_tileflag" and TheWorld.Map:GetTileAtPoint(px,py,pz)) then
 			totaltable = totaltable..", tile = "..tostring(TheWorld.Map:GetTileAtPoint(px,py,pz))	--flags always get tiles, regardless of tile setting.
 		end
 		if v.components.health ~= nil then
@@ -172,7 +148,7 @@ local function Capture(inst)
 		end
 		totaltable = totaltable.."},"
 	end
-	totaltable = totaltable.."},\n"
+	totaltable = totaltable.."},\n	},\n"
 	--print("captured prefabs:", totaltable)
 
 	local file_name = TUNING.DSTU.MODROOT.."scripts/umss_tables.lua"
@@ -189,7 +165,7 @@ local function Capture(inst)
 		file = io.open(file_name, "w")
 		local data = file:write(totaltable)
 		file:close()
-		TheNet:Announce("Successfully captured! Saved as returnedTable"..totaltable_number.." in "..file_name.."\nWe suggest renaming it!")--TODO: AUTO ADD UMSS PREFAB STUFF TOO!
+		TheNet:Announce("Successfully captured!")--TODO: AUTO ADD UMSS PREFAB STUFF TOO!
 		inst:Remove()
 		return data
 	else
@@ -211,20 +187,27 @@ local function fn()
 	inst:AddTag("structure")
 	inst:AddTag("chest")
 	inst:AddTag("DEVBEHOLDER")
-		
+
     inst.AnimState:SetBank("chest")
     inst.AnimState:SetBuild("treasure_chest")
     inst.AnimState:PlayAnimation("closed")
 
-
+	inst:AddTag("_writeable")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
+	inst.range = 0
+
+	inst:AddTag("_writeable")
+
+	inst:AddComponent("inspectable")
+    inst:AddComponent("writeable")
+
     inst:AddComponent("container")
-    inst.components.container:WidgetSetup("uncompromising_devcapture")
+    inst.components.container:WidgetSetup("um_devcapture")
     inst.components.container.onopenfn = onopen
     inst.components.container.onclosefn = onclose
     inst.components.container.skipclosesnd = true
@@ -244,13 +227,18 @@ local function fn()
     inst.components.channelable.use_channel_longaction_noloop = true
     --inst.components.channelable.skip_state_stopchanneling = true
     inst.components.channelable.skip_state_channeling = true
-	
+
+
 	inst:DoTaskInTime(0,function(inst)
 		local x,y,z = inst.Transform:GetWorldPosition()
 		local tile_x, tile_y, tile_z = TheWorld.Map:GetTileCenterPoint(x, 0, z)
 		inst.Transform:SetPosition(tile_x,tile_y,tile_z)
 	end)
-	
+
+	inst:DoPeriodicTask(1, CheckValidEntities, 0)
+    inst:ListenForEvent("itemlose", CheckValidEntities)
+    inst:ListenForEvent("itemget", CheckValidEntities)
+
     return inst
 end
 
@@ -280,11 +268,11 @@ local function TileFlag(inst)
 	inst.AnimState:SetMultColour(math.random(5, 10)/10,math.random(5, 10)/10,0,1)
 
 	inst:AddTag("DYNLAYOUT_FLAG")
-	
+
 	--MakeInventoryPhysics(inst)
 
     inst.entity:SetPristine()
-	
+
     if not TheWorld.ismastersim then
         return inst
     end
@@ -300,46 +288,6 @@ local function TileFlag(inst)
 	return inst
 end
 
-
-local function Helper(inst)
-    inst = CreateEntity()
-
-    --[[Non-networked entity]]
-    inst.entity:SetCanSleep(false)
-    inst.persists = false
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-	inst.entity:AddNetwork()
-
-    --inst:AddTag("CLASSIFIED")
-    inst:AddTag("NOCLICK")
-    --inst:AddTag("placer")
-	inst:AddTag("DYNLAYOUT_INDICATOR")
-
-    inst.Transform:SetScale(1, 1, 1)--at 1, it has a diameter of 1.5 tiles.
-
-    inst.AnimState:SetBank("firefighter_placement")
-    inst.AnimState:SetBuild("firefighter_placement")
-    inst.AnimState:PlayAnimation("idle")
-    inst.AnimState:SetLightOverride(1)
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    inst.AnimState:SetLayer(LAYER_BACKGROUND)
-    inst.AnimState:SetSortOrder(1)
-    inst.AnimState:SetAddColour(0, .2, .5, 0)
-
-    --inst.entity:SetParent(inst.entity)
-
-    return inst
-end
-
---[[
-local function placer_postinit_fn(inst)
-	inst.entity
-end]]
-
-return Prefab("um_dynlayout_devcapture", fn), --Version 1.0
-	Prefab("um_dynlayout_tileflag",TileFlag),
-	Prefab("um_dynlayout_range", Helper)
-
+return Prefab("um_devcapture", fn), --Version 1.0
+	Prefab("umdc_tileflag",TileFlag)
 
