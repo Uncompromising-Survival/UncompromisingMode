@@ -1,6 +1,7 @@
 local assets =
 {
-    Asset("ANIM", "anim/charcoal.zip"),
+    Asset("ANIM", "anim/sludge_oil.zip"),
+	 Asset("ANIM", "anim/sludge.zip"),
 }
 
 local function ontaken(inst, taker)
@@ -47,8 +48,8 @@ local function sludge_fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("charcoal")
-    inst.AnimState:SetBuild("charcoal")
+    inst.AnimState:SetBank("sludge")
+    inst.AnimState:SetBuild("sludge")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("allow_action_on_impassable")
@@ -106,8 +107,9 @@ local function oil_fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("bottle")
-    inst.AnimState:SetBuild("bottle")
+
+    inst.AnimState:SetBank("sludge_oil")
+    inst.AnimState:SetBuild("sludge_oil")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "med", 0.05, 0.6)
@@ -140,7 +142,7 @@ local function oil_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge.xml"
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_oil.xml"
     inst.components.inventoryitem.onactiveitemfn = onactiveitem
 
     return inst

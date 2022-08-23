@@ -1,4 +1,4 @@
-local cannonball_assets = {Asset("ANIM", "anim/cannonball_rock.zip")}
+local cannonball_assets = {Asset("ANIM", "anim/cannonball_sludge.zip")}
 
 -- TODO: Move these to tuning.lua!
 local CANNONBALL_RADIUS = TUNING.CANNONBALL_RADIUS
@@ -274,8 +274,8 @@ local function cannonball_item_fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("cannonball_rock")
-    inst.AnimState:SetBuild("cannonball_rock")
+    inst.AnimState:SetBank("cannonball_sludge")
+    inst.AnimState:SetBuild("cannonball_sludge")
     inst.AnimState:PlayAnimation("idle")
 
     inst.entity:AddTag("boatcannon_ammo")
@@ -289,6 +289,7 @@ local function cannonball_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge.xml"
     inst.components.inventoryitem:SetSinks(true)
 
     inst:AddComponent("stackable")

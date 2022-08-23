@@ -1,6 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/pigskin.zip"),
+    Asset("ANIM", "anim/rockjawleather.zip"),
 }
 
 local function fn()
@@ -12,8 +12,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("pigskin")
-    inst.AnimState:SetBuild("pigskin")
+    inst.AnimState:SetBank("rockjawleather")
+    inst.AnimState:SetBuild("rockjawleather")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "med", nil, 0.77)

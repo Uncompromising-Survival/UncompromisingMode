@@ -137,7 +137,7 @@ configuration_options =
 	{
 		name = "vetcurse",
 		label = "Veteran's Curse",
-		hover = "Veteran's curse is an optional dificulty mode, which increases risk & reward.",
+		hover = "Veteran's curse is an optional difficulty  mode, which increases risk & reward.",
 		options =
 		{
 			{description = "Default", data = "default"},

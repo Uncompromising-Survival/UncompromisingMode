@@ -33,6 +33,7 @@ local SavannaTable = {
 	sos = 1,
 	moxTable = 0.25,
 	deadBodies = 2,
+	grassTrap = 0.1
 	
 }
 local GeneralTable = {
@@ -46,15 +47,15 @@ local function AddToTheWorld(inst,umss)
 	table.insert(TheWorld.umsetpieces,umss)
 end
 
-local function FinalizeSpavvn(inst,umss,x,y,z)
-	local spavvner = SpawnPrefab("umss_general")
-	spavvner.DefineTable(spavvner,umss)
-	spavvner.Transform:SetPosition(x,y,z)
+local function FinalizeSpawn(inst,umss,x,y,z)
+	local spawner = SpawnPrefab("umss_general")
+	spawner.DefineTable(spawner,umss)
+	spawner.Transform:SetPosition(x,y,z)
 	AddToTheWorld(inst,umss)
 	inst:Remove()
 end
 
-local function SpavvnBiomeUMSS(inst)
+local function SpawnBiomeUMSS(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local tile = TheWorld.Map:GetTileAtPoint(x, y, z)
 	local umss
@@ -113,10 +114,10 @@ local function SpavvnBiomeUMSS(inst)
 		end
 	end
 	if not inst.fail then
-		FinalizeSpavvn(inst,umss,x,y,z)
+		FinalizeSpawn(inst,umss,x,y,z)
 	else
 		inst.fail = nil
-		SpavvnBiomeUMSS(inst)
+		SpawnBiomeUMSS(inst)
 	end
 end
 
@@ -139,10 +140,9 @@ local function makefn()
 	inst.RockyTable = RockyTable
 	inst.SavannaTable = SavannaTable
 	inst.GeneralTable = GeneralTable
-	
-	
+
 	inst.count = 0
-	inst:DoTaskInTime(0,SpavvnBiomeUMSS)
+	inst:DoTaskInTime(0,SpawnBiomeUMSS)
     return inst
 end
 

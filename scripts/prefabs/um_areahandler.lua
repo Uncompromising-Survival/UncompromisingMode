@@ -1,7 +1,7 @@
 --for emptying the area around.
 local function ClearSeastacks(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local things = TheSim:FindEntities(x,y,z, 80, nil, {"sirenpoint", "dynlayout_utw_inactivebiome", "dynlayout_utw_activebiome"}, {"seastack"})
+	local things = TheSim:FindEntities(x,y,z, 80, nil, {"sirenpoint", "umss_utw_inactivebiome", "umss_utw_activebiome"}, {"seastack"})
 	for k, v in ipairs(things) do
 		v:Remove()
 	end
@@ -10,7 +10,7 @@ end
 --for when an active biome spawns
 local function ClearInactiveBiome(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local inactive_biome = TheSim:FindEntities(x,y,z, 80, {"dynlayout_utw_inactivebiome"})
+	local inactive_biome = TheSim:FindEntities(x,y,z, 80, {"umss_utw_inactivebiome"})
 	for k, v in ipairs(inactive_biome) do
 		v:Remove()
 	end
@@ -19,7 +19,7 @@ end
 --for clearing an active biome
 local function ClearActiveBiome(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local inactive_biome = TheSim:FindEntities(x,y,z, 80, {"dynlayout_utw_activebiome"})
+	local inactive_biome = TheSim:FindEntities(x,y,z, 80, {"umss_utw_activebiome"})
 	for k, v in ipairs(inactive_biome) do
 		v:Remove()
 	end

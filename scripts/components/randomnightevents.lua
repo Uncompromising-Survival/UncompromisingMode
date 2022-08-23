@@ -1971,7 +1971,7 @@ local function CheckPlayers(forced)
 
 		local days_survived = player.components.age ~= nil and player.components.age:GetAgeInDays()
 
-		if self.rnequeued or forced or TheWorld.state.isfullmoon or TheWorld.state.isnewmoon then
+		if self.rnequeued or forced then
 			--TheNet:Announce("commencingrne")
 			if inst.punish and inst.punish > 0 then
 				inst.punish = inst.punish - 0.3 -- <-- This changes hovv many rnes it takes to cool dovvn the punishment 
@@ -2143,7 +2143,8 @@ local function DoRNEChance(inst)
 		--TheNet:Announce("DIDRNECHANCE")
 		local playerchancescaling = TUNING.DSTU.RNE_CHANCE
 		local days_survived = player.components.age ~= nil and player.components.age:GetAgeInDays()
-		if --[[TheWorld.state.cycles]]days_survived >= 5 and math.random() >= playerchancescaling or (days_survived >= 5 and TheWorld.state.isfullmoon) or (days_survived >= 5 and TheWorld.state.isnewmoon) then
+		--TheNet:Announce(days_survived)
+		if --[[TheWorld.state.cycles]]days_survived >= 5 and math.random() >= playerchancescaling then
 			self.rnequeued = true
 			self.playertarget = player
 		end

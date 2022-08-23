@@ -8,6 +8,7 @@ PreloadAssets = {
 ReloadPreloadAssets()
 --Start the game mode
 SignFiles = require("uncompromising_writeables")
+
 modimport("init/init_gamemodes/init_uncompromising_mode")
 
 if GetModConfigData("funny rat") then
@@ -29,6 +30,7 @@ GLOBAL.MATERIALS.SLUDGE = "sludge"
 GLOBAL.MATERIALS.COPPER = "copper"
 
 RemapSoundEvent( "dontstarve/together_FE/DST_theme_portaled", "UMMusic/music/uncomp_char_select" )
+RemapSoundEvent( "dontstarve/music/music_FE", "UMMusic/music/uncomp_main_menu" )
 
 AddShardModRPCHandler("UncompromisingSurvival", "Hayfever_Stop", function(...)
 	--print("RPC Hayfever_Stop")

@@ -61,7 +61,10 @@ end
 
 local function UncompromisingSpawnGOOOOO(inst, data)
     local x, y, z = inst.Transform:GetWorldPosition()
-
+	--attempted fix for worldgen/load crash, maybe it's 
+	if x == nil or y == nil or z == nil then--Full check, who knows what might be nil.
+		return
+	end
     if inst.tile_centered then
         local tile_x, tile_y, tile_z = TheWorld.Map:GetTileCenterPoint(x, 0, z)
         inst.Transform:SetPosition(tile_x, tile_y, tile_z)
@@ -71,12 +74,15 @@ local function UncompromisingSpawnGOOOOO(inst, data)
     local rotx = 1
     local rotz = 1
 
-    if inst.rotatable then -- This rotates the vvhole 
+    if inst.rotatable then -- This rotates the whole 
         if math.random() > 0.5 then rotx = -1 end
         if math.random() > 0.5 then rotz = -1 end
     end
     -- TheNet:Announce("code ran") --For Troubleshooting
     for i, v in ipairs(data) do
+		if x + v.x * rotx == nil or z + v.z * rotz == nil then
+			return
+		end
         -- TheNet:Announce(i) --For Troubleshooting
         -- TheNet:Announce("Prefab: "..v.prefab) --For Troubleshooting
         if v.prefab ~= "umdc_tileflag" and v.prefab ~= "seeds" --[[hecking birds man]]then
@@ -85,11 +91,11 @@ local function UncompromisingSpawnGOOOOO(inst, data)
             -- TheNet:Announce(tostring(inst.spawninwater_prefab))
 			if prefab then
             -- for area handlers, so they can find all things created by a especific SS.
-				if inst.tags then
-					for k, v in ipairs(inst.tags) do
-						prefab:AddTag("dynlayout_" .. v)
+				if inst.umss_tags then
+					for k, v in ipairs(inst.umss_tags) do
+						prefab:AddTag("umss_" .. v)
 					end
-					prefab.dynlayout_tags = inst.tags
+					prefab.umss_tags = inst.umss_tags
 				end
 
 				if inst.spawninwater_prefab then
@@ -105,7 +111,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
 				end
 
 				if v.diseased then
-					-- If vve ever add back acid rain I guess vve could have this, vvhatever
+					-- If we ever add back acid rain I guess we could have this, whatever
 				end
 				if v.barren and prefab.components.pickable then
 					prefab.components.pickable:MakeBarren()
@@ -172,7 +178,7 @@ local function UncompromisingSpawnGOOOOO(inst, data)
 	inst:Remove()
 end
 
-local function findTable(stringTable) --VVe randomly vveighted a table string name, novv find it in umss_tables
+local function findTable(stringTable) --We randomly weighted a table string name, now find it in umss_tables
 	for i,v in pairs(umss_tables) do
 		if v.name == stringTable then
 			return v
@@ -190,7 +196,7 @@ local function DefineTable(inst,data)
 		inst.spawninwater_tile = funtable.spawninwater_tile == nil and false or funtable.spawninwater_tile
 		inst.spawninwater_prefab = funtable.spawninwater_prefab == nil and false or funtable.spawninwater_prefab
 		inst.SpawnFn = funtable.spawnfn
-		inst.tags = funtable.tags
+		inst.umss_tags = funtable.tags
 	end
 end
 
@@ -200,7 +206,7 @@ local function onload(inst,data)
 	end
 end
 
-local function ReplaceMyself(inst) --You failed to find a table, so replacing myself so you can vvrite again
+local function ReplaceMyself(inst) --You failed to find a table, so replacing myself so you can write again
 	SpawnPrefab("umss_general").Transform:SetPosition(inst.Transform:GetWorldPosition())
 	inst:DoTaskInTime(1,function(inst) inst:Remove() end)
 end
@@ -225,7 +231,7 @@ local function TryForce(inst)
 				ReplaceMyself(inst)
 			end
 		else
-			inst:DoTaskInTime(0,function(inst) inst:DoTaskInTime(1,UncompromisingSpawnGOOOOO(inst,inst.spawnTable)) end) --Need to give time for the UI to close, and for some reason the first dotaskintime doesn't vvork
+			inst:DoTaskInTime(0,function(inst) inst:DoTaskInTime(1,UncompromisingSpawnGOOOOO(inst,inst.spawnTable)) end) --Need to give time for the UI to close, and for some reason the first dotaskintime doesn't work
 		end
 	end
 end

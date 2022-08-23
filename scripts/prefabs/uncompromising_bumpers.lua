@@ -91,7 +91,7 @@ local function CanDeployAtBoatEdge(inst, pt, mouseover, deployer, rot)
         -- If we're not standing on a boat, try to get the closest boat position via FindEntities()
         if boat == nil or not boat:HasTag("boat") then
             local BOAT_MUST_TAGS = { "boat" }
-            local boats = TheSim:FindEntities(pt.x, 0, pt.z, TUNING.BOAT.RADIUS, BOAT_MUST_TAGS)
+            local boats = TheSim:FindEntities(pt.x, 0, pt.z, TUNING.MAX_WALKABLE_PLATFORM_RADIUS, BOAT_MUST_TAGS)
             if #boats <= 0 then
                 return false
             end
@@ -119,7 +119,7 @@ function MakeBumperType(data)
     -- Default is kelp, so no need to load a build anim for it
     local buildname = data.name ~= nil and data.name ~= "kelp" and "boat_bumper_" .. data.name or "boat_bumper"
     if buildname ~= "boat_bumper" then
-        --table.insert(assets, Asset("ANIM", "anim/" .. buildname .. ".zip"))
+        table.insert(assets, Asset("ANIM", "anim/" .. buildname .. ".zip"))
     end
 
     local prefabs =
@@ -127,25 +127,25 @@ function MakeBumperType(data)
         "collapse_small",
     }
 
-    local function onbuilt(inst, data) -- builder, pos, rot, deployable
-        if data == nil then
+    local function onbuilt(inst, builddata) -- builder, pos, rot, deployable
+        if builddata == nil then
             return
         end
 
         inst.sg:GoToState("place")
-        local boat = TheWorld.Map:GetPlatformAtPoint(data.pos.x, data.pos.z)
+        local boat = TheWorld.Map:GetPlatformAtPoint(builddata.pos.x, builddata.pos.z)
 
         -- If clicked point isn't on a boat, try to get the closest boat via FindEntities()
         if boat == nil then
             local BOAT_MUST_TAGS = { "boat" }
-            local boats = TheSim:FindEntities(data.pos.x, 0, data.pos.z, TUNING.BOAT.RADIUS, BOAT_MUST_TAGS)
+            local boats = TheSim:FindEntities(builddata.pos.x, 0, builddata.pos.z, TUNING.BOAT.RADIUS, BOAT_MUST_TAGS)
             if boats ~= nil then
                 boat = GetClosest(inst, boats)
             end
         end
 
         if boat ~= nil then
-            SnapToBoatEdge(inst, boat, data.pos)
+            SnapToBoatEdge(inst, boat, builddata.pos)
             boat.components.boatring:AddBumper(inst)
         end
 
@@ -214,7 +214,7 @@ function MakeBumperType(data)
         inst:AddTag("walkableperipheral")
 
         inst.AnimState:SetBank("boat_bumper")
-        inst.AnimState:SetBuild(--[[buildname]]"kelp")
+        inst.AnimState:SetBuild(buildname)
         inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
         inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
         inst.AnimState:SetSortOrder(ANIM_SORT_ORDER.OCEAN_BOAT_BUMPERS)
@@ -304,10 +304,9 @@ local boatbumperdata =
 {
     { name = "sludge",     material = MATERIALS.SLUDGE,   tags = { "sludge" },      loot = "sludge", maxloots = 2, maxhealth = TUNING.BOAT.BUMPERS.KELP.HEALTH*3--[[using existing tuning values so other mods can alter it normally.]],     flammable = true, buildsound = "dontstarve/common/place_structure_wood"  },
     --Upgrade to the shell bumper
-    { name = "copper",     material = MATERIALS.COPPER,   tags = { "copper" },      loot = "copper_pipe", maxloots = 2, maxhealth = TUNING.BOAT.BUMPERS.SHELL.HEALTH*3--[[using existing tuning values so other mods can alter it normally.]],     flammable = false, buildsound = "dontstarve/common/place_structure_wood"  },
+    { name = "copper",     material = MATERIALS.COPPER,   tags = { "copper" },      loot = "copper_pipe", maxloots = 2, maxhealth = TUNING.BOAT.BUMPERS.SHELL.HEALTH*6--[[using existing tuning values so other mods can alter it normally.]],     flammable = false, buildsound = "dontstarve/common/place_structure_wood"  },
     --Harder-to-craft "super" bumper.
 }
-
 for i, v in ipairs(boatbumperdata) do
     local boatbumper, item, placer = MakeBumperType(v)
     table.insert(boatbumperprefabs, boatbumper)
@@ -316,4 +315,3 @@ for i, v in ipairs(boatbumperdata) do
 end
 
 return unpack(boatbumperprefabs)
-

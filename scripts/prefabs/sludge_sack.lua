@@ -1,12 +1,12 @@
 local assets =
 {
     Asset("ANIM", "anim/piggyback.zip"),
-    Asset("ANIM", "anim/swap_piggyback.zip"),
+    Asset("ANIM", "anim/swap_sludge_sack.zip"),
     Asset("ANIM", "anim/ui_piggyback_2x6.zip"),
 }
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_body", "swap_piggyback", "swap_body")
+    owner.AnimState:OverrideSymbol("swap_body", "swap_sludge_sack", "swap_body")
     inst.components.container:Open(owner)
 end
 
@@ -49,8 +49,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("piggyback")
-    inst.AnimState:SetBuild("swap_piggyback")
+    inst.AnimState:SetBank("swap_sludge_sack")
+    inst.AnimState:SetBuild("swap_sludge_sack")
     inst.AnimState:PlayAnimation("anim")
 
     inst.MiniMapEntity:SetIcon("piggyback.png")

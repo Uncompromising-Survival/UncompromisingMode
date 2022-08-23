@@ -1,5 +1,5 @@
 return {
-    --Characters
+	--Characters
 	"winky",
 	"winky_none",
 	--"wixie",
@@ -218,12 +218,12 @@ return {
 	"deerclops_barrier",
 	"roship_projectile",
 	"electric_ring",
-	
+
 	"cave_entrance_sunkdecid",
 	"cave_exit_sunkdecid",
 	"cave_entrance_ratacombs",
 	"cave_exit_ratacombs",
-	
+
 	"um_pawn",
 	"pawn_spawn",
 	"pigking_pigtorch",
@@ -255,7 +255,7 @@ return {
 	--"uncompromising_alterguardianspawner",
 	"driftwoodfishingrod",
 	"nightlightfuel",
-	
+
 	"voorhams",
 	"ratking",
 	"ratgas",
@@ -270,7 +270,7 @@ return {
 	"ratacombs_cleanair",
 	"ratacombs_totem",
 	"ratgashole",
-	
+
 	"rneearthquake",
 	"shadowvortex",
 	"nervoustick",
@@ -278,11 +278,11 @@ return {
 	"rneshadows",
 	"fuelseeker",
 	"rnemushroombomb",
-	
+
 	"wackymask",
 	"tiddlestranger_rne",
 	"rne_goodiebag",
-	
+
 	"backupcatcoonden",
 	--"moon_deerclops",
 	"um_books",
@@ -292,7 +292,7 @@ return {
 	"shockstundebuffimmunity",
 	"pied_rat",
 	"pied_piper_flute",
-	
+
 	"eyeofterror_laser",
 	"eyeofterror_extras",
 	"oculet",
@@ -321,7 +321,7 @@ return {
 	"driftwood_waterlogged",
 	"kelpstack",
 	"siren_throne",
-	
+
 	"uncompromising_harpoon",
 	"uncompromising_axepoon",
 	"uncompromising_magharpoon",
@@ -329,7 +329,7 @@ return {
 	"uncompromising_fishingnetvisualizer",
 	"um_windturbine",
 	"um_beegun",
-	
+
 	"armor_reed_um",
 	"armor_sharksuit_um",
 	"rockjawleather",
@@ -340,10 +340,10 @@ return {
 	"eyeofterror_mini_projectile_ally",
 	"stuffed_peeper_poppers",
 	"um_deviled_eggs",
-	
+
 	"figgypet",
 	"portableboat",
-	
+
 	"siren_bird_nest",
 	"um_scorpionhole",
 	"um_scorpionhole_organizer",
@@ -364,6 +364,7 @@ return {
 	"phantom",
 	"um_specter_amulet",
 	"um_walls",
+	"ocupus_items",
 	"ums_biometable",
 	"umss_general",
 }

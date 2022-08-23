@@ -274,7 +274,7 @@ local function fn()
     --inst:AddTag("shadowcreature")
     --inst:AddTag("monster")
     --inst:AddTag("hostile")
-    --inst:AddTag("shadow")
+    inst:AddTag("shadow")--why was the shadow tag removed? re-added for BD compat.
     inst:AddTag("notraptrigger")
     inst:AddTag("shadowteleporter")
     --inst:AddTag("notarget")

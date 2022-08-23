@@ -6,6 +6,17 @@ local Layouts = GLOBAL.require("map/layouts").Layouts
 local StaticLayout = GLOBAL.require("map/static_layout")
 local STRINGS = GLOBAL.STRINGS
 
+------
+local function TestForIA()
+    if (TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))) or GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+        print("TestForIA: is IA world!")
+        return true
+    else
+        print("TestForIA: not IA world!")
+        return false
+    end
+end
+
 local GROUND_OCEAN_COLOR = { -- Color for the main island ground tiles
     primary_color = { 0, 0, 0, 25 },
     secondary_color = { 0, 20, 33, 0 },
@@ -38,7 +49,7 @@ AddTile(
     { --turf_def 6
         name = "hoodedmoss",
         anim = "hoodedmoss",
-        bank_build = "hfturf"
+        bank_build = "turf_archives"
     }
 )
 
@@ -67,7 +78,7 @@ AddTile(
     {
         name = "ancienthoodedturf",
         anim = "ancienthoodedturf",
-        bank_build = "hfturf"
+        bank_build = "turf_archives"
     }
 )
 
@@ -76,18 +87,6 @@ ChangeTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES
 
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
-
-------
-
-local function TestForIA()
-    if (TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))) or GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
-        print("TestForIA: is IA world!")
-        return true
-    else
-        print("TestForIA: not IA world!")
-        return false
-    end
-end
 
 if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
     -- <<Cave Update WIP: Toggle at your own risk you buffoons! (That means you atoba, don't leak it please eh?)>>

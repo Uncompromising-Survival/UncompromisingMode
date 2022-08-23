@@ -183,6 +183,7 @@ local inventoryitems =
 	"sludge",
 	"sludge_cork",
 	"sludge_sack",
+	"cannonball_sludge",
 	"boatpatch_sludge",
 	"uncompromising_harpoon_heavy",
 	"rockjawleather",
@@ -196,6 +197,10 @@ local inventoryitems =
 	"winona_upgradekit_electrical",
 	"portableboat_item",
 	"critter_figgy_builder",
+	"ocupus_tentacle",
+	"ocupus_tentacle_eye",
+	"ocupus_tentacle_cooked",
+	"ocupus_beak",
 }
 	
 for k, v in ipairs(inventoryitems) do 
@@ -209,6 +214,7 @@ Assets = {
 	Asset( "IMAGE", "levels/textures/mini_noise_jungle.tex" ),
 	Asset( "IMAGE", "levels/tiles/jungle.tex" ),
 	Asset( "FILE", "levels/tiles/jungle.xml" ),
+	Asset("ANIM", "anim/hfturf.zip"),
 	Asset("ANIM", "anim/swturf.zip"),
 	--Asset("ATLAS", "images/inventoryimages/turf_jungle.xml"),
 	--Asset("IMAGE", "images/inventoryimages/turf_jungle.tex"),
@@ -239,6 +245,9 @@ Assets = {
     Asset( "IMAGE", "images/avatars/avatar_ghost_winky.tex" ),
     Asset( "ATLAS", "images/avatars/avatar_ghost_winky.xml" ),
 	
+    Asset( "IMAGE", "images/avatars/self_inspect_winky.tex" ),
+    Asset( "ATLAS", "images/avatars/self_inspect_winky.xml" ),
+	
     Asset( "IMAGE", "images/names_gold_winky.tex" ),
     Asset( "ATLAS", "images/names_gold_winky.xml" ),
 	
@@ -248,12 +257,6 @@ Assets = {
 	Asset("SOUNDPACKAGE", "sound/winky.fev"),
 	Asset("SOUND", "sound/winky.fsb"),
 	
-	--
-
-
-
-
-
     -- Livingtree root attack custom art by @Advent (modded from poison birchnut roots)
     Asset("ANIM", "anim/tree_leaf_spike_lt.zip"),
     Asset("ANIM", "anim/frog_yellow_build.zip"),
@@ -717,14 +720,20 @@ Assets = {
 	Asset("ANIM", "anim/um_beegun_ball.zip"),
 	Asset("ATLAS", "images/inventoryimages/um_beegun.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_beegun.tex"),
+	Asset("ANIM", "anim/boat_bumper_sludge.zip"),
+	Asset("ANIM", "anim/cannonball_sludge.zip"),
 	
-	
+
 	Asset("ATLAS", "images/inventoryimages/sludge.xml"),
 	Asset("IMAGE", "images/inventoryimages/sludge.tex"),
+	Asset("ATLAS", "images/inventoryimages/sludge_oil.xml"),
+	Asset("IMAGE", "images/inventoryimages/sludge_oil.tex"),
 	Asset("ATLAS", "images/inventoryimages/sludge_sack.xml"),
 	Asset("IMAGE", "images/inventoryimages/sludge_sack.tex"),
 	Asset("ATLAS", "images/inventoryimages/boatpatch_sludge.xml"),
 	Asset("IMAGE", "images/inventoryimages/boatpatch_sludge.tex"),
+	Asset("ATLAS", "images/inventoryimages/cannonball_sludge.xml"),
+	Asset("IMAGE", "images/inventoryimages/cannonball_sludge.tex"),
 	Asset("ATLAS", "images/inventoryimages/uncompromising_harpoon_heavy.xml"),
 	Asset("IMAGE", "images/inventoryimages/uncompromising_harpoon_heavy.tex"),
 	Asset("ATLAS", "images/inventoryimages/rockjawleather.xml"),
@@ -745,6 +754,14 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/winona_toolbox.tex"),
 	Asset("ATLAS", "images/inventoryimages/winona_upgradekit_electrical.xml"),
 	Asset("IMAGE", "images/inventoryimages/winona_upgradekit_electrical.tex"),
+	Asset("ATLAS", "images/inventoryimages/ocupus_tentacle.xml"),
+	Asset("IMAGE", "images/inventoryimages/ocupus_tentacle.tex"),
+	Asset("ATLAS", "images/inventoryimages/ocupus_tentacle_cooked.xml"),
+	Asset("IMAGE", "images/inventoryimages/ocupus_tentacle_cooked.tex"),
+	Asset("ATLAS", "images/inventoryimages/ocupus_tentacle_eye.xml"),
+	Asset("IMAGE", "images/inventoryimages/ocupus_tentacle_eye.tex"),
+	Asset("ATLAS", "images/inventoryimages/ocupus_beak.xml"),
+	Asset("IMAGE", "images/inventoryimages/ocupus_beak.tex"),
 	
 	Asset("ANIM", "anim/figgy_newton.zip"),
 	Asset("ATLAS", "images/inventoryimages/critter_figgy_builder.xml"),

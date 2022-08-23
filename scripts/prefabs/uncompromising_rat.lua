@@ -1591,6 +1591,7 @@ local function fn_winkyburrow()
 	inst:AddTag("herd")
     inst:AddTag("trader")
 	inst:AddTag("chest")
+	inst:AddTag("irreplaceable")
 	
     inst.MiniMapEntity:SetIcon("uncompromising_ratburrow.tex")
 	
@@ -1715,6 +1716,8 @@ local function fn_winkyburrow_master()
 	inst.entity:AddNetwork()
 	
 	inst:AddTag("chest")
+	inst:AddTag("irreplaceable")
+	
 	inst.entity:SetCanSleep(false)
 	
 	inst.entity:SetPristine()

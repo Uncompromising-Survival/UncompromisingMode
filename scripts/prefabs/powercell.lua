@@ -1,6 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/pigskin.zip"),
+    Asset("ANIM", "anim/winona_powercell.zip"),
 }
 
 local function discharge(inst)
@@ -61,8 +61,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("pigskin")
-    inst.AnimState:SetBuild("pigskin")
+    inst.AnimState:SetBank("winona_powercell")
+    inst.AnimState:SetBuild("winona_powercell")
     inst.AnimState:PlayAnimation("idle")
 
 
@@ -87,7 +87,8 @@ local function fn()
     inst.components.burnable:SetOnBurntFn(OnBurnt)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.sinks = true--thow batteries in the ocean wOOOOOOOO
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/powercell.xml"
+    inst.components.inventoryitem.sinks = true--throw batteries in the ocean wOOOOOOOO
 
     inst:AddComponent("battery")
     inst.components.battery.onused = discharge

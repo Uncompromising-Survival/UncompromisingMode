@@ -143,7 +143,7 @@ local function Capture(inst)
 		if v.components.scenariorunner ~= nil and v.components.scenariorunner.scriptname ~= nil then
 			totaltable = totaltable..", scenario = "..tostring(v.components.scenariorunner.scriptname)
 		end
-		if rotation then
+		if v:HasTag("fence") or v.prefab == "fast_farmplot" or v.prefab == "slow_farmplot" then
 			totaltable = totaltable..", rotation = "..tostring(v.Transform:GetRotation())
 		end
 		totaltable = totaltable.."},"

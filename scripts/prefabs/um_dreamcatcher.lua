@@ -3,6 +3,7 @@ require "prefabutil"
 local assets =
 {
     Asset("ANIM", "anim/um_dreamcatcher.zip"),
+	Asset("ANIM", "anim/brineish_moss.zip"),
 }
 local damage_time = 20*8*60
 
@@ -338,8 +339,8 @@ local function fnmoss(inst)
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("cutgrass")
-    inst.AnimState:SetBuild("cutgrass")
+    inst.AnimState:SetBank("brineish_moss")
+    inst.AnimState:SetBuild("brineish_moss")
     inst.AnimState:PlayAnimation("idle")
 
 
@@ -365,6 +366,7 @@ local function fnmoss(inst)
     inst:AddComponent("inspectable")
 	inst:AddComponent("tradable")
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/brineish_moss.xml"
 
     return inst
 end

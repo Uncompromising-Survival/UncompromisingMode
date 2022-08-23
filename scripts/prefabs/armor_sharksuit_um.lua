@@ -1,6 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/armor_wood.zip"),
+    Asset("ANIM", "anim/armor_sharksuit_um.zip"),
 }
 
 local function OnBlocked(owner)
@@ -13,7 +13,7 @@ local function onequip(inst, owner)
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
         owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, "swap_body", inst.GUID, "armor_wood")
     else
-		owner.AnimState:OverrideSymbol("swap_body", "armor_wood", "swap_body")
+		owner.AnimState:OverrideSymbol("swap_body", "armor_sharksuit_um", "swap_body")
     end
 
     inst:ListenForEvent("blocked", OnBlocked, owner)
@@ -38,8 +38,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("armor_wood")
-    inst.AnimState:SetBuild("armor_wood")
+    inst.AnimState:SetBank("armor_sharksuit_um")
+    inst.AnimState:SetBuild("armor_sharksuit_um")
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("wood")

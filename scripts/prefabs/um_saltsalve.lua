@@ -1,11 +1,11 @@
 local assets =
 {
-    Asset("ANIM", "anim/spider_gland_salve.zip"),
+    Asset("ANIM", "anim/brine_balm.zip"),
 }
 
 local function OnUse(inst, target)
 	if target.components.debuffable ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
-		target.configheal = 60--80
+		target.configheal = 60
 		target.components.debuffable:AddDebuff("confighealbuff", "confighealbuff")
 	end
 end
@@ -19,8 +19,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("spider_gland_salve")
-    inst.AnimState:SetBuild("spider_gland_salve")
+    inst.AnimState:SetBank("brine_balm")
+    inst.AnimState:SetBuild("brine_balm")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "small", 0.05, 0.95)
