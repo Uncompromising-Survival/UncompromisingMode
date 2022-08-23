@@ -685,13 +685,14 @@ AddRecipe2(
 AllRecipes["hermitshop_chum"].ingredients = {Ingredient("messagebottleempty", 1)}
 AllRecipes["hermitshop_chum"].numtogive = 3
 
+--[[
 AddRecipe2(
     "hermitshop_oil",
     {Ingredient("messagebottleempty", 3)},
     TECH.HERMITCRABSHOP_FIVE,
     {nounlock = true, product = "diseasecurebomb", sg_state = "give"}
 )
-ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
 
 --pearlrusher
 CONSTRUCTION_PLANS["hermithouse_construction3"] = {

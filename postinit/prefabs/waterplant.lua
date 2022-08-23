@@ -115,8 +115,6 @@ end)
 --SPAWNER-------------------
 ----------------------------
 
-
-
 env.AddPrefabPostInit("waterplant_spawner_rough", function(inst)
     local _OnSave = inst.OnSave
     local _OnLoad = inst.OnLoad
@@ -145,6 +143,10 @@ env.AddPrefabPostInit("waterplant_spawner_rough", function(inst)
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
+
+    if inst.spawned_sludge then
+        return
+    end
 
     inst:DoTaskInTime(0, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
