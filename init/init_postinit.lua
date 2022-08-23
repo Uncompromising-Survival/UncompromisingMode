@@ -138,7 +138,7 @@ local prefab_post = {
 	"grassgekko",
 	"minotaur_drops",
 	"frog",
-	"waterplant_bomb",
+	"waterplant",
 	--"grassgator",
 	"alterguardian",
 	"seasonal_shoals",

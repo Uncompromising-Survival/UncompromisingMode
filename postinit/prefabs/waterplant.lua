@@ -1,7 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
+--PROJECTILES-------------------
+--------------------------------
 local BOMB_MUSTHAVE_TAGS = { "_combat" }
 
 local function do_bomb(inst, thrower, target, no_hit_tags, damage, break_boats)
@@ -109,5 +110,51 @@ if inst.components.complexprojectile ~= nil then
 	--what the hell is the inst.entity anyways?!
 
 	inst.projectileprefab = "waterplant_bomb"
+end)
 
+--SPAWNER-------------------
+----------------------------
+
+
+
+env.AddPrefabPostInit("waterplant_spawner_rough", function(inst)
+    local _OnSave = inst.OnSave
+    local _OnLoad = inst.OnLoad
+
+    local function OnSave(inst, data)
+        if data ~= nil then
+            if inst.spawned_sludge then
+                data.spawned_sludge = inst.spawned_sludge
+            end
+            if _OnSave ~= nil then
+                return _OnSave(inst, data)
+            end
+        end
+    end
+
+    local function OnLoad(inst, data)
+        if data ~= nil then
+            if data.spawned_sludge then
+                inst.spawned_sludge = data.spawned_sludge
+            end
+            if _OnLoad ~= nil then
+                return _OnLoad(inst, data)
+            end
+        end
+    end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
+
+    inst:DoTaskInTime(0, function(inst)
+        local x, y, z = inst.Transform:GetWorldPosition()
+        for i = 1, math.random(5, 8) do
+            local sx, sy, sz = x + GetRandomWithVariance(-15, 15), y, z + GetRandomWithVariance(-15, 15)
+            if TheWorld.Map:IsOceanAtPoint(sx, sy, sz, false) then
+                local stack = SpawnPrefab("sludgestack")
+                stack.Transform:SetPosition(sx, sy, sz)
+            end
+        end
+        inst.spawned_sludge = true
+    end)
 end)

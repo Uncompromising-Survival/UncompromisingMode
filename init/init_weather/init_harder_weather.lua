@@ -92,10 +92,9 @@ env.AddPrefabPostInit("forest", function(inst)
 		inst:AddComponent("mock_dragonflyspawner")
 	end
 
-	--dev has the true spawning mechanic of spawning/reverting on spring/summer respectively.
-	--beta has the 1-and-done spawning!
-	inst:WatchWorldState("isspring", GenerateBiomes)
-	inst:WatchWorldState("issummer", GenerateInactiveBiomes)
+	--halted biome spawning until UTW.
+	--inst:WatchWorldState("isspring", GenerateBiomes)
+	--inst:WatchWorldState("issummer", GenerateInactiveBiomes)
 
 	--inst:DoTaskInTime(TUNING.TOTAL_DAY_TIME/2, GenerateInactiveBiomes)
 
