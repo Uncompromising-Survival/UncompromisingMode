@@ -4,6 +4,10 @@ local writeables = require("writeables")
 
 local kinds = UpvalueHacker.GetUpvalue(writeables.makescreen, "kinds")
 
+if kinds == nil then
+    return
+end
+
 kinds["umss_general"] = {
     prompt = STRINGS.SIGNS.MENU.PROMPT,
     animbank = "ui_board_5x3",
