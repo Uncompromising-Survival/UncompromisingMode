@@ -116,7 +116,7 @@ local function fn()
 	if not inst.components.timer:TimerExists("erode") then
 		inst.components.timer:StartTimer("erode",8*60)
 	end
-	
+    inst:AddComponent("inspectable")
 	inst:ListenForEvent("timerdone",Erode)
 	
 	inst.onsave = OnSave

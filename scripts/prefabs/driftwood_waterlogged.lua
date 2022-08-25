@@ -215,7 +215,7 @@ local function fn(type_name, is_large)
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.CHOP)
 
-    MakeInventoryFloatable(inst, "med", 1, {1.1, 0.9, 1.1})
+    MakeInventoryFloatable(inst, "med", 0, {1.1, 0.9, 1.1})
     inst.components.floater.bob_percent = 0
 
     local land_time = (POPULATING and math.random()*5*FRAMES) or 0

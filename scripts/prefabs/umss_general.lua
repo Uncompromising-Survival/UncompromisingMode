@@ -187,9 +187,10 @@ local function DefineTable(inst,data)
 		inst.spawnTable = funtable.content
 		inst.rotatable = funtable.rotate == nil and false or funtable.rotate
 		inst.tile_centered = funtable.tile_centered == nil and false or funtable.tile_centered
-		inst.spawninwater_tile = funtable.spawninwater_prefab == nil and true or funtable.spawninwater_prefab
-		inst.spawninwater_prefab = funtable.spawninwater_tile == nil and true or funtable.spawninwater_tile
+		inst.spawninwater_tile = funtable.spawninwater_tile == nil and false or funtable.spawninwater_tile
+		inst.spawninwater_prefab = funtable.spawninwater_prefab == nil and false or funtable.spawninwater_prefab
 		inst.SpawnFn = funtable.spawnfn
+		inst.tags = funtable.tags
 	end
 end
 

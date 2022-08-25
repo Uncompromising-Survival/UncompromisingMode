@@ -123,7 +123,7 @@ local function Capture(inst)
 		if (v.prefab == "umdc_tileflag" and TheWorld.Map:GetTileAtPoint(px,py,pz)) then
 			totaltable = totaltable..", tile = "..tostring(TheWorld.Map:GetTileAtPoint(px,py,pz))	--flags always get tiles, regardless of tile setting.
 		end
-		if v.components.health ~= nil then
+		if v.components.health ~= nil and not v.components.health:IsDead() then
 			totaltable = totaltable..", health = "..tostring(v.components.health:GetPercent())
 		end
 		if v:HasTag("burnt") then

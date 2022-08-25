@@ -144,19 +144,17 @@ env.AddPrefabPostInit("waterplant_spawner_rough", function(inst)
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
 
-    if inst.spawned_sludge then
-        return
-    end
-
     inst:DoTaskInTime(0, function(inst)
-        local x, y, z = inst.Transform:GetWorldPosition()
-        for i = 1, math.random(5, 8) do
-            local sx, sy, sz = x + GetRandomWithVariance(-15, 15), y, z + GetRandomWithVariance(-15, 15)
-            if TheWorld.Map:IsOceanAtPoint(sx, sy, sz, false) then
-                local stack = SpawnPrefab("sludgestack")
-                stack.Transform:SetPosition(sx, sy, sz)
+        if not inst.spawned_sludge then
+            local x, y, z = inst.Transform:GetWorldPosition()
+            for i = 1, math.random(5, 8) do
+                local sx, sy, sz = x + GetRandomWithVariance(-15, 15), y, z + GetRandomWithVariance(-15, 15)
+                if TheWorld.Map:IsOceanAtPoint(sx, sy, sz, false) then
+                    local stack = SpawnPrefab("sludgestack")
+                    stack.Transform:SetPosition(sx, sy, sz)
+                end
             end
+            inst.spawned_sludge = true
         end
-        inst.spawned_sludge = true
     end)
 end)
