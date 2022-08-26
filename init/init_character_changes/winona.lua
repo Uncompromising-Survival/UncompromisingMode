@@ -196,6 +196,8 @@ local function onbecameghost(inst, data)
 end
 
 env.AddPrefabPostInit("winona", function(inst)
+	inst:AddTag("electrical_upgradeuser")
+
 	if not TheWorld.ismastersim then
 		return
 	end
