@@ -1,4 +1,6 @@
-local cannonball_assets = {Asset("ANIM", "anim/cannonball_sludge.zip")}
+local cannonball_assets = { 
+    Asset("ANIM", "anim/cannonball_sludge.zip"),
+}
 
 -- TODO: Move these to tuning.lua!
 local CANNONBALL_RADIUS = TUNING.CANNONBALL_RADIUS
@@ -7,13 +9,14 @@ local CANNONBALL_SPLASH_RADIUS = TUNING.CANNONBALL_SPLASH_RADIUS
 local CANNONBALL_SPLASH_DAMAGE_PERCENT = TUNING.CANNONBALL_SPLASH_DAMAGE_PERCENT
 local CANNONBALL_PASS_THROUGH_TIME_BUFFER = TUNING.CANNONBALL_PASS_THROUGH_TIME_BUFFER -- to prevent the cannonball from hitting the same target multiple times as it passes through
 
-local MUST_ONE_OF_TAGS = {"_combat", "_health", "blocker"}
-local AREAATTACK_EXCLUDETAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost"}
+local MUST_ONE_OF_TAGS = { "_combat", "_health", "blocker" }
+local AREAATTACK_EXCLUDETAGS = { "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost" }
 
 local INITIAL_LAUNCH_HEIGHT = 0.1
 local SPEED_XZ = 4
 local SPEED_Y = 16
 local ANGLE_VARIANCE = 20
+
 local function launch_away(inst, position, use_variant_angle)
     if inst.Physics == nil then return end
 
@@ -23,8 +26,7 @@ local function launch_away(inst, position, use_variant_angle)
     inst.Physics:SetFriction(0.2)
 
     local px, py, pz = position:Get()
-    local random = use_variant_angle and math.random() * ANGLE_VARIANCE *
-                       -ANGLE_VARIANCE / 2 or 0
+    local random = use_variant_angle and math.random() * ANGLE_VARIANCE * -ANGLE_VARIANCE / 2 or 0
     local angle = ((180 - inst:GetAngleToPoint(px, py, pz)) + random) * DEGREES
     local sina, cosa = math.sin(angle), math.cos(angle)
     inst.Physics:SetVel(SPEED_XZ * cosa, SPEED_Y, SPEED_XZ * sina)
@@ -59,13 +61,14 @@ local function OnHit(inst, attacker, target)
 
     -- Hit a boat? Cause a leak!
     if target ~= nil and target:HasTag("boat") then
-        target.components.health:DoDelta(-TUNING.CANNONBALL_DAMAGE*0.75)
+        target.components.health:DoDelta(-TUNING.CANNONBALL_DAMAGE * 0.75)
     end
 
     -- Look for stuff on the ocean/ground and launch them
     local x, y, z = inst.Transform:GetWorldPosition()
     local position = inst:GetPosition()
-    local affected_entities = TheSim:FindEntities(x, 0, z, CANNONBALL_SPLASH_RADIUS, nil, nil, nil, AREAATTACK_EXCLUDETAGS) -- Set y to zero to look for objects floating on the ocean
+    local affected_entities = TheSim:FindEntities(x, 0, z, CANNONBALL_SPLASH_RADIUS, nil, nil, nil,
+        AREAATTACK_EXCLUDETAGS) -- Set y to zero to look for objects floating on the ocean
     for i, affected_entity in ipairs(affected_entities) do
         if affected_entity.components.burnable ~= nil then
             affected_entity.components.burnable:Ignite()
@@ -79,7 +82,7 @@ local function OnHit(inst, attacker, target)
                     local loot = SpawnPrefab(product)
                     if loot ~= nil then
                         local ae_x, ae_y, ae_z =
-                            affected_entity.Transform:GetWorldPosition()
+                        affected_entity.Transform:GetWorldPosition()
                         loot.Transform:SetPosition(ae_x, ae_y, ae_z)
                         launch_away(loot, position, true)
                     end
@@ -89,7 +92,7 @@ local function OnHit(inst, attacker, target)
             -- Spawn kelp roots along with kelp is a bullkelp plant is hit
         elseif affected_entity.prefab == "bullkelp_plant" then
             local ae_x, ae_y, ae_z =
-                affected_entity.Transform:GetWorldPosition()
+            affected_entity.Transform:GetWorldPosition()
 
             if affected_entity.components.pickable and
                 affected_entity.components.pickable:CanBePicked() then
@@ -142,9 +145,9 @@ local function OnHit(inst, attacker, target)
 end
 
 local function OnUpdateProjectile(inst)
-    if inst.components.burnable ~= nil and not inst.components.burnable:IsBurning() then
-        inst.components.burnable:Ignite()
-    end
+    --if inst.components.burnable ~= nil and not inst.components.burnable:IsBurning() then
+    --    inst.components.burnable:Ignite()
+    --end
 
     -- Look to hit targets while the cannonball is flying through the air
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -154,8 +157,9 @@ local function OnUpdateProjectile(inst)
         -- Ignore hitting bumpers while flying through the air
         if target ~= nil and target ~= inst.components.complexprojectile.attacker and not target:HasTag("boatbumper") then
             -- Do damage to entities with health
-            if target.components.combat and GetTime() - target.components.combat.lastwasattackedtime > CANNONBALL_PASS_THROUGH_TIME_BUFFER then
-                target.components.combat:GetAttacked(inst, CANNONBALL_DAMAGE*0.25, nil)
+            if target.components.combat and
+                GetTime() - target.components.combat.lastwasattackedtime > CANNONBALL_PASS_THROUGH_TIME_BUFFER then
+                target.components.combat:GetAttacked(inst, CANNONBALL_DAMAGE * 0.25, nil)
             end
 
             --playful bit of arson
@@ -166,9 +170,8 @@ local function OnUpdateProjectile(inst)
             -- Remove and do splash damage if it hits a wall
             if target:HasTag("wall") and target.components.health then
                 if not target.components.health:IsDead() then
-                    inst.components.combat:DoAreaAttack(inst, CANNONBALL_SPLASH_RADIUS, nil, nil, nil, AREAATTACK_EXCLUDETAGS)
-                    SpawnPrefab("waterballoon_splash").Transform:SetPosition(
-                        inst.Transform:GetWorldPosition())
+                    inst.components.combat:DoAreaAttack(inst, CANNONBALL_SPLASH_RADIUS, nil, nil, nil,AREAATTACK_EXCLUDETAGS)
+                    SpawnPrefab("waterballoon_splash").Transform:SetPosition(inst.Transform:GetWorldPosition())
                     inst:Remove()
                     return
                 end
@@ -176,7 +179,7 @@ local function OnUpdateProjectile(inst)
             elseif target.components.workable then
                 target.components.workable:Destroy(inst)
             end
-            
+
         end
     end
 end
@@ -215,7 +218,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild(build)
-    inst.AnimState:SetMultColour(1,1,0,1)
+    inst.AnimState:SetMultColour(1, 1, 0, 1)
 
     if type(anim) ~= "table" then
         inst.AnimState:PlayAnimation(anim, true)
@@ -242,7 +245,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
     inst:AddComponent("complexprojectile")
 
     inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(CANNONBALL_DAMAGE*0.75)
+    inst.components.combat:SetDefaultDamage(CANNONBALL_DAMAGE * 0.75)
     inst.components.combat:SetAreaDamage(CANNONBALL_SPLASH_RADIUS, CANNONBALL_SPLASH_DAMAGE_PERCENT)
 
     MakeMediumBurnable(inst, TUNING.MED_BURNTIME)
@@ -251,7 +254,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 end
 
 local function cannonball_fn()
-    local inst = common_fn("cannonball_rock", "cannonball_rock", "spin_loop", "NOCLICK")
+    local inst = common_fn("cannonball_sludge", "cannonball_sludge", "spin_loop", "NOCLICK")
 
     if not TheWorld.ismastersim then return inst end
 
@@ -289,7 +292,8 @@ local function cannonball_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge.xml"
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
+
     inst.components.inventoryitem:SetSinks(true)
 
     inst:AddComponent("stackable")
@@ -298,4 +302,5 @@ local function cannonball_item_fn()
     return inst
 end
 
-return Prefab("cannonball_sludge", cannonball_fn, cannonball_assets), Prefab("cannonball_sludge_item", cannonball_item_fn, cannonball_assets)
+return Prefab("cannonball_sludge", cannonball_fn, cannonball_assets),
+    Prefab("cannonball_sludge_item", cannonball_item_fn, cannonball_assets)

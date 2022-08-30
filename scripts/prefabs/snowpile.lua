@@ -100,8 +100,8 @@ local function onregen(inst)
             inst.components.pickable.cycles_left = inst.components.pickable.cycles_left + 1
             startregen(inst)
 		else
-			SpreadSno(inst)
-			startregen(inst)
+			--SpreadSno(inst)
+			--startregen(inst)
         end
     else
         if inst.components.workable.workleft > 1 then

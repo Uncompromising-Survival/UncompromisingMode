@@ -37,6 +37,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/brine_balm.xml"
 
     inst:AddComponent("healer")
     inst.components.healer:SetHealthAmount(-TUNING.HEALING_MED)
@@ -46,4 +47,4 @@ local function fn()
     return inst
 end
 
-return Prefab("um_saltsalve", fn, assets)
+return Prefab("brine_balm", fn, assets)

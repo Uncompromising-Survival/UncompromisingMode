@@ -76,7 +76,7 @@ local function sludge_fn()
     inst.components.boatpatch.patch_type = "sludge"
 
     inst:AddComponent("repairer")
-    inst.components.repairer.repairmaterial = MATERIALS.WOOD
+    inst.components.repairer.repairmaterial = MATERIALS.SLUDGE
     inst.components.repairer.healthrepairvalue = TUNING.REPAIR_TREEGROWTH_HEALTH
     inst.components.repairer.boatrepairsound = "waterlogged1/common/use_figjam"
 

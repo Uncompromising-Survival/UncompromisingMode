@@ -56,7 +56,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     GASMASK = "- Provides protection against spore clouds.",
 	PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
-    DISEASECUREBOMB = "- Restores sickly plants."
+    DISEASECUREBOMB = "- Restores sickly plants.",
+	SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
 }
 
 STRINGS.PINETREE_TOOLTIP = {

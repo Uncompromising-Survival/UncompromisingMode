@@ -113,12 +113,13 @@ local function SpawnBiomeUMSS(inst)
 			end
 		end
 	end
-	if not inst.fail then
+	--[[if not inst.fail then
 		FinalizeSpawn(inst,umss,x,y,z)
 	else
 		inst.fail = nil
 		SpawnBiomeUMSS(inst)
-	end
+	end]]
+	FinalizeSpawn(inst,umss,x,y,z)
 end
 
 

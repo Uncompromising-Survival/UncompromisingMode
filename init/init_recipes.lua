@@ -505,9 +505,11 @@ AddRecipe2(
   "sludge_oil",
   {Ingredient("sludge", 3), Ingredient("messagebottleempty", 1)},
   TECH.SCIENCE_TWO,
-  {"REFINE"}
+  nil,
+  {"TOOLS", "LIGHT"}
 )
---ChangeSortKey("sludge_oil", false)
+ChangeSortKey("sludge_oil", "sewing_tape", "TOOLS", true)
+ChangeSortKey("sludge_oil", "coldfirepit", "LIGHT", true)
 
 AddRecipe2(
     "armor_reed_um",
@@ -534,13 +536,13 @@ ChangeSortKey("armor_sharksuit_um", "balloonvest", "SEAFARING", true)
 ChangeSortKey("armor_sharksuit_um", "armor_reed_um", "RAIN", true)
 
 AddRecipe2(
-    "um_saltsalve",
+    "brine_balm",
     {Ingredient("saltrock", 2), Ingredient("kelp", 1), Ingredient("driftwood_log", 1)},
     TECH.SCIENCE_ONE,
     nil, --{numtogive = 2},
     {"RESTORATION"}
 )
-ChangeSortKey("um_saltsalve", "floral_bandage", "RESTORATION", true)
+ChangeSortKey("brine_balm", "floral_bandage", "RESTORATION", true)
 
 AddRecipe2(
     "sludge_cork",
@@ -796,7 +798,7 @@ STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
 STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky hands."
 STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
-STRINGS.RECIPE_DESC.UM_SALTSALVE = "Rub salt in the wounds."
+STRINGS.RECIPE_DESC.BRINE_BALM = "Rub salt in the wounds."
 STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "They like to put holes in things."
 STRINGS.RECIPE_DESC.BOAT_BUMBER_SLUDGE_KIT = "Sticky protection."
 STRINGS.RECIPE_DESC.BOAT_BUMPER_COPPER_KIT = "Sturdy protection."
