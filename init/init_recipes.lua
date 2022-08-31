@@ -559,16 +559,9 @@ AddRecipe2(
     {numtogive = 2},
     {"SEAFARING"}
 )
-ChangeSortKey("boat_bumper_sludge_kit", "boat_bumper_shell_kit", "SEAFARING", true)
+ChangeSortKey("boat_bumper_copper_kit", "boat_bumper_shell_kit", "SEAFARING", true)
 
 
-AddRecipe2(
-    "steeringwheel_copper",
-    {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)},
-    TECH.LOST,
-    nil,
-    {"SEAFARING"}
-)
 AddRecipe2(
     "steeringwheel_copper_item",
     {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)},
@@ -597,6 +590,7 @@ AddDeconstructRecipe("gore_horn_hat", {Ingredient("meat", 2), Ingredient("nightm
 AddDeconstructRecipe("crabclaw", {Ingredient("rocks", 4), Ingredient("cutstone", 1)})
 AddDeconstructRecipe("slobberlobber", {Ingredient("dragon_scales", 1), Ingredient("meat", 2)})
 AddDeconstructRecipe("um_beegun", {Ingredient("honeycomb", 6),Ingredient("royal_jelly", 2)})
+AddDeconstructRecipe("steeringwheel_copper",  {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})
 
 --Sailing Rebalance related recipes.
 
