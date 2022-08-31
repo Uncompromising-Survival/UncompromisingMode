@@ -551,7 +551,7 @@ AddRecipe2(
     nil,
     {"TOOLS"}
 )
-
+--[[
 AddRecipe2(
     "boat_bumper_copper_kit",
     {Ingredient("um_copper_pipe", 14)},
@@ -569,7 +569,7 @@ AddRecipe2(
     nil,
     {"SEAFARING"}
 )
-ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
+ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)]]
 
 --[[
 AddRecipe2(--unsure...
