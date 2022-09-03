@@ -32,6 +32,7 @@ local component_post = {
 	"wisecracker",
 	"boatphysics",
 	"map",
+	"playerspawner"
 }
 
 local prefab_post = {
