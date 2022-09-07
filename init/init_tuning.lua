@@ -290,7 +290,7 @@ TUNING.DSTU =
 	WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
 
     --Wanda
-    WANDA_NERF = GetModConfigData("wandanerf"),
+    WANDA_NERF = GetModConfigData("wanda_nerf"),
 
 	--Voretox
 	WORTOX = GetModConfigData("wortox"),

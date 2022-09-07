@@ -106,7 +106,6 @@ configuration_options =
     BinaryConfig("rat_raids", "Rat Raids", "Rats will periodically be attracted to your base.", true),
     BinaryConfig("durability", "Clothing Degradation", "Winter and Rain protection clothing items become less effective when their durability drops.", true),
 	BinaryConfig("sewingkit", "Sewing Kit Tweaks", "Sewing Kit has DOUBLE uses, but repairs HALF value. Pairs very well with Clothing Degredation, lets you keep clothing in top shape more easily.", true),
-	--BinaryConfig("hangyperds", "Starving Gobblers", "Gobblers are now more agressive and will attempt to take berries out of the player's inventory.", false),
 	BinaryConfig("lifeamulet", "Life Giving Amulet Changes", "The Life Giving Amulet acts like vanilla Don't Starve, only reviving when worn upon death. \nIts hunger > health conversion ticks much faster.", true),
 	BinaryConfig("longpig", "Long Pig", "Skeletons drop Long Pig to prevent telltale heart spam.", true),
 	{
@@ -155,7 +154,6 @@ configuration_options =
 ------------------------------
 	BinaryConfig("funny rat", "Winky", "The Vile Vermin", true),
     BinaryConfig("willow", "Willow", "Willow's Lighter now lasts forever when she holds it, she will retaliate when attacked by shadows.", true),
-    --BinaryConfig("bernie", "Big Bernie", "Enable Big BERNIE!!", true),
     BinaryConfig("warly", "Warly", "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.", true),
 	BinaryConfig("waxwell", "Maxwell", "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!", true),
 	--BinaryConfig("wolfgang", "Improved/Balanced Wolfgang", "Wolfgang gains new perks and downsides. Read the patch notes included in the mod folder or workshop for details.", false),
@@ -181,12 +179,10 @@ configuration_options =
 	BinaryConfig("applied horticulture", "Wickerbottom: Horticulture", "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.", true),
 	BinaryConfig("legacy_book_rain_recipe", "Wickerbottom: Rain Book Recipe", "Uncompromising Mode added a rain book before Klei did. This option returns the old recipe.", true),
 	BinaryConfig("wanda_nerf", "Experimental Wanda", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", false),
-	--BinaryConfig("wormwood_fire", "Extra Flamable Wormwood", "Wormwood is highly flameable, like in Hamlet.", false),
 	BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage", "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x", true),
 	BinaryConfig("wormwood_plants", "Wormwood: Planting Sanity", "Increases the sanity loss from digging plants.", true),
 	BinaryConfig("wendy", "Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
 	BinaryConfig("wx78", "WX-78", "No longer heals from lightning", true),
-	--BinaryConfig("woodie", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
 	SkipSpace(),
 ------------------------------
 -- Weather --
@@ -671,11 +667,19 @@ configuration_options =
 	SkipSpace(),
 	
 	Header("Experimental"),
-	--BinaryConfig("honeybandbuff", "Honey Poultice Buff", "[Experimental] Crafting honey poultice gives 2, healing with it gives 10 health overtime as well as 30 health.", false),
 	BinaryConfig("announce_basestatus", "[DEV] Announce Ratsniffer","[Developer Tool] Prints the exact rat sniff values to chat to be viewed in real time.",false),
 	BinaryConfig("eyebrellarework", "Eyebrella Rework","Eyebrella stats restored to vanilla value, must be repaired with Milky Whites, 12 day durability. Isn't affected by clothing degradation.",false),
 	BinaryConfig("cooldown_orangestaff", "Cooldown Based Lazy Explorer", "Lazy explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.", false),
-------------------------------
+	SkipSpace(),
+	Header("Legacy Options"),
+	SkipSpace(),
+	BinaryConfig("honeybandbuff", "Honey Poultice Buff", "[Experimental] Crafting honey poultice gives 2, healing with it gives 10 health overtime as well as 30 health.", false),
+	BinaryConfig("woodie", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
+	BinaryConfig("wormwood_fire", "Extra Flamable Wormwood", "Wormwood is highly flameable, like in Hamlet.", false),
+	BinaryConfig("hangyperds", "Starving Gobblers", "Gobblers are now more agressive and will attempt to take berries out of the player's inventory.", false),
+    BinaryConfig("bernie", "Big Bernie", "Enable Big BERNIE!!", true),
+
+	------------------------------
 -- Secret --
 -------------------------------
     --Header("Secret"),
