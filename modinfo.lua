@@ -1,21 +1,21 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.14.2 : "Calm Before the Storm" ]
+󰀔 [ Version 1.14.3 : "Calm Before the Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Prominent features:
 - Reworks to the Bee Queen and Ancient Guardian. New Vets Curse item from Bee Queen.
 - New setpieces, and mysteries at sea.
-- Reed Armor, Shark Suit Armor, Harpoons, Magnerang, Fishing Net, and much more!
+- Reed Armor, Shark Suit Armor, Magnerang, Fishing Net, and much more!
 - Remember, most of the new content is using placeholder images and animations!
 
 󰀏 NEXT UPDATE: Under the Weather, Part I.]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.14.2"
+version = "Calm Before the Storm v1.14.3"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
