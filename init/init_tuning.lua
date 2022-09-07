@@ -292,7 +292,7 @@ TUNING.DSTU =
     --Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
 
-	--Voretox
+	--Wortox
 	WORTOX = GetModConfigData("wortox"),
 
 	--Mobs
@@ -449,8 +449,6 @@ TUNING.AFFINITY_15_CALORIES_SUPERHUGE = 1.034
 
 if GetModConfigData("wanda_nerf") then
     TUNING.POCKETWATCH_SHADOW_DAMAGE = wilson_attack*1.5
-    TUNING.WANDA_SHADOW_DAMAGE_OLD = 2.5
-    TUNING.WANDA_SHADOW_DAMAGE_NORMAL = 68/51
     TUNING.POCKETWATCH_REVIVE_COOLDOWN = TUNING.POCKETWATCH_REVIVE_COOLDOWN * 2 --doubled cooldown
 end
 
