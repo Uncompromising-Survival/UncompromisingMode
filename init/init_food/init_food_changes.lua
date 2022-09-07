@@ -365,7 +365,8 @@ end)
 
 AddPrefabPostInit("cactus_meat_cooked", function (inst)
     if inst ~= nil and inst.components.edible ~= nil then
-        inst.components.edible.healthvalue = -5
+        --inst.components.edible.healthvalue = -5
+		inst.components.edible.sanityvalue = 5
     end
 end)
 
