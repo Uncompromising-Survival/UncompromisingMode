@@ -176,52 +176,12 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
     Layouts["impactfuldiscovery"] = StaticLayout.Get("map/static_layouts/umss_impactfuldiscovery")
     Layouts["boon_moonoil"] = StaticLayout.Get("map/static_layouts/umss_moonoil")
 	Layouts["umss_biometable"] = StaticLayout.Get("map/static_layouts/umss_biometable")
-	
-    local function chance_and_count(chance, min, max)
-        if math.random() > (1 - chance) then
-            if max == nil or min == max then
-                return min
-            else
-                return math.random(min, max)
-            end
-        else
-            return 0
-        end
-    end
 
     AddTaskSetPreInitAny(function(tasksetdata)
         if tasksetdata.location ~= "forest" or (tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
             return
         end
 
-
-        tasksetdata.set_pieces["moonfrag"] = { count = chance_and_count(0.33, 1, 3),
-            tasks = {
-                "Make a pick",
-                "Dig that rock",
-                "Great Plains",
-                "Squeltch",
-                "Beeeees!",
-                "Speak to the king",
-                "Forest hunters",
-                "For a nice walk",
-                "Badlands",
-                "Lightning Bluff",
-                "Befriend the pigs",
-                "Kill the spiders",
-                "Killer bees!",
-                "Make a Beehat",
-                "The hunters",
-                "Magic meadow",
-                "Frogs and bugs",
-                "Mole Colony Deciduous",
-                "Mole Colony Rocks",
-                "MooseBreedingTask",
-                "Speak to the king classic",
-            }
-        }
-
-		
         tasksetdata.set_pieces["umss_biometable"] = { count = math.random(3,5),
             tasks = {
                 "Make a pick",

@@ -1,7 +1,7 @@
 local DecidTable = {
-	
+
 	shyTable = 1,
-	
+
 }
 local DesertTable = {
 
@@ -11,17 +11,17 @@ local DesertTable = {
 local MarshTable = {
 
 	fooltrap1Table = 1,
-	
+
 }
 local HoodedTable = {
 
 	ancientwalrusTable = 1,
-	
+
 }
 local DarkForestTable = {
 
 	walterifgoodTable = 1,
-	
+
 }
 local RockyTable = {
 
@@ -30,17 +30,18 @@ local RockyTable = {
 }
 local SavannaTable = {
 
-	sos = 1,
-	moxTable = 0.25,
+	sos = 0.5,
+	moxTable = 0.5,
 	deadBodies = 2,
 	grassTrap = 0.1
-	
+
 }
 local GeneralTable = {
-	badfarmerTable = 1,
+	badfarmerTable = 0.5,
 	baseFrag_smellyKitchen = 0.5,
 	baseFrag_rattyStorage = 0.5,
-	moonOil = 1,
+	moonOil = 0.75,
+	moonFrag = 0.25,
 }
 
 local function AddToTheWorld(inst,umss)
@@ -64,10 +65,10 @@ local function SpawnBiomeUMSS(inst)
 	local tile = TheWorld.Map:GetTileAtPoint(x, y, z)
 	local umss
 	local Table
-	
+
 	if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
 		Table = inst.MarshTable
-		umss = weighted_random_choice(Table) 
+		umss = weighted_random_choice(Table)
 	end
 	if tile == WORLD_TILES.HOODEDFOREST and weighted_random_choice(inst.HoodedTable) then
 		Table = inst.HoodedTable
@@ -92,7 +93,7 @@ local function SpawnBiomeUMSS(inst)
 	if tile == WORLD_TILES.ROCKY and weighted_random_choice(inst.RockyTable) then
 		Table = inst.RockyTable
 		umss = weighted_random_choice(Table)
-	end	
+	end
 	if not umss then
 		Table = inst.GeneralTable
 		umss = weighted_random_choice(Table)
@@ -108,9 +109,9 @@ local function SpawnBiomeUMSS(inst)
 					table.remove(Table,i)
 				end
 			end
-			if inst.count > 3 then
+			if inst.count > 2 then
 				inst:Remove()
-			else				
+			else
 				inst.fail = true
 				inst.count = inst.count+1
 			end
@@ -132,7 +133,7 @@ local function makefn()
     inst.entity:AddTransform()
     inst.entity:AddNetwork()
     inst.entity:SetPristine()
-		
+
     if not TheWorld.ismastersim then
         return inst
     end
