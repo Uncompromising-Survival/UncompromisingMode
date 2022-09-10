@@ -145,3 +145,10 @@ function c_umss(umss)
 
     print("Spawning umss setpiece "..umss.." at "..tostring(pos.x)..","..tostring(pos.z)..".")
 end
+
+function c_setadrenaline(p)
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.components.adrenalinecounter ~= nil then
+        player.components.adrenalinecounter:SetPercent(p)
+    end
+end

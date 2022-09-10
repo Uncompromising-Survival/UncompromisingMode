@@ -34,6 +34,7 @@ local component_post = {
 	"map",
 	"playerspawner",
 	--"drownable", 
+	"combat",
 }
 
 local prefab_post = {
@@ -185,6 +186,7 @@ local class_post = {
 	"widgets/moisturemeter",
 	"widgets/controls",
 	"widgets/craftslot",
+	"widgets/bloodover"
 }
 
 local brain_post = {
