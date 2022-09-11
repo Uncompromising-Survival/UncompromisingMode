@@ -1,4 +1,4 @@
-local cannonball_assets = { 
+local cannonball_assets = {
     Asset("ANIM", "anim/cannonball_sludge.zip"),
 }
 
@@ -48,6 +48,20 @@ local function launch_away(inst, position, use_variant_angle)
     end
 end
 
+local function DoBubbleFX(inst)
+    for i = 1, math.random(2, 4) do
+        local x, y, z = inst.Transform:GetWorldPosition()
+        if x == nil or y == nil or z == nil then
+            break
+        end
+        local fx = SpawnPrefab("crab_king_bubble" .. math.random(3))
+        local x1, y1, z1 = x + math.random(-5, 5), 0, z + math.random(-5, 5)
+        if TheWorld.Map:IsOceanAtPoint(x1, y1, z1) and TheWorld.Map:GetPlatformAtPoint(x1, z1) == nil then
+            fx.Transform:SetPosition(x1, y1, z1)
+        end
+    end
+end
+
 local function OnHit(inst, attacker, target)
 
     -- Do splash damage upon hitting the ground
@@ -70,7 +84,7 @@ local function OnHit(inst, attacker, target)
     local affected_entities = TheSim:FindEntities(x, 0, z, CANNONBALL_SPLASH_RADIUS, nil, nil, nil,
         AREAATTACK_EXCLUDETAGS) -- Set y to zero to look for objects floating on the ocean
     for i, affected_entity in ipairs(affected_entities) do
-        if affected_entity.components.burnable ~= nil then
+        if affected_entity.components.burnable ~= nil and inst:HasTag("sludge_cannonball") then
             affected_entity.components.burnable:Ignite()
         end
 
@@ -132,6 +146,14 @@ local function OnHit(inst, attacker, target)
     -- Landed on the ocean
     if inst:IsOnOcean() then
         SpawnPrefab("crab_king_waterspout").Transform:SetPosition(inst.Transform:GetWorldPosition())
+        if inst:HasTag("sludge_cannonball") then --BOIL SOME WATER
+            DoBubbleFX(inst)
+            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
+            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
+            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
+            inst:RemoveFromScene()
+            inst:DoTaskInTime(FRAMES*11, inst.Remove)
+        end
         -- Landed on ground
     else
         local lava = SpawnPrefab("lavaspit_sludge")
@@ -140,8 +162,8 @@ local function OnHit(inst, attacker, target)
         local fx = SpawnPrefab("halloween_firepuff_1")
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
         fx.Transform:SetScale(3, 3, 3)
+        inst:Remove()
     end
-    inst:Remove()
 end
 
 local function OnUpdateProjectile(inst)
@@ -156,22 +178,12 @@ local function OnUpdateProjectile(inst)
 
         -- Ignore hitting bumpers while flying through the air
         if target ~= nil and target ~= inst.components.complexprojectile.attacker and not target:HasTag("boatbumper") then
-            -- Do damage to entities with health
-            if target.components.combat and
-                GetTime() - target.components.combat.lastwasattackedtime > CANNONBALL_PASS_THROUGH_TIME_BUFFER then
-                target.components.combat:GetAttacked(inst, CANNONBALL_DAMAGE * 0.25, nil)
-            end
-
-            --playful bit of arson
-            if target.components.burnable ~= nil then
-                target.components.burnable:Ignite()
-            end
-
-            -- Remove and do splash damage if it hits a wall
+            -- Remove and do splash damage if it hits a wall, fixed from klei's funny bugs
             if target:HasTag("wall") and target.components.health then
                 if not target.components.health:IsDead() then
-                    inst.components.combat:DoAreaAttack(inst, CANNONBALL_SPLASH_RADIUS, nil, nil, nil,AREAATTACK_EXCLUDETAGS)
-                    SpawnPrefab("waterballoon_splash").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    inst.components.combat:DoAreaAttack(inst, CANNONBALL_SPLASH_RADIUS, nil, nil, nil,
+                        AREAATTACK_EXCLUDETAGS)
+                    SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(inst.Transform:GetWorldPosition())
                     inst:Remove()
                     return
                 end
@@ -180,6 +192,16 @@ local function OnUpdateProjectile(inst)
                 target.components.workable:Destroy(inst)
             end
 
+            -- Do damage to entities with health
+            if target.components.combat and
+                GetTime() - target.components.combat.lastwasattackedtime > CANNONBALL_PASS_THROUGH_TIME_BUFFER then
+                target.components.combat:GetAttacked(inst, CANNONBALL_DAMAGE * 0.25, nil)
+            end
+
+            -- Playful bit of arson
+            if target.components.burnable ~= nil and inst:HasTag("sludge_cannonball") then
+                target.components.burnable:Ignite()
+            end
         end
     end
 end
@@ -256,6 +278,8 @@ end
 local function cannonball_fn()
     local inst = common_fn("cannonball_sludge", "cannonball_sludge", "spin_loop", "NOCLICK")
 
+    inst:AddTag("sludge_cannonball")
+
     if not TheWorld.ismastersim then return inst end
 
     inst.persists = false
@@ -292,7 +316,7 @@ local function cannonball_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
 
     inst.components.inventoryitem:SetSinks(true)
 
