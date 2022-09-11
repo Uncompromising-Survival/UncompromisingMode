@@ -90,7 +90,7 @@ configuration_options =
 	{
 		name = "rne chance",
 		label = "Night Terrors Chance",
-		hover = "Night Terrors have a default 20% chance to occur each night. Night Terrors are disabled before Day 5.",
+		hover = "Night Terrors have a default 40% chance to occur each night. Night Terrors are disabled before Day 5.",
 		options =
 		{
 			{description = "None", data = 100},
