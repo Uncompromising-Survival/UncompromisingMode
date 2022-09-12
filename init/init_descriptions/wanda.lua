@@ -403,3 +403,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.CORNCAN = "The can is a temporal time bubble."
