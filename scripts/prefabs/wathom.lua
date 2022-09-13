@@ -32,8 +32,8 @@ end
 
 
 local function AmpTimer(inst)
-	if (inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) and inst.components.grogginess then
-		inst.components.grogginess.grog_amount = 0.5
+	if inst.components.grogginess ~= nil  and (inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) then
+		inst.components.grogginess.grog_amount = 0.05
 	end
 end
 
@@ -163,25 +163,46 @@ local function UpdateAdrenaline(inst)
 	elseif inst:HasTag("wathomrun") and not (AmpLevel > 0.5 or inst:HasTag("amped")) then
 		inst:RemoveTag("wathomrun")
 	end
-	
+	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+
 	if AmpLevel == 0 and inst:HasTag("amped") then
 		UnAmp(inst)
 	elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
-		inst.components.combat.attackrange = 2
+		if item ~= nil then
+			inst.components.combat.attackrange = 2
+		else
+			inst.components.combat.attackrange = 2
+		end
 		inst.AmpDamageTakenModifier = 1
 	elseif AmpLevel < 0.32 and not inst:HasTag("amped") then
-		inst.components.combat.attackrange = 4
+		if item ~= nil then
+			inst.components.combat.attackrange = 4
+		else
+			inst.components.combat.attackrange = 2
+		end
 		inst.AmpDamageTakenModifier = 1
 	elseif AmpLevel < 0.45 and not inst:HasTag("amped") then
-		inst.components.combat.attackrange = 5
+		if item ~= nil then
+			inst.components.combat.attackrange = 5
+		else
+			inst.components.combat.attackrange = 2
+		end
 		inst.components.health:SetAbsorptionAmount(-0.50)
 		inst.AmpDamageTakenModifier = 2
 	elseif AmpLevel < 0.66 and not inst:HasTag("amped") then
-		inst.components.combat.attackrange = 6
+		if item ~= nil then
+			inst.components.combat.attackrange = 6
+		else
+			inst.components.combat.attackrange = 2
+		end
 		inst.components.health:SetAbsorptionAmount(-1)
 		inst.AmpDamageTakenModifier = 3
 	elseif AmpLevel < 1 and not inst:HasTag("amped") then
-		inst.components.combat.attackrange = 7
+		if item ~= nil then
+			inst.components.combat.attackrange = 7
+		else
+			inst.components.combat.attackrange = 2
+		end
 		inst.AmpDamageTakenModifier = 4
 	elseif AmpLevel == 1 and not inst:HasTag("amped") then
 		Amp(inst)
@@ -189,7 +210,7 @@ local function UpdateAdrenaline(inst)
 end
 
 local function CustomCombatDamage(inst, target)
-	return (target.components.hauntable and target.components.hauntable.panic) and 1.5 * (2) or 2
+	return (target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or 2
 end
 
 -- This initializes for both the server and client. Tags can be added here.
@@ -227,6 +248,7 @@ local common_postinit = function(inst)
 			end
 		end)
 	end)
+
 	inst:ListenForEvent("setowner", OnSetOwner)
 	inst:ListenForEvent("ondeath",function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
 
@@ -271,8 +293,22 @@ local master_postinit = function(inst)
 	-- Idle animation
 	inst.customidleanim = "spooked"
 
-	-- Wathom's Nightvision in the caves
+	-- grogginess stuff
 
+	local function DefaultKnockoutTest(inst)
+		local self = inst.components.grogginess
+		return self.grog_amount >= self:GetResistance()
+			and not (inst.components.health ~= nil and inst.components.health.takingfiredamage)
+			and not (inst.components.burnable ~= nil and inst.components.burnable:IsBurning())
+	end
+
+	inst.components.grogginess.knockouttestfn = function(inst)
+		if inst:HasTag("amped") then
+			return false
+		else
+			return DefaultKnockoutTest(inst)
+		end
+	end
 
 	-- Wathom's Nightvision aboveground
 	if TheWorld:HasTag("cave") or TheWorld.state.isnight then
@@ -314,7 +350,8 @@ local master_postinit = function(inst)
 	--	inst.components.playervision:ForceNightVision(true) -- Should only force this if it's night or in caves.
 
 	-- Doubles Wathom's attack range so he can jump at things from further away.
-	inst.components.combat.attackrange = 4
+	-- inst.components.combat.attackrange = 4
+
 	local _onsave = inst.OnSave
 
 	local function onsave(inst, data)
