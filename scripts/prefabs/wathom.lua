@@ -97,7 +97,7 @@ local function AttackOther(inst, data)
 			inst.adrenalresume:Cancel()
 			inst.adrenalresume = nil
 		end
-		inst.adrenalresume = inst:DoTaskInTime(3, function(inst) inst.adrenalpause = false end)
+		inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
 		if not inst:HasTag("amped") then
 			inst.components.adrenalinecounter:DoDelta(2)
 		end
