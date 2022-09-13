@@ -73,13 +73,13 @@ function AdrenalineCounter:DoDelta(delta, overtime)
 --        self.pestilencecheck = 2
 --    end
 
-    if self:GetPercent() < 0.24 then
+--    if self:GetPercent() < 0.24 then
 --        self.inst.components.sanity.dapperness = -20 / 60
-        self.inst.components.grogginess:AddGrogginess(0.5, 0)
+--        self.inst.components.grogginess:AddGrogginess(0.5, 0)
 
 --        local counterspeedmod = 1 / Remap(0, 1, 0, TUNING.MIN_GROGGY_SPEED_MOD, TUNING.MAX_GROGGY_SPEED_MOD)
 --        self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "countergrogginess", counterspeedmod)
-    end 
+--    end 
 
     self.inst:PushEvent("adrenalinedelta", {oldpercent = old/self.max, newpercent = self.current/self.max, overtime = overtime})
 end

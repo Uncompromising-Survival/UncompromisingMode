@@ -157,14 +157,13 @@ end
 
 local function UpdateAdrenaline(inst)
 	local AmpLevel = inst.components.adrenalinecounter:GetPercent()
+	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
 	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") then --Handle VVathom Running
 		inst:AddTag("wathomrun")
 	elseif inst:HasTag("wathomrun") and not (AmpLevel > 0.5 or inst:HasTag("amped")) then
 		inst:RemoveTag("wathomrun")
 	end
-	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-
 	if AmpLevel == 0 and inst:HasTag("amped") then
 		UnAmp(inst)
 	elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
