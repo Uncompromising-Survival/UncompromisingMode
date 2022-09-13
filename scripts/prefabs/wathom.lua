@@ -72,13 +72,14 @@ end
 
 local function AmpTimer2(inst)
 	-- Draining adrenaline when not in combat.
-	if (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) or
-		(inst:HasTag("amped") and not inst.adrenalpause) then
-		if inst:HasTag("amped") then
-			inst.components.adrenalinecounter:DoDelta(-4) --increased drain when amped
-		else
+	if inst:HasTag("amped") then
+		if inst.adrenalpause then
 			inst.components.adrenalinecounter:DoDelta(-1)
+		else
+			inst.components.adrenalinecounter:DoDelta(-4)
 		end
+	elseif (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) then
+		inst.components.adrenalinecounter:DoDelta(-1)
 	end
 
 	if inst.components.adrenalinecounter:GetPercent() < 0.25 and not inst:HasTag("amped") then
