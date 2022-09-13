@@ -17,29 +17,63 @@ for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
 end
 local prefabs = FlattenTree(start_inv, true)
 
+local function UnAmp(inst)
+	inst:RemoveTag("amped") -- Party's over.
+	TheWorld:PushEvent("enabledynamicmusic", true)
+	TheFocalPoint.SoundEmitter:KillSound("wathommusic")
+	inst.components.combat.attackrange = 2
+	inst.AmpDamageTakenModifier = 5
+	if inst.adrenalinehpregen ~= nil then
+		inst.adrenalinehpregen:Cancel()
+		inst.adrenalinehpregen = nil
+	end
+end
+
+local function Amp(inst)
+	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
+	inst.AmpDamageTakenModifier = 5
+	inst:AddTag("amped")
+	inst.components.talker:Say("AMPED UP!", nil, true)
+	TheWorld:PushEvent("enabledynamicmusic", false)
+	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
+		TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
+	end
+	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
+		if inst.components.health ~= nil and not inst.components.health:IsDead() then
+			inst.components.health:DoDelta(1.5)
+		end
+	end)
+end
+
 -- When the character is revived from human
 local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wathom_speed_mod", 1)
+	UnAmp(inst)
+	inst.components.adrenalinecounter:SetPercent(0.25)
 end
 
 local function onbecameghost(inst)
 	-- Remove speed modifier when becoming a ghost
 	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wathom_speed_mod")
+	UnAmp(inst)
+	inst.components.adrenalinecounter:SetPercent(0.25)
 end
 
 -------------------------------------------
 
 
 local function AmpTimer(inst)
-	if inst.components.grogginess ~= nil  and (inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) then
+	if inst.components.grogginess ~= nil and
+		(inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) then
 		inst.components.grogginess.grog_amount = 0.5
 	end
 end
 
 local function AmpTimer2(inst)
 	-- Draining adrenaline when not in combat.
-	if (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) or (inst:HasTag("amped") and not inst.adrenalpause) then
+	if (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) or
+		(inst:HasTag("amped") and not inst.adrenalpause) then
 		if inst:HasTag("amped") then
 			inst.components.adrenalinecounter:DoDelta(-4) --increased drain when amped
 		else
@@ -55,7 +89,8 @@ end
 local function AttackOther(inst, data)
 	if data and data.target and inst.components.adrenalinecounter:GetPercent() > 0.24 and
 		((data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
-			(data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or
+			(
+			data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or
 				data.target.prefab == "stalker")) then
 		inst.adrenalpause = true
 		if inst.adrenalresume then
@@ -63,7 +98,9 @@ local function AttackOther(inst, data)
 			inst.adrenalresume = nil
 		end
 		inst.adrenalresume = inst:DoTaskInTime(3, function(inst) inst.adrenalpause = false end)
-		inst.components.adrenalinecounter:DoDelta(2)
+		if not inst:HasTag("amped") then
+			inst.components.adrenalinecounter:DoDelta(2)
+		end
 	end
 end
 
@@ -122,34 +159,6 @@ local function onload(inst, data)
 	end
 end
 
-local function UnAmp(inst)
-	inst:RemoveTag("amped") -- Party's over.
-	TheWorld:PushEvent("enabledynamicmusic", true)
-	TheFocalPoint.SoundEmitter:KillSound("wathommusic")
-	inst.components.combat.attackrange = 2
-	inst.AmpDamageTakenModifier = 5
-	if inst.adrenalinehpregen ~= nil then
-		inst.adrenalinehpregen:Cancel()
-		inst.adrenalinehpregen = nil
-	end
-end
-
-local function Amp(inst)
-	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
-	inst.AmpDamageTakenModifier = 5
-	inst:AddTag("amped")
-	inst.components.talker:Say("AMPED UP!", nil, true)
-	TheWorld:PushEvent("enabledynamicmusic", false)
-	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
-		TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
-	end
-	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
-		if inst.components.health ~= nil and not inst.components.health:IsDead() then
-			inst.components.health:DoDelta(1.5)
-		end
-	end)
-end
-
 local function UpdateAdrenaline(inst)
 	local AmpLevel = inst.components.adrenalinecounter:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -206,7 +215,7 @@ end
 local function CustomCombatDamage(inst, target)
 	--sometimes I hate short-circuit evals...
 	return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
-	(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2
+		(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2
 end
 
 -- This initializes for both the server and client. Tags can be added here.
@@ -246,7 +255,7 @@ local common_postinit = function(inst)
 	end)
 
 	inst:ListenForEvent("setowner", OnSetOwner)
-	inst:ListenForEvent("ondeath",function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
+	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
 
 end
 
@@ -338,7 +347,7 @@ local master_postinit = function(inst)
 	if TheWorld.ismastersim then
 		inst:ListenForEvent("adrenalinedelta", UpdateAdrenaline)
 	end
-	inst:ListenForEvent("ondeath",function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
+	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
 	-- Wathom's immunity to night drain during the night.
 	inst.components.sanity.night_drain_mult = 0
 
@@ -355,11 +364,9 @@ local master_postinit = function(inst)
 			data.amped = true
 		end
 		if _onsave ~= nil then
-			return _onsave(inst,data)
+			return _onsave(inst, data)
 		end
 	end
-
-
 
 	inst.OnLoad = onload
 	inst.OnSave = onsave
