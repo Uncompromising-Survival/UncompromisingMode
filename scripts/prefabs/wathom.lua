@@ -167,7 +167,7 @@ local function UpdateAdrenaline(inst)
 		else
 			inst.components.combat.attackrange = 2
 		end
-		inst.AmpDamageTakenModifier = 1
+		inst.AmpDamageTakenModifier = 3
 	elseif AmpLevel < 0.32 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 4
