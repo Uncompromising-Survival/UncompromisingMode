@@ -73,6 +73,8 @@ end
 ---------------------------------------------
 
 local function GetPointSpecialActions(inst, pos, useitem, right)
+	--we really need a adrenaline replica or something
+	--for barking to not work on clients. -A
 	if right and useitem == nil then
 		local rider = inst.replica.rider
 		if rider == nil or not rider:IsRiding() then

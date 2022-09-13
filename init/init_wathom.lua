@@ -681,7 +681,7 @@ local wathombark = AddAction(
 	"WATHOMBARK",
 	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
-		if act.doer ~= nil then -- previously act.target
+		if act.doer ~= nil and (act.doer.components.adrenalinecounter:GetPercent() > 0.44 or act.doer:HasTag("amped"))  then -- previously act.target
 			local inst = act.doer
 			inst.AnimState:AddOverrideBuild("emote_angry")
 			if not inst:HasTag("amped") then
