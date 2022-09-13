@@ -33,7 +33,7 @@ end
 
 local function AmpTimer(inst)
 	if inst.components.grogginess ~= nil  and (inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) then
-		inst.components.grogginess.grog_amount = 0.05
+		inst.components.grogginess.grog_amount = 0.5
 	end
 end
 
