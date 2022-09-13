@@ -63,7 +63,7 @@ local function AttackOther(inst, data)
 			inst.adrenalresume = nil
 		end
 		inst.adrenalresume = inst:DoTaskInTime(3, function(inst) inst.adrenalpause = false end)
-		inst.components.adrenalinecounter:DoDelta(3)
+		inst.components.adrenalinecounter:DoDelta(2)
 	end
 end
 
