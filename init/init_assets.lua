@@ -503,7 +503,7 @@ Assets = {
 
 	Asset("ANIM", "anim/sorrel.zip"),
 
-	Asset("ANIM", "anim/um_tesla_tree.zip"),
+	--Asset("ANIM", "anim/um_tesla_tree.zip"),
 
 	--Asset("ANIM", "anim/crabapple_tree_build.zip"),
 
