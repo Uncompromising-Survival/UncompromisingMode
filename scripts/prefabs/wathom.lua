@@ -38,8 +38,13 @@ local function AmpTimer(inst)
 end
 
 local function AmpTimer2(inst)
-	if (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) or inst:HasTag("amped") then
-		inst.components.adrenalinecounter:DoDelta(-1) -- Draining adrenaline when not in combat. Need to make this not work if Wathom attacks/gets hit in the past 5 seconds.
+	-- Draining adrenaline when not in combat.
+	if (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) or (inst:HasTag("amped") and not inst.adrenalpause) then
+		if inst:HasTag("amped") then
+			inst.components.adrenalinecounter:DoDelta(-4) --increased drain when amped
+		else
+			inst.components.adrenalinecounter:DoDelta(-1)
+		end
 	end
 
 	if inst.components.adrenalinecounter:GetPercent() < 0.25 and not inst:HasTag("amped") then
@@ -49,18 +54,16 @@ end
 
 local function AttackOther(inst, data)
 	if data and data.target and inst.components.adrenalinecounter:GetPercent() > 0.24 and
-		(
-		(data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
-			(
-			data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or
-				data.target.prefab == "stalker")) and not inst:HasTag("amped") then
+		((data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
+			(data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or
+				data.target.prefab == "stalker")) then
 		inst.adrenalpause = true
 		if inst.adrenalresume then
 			inst.adrenalresume:Cancel()
 			inst.adrenalresume = nil
 		end
-		inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
-		inst.components.adrenalinecounter:DoDelta(1)
+		inst.adrenalresume = inst:DoTaskInTime(3, function(inst) inst.adrenalpause = false end)
+		inst.components.adrenalinecounter:DoDelta(3)
 	end
 end
 
@@ -119,31 +122,16 @@ local function onload(inst, data)
 	end
 end
 
-local function onsave(inst, data)
-	if inst:HasTag("amped") then
-		data.amped = true
-	end
-end
-
-local function EditCombat(inst)
-	local self = inst.components.combat
-	local _GetAttacked = self.GetAttacked
-	self.GetAttacked = function(self, attacker, damage, weapon, stimuli)
-		if attacker ~= nil and attacker:HasTag("wathom") and attacker.AmpDamageTakenModifier ~= nil and damage then
-			-- Take extra damage
-			damage = damage * attacker.AmpDamageTakenModifier
-			inst.components.adrenalinecounter:DoDelta(damage * -0.5) -- This gives Wathom adrenaline when attacked!
-		end
-		return _GetAttacked(self, attacker, damage, weapon, stimuli)
-	end
-end
-
 local function UnAmp(inst)
 	inst:RemoveTag("amped") -- Party's over.
 	TheWorld:PushEvent("enabledynamicmusic", true)
 	TheFocalPoint.SoundEmitter:KillSound("wathommusic")
 	inst.components.combat.attackrange = 2
 	inst.AmpDamageTakenModifier = 5
+	if inst.adrenalinehpregen ~= nil then
+		inst.adrenalinehpregen:Cancel()
+		inst.adrenalinehpregen = nil
+	end
 end
 
 local function Amp(inst)
@@ -155,6 +143,11 @@ local function Amp(inst)
 	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
 		TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
 	end
+	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
+		if inst.components.health ~= nil and not inst.components.health:IsDead() then
+			inst.components.health:DoDelta(1.5)
+		end
+	end)
 end
 
 local function UpdateAdrenaline(inst)
@@ -189,7 +182,7 @@ local function UpdateAdrenaline(inst)
 			inst.components.combat.attackrange = 2
 		end
 		inst.components.health:SetAbsorptionAmount(-0.50)
-		inst.AmpDamageTakenModifier = 2
+		inst.AmpDamageTakenModifier = 1.5
 	elseif AmpLevel < 0.66 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 6
@@ -197,21 +190,23 @@ local function UpdateAdrenaline(inst)
 			inst.components.combat.attackrange = 2
 		end
 		inst.components.health:SetAbsorptionAmount(-1)
-		inst.AmpDamageTakenModifier = 3
+		inst.AmpDamageTakenModifier = 2
 	elseif AmpLevel < 1 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 7
 		else
 			inst.components.combat.attackrange = 2
 		end
-		inst.AmpDamageTakenModifier = 4
+		inst.AmpDamageTakenModifier = 5
 	elseif AmpLevel == 1 and not inst:HasTag("amped") then
 		Amp(inst)
 	end
 end
 
 local function CustomCombatDamage(inst, target)
-	return (target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or 2
+	--sometimes I hate short-circuit evals...
+	return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
+	(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2
 end
 
 -- This initializes for both the server and client. Tags can be added here.
