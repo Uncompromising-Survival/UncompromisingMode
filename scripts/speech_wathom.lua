@@ -419,7 +419,7 @@ return{
 	ANNOUNCE_CHARLIE = "Not you!",
 	ANNOUNCE_CHARLIE_ATTACK = "BEGONE! NOT AGAIN!",
 --fallback to speech_wilson.lua 	ANNOUNCE_CHARLIE_MISSED = "only_used_by_winona", --winona specific
-	ANNOUNCE_COLD = "Can't... Stop... Now..."",
+	ANNOUNCE_COLD = "Can't... Stop... Now...",
 	ANNOUNCE_HOT = "Can't breathe!",
 	ANNOUNCE_CRAFTING_FAIL = "What.",
 	ANNOUNCE_DEERCLOPS = "Deerclops. Let's dance.",
