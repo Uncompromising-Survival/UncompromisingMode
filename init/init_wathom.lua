@@ -817,7 +817,7 @@ AddClassPostConstruct("widgets/statusdisplays", AmpbadgeDisplays)
 STRINGS.CHARACTER_TITLES.wathom = "The Abomination"
 STRINGS.CHARACTER_NAMES.wathom = "Wathom"
 STRINGS.CHARACTER_DESCRIPTIONS.wathom = "*Apex Predator\n*Gets amped up with adrenaline\n*Causes animals to panic\n*The faster he goes, the harder he falls"
-STRINGS.CHARACTER_QUOTES.wathom = "\"I HEAR YOU BREATHING.\""
+STRINGS.CHARACTER_QUOTES.wathom = "\"Cruel, the abyss. Either do, or die.\""
 STRINGS.CHARACTER_SURVIVABILITY.wathom = "Slim"
 
 -- Custom speech strings
