@@ -422,6 +422,9 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_RELEASE_TIME = (0.5 * day_time) / 2
 end
 
+--shield buff
+TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+
 TUNING.NO_BOSS_TIME = 24
 --TUNING.DISEASE_DELAY_TIME = total_day_time * 50 / 1.5
 --TUNING.DISEASE_DELAY_TIME_VARIANCE = total_day_time * 20
