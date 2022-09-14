@@ -389,9 +389,11 @@ AddRecipe2(
     {Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 1)},
     TECH.SCIENCE_TWO,
     nil,
-    {"TOOLS", "FISHING"}
+    {"TOOLS", "SEAFARING", "WEAPONS"}
 )
 ChangeSortKey("um_magnerang", "uncompromising_harpoon_heavy", "TOOLS", true)
+ChangeSortKey("um_magnerang", "boomerang", "WEAPONS", true)
+ChangeSortKey("um_magnerang", "oar_driftwood", "SEAFARING", true)
 
 AddRecipe2(
     "hermitshop_rain_horn",
