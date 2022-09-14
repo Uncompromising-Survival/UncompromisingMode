@@ -44,7 +44,7 @@ if TUNING.DSTU.WANDA_NERF then
             end
 
             target:PushEvent("respawnfromghost", { source = inst, from_haunt = doer == target })
-            if target.components.health ~= nil and target.components.health:GetPenalty() < 0.75 then
+            if target.components.health ~= nil and target.components.health:GetPenaltyPercent() < 0.75 then
                 target.components.health:DeltaPenalty(0.25)
             end
             inst.components.rechargeable:Discharge(TUNING.POCKETWATCH_REVIVE_COOLDOWN)
@@ -66,7 +66,7 @@ if TUNING.DSTU.WANDA_NERF then
             inst:Remove()
             return
         end
-        if owner.components.health ~= nil and owner.components.health:GetPenalty() < 0.75 then
+        if owner.components.health ~= nil and owner.components.health:GetPenaltyPercent() < 0.75 then
             owner.components.health:DeltaPenalty(0.25)
         end
     end
