@@ -36,6 +36,8 @@ env.AddComponentPostInit("combat", function(self)
                 damage = 600
             end
             return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
+        else
+            return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
         end
     end
 end)
