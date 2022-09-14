@@ -264,7 +264,7 @@ local function Vac(inst)
 		local distmult = (inst:GetDistanceSqToInst(inst.target) / 200)
 		local tuningmultiplier = 1.25
 		inst.magnet_damage = inst.magnet_damage + distmult * tuningmultiplier
-		TheNet:Announce(inst.magnet_damage)
+		--TheNet:Announce(inst.magnet_damage)
 		if distmult >= 0.15 then
 			local platform = inst:GetCurrentPlatform()
 				
