@@ -183,7 +183,7 @@ AddStategraphPostInit("wilson", function(inst)
 					inst._barkcdtask = inst:DoTaskInTime(20, OnCooldownBark)
 					return "wathombark"
 				elseif inst._cantbarktask == nil then
-					inst._cantbarktask = inst:DoTaskInTime(10, OnCooldownCantBark)
+					inst._cantbarktask = inst:DoTaskInTime(5, OnCooldownCantBark)
 					return "cantbark"
 				else
 					return "idle"

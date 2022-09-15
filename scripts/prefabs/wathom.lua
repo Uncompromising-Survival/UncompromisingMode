@@ -141,9 +141,11 @@ local function AttackOther(inst, data)
 end
 
 local function OnHealthDelta(inst, data)
-	if data.amount < 0 and not inst:HasTag("amped") then
-		inst.components.adrenalinecounter:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
-	end
+	inst:DoTaskInTime(FRAMES*2, function(inst)
+		if data.amount < 0 and not inst:HasTag("amped") then
+			inst.components.adrenalinecounter:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
+		end
+	end)
 end
 
 ---------------------------------------------
@@ -153,7 +155,7 @@ local function GetPointSpecialActions(inst, pos, useitem, right)
 	--for barking to not work on clients. -A
 	if right and useitem == nil then
 		local rider = inst.replica.rider
-		if rider == nil or not rider:IsRiding() then
+		if rider ~= nil and not rider:IsRiding() or rider == nil then
 			return { ACTIONS.WATHOMBARK }
 		end
 	end
