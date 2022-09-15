@@ -686,7 +686,7 @@ local wathombark = AddAction(
 	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		if act.doer ~= nil and act.doer.components.adrenalinecounter ~= nil then -- previously act.target
-			if act.doer.components.adrenalinecounter:GetPercent() > 0.44 then
+			if act.doer.components.adrenalinecounter:GetPercent() < 0.44 then
 				return false
 			end
 			local inst = act.doer
