@@ -85,6 +85,41 @@ local function AmpTimer2(inst)
 	if inst.components.adrenalinecounter:GetPercent() < 0.25 and not inst:HasTag("amped") then
 		inst.components.adrenalinecounter:DoDelta(0.5) -- Slowly regaining to normal levels.
 	end
+
+	local AmpLevel = inst.components.adrenalinecounter:GetPercent()
+	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+	--range updates
+	if AmpLevel < 0.25 and not inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 2
+		else
+			inst.components.combat.attackrange = 2
+		end
+	elseif AmpLevel < 0.32 and not inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 4
+		else
+			inst.components.combat.attackrange = 2
+		end
+	elseif AmpLevel < 0.45 and not inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 5
+		else
+			inst.components.combat.attackrange = 2
+		end
+	elseif AmpLevel < 0.66 and not inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 6
+		else
+			inst.components.combat.attackrange = 2
+		end
+	elseif AmpLevel < 1 and not inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 7
+		else
+			inst.components.combat.attackrange = 2
+		end
+	end
 end
 
 local function AttackOther(inst, data)

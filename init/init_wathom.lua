@@ -26,21 +26,14 @@ local Vector3 = GLOBAL.Vector3
 
 -- Setting up new actions
 
-local function OnCooldown(inst)
+local function OnCooldownBark(inst)
 	inst._barkcdtask = nil
 end
 
-local function EditCombat(inst)
-	local self = inst.components.combat
-	local _GetAttacked = self.GetAttacked
-	self.GetAttacked = function(self, attacker, damage, weapon, stimuli)
-		if attacker ~= nil and attacker:HasTag("wathom") and attacker.AmpDamageTakenModifier ~= nil and damage then
-			-- Take extra damage
-			damage = damage * attacker.AmpDamageTakenModifier
-		end
-		return _GetAttacked(self, attacker, damage, weapon, stimuli)
-	end
+local function OnCooldownCantBark(inst)
+	inst._cantbarkcdtask = nil
 end
+
 
 local function Effect(inst) -- I dumbed the shit out of this.
 	if GLOBAL.TheWorld.state.wetness > 25 then
@@ -187,10 +180,13 @@ AddStategraphPostInit("wilson", function(inst)
 		ActionHandler(GLOBAL.ACTIONS.WATHOMBARK,
 			function(inst, action)
 				if inst._barkcdtask == nil then
-					inst._barkcdtask = inst:DoTaskInTime(20, OnCooldown)
+					inst._barkcdtask = inst:DoTaskInTime(20, OnCooldownBark)
 					return "wathombark"
-				else
+				elseif inst._cantbarktask == nil then
+					inst._cantbarktask = inst:DoTaskInTime(10, OnCooldownCantBark)
 					return "cantbark"
+				else
+					return "idle"
 				end
 			end),
 
@@ -274,6 +270,10 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
+				if inst.components.adrenalinecounter:GetPercent() < 0.45 then
+					inst.sg:GoToState("cantbark")
+					return
+				end
 				local buffaction = inst:GetBufferedAction()
 				local target = buffaction ~= nil and buffaction.target or nil
 				inst.AnimState:PlayAnimation("emote_angry", false)
@@ -313,7 +313,6 @@ AddStategraphPostInit("wilson", function(inst)
 					inst.sg:RemoveStateTag("busy")
 					inst.sg:RemoveStateTag("nointerrupt")
 				end),
-
 			},
 
 			events =
@@ -337,7 +336,12 @@ AddStategraphPostInit("wilson", function(inst)
 
 				inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
 			end,
-
+			timeline = 
+			{
+				TimeEvent(12 * FRAMES, function(inst)
+					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
+				end),--bark twice.
+			},
 			events =
 			{
 				EventHandler("animover", function(inst)
@@ -681,7 +685,10 @@ local wathombark = AddAction(
 	"WATHOMBARK",
 	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
-		if act.doer ~= nil and (act.doer.components.adrenalinecounter:GetPercent() > 0.44 or act.doer:HasTag("amped"))  then -- previously act.target
+		if act.doer ~= nil and act.doer.components.adrenalinecounter ~= nil then -- previously act.target
+			if act.doer.components.adrenalinecounter:GetPercent() > 0.44 then
+				return false
+			end
 			local inst = act.doer
 			inst.AnimState:AddOverrideBuild("emote_angry")
 			if not inst:HasTag("amped") then
