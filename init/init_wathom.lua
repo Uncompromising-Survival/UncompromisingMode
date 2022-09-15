@@ -850,3 +850,10 @@ local skin_modes = {
 if GetModConfigData("holy fucking shit it's wathom") then
 	AddModCharacter("wathom", "MALE", skin_modes)
 end
+
+--skincolor
+for k, v in pairs(GLOBAL.CLOTHING) do
+	if v and v.symbol_overrides_by_character and v.symbol_overrides_by_character.wortox then
+		GLOBAL.CLOTHING[k].symbol_overrides_by_character.wathom = v.symbol_overrides_by_character.wortox
+	end
+end
