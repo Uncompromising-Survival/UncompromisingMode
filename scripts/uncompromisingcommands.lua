@@ -55,6 +55,7 @@ function c_ratcheck()
         inst.ratscore = 240
     end
     TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
+    TheNet:SystemMessage("Timer = "..TheWorld.components.ratcheck:GetRatTimer().."s")
     TheNet:SystemMessage("-------------------------")
 end
 

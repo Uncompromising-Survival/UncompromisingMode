@@ -2095,6 +2095,7 @@ local function TimeForACheckUp(inst,dev)
 	end
 	if TUNING.DSTU.ANNOUNCE_BASESTATUS then
 		TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
+		TheNet:SystemMessage("Timer = "..TheWorld.components.ratcheck:GetRatTimer().."s")
 		TheNet:SystemMessage("-------------------------")
 	end
 	TheWorld:PushEvent("reducerattimer", {value = inst.ratscore})

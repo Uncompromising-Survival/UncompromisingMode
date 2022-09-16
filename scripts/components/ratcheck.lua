@@ -3,13 +3,6 @@
 return Class(function(self, inst)
 
 --assert(TheWorld.ismastersim, "Ratcheck should not exist on client")
-
---------------------------------------------------------------------------
---[[ Public Member Variables ]]
---------------------------------------------------------------------------
-
-self.inst = inst
-
 --------------------------------------------------------------------------
 --[[ Private Member Variables ]]
 --------------------------------------------------------------------------
@@ -32,6 +25,13 @@ local _ratgrace = TUNING.DSTU.RATRAID_GRACE
 local _ratburrows = 0
 
 local RATRAID_TIMERNAME = "rat_raid"
+--------------------------------------------------------------------------
+--[[ Public Member Variables ]]
+--------------------------------------------------------------------------
+
+self.inst = inst
+self._initialrattimer = _initialrattimer
+
 
 --------------------------------------------------------------------------
 --[[ Private member functions ]]
@@ -53,6 +53,7 @@ local function StartRatTimer()
 	local _time = _rattimer + math.random(_rattimer_variance)
 	
 	_initialrattimer = _time
+	self._initialrattimer = _initialrattimer
 end
 
 local function StartTimerShort()
@@ -60,6 +61,7 @@ local function StartTimerShort()
 	local _time = _rattimer_short + math.random(_rattimer_short_variance)
 	
 	_initialrattimer = _time
+	self._initialrattimer = _initialrattimer
 end
 
 local function ChangeRatTimer(src, data)
@@ -67,10 +69,12 @@ local function ChangeRatTimer(src, data)
 	if _initialrattimer > 0 then
 		if value ~= nil and value < 0 and _initialrattimer < _rattimer then
 			_initialrattimer = _initialrattimer - value
+			self._initialrattimer = _initialrattimer
 			--print("increase timer")
 			--print(_initialrattimer)
 		elseif value ~= nil and value > 0 then
 			_initialrattimer = _initialrattimer - value
+			self._initialrattimer = _initialrattimer
 			--print("reduce timer")
 			--print(_initialrattimer)
 		end
@@ -346,11 +350,15 @@ function self:OnLoad(data)
 		
     if data.initialrattimer ~= nil then
 		_initialrattimer = data.initialrattimer
+		self._initialrattimer = _initialrattimer
 	end
 	
 	StartRespawnTimer()
 end
 
+function self:GetRatTimer()
+	return self._initialrattimer
+end
 
 StartRespawnTimer()
 self.inst:WatchWorldState("cycles", StartRespawnTimer)
