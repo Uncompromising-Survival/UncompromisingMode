@@ -87,7 +87,13 @@ local function AmpTimer2(inst)
 	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	--range updates
-	if AmpLevel < 0.25 and not inst:HasTag("amped") then
+	if inst:HasTag("amped") then
+		if item ~= nil then
+			inst.components.combat.attackrange = 7
+		else
+			inst.components.combat.attackrange = 2
+		end
+	elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 2
 		else
@@ -250,8 +256,8 @@ end
 
 local function CustomCombatDamage(inst, target)
 	--sometimes I hate short-circuit evals...
-	return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
-		(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2
+	return ((inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
+		((inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and inst:HasTag("amped") and 4 or (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and 2 or 1
 end
 
 -- This initializes for both the server and client. Tags can be added here.
@@ -292,11 +298,6 @@ local common_postinit = function(inst)
 
 	inst:ListenForEvent("setowner", OnSetOwner)
 	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
-	inst:DoPeriodicTask(FRAMES*5, function(inst)
-		if inst.replica ~= nil and inst.replica.adrenaline ~= nil then
-			TheFocalPoint.SoundEmitter:KillSound("wathommusic")
-		end
-	end)
 end
 
 -- This initializes for the server only. Components are added here.
