@@ -1,51 +1,66 @@
 local function onmax(self, max)
-
     self.inst.counter_max:set(max)
+    self.inst.replica.maxadrenaline = max
 end
 
 local function oncurrent(self, current)
-
     self.inst.counter_current:set(current)
+    self.inst.replica.currentadrenaline = current
 end
 
-local AdrenalineCounter = Class(function(self, inst)
+local function onamp(self, amped)
+    self.inst.replica.adrenalineamped = amped
+    if amped then
+        TheWorld:PushEvent("enabledynamicmusic", false)
+        if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
+            TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
+        end
+    else
+        TheWorld:PushEvent("enabledynamicmusic", true)
+        TheFocalPoint.SoundEmitter:KillSound("wathommusic")
+    end
+end
+
+local Adrenaline = Class(function(self, inst)
     self.inst = inst
     self.max = 100
     self.current = 25
     self.adrenalinecheck = 0
-
+    self.amped = nil
     self.inst:ListenForEvent("respawn", function(inst) self:OnRespawn() end)
 end,
     nil,
     {
         max = onmax,
         current = oncurrent,
+        amped = onamp,
     })
 
-function AdrenalineCounter:OnRespawn()
+function Adrenaline:OnRespawn()
     local old = self.current
     self.current = 25
+    self.inst.replica.adrenaline:SetCurrent(25)
 
     self.inst:PushEvent("adrenalinedelta",
         { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
 end
 
-function AdrenalineCounter:OnSave()
+function Adrenaline:OnSave()
     return { adrenaline = self.current }
 end
 
-function AdrenalineCounter:OnLoad(data)
+function Adrenaline:OnLoad(data)
     if data.adrenaline then
         self.current = data.adrenaline
         self:DoDelta(0)
     end
 end
 
-function AdrenalineCounter:GetDebugString()
+function Adrenaline:GetDebugString()
     return string.format("%2.2f / %2.2f", self.current, self.max)
 end
 
-function AdrenalineCounter:DoDelta(delta, overtime)
+function Adrenaline:DoDelta(delta, overtime)
     local old = self.current
     self.current = self.current + delta
     if self.current < 0 then
@@ -86,18 +101,22 @@ function AdrenalineCounter:DoDelta(delta, overtime)
         { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
 end
 
-function AdrenalineCounter:GetPercent()
+function Adrenaline:GetPercent()
     return self.current / self.max
 end
 
-function AdrenalineCounter:GetCurrent()
+function Adrenaline:GetCurrent()
     return self.current
 end
 
-function AdrenalineCounter:SetPercent(p)
+function Adrenaline:SetPercent(p)
     local old = self.current
     self.current = p * self.max
     self.inst:PushEvent("adrenalinedelta", { oldpercent = old / self.max, newpercent = p })
 end
 
-return AdrenalineCounter
+function Adrenaline:SetAmped(amped)
+    self.amped = amped
+end
+
+return Adrenaline

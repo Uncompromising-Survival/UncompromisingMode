@@ -19,25 +19,23 @@ local prefabs = FlattenTree(start_inv, true)
 
 local function UnAmp(inst)
 	inst:RemoveTag("amped") -- Party's over.
-	TheWorld:PushEvent("enabledynamicmusic", true)
-	TheFocalPoint.SoundEmitter:KillSound("wathommusic")
+
 	inst.components.combat.attackrange = 2
 	inst.AmpDamageTakenModifier = 5
 	if inst.adrenalinehpregen ~= nil then
 		inst.adrenalinehpregen:Cancel()
 		inst.adrenalinehpregen = nil
 	end
+	inst.components.adrenaline:SetAmped(false)
 end
 
 local function Amp(inst)
 	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
 	inst.AmpDamageTakenModifier = 5
 	inst:AddTag("amped")
+	inst.components.adrenaline:SetAmped(true)
 	inst.components.talker:Say("AMPED UP!", nil, true)
-	TheWorld:PushEvent("enabledynamicmusic", false)
-	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
-		TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
-	end
+
 	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
 			inst.components.health:DoDelta(1.5)
@@ -50,14 +48,14 @@ local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wathom_speed_mod", 1)
 	UnAmp(inst)
-	inst.components.adrenalinecounter:SetPercent(0.25)
+	inst.components.adrenaline:SetPercent(0.25)
 end
 
 local function onbecameghost(inst)
 	-- Remove speed modifier when becoming a ghost
 	inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wathom_speed_mod")
 	UnAmp(inst)
-	inst.components.adrenalinecounter:SetPercent(0.25)
+	inst.components.adrenaline:SetPercent(0.25)
 end
 
 -------------------------------------------
@@ -65,7 +63,7 @@ end
 
 local function AmpTimer(inst)
 	if inst.components.grogginess ~= nil and
-		(inst.components.adrenalinecounter:GetPercent() < 0.24 and not inst:HasTag("amped")) then
+		(inst.components.adrenaline:GetPercent() < 0.24 and not inst:HasTag("amped")) then
 		inst.components.grogginess.grog_amount = 0.5
 	end
 end
@@ -74,19 +72,19 @@ local function AmpTimer2(inst)
 	-- Draining adrenaline when not in combat.
 	if inst:HasTag("amped") then
 		if inst.adrenalpause then
-			inst.components.adrenalinecounter:DoDelta(-1)
+			inst.components.adrenaline:DoDelta(-1)
 		else
-			inst.components.adrenalinecounter:DoDelta(-4)
+			inst.components.adrenaline:DoDelta(-4)
 		end
-	elseif (inst.components.adrenalinecounter:GetPercent() > 0.25 and not inst.adrenalpause) then
-		inst.components.adrenalinecounter:DoDelta(-1)
+	elseif (inst.components.adrenaline:GetPercent() > 0.25 and not inst.adrenalpause) then
+		inst.components.adrenaline:DoDelta(-1)
 	end
 
-	if inst.components.adrenalinecounter:GetPercent() < 0.25 and not inst:HasTag("amped") then
-		inst.components.adrenalinecounter:DoDelta(0.5) -- Slowly regaining to normal levels.
+	if inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasTag("amped") then
+		inst.components.adrenaline:DoDelta(0.5) -- Slowly regaining to normal levels.
 	end
 
-	local AmpLevel = inst.components.adrenalinecounter:GetPercent()
+	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	--range updates
 	if AmpLevel < 0.25 and not inst:HasTag("amped") then
@@ -123,7 +121,7 @@ local function AmpTimer2(inst)
 end
 
 local function AttackOther(inst, data)
-	if data and data.target and inst.components.adrenalinecounter:GetPercent() > 0.24 and
+	if data and data.target and inst.components.adrenaline:GetPercent() > 0.24 and
 		((data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
 			(
 			data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or
@@ -135,7 +133,7 @@ local function AttackOther(inst, data)
 		end
 		inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
 		if not inst:HasTag("amped") then
-			inst.components.adrenalinecounter:DoDelta(2)
+			inst.components.adrenaline:DoDelta(2)
 		end
 	end
 end
@@ -143,7 +141,7 @@ end
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES*2, function(inst)
 		if data.amount < 0 and not inst:HasTag("amped") then
-			inst.components.adrenalinecounter:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
+			inst.components.adrenaline:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
 end
@@ -198,7 +196,7 @@ local function onload(inst, data)
 end
 
 local function UpdateAdrenaline(inst)
-	local AmpLevel = inst.components.adrenalinecounter:GetPercent()
+	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
 	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") then --Handle VVathom Running
@@ -294,7 +292,11 @@ local common_postinit = function(inst)
 
 	inst:ListenForEvent("setowner", OnSetOwner)
 	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
-
+	inst:DoPeriodicTask(FRAMES*5, function(inst)
+		if inst.replica ~= nil and inst.replica.adrenaline ~= nil then
+			TheFocalPoint.SoundEmitter:KillSound("wathommusic")
+		end
+	end)
 end
 
 -- This initializes for the server only. Components are added here.

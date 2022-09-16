@@ -6,11 +6,9 @@ env.AddClassPostConstruct("widgets/bloodover", function(self, owner)
     self.owner = owner
 
     function self:UpdateState()
-        if self.inst:HasTag("amped") or self.owner:HasTag("amped") then
-            print("amped! turning on bloodover")    --I have no idea what's self.owner but worth a shot.
+        if self.owner.replica ~= nil and self.owner.replica.adrenalineamped or self.owner:HasTag("amped") then
             self:TurnOn()
         else
-            print("not amped! returnign normal _updatestate")
             return _UpdateState(self)
         end
     end
@@ -18,4 +16,6 @@ env.AddClassPostConstruct("widgets/bloodover", function(self, owner)
     local function __UpdateState() self:UpdateState() end
 
     self.inst:ListenForEvent("adrenalinedelta", __UpdateState, owner)
+
+    self.owner:DoPeriodicTask(FRAMES*5, __UpdateState)
 end)

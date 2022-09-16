@@ -156,13 +156,10 @@ local function ConfigureRunState(inst)
 end
 
 AddStategraphPostInit("wilson", function(inst)
-
-
-
 	local _RunOnEnter = inst.states["run_start"].onenter
 
 	local function NevvOnEnter(inst)
-		--print(inst.components.adrenalinecounter:GetPercent())
+		--print(inst.components.adrenaline:GetPercent())
 		if inst:HasTag("wathom") and inst:HasTag("wathomrun") then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
@@ -270,7 +267,7 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
-				if inst.components.adrenalinecounter:GetPercent() < 0.45 then
+				if inst.components.adrenaline:GetPercent() < 0.45 then
 					inst.sg:GoToState("cantbark")
 					return
 				end
@@ -435,10 +432,10 @@ AddStategraphPostInit("wilson", function(inst)
 				TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
 					if inst:HasTag("amped") then
 						inst.Physics:SetMotorVel(15, 0, 0)
-					elseif inst.components.adrenalinecounter:GetPercent() > 0.24 and inst.components.adrenalinecounter:GetPercent() < 0.51 then
+					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 then
 						inst.Physics:SetMotorVel(10, 0, 0)
 					else	
-						inst.Physics:SetMotorVel(10 * (inst.components.adrenalinecounter:GetPercent() + .5), 0, 0) 
+						inst.Physics:SetMotorVel(10 * (inst.components.adrenaline:GetPercent() + .5), 0, 0) 
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				end),
@@ -687,16 +684,16 @@ local wathombark = AddAction(
 	"WATHOMBARK",
 	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
-		if act.doer ~= nil and act.doer.components.adrenalinecounter ~= nil then -- previously act.target
-			if act.doer.components.adrenalinecounter:GetPercent() < 0.44 then
+		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
+			if act.doer.components.adrenaline:GetPercent() < 0.44 then
 				return false
 			end
 			local inst = act.doer
 			inst.AnimState:AddOverrideBuild("emote_angry")
 			if not inst:HasTag("amped") then
-				inst.components.adrenalinecounter:DoDelta(-20, 2)
+				inst.components.adrenaline:DoDelta(-20, 2)
 			else
-				inst.components.adrenalinecounter:DoDelta(10, 2)
+				inst.components.adrenaline:DoDelta(10, 2)
 			end
 			--		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 
@@ -756,7 +753,7 @@ AddPlayerPostInit(function(inst)
 		inst.counter_current = GLOBAL.net_shortint(inst.GUID, "counter_current", "counter_currentdirty")
 
 		if GLOBAL.TheWorld.ismastersim then
-			inst:AddComponent("adrenalinecounter")
+			inst:AddComponent("adrenaline")
 		end
 		inst:ListenForEvent("onattackother", AttackOther)
 	end
