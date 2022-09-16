@@ -916,6 +916,7 @@ Assets = {
 
 	Asset("IMAGE", "images/inventoryimages/skullchest_child.tex"),
 	Asset("ATLAS_BUILD", "images/inventoryimages/skullchest_child.xml"),
+	Asset("ATLAS", "images/inventoryimages/skullchest_child.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/turf_hoodedmoss.tex"),
 	Asset("ATLAS_BUILD", "images/inventoryimages/turf_hoodedmoss.xml"),
