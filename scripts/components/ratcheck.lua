@@ -40,12 +40,12 @@ self._initialrattimer = _initialrattimer
 local function CooldownRaid(src, data)
 		_respawntime = nil
 		_raided = false
-		--print("cooldown raid")
+		print("cooldown raid")
 end
 
 local function Print()
-	--print(_respawntime)
-	--print(_raided)
+	print(_respawntime)
+	print(_raided)
 end
 
 local function StartRatTimer()
@@ -70,16 +70,16 @@ local function ChangeRatTimer(src, data)
 		if value ~= nil and value < 0 and _initialrattimer < _rattimer then
 			_initialrattimer = _initialrattimer - value
 			self._initialrattimer = _initialrattimer
-			--print("increase timer")
-			--print(_initialrattimer)
+			print("increase timer")
+			print(_initialrattimer)
 		elseif value ~= nil and value > 0 then
 			_initialrattimer = _initialrattimer - value
 			self._initialrattimer = _initialrattimer
-			--print("reduce timer")
-			--print(_initialrattimer)
+			print("reduce timer")
+			print(_initialrattimer)
 		end
 	else
-		--print("Rats are ready :)")
+		print("Rats are ready :)")
 	end
 end
 
@@ -215,11 +215,11 @@ local function StartRaid(inst)
 		MakeRatBurrow(inst)]]
 	--end
 	
-	--print("Rat Raid Warning :", ratwarning)
+	print("Rat Raid Warning :", ratwarning)
 end
 
 local function ActiveRaid(src, data)
-	--print("Active Raid")
+	print("Active Raid")
 	
 	if data.doer == nil and data.container ~= nil then
 		data.doer = data.container:GetNearestPlayer(true)
@@ -228,12 +228,12 @@ local function ActiveRaid(src, data)
 	local x, y, z = data.doer.Transform:GetWorldPosition()
 	
     if data ~= nil and data.doer ~= nil and data.container ~= nil then
-		--print("Found a Doer!")
+		print("Found a Doer!")
 		if not data.doer or not data.doer:IsValid() or not data.doer.Transform or not IsEligible(data.doer) then
 			return
 		end
 		
-		--print("Doer is valid!")
+		print("Doer is valid!")
 		
 		local ents = TheSim:FindEntities(x, y, z, 30, nil, {"cattoy"}, {"_inventoryitem"})
 		if IsEligible(data.doer) and
@@ -241,16 +241,16 @@ local function ActiveRaid(src, data)
 			not (_raided ~= nil and _raided) and
 			--[[not data.container.components.container:IsEmpty() and]]
 			#ents >= 20 then
-			--print("GOGO NINJA RATORIO")
+			print("GOGO NINJA RATORIO")
 			
 			_raided = true
 			
 			data.container:DoTaskInTime(0, StartRaid, data.doer)
 		else
-			--print(_initialrattimer)
+			print(_initialrattimer)
 			
 			if #ents <= 20 then
-				--print("CAN'T SPAWN RATS! There aren't enough items around!")
+				print("CAN'T SPAWN RATS! There aren't enough items around!")
 			else
 				if #TheSim:FindEntities(x, y, z, 30, { "structure" }) > 3 then
 					local ratchecker = TheSim:FindFirstEntityWithTag("rat_sniffer")
@@ -264,15 +264,15 @@ local function ActiveRaid(src, data)
 			
 			
 			if data.container.components.container:IsEmpty() then
-				--print("CAN'T SPAWN RATS! This container is empty!")
+				print("CAN'T SPAWN RATS! This container is empty!")
 			end
 			
 			if not IsEligible(data.doer) then
-				--print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
+				print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
 			end
 			
 			if (_raided ~= nil and _raided) then
-				--print("CAN'T SPAWN RATS! They are on break!")
+				print("CAN'T SPAWN RATS! They are on break!")
 			end
 		end
 		
@@ -282,12 +282,12 @@ end
 
 local function IncreaseDens(data)
 	_ratburrows = _ratburrows + 1
-	--print("INCREASED RAT BURROWS TO ".._ratburrows)
+	print("INCREASED RAT BURROWS TO ".._ratburrows)
 end
 
 local function DecreaseDens(data)
 	_ratburrows = _ratburrows - 1
-	--print("DECREASED RAT BURROWS TO ".._ratburrows)
+	print("DECREASED RAT BURROWS TO ".._ratburrows)
 end
 
 function self:GetBurrows()
@@ -298,8 +298,8 @@ function self:OnUpdate(dt)
 	if _ratsnifftimer then
 		if _ratsnifftimer > 0 then
 			_ratsnifftimer = _ratsnifftimer - dt --(dt * _ratburrows)
-			--print(_ratsnifftimer)
-			--print(_ratburrows)
+			print(_ratsnifftimer)
+			print(_ratburrows)
 		else
 			_ratsnifftimer = TUNING.DSTU.RATSNIFFER_TIMER
             --TheWorld:PushEvent("rat_sniffer")
