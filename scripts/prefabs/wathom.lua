@@ -319,7 +319,7 @@ local master_postinit = function(inst)
 
 	inst.components.eater:SetCanEatRawMeat(true)
 
-	inst.components.foodaffinity:AddPrefabAffinity("bonestew", 20) -- replace with hardshell tacos when implementing in uncomp
+	inst.components.foodaffinity:AddPrefabAffinity("hardshelltacos", 20) -- replace with hardshell tacos when implementing in uncomp
 
 	-- Stats
 	inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)
