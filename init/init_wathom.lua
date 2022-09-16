@@ -400,7 +400,7 @@ AddStategraphPostInit("wilson", function(inst)
 				TimeEvent(0 * FRAMES, function(inst)
 					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap")
 					inst.Physics:ClearCollisionMask() -- all of this physics stuff will give the impression that Wathom is jumping over things. It also allows him to slide past targets instead of ending his leap in front.
-					inst.components.hunger:DoDelta(-1, 2)
+--					inst.components.hunger:DoDelta(-1, 2)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.WORLD)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
@@ -435,8 +435,10 @@ AddStategraphPostInit("wilson", function(inst)
 				TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
 					if inst:HasTag("amped") then
 						inst.Physics:SetMotorVel(15, 0, 0)
-					else
-						inst.Physics:SetMotorVel(10 * (inst.components.adrenalinecounter:GetPercent() + .5), 0, 0) -- This causes Wathom to slide forward. Update when Adrenaline is implemented.
+					elseif inst.components.adrenalinecounter:GetPercent() > 0.24 and inst.components.adrenalinecounter:GetPercent() < 0.51 then
+						inst.Physics:SetMotorVel(10, 0, 0)
+					else	
+						inst.Physics:SetMotorVel(10 * (inst.components.adrenalinecounter:GetPercent() + .5), 0, 0) 
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				end),
