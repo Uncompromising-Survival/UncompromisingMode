@@ -1,7 +1,7 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.15.8 : "Calm Before the Storm" ]
+󰀔 [ Version 1.15.9 : "Calm Before the Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -15,7 +15,7 @@ Prominent features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.15.8"
+version = "Calm Before the Storm v1.15.9"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
