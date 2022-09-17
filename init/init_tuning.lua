@@ -407,6 +407,7 @@ TUNING.DSTU =
     NO_MOCK_DRAGONFLY_BOSS_TIME = GetModConfigData("wiltfly_spawn"),
     NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
 
+    WATHOM_MAX_DAMAGE_CAP = GetModConfigData("wathom_maxdmg"),
 --boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
@@ -464,6 +465,9 @@ TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 
 TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION = TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION * 4
 TUNING.SPAWNPROTECTIONBUFF_DURATION = TUNING.SPAWNPROTECTIONBUFF_DURATION * 1.5
+
+TUNING.MULTITOOL_AXE_PICKAXE_USES = 800
+
 
 --Sailing Rebalance related tuning changes
 --trident buff

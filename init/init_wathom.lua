@@ -856,3 +856,42 @@ for k, v in pairs(GLOBAL.CLOTHING) do
 		GLOBAL.CLOTHING[k].symbol_overrides_by_character.wathom = v.symbol_overrides_by_character.wortox
 	end
 end
+
+--Refuse to die Edit this not to include you
+local function MayKill(self,amount)
+	if self.currenthealth + amount <= 0 then
+		return true
+	end
+end
+
+local function HasLLA(self)
+	if self.inst.components.inventory then
+		local item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+		if item and item.prefab == "amulet" then
+			return true
+		end
+	end
+end
+
+AddComponentPostInit("health", function(self)
+    if not GLOBAL.TheWorld.ismastersim then return end
+
+    local _DoDelta = self.DoDelta
+    function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+		if MayKill(self,amount) and HasLLA(self) and not (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then
+			_DoDelta(self,amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb) --Don't trigger the LLA here, let it happen in our ovvn component, so this doesn't break vvhenever canis moves it to his ovvn mod. 
+		else
+			if MayKill(self,amount) and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then --suggest that vve add a trigger here to shovv that vvathom is still being hit, despite his lack of flinching or anything.
+				self:SetCurrentHealth(1)
+				if self.inst.components.adrenaline and self.inst:HasTag("deathamp") then
+					self.inst.components.adrenaline:DoDelta(amount * 0.2)
+				end
+				if not self.inst:HasTag("deathamp") then
+					self.inst:AddTag("deathamp")
+				end
+			elseif not self.inst:HasTag("deathamp") then -- No positive healing if you're on your last breath
+				_DoDelta(self,amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+			end
+		end
+    end
+end)

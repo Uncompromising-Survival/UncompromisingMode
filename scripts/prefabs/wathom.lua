@@ -27,6 +27,12 @@ local function UnAmp(inst)
 		inst.adrenalinehpregen = nil
 	end
 	inst.components.adrenaline:SetAmped(false)
+	if inst:HasTag("deathamp") then
+		inst:RemoveTag("deathamp")
+		if inst.components.health and not inst.components.health:IsDead() then
+			inst.components.health:DoDelta(-225)
+		end
+	end
 end
 
 local function Amp(inst)
@@ -145,7 +151,7 @@ local function AttackOther(inst, data)
 end
 
 local function OnHealthDelta(inst, data)
-	inst:DoTaskInTime(FRAMES*2, function(inst)
+	inst:DoTaskInTime(FRAMES * 2, function(inst)
 		if data.amount < 0 and not inst:HasTag("amped") then
 			inst.components.adrenaline:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
 		end
@@ -198,6 +204,7 @@ local function onload(inst, data)
 	end
 	if data and data.amped then
 		inst:AddTag("amped")
+		SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 	end
 end
 
@@ -256,11 +263,35 @@ end
 
 local function CustomCombatDamage(inst, target)
 	--sometimes I hate short-circuit evals...
-	return ((inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
-		((inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and inst:HasTag("amped") and 4 or (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and 2 or 1
+	return (
+		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and
+			target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
+		(
+		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and
+			target.components.hauntable.panic) and (1.5 * 2) or
+		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and inst:HasTag("amped") and 4 or
+		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and 2 or 1
 end
 
 -- This initializes for both the server and client. Tags can be added here.
+local function StartMusic(inst)
+	print("start music CLIENT")
+	TheWorld:PushEvent("enabledynamicmusic", false)
+	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
+		TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/wathom_amped", "wathommusic")
+	end
+	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
+end
+
+local function StopMusic(inst)
+	print("stop music CLIENT")
+	TheWorld:PushEvent("enabledynamicmusic", false)
+	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
+		TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/wathom_amped", "wathommusic")
+	end
+	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
+end
+
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wathom.tex")
@@ -296,8 +327,18 @@ local common_postinit = function(inst)
 		end)
 	end)
 
+	--t'was revealed to me in a dream, and I'm not even kidding.
+	inst:ListenForEvent("wathommusic_start", StartMusic)
+	inst:ListenForEvent("wathommusic_end", StopMusic)
+	inst:ListenForEvent("ms_playerreroll", StopMusic)
+
 	inst:ListenForEvent("setowner", OnSetOwner)
-	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
+	inst:ListenForEvent("ondeath", function(inst)
+		if inst:HasTag("amped") then
+			inst:RemoveTag("amped")
+		end
+		StopMusic()
+	end)
 end
 
 -- This initializes for the server only. Components are added here.
@@ -388,6 +429,9 @@ local master_postinit = function(inst)
 	if TheWorld.ismastersim then
 		inst:ListenForEvent("adrenalinedelta", UpdateAdrenaline)
 	end
+	inst:ListenForEvent("wathommusic_start", StartMusic)
+	inst:ListenForEvent("wathommusic_end", StopMusic)
+	inst:ListenForEvent("ms_playerreroll", StopMusic)
 	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
 	-- Wathom's immunity to night drain during the night.
 	inst.components.sanity.night_drain_mult = 0

@@ -329,6 +329,7 @@ return {
 	"uncompromising_fishingnet",
 	"uncompromising_fishingnetvisualizer",
 	"um_windturbine",
+	"mastupgrade_windturbine",
 	"um_beegun",
 
 	"armor_reed_um",

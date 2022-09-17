@@ -9,15 +9,14 @@ local function oncurrent(self, current)
 end
 
 local function onamp(self, amped)
-    self.inst.replica.adrenalineamped = amped
+    print("onamp!!!")
+    --transform it to binary because replica SetValue is numbers only, and I don't feel like messing with netvars...
+    self.inst.replica.adrenaline:SetAmped(amped)
+    --explicit true check because it's now a number
     if amped then
-        TheWorld:PushEvent("enabledynamicmusic", false)
-        if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
-            TheFocalPoint.SoundEmitter:PlaySound("dontstarve/music/music_hoedown_moose", "wathommusic")
-        end
+        self.inst:PushEvent("wathommusic_start")
     else
-        TheWorld:PushEvent("enabledynamicmusic", true)
-        TheFocalPoint.SoundEmitter:KillSound("wathommusic")
+        self.inst:PushEvent("wathommusic_end")
     end
 end
 
@@ -26,14 +25,14 @@ local Adrenaline = Class(function(self, inst)
     self.max = 100
     self.current = 25
     self.adrenalinecheck = 0
-    self.amped = nil
+    self.isamped = false
     self.inst:ListenForEvent("respawn", function(inst) self:OnRespawn() end)
 end,
     nil,
     {
         max = onmax,
         current = oncurrent,
-        amped = onamp,
+        isamped = onamp,
     })
 
 function Adrenaline:OnRespawn()
@@ -116,7 +115,7 @@ function Adrenaline:SetPercent(p)
 end
 
 function Adrenaline:SetAmped(amped)
-    self.amped = amped
+    self.isamped = amped
 end
 
 return Adrenaline

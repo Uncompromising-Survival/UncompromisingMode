@@ -203,6 +203,7 @@ local inventoryitems =
 	"um_brineishmoss",
 	"brine_balm",
 	"sludge_oil",
+	"mastupgrade_windturbine_item",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -558,6 +559,7 @@ Assets = {
 	Asset("ANIM", "anim/UM_harpoonreel.zip"),
 
 	Asset("ANIM", "anim/um_windturbine.zip"),
+	Asset("ANIM", "anim/mastupgrade_windturbine.zip"),
 
 	Asset("ANIM", "anim/trapdoorgrass.zip"),
 
@@ -1225,7 +1227,11 @@ Assets = {
 	Asset("ATLAS_BUILD", "images/inventoryimages/um_magnerang.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_magnerang.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_magnerang.tex"),
-
+	
+	Asset("ATLAS_BUILD", "images/inventoryimages/mastupgrade_windturbine_item.xml"),
+	Asset("ATLAS", "images/inventoryimages/mastupgrade_windturbine_item.xml"),
+	Asset("IMAGE", "images/inventoryimages/mastupgrade_windturbine_item.tex"),
+	
 	Asset("IMAGE", "images/inventoryimages/cursed_antler.tex"),
 	Asset("ATLAS_BUILD", "images/inventoryimages/cursed_antler.xml"),
 	Asset("ATLAS", "images/inventoryimages/cursed_antler.xml"),

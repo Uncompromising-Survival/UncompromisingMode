@@ -728,6 +728,8 @@ ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_
 AddRecipe2("portableboat_item", {Ingredient("mosquitosack", 2), Ingredient("rope", 2)}, GLOBAL.TECH.NONE, nil, {"SEAFARING"})
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
+AddRecipe2("mastupgrade_windturbine_item", {Ingredient("cutstone", 2), Ingredient("transistor", 2)}, GLOBAL.TECH.NONE, nil, {"SEAFARING"})
+ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 --recipe postinits
 
 AddRecipePostInitAny(function(recipe)
@@ -801,6 +803,7 @@ STRINGS.RECIPE_DESC.BOAT_BUMPER_COPPER_KIT = "Sturdy protection."
 STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
+STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "spinny wooooo"
 
 --sailing rebalance strings
 STRINGS.RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"

@@ -27,17 +27,18 @@ env.AddComponentPostInit("combat", function(self)
     function self:GetAttacked(attacker, damage, weapon, stimuli, ...)
         if self.inst ~= nil and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier ~= nil and damage then
             -- Take extra damage
-            print("pre",damage)
             damage = damage * self.inst.AmpDamageTakenModifier
-            print("post",damage)
             return _GetAttacked(self, attacker, damage, weapon, stimuli)
-        elseif self.inst ~= nil and attacker ~= nil and attacker:HasTag("wathom") then
+        elseif self.inst ~= nil and attacker ~= nil and attacker:HasTag("wathom") and TUNING.DSTU.WATHOM_MAX_DAMAGE_CAP then
             if damage > 600 then
                 damage = 600
             end
             return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
         elseif self.inst ~= nil and (self.inst.prefab == "bernie_active" or self.inst.prefab == "bernie_big") and attacker ~= nil and attacker:HasTag("shadow") then
             damage = damage * 0.2
+            return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
+        elseif self.inst:HasTag("ratwhisperer") and attacker ~= nil and attacker.prefab == "catcoon"  then
+            damage = damage + 10
             return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
         else
             return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
