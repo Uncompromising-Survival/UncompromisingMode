@@ -79,7 +79,7 @@ local function commonfn(build, tags)
 
     ------------------
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(400)
+    inst.components.health:SetMaxHealth(600)
 
     ------------------
     inst:AddComponent("combat")
