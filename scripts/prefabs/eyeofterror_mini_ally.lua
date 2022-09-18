@@ -27,6 +27,12 @@ local function OnAttacked(inst, data)
 	end
 end
 
+local function onnear(inst, target)
+    if inst.components.follower.leader == nil then
+		target.components.leader:AddFollower(inst)
+    end
+end
+
 local DIET = { FOODTYPE.MEAT }
 local function commonfn(build, tags)
     local inst = CreateEntity()
@@ -48,6 +54,7 @@ local function commonfn(build, tags)
     inst:AddTag("ignorewalkableplatformdrowning")
     inst:AddTag("monster")
     inst:AddTag("smallcreature")
+    inst:AddTag("companion")
 
     inst.AnimState:SetBank("eyeofterror_mini")
     inst.AnimState:SetBuild("eyeofterror_mini_mob_build")
@@ -90,8 +97,15 @@ local function commonfn(build, tags)
     ------------------
     inst:AddComponent("knownlocations")
 	inst:AddComponent("follower")
+
     ------------------
     inst:AddComponent("inspectable")
+
+    ------------------
+    inst:AddComponent("playerprox")
+    inst.components.playerprox:SetDist(4, 6) --set specific values
+    inst.components.playerprox:SetOnPlayerNear(onnear)
+    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
     ------------------
     inst:AddComponent("eater")
