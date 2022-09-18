@@ -182,7 +182,7 @@ local function onsave_rat(inst, data)
 		data.scouting = true
 	end
 
-	if inst:HasTag("notraptrigger") and inst.components.follower.leader ~= nil then
+	if inst:HasTag("winky_rat") and inst.components.follower.leader ~= nil then
 		data.iswinkyfollower = true
 	end
 end
@@ -199,6 +199,8 @@ local function onload_rat(inst, data)
 		if data.iswinkyfollower then
 			inst:AddTag("notraptrigger")
 			inst:RemoveTag("canbetrapped")
+			inst:AddTag("companion")
+			inst:AddTag("winky_rat")
 		end
 	end
 end
@@ -1501,8 +1503,11 @@ local function WinkyInteract(inst, doer)
 
 			newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
 			doer.components.leader:AddFollower(newrat)
+
 			newrat:AddTag("notraptrigger")
 			newrat:RemoveTag("canbetrapped")
+			newrat:AddTag("companion")
+			newrat:AddTag("winky_rat")
 
 			inst.AnimState:PlayAnimation("dig")
 			inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")

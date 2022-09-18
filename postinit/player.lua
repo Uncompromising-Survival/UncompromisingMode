@@ -8,7 +8,7 @@ env.AddPlayerPostInit(function(inst)
             not inst:HasTag("playerghost") then
             if not inst:HasTag("vetcurse") then
                 inst.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-                inst:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+                inst:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             end
         end
     elseif TUNING.DSTU.VETCURSE == "off" and inst:HasTag("vetcurse") then
@@ -51,24 +51,39 @@ env.AddPlayerPostInit(function(inst)
         local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         print(item)
 
-        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
+        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or
+            (
+            item ~= nil and
+                (
+                (item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or
+                    (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
             print("no handslot item - using headslot")
             item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
             print(item)
         end
 
-        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
+        if item == nil or (item ~= nil and not item:HasTag("electricaltool")) or
+            (
+            item ~= nil and
+                (
+                (item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or
+                    (item.components.fueled ~= nil and item.components.fueled:GetPercent() >= 0.99))) then
             print("no headslot item - using bodyslot")
             item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             print(item)
         end
 
-        if (item ~= nil and ((item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item.components.fueled ~= nil and item.components.fueled:GetPercent() > 0.99))) then
+        if (
+            item ~= nil and
+                (
+                (item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or
+                    (item.components.fueled ~= nil and item.components.fueled:GetPercent() > 0.99))) then
             return false, "CHARGE_FULL"
         end
 
         if inst.components.upgrademoduleowner == nil then
-            if (item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.99) then
+            if (item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or
+                (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.99) then
                 return false, "CHARGE_FULL"
             else
                 if item ~= nil and item:HasTag("electricaltool") then
@@ -78,18 +93,24 @@ env.AddPlayerPostInit(function(inst)
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true
                 end
             end
         else
-            if ((item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.995)) and inst.components.upgrademoduleowner:ChargeIsMaxed() or not (item ~= nil and item:HasTag("electricaltool")) then
+            if (
+                (item ~= nil and item.components.finiteuses ~= nil and item.components.finiteuses:GetPercent() == 1) or
+                    (item ~= nil and item.components.fueld ~= nil and item.components.fueled:GetPercent() >= 0.995)) and
+                inst.components.upgrademoduleowner:ChargeIsMaxed() or not (item ~= nil and item:HasTag("electricaltool")
+                ) then
                 return false, "CHARGE_FULL"
             else
                 if item ~= nil and item:HasTag("electricaltool") then
@@ -102,11 +123,13 @@ env.AddPlayerPostInit(function(inst)
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true
@@ -125,7 +148,7 @@ env.AddPlayerPostInit(function(inst)
 
     inst.OnDespawn = function(inst, migrationdata, ...)
         for k, v in pairs(inst.components.leader.followers) do
-            if (k:HasTag("spider") or k:HasTag("pig") or k:HasTag("merm") or k:HasTag("raidrat")) then--exluding things that can't/shouldn't/already do
+            if (k:HasTag("spider") or k:HasTag("pig") or k:HasTag("merm") or k:HasTag("raidrat") or k:HasTag("winky_rat")) then --exluding things that can't/shouldn't/already do
                 local savedata = k:GetSaveRecord()
                 table.insert(inst.um_all_followers, savedata)
                 -- remove followers
@@ -172,7 +195,7 @@ env.AddPlayerPostInit(function(inst)
                     local fx = SpawnPrefab("spawn_fx_small")
                     fx.Transform:SetPosition(follower.Transform:GetWorldPosition())
                 end)
-                data.um_all_followers = {}--empty the table to prevent duping.
+                data.um_all_followers = {} --empty the table to prevent duping.
             end
         end
         if _OnLoad ~= nil then
