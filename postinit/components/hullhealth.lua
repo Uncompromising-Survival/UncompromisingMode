@@ -5,7 +5,7 @@ env.AddComponentPostInit("hullhealth", function(self)
     local _OnCollide = self.OnCollide
 
     function self:OnCollide(data)
-        if data.other ~= nil and data.other:HasTag("boat") and data.other.prefab == self.inst.prefab and not TheNet:GetPVPEnabled() then
+        if data.other ~= nil and data.other:HasTag("boat") and not TheNet:GetPVPEnabled() then
             return
         else
             return _OnCollide(self, data)
