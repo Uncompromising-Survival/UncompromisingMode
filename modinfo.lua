@@ -521,6 +521,7 @@ configuration_options =
 
 
 	Header("Misc Monsters"),
+	BinaryConfig("pigking_guards", "Pig King Guards", "Pig King now has neutral guards watching over any suspicious activity.", true),
 	BinaryConfig("bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging berry bushes...", true),
 	BinaryConfig("desertscorpions", "Scorpions", "Scorpions plague the desert lands. They will spawn from desert turf within the desert during the day.", true),
 	BinaryConfig("pinelings", "Pinelings", "Stumps will become pinelings if awoken by a treeguard, or can happen naturally to existing old stumps.", true),
