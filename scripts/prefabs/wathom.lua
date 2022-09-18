@@ -276,19 +276,11 @@ end
 -- This initializes for both the server and client. Tags can be added here.
 local function StartMusic(inst)
 	print("start music CLIENT")
-	TheWorld:PushEvent("enabledynamicmusic", false)
-	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
-		TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/wathom_amped", "wathommusic")
-	end
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
 
 local function StopMusic(inst)
 	print("stop music CLIENT")
-	TheWorld:PushEvent("enabledynamicmusic", false)
-	if not TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
-		TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/wathom_amped", "wathommusic")
-	end
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
 
