@@ -529,3 +529,16 @@ for k, v in ipairs(farmplants) do
 		inst:AddTag("NORATCHECK")
 	end)
 end
+
+local froglegs = {"froglegs","froglegs_cooked"}
+
+for k, v in ipairs(froglegs) do
+	AddPrefabPostInit(v, function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+
+		inst:AddComponent("tradable")
+		inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
+	end)
+end
