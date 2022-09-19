@@ -327,7 +327,7 @@ AddStategraphPostInit("wilson", function(inst)
 			onenter = function(inst)
 				inst:ClearBufferedAction()
 
---				inst.components.talker:Say("Can't... Breathe...", nil, true) -- I cant think of anything cool for Wathom to say so away this goes
+--				inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
 
 				inst.AnimState:PlayAnimation("sing_fail", false)
 
@@ -397,7 +397,7 @@ AddStategraphPostInit("wilson", function(inst)
 				TimeEvent(0 * FRAMES, function(inst)
 					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap")
 					inst.Physics:ClearCollisionMask() -- all of this physics stuff will give the impression that Wathom is jumping over things. It also allows him to slide past targets instead of ending his leap in front.
---					inst.components.hunger:DoDelta(-1, 2)
+-- 					inst.components.hunger:DoDelta(-1, 2)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.WORLD)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
