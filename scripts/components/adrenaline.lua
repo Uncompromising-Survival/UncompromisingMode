@@ -89,7 +89,7 @@ function Adrenaline:DoDelta(delta, overtime)
 
     if self:GetPercent() < 0.24 then
         --        self.inst.components.sanity.dapperness = -20 / 60
-        if self.inst.components.grogginess ~= nil and not self.inst:HasTag("amped") then
+        if self.inst.components.grogginess ~= nil and not self.inst:HasTag("amped") and not self.inst:HasTag("playerghost") then
             self.inst.components.grogginess:AddGrogginess(0.5, 0)
         end
         --        local counterspeedmod = 1 / Remap(0, 1, 0, TUNING.MIN_GROGGY_SPEED_MOD, TUNING.MAX_GROGGY_SPEED_MOD)
