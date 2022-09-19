@@ -24,7 +24,7 @@ local function UnAmp(inst)
 	inst.AnimState:SetBuild("wathom")	
 
 	inst.components.combat.attackrange = 2
-	inst.AmpDamageTakenModifier = 5
+	inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	if inst.adrenalinehpregen ~= nil then
 		inst.adrenalinehpregen:Cancel()
 		inst.adrenalinehpregen = nil
@@ -45,7 +45,7 @@ end
 local function Amp(inst)
 	inst.AnimState:SetBuild("wathom_shadow") --placeholder so i know it works
 	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
-	inst.AmpDamageTakenModifier = 5
+	inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	inst:AddTag("amped")
 	inst.components.adrenaline:SetAmped(true)
 	local x, y, z = inst.Transform:GetWorldPosition()
@@ -277,7 +277,7 @@ local function UpdateAdrenaline(inst)
 		else
 			inst.components.combat.attackrange = 2
 		end
-		inst.AmpDamageTakenModifier = 5
+		inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	elseif AmpLevel == 1 and not inst:HasTag("amped") then
 		Amp(inst)
 	end

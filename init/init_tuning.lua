@@ -408,6 +408,8 @@ TUNING.DSTU =
     NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
 
     WATHOM_MAX_DAMAGE_CAP = GetModConfigData("wathom_maxdmg"),
+    WATHOM_AMPED_VULNERABILITY = GetModConfigData("wathom_ampvulnerability"),
+
     PK_GUARDS = GetModConfigData("pigking_guards"),
 
 --boss hp qol
