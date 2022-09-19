@@ -95,7 +95,7 @@ local function onregen(inst)
     if TheWorld.state.iswinter and
         not (tile ~= nil and INVALID_TILES[tile]) then -- or ents2 ~= nil and #ents2 < 0 then
         if inst.components.workable.workleft < 3 then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(my_x, 0, my_z)
             inst.components.workable:SetWorkLeft(inst.components.workable.workleft + 1)
             inst.components.pickable.cycles_left = inst.components.pickable.cycles_left + 1
             startregen(inst)
