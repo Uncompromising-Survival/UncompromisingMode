@@ -177,7 +177,7 @@ AddStategraphPostInit("wilson", function(inst)
 		ActionHandler(GLOBAL.ACTIONS.WATHOMBARK,
 			function(inst, action)
 				if inst._barkcdtask == nil then
-					inst._barkcdtask = inst:DoTaskInTime(20, OnCooldownBark)
+					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
 					return "wathombark"
 				elseif inst._cantbarktask == nil then
 					inst._cantbarktask = inst:DoTaskInTime(5, OnCooldownCantBark)
