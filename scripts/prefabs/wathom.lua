@@ -68,6 +68,13 @@ local function UnAmp(inst)
 	inst.components.adrenaline:SetAmped(false)
 	if inst:HasTag("deathamp") then
 		inst:RemoveTag("deathamp")
+	
+		local bed = inst.components.sleepingbaguser.bed
+
+		if bed ~= nil then
+			bed.components.sleepingbag:DoWakeUp()
+		end
+	
 		if inst.components.health and not inst.components.health:IsDead() then
 			inst.components.health:DoDelta(-225)
 		end

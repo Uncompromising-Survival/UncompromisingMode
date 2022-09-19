@@ -5,7 +5,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function Working(owner, data)
     print("Working!")
     local x, y, z = owner.Transform:GetWorldPosition()
-    owner:ShakeCamera(CAMERASHAKE.SIDE, 1, 0.02, 0.25)
+    owner:ShakeCamera(CAMERASHAKE.SIDE, 0.25, 0.02, 0.25)
     local ents = TheSim:FindEntities(x, y, z, 4, nil, { "INLIMBO", "DIG_workable"}, { "CHOP_workable", "MINE_workable" })
     for k, v in ipairs(ents) do
         if v ~= data.target and v.components.workable ~= nil and (v.components.workable:GetWorkAction() == ACTIONS.MINE or v.components.workable:GetWorkAction() == ACTIONS.CHOP) then
