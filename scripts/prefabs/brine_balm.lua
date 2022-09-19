@@ -5,7 +5,7 @@ local assets =
 
 local function OnUse(inst, target)
 	if target.components.debuffable ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
-		target.configheal = 60
+		target.configheal = 70
 		target.components.debuffable:AddDebuff("confighealbuff", "confighealbuff")
 	end
 end

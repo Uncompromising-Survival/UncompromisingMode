@@ -406,7 +406,7 @@ ChangeSortKey("hermitshop_rain_horn", "hermitshop_oceanfishingbobber_malbatross"
 
 AddRecipe2(
     "hat_ratmask",
-    {Ingredient("rope", 2), Ingredient("rat_tail", 3), Ingredient("sewing_kit", 1)},
+    {Ingredient("rope", 2), Ingredient("beardhair", 1), Ingredient("sewing_kit", 1)},
     TECH.SCIENCE_TWO,
     nil,
     {"CLOTHING"}
@@ -539,7 +539,7 @@ ChangeSortKey("armor_sharksuit_um", "armor_reed_um", "RAIN", true)
 
 AddRecipe2(
     "brine_balm",
-    {Ingredient("saltrock", 2), Ingredient("kelp", 1), Ingredient("driftwood_log", 1)},
+    {Ingredient("saltrock", 2), Ingredient("kelp", 1)},--, Ingredient("driftwood_log", 1)
     TECH.SCIENCE_ONE,
     nil, --{numtogive = 2},
     {"RESTORATION"}
