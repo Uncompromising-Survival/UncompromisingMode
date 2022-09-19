@@ -1,6 +1,8 @@
 local MakePlayerCharacter = require "prefabs/player_common"
 
 local assets = {
+    Asset("ANIM", "anim/wathom.zip" ),
+	Asset("ANIM", "anim/wathom_shadow.zip" ),
 	Asset("SCRIPT", "scripts/prefabs/player_common.lua"),
 	Asset("SOUNDPACKAGE", "sound/wathomcustomvoice.fev"),
 	Asset("SOUND", "sound/wathomcustomvoice.fsb")
@@ -19,6 +21,7 @@ local prefabs = FlattenTree(start_inv, true)
 
 local function UnAmp(inst)
 	inst:RemoveTag("amped") -- Party's over.
+	inst.AnimState:SetBuild("wathom")	
 
 	inst.components.combat.attackrange = 2
 	inst.AmpDamageTakenModifier = 5
@@ -26,6 +29,10 @@ local function UnAmp(inst)
 		inst.adrenalinehpregen:Cancel()
 		inst.adrenalinehpregen = nil
 	end
+    if inst.helpimleaking ~= nil then
+        inst.helpimleaking:Cancel()
+        inst.helpimleaking = nil
+    end	
 	inst.components.adrenaline:SetAmped(false)
 	if inst:HasTag("deathamp") then
 		inst:RemoveTag("deathamp")
@@ -36,17 +43,31 @@ local function UnAmp(inst)
 end
 
 local function Amp(inst)
+	inst.AnimState:SetBuild("wathom_shadow") --placeholder so i know it works
 	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
 	inst.AmpDamageTakenModifier = 5
 	inst:AddTag("amped")
 	inst.components.adrenaline:SetAmped(true)
+	local x, y, z = inst.Transform:GetWorldPosition()
+	SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
 	inst.components.talker:Say("AMPED UP!", nil, true)
+
 
 	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
 			inst.components.health:DoDelta(1.5)
 		end
 	end)
+	
+	inst.helpimleaking = inst:DoPeriodicTask(0.1, function(inst)
+        if inst:HasTag("amped") then
+			local x, y, z = inst.Transform:GetWorldPosition()
+            local xoffset = math.random(-10,10)/10
+            local zoffset = math.random(-10,10)/10
+            SpawnPrefab("cane_ancient_fx").Transform:SetPosition(x+xoffset, y, z+zoffset)
+        end
+    end)
+
 end
 
 -- When the character is revived from human
@@ -54,6 +75,7 @@ local function onbecamehuman(inst)
 	-- Set speed when not a ghost (optional)
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "wathom_speed_mod", 1)
 	UnAmp(inst)
+	inst.AnimState:SetBuild("wathom")	
 	inst.components.adrenaline:SetPercent(0.25)
 end
 
