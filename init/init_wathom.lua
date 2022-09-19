@@ -34,7 +34,6 @@ local function OnCooldownCantBark(inst)
 	inst._cantbarkcdtask = nil
 end
 
-
 local function Effect(inst) -- I dumbed the shit out of this.
 	if GLOBAL.TheWorld.state.wetness > 25 then
 		local puff = SpawnPrefab("weregoose_splash_med2")
@@ -57,7 +56,7 @@ local function Attack_New(inst, action)
 	inst.sg.mem.localchainattack = not action.forced or nil
 	local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 	if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown"))) and inst:HasTag("wathom") and
-		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding())  then
+		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) then
 		return ("wathomleap")
 	else
 		return Attack_Old(inst, action)
@@ -327,17 +326,17 @@ AddStategraphPostInit("wilson", function(inst)
 			onenter = function(inst)
 				inst:ClearBufferedAction()
 
---				inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
+				--				inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
 
 				inst.AnimState:PlayAnimation("sing_fail", false)
 
 				inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
 			end,
-			timeline = 
+			timeline =
 			{
 				TimeEvent(12 * FRAMES, function(inst)
 					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
-				end),--bark twice.
+				end), --bark twice.
 			},
 			events =
 			{
@@ -397,10 +396,8 @@ AddStategraphPostInit("wilson", function(inst)
 				TimeEvent(0 * FRAMES, function(inst)
 					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap")
 					inst.Physics:ClearCollisionMask() -- all of this physics stuff will give the impression that Wathom is jumping over things. It also allows him to slide past targets instead of ending his leap in front.
--- 					inst.components.hunger:DoDelta(-1, 2)
+					-- 					inst.components.hunger:DoDelta(-1, 2)
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.WORLD)
-					inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
-					inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
 					local buffaction = inst:GetBufferedAction()
 					local target = buffaction ~= nil and buffaction.target or nil
 					if target ~= nil then
@@ -427,6 +424,8 @@ AddStategraphPostInit("wilson", function(inst)
 					inst.components.playercontroller:Enable(false)
 					inst.components.locomotor:EnableGroundSpeedMultiplier(true)
 					inst.sg:RemoveStateTag("busy")
+					inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
+					inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
 				end),
 
 				TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
@@ -434,8 +433,8 @@ AddStategraphPostInit("wilson", function(inst)
 						inst.Physics:SetMotorVel(15, 0, 0)
 					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 then
 						inst.Physics:SetMotorVel(10, 0, 0)
-					else	
-						inst.Physics:SetMotorVel(10 * (inst.components.adrenaline:GetPercent() + .5), 0, 0) 
+					else
+						inst.Physics:SetMotorVel(10 * (inst.components.adrenaline:GetPercent() + .5), 0, 0)
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				end),
@@ -708,7 +707,17 @@ local wathombark = AddAction(
 					v.components.hauntable:Panic(TUNING.BATTLESONG_PANIC_TIME)
 					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
 				end
+				if v.components.hauntable == nil or
+					v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
+					v.components.follower ~= nil and v.components.follower:GetLeader() and
+						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
+					if not v:HasTag("bird") and v.components.combat then
+						v.components.combat:SetTarget(act.doer)
+						AddEnemyDebuffFx("battlesong_instant_taunt_fx", v)
+					end
+				end
 			end
+			return true --maybe???
 		end
 	end
 )
@@ -858,7 +867,7 @@ for k, v in pairs(GLOBAL.CLOTHING) do
 end
 
 --Refuse to die Edit this not to include you
-local function MayKill(self,amount)
+local function MayKill(self, amount)
 	if self.currenthealth + amount <= 0 then
 		return true
 	end
@@ -874,24 +883,25 @@ local function HasLLA(self)
 end
 
 AddComponentPostInit("health", function(self)
-    if not GLOBAL.TheWorld.ismastersim then return end
+	if not GLOBAL.TheWorld.ismastersim then return end
 
-    local _DoDelta = self.DoDelta
-    function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-		if MayKill(self,amount) and HasLLA(self) and not (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then
-			_DoDelta(self,amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb) --Don't trigger the LLA here, let it happen in our ovvn component, so this doesn't break vvhenever canis moves it to his ovvn mod. 
+	local _DoDelta = self.DoDelta
+	function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+		if MayKill(self, amount) and HasLLA(self) and not (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then
+			_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb) --Don't trigger the LLA here, let it happen in our ovvn component, so this doesn't break vvhenever canis moves it to his ovvn mod.
 		else
-			if MayKill(self,amount) and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then --suggest that vve add a trigger here to shovv that vvathom is still being hit, despite his lack of flinching or anything.
+			if MayKill(self, amount) and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then --suggest that vve add a trigger here to shovv that vvathom is still being hit, despite his lack of flinching or anything.
 				self:SetCurrentHealth(1)
 				if self.inst.components.adrenaline and self.inst:HasTag("deathamp") then
 					self.inst.components.adrenaline:DoDelta(amount * 0.2)
 				end
 				if not self.inst:HasTag("deathamp") then
 					self.inst:AddTag("deathamp")
+					self.inst:ToggleUndeathState(self.inst, true)
 				end
 			elseif not self.inst:HasTag("deathamp") then -- No positive healing if you're on your last breath
-				_DoDelta(self,amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+				_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
 			end
 		end
-    end
+	end
 end)
