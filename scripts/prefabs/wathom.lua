@@ -107,6 +107,10 @@ local function Amp(inst)
 			inst.components.health:DoDelta(1.5)
 		end
 	end)
+
+	inst.sg:GoToState("wathombark")
+	inst.components.health.invincible = true
+	inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
 end
 
 -- When the character is revived from human

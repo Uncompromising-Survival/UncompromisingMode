@@ -900,6 +900,9 @@ AddComponentPostInit("health", function(self)
 				end
 				if not self.inst:HasTag("deathamp") then
 					self.inst:AddTag("deathamp")
+					self.inst.sg:GoToState("wathombark")
+					self.invincible = true
+					self.inst:DoTaskInTime(3, function() self.invincible = false end)
 					self.inst:ToggleUndeathState(self.inst, true)
 				end
 			elseif not self.inst:HasTag("deathamp") then -- No positive healing if you're on your last breath
