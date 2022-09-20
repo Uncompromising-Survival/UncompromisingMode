@@ -199,8 +199,7 @@ if GetModConfigData("canedurability") then--is this modmain env.?
 end
 
 if TUNING.DSTU.WANDA_NERF then
-	TOOLTIP.POCKETWATCH_WEAPON = "- Deals less damage against shadows."
-	TOOLTIP.POCKETWATCH_REVIVE = "- Increased cooldown."
+	TOOLTIP.POCKETWATCH_REVIVE = "- Increased cooldown.\n- Gives health penalty."
 end
 
 if TUNING.DSTU.INSUL_THERMALSTONE then
