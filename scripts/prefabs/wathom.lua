@@ -31,10 +31,14 @@ local function ToggleUndeathState(inst, toggle)
 		end
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
-		inst.components.talker:Say("DEATH, REFUSED!", nil, true)
-		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")		
+		--inst.components.talker:Say("DEATH, REFUSED!", nil, true)
+		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")
 
-		inst.helpimleaking = inst:DoPeriodicTask(0.25, function(inst)
+		inst.sg:GoToState("wathombark")
+		inst.components.health.invincible = true
+		inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+
+		inst.helpimleaking = inst:DoPeriodicTask(0.125, function(inst)
 			if inst:HasTag("amped") then
 				local x, y, z = inst.Transform:GetWorldPosition()
 				local xoffset = math.random(-10, 10) / 10
@@ -90,7 +94,7 @@ local function Amp(inst)
 	inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	inst:AddTag("amped")
 	inst.components.adrenaline:SetAmped(true)
-	inst.components.talker:Say("AMPED UP!", nil, true)
+	--inst.components.talker:Say("AMPED UP!", nil, true)
 
 	inst.helpimleaking = inst:DoPeriodicTask(0.33, function(inst)
 		if inst:HasTag("amped") then
