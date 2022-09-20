@@ -32,6 +32,8 @@ local function ToggleUndeathState(inst, toggle)
 		end
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
+		inst.components.talker:Say("DEATH, REFUSED!", nil, true)
+		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")
 		
 		inst.helpimleaking = inst:DoPeriodicTask(0.25, function(inst)
 			if inst:HasTag("amped") then
