@@ -34,9 +34,11 @@ local function ToggleUndeathState(inst, toggle)
 		--inst.components.talker:Say("DEATH, REFUSED!", nil, true)
 		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")
 
-		inst.sg:GoToState("wathombark")
-		inst.components.health.invincible = true
-		inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+		if inst.components.health ~= nil and not inst.components.health:IsDead() then
+			inst.sg:GoToState("wathombark")
+			inst.components.health.invincible = true
+			inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+		end
 
 		inst.helpimleaking = inst:DoPeriodicTask(0.125, function(inst)
 			if inst:HasTag("amped") then
@@ -111,10 +113,11 @@ local function Amp(inst)
 			inst.components.health:DoDelta(1.5)
 		end
 	end)
-
-	inst.sg:GoToState("wathombark")
-	inst.components.health.invincible = true
-	inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+	if inst.components.health ~= nil and not inst.components.health:IsDead() then
+		inst.sg:GoToState("wathombark")
+		inst.components.health.invincible = true
+		inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+	end
 end
 
 -- When the character is revived from human
