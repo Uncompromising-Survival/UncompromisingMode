@@ -24,7 +24,6 @@ local function ToggleShadowForm(inst)
 	inst:RemoveEventCallback("animqueueover", ToggleShadowForm)
 end
 
-
 local function ToggleUndeathState(inst, toggle)
 	if toggle then
 		if not inst:HasTag("playerghost") then
@@ -33,8 +32,8 @@ local function ToggleUndeathState(inst, toggle)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
 		inst.components.talker:Say("DEATH, REFUSED!", nil, true)
-		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")
-		
+		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")		
+
 		inst.helpimleaking = inst:DoPeriodicTask(0.25, function(inst)
 			if inst:HasTag("amped") then
 				local x, y, z = inst.Transform:GetWorldPosition()
@@ -50,13 +49,12 @@ local function ToggleUndeathState(inst, toggle)
 			inst.helpimleaking = nil
 		end
 
-		if not inst:HasTag("playerghost") then
+		--if not inst:HasTag("playerghost") then
 			print("setting buildto normal wathom")
 			inst:ListenForEvent("animqueueover", ToggleShadowForm)
-		end
+		--end
 	end
 end
-
 
 local function UnAmp(inst)
 	inst:RemoveTag("amped") -- Party's over.
@@ -68,15 +66,19 @@ local function UnAmp(inst)
 	end
 
 	inst.components.adrenaline:SetAmped(false)
+	if inst.helpimleaking ~= nil then
+		inst.helpimleaking:Cancel()
+		inst.helpimleaking = nil
+	end
 	if inst:HasTag("deathamp") then
 		inst:RemoveTag("deathamp")
-	
+
 		local bed = inst.components.sleepingbaguser.bed
 
 		if bed ~= nil then
 			bed.components.sleepingbag:DoWakeUp()
 		end
-	
+
 		if inst.components.health and not inst.components.health:IsDead() then
 			inst.components.health:DoDelta(-225)
 		end
@@ -90,6 +92,15 @@ local function Amp(inst)
 	inst.components.adrenaline:SetAmped(true)
 	inst.components.talker:Say("AMPED UP!", nil, true)
 
+	inst.helpimleaking = inst:DoPeriodicTask(0.33, function(inst)
+		if inst:HasTag("amped") then
+			local x, y, z = inst.Transform:GetWorldPosition()
+			local xoffset = math.random(-10, 10) / 10
+			local zoffset = math.random(-10, 10) / 10
+			--SpawnPrefab("minotaur_blood"..math.random(3)).Transform:SetPosition(x + xoffset, y, z + zoffset)
+			SpawnPrefab("cane_ancient_fx").Transform:SetPosition(x + xoffset, y, z + zoffset)
+		end
+	end)
 
 	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
@@ -121,7 +132,7 @@ end
 
 local function AmpTimer(inst)
 	if inst.components.grogginess ~= nil and
-		(inst.components.adrenaline:GetPercent() < 0.24 and not inst:HasTag("amped")) then
+		(inst.components.adrenaline:GetPercent() < 0.24 and not inst:HasTag("amped") and not inst:HasTag("deathamp")) then
 		inst.components.grogginess.grog_amount = 0.5
 	end
 end
@@ -205,7 +216,7 @@ end
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
 		if data.amount < 0 and not inst:HasTag("amped") then
-			inst.components.adrenaline:DoDelta(data.amount * -0.5) -- This gives Wathom adrenaline when attacked!
+			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.5)) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
 end
@@ -264,7 +275,7 @@ local function UpdateAdrenaline(inst)
 	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
-	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") then --Handle VVathom Running
+	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst.components.rider == nil)  then --Handle VVathom Running
 		inst:AddTag("wathomrun")
 	elseif inst:HasTag("wathomrun") and not (AmpLevel > 0.5 or inst:HasTag("amped")) then
 		inst:RemoveTag("wathomrun")
@@ -313,26 +324,20 @@ local function UpdateAdrenaline(inst)
 	end
 end
 
-local function CustomCombatDamage(inst, target)
+local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
 	--sometimes I hate short-circuit evals...
-	return (
-		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and
-			target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
-		(
-		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and target.components.hauntable and
-			target.components.hauntable.panic) and (1.5 * 2) or
-		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and inst:HasTag("amped") and 4 or
-		(inst.components.rider ~= nil and not inst.components.rider:IsRiding()) and 2 or 1
+	if mount == nil then
+		return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
+			(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2 or 1
+	end
 end
 
 -- This initializes for both the server and client. Tags can be added here.
 local function StartMusic(inst)
-	print("start music CLIENT")
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
 
 local function StopMusic(inst)
-	print("stop music CLIENT")
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
 
@@ -375,13 +380,12 @@ local common_postinit = function(inst)
 	inst:ListenForEvent("wathommusic_start", StartMusic)
 	inst:ListenForEvent("wathommusic_end", StopMusic)
 	inst:ListenForEvent("ms_playerreroll", StopMusic)
-
 	inst:ListenForEvent("setowner", OnSetOwner)
 	inst:ListenForEvent("ondeath", function(inst)
 		if inst:HasTag("amped") then
 			inst:RemoveTag("amped")
 		end
-		StopMusic()
+		StopMusic(inst)
 	end)
 end
 
@@ -407,7 +411,7 @@ local master_postinit = function(inst)
 
 	inst.components.eater:SetCanEatRawMeat(true)
 
-	inst.components.foodaffinity:AddPrefabAffinity("hardshelltacos", 20) -- replace with hardshell tacos when implementing in uncomp
+	inst.components.foodaffinity:AddPrefabAffinity("hardshelltacos", 20)
 
 	-- Stats
 	inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)
@@ -476,7 +480,13 @@ local master_postinit = function(inst)
 	inst:ListenForEvent("wathommusic_start", StartMusic)
 	inst:ListenForEvent("wathommusic_end", StopMusic)
 	inst:ListenForEvent("ms_playerreroll", StopMusic)
-	inst:ListenForEvent("ondeath", function(inst) if inst:HasTag("amped") then inst:RemoveTag("amped") end end)
+
+	inst:ListenForEvent("ondeath", function(inst)
+		if inst:HasTag("amped") then
+			inst:RemoveTag("amped")
+			StopMusic(inst)
+		end
+	end)
 	-- Wathom's immunity to night drain during the night.
 	inst.components.sanity.night_drain_mult = 0
 
@@ -501,7 +511,7 @@ local master_postinit = function(inst)
 	inst.OnSave = onsave
 
 	inst.OnNewSpawn = onload
-	inst.ToggleUndeathState	= ToggleUndeathState
+	inst.ToggleUndeathState = ToggleUndeathState
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, prefabs)

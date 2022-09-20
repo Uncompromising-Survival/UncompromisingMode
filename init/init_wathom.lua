@@ -175,12 +175,12 @@ AddStategraphPostInit("wilson", function(inst)
 	{
 		ActionHandler(GLOBAL.ACTIONS.WATHOMBARK,
 			function(inst, action)
-				if inst._barkcdtask == nil then
-					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
-					return "wathombark"
-				elseif inst._cantbarktask == nil then
+				if inst._cantbarktask == nil then
 					inst._cantbarktask = inst:DoTaskInTime(5, OnCooldownCantBark)
 					return "cantbark"
+				elseif inst._barkcdtask == nil and inst.components.adrenaline:GetPercent() > 0.34 then
+					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
+					return "wathombark"
 				else
 					return --	"idle"
 				end
@@ -266,7 +266,7 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
-				if inst.components.adrenaline:GetPercent() < 0.45 then
+				if inst.components.adrenaline:GetPercent() < 0.45 and not inst:HasTag("amped") then
 					inst.sg:GoToState("cantbark")
 					return
 				end
@@ -684,7 +684,7 @@ local wathombark = AddAction(
 	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-			if act.doer.components.adrenaline:GetPercent() < 0.44 then
+			if act.doer.components.adrenaline:GetPercent() < 0.44 and not act.doer:HasTag("amped") then
 				return false
 			end
 			local inst = act.doer
@@ -887,7 +887,10 @@ AddComponentPostInit("health", function(self)
 
 	local _DoDelta = self.DoDelta
 	function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-		if MayKill(self, amount) and HasLLA(self) and not (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then
+		if MayKill(self, amount) and HasLLA(self) and not self.inst:HasTag("deathamp") then
+			if not self.inst:HasTag("playerghost") and self.inst.ToggleUndeathState ~= nil then
+				self.inst:ToggleUndeathState(self.inst, false)
+			end
 			_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb) --Don't trigger the LLA here, let it happen in our ovvn component, so this doesn't break vvhenever canis moves it to his ovvn mod.
 		else
 			if MayKill(self, amount) and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then --suggest that vve add a trigger here to shovv that vvathom is still being hit, despite his lack of flinching or anything.

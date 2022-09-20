@@ -21,7 +21,7 @@ local function healowner(inst, owner)
     end
 
     if (owner.components.health and owner.components.health:IsHurt())
-        and (owner.components.hunger and owner.components.hunger.current > 5) then
+        and (owner.components.hunger and owner.components.hunger.current > 5) and not owner:HasTag("deathamp") and owner.components.oldager == nil then
         owner.components.health:DoDelta(TUNING.REDAMULET_CONVERSION, false, "redamulet")
         owner.components.hunger:DoDelta(-TUNING.REDAMULET_CONVERSION)
         inst.components.fueled:DoDelta(-36)
@@ -87,7 +87,7 @@ local function ontakefuel_red(inst)
     if inst.components.equippable:IsEquipped() then
         local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner or nil
 
-        if inst.task == nil and owner ~= nil then
+        if inst.task == nil and owner ~= nil and not owner:HasTag("deathamp") and owner.components.oldager == nil then--don't bother healing a dead man walking or the person who cannot heal.
 
             local healtime = 10
 
