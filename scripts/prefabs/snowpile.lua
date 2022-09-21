@@ -105,13 +105,12 @@ local function onregen(inst)
         end
     else
         if inst.components.workable.workleft > 1 then
-            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
             inst.components.workable:SetWorkLeft(inst.components.workable.workleft - 1)
             inst.components.pickable.cycles_left = inst.components.pickable.cycles_left - 1
             startregen(inst)
         else
-            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(
-                inst.Transform:GetWorldPosition())
+            SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(my_x, 0, my_z)
             inst:Remove()
         end
     end
