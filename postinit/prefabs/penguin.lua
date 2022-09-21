@@ -134,10 +134,10 @@ env.AddPrefabPostInit("penguin", function(inst)
 	end
 	
 	--inst:AddComponent("halloweenmoonmutable")
-	if inst.components.halloweenmoonmutable ~= nil then
-		inst.components.halloweenmoonmutable:SetPrefabMutated("mutated_penguin")
-		inst.components.halloweenmoonmutable:SetOnMutateFn(OnMoonMutate)
-	end
+	--if inst.components.halloweenmoonmutable ~= nil then
+	--	inst.components.halloweenmoonmutable:SetPrefabMutated("mutated_penguin")
+	--	inst.components.halloweenmoonmutable:SetOnMutateFn(OnMoonMutate)
+	--end
 	
 	if inst.components.combat ~= nil then
 		inst.components.combat:SetRetargetFunction(2, NewRetarget)
