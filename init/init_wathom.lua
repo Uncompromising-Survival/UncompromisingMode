@@ -704,7 +704,7 @@ local wathombark = AddAction(
 					(
 					v.components.follower ~= nil and v.components.follower:GetLeader() and
 						v.components.follower:GetLeader():HasTag("player")) then
-					v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed 
+					v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
 					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
 				end
 				if v.components.hauntable == nil or
