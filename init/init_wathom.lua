@@ -836,7 +836,7 @@ STRINGS.CHARACTER_QUOTES.wathom = "\"Cruel, the abyss. Either do, or die.\""
 STRINGS.CHARACTER_SURVIVABILITY.wathom = "Slim"
 
 -- Custom speech strings
---STRINGS.CHARACTERS.WATHOM = require "speech_wathom"
+STRINGS.CHARACTERS.WATHOM = require "speech_wathom"
 
 -- The character's name as appears in-game
 STRINGS.NAMES.WATHOM = "Wathom"
