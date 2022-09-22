@@ -219,7 +219,7 @@ local function AttackOther(inst, data)
 		end
 		inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
 		if not inst:HasTag("amped") then
-			inst.components.adrenaline:DoDelta(2)
+			inst.components.adrenaline:DoDelta(3)
 		end
 	end
 end
@@ -227,7 +227,7 @@ end
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
 		if data.amount < 0 and not inst:HasTag("amped") then
-			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.5)) -- This gives Wathom adrenaline when attacked!
+			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
 end
