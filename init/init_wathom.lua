@@ -681,10 +681,10 @@ end
 
 local wathombark = AddAction(
 	"WATHOMBARK",
-	GLOBAL.STRINGS.ACTIONS.WATHOMBARK,
+	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-			if act.doer.components.adrenaline:GetPercent() < 0.44 and not act.doer:HasTag("amped") then
+			if (act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not inst:HasTag("amped") then
 				return false
 			end
 			local inst = act.doer
@@ -698,7 +698,7 @@ local wathombark = AddAction(
 
 			local act_pos = act:GetActionPoint()
 			local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-				{ "companion", "INLIMBO", "notarget" })
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost"})--added playertags because of the taunt.
 			for i, v in ipairs(ents) do
 				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
 					(
