@@ -88,15 +88,15 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/powercell.xml"
-    inst.components.inventoryitem.sinks = true--throw batteries in the ocean wOOOOOOOO
+    inst.components.inventoryitem.sinks = true --throw batteries in the ocean wOOOOOOOO
 
-    inst:AddComponent("battery")
-    inst.components.battery.onused = discharge
+    --inst:AddComponent("battery")
+    --inst.components.battery.onused = discharge
 
-    inst:AddComponent("deployable")
-    inst.components.deployable:SetDeployMode(DEPLOYMODE.ANYWHERE)
-    inst.components.deployable.ondeploy = ondeploy
-    inst.components.deployable.restrictedtag = "batteryuser"
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+    inst.components.fuel.fueltype = FUELTYPE.BATTERYPOWER
+
     return inst
 end
 

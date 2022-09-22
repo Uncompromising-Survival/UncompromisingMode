@@ -43,7 +43,7 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst.upgraded = true
             inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
-            inst.components.fueled.accepting = false
+            inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
             inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
             inst:AddTag("electricaltool")
 

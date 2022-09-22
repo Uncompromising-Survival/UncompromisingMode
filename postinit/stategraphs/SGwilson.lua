@@ -188,6 +188,10 @@ local actionhandlers =
 	ActionHandler(ACTIONS.CREATE_BURROW,
         function(inst, action)
             return "dolongaction"
+        end),
+    ActionHandler(ACTIONS.CHARGE_POWERCELL,
+        function(inst, action)
+            return action.invobject ~= nil and action.invobject:HasTag("powercell") and "doshortaction"
         end)
 }
 

@@ -134,6 +134,24 @@ createburrow.rmb = true
 createburrow.distance = 2
 createburrow.mount_valid = false
 
+local charge_powercell = AddAction(
+	"CHARGE_POWERCELL",
+	GLOBAL.STRINGS.ACTIONS.CHARGE_POWERCELL,
+    function(act)
+	local target = act.target or act.invobject
+
+    if (target ~= nil and target:HasTag("powercell")) and (act.doer ~= nil and act.doer:HasTag("batteryuser")) then
+        act.doer.components.batteryuser:ChargeFrom(target)
+		return true
+    else
+        return false
+    end
+end)
+
+charge_powercell.instant = true
+charge_powercell.rmb = true
+charge_powercell.priority = HIGH_ACTION_PRIORITY
+
 local _RummageFn = GLOBAL.ACTIONS.RUMMAGE.fn
 
 GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
