@@ -49,6 +49,11 @@ local CONTAINERS =
 	"siestahut",
 }
 
+local SNOWPILE_BLOCKERS = 
+{
+	"dragonflyfurnace",
+}
+
 local function RemoveSnowedTag(inst)
 	if inst:HasTag("snowpiledin") then
 		inst:RemoveTag("snowpiledin")
@@ -122,3 +127,11 @@ for k, v in pairs(CONTAINERS) do
 	AddContainers(v)
 end
 
+for k,v in pairs(SNOWPILE_BLOCKERS) do
+	AddPrefabPostInit(v, function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		inst:AddTag("snowpileblocker")
+	end)
+end
