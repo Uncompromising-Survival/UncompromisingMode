@@ -303,7 +303,7 @@ AddStategraphPostInit("wilson", function(inst)
 				end),
 
 
-				TimeEvent(12 * FRAMES, function(inst)
+				TimeEvent(10 * FRAMES, function(inst)
 					inst.components.locomotor:Stop()
 					inst:PerformBufferedAction() --Dis is the important part, canis -Axe
 					inst.sg:RemoveStateTag("busy")

@@ -24,7 +24,7 @@ env.AddComponentPostInit("combat", function(self)
     local _GetAttacked = self.GetAttacked
 
     function self:GetAttacked(attacker, damage, weapon, stimuli, ...)
-        if self.inst ~= nil and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier ~= nil and damage and (self.inst.components.rider ~= nil and not self.inst.components.rider:IsRiding() or self.inst.components.rider == nil) then
+        if self.inst ~= nil and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier ~= nil and damage and (self.inst.components.rider ~= nil and not self.inst.components.rider:IsRiding() or self.inst.components.rider == nil) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             damage = damage * self.inst.AmpDamageTakenModifier
             return _GetAttacked(self, attacker, damage, weapon, stimuli)

@@ -58,8 +58,8 @@ local function ToggleUndeathState(inst, toggle)
 		end
 
 		--if not inst:HasTag("playerghost") then
-			print("setting buildto normal wathom")
-			inst:ListenForEvent("animqueueover", ToggleShadowForm)
+		print("setting buildto normal wathom")
+		inst:ListenForEvent("animqueueover", ToggleShadowForm)
 		--end
 	end
 end
@@ -202,7 +202,7 @@ local function AmpTimer2(inst)
 	end
 end
 
-local function AttackOther(inst, data)
+local function OnAttackOther(inst, data)
 	if data and data.target and inst.components.adrenaline:GetPercent() > 0.24 and
 		((data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
 			(
@@ -222,7 +222,8 @@ end
 
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
-		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 and data.cause ~= "deathamp" then
+		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 and
+			data.cause ~= "deathamp" then
 			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
@@ -282,7 +283,8 @@ local function UpdateAdrenaline(inst)
 	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
-	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst.components.rider == nil)  then --Handle VVathom Running
+	if (AmpLevel > 0.5 or inst:HasTag("amped")) and not inst:HasTag("wathomrun") and
+		(inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst.components.rider == nil) then --Handle VVathom Running
 		inst:AddTag("wathomrun")
 	elseif inst:HasTag("wathomrun") and not (AmpLevel > 0.5 or inst:HasTag("amped")) then
 		inst:RemoveTag("wathomrun")
@@ -328,11 +330,18 @@ local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
 	--sometimes I hate short-circuit evals...
 	if mount == nil then
 		return (target.components.hauntable and target.components.hauntable.panic and inst:HasTag("amped")) and (1.5 * 4) or
-			(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2 or 1
+			(target.components.hauntable and target.components.hauntable.panic) and (1.5 * 2) or inst:HasTag("amped") and 4 or 2
+			or 1
 	end
 end
 
--- This initializes for both the server and client. Tags can be added here.
+local function OnAttacked(inst, data)
+	printwrap("", data)
+	print((data.damageresolved*inst.AmpDamageTakenModifier)-data.damageresolved)
+
+	inst.components.health:DoDelta(-((data.damageresolved*inst.AmpDamageTakenModifier)-data.damageresolved), nil, data.attacker)
+end
+
 local function StartMusic(inst)
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
@@ -341,6 +350,7 @@ local function StopMusic(inst)
 	SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, inst:HasTag("amped"))
 end
 
+-- This initializes for both the server and client. Tags can be added here.
 local common_postinit = function(inst)
 	-- Minimap icon
 	inst.MiniMapEntity:SetIcon("wathom.tex")
@@ -473,7 +483,10 @@ local master_postinit = function(inst)
 	inst:DoPeriodicTask(1, function() AmpTimer2(inst) end)
 
 	inst:ListenForEvent("healthdelta", OnHealthDelta)
-	inst:ListenForEvent("onattackother", AttackOther)
+	inst:ListenForEvent("onattackother", OnAttackOther)
+	if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
+		inst:ListenForEvent("attacked", OnAttacked)
+	end
 	if TheWorld.ismastersim then
 		inst:ListenForEvent("adrenalinedelta", UpdateAdrenaline)
 	end
