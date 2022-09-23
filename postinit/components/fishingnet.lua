@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 env.AddComponentPostInit("fishingnet", function(self)
 	local _OldCastNet = self.CastNet
-	
+
 	function self:CastNet(pos_x, pos_z, doer)
 		if self.inst:HasTag("uncompromising_fishingnetvisualizer") then
 			local visualizer = SpawnPrefab("uncompromising_fishingnetvisualizer")
@@ -21,27 +21,31 @@ end)
 env.AddComponentPostInit("fishingnetvisualizer", function(self)
 	local _OldBeginOpening = self.BeginOpening
 	local _OldDropItem = self.DropItem
-	
+
 	function self:BeginOpening()
 		_OldBeginOpening(self)
-	
+
 		if self.inst:HasTag("uncompromising_fishingnetvisualizer") then
 			print("extra netty")
 			if self.inst.item ~= nil then
 				self.inst.item.netweight = 1
 			end
-		
+
 			local my_x, my_y, my_z = self.inst.Transform:GetWorldPosition()
-			local fishies = TheSim:FindEntities(my_x,my_y,my_z, self.collect_radius, {"oceanfishable"})
+			local fishies = TheSim:FindEntities(my_x, my_y, my_z, self.collect_radius, { "oceanfishable"}, nil, {"weighable_fish", "oceanfish"})
+
 			for k, v in pairs(fishies) do
 				local fishdef = v.fish_def.prefab ~= nil and v.fish_def.prefab
-				local fish = SpawnPrefab(fishdef.."_inv") ~= nil and SpawnPrefab(fishdef.."_inv") or SpawnPrefab(fishdef.."_land") ~= nil and SpawnPrefab(fishdef.."_land")
-				
+
+				local fish = fishdef ~= nil and
+					(SpawnPrefab(fishdef .. "_inv") ~= nil and SpawnPrefab(fishdef .. "_inv") or
+					SpawnPrefab(fishdef .. "_land") ~= nil and SpawnPrefab(fishdef .. "_land"))
+
 				if fish ~= nil and k < 3 then
 					--local fish = SpawnPrefab(fishtype)
 					if self.inst.item ~= nil and v.components.weighable ~= nil then
 						local minweight = v.components.weighable.min_weight
-					
+
 						if minweight < 100 then
 							self.inst.item.netweight = self.inst.item.netweight + 2
 						elseif minweight >= 100 and minweight < 200 then
@@ -50,24 +54,24 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 							self.inst.item.netweight = self.inst.item.netweight + 4
 						end
 					end
-					
+
 					v:Remove()
 					fish.Transform:SetPosition(my_x, my_y, my_z)
 					fish.components.weighable:SetWeight(fish.components.weighable.min_weight)
 
 					if fish:IsValid() then
-						fish:RemoveFromScene()
+						fish:RemoveFromScene() --???
 					end
-					
+
 					table.insert(self.captured_entities, fish)
 					self.captured_entities_collect_distance[fish] = 0
 				end
 			end
 		end
-		
+
 		--return _OldBeginOpening(self)
 	end
-	
+
 	function self:DropItem(item, last_dir_x, last_dir_z, idx)
 		if self.inst:HasTag("uncompromising_fishingnetvisualizer") then
 			print("droppy drop")
@@ -97,7 +101,7 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 				local pt_z = drop_vec_z * drop_offset + thrower_z + camera_up_vec_z * up_offset_dist
 
 				local physics = item.Physics
-				
+
 				if not TheWorld.Map:IsOceanAtPoint(pt_x, 0, pt_z) then
 					if physics ~= nil then
 						local drop_height = GetRandomWithVariance(0.65, 0.2)
@@ -117,12 +121,12 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 						item.Transform:SetPosition(thrower_x, 0, thrower_z)
 					end
 				end
-				
+
 				if item:HasTag("stunnedbybomb") then
 					item.sg:GoToState("stunned", false)
 				end
 			end)
-		else 
+		else
 			_OldBeginOpening(self)
 		end
 	end
