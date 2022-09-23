@@ -37,7 +37,9 @@ local function ToggleUndeathState(inst, toggle)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
 			inst.sg:GoToState("wathombark")
 			inst.components.health.invincible = true
-			inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
+			print("turned on invin")
+
+			inst:DoTaskInTime(1, function() inst.components.health.invincible = false print("turned off invin") end)
 		end
 
 		inst.helpimleaking = inst:DoPeriodicTask(0.125, function(inst)
@@ -86,7 +88,7 @@ local function UnAmp(inst)
 		end
 
 		if inst.components.health and not inst.components.health:IsDead() then
-			inst.components.health:DoDelta(-225)
+			inst.components.health:DoDelta(-225, nil, "deathamp")
 		end
 	end
 end
@@ -220,7 +222,8 @@ end
 
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
-		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 then
+		printwrap("DATA", data)
+		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 and data.cause ~= "deathamp" then
 			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
