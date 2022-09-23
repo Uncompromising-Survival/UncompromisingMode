@@ -189,14 +189,17 @@ local function workcallback(inst, worker, workleft)
     end
 	
 	TryColdMenace(inst)
+
+    local x,y,z = inst.Transform:GetWorldPosition()
+
     if inst.components.pickable.cycles_left > 0 then
         if inst.Transform:GetWorldPosition() ~= nil then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
         end
         inst.components.pickable.cycles_left = inst.components.workable.workleft
     else
         if inst.Transform:GetWorldPosition() ~= nil then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
         end
         inst:Remove()
     end
@@ -291,14 +294,15 @@ local function onpickedfn(inst, picker)
 		end
     end
 	TryColdMenace(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
     if inst.components.workable.workleft > 0 then
         if inst.Transform:GetWorldPosition() ~= nil then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
         end
         inst.components.workable.workleft = inst.components.pickable.cycles_left
     else
         if inst.Transform:GetWorldPosition() ~= nil then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
         end
         inst:Remove()
     end
@@ -341,7 +345,8 @@ end
 local function Init(inst)
     if FindEntity(inst, 5, nil, {"snowpileblocker"}) then
         if inst.Transform:GetWorldPosition() ~= nil then
-            SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            local x,y,z = inst.Transform:GetWorldPosition()
+            SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
         end
         inst:Remove()
     end
@@ -433,7 +438,9 @@ local function snowpilefn(Sim)
     inst.components.pickable:SetUp("snowball_throwable", 0)
     inst.components.pickable.transplanted = true
 
-    SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    SpawnPrefab("splash_snow_fx").Transform:SetPosition(x,0,z)
     inst:ListenForEvent("animover", on_anim_over)
 
     inst:ListenForEvent("onremove", function()
