@@ -222,7 +222,6 @@ end
 
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
-		printwrap("DATA", data)
 		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 and data.cause ~= "deathamp" then
 			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
 		end
