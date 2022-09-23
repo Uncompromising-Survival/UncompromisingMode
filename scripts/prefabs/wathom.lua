@@ -179,19 +179,13 @@ local function AmpTimer2(inst)
 		else
 			inst.components.combat.attackrange = 2
 		end
-	elseif AmpLevel < 0.32 and not inst:HasTag("amped") then
+	elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 4
 		else
 			inst.components.combat.attackrange = 2
 		end
-	elseif AmpLevel < 0.45 and not inst:HasTag("amped") then
-		if item ~= nil then
-			inst.components.combat.attackrange = 5
-		else
-			inst.components.combat.attackrange = 2
-		end
-	elseif AmpLevel < 0.66 and not inst:HasTag("amped") then
+	elseif AmpLevel < 0.75 and not inst:HasTag("amped") then
 		if item ~= nil then
 			inst.components.combat.attackrange = 6
 		else
@@ -226,7 +220,7 @@ end
 
 local function OnHealthDelta(inst, data)
 	inst:DoTaskInTime(FRAMES * 2, function(inst)
-		if data.amount < 0 and not inst:HasTag("amped") then
+		if data.amount < 0 and not inst:HasTag("amped") and inst.components.adrenaline:GetPercent() > 0.24 then
 			inst.components.adrenaline:DoDelta(math.ceil(data.amount * -0.25)) -- This gives Wathom adrenaline when attacked!
 		end
 	end)
@@ -300,38 +294,37 @@ local function UpdateAdrenaline(inst)
 			inst.components.combat.attackrange = 2
 		end
 		inst.AmpDamageTakenModifier = 3
-	elseif AmpLevel < 0.32 and not inst:HasTag("amped") then
+		print("less-than-25 bracket")
+	elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
+		print("below 50 bracket")
 		if item ~= nil then
 			inst.components.combat.attackrange = 4
 		else
 			inst.components.combat.attackrange = 2
 		end
 		inst.AmpDamageTakenModifier = 1
-	elseif AmpLevel < 0.45 and not inst:HasTag("amped") then
-		if item ~= nil then
-			inst.components.combat.attackrange = 5
-		else
-			inst.components.combat.attackrange = 2
-		end
-		inst.components.health:SetAbsorptionAmount(-0.50)
-		inst.AmpDamageTakenModifier = 1.5
-	elseif AmpLevel < 0.66 and not inst:HasTag("amped") then
+	elseif AmpLevel >= 1 and not inst:HasTag("amped") then
+		print("100 bracket")
+		Amp(inst)
+		inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
+	elseif AmpLevel > 0.75 and not inst:HasTag("amped") then
+		print("75 bracket")
 		if item ~= nil then
 			inst.components.combat.attackrange = 6
 		else
 			inst.components.combat.attackrange = 2
 		end
-		inst.components.health:SetAbsorptionAmount(-1)
+		inst.components.health:SetAbsorptionAmount(-0.50)
 		inst.AmpDamageTakenModifier = 2
-	elseif AmpLevel < 1 and not inst:HasTag("amped") then
+	elseif AmpLevel > 0.5 and not inst:HasTag("amped") then
+		print("above 50 bracket")
+
 		if item ~= nil then
-			inst.components.combat.attackrange = 7
+			inst.components.combat.attackrange = 5
 		else
 			inst.components.combat.attackrange = 2
 		end
-		inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
-	elseif AmpLevel == 1 and not inst:HasTag("amped") then
-		Amp(inst)
+		inst.AmpDamageTakenModifier = 1.5
 	end
 end
 
