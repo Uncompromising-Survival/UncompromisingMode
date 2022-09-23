@@ -9,10 +9,8 @@ local STRINGS = GLOBAL.STRINGS
 ------
 local function TestForIA()
     if (TheWorld ~= nil and not (TheWorld:HasTag("forest") or TheWorld:HasTag("cave")) and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))) or GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
-        print("TestForIA: is IA world!")
         return true
     else
-        print("TestForIA: not IA world!")
         return false
     end
 end

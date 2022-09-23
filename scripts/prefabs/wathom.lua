@@ -294,9 +294,7 @@ local function UpdateAdrenaline(inst)
 			inst.components.combat.attackrange = 2
 		end
 		inst.AmpDamageTakenModifier = 3
-		print("less-than-25 bracket")
 	elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
-		print("below 50 bracket")
 		if item ~= nil then
 			inst.components.combat.attackrange = 4
 		else
@@ -304,11 +302,9 @@ local function UpdateAdrenaline(inst)
 		end
 		inst.AmpDamageTakenModifier = 1
 	elseif AmpLevel >= 1 and not inst:HasTag("amped") then
-		print("100 bracket")
 		Amp(inst)
 		inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	elseif AmpLevel > 0.75 and not inst:HasTag("amped") then
-		print("75 bracket")
 		if item ~= nil then
 			inst.components.combat.attackrange = 6
 		else
@@ -317,8 +313,6 @@ local function UpdateAdrenaline(inst)
 		inst.components.health:SetAbsorptionAmount(-0.50)
 		inst.AmpDamageTakenModifier = 2
 	elseif AmpLevel > 0.5 and not inst:HasTag("amped") then
-		print("above 50 bracket")
-
 		if item ~= nil then
 			inst.components.combat.attackrange = 5
 		else

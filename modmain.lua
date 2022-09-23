@@ -45,17 +45,13 @@ end)
 
 local function WathomMusicToggle(toggle)
 	if toggle then
-		print("start music")
 		GLOBAL.TheWorld:PushEvent("enabledynamicmusic", false)
 		if not GLOBAL.TheFocalPoint.SoundEmitter:PlayingSound("wathommusic") then
 			GLOBAL.TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/wathom_amped", "wathommusic")
 		end
-		print("PLEASE DO THE MUSIC I BEG YOU")
 	else
-		print("stop music")
 		GLOBAL.TheWorld:PushEvent("enabledynamicmusic", true)
 		GLOBAL.TheFocalPoint.SoundEmitter:KillSound("wathommusic")
-		print("PLEASE I BEG YOU TURNIT OFF!!!!!!!!!!")
 	end
 end
 
@@ -113,4 +109,3 @@ AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", f
 end)]]
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
-print("MOD ROOT HERE YOU DUMMY: " .. GLOBAL.TUNING.DSTU.MODROOT) --had to get a way around MODROOT being modmain env. only.

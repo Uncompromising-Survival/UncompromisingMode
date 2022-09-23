@@ -10,7 +10,6 @@ if TUNING.DSTU.WANDA_NERF then
         function self:GetAttacked(attacker, damage, weapon, stimuli, ...)
             if attacker ~= nil and attacker:HasTag("shadow") and self.inst.prefab == "wanda" then
                 damage = damage * 1.2 --or whatever mult you want
-                print(damage)
                 return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
             else
                 return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
