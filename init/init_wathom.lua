@@ -684,7 +684,7 @@ local wathombark = AddAction(
 	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-			if (act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not inst:HasTag("amped") then
+			if (act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not act.doer:HasTag("amped") then
 				return false
 			end
 			local inst = act.doer

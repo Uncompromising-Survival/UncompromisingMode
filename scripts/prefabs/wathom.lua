@@ -37,9 +37,8 @@ local function ToggleUndeathState(inst, toggle)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
 			inst.sg:GoToState("wathombark")
 			inst.components.health.invincible = true
-			print("turned on invin")
 
-			inst:DoTaskInTime(1, function() inst.components.health.invincible = false print("turned off invin") end)
+			inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
 		end
 
 		inst.helpimleaking = inst:DoPeriodicTask(0.125, function(inst)
@@ -116,7 +115,7 @@ local function Amp(inst)
 		end
 	end)
 	if inst.components.health ~= nil and not inst.components.health:IsDead() then
-		inst.sg:GoToState("wathombark")
+		--inst.sg:GoToState("wathombark")
 		inst.components.health.invincible = true
 		inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
 	end

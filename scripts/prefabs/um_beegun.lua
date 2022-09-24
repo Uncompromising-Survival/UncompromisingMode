@@ -12,7 +12,7 @@ local prefabs =
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-	if not owner:HasTag("vetcurse") then
+	if not (owner:HasTag("vetcurse") or owner:HasTag("royaljellymaker")) then
 		inst:DoTaskInTime(0, function(inst, owner)
 			local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
 			local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
