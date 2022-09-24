@@ -266,7 +266,7 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
-				if inst.components.adrenaline:GetPercent() < 0.45 and not inst:HasTag("amped") then
+				if (act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not act.doer:HasTag("amped") then
 					inst.sg:GoToState("cantbark")
 					return
 				end
