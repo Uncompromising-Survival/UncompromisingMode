@@ -406,9 +406,7 @@ AddStategraphPostInit("wilson", function(inst)
 						if target ~= nil then
 							if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
 								inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
-								inst.Physics:SetMotorVelOverride(math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x,
-									inst.sg.statemem.startingpos.z, inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES), 0
-									, 0)
+								inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z, inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
 							end
 						end
 					end
@@ -430,11 +428,11 @@ AddStategraphPostInit("wilson", function(inst)
 
 				TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
 					if inst:HasTag("amped") then
-						inst.Physics:SetMotorVel(15, 0, 0)
+						inst.leapvelocity = 15
 					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 then
-						inst.Physics:SetMotorVel(10, 0, 0)
+						inst.leapvelocity = 10
 					else
-						inst.Physics:SetMotorVel(10 * (inst.components.adrenaline:GetPercent() + .5), 0, 0)
+						inst.leapvelocity = 10 * (inst.components.adrenaline:GetPercent() + .5)
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				end),
@@ -450,14 +448,18 @@ AddStategraphPostInit("wilson", function(inst)
 					inst.sg:RemoveStateTag("nointerrupt")
 					inst.sg:RemoveStateTag("pausepredict")
 					inst.sg:AddStateTag("idle")
-					inst.Physics:SetMotorVel(0.0, 0, 0) -- Stops Wathom's sliding.
+					inst.leapvelocity = 0 -- Stops Wathom's sliding.
 					inst.Physics:Stop()
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.CHARACTERS) -- Re-enabling Wathom's normal collision.
 					inst.components.playercontroller:Enable(true)
 				end),
 
 			},
-
+			onupdate = function(inst)
+				if inst.leapvelocity then
+					inst.Physics:SetMotorVel(inst.leapvelocity, 0, 0)
+				end
+			end,
 			events =
 			{
 				EventHandler("animover", function(inst)

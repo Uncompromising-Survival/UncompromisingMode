@@ -1025,7 +1025,7 @@ return{
             GENERIC = "%s, scribeswoman.",
             ATTACKER = "Why, %s?",
             MURDERER = "Shame. %s, assistance possible.",
-            REVIVER = "CUrious, %s. Curious, knowledge.",
+            REVIVER = "Curious, %s. Curious, knowledge.",
             GHOST = "Magic, resurrection!",
             FIRESTARTER = "Flame magic, %s?",
         },
@@ -1257,9 +1257,7 @@ return{
 		YELLOWAMULET = "Throbs with my heart!",
 		GREENAMULET = "Missing material, replacements ravelled.",
 		SLURPERPELT = "No meat, all hair.",
-
 		SLURPER = "All hair, but tongue.",
-		SLURPER_PELT = "No meat, all hair.",
 		ARMORSLURPER = "Constriction. Sucks.",
 		ORANGEAMULET = "Teleportation focus, stationary.",
 		YELLOWSTAFF = "Birth, life of light.",
