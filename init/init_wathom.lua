@@ -177,7 +177,10 @@ AddStategraphPostInit("wilson", function(inst)
 	{
 		ActionHandler(GLOBAL.ACTIONS.WATHOMBARK,
 			function(inst, action)
-				if inst._cantbarkcdtask == nil and (inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() < 0.45 or inst.replica ~= nil and inst.replica.currentadrenaline < 45) and not inst:HasTag("amped") then
+				if inst._cantbarkcdtask == nil and
+					(
+					inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() < 0.5 or
+						inst.replica ~= nil and inst.replica.currentadrenaline < 5) and not inst:HasTag("amped") then
 					inst._cantbarkcdtask = inst:DoTaskInTime(5, OnCooldownCantBark)
 					return "cantbark"
 				elseif inst._cantbarkcdtask == nil and inst._barkcdtask ~= nil then
@@ -186,7 +189,10 @@ AddStategraphPostInit("wilson", function(inst)
 				elseif inst._barkcdtask == nil and inst:HasTag("amped") then
 					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
 					return "wathombark"
-				elseif inst._barkcdtask == nil and (inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() > 0.44 or inst.replica ~= nil and inst.replica.currentadrenaline > 44) then
+				elseif inst._barkcdtask == nil and
+					(
+					inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() >= 0.5 or
+						inst.replica ~= nil and inst.replica.currentadrenaline >= 50) then
 					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
 					return "wathombark"
 				else
@@ -686,28 +692,29 @@ local function AddEnemyDebuffFx(fx, target)
 	end)
 end
 
+--helper function so I can merge the action handler and action checks easily
+local function DoBark(act)
+
+end
+
 local wathombark = AddAction(
 	"WATHOMBARK",
 	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
+		local inst = act.doer
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-			if (
-				act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or
-					act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not act.doer:HasTag("amped") then
-				return false
-			end
 			local inst = act.doer
 			inst.AnimState:AddOverrideBuild("emote_angry")
 			if not inst:HasTag("amped") then
-				inst.components.adrenaline:DoDelta(-20, 2)
+				inst.components.adrenaline:DoDelta(-25, 2)
 			else
 				inst.components.adrenaline:DoDelta(10, 2)
 			end
 			--		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
-
+		
 			local act_pos = act:GetActionPoint()
 			local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-				{ "companion", "INLIMBO", "notarget", "player", "playerghost" }) --added playertags because of the taunt.
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail" }) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
 				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
 					(
@@ -719,14 +726,36 @@ local wathombark = AddAction(
 				if v.components.hauntable == nil or
 					v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
 					v.components.follower ~= nil and v.components.follower:GetLeader() and
-						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") and not v:HasTag("wall") then
+						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
 					if not v:HasTag("bird") and v.components.combat then
 						v.components.combat:SetTarget(act.doer)
 						AddEnemyDebuffFx("battlesong_instant_taunt_fx", v)
 					end
 				end
 			end
-			return true --maybe???
+			--also scare enemies near wathom, at a smaller radius
+			local x, y, z = act.doer.Transform:GetWorldPosition()
+			ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, { "_combat" },
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail" }) --added playertags because of the taunt.
+			for i, v in ipairs(ents) do
+				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
+					(
+					v.components.follower ~= nil and v.components.follower:GetLeader() and
+						v.components.follower:GetLeader():HasTag("player")) then
+					v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+				end
+				if v.components.hauntable == nil or
+					v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
+					v.components.follower ~= nil and v.components.follower:GetLeader() and
+						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
+					if not v:HasTag("bird") and v.components.combat then
+						v.components.combat:SetTarget(act.doer)
+					end
+				end
+			end
+			return true
+		else
+			return false
 		end
 	end
 )

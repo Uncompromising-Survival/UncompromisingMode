@@ -202,7 +202,7 @@ local function amulet_skin()
     inst.AnimState:SetBank("ancient_amulet_red_demoneye")
     inst.AnimState:SetBuild("ancient_amulet_red_demoneye")
 	
-	inst.skinname = "twisted_antler"
+	inst.skinname = "ancient_amulet_red_demoneye"
 	
 	if inst.components.inventoryitem ~= nil then
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/ancient_amulet_red_demoneye.xml"
