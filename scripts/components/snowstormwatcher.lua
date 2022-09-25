@@ -131,7 +131,7 @@ local NOTAGS = { "playerghost", "HASHEATER" }
 local function SnowpileChance(inst, self)
 	local x, y, z = self.inst.Transform:GetWorldPosition()
     local nearbyplayers1 = TheSim:FindEntities(x, y, z, 50, nil, nil, { "player" })
-    local ents4 = TheSim:FindEntities(x, y, z, 50, nil, { "snowpiledin", "hive" }, { "structure" })
+    local ents4 = TheSim:FindEntities(x, y, z, 50, nil, { "snowpiledin", "hive", "snowpileblocker"}, { "structure" })
 	local chancer = math.random()
 	
 	local playervalue1 = #nearbyplayers1 * 0.025
