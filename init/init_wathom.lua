@@ -171,14 +171,22 @@ AddStategraphPostInit("wilson", function(inst)
 	inst.states["run_start"].onenter = NevvOnEnter
 
 
+
+
 	local actionhandlers =
 	{
 		ActionHandler(GLOBAL.ACTIONS.WATHOMBARK,
 			function(inst, action)
-				if inst._cantbarktask == nil then
-					inst._cantbarktask = inst:DoTaskInTime(5, OnCooldownCantBark)
+				if inst._cantbarkcdtask == nil and (inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() < 0.45 or inst.replica ~= nil and inst.replica.currentadrenaline < 45) and not inst:HasTag("amped") then
+					inst._cantbarkcdtask = inst:DoTaskInTime(5, OnCooldownCantBark)
 					return "cantbark"
-				elseif inst._barkcdtask == nil and inst.components.adrenaline:GetPercent() > 0.34 then
+				elseif inst._cantbarkcdtask == nil and inst._barkcdtask ~= nil then
+					inst._cantbarkcdtask = inst:DoTaskInTime(5, OnCooldownCantBark)
+					return "cantbark"
+				elseif inst._barkcdtask == nil and inst:HasTag("amped") then
+					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
+					return "wathombark"
+				elseif inst._barkcdtask == nil and (inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() > 0.44 or inst.replica ~= nil and inst.replica.currentadrenaline > 44) then
 					inst._barkcdtask = inst:DoTaskInTime(12, OnCooldownBark)
 					return "wathombark"
 				else
@@ -266,10 +274,6 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
-				if (inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() < 0.45 or inst.replica ~= nil and inst.replica.currentadrenaline < 45) and not inst:HasTag("amped") then
-					inst.sg:GoToState("cantbark")
-					return
-				end
 				local buffaction = inst:GetBufferedAction()
 				local target = buffaction ~= nil and buffaction.target or nil
 				inst.AnimState:PlayAnimation("emote_angry", false)
@@ -406,7 +410,8 @@ AddStategraphPostInit("wilson", function(inst)
 						if target ~= nil then
 							if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
 								inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
-								inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z, inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
+								inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
+									inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
 							end
 						end
 					end
@@ -686,7 +691,9 @@ local wathombark = AddAction(
 	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-			if (act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not act.doer:HasTag("amped") then
+			if (
+				act.doer.components.adrenaline ~= nil and act.doer.components.adrenaline:GetPercent() < 0.45 or
+					act.doer.replica ~= nil and act.doer.replica.currentadrenaline < 45) and not act.doer:HasTag("amped") then
 				return false
 			end
 			local inst = act.doer
@@ -700,7 +707,7 @@ local wathombark = AddAction(
 
 			local act_pos = act:GetActionPoint()
 			local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-				{ "companion", "INLIMBO", "notarget", "player", "playerghost"})--added playertags because of the taunt.
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost" }) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
 				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
 					(
@@ -712,7 +719,7 @@ local wathombark = AddAction(
 				if v.components.hauntable == nil or
 					v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
 					v.components.follower ~= nil and v.components.follower:GetLeader() and
-						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
+						v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") and not v:HasTag("wall") then
 					if not v:HasTag("bird") and v.components.combat then
 						v.components.combat:SetTarget(act.doer)
 						AddEnemyDebuffFx("battlesong_instant_taunt_fx", v)
@@ -902,7 +909,7 @@ AddComponentPostInit("health", function(self)
 				if not self.inst:HasTag("deathamp") then
 					self.inst:AddTag("deathamp")
 					self.inst:ToggleUndeathState(self.inst, true)
-					_DoDelta(self, -self.currenthealth+1, nil, nil, true)--needed to do this for ignore_invincible...
+					_DoDelta(self, -self.currenthealth + 1, nil, nil, true) --needed to do this for ignore_invincible...
 				end
 			elseif not self.inst:HasTag("deathamp") then -- No positive healing if you're on your last breath
 				_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
