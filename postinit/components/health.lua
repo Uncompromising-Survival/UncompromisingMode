@@ -45,21 +45,10 @@ local function TriggerLLA(self)
 	FindSleepoPeepo(self.inst)
 	self:SetCurrentHealth(1)
 	if self.inst.components.oldager ~= nil then
-		--find a ageless watch
-		for k, v in ipairs(self.inst.components.inventory.itemslots) do
-			if v.prefab == "pocketwatch_heal" and v.components.rechargeable:IsCharged() then
-				item2 = v
-				break
-			end
-		end
-
-		if item2 ~= nil then
-			item2.components.pocketwatch.DoCastSpell(item2, self.inst) --if it can be used, use it!
-		end
 		self.inst.components.oldager:StopDamageOverTime()
-		self:DoDelta(10, true, "pocketwatch_heal")--minor heal regardless of charge just so  you don't insta-die
+		self:DoDelta(TUNING.POCKETWATCH_HEAL_HEALING, true, "pocketwatch_heal", true)--minor heal regardless of charge just so  you don't insta-die
 	else
-		self:DoDelta(39, false, item)
+		self:DoDelta(39, false, item, true)
 	end
 	if self.inst:HasTag("wathom") then
 		self.inst.AnimState:SetBuild("wathom")
