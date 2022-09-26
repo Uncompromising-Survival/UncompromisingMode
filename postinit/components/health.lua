@@ -46,7 +46,7 @@ local function TriggerLLA(self)
 	self:SetCurrentHealth(1)
 	if self.inst.components.oldager ~= nil then
 		self.inst.components.oldager:StopDamageOverTime()
-		self:DoDelta(TUNING.POCKETWATCH_HEAL_HEALING, true, "pocketwatch_heal", true)--minor heal regardless of charge just so  you don't insta-die
+		self:DoDelta(TUNING.POCKETWATCH_HEAL_HEALING, true, "pocketwatch_heal", true)
 	else
 		self:DoDelta(39, false, item, true)
 	end

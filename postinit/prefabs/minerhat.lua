@@ -2,6 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddPrefabPostInit("minerhat", function(inst)
+    if not TheWorld.ismastersim then
+		return
+	end
+
     if inst.components.equippable ~= nil then
         local OnEquip_old = inst.components.equippable.onequipfn
         inst.components.equippable.onequipfn = function(inst, owner)
@@ -39,11 +43,12 @@ env.AddPrefabPostInit("minerhat", function(inst)
     local function OnUpgrade(inst)
         if inst ~= nil then
             inst.upgraded = true
-            inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")
+            inst:SetPrefabNameOverride("MINERHAT_ELECTRICAL")--this is mainly for quotes, though I could use getstatus instead now...
             inst.components.upgradeable.upgradetype = nil
             inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
             inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
             inst:AddTag("electricaltool")
+            inst.components.named:SetName(STRINGS.NAMES.MINERHAT_ELECTRICAL)--this seems to actually set the name, since it has a replica for clients
 
             local owner = inst.components.inventoryitem:GetGrandOwner()
 
@@ -86,4 +91,7 @@ env.AddPrefabPostInit("minerhat", function(inst)
     inst:AddComponent("upgradeable")
     inst.components.upgradeable.upgradetype = UPGRADETYPES.ELECTRICAL
     inst.components.upgradeable.onupgradefn = OnUpgrade
+
+    inst:AddComponent("named")
+
 end)
