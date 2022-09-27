@@ -24,6 +24,19 @@ env.AddComponentPostInit("combat", function(self)
     local _GetAttacked = self.GetAttacked
 
     function self:GetAttacked(attacker, damage, weapon, stimuli, ...)
+        local damageredirecttarget = self.redirectdamagefn ~= nil and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli) or nil
+
+        local redirect_combat = damageredirecttarget ~= nil and damageredirecttarget.components.combat or nil
+        if redirect_combat ~= nil and TUNING.DSTU.BEEFALO_NERF then
+            if self.inst.components.health ~= nil and not self.inst.components.health:IsDead() then
+                print("health not nil and not dead")
+                redirect_combat:GetAttacked(attacker, damage/2, weapon, stimuli)
+                return _GetAttacked(self, attacker, damage/2, weapon, "beefalo_half_damage", ...)--added new stimuli to prevent Stackoverflow
+            else
+                print("health nil and/or dead")
+                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
+            end
+        end
         if self.inst ~= nil and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier ~= nil and damage and (self.inst.components.rider ~= nil and not self.inst.components.rider:IsRiding() or self.inst.components.rider == nil) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             damage = damage * self.inst.AmpDamageTakenModifier

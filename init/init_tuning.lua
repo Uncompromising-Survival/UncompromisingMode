@@ -403,7 +403,7 @@ TUNING.DSTU =
     ITEMCHECK = GetModConfigData("itemcheck"),
     SEEDS = GetModConfigData("seeds"),
     MAXHPHITTERS = GetModConfigData("maxhphitters"),
-
+    BEEFALO_NERF = GetModConfigData("beefalo_nerf"),
     NO_MOCK_DRAGONFLY_BOSS_TIME = GetModConfigData("wiltfly_spawn"),
     NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
 

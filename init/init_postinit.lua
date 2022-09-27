@@ -342,6 +342,9 @@ if GetModConfigData("noauradamage_butterfly") then
 	table.insert(prefab_post, "butterfly")
 end
 
+if GetModConfigData("beefalo_nerf") then
+	table.insert(component_post, "rider")
+end
 --if GetModConfigData("boatturning") then
 --	table.insert(prefab_post, "boat")
 --end

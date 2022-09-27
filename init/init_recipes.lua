@@ -84,6 +84,8 @@ AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 
 AllRecipes["battlesong_fireresistance"].ingredients = {Ingredient("papyrus", 1), Ingredient("featherpencil", 1), Ingredient("dragon_scales", 1)}
 
+AllRecipes["saddle_race"].ingredients = {Ingredient("livinglog", 2), Ingredient("silk", 4), Ingredient("glommerwings", 1)}
+
 --AllRecipes["book_fish"].ingredients = Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}
 
 --magnets and dock 
