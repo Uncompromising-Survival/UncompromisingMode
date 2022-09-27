@@ -90,7 +90,7 @@ local function onregen(inst)
     local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
     local tile
     if my_x ~= nil and my_y ~= nil and my_z ~= nil then
-	    tile = TheWorld.Map:GetTileAtPoint(my_x, my_y, my_z)
+	    tile = TheWorld.Map:GetTileAtPoint(my_x, 0, my_z)
     end
     if TheWorld.state.iswinter and
         not (tile ~= nil and INVALID_TILES[tile]) then -- or ents2 ~= nil and #ents2 < 0 then
