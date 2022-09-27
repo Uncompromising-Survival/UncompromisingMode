@@ -131,9 +131,7 @@ local require = GLOBAL.require
 		modimport("init/init_character_changes/willow")
 	end
 	
-	if  GetModConfigData("bernie") == false then
-		modimport("init/init_character_changes/willow_bernie")
-	end
+	modimport("init/init_character_changes/willow_bernie")
 	
 	--[[if GetModConfigData("gamemode") == GAMEMODE_UNCOMPROMISING and GetModConfigData("waxwell") or
 	(GetModConfigData("gamemode") == GAMEMODE_CUSTOM_SETTINGS and GetModConfigData("waxwell")) then

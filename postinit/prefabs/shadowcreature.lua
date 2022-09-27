@@ -33,6 +33,37 @@ local function onkilledbyother(inst, attacker)
 	return inst.Oldonkilledbyother(inst, attacker)
 end
 
+local function retargetfn(inst)
+	local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
+	local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
+	local target1, target2 = nil, nil
+	for i, v in ipairs(AllPlayers) do
+		if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+			local distsq = v:GetDistanceSqToInst(inst)
+			if distsq < rangesq then
+				if inst.components.shadowsubmissive:TargetHasDominance(v) then
+					if distsq < rangesq1 and inst.components.combat:CanTarget(v) then
+						target1 = v
+						rangesq1 = distsq
+						rangesq = math.max(rangesq1, rangesq2)
+					end
+				elseif distsq < rangesq2 and inst.components.combat:CanTarget(v) then
+					target2 = v
+					rangesq2 = distsq
+					rangesq = math.max(rangesq1, rangesq2)
+				end
+			end
+		end
+	end
+
+	if target1 ~= nil and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
+		--Targets with shadow dominance have higher priority within half targeting range
+		--Force target switch if current target does not have shadow dominance
+		return target1, not inst.components.shadowsubmissive:TargetHasDominance(inst.components.combat.target)
+	end
+	return target2
+end
+
 env.AddPrefabPostInit("terrorbeak", function(inst)
 	inst:AddTag("terrorbeak")
 
@@ -46,6 +77,9 @@ env.AddPrefabPostInit("terrorbeak", function(inst)
         inst.Oldonkilledbyother = inst.components.combat.onkilledbyother
 		inst.components.combat.onkilledbyother = onkilledbyother
 	end
+
+	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+
 end)
 
 env.AddPrefabPostInit("nightmarebeak", function(inst)
@@ -54,6 +88,9 @@ env.AddPrefabPostInit("nightmarebeak", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
+
+	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+
 end)
 
 local easing = require("easing")
@@ -111,6 +148,8 @@ env.AddPrefabPostInit("crawlinghorror", function(inst)
 		return
 	end
 	
+	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+
     inst.sanityreward = TUNING.SANITY_SMALL
 	
 	if inst.components.combat ~= nil then
@@ -124,9 +163,12 @@ end)
 env.AddPrefabPostInit("crawlingnightmare", function(inst)
 	inst:AddTag("crawlinghorror")
 
+
 	if not TheWorld.ismastersim then
 		return
 	end
-	
+
+	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+
     inst.LaunchProjectile = LaunchProjectile
 end)
