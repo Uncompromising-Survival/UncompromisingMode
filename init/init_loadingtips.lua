@@ -18,6 +18,7 @@ function setup_custom_loading_tips()
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_WINTERSMOLDERING", "\"It is so cold... I can't get a fire going.\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_UNHAPPYTOMATO", "\"My tomato harvest seems to have shortened this fall, I guess they're feeling under the weather.\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_AURACLOPS", "The ice walls certain Deerclops make can be mined, and some are more brittle than others.")
+	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_RATMASK", "\"To think like a rat, and smell like a rat, I must become a rat. Or at least, blend in really nicely with this Rat Mask.\" - W")
 
 	local tipcategorystartweights =
 	{

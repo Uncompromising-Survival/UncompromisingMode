@@ -378,8 +378,9 @@ local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
 end
 
 local function OnAttacked(inst, data)
-	inst.components.health:DoDelta(-((data.damageresolved * inst.AmpDamageTakenModifier) - data.damageresolved), nil,
-		data.attacker)
+	if data.damageresolved ~= nil then
+		inst.components.health:DoDelta(-((data.damageresolved * inst.AmpDamageTakenModifier) - data.damageresolved), nil, data.attacker)
+	end
 end
 
 local function UpdateMusic(inst)

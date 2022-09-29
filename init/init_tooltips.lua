@@ -38,6 +38,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	POTTEDFERN = "- Masks foul smells.",
 	SUCCULENT_POTTED = "- Masks foul smells.",
 	ENDTABLE = "- Masks foul smells when decorated.",
+	MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
 
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",

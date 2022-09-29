@@ -904,6 +904,8 @@ for k, v in pairs(GLOBAL.CLOTHING) do
 	end
 end
 
+
+--[[Keeping this here for standalone mod but this is causing issues with postinit/components/health
 --Refuse to die Edit this not to include you
 local function MayKill(self, amount)
 	if self.currenthealth + amount <= 0 then
@@ -925,24 +927,7 @@ AddComponentPostInit("health", function(self)
 
 	local _DoDelta = self.DoDelta
 	function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-		if MayKill(self, amount) and HasLLA(self) and not self.inst:HasTag("deathamp") then
-			if not self.inst:HasTag("playerghost") and self.inst.ToggleUndeathState ~= nil then
-				self.inst:ToggleUndeathState(self.inst, false)
-			end
-			_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb) --Don't trigger the LLA here, let it happen in our ovvn component, so this doesn't break vvhenever canis moves it to his ovvn mod.
-		else
-			if MayKill(self, amount) and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) then --suggest that vve add a trigger here to shovv that vvathom is still being hit, despite his lack of flinching or anything.
-				if self.inst.components.adrenaline and self.inst:HasTag("deathamp") then
-					self.inst.components.adrenaline:DoDelta(amount * 0.2)
-				end
-				if not self.inst:HasTag("deathamp") then
-					self.inst:AddTag("deathamp")
-					self.inst:ToggleUndeathState(self.inst, true)
-					_DoDelta(self, -self.currenthealth + 1, nil, nil, true) --needed to do this for ignore_invincible...
-				end
-			elseif not self.inst:HasTag("deathamp") then -- No positive healing if you're on your last breath
-				_DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-			end
-		end
+
 	end
 end)
+]]
