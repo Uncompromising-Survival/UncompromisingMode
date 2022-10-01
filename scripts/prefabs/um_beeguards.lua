@@ -64,7 +64,7 @@ local function RetargetFn(inst)
     return FindEntity(inst, targetDist, 
         function(guy) 
             if inst.components.combat:CanTarget(guy) then
-                return not guy:HasTag("bee")
+                return not (guy:HasTag("bee") or guy:HasTag("beehive"))
             end
     end)
 end
@@ -135,9 +135,9 @@ end
 
 local function MortarAttack(inst)
 	if not inst.sg:HasStateTag("mortar") then
-		local target = FindEntity(inst,20^2,nil,{"player"},{"playerghost","bee"})
+		local target = FindEntity(inst,40^2,nil,{"player"},{"playerghost","bee","smallcreature","structure"})
 		if not target then
-			target = FindEntity(inst,20^2,nil,{"_combat"},{"playerghost","bee"})
+			target = FindEntity(inst,40^2,nil,{"_combat"},{"playerghost","bee","smallcreature","structure"})
 		end
 		if target then
 			inst.stabtarget = target

@@ -41,7 +41,7 @@ STRINGS.PIG_GUARD_PIGKING_TALK_LOOKATWILSON_FRIEND = { "KING SAY PROTECT", "PROT
 
 -- Hey look! I actually did something! -Canis
 if GetModConfigData("willow") then
-	STRINGS.CHARACTER_DESCRIPTIONS.willow = STRINGS.CHARACTER_DESCRIPTIONS.willow.."\n󰀕Lighter lasts long on the right hands\n󰀕Can ignite things in the cold"
+	STRINGS.CHARACTER_DESCRIPTIONS.willow = STRINGS.CHARACTER_DESCRIPTIONS.willow.."\n󰀕Lighter lasts longer in the right hands\n󰀕Can ignite things in the cold"
 end
 if GetModConfigData("wx78") then
 	STRINGS.CHARACTER_DESCRIPTIONS.wx78 = STRINGS.CHARACTER_DESCRIPTIONS.wx78.."\n󰀕Systems are not repaired via lightning"

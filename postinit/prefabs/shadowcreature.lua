@@ -89,7 +89,7 @@ env.AddPrefabPostInit("nightmarebeak", function(inst)
 		return
 	end
 
-	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+	--inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 
 end)
 
@@ -168,7 +168,7 @@ env.AddPrefabPostInit("crawlingnightmare", function(inst)
 		return
 	end
 
-	inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
+	--inst.components.combat:SetRetargetFunction(3, retargetfn)--yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
 
     inst.LaunchProjectile = LaunchProjectile
 end)

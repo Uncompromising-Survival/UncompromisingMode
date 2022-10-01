@@ -155,7 +155,7 @@ env.AddPrefabPostInit("minotaur", function(inst)
 	inst:AddComponent("healthtrigger")
 	inst.components.healthtrigger:AddTrigger(0.4, function(inst)
 		inst.forcebelch = true
-		inst.have_a_heart = true
+		--inst.have_a_heart = true
 	end)
 	
 	inst:DoPeriodicTask(5,HomeCheck)

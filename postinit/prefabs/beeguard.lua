@@ -12,7 +12,7 @@ local normalsounds =
 
 local function MortarAttack(inst,again)
 	if not inst.sg:HasStateTag("mortar") then
-		local target = FindEntity(inst,20^2,nil,{"_combat"},{"playerghost","bee"})
+		local target = FindEntity(inst,40^2,nil,{"_combat"},{"playerghost","bee","smallcreature","structure"})
 		if target then
 			inst.stabtarget = target
 			inst.sg:GoToState("flyup")
