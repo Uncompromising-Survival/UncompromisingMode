@@ -147,6 +147,10 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
             table.insert(tasksetdata.required_prefabs, "riceplantspawnerlarge")
             table.insert(tasksetdata.required_prefabs, "riceplantspawner")
         end
+		table.insert(tasksetdata.required_prefabs, "wixie_wardrobe") --Make sure vvixie appears.
+		table.insert(tasksetdata.required_prefabs, "wixie_clock")
+		table.insert(tasksetdata.required_prefabs, "wixie_piano")
+		table.insert(tasksetdata.required_prefabs, "charles_t_horse")
     end)
     if GetModConfigData("caved") == false then
         AddTaskSetPreInitAny(function(tasksetdata)
@@ -393,7 +397,6 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
             task.room_choices["veteranshrine"] = 1
         end)
     end
-
     ---- KoreanWaffle's LOCK/KEY initialization code  --Inactive atm
     local LOCKS = GLOBAL.LOCKS
     local KEYS = GLOBAL.KEYS
@@ -640,14 +643,18 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
 	
 	-- WIXIE PUZZLE SETS
 	
-    Layouts["wixie_puzzle"] = StaticLayout.Get("map/static_layouts/wixie_puzzle")
+    --[[Layouts["wixie_puzzle"] = StaticLayout.Get("map/static_layouts/wixie_puzzle")
 	
 	AddRoomPreInit("DeepDeciduous", function(room)
         room.contents.countstaticlayouts =
         {
             ["wixie_puzzle"] = 1
         }
-    end)
+    end)]]
+	AddTaskPreInit("Make a pick", function(task)
+		GLOBAL.require("map/rooms/forest/challengespawner")
+		task.room_choices["wixie_puzzlearea"] = 1
+	end)
 	
 	-- WIXIE PUZZLE SETS
 	
