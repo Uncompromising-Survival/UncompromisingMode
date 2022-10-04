@@ -657,7 +657,7 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
     AddRoomPreInit("OceanHazardous", function(room)
         room.contents.countprefabs =
         {
-            ocean_speaker = 1
+            ocean_speaker_teaser = 1
         }
     end)
 end

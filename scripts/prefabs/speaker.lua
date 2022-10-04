@@ -64,4 +64,5 @@ local function fn()
     return inst
 end
 
-return Prefab("ocean_speaker", fn, assets, prefabs) -- This is the real one, other ones are temp placeholders.
+return Prefab("ocean_speaker", fn, assets, prefabs), -- This is the real one, other ones are temp placeholders.
+Prefab("ocean_speaker_teaser", fn, assets, prefabs)
