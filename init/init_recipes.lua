@@ -415,7 +415,7 @@ ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
 AddRecipe2(
     "winona_toolbox",
-    {Ingredient("um_copper_pipe", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
+    {Ingredient("boards", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
     TECH.NONE,
     {builder_tag = "handyperson"},
     {"CONTAINERS", "CHARACTER"}
