@@ -240,15 +240,6 @@ AddRecipe2(
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
 AddRecipe2(
-    "slingshotammo_firecrackers",
-    {Ingredient("nitre", 2)},
-    GLOBAL.TECH.SCIENCE_TWO,
-    {builder_tag = "pebblemaker", numtogive = 10},
-    {"CHARACTER"}
-)
-ChangeSortKey("slingshotammo_firecrackers", "slingshotammo_poop", "CHARACTER", false)
-
-AddRecipe2(
     "watermelon_lantern",
     {Ingredient("watermelon", 1), Ingredient("fireflies", 1)},
     TECH.SCIENCE_TWO,
@@ -424,7 +415,7 @@ ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
 AddRecipe2(
     "winona_toolbox",
-    {Ingredient("boards", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
+    {Ingredient("um_copper_pipe", 2), Ingredient("goldnugget", 3), Ingredient("sewing_tape", 1)},
     TECH.NONE,
     {builder_tag = "handyperson"},
     {"CONTAINERS", "CHARACTER"}
@@ -553,7 +544,7 @@ AddRecipe2(
     nil,
     {"TOOLS"}
 )
---[[
+
 AddRecipe2(
     "boat_bumper_copper_kit",
     {Ingredient("um_copper_pipe", 14)},
@@ -571,7 +562,7 @@ AddRecipe2(
     nil,
     {"SEAFARING"}
 )
-ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)]]
+ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
 
 --[[
 AddRecipe2(--unsure...
@@ -682,7 +673,6 @@ AddRecipe2(
 
 AllRecipes["hermitshop_chum"].ingredients = {Ingredient("messagebottleempty", 1)}
 AllRecipes["hermitshop_chum"].numtogive = 3
-
 --[[
 AddRecipe2(
     "hermitshop_oil",
@@ -725,10 +715,10 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
-AddRecipe2("portableboat_item", {Ingredient("mosquitosack", 2), Ingredient("rope", 2)}, GLOBAL.TECH.NONE, nil, {"SEAFARING"})
+AddRecipe2("portableboat_item", {Ingredient("mosquitosack", 2), Ingredient("rope", 2)}, TECH.SEAFARING_ONE, nil, {"SEAFARING"})
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
-AddRecipe2("mastupgrade_windturbine_item", {Ingredient("cutstone", 2), Ingredient("transistor", 2)}, GLOBAL.TECH.NONE, nil, {"SEAFARING"})
+AddRecipe2("mastupgrade_windturbine_item", {Ingredient("cutstone", 2), Ingredient("transistor", 2)}, TECH.SEAFARING_ONE, nil, {"SEAFARING"})
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 --recipe postinits
 
@@ -749,7 +739,6 @@ AddRecipePostInitAny(function(recipe)
     end
 end)
 
-STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
 STRINGS.RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
 STRINGS.RECIPE_DESC.SAND = "Turn a big rock into smaller rocks."

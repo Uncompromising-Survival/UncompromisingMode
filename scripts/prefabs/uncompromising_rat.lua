@@ -485,6 +485,7 @@ local function fn()
 	--inst.components.combat.onhitotherfn = OnHitOther
 	--inst.components.combat:SetRetargetFunction(3, rattargetfn)
 	--inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
+	inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
 
 	inst:AddComponent("thief")
 	--inst.components.thief:SetOnStolenFn(StealItem)
@@ -743,6 +744,7 @@ local function junkfn()
 	inst.components.combat:SetAttackPeriod(TUNING.DSTU.RAIDRAT_ATTACK_PERIOD)
 	inst.components.combat:SetRange(TUNING.DSTU.RAIDRAT_ATTACK_RANGE)
 	inst.components.combat.hiteffectsymbol = "carrat_body"
+	inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
 
 	inst.components.combat:SetRetargetFunction(3, junkretargetfn)
 	inst.components.combat:SetKeepTargetFunction(KeepTarget)
@@ -908,6 +910,7 @@ local function packfn()
 	inst.components.combat:SetAttackPeriod(TUNING.DSTU.RAIDRAT_ATTACK_PERIOD)
 	inst.components.combat:SetRange(TUNING.DSTU.RAIDRAT_ATTACK_RANGE)
 	inst.components.combat.hiteffectsymbol = "carrat_body"
+	inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
 
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(TUNING.DSTU.RAIDRAT_HEALTH * 1.5)

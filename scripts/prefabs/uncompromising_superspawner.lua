@@ -278,7 +278,8 @@ local spawner_data = {
     {name = "swamplake", table = umss_tables.swamplake, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
     {name = "singlefather", table = umss_tables.singlefather, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
 	{name = "sos", table = umss_tables.sos, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},		
-	
+	{name = "wixie_puzzle", table = umss_tables.wixie_puzzle, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
+    
 }
 
 local spawner_prefabs = {}

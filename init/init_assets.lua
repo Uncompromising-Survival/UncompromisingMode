@@ -179,6 +179,7 @@ local inventoryitems =
 	"zaspberry",
 	"zaspberryparfait",
 
+	"bulletbee",
 	"sludge",
 	"sludge_cork",
 	"sludge_sack",
@@ -204,6 +205,7 @@ local inventoryitems =
 	"brine_balm",
 	"sludge_oil",
 	"mastupgrade_windturbine_item",
+	"charles_t_horse",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -653,6 +655,13 @@ Assets = {
 
 	Asset("ATLAS", "images/fx5.xml"),
 	Asset("IMAGE", "images/fx5.tex"),
+	
+	Asset("ATLAS", "images/wixiepiano_whitekey.xml"),
+	Asset("IMAGE", "images/wixiepiano_whitekey.tex"),
+	Asset("ATLAS", "images/wixiepiano_blackkey.xml"),
+	Asset("IMAGE", "images/wixiepiano_blackkey.tex"),
+	Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
+	Asset("ATLAS", "images/inventoryimages/charles_t_horse.xml"),
 
 	Asset("ANIM", "anim/uncompromising_shadow_projectile1_fx.zip"),
 	Asset("ANIM", "anim/uncompromising_shadow_projectile2_fx.zip"),
@@ -876,6 +885,8 @@ Assets = {
 	Asset("ANIM", "anim/snapdragon_fertilizer.zip"),
 
 	Asset("ANIM", "anim/theatercorn.zip"),
+	
+	Asset("ANIM", "anim/bulletbee_build.zip"),
 
 
 
@@ -1510,6 +1521,9 @@ Assets = {
 	Asset("ATLAS_BUILD", "images/inventoryimages/rat_tail.xml"),
 	Asset("ATLAS", "images/inventoryimages/rat_tail.xml"),
 
+	Asset("IMAGE", "images/inventoryimages/bulletbee.tex"),
+	Asset("ATLAS_BUILD", "images/inventoryimages/bulletbee.xml"),
+	Asset("ATLAS", "images/inventoryimages/bulletbee.xml"),
 
 
 	--SWAPS

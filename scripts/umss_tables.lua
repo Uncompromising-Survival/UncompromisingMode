@@ -197,4 +197,31 @@ local UMSS_TABLES =
 		content = {	{x = 0, z = 0, prefab = "multiplayer_portal", ocean = false, tile = 6},	{x = -2, z = -5, prefab = "flower", ocean = false, tile = 6},	{x = 2, z = -7, prefab = "flower", ocean = false, tile = 6},	{x = 8, z = -1, prefab = "flower", ocean = false, tile = 6},},
 	},
 
+
+    returnedTable273 = { 
+		name = "returnedTable273", rotate = true, tile_centered = true, 
+		content = {},
+	},
+
+    wixie_puzzle = { 
+		name = "wixie_puzzle", rotate = true, tile_centered = true, 
+		content = {	
+			{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 10},	
+			{x = -1.0179977416992, z = 1.1900024414063, prefab = "wixie_piano", ocean = false},	
+			{x = 2.3040008544922, z = 0.58000183105469, prefab = "charles_t_horse", ocean = false},	
+			{x = 3.3970031738281, z = 0.156005859375, prefab = "slingshotammo_rock", ocean = false},	
+			{x = -0.69200134277344, z = -3.5780029296875, prefab = "gears", ocean = false},	
+			{x = 3.5630035400391, z = 0.927001953125, prefab = "slingshot", ocean = false},	
+			{x = 3.9210052490234, z = 0.41200256347656, prefab = "slingshotammo_rock", ocean = false},	
+			{x = 0, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 10},	
+			{x = 4, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 10},	
+			{x = 4, z = -4, prefab = "wixie_wardrobe", ocean = false},	
+			{x = 4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 10},	
+			{x = 4.0350036621094, z = 0.97700500488281, prefab = "slingshotammo_rock", ocean = false},	
+			{x = 0.086997985839844, z = -4.9860000610352, prefab = "gears", ocean = false},	
+			{x = -1.0579986572266, z = -5.1119995117188, prefab = "wixie_clock", ocean = false},		
+			{x = -1.2683715820313, z = -9.8249206542969, prefab = "seeds", ocean = false},	
+			{x = 0.16000366210938, z = -11.959999084473, prefab = "deciduoustree", ocean = false},
+		},
+	},
 } return UMSS_TABLES

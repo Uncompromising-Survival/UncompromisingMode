@@ -3,6 +3,11 @@ local DecidTable = {
 	shyTable = 1,
 
 }
+local WixieTable = {
+
+	wixie_puzzle = 2,
+
+}
 local DesertTable = {
 
 	sussyTable = 1,
@@ -82,6 +87,10 @@ local function SpawnBiomeUMSS(inst)
 		Table = inst.DecidTable
 		umss = weighted_random_choice(Table)
 	end
+	--[[if tile == WORLD_TILES.GRASS and weighted_random_choice(inst.WixieTable) then
+		Table = inst.WixieTable
+		umss = weighted_random_choice(Table)
+	end]]
 	if tile == WORLD_TILES.FOREST and weighted_random_choice(inst.DarkForestTable)then
 		Table = inst.DarkForestTable
 		umss = weighted_random_choice(Table)
@@ -138,6 +147,7 @@ local function makefn()
         return inst
     end
 	inst.DecidTable = DecidTable
+	inst.WixieTable = WixieTable
 	inst.DesertTable = DesertTable
 	inst.MarshTable = MarshTable
 	inst.HoodedTable = HoodedTable

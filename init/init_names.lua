@@ -320,9 +320,9 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.UM_MAGNERANGREEL = "Magnetized Battery"
 	STRINGS.UNCOMPROMISING_FISHINGNET = "Fishing Net"
 	STRINGS.UM_BEEGUN = "Hand Held Hive"
-	STRINGS.UM_BEE_PROJ = "Bullet Bee"
-	STRINGS.UM_KILLERBEE_PROJ = "Killer Bullet Bee"
-	
+	STRINGS.BULLETBEE = "Bullet Bee"
+	STRINGS.UM_BULLETBEE_PROJ = "Killer Bullet Bee"
+
 	STRINGS.WINONA_TOOLBOX = "Winona's Toolbox"
 	STRINGS.OCEAN_SPEAKER = "Dilapidated Speaker" --Kinda lame dunno what else though.
 	STRINGS.SUNKENCHEST_ROYAL = "Royal Sunken Chest"
@@ -366,6 +366,14 @@ UI = GLOBAL.STRINGS.UI
 	
 	STRINGS.MASTUPGRADE_WINDTURBINE_ITEM = "Wind Turbine"
 	
+	STRINGS.WIXIE_PIANO = "Grand Piano"
+	STRINGS.WIXIE_CLOCK = "Grandfather Clock"
+	STRINGS.WIXIE_CLOCKDANGLEY1 = "Seconds Weight"
+	STRINGS.WIXIE_CLOCKDANGLEY2 = "Minutes Weight"
+	STRINGS.WIXIE_CLOCKDANGLEY3 = "Hours Weight"
+	STRINGS.WIXIE_WARDROBE = "Fancy Wardrobe"
+	STRINGS.CHARLES_T_HORSE = "Charles T. Horse"
+	
 	STRINGS.LUSH_ENTRANCE = "Overly Ominous Hole"
 	STRINGS.GIANT_TREE_BIRDNEST = "Nest"
 
@@ -392,6 +400,9 @@ UI = GLOBAL.STRINGS.UI
 	STRINGS.SLUDGE_CORK = "Sludge Plug"
 	STRINGS.UM_SPECTOPLASM = "Spectoplasm"
 	STRINGS.UM_SPECTER_AMULET = "Specter Amulet"
-	STRINGS.PHANTOM = "Phantom"--phantom like minecraft :-O
+	STRINGS.PHANTOM = "Phantom" --phantom like minecraft :-O
 	STRINGS.UMSS_GENERAL = "UMSS"
 	STRINGS.UM_DEVCAPTURE = "Devcapture Device"
+	STRINGS.UM_BEEGUARD_SEEKER = "Impact Bee"
+	STRINGS.UM_BEEGUARD_BLOCKER = "Mason Bee"
+	STRINGS.UM_BEEGUARD_SHOOTER = "Bullet Bee"

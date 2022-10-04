@@ -636,6 +636,28 @@ if not TestForIA() or GetModConfigData("worldgenmastertoggle") then
             umss_sunkenboat = 1
         }
     end)
+	
+	
+	-- WIXIE PUZZLE SETS
+	
+    Layouts["wixie_puzzle"] = StaticLayout.Get("map/static_layouts/wixie_puzzle")
+	
+	AddRoomPreInit("DeepDeciduous", function(room)
+        room.contents.countstaticlayouts =
+        {
+            ["wixie_puzzle"] = 1
+        }
+    end)
+	
+	-- WIXIE PUZZLE SETS
+	
 
     modimport("init/init_food/init_food_worldgen")
+
+    AddRoomPreInit("OceanHazardous", function(room)
+        room.contents.countprefabs =
+        {
+            ocean_speaker = 1
+        }
+    end)
 end

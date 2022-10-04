@@ -10,7 +10,9 @@ env.AddPrefabPostInit("crabking", function(inst)
 		inst.components.vetcurselootdropper.loot = "crabclaw"
 	end
 	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn",1.00)
+	--[[
 	--hoarder ck
+	Shelved until UTW. Not satisfied with this...
 	inst:ListenForEvent("death", function(inst)
 		local pos = inst:GetPosition()
 		local messagebottletreasures = require("messagebottletreasures_um")
@@ -59,7 +61,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 			messagebottletreasures.GenerateTreasure(pos, "sunkenchest").Transform:SetPosition(pos.x + math.random(-normalpos, normalpos), pos.y, pos.z + math.random(-normalpos, normalpos))
 		end
 	end)
-
+]]
 	local DAMAGE_SCALE = 0.5
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics

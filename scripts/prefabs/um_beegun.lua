@@ -65,14 +65,37 @@ local function OnProjectileLaunched(inst, attacker, target)
 end
 
 local function OnAmmoLoaded(inst, data)
+	if data ~= nil and data.item ~= nil then
+		if data.item.components.perishable ~= nil then
+			data.item.components.perishable:StopPerishing()
+		end
+	end
+
 	if inst.components.weapon ~= nil then
 		if data ~= nil and data.item ~= nil then
-			inst.components.weapon:SetProjectile("um_"..data.item.prefab.."_proj")
+			if data.item.prefab ~= "bulletbee" then
+				local stacksize = data.item.components.stackable:StackSize()
+		
+				data.item:Remove()
+				
+				for i = 1, stacksize do
+					local bulletbee = SpawnPrefab("bulletbee")
+					inst.components.container:GiveItem(bulletbee)
+				end
+			end
+			
+			inst.components.weapon:SetProjectile("um_bulletbee_proj")
 		end
 	end
 end
 
 local function OnAmmoUnloaded(inst, data)
+	if data ~= nil and data.prev_item ~= nil then
+		if data.prev_item.components.perishable ~= nil then
+			data.prev_item.components.perishable:StartPerishing()
+		end
+	end
+
 	if inst.components.weapon ~= nil then
 		inst.components.weapon:SetProjectile(nil)
 	end
@@ -113,12 +136,22 @@ end
 local function collectbees(inst, target, pos)
 	local owner = inst.components.inventoryitem.owner
 	local ownerpos = owner ~= nil and owner:GetPosition()
+	local currentstacks = 0
+	local currentitem = inst.components.container:GetItemInSlot(1)
+	
+	if currentitem ~= nil then
+		currentstacks = currentitem.components.stackable:StackSize()
+	end
 	
 	if owner ~= nil then
 		if pos ~= nil then
 			local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, {"bee"})
 			if findbees ~= nil then
 				for i, v in pairs(findbees) do
+					if i + currentstacks > 20 then
+						break
+					end
+				
 					if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and not v.components.health:IsDead() then
 						if inst.components.container ~= nil then
 							local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
@@ -138,6 +171,10 @@ local function collectbees(inst, target, pos)
 			local findbees = TheSim:FindEntities(x, 0, z, 8, {"bee"})
 			if findbees ~= nil then
 				for i, v in pairs(findbees) do
+					if i + currentstacks > 20 then
+						break
+					end
+					
 					if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and not v.components.health:IsDead() then
 						if inst.components.container ~= nil then
 							local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
@@ -251,7 +288,7 @@ local function onhit(inst, attacker, target)
     end
 	
 	
-	local bee = SpawnPrefab(inst.beetype)
+	local bee = SpawnPrefab("bulletbee")
 	bee.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	
 	if target ~= nil then
@@ -268,7 +305,7 @@ local function pipethrown(inst)
     inst.persists = false
 end
 
-local function common(anim, beetype, sound)
+local function bullet()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -281,7 +318,7 @@ local function common(anim, beetype, sound)
 
     inst.AnimState:SetBank("um_beegun_dart")
     inst.AnimState:SetBuild("um_beegun_dart")
-    inst.AnimState:PlayAnimation(anim)
+    inst.AnimState:PlayAnimation("beedart_green")
 	inst.Transform:SetScale(1.2, 1.2, 1.2)
     inst.Transform:SetFourFaced()
 
@@ -303,9 +340,9 @@ local function common(anim, beetype, sound)
         return inst
     end
 	
-	inst.beetype = beetype
-	inst.sound = sound
-	inst.anim = anim
+	inst.beetype = "bulletbee"
+	inst.sound = "dontstarve/bee/killerbee_attack"
+	inst.anim = "beedart_green"
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(15)
@@ -327,24 +364,14 @@ local function common(anim, beetype, sound)
     return inst
 end
 
-local function yellow()
-    local inst = common("beedart_yellow", "bee", "dontstarve/bee/bee_attack")
-
-    return inst
-end
-	
-local function red()
-    local inst = common("beedart_red", "killerbee", "dontstarve/bee/killerbee_attack")
-
-    return inst
-end
-
 local function OnHitBall(inst, attacker, target)
 	if inst.beegun ~= nil and inst.beegun:IsValid() then
-		inst.beegun.components.container:GiveItem(SpawnPrefab(inst.beetype))
-		local beefx = SpawnPrefab("bee_poof_small")
-		
 		local owner = inst.beegun.components.inventoryitem.owner
+		local bulletbee = SpawnPrefab("bulletbee")
+		
+		inst.beegun.components.container:GiveItem(bulletbee)
+		
+		local beefx = SpawnPrefab("bee_poof_small")
 		
 		if owner ~= nil then
 			beefx.entity:SetParent(owner.entity)
@@ -432,8 +459,195 @@ local function redball()
     return inst
 end
 	
+local function greenball()
+    local inst = commonball("bullet", "bulletbee", "dontstarve/bee/killerbee_attack")
+
+    return inst
+end
+
+local beecommon = require "brains/beecommon"
+
+local workersounds =
+{
+    takeoff = "dontstarve/bee/killerbee_takeoff",
+    attack = "dontstarve/bee/killerbee_attack",
+    buzz = "dontstarve/bee/killerbee_fly_LP",
+    hit = "dontstarve/bee/killerbee_hurt",
+    death = "dontstarve/bee/killerbee_death",
+}
+
+local function OnWorked(inst, worker)
+	inst.components.health:Kill()
+end
+
+local function bonus_damage_via_allergy(inst, target, damage, weapon)
+    return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
+end
+
+local function OnDropped(inst)
+	--inst.components.health:Kill()
+end
+
+local function OnPickedUp(inst)
+    inst.SoundEmitter:KillSound("buzz")
+    inst.SoundEmitter:KillAllSounds()
+	
+	inst.sg:GoToState("idle")
+end
+
+local function EnableBuzz(inst, enable)
+    if enable then
+        if not inst.buzzing then
+            inst.buzzing = true
+            if not (inst.components.inventoryitem:IsHeld() or inst:IsAsleep() or inst.SoundEmitter:PlayingSound("buzz")) then
+                inst.SoundEmitter:PlaySound(inst.sounds.buzz, "buzz")
+            end
+        end
+    elseif inst.buzzing then
+        inst.buzzing = false
+        inst.SoundEmitter:KillSound("buzz")
+    end
+end
+
+local function OnWake(inst)
+    if inst.buzzing and not (inst.components.inventoryitem:IsHeld() or inst.SoundEmitter:PlayingSound("buzz")) then
+        inst.SoundEmitter:PlaySound(inst.sounds.buzz, "buzz")
+    end
+end
+
+local function OnSleep(inst)
+    inst.SoundEmitter:KillSound("buzz")
+end
+
+local RETARGET_MUST_TAGS = { "_combat", "_health" }
+local RETARGET_CANT_TAGS = { "insect", "INLIMBO" }
+local RETARGET_ONEOF_TAGS = { "character", "animal", "monster" }
+local function BeeRetarget(inst)
+    return FindEntity(inst, SpringCombatMod(8),
+        function(guy)
+            return inst.components.combat:CanTarget(guy)
+        end,
+        RETARGET_MUST_TAGS,
+        RETARGET_CANT_TAGS,
+        RETARGET_ONEOF_TAGS)
+end
+
+local workerbrain = require("brains/bulletbeebrain")
+
+local function bulletfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddLightWatcher()
+    inst.entity:AddDynamicShadow()
+    inst.entity:AddNetwork()
+
+    MakeFlyingCharacterPhysics(inst, 1, .5)
+
+    inst.DynamicShadow:SetSize(.8, .5)
+    inst.Transform:SetFourFaced()
+
+    inst:AddTag("bee")
+    inst:AddTag("bulletbee")
+    inst:AddTag("insect")
+    inst:AddTag("smallcreature")
+    inst:AddTag("cattoyairborne")
+    inst:AddTag("flying")
+    inst:AddTag("ignorewalkableplatformdrowning")
+    inst:AddTag("scarytoprey")
+
+    inst.AnimState:SetBank("bee")
+    inst.AnimState:SetBuild("bulletbee_build")
+    inst.AnimState:PlayAnimation("idle", true)
+    inst.AnimState:SetRayTestOnBB(true)
+	
+	inst.Transform:SetScale(.9, .9, .9)
+
+    MakeInventoryFloatable(inst)
+
+    MakeFeedableSmallLivestockPristine(inst)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
+    inst.components.locomotor.walkspeed = 8
+    inst.components.locomotor.runspeed = 12
+    inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+    inst.components.locomotor:SetTriggersCreep(false)
+    inst:SetStateGraph("SGbee")
+
+    inst:AddComponent("stackable")
+    inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
+    inst.components.inventoryitem.nobounce = true
+    inst.components.inventoryitem.canbepickedup = false
+    inst.components.inventoryitem.canbepickedupalive = true
+    inst.components.inventoryitem.pushlandedevents = false
+
+    ------------------
+    inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.NET)
+    inst.components.workable:SetWorkLeft(1)
+    inst.components.workable:SetOnFinishCallback(OnWorked)
+
+    MakeSmallBurnableCharacter(inst, "body", Vector3(0, -1, 1))
+    MakeTinyFreezableCharacter(inst, "body", Vector3(0, -1, 1))
+
+    ------------------
+
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(10)
+	
+    inst:AddComponent("combat")
+    inst.components.combat:SetDefaultDamage(TUNING.BEE_DAMAGE)
+    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
+    inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
+    inst.components.combat.hiteffectsymbol = "body"
+    inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
+    inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
+    inst.components.combat:SetRetargetFunction(2, BeeRetarget)
+
+    ------------------
+
+    inst:AddComponent("sleeper")
+    ------------------
+
+    inst:AddComponent("knownlocations")
+
+    ------------------
+
+    inst:AddComponent("inspectable")
+
+    ------------------
+
+    inst:AddComponent("tradable")
+
+    inst:ListenForEvent("attacked", beecommon.OnAttacked)
+    inst:ListenForEvent("worked", beecommon.OnWorked)
+
+    MakeFeedableSmallLivestock(inst, 30, OnPickedUp, OnDropped)
+
+    inst.sounds = workersounds
+    inst:SetBrain(workerbrain)
+	
+    inst.buzzing = true
+    inst.EnableBuzz = EnableBuzz
+    inst.OnEntityWake = OnWake
+    inst.OnEntitySleep = OnSleep
+    MakeHauntablePanic(inst)
+
+    return inst
+end
+
 return Prefab("um_beegun", fn, assets, prefabs),
-		Prefab("um_bee_proj", yellow, assets, prefabs),
+		Prefab("um_bulletbee_proj", bullet, assets, prefabs),
 		Prefab("um_bee_ball", yellowball, assets, prefabs),
-		Prefab("um_killerbee_proj", red, assets, prefabs),
-		Prefab("um_killerbee_ball", redball, assets, prefabs)
+		Prefab("um_killerbee_ball", redball, assets, prefabs),
+		Prefab("um_bulletbee_ball", greenball, assets, prefabs),
+		Prefab("bulletbee", bulletfn)

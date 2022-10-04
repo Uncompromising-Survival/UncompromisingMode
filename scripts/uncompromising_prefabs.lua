@@ -369,4 +369,8 @@ return {
 	"ocupus_items",
 	"ums_biometable",
 	"umss_general",
+	"charles_t_horse",
+	"wixie_piano",
+	"wixie_clock",
+	"wixie_wardrobe",
 }

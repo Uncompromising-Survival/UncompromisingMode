@@ -50,7 +50,7 @@ local function getrandomposition(caster)
 		
 			--local antimoonnode = TheWorld.Map:FindNodeAtPoint(node.x, 0, node.z)
 		
-			if TheWorld.Map:IsPassableAtPoint(node.x, 0, node.y) and node.type ~= NODE_TYPE.SeparatedRoom and not (node ~= nil and node.tags ~= nil and table.contains(node.tags, "lunacyarea")) then
+			if TheWorld.Map:IsPassableAtPoint(node.x, 0, node.y) and node.type ~= NODE_TYPE.SeparatedRoom and not (node ~= nil and node.tags ~= nil and (table.contains(node.tags, "lunacyarea") or table.contains(node.tags, "not_mainland"))) then
 				table.insert(centers, {x = node.x, z = node.y})
 			end
 		end

@@ -375,7 +375,7 @@ TUNING.DSTU =
 	EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
 
 --More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R23_REFRESH_WICKERBOTTOM"),--REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R24_STS_ALITTLEDRAMA"),--REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
 	POCKET_POWERTRIP = GetModConfigData("pocket_powertrip"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     HUNGRY_VOID = GetModConfigData("hungry_void"),
@@ -427,6 +427,11 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 2
     TUNING.BEEBOX_RELEASE_TIME = (0.5 * day_time) / 2
 end
+
+TUNING.NONLETHAL_TEMPERATURE = false
+TUNING.NONLETHAL_HUNGER = false
+TUNING.NONLETHAL_DARKNESS = false
+TUNING.NONLETHAL_PERCENT = 0
 
 --shield buff
 TUNING.SHIELDOFTERROR_DAMAGE = 59.5

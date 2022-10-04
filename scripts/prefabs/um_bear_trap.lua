@@ -1,39 +1,63 @@
 require "prefabutil"
 
 local function onfinished_normal(inst)
-	if inst.DynamicShadow ~= nil then
-		inst.DynamicShadow:Enable(false)
+	if inst.components.finiteuses ~= nil then
+		inst.components.finiteuses:Use(1)
 	end
-
-	if inst.deathtask ~= nil then
-		inst.deathtask:Cancel()
-	end
-	inst.deathtask = nil
-    inst:RemoveComponent("inventoryitem")
-    inst:RemoveComponent("mine")
-    inst.persists = false
-    inst.Physics:SetActive(false)
-
-	if not inst.Snapped then
-		inst.AnimState:PlayAnimation("activate")
-		inst.AnimState:PushAnimation("death", false)
-	else
-		inst.AnimState:PushAnimation("death", false)
-	end
-
-	print("prefab = "..inst.prefab)
-
-    inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
-    inst:DoTaskInTime(3, inst.Remove)
-
-	if inst.latchedtarget ~= nil then
-		local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
-		if inst.latchedtarget.components.locomotor ~= nil then
-			inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, "um_bear_trap")
-			inst.latchedtarget._bear_trap_speedmulttask = nil
+	
+	if inst.components.finiteuses ~= nil and inst.components.finiteuses:GetUses() > 0 then
+		local trapprefab = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype)
+	
+		if inst.latchedtarget ~= nil then
+			trapprefab.Transform:SetPosition(inst.latchedtarget.Transform:GetWorldPosition())
+			trapprefab.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+			trapprefab.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
+			trapprefab.AnimState:PlayAnimation("hit")
+			
+			inst:Remove()
+		else
+			trapprefab.Transform:SetPosition(inst.Transform:GetWorldPosition())
+			trapprefab.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+			trapprefab.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
+			trapprefab.AnimState:PlayAnimation("hit")
+			
+			inst:Remove()
 		end
-		inst.latchedtarget:RemoveChild(inst)
-		inst.Physics:Teleport(pos.x,pos.y,pos.z)
+	else
+		if inst.DynamicShadow ~= nil then
+			inst.DynamicShadow:Enable(false)
+		end
+
+		if inst.deathtask ~= nil then
+			inst.deathtask:Cancel()
+		end
+		inst.deathtask = nil
+		inst:RemoveComponent("inventoryitem")
+		inst:RemoveComponent("mine")
+		inst.persists = false
+		inst.Physics:SetActive(false)
+
+		if not inst.Snapped then
+			inst.AnimState:PlayAnimation("activate")
+			inst.AnimState:PushAnimation("death", false)
+		else
+			inst.AnimState:PushAnimation("death", false)
+		end
+
+		print("prefab = "..inst.prefab)
+
+		inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
+		inst:DoTaskInTime(3, inst.Remove)
+
+		if inst.latchedtarget ~= nil then
+			local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
+			if inst.latchedtarget.components.locomotor ~= nil then
+				inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, "um_bear_trap")
+				inst.latchedtarget._bear_trap_speedmulttask = nil
+			end
+			inst.latchedtarget:RemoveChild(inst)
+			inst.Physics:Teleport(pos.x,pos.y,pos.z)
+		end
 	end
 end
 
@@ -45,83 +69,88 @@ local function debuffremoval(inst)
 end
 
 local function OnExplode(inst, target)
-	if inst.deathtask == nil then
-	inst.deathtask = inst:DoTaskInTime(30, onfinished_normal)
-	end
-	inst.Snapped = true
-	inst.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
-	--inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_sharp")
-
-    inst.AnimState:PlayAnimation("activate")
-    if target then
-		if target.SoundEmitter ~= nil then
-			target.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
+	if target == nil then
+		onfinished_normal(inst)
+	else
+		if inst.deathtask == nil then
+			inst.deathtask = inst:DoTaskInTime(30, onfinished_normal)
 		end
+		
+		inst.Snapped = true
+		inst.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
+		--inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_sharp")
 
-		if inst.deathtask ~= nil then
-			inst.deathtask:Cancel()
-		end
-		inst.deathtask = nil
-
-		if inst.traptype == "gold" then
-			if target.components.combat.target ~= nil then
-				target.components.combat:GetAttacked(target.components.combat.target, TUNING.TRAP_TEETH_DAMAGE * 1.5)
-			else
-				target.components.combat:GetAttacked(inst, TUNING.TRAP_TEETH_DAMAGE * 1.5)
+		inst.AnimState:PlayAnimation("activate")
+		if target ~= nil then
+			if target.SoundEmitter ~= nil then
+				target.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
 			end
-		else
-			if target.components.combat.target ~= nil then
-				target.components.combat:GetAttacked(target.components.combat.target, TUNING.TRAP_TEETH_DAMAGE)
-			else
-				target.components.combat:GetAttacked(inst, TUNING.TRAP_TEETH_DAMAGE)
+
+			if inst.deathtask ~= nil then
+				inst.deathtask:Cancel()
 			end
-		end
+			inst.deathtask = nil
 
-		inst.latchedtarget = target
-
-		inst.AnimState:SetFinalOffset(1)
-		inst.Physics:Teleport(0,0,0)
-		target:AddChild(inst)
-        --inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
-
-		if target ~= nil and target.components.health:IsDead() then
-			inst.components.health:Kill()
-		else
-			local debuffkey = inst.prefab
-
-
-			inst:ListenForEvent("death", function(player)
-					onfinished_normal(inst)
-				end, target)
-			inst:ListenForEvent("onremoved", function(player)
-					onfinished_normal(inst)
-				end, target)
-			if target.components.locomotor ~= nil then
-				if inst.traptype ~= nil then
-					target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5 + 0.15)
+			if inst.traptype == "gold" then
+				if target.components.combat.target ~= nil then
+					target.components.combat:GetAttacked(target.components.combat.target, TUNING.TRAP_TEETH_DAMAGE * 1.5)
 				else
-					target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
+					target.components.combat:GetAttacked(inst, TUNING.TRAP_TEETH_DAMAGE * 1.5)
 				end
-				target._bear_trap_speedmulttask = target:DoTaskInTime(10, function(i)
-					i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-					i._bear_trap_speedmulttask = nil
-				end)
-
-				local function RemoveSpeed(inst)
-					inst.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
-					inst._bear_trap_speedmulttask = nil
+			else
+				if target.components.combat.target ~= nil then
+					target.components.combat:GetAttacked(target.components.combat.target, TUNING.TRAP_TEETH_DAMAGE)
+				else
+					target.components.combat:GetAttacked(inst, TUNING.TRAP_TEETH_DAMAGE)
 				end
-
-				target:ListenForEvent("onremoved", RemoveSpeed, inst)
 			end
-			inst:DoTaskInTime(10, function(inst) inst.components.health:Kill() end)
 
-			inst.persists = false
+			inst.latchedtarget = target
+
+			inst.AnimState:SetFinalOffset(1)
+			inst.Physics:Teleport(0,0,0)
+			target:AddChild(inst)
+			--inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
+
+			if target ~= nil and target.components.health:IsDead() then
+				inst.components.health:Kill()
+			else
+				local debuffkey = inst.prefab
+
+
+				inst:ListenForEvent("death", function(player)
+						onfinished_normal(inst)
+					end, target)
+				inst:ListenForEvent("onremoved", function(player)
+						onfinished_normal(inst)
+					end, target)
+				if target.components.locomotor ~= nil then
+					if inst.traptype ~= nil then
+						target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5 + 0.15)
+					else
+						target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
+					end
+					target._bear_trap_speedmulttask = target:DoTaskInTime(10, function(i)
+						i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+						i._bear_trap_speedmulttask = nil
+					end)
+
+					local function RemoveSpeed(inst)
+						inst.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+						inst._bear_trap_speedmulttask = nil
+					end
+
+					target:ListenForEvent("onremoved", RemoveSpeed, inst)
+				end
+				inst:DoTaskInTime(10, function(inst) inst.components.health:Kill() end)
+
+				inst.persists = false
+			end
 		end
-    end
 
-	inst:RemoveComponent("inventoryitem")
-	inst:RemoveComponent("mine")
+		inst:RemoveComponent("inventoryitem")
+		inst:RemoveComponent("mine")
+	end
 end
 
 local function OnReset(inst)
@@ -230,6 +259,10 @@ local function common_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+	
+    inst:AddComponent("finiteuses")
+	inst.components.finiteuses:SetMaxUses(8)
+    inst.components.finiteuses:SetUses(8)
 
 	inst.latchedtarget = nil
 	inst.Snapped = false
@@ -349,6 +382,10 @@ local function OnHitInk(inst, target)
 	inst.trap = SpawnPrefab("um_bear_trap")
 	inst.trap.Transform:SetPosition(x, 0, z)
 
+	if inst.components.finiteuses ~= nil and inst.trap.components.finiteuses ~= nil then
+		inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+	end
+
     inst:Remove()
 end
 
@@ -359,6 +396,10 @@ local function OnHitTarget(inst, target)
 	inst.trap.Transform:SetPosition(x, 0, z)
 	if target ~= nil then
 		inst.trap.components.mine:Explode(target)
+	end
+
+	if inst.components.finiteuses ~= nil and inst.trap.components.finiteuses ~= nil then
+		inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
 	end
 
     inst:Remove()
@@ -688,6 +729,10 @@ local function equiptoothfn()
     if not TheWorld.ismastersim then
         return inst
     end
+	
+    inst:AddComponent("finiteuses")
+	inst.components.finiteuses:SetMaxUses(6)
+    inst.components.finiteuses:SetUses(6)
 
 	inst.latchedtarget = nil
 	inst.Snapped = false
@@ -780,6 +825,10 @@ local function equipgoldfn()
         return inst
     end
 
+    inst:AddComponent("finiteuses")
+	inst.components.finiteuses:SetMaxUses(8)
+    inst.components.finiteuses:SetUses(8)
+	
 	inst:AddComponent("bloomer")
 	inst.components.bloomer:PushBloom(inst, "shaders/anim.ksh", 1)
 
