@@ -399,9 +399,6 @@ end
 
 local function fn(Sim)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
-    local sound = inst.entity:AddSoundEmitter()
     local shadow = inst.entity:AddDynamicShadow()
     shadow:SetSize(6, 3.5)
     inst.entity:AddTransform()
@@ -430,9 +427,9 @@ local function fn(Sim)
     inst.OnEntitySleep = OnSleep
     inst.OnRemoveEntity = OnRemove
 
-    anim:SetBank("dragonfly")
-    anim:SetBuild("dragonfly_build")
-    anim:PlayAnimation("idle", true)
+    inst.AnimState:SetBank("dragonfly")
+    inst.AnimState:SetBuild("dragonfly_build")
+    inst.AnimState:PlayAnimation("idle", true)
 
     inst.AnimState:SetMultColour(0.6, 0.6, 0.3, 1)
 

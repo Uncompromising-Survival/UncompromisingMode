@@ -48,8 +48,6 @@ end
 
 local function fn(Sim)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -59,9 +57,9 @@ local function fn(Sim)
 	--inst.entity:AddMiniMapEntity()
 	--inst.MiniMapEntity:SetIcon("veteranshrine_map.tex")
 
-    anim:SetBuild("wixie_clock")    
-    anim:SetBank("wixie_clock")
-    anim:PlayAnimation("idle", true)
+    inst.AnimState:SetBuild("wixie_clock")    
+    inst.AnimState:SetBank("wixie_clock")
+    inst.AnimState:PlayAnimation("idle", true)
 	
 	--MakeObstaclePhysics(inst, .2)
 	--inst:AddTag("NOCLICK")
@@ -81,16 +79,14 @@ end
 
 local function fncommon(handtype, startpoint)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
-    anim:SetBuild("wixie_clock_hands")    
-    anim:SetBank("wixie_clock_hands")
-	anim:PlayAnimation(handtype..startpoint, false)
+    inst.AnimState:SetBuild("wixie_clock_hands")    
+    inst.AnimState:SetBank("wixie_clock_hands")
+	inst.AnimState:PlayAnimation(handtype..startpoint, false)
 	
 	inst:AddTag("NOCLICK")
 	
@@ -157,17 +153,15 @@ end
 
 local function fncommondangle(dangle, startpoint)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    anim:SetBuild("wixie_dangley")    
-    anim:SetBank("wixie_dangley")
-	anim:SetPercent(dangle, ((1 / 12) * startpoint))
+    inst.AnimState:SetBuild("wixie_dangley")    
+    inst.AnimState:SetBank("wixie_dangley")
+	inst.AnimState:SetPercent(dangle, ((1 / 12) * startpoint))
 	
 	inst.entity:SetPristine()
 	
@@ -221,16 +215,14 @@ end
 
 local function frontfn()
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
-    anim:SetBuild("wixie_dangley")    
-    anim:SetBank("wixie_dangley")
-	anim:PlayAnimation("overlay")
+    inst.AnimState:SetBuild("wixie_dangley")    
+    inst.AnimState:SetBank("wixie_dangley")
+	inst.AnimState:PlayAnimation("overlay")
 	
 	inst:AddTag("NOCLICK")
 	

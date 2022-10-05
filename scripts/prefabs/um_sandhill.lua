@@ -173,18 +173,15 @@ local function sandhillfn(Sim)
 	inst.OnSave = onsave
 	inst.OnLoad = onload
 	inst.OnEntityWake = onwake
-	local trans = inst.entity:AddTransform()
-	local anim = inst.entity:AddAnimState()
-	local sound = inst.entity:AddSoundEmitter()
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-	anim:SetBuild("sand_dune")
-	anim:SetBank("sand_dune")
-	anim:PlayAnimation(anims[#anims])
+	inst.AnimState:SetBuild("sand_dune")
+	inst.AnimState:SetBank("sand_dune")
+	inst.AnimState:PlayAnimation(anims[#anims])
 	
 	inst.entity:SetPristine()
 	

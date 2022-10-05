@@ -59,10 +59,10 @@ local function WathomMusicToggle(level)
 		GLOBAL.TheFocalPoint.SoundEmitter:KillSound("wathommusic")
 	end
 end
-
-local function DoAdrenalineUpStinger(intensity)
-	if type(intensity) =="number" then
-		GLOBAL.TheFrontEnd:GetSound():PlaySoundWithParams("dontstarve_DLC001/characters/wathgrithr/inspiration_up", { intensity = intensity}) -- intensity: 0, 0.5, 1
+--wathomcustomvoice/wathomvoiceevent
+local function DoAdrenalineUpStinger(sound)
+	if type(sound) =="string" then
+		GLOBAL.TheFrontEnd:GetSound():PlaySound("wathomcustomvoice/wathomvoiceevent/"..sound)
 	else
 		GLOBAL.TheFrontEnd:GetSound():PlaySound("dontstarve_DLC001/characters/wathgrithr/inspiration_down")
 	end

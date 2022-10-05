@@ -5,8 +5,7 @@ local assets =
 
 local function fn(Sim)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
+
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -14,8 +13,8 @@ local function fn(Sim)
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 	
-    anim:SetBuild("shipwreck")    
-    anim:SetBank("shipwreck")
+    inst.AnimState:SetBuild("shipwreck")    
+    inst.AnimState:SetBank("shipwreck")
 
 	inst.entity:SetPristine()
 	
@@ -32,7 +31,7 @@ local function fn(Sim)
 	inst.type = math.random(1,4)
     inst:AddComponent("inspectable")
 
-	inst:DoTaskInTime(0,function(inst) anim:PlayAnimation("idle_empty"..inst.type, true) end)
+	inst:DoTaskInTime(0,function(inst) inst.AnimState:PlayAnimation("idle_empty"..inst.type, true) end)
 	
 	inst.OnLoad = function(inst,data) if data and data.type then inst.type = data.type end end
 	inst.OnSave = function(inst,data) data.type = inst.type end

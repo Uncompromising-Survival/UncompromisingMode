@@ -381,19 +381,15 @@ local function snowpilefn(Sim)
     inst.OnLoad = onload
     inst.OnEntityWake = onwake
 
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
-    local sound = inst.entity:AddSoundEmitter()
-
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    anim:SetBuild("snow_dune")
-    anim:SetBank("snow_dune")
-    anim:PlayAnimation("low")
+    inst.AnimState:SetBuild("snow_dune")
+    inst.AnimState:SetBank("snow_dune")
+    inst.AnimState:PlayAnimation("low")
 
     inst.entity:SetPristine()
 

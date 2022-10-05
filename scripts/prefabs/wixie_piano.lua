@@ -44,8 +44,7 @@ end
 
 local function fn(Sim)
     local inst = CreateEntity()
-    local trans = inst.entity:AddTransform()
-    local anim = inst.entity:AddAnimState()
+
 	
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -55,9 +54,9 @@ local function fn(Sim)
 	--inst.entity:AddMiniMapEntity()
 	--inst.MiniMapEntity:SetIcon("veteranshrine_map.tex")
 
-    anim:SetBuild("wixie_piano")    
-    anim:SetBank("wixie_piano")
-    anim:PlayAnimation("idle", true)
+    inst.AnimState:SetBuild("wixie_piano")    
+    inst.AnimState:SetBank("wixie_piano")
+    inst.AnimState:PlayAnimation("idle", true)
 	
     --inst.GetActivateVerb = GetVerb
 	
