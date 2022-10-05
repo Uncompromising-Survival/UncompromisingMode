@@ -381,7 +381,7 @@ AddStategraphPostInit("wilson", function(inst)
 				if inst.components.playercontroller ~= nil then
 					inst.components.playercontroller:RemotePausePrediction()
 				end
-
+				
 			end,
 
 			onexit = function(inst)
@@ -393,9 +393,11 @@ AddStategraphPostInit("wilson", function(inst)
 				inst.Transform:SetFourFaced()
 				inst.components.locomotor:Stop()
 				inst.Physics:ClearMotorVelOverride()
-				if not inst.components.playercontroller ~= nil then
-					inst.components.playercontroller:Enable(true)
-				end
+				inst:DoTaskInTime(0,function(inst)
+					if inst.components.playercontroller then
+						inst.components.playercontroller:Enable(true)
+					end
+				end)
 				inst.components.locomotor:EnableGroundSpeedMultiplier(true)
 				inst.AnimState:AddOverrideBuild("player_lunge")
 				inst.AnimState:AddOverrideBuild("player_attack_leap")
