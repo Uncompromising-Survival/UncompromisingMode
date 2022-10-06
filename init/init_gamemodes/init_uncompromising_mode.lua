@@ -145,6 +145,7 @@ end
 --if GetModConfigData("wolfgang") then
 --modimport("init/init_character_changes/wolfgang")
 modimport("init/init_character_changes/wolfgang2")
+modimport("init/init_character_changes/wormwood")
 --end
 
 if GetModConfigData("lifeamulet") then
