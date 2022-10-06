@@ -40,7 +40,7 @@ local function ToggleUndeathState(inst, toggle)
 
 			inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
 		end
-
+		inst.components.adrenaline:SetPercent(1)
 		inst.helpimleaking = inst:DoPeriodicTask(0.125, function(inst)
 			if inst:HasTag("amped") then
 				local x, y, z = inst.Transform:GetWorldPosition()
@@ -144,11 +144,8 @@ local function AmpTimer(inst)
 		(inst.components.adrenaline:GetPercent() < 0.24 and not inst:HasTag("amped") and not inst:HasTag("deathamp")) then
 		inst.components.grogginess.grog_amount = 0.5
 	end
-end
-
-local function AmpTimer2(inst)
 	-- Draining adrenaline when not in combat.
-	if inst:HasTag("amped") then
+	if (inst:HasTag("amped") or inst:HasTag("deathamp")) then
 		if inst.adrenalpause then
 			inst.components.adrenaline:DoDelta(-1)
 		else
@@ -165,7 +162,7 @@ local function AmpTimer2(inst)
 	local AmpLevel = inst.components.adrenaline:GetPercent()
 	local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	--range updates
-	if inst:HasTag("amped") then
+	if (inst:HasTag("amped") or inst:HasTag("deathamp")) then
 		if item ~= nil then
 			inst.components.combat.attackrange = 7
 		else
@@ -210,7 +207,7 @@ local function OnAttackOther(inst, data)
 			inst.adrenalresume = nil
 		end
 		inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
-		if not inst:HasTag("amped") then
+		if not (inst:HasTag("amped") or inst:HasTag("deathamp")) then
 			inst.components.adrenaline:DoDelta(3)
 		end
 	end
@@ -228,8 +225,6 @@ end
 ---------------------------------------------
 
 local function GetPointSpecialActions(inst, pos, useitem, right)
-	--we really need a adrenaline replica or something
-	--for barking to not work on clients. -A
 	if right and useitem == nil then
 		local rider = inst.replica.rider
 		if rider ~= nil and not rider:IsRiding() or rider == nil then
@@ -295,7 +290,7 @@ local function onload(inst, data)
 			SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
 		end
 	end
-	
+
 end
 
 local function UpdateAdrenaline(inst, data)
@@ -306,11 +301,13 @@ local function UpdateAdrenaline(inst, data)
 	--seperate 'if's so all sounds can play at once,in theory. (And I don't have to worry about elseif order...)
 	if data.oldpercent < 0.75 and data.newpercent >= 0.75 then
 		print("when wathom passes 75")
-		SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid, "wathom_ampstage_04")
+		SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid,
+			"wathom_ampstage_04")
 	end
 	if data.oldpercent < 0.5 and data.newpercent >= 0.5 then
 		print("when wathom passes 50")
-		SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid, "wathom_ampstage_02")
+		SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid,
+			"wathom_ampstage_02")
 	end
 
 	if data.oldpercent >= 0.5 and data.newpercent < 0.5 then
@@ -379,8 +376,17 @@ local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
 end
 
 local function OnAttacked(inst, data)
-	if data.damageresolved ~= nil then
-		inst.components.health:DoDelta(-((data.damageresolved * inst.AmpDamageTakenModifier) - data.damageresolved), nil, data.attacker)
+	inst.adrenalpause = true
+	if inst.adrenalresume then
+		inst.adrenalresume:Cancel()
+		inst.adrenalresume = nil
+	end
+	inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
+	if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
+		if data.damageresolved ~= nil then
+			inst.components.health:DoDelta(-((data.damageresolved * inst.AmpDamageTakenModifier) - data.damageresolved), nil,
+				data.attacker)
+		end
 	end
 end
 
@@ -517,14 +523,11 @@ local master_postinit = function(inst)
 	end)
 
 	-- stuff relating to Wathom's adrenaline timer. This can most likely be optimized.
-	inst:DoPeriodicTask(0.5, function() AmpTimer(inst) end)
-	inst:DoPeriodicTask(1, function() AmpTimer2(inst) end)
+	inst:DoPeriodicTask(1.5, function() AmpTimer(inst) end)
 
 	inst:ListenForEvent("healthdelta", OnHealthDelta)
 	inst:ListenForEvent("onattackother", OnAttackOther)
-	if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
-		inst:ListenForEvent("attacked", OnAttacked)
-	end
+	inst:ListenForEvent("attacked", OnAttacked)
 	if TheWorld.ismastersim then
 		inst:ListenForEvent("adrenalinedelta", UpdateAdrenaline)
 	end
