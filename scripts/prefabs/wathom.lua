@@ -32,10 +32,10 @@ local function ToggleUndeathState(inst, toggle)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
 		--inst.components.talker:Say("DEATH, REFUSED!", nil, true)
-		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark")
+		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/shadowbark")
 
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
-			inst.sg:GoToState("wathombark")
+			inst.sg:GoToState("wathombark_shadow")
 			inst.components.health.invincible = true
 
 			inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
@@ -92,6 +92,7 @@ local function UnAmp(inst)
 end
 
 local function Amp(inst)
+	inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/ampedbark")
 	inst.components.combat.attackrange = 7 -- These values are for when Wathom's at 100 Adrenaline, so he should be Amping Up right now.
 	inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
 	inst:AddTag("amped")

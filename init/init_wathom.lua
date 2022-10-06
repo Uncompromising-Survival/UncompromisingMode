@@ -330,6 +330,60 @@ AddStategraphPostInit("wilson", function(inst)
 		},
 
 		GLOBAL.State {
+			name = "wathombark_shadow",
+			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+
+			onenter = function(inst, data)
+				local buffaction = inst:GetBufferedAction()
+				local target = buffaction ~= nil and buffaction.target or nil
+				inst.AnimState:PlayAnimation("emote_angry", false)
+				inst.components.locomotor:Stop()
+				inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+				if inst.components.playercontroller ~= nil then
+					inst.components.playercontroller:RemotePausePrediction()
+				end
+			end,
+
+			onexit = function(inst)
+				if not inst.components.playercontroller ~= nil then
+					inst.components.playercontroller:Enable(true)
+				end
+			end,
+
+			timeline =
+			{
+				TimeEvent(0 * FRAMES, function(inst)
+					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/shadowbark") --place your funky sounds here
+					local fx = SpawnPrefab("statue_transition_2")
+					if fx ~= nil then
+						fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+						fx.Transform:SetScale(1.2, 1.2, 1.2)
+					end
+					fx = SpawnPrefab("statue_transition")
+					if fx ~= nil then
+						fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+						fx.Transform:SetScale(1.2, 1.2, 1.2)
+					end
+				end),
+
+
+				TimeEvent(10 * FRAMES, function(inst)
+					inst.components.locomotor:Stop()
+					inst:PerformBufferedAction() --Dis is the important part, canis -Axe
+					inst.sg:RemoveStateTag("busy")
+					inst.sg:RemoveStateTag("nointerrupt")
+				end),
+			},
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					inst.sg:GoToState("idle")
+				end),
+			},
+		},
+
+		GLOBAL.State {
 			name = "cantbark",
 			tags = { busy },
 
@@ -381,7 +435,7 @@ AddStategraphPostInit("wilson", function(inst)
 				if inst.components.playercontroller ~= nil then
 					inst.components.playercontroller:RemotePausePrediction()
 				end
-				
+
 			end,
 
 			onexit = function(inst)
@@ -393,7 +447,7 @@ AddStategraphPostInit("wilson", function(inst)
 				inst.Transform:SetFourFaced()
 				inst.components.locomotor:Stop()
 				inst.Physics:ClearMotorVelOverride()
-				inst:DoTaskInTime(0,function(inst)
+				inst:DoTaskInTime(0, function(inst)
 					if inst.components.playercontroller then
 						inst.components.playercontroller:Enable(true)
 					end
@@ -713,10 +767,10 @@ local wathombark = AddAction(
 				inst.components.adrenaline:DoDelta(10, 2)
 			end
 			--		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
-		
+
 			local act_pos = act:GetActionPoint()
 			local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail" }) --added playertags because of the taunt.
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail", "shadow" }) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
 				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
 					(
@@ -738,7 +792,7 @@ local wathombark = AddAction(
 			--also scare enemies near wathom, at a smaller radius
 			local x, y, z = act.doer.Transform:GetWorldPosition()
 			ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, { "_combat" },
-				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail" }) --added playertags because of the taunt.
+				{ "companion", "INLIMBO", "notarget", "player", "playerghost", "wall", "abigail", "shadow" }) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
 				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
 					(

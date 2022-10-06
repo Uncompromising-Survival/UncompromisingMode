@@ -665,12 +665,12 @@ ChangeSortKey("hermitshop_cookies", "hermitshop_supertacklecontainer", "CRAFTING
 
 AddRecipe2(
     "normal_chum",
-    {Ingredient("spoiled_food", 2), Ingredient("rope", 1)},
+    {Ingredient("spoiled_food", 2), Ingredient("rope", 1), Ingredient("waterplant_bomb", 1)},
     TECH.FISHING_ONE,
     {product = "chum", nounlock = false, numtogive = 2},
     {"FISHING"}
 )
-
+AllRecipes["chum"].ingredients = {Ingredient("spoiled_food", 1), Ingredient("rope", 1), Ingredient("waterplant_bomb", 1)}
 AllRecipes["hermitshop_chum"].ingredients = {Ingredient("messagebottleempty", 1)}
 AllRecipes["hermitshop_chum"].numtogive = 3
 --[[
@@ -681,13 +681,6 @@ AddRecipe2(
     {nounlock = true, product = "diseasecurebomb", sg_state = "give"}
 )
 ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
-
---pearlrusher
-CONSTRUCTION_PLANS["hermithouse_construction3"] = {
-    Ingredient("moonrocknugget", 5),
-    Ingredient("petals", 15),
-    Ingredient("moonglass", 10)
-}
 
 --better moonstorm
 AddRecipe2(

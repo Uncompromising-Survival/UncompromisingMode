@@ -9,7 +9,6 @@ local function oncurrent(self, current)
 end
 
 local function onamp(self, amped)
-    print("onamp!!!")
     --transform it to binary because replica SetValue is numbers only, and I don't feel like messing with netvars...
     self.inst.replica.adrenaline:SetAmped(amped)
     --explicit true check because it's now a number

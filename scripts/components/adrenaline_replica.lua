@@ -77,17 +77,14 @@ function Adrenaline:IsAmped()
 end
 
 function Adrenaline:SetAmped(isamped)
-    print("SETAMPED!!!")
     if self.classified ~= nil and self.classified.isamped ~= nil then
         self.classified.isamped:set(isamped)
     end
     if isamped then
-        print("pushing event! starting music")
         self.classified:PushEvent("wathommusic_start")
         self.inst.player_classified:PushEvent("wathommusic_start")
         self.inst:PushEvent("wathommusic_start")
     else
-        print("pushing event! stopping music")
         self.classified:PushEvent("wathommusic_end")
         self.inst.player_classified:PushEvent("wathommusic_end")
         self.inst:PushEvent("wathommusic_end")

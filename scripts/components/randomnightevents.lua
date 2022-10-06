@@ -506,7 +506,7 @@ local function SpawnBats(player)
 					bat.Transform:SetPosition(x + math.random(-8,8), y, z + math.random(-8,8))
 					bat:PushEvent("fly_back")
 					bat:DoTaskInTime(0, function(bat) DayBreak(bat) end)
-					bat:AddTag("shadow")
+					--bat:AddTag("shadow")
 				end)
 			end
 		else
@@ -521,7 +521,7 @@ local function SpawnBats(player)
 					bat.Transform:SetPosition(x + math.random(-8,8), y, z + math.random(-8,8))
 					bat:PushEvent("fly_back")
 					bat:DoTaskInTime(0, function(bat) DayBreak(bat) end)
-					bat:AddTag("shadow")
+					--bat:AddTag("shadow")
 				end)
 			end
 		end
