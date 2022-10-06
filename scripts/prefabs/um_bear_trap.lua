@@ -5,7 +5,7 @@ local function onfinished_normal(inst)
 		inst.components.finiteuses:Use(1)
 	end
 	
-	if inst.components.finiteuses ~= nil and inst.components.finiteuses:GetUses() > 0 then
+	if inst.components.finiteuses ~= nil and inst.components.finiteuses:GetUses() > 0 and inst.traptype ~= nil then
 		local trapprefab = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype)
 	
 		if inst.latchedtarget ~= nil then
