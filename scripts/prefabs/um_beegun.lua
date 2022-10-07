@@ -520,12 +520,12 @@ local function OnSleep(inst)
 end
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
-local RETARGET_CANT_TAGS = { "insect", "INLIMBO" }
+local RETARGET_CANT_TAGS = { "insect", "INLIMBO", "player" }
 local RETARGET_ONEOF_TAGS = { "character", "animal", "monster" }
 local function BeeRetarget(inst)
     return FindEntity(inst, SpringCombatMod(8),
         function(guy)
-            return inst.components.combat:CanTarget(guy)
+			return inst.components.combat:CanTarget(guy)
         end,
         RETARGET_MUST_TAGS,
         RETARGET_CANT_TAGS,
@@ -533,6 +533,12 @@ local function BeeRetarget(inst)
 end
 
 local workerbrain = require("brains/bulletbeebrain")
+
+local function NoTargetWillKillMe(inst)
+	if inst.components.combat.laststartattacktime ~= nil and inst.components.combat.laststartattacktime > 15 and not inst.components.inventoryitem:IsHeld() and not inst.components.combat:HasTarget() then
+		inst.components.combat:GetAttacked(nil, 1)
+	end
+end
 
 local function bulletfn()
     local inst = CreateEntity()
@@ -635,6 +641,8 @@ local function bulletfn()
 
     inst.sounds = workersounds
     inst:SetBrain(workerbrain)
+	
+	inst:DoPeriodicTask(1, NoTargetWillKillMe)
 	
     inst.buzzing = true
     inst.EnableBuzz = EnableBuzz
