@@ -90,7 +90,7 @@ local function SpavvnShooterBeesLine(inst,time,back)
 	if back then
 		dist = -dist
 	end
-	local spacing = 4
+	local spacing = 5
 	local randomness = math.random()
 	local aligned = math.random()
 	if target and target:IsValid() then
@@ -398,11 +398,20 @@ local function ShouldChase(inst) --All the cases that BQ shouldn't chase the pla
 	end
 end
 
+local function HasVVall(inst)
+	if VVallcheck(inst)	then
+		return true
+	else
+		return false
+	end
+end
+
 local PHASE2_HEALTH = .75
 local PHASE3_HEALTH = .5
 local PHASE4_HEALTH = .25
 
 local function FinalFormation(inst)
+	inst.components.timer:PauseTimer("spawnguards_cd")
 	inst.sg:GoToState("spawnguards_shooter_line")
 	inst.ffcount = inst.ffcount - 1
 	if inst.ffdir then
@@ -415,6 +424,7 @@ local function FinalFormation(inst)
 		inst:DoTaskInTime(time,FinalFormation)
 	else
 		inst:DoTaskInTime(time,function(inst)
+			inst.components.timer:ResumeTimer("spawnguards_cd")
 			inst.tiredcount = 12
 			inst.sg:GoToState("tired")
 		end)
@@ -712,6 +722,8 @@ env.AddPrefabPostInit("beequeen", function(inst)
 	
     inst.components.combat:SetAttackPeriod(TUNING.BEEQUEEN_ATTACK_PERIOD+1)
     inst.components.combat:SetRange(TUNING.BEEQUEEN_ATTACK_RANGE, TUNING.BEEQUEEN_HIT_RANGE) --Tune her attack.
+	
+	inst.hasVVall = HasVVall
 end)
 
 local function OnTagTimer(inst, data)

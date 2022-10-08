@@ -284,16 +284,11 @@ local states = {
 
         onenter = function(inst)
 			inst.defensivespincount = math.random(3,5)
-			if inst.components.timer:TimerExists("spin_bees") then
-				inst.components.timer:StopTimer("spin_bees")
-			end
 			inst.AnimState:PlayAnimation("command1")
 			inst.AnimState:PushAnimation("command3",false)
             FaceTarget(inst)
             inst.components.sanityaura.aura = -TUNING.SANITYAURA_HUGE
             inst.components.locomotor:StopMoving()
-
-			SpinVVall(inst,0.1)
         end,
 		
         timeline =
@@ -306,7 +301,8 @@ local states = {
         },	
 
 		onexit = function(inst)
-			SpinVVall(inst,0)
+			SpinVVall(inst,0.1)
+			inst:DoTaskInTime(math.random(2,3),function(inst) SpinVVall(inst,0) end)
 			inst.components.sanityaura.aura = 0		
 		end,
 		
@@ -323,6 +319,7 @@ local states = {
         tags = {"busy", "ability","tired"},
 
         onenter = function(inst)
+			inst.components.timer:PauseTimer("spawnguards_cd")
 			inst.components.locomotor:StopMoving()
 			inst.AnimState:PlayAnimation("tired_pre")
 			inst.AnimState:PushAnimation("tired_loop",true)
@@ -336,6 +333,9 @@ local states = {
         {
             TimeEvent(9 * FRAMES, StopFlapping),
         },		
+		onexit = function(inst)
+			inst.components.timer:ResumeTimer("spawnguards_cd")
+		end,
 		
         ontimeout = function(inst)
 			inst.tiredcount = nil
@@ -464,6 +464,7 @@ local states = {
         tags = { "spawnguards", "busy", "nosleep", "nofreeze" },
 
         onenter = function(inst)
+			--inst.components.timer:PauseTimer("spawnguards_cd")
             FaceTarget(inst)
             inst.components.locomotor:StopMoving()
             inst.AnimState:PlayAnimation("spawn")
@@ -473,7 +474,7 @@ local states = {
         timeline =
         {
             TimeEvent(16 * FRAMES, function(inst)
-					inst.SpavvnShooterBeesLine(inst,3,inst.ffdir)
+					inst.SpavvnShooterBeesLine(inst,5,inst.ffdir)
             end),
             CommonHandlers.OnNoSleepTimeEvent(32 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
@@ -481,7 +482,9 @@ local states = {
                 inst.sg:RemoveStateTag("nofreeze")
             end),
         },
-
+		onexit = function(inst)
+			--inst.components.timer:ResumeTimer("spawnguards_cd")
+		end,
         events =
         {
             CommonHandlers.OnNoSleepAnimOver("idle"),
