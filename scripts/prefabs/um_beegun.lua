@@ -594,8 +594,11 @@ end
 local function CherryPoison(inst, other)
 	if other ~= nil and other.components.debuffable ~= nil then
 		local poison = other.components.debuffable:AddDebuff("cherry_beepoisonbuff", "cherry_beepoisonbuff")
+        if poison.stacks == nil then
+            poison.stacks = 0
+        end
         if poison ~= nil and poison.stacks then
-            poison.stacks = poison.stacks == 0 and inst.flowerbuffs.poisonstacks or poison.stacks + (inst.flowerbuffs.poisonstacks * 0.5)
+            poison.stacks = poison.stacks + 1
         end
 	end
 end
