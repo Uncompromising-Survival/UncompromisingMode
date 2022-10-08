@@ -614,7 +614,7 @@ local function SpawnFx(inst, target)
 end
 
 local function CherryPoison(inst, other)
-    if other ~= nil and other.components.health ~= nil then
+    if other ~= nil and other.components.health ~= nil and not other:HasTag("insect") then
         if other.fake_poison_stacks == nil then
             other.fake_poison_stacks = 0
         end

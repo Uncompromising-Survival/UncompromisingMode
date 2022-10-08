@@ -40,6 +40,10 @@ function c_vetcurseitems()
     c_give("klaus_amulet")
     c_give("crabclaw")
     c_give("um_beegun")
+    if KnownModIndex:IsModEnabled("workshop-1289779251") then
+        c_give("um_beegun_cherry")
+    end
+
 end
 
 --lists current rat score shenenigans.
