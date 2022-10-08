@@ -38,6 +38,10 @@ local function CalcDodgeMult(self)
     return 1
 end
 
+local function GetHomePos(inst)
+    return inst.components.knownlocations:GetLocation("spawnpoint")
+end
+
 local DODGE_DELAY = 5
 local MAX_DODGE_TIME = 3
 
@@ -62,14 +66,6 @@ local function ShouldDodge(self)
         return false
     end
     --Find new dodge destination
-    local function GetHome(inst)
-        return self.inst.components.homeseeker ~= nil and self.inst.components.homeseeker.home or nil
-    end
-    
-    local function GetHomePos(inst)
-        local home = GetHome(inst)
-        return home ~= nil and home:GetPosition() or nil
-    end
     local homepos = GetHomePos(self.inst)
     local pos = self.inst:GetPosition()
     local dangerrangesq = TUNING.BEEQUEEN_CHASE_TO_RANGE * TUNING.BEEQUEEN_CHASE_TO_RANGE
