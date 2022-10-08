@@ -3,6 +3,9 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 env.AddPrefabPostInit("icestaff", function(inst)
+    if not TheWorld.ismastersim then
+		return
+	end
     local _onattack = inst.components.weapon.onattack
 
     local function OnAttack(inst, attacker, target, skipsanity)
@@ -34,6 +37,9 @@ env.AddPrefabPostInit("icestaff", function(inst)
 end)
 
 env.AddPrefabPostInit("firestaff", function(inst)
+    if not TheWorld.ismastersim then
+		return
+	end
     local _onattack = inst.components.weapon.onattack
 
     local function OnAttack(inst, attacker, target, skipsanity)
@@ -77,6 +83,9 @@ if env.GetModConfigData("cooldown_orangestaff") then
     end
 
     env.AddPrefabPostInit("orangestaff", function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
         inst:AddComponent("rechargeable")
 
         inst:RemoveComponent("finiteuses")
