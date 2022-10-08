@@ -97,6 +97,9 @@ local function SpavvnShooterBeesLine(inst,time,back)
 		inst.shooterbeeline = {}
 		for i = 1,total do
 			inst.shooterbeeline[i] = SpawnPrefab("um_beeguard_shooter")
+			if inst.prefab == "cherry_beequeen" then
+				inst.shooterbeeline[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+			end
 			inst.shooterbeeline[i].queen = inst
 			inst.shooterbeeline[i].target = target
 
@@ -142,6 +145,9 @@ local function SpavvnShooterBeesLine(inst,time,back)
 		for i = 1,total do
 			local j = i + total
 			inst.shooterbeeline[j] = SpawnPrefab("um_beeguard_shooter")
+			if inst.prefab == "cherry_beequeen" then
+				inst.shooterbeeline[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+			end
 			inst.shooterbeeline[j].queen = inst
 			inst.shooterbeeline[j].target = target
 
@@ -201,6 +207,9 @@ local function SpawnShooterBeesCircle(inst, prioritytarget)
 		inst.shooterbees = {}
 		for i = 1,8 do
 			inst.shooterbees[i] = SpawnPrefab("um_beeguard_shooter")
+			if inst.prefab == "cherry_beequeen" then
+				inst.shooterbees[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+			end
 			inst.shooterbees[i].queen = inst
 			inst.shooterbees[i].target = target
 			inst.shooterbees[i].components.linearcircler:SetCircleTarget(inst)
@@ -239,6 +248,9 @@ local function SpawnDefensiveBeesII(inst)
 	inst.defensebees = {}
 	for i = 1,8 do
 		inst.defensebees[i] = SpawnPrefab("um_beeguard_blocker")
+		if inst.prefab == "cherry_beequeen" then
+			inst.defensebees[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+		end
 		inst.defensebees[i].queen = inst
 		inst.defensebees[i].components.linearcircler:SetCircleTarget(inst)
 		inst.defensebees[i].components.linearcircler:Start()
@@ -258,6 +270,9 @@ local function SpawnDefensiveBees(inst)
 	inst.defensebees = {}
 	for i = 1,8 do
 		inst.defensebees[i] = SpawnPrefab("um_beeguard_blocker")
+		if inst.prefab == "cherry_beequeen" then
+			inst.defensebees[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+		end
 		inst.defensebees[i].queen = inst
 		inst.defensebees[i].components.linearcircler:SetCircleTarget(inst)
 		inst.defensebees[i].components.linearcircler:Start()
@@ -285,6 +300,9 @@ local function SpawnSeekerBees(inst)
 	end
 	for i = 1,totalseekers do
 		inst.seekerbees[i] = SpawnPrefab("um_beeguard_seeker")
+		if inst.prefab == "cherry_beequeen" then
+			inst.seekerbees[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+		end
 		inst.seekerbees[i].queen = inst
 		inst.seekerbees[i].components.linearcircler:SetCircleTarget(inst)
 		inst.seekerbees[i].components.linearcircler:Start()
@@ -319,6 +337,9 @@ local function SpawnSupport(inst)
 			beetype = "um_beeguard_seeker"
 		end
 		inst.extrabees[i] = SpawnPrefab(beetype)
+		if inst.prefab == "cherry_beequeen" then
+			inst.extrabees[i].AnimState:SetBuild("cherry_bee_guard_puffy_build")
+		end
 		inst.extrabees[i].queen = inst
 		inst.extrabees[i].components.linearcircler:SetCircleTarget(inst)
 		inst.extrabees[i].components.linearcircler:Start()
@@ -542,6 +563,81 @@ local function PstSummonHandler(inst)
 		inst.should_final = true
 	end
 end
+
+env.AddPrefabPostInit("cherry_beequeen", function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+	
+	if TUNING.DSTU.VETCURSE ~= "off" then
+		inst:AddComponent("vetcurselootdropper")
+		inst.components.vetcurselootdropper.loot = "um_beegun"
+	end
+	
+    inst.Physics:CollidesWith(COLLISION.FLYERS)
+	
+	if inst.components.health ~= nil then
+		inst.components.health:SetMaxHealth(TUNING.DSTU.BEEQUEEN_HEALTH)
+	end
+	
+	inst:AddComponent("groundpounder") --Groundpounder is visual only
+	inst.components.groundpounder.destroyer = true
+	inst.components.groundpounder.damageRings = 0
+    inst.components.groundpounder.destructionRings = 1
+    inst.components.groundpounder.platformPushingRings = 2
+    inst.components.groundpounder.numRings = 1
+	inst:ListenForEvent("death", DisableThatStuff)
+	--inst:ListenForEvent("death", ReleasebeeHolders)
+	
+	inst.stomprage = 0
+	inst.stompready = true
+	inst:DoPeriodicTask(3, StompRageCalmDown)
+	inst:ListenForEvent("attacked", StompHandler)
+	
+	-- No more honey when attacking
+	local OnMissOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnMissOther")
+	local OnAttackOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnAttackOther")
+    inst:RemoveEventCallback("onattackother", OnAttackOther)
+    inst:RemoveEventCallback("onmissother", OnMissOther)
+	
+
+	inst.ShouldChase = ShouldChase
+	inst.SpawnDefensiveBees = SpawnDefensiveBees
+	inst.SpawnDefensiveBeesII = SpawnDefensiveBeesII
+    inst.components.healthtrigger:AddTrigger(PHASE2_HEALTH, function(inst) 
+		--TheNet:Announce("2nd Phase")
+		inst.should_ability = nil
+		SeekerBeesRage(inst)
+	end)
+    inst.components.healthtrigger:AddTrigger(PHASE3_HEALTH, function(inst)
+		--TheNet:Announce("3rd Phase")
+		inst.should_ability = nil
+		ShooterBeesRage(inst)
+	end)
+    inst.components.healthtrigger:AddTrigger(PHASE4_HEALTH, function(inst)
+		--TheNet:Announce("4th Phase")
+		inst.should_ability = nil
+		DoFinalFormation(inst)
+	end)
+	
+	inst.SpawnSeekerBees = SpawnSeekerBees
+	inst.seekercount = math.random(4,5)
+	inst.defensivespincount = math.random(3,5)
+	inst.spawnguards_threshold = 20
+	inst.should_shooter_rage = 20
+	
+	inst.SpawnShooterBeesCircle = SpawnShooterBeesCircle
+	inst.SpawnSupport = SpawnSupport
+	inst.SpavvnShooterBeesLine = SpavvnShooterBeesLine
+	inst.FinalFormation = FinalFormation
+	inst.previousability = "I don't recall my ability"
+	inst.previousguardability = "I don't recall my guards"
+	inst.ActivateHitAbility = ActivateHitAbility
+	inst.PstSummonHandler = PstSummonHandler
+	
+    inst.components.combat:SetAttackPeriod(TUNING.BEEQUEEN_ATTACK_PERIOD+1)
+    inst.components.combat:SetRange(TUNING.BEEQUEEN_ATTACK_RANGE, TUNING.BEEQUEEN_HIT_RANGE) --Tune her attack.
+end)
 
 env.AddPrefabPostInit("beequeen", function(inst)
 	if not TheWorld.ismastersim then

@@ -90,6 +90,9 @@ end
 local function BeeHold(inst)
 	if inst.components.locomotor.walkspeed ~= TUNING.BEEGUARD_SPEED then
         inst.AnimState:SetBuild("bee_guard_build")
+		if inst.queen ~= nil and inst.queen.prefab == "cherry_beequeen" then
+			inst.AnimState:SetBuild("cherry_bee_guard_build")
+		end
         inst.components.locomotor.walkspeed = TUNING.BEEGUARD_SPEED
         inst.components.combat:SetDefaultDamage(TUNING.BEEGUARD_PUFFY_DAMAGE)
         inst.components.combat:SetAttackPeriod(TUNING.BEEGUARD_PUFFY_ATTACK_PERIOD)
