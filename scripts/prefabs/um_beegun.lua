@@ -6,37 +6,37 @@ local assets =
 
 local prefabs =
 {
-	"slingshotammo_rock_proj",
+    "slingshotammo_rock_proj",
 }
 
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-	if not (owner:HasTag("vetcurse") or owner:HasTag("royaljellymaker")) then
-		inst:DoTaskInTime(0, function(inst, owner)
-			local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
-			local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			if tool ~= nil and owner ~= nil then
-				owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-				owner.components.inventory:DropItem(tool)
-				owner.components.inventory:GiveItem(inst)
-				owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-				
-				if owner.sg ~= nil then
-					owner.sg:GoToState("hit")
-				end
-			end
-		end)
-	else
-		owner.AnimState:OverrideSymbol("swap_object", "swap_um_beegun", "swap_um_beegun")
-		owner.AnimState:Show("ARM_carry")
-		owner.AnimState:Hide("ARM_normal")
+    if not (owner:HasTag("vetcurse") or owner:HasTag("royaljellymaker")) then
+        inst:DoTaskInTime(0, function(inst, owner)
+            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
+            local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            if tool ~= nil and owner ~= nil then
+                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
+                owner.components.inventory:DropItem(tool)
+                owner.components.inventory:GiveItem(inst)
+                owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
 
-		if inst.components.container ~= nil then
-			inst.components.container:Open(owner)
-		end
-	end
+                if owner.sg ~= nil then
+                    owner.sg:GoToState("hit")
+                end
+            end
+        end)
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_um_beegun", "swap_um_beegun")
+        owner.AnimState:Show("ARM_carry")
+        owner.AnimState:Hide("ARM_normal")
+
+        if inst.components.container ~= nil then
+            inst.components.container:Open(owner)
+        end
+    end
 end
 
 local function OnUnequip(inst, owner)
@@ -53,68 +53,68 @@ local function OnUnequip(inst, owner)
 end
 
 local function OnProjectileLaunched(inst, attacker, target)
-	if inst.components.container ~= nil then
-		local ammo_stack = inst.components.container:GetItemInSlot(1)
-		local item = inst.components.container:RemoveItem(ammo_stack, false)
-		if item ~= nil then
+    if inst.components.container ~= nil then
+        local ammo_stack = inst.components.container:GetItemInSlot(1)
+        local item = inst.components.container:RemoveItem(ammo_stack, false)
+        if item ~= nil then
             inst.SoundEmitter:PlaySound("dontstarve/common/deathpoof")
-			
-			item:Remove()
-		end
-	end
+
+            item:Remove()
+        end
+    end
 end
 
 local function OnAmmoLoaded(inst, data)
-	if data ~= nil and data.item ~= nil then
-		if data.item.components.perishable ~= nil then
-			data.item.components.perishable:StopPerishing()
-		end
-	end
+    if data ~= nil and data.item ~= nil then
+        if data.item.components.perishable ~= nil then
+            data.item.components.perishable:StopPerishing()
+        end
+    end
 
-	if inst.components.weapon ~= nil then
-		if data ~= nil and data.item ~= nil then
-			local beecheck = "bulletbee"
-			
-			if inst.ischerry then
-				beecheck = "cherrybulletbee"
-			end
-		
-			if data.item.prefab ~= beecheck then
-				local stacksize = data.item.components.stackable:StackSize()
-		
-				data.item:Remove()
-				
-				for i = 1, stacksize do
-					local bulletbee = SpawnPrefab(beecheck)
-					inst.components.container:GiveItem(bulletbee)
-				end
-			end
-			
-			inst.components.weapon:SetProjectile("um_"..beecheck.."_proj")
-		end
-	end
+    if inst.components.weapon ~= nil then
+        if data ~= nil and data.item ~= nil then
+            local beecheck = "bulletbee"
+
+            if inst.ischerry then
+                beecheck = "cherrybulletbee"
+            end
+
+            if data.item.prefab ~= beecheck then
+                local stacksize = data.item.components.stackable:StackSize()
+
+                data.item:Remove()
+
+                for i = 1, stacksize do
+                    local bulletbee = SpawnPrefab(beecheck)
+                    inst.components.container:GiveItem(bulletbee)
+                end
+            end
+
+            inst.components.weapon:SetProjectile("um_" .. beecheck .. "_proj")
+        end
+    end
 end
 
 local function OnAmmoUnloaded(inst, data)
-	if data ~= nil and data.prev_item ~= nil then
-		if data.prev_item.components.perishable ~= nil then
-			data.prev_item.components.perishable:StartPerishing()
-		end
-	end
+    if data ~= nil and data.prev_item ~= nil then
+        if data.prev_item.components.perishable ~= nil then
+            data.prev_item.components.perishable:StartPerishing()
+        end
+    end
 
-	if inst.components.weapon ~= nil then
-		inst.components.weapon:SetProjectile(nil)
-	end
+    if inst.components.weapon ~= nil then
+        inst.components.weapon:SetProjectile(nil)
+    end
 end
 
-local floater_swap_data = {sym_build = "swap_um_beegun"}
+local floater_swap_data = { sym_build = "swap_um_beegun" }
 
 local function ReticuleTargetFn(inst)
     return Vector3(inst.entity:LocalToWorldSpace(6.5, 0, 0))
 end
 
 local function ReticuleMouseTargetFn(inst, mousepos)
-    if mousepos ~= nil then 
+    if mousepos ~= nil then
         local x, y, z = inst.Transform:GetWorldPosition()
         local dx = mousepos.x - x
         local dz = mousepos.z - z
@@ -140,70 +140,72 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
 end
 
 local function collectbees(inst, target, pos)
-	local owner = inst.components.inventoryitem.owner
-	local ownerpos = owner ~= nil and owner:GetPosition()
-	local currentstacks = 0
-	local currentitem = inst.components.container:GetItemInSlot(1)
-	
-	if currentitem ~= nil then
-		currentstacks = currentitem.components.stackable:StackSize()
-	end
-	
-	if owner ~= nil then
-		if pos ~= nil then
-			local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, {"bee"})
-			if findbees ~= nil then
-				for i, v in pairs(findbees) do
-					if i + currentstacks > 20 then
-						break
-					end
-				
-					if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and not v.components.health:IsDead() then
-						if inst.components.container ~= nil then
-							local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
-							beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
-							beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
-							beeball.beegun = inst
-							
-							v:Remove()
-							--inst.components.container:GiveItem(v)
-						end
-					end
-				end
-			end
-		elseif target ~= nil then
-			local x, y, z = target.Transform:GetWorldPosition()
-		
-			local findbees = TheSim:FindEntities(x, 0, z, 8, {"bee"})
-			if findbees ~= nil then
-				for i, v in pairs(findbees) do
-					if i + currentstacks > 20 then
-						break
-					end
-					
-					if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and not v.components.health:IsDead() then
-						if inst.components.container ~= nil then
-							local beeball = SpawnPrefab("um_"..v.prefab.."_ball")
-							beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
-							beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
-							beeball.beegun = inst
-							
-							v:Remove()
-							--inst.components.container:GiveItem(v)
-						end
-					end
-				end
-			end
-		end
-	end
+    local owner = inst.components.inventoryitem.owner
+    local ownerpos = owner ~= nil and owner:GetPosition()
+    local currentstacks = 0
+    local currentitem = inst.components.container:GetItemInSlot(1)
+
+    if currentitem ~= nil then
+        currentstacks = currentitem.components.stackable:StackSize()
+    end
+
+    if owner ~= nil then
+        if pos ~= nil then
+            local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, { "bee" })
+            if findbees ~= nil then
+                for i, v in pairs(findbees) do
+                    if i + currentstacks > 20 then
+                        break
+                    end
+
+                    if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and
+                        not v.components.health:IsDead() then
+                        if inst.components.container ~= nil then
+                            local beeball = SpawnPrefab("um_" .. v.prefab .. "_ball")
+                            beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
+                            beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
+                            beeball.beegun = inst
+
+                            v:Remove()
+                            --inst.components.container:GiveItem(v)
+                        end
+                    end
+                end
+            end
+        elseif target ~= nil then
+            local x, y, z = target.Transform:GetWorldPosition()
+
+            local findbees = TheSim:FindEntities(x, 0, z, 8, { "bee" })
+            if findbees ~= nil then
+                for i, v in pairs(findbees) do
+                    if i + currentstacks > 20 then
+                        break
+                    end
+
+                    if v ~= nil and not v:IsInLimbo() and v:IsValid() and v.components.inventoryitem and
+                        not v.components.health:IsDead() then
+                        if inst.components.container ~= nil then
+                            local beeball = SpawnPrefab("um_" .. v.prefab .. "_ball")
+                            beeball.Transform:SetPosition(v.Transform:GetWorldPosition())
+                            beeball.components.complexprojectile:Launch(ownerpos, owner, owner)
+                            beeball.beegun = inst
+
+                            v:Remove()
+                            --inst.components.container:GiveItem(v)
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 
 local function can_cast_fn(doer, target, pos)
-	if doer:HasTag("vetcurse") then
-		return true
-	else
-		return false
-	end
+    if doer:HasTag("vetcurse") then
+        return true
+    else
+        return false
+    end
 end
 
 local function fn(ischerry)
@@ -223,14 +225,14 @@ local function fn(ischerry)
     inst:AddTag("rangedweapon")
     inst:AddTag("beegun")
     inst:AddTag("allow_action_on_impassable")
-	inst:AddTag("vetcurse_item")
+    inst:AddTag("vetcurse_item")
 
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
 
     --inst.projectiledelay = PROJECTILE_DELAY
 
-    MakeInventoryFloatable(inst, "med", 0.075, {0.5, 0.4, 0.5}, true, -7, floater_swap_data)
+    MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
@@ -240,18 +242,18 @@ local function fn(ischerry)
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-		inst.OnEntityReplicated = function(inst) 
-			inst.replica.container:WidgetSetup("um_beegun") 
-		end
+        inst.OnEntityReplicated = function(inst)
+            inst.replica.container:WidgetSetup("um_beegun")
+        end
         return inst
     end
-	
-	inst.ischerry = ischerry
+
+    inst.ischerry = ischerry
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_beegun.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_beegun.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(OnEquip)
@@ -262,11 +264,11 @@ local function fn(ischerry)
     inst.components.weapon:SetRange(TUNING.SLINGSHOT_DISTANCE, TUNING.SLINGSHOT_DISTANCE_MAX)
     inst.components.weapon:SetOnProjectileLaunched(OnProjectileLaunched)
     inst.components.weapon:SetProjectile(nil)
-	inst.components.weapon:SetProjectileOffset(1)
-	
+    inst.components.weapon:SetProjectileOffset(1)
+
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("um_beegun")
-	inst.components.container.canbeopened = false
+    inst.components.container.canbeopened = false
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
 
@@ -276,7 +278,7 @@ local function fn(ischerry)
     inst.components.spellcaster.canuseontargets = true
     inst.components.spellcaster.canonlyuseonworkable = true
     inst.components.spellcaster.canonlyuseoncombat = true
-	inst.components.spellcaster.canuseonpoint = true
+    inst.components.spellcaster.canuseonpoint = true
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
@@ -290,7 +292,7 @@ local function um_gun()
 
     return inst
 end
-	
+
 local function cherry_gun()
     local inst = fn(true)
 
@@ -306,20 +308,20 @@ local function onhit(inst, attacker, target)
             impactfx:FacePoint(attacker.Transform:GetWorldPosition())
         end
     end
-	
-	
-	local bee = SpawnPrefab("bulletbee")
-	bee.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	
-	if target ~= nil then
-		bee.components.combat:SuggestTarget(target)
-	end
-	
+
+
+    local bee = SpawnPrefab("bulletbee")
+    bee.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+    if target ~= nil then
+        bee.components.combat:SuggestTarget(target)
+    end
+
     inst:Remove()
 end
 
 local function pipethrown(inst)
-	inst.SoundEmitter:PlaySound(inst.sound)
+    inst.SoundEmitter:PlaySound(inst.sound)
     inst.AnimState:PlayAnimation(inst.anim)
     inst:AddTag("NOCLICK")
     inst.persists = false
@@ -339,22 +341,22 @@ local function bullet(ischerry)
     inst.AnimState:SetBank("um_beegun_dart")
     inst.AnimState:SetBuild("um_beegun_dart")
     inst.AnimState:PlayAnimation("beedart_green")
-	inst.Transform:SetScale(1.2, 1.2, 1.2)
+    inst.Transform:SetScale(1.2, 1.2, 1.2)
     inst.Transform:SetFourFaced()
 
-	if ischerry then
-		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-	end
-	
+    if ischerry then
+        inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+    end
+
     --inst:AddTag("blowdart")
     inst:AddTag("sharp")
 
     --inst:AddTag("weapon")
 
     inst:AddTag("projectile")
-	inst:AddTag("vetcurse_item")
+    inst:AddTag("vetcurse_item")
 
-	RemovePhysicsColliders(inst)
+    RemovePhysicsColliders(inst)
 
     --MakeInventoryFloatable(inst, "small", 0.05, {0.75, 0.5, 0.75})
 
@@ -363,10 +365,10 @@ local function bullet(ischerry)
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.beetype = "bulletbee"
-	inst.sound = "dontstarve/bee/killerbee_attack"
-	inst.anim = "beedart_green"
+
+    inst.beetype = "bulletbee"
+    inst.sound = "dontstarve/bee/killerbee_attack"
+    inst.anim = "beedart_green"
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(15)
@@ -393,7 +395,7 @@ local function bulletproj()
 
     return inst
 end
-	
+
 local function cherryproj()
     local inst = bullet(true)
 
@@ -401,30 +403,30 @@ local function cherryproj()
 end
 
 local function OnHitBall(inst, attacker, target)
-	if inst.beegun ~= nil and inst.beegun:IsValid() then
-		local owner = inst.beegun.components.inventoryitem.owner
-		local bulletbee = SpawnPrefab("bulletbee")
-		
-		if inst.ischerry then
-			bulletbee = SpawnPrefab("cherrybulletbee")
-		end
-		
-		inst.beegun.components.container:GiveItem(bulletbee)
-		
-		local beefx = SpawnPrefab("bee_poof_small")
-		
-		if owner ~= nil then
-			beefx.entity:SetParent(owner.entity)
-			beefx.entity:AddFollower()
-			beefx.Follower:FollowSymbol(owner.GUID, "swap_object", 30, 0, 0.1)
-		else
-			beefx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		end
-		
-		
-	else
-		SpawnPrefab(inst.beetype).Transform:SetPosition(inst.Transform:GetWorldPosition())
-	end
+    if inst.beegun ~= nil and inst.beegun:IsValid() then
+        local owner = inst.beegun.components.inventoryitem.owner
+        local bulletbee = SpawnPrefab("bulletbee")
+
+        if inst.ischerry then
+            bulletbee = SpawnPrefab("cherrybulletbee")
+        end
+
+        inst.beegun.components.container:GiveItem(bulletbee)
+
+        local beefx = SpawnPrefab("bee_poof_small")
+
+        if owner ~= nil then
+            beefx.entity:SetParent(owner.entity)
+            beefx.entity:AddFollower()
+            beefx.Follower:FollowSymbol(owner.GUID, "swap_object", 30, 0, 0.1)
+        else
+            beefx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        end
+
+
+    else
+        SpawnPrefab(inst.beetype).Transform:SetPosition(inst.Transform:GetWorldPosition())
+    end
 
     inst:Remove()
 end
@@ -432,17 +434,17 @@ end
 local function onthrown_ball(inst)
     inst:AddTag("NOCLICK")
     inst.persists = false
-    inst.AnimState:PlayAnimation(inst.anim.."spin_loop", true)
-	inst.SoundEmitter:PlaySound(inst.sound)
-	
+    inst.AnimState:PlayAnimation(inst.anim .. "spin_loop", true)
+    inst.SoundEmitter:PlaySound(inst.sound)
+
     inst.Physics:SetMass(1)
     inst.Physics:SetFriction(10)
     inst.Physics:SetDamping(5)
     inst.Physics:SetCollisionGroup(COLLISION.OBSTACLES)
     inst.Physics:ClearCollisionMask()
 
-	inst.Physics:SetCapsule(0.02, 0.02)
-	
+    inst.Physics:SetCapsule(0.02, 0.02)
+
     inst.Physics:SetCollisionCallback(nil)
 end
 
@@ -457,23 +459,23 @@ local function commonball(anim, beetype, sound, ischerry)
 
     inst.AnimState:SetBank("um_beegun_ball")
     inst.AnimState:SetBuild("um_beegun_ball")
-    inst.AnimState:PlayAnimation(anim.."spin_loop")
+    inst.AnimState:PlayAnimation(anim .. "spin_loop")
     inst.Transform:SetFourFaced()
-	
-	if ischerry then
-		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-	end
+
+    if ischerry then
+        inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+    end
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst.beetype = beetype
-	inst.sound = sound
-	inst.anim = anim
-	inst.ischerry = ischerry
+
+    inst.beetype = beetype
+    inst.sound = sound
+    inst.anim = anim
+    inst.ischerry = ischerry
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(25)
@@ -487,7 +489,7 @@ local function commonball(anim, beetype, sound, ischerry)
 
     inst:AddComponent("locomotor")
 
-	inst:DoTaskInTime(5, inst.Remove)
+    inst:DoTaskInTime(5, inst.Remove)
 
     return inst
 end
@@ -497,7 +499,7 @@ local function yellowball()
 
     return inst
 end
-	
+
 local function redball()
     local inst = commonball("red", "killerbee", "dontstarve/bee/killerbee_attack", false)
 
@@ -528,7 +530,7 @@ local workersounds =
 }
 
 local function OnWorked(inst, worker)
-	inst.components.health:Kill()
+    inst.components.health:Kill()
 end
 
 local function bonus_damage_via_allergy(inst, target, damage, weapon)
@@ -536,14 +538,14 @@ local function bonus_damage_via_allergy(inst, target, damage, weapon)
 end
 
 local function OnDropped(inst)
-	--inst.components.health:Kill()
+    --inst.components.health:Kill()
 end
 
 local function OnPickedUp(inst)
     inst.SoundEmitter:KillSound("buzz")
     inst.SoundEmitter:KillAllSounds()
-	
-	inst.sg:GoToState("idle")
+
+    inst.sg:GoToState("idle")
 end
 
 local function EnableBuzz(inst, enable)
@@ -576,7 +578,7 @@ local RETARGET_ONEOF_TAGS = { "character", "animal", "monster" }
 local function BeeRetarget(inst)
     return FindEntity(inst, SpringCombatMod(8),
         function(guy)
-			return inst.components.combat:CanTarget(guy)
+            return inst.components.combat:CanTarget(guy)
         end,
         RETARGET_MUST_TAGS,
         RETARGET_CANT_TAGS,
@@ -586,21 +588,59 @@ end
 local workerbrain = require("brains/bulletbeebrain")
 
 local function NoTargetWillKillMe(inst)
-	if inst.components.combat.laststartattacktime ~= nil and inst.components.combat.laststartattacktime > 15 and not inst.components.inventoryitem:IsHeld() and not inst.components.combat:HasTarget() then
-		inst.components.combat:GetAttacked(nil, 1)
-	end
+    if inst.components.combat.laststartattacktime ~= nil and inst.components.combat.laststartattacktime > 15 and
+        not inst.components.inventoryitem:IsHeld() and not inst.components.combat:HasTarget() then
+        inst.components.combat:GetAttacked(nil, 1)
+    end
+end
+
+local function SpawnFx(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local fx = SpawnPrefab("cherry_beepoison_fx")
+    local theta = math.random() * 2 * PI
+    local pt = inst:GetPosition()
+    local radius = math.random(-1, 1)
+    local rdm = 0.75 + math.random()
+    local offset = FindWalkableOffset(pt, theta, radius, 12, false)
+    if offset ~= nil then
+        pt.x = pt.x + offset.x
+        pt.z = pt.z + offset.z
+    end
+    fx.Transform:SetScale(rdm, rdm, rdm)
+    fx.Transform:SetPosition(pt.x, math.random() + 1, pt.z)
+    if target ~= nil and target.sg ~= nil and not target.sg:HasStateTag("invisible") then
+        inst:DoTaskInTime(math.random() * 2, SpawnFx, target)
+    end
 end
 
 local function CherryPoison(inst, other)
-	if other ~= nil and other.components.debuffable ~= nil then
-		local poison = other.components.debuffable:AddDebuff("cherry_beepoisonbuff", "cherry_beepoisonbuff")
-        if poison.stacks == nil then
-            poison.stacks = 0
+    if other ~= nil and other.components.health ~= nil then
+        if other.fake_poison_stacks == nil then
+            other.fake_poison_stacks = 0
         end
-        if poison ~= nil and poison.stacks then
-            poison.stacks = poison.stacks + 1
+        other.fake_poison_stacks = other.fake_poison_stacks + 1
+
+        if other.fake_cherry_poison_task == nil then
+            other.fake_cherry_poison_task = other:DoPeriodicTask(1, function(inst)
+                if inst.components.health ~= nil then
+                    inst.components.health:DoDelta(-other.fake_poison_stacks)
+                    SpawnFx(inst)
+                end
+            end)
         end
-	end
+
+        if other.fake_cherry_poison_end_task ~= nil then
+            other.fake_cherry_poison_end_task:Cancel()
+            other.fake_cherry_poison_end_task = nil
+        end
+
+        other.fake_cherry_poison_end_task = other:DoTaskInTime(10, function(inst)
+            if inst.fake_cherry_poison_task ~= nil then
+                inst.fake_cherry_poison_task:Cancel()
+                inst.fake_cherry_poison_task = nil
+            end
+        end)
+    end
 end
 
 local function bulletfn(ischerry)
@@ -628,16 +668,20 @@ local function bulletfn(ischerry)
     inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("bee")
-    inst.AnimState:SetBuild("bulletbee_build")
+    if not ischerry then
+        inst.AnimState:SetBuild("bulletbee_build")
+    else
+        inst.AnimState:SetBuild("cherrybee_build")
+    end
     inst.AnimState:PlayAnimation("idle", true)
     inst.AnimState:SetRayTestOnBB(true)
-	
-	inst.Transform:SetScale(.9, .9, .9)
-	
-	if ischerry then
-		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-	end
-	
+
+    inst.Transform:SetScale(.9, .9, .9)
+
+    --if ischerry then
+    --    inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+    --end
+
     MakeInventoryFloatable(inst)
 
     MakeFeedableSmallLivestockPristine(inst)
@@ -657,7 +701,7 @@ local function bulletfn(ischerry)
 
     inst:AddComponent("stackable")
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.canbepickedupalive = true
@@ -676,7 +720,7 @@ local function bulletfn(ischerry)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(10)
-	
+
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(TUNING.BEE_DAMAGE)
     inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
@@ -685,10 +729,10 @@ local function bulletfn(ischerry)
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
     inst.components.combat:SetRetargetFunction(2, BeeRetarget)
-	
-	if ischerry then
-		inst.components.combat.onhitotherfn = CherryPoison
-	end
+
+    if ischerry then
+        inst.components.combat.onhitotherfn = CherryPoison
+    end
 
     ------------------
 
@@ -712,9 +756,9 @@ local function bulletfn(ischerry)
 
     inst.sounds = workersounds
     inst:SetBrain(workerbrain)
-	
-	inst:DoPeriodicTask(1, NoTargetWillKillMe)
-	
+
+    inst:DoPeriodicTask(1, NoTargetWillKillMe)
+
     inst.buzzing = true
     inst.EnableBuzz = EnableBuzz
     inst.OnEntityWake = OnWake
@@ -729,7 +773,7 @@ local function bulletbee()
 
     return inst
 end
-	
+
 local function cherrybee()
     local inst = bulletfn(true)
 
@@ -737,12 +781,12 @@ local function cherrybee()
 end
 
 return Prefab("um_beegun", um_gun, assets, prefabs),
-		Prefab("um_beegun_cherry", cherry_gun, assets, prefabs),
-		Prefab("um_bulletbee_proj", bulletproj, assets, prefabs),
-		Prefab("um_cherrybulletbee_proj", cherryproj, assets, prefabs),
-		Prefab("um_bee_ball", yellowball, assets, prefabs),
-		Prefab("um_killerbee_ball", redball, assets, prefabs),
-		Prefab("um_bulletbee_ball", greenball, assets, prefabs),
-		Prefab("um_cherrybulletbee_ball", cherryball, assets, prefabs),
-		Prefab("bulletbee", bulletfn),
-		Prefab("cherrybulletbee", cherrybee)
+    Prefab("um_beegun_cherry", cherry_gun, assets, prefabs),
+    Prefab("um_bulletbee_proj", bulletproj, assets, prefabs),
+    Prefab("um_cherrybulletbee_proj", cherryproj, assets, prefabs),
+    Prefab("um_bee_ball", yellowball, assets, prefabs),
+    Prefab("um_killerbee_ball", redball, assets, prefabs),
+    Prefab("um_bulletbee_ball", greenball, assets, prefabs),
+    Prefab("um_cherrybulletbee_ball", cherryball, assets, prefabs),
+    Prefab("bulletbee", bulletfn),
+    Prefab("cherrybulletbee", cherrybee)
