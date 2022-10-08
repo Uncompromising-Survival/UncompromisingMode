@@ -73,18 +73,24 @@ local function OnAmmoLoaded(inst, data)
 
 	if inst.components.weapon ~= nil then
 		if data ~= nil and data.item ~= nil then
-			if data.item.prefab ~= "bulletbee" then
+			local beecheck = "bulletbee"
+			
+			if inst.ischerry then
+				beecheck = "cherrybulletbee"
+			end
+		
+			if data.item.prefab ~= beecheck then
 				local stacksize = data.item.components.stackable:StackSize()
 		
 				data.item:Remove()
 				
 				for i = 1, stacksize do
-					local bulletbee = SpawnPrefab("bulletbee")
+					local bulletbee = SpawnPrefab(beecheck)
 					inst.components.container:GiveItem(bulletbee)
 				end
 			end
 			
-			inst.components.weapon:SetProjectile("um_bulletbee_proj")
+			inst.components.weapon:SetProjectile("um_"..beecheck.."_proj")
 		end
 	end
 end
@@ -200,7 +206,7 @@ local function can_cast_fn(doer, target, pos)
 	end
 end
 
-local function fn()
+local function fn(ischerry)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -239,6 +245,8 @@ local function fn()
 		end
         return inst
     end
+	
+	inst.ischerry = ischerry
 
     inst:AddComponent("inspectable")
 
@@ -277,6 +285,18 @@ local function fn()
     return inst
 end
 
+local function um_gun()
+    local inst = fn(false)
+
+    return inst
+end
+	
+local function cherry_gun()
+    local inst = fn(true)
+
+    return inst
+end
+
 local function onhit(inst, attacker, target)
     local impactfx = SpawnPrefab("impact")
     if impactfx ~= nil and target.components.combat then
@@ -305,7 +325,7 @@ local function pipethrown(inst)
     inst.persists = false
 end
 
-local function bullet()
+local function bullet(ischerry)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -322,6 +342,10 @@ local function bullet()
 	inst.Transform:SetScale(1.2, 1.2, 1.2)
     inst.Transform:SetFourFaced()
 
+	if ischerry then
+		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+	end
+	
     --inst:AddTag("blowdart")
     inst:AddTag("sharp")
 
@@ -364,10 +388,26 @@ local function bullet()
     return inst
 end
 
+local function bulletproj()
+    local inst = bullet(false)
+
+    return inst
+end
+	
+local function cherryproj()
+    local inst = bullet(true)
+
+    return inst
+end
+
 local function OnHitBall(inst, attacker, target)
 	if inst.beegun ~= nil and inst.beegun:IsValid() then
 		local owner = inst.beegun.components.inventoryitem.owner
 		local bulletbee = SpawnPrefab("bulletbee")
+		
+		if inst.ischerry then
+			bulletbee = SpawnPrefab("cherrybulletbee")
+		end
 		
 		inst.beegun.components.container:GiveItem(bulletbee)
 		
@@ -406,7 +446,7 @@ local function onthrown_ball(inst)
     inst.Physics:SetCollisionCallback(nil)
 end
 
-local function commonball(anim, beetype, sound)
+local function commonball(anim, beetype, sound, ischerry)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -419,6 +459,10 @@ local function commonball(anim, beetype, sound)
     inst.AnimState:SetBuild("um_beegun_ball")
     inst.AnimState:PlayAnimation(anim.."spin_loop")
     inst.Transform:SetFourFaced()
+	
+	if ischerry then
+		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+	end
 
     inst.entity:SetPristine()
 
@@ -429,6 +473,7 @@ local function commonball(anim, beetype, sound)
 	inst.beetype = beetype
 	inst.sound = sound
 	inst.anim = anim
+	inst.ischerry = ischerry
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(25)
@@ -448,19 +493,25 @@ local function commonball(anim, beetype, sound)
 end
 
 local function yellowball()
-    local inst = commonball("yellow", "bee", "dontstarve/bee/bee_attack")
+    local inst = commonball("yellow", "bee", "dontstarve/bee/bee_attack", false)
 
     return inst
 end
 	
 local function redball()
-    local inst = commonball("red", "killerbee", "dontstarve/bee/killerbee_attack")
+    local inst = commonball("red", "killerbee", "dontstarve/bee/killerbee_attack", false)
 
     return inst
 end
-	
+
 local function greenball()
-    local inst = commonball("bullet", "bulletbee", "dontstarve/bee/killerbee_attack")
+    local inst = commonball("bullet", "bulletbee", "dontstarve/bee/killerbee_attack", false)
+
+    return inst
+end
+
+local function cherryball()
+    local inst = commonball("bullet", "bulletbee", "dontstarve/bee/killerbee_attack", true)
 
     return inst
 end
@@ -540,7 +591,16 @@ local function NoTargetWillKillMe(inst)
 	end
 end
 
-local function bulletfn()
+local function CherryPoison(inst, other)
+	if other ~= nil and other.components.debuffable ~= nil then
+		local poison = other.components.debuffable:AddDebuff("cherry_beepoisonbuff", "cherry_beepoisonbuff")
+        if poison ~= nil and poison.stacks then
+            poison.stacks = poison.stacks == 0 and inst.flowerbuffs.poisonstacks or poison.stacks + (inst.flowerbuffs.poisonstacks * 0.5)
+        end
+	end
+end
+
+local function bulletfn(ischerry)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -570,7 +630,11 @@ local function bulletfn()
     inst.AnimState:SetRayTestOnBB(true)
 	
 	inst.Transform:SetScale(.9, .9, .9)
-
+	
+	if ischerry then
+		inst.AnimState:SetMultColour(1, 0, 0.7, 1)
+	end
+	
     MakeInventoryFloatable(inst)
 
     MakeFeedableSmallLivestockPristine(inst)
@@ -618,6 +682,10 @@ local function bulletfn()
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
     inst.components.combat:SetRetargetFunction(2, BeeRetarget)
+	
+	if ischerry then
+		inst.components.combat.onhitotherfn = CherryPoison
+	end
 
     ------------------
 
@@ -653,9 +721,25 @@ local function bulletfn()
     return inst
 end
 
-return Prefab("um_beegun", fn, assets, prefabs),
-		Prefab("um_bulletbee_proj", bullet, assets, prefabs),
+local function bulletbee()
+    local inst = bulletfn(false)
+
+    return inst
+end
+	
+local function cherrybee()
+    local inst = bulletfn(true)
+
+    return inst
+end
+
+return Prefab("um_beegun", um_gun, assets, prefabs),
+		Prefab("um_beegun_cherry", cherry_gun, assets, prefabs),
+		Prefab("um_bulletbee_proj", bulletproj, assets, prefabs),
+		Prefab("um_cherrybulletbee_proj", cherryproj, assets, prefabs),
 		Prefab("um_bee_ball", yellowball, assets, prefabs),
 		Prefab("um_killerbee_ball", redball, assets, prefabs),
 		Prefab("um_bulletbee_ball", greenball, assets, prefabs),
-		Prefab("bulletbee", bulletfn)
+		Prefab("um_cherrybulletbee_ball", cherryball, assets, prefabs),
+		Prefab("bulletbee", bulletfn),
+		Prefab("cherrybulletbee", cherrybee)
