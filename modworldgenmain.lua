@@ -140,12 +140,15 @@ if GetModConfigData("worldgenmastertoggle") then
         --Ruins Split
         ]]
     AddTaskSetPreInitAny(function(tasksetdata)
-
-        if tasksetdata.location ~= "forest" or
-            (
+        if tasksetdata.location ~= "forest" then
+            return
+        end
+        if (
             tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or
                 tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
-            table.insert(tasksetdata.tasks, "GiantTrees_IA")
+            if GetModConfigData("hoodedforest") then
+                table.insert(tasksetdata.tasks, "GiantTrees_IA")
+            end
             return
         end
 
@@ -164,15 +167,17 @@ if GetModConfigData("worldgenmastertoggle") then
 
     if GetModConfigData("caved") == false then
         AddTaskSetPreInitAny(function(tasksetdata)
-            if tasksetdata.location ~= "forest" or
-                (
+            if tasksetdata.location ~= "forest" then
+                return
+            end
+            if (
                 tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or
                     tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
-                        tasksetdata.set_pieces["ToadstoolArena"] = { 1,
-                        tasks = {
-                            "ThemeMarshCity"
-                        }
+                tasksetdata.set_pieces["ToadstoolArena"] = { 1,
+                    tasks = {
+                        "ThemeMarshCity"
                     }
+                }
                 return
             end
 
