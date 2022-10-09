@@ -495,5 +495,5 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal." -- I think he already has a quote that's exactly like this
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
-	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.UM_MAGNERANGREEL = "Science is pretty attractive."
 	DESCRIBE.SIREN_THRONE = "Something... or someone, seems to have been here recently."
