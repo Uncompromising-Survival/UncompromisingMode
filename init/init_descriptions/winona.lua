@@ -359,7 +359,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	
 	----UNDER THE WEATHER----
 	
-	DESCRIBE.WINONA_TOOLBOX = "Wouldn't leave home with out it."
+	DESCRIBE.WINONA_TOOLBOX = "Wouldn't leave home without it."
 	ACTIONFAIL.WINONATOOLBOX = "Huh? Who locked me out!"
 	DESCRIBE.POWERCELL = "Lil' ingenuity and elbow grease go a long way."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "I designed it from scratch."
