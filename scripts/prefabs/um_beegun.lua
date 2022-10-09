@@ -73,11 +73,7 @@ local function OnAmmoLoaded(inst, data)
 
     if inst.components.weapon ~= nil then
         if data ~= nil and data.item ~= nil then
-            local beecheck = "bulletbee"
-
-            if inst.ischerry then
-                beecheck = "cherrybulletbee"
-            end
+			local beecheck = inst.beetype
 
             if data.item.prefab ~= beecheck then
                 local stacksize = data.item.components.stackable:StackSize()
@@ -208,7 +204,7 @@ local function can_cast_fn(doer, target, pos)
     end
 end
 
-local function fn(ischerry)
+local function fn(beetype)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -248,7 +244,7 @@ local function fn(ischerry)
         return inst
     end
 
-    inst.ischerry = ischerry
+    inst.beetype = beetype
 
     inst:AddComponent("inspectable")
 
@@ -288,13 +284,13 @@ local function fn(ischerry)
 end
 
 local function um_gun()
-    local inst = fn(false)
+    local inst = fn("bulletbee")
 
     return inst
 end
 
 local function cherry_gun()
-    local inst = fn(true)
+    local inst = fn("cherrybulletbee")
 
     return inst
 end
@@ -310,7 +306,7 @@ local function onhit(inst, attacker, target)
     end
 
 
-    local bee = SpawnPrefab("bulletbee")
+    local bee = SpawnPrefab(inst.beetype)
     bee.Transform:SetPosition(inst.Transform:GetWorldPosition())
 
     if target ~= nil then
@@ -327,7 +323,7 @@ local function pipethrown(inst)
     inst.persists = false
 end
 
-local function bullet(ischerry)
+local function bullet(beetype, anim, ischerry)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -340,13 +336,9 @@ local function bullet(ischerry)
 
     inst.AnimState:SetBank("um_beegun_dart")
     inst.AnimState:SetBuild("um_beegun_dart")
-    inst.AnimState:PlayAnimation("beedart_green")
+    inst.AnimState:PlayAnimation(anim)
     inst.Transform:SetScale(1.2, 1.2, 1.2)
     inst.Transform:SetFourFaced()
-
-    if ischerry then
-        inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-    end
 
     --inst:AddTag("blowdart")
     inst:AddTag("sharp")
@@ -366,9 +358,9 @@ local function bullet(ischerry)
         return inst
     end
 
-    inst.beetype = "bulletbee"
+    inst.beetype = beetype
     inst.sound = "dontstarve/bee/killerbee_attack"
-    inst.anim = "beedart_green"
+    inst.anim = anim
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(15)
@@ -391,13 +383,13 @@ local function bullet(ischerry)
 end
 
 local function bulletproj()
-    local inst = bullet(false)
+    local inst = bullet("bulletbee", "beedart_green", false)
 
     return inst
 end
 
 local function cherryproj()
-    local inst = bullet(true)
+    local inst = bullet("cherrybulletbee", "beedart_cherry", true)
 
     return inst
 end
@@ -405,11 +397,7 @@ end
 local function OnHitBall(inst, attacker, target)
     if inst.beegun ~= nil and inst.beegun:IsValid() then
         local owner = inst.beegun.components.inventoryitem.owner
-        local bulletbee = SpawnPrefab("bulletbee")
-
-        if inst.ischerry then
-            bulletbee = SpawnPrefab("cherrybulletbee")
-        end
+        local bulletbee = SpawnPrefab(inst.beegun.beetype)
 
         inst.beegun.components.container:GiveItem(bulletbee)
 
@@ -462,10 +450,6 @@ local function commonball(anim, beetype, sound, ischerry)
     inst.AnimState:PlayAnimation(anim .. "spin_loop")
     inst.Transform:SetFourFaced()
 
-    if ischerry then
-        inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-    end
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -513,7 +497,7 @@ local function greenball()
 end
 
 local function cherryball()
-    local inst = commonball("bullet", "bulletbee", "dontstarve/bee/killerbee_attack", true)
+    local inst = commonball("cherry", "cherrybulletbee", "dontstarve/bee/killerbee_attack", true)
 
     return inst
 end
@@ -538,7 +522,31 @@ local function bonus_damage_via_allergy(inst, target, damage, weapon)
 end
 
 local function OnDropped(inst)
-    --inst.components.health:Kill()
+    if inst.buzzing and not (inst:IsAsleep() or inst.SoundEmitter:PlayingSound("buzz")) then
+        inst.SoundEmitter:PlaySound(inst.sounds.buzz, "buzz")
+    end
+    inst.sg:GoToState("catchbreath")
+    if inst.components.workable ~= nil then
+        inst.components.workable:SetWorkLeft(1)
+    end
+    if inst.brain ~= nil then
+        inst.brain:Start()
+    end
+    if inst.sg ~= nil then
+        inst.sg:Start()
+    end
+    if inst.components.stackable ~= nil and inst.components.stackable:IsStack() then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        while inst.components.stackable:IsStack() do
+            local item = inst.components.stackable:Get()
+            if item ~= nil then
+                if item.components.inventoryitem ~= nil then
+                    item.components.inventoryitem:OnDropped()
+                end
+                item.Physics:Teleport(x, y, z)
+            end
+        end
+    end
 end
 
 local function OnPickedUp(inst)
@@ -668,19 +676,17 @@ local function bulletfn(ischerry)
     inst:AddTag("scarytoprey")
 
     inst.AnimState:SetBank("bee")
-    if not ischerry then
-        inst.AnimState:SetBuild("bulletbee_build")
-    else
+	
+    if ischerry then
         inst.AnimState:SetBuild("cherrybee_build")
+    else
+        inst.AnimState:SetBuild("bulletbee_build")
     end
+	
     inst.AnimState:PlayAnimation("idle", true)
     inst.AnimState:SetRayTestOnBB(true)
 
     inst.Transform:SetScale(.9, .9, .9)
-
-    --if ischerry then
-    --    inst.AnimState:SetMultColour(1, 0, 0.7, 1)
-    --end
 
     MakeInventoryFloatable(inst)
 
@@ -701,7 +707,13 @@ local function bulletfn(ischerry)
 
     inst:AddComponent("stackable")
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
+	
+    if ischerry then
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/cherrybulletbee.xml"
+	else
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
+	end
+	
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.canbepickedupalive = true
@@ -788,5 +800,5 @@ return Prefab("um_beegun", um_gun, assets, prefabs),
     Prefab("um_killerbee_ball", redball, assets, prefabs),
     Prefab("um_bulletbee_ball", greenball, assets, prefabs),
     Prefab("um_cherrybulletbee_ball", cherryball, assets, prefabs),
-    Prefab("bulletbee", bulletfn),
+    Prefab("bulletbee", bulletbee),
     Prefab("cherrybulletbee", cherrybee)

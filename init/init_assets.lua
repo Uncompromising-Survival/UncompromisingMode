@@ -180,6 +180,7 @@ local inventoryitems =
 	"zaspberryparfait",
 
 	"bulletbee",
+	"cherrybulletbee",
 	"sludge",
 	"sludge_cork",
 	"sludge_sack",
@@ -1524,6 +1525,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/bulletbee.tex"),
 	Asset("ATLAS_BUILD", "images/inventoryimages/bulletbee.xml"),
 	Asset("ATLAS", "images/inventoryimages/bulletbee.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/cherrybulletbee.tex"),
+	Asset("ATLAS_BUILD", "images/inventoryimages/cherrybulletbee.xml"),
+	Asset("ATLAS", "images/inventoryimages/cherrybulletbee.xml"),
 
 
 	--SWAPS
