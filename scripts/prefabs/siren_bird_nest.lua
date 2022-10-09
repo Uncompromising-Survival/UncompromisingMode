@@ -50,6 +50,9 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst:SetPrefabNameOverride("siren_bird_nest")
+
     inst:AddTag("sirenpoint")
 
     inst:AddComponent("inspectable")
@@ -71,4 +74,4 @@ local function fn()
     return inst
 end
 
-return Prefab("siren_bird_nest", fn, assets)
+return Prefab("siren_bird_nest", fn, assets), Prefab("siren_bird_nest_teaser", fn, assets)--teaser will remove itself eventually.

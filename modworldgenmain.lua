@@ -709,7 +709,7 @@ if GetModConfigData("worldgenmastertoggle") then
     AddRoomPreInit("OceanHazardous", function(room)
         room.contents.countprefabs =
         {
-            ocean_speaker_teaser = 1
+            siren_teaser_picker = 1
         }
     end)
 end

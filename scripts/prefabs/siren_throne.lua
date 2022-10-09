@@ -46,6 +46,8 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst:SetPrefabNameOverride("siren_throne")
+
     inst:AddTag("sirenpoint")
 
     inst:AddComponent("inspectable")
@@ -55,4 +57,4 @@ local function fn()
     return inst
 end
 
-return Prefab("siren_throne", fn, assets, prefabs)
+return Prefab("siren_throne", fn, assets, prefabs), Prefab("siren_throne_teaser", fn, assets, prefabs)

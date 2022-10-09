@@ -19,6 +19,13 @@ local function PlaySound(inst)
 	end
 end
 
+local types =
+{
+    "siren_throne",
+    "ocean_speaker",
+    "siren_bird_nest"
+}
+
 local function fn()
     local inst = CreateEntity()
 
@@ -56,6 +63,7 @@ local function fn()
     end
 
     inst:AddTag("sirenpoint")
+    inst:SetPrefabNameOverride("ocean_speaker")
 
     inst:AddComponent("inspectable")
 
@@ -64,5 +72,52 @@ local function fn()
     return inst
 end
 
+--I am incredibly lazy.
+local function fn1()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    inst.MiniMapEntity:SetIcon("seastack.png")
+
+    inst:SetPhysicsRadiusOverride(2.35)
+
+    MakeWaterObstaclePhysics(inst, 0.80, 2, 0.75)
+
+    inst:AddTag("ignorewalkableplatforms")
+    inst:AddTag("seastack")
+
+    --inst.AnimState:SetBank("speaker_test")
+    --inst.AnimState:SetBuild("speaker_test")
+    --inst.AnimState:PlayAnimation("sneaky_leaky_preview")
+
+    MakeInventoryFloatable(inst, "med", 0.1, {1.1, 0.9, 1.1})
+    inst.components.floater.bob_percent = 0
+    local land_time = (POPULATING and math.random()*5*FRAMES) or 0
+
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    inst:DoTaskInTime(0.5, function(inst)
+        print(types[math.random(3)].."_teaser")
+        local x,y,z = inst.Transform:GetWorldPosition()
+        local siren = SpawnPrefab(types[math.random(3)].."_teaser")
+        siren.Transform:SetPosition(x,y,z)
+        inst:Remove()
+    end)
+    return inst
+end
+
+
+
+
 return Prefab("ocean_speaker", fn, assets, prefabs), -- This is the real one, other ones are temp placeholders.
-Prefab("ocean_speaker_teaser", fn, assets, prefabs)
+Prefab("ocean_speaker_teaser", fn, assets, prefabs),
+Prefab("siren_teaser_picker", fn1, assets, prefabs)
