@@ -412,3 +412,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.SIREN_THRONE = "How dare something encroach on MY waters?!"

@@ -404,3 +404,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.CORNCAN = "The can is a temporal time bubble."
+	DESCRIBE.SIREN_THRONE = "Oh look! A rock! Anyways."

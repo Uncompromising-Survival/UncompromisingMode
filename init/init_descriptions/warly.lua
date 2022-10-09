@@ -399,7 +399,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.UM_DREAMCATCHER = "."
 	DESCRIBE.UM_BRINEISHMOSS = "Salted moss"
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
-	DESCRIBE.SLUDGE_CORK = "Not a cork for wine, unfortunatly."
+	DESCRIBE.SLUDGE_CORK = "Not a cork for wine, unfortunately."
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
@@ -407,3 +407,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.CORNCAN = "I'll be able to use this corn for recipes later!"
+	DESCRIBE.SIREN_THRONE = "An even bigger, lumpier rock."
