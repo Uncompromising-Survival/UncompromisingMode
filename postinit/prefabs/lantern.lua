@@ -48,7 +48,7 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
             inst.components.fueled.fueltype = FUELTYPE.BATTERYPOWER
-            inst.components.fueled.maxfuel = inst.components.fueled.maxfuel*2
+            inst.components.fueled.maxfuel = TUNING.LANTERN_LIGHTTIME*2
             inst:AddTag("electricaltool")
             inst.components.named:SetName(STRINGS.NAMES.LANTERN_ELECTRICAL)
             local owner = inst.components.inventoryitem:GetGrandOwner()

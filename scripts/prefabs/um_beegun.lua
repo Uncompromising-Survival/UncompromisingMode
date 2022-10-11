@@ -276,8 +276,8 @@ local function fn(beetype)
     inst.components.spellcaster.canonlyuseoncombat = true
     inst.components.spellcaster.canuseonpoint = true
 
-    MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
-    MakeSmallPropagator(inst)
+    --MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+    --MakeSmallPropagator(inst)
     MakeHauntableLaunch(inst)
 
     return inst

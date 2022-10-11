@@ -36,6 +36,8 @@ env.AddPlayerPostInit(function(inst)
 
                 print("refuelnumber: ", refuelnumber)
                 item.components.fueled:SetPercent(refuelnumber)
+                item.components.fueled.ontakefuelfn(item, 0)
+                --item:PushEvent("takefuel", {fuelvalue = 0})
             elseif item.components.finiteuses ~= nil then
                 print("finiteuses item")
                 local percent = item.components.finiteuses:GetPercent()
@@ -59,18 +61,18 @@ env.AddPlayerPostInit(function(inst)
 
         local item_hand_fuel = item_hand ~= nil and item_hand:HasTag("electricaltool") and
             (item_hand.components.fueled ~= nil and item_hand.components.fueled:GetPercent() or
-            item_hand.components.finiteuses ~= nil and item_hand.components.finiteuses:GetPercent()) or -1 --just so it isn't a nil value, but is lower than 0.
+                item_hand.components.finiteuses ~= nil and item_hand.components.finiteuses:GetPercent()) or -1 --just so it isn't a nil value, but is lower than 0.
 
         local item_head_fuel = item_head ~= nil and item_head:HasTag("electricaltool") and
             (item_head.components.fueled ~= nil and item_head.components.fueled:GetPercent() or
-            item_head.components.finiteuses ~= nil and item_head.components.finiteuses:GetPercent()) or -1
+                item_head.components.finiteuses ~= nil and item_head.components.finiteuses:GetPercent()) or -1
 
         local item_body_fuel = item_body ~= nil and item_body:HasTag("electricaltool") and
             (item_body.components.fueled ~= nil and item_body.components.fueled:GetPercent() or
-            item_body.components.finiteuses ~= nil and item_body.components.finiteuses:GetPercent()) or -1
+                item_body.components.finiteuses ~= nil and item_body.components.finiteuses:GetPercent()) or -1
 
         if item_hand_fuel > item_head_fuel and item_hand_fuel > item_body_fuel then
-            final_item = item_head or item_body or item_hand--it *should* prioritize the lower fuel values first, if they're not nil...
+            final_item = item_head or item_body or item_hand --it *should* prioritize the lower fuel values first, if they're not nil...
         elseif item_head_fuel > item_hand_fuel and item_head_fuel > item_body_fuel then
             final_item = item_hand or item_body or item_head
         elseif item_body_fuel > item_hand_fuel and item_body_fuel > item_head_fuel then
@@ -83,7 +85,9 @@ env.AddPlayerPostInit(function(inst)
         print("final item: ", final_item)
 
         if inst.components.upgrademoduleowner == nil then
-            if (final_item ~= nil and final_item.components.finiteuses ~= nil and final_item.components.finiteuses:GetPercent() == 1) then
+            if (
+                final_item ~= nil and final_item.components.finiteuses ~= nil and
+                    final_item.components.finiteuses:GetPercent() == 1) then
                 print("normal charge full")
                 return false, "CHARGE_FULL"
             else
@@ -96,12 +100,14 @@ env.AddPlayerPostInit(function(inst)
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
                         print("insulated")
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true
@@ -110,9 +116,11 @@ env.AddPlayerPostInit(function(inst)
                 end
             end
         else
-            if (final_item ~= nil and final_item.components.finiteuses ~= nil and final_item.components.finiteuses:GetPercent() == 1) and
+            if (
+                final_item ~= nil and final_item.components.finiteuses ~= nil and
+                    final_item.components.finiteuses:GetPercent() == 1) and
                 inst.components.upgrademoduleowner:ChargeIsMaxed() then
-                    print("wx charge full")
+                print("wx charge full")
                 return false, "CHARGE_FULL"
             else
                 if final_item ~= nil then
@@ -127,12 +135,14 @@ env.AddPlayerPostInit(function(inst)
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
                         print("insulated wx")
                         if inst.components.talker ~= nil then
-                            inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
+                            inst:DoTaskInTime(1,
+                                inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true

@@ -4,6 +4,7 @@
 
 table.insert(GLOBAL.TUNING.WX78_CHARGING_FOODS, {zaspberry = 1})
 table.insert(GLOBAL.TUNING.WX78_CHARGING_FOODS, {zaspberryparfait = 1})
+table.insert(GLOBAL.TUNING.WX78_CHARGING_FOODS, {powercell = 1})
 
 local ModuleDefs = require("wx78_moduledefs")
 

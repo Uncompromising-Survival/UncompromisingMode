@@ -51,6 +51,23 @@ local function ondeploy(inst, pt, deployer)
     end
 end
 
+local function OnEaten(inst, eater)
+    if not eater.components.inventory:IsInsulated() then
+        print("no inssulation wx")
+        eater.sg:GoToState("electrocute")
+        eater.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
+        eater.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
+        if eater.components.talker ~= nil then
+            eater:DoTaskInTime(1, eater.components.talker:Say(GetString(eater, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
+        end
+    else
+        print("insulated wx")
+        if eater.components.talker ~= nil then
+            eater:DoTaskInTime(1, eater.components.talker:Say(GetString(eater, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
+        end
+    end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -93,8 +110,15 @@ local function fn()
     --inst:AddComponent("battery")
     --inst.components.battery.onused = discharge
 
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.GEARS
+    inst.components.edible.healthvalue = 0
+    inst.components.edible.hungervalue = 0
+    inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL
+    inst.components.edible.oneaten = OnEaten
+
     inst:AddComponent("fuel")
-    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+    inst.components.fuel.fuelvalue = TUNING.MED_LARGE_FUEL*1.25
     inst.components.fuel.fueltype = FUELTYPE.BATTERYPOWER
 
     return inst
