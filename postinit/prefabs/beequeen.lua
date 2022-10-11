@@ -31,40 +31,42 @@ local function StompHandler(inst,data)
 	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
 	end]]
-	local soldiers = inst.components.commander:GetAllSoldiers()
-	
-	if inst.components.health and inst.components.health:GetPercent() < 0.5 and not inst.sg:HasStateTag("busy") then
+	if inst.components.health and not inst.components.health:IsDead() then
 		local soldiers = inst.components.commander:GetAllSoldiers()
-		if #soldiers > 0 then
-			inst.sg:GoToState("focustarget")
+		
+		if inst.components.health and inst.components.health:GetPercent() < 0.5 and not inst.sg:HasStateTag("busy") then
+			local soldiers = inst.components.commander:GetAllSoldiers()
+			if #soldiers > 0 then
+				inst.sg:GoToState("focustarget")
+			end
+			inst.should_shooter_rage = inst.should_shooter_rage -1
 		end
-		inst.should_shooter_rage = inst.should_shooter_rage -1
-	end
-	if inst.components.health and inst.components.health:GetPercent() < 0.75 then
-		if inst.sg:HasStateTag("tired") then
-			inst.AnimState:PlayAnimation("tired_hit")
-			inst.AnimState:PushAnimation("tired_loop",true)
-		end
+		if inst.components.health and inst.components.health:GetPercent() < 0.75 then
+			if inst.sg:HasStateTag("tired") then
+				inst.AnimState:PlayAnimation("tired_hit")
+				inst.AnimState:PushAnimation("tired_loop",true)
+			end
 
-		inst.stomprage = inst.stomprage + 1
+			inst.stomprage = inst.stomprage + 1
 
-		if data.attacker and data.attacker.components.combat and inst.stompready then
-			inst.prioritytarget = data.attacker
-			if inst.components.combat.target ~= nil then
-				if data.attacker ~= inst.components.combat.target then
-					inst.stomprage = inst.stomprage + 4
+			if data.attacker and data.attacker.components.combat and inst.stompready then
+				inst.prioritytarget = data.attacker
+				if inst.components.combat.target ~= nil then
+					if data.attacker ~= inst.components.combat.target then
+						inst.stomprage = inst.stomprage + 4
+					end
 				end
-			end
-			local x,y,z = data.attacker.Transform:GetWorldPosition()
-			if TheWorld.Map:GetPlatformAtPoint(x, z) ~= nil then
-				inst.stomprage = inst.stomprage + 10
-			end
-			if inst.stomprage > 20 and not inst.sg:HasStateTag("ability") and inst.components.health and not inst.components.health:IsDead() then
-				inst:ForceFacePoint(x,y,z)
-				inst.stomprage = 0
-				inst.stompready = false
-				inst:DoTaskInTime(math.random(3,5),function(inst) inst.stompready = true end)
-				inst.sg:GoToState("stomp")
+				local x,y,z = data.attacker.Transform:GetWorldPosition()
+				if TheWorld.Map:GetPlatformAtPoint(x, z) ~= nil then
+					inst.stomprage = inst.stomprage + 10
+				end
+				if inst.stomprage > 20 and not inst.sg:HasStateTag("ability") and inst.components.health and not inst.components.health:IsDead() then
+					inst:ForceFacePoint(x,y,z)
+					inst.stomprage = 0
+					inst.stompready = false
+					inst:DoTaskInTime(math.random(3,5),function(inst) inst.stompready = true end)
+					inst.sg:GoToState("stomp")
+				end
 			end
 		end
 	end
@@ -411,23 +413,25 @@ local PHASE3_HEALTH = .5
 local PHASE4_HEALTH = .25
 
 local function FinalFormation(inst)
-	inst.components.timer:PauseTimer("spawnguards_cd")
-	inst.sg:GoToState("spawnguards_shooter_line")
-	inst.ffcount = inst.ffcount - 1
-	if inst.ffdir then
-		inst.ffdir = nil
-	else
-		inst.ffdir = true
-	end
-	local time = 3.5
-	if inst.ffcount > 0 then
-		inst:DoTaskInTime(time,FinalFormation)
-	else
-		inst:DoTaskInTime(time,function(inst)
-			inst.components.timer:ResumeTimer("spawnguards_cd")
-			inst.tiredcount = 12
-			inst.sg:GoToState("tired")
-		end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.components.timer:PauseTimer("spawnguards_cd")
+		inst.sg:GoToState("spawnguards_shooter_line")
+		inst.ffcount = inst.ffcount - 1
+		if inst.ffdir then
+			inst.ffdir = nil
+		else
+			inst.ffdir = true
+		end
+		local time = 3.5
+		if inst.ffcount > 0 then
+			inst:DoTaskInTime(time,FinalFormation)
+		else
+			inst:DoTaskInTime(time,function(inst)
+				inst.components.timer:ResumeTimer("spawnguards_cd")
+				inst.tiredcount = 12
+				inst.sg:GoToState("tired")
+			end)
+		end
 	end
 end
 
@@ -443,32 +447,40 @@ local function VVallcheck(inst)
 end
 
 local function MakeSeekerHitlist(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local players = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost"})
-	inst.seeker_hitlist = players
+	if inst.components.health and not inst.components.health:IsDead() then
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local players = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost"})
+		inst.seeker_hitlist = players
+	end
 end
 
 local function SeekerBeesRage(inst)
-	inst.abilitybusy = true
-	MakeSeekerHitlist(inst)
-	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.abilitybusy = true
+		MakeSeekerHitlist(inst)
+		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end)
+	end
 end
 
 local function ShooterBeesRage(inst)
-	inst.abilitybusy = true
-	inst.previousability = "shooter"
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local targets = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost","bee"})
-	inst.shoottargets = targets
-	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_shooter_circle") end)	
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.abilitybusy = true
+		inst.previousability = "shooter"
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local targets = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost","bee"})
+		inst.shoottargets = targets
+		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_shooter_circle") end)	
+	end
 end
 
 local function DoFinalFormation(inst)
-	inst.abilitybusy = true
-	inst.should_final = false
-	inst.previousability = "final"
-	inst.ffcount = 5
-	FinalFormation(inst)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.abilitybusy = true
+		inst.should_final = false
+		inst.previousability = "final"
+		inst.ffcount = 5
+		FinalFormation(inst)
+	end
 end
 
 local function ActivateHitAbility(inst)
@@ -518,18 +530,24 @@ local function ActivateHitAbility(inst)
 end
 
 local function SpavvnGuardsSeeker(inst)
-	inst.previousguardability = "seeker"
-	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker") end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.previousguardability = "seeker"
+		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker") end)
+	end
 end
 
 local function SpavvnVValls(inst)
-	inst.previousguardability = "vvall"
-	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_vvall") end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.previousguardability = "vvall"
+		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_vvall") end)
+	end
 end
 
 local function SpavvnGuardsShooters(inst)
-	inst.previousguardability = "shooter"
-	inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_vvall_shooter") end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.previousguardability = "shooter"
+		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_vvall_shooter") end)
+	end
 end
 
 local function PstSummonHandler(inst)
