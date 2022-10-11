@@ -413,3 +413,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = "Are we sure it's not going to start a forest fire?"
 	DESCRIBE.SIREN_THRONE = "Look Woby! A rock!" --Dumb kid.
+	DESCRIBE.LAVASPIT_SLUDGE = "Careful around that Woby!"

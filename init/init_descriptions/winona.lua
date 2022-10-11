@@ -411,3 +411,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "Oh wow, another rock."
+	DESCRIBE.LAVASPIT_SLUDGE = "It's the factory fire all over again!"

@@ -407,3 +407,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "Quite the homely lookin' rock, eh?"
+	DESCRIBE.LAVASPIT_SLUDGE = "Now that's a quick way to start a fire, eh?"

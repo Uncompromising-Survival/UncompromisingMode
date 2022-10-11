@@ -406,3 +406,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "A throne to rule over the vast nothingness."
+	DESCRIBE.LAVASPIT_SLUDGE = "A tempting way to go out in a blaze."

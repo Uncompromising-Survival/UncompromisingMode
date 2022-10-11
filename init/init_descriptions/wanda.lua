@@ -408,3 +408,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = "It looks unstable."
 	DESCRIBE.SIREN_THRONE = "Oh look! A rock! Anyways."
+	DESCRIBE.LAVASPIT_SLUDGE = "I have no time to be dancing around hot coals!"

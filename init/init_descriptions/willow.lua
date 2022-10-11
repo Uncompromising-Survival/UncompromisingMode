@@ -420,3 +420,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "Ugh, who would want to sit on a dumb stinky rock?"
+	DESCRIBE.LAVASPIT_SLUDGE = "Hah! This stuff's awesome!"

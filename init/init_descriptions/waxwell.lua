@@ -413,3 +413,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "How dare something encroach on MY waters?!"
+	DESCRIBE.LAVASPIT_SLUDGE = "That's the quickest way to tarnish a suit."

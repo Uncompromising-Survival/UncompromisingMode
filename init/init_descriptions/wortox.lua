@@ -407,3 +407,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "What a shock, a rock!"
+	DESCRIBE.LAVASPIT_SLUDGE = "A fire from Hell to quell!"

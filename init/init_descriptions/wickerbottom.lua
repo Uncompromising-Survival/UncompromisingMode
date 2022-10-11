@@ -413,3 +413,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "Curious. It seems something has made a home out of this formation."
+	DESCRIBE.LAVASPIT_SLUDGE = "It'd be smart to keep my distance."

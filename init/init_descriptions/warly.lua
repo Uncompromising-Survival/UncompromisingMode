@@ -408,3 +408,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.CORNCAN = "I'll be able to use this corn for recipes later!"
 	DESCRIBE.SIREN_THRONE = "An even bigger, lumpier rock."
+	DESCRIBE.LAVASPIT_SLUDGE = "I prefer my fires in the pan!"

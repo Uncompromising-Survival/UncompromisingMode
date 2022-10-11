@@ -409,3 +409,4 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = "It's the reel deal."
 	DESCRIBE.SIREN_THRONE = "Is mighty throne!"
+	DESCRIBE.LAVASPIT_SLUDGE = "Is hot mess."
