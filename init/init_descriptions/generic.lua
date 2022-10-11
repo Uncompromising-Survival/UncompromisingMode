@@ -497,3 +497,4 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
 	DESCRIBE.UM_MAGNERANGREEL = "Science is pretty attractive."
 	DESCRIBE.SIREN_THRONE = "Something... or someone, seems to have been here recently."
+	DESCRIBE.LAVASPIT_SLUDGE = "Ack, that's boiling!"
