@@ -21,7 +21,10 @@ env.AddPlayerPostInit(function(inst)
 
     local function ChargeItem(item)
         if item ~= nil then
+            print("item not nil!")
+            print("item: ", item.prefab)
             if item.components.fueled ~= nil then
+                print("fueled item")
                 local percent = item.components.fueled:GetPercent()
                 local refuelnumber = 0
 
@@ -31,8 +34,10 @@ env.AddPlayerPostInit(function(inst)
                     refuelnumber = percent + 0.33
                 end
 
+                print("refuelnumber: ", refuelnumber)
                 item.components.fueled:SetPercent(refuelnumber)
             elseif item.components.finiteuses ~= nil then
+                print("finiteuses item")
                 local percent = item.components.finiteuses:GetPercent()
                 local refuelnumber = 0
 
@@ -41,7 +46,7 @@ env.AddPlayerPostInit(function(inst)
                 else
                     refuelnumber = percent + 0.33
                 end
-
+                print("refuelnumber: ", refuelnumber)
                 item.components.finiteuses:SetPercent(refuelnumber)
             end
         end
@@ -72,13 +77,21 @@ env.AddPlayerPostInit(function(inst)
             final_item = item_head or item_hand or item_body
         end
 
+        print("hand item: ", item_hand)
+        print("head item: ", item_head)
+        print("body item: ", item_body)
+        print("final item: ", final_item)
+
         if inst.components.upgrademoduleowner == nil then
             if (final_item ~= nil and final_item.components.finiteuses ~= nil and final_item.components.finiteuses:GetPercent() == 1) then
+                print("normal charge full")
                 return false, "CHARGE_FULL"
             else
                 if final_item ~= nil then
+                    print("item not nil!")
                     ChargeItem(final_item)
                     if not inst.components.inventory:IsInsulated() then
+                        print("no inssulation")
                         inst.sg:GoToState("electrocute")
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
@@ -86,24 +99,30 @@ env.AddPlayerPostInit(function(inst)
                             inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
+                        print("insulated")
                         if inst.components.talker ~= nil then
                             inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true
+                else
+                    print("item nil!")
                 end
             end
         else
             if (final_item ~= nil and final_item.components.finiteuses ~= nil and final_item.components.finiteuses:GetPercent() == 1) and
                 inst.components.upgrademoduleowner:ChargeIsMaxed() then
+                    print("wx charge full")
                 return false, "CHARGE_FULL"
             else
                 if final_item ~= nil then
+                    print("item not nil! wx")
                     ChargeItem(final_item)
                     if not inst.components.upgrademoduleowner:ChargeIsMaxed() then
                         inst.components.upgrademoduleowner:AddCharge(1)
                     end
                     if not inst.components.inventory:IsInsulated() then
+                        print("no inssulation wx")
                         inst.sg:GoToState("electrocute")
                         inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
                         inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
@@ -111,11 +130,14 @@ env.AddPlayerPostInit(function(inst)
                             inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
                         end
                     else
+                        print("insulated wx")
                         if inst.components.talker ~= nil then
                             inst:DoTaskInTime(1, inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_INSULATED")))
                         end
                     end
                     return true
+                else
+                    print("item nil! wx")
                 end
             end
         end
