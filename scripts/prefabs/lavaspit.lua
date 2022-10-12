@@ -191,10 +191,6 @@ local function slobberfn()
     end
 	
 	inst.lobber = nil
-	
-    if inst.type == "sludge" then
-        inst:SetPrefabNameOverride("BURNING_SLUDGE")
-    end
 
 	inst.coolingtime = 8
 
