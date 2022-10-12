@@ -21,7 +21,7 @@ env.AddPlayerPostInit(function(inst)
 
     local function ChargeItem(item)
         if item ~= nil then
-            print("item not nil!")
+            print("recharge: item not nil!")
             print("item: ", item.prefab)
             if item.components.fueled ~= nil then
                 print("fueled item")
@@ -33,7 +33,7 @@ env.AddPlayerPostInit(function(inst)
                 else
                     refuelnumber = percent + 0.33
                 end
-
+                print("current percent: ", percent)
                 print("refuelnumber: ", refuelnumber)
                 item.components.fueled:SetPercent(refuelnumber)
                 item.components.fueled.ontakefuelfn(item, 0)
@@ -58,25 +58,35 @@ env.AddPlayerPostInit(function(inst)
         local item_hand = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         local item_head = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         local item_body, final_item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY), nil
+        local item_hand_fuel, item_body_fuel, item_head_fuel
 
-        local item_hand_fuel = item_hand ~= nil and item_hand:HasTag("electricaltool") and
+        item_hand_fuel = item_hand ~= nil and item_hand:HasTag("electricaltool") and
             (item_hand.components.fueled ~= nil and item_hand.components.fueled:GetPercent() or
                 item_hand.components.finiteuses ~= nil and item_hand.components.finiteuses:GetPercent()) or -1 --just so it isn't a nil value, but is lower than 0.
-
-        local item_head_fuel = item_head ~= nil and item_head:HasTag("electricaltool") and
+        item_head_fuel = item_head ~= nil and item_head:HasTag("electricaltool") and
             (item_head.components.fueled ~= nil and item_head.components.fueled:GetPercent() or
                 item_head.components.finiteuses ~= nil and item_head.components.finiteuses:GetPercent()) or -1
 
-        local item_body_fuel = item_body ~= nil and item_body:HasTag("electricaltool") and
+        item_body_fuel = item_body ~= nil and item_body:HasTag("electricaltool") and
             (item_body.components.fueled ~= nil and item_body.components.fueled:GetPercent() or
                 item_body.components.finiteuses ~= nil and item_body.components.finiteuses:GetPercent()) or -1
 
+
         if item_hand_fuel > item_head_fuel and item_hand_fuel > item_body_fuel then
-            final_item = item_head or item_body or item_hand --it *should* prioritize the lower fuel values first, if they're not nil...
+            final_item = item_head:HasTag("electricaltool") and item_head or
+                item_body:HasTag("electricaltool") and item_body or
+                item_hand:HasTag("electricaltool") and item_hand or
+                nil --it *should* prioritize the lower fuel values first, if they're not nil...
         elseif item_head_fuel > item_hand_fuel and item_head_fuel > item_body_fuel then
-            final_item = item_hand or item_body or item_head
+            final_item = item_hand:HasTag("electricaltool") and item_hand or
+                item_body:HasTag("electricaltool") and item_body or
+                item_head:HasTag("electricaltool") and item_head or
+                nil
         elseif item_body_fuel > item_hand_fuel and item_body_fuel > item_head_fuel then
-            final_item = item_head or item_hand or item_body
+            final_item = item_head:HasTag("electricaltool") and item_head or
+                item_hand:HasTag("electricaltool") and item_hand or 
+                item_body:HasTag("electricaltool") and item_body or
+                nil
         end
 
         print("hand item: ", item_hand)
