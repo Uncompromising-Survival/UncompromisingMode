@@ -300,4 +300,7 @@ STRINGS.STALKER_ATRIUM_WATHOM_BATTLECRY = {
 	"Retreat while you're still whole.",
 	"...",
 	"So be it.",
+	"Our mistakes shouldn't be repeated.",
+	"Let the dead stay buried.",
+	"I pity you, mimic.",
 }
