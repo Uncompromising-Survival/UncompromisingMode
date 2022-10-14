@@ -252,14 +252,6 @@ local WATHOM_COLOURCUBES =
 local function GetMusicValues(inst)
 	if inst:HasTag("amped") then
 		return "wathom_amped"
-	elseif (
-		inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() >= 0.75 or
-			inst.replica ~= nil and inst.replica.currentadrenaline >= 75) then
-		return --music for 75-100
-	elseif (
-		inst.components.adrenaline ~= nil and inst.components.adrenaline:GetPercent() >= 0.5 or
-			inst.replica ~= nil and inst.replica.currentadrenaline >= 50) then
-		return --music for 50-75
 	else
 		return nil --this should turn off the music.
 	end

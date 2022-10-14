@@ -72,25 +72,4 @@ function Adrenaline:GetCurrent()
     end
 end
 
-function Adrenaline:IsAmped()
-    return self.classified ~= nil and self.classified.isamped:value() or self.inst:HasTag("amped")
-end
-
-function Adrenaline:SetAmped(isamped)
-    if self.classified ~= nil and self.classified.isamped ~= nil then
-        self.classified.isamped:set(isamped)
-    end
-    if isamped then
-        self.classified:PushEvent("wathommusic_start")
-        self.inst.player_classified:PushEvent("wathommusic_start")
-        self.inst:PushEvent("wathommusic_start")
-    else
-        self.classified:PushEvent("wathommusic_end")
-        self.inst.player_classified:PushEvent("wathommusic_end")
-        self.inst:PushEvent("wathommusic_end")
-    end
-end
-
-
-
 return Adrenaline

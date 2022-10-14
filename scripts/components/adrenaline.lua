@@ -8,14 +8,9 @@ local function oncurrent(self, current)
     self.inst.replica.currentadrenaline = current
 end
 
-local function onamp(self, amped)
-    --transform it to binary because replica SetValue is numbers only, and I don't feel like messing with netvars...
-    self.inst.replica.adrenaline:SetAmped(amped)
-    --explicit true check because it's now a number
-    if amped then
-        self.inst:PushEvent("wathommusic_start")
-    else
-        self.inst:PushEvent("wathommusic_end")
+local function onisamped(self, isamped)
+    if self.classified ~= nil and self.classified.isamped ~= nil then
+        self.classified.isamped:set(isamped)
     end
 end
 
@@ -31,7 +26,7 @@ end,
     {
         max = onmax,
         current = oncurrent,
-        isamped = onamp,
+        isamped = onisamped
     })
 
 function Adrenaline:OnRespawn()
@@ -39,8 +34,7 @@ function Adrenaline:OnRespawn()
     self.current = 25
     self.inst.replica.adrenaline:SetCurrent(25)
 
-    self.inst:PushEvent("adrenalinedelta",
-        { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
+    self.inst:PushEvent("adrenalinedelta", { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
 end
 
 function Adrenaline:OnSave()
@@ -67,36 +61,13 @@ function Adrenaline:DoDelta(delta, overtime)
         self.current = self.max
     end
 
-    --    if self:GetPercent() <= 0.10 and self.pestilencecheck < 3 then
-    --        self.inst.components.talker:Say("I must advance my cure immediately." , 3)
-    --        self.pestilencecheck = 3
-    --    elseif self:GetPercent() <= 0.33 and self.pestilencecheck < 2 then
-    --        self.inst.components.talker:Say("I need a patient with human-like anatomy." , 3)
-    --        self.pestilencecheck = 2
-    --    elseif self:GetPercent() <= 0.5 and self.pestilencecheck < 1 then
-    --        self.inst.components.talker:Say("The Pestilence grows stronger." , 3)
-    --        self.pestilencecheck = 1
-    --    end
-
-    --    if self:GetPercent() > 0.5 then
-    --        self.pestilencecheck = 0
-    --    elseif self:GetPercent() > 0.33 then
-    --        self.pestilencecheck = 1
-    --    elseif self:GetPercent() > 0.10 then
-    --        self.pestilencecheck = 2
-    --    end
-
     if self:GetPercent() < 0.24 then
-        --        self.inst.components.sanity.dapperness = -20 / 60
         if self.inst.components.grogginess ~= nil and not self.inst:HasTag("amped") and not self.inst:HasTag("playerghost") and not self.inst:HasTag("deathamp") then
             self.inst.components.grogginess:AddGrogginess(0.5, 0)
         end
-        --        local counterspeedmod = 1 / Remap(0, 1, 0, TUNING.MIN_GROGGY_SPEED_MOD, TUNING.MAX_GROGGY_SPEED_MOD)
-        --        self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "countergrogginess", counterspeedmod)
     end
 
-    self.inst:PushEvent("adrenalinedelta",
-        { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
+    self.inst:PushEvent("adrenalinedelta", { oldpercent = old / self.max, newpercent = self.current / self.max, overtime = overtime })
 end
 
 function Adrenaline:GetPercent()
