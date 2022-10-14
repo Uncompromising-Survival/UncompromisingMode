@@ -213,7 +213,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHOM.ACTIONFAIL
 	DESCRIBE.HOODED_MUSHTREE_TALL = DESCRIBE.MUSHTREE_TALL
 	DESCRIBE.HOODED_MUSHTREE_MEDIUM = DESCRIBE.MUSHTREE_MEDIUM
 	DESCRIBE.HOODED_MUSHTREE_SMALL = DESCRIBE.MUSHTREE_SMALL
-	DESCRIBE.WATERMELON_LANTERN = "Why>"
+	DESCRIBE.WATERMELON_LANTERN = "Why."
 	DESCRIBE.SNOWCONE = "Just ice."
 
 	--Viperstuff Quotes
@@ -404,7 +404,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.PIED_PIPER_FLUTE = "Accessory, compulsion."
 	DESCRIBE.UNCOMPROMISING_PACKRAT = "Belongings, located!"
 
-	ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Value, minimal! Escape!"
+	ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Value minimal! Escape!"
 
 	ACTIONFAIL.CHARGE_FROM =
 	{
@@ -418,23 +418,23 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
 	DESCRIBE.WINONA_TOOLBOX = "Implements, unusual."
 	ACTIONFAIL.WINONATOOLBOX = "Untrained."
-    DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Of course I know how this works! I could've made one myself."
-	DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"
-	DESCRIBE.OCEAN_SPEAKER = "Well this seems awfully out of place." --Lame guy. Lame quote.
+    DESCRIBE.POWERCELL = ""
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.MINERHAT_ELECTRICAL = ""
+	DESCRIBE.OCEAN_SPEAKER = "" 
 
-	DESCRIBE.OCUPUS_BEAK = "Better that I ate you, than you eat me."
+	DESCRIBE.OCUPUS_BEAK = "."
 	DESCRIBE.OCUPUS_TENTACLE = ""
-	DESCRIBE.OCUPUS_TENTACLE_EYE = "Everyone around here seems to be watching me."
-	DESCRIBE.OCUPUS_TENTACLE_COOKED = "It doesn't look that bad..."
+	DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 
-	DESCRIBE.ARMOR_REED_UM = "I'll still be light on my feet with it on."
-	DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me feel like the alpha predator."
-	DESCRIBE.ROCKJAWLEATHER = "It's cold and surprinsgly smooth."
+	DESCRIBE.ARMOR_REED_UM = ""
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "."
+	DESCRIBE.ROCKJAWLEATHER = ""
 
 	--DESCRIBE.UM_SIREN = "Science says we may be able to \"help\" each other."
 	--WHAT THE FUCK VARIANT
-	--DESCRIBE.UM_SIREN = "youtube.com/watch?v=O2XY3Y7JIa0"
+	--DESCRIBE.UM_SIREN = "youtube.com/watch?v=O2XY3Y7JIa0" --who added this??????????????
 
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "Eyeballs."
@@ -453,7 +453,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
     DESCRIBE.BOATPATCH_SLUDGE = "Resort, last."
     DESCRIBE.UM_COPPER_PIPE = "Experienced stranger."
     DESCRIBE.BRINE_BALM  = "Painful stimuli, intensified."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Fishing rod, no, irrelevant."
 	DESCRIBE.UM_AMBER = "Curious, contents."
 	DESCRIBE.UM_BEEGUN = "Natural hive, exploited."
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
@@ -466,10 +466,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UM_COALESCED_NIGHTMARE = "Pulsating."
 	DESCRIBE.SLUDGE_CORK = "Impractical, boats. Other uses?"
 	DESCRIBE.SLUDGESTACK = "Appearance unique. Investigation, rewarded?"
-	DESCRIBE.SPECTER_SHIPWRECK = "Ship, wrecked." --TM
+	DESCRIBE.SPECTER_SHIPWRECK = "Ship, wrecked." 
 
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Get over here."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Get over here!"
-	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "Ocean combat, still undesired." -- I think he already has a quote that's exactly like this
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "Ocean combat, still undesired." 
 	DESCRIBE.UM_MAGNERANG = "Food chain, intelligence dominated."
 	DESCRIBE.UM_MAGNERANGREEL = "Return!"

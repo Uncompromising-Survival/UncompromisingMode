@@ -367,13 +367,13 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "Now if I could just see its insides..."
 	--DESCRIBE.UM_SIREN = "Heh, she certainly knows how to run her workplace."
 	
-	--DESCRIBE.OCUPUS_BEAK = ""
-	--DESCRIBE.OCUPUS_TENTACLE = ""
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
-	--DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
+	DESCRIBE.OCUPUS_BEAK = "Has a nice sheen to 'er."
+	DESCRIBE.OCUPUS_TENTACLE = "" --It'll wriggle on down yer gullet.
+	DESCRIBE.OCUPUS_TENTACLE_EYE = "Not one for eatin' eyes and all."
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "Smells a lot better now."
 	
 	DESCRIBE.ARMOR_REED_UM = DESCRIBE.ARMORGRASS
-	--DESCRIBE.ARMOR_SHARKSUIT_UM = ""
+	DESCRIBE.ARMOR_SHARKSUIT_UM = ""
 	DESCRIBE.ROCKJAWLEATHER = "Looks like he lost a bit of skin."
 	
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
@@ -384,7 +384,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Hah! I'm impressed those shells didn't crack from that fall."
 	
     DESCRIBE.SLUDGE = "Awfully digusting, but probably worth something."
-	DESCRIBE.SLUDGE_OIL = ""
+	DESCRIBE.SLUDGE_OIL = "At the end of the day, fuel is fuel."
     DESCRIBE.SLUDGE_SACK = "It's all slimey now, probably not the best storage."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Wouldn't want to be on the receiving end of this one."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "Seems safe enough."
@@ -392,7 +392,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
     DESCRIBE.BOATPATCH_SLUDGE = "Better hammer it in too."
     DESCRIBE.UM_COPPER_PIPE = "Wasn't expecting to find these out here."
     DESCRIBE.BRINE_BALM  = "Better be worth its salt."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Better quality check for holes."
 	DESCRIBE.UM_AMBER = "Not sure what kind of rock this."
     DESCRIBE.UM_BEEGUN = "?"
 	DESCRIBE.SUNKENCHEST_ROYAL = "Oooh real fancy now arent we!"
@@ -404,11 +404,13 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = "It should help me plug up that sludge."
+	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANG = "Hefty, like tossin' round a horseshoe."
 	DESCRIBE.UM_MAGNERANGREEL = ""
 	DESCRIBE.SIREN_THRONE = "Oh wow, another rock."
 	DESCRIBE.LAVASPIT_SLUDGE = "It's the factory fire all over again!"

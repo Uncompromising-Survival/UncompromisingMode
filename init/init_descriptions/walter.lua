@@ -366,15 +366,15 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.OCEAN_SPEAKER = "I wonder if Woby can hear its frequency?"
 	--DESCRIBE.UM_SIREN = "Woah!! A REAL sea monster!!"
 	
-	--DESCRIBE.OCUPUS_BEAK = ""
+	DESCRIBE.OCUPUS_BEAK = "The mouth of the Kraken!"
 	DESCRIBE.OCUPUS_TENTACLE = ""
-	--DESCRIBE.OCUPUS_TENTACLE_EYE = ""
+	DESCRIBE.OCUPUS_TENTACLE_EYE = ""
 	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 	
 	DESCRIBE.ARMOR_REED_UM = "It just might help me blend in."
 	DESCRIBE.ARMOR_SHARKSUIT_UM = "I don't need help swimming!"
-	DESCRIBE.ROCKJAWLEATHER = "How do they stay afloat with this stuff?"
-	
+	DESCRIBE.ROCKJAWLEATHER = "Woah, Geniune shark skin."
+
 	DESCRIBE.EYEOFTERROR_MINI_ALLY = DESCRIBE.EYEOFTERROR_MINI
 	DESCRIBE.STUFFED_PEEPER_POPPERS = "If I close my eyes and swallow, maybe it will taste better!"
 	DESCRIBE.UM_DEVILED_EGGS = "It's pretty fowl! Get it? ...You get it."
@@ -382,9 +382,9 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.CRITTER_FIGGY = "Woby wants to play with you, Figgy!"
 	DESCRIBE.GIANT_TREE_BIRDNEST = "Woby, leave those eggs alone!" --Woby you bitch don't eat the eggsssss
 	ACTIONFAIL.UPGRADE.NOT_HARVESTED = "Always keep your equipment clean and tidy!"
-	
-    DESCRIBE.SLUDGE = "It's not in my handbook, I don't know what this stuff is..."
-	DESCRIBE.SLUDGE_OIL = "That's Pine Tree Pioneer ingenuity at its finest!"
+
+    DESCRIBE.SLUDGE = "A smelly glob of stuff?"
+	DESCRIBE.SLUDGE_OIL = "This is some greasy oil."
     DESCRIBE.SLUDGE_SACK = "It'll keep stuff I don't want stolen!"
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Maybe this is what solid fire looks like."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It reminds me of a rubber raft!"
@@ -399,18 +399,18 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.STEERINGWHEEL_COPPER = "The future is now!"
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "I prefer a nice wooden wheel."
 	DESCRIBE.BOAT_BUMPER_COPPER = "This will keep us safe!"
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Reinforce our perimeter!"
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Reinforce the perimeter!"
 	DESCRIBE.UM_DREAMCATCHER = "I've read about these! I hope they work..."
 	DESCRIBE.UM_BRINEISHMOSS = "It looks like a caterpillar."
-	DESCRIBE.UM_COALESCED_NIGHTMARE = "Is that what my nightmares look like?"
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Is that what my nightmares look like? It's really not that scary."
 	DESCRIBE.SLUDGE_CORK = "A plug for an oversized bathtub!"
 	DESCRIBE.SLUDGESTACK = "What is that stuff? I don't recognize it..."
-	DESCRIBE.SPECTER_SHIPWRECK = "I hope it's haunted!" --TM
+	DESCRIBE.SPECTER_SHIPWRECK = "I hope it's haunted!" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = "It'll come back and bring something with it."
+	DESCRIBE.UM_MAGNERANG = ""
 	DESCRIBE.UM_MAGNERANGREEL = "Are we sure it's not going to start a forest fire?"
 	DESCRIBE.SIREN_THRONE = "Look Woby! A rock!" --Dumb kid.
 	DESCRIBE.LAVASPIT_SLUDGE = "Careful around that Woby!"
