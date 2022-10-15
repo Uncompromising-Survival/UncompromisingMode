@@ -406,7 +406,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = "Moss isn't too noteworthy."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = "A recipe for disaster."
 	DESCRIBE.SLUDGE_CORK = "What exactly am I going to plug with this, a sink hole?"
-	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SLUDGESTACK = "Someone else can harvest it."
 	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

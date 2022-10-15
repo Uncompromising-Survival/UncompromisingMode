@@ -401,7 +401,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = "We can plug really big holes with this."
-	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SLUDGESTACK = "We don't think that'll be good for our fur."
 	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

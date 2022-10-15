@@ -395,7 +395,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "Better quality check for holes."
 	DESCRIBE.UM_AMBER = "Not sure what kind of rock this."
     DESCRIBE.UM_BEEGUN = "?"
-	DESCRIBE.SUNKENCHEST_ROYAL = "Oooh real fancy now arent we!"
+	DESCRIBE.SUNKENCHEST_ROYAL = "Oooh, real fancy now aren't we!"
 	DESCRIBE.STEERINGWHEEL_COPPER = "Keep on turning, nice and smooth."
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "Real nice piece a'work."
 	DESCRIBE.BOAT_BUMPER_COPPER = "Gonna take a lot to bust through that."
@@ -404,7 +404,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = "It should help me plug up that sludge."
-	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SLUDGESTACK = "Might be worth giving it a look."
 	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

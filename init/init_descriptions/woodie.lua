@@ -389,7 +389,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
     DESCRIBE.UM_COPPER_PIPE = "Smells like pennies."
     DESCRIBE.BRINE_BALM  = "It hurts like a bee sting!" --haha you thought he'd say bitch.
     DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
-	DESCRIBE.UM_AMBER = "Eh, this stuff comes from trees doesn't it?"
+	DESCRIBE.UM_AMBER = "Eh, this stuff comes from trees, doesn't it?"
     DESCRIBE.UM_BEEGUN = "Bitch."
 	DESCRIBE.SUNKENCHEST_ROYAL = "No wonder he was a king."
 	DESCRIBE.STEERINGWHEEL_COPPER = "Touching it makes my hands smell like pennies."
@@ -400,7 +400,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = "Eyup. Moss."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = "Carved for a big hole, eh."
-	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SLUDGESTACK = "That ought to have some sort of use."
 	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

@@ -398,7 +398,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "A beautiful chunk of fiery destruction."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "Well, it better save my boat from sinking."
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Burning it would have been better."
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.BOATPATCH_SLUDGE = "Ugh, the boat is gonna smell bad!"
     DESCRIBE.UM_COPPER_PIPE = "These won't burn at all."
     DESCRIBE.BRINE_BALM  = "A different kind of burning, I can get used to this."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
@@ -413,7 +413,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.UM_BRINEISHMOSS = ""
 	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
 	DESCRIBE.SLUDGE_CORK = "Atleast now I can plug that sludge up!"
-	DESCRIBE.SLUDGESTACK = ""
+	DESCRIBE.SLUDGESTACK = "C'moooon, wouldn't it be fun to watch it combust?"
 	DESCRIBE.SPECTER_SHIPWRECK = "" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."

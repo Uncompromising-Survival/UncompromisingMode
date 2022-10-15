@@ -378,13 +378,13 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
 	DESCRIBE.CRITTER_FIGGY = "Its hollow eyes stare right through me..."
 	DESCRIBE.GIANT_TREE_BIRDNEST = "They haven't even hatched, yet the world is cruel enough to throw them to the predators."
 	
-    DESCRIBE.SLUDGE = "."
+    DESCRIBE.SLUDGE = "A vile concoction of the ocean."
 	DESCRIBE.SLUDGE_OIL = "A drink of death."
     DESCRIBE.SLUDGE_SACK = "A soggy sack."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "."
-	DESCRIBE.BOAT_BUMPER_SLUDGE = ""
-	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "."
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+	DESCRIBE.BOAT_BUMPER_SLUDGE = "It will only prolong the inevitable." -- listen if klei can be lazy with her quotes i can too
+	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "It will only prolong the inevitable."
+    DESCRIBE.BOATPATCH_SLUDGE = "Temporary protection from the cruelty of the sea."
     DESCRIBE.UM_COPPER_PIPE = "Hollow."
     DESCRIBE.BRINE_BALM  = "Pain to soothe my cuts."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "No where to swim away from now."
