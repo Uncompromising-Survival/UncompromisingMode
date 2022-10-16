@@ -25,12 +25,15 @@ local function InitializeClockPieces(inst)
 	inst.front.Transform:SetPosition(x, y - 0.1, z)
 	
 	inst.second.entity:SetParent(inst.entity)
+	inst.second.Transform:SetPosition(0,0,0)
 	inst.entity:AddFollower()
 	
 	inst.minute.entity:SetParent(inst.entity)
+	inst.minute.Transform:SetPosition(0,0,0)
 	inst.entity:AddFollower()
 	
 	inst.hour.entity:SetParent(inst.entity)
+	inst.hour.Transform:SetPosition(0,0,0)
 	inst.entity:AddFollower()
 	
 	--inst.seconddangle.entity:SetParent(inst.entity)

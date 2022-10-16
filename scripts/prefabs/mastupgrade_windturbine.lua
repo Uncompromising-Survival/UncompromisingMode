@@ -27,18 +27,6 @@ local function mast_burnt(inst)
     end
 end
 
-local function mast_lamp_off(inst)
-    inst.AnimState:SetLightOverride(0)
-    inst.AnimState:PlayAnimation("off")
-    inst.SoundEmitter:KillSound("lamp")
-end
-
-local function mast_lamp_on(inst)
-    inst.AnimState:SetLightOverride(LAMP_LIGHT_OVERRIDE)
-    inst.AnimState:PlayAnimation("full", true)
-    inst.SoundEmitter:PlaySound("dangerous_sea/common/mast_item/lamp_LP","lamp")
-end
-
 local function onbuilt(inst)
     inst.AnimState:PlayAnimation("place")
     inst.SoundEmitter:PlaySound("dangerous_sea/common/mast_item/place_lamp")
@@ -66,6 +54,10 @@ local function OnEntityReplicated(inst)
     if parent ~= nil and parent.prefab == "mast" or parent.prefab == "mast_malbatross" then
         parent.highlightchildren = { inst }
     end
+end
+
+local function onremovelight(light)
+    inst:Remove()
 end
 
 local function UpdateLight(inst)
@@ -96,18 +88,22 @@ local function UpdateLight(inst)
 				inst.AnimState:PlayAnimation("spin", true)
 			end
 			if inst.powerlevel > 1000 then
+				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/fast_spin", "twirl")
 				inst.powerlevel = 1000
 			elseif inst.powerlevel < 400 then
+				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/slow_spin", "twirl")
 				inst.powerlevel = inst.powerlevel + finalnums
 			elseif inst.powerlevel > 400 and finalnums >= 3 then
+				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/med_spin", "twirl")
 				inst.powerlevel = inst.powerlevel + finalnums
 			end
 		elseif inst.powerlevel > 0 then
 			if not inst.AnimState:IsCurrentAnimation("idle") then
+				inst.SoundEmitter:KillSound("twirl")
 				inst.AnimState:PlayAnimation("idle")
 			end
 			
-			inst.powerlevel = inst.powerlevel - 5
+			inst.powerlevel = inst.powerlevel - 3.5
 		elseif inst.powerlevel < 0 then
 			inst.powerlevel = 0
 		end
@@ -131,19 +127,41 @@ local function UpdateLight(inst)
 		end
 		
 		if inst.lightlevel > 0 then
-			inst.Light:SetIntensity(lerpval)
-			inst.Light:SetRadius(inst.lightlevel * 7)
-			inst.Light:SetFalloff(.9)
+			inst.AnimState:SetLightOverride(1)
+		
+			inst._mast.Light:SetColour(180 / 255, 195 / 255, 150 / 255)
+			inst._mast.Light:Enable(true)
+			inst._mast.Light:SetIntensity(lerpval)
+			inst._mast.Light:SetRadius(inst.lightlevel * 9)
+			inst._mast.Light:SetFalloff(.9)
+			
+			if inst._light == nil then
+				inst._light = SpawnPrefab("mastupgrade_windturbine_light")
+				inst._light.entity:SetParent(inst.entity)
+				inst.entity:AddFollower()
+				inst._light.AnimState:SetMultColour(1, 1, 1, inst.lightlevel / 2)
+			else
+				inst._light.AnimState:SetMultColour(1, 1, 1, inst.lightlevel / 2)
+			end
 		else
-			--inst.Light:Enable(false)
-			inst.Light:SetIntensity(lerpval)
-			inst.Light:SetRadius(inst.lightlevel * 7)
-			inst.Light:SetFalloff(.9)
+			inst.AnimState:SetLightOverride(0)
+			
+			inst._mast.Light:SetColour(180 / 255, 195 / 255, 150 / 255)
+			inst._mast.Light:SetIntensity(lerpval)
+			inst._mast.Light:SetRadius(inst.lightlevel * 7)
+			inst._mast.Light:SetFalloff(.9)
+			
+			if inst._light ~= nil then
+				inst._light:Remove()
+				inst._light = nil
+			end
 		end
 		
 		print(inst.powerlevel)
-
-		inst.AnimState:SetDeltaTimeMultiplier(finalnums)
+		
+		if inst.startupdating ~= nil and inst.startupdating then
+			inst.AnimState:SetDeltaTimeMultiplier(finalnums)
+		end
 	end
 end
 
@@ -152,20 +170,16 @@ local function fn()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddLight()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
     inst.AnimState:SetBank("mastupgrade_windturbine")
     inst.AnimState:SetBuild("mastupgrade_windturbine")
-    inst.AnimState:PlayAnimation("place")
+    inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("NOCLICK")
     inst:AddTag("DECOR")
 	
-    inst.Light:SetColour(180 / 255, 195 / 255, 150 / 255)
-	inst.Light:Enable(true)
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -177,6 +191,7 @@ local function fn()
 	inst.powerlevel = 0
 	inst.lightlevel = 0
 	inst.maxlevel = 0
+	inst._light = nil
 		
 	inst.animqueueclear = nil
 	inst.canupdatelight = nil
@@ -194,9 +209,6 @@ local function fn()
     inst:ListenForEvent("onremove", onremove)
 
     inst:ListenForEvent("mast_burnt", mast_burnt)
-
-    --inst:ListenForEvent("mast_lamp_on", mast_lamp_on)
-    --inst:ListenForEvent("mast_lamp_off", mast_lamp_off)
 
     inst:ListenForEvent("ondeconstructstructure", ondeconstructstructure)
 
@@ -242,5 +254,30 @@ local function itemfn()
     return inst
 end
 
+local function lightfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+	
+    inst.AnimState:SetBank("mastupgrade_windturbine")
+    inst.AnimState:SetBuild("mastupgrade_windturbine")
+    inst.AnimState:PlayAnimation("light")
+
+    inst:AddTag("FX")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+
+    return inst
+end
+
 return Prefab("mastupgrade_windturbine_item", itemfn, assets, prefabs),
-    Prefab("mastupgrade_windturbine", fn, assets)
+    Prefab("mastupgrade_windturbine", fn, assets),
+    Prefab("mastupgrade_windturbine_light", lightfn, assets)
