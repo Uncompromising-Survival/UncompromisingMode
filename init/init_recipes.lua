@@ -84,18 +84,22 @@ AllRecipes["saddle_race"].ingredients = {Ingredient("livinglog", 2), Ingredient(
 
 AllRecipes["battlesong_fireresistance"].ingredients = {Ingredient("papyrus", 1), Ingredient("featherpencil", 1), Ingredient("dragon_scales", 1)}
 
-AllRecipes["walterhat"].ingredients = {Ingredient("silk", 4), Ingredient("pinecone", 1)}
+AllRecipes["walterhat"].ingredients = {Ingredient("silk", 4), Ingredient("pinecone", 1)}--????
 
-AllRecipes["book_fish"].ingredients = {Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}
-AllRecipes["book_light"].ingredients = {Ingredient("papyrus", 2), Ingredient("wormlight", 1)}
-AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
-AllRecipes["bookstation"].ingredients = {Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1)}
+if GetModConfigData("book_recipes") then
+    AllRecipes["book_rain"].ingredients = {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)}
+    AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
+    AllRecipes["book_fish"].ingredients = {Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}--???????????????
+    AllRecipes["book_light"].ingredients = {Ingredient("papyrus", 2), Ingredient("wormlight", 1)}
+    AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)--??????????????????????????????????????????????
+end
 
 --magnets and dock 
 if GetModConfigData("no4crafts") then --:desolate:
     AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 2), Ingredient("palmconetree_scale", 4)}
     AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("gears", 1), Ingredient("transistor", 2), Ingredient("um_copper_pipe", 3)}
     AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("messagebottleempty", 1), Ingredient("transistor", 1), Ingredient("um_copper_pipe", 1)}
+    AllRecipes["bookstation"].ingredients = {Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1)}
 end
 
 AllRecipes["fish_box"].testfn = function(pt) return GLOBAL.TheWorld.Map:GetPlatformAtPoint(pt.x, 0, pt.z, -0.5) ~= nil or GLOBAL.TheWorld.Map:GetTileAtPoint(pt.x, 0, pt.z) == GLOBAL.WORLD_TILES.MONKEY_DOCK end
@@ -321,22 +325,6 @@ AddRecipe2(
     {"CHARACTER"}
 )
 ChangeSortKey("mutator_trapdoor", "mutator_warrior", "CHARACTER", true)
-
-if not TUNING.DSTU.UPDATE_CHECK then
-    AddRecipe2(
-        "book_rain_um",
-        {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)},
-        TECH.MAGIC_THREE,
-        {builder_tag = "bookbuilder"},
-        {"CHARACTER"}
-    )
-    ChangeSortKey("book_rain_um", "book_tentacles", "CHARACTER", true)
-else
-    if GetModConfigData("legacy_book_rain_recipe") then
-        AllRecipes["book_rain"].ingredients = {Ingredient("papyrus", 2), Ingredient("moon_tear", 1), Ingredient("waterballoon", 4)}
-        AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
-    end
-end
 
 AddRecipe2(
     "driftwoodfishingrod",
