@@ -92,6 +92,7 @@ if GetModConfigData("book_recipes") then
     AllRecipes["book_fish"].ingredients = {Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}--???????????????
     AllRecipes["book_light"].ingredients = {Ingredient("papyrus", 2), Ingredient("wormlight", 1)}
     AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)--??????????????????????????????????????????????
+    AllRecipes["bookstation"].ingredients = {Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1)}
 end
 
 --magnets and dock 
@@ -99,7 +100,6 @@ if GetModConfigData("no4crafts") then --:desolate:
     AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 2), Ingredient("palmconetree_scale", 4)}
     AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("gears", 1), Ingredient("transistor", 2), Ingredient("um_copper_pipe", 3)}
     AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("messagebottleempty", 1), Ingredient("transistor", 1), Ingredient("um_copper_pipe", 1)}
-    AllRecipes["bookstation"].ingredients = {Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1)}
 end
 
 AllRecipes["fish_box"].testfn = function(pt) return GLOBAL.TheWorld.Map:GetPlatformAtPoint(pt.x, 0, pt.z, -0.5) ~= nil or GLOBAL.TheWorld.Map:GetTileAtPoint(pt.x, 0, pt.z) == GLOBAL.WORLD_TILES.MONKEY_DOCK end
