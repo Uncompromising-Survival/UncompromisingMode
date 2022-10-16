@@ -58,6 +58,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL
             GHOST = "I hope that wasn't caused by one of my experiments.",
             FIRESTARTER = "Rats shouldn't wield fire!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "%s seems smarter than he looks.",
+            ATTACKER = "%s looks pretty intimidating!",
+            MURDERER = "This monster is going to kill us all!",
+            REVIVER = "I'm glad %s is on my side!",
+            GHOST = "That doesn't look like normal ghosts. Well, \"normal\".",
+            FIRESTARTER = "Are you trying to breathe fire, %s?",
+        }
+
 
     DESCRIBE.RATPOISONBOTTLE = "It's labeled \"Do not drink. That means you, Webber.\""
     DESCRIBE.RATPOISON = "It's all murdery."

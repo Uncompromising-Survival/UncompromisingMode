@@ -12,6 +12,7 @@ local function DisableThatStuff(inst)
 	
 	SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "Hayfever_Stop"), nil)
 end
+
 env.AddPrefabPostInit("beeguard", function(inst)
 	inst:AddTag("ignorewalkableplatforms")
 end)
@@ -39,7 +40,7 @@ local function StompHandler(inst,data)
 			if #soldiers > 0 then
 				inst.sg:GoToState("focustarget")
 			end
-			inst.should_shooter_rage = inst.should_shooter_rage -1
+			inst.should_shooter_rage = inst.should_shooter_rage - 1
 		end
 		if inst.components.health and inst.components.health:GetPercent() < 0.75 then
 			if inst.sg:HasStateTag("tired") then
@@ -557,42 +558,40 @@ local function PstSummonHandler(inst)
 	inst.spawnguards_cd = RedoSpavvnguard_cd(inst)
 	local pct = inst.components.health:GetPercent()
 	inst.should_ability = true
-	if pct < 1 then
-		if pct > 0.75 then
+	if pct > 0.75 then
+		SpavvnGuardsSeeker(inst)
+	elseif pct > 0.5 then
+		if inst.previousguardability == "seeker" then
+			SpavvnVValls(inst)
+		else
 			SpavvnGuardsSeeker(inst)
-		elseif pct > 0.5 then
-			if inst.previousguardability == "seeker" then
+		end
+	elseif pct > 0.25 then
+		if inst.previousguardability == "seeker" then
+			if math.random() > 0.5 then
+				SpavvnVValls(inst)
+			else
+				SpavvnGuardsShooters(inst)
+			end
+		elseif inst.previousguardability == "vvall" then
+			if math.random() > 0.5 then
+				SpavvnGuardsSeeker(inst)
+			else
+				SpavvnGuardsShooters(inst)
+			end
+		else
+			if math.random() > 0.5 then
 				SpavvnVValls(inst)
 			else
 				SpavvnGuardsSeeker(inst)
 			end
-		elseif pct > 0.25 then
-			if inst.previousguardability == "seeker" then
-				if math.random() > 0.5 then
-					SpavvnVValls(inst)
-				else
-					SpavvnGuardsShooters(inst)
-				end
-			elseif inst.previousguardability == "vvall" then
-				if math.random() > 0.5 then
-					SpavvnGuardsSeeker(inst)
-				else
-					SpavvnGuardsShooters(inst)
-				end
-			else
-				if math.random() > 0.5 then
-					SpavvnVValls(inst)
-				else
-					SpavvnGuardsSeeker(inst)
-				end
-			end
+		end
+	else
+		inst.bonusvvall = true
+		if inst.previousguardability == "seeker" then
+			SpavvnGuardsShooters(inst)
 		else
-			inst.bonusvvall = true
-			if inst.previousguardability == "seeker" then
-				SpavvnGuardsShooters(inst)
-			else
-				SpavvnGuardsSeeker(inst)
-			end
+			SpavvnGuardsSeeker(inst)
 		end
 	end
 end

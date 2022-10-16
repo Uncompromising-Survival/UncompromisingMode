@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/boat_repair_build.zip"),
-    Asset("ANIM", "anim/boat_repair.zip"),
+    Asset("ANIM", "anim/boat_repair_cork_build.zip"),
 }
 
 local prefabs =
@@ -40,7 +40,7 @@ local function fn()
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("boat_repair")
-    inst.AnimState:SetBuild("boat_repair_build")
+    inst.AnimState:SetBuild("boat_repair_cork_build")
     inst.AnimState:PlayAnimation("item")
 
     MakeInventoryFloatable(inst, "med", 0.1)

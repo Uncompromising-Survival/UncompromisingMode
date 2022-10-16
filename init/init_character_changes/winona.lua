@@ -287,7 +287,7 @@ env.AddPrefabPostInit("winona_catapult", function(inst)
 end)
 
 env.AddPrefabPostInit("winona_catapult_projectile", function(inst)
-	if TUNING.DSTU.WINONA_WACKCATS then
+	if TUNING.DSTU.WINONA_WACKCATS and inst.components.combat ~= nil then
 		inst.components.combat:SetDefaultDamage(34)
 	end
 end)

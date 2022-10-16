@@ -274,14 +274,18 @@ local function speed(inst)
 end
 
 local function OnDismantle(inst, doer)
-	--doer.components.inventory:GiveItem("portableboat_item")
-    --local item = SpawnPrefab("portableboat_item")
-    --item.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst.AnimState:PlayAnimation("plug_remove")
+	
+	SpawnPrefab("splash").Transform:SetPosition(inst.Transform:GetWorldPosition())
+	
 	inst.portaraft.boatreciever = doer
 	inst.portaraft.rechargerate = inst.portaraft.components.health:GetPercent()
 	
 	inst.portaraft.components.health:Kill()
-	inst:Remove()
+	
+	inst:ListenForEvent("animover", function(inst)
+		inst:Remove()
+	end)
 end
 
 local function fn()
@@ -314,7 +318,7 @@ local function fn()
     phys:CollidesWith(COLLISION.OBSTACLES)
     phys:SetCylinder(radius, 3)     
 
-    inst.AnimState:SetBank("boat_01")
+    inst.AnimState:SetBank("portableboat_test")
     inst.AnimState:SetBuild("portableboat_test")
     inst.AnimState:SetSortOrder(ANIM_SORT_ORDER.OCEAN_BOAT)
 	inst.AnimState:SetFinalOffset(1)
@@ -616,13 +620,10 @@ local function cord_fn()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
-    inst.AnimState:SetBank("seafarer_boat")
-    inst.AnimState:SetBuild("seafarer_boat")
-    inst.AnimState:PlayAnimation("IDLE")
-    --inst.AnimState:SetSortOrder(ANIM_SORT_ORDER.OCEAN_BOAT)
-    --inst.AnimState:SetFinalOffset(2)
-    --inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    --inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
+    inst.AnimState:SetBank("portableboat_test")
+    inst.AnimState:SetBuild("portableboat_test")
+    inst.AnimState:PlayAnimation("plug_place")
+    inst.AnimState:PushAnimation("plug_idle", false)
 
     inst:AddTag("ignorewalkableplatforms")
 
@@ -632,7 +633,7 @@ local function cord_fn()
         return inst
     end
 	
-    inst:AddComponent("inspectable")
+    --inst:AddComponent("inspectable")
 	
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle)

@@ -573,8 +573,8 @@ AddDeconstructRecipe("slobberlobber", {Ingredient("dragon_scales", 1), Ingredien
 AddDeconstructRecipe("um_beegun", {Ingredient("honeycomb", 6),Ingredient("royal_jelly", 2)})
 
 AddDeconstructRecipe("shadow_crown", {Ingredient("nightmarefuel", 5),Ingredient("beardhair", 3)})
-AddDeconstructRecipe("rain_horn", {Ingredient("slurtle_shellpieces", 4),Ingredient("rock", 2),Ingredient("oceanfish_small_9_inv", 3)})
-AddDeconstructRecipe("dormant_rain_horn", {Ingredient("cookiecuttershell", 4),Ingredient("rock", 2)})
+AddDeconstructRecipe("rain_horn", {Ingredient("slurtle_shellpieces", 4),Ingredient("rocks", 2),Ingredient("oceanfish_small_9_inv", 3)})
+AddDeconstructRecipe("dormant_rain_horn", {Ingredient("cookiecuttershell", 4),Ingredient("rocks", 2)})
 
 ----deconstruct recipes for craftable items
 --AddDeconstructRecipe("steeringwheel_copper", {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})

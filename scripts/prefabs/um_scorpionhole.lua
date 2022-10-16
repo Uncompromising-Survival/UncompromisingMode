@@ -69,16 +69,13 @@ local function IsInvestigator(child)
     return child.components.knownlocations:GetLocation("investigate") ~= nil
 end
 
-local function SpawnInvestigators(inst, data)
+local function SpawnInvestigators(inst, worker)
     if inst.components.childspawner ~= nil then
-        local num_to_release = math.min(inst._num_investigators or 2, inst.components.childspawner.childreninside)
-        local num_investigators = inst.components.childspawner:CountChildrenOutside(IsInvestigator)
-        num_to_release = num_to_release - num_investigators
-        local targetpos = data ~= nil and data.target ~= nil and data.target:GetPosition() or nil
-        for k = 1, num_to_release do
-            local spider = inst.components.childspawner:SpawnChild()
-            if spider ~= nil and targetpos ~= nil then
-                spider.components.knownlocations:RememberLocation("investigate", targetpos)
+        local targetpos = worker ~= nil and worker and worker:GetPosition() or nil
+        for k = 1, math.random(1,2) do
+            local scorpion = inst.components.childspawner:SpawnChild()
+            if scorpion ~= nil and targetpos ~= nil then
+                scorpion.components.knownlocations:RememberLocation("investigate", targetpos)
             end
         end
     end
@@ -123,6 +120,7 @@ local function spawner_onworked(inst, worker, workleft)
     end
 
     if inst.components.childspawner ~= nil then
+		SpawnInvestigators(inst, worker)
         inst.components.childspawner:ReleaseAllChildren(worker)
     end
 end

@@ -71,7 +71,7 @@ env.AddPlayerPostInit(function(inst)
                 item_hand ~= nil and item_hand:HasTag("electricaltool") and item_hand or
                 nil --it *should* prioritize the lower fuel values first, if they're not nil...
         elseif item_head_fuel > item_hand_fuel and item_head_fuel > item_body_fuel then
-            final_item = item_habd ~= nil and item_hand:HasTag("electricaltool") and item_hand or
+            final_item = item_hand ~= nil and item_hand:HasTag("electricaltool") and item_hand or
                 item_body ~= nil and item_body:HasTag("electricaltool") and item_body or
                 item_head ~= nil and item_head:HasTag("electricaltool") and item_head or
                 nil

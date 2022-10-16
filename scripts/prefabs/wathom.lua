@@ -78,8 +78,8 @@ local function UnAmp(inst)
 	end
 	if inst:HasTag("deathamp") then
 		inst:RemoveTag("deathamp")
-
-		local bed = inst.components.sleepingbaguser.bed
+		
+		local bed = inst.components.sleepingbaguser ~= nil and inst.components.sleepingbaguser.bed or nil
 
 		if bed ~= nil then
 			bed.components.sleepingbag:DoWakeUp()
@@ -109,11 +109,11 @@ local function Amp(inst)
 		end
 	end)
 
-	inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
+	--[[inst.adrenalinehpregen = inst:DoPeriodicTask(1, function(inst)
 		if inst.components.health ~= nil and not inst.components.health:IsDead() then
 			inst.components.health:DoDelta(1.5)
 		end
-	end)
+	end)]]
 	if inst.components.health ~= nil and not inst.components.health:IsDead() then
 		--inst.sg:GoToState("wathombark")
 		inst.components.health.invincible = true
@@ -156,7 +156,7 @@ local function AmpTimer(inst)
 		inst.components.adrenaline:DoDelta(-1)
 	end
 
-	if inst.components.adrenaline:GetPercent() < 0.25 and not inst:HasTag("amped") then
+	if inst.components.adrenaline:GetPercent() < 0.25 and not (inst:HasTag("amped") or inst:HasTag("deathamped")) then
 		inst.components.adrenaline:DoDelta(0.5) -- Slowly regaining to normal levels.
 	end
 

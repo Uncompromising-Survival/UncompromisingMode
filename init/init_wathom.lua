@@ -761,7 +761,7 @@ local wathombark = AddAction(
 			if not inst:HasTag("amped") then
 				inst.components.adrenaline:DoDelta(-25, 2)
 			else
-				inst.components.adrenaline:DoDelta(10, 2)
+				inst.components.adrenaline:DoDelta(8, 2)
 			end
 			--		inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 

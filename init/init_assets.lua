@@ -207,6 +207,8 @@ local inventoryitems =
 	"sludge_oil",
 	"mastupgrade_windturbine_item",
 	"charles_t_horse",
+	"um_ornament_opossum",
+	"um_ornament_rat",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -498,6 +500,10 @@ Assets = {
 
 
 	--MISC.
+	Asset("ANIM", "anim/sludgestack_short.zip"),
+
+	Asset("ANIM", "anim/boat_repair_cork_build.zip"),
+
 	Asset("ANIM", "anim/speaker_test.zip"),
 
 	Asset("ANIM", "anim/siren_throne.zip"),
@@ -1536,6 +1542,13 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/cherrybulletbee.xml"),
 	Asset("ATLAS", "images/inventoryimages/cherrybulletbee.xml"),
 
+	Asset("IMAGE", "images/inventoryimages/um_ornament_opossum.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_ornament_opossum.xml"),
+	Asset("ATLAS", "images/inventoryimages/um_ornament_opossum.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/um_ornament_rat.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_ornament_rat.xml"),
+	Asset("ATLAS", "images/inventoryimages/um_ornament_rat.xml"),
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),

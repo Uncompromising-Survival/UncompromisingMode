@@ -38,6 +38,7 @@ modimport("init/init_descriptions/wurt")
 modimport("init/init_descriptions/walter")
 modimport("init/init_descriptions/wanda")
 modimport("init/init_descriptions/winky")
+modimport("init/init_descriptions/wathom")
 
 --	[ 		Number Tuning and PostInits		]	--
 

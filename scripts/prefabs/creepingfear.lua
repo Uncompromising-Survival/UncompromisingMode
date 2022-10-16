@@ -279,8 +279,8 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_loop", true)
     inst.AnimState:SetMultColour(1, 1, 1, .5)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
-
+    inst.AnimState:SetLayer(LAYER_WORLD)
+	inst.AnimState:SetSortOrder(5)
     inst:AddComponent("transparentonsanity")
 
     inst.entity:SetPristine()

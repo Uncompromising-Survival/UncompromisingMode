@@ -18,7 +18,7 @@ env.AddComponentPostInit("boatleak", function(self)
                 end
             end)
         elseif state == "repaired_driftwood" then
-            self:ChangeToRepaired("boat_repair_build")--"boat_repair_cork_build")
+            self:ChangeToRepaired("boat_repair_cork_build")
             self.inst.Transform:SetScale(0.9,0.9,0.9)
         end
         return ret

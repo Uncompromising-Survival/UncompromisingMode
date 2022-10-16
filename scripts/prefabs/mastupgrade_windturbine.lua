@@ -84,16 +84,28 @@ local function UpdateLight(inst)
 		local finalnums = velocity + sandstorm + snowstorm
 		
 		if finalnums >= 1.5 then
-			if not inst.AnimState:IsCurrentAnimation("spin") then
-				inst.AnimState:PlayAnimation("spin", true)
-			end
 			if inst.powerlevel > 1000 then
+			
+				if not inst.AnimState:IsCurrentAnimation("spin_fast") then
+					inst.AnimState:PlayAnimation("spin_fast", true)
+				end
+				
 				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/fast_spin", "twirl")
 				inst.powerlevel = 1000
 			elseif inst.powerlevel < 400 then
+			
+				if not inst.AnimState:IsCurrentAnimation("spin_slow") then
+					inst.AnimState:PlayAnimation("spin_slow", true)
+				end
+				
 				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/slow_spin", "twirl")
 				inst.powerlevel = inst.powerlevel + finalnums
 			elseif inst.powerlevel > 400 and finalnums >= 3 then
+			
+				if not inst.AnimState:IsCurrentAnimation("spin_med") then
+					inst.AnimState:PlayAnimation("spin_med", true)
+				end
+				
 				inst.SoundEmitter:PlaySound("UCSounds/um_windturbine/med_spin", "twirl")
 				inst.powerlevel = inst.powerlevel + finalnums
 			end
@@ -159,7 +171,7 @@ local function UpdateLight(inst)
 		
 		print(inst.powerlevel)
 		
-		if inst.startupdating ~= nil and inst.startupdating then
+		if inst.animqueueclear == nil then
 			inst.AnimState:SetDeltaTimeMultiplier(finalnums)
 		end
 	end
@@ -225,9 +237,9 @@ local function itemfn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("mastupgrade_lamp_item")
-    inst.AnimState:SetBuild("mastupgrade_lamp")
-    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetBank("mastupgrade_windturbine")
+    inst.AnimState:SetBuild("mastupgrade_windturbine")
+    inst.AnimState:PlayAnimation("item")
 
     MakeInventoryFloatable(inst, "med", nil, 0.68)
 
