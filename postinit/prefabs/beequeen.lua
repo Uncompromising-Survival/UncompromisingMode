@@ -290,7 +290,7 @@ end
 
 local function SpawnSeekerBees(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local rangeLIMIT = 5
+	local rangeLIMIT = 3
 	if not inst.seekerbees then
 		inst.seekerbees = {}
 	end
@@ -458,6 +458,7 @@ local function SeekerBeesRage(inst)
 	if inst.components.health and not inst.components.health:IsDead() then
 		inst.abilitybusy = true
 		MakeSeekerHitlist(inst)
+		inst.components.timer:PauseTimer("spawnguards_cd")
 		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end)
 	end
 end
@@ -565,7 +566,7 @@ local function PstSummonHandler(inst)
 			else
 				SpavvnGuardsSeeker(inst)
 			end
-		else
+		elseif pct > 0.25 then
 			if inst.previousguardability == "seeker" then
 				if math.random() > 0.5 then
 					SpavvnVValls(inst)
@@ -585,10 +586,14 @@ local function PstSummonHandler(inst)
 					SpavvnGuardsSeeker(inst)
 				end
 			end
+		else
+			inst.bonusvvall = true
+			if inst.previousguardability == "seeker" then
+				SpavvnGuardsShooters(inst)
+			else
+				SpavvnGuardsSeeker(inst)
+			end
 		end
-	end
-	if pct < .25 and inst.previousguardability ~= "final" then
-		inst.should_final = true
 	end
 end
 
@@ -613,7 +618,7 @@ local function BeeQueenPost(inst)
 	inst.stompready = true
 	inst:DoPeriodicTask(3, StompRageCalmDown)
 	inst:ListenForEvent("attacked", StompHandler)
-	
+	inst.spawnguards_cd = RedoSpavvnguard_cd(inst)
 	-- No more honey when attacking
 	local OnMissOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnMissOther")
 	local OnAttackOther = UpvalueHacker.GetUpvalue(Prefabs.beequeen.fn, "OnAttackOther")
@@ -637,7 +642,7 @@ local function BeeQueenPost(inst)
     inst.components.healthtrigger:AddTrigger(PHASE4_HEALTH, function(inst)
 		--TheNet:Announce("4th Phase")
 		inst.should_ability = nil
-		DoFinalFormation(inst)
+		--DoFinalFormation(inst)
 	end)
 	
 	inst.SpawnSeekerBees = SpawnSeekerBees

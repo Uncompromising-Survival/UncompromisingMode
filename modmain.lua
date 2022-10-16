@@ -11,7 +11,6 @@ SignFiles = require("uncompromising_writeables")
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("uncompskins_api.lua")
 
 if GetModConfigData("funny rat") then
 	AddModCharacter("winky", "FEMALE")
@@ -121,5 +120,17 @@ end)
 AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", function(shard_id, data)
     GLOBAL.TheWorld:PushEvent("master_acidmushroomsfinished", data)
 end)]]
+
+GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "plaguemask") end
+GLOBAL.plaguemask_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "plaguemask") end
+
+GLOBAL.feather_frock_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "feather_frock") end
+GLOBAL.feather_frock_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "feather_frock") end
+
+GLOBAL.cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "cursed_antler") end
+GLOBAL.cursed_antler_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "cursed_antler") end
+
+GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "ancient_amulet_red") end
+GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "ancient_amulet_red") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT

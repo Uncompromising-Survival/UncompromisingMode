@@ -80,20 +80,22 @@ AllRecipes["goggleshat"].ingredients = {Ingredient("goldnugget", 4), Ingredient(
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 
-AllRecipes["battlesong_fireresistance"].ingredients = {Ingredient("papyrus", 1), Ingredient("featherpencil", 1), Ingredient("dragon_scales", 1)}
-
 AllRecipes["saddle_race"].ingredients = {Ingredient("livinglog", 2), Ingredient("silk", 4), Ingredient("glommerwings", 1)}
 
---AllRecipes["book_fish"].ingredients = Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}
+AllRecipes["battlesong_fireresistance"].ingredients = {Ingredient("papyrus", 1), Ingredient("featherpencil", 1), Ingredient("dragon_scales", 1)}
+
+AllRecipes["walterhat"].ingredients = {Ingredient("silk", 4), Ingredient("pinecone", 1)}
+
+AllRecipes["book_fish"].ingredients = {Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2)}
+AllRecipes["book_light"].ingredients = {Ingredient("papyrus", 2), Ingredient("wormlight", 1)}
+AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
+AllRecipes["bookstation"].ingredients = {Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1)}
 
 --magnets and dock 
 if GetModConfigData("no4crafts") then --:desolate:
-    AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 3), Ingredient("palmconetree_scale", 4)}
-    AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("gears", 1), Ingredient("transistor", 2), Ingredient("steelwool", 2)}
-    AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("messagebottleempty", 1), Ingredient("transistor", 1), Ingredient("steelwool", 1)}
-
-    --Wickers book case
-    --AllRecipes["Wickerbookcaseidk"].ingredients = {Ingredient("boards", 4), Ingredient("goldnugget", 4), Ingredient("papyrus", 6)}
+    AllRecipes["dock_kit"].ingredients = {Ingredient("boards", 4), Ingredient("stingers", 2), Ingredient("palmconetree_scale", 4)}
+    AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("gears", 1), Ingredient("transistor", 2), Ingredient("um_copper_pipe", 3)}
+    AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("messagebottleempty", 1), Ingredient("transistor", 1), Ingredient("um_copper_pipe", 1)}
 end
 
 AllRecipes["fish_box"].testfn = function(pt) return GLOBAL.TheWorld.Map:GetPlatformAtPoint(pt.x, 0, pt.z, -0.5) ~= nil or GLOBAL.TheWorld.Map:GetTileAtPoint(pt.x, 0, pt.z) == GLOBAL.WORLD_TILES.MONKEY_DOCK end
@@ -377,14 +379,12 @@ ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS",
 
 AddRecipe2(
     "um_magnerang",
-    {Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 1)},
+    {Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 3)},
     TECH.SCIENCE_TWO,
     nil,
-    {"TOOLS", "SEAFARING", "WEAPONS"}
+    {"WEAPONS"}
 )
-ChangeSortKey("um_magnerang", "uncompromising_harpoon_heavy", "TOOLS", true)
 ChangeSortKey("um_magnerang", "boomerang", "WEAPONS", true)
-ChangeSortKey("um_magnerang", "oar_driftwood", "SEAFARING", true)
 
 AddRecipe2(
     "hermitshop_rain_horn",
@@ -397,7 +397,7 @@ ChangeSortKey("hermitshop_rain_horn", "hermitshop_oceanfishingbobber_malbatross"
 
 AddRecipe2(
     "hat_ratmask",
-    {Ingredient("rope", 2), Ingredient("beardhair", 1), Ingredient("sewing_kit", 1)},
+    {Ingredient("rope", 2), Ingredient("beardhair", 3), Ingredient("sewing_kit", 1)},
     TECH.SCIENCE_TWO,
     nil,
     {"CLOTHING"}
@@ -577,13 +577,19 @@ ChangeSortKey("trinket_6", "transistor", "REFINE", true)]]
 --deconstruct recipes
 AddDeconstructRecipe("cursed_antler", {Ingredient("boneshard", 8), Ingredient("nightmarefuel", 2)})
 AddDeconstructRecipe("beargerclaw", {Ingredient("boneshard", 4), Ingredient("furtuft", 8)})
-AddDeconstructRecipe("klaus_amulet", {Ingredient("cutstone", 1), Ingredient("nightmarefuel", 6)})
+AddDeconstructRecipe("klaus_amulet", {Ingredient("goldnugget", 4), Ingredient("nightmarefuel", 6)})
 AddDeconstructRecipe("feather_frock", {Ingredient("goose_feather", 6)})
 AddDeconstructRecipe("gore_horn_hat", {Ingredient("meat", 2), Ingredient("nightmarefuel", 4)})
 AddDeconstructRecipe("crabclaw", {Ingredient("rocks", 4), Ingredient("cutstone", 1)})
-AddDeconstructRecipe("slobberlobber", {Ingredient("dragon_scales", 1), Ingredient("meat", 2)})
+AddDeconstructRecipe("slobberlobber", {Ingredient("dragon_scales", 1), Ingredient("meat", 1)})
 AddDeconstructRecipe("um_beegun", {Ingredient("honeycomb", 6),Ingredient("royal_jelly", 2)})
---AddDeconstructRecipe("steeringwheel_copper",  {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})
+
+AddDeconstructRecipe("shadow_crown", {Ingredient("nightmarefuel", 5),Ingredient("beardhair", 3)})
+AddDeconstructRecipe("rain_horn", {Ingredient("slurtle_shellpieces", 4),Ingredient("rock", 2),Ingredient("oceanfish_small_9_inv", 3)})
+AddDeconstructRecipe("dormant_rain_horn", {Ingredient("cookiecuttershell", 4),Ingredient("rock", 2)})
+
+----deconstruct recipes for craftable items
+--AddDeconstructRecipe("steeringwheel_copper", {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})
 
 --Sailing Rebalance related recipes.
 
@@ -775,7 +781,7 @@ STRINGS.RECIPE_DESC.WINONA_UPGRADEKIT_ELECTRICAL = "Any old light source can be 
 STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat needs a little more than a bit of fixing."
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
-STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky hands."
+STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky fingers."
 STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
 STRINGS.RECIPE_DESC.BRINE_BALM = "Rub salt in the wounds."

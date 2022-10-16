@@ -220,7 +220,7 @@ local function CircleFormation(inst)
 	end
 end
 
-local function fnmain(bee)
+local function fnmain(bee, build)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -238,7 +238,7 @@ local function fnmain(bee)
     MakeFlyingCharacterPhysics(inst, 0.5, .75)
 
     inst.AnimState:SetBank("bee_guard")
-    inst.AnimState:SetBuild("bee_guard_build")
+    inst.AnimState:SetBuild(build)
     inst.AnimState:PlayAnimation("idle", true)
 
     inst:AddTag("insect")
@@ -314,21 +314,18 @@ local function fnmain(bee)
 	if bee == "blocker" then
 		inst.components.health:SetMaxHealth(15*TUNING.BEEGUARD_HEALTH)
 		inst.Transform:SetScale(1.6,1.6,1.6)
-		inst.AnimState:SetMultColour(1,1,0.2,1)
 		
 		inst:ListenForEvent("timerdone", SlovvDeath)
 	end	
 	if bee == "seeker" then
 		inst.components.health:SetMaxHealth(0.5*TUNING.BEEGUARD_HEALTH)
 		inst.Transform:SetScale(1.2,1.2,1.2)
-		inst.AnimState:SetMultColour(1,0.2,0.2,1)
 		inst.MortarAttack = MortarAttack
 		inst:DoTaskInTime(math.random(1,3),MortarAttack)
 	end
 	if bee == "shooter" then
 		inst.components.health:SetMaxHealth(0.5*TUNING.BEEGUARD_HEALTH)
 		inst.Transform:SetScale(1.2,1.2,1.2)
-		inst.AnimState:SetMultColour(0.8,0.2,1,1)
 		inst.Shoot = Shoot
 		inst.CircleFormation = CircleFormation
 		inst:ListenForEvent("timerdone", function(inst)
@@ -343,15 +340,15 @@ local function fnmain(bee)
 end
 
 local function fnblocker()
-	return fnmain("blocker")
+	return fnmain("blocker", "hivehead_bee_guard")
 end
 
 local function fnseeker()
-	return fnmain("seeker")
+	return fnmain("seeker", "fatbee_guard_build")
 end
 
 local function fnshooter()
-	return fnmain("shooter")
+	return fnmain("shooter", "bulletbee_guard")
 end
 
 local function fntarget()

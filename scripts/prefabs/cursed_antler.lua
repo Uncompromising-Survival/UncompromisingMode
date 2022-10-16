@@ -41,9 +41,13 @@ local function OnCharged(inst)
 end
 
 local function onunequip(inst, owner)
+	local skin_build = inst:GetSkinBuild()
+	if skin_build ~= nil then
+		owner:PushEvent("unequipskinneditem", inst:GetSkinName())
+	end
+	
 	owner.AnimState:Hide("ARM_carry")
 	owner.AnimState:Show("ARM_normal")
-
 end
 
 local function onequip(inst, owner)
@@ -64,10 +68,11 @@ local function onequip(inst, owner)
 			end
 		end)
 	else
-		if inst.skinname ~= nil then
-			owner.AnimState:OverrideSymbol("swap_object", "swap_twisted_antler", "swap_twisted_antler")
+		local skin_build = inst:GetSkinBuild()
+		if skin_build ~= nil then
+			owner:PushEvent("equipskinneditem", inst:GetSkinName())
+			owner.AnimState:OverrideSymbol("swap_object", skin_build or "swap_twisted_antler", skin_build or "swap_twisted_antler")	
 		else
-
 			owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
 		end
 
@@ -181,35 +186,4 @@ local function fn()
 	return inst
 end
 
-local function antler_skin()
-	local inst = fn()
-
-	inst.AnimState:SetBank("twisted_antler")
-	inst.AnimState:SetBuild("twisted_antler")
-
-	inst.skinname = "twisted_antler"
-
-	if inst.components.inventoryitem ~= nil then
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/twisted_antler.xml"
-	end
-
-	return inst
-end
-
-return Prefab("cursed_antler", fn, assets),
-	CreateModPrefabSkin("twisted_antler",
-		{
-			assets = {
-				Asset("ANIM", "anim/twisted_antler.zip"),
-			},
-			base_prefab = "cursed_antler",
-			fn = antler_skin, -- This is our constructor!
-			rarity = "Timeless",
-			reskinable = true,
-
-			build_name_override = "twisted_antler",
-
-			type = "item",
-			skin_tags = {},
-			release_group = 0,
-		})
+return Prefab("cursed_antler", fn, assets)

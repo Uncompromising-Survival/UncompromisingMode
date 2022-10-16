@@ -408,6 +408,10 @@ local states = {
             TimeEvent(16 * FRAMES, function(inst)
 				inst.defensivecircle = true
 				inst.SpawnShooterBeesCircle(inst)
+				if inst.bonusvvall then
+					inst.bonusvvall = nil
+					inst.SpawnDefensiveBeesII(inst)
+				end
             end),
             CommonHandlers.OnNoSleepTimeEvent(32 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
@@ -533,6 +537,10 @@ local states = {
         {
             TimeEvent(16 * FRAMES, function(inst)
 				inst.SpawnSeekerBees(inst)
+				if inst.bonusvvall then
+					inst.bonusvvall = nil
+					inst.SpawnDefensiveBeesII(inst)
+				end
             end),
             CommonHandlers.OnNoSleepTimeEvent(32 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
@@ -611,6 +619,7 @@ local states = {
 					if inst.seekercount > 0 then
 						inst:DoTaskInTime(0.1,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end) -- Lil bit of a gap
 					else
+						inst.components.timer:ResumeTimer("spawnguards_cd")
 						local x,y,z = inst.Transform:GetWorldPosition()
 						local players = TheSim:FindEntities(x,y,z,30,{"player"},{"playerghost"}) --more bees for more players
 						inst.seekercount = math.random(4,5) + 2*#players

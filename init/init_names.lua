@@ -1,4 +1,5 @@
 SKINS = GLOBAL.STRINGS.SKIN_NAMES
+SKINSDESC = GLOBAL.STRINGS.SKIN_DESCRIPTIONS
 STRINGS = GLOBAL.STRINGS.NAMES
 UI = GLOBAL.STRINGS.UI
 
@@ -66,10 +67,12 @@ STRINGS.UM_MONSTEREGG = "Monster Egg"
 STRINGS.UM_MONSTEREGG_COOKED = "Cooked Monster Egg"
 STRINGS.VETERANSHRINE = "Melancholic Skull"
 STRINGS.RATSKIN = "Diseased Fur"
+
 STRINGS.PLAGUEMASK = "Plague Mask"
-STRINGS.plaguemask_formal = "Faux Plague Masque"
-SKINS.plaguemask_formal = "Faux Plague Masque"
-SKINS.wormwood_shadow = "The Corrupted"
+SKINS.hat_plaguemask_formal = "Faux Plague Masque"
+
+SKINS.wormwood_shadow = "The Corrupted" -- personal vendetta, bruh that shit aint 'triumphant'
+
 STRINGS.TRAPDOOR = "Inconspicuous Mound"
 STRINGS.SPIDER_TRAPDOOR = "Trapdoor Spider"
 STRINGS.MUTATOR_TRAPDOOR = "Trapdoor Switcherdoodle"
@@ -125,10 +128,10 @@ STRINGS.LUREPLAGUE_RAT = "Lureplague Rat"
 STRINGS.SNAPPERTURTLE = "Snapper Turtle"
 STRINGS.SNAPPERTURTLEBABY = "Whippersnapper Turtle"
 STRINGS.SNAPPERTURTLENEST = "Nest"
+
 STRINGS.CURSED_ANTLER = "Cursed Antler"
-STRINGS.TWISTED_ANTLER = "Twisted Antler"
-STRINGS.twisted_antler = "Twisted Antler"
 SKINS.twisted_antler = "Twisted Antler"
+
 STRINGS.MARSH_GRASS = "Marsh Bush"
 STRINGS.GIANT_TREE = "Giant Redwood"
 STRINGS.WEBBEDCREATURE = "Silky Cocoon"
@@ -190,10 +193,10 @@ STRINGS.ANCIENT_TREPIDATION = "Trepidation"
 STRINGS.ANCIENT_TREPIDATION_ARM = "Trepidation's Reach"
 STRINGS.STEEL_SWEATER = "Steel Sweater"
 STRINGS.RNESKELETON = "Skeleton"
+
 STRINGS.ANCIENT_AMULET_RED = "Ancient Soul Amulet"
-STRINGS.ANCIENT_AMULET_RED_DEMONEYE = "Demon-eyed Amulet"
-STRINGS.ancient_amulet_red_demoneye = "Demon-eyed Amulet"
 SKINS.ancient_amulet_red_demoneye = "Demon-eyed Amulet"
+
 STRINGS.RAT_WHIP = "Tail o' Twined Rats"
 STRINGS.KLAUS_AMULET = "Naught Lock"
 STRINGS.LIGHTNINGHOUND = "Lightning Hound"
@@ -230,9 +233,10 @@ STRINGS.CORNCAN = "Canned Corn"
 STRINGS.SKULLCHEST_CHILD = "Skull Chest"
 STRINGS.SKULLCHEST = "Skull Chest"
 STRINGS.GREENFOLIAGE = "Hooded Foliage" --Well, I guess I did this then...
+
 STRINGS.FEATHER_FROCK = "Feather Frock"
-STRINGS.FEATHER_FROCK_FANCY = "Raven Cloak"
 SKINS.feather_frock_fancy = "Raven Cloak"
+
 STRINGS.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "Snap-Teeth"
 STRINGS.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "Shiny Snap-Teeth"
 STRINGS.DRIFTWOODFISHINGROD = "Driftwood Fishing Rod"
@@ -320,6 +324,7 @@ STRINGS.UM_MAGNERANG = "Magnerang"
 STRINGS.UM_MAGNERANGREEL = "Magnetized Battery"
 STRINGS.UNCOMPROMISING_FISHINGNET = "Fishing Net"
 STRINGS.UM_BEEGUN = "Hand Held Hive"
+STRINGS.UM_BEEGUN_CHERRY = "Hand Held Hibeescus Hive"
 STRINGS.BULLETBEE = "Bullet Bee"
 STRINGS.CHERRYBULLETBEE = "Bullet Hibeescus"
 STRINGS.UM_BULLETBEE_PROJ = "Bullet Bee"
@@ -408,7 +413,7 @@ STRINGS.UM_SPECTER_AMULET = "Specter Amulet"
 STRINGS.PHANTOM = "Phantom" --phantom like minecraft :-O
 STRINGS.UMSS_GENERAL = "UMSS"
 STRINGS.UM_DEVCAPTURE = "Devcapture Device"
-STRINGS.UM_BEEGUARD_SEEKER = "Impact Bee"
-STRINGS.UM_BEEGUARD_BLOCKER = "Mason Bee"
+STRINGS.UM_BEEGUARD_SEEKER = "Bomber Bee"
+STRINGS.UM_BEEGUARD_BLOCKER = "Blocker Bee"
 STRINGS.UM_BEEGUARD_SHOOTER = "Bullet Bee"
 STRINGS.DEATHAMP = "a heart attack"

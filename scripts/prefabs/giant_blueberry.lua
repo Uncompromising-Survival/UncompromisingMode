@@ -12,6 +12,7 @@ local function oneatenfn(inst, eater)
                 eater.components.moisture:DoDelta(5)
 	end
 end
+--hey uh, push jic?
 
 
 local function fn()

@@ -414,3 +414,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANGREEL = "Are we sure it's not going to start a forest fire?"
 	DESCRIBE.SIREN_THRONE = "Look Woby! A rock!" --Dumb kid.
 	DESCRIBE.LAVASPIT_SLUDGE = "Careful around that Woby!"
+		
+	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_BLOCKER = "That's fine, I wasn't planning on getting too close anyway!"

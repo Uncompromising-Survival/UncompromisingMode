@@ -112,7 +112,7 @@ local inventoryitems =
 	"pied_piper_flute",
 	"pink_vomit",
 	"plaguemask",
-	"plaguemask_formal",
+	"hat_plaguemask_formal",
 	"purple_vomit",
 	"purplegem_cracked",
 	"purplesteamedhams",
@@ -269,6 +269,7 @@ Assets = {
 
 
 	-- WATHOM!!!
+	Asset("ANIM", "anim/vvathom_run.zip"),
 	Asset("ANIM", "anim/ampbadge.zip"),
 
 	Asset("IMAGE", "images/saveslot_portraits/wathom.tex"),
@@ -887,9 +888,13 @@ Assets = {
 
 	Asset("ANIM", "anim/theatercorn.zip"),
 	
+	Asset("ANIM", "anim/bulletbee_guard.zip"),
+	Asset("ANIM", "anim/fatbee_guard_build.zip"),
+	Asset("ANIM", "anim/hivehead_bee_guard.zip"),
+	
 	Asset("ANIM", "anim/bulletbee_build.zip"),
 
-
+	Asset("ANIM", "anim/um_shadowarena.zip"),
 
 	--INVENTORY ITEMS [IMAGES & ATLAS]
 	Asset("IMAGE", "images/inventoryimages/grassgekko.tex"),
@@ -1432,9 +1437,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/plaguemask.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/plaguemask.xml"),
 	Asset("ATLAS", "images/inventoryimages/plaguemask.xml"),
-	Asset("IMAGE", "images/inventoryimages/plaguemask_formal.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/plaguemask_formal.xml"),
-	Asset("ATLAS", "images/inventoryimages/plaguemask_formal.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/hat_plaguemask_formal.tex"),
+	--Asset("ATLAS_BUILD", "images/inventoryimages/hat_plaguemask_formal.xml"),
+	Asset("ATLAS", "images/inventoryimages/hat_plaguemask_formal.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/shroom_skin_fragment.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/shroom_skin_fragment.xml"),
@@ -1689,10 +1695,14 @@ Assets = {
 	Asset("ATLAS", "images/map_icons/uncompromising_winkyhomeburrow.xml"),
 
 
-
 	--BIGPORTRAITS
 	Asset("IMAGE", "bigportraits/willow.tex"),
 	Asset("ATLAS", "bigportraits/willow.xml"),
 	Asset("IMAGE", "bigportraits/willow_none.tex"),
 	Asset("ATLAS", "bigportraits/willow_none.xml"),
 }
+
+RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/hat_plaguemask_formal.xml"), "hat_plaguemask_formal.tex")
+RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/feather_frock_fancy.xml"), "feather_frock_fancy.tex")
+RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/twisted_antler.xml"), "twisted_antler.tex")
+RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/ancient_amulet_red_demoneye.xml"), "ancient_amulet_red_demoneye.tex")

@@ -493,3 +493,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UM_MAGNERANG = "Why would I want to throw it? This is mine now."
 	DESCRIBE.UM_MAGNERANGREEL = "It is trying to take things!"
 	
+	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_BLOCKER = "According to all known laws of aviation, there is no way a bee should be able to fly."
+	

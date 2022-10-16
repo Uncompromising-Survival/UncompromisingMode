@@ -416,3 +416,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.UM_MAGNERANGREEL = "I don't believe that's how magnets work."
 	DESCRIBE.SIREN_THRONE = "Curious. It seems something has made a home out of this formation."
 	DESCRIBE.LAVASPIT_SLUDGE = "It'd be smart to keep my distance."
+	
+	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
+	DESCRIBE.UM_BEEGUARD_BLOCKER = "The Osmia bicornis are insistent we do not reach the monarch."

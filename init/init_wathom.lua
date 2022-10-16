@@ -83,7 +83,7 @@ local function AttackClient_New(inst, action)
 end
 
 local function RunUpdateTools(inst, client, exiting)
-	local method
+	--[[local method
 	if client then
 		method = inst.replica
 	else
@@ -96,7 +96,7 @@ local function RunUpdateTools(inst, client, exiting)
 	elseif weapon then
 		inst.AnimState:Hide("ARM_carry")
 		inst.AnimState:Show("ARM_normal")
-	end
+	end]]
 end
 
 --Pack it up
@@ -214,23 +214,21 @@ AddStategraphPostInit("wilson", function(inst)
 				ConfigureRunState(inst)
 				inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
 				--inst.components.hunger:SetRate(TUNING.WILSON_HUNGER_RATE * TUNING.WONKEY_RUN_HUNGER_RATE_MULT)
-				inst.Transform:SetPredictedSixFaced()
 				inst.components.locomotor:RunForward()
 				RunUpdateTools(inst)
-				if not inst.AnimState:IsCurrentAnimation("run_monkey_loop") then
-					inst.AnimState:PlayAnimation("run_monkey_loop", true)
+				if not inst.AnimState:IsCurrentAnimation("umrun") then
+					inst.AnimState:PlayAnimation("umrun", true)
 				end
 
 				--V2C: adding half a frame time so it rounds up
 				inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength() + .5 * FRAMES)
+
 			end,
 
 			timeline =
 			{
-				--[[TimeEvent(4*FRAMES, function(inst) PlayFootstep(inst, 0.5) end),
-            TimeEvent(5*FRAMES, function(inst) PlayFootstep(inst, 0.5) DoFoleySounds(inst) end),
-            TimeEvent(10*FRAMES, function(inst) PlayFootstep(inst, 0.5) end),
-            TimeEvent(11*FRAMES, function(inst) PlayFootstep(inst, 0.5) end),]]
+				TimeEvent(6*FRAMES, function(inst) GLOBAL.PlayFootstep(inst, 0.5)  end),
+				TimeEvent(7*FRAMES, function(inst) GLOBAL.PlayFootstep(inst, 0.5) end),
 			},
 
 			onupdate = function(inst)
@@ -582,11 +580,10 @@ AddStategraphPostInit("wilson_client", function(inst)
 			onenter = function(inst)
 				ConfigureRunState(inst)
 				inst.components.locomotor.predictrunspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
-				inst.Transform:SetPredictedSixFaced()
 				inst.components.locomotor:RunForward()
 				RunUpdateTools(inst, true)
-				if not inst.AnimState:IsCurrentAnimation("run_monkey_loop") then
-					inst.AnimState:PlayAnimation("run_monkey_loop", true)
+				if not inst.AnimState:IsCurrentAnimation("umrun") then
+					inst.AnimState:PlayAnimation("umrun", true)
 				end
 				--V2C: adding half a frame time so it rounds up
 				inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength() + .5 * FRAMES)

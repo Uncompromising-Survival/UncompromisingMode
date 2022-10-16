@@ -52,6 +52,7 @@ local function fn()
     end
 
     inst:AddComponent("boatpatch")
+    inst.components.boatpatch.patch_type = "driftwood"
 
     --[[inst:AddComponent("repairer")
     inst.components.repairer.repairmaterial = MATERIALS.WOOD
