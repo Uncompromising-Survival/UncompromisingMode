@@ -43,9 +43,21 @@ if TUNING.DSTU.WANDA_NERF then
         return false, "REVIVE_FAILED"
     end
 
+    local function Revive_OnHaunt(inst, haunter)
+        inst.components.hauntable.hauntvalue = TUNING.HAUNT_SMALL
+        if haunter:HasTag("pocketwatchcaster") and inst.components.pocketwatch:CastSpell(haunter, haunter) then
+            --NOTHING! Enjoy the cooldown...
+        else
+            Launch(inst, haunter, TUNING.LAUNCH_SPEED_SMALL)
+        end
+    end
+
     env.AddPrefabPostInit("pocketwatch_revive", function(inst)
         if inst.components.pocketwatch ~= nil then
             inst.components.pocketwatch.DoCastSpell = Revive_DoCastSpell
+        end
+        if inst.components.hauntable ~= nil then
+            inst.components.hauntable:SetOnHauntFn(Revive_OnHaunt)
         end
     end)
 
