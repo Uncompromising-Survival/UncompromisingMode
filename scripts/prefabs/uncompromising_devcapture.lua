@@ -115,7 +115,7 @@ local function Capture(inst)
 		if v.components.witherable and v.components.witherable:IsWithered() then
 			totaltable = totaltable..", withered = true"
 		end
-		if TheWorld.Map:IsOceanAtPoint(px,py,pz) then
+		if TheWorld.Map:IsOceanAtPoint(px,py,pz) then --Not in use currently
 			totaltable = totaltable..", ocean = true"
 		else
 			totaltable = totaltable..", ocean = false"

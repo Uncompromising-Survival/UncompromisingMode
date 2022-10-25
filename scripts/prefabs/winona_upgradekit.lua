@@ -2,7 +2,7 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/mastupgrade_lightningrod.zip"),
+    Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
 }
 
 local prefabs =
@@ -22,8 +22,8 @@ local function itemfn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("mastupgrade_lightningrod_item")
-    inst.AnimState:SetBuild("mastupgrade_lightningrod")
+    inst.AnimState:SetBank("winona_upgradekit_electrical")
+    inst.AnimState:SetBuild("winona_upgradekit_electrical")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "med", nil, 0.68)
@@ -41,6 +41,7 @@ local function itemfn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_upgradekit_electrical.xml"
     inst.components.inventoryitem:SetSinks(false)
 
     inst:AddComponent("upgrader")

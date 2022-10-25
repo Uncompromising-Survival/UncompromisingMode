@@ -261,7 +261,7 @@ local function makefn()
     inst:AddComponent("writeable")
 	inst.components.writeable:SetOnWritingEndedFn(TryForce)
 	inst.OnLoad = onload
-	inst:DoTaskInTime(0.1,
+	inst:DoTaskInTime(0.2,
 		function(inst)
 				--TheNet:Announce("Code Ran") --For Troubleshooting
 			if inst.spawnTable then

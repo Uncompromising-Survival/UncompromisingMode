@@ -50,12 +50,10 @@ function Uncompromising_Tooltip:RefreshTooltips()
 
 	if self.item_tip ~= nil and STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] ~= nil and ThePlayer:HasTag("pinetreepioneer") then
 		self.icon2:SetTooltip(STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)])
-		self.icon2:SetTooltip(STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)])
 		self.icon2:Show()
 		
 		self.icon1:Hide()
 	elseif self.item_tip ~= nil and STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)] ~= nil then
-		self.icon1:SetTooltip(STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)])
 		self.icon1:SetTooltip(STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)])
 		self.icon1:Show()
 		

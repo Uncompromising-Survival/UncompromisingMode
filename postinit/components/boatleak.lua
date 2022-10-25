@@ -7,16 +7,7 @@ env.AddComponentPostInit("boatleak", function(self)
     function self:SetState(state, skip_open)
         local ret = _SetState(self, state, skip_open)
         if state == "repaired_sludge" then
-            self:ChangeToRepaired("treegrowthsolution", "waterlogged2/common/repairgoop")
-            self.inst.AnimState:SetBankAndPlayAnimation("treegrowthsolution", "pre_idle")
-            self.inst.AnimState:SetMultColour(100, 200, 0, 1)
-            self.inst:ListenForEvent("animover", function()
-                if self.inst.AnimState:IsCurrentAnimation("pre_idle") then
-                    self.inst.AnimState:PlayAnimation("idle")
-                elseif self.inst.AnimState:IsCurrentAnimation("idle") then
-                    self.inst:Remove()
-                end
-            end)
+            self:ChangeToRepaired("boat_repair_sludge_build")
         elseif state == "repaired_driftwood" then
             self:ChangeToRepaired("boat_repair_cork_build")
             self.inst.Transform:SetScale(0.9,0.9,0.9)

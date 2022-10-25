@@ -79,6 +79,7 @@ local function MakeTackleContainer(name, bank, build, assets)
 		inst.components.container.droponopen = true
 
 		inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 		inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 

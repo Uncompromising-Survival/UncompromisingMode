@@ -32,7 +32,19 @@ local function StompHandler(inst,data)
 	--[[if inst.components.health and inst.components.health:GetPercent() > 0.5 then --fast fovvard to the 3rd phase
 		inst.components.health:SetPercent(0.49)
 	end]]
+	if inst.components.timer:GetTimeLeft("spawnguards_cd") then
+		local nevvtime = inst.components.timer:GetTimeLeft("spawnguards_cd") - data.damage/50 --nevv code to adjust bq to speed up the fight if player is going through her really quickly, need to make sure her abilities actually get the chance to proc.
+		if nevvtime < 0 then
+			nevvtime = 0.1
+		end
+		inst.components.timer:SetTimeLeft("spawnguards_cd",nevvtime)
+	end
+
+	
 	if inst.components.health and not inst.components.health:IsDead() then
+		if inst.tiredcount then
+			inst.tiredcount = inst.tiredcount - 0.1
+		end
 		local soldiers = inst.components.commander:GetAllSoldiers()
 		
 		if inst.components.health and inst.components.health:GetPercent() < 0.5 and not inst.sg:HasStateTag("busy") then
@@ -54,6 +66,9 @@ local function StompHandler(inst,data)
 				inst.prioritytarget = data.attacker
 				if inst.components.combat.target ~= nil then
 					if data.attacker ~= inst.components.combat.target then
+						if inst.tiredcount then
+							inst.tiredcount = inst.tiredcount - 1
+						end
 						inst.stomprage = inst.stomprage + 4
 					end
 				end
@@ -61,7 +76,7 @@ local function StompHandler(inst,data)
 				if TheWorld.Map:GetPlatformAtPoint(x, z) ~= nil then
 					inst.stomprage = inst.stomprage + 10
 				end
-				if inst.stomprage > 20 and not inst.sg:HasStateTag("ability") and inst.components.health and not inst.components.health:IsDead() then
+				if inst.stomprage > 20 and not inst.sg:HasStateTag("ability") and inst.components.health and not inst.components.health:IsDead() and not inst:HasTag("doingability") then
 					inst:ForceFacePoint(x,y,z)
 					inst.stomprage = 0
 					inst.stompready = false
@@ -170,7 +185,9 @@ local function SpavvnShooterBeesLine(inst,time,back)
 					local x,y,z = bee.Transform:GetWorldPosition()
 					bee:RemoveComponent("linearcircler")
 					bee.Transform:SetPosition(x,y,z)
-					bee.sg:GoToState("flyup_shooter") 
+					if bee.components.health and not bee.components.health:IsDead() then
+						bee.sg:GoToState("flyup_shooter")
+					end
 				end 
 			end)
 			inst.shooterbeeline[j]:DoPeriodicTask(FRAMES,function(bee) 
@@ -430,7 +447,9 @@ local function FinalFormation(inst)
 			inst:DoTaskInTime(time,function(inst)
 				inst.components.timer:ResumeTimer("spawnguards_cd")
 				inst.tiredcount = 12
-				inst.sg:GoToState("tired")
+				if inst.components.health and not inst.components.health:IsDead() then
+					inst.sg:GoToState("tired_pre")
+				end
 			end)
 		end
 	end
@@ -450,7 +469,7 @@ end
 local function MakeSeekerHitlist(inst)
 	if inst.components.health and not inst.components.health:IsDead() then
 		local x,y,z = inst.Transform:GetWorldPosition()
-		local players = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost"})
+		local players = TheSim:FindEntities(x,y,z,40,{"_combat"},{"playerghost","smallcreature","bee","beehive"})
 		inst.seeker_hitlist = players
 	end
 end
@@ -458,6 +477,8 @@ end
 local function SeekerBeesRage(inst)
 	if inst.components.health and not inst.components.health:IsDead() then
 		inst.abilitybusy = true
+		inst.previousability = "seeker"
+		inst:AddTag("doingability")
 		MakeSeekerHitlist(inst)
 		inst.components.timer:PauseTimer("spawnguards_cd")
 		inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end)
@@ -468,6 +489,7 @@ local function ShooterBeesRage(inst)
 	if inst.components.health and not inst.components.health:IsDead() then
 		inst.abilitybusy = true
 		inst.previousability = "shooter"
+		inst:AddTag("doingability")
 		local x,y,z = inst.Transform:GetWorldPosition()
 		local targets = TheSim:FindEntities(x,y,z,40,{"player"},{"playerghost","bee"})
 		inst.shoottargets = targets
@@ -491,40 +513,42 @@ local function ActivateHitAbility(inst)
 	--[[if inst.should_ability then
 		TheNet:Announce(inst.previousability)
 	end]]
-	
-	if pct > 0.75 then
-		--Nothing.... for novv. There are no post-spavvn abilities at 100%-75%	
-	elseif pct > 0.5 then	-------------------------------------------------------------------------------------------------
-		if VVallcheck(inst) then
-			inst.defensivespincount = inst.defensivespincount - 1
-			if inst.defensivespincount < 1 then -- This is the only time this is really used.... in VVall Bees I bq can manually rotate the bees
-				inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("defensive_spin") end)
-			end
-		else
-			if inst.should_ability then --First ability
+	if inst.components.health and not inst.components.health:IsDead() then
+		if pct > 0.75 then
+			--Nothing.... for novv. There are no post-spavvn abilities at 100%-75%	
+		elseif pct > 0.5 then	-------------------------------------------------------------------------------------------------
+			if VVallcheck(inst) then
+				inst.defensivespincount = inst.defensivespincount - 1
+				if inst.defensivespincount < 1 then -- This is the only time this is really used.... in VVall Bees I bq can manually rotate the bees
+					inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("defensive_spin") end)
+				end
+			else
+				if inst.should_ability then --First ability
+					inst.should_ability = nil
+					SeekerBeesRage(inst)
+				end
+			end		
+		elseif pct > 0.25 then	----------------------------------------------------------------------------------------------------
+			if inst.should_ability then
 				inst.should_ability = nil
-				SeekerBeesRage(inst)
-			end
-		end		
-	elseif pct > 0.25 then	----------------------------------------------------------------------------------------------------
-		if inst.should_ability then
-			inst.should_ability = nil
-			if inst.previousability == "shooter" then --Tvvo abilities novv
-				SeekerBeesRage(inst)
-			else
-				ShooterBeesRage(inst)
-			end
-		end	
-	else	--------------------------------------------------------------------------------------------------------------
-		if inst.should_ability then --Three abilities novv
-			inst.should_ability = nil
-			if inst.should_final and not inst.previousability == "final" then
-				DoFinalFormation(inst)
-			else
-				if inst.previousability == "shooter" or (math.random() > 0.5 and inst.previousability == "final") then --If the previous thing vvas a shooter, roll by %chance instead
+				--TheNet:Announce(inst.previousability)
+				if inst.previousability == "shooter" then --Tvvo abilities novv
 					SeekerBeesRage(inst)
 				else
 					ShooterBeesRage(inst)
+				end
+			end	
+		else	--------------------------------------------------------------------------------------------------------------
+			if inst.should_ability then --Three abilities novv
+				inst.should_ability = nil
+				if inst.should_final and not inst.previousability == "final" then
+					DoFinalFormation(inst)
+				else
+					if inst.previousability == "shooter" or (math.random() > 0.5 and inst.previousability == "final") then --If the previous thing vvas a shooter, roll by %chance instead
+						SeekerBeesRage(inst)
+					else
+						ShooterBeesRage(inst)
+					end
 				end
 			end
 		end

@@ -374,6 +374,9 @@ return {
 	"wixie_piano",
 	"wixie_clock",
 	"wixie_wardrobe",
+	
+	"wathom",
+	"wathom_none",
 
 	"uncompromising_skins",
 }

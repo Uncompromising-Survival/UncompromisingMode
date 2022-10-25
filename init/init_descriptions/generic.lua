@@ -457,9 +457,9 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.OCEAN_SPEAKER = "Well this seems awfully out of place." --Lame guy. Lame quote.
 
 	DESCRIBE.OCUPUS_BEAK = "Better that I ate you, than you eat me."
-	--DESCRIBE.OCUPUS_TENTACLE = ""
+	DESCRIBE.OCUPUS_TENTACLE = ""
 	DESCRIBE.OCUPUS_TENTACLE_EYE = "Everyone around here seems to be watching me."
-	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
+	DESCRIBE.OCUPUS_TENTACLE_COOKED = "It doesn't look that bad..."
 
 	DESCRIBE.ARMOR_REED_UM = "I'll still be light on my feet with it on."
 	DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me feel like the alpha predator."
@@ -478,7 +478,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	ACTIONFAIL.UPGRADE.NOT_HARVESTED = "Yuck, I gotta clean that first!"
 
     DESCRIBE.SLUDGE = "It reeks like eggs, but doesn't look nearly as appetizing."
-	DESCRIBE.SLUDGE_OIL = "It belongs in my old laboratory."
+	DESCRIBE.SLUDGE_OIL = "Something like this belongs in my old laboratory."
     DESCRIBE.SLUDGE_SACK = "I hope it doesn't stick to my back."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "It's crude, but it blows things up all the same."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It'll bounce back whatever hits it."

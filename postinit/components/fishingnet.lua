@@ -129,7 +129,7 @@ env.AddComponentPostInit("fishingnetvisualizer", function(self)
 				end
 			end)
 		else 
-			_OldBeginOpening(self)
+			return _OldDropItem(self, item, last_dir_x, last_dir_z, idx)
 		end
 	end
 end)

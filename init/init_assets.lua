@@ -658,9 +658,9 @@ Assets = {
 	Asset("ANIM", "anim/electric_explosion.zip"),
  
 	Asset("ANIM", "anim/um_harpoonhitfx.zip"),
-
+	
 	Asset("ANIM", "anim/um_magneranghitfx.zip"),
-
+	
 	Asset("ATLAS", "images/fx5.xml"),
 	Asset("IMAGE", "images/fx5.tex"),
 	
@@ -687,6 +687,7 @@ Assets = {
 
 	--INVENTORY ITEMS [ANIMS & INV_IMAGE]
 	Asset("ANIM", "anim/cannonball_sludge.zip"),
+	Asset("ANIM", "anim/boat_repair_cork_build.zip"),
 
 	Asset("ANIM", "anim/ancient_amulet_red_demoneye.zip"),
 
@@ -801,6 +802,7 @@ Assets = {
 	Asset("ANIM", "anim/um_harpoon.zip"),
 
 	Asset("ANIM", "anim/magnerang.zip"),
+	Asset("ANIM", "anim/um_magnerang_reel.zip"),
 
 	Asset("ANIM", "anim/hardshelltacos.zip"),
 
@@ -1602,8 +1604,9 @@ Assets = {
 	Asset("ANIM", "anim/swap_um_harpoon.zip"),
 
 	Asset("ANIM", "anim/swap_magnerang.zip"),
-
-
+	
+	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
+	
 
 	--UI
 	Asset("IMAGE", "images/dragonflycontainerborder.tex"),

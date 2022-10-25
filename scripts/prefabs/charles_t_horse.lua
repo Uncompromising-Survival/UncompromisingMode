@@ -70,8 +70,6 @@ local function fn()
 
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-    inst.components.equippable.walkspeedmult = 1
-    inst.components.equippable.dapperness = 0
 
     MakeHauntableLaunch(inst)
 
@@ -79,31 +77,10 @@ local function fn()
         if owner.components.locomotor.wantstomoveforward then
 			if not inst.SoundEmitter:PlayingSound("ringaling") then
 				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell", "ringaling")
-				inst.multiplier = inst.multiplier + 0.01
 				
-				if inst.multiplier >= 1.35 then
-					inst.multiplier = 1.35
-				end
-				
-				inst:DoTaskInTime(1.6 - inst.multiplier, function(inst) 
+				inst:DoTaskInTime(1, function(inst)
 					inst.SoundEmitter:KillSound("ringaling")
 				end)
-				
-				if inst._owner ~= nil then
-					inst._owner.AnimState:SetDeltaTimeMultiplier(inst.multiplier)
-				end
-			end
-			
-			
-			inst.components.equippable.dapperness = (inst.multiplier - 1) / 2
-			inst.components.equippable.walkspeedmult = inst.multiplier
-        else
-			inst.multiplier = 1
-			inst.components.equippable.dapperness = 0
-			inst.components.equippable.walkspeedmult = 1
-				
-			if inst._owner ~= nil then
-				inst._owner.AnimState:SetDeltaTimeMultiplier(inst.multiplier)
 			end
         end
     end

@@ -735,7 +735,7 @@ local function bulletfn(ischerry)
 
     inst:AddComponent("combat")
     inst.components.combat:SetDefaultDamage(TUNING.BEE_DAMAGE)
-    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
+    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD)
     inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
     inst.components.combat.hiteffectsymbol = "body"
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
@@ -783,6 +783,8 @@ end
 local function bulletbee()
     local inst = bulletfn(false)
 
+    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
+	
     return inst
 end
 

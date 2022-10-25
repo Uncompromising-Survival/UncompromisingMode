@@ -37,6 +37,7 @@ local function fn()
     inst.components.tradable.goldvalue = 4
 
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/rockjawleather.xml"
 
     return inst
 end

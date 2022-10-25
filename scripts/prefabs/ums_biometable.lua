@@ -60,7 +60,7 @@ local function FinalizeSpawn(inst,umss,x,y,z)
 	spawner.AnimState:SetMultColour(0,0,0,0)--makes it invisible too.
 	spawner:AddTag("NOCLICK")
 	spawner:AddTag("NOBLOCK")
-	spawner:DoTaskInTime(10, inst.Remove)--just in case it fails.
+	spawner:DoTaskInTime(3, function(spawner) spawner:Remove() end)--just in case it fails.
 	AddToTheWorld(inst,umss)
 	inst:Remove()
 end

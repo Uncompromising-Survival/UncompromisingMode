@@ -159,7 +159,7 @@ AddStategraphPostInit("wilson", function(inst)
 
 	local function NevvOnEnter(inst)
 		--print(inst.components.adrenaline:GetPercent())
-		if inst:HasTag("wathom") and inst:HasTag("wathomrun") then
+		if inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst:HasTag("wathom") and inst:HasTag("wathomrun")then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
 			return
@@ -232,7 +232,7 @@ AddStategraphPostInit("wilson", function(inst)
 			},
 
 			onupdate = function(inst)
-				if not inst:HasTag("wathomrun") then
+				if inst.components.rider ~= nil and inst.components.rider:IsRiding() and not inst:HasTag("wathomrun") or not inst:HasTag("wathomrun") then
 					inst.sg:GoToState("run")
 					return
 				end
@@ -879,6 +879,10 @@ local function AmpbadgeDisplays(self)
 			self.adrenaline.bg = self.adrenaline:AddChild(Image("images/status_bgs.xml", "status_bgs.tex"))
 			self.adrenaline.bg:SetScale(.4, .43, 0)
 			self.adrenaline.bg:SetPosition(-.5, -40, 0)
+
+			if self.boatmeter then
+				self.boatmeter:SetPosition(-124 , -52)
+			end
 
 			self.adrenaline.num:SetFont(NUMBERFONT)
 			self.adrenaline.num:SetSize(28)

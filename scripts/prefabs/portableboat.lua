@@ -578,7 +578,7 @@ local function item_fn()
 
     inst:AddTag("boatbuilder")
 	inst:AddTag("usedeployspacingasoffset")
-
+    
     MakeInventoryPhysics(inst, 3000)
 
     inst.AnimState:SetBank("portableboat_item")
@@ -626,6 +626,7 @@ local function cord_fn()
     inst.AnimState:PushAnimation("plug_idle", false)
 
     inst:AddTag("ignorewalkableplatforms")
+    inst:AddTag("boat_ripcord")
 
     inst.entity:SetPristine()
 

@@ -8,14 +8,15 @@ env.AddComponentPostInit("playerspawner", function(self)
 	local SPAWNLIGHT_TAGS = { "spawnlight" }
 	function self:SpawnAtLocation(inst, player, x, y, z, isloading, platform_uid, rx, ry, rz)
         if player:HasTag("troublemaker") and not isloading and TheSim:FindFirstEntityWithTag("wixie_wardrobe") ~= nil then
+
+			player.sg:GoToState("wixie_spawn")
+			
 			player.components.playercontroller:Enable(false)
 			
-			player:DoStaticTaskInTime(5+(20*FRAMES), function(inst)
-				player.components.playercontroller:Enable(true)
-			end)
-			
-			player:DoStaticTaskInTime(6*FRAMES+FRAMES, function(inst)
+			player:DoTaskInTime(6*FRAMES+FRAMES, function(inst)
 				player:Hide()
+				
+				player.components.playercontroller:Enable(false)
 				
 				local ux, uy, uz = player.Transform:GetWorldPosition()
 					

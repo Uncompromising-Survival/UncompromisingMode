@@ -60,10 +60,11 @@ local function onload(inst, data)
     end
 end
 
-local function MakeChest(name, bank, build, indestructible, master_postinit, prefabs, assets, common_postinit, force_non_burnable)
+local function MakeChest(name, bank, build, indestructible, master_postinit, prefabs, assets, common_postinit,
+                         force_non_burnable)
     local default_assets =
     {
-        Asset("ANIM", "anim/"..build..".zip"),
+        Asset("ANIM", "anim/" .. build .. ".zip"),
         Asset("ANIM", "anim/ui_chest_3x2.zip"),
     }
     assets = assets ~= nil and JoinArrays(assets, default_assets) or default_assets
@@ -77,7 +78,7 @@ local function MakeChest(name, bank, build, indestructible, master_postinit, pre
         inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
-        inst.MiniMapEntity:SetIcon(name..".png")
+        inst.MiniMapEntity:SetIcon(name .. ".png")
 
         inst:AddTag("structure")
         inst:AddTag("chest")
@@ -86,7 +87,7 @@ local function MakeChest(name, bank, build, indestructible, master_postinit, pre
         inst.AnimState:SetBuild(build)
         inst.AnimState:PlayAnimation("closed")
 
-		MakeSnowCoveredPristine(inst)
+        MakeSnowCoveredPristine(inst)
 
         if common_postinit ~= nil then
             common_postinit(inst)
@@ -126,7 +127,7 @@ local function MakeChest(name, bank, build, indestructible, master_postinit, pre
         inst:ListenForEvent("onbuilt", onbuilt)
         MakeSnowCovered(inst)
 
-		-- Save / load is extended by some prefab variants
+        -- Save / load is extended by some prefab variants
         inst.OnSave = onsave
         inst.OnLoad = onload
 
@@ -160,15 +161,15 @@ end
 
 local function sunken_OnEquip(inst, owner)
     if inst.components.container ~= nil then
-		inst.components.container:Close()
-	end
+        inst.components.container:Close()
+    end
     owner.AnimState:OverrideSymbol("swap_body", "swap_sunken_treasurechest", "swap_body")
 end
 
 local function sunken_OnSubmerge(inst)
-	if inst.components.container ~= nil then
-		inst.components.container:Close()
-	end
+    if inst.components.container ~= nil then
+        inst.components.container:Close()
+    end
     inst:AddTag("saltbox")
 end
 
@@ -181,10 +182,10 @@ local function sunken_GetStatus(inst)
 end
 
 local function sunken_common_postinit(inst)
-	inst:AddTag("heavy")
+    inst:AddTag("heavy")
 
-	MakeHeavyObstaclePhysics(inst, 0)
-	inst:SetPhysicsRadiusOverride(0)
+    MakeHeavyObstaclePhysics(inst, 0)
+    inst:SetPhysicsRadiusOverride(0)
 end
 
 local function sunken_master_postinit(inst)
@@ -192,8 +193,8 @@ local function sunken_master_postinit(inst)
 
     inst.components.inspectable.getstatus = sunken_GetStatus
 
-	inst:AddComponent("heavyobstaclephysics")
-	inst.components.heavyobstaclephysics:SetRadius(0)
+    inst:AddComponent("heavyobstaclephysics")
+    inst.components.heavyobstaclephysics:SetRadius(0)
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.cangoincontainer = false
@@ -207,12 +208,39 @@ local function sunken_master_postinit(inst)
     inst.components.container.canbeopened = true
     --need new anims/assets for it.
 
-	inst:AddComponent("submersible")
-	inst:AddComponent("symbolswapdata")
+    inst:AddComponent("submersible")
+    inst:AddComponent("symbolswapdata")
     inst.components.symbolswapdata:SetData("swap_sunken_treasurechest", "swap_body")
 
-	inst:ListenForEvent("on_submerge", sunken_OnSubmerge)
+    inst:ListenForEvent("on_submerge", sunken_OnSubmerge)
     inst:ListenForEvent("on_landed", sunken_OnLanded)
 end
 
-return MakeChest("sunkenchest_royal", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit, { "collapse_small", "underwater_salvageable", "splash_green" }, { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") }, sunken_common_postinit, true)
+return MakeChest("sunkenchest_royal", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+    { "collapse_small", "underwater_salvageable", "splash_green" },
+    { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+    sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_red", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_blue", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_purple", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_green", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_orange", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_yellow", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true)

@@ -70,13 +70,11 @@ end
 function FruitBatBrain:OnStart()
     local root = PriorityNode({
         WhileNode(function() return self.inst.components.health.takingfiredamage or self.inst.components.hauntable.panic end, "Panic", Panic(self.inst)),
-        --ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST),
         --WhileNode(function() return TheWorld.state.isnight end, "IsNight",
             --DoAction(self.inst, GoHomeAction)),
-          
-                DoAction(self.inst, EatFoodAction),
-                MinPeriod(self.inst, TUNING.BAT_ESCAPE_TIME, false,
-                    DoAction(self.inst, EscapeAction)),
+				ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST),
+                --DoAction(self.inst, EatFoodAction),
+                --MinPeriod(self.inst, TUNING.BAT_ESCAPE_TIME, false, DoAction(self.inst, EscapeAction)),
                 Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST),
     }, .25)
 

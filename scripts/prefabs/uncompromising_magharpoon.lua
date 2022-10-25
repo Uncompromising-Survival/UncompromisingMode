@@ -57,7 +57,12 @@ local function onhit(inst, attacker, target)
 			end
 			reel.Transform:SetPosition(inst.x, inst.y, inst.z)
 			reel.target = target
-			reel.AnimState:PlayAnimation("place")
+			
+			if boat then
+				reel.AnimState:PlayAnimation("place_boat")
+			else
+				reel.AnimState:PlayAnimation("place")
+			end
 		end
 	end
 	
@@ -182,21 +187,88 @@ local function onhit_return(inst, attacker, target)
 		end
 		magnerang.Transform:SetPosition(x, 1.5, z)
 		magnerang.target = target
+	elseif attacker ~= nil then
+		local x, y, z = attacker.Transform:GetWorldPosition()
+		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
+		magnerang.Transform:SetPosition(x, 1.5, z)
+		magnerang.target = target
 	end
 	
 	if inst.reel ~= nil then
-		inst.reel:Remove()
+		inst.reel.AnimState:PlayAnimation("break")
+		inst.reel:ListenForEvent("animover", inst.Remove)
 	end
 	
     inst:Remove()
 end
 
-local function onmiss_return(inst)
+local function onmiss_return(inst, attacker, target)
 	if inst.reel ~= nil then
-		inst.reel:Remove()
+		inst.reel.AnimState:PlayAnimation("break")
+		inst.reel:ListenForEvent("animover", inst.Remove)
 	end
 	
-    inst:Remove()
+	if target ~= nil then
+		local x, y, z = target.Transform:GetWorldPosition()
+		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
+		magnerang.Transform:SetPosition(x, 1.5, z)
+		magnerang.target = target
+	elseif attacker ~= nil then
+		local x, y, z = attacker.Transform:GetWorldPosition()
+		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
+		magnerang.Transform:SetPosition(x, 1.5, z)
+		magnerang.target = target
+	end
+
+	inst:Remove()
+end
+
+local function ReturnToTarget(inst, attacker, target)
+	if attacker ~= nil then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		
+		local proj = SpawnPrefab("um_magnerang_projectile")
+	
+		proj.Transform:SetPosition(x, 1.5, z)
+		proj.components.projectile:Throw(attacker, inst)
+		if inst.uses then --Pass the uses from the magnerang
+			proj.uses = inst.uses
+		end
+		proj.components.projectile:SetOnHitFn(onhit_return)
+		proj.components.projectile:SetOnMissFn(onmiss_return)
+	elseif attacker ~= nil then
+		local x, y, z = attacker.Transform:GetWorldPosition()
+		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
+		magnerang.Transform:SetPosition(x, 1.5, z)
+		magnerang.target = target
+	end
+	
+    inst.AnimState:PlayAnimation("break")
+	inst:ListenForEvent("animover", inst.Remove)
 end
 
 local function harpoon()
@@ -236,7 +308,7 @@ local function harpoon()
     inst.components.projectile:SetOnThrownFn(pipethrown)
     inst.components.projectile:SetRange(TUNING.WALRUS_DART_RANGE)
     inst.components.projectile:SetHoming(true)
-    inst.components.projectile:SetOnMissFn(inst.Remove)
+    inst.components.projectile:SetOnMissFn(ReturnToTarget)
     inst.components.projectile:SetLaunchOffset(Vector3(3, 2, 0))
     inst.components.projectile:SetSpeed(10)
     inst.components.projectile:SetOnHitFn(onhit)
@@ -258,14 +330,34 @@ end
 
 local function Vac(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	if inst.magnet_damage < 200 and inst ~= nil and inst:IsValid() and inst.target ~= nil and inst.target:IsValid() then
+	if inst.magnet_damage < 200 and inst ~= nil and inst:IsValid() and inst.target ~= nil and inst.target:IsValid() and not inst.target:HasTag("INLIMBO") then
 		local px, py, pz = inst.target.Transform:GetWorldPosition()
-			
+		
 		local distmult = (inst:GetDistanceSqToInst(inst.target) / 200)
-		local tuningmultiplier = 1.25
-		inst.magnet_damage = inst.magnet_damage + distmult * tuningmultiplier
+		local tuningmultiplier = inst.target:HasTag("epic") and 1.5 or 1.25
 		--TheNet:Announce(inst.magnet_damage)
+		
+		if inst.hitfx ~= nil then
+			if inst.magnet_damage <= 50 and inst.soundlevel == nil then
+				inst.soundlevel = 50
+				inst.hitfx.SoundEmitter:PlaySound("UCSounds/magnerang/slow_pull", "pull")
+			elseif inst.magnet_damage <= 100 and inst.magnet_damage > 50 and inst.soundlevel == 50 then
+				inst.soundlevel = 100
+				inst.hitfx.SoundEmitter:KillSound("pull")
+				inst.hitfx.SoundEmitter:PlaySound("UCSounds/magnerang/mid_pull", "pull")
+			elseif inst.magnet_damage <= 150 and inst.magnet_damage > 100 and inst.soundlevel == 100 then
+				inst.soundlevel = 150
+				inst.hitfx.SoundEmitter:KillSound("pull")
+				inst.hitfx.SoundEmitter:PlaySound("UCSounds/magnerang/high_pull", "pull")
+			elseif inst.magnet_damage > 150 and inst.soundlevel == 150 then
+				inst.soundlevel = 200
+				inst.hitfx.SoundEmitter:KillSound("pull")
+				inst.hitfx.SoundEmitter:PlaySound("UCSounds/magnerang/veryhigh_pull", "pull")
+			end
+		end
+
 		if distmult >= 0.15 then
+			tuningmultiplier = 0.5
 			local platform = inst:GetCurrentPlatform()
 				
 			if platform ~= nil and platform:IsValid() then
@@ -297,9 +389,14 @@ local function Vac(inst)
 				end
 			end
 		end
+		
+		inst.magnet_damage = inst.magnet_damage + distmult * tuningmultiplier
 	else
+		if inst.hitfx ~= nil then
+			inst.hitfx.SoundEmitter:KillSound("twirl")
+		end
+		
 		inst:KillRopes()
-		return
 	end
 end
 
@@ -328,7 +425,7 @@ local function KillRopes(inst)
 		inst.hitfx:Remove()
 	end
 	
-	if inst.target then
+	if inst.target ~= nil and inst.target:IsValid() and not inst.target:HasTag("INLIMBO") then
 		local x, y, z = inst.target.Transform:GetWorldPosition()
 	
 		local proj = SpawnPrefab("um_magnerang_projectile")
@@ -348,10 +445,22 @@ local function KillRopes(inst)
 			proj.components.projectile:SetOnMissFn(onmiss_return)
 			proj.reel = inst
 		end
+		
+		Link(inst,"remove")
 	else
-		SpawnPrefab("um_magnerang_projectile").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local magnerang = SpawnPrefab("um_magnerang")
+		if inst.uses and magnerang.components.finiteuses then
+			magnerang.components.finiteuses.current = inst.uses - 1
+			if magnerang.components.finiteuses.current <= 0 then
+				OnFinished(magnerang)
+			end
+		end
+		magnerang.Transform:SetPosition(x, 0, z)
+			
+		inst.AnimState:PlayAnimation("break")
+		inst:ListenForEvent("animover", inst.Remove)
 	end
-	Link(inst,"remove")
 end
 
 local function InitializeRope(inst)
@@ -396,6 +505,37 @@ local function GetVerb(inst)
 	return "HARPOON"
 end
 
+local function PulseTask(inst)
+	if inst.magnet_damage <= 50 then
+		local fx = SpawnPrefab("dr_warm_loop_1")
+		fx.entity:SetParent(inst.entity)
+		fx.Transform:SetPosition(0, 1.5, 0)
+		fx.Transform:SetScale(0.8, 0.8, 0.8)
+		
+		inst:DoTaskInTime(2, PulseTask)
+	elseif inst.magnet_damage <= 100 and inst.magnet_damage > 50 then
+		local fx = SpawnPrefab("dr_warm_loop_1")
+		fx.entity:SetParent(inst.entity)
+		fx.Transform:SetPosition(0, 1.5, 0)
+		
+		inst:DoTaskInTime(1.5, PulseTask)
+	elseif inst.magnet_damage <= 150 and inst.magnet_damage > 100 then
+		local fx = SpawnPrefab("dr_warmer_loop")
+		fx.Transform:SetScale(0.9, 0.9, 0.9)
+		fx.entity:SetParent(inst.entity)
+		fx.Transform:SetPosition(0, 1.5, 0)
+		
+		inst:DoTaskInTime(1, PulseTask)
+	elseif inst.magnet_damage > 150 then
+		local fx = SpawnPrefab("dr_hot_loop")
+		fx.entity:SetParent(inst.entity)
+		fx.Transform:SetPosition(0, 1.5, 0)
+		fx.Transform:SetScale(0.8, 0.8, 0.8)
+		
+		inst:DoTaskInTime(0.5, PulseTask)
+	end
+end
+
 local function reel()
     local inst = CreateEntity()
 
@@ -407,9 +547,9 @@ local function reel()
 	
 	inst:AddTag("harpoonreel")
 
-    inst.AnimState:SetBank("UM_harpoonreel")
-    inst.AnimState:SetBuild("UM_harpoonreel")
-    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetBank("um_magnerang_reel")
+    inst.AnimState:SetBuild("um_magnerang_reel")
+    inst.AnimState:PlayAnimation("place", false)
 
     MakeSnowCoveredPristine(inst)
 	
@@ -444,6 +584,10 @@ local function reel()
 	
     inst:AddComponent("updatelooper")
     inst.components.updatelooper:AddOnUpdateFn(Vac)
+	
+	inst:DoTaskInTime(60, KillRopes)
+	
+	inst:DoTaskInTime(1, PulseTask)
 	
 	inst:DoTaskInTime(60, KillRopes)
 	

@@ -42,7 +42,7 @@ local function GetHomePos(inst)
     return inst.components.knownlocations:GetLocation("spawnpoint")
 end
 
-local DODGE_DELAY = 5
+local DODGE_DELAY = 10
 local MAX_DODGE_TIME = 3
 
 local function ShouldDodge(self)

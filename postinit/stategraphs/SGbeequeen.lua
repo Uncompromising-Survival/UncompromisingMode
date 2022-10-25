@@ -75,6 +75,9 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 	if inst.states["spawnguards"].onexit then
 		_OldOnExit = inst.states["spawnguards"].onexit
 	end
+	
+	table.insert(inst.states["spawnguards"].tags,"ability") -- This is added such that the stomphandler can recognize the spavvnguards move as an ability
+	
 	inst.states["spawnguards"].onexit = function(inst)
 		inst.abilitybusy = nil
 		inst.PstSummonHandler(inst)
@@ -83,7 +86,7 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 		end
 	end
 	
-	--[[local _OldOnAtkEnter
+	--[[local _OldOnAtkEnter --Deprecated bq combo attack code.
 	if inst.states["attack"].onenter then
 		_OldOnAtkEnter = inst.states["attack"].onenter
 	end
@@ -326,22 +329,31 @@ local states = {
 			if not inst.tiredcount then
 				inst.tiredcount = 9
 			end
-			inst.sg:SetTimeout(inst.tiredcount)
+			inst.tiredtask = inst:DoPeriodicTask(1,function(inst) inst.tiredcount = inst.tiredcount - 1 end)
         end,
 		
         timeline =
         {
             TimeEvent(9 * FRAMES, StopFlapping),
-        },		
-		onexit = function(inst)
-			inst.components.timer:ResumeTimer("spawnguards_cd")
+        },
+		
+		onupdate = function(inst)
+			if inst.tiredcount < 0 then
+				if inst.components.health and not inst.components.health:IsDead() then
+					inst.sg:GoToState("tired_pst")
+				else
+					inst.sg:GoToState("death")
+				end			
+			end
 		end,
 		
-        ontimeout = function(inst)
+		onexit = function(inst)
+			inst.tiredtask:Cancel()
+			inst.tiredtask = nil
 			inst.tiredcount = nil
-			inst.sg:GoToState("tired_pst")
-        end, 		
-
+			inst.components.timer:ResumeTimer("spawnguards_cd")
+			inst:RemoveTag("doingability")
+		end,
     },
     State{
         name = "tired_pst", --Bee Queen is Tired after rapidly commanding the army
@@ -355,7 +367,11 @@ local states = {
         {
             EventHandler("animover", function(inst)
 				StartFlapping(inst)
-                inst.sg:GoToState("idle")
+				if inst.components.health and not inst.components.health:IsDead() then
+					inst.sg:GoToState("idle")
+				else
+					inst.sg:GoToState("death")
+				end
             end),
         },	
 
@@ -456,10 +472,20 @@ local states = {
         },
 		onexit = function(inst) --Unfinished business, need to shoot more ppl.
 			if inst.shoottargets and inst.shoottargets[1] then
-				inst:DoTaskInTime(1,function(inst) inst.sg:GoToState("spawnguards_shooter_circle") end)
+				inst:DoTaskInTime(1,function(inst) 
+					if inst.components.health and not inst.components.health:IsDead() then
+						inst.sg:GoToState("spawnguards_shooter_circle") 
+					end
+				end)
 			else
 				inst.tiredcount = 14
-				inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("tired") end)
+				inst:DoTaskInTime(0,function(inst) 
+					if inst.components.health and not inst.components.health:IsDead() then
+						inst.sg:GoToState("tired") 
+					else
+						inst.sg:GoToState("death")
+					end
+				end)
 			end
 		end,
     },
@@ -546,7 +572,11 @@ local states = {
                 inst.sg:RemoveStateTag("busy")
                 inst.sg:RemoveStateTag("nosleep")
                 inst.sg:RemoveStateTag("nofreeze")
-				inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("command_mortar") end)
+				inst:DoTaskInTime(0,function(inst) 
+					if inst.components.health and not inst.components.health:IsDead() then
+						inst.sg:GoToState("command_mortar") 
+					end
+				end)
             end),
         },
 
@@ -610,21 +640,30 @@ local states = {
                                 if x ~= nil and y ~= nil and z ~= nil then 
                                     seeker.Transform:SetPosition(x,y,z)
                                 end
-                                seeker:MortarAttack(seeker,inst.components.combat.target,0.5)
+                                seeker:MortarAttack(seeker,target,0.5)
 							end
 						end
 					end
 				end
 				inst:DoTaskInTime(0,function(inst)
 					if inst.seekercount > 0 then
-						inst:DoTaskInTime(0.1,function(inst) inst.sg:GoToState("spawnguards_seeker_quick") end) -- Lil bit of a gap
+						inst:DoTaskInTime(0.1,function(inst) 
+						if inst.components.health and not inst.components.health:IsDead() then
+							inst.sg:GoToState("spawnguards_seeker_quick") 
+						end
+					end) -- Lil bit of a gap
 					else
+						inst:RemoveTag("doingability")
 						inst.components.timer:ResumeTimer("spawnguards_cd")
 						local x,y,z = inst.Transform:GetWorldPosition()
 						local players = TheSim:FindEntities(x,y,z,30,{"player"},{"playerghost"}) --more bees for more players
 						inst.seekercount = math.random(4,5) + 2*#players
 						inst.tiredcount = 10
-						inst.sg:GoToState("tired")
+						if inst.components.health and not inst.components.health:IsDead() then	
+							inst.sg:GoToState("tired")
+						else
+							inst.sg:GoToState("death")
+						end
 					end
 				end)
 		end,

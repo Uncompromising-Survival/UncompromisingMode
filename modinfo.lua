@@ -1,7 +1,7 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.15.23 : "Calm Before the Storm" ]
+󰀔 [ Version 1.15.3 : "Calm Before the Storm" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -16,7 +16,7 @@ Prominent features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.15.23"
+version = "Calm Before the Storm v1.15.3"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -146,7 +146,7 @@ configuration_options =
 		},
 		default = "default",
 	},
-	BinaryConfig("moon_transformations", "Moon Transformations","Certain things transform under the dim light of the full \"Moon\".", true),
+	--BinaryConfig("moon_transformations", "Moon Transformations","Certain things transform under the dim light of the full \"Moon\".", true),
 	SkipSpace(),
 ------------------------------
 -- Character Reworks --
@@ -566,6 +566,7 @@ configuration_options =
 	BinaryConfig("hungryfrogs", "Hungry Frogs", "Frogs eat anything left on the floor.", true),
 	BinaryConfig("cowardfrogs", "Frog Anti-cheese", "Frogs flee from bosses to prevent cheesing.", true),
 	BinaryConfig("toads", "Toads", "Toads replace frogs in the second autumn and release poisonous clouds on death.", true),
+	BinaryConfig("fiendforcedmetodothis", "Slurtle Tweaks", "Slurtles attack faster, have less health and drop Shellmets more often.", true),
 	SkipSpace(),
 
 -----------------------------

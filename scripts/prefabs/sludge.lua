@@ -2,6 +2,7 @@ local assets =
 {
     Asset("ANIM", "anim/sludge_oil.zip"),
 	 Asset("ANIM", "anim/sludge.zip"),
+     Asset("ANIM", "anim/boat_repair_sludge_build.zip")
 }
 
 local function ontaken(inst, taker)
@@ -90,6 +91,7 @@ local function sludge_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge.xml"
 
     return inst
 end
