@@ -56,6 +56,8 @@ local function fn()
         inst.components.floater:OnLandedServer()
     end)
 
+    inst:SetPrefabNameOverride("ocean_speaker")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -63,7 +65,6 @@ local function fn()
     end
 
     inst:AddTag("sirenpoint")
-    inst:SetPrefabNameOverride("ocean_speaker")
 
     inst:AddComponent("inspectable")
 

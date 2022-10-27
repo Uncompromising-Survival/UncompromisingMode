@@ -47,11 +47,12 @@ local function fn()
 
     inst.entity:SetPristine()
 
+    inst:SetPrefabNameOverride("siren_bird_nest")
+
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst:SetPrefabNameOverride("siren_bird_nest")
 
     inst:AddTag("sirenpoint")
 

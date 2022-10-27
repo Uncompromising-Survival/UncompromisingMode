@@ -36,6 +36,8 @@ local function fn()
     MakeInventoryFloatable(inst, "med", 0.1, {1.1, 0.9, 1.1})
     inst.components.floater.bob_percent = 0
 
+    inst:SetPrefabNameOverride("siren_throne")
+
     local land_time = (POPULATING and math.random()*5*FRAMES) or 0
     inst:DoTaskInTime(land_time, function(inst)
         inst.components.floater:OnLandedServer()
@@ -46,7 +48,6 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-    inst:SetPrefabNameOverride("siren_throne")
 
     inst:AddTag("sirenpoint")
 
