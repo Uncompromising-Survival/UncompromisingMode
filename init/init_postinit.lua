@@ -164,6 +164,7 @@ local prefab_post = {
 	"multitool_axe_pickaxe",
 	"staffs", --generic staffs.
 	"stalker",
+	"sacred_chest",
 }
 
 local stategraph_post = {

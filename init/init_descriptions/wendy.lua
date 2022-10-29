@@ -381,35 +381,50 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
     DESCRIBE.SLUDGE = "A vile concoction of the ocean."
 	DESCRIBE.SLUDGE_OIL = "A drink of death."
     DESCRIBE.SLUDGE_SACK = "A soggy sack."
-	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "."
+	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "May those on the other end face a quick end."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It will only prolong the inevitable." -- listen if klei can be lazy with her quotes i can too
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "It will only prolong the inevitable."
     DESCRIBE.BOATPATCH_SLUDGE = "Temporary protection from the cruelty of the sea."
     DESCRIBE.UM_COPPER_PIPE = "Hollow."
     DESCRIBE.BRINE_BALM  = "Pain to soothe my cuts."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "No where to swim away from now."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Encased forever."
-	DESCRIBE.UM_BEEGUN = "fucking bees."
+	DESCRIBE.UM_BEEGUN = "Death by a thousand little stabs."
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
-	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_DREAMCATCHER = "."
+	DESCRIBE.STEERINGWHEEL_COPPER = "Now I can rotate this boat."
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "It can turn an entire boat, if only I had one."
+	DESCRIBE.BOAT_BUMPER_COPPER = "This will last longer, but not forever."
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "This will last longer, but not forever."
+	DESCRIBE.UM_DREAMCATCHER = "Oh, to catch a dream."
 	DESCRIBE.UM_BRINEISHMOSS = "Sad, sad moss."
-	DESCRIBE.UM_COALESCED_NIGHTMARE = "something something edgy quote"
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Dreams of sustained cruelty."
 	DESCRIBE.SLUDGE_CORK = "To plug the slimey tears of the ocean."
-	DESCRIBE.SLUDGESTACK = ""
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SLUDGESTACK = "Tears rising from below the salty depths."
+	DESCRIBE.SPECTER_SHIPWRECK = "Left to rot in the ocean." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = ""
-	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.UM_MAGNERANG = "I'm not good at keeping things close."
+	DESCRIBE.UM_MAGNERANGREEL = "I have seperation anxiety too."
 	DESCRIBE.SIREN_THRONE = "A throne to rule over the vast nothingness."
 	DESCRIBE.LAVASPIT_SLUDGE = "A tempting way to go out in a blaze."
 	
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "They are a fight we ought to avoid..."
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "It won't be joining us in the murky depths."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "An endless cycle."
+	
+	DESCRIBE.WIXIE_PIANO = "I only know sad songs. Sorry..."
+	DESCRIBE.WIXIE_CLOCK = "It looks like its time is at it's end."
+	DESCRIBE.WIXIE_WARDROBE = "Dark secrets may lie within."
+	DESCRIBE.CHARLES_T_HORSE = "It might bring someone else joy."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Is it truly dead, or merely playing? What do you think, Abigail?"
+	DESCRIBE.UM_ORNAMENT_RAT = "Rats have short lifespans."
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Broken and worthless. Like... Nevermind."

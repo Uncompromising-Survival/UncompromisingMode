@@ -387,9 +387,11 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
     DESCRIBE.BOATPATCH_SLUDGE = "Pop it in a hole and forget about it."
     DESCRIBE.UM_COPPER_PIPE ="It's aged and rusty."
     DESCRIBE.BRINE_BALM  = "No thanks, time heals all wounds."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Catching fish this way is much more time efficient."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Something got caught inside there a long time ago."
 	DESCRIBE.UM_BEEGUN = "Now I'm their queen."
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "It's from another timeline, how did you get into this one?"
 	DESCRIBE.STEERINGWHEEL_COPPER = "It could last a millenium."
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "We need something to steer first."
@@ -400,12 +402,12 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.UM_COALESCED_NIGHTMARE = "I doubt this will contain Them for long."
 	DESCRIBE.SLUDGE_CORK = "This should speed things up with that sludge."
 	DESCRIBE.SLUDGESTACK = "That sludge has worn the rock down over time."
-	DESCRIBE.SPECTER_SHIPWRECK = "All comes to ruin, eventually." --TM
+	DESCRIBE.SPECTER_SHIPWRECK = "All comes to ruin, eventually." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = ""
+	DESCRIBE.UM_MAGNERANG = "Magnets aren't my specialty."
 	DESCRIBE.UM_MAGNERANGREEL = "It looks unstable."
 	DESCRIBE.SIREN_THRONE = "Oh look! A rock! Anyways."
 	DESCRIBE.LAVASPIT_SLUDGE = "I have no time to be dancing around hot coals!"
@@ -413,3 +415,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Attacking those head on would be a waste of time."
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "This boat is sure to have a short life span."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "The faster we go, the brighter it glows!"
+	
+	DESCRIBE.WIXIE_PIANO = "We have eternity to learn!"
+	DESCRIBE.WIXIE_CLOCK = "I can't open it up, so I can't fix it!"
+	DESCRIBE.WIXIE_WARDROBE = "Wait, how long has this been here?"
+	DESCRIBE.CHARLES_T_HORSE = "Not a cog in sight."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Shame about their short lifespan."
+	DESCRIBE.UM_ORNAMENT_RAT = "Don't let it get in my clocks!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Oh that was SUCH a waste of time."

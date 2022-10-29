@@ -61,6 +61,32 @@ TheNet:SystemMessage("Got a new target")
 	end
 end
 
+local function ReflectionMode(inst)
+	inst.AnimState:SetScale(1, -1)
+	inst.AnimState:SetSortOrder(ANIM_SORT_ORDER_BELOW_GROUND.UNDERWATER)
+	inst.AnimState:SetLayer(LAYER_WIP_BELOW_OCEAN)
+	inst.AnimState:SetMultColour(1, 1, 1, 0.2)
+	inst:AddTag("notarget")
+end
+
+local function RealMode(inst)
+	inst.AnimState:SetScale(1, 1)
+    inst.AnimState:SetSortOrder(0)
+    inst.AnimState:SetLayer(LAYER_WORLD)
+	inst.AnimState:SetMultColour(1, 1, 1, 1)
+	inst:RemoveTag("notarget")
+end
+
+local function RedoPoint(inst)
+	if inst.point then
+		TheNet:Announce("point vvas not nill")
+		inst.point = nil
+	else
+		TheNet:Announce("point vvas nil")
+		inst.point = FindSwimmableOffset(inst:GetPosition(), math.random() * PI * 2, 5)
+	end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -106,8 +132,8 @@ local function fn()
     inst:SetBrain(brain)
 
     inst:AddComponent("locomotor")
-    inst.components.locomotor.walkspeed = 8
-    inst.components.locomotor.runspeed = 8
+    inst.components.locomotor.walkspeed = 3
+    inst.components.locomotor.runspeed = 3
 	    
 	inst:AddComponent("circler")
 	
@@ -131,10 +157,6 @@ local function fn()
     inst.components.combat.playerdamagepercent = TUNING.GHOST_DMG_PLAYER_PERCENT
     inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 
-    inst:AddComponent("aura")
-    inst.components.aura.radius = TUNING.GHOST_RADIUS
-    inst.components.aura.tickperiod = TUNING.GHOST_DMG_PERIOD
-    inst.components.aura.auratestfn = AuraTest
 
     --Added so you can attempt to give hearts to trigger flavour text when the action fails
     inst:AddComponent("trader")
@@ -144,8 +166,19 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
 	inst:ListenForEvent("newcombattarget", OnNewTarget)
     ------------------
-
-
+	inst.ReflectionMode = ReflectionMode
+	inst.RealMode = RealMode
+	inst:DoPeriodicTask(10,RedoPoint)
+	
+	
+	inst:DoPeriodicTask(4,function(inst)
+		if inst:HasTag("notarget") then
+			inst.sg:GoToState("surface")
+		else
+			inst.sg:GoToState("dive")
+		end
+	end)
+	
     return inst
 end
 

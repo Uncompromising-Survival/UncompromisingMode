@@ -38,9 +38,17 @@ local SavannaTable = {
 	sos = 0.5,
 	moxTable = 0.5,
 	deadBodies = 2,
-	grassTrap = 0.1
+	grassTrap = 0.1,
 
 }
+
+local MosaicTable = { --need more mosaic setpieces
+
+	impactfulDiscovery = 1,
+
+
+}
+
 local GeneralTable = {
 	badfarmerTable = 0.5,
 	baseFrag_smellyKitchen = 0.5,
@@ -60,7 +68,7 @@ local function FinalizeSpawn(inst,umss,x,y,z)
 	spawner.AnimState:SetMultColour(0,0,0,0)--makes it invisible too.
 	spawner:AddTag("NOCLICK")
 	spawner:AddTag("NOBLOCK")
-	spawner:DoTaskInTime(3, function(spawner) spawner:Remove() end)--just in case it fails.
+	spawner:DoPeriodicTask(3, function(spawner) spawner:Remove() end)--just in case it fails.
 	AddToTheWorld(inst,umss)
 	inst:Remove()
 end
@@ -70,7 +78,7 @@ local function SpawnBiomeUMSS(inst)
 	local tile = TheWorld.Map:GetTileAtPoint(x, y, z)
 	local umss
 	local Table
-
+	
 	if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
 		Table = inst.MarshTable
 		umss = weighted_random_choice(Table)
@@ -103,6 +111,16 @@ local function SpawnBiomeUMSS(inst)
 		Table = inst.RockyTable
 		umss = weighted_random_choice(Table)
 	end
+	
+	if inst.components.areaaware:CurrentlyInTag("oasis") then --Also triggers for secondary meteor biome
+		Table = inst.MosaicTable
+		umss = weighted_random_choice(Table)
+	end
+	
+	
+	
+	
+	
 	if not umss then
 		Table = inst.GeneralTable
 		umss = weighted_random_choice(Table)
@@ -154,8 +172,9 @@ local function makefn()
 	inst.DarkForestTable = DarkForestTable
 	inst.RockyTable = RockyTable
 	inst.SavannaTable = SavannaTable
+	inst.MosaicTable = MosaicTable
 	inst.GeneralTable = GeneralTable
-
+	inst:AddComponent("areaaware")
 	inst.count = 0
 	inst:DoTaskInTime(0,SpawnBiomeUMSS)
     return inst

@@ -404,17 +404,19 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
     DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Pretty."
 	DESCRIBE.UM_BEEGUN = "Everybody gets BEES!"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Riches beyond my wildest dreams."
 	DESCRIBE.STEERINGWHEEL_COPPER = "Now the whole boats spinning!"
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "I still need one of these."
 	DESCRIBE.BOAT_BUMPER_COPPER = "Does this mean I can crash into as many things I want too?"
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "So, this must be pretty strong I guess."
-	DESCRIBE.UM_DREAMCATCHER = "."
-	DESCRIBE.UM_BRINEISHMOSS = ""
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_DREAMCATCHER = "Can you catch all my bad dreams?"
+	DESCRIBE.UM_BRINEISHMOSS = "Moist and gross."
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "I don't even want to think about where it came from."
 	DESCRIBE.SLUDGE_CORK = "Atleast now I can plug that sludge up!"
 	DESCRIBE.SLUDGESTACK = "C'moooon, wouldn't it be fun to watch it combust?"
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SPECTER_SHIPWRECK = "It's in the water, but it looks burnable enough." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
@@ -427,3 +429,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "That jerk is keeping me away!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "A fireproof boat? All aboard!"
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "It doesn't have the comforting glow of a nice roaring fire."
+	
+	DESCRIBE.WIXIE_PIANO = "Potatoes and molasses!"
+	DESCRIBE.WIXIE_CLOCK = "It's fire-o-clock! Every hour, every day!"
+	DESCRIBE.WIXIE_WARDROBE = "I hate non-flammable wood!"
+	DESCRIBE.CHARLES_T_HORSE = "I couldn't bring myself to burn it... Because it won't burn!"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Oh, it's a little angel!"
+	DESCRIBE.UM_ORNAMENT_RAT = "I hate rats! Oh, it's fake? I still hate it!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Wow!! This is worthless."

@@ -486,9 +486,11 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
     DESCRIBE.BOATPATCH_SLUDGE = "Another way to plug up any leaks."
     DESCRIBE.UM_COPPER_PIPE = "Metal tubes, from a tree?"
     DESCRIBE.BRINE_BALM  = "It keeps wounds fresh. No wait, that's not right."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "A whole lot of holes with this net."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "There's something inside of it?"
 	DESCRIBE.UM_BEEGUN = "Bees love being shot out of cannons, right?"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
 	DESCRIBE.STEERINGWHEEL_COPPER = "It's mechanical, and that means it's better."
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "It's better because it's mechanical."
@@ -512,3 +514,16 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "They beecame a wall!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "Science will determine if it floats."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "It produces light, theoretically."
+	
+	DESCRIBE.WIXIE_PIANO = "It's never too late to learn!"
+	DESCRIBE.WIXIE_CLOCK = "We're both right twice a day. Usually."
+	DESCRIBE.WIXIE_WARDROBE = "It contains dark secrets. Or clothing."
+	DESCRIBE.CHARLES_T_HORSE = "This better not be a trick."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Would it make a good decoration? Possumbly!"
+	DESCRIBE.UM_ORNAMENT_RAT = "Rats aren't so scary!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "It looks a little brokeny, whatever it is."

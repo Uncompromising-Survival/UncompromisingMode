@@ -390,27 +390,42 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
     DESCRIBE.BRINE_BALM  = "It hurts like a bee sting!" --haha you thought he'd say bitch.
     DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Eh, this stuff comes from trees, doesn't it?"
-    DESCRIBE.UM_BEEGUN = "Bitch."
+    DESCRIBE.UM_BEEGUN = "I wouldn't be too happy about this if it were me."
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "No wonder he was a king."
 	DESCRIBE.STEERINGWHEEL_COPPER = "Touching it makes my hands smell like pennies."
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "I think I like the wood one better."
 	DESCRIBE.BOAT_BUMPER_COPPER = "The boat will be safe now."
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Not wood, but close enough."
 	DESCRIBE.UM_DREAMCATCHER = "Haven't seen one of these in a while."
 	DESCRIBE.UM_BRINEISHMOSS = "Eyup. Moss."
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Someone must have had a bad dream."
 	DESCRIBE.SLUDGE_CORK = "Carved for a big hole, eh."
-	DESCRIBE.SLUDGESTACK = "That ought to have some sort of use."
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SLUDGESTACK = "That ought to have some sort of use?"
+	DESCRIBE.SPECTER_SHIPWRECK = "Wood gone down the drain." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
     DESCRIBE.UM_MAGNERANG = "Like throwing a horseshoe."
-	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.UM_MAGNERANGREEL = "I'm a simple man, I don't worry about how it works."
 	DESCRIBE.SIREN_THRONE = "Quite the homely lookin' rock, eh?"
 	DESCRIBE.LAVASPIT_SLUDGE = "Now that's a quick way to start a fire, eh?"
 
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Let down your walls, eh?"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "I'd prefer something more sturdy. Oak, perhaps."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "What'll they think of next?"
+	
+	DESCRIBE.WIXIE_PIANO = "She's a beaut'! Shame it's been smashed up..."
+	DESCRIBE.WIXIE_CLOCK = "Excellent craftmanship!"
+	DESCRIBE.WIXIE_WARDROBE = "It's got a nice oak smell, with a hint of nightmares."
+	DESCRIBE.CHARLES_T_HORSE = "A fine toy for the kiddies."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "We don't get many of these up north."
+	DESCRIBE.UM_ORNAMENT_RAT = "Oh good, it's just a toy."
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Well that a right load'a malarky."

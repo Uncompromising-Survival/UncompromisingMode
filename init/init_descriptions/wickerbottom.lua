@@ -394,25 +394,27 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
     DESCRIBE.BOATPATCH_SLUDGE = "A good idea to have a few spare plugs around."
     DESCRIBE.UM_COPPER_PIPE = "I don't believe copper grows ..."
     DESCRIBE.BRINE_BALM  = "A painful antiseptic."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "It should be worth the effort."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Presumably, something ancient lies within."
-	DESCRIBE.UM_BEEGUN = ""
+	DESCRIBE.UM_BEEGUN = "How does it propel the bees with such force?"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Must be full of riches."
 	DESCRIBE.STEERINGWHEEL_COPPER = "I should be able to turn the entire barge now."
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "The mechinism allows it to work with a rudder."
-	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
-	DESCRIBE.UM_DREAMCATCHER = ""
+	DESCRIBE.BOAT_BUMPER_COPPER = "It should last a millenium."
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Where should we put it?"
+	DESCRIBE.UM_DREAMCATCHER = "Not much use to me."
 	DESCRIBE.UM_BRINEISHMOSS = "It grows almost everywhere."
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "The esscence of someones negative thoughts."
 	DESCRIBE.SLUDGE_CORK = "Not suitable for a boat, it's for a much bigger hole."
 	DESCRIBE.SLUDGESTACK = "It's reminiscient of a hydrothermal vent."
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SPECTER_SHIPWRECK = "an Abandoned wreck." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = "."
+	DESCRIBE.UM_MAGNERANG = "This is not the intended use for a magnet!"
 	DESCRIBE.UM_MAGNERANGREEL = "I don't believe that's how magnets work."
 	DESCRIBE.SIREN_THRONE = "Curious. It seems something has made a home out of this formation."
 	DESCRIBE.LAVASPIT_SLUDGE = "It'd be smart to keep my distance."
@@ -420,3 +422,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "The Osmia bicornis are insistent we do not reach the monarch."
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "It doesn't look stable."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "A facinating use of kinetic principles!"
+	
+	DESCRIBE.WIXIE_PIANO = "I haven't played one of these in a long time."
+	DESCRIBE.WIXIE_CLOCK = "I miss the ticking of my old grandfather clock."
+	DESCRIBE.WIXIE_WARDROBE = "An ordinary wardrobe, from a glance."
+	DESCRIBE.CHARLES_T_HORSE = "I couldn't bring myself to burn it... Because it won't burn!"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "An excellent model of a Didelphis Virginiana."
+	DESCRIBE.UM_ORNAMENT_RAT = "The kittens would love it!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Oh, this must be a subspecies of that sentient creature!"

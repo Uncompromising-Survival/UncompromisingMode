@@ -278,7 +278,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.LIGHTNINGHOUND = "Surroundings ionized!"
 	DESCRIBE.SPOREHOUND = "Plague-spreader."
 	DESCRIBE.GLACIALHOUND = "Harrassment, ranged!"
-	DESCRIBE.RNESKELETON = "Skeletons, animate."
+	DESCRIBE.RNESKELETON = "Human remains, animate."
 	DESCRIBE.RAT_WHIP = "Night, walking, stalking."
 	DESCRIBE.KLAUS_AMULET = "Curse of Klaus."
 	DESCRIBE.CRABCLAW = "Gem magic, rudimentary."
@@ -350,7 +350,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.SKULLFLASK_EMPTY = "Pleasure, favorite. Regenerating."
 	DESCRIBE.STANTON_SHADOW_TONIC = "Scent, toxic."
 	DESCRIBE.STANTON_SHADOW_TONIC_FANCY = DESCRIBE.STANTON_SHADOW_TONIC
-	DESCRIBE.STANTON = "Comradery, seeking?"
+	DESCRIBE.STANTON = "Remains, animate. Comradery, seeking?"
 	ANNOUNCE.ANNOUNCE_ATTACH_BUFF_HYPERCOURAGE = "Ha! HA! TODAY, DEATH!"
 	ANNOUNCE.ANNOUNCE_DETACH_BUFF_HYPERCOURAGE = "Again!"
 	--StantonStuff
@@ -417,19 +417,19 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
 	DESCRIBE.WINONA_TOOLBOX = "Implements, unusual."
 	ACTIONFAIL.WINONATOOLBOX = "Untrained."
-    DESCRIBE.POWERCELL = ""
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
-	DESCRIBE.MINERHAT_ELECTRICAL = ""
-	DESCRIBE.OCEAN_SPEAKER = "" 
+    DESCRIBE.POWERCELL = "Power source, electrical. Design limiting."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Conversion, power input."
+	DESCRIBE.MINERHAT_ELECTRICAL = "Tinkered, manipulated."
+	DESCRIBE.OCEAN_SPEAKER = "Curious, meaning, purpose." 
 
 	DESCRIBE.OCUPUS_BEAK = "."
 	DESCRIBE.OCUPUS_TENTACLE = ""
 	DESCRIBE.OCUPUS_TENTACLE_EYE = ""
 	DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
 
-	DESCRIBE.ARMOR_REED_UM = ""
-	DESCRIBE.ARMOR_SHARKSUIT_UM = "."
-	DESCRIBE.ROCKJAWLEATHER = ""
+	DESCRIBE.ARMOR_REED_UM = "Luxury. Physical protection lacking."
+	DESCRIBE.ARMOR_SHARKSUIT_UM = "Ocean be damned."
+	DESCRIBE.ROCKJAWLEATHER = "Curious, properties hydrophobic."
 
 	--DESCRIBE.UM_SIREN = "Science says we may be able to \"help\" each other."
 	--WHAT THE FUCK VARIANT
@@ -472,7 +472,21 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "Ocean combat, still undesired." 
 	DESCRIBE.UM_MAGNERANG = "Food chain, intelligence dominated."
 	DESCRIBE.UM_MAGNERANGREEL = "Return!"
+	DESCRIBE.LAVASPIT_SLUDGE = "Fragrant, burning."
 	
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Priority, zero."
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "Inadequate, weight capacity. Abatement, temporary."
+    DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Power generation, kinetic energy."
+    
+    DESCRIBE.WIXIE_PIANO = "Noisemaker, melodic. Presence, unknown cause."
+    DESCRIBE.WIXIE_CLOCK = "Simple clock. Ancients, larger one built."
+    DESCRIBE.WIXIE_WARDROBE = "Curious. Entry point, destination unknown."
+    DESCRIBE.CHARLES_T_HORSE = "Plaything. Depiction, creature unknown."
+
+    DESCRIBE.UM_ORNAMENT_OPOSSUM = "Rat-like."
+    DESCRIBE.UM_ORNAMENT_RAT = "Vermin. Stuffed."
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Shit."

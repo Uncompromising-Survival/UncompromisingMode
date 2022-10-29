@@ -215,7 +215,7 @@ local function ShoTable(inst)
 	for i,v in pairs(umss_tables) do
 		TheNet:Announce(v.name)
 	end
-	ReplaceMyself(inst)
+	--ReplaceMyself(inst)
 end
 
 local function TryForce(inst)
@@ -261,6 +261,7 @@ local function makefn()
     inst:AddComponent("writeable")
 	inst.components.writeable:SetOnWritingEndedFn(TryForce)
 	inst.OnLoad = onload
+	inst.persists = false
 	inst:DoTaskInTime(0.2,
 		function(inst)
 				--TheNet:Announce("Code Ran") --For Troubleshooting

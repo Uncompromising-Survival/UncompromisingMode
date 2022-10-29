@@ -14,7 +14,7 @@ end
 
 local events =
 {
-    CommonHandlers.OnLocomote(true, true),
+    --CommonHandlers.OnLocomote(true, true),
     EventHandler("startaura", startaura),
     EventHandler("stopaura", stopaura),
     EventHandler("attacked", function(inst)
@@ -27,21 +27,13 @@ local events =
             inst.sg:GoToState("knockback", data)
         end
     end),
-    EventHandler("updatepetmastery", function(inst, data)
-        if inst._pet_level ~= nil and data ~= nil and inst._pet_level == data.newlevel then
-            --cancel change
-            inst.sg.mem.queuelevelchange = nil
-        else
-            inst.sg.mem.queuelevelchange = true
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst.sg.currentstate.name ~= "appear" then
-                inst.sg:GoToState("levelup")
-            end
-        end
-    end),
     EventHandler("death", function(inst)
         inst.sg:GoToState("dissipate")
     end),
     EventHandler("locomote", function(inst)
+		if not inst.sg:HasStateTag("busy") then
+			inst.sg:GoToState("lurk")
+		end
         --[[if not inst.sg:HasStateTag("busy") and inst.circling == false then
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
@@ -139,6 +131,46 @@ local states =
         },
     },
     State{
+        name = "dive",
+        tags = { "busy", "noattack", "nointerrupt" },
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("dive")--inst.AnimState:PlayAnimation("dissipate")
+			inst.AnimState:PushAnimation("surface",false)
+        end,
+		
+        events =
+        {
+		    EventHandler("animover", function(inst)
+				inst.ReflectionMode(inst)
+            end),
+            EventHandler("animqueueover", function(inst)
+				inst.sg:GoToState("idle")
+            end),
+        },
+    },
+    State{
+        name = "surface",
+        tags = { "busy", "noattack", "nointerrupt" },
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("dive")--inst.AnimState:PlayAnimation("dissipate")
+			inst.AnimState:PushAnimation("surface",false)
+        end,
+		
+		events =
+        {
+		    EventHandler("animover", function(inst)
+				inst.RealMode(inst)
+            end),
+            EventHandler("animqueueover", function(inst)
+				inst.sg:GoToState("idle")
+            end)
+        },
+    },
+    State{
         name = "premoving",
         tags = {"moving", "canrotate"},
 
@@ -173,6 +205,24 @@ local states =
         events=
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("run") end),
+        },
+    },
+    State{
+        name = "lurk",
+        tags = {"moving", "canrotate"},
+
+        onenter = function(inst)
+            inst.components.locomotor:WalkForward()
+            inst.AnimState:PushAnimation("idle")
+        end,
+
+        timeline=
+        {
+         },
+
+        events=
+        {
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
     State{

@@ -54,7 +54,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
             GENERIC = "Do I know you?",
             ATTACKER = "%s, keep your stupid claws away from me!",
             MURDERER = "%s I see blood in your fur!",
-            REVIVER = "We are family I guess.",
+            REVIVER = "We are family now, I guess.",
             GHOST = "You seem familiar, were you part of my pack?",
             FIRESTARTER = "I can smell the ash on your fur, you stupid.",
         }
@@ -66,7 +66,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
             MURDERER = "I am going to throw rocks at you now, %s!",
             REVIVER = "You are fine, I guess.",
             GHOST = "Did you choke on a little pebble?",
-            FIRESTARTER = "You are burning things now too!",
+            FIRESTARTER = "You are burning things now too!? Stop!",
+        }
+	WATHOM =
+        {
+            GENERIC = "You are the lobster man! You remember me, dont you?",
+            ATTACKER = "My family and I know you're a killer!",
+            MURDERER = "He is on a massacre, I must escape!",
+            REVIVER = "I did not know you can do something other than killing.",
+            GHOST = "Huh, who killed you?",
+            FIRESTARTER = "%s, You are not very good at burning things, so stop.",
         }
 	
     DESCRIBE.RATPOISONBOTTLE = "Yuck! Are you trying to kill me?"
@@ -80,7 +89,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 
     DESCRIBE.MUSHROOMSPROUT_OVERWORLD = "That! That is where the melting rain is from!"
     DESCRIBE.TOADLING = "Stop getting in my way."
-	DESCRIBE.UNCOMPROMISING_TOAD = "Smells."
+	DESCRIBE.UNCOMPROMISING_TOAD = "Smells interesting, now."
 	
     DESCRIBE.GASMASK = "It is stuffy, I can not smell with it."
 	DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
@@ -464,7 +473,7 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.GIANT_TREE_BIRDNEST = "It seems they came to me!"
 	
 	DESCRIBE.SLUDGE = "This has an interesting fragance to it, I like."
-	DESCRIBE.SLUDGE_OIL = ""
+	DESCRIBE.SLUDGE_OIL = "The scent is most powerful. Too powerful, I do not like it!"
     DESCRIBE.SLUDGE_SACK = "Slimey gooey carrier, It is my style."
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "The sludge, It is a rock now."
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "Yes, very nice."
@@ -473,13 +482,15 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
     DESCRIBE.UM_COPPER_PIPE = "Licking this is very tasty."
     DESCRIBE.BRINE_BALM  = "I am not hurting myself to help myself."
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "I will steal everything I want now with this."
-	DESCRIBE.UM_AMBER = ""
+	DESCRIBE.UM_AMBER = "Is it a jewel?"
 	DESCRIBE.UM_BEEGUN = "They are my bees now! I do not want to shoot them!"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "I need more rats to bring this back to my hole."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
-	DESCRIBE.BOAT_BUMPER_COPPER = ""
-	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "Yes, Keep spinning, and spinning..."
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "It is machine-like."
+	DESCRIBE.BOAT_BUMPER_COPPER = "You bump me? I bump you!"
+	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Very sturdy!"
 	DESCRIBE.UM_DREAMCATCHER = "Give me my dream back. It is mine!"
 	DESCRIBE.UM_BRINEISHMOSS = "I have eaten enough moss to know how it tastes."
 	DESCRIBE.UM_COALESCED_NIGHTMARE = "I do not want... this..."
@@ -492,8 +503,22 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "" 
 	DESCRIBE.UM_MAGNERANG = "Why would I want to throw it? This is mine now."
 	DESCRIBE.UM_MAGNERANGREEL = "It is trying to take things!"
+	DESCRIBE.SIREN_THRONE = "Whose hoard is this?"
+	DESCRIBE.LAVASPIT_SLUDGE = "Can't touch fire goop!"
 	
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
-	DESCRIBE.UM_BEEGUARD_BLOCKER = "According to all known laws of aviation, there is no way a bee should be able to fly."
+	DESCRIBE.UM_BEEGUARD_BLOCKER = "Let me pass!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "I want to chew hole in it."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Spins good!"
 	
+	DESCRIBE.WIXIE_PIANO = "I will play a beautiful song for my rats."
+	DESCRIBE.WIXIE_CLOCK = "I did not break it!"
+	DESCRIBE.WIXIE_WARDROBE = "What's inside? Show me!"
+	DESCRIBE.CHARLES_T_HORSE = "Some kind of chew toy?"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "*Hiss*!"
+	DESCRIBE.UM_ORNAMENT_RAT = "You're just a fake friend."
+	
+	DESCRIBE.TRINKET_WATHOM1 = "That where I put it! Heeheeh."

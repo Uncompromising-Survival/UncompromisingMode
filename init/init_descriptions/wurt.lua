@@ -397,26 +397,42 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WURT.ACTIONFAIL
     DESCRIBE.BRINE_BALM  = "Like salt, but this too salty!"
     DESCRIBE.UNCOMPROMISING_FISHINGNET = "Better not hurt them."
 	DESCRIBE.UM_AMBER = "Surprise rock!"
-    DESCRIBE.UM_BEEGUN = "."
+    DESCRIBE.UM_BEEGUN = "Buzzys work for me now!"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Need this. Bring to king."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "No taste good."
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "Shiny wheel thingy!"
 	DESCRIBE.BOAT_BUMPER_COPPER = "Boat look like Ironfolk, flurp."
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Make boat look like Ironfolk."
 	DESCRIBE.UM_DREAMCATCHER = "Bad sleep catcher? Florp. How that work?"
 	DESCRIBE.UM_BRINEISHMOSS = "Moss tasty"
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Scary thingy. Bad thingy!"
 	DESCRIBE.SLUDGE_CORK = "Big plug thingy."
-	DESCRIBE.SLUDGESTACK = "Mmmmm, has good stink to it."
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SLUDGESTACK = "Ooey Gooey."
+	DESCRIBE.SPECTER_SHIPWRECK = "Boat not round?" 
 	
-	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
-	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
-	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = "."
-	DESCRIBE.UM_MAGNERANGREEL = ""
+	DESCRIBE.UNCOMPROMISING_HARPOON = "." -- unimplemented
+	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "." -- unimplemented
+	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "." -- unimplemented
+	DESCRIBE.UM_MAGNERANG = "Magnet? How that work?"
+	DESCRIBE.UM_MAGNERANGREEL = "Tiny horsey shoe!"
+	DESCRIBE.SIREN_THRONE = "Pretty lady's rock?"
 	DESCRIBE.LAVASPIT_SLUDGE = "Glorp! Too hot!"
 	
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
-	DESCRIBE.UM_BEEGUARD_BLOCKER = "Stinger wall! Florp!"
+	DESCRIBE.UM_BEEGUARD_BLOCKER = "Stinger wall! Glurp!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "Mermfolk can float better!"
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "It make wind... into light?"
+	
+	DESCRIBE.WIXIE_PIANO = "Makes funny little sounds!"
+	DESCRIBE.WIXIE_CLOCK = "Pulling thingies makes pointy things spin!"
+	DESCRIBE.WIXIE_WARDROBE = "What inside? Is it bad?"
+	DESCRIBE.CHARLES_T_HORSE = "Like springy folk, but no springy."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Swampy kitty!"
+	DESCRIBE.UM_ORNAMENT_RAT = "Sneaky thing taking nap?"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Look like Wathy! Maybe he want it?"

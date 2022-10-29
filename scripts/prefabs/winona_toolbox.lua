@@ -1,29 +1,22 @@
 require "prefabutil"
 
-local supertacklecontainer_sounds =
-{
-    open = "hookline_2/characters/hermit/tacklebox/large_open",
-    close = "hookline_2/characters/hermit/tacklebox/large_close",
-}
-
 local function onopen(inst)
-        if not inst:HasTag("burnt") then
-            inst.AnimState:PlayAnimation("open")
-            inst.SoundEmitter:PlaySound(inst._sounds.open)
-        end
+	if not inst:HasTag("burnt") then
+		inst.AnimState:PlayAnimation("open", false)
+		inst.SoundEmitter:PlaySound("hookline/common/fishbox/open")
+	end
 end
 
 local function onclose(inst)
     if not inst:HasTag("burnt") then
-        inst.AnimState:PlayAnimation("close")
-        inst.AnimState:PushAnimation("closed", false)
-        inst.SoundEmitter:PlaySound(inst._sounds.close)
+        inst.AnimState:PlayAnimation("close", false)
+    inst.SoundEmitter:PlaySound("saltydog/common/saltbox/close")
     end
 end
 
 local function OnPutInInventory(inst)
 	inst.components.container:Close()
-	inst.AnimState:PlayAnimation("closed", false)
+	inst.AnimState:PlayAnimation("idle", false)
 end
 
 local function onsave(inst, data)
@@ -55,11 +48,12 @@ local function MakeTackleContainer(name, bank, build, assets)
 
         inst.AnimState:SetBank(bank)
         inst.AnimState:SetBuild(build)
-        inst.AnimState:PlayAnimation("closed")
+        inst.AnimState:PlayAnimation("idle")
+		inst.Transform:SetScale(2, 2, 2)
 
 		MakeInventoryPhysics(inst)
 
-        local swap_data = {bank = bank, anim = "closed"}
+        local swap_data = {bank = bank, anim = "idle"}
         MakeInventoryFloatable(inst, "med", nil, nil, nil, nil, swap_data)
 
         inst.entity:SetPristine()
@@ -79,7 +73,6 @@ local function MakeTackleContainer(name, bank, build, assets)
 		inst.components.container.droponopen = true
 
 		inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 		inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_toolbox.xml"
 
@@ -88,7 +81,6 @@ local function MakeTackleContainer(name, bank, build, assets)
         inst:AddComponent("hauntable")
         inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
         inst:AddTag("winona_notouchy")
-        inst._sounds = supertacklecontainer_sounds
 
 
         inst.OnSave = onsave
@@ -100,4 +92,4 @@ local function MakeTackleContainer(name, bank, build, assets)
     return Prefab(name, fn, assets, prefabs)
 end
 
-return MakeTackleContainer("winona_toolbox", "supertacklecontainer", "supertacklecontainer", { Asset("ANIM", "anim/ui_tacklecontainer_3x5.zip") })
+return MakeTackleContainer("winona_toolbox", "winona_toolbox", "winona_toolbox", { Asset("ANIM", "anim/ui_tacklecontainer_3x5.zip") })

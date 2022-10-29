@@ -779,7 +779,7 @@ STRINGS.RECIPE_DESC.BOAT_BUMPER_COPPER_KIT = "Sturdy protection."
 STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
-STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "spinny wooooo"
+STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
 
 --sailing rebalance strings
 STRINGS.RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"

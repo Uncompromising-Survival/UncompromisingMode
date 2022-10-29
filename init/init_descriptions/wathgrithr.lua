@@ -385,32 +385,47 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.CANNONBALL_SLUDGE_ITEM = "A ball of brimstone!"
 	DESCRIBE.BOAT_BUMPER_SLUDGE = "It will take the brunt of any blows."
 	DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Squishy armor for my vessel."
-    DESCRIBE.BOATPATCH_SLUDGE = ""
+    DESCRIBE.BOATPATCH_SLUDGE = "Holes, Never more."
     DESCRIBE.UM_COPPER_PIPE = "Material for the blacksmith."
     DESCRIBE.BRINE_BALM  = "My constitution shall triumph."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "This will bring me a bountiful feast of fish."
-	DESCRIBE.UM_AMBER = ""
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
+	DESCRIBE.UM_AMBER = "A shell of sap."
     DESCRIBE.UM_BEEGUN = "A volley of bees!"
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Treasures for our hall!"
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "My vessel will be covered from all angles of attack."
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "Sturdy, but a it requires a vessel to steer."
 	DESCRIBE.BOAT_BUMPER_COPPER = "Plate armor to keep the waves at bay."
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Plate mail for thine vessel."
 	DESCRIBE.UM_DREAMCATCHER = "I only dream of glorius death in battle!"
 	DESCRIBE.UM_BRINEISHMOSS = "Damp moss."
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Fear manifest!"
 	DESCRIBE.SLUDGE_CORK = "This will keep the ichor at bay."
 	DESCRIBE.SLUDGESTACK = "Ichor spews from Hel's veins!"
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SPECTER_SHIPWRECK = "Swept away by the ocean, and left to decay." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = "."
-	DESCRIBE.UM_MAGNERANGREEL = ""
-	DESCRIBE.SIREN_THRONE = "An amateur throne."
-	DESCRIBE.LAVASPIT_SLUDGE = "A fire of Hel!"
+	DESCRIBE.UM_MAGNERANG = "A weapon that will attatch to my enemies armor, and weigh them down."
+	DESCRIBE.UM_MAGNERANGREEL = "It keeps my enemies at bay."
+	DESCRIBE.SIREN_THRONE = "An amateurs throne."
+	DESCRIBE.LAVASPIT_SLUDGE = "Fire of Hel!"
 
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "The monarch has taken a defensive stance!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "This vessel is not combat worthy!"
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Bestow light upon me, Njoror!"
+	
+	DESCRIBE.WIXIE_PIANO = "I shall write a symphony worthy of my greatness!"
+	DESCRIBE.WIXIE_CLOCK = "Time stops for no one! Oh, wait..."
+	DESCRIBE.WIXIE_WARDROBE = "What lies in side? A beast of burden?"
+	DESCRIBE.CHARLES_T_HORSE = "Beast, wooden. Purpose unknown."
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Awaken, foul beast!"
+	DESCRIBE.UM_ORNAMENT_RAT = "You are beneath me, little one!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "What sort of instrument is this?"

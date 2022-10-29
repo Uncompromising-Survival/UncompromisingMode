@@ -389,28 +389,44 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
     DESCRIBE.BOATPATCH_SLUDGE = "It's the perfect size for any holes."
     DESCRIBE.UM_COPPER_PIPE = "We can look through it and pretend it's a spyglass."
     DESCRIBE.BRINE_BALM  = "It hurts, but it's good for us."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "It's our little web for fishies!"
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "It's hard to see, but there's something inside."
-	DESCRIBE.UM_BEEGUN = "?"
+	DESCRIBE.UM_BEEGUN = "This seems wrong."
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Yay! A fancy treasure chest!"
 	DESCRIBE.STEERINGWHEEL_COPPER = "We might get sea sick with all this turning."
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "It'll will help us spin our boat."
 	DESCRIBE.BOAT_BUMPER_COPPER = ""
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = ""
 	DESCRIBE.UM_DREAMCATCHER = "Nighty night."
-	DESCRIBE.UM_BRINEISHMOSS = ""
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_BRINEISHMOSS = "It feels like wet fur."
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "They're not our thoughts."
 	DESCRIBE.SLUDGE_CORK = "We can plug really big holes with this."
 	DESCRIBE.SLUDGESTACK = "We don't think that'll be good for our fur."
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SPECTER_SHIPWRECK = "Is anyone in there?" 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
 	DESCRIBE.UM_MAGNERANG = "Didn't dad have some in his drawer."
-	DESCRIBE.UM_MAGNERANGREEL = "."
+	DESCRIBE.UM_MAGNERANGREEL = "We like the colors!"
+	DESCRIBE.SIREN_THRONE = "No ones home."
 	DESCRIBE.LAVASPIT_SLUDGE = "Ah, it scorched our fur!"
 
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Wahh! Let us through you meanies!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "It won't be joining us in the murky depths."
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "An endless cycle."
+	
+	DESCRIBE.WIXIE_PIANO = "It's still hard to play, even with eight arms!"
+	DESCRIBE.WIXIE_CLOCK = "Aw, it's not a cuckoo clock."
+	DESCRIBE.WIXIE_WARDROBE = "Looks scary!"
+	DESCRIBE.CHARLES_T_HORSE = "Giddy up, horsey!"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Oh no! Are you okay?"
+	DESCRIBE.UM_ORNAMENT_RAT = "We got you, you sneaky thing!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "We want a refund!!"

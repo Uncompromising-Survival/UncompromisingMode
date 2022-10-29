@@ -313,8 +313,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	DESCRIBE.GLASS_SCALES = "Is nice glow."
 	DESCRIBE.MOONGLASS_GEODE = "Is moon glow!"
 	DESCRIBE.ARMOR_GLASSMAIL = "No one is mightier!"
-	DESCRIBE.ARMOR_GLASSMAIL_SHARDS = ""
-	--Stuff for Canis to check
+	DESCRIBE.ARMOR_GLASSMAIL_SHARDS = "Protect Wolfgang!"
 	DESCRIBE.MOONMAW_GLASSSHARDS_RING = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 	DESCRIBE.MOONMAW_GLASSSHARDS = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
 	DESCRIBE.MOONMAW_LAVAE_RING = DESCRIBE.MOONMAW_LAVAE
@@ -359,8 +358,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Wolfgang did not leave dumbbells in there."
 	ACTIONFAIL.WINONATOOLBOX = "Wolfgang did not leave dumbbells in there."
-	DESCRIBE.POWERCELL = "."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
+	DESCRIBE.POWERCELL = "Is a box of shock."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Must connect to lamp now."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Head lamp is now electric head lamp."
 	DESCRIBE.OCEAN_SPEAKER = "Is speaker! Had many in circus!"
 	--DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
@@ -390,20 +389,22 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
     DESCRIBE.BOATPATCH_SLUDGE = "Makes holes into filled holes."
     DESCRIBE.UM_COPPER_PIPE = "Bend pipes no problem."
     DESCRIBE.BRINE_BALM  = "No pain, no gain."
-    DESCRIBE.UNCOMPROMISING_FISHINGNET = "Big net for big fish."
+    DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Big glossy rock."
 	DESCRIBE.UM_BEEGUN = "I like shooting them at things I do not like."
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "Was a much work to get this, be proud."
-	DESCRIBE.STEERINGWHEEL_COPPER = ""
-	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = ""
+	DESCRIBE.STEERINGWHEEL_COPPER = "Strong wheel perfect for Wolfgang!"
+	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "A mighty wheel!"
 	DESCRIBE.BOAT_BUMPER_COPPER = "It will bump many things before it breaks."
 	DESCRIBE.BOAT_BUMPER_COPPER_KIT = "Metal is very strong, good for boat."
 	DESCRIBE.UM_DREAMCATCHER = "Is net for catching dreams."
-	DESCRIBE.UM_BRINEISHMOSS = ""
-	DESCRIBE.UM_COALESCED_NIGHTMARE = ""
+	DESCRIBE.UM_BRINEISHMOSS = "Is boring."
+	DESCRIBE.UM_COALESCED_NIGHTMARE = "Wolfgang hate nightmares!"
 	DESCRIBE.SLUDGE_CORK = "How plug does not work for boat?"
 	DESCRIBE.SLUDGESTACK = "Where is sludge coming from?"
-	DESCRIBE.SPECTER_SHIPWRECK = "" 
+	DESCRIBE.SPECTER_SHIPWRECK = "Should sail back, this is place where ships die." 
 	
 	DESCRIBE.UNCOMPROMISING_HARPOON = "It is very easy to throw."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Watch how far this can be thrown."
@@ -416,3 +417,16 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Wolfgang cannot break through bee wall!"
+
+	DESCRIBE.PORTABLEBOAT_ITEM = "Tiny boat is wimpy!"
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Mighty wind makes mighty light!"
+	
+	DESCRIBE.WIXIE_PIANO = "Smashed by a mighty force? Wolfgang must find!"
+	DESCRIBE.WIXIE_CLOCK = "Who broken?"
+	DESCRIBE.WIXIE_WARDROBE = "Being near it gives Wolfgang chills."
+	DESCRIBE.CHARLES_T_HORSE = "Little circus horse! Wolfgang love this!"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Ahh! Don't bite!"
+	DESCRIBE.UM_ORNAMENT_RAT = "Don't let elephants see!"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "Forbidden potato."

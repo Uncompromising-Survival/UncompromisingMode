@@ -112,7 +112,7 @@ AddStategraphActionHandler("wilson", ActionHandler(GLOBAL.ACTIONS.ATTACK, Attack
 -- the MEAT
 
 local function ConfigureRunState(inst)
-	if inst.components.rider:IsRiding() then
+	if inst.components.rider ~= nil and inst.components.rider:IsRiding() then
 		inst.sg.statemem.riding = true
 		inst.sg.statemem.groggy = inst:HasTag("groggy")
 		inst.sg:AddStateTag("nodangle")
@@ -120,7 +120,7 @@ local function ConfigureRunState(inst)
 		local mount = inst.components.rider:GetMount()
 		inst.sg.statemem.ridingwoby = mount and mount:HasTag("woby")
 
-	elseif inst.components.inventory:IsHeavyLifting() then
+	elseif inst.components.inventory ~= nil and inst.components.inventory:IsHeavyLifting() then
 		inst.sg.statemem.heavy = true
 		inst.sg.statemem.heavy_fast = inst.components.mightiness ~= nil and inst.components.mightiness:IsMighty()
 	elseif inst:HasTag("wereplayer") then

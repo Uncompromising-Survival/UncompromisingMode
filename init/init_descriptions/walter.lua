@@ -2,7 +2,7 @@ ANNOUNCE = GLOBAL.STRINGS.CHARACTERS.WALTER
 DESCRIBE = GLOBAL.STRINGS.CHARACTERS.WALTER.DESCRIBE
 ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 
---	[ 		Wigfrid Descriptions		]   --
+--	[ 		Walter Descriptions		]   --
 
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "You need my help! And your body..."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "I haven't gotten my \"putting rocks in machines\" badge yet."
@@ -395,6 +395,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
     DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 	DESCRIBE.UM_AMBER = "Ooh, are there any bugs in it?"
     DESCRIBE.UM_BEEGUN = "K-keep your enemies close, right?" --please make Walter lose 20 sanity per minute with this equipped I think that would be a cool flavour perk
+	DESCRIBE.BULLETBEE = DESCRIBE.KILLERBEE
+	DESCRIBE.CHERRYBULLETBEE = DESCRIBE.KILLERBEE
 	DESCRIBE.SUNKENCHEST_ROYAL = "It was a royal pain just to get this."
 	DESCRIBE.STEERINGWHEEL_COPPER = "The future is now!"
 	DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "I prefer a nice wooden wheel."
@@ -410,7 +412,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
-	DESCRIBE.UM_MAGNERANG = ""
+	DESCRIBE.UM_MAGNERANG = "It always finds its way back!"
 	DESCRIBE.UM_MAGNERANGREEL = "Are we sure it's not going to start a forest fire?"
 	DESCRIBE.SIREN_THRONE = "Look Woby! A rock!" --Dumb kid.
 	DESCRIBE.LAVASPIT_SLUDGE = "Careful around that Woby!"
@@ -418,3 +420,13 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "That's fine, I wasn't planning on getting too close anyway!"
+	
+	DESCRIBE.WIXIE_PIANO = "Piano lessens weren't a part of my training!"
+	DESCRIBE.WIXIE_CLOCK = "Shame it's broken, a ticking clock adds tension to horror stories!"
+	DESCRIBE.WIXIE_WARDROBE = "Reminds me of this one radio play I heard, the \"Haunted Wardrobe at the End of the Hall\" it's about-"
+	DESCRIBE.CHARLES_T_HORSE = "I can't be seen playing with kids toys!"
+
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "I love these little guys! I wish we had more up north..."
+	DESCRIBE.UM_ORNAMENT_RAT = "All alone, little guy?"
+	
+	DESCRIBE.TRINKET_WATHOM1 = "It's... Treasure? I think? Is it??"

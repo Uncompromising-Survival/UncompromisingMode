@@ -357,10 +357,10 @@ local function Vac(inst)
 		end
 
 		if distmult >= 0.15 then
-			tuningmultiplier = 0.5
 			local platform = inst:GetCurrentPlatform()
 				
 			if platform ~= nil and platform:IsValid() then
+				tuningmultiplier = 0.5
 				if inst._cdtask == nil then
 					
 					inst._cdtask = inst:DoTaskInTime(.5, OnCooldown)
@@ -390,7 +390,7 @@ local function Vac(inst)
 			end
 		end
 		
-		inst.magnet_damage = inst.magnet_damage + distmult * tuningmultiplier
+		inst.magnet_damage = (inst.magnet_damage + distmult) * tuningmultiplier
 	else
 		if inst.hitfx ~= nil then
 			inst.hitfx.SoundEmitter:KillSound("twirl")

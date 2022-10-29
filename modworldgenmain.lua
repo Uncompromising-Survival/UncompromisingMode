@@ -48,9 +48,9 @@ AddTile(
         noise_texture = "mini_noise_hoodedmoss.tex"
     },
     { --turf_def 6
-        name = "hoodedmoss",
+        name = "hfturf",
         anim = "hoodedmoss",
-        bank_build = "turf_archives"
+        bank_build = "hfturf"
     }
 )
 
@@ -77,11 +77,73 @@ AddTile(
         noise_texture = "mini_noise_jungle.tex"
     },
     {
-        name = "ancienthoodedturf",
+        name = "hfturf",
         anim = "ancienthoodedturf",
+        bank_build = "hfturf"
+    }
+)
+
+
+--[[
+AddTile(
+    "MAGMA_ROCK", --tile_name 1
+    "LAND", --tile_range 2
+    { --tile_data 3
+        ground_name = "magma_rock",
+    },
+    { --ground_tile_def 4
+        name = "rocky.tex",
+        atlas = "rocky.xml",
+        noise_texture = "ground_lava_rock.tex",
+        runsound = "dontstarve/movement/run_rock",
+        walksound = "dontstarve/movement/walk_rock",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    },
+    { --minimap_tile_def 5
+        name = "map_edge.tex",
+        atlas = "ancienthoodedturf.xml",
+        noise_texture = "mini_ground_lava_rock.tex"
+    },
+    { --turf_def 6
+        name = "magma_rock",
+        anim = "magma_rock",
         bank_build = "turf_archives"
     }
 )
+
+
+AddTile(
+    "MAGMA_ASH", --tile_name 1
+    "LAND", --tile_range 2
+    { --tile_data 3
+        ground_name = "magma_ash",
+    },
+    { --ground_tile_def 4
+        name = "rocky.tex",
+        atlas = "rocky.xml",
+        noise_texture = "ground_ash.tex",
+        runsound = "dontstarve/movement/run_rock",
+        walksound = "dontstarve/movement/walk_rock",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    },
+    { --minimap_tile_def 5
+        name = "map_edge.tex",
+        atlas = "ancienthoodedturf.xml",
+        noise_texture = "mini_ash.tex"
+    },
+    { --turf_def 6
+        name = "magma_ash",
+        anim = "magma_ash",
+        bank_build = "turf_archives"
+    }
+)
+
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.MAGMA_ROCK, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.MAGMA_ASH, GLOBAL.WORLD_TILES.DIRT)]]
 
 ChangeTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 ChangeTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
@@ -89,6 +151,49 @@ ChangeTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 
+--[[local batplaces ={
+	"batplaces",
+	"BattyCave",
+	"FernyBatCave",
+	"BGBatCave",
+	"BGBatCaveRoom",
+	"PitRoom",
+}
+
+for i,v in ipairs(batplaces) do
+	AddRoomPreInit(v,
+	function(room) --This effects the outer areas of the Triple Mac and The Major Beefalo Plains
+		room.value = WORLD_TILES.MAGMA_ASH
+		if not room.contents.distributeprefabs then
+			room.contents.distributeprefabs = {}
+			room.contents.distributepercent = .13
+		end
+		room.contents.distributeprefabs.umss_general = 0.3
+		
+		
+		if not room.contents.prefabdata then
+			room.contents.prefabdata = {}
+		end
+		room.contents.prefabdata.umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
+	end)	
+end]]
+
+--[[
+GLOBAL.require("map/rooms/caves/moltenregions")
+		
+AddTaskPreInit("BigBatCave",
+	function(task) --Leave Forest Hunters in incase someone adds something to its setpieces.
+    task.room_choices={
+        ["MoltenBatCave"] = 3,
+        ["MoltenBattyCave"] = 1,
+        ["MoltenFernyBatCave"] = 2,
+        ["PitRoom"] = 4,
+    }
+    task.background_room="BGMoltenBatCaveRoom"
+    task.room_bg=WORLD_TILES.MAGMA_ASH
+end)]]
+
+	
 if GetModConfigData("worldgenmastertoggle") then
     -- <<Cave Update WIP: Toggle at your own risk you buffoons! (That means you atoba, don't leak it please eh?)>>
     -- I became a dev :sunglasses: - Atobá
@@ -241,7 +346,7 @@ if GetModConfigData("worldgenmastertoggle") then
             tasksetdata.ocean_prefill_setpieces["utw_biomespawner"] = { count = math.random(6, 9) }
         end --nice
     end)
-
+	
     if GetModConfigData("trapdoorspiders") then
         AddRoomPreInit("BGSavanna",
             function(room) --This effects the outer areas of the Triple Mac and The Major Beefalo Plains
@@ -385,7 +490,7 @@ if GetModConfigData("worldgenmastertoggle") then
 
     -----KoreanWaffle's Spawner Limiter Tag Adding Code
     --Add new map tags to storygen
-    local MapTags = { "scorpions", "hoodedcanopy", "rattygas", "ratkey1" }
+    local MapTags = { "scorpions", "hoodedcanopy", "rattygas", "ratkey1","mosaic" }
     AddGlobalClassPostConstruct("map/storygen", "Story", function(self)
         for k, v in pairs(MapTags) do
             self.map_tags.Tag[v] = function(tagdata)
@@ -415,6 +520,24 @@ if GetModConfigData("worldgenmastertoggle") then
         end)
     end
 
+    local meteorIsh = {
+        "BGNoise",
+        "Rocky",
+        "CritterDen",
+        "Graveyard",
+    }
+
+    --Add "mosaic" room tag to all mosaic rooms
+    for k, v in pairs(meteorIsh) do
+        AddRoomPreInit(v, function(room)
+            if not room.tags then
+                room.tags = { "mosaic" }
+            elseif room.tags then
+                table.insert(room.tags, "mosaic")
+            end
+        end)
+    end
+	
     -----KoreanWaffle's Spawner Limiter Tag Adding Code
     GLOBAL.require("map/rooms/forest/extraswamp")
     if GetModConfigData("vetcurse") == "default" then
@@ -652,12 +775,12 @@ if GetModConfigData("worldgenmastertoggle") then
     end
 
 
-    AddRoomPreInit("CritterDen", function(room)
+    --[[AddRoomPreInit("CritterDen", function(room)
         if not room.contents.countstaticlayouts then
             room.contents.countstaticlayouts = {}
         end
         room.contents.countstaticlayouts["impactfuldiscovery"] = 1
-    end)
+    end)]]
 
     AddRoomPreInit("OceanCoastal", function(room)
         room.contents.countprefabs =

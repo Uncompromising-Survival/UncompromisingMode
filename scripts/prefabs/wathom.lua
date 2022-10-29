@@ -157,7 +157,7 @@ local function AmpTimer(inst)
 	end
 
 	if inst.components.adrenaline:GetPercent() < 0.25 and not (inst:HasTag("amped") or inst:HasTag("deathamped")) then
-		inst.components.adrenaline:DoDelta(0.5) -- Slowly regaining to normal levels.
+		inst.components.adrenaline:DoDelta(1) -- Slowly regaining to normal levels.
 	end
 
 	local AmpLevel = inst.components.adrenaline:GetPercent()

@@ -3,35 +3,52 @@
 return Class(function(self, inst)
 
 	--assert(TheWorld.ismastersim, "Ratcheck should not exist on client")
-	--------------------------------------------------------------------------
-	--[[ Private Member Variables ]]
-	--------------------------------------------------------------------------
 
-	local _ratraid = nil
-	local _cooldown = nil
-	local _respawntime = nil
-	local _time = nil
-	local _raided = true
-	local _respawntimeremaining = nil
-	local ratwarning = nil
-	--local _initialrattimer = 24000
-	local _initialrattimer = TUNING.DSTU.RATRAID_TIMERSTART --24000
-	local _rattimer = TUNING.DSTU.RATRAID_TIMERSTART --24000
-	local _rattimer_variance = _rattimer / 3 --24000
-	local _rattimer_short = TUNING.DSTU.RATRAID_TIMERSTART / 3 --24000
-	local _rattimer_short_variance = _rattimer_short / 3 --24000
-	local _ratsnifftimer = TUNING.DSTU.RATSNIFFER_TIMER
-	local _ratgrace = TUNING.DSTU.RATRAID_GRACE
-	local _ratburrows = 0
-
-	local RATRAID_TIMERNAME = "rat_raid"
 	--------------------------------------------------------------------------
 	--[[ Public Member Variables ]]
 	--------------------------------------------------------------------------
 
 	self.inst = inst
-	self._initialrattimer = _initialrattimer
 
+	--------------------------------------------------------------------------
+	--[[ Private Member Variables ]]
+	--------------------------------------------------------------------------
+
+	--I'm lazy.
+
+	local _ratraid = self._ratraid
+	local _cooldown = self._cooldown
+	local _respawntime = self._respawntime
+	local _time = self._time
+	local _raided = self._raided
+	local _respawntimeremaining = self._respawntimeremaining
+	local ratwarning = self.ratwarning
+	local _initialrattimer = self._initialrattimer
+	local _rattimer = self.rattimer
+	local _rattimer_variance = self._rattimer_variance
+	local _rattimer_short = self.rattimer_short
+	local _rattimer_short_variance = self._rattimer_short_variance
+	local _ratsnifftimer = self._ratsnifftimer
+	local _ratgrace = self._ratgrace
+	local _ratburrows = self._ratburrows
+
+	_ratraid = nil
+	_cooldown = nil
+	_respawntime = nil
+	_time = nil
+	_raided = true
+	_respawntimeremaining = nil
+	ratwarning = nil
+	_initialrattimer = TUNING.DSTU.RATRAID_TIMERSTART --24000
+	_rattimer = TUNING.DSTU.RATRAID_TIMERSTART --24000
+	_rattimer_variance = _rattimer / 3 --24000
+	_rattimer_short = TUNING.DSTU.RATRAID_TIMERSTART / 3 --24000
+	_rattimer_short_variance = _rattimer_short / 3 --24000
+	_ratsnifftimer = TUNING.DSTU.RATSNIFFER_TIMER
+	_ratgrace = TUNING.DSTU.RATRAID_GRACE
+	_ratburrows = 0
+
+	local RATRAID_TIMERNAME = "rat_raid"
 
 	--------------------------------------------------------------------------
 	--[[ Private member functions ]]

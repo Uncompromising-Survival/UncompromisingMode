@@ -209,6 +209,7 @@ local inventoryitems =
 	"charles_t_horse",
 	"um_ornament_opossum",
 	"um_ornament_rat",
+	"trinket_wathom1",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -903,6 +904,8 @@ Assets = {
 	Asset("ANIM", "anim/bulletbee_build.zip"),
 
 	Asset("ANIM", "anim/um_shadowarena.zip"),
+	
+	Asset("ANIM", "anim/trinket_wathom1.zip"),
 
 	--INVENTORY ITEMS [IMAGES & ATLAS]
 	Asset("IMAGE", "images/inventoryimages/grassgekko.tex"),
@@ -1551,6 +1554,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/um_ornament_rat.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_ornament_rat.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_ornament_rat.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/trinket_wathom1.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/trinket_wathom1.xml"),
+	Asset("ATLAS", "images/inventoryimages/trinket_wathom1.xml"),
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
@@ -1605,6 +1612,7 @@ Assets = {
 
 	Asset("ANIM", "anim/swap_magnerang.zip"),
 	
+	Asset("ANIM", "anim/winona_toolbox.zip"),
 	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
 	
 

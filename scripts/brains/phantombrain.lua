@@ -54,12 +54,11 @@ end
 function PhantomBrain:OnStart()
     local root = PriorityNode(
     {
-        WhileNode(function() return GetFollowTarget(self.inst) ~= nil end, "FollowTarget",
-            Follow(self.inst, function() return self.inst.brain.followtarget end, TUNING.GHOST_RADIUS*.25, TUNING.GHOST_RADIUS*.5, TUNING.GHOST_RADIUS)
+        WhileNode(function() return self.inst.point end, "Followpoint",
+			Wander(self.inst, function() return self.inst.point end, 1)
         ),
         SequenceNode{
 			ParallelNodeAny{
-				WaitNode(10),
 				Wander(self.inst),
 			},
             --ActionNode(function() self.inst.sg:GoToState("dissipate") end),

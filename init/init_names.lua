@@ -417,4 +417,6 @@ STRINGS.UM_BEEGUARD_SHOOTER = "Bullet Bee"
 STRINGS.UM_ORNAMENT_OPOSSUM = "Opossum Decoration"
 STRINGS.UM_ORNAMENT_RAT = "Rat Decoration"
 
+STRINGS.TRINKET_WATHOM1 = "Busted Inhaler"
+
 STRINGS.DEATHAMP = "a heart attack"

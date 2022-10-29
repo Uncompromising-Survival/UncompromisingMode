@@ -254,7 +254,7 @@ local states=
             TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Scorpion/snap") end),
             TimeEvent(12*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Scorpion/snap") end),
             TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Scorpion/attack") end),
-            TimeEvent(25*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
+            TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
         },
         
         events=
@@ -329,7 +329,9 @@ local states=
             TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Scorpion/snap_pre") end),
             TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Scorpion/snap") end),
             TimeEvent(19*FRAMES, function(inst) inst.components.combat:SetRange(3, 3)
-			inst.components.combat:DoAttack(inst.sg.statemem.target) end),
+			inst.components.combat:DoAttack(inst.sg.statemem.target) 
+            print("getting attacked!")
+        end),
             TimeEvent(20*FRAMES,
                 function(inst)
                     inst.Physics:ClearMotorVelOverride()

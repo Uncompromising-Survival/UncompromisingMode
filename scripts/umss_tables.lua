@@ -216,4 +216,24 @@ local UMSS_TABLES =
 			{x = -1.0579986572266, z = -5.1119995117188, prefab = "wixie_clock", ocean = false},		
 		},
 	},
+
+    MAGMASPLOTCH1 = { 
+		name = "MAGMASPLOTCH1", rotate = true, tile_centered = true, 
+		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},},
+	},
+
+    MAGMASPLOTCH2 = { 
+		name = "MAGMASPLOTCH2", rotate = true, tile_centered = true, 
+		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 0, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 264},},
+	},
+
+    MAGMASPLOTCH3 = { 
+		name = "MAGMASPLOTCH3", rotate = true, tile_centered = true, 
+		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = -4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 0, z = 4, prefab = "umdc_tileflag", ocean = false, tile = 264},},
+	},
+
+    MAGMASPLOTCH4 = { 
+		name = "MAGMASPLOTCH4", rotate = true, tile_centered = true, 
+		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = -4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 0, z = 4, prefab = "umdc_tileflag", ocean = false, tile = 264},{x = 0, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},},
+	},
 } return UMSS_TABLES
