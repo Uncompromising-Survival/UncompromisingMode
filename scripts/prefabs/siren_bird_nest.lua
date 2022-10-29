@@ -55,6 +55,7 @@ local function fn()
 
 
     inst:AddTag("sirenpoint")
+    inst:AddTag("sirenpoint_bird")
 
     inst:AddComponent("inspectable")
 

@@ -50,6 +50,7 @@ local function fn()
     end
 
     inst:AddTag("sirenpoint")
+    inst:AddTag("sirenpoint_throne")
 
     inst:AddComponent("inspectable")
 

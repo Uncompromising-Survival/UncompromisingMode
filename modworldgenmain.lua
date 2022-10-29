@@ -706,10 +706,16 @@ if GetModConfigData("worldgenmastertoggle") then
 
     modimport("init/init_food/init_food_worldgen")
 
-    AddRoomPreInit("OceanHazardous", function(room)
+    AddRoomPreInit("OceanSwell", function(room)
         room.contents.countprefabs =
         {
             siren_teaser_picker = 1
+        }
+    end)
+    AddRoomPreInit("OceanRough", function(room)
+        room.contents.countprefabs =
+        {
+            siren_teaser_picker = 2
         }
     end)
 end
