@@ -32,7 +32,7 @@ env.AddComponentPostInit("boatleak", function(self)
 
             return true
         else
-            _Repair(self, doer, patch_item)
+            return _Repair(self, doer, patch_item)
         end
     end
 end)
