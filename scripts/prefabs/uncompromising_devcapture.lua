@@ -89,7 +89,7 @@ local function Capture(inst)
 
 	local ents = TheSim:FindEntities(x,y,z,inst.range,nil,{"DEVBEHOLDER","player","bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
 	local totaltable_number = tostring(math.random(1000))
-	local tableName = inst.components.writeable.text or not inst.components.writeable.text and "returnedTable"..totaltable_number
+	local tableName = string.gsub(inst.components.writeable.text, " ", "_") or not inst.components.writeable.text and "returnedTable"..totaltable_number
 	local totaltable = tableName.." = { \n	"
 
 	if inst.components.writeable.text then

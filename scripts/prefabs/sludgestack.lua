@@ -45,6 +45,7 @@ local function OnUpgraded(inst)
     if not inst.components.timer:TimerExists("pop_cork") then
         inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
     end
+    inst.components.pickable.canbepicked = false
 end
 
 local function CanUpgrade(inst)
@@ -59,7 +60,7 @@ local function DoLootExplosion(inst)
     local MAX_LOOTFLING_DELAY = 0.8
 
     local cork_pop_loot = {
-        "sludge", "sludge", "sludge", "sludge", "sludge_cork"
+        "sludge", "sludge", "sludge", "sludge" --, "sludge_cork"
     }
 
     if math.random() > 0.66 then
@@ -79,19 +80,19 @@ local function DoLootExplosion(inst)
         table.insert(cork_pop_loot, "sludge")
     end
 
+
+    inst.AnimState:PlayAnimation("pop")
+    --inst.AnimState:PushAnimation("grow")
+    --inst.AnimState:PushAnimation("idle_sludge", true)
+    inst.components.pickable:Resume()
+    inst.components.pickable:Regen()
+
     for i, v in ipairs(cork_pop_loot) do
         local loot = SpawnPrefab(v)
         loot:RemoveFromScene()
         loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
         loot:DoTaskInTime(MAX_LOOTFLING_DELAY * math.random(), fling_loot)
     end
-    inst:DoTaskInTime(MAX_LOOTFLING_DELAY * math.random(), function(inst)
-        inst.AnimState:PlayAnimation("pop")
-        inst.AnimState:PushAnimation("grow")
-        inst.AnimState:PushAnimation("idle_sludge", true)
-    end)
-    inst.components.pickable:Resume()
-    inst.components.pickable:Regen()
 end
 
 local function TimerDone(inst, data)
@@ -114,8 +115,6 @@ local function OnSave(inst, data)
     if data ~= nil then
         data.upgraded = inst.upgraded
         print("upgraded", inst.upgraded)
-        data.paused = inst.components.pickable.paused
-        print("paused", inst.components.pickable.paused)
         data.explode_when_loaded = inst.explode_when_loaded
         print("explode_when_loaded", inst.explode_when_loaded)
     end
@@ -124,24 +123,17 @@ end
 local function OnLoad(inst, data)
     if data ~= nil then
         if data.upgraded ~= nil then OnUpgraded(inst) end
-        if data.paused then
-            inst.components.pickable:Pause()
-            print("paused")
-        else
-            inst.components.pickable:Resume()
-            print("resumed")
-        end
         inst.explode_when_loaded = data.explode_when_loaded
     end
     inst:AddTag("SLUDGE_CORK_upgradeable") -- GOD DAMNIT KEEP THE DAMN TAG!!!
 end
 
 local function OnPicked(inst)
-    inst.AnimState:PlayAnimation("idle", true)
+    inst.AnimState:PushAnimation("idle", true)
 end
 
 local function OnRegen(inst)
-    inst.AnimState:PlayAnimation("grow")
+    inst.AnimState:PushAnimation("grow")
     inst.AnimState:PushAnimation("idle_sludge", true)
 end
 

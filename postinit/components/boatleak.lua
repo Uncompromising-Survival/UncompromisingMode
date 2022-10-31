@@ -17,22 +17,37 @@ env.AddComponentPostInit("boatleak", function(self)
 
     local _Repair = self.Repair
     function self:Repair(doer, patch_item)
+        --print(doer, patch_item)
         if patch_item.components.finiteuses ~= nil then
             patch_item.components.finiteuses:Use()
 
             local repair_state = "repaired"
-            local patch_type = (
-                patch_item.components.boatpatch ~= nil and patch_item.components.boatpatch:GetPatchType()) or nil
+            local patch_type = (patch_item.components.boatpatch ~= nil and patch_item.components.boatpatch:GetPatchType()) or nil
             if patch_type ~= nil then
-                repair_state = repair_state .. "_" .. patch_type
+                repair_state = repair_state.."_"..patch_type
             end
-
+        
             self.inst.AnimState:PlayAnimation("leak_small_pst")
-            self.inst:DoTaskInTime(0.4, function(inst) self:SetState(repair_state) end)
-
+            self.inst:DoTaskInTime(0.4, function(inst)
+                self:SetState(repair_state)
+            end)
+        
             return true
         else
-            return _Repair(self, doer, patch_item)
+            --BY GOD'S LIGHT I SMITE YOOOUUU!!!!
+            local ret = _Repair(self, doer, patch_item)
+            if patch_item.components.repairer and self.inst:GetCurrentPlatform() and self.inst:GetCurrentPlatform().components.repairable then
+                self.inst:GetCurrentPlatform().components.repairable:Repair(doer, patch_item)
+                -- consumed in the repair
+            else
+                if patch_item.components.stackable ~= nil then
+                    patch_item.components.stackable:Get():Remove()
+                else
+                    patch_item:Remove()
+                end
+            end
+            --print("WHy the FUCK is this not working... or is it???")
+            return ret
         end
     end
 end)

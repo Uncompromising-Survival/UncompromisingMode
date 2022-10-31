@@ -530,7 +530,7 @@ AddRecipe2(
     {Ingredient("driftwood_log", 2), Ingredient("rope", 2)},
     TECH.SCIENCE_ONE,
     nil,
-    {"TOOLS"}
+    {"TOOLS", "SEAFARING"}
 )
 --[[
 AddRecipe2(

@@ -73,13 +73,13 @@ local function sludge_fn()
 
     --inst.components.fuel:SetOnTakenFn(ontaken)-- :)
 
-    inst:AddComponent("boatpatch")
-    inst.components.boatpatch.patch_type = "sludge"
-
     inst:AddComponent("repairer")
     inst.components.repairer.repairmaterial = MATERIALS.SLUDGE
     inst.components.repairer.healthrepairvalue = TUNING.REPAIR_TREEGROWTH_HEALTH
     inst.components.repairer.boatrepairsound = "waterlogged1/common/use_figjam"
+
+    inst:AddComponent("boatpatch")
+    inst.components.boatpatch.patch_type = "sludge"
 
     MakeSmallBurnable(inst, TUNING.LARGE_BURNTIME)
     MakeSmallPropagator(inst)
@@ -109,7 +109,6 @@ local function oil_fn()
 
     MakeInventoryPhysics(inst)
 
-
     inst.AnimState:SetBank("sludge_oil")
     inst.AnimState:SetBuild("sludge_oil")
     inst.AnimState:PlayAnimation("idle")
@@ -132,7 +131,6 @@ local function oil_fn()
     inst.components.finiteuses:SetMaxUses(10)
     inst.components.finiteuses:SetUses(10)
     inst.components.finiteuses:SetOnFinished(onfinished)
-
 
     MakeSmallBurnable(inst, TUNING.LARGE_BURNTIME)
     MakeSmallPropagator(inst)

@@ -56,7 +56,7 @@ local function fn()
     inst.Light:Enable(true)
     inst.Light:SetRadius(1.5)
     inst.Light:SetFalloff(0.66)
-    inst.Light:SetIntensity(0.11a)
+    inst.Light:SetIntensity(0.11)
     inst.Light:SetColour(235 / 255, 121 / 255, 12 / 255)
 
     inst._playingmusic = false
