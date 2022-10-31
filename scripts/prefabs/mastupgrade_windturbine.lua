@@ -141,7 +141,6 @@ local function UpdateLight(inst)
 		end
 
 		if inst.lightlevel > 0 then
-			inst.AnimState:SetLightOverride(1)
 
 			inst._mast.Light:SetColour(180 / 255, 195 / 255, 150 / 255)
 			inst._mast.Light:Enable(true)
@@ -158,7 +157,6 @@ local function UpdateLight(inst)
 				inst._light.AnimState:SetMultColour(1, 1, 1, inst.lightlevel / 2)
 			end
 		else
-			inst.AnimState:SetLightOverride(0)
 
 			inst._mast.Light:SetColour(180 / 255, 195 / 255, 150 / 255)
 			inst._mast.Light:SetIntensity(lerpval)

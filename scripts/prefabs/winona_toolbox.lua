@@ -45,6 +45,8 @@ local function MakeTackleContainer(name, bank, build, assets)
         inst.entity:AddNetwork()
 
 		inst.MiniMapEntity:SetIcon(name..".png")
+		
+		inst:AddTag("waterproofer")
 
         inst.AnimState:SetBank(bank)
         inst.AnimState:SetBuild(build)
@@ -54,7 +56,7 @@ local function MakeTackleContainer(name, bank, build, assets)
 		MakeInventoryPhysics(inst)
 
         local swap_data = {bank = bank, anim = "idle"}
-        MakeInventoryFloatable(inst, "med", nil, nil, nil, nil, swap_data)
+        MakeInventoryFloatable(inst, "small", nil, nil, nil, nil, swap_data)
 
         inst.entity:SetPristine()
 
@@ -63,6 +65,9 @@ local function MakeTackleContainer(name, bank, build, assets)
         end
 
 		inst:AddComponent("inspectable")
+
+		inst:AddComponent("waterproofer")
+		inst.components.waterproofer:SetEffectiveness(0)
 
         inst:AddComponent("container")
         inst.components.container:WidgetSetup("winona_toolbox")

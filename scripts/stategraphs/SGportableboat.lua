@@ -54,7 +54,7 @@ local states =
 			local fx_boat_crackle = SpawnPrefab("boat_leak")
 			fx_boat_crackle.Transform:SetPosition(inst.Transform:GetWorldPosition())
 			fx_boat_crackle.entity:SetParent(inst.entity)
-            inst.AnimState:PlayAnimation("crack")
+            inst.AnimState:PlayAnimation("deflate")
             inst.sg:SetTimeout(3)
 
             for k in pairs(inst.components.walkableplatform:GetPlayersOnPlatform()) do
