@@ -502,23 +502,23 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Why would I want to throw it? This is mine now."
 	DESCRIBE.UNCOMPROMISING_HARPOONREEL = "" 
 	DESCRIBE.UM_MAGNERANG = "Why would I want to throw it? This is mine now."
-	DESCRIBE.UM_MAGNERANGREEL = "It is trying to take things!"
-	DESCRIBE.SIREN_THRONE = "Whose hoard is this?"
-	DESCRIBE.LAVASPIT_SLUDGE = "Can't touch fire goop!"
+	DESCRIBE.UM_MAGNERANGREEL = "It is trying to take things?"
+	DESCRIBE.SIREN_THRONE = "I think it is a seat? What are those things on it, I want them."
+	DESCRIBE.LAVASPIT_SLUDGE = "Too hot!"
 	
 	DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 	DESCRIBE.UM_BEEGUARD_BLOCKER = "Let me pass!"
 
 	DESCRIBE.PORTABLEBOAT_ITEM = "I want to chew hole in it."
-	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Spins good!"
+	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "Yes, I like the spinning."
 	
-	DESCRIBE.WIXIE_PIANO = "I will play a beautiful song for my rats."
+	DESCRIBE.WIXIE_PIANO = "I like tipping and tapping the keys So it makes the noises."
 	DESCRIBE.WIXIE_CLOCK = "I did not break it!"
 	DESCRIBE.WIXIE_WARDROBE = "What's inside? Show me!"
-	DESCRIBE.CHARLES_T_HORSE = "Some kind of chew toy?"
+	DESCRIBE.CHARLES_T_HORSE = "Some kind of chewing stick?"
 
-	DESCRIBE.UM_ORNAMENT_OPOSSUM = "*Hiss*!"
-	DESCRIBE.UM_ORNAMENT_RAT = "You're just a fake friend."
+	DESCRIBE.UM_ORNAMENT_OPOSSUM = "*Hiss!* You are not real!"
+	DESCRIBE.UM_ORNAMENT_RAT = "You are fake family!"
 	
-	DESCRIBE.TRINKET_WATHOM1 = "That where I put it! Heeheeh."
+	DESCRIBE.TRINKET_WATHOM1 = "Oh! that is where It went."

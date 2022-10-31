@@ -12,8 +12,8 @@ return {
         BUILD =
         {
             MOUNTED = "I'm not falling off for that!",
-            HASPET = "I have a creature, I don't need more.",
-			TICOON = "They might KILL me if get another.",
+            HASPET = "I have a creature, I don't need more!",
+			TICOON = "They might KILL me together if I get another.",
         },
 		SHAVE =
 		{
@@ -633,7 +633,7 @@ return {
 	ANNOUNCE_OCEANFISHING_BADCAST = "I threw it wrong.",
 	ANNOUNCE_OCEANFISHING_IDLE_QUOTE =
 	{
-		"I would rather be taking a rat nap.",
+		"I would rather be taking a rat-nap.",
 		"This is so boring.",
 		"Maybe I am not doing it right?",
 		"Are there even fish out here!?",
@@ -849,7 +849,7 @@ return {
 
         BERNIE_INACTIVE =
         {
-            BROKEN = "hah.",
+            BROKEN = "ha, no more.",
             GENERIC = "Fuzzy somewhat. mostly ash actually.",
         },
 
@@ -883,7 +883,7 @@ return {
         PLAYER =
         {
             GENERIC = "Hello you nobody!",
-            ATTACKER = "Aha! you are evil!",
+            ATTACKER = "Aha! You are evil!",
             MURDERER = "I know you did it!",
             REVIVER = "You are nice, just don't get handsy.",
             GHOST = "%s died stupidly.",
@@ -892,9 +892,9 @@ return {
         WILSON =
         {
             GENERIC = "No! I will not let you experiment on me.",
-            ATTACKER = "Stabbing is not a good experiment",
+            ATTACKER = "Stabbing is not a good experiment.",
             MURDERER = "He has killing down to a science.",
-            REVIVER = "I suppse we're freinds now, %s.",
+            REVIVER = "I suppose you are not so bad, %s.",
             GHOST = "Now you're my lab rat, Hehe.",
             FIRESTARTER = "You should stop doing fire experiments, %s.",
         },
@@ -909,12 +909,12 @@ return {
         },
         WAXWELL =
         {
-            GENERIC = "The Shadow has taken him too.",
+            GENERIC = "The Shadows have taken him too.",
             ATTACKER = "You will not take me!",
             MURDERER = "He is a dark evil killer!",
             REVIVER = "I will not get your suit filthy!",
             GHOST = "Even dead you still have a nice suit.",
-            FIRESTARTER = "Why are you burning the you helped make?",
+            FIRESTARTER = "Why are you burning the world you helped make?",
         },
         WX78 =
         {
@@ -947,7 +947,7 @@ return {
         {
             GENERIC = "Tra lala la, Yes, yes I've heard it before.",
             ATTACKER = "Do you plan on swinging that axe at me?",
-            MURDERER = "The woodsman is the real monster!",
+            MURDERER = "The Woodsman is the real monster!",
             REVIVER = "I'll tell all my family about the good woodsman!",
             GHOST = "He is a sheet now.",
             BEAVER = "Stop stealing my look, I should be the only one with teeth like that!",
@@ -962,9 +962,9 @@ return {
         {
             GENERIC = "%s, you know many strange words.",
             ATTACKER = "You won't exterminate me!",
-            MURDERER = "I going to steal your books now.",
-            REVIVER = "Yes, thank you. I will not steal your books now.",
-            GHOST = "She did not have the right words to live.",
+            MURDERER = "%s, I'm going to steal all your books now, you killer.",
+            REVIVER = "Yes, you are nice. I will not steal your books now.",
+            GHOST = "She did not have the right books to live.",
             FIRESTARTER = "Maybe I should start burning books too.",
         },
         WES =
@@ -999,9 +999,9 @@ return {
             GENERIC = "I won't cause a problem, I promise!",
             ATTACKER = "Stealing from you was an accident, no need to fight!",
             MURDERER = "I see... I am just another rat to you.",
-            REVIVER = "Thank you, I will not steal from you.",
-            GHOST = "She is very stupid bad woker.",
-            FIRESTARTER = "Why are you an anarchist now.",
+            REVIVER = "I will not steal from you, now.",
+            GHOST = "",
+            FIRESTARTER = "",
         },
         WORTOX =
         {
@@ -1015,9 +1015,9 @@ return {
         WORMWOOD =
         {
             GENERIC = "Plants do not talk, %s. Well you do, but you are weird.",
-            ATTACKER = "Stop hitting me stupid thing!",
-            MURDERER = "",
-            REVIVER = "Strange plant, but nice I guess.",
+            ATTACKER = "Stop hitting me, stupid thing!",
+            MURDERER = "You should've stayed as a plant, I can make that happen!",
+            REVIVER = "Strange plant, but it nice, I guess.",
             GHOST = "I did not know a plant can die.",
             FIRESTARTER = "How have you not lit yourself on fire?",
         },
@@ -1026,17 +1026,17 @@ return {
             GENERIC = "I don't suppose you have any cheddar on you %s?",
             ATTACKER = "I am sorry, I won't pull your hair again!",
             MURDERER = "Is rat on the menu then?",
-            REVIVER = "He needs my help in the kitchen.",
+            REVIVER = "He might need my help in the kitchen.",
             GHOST = "If I make you fleshy again, you will make me a chef, no?",
-            FIRESTARTER = "You stink at cooking. I am better",
+            FIRESTARTER = "You stink at cooking. I am better.",
         },
 
         WURT =
         {
             GENERIC = "%s you have a nice stink today, as usual.",
             ATTACKER = "Claw me and I will claw back!",
-            MURDERER = "She is slimy and stinky and evil!",
-            REVIVER = "Thank you %s, we will stink this place together.",
+            MURDERER = "She is slimey and stinky and evil!",
+            REVIVER = "%s, we will stink this place together.",
             GHOST = "Still smells fishy.",
             FIRESTARTER = "You have the spark!",
         },
@@ -1045,8 +1045,8 @@ return {
         {
             GENERIC = "stop calling me weird names, %s.",
             ATTACKER = "Watch where you throw things!",
-            MURDERER = "I have come back for revenge!",
-            REVIVER = "Thank you, but you talk too much.",
+            MURDERER = "%s, I will have my revenge!",
+            REVIVER = "I will respect you, for now.",
             GHOST = "Aaah... peace and quiet.",
             FIRESTARTER = "Stupid boy, stop burning everything!",
         },
@@ -1054,9 +1054,9 @@ return {
         WANDA =
         {
             GENERIC = "I suppose you like to hoard clocks.",
-            ATTACKER = "Look at your clocks, I am leaving.",
-            MURDERER = "So Just because I am not perfect I do not belong?",
-            REVIVER = "I guess she needs me.",
+            ATTACKER = "Look at your clocks, and stay away from me.",
+            MURDERER = "So Just because I am not perfect, I am your next target?",
+            REVIVER = "she needs me around, maybe?",
             GHOST = "Is dying a time thing.",
             FIRESTARTER = "You have time to burn things, I see...",
         },
@@ -1064,11 +1064,11 @@ return {
 		WONKEY =
         {
             GENERIC = "You better not take my things...",
-            ATTACKER = "GragH! They are mine!",
+            ATTACKER = "GragH! Don't touch me! The loot is mine!",
             MURDERER = "You! Give me my loot.",
-            REVIVER = "I am not in your debt, yes?",
+            REVIVER = "",
             GHOST = "you probably died for stealing something.", 
-            FIRESTARTER = "",  
+            FIRESTARTER = "Stupid, Monkey, stop burning things.",  
         },
 
         MIGRATION_PORTAL =
@@ -1177,10 +1177,10 @@ return {
             CALM = " phew.... It is over...",
             WARN = "This is not good...",
             WAXING = "This is why rats NEVER come here.",
-            STEADY = "The Evil is holding on.",
-            WANING = "It's still here.",
+            STEADY = "The Evil is still in the air.",
+            WANING = "Evil is still here.",
             DAWN = "I'm almost free!",
-            NOMAGIC = "It has vanished for now.",
+            NOMAGIC = "The Evil, it has vanished.",
 		},
 		BISHOP_NIGHTMARE = "Horrible gnashing metal!",
 		ROOK_NIGHTMARE = "Screching metal horror!",
@@ -1193,7 +1193,7 @@ return {
 		MULTITOOL_AXE_PICKAXE = "For whacking and hacking.",
 		ORANGESTAFF = "eye of jewels.",
 		YELLOWAMULET = "It is like an eye of ire.",
-		GREENAMULET = "",
+		GREENAMULET = "The green jewel makes me better at making, yes I see.",
 		SLURPERPELT = "Not bad tasting.",
 
 		SLURPER = "You can not eat what I eat!",
@@ -1373,6 +1373,11 @@ return {
 		
 	    TURF_MONKEY_GROUND = "Dirty Dirt.",
 
+        TURF_CARPETFLOOR2 = "I would sleep on it. yes, yes.",
+        TURF_MOSAIC_GREY = "It is weird coloured, ground.",
+        TURF_MOSAIC_RED = "It is weird coloured, ground.",
+        TURF_MOSAIC_BLUE = "It is weird coloured, ground.",
+		
 		POWCAKE = "Where were you all my miserable life!",
         CAVE_ENTRANCE = "that rock looks good for bashing.",
         CAVE_ENTRANCE_RUINS = "Many silent whispers from there. Scary.",
@@ -1740,6 +1745,7 @@ return {
 		},
         GOGGLESHAT = "It keeps falling off my head.",
         DESERTHAT = "I can't even hear anything when I wear it.",
+		ANTLIONHAT = "Now I can be a noisy, stupid, beetle who eats rocks too.",
 		DEVTOOL = "It is probably useless.",
 		DEVTOOL_NODEV = "I am stealing it now.",
 		DIRTPILE = "Dirty Lump.",
@@ -1802,12 +1808,12 @@ return {
 		},
 		LAVAE_TOOTH = "It is an eggs tooth!",
 
-		DRAGONFRUIT = "",
-		DRAGONFRUIT_COOKED = "",
+		DRAGONFRUIT = "It looks like one big berry.",
+		DRAGONFRUIT_COOKED = "Warm and juicy, like meat almost except worse.",
 		DRAGONFRUIT_SEEDS = "Crunchy little bits.",
 		DRAGONPIE = "Yes, I like this.",
-		DRUMSTICK = "",
-		DRUMSTICK_COOKED = "",
+		DRUMSTICK = "It is mine!",
+		DRUMSTICK_COOKED = "Maybe I should rub dirt in it for taste.",
 		DUG_BERRYBUSH = "I am bringing the berry maker with me.",
 		DUG_BERRYBUSH_JUICY = "I am bringing the squishy berry maker with me.",
 		DUG_GRASS = "Yes, I need grass somewhere else.",
@@ -1818,7 +1824,7 @@ return {
 		DURIAN_SEEDS = "Crunchy little bits.",
 		EARMUFFSHAT = "I do not think this will cover my ears right...",
 		EGGPLANT = "It is not an egg, why do those people come up with such stupid names.",
-		EGGPLANT_COOKED = ".",
+		EGGPLANT_COOKED = "This is better.",
 		EGGPLANT_SEEDS = "Crunchy little bits.",
 
 		ENDTABLE =
@@ -1921,7 +1927,7 @@ return {
 		FISHSTICKS = "It needs sauce.",
 		FISHTACOS = "Never enough of these.",
 		FISH_COOKED = "The fishes are delicious.",
-		FLINT = "Best kind of rock.",
+		FLINT = "It is the best kind of rock.",
 		FLOWER =
 		{
             GENERIC = "I must find better smells. These are boring smells.",
@@ -1966,7 +1972,7 @@ return {
 		{
 			BARREN = "Broken.",
 			WITHERED = "Weak plant...",
-			BURNING = "Aaa it is up in flames!",
+			BURNING = "Aaah! it is up in flames!",
 			GENERIC = "Grass.",
 			PICKED = "Isn't there something more important you could have me look at?",
 			DISEASED = "Eugh. Looks dead, and not good dead.", --unimplemented
@@ -2141,7 +2147,7 @@ return {
         MONKEY = "Stealers! I will steal back what is mine!",
         MONKEYBARREL = "Hiding in plain sight!",
         MONSTERLASAGNA = "Most wonderful meal!",
-        FLOWERSALAD = "bleagh, I would rather not.",
+        FLOWERSALAD = "I do not like this, But I would rather eat than smell it.",
         ICECREAM = "I should let it melt, then drink it.",
         WATERMELONICLE = "Why put the good part behind ice.",
         TRAILMIX = "Maybe I can burry these for later.",
@@ -2401,8 +2407,8 @@ return {
 			FINISHED = "",
 			READY = "",
 		},
-        GARGOYLE_HOUND = "It is alawys watching...",
-        GARGOYLE_WEREPIG = "",
+        GARGOYLE_HOUND = "Is it watching me?",
+        GARGOYLE_WEREPIG = "Very grotesque, who put you here?",
 		SEEDS = "Crunchy little bits.",
 		SEEDS_COOKED = "Smokey and crunchy bits.",
 		SEWING_KIT = "It twirls around my hands when I try and use it.",
@@ -2514,7 +2520,7 @@ return {
 		TENTACLESPIKE = "Very slimy slapper, I like it.",
 		TENTACLESPOTS = "The slime on this tastes funny?",
 		TENTACLE_PILLAR = "It is the most slimy tentacle.",
-        TENTACLE_PILLAR_HOLE = "This hole... it is not for me.",
+        TENTACLE_PILLAR_HOLE = "This hole... It is not for me.",
 		TENTACLE_PILLAR_ARM = "",
 		TENTACLE_GARDEN = ".",
 		TOPHAT = "A rat in a hat?",
@@ -3056,7 +3062,7 @@ return {
 
         QUAGMIRE_ROTTEN_CROP = "Smells like bad bugs.",
 
-		QUAGMIRE_SALMON = "",
+		QUAGMIRE_SALMON = "A slimey delicious fish.",
 		QUAGMIRE_SALMON_COOKED = "",
 		QUAGMIRE_CRABMEAT = "",
 		QUAGMIRE_CRABMEAT_COOKED = "",
@@ -3094,7 +3100,7 @@ return {
 		},
 
 		QUAGMIRE_KEY = "It is mine now!",
-		QUAGMIRE_KEY_PARK = "",
+		QUAGMIRE_KEY_PARK = "It is mine now!",
         QUAGMIRE_PORTAL_KEY = "I want to bring it with me!",
 
 
@@ -3131,7 +3137,7 @@ return {
             GENERIC = "I guess you're in charge around here?",
             SLEEPING = ".",
         },
-        QUAGMIRE_SWAMPIG = "It's a super hairy pig.",
+        QUAGMIRE_SWAMPIG = "",
 
         QUAGMIRE_PORTAL = "Stupid hole did it again.",
         QUAGMIRE_SALTROCK = "",
@@ -3217,14 +3223,14 @@ return {
         WINONA_CATAPULT =
         {
         	GENERIC = "Hmm yes, a machine with a good purpose.",
-        	OFF = "Kick it so it starts working.",
+        	OFF = "Kick it, so it starts working.",
         	BURNING = "Huh? that is not right.",
         	BURNT = "Now it really is broken haha!",
         },
         WINONA_SPOTLIGHT =
         {
         	GENERIC = "Looking at it hurts my eyes!",
-        	OFF = "Kick it so it starts working.",
+        	OFF = "Kick it, so it starts working.",
         	BURNING = "Huh? that is not right.",
         	BURNT = "Now it really is broken haha!",
         },
@@ -3248,7 +3254,7 @@ return {
         --Wormwood
         COMPOSTWRAP = "That is gross, even for me.",
         ARMOR_BRAMBLE = "Now nobody can touch me, and I can be left alone.",
-        TRAP_BRAMBLE = "It's like a spring but deadly.",
+        TRAP_BRAMBLE = "It's like a spring, but deadly.",
 
         BOATFRAGMENT03 = "I am happy that wasn't me.",
         BOATFRAGMENT04 = "I am happy that wasn't me.",
@@ -3359,34 +3365,34 @@ return {
 		},
         MOON_ALTAR =
         {
-            MOON_ALTAR_WIP = "Yes, I will make you good!",
-            GENERIC = "",
+            MOON_ALTAR_WIP = "Yes, I can make you better!",
+            GENERIC = "I can hear you, but where are you? Speak louder!",
         },
 
-        MOON_ALTAR_IDOL = "",
-        MOON_ALTAR_GLASS = "",
-        MOON_ALTAR_SEED = "",
+        MOON_ALTAR_IDOL = "I must bring you somewhere, I must bring you home.",
+        MOON_ALTAR_GLASS = "How can you whisper so loudly?",
+        MOON_ALTAR_SEED = "I know what you want, but I do not understand the whispers.",
 
-        MOON_ALTAR_ROCK_IDOL = "",
-        MOON_ALTAR_ROCK_GLASS = "T",
-        MOON_ALTAR_ROCK_SEED = "T",
+        MOON_ALTAR_ROCK_IDOL = "There is someone inside.",
+        MOON_ALTAR_ROCK_GLASS = "The whispers are just as loud no matter how far I am?",
+        MOON_ALTAR_ROCK_SEED = "Yes, I am coming to help, stop being so loud.",
 
-        MOON_ALTAR_CROWN = "!",
-        MOON_ALTAR_COSMIC = "Ig.",
+        MOON_ALTAR_CROWN = "You belong to me now, yes, thank me later.",
+        MOON_ALTAR_COSMIC = "Patience? Why?",
 
-        MOON_ALTAR_ASTRAL = "",
-        MOON_ALTAR_ICON = "I.",
-        MOON_ALTAR_WARD = "It.",
+        MOON_ALTAR_ASTRAL = "You are here, What do you want now?",
+        MOON_ALTAR_ICON = "It wants to go back the moon place, with its family.",
+        MOON_ALTAR_WARD = "You belong with your family.",
 
         SEAFARING_PROTOTYPER =
         {
             GENERIC = "Helping me learn about why I hate being wet.",
             BURNT = "No more learning. Good.",
         },
-        BOAT_ITEM = "I can .",
-        STEERINGWHEEL_ITEM = "",
-        ANCHOR_ITEM = ".",
-        MAST_ITEM = ".",
+        BOAT_ITEM = "I do not trust it, I do not like water.",
+        STEERINGWHEEL_ITEM = "I do not need it, but it is mine now.",
+        ANCHOR_ITEM = "It is heavy, but I want it.",
+        MAST_ITEM = "It catches wind? How do you catch something you can not hold?",
         MUTATEDHOUND =
         {
         	DEAD = "I spit on you.",
@@ -3417,7 +3423,7 @@ return {
         KELPHAT = "Slimey thing.",
 		KELP = "I think I like, but eating it makes me thirsty.",
 		KELP_COOKED = "slimey and hot.",
-		KELP_DRIED = "Better slimy, not crunchy.",
+		KELP_DRIED = "Better slimey, not crunchy.",
 
 		GESTALT = "My.. Desires..?",
         GESTALT_GUARD = "Angry whisperers... I hate you too.",
@@ -3435,10 +3441,10 @@ return {
 		SALTBOX = "You food the salt?",
 
 		TACKLESTATION = "I do not like fishing, but I like to eat.",
-		TACKLESKETCH = "little scritches on the paper.",
+		TACKLESKETCH = "Little scritches on the paper.",
 
         MALBATROSS = "That duck is too big!",
-        MALBATROSS_FEATHER = "",
+        MALBATROSS_FEATHER = "I like this sea duck feather, it is mine now.",
         MALBATROSS_BEAK = "Look, noow I can be a duck, Quack! Quack! That is funny, right?",
         MAST_MALBATROSS_ITEM = "Birds catch wind, so it is better.",
         MAST_MALBATROSS = "Birds catch wind, so it is better.",
@@ -3458,46 +3464,46 @@ return {
 		OAR_DRIFTWOOD = "I carved it, so I will use it how I want.",
 
 		OCEANFISHINGROD = "!",
-		OCEANFISHINGBOBBER_NONE = "",
-        OCEANFISHINGBOBBER_BALL = ".",
-        OCEANFISHINGBOBBER_OVAL = "T!",
-		OCEANFISHINGBOBBER_CROW = ".",
-		OCEANFISHINGBOBBER_ROBIN = ".",
-		OCEANFISHINGBOBBER_ROBIN_WINTER = ".",
-		OCEANFISHINGBOBBER_CANARY = "!",
-		OCEANFISHINGBOBBER_GOOSE = ",",
-		OCEANFISHINGBOBBER_MALBATROSS = ".",
+		OCEANFISHINGBOBBER_NONE = "It is for floating, and the fish like it?",
+        OCEANFISHINGBOBBER_BALL = "It is for floating, and the fish like it?",
+        OCEANFISHINGBOBBER_OVAL = "It is for floating, and the fish like it?",
+		OCEANFISHINGBOBBER_CROW = "Black needle floter thing.",
+		OCEANFISHINGBOBBER_ROBIN = "Red needle floter thing.",
+		OCEANFISHINGBOBBER_ROBIN_WINTER = "White needle floter thing.",
+		OCEANFISHINGBOBBER_CANARY = "Yellow needle floter thing.",
+		OCEANFISHINGBOBBER_GOOSE = "Goosey needle floater thing.",
+		OCEANFISHINGBOBBER_MALBATROSS = "Blue needle floater thing.",
 
-		OCEANFISHINGLURE_SPINNER_RED = "Some fish might find this a-luring!",
-		OCEANFISHINGLURE_SPINNER_GREEN = "Some fish might find this a-luring!",
-		OCEANFISHINGLURE_SPINNER_BLUE = "Some fish might find this a-luring!",
-		OCEANFISHINGLURE_SPOON_RED = "Some smaller fish might find this a-luring!",
-		OCEANFISHINGLURE_SPOON_GREEN = "Some smaller fish might find this a-luring!",
-		OCEANFISHINGLURE_SPOON_BLUE = "Some smaller fish might find this a-luring!",
-		OCEANFISHINGLURE_HERMIT_RAIN = ".",
-		OCEANFISHINGLURE_HERMIT_SNOW = "",
-		OCEANFISHINGLURE_HERMIT_DROWSY = "!",
-		OCEANFISHINGLURE_HERMIT_HEAVY = "I could just chuck it at the fish.",
+		OCEANFISHINGLURE_SPINNER_RED = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_SPINNER_GREEN = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_SPINNER_BLUE = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_SPOON_RED = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_SPOON_GREEN = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_SPOON_BLUE = "Mushrooms make for good fish catchers, I think.",
+		OCEANFISHINGLURE_HERMIT_RAIN = "I do not like water, why would I fish when there is more of it.",
+		OCEANFISHINGLURE_HERMIT_SNOW = "It looks like a snowflake.",
+		OCEANFISHINGLURE_HERMIT_DROWSY = "I could just... Chuck it at the fish!",
+		OCEANFISHINGLURE_HERMIT_HEAVY = "Why does it look like the drowning faces?",
 
-		OCEANFISH_SMALL_1 = "Too small, I need more.",
-		OCEANFISH_SMALL_2 = "I won't win any bragging rights with this one.",
-		OCEANFISH_SMALL_3 = "It's a bit on the small side.",
-		OCEANFISH_SMALL_4 = "A fish this size won't tide me over for long.",
+		OCEANFISH_SMALL_1 = "Some small and stupid fish.", --runty guppy
+		OCEANFISH_SMALL_2 = "That does not look like a nose, stupid fish.", --needlenose squirt
+		OCEANFISH_SMALL_3 = "I should just eat you for wasting my time.", --bitybaitfish
+		OCEANFISH_SMALL_4 = "Yes, maybe I should fry it.", --smolt fry
 		OCEANFISH_SMALL_5 = "The fish is popped and puffy.", --PopCorn
-		OCEANFISH_SMALL_6 = "", --fallounder
-		OCEANFISH_SMALL_7 = "", --bloomfin
-		OCEANFISH_SMALL_8 = "", --sun
+		OCEANFISH_SMALL_6 = "How is a fish leaves, are there ocean trees?", --fallounder
+		OCEANFISH_SMALL_7 = "Does it make fruit too? I do not get it.", --bloomfin
+		OCEANFISH_SMALL_8 = "Too hot to eat. Maybe it will cook itself to death?", --sun
         OCEANFISH_SMALL_9 = "I will spit back at you, stupid fish!", --spittle
 
-		OCEANFISH_MEDIUM_1 = "I certainly hope it tastes better than it looks.",
-		OCEANFISH_MEDIUM_2 = "I went to a lot of treble to catch it.",
-		OCEANFISH_MEDIUM_3 = "", --Lion
-		OCEANFISH_MEDIUM_4 = "I'm sure this won't bring me any bad luck.",
-		OCEANFISH_MEDIUM_5 = "", --Corn
-		OCEANFISH_MEDIUM_6 = "Now that's the real McKoi!", --Koi
-		OCEANFISH_MEDIUM_7 = "Now that's the real McKoi!", --Koi
-		OCEANFISH_MEDIUM_8 = "", --Icebream
-        OCEANFISH_MEDIUM_9 = "", --sweetish
+		OCEANFISH_MEDIUM_1 = "It is a tasty looking fish.", --mudfish
+		OCEANFISH_MEDIUM_2 = "Goo goo eyed fish, strange and stupid looking.", --deepbass
+		OCEANFISH_MEDIUM_3 = "Are your spikes supposed to stop me from eating you?", --Lion
+		OCEANFISH_MEDIUM_4 = "It is an imitation cat! You can not trick me.", --black catfish
+		OCEANFISH_MEDIUM_5 = "it is an uncooked fish, it must be made popped and puffy.", --Corn
+		OCEANFISH_MEDIUM_6 = "It has whiskers like a rat, very strange.", --Koi
+		OCEANFISH_MEDIUM_7 = "It has whiskers like a rat, very strange.", --Koi
+		OCEANFISH_MEDIUM_8 = "Too cold and hard, it must thaw.", --Icebream
+        OCEANFISH_MEDIUM_9 = "Yes, you were made for eating!", --sweetish
 
 		PONDFISH = "You will not struggle for long.",
 		PONDEEL = "Stop squirming, I will bite your head off.",
@@ -3516,11 +3522,11 @@ return {
 
 		TROPHYSCALE_FISH =
 		{
-			GENERIC = "!",
+			GENERIC = "It is for seeing how much meat a fish has.",
 			HAS_ITEM = "Weight: {weight}\nCaught by: {owner}",
-			HAS_ITEM_HEAVY = "Weight: {weight}\nCaught by: {owner}\nWhat a catch!",
-			BURNING = "",
-			BURNT = "!",
+			HAS_ITEM_HEAVY = "Weight: {weight}\nCaught by: {owner}\nYes, the fish is big!",
+			BURNING = "It is cooking the fishes on it now.",
+			BURNT = "It cooked itself and is broken now.",
 			OWNER = "It is mine, I will eat it later. \nWeight: {weight}\nCaught by: {owner}",
 			OWNER_HEAVY = "Weight: {weight}\nCaught by: {owner}\nI catch the biggest juiciest fish!",
 		},
@@ -3536,7 +3542,7 @@ return {
         WOBSTER_SHELLER_DEAD = "He is dead and smelly.",
         WOBSTER_SHELLER_DEAD_COOKED = "I will crack you up and eat you.",
 
-        LOBSTERBISQUE = "",
+        LOBSTERBISQUE = "Soupy lobster drink, yes, I like this.",
         LOBSTERDINNER = "Yes, it was boiled alive!",
 
         WOBSTER_MOONGLASS = "Hmmm, I do not think I will eat this...",
@@ -3985,7 +3991,7 @@ return {
 			GENERIC = "That is some stupid plant.",
 			SEED = "They grow. I think.",
 			GROWING = "It is still too small to eat.",
-			FULL = "",
+			FULL = "I want to eat it now.",
 			ROTTEN = "It smells interesting now.",
 			FULL_OVERSIZED = "",
 			ROTTEN_OVERSIZED = "It is fermenting, it will be much more delicious soon.",
@@ -4019,7 +4025,7 @@ return {
 			PLAYING = "I am running around like a headless chicken!",
 		},
 		CARNIVALGAME_FEEDCHICKS_KIT = "Fun and games until I eat the worms.",
-		CARNIVALGAME_FEEDCHICKS_FOOD = "Wait... fake food?",
+		CARNIVALGAME_FEEDCHICKS_FOOD = "Wait... Fake worms?",
 
 		CARNIVALGAME_MEMORY_KIT = "Pointless.",
 		CARNIVALGAME_MEMORY_STATION =
@@ -4062,8 +4068,8 @@ return {
 			CARNIVALGAME_WHEELSPIN_KIT = "This really is a pop-up carnival.",
 		CARNIVALGAME_WHEELSPIN_STATION =
 		{
-			GENERIC = "It won't let me play until I give it something shiny.",
-			PLAYING = "It turns out that spinning your wheels is actually very productive.",
+			GENERIC = "I like spinning, let me play!",
+			PLAYING = "Yes, the spinning....",
 		},
 
 		CARNIVALGAME_PUCKDROP_KIT = "This really is a pop-up carnival.",
@@ -4104,9 +4110,9 @@ return {
 
 		CARNIVALDECOR_FIGURE =
 		{
-			RARE = "See? Proof that trying the exact same thing over and over will eventually lead to success!",
-			UNCOMMON = "You don't see this kind of design too often.",
-			GENERIC = "I seem to be getting a lot of these...",
+			RARE = "",
+			UNCOMMON = "",
+			GENERIC = "",
 		},
 		CARNIVALDECOR_FIGURE_KIT = "",
 
@@ -4119,8 +4125,8 @@ return {
         CARNIVAL_VEST_C = "It is a nice shade.",
 
         -- YOTB
-        YOTB_SEWINGMACHINE = "I do not understand how you old the little needle and string.",
-        YOTB_SEWINGMACHINE_ITEM = ".",
+        YOTB_SEWINGMACHINE = "I do not understand how you hold the little needle and string.",
+        YOTB_SEWINGMACHINE_ITEM = "It is making stuff you wear I think.",
         YOTB_STAGE = "Strange, I never see him enter or leave...",
         YOTB_POST =  "This contest is going to go off without a hitch! Well, figuratively speaking.",
         YOTB_STAGE_ITEM = "It looks like a bit of building is in order.",
@@ -4170,20 +4176,20 @@ return {
 
         WAR_BLUEPRINT = "RAGH! Scary! This is perfect!",
         DOLL_BLUEPRINT = "I do not want a doll! That is not scary.",
-        FESTIVE_BLUEPRINT = "I want something Hideous, this will not do.",
-        ROBOT_BLUEPRINT = "Maybe it's gears will turn things to rubble.",
+        FESTIVE_BLUEPRINT = "I want something hideous, this will not do.",
+        ROBOT_BLUEPRINT = "Maybe Its gears will turn things to rubble.",
         NATURE_BLUEPRINT = "Blegh, Too natural.",
         FORMAL_BLUEPRINT = "Too nice looking, I want a monster.",
         VICTORIAN_BLUEPRINT = "Too old.",
         ICE_BLUEPRINT = "It looks too cold.",
         BEAST_BLUEPRINT = "A beastly beast for me to trample and terrorize with!",
 
-        BEEF_BELL = ".",
+        BEEF_BELL = "A bell for beasts.",
 
 		-- YOT Catcoon
 		KITCOONDEN = 
 		{
-			GENERIC = "I do not like... cats...",
+			GENERIC = "I do not like... Cats...",
             BURNT = "ha ha!",
 			PLAYING_HIDEANDSEEK = "They should stay hidden, so I do not have to see them.",
 			PLAYING_HIDEANDSEEK_TIME_ALMOST_UP = "I hope they do not get found...",
@@ -4216,38 +4222,38 @@ return {
 		KITCOON_MARSH = "AH Get away from me you little monster!",
 		KITCOON_DECIDUOUS = "Stop following me, I am very uncomfortable.",
 		KITCOON_GRASS = "Stop following me, I am very uncomfortable.",
-		KITCOON_ROCKY = "",
-		KITCOON_DESERT = "",
+		KITCOON_ROCKY = "I do not like you... Why are you here.",
+		KITCOON_DESERT = "I do not like you... Why are you here.",
 		KITCOON_MOON = "AH Get away from me you little monster!",
-		KITCOON_YOT = "",
+		KITCOON_YOT = "I do not like you... Why are you here.",
 
         -- Moon Storm
         ALTERGUARDIAN_PHASE1 = {
-            GENERIC = "",
-            DEAD = "",
+            GENERIC = "AH! Why is the moon angry at me! What did I do!",
+            DEAD = "You are nothing but rubble now!",
         },
         ALTERGUARDIAN_PHASE2 = {
-            GENERIC = "",
-            DEAD = "",
+            GENERIC = "You are back!? It wasn't me who killed you!",
+            DEAD = "I do not trust that you are dead...",
         },
         ALTERGUARDIAN_PHASE2SPIKE = "AH! I will not be stabbed!",
 		
-        ALTERGUARDIAN_PHASE3 = "",
-        ALTERGUARDIAN_PHASE3TRAP = "",
-        ALTERGUARDIAN_PHASE3DEADORB = "",
-        ALTERGUARDIAN_PHASE3DEAD = ".",
+        ALTERGUARDIAN_PHASE3 = "Oh no! It's floating, that is not good...",
+        ALTERGUARDIAN_PHASE3TRAP = "Stop throwing these at me I do not want them!",
+        ALTERGUARDIAN_PHASE3DEADORB = "That is nothing, I do not want that.",
+        ALTERGUARDIAN_PHASE3DEAD = "Haha, You are nothing but rubble now!",
 
         ALTERGUARDIANHAT = "Oooo spinning, spinning...",
         ALTERGUARDIANHATSHARD = "A bit that is no longer spinning.",
 
         MOONSTORM_GLASS = {
             GENERIC = "Maybe I should steal it.",
-            INFUSED = "It is buzzing. I should steal it."
+            INFUSED = "It is buzzing, I should steal it!"
         },
 
         MOONSTORM_STATIC = "Keep it inside!",
         MOONSTORM_STATIC_ITEM = "I have contained it. It is mine now, right?",
-        MOONSTORM_SPARK = "Huh What is that?", --moongleam
+        MOONSTORM_SPARK = "Huh what is that?", --moongleam
 
         BIRD_MUTANT = "It is ugly. Very ugly.",
         BIRD_MUTANT_SPITTER = "Do not spit at me, you stupid ugly bird!",
@@ -4256,17 +4262,17 @@ return {
         ALTERGUARDIAN_CONTAINED = "Good! Lock it away!",
 
         WAGSTAFF_TOOL_1 = "It is MINE! I found it.",
-        WAGSTAFF_TOOL_2 = "",
-        WAGSTAFF_TOOL_3 = "",
-        WAGSTAFF_TOOL_4 = "",
-        WAGSTAFF_TOOL_5 = "",
+        WAGSTAFF_TOOL_2 = "Very interesting, it is mine now.",
+        WAGSTAFF_TOOL_3 = "I am keeping this.",
+        WAGSTAFF_TOOL_4 = "I think I've seen one of these before.",
+        WAGSTAFF_TOOL_5 = "Yes, I have one already.",
 
         MOONSTORM_GOGGLESHAT = "I am learning food is used for more than eating.",
 
         MOON_DEVICE = {
-            GENERIC = "It's containing the energy! I knew what it was for all along, of course.",
-            CONSTRUCTION1 = "The science has only just started.",
-            CONSTRUCTION2 = "That's looking much more science-y already!",
+            GENERIC = "Oh, Is that how that works?",
+            CONSTRUCTION1 = "It looks broken.",
+            CONSTRUCTION2 = "This machine is still broken, isn't it.",
         },
 
 		-- Wanda
@@ -4376,7 +4382,7 @@ return {
 		EYEMASKHAT = "This is safe to wear?",
 
         EYEOFTERROR = "I do not like being stared at!",
-        EYEOFTERROR_MINI = "I will put you in the ground, ugly.",
+        EYEOFTERROR_MINI = "I will put you in the ground, Ugly.",
         EYEOFTERROR_MINI_GROUNDED = "Go back in I don't want you out here!",
 
         FROZENBANANADAIQUIRI = "This yellow paste is quite good.",
@@ -4437,6 +4443,13 @@ return {
         WX78_MODULEREMOVER = "I could use it to steal teeth.",
 
         SCANDATA = "Useless paper with holes.",
+		
+		-- QOL 2022
+		JUSTEGGS = "I would be better in my mouth now.",
+		VEGGIEOMLET = "Not gooey, but I still find it yummy.",
+		TALLEGGS = "Crunchy and eggy, yes, most delicious eggs!",
+		BEEFALOFEED = "They are twigs, I should just chew on it.",
+		BEEFALOTREAT = "It looks good, why should I let those beasts eat it.",
 	
 	    -- Pirates
         BOAT_ROTATOR = "It will make me sick if it keeps spinning.",
@@ -4454,10 +4467,10 @@ return {
 
         OCEAN_TRAWLER = {
             GENERIC = "It is a floaty net thing.",
-            LOWERED = "something stupid will get trapped for me.",
-            CAUGHT = "",
+            LOWERED = "Something stupid will get trapped for me.",
+            CAUGHT = "Hahaha! There is a stupid fish in there!",
             ESCAPED = "It is a worthless net.",
-            FIXED = "It is re-netted.",
+            FIXED = "I have re-netted it.",
         },
         OCEAN_TRAWLER_KIT = "I could plop it down, and it will steal fish for me.",
 
@@ -4510,11 +4523,50 @@ return {
 
         BANANAJUICE = "It is slimey mushy juice.",
 		
-		FENCE_ROTATOR = "Spiney poker, I will use this.",
+		FENCE_ROTATOR = "Springy poker, I will use this.",
+		
+		CHARLIE_STAGE_POST = "This was not here before, I think?",
+        CHARLIE_LECTURN = "Scritches and scratches, They are fancy.",
+
+        CHARLIE_HECKLER = "Get down here!",
+
+        PLAYBILL_THE_DOLL = "I do not like you, fake person.",
+        STATUEHARP_HEDGESPAWNER = "they are dead.",
+        HEDGEHOUND = "AH! You are imitation bush!",
+        HEDGEHOUND_BUSH = "There is something for me?",
+
+        MASK_DOLLHAT = ".",
+        MASK_DOLLBROKENHAT = "It is broken.",
+        MASK_DOLLREPAIREDHAT = "It is more broken.",
+        MASK_BLACKSMITHHAT = "I",
+        MASK_MIRRORHAT = "",
+        MASK_QUEENHAT = "",
+        MASK_KINGHAT = ".",
+        MASK_TREEHAT = "I do not want to be a pine head.",
+        MASK_FOOLHAT = ".",
+
+        COSTUME_DOLL_BODY = "These are clothes for.",
+        COSTUME_QUEEN_BODY = "",
+        COSTUME_KING_BODY = "",
+        COSTUME_BLACKSMITH_BODY = "",
+        COSTUME_MIRROR_BODY = "",
+        COSTUME_TREE_BODY = "It looks like a tree. Why?",
+        COSTUME_FOOL_BODY = "",
+
+        STAGEUSHER =
+        {
+            STANDING = "J?",
+            SITTING = "",
+        },
+        SEWING_MANNEQUIN =
+        {
+            GENERIC = "This is a fake person, it is weird.",
+            BURNT = "Now it is dead.",
+        },
     },
 
     DESCRIBE_GENERIC = "Never have I seen a.... This...",
-    DESCRIBE_TOODARK = "Aaaah What? I ca nnot see?",
+    DESCRIBE_TOODARK = "Aaaah! What? I cannot see?",
     DESCRIBE_SMOLDERING = "Oh no! It is smoking!",
 
     DESCRIBE_PLANTHAPPY = "The plant is smiling I think.",
