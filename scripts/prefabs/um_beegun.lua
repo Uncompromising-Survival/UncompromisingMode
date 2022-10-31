@@ -744,6 +744,8 @@ local function bulletfn(ischerry)
 
     if ischerry then
         inst.components.combat.onhitotherfn = CherryPoison
+	else
+		inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
     end
 
     ------------------
@@ -782,8 +784,6 @@ end
 
 local function bulletbee()
     local inst = bulletfn(false)
-
-    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
 	
     return inst
 end

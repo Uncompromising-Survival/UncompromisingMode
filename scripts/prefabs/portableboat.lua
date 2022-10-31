@@ -1,6 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/portableboat_test.zip"),
+    Asset("ANIM", "anim/portableboat.zip"),
 }
 
 local item_assets =
@@ -318,8 +318,8 @@ local function fn()
     phys:CollidesWith(COLLISION.OBSTACLES)
     phys:SetCylinder(radius, 3)     
 
-    inst.AnimState:SetBank("portableboat_test")
-    inst.AnimState:SetBuild("portableboat_test")
+    inst.AnimState:SetBank("portableboat")
+    inst.AnimState:SetBuild("portableboat")
     inst.AnimState:SetSortOrder(ANIM_SORT_ORDER.OCEAN_BOAT)
 	inst.AnimState:SetFinalOffset(1)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
@@ -375,12 +375,12 @@ local function fn()
     inst:AddComponent("hull")
     inst.components.hull:SetRadius(radius)
 	local boatlip = SpawnPrefab("boatlip")
-	boatlip.AnimState:SetScale(0.45, 0.45, 0.45)
+	boatlip.AnimState:SetScale(0.7, 0.7, 0.7)
 	inst.components.hull:SetBoatLip(boatlip)
    -- local playercollision = SpawnPrefab("portableboat_player_collision")
 	--inst.components.hull:AttachEntityToBoat(playercollision, 0, 0)
-
-    local walking_plank = SpawnPrefab("walkingplank")
+	
+    local walking_plank = SpawnPrefab("portableplank")
     local edge_offset = -0.05
     inst.components.hull:AttachEntityToBoat(walking_plank, 0, 3 + edge_offset, true)
     inst.components.hull:SetPlank(walking_plank)
@@ -644,9 +644,72 @@ local function cord_fn()
     return inst
 end
 
+local function lipfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst:AddTag("NOBLOCK")
+    inst:AddTag("DECOR")
+
+    inst.AnimState:SetBank("portableboat")
+    inst.AnimState:SetBuild("portableboat")
+    inst.AnimState:PlayAnimation("lip", true)
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGroundFixed)
+    inst.AnimState:SetLayer(LAYER_BELOW_GROUND)
+    inst.AnimState:SetSortOrder(ANIM_SORT_ORDER_BELOW_GROUND.BOAT_LIP)
+    inst.AnimState:SetFinalOffset(0)
+    inst.AnimState:SetOceanBlendParams(TUNING.OCEAN_SHADER.EFFECT_TINT_AMOUNT)
+    inst.AnimState:SetInheritsSortKey(false)
+
+    inst.Transform:SetRotation(90)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+
+    return inst
+end
+
+local function fakefn()
+    local inst = CreateEntity()
+	
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst:AddTag("walkingplank")
+    inst:AddTag("FX")
+
+    inst:AddTag("ignorewalkableplatforms") -- because it is a child of the boat    
+	
+    inst.entity:SetPristine()
+	
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:SetStateGraph("SGwalkingplank")
+	
+    inst:AddComponent("walkingplank")
+    inst.persists = false
+	
+    return inst
+end
+
 return Prefab("portableboat", fn, assets, prefabs),
        Prefab("portableboat_player_collision", boat_player_collision_fn),
        Prefab("portableboat_item_collision", boat_item_collision_fn),
        Prefab("portableboat_item", item_fn, item_assets, item_prefabs),
        Prefab("portableboat_ripcord", cord_fn, item_assets, item_prefabs),
+	   Prefab("portableboatlip", lipfn, assets, prefabs),
+	   Prefab("portableplank", fakefn, assets, prefabs),
        MakePlacer("portableboat_item_placer", "portableboat_placer", "portableboat_test", "placer", true, false, false, nil, nil, nil, nil, 0)

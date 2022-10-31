@@ -548,6 +548,7 @@ Assets = {
 
 	Asset("ANIM", "anim/player_actions_speargun.zip"),
 
+	Asset("ANIM", "anim/portableboat.zip"),
 	Asset("ANIM", "anim/portableboat_test.zip"),
 	Asset("ANIM", "anim/portableboat_placer.zip"),
 
