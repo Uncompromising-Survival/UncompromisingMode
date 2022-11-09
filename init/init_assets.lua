@@ -37,6 +37,7 @@ local inventoryitems =
 	"cctrinket_don",
 	"cctrinket_freddo",
 	"cctrinket_jazzy",
+	"codex_mantra",
 	"chester_eyebone_closed_lazy",
 	"chester_eyebone_lazy",
 	"cookedmonstersmallmeat",
@@ -128,7 +129,7 @@ local inventoryitems =
 	"rice_cooked",
 	"rne_goodiebag",
 	"saltpack",
-	"sand",
+	--"sand",
 	"scorpioncarapace",
 	"scorpioncarapacecooked",
 	"screecher_trinket",
@@ -603,7 +604,7 @@ Assets = {
 	Asset("ANIM", "anim/chop_root_spike.zip"),
 
 	Asset("ANIM", "anim/snow_dune.zip"),
-	Asset("ANIM", "anim/sandhill.zip"),
+	--Asset("ANIM", "anim/sandhill.zip"),
 	Asset("ANIM", "anim/snowpile.zip"),
 
 	Asset("ANIM", "anim/tar.zip"),
@@ -643,7 +644,8 @@ Assets = {
 
 	Asset("ANIM", "anim/bearger_boulder.zip"),
 
-
+	Asset("ATLAS", "images/the_men.xml"),
+	Asset("IMAGE", "images/the_men.tex"),
 
 	--OVERLAYS
 	Asset("ATLAS", "images/UM_pollenover.xml"),
@@ -959,6 +961,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/ancient_amulet_red_demoneye.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
 	Asset("ATLAS", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/codex_mantra.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
+	Asset("ATLAS", "images/inventoryimages/codex_mantra.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/driftwoodfishingrod.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/driftwoodfishingrod.xml"),
@@ -1375,8 +1381,8 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/gasmask.tex"),
 
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/sand.xml"),
-	Asset("ATLAS", "images/inventoryimages/sand.xml"),
-	Asset("IMAGE", "images/inventoryimages/sand.tex"),
+	--Asset("ATLAS", "images/inventoryimages/sand.xml"),
+	--Asset("IMAGE", "images/inventoryimages/sand.tex"),
 
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/snowgoggles.xml"),
 	Asset("ATLAS", "images/inventoryimages/snowgoggles.xml"),
@@ -1616,7 +1622,8 @@ Assets = {
 	Asset("ANIM", "anim/winona_toolbox.zip"),
 	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
 	
-
+	Asset("ANIM", "anim/um_goo_honey.zip"),
+	
 	--UI
 	Asset("IMAGE", "images/dragonflycontainerborder.tex"),
 	Asset("ATLAS", "images/dragonflycontainerborder.xml"),
@@ -1722,17 +1729,17 @@ Assets = {
 	Asset("IMAGE", "images/map_icons/sludge_sack.tex"),
 	Asset("ATLAS", "images/map_icons/sludge_sack.xml"),
 	
-	Asset("IMAGE", "images/map_icons/sludge_stack.tex"),
-	Asset("ATLAS", "images/map_icons/sludge_stack.xml"),
+	--Asset("IMAGE", "images/map_icons/sludge_stack.tex"),
+	--Asset("ATLAS", "images/map_icons/sludge_stack.xml"),
 	
-	Asset("IMAGE", "images/map_icons/winonas_toolbox.tex"),
-	Asset("ATLAS", "images/map_icons/winonas_toolbox.xml"),
+	--Asset("IMAGE", "images/map_icons/winonas_toolbox.tex"),
+	--Asset("ATLAS", "images/map_icons/winonas_toolbox.xml"),
 	
-	Asset("IMAGE", "images/map_icons/inflatable_raft.tex"),
-	Asset("ATLAS", "images/map_icons/inflatable_raft.xml"),
+	--Asset("IMAGE", "images/map_icons/inflatable_raft.tex"),
+	--Asset("ATLAS", "images/map_icons/inflatable_raft.xml"),
 	
-	Asset("IMAGE", "images/map_icons/boomberry.tex"),
-	Asset("ATLAS", "images/map_icons/boomberry.xml"),
+	--Asset("IMAGE", "images/map_icons/boomberry.tex"),
+	--Asset("ATLAS", "images/map_icons/boomberry.xml"),
 
 
 	--BIGPORTRAITS

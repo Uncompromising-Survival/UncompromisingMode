@@ -65,7 +65,7 @@ if GetModConfigData("longpig") then
 end
 
 if GetModConfigData("wanda_nerf") then
-    AllRecipes["pocketwatch_revive"].ingredients = {Ingredient("pocketwatch_parts", 3), Ingredient("livinglog", 2), Ingredient("skeletonmeat", 1)}
+    AllRecipes["pocketwatch_revive"].ingredients = {Ingredient("pocketwatch_parts", 3), Ingredient("livinglog", 2), Ingredient("reviver", 1)}
 end
 
 AllRecipes["moonrockidol"].ingredients = { Ingredient("moonrocknugget", GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST), Ingredient("purplegem", 1)}
@@ -536,26 +536,6 @@ ChangeSortKey("sludge_cork", "oceanfishingrod", "TOOLS", true)
 ChangeSortKey("sludge_cork", "boat_magnet_beacon", "SEAFARING", true)
 
 --[[
-AddRecipe2(
-    "boat_bumper_copper_kit",
-    {Ingredient("um_copper_pipe", 14)},
-    TECH.SEAFARING_ONE,
-    {numtogive = 2},
-    {"SEAFARING"}
-)
-ChangeSortKey("boat_bumper_copper_kit", "boat_bumper_shell_kit", "SEAFARING", true)]]
-
---[[
-AddRecipe2(
-    "steeringwheel_copper_item",
-    {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)},
-    TECH.SEAFARING_ONE,
-    nil,
-    {"SEAFARING"}
-)
-ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)]]
-
---[[
 AddRecipe2(--unsure...
     "trinket_6",
     {Ingredient("um_copper_pipe", 3)},
@@ -580,7 +560,7 @@ AddDeconstructRecipe("rain_horn", {Ingredient("slurtle_shellpieces", 4),Ingredie
 AddDeconstructRecipe("dormant_rain_horn", {Ingredient("cookiecuttershell", 4),Ingredient("rocks", 2)})
 
 ----deconstruct recipes for craftable items
---AddDeconstructRecipe("steeringwheel_copper", {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})
+AddDeconstructRecipe("steeringwheel_copper", {Ingredient("um_copper_pipe", 3), Ingredient("gears", 1)})
 
 --Sailing Rebalance related recipes.
 
@@ -708,6 +688,17 @@ ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_
 AddRecipe2("portableboat_item", {Ingredient("mosquitosack", 2), Ingredient("rope", 2)}, TECH.SEAFARING_ONE, nil, {"SEAFARING"})
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
+
+AddRecipe2(
+    "codex_mantra",
+    {Ingredient("waxwelljournal", 1)},
+    TECH.NONE,
+    {builder_tag="shadowmagic"}, 
+	{"CHARACTER"}
+)
+ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
+
+
 AddRecipe2("mastupgrade_windturbine_item", {Ingredient("cutstone", 2), Ingredient("transistor", 2)}, TECH.SEAFARING_ONE, nil, {"SEAFARING"})
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 --recipe postinits
@@ -773,6 +764,7 @@ STRINGS.RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat has a hole that shoul
 STRINGS.RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
 STRINGS.RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
 STRINGS.RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky fingers."
+STRINGS.RECIPE_DESC.BOAT_BUMPER_SLUDGE_KIT = "Cushion the blow."
 STRINGS.RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
 STRINGS.RECIPE_DESC.SLUDGE_CORK = "Impractically large for a boat."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
@@ -784,6 +776,7 @@ STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
+STRINGS.RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
 
 --sailing rebalance strings
 STRINGS.RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"

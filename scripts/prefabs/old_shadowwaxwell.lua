@@ -89,6 +89,46 @@ local function DisappearShadow(inst)
     end	
 end
 
+
+local function protector_updatehealthclamp(inst)
+	local cap = math.abs(inst.components.health.maxdamagetakenperhit)
+	cap = cap + math.abs(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INCREASE)
+	cap = math.min(cap, math.max(1, inst.components.health.maxhealth - 1))
+	inst.components.health:SetMaxDamageTakenPerHit(cap)
+end
+local function protector_onengaged(inst)
+	if inst.disengagetask ~= nil then
+		inst.disengagetask:Cancel()
+		inst.disengagetask = nil
+	end
+	if inst.engagedtask == nil then
+		inst.engagedtask = inst:DoPeriodicTask(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_PERIOD, protector_updatehealthclamp, TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INITIAL_PERIOD)
+	end
+end
+local function protector_resethealthclamp(inst)
+	inst.disengagetask = nil
+	if inst.engagedtask ~= nil then
+		inst.engagedtask:Cancel()
+		inst.engagedtask = nil
+	end
+	inst.components.health:SetMaxDamageTakenPerHit(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_TAKEN)
+end
+local function protector_ondisengaged(inst)
+	if inst.disengagetask == nil then
+		inst.disengagetask = inst:DoTaskInTime(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INITIAL_PERIOD, protector_resethealthclamp)
+	end
+end
+local function protector_attacked(inst, data)
+	if data ~= nil and data.damage ~= nil and data.damage > 0 then
+		inst.components.health:SetMaxDamageTakenPerHit(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_TAKEN)
+		if inst.engagedtask ~= nil then
+			inst.engagedtask:Cancel()
+			inst.engagedtask = inst:DoPeriodicTask(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_PERIOD, protector_updatehealthclamp, TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_INITIAL_PERIOD)
+		end
+	end
+end
+
+
 local function fn()
 	local inst = CreateEntity()
 
@@ -99,10 +139,18 @@ local function fn()
 
 	inst.Transform:SetFourFaced(inst)
 
+    inst:SetPhysicsRadiusOverride(.5)
 	MakeGhostPhysics(inst, 1, .5)
 
-	inst.AnimState:SetBank("wilson")
-	inst.AnimState:SetBuild("waxwell_shadow_mod")
+    inst.AnimState:SetBank("wilson")
+    inst.AnimState:SetBuild("waxwell") -- "waxwell_shadow_mod" Deprecated.
+    inst.AnimState:OverrideSymbol("fx_wipe", "wilson_fx", "fx_wipe")
+    inst.AnimState:AddOverrideBuild("waxwell_minion_spawn")
+    inst.AnimState:AddOverrideBuild("waxwell_minion_appear")
+    inst.AnimState:AddOverrideBuild("lavaarena_shadow_lunge")
+    inst.AnimState:SetMultColour(0, 0, 0, .5)
+	inst.AnimState:UsePointFiltering(true)
+
 	inst.AnimState:PlayAnimation("idle")
 
     inst.AnimState:Hide("ARM_carry")
@@ -118,13 +166,17 @@ local function fn()
     inst.entity:SetPristine()
 
     inst:SetPrefabNameOverride("shadowwaxwell")
-		
+
     if not TheWorld.ismastersim then
         return inst
     end
 
-	inst:AddComponent("colourtweener")
-	inst.components.colourtweener:StartTween({0,0,0,.5}, 0)
+    inst:AddComponent("skinner")
+    inst.components.skinner:SetupNonPlayerData()
+
+
+	--inst:AddComponent("colourtweener")
+	--inst.components.colourtweener:StartTween({0,0,0,.5}, 0)
 
 	inst:AddComponent("locomotor")
     inst.components.locomotor.runspeed = TUNING.SHADOWWAXWELL_SPEED
@@ -134,6 +186,7 @@ local function fn()
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.SHADOWWAXWELL_LIFE)
+    inst.components.health:SetMaxDamageTakenPerHit(TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_TAKEN)
     inst.components.health:StartRegen(TUNING.CHESTER_HEALTH_REGEN_AMOUNT / 4, TUNING.CHESTER_HEALTH_REGEN_PERIOD)
     inst.components.health.nofadeout = true
     inst.components.health.fire_damage_scale = TUNING.WILLOW_FIRE_DAMAGE
@@ -146,6 +199,7 @@ local function fn()
     inst.components.combat:SetAttackPeriod(TUNING.SHADOWWAXWELL_ATTACK_PERIOD)
     inst.components.combat:SetRange(2, 3)
     inst.components.combat:SetDefaultDamage(TUNING.SHADOWWAXWELL_DAMAGE)
+
 
 	inst:AddComponent("inventory")
     inst.components.inventory.dropondeath = false
@@ -179,7 +233,10 @@ local function fn()
 		end)
 	end)
 	inst:ListenForEvent("onremove", DisappearShadow)
-	
+    inst:ListenForEvent("newcombattarget", protector_onengaged)
+	inst:ListenForEvent("droppedtarget", protector_ondisengaged)
+	inst:ListenForEvent("attacked", protector_attacked)--yoinked from protectors from the rework
+
 	return inst
 end
 

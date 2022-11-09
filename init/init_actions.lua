@@ -157,7 +157,7 @@ local _RummageFn = GLOBAL.ACTIONS.RUMMAGE.fn
 GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
 	local targ = act.target or act.invobject
 	
-	if targ ~= nil and targ:HasTag("winky_storage") then
+	--[[if targ ~= nil and targ:HasTag("winky_storage") then
 		if GLOBAL.TheWorld.components.winkyburrowinventory.trunk and GLOBAL.TheWorld.components.winkyburrowinventory.trunk.components.container:IsOpen() and not GLOBAL.TheWorld.components.winkyburrowinventory.trunk.components.container:IsOpenedBy(act.doer) then
 			return false, "INUSE"
 		end
@@ -165,7 +165,7 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
 		if GLOBAL.TheWorld.components.skullchestinventory.trunk and GLOBAL.TheWorld.components.skullchestinventory.trunk.components.container:IsOpen() and not GLOBAL.TheWorld.components.skullchestinventory.trunk.components.container:IsOpenedBy(act.doer) then
 			return false, "INUSE"
 		end
-	elseif targ ~= nil and targ:HasTag("winona_notouchy") and not act.doer:HasTag("handyperson") then
+	else]]if targ ~= nil and targ:HasTag("winona_notouchy") and not act.doer:HasTag("handyperson") then
 		return false, "WINONATOOLBOX"
 	end
 	return _RummageFn(act)
@@ -197,6 +197,7 @@ GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
 end
 
 local _AddFuelFn = GLOBAL.ACTIONS.ADDFUEL.fn
+local _AddWetFuelFn = GLOBAL.ACTIONS.ADDWETFUEL.fn
 
 GLOBAL.ACTIONS.ADDFUEL.fn = function(act)
     if act.doer.components.inventory and act.invobject.components.finiteuses ~= nil and act.invobject:HasTag("sludge_oil") then
@@ -211,5 +212,21 @@ GLOBAL.ACTIONS.ADDFUEL.fn = function(act)
         end
 	else
 		return _AddFuelFn(act)
+	end
+end
+
+GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act)--I'M GOING TO ***BOMB KLEI*** WHY THE *FUCK* IS WETFUEL IT'S OWN ACTION.
+    if act.doer.components.inventory and act.invobject.components.finiteuses ~= nil and act.invobject:HasTag("sludge_oil") then
+		local fuel = act.invobject
+        if fuel then
+            if act.target.components.fueled and act.target.components.fueled:TakeFuelItem(fuel, act.doer) then
+                return true
+            else
+                --print("False")
+                act.doer.components.inventory:GiveItem(fuel)
+            end
+        end
+	else
+		return _AddWetFuelFn(act)
 	end
 end

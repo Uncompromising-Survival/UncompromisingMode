@@ -1,22 +1,21 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.15.3.6 : "Calm Before the Storm" ]
+󰀔 [ Version 1.5.1 Pre-release 1 ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Prominent features:
-- Wathom, the Abomination
+- Wathom, the Forgotten Parody
 - Reworks to the Bee Queen and Ancient Guardian. New Vets Curse item from Bee Queen.
 - New setpieces, and mysteries at sea.
 - Reed Armor, Shark Suit Armor, Magnerang, Fishing Net, and much more!
-- Remember, most of the new content is using placeholder images and animations!
 
 󰀏 NEXT UPDATE: Under the Weather, Part I.]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.15.3.6"
+version = "Calm Before the Storm v1.5.1 Pre-release"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -44,13 +43,6 @@ server_filter_tags = {
 	"madness",
 	"challenge",
 	"hardcore"
-}
-
-
-mod_dependencies = {
-    {--WIXIE, only for beta build.
-        workshop = "workshop-2758491764",
-    },
 }
 
 priority = -10
@@ -105,7 +97,7 @@ configuration_options =
 	},
     BinaryConfig("harder_shadows", "Harder Nightmare Creatures", "Insanity is a big threat now. Those who pass the brink may never return.", true),
     BinaryConfig("rat_raids", "Rat Raids", "Rats will periodically be attracted to your base.", true),
-    BinaryConfig("durability", "Clothing Degradation", "Winter and Rain protection clothing items become less effective when their durability drops.", true),
+    BinaryConfig("durability", "Clothing Degradation", "Winter and Rain protection clothing items become less effective when their durability drops.", false),
 	BinaryConfig("sewingkit", "Sewing Kit Tweaks", "Sewing Kit has DOUBLE uses, but repairs HALF value. Pairs very well with Clothing Degredation, lets you keep clothing in top shape more easily.", true),
 	BinaryConfig("lifeamulet", "Life Giving Amulet Changes", "The Life Giving Amulet acts like vanilla Don't Starve, only reviving when worn upon death. \nIts hunger > health conversion ticks much faster.", true),
 	BinaryConfig("longpig", "Long Pig", "Skeletons drop Long Pig to prevent telltale heart spam.", true),
@@ -205,7 +197,7 @@ configuration_options =
 	BinaryConfig("on tentacles", "Wickerbottom: On Tentacles", "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
 	BinaryConfig("applied horticulture", "Wickerbottom: Horticulture", "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.", true),
 	BinaryConfig("book_recipes", "Wickerbottom: Book Recipe Tweaks", "Changes some book recipes to be slightly more balanced.", true),
-	BinaryConfig("wanda_nerf", "Experimental Wanda", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", false),
+	BinaryConfig("wanda_nerf", "Wanda:", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
 	BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage", "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x", true),
 	BinaryConfig("wormwood_plants", "Wormwood: Planting Sanity", "Increases the sanity loss from digging plants.", true),
 	BinaryConfig("wendy", "Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
@@ -614,7 +606,7 @@ configuration_options =
 	Header("Raid Bosses"),
 	BinaryConfig("harder_dragonfly", "Harder Dragonfly", "Dragonfly now has knockback on hit.", true),
 	BinaryConfig("harder_lavae", "Exploding Lavae", "Lavae will now leave exploding paste upon death, knocks holes in walls.", true),
-	BinaryConfig("harder_beequeen", "Harder Bee Queen", "Bee Queen now has AOE attached to her main attack.", true),
+	BinaryConfig("harder_beequeen", "Harder Bee Queen", "Bee Queen now has a variety of attacks with different bees.", true),--lame! help!
 	BinaryConfig("rework_minotaur", "Ancient Guardian Rework", "The Ancient Guardian's fight is expanded, includes more attacks.", true),
 	BinaryConfig("reworked_eyes", "Reworked Eyes of Terror", "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
 	SkipSpace(),
