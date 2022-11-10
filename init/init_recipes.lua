@@ -222,10 +222,11 @@ AddRecipe2(
     {Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3)},
     TECH.LOST,
     {placer = "skullchest_child_placer"},
-    {"STRUCTURES", "CONTAINERS"}
+    {"STRUCTURES", "CONTAINERS", "MAGIC"}
 )
-ChangeSortKey("skullchest_child", "dragonflychest", "STRUCTURES", true)
-ChangeSortKey("skullchest_child", "dragonflychest", "CONTAINERS", true)
+ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)
+ChangeSortKey("skullchest_child", "magician_chest", "CONTAINERS", true)
+ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
 
 AddRecipe2(
     "honey_log",

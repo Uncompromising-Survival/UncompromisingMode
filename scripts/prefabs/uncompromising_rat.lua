@@ -1617,6 +1617,7 @@ local function fn_winkyburrow()
 	--inst:AddTag("trader")
 	inst:AddTag("chest")
 	inst:AddTag("irreplaceable")
+	inst:AddTag("winky_burrow")
 
 	inst.MiniMapEntity:SetIcon("uncompromising_ratburrow.tex")
 
@@ -1688,6 +1689,7 @@ local function fn_winkyhomeburrow()
 	inst:AddTag("herd")
 	--inst:AddTag("trader")
 	inst:AddTag("chest")
+	inst:AddTag("winky_burrow")
 
 	inst.MiniMapEntity:SetIcon("uncompromising_winkyhomeburrow.tex")
 

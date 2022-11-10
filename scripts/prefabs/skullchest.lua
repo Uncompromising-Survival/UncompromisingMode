@@ -19,7 +19,7 @@ local POCKETDIMENSIONCONTAINER_DEFS = {
 	},
 	{--but this one doesn't??
 		name = "winky",
-		prefab = "winkyburrow_pocketdim",
+		prefab = "uncompromising_winkyburrow_master",
 		ui = "anim/ui_portal_shadow_3x4.zip",
 		widgetname = "shadowchester",
 	},
@@ -114,6 +114,7 @@ local function fn()
 
 	inst:AddTag("structure")
 	--inst:AddTag("chest")
+	inst:AddTag("skullchest")
 
 	inst.AnimState:SetBank("skull_chest")
 	inst.AnimState:SetBuild("skull_chest")

@@ -7,24 +7,74 @@ env.AddPrefabPostInit("world", function(inst)
         return
     end
 
-    --super scuffed but uh, no idea.
-    local count1, count2 = 0,0
+    local count_skull, count_winky, items_skull, items_winky = 0, 0
+    inst:DoTaskInTime(0, function()
 
-    for k,v in pairs(Ents) do
-        if v.prefab == "skullchest" then
-            count1 = count1 + 1
+        --count all skullchests and winky burrows
+        for k, v in pairs(Ents) do
+            if v.prefab == "skullchest" then
+                count_skull = count_skull + 1
+            elseif v.prefab == "uncompromising_winkyburrow_master" then
+                count_winky = count_winky + 1
+            end
         end
-        if v.prefab == "winkyburrow" then
-            count2 = count2 + 1
-        end
-    end
 
-    if count1 == 0 then
-        SpawnPrefab("skullchest")
-    end
-    if count2 == 0 then
-        SpawnPrefab("winkyburrow_pocketdim")
-    end
+        --resolve any excess skullchests
+        if count_skull > 1 then
+            for k, v in pairs(Ents) do
+                if count_skull == 1 then
+                    break
+                end
+                if v.prefab == "skullchest" then
+                    items_skull = v.components.container:RemoveAllItems()
+                    if items_skull ~= nil then
+                        local x, y, z = TheSim:FindFirstEntityWithTag("skullchest").Transform:GetWorldPosition()
+                        for _, item in pairs(items_skull) do
+                            item.Transform:SetPosition(x, y, z)
+                        end
+                    end
+                    v:DoTaskInTime(1, v.Remove)
+                    count_skull = count_skull - 1
+                end
+            end
+        end
+
+        if count_winky > 1 then
+            for k, v in pairs(Ents) do
+                if count_winky == 1 then
+                    break
+                end
+                if v.prefab == "skullchest" then
+                    items_winky = v.components.container:RemoveAllItems()
+                    if count_winky ~= nil then
+                        local x, y, z = TheSim:FindFirstEntityWithTag("winky_burrow").Transform:GetWorldPosition()
+                        for _, item in pairs(items_winky) do
+                            item.Transform:SetPosition(x, y, z)
+                        end
+                    end
+                    v:DoTaskInTime(1, v.Remove)
+                    count_winky = count_winky - 1
+                end
+            end
+        end
+
+        if count_skull == 0 then
+            SpawnPrefab("skullchest") --Add a skullchest entity if there's none
+            for k, v in pairs(Ents) do
+                if v.prefab == "skullchest_child" then
+                    v:OnLoadPostPass(v) --reattach for any pre-existing ones
+                end
+            end
+        end
+        if count_winky == 0 then
+            SpawnPrefab("uncompromising_winkyburrow_master") --Add a uncompromising_winkyburrow_master entity if there's none
+            for k, v in pairs(Ents) do
+                if v.prefab == "uncompromising_winkyburrow" or v.prefab == "uncompromising_winkyhomeburrow" then
+                    v:OnLoadPostPass(v) --reattach for any pre-existing ones
+                end
+            end
+        end
+    end)
 
     if inst:HasTag("forest") then
         inst:AddComponent("acidmushrooms")
