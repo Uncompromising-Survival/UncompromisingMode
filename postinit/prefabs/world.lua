@@ -28,7 +28,11 @@ env.AddPrefabPostInit("world", function(inst)
                 if v.prefab == "skullchest" then
                     items_skull = v.components.container:RemoveAllItems()
                     if items_skull ~= nil then
-                        local x, y, z = TheSim:FindFirstEntityWithTag("skullchest").Transform:GetWorldPosition()
+                        local skullchest = TheSim:FindFirstEntityWithTag("skullchest")
+                        local x, y, z = 0, 0, 0
+                        if skullchest ~= nil then
+                            x, y, z = skullchest.Transform:GetWorldPosition()
+                        end
                         for _, item in pairs(items_skull) do
                             item.Transform:SetPosition(x, y, z)
                         end
@@ -47,7 +51,11 @@ env.AddPrefabPostInit("world", function(inst)
                 if v.prefab == "skullchest" then
                     items_winky = v.components.container:RemoveAllItems()
                     if count_winky ~= nil then
-                        local x, y, z = TheSim:FindFirstEntityWithTag("winky_burrow").Transform:GetWorldPosition()
+                        local winky_burrow = TheSim:FindFirstEntityWithTag("winky_burrow")
+                        local x, y, z = 0, 0, 0
+                        if winky_burrow ~= nil then
+                            x, y, z = winky_burrow.Transform:GetWorldPosition()
+                        end
                         for _, item in pairs(items_winky) do
                             item.Transform:SetPosition(x, y, z)
                         end
