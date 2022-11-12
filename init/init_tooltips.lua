@@ -135,7 +135,7 @@ if TUNING.DSTU.HAYFEVER then
 	TOOLTIP.PERDFAN = "- Grants large amounts of Hayfever protection when blown."
 end
 
-if TUNING.DSTU.GOTOBED then
+if TUNING.DSTU.GOTOBED ~= false then
 	TOOLTIP.BEDROLL_STRAW = "- May restore maximum health."
 	PINETREETOOLTIP.BEDROLL_STRAW = "- May restore maximum health.\n"..PINETREETOOLTIP.BEDROLL_STRAW
 	

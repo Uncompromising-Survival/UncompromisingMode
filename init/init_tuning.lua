@@ -413,6 +413,8 @@ TUNING.DSTU =
 
     PK_GUARDS = GetModConfigData("pigking_guards"),
 
+    BERNIE_BUFF = GetModConfigData("bernie_buffs"),
+
 --boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
@@ -479,6 +481,8 @@ TUNING.SPAWNPROTECTIONBUFF_SPAWN_DIST_SQ = 3*3
 
 TUNING.MULTITOOL_DAMAGE = TUNING.AXE_DAMAGE
 
+
+TUNING.HAWAIIANSHIRT_PERISHTIME = TUNING.HAWAIIANSHIRT_PERISHTIME+total_day_time*5
 
 --Sailing Rebalance related tuning changes
 --trident buff
