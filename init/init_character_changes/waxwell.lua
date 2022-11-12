@@ -50,7 +50,6 @@ end
 
 local SHADOW_MIMIC_SPELL =
 {
-	label = STRINGS.SPELLS.SHADOW_MIMIC,
 	onselect = function(inst)
 		inst.components.spellbook:SetSpellName(STRINGS.SPELLS.SHADOW_MIMIC)
 		if TheWorld.ismastersim then
@@ -65,6 +64,7 @@ local SHADOW_MIMIC_SPELL =
 		end
 		print("here?")
 	end,
+	label = STRINGS.SPELLS.SHADOW_MIMIC,
 	atlas = "images/the_men.xml", --didn't rename because I thought it was funny.
 	normal = "the_men.tex",
 	widget_scale = ICON_SCALE,

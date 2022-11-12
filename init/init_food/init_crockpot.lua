@@ -857,10 +857,9 @@ local um_deviled_eggs =
 {
     name = "um_deviled_eggs",
     --test = function(cooker, names, tags) return tags.monster >= 2 and tags.egg and not tags.meat end,
-    test = function(cooker, names, tags) return tags.monster and tags.egg and (not tags.meat or tags.egg >= 3) and
-        not tags.inedible end,
+    test = function(cooker, names, tags) return tags.monster and tags.egg and (not tags.meat) end,
 
-    priority = 52,
+    priority = 9,
     weight = 1,
     foodtype = "MEAT",
     secondaryfoodtype = "MONSTER",

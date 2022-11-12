@@ -230,3 +230,10 @@ GLOBAL.ACTIONS.ADDWETFUEL.fn = function(act)--I'M GOING TO ***BOMB KLEI*** WHY T
 		return _AddWetFuelFn(act)
 	end
 end
+
+local _UseSpellBookStrFn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+
+GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
+	local target = act.invobject or act.target
+	return target:HasTag("telestaff") and "TELESTAFF" or _UseSpellBookStrFn ~= nil and _UseSpellBookStrFn(act) or "BOOK"
+end

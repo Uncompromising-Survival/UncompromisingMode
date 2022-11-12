@@ -697,7 +697,11 @@ local function BeeQueenPost(inst)
 	
 	inst.StartHoney = function(inst) end
 
-	
+	inst:DoPeriodicTask(10,function(inst) 
+		if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and inst.components.combat and inst.components.combat.target and not ShouldChase(inst) then
+			inst.sg:GoToState("lob") 
+		end 
+	end)
 	inst:DoTaskInTime(0,function(inst) inst.StopHoney(inst) end)
 end
 

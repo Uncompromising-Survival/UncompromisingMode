@@ -647,6 +647,10 @@ Assets = {
 	Asset("ATLAS", "images/the_men.xml"),
 	Asset("IMAGE", "images/the_men.tex"),
 
+	Asset("ATLAS", "images/telocator_spell.xml"),
+	Asset("IMAGE", "images/telocator_spell.tex"),
+
+
 	--OVERLAYS
 	Asset("ATLAS", "images/UM_pollenover.xml"),
 	Asset("IMAGE", "images/UM_pollenover.tex"),
@@ -1741,6 +1745,8 @@ Assets = {
 	--Asset("IMAGE", "images/map_icons/boomberry.tex"),
 	--Asset("ATLAS", "images/map_icons/boomberry.xml"),
 
+	Asset("IMAGE", "images/map_icons/telebase_active.tex"),
+	Asset("ATLAS", "images/map_icons/telebase_active.xml"),
 
 	--BIGPORTRAITS
 	Asset("IMAGE", "bigportraits/willow.tex"),
