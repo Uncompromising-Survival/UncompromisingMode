@@ -37,7 +37,7 @@ local function onread(inst, reader)
 
 
 	local readx, ready, readz = reader.Transform:GetWorldPosition()
-	local shadowmax = reader.components.petleash:SpawnPetAt(readx, ready, readz, "old_shadowwaxwell")
+	local shadowmax = reader.components.petleash:SpawnPetAt(readx, ready, readz, "old_shadowwaxwell_1")
 
 	if shadowmax ~= nil then
 		reader.components.inventory:ConsumeByName("nightmarefuel", TUNING.DSTU.SHADOWWAXWELL_FUEL_COST)

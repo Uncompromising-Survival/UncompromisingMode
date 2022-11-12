@@ -37,7 +37,9 @@ local function OnAttacked(inst, data)
             if inst.components.lootdropper == nil then
                 inst:AddComponent("lootdropper")
             end
-            inst.components.lootdropper:SpawnLootPrefab("nightmarefuel", inst:GetPosition())
+            if inst.prefab == "old_shadowwaxwell_1" then
+                inst.components.lootdropper:SpawnLootPrefab("nightmarefuel", inst:GetPosition())
+            end
             data.attacker.components.petleash:DespawnPet(inst)
         --[[elseif data.attacker.components.combat ~= nil then
             inst.components.combat:SuggestTarget(data.attacker)]]
@@ -240,4 +242,4 @@ local function fn()
 	return inst
 end
 
-return Prefab("old_shadowwaxwell", fn, assets, prefabs)
+return Prefab("old_shadowwaxwell", fn, assets, prefabs), Prefab("old_shadowwaxwell_1", fn, assets, prefabs)
