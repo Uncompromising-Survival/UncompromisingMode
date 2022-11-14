@@ -58,10 +58,11 @@ local function WathomMusicToggle(level)
 		GLOBAL.TheFocalPoint.SoundEmitter:KillSound("wathommusic")
 	end
 end
+
 --wathomcustomvoice/wathomvoiceevent
 local function DoAdrenalineUpStinger(sound)
-	if type(sound) =="string" then
-		GLOBAL.TheFrontEnd:GetSound():PlaySound("wathomcustomvoice/wathomvoiceevent/"..sound)
+	if type(sound) == "string" then
+		GLOBAL.TheFrontEnd:GetSound():PlaySound("wathomcustomvoice/wathomvoiceevent/" .. sound)
 	else
 		GLOBAL.TheFrontEnd:GetSound():PlaySound("dontstarve_DLC001/characters/wathgrithr/inspiration_down")
 	end
@@ -70,6 +71,12 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
 AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
 
+local function GetTargetFocus(player, telebase, telestaff)
+	print(player, telebase, telestaff)
+	telestaff.target_focus = telebase
+end
+
+AddModRPCHandler("UncompromisingSurvival", "GetTargetFocus", GetTargetFocus)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsDeath", function(...)
 	if not GLOBAL.TheWorld.ismastershard then
@@ -130,7 +137,9 @@ GLOBAL.feather_frock_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "feat
 GLOBAL.cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "cursed_antler") end
 GLOBAL.cursed_antler_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "cursed_antler") end
 
-GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "ancient_amulet_red") end
+GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name,
+		"ancient_amulet_red")
+end
 GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "ancient_amulet_red") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT

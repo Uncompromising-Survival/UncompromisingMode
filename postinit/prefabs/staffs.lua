@@ -116,105 +116,6 @@ end
 local ICON_SCALE = .6
 local ICON_RADIUS = 50
 
-local function ParseAreaHandlerData(inst)
-    local data = inst.components.areaaware.current_area_data
-    local _string = "Unknown"
-    local x, y, z = inst.Transform:GetWorldPosition()
-    --hoo boy...
-    if data == nil then
-        return _string
-    end
-    if string.match(data.id, "HermitcrabIsland") then
-        _string = "Hermit's Island"
-    elseif string.match(data.id, "MonkeyIsland") then
-        _string = "Moon Quay"
-    elseif string.match(data.id, "MoonIsland") then
-        _string = "Lunar Island"
-    elseif TheWorld.Map:GetPlatformAtPoint(x, z) then
-        _string = "On a boat"
-    elseif string.match(data.id, "Make a pick") then
-        _string = "Make a pick"
-    elseif string.match(data.id, "LightningBluffOasis") then
-        _string = "Oasis"
-    elseif string.match(data.id, "Lightning Bluff") then
-        _string = "Oasis Desert"
-    elseif string.match(data.id, "Squeltch") then
-        _string = "Marsh"
-    elseif string.match(data.id, "Forest hunters") then
-        _string = "Forest Hunters"
-    elseif string.match(data.id, "PigKingdom") then
-        _string = "Pig King"
-    elseif string.match(data.id, "Speak to the king") then
-        _string = "Pig King Deciduous"
-    elseif string.match(data.id, "For a nice walk") then
-        _string = "Forest"
-    elseif string.match(data.id, "MooseBreedingTask") then
-        _string = "Moose Breeding Grounds"
-    elseif string.match(data.id, "Beeeees!") then
-        _string = "Bee Queen Grassland"
-    elseif string.match(data.id, "The hunters") then
-        _string = "Triple Mac Tusk"
-    elseif string.match(data.id, "Magic meadow") then
-        _string = "Meadow"
-    elseif string.match(data.id, "GiantTrees") then
-        _string = "Hooded Forest"
-    elseif string.match(data.id, "Badlands") then
-        _string = "Dragonfly Desert"
-    elseif string.match(data.id, "Kill the spiders") then
-        _string = "Spider Quarry region"
-    elseif string.match(data.id, "Make a pick") then
-        _string = "Make a Pick (Spawn Region)"
-    elseif string.match(data.id, "Dig that rock") then
-        _string = "Mosaic"
-    elseif string.match(data.id, "Befriend the pigs") then
-        _string = "Pig Village Surroundings"
-    elseif string.match(data.id, "Great Plains") then
-        _string = "Savannah"
-    elseif string.match(data.id, "START") then
-        _string = "Spawn"
-    elseif string.match(data.id, "PigVillage") then
-        _string = "Pig Village"
-    end
-    local ret = _string .. "."
-    return ret
-end
-
-local function GetAllValidSpells(inst)
-    local spells = {}
-    for k, v in pairs(GetAllActiveTelebases()) do
-        local spell = {
-            atlas = "images/telocator_spell.xml",
-            normal = "telocator_spell.tex",
-            widget_scale = ICON_SCALE,
-            hit_radius = ICON_RADIUS,
-        }
-        spell.target_focus = v
-        local function GetLabel()
-            local dist = inst.components.inventoryitem.owner ~= nil and spell.target_focus ~= nil and
-                "Distance: " ..
-                tostring(math.floor(math.sqrt(inst.components.inventoryitem.owner:GetDistanceSqToInst(spell.target_focus))))
-                .. "." or "Distance: Unknown."
-            local location = "\nLocation: ".. ParseAreaHandlerData(spell.target_focus)
-            return dist..location
-        end
-
-        spell.label = GetLabel()
-        spell.onselect = function(inst)
-        end
-        spell.execute = function(inst)
-            inst.target_focus = spell.target_focus
-            inst.components.inventoryitem.owner.sg:GoToState("castspell")
-            inst.components.spellcaster:CastSpell(inst.components.inventoryitem.owner, inst)
-        end
-        table.insert(spells, spell)
-    end
-    return spells
-end
-
-local function OnOpen(inst)
-    inst.components.spellbook.items = GetAllValidSpells(inst)
-end
-
 local function getrandomposition(caster, teleportee, target_in_ocean)
     if target_in_ocean then
         local pt = TheWorld.Map:FindRandomPointInOcean(20)
@@ -279,7 +180,7 @@ local function teleport_end(teleportee, locpos, loctarget, staff)
         end
         teleportee:PushEvent("teleported")
     end
-    staff.target_focus = nil
+    --staff.target_focus = nil
 end
 
 local function teleport_continue(teleportee, locpos, loctarget, staff)
@@ -396,18 +297,101 @@ local function teleport_func(inst, target)
         or target.components.hitchable ~= nil and target:HasTag("hitched") and target.components.hitchable.hitched
         or nil
 
+    print("TELEPORT_FUNC", inst.target_focus)
     if loctarget == nil and not target_in_ocean then
         loctarget = inst.target_focus ~= nil and inst.target_focus or FindNearestActiveTelebase(x, y, z, nil, 1)
     end
     teleport_start(target, inst, caster, loctarget, target_in_ocean)
 end
 
-env.AddPrefabPostInit("telestaff", function(inst)
+local function GetAllValidSpells(inst)
+    local spells = {}
+    local deselect_spell =
+    {
+        widget_scale = inst.target_focus ~= nil and ICON_SCALE * 1.5 or ICON_SCALE * 2,
+        hit_radius = ICON_RADIUS,
+        atlas = "images/tele_icon1.xml",
+        normal = "tele_icon1.tex", --TODO DESELECT ICON
+        label = "Location: Nearest.",
+        execute = function(inst)
+            inst.target_focus = nil
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), nil, inst)
+        end,
+        onselect = function(inst)
+            inst.target_focus = nil
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), nil, inst)
+        end
+    }
 
+    for k, v in pairs(GetAllActiveTelebases()) do
+        if not table.contains(spells, deselect_spell) then --only show deselect spell with focuses
+            table.insert(spells, deselect_spell)
+        end
+
+        local spell = {
+            widget_scale = ICON_SCALE * 1.5,
+            hit_radius = ICON_RADIUS,
+        }
+        spell.target_focus = v
+
+        local skin = spell.target_focus.AnimState:GetBuild()
+        spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or
+            skin == "telebase_crystal" and "images/tele_icon2.xml" or
+            "images/tele_icon1.xml"
+
+        spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or
+            skin == "telebase_crystal" and "tele_icon2.tex" or
+            "tele_icon1.tex"
+
+        if spell.target_focus == inst.target_focus then
+            spell.widget_scale = ICON_SCALE * 2
+
+            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or
+                skin == "telebase_crystal" and "images/tele_icon2.xml" or
+                "images/tele_icon1.xml"
+
+            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or
+                skin == "telebase_crystal" and "tele_icon2.tex" or
+                "tele_icon1.tex"
+        end
+
+
+        if spell.target_focus.spell_location ~= nil then
+            spell.label = "Location: " .. spell.target_focus.spell_location
+        else
+            spell.label = "Location: Unknown."
+        end
+
+        spell.execute = function(inst)
+            inst.target_focus = spell.target_focus
+        end
+
+        spell.onselect = function(inst)
+            inst.target_focus = spell.target_focus
+            SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), inst.target_focus, inst)
+        end
+
+        table.insert(spells, spell)
+    end
+
+    return spells
+end
+
+local function UpdateSpells(inst)
+    inst.components.spellbook.items = GetAllValidSpells(inst)
+end
+
+env.AddPrefabPostInit("telestaff", function(inst)
     inst:AddTag("telestaff")
-    --inst:RemoveComponent("spellcaster")
-    --inst:AddComponent("spellcaster")
     inst:AddComponent("spellbook")
+    inst.components.spellbook.items = GetAllValidSpells(inst)
+    inst.components.spellbook:SetOnOpenFn(UpdateSpells)
+    inst.components.spellbook:SetOnCloseFn(UpdateSpells)
+
+    inst.components.spellbook:SetRequiredTag("telestaff_spellbook_user")
+
+    inst:ListenForEvent("openspellwheel", UpdateSpells)
+    inst:ListenForEvent("closespellwheel", UpdateSpells)
 
     if not TheWorld.ismastersim then
         return
@@ -418,24 +402,17 @@ env.AddPrefabPostInit("telestaff", function(inst)
         inst.components.finiteuses:SetMaxUses(inst.components.finiteuses.total * 2)
     end
 
-    inst.components.spellcaster:SetSpellFn(teleport_func)
-    inst.components.spellbook.items = GetAllValidSpells(inst)
-    inst.components.spellbook:SetOnOpenFn(OnOpen)
-    inst.components.spellbook:SetRequiredTag("telestaff_spellbook_user")
-
     local _OnUnequip = inst.components.equippable.onunequipfn
 
     inst.components.equippable.onunequipfn = function(inst, owner)
         if inst.components.spellbook ~= nil then
             inst.components.spellbook.items = GetAllValidSpells(inst)
         end
-        if inst.spell_update_task ~= nil then
-            inst.spell_update_task:Cancel()
-            inst.spell_update_task = nil
-        end
         owner:RemoveTag("telestaff_spellbook_user")
         _OnUnequip(inst, owner)
     end
+
+    inst.components.spellcaster:SetSpellFn(teleport_func)
 
     local _OnEquip = inst.components.equippable.onequipfn
 
@@ -457,15 +434,100 @@ local function teleport_target(inst)
     --nothing!!!
 end
 
+local function UpdateTelestaffs()
+    for k, v in pairs(Ents) do
+        if v.prefab == "telestaff" then
+            UpdateSpells(v)
+        end
+    end
+end
+
+local things1 = {
+    ["The hunters"] = "Triple Mac Tusk",
+    ["HermitcrabIsland"] = "Hermit's Island",
+    ["MoonIsland"] = "Lunar Island",
+    ["Make a pick"] = "Spawn Surroundings",
+    ["LightningBluffOasis"] = "Oasis",
+    ["Lightning Bluff"] = "Oasis Desert",
+    ["Squeltch"] = "Marsh",
+    ["Forest hunters"] = "Forest",
+    ["PigKingdom"] = "Moon Quay",
+    ["Speak to the king"] = "Pig King Deciduous",
+    ["For a nice walk"] = "Forest",
+    ["MooseBreedingTask"] = "Moose Breeding Grounds",
+    ["Magic meadow"] = "Meadow",
+    ["GiantTrees"] = "Hooded Forest",
+    ["Badlands"] = "Dragonfly Desert",
+    ["Kill the spiders"] = "Spider Quarry Region",
+    ["Dig that rock"] = "Mosaic",
+    ["Befriend the pigs"] = "Pig Village Surroundings",
+    ["Great Plains"] = "Savannah",
+    ["PigVillage"] = "Pig Village",
+    ["Frogs and bugs"] = "Grasslands",
+}
+local things2 = {
+    ["veteranshrine"] = "Veteran's Shrine",
+    ["START"] = "Spawn",
+}
+
+--TODO: FIX THIS!!!!
+local function ParseAreaAwareData(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local data = inst.components.areaaware:GetCurrentArea()
+    if data == nil then
+        inst.components.areaaware:UpdatePosition(x, y, z)
+    end
+    data = inst.components.areaaware.current_area_data
+    --hoo boy...
+    local _string = "Unknown"
+
+    if data == nil then
+        return "Ocean."
+    end
+
+    local thing1, thing2
+    if data.id ~= "START" then
+        thing1, thing2 = string.match(data.id, "([^:]+):%d+:(.+)$")
+        print("data.id", data ~= nil and data.id or "Data is nil!!!")
+        print("thing1, thing2", thing1, thing2)
+        _string = things2[thing2] or things1[thing1] or _string
+    else
+        _string = "Spawn"
+    end
+
+    local ret = _string .. "."
+    return ret
+end
+
+local function onhit(inst)
+    for k, v in pairs(inst.components.objectspawner.objects) do
+        v.AnimState:PlayAnimation("hit_full")
+        v.AnimState:PushAnimation("idle_full_loop")
+    end
+end
+
 env.AddPrefabPostInit("telebase", function(inst)
+
+    inst:DoTaskInTime(0, UpdateTelestaffs)
+
+    inst.OnRemoveEntity = UpdateTelestaffs
+
+    inst.onteleto = teleport_target
+    inst.canteleto = validteleporttarget
+
+    inst:AddComponent("areaaware")
+    inst:DoTaskInTime(0, function()
+        local x, y, z = inst.Transform:GetWorldPosition()
+        inst.components.areaaware:UpdatePosition(x, y, z)
+        inst.spell_location = ParseAreaAwareData(inst)
+    end)
+
     if not TheWorld.ismastersim then
         return
     end
 
-    inst:AddComponent("areaaware")
-
-    inst.onteleto = teleport_target
-    inst.canteleto = validteleporttarget
+    inst.components.workable:SetOnWorkCallback(onhit)
+    inst.entity:SetCanSleep(false)
 end)
 
 --I basicly have to remake this thing, fun!!
@@ -511,7 +573,11 @@ env.AddPrefabPostInit("gemsocket", function(inst)
 
     inst:RemoveComponent("pickable")
     --I uhh, am lazy?
-    OnGemGiven(inst)
+    inst:DoTaskInTime(1 + math.random(), function(inst)
+        OnGemGiven(inst)
+        local x, y, z = inst.Transform:GetWorldPosition()
+        SpawnPrefab("crab_king_shine").Transform:SetPosition(x, y + 1.75, z)
+    end)
     inst.components.trader.onaccept = OnGemGiven
     inst.components.inspectable.getstatus = getstatus
     inst.DestroyGemFn = DestroyGem

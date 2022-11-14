@@ -39,6 +39,8 @@ STRINGS.UNCOMP_TOOLTIP = {
 	SUCCULENT_POTTED = "- Masks foul smells.",
 	ENDTABLE = "- Masks foul smells when decorated.",
 	MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
+	TELESTAFF = "- Can select its destination.\n- Increased uses.",
+	TELEBASE = "- No longer requires gems per teleport.",
 
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",

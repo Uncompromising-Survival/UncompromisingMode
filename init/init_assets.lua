@@ -647,8 +647,12 @@ Assets = {
 	Asset("ATLAS", "images/the_men.xml"),
 	Asset("IMAGE", "images/the_men.tex"),
 
-	Asset("ATLAS", "images/telocator_spell.xml"),
-	Asset("IMAGE", "images/telocator_spell.tex"),
+	Asset("ATLAS", "images/tele_icon1.xml"),
+	Asset("IMAGE", "images/tele_icon1.tex"),
+	Asset("ATLAS", "images/tele_icon2.xml"),
+	Asset("IMAGE", "images/tele_icon2.tex"),
+	Asset("ATLAS", "images/tele_icon3.xml"),
+	Asset("IMAGE", "images/tele_icon3.tex"),
 
 
 	--OVERLAYS

@@ -37,7 +37,7 @@ local component_post = {
 	"combat",
 	"hullhealth",
 	"health",
-	"spellbook"
+	--"spellbook"
 }
 
 local prefab_post = {
@@ -186,7 +186,7 @@ local stategraph_post = {
 local class_post = {
 	--example:
 	--"components/inventoryitem_replica",
-	--"screens/playerhud",
+	"screens/playerhud",
 	"widgets/itemtile",
 	--"widgets/hoverer",
 	"widgets/moisturemeter",
