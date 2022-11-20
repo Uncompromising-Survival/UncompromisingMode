@@ -514,9 +514,6 @@ local function onhit(inst)
 end
 
 env.AddPrefabPostInit("telebase", function(inst)
-
-    inst:DoTaskInTime(0, UpdateTelestaffs)
-
     inst.OnRemoveEntity = UpdateTelestaffs
 
     inst.onteleto = teleport_target
@@ -527,6 +524,7 @@ env.AddPrefabPostInit("telebase", function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         inst.components.areaaware:UpdatePosition(x, y, z)
         inst.spell_location = ParseAreaAwareData(inst)
+        UpdateTelestaffs()
     end)
 
     if not TheWorld.ismastersim then
