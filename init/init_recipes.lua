@@ -131,8 +131,10 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
         Ingredient("twigs", 2) }
 end
 
-AllRecipes["telebase"].ingredients = { Ingredient("purplegem", 3), Ingredient("livinglog", 4),
-    Ingredient("nightmarefuel", 4) }
+AllRecipes["telebase"].ingredients = { Ingredient("purplegem", 3), Ingredient("livinglog", 4), Ingredient("nightmarefuel", 4) }
+--[[
+--boats forces things on them to unload with them.
+--which caused telebases to unload.    
 AllRecipes["telebase"].testfn = function(pt, rot)
     --See telebase.lua
     local telebase_parts =
@@ -163,7 +165,7 @@ AllRecipes["telebase"].testfn = function(pt, rot)
         end
     end
     return true
-end
+end]]
 
 AddRecipe2(
     "ghostlyelixir_fastregen",

@@ -186,7 +186,7 @@ local stategraph_post = {
 local class_post = {
 	--example:
 	--"components/inventoryitem_replica",
-	"screens/playerhud",
+	--"screens/playerhud",
 	"widgets/itemtile",
 	--"widgets/hoverer",
 	"widgets/moisturemeter",

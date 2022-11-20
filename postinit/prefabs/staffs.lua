@@ -310,16 +310,18 @@ local function GetAllValidSpells(inst)
     {
         widget_scale = inst.target_focus ~= nil and ICON_SCALE * 1.5 or ICON_SCALE * 2,
         hit_radius = ICON_RADIUS,
-        atlas = "images/tele_icon1.xml",
-        normal = "tele_icon1.tex", --TODO DESELECT ICON
+        atlas = "images/tele_icon4.xml",
+        normal = "tele_icon4.tex",
         label = "Location: Nearest.",
         execute = function(inst)
             inst.target_focus = nil
             SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), nil, inst)
+            inst.components.spellbook.items = GetAllValidSpells(inst)
         end,
         onselect = function(inst)
             inst.target_focus = nil
             SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), nil, inst)
+            inst.components.spellbook.items = GetAllValidSpells(inst)
         end
     }
 
@@ -344,17 +346,16 @@ local function GetAllValidSpells(inst)
             "tele_icon1.tex"
 
         if spell.target_focus == inst.target_focus then
-            spell.widget_scale = ICON_SCALE * 2
+            --spell.widget_scale = ICON_SCALE * 2
 
-            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or
-                skin == "telebase_crystal" and "images/tele_icon2.xml" or
-                "images/tele_icon1.xml"
+            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or
+                skin == "telebase_crystal" and "images/tele_icon2b.xml" or
+                "images/tele_icon1b.xml"
 
-            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or
-                skin == "telebase_crystal" and "tele_icon2.tex" or
-                "tele_icon1.tex"
+            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or
+                skin == "telebase_crystal" and "tele_icon2b.tex" or
+                "tele_icon1b.tex"
         end
-
 
         if spell.target_focus.spell_location ~= nil then
             spell.label = "Location: " .. spell.target_focus.spell_location
@@ -364,11 +365,13 @@ local function GetAllValidSpells(inst)
 
         spell.execute = function(inst)
             inst.target_focus = spell.target_focus
+            inst.components.spellbook.items = GetAllValidSpells(inst)
         end
 
         spell.onselect = function(inst)
             inst.target_focus = spell.target_focus
             SendModRPCToServer(GetModRPC("UncompromisingSurvival", "GetTargetFocus"), inst.target_focus, inst)
+            inst.components.spellbook.items = GetAllValidSpells(inst)
         end
 
         table.insert(spells, spell)
@@ -420,11 +423,6 @@ env.AddPrefabPostInit("telestaff", function(inst)
         if inst.components.spellbook ~= nil then
             inst.components.spellbook.items = GetAllValidSpells(inst)
         end
-        inst.spell_update_task = inst:DoStaticPeriodicTask(1, function() --fuck it why not!!!
-            if inst.components.spellbook ~= nil then
-                inst.components.spellbook.items = GetAllValidSpells(inst)
-            end
-        end)
         owner:AddTag("telestaff_spellbook_user")
         _OnEquip(inst, owner)
     end
@@ -442,21 +440,19 @@ local function UpdateTelestaffs()
     end
 end
 
-local things1 = {
+local locations1 = {
     ["The hunters"] = "Triple Mac Tusk",
     ["HermitcrabIsland"] = "Hermit's Island",
-    ["MoonIsland"] = "Lunar Island",
+    --["MoonIsland"] = "Lunar Island",
     ["Make a pick"] = "Spawn Surroundings",
-    ["LightningBluffOasis"] = "Oasis",
     ["Lightning Bluff"] = "Oasis Desert",
     ["Squeltch"] = "Marsh",
     ["Forest hunters"] = "Forest",
-    ["PigKingdom"] = "Moon Quay",
+    ["PigKingdom"] = "Pig King",
     ["Speak to the king"] = "Pig King Deciduous",
     ["For a nice walk"] = "Forest",
     ["MooseBreedingTask"] = "Moose Breeding Grounds",
     ["Magic meadow"] = "Meadow",
-    ["GiantTrees"] = "Hooded Forest",
     ["Badlands"] = "Dragonfly Desert",
     ["Kill the spiders"] = "Spider Quarry Region",
     ["Dig that rock"] = "Mosaic",
@@ -464,13 +460,24 @@ local things1 = {
     ["Great Plains"] = "Savannah",
     ["PigVillage"] = "Pig Village",
     ["Frogs and bugs"] = "Grasslands",
+    ["GiantTrees"] = "Hooded Forest",
 }
-local things2 = {
+local locations2 = {
     ["veteranshrine"] = "Veteran's Shrine",
     ["START"] = "Spawn",
+    ["GiantTrees"] = "Hooded Forest",
+    ["MoonIsland_Mine"] = "Lunar Island",
+    ["MoonIsland_Beach"] = "Lunar Island",
+    ["MoonIsland_Baths"] = "Lunar Island",
+    ["MoonIsland_Forest"] = "Lunar Island",
+    ["DeepDeciduous"] = "Deciduous Forest",
+    ["Killer bees!"] = "Killer Bee Field",
+    ["LightningBluffOasis"] = "Oasis",
+    ["Make a Beehat"] = "Grasslands",
+    ["Mole Colony Rocks"] = "Rocky",
+
 }
 
---TODO: FIX THIS!!!!
 local function ParseAreaAwareData(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local data = inst.components.areaaware:GetCurrentArea()
@@ -487,10 +494,10 @@ local function ParseAreaAwareData(inst)
 
     local thing1, thing2
     if data.id ~= "START" then
-        thing1, thing2 = string.match(data.id, "([^:]+):%d+:(.+)$")
+        thing1, thing2 = string.match(data.id, "([^:]+):.+:(.+)$")
         print("data.id", data ~= nil and data.id or "Data is nil!!!")
         print("thing1, thing2", thing1, thing2)
-        _string = things2[thing2] or things1[thing1] or _string
+        _string = locations2[thing2] or locations1[thing1] or _string
     else
         _string = "Spawn"
     end
@@ -527,13 +534,13 @@ env.AddPrefabPostInit("telebase", function(inst)
     end
 
     inst.components.workable:SetOnWorkCallback(onhit)
+
     inst.entity:SetCanSleep(false)
 end)
 
 --I basicly have to remake this thing, fun!!
 
 local function OnGemGiven(inst, giver, item)
-    --Disable trading, add teleports.
     inst.SoundEmitter:PlaySound("dontstarve/common/telebase_hum", "hover_loop")
     inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
     inst.AnimState:PlayAnimation("idle_full_loop", true)
