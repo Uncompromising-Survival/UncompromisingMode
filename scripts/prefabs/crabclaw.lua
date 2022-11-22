@@ -395,7 +395,7 @@ local function OnOpen(inst)
 end
 
 local function GetShadowLevel(inst)
-	return #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + 1
+	return inst.components.container ~= nil and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + 1
 end
 
 local function fn()
@@ -444,7 +444,7 @@ local function fn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/crabclaw.xml"
 
 	inst:AddComponent("shadowlevel")
-	inst.components.shadowlevel:SetLevelFn(GetShadowLevel(inst))
+	inst.components.shadowlevel:SetLevelFn(GetShadowLevel)
 
 	inst:AddComponent("container")
 	inst.components.container:WidgetSetup("crabclaw")
