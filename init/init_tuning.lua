@@ -273,6 +273,9 @@ TUNING.DSTU =
 	--Warly
     WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
 	WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
+	
+	--Wigfrid
+    BATTLESONG_FIRE_RESIST_MOD = 0, --orig 33% fire resis
 
 	--Maxwell
 	SHADOWWAXWELL_FUEL_COST = 2,
@@ -288,6 +291,7 @@ TUNING.DSTU =
 	WICKERNERF = GetModConfigData("wickerbottom"),
 	WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
 	WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
+	
 
     --Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
@@ -335,10 +339,12 @@ TUNING.DSTU =
     DREADEYE_SPEED = 7,
     DREADEYE_HEALTH = 350,
     DREADEYE_DAMAGE = 35,
-    DREADEYE_ATTACK_PERIOD = 2,
-    DREADEYE_RANGE_1 = 1,
-    DREADEYE_RANGE_2 = 2,
-    DREADEYE_SPAWN_THRESH = 0.20,
+    DREADEYE_ATTACK_PERIOD = 3,
+    DREADEYE_RANGE_1 = 20,
+    DREADEYE_RANGE_2 = 2.5,
+    DREADEYE_SPAWN_THRESH = 0.50,
+	
+    MINI_DREADEYE_HEALTH = 100,
 
 	MOCK_DRAGONFLY_DAMAGE = 125,
 
