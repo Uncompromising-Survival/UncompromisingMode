@@ -308,10 +308,10 @@ local function GetAllValidSpells(inst)
     local spells = {}
     local deselect_spell =
     {
-        widget_scale = inst.target_focus ~= nil and ICON_SCALE * 1.5 or ICON_SCALE * 2,
+        widget_scale = inst.target_focus ~= nil and ICON_SCALE or ICON_SCALE * 1.5,
         hit_radius = ICON_RADIUS,
-        atlas = "images/tele_icon4.xml",
-        normal = "tele_icon4.tex",
+        atlas = "images/tele_icon1c.xml",
+        normal = "tele_icon1c.tex",
         label = "Location: Nearest.",
         execute = function(inst)
             inst.target_focus = nil
@@ -331,7 +331,7 @@ local function GetAllValidSpells(inst)
         end
 
         local spell = {
-            widget_scale = ICON_SCALE * 1.5,
+            widget_scale = ICON_SCALE,
             hit_radius = ICON_RADIUS,
         }
         spell.target_focus = v

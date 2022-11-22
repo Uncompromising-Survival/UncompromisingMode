@@ -68,9 +68,13 @@ local function DoAdrenalineUpStinger(sound)
 	end
 end
 
+local function GetTargetFocus(player, telebase, telestaff)
+	telestaff.target_focus = telebase
+end
+
+AddModRPCHandler("UncompromisingSurvival", "GetTargetFocus", GetTargetFocus)
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
 AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
-AddClientModRPCHandler("UncompromisingSurvival", "GetTelestaffLabel", GetTelestaffLabel)
 
 local function ToggleLagCompOn(self)
     if --[[not GLOBAL.IsDefaultScreen() or]] GLOBAL.ThePlayer == nil or GLOBAL.ThePlayer.hadcompenabled ~= nil then
