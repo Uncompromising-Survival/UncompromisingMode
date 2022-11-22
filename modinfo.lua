@@ -15,7 +15,7 @@ Prominent features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.5.2 Pre-release 7"
+version = "Calm Before the Storm v1.5.1 Pre-release 9"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
