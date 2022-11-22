@@ -422,7 +422,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	
 	DESCRIBE.WIXIE_PIANO = "I shall write a symphony worthy of my greatness!"
 	DESCRIBE.WIXIE_CLOCK = "Time stops for no one! Oh, wait..."
-	DESCRIBE.WIXIE_WARDROBE = "What lies in side? A beast of burden?"
+	DESCRIBE.WIXIE_WARDROBE = "What lies inside? A beast of burden?"
 	DESCRIBE.CHARLES_T_HORSE = "Beast, wooden. Purpose unknown."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Awaken, foul beast!"

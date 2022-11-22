@@ -3,7 +3,20 @@ require("stategraphs/commonstates")
 local actionhandlers =
 {
     ActionHandler(ACTIONS.GOHOME, "action"),
+    ActionHandler(ACTIONS.EAT, "eat"),
 }
+
+local function ShouldStopSpin(inst)
+	local pos = inst:GetPosition()
+
+	local nearby_player = FindClosestPlayerInRange(pos.x, pos.y, pos.z, 25, true)
+	local time_out = inst.numSpins >= 3
+	
+	print(nearby_player)
+	print(time_out)
+
+	return not nearby_player or time_out
+end
 
 local events =
 {
@@ -15,7 +28,11 @@ local events =
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("doattack", function(inst, data)
         if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
-            inst.sg:GoToState("attack", data.target)
+            inst.sg:GoToState(data.target ~= nil 
+			and data.target:IsValid() 
+			and inst:IsNear(data.target, TUNING.DSTU.CREEPINGFEAR_RANGE_2) 
+			and "attack"
+			or "charge_pre", data.target)
         end
     end),
     CommonHandlers.OnLocomote(false, true),
@@ -86,6 +103,32 @@ local states =
     },
 
     State{
+        name = "eat",
+        tags = { "busy" },
+
+        onenter = function(inst, target)
+            inst.Physics:Stop()
+            inst.components.combat:StartAttack()
+            inst.AnimState:PlayAnimation("atk_pre")
+            inst.AnimState:PushAnimation("atk", false)
+        end,
+
+        timeline =
+        {
+            TimeEvent(14*FRAMES, function(inst) PlayExtendedSound(inst, "attack") end),
+            TimeEvent(16*FRAMES, function(inst) inst:PerformBufferedAction() end),
+        },
+
+        events =
+        {
+            EventHandler("animqueueover", function(inst) 
+				inst:PerformBufferedAction()
+				inst.sg:GoToState("idle")
+			end),
+        },
+    },
+
+    State{
         name = "attack",
         tags = { "attack", "busy" },
 
@@ -113,6 +156,103 @@ local states =
                 else
                     inst.sg:GoToState("idle")
                 end
+            end),
+        },
+    },
+
+    State{
+        name = "charge_pre",
+        tags = { "attack", "busy" },
+
+        onenter = function(inst, target)
+            inst.sg.statemem.target = target
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("taunt")
+            PlayExtendedSound(inst, "taunt")
+			
+			inst.numSpins = 0
+        end,
+		
+        events =
+        {
+            EventHandler("animover", function(inst)
+				inst.sg:GoToState("charge_loop")
+            end),
+        },
+    },
+
+    State{
+        name = "charge_loop",
+        tags = { "attack", "busy" },
+
+        onenter = function(inst, target)
+            inst.sg.statemem.target = target
+			
+			if target ~= nil and target.Transform ~= nil then
+				inst:ForceFacePoint(target.Transform:GetWorldPosition())
+			end
+				
+            inst.components.combat:StartAttack()
+            inst.AnimState:PlayAnimation("atk_pre", false)
+            PlayExtendedSound(inst, "attack_grunt")
+			
+			
+            inst.sg:SetTimeout(.8)
+        end,
+
+		onupdate = function(inst)
+			inst.components.locomotor:RunForward()
+		end,
+
+        timeline =
+        {
+			TimeEvent(0, function(inst)
+				inst.components.combat:DoAttack(inst.sg.statemem.target) 
+			end),
+			TimeEvent(.4, function(inst) 
+				inst.components.combat:DoAttack(inst.sg.statemem.target) 
+			end),
+            TimeEvent(.8, function(inst) 
+				inst.components.combat:DoAttack(inst.sg.statemem.target)
+			end),
+        },
+
+        ontimeout = function(inst)
+			inst.sg:GoToState("charge_pst")
+        end,
+    },
+
+    State{
+        name = "charge_pst",
+        tags = { "attack", "busy" },
+
+        onenter = function(inst, target)
+            inst.sg.statemem.target = target
+            --inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("atk")
+			PlayExtendedSound(inst, "attack")
+        end,
+		
+		TimeEvent(4*FRAMES, function(inst)
+			inst.components.combat:DoAttack(inst.sg.statemem.target) 
+		end),
+			
+        events =
+        {
+            EventHandler("animover", function(inst)
+				inst.numSpins = inst.numSpins + 1
+				print(inst.numSpins)
+				if not ShouldStopSpin(inst) then
+					print("ShouldStopSpin")
+					inst.sg:GoToState("charge_loop")
+				else
+					if math.random() < .333 then
+						inst.components.combat:SetTarget(nil)
+						inst.sg:GoToState("taunt")
+					else
+						inst.sg:GoToState("idle")
+					end
+				end
             end),
         },
     },
