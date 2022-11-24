@@ -1,7 +1,7 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Version 1.5.1 Pre-release 9 ]
+󰀔 [ Beta Version 2.0 ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -11,11 +11,11 @@ Prominent features:
 - New setpieces, and mysteries at sea.
 - Reed Armor, Shark Suit Armor, Magnerang, Fishing Net, and much more!
 
-󰀏 NEXT UPDATE: Under the Weather, Part I.]]
+󰀏 NEXT UPDATE: ???]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Calm Before the Storm v1.5.1 Pre-release 9"
+version = "Beta ??? v2.0"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
