@@ -236,6 +236,14 @@ local function TryDisguise(inst, target)
 	--Disguise(inst)
 end
 
+local function ResetCooldown(inst)
+	if inst.oncooldown ~= nil then
+		inst.oncooldown:Cancel()
+	end
+	
+	inst.oncooldown = nil
+end
+
 local function onnear(inst, target)
 	if inst.oncooldown == nil then
 		if inst.isdisguised and not inst.components.health:IsDead() then
@@ -269,12 +277,18 @@ local function onnear(inst, target)
 					inst.disguiseprefab:Remove()
 					inst.disguiseprefab = nil
 				end
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			end
 		elseif not inst.isdisguised and not inst.components.health:IsDead() and not inst.components.combat:HasTarget() then	
 			if target ~= nil and target.components.sanity ~= nil and target.components.sanity:GetPercent() <= .7 and target.components.sanity:GetPercent() > .2 then
 				TryDisguise(inst, target)
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			else
 				inst.sg:GoToState("teleport_to")
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			end
 		end
 	end
@@ -319,14 +333,6 @@ local function CLIENT_ShadowSubmissive_HostileToPlayerTest(inst, player)
 	return false
 end
 
-local function ResetCooldown(inst)
-	if inst.oncooldown ~= nil then
-		inst.oncooldown:Cancel()
-	end
-	
-	inst.oncooldown = nil
-end
-
 local function AllPlayers(inst, self)
 	if inst.oncooldown == nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
@@ -337,7 +343,6 @@ local function AllPlayers(inst, self)
 		for i, v in ipairs(players) do
 			if v:IsValid() then
 				onnear(inst, v)
-				inst.oncooldown = inst:DoTaskInTime(3, ResetCooldown)
 			end
 		end
 	end
