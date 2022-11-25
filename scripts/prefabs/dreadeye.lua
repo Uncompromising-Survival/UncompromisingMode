@@ -319,6 +319,30 @@ local function CLIENT_ShadowSubmissive_HostileToPlayerTest(inst, player)
 	return false
 end
 
+local function ResetCooldown(inst)
+	if inst.oncooldown ~= nil then
+		inst.oncooldown:Cancel()
+	end
+	
+	inst.oncooldown = nil
+end
+
+local function AllPlayers(inst, self)
+	if inst.oncooldown == nil then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		
+		local players = FindPlayersInRange(x, y, z, 4, { "player" }, { "playerghost" })
+
+		local closeplayers = {}
+		for i, v in ipairs(players) do
+			if v:IsValid() then
+				onnear(inst, v)
+				inst.oncooldown = inst:DoTaskInTime(3, ResetCooldown)
+			end
+		end
+	end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -394,12 +418,6 @@ local function fn()
     inst:AddComponent("health")
     inst.components.health.nofadeout = true
 	
-	inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(4, 5) --set specific values
-    inst.components.playerprox:SetOnPlayerNear(onnear)
-    inst.components.playerprox:SetOnPlayerFar(onnear)
-    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
-	
     inst:AddComponent("combat")
     inst.components.combat:SetAttackPeriod(TUNING.DSTU.DREADEYE_ATTACK_PERIOD)
     inst.components.combat:SetRange(TUNING.DSTU.DREADEYE_RANGE_1, TUNING.DSTU.DREADEYE_RANGE_2)
@@ -419,6 +437,8 @@ local function fn()
     inst:ListenForEvent("death", OnDeath)
 
 	inst.Disguise = Disguise
+	
+	inst:DoPeriodicTask(.5, AllPlayers)
 	
     --inst.OnEntitySleep = OnEntitySleep
 

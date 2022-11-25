@@ -114,14 +114,6 @@ local function SpikeAoE(inst)
     end
 end
 
-local function ResetCooldown(inst)
-	if inst.oncooldown ~= nil then
-		inst.oncooldown:Cancel()
-	end
-	
-	inst.oncooldown = nil
-end
-
 local states =
 {
     State{
@@ -186,8 +178,6 @@ local states =
         tags = { "disguise", "busy", "disguised" }, -- , "busy" 
 
         onenter = function(inst)
-			inst.oncooldown = inst:DoTaskInTime(5, ResetCooldown)
-			
             PlayExtendedSound(inst, "death")
             inst.AnimState:PlayAnimation("disappear")
             inst.Physics:Stop()
@@ -218,13 +208,6 @@ local states =
 				end
 			
 				inst.sg:GoToState("disguise")
-				
-				--inst.components.playerprox.isclose = false
-				--inst.components.playerprox.target = nil
-				--inst.components.playerprox:ForceUpdate()
-				
-				inst.components.playerprox:OnEntitySleep()
-				inst.components.playerprox:OnEntityWake()
 			end)
         },
     },
@@ -620,13 +603,6 @@ local states =
 				inst.Transform:SetRotation(math.random(360))
 		
 				inst.sg:GoToState("appear")
-				
-				--inst.components.playerprox.isclose = false
-				--inst.components.playerprox.target = nil
-				--inst.components.playerprox:ForceUpdate()
-				
-				inst.components.playerprox:OnEntitySleep()
-				inst.components.playerprox:OnEntityWake()
 			end),
         },
     },
