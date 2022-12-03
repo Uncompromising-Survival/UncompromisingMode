@@ -23,7 +23,7 @@ local TransparentOnSanity = Class(function(self, inst)
     PushAlpha(self, 0.6, 1.2)
     inst:StartUpdatingComponent(self)
 
-	self.inst.AnimState:UsePointFiltering(true)
+	--self.inst.AnimState:UsePointFiltering(true)
 end)
 
 function TransparentOnSanity:OnUpdate(dt)

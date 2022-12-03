@@ -184,11 +184,20 @@ local function ShadowSuprise(inst)
 	end
 end
 
-local function TryEyeSpawn(v)
+local function TryEyeSpawn(inst, v)
 
 	local x1, y1, z1 = v.Transform:GetWorldPosition()
 	if x1 ~= nil and z1 ~= nil and v.components.sanity and v.components.sanity:IsInsane() then
-		SpawnPrefab("mini_dreadeye").Transform:SetPosition(v.Transform:GetWorldPosition())
+		local eye = TheSim:FindEntities(x1, y1, z1, 8, {"shadow_eye"})
+			
+		if eye ~= nil and #eye ~= 0 then
+			return
+		end
+			
+		local myeye = SpawnPrefab("mini_dreadeye")
+		myeye.Transform:SetPosition(v.Transform:GetWorldPosition())
+		myeye.leader = inst
+		
 		--SpawnPrefab("mini_dreadeye").Transform:SetPosition(x1 + math.random(-5,5), 0, z1 + math.random(-5,5))
 	end
 	
@@ -199,13 +208,14 @@ local function ShadowEyeSpawn(inst)
     local ents = TheSim:FindEntities(x, y, z, 50, nil, NOTAGS, { "player" })
 	
 	for i, v in ipairs(ents) do
-        TryEyeSpawn(v)
+        TryEyeSpawn(inst, v)
     end
 end
 
 local function Disguise(inst)
 	if not inst.components.health:IsDead() then
 		inst.isdisguised = true
+		inst.disguisecount = 0
 	
 		local disguise = SpawnPrefab("dreadeye_disguise")
 		disguise.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -236,6 +246,14 @@ local function TryDisguise(inst, target)
 	--Disguise(inst)
 end
 
+local function ResetCooldown(inst)
+	if inst.oncooldown ~= nil then
+		inst.oncooldown:Cancel()
+	end
+	
+	inst.oncooldown = nil
+end
+
 local function onnear(inst, target)
 	if inst.oncooldown == nil then
 		if inst.isdisguised and not inst.components.health:IsDead() then
@@ -255,10 +273,8 @@ local function onnear(inst, target)
 				end
 				
 				if target ~= nil then
-					
-					target:PushEvent("spooked", { source = inst })
-						
 					if not IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) and target.components.sanity ~= nil and target.components.sanity:IsSane() then
+						target:PushEvent("spooked", { source = inst })
 						target.components.sanity:DoDelta(-10)
 					end
 					
@@ -269,12 +285,18 @@ local function onnear(inst, target)
 					inst.disguiseprefab:Remove()
 					inst.disguiseprefab = nil
 				end
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			end
 		elseif not inst.isdisguised and not inst.components.health:IsDead() and not inst.components.combat:HasTarget() then	
 			if target ~= nil and target.components.sanity ~= nil and target.components.sanity:GetPercent() <= .7 and target.components.sanity:GetPercent() > .2 then
 				TryDisguise(inst, target)
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			else
 				inst.sg:GoToState("teleport_to")
+				
+				inst.oncooldown = inst:DoTaskInTime(2.5, ResetCooldown)
 			end
 		end
 	end
@@ -319,26 +341,32 @@ local function CLIENT_ShadowSubmissive_HostileToPlayerTest(inst, player)
 	return false
 end
 
-local function ResetCooldown(inst)
-	if inst.oncooldown ~= nil then
-		inst.oncooldown:Cancel()
-	end
-	
-	inst.oncooldown = nil
-end
-
-local function AllPlayers(inst, self)
+local function AllRadiusPlayers(inst, self)
 	if inst.oncooldown == nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
+		local radius = 4
 		
-		local players = FindPlayersInRange(x, y, z, 4, { "player" }, { "playerghost" })
+		if TheWorld.Map:IsOceanAtPoint(x, y, z, false) then
+			radius = 8
+		end
+		
+		local players = FindPlayersInRange(x, y, z, radius, { "player" }, { "playerghost" })
 
 		local closeplayers = {}
 		for i, v in ipairs(players) do
 			if v:IsValid() then
 				onnear(inst, v)
-				inst.oncooldown = inst:DoTaskInTime(3, ResetCooldown)
 			end
+		end
+	end
+end
+
+local function PokeDisguise(inst)
+	if inst.isdisguised then
+		inst.disguisecount = inst.disguisecount + 1
+		
+		if inst.disguisecount == 2 then
+			ShadowSuprise(inst)
 		end
 	end
 end
@@ -365,6 +393,7 @@ local function fn()
     inst:AddTag("hostile")
     inst:AddTag("shadow")
     inst:AddTag("notraptrigger")
+	inst:AddTag("ignorewalkableplatforms")
 
 	--shadowsubmissive (from shadowsubmissive component) added to pristine state for optimization
 	inst:AddTag("shadowsubmissive")
@@ -394,9 +423,11 @@ local function fn()
         return inst
     end
 
-	
+    inst.disguisecount = 0
+	inst.PokeDisguise = PokeDisguise
 	inst.isdisguised = false
     inst.atkcount = 3
+	inst.TryDisguise = TryDisguise
     --inst.disguise_form = nil
     --inst.disguise_cd = -1
 
@@ -438,7 +469,7 @@ local function fn()
 
 	inst.Disguise = Disguise
 	
-	inst:DoPeriodicTask(.5, AllPlayers)
+	inst:DoPeriodicTask(.5, AllRadiusPlayers)
 	
     --inst.OnEntitySleep = OnEntitySleep
 
@@ -523,6 +554,33 @@ local disguises =
 	},
 }
 
+local ocean_disguises =
+{
+	{
+		name = "bullkelp_plant",
+		bank = "bullkelp",
+		build = "bullkelp",
+		anim = "idle",
+	},
+	{
+		name = "boatfragment04",
+		bank = "boat_broken",
+		build = "boat_brokenparts_build",
+		anim = "idle_loop_03",
+	},
+	{
+		name = "boatfragment05",
+		bank = "boat_broken",
+		build = "boat_brokenparts_build",
+		anim = "idle_loop_04",
+	},
+	{
+		name = "boatfragment03",
+		bank = "boat_broken",
+		build = "boat_brokenparts_build",
+		anim = "idle_loop_05",
+	},
+}
 
 local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
     local inst = CreateEntity()
@@ -547,13 +605,37 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local ents = TheSim:FindEntities(x, y, z, 15)
 		local disguisechoice = math.random(#disguises)
-		for i, v in ipairs(disguises) do
 		
-			for n, b in ipairs(ents) do
-				if v.name == b.prefab then
+		
+		if TheWorld.Map:IsPassableAtPoint(x, y, z) then
+			for i, v in ipairs(disguises) do
+				for n, b in ipairs(ents) do
+					if v.name == b.prefab then
+						inst.AnimState:SetBank(v.bank)
+						inst.AnimState:SetBuild(v.build)
+						
+						if v.name == "deciduoustree" then
+							if not TheWorld.state.iswinter then
+								if TheWorld.state.isautumn then
+									inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_orange_build", "swap_leaves")
+								else
+									inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_green_build", "swap_leaves")
+								end
+							end
+								
+							inst.color = .5 + math.random() * .5
+							inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
+						end
+						
+						inst.AnimState:PlayAnimation(v.anim, true)
+						break
+					end
+				end
+				
+				if i == disguisechoice then
 					inst.AnimState:SetBank(v.bank)
 					inst.AnimState:SetBuild(v.build)
-					
+						
 					if v.name == "deciduoustree" then
 						if not TheWorld.state.iswinter then
 							if TheWorld.state.isautumn then
@@ -568,28 +650,29 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 					end
 					
 					inst.AnimState:PlayAnimation(v.anim, true)
-					break
 				end
 			end
-			
-			if i == disguisechoice then
-				inst.AnimState:SetBank(v.bank)
-				inst.AnimState:SetBuild(v.build)
-					
-				if v.name == "deciduoustree" then
-					if not TheWorld.state.iswinter then
-						if TheWorld.state.isautumn then
-							inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_orange_build", "swap_leaves")
-						else
-							inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_green_build", "swap_leaves")
-						end
+		else
+			for i, v in ipairs(ocean_disguises) do
+				for n, b in ipairs(ents) do
+					if v.name == b.prefab then
+						inst.AnimState:SetBank(v.bank)
+						inst.AnimState:SetBuild(v.build)
+						inst.AnimState:PlayAnimation(v.anim, true)
+						break
 					end
-						
-					inst.color = .5 + math.random() * .5
-					inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
 				end
 				
-				inst.AnimState:PlayAnimation(v.anim)
+				if i == disguisechoice then
+					inst.AnimState:SetBank(v.bank)
+					inst.AnimState:SetBuild(v.build)
+					inst.AnimState:PlayAnimation(v.anim, true)
+				end
+				
+				
+				if v.prefab == "bullkelp_plant" then
+					AddDefaultRippleSymbols(inst, true, false)
+				end
 			end
 		end
 	end)
