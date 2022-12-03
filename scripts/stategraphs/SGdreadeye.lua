@@ -193,15 +193,21 @@ local states =
 			
 				local max_tries = 20
 				for k = 1, max_tries do
-				
 					local x, y, z = inst.Transform:GetWorldPosition()
+					local x1, y1, z1 = nil, nil, nil
+					
+					if inst.disguisetarget ~= nil then
+						local x1, y1, z1 = inst.disguisetarget.Transform:GetWorldPosition()
+						x = x1
+						y = y1
+						z = z1
+					end
 					
 					local offset = 25
 					x = x + math.random(2 * offset) - offset
 					z = z + math.random(2 * offset) - offset
 					local playercheck = TheSim:FindEntities(x, y, z, 10, {"player"})
-					
-					if TheWorld.Map:IsPassableAtPoint(x, y, z) and (playercheck == nil or #playercheck == 0) then
+					if not TheWorld.Map:GetPlatformAtPoint(x, z) and (playercheck == nil or #playercheck == 0) then
 						inst.Physics:Teleport(x, y, z)
 						break
 					end
@@ -276,15 +282,16 @@ local states =
             inst.sg.statemem.target = target
             inst.Physics:Stop()
             inst.components.combat:StartAttack()
-            inst.AnimState:PlayAnimation("disappear")
+            inst.AnimState:PlayAnimation("taunt")
+            inst.AnimState:PushAnimation("disappear", false)
 			
-			inst:AddTag("dreadeyefading")
 			--inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = 0
         end,
 
         timeline =
         {
             TimeEvent(19 * FRAMES, function(inst)
+				inst:AddTag("dreadeyefading")
                 inst.sg:AddStateTag("noattack")
                 inst.components.health:SetInvincible(true)
             end),
@@ -292,7 +299,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
+            EventHandler("animqueueover", function(inst)
                 if inst.AnimState:AnimDone() then
                     inst.sg.statemem.attack = true
                     inst.sg:GoToState("attack_teleport", inst.sg.statemem.target)
@@ -418,17 +425,44 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                local max_tries = 4
-                for k = 1, max_tries do
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local offset = 15
-                    x = x + math.random(2 * offset) - offset
-                    z = z + math.random(2 * offset) - offset
-                    if TheWorld.Map:IsPassableAtPoint(x, y, z) then
-                        inst.Physics:Teleport(x, y, z)
-                        break
-                    end
-                end
+				local target = inst.components.combat:HasTarget() and inst.components.combat.target or 
+								inst.disguisetarget ~= nil and inst.disguisetarget or
+								inst.mytarget ~= nil and inst.mytarget or
+								inst.spawnedforplayer ~= nil and inst.spawnedforplayer or
+								nil
+				if target ~= nil and target:IsValid() then
+					local max_tries = 8
+					for k = 1, max_tries do
+						local x, y, z = target.Transform:GetWorldPosition()
+						local offset = 15
+						x = x + math.random(2 * offset) - offset
+						z = z + math.random(2 * offset) - offset
+						
+						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
+					
+						if (playercheck == nil or #playercheck == 0) then
+							inst.Physics:Teleport(x, y, z)
+							break
+						end
+					end
+				else
+					local max_tries = 8
+					for k = 1, max_tries do
+						local x, y, z = inst.Transform:GetWorldPosition()
+						local offset = 15
+						x = x + math.random(2 * offset) - offset
+						z = z + math.random(2 * offset) - offset
+						
+						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
+						
+						if (playercheck == nil or #playercheck == 0) then
+							inst.Physics:Teleport(x, y, z)
+							break
+						end
+					end
+				end
+				
+				inst.Transform:SetRotation(math.random(360))
 
 				if math.random() <= 0.33 then
 					inst.sg:GoToState("disguise")
@@ -578,7 +612,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 					
-						if TheWorld.Map:IsPassableAtPoint(x, y, z) and (playercheck == nil or #playercheck == 0) then
+						if (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end
@@ -593,7 +627,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 						
-						if TheWorld.Map:IsPassableAtPoint(x, y, z) and (playercheck == nil or #playercheck == 0) then
+						if (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end

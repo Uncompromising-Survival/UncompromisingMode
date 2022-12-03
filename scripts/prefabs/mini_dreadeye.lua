@@ -26,19 +26,33 @@ local function TryFear(inst, v)
 		local debuffkey = inst.prefab
 		
 		if v ~= nil and v:IsValid() and v.components.locomotor ~= nil then
-			if v._slingshot_speedmulttask ~= nil then
-				v._slingshot_speedmulttask:Cancel()
+			if v._dreadeye_speedmulttask ~= nil then
+				v._dreadeye_speedmulttask:Cancel()
 			end
-			v._slingshot_speedmulttask = v:DoTaskInTime(2.1, function(i) i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey) i._slingshot_speedmulttask = nil end)
 
-			v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, TUNING.SLINGSHOT_AMMO_MOVESPEED_MULT)
+			if v._dreadeye_speedstack == nil then
+				v._dreadeye_speedstack = 0.95
+			elseif v._dreadeye_speedstack <= 0.5 then
+				v._dreadeye_speedstack = 0.5
+			else
+				v._dreadeye_speedstack = v._dreadeye_speedstack - 0.05
+			end
+
+			v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, v._dreadeye_speedstack)
+			
+			v._dreadeye_speedmulttask = v:DoTaskInTime(2.1, function(i) 
+				i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey) 
+				i._dreadeye_speedmulttask = nil 
+				
+				i._dreadeye_speedstack = nil
+			end)
 		end
 	end
 end
 
 local function DoAreaFear(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "player" }, { "playerghost"})
+    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "player" }, { "playerghost", "shadowdominance" })
 	
 	if not inst.AnimState:IsCurrentAnimation("spawn") then
 		if ents ~= nil and #ents >= 1 then
@@ -51,7 +65,9 @@ local function DoAreaFear(inst)
 				--SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(x, y + 1, z)
 				
 				for i, v in ipairs(ents) do
-					TryFear(inst, v)
+					if v.components.sanity ~= nil and v.components.sanity:IsInsane() then
+						TryFear(inst, v)
+					end
 				end
 			end
 		else
@@ -71,6 +87,58 @@ end
 
 local function CancelCreepingSound(inst)
 	inst.SoundEmitter:KillSound("creeping")
+end
+
+local function retargetfn(inst)
+    local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
+    local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
+    local target1, target2 = nil, nil
+    for i, v in ipairs(AllPlayers) do
+        if v.components.sanity:IsInsane() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+            local distsq = v:GetDistanceSqToInst(inst)
+            if distsq < rangesq then
+                if inst.components.shadowsubmissive:TargetHasDominance(v) then
+                    if distsq < rangesq1 and inst.components.combat:CanTarget(v) then
+                        target1 = v
+                        rangesq1 = distsq
+                        rangesq = math.max(rangesq1, rangesq2)
+                    end
+                elseif distsq < rangesq2 and inst.components.combat:CanTarget(v) then
+                    target2 = v
+                    rangesq2 = distsq
+                    rangesq = math.max(rangesq1, rangesq2)
+                end
+            end
+        end
+    end
+
+    if target1 ~= nil and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
+        --Targets with shadow dominance have higher priority within half targeting range
+        --Force target switch if current target does not have shadow dominance
+        return target1, not inst.components.shadowsubmissive:TargetHasDominance(inst.components.combat.target)
+    end
+    return target2
+end
+
+local function CLIENT_ShadowSubmissive_HostileToPlayerTest(inst, player)
+	if player:HasTag("shadowdominance") then
+		return false
+	end
+	local combat = inst.replica.combat
+	if combat ~= nil and combat:GetTarget() == player then
+		return true
+	end
+	local sanity = player.replica.sanity
+	if sanity ~= nil and sanity:IsCrazy() then
+		return true
+	end
+	return false
+end
+
+local function PokeMyDreadEye(inst)
+	if inst.leader ~= nil then
+		inst.leader:PokeDisguise()
+	end
 end
 
 local function fn()
@@ -98,12 +166,17 @@ local function fn()
     inst:AddTag("shadow")
     inst:AddTag("notraptrigger")
 
+	--shadowsubmissive (from shadowsubmissive component) added to pristine state for optimization
+	inst:AddTag("shadowsubmissive")
+
     --inst:AddComponent("transparentonsanity_dreadeye")
     if not TheNet:IsDedicated() then
 		-- this is purely view related
 		inst:AddComponent("transparentonsanity")
 		inst.components.transparentonsanity:ForceUpdate()
 	end
+
+	inst.HostileToPlayerTest = CLIENT_ShadowSubmissive_HostileToPlayerTest
 	
 	inst.entity:SetPristine()
 	
@@ -116,7 +189,6 @@ local function fn()
     inst.SoundEmitter:PlaySound("dontstarve/sanity/shadowhand_creep", "creeping")
 	inst:DoTaskInTime(1.5, CancelCreepingSound)
 	
-	
 	inst:AddComponent("aura")
     inst.components.aura.radius = 10
     inst.components.aura.tickperiod = TUNING.TOADSTOOL_SPORECLOUD_TICK * 2
@@ -124,11 +196,15 @@ local function fn()
     inst.components.aura:Enable(true)
     inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaFear, inst.components.aura.tickperiod)
 
-	inst:AddComponent("combat")
-	
     inst:AddComponent("health")
     inst.components.health.nofadeout = true
     inst.components.health:SetMaxHealth(TUNING.DSTU.MINI_DREADEYE_HEALTH)
+	
+	inst:AddComponent("combat")
+    inst.components.combat:SetRetargetFunction(3, retargetfn)
+	inst:ListenForEvent("death", PokeMyDreadEye)
+
+    inst:AddComponent("shadowsubmissive")
 	
 	inst:ListenForEvent("death", function(inst)
 		inst.despawning = true
