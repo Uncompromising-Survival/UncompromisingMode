@@ -35,6 +35,7 @@ local component_post = {
 	"playerspawner",
 	--"drownable",
 	"combat",
+	"combat_replica",
 	"hullhealth",
 	"health",
 	--"spellbook"
