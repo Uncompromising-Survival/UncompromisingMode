@@ -12,7 +12,9 @@ local function onclose(inst)
 end
 
 local function ChangeIn(inst,doer)
-	inst.components.wardrobe:BeginChanging(doer)
+	if inst.components.wardrobe then
+		inst.components.wardrobe:BeginChanging(doer)
+	end
 end
 local function OnStopChanneling(inst)
 	if inst.channeler ~= nil then
