@@ -8,6 +8,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHOM.ACTIONFAIL
 
 --	[ 		Wathom Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "It's... awake. Watching us."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Never dead, truly."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Ancient designs, incompatible. Myself, willing student."
     ANNOUNCE.ANNOUNCE_RATRAID = "Vocalizations, rats."

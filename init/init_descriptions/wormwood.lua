@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORMWOOD.ACTIONFAIL
 
 --	[ 		Wormwood Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "What watching me?"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Goes in meat parts"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "How do make go?"
     ANNOUNCE.ANNOUNCE_RATRAID = "Squeak!"

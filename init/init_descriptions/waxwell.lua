@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 
 --	[ 		Maxwell Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Charlie? No... it was something else..."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "I'll have to impart this heart to their rotting corpse."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "I'm more of a \"magic and dark arts\" man."
     ANNOUNCE.ANNOUNCE_RATRAID = "Oh, no."

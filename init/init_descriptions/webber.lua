@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 
 --	[ 		Webber Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Eek! That scared us..."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Mister Wilson says that isn't how ghosts work."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Father told me not to play with machinery."
     ANNOUNCE.ANNOUNCE_RATRAID = "What's that sound? Friends?"

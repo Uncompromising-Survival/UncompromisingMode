@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 
 --	[ 		Walter Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Hey! Don't sneak up one me like that!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "You need my help! And your body..."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "I haven't gotten my \"putting rocks in machines\" badge yet."
     ANNOUNCE.ANNOUNCE_RATRAID = "Sounds like rats!"

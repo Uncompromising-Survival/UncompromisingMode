@@ -131,6 +131,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg:GoToState("sneeze")
                 -- end
             end
+        end),
+		
+        EventHandler("dreadeye_spooked", function(inst)
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead() or inst.components.rider:IsRiding()) then
+                inst.sg:GoToState("dreadeye_spooked")
+            end
         end)
     }
 
@@ -1356,6 +1362,74 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
             end,
         },
+		
+		State{
+			name = "dreadeye_spooked",
+			tags = { "busy", "pausepredict" },
+
+			onenter = function(inst)
+				ForceStopHeavyLifting(inst)
+				inst.components.locomotor:Stop()
+				inst:ClearBufferedAction()
+
+				inst.AnimState:PlayAnimation("spooked")
+
+				if inst.components.playercontroller ~= nil then
+					inst.components.playercontroller:RemotePausePrediction()
+				end
+			end,
+
+			timeline =
+			{
+				TimeEvent(20 * FRAMES, function(inst)
+					if inst.components.talker ~= nil then
+						inst.components.talker:Say(GetString(inst, "ANNOUNCE_DREADEYE_SPOOKED"))
+					end
+				end),
+				TimeEvent(49 * FRAMES, function(inst)
+					inst.sg:GoToState("idle", true)
+				end),
+			},
+
+			events =
+			{
+				EventHandler("ontalk", function(inst)
+					if inst.sg.statemem.talktask ~= nil then
+						inst.sg.statemem.talktask:Cancel()
+						inst.sg.statemem.talktask = nil
+						StopTalkSound(inst, true)
+					end
+					if DoTalkSound(inst) then
+						inst.sg.statemem.talktask =
+							inst:DoTaskInTime(1.5 + math.random() * .5,
+								function()
+									inst.sg.statemem.talktask = nil
+									StopTalkSound(inst)
+								end)
+					end
+				end),
+				EventHandler("donetalking", function(inst)
+					if inst.sg.statemem.talktalk ~= nil then
+						inst.sg.statemem.talktask:Cancel()
+						inst.sg.statemem.talktask = nil
+						StopTalkSound(inst)
+					end
+				end),
+				EventHandler("animover", function(inst)
+					if inst.AnimState:AnimDone() then
+						inst.sg:GoToState("idle")
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				if inst.sg.statemem.talktask ~= nil then
+					inst.sg.statemem.talktask:Cancel()
+					inst.sg.statemem.talktask = nil
+					StopTalkSound(inst)
+				end
+			end,
+		},
     }
 
     for k, v in pairs(events) do

@@ -4,6 +4,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WURT.ACTIONFAIL
 
 --	[ 		Wurt Descriptions		]	--
 	DESCRIBE.DEERCLOPS = "He not look happy, florp."
+	
+	ANNOUNCE.DREADEYE_SPOOKED = "W-what that?"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Not go in there, florp."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Weenowna-lady need to do it!"
     ANNOUNCE.ANNOUNCE_RATRAID = "What that squeak?"

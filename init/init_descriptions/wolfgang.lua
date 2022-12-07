@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 
 --	[ 		Wolfgang Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "AHH! Eye scared Wolfgang!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Heart not stay in spooky ghost. Where body?"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "How do Wolfgang make box work?"
     ANNOUNCE.ANNOUNCE_RATRAID = "Wolfgang hear tiny squeak squeaks?"

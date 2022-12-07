@@ -9,6 +9,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL
 
 --	[ 		Wilson Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "W-What?"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Hearts aren't part of ghost anatomy!"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "That's not really my thing."
     ANNOUNCE.ANNOUNCE_RATRAID = "Squeak squeak?"

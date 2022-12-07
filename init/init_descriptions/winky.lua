@@ -8,6 +8,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 
 --	[ 		Winky Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Wah! What is that?!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Grah! This heart is mine, not yours."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Useless machine"
     ANNOUNCE.ANNOUNCE_RATRAID = "I can hear my family."

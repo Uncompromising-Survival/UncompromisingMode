@@ -5,6 +5,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 
 --	[ 		Wickerbottom Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Oh!! That wasn't what I was expecting..."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "We'll need the body for a heart to be of much use."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Winona dear, is there documentation for this model?"
     ANNOUNCE.ANNOUNCE_RATRAID = "Ah, new subjects of study!"

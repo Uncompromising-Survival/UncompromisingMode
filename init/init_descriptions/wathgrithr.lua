@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 
 --	[ 		Wigfrid Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "No more tricks! Face me!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Comrade! We must venture to thine corpse!"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Such is best left to the mechanical maiden."
     ANNOUNCE.ANNOUNCE_RATRAID = "Something squeaky approaches."

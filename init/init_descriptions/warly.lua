@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 
 --	[ 		Warly Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Mon ami!."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "It would be best served to the patron themself."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Engineering isn't part of my palate."
     ANNOUNCE.ANNOUNCE_RATRAID = "Oh non..."

@@ -144,7 +144,8 @@ configuration_options =
 		},
 		default = "default",
 	},
-	--BinaryConfig("moon_transformations", "Moon Transformations","Certain things transform under the dim light of the full \"Moon\".", true),
+	BinaryConfig("moon_transformations", "Moon Transformations","Certain things transform under the dim light of the full \"Moon\".", false),
+	BinaryConfig("worldregrowth", "World Regrowth", "Governs whether world, desolation and resource regrowths function.", false),
 	SkipSpace(),
 ------------------------------
 -- Character Reworks --

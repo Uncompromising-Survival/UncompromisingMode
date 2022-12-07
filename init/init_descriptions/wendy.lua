@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
 
 --	[ 		Wendy Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Yipe! Don't play tricks like that..."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Were it so easy..."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "I'd probably ruin it, like everything else..."
     ANNOUNCE.ANNOUNCE_RATRAID = "Oh joy."

@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
 
 --	[ 			Woodie Descriptions			]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Whose there? Show yourself!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Wouldn't do much good without a body, eh?"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "I'm not too keen on maintaining an electrical engine."
     ANNOUNCE.ANNOUNCE_RATRAID = "That's the sound of somethin' devious."

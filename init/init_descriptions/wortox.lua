@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 
 --	[ 		Wortox Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Someone is playing tricks. H-Hyuyu... "
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Just kidding! Hyuyu."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Let the mortal have her fun. I've elsewhere to run!"
     ANNOUNCE.ANNOUNCE_RATRAID = "The piper calls! Best hide it all!"

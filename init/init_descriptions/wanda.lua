@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 
 --	[ 		Wanda Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "That wasn't one of the usual creeps..."
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "what."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Haven't had time to learn this stuff yet."
     ANNOUNCE.ANNOUNCE_RATRAID = "Go bother someone else!"

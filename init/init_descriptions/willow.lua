@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 
 --	[ 		Willow Descriptions		]	--
 
+	ANNOUNCE.DREADEYE_SPOOKED = "Bernie! Help me!"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Wait, where would I even put this thing?"
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Eww, I don't want grease on my hands!"
     ANNOUNCE.ANNOUNCE_RATRAID = "I really don't like that sound..."

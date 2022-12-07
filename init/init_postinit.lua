@@ -167,6 +167,7 @@ local prefab_post = {
 	"sacred_chest",
 	"soil_amender",
 	"vetcurse_drops",
+	"charcoal",
 }
 
 local stategraph_post = {
@@ -206,6 +207,7 @@ local brain_post = {
 	"perd",
 	"catcoon",
 	"deer",
+	"shadowwaxwell"
 }
 
 if GetModConfigData("hangyperds") then

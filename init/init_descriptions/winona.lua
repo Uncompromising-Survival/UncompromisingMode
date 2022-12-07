@@ -4,6 +4,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 
 --	[ 		Winona Descriptions		]   --
 
+	ANNOUNCE.DREADEYE_SPOOKED = "I-is that you, Charlie?"
     ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Without the body? That wouldn't be too constructive."
     ANNOUNCE.ANNOUNCE_WINONAGEN = "Even if it's small, please...p-put your bug report in my Discord server, Player-san!"
     ANNOUNCE.ANNOUNCE_RATRAID = "Aw, rats."

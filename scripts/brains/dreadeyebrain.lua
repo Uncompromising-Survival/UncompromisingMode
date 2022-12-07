@@ -8,7 +8,7 @@ local MAX_FOLLOW = 30
 
 local HARASS_MIN = 0
 local HARASS_MED = 15
-local HARASS_MAX = 17
+local HARASS_MAX = 20
 
 local DreadEyeBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
@@ -59,15 +59,10 @@ local function ShouldChaseAndHarass(self)
         or not self.inst:IsNear(self._harasstarget, HARASS_MED)
 end
 
-local function ShouldStareAt(inst)
-    return inst.spawnedforplayer ~= nil and inst:IsNear(inst.spawnedforplayer, HARASS_MED) or
-			inst._harasstarget ~= nil and inst:IsNear(inst._harasstarget, HARASS_MED)
-end
-
-local function KeepFaceTargetFn(inst, target)
-    return not (inst.sg:HasStateTag("busy") or
-                inst:HasTag("notarget"))
-        and inst:IsNear(inst._harasstarget, HARASS_MED)
+local function KeepFaceTargetFn(self)
+    return not (self.inst.sg:HasStateTag("busy") or
+                self.inst:HasTag("notarget"))
+        and self.mytarget ~= nil and self.inst:IsNear(self.mytarget, HARASS_MED)
 end
 
 local function GetHarassWanderDir(self)
@@ -82,6 +77,10 @@ local function targetatsea(inst)
            return true
         end
     end
+end
+
+local function GetFaceTargetFn(self)
+    return self.mytarget or nil
 end
 
 local function teleport(inst)
@@ -108,8 +107,7 @@ function DreadEyeBrain:OnStart()
                     end]]
                 end),
             }, .25)),
-        WhileNode(function() return ShouldStareAt(self) end, "Stare At",
-            FaceEntity(self.inst, self._harasstarget, KeepFaceTargetFn)),
+        FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
         WhileNode(function() return self._harasstarget ~= nil and self._harasstarget:IsValid() end, "LoiterAndHarass",
             Wander(self.inst, function() return self._harasstarget:GetPosition() end, 20, { minwaittime = 0, randwaittime = .3 }, function() return GetHarassWanderDir(self) end)),
         Follow(self.inst, function() return self.mytarget end, MIN_FOLLOW, MED_FOLLOW, MAX_FOLLOW),
