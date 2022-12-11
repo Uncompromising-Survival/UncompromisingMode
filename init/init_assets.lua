@@ -216,7 +216,7 @@ local inventoryitems =
 }
 
 for k, v in ipairs(inventoryitems) do
-	print("registering inventory item atlas: " .. v)
+	--print("registering inventory item atlas: " .. v)
 	RegisterInventoryItemAtlas("images/inventoryimages/" .. v .. ".xml", v .. ".tex")
 end
 
@@ -517,8 +517,6 @@ Assets = {
 	Asset("ANIM", "anim/driftwood_normal.zip"),
 
 	Asset("ANIM", "anim/sorrel.zip"),
-
-	--Asset("ANIM", "anim/um_tesla_tree.zip"),
 
 	--Asset("ANIM", "anim/crabapple_tree_build.zip"),
 

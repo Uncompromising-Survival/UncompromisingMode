@@ -54,7 +54,7 @@ local prefab_post = {
 	"catcoon",
 	"icehound",
 	"firehound",
-	--"forest",
+	"forest",
 	"world",
 	"antlion",
 	"minifan",
