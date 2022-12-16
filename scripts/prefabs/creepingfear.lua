@@ -250,21 +250,6 @@ local function ConsumeShadow(inst, other, damage)
 	end
 end
 
-local function CLIENT_ShadowSubmissive_HostileToPlayerTest(inst, player)
-	if player:HasTag("shadowdominance") then
-		return false
-	end
-	local combat = inst.replica.combat
-	if combat ~= nil and combat:GetTarget() == player then
-		return true
-	end
-	local sanity = player.replica.sanity
-	if sanity ~= nil and sanity:IsCrazy() then
-		return true
-	end
-	return false
-end
-
 local function fn()
     local inst = CreateEntity()
 
@@ -282,16 +267,12 @@ local function fn()
     inst.Transform:SetScale(1.2, 1.2, 1.2)
 
     inst:AddTag("shadowcreature")
-	inst:AddTag("gestaltnoloot")
     inst:AddTag("monster")
     inst:AddTag("hostile")
     inst:AddTag("shadow")
 	inst:AddTag("creepingfear")
-    inst:AddTag("notraptrigger")
     --inst:AddTag("epic")
-
-	--shadowsubmissive (from shadowsubmissive component) added to pristine state for optimization
-	inst:AddTag("shadowsubmissive")
+    inst:AddTag("notraptrigger")
 
     inst.AnimState:SetBank("creepingfear")
     inst.AnimState:SetBuild("creepingfear")
@@ -300,15 +281,8 @@ local function fn()
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_WORLD)
 	inst.AnimState:SetSortOrder(5)
+    inst:AddComponent("transparentonsanity")
 
-	if not TheNet:IsDedicated() then
-		-- this is purely view related
-		inst:AddComponent("transparentonsanity")
-		inst.components.transparentonsanity:ForceUpdate()
-	end
-
-	inst.HostileToPlayerTest = CLIENT_ShadowSubmissive_HostileToPlayerTest
-		
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
