@@ -424,6 +424,8 @@ TUNING.DSTU =
 
     COMPROMISING_SHADOWVORTEX = GetModConfigData("compromising_vortex"),
 
+    DISABLE_MEGAFLARE = GetModConfigData("disable_megaflare"),
+
 --boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),

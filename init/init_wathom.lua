@@ -988,3 +988,36 @@ AddComponentPostInit("health", function(self)
 	end
 end)
 ]]
+
+local PREFAB_SKINS = GLOBAL.PREFAB_SKINS
+local PREFAB_SKINS_IDS = GLOBAL.PREFAB_SKINS_IDS
+local SKIN_AFFINITY_INFO = GLOBAL.require("skin_affinity_info")
+
+-- Modded Skin API 
+
+modimport("skins_api")
+
+SKIN_AFFINITY_INFO.wathom = {
+    "wathom_triumphant", --Hornet: These skins will show up for the character when the Survivor filter is enabled
+}
+
+PREFAB_SKINS["wathom"] = {"wathom_none", "wathom_triumphant",}
+
+PREFAB_SKINS_IDS = {} --Make sure this is after you  change the PREFAB_SKINS["character"] table
+for prefab,skins in pairs(PREFAB_SKINS) do
+    PREFAB_SKINS_IDS[prefab] = {}
+    for k,v in pairs(skins) do
+          PREFAB_SKINS_IDS[prefab][v] = k
+    end
+end
+
+AddSkinnableCharacter("wathom")
+
+STRINGS.SKIN_NAMES.wathom_none = "Wathom"
+STRINGS.SKIN_NAMES.wathom_triumphant = "The Triumphant"
+
+STRINGS.SKIN_QUOTES.wathom_none = "\"Cruel, the abyss.\""
+STRINGS.SKIN_QUOTES.wathom_triumphant = "\"No power, no respect. Intimidation, world's basis.\""
+
+STRINGS.SKIN_DESCRIPTIONS.wathom_none = "A crude recreation of those who came before him."
+STRINGS.SKIN_DESCRIPTIONS.wathom_triumphant = "Donned with military attire, Wathom acknowledges and accepts his fate when repeating history. He was born for this."

@@ -65,56 +65,84 @@ if GetModConfigData("longpig") then
 end
 
 if GetModConfigData("wanda_nerf") then
-    AllRecipes["pocketwatch_revive"].ingredients = { Ingredient("pocketwatch_parts", 3), Ingredient("livinglog", 2),
-        Ingredient("reviver", 1) }
+    AllRecipes["pocketwatch_revive"].ingredients = {
+        Ingredient("pocketwatch_parts", 3),
+        Ingredient("livinglog", 2),
+        Ingredient("reviver", 1)
+    }
 end
 
-AllRecipes["moonrockidol"].ingredients = { Ingredient("moonrocknugget",
-    GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST), Ingredient("purplegem", 1) }
+AllRecipes["moonrockidol"].ingredients = {
+    Ingredient("moonrocknugget", GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST),
+    Ingredient("purplegem", 1)
+}
 
 AllRecipes["minifan"].ingredients = { Ingredient("twigs", 3), Ingredient("petals", 4) }
 
-AllRecipes["seedpouch"].ingredients = { Ingredient("slurtle_shellpieces", 2), Ingredient("waxpaper", 1),
-    Ingredient("seeds", 2) }
+AllRecipes["seedpouch"].ingredients = {
+    Ingredient("slurtle_shellpieces", 2),
+    Ingredient("waxpaper", 1),
+    Ingredient("seeds", 2)
+}
 
 AllRecipes["catcoonhat"].ingredients = { Ingredient("coontail", 4), Ingredient("silk", 4) }
 
-AllRecipes["goggleshat"].ingredients = { Ingredient("goldnugget", 4), Ingredient("pigskin", 1),
-    Ingredient("houndstooth", 2) }
+AllRecipes["goggleshat"].ingredients = {
+    Ingredient("goldnugget", 4),
+    Ingredient("pigskin", 1),
+    Ingredient("houndstooth", 2)
+}
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 
-AllRecipes["saddle_race"].ingredients = { Ingredient("livinglog", 2), Ingredient("silk", 4),
-    Ingredient("glommerwings", 1) }
+AllRecipes["saddle_race"].ingredients = {
+    Ingredient("livinglog", 2),
+    Ingredient("silk", 4),
+    Ingredient("glommerwings", 1)
+}
 
-AllRecipes["battlesong_fireresistance"].ingredients = { Ingredient("papyrus", 1), Ingredient("featherpencil", 1),
-    Ingredient("dragon_scales", 1) }
+AllRecipes["battlesong_fireresistance"].ingredients = {
+    Ingredient("papyrus", 1),
+    Ingredient("featherpencil", 1),
+    Ingredient("dragon_scales", 1)
+}
 
 AllRecipes["walterhat"].ingredients = { Ingredient("silk", 4), Ingredient("pinecone", 1) } --????
 
 if GetModConfigData("book_recipes") then
-    AllRecipes["book_rain"].ingredients = { Ingredient("papyrus", 2), Ingredient("moon_tear", 1),
-        Ingredient("waterballoon", 4) }
+    AllRecipes["book_rain"].ingredients = {
+        Ingredient("papyrus", 2),
+        Ingredient("moon_tear", 1),
+        Ingredient("waterballoon", 4)
+    }
     AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
     AllRecipes["book_fish"].ingredients = { Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2) } --???????????????
     AllRecipes["book_light"].ingredients = { Ingredient("papyrus", 2), Ingredient("wormlight", 1) }
     AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST) --??????????????????????????????????????????????
-    AllRecipes["bookstation"].ingredients = { Ingredient("livinglog", 4), Ingredient("papyrus", 4),
-        Ingredient("featherpencil", 1) }
+    AllRecipes["bookstation"].ingredients = {
+        Ingredient("livinglog", 4),
+        Ingredient("papyrus", 4),
+        Ingredient("featherpencil", 1)
+    }
 end
 
 --magnets and dock
 if GetModConfigData("no4crafts") then --:desolate:
-    AllRecipes["dock_kit"].ingredients = { Ingredient("boards", 4), Ingredient("stingers", 2),
-        Ingredient("palmconetree_scale", 4) }
-    AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("gears", 1), Ingredient("transistor", 2),
-        Ingredient("um_copper_pipe", 3) }
-    AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("messagebottleempty", 1), Ingredient("transistor", 1),
-        Ingredient("um_copper_pipe", 1) }
-end
-
-AllRecipes["fish_box"].testfn = function(pt) return GLOBAL.TheWorld.Map:GetPlatformAtPoint(pt.x, 0, pt.z, -0.5) ~= nil or
-        GLOBAL.TheWorld.Map:GetTileAtPoint(pt.x, 0, pt.z) == GLOBAL.WORLD_TILES.MONKEY_DOCK
+    AllRecipes["dock_kit"].ingredients = {
+        Ingredient("boards", 4),
+        Ingredient("stingers", 2),
+        Ingredient("palmconetree_scale", 4)
+    }
+    AllRecipes["boat_magnet_kit"].ingredients = {
+        Ingredient("gears", 1),
+        Ingredient("transistor", 2),
+        Ingredient("um_copper_pipe", 3)
+    }
+    AllRecipes["boat_magnet_beacon"].ingredients = {
+        Ingredient("messagebottleempty", 1),
+        Ingredient("transistor", 1),
+        Ingredient("um_copper_pipe", 1)
+    }
 end
 
 AllRecipes["boat_bumper_shell_kit"].numtogive = 4 --8
@@ -125,15 +153,35 @@ AllRecipes["boat_bumper_kelp_kit"].ingredients = { Ingredient("kelp", 3), Ingred
 if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     AllRecipes["mighty_gym"].ingredients = { Ingredient("boards", 4), Ingredient("cutstone", 2), Ingredient("rope", 3) }
     AllRecipes["dumbbell"].ingredients = { Ingredient("rocks", 4), Ingredient("twigs", 1) }
-    AllRecipes["dumbbell_golden"].ingredients = { Ingredient("goldnugget", 2), Ingredient("cutstone", 2),
-        Ingredient("twigs", 2) }
-    AllRecipes["dumbbell_gem"].ingredients = { Ingredient("purplegem", 1), Ingredient("cutstone", 2),
-        Ingredient("twigs", 2) }
+    AllRecipes["dumbbell_golden"].ingredients = {
+        Ingredient("goldnugget", 2),
+        Ingredient("cutstone", 2),
+        Ingredient("twigs", 2)
+    }
+    AllRecipes["dumbbell_gem"].ingredients = {
+        Ingredient("purplegem", 1),
+        Ingredient("cutstone", 2),
+        Ingredient("twigs", 2)
+    }
 end
 
 if GetModConfigData("telestaff_rework") then
-    AllRecipes["telebase"].ingredients = { Ingredient("purplegem", 3), Ingredient("livinglog", 4),
-        Ingredient("nightmarefuel", 4) }
+    AllRecipes["telebase"].ingredients = {
+        Ingredient("purplegem", 3),
+        Ingredient("livinglog", 4),
+        Ingredient("nightmarefuel", 4)
+    }
+    AllRecipes["telestaff"].ingredients = {
+        Ingredient("nightmarefuel", 2),
+        Ingredient("spear", 1),
+        Ingredient("purplegem", 1),
+
+    }
+    AllRecipes["purpleamulet"].ingredients = {
+        Ingredient("goldnugget", 3),
+        Ingredient("nightmarefuel", 2),
+        Ingredient("purplegem", 1),
+    }
 end
 
 AddRecipe2(
@@ -385,7 +433,6 @@ AddRecipe2(
     {"TOOLS", "FISHING"}
 )
 ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS", true)]]
-
 AddRecipe2(
     "um_magnerang",
     { Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 3) },
@@ -513,13 +560,7 @@ AddRecipe2(
 ChangeSortKey("sludge_oil", "sewing_tape", "TOOLS", true)
 ChangeSortKey("sludge_oil", "coldfirepit", "LIGHT", true)
 
-AddRecipe2(
-    "armor_reed_um",
-    { Ingredient("cutreeds", 8), Ingredient("twigs", 3) },
-    TECH.NONE,
-    nil,
-    { "ARMOUR", "RAIN" }
-)
+AddRecipe2("armor_reed_um", { Ingredient("cutreeds", 8), Ingredient("twigs", 3) }, TECH.NONE, nil, { "ARMOUR", "RAIN" })
 ChangeSortKey("armor_reed_um", "armorgrass", "ARMOUR", true)
 ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
 
@@ -567,8 +608,10 @@ AddDeconstructRecipe("slobberlobber", { Ingredient("dragon_scales", 1), Ingredie
 AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("royal_jelly", 2) })
 
 AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })
-AddDeconstructRecipe("rain_horn",
-    { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) })
+AddDeconstructRecipe(
+    "rain_horn",
+    { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) }
+)
 AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2) })
 
 ----deconstruct recipes for craftable items
@@ -659,7 +702,11 @@ AddRecipe2(
     { product = "chum", nounlock = false, numtogive = 2 },
     { "FISHING" }
 )
-AllRecipes["chum"].ingredients = { Ingredient("spoiled_food", 1), Ingredient("rope", 1), Ingredient("waterplant_bomb", 1) }
+AllRecipes["chum"].ingredients = {
+    Ingredient("spoiled_food", 1),
+    Ingredient("rope", 1),
+    Ingredient("waterplant_bomb", 1)
+}
 AllRecipes["hermitshop_chum"].ingredients = { Ingredient("messagebottleempty", 1) }
 AllRecipes["hermitshop_chum"].numtogive = 3
 --[[
@@ -670,7 +717,6 @@ AddRecipe2(
     {nounlock = true, product = "diseasecurebomb", sg_state = "give"}
 )
 ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
-
 --better moonstorm
 AddRecipe2(
     "moonstorm_static_item",
@@ -687,8 +733,10 @@ AddRecipe2(
     { "LIGHT", "REFINE" }
 )
 
-AddDeconstructRecipe("alterguardianhat",
-    { Ingredient("alterguardianhatshard", 5), Ingredient("alterguardianhatshard_blueprint", 1) })
+AddDeconstructRecipe(
+    "alterguardianhat",
+    { Ingredient("alterguardianhatshard", 5), Ingredient("alterguardianhatshard_blueprint", 1) }
+)
 
 AddRecipe2(
     "critter_figgy_builder",
@@ -698,8 +746,13 @@ AddRecipe2(
 )
 ChangeSortKey("critter_figgy_builder", "critter_eyeofterror_builder", "CRAFTING_STATION", true)
 
-AddRecipe2("portableboat_item", { Ingredient("mosquitosack", 2), Ingredient("rope", 2) }, TECH.SEAFARING_ONE, nil,
-    { "SEAFARING" })
+AddRecipe2(
+    "portableboat_item",
+    { Ingredient("mosquitosack", 2), Ingredient("rope", 2) },
+    TECH.SEAFARING_ONE,
+    nil,
+    { "SEAFARING" }
+)
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
 --[[
@@ -713,27 +766,33 @@ AddRecipe2(
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 ]]
 
-AddRecipe2("mastupgrade_windturbine_item", { Ingredient("cutstone", 2), Ingredient("transistor", 2) }, TECH.SEAFARING_ONE
-    , nil, { "SEAFARING" })
+AddRecipe2(
+    "mastupgrade_windturbine_item",
+    { Ingredient("cutstone", 2), Ingredient("transistor", 2) }, TECH.SEAFARING_ONE,
+    nil,
+    { "SEAFARING" }
+)
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 --recipe postinits
 
-AddRecipePostInitAny(function(recipe)
-    if recipe.FindAndConvertIngredient ~= nil then
-        local tar = recipe:FindAndConvertIngredient("tar") --tar/sludge can replace eachother!
-        local sludge = recipe:FindAndConvertIngredient("sludge")
+AddRecipePostInitAny(
+    function(recipe)
+        if recipe.FindAndConvertIngredient ~= nil then
+            local tar = recipe:FindAndConvertIngredient("tar") --tar/sludge can replace eachother!
+            local sludge = recipe:FindAndConvertIngredient("sludge")
 
-        if tar and tar.AddDictionaryPrefab ~= nil then
-            tar:AddDictionaryPrefab("sludge")
-        end
+            if tar and tar.AddDictionaryPrefab ~= nil then
+                tar:AddDictionaryPrefab("sludge")
+            end
 
-        if sludge and sludge.AddDictionaryPrefab ~= nil then
-            if GLOBAL.Prefabs["tar"] ~= nil then
-                sludge:AddDictionaryPrefab("tar")
+            if sludge and sludge.AddDictionaryPrefab ~= nil then
+                if GLOBAL.Prefabs["tar"] ~= nil then
+                    sludge:AddDictionaryPrefab("tar")
+                end
             end
         end
     end
-end)
+)
 
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
 STRINGS.RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."

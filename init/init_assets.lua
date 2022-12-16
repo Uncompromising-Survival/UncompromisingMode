@@ -310,6 +310,12 @@ Assets = {
 	Asset("IMAGE", "images/names_gold_wathom.tex"),
 	Asset("ATLAS", "images/names_gold_wathom.xml"),
 
+	Asset("ANIM", "anim/wathom_triumphant.zip"),
+	Asset("ANIM", "anim/wathom_shadow_triumphant.zip"),
+
+	Asset("IMAGE", "bigportraits/wathom_triumphant.tex"),
+	Asset("ATLAS", "bigportraits/wathom_triumphant.xml"),
+
 
 
 	--CREATURES

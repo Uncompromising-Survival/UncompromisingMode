@@ -619,6 +619,7 @@ configuration_options =
 	BinaryConfig("harder_spiderqueen","Harder Spider Queen", "Spider Queen ocasionally spits web balls that trap players.", true),
 	BinaryConfig("harder_deerclops", "Deerclops Mutations", "Three different harder versions of deerclops spawn instead of the vanilla variant.", true),
 	BinaryConfig("caveclops","Cave Deerclops", "During winter, Deerclops can break through the cealing to reach you.", true),
+	BinaryConfig("disable_megaflare", "Disable Hostile Flare", "Hostile Flares no longer spawn Deerclops.", true),
 	BinaryConfig("harder_moose", "Harder Goose", "Goose fight has more mechanics and is harder. This also disables Moose AOE. Does not apply to Mother Goose.", true),
 	BinaryConfig("harder_bearger", "Harder Bearger", "Enabling this option makes bearger's fight contain more attacks, and will make bearger more actively seek out you.", true),
 	BinaryConfig("harder_leifs", "Harder Treeguards", "Enabling this option makes treeguards perform root attacks, inflict knockback, and summon pinelings.", true),
