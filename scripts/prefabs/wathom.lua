@@ -20,14 +20,22 @@ end
 local prefabs = FlattenTree(start_inv, true)
 
 local function TurnOffShadowForm(inst)
-	inst.AnimState:SetBuild("wathom")
+	if inst.AnimState:GetBuild() == "wathom_shadow" then
+		inst.AnimState:SetBuild("wathom")
+	else
+		inst.AnimState:SetBuild("wathom_triumphant")
+	end
 	inst:RemoveEventCallback("animqueueover", TurnOffShadowForm)
 end
 
 local function ToggleUndeathState(inst, toggle)
 	if toggle then
 		if not inst:HasTag("playerghost") then
-			inst.AnimState:SetBuild("wathom_shadow")
+			if inst.AnimState:GetBuild() == "wathom" then
+				inst.AnimState:SetBuild("wathom_shadow")
+			else
+				inst.AnimState:SetBuild("wathom_shadow_triumphant")
+			end
 		end
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)

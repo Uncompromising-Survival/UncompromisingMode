@@ -32,7 +32,7 @@ CreatePrefabSkin("wathom_triumphant",
 	skin_tags = { "BASE", "wathom", "SHADOW"}, --Notice in this skin_tags table I have "VICTORIAN", This tag actually makes the little gorge icon show up on the skin! Other tags will do the same thing such as forge, yotc, yotp, yotv, yog and so on!
 	skins = {
 		normal_skin = "wathom_triumphant", --Rename your "normal_skin" accordingly
-		--ghost_skin = "ghost_wathom_build", --And if you did a ghost skin, rename that too!
+		ghost_skin = "ghost_wathom_build", --And if you did a ghost skin, rename that too!
 	},
 
 	assets = {
