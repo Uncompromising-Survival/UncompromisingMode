@@ -75,7 +75,7 @@ end
 local function AttackClient_New(inst, action)
 	local weapon = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 	if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown"))) and inst:HasTag("wathom") and
-		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) then
+		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst.replica.rider ~= nil and not inst.replica.rider:IsRiding()) then
 		return ("wathomleap_pre")
 	else
 		return ClientAttack_Old(inst, action)
@@ -417,6 +417,7 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
+				--SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOff"), nil)
 				Effect(inst)
 				local buffaction = inst:GetBufferedAction()
 				local target = buffaction ~= nil and buffaction.target or nil
@@ -437,6 +438,7 @@ AddStategraphPostInit("wilson", function(inst)
 			end,
 
 			onexit = function(inst)
+				--SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOn"), nil)
 				--            inst.components.health:SetInvincible(false)
 				inst.components.combat:SetTarget(nil)
 				if inst.sg:HasStateTag("abouttoattack") then
@@ -664,7 +666,7 @@ AddStategraphPostInit("wilson_client", function(inst)
 			onupdate = function(inst)
 				if inst:HasTag("busy") then
 					if inst.entity:FlattenMovementPrediction() then
-						inst.sg:GoToState("idle", "noanim")
+						inst.AnimState:PlayAnimation("atk_leap_lag", false)
 					end
 				elseif inst.bufferedaction == nil then
 					inst.sg:GoToState("idle")
@@ -994,7 +996,7 @@ local PREFAB_SKINS_IDS = GLOBAL.PREFAB_SKINS_IDS
 local SKIN_AFFINITY_INFO = GLOBAL.require("skin_affinity_info")
 
 -- Modded Skin API 
-
+--[[
 modimport("skins_api")
 
 SKIN_AFFINITY_INFO.wathom = {
@@ -1010,8 +1012,8 @@ for prefab,skins in pairs(PREFAB_SKINS) do
           PREFAB_SKINS_IDS[prefab][v] = k
     end
 end
+AddSkinnableCharacter("wathom")]]
 
-AddSkinnableCharacter("wathom")
 
 STRINGS.SKIN_NAMES.wathom_none = "Wathom"
 STRINGS.SKIN_NAMES.wathom_triumphant = "The Triumphant"
