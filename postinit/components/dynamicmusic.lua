@@ -231,7 +231,9 @@ if GetModConfigData("um_music") and not TUNING.DSTU.ISLAND_ADVENTURES then
 		if player:HasTag("polite") and (player.replica.rider ~= nil and player.replica.rider:IsRiding())
 		and player.replica.rider:GetMount() ~= nil and player.replica.rider:GetMount():HasTag("woby") then
 			inst:DoTaskInTime(1, function()
-				StartWoby(player)
+				inst.wobytask = player:DoPeriodicTask(3, function()
+					StartWoby(player)
+				end)
 			end)
 		elseif inst.wobytask ~= nil then
 			inst.wobytask:Cancel()
