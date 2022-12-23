@@ -249,8 +249,7 @@ if GetModConfigData("worldgenmastertoggle") then
             return
         end
         if (
-            tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or
-                tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
+            tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
             if GetModConfigData("hoodedforest") then
                 table.insert(tasksetdata.tasks, "GiantTrees_IA")
             end
@@ -260,6 +259,7 @@ if GetModConfigData("worldgenmastertoggle") then
         if GetModConfigData("hoodedforest") then
             table.insert(tasksetdata.tasks, "GiantTrees")
         end
+        
         if GetModConfigData("rice") then
             table.insert(tasksetdata.required_prefabs, "riceplantspawnerlarge")
             table.insert(tasksetdata.required_prefabs, "riceplantspawner")
