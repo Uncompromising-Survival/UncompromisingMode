@@ -119,11 +119,10 @@ if GetModConfigData("book_recipes") then
     AllRecipes["book_fish"].ingredients = { Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2) } --???????????????
     AllRecipes["book_light"].ingredients = { Ingredient("papyrus", 2), Ingredient("wormlight", 1) }
     AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST) --??????????????????????????????????????????????
-    AllRecipes["bookstation"].ingredients = {
-        Ingredient("livinglog", 4),
-        Ingredient("papyrus", 4),
-        Ingredient("featherpencil", 1)
-    }
+    AllRecipes["bookstation"].ingredients = { Ingredient("livinglog", 4), Ingredient("papyrus", 4), Ingredient("featherpencil", 1) }
+    AllRecipes["book_moon"].ingredients = {Ingredient("papyrus", 2), Ingredient("moonrocknugget", 2), Ingredient("moonbutterflywings", 1)}
+    AllRecipes["book_bees"].ingredients = {Ingredient("papyrus", 2), Ingredients{"honeycomb", 1}, Ingredient("stinger", 8)}
+    AllRecipes["book_horticulture"].ingredients = { Ingredient("papyrus", 2), Ingredient("plantmeat", 1), Ingredient("poop", 5) }
 end
 
 --magnets and dock
