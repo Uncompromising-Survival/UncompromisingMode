@@ -1,11 +1,14 @@
 --[[
-Code courtesy of penguin0616. Most (Almost all, actually) belongs to Insight.
+-Code courtesy of penguin0616. Most (Almost all, actually) belongs to Insight.
 Adapted for uncompromising mode. 
 ]]
-local UpvalueHacker = require("tools/upvaluehacker")
-local GMOOSE_TIMERNAME = "mothergoose_timetoattack"
-local function GetGmooseData(self)
-	if GMOOSE_TIMERNAME == false then
+
+-- uncompromising_moosespawner.lua [Worldly]
+local filename = debug.getinfo(1, "S").source:match("([%w_]+)%.lua$")
+
+local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
+local function GetMooseData(self)
+	if MOTHERGOOSE_TIMERNAME == false then
 		return {}
 	end
 
@@ -13,14 +16,20 @@ local function GetGmooseData(self)
 		return {}
 	end
 
+	local save_data = self:OnSave()
+
 	local time_to_attack
 	if CurrentRelease.GreaterOrEqualTo("R15_QOL_WORLDSETTINGS") then
-		time_to_attack = TheWorld.components.worldsettingstimer:GetTimeLeft("mothergoose_timetoattack")
+		if MOTHERGOOSE_TIMERNAME == nil then
+			--DEERCLOPS_TIMERNAME = assert(Insight.env.util.recursiveGLOBALetupvalue(TheWorld.components[filename].GetDebugString, "DEERCLOPS_TIMERNAME"), "Unable to find \"DEERCLOPS_TIMERNAME\"") --"moose_timetoattack"
+			MOTHERGOOSE_TIMERNAME = Insight.env.util.recursive_getupvalue(TheWorld.components[filename].GetDebugString, "DEERCLOPS_TIMERNAME") or false
+		end
+		time_to_attack = TheWorld.components.worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME)
 	else
-		time_to_attack = self:OnSave().timetoattack
+		time_to_attack = save_data.timetoattack
 	end
 
-	local target = UpvalueHacker.GetUpvalue(self.OnUpdate, "_targetplayer")
+	local target = Insight.env.util.getupvalue(self.OnUpdate, "_targetplayer")
 
 	if target then
 		target = {
@@ -32,7 +41,8 @@ local function GetGmooseData(self)
 
 	return {
 		time_to_attack = time_to_attack,
-		target = target
+		target = target,
+		warning = save_data.warning,
 	}
 end
 
@@ -46,7 +56,7 @@ local function ProcessInformation(context, time_to_attack, target)
 		local target_string = string.format("%s - %s", target.name, target.prefab)
 		return string.format(
 			"<color=%s>Target: %s</color> -> %s", 
-			Color.ToHex(
+			Insight.env.Color.ToHex(
 				client_table.colour
 			),
 			target_string, 
@@ -59,12 +69,12 @@ local function Describe(self, context)
 	local description = nil
 	local data = {}
 
-	if self == nil and context.gmoose_data then
-		data = context.gmoose_data
-	elseif self and context.gmoose_data == nil then
-		data = GetGmooseData(self)
+	if self == nil and context.moose_data then
+		data = context.moose_data
+	elseif self and context.moose_data == nil then
+		data = GetMooseData(self)
 	else
-		error(string.format("gmoosespawner.Describe improperly called with self=%s & gmoose_data=%s", tostring(self), tostring(context.gmoose_data)))
+		error(string.format("moosespawner.Describe improperly called with self=%s & moose_data=%s", tostring(self), tostring(context.moose_data)))
 	end
 
 	if data.time_to_attack then
@@ -80,7 +90,8 @@ local function Describe(self, context)
 		},
 		worldly = true,
 		time_to_attack = data.time_to_attack,
-		target_userid = data.target and data.target.userid or nil
+		target_userid = data.target and data.target.userid or nil,
+		warning = data.warning,
 	}
 end
 
@@ -93,16 +104,15 @@ local function StatusAnnoucementsDescribe(special_data, context)
 	local target = special_data.target_userid and TheNet:GetClientTableForUser(special_data.target_userid)
 
 	if target then
-		-- Bearger is targetting someone
 		description = Insight.env.ProcessRichTextPlainly(string.format(
-			"Mother Goose will spawn on %s (<prefab=%s>) in %s.",
+			"<prefab=moose> will spawn on %s (<prefab=%s>) in %s.",
 			target.name,
 			target.prefab,
 			context.time:TryStatusAnnouncementsTime(special_data.time_to_attack)
 		))
 	else
 		description = Insight.env.ProcessRichTextPlainly(string.format(
-			"Mother Goose will attack in %s.",
+			"<prefab=moose> will attack in %s.",
 			context.time:TryStatusAnnouncementsTime(special_data.time_to_attack)
 		))
 	end
@@ -113,8 +123,34 @@ local function StatusAnnoucementsDescribe(special_data, context)
 	}
 end
 
+local function DangerAnnouncementDescribe(special_data, context)
+	-- Funny enough, very similar to logic for status announcements and normal descriptor.
+	-- Gets repetitive.
+	if not special_data.time_to_attack then
+		return
+	end
+
+	local description
+	local client_table = TheNet:GetClientTableForUser(special_data.target_userid)
+	local time_string = context.time:SimpleProcess(special_data.time_to_attack, "realtime")
+	
+	if not client_table then
+		description = string.format(context.lstr[filename].moose_attack, time_string)
+	else
+		description = string.format(
+			context.lstr[filename].announce_moose_target,
+			client_table.name, 
+			client_table.prefab, 
+			time_string
+		)
+	end
+
+	return description, "boss"
+end
+
 return {
 	Describe = Describe,
-	GetGmooseData = GetGmooseData,
-	StatusAnnoucementsDescribe = StatusAnnoucementsDescribe
+	GetMooseData = GetMooseData,
+	StatusAnnoucementsDescribe = StatusAnnoucementsDescribe,
+	DangerAnnouncementDescribe = DangerAnnouncementDescribe,
 }

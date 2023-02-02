@@ -1,9 +1,11 @@
 --[[
-Code courtesy of penguin0616. Most (Almost all, actually) belongs to Insight.
+-Code courtesy of penguin0616. Most (Almost all, actually) belongs to Insight.
 Adapted for uncompromising mode. 
 ]]
-local UpvalueHacker = require("tools/upvaluehacker")
--- uncompromising_deerclopsspawner.lua [Worldly]
+
+-- uncompromising_mock_dragonflyspawner.lua [Worldly]
+local filename = debug.getinfo(1, "S").source:match("([%w_]+)%.lua$")
+
 local DEERCLOPS_TIMERNAME = "deerclops_timetoattack"
 local function GetDeerclopsData(self)
 	if DEERCLOPS_TIMERNAME == false then
@@ -14,14 +16,16 @@ local function GetDeerclopsData(self)
 		return {}
 	end
 
+	local save_data = self:OnSave()
+
 	local time_to_attack
 	if CurrentRelease.GreaterOrEqualTo("R15_QOL_WORLDSETTINGS") then
-		time_to_attack = TheWorld.components.worldsettingstimer:GetTimeLeft("deerclops_timetoattack")
+		time_to_attack = TheWorld.components.worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
 	else
-		time_to_attack = self:OnSave().timetoattack
+		time_to_attack = save_data.timetoattack
 	end
 
-	local target = UpvalueHacker.GetUpvalue(self.OnUpdate, "_targetplayer")
+	local target = Insight.env.util.getupvalue(self.OnUpdate, "_targetplayer")
 
 	if target then
 		target = {
@@ -33,7 +37,8 @@ local function GetDeerclopsData(self)
 
 	return {
 		time_to_attack = time_to_attack,
-		target = target
+		target = target,
+		warning = save_data.warning,
 	}
 end
 
@@ -46,8 +51,8 @@ local function ProcessInformation(context, time_to_attack, target)
 	else
 		local target_string = string.format("%s - %s", target.name, target.prefab)
 		return string.format(
-			context.lstr.deerclopsspawner.incoming_deerclops_targeted, 
-			Color.ToHex(
+			"<color=%s>Target: %s</color> -> %s", 
+			Insight.env.Color.ToHex(
 				client_table.colour
 			),
 			target_string, 
@@ -65,7 +70,7 @@ local function Describe(self, context)
 	elseif self and context.deerclops_data == nil then
 		data = GetDeerclopsData(self)
 	else
-		error(string.format("uncompromising_deerclopsspawner.Describe improperly called with self=%s & deerclops_data=%s", tostring(self), tostring(context.deerclops_data)))
+		error(string.format("mock_dragonflyspawner.Describe improperly called with self=%s & deerclops_data=%s", tostring(self), tostring(context.deerclops_data)))
 	end
 
 	if data.time_to_attack then
@@ -81,7 +86,8 @@ local function Describe(self, context)
 		},
 		worldly = true,
 		time_to_attack = data.time_to_attack,
-		target_userid = data.target and data.target.userid or nil
+		target_userid = data.target and data.target.userid or nil,
+		warning = data.warning,
 	}
 end
 
@@ -94,16 +100,15 @@ local function StatusAnnoucementsDescribe(special_data, context)
 	local target = special_data.target_userid and TheNet:GetClientTableForUser(special_data.target_userid)
 
 	if target then
-		-- Bearger is targetting someone
 		description = Insight.env.ProcessRichTextPlainly(string.format(
-			context.lstr.deerclopsspawner.announce_deerclops_target,
+			"<prefab=moose> will spawn on %s (<prefab=%s>) in %s.",
 			target.name,
 			target.prefab,
 			context.time:TryStatusAnnouncementsTime(special_data.time_to_attack)
 		))
 	else
 		description = Insight.env.ProcessRichTextPlainly(string.format(
-			context.lstr.deerclopsspawner.deerclops_attack,
+			"<prefab=moose> will attack in %s.",
 			context.time:TryStatusAnnouncementsTime(special_data.time_to_attack)
 		))
 	end
@@ -114,8 +119,34 @@ local function StatusAnnoucementsDescribe(special_data, context)
 	}
 end
 
+local function DangerAnnouncementDescribe(special_data, context)
+	-- Funny enough, very similar to logic for status announcements and normal descriptor.
+	-- Gets repetitive.
+	if not special_data.time_to_attack then
+		return
+	end
+
+	local description
+	local client_table = TheNet:GetClientTableForUser(special_data.target_userid)
+	local time_string = context.time:SimpleProcess(special_data.time_to_attack, "realtime")
+	
+	if not client_table then
+		description = string.format("<prefab=moose> will attack in %s.", time_string)
+	else
+		description = string.format(
+			"<prefab=moose> will spawn on %s (<prefab=%s>) in %s.",
+			client_table.name, 
+			client_table.prefab, 
+			time_string
+		)
+	end
+
+	return description, "boss"
+end
+
 return {
 	Describe = Describe,
 	GetDeerclopsData = GetDeerclopsData,
-	StatusAnnoucementsDescribe = StatusAnnoucementsDescribe
+	StatusAnnoucementsDescribe = StatusAnnoucementsDescribe,
+	DangerAnnouncementDescribe = DangerAnnouncementDescribe,
 }
