@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
             GHOST = "Ohoho, you need to be more careful, %s!",
             FIRESTARTER = "Watch out, %s has learned to use fire!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "%s has a great smile!",
+            ATTACKER = "%s is up to no good!",
+            MURDERER = "%s has taken pranks too far!",
+            REVIVER = "We may yet be friends, %s!",
+            GHOST = "You're like the old ones, aren't you %s?",
+            FIRESTARTER = "%s likes a roaring fire!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Not very subtle with your quips, are you %s?",
+            ATTACKER = "%s has resorted to violence!",
+            MURDERER = "A killer in red!",
+            REVIVER = "Ohoho, helping a fellow prankster in need, %s?",
+            GHOST = "Karma bites, doesn't it %s?",
+            FIRESTARTER = "Another firebug is among us!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "My oh my, what a way to die!"
     DESCRIBE.RATPOISON = "A deadly slick! That should do the trick!"
@@ -429,6 +447,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	DESCRIBE.WIXIE_CLOCK = "Cuckoo! Cuckoo!"
 	DESCRIBE.WIXIE_WARDROBE = "Hmm? A portal of some kind?"
 	DESCRIBE.CHARLES_T_HORSE = "What secrets do you hold? I can't wait to find out!"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Trot-a-lot!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Do you like tricks too?"
 	DESCRIBE.UM_ORNAMENT_RAT = "Catch him by the tail!"

@@ -370,17 +370,40 @@ return {
 	"ums_biometable",
 	"umss_general",
 	"um_halloween_ornaments",
+	"trinket_wathom1",
+	
+	"uncompromising_skins",
+	
+	"codex_mantra",
+	
+	--WIXIE RELATED PREFABS
 	"charles_t_horse",
 	"wixie_piano",
 	"wixie_clock",
 	"wixie_wardrobe",
 	
-	"wathom",
-	"wathom_none",
-
-	"uncompromising_skins",
-	
-	"codex_mantra",
-	"winona_structure_item",
-
+	"slingshotammo_secondary",
+	"slingshotammo_extras",
+	"slingshotammo_IA",
+	"slingshot_target",
+	"wixie",
+	"wixie_none",
+	"wixiehoney_trail",
+	"wixietar_trail",
+	"wixie_stinkdebuff",
+	"wixie_panicshield",
+	"wixiecurse_debuff",
+	"meatrack_hat",
+	"walterbonus_buff",
+	"bagofmarbles",
+	"wixiebowling",
+	"slingshot_gnasher",
+	"slingshot_matilda",
+	"shadow_wixie",
+	"dried_fishmeats",
+	"bigwoby_debuff",
+	"woby_target",
+	"wixie_stinkcloud",
+	"wixiegun",
+	"placeholder_recipe_item",
 }

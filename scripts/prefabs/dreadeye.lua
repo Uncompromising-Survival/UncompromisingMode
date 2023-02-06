@@ -272,14 +272,8 @@ local function onnear(inst, target)
 					inst.shadoweye_task = nil
 				end
 				
-				if target ~= nil then
-					if not IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) and target.components.sanity ~= nil and target.components.sanity:IsSane() then
-						target:PushEvent("spooked", { source = inst })
-						target.components.sanity:DoDelta(-10)
-					end
-					
-					SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
-				end
+				SpawnPrefab("dreadeye_sanityburst").Transform:SetPosition(inst.Transform:GetWorldPosition())
+				SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				
 				if inst.disguiseprefab ~= nil then
 					inst.disguiseprefab:Remove()
@@ -483,6 +477,114 @@ local function fn()
     return inst
 end
 
+local function near_burst(inst, target)
+	if target ~= nil and target.components.sanity ~= nil and target.components.sanity:GetPercent() <= .7 then
+		if target.components.sanity ~= nil and target.components.sanity:IsSane() then
+			target.components.sanity:DoDelta(-10)
+		end
+	end
+	
+	inst:Remove()
+end
+
+local function SanityBurst(inst)
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local radius = 6
+		
+	local burstring = SpawnPrefab("dreadeye_sanityburstring")
+	burstring.Transform:SetPosition(x, 0, z)
+	burstring.Transform:SetScale(1.8, 1.8, 1.8)
+	if TheWorld.Map:IsOceanAtPoint(x, y, z, false) then
+		radius = 10
+		burstring.Transform:SetScale(2.3, 2.3, 2.3)
+	end
+		
+	local players = FindPlayersInRange(x, y, z, radius, { "player" }, { "playerghost" })
+
+	local closeplayers = {}
+	for i, v in ipairs(players) do
+		if v:IsValid() then
+			near_burst(inst, v)
+		end
+	end
+end
+
+local function fxfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("shadow_teleport")
+    inst.AnimState:SetBuild("shadow_teleport")
+    inst.AnimState:PlayAnimation("portal_in")
+	inst.AnimState:SetTime(inst.AnimState:GetCurrentAnimationLength() / 2)
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+	inst.Transform:SetScale(2, 2, 2)
+
+	inst:AddTag("FX")
+	inst:AddTag("NOCLICK")
+
+    if not TheNet:IsDedicated() then
+		inst:AddComponent("transparentonsanity_dreadeye")
+		inst.components.transparentonsanity_dreadeye:ForceUpdate()
+	end
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+	
+	inst:ListenForEvent("animover", SanityBurst)
+
+    inst.persists = false
+
+    return inst
+end
+
+local function fx2fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("dreadeye_circle")
+    inst.AnimState:SetBuild("dreadeye_circle")
+    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+	inst.Transform:SetScale(2, 2, 2)
+
+	inst:AddTag("FX")
+	inst:AddTag("NOCLICK")
+
+    if not TheNet:IsDedicated() then
+		inst:AddComponent("transparentonsanity_dreadeye")
+		inst.components.transparentonsanity_dreadeye:ForceUpdate()
+	end
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+	inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/shield")
+	
+	inst:ListenForEvent("animover", inst.Remove)
+
+    inst.persists = false
+
+    return inst
+end
 
 local disguises =
 {
@@ -683,4 +785,6 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 end
 	
 return Prefab("dreadeye", fn, assets),
+		Prefab("dreadeye_sanityburst", fxfn),
+		Prefab("dreadeye_sanityburstring", fx2fn),
 		Prefab("dreadeye_disguise", shadowdisguise_fn)

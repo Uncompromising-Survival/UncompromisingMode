@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORMWOOD.ACTIONFAIL
             GHOST = "Oh, squeaker need help",
             FIRESTARTER = "Hurt friends!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Scary red toothy",
+            ATTACKER = "Red toothy is angry!",
+            MURDERER = "Deadly toother!",
+            REVIVER = "Toother is friend?",
+            GHOST = "Oh, bad floaty",
+            FIRESTARTER = "%s red like fire.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Big meanie",
+            ATTACKER = "%s is mad!",
+            MURDERER = "%s hurt friends",
+            REVIVER = "%s help me?",
+            GHOST = "No more mean words",
+            FIRESTARTER = "%s make fire!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Friend hat soup!"
     DESCRIBE.RATPOISON = "Smells good"
@@ -427,7 +445,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORMWOOD.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "Wooden friend make nice sound"
 	DESCRIBE.WIXIE_CLOCK = "Pulling thingies makes pointy things spin!"
 	DESCRIBE.WIXIE_WARDROBE = "What inside? Is it bad?"
-	DESCRIBE.CHARLES_T_HORSE = "Like springy folk, but no springy."
+	DESCRIBE.CHARLES_T_HORSE = "Scary thing"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Neigh!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Scary. But cute?"
 	DESCRIBE.UM_ORNAMENT_RAT = "Squeaky alive?"

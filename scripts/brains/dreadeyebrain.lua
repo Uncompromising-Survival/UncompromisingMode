@@ -3,11 +3,11 @@ require "behaviours/chaseandattack"
 require "behaviours/follow"
 
 local MIN_FOLLOW = 5
-local MED_FOLLOW = 15
+local MED_FOLLOW = 13
 local MAX_FOLLOW = 30
 
 local HARASS_MIN = 0
-local HARASS_MED = 15
+local HARASS_MED = 13
 local HARASS_MAX = 20
 
 local DreadEyeBrain = Class(Brain, function(self, inst)

@@ -50,7 +50,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
     DESCRIBE.UNCOMPROMISING_WINKYBURROW = "There are many tunnels that lead to home."
     DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "My beautiful home!"
 	
-	WINKY =
+	DESCRIBE.WINKY =
         {
             GENERIC = "Do I know you?",
             ATTACKER = "%s, keep your stupid claws away from me!",
@@ -60,7 +60,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
             FIRESTARTER = "I can smell the ash on your fur, you stupid.",
         }
 		
-	WIXIE =
+	DESCRIBE.WIXIE =
         {
             GENERIC = "Why do you have teeth like me? You are not family.",
             ATTACKER = "Stop throwing your stupid pebbles at me!",
@@ -69,7 +69,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
             GHOST = "Did you choke on a little pebble?",
             FIRESTARTER = "You are burning things now too!? Stop!",
         }
-	WATHOM =
+	DESCRIBE.WATHOM =
         {
             GENERIC = "You are the lobster man! You remember me, dont you?",
             ATTACKER = "My family and I know you're a killer!",
@@ -521,7 +521,8 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.WIXIE_PIANO = "I like tipping and tapping the keys So it makes the noises."
 	DESCRIBE.WIXIE_CLOCK = "I did not break it!"
 	DESCRIBE.WIXIE_WARDROBE = "What's inside? Show me!"
-	DESCRIBE.CHARLES_T_HORSE = "Some kind of chewing stick?"
+	DESCRIBE.CHARLES_T_HORSE = "Greasy and chewy."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Some kind of chewing stick?"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "*Hiss!* You are not real!"
 	DESCRIBE.UM_ORNAMENT_RAT = "You are fake family!"

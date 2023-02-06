@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
             GHOST = "Maybe it's better this way.",
             FIRESTARTER = "She's left destruction in her wake!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "%s is a relic of the past.",
+            ATTACKER = "%s is starting trouble.",
+            MURDERER = "You'll wish you could take it back, %s!",
+            REVIVER = "%s has plans for me, it seems!",
+            GHOST = "I can only speculate why their ghost looks like that.",
+            FIRESTARTER = "%s is a destructive force!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "% makes me want to jump from this timeline.",
+            ATTACKER = "Respect your elders, %s!",
+            MURDERER = "Violent youth are an issue around here!",
+            REVIVER = "Whats your angle, %s?",
+            GHOST = "Should we help %s? I'm not so sure.",
+            FIRESTARTER = "She's too reckless!",
+        }
 
     DESCRIBE.RATPOISONBOTTLE = "Sorry it had to come to this."
     DESCRIBE.RATPOISON = "Your time has come, little ones..."
@@ -427,7 +445,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WANDA.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "We have an eternity to learn!"
 	DESCRIBE.WIXIE_CLOCK = "I can't open it up, so I can't fix it!"
 	DESCRIBE.WIXIE_WARDROBE = "Wait, how long has this been here?"
-	DESCRIBE.CHARLES_T_HORSE = "Not a cog in sight."
+	DESCRIBE.CHARLES_T_HORSE = "It's been lost to time."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Not a cog in sight."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Shame about their short lifespan."
 	DESCRIBE.UM_ORNAMENT_RAT = "Don't let it get in my clocks!"

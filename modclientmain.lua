@@ -1,6 +1,7 @@
 PrefabFiles = {
 	"winky_none",
-	"wathom_none"    
+	"wathom_none"
+	"wixie_none"
 }
 
 Assets = {
@@ -28,6 +29,25 @@ Assets = {
     Asset( "ATLAS", "images/names_gold_winky.xml" ),
 	Asset( "IMAGE", "images/names_wathom.tex" ),
     Asset( "ATLAS", "images/names_wathom.xml" ),    
+	
+	
+	Asset("ANIM", "anim/wixie.zip"),
+	Asset("ANIM", "anim/ghost_wixie_build.zip"),
+	
+	Asset( "IMAGE", "bigportraits/wixie.tex" ),
+    Asset( "ATLAS", "bigportraits/wixie.xml" ),
+
+    Asset( "IMAGE", "bigportraits/wixie_none_oval.tex" ),
+    Asset( "ATLAS", "bigportraits/wixie_none.xml" ),
+
+    Asset( "IMAGE", "images/saveslot_portraits/wixie.tex" ),
+    Asset( "ATLAS", "images/saveslot_portraits/wixie.xml" ),
+
+    Asset( "IMAGE", "images/names_gold_wixie.tex" ),
+    Asset( "ATLAS", "images/names_gold_wixie.xml" ),
+	
+    Asset("IMAGE", "images/inventoryimages/meatrack_hat.tex" ),
+    Asset("ATLAS", "images/inventoryimages/meatrack_hat.xml"), 
 }
 
 local STRINGS = GLOBAL.STRINGS
@@ -113,3 +133,4 @@ TUNING.STARTING_ITEM_IMAGE_OVERRIDE["meatrack_hat"] = {
 
 AddModCharacter("winky", "FEMALE")
 AddModCharacter("wathom", "MALE")
+AddModCharacter("wixie", "FEMALE")

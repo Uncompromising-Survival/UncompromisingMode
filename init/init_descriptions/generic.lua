@@ -68,7 +68,15 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL
             GHOST = "That doesn't look like normal ghosts. Well, \"normal\".",
             FIRESTARTER = "Are you trying to breathe fire, %s?",
         }
-
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "I don't think %s likes me.",
+            ATTACKER = "%s is being a bully!",
+            MURDERER = "She's lost her moral compass!",
+            REVIVER = "%s motives are a mystery.",
+            GHOST = "I think %s got what was coming to her.",
+            FIRESTARTER = "%s is a menace!",
+        }
 
     DESCRIBE.RATPOISONBOTTLE = "It's labeled \"Do not drink. That means you, Webber.\""
     DESCRIBE.RATPOISON = "It's all murdery."
@@ -522,11 +530,6 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
 	DESCRIBE.PORTABLEBOAT_ITEM = "Science will determine if it floats."
 	DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "It produces light, theoretically."
-	
-	DESCRIBE.WIXIE_PIANO = "It's never too late to learn!"
-	DESCRIBE.WIXIE_CLOCK = "We're both right twice a day. Usually."
-	DESCRIBE.WIXIE_WARDROBE = "It contains dark secrets. Or clothing."
-	DESCRIBE.CHARLES_T_HORSE = "This better not be a trick."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Would it make a good decoration? Possumbly!"
 	DESCRIBE.UM_ORNAMENT_RAT = "Rats aren't so scary!"
@@ -534,3 +537,37 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	DESCRIBE.TRINKET_WATHOM1 = "It looks a little brokeny, whatever it is."
 	
 	DESCRIBE.CODEX_MANTRA = DESCRIBE.WAXWELLJOURNAL
+	
+	-- WIXIE RELATED STRINGS
+	
+	DESCRIBE.WIXIE_PIANO = "It's never too late to learn!"
+	DESCRIBE.WIXIE_CLOCK = "We're both right twice a day. Usually."
+	DESCRIBE.WIXIE_WARDROBE = "It contains dark secrets. Or clothing."
+	DESCRIBE.CHARLES_T_HORSE = "This better not be a trick."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Yee-haw."
+	DESCRIBE.SLINGSHOT_MATILDA = "She's raising her smashed windows quota."
+	DESCRIBE.SLINGSHOT_GNASHER = "For precision strikes."
+
+	DESCRIBE.SLINGSHOTAMMO_LAZY = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_SHADOW = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_FIRECRACKERS = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_HONEY = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_RUBBER = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_TREMOR = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_MOONROCK = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_MOONGLASS = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_SALT = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_SLIME = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_GOOP = "Shots to be slinged."
+		
+	DESCRIBE.SLINGSHOTAMMO_LIMESTONE = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_TAR = "Shots to be slinged."
+	DESCRIBE.SLINGSHOTAMMO_OBSIDIAN = "Shots to be slinged."
+
+	DESCRIBE.BAGOFMARBLES = "A bag of tricks. One trick, to be precise."
+
+	DESCRIBE.MEATRACK_HAT = "Why didn't 'I' come up with that one?"
+	DESCRIBE.FISHMEAT_DRIED = "The fishy smell is gone."
+	DESCRIBE.SMALLFISHMEAT_DRIED = "A little fishy."
+		
+	DESCRIBE.WIXIEGUN = "Science has gone too far."

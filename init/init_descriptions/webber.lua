@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
             GHOST = "Oh no! We should help her!",
             FIRESTARTER = "Careful not to singe your fur, %s! Also, don't burn our stuff...",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "I wish %s had more in common with us!",
+            ATTACKER = "No one likes a bully, %s.",
+            MURDERER = "%s might be a monster!",
+            REVIVER = "You have a good heart, %s!",
+            GHOST = "What a strange ghost!",
+            FIRESTARTER = "Don't play with fire, %s.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Hi %s! Wanna play? ...No?",
+            ATTACKER = "Stop being a meanie, %s!",
+            MURDERER = "You've gone too far, %!",
+            REVIVER = "Thank you, %!",
+            GHOST = "Oh, poor %s!",
+            FIRESTARTER = "Your bow is a bit charred, %s.",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Wendy really likes this stuff! Wonder what it tastes like..."
     DESCRIBE.RATPOISON = "Whoops! It's all spilled!"
@@ -429,7 +447,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "It's still hard to play, even with eight arms!"
 	DESCRIBE.WIXIE_CLOCK = "Aw, it's not a cuckoo clock."
 	DESCRIBE.WIXIE_WARDROBE = "Looks scary!"
-	DESCRIBE.CHARLES_T_HORSE = "Giddy up, horsey!"
+	DESCRIBE.CHARLES_T_HORSE = "Aw, poor toy!"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Giddy up, horsey!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Oh no! Are you okay?"
 	DESCRIBE.UM_ORNAMENT_RAT = "We got you, you sneaky thing!"

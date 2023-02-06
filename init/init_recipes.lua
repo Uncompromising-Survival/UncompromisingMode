@@ -784,6 +784,166 @@ AddRecipe2(
     { "SEAFARING" }
 )
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
+
+-- WIXIE RELATED CRAFTS
+
+if GetModConfigData("wixie_walter") then
+	AddRecipe2("slingshot_gnasher", {Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack", 2)}, GLOBAL.TECH.MAGIC_THREE, {builder_tag="pebblemaker"}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_GNASHER = "More bark, more bite!"
+	ChangeSortKey("slingshot_gnasher", "slingshot", "WEAPONS", true)
+	ChangeSortKey("slingshot_gnasher", "slingshot", "CHARACTER", true)
+
+	AddRecipe2("slingshot_matilda", {Ingredient("driftwood_log", 1), Ingredient("coontail", 1), Ingredient("mosquitosack", 3)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker"}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_MATILDA = "A whole heap of trouble!"
+	ChangeSortKey("slingshot_matilda", "slingshot_gnasher", "WEAPONS", true)
+	ChangeSortKey("slingshot_matilda", "slingshot_gnasher", "CHARACTER", true)
+
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT = "Cause all kinds of mischief!"
+
+	GLOBAL.GetValidRecipe("slingshotammo_rock").numtogive = 15
+	GLOBAL.GetValidRecipe("slingshotammo_gold").numtogive = 15
+	GLOBAL.GetValidRecipe("slingshotammo_marble").numtogive = 15
+	GLOBAL.GetValidRecipe("slingshotammo_freeze").numtogive = 15
+	GLOBAL.GetValidRecipe("slingshotammo_slow").numtogive = 15
+
+	GLOBAL.GetValidRecipe("slingshotammo_freeze").ingredients = {Ingredient("bluegem", 1)}
+
+	GLOBAL.GetValidRecipe("slingshotammo_slow").ingredients = {Ingredient("purplegem", 1)}
+	GLOBAL.STRINGS.NAMES.SLINGSHOTAMMO_SLOW = "Vortex Rounds"
+
+	AddRecipeToFilter("slingshotammo_rock", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_gold", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_marble", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_poop", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_freeze", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_slow", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_thulecite", "WEAPONS")
+	AddRecipeToFilter("slingshotammo_thulecite", "CRAFTING_STATION")
+	AddRecipeToFilter("slingshotammo_shadow", "WEAPONS")
+
+	ChangeSortKey("slingshotammo_rock", "slingshot_matilda", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_rock", "slingshot_matilda", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_gold", "slingshotammo_rock", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_gold", "slingshotammo_rock", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_marble", "slingshotammo_gold", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_marble", "slingshotammo_gold", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_poop", "slingshotammo_marble", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_poop", "slingshotammo_marble", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_freeze", "slingshotammo_poop", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_freeze", "slingshotammo_poop", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_slow", "slingshotammo_freeze", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_slow", "slingshotammo_freeze", "CHARACTER", true)
+
+	ChangeSortKey("slingshotammo_thulecite", "slingshotammo_slow", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_thulecite", "slingshotammo_slow", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_thulecite", "ruins_bat", "CRAFTING_STATION", true)
+
+	AddRecipe2("slingshotammo_lazy", {Ingredient("orangegem", 1), Ingredient("nightmarefuel", 1)}, GLOBAL.TECH.ANCIENT_TWO, {builder_tag="pebblemaker", numtogive = 20, no_deconstruction=true, nounlock=true}, {"CHARACTER", "WEAPONS", "CRAFTING_STATION"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_LAZY = "Now you see me..."
+	ChangeSortKey("slingshotammo_lazy", "slingshotammo_thulecite", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_lazy", "slingshotammo_thulecite", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_lazy", "slingshotammo_thulecite", "CRAFTING_STATION", true)
+
+	AddRecipe2("slingshotammo_shadow", {Ingredient("nightmarefuel", 1)}, GLOBAL.TECH.LOST, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_SHADOW = "Spread the terror."
+	ChangeSortKey("slingshotammo_shadow", "slingshotammo_lazy", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_shadow", "slingshotammo_lazy", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_firecrackers", {Ingredient("nitre", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 15, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
+	ChangeSortKey("slingshotammo_firecrackers", "slingshotammo_lazy", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_firecrackers", "slingshotammo_lazy", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_honey", {Ingredient("honey", 3)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_HONEY = "Oh bother!"
+	ChangeSortKey("slingshotammo_honey", "slingshotammo_firecrackers", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_honey", "slingshotammo_firecrackers", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_rubber", {Ingredient("mosquitosack", 1)}, GLOBAL.TECH.SCIENCE_ONE, {builder_tag="pebblemaker", numtogive = 15, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_RUBBER = "Rebounding Rounds."
+	ChangeSortKey("slingshotammo_rubber", "slingshotammo_honey", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_rubber", "slingshotammo_honey", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_tremor", {Ingredient("townportaltalisman", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_TREMOR = "See what shakes loose."
+	ChangeSortKey("slingshotammo_tremor", "slingshotammo_rubber", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_tremor", "slingshotammo_rubber", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_moonrock", {Ingredient("moonrocknugget", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 15, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_MOONROCK = "Take the fight to the next dimension."
+	ChangeSortKey("slingshotammo_moonrock", "slingshotammo_tremor", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_moonrock", "slingshotammo_tremor", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_moonglass", {Ingredient("moonglass", 1)}, GLOBAL.TECH.CELESTIAL_THREE, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true, nounlock = true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_MOONGLASS = "Watch your hands!"
+	ChangeSortKey("slingshotammo_moonglass", "slingshotammo_moonrock", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_moonglass", "slingshotammo_moonrock", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_moonglass", "glasscutter", "CRAFTING_STATION", true)
+
+	AddRecipe2("slingshotammo_salt", {Ingredient("saltrock", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 15, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_SALT = "Salt in the wounds!"
+	ChangeSortKey("slingshotammo_salt", "slingshotammo_moonglass", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_salt", "slingshotammo_moonglass", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_slime", {Ingredient("slurtleslime", 1), Ingredient("rocks", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_SLIME = "It's slime time!"
+	ChangeSortKey("slingshotammo_slime", "slingshotammo_salt", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_slime", "slingshotammo_salt", "WEAPONS", true)
+
+	AddRecipe2("slingshotammo_goop", {Ingredient("glommerfuel", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 5, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
+	ChangeSortKey("slingshotammo_goop", "slingshotammo_slime", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_goop", "slingshotammo_slime", "WEAPONS", true)
+
+	AddRecipe2("slingshotammo_tar", {Ingredient("placeholder_ingredient_ia_um", 0)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true}, {"CHARACTER", "WEAPONS"})
+
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_TAR = "Sticky trails!"
+	ChangeSortKey("slingshotammo_tar", "slingshotammo_goop", "WEAPONS", true)
+	ChangeSortKey("slingshotammo_tar", "slingshotammo_goop", "CHARACTER", true)
+
+	AddRecipe2("slingshotammo_obsidian", {Ingredient("placeholder_ingredient_ia", 0)}, GLOBAL.TECH.OBSIDIAN_TWO, {builder_tag="pebblemaker", numtogive = 10, no_deconstruction=true, nounlock = true}, {"CRAFTING_STATION", "CHARACTER", "WEAPONS"})
+
+	GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_OBSIDIAN = "A playful bit of arson."
+	ChangeSortKey("slingshotammo_obsidian", "armorobsidian", "CRAFTING_STATION", true)
+	ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "CHARACTER", true)
+	ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
+
+	AddRecipe2("bagofmarbles", {Ingredient("slingshotammo_marble", 10), Ingredient("rope", 1)}, GLOBAL.TECH.SCIENCE_TWO, {builder_tag="pebblemaker"}, {"CHARACTER", "WEAPONS"})
+	GLOBAL.STRINGS.RECIPE_DESC.BAGOFMARBLES = "Watch your step!"
+	ChangeSortKey("bagofmarbles", "slingshotammo_salt", "WEAPONS", true)
+	ChangeSortKey("bagofmarbles", "slingshotammo_salt", "CHARACTER", true)
+
+	AddRecipe2("meatrack_hat", {Ingredient("twigs", 2), Ingredient("rope", 1), Ingredient("charcoal", 1)}, GLOBAL.TECH.NONE, {builder_tag="pinetreepioneer"}, {"CHARACTER", "COOKING", "CLOTHING"})
+	GLOBAL.STRINGS.RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
+	ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
+	ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
+
+	STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
+
+	AddPrefabPostInit("forest", function(inst)
+		print("doing IA recipes")
+		inst:DoTaskInTime(0, function(inst)
+			if Prefabs["tar"] then
+				print("using tar")
+				AllRecipes["slingshotammo_tar"].ingredients = { Ingredient("tar", 1) }
+			elseif Prefabs["sludge"] then
+				print("using sludge")
+				AllRecipes["slingshotammo_tar"].ingredients = { Ingredient("sludge", 1) }
+			end
+
+			if Prefabs["obsidian"] then
+				AllRecipes["slingshotammo_obsidian"].ingredients = { Ingredient("obsidian", 1) }
+			end
+		end)
+	end)
+end
+
+
 --recipe postinits
 
 AddRecipePostInitAny(

@@ -49,6 +49,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WURT.ACTIONFAIL
             GHOST = "You be okay, squeaky! Will get heart!",
             FIRESTARTER = "She did it! She burn it all!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Teethy looks familiar...",
+            ATTACKER = "Why hurt me? We so similar!",
+            MURDERER = "%s is killer! Run away!",
+            REVIVER = "We friends now, %s?",
+            GHOST = "Weird floaty, %s looks bad!",
+            FIRESTARTER = "%s is red like fire!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Glurph... I no understand words you say, %s!",
+            ATTACKER = "%s is mean, go away!",
+            MURDERER = "What 'fish in barrel' mean? Me ask wicker-lady...",
+            REVIVER = "Ohoho, helping a fellow prankster in need, %s?",
+            GHOST = "Oh? %s is normal floaty? Me thought was a monster...",
+            FIRESTARTER = "No more burny, %s!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "What you mean \"don't eat\"?"
     DESCRIBE.RATPOISON = "Glurmph, fine..."
@@ -436,7 +454,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WURT.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "Makes funny little sounds!"
 	DESCRIBE.WIXIE_CLOCK = "Pulling thingies makes pointy things spin!"
 	DESCRIBE.WIXIE_WARDROBE = "What inside? Is it bad?"
-	DESCRIBE.CHARLES_T_HORSE = "Like springy folk, but no springy."
+	DESCRIBE.CHARLES_T_HORSE = "Like scary springy folk."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Like springy folk, but no springy."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Swampy kitty!"
 	DESCRIBE.UM_ORNAMENT_RAT = "Sneaky thing taking nap?"

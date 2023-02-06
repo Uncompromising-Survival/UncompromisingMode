@@ -125,12 +125,10 @@ RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", "UMMusic/music/unco
 RemapSoundEvent("dontstarve/music/music_FE", "UMMusic/music/uncomp_main_menu")
 
 AddShardModRPCHandler("UncompromisingSurvival", "Hayfever_Stop", function()
-    --print("RPC Hayfever_Stop")
     GLOBAL.TheWorld:PushEvent("beequeenkilled")
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "Hayfever_Start", function(...)
-    --print("RPC Hayfever_Start")
     GLOBAL.TheWorld:PushEvent("beequeenrespawned")
 end)
 
@@ -165,9 +163,30 @@ end
 
 AddModRPCHandler("UncompromisingSurvival", "GetTargetFocus", GetTargetFocus)
 
-AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete", function()
-    GLOBAL.TheWorld:PushEvent("pianopuzzlecomplete")
-end)
+local function PianoPuzzleComplete1()
+	print("PianoPuzzleComplete")
+	
+	local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
+	piano:PushEvent("pianopuzzlecomplete_1")
+end
+
+local function PianoPuzzleComplete2()
+	print("PianoPuzzleComplete")
+	
+	local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
+	piano:PushEvent("pianopuzzlecomplete_2")
+end
+
+local function PianoPuzzleComplete3()
+	print("PianoPuzzleComplete")
+	
+	local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
+	piano:PushEvent("pianopuzzlecomplete_3")
+end
+
+AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete1", PianoPuzzleComplete1)
+AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete2", PianoPuzzleComplete2)
+AddModRPCHandler("UncompromisingSurvival", "PianoPuzzleComplete3", PianoPuzzleComplete3)
 
 AddClientModRPCHandler("UncompromisingSurvival", "WathomMusicToggle", WathomMusicToggle)
 AddClientModRPCHandler("UncompromisingSurvival", "WathomAdrenalineStinger", DoAdrenalineUpStinger)
@@ -263,6 +282,75 @@ AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsStored_caves", functio
         GLOBAL.TheWorld:PushEvent("storehassler")
     end
 end)
+
+
+-- WIXIE RELATED RPC'S
+
+local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
+	if GLOBAL.TheWorld.ismastersim then
+		if mouseposx ~= nil then
+			player.wixiepointx = mouseposx
+		end
+		
+		if mouseposy ~= nil then
+			player.wixiepointy = mouseposy
+		end
+		
+		if mouseposz ~= nil then
+			player.wixiepointz = mouseposz
+		end
+	else
+		local wixieposition = GLOBAL.TheInput:GetWorldPosition()
+		print("caved!")
+		
+		player.wixiepointx = wixieposition.x
+		player.wixiepointy = wixieposition.y
+		player.wixiepointz = wixieposition.z
+	end
+end
+
+AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
+
+local function ClaustrophobiaPanic(player, inst)
+	if inst.components.health ~= nil and not inst.components.health:IsDead() 
+	and not inst.sg:HasStateTag("wixiepanic") then
+		inst.sg:GoToState("claustrophobic")
+	end
+end
+
+AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
+
+local function ClaustrophobiaEquipMult(claustrophobiamodifier)
+	if GLOBAL.ThePlayer ~= nil then
+		GLOBAL.ThePlayer.claustrophobiamodifier = claustrophobiamodifier
+	end
+end
+
+AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
+
+local function ClaustrophobiaHidden(claustrophobiahidden)
+	if GLOBAL.ThePlayer ~= nil then
+		GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
+	end
+end
+
+AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaHidden", ClaustrophobiaHidden)
+
+if GetModConfigData("wixie_walter") then
+	AddModCharacter("wixie", "FEMALE")
+	
+	GLOBAL.TUNING.WIXIE_HEALTH = 130
+	GLOBAL.TUNING.WIXIE_HUNGER = 150
+	GLOBAL.TUNING.WIXIE_SANITY = 200
+	GLOBAL.STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
+
+	for k, v in pairs(GLOBAL.CLOTHING) do
+		if v and v.symbol_overrides_by_character and v.symbol_overrides_by_character.walter then
+			GLOBAL.CLOTHING[k].symbol_overrides_by_character.wixie = v.symbol_overrides_by_character.walter
+		end
+	end
+end
+
 --[[
 AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsUpdate", function(shard_id, data)
     GLOBAL.TheWorld:PushEvent("acidmushroomsdirty", {shard_id = shard_id, uuid = data.uuid, targets = data.targets})
@@ -288,4 +376,3 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 modimport("init/init_insightcompat")
-

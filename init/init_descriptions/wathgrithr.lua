@@ -43,11 +43,29 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.WINKY =
         {
             GENERIC = "A man sized rat! Surely this is an omen!",
-            ATTACKER = "Keep thy teeth to thyself!",
+            ATTACKER = "Keep thine teeth to thyself!",
             MURDERER = "%s will bring a plague upon us!",
             REVIVER = "Perhaps I judged too quickly!",
             GHOST = "The beast is slain, but her spirit remains.",
             FIRESTARTER = "A pox upon our crops and houses!",
+        }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "May we meet in battle on day, %s!",
+            ATTACKER = "To arms, %s!",
+            MURDERER = "I shall bring you to justice!",
+            REVIVER = "We may yet be friends, %s!",
+            GHOST = "Another beast has been slain!",
+            FIRESTARTER = "Why fight with fire with claws like that?",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "%s is Loki incarnate!",
+            ATTACKER = "Quit fighting from afar, %s!",
+            MURDERER = "You're too young to be a killer!",
+            REVIVER = "You wish to taunt me further, %s?",
+            GHOST = "The little devil has been slain!",
+            FIRESTARTER = "Up to your tricks, Loki?",
         }
 		
     DESCRIBE.RATPOISONBOTTLE = "My treasures, the bait. Mine fury, the trap."
@@ -428,7 +446,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "I shall write a symphony worthy of my greatness!"
 	DESCRIBE.WIXIE_CLOCK = "Time stops for no one! Oh, wait..."
 	DESCRIBE.WIXIE_WARDROBE = "What lies inside? A beast of burden?"
-	DESCRIBE.CHARLES_T_HORSE = "Beast, wooden. Purpose unknown."
+	DESCRIBE.CHARLES_T_HORSE = "This horse has gone to Valhalla long ago."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Are there tiny soldiers lying within?"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Awaken, foul beast!"
 	DESCRIBE.UM_ORNAMENT_RAT = "You are beneath me, little one!"

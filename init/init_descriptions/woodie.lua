@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
             GHOST = "Save the woodland animals!",
             FIRESTARTER = "Rats are nothing but trouble!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "I hope you won't cause any trouble, %s.",
+            ATTACKER = "I've seen scarier things in the woods.",
+            MURDERER = "%s is one of the deadly ones.",
+            REVIVER = "We creatures of the woods need to stick together, eh %s?",
+            GHOST = "You see something new every day, eh %s?",
+            FIRESTARTER = "%s doesn't care much for the environment.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Keep away from me and Lucy, you little menace!",
+            ATTACKER = "Quit shooting your rocks at me!",
+            MURDERER = "%s has quite a mean streak!",
+            REVIVER = "I suppose I could forgive you, %s.",
+            GHOST = "%s still has a soul, eh?",
+            FIRESTARTER = "I don't mind the insults, but lighting fires crosses the line!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Feast your eyes on the deep woods gut bomb!"
     DESCRIBE.RATPOISON = "A little somethin' for the moochers' next visit..."
@@ -428,7 +446,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOODIE.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "She's a beaut'! Shame it's been smashed up..."
 	DESCRIBE.WIXIE_CLOCK = "Excellent craftmanship!"
 	DESCRIBE.WIXIE_WARDROBE = "It's got a nice oak smell, with a hint of nightmares."
-	DESCRIBE.CHARLES_T_HORSE = "A fine toy for the kiddies."
+	DESCRIBE.CHARLES_T_HORSE = "Poor thing."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "A fine toy for the kiddies."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "We don't get many of these up north."
 	DESCRIBE.UM_ORNAMENT_RAT = "Oh good, it's just a toy."

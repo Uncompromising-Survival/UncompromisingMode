@@ -210,6 +210,7 @@ local inventoryitems =
 	"sludge_oil",
 	"mastupgrade_windturbine_item",
 	"charles_t_horse",
+	"the_real_charles_t_horse",
 	"um_ornament_opossum",
 	"um_ornament_rat",
 	"trinket_wathom1",
@@ -370,8 +371,203 @@ Assets = {
 	Asset("IMAGE", "bigportraits/wathom_triumphant.tex"),
 	Asset("ATLAS", "bigportraits/wathom_triumphant.xml"),
 
+	-- ITS WIXIE!!! (Also walter...)
+	
+	Asset("ANIM", "anim/wixie.zip"),
+	Asset("ANIM", "anim/ghost_wixie_build.zip"),
+	Asset("ANIM", "anim/wixie_idle.zip"),
+	
+	Asset("ANIM", "anim/wixie_shadowclone.zip"),
+	
+	Asset("ANIM", "anim/wixieammo.zip"),
+	Asset("ANIM", "anim/wixieammo_IA.zip"),
+	Asset("ANIM", "anim/shadowvortex.zip"),
+	Asset("ANIM", "anim/goldshattered.zip"),
+	Asset("ANIM", "anim/curse_muncher.zip"),
+	Asset("ANIM", "anim/bowlingping.zip"),
+	Asset("ANIM", "anim/walterwhistle.zip"),
+	Asset("ANIM", "anim/marblebag.zip"),
+	Asset("ANIM", "anim/swap_marblebag.zip"),
+	Asset("ANIM", "anim/baggedmarbles.zip"),
+	
+	Asset("ANIM", "anim/swap_wixiegun.zip"),
+	
+	Asset("ANIM", "anim/wixie_slimeball.zip"),
+	
+	Asset("ANIM", "anim/slingshot_matilda.zip"),
+	Asset("ANIM", "anim/swap_slingshot_matilda.zip"),
+	Asset("ANIM", "anim/slingshot_gnasher.zip"),
+	Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
+	Asset("ANIM", "anim/fishmeats.zip"),
+	Asset("ANIM", "anim/driedfishmeat.zip"),
+	
+	Asset("ANIM", "anim/meatrack_hat_swap.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_batwing.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_drumstick.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_eel.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_fish.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_fishmeat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_fishmeat_small.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_froglegs.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_humanmeat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_kelp.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_meat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_monstermeat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_plantmeat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_smallmeat.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_default.zip"),
+	
+	--Uncompromising Mode
+	Asset("ANIM", "anim/meatrack_hat_swap_monstersmallmeat.zip"),
+	
+	--Shipwrecked and Hamlet Jerky Hats
+	
+	Asset("ANIM", "anim/meatrack_hat_swap_solofish_dead.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_swordfish_dead.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_jellyfish_dead.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_rainbowjellyfish_dead.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_fish_tropical.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_seaweed.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_venus_stalk.zip"),
+	Asset("ANIM", "anim/meatrack_hat_swap_froglegs_poison.zip"),
+	
+	Asset("ANIM", "anim/status_meter_woby_small.zip"),
+	Asset("ANIM", "anim/status_meter_woby_big.zip"),
+	Asset("ANIM", "anim/woby_big_command.zip"),
+	Asset("ANIM", "anim/woby_does_a_flip.zip"),
+	
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_firecrackers.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_honey.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_honey.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_rubber.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_rubber.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_tremor.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_tremor.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_moonrock.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_moonrock.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_moonglass.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_moonglass.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_salt.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_salt.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_limestone.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_limestone.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_tar.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_tar.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_obsidian.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_obsidian.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_goop.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_goop.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_slime.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_slime.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_lazy.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_lazy.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshotammo_shadow.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshotammo_shadow.xml"),
+	Asset("IMAGE", "images/inventoryimages/placeholder_ingredient_ia.tex"),
+	Asset("ATLAS", "images/inventoryimages/placeholder_ingredient_ia.xml"),
+	Asset("IMAGE", "images/inventoryimages/placeholder_ingredient_ia_um.tex"),
+	Asset("ATLAS", "images/inventoryimages/placeholder_ingredient_ia_um.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_batnose.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_batnose.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_batwing.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_batwing.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_drumstick.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_drumstick.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_eel.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_eel.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_fish.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_fish.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_fishmeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_fishmeat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_fishmeat_small.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_fishmeat_small.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_froglegs.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_froglegs.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_humanmeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_humanmeat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_kelp.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_kelp.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_meat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_meat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_monstermeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_monstermeat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_plantmeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_plantmeat.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_smallmeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_smallmeat.xml"),
+	
+	--Uncompromising Mode Jerky Hats
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_monstersmallmeat.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_monstersmallmeat.xml"),
+	
+	--Shipwrecked and Hamlet Jerky Hats
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_solofish_dead.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_solofish_dead.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_swordfish_dead.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_swordfish_dead.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_jellyfish_dead.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_jellyfish_dead.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_rainbowjellyfish_dead.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_rainbowjellyfish_dead.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_fish_tropical.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_fish_tropical.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_seaweed.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_seaweed.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_venus_stalk.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_venus_stalk.xml"),
+	Asset("IMAGE", "images/inventoryimages/meatrack_hat_froglegs_poison.tex"),
+	Asset("ATLAS", "images/inventoryimages/meatrack_hat_froglegs_poison.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/slingshot_gnasher.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_gnasher.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/slingshot_matilda.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_matilda.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/bagofmarbles.tex"),
+	Asset("ATLAS", "images/inventoryimages/bagofmarbles.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"),
+	Asset("ATLAS", "images/inventoryimages/fishmeat_dried.xml"),
 
+	Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"),
+	Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/wixiegun.tex"),
+	Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),
+
+    Asset( "IMAGE", "bigportraits/wixie.tex" ),
+    Asset( "ATLAS", "bigportraits/wixie.xml" ),
+    Asset( "IMAGE", "bigportraits/wixie_none.tex" ),
+    Asset( "ATLAS", "bigportraits/wixie_none.xml" ),
+	
+    Asset( "IMAGE", "images/names_gold_wixie.tex" ),
+    Asset( "ATLAS", "images/names_gold_wixie.xml" ),
+
+	Asset( "IMAGE", "images/map_icons/wixie.tex" ),
+	Asset( "ATLAS", "images/map_icons/wixie.xml" ),
+
+    Asset( "IMAGE", "images/avatars/avatar_wixie.tex" ),
+    Asset( "ATLAS", "images/avatars/avatar_wixie.xml" ),
+	
+    Asset( "IMAGE", "images/avatars/avatar_ghost_wixie.tex" ),
+    Asset( "ATLAS", "images/avatars/avatar_ghost_wixie.xml" ),
+	
+    Asset( "IMAGE", "images/avatars/self_inspect_wixie.tex" ),
+    Asset( "ATLAS", "images/avatars/self_inspect_wixie.xml" ),
+	
+	Asset("SOUNDPACKAGE", "sound/wixie.fev"),
+	Asset("SOUND", "sound/wixie.fsb"),
+	
+	Asset("ATLAS", "images/claustrophobia.xml"),
+	Asset("IMAGE", "images/claustrophobia.tex"),
+	
+	
 	--CREATURES
 	Asset("ANIM", "anim/voorhams.zip"),
 
@@ -506,6 +702,7 @@ Assets = {
 	Asset("ANIM", "anim/creepingfear.zip"),
 
 	Asset("ANIM", "anim/dreadeye.zip"),
+	Asset("ANIM", "anim/dreadeye_circle.zip"),
 	Asset("ANIM", "anim/shadow_eye.zip"),
 
 	Asset("ANIM", "anim/hippo_attacks.zip"),
@@ -751,6 +948,10 @@ Assets = {
 	Asset("IMAGE", "images/wixiepiano_blackkey.tex"),
 	Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
 	Asset("ATLAS", "images/inventoryimages/charles_t_horse.xml"),
+	Asset("IMAGE", "images/inventoryimages/the_real_charles_t_horse.tex"),
+	Asset("ATLAS", "images/inventoryimages/the_real_charles_t_horse.xml"),
+	
+	Asset("ANIM", "anim/swap_charles_shadow.zip"),
 
 	Asset("ANIM", "anim/uncompromising_shadow_projectile1_fx.zip"),
 	Asset("ANIM", "anim/uncompromising_shadow_projectile2_fx.zip"),

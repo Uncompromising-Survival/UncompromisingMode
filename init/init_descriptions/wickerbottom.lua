@@ -49,6 +49,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
             GHOST = "The sooner we help her, the sooner we can stop asking questions.",
             FIRESTARTER = "%s has discovered fire, this is quite unprecedented!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Quite an impressive exoskeleton, %s.",
+            ATTACKER = "%s is one of the aggressive ones.",
+            MURDERER = "The apex predator is on the hunt.",
+            REVIVER = "Let this be a learning experience for both of us, %s.",
+            GHOST = "This is far from my area of expertise.",
+            FIRESTARTER = "Don't burn my books, %s.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "I'll classify %s as a 'troubled youth'.",
+            ATTACKER = "%s needs a good role model, and a good book. \nI'm afraid I only have the latter.",
+            MURDERER = "I think %s is beyond the point of helping.",
+            REVIVER = "You're making progress, %s!",
+            GHOST = "%s could use a second chance.",
+            FIRESTARTER = "Another firebug? Tsk tsk, I had such high hopes...",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "The toxic elements of the fungus have been fully activated."
     DESCRIBE.RATPOISON = "A minor chemical odor emanating from the mixture attracts rodents."
@@ -434,7 +452,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "I haven't played one of these in a long time."
 	DESCRIBE.WIXIE_CLOCK = "I miss the ticking of my old grandfather clock."
 	DESCRIBE.WIXIE_WARDROBE = "An ordinary wardrobe, from a glance."
-	DESCRIBE.CHARLES_T_HORSE = "I couldn't bring myself to burn it... Because it won't burn!"
+	DESCRIBE.CHARLES_T_HORSE = "A childhood toy lost to time."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "A charming toy for the children."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "An excellent model of a Didelphis Virginiana."
 	DESCRIBE.UM_ORNAMENT_RAT = "The kittens would love it!"

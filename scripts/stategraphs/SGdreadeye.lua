@@ -606,7 +606,7 @@ local states =
 					local max_tries = 8
 					for k = 1, max_tries do
 						local x, y, z = target.Transform:GetWorldPosition()
-						local offset = 15
+						local offset = 13
 						x = x + math.random(2 * offset) - offset
 						z = z + math.random(2 * offset) - offset
 						

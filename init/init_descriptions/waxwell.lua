@@ -49,6 +49,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
             GHOST = "%s died as she lived. As a filthy, smelly rat.",
             FIRESTARTER = "Why must all the creatures here have to cause trouble?",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Not one of my proudest experiments.",
+            ATTACKER = "You're getting out of control, %s.",
+            MURDERER = "Is this how you repay me, %s?",
+            REVIVER = "I knew you would have your uses, %s.",
+            GHOST = "Strange, They manifest under the surface.",
+            FIRESTARTER = "I didn't expect you to be a firestarter, %s.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "I hope you aren't collecting strays, Charlie.",
+            ATTACKER = "Cease your violence at once, %s!",
+            MURDERER = "I don't understand children anymore.",
+            REVIVER = "I'll be keeping an eye on you, %s.",
+            GHOST = "Finally, some peace and quiet.",
+            FIRESTARTER = "%s is becoming predictable.",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Hmhm...I remember what the red ones were for now."
     DESCRIBE.RATPOISON = "A little something to keep the vermin at bay."
@@ -434,7 +452,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "How did this get here?"
 	DESCRIBE.WIXIE_CLOCK = "A shame it's not in working condition."
 	DESCRIBE.WIXIE_WARDROBE = "It's some kind of one way portal..."
-	DESCRIBE.CHARLES_T_HORSE = "How quaint."
+	DESCRIBE.CHARLES_T_HORSE = "They have reclaimed it."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "How quaint."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "It's not dead, it's merely an act. I think."
 	DESCRIBE.UM_ORNAMENT_RAT = "Begone, vile thing!"

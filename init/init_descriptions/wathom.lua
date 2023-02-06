@@ -489,7 +489,8 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
     DESCRIBE.WIXIE_PIANO = "Noisemaker, melodic. Presence, unknown cause."
     DESCRIBE.WIXIE_CLOCK = "Simple clock. Ancients, larger one built."
     DESCRIBE.WIXIE_WARDROBE = "Curious. Entry point, destination unknown."
-    DESCRIBE.CHARLES_T_HORSE = "Plaything. Depiction, creature unknown."
+    DESCRIBE.CHARLES_T_HORSE = "Reclaimed. Darkness within."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Plaything. Depiction, creature unknown."
 
     DESCRIBE.UM_ORNAMENT_OPOSSUM = "Rat-like."
     DESCRIBE.UM_ORNAMENT_RAT = "Vermin. Stuffed."

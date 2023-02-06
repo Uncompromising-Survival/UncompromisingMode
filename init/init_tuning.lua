@@ -342,7 +342,7 @@ TUNING.DSTU =
     DREADEYE_HEALTH = 350,
     DREADEYE_DAMAGE = 35,
     DREADEYE_ATTACK_PERIOD = 6,
-    DREADEYE_RANGE_1 = 15,
+    DREADEYE_RANGE_1 = 13,
     DREADEYE_RANGE_2 = 2.5,
     DREADEYE_SPAWN_THRESH = 0.50,
 	
@@ -441,6 +441,18 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 2
     TUNING.BEEBOX_RELEASE_TIME = (0.5 * day_time) / 2
 end
+
+if GetModConfigData("wixie_walter") then
+	TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
+	TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 1.5
+			
+	TUNING.WOBY_SMALL_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
+	TUNING.WOBY_SMALL_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 1.5
+	
+	TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = {"walterhat", "meatrack_hat", "meat", "monstermeat"}
+	TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}	
+end
+
 
 TUNING.NONLETHAL_TEMPERATURE = false
 TUNING.NONLETHAL_HUNGER = false

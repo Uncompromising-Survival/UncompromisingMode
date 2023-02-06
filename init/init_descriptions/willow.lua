@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
             GHOST = "I had a pet rat once. I wonder if she became a ghost too?",
             FIRESTARTER = "You're not so bad for a rat, %s!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "You'll let flies in with a mouth like that!",
+            ATTACKER = "Cool it, %s!",
+            MURDERER = "Another angry murderous beast!",
+            REVIVER = "You'll kill me again with that breath!",
+            GHOST = "%s looks even creepier as a ghost!",
+            FIRESTARTER = "A monster who burns stuff? I hope I'm not looking in a mirror.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "I didn't have friends either, but it wasn't because I was a jerk!",
+            ATTACKER = "Quit hitting people with rocks, you jerk!",
+            MURDERER = "%s has gone mad!",
+            REVIVER = "Don't act like your my friend, %s!",
+            GHOST = "That's what you get for being a bully, %s!",
+            FIRESTARTER = "You like burning stuff too? Maybe we can be friends!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Yea, this'll take care of those gross little jerks!"
     DESCRIBE.RATPOISON = "Cooome and get iiiiit..."
@@ -442,6 +460,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WILLOW.ACTIONFAIL
 	DESCRIBE.WIXIE_CLOCK = "It's fire-o-clock! Every hour, every day!"
 	DESCRIBE.WIXIE_WARDROBE = "I hate non-flammable wood!"
 	DESCRIBE.CHARLES_T_HORSE = "I couldn't bring myself to burn it... Because it won't burn!"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "I already have Bernie!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Oh, it's a little angel!"
 	DESCRIBE.UM_ORNAMENT_RAT = "I hate rats! Oh, it's fake? I still hate it!"

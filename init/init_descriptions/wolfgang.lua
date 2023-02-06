@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
             GHOST = "Wolfgang hate rats! Wolfgang HATE ghosts!",
             FIRESTARTER = "Do not burn things %s!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Ah! %s is scary monster!",
+            ATTACKER = "Scary monster is hurting us!",
+            MURDERER = "%s is angry! Run!!",
+            REVIVER = "There's more to you than I first thought, %s!",
+            GHOST = "AH! Ghost is more scary than others...",
+            FIRESTARTER = "Scary monster is burning things!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Haha! You speak funny words, %s!",
+            ATTACKER = "Trying to hurt Wolfgang, little %s?",
+            MURDERER = "Little girl is scary!",
+            REVIVER = "Thank you, funny little girl!",
+            GHOST = "Eat beet root next time, is good for you.",
+            FIRESTARTER = "Funny little girl is burning things!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Icky death soup."
     DESCRIBE.RATPOISON = "Wolfgang not have to catch rat if rat dead! Hah hah!"
@@ -429,7 +447,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "Smashed by a mighty force? Wolfgang must find!"
 	DESCRIBE.WIXIE_CLOCK = "Who broken?"
 	DESCRIBE.WIXIE_WARDROBE = "Being near it gives Wolfgang chills."
-	DESCRIBE.CHARLES_T_HORSE = "Little circus horse! Wolfgang love this!"
+	DESCRIBE.CHARLES_T_HORSE = "Scary horse!"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Little circus horse! Wolfgang love this!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Ahh! Don't bite!"
 	DESCRIBE.UM_ORNAMENT_RAT = "Don't let elephants see!"

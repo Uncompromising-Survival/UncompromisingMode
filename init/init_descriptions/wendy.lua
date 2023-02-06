@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
             GHOST = "Her short life has ended.",
             FIRESTARTER = "Burning things won't rekindle the fire inside.",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Out from the earth, the beast hath come.",
+            ATTACKER = "Is a beasts fate not to hurt others, %s?",
+            MURDERER = "Take me next.",
+            REVIVER = "Revived once more, to be slain at a later date.",
+            GHOST = "A darker force than the undead, perhaps?",
+            FIRESTARTER = "All that lies in his wake is destruction.",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Sticks and stones have broken my bones. %s will never hurt me.",
+            ATTACKER = "Nevermind, %s is perfectly capable of hurting people.",
+            MURDERER = "Murder, %s? Another youth has been corrupted.",
+            REVIVER = "Keeping your enemies close, %s?",
+            GHOST = "%s reminds me of Abigail.",
+            FIRESTARTER = "%s takes the scortched earth approach.",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "There's a thought..."
     DESCRIBE.RATPOISON = "Even if I were to partake, this world would drag me back..."
@@ -427,7 +445,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "I only know sad songs. Sorry..."
 	DESCRIBE.WIXIE_CLOCK = "It looks like its time is at it's end."
 	DESCRIBE.WIXIE_WARDROBE = "Dark secrets may lie within."
-	DESCRIBE.CHARLES_T_HORSE = "It might bring someone else joy."
+	DESCRIBE.CHARLES_T_HORSE = "Innocense lost..."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "It might bring someone else joy."
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Is it truly dead, or merely playing? What do you think, Abigail?"
 	DESCRIBE.UM_ORNAMENT_RAT = "Rats have short lifespans."

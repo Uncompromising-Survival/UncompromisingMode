@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
             GHOST = "There must be hundreds of rats haunting the old factory back home!",
             FIRESTARTER = "Were you chewing wires, %s? Did you start an electrical fire?!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "I know a replica when I see one.",
+            ATTACKER = "%s is more bite than bark!",
+            MURDERER = "%s is on a rampage!",
+            REVIVER = "There's more to you than I first thought, %s!",
+            GHOST = "I think this ghost is defective!",
+            FIRESTARTER = "&s is out to wreck all our stuff!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "%s reminds me of myself at her age. Sorry, Charlie...",
+            ATTACKER = "Stop your rough-housing, %s!",
+            MURDERER = "You little menace!",
+            REVIVER = "Bully with the heart of gold, huh?",
+            GHOST = "What comes around goes around.",
+            FIRESTARTER = "Resorting to arson, you little devil?!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Darn, this stuff woulda put Red Squill to shame."
     DESCRIBE.RATPOISON = "Nice not having to worry about rat presents all over our stuff."
@@ -433,7 +451,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	--I can't play a PIANO as a god damn SHADOW. FUCK.
 	DESCRIBE.WIXIE_CLOCK = "Broken huh? Wouldn'tve happened if it were made of steel!"
 	DESCRIBE.WIXIE_WARDROBE = "Give me a steel locker any day of the week."
-	DESCRIBE.CHARLES_T_HORSE = "What kind of kid would want THIS?"
+	DESCRIBE.CHARLES_T_HORSE = "Don't ask me to fix it, I'm not a woodworker."
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "What kind of kid would want THIS?"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "This critters more bark than bite."
 	DESCRIBE.UM_ORNAMENT_RAT = "Don't go chewing holds in things when my back is turned!"

@@ -48,6 +48,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
             GHOST = "Well, atleast she's not in all the food anymore.",
             FIRESTARTER = "Turn down the heat, %s! You'll burn all the food!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Please don't slobber on my food, %s.",
+            ATTACKER = "I cannot quench your thirst for violence, %s!",
+            MURDERER = "This pot is over boiled!",
+            REVIVER = "Merci, %s!",
+            GHOST = "You're a strange one, %s.",
+            FIRESTARTER = "Turn the heat down, %s!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "Un petit diable!",
+            ATTACKER = "Trouble is brewing within %s's head!",
+            MURDERER = "I cannot handle all her violence!",
+            REVIVER = "Thank you %s, but please stay out of my kitchen!",
+            GHOST = "Should we help %s? I'm not so sure.",
+            FIRESTARTER = "She likes everything over cooked!",
+        }
 		
     DESCRIBE.RATPOISONBOTTLE = "Peace of mind in a bottle."
     DESCRIBE.RATPOISON = "Dinner is served..."
@@ -429,6 +447,7 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	DESCRIBE.WIXIE_CLOCK = "How long has my souffle been baking?"
 	DESCRIBE.WIXIE_WARDROBE = "Trouble's brewing!"
 	DESCRIBE.CHARLES_T_HORSE = "This mare is rare!"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "A passionate craft!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "Would you like to help me clean up the scraps?"
 	DESCRIBE.UM_ORNAMENT_RAT = "No pests in my kitchen!"

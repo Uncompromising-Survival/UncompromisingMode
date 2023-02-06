@@ -49,6 +49,24 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
             GHOST = "Haunted by the ghost of a were-rat? This would make a great story!",
             FIRESTARTER = "I wouldn't have thought you knew how to start fires!",
         }
+	DESCRIBE.WATHOM =
+        {
+            GENERIC = "Look Woby! Another talking monster!",
+            ATTACKER = "%s is dangerous!",
+            MURDERER = "Run, Woby! %s is feral!",
+            REVIVER = "%s is a nice monster!",
+            GHOST = "Woah! %s has a cool ghost!",
+            FIRESTARTER = "I know you understand me, %s!",
+        }
+	DESCRIBE.WIXIE =
+        {
+            GENERIC = "What's the matter? Don't you want to be friends, %s?",
+            ATTACKER = "Violence will get you no where, %s!",
+            MURDERER = "I think somethings wrong with %s!",
+            REVIVER = "See %s? Helping others feels good!",
+            GHOST = "A pinetree pioneer always helps those in need! Even if they are mean.",
+            FIRESTARTER = "Fire is no joke, %s! Please stop laughing.",
+        }
 	
     DESCRIBE.RATPOISONBOTTLE = "If there's no other option..."
     DESCRIBE.RATPOISON = "I hope nothing friendly gets into it..."
@@ -429,7 +447,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WALTER.ACTIONFAIL
 	DESCRIBE.WIXIE_PIANO = "Piano lessons weren't a part of my training!"
 	DESCRIBE.WIXIE_CLOCK = "Shame it's broken, a ticking clock adds tension to horror stories!"
 	DESCRIBE.WIXIE_WARDROBE = "Reminds me of this one radio play I heard, the \"Haunted Wardrobe at the End of the Hall\" it's about-"
-	DESCRIBE.CHARLES_T_HORSE = "I can't be seen playing with kids toys!"
+	DESCRIBE.CHARLES_T_HORSE = "Think it's cursed, Woby?"
+	DESCRIBE.THE_REAL_CHARLES_T_HORSE = "I can't be seen playing with kids toys!"
 
 	DESCRIBE.UM_ORNAMENT_OPOSSUM = "I love these little guys! I wish we had more up north..."
 	DESCRIBE.UM_ORNAMENT_RAT = "All alone, little guy?"
