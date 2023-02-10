@@ -87,8 +87,8 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
         "THIS IS WHERE I BELONG",
         "I DON'T WANT TO GO BACK",
     }
-	DESCRIBE.SAND = "You are a very clean dirt."
-	DESCRIBE.SANDHILL = "I will not make a mountain out of a sandhill."
+	DESCRIBE.UM_SAND = "You are a very clean dirt."
+	DESCRIBE.UM_SANDHILL = "I will not make a mountain out of a sandhill."
 	DESCRIBE.SNOWPILE = "Skaði would not be impressed."
 	DESCRIBE.SNOWGOGGLES = "We shall fight the storm itself!"
 	
