@@ -3,7 +3,16 @@ require "prefabutil"
 local assets =
 {
     Asset("ANIM", "anim/portable_blender.zip"),
-    Asset("ANIM", "anim/winona_spotlight.zip")
+    Asset("ANIM", "anim/winona_spotlight.zip"),
+    Asset("ANIM", "anim/winona_spotlight_placement.zip"),
+    Asset("ANIM", "anim/winona_catapult.zip"),
+    Asset("ANIM", "anim/winona_catapult_placement.zip"),
+    Asset("ANIM", "anim/winona_battery_low.zip"),
+    Asset("ANIM", "anim/winona_battery_high.zip"),
+    Asset("ANIM", "anim/winona_battery_placement.zip"),
+    Asset("ANIM", "anim/gems.zip"),
+
+
 }
 
 local prefabs =

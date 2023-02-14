@@ -57,34 +57,7 @@ local function OnDismantle_high(inst)
     inst:Remove()
 end
 
-env.AddPrefabPostInit("winona_catapult", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddComponent("portablestructure")
-    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_catapult)
-end)
-
-env.AddPrefabPostInit("winona_spotlight", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddComponent("portablestructure")
-    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_spotlight)
-end)
-
-env.AddPrefabPostInit("winona_battery_low", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddComponent("portablestructure")
-    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_low)
-end)
-
---I'll admit it, I got lazy on this. But it's 11pm and I want to go to bed.
+--I'll admit it, I got lazy on this. But was 11pm and I wanted to go to bed.
 
 local NUM_LEVELS = 6
 local GEMSLOTS = 3
@@ -109,6 +82,12 @@ local function UnsetGem(inst, slot, gemname)
             fx.AnimState:PlayAnimation(anim)
         end
         inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
+    end
+end
+
+local function UpdateSoundLoop(inst, level)
+    if inst.SoundEmitter:PlayingSound("loop") then
+        inst.SoundEmitter:SetParameter("loop", "intensity", 1 - level / NUM_LEVELS)
     end
 end
 
@@ -174,7 +153,7 @@ local function StartIdleChargeSounds(inst)
     end
 end
 
-local function OnLoad(inst, data)
+local function OnLoad_high(inst, data)
     if data ~= nil then
         if data.gems ~= nil and #inst._gems < GEMSLOTS then
             for i, v in ipairs(data.gems) do
@@ -206,12 +185,60 @@ local function OnLoad(inst, data)
     end
 end
 
+local function OnLoad_low(inst, data, ents)
+    if data ~= nil and data.burnt then
+        inst.components.burnable.onburnt(inst)
+    elseif inst.components.fueled:IsEmpty() then
+        OnFuelEmpty(inst)
+    else
+        UpdateSoundLoop(inst, inst.components.fueled:GetCurrentSection())
+        if inst.AnimState:IsCurrentAnimation("idle_charge") then
+            local frame = inst.AnimState:GetCurrentAnimationNumFrames() ~= nil and
+                inst.AnimState:GetCurrentAnimationNumFrames() ~= 0 and
+                math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1 or 1
+
+			inst.AnimState:SetFrame(frame)
+        end
+    end
+end
+
+
+env.AddPrefabPostInit("winona_catapult", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("portablestructure")
+    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_catapult)
+end)
+
+env.AddPrefabPostInit("winona_spotlight", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("portablestructure")
+    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_spotlight)
+end)
+
+env.AddPrefabPostInit("winona_battery_low", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.OnLoad = OnLoad_low
+
+    inst:AddComponent("portablestructure")
+    inst.components.portablestructure:SetOnDismantleFn(OnDismantle_low)
+end)
+
+
 env.AddPrefabPostInit("winona_battery_high", function(inst)
     if not TheWorld.ismastersim then
         return
     end
 
-    inst.OnLoad = OnLoad
+    inst.OnLoad = OnLoad_high
 
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle_high)
