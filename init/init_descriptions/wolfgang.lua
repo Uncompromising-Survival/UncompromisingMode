@@ -359,6 +359,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WOLFGANG.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Wolfgang did not leave dumbbells in there."
 	ACTIONFAIL.WINONATOOLBOX = "Wolfgang did not leave dumbbells in there."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "For lifting?"
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "For lifting?"
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "For lifting?"
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "For lifting?"
 	DESCRIBE.POWERCELL = "Is a box of shock."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Must connect to lamp now."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Head lamp is now electric head lamp."

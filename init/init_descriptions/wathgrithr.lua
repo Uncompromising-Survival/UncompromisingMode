@@ -358,6 +358,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHGRITHR.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Not needed, I have every tool for battle I require."
 	ACTIONFAIL.WINONATOOLBOX = "Encore! It hath no tools of war!"
+	DESCRIBE.WINONA_CATAPULT_ITEM = "An evil contraption!"
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "An evil contraption!"
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "An evil contraption!"
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "An evil contraption!"
 	DESCRIBE.POWERCELL = "She has harenessed thors might into a box."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She has harenessed thors might into a box."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Thors boons are without doubt."

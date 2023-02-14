@@ -366,7 +366,11 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WURT.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Weenowna-lady not like me playing with things inside..."
 	ACTIONFAIL.WINONATOOLBOX = "Can't open lock!"
-	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "One of tough ladies things."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "One of tough ladies things."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "One of tough ladies things."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "One of tough ladies things."
+	DESCRIBE.POWERCELL = "Do not lick!"
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Give box to lights."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Has a box now."
 	DESCRIBE.OCEAN_SPEAKER = "What it yelling at?"

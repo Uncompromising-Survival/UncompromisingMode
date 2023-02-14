@@ -357,9 +357,13 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WENDY.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "If empty it has no purpose."
 	ACTIONFAIL.WINONATOOLBOX = "It is not mine to take from."
-	DESCRIBE.POWERCELL = "."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
-	DESCRIBE.MINERHAT_ELECTRICAL = ""
+	DESCRIBE.WINONA_CATAPULT_ITEM = "I'm not interested in lifeless machines."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "I'm not interested in lifeless machines."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I'm not interested in lifeless machines."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "I'm not interested in lifeless machines."
+	DESCRIBE.POWERCELL = "It sustains the electronics."
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Perhaps this is the future of humanity?"
+	DESCRIBE.MINERHAT_ELECTRICAL = "Light is light, who am I to complain?"
 	DESCRIBE.OCEAN_SPEAKER = "It's busted and hollow inside. Only playing dreary tunes."
 	--DESCRIBE.UM_SIREN = "She manipulates her pawns through song. A very potentent ability..."
 	

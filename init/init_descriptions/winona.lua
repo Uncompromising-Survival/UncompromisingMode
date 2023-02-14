@@ -362,6 +362,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINONA.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Wouldn't leave home without it."
 	ACTIONFAIL.WINONATOOLBOX = "Huh? Who locked me out!"
+	DESCRIBE.WINONA_CATAPULT_ITEM = "A bit of portable protection."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "Who needs the spotlight?"
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I just wish it wasn't so heavy!"
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "None of that magic made it any lighter."
 	DESCRIBE.POWERCELL = "Lil' ingenuity and elbow grease go a long way."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "I designed it from scratch."
 	DESCRIBE.MINERHAT_ELECTRICAL = "A lil' tinkering makes all the difference."

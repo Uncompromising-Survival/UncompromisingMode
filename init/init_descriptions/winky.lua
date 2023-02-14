@@ -451,6 +451,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 	
 	DESCRIBE.WINONA_TOOLBOX = "Let me see what is in there."
 	ACTIONFAIL.WINONATOOLBOX = "It is mine I tell you! Mine!"
+	DESCRIBE.WINONA_CATAPULT_ITEM = "Funny little machine!"
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "Funny little machine!"
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "Funny little machine!"
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "Funny little machine!"
 	DESCRIBE.POWERCELL = "I feel I should chew on this."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Thing with wires to put on other things."
 	DESCRIBE.MINERHAT_ELECTRICAL = "It is all wired up now."

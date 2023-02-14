@@ -418,6 +418,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
 	DESCRIBE.WINONA_TOOLBOX = "Implements, unusual."
 	ACTIONFAIL.WINONATOOLBOX = "Untrained."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "Collapsed, machines."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "Collapsed, machines."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "Collapsed, machines."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "Collapsed, machines."
     DESCRIBE.POWERCELL = "Power source, electrical. Design limiting."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Conversion, power input."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Tinkered, manipulated."

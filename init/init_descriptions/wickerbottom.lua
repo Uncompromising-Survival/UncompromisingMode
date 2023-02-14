@@ -364,6 +364,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "An organized work place is an efficient work place."
 	ACTIONFAIL.WINONATOOLBOX = "I'm no handywoman myself, I do know a thing or two however."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "I can't tell what it is, it needs to be put together."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "I can't tell what it is, it needs to be put together."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I can't tell what it is, it needs to be put together."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "I can't tell what it is, it needs to be put together."
 	DESCRIBE.POWERCELL = "A box full of electricty, I'm not too familiar with this."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "The whole is greater than the sum of its parts."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Now that it's electric it will be quite beneficial."

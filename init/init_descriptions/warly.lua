@@ -358,6 +358,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WARLY.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Not meant for pots and pans, but I can make do."
 	ACTIONFAIL.WINONATOOLBOX = "Not full of utensils I presume."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "I'll stick to my kitchenware."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "I'll stick to my kitchenware."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I'll stick to my kitchenware."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "I'll stick to my kitchenware."
 	DESCRIBE.POWERCELL = "Food for the batteries, I suppose."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "I could use a battery charged... well, everything."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Would make cooking in the dark easier."

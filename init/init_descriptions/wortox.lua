@@ -358,8 +358,12 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WORTOX.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "A place to put the tools of trade."
 	ACTIONFAIL.WINONATOOLBOX = "My tools of trade are in another type of box."
-	DESCRIBE.POWERCELL = "."
-	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = ""
+	DESCRIBE.WINONA_CATAPULT_ITEM = "It's a bit too complex for me."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "It's a bit too complex for me."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "It's a bit too complex for me."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "It's a bit too complex for me."
+	DESCRIBE.POWERCELL = "Gives quite a shock!"
+	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "An assortment of whimsical wires."
 	DESCRIBE.MINERHAT_ELECTRICAL = "I can fill it with shock and awe, hyuyuyuyu!"
 	DESCRIBE.OCEAN_SPEAKER = "It plays a tune that could spell our doom. Hyuyu!" --Oh gee oh fuck I'm out of luck!!!!!
 	--DESCRIBE.UM_SIREN = "My, is that a siren on the horizon?"

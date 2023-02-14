@@ -359,6 +359,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WEBBER.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "Can we make it into a toy box?"
 	ACTIONFAIL.WINONATOOLBOX = "We should be respectful."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "I don't want to lose an arm!"
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "I don't want to lose an arm!"
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I don't want to lose an arm!"
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "I don't want to lose an arm!"
 	DESCRIBE.POWERCELL = "That's a big battery."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Makes everything we put in on a battery!"
 	DESCRIBE.MINERHAT_ELECTRICAL = "Now We can charge it too."

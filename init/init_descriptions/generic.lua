@@ -452,6 +452,10 @@ RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
 	DESCRIBE.WINONA_TOOLBOX = "I had one like this for all of my scientific tools."
 	ACTIONFAIL.WINONATOOLBOX = "Well, I never said these were my tools."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "I'm not trained to handle heavy machinery."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "I'm not trained to handle heavy machinery."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "I'm not trained to handle heavy machinery."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "I'm not trained to handle heavy machinery."
     DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Of course I know how this works! I could've made one myself."
 	DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"

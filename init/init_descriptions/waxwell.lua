@@ -364,7 +364,11 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 	
 	DESCRIBE.WINONA_TOOLBOX = "I will not lug that around."
 	ACTIONFAIL.WINONATOOLBOX = "How can I help if I can't get inside?"
-	DESCRIBE.POWERCELL = "."
+	DESCRIBE.WINONA_CATAPULT_ITEM = "Some days I miss my clockworks."
+	DESCRIBE.WINONA_SPOTLIGHT_ITEM = "Some days I miss my clockworks."
+	DESCRIBE.WINONA_BATTERY_LOW_ITEM = "Some days I miss my clockworks."
+	DESCRIBE.WINONA_BATTERY_HIGH_ITEM = "Some days I miss my clockworks."
+	DESCRIBE.POWERCELL = "Time flies when you're stuck in here."
 	DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She's just full of bright ideas."
 	DESCRIBE.MINERHAT_ELECTRICAL = "I guess that solves the firefly problem."
 	DESCRIBE.OCEAN_SPEAKER = "You know, I used to be king. Here I am unable to recognize half the stuff I find in these wretched waters."
