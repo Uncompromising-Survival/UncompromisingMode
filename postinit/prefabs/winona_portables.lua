@@ -185,6 +185,30 @@ local function OnLoad_high(inst, data)
     end
 end
 
+local function StopBattery(inst)
+    if inst._batterytask ~= nil then
+        inst._batterytask:Cancel()
+        inst._batterytask = nil
+    end
+end
+
+local function OnFuelEmpty(inst)
+    if inst.components.fueled.accepting then
+        inst.components.fueled:StopConsuming()
+        BroadcastCircuitChanged(inst)
+        StopBattery(inst)
+        inst.SoundEmitter:KillSound("loop")
+        inst.AnimState:OverrideSymbol("m2", "winona_battery_low", "m1")
+        inst.AnimState:OverrideSymbol("plug", "winona_battery_low", "plug_off")
+        if inst.AnimState:IsCurrentAnimation("idle_charge") then
+            inst.AnimState:PlayAnimation("idle_empty")
+        end
+        if not POPULATING then
+            inst.SoundEmitter:PlaySound("dontstarve/common/together/battery/down")
+        end
+    end
+end
+
 local function OnLoad_low(inst, data, ents)
     if data ~= nil and data.burnt then
         inst.components.burnable.onburnt(inst)
