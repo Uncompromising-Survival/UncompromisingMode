@@ -23,8 +23,12 @@ end
 function CheckWardrobeItem(container, item, slot)
     return item:HasTag("_equippable") or item:HasTag("reloaditem_ammo") or item:HasTag("tool") or item:HasTag("weapon")
         or (item.prefab == "razor" or item.prefab == "beef_bell") or item:HasTag("heatrock") or
-        (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or item:HasTag("toolbox_item") or
+        (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or 
         item.prefab == "sewing_tape" or item.prefab == "sewing_kit" or item:HasTag("fan") or string.match(item.prefab, "wx78module_") ~= nil
+end
+
+function CheckToolboxItem(container, item, slot)
+    return item:HasTag("toolbox_item")
 end
 
 function CheckEquipItem(container, item, slot)
@@ -457,7 +461,7 @@ containers.params.winona_toolbox =
         side_align_tip = 160,
     },
     type = "chest",
-    itemtestfn = CheckWardrobeItem,
+    itemtestfn = CheckToolboxItem,
 }
 
 for y = 1, 0, -1 do

@@ -101,6 +101,8 @@ local function fn(ondeploy, finiteuses)
 
     MakeInventoryFloatable(inst, nil, 0.05, 0.7)
 
+    inst:AddTag("toolbox_item")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
