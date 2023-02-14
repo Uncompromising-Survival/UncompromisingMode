@@ -406,4 +406,5 @@ return {
 	"wixie_stinkcloud",
 	"wixiegun",
 	"placeholder_recipe_item",
+	"winona_structure_item",
 }

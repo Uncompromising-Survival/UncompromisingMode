@@ -175,6 +175,8 @@ local prefab_post = {
 	"winona_portables",
 	"inventoryitem_classified",
 	"wptags",
+	"winona_portables",
+	"inventoryitem_classified",
 }
 
 local stategraph_post = {
