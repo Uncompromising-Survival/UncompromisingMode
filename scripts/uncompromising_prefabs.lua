@@ -381,4 +381,6 @@ return {
 	"uncompromising_skins",
 	
 	"codex_mantra",
+	"winona_structure_item",
+
 }

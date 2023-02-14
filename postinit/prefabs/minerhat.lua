@@ -1,7 +1,16 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local function OnOvercharge(inst, toggle)
+    if inst._light ~= nil then
+        inst._light.Light:SetRadius(toggle and 5 or 2.5)
+        inst.components.fueled.rate = toggle and 2 or 1
+    end
+end
+
 env.AddPrefabPostInit("minerhat", function(inst)
+    inst:AddTag("overchargeable")
+
     if not TheWorld.ismastersim then
 		return
 	end
@@ -94,4 +103,5 @@ env.AddPrefabPostInit("minerhat", function(inst)
 
     inst:AddComponent("named")
 
+    inst:ListenForEvent("overcharged", OnOvercharge)
 end)

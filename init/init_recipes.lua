@@ -191,6 +191,18 @@ AddRecipe2(
     { "CHARACTER" }
 )
 
+local winona_portables = {
+    "battery_high",
+    "battery_low",
+    "spotlight",
+    "catapult",
+}
+
+for k,v in ipairs(winona_portables) do
+    AllRecipes["winona_"..v].product = "winona_"..v.."_item"
+    AllRecipes["winona_"..v].placer = nil
+end
+
 --new recipes
 
 AddRecipe2(

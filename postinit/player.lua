@@ -23,25 +23,13 @@ env.AddPlayerPostInit(function(inst)
         if item ~= nil then
             if item.components.fueled ~= nil then
                 local percent = item.components.fueled:GetPercent()
-                local refuelnumber = 0
-
-                if percent + 0.33 > 1 then
-                    refuelnumber = 1
-                else
-                    refuelnumber = percent + 0.33
-                end
+                local refuelnumber = math.clamp(percent + 0.33, 0, inst:HasTag("handyperson") and 2 or 1)
                 item.components.fueled:SetPercent(refuelnumber)
                 item.components.fueled.ontakefuelfn(item, 0)
                 --item:PushEvent("takefuel", {fuelvalue = 0})
             elseif item.components.finiteuses ~= nil then
                 local percent = item.components.finiteuses:GetPercent()
-                local refuelnumber = 0
-
-                if percent + 0.33 > 1 then
-                    refuelnumber = 1
-                else
-                    refuelnumber = percent + 0.33
-                end
+                local refuelnumber = math.clamp(percent + 0.33, 0, inst:HasTag("handyperson") and 2 or 1)
                 item.components.finiteuses:SetPercent(refuelnumber)
             end
         end
@@ -55,14 +43,15 @@ env.AddPlayerPostInit(function(inst)
 
         item_hand_fuel = item_hand ~= nil and item_hand:HasTag("electricaltool") and
             (item_hand.components.fueled ~= nil and item_hand.components.fueled:GetPercent() or
-                item_hand.components.finiteuses ~= nil and item_hand.components.finiteuses:GetPercent()) or -1 --just so it isn't a nil value, but is lower than 0.
+            item_hand.components.finiteuses ~= nil and item_hand.components.finiteuses:GetPercent()) or
+            -1 --just so it isn't a nil value, but is lower than 0.
         item_head_fuel = item_head ~= nil and item_head:HasTag("electricaltool") and
             (item_head.components.fueled ~= nil and item_head.components.fueled:GetPercent() or
-                item_head.components.finiteuses ~= nil and item_head.components.finiteuses:GetPercent()) or -1
+            item_head.components.finiteuses ~= nil and item_head.components.finiteuses:GetPercent()) or -1
 
         item_body_fuel = item_body ~= nil and item_body:HasTag("electricaltool") and
             (item_body.components.fueled ~= nil and item_body.components.fueled:GetPercent() or
-                item_body.components.finiteuses ~= nil and item_body.components.finiteuses:GetPercent()) or -1
+            item_body.components.finiteuses ~= nil and item_body.components.finiteuses:GetPercent()) or -1
 
 
         if item_hand_fuel > item_head_fuel and item_hand_fuel > item_body_fuel then
@@ -85,15 +74,15 @@ env.AddPlayerPostInit(function(inst)
         if inst.components.upgrademoduleowner == nil then
             if (
                 final_item ~= nil and final_item.components.finiteuses ~= nil and
-                    final_item.components.finiteuses:GetPercent() == 1) then
+                final_item.components.finiteuses:GetPercent() == 1) then
                 return false, "CHARGE_FULL"
             else
                 if final_item ~= nil then
                     ChargeItem(final_item)
                     if not inst.components.inventory:IsInsulated() then
                         inst.sg:GoToState("electrocute")
-                        inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
-                        inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
+                        inst.components.health:DoDelta( -TUNING.HEALING_SMALL, false, "lightning")
+                        inst.components.sanity:DoDelta( -TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
                             inst:DoTaskInTime(1,
                                 inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
@@ -110,7 +99,7 @@ env.AddPlayerPostInit(function(inst)
         else
             if (
                 final_item ~= nil and final_item.components.finiteuses ~= nil and
-                    final_item.components.finiteuses:GetPercent() == 1) and
+                final_item.components.finiteuses:GetPercent() == 1) and
                 inst.components.upgrademoduleowner:ChargeIsMaxed() then
                 return false, "CHARGE_FULL"
             else
@@ -121,8 +110,8 @@ env.AddPlayerPostInit(function(inst)
                     end
                     if not inst.components.inventory:IsInsulated() then
                         inst.sg:GoToState("electrocute")
-                        inst.components.health:DoDelta(-TUNING.HEALING_SMALL, false, "lightning")
-                        inst.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
+                        inst.components.health:DoDelta( -TUNING.HEALING_SMALL, false, "lightning")
+                        inst.components.sanity:DoDelta( -TUNING.SANITY_SMALL)
                         if inst.components.talker ~= nil then
                             inst:DoTaskInTime(1,
                                 inst.components.talker:Say(GetString(inst, "ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED")))
@@ -151,7 +140,7 @@ env.AddPlayerPostInit(function(inst)
         for k, v in pairs(inst.components.leader.followers) do
             if (
                 k:HasTag("spider") or k:HasTag("pig") or k:HasTag("merm") or k:HasTag("raidrat") or k:HasTag("winky_rat")
-                    or k.prefab == "eyeofterror_mini_ally") or k.prefab == "smallbird" or k.prefab == "teenbird" then --exluding things that can't/shouldn't/already do
+                or k.prefab == "eyeofterror_mini_ally") or k.prefab == "smallbird" or k.prefab == "teenbird" then --exluding things that can't/shouldn't/already do
                 local savedata = k:GetSaveRecord()
                 table.insert(inst.um_all_followers, savedata)
                 -- remove followers

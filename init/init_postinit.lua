@@ -39,6 +39,7 @@ local component_post = {
 	"hullhealth",
 	"health",
 	--"spellbook"
+	"finiteuses",
 }
 
 local prefab_post = {
@@ -168,6 +169,8 @@ local prefab_post = {
 	"vetcurse_drops",
 	"charcoal",
 	"mermhat",
+	"winona_portables",
+	"inventoryitem_classified",
 }
 
 local stategraph_post = {

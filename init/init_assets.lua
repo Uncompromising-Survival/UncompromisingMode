@@ -1693,7 +1693,8 @@ Assets = {
 	Asset("IMAGE", "images/PP_TT.tex"),
 	Asset("ATLAS", "images/PP_TT.xml"),
 
-
+	Asset("IMAGE", "images/engineering_tip.tex"),
+	Asset("ATLAS", "images/engineering_tip.xml"),
 
 	--SOUND
 	Asset("SOUNDPACKAGE", "sound/UCSounds.fev"),
