@@ -1,91 +1,12 @@
-local assets =
-{
-    Asset("ANIM", "anim/charles_t_horse.zip"),
-    Asset("ANIM", "anim/swap_charles.zip"),
-}
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.2.4) ~  Much Love, Ferib 
 
-local function onequip(inst, owner)
-	owner.AnimState:OverrideSymbol("swap_object", "swap_charles", "swap_charles")
-    owner.AnimState:Show("ARM_carry")
-    owner.AnimState:Hide("ARM_normal")
+]]--
 
-    if inst._owner ~= nil then
-        inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
-    end
-    inst._owner = owner
-    inst:ListenForEvent("locomote", inst._onlocomote, owner)
-end
-
-local function onunequip(inst, owner)
-    if inst._owner ~= nil then
-        inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
-        inst._owner = nil
-    end
-
-    owner.AnimState:Hide("ARM_carry")
-    owner.AnimState:Show("ARM_normal")
-end
-
-local function fn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("charles_t_horse")
-    inst.AnimState:SetBuild("charles_t_horse")
-    inst.AnimState:PlayAnimation("idle")
-
-    --weapon (from weapon component) added to pristine state for optimization
-    inst:AddTag("weapon")
-	inst:AddTag("irreplaceable")
-
-	--inst.foleysound = "dontstarve/creatures/together/deer/bell"
-
-    local swap_data = {sym_build = "charles_t_horse"}
-    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-	
-	inst.multiplier = 1
-	inst.ringaling = true
-
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(TUNING.CANE_DAMAGE)
-
-    inst:AddComponent("inspectable")
-
-    inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/charles_t_horse.xml"
-
-    inst:AddComponent("equippable")
-
-    inst.components.equippable:SetOnEquip(onequip)
-    inst.components.equippable:SetOnUnequip(onunequip)
-
-    MakeHauntableLaunch(inst)
-
-    inst._onlocomote = function(owner)
-        if owner.components.locomotor.wantstomoveforward then
-			if not inst.SoundEmitter:PlayingSound("ringaling") then
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell", "ringaling")
-				
-				inst:DoTaskInTime(1, function(inst)
-					inst.SoundEmitter:KillSound("ringaling")
-				end)
-			end
-        end
-    end
-	
-    return inst
-end
-
-return Prefab("charles_t_horse", fn, assets)
+local v0={Asset("ANIM","anim/nightmare_charles_t_horse.zip"),Asset("ANIM","anim/swap_charles_nightmare.zip")};local v1={Asset("ANIM","anim/charles_t_horse.zip"),Asset("ANIM","anim/swap_charles.zip")};local v2={["N"]=0,["S"]=180,NE=45,["E"]=90,SE=135,NW= -45,["W"]= -90,SW= -135};local v3={["N"]=135,NE=180,["E"]= -135,SE= -90,["S"]= -45,SW=0,["W"]=45,NW=90};local function v4(v5)local v30=v5.components.inventoryitem.owner;if ((v30~=nil) and v30:IsValid()) then local v76=v30.Transform:GetRotation();local v77,v78=nil,nil;for v95,v96 in pairs(v3) do local v97=math.abs(anglediff(v76,v96));if ( not v77 or (v97<v78)) then v77,v78=v95,v97;end end return v77;end end local function v6(v5,v7)v7.AnimState:OverrideSymbol("swap_object","swap_charles_nightmare","swap_charles_nightmare");v7.AnimState:Show("ARM_carry");v7.AnimState:Hide("ARM_normal");if (v5._owner~=nil) then v5:RemoveEventCallback("locomote",v5._onlocomote,v5._owner);end v5._owner=v7;v5:ListenForEvent("locomote",v5._onlocomote,v7);end local function v8(v5,v7)if (v5._owner~=nil) then v5:RemoveEventCallback("locomote",v5._onlocomote,v5._owner);v5._owner=nil;end if (v5.ringalingtask~=nil) then v5.ringalingtask:Cancel();v5.ringalingtask=nil;end v7.AnimState:Hide("ARM_carry");v7.AnimState:Show("ARM_normal");end local function v9(v5)v5.final_code_ready=false;end local function v10()local v33=CreateEntity();v33.entity:AddTransform();v33.entity:AddAnimState();v33.entity:AddSoundEmitter();v33.entity:AddNetwork();MakeInventoryPhysics(v33);v33.AnimState:SetBank("nightmare_charles_t_horse");v33.AnimState:SetBuild("nightmare_charles_t_horse");v33.AnimState:PlayAnimation("idle");v33:AddTag("weapon");v33:AddTag("irreplaceable");v33:AddTag("puzzle_charles");local v34={sym_build="nightmare_charles_t_horse"};MakeInventoryFloatable(v33,"med",0.05,{0.85,0.45,0.85},true,1,v34);v33.entity:SetPristine();if  not TheWorld.ismastersim then return v33;end v33.code=0;v33.code2=0;v33.ringaling=true;v33.final_code_ready=false;v33:AddComponent("weapon");v33.components.weapon:SetDamage(TUNING.CANE_DAMAGE);v33:AddComponent("inspectable");v33:AddComponent("inventoryitem");v33.components.inventoryitem.atlasname="images/inventoryimages/charles_t_horse.xml";v33:AddComponent("equippable");v33.components.equippable:SetOnEquip(v6);v33.components.equippable:SetOnUnequip(v8);MakeHauntableLaunch(v33);v33._onlocomote=function(v40)if v40.components.locomotor.wantstomoveforward then if (v33.ringalingtask==nil) then v33.ringalingtask=v33:DoPeriodicTask(0.8,function(v33)local v105=v4(v33);local v106=TheSim:FindFirstEntityWithTag("wixie_wardrobe");print(v105);local v107=v33.components.inventoryitem.owner;local v108=4000;if ((v107~=nil) and v107:IsValid() and (v106~=nil) and v106:IsValid()) then v108=v107:GetDistanceSqToInst(v106);end if ((v108~=nil) and (((v33.code==0) and (v108<200)) or ((v33.code>0) and (v108<5000)))) then v33.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell");if ((v106~=nil) and (v106.beequeen~=nil) and (v105==v106.beequeen) and (v33.code<=4)) then v33.code=v33.code + 1;elseif ((v106~=nil) and (v106.widowspawner~=nil) and (v105==v106.widowspawner) and (v33.code==13)) then print("ringaling u win");v33.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/voice");v33.code=0;local v116=SpawnPrefab("wixie_piano_card");v116.Transform:SetPosition(v107.Transform:GetWorldPosition());v116.name="Milites et Equi";Launch2(v116,v107,2,0,1,0.5);elseif ((v106~=nil) and (v106.widowspawner~=nil) and (v105==v106.widowspawner) and (v33.code>6) and (v33.code<=12)) then v33.code=v33.code + 1;elseif ((v106~=nil) and (v106.oasis~=nil) and (v105==v106.oasis) and (v33.code>4) and (v33.code<=6)) then v33.code=v33.code + 1;else v33.code=0;end else v33.code=0;end local v109=TheSim:FindFirstEntityWithTag("wixie_clock");if ((v109~=nil) and v33.final_code_ready and (v108~=nil) and (((v33.code2==0) and (v108<200)) or ((v33.code2>0) and (v108<4000)))) then if ((v105=="N") and ((v33.code2==0) or (v33.code2==4) or (v33.code2==8))) then v33.code2=v33.code2 + 1;elseif ((v105=="E") and ((v33.code2==1) or (v33.code2==7))) then v33.code2=v33.code2 + 1;elseif ((v105=="S") and ((v33.code2==2) or (v33.code2==3) or (v33.code2==6))) then v33.code2=v33.code2 + 1;elseif ((v105=="W") and (v33.code2==5)) then v33.code2=v33.code2 + 1;elseif ((v105=="W") and (v33.code2==9)) then print("ringaling u win");v109.final_code_ready=true;v33.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/death");SpawnPrefab("statue_transition").Transform:SetPosition(v107:GetPosition():Get());SpawnPrefab("statue_transition_2").Transform:SetPosition(v107:GetPosition():Get());v33.code2=0;TheNet:SystemMessage("The path is set...");else v33.code2=0;end print(v33.code2);else v33.code2=0;end end);end elseif (v33.ringalingtask~=nil) then v33.ringalingtask:Cancel();v33.ringalingtask=nil;end end;v33:WatchWorldState("isday",v9);return v33;end local function v11(v5)if (v5.components.fueled:GetPercent()<1) then if v5.pausedfuel then v5.components.fueled:DoDelta(5);end if (v5.components.fueled:GetPercent()>=1) then if (v5.fuelmetask~=nil) then v5.fuelmetask:Cancel();v5.fuelmetask=nil;end end elseif (v5.fuelmetask~=nil) then v5.fuelmetask:Cancel();v5.fuelmetask=nil;end end local function v12(v5)v5.pausedfuel=true;if (v5.fuelmetask==nil) then v5.fuelmetask=v5:DoPeriodicTask(0.5,v11);end end local function v13(v5)if (v5.components.fueled:GetPercent()>=1) then v5.pausedfuel=false;end end local function v14(v5)v5.pausedfuel=true;end local function v15(v5,v7)v7.AnimState:OverrideSymbol("swap_object","swap_charles","swap_charles");v7.AnimState:Show("ARM_carry");v7.AnimState:Hide("ARM_normal");if (v5._owner~=nil) then v5:RemoveEventCallback("locomote",v5._onlocomote,v5._owner);end if v7:HasTag("troublemaker") then v7.components.talker:Say(GetString(v7,"EQUIP_CHARLES"));end v5._owner=v7;v5:ListenForEvent("locomote",v5._onlocomote,v7);end local function v16(v5,v7)if (v5._owner~=nil) then v5:RemoveEventCallback("locomote",v5._onlocomote,v5._owner);v5._owner=nil;end if (v5.ringalingtask~=nil) then v5.ringalingtask:Cancel();v5.ringalingtask=nil;end v7.AnimState:Hide("ARM_carry");v7.AnimState:Show("ARM_normal");end local function v17(v5)return Vector3(v5.entity:LocalToWorldSpace(6.5,0,0));end local function v18(v5,v19)if (v19~=nil) then local v85,v86,v87=v5.Transform:GetWorldPosition();local v88=v19["x"] -v85;local v89=v19["z"] -v87;local v90=(v88 * v88) + (v89 * v89);if (v90<=0) then return v5.components.reticule.targetpos;end v90=6.5/math.sqrt(v90);return Vector3(v85 + (v88 * v90),0,v87 + (v89 * v90));end end local function v20(v5,v21,v22,v23,v24,v25)local v45,v46,v47=v5.Transform:GetWorldPosition();v22.Transform:SetPosition(v45,0,v47);local v48= -math.atan2(v21["z"] -v47,v21["x"] -v45)/DEGREES;if (v23 and (v25~=nil)) then local v91=v22.Transform:GetRotation();local v92=v48-v91;v48=Lerp(((v92>180) and (v91 + 360)) or ((v92< -180) and (v91-360)) or v91,v48,v25 * v24);end v22.Transform:SetRotation(v48);end local function v26(v5,v27,v21)v5.components.fueled:DoDelta( -20);if (v5.fuelmetask~=nil) then v5.fuelmetask:Cancel();v5.fuelmetask=nil;end if (v5.unpausefuel_task~=nil) then v5.unpausefuel_task:Cancel();v5.unpausefuel_task=nil;end v5.unpausefuel_task=v5:DoTaskInTime(2,v12);end local function v28(v5)return true;end local function v29()local v50=CreateEntity();v50.entity:AddTransform();v50.entity:AddAnimState();v50.entity:AddSoundEmitter();v50.entity:AddNetwork();MakeInventoryPhysics(v50);v50.AnimState:SetBank("charles_t_horse");v50.AnimState:SetBuild("charles_t_horse");v50.AnimState:PlayAnimation("idle");v50:AddTag("weapon");v50:AddTag("charles_t_horse");local v51={sym_build="charles_t_horse"};MakeInventoryFloatable(v50,"med",0.05,{0.85,0.45,0.85},true,1,v51);v50.spelltype="CHARLES_CHARGE";v50:AddComponent("reticule");v50.components.reticule.reticuleprefab="reticuleline2";v50.components.reticule.pingprefab="reticulelongping";v50.components.reticule.targetfn=v17;v50.components.reticule.mousetargetfn=v18;v50.components.reticule.updatepositionfn=v20;v50.components.reticule.validcolour={1,1,1,1};v50.components.reticule.invalidcolour={0.5,0,0,1};v50.components.reticule.ease=true;v50.components.reticule.mouseenabled=true;v50.components.reticule.ispassableatallpoints=true;v50.entity:SetPristine();if  not TheWorld.ismastersim then return v50;end v50.fuelmetask=nil;v50.pausedfuel=true;v50:AddComponent("weapon");v50.components.weapon:SetDamage(TUNING.CANE_DAMAGE);v50:AddComponent("inspectable");v50:AddComponent("inventoryitem");v50.components.inventoryitem.atlasname="images/inventoryimages/the_real_charles_t_horse.xml";v50:AddComponent("equippable");v50.components.equippable:SetOnEquip(v15);v50.components.equippable:SetOnUnequip(v16);v50.components.equippable.walkspeedmult=v50.multiplier;MakeHauntableLaunch(v50);v50:AddComponent("fueled");v50.components.fueled:InitializeFuelLevel(100);v50.components.fueled.accepting=false;v50.components.fueled:SetDepletedFn(v14);v50.components.fueled:SetUpdateFn(v13);v50:AddComponent("spellcaster");v50.components.spellcaster:SetSpellFn(v26);v50.components.spellcaster:SetCanCastFn(v28);v50.components.spellcaster.canuseontargets=true;v50.components.spellcaster.canuseondead=true;v50.components.spellcaster.canuseonpoint=true;v50.components.spellcaster.canuseonpoint_water=true;v50.components.spellcaster.canusefrominventory=false;v50.fuelmetask=v50:DoPeriodicTask(0.5,v11);v50._onlocomote=function(v74)if v74.components.locomotor.wantstomoveforward then if (v50.ringalingtask==nil) then v50.ringalingtask=v50:DoPeriodicTask(0.5,function(v50)v50.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell");end);end elseif (v50.ringalingtask~=nil) then v50.ringalingtask:Cancel();v50.ringalingtask=nil;end end;return v50;end return Prefab("charles_t_horse",v10,v0),Prefab("the_real_charles_t_horse",v29,v1);

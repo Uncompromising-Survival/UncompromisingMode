@@ -56,6 +56,7 @@ local prefab_post = {
 	"icehound",
 	"firehound",
 	"forest",
+	"cave",
 	"world",
 	"antlion",
 	"minifan",

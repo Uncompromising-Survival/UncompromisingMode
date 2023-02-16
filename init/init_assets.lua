@@ -213,6 +213,60 @@ local inventoryitems =
 	"um_ornament_opossum",
 	"um_ornament_rat",
 	"trinket_wathom1",
+	"wooden_queen_piece",
+	"wixie_piano_card",
+	
+	--Wixie related inventory icons
+	
+	"slingshot_gnasher",
+	"slingshot_matilda",
+	"slingshotammo_firecrackers",
+	"slingshotammo_honey",
+	"slingshotammo_rubber",
+	"slingshotammo_tremor",
+	"slingshotammo_moonrock",
+	"slingshotammo_moonglass",
+	"slingshotammo_salt",
+	"slingshotammo_limestone",
+	"slingshotammo_tar",
+	"slingshotammo_obsidian",
+	"slingshotammo_goop",
+	"slingshotammo_slime",
+	"slingshotammo_lazy",
+	"slingshotammo_shadow",
+	"bagofmarbles",
+	
+	"placeholder_ingredient_ia",
+	"placeholder_ingredient_ia_um",
+	
+	--Walters jerky hats
+	"meatrack_hat",
+	"meatrack_hat_batnose",
+	"meatrack_hat_batwing",
+	"meatrack_hat_drumstick",
+	"meatrack_hat_eel",
+	"meatrack_hat_fish",
+	"meatrack_hat_fishmeat",
+	"meatrack_hat_fishmeat_small",
+	"meatrack_hat_froglegs",
+	"meatrack_hat_humanmeat",
+	"meatrack_hat_kelp",
+	"meatrack_hat_meat",
+	"meatrack_hat_monstermeat",
+	"meatrack_hat_monstersmallmeat",
+	"meatrack_hat_default",
+	"meatrack_hat_plantmeat",
+	"meatrack_hat_smallmeat",
+	
+	--ia (and possibly hamlet) related wixie icons
+	"meatrack_hat_solofish_dead",
+	"meatrack_hat_swordfish_dead",
+	"meatrack_hat_jellyfish_dead",
+	"meatrack_hat_rainbowjellyfish_dead",
+	"meatrack_hat_fish_tropical",
+	"meatrack_hat_seaweed",
+	"meatrack_hat_venus_stalk",
+	"meatrack_hat_froglegs_poison",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1592,6 +1646,14 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/trinket_wathom1.xml"),
 	Asset("ATLAS", "images/inventoryimages/trinket_wathom1.xml"),
 
+	Asset("IMAGE", "images/inventoryimages/wooden_queen_piece.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/wooden_queen_piece.xml"),
+	Asset("ATLAS", "images/inventoryimages/wooden_queen_piece.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/wixie_piano_card.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/wixie_piano_card.xml"),
+	Asset("ATLAS", "images/inventoryimages/wixie_piano_card.xml"),
+	
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
 

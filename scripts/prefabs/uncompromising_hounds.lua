@@ -275,9 +275,11 @@ local function OnAttacked(inst, data)
 		if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
 			(data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil and data.weapon.components.complexprojectile == nil and data.weapon.components.linearprojectile == nil)) then
 		
-			data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
 			if data.attacker.sg ~= nil and data.attacker:HasTag("player") and not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
+				data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
 				data.attacker.sg:GoToState("electrocute")
+			elseif not data.attacker:HasTag("player") then
+				data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
 			end
         end
     end
@@ -613,6 +615,10 @@ local function ontimerdone(inst, data)
     end
 end
 
+local function DoLightningExplosion(inst)
+	SpawnPrefab("hound_lightning").Transform:GetWorldPosition()
+end
+
 local function fnlightning()
     local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, {amphibious = true})
 
@@ -640,6 +646,7 @@ local function fnlightning()
 	
 	inst:ListenForEvent("attacked", OnAttacked)
 	inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("death", DoLightningExplosion)
 	
 	inst.lightningshot = true
 
@@ -684,6 +691,38 @@ local function GlacialCharge(inst)
     inst.task = inst:DoPeriodicTask(0.25, function(inst) GlacialCharging(inst) end)
 end
 
+local function OnGlacialAttacked(inst, data)
+	if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
+		if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+			(data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
+		
+            if data.attacker.components.freezable ~= nil then
+                data.attacker.components.freezable:AddColdness(2)
+            end
+			
+            if data.attacker.components.temperature ~= nil then
+                local mintemp = math.max(data.attacker.components.temperature.mintemp, 0)
+                local curtemp = data.attacker.components.temperature:GetCurrent()
+                if mintemp < curtemp then
+                    data.attacker.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
+                end
+            end
+			
+			if data.attacker.components.freezable ~= nil then
+				data.attacker.components.freezable:SpawnShatterFX()
+			end
+        end
+    end
+	
+    inst.components.combat:SetTarget(data.attacker)
+    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
+        function(dude)
+            return not (dude.components.health ~= nil and dude.components.health:IsDead())
+                and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
+                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+        end, 5)
+end
+
 local function fnglacial()
     local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, {amphibious = true})
 
@@ -703,7 +742,9 @@ local function fnglacial()
 
 	inst.task = nil
 	
+	inst:ListenForEvent("attacked", OnGlacialAttacked)
     inst:ListenForEvent("death", DoGlacialExplosion)
+	
     inst.LaunchProjectile = GlacialProjectile
     inst.CancelCharge = CancelGlacialCharge
     inst.Charge = GlacialCharge
@@ -874,7 +915,7 @@ local function OnMagmaAttacked(inst, data)
 		if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
 			(data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
 		
-			data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
+			data.attacker.components.health:DoFireDamage(5, inst.prefab, true)
 			if data.attacker:HasTag("player") and not data.attacker.components.burnable ~= nil then
 				data.attacker.components.burnable:Ignite()
 			end
