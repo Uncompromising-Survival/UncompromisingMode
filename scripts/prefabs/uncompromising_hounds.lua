@@ -993,6 +993,9 @@ local function fnspore()
 
     inst.components.lootdropper:SetChanceLootTable('hound_spore')
 	
+    MakeMediumFreezableCharacter(inst, "hound_body")
+    MakeMediumBurnableCharacter(inst, "hound_body")
+	
 	inst:ListenForEvent("onattackother", OnAttackOther_Spore)
 
     return inst

@@ -205,7 +205,7 @@ local function AmpTimer(inst)
 end
 
 local function OnAttackOther(inst, data)
-	if data and data.target and inst.components.adrenaline:GetPercent() > 0.24 and
+	if data and data.target and not data.projectile and inst.components.adrenaline:GetPercent() > 0.24 and
 		((data.target.components.combat and data.target.components.combat.defaultdamage > 0) or
 			(
 			data.target.prefab == "dummytarget" or data.target.prefab == "antlion" or data.target.prefab == "stalker_atrium" or

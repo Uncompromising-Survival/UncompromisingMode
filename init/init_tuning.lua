@@ -427,6 +427,8 @@ TUNING.DSTU =
 
     DISABLE_MEGAFLARE = GetModConfigData("disable_megaflare"),
 
+    WIXIE = GetModConfigData("wixie_walter"),
+
 --boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),

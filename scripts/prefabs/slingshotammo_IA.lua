@@ -568,6 +568,10 @@ local function fncommon(symbol, inv)
 	inst:AddTag("slingshotammo")
 	inst:AddTag("reloaditem_ammo")
 
+    if not TUNING.DSTU.WIXIE then
+        inst:DoTaskInTime(0, inst.Remove)
+    end
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

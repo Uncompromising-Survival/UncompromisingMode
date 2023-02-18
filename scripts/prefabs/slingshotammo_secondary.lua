@@ -1,3 +1,8 @@
+--wonder if this will work
+if not TUNING.DSTU.WIXIE then
+	return
+end
+
 local assets =
 {
     Asset("ANIM", "anim/slingshotammo.zip"),
