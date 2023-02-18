@@ -1,6 +1,6 @@
 PrefabFiles = {
 	"winky_none",
-	"wathom_none"
+	"wathom_none",
 	"wixie_none"
 }
 
