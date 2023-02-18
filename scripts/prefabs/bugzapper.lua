@@ -284,7 +284,7 @@ local function fn()
 
 	inst.OnLoad = function(inst, data)
 		if data ~= nil and data.actual_fuel ~= nil then
-			inst.components.fueled:SetPercent(data.actual_fuel)
+			inst:DoTaskInTime(0, function() inst.components.fueled:SetPercent(data.actual_fuel) end)
 		end
 	end
 

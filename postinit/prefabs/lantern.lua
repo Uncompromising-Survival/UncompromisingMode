@@ -4,8 +4,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 
 env.AddPrefabPostInit("lantern", function(inst)
-    inst:AddTag("overchargeable")
-
     if not TheWorld.ismastersim then
         return
     end
@@ -47,6 +45,7 @@ env.AddPrefabPostInit("lantern", function(inst)
 
     local function OnUpgrade(inst)
         if inst ~= nil then
+            inst:AddTag("overchargeable")
             inst.upgraded = true
             inst:SetPrefabNameOverride("LANTERN_ELECTRICAL")
             inst.components.upgradeable.upgradetype = nil
@@ -81,7 +80,7 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst.upgraded = true
             OnUpgrade(inst)
             if data.saved_fuel_value ~= nil and inst.components.fueled ~= nil then
-                inst.components.fueled:SetPercent(data.saved_fuel_value)
+                inst:DoTaskInTime(0, function() inst.components.fueled:SetPercent(data.saved_fuel_value) end)
             end
         end
         if _OnLoad ~= nil then
