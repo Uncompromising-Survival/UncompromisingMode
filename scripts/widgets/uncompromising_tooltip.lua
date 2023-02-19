@@ -56,10 +56,10 @@ function Uncompromising_Tooltip:RefreshTooltips()
 	local um_tip = self.item_tip ~= nil and STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)] ~= nil and
 		STRINGS.UNCOMP_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
 
-	local walter_tip = self.item_tip ~= nil and STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] ~= nil and
+	local walter_tip = self.item_tip ~= nil and ThePlayer:HasTag("pinetreepioneer") and STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] ~= nil and
 		STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
 
-	local winona_tip = self.item_tip ~= nil and STRINGS.ENGINEERING_TOOLTIP[string.upper(self.item_tip)] ~= nil and
+	local winona_tip = self.item_tip ~= nil and ThePlayer:HasTag("handyperson") and STRINGS.ENGINEERING_TOOLTIP[string.upper(self.item_tip)] ~= nil and
 		STRINGS.ENGINEERING_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
 
 	local tooltip = um_tip .. walter_tip .. winona_tip
