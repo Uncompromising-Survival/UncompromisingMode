@@ -28,7 +28,7 @@ function CheckWardrobeItem(container, item, slot)
 end
 
 function CheckToolboxItem(container, item, slot)
-    return item:HasTag("toolbox_item")
+    return item:HasTag("toolbox_item") or item:HasTag("gem") or item.prefab == "nitre"
 end
 
 function CheckEquipItem(container, item, slot)
@@ -454,20 +454,28 @@ containers.params.winona_toolbox =
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
         },
-        animbank = "ui_tacklecontainer_3x2",
-        animbuild = "ui_tacklecontainer_3x2",
-        pos = Vector3(0, 200, 0),
+        animbank = "ui_tacklecontainer_3x5",
+        animbuild = "ui_tacklecontainer_3x5",
+        pos = Vector3(0, 280, 0),
         side_align_tip = 160,
     },
     type = "chest",
     itemtestfn = CheckToolboxItem,
 }
 
-for y = 1, 0, -1 do
+for y = 1, -3, -1 do
     for x = 0, 2 do
-        table.insert(containers.params.winona_toolbox.widget.slotpos,
-            Vector3(80 * x - 80 * 2 + 80, 80 * y - 80 * 2 + 120, 0))
+        table.insert(containers.params.winona_toolbox.widget.slotpos, Vector3(80 * x - 80 * 2 + 80, 80 * y - 45, 0))
     end
 end
 
