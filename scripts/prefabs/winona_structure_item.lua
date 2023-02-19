@@ -78,6 +78,7 @@ local function ondeploy_high(inst, pt, deployer)
 
         gen:RemoveTag("NOCLICK")--manually do it since the animation gets a buit interrupted.
         gen.components.trader:Enable()
+        gen.components.fueled:SetPercent(inst.components.finiteuses:GetPercent())
     end)
 
     inst:Remove()
@@ -145,7 +146,7 @@ local function fn_low()
 end
 
 local function fn_high()
-    local inst = fn(ondeploy_high, false)
+    local inst = fn(ondeploy_high)
 
     inst.OnSave = function(inst, data)
         if inst.generator ~= nil then

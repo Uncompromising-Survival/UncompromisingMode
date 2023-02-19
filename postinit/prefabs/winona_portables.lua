@@ -51,6 +51,8 @@ local function OnDismantle_high(inst)
         item.generator = inst:GetSaveRecord()
     end
 
+    item.components.finiteuses:SetPercent(inst.components.fueled:GetPercent())
+
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("wood")
 
