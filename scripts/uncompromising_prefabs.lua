@@ -406,4 +406,5 @@ return {
 	"wixiegun",
 	"placeholder_recipe_item",
 	"winona_structure_item",
+	"boiling_water",
 }

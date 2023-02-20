@@ -147,12 +147,8 @@ local function OnHit(inst, attacker, target)
     if inst:IsOnOcean() then
         SpawnPrefab("crab_king_waterspout").Transform:SetPosition(inst.Transform:GetWorldPosition())
         if inst:HasTag("sludge_cannonball") then --BOIL SOME WATER
-            DoBubbleFX(inst)
-            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
-            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
-            inst:DoTaskInTime(FRAMES*math.random(10), DoBubbleFX, nil, inst)
-            inst:RemoveFromScene()
-            inst:DoTaskInTime(FRAMES*11, inst.Remove)
+            SpawnPrefab("boiling_water_spawner").Transform:SetPosition(x,y,z)
+            inst:Remove()
         end
         -- Landed on ground
     else
