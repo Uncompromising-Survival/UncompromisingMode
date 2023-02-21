@@ -15,7 +15,7 @@ Prominent features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Beta ??? v2.0.1.12"
+version = "Beta ??? v2.0.1.13"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
