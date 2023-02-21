@@ -44,10 +44,12 @@ local function DealDamage(inst, attacker, target, salty)
 		
 		target.components.combat.temp_disable_aggro = no_aggro(attacker, target)
 		
-		if target.sg == nil or target.wixieammo_hitstuncd == nil and not 
-			target.sg:HasStateTag("busy") or 
+		if target:HasTag("shadowcreature") or 
+			target.sg == nil or 
+			target.wixieammo_hitstuncd == nil and not 
+			(target.sg:HasStateTag("busy") or 
 			target.sg:HasStateTag("caninterrupt") or 
-			target.sg:HasStateTag("frozen") then
+			target.sg:HasStateTag("frozen")) then
 			
 			target.wixieammo_hitstuncd = target:DoTaskInTime(8, function()
 				if target.wixieammo_hitstuncd ~= nil then
@@ -64,7 +66,9 @@ local function DealDamage(inst, attacker, target, salty)
 			target.components.health:DoDelta(-inst.finaldamage, false, inst, false, attacker, false)
 		end
 		
-		target.components.combat.temp_disable_aggro = false
+		if target.components.combat ~= nil then
+			target.components.combat.temp_disable_aggro = false
+		end
 		
 		attacker.components.combat:SetTarget(target)
     end

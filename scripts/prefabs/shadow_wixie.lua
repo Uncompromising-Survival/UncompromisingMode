@@ -14,24 +14,13 @@ local prefabs =
 {
 
 }
-
-local sounds =
-{
-	attack = "dontstarve/sanity/creature2/attack",
-	attack_grunt = "dontstarve/sanity/creature2/attack_grunt",
-	death = "dontstarve/sanity/creature2/die",
-	idle = "dontstarve/sanity/creature2/idle",
-	taunt = "dontstarve/sanity/creature2/taunt",
-	appear = "dontstarve/sanity/creature2/appear",
-	disappear = "dontstarve/sanity/creature2/dissappear",
-}
 	
 local function retargetfn(inst)
     --retarget nearby players if current target is fleeing or not a player
 	local target = inst.components.combat.target
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local players = FindPlayersInRange(x, y, z, TUNING.SHADOWCREATURE_TARGET_DIST, true)
+    local players = FindPlayersInRange(x, y, z, 30, true)
     local rangesq = math.huge
     for i, v in ipairs(players) do
         local distsq = v:GetDistanceSqToPoint(x, y, z)
@@ -82,7 +71,7 @@ local function fn()
     MakeCharacterPhysics(inst, 10, .25)
     RemovePhysicsColliders(inst)
     inst.Physics:SetCollisionGroup(COLLISION.SANITY)
-    inst.Physics:CollidesWith(COLLISION.WORLD)
+	inst.Physics:CollidesWith(COLLISION.SANITY)
 
     inst.AnimState:SetBank("wilson")
     inst.AnimState:SetBuild("wixie") -- "waxwell_shadow_mod" Deprecated.
@@ -102,7 +91,7 @@ local function fn()
     inst.AnimState:Hide("hat")
     inst.AnimState:Hide("hat_hair")
 
-    inst:AddTag("monster")
+    inst:AddTag("epic")
     inst:AddTag("hostile")
     inst:AddTag("notraptrigger")
     inst:AddTag("shadowchesspiece")
@@ -118,6 +107,7 @@ local function fn()
 	inst.decoy_attack_count = 0
 	inst.stunned_count = 0
 	inst.marble_bag_attack = false
+	inst.helper = false
 
 	inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
 	inst.AnimState:Show("ARM_carry") 
@@ -157,16 +147,15 @@ local function fn()
 	local brain = require"brains/shadow_wixie"
 	inst:SetBrain(brain)
 
-	inst.sounds = sounds
 	inst:SetStateGraph("SGshadow_wixie")
 
 	inst:DoTaskInTime(0, function()
 		if not inst:HasTag("puzzlespawn") then
 			if inst.physbox ~= nil then
-				inst.physbox:Remove()
+				--inst.physbox:Remove()
 			end
 			
-			inst:Remove()
+			--inst:Remove()
 		end
 	end)
 	
@@ -195,11 +184,127 @@ local function fn()
 	return inst
 end
 
+local function helperfn()
+	local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+	inst.Transform:SetFourFaced(inst)
+
+    MakeCharacterPhysics(inst, 10, .25)
+    RemovePhysicsColliders(inst)
+    inst.Physics:SetCollisionGroup(COLLISION.SANITY)
+	inst.Physics:CollidesWith(COLLISION.SANITY)
+
+    inst.AnimState:SetBank("wilson")
+    inst.AnimState:SetBuild("wixie") -- "waxwell_shadow_mod" Deprecated.
+	inst.AnimState:HideSymbol("face")
+    inst.AnimState:OverrideSymbol("fx_wipe", "wilson_fx", "fx_wipe")
+	
+	
+    inst.AnimState:AddOverrideBuild("waxwell_minion_spawn")
+    inst.AnimState:AddOverrideBuild("waxwell_minion_appear")
+    inst.AnimState:AddOverrideBuild("lavaarena_shadow_lunge")
+    inst.AnimState:SetMultColour(0, 0, 0, .6)
+	inst.AnimState:UsePointFiltering(true)
+
+	inst.AnimState:PlayAnimation("idle")
+
+    inst.AnimState:Hide("ARM_carry")
+    inst.AnimState:Hide("hat")
+    inst.AnimState:Hide("hat_hair")
+
+    inst:AddTag("hostile")
+    inst:AddTag("notraptrigger")
+    inst:AddTag("shadowchesspiece")
+	inst:AddTag("shadowcreature")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+	
+	inst.stunned_count = 0
+	inst.helper = true
+
+	inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
+	inst.AnimState:Show("ARM_carry") 
+	inst.AnimState:Hide("ARM_normal")
+	
+	inst:AddComponent("locomotor")
+	inst.components.locomotor.walkspeed = 8
+	inst.components.locomotor.runspeed = 20
+	inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
+    inst.components.locomotor:SetSlowMultiplier(.6)
+
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(1)
+    inst.components.health:SetMaxDamageTakenPerHit(1)
+    inst.components.health.destroytime = 3
+    inst.components.health.fire_damage_scale = TUNING.WILLOW_FIRE_DAMAGE
+	
+    inst:AddComponent("colourtweener")
+
+    inst:AddComponent("combat")
+    inst.components.combat.hiteffectsymbol = "torso"
+    inst.components.combat:SetAttackPeriod(2)
+    inst.components.combat:SetRange(5, 1)
+    inst.components.combat:SetDefaultDamage(10)
+    inst.components.combat:SetRetargetFunction(4, retargetfn)
+	
+    inst:AddComponent("lootdropper")
+	
+    inst:AddComponent("sanityaura")
+    inst.components.sanityaura.penalty = TUNING.OLD_SHADOWWAXWELL_SANITY_PENALTY
+
+	local brain = require"brains/shadow_wixie"
+	inst:SetBrain(brain)
+
+	inst:SetStateGraph("SGshadow_wixie")
+
+	inst:DoTaskInTime(0, function()
+		if not inst:HasTag("puzzlespawn") then
+			if inst.physbox ~= nil then
+				inst.physbox:Remove()
+			end
+			
+			inst:Remove()
+		end
+	end)
+	
+	inst:WatchWorldState("cycles", function() 
+		if not inst.components.health:IsDead() then
+			
+			local x, y, z = inst.Transform:GetWorldPosition()
+			
+			SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+			SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+			if inst.physbox ~= nil then
+				inst.physbox:Remove()
+			end
+			
+			inst:Remove()
+		end
+	end)
+	
+	inst.persists = false
+
+	return inst
+end
+
 local function OnHitLazy(inst, attacker, target)
 	
 	local pt = inst:GetPosition()
-	if inst.caster ~= nil and inst.thisistheone and TheWorld.Map:IsPassableAtPoint(pt.x, 0, pt.z) then
-		inst.caster.Physics:Teleport(pt:Get())
+	if inst.caster ~= nil and inst.thisistheone then
+		if TheWorld.Map:IsPassableAtPoint(pt.x, 0, pt.z) then
+			inst.caster.Physics:Teleport(pt:Get())
+		end
 		
 		inst.caster.sg:GoToState("trickster")
 	else
@@ -519,7 +624,7 @@ local function shadowshot_fn()
 	
     inst.Physics:SetCollisionCallback(nil)
 	
-	inst:DoPeriodicTask(FRAMES, CollisionCheck)
+	inst:DoPeriodicTask(FRAMES, CollisionCheck, 0)
 
     inst:AddComponent("locomotor")
 	
@@ -567,6 +672,7 @@ local function shieldfn()
 end
 
 return Prefab("shadow_wixie", fn, assets, prefabs),
+		Prefab("shadow_wixie_helper", helperfn, assets, prefabs),
 		Prefab("shadow_wixie_cloneball", ballfn, assets, prefabs),
 		Prefab("wixie_shadow_clone", shadowclone_fn, assets, prefabs),
 		Prefab("wixie_shadow_ring", ringfn, assets, prefabs),

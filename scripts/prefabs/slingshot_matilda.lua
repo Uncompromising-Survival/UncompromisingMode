@@ -227,7 +227,6 @@ local function Proxy_Shoot(inst, owner, fixedpowerlevel)
 									
 					spittarget.Transform:SetPosition(wx, 0.5, wz)
 									
-					SpawnPrefab("shadow_despawn").Transform:SetPosition(wx, 0.5, wz)
 					LaunchSpit(inst, caster, spittarget, fixedpowerlevel)
 					spittarget:DoTaskInTime(0, spittarget.Remove)
 				end
