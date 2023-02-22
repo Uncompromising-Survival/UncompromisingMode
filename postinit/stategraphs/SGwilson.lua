@@ -122,7 +122,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 
 	local SLEEPREPEL_MUST_TAGS = { "_combat" }
-	local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "wixieshoved" }
+	local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible", "hiding", "NOTARGET", "flight" }
 
     local function Check_Bowling(inst)
 		if inst ~= nil then
@@ -215,7 +215,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                 return "castspelllighter"
             elseif action.invobject:HasTag("charles_t_horse") then
 				if action.invobject.components.fueled:GetPercent() >= 0.2 then
-					return "charles_charge"
+					if inst.components.rider and inst.components.rider:IsRiding() then
+						inst.components.rider:Dismount()
+					else
+						return "charles_charge"
+					end
 				else
 					return
 				end
@@ -1534,7 +1538,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 			timeline =
 			{
 				TimeEvent(0 * FRAMES, function(inst)
-					inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/attack")
+					inst.SoundEmitter:PlaySound("dontstarve/creatures/knight/attack")
 					
 					inst.Physics:SetMotorVelOverride(20,0,0)
 					
@@ -1556,10 +1560,9 @@ env.AddStategraphPostInit("wilson", function(inst)
 					Check_Bowling(inst)
 				end),
 				
-				TimeEvent(20 * FRAMES, function(inst)
+				TimeEvent(16 * FRAMES, function(inst)
 					inst.Physics:ClearMotorVelOverride()
 					inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-					inst.Physics:ClearMotorVelOverride()
 				end),
 			},
 

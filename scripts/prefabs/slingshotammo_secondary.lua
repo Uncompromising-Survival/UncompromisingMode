@@ -41,10 +41,12 @@ local function OnAttack(inst, attacker, target)
 		
 			target.components.combat.temp_disable_aggro = no_aggro(attacker, target)
 			
-			if target.sg == nil or target.wixieammo_hitstuncd == nil and not 
-				target.sg:HasStateTag("busy") or 
+			if target:HasTag("shadowcreature") or 
+				target.sg == nil or 
+				target.wixieammo_hitstuncd == nil and not 
+				(target.sg:HasStateTag("busy") or 
 				target.sg:HasStateTag("caninterrupt") or 
-				target.sg:HasStateTag("frozen") then
+				target.sg:HasStateTag("frozen")) then
 				target.wixieammo_hitstuncd = target:DoTaskInTime(8, function()
 					if target.wixieammo_hitstuncd ~= nil then
 						target.wixieammo_hitstuncd:Cancel()
@@ -60,7 +62,9 @@ local function OnAttack(inst, attacker, target)
 				target.components.health:DoDelta(-inst.finaldamage, false, inst, false, attacker, false)
 			end
 			
-			target.components.combat.temp_disable_aggro = false
+			if target.components.combat ~= nil then
+				target.components.combat.temp_disable_aggro = false
+			end
 		end
 		
 		ImpactFx(inst, attacker, target)
@@ -404,7 +408,7 @@ local function OnHit_Gold(inst, attacker, target)
 		goldshatter.AnimState:PlayAnimation("level"..inst.powerlevel)
 			
 		local ents = TheSim:FindEntities(x, y, z, 1.5 + inst.powerlevel, { "_combat" }, AURA_EXCLUDE_TAGS)
-		local damage = (inst.ammo_def.damage * (1 + inst.powerlevel)) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
+		local damage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
 			
 		for i, v in ipairs(ents) do
 			if v ~= target and v:IsValid() and not v:IsInLimbo() and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
