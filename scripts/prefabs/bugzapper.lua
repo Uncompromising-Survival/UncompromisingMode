@@ -157,7 +157,11 @@ local function onattack(inst, attacker, target)
 			for i, v in ipairs(ents) do
 				if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
 					if (v.components.health ~= nil and not v.components.health:IsDead()) and not v.sg:HasStateTag("noattack") then
-						v.components.health:DoDelta( -10, false, attacker, false, attacker)
+						if not inst.overcharged then
+							v.components.health:DoDelta( -10, false, attacker, false, attacker)
+						else
+							v.components.combat:GetAttacked(attacker, 10, nil) --overcharge gets hitstun
+						end
 						SpawnPrefab("electrichitsparks"):AlignToTarget(v, attacker, true)
 					end
 				end
