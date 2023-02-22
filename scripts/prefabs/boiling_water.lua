@@ -21,7 +21,7 @@ local function fn()
 
     inst:DoTaskInTime(0, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 4, {"_health"}, { "dead", "INLIMBO" }, { "_combat", "boat"})
+        local ents = TheSim:FindEntities(x, y, z, 6, {"_health"}, { "dead", "INLIMBO" }, { "_combat", "boat"})
         local oceanfish = TheSim:FindEntities(x, y, z, 4, { "oceanfishable" }, { "INLIMBO" })
 
         for k, v in ipairs(ents) do
