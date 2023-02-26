@@ -143,6 +143,11 @@ local function fn()
 	
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("healthdelta", OnDamaged)
+    inst:ListenForEvent("removed", function()
+		if inst.physbox ~= nil then
+			inst.physbox:Remove()
+		end 
+	end)
 
 	local brain = require"brains/shadow_wixie"
 	inst:SetBrain(brain)
@@ -152,10 +157,10 @@ local function fn()
 	inst:DoTaskInTime(0, function()
 		if not inst:HasTag("puzzlespawn") then
 			if inst.physbox ~= nil then
-				--inst.physbox:Remove()
+				inst.physbox:Remove()
 			end
 			
-			--inst:Remove()
+			inst:Remove()
 		end
 	end)
 	

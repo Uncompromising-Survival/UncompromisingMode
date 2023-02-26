@@ -39,14 +39,16 @@ local function OnAttack(inst, attacker, target)
 		if inst.ammo_def ~= nil and inst.ammo_def.damage ~= nil then
 			inst.finaldamage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
 		
-			target.components.combat.temp_disable_aggro = no_aggro(attacker, target)
+			if no_aggro(attacker, target) then
+				target.components.combat:SetShouldAvoidAggro(attacker)
+			end
 			
 			if target:HasTag("shadowcreature") or 
 				target.sg == nil or 
 				target.wixieammo_hitstuncd == nil and not 
 				(target.sg:HasStateTag("busy") or 
-				target.sg:HasStateTag("caninterrupt") or 
-				target.sg:HasStateTag("frozen")) then
+				target.sg:HasStateTag("caninterrupt")) or
+				target.sg:HasStateTag("frozen")	then
 				target.wixieammo_hitstuncd = target:DoTaskInTime(8, function()
 					if target.wixieammo_hitstuncd ~= nil then
 						target.wixieammo_hitstuncd:Cancel()
@@ -58,17 +60,14 @@ local function OnAttack(inst, attacker, target)
 				target.components.combat:GetAttacked(attacker, inst.finaldamage, inst)
 			else
 				target.components.combat:GetAttacked(attacker, 0, inst)
-				target.components.combat:SuggestTarget(attacker)
+				target.components.combat:SetTarget(attacker)
 				target.components.health:DoDelta(-inst.finaldamage, false, inst, false, attacker, false)
-			end
-			
-			if target.components.combat ~= nil then
-				target.components.combat.temp_disable_aggro = false
 			end
 		end
 		
 		ImpactFx(inst, attacker, target)
 		
+		target.components.combat:RemoveShouldAvoidAggro(attacker)
 		attacker.components.combat:SetTarget(target)
 	end
 end
@@ -221,7 +220,7 @@ local function OnHit_Ice(inst, attacker, target)
     end
 
     if not no_aggro(attacker, target) and target.components.combat ~= nil then
-        target.components.combat:SuggestTarget(attacker)
+		target.components.combat:SetTarget(attacker)
     end
 
     inst:Remove()
@@ -414,7 +413,13 @@ local function OnHit_Gold(inst, attacker, target)
 			if v ~= target and v:IsValid() and not v:IsInLimbo() and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
 				if not (v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")) then
 					if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) then
+						if no_aggro(attacker, v) then
+							v.components.combat:SetShouldAvoidAggro(attacker)
+						end
+						
 						v.components.combat:GetAttacked(attacker, damage, inst)
+						
+						v.components.combat:RemoveShouldAvoidAggro(attacker)
 					end
 				end
 			end

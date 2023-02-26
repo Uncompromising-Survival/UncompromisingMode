@@ -88,6 +88,8 @@ local function OnActivate_Clock(inst, doer)
 				inst.final_code_ready = false
 				
 				inst.components.timer:StartTimer("reset_use", 9600)
+				
+				TheNet:SystemMessage("The time has come...")
 			else
 				TheNet:SystemMessage("All must be gathered before you can proceed...")
 			end

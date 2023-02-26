@@ -4,7 +4,7 @@ local assets =
 }
 
 
-local AURA_EXCLUDE_TAGS = { "noauradamage", "INLIMBO", "notarget", "noattack" }
+local AURA_EXCLUDE_TAGS = { "noauradamage", "INLIMBO", "notarget", "noattack", "playerghost", "shadowdominance"}
 
 local NOTAGS = { "playerghost", "INLIMBO" }
 
@@ -52,7 +52,7 @@ end
 
 local function DoAreaFear(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "player" }, { "playerghost", "shadowdominance" })
+    local ents = TheSim:FindEntities(x, y, z, 10, { "player" }, AURA_EXCLUDE_TAGS)
 	
 	if not inst.AnimState:IsCurrentAnimation("spawn") then
 		if ents ~= nil and #ents >= 1 then
@@ -94,7 +94,7 @@ local function retargetfn(inst)
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
     for i, v in ipairs(AllPlayers) do
-        if v.components.sanity:IsInsane() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
                 if inst.components.shadowsubmissive:TargetHasDominance(v) then
@@ -189,18 +189,14 @@ local function fn()
     inst.SoundEmitter:PlaySound("dontstarve/sanity/shadowhand_creep", "creeping")
 	inst:DoTaskInTime(1.5, CancelCreepingSound)
 	
-	inst:AddComponent("aura")
-    inst.components.aura.radius = 10
-    inst.components.aura.tickperiod = TUNING.TOADSTOOL_SPORECLOUD_TICK * 2
-    inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
-    inst.components.aura:Enable(true)
-    inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaFear, inst.components.aura.tickperiod)
-
+	inst:DoPeriodicTask(TUNING.TOADSTOOL_SPORECLOUD_TICK * 2, DoAreaFear, TUNING.TOADSTOOL_SPORECLOUD_TICK * 2)
+	
     inst:AddComponent("health")
     inst.components.health.nofadeout = true
     inst.components.health:SetMaxHealth(TUNING.DSTU.MINI_DREADEYE_HEALTH)
 	
 	inst:AddComponent("combat")
+    inst.components.combat.canattack = false
     inst.components.combat:SetRetargetFunction(3, retargetfn)
 	inst:ListenForEvent("death", PokeMyDreadEye)
 

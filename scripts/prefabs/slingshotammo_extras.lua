@@ -15,6 +15,7 @@ local prefabs_firecrackers =
 }
 
 local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "abigail", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
+local GOOP_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
 
 if not TheNet:GetPVPEnabled() then 
 	table.insert(AURA_EXCLUDE_TAGS, "player")
@@ -30,7 +31,6 @@ end
 
 local function DealDamage(inst, attacker, target, salty)
     if target ~= nil and target:IsValid() and target.components.combat ~= nil then
-	
 		inst.finaldamage = (inst.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
 		
 		if salty ~= nil and salty and target.components.health ~= nil then
@@ -43,14 +43,16 @@ local function DealDamage(inst, attacker, target, salty)
 			end
 		end
 		
-		target.components.combat.temp_disable_aggro = no_aggro(attacker, target)
+		if no_aggro(attacker, target) then
+			target.components.combat:SetShouldAvoidAggro(attacker)
+		end
 		
 		if target:HasTag("shadowcreature") or 
 			target.sg == nil or 
 			target.wixieammo_hitstuncd == nil and not 
 			(target.sg:HasStateTag("busy") or 
-			target.sg:HasStateTag("caninterrupt") or 
-			target.sg:HasStateTag("frozen")) then
+			target.sg:HasStateTag("caninterrupt")) or
+			target.sg:HasStateTag("frozen")	then
 			target.wixieammo_hitstuncd = target:DoTaskInTime(8, function()
 				if target.wixieammo_hitstuncd ~= nil then
 					target.wixieammo_hitstuncd:Cancel()
@@ -62,14 +64,11 @@ local function DealDamage(inst, attacker, target, salty)
 			target.components.combat:GetAttacked(attacker, inst.finaldamage, inst)
 		else
 			target.components.combat:GetAttacked(attacker, 0, inst)
-			target.components.combat:SuggestTarget(attacker)
+			target.components.combat:SetTarget(attacker)
 			target.components.health:DoDelta(-inst.finaldamage, false, inst, false, attacker, false)
 		end
 		
-		if target.components.combat ~= nil then
-			target.components.combat.temp_disable_aggro = false
-		end
-		
+		target.components.combat:RemoveShouldAvoidAggro(attacker)
 		attacker.components.combat:SetTarget(target)
     end
 end
@@ -175,9 +174,14 @@ local function DoPop(inst, remaining, total, level, hissvol)
 							v.SoundEmitter:PlaySound(v.components.combat:GetImpactSound(v))
 						end
 					else
-						--v:PushEvent("attacked", { attacker = inst.attacker or nil, damage = 5} )
+						if no_aggro(attacker, v) then
+							v.components.combat:SetShouldAvoidAggro(attacker)
+						end
+					
 						v.components.combat:GetAttacked(inst, 10, inst)
 						v.components.combat:SetTarget(inst.attacker or nil)
+						
+						v.components.combat:RemoveShouldAvoidAggro(attacker)
 					end
 				end
 			end
@@ -749,7 +753,13 @@ local function OnHit_Slime(inst, attacker, target)
 			if target.components.burnable ~= nil and target.components.burnable:IsBurning() or target.components.propagator and target.components.propagator.spreading then
 				if target ~= nil then
 					if target.components.combat ~= nil then
+						if no_aggro(attacker, target) then
+							target.components.combat:SetShouldAvoidAggro(attacker)
+						end
+					
 						target.components.combat:GetAttacked(attacker, 50, attacker)
+						
+						target.components.combat:RemoveShouldAvoidAggro(attacker)
 					end
 					
 					local debuffkey = hitfx.prefab
@@ -765,7 +775,13 @@ local function OnHit_Slime(inst, attacker, target)
 				hitfx:ListenForEvent("onignite", function(inst)
 						if target ~= nil then
 							if target.components.combat ~= nil then
+								if no_aggro(attacker, target) then
+									target.components.combat:SetShouldAvoidAggro(attacker)
+								end
+						
 								target.components.combat:GetAttacked(attacker, hitfx.damage, attacker)
+						
+								target.components.combat:RemoveShouldAvoidAggro(attacker)
 							end
 							
 							local debuffkey = hitfx.prefab
@@ -822,11 +838,16 @@ local function CollisionCheck(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local attacker = inst.components.projectile.owner or nil
 		
-		for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, { "_combat" }, AURA_EXCLUDE_TAGS)) do
+		for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, { "_combat" }, inst.healinggoop and GOOP_EXCLUDE_TAGS or AURA_EXCLUDE_TAGS)) do
+			print(v.prefab.."for loop")
 			if inst.healinggoop or v:GetPhysicsRadius(0) > 1.5 and v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
+				print(v.prefab.."phys check")
 				if inst.oldtarget == nil or inst.oldtarget ~= nil and not v == inst.oldtarget then
+					print(v.prefab.."old target")
 					if inst.healinggoop or not (v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")) then
-						if not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost") or (v:HasTag("player") and not TheNet:GetPVPEnabled())) then
+						print(v.prefab.."follower check")
+						if inst.healinggoop and v ~= attacker or not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost") or (v:HasTag("player") and not TheNet:GetPVPEnabled())) then
+							print(v.prefab.."not me check")
 							inst.OnHit(inst, attacker, v)
 							inst:Remove()
 							return
@@ -1035,6 +1056,10 @@ local function GlassCut(inst)
 				
 					inst.finallevel = inst.powerlevel
 					
+					if no_aggro(attacker, v) then
+						v.components.combat:SetShouldAvoidAggro(attacker)
+					end
+					
 					if v:HasTag("shadow") or v:HasTag("shadowcreature") then
 						inst.finallevel = inst.powerlevel + .5
 					end
@@ -1048,8 +1073,8 @@ local function GlassCut(inst)
 					v.sg == nil or 
 					v.wixieammo_hitstuncd == nil and not
 					(v.sg:HasStateTag("busy") or 
-					v.sg:HasStateTag("caninterrupt") or 
-					v.sg:HasStateTag("frozen")) then
+					v.sg:HasStateTag("caninterrupt")) or
+					v.sg:HasStateTag("frozen") then
 						v.wixieammo_hitstuncd = v:DoTaskInTime(8, function()
 							if v.wixieammo_hitstuncd ~= nil then
 								v.wixieammo_hitstuncd:Cancel()
@@ -1061,9 +1086,11 @@ local function GlassCut(inst)
 						v.components.combat:GetAttacked(attacker, (7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1), inst)
 					else
 						v.components.combat:GetAttacked(attacker, 0, inst)
-						v.components.combat:SuggestTarget(attacker)
+						v.components.combat:SetTarget(attacker)
 						v.components.health:DoDelta(-((7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, inst, false, attacker, false)
 					end
+					
+					v.components.combat:RemoveShouldAvoidAggro(attacker)
 				end
 			end
 		end
@@ -1075,6 +1102,10 @@ local function GlassCut(inst)
 				if not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost") or (v:HasTag("player") and not TheNet:GetPVPEnabled())) then
 				
 					inst.finallevel = inst.powerlevel
+					
+					if no_aggro(attacker, v) then
+						v.components.combat:SetShouldAvoidAggro(attacker)
+					end
 					
 					if v:HasTag("shadow") or v:HasTag("shadowcreature") then
 						inst.finallevel = inst.powerlevel + .5
@@ -1089,8 +1120,8 @@ local function GlassCut(inst)
 					v.sg == nil or 
 					v.wixieammo_hitstuncd == nil and not 
 					(v.sg:HasStateTag("busy") or 
-					v.sg:HasStateTag("caninterrupt") or 
-					v.sg:HasStateTag("frozen")) then
+					v.sg:HasStateTag("caninterrupt")) or
+					v.sg:HasStateTag("frozen") then
 						v.wixieammo_hitstuncd = v:DoTaskInTime(8, function()
 							if v.wixieammo_hitstuncd ~= nil then
 								v.wixieammo_hitstuncd:Cancel()
@@ -1102,9 +1133,11 @@ local function GlassCut(inst)
 						v.components.combat:GetAttacked(attacker, (7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1), inst)
 					else
 						v.components.combat:GetAttacked(attacker, 0, inst)
-						v.components.combat:SuggestTarget(attacker)
+						v.components.combat:SetTarget(attacker)
 						v.components.health:DoDelta(-((7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, inst, false, attacker, false)
 					end
+					
+					v.components.combat:RemoveShouldAvoidAggro(attacker)
 				end
 			end
 		end
@@ -1579,7 +1612,13 @@ local function Rebound(inst, attacker, target)
 		
 		
 		if not target:HasTag("wall") and not target:HasTag("structure") then
+			if no_aggro(attacker, target) then
+				target.components.combat:SetShouldAvoidAggro(attacker)
+			end
+		
 			target.components.combat:GetAttacked(inst, 10, inst)
+
+			target.components.combat:RemoveShouldAvoidAggro(attacker)
 		end
 		
 		if inst.bouncecount <= inst.maxbounces then
@@ -1921,7 +1960,13 @@ local function Tremor(inst)
 						inst.finaldamage = inst.finaldamage * (inst.attacker.components.combat ~= nil and inst.attacker.components.combat.externaldamagemultipliers:Get() or 1)
 					end
 					
+					if no_aggro(attacker, v) then
+						v.components.combat:SetShouldAvoidAggro(attacker)
+					end
+					
 					v.components.combat:GetAttacked(inst.attacker, inst.finaldamage, inst)
+					
+					v.components.combat:RemoveShouldAvoidAggro(attacker)
 				end
 			end
 		end

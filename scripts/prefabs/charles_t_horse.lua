@@ -20,13 +20,21 @@ local dirs2 =
 local dirs =
 {
     N=135, 
+    NNE=157.5, 
     NE=180, 
+    NEE=-157.5, 
 	E=-135, 
+	SEE=-112.5, 
 	SE=-90,
+	SSE=-67.5, 
 	S=-45,
+	SSW=-22.5,
 	SW=0,
+	SWW=22.5,
 	W=45,
+	NNW=112.5, 
 	NW=90,
+	NWW=67.5, 
 }
 
 local function CheckAngle(inst)
@@ -36,13 +44,39 @@ local function CheckAngle(inst)
 		local dir, closest_diff = nil, nil
 		
 		for k,v in pairs(dirs) do
+			print(anglediff(heading, v))
+			local diff = math.abs(anglediff(heading, v))
+			print(diff)
+			if not dir or diff < closest_diff then
+				dir, closest_diff = k, diff
+			end
+		end
+		if dir ~= nil then
+			print(dir)
+			print(closest_diff)
+		end
+				
+		return dir
+	end
+end
+
+local function CheckKeyObjectAngle(inst, target)
+	local owner = inst.components.inventoryitem.owner
+	if owner ~= nil and owner:IsValid() and target ~= nil then
+		local x, y, z = target.Transform:GetWorldPosition()
+		local heading = owner:GetAngleToPoint(x, y, z)
+		local dir, closest_diff = nil, nil
+			
+		for k,v in pairs(dirs) do
 			local diff = math.abs(anglediff(heading, v))
 			if not dir or diff < closest_diff then
 				dir, closest_diff = k, diff
 			end
 		end
-				
+					
 		return dir
+	else
+		return nil
 	end
 end
 
@@ -55,6 +89,7 @@ local function onequip(inst, owner)
         inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
     end
     inst._owner = owner
+	inst._onlocomote(inst._owner)
     inst:ListenForEvent("locomote", inst._onlocomote, owner)
 end
 
@@ -74,7 +109,7 @@ local function onunequip(inst, owner)
 end
 
 local function NewDay(inst)
-	inst.final_code_ready = false
+	--inst.final_code_ready = false
 end
 
 local function fn()
@@ -98,7 +133,7 @@ local function fn()
 
 	--inst.foleysound = "dontstarve/creatures/together/deer/bell"
 
-    local swap_data = {sym_build = "swap_charles_nightmare"}
+    local swap_data = {sym_build = "swap_charles_nightmare", bank = "nightmare_charles_t_horse"}
     MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
 
     inst.entity:SetPristine()
@@ -134,6 +169,14 @@ local function fn()
 					local point = CheckAngle(inst)
 					local wardrobe = TheSim:FindFirstEntityWithTag("wixie_wardrobe")
 					
+					local beequeen = TheSim:FindFirstEntityWithTag("custom_beequeenhive_tag")
+					local widowspawner = TheSim:FindFirstEntityWithTag("widowweb")
+					local oasis = TheSim:FindFirstEntityWithTag("custom_oasis_tag")
+	
+					inst.beequeen = CheckKeyObjectAngle(inst, beequeen)
+					inst.widowspawner = CheckKeyObjectAngle(inst, widowspawner)
+					inst.oasis = CheckKeyObjectAngle(inst, oasis)
+					
 					print(point)
 		
 					local owner = inst.components.inventoryitem.owner
@@ -144,14 +187,14 @@ local function fn()
 					end
 						
 					
-					if distsq ~= nil and (inst.code == 0 and distsq < 200 or inst.code > 0 and distsq < 4000) then
-						inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell")
+					if distsq ~= nil and (inst.code == 0 and distsq < 80 or inst.code > 0 and distsq < 4000) then
+					
 						
-						if wardrobe ~= nil and wardrobe.beequeen ~= nil and
-						point == wardrobe.beequeen and inst.code <= 4 then
+						if inst.beequeen ~= nil and
+						point == inst.beequeen and inst.code <= 4 then
 							inst.code = inst.code + 1
-						elseif wardrobe ~= nil and wardrobe.widowspawner ~= nil and
-						point == wardrobe.widowspawner and inst.code == 13 then
+						elseif inst.widowspawner ~= nil and
+						point == inst.widowspawner and inst.code == 13 then
 							print("ringaling u win")
 							inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/voice")
 							inst.code = 0
@@ -160,16 +203,15 @@ local function fn()
 							papyrus.Transform:SetPosition(owner.Transform:GetWorldPosition())
 							papyrus.name = "Milites et Equi"
 							Launch2(papyrus, owner, 2, 0, 1, .5)
-						elseif wardrobe ~= nil and wardrobe.widowspawner ~= nil and
-						point == wardrobe.widowspawner and inst.code > 6 and inst.code <= 12 then
+						elseif inst.widowspawner ~= nil and
+						point == inst.widowspawner and inst.code > 6 and inst.code <= 12 then
 							inst.code = inst.code + 1
-						elseif wardrobe ~= nil and wardrobe.oasis ~= nil and
-						point == wardrobe.oasis and inst.code > 4 and inst.code <= 6 then
+						elseif inst.oasis ~= nil and
+						point == inst.oasis and inst.code > 4 and inst.code <= 6 then
 							inst.code = inst.code + 1
 						else
 							inst.code = 0
 						end
-					
 						--print(inst.code)
 					else
 						inst.code = 0
@@ -177,7 +219,7 @@ local function fn()
 					
 					local wixie_clock = TheSim:FindFirstEntityWithTag("wixie_clock")
 					
-					if wixie_clock ~= nil and inst.final_code_ready and distsq ~= nil and (inst.code2 == 0 and distsq < 200 or inst.code2 > 0 and distsq < 4000) then
+					if wixie_clock ~= nil and inst.final_code_ready and distsq ~= nil and (inst.code2 == 0 and distsq < 80 or inst.code2 > 0 and distsq < 4000) then
 						if point == "N" and (inst.code2 == 0 or inst.code2 == 4 or inst.code2 == 8) then
 							inst.code2 = inst.code2 + 1
 						elseif point == "E" and (inst.code2 == 1 or inst.code2 == 7) then
@@ -203,6 +245,20 @@ local function fn()
 						print(inst.code2)
 					else
 						inst.code2 = 0
+					end
+					
+					
+					
+					if distsq < 80 or inst.code > 0 or inst.code2 > 0 then
+						inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell")
+					elseif distsq >= 4000 then
+						if wardrobe ~= nil and owner ~= nil then
+							local tool = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+							owner.components.inventory:Unequip(EQUIPSLOTS.HANDS, true)
+							owner.components.inventory:DropItem(tool)
+						
+							Launch2(inst, wardrobe, 2, 0, 1, .5)
+						end
 					end
 				end)
 			end
@@ -358,7 +414,7 @@ local function realfn()
 
 	--inst.foleysound = "dontstarve/creatures/together/deer/bell"
 
-    local swap_data = {sym_build = "swap_charles"}
+    local swap_data = {sym_build = "swap_charles", bank = "charles_t_horse"}
     MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
 	
     inst.spelltype = "CHARLES_CHARGE"

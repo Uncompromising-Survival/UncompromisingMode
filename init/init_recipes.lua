@@ -805,6 +805,21 @@ AddRecipe2(
 )
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 
+
+AddRecipe2(
+	"the_real_charles_t_horse", 
+	{Ingredient("nightmarefuel", 2), Ingredient("cane", 1), Ingredient("gears", 1)}, 
+	GLOBAL.TECH.LOST, 
+	nil, 
+	{"TOOLS", "CLOTHING"}
+)
+
+GLOBAL.STRINGS.RECIPE_DESC.THE_REAL_CHARLES_T_HORSE = "Giddy-up, Charles!"
+AddRecipeToFilter("the_real_charles_t_horse", "TOOLS")
+AddRecipeToFilter("the_real_charles_t_horse", "CLOTHING")
+ChangeSortKey("the_real_charles_t_horse", "cane", "TOOLS", true)
+ChangeSortKey("the_real_charles_t_horse", "cane", "CLOTHING", true)
+
 -- WIXIE RELATED CRAFTS
 
 if GetModConfigData("wixie_walter") then

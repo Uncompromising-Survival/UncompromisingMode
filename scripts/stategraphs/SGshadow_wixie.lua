@@ -98,7 +98,7 @@ local function DamageNearbyEnemies(inst)
 	fxcircle.Transform:SetScale(1.4, 1.4, 1.4)
 	fxcircle.entity:SetParent(inst.entity)
 	
-	for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, { "_combat", "player"}, {"playerghost"})) do
+	for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, { "_combat", "player"}, {"playerghost"})) do
 		if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil then
 			if not (v.components.health:IsDead() or v:HasTag("playerghost")) then
 				v.components.combat:GetAttacked(inst, 50, inst)
@@ -129,7 +129,7 @@ local function ShootVolley(inst, i, x, y, z, pattern)
 end
 
 local function onothercollide(inst, target)
-	target.components.combat:GetAttacked(inst, 40)
+	target.components.combat:GetAttacked(inst, 75)
 
 	target:PushEvent("knockback", {knocker = inst, radius = 20, strengthmult = 1.5})
 	
@@ -334,12 +334,30 @@ local states =
         },
 
         ontimeout = function(inst)
-			inst.sg:GoToState("charles_charge")
+			inst.sg:GoToState("charles_charge_pre")
         end,
 
         events =
         {
             EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("charles_charge_pre")
+                end
+            end),
+        },
+    },
+	
+    State {
+        name = "charles_charge_pre",
+        tags = { "busy" },
+		
+        onenter = function(inst, pushanim)
+            inst.AnimState:PlayAnimation("spearjab_pre")
+        end,
+
+        events =
+        {
+            EventHandler("animover", function(inst)
                 if inst.AnimState:AnimDone() then
                     inst.sg:GoToState("charles_charge")
                 end
@@ -366,8 +384,10 @@ local states =
                 inst:ForceFacePoint(target.Transform:GetWorldPosition())
             end
 		
-			inst.AnimState:PlayAnimation("spearjab_pre")
-			inst.AnimState:PushAnimation("spearjab", false)
+			inst.AnimState:PlayAnimation("spearjab")
+			
+			--inst.AnimState:PlayAnimation("spearjab_pre")
+			--inst.AnimState:PushAnimation("spearjab", false)
 			inst.sg.statemem.start_bowling = false
         end,
 
@@ -379,7 +399,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(8 * FRAMES, function(inst)
+            TimeEvent(0 * FRAMES, function(inst)
 				inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/attack")
 			
 				inst.components.locomotor:WalkForward()
@@ -388,22 +408,22 @@ local states =
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(18 * FRAMES, function(inst)
+            TimeEvent(7 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(28 * FRAMES, function(inst)
+            TimeEvent(17 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(38 * FRAMES, function(inst)
+            TimeEvent(27 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
         },
 
         events =
         {
-            EventHandler("animqueueover", function(inst)
+            EventHandler("animover", function(inst)
 				if inst.charge_count >= 5 then
 					inst.charge_count = nil
 					inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
@@ -427,6 +447,8 @@ local states =
 		tags = { "attack", "abouttoattack" },
 
         onenter = function(inst)
+			inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
+					
             local buffaction = inst:GetBufferedAction()
 			local target = inst.components.combat.target
 			if target ~= nil and target:IsValid() then
@@ -609,17 +631,23 @@ local states =
 					local players = FindPlayersInRange( x, y, z, 40, true )
 					
 					for i,player in ipairs(players) do
-						if player ~= nil and player:IsValid() and player:HasTag("troublemaker") then
+						if player ~= nil and player:IsValid() then
 							local fx = SpawnPrefab("archive_lockbox_player_fx")
 							if fx ~= nil then
 								player:AddChild(fx)
 							end
-
-							player.components.builder:UnlockRecipe("slingshotammo_shadow")
+								
+							player.components.builder:UnlockRecipe("the_real_charles_t_horse")
+							
+							if player:HasTag("troublemaker") then
+								player.components.builder:UnlockRecipe("slingshotammo_shadow")
+							end
 
 							if player.components.talker then
 								player.components.talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true)
 							end
+							
+							Launch2(SpawnPrefab("nightmarefuel"), inst, 1.5, 1, 3, .75)
 						end
 					end
 					

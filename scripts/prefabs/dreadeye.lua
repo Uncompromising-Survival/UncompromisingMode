@@ -150,6 +150,13 @@ local function OnNewCombatTarget(inst, data)
 end
 
 local function OnDeath(inst, data)
+	if inst.disguiseprefab ~= nil then
+		local px, py, pz = inst.disguiseprefab.Transform:GetWorldPosition()
+		SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
+		inst.disguiseprefab:Remove()
+		inst.disguiseprefab = nil
+	end
+
     if data ~= nil and data.afflicter ~= nil and data.afflicter:HasTag("crazy") then
         --max one nightmarefuel if killed by a crazy NPC (e.g. Bernie)
         inst.components.lootdropper:SetLoot({ "nightmarefuel" })

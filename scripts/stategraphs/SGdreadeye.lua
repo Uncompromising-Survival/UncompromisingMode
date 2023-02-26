@@ -220,7 +220,7 @@ local states =
 
     State{
         name = "disguise",
-        tags = { "disguise", "busy", "disguised" }, -- , "busy" 
+        tags = { "invisible", "disguise", "busy", "disguised" }, -- , "busy" 
 
         onenter = function(inst)
 			inst.disguisetarget = nil

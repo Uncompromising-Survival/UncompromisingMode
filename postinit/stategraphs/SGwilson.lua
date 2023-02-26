@@ -136,7 +136,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 				SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
 				if v.components.combat ~= nil then
-					v:PushEvent("attacked", {attacker = inst, damage = 10, weapon = nil})
+					v.components.combat:GetAttacked(inst, 10)
 				end
 				
 				if v.components.locomotor ~= nil then
@@ -1510,7 +1510,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 		
 		State{
 			name = "charles_charge",
-			tags = { "moving", "running", "canrotate", "busy" },
+			tags = { "canrotate", "busy" },
 
 			onenter = function(inst)
 				inst.components.locomotor:Stop()
@@ -1546,23 +1546,28 @@ env.AddStategraphPostInit("wilson", function(inst)
 				end),
 				
 				TimeEvent(5 * FRAMES, function(inst)
+					inst.Physics:ClearMotorVelOverride()
 					inst.Physics:SetMotorVelOverride(15,0,0)
 					Check_Bowling(inst)
 				end),
 				
 				TimeEvent(10 * FRAMES, function(inst)
+					inst.Physics:ClearMotorVelOverride()
 					inst.Physics:SetMotorVelOverride(10,0,0)
 					Check_Bowling(inst)
 				end),
 				
 				TimeEvent(15 * FRAMES, function(inst)
+					inst.Physics:ClearMotorVelOverride()
 					inst.Physics:SetMotorVelOverride(5,0,0)
 					Check_Bowling(inst)
 				end),
 				
-				TimeEvent(16 * FRAMES, function(inst)
+				TimeEvent(18 * FRAMES, function(inst)
 					inst.Physics:ClearMotorVelOverride()
 					inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+					
+					inst.sg:RemoveStateTag("busy")
 				end),
 			},
 
@@ -1574,7 +1579,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 			},
 
 			onexit = function(inst)
-				inst.components.locomotor:Stop()
 				inst.components.locomotor:EnableGroundSpeedMultiplier(true)
 				inst.Physics:ClearMotorVelOverride()
 			end,
