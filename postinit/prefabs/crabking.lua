@@ -250,7 +250,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 	end
 
 	inst.startcastspell = function(inst, freeze)
-		for i = 1, inst.countgems(inst).purple/2 do
+		for i = 1, math.clamp(inst.countgems(inst).purple / 2, 1, 4) do
 			if math.random() >= 0.25 then
 				if math.random() >= 0.66 then
 					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
