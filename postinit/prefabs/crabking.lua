@@ -98,9 +98,9 @@ local function DoSeekingAttack(inst)
 
 		local dist = math.sqrt(distsq(ix, iz, px, pz)) + 24
 
-		for i = 1, math.clamp(dist, 0, 48) do			
+		for i = 1, math.clamp(dist, 0, 48) do
 			--local px, py, pz = targetfocus.Transform:GetWorldPosition()
-			inst:DoTaskInTime((FRAMES * i)*Lerp(0,1, dist/10), function()
+			inst:DoTaskInTime((FRAMES * i) * Lerp(0, 1, dist / 10), function()
 				if targetfocus == nil then
 					return
 				end
@@ -112,7 +112,6 @@ local function DoSeekingAttack(inst)
 
 				local rad = math.rad(deg)
 
-				print(rad)
 				local velx = math.cos(rad)
 				local velz = -math.sin(rad)
 
@@ -251,23 +250,21 @@ env.AddPrefabPostInit("crabking", function(inst)
 	end
 
 	inst.startcastspell = function(inst, freeze)
-		if math.random() >= 0.25 then
-			if math.random() >= 0.66 then
-				for i = 1, math.clamp(inst.countgems(inst).purple, 1, 6) do
+		for i = 1, math.clamp(math.random(math.clamp(inst.countgems(inst).purple, 1, 9)), inst.countgems(inst).purple/2, inst.countgems(inst).purple) do
+			if math.random() >= 0.25 then
+				if math.random() >= 0.66 then
 					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
 						DoLineAttack(inst, true)
 					end)
-				end
-			else
-				for i = 1, math.clamp(inst.countgems(inst).purple, 1, 6) do
+				else
 					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
 						DoLineAttack(inst, false)
 					end)
+					--_startcastspell(inst, false)
 				end
-				--_startcastspell(inst, false)
+			else
+				DoSeekingAttack(inst)
 			end
-		else
-			DoSeekingAttack(inst)
 		end
 	end
 
