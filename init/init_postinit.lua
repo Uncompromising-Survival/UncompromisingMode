@@ -118,6 +118,7 @@ local prefab_post = {
 	"tophat",
 	"tophatreduction",
 	"crabking",
+	"crabking_claw",
 	"ruinsstatues",
 	"moondial",
 	--"deciduoustrees",

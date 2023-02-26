@@ -712,7 +712,7 @@ configuration_options =
 		},
 		default = 10000,
 	},
-	BinaryConfig("crabking_claws", "Crabking Fight Adjustment", "The Crabkings imposing claws now deal 500 damage to the king when killed.", false),
+	--BinaryConfig("crabking_claws", "Crabking Fight Adjustment", "The Crabkings imposing claws now deal 500 damage to the king when killed.", false),
 	SkipSpace(),
 	
 	Header("Experimental"),

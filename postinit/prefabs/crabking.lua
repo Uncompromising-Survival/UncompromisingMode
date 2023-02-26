@@ -1,15 +1,279 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local function removecrab(inst)
+	inst.crab = nil
+	inst:Remove()
+end
+
+local CRABKING_SPELLGENERATOR_TAGS = { "crabking_spellgenerator" }
+
+--I LOVE MATH!!!
+--I almost went down a Bézier curve rabbithole.
+
+local function DoLineAttack(inst, rand_start)
+	local ck_x, ck_y, ck_z = inst.Transform:GetWorldPosition()
+	local target = inst.components.combat ~= nil and inst.components.combat.target
+
+	if target == nil then
+		local boats = TheSim:FindEntities(ck_x, ck_y, ck_z, 25, { "boat" })
+		if #boats > 0 then
+			target = boats[math.random(#boats)]
+		end
+	end
+
+	if target ~= nil then
+		local tar_x, tar_y, tar_z = target.Transform:GetWorldPosition()
+
+		local variance_x, variance_z = math.random( -24, 24), math.random( -24, 24)
+
+		if variance_x > 0 then --wonder if there's anything I could do to make this better
+			variance_x = math.clamp(variance_x, 16, 24)
+		else
+			variance_x = math.clamp(variance_x, -16, -24)
+		end
+
+		if variance_z > 0 then
+			variance_z = math.clamp(variance_z, 16, 24)
+		else
+			variance_z = math.clamp(variance_z, -16, -24)
+		end
+		local start_x, start_y, start_z
+
+		if rand_start then
+			start_x, start_y, start_z = tar_x + variance_x, tar_y, tar_z + variance_z
+		else
+			start_x, start_y, start_z = ck_x, ck_y, ck_z
+			tar_x, tar_z = tar_x + variance_x * 0.1, tar_z + variance_z * 0.1
+		end
+
+		local deg = math.atan2(start_z - tar_z, tar_x - start_x) / DEGREES
+
+		local rad = math.rad(deg)
+
+		local velx = math.cos(rad) * 1.5
+		local velz = -math.sin(rad) * 1.5
+
+		local dist = distsq(start_x, start_z, tar_x, tar_z)
+
+		dist = math.sqrt(dist)
+
+		if not rand_start then
+			dist = dist + 8
+		end
+
+		for i = 1, math.clamp(dist, 0, 48) do
+			inst:DoTaskInTime(FRAMES * i, function()
+				local dx, dy, dz = start_x + (i * velx), 0, start_z + (i * velz)
+
+				local fx = SpawnPrefab("crabking_geyser_single")
+				fx.Transform:SetPosition(dx, dy, dz)
+				fx.chain_time = i
+				fx.crab = inst
+				fx.fisher_prefab = inst.prefab
+				fx:ListenForEvent("onremove", function() removecrab(fx) end, inst)
+				fx.dogeyserburbletask(fx)
+			end)
+		end
+	end
+end
+
+local function DoSeekingAttack(inst)
+	local ck_x, ck_y, ck_z = inst.Transform:GetWorldPosition()
+	local target = inst.components.combat ~= nil and inst.components.combat.target
+
+	if target == nil then
+		local boats = TheSim:FindEntities(ck_x, ck_y, ck_z, 25, { "boat" })
+		if #boats > 0 then
+			target = boats[math.random(#boats)]
+		end
+	end
+
+	if target ~= nil then
+		local ix, iy, iz = inst.Transform:GetWorldPosition()
+		local targetfocus = target
+
+		local px, py, pz = targetfocus.Transform:GetWorldPosition()
+
+
+		local dist = math.sqrt(distsq(ix, iz, px, pz)) + 24
+
+		for i = 1, math.clamp(dist, 0, 48) do			
+			--local px, py, pz = targetfocus.Transform:GetWorldPosition()
+			inst:DoTaskInTime((FRAMES * i)*Lerp(0,1, dist/10), function()
+				if targetfocus == nil then
+					return
+				end
+				px, py, pz = targetfocus.Transform:GetWorldPosition()
+				if px == nil or pz == nil then
+					return
+				end
+				local deg = math.atan2(iz - pz, px - ix) / DEGREES
+
+				local rad = math.rad(deg)
+
+				print(rad)
+				local velx = math.cos(rad)
+				local velz = -math.sin(rad)
+
+				local dx, dy, dz = ix + (i * velx), 0, iz + (i * velz)
+
+				if targetfocus ~= nil then
+					local fx = SpawnPrefab("crabking_geyser_single")
+					fx.Transform:SetPosition(dx, dy, dz)
+					fx.chain_time = i
+					fx.crab = inst
+					fx.fisher_prefab = inst.prefab
+					fx:ListenForEvent("onremove", function() removecrab(fx) end, inst)
+					fx.dogeyserburbletask(fx)
+				end
+			end)
+		end
+	end
+end
+
+local function spawnwaves(inst, numWaves, totalAngle, waveSpeed, wavePrefab, initialOffset, idleTime, instantActivate,
+	                      random_angle)
+	SpawnAttackWaves(
+		inst:GetPosition(),
+		(not random_angle and inst.Transform:GetRotation()) or nil,
+		initialOffset or (inst.Physics and inst.Physics:GetRadius()) or nil,
+		numWaves,
+		totalAngle,
+		waveSpeed,
+		wavePrefab,
+		idleTime,
+		instantActivate
+	)
+end
+
+local function spawnwave(inst, time)
+	spawnwaves(inst, 12, 360, Lerp(1, 6, inst.countgems(inst).blue / 10), nil, 2.5, time or 2, true, true)
+end
+
+local RETARGET_MUST_TAGS = { "_combat", }
+local RETARGET_CANT_TAGS = { "wall", "INLIMBO", "prey", "bird", "crab" }
+local TARGET_DIST = 48
+
+local function RetargetFn(inst)
+	local range = inst:GetPhysicsRadius(0) + 8
+	return FindEntity(
+		inst,
+		TARGET_DIST,
+		function(guy)
+			return inst.components.combat:CanTarget(guy)
+				and (guy.components.combat:TargetIs(inst) or
+				guy:IsNear(inst, range)
+				)
+		end,
+		RETARGET_MUST_TAGS,
+		RETARGET_CANT_TAGS
+	)
+end
+
+local gems =
+{
+	"blue",
+	"red",
+	"purple",
+	"orange",
+	"yellow",
+	"green",
+}
+
 env.AddPrefabPostInit("crabking", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
 
-	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn",1.00)
+	inst.castedaspell = false
+
+	if inst.components.combat ~= nil then
+		inst.components.combat:SetRetargetFunction(1, RetargetFn)
+	end
+
+	inst.wantstocast = true
+
+	local _startcastspell = inst.startcastspell
+	local _endcastspell = inst.endcastspell
+
+	inst.endcastspell = function(inst, lastwasfreeze)
+		_endcastspell(inst, lastwasfreeze)
+
+		if inst.components.timer:TimerExists("spell_cooldown") then
+			inst.components.timer:StopTimer("spell_cooldown")
+		end
+
+		inst.dofreezecast = nil -- NO FREEZE, BAD!
+
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, 64, nil, nil, CRABKING_SPELLGENERATOR_TAGS)
+		if #ents > 0 then
+			for i, ent in pairs(ents) do
+				if (not inst.components.freezable or not inst.components.freezable:IsFrozen()) and not inst.components.health:IsDead() then
+					ent:PushEvent("endspell")
+				else
+					ent:Remove()
+				end
+			end
+		end
+
+		if inst.attack_count == nil then
+			inst.attack_count = 0
+		end
+
+		inst.attack_count = inst.attack_count + 1 or 1
+
+		if inst.attack_count > math.random(5, 8) then
+			inst.components.timer:StartTimer("spell_cooldown", 30)
+
+			inst.vulnerable_shine_task = inst:DoPeriodicTask(2, function()
+				for k, v in ipairs(gems) do
+					inst.gemshine(inst, v)
+				end
+				inst.wantstocast = false --keep it that way!!!
+			end)
+			inst:DoTaskInTime(30, function()
+				inst.wantstocast = true
+				inst.attack_count = 0
+				if inst.vulnerable_shine_task ~= nil then
+					inst.vulnerable_shine_task:Cancel()
+					inst.vulnerable_shine_task = nil
+				end
+				spawnwave(inst)
+			end)
+		else
+			inst.components.timer:StartTimer("spell_cooldown", 2.5)
+			inst:DoTaskInTime(2.5, function()
+				inst.wantstocast = true
+			end)
+		end
+	end
+
+	inst.startcastspell = function(inst, freeze)
+		if math.random() >= 0.25 then
+			if math.random() >= 0.66 then
+				for i = 1, math.clamp(inst.countgems(inst).purple, 1, 6) do
+					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
+						DoLineAttack(inst, true)
+					end)
+				end
+			else
+				for i = 1, math.clamp(inst.countgems(inst).purple, 1, 6) do
+					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
+						DoLineAttack(inst, false)
+					end)
+				end
+				--_startcastspell(inst, false)
+			end
+		else
+			DoSeekingAttack(inst)
+		end
+	end
+
+	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 	--[[
 	--hoarder ck
-	Shelved until UTW. Not satisfied with this...
 	inst:ListenForEvent("death", function(inst)
 		local pos = inst:GetPosition()
 		local messagebottletreasures = require("messagebottletreasures_um")
@@ -22,54 +286,102 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local opal = inst.countgems(inst).opal+1
 		local pearl = inst.countgems(inst).pearl*3
 
-		if red > 2 then
-			red = 2
-		end
-		if blue > 2 then
-			blue = 2
-		end
-		if purple > 2 then
-			purple = 2
-		end
-		if yellow > 2 then
-			yellow = 2
-		end
-		if orange > 2 then
-			orange = 2
-		end
-		if green > 2 then
-			green = 2
-		end
-		if opal > 2 then
-			opal = 2
-		end
+		print("Count:")
+		print("RED: "..red.."   ".."BLUE: "..blue.."   ".."PURPLE: "..purple)
+		print("YELLOW: "..yellow.."   ".."ORANGE: "..orange.."   ".."GREEN: "..green)
 
-		local royalcount = 3+(red + blue + purple + yellow + orange + green + pearl)*opal
-		local normalcount = (1+(red + blue + purple + yellow + orange + green + pearl)*opal)
-		local royalpos = royalcount*0.33
-		local normalpos = normalcount*1.25
 
-		print(royalcount)
-		print(normalcount)
-		for i = 1, royalcount do
-			messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal").Transform:SetPosition(pos.x + math.random(-royalpos, royalpos), pos.y, pos.z + math.random(-royalpos, royalpos))
+		print("Chances:")
+		print("RED: "..red.."0%".."   ".."BLUE: "..blue.."0%".."   ".."PURPLE: "..purple.."0%")
+		print("YELLOW: "..yellow.."0%".."   ".."ORANGE: "..orange.."0%".."   ".."GREEN: "..green.."0%")
+
+		if math.random(10) < red then
+			print("congrats! you got a red chest!")
 		end
-		for i = 1, normalcount do
-			messagebottletreasures.GenerateTreasure(pos, "sunkenchest").Transform:SetPosition(pos.x + math.random(-normalpos, normalpos), pos.y, pos.z + math.random(-normalpos, normalpos))
+		if math.random(10) < blue then
+			print("congrats! you got a blue chest!")
 		end
-	end)
-]]
+		if math.random(10) < purple then
+			print("congrats! you got a purple chest!")
+		end
+		if math.random(5) < yellow then
+			print("congrats! you got a yellow chest!")
+		end
+		if math.random(5) < orange then
+			print("congrats! you got a orange chest!")
+		end
+		if math.random(5) < green then
+			print("congrats! you got a green chest!")
+		end
+		if opal >= 1 then
+			print("congrats! you got a rainbow chest!")
+		end
+	end)]]
 	local DAMAGE_SCALE = 0.5
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics
 		if boat_physics ~= nil then
-			local hit_velocity = math.floor(math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity) * DAMAGE_SCALE / boat_physics.max_velocity + 0.5)
-			print(hit_velocity)
+			local hit_velocity = math.floor(math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity) * DAMAGE_SCALE /
+			boat_physics.max_velocity + 0.5)
 			if inst.components.health ~= nil then
-				inst.components.health:DoDelta(-400*hit_velocity)
+				inst.components.health:DoDelta( -2000 * hit_velocity)
 			end
 		end
-	end
-	inst:ListenForEvent("on_collide", OnCollide)
 
+		inst.finishfixing(inst)
+		spawnwave(inst)
+
+		if inst.vulnerable_shine_task ~= nil then
+			inst.vulnerable_shine_task:Cancel()
+			inst.vulnerable_shine_task = nil
+
+			inst.wantstocast = true
+			inst.attack_count = 0
+		else
+			if inst.attack_count == nil then
+				inst.attack_count = 0
+			end
+
+			inst.attack_count = inst.attack_count - 1
+		end
+	end
+
+
+	inst:ListenForEvent("activate", function()
+		inst:DoTaskInTime(5, function()
+			inst.wantstocast = true
+			inst.attack_count = 0
+			if inst.vulnerable_shine_task ~= nil then
+				inst.vulnerable_shine_task:Cancel()
+				inst.vulnerable_shine_task = nil
+			end
+		end)
+		inst:ListenForEvent("on_collide", OnCollide)
+	end)
 end)
+
+--[[
+TUNING.CRABKING_DEADLY_GEYSERS = 1
+
+env.AddPrefabPostInit("crabking_geyserspawner", function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	local _endgeyser = UpvalueHacker.GetUpvalue(Prefabs.crabking_geyserspawner.fn, "endgeyser")
+
+	inst:RemoveEventCallback("endspell", _endgeyser)
+
+	inst:ListenForEvent("endspell", function() endgeyser(inst) end)
+	local _dogeyserburbletask = inst.dogeyserburbletask
+
+	inst.dogeyserburbletask = function(inst)
+		if inst.crab == nil or inst.crab ~= nil and inst.crab.countgems == nil then
+			print("crab not real tf??")
+			inst:Remove()
+			return
+		else
+			_dogeyserburbletask(inst)
+		end
+	end
+end)]]

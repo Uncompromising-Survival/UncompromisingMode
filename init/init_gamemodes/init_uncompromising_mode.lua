@@ -157,10 +157,6 @@ if GetModConfigData("caved") == false and GetModConfigData("acidrain") then
 	modimport("init/init_weather/init_overworld_toadstool")
 end
 
-if GetModConfigData("crabking_claws") then
-	modimport("postinit/prefabs/crabking_claw")
-end
-
 if GetModConfigData("foodregen") then
 	modimport("init/init_food/init_foodregen")
 end

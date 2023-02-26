@@ -19,6 +19,6 @@ env.AddPrefabPostInit("crabking_claw", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
-	
+	inst:AddTag("crab")
 	inst:ListenForEvent("death", BonusDamage)
 end)

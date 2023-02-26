@@ -407,4 +407,5 @@ return {
 	"placeholder_recipe_item",
 	"winona_structure_item",
 	"boiling_water",
+	"crabking_geyser_single"
 }
