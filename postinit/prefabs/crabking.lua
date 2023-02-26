@@ -51,8 +51,8 @@ local function DoLineAttack(inst, rand_start)
 
 		local rad = math.rad(deg)
 
-		local velx = math.cos(rad) * 1.5
-		local velz = -math.sin(rad) * 1.5
+		local velx = math.cos(rad) * 2.5
+		local velz = -math.sin(rad) * 2.5
 
 		local dist = distsq(start_x, start_z, tar_x, tar_z)
 
@@ -62,7 +62,7 @@ local function DoLineAttack(inst, rand_start)
 			dist = dist + 8
 		end
 
-		for i = 1, math.clamp(dist, 0, 48) do
+		for i = 1, math.clamp(dist, 0, 24) do
 			inst:DoTaskInTime(FRAMES * i, function()
 				local dx, dy, dz = start_x + (i * velx), 0, start_z + (i * velz)
 
