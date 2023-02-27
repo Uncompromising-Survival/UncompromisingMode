@@ -147,7 +147,16 @@ local function spawnwaves(inst, numWaves, totalAngle, waveSpeed, wavePrefab, ini
 end
 
 local function spawnwave(inst, time)
-	spawnwaves(inst, 12, 360, Lerp(1, 6, inst.countgems(inst).blue / 10), nil, 2.5, time or 2, true, true)
+	spawnwaves(inst, 12, 360, Lerp(2, 6, inst.countgems(inst).blue / 10), nil, 2.5, time or 2, true, true)
+
+	--need to manually push boats without being the waves, as the waves can try spawning on the boat itself, and then not moving it.
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local boats = TheSim:FindEntities(x, y, z, 12, nil, nil, { "boat" })
+	for k, v in ipairs(boats) do
+		local bx, by, bz = v.Transform:GetWorldPosition()
+		local push_dir_x, push_dir_z = VecUtil_Normalize(bx - x, bz - z)
+		v.components.boatphysics:ApplyForce(push_dir_x, push_dir_z, Lerp(2, 6, inst.countgems(inst).blue / 10))
+	end
 end
 
 local RETARGET_MUST_TAGS = { "_combat", }
@@ -199,6 +208,8 @@ env.AddPrefabPostInit("crabking", function(inst)
 	inst.endcastspell = function(inst, lastwasfreeze)
 		_endcastspell(inst, lastwasfreeze)
 
+		local atk_cd = (TUNING.CRABKING_CAST_TIME - math.floor(inst.countgems(inst).yellow * 0.75)) * 0.125
+
 		if inst.components.timer:TimerExists("spell_cooldown") then
 			inst.components.timer:StopTimer("spell_cooldown")
 		end
@@ -224,7 +235,9 @@ env.AddPrefabPostInit("crabking", function(inst)
 		inst.attack_count = inst.attack_count + 1 or 1
 
 		if inst.attack_count > math.random(5, 8) then
-			inst.components.timer:StartTimer("spell_cooldown", 30)
+			print("long attack cd time", 30 - inst.countgems(inst).yellow)
+
+			inst.components.timer:StartTimer("spell_cooldown", 30 - inst.countgems(inst).yellow)
 
 			inst.vulnerable_shine_task = inst:DoPeriodicTask(2, function()
 				for k, v in ipairs(gems) do
@@ -232,7 +245,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 				end
 				inst.wantstocast = false --keep it that way!!!
 			end)
-			inst:DoTaskInTime(30, function()
+			inst.long_cd = inst:DoTaskInTime(30 - inst.countgems(inst).yellow, function()
 				inst.wantstocast = true
 				inst.attack_count = 0
 				if inst.vulnerable_shine_task ~= nil then
@@ -242,22 +255,23 @@ env.AddPrefabPostInit("crabking", function(inst)
 				spawnwave(inst)
 			end)
 		else
-			inst.components.timer:StartTimer("spell_cooldown", 0.5)
-			inst:DoTaskInTime(0.5, function()
+			print("attack cd time", atk_cd)
+			inst.components.timer:StartTimer("spell_cooldown", atk_cd)
+			inst:DoTaskInTime(atk_cd, function()
 				inst.wantstocast = true
 			end)
 		end
 	end
 
 	inst.startcastspell = function(inst, freeze)
-		for i = 1, math.clamp(inst.countgems(inst).purple / 2, 1, 4) do
+		for i = 1, 3 do
 			if math.random() >= 0.25 then
 				if math.random() >= 0.66 then
-					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
+					inst:DoTaskInTime(i * GetRandomWithVariance(0.5, 0.75), function()
 						DoLineAttack(inst, true)
 					end)
 				else
-					inst:DoTaskInTime(i * GetRandomWithVariance(0.75, 1), function()
+					inst:DoTaskInTime(i * GetRandomWithVariance(0.5, 0.75), function()
 						DoLineAttack(inst, false)
 					end)
 					--_startcastspell(inst, false)
@@ -281,58 +295,78 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local yellow = inst.countgems(inst).yellow
 		local orange = inst.countgems(inst).orange
 		local green = inst.countgems(inst).green
-		local opal = inst.countgems(inst).opal+1
-		local pearl = inst.countgems(inst).pearl*3
+		local opal = inst.countgems(inst).opal
+		local pearl = inst.countgems(inst).pearl
 
 		print("Count:")
-		print("RED: "..red.."   ".."BLUE: "..blue.."   ".."PURPLE: "..purple)
-		print("YELLOW: "..yellow.."   ".."ORANGE: "..orange.."   ".."GREEN: "..green)
+		print("RED: " .. red .. "   " .. "BLUE: " .. blue .. "   " .. "PURPLE: " .. purple)
+		print("YELLOW: " .. yellow .. "   " .. "ORANGE: " .. orange .. "   " .. "GREEN: " .. green)
 
 
 		print("Chances:")
-		print("RED: "..red.."0%".."   ".."BLUE: "..blue.."0%".."   ".."PURPLE: "..purple.."0%")
-		print("YELLOW: "..yellow.."0%".."   ".."ORANGE: "..orange.."0%".."   ".."GREEN: "..green.."0%")
+		print("RED: " .. red .. "0%" .. "   " .. "BLUE: " .. blue .. "0%" .. "   " .. "PURPLE: " .. purple .. "0%")
+		print("YELLOW: " .. yellow .. "0%" .. "   " .. "ORANGE: " .. orange .. "0%" .. "   " .. "GREEN: " .. green ..
+		"0%")
+
+		if pearl > 0 then
+			print("congrats! you got the Tribute!")
+			return
+		end
 
 		if math.random(10) < red then
 			print("congrats! you got a red chest!")
+			return
 		end
 		if math.random(10) < blue then
 			print("congrats! you got a blue chest!")
+			return
 		end
 		if math.random(10) < purple then
 			print("congrats! you got a purple chest!")
+			return
 		end
 		if math.random(5) < yellow then
 			print("congrats! you got a yellow chest!")
+			return
 		end
 		if math.random(5) < orange then
 			print("congrats! you got a orange chest!")
+			return
 		end
 		if math.random(5) < green then
 			print("congrats! you got a green chest!")
+			return
 		end
 		if opal >= 1 then
 			print("congrats! you got a rainbow chest!")
+			return
 		end
 	end)
 
-	local DAMAGE_SCALE = 0.5
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics
 		if boat_physics ~= nil then
-			local hit_velocity = math.floor(math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity) * DAMAGE_SCALE /
-			boat_physics.max_velocity + 0.5)
 			if inst.components.health ~= nil then
-				inst.components.health:DoDelta( -2000 * hit_velocity)
+				inst.components.health:DoDelta( -1000 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
 			end
 		end
 
-		inst.finishfixing(inst)
+			inst.finishfixing(inst)
+		if inst.attack_count <= 3 then
+			inst:DoTaskInTime(3, function(inst)
+				if inst.components.timer:TimerExists("claw_regen_timer") then
+					inst.components.timer:StopTimer("claw_regen_timer")
+				end
+				inst.regenarm(inst)
+			end)
+		end
 		spawnwave(inst)
 
 		if inst.vulnerable_shine_task ~= nil then
 			inst.vulnerable_shine_task:Cancel()
 			inst.vulnerable_shine_task = nil
+			inst.long_cd:Cancel()
+			inst.long_cd = nil
 
 			inst.wantstocast = true
 			inst.attack_count = 0
@@ -344,7 +378,6 @@ env.AddPrefabPostInit("crabking", function(inst)
 			inst.attack_count = inst.attack_count - 1
 		end
 	end
-
 
 	inst:ListenForEvent("activate", function()
 		inst:DoTaskInTime(5, function()
@@ -359,7 +392,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 		inst:ListenForEvent("on_collide", OnCollide)
 	end)
 
-    inst:ListenForEvent("entitysleep", function(inst)
+	inst:ListenForEvent("entitysleep", function(inst)
 		inst:RemoveEventCallback("on_collide", OnCollide)
 		TheWorld.crabking_active = false
 	end)

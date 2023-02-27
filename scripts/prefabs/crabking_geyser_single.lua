@@ -98,7 +98,7 @@ local function endgeyser(inst)
                     end
                 end
                 if v.components.health ~= nil and v.components.combat ~= nil and not v:HasTag("boat") and v.prefab ~= "crabking_claw" and v.prefab ~= "crabking" then
-                    v.components.combat:GetAttacked(inst.crab, 33.33)
+                    v.components.combat:GetAttacked(inst.crab, 33.33+inst.crab.countgems(inst.crab).purple*2)
                 end
 
             end
@@ -106,7 +106,7 @@ local function endgeyser(inst)
             local boat = TheWorld.Map:GetPlatformAtPoint(x + offset.x, z + offset.z)
             if boat then
                 local pt = Vector3(x + offset.x, 0, z + offset.z)
-                boat.components.health:DoDelta(-4)
+                boat.components.health:DoDelta(-4-inst.crab.countgems(inst.crab).purple)
 
                 -- look for patches
                 --[[local nearpatch = TheSim:FindEntities(pt.x, 0, pt.z, 2, REPAIRED_PATCH_TAGS)
