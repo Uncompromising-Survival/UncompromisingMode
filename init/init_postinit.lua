@@ -40,6 +40,7 @@ local component_post = {
 	"health",
 	--"spellbook"
 	"finiteuses",
+	"piratespawner",
 }
 
 local prefab_post = {

@@ -269,9 +269,10 @@ env.AddPrefabPostInit("crabking", function(inst)
 	end
 
 	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
-	--[[
-	--hoarder ck
+
 	inst:ListenForEvent("death", function(inst)
+		TheWorld.crabking_active = false
+
 		local pos = inst:GetPosition()
 		local messagebottletreasures = require("messagebottletreasures_um")
 		local red = inst.countgems(inst).red
@@ -313,7 +314,8 @@ env.AddPrefabPostInit("crabking", function(inst)
 		if opal >= 1 then
 			print("congrats! you got a rainbow chest!")
 		end
-	end)]]
+	end)
+
 	local DAMAGE_SCALE = 0.5
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics
@@ -352,9 +354,18 @@ env.AddPrefabPostInit("crabking", function(inst)
 				inst.vulnerable_shine_task:Cancel()
 				inst.vulnerable_shine_task = nil
 			end
+			TheWorld.crabking_active = true
 		end)
 		inst:ListenForEvent("on_collide", OnCollide)
 	end)
+
+	local _OnEntitySleep = inst.OnEntitySleep
+
+	inst.OnEntitySleep = function(inst)
+		inst:RemoveEventCallback("on_collide", OnCollide)
+		TheWorld.crabking_active = false
+		_OnEntitySleep(inst)
+	end
 end)
 
 --[[
