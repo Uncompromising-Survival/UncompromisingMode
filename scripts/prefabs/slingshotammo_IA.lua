@@ -303,8 +303,10 @@ local function DoAreaBurn(inst)
 				v.components.health:DoDelta(-8)
 				SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(v.Transform:GetWorldPosition())
 				
-				v:PushEvent("onignite")
+				--v:PushEvent("onignite")
 			end
+			
+			v:PushEvent("onignite")
 
 			inst:AddTag("obsidianburning")
 		end

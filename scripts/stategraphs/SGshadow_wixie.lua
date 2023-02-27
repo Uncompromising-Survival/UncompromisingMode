@@ -157,13 +157,18 @@ local function Check_Bowling(inst)
 end
 
 local function GetANewTarget(inst)
+	if inst:HasTag("prime_shadow_wixie") then
+		inst.components.combat:DropTarget()
+	end
+	
+	--[[
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local players = FindPlayersInRange(x, y, z, 40, true)
+	local players = TheSim:FindEntities(x, y, z, 30, { "player" })
 	for i, v in ipairs(players) do
 		if not inst.components.combat.target == v and inst.components.combat:CanTarget(v) then
 			inst.components.combat:SetTarget(v)
 		end
-	end
+	end]]
 end
 
 local function SpawnDupes(inst)
@@ -171,6 +176,18 @@ local function SpawnDupes(inst)
 	shadowhelper.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	shadowhelper:AddTag("puzzlespawn")
 	shadowhelper.Transform:SetRotation(math.random(0, 360))
+	
+	local max_tries = 4
+	for k = 1, max_tries do
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local offset = 10
+		x = x + math.random(2 * offset) - offset
+		z = z + math.random(2 * offset) - offset
+		if TheWorld.Map:IsPassableAtPoint(x, y, z) then
+			shadowhelper.Transform:SetPosition(x, y, z)
+			break
+		end
+	end
 end
 
 local states =

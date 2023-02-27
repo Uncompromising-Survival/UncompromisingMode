@@ -72,7 +72,7 @@ AddComponentPostInit("dynamicmusic", function(self)
 
     BUSYTHEMES["HOODEDFOREST"] = 1337
     BUSYTHEMES["PINETREE_PIONEER"] = 1338
-
+	
     local function IsInHoodedForest(player)
         return player.components.areaaware ~= nil
             and player.components.areaaware:CurrentlyInTag("hoodedcanopy")
@@ -131,6 +131,25 @@ AddComponentPostInit("dynamicmusic", function(self)
         _StartBusyTheme(player, BUSYTHEMES.PINETREE_PIONEER, "UMMusic/music/follow_me_woby", 2)
     end
 
+    local function StartWixieMusic(player, data)
+		local level = math.max(1, math.floor(data ~= nil and data.level or 1))
+		
+		if get_dangertask() ~= nil then
+			set_extendtime(GLOBAL.GetTime() + 3)
+		elseif _isenabled then
+			_StopBusy()
+			_StopDanger()
+			
+			_soundemitter:PlaySound("UMMusic/music/shadow_boxing", "danger")
+			if _hasinspirationbuff then
+				_soundemitter:SetParameter("danger", "wathgrithr_intensity", _hasinspirationbuff)
+			end
+
+			set_dangertask(inst:DoTaskInTime(data.duration or 10, _StopDanger, true))
+			set_extendtime(0)
+		end
+	end
+
 
     -- All that just to modify one function ಠ_ಠ
     UpvalueHacker.SetUpvalue(_StartPlayerListeners, StartBusy, "StartBusy")
@@ -149,11 +168,13 @@ AddComponentPostInit("dynamicmusic", function(self)
     local function UM_StartPlayerListeners(player)
         inst:ListenForEvent("hasinspirationbuff", UM_OnHasInspirationBuff, player)
         inst:ListenForEvent("playwobymusic", StartWobyMusic, player)
+        inst:ListenForEvent("playwixiemusic", StartWixieMusic, player)
     end
 
     local function UM_StopPlayerListeners(player)
         inst:RemoveEventCallback("hasinspirationbuff", UM_OnHasInspirationBuff, player)
         inst:RemoveEventCallback("playwobymusic", StartWobyMusic, player)
+        inst:RemoveEventCallback("playwixiemusic", StartWixieMusic, player)
     end
 
     local function UM_StartSoundEmitter()
