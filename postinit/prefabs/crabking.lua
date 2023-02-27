@@ -242,8 +242,8 @@ env.AddPrefabPostInit("crabking", function(inst)
 				spawnwave(inst)
 			end)
 		else
-			inst.components.timer:StartTimer("spell_cooldown", 2.5)
-			inst:DoTaskInTime(2.5, function()
+			inst.components.timer:StartTimer("spell_cooldown", 0.5)
+			inst:DoTaskInTime(0.5, function()
 				inst.wantstocast = true
 			end)
 		end
@@ -359,13 +359,10 @@ env.AddPrefabPostInit("crabking", function(inst)
 		inst:ListenForEvent("on_collide", OnCollide)
 	end)
 
-	local _OnEntitySleep = inst.OnEntitySleep
-
-	inst.OnEntitySleep = function(inst)
+    inst:ListenForEvent("entitysleep", function(inst)
 		inst:RemoveEventCallback("on_collide", OnCollide)
 		TheWorld.crabking_active = false
-		_OnEntitySleep(inst)
-	end
+	end)
 end)
 
 --[[
