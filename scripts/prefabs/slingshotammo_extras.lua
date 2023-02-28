@@ -618,7 +618,7 @@ local function OnHit_MoonRock(inst, attacker, target)
 			target:PushEvent("wixiebite")
 		end
 	
-		if target:HasTag("shadow") or target:HasTag("shadowcreature") then
+		if target:HasTag("shadow") or target:HasTag("shadowcreature") or target:HasTag("stalker") or v:HasTag("shadowchesspiece") then
 			inst.powerlevel = inst.powerlevel + 2
 		end
 	
@@ -1059,7 +1059,7 @@ local function GlassCut(inst)
 						v.components.combat:SetShouldAvoidAggro(attacker)
 					end
 					
-					if v:HasTag("shadow") or v:HasTag("shadowcreature") then
+					if v:HasTag("shadow") or v:HasTag("shadowcreature") or v:HasTag("stalker") or v:HasTag("shadowchesspiece") then
 						inst.finallevel = inst.powerlevel + .5
 					end
 					

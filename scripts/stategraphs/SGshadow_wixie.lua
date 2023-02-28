@@ -24,7 +24,7 @@ local events =
     CommonHandlers.OnLocomote(false, true),
     EventHandler("attacked", function(inst, data)
 		--if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
-        if not inst.components.health:IsDead() then
+        if not inst.sg:HasStateTag("busy") and inst.components.health:IsDead() then
 			if inst.components.health:GetPercent() <= 0.75 then
 				inst.marble_bag_attack = true
 			end
@@ -524,7 +524,7 @@ local states =
 							inst.sg:GoToState("idle")
 						end
 					else
-						local shot_calc = 6 - (inst.components.health.currenthealth / 3)
+						local shot_calc = 6 - ((15 * inst.components.health:GetPercent()) / 3)
 						
 						if inst.multisling == nil then
 							inst.multisling = 1
@@ -700,7 +700,7 @@ local states =
                 local max_tries = 4
                 for k = 1, max_tries do
                     local x, y, z = inst.Transform:GetWorldPosition()
-                    local offset = 10
+                    local offset = 12
                     x = x + math.random(2 * offset) - offset
                     z = z + math.random(2 * offset) - offset
                     if TheWorld.Map:IsPassableAtPoint(x, y, z) then
@@ -785,7 +785,7 @@ local states =
 				inst.physbox = nil
 			end
 			
-            inst.sg:SetTimeout(inst.helper and 6.2 or 4.2)
+            inst.sg:SetTimeout(inst.helper and 8 or 5)
         end,
 
         ontimeout = function(inst)
@@ -795,7 +795,7 @@ local states =
 
     State{
         name = "claustrophobia_pst",
-        tags = { "idle" },
+        tags = { "busy" },
 
         onenter = function(inst)
 			ResetShield(inst)
@@ -808,7 +808,7 @@ local states =
                 if inst.AnimState:AnimDone() then
 					GetANewTarget(inst)
 				
-					inst.sg:GoToState("idle")
+					inst.sg:GoToState("disappear")
                 end
             end),
         },

@@ -20,12 +20,12 @@ local function retargetfn(inst)
 	local target = inst.components.combat.target
 
     local x, y, z = inst.Transform:GetWorldPosition()
-	local players = TheSim:FindEntities(x, y, z, 30, { "player" })
+	local players = TheSim:FindEntities(x, y, z, 40, { "player" })
     local rangesq = math.huge
     for i, v in ipairs(players) do
         local distsq = v:GetDistanceSqToPoint(x, y, z)
 		
-		local clones = TheSim:FindEntities(x, y, z, 30, { "shadow_wixie" })
+		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
 		for n, b in ipairs(clones) do
 			if #clones == 1 or b ~= inst and (b.components.combat.target == nil or b.components.combat.target ~= v) then
 				if distsq < rangesq and inst.components.combat:CanTarget(v) and (target == nil) then
@@ -41,7 +41,7 @@ end
 local function KeepTargetFn(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
 		
-	local clones = TheSim:FindEntities(x, y, z, 30, { "shadow_wixie" })
+	local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
 	for n, b in ipairs(clones) do
 		if b ~= inst and b.components.combat.target ~= nil and b.components.combat.target == target then
 			return false
@@ -58,16 +58,19 @@ local function OnAttacked(inst, data)
 end
 
 local function OnDamaged(inst, data)
-	inst.decoy_attack_count = inst.decoy_attack_count + 1
+	local amount = data.amount or 0
+
+	inst.decoy_attack_count = inst.decoy_attack_count + amount
 	
-	if inst.decoy_attack_count == 5 or inst.decoy_attack_count == 10 then
+	if inst.decoy_attack_count >= 1500 then
 		inst.decoy_attack = true
+		inst.decoy_attack_count = 0
 	end
-	
-	inst:PushEvent("attacked")
+
+	inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/appear")
 			
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local clones = TheSim:FindEntities(x, y, z, 30, { "shadow_wixie_clone" })
+	local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_clone" })
 			
 	for i, v in pairs(clones) do
 		if v ~= nil and v:IsValid() then
@@ -178,8 +181,8 @@ local function fn()
     inst.components.locomotor:SetSlowMultiplier(.6)
 
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(15)
-    inst.components.health:SetMaxDamageTakenPerHit(1)
+    inst.components.health:SetMaxHealth(5000)
+    --inst.components.health:SetMaxDamageTakenPerHit(1)
     inst.components.health.destroytime = 3
     inst.components.health.fire_damage_scale = TUNING.WILLOW_FIRE_DAMAGE
 	
@@ -285,6 +288,7 @@ local function helperfn()
     inst:AddTag("shadowchesspiece")
 	inst:AddTag("shadowcreature")
     inst:AddTag("shadow_wixie")
+    inst:AddTag("shadow_wixie_clone")
 
     inst.entity:SetPristine()
 
@@ -379,7 +383,7 @@ local function OnHitLazy(inst, attacker, target)
 		inst.caster.sg:GoToState("trickster")
 			
 		local x, y, z = inst.Transform:GetWorldPosition()
-		local clones = TheSim:FindEntities(x, y, z, 30, { "shadow_wixie" })
+		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_clone" })
 				
 		for i, v in pairs(clones) do
 			if v ~= nil and v ~= inst and v:IsValid() then
