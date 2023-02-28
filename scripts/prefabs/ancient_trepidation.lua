@@ -312,6 +312,11 @@ local function fn(Sim)
 	inst.AnimState:UsePointFiltering(true)
 	inst.entity:SetPristine()
 
+	inst:AddTag("notraptrigger")
+	inst:AddTag("shadowchesspiece")
+	inst:AddTag("trepidation")
+	inst:AddTag("fossil")
+
 	inst.menaces = {} --putting this here so clients can access it!
 
 	if not TheWorld.ismastersim then
@@ -335,12 +340,6 @@ local function fn(Sim)
 
 	inst:AddComponent("lootdropper")
 	inst.components.lootdropper:SetChanceLootTable('ancient_trepidation')
-
-
-	inst:AddTag("notraptrigger")
-	inst:AddTag("shadowchesspiece")
-	inst:AddTag("trepidation")
-	inst:AddTag("fossil")
 	------------------
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(3000)

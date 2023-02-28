@@ -15,7 +15,7 @@ local prefabs_firecrackers =
 }
 
 local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "abigail", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
-local GOOP_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
+local GOOP_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "invisible" }
 
 if not TheNet:GetPVPEnabled() then 
 	table.insert(AURA_EXCLUDE_TAGS, "player")
@@ -174,14 +174,14 @@ local function DoPop(inst, remaining, total, level, hissvol)
 							v.SoundEmitter:PlaySound(v.components.combat:GetImpactSound(v))
 						end
 					else
-						if no_aggro(attacker, v) then
-							v.components.combat:SetShouldAvoidAggro(attacker)
+						if no_aggro(inst.attacker, v) then
+							v.components.combat:SetShouldAvoidAggro(inst.attacker)
 						end
 					
 						v.components.combat:GetAttacked(inst, 10, inst)
 						v.components.combat:SetTarget(inst.attacker or nil)
 						
-						v.components.combat:RemoveShouldAvoidAggro(attacker)
+						v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
 					end
 				end
 			end
@@ -618,7 +618,7 @@ local function OnHit_MoonRock(inst, attacker, target)
 			target:PushEvent("wixiebite")
 		end
 	
-		if target:HasTag("shadow") or target:HasTag("shadowcreature") then
+		if target:HasTag("shadow") or target:HasTag("shadowcreature") or target:HasTag("stalker") or v:HasTag("shadowchesspiece") then
 			inst.powerlevel = inst.powerlevel + 2
 		end
 	
@@ -734,16 +734,15 @@ local function OnHit_Slime(inst, attacker, target)
 		if target.slingshot_slime ~= nil then
 			target.slingshot_slime:Advance()
 		elseif target.components.combat then
-			if target.components.combat.hiteffectsymbol ~= nil and target.components.combat.hiteffectsymbol ~= "marker" then
-				hitfx.Transform:SetPosition(x, y, z)
-				local follower = hitfx.entity:AddFollower()
-				hitfx.entity:SetParent(target.entity)
-				follower:FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+			hitfx.entity:SetParent(target.entity)
+			hitfx.Transform:SetPosition(0, 0, 0)
+			
+			if target.components.combat ~= nil and 
+			target.components.combat.hiteffectsymbol ~= nil and
+			target.components.combat.hiteffectsymbol ~= "marker" then
+				hitfx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
 			else
-				hitfx.Transform:SetPosition(x, 1.5, z)
-				--local follower = hitfx.entity:AddFollower()
-				hitfx.entity:SetParent(target.entity)
-				hitfx.entity:AddFollower()
+				hitfx.Transform:SetPosition(0, 2, 0)
 			end
 			
 			hitfx.target = target
@@ -1060,7 +1059,7 @@ local function GlassCut(inst)
 						v.components.combat:SetShouldAvoidAggro(attacker)
 					end
 					
-					if v:HasTag("shadow") or v:HasTag("shadowcreature") then
+					if v:HasTag("shadow") or v:HasTag("shadowcreature") or v:HasTag("stalker") or v:HasTag("shadowchesspiece") then
 						inst.finallevel = inst.powerlevel + .5
 					end
 					
@@ -1960,13 +1959,13 @@ local function Tremor(inst)
 						inst.finaldamage = inst.finaldamage * (inst.attacker.components.combat ~= nil and inst.attacker.components.combat.externaldamagemultipliers:Get() or 1)
 					end
 					
-					if no_aggro(attacker, v) then
-						v.components.combat:SetShouldAvoidAggro(attacker)
+					if no_aggro(inst.attacker, v) then
+						v.components.combat:SetShouldAvoidAggro(inst.attacker)
 					end
 					
 					v.components.combat:GetAttacked(inst.attacker, inst.finaldamage, inst)
 					
-					v.components.combat:RemoveShouldAvoidAggro(attacker)
+					v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
 				end
 			end
 		end

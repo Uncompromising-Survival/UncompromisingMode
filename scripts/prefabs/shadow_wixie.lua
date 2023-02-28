@@ -14,22 +14,41 @@ local prefabs =
 {
 
 }
-	
+
 local function retargetfn(inst)
     --retarget nearby players if current target is fleeing or not a player
 	local target = inst.components.combat.target
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local players = FindPlayersInRange(x, y, z, 30, true)
+	local players = TheSim:FindEntities(x, y, z, 40, { "player" })
     local rangesq = math.huge
     for i, v in ipairs(players) do
         local distsq = v:GetDistanceSqToPoint(x, y, z)
-        if distsq < rangesq and inst.components.combat:CanTarget(v) and (target == nil) then
-            rangesq = distsq
-            target = v
-        end
+		
+		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
+		for n, b in ipairs(clones) do
+			if #clones == 1 or b ~= inst and (b.components.combat.target == nil or b.components.combat.target ~= v) then
+				if distsq < rangesq and inst.components.combat:CanTarget(v) and (target == nil) then
+					rangesq = distsq
+					target = v
+				end
+			end
+		end
     end
     return target, true
+end
+
+local function KeepTargetFn(inst, target)
+    local x, y, z = inst.Transform:GetWorldPosition()
+		
+	local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie" })
+	for n, b in ipairs(clones) do
+		if b ~= inst and b.components.combat.target ~= nil and b.components.combat.target == target then
+			return false
+		end
+	end
+	
+    return true
 end
 
 local function OnAttacked(inst, data)
@@ -39,23 +58,59 @@ local function OnAttacked(inst, data)
 end
 
 local function OnDamaged(inst, data)
-	inst.decoy_attack_count = inst.decoy_attack_count + 1
+	local amount = data.amount or 0
+
+	inst.decoy_attack_count = inst.decoy_attack_count + amount
 	
-	if inst.decoy_attack_count == 5 or inst.decoy_attack_count == 10 then
+	if inst.decoy_attack_count <= -1500 then
 		inst.decoy_attack = true
 	end
-	
-	inst:PushEvent("attacked")
-	
+
+	inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/appear")
+			
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local clones = TheSim:FindEntities(x, y, z, 30, { "shadow_wixie" })
-	
+	local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_clone" })
+			
 	for i, v in pairs(clones) do
 		if v ~= nil and v:IsValid() then
 			SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
+
+			if v.physbox ~= nil then
+				v.physbox:Remove()
+			end
+
 			v:Remove()
 		end
 	end
+	
+	inst.force_invincible_value = inst.force_invincible_value + amount
+	print(inst.force_invincible_value)
+	if inst.sg.currentstate.name == "trickster" or inst.force_invincible_value <= -500 then
+		inst.sg:GoToState("disappear")
+	end
+end
+
+local function PushMusic(inst, level)
+    if ThePlayer == nil or inst:HasTag("flight") or IsEntityDead(inst) then
+        inst._playingmusic = false
+    elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
+        inst._playingmusic = true
+        ThePlayer:PushEvent("playwixiemusic", { name = "wixie", level = level })
+    elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
+        inst._playingmusic = false
+    end
+end
+
+local function OnMusicDirty(inst)
+    --Dedicated server does not need to trigger music
+    if not TheNet:IsDedicated() then
+        if inst._musictask ~= nil then
+            inst._musictask:Cancel()
+        end
+        local level = inst._pausemusic:value() and 2 or (inst._unchained:value() and 3 or 1)
+        inst._musictask = inst:DoPeriodicTask(1, PushMusic, nil, level)
+        PushMusic(inst, level)
+    end
 end
 
 local function fn()
@@ -96,15 +151,26 @@ local function fn()
     inst:AddTag("notraptrigger")
     inst:AddTag("shadowchesspiece")
 	inst:AddTag("shadowcreature")
+	inst:AddTag("shadow_wixie")
+	inst:AddTag("prime_shadow_wixie")
+
+    inst._unchained = net_bool(inst.GUID, "klaus._unchained", "musicdirty")
+    inst._pausemusic = net_bool(inst.GUID, "klaus_pausemusic", "musicdirty")
+    inst._playingmusic = false
+    inst._musictask = nil
+    OnMusicDirty(inst)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
+        inst:ListenForEvent("musicdirty", OnMusicDirty)
+		
         return inst
     end
 	
 	inst.decoy_attack = false
 	inst.decoy_attack_count = 0
+	inst.force_invincible_value = 0
 	inst.stunned_count = 0
 	inst.marble_bag_attack = false
 	inst.helper = false
@@ -121,8 +187,8 @@ local function fn()
     inst.components.locomotor:SetSlowMultiplier(.6)
 
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(15)
-    inst.components.health:SetMaxDamageTakenPerHit(1)
+    inst.components.health:SetMaxHealth(5000)
+    --inst.components.health:SetMaxDamageTakenPerHit(1)
     inst.components.health.destroytime = 3
     inst.components.health.fire_damage_scale = TUNING.WILLOW_FIRE_DAMAGE
 	
@@ -134,6 +200,7 @@ local function fn()
     inst.components.combat:SetRange(5, 1)
     inst.components.combat:SetDefaultDamage(10)
     inst.components.combat:SetRetargetFunction(4, retargetfn)
+	inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 	
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetLoot({"nightmarefuel", "nightmarefuel", "nightmarefuel", "the_real_charles_t_horse"})
@@ -157,10 +224,10 @@ local function fn()
 	inst:DoTaskInTime(0, function()
 		if not inst:HasTag("puzzlespawn") then
 			if inst.physbox ~= nil then
-				inst.physbox:Remove()
+				--inst.physbox:Remove()
 			end
 			
-			inst:Remove()
+			--inst:Remove()
 		end
 	end)
 	
@@ -226,6 +293,9 @@ local function helperfn()
     inst:AddTag("notraptrigger")
     inst:AddTag("shadowchesspiece")
 	inst:AddTag("shadowcreature")
+    inst:AddTag("shadow_wixie")
+    inst:AddTag("shadow_wixie_helper")
+    inst:AddTag("shadow_wixie_clone")
 
     inst.entity:SetPristine()
 
@@ -261,6 +331,7 @@ local function helperfn()
     inst.components.combat:SetRange(5, 1)
     inst.components.combat:SetDefaultDamage(10)
     inst.components.combat:SetRetargetFunction(4, retargetfn)
+	inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 	
     inst:AddComponent("lootdropper")
 	
@@ -271,6 +342,11 @@ local function helperfn()
 	inst:SetBrain(brain)
 
 	inst:SetStateGraph("SGshadow_wixie")
+    inst:ListenForEvent("removed", function()
+		if inst.physbox ~= nil then
+			inst.physbox:Remove()
+		end 
+	end)
 
 	inst:DoTaskInTime(0, function()
 		if not inst:HasTag("puzzlespawn") then
@@ -312,6 +388,21 @@ local function OnHitLazy(inst, attacker, target)
 		end
 		
 		inst.caster.sg:GoToState("trickster")
+			
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_helper" })
+				
+		for i, v in pairs(clones) do
+			if v ~= nil and v ~= inst and v:IsValid() then
+				SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
+
+				if v.physbox ~= nil then
+					v.physbox:Remove()
+				end
+
+				v:Remove()
+			end
+		end
 	else
 		local xc, yc, zc = inst.Transform:GetWorldPosition()
 			
@@ -446,7 +537,7 @@ local function SpawnSpikes(inst)
         end
     end
 		
-	inst:DoTaskInTime(1, function()
+	inst:DoTaskInTime(.1, function()
 		SpawnPrefab("shadow_despawn").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst:Remove()
 	end)
@@ -468,7 +559,7 @@ local function shadowclone_fn()
     inst:AddTag("hostile")
     inst:AddTag("notraptrigger")
     inst:AddTag("shadowchesspiece")
-    inst:AddTag("shadow_wixie")
+    inst:AddTag("shadow_wixie_clone")
 
     inst.entity:SetPristine()
 
@@ -481,7 +572,7 @@ local function shadowclone_fn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(10)
 	
-	inst:DoTaskInTime(8, function(inst) 
+	inst:DoTaskInTime(15, function(inst) 
 		SpawnSpikes(inst)
 	end)
 	
@@ -641,7 +732,7 @@ local function shadowshot_fn()
     inst.components.projectile:SetOnMissFn(nil)
 	inst.components.projectile:SetLaunchOffset(Vector3(1, 0.5, 0))
 	
-	inst:DoTaskInTime(3, inst.Remove)
+	inst:DoTaskInTime(2, inst.Remove)
 	
     return inst
 end

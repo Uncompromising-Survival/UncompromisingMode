@@ -9,6 +9,7 @@ local actionhandlers =
 
 local function ResetShield(inst)
 	inst.components.health:SetInvincible(true)
+	inst.force_invincible_value = 0
 	
 	if inst.physbox == nil then
 		inst.physbox = SpawnPrefab("wixie_shadow_shield")
@@ -24,7 +25,7 @@ local events =
     CommonHandlers.OnLocomote(false, true),
     EventHandler("attacked", function(inst, data)
 		--if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
-        if not inst.components.health:IsDead() then
+        if not inst.sg:HasStateTag("busy") and inst.components.health:IsDead() then
 			if inst.components.health:GetPercent() <= 0.75 then
 				inst.marble_bag_attack = true
 			end
@@ -157,13 +158,18 @@ local function Check_Bowling(inst)
 end
 
 local function GetANewTarget(inst)
+	if inst:HasTag("prime_shadow_wixie") then
+		inst.components.combat:DropTarget()
+	end
+	
+	--[[
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local players = FindPlayersInRange(x, y, z, 40, true)
+	local players = TheSim:FindEntities(x, y, z, 30, { "player" })
 	for i, v in ipairs(players) do
 		if not inst.components.combat.target == v and inst.components.combat:CanTarget(v) then
 			inst.components.combat:SetTarget(v)
 		end
-	end
+	end]]
 end
 
 local function SpawnDupes(inst)
@@ -171,6 +177,18 @@ local function SpawnDupes(inst)
 	shadowhelper.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	shadowhelper:AddTag("puzzlespawn")
 	shadowhelper.Transform:SetRotation(math.random(0, 360))
+	
+	local max_tries = 4
+	for k = 1, max_tries do
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local offset = 10
+		x = x + math.random(2 * offset) - offset
+		z = z + math.random(2 * offset) - offset
+		if TheWorld.Map:IsPassableAtPoint(x, y, z) then
+			shadowhelper.Transform:SetPosition(x, y, z)
+			break
+		end
+	end
 end
 
 local states =
@@ -196,7 +214,7 @@ local states =
 				inst.physbox = nil
 			end
 			
-            inst.sg:SetTimeout(8)
+            inst.sg:SetTimeout(15)
         end,
 
         timeline =
@@ -426,6 +444,7 @@ local states =
             EventHandler("animover", function(inst)
 				if inst.charge_count >= 5 then
 					inst.charge_count = nil
+					inst.collided = nil
 					inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
 					inst.sg:GoToState("claustrophobia")
 				else
@@ -507,7 +526,7 @@ local states =
 							inst.sg:GoToState("idle")
 						end
 					else
-						local shot_calc = 6 - (inst.components.health.currenthealth / 3)
+						local shot_calc = 6 - ((15 * inst.components.health:GetPercent()) / 3)
 						
 						if inst.multisling == nil then
 							inst.multisling = 1
@@ -552,15 +571,16 @@ local states =
             inst.AnimState:PushAnimation("cointoss", false)
 			inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/taunt")
 			
+			inst.decoy_attack_count = 0
         end,
 
         timeline =
         {
             TimeEvent(12 * FRAMES, function(inst)
-				local teleport_to = math.random(1, 10)
+				local teleport_to = math.random(1, 15)
 			
-				for i = 1, 10 do
-					inst:DoTaskInTime(i / 25, function(inst)
+				for i = 1, 15 do
+					inst:DoTaskInTime(i / 40, function(inst)
 						if teleport_to == i then
 							TossDistraction(inst, true)
 						else
@@ -683,7 +703,7 @@ local states =
                 local max_tries = 4
                 for k = 1, max_tries do
                     local x, y, z = inst.Transform:GetWorldPosition()
-                    local offset = 10
+                    local offset = 12
                     x = x + math.random(2 * offset) - offset
                     z = z + math.random(2 * offset) - offset
                     if TheWorld.Map:IsPassableAtPoint(x, y, z) then
@@ -768,7 +788,7 @@ local states =
 				inst.physbox = nil
 			end
 			
-            inst.sg:SetTimeout(inst.helper and 6.2 or 4.2)
+            inst.sg:SetTimeout(inst.helper and 8 or 5)
         end,
 
         ontimeout = function(inst)
@@ -778,7 +798,7 @@ local states =
 
     State{
         name = "claustrophobia_pst",
-        tags = { "idle" },
+        tags = { "busy" },
 
         onenter = function(inst)
 			ResetShield(inst)
@@ -791,7 +811,7 @@ local states =
                 if inst.AnimState:AnimDone() then
 					GetANewTarget(inst)
 				
-					inst.sg:GoToState("idle")
+					inst.sg:GoToState("disappear")
                 end
             end),
         },
