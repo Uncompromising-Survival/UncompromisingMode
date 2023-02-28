@@ -85,7 +85,7 @@ local function OnDamaged(inst, data)
 	
 	inst.force_invincible_value = inst.force_invincible_value + amount
 	print(inst.force_invincible_value)
-	if inst.force_invincible_value <= -500 then
+	if inst.sg.currentstate.name == "trickster" or inst.force_invincible_value <= -500 then
 		inst.sg:GoToState("disappear")
 	end
 end
