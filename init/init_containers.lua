@@ -479,7 +479,7 @@ for y = 1, -3, -1 do
     end
 end
 
-containers.params.sunkenchest_royal = containers.params.shadowchester
+containers.params.sunkenchest_royal_random = containers.params.shadowchester
 
 for k, v in pairs(modparams) do
     containers.MAXITEMSLOTS = math.max(containers.MAXITEMSLOTS, v.widget.slotpos ~= nil and #v.widget.slotpos or 0)

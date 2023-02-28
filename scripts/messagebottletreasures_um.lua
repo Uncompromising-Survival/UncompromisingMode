@@ -208,7 +208,7 @@ local treasure_templates =
 
 		}
 	},
-	sunkenchest_royal =
+	sunkenchest_royal_random =
 	{
 		treasure_type_weight = 0.5,
 
@@ -340,6 +340,154 @@ local treasure_templates =
 			}
 		}
 	},
+	sunkenchest_royal_red =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			red =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					armor_crab_maxhp = 1,
+					ancient_amulet_red = 1,
+					sludge = { 4, 8 },
+					redgem = {0,1,2},
+				},
+			},
+		}
+	},
+	sunkenchest_royal_blue =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			blue =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					rain_horn = 1,
+					blueamulet = 1,
+					ice = { 4, 8 },
+					bluegem = {0,1,2},
+				},
+			},
+		}
+	},
+
+	sunkenchest_royal_purple =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			purple =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					trident = 1,
+					kelp = 2,
+					gnarwail_horn = { 1, 2 },
+					purplegem = {0,1,2},
+				},
+			},
+		}
+	},
+	sunkenchest_royal_orange =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			orange =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					--crabhat = 1,
+					rocks = 4,
+					cutstone = { 1, 2 },
+					orangegem = {0,1,2},
+				},
+			},
+		}
+	},
+	sunkenchest_royal_yellow =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			yellow =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					staff_starfall = 1,
+					goldnugget = 4,
+					feather_canary = { 1, 2 },
+					yellowgem = {0,1,2},
+				},
+			},
+		}
+	},
+	sunkenchest_royal_green =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			green =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					armor_crab_regen = 1,
+					reeds = 4,
+					rocks = { 1, 2, 3 },
+					greengem = {0,1,2},
+				},
+			},
+		}
+	},
+	sunkenchest_royal_rainbow =
+	{
+		treasure_type_weight = 0,
+
+		presets =
+		{
+			rainbow =
+			{
+				preset_weight = 1,
+
+				guaranteed_loot =
+				{
+					--boat_bumper_crab_blueprint = 1,
+					redgem = {0,1,2},
+					bluegem = {0,1,2},
+					purplegem = {0,1,2},
+					greengem = {0,1,2},
+					yellowgem = {0,1,2},
+					orangegem = {0,1,2},
+					moonglass = {0,1,2,3,4,5}
+				},
+			},
+		}
+	},
+
+
+
 
 }
 

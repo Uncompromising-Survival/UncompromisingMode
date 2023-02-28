@@ -106,7 +106,7 @@ local function endgeyser(inst)
             local boat = TheWorld.Map:GetPlatformAtPoint(x + offset.x, z + offset.z)
             if boat then
                 local pt = Vector3(x + offset.x, 0, z + offset.z)
-                boat.components.health:DoDelta(-4-inst.crab.countgems(inst.crab).purple)
+                boat.components.health:DoDelta(-2-inst.crab.countgems(inst.crab).purple)
 
                 -- look for patches
                 --[[local nearpatch = TheSim:FindEntities(pt.x, 0, pt.z, 2, REPAIRED_PATCH_TAGS)

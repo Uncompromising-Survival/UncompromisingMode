@@ -216,10 +216,10 @@ local function sunken_master_postinit(inst)
     inst:ListenForEvent("on_landed", sunken_OnLanded)
 end
 
-return MakeChest("sunkenchest_royal", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
-    { "collapse_small", "underwater_salvageable", "splash_green" },
-    { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
-    sunken_common_postinit, true),
+return MakeChest("sunkenchest_royal_random", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
     MakeChest("sunkenchest_royal_red", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
         { "collapse_small", "underwater_salvageable", "splash_green" },
         { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
@@ -241,6 +241,10 @@ return MakeChest("sunkenchest_royal", "sunken_treasurechest", "sunken_royalchest
         { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
         sunken_common_postinit, true),
     MakeChest("sunkenchest_royal_yellow", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
+        { "collapse_small", "underwater_salvageable", "splash_green" },
+        { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
+        sunken_common_postinit, true),
+    MakeChest("sunkenchest_royal_rainbow", "sunken_treasurechest", "sunken_royalchest", false, sunken_master_postinit,
         { "collapse_small", "underwater_salvageable", "splash_green" },
         { Asset("ANIM", "anim/swap_sunken_treasurechest.zip"), Asset("ANIM", "anim/sunken_royalchest.zip") },
         sunken_common_postinit, true)

@@ -41,6 +41,8 @@ local component_post = {
 	--"spellbook"
 	"finiteuses",
 	"piratespawner",
+	"repairable",
+	"sewing",
 }
 
 local prefab_post = {
@@ -109,7 +111,7 @@ local prefab_post = {
 	"wobster",
 	"townportal",
 	"trinkets", --This is for the grave mound cc trinkets
-	"trap",  -- prevents traps and rabbits from 'sleeping' off screen
+	"trap", -- prevents traps and rabbits from 'sleeping' off screen
 	"moonbase",
 	"koalas",
 	"pumpkin_lantern",
@@ -176,6 +178,7 @@ local prefab_post = {
 	"wptags",
 	"winona_portables",
 	"inventoryitem_classified",
+	"cannonballs",
 }
 
 local stategraph_post = {
@@ -219,43 +222,56 @@ local brain_post = {
 }
 
 if GetModConfigData("wixie_walter") then
+	local wixie_prefabs =
+	{
+		"extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
+		"slingshot", -- stuff for new slingshot aiming and wixie exclusivity
+		"walter", -- all of walters things, including woby action
+		"wobysmall",
+		"wobybig",
+		"wormhole", -- wixie loses more sanity from wormholes
+		"slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
+		"coconut", -- shoot a coconut
+	}
+	local wixie_components = 
+	{
+		"healer", -- Walter gets a 50% bonus from healing items, over time. works on companions too.
+		"bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
+		"wobypicking", -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
+		"dryer", -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
+	
+	}
+
+	for k,v in ipairs(wixie_prefabs) do
+		modimport("wixie_postinit/prefabs/"..v)
+	end
+
+	for k,v in ipairs(wixie_components) do
+		modimport("wixie_postinit/components/"..v)
+	end
+
 	modimport("wixie_postinit/walter_actions")
 	modimport("wixie_postinit/widgets/controls") -- Claustrophobia overlay init
-	modimport("wixie_postinit/components/healer") -- Walter gets a 50% bonus from healing items, over time. works on companions too.
-	modimport("wixie_postinit/components/bufferedaction") -- This handles wixie sending an rpc with the mouse pointer click location
-	modimport("wixie_postinit/components/wobypicking") -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
-	modimport("wixie_postinit/components/dryer") -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
-
-	modimport("wixie_postinit/prefabs/extra_claustrophobia_checks") -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
-	modimport("wixie_postinit/prefabs/slingshot") -- stuff for new slingshot aiming and wixie exclusivity
-	modimport("wixie_postinit/prefabs/walter") -- all of walters things, including woby action
-	modimport("wixie_postinit/prefabs/wobysmall")
-	modimport("wixie_postinit/prefabs/wobybig")
-	modimport("wixie_postinit/prefabs/wormhole") -- wixie loses more sanity from wormholes
-	modimport("wixie_postinit/prefabs/slingshotammo") -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
-
-	modimport("wixie_postinit/prefabs/coconut") -- shoot a coconut
 
 	modimport("wixie_postinit/stategraphs/SGwixie")
 	modimport("wixie_postinit/stategraphs/SGwixie_client")
 	modimport("wixie_postinit/stategraphs/SGwobysmall")
 
 	modimport("wixie_postinit/walter_strings")
-	
 	modimport("wixie_postinit/wixie_strings")
 
-	RemapSoundEvent( "dontstarve/characters/wixie/death_voice", "wixie/characters/wixie/death_voice" )
-	RemapSoundEvent( "dontstarve/characters/wixie/hurt", "wixie/characters/wixie/hurt" )
-	RemapSoundEvent( "dontstarve/characters/wixie/talk_LP", "wixie/characters/wixie/talk_LP" )
-	RemapSoundEvent( "dontstarve/characters/wixie/ghost_LP", "wixie/characters/wixie/ghost_LP" )
-	RemapSoundEvent( "dontstarve/characters/wixie/nightmare_LP", "wixie/characters/wixie/nightmare_LP" )
-	RemapSoundEvent( "dontstarve/characters/wixie/yawn", "wixie/characters/wixie/yawn" )
-	RemapSoundEvent( "dontstarve/characters/wixie/emote", "wixie/characters/wixie/emote" )
-	RemapSoundEvent( "dontstarve/characters/wixie/pose", "wixie/characters/wixie/pose" )
-	RemapSoundEvent( "dontstarve/characters/wixie/yawn", "wixie/characters/wixie/yawn" )
-	RemapSoundEvent( "dontstarve/characters/wixie/eye_rub_vo", "wixie/characters/wixie/eye_rub_vo" )
-	RemapSoundEvent( "dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol" )
-	RemapSoundEvent( "dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking" )
+	RemapSoundEvent("dontstarve/characters/wixie/death_voice", "wixie/characters/wixie/death_voice")
+	RemapSoundEvent("dontstarve/characters/wixie/hurt", "wixie/characters/wixie/hurt")
+	RemapSoundEvent("dontstarve/characters/wixie/talk_LP", "wixie/characters/wixie/talk_LP")
+	RemapSoundEvent("dontstarve/characters/wixie/ghost_LP", "wixie/characters/wixie/ghost_LP")
+	RemapSoundEvent("dontstarve/characters/wixie/nightmare_LP", "wixie/characters/wixie/nightmare_LP")
+	RemapSoundEvent("dontstarve/characters/wixie/yawn", "wixie/characters/wixie/yawn")
+	RemapSoundEvent("dontstarve/characters/wixie/emote", "wixie/characters/wixie/emote")
+	RemapSoundEvent("dontstarve/characters/wixie/pose", "wixie/characters/wixie/pose")
+	RemapSoundEvent("dontstarve/characters/wixie/yawn", "wixie/characters/wixie/yawn")
+	RemapSoundEvent("dontstarve/characters/wixie/eye_rub_vo", "wixie/characters/wixie/eye_rub_vo")
+	RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
+	RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
 
 if GetModConfigData("hangyperds") then

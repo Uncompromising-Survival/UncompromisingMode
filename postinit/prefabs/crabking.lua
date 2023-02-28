@@ -1,3 +1,29 @@
+--[[
+	LOOT
+
+	Opal: Crab Bumper
+		Crab bumper allows socketing a gem to give it different effects
+		blue - bounce back
+		red - increased boat and bumper health
+		purple - prevent sanity monsters from aggro'ing on the boat
+		green - bumper doesn't fully break, ramming things gives extra resources
+		orange - teleports you to land/a boat if you were to drown nearby
+		yellow - increased speed multiplier + glow
+		opal - boat gains a sanity aura, glows and has additional 50% genering health in the form of growing glass.
+
+	Blue: Rain Horn DONE
+
+	Red: Armor that increases max health DONE
+
+	Purple: Trident DONE
+
+	Orange: Headwear that makes repairing/healing/sewing whatever 2x more effective
+
+	Yellow: Extremely rapid-fire "starfall" staff DONE
+
+	Green: Self-healing armor DONE
+]]
+
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -193,7 +219,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
-
+	inst.attack_count = 0
 	inst.castedaspell = false
 
 	if inst.components.combat ~= nil then
@@ -208,7 +234,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 	inst.endcastspell = function(inst, lastwasfreeze)
 		_endcastspell(inst, lastwasfreeze)
 
-		local atk_cd = (TUNING.CRABKING_CAST_TIME - math.floor(inst.countgems(inst).yellow * 0.75)) * 0.125
+		local atk_cd = (TUNING.CRABKING_CAST_TIME - math.floor(inst.countgems(inst).yellow * 0.75)) * 0.2
 
 		if inst.components.timer:TimerExists("spell_cooldown") then
 			inst.components.timer:StopTimer("spell_cooldown")
@@ -228,11 +254,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 			end
 		end
 
-		if inst.attack_count == nil then
-			inst.attack_count = 0
-		end
-
-		inst.attack_count = inst.attack_count + 1 or 1
+		inst.attack_count = math.clamp(inst.attack_count + 1, 0, 10)
 
 		if inst.attack_count > math.random(5, 8) then
 			print("long attack cd time", 30 - inst.countgems(inst).yellow)
@@ -282,7 +304,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 		end
 	end
 
-	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
+	--inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 
 	inst:ListenForEvent("death", function(inst)
 		TheWorld.crabking_active = false
@@ -296,50 +318,21 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local orange = inst.countgems(inst).orange
 		local green = inst.countgems(inst).green
 		local opal = inst.countgems(inst).opal
-		local pearl = inst.countgems(inst).pearl
 
-		print("Count:")
-		print("RED: " .. red .. "   " .. "BLUE: " .. blue .. "   " .. "PURPLE: " .. purple)
-		print("YELLOW: " .. yellow .. "   " .. "ORANGE: " .. orange .. "   " .. "GREEN: " .. green)
-
-
-		print("Chances:")
-		print("RED: " .. red .. "0%" .. "   " .. "BLUE: " .. blue .. "0%" .. "   " .. "PURPLE: " .. purple .. "0%")
-		print("YELLOW: " .. yellow .. "0%" .. "   " .. "ORANGE: " .. orange .. "0%" .. "   " .. "GREEN: " .. green ..
-		"0%")
-
-		if pearl > 0 then
-			print("congrats! you got the Tribute!")
-			return
-		end
-
-		if math.random(10) < red then
-			print("congrats! you got a red chest!")
-			return
-		end
-		if math.random(10) < blue then
-			print("congrats! you got a blue chest!")
-			return
-		end
 		if math.random(10) < purple then
 			print("congrats! you got a purple chest!")
-			return
 		end
 		if math.random(5) < yellow then
 			print("congrats! you got a yellow chest!")
-			return
 		end
 		if math.random(5) < orange then
 			print("congrats! you got a orange chest!")
-			return
 		end
 		if math.random(5) < green then
 			print("congrats! you got a green chest!")
-			return
 		end
 		if opal >= 1 then
 			print("congrats! you got a rainbow chest!")
-			return
 		end
 	end)
 
@@ -347,12 +340,12 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local boat_physics = data.other.components.boatphysics
 		if boat_physics ~= nil then
 			if inst.components.health ~= nil then
-				inst.components.health:DoDelta( -1000 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
+				inst.components.health:DoDelta( -1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
 			end
 		end
 
-			inst.finishfixing(inst)
-		if inst.attack_count <= 3 then
+		inst.finishfixing(inst)
+		if inst.attack_count <= 2 then
 			inst:DoTaskInTime(3, function(inst)
 				if inst.components.timer:TimerExists("claw_regen_timer") then
 					inst.components.timer:StopTimer("claw_regen_timer")
@@ -371,11 +364,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 			inst.wantstocast = true
 			inst.attack_count = 0
 		else
-			if inst.attack_count == nil then
-				inst.attack_count = 0
-			end
-
-			inst.attack_count = inst.attack_count - 1
+			inst.attack_count = math.clamp(inst.attack_count - 1, 0, 10)
 		end
 	end
 

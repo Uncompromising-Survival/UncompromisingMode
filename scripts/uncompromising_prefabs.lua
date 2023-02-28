@@ -407,5 +407,8 @@ return {
 	"placeholder_recipe_item",
 	"winona_structure_item",
 	"boiling_water",
-	"crabking_geyser_single"
+	"crabking_geyser_single",
+	"staff_starfall",
+	"armor_crab",
+	"crab_hat",
 }
