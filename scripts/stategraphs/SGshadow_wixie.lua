@@ -9,6 +9,7 @@ local actionhandlers =
 
 local function ResetShield(inst)
 	inst.components.health:SetInvincible(true)
+	inst.force_invincible_value = 0
 	
 	if inst.physbox == nil then
 		inst.physbox = SpawnPrefab("wixie_shadow_shield")
@@ -213,7 +214,7 @@ local states =
 				inst.physbox = nil
 			end
 			
-            inst.sg:SetTimeout(8)
+            inst.sg:SetTimeout(15)
         end,
 
         timeline =
@@ -443,6 +444,7 @@ local states =
             EventHandler("animover", function(inst)
 				if inst.charge_count >= 5 then
 					inst.charge_count = nil
+					inst.collided = nil
 					inst.AnimState:OverrideSymbol("swap_object", "swap_slingshot", "swap_slingshot")
 					inst.sg:GoToState("claustrophobia")
 				else
@@ -569,15 +571,16 @@ local states =
             inst.AnimState:PushAnimation("cointoss", false)
 			inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/taunt")
 			
+			inst.decoy_attack_count = 0
         end,
 
         timeline =
         {
             TimeEvent(12 * FRAMES, function(inst)
-				local teleport_to = math.random(1, 10)
+				local teleport_to = math.random(1, 15)
 			
-				for i = 1, 10 do
-					inst:DoTaskInTime(i / 25, function(inst)
+				for i = 1, 15 do
+					inst:DoTaskInTime(i / 40, function(inst)
 						if teleport_to == i then
 							TossDistraction(inst, true)
 						else

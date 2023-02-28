@@ -62,9 +62,8 @@ local function OnDamaged(inst, data)
 
 	inst.decoy_attack_count = inst.decoy_attack_count + amount
 	
-	if inst.decoy_attack_count >= 1500 then
+	if inst.decoy_attack_count <= -1500 then
 		inst.decoy_attack = true
-		inst.decoy_attack_count = 0
 	end
 
 	inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/appear")
@@ -82,6 +81,12 @@ local function OnDamaged(inst, data)
 
 			v:Remove()
 		end
+	end
+	
+	inst.force_invincible_value = inst.force_invincible_value + amount
+	print(inst.force_invincible_value)
+	if inst.force_invincible_value <= -500 then
+		inst.sg:GoToState("disappear")
 	end
 end
 
@@ -165,6 +170,7 @@ local function fn()
 	
 	inst.decoy_attack = false
 	inst.decoy_attack_count = 0
+	inst.force_invincible_value = 0
 	inst.stunned_count = 0
 	inst.marble_bag_attack = false
 	inst.helper = false
@@ -288,6 +294,7 @@ local function helperfn()
     inst:AddTag("shadowchesspiece")
 	inst:AddTag("shadowcreature")
     inst:AddTag("shadow_wixie")
+    inst:AddTag("shadow_wixie_helper")
     inst:AddTag("shadow_wixie_clone")
 
     inst.entity:SetPristine()
@@ -383,7 +390,7 @@ local function OnHitLazy(inst, attacker, target)
 		inst.caster.sg:GoToState("trickster")
 			
 		local x, y, z = inst.Transform:GetWorldPosition()
-		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_clone" })
+		local clones = TheSim:FindEntities(x, y, z, 40, { "shadow_wixie_helper" })
 				
 		for i, v in pairs(clones) do
 			if v ~= nil and v ~= inst and v:IsValid() then
@@ -565,7 +572,7 @@ local function shadowclone_fn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(10)
 	
-	inst:DoTaskInTime(8, function(inst) 
+	inst:DoTaskInTime(15, function(inst) 
 		SpawnSpikes(inst)
 	end)
 	
