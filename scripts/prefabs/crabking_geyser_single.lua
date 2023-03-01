@@ -8,7 +8,7 @@ local geyserprefabs =
     "crab_king_waterspout",
 }
 
-local REPAIRED_PATCH_TAGS = {"boat_repaired_patch"}
+local REPAIRED_PATCH_TAGS = { "boat_repaired_patch" }
 
 local function dogeyserburbletask(inst)
     if inst.burbletask then
@@ -18,7 +18,7 @@ local function dogeyserburbletask(inst)
     local totalcasttime = TUNING.CRABKING_CAST_TIME -
         (inst.crab and inst.crab:IsValid() and math.floor(inst.crab.countgems(inst.crab).yellow / 2 or 0))
     local time = Remap(inst.components.age:GetAge(), 0, totalcasttime, 0.2, 0.01)
-    inst.burbletask = inst:DoTaskInTime(time+1, function() inst.burble(inst) end) -- 0.01+ math.random()*0.1
+    inst.burbletask = inst:DoTaskInTime(time + 1, function() inst.burble(inst) end) -- 0.01+ math.random()*0.1
 end
 
 local function burble(inst)
@@ -50,7 +50,7 @@ local function endgeyser(inst)
         end
     end)
 
-    inst:DoTaskInTime(--[[(math.random() * 0.4)+]](inst.chain_time*0.025), function()
+    inst:DoTaskInTime( --[[(math.random() * 0.4)+]] (inst.chain_time * 0.025), function()
         local MAXRADIUS = 1.25
         local x, y, z = inst.Transform:GetWorldPosition()
         local theta = math.random() * 2 * PI
@@ -98,15 +98,14 @@ local function endgeyser(inst)
                     end
                 end
                 if v.components.health ~= nil and v.components.combat ~= nil and not v:HasTag("boat") and v.prefab ~= "crabking_claw" and v.prefab ~= "crabking" then
-                    v.components.combat:GetAttacked(inst.crab, 33.33+inst.crab.countgems(inst.crab).purple*2)
+                    v.components.combat:GetAttacked(inst.crab, 34 + inst.crab.countgems(inst.crab).purple * 2)
                 end
-
             end
         else
             local boat = TheWorld.Map:GetPlatformAtPoint(x + offset.x, z + offset.z)
             if boat then
                 local pt = Vector3(x + offset.x, 0, z + offset.z)
-                boat.components.health:DoDelta(-2-inst.crab.countgems(inst.crab).purple)
+                boat.components.health:DoDelta( -2 - math.floor(inst.crab.countgems(inst.crab).purple*0.5))
 
                 -- look for patches
                 --[[local nearpatch = TheSim:FindEntities(pt.x, 0, pt.z, 2, REPAIRED_PATCH_TAGS)
@@ -115,7 +114,6 @@ local function endgeyser(inst)
                     patch:Remove()
                     break
                 end]]
-
                 --boat:PushEvent("spawnnewboatleak", { pt = pt, leak_size = "small_leak", playsoundfx = true })
             end
         end

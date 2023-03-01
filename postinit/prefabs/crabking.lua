@@ -15,9 +15,9 @@
 
 	Red: Armor that increases max health DONE
 
-	Purple: Trident DONE
+	Purple: Trident NEED TO REWORK
 
-	Orange: Headwear that makes repairing/healing/sewing whatever 2x more effective
+	Orange: Headwear that makes repairing/healing/sewing whatever 2x more effective DONE
 
 	Yellow: Extremely rapid-fire "starfall" staff DONE
 

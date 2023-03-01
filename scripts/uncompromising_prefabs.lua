@@ -411,4 +411,5 @@ return {
 	"staff_starfall",
 	"armor_crab",
 	"crab_hat",
+	"trident_ground_fx",
 }

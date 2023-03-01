@@ -194,6 +194,7 @@ local stategraph_post = {
 	--"merm",
 	"carnival_host",
 	"catcoon",
+	"crabkingclaw",
 }
 
 local class_post = {

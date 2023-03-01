@@ -63,6 +63,19 @@ local function DoBubbleFX(inst)
         end
     end
 
+    for i = 1, math.random(2, 4) do
+        local x, y, z = inst.Transform:GetWorldPosition()
+        if x == nil or y == nil or z == nil then
+            break
+        end
+        local fx = SpawnPrefab("slow_steam_fx"..math.random(5))
+        local x1, y1, z1 = x + math.random(-5, 5), 0, z + math.random(-5, 5)
+        if TheWorld.Map:IsOceanAtPoint(x1, y1, z1) and TheWorld.Map:GetPlatformAtPoint(x1, z1) == nil then
+            fx.Transform:SetPosition(x1, y1, z1)
+        end
+    end
+
+
     inst.count = inst.count + 1
     if inst.count > 10 then
         inst:Remove()
