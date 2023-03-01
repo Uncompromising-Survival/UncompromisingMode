@@ -66,6 +66,15 @@ local function OnDamaged(inst, data)
 		inst.decoy_attack = true
 	end
 
+	inst.marble_bag_attack_count = inst.marble_bag_attack_count + amount
+
+	if inst.marble_bag_attack_count <= -250 then
+		if inst.components.health:GetPercent() <= 0.75 then
+			inst.marble_bag_attack_count = 0
+			inst.marble_bag_attack = true
+		end
+	end
+
 	inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/appear")
 			
 	local x, y, z = inst.Transform:GetWorldPosition()
@@ -84,9 +93,11 @@ local function OnDamaged(inst, data)
 	end
 	
 	inst.force_invincible_value = inst.force_invincible_value + amount
-	print(inst.force_invincible_value)
-	if inst.sg.currentstate.name == "trickster" or inst.force_invincible_value <= -500 then
+	
+	if inst.force_invincible_value <= -500 then
 		inst.sg:GoToState("disappear")
+	elseif inst.sg.currentstate.name == "trickster" then
+		inst.sg:GoToState("claustrophobia")
 	end
 end
 
@@ -171,6 +182,7 @@ local function fn()
 	inst.decoy_attack = false
 	inst.decoy_attack_count = 0
 	inst.force_invincible_value = 0
+	inst.marble_bag_attack_count = 0
 	inst.stunned_count = 0
 	inst.marble_bag_attack = false
 	inst.helper = false
@@ -199,7 +211,7 @@ local function fn()
     inst.components.combat:SetAttackPeriod(2)
     inst.components.combat:SetRange(5, 1)
     inst.components.combat:SetDefaultDamage(10)
-    inst.components.combat:SetRetargetFunction(4, retargetfn)
+    inst.components.combat:SetRetargetFunction(1, retargetfn)
 	inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 	
     inst:AddComponent("lootdropper")
@@ -330,7 +342,7 @@ local function helperfn()
     inst.components.combat:SetAttackPeriod(2)
     inst.components.combat:SetRange(5, 1)
     inst.components.combat:SetDefaultDamage(10)
-    inst.components.combat:SetRetargetFunction(4, retargetfn)
+    inst.components.combat:SetRetargetFunction(2, retargetfn)
 	inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 	
     inst:AddComponent("lootdropper")
@@ -578,6 +590,18 @@ local function shadowclone_fn()
 	
     inst:ListenForEvent("attacked", function(inst)
 		inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_sanity_armour_dull")
+	end)
+	
+	inst:WatchWorldState("cycles", function() 
+		if not inst.components.health:IsDead() then
+			
+			local x, y, z = inst.Transform:GetWorldPosition()
+			
+			SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+			SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+			inst:Remove()
+		end
 	end)
 	
     inst:ListenForEvent("death", function(inst)

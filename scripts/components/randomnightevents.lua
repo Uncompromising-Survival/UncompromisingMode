@@ -365,6 +365,7 @@ local function SpawnMonkeysFunction(player)
 						
 		if (playercheck == nil or #playercheck == 0) then
 			if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
+				local monkey = SpawnPrefab("chimp")
 				monkey.Transform:SetPosition(x, y, z)
 				monkey:DoTaskInTime(0, function(monkey) DayBreak(monkey) end)
 				break
