@@ -8,7 +8,7 @@ local function BonusDamage(inst)
 		for i, v in ipairs(ents) do
 			if v:IsValid() and not v:IsInLimbo() then
 				if v.components.health ~= nil and not v.components.health:IsDead() then
-					v.components.health:DoDelta( -500)
+					v.components.health:DoDelta(-inst.components.health.maxhealth)
 				end
 			end
 		end
