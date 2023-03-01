@@ -26,9 +26,6 @@ local events =
     EventHandler("attacked", function(inst, data)
 		--if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
         if not inst.sg:HasStateTag("busy") and inst.components.health:IsDead() then
-			if inst.components.health:GetPercent() <= 0.75 then
-				inst.marble_bag_attack = true
-			end
 			inst.sg:GoToState("disappear")
         end
     end),
@@ -44,12 +41,12 @@ local events =
         if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
 			if inst.decoy_attack ~= nil and inst.decoy_attack then
 				inst.sg:GoToState("swap_ammo")
-			elseif inst.components.health:GetPercent() <= 0.4 and math.random() < 0.5 then
-				inst.sg:GoToState("cast_charles")
 			elseif inst.marble_bag_attack ~= nil and inst.marble_bag_attack then
 				inst.marble_bag_attack = false
 				
 				inst.sg:GoToState("throw_marbles", data.target)
+			elseif inst.components.health:GetPercent() <= 0.4 and math.random() < 0.5 then
+				inst.sg:GoToState("cast_charles")
 			elseif inst:IsNear(data.target, 2) then
 				inst.sg:GoToState("attack", data.target)
 			else
@@ -219,7 +216,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(4, function(inst)
+            TimeEvent(7.5, function(inst)
 				inst.SoundEmitter:PlaySound("UCSounds/shadow_wixie/idle")
             end),
         },
