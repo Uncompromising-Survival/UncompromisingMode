@@ -32,7 +32,7 @@ local function DoLineAttack(inst, target, position)
         end
 
         if position == nil and target ~= nil then
-            position = target:GetPosition()--launch_away @ line 47 in prefabs/trident.lua would crash.
+            position = target:GetPosition() --launch_away @ line 47 in prefabs/trident.lua would crash.
         end
 
 
@@ -73,28 +73,16 @@ local function DoLineAttack(inst, target, position)
                     MUST_HAVE_SPELL_TAGS,
                     CANT_HAVE_SPELL_TAGS, MUST_HAVE_ONE_OF_SPELL_TAGS)
                 for _, v in ipairs(affected_entities) do
-                    inst:DoWaterExplosionEffect(v, owner, position)
+                    if v.prefab ~= "boat" or TheNet:GetPVPEnabled() then
+                        inst:DoWaterExplosionEffect(v, owner, position)
+                    end
                 end
 
                 if TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) and not TheWorld.Map:IsVisualGroundAtPoint(dx, dy, dz) then
                     local platform_at_point = TheWorld.Map:GetPlatformAtPoint(dx, dz)
                     if platform_at_point ~= nil then
-                        -- Spawn a boat leak slightly further in to help avoid being on the edge of the boat and sliding off.
-                        local bx, by, bz = platform_at_point.Transform:GetWorldPosition()
-                        if bx == dx and bz == dz then
-                            platform_at_point:PushEvent("spawnnewboatleak",
-                                { pt = Vector3(dx, dy, dz), leak_size = "med_leak", playsoundfx = true, cause = "trident" })
-                        else
-                            local p_to_ox, p_to_oz = VecUtil_Normalize(bx - dx, bz - dz)
-                            local ox_mod, oz_mod = ox + (0.5 * p_to_ox), oz + (0.5 * p_to_oz)
-                            platform_at_point:PushEvent("spawnnewboatleak",
-                                {
-                                    pt = Vector3(ox_mod, py, oz_mod),
-                                    leak_size = "med_leak",
-                                    playsoundfx = true,
-                                    cause = "trident"
-                                })
-                        end
+                        platform_at_point.SoundEmitter:PlaySoundWithParams("turnoftides/common/together/boat/damage",
+                        { intensity = .3 })
                     else
                         local fx = SpawnPrefab("crab_king_waterspout")
                         fx.Transform:SetPosition(dx + math.random( -1, 1), dy, dz + math.random( -1, 1))
@@ -131,7 +119,7 @@ env.AddPrefabPostInit("trident", function(inst)
 
     if inst.components.spellcaster ~= nil then
         inst.components.spellcaster:SetSpellFn(DoLineAttack)
-        inst.components.spellcaster:SetCanCastFn(function() return true end)--why the FUCK does it need a cancastfn for canuseontargets but not canuseonpoint??????
+        inst.components.spellcaster:SetCanCastFn(function() return true end) --why the FUCK does it need a cancastfn for canuseontargets but not canuseonpoint??????
         inst.components.spellcaster.canuseontargets = true
         inst.components.spellcaster.canuseondead = true
         inst.components.spellcaster.canuseonpoint = true

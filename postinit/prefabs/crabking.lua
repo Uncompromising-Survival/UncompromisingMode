@@ -23,7 +23,6 @@
 
 	Green: Self-healing armor DONE
 ]]
-
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -318,21 +317,48 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local orange = inst.countgems(inst).orange
 		local green = inst.countgems(inst).green
 		local opal = inst.countgems(inst).opal
+		local count = 0
 
-		if math.random(10) < purple then
-			print("congrats! you got a purple chest!")
+		if math.random(6) < red then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
 		end
-		if math.random(5) < yellow then
-			print("congrats! you got a yellow chest!")
+
+		if math.random(6) < blue then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
 		end
-		if math.random(5) < orange then
-			print("congrats! you got a orange chest!")
+
+		if math.random(6) < purple then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
 		end
-		if math.random(5) < green then
-			print("congrats! you got a green chest!")
+
+		if math.random(6) < yellow then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
 		end
-		if opal >= 1 then
-			print("congrats! you got a rainbow chest!")
+
+		if math.random(6) < orange then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
+		end
+
+		if math.random(6) < green then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
+		end
+
+		if math.random(6) < opal then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
 		end
 	end)
 

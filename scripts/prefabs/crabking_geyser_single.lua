@@ -106,6 +106,8 @@ local function endgeyser(inst)
             if boat then
                 local pt = Vector3(x + offset.x, 0, z + offset.z)
                 boat.components.health:DoDelta( -2 - math.floor(inst.crab.countgems(inst.crab).purple*0.5))
+                boat.SoundEmitter:PlaySoundWithParams("turnoftides/common/together/boat/damage",
+                { intensity = .6 })
 
                 -- look for patches
                 --[[local nearpatch = TheSim:FindEntities(pt.x, 0, pt.z, 2, REPAIRED_PATCH_TAGS)

@@ -14,6 +14,7 @@ local function fn()
     inst.AnimState:SetBuild("cavein_debris_fx")
     inst.AnimState:PlayAnimation("anim")
     inst.AnimState:SetScale(0.5, -0.25, 0.5)
+    inst.AnimState:SetAddColour(0, 0, 0, 6)
     inst.AnimState:SetDeltaTimeMultiplier(2)
 
     inst.entity:SetPristine()

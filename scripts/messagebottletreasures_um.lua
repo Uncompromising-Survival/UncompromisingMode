@@ -61,9 +61,9 @@ local treasure_templates =
 				randomly_selected_loot =
 				{
 
-					{ yellowstaff = 0.33, greenstaff = 0.33, orangestaff = 0.33, }, --staffs and amulets instead of raw gems, lowered chance.
+					{ yellowstaff = 0.33,  greenstaff = 0.33,  orangestaff = 0.33, }, --staffs and amulets instead of raw gems, lowered chance.
 					{ yellowamulet = 0.33, greenamulet = 0.33, orangeamulet = 0.33, },
-					{ ruinshat = 0.33, armorruins = 0.33, ruins_bat = 0.33 }, --chance for both thule suit and crown.
+					{ ruinshat = 0.33,     armorruins = 0.33,  ruins_bat = 0.33 }, --chance for both thule suit and crown.
 
 				},
 			},
@@ -127,7 +127,7 @@ local treasure_templates =
 				},
 				randomly_selected_loot =
 				{
-					{ gnarwail_horn = 0.5, malbatross_beak = 0.25 },
+					{ gnarwail_horn = 0.5,        malbatross_beak = 0.25 },
 					{ nutrientsgoggleshat = 0.10, plantregistryhat = 0.90 },
 				},
 			},
@@ -148,7 +148,7 @@ local treasure_templates =
 				randomly_selected_loot =
 				{
 					{ tentaclespike = 0.5, batbat = 0.5 },
-					{ wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2, },
+					{ wormlight = 0.2,     wormlight_lesser = .6, minerhat = 0.2, },
 				},
 			},
 			------------------
@@ -194,9 +194,9 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					sludge = {1,2,3,4,5,6,7,8,9,10},
+					sludge = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
 					um_magnerang = 1,
-					sludge_cork = {1, 2},
+					sludge_cork = { 1, 2 },
 					boneshard = { 4, 7, 10 },
 				},
 				randomly_selected_loot =
@@ -244,7 +244,7 @@ local treasure_templates =
 				randomly_selected_loot =
 				{
 					{ tentaclespike = 0.5, batbat = 0.5 },
-					{ wormlight = 0.2, wormlight_lesser = .6, minerhat = 0.2, },
+					{ wormlight = 0.2,     wormlight_lesser = .6, minerhat = 0.2, },
 				},
 			},
 			------------------
@@ -312,7 +312,7 @@ local treasure_templates =
 				},
 				randomly_selected_loot =
 				{
-					{ opalstaff = 0.2, yellowstaff = 0.2, greenstaff = 0.2, orangestaff = 0.2, telestaff = 0.2 },
+					{ opalstaff = 0.2,     yellowstaff = 0.2,   greenstaff = 0.2,   orangestaff = 0.2,  telestaff = 0.2 },
 					{ yellowamulet = 0.25, orangeamulet = 0.25, greenamulet = 0.25, purpleamulet = 0.25 },
 					{ trinket_26 = 0.1 },
 				},
@@ -325,11 +325,11 @@ local treasure_templates =
 				},
 				randomly_selected_loot =
 				{
-					{ nightstick = 0.5, bugzapper = 0.5 },
+					{ nightstick = 0.5,      bugzapper = 0.5 },
 					{ ancient_amulet_red = 1 },
-					{ plaguemask = 0.33, widowshead = 0.33, sunglasses = 0.33 },
-					{ viperjam = 0.33, beefalowings = 0.33, zaspberryparfait = 0.33 },
-					{ glass_scales = 0.33, pied_piper_flute = 0.33, widowsgrasp = 0.33 },
+					{ plaguemask = 0.33,     widowshead = 0.33,       sunglasses = 0.33 },
+					{ viperjam = 0.33,       beefalowings = 0.33,     zaspberryparfait = 0.33 },
+					{ glass_scales = 0.33,   pied_piper_flute = 0.33, widowsgrasp = 0.33 },
 					{ hat_bagmask = 0.41, hat_blackcatmask = 0.41, hat_clownmask = 0.41, hat_orangecatmask = 0.41,
 						hat_devilmask = 0.41, hat_fiendmask = 0.41, hat_ghostmask = 0.41, hat_oozemask = 0.41,
 						hat_globmask = 0.41, hat_hockeymask = 0.41, hat_joyousmask = 0.41, hat_mermmask = 0.41,
@@ -340,6 +340,7 @@ local treasure_templates =
 			}
 		}
 	},
+
 	sunkenchest_royal_red =
 	{
 		treasure_type_weight = 0,
@@ -352,10 +353,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					armor_crab_maxhp = 1,
+					armor_crab_maxhp_blueprint = 1,
 					ancient_amulet_red = 1,
 					sludge = { 4, 8 },
-					redgem = {0,1,2},
+					redgem = { 0, 1, 2 },
 				},
 			},
 		}
@@ -372,15 +373,14 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					rain_horn = 1,
+					--rain_horn = 1,
 					blueamulet = 1,
 					ice = { 4, 8 },
-					bluegem = {0,1,2},
+					bluegem = { 0, 1, 2 },
 				},
 			},
 		}
 	},
-
 	sunkenchest_royal_purple =
 	{
 		treasure_type_weight = 0,
@@ -393,10 +393,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					trident = 1,
+					trident_blueprint = 1,
 					kelp = 2,
 					gnarwail_horn = { 1, 2 },
-					purplegem = {0,1,2},
+					purplegem = { 0, 1, 2 },
 				},
 			},
 		}
@@ -413,10 +413,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					--crabhat = 1,
+					crab_hat_blueprint = 1,
 					rocks = 4,
 					cutstone = { 1, 2 },
-					orangegem = {0,1,2},
+					orangegem = { 0, 1, 2 },
 				},
 			},
 		}
@@ -433,10 +433,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					staff_starfall = 1,
+					staff_starfall_blueprint = 1,
 					goldnugget = 4,
 					feather_canary = { 1, 2 },
-					yellowgem = {0,1,2},
+					yellowgem = { 0, 1, 2 },
 				},
 			},
 		}
@@ -453,10 +453,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					armor_crab_regen = 1,
+					armor_crab_regen_blueprint = 1,
 					reeds = 4,
 					rocks = { 1, 2, 3 },
-					greengem = {0,1,2},
+					greengem = { 0, 1, 2 },
 				},
 			},
 		}
@@ -474,21 +474,17 @@ local treasure_templates =
 				guaranteed_loot =
 				{
 					--boat_bumper_crab_blueprint = 1,
-					redgem = {0,1,2},
-					bluegem = {0,1,2},
-					purplegem = {0,1,2},
-					greengem = {0,1,2},
-					yellowgem = {0,1,2},
-					orangegem = {0,1,2},
-					moonglass = {0,1,2,3,4,5}
+					redgem = { 0, 1, 2 },
+					bluegem = { 0, 1, 2 },
+					purplegem = { 0, 1, 2 },
+					greengem = { 0, 1, 2 },
+					yellowgem = { 0, 1, 2 },
+					orangegem = { 0, 1, 2 },
+					moonglass = { 0, 1, 2, 3, 4, 5 }
 				},
 			},
 		}
 	},
-
-
-
-
 }
 
 
@@ -522,7 +518,12 @@ for prefabname, data in pairs(treasure_templates) do
 	end
 end
 
-local function GenerateTreasure(pt, overrideprefab, spawn_as_empty, postfn)
+local function GenerateTreasure(self, pt, overrideprefab, spawn_as_empty, postfn)
+	print("pt", pt)
+	print("overrideprefab", overrideprefab)
+	print("spawn_as_empty", spawn_as_empty)
+	print("postfn", postfn)
+
 	local prefab = overrideprefab or weighted_random_choice(weighted_treasure_prefabs)
 
 	local treasure = SpawnPrefab(prefab)
@@ -593,16 +594,16 @@ local function GetPrefabs()
 		prefabscontain[treasureprefab] = true -- Chests, etc
 
 		if weighted_lists ~= nil and type(weighted_lists) == "table" and next(weighted_lists) ~= nil then
-			for weighted_list, _ --[[weight]]in pairs(weighted_lists) do
+			for weighted_list, _ --[[weight]] in pairs(weighted_lists) do
 				if weighted_list.guaranteed_loot ~= nil then
-					for itemprefab, _ --[[count]]in pairs(weighted_list.guaranteed_loot) do
+					for itemprefab, _ --[[count]] in pairs(weighted_list.guaranteed_loot) do
 						prefabscontain[itemprefab] = true
 					end
 				end
 
 				if weighted_list.randomly_selected_loot ~= nil then
 					for i, v in ipairs(weighted_list.randomly_selected_loot) do
-						for itemprefab, _ --[[weight]]in pairs(v) do
+						for itemprefab, _ --[[weight]] in pairs(v) do
 							prefabscontain[itemprefab] = true
 						end
 					end

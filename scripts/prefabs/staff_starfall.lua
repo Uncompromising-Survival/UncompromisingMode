@@ -15,6 +15,14 @@ local function OnAttack(inst, attacker, target, skipsanity)
         return
     end
 
+    if not skipsanity and attacker ~= nil then
+        if attacker.components.staffsanity then
+            attacker.components.staffsanity:DoCastingDelta(-TUNING.SANITY_SUPERTINY)
+        elseif attacker.components.sanity ~= nil then
+            attacker.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY)
+        end
+    end
+
     if target.components.sleeper ~= nil and target.components.sleeper:IsAsleep() then
         target.components.sleeper:WakeUp()
     end

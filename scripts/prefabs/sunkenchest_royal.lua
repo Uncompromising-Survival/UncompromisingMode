@@ -100,6 +100,7 @@ local function MakeChest(name, bank, build, indestructible, master_postinit, pre
         end
 
         inst:AddComponent("inspectable")
+    
         inst:AddComponent("container")
         inst.components.container:WidgetSetup(name)
         inst.components.container.onopenfn = onopen
