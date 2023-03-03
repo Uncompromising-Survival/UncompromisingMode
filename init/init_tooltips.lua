@@ -59,6 +59,13 @@ STRINGS.UNCOMP_TOOLTIP = {
 	FLORAL_BANDAGE = "- Restores extra health over time.",
 	DISEASECUREBOMB = "- Restores sickly plants.",
 	SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
+
+	CRAB_HAT = "- Repairs & sewing are twice as effective when worn.",
+	CRAB_HAT_ICE = "- Resistance scales with wetness.\n- Prevents the wearer from drying up.",
+	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
+	ARMOR_CRAB_REGEN = "- Self-healing."
+	
+	
 }
 
 STRINGS.PINETREE_TOOLTIP = {

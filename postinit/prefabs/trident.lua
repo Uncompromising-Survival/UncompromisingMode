@@ -20,8 +20,6 @@ local function DoLineAttack(inst, target, position)
         --return
     end
 
-    local used_on_land = false
-
     for _ = 1, 3 do
         local tar_x, tar_y, tar_z
 
@@ -35,8 +33,7 @@ local function DoLineAttack(inst, target, position)
             position = target:GetPosition() --launch_away @ line 47 in prefabs/trident.lua would crash.
         end
 
-
-        local variance_x, variance_z = math.random( -6, 6), math.random( -6, 6)
+        local variance_x, variance_z = math.random(-6, 6), math.random(-6, 6)
 
         if variance_x > 0 then --wonder if there's anything I could do to make this better
             variance_x = math.clamp(variance_x, 4, 6)
@@ -82,18 +79,11 @@ local function DoLineAttack(inst, target, position)
                     local platform_at_point = TheWorld.Map:GetPlatformAtPoint(dx, dz)
                     if platform_at_point ~= nil then
                         platform_at_point.SoundEmitter:PlaySoundWithParams("turnoftides/common/together/boat/damage",
-                        { intensity = .3 })
+                            { intensity = .3 })
                     else
                         local fx = SpawnPrefab("crab_king_waterspout")
-                        fx.Transform:SetPosition(dx + math.random( -1, 1), dy, dz + math.random( -1, 1))
+                        fx.Transform:SetPosition(dx + math.random(-1, 1), dy, dz + math.random(-1, 1))
                     end
-                else
-                    used_on_land = true
-                    local ring = SpawnPrefab("groundpoundring_fx")
-                    ring.Transform:SetPosition(dx + math.random( -1, 1), dy, dz + math.random( -1, 1))
-                    ring.Transform:SetScale(0.33, 0.33, 0.33)
-                    local fx2 = SpawnPrefab("trident_ground_fx")
-                    fx2.Transform:SetPosition(dx + math.random( -1, 1), dy + 8, dz + math.random( -1, 1))
                 end
             end)
         end
@@ -106,9 +96,29 @@ local function DoLineAttack(inst, target, position)
         end
     end
 
-    inst.components.finiteuses:Use(not used_on_land and COST_PER_EXPLOSION or COST_PER_EXPLOSION * 2)
+    inst.components.finiteuses:Use(COST_PER_EXPLOSION)
 end
 
+local function OnAttack(inst, attacker, target)
+    inst.charge = inst.charge + 1
+
+    if inst.charge > 3 then
+        target.components.combat:GetAttacked(attacker, 27.21)
+        local x, y, z = target.Transform:GetWorldPosition()
+
+        local fx = TheWorld.Map:IsOceanTileAtPoint(x, y, z) and not TheWorld.Map:IsVisualGroundAtPoint(x, y, z) and
+        TheWorld.Map:GetPlatformAtPoint(x, z) == nil and SpawnPrefab("crab_king_waterspout") or
+        SpawnPrefab("trident_ground_fx")
+        local y_offset = fx.prefab == "trident_ground_fx" and 8 or 0
+        local x_offset, z_offset = math.random(-2,2), math.random(-2,2)
+        fx.Transform:SetPosition(x + x_offset, y + y_offset, z + z_offset)
+
+        local ring = SpawnPrefab("groundpoundring_fx")
+        ring.Transform:SetPosition(x + x_offset, y, z + z_offset)
+        ring.Transform:SetScale(0.33, 0.33, 0.33)
+        inst.charge = inst.charge - math.random(inst.charge)
+    end
+end
 
 env.AddPrefabPostInit("trident", function(inst)
     inst:AddTag("castontargets")
@@ -117,12 +127,11 @@ env.AddPrefabPostInit("trident", function(inst)
         return
     end
 
+    inst.charge = 0
+
     if inst.components.spellcaster ~= nil then
         inst.components.spellcaster:SetSpellFn(DoLineAttack)
-        inst.components.spellcaster:SetCanCastFn(function() return true end) --why the FUCK does it need a cancastfn for canuseontargets but not canuseonpoint??????
-        inst.components.spellcaster.canuseontargets = true
-        inst.components.spellcaster.canuseondead = true
-        inst.components.spellcaster.canuseonpoint = true
-        inst.components.spellcaster.canusefrominventory = false
     end
+
+    inst.components.weapon:SetOnAttack(OnAttack)
 end)
