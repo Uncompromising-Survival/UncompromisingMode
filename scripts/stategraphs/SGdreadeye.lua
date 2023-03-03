@@ -207,7 +207,7 @@ local states =
 					x = x + math.random(2 * offset) - offset
 					z = z + math.random(2 * offset) - offset
 					local playercheck = TheSim:FindEntities(x, y, z, 10, {"player"})
-					if not TheWorld.Map:GetPlatformAtPoint(x, z) and (playercheck == nil or #playercheck == 0) then
+					if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
 						inst.Physics:Teleport(x, y, z)
 						break
 					end
@@ -440,7 +440,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 					
-						if (playercheck == nil or #playercheck == 0) then
+						if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end
@@ -455,7 +455,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 						
-						if (playercheck == nil or #playercheck == 0) then
+						if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end
@@ -612,7 +612,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 					
-						if (playercheck == nil or #playercheck == 0) then
+						if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end
@@ -627,7 +627,7 @@ local states =
 						
 						local playercheck = TheSim:FindEntities(x, y, z, 5, {"player"})
 						
-						if (playercheck == nil or #playercheck == 0) then
+						if not TheWorld.Map:GetPlatformAtPoint(x, z) and (TheWorld.Map:IsOceanAtPoint(x, y, z) or TheWorld.Map:IsPassableAtPoint(x, y, z)) and (playercheck == nil or #playercheck == 0) then
 							inst.Physics:Teleport(x, y, z)
 							break
 						end

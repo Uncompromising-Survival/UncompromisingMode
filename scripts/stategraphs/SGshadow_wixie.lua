@@ -30,6 +30,11 @@ local events =
         end
     end),
     EventHandler("death", function(inst) 
+		if inst.physbox ~= nil then
+			inst.physbox:Remove()
+			inst.physbox = nil
+		end
+	
 		if inst.helper then
 			SpawnPrefab("shadow_despawn").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			inst:Remove() 

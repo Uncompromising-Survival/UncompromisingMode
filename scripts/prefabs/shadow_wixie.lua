@@ -222,6 +222,11 @@ local function fn()
 	
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("healthdelta", OnDamaged)
+    inst:ListenForEvent("death", function()
+		if inst.physbox ~= nil then
+			inst.physbox:Remove()
+		end 
+	end)
     inst:ListenForEvent("removed", function()
 		if inst.physbox ~= nil then
 			inst.physbox:Remove()
@@ -354,6 +359,11 @@ local function helperfn()
 	inst:SetBrain(brain)
 
 	inst:SetStateGraph("SGshadow_wixie")
+    inst:ListenForEvent("death", function()
+		if inst.physbox ~= nil then
+			inst.physbox:Remove()
+		end 
+	end)
     inst:ListenForEvent("removed", function()
 		if inst.physbox ~= nil then
 			inst.physbox:Remove()

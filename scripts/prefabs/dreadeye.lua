@@ -68,7 +68,7 @@ local function retargetfn(inst)
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
     for i, v in ipairs(AllPlayers) do
-        if v.components.sanity:IsInsane() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
                 if inst.components.shadowsubmissive:TargetHasDominance(v) then
@@ -608,24 +608,6 @@ local disguises =
 		anim = "full",
 	},
 	{
-		name = "reeds",
-		bank = "grass",
-		build = "reeds",
-		anim = "idle",
-	},
-	{
-		name = "marsh_tree",
-		bank = "marsh_tree",
-		build = "tree_marsh",
-		anim = "swap_1_loop",
-	},
-	{
-		name = "rock_flintless",
-		bank = "rock_flintless",
-		build = "rock_flintless",
-		anim = "full",
-	},
-	{
 		name = "evergreen",
 		bank = "evergreen_short",
 		build = "evergreen_new",
@@ -644,12 +626,6 @@ local disguises =
 		anim = "sway",
 	},
 	{
-		name = "deciduoustree",
-		bank = "tree_leaf",
-		build = "tree_leaf_trunk_build",
-		anim = "idle_tall",
-	},
-	{
 		name = "berrybush",
 		bank = "berrybush",
 		build = "berrybush",
@@ -660,6 +636,133 @@ local disguises =
 		bank = "carrot",
 		build = "carrot",
 		anim = "planted",
+	},
+}
+
+local situational_disguises =
+{
+	{
+		name = "rock1",
+		bank = "rock",
+		build = "rock",
+		anim = "full",
+	},
+	{
+		name = "rock2",
+		bank = "rock2",
+		build = "rock2",
+		anim = "full",
+	},
+	{
+		name = "reeds",
+		bank = "grass",
+		build = "reeds",
+		anim = "idle",
+	},
+	{
+		name = "marsh_tree",
+		bank = "marsh_tree",
+		build = "tree_marsh",
+		anim = "swap_1_loop",
+	},
+	{
+		name = "rock_flintless",
+		bank = "rock_flintless",
+		build = "rock_flintless",
+		anim = "full",
+	},
+	{
+		name = "deciduoustree",
+		bank = "tree_leaf",
+		build = "tree_leaf_trunk_build",
+		anim = "idle_tall",
+	},
+	{
+		name = "hooded_fern",
+		bank = "largefern",
+		build = "largefern",
+		anim = "idle",
+	},
+	{
+		name = "evergreen_sparse",
+		bank = "evergreen_short",
+		build = "evergreen_new_2",
+		anim = "idle_normal",
+	},
+}
+
+local cave_disguises =
+{
+	{
+		name = "stalagmite_tall",
+		bank = "rock_stalagmite_tall",
+		build = "rock_stalagmite_tall",
+		anim = "full_"..math.random(2),
+	},
+	{
+		name = "stalagmite_tall_full",
+		bank = "rock_stalagmite_tall",
+		build = "rock_stalagmite_tall",
+		anim = "full_"..math.random(2),
+	},
+	{
+		name = "stalagmite_tall_med",
+		bank = "rock_stalagmite_tall",
+		build = "rock_stalagmite_tall",
+		anim = "med_"..math.random(2),
+	},
+	{
+		name = "stalagmite_tall_low",
+		bank = "rock_stalagmite_tall",
+		build = "rock_stalagmite_tall",
+		anim = "low_"..math.random(2),
+	},
+}
+
+local situational_cave_disguises =
+{
+	{
+		name = "mushtree_tall",
+		bank = "mushroom_tree",
+		build = "mushroom_tree_tall",
+		anim = "idle_loop",
+	},
+	{
+		name = "mushtree_medium",
+		bank = "mushroom_tree_med",
+		build = "mushroom_tree_med",
+		anim = "idle_loop",
+	},
+	{
+		name = "mushtree_small",
+		bank = "mushroom_tree_small",
+		build = "mushroom_tree_small",
+		anim = "idle_loop",
+	},
+	-- ruins
+	{
+		name = "ruins_statue_head",
+		bank = "statue_ruins",
+		build = "statue_ruins",
+		anim = "idle_full",
+	},
+	{
+		name = "ruins_statue_head_nogem",
+		bank = "statue_ruins_small",
+		build = "statue_ruins_small",
+		anim = "idle_full",
+	},
+	{
+		name = "ruins_statue_mage",
+		bank = "statue_ruins",
+		build = "statue_ruins",
+		anim = "idle_full",
+	},
+	{
+		name = "ruins_statue_mage_nogem",
+		bank = "statue_ruins_small",
+		build = "statue_ruins_small",
+		anim = "idle_full",
 	},
 }
 
@@ -689,6 +792,18 @@ local ocean_disguises =
 		build = "boat_brokenparts_build",
 		anim = "idle_loop_05",
 	},
+	{
+		name = "messagebottle",
+		bank = "bottle",
+		build = "bottle",
+		anim = "idle_water",
+	},
+	{
+		name = "seastack",
+		bank = "water_rock01",
+		build = "water_rock_01",
+		anim = math.random(5).."_full"
+	},
 }
 
 local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
@@ -710,55 +825,71 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
         return inst
     end
 	
+	inst.persists = false
+	
 	inst:DoTaskInTime(0, function(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 15)
-		local disguisechoice = math.random(#disguises)
+		local ents = TheSim:FindEntities(x, y, z, 20)
 		
-		
-		if TheWorld.Map:IsPassableAtPoint(x, y, z) then
-			for i, v in ipairs(disguises) do
-				for n, b in ipairs(ents) do
-					if v.name == b.prefab then
-						inst.AnimState:SetBank(v.bank)
-						inst.AnimState:SetBuild(v.build)
-						
-						if v.name == "deciduoustree" then
-							if not TheWorld.state.iswinter then
-								if TheWorld.state.isautumn then
-									inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_orange_build", "swap_leaves")
-								else
-									inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_green_build", "swap_leaves")
-								end
-							end
-								
-							inst.color = .5 + math.random() * .5
-							inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
+		if not TheWorld.Map:IsOceanAtPoint(x, y, z) then
+			if TheWorld:HasTag("cave") then
+				for i, v in ipairs(situational_cave_disguises) do
+					for n, b in ipairs(ents) do
+						if v.name == b.prefab then
+							inst.AnimState:SetBank(v.bank)
+							inst.AnimState:SetBuild(v.build)
+							
+							inst.AnimState:PlayAnimation(v.anim, true)
+							return
 						end
-						
-						inst.AnimState:PlayAnimation(v.anim, true)
-						break
 					end
 				end
 				
-				if i == disguisechoice then
-					inst.AnimState:SetBank(v.bank)
-					inst.AnimState:SetBuild(v.build)
+				local disguisechoice = math.random(#cave_disguises)
+		
+				for i, v in ipairs(cave_disguises) do
+					if i == disguisechoice then
+						inst.AnimState:SetBank(v.bank)
+						inst.AnimState:SetBuild(v.build)
 						
-					if v.name == "deciduoustree" then
-						if not TheWorld.state.iswinter then
-							if TheWorld.state.isautumn then
-								inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_orange_build", "swap_leaves")
-							else
-								inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_green_build", "swap_leaves")
-							end
-						end
-							
-						inst.color = .5 + math.random() * .5
-						inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
+						inst.AnimState:PlayAnimation(v.anim, true)
 					end
-					
-					inst.AnimState:PlayAnimation(v.anim, true)
+				end
+			else
+				for i, v in ipairs(situational_disguises) do
+					for n, b in ipairs(ents) do
+						if v.name == b.prefab then
+							inst.AnimState:SetBank(v.bank)
+							inst.AnimState:SetBuild(v.build)
+							
+							if v.name == "deciduoustree" then
+								if not TheWorld.state.iswinter then
+									if TheWorld.state.isautumn then
+										inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_orange_build", "swap_leaves")
+									else
+										inst.AnimState:OverrideSymbol("swap_leaves", "tree_leaf_green_build", "swap_leaves")
+									end
+								end
+									
+								inst.color = .5 + math.random() * .5
+								inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
+							end
+							
+							inst.AnimState:PlayAnimation(v.anim, true)
+							return
+						end
+					end
+				end
+				
+				local disguisechoice = math.random(#disguises)
+				
+				for i, v in ipairs(disguises) do
+					if i == disguisechoice then
+						inst.AnimState:SetBank(v.bank)
+						inst.AnimState:SetBuild(v.build)
+						
+						inst.AnimState:PlayAnimation(v.anim, true)
+					end
 				end
 			end
 		else
@@ -768,25 +899,51 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 						inst.AnimState:SetBank(v.bank)
 						inst.AnimState:SetBuild(v.build)
 						inst.AnimState:PlayAnimation(v.anim, true)
-						break
+						
+						if v.name == "seastack" then
+							inst.front_fx = SpawnPrefab("float_fx_front")
+							inst.front_fx.entity:SetParent(inst.entity)
+							inst.front_fx.Transform:SetPosition(0, 0.1, 0)
+							inst.front_fx.AnimState:PlayAnimation("idle_front_med", true)
+							inst.front_fx.Transform:SetScale(1.1, 0.9, 1.1)
+						elseif v.name == "messagebottle" then
+							inst.front_fx = SpawnPrefab("float_fx_front")
+							inst.front_fx.entity:SetParent(inst.entity)
+							inst.front_fx.Transform:SetPosition(0, 0.04, 0)
+							inst.front_fx.AnimState:PlayAnimation("idle_front_small", true)
+						elseif v.name == "bullkelp_plant" then
+							AddDefaultRippleSymbols(inst, true, false)
+						end
+						
+						return
 					end
 				end
+				
+				local disguisechoice = math.random(#disguises)
 				
 				if i == disguisechoice then
 					inst.AnimState:SetBank(v.bank)
 					inst.AnimState:SetBuild(v.build)
 					inst.AnimState:PlayAnimation(v.anim, true)
-				end
-				
-				
-				if v.prefab == "bullkelp_plant" then
-					AddDefaultRippleSymbols(inst, true, false)
+						
+					if v.name == "seastack" then
+						inst.front_fx = SpawnPrefab("float_fx_front")
+						inst.front_fx.entity:SetParent(inst.entity)
+						inst.front_fx.Transform:SetPosition(0, 0.1, 0)
+						inst.front_fx.AnimState:PlayAnimation("idle_front_med", true)
+						inst.front_fx.Transform:SetScale(1.1, 0.9, 1.1)
+					elseif v.name == "messagebottle" then
+						inst.front_fx = SpawnPrefab("float_fx_front")
+						inst.front_fx.entity:SetParent(inst.entity)
+						inst.front_fx.Transform:SetPosition(0, 0.04, 0)
+						inst.front_fx.AnimState:PlayAnimation("idle_front_small", true)
+					elseif v.name == "bullkelp_plant" then
+						AddDefaultRippleSymbols(inst, true, false)
+					end
 				end
 			end
 		end
 	end)
-	
-	inst.persists = false
 	
     return inst
 end
