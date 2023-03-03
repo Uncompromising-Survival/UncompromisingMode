@@ -818,6 +818,14 @@ AddRecipe2(
 )
 
 AddRecipe2(
+    "crab_hat_ice",
+    { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) },
+    TECH.LOST,
+    nil,
+    { "ARMOUR" }
+)
+
+AddRecipe2(
     "armor_crab_maxhp",
     { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) },
     TECH.LOST,

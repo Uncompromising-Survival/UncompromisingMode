@@ -17,9 +17,9 @@ local function OnAttack(inst, attacker, target, skipsanity)
 
     if not skipsanity and attacker ~= nil then
         if attacker.components.staffsanity then
-            attacker.components.staffsanity:DoCastingDelta(-TUNING.SANITY_SUPERTINY)
+            attacker.components.staffsanity:DoCastingDelta( -TUNING.SANITY_SUPERTINY)
         elseif attacker.components.sanity ~= nil then
-            attacker.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY)
+            attacker.components.sanity:DoDelta( -TUNING.SANITY_SUPERTINY)
         end
     end
 
@@ -33,20 +33,34 @@ local function OnAttack(inst, attacker, target, skipsanity)
 
     for i = 1, math.random(3, 5) do
         inst:DoTaskInTime(i == 1 and 0 or math.random() * 0.5, function()
+            if target == nil or not target:IsValid() then
+                return--target removed/died.
+            end
             local proj = SpawnPrefab("staff_starfall_projectile")
             local x, y, z = target.Transform:GetWorldPosition()
+            if x == nil or y == nil or z == nil then
+                proj:Remove()--wierd edge case with things that immediatly remove themselves on death.
+                return
+            end
             proj.Transform:SetPosition(x + math.random( -4, 4), y + math.random(10, 15), z + math.random( -4, 4))
             proj.attacker = attacker
+            if inst.components.finitesuses ~= nil then -- who knows, someone might make a mod to remove it
+                inst.components.finitesuses:Use()
+            end
+            target.SoundEmitter:PlaySound("dontstarve/wilson/fireball_explo")
         end)
     end
+end
+
+local function OnEquip(inst, owner)
+    owner.AnimState:OverrideSymbol("swap_object", "swap_staffs", "swap_yellowstaff")
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
 end
 
 local function OnUnequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
-    if owner.components.upgrademoduleowner == nil then
-        owner:RemoveTag("batteryuser")
-    end
 end
 
 local function fn()
@@ -66,7 +80,6 @@ local function fn()
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetFinalOffset(1)
 
-
     local floater_swap_data =
     {
         sym_build = "swap_staffs",
@@ -74,6 +87,7 @@ local function fn()
         bank = "staffs",
         anim = "yellowstaff"
     }
+
     MakeInventoryFloatable(inst, "med", 0.1, { 0.9, 0.4, 0.9 }, true, -13, floater_swap_data)
 
     inst.entity:SetPristine()
@@ -103,14 +117,13 @@ local function fn()
     inst:AddComponent("tradable")
 
     inst:AddComponent("equippable")
-
-    inst.components.equippable:SetOnEquip(function(inst, owner)
-        owner.AnimState:OverrideSymbol("swap_object", "swap_staffs", "swap_yellowstaff")
-        owner.AnimState:Show("ARM_carry")
-        owner.AnimState:Hide("ARM_normal")
-    end)
-
+    inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
+
+    inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetMaxUses(300)
+    inst.components.finiteuses:SetUses(300)
+    inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     return inst
 end
@@ -119,25 +132,20 @@ local function OnCollide(inst)
     local fx = SpawnPrefab("staff_starfall_explode")
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, nil,
-        { "dead", "INLIMBO", "companion", "abigail", "player", "playerghost" },
-        { "_combat", "_health" })
+    local ents = TheSim:FindEntities(x, y, z, 4, {"_combat"},
+        { "dead", "INLIMBO", "companion", "abigail", "player", "playerghost" })
 
     for k, v in ipairs(ents) do
-        if v.components.health ~= nil then
-            v.components.health:DoDelta( -34, true, inst)
-        end
-        if inst.components.combat ~= nil then
+        if v.components.combat ~= nil then
             v.components.combat:SuggestTarget(inst.attacker)
+            v.components.combat:GetAttacked(inst.attacker, 27.21)
         end
     end
 
-
     fx.Transform:SetPosition(x, y, z)
+    fx.SoundEmitter:PlaySound("dontstarve/common/lava_arena/spell/elemental/attack")
 
     inst:Remove()
-
-    inst.SoundEmitter:PlaySound("dontstarve/creatures/bishop/shotexplo")
 end
 
 local function fn_proj()
@@ -149,11 +157,13 @@ local function fn_proj()
     inst.entity:AddNetwork()
     inst.entity:AddPhysics()
 
-
     inst.AnimState:SetBank("crab_king_shine")
     inst.AnimState:SetBuild("crab_king_shine")
     inst.AnimState:PlayAnimation("shine", true)
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.AnimState:SetLightOverride(1)
+
+    inst.Transform:SetScale(0.75, 0.75, 0.75)
 
     inst.hue = math.random()
 
@@ -208,9 +218,11 @@ local function fn_fx1()
     inst.AnimState:SetBank("explode")
     inst.AnimState:SetBuild("explode")
     inst.AnimState:PlayAnimation("small_firecrackers")
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetLightOverride(1)
     inst.AnimState:SetFinalOffset(1)
+
+    --inst.Transform:SetScale(0.5, 0.5, 0.5)
 
     inst.hue = 0
 
@@ -249,6 +261,8 @@ local function fn_fx2()
     inst.AnimState:SetBank("hits_sparks")
     inst.AnimState:SetBuild("lavaarena_hit_sparks_fx")
     inst.AnimState:PlayAnimation("hit_3")
+    inst.AnimState:Hide("glow")
+
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetFinalOffset(1)
     inst.AnimState:SetScale(math.random() >= 0.5 and -.7 or .7, .7)
@@ -277,8 +291,6 @@ local function fn_fx2()
 
     return inst
 end
-
-
 
 return Prefab("staff_starfall", fn, assets), Prefab("staff_starfall_projectile", fn_proj),
     Prefab("staff_starfall_explode", fn_fx1), Prefab("staff_starfall_trail", fn_fx2)

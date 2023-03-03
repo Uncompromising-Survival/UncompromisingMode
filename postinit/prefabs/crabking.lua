@@ -214,12 +214,50 @@ local gems =
 	"green",
 }
 
+SetSharedLootTable('crabking',
+	{
+		{ "chesspiece_crabking_sketch", 1.00 },
+		--{"trident_blueprint",                   1.00},
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ 'meat',                       1.00 },
+		{ "singingshell_octave5",       1.00 },
+		{ "singingshell_octave5",       1.00 },
+		{ "singingshell_octave5",       1.00 },
+		{ "singingshell_octave5",       1.00 },
+		{ "singingshell_octave5",       0.50 },
+		{ "singingshell_octave5",       0.25 },
+		{ "singingshell_octave4",       1.00 },
+		{ "singingshell_octave4",       1.00 },
+		{ "singingshell_octave4",       1.00 },
+		{ "singingshell_octave4",       0.50 },
+		{ "singingshell_octave4",       0.25 },
+		{ "singingshell_octave3",       1.00 },
+		{ "singingshell_octave3",       1.00 },
+		{ "singingshell_octave3",       0.50 },
+		{ "barnacle",                   1.00 },
+		{ "barnacle",                   1.00 },
+		{ "barnacle",                   1.00 },
+		{ "barnacle",                   0.25 },
+		{ "barnacle",                   0.25 },
+		{ "barnacle",                   0.25 },
+		{ "barnacle",                   0.25 },
+	})
+
 env.AddPrefabPostInit("crabking", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
+
+	if inst.components.lootdropper ~= nil then
+		inst.components.lootdropper:SetChanceLootTable('batty')
+	end
+
 	inst.attack_count = 0
-	inst.castedaspell = false
 
 	if inst.components.combat ~= nil then
 		inst.components.combat:SetRetargetFunction(1, RetargetFn)
@@ -303,60 +341,68 @@ env.AddPrefabPostInit("crabking", function(inst)
 		end
 	end
 
-	--inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
+	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 
 	inst:ListenForEvent("death", function(inst)
 		TheWorld.crabking_active = false
 
 		local pos = inst:GetPosition()
 		local messagebottletreasures = require("messagebottletreasures_um")
-		local red = inst.countgems(inst).red
-		local blue = inst.countgems(inst).blue
-		local purple = inst.countgems(inst).purple
-		local yellow = inst.countgems(inst).yellow
-		local orange = inst.countgems(inst).orange
-		local green = inst.countgems(inst).green
+		local pearl = inst.countgems(inst).pearl * 1.5
+		local red = inst.countgems(inst).red - pearl --Don't want pearls to make you have more chance on the normal gems
+		local blue = inst.countgems(inst).blue - pearl
+		local purple = inst.countgems(inst).purple - pearl
+		local yellow = inst.countgems(inst).yellow - pearl
+		local orange = inst.countgems(inst).orange - pearl
+		local green = inst.countgems(inst).green - pearl
 		local opal = inst.countgems(inst).opal
 		local count = 0
 
+		if math.random(6) < opal then
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			count = count + 1
+			if count > 3 then return end
+		end
+
 		if math.random(6) < red then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end
 
 		if math.random(6) < blue then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end
 
 		if math.random(6) < purple then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end
 
 		if math.random(6) < yellow then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end
 
 		if math.random(6) < orange then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end
 
 		if math.random(6) < green then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
-
-		if math.random(6) < opal then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
+			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
+				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
 			count = count + 1
 			if count > 3 then return end
 		end

@@ -356,7 +356,8 @@ local treasure_templates =
 					armor_crab_maxhp_blueprint = 1,
 					ancient_amulet_red = 1,
 					sludge = { 4, 8 },
-					redgem = { 0, 1, 2 },
+					redgem = { 1, 2 },
+					nitre = {1,2,3,4},
 				},
 			},
 		}
@@ -373,10 +374,10 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					--rain_horn = 1,
+					crab_hat_ice_blueprint = 1,
 					blueamulet = 1,
 					ice = { 4, 8 },
-					bluegem = { 0, 1, 2 },
+					bluegem = {1, 2 },
 				},
 			},
 		}
@@ -396,7 +397,7 @@ local treasure_templates =
 					trident_blueprint = 1,
 					kelp = 2,
 					gnarwail_horn = { 1, 2 },
-					purplegem = { 0, 1, 2 },
+					purplegem = {1, 2 },
 				},
 			},
 		}
@@ -416,7 +417,7 @@ local treasure_templates =
 					crab_hat_blueprint = 1,
 					rocks = 4,
 					cutstone = { 1, 2 },
-					orangegem = { 0, 1, 2 },
+					orangegem = {1, 2 },
 				},
 			},
 		}
@@ -436,7 +437,7 @@ local treasure_templates =
 					staff_starfall_blueprint = 1,
 					goldnugget = 4,
 					feather_canary = { 1, 2 },
-					yellowgem = { 0, 1, 2 },
+					yellowgem = {1, 2 },
 				},
 			},
 		}
@@ -456,7 +457,7 @@ local treasure_templates =
 					armor_crab_regen_blueprint = 1,
 					reeds = 4,
 					rocks = { 1, 2, 3 },
-					greengem = { 0, 1, 2 },
+					greengem = {1, 2 },
 				},
 			},
 		}
@@ -473,14 +474,11 @@ local treasure_templates =
 
 				guaranteed_loot =
 				{
-					--boat_bumper_crab_blueprint = 1,
-					redgem = { 0, 1, 2 },
-					bluegem = { 0, 1, 2 },
-					purplegem = { 0, 1, 2 },
-					greengem = { 0, 1, 2 },
-					yellowgem = { 0, 1, 2 },
-					orangegem = { 0, 1, 2 },
-					moonglass = { 0, 1, 2, 3, 4, 5 }
+					moon_beacon_kit = 1,
+					moonrocknugget = { 1, 2,3,4},
+					moonglass = { 0, 1, 2, 3, 4, 5 },
+					moonstorm_spark = {1,2,3}, -- Teehee :)
+					charged_moonglass = {1,2,3,4,5},
 				},
 			},
 		}

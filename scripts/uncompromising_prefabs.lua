@@ -412,4 +412,5 @@ return {
 	"armor_crab",
 	"crab_hat",
 	"trident_ground_fx",
+	"moon_beacon",
 }
