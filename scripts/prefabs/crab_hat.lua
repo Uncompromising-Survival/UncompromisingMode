@@ -93,13 +93,10 @@ local function onequip_ice(inst, owner)
 
         owner.crab_hat_task = owner:DoPeriodicTask(1, function()
             local wetness = owner.components.moisture ~= nil and owner.components.moisture:GetMoisturePercent()
-            print("wetness", wetness)
             if wetness ~= nil then
                 inst.components.armor.absorb_percent = Lerp(0.6,0.95, wetness)
-                print("not nil %", Lerp(0.6,0.95, wetness))
             else
-                inst.components.armor.absorb_percent = 0.6
-                print("nil")
+                inst.components.armor.absorb_percent = owner:HasTag("wet") and 0.95 or 0.6
             end
         end)
     end
