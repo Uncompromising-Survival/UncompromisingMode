@@ -198,6 +198,7 @@ SKINS.ancient_amulet_red_demoneye = "Demon-eyed Amulet"
 
 STRINGS.RAT_WHIP = "Tail o' Twined Rats"
 STRINGS.KLAUS_AMULET = "Naught Lock"
+STRINGS.HOUND_LIGHTNING = "Magic Lightning"
 STRINGS.LIGHTNINGHOUND = "Lightning Hound"
 STRINGS.MAGMAHOUND = "Magma Hound"
 STRINGS.SPOREHOUND = "Spore Hound"

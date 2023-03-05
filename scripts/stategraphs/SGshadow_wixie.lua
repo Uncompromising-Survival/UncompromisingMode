@@ -150,7 +150,7 @@ end
 local NOTAGS = { "fx", "INLIMBO", "playerghost", "shadowwixie_collision" }
 local function Check_Bowling(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 3, { "_combat", "player" }, NOTAGS)
+	local ents = TheSim:FindEntities(x, y, z, 2.9, { "_combat", "player" }, NOTAGS)
 	for i, v in ipairs(ents) do
 		if v ~= nil and v:IsValid() and v.components.health ~= nil and not v.components.health:IsDead() then
 			inst.collided = true
@@ -419,7 +419,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(0 * FRAMES, function(inst)
+            TimeEvent(1 * FRAMES, function(inst)
 				inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/attack")
 			
 				inst.components.locomotor:WalkForward()
@@ -428,15 +428,15 @@ local states =
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(7 * FRAMES, function(inst)
+            TimeEvent(8 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(17 * FRAMES, function(inst)
+            TimeEvent(18 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
 			
-            TimeEvent(27 * FRAMES, function(inst)
+            TimeEvent(28 * FRAMES, function(inst)
 				Check_Bowling(inst)
             end),
         },
@@ -783,6 +783,9 @@ local states =
 			inst.AnimState:PushAnimation("mindcontrol_loop", true)
 
 			inst.components.health:SetInvincible(false)
+			
+			inst.charge_count = nil
+			inst.stunned_count = 0
 			
 			if inst.physbox ~= nil then
 				inst.physbox.AnimState:PlayAnimation("close")

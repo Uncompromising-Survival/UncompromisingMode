@@ -220,9 +220,11 @@ local states =
 
     State{
         name = "disguise",
-        tags = { "invisible", "disguise", "busy", "disguised" }, -- , "busy" 
+        tags = { "invisible", "disguise", "busy", "disguised", "noattack" }, -- , "busy" 
 
         onenter = function(inst)
+			inst.components.health:SetInvincible(true)
+			
 			inst.disguisetarget = nil
 		
             inst.AnimState:PlayAnimation("idonotexist")
@@ -235,6 +237,10 @@ local states =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("disguise") end)
         },
+
+        onexit = function(inst)
+			inst.components.health:SetInvincible(false)
+        end,
     },
 
     State{

@@ -311,6 +311,10 @@ end
 
 local function MarbleInit(inst)
     inst.AnimState:PlayAnimation("idle_"..inst.type)
+	
+	inst:DoTaskInTime(inst.player_targeting and 20 or 60, function(inst)
+		inst.fadeout = true
+	end)
 end
 
 local function slipperymarblesfn()
@@ -435,10 +439,6 @@ local function slipperymarblesfn()
 				end
 			end
 		end
-	end)
-	
-	inst:DoTaskInTime(inst.player_targeting and 15 or 60, function(inst)
-		inst.fadeout = true
 	end)
 	
 	inst.persists = false

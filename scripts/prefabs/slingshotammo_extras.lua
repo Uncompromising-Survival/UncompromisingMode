@@ -618,7 +618,7 @@ local function OnHit_MoonRock(inst, attacker, target)
 			target:PushEvent("wixiebite")
 		end
 	
-		if target:HasTag("shadow") or target:HasTag("shadowcreature") or target:HasTag("stalker") or v:HasTag("shadowchesspiece") then
+		if target:HasTag("shadow") or target:HasTag("shadowcreature") or target:HasTag("stalker") or target:HasTag("shadowchesspiece") then
 			inst.powerlevel = inst.powerlevel + 2
 		end
 	
@@ -670,7 +670,7 @@ local function OnHit_Goop(inst, attacker, target)
 		local goop = SpawnPrefab("slingshotammo_goop_proj_secondary")
 		
 		local players = TheSim:FindEntities(x, y, z, 10, { "_combat" }, {"noclaustrophobia", "playerghost"}, { "companion", "player" })
-		local ents = TheSim:FindEntities(x, y, z, 10, { "_combat" }, AURA_EXCLUDE_TAGS)
+		local ents = TheSim:FindEntities(x, y, z, 10, { "_combat" }, GOOP_EXCLUDE_TAGS)
 		
 		for i, v in pairs(players) do 
 			if v ~= target then
@@ -741,6 +741,8 @@ local function OnHit_Slime(inst, attacker, target)
 			target.components.combat.hiteffectsymbol ~= nil and
 			target.components.combat.hiteffectsymbol ~= "marker" then
 				hitfx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+			elseif target:HasTag("smallcreature") then
+				hitfx.Transform:SetPosition(0, .5, 0)
 			else
 				hitfx.Transform:SetPosition(0, 2, 0)
 			end
@@ -749,52 +751,54 @@ local function OnHit_Slime(inst, attacker, target)
 			target.slingshot_slime = hitfx
 			target.slingshot_slime:Advance()
 		
-			if target.components.burnable ~= nil and target.components.burnable:IsBurning() or target.components.propagator and target.components.propagator.spreading then
-				if target ~= nil then
-					if target.components.combat ~= nil then
-						if no_aggro(attacker, target) then
-							target.components.combat:SetShouldAvoidAggro(attacker)
-						end
-					
-						target.components.combat:GetAttacked(attacker, 50, attacker)
+			hitfx:ListenForEvent("onignite", function(inst)
+					if target ~= nil then
+						if target.components.combat ~= nil then
+							if no_aggro(attacker, target) then
+								target.components.combat:SetShouldAvoidAggro(attacker)
+							end
 						
-						target.components.combat:RemoveShouldAvoidAggro(attacker)
+							target.components.combat:GetAttacked(attacker, hitfx.damage, attacker)
+					
+							target.components.combat:RemoveShouldAvoidAggro(attacker)
+						end
+							
+						local debuffkey = hitfx.prefab
+						target.components.locomotor:RemoveExternalSpeedMultiplier(target, debuffkey) 
+						target._slingslime_speedmulttask = nil
+						target.slingshot_slime = nil
+							
+						SpawnPrefab("explode_small").Transform:SetPosition(target.Transform:GetWorldPosition())
+					end
+				
+				
+					hitfx:Remove()
+				end, target)
+
+			hitfx:DoPeriodicTask(.2, function()
+				if target.components.burnable ~= nil and target.components.burnable:IsBurning() or target.components.propagator and target.components.propagator.spreading then
+					if target ~= nil then
+						if target.components.combat ~= nil then
+							if no_aggro(attacker, target) then
+								target.components.combat:SetShouldAvoidAggro(attacker)
+							end
+						
+							target.components.combat:GetAttacked(attacker, 50, attacker)
+							
+							target.components.combat:RemoveShouldAvoidAggro(attacker)
+						end
+						
+						local debuffkey = hitfx.prefab
+						target.components.locomotor:RemoveExternalSpeedMultiplier(target, debuffkey) 
+						target._slingslime_speedmulttask = nil
+						target.slingshot_slime = nil
+								
+						SpawnPrefab("explode_small").Transform:SetPosition(target.Transform:GetWorldPosition())
 					end
 					
-					local debuffkey = hitfx.prefab
-					target.components.locomotor:RemoveExternalSpeedMultiplier(target, debuffkey) 
-					target._slingslime_speedmulttask = nil
-					target.slingshot_slime = nil
-							
-					SpawnPrefab("explode_small").Transform:SetPosition(target.Transform:GetWorldPosition())
+					hitfx:Remove()
 				end
-				
-				hitfx:Remove()
-			else
-				hitfx:ListenForEvent("onignite", function(inst)
-						if target ~= nil then
-							if target.components.combat ~= nil then
-								if no_aggro(attacker, target) then
-									target.components.combat:SetShouldAvoidAggro(attacker)
-								end
-						
-								target.components.combat:GetAttacked(attacker, hitfx.damage, attacker)
-						
-								target.components.combat:RemoveShouldAvoidAggro(attacker)
-							end
-							
-							local debuffkey = hitfx.prefab
-							target.components.locomotor:RemoveExternalSpeedMultiplier(target, debuffkey) 
-							target._slingslime_speedmulttask = nil
-							target.slingshot_slime = nil
-							
-							SpawnPrefab("explode_small").Transform:SetPosition(target.Transform:GetWorldPosition())
-						end
-				
-				
-						hitfx:Remove()
-					end, target)
-			end
+			end)
 		end
 	end
 	

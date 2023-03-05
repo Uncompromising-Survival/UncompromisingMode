@@ -374,6 +374,25 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
 end
 
 local function castspell(inst, target, pos)
+	for i, v in pairs(inst._owner.components.inventory.itemslots) do
+		if v ~= nil and v:HasTag("charles_t_horse") then
+			v.components.fueled:DoDelta(-20)
+	
+			if inst.fuelmetask ~= nil then
+				inst.fuelmetask:Cancel()
+				inst.fuelmetask = nil
+			end
+			
+			if inst.unpausefuel_task ~= nil then
+				inst.unpausefuel_task:Cancel()
+				inst.unpausefuel_task = nil
+			end
+			
+			inst.unpausefuel_task = inst:DoTaskInTime(2, unpausefueled)
+		end
+	end
+			
+
 	inst.components.fueled:DoDelta(-20)
 	
 	if inst.fuelmetask ~= nil then

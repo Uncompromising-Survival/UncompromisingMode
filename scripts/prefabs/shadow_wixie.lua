@@ -595,6 +595,21 @@ local function shadowclone_fn()
     inst.components.health:SetMaxHealth(10)
 	
 	inst:DoTaskInTime(15, function(inst) 
+
+	local x, y, z = inst.Transform:GetWorldPosition()
+		local fxcircle = SpawnPrefab("dreadeye_sanityburstring")
+		fxcircle:AddTag("ignore_transparency")
+		fxcircle.Transform:SetScale(1.4, 1.4, 1.4)
+		fxcircle.entity:SetParent(inst.entity)
+		
+		for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, { "_combat", "player"}, {"playerghost"})) do
+			if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil then
+				if not (v.components.health:IsDead() or v:HasTag("playerghost")) then
+					v.components.combat:GetAttacked(inst, 50, inst)
+				end
+			end
+		end
+		
 		SpawnSpikes(inst)
 	end)
 	
