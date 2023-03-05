@@ -12,11 +12,11 @@ local prefabs =
 }
 
 local function PlaySound(inst)
-	if TheWorld.state.isnight then
-		inst.SoundEmitter:PlaySound("UCSounds/speaker/canyouseethem?", "thedeepwatches")
-	else
-		inst.SoundEmitter:KillSound("thedeepwatches")
-	end
+    if TheWorld.state.isnight then
+        inst.SoundEmitter:PlaySound("UCSounds/speaker/canyouseethem?", "thedeepwatches")
+    else
+        inst.SoundEmitter:KillSound("thedeepwatches")
+    end
 end
 
 local types =
@@ -48,10 +48,10 @@ local function fn()
     inst.AnimState:SetBuild("speaker_test")
     inst.AnimState:PlayAnimation("sneaky_leaky_preview")
 
-    MakeInventoryFloatable(inst, "med", 0.1, {1.1, 0.9, 1.1})
+    MakeInventoryFloatable(inst, "med", 0.1, { 1.1, 0.9, 1.1 })
     inst.components.floater.bob_percent = 0
 
-    local land_time = (POPULATING and math.random()*5*FRAMES) or 0
+    local land_time = (POPULATING and math.random() * 5 * FRAMES) or 0
     inst:DoTaskInTime(land_time, function(inst)
         inst.components.floater:OnLandedServer()
     end)
@@ -68,9 +68,19 @@ local function fn()
 
     inst:AddComponent("inspectable")
 
-	inst:WatchWorldState("isnight", PlaySound)
+    inst:WatchWorldState("isnight", PlaySound)
 
     return inst
+end
+
+local function PickSiren(inst)
+    if TheWorld.siren_count == 1 then
+        return "siren_throne"
+    elseif TheWorld.siren_count == 2 then
+        return "siren_bird_nest"
+    else
+        return "ocean_speaker"
+    end
 end
 
 --I am incredibly lazy.
@@ -96,9 +106,9 @@ local function fn1()
     --inst.AnimState:SetBuild("speaker_test")
     --inst.AnimState:PlayAnimation("sneaky_leaky_preview")
 
-    MakeInventoryFloatable(inst, "med", 0.1, {1.1, 0.9, 1.1})
+    MakeInventoryFloatable(inst, "med", 0.1, { 1.1, 0.9, 1.1 })
     inst.components.floater.bob_percent = 0
-    local land_time = (POPULATING and math.random()*5*FRAMES) or 0
+    local land_time = (POPULATING and math.random() * 5 * FRAMES) or 0
 
 
     inst.entity:SetPristine()
@@ -106,11 +116,18 @@ local function fn1()
     if not TheWorld.ismastersim then
         return inst
     end
-    inst:DoTaskInTime(0.5, function(inst)
-        print(types[math.random(3)].."_teaser")
-        local x,y,z = inst.Transform:GetWorldPosition()
-        local siren = SpawnPrefab(types[math.random(3)].."_teaser")
-        siren.Transform:SetPosition(x,y,z)
+
+    --hopefully impossibly hard to get things to spawn at the same time.
+    inst:DoTaskInTime(math.random(), function(inst)
+
+        if TheWorld.siren_count == nil then
+            TheWorld.siren_count = 0
+        end
+        print(PickSiren())
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local siren = SpawnPrefab(PickSiren() .. "_teaser")
+        siren.Transform:SetPosition(x, y, z)
+        TheWorld.siren_count = TheWorld.siren_count + 1
         inst:Remove()
     end)
     return inst
@@ -120,5 +137,5 @@ end
 
 
 return Prefab("ocean_speaker", fn, assets, prefabs), -- This is the real one, other ones are temp placeholders.
-Prefab("ocean_speaker_teaser", fn, assets, prefabs),
-Prefab("siren_teaser_picker", fn1, assets, prefabs)
+    Prefab("ocean_speaker_teaser", fn, assets, prefabs),
+    Prefab("siren_teaser_picker", fn1, assets, prefabs)
