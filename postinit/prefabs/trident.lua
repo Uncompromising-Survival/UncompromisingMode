@@ -13,11 +13,10 @@ local FX_RADIUS = TUNING.TRIDENT.SPELL.RADIUS * 0.65
 local COST_PER_EXPLOSION = TUNING.TRIDENT.USES / TUNING.TRIDENT.SPELL.USE_COUNT
 
 local function DoLineAttack(inst, target, position)
-    print(inst, target, position)
 
     local owner = inst.components.inventoryitem:GetGrandOwner()
     if owner == nil then
-        --return
+        return
     end
 
     for _ = 1, 3 do
@@ -90,6 +89,7 @@ local function DoLineAttack(inst, target, position)
     end
 
     local x, y, z = owner.Transform:GetWorldPosition()
+
     for _, v in pairs(TheSim:FindEntities(x, y, z, TUNING.TRIDENT_FARM_PLANT_INTERACT_RANGE, PLANT_TAGS)) do
         if v.components.farmplanttendable ~= nil then
             v.components.farmplanttendable:TendTo(owner)
