@@ -64,77 +64,11 @@ end
 
 if TUNING.DSTU.WICKERNERF_MOONBOOK then
 	--just a little convinience thing for me
-	env.AddPrefabPostInit("werebeast", function(self)
+	env.AddComponentPostInit("werebeast", function(self)
 		if self.inst ~= nil then
 			self.inst:AddTag("werebeast")
 		end
 	end)
-
-	local WEREMODE_NAMES =
-	{
-		"beaver",
-		"moose",
-		"goose",
-	}	
-
-	local WEREMODES = { NONE = 0 }
-	for i, v in ipairs(WEREMODE_NAMES) do
-		WEREMODES[string.upper(v)] = i
-	end
-
-	local function IsWereMode(mode)
-		return WEREMODE_NAMES[mode] ~= nil
-	end
-
-	local function OnGooseRunningOver(inst, CalculateWerenessDrainRate)
-		if inst._gooserunninglevel > 1 then
-			inst._gooserunninglevel = inst._gooserunninglevel - 1
-			inst._gooserunning = inst:DoTaskInTime(TUNING.WEREGOOSE_RUN_DRAIN_TIME_DURATION, OnGooseRunningOver,
-				CalculateWerenessDrainRate)
-		else
-			inst._gooserunning = nil
-			inst._gooserunninglevel = nil
-		end
-		inst.components.wereness:SetDrainRate(CalculateWerenessDrainRate(inst, WEREMODES.GOOSE, TheWorld.state.isfullmoon))
-	end
-
-	local function CalculateWerenessDrainRate(inst, mode, isfullmoon)
-		local t = isfullmoon and TUNING.WERE_FULLMOON_DRAIN_TIME_MULTIPLIER or 1
-		if mode == WEREMODES.BEAVER then
-			t = t * TUNING.BEAVER_DRAIN_TIME
-			if inst._beaverworkinglevel ~= nil then
-				t = t *
-					(
-					inst._beaverworkinglevel > 1 and TUNING.BEAVER_WORKING_DRAIN_TIME_MULTIPLIER2 or
-						TUNING.BEAVER_WORKING_DRAIN_TIME_MULTIPLIER1)
-			end
-		elseif mode == WEREMODES.MOOSE then
-			t = t * TUNING.WEREMOOSE_DRAIN_TIME
-			if inst._moosefightinglevel ~= nil then
-				t = t *
-					(
-					inst._moosefightinglevel > 1 and TUNING.WEREMOOSE_FIGHTING_DRAIN_TIME_MULTIPLIER2 or
-						TUNING.WEREMOOSE_FIGHTING_DRAIN_TIME_MULTIPLIER1)
-			end
-		else --if mode == WEREMODES.GOOSE then
-			t = t * TUNING.WEREGOOSE_DRAIN_TIME
-			if inst.sg:HasStateTag("moving") then
-				if inst._gooserunning ~= nil then
-					inst._gooserunning:Cancel()
-				end
-				inst._gooserunning = inst:DoTaskInTime(TUNING.WEREGOOSE_RUN_DRAIN_TIME_DURATION, OnGooseRunningOver,
-					CalculateWerenessDrainRate)
-				inst._gooserunninglevel = 2
-			end
-			if inst._gooserunninglevel ~= nil then
-				t = t *
-					(
-					inst._gooserunninglevel > 1 and TUNING.WEREGOOSE_RUN_DRAIN_TIME_MULTIPLIER2 or
-						TUNING.WEREGOOSE_RUN_DRAIN_TIME_MULTIPLIER1)
-			end
-		end
-		return -100 / t
-	end
 
 	local function OnRead_moon(inst, reader)
 		local x, y, z = reader.Transform:GetWorldPosition()
@@ -164,21 +98,18 @@ if TUNING.DSTU.WICKERNERF_MOONBOOK then
 		for k, v in ipairs(woodies) do
 			x, y, z = v.Transform:GetWorldPosition()
 
-			if not v.fullmoontriggered then
-				v.fullmoontriggered = true
-				local pct = v.components.wereness:GetPercent()
-				if pct > 0 then
-					v.components.wereness:SetPercent(1)
-					local fx = SpawnPrefab("halloween_moonpuff")
-					fx.Transform:SetPosition(x, y, z)
-				else
-					v.components.wereeater:ForceTransformToWere()
-					v.components.wereness:SetPercent(1, true)
-					local fx = SpawnPrefab("halloween_moonpuff")
-					fx.Transform:SetPosition(x, y, z)
-				end
-				found = true
+			local pct = v.components.wereness:GetPercent()
+			if pct > 0 then
+				v.components.wereness:SetPercent(1)
+				local fx = SpawnPrefab("halloween_moonpuff")
+				fx.Transform:SetPosition(x, y, z)
+			else
+				v.components.wereness:SetPercent(1, true)
+				v.components.wereeater:ForceTransformToWere()
+				local fx = SpawnPrefab("halloween_moonpuff")
+				fx.Transform:SetPosition(x, y, z)
 			end
+			found = true
 		end
 
 		if found then
