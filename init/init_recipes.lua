@@ -118,7 +118,7 @@ if GetModConfigData("book_recipes") then
     AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
     AllRecipes["book_fish"].ingredients = { Ingredient("papyrus", 2), Ingredient("oceanfishingbobber_oval", 2) } --???????????????
     AllRecipes["book_light"].ingredients = { Ingredient("papyrus", 2), Ingredient("wormlight", 1) }
-    AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST) --??????????????????????????????????????????????
+    AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)                                         --??????????????????????????????????????????????
     AllRecipes["bookstation"].ingredients = { Ingredient("livinglog", 4), Ingredient("papyrus", 4),
         Ingredient("featherpencil", 1) }
     AllRecipes["book_moon"].ingredients = { Ingredient("papyrus", 2), Ingredient("moonrocknugget", 2),
@@ -149,7 +149,7 @@ if GetModConfigData("no4crafts") then --:desolate:
 end
 
 AllRecipes["boat_bumper_shell_kit"].numtogive = 4 --8
-AllRecipes["boat_bumper_kelp_kit"].numtogive = 4 --8
+AllRecipes["boat_bumper_kelp_kit"].numtogive = 4  --8
 AllRecipes["boat_bumper_shell_kit"].ingredients = { Ingredient("slurtle_shellpieces", 3), Ingredient("rope", 3) }
 AllRecipes["boat_bumper_kelp_kit"].ingredients = { Ingredient("kelp", 3), Ingredient("cutgrass", 6) }
 
@@ -201,12 +201,12 @@ local winona_portables = {
     "spotlight",
     "catapult",
 }
-
-for k, v in ipairs(winona_portables) do
-    AllRecipes["winona_" .. v].product = "winona_" .. v .. "_item"
-    AllRecipes["winona_" .. v].placer = nil
+if GetModConfigData("winona_portables") then
+    for k, v in ipairs(winona_portables) do
+        AllRecipes["winona_" .. v].product = "winona_" .. v .. "_item"
+        AllRecipes["winona_" .. v].placer = nil
+    end
 end
-
 --new recipes
 
 AddRecipe2(
@@ -597,7 +597,7 @@ AddRecipe2(
     "brine_balm",
     { Ingredient("saltrock", 2), Ingredient("kelp", 1) }, --, Ingredient("driftwood_log", 1)
     TECH.SCIENCE_ONE,
-    nil, --{numtogive = 2},
+    nil,                                                  --{numtogive = 2},
     { "RESTORATION" }
 )
 ChangeSortKey("brine_balm", "floral_bandage", "RESTORATION", true)
@@ -797,7 +797,8 @@ AddRecipe2(
 )
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
-AddRecipe2("codex_mantra", { Ingredient("waxwelljournal", 1) }, TECH.NONE, { builder_tag = "shadowmagic" }, { "CHARACTER" })
+AddRecipe2("codex_mantra", { Ingredient("waxwelljournal", 1) }, TECH.NONE, { builder_tag = "shadowmagic" },
+{ "CHARACTER" })
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 AddRecipe2(
@@ -928,7 +929,8 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("slingshotammo_thulecite", "ruins_bat", "CRAFTING_STATION", true)
 
     AddRecipe2("slingshotammo_lazy", { Ingredient("orangegem", 1), Ingredient("nightmarefuel", 1) },
-        GLOBAL.TECH.ANCIENT_TWO, { builder_tag = "pebblemaker", numtogive = 20, no_deconstruction = true, nounlock = true },
+        GLOBAL.TECH.ANCIENT_TWO,
+        { builder_tag = "pebblemaker", numtogive = 20, no_deconstruction = true, nounlock = true },
         { "CHARACTER", "WEAPONS", "CRAFTING_STATION" })
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_LAZY = "Now you see me..."
     ChangeSortKey("slingshotammo_lazy", "slingshotammo_thulecite", "WEAPONS", true)
@@ -1014,7 +1016,7 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
 
     AddRecipe2("bagofmarbles", { Ingredient("slingshotammo_marble", 10), Ingredient("rope", 1) }, GLOBAL.TECH
-    .SCIENCE_TWO, { builder_tag = "pebblemaker" }, { "CHARACTER", "WEAPONS" })
+        .SCIENCE_TWO, { builder_tag = "pebblemaker" }, { "CHARACTER", "WEAPONS" })
     GLOBAL.STRINGS.RECIPE_DESC.BAGOFMARBLES = "Watch your step!"
     ChangeSortKey("bagofmarbles", "slingshotammo_salt", "WEAPONS", true)
     ChangeSortKey("bagofmarbles", "slingshotammo_salt", "CHARACTER", true)

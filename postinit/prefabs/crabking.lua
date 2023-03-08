@@ -50,7 +50,7 @@ local function DoLineAttack(inst, rand_start)
 	if target ~= nil then
 		local tar_x, tar_y, tar_z = target.Transform:GetWorldPosition()
 
-		local variance_x, variance_z = math.random( -24, 24), math.random( -24, 24)
+		local variance_x, variance_z = math.random(-24, 24), math.random(-24, 24)
 
 		if variance_x > 0 then --wonder if there's anything I could do to make this better
 			variance_x = math.clamp(variance_x, 16, 24)
@@ -157,7 +157,7 @@ local function DoSeekingAttack(inst)
 end
 
 local function spawnwaves(inst, numWaves, totalAngle, waveSpeed, wavePrefab, initialOffset, idleTime, instantActivate,
-	                      random_angle)
+						  random_angle)
 	SpawnAttackWaves(
 		inst:GetPosition(),
 		(not random_angle and inst.Transform:GetRotation()) or nil,
@@ -213,48 +213,51 @@ local gems =
 	"yellow",
 	"green",
 }
-
-SetSharedLootTable('crabking',
-	{
-		{ "chesspiece_crabking_sketch", 1.00 },
-		--{"trident_blueprint",                   1.00},
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ 'meat',                       1.00 },
-		{ "singingshell_octave5",       1.00 },
-		{ "singingshell_octave5",       1.00 },
-		{ "singingshell_octave5",       1.00 },
-		{ "singingshell_octave5",       1.00 },
-		{ "singingshell_octave5",       0.50 },
-		{ "singingshell_octave5",       0.25 },
-		{ "singingshell_octave4",       1.00 },
-		{ "singingshell_octave4",       1.00 },
-		{ "singingshell_octave4",       1.00 },
-		{ "singingshell_octave4",       0.50 },
-		{ "singingshell_octave4",       0.25 },
-		{ "singingshell_octave3",       1.00 },
-		{ "singingshell_octave3",       1.00 },
-		{ "singingshell_octave3",       0.50 },
-		{ "barnacle",                   1.00 },
-		{ "barnacle",                   1.00 },
-		{ "barnacle",                   1.00 },
-		{ "barnacle",                   0.25 },
-		{ "barnacle",                   0.25 },
-		{ "barnacle",                   0.25 },
-		{ "barnacle",                   0.25 },
-	})
+if env.GetModConfigData("ck_loot") then
+	SetSharedLootTable('crabking',
+		{
+			{ "chesspiece_crabking_sketch", 1.00 },
+			--{"trident_blueprint",                   1.00},
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ 'meat',                       1.00 },
+			{ "singingshell_octave5",       1.00 },
+			{ "singingshell_octave5",       1.00 },
+			{ "singingshell_octave5",       1.00 },
+			{ "singingshell_octave5",       1.00 },
+			{ "singingshell_octave5",       0.50 },
+			{ "singingshell_octave5",       0.25 },
+			{ "singingshell_octave4",       1.00 },
+			{ "singingshell_octave4",       1.00 },
+			{ "singingshell_octave4",       1.00 },
+			{ "singingshell_octave4",       0.50 },
+			{ "singingshell_octave4",       0.25 },
+			{ "singingshell_octave3",       1.00 },
+			{ "singingshell_octave3",       1.00 },
+			{ "singingshell_octave3",       0.50 },
+			{ "barnacle",                   1.00 },
+			{ "barnacle",                   1.00 },
+			{ "barnacle",                   1.00 },
+			{ "barnacle",                   0.25 },
+			{ "barnacle",                   0.25 },
+			{ "barnacle",                   0.25 },
+			{ "barnacle",                   0.25 },
+		})
+end
 
 env.AddPrefabPostInit("crabking", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
 
-	if inst.components.lootdropper ~= nil then
-		inst.components.lootdropper:SetChanceLootTable('batty')
+	if env.GetModConfigData("ck_loot") then
+		if inst.components.lootdropper ~= nil then
+			inst.components.lootdropper:SetChanceLootTable('crabking')
+		end
 	end
 
 	inst.attack_count = 0
@@ -344,67 +347,70 @@ env.AddPrefabPostInit("crabking", function(inst)
 	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 
 	inst:ListenForEvent("death", function(inst)
-		TheWorld.crabking_active = false
+		if env.GetModConfigData("ck_loot") then
+			TheWorld.crabking_active = false
 
-		local pos = inst:GetPosition()
-		local messagebottletreasures = require("messagebottletreasures_um")
-		local pearl = inst.countgems(inst).pearl * 1.5
-		local red = inst.countgems(inst).red - pearl --Don't want pearls to make you have more chance on the normal gems
-		local blue = inst.countgems(inst).blue - pearl
-		local purple = inst.countgems(inst).purple - pearl
-		local yellow = inst.countgems(inst).yellow - pearl
-		local orange = inst.countgems(inst).orange - pearl
-		local green = inst.countgems(inst).green - pearl
-		local opal = inst.countgems(inst).opal
-		local count = 0
+			local pos = inst:GetPosition()
+			local messagebottletreasures = require("messagebottletreasures_um")
+			local pearl = inst.countgems(inst).pearl * 1.5
+			local red = inst.countgems(inst).red -
+				pearl --Don't want pearls to make you have more chance on the normal gems
+			local blue = inst.countgems(inst).blue - pearl
+			local purple = inst.countgems(inst).purple - pearl
+			local yellow = inst.countgems(inst).yellow - pearl
+			local orange = inst.countgems(inst).orange - pearl
+			local green = inst.countgems(inst).green - pearl
+			local opal = inst.countgems(inst).opal
+			local count = 0
 
-		if math.random(6) < opal then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < opal then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < red then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < red then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < blue then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < blue then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < purple then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < purple then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < yellow then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < yellow then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < orange then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
-		end
+			if math.random(6) < orange then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 
-		if math.random(6) < green then
-			messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
-				pos.x + math.random( -4, 4), pos.y, pos.z + math.random( -4, 4))
-			count = count + 1
-			if count > 3 then return end
+			if math.random(6) < green then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
+				if count > 3 then return end
+			end
 		end
 	end)
 
@@ -412,7 +418,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 		local boat_physics = data.other.components.boatphysics
 		if boat_physics ~= nil then
 			if inst.components.health ~= nil then
-				inst.components.health:DoDelta( -1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
+				inst.components.health:DoDelta(-1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
 			end
 		end
 
@@ -458,29 +464,3 @@ env.AddPrefabPostInit("crabking", function(inst)
 		TheWorld.crabking_active = false
 	end)
 end)
-
---[[
-TUNING.CRABKING_DEADLY_GEYSERS = 1
-
-env.AddPrefabPostInit("crabking_geyserspawner", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-
-	local _endgeyser = UpvalueHacker.GetUpvalue(Prefabs.crabking_geyserspawner.fn, "endgeyser")
-
-	inst:RemoveEventCallback("endspell", _endgeyser)
-
-	inst:ListenForEvent("endspell", function() endgeyser(inst) end)
-	local _dogeyserburbletask = inst.dogeyserburbletask
-
-	inst.dogeyserburbletask = function(inst)
-		if inst.crab == nil or inst.crab ~= nil and inst.crab.countgems == nil then
-			print("crab not real tf??")
-			inst:Remove()
-			return
-		else
-			_dogeyserburbletask(inst)
-		end
-	end
-end)]]

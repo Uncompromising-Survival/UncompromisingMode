@@ -39,7 +39,7 @@ env.AddComponentPostInit("combat", function(self)
             end
         end
 
-        if self.inst ~= nil and (self.inst.prefab == "crabking" or self.inst.prefab == "crabking_claw") and attacker ~= nil and (attacker.prefab == "cannonball_rock" or attacker.prefab == "cannonball_sludge") then
+        if (self.inst ~= nil and (self.inst.prefab == "crabking" or self.inst.prefab == "crabking_claw") and attacker ~= nil and (attacker.prefab == "cannonball_rock" or attacker.prefab == "cannonball_sludge")) and env.GetModConfigData("reworked_ck") then
             damage = damage *
                 (attacker.prefab == "cannonball_rock" and 4 or attacker.prefab == "cannonball_sludge" and 2)
             if self.inst.attack_count ~= nil then

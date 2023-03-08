@@ -461,24 +461,17 @@ containers.params.winona_toolbox =
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
         },
-        animbank = "ui_tacklecontainer_3x5",
-        animbuild = "ui_tacklecontainer_3x5",
-        pos = Vector3(0, 280, 0),
+        animbank = "ui_chester_shadow_3x4",
+        animbuild = "ui_chester_shadow_3x4",
+        pos = Vector3(0, 220, 0),
         side_align_tip = 160,
     },
     type = "chest",
-    itemtestfn = CheckToolboxItem,
+    itemtestfn = GetModConfigData("winona_portables") and CheckToolboxItem or CheckWardrobeItem,
 }
 
-for y = 1, -3, -1 do
-    for x = 0, 2 do
-        table.insert(containers.params.winona_toolbox.widget.slotpos, Vector3(80 * x - 80 * 2 + 80, 80 * y - 45, 0))
-    end
-end
+containers.params.winona_toolbox.widget.slotpos = containers.params.shadowchester.widget.slotpos
 
 modparams.sunkenchest_royal_random = containers.params.shadowchester
 modparams.sunkenchest_royal_red = containers.params.shadowchester

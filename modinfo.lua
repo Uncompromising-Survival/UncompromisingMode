@@ -69,12 +69,17 @@ configuration_options =
 -- Core Gameplay --
 ------------------------------
 	--Header("Official Beta Compatibility"),
-	--BinaryConfig("beta_compatibility", "March QoL Beta", "This will enable proper compatibility for the beta Crafting, Ancient Guardian, and Varg Waves features.", false),
+	--BinaryConfig("beta_compatibility", "March QoL Beta", "This will enable proper compatibility for the beta Crafting, Ancient Guardian, and Varg Waves features.", false),|
 
 	Header("Mod Compatibility"),
 	BinaryConfig("worldgenmastertoggle", "Master Toggle", "Toggles ALL worldgen. MUST DISABLE IN ISLAND ADVENTURE WORLDS!", true),
 	BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods.", true),
 	BinaryConfig("hungry_void", "Anti-Voidwalk", "Disable this if you are using any mods that allow flight or traversal over the cave void.", true),
+	SkipSpace(),
+
+	Header("In Development"),
+	BinaryConfig("winona_portables", "Winona: Portable Structures", "Makes winona's structures portable,  and reworks the toolbox into the Contraption Container\nMissing art assets.", false),
+	BinaryConfig("ck_loot", "Additional Crab King Loot", "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
 	SkipSpace(),
 
 	Header("Core Gameplay"),
@@ -637,6 +642,7 @@ configuration_options =
 	BinaryConfig("harder_beequeen", "Harder Bee Queen", "Bee Queen now has a variety of attacks with different bees.", true),--lame! help!
 	BinaryConfig("rework_minotaur", "Ancient Guardian Rework", "The Ancient Guardian's fight is expanded, includes more attacks.", true),
 	BinaryConfig("reworked_eyes", "Reworked Eyes of Terror", "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
+	BinaryConfig("reworked_ck", "Reworked Crab King", "Crab King has his main attack altered, freeze removed and a couple more mechanics.", true),
 	SkipSpace(),
 
 	Header("Boss Quality of Life"),

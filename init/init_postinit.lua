@@ -111,7 +111,7 @@ local prefab_post = {
 	"wobster",
 	"townportal",
 	"trinkets", --This is for the grave mound cc trinkets
-	"trap", -- prevents traps and rabbits from 'sleeping' off screen
+	"trap",  -- prevents traps and rabbits from 'sleeping' off screen
 	"moonbase",
 	"koalas",
 	"pumpkin_lantern",
@@ -120,8 +120,6 @@ local prefab_post = {
 	"armor_sanity",
 	"tophat",
 	"tophatreduction",
-	"crabking",
-	"crabking_claw",
 	"ruinsstatues",
 	"moondial",
 	--"deciduoustrees",
@@ -176,7 +174,6 @@ local prefab_post = {
 	"charcoal",
 	"mermhat",
 	"wptags",
-	"winona_portables",
 	"inventoryitem_classified",
 	"cannonballs",
 }
@@ -194,7 +191,6 @@ local stategraph_post = {
 	--"merm",
 	"carnival_host",
 	"catcoon",
-	"crabkingclaw",
 }
 
 local class_post = {
@@ -226,29 +222,29 @@ if GetModConfigData("wixie_walter") then
 	local wixie_prefabs =
 	{
 		"extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
-		"slingshot", -- stuff for new slingshot aiming and wixie exclusivity
-		"walter", -- all of walters things, including woby action
+		"slingshot",             -- stuff for new slingshot aiming and wixie exclusivity
+		"walter",                -- all of walters things, including woby action
 		"wobysmall",
 		"wobybig",
 		"wormhole", -- wixie loses more sanity from wormholes
 		"slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
 		"coconut", -- shoot a coconut
 	}
-	local wixie_components = 
+	local wixie_components =
 	{
-		"healer", -- Walter gets a 50% bonus from healing items, over time. works on companions too.
+		"healer",   -- Walter gets a 50% bonus from healing items, over time. works on companions too.
 		"bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
 		"wobypicking", -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
-		"dryer", -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
-	
+		"dryer",    -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
+
 	}
 
-	for k,v in ipairs(wixie_prefabs) do
-		modimport("wixie_postinit/prefabs/"..v)
+	for k, v in ipairs(wixie_prefabs) do
+		modimport("wixie_postinit/prefabs/" .. v)
 	end
 
-	for k,v in ipairs(wixie_components) do
-		modimport("wixie_postinit/components/"..v)
+	for k, v in ipairs(wixie_components) do
+		modimport("wixie_postinit/components/" .. v)
 	end
 
 	modimport("wixie_postinit/walter_actions")
@@ -424,6 +420,16 @@ end
 --if GetModConfigData("boatturning") then
 --	table.insert(prefab_post, "boat")
 --end
+
+if GetModConfigData("winona_portables") then
+	table.insert(prefab_post, "winona_portables")
+end
+
+if GetModConfigData("reworked_ck") then
+	table.insert(prefab_post, "crabking")
+	table.insert(prefab_post, "crabking_claw")
+	table.insert(stategraph_post, "crabkingclaw")
+end
 
 if GetModConfigData("hambatnerf") then
 	table.insert(prefab_post, "hambat")
