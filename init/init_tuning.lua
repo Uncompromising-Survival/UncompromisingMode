@@ -403,7 +403,7 @@ TUNING.DSTU =
     UNCOOL_CHESTER = GetModConfigData("uncool_chester"),
     HOODEDFOREST = GetModConfigData("hoodedforest"),
     GHOSTWALRUS = GetModConfigData("ghostwalrus"),
-    WINONA_GEN = GetModConfigData("winona_gen"),
+    WINONA_GEN = GetModConfigData("winona_gen_"),
     RICE = GetModConfigData("rice"),
     NEWRECIPES = GetModConfigData("newrecipes"),
     CAVECLOPS = GetModConfigData("caveclops"),
@@ -455,11 +455,12 @@ if GetModConfigData("wixie_walter") then
 	TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}	
 end
 
-
 TUNING.NONLETHAL_TEMPERATURE = false
 TUNING.NONLETHAL_HUNGER = false
 TUNING.NONLETHAL_DARKNESS = false
 TUNING.NONLETHAL_PERCENT = 0
+
+TUNING.WINONA_BATTERY_MIN_LOAD = 0 --generators don't drain when not powering anything, I think.
 
 --shield buff
 TUNING.SHIELDOFTERROR_DAMAGE = 59.5
