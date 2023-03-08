@@ -416,6 +416,11 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics
+
+		if (math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity)) < 1.2 then
+			return
+		end
+
 		if boat_physics ~= nil then
 			if inst.components.health ~= nil then
 				inst.components.health:DoDelta(-1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
@@ -423,6 +428,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 		end
 
 		inst.finishfixing(inst)
+
 		if inst.attack_count <= 2 then
 			inst:DoTaskInTime(3, function(inst)
 				if inst.components.timer:TimerExists("claw_regen_timer") then

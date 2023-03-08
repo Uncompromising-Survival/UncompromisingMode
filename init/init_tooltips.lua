@@ -64,8 +64,6 @@ STRINGS.UNCOMP_TOOLTIP = {
 	CRAB_HAT_ICE = "- Resistance scales with wetness.\n- Prevents the wearer from drying up.",
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing."
-	
-	
 }
 
 STRINGS.PINETREE_TOOLTIP = {
@@ -84,15 +82,18 @@ STRINGS.PINETREE_TOOLTIP = {
 }
 
 STRINGS.ENGINEERING_TOOLTIP = {
-	WINONA_CATAPULT = "- Now portable.",
-	WINONA_SPOTLIGHT = "- Now portable.",
-	WINONA_BATTERY_LOW = "- Now portable.",
-	WINONA_BATTERY_HIGH = "- Now portable.",
 	MINERHAT = " - May be upgraded.\n- Can be overcharged, if upgraded.",
 	LANTERN = "- May be upgraded.\n- Can be overcharged, if upgraded.",
 	NIGHTSTICK = "- Can be overcharged.",
 	BUGZAPPER = "- Can be overcharged."
 }
+
+if GetModConfigData("winona_portables") then
+	STRINGS.ENGINEERING_TOOLTIP.WINONA_CATAPULT = "- Now portable."
+	STRINGS.ENGINEERING_TOOLTIP.WINONA_SPOTLIGHT = "- Now portable."
+	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_LOW = "- Now portable."
+	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_HIGH = "- Now portable."
+end
 
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
 
