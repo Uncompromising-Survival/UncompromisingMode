@@ -798,7 +798,7 @@ AddRecipe2(
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 
 AddRecipe2("codex_mantra", { Ingredient("waxwelljournal", 1) }, TECH.NONE, { builder_tag = "shadowmagic" },
-{ "CHARACTER" })
+    { "CHARACTER" })
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 AddRecipe2(
@@ -809,48 +809,49 @@ AddRecipe2(
     { "SEAFARING" }
 )
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
+if GetModConfigData("ck_loot") then
+    AddRecipe2(
+        "crab_hat",
+        { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) },
+        TECH.LOST,
+        nil,
+        { "CLOTHING" }
+    )
 
-AddRecipe2(
-    "crab_hat",
-    { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) },
-    TECH.LOST,
-    nil,
-    { "CLOTHING" }
-)
+    AddRecipe2(
+        "crab_hat_ice",
+        { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) },
+        TECH.LOST,
+        nil,
+        { "ARMOUR" }
+    )
 
-AddRecipe2(
-    "crab_hat_ice",
-    { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) },
-    TECH.LOST,
-    nil,
-    { "ARMOUR" }
-)
+    AddRecipe2(
+        "armor_crab_maxhp",
+        { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) },
+        TECH.LOST,
+        nil,
+        { "ARMOUR" }
+    )
 
-AddRecipe2(
-    "armor_crab_maxhp",
-    { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) },
-    TECH.LOST,
-    nil,
-    { "ARMOUR" }
-)
+    AddRecipe2(
+        "armor_crab_regen",
+        { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) },
+        TECH.LOST,
+        nil,
+        { "ARMOUR" }
+    )
 
-AddRecipe2(
-    "armor_crab_regen",
-    { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) },
-    TECH.LOST,
-    nil,
-    { "ARMOUR" }
-)
-
-AddRecipe2(
-    "staff_starfall",
-    { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) },
-    TECH.LOST,
-    nil,
-    { "WEAPONS", "SHADOWMAGIC" }
-)
-ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
-ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
+    AddRecipe2(
+        "staff_starfall",
+        { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) },
+        TECH.LOST,
+        nil,
+        { "WEAPONS", "SHADOWMAGIC" }
+    )
+    ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
+    ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
+end
 
 AddRecipe2(
     "the_real_charles_t_horse",
