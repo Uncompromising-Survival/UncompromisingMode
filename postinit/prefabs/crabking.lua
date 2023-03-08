@@ -254,6 +254,9 @@ env.AddPrefabPostInit("crabking", function(inst)
 		return
 	end
 
+	inst:RemoveComponent("burnable")
+	inst:RemoveComponent("propagator")
+
 	if env.GetModConfigData("ck_loot") then
 		if inst.components.lootdropper ~= nil then
 			inst.components.lootdropper:SetChanceLootTable('crabking')
@@ -268,7 +271,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 	inst.wantstocast = true
 
-	local _startcastspell = inst.startcastspell
+	--local _startcastspell = inst.startcastspell
 	local _endcastspell = inst.endcastspell
 
 	inst.endcastspell = function(inst, lastwasfreeze)
