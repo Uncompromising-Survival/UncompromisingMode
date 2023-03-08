@@ -78,8 +78,8 @@ configuration_options =
 	SkipSpace(),
 
 	Header("In Development"),
-	BinaryConfig("winona_portables", "Winona: Portable Structures", "Makes winona's structures portable,  and reworks the toolbox into the Contraption Container\nMissing art assets.", false),
-	BinaryConfig("ck_loot", "Additional Crab King Loot", "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+	BinaryConfig("winona_portables", "Winona: Portable Structures", "Makes winona's structures portable,  and reworks the toolbox into the Contraption Container\nMissing art assets.", true),
+	BinaryConfig("ck_loot", "Additional Crab King Loot", "Crab King now drops unique loot based on the gems used.\nMissing art assets.", true),
 	SkipSpace(),
 
 	Header("Core Gameplay"),
