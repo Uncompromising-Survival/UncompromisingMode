@@ -190,6 +190,7 @@ local function fn()
 	inst.components.dryer:SetOnHarvestFn(onharvested)
 	inst.components.dryer:SetDoneDryingFn(DropMeat)
 	
+	inst:AddComponent("tradable")
 	
     inst._onlocomote = function(owner)
 		inst.components.dryer:Pause()

@@ -378,17 +378,17 @@ local function castspell(inst, target, pos)
 		if v ~= nil and v:HasTag("charles_t_horse") then
 			v.components.fueled:DoDelta(-20)
 	
-			if inst.fuelmetask ~= nil then
-				inst.fuelmetask:Cancel()
-				inst.fuelmetask = nil
+			if v.fuelmetask ~= nil then
+				v.fuelmetask:Cancel()
+				v.fuelmetask = nil
 			end
 			
-			if inst.unpausefuel_task ~= nil then
-				inst.unpausefuel_task:Cancel()
-				inst.unpausefuel_task = nil
+			if v.unpausefuel_task ~= nil then
+				v.unpausefuel_task:Cancel()
+				v.unpausefuel_task = nil
 			end
 			
-			inst.unpausefuel_task = inst:DoTaskInTime(2, unpausefueled)
+			v.unpausefuel_task = v:DoTaskInTime(2, unpausefueled)
 		end
 	end
 			
