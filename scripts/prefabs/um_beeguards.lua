@@ -336,7 +336,6 @@ local function fnmain(bee, build)
         inst.MortarAttack = MortarAttack
         inst:DoTaskInTime(math.random(1, 3), MortarAttack)
         inst.dohoney = Honey
-
     end
     if bee == "shooter" then
         inst.components.health:SetMaxHealth(0.5 * TUNING.BEEGUARD_HEALTH)
@@ -355,7 +354,11 @@ local function fnmain(bee, build)
 end
 
 local function fnblocker()
-    return fnmain("blocker", "hivehead_bee_guard")
+    local inst = fnmain("blocker", "hivehead_bee_guard")
+
+    inst.components.combat:SetRange(TUNING.BEEGUARD_ATTACK_RANGE)
+
+    return inst
 end
 
 local function fnseeker()
