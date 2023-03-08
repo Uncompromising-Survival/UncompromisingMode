@@ -1,7 +1,7 @@
 name = "[BETA]󰀀 Uncompromising Mode"
 description =
 [[
-󰀔 [ Beta Version v2.0.4.6 ]
+󰀔 [ Beta Version v2.0.4.7 ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -15,7 +15,7 @@ Prominent features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Beta ??? v2.0.4.6"
+version = "Beta ??? v2.0.4.7"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
