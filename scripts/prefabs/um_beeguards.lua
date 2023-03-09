@@ -329,6 +329,7 @@ local function fnmain(bee, build)
         inst.Transform:SetScale(1.6, 1.6, 1.6)
 
         inst:ListenForEvent("timerdone", SlovvDeath)
+        inst.components.combat:SetRange(TUNING.BEEGUARD_ATTACK_RANGE)
     end
     if bee == "seeker" then
         inst.components.health:SetMaxHealth(0.5 * TUNING.BEEGUARD_HEALTH)
@@ -354,11 +355,7 @@ local function fnmain(bee, build)
 end
 
 local function fnblocker()
-    local inst = fnmain("blocker", "hivehead_bee_guard")
-
-    inst.components.combat:SetRange(TUNING.BEEGUARD_ATTACK_RANGE)
-
-    return inst
+    return fnmain("blocker", "hivehead_bee_guard")
 end
 
 local function fnseeker()
