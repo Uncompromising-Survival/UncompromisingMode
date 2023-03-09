@@ -27,10 +27,6 @@ local function OnAttack(inst, attacker, target, skipsanity)
         target.components.sleeper:WakeUp()
     end
 
-    if target.components.combat ~= nil then
-        target.components.combat:SuggestTarget(attacker)
-    end
-
     for i = 1, math.random(3, 5) do
         inst:DoTaskInTime(i == 1 and 0 or math.random() * 0.5, function()
             if target == nil or not target:IsValid() then
@@ -135,12 +131,15 @@ local function OnCollide(inst)
 
     for k, v in ipairs(ents) do
         if v.components.combat ~= nil then
-            v.components.combat:SuggestTarget(inst.attacker)
+            if v.components.combat.target ~= nil then
+				v.components.combat:SetShouldAvoidAggro(inst.attacker)
+            end
             v.components.combat:GetAttacked(inst.attacker, 27.21)
+            v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
         end
     end
 
-    if not TheWorld.Map:IsOceanAtPoint(x,0,z) then
+    if not TheWorld.Map:IsOceanAtPoint(x, 0, z) then
         local fx = SpawnPrefab("staff_starfall_explode")
         fx.Transform:SetPosition(x, y, z)
         fx.SoundEmitter:PlaySound("dontstarve/common/lava_arena/spell/elemental/attack")
