@@ -349,6 +349,17 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 
+	local types = 
+	{
+		"red",
+		"blue",
+		"purple",
+		"yellow",
+		"orange",
+		"rainbow",
+		"green",
+	}
+
 	inst:ListenForEvent("death", function(inst)
 		if env.GetModConfigData("ck_loot") then
 			TheWorld.crabking_active = false
@@ -412,6 +423,12 @@ env.AddPrefabPostInit("crabking", function(inst)
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
+			end
+
+			if count == 0 then
+				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_"..types[math.random(#types)]).Transform:SetPosition(
+					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				count = count + 1
 			end
 		end
 	end)
