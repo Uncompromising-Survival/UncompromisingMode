@@ -17,9 +17,9 @@ local function OnAttack(inst, attacker, target, skipsanity)
 
     if not skipsanity and attacker ~= nil then
         if attacker.components.staffsanity then
-            attacker.components.staffsanity:DoCastingDelta( -TUNING.SANITY_SUPERTINY)
+            attacker.components.staffsanity:DoCastingDelta(-TUNING.SANITY_SUPERTINY)
         elseif attacker.components.sanity ~= nil then
-            attacker.components.sanity:DoDelta( -TUNING.SANITY_SUPERTINY)
+            attacker.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY)
         end
     end
 
@@ -34,15 +34,15 @@ local function OnAttack(inst, attacker, target, skipsanity)
     for i = 1, math.random(3, 5) do
         inst:DoTaskInTime(i == 1 and 0 or math.random() * 0.5, function()
             if target == nil or not target:IsValid() then
-                return--target removed/died.
+                return --target removed/died.
             end
             local proj = SpawnPrefab("staff_starfall_projectile")
             local x, y, z = target.Transform:GetWorldPosition()
             if x == nil or y == nil or z == nil then
-                proj:Remove()--wierd edge case with things that immediatly remove themselves on death.
+                proj:Remove() --wierd edge case with things that immediatly remove themselves on death.
                 return
             end
-            proj.Transform:SetPosition(x + math.random( -4, 4), y + math.random(10, 15), z + math.random( -4, 4))
+            proj.Transform:SetPosition(x + math.random(-4, 4), y + math.random(10, 15), z + math.random(-4, 4))
             proj.attacker = attacker
             if inst.components.finitesuses ~= nil then -- who knows, someone might make a mod to remove it
                 inst.components.finitesuses:Use()
@@ -129,10 +129,8 @@ local function fn()
 end
 
 local function OnCollide(inst)
-    local fx = SpawnPrefab("staff_starfall_explode")
-
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, {"_combat"},
+    local ents = TheSim:FindEntities(x, y, z, 4, { "_combat" },
         { "dead", "INLIMBO", "companion", "abigail", "player", "playerghost" })
 
     for k, v in ipairs(ents) do
@@ -142,8 +140,16 @@ local function OnCollide(inst)
         end
     end
 
-    fx.Transform:SetPosition(x, y, z)
-    fx.SoundEmitter:PlaySound("dontstarve/common/lava_arena/spell/elemental/attack")
+    if not TheWorld.Map:IsOceanAtPoint(x,0,z) then
+        local fx = SpawnPrefab("staff_starfall_explode")
+        fx.Transform:SetPosition(x, y, z)
+        fx.SoundEmitter:PlaySound("dontstarve/common/lava_arena/spell/elemental/attack")
+    else
+        local fx = SpawnPrefab("crab_king_waterspout")
+        fx.Transform:SetPosition(x, y, z)
+        local fx2 = SpawnPrefab("crab_king_bubble" .. math.random(3))
+        fx2.Transform:SetPosition(x, y, z)
+    end
 
     inst:Remove()
 end
@@ -187,7 +193,7 @@ local function fn_proj()
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.GROUND)
     inst.Physics:SetSphere(2)
-    inst.Physics:SetMotorVel(math.random( -50, 50) / 10, -33, math.random( -50, 50) / 10)
+    inst.Physics:SetMotorVel(math.random(-50, 50) / 10, -33, math.random(-50, 50) / 10)
 
     inst.entity:SetPristine()
 
