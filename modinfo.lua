@@ -213,7 +213,7 @@ configuration_options =
 	BinaryConfig("lunar grimoire", "Wickerbottom: Lunar Grimoire", "\"Lunar Grimoire\" now mutates creates around you.", true),
 	BinaryConfig("apicultural notes", "Wickerbottom: Apicultural Notes", "\"Apicultural Notes\" now makes beehives get filled to max around you.", true),
 	BinaryConfig("book_recipes", "Wickerbottom: Book Recipe Tweaks", "Changes some book recipes to be slightly more balanced.", true),
-	BinaryConfig("wanda_nerf", "Wanda:", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
+	BinaryConfig("wanda_nerf", "Wanda", "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
 	BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage", "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x", true),
 	BinaryConfig("wormwood_plants", "Wormwood: Planting Sanity", "Increases the sanity loss from digging plants.", true),
 	BinaryConfig("wendy", "Wendy", "Abigail was nerfed to not increase Wendy's maximum damage above average.", true),
