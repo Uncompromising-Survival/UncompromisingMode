@@ -72,6 +72,8 @@ local function fn_crab()
     inst.components.equippable:SetOnEquip(onequip_crab)
     inst.components.equippable:SetOnUnequip(onunequip_crab)
 
+    inst:AddComponent("tradable")
+
     MakeHauntableLaunch(inst)
 
     return inst
@@ -90,16 +92,17 @@ local function onequip_ice(inst, owner)
         owner.AnimState:Hide("HEAD")
         owner.AnimState:Show("HEAD_HAT")
         owner:AddTag("wetness_affinity")
-
-        owner.crab_hat_task = owner:DoPeriodicTask(1, function()
-            local wetness = owner.components.moisture ~= nil and owner.components.moisture:GetMoisturePercent()
-            if wetness ~= nil then
-                inst.components.armor.absorb_percent = Lerp(0.6,0.95, wetness)
-            else
-                inst.components.armor.absorb_percent = owner:HasTag("wet") and 0.95 or 0.6
-            end
-        end)
     end
+
+    owner.crab_hat_task = owner:DoPeriodicTask(1, function()
+        local wetness = owner.components.moisture ~= nil and owner.components.moisture:GetMoisturePercent()
+        if wetness ~= nil then
+            inst.components.armor.absorb_percent = Lerp(0.6, 0.95, wetness)
+        else
+            print(owner:HasTag("wet"))
+            inst.components.armor.absorb_percent = owner:HasTag("wet") and 0.95 or 0.6
+        end
+    end, 0)
 end
 
 local function onunequip_ice(inst, owner)
@@ -119,7 +122,6 @@ local function onunequip_ice(inst, owner)
         owner.crab_hat_task:Cancel()
         owner.crab_hat_task = nil
     end
-
 end
 
 local function fn_ice()
@@ -153,6 +155,8 @@ local function fn_ice()
     inst.components.inventoryitem.atlasname = "images/inventoryimages/gore_horn_hat.xml"
 
     inst:AddComponent("inspectable")
+
+    inst:AddComponent("tradable")
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
