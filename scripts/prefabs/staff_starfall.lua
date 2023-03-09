@@ -137,7 +137,9 @@ local function OnCollide(inst)
                 v.components.combat:SetShouldAvoidAggro(inst.attacker)
             end
             v.components.combat:GetAttacked(inst.attacker, 27.21)
-            v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
+            if v.components.combat ~= nil then--something may lose their combat component after the GetAttacked, like sentrypede corpses
+                v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
+            end
         end
     end
 
