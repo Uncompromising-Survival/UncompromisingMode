@@ -455,7 +455,7 @@ local treasure_templates =
 				guaranteed_loot =
 				{
 					armor_crab_regen_blueprint = 1,
-					reeds = 4,
+					cutreeds = 4,
 					rocks = { 1, 2, 3 },
 					greengem = {1, 2 },
 				},

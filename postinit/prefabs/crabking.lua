@@ -356,8 +356,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 			local pos = inst:GetPosition()
 			local messagebottletreasures = require("messagebottletreasures_um")
 			local pearl = inst.countgems(inst).pearl * 1.5
-			local red = inst.countgems(inst).red -
-				pearl --Don't want pearls to make you have more chance on the normal gems
+			local red = inst.countgems(inst).red - pearl 
 			local blue = inst.countgems(inst).blue - pearl
 			local purple = inst.countgems(inst).purple - pearl
 			local yellow = inst.countgems(inst).yellow - pearl
