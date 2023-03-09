@@ -278,6 +278,7 @@ local function fn_fx2()
 
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetFinalOffset(1)
+    inst.AnimState:SetLightOverride(1)
     inst.AnimState:SetScale(math.random() >= 0.5 and -.7 or .7, .7)
 
     inst.hue = 0
@@ -317,6 +318,8 @@ local function Scorch_OnFadeDirty(inst)
         local k = (inst._fade:value() - SCORCH_FADE_FRAMES - SCORCH_DELAY_FRAMES) / SCORCH_RED_FRAMES
         inst.AnimState:OverrideMultColour(1, 1, 1, 1)
         inst.AnimState:SetHighlightColour(k, k, 0, 0)
+        inst.AnimState:SetLightOverride(k)
+
     elseif inst._fade:value() >= SCORCH_FADE_FRAMES then
         inst.AnimState:OverrideMultColour(1, 1, 1, 1)
         inst.AnimState:SetHighlightColour()
