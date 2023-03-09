@@ -1,7 +1,6 @@
 --Update this list when adding files
 local component_post = {
 	--example:
-	--"container",
 	"groundpounder",
 	"propagator",
 	"moisture",
@@ -43,6 +42,7 @@ local component_post = {
 	"piratespawner",
 	"repairable",
 	"sewing",
+	"container",
 }
 
 local prefab_post = {

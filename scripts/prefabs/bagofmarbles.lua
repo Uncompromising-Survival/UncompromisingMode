@@ -300,7 +300,7 @@ local function slipperymarblesprojfn()
 	
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
-    inst.components.complexprojectile:SetGravity(-20)
+    inst.components.complexprojectile:SetGravity(-25)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(0, .5, 0))
     inst.components.complexprojectile:SetOnLaunch(MarbleThrow)
     inst.components.complexprojectile:SetOnHit(MarbleLand)

@@ -54,7 +54,7 @@ AddAction(
 	"RAT_STEAL_EQUIPPABLE",
 	function(act)
 		if act.target.components.container then
-			act.target.components.container:DropEverythingWithTag("_equippable")
+			act.target.components.container:DropOneItemWithTag("_equippable")
 			return true
 		end
 	end
@@ -64,7 +64,7 @@ AddAction(
 	"RAT_STEAL_GEM",
 	function(act)
 		if act.target.components.container then
-			act.target.components.container:DropEverythingWithTag("gem")
+			act.target.components.container:DropOneItemWithTag("gem")
 			return true
 		end
 	end

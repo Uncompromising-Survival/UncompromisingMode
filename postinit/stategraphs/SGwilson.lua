@@ -136,7 +136,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 				SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
 				if v.components.combat ~= nil then
-					v.components.combat:GetAttacked(inst, 10)
+					v.components.combat:GetAttacked(inst, 0)
 				end
 				
 				if v.components.locomotor ~= nil then
