@@ -214,7 +214,7 @@ local gems =
 	"green",
 }
 if env.GetModConfigData("ck_loot") then
-	SetSharedLootTable('crabking',
+	SetSharedLootTable('crabkingy',
 		{
 			{ "chesspiece_crabking_sketch", 1.00 },
 			--{"trident_blueprint",                   1.00},
@@ -259,7 +259,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 	if env.GetModConfigData("ck_loot") then
 		if inst.components.lootdropper ~= nil then
-			inst.components.lootdropper:SetChanceLootTable('crabking')
+			inst.components.lootdropper:SetChanceLootTable('crabkingy')
 		end
 	end
 
