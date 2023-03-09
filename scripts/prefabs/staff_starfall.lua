@@ -15,11 +15,13 @@ local function OnAttack(inst, attacker, target, skipsanity)
         return
     end
 
+    local drain = attacker:HasTag("Funny_Words_Magic_Man") and 0.5 or 1
+
     if not skipsanity and attacker ~= nil then
         if attacker.components.staffsanity then
-            attacker.components.staffsanity:DoCastingDelta(-TUNING.SANITY_SUPERTINY)
+            attacker.components.staffsanity:DoCastingDelta(-TUNING.SANITY_SUPERTINY*drain)
         elseif attacker.components.sanity ~= nil then
-            attacker.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY)
+            attacker.components.sanity:DoDelta(-TUNING.SANITY_SUPERTINY*drain)
         end
     end
 
