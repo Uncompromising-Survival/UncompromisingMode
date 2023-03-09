@@ -132,7 +132,7 @@ local function OnCollide(inst)
     for k, v in ipairs(ents) do
         if v.components.combat ~= nil then
             if v.components.combat.target ~= nil then
-				v.components.combat:SetShouldAvoidAggro(inst.attacker)
+                v.components.combat:SetShouldAvoidAggro(inst.attacker)
             end
             v.components.combat:GetAttacked(inst.attacker, 27.21)
             v.components.combat:RemoveShouldAvoidAggro(inst.attacker)
@@ -143,6 +143,10 @@ local function OnCollide(inst)
         local fx = SpawnPrefab("staff_starfall_explode")
         fx.Transform:SetPosition(x, y, z)
         fx.SoundEmitter:PlaySound("dontstarve/common/lava_arena/spell/elemental/attack")
+        local fx2 = SpawnPrefab("staff_starfall_scorch")
+        fx2.Transform:SetPosition(x, y, z)
+        local fx3 = SpawnPrefab("slow_steam_fx"..math.random(5))
+        fx3.Transform:SetPosition(x, y, z)
     else
         local fx = SpawnPrefab("crab_king_waterspout")
         fx.Transform:SetPosition(x, y, z)
@@ -297,5 +301,80 @@ local function fn_fx2()
     return inst
 end
 
-return Prefab("staff_starfall", fn, assets), Prefab("staff_starfall_projectile", fn_proj),
-    Prefab("staff_starfall_explode", fn_fx1), Prefab("staff_starfall_trail", fn_fx2)
+
+local SCORCH_RED_FRAMES = 20
+local SCORCH_DELAY_FRAMES = 40
+local SCORCH_FADE_FRAMES = 15
+
+local function Scorch_OnFadeDirty(inst)
+    --V2C: hack alert: using SetHightlightColour to achieve something like OverrideAddColour
+    --     (that function does not exist), because we know this FX can never be highlighted!
+    if inst._fade:value() > SCORCH_FADE_FRAMES + SCORCH_DELAY_FRAMES then
+        local k = (inst._fade:value() - SCORCH_FADE_FRAMES - SCORCH_DELAY_FRAMES) / SCORCH_RED_FRAMES
+        inst.AnimState:OverrideMultColour(1, 1, 1, 1)
+        inst.AnimState:SetHighlightColour(k, k, 0, 0)
+    elseif inst._fade:value() >= SCORCH_FADE_FRAMES then
+        inst.AnimState:OverrideMultColour(1, 1, 1, 1)
+        inst.AnimState:SetHighlightColour()
+    else
+        local k = inst._fade:value() / SCORCH_FADE_FRAMES
+        k = k * k
+        inst.AnimState:OverrideMultColour(1, 1, 1, k)
+        inst.AnimState:SetHighlightColour()
+    end
+end
+
+local function Scorch_OnUpdateFade(inst)
+    if inst._fade:value() > 1 then
+        inst._fade:set_local(inst._fade:value() - 1)
+        Scorch_OnFadeDirty(inst)
+    elseif TheWorld.ismastersim then
+        inst:Remove()
+    elseif inst._fade:value() > 0 then
+        inst._fade:set_local(0)
+        inst.AnimState:OverrideMultColour(1, 1, 1, 0)
+    end
+end
+
+local function fn_fx3()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBuild("burntground")
+    inst.AnimState:SetBank("burntground")
+    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
+
+    inst._fade = net_byte(inst.GUID, "deerclops_laserscorch._fade", "fadedirty")
+    inst._fade:set(SCORCH_RED_FRAMES + SCORCH_DELAY_FRAMES + SCORCH_FADE_FRAMES)
+
+    inst:DoPeriodicTask(0, Scorch_OnUpdateFade)
+    Scorch_OnFadeDirty(inst)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        inst:ListenForEvent("fadedirty", Scorch_OnFadeDirty)
+
+        return inst
+    end
+
+    inst.Transform:SetRotation(math.random() * 360)
+    inst.persists = false
+
+    return inst
+end
+
+return Prefab("staff_starfall", fn, assets),
+    Prefab("staff_starfall_projectile", fn_proj),
+    Prefab("staff_starfall_explode", fn_fx1),
+    Prefab("staff_starfall_trail", fn_fx2),
+    Prefab("staff_starfall_scorch", fn_fx3)
