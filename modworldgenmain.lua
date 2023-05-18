@@ -88,6 +88,34 @@ AddTile(
     }
 )
 
+AddTile(
+    "UM_FLOODWATER",
+    "LAND",
+    {
+        ground_name = "um_floodwater",
+        old_static_id = 112,
+    },
+    {
+        name = "ancienthoodedturf",
+        noise_texture = "noise_um_floodwater",
+        runsound = "dontstarve/movement/run_marsh",
+        walksound = "dontstarve/movement/walk_marsh",
+        snowsound = "dontstarve/movement/run_marsh",
+        mudsound = "dontstarve/movement/run_marsh",
+        colors = GROUND_OCEAN_COLOR,
+        cannotbedug = true
+    },
+    {
+        name = "map_edge",
+        noise_texture = "mini_noise_um_floodwater"
+    },
+    {
+        name = "ancienthoodedturf",
+        anim = "ancienthoodedturf",
+        bank_build = "hfturf"
+    }
+)
+
 
 --[[
 AddTile(

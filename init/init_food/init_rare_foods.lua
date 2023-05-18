@@ -86,24 +86,34 @@ GLOBAL.TUNING.ROCK_FRUIT_REGROW =
 
 local function ToggleGrowable(inst, iswinter)
     if iswinter then
-        inst.components.growable:Pause()
-    else
-        inst.components.growable:Resume()
+		if inst.components.growable ~= nil then
+			inst.components.growable:Pause()
+		end
+
+		if inst.components.pickable ~= nil then
+			inst.components.pickable:Pause()
+		end
+	else
+		if inst.components.growable ~= nil then
+			inst.components.growable:Resume()
+		end
+
+		if inst.components.pickable ~= nil then
+			inst.components.pickable:Resume()
+		end
     end
 end
 
--- Stone fruits bushs
 if GetModConfigData("nowintergrowing") then
+
+	-- Stone fruits bushs
     AddPrefabPostInit("rock_avocado_bush", function(inst)
         if inst~= nil and inst.components.pickable ~= nil then
             GLOBAL.MakeNoGrowInWinter(inst)
-        end
+		end
 
-        if inst.components.growable ~= nil then
-            inst:WatchWorldState("iswinter", ToggleGrowable)
-            ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
-        end
-
+		inst:WatchWorldState("iswinter", ToggleGrowable)
+		ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
     end)
 
     -- Cactus
@@ -119,6 +129,80 @@ if GetModConfigData("nowintergrowing") then
             GLOBAL.MakeNoGrowInWinter(inst)
         end
     end)
+
+    -- Bullkelp
+    AddPrefabPostInit("bullkelp_plant", function(inst)
+        if inst~= nil and inst.components.pickable ~= nil then
+            GLOBAL.MakeNoGrowInWinter(inst)
+        end
+    end)
+
+	-- Farm Crops
+	local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
+	for k, v in pairs(PLANT_DEFS) do
+		AddPrefabPostInit(v.prefab, function(inst)
+
+			inst:WatchWorldState("iswinter", ToggleGrowable)
+			ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
+		end)
+	end
+
+	-- Weeds
+	local WEED_DEFS = require("prefabs/weed_defs").WEED_DEFS
+	for k, v in pairs(WEED_DEFS) do
+		AddPrefabPostInit(v.prefab, function(inst)
+
+			inst:WatchWorldState("iswinter", ToggleGrowable)
+			ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
+		end)
+	end
+
+	-- Banana Bushes
+    AddPrefabPostInit("bananabush", function(inst)
+		inst:WatchWorldState("iswinter", ToggleGrowable)
+		ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
+    end)
+
+	-- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
+	AddComponentPostInit("growable", function(self)
+		local _OldResume = self.Resume
+
+		function self:Resume()
+			if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+				return false
+			else
+				return _OldResume(self)
+			end
+		end
+
+		local _OldStartGrowing = self.StartGrowing
+
+		function self:StartGrowing(time)
+			if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+				return false
+			else
+				return _OldStartGrowing(self, time)
+			end
+		end
+	end)
+
+	AddComponentPostInit("pickable", function(self)
+		local _OldResume = self.Resume
+
+		function self:Resume()
+			if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+				return false
+			else
+				return _OldResume(self)
+			end
+		end
+	end)
+
+
+	PLANT_DEFS.potato.good_seasons = {autumn = true,	spring = true}
+	PLANT_DEFS.carrot.good_seasons = {autumn = true,	spring = true,	summer = true}
+	PLANT_DEFS.pumpkin.good_seasons = {autumn = true,	summer = true}
+	PLANT_DEFS.asparagus.good_seasons = {spring = true,	autumn = true}
 end
 -----------------------------------------------------------------
 -- Bunnies don't drop carrots anymore

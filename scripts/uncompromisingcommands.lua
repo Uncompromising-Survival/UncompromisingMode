@@ -186,3 +186,7 @@ function c_um_findents()
 		end
 	end
 end
+
+function c_um_forcetornado()
+    TheWorld:PushEvent("forcetornado")
+end

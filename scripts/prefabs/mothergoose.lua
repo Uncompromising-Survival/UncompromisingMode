@@ -135,7 +135,6 @@ local function ontimerdone(inst, data)
     end
 
     if data.name == "TornadoAttack" then
-		--print("asidmaisdnasiofnaonagnoiadngionASDAFAFGA")
         inst.TornadoAttack = true
     end
 end

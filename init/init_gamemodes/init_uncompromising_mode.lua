@@ -80,6 +80,7 @@ modimport("init/init_creatures/init_harder_monsters")
 modimport("init/init_food/init_food_changes")
 modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
+modimport("init/init_vetcurse")
 
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.

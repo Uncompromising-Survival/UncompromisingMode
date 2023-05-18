@@ -280,7 +280,6 @@ local inventoryitems =
 }
 
 for k, v in ipairs(inventoryitems) do
-	print("registering inventory item atlas: " .. v)
 	RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. v .. ".xml"), v .. ".tex")
 end
 
@@ -788,11 +787,29 @@ Assets = {
 	Asset("ANIM", "anim/siren_throne.zip"),
 
 	Asset("ANIM", "anim/sunken_royalchest.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_rainbow.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_purple.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_red.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_blue.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_green.zip"),
+    Asset("ANIM", "anim/sunken_royalchest_orange.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_yellow.zip"),
+	Asset("ANIM", "anim/sunken_royalchest_naked.zip"),
 
 	Asset("ANIM", "anim/driftwood_normal.zip"),
 
 	Asset("ANIM", "anim/sorrel.zip"),
-	
+
+	Asset("ANIM", "anim/Bigspin.zip"),
+
+	Asset("ANIM", "anim/um_whirlpool.zip"),
+
+	Asset("ANIM", "anim/um_waterfall.zip"),
+
+	Asset("ANIM", "anim/um_waterfall_pool.zip"),
+
+	Asset("ANIM", "anim/alpha_lightning_goat_build.zip"),
+
 	Asset("ANIM", "anim/marshmist.zip"),
 
 	Asset("ANIM", "anim/ratking.zip"),
@@ -944,7 +961,7 @@ Assets = {
 
 	Asset("ANIM", "anim/snow_over.zip"),
 
-
+	Asset("ANIM", "anim/um_storm_over.zip"),
 
 	--FX
 	Asset("ANIM", "anim/electric_explosion.zip"),
@@ -955,7 +972,8 @@ Assets = {
 
 	Asset("ATLAS", "images/fx5.xml"),
 	Asset("IMAGE", "images/fx5.tex"),
-	
+
+	--
 	Asset("ATLAS", "images/wixiepiano_whitekey.xml"),
 	Asset("IMAGE", "images/wixiepiano_whitekey.tex"),
 	Asset("ATLAS", "images/wixiepiano_blackkey.xml"),
@@ -1948,6 +1966,8 @@ Assets = {
 	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
 
 	Asset("ANIM", "anim/um_goo_honey.zip"),
+
+	Asset("ANIM", "anim/um_alpha_lightninggoat.zip"),
 
 	--UI
 	Asset("IMAGE", "images/dragonflycontainerborder.tex"),

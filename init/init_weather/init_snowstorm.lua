@@ -36,11 +36,7 @@ local function GetSandstormLevel(inst)
 end
 
 local function SetInstanceFunctions2(inst)
-        inst.GetSandstormLevel = GetSandstormLevel
-end
-
-local function checkrevive(inst)
-	inst:PushEvent("usedtouchstone", inst)
+	inst.GetSandstormLevel = GetSandstormLevel
 end
 
 AddPlayerPostInit(function(inst)
@@ -53,37 +49,7 @@ AddPlayerPostInit(function(inst)
 		inst:AddComponent("snowstormwatcher")
 	end
 	
-	local _OldOnSave = inst.OnSave
-	local _OldOnLoad = inst.OnLoad
-
-	local function OnSave(inst, data)
-		if inst.vetcurse ~= nil then
-			data.vetscurse = inst.vetcurse
-		end
-		
-		_OldOnSave(inst, data)
-	end
-
-	local function OnLoad(inst, data)
-		if data ~= nil then
-			if data.vetscurse then
-				inst:ListenForEvent("respawnfromghost", function()
-					inst:DoTaskInTime(3, function(inst) 
-						inst.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-					end)
-				end, inst)
-			end
-		end
-	
-		_OldOnLoad(inst, data)
-	end
-	
 	SetInstanceFunctions2(inst)
-	
-	inst.OnSave = OnSave
-	inst.OnLoad = OnLoad
-	
-	--inst:ListenForEvent("death", checkrevive)
 end)
 
 AddClassPostConstruct("screens/playerhud",function(inst)
@@ -94,23 +60,10 @@ AddClassPostConstruct("screens/playerhud",function(inst)
 		self.snowover = self.overlayroot:AddChild(SnowOver(owner))
 	end
 	
+	local Um_StormOver = require("widgets/um_stormover")
+	local fn =inst.CreateOverlays
+	function inst:CreateOverlays(owner)
+		fn(self, owner)
+		self.um_stormover = self.overlayroot:AddChild(Um_StormOver(owner))
+	end
 end)
---[[
-local function OnSpy(inst)
-        inst._parent.HUD.snowover:SnowOn()
-		inst._parent:PushEvent("snowon")
-		
-end
-
-local function OffSpy(inst)
-	if inst._parent ~= nil then
-		ThePlayer.HUD.snowover:Show()
-        inst._parent.HUD.snowover:SnowOn()
-    end
-end
-
-AddPrefabPostInit("player_classified", function(inst)
-	
-	inst.snowoveron = GLOBAL.net_bool(inst.GUID, "snow.snowover", "snowdirty")
-	inst:ListenForEvent("snowdirty", OnSpy)
-end)--]]

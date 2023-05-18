@@ -217,7 +217,6 @@ local function DoHoneyTrail(inst)
         for k, v in ipairs(TheSim:FindEntities(x, y, z, 10, {"tartrail"})) do
             if v.components.burnable ~= nil then
                 v.components.burnable:Ignite()
-                print("burn damnit!")
             end
         end
     end

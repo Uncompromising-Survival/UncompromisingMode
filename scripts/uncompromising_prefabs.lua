@@ -365,13 +365,20 @@ return {
 	"ums_biometable",
 	"umss_general",
 
+	"um_tornado",
+	"um_whirlpool",
+	
+	"um_waterfall",
+	"um_waterfall_terraformer",
+	
+	"krampus_middleman_inventory",
+	"alpha_lightninggoat",
+
 	"wathom",
 	"wathom_none",
 
 	"um_halloween_ornaments",
 	"trinket_wathom1",
-
-	"uncompromising_skins",
 
 	"codex_mantra",
 
@@ -413,6 +420,8 @@ return {
 	"crab_hat",
 	"trident_ground_fx",
 	"moon_beacon",
+	"goat_lightning",
+
 --	"um_bombmixer1",
 --	"um_bombmixer_bombs2",
 --	"um_bombmixer",

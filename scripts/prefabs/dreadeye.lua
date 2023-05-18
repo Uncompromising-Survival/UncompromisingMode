@@ -265,7 +265,6 @@ local function onnear(inst, target)
 	if inst.oncooldown == nil then
 		if inst.isdisguised and not inst.components.health:IsDead() then
 			if target ~= nil and target.components.sanity ~= nil and target.components.sanity:GetPercent() <= .7 then
-				print("disguse attack")
 				inst.sg:GoToState("disguise_attack")
 				inst.isdisguised = false
 				
@@ -673,12 +672,6 @@ local situational_disguises =
 		anim = "full",
 	},
 	{
-		name = "deciduoustree",
-		bank = "tree_leaf",
-		build = "tree_leaf_trunk_build",
-		anim = "idle_tall",
-	},
-	{
 		name = "hooded_fern",
 		bank = "largefern",
 		build = "largefern",
@@ -694,6 +687,18 @@ local situational_disguises =
 		name = "trapdoorgrass",
 		bank = "trapdoorgrass",
 		build = "trapdoorgrass",
+		anim = "idle",
+	},
+	{
+		name = "deciduoustree",
+		bank = "tree_leaf",
+		build = "tree_leaf_trunk_build",
+		anim = "idle_tall",
+	},
+	{
+		name = "grass",
+		bank = "grass",
+		build = "grass1",
 		anim = "idle",
 	},
 }

@@ -183,22 +183,16 @@ end
 AddClientModRPCHandler("UncompromisingSurvival", "UpdateAllFocuses", UpdateAllFocuses)
 
 local function PianoPuzzleComplete1()
-    print("PianoPuzzleComplete")
-
     local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
     piano:PushEvent("pianopuzzlecomplete_1")
 end
 
 local function PianoPuzzleComplete2()
-    print("PianoPuzzleComplete")
-
     local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
     piano:PushEvent("pianopuzzlecomplete_2")
 end
 
 local function PianoPuzzleComplete3()
-    print("PianoPuzzleComplete")
-
     local piano = TheSim:FindFirstEntityWithTag("wixie_piano")
     piano:PushEvent("pianopuzzlecomplete_3")
 end
@@ -262,46 +256,50 @@ AddClientModRPCHandler("UncompromisingSurvival", "ToggleLagCompOff", ToggleLagCo
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsDeath", function(...)
     if not GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsDeath")
         GLOBAL.TheWorld:PushEvent("hasslerkilled")
     end
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsRemoved", function(...)
     if not GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsRemoved")
         GLOBAL.TheWorld:PushEvent("hasslerremoved")
     end
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsStored", function(...)
     if not GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsStored")
         GLOBAL.TheWorld:PushEvent("storehassler")
     end
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsDeath_caves", function(...)
     if GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsDeath")
         GLOBAL.TheWorld:PushEvent("hasslerkilled_secondary")
     end
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsRemoved_caves", function(...)
     if GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsRemoved")
         GLOBAL.TheWorld:PushEvent("hasslerremoved")
     end
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsStored_caves", function(...)
     if GLOBAL.TheWorld.ismastershard then
-        print("RPC DeerclopsStored")
         GLOBAL.TheWorld:PushEvent("storehassler")
     end
 end)
 
+AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, z)
+	print("====")
+	print(def)
+	print(x)
+	print(z)
+	print("====")
+    if not GLOBAL.TheWorld.ismastershard then
+        GLOBAL.TheWorld:PushEvent("spawncavetornado", { xdata = x, zdata = z })
+    end
+end)
 
 -- WIXIE RELATED RPC'S
 
@@ -320,7 +318,6 @@ local function HandlerFunction(player, mouseposx, mouseposy, mouseposz)
         end
     else
         local wixieposition = GLOBAL.TheInput:GetWorldPosition()
-        print("caved!")
 
         player.wixiepointx = wixieposition.x
         player.wixiepointy = wixieposition.y

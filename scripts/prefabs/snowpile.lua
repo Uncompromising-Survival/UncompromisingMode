@@ -170,8 +170,6 @@ startregen = function(inst, regentime)
             -- inst.AnimState:PlayAnimation(anims[inst.components.pickable.cycles_left])
         end
     end
-
-    -- print('startregen', inst.components.workable.workleft, regentime, anims[inst.components.workable.workleft])
 end
 
 local function workcallback(inst, worker, workleft)

@@ -15,7 +15,7 @@ local actionhandlers =
 local function onattackfn(inst)
 	if inst.components.health and not inst.components.health:IsDead()
 	   and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
-		if inst.CanDisarm then
+		if inst.CanDisarm and inst.tornado_tracking == nil then
 			inst.sg:GoToState("disarm")
 		elseif inst.TornadoAttack then
 			inst.sg:GoToState("tornadostorm")
@@ -488,6 +488,8 @@ local states =
 			--tornado4.Physics:Teleport(0,0,0)
 			--inst:AddChild(tornado4)
             --tornado4.Physics:Stop()
+			
+			inst.tornado_tracking = true
 		end,
 		
 		timeline=

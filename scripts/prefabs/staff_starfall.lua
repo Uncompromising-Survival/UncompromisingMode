@@ -167,8 +167,6 @@ local function OnCollide(inst)
 
         local fx2 = SpawnPrefab("crab_king_bubble" .. math.random(3))
         fx2.Transform:SetPosition(x, y, z)
-        local fx3 = SpawnPrefab("slow_steam_fx"..math.random(5))
-        fx3.Transform:SetPosition(x, y, z)
     end
 
     inst:Remove()

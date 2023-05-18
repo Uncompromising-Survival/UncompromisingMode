@@ -1,24 +1,24 @@
-name = "󰀕 Uncompromising Mode"
+name = "󰀕 [BETA] Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then name = "[LOCAL] - " .. name end
 
 description = [[
-󰀔 [ Version 1.2.3.1: "Face Your Fears" ]
+󰀔 [ Version 1.0: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- Wixie, the Delinquent & Walter Rework
-- Reworks to Crab King and Dread Eye and Trepidation.
-- New Winona perks
+- New spring weather, uncluding storms, tornados, and cave flooding.
+- Alpha Goats will appear in goat herds, to protect their own, and have consisant loot.
+- Krampii will more effectively steal things and do their job.
 - A ton of misc. changes, ranging from Wickerbottom's books to hounds.
 
 󰀏 NEXT UPDATE: Under the Weather, part 1 ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Face Your Fears v1.2.3.1"
+version = "Under the Weather Pt.1 v1.0"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 

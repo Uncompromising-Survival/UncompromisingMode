@@ -62,6 +62,8 @@ env.AddPrefabPostInit("cave", function(inst)
 	end
 	inst:AddComponent("randomnighteventscaves")
 	inst:AddComponent("ratacombs_junk_manager")
+	
+	inst:AddComponent("um_stormspawner")
 
 	inst:DoTaskInTime(0, function(inst)
 		if TestForIA() then
@@ -103,10 +105,11 @@ env.AddPrefabPostInit("forest", function(inst)
 	if TUNING.DSTU.SNOWSTORMS then
 		inst:AddComponent("snowstorminitiator")
 	end
+	
+	inst:AddComponent("um_stormspawner")
 
 	inst:DoTaskInTime(0, function(inst)
 		if TestForIA() then --remove components if the world is IA island/volcano, instead of checking for the mod or delaying adding components.
-			print("IA CHECK PASSED, REMOVING UM WORLD COMPONENTS.")
 			inst:RemoveComponent("uncompromising_deerclopsspawner")
 			inst:RemoveComponent("toadrain")
 			--inst:RemoveComponent("hayfever_tracker")

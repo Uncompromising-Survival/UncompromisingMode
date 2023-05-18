@@ -39,7 +39,10 @@ local function Zap(inst)
 			if v:HasTag("player") and (v.components.inventory ~= nil and not v.components.inventory:IsInsulated()) then
 				if not v:HasTag("electricdamageimmune") then
 					v.components.health:DoDelta(-25, nil, inst.prefab, nil, inst)
-					v.sg:GoToState("electrocute")
+					
+					if not v.sg:HasStateTag("nointerrupt") then
+						v.sg:GoToState("electrocute")
+					end
 				else
 					if not v:HasTag("automaton") then
 						v.components.combat:GetAttacked(inst, 10)
