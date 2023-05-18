@@ -1,28 +1,3 @@
---[[
-	LOOT
-
-	Opal: Crab Bumper
-		Crab bumper allows socketing a gem to give it different effects
-		blue - bounce back
-		red - increased boat and bumper health
-		purple - prevent sanity monsters from aggro'ing on the boat
-		green - bumper doesn't fully break, ramming things gives extra resources
-		orange - teleports you to land/a boat if you were to drown nearby
-		yellow - increased speed multiplier + glow
-		opal - boat gains a sanity aura, glows and has additional 50% genering health in the form of growing glass.
-
-	Blue: Rain Horn DONE
-
-	Red: Armor that increases max health DONE
-
-	Purple: Trident NEED TO REWORK
-
-	Orange: Headwear that makes repairing/healing/sewing whatever 2x more effective DONE
-
-	Yellow: Extremely rapid-fire "starfall" staff DONE
-
-	Green: Self-healing armor DONE
-]]
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -38,7 +13,8 @@ local CRABKING_SPELLGENERATOR_TAGS = { "crabking_spellgenerator" }
 
 local function DoLineAttack(inst, rand_start)
 	local ck_x, ck_y, ck_z = inst.Transform:GetWorldPosition()
-	local target = inst.components.combat ~= nil and inst.components.combat.target
+	local target = #inst.all_targets > 1 and inst.all_targets[math.random(#inst.all_targets)] or
+		inst.components.combat ~= nil and inst.components.combat.target
 
 	if target == nil then
 		local boats = TheSim:FindEntities(ck_x, ck_y, ck_z, 25, { "boat" })
@@ -89,7 +65,8 @@ local function DoLineAttack(inst, rand_start)
 
 		for i = 1, math.clamp(dist, 0, 24) do
 			inst:DoTaskInTime(FRAMES * i, function()
-				local dx, dy, dz = start_x + (i * velx), 0, start_z + (i * velz)
+				local dx, dy, dz = (start_x + (i * velx)) + math.random(-1, 1), 0,
+					(start_z + (i * velz)) + math.random(-1, 1)
 
 				local fx = SpawnPrefab("crabking_geyser_single")
 				fx.Transform:SetPosition(dx, dy, dz)
@@ -105,7 +82,8 @@ end
 
 local function DoSeekingAttack(inst)
 	local ck_x, ck_y, ck_z = inst.Transform:GetWorldPosition()
-	local target = inst.components.combat ~= nil and inst.components.combat.target
+	local target = #inst.all_targets > 1 and inst.all_targets[math.random(#inst.all_targets)] or
+		inst.components.combat ~= nil and inst.components.combat.target
 
 	if target == nil then
 		local boats = TheSim:FindEntities(ck_x, ck_y, ck_z, 25, { "boat" })
@@ -119,7 +97,6 @@ local function DoSeekingAttack(inst)
 		local targetfocus = target
 
 		local px, py, pz = targetfocus.Transform:GetWorldPosition()
-
 
 		local dist = math.sqrt(distsq(ix, iz, px, pz)) + 24
 
@@ -190,13 +167,24 @@ local TARGET_DIST = 48
 
 local function RetargetFn(inst)
 	local range = inst:GetPhysicsRadius(0) + 8
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, y, z, TARGET_DIST, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS)
+	inst.all_targets = {}
+
+	for k, v in ipairs(ents) do
+		if inst.components.combat:CanTarget(v)
+			and (v.components.combat:TargetIs(inst) or v:IsNear(inst, range)) then
+			table.insert(inst.all_targets, v)
+		end
+	end
+
 	return FindEntity(
 		inst,
 		TARGET_DIST,
 		function(guy)
 			return inst.components.combat:CanTarget(guy)
 				and (guy.components.combat:TargetIs(inst) or
-				guy:IsNear(inst, range)
+					guy:IsNear(inst, range)
 				)
 		end,
 		RETARGET_MUST_TAGS,
@@ -249,10 +237,29 @@ if env.GetModConfigData("ck_loot") then
 		})
 end
 
+local function OnAttacked(inst, data)
+	if data.attacker.ck_attack_quote_cd ~= nil then
+		data.attacker.ck_attack_quote_cd:Cancel()
+		data.attacker.ck_attack_quote_cd = nil
+		data.attacker.ck_attack_quote_cd = data.attacker:DoTaskInTime(10, function()
+		end)
+	end
+
+	if data.attacker:HasTag("player") and data.attacker.components.talker ~= nil and data.attacker.ck_attack_quote_cd == nil then
+		data.attacker.components.talker:Say(GetString(inst, "ATTACKED_CRABKING"))
+		data.attacker.ck_attack_quote_cd = data.attacker:DoTaskInTime(10, function()
+		end)
+	end
+end
+
 env.AddPrefabPostInit("crabking", function(inst)
+	inst:AddTag("crab")
+
 	if not TheWorld.ismastersim then
 		return
 	end
+
+	inst:ListenForEvent("attacked", OnAttacked)
 
 	inst:RemoveComponent("burnable")
 	inst:RemoveComponent("propagator")
@@ -299,9 +306,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 		inst.attack_count = math.clamp(inst.attack_count + 1, 0, 10)
 
-		if inst.attack_count > math.random(5, 8) then
-			print("long attack cd time", 30 - inst.countgems(inst).yellow)
-
+		if inst.attack_count > math.random(2, 4) then
 			inst.components.timer:StartTimer("spell_cooldown", 30 - inst.countgems(inst).yellow)
 
 			inst.vulnerable_shine_task = inst:DoPeriodicTask(2, function()
@@ -310,6 +315,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 				end
 				inst.wantstocast = false --keep it that way!!!
 			end)
+
 			inst.long_cd = inst:DoTaskInTime(30 - inst.countgems(inst).yellow, function()
 				inst.wantstocast = true
 				inst.attack_count = 0
@@ -320,7 +326,6 @@ env.AddPrefabPostInit("crabking", function(inst)
 				spawnwave(inst)
 			end)
 		else
-			print("attack cd time", atk_cd)
 			inst.components.timer:StartTimer("spell_cooldown", atk_cd)
 			inst:DoTaskInTime(atk_cd, function()
 				inst.wantstocast = true
@@ -329,7 +334,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 	end
 
 	inst.startcastspell = function(inst, freeze)
-		for i = 1, 3 do
+		for i = 1, math.clamp(3 + (#inst.all_targets - 1), 1, 10) do
 			if math.random() >= 0.25 then
 				if math.random() >= 0.66 then
 					inst:DoTaskInTime(i * GetRandomWithVariance(0.5, 0.75), function()
@@ -349,7 +354,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
 
-	local types = 
+	local types =
 	{
 		"red",
 		"blue",
@@ -361,72 +366,78 @@ env.AddPrefabPostInit("crabking", function(inst)
 	}
 
 	inst:ListenForEvent("death", function(inst)
+		if inst.long_cd ~= nil then
+			inst.long_cd:Cancel()
+			inst.long_cd = nil
+		end
+
 		if env.GetModConfigData("ck_loot") then
 			TheWorld.crabking_active = false
 
 			local pos = inst:GetPosition()
 			local messagebottletreasures = require("messagebottletreasures_um")
-			local pearl = inst.countgems(inst).pearl * 1.5
-			local red = inst.countgems(inst).red - pearl 
-			local blue = inst.countgems(inst).blue - pearl
-			local purple = inst.countgems(inst).purple - pearl
-			local yellow = inst.countgems(inst).yellow - pearl
-			local orange = inst.countgems(inst).orange - pearl
-			local green = inst.countgems(inst).green - pearl
-			local opal = inst.countgems(inst).opal
+			local pearl = inst.countgems(inst).pearl
+			local red = inst.countgems(inst).red + pearl
+			local blue = inst.countgems(inst).blue + pearl
+			local purple = inst.countgems(inst).purple + pearl
+			local yellow = inst.countgems(inst).yellow + pearl
+			local orange = inst.countgems(inst).orange + pearl
+			local green = inst.countgems(inst).green + pearl
+			local opal = inst.countgems(inst).opal + pearl
 			local count = 0
 
-			if math.random(6) < opal then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
+			if math.random(6) <= opal then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < red then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
+			if math.random(6) <= red then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < blue then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
+			if math.random(6) <= blue then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < purple then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
+			if math.random(6) <= purple then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < yellow then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
+			if math.random(6) <= yellow then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < orange then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
+			if math.random(6) <= orange then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
-			if math.random(6) < green then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
+			if math.random(6) <= green then
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 				if count > 3 then return end
 			end
 
 			if count == 0 then
-				messagebottletreasures:GenerateTreasure(pos, "sunkenchest_royal_"..types[math.random(#types)]).Transform:SetPosition(
+				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_" .. types[math.random(#types)])
+					.Transform:SetPosition(
 					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
 				count = count + 1
 			end
@@ -442,7 +453,8 @@ env.AddPrefabPostInit("crabking", function(inst)
 
 		if boat_physics ~= nil then
 			if inst.components.health ~= nil then
-				inst.components.health:DoDelta(-1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity))
+				inst.components.health:DoDelta((-1500 * math.abs(boat_physics:GetVelocity() * data.hit_dot_velocity)) *
+					0.33)
 			end
 		end
 
@@ -461,11 +473,14 @@ env.AddPrefabPostInit("crabking", function(inst)
 		if inst.vulnerable_shine_task ~= nil then
 			inst.vulnerable_shine_task:Cancel()
 			inst.vulnerable_shine_task = nil
-			inst.long_cd:Cancel()
-			inst.long_cd = nil
 
 			inst.wantstocast = true
 			inst.attack_count = 0
+
+			if inst.long_cd ~= nil then
+				inst.long_cd:Cancel()
+				inst.long_cd = nil
+			end
 		else
 			inst.attack_count = math.clamp(inst.attack_count - 1, 0, 10)
 		end
@@ -487,5 +502,17 @@ env.AddPrefabPostInit("crabking", function(inst)
 	inst:ListenForEvent("entitysleep", function(inst)
 		inst:RemoveEventCallback("on_collide", OnCollide)
 		TheWorld.crabking_active = false
+	end)
+
+	inst:ListenForEvent("unfreeze", function()
+		inst.attack_count = math.clamp(inst.attack_count + -2, 0, 10)
+		inst.gemshine(inst, "blue")
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local fx = SpawnPrefab("crabking_feeze")
+		fx.crab = inst
+		fx:ListenForEvent("onremove", function() removecrab(fx) end, inst)
+		fx.Transform:SetPosition(x, y, z)
+		local scale = 0.75 + Remap(inst.countgems(inst).blue, 0, 9, 0, 1.55)
+		fx.Transform:SetScale(scale, scale, scale)
 	end)
 end)

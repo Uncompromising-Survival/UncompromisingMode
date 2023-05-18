@@ -11,8 +11,6 @@ local assets =
     Asset("ANIM", "anim/winona_battery_high.zip"),
     Asset("ANIM", "anim/winona_battery_placement.zip"),
     Asset("ANIM", "anim/gems.zip"),
-
-
 }
 
 local prefabs =
@@ -50,6 +48,12 @@ local function ondeploy_spotlight(inst, pt, deployer)
     end
 end
 
+local function AnimOver(inst)
+    inst.AnimState:PushAnimation("idle_empty")
+    inst:DoTaskInTime(FRAMES * 2, inst.components.fueled.depleted(inst))
+    inst:RemoveEventCallback("animover", AnimOver)
+end
+
 local function ondeploy_low(inst, pt, deployer)
     local gen = SpawnPrefab("winona_battery_low")
     if gen ~= nil then
@@ -58,33 +62,52 @@ local function ondeploy_low(inst, pt, deployer)
         gen.Physics:SetCollides(true)
         gen:PushEvent("onbuilt")
         gen.components.fueled:SetPercent(inst.components.finiteuses:GetPercent())
+
+        if inst.components.finiteuses:GetPercent() == 0 then
+            gen:ListenForEvent("animover", AnimOver)
+        end
+
         inst:Remove()
     end
 end
 
 
 local function ondeploy_high(inst, pt, deployer)
-    local gen = inst.generator ~= nil and SpawnSaveRecord(inst.generator) or SpawnPrefab("winona_battery_high")
+    local gen = SpawnPrefab("winona_battery_high")
 
     gen.Physics:SetCollides(false)
     gen.Physics:Teleport(pt.x, 0, pt.z)
     gen.Physics:SetCollides(true)
     gen:PushEvent("onbuilt")
 
-    gen:DoTaskInTime(61 * FRAMES, function()--1 frame delay so the anim is finished visually.
-        for k,v in ipairs(gen._gems) do
-            gen.components.trader.onaccept(gen, deployer, v)
+    inst:RemoveFromScene()
+    inst:AddTag("INLIMBO")
+    inst.persists = false
+
+    gen:DoTaskInTime(61 * FRAMES, function() --1 frame delay so the anim is finished visually.
+        if inst._gems ~= nil then
+            for k, v in ipairs(inst._gems) do
+                local gem = SpawnPrefab(v)
+                gen.components.trader.onaccept(gen, deployer, gem)
+            end
         end
 
-        gen:RemoveTag("NOCLICK")--manually do it since the animation gets a buit interrupted.
+        gen:RemoveTag("NOCLICK") --manually do it since the animation gets a buit interrupted.
         gen.components.trader:Enable()
-        gen.components.fueled:SetPercent(inst.components.finiteuses:GetPercent())
-    end)
 
-    inst:Remove()
+        gen:DoTaskInTime(FRAMES*2, function() gen.components.fueled:SetPercent(inst.components.finiteuses:GetPercent()) end)
+
+        if inst.components.finiteuses:GetPercent() == 0 then
+            gen:DoTaskInTime(FRAMES * 2, gen.components.fueled.depleted)
+            gen.AnimState:PushAnimation("idle_empty")
+            gen:RemoveTag("NOCLICK") --GOD DAMNIT REMOVE IT!!!
+        end
+
+        inst:DoTaskInTime(FRAMES * 2.5, inst.Remove)
+    end)
 end
 
-local function fn(ondeploy, finiteuses)
+local function fn(ondeploy, atlas, anim, uses_startingfuel)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -94,9 +117,9 @@ local function fn(ondeploy, finiteuses)
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("portable_blender")
-    inst.AnimState:SetBuild("portable_blender")
-    inst.AnimState:PlayAnimation("idle_ground")
+    inst.AnimState:SetBank("winona_portables")
+    inst.AnimState:SetBuild("winona_portables")
+    inst.AnimState:PlayAnimation(anim, true)
 
     inst:AddTag("portableitem")
 
@@ -113,6 +136,7 @@ local function fn(ondeploy, finiteuses)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/"..atlas..".xml"
 
     inst:AddComponent("deployable")
     inst.components.deployable.restrictedtag = "handyperson"
@@ -121,10 +145,10 @@ local function fn(ondeploy, finiteuses)
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
 
-    if finiteuses == nil then
+    if uses_startingfuel == nil or uses_startingfuel == true or type(uses_startingfuel) == "number" then
         inst:AddComponent("finiteuses")
         inst.components.finiteuses:SetMaxUses(100)
-        inst.components.finiteuses:SetUses(100)
+        inst.components.finiteuses:SetUses(type(uses_startingfuel) == "number" and uses_startingfuel or 100)
     end
 
     MakeMediumBurnable(inst)
@@ -134,29 +158,29 @@ local function fn(ondeploy, finiteuses)
 end
 
 local function fn_catapult()
-    return fn(ondeploy_catapult)
+    return fn(ondeploy_catapult, "winona_catapult_item", "catapult")
 end
 
 local function fn_spotlight()
-    return fn(ondeploy_spotlight, false)
+    return fn(ondeploy_spotlight, "winona_spotlight_item", "spotlight", false)
 end
 
 local function fn_low()
-    return fn(ondeploy_low)
+    return fn(ondeploy_low, "winona_battery_low_item", "battery_low")
 end
 
 local function fn_high()
-    local inst = fn(ondeploy_high)
+    local inst = fn(ondeploy_high, "winona_battery_high_item", "battery_high", 0)
 
     inst.OnSave = function(inst, data)
-        if inst.generator ~= nil then
-            data.generator = inst.generator
+        if inst._gems ~= nil then
+            data._gems = inst._gems
         end
     end
 
     inst.OnLoad = function(inst, data)
-        if data ~= nil and data.generator ~= nil then
-            inst.generator = data.generator
+        if data ~= nil and data._gems ~= nil then
+            inst._gems = data._gems
         end
     end
 
@@ -327,11 +351,14 @@ local function placer_high(inst)
 end
 
 return Prefab("winona_catapult_item", fn_catapult, assets, prefabs_item),
-    MakePlacer("winona_catapult_item_placer", "winona_catapult_placement", "winona_catapult_placement", "idle", true, nil, nil, nil, nil, nil, placer_catapult),
+    MakePlacer("winona_catapult_item_placer", "winona_catapult_placement", "winona_catapult_placement", "idle", true, nil,
+        nil, nil, nil, nil, placer_catapult),
     Prefab("winona_spotlight_item", fn_spotlight, assets, prefabs_item),
-    MakePlacer("winona_spotlight_item_placer", "winona_spotlight_placement", "winona_spotlight_placement", "idle", true, nil, nil, nil, nil, nil, placer_spotlight),
+    MakePlacer("winona_spotlight_item_placer", "winona_spotlight_placement", "winona_spotlight_placement", "idle", true,
+        nil, nil, nil, nil, nil, placer_spotlight),
     Prefab("winona_battery_low_item", fn_low, assets, prefabs_item),
-    MakePlacer("winona_battery_low_item_placer", "winona_battery_placement", "winona_battery_placement", "idle", true, nil, nil, nil, nil, nil, placer_low),
+    MakePlacer("winona_battery_low_item_placer", "winona_battery_placement", "winona_battery_placement", "idle", true,
+        nil, nil, nil, nil, nil, placer_low),
     Prefab("winona_battery_high_item", fn_high, assets, prefabs_item),
-    MakePlacer("winona_battery_high_item_placer", "winona_battery_placement", "winona_battery_placement", "idle", true, nil, nil, nil, nil, nil, placer_high)
-
+    MakePlacer("winona_battery_high_item_placer", "winona_battery_placement", "winona_battery_placement", "idle", true,
+        nil, nil, nil, nil, nil, placer_high)

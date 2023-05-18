@@ -47,10 +47,7 @@ local function OnDismantle_high(inst)
     local fx = SpawnPrefab("collapse_small")
 
     item.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    if #inst._gems > 0 then
-        item.generator = inst:GetSaveRecord()
-    end
-
+    item._gems = inst._gems
     item.components.finiteuses:SetPercent(inst.components.fueled:GetPercent())
 
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -223,17 +220,31 @@ local function OnLoad_low(inst, data, ents)
                 inst.AnimState:GetCurrentAnimationNumFrames() ~= 0 and
                 math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1 or 1
 
-			inst.AnimState:SetFrame(frame)
+            inst.AnimState:SetFrame(frame)
         end
     end
 end
 
+
+local function SetupOnBurnt(inst)
+    if inst.components.burnable ~= nil then
+        local _OnBurnt = inst.components.burnable.onburnt
+
+        inst.components.burnable.onburnt = function(inst)
+            inst:RemoveComponent("portablestructure")
+            if _OnBurnt ~= nil then
+                _OnBurnt(inst)
+            end
+        end
+    end
+end
 
 env.AddPrefabPostInit("winona_catapult", function(inst)
     if not TheWorld.ismastersim then
         return
     end
 
+    SetupOnBurnt(inst)
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle_catapult)
 end)
@@ -243,6 +254,7 @@ env.AddPrefabPostInit("winona_spotlight", function(inst)
         return
     end
 
+    SetupOnBurnt(inst)
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle_spotlight)
 end)
@@ -254,6 +266,7 @@ env.AddPrefabPostInit("winona_battery_low", function(inst)
 
     inst.OnLoad = OnLoad_low
 
+    SetupOnBurnt(inst)
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle_low)
 end)
@@ -266,6 +279,7 @@ env.AddPrefabPostInit("winona_battery_high", function(inst)
 
     inst.OnLoad = OnLoad_high
 
+    SetupOnBurnt(inst)
     inst:AddComponent("portablestructure")
     inst.components.portablestructure:SetOnDismantleFn(OnDismantle_high)
 end)

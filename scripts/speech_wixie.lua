@@ -540,15 +540,15 @@ return{
 
 
 	ANNOUNCE_DAMP = "I hate the rain.",
-	ANNOUNCE_WET = "Ugh, it's like wearing an extra layer.",
+	ANNOUNCE_WET = "Rain, rain, go away. Please.",
 	ANNOUNCE_WETTER = "I don't like being drenched by all this water...",
-	ANNOUNCE_SOAKED = "I feel crowded! Get this water off me!",
+	ANNOUNCE_SOAKED = "Am I melting?! I feel like I'm melting!",
 
 	ANNOUNCE_WASHED_ASHORE = "I hate swimming, I prefer open air...",
 
     ANNOUNCE_DESPAWN = "Oh, my head...",
 	ANNOUNCE_BECOMEGHOST = "Boo!",
-	ANNOUNCE_GHOSTDRAIN = "How come everyones dying but me?",
+	ANNOUNCE_GHOSTDRAIN = "How come everyone is dying but me?",
 	ANNOUNCE_PETRIFED_TREES = "Did they turn to rock? Or are they... encased by it?",
 	ANNOUNCE_KLAUS_ENRAGE = "Now he's even scarier!",
 	ANNOUNCE_KLAUS_UNCHAINED = "He's unleashed, and after me!",
@@ -648,7 +648,7 @@ return{
 	},
 	ANNOUNCE_STORYTELLING_ABORT_FIREWENTOUT =
 	{
-        "And thats why Wacky stinks! The end.",
+        "And that's why Wacky stinks! The end.",
 	},
 	ANNOUNCE_STORYTELLING_ABORT_NOT_NIGHT =
 	{
@@ -676,7 +676,7 @@ return{
     ANNOUNCE_ATTACH_BUFF_ATTACK            = "Hot head? HOT HEAD?! I'LL SHOW YOU A HOT HEAD!!",
     ANNOUNCE_ATTACH_BUFF_PLAYERABSORPTION  = "What can I say? I've got thick skin!",
     ANNOUNCE_ATTACH_BUFF_WORKEFFECTIVENESS = "I could get my chores done in half the time!",
-    ANNOUNCE_ATTACH_BUFF_MOISTUREIMMUNITY  = "Now I can rough house in the rain without getting wet!",
+    ANNOUNCE_ATTACH_BUFF_MOISTUREIMMUNITY  = "Now I can roughhouse in the rain without getting wet!",
     ANNOUNCE_ATTACH_BUFF_SLEEPRESISTANCE   = "I wasn't planning on sleeping anyways.",
 
     ANNOUNCE_DETACH_BUFF_ELECTRICATTACK    = "I've lost my glow.",
@@ -1330,7 +1330,7 @@ return{
         BATBAT = "One step closer to flight!",
         BATWING = "It's too small to lift me off the ground.",
         BATWING_COOKED = "It's definitely not going to help me fly.",
-        BATCAVE = "I'm not about to check whats hiding in there.",
+        BATCAVE = "I'm not about to check what's hiding in there.",
         BEDROLL_FURRY = "It's almost like having a real bed again!",
         BUNNYMAN = "I'm gonna call you \"Bucky\".",
         FLOWER_CAVE = "Light my way, jerks!",
@@ -1578,7 +1578,7 @@ return{
 		BEEFALO =
 		{
 			FOLLOWER = "Oh no, it's following me.",
-			GENERIC = "Take a bath!",
+			GENERIC = "It's like a horse, but more fat and smelly.",
 			NAKED = "Look how sad it looks! Ha-ha!",
 			SLEEPING = "Now is the perfect time for a prank!",
             --Domesticated states:
@@ -1769,7 +1769,7 @@ return{
         CHESSPIECE_BEEFALO = "What a dope.",
 		CHESSPIECE_KITCOON = "I'm going to knock it over!",
 		CHESSPIECE_CATCOON = "Caught red handed!",
-        CHESSPIECE_MANRABBIT = "Their smugness irritates me.", -- spelling
+        CHESSPIECE_MANRABBIT = "Their smugness irritates me.",
         CHESSPIECE_GUARDIANPHASE3 = "A reminder of the time we killed an alien. That was fun.",
         CHESSPIECE_EYEOFTERROR = "It looks shocked. How can an EYEBALL look shocked?",
         CHESSPIECE_TWINSOFTERROR = "Boy, am I sure glad I don't have a whiney sibling!",
@@ -1807,7 +1807,7 @@ return{
 
 		CRITTERLAB = "More critters? In a cramped space? No thank you.",
         CRITTER_GLOMLING = "Why is this creep following me?",
-        CRITTER_DRAGONLING = "Stop spitting on everything, thats my job!",
+        CRITTER_DRAGONLING = "Stop spitting on everything, that's my job!",
 		CRITTER_LAMB = "Your coat is itchy, I hate it.",
         CRITTER_PUPPY = "Quit slobbering on me!",
         CRITTER_KITTEN = "Another straw, there's a lot of you back home.",
@@ -1917,7 +1917,7 @@ return{
 		DURIAN_COOKED = "Yum, roasted gym socks.",
 		DURIAN_SEEDS = "I hate gardening!",
 		EARMUFFSHAT = "Atleast it doesn't mess up my bow!",
-		EGGPLANT = "I could go for a good eggplant parmesan right about now.", -- check spelling
+		EGGPLANT = "I could go for a good eggplant parmesan right about now.",
 		EGGPLANT_COOKED = "It's definitely my favorite vegetable!",
 		EGGPLANT_SEEDS = "I hate gardening!",
 
@@ -2003,7 +2003,7 @@ return{
 		{
 			EMBERS = "It's gonna go out!",
 			GENERIC = "Light of my life!",
-			HIGH = "Now THATS a good fire!",
+			HIGH = "Now THAT'S a good fire!",
 			LOW = "It's a wimpy little fire.",
 			NORMAL = "It's a perfectly normal... cold... fire...",
 			OUT = "Let's get a bonfire going!",
@@ -2140,7 +2140,7 @@ return{
 		},
 		JAMMYPRESERVES = "It's just mashed berries, nothing to it.",
 
-		KABOBS = "The food has been impaled!", -- spelling
+		KABOBS = "The food has been impaled!",
 		KILLERBEE =
 		{
 			GENERIC = "How can something so small be a killer?",
@@ -2234,7 +2234,7 @@ return{
         },
         MERMHOUSE =
         {
-            GENERIC = "I hate communal homes...", -- spelling
+            GENERIC = "I hate communal homes...",
             BURNT = "Well, it's not much of a home anymore.",
         },
         MINERHAT = "I'm a bright minded individual!",
@@ -2312,7 +2312,7 @@ return{
             WEREPIG = "Furry fury!",
         },
         PIGSKIN = "Who wants to play football? Full contact!",
-        PIGTENT = "Tentative, at best.", -- spelling
+        PIGTENT = "Tentative, at best.",
         PIGTORCH = "Look at their dumb little faces.",
         PINECONE = "Maybe I could chuck it at someone.",
         PINECONE_SAPLING = "This should only take... what, thirty years?",
@@ -2355,7 +2355,7 @@ return{
             GENERIC = "What a waste of supplies.",
             BURNT = "Couldn't see that coming, could you?",
         },
-        RAINCOAT = "Now I can roughhouse in the rain!", -- spelling
+        RAINCOAT = "Now I can roughhouse in the rain!",
         RAINHAT = "I hate it when my hair gets wet.",
         RATATOUILLE = "It looks like someone beat up a salad.",
         RAZOR = "Sleep with an eye open, unless you don't mind losing your eyebrows!",
@@ -2399,7 +2399,7 @@ return{
         },
         RESURRECTIONSTATUE =
         {
-            GENERIC = "I tried sculpting my likeness, and this is what came out...",
+            GENERIC = "I sculpted the dumbest thing I can think of.",
             BURNT = "I wasn't proud of that piece anyways.",
         },
         RESURRECTIONSTONE = "I do like touching stuff...",
@@ -2620,7 +2620,7 @@ return{
 		TORCH = "Ah yes, fire on a stick.",
 		TRANSISTOR = "I think I saw these in that radio I brok- I mean, uh...",
 		TRAP = "I don't know how I made it, to be honest.",
-		TRAP_TEETH = "I'm particularly proud of this one.", -- spelling
+		TRAP_TEETH = "I'm particularly proud of this one.",
 		TRAP_TEETH_MAXWELL = "I'd like to meet whoever made these!", --single player
 		TREASURECHEST =
 		{
@@ -2739,7 +2739,7 @@ return{
         LUCKY_GOLDNUGGET = "I can't even make anything useful with it!",
         FIRECRACKERS = "Boom boom boom!",
         PERDFAN = "Now I just need some sucker to fan me.",
-        REDPOUCH = "Let's see whats inside already!",
+        REDPOUCH = "Let's see what's inside already!",
         WARGSHRINE =
         {
             GENERIC = "You'd better have something good...",
@@ -3224,7 +3224,7 @@ return{
 
 		QUAGMIRE_KEY = "What could it unlock?",
 		QUAGMIRE_KEY_PARK = "No private property is safe from me!",
-        QUAGMIRE_PORTAL_KEY = "I'm sick of this sickly place, lets get out of here!", -- spelling (lets?)
+        QUAGMIRE_PORTAL_KEY = "I'm sick of this sickly place, let's get out of here!",
 
 
 		QUAGMIRE_MUSHROOMSTUMP =
@@ -3240,7 +3240,7 @@ return{
 		QUAGMIRE_RUBBLE_CARRIAGE = "Is this what old people traveled in?",
         QUAGMIRE_RUBBLE_CLOCK = "Someone smashed their alarm clock.",
         QUAGMIRE_RUBBLE_CATHEDRAL = "No more church. No more free snacks...",
-        QUAGMIRE_RUBBLE_PUBDOOR = "Now I'll never see what's inside!", -- spelling (what's)
+        QUAGMIRE_RUBBLE_PUBDOOR = "Now I'll never see what's inside!",
         QUAGMIRE_RUBBLE_ROOF = "Atleast the roof is intact. Mostly.",
         QUAGMIRE_RUBBLE_CLOCKTOWER = "Is that why time has stopped here?",
         QUAGMIRE_RUBBLE_BIKE = "I miss my bike.", -- lore :)
@@ -3405,7 +3405,7 @@ return{
             BURNING = "Moon magic won't save you now!",
             BURNT = "Mutated or not, it burns like the rest!",
             CHOPPED = "Doesn't seem too different from a regular tree.",
-            GENERIC = "Let's chop it down and see whats inside!",
+            GENERIC = "Let's chop it down and see what's inside!",
         },
 		MOON_TREE_BLOSSOM = "I dare you to eat it!",
 
@@ -3424,7 +3424,7 @@ return{
         {
         	BARREN = "Aw, this doesn't rock.",
 			WITHERED = "I guess rocks don't like the heat.",
-			GENERIC = "And thats how rocks are made!", -- spelling that's or thats
+			GENERIC = "And that's how rocks are made!",
 			PICKED = "All the ripe rocks have been picked.",
 			DISEASED = "I can't tell if this is normal or not.", --unimplemented
             DISEASING = "These rocks are attracting flies.", --unimplemented
@@ -3793,7 +3793,7 @@ return{
 		SISTURN =
 		{
 			GENERIC = "Whose wasting their time with pottery?",
-			SOME_FLOWERS = "Whats with the flowers?",
+			SOME_FLOWERS = "What's with the flowers?",
 			LOTS_OF_FLOWERS = "Boring!",
 		},
 
@@ -4038,7 +4038,7 @@ return{
         },
 
         ARCHIVE_PORTAL = {
-            POWEROFF = "Can't wait to see whats through it!",
+            POWEROFF = "Can't wait to see what's through it!",
             GENERIC = "Stupid portal! Wake up!",
         },
 
@@ -4639,7 +4639,7 @@ return{
         MONKEYHUT = 
         {
             GENERIC = "I'd prefer something more open concept.",
-            BURNT = "Thats what you get for living in a tree!",
+            BURNT = "That's what you get for living in a tree!",
         },
         POWDER_MONKEY = "Quit monkeying around!",
         PRIME_MATE = "If I take you down, does that mean I'm in charge?",
@@ -4661,10 +4661,10 @@ return{
         POLLY_ROGERSHAT = "I don't need no stinking bird following me around!",
         POLLY_ROGERS = "Shoo! Get out of here you pest!",
 
-        MONKEYISLAND_PORTAL = "Oh, another portal? Thats neat.",
+        MONKEYISLAND_PORTAL = "Oh, another portal? That's neat.",
         MONKEYISLAND_PORTAL_DEBRIS = "Looks like somethings been smashed without me...",
         MONKEYQUEEN = "I'd make more jokes, but I feel like you wouldn't understand them.",
-        MONKEYPILLAR = "Thats a lot of effort just to hang one hammock.",
+        MONKEYPILLAR = "That's a lot of effort just to hang one hammock.",
         PIRATE_FLAG_POLE = "Atleast they are getting their vitamin C.",
 
         BLACKFLAG = "I should make my own pirate logo!",

@@ -37,7 +37,7 @@ local function OnHit_Marbles(inst, attacker, target)
 		local maxrange = TUNING.FIRE_DETECTOR_RANGE
 		local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
 		marble.components.complexprojectile:SetHorizontalSpeed(25)
-		marble.components.complexprojectile:SetGravity(-30)
+		marble.components.complexprojectile:SetGravity(-50)
 		marble.components.complexprojectile:SetLaunchOffset(Vector3(0, .25, 0))
 		marble.components.complexprojectile.usehigharc = true
 		marble.components.complexprojectile:Launch(targetpos, inst, inst)
@@ -403,32 +403,33 @@ local function slipperymarblesfn()
 							
 							local giantreduction = v:HasTag("epic") and 2 or v:HasTag("smallcreature") and 0.8 or 1
 									
-							
-							local dx, dy, dz = px + (((3 / (i + 3)) * velx) / giantreduction), py, pz + (((3 / (i + 3)) * velz) / giantreduction)
-													
-							--local dx, dy, dz = px - (((FRAMES * 4) * velx) / multiplierplayer) * inst.Transform:GetScale(), py, pz - (((FRAMES * 4) * velz) / multiplierplayer) * inst.Transform:GetScale()
+							if px ~= nil then
+								local dx, dy, dz = px + (((3 / (i + 3)) * velx) / giantreduction), py, pz + (((3 / (i + 3)) * velz) / giantreduction)
+														
+								--local dx, dy, dz = px - (((FRAMES * 4) * velx) / multiplierplayer) * inst.Transform:GetScale(), py, pz - (((FRAMES * 4) * velz) / multiplierplayer) * inst.Transform:GetScale()
+									
+								local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+								local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
+								local ocean = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
+								local on_water = nil
+																					
+								if TUNING.DSTU.ISLAND_ADVENTURES then
+									on_water = IsOnWater(dx, dy, dz)
+								end
 								
-							local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-							local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-							local ocean = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-							local on_water = nil
-																				
-							if TUNING.DSTU.ISLAND_ADVENTURES then
-								on_water = IsOnWater(dx, dy, dz)
-							end
-							
-							if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then	
-								if v ~= nil and v.components.locomotor ~= nil and dx ~= nil and (ground or boat or ocean and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
-									if not v:HasTag("aquatic") and not on_water or v:HasTag("aquatic") and on_water then
-										--[[if ocean and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
-											v.components.amphibiouscreature:OnEnterOcean()
-										end]]
-										
-										v.Transform:SetPosition(dx, dy, dz)
+								if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then	
+									if v ~= nil and v.components.locomotor ~= nil and dx ~= nil and (ground or boat or ocean and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
+										if not v:HasTag("aquatic") and not on_water or v:HasTag("aquatic") and on_water then
+											--[[if ocean and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
+												v.components.amphibiouscreature:OnEnterOcean()
+											end]]
+											
+											v.Transform:SetPosition(dx, dy, dz)
+										end
 									end
 								end
 							end
-							
+								
 							if i >= 50 then 
 								v:RemoveTag("noslippy")
 							end

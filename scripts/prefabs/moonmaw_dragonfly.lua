@@ -330,8 +330,8 @@ local function OnKill(inst, data)
 	end --]]
 end
 
-local loot = { "meat", "meat", "meat", "meat", "meat", "meat", "meat", "meat", "glass_scales", "glass_scales",
-	"glass_scales", "moonglass_geode", "moonglass_geode", "moonglass_geode" }
+local loot = { "meat", "meat", "meat", "meat", "meat", "meat", "meat", "meat", "glass_scales",
+	"moonglass_geode", "moonglass_geode", "moonglass_geode" }
 
 local function OnDead(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
@@ -508,7 +508,7 @@ local function CheckTimer(inst, data)
 end
 
 local function RedoLavae(inst)
-	if inst.lavae ~= nil then
+	if inst.lavae ~= nil then	
 		for i = 1, 8 do
 			if inst.lavae[i].hidden ~= true then
 				EjectLavae(inst, i, true)
@@ -518,6 +518,7 @@ local function RedoLavae(inst)
 	inst.components.timer:StopTimer("summoncrystals")
 	inst.components.timer:StartTimer("summoncrystals", 30 + math.random(0, 15))
 	inst.redolavae = true
+	inst.SpawnedLavae = false
 	inst.sg:GoToState("summoncrystals")
 end
 
@@ -595,6 +596,8 @@ local function fn(Sim)
 	inst._musicdirty = net_event(inst.GUID, "alterguardian_phase1._musicdirty", "musicdirty")
 	inst._playingmusic = false
 	OnMusicDirty(inst)
+
+	inst:AddTag("lunar_aligned")
 
 
 	inst.entity:SetPristine()

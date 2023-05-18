@@ -28,6 +28,9 @@ local events=
 							end
 						end
 					end
+				else
+					inst.components.inventory:Equip(inst.weaponitems.meleeweapon)
+					inst.sg:GoToState("attack", data.target)
 				end
 			end
 		end
@@ -90,7 +93,6 @@ local function WebMortar(inst,angle)
 	if speed < 5 then
 	speed = 14*math.random(100,200)*0.01
 	end
-	print("speed = "..speed)
     projectile.components.complexprojectile:SetHorizontalSpeed(speed)
     projectile.components.complexprojectile:Launch(targetpos, inst, inst)
 	end
@@ -103,6 +105,11 @@ local states=
         name = "idle",
         tags = {"idle", "canrotate"},
         onenter = function(inst, playanim)
+			if inst.should_go_tired then
+				inst.should_go_tired = false
+				inst.sg:GoToState("tired")
+			end
+		
             inst.Physics:Stop()
 			inst.AnimState:PlayAnimation("idle", true)
 			if math.random() < .2 then
@@ -118,7 +125,7 @@ local states=
 
     State{
         name = "attack",
-        tags = {"attack"},
+        tags = {"attack", "busy"},
 
         onenter = function(inst, target)
             inst.Physics:Stop()
@@ -157,6 +164,7 @@ local states=
 					inst.docombo = false
 					--TheNet:SystemMessage(inst.combo)
 					inst.combo = inst.combo+2
+					inst.sg:RemoveStateTag("busy")
 					inst.sg:GoToState("attack")
 				else
 					if inst.combosucceed == false and inst.combo > 1 then
@@ -408,14 +416,17 @@ local states=
 			inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
 			inst.components.timer:StartTimer("pounce",10+math.random(-3,5))
 			
-			if inst.brain then
-				inst.brain:Start()
-			end
 			if inst.oldtarget ~= nil and inst.components.combat ~= nil and inst.oldtarget:IsValid() then
 				inst.components.combat:SuggestTarget(inst.oldtarget)
 			end
 			inst.sg:GoToState("idle") end),
         },       
+		
+		onexit = function(inst)
+			if inst.brain then
+				inst.brain:Start()
+			end
+		end,
 
     },
     State{

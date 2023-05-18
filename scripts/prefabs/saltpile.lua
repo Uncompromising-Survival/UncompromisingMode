@@ -23,9 +23,13 @@ end
 
 local function OnPicked(inst) inst:Remove() end
 
-local function OnSpring(inst) 
-	if not TheWorld.state.iswinter then
-		inst:Remove() 
+local function OnIsRaining(inst)
+    if not TheWorld.state.iswinter then
+        if inst:IsAsleep() then
+		    inst:DoTaskInTime(math.random(), inst.Remove)
+        else
+			inst.components.despawnfader:FadeOut()
+        end
 	end
 end
 
@@ -71,12 +75,15 @@ local function fn()
     inst:AddTag("snowpileblocker")
     inst:AddTag("NOBLOCK")
     inst:AddTag("NOCLICK")
+
+    inst:AddComponent("despawnfader")
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then return inst end
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW/2)
 
     inst.type = 1
 
@@ -91,9 +98,8 @@ local function fn()
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
-    inst:WatchWorldState("isspring", OnSpring)
-    inst:WatchWorldState("isautumn", OnSpring) -- Include other seasons incase someone is weird and disables spring for reasons unknown?
-    inst:WatchWorldState("issummer", OnSpring)
+
+    inst:WatchWorldState("israining", OnIsRaining)
 
     return inst
 end

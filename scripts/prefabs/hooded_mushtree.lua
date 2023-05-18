@@ -452,7 +452,8 @@ local function maketree(name, data, state)
         inst:AddTag("shelter")
         inst:AddTag("mushtree")
         inst:AddTag("cavedweller")
-        inst:AddTag("plant")
+		inst:AddTag("plant")
+		inst:AddTag("lunarplant_target")
         inst:AddTag("tree")
 
         if data.webbable then
@@ -460,6 +461,7 @@ local function maketree(name, data, state)
         end
 
         inst:SetPrefabName(name)
+        inst:SetPrefabNameOverride(name)
 
         inst.entity:SetPristine()
 

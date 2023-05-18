@@ -5,15 +5,14 @@ local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 -----------------------------------------------------------------
 local function MakeSoulless(prefab)
     AddPrefabPostInit(prefab, function(inst)
-        if inst~= nil then
+        if inst ~= nil then
             inst:AddTag("soulless")
         end
     end)
 end
 
---print("DSTU: wortox")
 
-local REMOVE_SOULS = 
+local REMOVE_SOULS =
 {
     --"spider",
     "mosquito",
@@ -21,29 +20,30 @@ local REMOVE_SOULS =
     "killerbee",
     "butterfly",
     "birchnutdrake",
-	--"mole",
+    --"mole",
     --"beeguard",
-	--"bat",
-	--"rabbit",
-	--"crow",
-	--"canary",
-	--"robin",
-	--"robin_winter",
-	--"frog",
-	--"bird_mutant",
-	--"smallbird",
-	"moonbutterfly",
-	--"puffin",
-	--"bird_mutant_spitter",
-	--"fruitbat",
-	--"stumpling",
-	--"birchling",
-	--"aphid",
+    --"bat",
+    --"rabbit",
+    --"crow",
+    --"canary",
+    --"robin",
+    --"robin_winter",
+    --"frog",
+    --"bird_mutant",
+    --"smallbird",
+    "moonbutterfly",
+    --"puffin",
+    --"bird_mutant_spitter",
+    --"fruitbat",
+    --"stumpling",
+    --"birchling",
+    --"aphid",
 }
+
 if GLOBAL.TUNING.DSTU.WORTOX == "UMNERF" then
-	for k, v in pairs(REMOVE_SOULS) do
-		MakeSoulless(v)
-	end
+    for k, v in pairs(REMOVE_SOULS) do
+        MakeSoulless(v)
+    end
 end
 
 local function UncompromisingSoulHeal(inst)
@@ -71,10 +71,16 @@ local function UncompromisingSoulHeal(inst)
         end
 
         if healtargetscount > 0 then
-            local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, TUNING.HEALING_MED - TUNING.WORTOX_SOULHEAL_LOSS_PER_PLAYER * (healtargetscount - 1))
+            local amt = GLOBAL.TUNING.DSTU.WORTOX == "SHOT" and
+                math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL,
+                    TUNING.HEALING_MED - TUNING.WORTOX_SOULHEAL_LOSS_PER_PLAYER * (healtargetscount - 1)) or
+                math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL,
+                    10 - TUNING.WORTOX_SOULHEAL_LOSS_PER_PLAYER * (healtargetscount - 1))
+
             for i = 1, healtargetscount do
                 local v = healtargets[i]
-                v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse", {duration = (amt * 0.1)})
+                v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse",
+                    { duration = (amt * 0.1) })
                 if v.components.combat then -- Always show fx now that the heals do special targeting to show the player that it stops working when everyone is full.
                     local fx = GLOBAL.SpawnPrefab("wortox_soul_heal_fx")
                     fx.entity:AddFollower():FollowSymbol(v.GUID, v.components.combat.hiteffectsymbol, 0, -50, 0)
@@ -82,11 +88,14 @@ local function UncompromisingSoulHeal(inst)
                 end
             end
         end
-        if sanitytargetscount > 0 then
-            local amt = TUNING.SANITY_TINY * 0.5
-            for i = 1, sanitytargetscount do
-                local v = sanitytargets[i]
-                v.components.sanity:DoDelta(amt)
+
+        if TUNING.DSTU.WORTOX ~= "APOLLO" then
+            if sanitytargetscount > 0 then
+                local amt = TUNING.SANITY_TINY * 0.5
+                for i = 1, sanitytargetscount do
+                    local v = sanitytargets[i]
+                    v.components.sanity:DoDelta(amt)
+                end
             end
         end
     else
@@ -101,7 +110,8 @@ local function UncompromisingSoulHeal(inst)
             local amt = TUNING.HEALING_MED - math.min(8, #targets) + 1
             for i, v in ipairs(targets) do
                 --always heal, but don't stack visual fx
-                v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse", {duration = (amt * 0.1)})
+                v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse",
+                    { duration = (amt * 0.1) })
                 if v.blocksoulhealfxtask == nil and v.components.combat then
                     v.blocksoulhealfxtask = v:DoTaskInTime(.5, EndBlockSoulHealFX)
                     local fx = GLOBAL.SpawnPrefab("wortox_soul_heal_fx")
@@ -114,7 +124,7 @@ local function UncompromisingSoulHeal(inst)
 end
 
 
---If there's a better vvay of doing this, lemme knovv, I'm not sure hovv to grab the wortox_soul_common.DoHeal, it doesn't vvork if I reference it in its ovvn postinit like inst.DoHeal = NevvHeal
+--If there's a better way of doing this, lemme know, I'm not sure how to grab the wortox_soul_common.DoHeal, it doesn't work if I reference it in its own postinit like inst.DoHeal = NewHeal
 local function KillSoul(inst)
     inst:ListenForEvent("animover", inst.Remove)
     inst.AnimState:PlayAnimation("idle_pst")
@@ -133,9 +143,26 @@ local function toground(inst)
     end
 end
 
---beta uses 
-if GLOBAL.TUNING.DSTU.WORTOX == "SHOT" then
-	AddPrefabPostInit("wortox_soul", function(inst)
-		UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.wortox_soul.fn, toground, "toground")
-	end)
+--beta uses
+if GLOBAL.TUNING.DSTU.WORTOX == "SHOT" or GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
+    AddPrefabPostInit("wortox_soul", function(inst)
+        UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.wortox_soul.fn, toground, "toground")
+    end)
+end
+
+if GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
+    AddPrefabPostInit("wortox", function(inst)
+        if not GLOBAL.TheWorld.ismastersim then
+            return
+        end
+
+        if inst.components.souleater ~= nil then
+            local oneatsoulfn_ = inst.components.souleater.oneatsoulfn
+
+            inst.components.souleater.oneatsoulfn = function(inst, soul)
+                oneatsoulfn_(inst, soul)
+                inst.components.sanity:DoDelta(-TUNING.SANITY_TINY)
+            end
+        end
+    end)
 end

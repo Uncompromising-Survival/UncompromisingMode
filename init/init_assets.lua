@@ -18,7 +18,6 @@ local inventoryitems =
 {
 	"air_conditioner",
 	"ancient_amulet_red",
-	"ancient_amulet_red_demoneye",
 	"aphid",
 	"armor_glassmail",
 	"beargerclaw",
@@ -52,7 +51,6 @@ local inventoryitems =
 	"dormant_rain_horn",
 	"driftwoodfishingrod",
 	"feather_frock",
-	"feather_frock_fancy",
 	"floral_bandage",
 	"gasmask",
 	"giant_blueberry",
@@ -113,7 +111,6 @@ local inventoryitems =
 	"pied_piper_flute",
 	"pink_vomit",
 	"plaguemask",
-	"hat_plaguemask_formal",
 	"purple_vomit",
 	"purplegem_cracked",
 	"purplesteamedhams",
@@ -157,7 +154,6 @@ local inventoryitems =
 	"theatercorn",
 	"turf_ancienthoodedturf",
 	"turf_hoodedmoss",
-	"twisted_antler",
 	"um_bear_trap_equippable",
 	"um_bear_trap_equippable_gold",
 	"um_bear_trap_equippable_tooth",
@@ -218,7 +214,7 @@ local inventoryitems =
 	"wixie_piano_card",
 	
 	--Wixie related inventory icons
-	
+
 	"slingshot_gnasher",
 	"slingshot_matilda",
 	"slingshotammo_firecrackers",
@@ -236,10 +232,10 @@ local inventoryitems =
 	"slingshotammo_lazy",
 	"slingshotammo_shadow",
 	"bagofmarbles",
-	
+
 	"placeholder_ingredient_ia",
 	"placeholder_ingredient_ia_um",
-	
+
 	--Walters jerky hats
 	"meatrack_hat",
 	"meatrack_hat_batnose",
@@ -258,7 +254,7 @@ local inventoryitems =
 	"meatrack_hat_default",
 	"meatrack_hat_plantmeat",
 	"meatrack_hat_smallmeat",
-	
+
 	--ia (and possibly hamlet) related wixie icons
 	"meatrack_hat_solofish_dead",
 	"meatrack_hat_swordfish_dead",
@@ -267,15 +263,38 @@ local inventoryitems =
 	"meatrack_hat_fish_tropical",
 	"meatrack_hat_seaweed",
 	"meatrack_hat_venus_stalk",
-	"meatrack_hat_froglegs_poison",
+    "meatrack_hat_froglegs_poison",
+
+    --skins
+	"ms_ancient_amulet_red_demoneye",
+    "ms_hat_plaguemask_formal",
+	"ms_plaguemask_formal",--dunno??
+	"ms_feather_frock_fancy",
+	"ms_twisted_antler",
+
+    --winona stuff
+    "winona_battery_low_item",
+    "winona_battery_high_item",
+    "winona_spotlight_item",
+	"winona_catapult_item",
 }
 
 for k, v in ipairs(inventoryitems) do
 	print("registering inventory item atlas: " .. v)
-	RegisterInventoryItemAtlas("images/inventoryimages/" .. v .. ".xml", v .. ".tex")
+	RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. v .. ".xml"), v .. ".tex")
 end
 
 Assets = {
+    --crafting menu avatars
+	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
+    Asset("ATLAS", "images/crafting_menu_avatars/avatar_wixie.xml"),
+
+	Asset("IMAGE", "images/crafting_menu_avatars/avatar_winky.tex"),
+	Asset("ATLAS", "images/crafting_menu_avatars/avatar_winky.xml"),
+
+	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wathom.tex"),
+	Asset("ATLAS", "images/crafting_menu_avatars/avatar_wathom.xml"),
+
 	----TURF
 	Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
 	Asset("IMAGE", "levels/textures/mini_noise_jungle.tex"),
@@ -372,13 +391,13 @@ Assets = {
 	Asset("ATLAS", "bigportraits/wathom_triumphant.xml"),
 
 	-- ITS WIXIE!!! (Also walter...)
-	
+
 	Asset("ANIM", "anim/wixie.zip"),
 	Asset("ANIM", "anim/ghost_wixie_build.zip"),
 	Asset("ANIM", "anim/wixie_idle.zip"),
-	
+
 	Asset("ANIM", "anim/wixie_shadowclone.zip"),
-	
+
 	Asset("ANIM", "anim/wixieammo.zip"),
 	Asset("ANIM", "anim/wixieammo_IA.zip"),
 	Asset("ANIM", "anim/shadowvortex.zip"),
@@ -389,11 +408,11 @@ Assets = {
 	Asset("ANIM", "anim/marblebag.zip"),
 	Asset("ANIM", "anim/swap_marblebag.zip"),
 	Asset("ANIM", "anim/baggedmarbles.zip"),
-	
+
 	Asset("ANIM", "anim/swap_wixiegun.zip"),
-	
+
 	Asset("ANIM", "anim/wixie_slimeball.zip"),
-	
+
 	Asset("ANIM", "anim/slingshot_matilda.zip"),
 	Asset("ANIM", "anim/swap_slingshot_matilda.zip"),
 	Asset("ANIM", "anim/slingshot_gnasher.zip"),
@@ -401,7 +420,7 @@ Assets = {
 
 	Asset("ANIM", "anim/fishmeats.zip"),
 	Asset("ANIM", "anim/driedfishmeat.zip"),
-	
+
 	Asset("ANIM", "anim/meatrack_hat_swap.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_batwing.zip"),
@@ -418,12 +437,12 @@ Assets = {
 	Asset("ANIM", "anim/meatrack_hat_swap_plantmeat.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_smallmeat.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_default.zip"),
-	
+
 	--Uncompromising Mode
 	Asset("ANIM", "anim/meatrack_hat_swap_monstersmallmeat.zip"),
-	
+
 	--Shipwrecked and Hamlet Jerky Hats
-	
+
 	Asset("ANIM", "anim/meatrack_hat_swap_solofish_dead.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_swordfish_dead.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_jellyfish_dead.zip"),
@@ -432,12 +451,11 @@ Assets = {
 	Asset("ANIM", "anim/meatrack_hat_swap_seaweed.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_venus_stalk.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_froglegs_poison.zip"),
-	
+
 	Asset("ANIM", "anim/status_meter_woby_small.zip"),
-	Asset("ANIM", "anim/status_meter_woby_big.zip"),
 	Asset("ANIM", "anim/woby_big_command.zip"),
 	Asset("ANIM", "anim/woby_does_a_flip.zip"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
 	Asset("ATLAS", "images/inventoryimages/slingshotammo_firecrackers.xml"),
 	Asset("IMAGE", "images/inventoryimages/slingshotammo_honey.tex"),
@@ -500,11 +518,11 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_plantmeat.xml"),
 	Asset("IMAGE", "images/inventoryimages/meatrack_hat_smallmeat.tex"),
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_smallmeat.xml"),
-	
+
 	--Uncompromising Mode Jerky Hats
 	Asset("IMAGE", "images/inventoryimages/meatrack_hat_monstersmallmeat.tex"),
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_monstersmallmeat.xml"),
-	
+
 	--Shipwrecked and Hamlet Jerky Hats
 	Asset("IMAGE", "images/inventoryimages/meatrack_hat_solofish_dead.tex"),
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_solofish_dead.xml"),
@@ -522,22 +540,22 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_venus_stalk.xml"),
 	Asset("IMAGE", "images/inventoryimages/meatrack_hat_froglegs_poison.tex"),
 	Asset("ATLAS", "images/inventoryimages/meatrack_hat_froglegs_poison.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/slingshot_gnasher.tex"),
 	Asset("ATLAS", "images/inventoryimages/slingshot_gnasher.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/slingshot_matilda.tex"),
 	Asset("ATLAS", "images/inventoryimages/slingshot_matilda.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/bagofmarbles.tex"),
 	Asset("ATLAS", "images/inventoryimages/bagofmarbles.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"),
 	Asset("ATLAS", "images/inventoryimages/fishmeat_dried.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"),
 	Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/wixiegun.tex"),
 	Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),
 
@@ -545,7 +563,7 @@ Assets = {
     Asset( "ATLAS", "bigportraits/wixie.xml" ),
     Asset( "IMAGE", "bigportraits/wixie_none.tex" ),
     Asset( "ATLAS", "bigportraits/wixie_none.xml" ),
-	
+
     Asset( "IMAGE", "images/names_gold_wixie.tex" ),
     Asset( "ATLAS", "images/names_gold_wixie.xml" ),
 
@@ -554,20 +572,20 @@ Assets = {
 
     Asset( "IMAGE", "images/avatars/avatar_wixie.tex" ),
     Asset( "ATLAS", "images/avatars/avatar_wixie.xml" ),
-	
+
     Asset( "IMAGE", "images/avatars/avatar_ghost_wixie.tex" ),
     Asset( "ATLAS", "images/avatars/avatar_ghost_wixie.xml" ),
-	
+
     Asset( "IMAGE", "images/avatars/self_inspect_wixie.tex" ),
     Asset( "ATLAS", "images/avatars/self_inspect_wixie.xml" ),
-	
+
 	Asset("SOUNDPACKAGE", "sound/wixie.fev"),
 	Asset("SOUND", "sound/wixie.fsb"),
-	
+
 	Asset("ATLAS", "images/claustrophobia.xml"),
 	Asset("IMAGE", "images/claustrophobia.tex"),
-	
-	
+
+
 	--CREATURES
 	Asset("ANIM", "anim/voorhams.zip"),
 
@@ -930,11 +948,11 @@ Assets = {
 
 	--FX
 	Asset("ANIM", "anim/electric_explosion.zip"),
- 
+
 	Asset("ANIM", "anim/um_harpoonhitfx.zip"),
-	
+
 	Asset("ANIM", "anim/um_magneranghitfx.zip"),
-	
+
 	Asset("ATLAS", "images/fx5.xml"),
 	Asset("IMAGE", "images/fx5.tex"),
 	
@@ -946,7 +964,7 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/charles_t_horse.xml"),
 	Asset("IMAGE", "images/inventoryimages/the_real_charles_t_horse.tex"),
 	Asset("ATLAS", "images/inventoryimages/the_real_charles_t_horse.xml"),
-	
+
 	Asset("ANIM", "anim/swap_charles_shadow.zip"),
 
 	Asset("ANIM", "anim/uncompromising_shadow_projectile1_fx.zip"),
@@ -960,6 +978,9 @@ Assets = {
 	Asset("ANIM", "anim/spikes_robin.zip"),
 	Asset("ANIM", "anim/spikes_robinwinter.zip"),
 	Asset("ANIM", "anim/spikes_canary.zip"),
+
+	Asset("ANIM", "anim/mara_boss1.zip"),
+	Asset("ANIM", "anim/mara_boss1_bullets.zip"),
 
 
 
@@ -1173,16 +1194,18 @@ Assets = {
 	Asset("ANIM", "anim/snapdragon_fertilizer.zip"),
 
 	Asset("ANIM", "anim/theatercorn.zip"),
-	
+
 	Asset("ANIM", "anim/bulletbee_guard.zip"),
 	Asset("ANIM", "anim/fatbee_guard_build.zip"),
 	Asset("ANIM", "anim/hivehead_bee_guard.zip"),
-	
+
 	Asset("ANIM", "anim/bulletbee_build.zip"),
 
 	Asset("ANIM", "anim/um_shadowarena.zip"),
-	
+
 	Asset("ANIM", "anim/trinket_wathom1.zip"),
+
+	Asset("ANIM", "anim/winona_portables.zip"),
 
 	--INVENTORY ITEMS [IMAGES & ATLAS]
 	Asset("IMAGE", "images/inventoryimages/grassgekko.tex"),
@@ -1232,9 +1255,9 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/turf_ancienthoodedturf.xml"),
 	Asset("ATLAS", "images/inventoryimages/turf_ancienthoodedturf.xml"),
 
-	Asset("IMAGE", "images/inventoryimages/ancient_amulet_red_demoneye.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
-	Asset("ATLAS", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
+	Asset("IMAGE", "images/inventoryimages/ms_ancient_amulet_red_demoneye.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/ms_ancient_amulet_red_demoneye.xml"),
+	Asset("ATLAS", "images/inventoryimages/ms_ancient_amulet_red_demoneye.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/codex_mantra.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/ancient_amulet_red_demoneye.xml"),
@@ -1449,7 +1472,7 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_beegun.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_beegun.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_beegun.tex"),
-	
+
 	Asset("ATLAS", "images/inventoryimages/um_beegun_cherry.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_beegun_cherry.tex"),
 
@@ -1539,17 +1562,17 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_magnerang.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_magnerang.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_magnerang.tex"),
-	
+
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/mastupgrade_windturbine_item.xml"),
 	Asset("ATLAS", "images/inventoryimages/mastupgrade_windturbine_item.xml"),
 	Asset("IMAGE", "images/inventoryimages/mastupgrade_windturbine_item.tex"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/cursed_antler.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/cursed_antler.xml"),
 	Asset("ATLAS", "images/inventoryimages/cursed_antler.xml"),
-	Asset("IMAGE", "images/inventoryimages/twisted_antler.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/twisted_antler.xml"),
-	Asset("ATLAS", "images/inventoryimages/twisted_antler.xml"),
+	Asset("IMAGE", "images/inventoryimages/ms_twisted_antler.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/ms_twisted_antler.xml"),
+	Asset("ATLAS", "images/inventoryimages/ms_twisted_antler.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/seafoodpaella.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/seafoodpaella.xml"),
@@ -1645,9 +1668,9 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/feather_frock.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/feather_frock.xml"),
 	Asset("ATLAS", "images/inventoryimages/feather_frock.xml"),
-	Asset("IMAGE", "images/inventoryimages/feather_frock_fancy.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/feather_frock_fancy.xml"),
-	Asset("ATLAS", "images/inventoryimages/feather_frock_fancy.xml"),
+	Asset("IMAGE", "images/inventoryimages/ms_feather_frock_fancy.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/ms_feather_frock_fancy.xml"),
+	Asset("ATLAS", "images/inventoryimages/ms_feather_frock_fancy.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/zaspberryparfait.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/zaspberryparfait.xml"),
@@ -1732,10 +1755,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/plaguemask.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/plaguemask.xml"),
 	Asset("ATLAS", "images/inventoryimages/plaguemask.xml"),
-	
-	Asset("IMAGE", "images/inventoryimages/hat_plaguemask_formal.tex"),
-	--Asset("ATLAS_BUILD", "images/inventoryimages/hat_plaguemask_formal.xml"),
-	Asset("ATLAS", "images/inventoryimages/hat_plaguemask_formal.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/ms_hat_plaguemask_formal.tex"),
+	--Asset("ATLAS_BUILD", "images/inventoryimages/ms_hat_plaguemask_formal.xml"),
+	Asset("ATLAS", "images/inventoryimages/ms_hat_plaguemask_formal.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/shroom_skin_fragment.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/shroom_skin_fragment.xml"),
@@ -1834,11 +1857,11 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/um_ornament_opossum.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_ornament_opossum.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_ornament_opossum.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/um_ornament_rat.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_ornament_rat.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_ornament_rat.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/trinket_wathom1.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/trinket_wathom1.xml"),
 	Asset("ATLAS", "images/inventoryimages/trinket_wathom1.xml"),
@@ -1846,11 +1869,27 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/wooden_queen_piece.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/wooden_queen_piece.xml"),
 	Asset("ATLAS", "images/inventoryimages/wooden_queen_piece.xml"),
-	
+
 	Asset("IMAGE", "images/inventoryimages/wixie_piano_card.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/wixie_piano_card.xml"),
 	Asset("ATLAS", "images/inventoryimages/wixie_piano_card.xml"),
-	
+
+	Asset("IMAGE", "images/inventoryimages/winona_battery_low_item.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/winona_battery_low_item.xml"),
+	Asset("ATLAS", "images/inventoryimages/winona_battery_low_item.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/winona_battery_high_item.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/winona_battery_high_item.xml"),
+	Asset("ATLAS", "images/inventoryimages/winona_battery_high_item.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/winona_spotlight_item.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/winona_spotlight_item.xml"),
+	Asset("ATLAS", "images/inventoryimages/winona_spotlight_item.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/winona_catapult_item.tex"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/winona_catapult_item.xml"),
+	Asset("ATLAS", "images/inventoryimages/winona_catapult_item.xml"),
+
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
 
@@ -1904,12 +1943,12 @@ Assets = {
 	Asset("ANIM", "anim/swap_um_harpoon.zip"),
 
 	Asset("ANIM", "anim/swap_magnerang.zip"),
-	
+
 	Asset("ANIM", "anim/winona_toolbox.zip"),
 	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
-	
+
 	Asset("ANIM", "anim/um_goo_honey.zip"),
-	
+
 	--UI
 	Asset("IMAGE", "images/dragonflycontainerborder.tex"),
 	Asset("ATLAS", "images/dragonflycontainerborder.xml"),
@@ -2012,19 +2051,19 @@ Assets = {
 
 	Asset("IMAGE", "images/map_icons/uncompromising_winkyhomeburrow.tex"),
 	Asset("ATLAS", "images/map_icons/uncompromising_winkyhomeburrow.xml"),
-	
+
 	Asset("IMAGE", "images/map_icons/sludge_sack.tex"),
 	Asset("ATLAS", "images/map_icons/sludge_sack.xml"),
-	
+
 	--Asset("IMAGE", "images/map_icons/sludge_stack.tex"),
 	--Asset("ATLAS", "images/map_icons/sludge_stack.xml"),
-	
+
 	--Asset("IMAGE", "images/map_icons/winonas_toolbox.tex"),
 	--Asset("ATLAS", "images/map_icons/winonas_toolbox.xml"),
-	
+
 	--Asset("IMAGE", "images/map_icons/inflatable_raft.tex"),
 	--Asset("ATLAS", "images/map_icons/inflatable_raft.xml"),
-	
+
 	--Asset("IMAGE", "images/map_icons/boomberry.tex"),
 	--Asset("ATLAS", "images/map_icons/boomberry.xml"),
 
@@ -2037,8 +2076,3 @@ Assets = {
 	Asset("IMAGE", "bigportraits/willow_none.tex"),
 	Asset("ATLAS", "bigportraits/willow_none.xml"),
 }
-
-RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/hat_plaguemask_formal.xml"), "hat_plaguemask_formal.tex")
-RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/feather_frock_fancy.xml"), "feather_frock_fancy.tex")
-RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/twisted_antler.xml"), "twisted_antler.tex")
-RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/ancient_amulet_red_demoneye.xml"), "ancient_amulet_red_demoneye.tex")

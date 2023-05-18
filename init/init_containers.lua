@@ -340,6 +340,8 @@ modparams.uncompromising_winkyburrow_master = GLOBAL.deepcopy(containers.params.
 modparams.uncompromising_winkyburrow_master.itemtestfn = NoIreplaceables
 modparams.um_devcapture = GLOBAL.deepcopy(containers.params.shadowchester)
 modparams.um_devcapture.itemtestfn = NoIreplaceables
+modparams.um_sacred_chest = GLOBAL.deepcopy(containers.params.sacred_chest)
+modparams.um_sacred_chest.itemtestfn = NoIreplaceables
 
 modparams.sludge_sack = containers.params.piggyback
 
@@ -468,7 +470,7 @@ containers.params.winona_toolbox =
         side_align_tip = 160,
     },
     type = "chest",
-    itemtestfn = GetModConfigData("winona_portables") and CheckToolboxItem or CheckWardrobeItem,
+    itemtestfn = GetModConfigData("winona_portables_") and CheckToolboxItem or CheckWardrobeItem,
 }
 
 containers.params.winona_toolbox.widget.slotpos = containers.params.shadowchester.widget.slotpos

@@ -165,8 +165,8 @@ end
 local function Charging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local x1 = x + math.random( -0.5, 0.5)
-    local z1 = z + math.random( -0.5, 0.5)
+    local x1 = x + math.random(-0.5, 0.5)
+    local z1 = z + math.random(-0.5, 0.5)
 
     if math.random() >= 0.8 then
         SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
@@ -274,25 +274,27 @@ local function moon_keeptargetfn(inst, target)
 end
 
 local function OnAttacked(inst, data)
-    if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil and data.weapon.components.complexprojectile == nil and data.weapon.components.linearprojectile == nil)) then
-            if data.attacker.sg ~= nil and data.attacker:HasTag("player") and not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
-                data.attacker.components.health:DoDelta( -5, nil, inst.prefab, nil, inst)
-                data.attacker.sg:GoToState("electrocute")
-            elseif not data.attacker:HasTag("player") then
-                data.attacker.components.health:DoDelta( -5, nil, inst.prefab, nil, inst)
+    if not inst.components.health:IsDead() then
+        if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
+            if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil and data.weapon.components.complexprojectile == nil and data.weapon.components.linearprojectile == nil)) then
+                if data.attacker.sg ~= nil and data.attacker:HasTag("player") and not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
+                    data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
+                    data.attacker.sg:GoToState("electrocute")
+                elseif not data.attacker:HasTag("player") then
+                    data.attacker.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
+                end
             end
         end
-    end
 
-    inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-        function(dude)
-            return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-        end, 5)
+        inst.components.combat:SetTarget(data.attacker)
+        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
+            function(dude)
+                return not (dude.components.health ~= nil and dude.components.health:IsDead())
+                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
+                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+            end, 5)
+    end
 end
 
 local function OnAttackOther(inst, data)
@@ -300,7 +302,7 @@ local function OnAttackOther(inst, data)
         if data.target.components.health ~= nil and not data.target.components.health:IsDead() and
             (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
             not (data.target.components.inventory ~= nil and data.target.components.inventory:IsInsulated()) then
-            data.target.components.health:DoDelta( -5, nil, inst.prefab, nil, inst)
+            data.target.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
             if data.target:HasTag("player") and not data.target.components.health:IsDead() then
                 local shockvictim = data.target.sg ~= nil and data.target.sg:GoToState("electrocute")
                 inst:DoTaskInTime(2, shockvictim)
@@ -678,8 +680,8 @@ end
 local function GlacialCharging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local x1 = x + math.random( -2, 2)
-    local z1 = z + math.random( -2, 2)
+    local x1 = x + math.random(-2, 2)
+    local z1 = z + math.random(-2, 2)
     local y1 = 0 + 0.25 * math.random()
 
     local flakes = SpawnPrefab("deer_ice_flakes")
@@ -692,34 +694,36 @@ local function GlacialCharge(inst)
 end
 
 local function OnGlacialAttacked(inst, data)
-    if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
-            if data.attacker.components.freezable ~= nil then
-                data.attacker.components.freezable:AddColdness(2)
-            end
+    if not inst.components.health:IsDead() then
+        if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
+            if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
+                if data.attacker.components.freezable ~= nil then
+                    data.attacker.components.freezable:AddColdness(2)
+                end
 
-            if data.attacker.components.temperature ~= nil then
-                local mintemp = math.max(data.attacker.components.temperature.mintemp, 0)
-                local curtemp = data.attacker.components.temperature:GetCurrent()
-                if mintemp < curtemp then
-                    data.attacker.components.temperature:DoDelta(math.max( -5, mintemp - curtemp))
+                if data.attacker.components.temperature ~= nil then
+                    local mintemp = math.max(data.attacker.components.temperature.mintemp, 0)
+                    local curtemp = data.attacker.components.temperature:GetCurrent()
+                    if mintemp < curtemp then
+                        data.attacker.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
+                    end
+                end
+
+                if data.attacker.components.freezable ~= nil then
+                    data.attacker.components.freezable:SpawnShatterFX()
                 end
             end
-
-            if data.attacker.components.freezable ~= nil then
-                data.attacker.components.freezable:SpawnShatterFX()
-            end
         end
-    end
 
-    inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-        function(dude)
-            return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-        end, 5)
+        inst.components.combat:SetTarget(data.attacker)
+        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
+            function(dude)
+                return not (dude.components.health ~= nil and dude.components.health:IsDead())
+                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
+                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+            end, 5)
+    end
 end
 
 local function fnglacial()
@@ -860,8 +864,8 @@ local function ShootProjectile(inst, target)
         projectile.Transform:SetPosition(x, y, z)
         local a, b, c = target.Transform:GetWorldPosition()
         local targetpos = target:GetPosition()
-        targetpos.x = targetpos.x + math.random( -1, 1)
-        targetpos.z = targetpos.z + math.random( -1, 1)
+        targetpos.x = targetpos.x + math.random(-1, 1)
+        targetpos.z = targetpos.z + math.random(-1, 1)
         local dx = a - x
         local dz = c - z
         local rangesq = dx * dx + dz * dz
@@ -879,8 +883,8 @@ end
 local function MagmaCharging(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local x1 = x + math.random( -2, 2)
-    local z1 = z + math.random( -2, 2)
+    local x1 = x + math.random(-2, 2)
+    local z1 = z + math.random(-2, 2)
     local y1 = 0 + 0.25 * math.random()
 
     local chance = math.random()
@@ -909,23 +913,31 @@ local function MagmaCharge(inst)
 end
 
 local function OnMagmaAttacked(inst, data)
-    if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
-            data.attacker.components.health:DoFireDamage(5, inst.prefab, true)
-            if data.attacker:HasTag("player") and not data.attacker.components.burnable ~= nil then
-                data.attacker.components.burnable:Ignite()
+    if inst.components.health ~= nil and not inst.components.health:IsDead() then
+        if inst.sg ~= nil and
+            inst.sg:HasStateTag("charging") and
+            data ~= nil and
+            data.attacker ~= nil then
+            if data.attacker:IsValid() and
+                data.attacker.components.health ~= nil and
+                not data.attacker.components.health:IsDead() and
+                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and
+                data.weapon.components.projectile == nil)) and data.attacker.components.health.redirect == nil then
+                    data.attacker.components.health:DoFireDamage(5, inst.prefab, true)  --redirect calls "afllicter"
+                if data.attacker:HasTag("player") and not data.attacker.components.burnable ~= nil then
+                    data.attacker.components.burnable:Ignite()
+                end
             end
         end
-    end
 
-    inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-        function(dude)
-            return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-        end, 5)
+        inst.components.combat:SetTarget(data.attacker)
+        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
+            function(dude)
+                return not (dude.components.health ~= nil and dude.components.health:IsDead())
+                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
+                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+            end, 5)
+    end
 end
 
 local function fnmagma()

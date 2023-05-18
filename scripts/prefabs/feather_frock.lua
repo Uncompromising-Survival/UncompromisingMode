@@ -283,7 +283,8 @@ local function onequip(inst, owner)
 		local skin_build = inst:GetSkinBuild()
 		if skin_build ~= nil then
 			owner:PushEvent("equipskinneditem", inst:GetSkinName())
-			owner.AnimState:OverrideSymbol("swap_body", skin_build or "featherfrock_fancy", "swap_body")
+            --owner.AnimState:OverrideSymbol("swap_body", skin_build or "featherfrock_fancy", "swap_body")
+			owner.AnimState:OverrideItemSkinSymbol("swap_body", "featherfrock_fancy", "swap_body", inst.GUID, "featherfrock")
 		else
 			owner.AnimState:OverrideSymbol("swap_body", "featherfrock", "swap_body")
 		end
@@ -304,8 +305,11 @@ local function onunequip(inst, owner)
 	if inst.components.container ~= nil then
 		inst.components.container:Close()
 	end
-	owner.AnimState:ClearOverrideSymbol("swap_body")
-	owner.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wingsuit")
+    owner.AnimState:ClearOverrideSymbol("swap_body")
+
+    if owner.components.locomotor ~= nil then
+        owner.components.locomotor:RemoveExternalSpeedMultiplier(inst, "wingsuit")
+    end
 
 	inst:RemoveEventCallback("blocked", inst._onblocked, owner)
 	inst:RemoveEventCallback("attacked", inst._onblocked, owner)

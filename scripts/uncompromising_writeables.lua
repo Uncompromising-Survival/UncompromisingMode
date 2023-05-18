@@ -36,3 +36,6 @@ kinds["um_devcapture"] = {
 
     --defaulttext = SignGenerator,
 }
+kinds["telebase"] = kinds["homesign"]
+kinds["pocketwatch_portal"] = kinds["homesign"]
+kinds["pocketwatch_recall"] = kinds["homesign"]

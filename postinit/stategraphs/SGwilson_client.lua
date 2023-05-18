@@ -144,7 +144,8 @@ local _OldDeathEvent = inst.events["death"].fn
             function(inst, action)
                 return action.invobject ~= nil
                 and action.invobject:HasTag("powercell") and "doshortaction"
-            end)
+            end),
+            ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
     }
 
     --[[
@@ -156,7 +157,7 @@ local _OldIdleState = inst.states["idle"].onenter
 			_OldIdleState(inst, pushanim)
 		end
     end
-	
+
 local _OldEatState = inst.states["eat"].onenter
 	inst.states["eat"].onenter = function(inst, foodinfo)
 		if inst.wantstosneeze then

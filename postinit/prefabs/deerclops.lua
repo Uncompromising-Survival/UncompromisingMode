@@ -265,7 +265,7 @@ env.AddPrefabPostInit("deerclops", function(inst)
 			data.healthUM = inst.components.health.currenthealth
 		end
 		
-		_OnSave(inst, data)
+		return _OnSave(inst, data)
 	end
 	
 	local function OnLoad(inst, data)
@@ -293,8 +293,8 @@ env.AddPrefabPostInit("deerclops", function(inst)
 				inst.components.health.currenthealth = data.healthUM
 			end
 		end
-		print("My upgrade is: "..inst.upgrade)
-		_OnLoad(inst, data)
+		
+		return _OnLoad(inst, data)
 	end
 	
 	inst.OnSave = OnSave

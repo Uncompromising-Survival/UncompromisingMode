@@ -12,7 +12,6 @@ local assets =
         owner.AnimState:Show("HAIR_HAT")
         owner.AnimState:Hide("HAIR_NOHAT")
         owner.AnimState:Hide("HAIR")
-			owner.AnimState:Hide("HEAD")
 		
 		if owner:HasTag("player") then
 			owner.AnimState:Hide("HEAD")

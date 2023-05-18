@@ -19,10 +19,10 @@ end
 
 local function TryColdMenace(inst)
     if math.random() > 0.9 and (inst.components.workable.workleft > 2 or inst.components.pickable.cycles_left > 2) and
-        not inst.mongproof then --This chance could be adjusted or scale vvith time.
+        not inst.mongproof then --This chance could be adjusted or scale with time.
         inst:DoColdMenace(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
-        if math.random() > 0.3 then --Have a good chance of spavvning buddies vvith them.
+        if math.random() > 0.3 then --Have a good chance of spawning buddies with them.
             local sno = TheSim:FindEntities(x, y, z, 10, { "snowpile" })
             local nummongs = math.random(1, 3)
             for i, pile in ipairs(sno) do
@@ -61,13 +61,13 @@ local function FindSpreadSpot(inst, angle)
     end
     x = x + 4 * math.cos(angle)
     z = z + 4 * math.sin(angle)
-    if TheSim:FindEntities(x, y, z, 2, { "snowpile" }) then --Don't vvant to be close to a single pile
+    if TheSim:FindEntities(x, y, z, 2, { "snowpile" }) then --Don't want to be close to a single pile
         inst.redo = true
     end
-    if #TheSim:FindEntities(x, y, z, 3, { "snowpile" }) > 3 then -- Don't vvant to clog the piles all in one location either
+    if #TheSim:FindEntities(x, y, z, 3, { "snowpile" }) > 3 then -- Don't want to clog the piles all in one location either
         inst.redo = true
     end
-    if inst.count > 7 or not inst.redo then -- If vve've been going at it forever... then maybe just return this anyhovv
+    if inst.count > 7 or not inst.redo then -- If we've been going at it forever... then maybe just return this anyhow
         return x, y, z, angle
     else
         inst.redo = nil
@@ -175,7 +175,6 @@ startregen = function(inst, regentime)
 end
 
 local function workcallback(inst, worker, workleft)
-
     inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
 
     if worker ~= nil and worker:HasTag("wereplayer") and worker.components.moisture then
@@ -286,22 +285,27 @@ local function DoAreaColdness(inst)
 end
 
 local function onpickedfn(inst, picker)
+	if picker ~= nil and picker:IsValid() then
+		if picker.components.moisture then
+			if picker.components.talker and picker == ThePlayer then
+				ThePlayer.components.talker:Say(GetString(ThePlayer.prefab, "ANNOUNCE_COLD"))
+			end
 
-    if picker.components.moisture then
-        if picker.components.talker and picker == ThePlayer then
-            ThePlayer.components.talker:Say(GetString(ThePlayer.prefab, "ANNOUNCE_COLD"))
-        end
+			picker.components.moisture:DoDelta(15)
+		end
 
-        picker.components.moisture:DoDelta(15)
+		if picker.components.temperature ~= nil then
+			picker.components.temperature:DoDelta(-20)
+			if picker.components.temperature.current > -3 then
+				picker.components.temperature:SetTemperature(-3)
+			end
+		end
+	end
+
+    if TheWorld.state.iswinter then
+        TryColdMenace(inst)
     end
 
-    if picker.components.temperature ~= nil then
-        picker.components.temperature:DoDelta(-20)
-        if picker.components.temperature.current > -3 then
-            picker.components.temperature:SetTemperature(-3)
-        end
-    end
-    TryColdMenace(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     if inst.components.workable.workleft > 0 then
         if inst.Transform:GetWorldPosition() ~= nil then
@@ -317,7 +321,6 @@ local function onpickedfn(inst, picker)
 
 
     startregen(inst)
-
 end
 
 local function makefullfn(inst)
@@ -375,11 +378,10 @@ local function Init(inst)
 end
 
 local function OnSeasonChange(inst)
-    print("OnSeasonChange")
-	if not TheWorld.state.iswinter then
-		inst.persists = false
+    if not TheWorld.state.iswinter then
+        inst.persists = false
         inst:Remove()
-	end
+    end
 end
 
 local function snowpilefn(Sim)
@@ -463,11 +465,17 @@ local function snowpilefn(Sim)
         for i, v in ipairs(inlimbostructures) do v:RemoveTag("INLIMBO") end
     end)
 
-	inst:WatchWorldState("season", OnSeasonChange)
+    inst:WatchWorldState("season", OnSeasonChange)
 
     startregen(inst)
     inst:DoTaskInTime(0, Init)
     inst.DoColdMenace = DoColdMenace
+
+    inst:DoPeriodicTask(10, function(inst)
+        if TheWorld.state.israining and not TheWorld.state.iswinter then
+            inst.components.pickable:Pick()
+        end
+    end)
 
     return inst
 end

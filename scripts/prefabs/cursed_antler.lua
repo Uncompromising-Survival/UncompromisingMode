@@ -45,7 +45,7 @@ local function onunequip(inst, owner)
 	if skin_build ~= nil then
 		owner:PushEvent("unequipskinneditem", inst:GetSkinName())
 	end
-	
+
 	owner.AnimState:Hide("ARM_carry")
 	owner.AnimState:Show("ARM_normal")
 end
@@ -69,9 +69,10 @@ local function onequip(inst, owner)
 		end)
 	else
 		local skin_build = inst:GetSkinBuild()
-		if skin_build ~= nil then
+        if skin_build ~= nil then
+			print(skin_build)
 			owner:PushEvent("equipskinneditem", inst:GetSkinName())
-			owner.AnimState:OverrideSymbol("swap_object", skin_build or "swap_twisted_antler", skin_build or "swap_twisted_antler")	
+			owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_"..skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
 		else
 			owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
 		end
@@ -128,7 +129,7 @@ local function onattack(inst, attacker, target)
 				if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) then
 					v.components.combat:GetAttacked(attacker, 34, nil)
 
-					if v.components.freezable ~= nil and target.components.health ~= nil and not v.components.health:IsDead() and
+					if v.components.freezable ~= nil and v.components.health ~= nil and not v.components.health:IsDead() and
 						not v.components.freezable:IsFrozen() then
 						v.components.freezable:AddColdness(0.5)
 						v.components.freezable:SpawnShatterFX()

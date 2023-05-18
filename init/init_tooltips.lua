@@ -34,11 +34,9 @@ STRINGS.UNCOMP_TOOLTIP = {
 	LIGHTNING_ROD = "- Can charge electrical equipment.",
 	LIGHTER = "- Lasts forever in the hands of a pyromaniac.",
 	BANDAGE = "- Restores a bit of extra health over time.",
-	SISTURN = "- Petals inside decay into Mourning Glory.\n- Masks foul smells.",
-	POTTEDFERN = "- Masks foul smells.",
-	SUCCULENT_POTTED = "- Masks foul smells.",
-	ENDTABLE = "- Masks foul smells when decorated.",
+	SISTURN = "- Petals inside decay into Mourning Glory.",
 	MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
+	FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
 
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
@@ -57,7 +55,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	GASMASK = "- Provides protection against spore clouds.",
 	PLAGUEMASK = "- Provides protection against spore clouds.",
 	FLORAL_BANDAGE = "- Restores extra health over time.",
-	DISEASECUREBOMB = "- Restores sickly plants.",
+	DISEASECUREBOMB = "- Restores health and sickly plants.",
 	SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
 
 	CRAB_HAT = "- Repairs & sewing are twice as effective when worn.",
@@ -88,7 +86,7 @@ STRINGS.ENGINEERING_TOOLTIP = {
 	BUGZAPPER = "- Can be overcharged."
 }
 
-if GetModConfigData("winona_portables") then
+if GetModConfigData("winona_portables_") then
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_CATAPULT = "- Now portable."
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_SPOTLIGHT = "- Now portable."
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_LOW = "- Now portable."
@@ -148,10 +146,11 @@ if TUNING.DSTU.SNOWSTORMS then
 	TOOLTIP.WALL_RUINS_ITEM = "- Provides protection from Snow Storms."
 	TOOLTIP.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms."
 	TOOLTIP.YELLOWSTAFF = "- Dwarf Stars provide protection from Snow Storms."
-	TOOLTIP.MOLEHAT = "- Grants protection against Snow Storms / Sand Storms when worn."
-	TOOLTIP.DESERTHAT = "- Also works as protection against Snow Storms."
+	TOOLTIP.MOLEHAT = "- Grants protection against Snow Storms / Sand Storms and Moon Storms when worn."
+    TOOLTIP.DESERTHAT = "- Also works as protection against Snow Storms."
+	TOOLTIP.BEARGERVEST = "- Provides protection from Snow Storms' slowdown."
 else
-	TOOLTIP.MOLEHAT = "- Grants protection against Sand Storms when worn."
+	TOOLTIP.MOLEHAT = "- Grants protection against Sand Storms and Moon Storms when worn."
 end
 
 if TUNING.DSTU.HAYFEVER then
@@ -166,15 +165,13 @@ end
 if TUNING.DSTU.GOTOBED ~= false then
 	TOOLTIP.BEDROLL_STRAW = "- May restore maximum health."
 
-	TOOLTIP.BEDROLL_FURRY = "- May restore maximum health."
+	TOOLTIP.BEDROLL_FURRY = "- A bit more efficient.\n- May restore maximum health."
 
 	TOOLTIP.TENT = "- May restore maximum health."
 
 	TOOLTIP.PORTABLETENT_ITEM = "- May restore maximum health."
 
 	TOOLTIP.SIESTAHUT = "- A bit less efficient.\n- May restore maximum health."
-else
-	TOOLTIP.SIESTAHUT = "- A bit less efficient."
 end
 
 if TUNING.DSTU.SLEEPINGBUFF > 1 then
@@ -204,7 +201,9 @@ end
 if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
 	TOOLTIP.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection."
 	TOOLTIP.TRUNKVEST_WINTER = "- Now has pockets!"
-	TOOLTIP.REFLECTIVEVEST = "- Now has pockets!"
+    TOOLTIP.REFLECTIVEVEST = "- Now has pockets!"
+    TOOLTIP.RAINCOAT = "- Now has pockets!"
+	TOOLTIP.HAWAIIANSHIRT = "- Increased durability.\n- Now has pockets!"
 end
 
 if GetModConfigData("canedurability") then
@@ -231,4 +230,16 @@ end
 if TUNING.DSTU.WINONA_GEN then
 	TOOLTIP.WINONA_BATTERY_HIGH = TOOLTIP.WINONA_BATTERY_HIGH .. "\n- Access limited to Winona."
 	TOOLTIP.WINONA_BATTERY_LOW = TOOLTIP.WINONA_BATTERY_LOW .. "\n- Access limited to Winona."
+end
+
+if GetModConfigData("lunar grimoire") then
+	TOOLTIP.BOOK_MOON = "- Now mutates everything around on use."
+end
+
+if GetModConfigData("apicultural notes") then
+    TOOLTIP.BOOK_BEES = "- Now fills up to 10 nearby Bee Boxes."
+end
+
+if GetModConfigData("disable_megaflare") then
+	TOOLTIP.MEGAFLARE = "- No longer summons Deerclops."
 end

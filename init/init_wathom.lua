@@ -4,19 +4,11 @@ require "class"
 local require = GLOBAL.require
 local STRINGS = GLOBAL.STRINGS
 local FRAMES = GLOBAL.FRAMES
-FRAMES = GLOBAL.FRAMES
 local TimeEvent = GLOBAL.TimeEvent
-TimeEvent = GLOBAL.TimeEvent
 local EventHandler = GLOBAL.EventHandler
-EventHandler = GLOBAL.EventHandler
-localEQUIPSLOTS = GLOBAL.EQUIPSLOTS
-EQUIPSLOTS = GLOBAL.EQUIPSLOTS
+local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 local SpawnPrefab = GLOBAL.SpawnPrefab
-local Action = GLOBAL.Action
 local ActionHandler = GLOBAL.ActionHandler
-Action = GLOBAL.Action
-Vector3 = GLOBAL.Vector3
-local Vector3 = GLOBAL.Vector3
 
 
 -- It's 1 AM and I don't want to pick apart which local is needed so I'll just grab all of it.
@@ -157,7 +149,7 @@ end
 AddStategraphPostInit("wilson", function(inst)
 	local _RunOnEnter = inst.states["run_start"].onenter
 
-	local function NevvOnEnter(inst)
+	local function NewOnEnter(inst)
 		--print(inst.components.adrenaline:GetPercent())
 		if inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst:HasTag("wathom") and inst:HasTag("wathomrun")then
 			inst.sg.mem.footsteps = 0
@@ -168,7 +160,7 @@ AddStategraphPostInit("wilson", function(inst)
 		end
 	end
 
-	inst.states["run_start"].onenter = NevvOnEnter
+	inst.states["run_start"].onenter = NewOnEnter
 
 
 
@@ -282,7 +274,6 @@ AddStategraphPostInit("wilson", function(inst)
 				local target = buffaction ~= nil and buffaction.target or nil
 				inst.AnimState:PlayAnimation("emote_angry", false)
 				inst.components.locomotor:Stop()
-				inst.components.locomotor:EnableGroundSpeedMultiplier(false)
 				if inst.components.playercontroller ~= nil then
 					inst.components.playercontroller:RemotePausePrediction()
 				end
@@ -336,7 +327,6 @@ AddStategraphPostInit("wilson", function(inst)
 				local target = buffaction ~= nil and buffaction.target or nil
 				inst.AnimState:PlayAnimation("emote_angry", false)
 				inst.components.locomotor:Stop()
-				inst.components.locomotor:EnableGroundSpeedMultiplier(false)
 				if inst.components.playercontroller ~= nil then
 					inst.components.playercontroller:RemotePausePrediction()
 				end
@@ -417,7 +407,6 @@ AddStategraphPostInit("wilson", function(inst)
 			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
 			onenter = function(inst, data)
-				--SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOff"), nil)
 				Effect(inst)
 				local buffaction = inst:GetBufferedAction()
 				local target = buffaction ~= nil and buffaction.target or nil
@@ -438,7 +427,6 @@ AddStategraphPostInit("wilson", function(inst)
 			end,
 
 			onexit = function(inst)
-				--SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOn"), nil)
 				--            inst.components.health:SetInvincible(false)
 				inst.components.combat:SetTarget(nil)
 				if inst.sg:HasStateTag("abouttoattack") then
@@ -494,12 +482,16 @@ AddStategraphPostInit("wilson", function(inst)
 				end),
 
 				TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
-					if inst:HasTag("amped") then
+					if inst:HasTag("amped") and not inst:HasTag("wearingheavyarmor") then
 						inst.leapvelocity = 15
-					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 then
-						inst.leapvelocity = 10
+					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 and not inst:HasTag("wearingheavyarmor") then
+						inst.leapvelocity = 7.5 -- originally 10, lets see how this goes.
+					elseif inst.components.adrenaline:GetPercent() > 0.50 and inst.components.adrenaline:GetPercent() < 0.75 and not inst:HasTag("wearingheavyarmor") then
+						inst.leapvelocity = 10 -- * (inst.components.adrenaline:GetPercent() + .5)
+					elseif inst.components.adrenaline:GetPercent() > 0.74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") then
+						inst.leapvelocity = 12.5 -- this is used in between 75 and 100 (Amped).
 					else
-						inst.leapvelocity = 10 * (inst.components.adrenaline:GetPercent() + .5)
+						inst.leapvelocity = 0 --Either Wathom has the "wearingheavyarmor" tag, is under 25 adrenaline (ie fatigued) or the game is somehow not reading the Adrenaline meter.
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
 				end),
@@ -554,7 +546,7 @@ AddStategraphPostInit("wilson_client", function(inst)
 
 	local _RunOnEnter = inst.states["run_start"].onenter
 
-	local function NevvOnEnter(inst)
+	local function NewOnEnter(inst)
 		if inst:HasTag("wathom") and inst:HasTag("wathomrun") then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
@@ -564,7 +556,7 @@ AddStategraphPostInit("wilson_client", function(inst)
 		end
 	end
 
-	inst.states["run_start"].onenter = NevvOnEnter
+	inst.states["run_start"].onenter = NewOnEnter
 
 	local actionhandlers =
 	{
@@ -850,7 +842,6 @@ end
 
 AddPlayerPostInit(function(inst)
 	if inst:HasTag("wathom") then
-
 		inst.counter_max = GLOBAL.net_shortint(inst.GUID, "counter_max", "counter_maxdirty")
 		inst.counter_current = GLOBAL.net_shortint(inst.GUID, "counter_current", "counter_currentdirty")
 
@@ -867,7 +858,8 @@ local function AmpbadgeDisplays(self)
 
 		self.combinedmod = GetModName("Combined Status")
 
-		self.adrenaline = self:AddChild(ampbadge(self.owner))
+        self.adrenaline = self:AddChild(ampbadge(self.owner))
+
 		if self.combinedmod ~= nil then
 			self.brain:SetPosition(0, 35, 0)
 			self.stomach:SetPosition(-62, 35, 0)
@@ -899,9 +891,10 @@ local function AmpbadgeDisplays(self)
 			self.adrenaline.maxnum:MoveToFront()
 			self.adrenaline.maxnum:Hide()
 		else
-			self.adrenaline:SetPosition(-40, -50, 0)
-			self.brain:SetPosition(40, -50, 0)
-			self.stomach:SetPosition(-40, 17, 0)
+			self.adrenaline:SetPosition(self.column3, -130, 0)
+			self.moisturemeter:SetPosition(self.column1, -130, 0)
+			--self.brain:SetPosition(40, -50, 0)
+			--self.stomach:SetPosition(-40, 17, 0)
 		end
 
 		--self.inst:ListenForEvent("adrenalinedelta", function(inst, data) self.adrenaline:SetPercent(data.newpercent, self.owner.components.pestilencecounter:Max()) end, self.owner)
@@ -929,7 +922,7 @@ AddClassPostConstruct("widgets/statusdisplays", AmpbadgeDisplays)
 STRINGS.CHARACTER_TITLES.wathom = "The Forgotten Parody"
 STRINGS.CHARACTER_NAMES.wathom = "Wathom"
 STRINGS.CHARACTER_DESCRIPTIONS.wathom = "*Apex Predator\n*Gets amped up with adrenaline\n*Causes animals to panic\n*The faster he goes, the harder he falls"
-STRINGS.CHARACTER_QUOTES.wathom = "\"Cruel, the abyss. Either do, or die.\""
+STRINGS.CHARACTER_QUOTES.wathom = "\"Cruel, the abyss.\""
 STRINGS.CHARACTER_SURVIVABILITY.wathom = "Slim"
 
 -- Custom speech strings
@@ -995,7 +988,7 @@ local PREFAB_SKINS = GLOBAL.PREFAB_SKINS
 local PREFAB_SKINS_IDS = GLOBAL.PREFAB_SKINS_IDS
 local SKIN_AFFINITY_INFO = GLOBAL.require("skin_affinity_info")
 
--- Modded Skin API 
+-- Modded Skin API
 --[[
 modimport("skins_api")
 

@@ -210,7 +210,7 @@ local function _GroundDetectionUpdate(debris, override_density)
                     #TheSim:FindEntities(x, 0, y, density, nil, QUAKEDEBRIS_CANT_TAGS, QUAKEDEBRIS_ONEOF_TAGS) > 1
                 ) then
                 --keep it
-                debris.persists = true
+                
                 debris.entity:SetCanSleep(true)
 				if debris.components.inventoryitem then
 					debris.components.inventoryitem.canbepickedup = true
@@ -231,7 +231,7 @@ local function _GroundDetectionUpdate(debris, override_density)
 		end
     elseif debris:IsInLimbo() then
         --failsafe, but maybe we got trapped or picked up somehow, so keep it
-        debris.persists = true
+        
         debris.entity:SetCanSleep(true)
         debris.shadow:Remove()
         debris.shadow = nil
@@ -287,7 +287,7 @@ local function SpawnDebris(inst,chopper,loottable)
         local debris = SpawnPrefab(prefab)
         if debris ~= nil then
             debris.entity:SetCanSleep(false)
-            debris.persists = false
+            
 			debris:AddTag("quakedebris")
             if debris.components.inventoryitem ~= nil and debris.components.inventoryitem.canbepickedup then
                 debris.components.inventoryitem.canbepickedup = false
@@ -382,7 +382,7 @@ local function InfestedInit(inst)
 end
 -----------------------------
 
------------------------------VVorkable handling
+-----------------------------Workable handling
 local function on_chop(inst, chopper, remaining_chops)
     if not (chopper ~= nil and chopper:HasTag("playerghost")) then
         inst.SoundEmitter:PlaySound("dontstarve/wilson/use_axe_tree")
@@ -424,7 +424,7 @@ local function on_chop(inst, chopper, remaining_chops)
 		if remaining_chops == 0 or remaining_chops < 0 then
 			phase = 4
 		end			
-		--TheNet:Announce("I told nevv anim")
+		--TheNet:Announce("I told new anim")
 		--inst.AnimState:PlayAnimation("damaged-"..phase,true)	
 	end
 end
@@ -467,13 +467,13 @@ local function on_chopped_down(inst, chopper)
 		if inst.components.timer:TimerExists("remoss") then
 			inst.components.timer:StopTimer("remoss")
 		end
-		inst.components.timer:StartTimer("remoss", 4800) --10 days to regrovv moss
+		inst.components.timer:StartTimer("remoss", 4800) --10 days to regrow moss
 	end
 end
 -----------------------------
 
 
------------------------------Spavvner Handling
+-----------------------------Spawner Handling
 local function StartSpawning(inst)
     if inst.components.childspawner then
         inst.components.childspawner:StartSpawning()
@@ -594,7 +594,7 @@ local function PickBuild(inst)
 end
 -----------------------------
 
------------------------------Regrovvth Timer Handler
+-----------------------------Regrowth Timer Handler
 local function Regrow(inst, data)
 	if data.name == "regrow" then
 		inst.chopped = false
