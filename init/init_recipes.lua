@@ -164,7 +164,7 @@ if GetModConfigData("no4crafts") then -- :desolate:
     AllRecipes["dock_kit"].ingredients = {
         Ingredient("boards", 4),
         Ingredient("stinger", 2),
-        Ingredient("palmconetree_scale", 4)
+        Ingredient("palmcone_scale", 4)
     }
     --[[AllRecipes["boat_magnet_kit"].ingredients = {
      Ingredient("gears", 1),
