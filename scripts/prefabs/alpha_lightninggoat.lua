@@ -176,6 +176,7 @@ local function fn()
 
     ------------------------------------------
 
+    inst:AddTag("alpha_goat")
     inst:AddTag("lightninggoat")
     inst:AddTag("animal")
     inst:AddTag("lightningrod")

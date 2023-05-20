@@ -96,7 +96,7 @@ AddTile(
         old_static_id = 112,
     },
     {
-        name = "ancienthoodedturf",
+        name = "um_floodwater",
         noise_texture = "noise_um_floodwater",
         runsound = "dontstarve/movement/run_marsh",
         walksound = "dontstarve/movement/walk_marsh",

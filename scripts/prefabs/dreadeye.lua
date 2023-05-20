@@ -347,7 +347,7 @@ local function AllRadiusPlayers(inst, self)
 		local radius = 4
 		
 		if TheWorld.Map:IsOceanAtPoint(x, y, z, false) then
-			radius = 8
+			radius = 6
 		end
 		
 		local players = FindPlayersInRange(x, y, z, radius, { "player" }, { "playerghost" })
@@ -502,8 +502,8 @@ local function SanityBurst(inst)
 	burstring.Transform:SetPosition(x, 0, z)
 	burstring.Transform:SetScale(1.8, 1.8, 1.8)
 	if TheWorld.Map:IsOceanAtPoint(x, y, z, false) then
-		radius = 10
-		burstring.Transform:SetScale(2.3, 2.3, 2.3)
+		radius = 8
+		burstring.Transform:SetScale(2.1, 2.1, 2.1)
 	end
 		
 	local players = FindPlayersInRange(x, y, z, radius, { "player" }, { "playerghost" })

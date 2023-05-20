@@ -146,18 +146,18 @@ local states=
         events =
         {
             EventHandler("animover", function(inst)
-				if inst.getting_angry then
-					inst.sg:GoToState("getting_pissed")
-				else
+				--if inst.getting_angry then
+					--inst.sg:GoToState("getting_pissed")
+				--else
 					inst.sg:GoToState("idle")
-				end
+				--end
 			end),
         },
     },
 
     State{
         name = "getting_pissed",
-        tags = { "busy" },
+        tags = { "taunt" },
 
         onenter = function(inst)
             inst.Physics:Stop()
