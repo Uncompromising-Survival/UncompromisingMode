@@ -216,8 +216,8 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
     -- Warly
-    WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
-    WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
+	WARLY_FOOD = GetModConfigData("warly_food"),
+	WARLY_BUTCHER = GetModConfigData("warly_butcher"),
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resis
     -- Maxwell

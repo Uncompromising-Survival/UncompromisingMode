@@ -6,9 +6,10 @@ GLOBAL.setfenv(1, GLOBAL)
 env.AddComponentPostInit("lootdropper", function(self)
 
 	local _OldDropLoot = self.DropLoot
-	local _OldGenerateLoot = self.GenerateLoot
+	local _GenerateLoot = self.GenerateLoot
 	
-	function self:GenerateLoot()
+	if TUNING.DSTU.WARLY_BUTCHER then
+		function self:GenerateLoot()
 		
 			local loots = {}
 			local previous_prefab = nil
@@ -18,7 +19,7 @@ env.AddComponentPostInit("lootdropper", function(self)
 			end
 	
 			local function butcherloot(prefab)
-				if self.inst:HasTag("butchermark") or self.inst:HasTag("butchermarkitem") and not (self.inst:HasTag("epic") or self.inst:HasTag("shadowcreature")) and math.random() <= .33 and (previous_prefab == nil or previous_prefab ~= prefab) then
+				if self.inst:HasTag("butchermark") and not (self.inst:HasTag("epic") or self.inst:HasTag("shadowcreature") or self.inst:HasTag("structure")) and math.random() <= .25 and (previous_prefab == nil or previous_prefab ~= prefab) then
 					table.insert(loots, prefab)
 				end
 				previous_prefab = prefab
@@ -38,11 +39,12 @@ env.AddComponentPostInit("lootdropper", function(self)
 				for k,v in pairs(self.chanceloot) do
 					if v.chance >= 1.0 then
 						table.insert(loots, v.prefab)
+						butcherloot(v.prefab)
 					elseif math.random() < v.chance then
 						table.insert(loots, v.prefab)
+						butcherloot(v.prefab)
 						self.droppingchanceloot = true
 					end
-					butcherloot(v.prefab)
 				end
 			end
 
@@ -54,11 +56,12 @@ env.AddComponentPostInit("lootdropper", function(self)
 						local chance = entry[2]
 						if chance >= 1.0 then
 							table.insert(loots, prefab)
+							butcherloot(prefab)
 						elseif math.random() <= chance then
 							table.insert(loots, prefab)
+							butcherloot(prefab)
 							self.droppingchanceloot = true
 						end
-						butcherloot(prefab)
 					end
 				end
 			end
@@ -92,6 +95,7 @@ env.AddComponentPostInit("lootdropper", function(self)
 	
 		return loots
 		end
+	end
 	
 	if TUNING.DSTU.FIRELOOT ~= nil and TUNING.DSTU.FIRELOOT > 1 then
 		function self:DropLoot(pt, ...)
