@@ -23,6 +23,28 @@ local function oneat(inst, data)
 	end
 end
 
+local function onbutchered(target, data)
+	local target = data.target
+	if target ~= nil and not target:HasTag("butchermark") then
+		target:AddTag("butchermark")
+		target:DoTaskInTime(3, function() target:RemoveTag("butchermark") end)
+	end
+end
+
+local function inventorystuff(item, data)
+	local item = data.item
+	if item ~= nil and ( item.components.health and item.components.inventoryitem.canbepickedupalive == true) then
+		item:AddTag("butchermarkitem")
+	end
+end
+
+local function ondropitem(item, data)
+	local item = data.item
+	if item ~= nil and item:HasTag("butchermarkitem") then
+		item:RemoveTag("butchermarkitem")
+	end
+end
+
 env.AddPrefabPostInit("warly", function(inst) 
 	if not TheWorld.ismastersim then
 		return
@@ -39,6 +61,12 @@ env.AddPrefabPostInit("warly", function(inst)
 	if inst.components.foodmemory ~= nil then
 		inst.components.foodmemory:SetDuration(TUNING.DSTU.WARLY_SAME_OLD_COOLDOWN)
 		inst.components.foodmemory:SetMultipliers(TUNING.DSTU.WARLY_SAME_OLD_MULTIPLIERS)
+	end
+	
+	if inst.components.combat ~= nil then
+		inst:ListenForEvent("onattackother", onbutchered)
+		inst:ListenForEvent("itemget", inventorystuff)
+		inst:ListenForEvent("dropitem", ondropitem)
 	end
 end)
 
