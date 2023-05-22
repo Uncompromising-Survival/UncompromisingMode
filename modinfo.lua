@@ -106,7 +106,7 @@ configuration_options = {
         default = 3,
     },
     {
-        name = "Dynamic Boss Resistance",
+        name = "bossresistance", label = "Dynamic Boss Resistance",
         hover = "Some bosses have increasing resistance against multiple players",
         options = {
             { description = "Dynamic", hover = "Bosses change their resistance based on hits taken.", data = "Dynamic" },
