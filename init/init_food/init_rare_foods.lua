@@ -121,6 +121,13 @@ if GetModConfigData("nowintergrowing") then
         end
     end)
 
+    --cherry tomatos
+    AddPrefabPostInit("cherrytomato_planted", function(inst)
+        if inst ~= nil and inst.components.pickable ~= nil then
+            GLOBAL.MakeNoGrowInWinter(inst)
+        end
+    end)
+
     -- Cactus
     AddPrefabPostInit("cactus", function(inst)
         if inst ~= nil and inst.components.pickable ~= nil then
@@ -223,8 +230,8 @@ end
 local function IsCrazyGuy(guy)
     local sanity = guy ~= nil and guy.replica.sanity or nil
     return sanity ~= nil and sanity:IsInsanityMode() and
-    sanity:GetPercentNetworked() <=
-    (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
+        sanity:GetPercentNetworked() <=
+        (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
 end
 --[[
 local function LootSetupFunction(lootdropper)
@@ -340,9 +347,9 @@ local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
 
 levels =
 {
-    { amount = HONEY_PER_STAGE[4], idle = "honey3", hit = "hit_honey3" },
-    { amount = HONEY_PER_STAGE[3], idle = "honey2", hit = "hit_honey2" },
-    { amount = HONEY_PER_STAGE[2], idle = "honey1", hit = "hit_honey1" },
+    { amount = HONEY_PER_STAGE[4], idle = "honey3",    hit = "hit_honey3" },
+    { amount = HONEY_PER_STAGE[3], idle = "honey2",    hit = "hit_honey2" },
+    { amount = HONEY_PER_STAGE[2], idle = "honey1",    hit = "hit_honey1" },
     { amount = HONEY_PER_STAGE[1], idle = "bees_loop", hit = "hit_idle" },
 }
 
@@ -416,17 +423,17 @@ local xc = GLOBAL.TUNING.DSTU.TREE_GROWTH_TIME_INCREASE
 GLOBAL.TUNING.EVERGREEN_GROW_TIME =
 {
     { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 5 * day_time * xc, random = 2 * day_time }, --normal
-    { base = 5 * day_time * xc, random = 2 * day_time }, --tall
-    { base = 1 * day_time * xc, random = 0.5 * day_time } --old
+    { base = 5 * day_time * xc,   random = 2 * day_time },   --normal
+    { base = 5 * day_time * xc,   random = 2 * day_time },   --tall
+    { base = 1 * day_time * xc,   random = 0.5 * day_time }  --old
 }
 
 GLOBAL.TUNING.TWIGGY_TREE_GROW_TIME =
 {
     { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 3 * day_time * xc, random = 1 * day_time }, --normal
-    { base = 3 * day_time * xc, random = 1 * day_time }, --tall
-    { base = 5 * day_time * xc, random = 0.5 * day_time } --old
+    { base = 3 * day_time * xc,   random = 1 * day_time },   --normal
+    { base = 3 * day_time * xc,   random = 1 * day_time },   --tall
+    { base = 5 * day_time * xc,   random = 0.5 * day_time }  --old
 }
 
 GLOBAL.TUNING.PINECONE_GROWTIME = { base = 0.75 * day_time * xc, random = 0.25 * day_time }
@@ -434,7 +441,7 @@ GLOBAL.TUNING.PINECONE_GROWTIME = { base = 0.75 * day_time * xc, random = 0.25 *
 GLOBAL.TUNING.DECIDUOUS_GROW_TIME =
 {
     { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 5 * day_time * xc, random = 2 * day_time }, --normal
-    { base = 5 * day_time * xc, random = 2 * day_time }, --tall
-    { base = 1 * day_time * xc, random = 0.5 * day_time } --old
+    { base = 5 * day_time * xc,   random = 2 * day_time },   --normal
+    { base = 5 * day_time * xc,   random = 2 * day_time },   --tall
+    { base = 1 * day_time * xc,   random = 0.5 * day_time }  --old
 }
