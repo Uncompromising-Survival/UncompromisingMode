@@ -101,12 +101,13 @@ end
 
 local function TornadoTask(inst)
 	if inst.startmoving then
+		local x, y, z = inst.Transform:GetWorldPosition()
+
 		if not TheWorld.state.israining then
 			TheWorld:PushEvent("ms_forceprecipitation", true)
 			--TheWorld:PushEvent("ms_deltamoistureceil", 15)
 		end
 
-		local x, y, z = inst.Transform:GetWorldPosition()
 
 		local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
@@ -220,7 +221,7 @@ local function TornadoTask(inst)
 					else
 						v.components.pickable:Pick(TheWorld)
 					end
-				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() then
+				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") then
 					inst.components.inventory:GiveItem(v)
 					local stacksize = v.components.stackable ~= nil and v.components.stackable:StackSize() or
 						1
