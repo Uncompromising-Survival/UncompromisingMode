@@ -101,23 +101,37 @@ end
 
 local function TornadoTask(inst)
 	if inst.startmoving then
-		--if not TheWorld.state.israining then
-		--TheWorld:PushEvent("ms_forceprecipitation", true)
-		TheWorld:PushEvent("ms_deltamoistureceil", 15)
-		--end
+		if not TheWorld.state.israining then
+			TheWorld:PushEvent("ms_forceprecipitation", true)
+			--TheWorld:PushEvent("ms_deltamoistureceil", 15)
+		end
 
 		local x, y, z = inst.Transform:GetWorldPosition()
 
 		local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
-		if math.random() > 0.96 then
-			SpawnPrefab("hound_lightning").Transform:SetPosition(x + math.random(-100, 100), 0,
+		if math.random() > 0.6 then
+			SpawnPrefab("hound_lightning").Transform:SetPosition(x + math.random(-300, 300), 0,
 				z + math.random(-300, 300))
 		end
 
-		local ents = TheSim:FindEntities(x, y, z, 100, { "player" }, { "playerghost" })
+		if math.random() <= 0.75 then
+			if #inst.components.inventory.itemslots ~= 0 then
+				local random_item = inst.components.inventory:RemoveItem(inst.components.inventory
+					.itemslots[math.random(#inst.components.inventory
+						.itemslots)])
+				if random_item ~= nil then
+					random_item:AddTag("tornado_nosucky")
+					random_item:DoTaskInTime(8, function(inst) inst:RemoveTag("tornado_nosucky") end)
+					Launch2(random_item, inst, 24, 1, math.random(4, 8), 2, math.random(8, 32), math.random(360))
+				end
+			end
+		end
 
-		for i, v in ipairs(ents) do
+		local players = TheSim:FindEntities(x, y, z, 200, nil, { "playerghost" },
+			{ "player", "_inventoryitem" })
+
+		for i, v in ipairs(players) do
 			local px, py, pz = v.Transform:GetWorldPosition()
 
 			if v:HasTag("player") then
@@ -133,13 +147,14 @@ local function TornadoTask(inst)
 
 					v.um_tornado_weathertask = nil
 				end)
+
+				if math.random() > 0.99 then
+					SpawnPrefab("hound_lightning").Transform:SetPosition(px + math.random(-5, 5), 0,
+						pz + math.random(-5, 5))
+				end
 			end
 
-			if math.random() > 0.99 then
-				SpawnPrefab("hound_lightning").Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-			end
-
-			if v ~= nil and v:IsValid() and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 then
+			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") then
 				local rad = math.rad(v:GetAngleToPoint(x, y, z))
 				local velx = math.cos(rad)
 				local velz = -math.sin(rad)
@@ -151,7 +166,7 @@ local function TornadoTask(inst)
 				if multiplierplayer < .4 then
 					multiplierplayer = .4
 
-					if v.components.health ~= nil and not v.components.health:IsDead() and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() then
+					if v.components.health ~= nil and not v.components.health:IsDead() and v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() and v:HasTag("player") then
 						local locpos = getrandomposition(v)
 						v.sg:GoToState("um_tornado_teleport")
 						v.sg.statemem.teleport_task = v:DoTaskInTime(3, function() teleport_continue(v, locpos, inst) end)
@@ -169,6 +184,76 @@ local function TornadoTask(inst)
 			end
 		end
 
+		local tornado_workables = TheSim:FindEntities(x, y, z, 6, nil, nil, { "DIG_workable", "CHOP_workable" })
+
+		for k, v in ipairs(tornado_workables) do
+			if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --simulate "working" while not actually doing that when "unloaded"
+				if v.components.lootdropper ~= nil then
+					local loots = v.components.lootdropper:GenerateLoot()
+					for k, v in pairs(loots) do
+						if v.components ~= nil and v.components.inventoryitem ~= nil then
+							inst.components.inventory:GiveItem(v)
+						end
+					end
+
+					v:Remove()
+				end
+			else
+				if v.components.workable ~= nil and v.components.pickable == nil then
+					if v.components.workable.action == ACTIONS.DIG then
+						local fx = SpawnPrefab("shovel_dirt")
+						local x1, y1, z1 = v.Transform:GetWorldPosition()
+						fx.Transform:SetPosition(x1, y1, z1)
+					end
+					v.components.workable:Destroy(inst)
+				end
+			end
+		end
+
+		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil then --don't bother with items/pickables off-screen
+			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "burning", "tornado_nosucky" },
+				{ "pickable", "_inventoryitem" })
+			for k, v in ipairs(tornado_pickables) do
+				if v.components.pickable ~= nil then --you never know...
+					if v:GetDistanceSqToInst(inst) < 16 then
+						v.components.pickable:Pick(inst)
+					else
+						v.components.pickable:Pick(TheWorld)
+					end
+				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() then
+					inst.components.inventory:GiveItem(v)
+					local stacksize = v.components.stackable ~= nil and v.components.stackable:StackSize() or
+						1
+
+					if v.components.health ~= nil then
+						-- NOTES(JBK): Push the events before spawning any giving any loot.
+						v:PushEvent("murdered", { victim = v, stackmult = stacksize })
+						v:PushEvent("killed", { victim = v, stackmult = stacksize })
+
+						if v.components.lootdropper ~= nil then
+							v.causeofdeath = inst
+							for i = 1, stacksize do
+								local loots = v.components.lootdropper:GenerateLoot()
+								for k, _loot in pairs(loots) do
+									local loot = SpawnPrefab(_loot)
+									if loot ~= nil then
+										inst.components.inventory:GiveItem(loot)
+									end
+								end
+							end
+						end
+
+
+						if v ~= nil and v.components.inventory and v:HasTag("drop_inventory_onmurder") then
+							v.components.inventory:TransferInventory(inst)
+						end
+
+						v:Remove()
+					end
+				end
+			end
+		end
+
 		if destination ~= nil then
 			local x_dest, y_dest, z_dest = destination.Transform:GetWorldPosition()
 			local dest_rad = math.rad(inst:GetAngleToPoint(x_dest, y_dest, z_dest))
@@ -181,7 +266,7 @@ local function TornadoTask(inst)
 				inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
 			end
 
-			if inst.persists and (destination:IsValid() and inst:GetDistanceSqToInst(destination) < 50 or not (TheWorld.Map:IsPassableAtPoint(x, 0, z) or TheWorld.Map:IsOceanAtPoint(x, 0, z))) then
+			if inst.persists and destination:IsValid() and inst:GetDistanceSqToInst(destination) < 50 --[[or not (TheWorld.Map:IsPassableAtPoint(x, 0, z) or TheWorld.Map:IsOceanAtPoint(x, 0, z)))]] then
 				inst.AnimState:PlayAnimation("tornado_pst", false)
 
 				inst:ListenForEvent("animover", function()
@@ -233,6 +318,7 @@ local function fn()
 
 	inst:AddTag("NOCLICK")
 	inst:AddTag("FX")
+	inst:AddTag("scarytoprey")
 	--[[Non-networked entity]]
 	inst.entity:SetCanSleep(false)
 
@@ -266,6 +352,9 @@ local function fn()
 	inst:AddComponent("updatelooper")
 	inst.components.updatelooper:AddOnUpdateFn(TornadoTask)
 
+	inst:AddComponent("inventory")
+	inst.components.inventory.ignorescangoincontainer = true
+
 	inst:DoTaskInTime(0, Init)
 
 	return inst
@@ -274,23 +363,23 @@ end
 local function CaveTornadoTask(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
-	
+
 	if math.random() > 0.96 then
 		SpawnPrefab("cavein_debris").Transform:SetPosition(x, 0, z)
 	end
-    
+
 	if destination ~= nil then
 		local x_dest, y_dest, z_dest = destination.Transform:GetWorldPosition()
 		local dest_rad = math.rad(inst:GetAngleToPoint(x_dest, y_dest, z_dest))
 		local dest_velx = math.cos(dest_rad)
 		local dest_velz = -math.sin(dest_rad)
-			
+
 		local x_dest2, y_dest2, z_dest2 = x + ((FRAMES * 3) * dest_velx), 0, z + ((FRAMES * 3) * dest_velz)
-		
+
 		if x_dest2 ~= nil then
 			inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
 		end
-			
+
 		if destination:IsValid() and inst:GetDistanceSqToInst(destination) < 50 then
 			destination:Remove()
 			inst:Remove()
@@ -302,14 +391,14 @@ end
 
 local function CanSpawnWaterfall(inst, x, y, z)
 	local is_valid_tile = true
-	
+
 	if x ~= nil then
 		local ents = TheSim:FindEntities(x, y, z, 40, { "um_waterfall" })
 
 		if ents ~= nil and #ents > 0 then
 			is_valid_tile = false
 		end
-		
+
 		local offs =
 		{
 			{-2,-2}, {-1,-2}, {0,-2}, {1,-2}, {2,-2},
@@ -332,49 +421,49 @@ local function CanSpawnWaterfall(inst, x, y, z)
 				is_valid_tile = false
 			end
 		end
-	else 
+	else
 		is_valid_tile = false
 	end
-	
+
 	return is_valid_tile
 end
 
 local function TrySpawnWaterfall(inst, x, z)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	
+
 	x = x + math.random(-15, 15)
 	z = z + math.random(-15, 15)
-	
+
 	if CanSpawnWaterfall(inst, x, y, z) then
 		SpawnPrefab("um_waterfall_spawner").Transform:SetPosition(x, y, z)
 	end
 end
 
 local function cavefn()
-    local inst = CreateEntity()
+	local inst = CreateEntity()
 
-    inst:AddTag("NOCLICK")
-    inst:AddTag("FX")
-    --[[Non-networked entity]]
-    inst.entity:SetCanSleep(false)
-	
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
-	
-    inst.entity:SetPristine()
-	
-    if not TheWorld.ismastersim then
-        return inst
-    end
-	
+	inst:AddTag("NOCLICK")
+	inst:AddTag("FX")
+	--[[Non-networked entity]]
+	inst.entity:SetCanSleep(false)
+
+	inst.entity:AddTransform()
+	inst.entity:AddAnimState()
+	inst.entity:AddSoundEmitter()
+	inst.entity:AddNetwork()
+
+	inst.entity:SetPristine()
+
+	if not TheWorld.ismastersim then
+		return inst
+	end
+
 	inst:AddComponent("updatelooper")
 	inst.components.updatelooper:AddOnUpdateFn(CaveTornadoTask)
-	
+
 	inst:DoPeriodicTask(5, TrySpawnWaterfall)
-	
-    return inst
+
+	return inst
 end
 
 local function destfn()
@@ -399,5 +488,5 @@ local function destfn()
 end
 
 return Prefab("um_tornado", fn, assets, prefabs),
-		Prefab("um_cavetornado", cavefn, assets, prefabs),
-		Prefab("um_tornado_destination", destfn, assets, prefabs)
+	Prefab("um_cavetornado", cavefn, assets, prefabs),
+	Prefab("um_tornado_destination", destfn, assets, prefabs)

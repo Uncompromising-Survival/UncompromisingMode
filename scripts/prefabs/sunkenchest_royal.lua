@@ -92,10 +92,10 @@ local function MakeChest(name, bank, build, indestructible, master_postinit, pre
         inst.AnimState:HideSymbol("chain03")
         inst.AnimState:HideSymbol("lock")
 
-        if name == "sunkenchest_royal_rainbow" then--FEEL THE RAINBOW
+        if name == "sunkenchest_royal_rainbow" then --FEEL THE RAINBOW
             inst.hue = math.random()
             inst:DoPeriodicTask(0.125, function(inst)
-                inst.hue = inst.hue - 0.0125
+                inst.hue = inst.hue - 0.015
                 if inst.hue == 0 then
                     inst.hue = 1
                 end
