@@ -216,10 +216,10 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
     -- Warly
-	WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
-    WARLY_SAME_OLD_MULTIPLIERS = {.6, .5, .35, .2, .1},
-	-- WARLY_FOOD = GetModConfigData("warly_food"),
-	-- WARLY_BUTCHER = GetModConfigData("warly_butcher"),
+    WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
+    WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
+    -- WARLY_FOOD = GetModConfigData("warly_food"),
+    -- WARLY_BUTCHER = GetModConfigData("warly_butcher"),
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resis
     -- Maxwell
@@ -486,13 +486,16 @@ TUNING.MESSAGEBOTTLE_NOTE_CHANCE = 0.66
 -- nautopilot buff
 TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE = TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE * 2
 TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY *
-10                                                                               -- No matter the boatspeed, nautopilots should be able to keep up.
+    10 -- No matter the boatspeed, nautopilots should be able to keep up.
 TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED = TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED * 100
 
 -- lowered CK health
 -- TUNING.CRABKING_HEALTH = TUNING.CRABKING_HEALTH * 0.66
 -- TUNING.CRABKING_HEALTH_BONUS = TUNING.CRABKING_HEALTH_BONUS * 0.66
-TUNING.CRABKING_REGEN = 400
+if GetModConfigData("reworked_ck") then
+    TUNING.CRABKING_REGEN = 400
+    TUNING.CRABKING_BASE_CLAWS = TUNING.CRABKING_BASE_CLAWS * 0.5
+end
 -- TUNING.CRABKING_REGEN_BUFF = TUNING.CRABKING_REGEN * 0.33
 
 -- Wortox
