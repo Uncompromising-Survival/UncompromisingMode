@@ -117,25 +117,25 @@ AllRecipes["battlesong_fireresistance"].ingredients = {
 AllRecipes["walterhat"].ingredients = {
     Ingredient("silk", 4),
     Ingredient("pinecone", 1)
-} -- ????
+}
 
 if GetModConfigData("book_recipes") then
-    AllRecipes["book_rain"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("moon_tear", 1),
-        Ingredient("waterballoon", 4)
-    }
-    AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
+    -- AllRecipes["book_rain"].ingredients = {
+        -- Ingredient("papyrus", 2),
+        -- Ingredient("moon_tear", 1),
+        -- Ingredient("waterballoon", 4)
+    -- }
+    -- AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
 
     AllRecipes["book_fish"].ingredients = {
         Ingredient("papyrus", 2),
         Ingredient("oceanfishingbobber_oval", 2)
-    } -- ???????????????
+    }
     AllRecipes["book_light"].ingredients = {
         Ingredient("papyrus", 2),
         Ingredient("wormlight", 1)
     }
-    AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST) -- ??????????????????????????????????????????????
+    -- AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
 
     AllRecipes["bookstation"].ingredients = {
         Ingredient("livinglog", 4),
