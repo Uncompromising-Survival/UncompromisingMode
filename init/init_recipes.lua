@@ -121,9 +121,9 @@ AllRecipes["walterhat"].ingredients = {
 
 if GetModConfigData("book_recipes") then
     -- AllRecipes["book_rain"].ingredients = {
-        -- Ingredient("papyrus", 2),
-        -- Ingredient("moon_tear", 1),
-        -- Ingredient("waterballoon", 4)
+    -- Ingredient("papyrus", 2),
+    -- Ingredient("moon_tear", 1),
+    -- Ingredient("waterballoon", 4)
     -- }
     -- AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
 
@@ -625,11 +625,11 @@ AddRecipe2("mastupgrade_windturbine_item", { Ingredient("cutstone", 2), Ingredie
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 
 if GetModConfigData("ck_loot") then
-    AddRecipe2("crab_hat",
+    AddRecipe2("hat_crab",
         { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) },
         TECH.LOST, nil, { "CLOTHING" })
 
-    AddRecipe2("crab_hat_ice",
+    AddRecipe2("hat_crab_ice",
         { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil,
         { "ARMOUR" })
 
