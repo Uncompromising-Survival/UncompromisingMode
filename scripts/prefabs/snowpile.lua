@@ -54,38 +54,67 @@ local INVALID_TILES = table.invert({ GROUND.SCALE })
 local startregen
 
 
-local function FindSpreadSpot(inst, angle)
+local function FindSpreadSpot(inst)
+    print("START")
     local x, y, z = inst.Transform:GetWorldPosition()
-    if (not angle) or inst.count > 4 then
-        angle = math.random(0, 2 * PI)
-    end
+    local angle = math.random(0, 8 * RADIANS)
+
     x = x + 4 * math.cos(angle)
     z = z + 4 * math.sin(angle)
-    if TheSim:FindEntities(x, y, z, 2, { "snowpile" }) then --Don't want to be close to a single pile
+
+    inst.redo = false
+    print("first check")
+    local ents1
+    if #TheSim:FindEntities(x, y, z, 3, { "snowpile" }) > 2 then --Don't want to be close to a single pile
+        print("first check passed")
         inst.redo = true
     end
-    if #TheSim:FindEntities(x, y, z, 3, { "snowpile" }) > 3 then -- Don't want to clog the piles all in one location either
+    print("second check")
+    if #TheSim:FindEntities(x, y, z, 4, { "snowpile" }) > 3 then -- Don't want to clog the piles all in one location either
+        print("second check passed")
         inst.redo = true
     end
-    if inst.count > 7 or not inst.redo then -- If we've been going at it forever... then maybe just return this anyhow
-        return x, y, z, angle
+
+    print("third check")
+    if #TheSim:FindEntities(x, y, z, 64, { "snowpile" }) > 64 then --limit all snowpiles in a big radius
+        print("third check passed")
+        inst.redo = true
+        inst.count = 9
+    end
+
+    if inst.count > 8 then --give up if you try too much.
+        print("giving up")
+        return nil
+    elseif not inst.redo then
+        print("sending")
+        return x, y, z
     else
+        print("retrying")
         inst.redo = nil
         inst.count = inst.count + 1
-        return FindSpreadSpot(inst, angle)
+        return FindSpreadSpot(inst)
     end
 end
 
 local function SpreadSno(inst)
-    inst.count = 0
-    inst.redo = nil
-    local x, y, z, angle = FindSpreadSpot(inst, inst.angle and inst.angle + math.random(-1, 1) * 0.05 or nil)
-    inst.components.workable.workleft = 2
-    inst.components.pickable.cycles_left = 2
-    inst.AnimState:PlayAnimation(anims[inst.components.workable.workleft])
-    local sno = SpawnPrefab("snowpile")
-    sno.Transform:SetPosition(x, y, z)
-    sno.angle = angle
+    inst:DoTaskInTime(math.random() + math.random(), function()
+        inst.count = 0
+        inst.redo = nil
+        local x, y, z = FindSpreadSpot(inst)
+        if x ~= nil then
+            inst.components.workable.workleft = 2
+            inst.components.pickable.cycles_left = 2
+            inst.AnimState:PlayAnimation(anims[inst.components.workable.workleft])
+            local sno = SpawnPrefab("snowpile")
+            sno.Transform:SetPosition(x, y, z)
+            sno:DoTaskInTime(0, function(inst)
+                local x, y, z = inst.Transform:GetWorldPosition()
+                if #TheSim:FindEntities(x, y, z, 2, { "snowpile" }) > 1 then
+                    inst:Remove()
+                end
+            end)
+        end
+    end)
 end
 
 local function onregen(inst)
@@ -102,8 +131,8 @@ local function onregen(inst)
             inst.components.pickable.cycles_left = inst.components.pickable.cycles_left + 1
             startregen(inst)
         else
-            --SpreadSno(inst)
-            --startregen(inst)
+            SpreadSno(inst)
+            startregen(inst)
         end
     else
         if inst.components.workable.workleft > 1 then
@@ -283,22 +312,22 @@ local function DoAreaColdness(inst)
 end
 
 local function onpickedfn(inst, picker)
-	if picker ~= nil and picker:IsValid() then
-		if picker.components.moisture then
-			if picker.components.talker and picker == ThePlayer then
-				ThePlayer.components.talker:Say(GetString(ThePlayer.prefab, "ANNOUNCE_COLD"))
-			end
+    if picker ~= nil and picker:IsValid() then
+        if picker.components.moisture then
+            if picker.components.talker and picker == ThePlayer then
+                ThePlayer.components.talker:Say(GetString(ThePlayer.prefab, "ANNOUNCE_COLD"))
+            end
 
-			picker.components.moisture:DoDelta(15)
-		end
+            picker.components.moisture:DoDelta(15)
+        end
 
-		if picker.components.temperature ~= nil then
-			picker.components.temperature:DoDelta(-20)
-			if picker.components.temperature.current > -3 then
-				picker.components.temperature:SetTemperature(-3)
-			end
-		end
-	end
+        if picker.components.temperature ~= nil then
+            picker.components.temperature:DoDelta(-20)
+            if picker.components.temperature.current > -3 then
+                picker.components.temperature:SetTemperature(-3)
+            end
+        end
+    end
 
     if TheWorld.state.iswinter then
         TryColdMenace(inst)
