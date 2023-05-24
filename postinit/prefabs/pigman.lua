@@ -41,7 +41,7 @@ local function OnAttacked(inst, data)
     local attacker = data.attacker
     inst:ClearBufferedAction()
 
-	if attacker ~= nil then
+	if attacker ~= nil and not inst:HasTag("werepig") then
 		if attacker:HasTag("player") then
 			inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude) return dude.prefab == inst.prefab end, MAX_TARGET_SHARES)
 		end
@@ -101,12 +101,12 @@ env.AddPrefabPostInit("pigman", function(inst)
 	local _OldOnSave = inst.OnSave
 	local _OldOnLoad = inst.OnLoad
 	
-	if inst.OnSave ~= nil then
-		inst._OldOnSave = inst.OnSave
+	if _OldOnSave ~= nil then
+		inst._OldOnSave = _OldOnSave
 	end
 	
-	if inst.OnLoad ~= nil then
-		inst._OldOnLoad = inst.OnLoad
+	if _OldOnLoad ~= nil then
+		inst._OldOnLoad = _OldOnLoad
 	end
 	
     inst:ListenForEvent("attacked", OnAttacked)

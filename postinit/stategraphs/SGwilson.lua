@@ -89,6 +89,14 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local function DoMockAttack(inst)
         local target = inst.components.combat ~= nil and inst.components.combat.target
+		local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		
+		if equip ~= nil and target ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
+			inst.components.combat:DoNaughtAttack(target)
+			
+			equip.components.weapon:OnAttack_NoDurabilityLoss(inst, target)
+		end
+		--[[
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         local dist = target ~= nil and
             distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) or false
@@ -119,7 +127,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     target.components.combat:GetAttacked(inst, damagecalc, equip)
                 end
             end
-        end
+        end]]
     end
 
 

@@ -45,7 +45,11 @@ local function Zap(inst)
 					end
 				else
 					if not v:HasTag("automaton") then
-						v.components.combat:GetAttacked(inst, 10)
+						v.components.health:DoDelta(-10, nil, inst.prefab, nil, inst)
+							
+						if not v.sg:HasStateTag("nointerrupt") then
+							v.sg:GoToState("hit")
+						end
 					else
 						if v.components.playerlightningtarget ~= nil then
 							v.components.playerlightningtarget:DoStrike()
@@ -53,7 +57,15 @@ local function Zap(inst)
 					end
 				end
 			elseif v.components.combat ~= nil then
-				v.components.combat:GetAttacked(inst, 25)
+				if not v:HasTag("electricdamageimmune") then
+					v.components.health:DoDelta(-10, nil, inst.prefab, nil, inst)
+				else 
+					v.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
+				end
+				
+				if not v.sg:HasStateTag("nointerrupt") then
+					v.sg:GoToState("hit")
+				end
 			end
 		end
 	end

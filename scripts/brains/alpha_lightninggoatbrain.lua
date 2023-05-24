@@ -11,7 +11,8 @@ local WANDER_DIST_DAY = 20
 local WANDER_DIST_NIGHT = 5
 local MAX_CHASE_TIME = 6
 
-local START_FACE_DIST = 12
+local START_CHASE_DIST = 14
+local START_FACE_DIST = 8
 local KEEP_FACE_DIST = 14
 
 local MIN_FOLLOW_DIST = 5
@@ -22,6 +23,19 @@ local STOP_RUN_AWAY_DIST = 7
 
 local function GetFaceTargetFn(inst)
 	local target = FindClosestPlayerToInst(inst, START_FACE_DIST, true)
+	local herd = inst.components.knownlocations:GetLocation("herd")
+	
+	if target ~= nil and not target:HasTag("notarget") then
+		inst.getting_angry = true
+	else
+		inst.getting_angry = false
+	end
+		
+	return herd ~= nil and inst:GetDistanceSqToPoint(herd:Get()) < 300 and target ~= nil and not target:HasTag("notarget") and target or nil
+end
+
+local function GetChaseTargetFn(inst)
+	local target = FindClosestPlayerToInst(inst, START_CHASE_DIST, true)
 	local herd = inst.components.knownlocations:GetLocation("herd")
 	
 	if target ~= nil and not target:HasTag("notarget") then
@@ -66,8 +80,9 @@ function Alpha_LightningGoatBrain:OnStart()
 			AttackWall(self.inst)
 		),		
         ChaseAndAttack(self.inst, MAX_CHASE_TIME),
-        Follow(self.inst, function() return GetFaceTargetFn(self.inst) end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
-        FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
+		FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
+        Follow(self.inst, function() return GetChaseTargetFn(self.inst) end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
+        --FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
         BrainCommon.AnchorToSaltlick(self.inst),
         Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("herd") end, GetWanderDistFn)
     },.25)
