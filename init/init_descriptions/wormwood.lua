@@ -10,7 +10,7 @@ ANNOUNCE.ANNOUNCE_WINONAGEN = "How do make go?"
 ANNOUNCE.ANNOUNCE_RATRAID = "Squeak!"
 ANNOUNCE.ANNOUNCE_RATRAID_SPAWN = "Stealer squeak squeaks!"
 ANNOUNCE.ANNOUNCE_RATRAID_OVER = "Squeaky go home?"
-ANNOUNCE.ANNOUNCE_ACIDRAIN = {"Water hurt?!", "Water burn!", "Why water bad?!"}
+ANNOUNCE.ANNOUNCE_ACIDRAIN = { "Water hurt?!", "Water burn!", "Why water bad?!" }
 ANNOUNCE.ANNOUNCE_TOADSTOOLED = "Friends? Sick friends! No! Bad!"
 -- FoodBuffs
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LESSERELECTRICATTACK =
@@ -89,7 +89,7 @@ ANNOUNCE.ANNOUNCE_FIREFALL = {
 }
 ANNOUNCE.ANNOUNCE_ROOTING = "Bad hug!"
 ANNOUNCE.ANNOUNCE_SNOWSTORM = "Brrr.... Snow coming"
-ANNOUNCE.SHADOWTALKER = {"ALONE", "NOT LIKE THEM", "SAD"}
+ANNOUNCE.SHADOWTALKER = { "ALONE", "NOT LIKE THEM", "SAD" }
 ANNOUNCE.ANNOUNCE_OVER_EAT = {
     STUFFED = "Too much belly stuff",
     OVERSTUFFED = "Too full!"
@@ -222,7 +222,7 @@ DESCRIBE.ANTIHISTAMINE = "Sniff food"
 ANNOUNCE.CURSED_ITEM_EQUIP = "No good!"
 DESCRIBE.VETSITEM = "Wants curses."
 DESCRIBE.SCREECHER_TRINKET = "Scary, not friend"
-ACTIONFAIL.GIVE = {NOTNIGHT = "Needs moon"}
+ACTIONFAIL.GIVE = { NOTNIGHT = "Needs moon" }
 
 DESCRIBE.MAGMAHOUND = "Bad! Bad!"
 DESCRIBE.LIGHTNINGHOUND = "Zzzt woofer!"
@@ -287,7 +287,7 @@ DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM .. "\nReshaped self."
 DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM .. "\nReshaped self."
 DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM .. "\nReshaped self."
 DESCRIBE.OPALPRECIOUSGEM_CRACKED = DESCRIBE.OPALPRECIOUSGEM ..
-                                       "\nReshaped self."
+    "\nReshaped self."
 
 DESCRIBE.RED_MUSHED_ROOM = "Mushed friend..."
 DESCRIBE.GREEN_MUSHED_ROOM = "Mushed friend..."
@@ -308,7 +308,8 @@ DESCRIBE.ARMORLAVAE = DESCRIBE.LAVAE
 DESCRIBE.THEATERCORN = "Can watch friends now"
 DESCRIBE.DEERCLOPS_BARRIER = "Break weak ones"
 
-DESCRIBE.MOONMAW_DRAGONFLY = "Mooniest fly" -- Reference to WormiestWood, who suggested this first. We love our community :)
+DESCRIBE.MOONMAW_DRAGONFLY =
+"Mooniest fly"                              -- Reference to WormiestWood, who suggested this first. We love our community :)
 DESCRIBE.MOONMAW_LAVAE = "Familiar"
 DESCRIBE.SNAPPERTURTLE = "Hello"
 DESCRIBE.SNAPPERTURTLEBABY = "Small"
@@ -332,9 +333,9 @@ DESCRIBE.DORMANT_RAIN_HORN = "Nice shell"
 DESCRIBE.RAIN_HORN = "Wet shell"
 DESCRIBE.DRIFTWOODFISHINGROD = "Glub Glubs like Friend Stick"
 
-ANNOUNCE.ANNOUNCE_RATSNIFFER_ITEMS = {LEVEL_1 = "Too much stuff on ground!"}
-ANNOUNCE.ANNOUNCE_RATSNIFFER_FOOD = {LEVEL_1 = "Food too smelly!"}
-ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {LEVEL_1 = "Stuff stealers out there"}
+ANNOUNCE.ANNOUNCE_RATSNIFFER_ITEMS = { LEVEL_1 = "Too much stuff on ground!" }
+ANNOUNCE.ANNOUNCE_RATSNIFFER_FOOD = { LEVEL_1 = "Food too smelly!" }
+ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = { LEVEL_1 = "Stuff stealers out there" }
 
 DESCRIBE.PIED_RAT = "Really big Squeaker"
 DESCRIBE.PIED_PIPER_FLUTE = "Toot toot toot!"
@@ -342,7 +343,7 @@ DESCRIBE.UNCOMPROMISING_PACKRAT = "Squeaker carries more"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "Oh, floaty sinking!"
 
-ACTIONFAIL.CHARGE_FROM = {NOT_ENOUGH_CHARGE = "Nope", CHARGE_FULL = "Nope"}
+ACTIONFAIL.CHARGE_FROM = { NOT_ENOUGH_CHARGE = "Nope", CHARGE_FULL = "Nope" }
 ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_INSULATED = "Bzzzt stick better"
 ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED = "Zappy!"
 
@@ -478,3 +479,4 @@ DESCRIBE.WIXIEGUN = "Super Pew-Pew!"
 
 DESCRIBE.MARA_BOSS1 = "Not go right! Run!!"
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
+ANNOUNCE.GAS_DAMAGE = "kack! kack!"

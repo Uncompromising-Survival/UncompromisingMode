@@ -367,10 +367,10 @@ return {
 
 	"um_tornado",
 	"um_whirlpool",
-	
+
 	"um_waterfall",
 	"um_waterfall_terraformer",
-	
+
 	"krampus_middleman_inventory",
 	"alpha_lightninggoat",
 
@@ -422,11 +422,12 @@ return {
 	"moon_beacon",
 	"goat_lightning",
 
---	"um_bombmixer1",
---	"um_bombmixer_bombs2",
---	"um_bombmixer",
-	
+	--	"um_bombmixer1",
+	--	"um_bombmixer_bombs2",
+	--	"um_bombmixer",
+
 	"mara_boss1",
 	"mara_boss1_bullets",
 	"um_sacred_chest",
+	"smog",
 }
