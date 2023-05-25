@@ -165,7 +165,9 @@ local function OnDead(inst)
 end
 
 local function OnRemove(inst)
-    TheWorld:PushEvent("mothergooseremoved", inst)
+	if inst.iamflyingaway == nil then
+		TheWorld:PushEvent("mothergooseremoved", inst)
+	end
 end
 
 local function fn()

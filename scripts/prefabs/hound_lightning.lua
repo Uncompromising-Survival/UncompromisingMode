@@ -40,14 +40,14 @@ local function Zap(inst)
 				if not v:HasTag("electricdamageimmune") then
 					v.components.health:DoDelta(-25, nil, inst.prefab, nil, inst)
 					
-					if not v.sg:HasStateTag("nointerrupt") then
+					if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") then
 						v.sg:GoToState("electrocute")
 					end
 				else
 					if not v:HasTag("automaton") then
 						v.components.health:DoDelta(-10, nil, inst.prefab, nil, inst)
 							
-						if not v.sg:HasStateTag("nointerrupt") then
+						if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") then
 							v.sg:GoToState("hit")
 						end
 					else
@@ -63,7 +63,7 @@ local function Zap(inst)
 					v.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
 				end
 				
-				if not v.sg:HasStateTag("nointerrupt") then
+				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") then
 					v.sg:GoToState("hit")
 				end
 			end

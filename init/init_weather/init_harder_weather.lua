@@ -103,7 +103,8 @@ env.AddPrefabPostInit("forest", function(inst)
 	--inst:DoTaskInTime(TUNING.TOTAL_DAY_TIME/2, GenerateInactiveBiomes)
 
 	if TUNING.DSTU.SNOWSTORMS then
-		inst:AddComponent("snowstorminitiator")
+		--inst:AddComponent("snowstorminitiator")
+		inst:AddComponent("um_snow_stormspawner")
 	end
 	
 	inst:AddComponent("um_stormspawner")

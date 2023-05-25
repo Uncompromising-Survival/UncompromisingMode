@@ -315,6 +315,8 @@ local states =
 		tags = {"flight", "busy"},
 
 		onenter = function(inst)
+			inst.iamflyingaway = true
+		
 			inst.Physics:Stop()
 			inst.DynamicShadow:Enable(false)
 			inst.AnimState:PlayAnimation("takeoff_pre_vertical")
