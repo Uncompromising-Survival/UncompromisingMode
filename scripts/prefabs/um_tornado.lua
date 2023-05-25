@@ -278,6 +278,11 @@ local function TornadoTask(inst)
 				elseif v.components.oceanfishable ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") then
 					local fishdef = v.fish_def ~= nil and v.fish_def.prefab ~= nil and v.fish_def.prefab or nil
 					local fish = fishdef ~= nil and SpawnPrefab(fishdef .. "_inv") or nil
+
+					if fish == nil then
+						fish = fishdef ~= nil and SpawnPrefab(fishdef .. "_land") or nil
+					end
+
 					if fish ~= nil then
 						inst.components.inventory:GiveItem(fish)
 						v:Remove()
@@ -388,7 +393,7 @@ local function fn()
 
 	inst:AddComponent("inventory")
 	inst.components.inventory.ignorescangoincontainer = true
-
+	inst.components.inventory.maxslots = 100
 	inst:DoTaskInTime(0, Init)
 
 	return inst
