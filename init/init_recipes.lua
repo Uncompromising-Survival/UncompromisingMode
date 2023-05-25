@@ -131,12 +131,12 @@ if GetModConfigData("book_recipes") then
         Ingredient("papyrus", 2),
         Ingredient("oceanfishingbobber_oval", 2)
     }
-    AllRecipes["book_light"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("wormlight", 1)
+    AllRecipes["book_light_upgraded"].ingredients = {
+		Ingredient("book_light", 1),
+        Ingredient("wormlight", 1),
+		Ingredient("papyrus", 2)
     }
     -- AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
-
     AllRecipes["bookstation"].ingredients = {
         Ingredient("livinglog", 4),
         Ingredient("papyrus", 4),
@@ -157,6 +157,11 @@ if GetModConfigData("book_recipes") then
         Ingredient("plantmeat", 1),
         Ingredient("poop", 5)
     }
+	AllRecipes["book_horticulture_upgraded"].ingredients = {
+		Ingredient("book_horticulture", 1),
+        Ingredient("treegrowthsolution", 1),
+		Ingredient("papyrus", 2)
+	}
 end
 
 -- magnets and dock
