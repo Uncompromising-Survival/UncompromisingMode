@@ -4,7 +4,7 @@ folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then name = "[LOCAL] - " .. name end
 
 description = [[
-󰀔 [ Version 1.1: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.1: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -14,11 +14,11 @@ Latest update features:
 - Krampii will more effectively steal things and do their job.
 - A ton of misc. changes, ranging from Wickerbottom's books to hounds.
 
-󰀏 NEXT UPDATE: Under the Weather, part 1 ]]
+󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain" ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1"
+version = "Under the Weather Pt.1 v1.1.1"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
