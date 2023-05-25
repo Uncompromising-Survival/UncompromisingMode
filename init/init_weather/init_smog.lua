@@ -8,12 +8,14 @@ env.AddPrefabPostInitAny(function(inst)
 
         inst.components.burnable.onignite = function(inst, source, doer, ...)
             if TheWorld.state.issummer then
-                inst.smog_task = inst:DoTaskInTime(math.random(10, 30), function()
+                inst.smog_task = inst:DoTaskInTime(math.random(10, 30) / 10, function()
                     for i = 1, math.random(3) do
                         local smog = SpawnPrefab("smog")
                         local x, y, z = inst.Transform:GetWorldPosition()
 
-                        smog.Transform:SetPosition(x + math.random(-16, 16), 0, z + math.random(-16, 16))
+                        smog.Transform:SetPosition(x + math.random(-160, 160) / 10, math.random(0, 4),
+                            z + math.random(-160, 160) / 10)
+                        --smog.Transform:SetRotation(TheWorld.components.worldwind:GetWindAngle())
                     end
                 end)
             end
