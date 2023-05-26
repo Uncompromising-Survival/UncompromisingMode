@@ -4,7 +4,7 @@ folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then name = "[LOCAL] - " .. name end
 
 description = [[
-󰀔 [ Version 1.1.2: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.3: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -18,7 +18,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.2"
+version = "Under the Weather Pt.1 v1.1.3"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -288,12 +288,12 @@ configuration_options = {
     BinaryConfig("on tentacles", "Wickerbottom: On Tentacles",
         "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
     -- BinaryConfig("applied horticulture", "Wickerbottom: Horticulture, Abr.",
-        -- "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.",
-        -- true),
-	BinaryConfig("horticulture, expanded", "Wickerbottom: Horticulture, Exp.",
-		"\"Horticulture, Expanded\" now grows 20 plants, instead of 15.", true),
-	BinaryConfig("lux aeterna", "Wickerbottom: Lux and Redux",
-		"\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer.", true),	
+    -- "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.",
+    -- true),
+    BinaryConfig("horticulture, expanded", "Wickerbottom: Horticulture, Exp.",
+        "\"Horticulture, Expanded\" now grows 20 plants, instead of 15.", true),
+    BinaryConfig("lux aeterna", "Wickerbottom: Lux and Redux",
+        "\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer.", true),
     BinaryConfig("lunar grimoire", "Wickerbottom: Lunar Grimoire", "\"Lunar Grimoire\" now mutates things around you.",
         true),
     BinaryConfig("apicultural notes", "Wickerbottom: Apicultural Notes",
