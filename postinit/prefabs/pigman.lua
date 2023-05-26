@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-
+--[[
 local function OnNewTarget_Remember(inst, data)
 	if data ~= nil and data.target ~= nil and data.target:HasTag("player") then
 		if table.contains(inst.remembered_threats, data.target) then
@@ -115,7 +115,7 @@ env.AddPrefabPostInit("pigman", function(inst)
 	
     inst.OnLoad = OnLoad
 
-end)
+end)]]
 
 env.AddPrefabPostInit("pigguard", function(inst)
 	if not TheWorld.ismastersim then
