@@ -41,7 +41,8 @@ local component_post = {
     "piratespawner",
     "repairable",
     "sewing",
-    "container"
+    "container",
+    "weather"
 }
 
 local prefab_post = {

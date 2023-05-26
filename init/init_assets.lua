@@ -279,7 +279,8 @@ local inventoryitems =
 	"winona_catapult_item",
 
 	--crab king items
-	"hat_crab"
+	"hat_crab",
+	"staff_starfall",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -995,6 +996,7 @@ Assets = {
 
 	--INVENTORY ITEMS [ANIMS & INV_IMAGE]
 	Asset("ANIM", "anim/hat_crab.zip"),
+	Asset("ANIM", "anim/staff_starfall.zip"),
 	Asset("ANIM", "anim/cannonball_sludge.zip"),
 	Asset("ANIM", "anim/boat_repair_cork_build.zip"),
 
@@ -1221,6 +1223,9 @@ Assets = {
 
 	Asset("ATLAS", "images/inventoryimages/hat_crab.xml"),
 	Asset("IMAGE", "images/inventoryimages/hat_crab.tex"),
+
+	Asset("ATLAS", "images/inventoryimages/staff_starfall.xml"),
+	Asset("IMAGE", "images/inventoryimages/staff_starfall.tex"),
 
 	Asset("IMAGE", "images/inventoryimages/grassgekko.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/grassgekko.xml"),
@@ -1860,7 +1865,7 @@ Assets = {
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
 	Asset("ANIM", "anim/torso_amulets_klaus.zip"), --Not quite sure...
 	Asset("ANIM", "anim/swap_hat_crab.zip"),
-
+	Asset("ANIM", "anim/swap_staff_starfall.zip"),
 	Asset("ANIM", "anim/torso_amulets_ancient.zip"),
 	Asset("ANIM", "anim/torso_ancient_amulet_red_demoneye.zip"),
 

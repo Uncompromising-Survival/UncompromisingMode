@@ -55,7 +55,6 @@ local startregen
 
 
 local function FindSpreadSpot(inst)
-    print("START")
     local x, y, z = inst.Transform:GetWorldPosition()
     local angle = math.random(0, 8 * RADIANS)
 
@@ -63,33 +62,39 @@ local function FindSpreadSpot(inst)
     z = z + 4 * math.sin(angle)
 
     inst.redo = false
-    print("first check")
-    local ents1
-    if #TheSim:FindEntities(x, y, z, 3, { "snowpile" }) > 2 then --Don't want to be close to a single pile
-        print("first check passed")
-        inst.redo = true
+
+    for i = -2, 2 do
+        for k = -2, 2 do
+            if TheWorld.Map:GetTileAtPoint(x + i, y, z + k) == GROUND.SCALE or not TheWorld.Map:IsPassableAtPoint(x + i, y, z + k) then
+                inst.redo = true
+                break
+            end
+        end
     end
-    print("second check")
-    if #TheSim:FindEntities(x, y, z, 4, { "snowpile" }) > 3 then -- Don't want to clog the piles all in one location either
-        print("second check passed")
+
+    if #TheSim:FindEntities(x, y, z, 4, { "snowpile" }) > 2 then --Don't want to be close to a single pile
         inst.redo = true
     end
 
-    print("third check")
+    if #TheSim:FindEntities(x, y, z, 6, { "snowpile" }) > 3 then -- Don't want to clog the piles all in one location either
+        inst.redo = true
+    end
+
+    if #TheSim:FindEntities(x, y, z, 6, { "snowpileblocker" }) > 1 then -- Snowpile blockers
+        inst.redo = true
+    end
+
+
     if #TheSim:FindEntities(x, y, z, 64, { "snowpile" }) > 64 then --limit all snowpiles in a big radius
-        print("third check passed")
         inst.redo = true
         inst.count = 9
     end
 
     if inst.count > 8 then --give up if you try too much.
-        print("giving up")
         return nil
     elseif not inst.redo then
-        print("sending")
         return x, y, z
     else
-        print("retrying")
         inst.redo = nil
         inst.count = inst.count + 1
         return FindSpreadSpot(inst)

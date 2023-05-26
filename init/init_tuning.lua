@@ -237,8 +237,8 @@ TUNING.DSTU = {
     -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
     WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
     WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
-	WICKERBUFF_HORTICULTURE = GetModConfigData("lux aeterna"),
-	WICKERBUFF_LIGHT = GetModConfigData("horticulture, expanded"),
+    WICKERBUFF_HORTICULTURE = GetModConfigData("lux aeterna"),
+    WICKERBUFF_LIGHT = GetModConfigData("horticulture, expanded"),
     -- Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
     -- Wortox
@@ -509,3 +509,6 @@ if GetModConfigData("wortox") == "APOLLO" then
     TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL = 5
     TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
 end
+
+TUNING.WILDFIRE_CHANCE = TUNING.WILDFIRE_CHANCE * 10 --testing, fuck it why not?!
+TUNING.WILDFIRE_RETRY_TIME = TUNING.WILDFIRE_RETRY_TIME * 0.5

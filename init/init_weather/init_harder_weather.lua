@@ -6,7 +6,7 @@
 local function DoSewing(self, target, doer)
     if self ~= nil and self.inst ~= nil then
         local _OldDoSewing = self.DoSewing
-        
+
         self.DoSewing = function(self, target, doer)
             if target ~= nil and not target:HasTag("heatrock") then --<< Check for thermal
                 _OldDoSewing(self, target, doer)
@@ -28,7 +28,7 @@ if TUNING.DSTU.WINTER_BURNING then
 				if act.invobject.components.fueled then
 					act.invobject.components.fueled:DoDelta(-5, act.doer) --Hornet: Made it take fuel away because.... The snow and cold takes some of the fire? probably will change
 				end
-				act.target.components.burnable:StartWildfire()
+				act.target.components.burnable:StartSmoldering()
 				return true
 			else
 				return _OldLightAction(act)
@@ -62,7 +62,7 @@ env.AddPrefabPostInit("cave", function(inst)
 	end
 	inst:AddComponent("randomnighteventscaves")
 	inst:AddComponent("ratacombs_junk_manager")
-	
+
 	inst:AddComponent("um_stormspawner")
 
 	inst:DoTaskInTime(0, function(inst)
@@ -106,7 +106,11 @@ env.AddPrefabPostInit("forest", function(inst)
 		--inst:AddComponent("snowstorminitiator")
 		inst:AddComponent("um_snow_stormspawner")
 	end
-	
+
+	--if TUNING.DSTU.HEATWAVES then --TODO: MAKE THIS A CONFIG
+	inst:AddComponent("um_heatwaves")
+	--end
+
 	inst:AddComponent("um_stormspawner")
 
 	inst:DoTaskInTime(0, function(inst)

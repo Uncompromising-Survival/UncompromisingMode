@@ -1,55 +1,28 @@
 local env = env
-local getupvalue = GLOBAL.debug.getupvalue
 GLOBAL.setfenv(1, GLOBAL)
-local easing = require("easing")
-local UpvalueHacker = require("tools/upvaluehacker") 
+local UpvalueHacker = require("tools/upvaluehacker")
 
-
-
-
-
-env.AddClassPostConstruct("components/wildfires", function(self)
---[[	--local OLD = UpvalueHacker.GetUpvalue(LightFireForPlayer)
-	local function _Old(player, rescheduleFn) --TODO: Grab the original value from wildfires to prevent any issues with using another mod that modifies wildfires.
-    _scheduledtasks[player] = nil
-
-    if math.random() <= _chance and
-        not (_world.components.sandstorms ~= nil and
-            _world.components.sandstorms:IsInSandstorm(player)) then
-        local x, y, z = player.Transform:GetWorldPosition()
-        local firestarters = TheSim:FindEntities(x, y, z, _radius, nil, _excludetags)
-        if #firestarters > 0 then
-            local highprio = {}
-            local lowprio = {}
-            for i, v in ipairs(firestarters) do
-                if v.components.burnable ~= nil then
-                    table.insert(v:HasTag("wildfirepriority") and highprio or lowprio, v)
-                end
-            end
-            firestarters = #highprio > 0 and highprio or lowprio
-            while #firestarters > 0 do
-                local i = math.random(#firestarters)
-                if CheckValidWildfireStarter(firestarters[i]) then
-                    firestarters[i].components.burnable:StartWildfire()
-                    break
-                else
-                    table.remove(firestarters, i)
-                end
-            end
+--why was this a postconstruct?? -A
+env.AddComponentPostInit("wildfires", function(self)
+    local _ms_startwildfireforplayerfn
+    for k, v in pairs(self.inst.event_listening["ms_lightwildfireforplayer"]) do
+        for _k, _v in pairs(self.inst.event_listening["ms_lightwildfireforplayer"][k]) do
+            print(_v)
+            _ms_startwildfireforplayerfn = _v
+            break
         end
+        break
     end
 
-    rescheduleFn(player)
-	end
-	
-	local function LightFireForPlayer(player, rescheduleFn)
-	if player.components.areaaware ~= nil then
-	if not player.components.areaaware:CurrentlyInTag("hoodedcanopy") then
-		--OLD(player, rescheduleFn)
-		else
-	    rescheduleFn(player)
-	end
-	end
-	UpvalueHacker.SetUpvalue(GLOBAL.Components.wildfires.class, LightFireForPlayer)
-end]]
+    local ShouldActivateWildfires = function()
+        return --[[_ShouldActivateWildfires() or]] TheWorld:HasTag("heatwavestart")
+    end
+
+    UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, ShouldActivateWildfires,
+        "ShouldActivateWildfires")
+    local _excludetags = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_excludetags")
+    local _radius      = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_radius")
+    table.insert(_excludetags, "structure")
+    UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, _radius + 75, "LightFireForPlayer", "_radius")
+    _radius = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_radius")
 end)

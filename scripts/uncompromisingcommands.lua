@@ -1,15 +1,15 @@
 --toggle snowstorm
 function c_snowstorm()
-    if TheWorld:HasTag("snowstormstart") == false and TheWorld.state.iswinter then
-        TheWorld:AddTag("snowstormstart")
+    if TheWorld:HasTag("heatwavestart") == false and TheWorld.state.iswinter then
+        TheWorld:AddTag("heatwavestart")
         if TheWorld.net ~= nil then
-            TheWorld.net:AddTag("snowstormstartnet")
+            TheWorld.net:AddTag("heatwavestartnet")
         end
         print("starting snowstorm...")
-    elseif TheWorld:HasTag("snowstormstart") then
-        TheWorld:RemoveTag("snowstormstart")
+    elseif TheWorld:HasTag("heatwavestart") then
+        TheWorld:RemoveTag("heatwavestart")
         if TheWorld.net ~= nil then
-            TheWorld.net:RemoveTag("snowstormstartnet")
+            TheWorld.net:RemoveTag("heatwavestartnet")
         end
         print("stopping snowstorm...")
     end
@@ -21,7 +21,7 @@ function c_vetcurse()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
             player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-            player:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+            player:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             print("added vetcurse")
         elseif player:HasTag("vetcurse") then
             player.components.debuffable:RemoveDebuff("buff_vetcurse")
@@ -43,7 +43,6 @@ function c_vetcurseitems()
     if KnownModIndex:IsModEnabled("workshop-1289779251") then
         c_give("um_beegun_cherry")
     end
-
 end
 
 --lists current rat score shenenigans.
@@ -51,15 +50,15 @@ function c_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
-    TheNet:SystemMessage("Itemscore = "..inst.itemscore)
-    TheNet:SystemMessage("Foodscore = "..inst.foodscore)
-    TheNet:SystemMessage("Burrowbonus = "..inst.burrowbonus)
-    TheNet:SystemMessage("Ratscore = "..inst.ratscore)
+    TheNet:SystemMessage("Itemscore = " .. inst.itemscore)
+    TheNet:SystemMessage("Foodscore = " .. inst.foodscore)
+    TheNet:SystemMessage("Burrowbonus = " .. inst.burrowbonus)
+    TheNet:SystemMessage("Ratscore = " .. inst.ratscore)
     if inst.ratscore > 240 then
         inst.ratscore = 240
     end
-    TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
-    TheNet:SystemMessage("Timer = "..TheWorld.components.ratcheck:GetRatTimer().."s")
+    TheNet:SystemMessage("True Ratscore = " .. inst.ratscore)
+    TheNet:SystemMessage("Timer = " .. TheWorld.components.ratcheck:GetRatTimer() .. "s")
     TheNet:SystemMessage("-------------------------")
 end
 
@@ -80,17 +79,17 @@ function c_spawnsunkenchest(royal)
 
     if royal ~= true and royal ~= false then
         local messagebottletreasures = require("messagebottletreasures")
-        print("spawning normal sunken chest at X:"..pos.x.." Z:"..pos.z)
+        print("spawning normal sunken chest at X:" .. pos.x .. " Z:" .. pos.z)
         local treasure = messagebottletreasures.GenerateTreasure(pos)
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     elseif royal then
         local messagebottletreasures_um = require("messagebottletreasures_um")
-        print("spawning royal sunken chest at X:"..pos.x.." Z:".. pos.z)
+        print("spawning royal sunken chest at X:" .. pos.x .. " Z:" .. pos.z)
         local treasure = messagebottletreasures_um.GenerateTreasure(pos, "sunkenchest_royal_random")
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     elseif not royal then
         local messagebottletreasures_um = require("messagebottletreasures_um")
-        print("spawning UM normal sunken chest at X:"..pos.x.." Z:"..pos.z)
+        print("spawning UM normal sunken chest at X:" .. pos.x .. " Z:" .. pos.z)
         local treasure = messagebottletreasures_um.GenerateTreasure(pos, "sunkenchest")
         treasure.Transform:SetPosition(pos.x, pos.y, pos.z)
     else
@@ -105,15 +104,15 @@ function c_settile(tile)
         tile = 4
     end
     local pos = ConsoleWorldPosition()
-    local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0,pos.z)
+    local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
 
     if tile ~= WORLD_TILES.MONKEY_DOCK then
-        TheWorld.Map:SetTile(tile_x,tile_z, tile)
+        TheWorld.Map:SetTile(tile_x, tile_z, tile)
     else
-        TheWorld.components.dockmanager:CreateDockAtPoint(pos.x, 0, pos.z, WORLD_TILES.MONKEY_DOCK)--so it properly creates the undertile.
+        TheWorld.components.dockmanager:CreateDockAtPoint(pos.x, 0, pos.z, WORLD_TILES.MONKEY_DOCK) --so it properly creates the undertile.
     end
 
-    print("setting tile "..tile.." at "..tile_x..", "..tile_z)
+    print("setting tile " .. tile .. " at " .. tile_x .. ", " .. tile_z)
 end
 
 --cheap little shortcut to respawn ocean biomes...
@@ -145,10 +144,10 @@ function c_umss(umss)
     setpiece.DefineTable(setpiece, umss)
     setpiece.Transform:SetPosition(pos.x, 0, pos.z)
     setpiece:AddTag("NOCLICK")
-    setpiece.AnimState:SetMultColour(0,0,0,0)
+    setpiece.AnimState:SetMultColour(0, 0, 0, 0)
     setpiece:DoTaskInTime(1, setpiece.Remove)
 
-    print("Spawning umss setpiece "..umss.." at "..tostring(pos.x)..","..tostring(pos.z)..".")
+    print("Spawning umss setpiece " .. umss .. " at " .. tostring(pos.x) .. "," .. tostring(pos.z) .. ".")
 end
 
 function c_setadrenaline(p)
@@ -158,35 +157,50 @@ function c_setadrenaline(p)
     end
 end
 
-
 local function CountLocalPrefabs(prefab, pos)
-	local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
+    local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
     local count = 0
-	
-    for k,v in pairs(ents) do
+
+    for k, v in pairs(ents) do
         if v ~= nil and v.prefab ~= nil and v.prefab == prefab then
             count = count + 1
         end
     end
-	
-	print("There are ", count, prefab.."s in this vicinity.")
+
+    print("There are ", count, prefab .. "s in this vicinity.")
 end
 
 function c_um_findents()
     local pos = ConsoleWorldPosition()
-	local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
-	local alreadycounted_ents = {}
-	
-	for i, v in ipairs(ents) do
-		local count = 0
-	
-		if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
-			table.insert(alreadycounted_ents, v.prefab)
-			CountLocalPrefabs(v.prefab, pos)
-		end
-	end
+    local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
+    local alreadycounted_ents = {}
+
+    for i, v in ipairs(ents) do
+        local count = 0
+
+        if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
+            table.insert(alreadycounted_ents, v.prefab)
+            CountLocalPrefabs(v.prefab, pos)
+        end
+    end
 end
 
 function c_um_forcetornado()
     TheWorld:PushEvent("forcetornado")
+end
+
+function c_startheatwaves()
+    if TheWorld:HasTag("heatwavestart") == false and TheWorld.state.issummer then
+        TheWorld:AddTag("heatwavestart")
+        if TheWorld.net ~= nil then
+            TheWorld.net:AddTag("heatwavestartnet")
+        end
+        print("starting heatwave...")
+    elseif TheWorld:HasTag("heatwavestart") then
+        TheWorld:RemoveTag("heatwavestart")
+        if TheWorld.net ~= nil then
+            TheWorld.net:RemoveTag("heatwavestartnet")
+        end
+        print("stopping heatwave...")
+    end
 end
