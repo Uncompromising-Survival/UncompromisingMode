@@ -121,9 +121,9 @@ AllRecipes["walterhat"].ingredients = {
 
 if GetModConfigData("book_recipes") then
     -- AllRecipes["book_rain"].ingredients = {
-        -- Ingredient("papyrus", 2),
-        -- Ingredient("moon_tear", 1),
-        -- Ingredient("waterballoon", 4)
+    -- Ingredient("papyrus", 2),
+    -- Ingredient("moon_tear", 1),
+    -- Ingredient("waterballoon", 4)
     -- }
     -- AllRecipes["book_rain"].level = TechTree.Create(TECH.MAGIC_THREE)
 
@@ -131,12 +131,12 @@ if GetModConfigData("book_recipes") then
         Ingredient("papyrus", 2),
         Ingredient("oceanfishingbobber_oval", 2)
     }
-    AllRecipes["book_light"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("wormlight", 1)
+    AllRecipes["book_light_upgraded"].ingredients = {
+		Ingredient("book_light", 1),
+        Ingredient("wormlight", 1),
+		Ingredient("papyrus", 2)
     }
     -- AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
-
     AllRecipes["bookstation"].ingredients = {
         Ingredient("livinglog", 4),
         Ingredient("papyrus", 4),
@@ -157,6 +157,11 @@ if GetModConfigData("book_recipes") then
         Ingredient("plantmeat", 1),
         Ingredient("poop", 5)
     }
+	AllRecipes["book_horticulture_upgraded"].ingredients = {
+		Ingredient("book_horticulture", 1),
+        Ingredient("treegrowthsolution", 1),
+		Ingredient("papyrus", 2)
+	}
 end
 
 -- magnets and dock
@@ -625,11 +630,11 @@ AddRecipe2("mastupgrade_windturbine_item", { Ingredient("cutstone", 2), Ingredie
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 
 if GetModConfigData("ck_loot") then
-    AddRecipe2("crab_hat",
+    AddRecipe2("hat_crab",
         { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) },
         TECH.LOST, nil, { "CLOTHING" })
 
-    AddRecipe2("crab_hat_ice",
+    AddRecipe2("hat_crab_ice",
         { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil,
         { "ARMOUR" })
 

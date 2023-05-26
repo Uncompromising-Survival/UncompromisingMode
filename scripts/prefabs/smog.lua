@@ -15,7 +15,7 @@ local function fn()
     inst.AnimState:SetLayer(LAYER_WORLD)
     inst.AnimState:SetSortOrder(1)
     inst.AnimState:SetScale(10, 8, 5)
-    inst.AnimState:SetMultColour(0.4, 0.4, 0.4, 0.0)
+    inst.AnimState:SetMultColour(0.05, 0.05, 0.05, 0.0)
 
     inst:DoTaskInTime(0, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -26,8 +26,8 @@ local function fn()
 
     inst.mult = 0
     inst.fadeintask = inst:DoPeriodicTask(0.125, function(inst)
-        inst.AnimState:SetMultColour(0.4, 0.4, 0.4, inst.mult)
-        inst.mult = inst.mult + 0.025
+        inst.AnimState:SetMultColour(0.05, 0.05, 0.05, inst.mult)
+        inst.mult = inst.mult + 0.0125
         if inst.mult >= 0.4 then
             inst.mult = 0.4
             inst.fadeintask:Cancel()
@@ -41,7 +41,7 @@ local function fn()
 
     inst:DoTaskInTime(math.random(60, 120), function(inst)
         inst:DoPeriodicTask(0.125, function(inst)
-            inst.AnimState:SetMultColour(0.4, 0.4, 0.4, inst.mult)
+            inst.AnimState:SetMultColour(0.05, 0.05, 0.05, inst.mult)
             inst.mult = inst.mult - 0.025
             if inst.mult <= 0 then
                 inst:Remove()
@@ -53,8 +53,8 @@ local function fn()
         local x, y, z = inst.Transform:GetWorldPosition()
         local players = TheSim:FindEntities(x, y, z, 12, { "player" }, { "playerghost" })
         for k, v in ipairs(players) do
-            if v.components.health ~= nil and v.prefab ~= "willow" and not v:HasTag("has_gasmask") then
-                v.components.health:DeltaPenalty(0.0125)
+            if v.components.health ~= nil and v.prefab ~= "willow" and not v:HasTag("has_gasmask") and inst.mult >= 0.4 then
+                v.components.health:DeltaPenalty(0.025)
                 if v.components.talker ~= nil then
                     v.components.talker:Say(GetString(v, "GAS_DAMAGE"))
                 end

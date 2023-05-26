@@ -417,7 +417,7 @@ return {
 	"crabking_geyser_single",
 	"staff_starfall",
 	"armor_crab",
-	"crab_hat",
+	"hat_crab",
 	"trident_ground_fx",
 	"moon_beacon",
 	"goat_lightning",

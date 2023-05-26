@@ -60,8 +60,8 @@ STRINGS.UNCOMP_TOOLTIP = {
 	DISEASECUREBOMB = "- Restores health and sickly plants.",
 	SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
 
-	CRAB_HAT = "- Repairs & sewing are twice as effective when worn.",
-	CRAB_HAT_ICE = "- Resistance scales with wetness.\n- Prevents the wearer from drying up.",
+	HAT_CRAB = "- Repairs & sewing are twice as effective when worn.",
+	HAT_CRAB_ICE = "- Resistance scales with wetness.\n- Prevents the wearer from drying up.",
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing."
 }

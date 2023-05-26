@@ -108,7 +108,6 @@ local function TornadoTask(inst)
 			--TheWorld:PushEvent("ms_deltamoistureceil", 15)
 		end
 
-
 		local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
 		if math.random() > 0.6 then
@@ -116,7 +115,7 @@ local function TornadoTask(inst)
 				z + math.random(-300, 300))
 		end
 
-		if math.random() <= 0.75 then
+		if math.random() >= 0.9 then
 			if #inst.components.inventory.itemslots ~= 0 then
 				local random_item = inst.components.inventory:RemoveItem(inst.components.inventory
 					.itemslots[math.random(#inst.components.inventory
@@ -130,7 +129,7 @@ local function TornadoTask(inst)
 		end
 
 		local players = TheSim:FindEntities(x, y, z, 200, nil, { "playerghost" },
-			{ "player", "_inventoryitem" })
+			{ "player", "_inventoryitem", "oceanfishable" })
 
 		for i, v in ipairs(players) do
 			local px, py, pz = v.Transform:GetWorldPosition()
@@ -155,7 +154,7 @@ local function TornadoTask(inst)
 				end
 			end
 
-			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") then
+			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") and GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil or v.components.oceanfishable ~= nil then
 				local rad = math.rad(v:GetAngleToPoint(x, y, z))
 				local velx = math.cos(rad)
 				local velz = -math.sin(rad)
@@ -177,17 +176,21 @@ local function TornadoTask(inst)
 				local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
 					pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
 
-				local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+				local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) --changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
 				local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-				if dx ~= nil and (ground or boat) then
+				local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
+				local p_boat = TheWorld.Map:GetPlatformAtPoint(px, pz)
+
+				if dx ~= nil and (ground == p_ground or boat) then
 					v.Transform:SetPosition(dx, dy, dz)
 				end
 			end
 		end
 
-		local tornado_workables = TheSim:FindEntities(x, y, z, 6, nil, nil, { "DIG_workable", "CHOP_workable" })
+		local tornado_near = TheSim:FindEntities(x, y, z, 4, nil, nil, { "DIG_workable", "CHOP_workable" })
+		local tornado_far = TheSim:FindEntities(x, y, z, 24, { "CHOP_workable" })
 
-		for k, v in ipairs(tornado_workables) do
+		for k, v in ipairs(tornado_near) do
 			if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --simulate "working" while not actually doing that when "unloaded"
 				if v.components.lootdropper ~= nil then
 					local loots = v.components.lootdropper:GenerateLoot()
@@ -211,9 +214,30 @@ local function TornadoTask(inst)
 			end
 		end
 
+		for k, v in ipairs(tornado_far) do
+			if math.random() >= 0.99 then
+				if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --simulate "working" while not actually doing that when "unloaded"
+					if v.components.lootdropper ~= nil then
+						local loots = v.components.lootdropper:GenerateLoot()
+						for k, v in pairs(loots) do
+							if v.components ~= nil and v.components.inventoryitem ~= nil then
+								inst.components.inventory:GiveItem(v)
+							end
+						end
+
+						v:Remove()
+					end
+				else
+					if v.components.workable ~= nil then
+						v.components.workable:Destroy(inst)
+					end
+				end
+			end
+		end
+
 		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil then --don't bother with items/pickables off-screen
 			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "burning", "tornado_nosucky" },
-				{ "pickable", "_inventoryitem" })
+				{ "pickable", "_inventoryitem", "oceanfishable" })
 			for k, v in ipairs(tornado_pickables) do
 				if v.components.pickable ~= nil then --you never know...
 					if v:GetDistanceSqToInst(inst) < 16 then
@@ -221,7 +245,7 @@ local function TornadoTask(inst)
 					else
 						v.components.pickable:Pick(TheWorld)
 					end
-				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") then
+				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") and v.prefab ~= "bullkelp_beachedroot" then
 					inst.components.inventory:GiveItem(v)
 					local stacksize = v.components.stackable ~= nil and v.components.stackable:StackSize() or
 						1
@@ -251,9 +275,23 @@ local function TornadoTask(inst)
 
 						v:Remove()
 					end
+				elseif v.components.oceanfishable ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") then
+					local fishdef = v.fish_def ~= nil and v.fish_def.prefab ~= nil and v.fish_def.prefab or nil
+					local fish = fishdef ~= nil and SpawnPrefab(fishdef .. "_inv") or nil
+
+					if fish == nil then
+						fish = fishdef ~= nil and SpawnPrefab(fishdef .. "_land") or nil
+					end
+
+					if fish ~= nil then
+						inst.components.inventory:GiveItem(fish)
+						v:Remove()
+					end
 				end
 			end
 		end
+
+
 
 		if destination ~= nil then
 			local x_dest, y_dest, z_dest = destination.Transform:GetWorldPosition()
@@ -355,7 +393,7 @@ local function fn()
 
 	inst:AddComponent("inventory")
 	inst.components.inventory.ignorescangoincontainer = true
-
+	inst.components.inventory.maxslots = 100
 	inst:DoTaskInTime(0, Init)
 
 	return inst
@@ -402,16 +440,16 @@ local function CanSpawnWaterfall(inst, x, y, z)
 
 		local offs =
 		{
-			{-2,-2}, {-1,-2}, {0,-2}, {1,-2}, {2,-2},
-			{-2,-1}, 						  {2,-1},
-			{-2, 0}, 						  {2, 0},
-			{-2, 1}, 						  {2, 1},
-			{-2, 2}, {-1, 2}, {0, 2}, {1, 2}, {2, 2},
-			{-2,-2}, {-2,-3}, {0,-3}, {2,-3}, {3,-3},
-			{-3,-2}, 						  {3,-2},
-			{-3, 0}, 						  {3, 0},
-			{-3, 1}, 						  {3, 2},
-			{-3, 3}, {-2, 3}, {0, 3}, {2, 3}, {3, 3}
+			{ -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 },
+			{ -2, -1 }, { 2, -1 },
+			{ -2, 0 }, { 2, 0 },
+			{ -2, 1 }, { 2, 1 },
+			{ -2, 2 }, { -1, 2 }, { 0, 2 }, { 1, 2 }, { 2, 2 },
+			{ -2, -2 }, { -2, -3 }, { 0, -3 }, { 2, -3 }, { 3, -3 },
+			{ -3, -2 }, { 3, -2 },
+			{ -3, 0 }, { 3, 0 },
+			{ -3, 1 }, { 3, 2 },
+			{ -3, 3 }, { -2, 3 }, { 0, 3 }, { 2, 3 }, { 3, 3 }
 		}
 
 		for i = 1, #offs, 1 do

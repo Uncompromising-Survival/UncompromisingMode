@@ -1,12 +1,13 @@
 local assets =
 {
-    Asset("ANIM", "anim/hat_snowgoggles.zip"),
-    Asset("ATLAS", "images/inventoryimages/gasmask.xml"),
-    Asset("IMAGE", "images/inventoryimages/gasmask.tex"),
+    Asset("ANIM", "anim/hat_crab.zip"),
+    Asset("ANIM", "anim/swap_hat_crab.zip"),
+    Asset("ATLAS", "images/inventoryimages/hat_crab.xml"),
+    Asset("IMAGE", "images/inventoryimages/hat_crab.tex"),
 }
 
 local function onequip_crab(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_hat", "hat_gore_horn_swap_off", "swap_hat")
+    owner.AnimState:OverrideSymbol("swap_hat", "swap_hat_crab", "swap_hat")
 
     owner.AnimState:Show("HAT")
     owner.AnimState:Show("HAIR_HAT")
@@ -44,8 +45,8 @@ local function fn_crab()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("hat_gore_horn")
-    inst.AnimState:SetBuild("hat_gore_horn")
+    inst.AnimState:SetBank("hat_crab")
+    inst.AnimState:SetBuild("hat_crab")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("hat")
@@ -63,7 +64,7 @@ local function fn_crab()
     end
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/gore_horn_hat.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/hat_crab.xml"
 
     inst:AddComponent("inspectable")
 
@@ -80,7 +81,7 @@ local function fn_crab()
 end
 
 local function onequip_ice(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_hat", "hat_gore_horn_swap_off", "swap_hat")
+    owner.AnimState:OverrideSymbol("swap_hat", "swap_hat_crab", "swap_hat") --TODO
 
     owner.AnimState:Show("HAT")
     owner.AnimState:Show("HAIR_HAT")
@@ -94,7 +95,7 @@ local function onequip_ice(inst, owner)
         owner:AddTag("wetness_affinity")
     end
 
-    owner.crab_hat_task = owner:DoPeriodicTask(1, function()
+    owner.hat_crab_task = owner:DoPeriodicTask(1, function()
         if owner.components.moisture ~= nil then
             inst.components.armor.absorb_percent = Lerp(0.6, 0.95, owner.components.moisture:GetMoisturePercent())
         else
@@ -116,9 +117,9 @@ local function onunequip_ice(inst, owner)
         owner:RemoveTag("wetness_affinity")
     end
 
-    if owner.crab_hat_task ~= nil then
-        owner.crab_hat_task:Cancel()
-        owner.crab_hat_task = nil
+    if owner.hat_crab_task ~= nil then
+        owner.hat_crab_task:Cancel()
+        owner.hat_crab_task = nil
     end
 end
 
@@ -169,4 +170,4 @@ local function fn_ice()
     return inst
 end
 
-return Prefab("crab_hat", fn_crab, assets), Prefab("crab_hat_ice", fn_ice, assets)
+return Prefab("hat_crab", fn_crab, assets), Prefab("hat_crab_ice", fn_ice, assets)
