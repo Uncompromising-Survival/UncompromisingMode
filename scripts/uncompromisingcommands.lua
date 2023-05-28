@@ -1,15 +1,15 @@
 --toggle snowstorm
 function c_snowstorm()
-    if TheWorld:HasTag("heatwavestart") == false and TheWorld.state.iswinter then
-        TheWorld:AddTag("heatwavestart")
+    if TheWorld:HasTag("snowstormstart") == false and TheWorld.state.iswinter then
+        TheWorld:AddTag("snowstormstart")
         if TheWorld.net ~= nil then
-            TheWorld.net:AddTag("heatwavestartnet")
+            TheWorld.net:AddTag("snowstormstartnet")
         end
         print("starting snowstorm...")
-    elseif TheWorld:HasTag("heatwavestart") then
-        TheWorld:RemoveTag("heatwavestart")
+    elseif TheWorld:HasTag("snowstormstart") then
+        TheWorld:RemoveTag("snowstormstart")
         if TheWorld.net ~= nil then
-            TheWorld.net:RemoveTag("heatwavestartnet")
+            TheWorld.net:RemoveTag("hsnowstormtartnet")
         end
         print("stopping snowstorm...")
     end
@@ -189,7 +189,7 @@ function c_um_forcetornado()
     TheWorld:PushEvent("forcetornado")
 end
 
-function c_startheatwaves()
+function c_heatwave()
     if TheWorld:HasTag("heatwavestart") == false and TheWorld.state.issummer then
         TheWorld:AddTag("heatwavestart")
         if TheWorld.net ~= nil then

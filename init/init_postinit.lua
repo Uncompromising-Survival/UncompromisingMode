@@ -42,7 +42,8 @@ local component_post = {
     "repairable",
     "sewing",
     "container",
-    "weather"
+    "weather",
+    "worldtemperature"
 }
 
 local prefab_post = {
