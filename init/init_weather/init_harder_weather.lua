@@ -108,7 +108,7 @@ env.AddPrefabPostInit("forest", function(inst)
 	end
 
 	--if TUNING.DSTU.HEATWAVES then --TODO: MAKE THIS A CONFIG
-	--inst:AddComponent("um_heatwaves")
+	inst:AddComponent("um_heatwaves") -- just changing this line so other branches with this commented out get a conflict so I don't forget to readd it here!!
 	--end
 
 	inst:AddComponent("um_stormspawner")

@@ -9,9 +9,7 @@ env.AddComponentPostInit("wildfires", function(self)
         for _k, _v in pairs(self.inst.event_listening["ms_lightwildfireforplayer"][k]) do
             print(_v)
             _ms_startwildfireforplayerfn = _v
-            break
         end
-        break
     end
 
     local ShouldActivateWildfires = function()
@@ -21,8 +19,9 @@ env.AddComponentPostInit("wildfires", function(self)
     UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, ShouldActivateWildfires,
         "ShouldActivateWildfires")
     local _excludetags = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_excludetags")
-    local _radius      = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_radius")
+    --local _radius      = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_radius")
     table.insert(_excludetags, "structure")
-    UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, _radius + 75, "LightFireForPlayer", "_radius")
+    --UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, _radius + 75, "LightFireForPlayer", "_radius")
+    --TODO: Rework this into a heat wave that goes across the map!!
     _radius = UpvalueHacker.GetUpvalue(_ms_startwildfireforplayerfn, "LightFireForPlayer", "_radius")
 end)

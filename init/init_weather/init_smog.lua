@@ -19,7 +19,9 @@ env.AddPrefabPostInitAny(function(inst)
                     end
                 end)
             end
-            _OnIgnite(inst, source, doer, ...)
+            if _OnIgnite ~= nil then
+                _OnIgnite(inst, source, doer, ...)
+            end
         end
     end
 end)

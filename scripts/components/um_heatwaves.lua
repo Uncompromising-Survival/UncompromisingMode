@@ -1,7 +1,26 @@
+-- TODO: Rework this into a heat wave that goes across the map!!
+
+
 --------------------------------------------------------------------------
 --[[ Dependencies ]]
 --------------------------------------------------------------------------
 local easing = require("easing")
+local WorldTemperature = require("components/worldtemperature")
+local UpvalueHacker = require("tools/upvaluehacker")
+
+-- Keeping this here so it's centralized in one file, but maybe it should be in /postinit/components/worldtemperature instead - A
+-- WorldTemperature hacking so heatwave's heat increase actually works. I'm suprised the old iteration even made it through.
+local _CalculateTemperature  = UpvalueHacker.GetUpvalue(self.GetDebugString, "CalculateTemperature") -- This is an old copy of the function, right? This would cause a stackoverflow when it gets set again, right???
+
+local function new_CalculateTemperature()
+    print("Testing!")
+    print("Heatwaves active: ", TheWorld:HasTag("heatwavestart"))
+    print("Pre-Heatwave temp: ", _CalculateTemperature())
+    print("Post: ", _CalculateTemperature() * 2)
+    return _CalculateTemperature() * TheWorld:HasTag("heatwavestart") and 2 or 1 -- Is 2 too much?
+end
+
+UpvalueHacker.SetUpvalue(self.GetDebugString, new_CalculateTemperature, "CalculateTemperature")
 
 --------------------------------------------------------------------------
 --[[ UM_Heatwaves class definition ]]
@@ -14,16 +33,11 @@ return Class(function(self, inst)
     local UM_STOPHEATWAVE_TIMERNAME = "um_stopheatwave_timer"
 
     --------------------------------------------------------------------------
-    --[[ Private constants ]]
-    --------------------------------------------------------------------------
-
-
-    --------------------------------------------------------------------------
     --[[ Public Member Variables ]]
     --------------------------------------------------------------------------
 
     self.inst = inst
-    self.old_temp = nil
+    --self.old_temp = nil
 
     --------------------------------------------------------------------------
     --[[ Private Member Variables ]]
@@ -45,7 +59,7 @@ return Class(function(self, inst)
         if TheWorld.net ~= nil then
             TheWorld.net:RemoveTag("heatwavestartnet")
         end
-        TheWorld.state.temperature = self.old_temp
+        --TheWorld.state.temperature = self.old_temp
 
 
         if _worldsettingstimer:GetTimeLeft(UM_HEATWAVE_TIMERNAME) == nil then
@@ -72,8 +86,8 @@ return Class(function(self, inst)
                 TheWorld.net:AddTag("heatwavestartnet")
             end
 
-            self.old_temp = TheWorld.state.temperature
-            TheWorld.state.temperature = TheWorld.state.temperature * 2
+            --self.old_temp = TheWorld.state.temperature
+            --TheWorld.state.temperature = TheWorld.state.temperature * 2
             _worldsettingstimer:StartTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120))
         end)
     end
@@ -112,7 +126,7 @@ return Class(function(self, inst)
         local data =
         {
             storming = _storming,
-            old_temp = self.old_temp
+            --old_temp = self.old_temp
         }
 
         return data
@@ -120,7 +134,7 @@ return Class(function(self, inst)
 
     function self:OnLoad(data)
         _storming = data.storming or false
-        self.old_temp = data.old_temp
+        --self.old_temp = data.old_temp
 
         if _storming then
             TheWorld:AddTag("heatwavestart")
