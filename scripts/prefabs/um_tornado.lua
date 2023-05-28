@@ -110,7 +110,7 @@ local function TornadoTask(inst)
 
 		local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
-		if math.random() > 0.6 then
+		if math.random() > 0.8 then
 			SpawnPrefab("hound_lightning").Transform:SetPosition(x + math.random(-300, 300), 0,
 				z + math.random(-300, 300))
 		end
@@ -154,7 +154,9 @@ local function TornadoTask(inst)
 				end
 			end
 
-			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") and GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil or v.components.oceanfishable ~= nil then
+			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or
+				v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") and GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil or
+				v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
 				local rad = math.rad(v:GetAngleToPoint(x, y, z))
 				local velx = math.cos(rad)
 				local velz = -math.sin(rad)
@@ -186,23 +188,11 @@ local function TornadoTask(inst)
 				end
 			end
 		end
+		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --tornado doesn't sleep. Using alt distance-based check.
+			local tornado_workables = TheSim:FindEntities(x, y, z, 4, nil, { "INLIMBO" },
+				{ "DIG_workable", "CHOP_workable" })
 
-		local tornado_near = TheSim:FindEntities(x, y, z, 4, nil, nil, { "DIG_workable", "CHOP_workable" })
-		local tornado_far = TheSim:FindEntities(x, y, z, 24, { "CHOP_workable" })
-
-		for k, v in ipairs(tornado_near) do
-			if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --simulate "working" while not actually doing that when "unloaded"
-				if v.components.lootdropper ~= nil then
-					local loots = v.components.lootdropper:GenerateLoot()
-					for k, v in pairs(loots) do
-						if v.components ~= nil and v.components.inventoryitem ~= nil then
-							inst.components.inventory:GiveItem(v)
-						end
-					end
-
-					v:Remove()
-				end
-			else
+			for k, v in ipairs(tornado_workables) do
 				if v.components.workable ~= nil and v.components.pickable == nil then
 					if v.components.workable.action == ACTIONS.DIG then
 						local fx = SpawnPrefab("shovel_dirt")
@@ -212,31 +202,8 @@ local function TornadoTask(inst)
 					v.components.workable:Destroy(inst)
 				end
 			end
-		end
 
-		for k, v in ipairs(tornado_far) do
-			if math.random() >= 0.99 then
-				if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --simulate "working" while not actually doing that when "unloaded"
-					if v.components.lootdropper ~= nil then
-						local loots = v.components.lootdropper:GenerateLoot()
-						for k, v in pairs(loots) do
-							if v.components ~= nil and v.components.inventoryitem ~= nil then
-								inst.components.inventory:GiveItem(v)
-							end
-						end
-
-						v:Remove()
-					end
-				else
-					if v.components.workable ~= nil then
-						v.components.workable:Destroy(inst)
-					end
-				end
-			end
-		end
-
-		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil then --don't bother with items/pickables off-screen
-			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "burning", "tornado_nosucky" },
+			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "INLIMBO", "burning", "tornado_nosucky" },
 				{ "pickable", "_inventoryitem", "oceanfishable" })
 			for k, v in ipairs(tornado_pickables) do
 				if v.components.pickable ~= nil then --you never know...
