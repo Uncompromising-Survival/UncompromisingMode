@@ -154,6 +154,8 @@ local function TornadoTask(inst)
 				end
 			end
 
+
+
 			if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or
 				v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and not v:HasTag("INLIMBO") and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") and GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) ~= nil or
 				v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
@@ -188,7 +190,8 @@ local function TornadoTask(inst)
 				end
 			end
 		end
-		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE) == nil then --tornado doesn't sleep. Using alt distance-based check.
+		--minor boost so it doesn't just start doing stuff visually on-screen.
+		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) == nil then --tornado doesn't sleep. Using alt distance-based check.
 			local tornado_workables = TheSim:FindEntities(x, y, z, 4, nil, { "INLIMBO" },
 				{ "DIG_workable", "CHOP_workable" })
 
