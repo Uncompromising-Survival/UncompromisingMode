@@ -52,7 +52,7 @@ local function OnUpgraded(inst)
     end
 
     if not inst.components.timer:TimerExists("pop_cork_pre") then
-        inst.components.timer:StartTimer("pop_cork_pre", TUNING.GRASS_REGROW_TIME - TUNING.TOTAL_DAY_TIME/2)
+        inst.components.timer:StartTimer("pop_cork_pre", TUNING.GRASS_REGROW_TIME - TUNING.TOTAL_DAY_TIME / 2)
     end
 
     inst.components.pickable.canbepicked = false
@@ -123,7 +123,7 @@ local function TimerDone(inst, data)
     end
 
     if data.name == "pop_cork_pre" then
-        inst.boiling_water_task = inst:DoPeriodicTask(math.random(5,15), DoBoilingWater)
+        inst.boiling_water_task = inst:DoPeriodicTask(math.random(5, 15), DoBoilingWater)
     end
 end
 
@@ -138,7 +138,12 @@ local function OnSave(inst, data)
         data.upgraded = inst.upgraded
         data.explode_when_loaded = inst.explode_when_loaded
         data.water_task = inst.boiling_water_task ~= nil
+        data.picked = not inst.components.pickable:CanBePicked()
     end
+end
+
+local function OnPicked(inst)
+    inst.AnimState:PushAnimation("idle", true)
 end
 
 local function OnLoad(inst, data)
@@ -148,13 +153,13 @@ local function OnLoad(inst, data)
         if data.water_task then
             inst.boiling_water_task = inst:DoPeriodicTask(10, DoBoilingWater)
         end
+        if data.picked then
+            OnPicked(inst)
+        end
     end
     inst:AddTag("SLUDGE_CORK_upgradeable") -- GOD DAMNIT KEEP THE DAMN TAG!!!
 end
 
-local function OnPicked(inst)
-    inst.AnimState:PushAnimation("idle", true)
-end
 
 local function OnRegen(inst)
     inst.AnimState:PushAnimation("grow")
@@ -217,7 +222,7 @@ local function fn_stack()
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
-    inst.components.workable:SetWorkLeft(TUNING.SEASTACK_MINE*2)
+    inst.components.workable:SetWorkLeft(TUNING.SEASTACK_MINE * 2)
     inst.components.workable:SetOnWorkCallback(OnWork)
     inst.components.workable.savestate = true
 
