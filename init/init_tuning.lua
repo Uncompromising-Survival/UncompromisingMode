@@ -183,7 +183,7 @@ TUNING.DSTU = {
     PERISHABLETIME = GetModConfigData("more perishing"),
     -- Fire Loot Rework
     FIRELOOT = GetModConfigData("fireloot"),
-    POLLENMITES = GetModConfigData("pollenmites"),
+    POLLENMITES = false,
     ----------------------------------------------------------------------------
     -- Player changes
     ----------------------------------------------------------------------------
@@ -318,7 +318,7 @@ TUNING.DSTU = {
         "alterguardian_phase1",
         "alterguardian_phase2",
         "alterguardian_phase3",
-		"crabking"
+        "crabking"
     },
 
     ----------------------------------------------------------------------------
