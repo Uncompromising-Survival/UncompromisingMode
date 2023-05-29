@@ -9,7 +9,7 @@ function c_snowstorm()
     elseif TheWorld:HasTag("snowstormstart") then
         TheWorld:RemoveTag("snowstormstart")
         if TheWorld.net ~= nil then
-            TheWorld.net:RemoveTag("hsnowstormtartnet")
+            TheWorld.net:RemoveTag("snowstormtartnet")
         end
         print("stopping snowstorm...")
     end
