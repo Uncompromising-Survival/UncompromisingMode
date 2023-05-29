@@ -190,7 +190,7 @@ local function TornadoTask(inst)
 			end
 		end
 		--minor boost so it doesn't just start doing stuff visually on-screen.
-		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) == nil then --tornado doesn't sleep. Using alt distance-based check.
+		if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then --tornado doesn't sleep. Using alt distance-based check.
 			local tornado_workables = TheSim:FindEntities(x, y, z, 4, nil, { "INLIMBO" },
 				{ "DIG_workable", "CHOP_workable" })
 
@@ -207,13 +207,7 @@ local function TornadoTask(inst)
 
 			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "INLIMBO", "burning", "tornado_nosucky" },
 				{ "pickable", "_inventoryitem", "oceanfishable" })
-			printwrap("tornado_pickables", tornado_pickables)
 			for k, v in ipairs(tornado_pickables) do
-				print("ITEM CHEKCS")
-				print(v.components.inventoryitem ~= nil)
-				print(v:GetDistanceSqToInst(inst) < 16)
-				print(not v:HasTag("INLIMBO"))
-				print(v.prefab ~= "bullkelp_beachedroot")
 				if v.components.pickable ~= nil then --you never know...
 					if v:GetDistanceSqToInst(inst) < 16 then
 						v.components.pickable:Pick(inst)
