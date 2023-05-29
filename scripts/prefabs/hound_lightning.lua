@@ -38,7 +38,7 @@ local function Zap(inst)
 				if not v:HasTag("electricdamageimmune") then
 					v.components.health:DoDelta(-25, nil, inst.prefab, nil, inst)
 
-					if not v.sg:HasStateTag("nointerrupt") then
+					if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") then
 						v.sg:GoToState("electrocute")
 					end
 				else
@@ -95,9 +95,10 @@ local function fn()
 	inst.task = inst:DoPeriodicTask(0.05, Sparks)
 
 	inst.SoundEmitter:PlaySound("dontstarve/rain/thunder_far")
-
-	inst:DoTaskInTime(1, Zap)
-
+	inst:DoTaskInTime(0, function() --modern problems require modern solutions
+		-- need this or else when something sets inst.Delay the task will already have started with 1.
+		inst:DoTaskInTime(inst.Delay ~= nil and inst.Delay or 1, Zap)
+	end)
 	return inst
 end
 
