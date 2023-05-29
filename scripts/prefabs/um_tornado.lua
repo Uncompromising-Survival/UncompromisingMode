@@ -215,7 +215,7 @@ local function TornadoTask(inst)
 					else
 						v.components.pickable:Pick(TheWorld)
 					end
-				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and v:IsValid() and not v:HasTag("INLIMBO") and v.prefab ~= "bullkelp_beachedroot" then
+				elseif v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 16 and not v:HasTag("INLIMBO") and v.prefab ~= "bullkelp_beachedroot" then
 					inst.components.inventory:GiveItem(v)
 					local stacksize = v.components.stackable ~= nil and v.components.stackable:StackSize() or
 						1
