@@ -10,11 +10,6 @@ SetSharedLootTable('sludgestack', {
     { 'rocks', 1.00 }, { 'rocks', 1.00 }, { 'sludge', 1.00 }, { 'sludge', 0.5 }
 })
 
-local function DoBoilingWater(inst)
-    local water = SpawnPrefab("boiling_water_spawner")
-    local x, y, z = inst.Transform:GetWorldPosition()
-    water.Transform:SetPosition(x + math.random(-1, 1), 0, z + math.random(-1, 1))
-end
 
 local function OnWork(inst, worker, workleft)
     if workleft <= 0 then
@@ -49,10 +44,6 @@ local function OnUpgraded(inst)
     inst.AnimState:PushAnimation("idle_corked", true)
     if not inst.components.timer:TimerExists("pop_cork") then
         inst.components.timer:StartTimer("pop_cork", TUNING.GRASS_REGROW_TIME)
-    end
-
-    if not inst.components.timer:TimerExists("pop_cork_pre") then
-        inst.components.timer:StartTimer("pop_cork_pre", TUNING.GRASS_REGROW_TIME - TUNING.TOTAL_DAY_TIME / 2)
     end
 
     inst.components.pickable.canbepicked = false
@@ -100,11 +91,6 @@ local function DoLootExplosion(inst)
     inst.components.pickable:Resume()
     inst.components.pickable:Regen()
 
-    if inst.boiling_water_task ~= nil then
-        inst.boiling_water_task:Cancel()
-        inst.boiling_water_task = nil
-    end
-
     for i, v in ipairs(cork_pop_loot) do
         local loot = SpawnPrefab(v)
         loot:RemoveFromScene()
@@ -121,10 +107,6 @@ local function TimerDone(inst, data)
             inst.explode_when_loaded = true
         end
     end
-
-    if data.name == "pop_cork_pre" then
-        inst.boiling_water_task = inst:DoPeriodicTask(math.random(5, 15), DoBoilingWater)
-    end
 end
 
 local function OnEntityWake(inst)
@@ -137,7 +119,6 @@ local function OnSave(inst, data)
     if data ~= nil then
         data.upgraded = inst.upgraded
         data.explode_when_loaded = inst.explode_when_loaded
-        data.water_task = inst.boiling_water_task ~= nil
         data.picked = not inst.components.pickable:CanBePicked()
     end
 end
@@ -150,9 +131,6 @@ local function OnLoad(inst, data)
     if data ~= nil then
         if data.upgraded ~= nil then OnUpgraded(inst) end
         inst.explode_when_loaded = data.explode_when_loaded
-        if data.water_task then
-            inst.boiling_water_task = inst:DoPeriodicTask(10, DoBoilingWater)
-        end
         if data.picked then
             OnPicked(inst)
         end
@@ -222,6 +200,7 @@ local function fn_stack()
 
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.MINE)
+    inst.components.workable:SetWorkLeft(TUNING.SEASTACK_MINE)
     inst.components.workable:SetWorkLeft(TUNING.SEASTACK_MINE * 2)
     inst.components.workable:SetOnWorkCallback(OnWork)
     inst.components.workable.savestate = true
