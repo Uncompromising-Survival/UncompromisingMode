@@ -39,7 +39,7 @@ local function fn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:DoTaskInTime(math.random(60, 120), function(inst)
+    inst:DoTaskInTime(math.random(120, 240), function(inst)
         inst:DoPeriodicTask(0.125, function(inst)
             inst.AnimState:SetMultColour(0.05, 0.05, 0.05, inst.mult)
             inst.mult = inst.mult - 0.025
