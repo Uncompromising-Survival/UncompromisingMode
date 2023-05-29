@@ -27,5 +27,11 @@ env.AddComponentPostInit("weather", function(self)
                 _pollenfx.particles_per_tick = _pollenfx.particles_per_tick * 1000 + 1 --MOREEEEEEEEEEEEEEEE
             end
         end
+        if TheSim:FindFirstEntityWithTag("um_tornado") then
+            if _hasfx then
+                _rainfx.particles_per_tick = _rainfx.particles_per_tick * 10
+                _rainfx.splashes_per_tick = _rainfx.splashes_per_tick * 10
+            end
+        end
     end
 end)
