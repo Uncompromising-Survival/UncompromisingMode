@@ -108,8 +108,8 @@ local function fn()
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(300)
-    inst.components.finiteuses:SetUses(300)
+    inst.components.finiteuses:SetMaxUses(250)
+    inst.components.finiteuses:SetUses(250)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     return inst
