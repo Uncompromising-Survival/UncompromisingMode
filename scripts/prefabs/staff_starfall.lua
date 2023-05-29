@@ -235,7 +235,7 @@ local function fn_proj()
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.GROUND)
     inst.Physics:SetSphere(2)
-    inst.Physics:SetMotorVel(math.random(-50, 50) / 10, -50, math.random(-50, 50) / 10)
+    inst.Physics:SetMotorVel(math.random(-50, 50) / 10, math.random(-100, -50), math.random(-50, 50) / 10)
 
     local dt = 1 / 20
     inst.i = .1

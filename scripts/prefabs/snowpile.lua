@@ -291,7 +291,9 @@ end
 
 local function TryColdness(v)
     if v.components.moisture ~= nil then
-        v.components.moisture:DoDelta(3)
+        if v.components.inventory ~= nil and (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ~= nil and v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
+            v.components.moisture:DoDelta(3)
+        end
     end
 end
 
