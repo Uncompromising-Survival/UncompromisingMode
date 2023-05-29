@@ -19,7 +19,6 @@ env.AddComponentPostInit("wildfires", function(self)
         end
     end
     local ShouldActivateWildfires = function()
-        print("START WILDIFRES!!!", _ShouldActivateWildfires() and TheWorld:HasTag("heatwavestart"))
         return _ShouldActivateWildfires() and TheWorld:HasTag("heatwavestart")
     end
     UpvalueHacker.SetUpvalue(_ms_startwildfireforplayerfn, ShouldActivateWildfires, "ShouldActivateWildfires")

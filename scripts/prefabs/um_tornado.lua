@@ -183,7 +183,6 @@ local function TornadoTask(inst)
 				local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) --changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
 				local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
 				local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
-				local p_boat = TheWorld.Map:GetPlatformAtPoint(px, pz)
 
 				if dx ~= nil and (ground == p_ground or boat) then
 					v.Transform:SetPosition(dx, dy, dz)
@@ -208,7 +207,13 @@ local function TornadoTask(inst)
 
 			local tornado_pickables = TheSim:FindEntities(x, y, z, 16, nil, { "INLIMBO", "burning", "tornado_nosucky" },
 				{ "pickable", "_inventoryitem", "oceanfishable" })
+			printwrap("tornado_pickables", tornado_pickables)
 			for k, v in ipairs(tornado_pickables) do
+				print("ITEM CHEKCS")
+				print(v.components.inventoryitem ~= nil)
+				print(v:GetDistanceSqToInst(inst) < 16)
+				print(not v:HasTag("INLIMBO"))
+				print(v.prefab ~= "bullkelp_beachedroot")
 				if v.components.pickable ~= nil then --you never know...
 					if v:GetDistanceSqToInst(inst) < 16 then
 						v.components.pickable:Pick(inst)

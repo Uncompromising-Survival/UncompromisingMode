@@ -42,9 +42,6 @@ env.AddComponentPostInit("burnable", function(self)
 
 	function self:StartWildfire()
 		local x, y, z = self.inst.Transform:GetWorldPosition()
-		print(#TheSim:FindEntities(x, y, z, 12, { "canopy" }) <= 0)
-		print(TheWorld:HasTag("heatwavestart"))
-		print(self.inst:HasTag("plant"))
 		if #TheSim:FindEntities(x, y, z, 12, { "canopy" }) <= 0 or TheWorld:HasTag("heatwavestart") then
 			return _OldStartWildfire(self)
 		end
