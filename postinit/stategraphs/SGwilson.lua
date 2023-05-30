@@ -1341,6 +1341,10 @@ env.AddStategraphPostInit("wilson", function(inst)
             tags = { "attack", "notalking", "abouttoattack" },
 
             onenter = function(inst)
+				if inst.components.rider:IsRiding() then
+					inst.Transform:SetFourFaced()
+				end
+				
                 inst.sg.statemem.target = inst.components.combat.target
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:Stop()
@@ -1354,6 +1358,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end
             end,
+
+			onexit = function(inst)
+				if inst.components.rider:IsRiding() then
+					inst.Transform:SetSixFaced()
+				end
+			end,
 
             timeline =
             {
@@ -1392,6 +1402,10 @@ env.AddStategraphPostInit("wilson", function(inst)
             tags = { "attack", "notalking", "abouttoattack" },
 
             onenter = function(inst)
+				if inst.components.rider:IsRiding() then
+					inst.Transform:SetFourFaced()
+				end
+				
                 inst.sg.statemem.target = inst.components.combat.target
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:Stop()
@@ -1406,6 +1420,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end
             end,
+
+			onexit = function(inst)
+				if inst.components.rider:IsRiding() then
+					inst.Transform:SetSixFaced()
+				end
+			end,
 
             timeline =
             {
