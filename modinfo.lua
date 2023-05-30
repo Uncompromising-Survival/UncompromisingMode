@@ -98,7 +98,7 @@ configuration_options = {
 
     Header("In Development"),
     BinaryConfig("ck_loot", "Additional Crab King Loot",
-        "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+        "Crab King now drops unique loot based on the gems used.\nMissing art assets.", true),
     SkipSpace(),
 
     Header("Core Gameplay"),
@@ -249,8 +249,8 @@ configuration_options = {
         "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.",
         true),
     BinaryConfig("warly_butcher", "Experimental Warly's Butchering",
-		"Warly is a certified butcher, he can sometimes get more resources from his kills.",
-		false),
+        "Warly is a certified butcher, he can sometimes get more resources from his kills.",
+        true),
     BinaryConfig("waxwell", "Maxwell",
         "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!",
         true),
