@@ -80,6 +80,10 @@ local function fn_crab()
     return inst
 end
 
+local function OnArmorDamaged(inst, damage_amount)
+    inst.absorbed_moisture = inst.absorbed_moisture - damage_amount * 0.5
+end
+
 local function onequip_ice(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "swap_hat_crab", "swap_hat") --TODO
 
@@ -95,11 +99,16 @@ local function onequip_ice(inst, owner)
         owner:AddTag("wetness_affinity")
     end
 
-    owner.hat_crab_task = owner:DoPeriodicTask(1, function()
+    owner.hat_crab_task = owner:DoPeriodicTask(0.125, function()
         if owner.components.moisture ~= nil then
-            inst.components.armor.absorb_percent = Lerp(0.6, 0.95, owner.components.moisture:GetMoisturePercent())
-        else
-            inst.components.armor.absorb_percent = (owner:HasTag("wet") or TheWorld.state.iswet) and 0.95 or 0.6
+            local delta = 1
+            if owner.components.moisture.moisture - delta > 0 and inst.absorbed_moisture < (TUNING.ARMOR_RUINSHAT * 0.333) then
+                owner.components.moisture:DoDelta(-delta, true)
+                inst.absorbed_moisture = math.min(inst.absorbed_moisture + delta, (TUNING.ARMOR_RUINSHAT * 0.333))
+            end
+            print(inst.absorbed_moisture)
+            inst.components.armor.absorb_percent = Lerp(0.4, 0.90,
+                inst.absorbed_moisture / (TUNING.ARMOR_RUINSHAT * 0.333))
         end
     end, 0)
 end
@@ -123,6 +132,18 @@ local function onunequip_ice(inst, owner)
     end
 end
 
+local function OnSave(inst, data)
+    if data ~= nil then
+        data.absorbed_moisture = inst.absorbed_moisture
+    end
+end
+
+local function OnLoad(inst, data)
+    if data ~= nil and data.absorbed_moisture ~= nil then
+        inst.absorbed_moisture = data.absorbed_moisture
+    end
+end
+
 local function fn_ice()
     local inst = CreateEntity()
     inst.entity:AddTransform()
@@ -137,6 +158,7 @@ local function fn_ice()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("hat")
+    inst:AddTag("overchargeable")
 
     MakeInventoryFloatable(inst)
 
@@ -149,6 +171,17 @@ local function fn_ice()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
+
+
+    inst:ListenForEvent("armordamaged", OnArmorDamaged)
+
+    inst.absorbed_moisture = 0
+
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(0)
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/gore_horn_hat.xml"
