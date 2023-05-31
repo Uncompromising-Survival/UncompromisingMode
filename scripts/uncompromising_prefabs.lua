@@ -380,6 +380,8 @@ return {
 	"um_halloween_ornaments",
 	"trinket_wathom1",
 
+	"uncompromising_skins",
+
 	"codex_mantra",
 
 	--WIXIE RELATED PREFABS
