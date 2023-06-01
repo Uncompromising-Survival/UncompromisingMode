@@ -132,9 +132,9 @@ if GetModConfigData("book_recipes") then
         Ingredient("oceanfishingbobber_oval", 2)
     }
     AllRecipes["book_light_upgraded"].ingredients = {
-		Ingredient("book_light", 1),
+        Ingredient("book_light", 1),
         Ingredient("wormlight", 1),
-		Ingredient("papyrus", 2)
+        Ingredient("papyrus", 2)
     }
     -- AllRecipes["book_light_upgraded"].level = TechTree.Create(TECH.LOST)
     AllRecipes["bookstation"].ingredients = {
@@ -157,11 +157,11 @@ if GetModConfigData("book_recipes") then
         Ingredient("plantmeat", 1),
         Ingredient("poop", 5)
     }
-	AllRecipes["book_horticulture_upgraded"].ingredients = {
-		Ingredient("book_horticulture", 1),
+    AllRecipes["book_horticulture_upgraded"].ingredients = {
+        Ingredient("book_horticulture", 1),
         Ingredient("treegrowthsolution", 1),
-		Ingredient("papyrus", 2)
-	}
+        Ingredient("papyrus", 2)
+    }
 end
 
 -- magnets and dock
@@ -446,6 +446,8 @@ if GetModConfigData("snowstorms") then
     ChangeSortKey("wall_stone_item", "wall_wood_item", "WINTER", true)
     AddRecipeToFilter("wall_moonrock_item", "WINTER")
     ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
+    AddRecipeToFilter("turf_dragonfly", "WINTER")
+    ChangeSortKey("turf_dragonfly", "dragonflyfurnace", "WINTER", true)
 end
 
 AddRecipe2("boatpatch_sludge", { Ingredient("sludge", 3), Ingredient("driftwood_log", 2) }, TECH.NONE, nil, -- {numtogive = 2},
