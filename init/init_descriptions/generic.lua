@@ -613,3 +613,7 @@ ANNOUNCE.ATTACKED_CRABKING =
 DESCRIBE.MARA_BOSS1 = "Uhh..."
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough! Cough!"
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "A new specimen! Maybe I should get a closer look..."
+DESCRIBE.UM_SMOLDER_SPORE = "It looks a little shakey!"

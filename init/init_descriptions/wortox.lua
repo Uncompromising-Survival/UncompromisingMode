@@ -517,4 +517,16 @@ DESCRIBE.WIXIEGUN = "Too much mischief!"
 
 DESCRIBE.MARA_BOSS1 = "Hoh? Where ever is your soul, funny bones?"
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
-ANNOUNCE.GAS_DAMAGE = "HELP IDK"
+ANNOUNCE.GAS_DAMAGE = {
+	"Khu! Ukhu! Hyu...",
+	"U-kuh! Hyu!",
+	"T-through the-kh... Foul and-akhu... Filthy air!",
+	"Kh-hak! Hyuyu...",
+	"Hyu-yhu huhu... Hyuyu!",
+	"Hyu-hyu hu-hyuhuuu!",
+	"Cough."
+}
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Ho, quite the fiery one!"
+DESCRIBE.UM_SMOLDER_SPORE = "Aren't you a patient little terror?"

@@ -73,6 +73,7 @@ local ANTIHISTAMINES =
 	"acorn_cooked",
 	"red_cap",
 	"red_cap_cooked",
+	"firenettles",
 }
 
 local function AddAntihistamine(prefab)

@@ -525,3 +525,7 @@ DESCRIBE.WIXIEGUN = "That just ain't right."
 DESCRIBE.MARA_BOSS1 = "Huh. Ya don't see that every day."
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough! Cough! Ahem."
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "I reckon that one's a doozy."
+DESCRIBE.UM_SMOLDER_SPORE = "Is it looking for something?"

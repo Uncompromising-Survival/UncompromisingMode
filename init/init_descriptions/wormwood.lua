@@ -480,3 +480,7 @@ DESCRIBE.WIXIEGUN = "Super Pew-Pew!"
 DESCRIBE.MARA_BOSS1 = "Not go right! Run!!"
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "kack! kack!"
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Big hot guys!"
+DESCRIBE.UM_SMOLDER_SPORE = "Shy, should leave alone"

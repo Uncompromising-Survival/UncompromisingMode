@@ -992,6 +992,11 @@ Assets = {
 
 	Asset("ANIM", "anim/mara_boss1.zip"),
 	Asset("ANIM", "anim/mara_boss1_bullets.zip"),
+	
+	-- Pyre Nettle stuff
+	Asset("ANIM", "anim/um_pyre_nettles.zip"),
+	Asset("ANIM", "anim/um_smolder_spore.zip"),
+	Asset("ANIM", "anim/umdebuff_pyre_toxin_fx.zip"),
 
 
 
@@ -2039,6 +2044,9 @@ Assets = {
 
 	Asset("IMAGE", "images/map_icons/telebase_active.tex"),
 	Asset("ATLAS", "images/map_icons/telebase_active.xml"),
+	
+	Asset("IMAGE", "images/map_icons/um_pyre_nettles_map.tex"),
+	Asset("ATLAS", "images/map_icons/um_pyre_nettles_map.xml"),
 
 	--BIGPORTRAITS
 	Asset("IMAGE", "bigportraits/willow.tex"),
