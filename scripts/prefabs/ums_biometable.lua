@@ -1,6 +1,6 @@
 local DecidTable = {
 
-	shyTable = 1,
+	LazyBase = 1,
 
 }
 local WixieTable = {
@@ -26,7 +26,7 @@ local HoodedTable = {
 }
 local DarkForestTable = {
 
-	walterifgoodTable = 1,
+	walterifgood = 1,
 
 }
 local RockyTable = {
