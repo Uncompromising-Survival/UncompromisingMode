@@ -62,7 +62,7 @@ return Class(function(self, inst)
         --    --end
         --end
 
-        TheWorld:PushEvent("ms_forceprecipitation", true)
+        TheWorld:PushEvent("ms_forceprecipitation", false)
 
         TheWorld:DoTaskInTime(5, function()
             TheWorld:AddTag("heatwavestart")
