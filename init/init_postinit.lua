@@ -182,7 +182,8 @@ local prefab_post = {
     "cannonballs",
     --	"renameable_items",
     "lightninggoatherd",
-    "archive_centipede"
+    "archive_centipede",
+	"firenettles"
 }
 
 local stategraph_post = {

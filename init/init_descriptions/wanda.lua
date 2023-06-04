@@ -533,3 +533,7 @@ DESCRIBE.WIXIEGUN = "This is NOT the right timeline!"
 DESCRIBE.MARA_BOSS1 = "Well. There goes another timeline."
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Ack! I can't tinker in a place like this!"
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Gathering in bulk could save some time... If I don't get stuck by the blasted things."
+DESCRIBE.UM_SMOLDER_SPORE = "I could slip by, if I don't dally about it."

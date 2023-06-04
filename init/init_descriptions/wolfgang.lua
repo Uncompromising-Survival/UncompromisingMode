@@ -510,3 +510,7 @@ DESCRIBE.WIXIEGUN = "Wolfgang not like this..."
 DESCRIBE.MARA_BOSS1 = "No no no NO NO!!"
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Hack! Cough! Ack!"
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Scary child say they make nice pillow!"
+DESCRIBE.UM_SMOLDER_SPORE = "Look shakey. Maybe should be careful..."

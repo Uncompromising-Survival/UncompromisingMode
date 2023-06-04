@@ -515,6 +515,7 @@ RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 if TUNING.DSTU.NEWRECIPES then
+	InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, true, false, false)
 end

@@ -547,3 +547,7 @@ DESCRIBE.WIXIEGUN = "This is NOT Pinetree Pioneer approved!"
 DESCRIBE.MARA_BOSS1 = "It's ALIIIVE!!"
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough! Cough!"--TODO
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Alright, that one's DEFINITELY poisonous."
+DESCRIBE.UM_SMOLDER_SPORE = "Maybe we could take a closer look..."

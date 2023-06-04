@@ -540,3 +540,7 @@ DESCRIBE.WIXIEGUN = "Is this the future of manufacturing? For shame."
 DESCRIBE.MARA_BOSS1 = "Ho GOLLY what is that."
 DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "It's like a smeltery in here! COUGH!"
+
+-- Pyre Nettle stuff
+DESCRIBE.UM_PYRE_NETTLES = "Maybe I should put up some hazard tape."
+DESCRIBE.UM_SMOLDER_SPORE = "Watch out, that thing looks ready to pop!"
