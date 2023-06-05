@@ -101,6 +101,7 @@ local states = {
 
         timeline =
         {
+			TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/krampus/bag_swing") end),
             TimeEvent(8 * FRAMES, function(inst)
                 
 				local x, y, z = inst:GetPosition():Get()

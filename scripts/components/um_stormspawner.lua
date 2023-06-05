@@ -33,7 +33,7 @@ return Class(function(self, inst)
 	--[[ Private Member Variables ]]
 	--------------------------------------------------------------------------
 
-	local _tornadotime = (TheWorld.state.springlength / 4) * 240
+	local _tornadotime = (TheWorld.state.springlength / 4) * 480
 
 	--------------------------------------------------------------------------
 	--[[ Private member functions ]]
@@ -47,7 +47,6 @@ return Class(function(self, inst)
 				"siren_fish_spawner",
 			}
 		else
-			local target_portal = TheSim:FindFirstEntityWithTag("multiplayer_portal")
 			local location_id = math.random(#_locationtags)
 			local spawn_location = TheSim:FindFirstEntityWithTag(_locationtags[location_id])
 
@@ -56,24 +55,97 @@ return Class(function(self, inst)
 
 				local x, y, z = spawn_location.Transform:GetWorldPosition()
 				local x_dest, y_dest, z_dest = spawn_location.Transform:GetWorldPosition()
+				local wise = 90
+				local dest_can_move = true
+				
+				local mthnrd = math.random()
+				
+				--if x > 700 or x < -700 or mthnrd > 0.5 and not (z > 700 or z < -700) then
+				if mthnrd > 0.5 then
+					if x > 0 then
+						x_dest = -x * 1.5
+					else
+						x_dest = math.abs(x) * 1.5
+					end
+					
+					z_dest = z * 1.5
+					
+					local destination = SpawnPrefab("um_tornado_destination")
+					destination.Transform:SetPosition(x_dest, 0, z_dest)
 
-				if x > 0 then
-					x_dest = -x * 2
+					if x > 0 and z > 0 then
+						print("green x > 0 and z > 0")
+						destination.danumber = 90
+					elseif x > 0 and z < 0 then
+						print("green x > 0 and z < 0")
+						destination.danumber = -90
+						wise = -90
+					elseif x < 0 and z > 0 then
+						print("green x < 0 and z > 0")
+						destination.danumber = -90
+						wise = -90
+					else
+						print("green")
+						destination.danumber = 90
+					end
+					
+					destination.marker = "um_tornado_destination_marker"
+					
+					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
+				--elseif z > 700 or z < -700 or mthnrd <= 0.5 and not (x > 700 or x < -700) then
 				else
-					x_dest = math.abs(x) * 2
+					x_dest = x * 1.5
+					
+					if z > 0 then
+						z_dest = -z * 1.5
+					else
+						z_dest = math.abs(z) * 1.5
+					end
+
+					local destination = SpawnPrefab("um_tornado_destination")
+					destination.Transform:SetPosition(x_dest, 0, z_dest)
+					
+					if x > 0 and z > 0 then
+						print("red x > 0 and z > 0")
+						destination.danumber = -90
+						wise = -90
+					elseif x > 0 and z < 0 then
+						print("red x > 0 and z < 0")
+						destination.danumber = 90
+					elseif x < 0 and z > 0 then
+						print("red x < 0 and z > 0")
+						destination.danumber = 90
+					else
+						print("red")
+						destination.danumber = -90
+						wise = -90
+					end
+					
+					destination.marker = "um_tornado_destination_marker3"
+					
+					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
+				--[[else
+					if x > 0 then
+						x_dest = -x * 1.5
+					else
+						x_dest = math.abs(x) * 1.5
+					end
+					
+					if z > 0 then
+						z_dest = -z * 1.5
+					else
+						z_dest = math.abs(z) * 1.5
+					end
+					
+					local destination = SpawnPrefab("um_tornado_destination")
+					destination.Transform:SetPosition(x_dest, 0, z_dest)
+					destination.dest_can_move = false
+					dest_can_move = false
+					
+					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)]]
 				end
 
-				if z > 0 then
-					z_dest = -z * 2
-				else
-					z_dest = math.abs(z) * 2
-				end
-
-				SpawnPrefab("um_tornado_destination").Transform:SetPosition(x_dest + math.random(-50, 50), 0,
-					z_dest + math.random(-50, 50))
-				SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
-
-				SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "CaveTornado"), nil, x, z)
+				SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "CaveTornado"), nil, x, z, wise, dest_can_move)
 			end
 		end
 
@@ -86,6 +158,8 @@ return Class(function(self, inst)
 			--print("xdata"..data.xdata)
 			local x = data.xdata
 			local z = data.zdata
+			local wise = data.wisedata
+			local dest_can_move = data.dest_can_movedata
 
 			local x_dest = x
 			local z_dest = z
@@ -101,9 +175,12 @@ return Class(function(self, inst)
 			else
 				z_dest = math.abs(z) * 2
 			end
-
-			SpawnPrefab("um_tornado_destination").Transform:SetPosition(x_dest + math.random(-50, 50), 0,
-				z_dest + math.random(-50, 50))
+			
+			local destination = SpawnPrefab("um_tornado_destination")
+			destination.Transform:SetPosition(x_dest, 0, z_dest)
+			destination.danumber = wise
+			destination.dest_can_move = dest_can_move
+			
 			SpawnPrefab("um_cavetornado").Transform:SetPosition(x, 0, z)
 		end
 	end

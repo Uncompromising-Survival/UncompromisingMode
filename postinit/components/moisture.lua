@@ -7,10 +7,6 @@ env.AddComponentPostInit("moisture", function(self)
 
 	function self:GetMoistureRate()
 		if self.inst:HasTag("under_the_weather") then
-			if not TheWorld.state.israining then
-				return 0
-			end
-
 			local waterproofmult =
 				(self.inst.components.sheltered ~= nil and
 					self.inst.components.sheltered.sheltered and
@@ -31,7 +27,7 @@ env.AddComponentPostInit("moisture", function(self)
 			if TheWorld.state.precipitationrate ~= nil then
 				rate = easing.inSine(TheWorld.state.precipitationrate, self.minMoistureRate, self.maxMoistureRate, 1)
 			end
-			return rate * (1.5 - waterproofmult)
+			return (rate + 0.2) * (1.5 - waterproofmult)
 		elseif self.inst:HasTag("um_waterfall_moisture_override") then
 			local waterproofmult =
 				(self.inst.components.sheltered ~= nil and

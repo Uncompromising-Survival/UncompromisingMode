@@ -47,6 +47,15 @@ local function TrySpawnAlpha(inst, data)
 			end
 		end
 		
+		
+		for i, v in pairs(inst.components.herd.members) do
+			if i:HasTag("alpha_goat") then
+				inst.components.timer:StartTimer("spawn_alpha", 240 + math.random(240))
+				
+				return
+			end
+		end
+		
 		local goat = SpawnPrefab(prefab)
 		goat.Transform:SetPosition(x, y, z)
 			

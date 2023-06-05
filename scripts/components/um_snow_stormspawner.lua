@@ -72,10 +72,10 @@ return Class(function(self, inst)
 				TheWorld.net:AddTag("snowstormstartnet")
 			end
 			
-			if _worldsettingstimer:GetTimeLeft(UM_STORM_TIMERNAME) == nil then
+			if _worldsettingstimer:GetTimeLeft(UM_STOPSTORM_TIMERNAME) == nil then
 				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
 			end
-			
+
 			_worldsettingstimer:ResumeTimer(UM_STOPSTORM_TIMERNAME)
 		end)
 	end
@@ -135,6 +135,8 @@ return Class(function(self, inst)
 			if _worldsettingstimer:GetTimeLeft(UM_STOPSTORM_TIMERNAME) == nil then
 				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
 			end
+
+			_worldsettingstimer:ResumeTimer(UM_STOPSTORM_TIMERNAME)
 		end
 	end
 

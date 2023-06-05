@@ -7,7 +7,18 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local function OnHitOther(inst, data)
     if data.target ~= nil then
-        inst.components.thief:StealItem(data.target)
+		inst.components.thief:StealItem(data.target)
+	
+		if data.target:HasTag("creatureknockbackable") or data.target:HasTag("player") and data.target.components.inventory ~= nil and not data.target:HasTag("fat_gang") and
+			not data.target:HasTag("foodknockbackimmune") and
+			not (data.target.components.rider ~= nil and data.target.components.rider:IsRiding()) and
+			--Don't knockback if you wear marble
+			(
+			data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil or
+				not data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and
+				not data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
+			inst.sg:GoToState("taunt")
+		end
     end
 end
 
@@ -26,6 +37,8 @@ local function CheckLeaving(inst, data)
 				middleman.Transform:SetPosition(inst.Transform:GetWorldPosition())
 				inst.components.inventory:TransferInventory(middleman)
 			end
+			
+			inst.components.health:SetInvincible(true)
 		end
 	end
 end

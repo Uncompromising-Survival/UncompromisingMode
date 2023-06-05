@@ -290,14 +290,14 @@ AddShardModRPCHandler("UncompromisingSurvival", "DeerclopsStored_caves", functio
     end
 end)
 
-AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, z)
+AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, z, wise, dest_can_move)
 	print("====")
 	print(def)
 	print(x)
 	print(z)
 	print("====")
     if not GLOBAL.TheWorld.ismastershard then
-        GLOBAL.TheWorld:PushEvent("spawncavetornado", { xdata = x, zdata = z })
+        GLOBAL.TheWorld:PushEvent("spawncavetornado", { xdata = x, zdata = z, wisedata = wise, dest_can_movedata = dest_can_move })
     end
 end)
 

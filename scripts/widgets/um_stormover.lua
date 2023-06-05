@@ -35,6 +35,16 @@ local Um_StormOver = Class(Widget, function(self, owner, storm_overlays)
 	self.bg2:GetAnimState():SetBuild("um_storm_over")
 	self.bg2:GetAnimState():PlayAnimation("rain_loop", true)
 
+	self.bg4 = self:AddChild(Widget("rain_root"))
+	self.bg4:SetHAnchor(ANCHOR_MIDDLE)
+	self.bg4:SetVAnchor(ANCHOR_MIDDLE)
+	self.bg4:SetScaleMode(SCALEMODE_FIXEDSCREEN_NONDYNAMIC)
+	self.bg4 = self.bg4:AddChild(UIAnim())
+	self.bg4:GetAnimState():SetBank("um_storm_over")
+	self.bg4:GetAnimState():SetBuild("um_storm_over")
+	self.bg4:GetAnimState():PlayAnimation("rain_loop", true)
+	self.bg4:SetScale(1.5)
+
 	self.bg3 = self:AddChild(Widget("cloud_root"))
 	self.bg3:SetHAnchor(ANCHOR_MIDDLE)
 	self.bg3:SetVAnchor(ANCHOR_MIDDLE)
@@ -65,8 +75,10 @@ function Um_StormOver:OnUpdate(dt)
 			self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 			self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 			self.bg3:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
-			--TheFocalPoint.SoundEmitter:PlaySound("dontstarve/AMB/rain", "um_storm_rain")
-			--TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
+			self.bg4:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
+			
+			TheFocalPoint.SoundEmitter:PlaySound("UCSounds/um_tornado/um_heavy_rain", "um_storm_rain")
+			TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
 		end
 	else
 		if self.changed > 0 then
@@ -74,11 +86,12 @@ function Um_StormOver:OnUpdate(dt)
 			self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 			self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 			self.bg3:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
+			self.bg4:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 
-			--TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
+			TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
 		else
 			self:Hide()
-			--TheFocalPoint.SoundEmitter:KillSound("um_storm_rain")
+			TheFocalPoint.SoundEmitter:KillSound("um_storm_rain")
 		end
 	end
 end

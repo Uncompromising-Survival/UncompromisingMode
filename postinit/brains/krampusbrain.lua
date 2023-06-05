@@ -31,17 +31,25 @@ local function KrampusStealing(self)
 
 	local function StealAction(inst)
 		if not inst.components.inventory:IsFull() then
+			local target_priority = FindEntity(inst, SEE_DIST,
+				CanSteal,
+				{ "_inventoryitem", "_equippable" },
+				STEAL_CANT_TAGS)
+				
 			local target = FindEntity(inst, SEE_DIST,
 				CanSteal,
 				STEAL_MUST_TAGS, --see entityreplica.lua
 				STEAL_CANT_TAGS)
-			return target ~= nil
+
+			return target_priority ~= nil
+				and BufferedAction(inst, target_priority, ACTIONS.PICKUP) or
+				target ~= nil
 				and BufferedAction(inst, target, ACTIONS.PICKUP)
 				or nil
 		end
 	end
 
-    self.greed = 4 + math.random(2)
+    self.greed = 4
 
 	local leave_2 = IfNode( function() return self.inst.components.inventory:NumItems() >= self.greed and not self.inst.sg:HasStateTag("busy") end, "ForceLeave",
             ActionNode(function() self.inst.sg:GoToState("exit") return SUCCESS end, "leave" ))
