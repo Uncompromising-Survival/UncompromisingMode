@@ -29,7 +29,6 @@ return Class(function(self, inst)
 	--------------------------------------------------------------------------
 
 	local _storming = false
-	local _tornadotime = (TheWorld.state.springlength / 4) * 240
 	local _spawninterval = TUNING.TOTAL_DAY_TIME * 3
 	local _despawninterval = TUNING.TOTAL_DAY_TIME / 2
 
@@ -66,14 +65,18 @@ return Class(function(self, inst)
 		
 		TheWorld:PushEvent("ms_forceprecipitation", true)
 		
-		TheWorld:DoTaskInTime(5, function()
+		TheWorld:DoTaskInTime(60, function()
 			print("TASK IN TIME STORM START!")
 			TheWorld:AddTag("snowstormstart")
 			if TheWorld.net ~= nil then
 				TheWorld.net:AddTag("snowstormstartnet")
 			end
 			
-			_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
+			if _worldsettingstimer:GetTimeLeft(UM_STORM_TIMERNAME) == nil then
+				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
+			end
+			
+			_worldsettingstimer:ResumeTimer(UM_STOPSTORM_TIMERNAME)
 		end)
 	end
 
