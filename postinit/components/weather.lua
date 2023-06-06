@@ -24,13 +24,13 @@ env.AddComponentPostInit("weather", function(self)
         _OnUpdate(self, dt)
         if TheWorld.state.issummer and TheWorld.net:HasTag("heatwavestartnet") then
             if _hasfx then
-                _pollenfx.particles_per_tick = _pollenfx.particles_per_tick * 1000 + 1 --MOREEEEEEEEEEEEEEEE
+                _pollenfx.particles_per_tick = _pollenfx.particles_per_tick * 1000 + 1 -- MOREEEEEEEEEEEEEEEE
             end
         end
         if ThePlayer ~= nil and ThePlayer:HasTag("under_the_weather") then
             if _hasfx then
-                _rainfx.particles_per_tick = _rainfx.particles_per_tick * 10
-                _rainfx.splashes_per_tick = _rainfx.splashes_per_tick * 10
+                _rainfx.particles_per_tick = _rainfx.particles_per_tick * 10 + 5
+                _rainfx.splashes_per_tick = _rainfx.splashes_per_tick * 10 + 5
             end
         end
     end

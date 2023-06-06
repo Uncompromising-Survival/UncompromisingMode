@@ -111,7 +111,7 @@ local prefab_post = {
     "critterlab",
     "wobster",
     "trinkets", -- This is for the grave mound cc trinkets
-    "trap",     -- prevents traps and rabbits from 'sleeping' off screen
+    "trap", -- prevents traps and rabbits from 'sleeping' off screen
     "moonbase",
     "koalas",
     "pumpkin_lantern",
@@ -183,7 +183,7 @@ local prefab_post = {
     --	"renameable_items",
     "lightninggoatherd",
     "archive_centipede",
-	"firenettles"
+    "firenettles"
 }
 
 local stategraph_post = {
@@ -221,25 +221,26 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
-    "terrorguisestuff"
+    "terrorguisestuff",
+    "powdermonkey"
 }
 
 if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
         "extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
-        "slingshot",                   -- stuff for new slingshot aiming and wixie exclusivity
-        "walter",                      -- all of walters things, including woby action
+        "slingshot", -- stuff for new slingshot aiming and wixie exclusivity
+        "walter", -- all of walters things, including woby action
         "wobysmall",
         "wobybig",
-        "wormhole",      -- wixie loses more sanity from wormholes
+        "wormhole", -- wixie loses more sanity from wormholes
         "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
-        "coconut"        -- shoot a coconut
+        "coconut" -- shoot a coconut
     }
     local wixie_components = {
-        "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
+        "healer", -- Walter gets a 50% bonus from healing items, over time. works on companions too.
         "bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
-        "wobypicking",    -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
-        "dryer"           -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
+        "wobypicking", -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
+        "dryer" -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
 
     }
 
