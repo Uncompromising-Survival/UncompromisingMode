@@ -105,7 +105,10 @@ local function UncompromisingSpawnGOOOOO(inst, data)
                 end
 
                 if v.prefab == "boat_cannon" then
+                    -- local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+                    -- local angle_awayfrom_aop = prefab:GetAngleToPoint(tx, y, tz) + 180
                     local angle_awayfrom_aop = prefab:GetAngleToPoint(x, 0, z) + 180
+
                     if prefab.Transform ~= nil then
                         prefab.Transform:SetRotation(angle_awayfrom_aop)
                     end

@@ -19,7 +19,7 @@ local function gotocannon(inst)
             if #targets > 0 then
                 for i, target in ipairs(targets) do
                     print(target)
-                    if not cannon.components.timer:TimerExists("monkey_biz") then
+                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" then
                         local boatpos = Vector3(target.Transform:GetWorldPosition())
                         local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
 
@@ -56,7 +56,7 @@ local function firecannon(inst)
             for i, target in ipairs(targets) do
                 print(target)
 
-                if not cannon.components.timer:TimerExists("monkey_biz") then
+                if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" then
                     local boatpos = Vector3(target.Transform:GetWorldPosition())
                     local angle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
 
