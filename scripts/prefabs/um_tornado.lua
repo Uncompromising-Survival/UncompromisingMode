@@ -307,7 +307,7 @@ local function TornadoItemTossTask(inst)
 
                 random_item:DoTaskInTime(8, function(inst) inst:RemoveTag("tornado_nosucky") end)
                 random_item.Physics:Teleport(x, 35, z)
-                random_item.Physics:SetMotorVel(0, -50, 0)
+                random_item.Physics:SetMotorVel(0, math.random(-33, -25), 0)
                 random_item.shadow = SpawnPrefab("warningshadow")
                 random_item.shadow:ListenForEvent("onremove", function(debris) debris.shadow:Remove() end, random_item)
                 random_item.shadow.Transform:SetPosition(x, 0, z)
