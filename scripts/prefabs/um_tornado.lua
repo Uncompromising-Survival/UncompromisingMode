@@ -317,6 +317,8 @@ local function TornadoItemTossTask(inst)
                 random_item.updatetask = random_item:DoPeriodicTask(FRAMES, _GroundDetectionUpdate, nil, 5)
 
                 random_item.updatetask_timeout = random_item:DoTaskInTime(30, function(inst)
+                    inst.Physics:ClearMotorVelOverride()
+
                     if inst.updatetask ~= nil or inst.shadow ~= nil then
                         print("PANIC? FALLING ITEM TIMED OUT!")
                         inst.entity:SetCanSleep(true)
