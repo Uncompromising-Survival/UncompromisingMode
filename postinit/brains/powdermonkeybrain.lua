@@ -19,14 +19,15 @@ local function gotocannon(inst)
             if #targets > 0 then
                 for i, target in ipairs(targets) do
                     print(target)
-                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" then
+                    local cx, cy, cz = cannon.Transform:GetWorldPosition()
+                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
                         local boatpos = Vector3(target.Transform:GetWorldPosition())
-                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
+                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z) + math.random(-2.5, 2.5)
 
                         if math.abs(DiffAngle(cannonangle, cannon.Transform:GetRotation())) < 270 then
                             local cannonpos = Vector3(cannon.Transform:GetWorldPosition())
-                            local angle = (cannon.Transform:GetRotation() - 180) * DEGREES
-                            local offset = FindWalkableOffset(cannonpos, angle, 2, 12, true, false, nil, true)
+                            local angle = (cannonangle - 180) * DEGREES
+                            local offset = FindWalkableOffset(cannonpos, angle, 2.5, 12, true, false, nil, false)
 
                             if offset and inst:GetDistanceSqToPoint(cannonpos) > (0.25 * 0.25) then
                                 cannon.operator = inst
@@ -56,15 +57,16 @@ local function firecannon(inst)
             for i, target in ipairs(targets) do
                 print(target)
 
-                if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" then
+                if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and TheWorld.Map:GetTileAtPoint(target.Transform:GetWorldPosition()) ~= WORLD_TILES.MONKEY_DOCK then
                     local boatpos = Vector3(target.Transform:GetWorldPosition())
                     local angle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
 
-                    if math.abs(DiffAngle(angle, cannon.Transform:GetRotation())) < 45 then
+                    if math.abs(DiffAngle(angle, cannon.Transform:GetRotation())) < 90 then
                         local cannonpos = Vector3(cannon.Transform:GetWorldPosition())
-                        local offset = FindWalkableOffset(cannonpos, angle, 2, 12, true, false, nil, true)
+                        local offset = FindWalkableOffset(cannonpos, angle, 2.5, 12, true, false, nil, false)
 
                         if inst:GetDistanceSqToPoint(cannonpos + offset) <= (0.3 * 0.3) then
+                            cannon.Transform:SetRotation(cannon.Transform:GetRotation() + math.random(-15, 15))
                             return BufferedAction(inst, cannon, ACTIONS.BOAT_CANNON_SHOOT)
                         end
                     end
