@@ -17,7 +17,7 @@ local night_time = seg_time * night_segs
 -----------------------------------------------------------------
 -- Reduce seed spawn chance
 -----------------------------------------------------------------
---TODO: this is not working
+-- TODO: this is not working
 local RAND_TIME_MIN = FOOD_BIRD_SEED_SPAWN_MIN_RANDOM_TIME
 local RAND_TIME_MAX = FOOD_BIRD_SEED_SPAWN_MAX_RANDOM_TIME
 AddPrefabPostInit("crow", function(inst)
@@ -38,11 +38,10 @@ AddPrefabPostInit("robin", function(inst)
     end
 end)
 
-
 -----------------------------------------------------------------
 -- Butterflies appearance rate depends on nr of players
 -----------------------------------------------------------------
---TODO complicated
+-- TODO complicated
 --[[local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 AddClassPostConstruct("components/butterflyspawner", function(self)
     local _activeplayers = UpvalueHacker.GetUpvalue(self, "ScheduleSpawn", "_activeplayers")
@@ -66,18 +65,12 @@ AddPrefabPostInit("world", function(inst)
 
 end)]]
 GLOBAL.TUNING.BUTTERFLY_SPAWN_TIME = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_SPAWN_TIME_INCREASE
---TODO: Fix, this doesn't work
+-- TODO: Fix, this doesn't work
 
 -----------------------------------------------------------------
 -- stone fruits increased duration
 -----------------------------------------------------------------
-GLOBAL.TUNING.ROCK_FRUIT_REGROW =
-{
-    EMPTY = { BASE = 2 * day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time },
-    PREPICK = { BASE = seg_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 0 },
-    PICK = { BASE = 3 * day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time },
-    CRUMBLE = { BASE = day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time }
-}
+GLOBAL.TUNING.ROCK_FRUIT_REGROW = {EMPTY = {BASE = 2 * day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time}, PREPICK = {BASE = seg_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 0}, PICK = {BASE = 3 * day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time}, CRUMBLE = {BASE = day_time * GLOBAL.TUNING.DSTU.STONE_FRUIT_GROWTH_INCREASE, VAR = 2 * seg_time}}
 
 -----------------------------------------------------------------
 -- No grow in winter
@@ -104,7 +97,6 @@ local function ToggleGrowable(inst, iswinter)
     end
 end
 
-
 local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
 
 function GLOBAL.MakeNoGrowInWinter(inst)
@@ -121,7 +113,7 @@ if GetModConfigData("nowintergrowing") then
         end
     end)
 
-    --cherry tomatos
+    -- cherry tomatos
     AddPrefabPostInit("cherrytomato_planted", function(inst)
         if inst ~= nil and inst.components.pickable ~= nil then
             GLOBAL.MakeNoGrowInWinter(inst)
@@ -208,16 +200,15 @@ if GetModConfigData("nowintergrowing") then
         end
     end)
 
-
-    PLANT_DEFS.potato.good_seasons = { autumn = true, spring = true }
-    PLANT_DEFS.carrot.good_seasons = { autumn = true, spring = true, summer = true }
-    PLANT_DEFS.pumpkin.good_seasons = { autumn = true, summer = true }
-    PLANT_DEFS.asparagus.good_seasons = { spring = true, autumn = true }
+    PLANT_DEFS.potato.good_seasons = {autumn = true, spring = true}
+    PLANT_DEFS.carrot.good_seasons = {autumn = true, spring = true, summer = true}
+    PLANT_DEFS.pumpkin.good_seasons = {autumn = true, summer = true}
+    PLANT_DEFS.asparagus.good_seasons = {spring = true, autumn = true}
 end
 -----------------------------------------------------------------
 -- Bunnies don't drop carrots anymore
 -----------------------------------------------------------------
-local beardlordloot = { "beardhair", "beardhair", "monstermeat" }
+local beardlordloot = {"beardhair", "beardhair", "monstermeat"}
 
 local function SetBeardLord(inst)
     inst.beardlord = true
@@ -229,9 +220,7 @@ end
 
 local function IsCrazyGuy(guy)
     local sanity = guy ~= nil and guy.replica.sanity or nil
-    return sanity ~= nil and sanity:IsInsanityMode() and
-        sanity:GetPercentNetworked() <=
-        (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
+    return sanity ~= nil and sanity:IsInsanityMode() and sanity:GetPercentNetworked() <= (guy:HasTag("dappereffects") and TUNING.DAPPER_BEARDLING_SANITY or TUNING.BEARDLING_SANITY)
 end
 --[[
 local function LootSetupFunction(lootdropper)
@@ -258,8 +247,8 @@ AddPrefabPostInit("bunnyman", function (inst)
     end
 end)
 ]]
-local rabbitloot = { "smallmeat" }
-local forced_beardlingloot = { "nightmarefuel" }
+local rabbitloot = {"smallmeat"}
+local forced_beardlingloot = {"nightmarefuel"}
 
 local function SetRabbitLoot(lootdropper)
     if lootdropper.loot ~= rabbitloot and not lootdropper.inst._fixedloot then
@@ -288,9 +277,7 @@ local function SetForcedBeardlingLoot(lootdropper)
     end
 end
 
-local function IsForcedNightmare(inst)
-    return inst.components.timer:TimerExists("forcenightmare")
-end
+local function IsForcedNightmare(inst) return inst.components.timer:TimerExists("forcenightmare") end
 
 local function LootSetupFunction_jack(lootdropper)
     local guy = lootdropper.inst.causeofdeath
@@ -326,7 +313,7 @@ end)]]
 -----------------------------------------------------------------
 -- Bees don't drop honey no more
 -----------------------------------------------------------------
-local stinger_only = { "stinger" }
+local stinger_only = {"stinger"}
 AddPrefabPostInit("bee", function(inst)
     if inst.components.lootdropper ~= nil then
         inst.components.lootdropper:SetLoot(stinger_only)
@@ -339,24 +326,22 @@ AddPrefabPostInit("killerbee", function(inst)
     end
 end)
 
-
 -----------------------------------------------------------------
 -- Bee box levels are 0,1,2,4 honey (from 0,1,3,6)
 -----------------------------------------------------------------
 local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
 
-levels =
-{
-    { amount = HONEY_PER_STAGE[4], idle = "honey3",    hit = "hit_honey3" },
-    { amount = HONEY_PER_STAGE[3], idle = "honey2",    hit = "hit_honey2" },
-    { amount = HONEY_PER_STAGE[2], idle = "honey1",    hit = "hit_honey1" },
+levels = {
+    { amount = HONEY_PER_STAGE[4], idle = "honey3", hit = "hit_honey3" },
+    { amount = HONEY_PER_STAGE[3], idle = "honey2", hit = "hit_honey2" },
+    { amount = HONEY_PER_STAGE[2], idle = "honey1", hit = "hit_honey1" },
     { amount = HONEY_PER_STAGE[1], idle = "bees_loop", hit = "hit_idle" },
 }
 
 local function setlevel(inst, level)
     if not inst:HasTag("burnt") then
         if inst.anims == nil then
-            inst.anims = { idle = level.idle, hit = level.hit }
+            inst.anims = {idle = level.idle, hit = level.hit}
         else
             inst.anims.idle = level.idle
             inst.anims.hit = level.hit
@@ -380,21 +365,21 @@ local function onharvest(inst, picker, produce)
     if not inst:HasTag("burnt") then
         updatelevel(inst)
         if inst.components.childspawner ~= nil and not GLOBAL.TheWorld.state.iswinter then
-            inst.components.childspawner:ReleaseAllChildren(picker)
+            inst.components.childspawner:ReleaseAllChildren()
         end
     end
 end
 
 if GetModConfigData("beebox_nerf") then
     AddPrefabPostInit("beebox", function(inst)
-        --TODO, test this
+        -- TODO, test this
         if not GLOBAL.TheWorld.ismastersim then
             return
         end
 
-        if inst.components.harvestable ~= nil then
-            inst.components.harvestable:SetUp("honey", HONEY_PER_STAGE[4], nil, onharvest, updatelevel)
-        end
+        -- if inst.components.harvestable ~= nil then
+        --    inst.components.harvestable:SetUp("honey", HONEY_PER_STAGE[4], nil, onharvest, updatelevel)
+        -- end
 
         updatelevel(inst)
     end)
@@ -420,28 +405,25 @@ end)
 -----------------------------------------------------------------
 local xc = GLOBAL.TUNING.DSTU.TREE_GROWTH_TIME_INCREASE
 
-GLOBAL.TUNING.EVERGREEN_GROW_TIME =
-{
-    { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 5 * day_time * xc,   random = 2 * day_time },   --normal
-    { base = 5 * day_time * xc,   random = 2 * day_time },   --tall
-    { base = 1 * day_time * xc,   random = 0.5 * day_time }  --old
+GLOBAL.TUNING.EVERGREEN_GROW_TIME = {
+    {base = 1.5 * day_time * xc, random = 0.5 * day_time}, -- short
+    {base = 5 * day_time * xc, random = 2 * day_time}, -- normal
+    {base = 5 * day_time * xc, random = 2 * day_time}, -- tall
+    {base = 1 * day_time * xc, random = 0.5 * day_time} -- old
 }
 
-GLOBAL.TUNING.TWIGGY_TREE_GROW_TIME =
-{
-    { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 3 * day_time * xc,   random = 1 * day_time },   --normal
-    { base = 3 * day_time * xc,   random = 1 * day_time },   --tall
-    { base = 5 * day_time * xc,   random = 0.5 * day_time }  --old
+GLOBAL.TUNING.TWIGGY_TREE_GROW_TIME = {
+    {base = 1.5 * day_time * xc, random = 0.5 * day_time}, -- short
+    {base = 3 * day_time * xc, random = 1 * day_time}, -- normal
+    {base = 3 * day_time * xc, random = 1 * day_time}, -- tall
+    {base = 5 * day_time * xc, random = 0.5 * day_time} -- old
 }
 
-GLOBAL.TUNING.PINECONE_GROWTIME = { base = 0.75 * day_time * xc, random = 0.25 * day_time }
+GLOBAL.TUNING.PINECONE_GROWTIME = {base = 0.75 * day_time * xc, random = 0.25 * day_time}
 
-GLOBAL.TUNING.DECIDUOUS_GROW_TIME =
-{
-    { base = 1.5 * day_time * xc, random = 0.5 * day_time }, --short
-    { base = 5 * day_time * xc,   random = 2 * day_time },   --normal
-    { base = 5 * day_time * xc,   random = 2 * day_time },   --tall
-    { base = 1 * day_time * xc,   random = 0.5 * day_time }  --old
+GLOBAL.TUNING.DECIDUOUS_GROW_TIME = {
+    {base = 1.5 * day_time * xc, random = 0.5 * day_time}, -- short
+    {base = 5 * day_time * xc, random = 2 * day_time}, -- normal
+    {base = 5 * day_time * xc, random = 2 * day_time}, -- tall
+    {base = 1 * day_time * xc, random = 0.5 * day_time} -- old
 }
