@@ -103,7 +103,7 @@ if GetModConfigData("telestaff_rework") then
 end
 
 if GetModConfigData("beebox_nerf") then
-	TOOLTIP.BEEBOX = "- Reduced yield per stage.\n- Reduced maximum active bees."
+	TOOLTIP.BEEBOX = "- Reduced maximum active bees."
 end
 
 if not TUNING.DSTU.ELECTRICALMISHAP then
@@ -239,7 +239,7 @@ if GetModConfigData("lunar grimoire") then
 end
 
 if GetModConfigData("apicultural notes") then
-	TOOLTIP.BOOK_BEES = "- Now fills up to 10 nearby Bee Boxes."
+	TOOLTIP.BOOK_BEES = "- Now adds Honey to 20 nearby Bee Boxes."
 end
 
 if GetModConfigData("disable_megaflare") then

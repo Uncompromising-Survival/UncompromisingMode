@@ -74,6 +74,14 @@ if GetModConfigData("wanda_nerf") then
     }
 end
 
+if GetModConfigData("beebox_nerf") then
+	AllRecipes["beebox"].ingredients = {
+		Ingredient("boards", 2),
+		Ingredient("honeycomb", 1),
+		Ingredient("bee", 1)
+	}
+end
+
 AllRecipes["moonrockidol"].ingredients = {
     Ingredient("moonrocknugget", GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST),
     Ingredient("purplegem", 1)

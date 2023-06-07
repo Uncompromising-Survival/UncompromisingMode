@@ -341,13 +341,13 @@ local function OnRead_bees(inst, reader)
     local found = false
 
     for k, v in ipairs(beeboxes) do
-        if k > 10 then
+        if k > 20 then
             break
         end
         local x, y, z = v.Transform:GetWorldPosition()
-
-        if v.components.childspawner and v.components.childspawner.childreninside > 0 and not TheWorld.state.iswinter then
-            v.components.childspawner:ReleaseAllChildren(reader)
+			
+        if  (v.components.harvestable.maxproduce - v.components.harvestable.produce) ~= 0 and not TheWorld.state.iswinter then
+            v.components.harvestable:Grow(1)
             local fx = SpawnPrefab("fx_book_bees")
             fx.Transform:SetPosition(x, y, z)
             found = true
