@@ -1866,6 +1866,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/winona_catapult_item.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/winona_catapult_item.xml"),
 	Asset("ATLAS", "images/inventoryimages/winona_catapult_item.xml"),
+	
+	Asset("ATLAS", "images/inventoryimages/um_smolder_spore.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_smolder_spore.tex"),
+	
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
@@ -1982,6 +1986,9 @@ Assets = {
 
 	Asset("SOUNDPACKAGE", "sound/tiddle_stranger.fev"),
 	Asset("SOUND", "sound/tiddle_stranger.fsb"),
+	
+	Asset("SOUNDPACKAGE", "sound/stmpwyfs.fev"),
+	Asset("SOUND", "sound/stmpwyfs.fsb"),
 
 
 

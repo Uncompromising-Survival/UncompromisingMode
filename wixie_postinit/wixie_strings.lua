@@ -506,6 +506,8 @@ DESCRIBE.MARA_BOSS1 = "It doesn't look so tough!"
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Better keep that one at arm's length..."
 DESCRIBE.UM_SMOLDER_SPORE = "Hey, target practice!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Yeah, I'm on fire!! LITERALLY HELP."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Yeah, I'm on fire!! LITERALLY HELP."
 
 local general_scripts = require("play_generalscripts")
 

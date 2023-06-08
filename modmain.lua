@@ -298,9 +298,11 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
     if toggle then
         GLOBAL.TheWorld:AddTag("heatwavestart")
         GLOBAL.TheWorld.net:AddTag("heatwavestartnet")
+		GLOBAL.TheWorld:PushEvent("heatwavestart")
     else
         GLOBAL.TheWorld:RemoveTag("heatwavestart")
         GLOBAL.TheWorld.net:RemoveTag("heatwavestartnet")
+		GLOBAL.TheWorld:PushEvent("heatwaveend")
     end
 end)
 

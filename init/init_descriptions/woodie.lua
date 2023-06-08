@@ -523,9 +523,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "A small bite."
 DESCRIBE.WIXIEGUN = "That just ain't right."
 
 DESCRIBE.MARA_BOSS1 = "Huh. Ya don't see that every day."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough! Cough! Ahem."
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "I reckon that one's a doozy."
 DESCRIBE.UM_SMOLDER_SPORE = "Is it looking for something?"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "I feel like I coulda prevented that."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I feel like I coulda prevented that."

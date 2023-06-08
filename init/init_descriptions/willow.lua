@@ -527,11 +527,11 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "Is it still Sushi?"
 
 DESCRIBE.WIXIEGUN = "Yes!! Violence!!!"
 
-DESCRIBE.MARA_BOSS1 =
-"The last thing I should've done today was get out of bed."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
+DESCRIBE.MARA_BOSS1 = "The last thing I should've done today was get out of bed."
 ANNOUNCE.GAS_DAMAGE = "Cough. Cough. It's like smoke without the fire." --change this when we implement ratgas.
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Ooh, pretty! But it could be prettier..."
 DESCRIBE.UM_SMOLDER_SPORE = "Aw, aren't you a little ball of a potential?"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Spicy!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oops! Tehe."

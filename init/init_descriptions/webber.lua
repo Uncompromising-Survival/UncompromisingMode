@@ -513,9 +513,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "Itty bitty fishy bites!"
 DESCRIBE.WIXIEGUN = "We shouldn't play with this!"
 
 DESCRIBE.MARA_BOSS1 = "Ooh, pretty!"
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Khoff. Khak. Khak."
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "That one doesn't look nice!"
 DESCRIBE.UM_SMOLDER_SPORE = "It's different from the others..."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ack! Our fur's on fire!!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Ack! Our fur's on fire!!"

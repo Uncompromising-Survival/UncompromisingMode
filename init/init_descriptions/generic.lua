@@ -611,9 +611,10 @@ ANNOUNCE.ATTACKED_CRABKING =
 "That shell is too tough! Maybe I should use the boat instead..."
 
 DESCRIBE.MARA_BOSS1 = "Uhh..."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough! Cough!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "A new specimen! Maybe I should get a closer look..."
 DESCRIBE.UM_SMOLDER_SPORE = "It looks a little shakey!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "What did I THINK would happen?!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oh, it's gone off! OH, IT'S GONE OFF!!"

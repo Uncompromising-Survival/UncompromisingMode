@@ -32,9 +32,10 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
 	and not target:HasTag("PyreToxinImmune")
+	and not target:HasTag("plantkin")
 	and not target:HasTag("dragonfly")
 	and not target:HasTag("lavae")
-	and not target:HasTag("plantkin")
+--	and not target:HasTag("scorpion")
 	and target.prefab ~= "firehound"
 	then
 		-- Basic debuff stuff.

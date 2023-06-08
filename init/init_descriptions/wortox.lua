@@ -516,7 +516,6 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "It just don't get it."
 DESCRIBE.WIXIEGUN = "Too much mischief!"
 
 DESCRIBE.MARA_BOSS1 = "Hoh? Where ever is your soul, funny bones?"
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = {
 	"Khu! Ukhu! Hyu...",
 	"U-kuh! Hyu!",
@@ -530,3 +529,5 @@ ANNOUNCE.GAS_DAMAGE = {
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Ho, quite the fiery one!"
 DESCRIBE.UM_SMOLDER_SPORE = "Aren't you a patient little terror?"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "This is fine, hyuyu."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Hyu!!"

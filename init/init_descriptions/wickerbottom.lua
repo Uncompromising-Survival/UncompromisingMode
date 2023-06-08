@@ -571,9 +571,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "Just make sure to wash your hands after eating."
 DESCRIBE.WIXIEGUN = "This doesn't belong in the hands of a child."
 
 DESCRIBE.MARA_BOSS1 = "WHAT in the..."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Ahem. Cough. Ahem. Ahem."
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "The increased virulancy of the wild strain seems to reduce the toxin's potency."
 DESCRIBE.UM_SMOLDER_SPORE = "The nettles appear to spread via a symbiotic fungal infection... Fascinating!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "I suppose I was feeling nostalgic."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oh, that little specimen slipped my mind!!"

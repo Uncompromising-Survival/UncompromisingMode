@@ -23,6 +23,8 @@ env.AddPrefabPostInit("cave", function(inst)
         return
     end
 	
+	inst:AddComponent("um_pyre_nettles_summer_spawner") -- should make some kind of config but idk what this would fall under lmao
+	
 	inst.trepspawners = {}
 	
 	if TUNING.DSTU.TREPIDATIONS then

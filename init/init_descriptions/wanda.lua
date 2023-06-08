@@ -531,9 +531,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "I'm surprised it didn't wither away."
 DESCRIBE.WIXIEGUN = "This is NOT the right timeline!"
 
 DESCRIBE.MARA_BOSS1 = "Well. There goes another timeline."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Ack! I can't tinker in a place like this!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Gathering in bulk could save some time... If I don't get stuck by the blasted things."
 DESCRIBE.UM_SMOLDER_SPORE = "I could slip by, if I don't dally about it."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Blasted! If only they didn't taste so good!!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AGKH! I missed the time window!!"

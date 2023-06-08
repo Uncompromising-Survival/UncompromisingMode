@@ -12,19 +12,31 @@ local prefabs = {
 }
 
 
-local plant_maxhealth = 300
+local plant_maxhealth = 301 -- Minimum HP makes health mods display max health - min health as max. This is for in-game neatness.
 local spore_cooldown_max = 8
 
-local onsurface = false
-local oncave = false
-local function WorldCheck(inst)
-	if TheWorld:HasTag("forest") then
-		onsurface = true
-	end
-	if TheWorld:HasTag("cave") then
-		oncave = true
-	end
-end
+
+--local onsurface = false
+--local oncave = false
+--local function WorldCheck(inst)
+--	if TheWorld:HasTag("forest") then
+--		onsurface = true
+--	end
+--	if TheWorld:HasTag("cave") then
+--		oncave = true
+--	end
+--end
+
+
+-- These tiles are where Smolder Spores can survive, when it isn't Summer.
+-- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
+local HOME_TILES =
+{
+	[WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
+--	[WORLD_TILES.MAGMA_ASH] = true,
+--	[WORLD_TILES.MAGMA_ROCK] = true,
+--	[WORLD_TILES.MAGMAFIELD] = true,
+}
 
 
 SetSharedLootTable( 'um_pyre_nettles_1',
@@ -57,7 +69,7 @@ SetSharedLootTable( 'um_pyre_nettles_5',
 })
 
 
-local function pyrenettle_bumped(inst, bumpradius)
+local function pyrenettle_bumped(inst)
 	local bumpradius = 1
 	if inst.stage > 3 then
 		bumpradius = inst.stage * 0.75
@@ -67,7 +79,7 @@ local function pyrenettle_bumped(inst, bumpradius)
 	
 	if nextvictim ~= nil
 	and nextvictim.components.locomotor ~= nil
-	and not inst:GetIsWet() -- Lava Caves version shouldn't normally get wet due to location; this is for surface spawns.
+--	and not inst:GetIsWet() -- Disabled because it would completely remove the threat in summer.
 	and math.random() > 0.5 -- Chance to bump the plant.
 	then
 		--print ("At the time of pyrenettle_bumped PlayAnimation, inst.stage == " .. inst.stage )
@@ -192,18 +204,22 @@ end
 
 
 local function OnGrow(inst)
-	local targetstage = (inst.stage + 1)
+	local targetstage = 1
+	if inst.stage ~= nil then
+		local targetstage = (inst.stage + 1)
+	end
 	
 	-- In case we've reached an invalid stage, crash/error prevention.
 	if targetstage > 5 then
 		targetstage = 6 -- This exists just for stage 5 plants to drop spores when burnt.
 	elseif targetstage < 1 then
-		print ("um_pyre_nettles.lua is trying to grow to an invalid stage! Target stage: ", targetstage)
+		print ("um_pyre_nettles.lua is trying to grow to an invalid stage! Target stage: " .. targetstage)
 		targetstage = 1
 	end
 	
 	local growsuccess = false
 	local x, y, z = inst.Transform:GetWorldPosition()
+	local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
 	local findnettles = TheSim:FindEntities(x, y, z, 50, {"PyreNettle" .. targetstage})
 	
 	local nearextremeheat = false
@@ -213,7 +229,9 @@ local function OnGrow(inst)
 		nearextremeheat = true
 	end
 	
-	inst.components.pickable.canbepicked = false
+	if inst.components.pickable ~= nil then
+		inst.components.pickable.canbepicked = false
+	end
 	
 	-- This block is set up this way so it'll be easily changable for balance/biome aesthetics. Don't condense it.
 	-- This decides if the plant will actually grow a stage.
@@ -231,11 +249,12 @@ local function OnGrow(inst)
 		growsuccess = true
 	end
 	
-	-- On the surface, Pyre Nettles can't grow past stage 2 (unless nearextremeheat). They also have a chance to stop growth at stage 1.
+	-- Outside Magma Caves, Pyre Nettles can't grow past stage 2.
 	if growsuccess == true
-	and onsurface == true
-	and nearextremeheat == false
-	and (targetstage > 2 or (targetstage == 2 and math.random() > 0.5))
+	and not HOME_TILES[tile_at_position]
+	and not TheWorld:HasTag("heatwavestart") -- Unless a heatwave is happening.
+	and nearextremeheat == false -- Or we're near lava.
+	and (targetstage > 2 or (targetstage == 2 and math.random() > 0.5)) --They also have a chance to stop growth at stage 1.
 	then
 		growsuccess = false
 	end
@@ -247,7 +266,7 @@ local function OnGrow(inst)
 			inst.AnimState:PushAnimation("pn5_idle", true)
 			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			inst.components.timer:StartTimer("SporeCooldownTimer", spore_cooldown_max)
-		elseif targetstage ~= 6 then
+		elseif targetstage < 6 then
 			inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
 			inst.stage = targetstage
 			inst:ListenForEvent("animover", SetStage)
@@ -258,15 +277,21 @@ end
 local function OnShrink(inst)
 	local targetstage = (inst.stage - 1)
 	
-	inst.components.pickable.canbepicked = false
+	if inst.components.pickable ~= nil then
+		inst.components.pickable.canbepicked = false
+	end
+	
 	inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_shrink", false)
 	
 	inst.stage = targetstage
 	
 	inst:ListenForEvent("animover", function()
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
+		
 		if inst.stage == 0 then
 			inst:Remove()
-		elseif onsurface == true and TheWorld.state.season ~= "summer" then
+		elseif TheWorld.state.season ~= "summer" and not HOME_TILES[tile_at_position] then
 			inst:DoTaskInTime(((30 * 3 * math.random()) + 30), OnShrink)
 		end
 		
@@ -323,19 +348,36 @@ local function OnHaunt(inst)
 	end
 end
 
-local function SpringCleaning(inst)
-	inst:DoTaskInTime(10, function()
-		if TheWorld.state.season ~= "summer" then
-			inst:DoTaskInTime(((60 * 10 * math.random()) + (60 * 4)), OnShrink)
-		end
-	end)
-end
-
 local function OnTimerDone(inst, data)
 	if data.name == "SmallPyreNettleGrowthTimer" then
 		OnGrow(inst)
 	elseif data.name == "NaturalSporeSpawnTimer" then
 		NaturalSporeSpawnTimerReset(inst)
+	end
+end
+
+
+local function SpringCleaning(inst)
+	inst:DoTaskInTime(10, function()
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
+	
+		if TheWorld.state.season ~= "summer" and not HOME_TILES[tile_at_position] then
+			inst:DoTaskInTime(((60 * 10 * math.random()) + (60 * 4)), OnShrink)
+		end
+	end)
+end
+
+local function OnHeatwaveStart(inst)
+	if inst.HeatwaveGrowthTask == nil then
+		inst.HeatwaveGrowthTask = inst:DoPeriodicTask((60 * 2 * math.random()) + 30, OnGrow, 2)
+	end
+end
+
+local function OnHeatwaveEnd(inst)
+	if inst.HeatwaveGrowthTask ~= nil then
+		inst.HeatwaveGrowthTask:Cancel()
+		inst.HeatwaveGrowthTask = nil
 	end
 end
 
@@ -381,7 +423,12 @@ local function StageSpawner(name, SpawnAtStage)
 		
 		inst.AnimState:SetBank("um_pyre_nettles")
 		inst.AnimState:SetBuild("um_pyre_nettles")
-		inst.Transform:SetScale(0.85, 0.85, 0.85)
+		local multsize = 0.75 + (math.random() * 0.2)
+		if math.random() < 0.5 then
+			inst.AnimState:SetScale(-multsize, multsize, multsize)
+		else
+			inst.AnimState:SetScale(multsize, multsize, multsize)
+		end
 		inst.AnimState:PlayAnimation("pn" .. growanimstage .. "_grow", false)
 		local multcolor = 0.85 + (math.random() * 0.15)
 		inst.AnimState:SetMultColour(multcolor, multcolor, multcolor, 1)
@@ -434,9 +481,16 @@ local function StageSpawner(name, SpawnAtStage)
 		inst:AddComponent("timer")
 		inst:ListenForEvent("timerdone", OnTimerDone)
 		
+		
+		-- Heatwave listeners.
+		inst:ListenForEvent("heatwavestart", OnHeatwaveStart, TheWorld)
+		inst:ListenForEvent("heatwaveend", OnHeatwaveEnd, TheWorld)
+		
+		
+		SpringCleaning(inst)
 		inst:WatchWorldState("stopsummer", SpringCleaning)
 		
-		inst:DoTaskInTime(0, WorldCheck)
+	--	inst:DoTaskInTime(0, WorldCheck)
 		inst:DoTaskInTime(0, SetStage)
 		
 		inst.OnSave = OnSave

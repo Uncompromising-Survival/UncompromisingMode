@@ -518,9 +518,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "You can hardly tell it was once a fish."
 DESCRIBE.WIXIEGUN = "Cold steel."
 
 DESCRIBE.MARA_BOSS1 = "Finally."
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Cough. I'm done for!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "The toxins aren't so bad, once you get used to them."
 DESCRIBE.UM_SMOLDER_SPORE = "Just a little closer..."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Let's just get this over with."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Maybe if I'd paid attention, it wouldn't have ended this way..."

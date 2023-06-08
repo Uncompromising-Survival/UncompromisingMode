@@ -540,9 +540,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED =
 DESCRIBE.WIXIEGUN = "What magic is this?!"
 
 DESCRIBE.MARA_BOSS1 = "*SIGH*"
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Hack! Cough! Ack!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "It seems they've adapted quite well. Hooray." -- Cope, seethe, ect Maxy~
 DESCRIBE.UM_SMOLDER_SPORE = "Spores from that plant? How peculiar."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ah, yes. What a surprise."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I suppose I had that coming."

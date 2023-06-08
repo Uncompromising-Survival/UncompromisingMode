@@ -504,9 +504,10 @@ DESCRIBE.SMALLFISHMEAT_DRIED = "Barely a snack!"
 DESCRIBE.WIXIEGUN = "This modern warfare frightens me."
 
 DESCRIBE.MARA_BOSS1 = "YES!! FIGHT ME, DEMON!!"
-DESCRIBE.UM_SACRED_CHEST = DESCRIBE.SACRED_CHEST
 ANNOUNCE.GAS_DAMAGE = "Ack! Kaff! Can't... Breathe!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "A brave facade, for such a cowardly form!"
 DESCRIBE.UM_SMOLDER_SPORE = "It shakes with power."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Fires of Hel!!"
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Fires of Hel!!"
