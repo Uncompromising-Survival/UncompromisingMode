@@ -1,9 +1,6 @@
 -- TODO: Rework this into a heat wave that goes across the map!!
-
-
 --------------------------------------------------------------------------
---[[ Dependencies ]]
---------------------------------------------------------------------------
+--[[ Dependencies ]] --------------------------------------------------------------------------
 local easing = require("easing")
 
 --------------------------------------------------------------------------
@@ -21,7 +18,7 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
 
     self.inst = inst
-    --self.old_temp = nil
+    -- self.old_temp = nil
 
     --------------------------------------------------------------------------
     --[[ Private Member Variables ]]
@@ -43,8 +40,8 @@ return Class(function(self, inst)
         if TheWorld.net ~= nil then
             TheWorld.net:RemoveTag("heatwavestartnet")
         end
-        --TheWorld.state.temperature = self.old_temp
-
+        -- TheWorld.state.temperature = self.old_temp
+        SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "ToggleCaveHeatWave"), nil, false)
 
         if _worldsettingstimer:GetTimeLeft(UM_HEATWAVE_TIMERNAME) == nil then
             _worldsettingstimer:StartTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120))
@@ -56,11 +53,11 @@ return Class(function(self, inst)
     local function StartHeatWaving()
         _storming = true
 
-        --for i, v in ipairs(AllPlayers) do
+        -- for i, v in ipairs(AllPlayers) do
         --    --if v.components ~= nil and v.components.talker ~= nil and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
         --    v.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
         --    --end
-        --end
+        -- end
 
         TheWorld:PushEvent("ms_forceprecipitation", false)
 
@@ -69,9 +66,9 @@ return Class(function(self, inst)
             if TheWorld.net ~= nil then
                 TheWorld.net:AddTag("heatwavestartnet")
             end
-
-            --self.old_temp = TheWorld.state.temperature
-            --TheWorld.state.temperature = TheWorld.state.temperature * 2
+            SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "ToggleCaveHeatWave"), nil, true)
+            -- self.old_temp = TheWorld.state.temperature
+            -- TheWorld.state.temperature = TheWorld.state.temperature * 2
             _worldsettingstimer:StartTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120))
         end)
     end
@@ -95,11 +92,11 @@ return Class(function(self, inst)
 
     local function OnSeasonChange(self)
         if TheWorld.state.season == "summer" then
-            --if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
+            -- if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
             if not _storming then
                 StartHeatWaves()
             end
-            --end
+            -- end
         else
             StopHeatwave()
             StopHeatWaves()
@@ -107,18 +104,38 @@ return Class(function(self, inst)
     end
 
     function self:OnSave()
-        local data =
-        {
-            storming = _storming,
-            --old_temp = self.old_temp
+        local data = {
+            storming = _storming
+            -- old_temp = self.old_temp
         }
 
         return data
     end
 
+    function self:ToggleHeatWave(toggle)
+        if toggle == nil or type(toggle) ~= "boolean" then
+            if not _storming then
+                StartHeatWaving()
+                return true
+            else
+                StopHeatwave()
+                return false
+            end
+        else
+            if toggle then
+                StartHeatWaving()
+                return true
+            else
+                StopHeatwave()
+                return false
+
+            end
+        end
+    end
+
     function self:OnLoad(data)
         _storming = data.storming or false
-        --self.old_temp = data.old_temp
+        -- self.old_temp = data.old_temp
 
         if _storming then
             TheWorld:AddTag("heatwavestart")
@@ -134,22 +151,21 @@ return Class(function(self, inst)
 
     function self:OnPostInit()
         _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
-        _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
-            StopHeatwave)
+        _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true, StopHeatwave)
 
         OnSeasonChange()
     end
 
-    --[[function self:OnUpdate(dt)
-        if TheWorld:HasTag("heatwavestart") then
+    function self:OnUpdate(dt)
+        if TheWorld.state.israining and TheWorld:HasTag("heatwavestart") then
             TheWorld:PushEvent("ms_forceprecipitation", false)
         end
-    end]]
+    end
 
-    --function self:LongUpdate(dt)
-    --    self:OnUpdate(dt)
-    --end
+    function self:LongUpdate(dt) self:OnUpdate(dt) end
 
     self:WatchWorldState("season", OnSeasonChange)
-    --self.inst:ListenForEvent("forcetornado", PickAttackTarget)
+    -- self.inst:ListenForEvent("forcetornado", PickAttackTarget)
+
+    self.inst:StartUpdatingComponent(self)
 end)

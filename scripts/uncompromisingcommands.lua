@@ -1,4 +1,4 @@
---toggle snowstorm
+-- toggle snowstorm
 function c_snowstorm()
     if TheWorld:HasTag("snowstormstart") == false and TheWorld.state.iswinter then
         TheWorld:AddTag("snowstormstart")
@@ -15,13 +15,13 @@ function c_snowstorm()
     end
 end
 
---toggles vetcurse
+-- toggles vetcurse
 function c_vetcurse()
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
             player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-            player:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
+            player:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
             print("added vetcurse")
         elseif player:HasTag("vetcurse") then
             player.components.debuffable:RemoveDebuff("buff_vetcurse")
@@ -30,7 +30,7 @@ function c_vetcurse()
     end
 end
 
---gives all current vet curse items
+-- gives all current vet curse items
 function c_vetcurseitems()
     c_give("cursed_antler")
     c_give("beargerclaw")
@@ -45,7 +45,7 @@ function c_vetcurseitems()
     end
 end
 
---lists current rat score shenenigans.
+-- lists current rat score shenenigans.
 function c_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
@@ -62,18 +62,18 @@ function c_ratcheck()
     TheNet:SystemMessage("-------------------------")
 end
 
---forces an RNE.
+-- forces an RNE.
 function c_rne()
     local rne = TheWorld.components.randomnightevents
     rne:ForceRNE(true)
 end
 
---spawns a sunken chest at mouse pos
---@royal: whether to spawn royal chest
---examples:
---c_spawnsunkenchest() spawns a vanilla treasure
---c_spawnsunkenchest(true) spawns a royal chest
---c_spawnsunkenchest(false) spawns a um normal chest
+-- spawns a sunken chest at mouse pos
+-- @royal: whether to spawn royal chest
+-- examples:
+-- c_spawnsunkenchest() spawns a vanilla treasure
+-- c_spawnsunkenchest(true) spawns a royal chest
+-- c_spawnsunkenchest(false) spawns a um normal chest
 function c_spawnsunkenchest(royal)
     local pos = ConsoleWorldPosition()
 
@@ -97,8 +97,8 @@ function c_spawnsunkenchest(royal)
     end
 end
 
---sets a tile by ID
---defaults to barren if unspecified.
+-- sets a tile by ID
+-- defaults to barren if unspecified.
 function c_settile(tile)
     if tile == nil then
         tile = 4
@@ -109,13 +109,13 @@ function c_settile(tile)
     if tile ~= WORLD_TILES.MONKEY_DOCK then
         TheWorld.Map:SetTile(tile_x, tile_z, tile)
     else
-        TheWorld.components.dockmanager:CreateDockAtPoint(pos.x, 0, pos.z, WORLD_TILES.MONKEY_DOCK) --so it properly creates the undertile.
+        TheWorld.components.dockmanager:CreateDockAtPoint(pos.x, 0, pos.z, WORLD_TILES.MONKEY_DOCK) -- so it properly creates the undertile.
     end
 
     print("setting tile " .. tile .. " at " .. tile_x .. ", " .. tile_z)
 end
 
---cheap little shortcut to respawn ocean biomes...
+-- cheap little shortcut to respawn ocean biomes...
 function c_regenerateoceanbiomes()
     local um_areahandler = TheWorld.components.um_areahandler
     if um_areahandler ~= nil then
@@ -131,8 +131,8 @@ function c_regenerateoceanbiomes()
     end
 end
 
---quick umss spawn command shortcut
---umss is string!
+-- quick umss spawn command shortcut
+-- umss is string!
 function c_umss(umss)
     if type(umss) ~= "string" then
         print("Failed to spawn! Defined value must be a string.")
@@ -185,22 +185,14 @@ function c_um_findents()
     end
 end
 
-function c_um_forcetornado()
-    TheWorld:PushEvent("forcetornado")
-end
+function c_um_forcetornado() TheWorld:PushEvent("forcetornado") end
 
 function c_heatwave()
-    if TheWorld:HasTag("heatwavestart") == false and TheWorld.state.issummer then
-        TheWorld:AddTag("heatwavestart")
-        if TheWorld.net ~= nil then
-            TheWorld.net:AddTag("heatwavestartnet")
+    if TheWorld.components.um_heatwaves ~= nil and TheWorld.state.issummer then
+        if TheWorld.components.um_heatwaves:ToggleHeatWave() then
+            print("starting heatwave...")
+        else
+            print("stopping heatwave")
         end
-        print("starting heatwave...")
-    elseif TheWorld:HasTag("heatwavestart") then
-        TheWorld:RemoveTag("heatwavestart")
-        if TheWorld.net ~= nil then
-            TheWorld.net:RemoveTag("heatwavestartnet")
-        end
-        print("stopping heatwave...")
     end
 end
