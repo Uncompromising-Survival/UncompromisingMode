@@ -337,7 +337,7 @@ end
 
 local function OnRead_bees(inst, reader)
     local x, y, z = reader.Transform:GetWorldPosition()
-    local beeboxes = TheSim:FindEntities(x, y, z, 16, {"beebox"}, {"burnt", "INLIMBO"})
+    local beeboxes = TheSim:FindEntities(x, y, z, 16, nil, nil, {"beebox", "beehive", "beebox_hermit"}, {"burnt", "INLIMBO"})
     local found = false
 
     for k, v in ipairs(beeboxes) do
@@ -346,8 +346,8 @@ local function OnRead_bees(inst, reader)
         end
         local x, y, z = v.Transform:GetWorldPosition()
 			
-        if  (v.components.harvestable.maxproduce - v.components.harvestable.produce) ~= 0 and not TheWorld.state.iswinter then
-            v.components.harvestable:Grow(1)
+        if v.components.childspawner and v.components.childspawner.childreninside > 0 and not TheWorld.state.iswinter and not TheWorld.state.isdusk and not TheWorld.state.isnight then
+            v.components.childspawner:ReleaseAllChildren()
             local fx = SpawnPrefab("fx_book_bees")
             fx.Transform:SetPosition(x, y, z)
             found = true
