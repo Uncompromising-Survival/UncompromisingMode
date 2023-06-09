@@ -28,7 +28,7 @@ if TUNING.DSTU.WINTER_BURNING then
 				if act.invobject.components.fueled then
 					act.invobject.components.fueled:DoDelta(-5, act.doer) --Hornet: Made it take fuel away because.... The snow and cold takes some of the fire? probably will change
 				end
-				act.target.components.burnable:StartSmoldering()
+				act.target.components.burnable:StartWildfire()
 				return true
 			else
 				return _OldLightAction(act)

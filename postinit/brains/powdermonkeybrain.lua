@@ -15,15 +15,14 @@ local function gotocannon(inst)
 
     for i, cannon in ipairs(cannons) do
         if cannon.operator == nil or cannon.operator == inst then
-            local targets = TheSim:FindEntities(pos.x, pos.y, pos.z, 50, TARGETS_MUST, TARGETS_CANT)
+            local targets = TheSim:FindEntities(pos.x, pos.y, pos.z, 32, TARGETS_MUST, TARGETS_CANT)
             if #targets > 0 then
                 for i, target in ipairs(targets) do
                     print(target)
                     local cx, cy, cz = cannon.Transform:GetWorldPosition()
                     if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
                         local boatpos = Vector3(target.Transform:GetWorldPosition())
-                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z) +
-                            math.random(-2.5, 2.5)
+                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
 
                         if math.abs(DiffAngle(cannonangle, cannon.Transform:GetRotation())) < 270 then
                             local cannonpos = Vector3(cannon.Transform:GetWorldPosition())
@@ -57,7 +56,6 @@ local function firecannon(inst)
         if #targets > 0 then
             for i, target in ipairs(targets) do
                 print(target)
-
                 if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and TheWorld.Map:GetTileAtPoint(target.Transform:GetWorldPosition()) ~= WORLD_TILES.MONKEY_DOCK then
                     local boatpos = Vector3(target.Transform:GetWorldPosition())
                     local angle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z)
