@@ -1,6 +1,6 @@
-local CANNON_MUST = {"boatcannon"}
-local TARGETS_MUST = {"_health", "_combat"}
-local TARGETS_CANT = {"pirate", "bird", "shadow", "structure", "INLIMBO", "notarget"}
+local CANNON_MUST = { "boatcannon" }
+local TARGETS_MUST = { "_health", "_combat" }
+local TARGETS_CANT = { "pirate", "bird", "shadow", "structure", "INLIMBO", "notarget", "smallcreature", "wall", "fence" }
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
@@ -20,9 +20,10 @@ local function gotocannon(inst)
                 for i, target in ipairs(targets) do
                     print(target)
                     local cx, cy, cz = cannon.Transform:GetWorldPosition()
-                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and target.prefab ~= "mosquito" and target.prefab ~= "grassgekko" and target.prefab ~= "fence" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
+                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
                         local boatpos = Vector3(target.Transform:GetWorldPosition())
-                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z) + math.random(-2.5, 2.5)
+                        local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z) +
+                            math.random(-2.5, 2.5)
 
                         if math.abs(DiffAngle(cannonangle, cannon.Transform:GetRotation())) < 270 then
                             local cannonpos = Vector3(cannon.Transform:GetWorldPosition())
