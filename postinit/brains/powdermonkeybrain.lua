@@ -20,7 +20,7 @@ local function gotocannon(inst)
                 for i, target in ipairs(targets) do
                     print(target)
                     local cx, cy, cz = cannon.Transform:GetWorldPosition()
-                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
+                    if not cannon.components.timer:TimerExists("monkey_biz") and target.prefab ~= "merm" and target.prefab ~= "mosquito" and target.prefab ~= "grassgekko" and target.prefab ~= "fence" and not TheWorld.Map:IsOceanAtPoint(cx, cy, cz) then
                         local boatpos = Vector3(target.Transform:GetWorldPosition())
                         local cannonangle = cannon:GetAngleToPoint(boatpos.x, boatpos.y, boatpos.z) + math.random(-2.5, 2.5)
 
