@@ -48,11 +48,11 @@ local function BoneZone(inst)
 	
 	if #anythingwithafuckinghealthbar ~= nil then
 		for i = 1, #anythingwithafuckinghealthbar do
-			inst:DoTaskInTime(0.2 * i, Projectile)
+			inst:DoTaskInTime(0.2, Projectile)
 		end
 	end
 	
-	inst:DoTaskInTime(math.random() * 0.6 + 0.6, BoneZone)
+	inst:DoTaskInTime(math.random() * 0.6 + 1, BoneZone)
 end
 
 local function SoundsThatMightPlayWhenYouFightSans(inst)
@@ -120,6 +120,10 @@ local function fn()
 	inst.components.locomotor.pathcaps = { ignorecreep = true }
 	
 	inst:AddComponent("inspectable")
+	
+	inst:AddComponent("health")
+	inst.components.health:SetMaxHealth(1)
+	inst.components.health:SetInvincible(true)
 	
 	inst:DoTaskInTime(0, Arise)
 	

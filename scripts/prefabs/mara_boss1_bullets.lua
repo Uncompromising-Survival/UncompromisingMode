@@ -50,7 +50,7 @@ end
 local function WOOSH(inst)
 	local nextvictim = FindClosestEntity(inst, 50, true, nil, { "plant", "blocker", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
 	
-	if nextvictim ~= nil and nextvictim.components.health ~= nil and math.random() > 0.95 then
+	if nextvictim ~= nil and nextvictim.components.health ~= nil and math.random() > 0.8 then
 		inst:FacePoint(nextvictim.Transform:GetWorldPosition())
 		inst.components.locomotor:RunForward()
 	--	Maybe mix in a spiral pattern occasionally? Hm.
@@ -59,7 +59,7 @@ local function WOOSH(inst)
 		inst.components.locomotor:RunForward()
 	end
 	
-	inst:DoTaskInTime(2, Perish)
+--	inst:DoTaskInTime(3, Perish)
 end
 
 -- Here's the part where we violently murder anything we so much as lightly graze :D
@@ -137,6 +137,9 @@ local function fn()
 	
 	inst:DoTaskInTime(0, WOOSH)
 	inst:DoTaskInTime(0, OmaeWaMou)
+	
+	
+	inst.persists = false
 	
 	return inst
 end
