@@ -2,10 +2,10 @@ require "prefabutil"
 
 local assets =
 {
-	Asset("ANIM", "anim/Bigspin.zip"),
+    Asset("ANIM", "anim/Bigspin.zip"),
 }
 
-local prefabs = {"collapse_small", "nightlight_flame"}
+local prefabs = { "collapse_small", "nightlight_flame" }
 
 local function Advance_Full(inst)
     if inst.Advance_Task ~= nil then
@@ -62,7 +62,7 @@ local function getrandomposition(caster)
         -- local antimoonnode = TheWorld.Map:FindNodeAtPoint(node.x, 0, node.z)
 
         if TheWorld.Map:IsPassableAtPoint(node.x, 0, node.y) and node.type ~= NODE_TYPE.SeparatedRoom and not (node ~= nil and node.tags ~= nil and (table.contains(node.tags, "lunacyarea") or table.contains(node.tags, "not_mainland"))) then
-            table.insert(centers, {x = node.x, z = node.y})
+            table.insert(centers, { x = node.x, z = node.y })
         end
     end
     if #centers > 0 then
@@ -84,18 +84,19 @@ local function teleport_continue(teleportee, locpos, inst)
     if teleportee:HasTag("player") then
         teleportee:SnapCamera()
         teleportee:ScreenFade(true, 2)
-        teleportee.sg.statemem.teleport_task = teleportee:DoTaskInTime(3, function() teleport_end(teleportee, locpos, inst) end)
+        teleportee.sg.statemem.teleport_task = teleportee:DoTaskInTime(3,
+            function() teleport_end(teleportee, locpos, inst) end)
     else
         teleport_end(teleportee, locpos, inst)
     end
 end
 
-local QUAKEDEBRIS_CANT_TAGS = {"quakedebris"}
-local QUAKEDEBRIS_ONEOF_TAGS = {"INLIMBO"}
-local SMASHABLE_TAGS = {"smashable", "_combat"}
-local NON_SMASHABLE_TAGS = {"INLIMBO", "playerghost", "irreplaceable"}
-local HEAVY_SMASHABLE_TAGS = {"smashable", "quakedebris", "_combat", "_inventoryitem", "NPC_workable"}
-local HEAVY_NON_SMASHABLE_TAGS = {"INLIMBO", "playerghost", "irreplaceable", "caveindebris", "outofreach"}
+local QUAKEDEBRIS_CANT_TAGS = { "quakedebris" }
+local QUAKEDEBRIS_ONEOF_TAGS = { "INLIMBO" }
+local SMASHABLE_TAGS = { "smashable", "_combat" }
+local NON_SMASHABLE_TAGS = { "INLIMBO", "playerghost", "irreplaceable" }
+local HEAVY_SMASHABLE_TAGS = { "smashable", "quakedebris", "_combat", "_inventoryitem", "NPC_workable" }
+local HEAVY_NON_SMASHABLE_TAGS = { "INLIMBO", "playerghost", "irreplaceable", "caveindebris", "outofreach" }
 
 local function _GroundDetectionUpdate(debris, override_density)
     local x, y, z = debris.Transform:GetWorldPosition()
@@ -191,7 +192,7 @@ local function TornadoEnviromentTask(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
     -- PICKABLES
-    local pickables = TheSim:FindEntities(x, y, z, 28, {"pickable"})
+    local pickables = TheSim:FindEntities(x, y, z, 28, { "pickable" })
     for k, v in ipairs(pickables) do
         if v.components.pickable:CanBePicked() then
             v.components.pickable:Pick(TheWorld)
@@ -199,7 +200,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM SUCKING - Especifically *after* pickables because it then will capture the items pickable produced.
-    local items_suck = TheSim:FindEntities(x, y, z, 56, {"_inventoryitem"}, {"irreplaceable", "tornado_nosucky"})
+    local items_suck = TheSim:FindEntities(x, y, z, 56, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
     for k, v in pairs(items_suck) do
@@ -220,7 +221,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM PICKING
-    local items_pick = TheSim:FindEntities(x, y, z, 4, {"_inventoryitem"}, {"irreplaceable", "tornado_nosucky"})
+    local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
     for k, v in ipairs(items_pick) do
         if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
             inst.components.inventory:GiveItem(v)
@@ -228,8 +229,8 @@ local function TornadoEnviromentTask(inst)
 
             if v.components.health ~= nil then
                 -- NOTES(JBK): Push the events before spawning any giving any loot.
-                v:PushEvent("murdered", {victim = v, stackmult = stacksize})
-                v:PushEvent("killed", {victim = v, stackmult = stacksize})
+                v:PushEvent("murdered", { victim = v, stackmult = stacksize })
+                v:PushEvent("killed", { victim = v, stackmult = stacksize })
 
                 if v.components.lootdropper ~= nil then
                     v.causeofdeath = inst
@@ -254,7 +255,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- WORKING
-    local workables = TheSim:FindEntities(x, y, z, 16, nil, {"irreplaceable"}, {"DIG_workable", "CHOP_workable"})
+    local workables = TheSim:FindEntities(x, y, z, 16, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
 
     for k, v in ipairs(workables) do
         if v.components.workable ~= nil and v.components.pickable == nil then
@@ -291,7 +292,8 @@ local function TornadoItemTossTask(inst)
             z = z + math.random(-10, 10)
         end
         if #inst.components.inventory.itemslots ~= 0 and x ~= nil then
-            local random_item = inst.components.inventory:RemoveItem(inst.components.inventory.itemslots[math.random(#inst.components.inventory.itemslots)])
+            local random_item = inst.components.inventory:RemoveItem(inst.components.inventory.itemslots
+                [math.random(#inst.components.inventory.itemslots)])
 
             if random_item ~= nil then
                 random_item:AddTag("tornado_nosucky")
@@ -310,7 +312,7 @@ local function TornadoItemTossTask(inst)
 
                 random_item:DoTaskInTime(8, function(inst) inst:RemoveTag("tornado_nosucky") end)
                 random_item.Physics:Teleport(x, 35, z)
-                random_item.Physics:SetMotorVel(0, math.random(-33, -25), 0)
+                random_item.Physics:SetMotorVel(0, math.random(-50, -33), 0)
                 random_item.shadow = SpawnPrefab("warningshadow")
                 random_item.shadow:ListenForEvent("onremove", function(debris) debris.shadow:Remove() end, random_item)
                 random_item.shadow.Transform:SetPosition(x, 0, z)
@@ -362,7 +364,7 @@ local function TornadoTask(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
-        local players = TheSim:FindEntities(x, y, z, 300, nil, {"playerghost"}, {"player"})
+        local players = TheSim:FindEntities(x, y, z, 300, nil, { "playerghost" }, { "player" })
 
         if math.random() > 0.9 then
             local lightning = SpawnPrefab("hound_lightning")
@@ -413,7 +415,8 @@ local function TornadoTask(inst)
                     end
                 end
 
-                local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0, pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
+                local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
+                    pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
 
                 local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
                 local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
@@ -437,17 +440,17 @@ local function TornadoTask(inst)
                 inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
             end
 
-			local ocean_anim = TheWorld.Map:IsOceanTileAtPoint(x_dest2, 0, z_dest2)
-			local ground_anim = TheWorld.Map:IsPassableAtPoint(x_dest2, 0, z_dest2)
-			
-			if ground_anim then
-				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx")
-			elseif ocean_anim then
-				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_water")
-			else
-				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_void")
-			end
-				
+            local ocean_anim = TheWorld.Map:IsOceanTileAtPoint(x_dest2, 0, z_dest2)
+            local ground_anim = TheWorld.Map:IsPassableAtPoint(x_dest2, 0, z_dest2)
+
+            if ground_anim then
+                --inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx")
+            elseif ocean_anim then
+                --inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_water")
+            else
+                --inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_void")
+            end
+
             if inst.persists and (destination:IsValid() and inst:GetDistanceSqToInst(destination) < 50) --[[or (not TheWorld.Map:IsPassableAtPoint(x, 0, z) and not TheWorld.Map:IsOceanAtPoint(x, 0, z)))]] then
                 inst.AnimState:PlayAnimation("tornado_pst", false)
 
@@ -476,7 +479,6 @@ local function TornadoTask(inst)
                 inst.AnimState:PlayAnimation("tornado_pst", false)
 
                 inst:ListenForEvent("animover", function()
-
                     for k, v in ipairs(inst.components.inventory.itemslots) do
                         local item = inst.components.inventory:RemoveItem(v)
                         Launch2(item, inst, 2, 2, 5, 0, 10)
@@ -490,8 +492,8 @@ local function TornadoTask(inst)
                 inst.persists = false
             end
         end
-		
-		if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) then
+
+        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) then
             inst.whirlpool = SpawnPrefab("um_whirlpool")
             inst.whirlpool.entity:SetParent(inst.entity)
             inst.whirlpool.Transform:SetPosition(0, 0, 0)
@@ -525,8 +527,8 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-	inst.AnimState:SetBank("tornado_weather")
-	inst.AnimState:SetBuild("tornado_weather")
+    inst.AnimState:SetBank("tornado_weather")
+    inst.AnimState:SetBuild("tornado_weather")
 
     inst:AddTag("um_tornado")
 
@@ -597,13 +599,17 @@ local function CanSpawnWaterfall(inst, x, y, z)
     local is_valid_tile = true
 
     if x ~= nil then
-        local ents = TheSim:FindEntities(x, y, z, 40, {"um_waterfall"})
+        local ents = TheSim:FindEntities(x, y, z, 40, { "um_waterfall" })
 
         if ents ~= nil and #ents > 0 then
             is_valid_tile = false
         end
 
-        local offs = {{-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {2, -1}, {-2, 0}, {2, 0}, {-2, 1}, {2, 1}, {-2, 2}, {-1, 2}, {0, 2}, {1, 2}, {2, 2}, {-2, -2}, {-2, -3}, {0, -3}, {2, -3}, {3, -3}, {-3, -2}, {3, -2}, {-3, 0}, {3, 0}, {-3, 1}, {3, 2}, {-3, 3}, {-2, 3}, {0, 3}, {2, 3}, {3, 3}}
+        local offs = { { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { 2, -1 }, { -2, 0 },
+            { 2,  0 },
+            { -2, 1 }, { 2, 1 }, { -2, 2 }, { -1, 2 }, { 0, 2 }, { 1, 2 }, { 2, 2 }, { -2, -2 }, { -2, -3 }, { 0, -3 },
+            { 2, -3 }, { 3, -3 }, { -3, -2 }, { 3, -2 }, { -3, 0 }, { 3, 0 }, { -3, 1 }, { 3, 2 }, { -3, 3 }, { -2, 3 },
+            { 0, 3 }, { 2, 3 }, { 3, 3 } }
 
         for i = 1, #offs, 1 do
             local curoff = offs[i]
@@ -839,4 +845,8 @@ local function marker3()
     return inst
 end
 
-return Prefab("um_tornado", fn, assets, prefabs), Prefab("um_cavetornado", cavefn, assets, prefabs), Prefab("um_tornado_destination", destfn, assets, prefabs), Prefab("um_tornado_destination_marker", marker, assets, prefabs), Prefab("um_tornado_destination_marker2", marker2, assets, prefabs), Prefab("um_tornado_destination_marker3", marker3, assets, prefabs)
+return Prefab("um_tornado", fn, assets, prefabs), Prefab("um_cavetornado", cavefn, assets, prefabs),
+    Prefab("um_tornado_destination", destfn, assets, prefabs),
+    Prefab("um_tornado_destination_marker", marker, assets, prefabs),
+    Prefab("um_tornado_destination_marker2", marker2, assets, prefabs),
+    Prefab("um_tornado_destination_marker3", marker3, assets, prefabs)
