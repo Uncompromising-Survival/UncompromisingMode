@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.1.7.1: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.7.2: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -20,7 +20,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.7.1"
+version = "Under the Weather Pt.1 v1.1.7.2"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -117,7 +117,7 @@ configuration_options = {
         "Night Terrors have a default 40% chance to occur each night. Night Terrors are disabled before Day 5.",
         options = {
             { description = "None", data = 100 }, { description = "10%", data = 0.9 },
-            { description = "20%", data = 0.8 },
+            { description = "20%",  data = 0.8 },
             { description = "30%",  data = 0.7 }, { description = "40%", data = 0.6 },
             { description = "50%", data = 0.5 },
             { description = "60%", data = 0.4 }, { description = "70%", data = 0.3 },
@@ -166,11 +166,18 @@ configuration_options = {
         hover =
         "Some bosses have increasing resistance against multiple players",
         options = {
-            { description = "Dynamic",  hover = "Bosses change their resistance based on hits taken.",     data =
-            "Dynamic" },
-            { description = "Static",   hover = "Bosses change their resistance based on nearby players.",
-                                                                                                               data =
-                "Static" },
+            {
+                description = "Dynamic",
+                hover = "Bosses change their resistance based on hits taken.",
+                data =
+                "Dynamic"
+            },
+            {
+                description = "Static",
+                hover = "Bosses change their resistance based on nearby players.",
+                data =
+                "Static"
+            },
             { description = "Disabled", data = false } },
         default =
         "dynamic"
@@ -212,7 +219,7 @@ configuration_options = {
         "Wathom takes more damage when amped.",
         options = {
             { description = "5x (Default)", data = 5 }, { description = "4x", data = 4 },
-            { description = "3x", data = 3 },
+            { description = "3x",           data = 3 },
             { description = "2x",           data = 2 } },
         default = 5
     },
