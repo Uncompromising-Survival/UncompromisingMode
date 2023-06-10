@@ -77,8 +77,8 @@ function Um_StormOver:OnUpdate(dt)
             self.bg3:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
             self.bg4:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 
-            TheFocalPoint.SoundEmitter:PlaySound("UCSounds/um_tornado/um_heavy_rain", "um_storm_rain")
-            TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
+            TheFocalPoint.SoundEmitter:PlaySound("UCSounds/um_tornado/um_heavy_rain_layer", "um_storm_rain")
+			TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "volume", self.changed)
         end
     else
         if self.changed > 0 then
@@ -88,7 +88,7 @@ function Um_StormOver:OnUpdate(dt)
             self.bg3:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
             self.bg4:GetAnimState():SetMultColour(1, 1, 1, self.changed / 2)
 
-            TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "intensity", self.changed)
+			TheFocalPoint.SoundEmitter:SetParameter("um_storm_rain", "volume", self.changed)
         else
             self:Hide()
             TheFocalPoint.SoundEmitter:KillSound("um_storm_rain")

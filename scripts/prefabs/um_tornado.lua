@@ -1,6 +1,9 @@
 require "prefabutil"
 
-local assets = {Asset("ANIM", "anim/nightmare_torch.zip")}
+local assets =
+{
+	Asset("ANIM", "anim/Bigspin.zip"),
+}
 
 local prefabs = {"collapse_small", "nightlight_flame"}
 
@@ -434,6 +437,17 @@ local function TornadoTask(inst)
                 inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
             end
 
+			local ocean_anim = TheWorld.Map:IsOceanTileAtPoint(x_dest2, 0, z_dest2)
+			local ground_anim = TheWorld.Map:IsPassableAtPoint(x_dest2, 0, z_dest2)
+			
+			if ground_anim then
+				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx")
+			elseif ocean_anim then
+				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_water")
+			else
+				--inst.AnimState:OverrideSymbol("wormmovefx", "um_tornado", "wormmovefx_void")
+			end
+				
             if inst.persists and (destination:IsValid() and inst:GetDistanceSqToInst(destination) < 50) --[[or (not TheWorld.Map:IsPassableAtPoint(x, 0, z) and not TheWorld.Map:IsOceanAtPoint(x, 0, z)))]] then
                 inst.AnimState:PlayAnimation("tornado_pst", false)
 
@@ -476,8 +490,8 @@ local function TornadoTask(inst)
                 inst.persists = false
             end
         end
-
-        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) then
+		
+		if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) then
             inst.whirlpool = SpawnPrefab("um_whirlpool")
             inst.whirlpool.entity:SetParent(inst.entity)
             inst.whirlpool.Transform:SetPosition(0, 0, 0)
@@ -511,8 +525,8 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    inst.AnimState:SetBank("tornado_weather")
-    inst.AnimState:SetBuild("tornado_weather")
+	inst.AnimState:SetBank("tornado_weather")
+	inst.AnimState:SetBuild("tornado_weather")
 
     inst:AddTag("um_tornado")
 

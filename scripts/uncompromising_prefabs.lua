@@ -193,6 +193,7 @@ return {
 	"buff_ancient_amulet_red",
 	"amulet_health_orb",
 	"nightcrawler",
+	--"um_nightcrawler",
 	"ancient_trepidation_arm",
 	--"steel_sweater",
 	"rat_whip",

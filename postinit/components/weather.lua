@@ -32,8 +32,9 @@ env.AddComponentPostInit("weather", function(self)
             end
         end
         if ThePlayer ~= nil and ThePlayer:HasTag("under_the_weather") then
-            if _hasfx then
-                local tornado_dist = math.sqrt(ThePlayer:GetDistanceSqToInst(TheSim:FindFirstEntityWithTag("um_tornado")))
+			local tornado = TheSim:FindFirstEntityWithTag("um_tornado")
+            if _hasfx and tornado ~= nil and tornado:IsValid() then
+                local tornado_dist = math.sqrt(ThePlayer:GetDistanceSqToInst(tornado))
                 local intensity = Lerp(10, 1, tornado_dist / 300)
                 _rainfx.particles_per_tick = preciprate * 5 + intensity
                 _rainfx.splashes_per_tick = preciprate * 3 + intensity
