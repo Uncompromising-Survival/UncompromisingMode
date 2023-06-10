@@ -259,7 +259,11 @@ local function OnGrow(inst)
 	then
 		growsuccess = false
 	end
-
+	
+	if growsuccess == false and inst ~= nil then
+		SetStage(inst) -- Even if the stage didn't change, we still need to reset traits like pickability.
+	end
+	
 	if growsuccess == true and inst ~= nil and inst.AnimState ~= nil then
 		local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
 		if spore_cooldown_running == nil and targetstage == 6 then
