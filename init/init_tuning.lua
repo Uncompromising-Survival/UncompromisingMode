@@ -219,7 +219,7 @@ TUNING.DSTU = {
     WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
     WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
     WARLY_BUTCHER = GetModConfigData("warly_butcher"),
-	--WARLY_FOOD = GetModConfigData("warly_food"),
+    --WARLY_FOOD = GetModConfigData("warly_food"),
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resis
     -- Maxwell
@@ -511,5 +511,5 @@ if GetModConfigData("wortox") == "APOLLO" then
     TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
 end
 
-TUNING.WILDFIRE_CHANCE = TUNING.WILDFIRE_CHANCE * 10 --testing, fuck it why not?!
+TUNING.WILDFIRE_CHANCE = TUNING.WILDFIRE_CHANCE * 5 --testing, fuck it why not?!
 TUNING.WILDFIRE_RETRY_TIME = TUNING.WILDFIRE_RETRY_TIME * 0.5
