@@ -76,7 +76,8 @@ local function pyrenettle_bumped(inst)
 	end
 
 	local nextvictim = FindClosestEntity(inst, bumpradius, true, nil,
-		{ "PyreToxinImmune", "plantkin", "flying", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+		{ "PyreToxinImmune", "plantkin", "flying", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog",
+			"wall" })
 
 	if nextvictim ~= nil
 		and nextvictim.components.locomotor ~= nil
@@ -242,14 +243,14 @@ local function OnGrow(inst)
 		growsuccess = true
 	elseif targetstage == 3 and #findnettles < 8 then
 		growsuccess = true
-	elseif targetstage == 4 and #findnettles < 4 and nearextremeheat == true then
+	elseif targetstage == 4 and #findnettles < 4 then
 		growsuccess = true
-	elseif targetstage == 5 and #findnettles < 2 and nearextremeheat == true then
+	elseif targetstage == 5 and #findnettles < 2 then
 		growsuccess = true
-	elseif targetstage == 6 and nearextremeheat == true then
+	elseif targetstage == 6 then
 		growsuccess = true
 	end
-
+	print("heatwave check", TheWorld:HasTag("heatwavestart"))
 	-- Outside Magma Caves, Pyre Nettles can't grow past stage 2.
 	if growsuccess == true
 		and not HOME_TILES[tile_at_position]
@@ -259,11 +260,11 @@ local function OnGrow(inst)
 	then
 		growsuccess = false
 	end
-	
+
 	if growsuccess == false and inst ~= nil then
 		SetStage(inst) -- Even if the stage didn't change, we still need to reset traits like pickability.
 	end
-	
+
 	if growsuccess == true and inst ~= nil and inst.AnimState ~= nil then
 		local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
 		if spore_cooldown_running == nil and targetstage == 6 then
@@ -376,7 +377,7 @@ end
 
 local function OnHeatwaveStart(inst)
 	if inst.HeatwaveGrowthTask == nil then
-		inst.HeatwaveGrowthTask = inst:DoPeriodicTask((60 * 2 * math.random()) + 30, OnGrow, 2)
+		inst.HeatwaveGrowthTask = inst:DoPeriodicTask((60 * math.random()) + 30, OnGrow, 2)
 	end
 end
 
@@ -449,12 +450,20 @@ local function StageSpawner(name, SpawnAtStage)
 
 		inst:SetDeployExtraSpacing(1)
 
-
 		inst.entity:SetPristine()
 
 		if not TheWorld.ismastersim then
 			return inst
 		end
+
+		--inst:DoPeriodicTask(1 --[[(30 * math.random()) + 30]], OnGrow, 2)
+
+		inst:DoTaskInTime(0, function(inst)
+			local x, y, z = inst.Transform:GetWorldPosition()
+			if #TheSim:FindEntities(x, y, z, 1, { "PyreNettle" }) > 1 then
+				inst:Remove()
+			end
+		end)
 
 		inst:AddComponent("inspectable")
 
@@ -489,8 +498,15 @@ local function StageSpawner(name, SpawnAtStage)
 
 
 		-- Heatwave listeners.
-		inst:ListenForEvent("heatwavestart", OnHeatwaveStart, TheWorld)
-		inst:ListenForEvent("heatwaveend", OnHeatwaveEnd, TheWorld)
+		inst:DoPeriodicTask(5, function(inst)
+			if TheWorld:HasTag("heatwavestart") then
+				OnHeatwaveStart(inst)
+			else
+				OnHeatwaveEnd(inst)
+			end
+		end)
+		--inst:ListenForEvent("heatwavestart", OnHeatwaveStart, TheWorld)
+		--inst:ListenForEvent("heatwaveend", OnHeatwaveEnd, TheWorld)
 
 
 		SpringCleaning(inst)

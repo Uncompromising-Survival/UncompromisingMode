@@ -6,7 +6,6 @@ return Class(function(self, inst)
 
 	self.inst = inst
 
-
 	-- Spawn conditions are here.
 	local function SpawnPlants(inst)
 		local tempchance = (TheWorld.state.temperature * 2) * math.random()
@@ -19,21 +18,27 @@ return Class(function(self, inst)
 				local y = 0
 				local z = z - 30 * math.sin(theta)
 
-				local blockers = TheSim:FindEntities(x, y, z, 0.5, { "blocker" }, { "invisible", "playerghost" })
+				local blockers = TheSim:FindEntities(x, y, z, 8, nil,
+					{ "invisible", "playerghost" },
+					{ "blocker", "player", "antlion_sinkhole_blocker", "structure" })
 				local nettlescrowding = TheSim:FindEntities(x, y, z, 10, { "PyreNettle" })
 				local findnettles = TheSim:FindEntities(x, y, z, 30, { "PyreNettle" })
 
-				print("Trying to spawn PN near a player.")
-				--	if blockers == nil
-				--	and nettlescrowding == nil
-				--	and #findnettles < 16
-				--	and TheWorld.Map:CanPlantAtPoint(x, y, z) -- Pyre Nettles are lava-dwellers; they can grow in rock. This is just here for reference.
-				--	and not (RoadManager ~= nil and RoadManager:IsOnRoad(x, y, z)) -- Not needed in caves.
-				--	then
-				print("Spawning PN near a player.")
-				local nettle = SpawnPrefab("um_pyre_nettles")
-				nettle.Transform:SetPosition(x, y, z)
-				nettle:PutBackOnGround(30)
+				if #blockers > 0 or #nettlescrowding > 16 or #findnettles > 32 then
+					--SpawnPlants()
+					return
+				end
+
+				for i = 1, math.random(10, 15) do
+					local ix, iy, iz = x + math.random(-i, i), y, z + math.random(-i, i)
+					if TheWorld.Map:IsPassableAtPoint(ix, iy, iz) then
+						inst:DoTaskInTime(math.random(), function()
+							local nettle = SpawnPrefab("um_pyre_nettles")
+							nettle.Transform:SetPosition(ix, iy, iz)
+							nettle:PutBackOnGround(30)
+						end)
+					end
+				end
 				--	end
 			end
 		end
@@ -42,7 +47,7 @@ return Class(function(self, inst)
 
 	local function OnSeasonChange()
 		if TheWorld.state.season == "summer" then
-			self.inst.SpawnChanceTask = self.inst:DoPeriodicTask(3, SpawnPlants, 1)
+			self.inst.SpawnChanceTask = self.inst:DoPeriodicTask(TUNING.TOTAL_DAY_TIME, SpawnPlants, 1)
 		elseif self.SpawnChanceTask ~= nil then
 			self.inst.SpawnChanceTask:Cancel()
 		end
@@ -52,6 +57,10 @@ return Class(function(self, inst)
 		if TheWorld.state.season == "summer" then
 			OnSeasonChange()
 		end
+	end
+
+	function self:ForceSpawnNettles()
+		SpawnPlants()
 	end
 
 	self:WatchWorldState("season", OnSeasonChange)

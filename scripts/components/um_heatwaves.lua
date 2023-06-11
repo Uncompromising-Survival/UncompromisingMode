@@ -1,6 +1,7 @@
 -- TODO: Rework this into a heat wave that goes across the map!!
 --------------------------------------------------------------------------
---[[ Dependencies ]] --------------------------------------------------------------------------
+--[[ Dependencies ]]
+--------------------------------------------------------------------------
 local easing = require("easing")
 
 --------------------------------------------------------------------------
@@ -128,7 +129,6 @@ return Class(function(self, inst)
             else
                 StopHeatwave()
                 return false
-
             end
         end
     end
@@ -151,7 +151,8 @@ return Class(function(self, inst)
 
     function self:OnPostInit()
         _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
-        _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true, StopHeatwave)
+        _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
+            StopHeatwave)
 
         OnSeasonChange()
     end
