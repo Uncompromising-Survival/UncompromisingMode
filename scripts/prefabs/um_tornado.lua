@@ -267,6 +267,18 @@ local function TornadoEnviromentTask(inst)
             v.components.workable:WorkedBy(inst, 1)
         end
     end
+
+    -- DAMAGING
+    local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
+        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
+
+    local targets = TheSim:FindEntities(x, y, z, 4, { "_combat" }, AURA_EXCLUDE_TAGS)
+
+    for k, v in ipairs(targets) do
+        if v.components.health ~= nil and not v.components.health:IsDead() then
+            v.components.combat:GetAttacked(inst, 2.5)
+        end
+    end
 end
 
 local function TornadoItemTossTask(inst)
