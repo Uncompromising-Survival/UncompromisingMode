@@ -343,6 +343,7 @@ local function fn()
 
 	inst:AddComponent("inspectable")
 
+	inst:AddComponent("stackable")
 
 	inst:AddComponent("lootdropper")
 	inst.components.lootdropper:SetChanceLootTable("um_smolder_spore")
