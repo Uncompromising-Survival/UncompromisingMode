@@ -20,7 +20,7 @@ local function onpickup(inst, picker)
     local x, y, z = inst.Transform:GetWorldPosition()
     for i = 1, math.random(3, 6) do
         item = SpawnPrefab("twigs")
-        if picker ~= nil or picker ~= TheWorld then
+        if (picker ~= nil or picker ~= TheWorld) and picker.components.inventory ~= nil then
             picker.components.inventory:GiveItem(item, nil, inst:GetPosition())
         else
             item.Transform:SetPosition(x, y, z)
@@ -29,7 +29,7 @@ local function onpickup(inst, picker)
 
     for i = 1, inst.egg do
         item = SpawnPrefab("bird_egg")
-        if picker ~= nil or picker ~= TheWorld then
+        if (picker ~= nil or picker ~= TheWorld) and picker.components.inventory ~= nil then
             picker.components.inventory:GiveItem(item, nil, inst:GetPosition())
         else
             item.Transform:SetPosition(x, y, z)
