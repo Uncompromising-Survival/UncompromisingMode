@@ -356,6 +356,7 @@ local function fn()
 	inst.components.hauntable:SetOnHauntFn(Divebomb)
 	
 	inst:AddComponent("moisture")
+	inst.components.moisture.maxmoisture = 2
 	inst:ListenForEvent("moisturedelta", function()
 		if inst:GetIsWet() then
 			PlantSelf(inst)
