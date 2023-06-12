@@ -189,7 +189,7 @@ end
 
 
 local function PickItem(item, inst)
-    if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" then
+    if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" and item:IsValid() then
         inst.components.inventory:GiveItem(item)
         local stacksize = item.components.stackable ~= nil and item.components.stackable:StackSize() or 1
 
@@ -254,7 +254,7 @@ local function TornadoEnviromentTask(inst)
         end
     end
 
-    -- ITEM SUCKING - Especifically *after* pickables because it then will capture the items pickable produced.
+    -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
     local items_suck = TheSim:FindEntities(x, y, z, 56, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
@@ -324,8 +324,15 @@ local function TornadoItemTossTask(inst)
             z = z + math.random(-10, 10)
         end
         if #inst.components.inventory.itemslots ~= 0 and x ~= nil then
-            local random_item = inst.components.inventory:RemoveItem(inst.components.inventory.itemslots
-                [math.random(#inst.components.inventory.itemslots)])
+            local item =
+                inst.components.inventory.itemslots
+                [math.random(#inst.components.inventory.itemslots)]
+            if item ~= nil and not item:IsValid() then
+                --idk why and wehn this stupid crash started happening
+                return
+            end
+
+            local random_item = inst.components.inventory:RemoveItem(item)
 
             if random_item ~= nil then
                 random_item:AddTag("tornado_nosucky")
