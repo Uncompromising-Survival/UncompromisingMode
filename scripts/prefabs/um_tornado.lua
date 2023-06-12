@@ -231,7 +231,7 @@ local function TornadoEnviromentTask(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
     -- PICKABLES
-    local pickables = TheSim:FindEntities(x, y, z, 28, { "pickable" })
+    local pickables = TheSim:FindEntities(x, y, z, 16, { "pickable" })
     for k, v in ipairs(pickables) do
         if v.components.pickable:CanBePicked() then
             if not v:IsAsleep() then
@@ -243,7 +243,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- WORKING
-    local workables = TheSim:FindEntities(x, y, z, 16, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
+    local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
 
     for k, v in ipairs(workables) do
         if v.components.workable ~= nil and v.components.pickable == nil then
@@ -261,7 +261,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
-    local items_suck = TheSim:FindEntities(x, y, z, 56, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
+    local items_suck = TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
     for k, v in pairs(items_suck) do
@@ -434,45 +434,46 @@ local function TornadoTask(inst)
                     v.um_tornado_weathertask = nil
                 end)
             end
-			
-			if not v:HasTag("um_windturbine") then
-				if math.random() > 0.99 then
-					local lightning = SpawnPrefab("hound_lightning")
-					lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-					lightning.Delay = 1.5
-				end
 
-				if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
-					local rad = math.rad(v:GetAngleToPoint(x, y, z))
-					local velx = math.cos(rad)
-					local velz = -math.sin(rad)
+            if not v:HasTag("um_windturbine") then
+                if math.random() > 0.99 then
+                    local lightning = SpawnPrefab("hound_lightning")
+                    lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
+                    lightning.Delay = 1.5
+                end
 
-					local multiplierplayer = inst:GetDistanceSqToPoint(px, py, pz)
+                if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
+                    local rad = math.rad(v:GetAngleToPoint(x, y, z))
+                    local velx = math.cos(rad)
+                    local velz = -math.sin(rad)
 
-					multiplierplayer = multiplierplayer / 60
+                    local multiplierplayer = inst:GetDistanceSqToPoint(px, py, pz)
 
-					if multiplierplayer < .4 then
-						multiplierplayer = .4
+                    multiplierplayer = multiplierplayer / 60
 
-						if v.components.health ~= nil and not v.components.health:IsDead() and v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() and v:HasTag("player") then
-							local locpos = getrandomposition(v)
-							v.sg:GoToState("um_tornado_teleport")
-							v.sg.statemem.teleport_task = v:DoTaskInTime(3, function() teleport_continue(v, locpos, inst) end)
-						end
-					end
+                    if multiplierplayer < .4 then
+                        multiplierplayer = .4
 
-					local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
-						pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
+                        if v.components.health ~= nil and not v.components.health:IsDead() and v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() and v:HasTag("player") then
+                            local locpos = getrandomposition(v)
+                            v.sg:GoToState("um_tornado_teleport")
+                            v.sg.statemem.teleport_task = v:DoTaskInTime(3,
+                                function() teleport_continue(v, locpos, inst) end)
+                        end
+                    end
 
-					local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
-					local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-					local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
+                    local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
+                        pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
 
-					if dx ~= nil and (ground == p_ground or boat) then
-						v.Transform:SetPosition(dx, dy, dz)
-					end
-				end
-			end
+                    local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
+                    local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
+                    local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
+
+                    if dx ~= nil and (ground == p_ground or boat) then
+                        v.Transform:SetPosition(dx, dy, dz)
+                    end
+                end
+            end
         end
 
         if destination ~= nil then
@@ -719,8 +720,8 @@ end
 local function MoveDestination(inst)
     if inst.dest_can_move then
         if not inst.components.timer:TimerExists("stop_moving") then
-			inst.components.timer:StartTimer("stop_moving", (TheWorld.state.springlength / 7) * 480)
-			--inst.components.timer:StartTimer("stop_moving", 10)
+            inst.components.timer:StartTimer("stop_moving", (TheWorld.state.springlength / 7) * 480)
+            --inst.components.timer:StartTimer("stop_moving", 10)
         end
 
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -733,7 +734,7 @@ local function MoveDestination(inst)
     end
 
     if not inst.components.timer:TimerExists("delete_destination") then
-		inst.components.timer:StartTimer("delete_destination", (TheWorld.state.springlength / 4.5) * 480)
+        inst.components.timer:StartTimer("delete_destination", (TheWorld.state.springlength / 4.5) * 480)
         --inst.components.timer:StartTimer("delete_destination", 30)
     end
 end
