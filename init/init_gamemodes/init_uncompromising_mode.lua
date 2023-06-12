@@ -57,6 +57,7 @@ modimport("init/init_generatorcharging")
 --	[ 	Console Commands for tests !	]	--
 
 require("uncompromisingcommands")
+modimport("scripts/uncompromisingcommands_autocomplete")
 
 --	[ 				Gamemodes			]	--
 

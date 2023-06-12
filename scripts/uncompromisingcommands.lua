@@ -1,5 +1,5 @@
 -- toggle snowstorm
-function c_snowstorm()
+function c_um_snowstorm()
     if TheWorld:HasTag("snowstormstart") == false and TheWorld.state.iswinter then
         TheWorld:AddTag("snowstormstart")
         if TheWorld.net ~= nil then
@@ -16,7 +16,7 @@ function c_snowstorm()
 end
 
 -- toggles vetcurse
-function c_vetcurse()
+function c_um_vetcurse()
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
@@ -31,7 +31,7 @@ function c_vetcurse()
 end
 
 -- gives all current vet curse items
-function c_vetcurseitems()
+function c_um_vetcurseitems()
     c_give("cursed_antler")
     c_give("beargerclaw")
     c_give("slobberlobber")
@@ -46,7 +46,7 @@ function c_vetcurseitems()
 end
 
 -- lists current rat score shenenigans.
-function c_ratcheck()
+function c_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
@@ -63,7 +63,7 @@ function c_ratcheck()
 end
 
 -- forces an RNE.
-function c_rne()
+function c_um_rne()
     local rne = TheWorld.components.randomnightevents
     rne:ForceRNE(true)
 end
@@ -71,10 +71,10 @@ end
 -- spawns a sunken chest at mouse pos
 -- @royal: whether to spawn royal chest
 -- examples:
--- c_spawnsunkenchest() spawns a vanilla treasure
--- c_spawnsunkenchest(true) spawns a royal chest
--- c_spawnsunkenchest(false) spawns a um normal chest
-function c_spawnsunkenchest(royal)
+-- c_um_spawnsunkenchest() spawns a vanilla treasure
+-- c_um_spawnsunkenchest(true) spawns a royal chest
+-- c_um_spawnsunkenchest(false) spawns a um normal chest
+function c_um_spawnsunkenchest(royal)
     local pos = ConsoleWorldPosition()
 
     if royal ~= true and royal ~= false then
@@ -99,7 +99,7 @@ end
 
 -- sets a tile by ID
 -- defaults to barren if unspecified.
-function c_settile(tile)
+function c_um_settile(tile)
     if tile == nil then
         tile = 4
     end
@@ -116,7 +116,7 @@ function c_settile(tile)
 end
 
 -- cheap little shortcut to respawn ocean biomes...
-function c_regenerateoceanbiomes()
+function c_um_regenerateoceanbiomes()
     local um_areahandler = TheWorld.components.um_areahandler
     if um_areahandler ~= nil then
         --[[if TheWorld.state.isspring then
@@ -133,7 +133,7 @@ end
 
 -- quick umss spawn command shortcut
 -- umss is string!
-function c_umss(umss)
+function c_um_umss(umss)
     if type(umss) ~= "string" then
         print("Failed to spawn! Defined value must be a string.")
         return
@@ -150,7 +150,7 @@ function c_umss(umss)
     print("Spawning umss setpiece " .. umss .. " at " .. tostring(pos.x) .. "," .. tostring(pos.z) .. ".")
 end
 
-function c_setadrenaline(p)
+function c_um_setadrenaline(p)
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.components.adrenaline ~= nil then
         player.components.adrenaline:SetPercent(p)
@@ -187,7 +187,7 @@ end
 
 function c_um_forcetornado() TheWorld:PushEvent("forcetornado") end
 
-function c_heatwave()
+function c_um_heatwave()
     if TheWorld.components.um_heatwaves ~= nil and TheWorld.state.issummer then
         if TheWorld.components.um_heatwaves:ToggleHeatWave() then
             print("starting heatwave...")

@@ -239,7 +239,7 @@ if GetModConfigData("lunar grimoire") then
 end
 
 if GetModConfigData("apicultural notes") then
-	TOOLTIP.BOOK_BEES = "- Now wakes up all Bees from up to 20 nearby sources."
+	TOOLTIP.BOOK_BEES = "- Now adds Honey to 20 nearby Bee Boxes."
 end
 
 if GetModConfigData("disable_megaflare") then
