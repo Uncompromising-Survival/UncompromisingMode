@@ -187,6 +187,39 @@ local function _GroundDetectionUpdate(debris, override_density)
     end
 end
 
+
+local function PickItem(item, inst)
+    if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" then
+        inst.components.inventory:GiveItem(item)
+        local stacksize = item.components.stackable ~= nil and item.components.stackable:StackSize() or 1
+
+        if item.components.health ~= nil then
+            -- NOTES(JBK): Push the events before spawning any giving any loot.
+            item:PushEvent("murdered", { victim = item, stackmult = stacksize })
+            item:PushEvent("killed", { victim = item, stackmult = stacksize })
+
+            if item.components.lootdropper ~= nil then
+                item.causeofdeath = inst
+                for i = 1, stacksize do
+                    local loots = item.components.lootdropper:GenerateLoot()
+                    for k, _loot in pairs(loots) do
+                        local loot = SpawnPrefab(_loot)
+                        if loot ~= nil then
+                            inst.components.inventory:GiveItem(loot)
+                        end
+                    end
+                end
+            end
+
+            if item ~= nil and item.components.inventory and item:HasTag("drop_inventory_onmurder") then
+                item.components.inventory:TransferInventory(inst)
+            end
+
+            item:Remove()
+        end
+    end
+end
+
 local function TornadoEnviromentTask(inst)
     -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
 
@@ -195,7 +228,29 @@ local function TornadoEnviromentTask(inst)
     local pickables = TheSim:FindEntities(x, y, z, 28, { "pickable" })
     for k, v in ipairs(pickables) do
         if v.components.pickable:CanBePicked() then
-            v.components.pickable:Pick(TheWorld)
+            if not v:IsAsleep() then
+                v.components.pickable:Pick(TheWorld)
+            else
+                v.components.pickable:Pick(inst)
+            end
+        end
+    end
+
+    -- WORKING
+    local workables = TheSim:FindEntities(x, y, z, 16, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
+
+    for k, v in ipairs(workables) do
+        if v.components.workable ~= nil and v.components.pickable == nil then
+            if not v:IsAsleep() then
+                if v.components.workable.action == ACTIONS.DIG then
+                    local fx = SpawnPrefab("shovel_dirt")
+                    local x1, y1, z1 = v.Transform:GetWorldPosition()
+                    fx.Transform:SetPosition(x1, y1, z1)
+                end
+                v.components.workable:WorkedBy(inst, 1)
+            else
+                v.components.workable:Destroy(inst)
+            end
         end
     end
 
@@ -204,15 +259,19 @@ local function TornadoEnviromentTask(inst)
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
     for k, v in pairs(items_suck) do
-        if v and v.Physics and v.components.inventoryitem and not v.components.inventoryitem:IsHeld() and v.replica.inventoryitem:CanBePickedUp() then
+        if v and v.Physics and v.components.inventoryitem and not v.components.inventoryitem:IsHeld() and v.replica.inventoryitem:CanBePickedUp() and v.prefab ~= "bullkelp_beachedroot" then
             local _x, _y, _z = v:GetPosition():Get()
             local item_ground = TheWorld.Map:IsOceanAtPoint(_x, _y, _z)
             if ground == item_ground then
-                _y = .1
-                v.Physics:Teleport(_x, _y, _z)
-                local dir = v:GetPosition() - inst:GetPosition()
-                local angle = math.atan2(-dir.z, -dir.x) + 66 * RADIANS
-                v.Physics:SetVel(math.cos(angle) * 10, 0, math.sin(angle) * 10)
+                if not v:IsAsleep() then
+                    _y = .1
+                    v.Physics:Teleport(_x, _y, _z)
+                    local dir = v:GetPosition() - inst:GetPosition()
+                    local angle = math.atan2(-dir.z, -dir.x) + 66 * RADIANS
+                    v.Physics:SetVel(math.cos(angle) * 10, 0, math.sin(angle) * 10)
+                else
+                    PickItem(v, inst) --skip all the steps above if you're just gonna do it off-screen.
+                end
             end
         else
             v:AddTag("tornado_nosucky")
@@ -224,53 +283,14 @@ local function TornadoEnviromentTask(inst)
     local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
     for k, v in ipairs(items_pick) do
         if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
-            inst.components.inventory:GiveItem(v)
-            local stacksize = v.components.stackable ~= nil and v.components.stackable:StackSize() or 1
-
-            if v.components.health ~= nil then
-                -- NOTES(JBK): Push the events before spawning any giving any loot.
-                v:PushEvent("murdered", { victim = v, stackmult = stacksize })
-                v:PushEvent("killed", { victim = v, stackmult = stacksize })
-
-                if v.components.lootdropper ~= nil then
-                    v.causeofdeath = inst
-                    for i = 1, stacksize do
-                        local loots = v.components.lootdropper:GenerateLoot()
-                        for k, _loot in pairs(loots) do
-                            local loot = SpawnPrefab(_loot)
-                            if loot ~= nil then
-                                inst.components.inventory:GiveItem(loot)
-                            end
-                        end
-                    end
-                end
-
-                if v ~= nil and v.components.inventory and v:HasTag("drop_inventory_onmurder") then
-                    v.components.inventory:TransferInventory(inst)
-                end
-
-                v:Remove()
-            end
+            PickItem(v, inst)
         end
     end
 
-    -- WORKING
-    local workables = TheSim:FindEntities(x, y, z, 16, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
-
-    for k, v in ipairs(workables) do
-        if v.components.workable ~= nil and v.components.pickable == nil then
-            if v.components.workable.action == ACTIONS.DIG then
-                local fx = SpawnPrefab("shovel_dirt")
-                local x1, y1, z1 = v.Transform:GetWorldPosition()
-                fx.Transform:SetPosition(x1, y1, z1)
-            end
-            v.components.workable:WorkedBy(inst, 1)
-        end
-    end
 
     -- DAMAGING
     local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
-        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
+        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "INLIMBO" }
 
     local targets = TheSim:FindEntities(x, y, z, 4, { "_combat" }, AURA_EXCLUDE_TAGS)
 
