@@ -609,7 +609,7 @@ local function fn()
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("um_tornado_destination_marker2").Transform:SetPosition(x, 0, z)
     end)
-    --inst:DoPeriodicTask(5, TornadoItemTossTask)
+    inst:DoPeriodicTask(5, TornadoItemTossTask)
     inst:DoPeriodicTask(0.25, TornadoEnviromentTask)
     return inst
 end
