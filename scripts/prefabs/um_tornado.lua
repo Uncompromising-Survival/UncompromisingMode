@@ -435,6 +435,13 @@ local function TornadoTask(inst)
                 end)
             end
 
+			if not v:HasTag("um_windturbine") then
+				if math.random() > 0.99 then
+					local lightning = SpawnPrefab("hound_lightning")
+					lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
+					lightning.Delay = 1.5
+				end
+
             if not v:HasTag("um_windturbine") then
                 if math.random() > 0.99 then
                     local lightning = SpawnPrefab("hound_lightning")

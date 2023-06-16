@@ -6,6 +6,8 @@ local function KrampusStealing(self)
 	local SEE_DIST = 30
 	local TOOCLOSE = 6
 
+    self.greed = 4
+
 	local function CanSteal(item)
 		return item.components.inventoryitem ~= nil
 			and item.components.inventoryitem.canbepickedup
@@ -48,8 +50,6 @@ local function KrampusStealing(self)
 				or nil
 		end
 	end
-
-    self.greed = 4
 
 	local leave_2 = IfNode( function() return self.inst.components.inventory:NumItems() >= self.greed and not self.inst.sg:HasStateTag("busy") end, "ForceLeave",
             ActionNode(function() self.inst.sg:GoToState("exit") return SUCCESS end, "leave" ))
