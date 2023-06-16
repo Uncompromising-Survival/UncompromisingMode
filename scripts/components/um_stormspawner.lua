@@ -60,15 +60,30 @@ return Class(function(self, inst)
 				
 				local mthnrd = math.random()
 				
+				local x_offset = 0
+				local z_offset = 0
+				
 				--if x > 700 or x < -700 or mthnrd > 0.5 and not (z > 700 or z < -700) then
 				if mthnrd > 0.5 then
-					if x > 0 then
-						x_dest = -x * 1.5
-					else
-						x_dest = math.abs(x) * 1.5
+					if x < 200 and x >= 0 then
+						x_offset = -200
+					elseif x > -200 and x <= 0 then
+						x_offset = 200
 					end
 					
-					z_dest = z * 1.5
+					if z < 200 and z >= 0 then
+						z_offset = 200
+					elseif z > -200 and z <= 0 then
+						z_offset = -200
+					end
+				
+					if x > 0 then
+						x_dest = (-x + x_offset) * 1.5
+					else
+						x_dest = (math.abs(x) + x_offset) * 1.5
+					end
+					
+					z_dest = (z + z_offset) * 1.5
 					
 					local destination = SpawnPrefab("um_tornado_destination")
 					destination.Transform:SetPosition(x_dest, 0, z_dest)
@@ -94,12 +109,24 @@ return Class(function(self, inst)
 					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
 				--elseif z > 700 or z < -700 or mthnrd <= 0.5 and not (x > 700 or x < -700) then
 				else
-					x_dest = x * 1.5
+					if x < 200 and x >= 0 then
+						x_offset = 200
+					elseif x > -200 and x <= 0 then
+						x_offset = -200
+					end
+					
+					if z < 200 and z >= 0 then
+						z_offset = -200
+					elseif z > -200 and z <= 0 then
+						z_offset = 200
+					end
+					
+					x_dest = (x + x_offset) * 1.5
 					
 					if z > 0 then
-						z_dest = -z * 1.5
+						z_dest = (-z + z_offset) * 1.5
 					else
-						z_dest = math.abs(z) * 1.5
+						z_dest = (math.abs(z) + z_offset) * 1.5
 					end
 
 					local destination = SpawnPrefab("um_tornado_destination")

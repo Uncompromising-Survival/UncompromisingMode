@@ -364,7 +364,7 @@ local function onothercollide(inst, other, owner)
 	end
 end
 
-local NOTAGS = { "fx", "INLIMBO", "shadow", "player", "DIG_workable", "prey" }
+local NOTAGS = { "fx", "INLIMBO", "shadow", "player", "DIG_workable", "prey", "bird" }
 local function oncollide(inst)
 	if inst.owner ~= nil then
 		local x, y, z = inst.owner.Transform:GetWorldPosition()

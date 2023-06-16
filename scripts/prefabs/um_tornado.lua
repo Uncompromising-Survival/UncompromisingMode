@@ -140,10 +140,14 @@ local function _GroundDetectionUpdate(debris, override_density)
                 debris.Physics:SetMotorVel(0, 0, 0)
                 debris.Physics:SetVel(speed * math.cos(angle), speed * 2.3, speed * math.sin(angle))
             end
-            debris.shadow:Remove()
-            debris.shadow = nil
-            debris.updatetask:Cancel()
-            debris.updatetask = nil
+            if debris.shadow ~= nil then
+                debris.shadow:Remove()
+                debris.shadow = nil
+            end
+            if debris.updatetask ~= nil then
+                debris.updatetask:Cancel()
+                debris.updatetask = nil
+            end
             local density = override_density or DENSITYRADIUS
             if density <= 0 or debris.prefab == "mole" or debris.prefab == "rabbit" or not (math.random() < .75 or #TheSim:FindEntities(x, 0, y, density, nil, QUAKEDEBRIS_CANT_TAGS, QUAKEDEBRIS_ONEOF_TAGS) > 1) then
                 -- keep it
@@ -204,8 +208,10 @@ local function PickItem(item, inst)
                     local loots = item.components.lootdropper:GenerateLoot()
                     for k, _loot in pairs(loots) do
                         local loot = SpawnPrefab(_loot)
-                        if loot ~= nil then
+                        if loot ~= nil and loot:IsValid() then
                             inst.components.inventory:GiveItem(loot)
+                        else
+                            loot:Remove()
                         end
                     end
                 end
@@ -259,7 +265,7 @@ local function TornadoEnviromentTask(inst)
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
     for k, v in pairs(items_suck) do
-        if v and v.Physics and v.components.inventoryitem and not v.components.inventoryitem:IsHeld() and v.replica.inventoryitem:CanBePickedUp() and v.prefab ~= "bullkelp_beachedroot" then
+        if v and v.Physics and v.components.inventoryitem and not v.components.inventoryitem:IsHeld() and v.replica.inventoryitem ~= nil and v.replica.inventoryitem:CanBePickedUp() and v.prefab ~= "bullkelp_beachedroot" then
             local _x, _y, _z = v:GetPosition():Get()
             local item_ground = TheWorld.Map:IsOceanAtPoint(_x, _y, _z)
             if ground == item_ground then
@@ -268,7 +274,8 @@ local function TornadoEnviromentTask(inst)
                     v.Physics:Teleport(_x, _y, _z)
                     local dir = v:GetPosition() - inst:GetPosition()
                     local angle = math.atan2(-dir.z, -dir.x) + 66 * RADIANS
-                    v.Physics:SetVel(math.cos(angle) * 10, 0, math.sin(angle) * 10)
+                    v.Physics:ClearMotorVelOverride()
+                    v.Physics:SetMotorVelOverride(math.cos(angle) * 10, 0, math.sin(angle) * 10)
                 else
                     PickItem(v, inst) --skip all the steps above if you're just gonna do it off-screen.
                 end
@@ -286,7 +293,6 @@ local function TornadoEnviromentTask(inst)
             PickItem(v, inst)
         end
     end
-
 
     -- DAMAGING
     local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
@@ -334,7 +340,7 @@ local function TornadoItemTossTask(inst)
 
             local random_item = inst.components.inventory:RemoveItem(item)
 
-            if random_item ~= nil then
+            if random_item ~= nil and random_item:IsValid() then
                 random_item:AddTag("tornado_nosucky")
 
                 random_item.entity:SetCanSleep(false)
@@ -403,7 +409,7 @@ local function TornadoTask(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
 
-        local players = TheSim:FindEntities(x, y, z, 300, nil, { "playerghost" }, { "player" })
+        local players = TheSim:FindEntities(x, y, z, 300, nil, { "playerghost" }, { "player", "um_windturbine" })
 
         if math.random() > 0.9 then
             local lightning = SpawnPrefab("hound_lightning")
@@ -414,7 +420,7 @@ local function TornadoTask(inst)
         for k, v in pairs(players) do
             local px, py, pz = v.Transform:GetWorldPosition()
 
-            if v:HasTag("player") then
+            if v:HasTag("player") or v:HasTag("um_windturbine") then
                 v:AddTag("under_the_weather")
 
                 if v.um_tornado_weathertask ~= nil then
@@ -428,43 +434,45 @@ local function TornadoTask(inst)
                     v.um_tornado_weathertask = nil
                 end)
             end
+			
+			if not v:HasTag("um_windturbine") then
+				if math.random() > 0.99 then
+					local lightning = SpawnPrefab("hound_lightning")
+					lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
+					lightning.Delay = 1.5
+				end
 
-            if math.random() > 0.99 then
-                local lightning = SpawnPrefab("hound_lightning")
-                lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-                lightning.Delay = 1.5
-            end
+				if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
+					local rad = math.rad(v:GetAngleToPoint(x, y, z))
+					local velx = math.cos(rad)
+					local velz = -math.sin(rad)
 
-            if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
-                local rad = math.rad(v:GetAngleToPoint(x, y, z))
-                local velx = math.cos(rad)
-                local velz = -math.sin(rad)
+					local multiplierplayer = inst:GetDistanceSqToPoint(px, py, pz)
 
-                local multiplierplayer = inst:GetDistanceSqToPoint(px, py, pz)
+					multiplierplayer = multiplierplayer / 60
 
-                multiplierplayer = multiplierplayer / 60
+					if multiplierplayer < .4 then
+						multiplierplayer = .4
 
-                if multiplierplayer < .4 then
-                    multiplierplayer = .4
+						if v.components.health ~= nil and not v.components.health:IsDead() and v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() and v:HasTag("player") then
+							local locpos = getrandomposition(v)
+							v.sg:GoToState("um_tornado_teleport")
+							v.sg.statemem.teleport_task = v:DoTaskInTime(3, function() teleport_continue(v, locpos, inst) end)
+						end
+					end
 
-                    if v.components.health ~= nil and not v.components.health:IsDead() and v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not v.components.health:IsInvincible() and v:HasTag("player") then
-                        local locpos = getrandomposition(v)
-                        v.sg:GoToState("um_tornado_teleport")
-                        v.sg.statemem.teleport_task = v:DoTaskInTime(3, function() teleport_continue(v, locpos, inst) end)
-                    end
-                end
+					local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
+						pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
 
-                local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
-                    pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
+					local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
+					local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
+					local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
 
-                local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
-                local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-                local p_ground = TheWorld.Map:IsOceanTileAtPoint(px, py, pz)
-
-                if dx ~= nil and (ground == p_ground or boat) then
-                    v.Transform:SetPosition(dx, dy, dz)
-                end
-            end
+					if dx ~= nil and (ground == p_ground or boat) then
+						v.Transform:SetPosition(dx, dy, dz)
+					end
+				end
+			end
         end
 
         if destination ~= nil then
@@ -711,7 +719,8 @@ end
 local function MoveDestination(inst)
     if inst.dest_can_move then
         if not inst.components.timer:TimerExists("stop_moving") then
-            inst.components.timer:StartTimer("stop_moving", 1440)
+			inst.components.timer:StartTimer("stop_moving", (TheWorld.state.springlength / 7) * 480)
+			--inst.components.timer:StartTimer("stop_moving", 10)
         end
 
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -724,7 +733,8 @@ local function MoveDestination(inst)
     end
 
     if not inst.components.timer:TimerExists("delete_destination") then
-        inst.components.timer:StartTimer("delete_destination", 2340)
+		inst.components.timer:StartTimer("delete_destination", (TheWorld.state.springlength / 4.5) * 480)
+        --inst.components.timer:StartTimer("delete_destination", 30)
     end
 end
 

@@ -132,7 +132,7 @@ local states = {
 						if not v:HasTag("fat_gang") and not v:HasTag("foodknockbackimmune") and not (v.components.rider ~= nil and v.components.rider:IsRiding()) and 
 							--Don't knockback if you wear marble
 							(v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ==nil or not v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
-								v:PushEvent("knockback", {knocker = inst, radius = 150, strengthmult = 1})
+								v:PushEvent("knockback", {knocker = inst, radius = 150, strengthmult = 1.5})
 						end
 					end
 				end
