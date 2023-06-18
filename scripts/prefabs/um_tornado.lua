@@ -253,7 +253,7 @@ local function TornadoEnviromentTask(inst)
                     local x1, y1, z1 = v.Transform:GetWorldPosition()
                     fx.Transform:SetPosition(x1, y1, z1)
                 end
-                v.components.workable:WorkedBy(inst, 1)
+                v.components.workable:WorkedBy(inst, 2.5)
             else
                 v.components.workable:Destroy(inst)
             end
@@ -261,7 +261,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
-    local items_suck = TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
+    local items_suck = TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap"})
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
 
     for k, v in pairs(items_suck) do
@@ -287,7 +287,7 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM PICKING
-    local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky" })
+    local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap"})
     for k, v in ipairs(items_pick) do
         if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
             PickItem(v, inst)
