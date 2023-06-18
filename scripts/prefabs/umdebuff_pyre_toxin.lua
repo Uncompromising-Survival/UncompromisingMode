@@ -14,7 +14,8 @@ local function debuff_OnDetached(inst, target)
 	
 	if inst.fx ~= nil then
 		if inst.fx:IsValid() then
-			inst.fx:Remove()
+		--	inst.fx:Remove()
+			ErodeAway(inst.fx, 60*FRAMES)
 		end
 	end
 	
@@ -25,16 +26,22 @@ end
 
 
 local function DamageTarget(inst, target)
-	target.components.health:DoDelta(-15, false, "umdebuff_pyre_toxin")
+	if target.components.health.currenthealth > 15 then
+		target.components.health:DoDelta(-15, false, "umdebuff_pyre_toxin")
+	end
 end
 
 local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
-	and not target:HasTag("PyreToxinImmune")
+	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasTag("PyreToxinImmune"))
 	and not target:HasTag("plantkin")
 	and not target:HasTag("dragonfly")
 	and not target:HasTag("lavae")
+	and not target:HasTag("butterfly")
+	and not (target:HasTag("bee") and not target:HasTag("monster"))
+	and not target:HasTag("wall")
+	and not target:HasTag("structure")
 --	and not target:HasTag("scorpion")
 	and target.prefab ~= "firehound"
 	then
@@ -65,38 +72,47 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 		-- Mob negatives here.
 		if not target:HasTag("player") then
 			-- Damage.
-			if target.components.health ~= nil and not target.components.health:IsDead()
-			and target.components.health.currenthealth > 15
-			then
+			if target.components.health ~= nil and not target.components.health:IsDead() then
 				inst:DoPeriodicTask(1, DamageTarget, 0, target)
 			end
 			
 			-- Panic.
-			if target.components.hauntable ~= nil and target.components.hauntable.panicable	then
+			if target.components.hauntable ~= nil and target.components.hauntable.panicable then
 				if target:HasTag("epic") then
 					target.components.hauntable:Panic(3)
 				else
 					target.components.hauntable:Panic(5)
 				end
 			end
+			-- Trying to figure out how to do it without relying on hauntable...
+			--if target.brain ~= nil then
+			--	target.brain:PanicTrigger(target)
+			--end
 		end
 		
 		-- Begin the visual effects.
 		if inst.fx == nil or not inst.fx:IsValid() then
 			inst.fx = SpawnPrefab("umdebuff_pyre_toxin_fx")
 		end
-		--if target.components.combat ~= nil then
-		--	inst.fx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, -1, 0)
-		--else
+		if target.components.combat ~= nil then
+			inst.fx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, -1, 0)
+		else
 			inst.fx.entity:SetParent(target.entity)
-		--end
+		end
+		if target:HasTag("smallcreature") then
+			inst.fx.Transform:SetScale(0.5, 0.5, 0.5)
+		end
 		
 		-- Say the line...
 		if target:HasTag("player")
 		and target.components.talker ~= nil
 		and target.components.health ~= nil and not target.components.health:IsDead()
 		and target:HasTag("idle") then
-			target.components.talker:Say(GetString(target, "ANNOUNCE_FIRENETTLE_TOXIN")) -- Change this if the toxin is ever applied by non-nettles.
+			if inst.components.debuff.name ~= "umdebuff_pyre_toxin_armor_wearer"
+			or (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" and math.random() > 0.75)
+			then
+				target.components.talker:Say(GetString(target, "ANNOUNCE_FIRENETTLE_TOXIN")) -- Change this if the toxin is ever applied by non-nettles.				
+			end
 		end
 	else
 		inst:Remove()
@@ -186,4 +202,3 @@ end
 
 return Prefab("umdebuff_pyre_toxin", fn, nil, prefabs),
 	Prefab("umdebuff_pyre_toxin_fx", fx_fn)
-	

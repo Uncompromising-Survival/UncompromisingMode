@@ -525,3 +525,5 @@ DESCRIBE.UM_PYRE_NETTLES = "The toxins aren't so bad, once you get used to them.
 DESCRIBE.UM_SMOLDER_SPORE = "Just a little closer..."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Let's just get this over with."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Maybe if I'd paid attention, it wouldn't have ended this way..."
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A reminder of the constant pain that is life."
+DESCRIBE.UM_BLOWDART_PYRE = "Death delivered from afar."

@@ -212,6 +212,11 @@ local inventoryitems =
 	"trinket_wathom1",
 	"wooden_queen_piece",
 	"wixie_piano_card",
+	
+	--Magma Caves icons
+	"um_smolder_spore",
+	"um_armor_pyre_nettles",
+	"um_blowdart_pyre",
 
 	--Wixie related inventory icons
 
@@ -997,6 +1002,9 @@ Assets = {
 	Asset("ANIM", "anim/um_pyre_nettles.zip"),
 	Asset("ANIM", "anim/um_smolder_spore.zip"),
 	Asset("ANIM", "anim/umdebuff_pyre_toxin_fx.zip"),
+	Asset("ANIM", "anim/um_armor_pyre_nettles.zip"), -- This file is both a swap and a floor item. Hell if I know where to put it...so it's here!
+	Asset("ANIM", "anim/um_blowdart_pyre.zip"),
+	Asset("ANIM", "anim/swap_blowdart.zip"), -- Same here. Naming convention is vanilla, blame Mr. Kelly Entertainment.
 
 
 
@@ -1868,7 +1876,17 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/winona_catapult_item.xml"),
 	
 	Asset("ATLAS", "images/inventoryimages/um_smolder_spore.xml"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_smolder_spore.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_smolder_spore.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/um_blowdart_pyre.xml"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_blowdart_pyre.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_blowdart_pyre.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/um_armor_pyre_nettles.xml"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_armor_pyre_nettles.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_armor_pyre_nettles.tex"),
+	
 	
 
 	--SWAPS

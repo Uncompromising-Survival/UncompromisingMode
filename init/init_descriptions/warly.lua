@@ -533,3 +533,5 @@ DESCRIBE.UM_PYRE_NETTLES = "Mm... Perhaps it could spice up my palette?" -- STAY
 DESCRIBE.UM_SMOLDER_SPORE = "They pack quite a kick!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "That's-a spicy-a meat-a boll!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AAH!! I'm getting broiled!!"
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A little something to keep the heat on..."
+DESCRIBE.UM_BLOWDART_PYRE = "Aren't you a spicy one?"

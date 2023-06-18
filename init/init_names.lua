@@ -503,3 +503,5 @@ STRINGS.MARA_BOSS1_BULLETS = "a bad time"
 -- Pyre Nettle stuff
 STRINGS.UM_PYRE_NETTLES = "Pyre Nettles"
 STRINGS.UM_SMOLDER_SPORE = "Smolder Spore"
+STRINGS.UM_ARMOR_PYRE_NETTLES = "Pyre Mantle"
+STRINGS.UM_BLOWDART_PYRE = "Pyre Dart"

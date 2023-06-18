@@ -663,6 +663,17 @@ if GetModConfigData("ck_loot") then
     ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
 end
 
+-- Pyre Nettles stuff
+-- Pyre Mantle
+AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 5), Ingredient("silk", 1) }, TECH.NONE, nil, { "ARMOUR", "WINTER" })
+ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
+ChangeSortKey("um_armor_pyre_nettles", "sweatervest", "WINTER", false)
+-- Pyre Dart
+AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_ONE, nil, { "WEAPONS" })
+ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
+
+
+
 -- Wormwood Crafts
 if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
@@ -947,7 +958,13 @@ STRINGS.RECIPE_DESC.WATERPLANT_PLANTER = "Grow your very own Sea Weed."
 STRINGS.RECIPE_DESC.BLUEPRINT = "Learn new things."
 STRINGS.RECIPE_DESC.PUMPKINCOOKIE = "Grandma's cookies."
 STRINGS.RECIPE_DESC.HERMIT_BUNDLE_LURES = "Get to fishing, today!"
+-- Pyre Nettle stuff
+STRINGS.RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
+STRINGS.RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
 
+
+
+-- [ PROTOTYPERS ] --
 GLOBAL.PROTOTYPER_DEFS.critterlab_real = GLOBAL.PROTOTYPER_DEFS.critterlab
 
 AddPrototyperDef("um_bombmixer",

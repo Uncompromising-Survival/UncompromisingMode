@@ -538,3 +538,5 @@ DESCRIBE.UM_PYRE_NETTLES = "Gathering in bulk could save some time... If I don't
 DESCRIBE.UM_SMOLDER_SPORE = "I could slip by, if I don't dally about it."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Blasted! If only they didn't taste so good!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AGKH! I missed the time window!!"
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "I'd be better off just keeping my distance."
+DESCRIBE.UM_BLOWDART_PYRE = "Oh, what a waste..."

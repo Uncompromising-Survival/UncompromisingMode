@@ -532,6 +532,17 @@ ANNOUNCE.GAS_DAMAGE = "Cough. Cough. It's like smoke without the fire." --change
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Ooh, pretty! But it could be prettier..."
+ANNOUNCE.ANNOUNCE_FIRENETTLE_TOXIN = {
+	"Alright, bring on the heat!",
+	"Things are heating up!",
+	"That's more like it!",
+	"Hey, this is kinda comfy.",
+	"I'm starting to feel all warm and fuzzy inside.",
+	"There's fire in my veins! Uh, literally?",
+	"Hey, this is fine actually."
+}
 DESCRIBE.UM_SMOLDER_SPORE = "Aw, aren't you a little ball of a potential?"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Spicy!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oops! Tehe."
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Feel the burn!"
+DESCRIBE.UM_BLOWDART_PYRE = "That one was MY idea! You're welcome."

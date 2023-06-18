@@ -64,6 +64,10 @@ env.AddPrefabPostInit("cave", function(inst)
 	inst:AddComponent("ratacombs_junk_manager")
 
 	inst:AddComponent("um_stormspawner")
+	
+	--if TUNING.DSTU.HEATWAVES then --TODO: MAKE THIS A CONFIG
+		inst:AddComponent("um_pyre_nettles_summer_spawner")
+	--end
 
 	inst:DoTaskInTime(0, function(inst)
 		if TestForIA() then

@@ -415,6 +415,7 @@ return {
 	"wixie_stinkcloud",
 	"wixiegun",
 	"placeholder_recipe_item",
+	
 	"winona_structure_item",
 	"boiling_water",
 	"crabking_geyser_single",
@@ -438,4 +439,6 @@ return {
 	"um_pyre_nettles",
 	"um_smolder_spore",
 	"umdebuff_pyre_toxin",
+	"um_armor_pyre_nettles",
+	"um_blowdart_pyre",
 }

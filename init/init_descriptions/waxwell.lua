@@ -543,7 +543,9 @@ DESCRIBE.MARA_BOSS1 = "*SIGH*"
 ANNOUNCE.GAS_DAMAGE = "Hack! Cough! Ack!"
 
 -- Pyre Nettle stuff
-DESCRIBE.UM_PYRE_NETTLES = "It seems they've adapted quite well. Hooray." -- Cope, seethe, ect Maxy~
+DESCRIBE.UM_PYRE_NETTLES = "It seems they've adapted quite well. Hooray." -- Cope and seethe, Maxy~
 DESCRIBE.UM_SMOLDER_SPORE = "Spores from that plant? How peculiar."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ah, yes. What a surprise."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I suppose I had that coming."
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A bit risky for my tastes, but it should keep the nettles at bay."
+DESCRIBE.UM_BLOWDART_PYRE = "These should thoroughly inconvenience whatever I point them toward..."

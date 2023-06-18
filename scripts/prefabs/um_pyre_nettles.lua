@@ -12,7 +12,7 @@ local prefabs = {
 }
 
 
-local plant_maxhealth = 301 -- Minimum HP makes health mods display max health - min health as max. This is for in-game neatness.
+local plant_maxhealth = 300
 local spore_cooldown_max = 8
 
 
@@ -74,10 +74,10 @@ local function pyrenettle_bumped(inst)
 	if inst.stage > 3 then
 		bumpradius = inst.stage * 0.75
 	end
-
+	
 	local nextvictim = FindClosestEntity(inst, bumpradius, true, nil,
-		{ "PyreToxinImmune", "plantkin", "flying", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog",
-			"wall" })
+		{ "PyreToxinImmune", "plantkin", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
+	)
 
 	if nextvictim ~= nil
 		and nextvictim.components.locomotor ~= nil
@@ -416,7 +416,7 @@ local function StageSpawner(name, SpawnAtStage)
 
 		inst.prefab = "um_pyre_nettles" -- In case we're a spawned-in stage-specifying prefab.
 
-		MakeObstaclePhysics(inst, 0.1)
+	--	MakeObstaclePhysics(inst, 0.1)
 
 		local minimap = inst.entity:AddMiniMapEntity()
 		inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
@@ -447,6 +447,7 @@ local function StageSpawner(name, SpawnAtStage)
 		-- Vanilla tags
 		inst:AddTag("plant")
 		inst:AddTag("scarytoprey")
+		inst:AddTag("thorny")
 
 		inst:SetDeployExtraSpacing(1)
 

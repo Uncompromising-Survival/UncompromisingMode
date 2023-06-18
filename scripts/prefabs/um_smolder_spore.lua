@@ -1,6 +1,7 @@
 local prefabs = {
 	"um_pyre_nettles",
-	"houndfire"
+	"houndfire",
+	"smog"
 }
 
 
@@ -92,17 +93,17 @@ local function FireSpread(inst)
 
 	-- Instantly ignites anything flammable within a radius.
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 2, nil,
-		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
-	for i, v in pairs(ents) do
-		if v.components.burnable ~= nil then
-			v.components.burnable:Ignite()
+	local ents = TheSim:FindEntities(x, y, z, 2, nil, { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+	if #ents > 0 then
+		for i, v in pairs(ents) do
+			if v.components.burnable ~= nil then
+				v.components.burnable:Ignite()
+			end
 		end
 	end
 
 	-- Slight AoE damage. Mainly to set off other nearby Smolder Spores.
-	inst.components.combat:DoAreaAttack(inst, 3, nil, nil, nil,
-		{ "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "notarget", "noattack" })
+	inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire", { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
 
 	inst.components.lootdropper:DropLoot(inst:GetPosition())
 end
@@ -211,7 +212,7 @@ local function OnEaten(inst, eater)
 	if eater.components.sanity ~= nil then
 		if eater:HasTag("plantkin") then -- The spores are alive. L for canibaLism.
 			eater.components.sanity:DoDelta(-10)
-		elseif eater.prefab == "wanda" then
+		elseif eater:HasTag("pyromaniac") or eater.prefab == "wanda" then
 			eater.components.sanity:DoDelta(10)
 		end
 	end
@@ -318,7 +319,8 @@ local function fn()
 	inst:AddTag("PyreToxinImmune")
 	inst:AddTag("soulless") -- Prefab shouldn't die via health loss, but...just in case.
 	inst:AddTag("scarytoprey")
-	--inst:AddTag("flying")
+	inst:AddTag("thorny")
+--	inst:AddTag("flying") -- Makes them ignore platform borders entirely. Flying over the void isn't ideal...
 
 	inst:AddTag("show_spoilage")
 
@@ -349,7 +351,7 @@ local function fn()
 	inst.components.lootdropper:SetChanceLootTable("um_smolder_spore")
 
 	inst:AddComponent("health")
-	inst.components.health:SetMaxHealth(6)    -- To make it poppable via ranged attacks or earthquake drops.
+	inst.components.health:SetMaxHealth(5)    -- To make it poppable via ranged attacks or earthquake drops.
 	inst.components.health:SetMinHealth(1)    -- We don't want it to die a 'normal' death.
 	inst.components.health.fire_damage_scale = 0 -- Take no damage from fire.
 	inst.components.health.canmurder = false

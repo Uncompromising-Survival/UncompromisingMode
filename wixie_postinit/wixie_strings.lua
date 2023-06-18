@@ -508,6 +508,10 @@ DESCRIBE.UM_PYRE_NETTLES = "Better keep that one at arm's length..."
 DESCRIBE.UM_SMOLDER_SPORE = "Hey, target practice!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Yeah, I'm on fire!! LITERALLY HELP."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Yeah, I'm on fire!! LITERALLY HELP."
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "I guess it would keep OTHER stuff off me..."
+DESCRIBE.UM_BLOWDART_PYRE = "It's not as good as my slingshot, but it'll do the trick."
+
+
 
 local general_scripts = require("play_generalscripts")
 

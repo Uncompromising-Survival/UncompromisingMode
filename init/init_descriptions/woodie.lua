@@ -530,3 +530,5 @@ DESCRIBE.UM_PYRE_NETTLES = "I reckon that one's a doozy."
 DESCRIBE.UM_SMOLDER_SPORE = "Is it looking for something?"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "I feel like I coulda prevented that."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I feel like I coulda prevented that."
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It makes me feel one with nature. Really hot, annoyin' nature."
+DESCRIBE.UM_BLOWDART_PYRE = "Feels real likely to spark up somethin' I care aboot." -- god what did i just write
