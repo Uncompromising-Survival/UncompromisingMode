@@ -22,9 +22,9 @@ local prefabs = {
 local HOME_TILES =
 {
 	[WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
-	--	[WORLD_TILES.MAGMA_ASH] = true,
-	--	[WORLD_TILES.MAGMA_ROCK] = true,
-	--	[WORLD_TILES.MAGMAFIELD] = true,
+--	[WORLD_TILES.MAGMA_ASH] = true,
+--	[WORLD_TILES.MAGMA_ROCK] = true,
+--	[WORLD_TILES.MAGMAFIELD] = true,
 }
 
 
@@ -70,6 +70,7 @@ local function PlantSelf(inst)
 		inst.components.locomotor:Stop()
 		inst.AnimState:PlayAnimation("divebomb", false)
 		inst:ListenForEvent("animover", function()
+			inst:Hide()
 			if TheWorld.Map:IsPassableAtPoint(x, y, z) then
 				SpawnPrefab("um_pyre_nettles").Transform:SetPosition(x, y, z)
 			end
@@ -129,7 +130,10 @@ end
 
 -- Divebomb the ground and explode!
 local function Divebomb(inst)
-	if not inst:HasTag("BUSYSMOLDERSPORE") then
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local refusetargets = TheSim:FindEntities(x, y, z, 2, "_health", nil, { "SmolderSporeAvoid", "plantkin" })
+	
+	if not inst:HasTag("BUSYSMOLDERSPORE") and #refusetargets < 1 then
 		inst:AddTag("BUSYSMOLDERSPORE")
 
 		inst.components.locomotor:Stop()
@@ -140,6 +144,7 @@ local function Divebomb(inst)
 			SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
 
 			FireSpread(inst)
+			inst:Hide()
 			inst:DoTaskInTime(1, function()
 				inst:Remove()
 			end)

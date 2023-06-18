@@ -109,7 +109,7 @@ local function OnEquip(inst, owner)
 		owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 0.33) -- Fire does 1/3 damage.
 	end
 	
-	-- Add area debuff.
+	-- Activate area debuff.
 	inst.bump_task = inst:DoPeriodicTask((FRAMES * 3), inst._bumpcheck, FRAMES * 1, owner)
 	
 	-- Debuff wearer when equipped.
@@ -145,6 +145,20 @@ local function OnUnequip(inst, owner)
 	if inst.bump_task ~= nil then
 		inst.bump_task:Cancel()
 	end
+end
+
+
+local function OnPerish(inst)
+	if inst.components.inventoryitem.owner ~= nil then
+		local wearer = inst.components.inventoryitem.owner
+		
+		wearer:PushEvent("armorbroke", { armor = inst })
+		SpawnPrefab("spoiled_food").Transform:SetPosition(wearer.Transform:GetWorldPosition())
+	else
+		SpawnPrefab("spoiled_food").Transform:SetPosition(inst.Transform:GetWorldPosition())
+	end
+	
+	inst:Remove()
 end
 
 
@@ -212,7 +226,7 @@ local function fn()
 	inst:AddComponent("perishable")
 	inst.components.perishable:SetPerishTime(TUNING.TOTAL_DAY_TIME * 5)
 	inst.components.perishable:StartPerishing()
-	inst.components.perishable:SetOnPerishFn(inst.Remove)
+	inst.components.perishable:SetOnPerishFn(OnPerish)
 	
 	MakeHauntableLaunch(inst)
 	
