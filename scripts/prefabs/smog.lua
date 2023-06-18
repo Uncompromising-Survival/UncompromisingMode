@@ -57,7 +57,7 @@ local function fn()
         inst:DoPeriodicTask(FRAMES, function(inst)
             if TheWorld.components.worldwind ~= nil then
                 local x, y, z = inst.Transform:GetWorldPosition()
-                local ang = TheWorld.components.worldwind:GetWindAngle() + (math.random(-450, 450) / 10)
+                local ang = TheWorld.components.worldwind:GetWindAngle()
                 local rad = math.rad(ang)
                 inst.Transform:SetRotation(TheWorld.components.worldwind:GetWindAngle())
                 local velx = math.cos(rad)  --* 4.5
