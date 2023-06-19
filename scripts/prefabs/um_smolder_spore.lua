@@ -22,9 +22,9 @@ local prefabs = {
 local HOME_TILES =
 {
 	[WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
---	[WORLD_TILES.MAGMA_ASH] = true,
---	[WORLD_TILES.MAGMA_ROCK] = true,
---	[WORLD_TILES.MAGMAFIELD] = true,
+	--	[WORLD_TILES.MAGMA_ASH] = true,
+	--	[WORLD_TILES.MAGMA_ROCK] = true,
+	--	[WORLD_TILES.MAGMAFIELD] = true,
 }
 
 
@@ -94,7 +94,8 @@ local function FireSpread(inst)
 
 	-- Instantly ignites anything flammable within a radius.
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 2, nil, { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+	local ents = TheSim:FindEntities(x, y, z, 2, nil,
+		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
 	if #ents > 0 then
 		for i, v in pairs(ents) do
 			if v.components.burnable ~= nil then
@@ -104,7 +105,8 @@ local function FireSpread(inst)
 	end
 
 	-- Slight AoE damage. Mainly to set off other nearby Smolder Spores.
-	inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire", { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
+	inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire",
+		{ "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
 
 	inst.components.lootdropper:DropLoot(inst:GetPosition())
 end
@@ -132,7 +134,7 @@ end
 local function Divebomb(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	local refusetargets = TheSim:FindEntities(x, y, z, 2, "_health", nil, { "SmolderSporeAvoid", "plantkin" })
-	
+
 	if not inst:HasTag("BUSYSMOLDERSPORE") and #refusetargets < 1 then
 		inst:AddTag("BUSYSMOLDERSPORE")
 
@@ -272,8 +274,24 @@ local function OnDropped(inst)
 		PlantSelf(inst)
 	end
 
+	if inst.components.stackable ~= nil then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		while inst.components.stackable:StackSize() > 1 do
+			local item = inst.components.stackable:Get()
+			if item ~= nil then
+				if item.components.inventoryitem ~= nil then
+					item.components.inventoryitem:OnDropped()
+				end
+				item.Physics:Teleport(x + math.random(-4, 4), y, z + math.random(-4, 4))
+			end
+		end
+	end
+
+
 	TaskStartup(inst)
 end
+
+
 
 local function OnPickup(inst)
 	inst.Light:Enable(false)
@@ -325,7 +343,7 @@ local function fn()
 	inst:AddTag("soulless") -- Prefab shouldn't die via health loss, but...just in case.
 	inst:AddTag("scarytoprey")
 	inst:AddTag("thorny")
---	inst:AddTag("flying") -- Makes them ignore platform borders entirely. Flying over the void isn't ideal...
+	--	inst:AddTag("flying") -- Makes them ignore platform borders entirely. Flying over the void isn't ideal...
 
 	inst:AddTag("show_spoilage")
 
