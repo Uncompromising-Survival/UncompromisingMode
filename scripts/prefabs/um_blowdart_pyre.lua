@@ -63,7 +63,7 @@ local function OnHit(inst, attacker, target)
 		
 		-- Instantly damages anything within a radius.
 		local x, y, z = target.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 2, nil, { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
+		local ents = TheSim:FindEntities(x, y, z, 3, nil, { "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
 		if #ents > 0 then
 			for i, v in pairs(ents) do
 				if v.components.combat ~= nil then
