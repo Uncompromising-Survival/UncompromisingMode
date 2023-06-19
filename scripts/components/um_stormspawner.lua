@@ -57,12 +57,12 @@ return Class(function(self, inst)
 				local x_dest, y_dest, z_dest = spawn_location.Transform:GetWorldPosition()
 				local wise = 90
 				local dest_can_move = true
-				
+
 				local mthnrd = math.random()
-				
+
 				local x_offset = 0
 				local z_offset = 0
-				
+
 				--if x > 700 or x < -700 or mthnrd > 0.5 and not (z > 700 or z < -700) then
 				if mthnrd > 0.5 then
 					if x < 200 and x >= 0 then
@@ -70,21 +70,21 @@ return Class(function(self, inst)
 					elseif x > -200 and x <= 0 then
 						x_offset = 200
 					end
-					
+
 					if z < 200 and z >= 0 then
 						z_offset = 200
 					elseif z > -200 and z <= 0 then
 						z_offset = -200
 					end
-				
+
 					if x > 0 then
 						x_dest = (-x + x_offset) * 1.5
 					else
 						x_dest = (math.abs(x) + x_offset) * 1.5
 					end
-					
+
 					z_dest = (z + z_offset) * 1.5
-					
+
 					local destination = SpawnPrefab("um_tornado_destination")
 					destination.Transform:SetPosition(x_dest, 0, z_dest)
 
@@ -103,26 +103,26 @@ return Class(function(self, inst)
 						print("green")
 						destination.danumber = 90
 					end
-					
+
 					destination.marker = "um_tornado_destination_marker"
-					
+
 					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
-				--elseif z > 700 or z < -700 or mthnrd <= 0.5 and not (x > 700 or x < -700) then
+					--elseif z > 700 or z < -700 or mthnrd <= 0.5 and not (x > 700 or x < -700) then
 				else
 					if x < 200 and x >= 0 then
 						x_offset = 200
 					elseif x > -200 and x <= 0 then
 						x_offset = -200
 					end
-					
+
 					if z < 200 and z >= 0 then
 						z_offset = -200
 					elseif z > -200 and z <= 0 then
 						z_offset = 200
 					end
-					
+
 					x_dest = (x + x_offset) * 1.5
-					
+
 					if z > 0 then
 						z_dest = (-z + z_offset) * 1.5
 					else
@@ -131,7 +131,7 @@ return Class(function(self, inst)
 
 					local destination = SpawnPrefab("um_tornado_destination")
 					destination.Transform:SetPosition(x_dest, 0, z_dest)
-					
+
 					if x > 0 and z > 0 then
 						print("red x > 0 and z > 0")
 						destination.danumber = -90
@@ -147,11 +147,11 @@ return Class(function(self, inst)
 						destination.danumber = -90
 						wise = -90
 					end
-					
+
 					destination.marker = "um_tornado_destination_marker3"
-					
+
 					SpawnPrefab("um_tornado").Transform:SetPosition(x, y, z)
-				--[[else
+					--[[else
 					if x > 0 then
 						x_dest = -x * 1.5
 					else
@@ -202,12 +202,12 @@ return Class(function(self, inst)
 			else
 				z_dest = math.abs(z) * 2
 			end
-			
+
 			local destination = SpawnPrefab("um_tornado_destination")
 			destination.Transform:SetPosition(x_dest, 0, z_dest)
 			destination.danumber = wise
 			destination.dest_can_move = dest_can_move
-			
+
 			SpawnPrefab("um_cavetornado").Transform:SetPosition(x, 0, z)
 		end
 	end
@@ -229,7 +229,7 @@ return Class(function(self, inst)
 	--------------------------------------------------------------------------
 
 	local function OnSeasonChange(self)
-		if TheWorld.state.season == "spring" then
+		if TheWorld.state.season == "spring" and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SPRING then
 			StartStorms()
 		else
 			_locationtags = {

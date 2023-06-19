@@ -260,7 +260,7 @@ TUNING.DSTU = {
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
     WEATHERHAZARD_START_DATE_WINTER = GetModConfigData("weatherhazard_winter"),
     WEATHERHAZARD_START_DATE_SPRING = GetModConfigData("weatherhazard_spring"),
-    -- WEATHERHAZARD_START_DATE_SUMMER = GetModConfigData("weatherhazard_summer"),
+    WEATHERHAZARD_START_DATE_SUMMER = GetModConfigData("weatherhazard_summer"),
     RNE_CHANCE = GetModConfigData("rne chance"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
@@ -369,16 +369,23 @@ TUNING.DSTU = {
     DISABLE_MEGAFLARE = GetModConfigData("disable_megaflare"),
     WIXIE = GetModConfigData("wixie_walter"),
     WIXIE_BIRDS = GetModConfigData("wixie_birds"),
+    MONSTERSMALLMEAT = GetModConfigData("monstersmallmeat"),
+    THE_COOLER_SACRED_CHEST = GetModConfigData("the_cooler_sacred_chest"),
+    BOSS_RESISTANCE = GetModConfigData("bossresistance"),
+    STORMS = GetModConfigData("um_storms"),
+    PYRENETTLES = GetModConfigData("pyrenettles"),
+    HEATWAVES = GetModConfigData("heatwaves"),
+    SMOG = GetModConfigData("smog"),
+
     -- boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
     TWIN1_HEALTH = GetModConfigData("twins health"),
     TWIN2_HEALTH = GetModConfigData("twins health"),
+
+    --mod chekcs
     ISLAND_ADVENTURES = ia_check,
     TREATS_FOR_WEBBER = tfw_check,
-    MONSTERSMALLMEAT = GetModConfigData("monstersmallmeat"),
-    THE_COOLER_SACRED_CHEST = GetModConfigData("the_cooler_sacred_chest"),
-    BOSS_RESISTANCE = GetModConfigData("bossresistance")
 }
 
 -- [              DST Related Overrides                  ]

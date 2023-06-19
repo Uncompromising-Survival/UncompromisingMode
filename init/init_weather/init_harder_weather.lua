@@ -65,9 +65,9 @@ env.AddPrefabPostInit("cave", function(inst)
 
 	inst:AddComponent("um_stormspawner")
 	
-	--if TUNING.DSTU.HEATWAVES then --TODO: MAKE THIS A CONFIG
+	if TUNING.DSTU.PYRENETTLES then
 		inst:AddComponent("um_pyre_nettles_summer_spawner")
-	--end
+	end
 
 	inst:DoTaskInTime(0, function(inst)
 		if TestForIA() then
@@ -111,12 +111,12 @@ env.AddPrefabPostInit("forest", function(inst)
 		inst:AddComponent("um_snow_stormspawner")
 	end
 
-	--if TUNING.DSTU.HEATWAVES then --TODO: MAKE THIS A CONFIG
-	inst:AddComponent("um_heatwaves") -- just changing this line so other branches with this commented out get a conflict so I don't forget to readd it here!!
-	--end
-
-	inst:AddComponent("um_stormspawner")
-
+	if TUNING.DSTU.HEATWAVES then
+		inst:AddComponent("um_heatwaves")
+	end
+	if TUNING.DSTU.STORMS then
+		inst:AddComponent("um_stormspawner")
+	end
 	inst:DoTaskInTime(0, function(inst)
 		if TestForIA() then --remove components if the world is IA island/volcano, instead of checking for the mod or delaying adding components.
 			inst:RemoveComponent("uncompromising_deerclopsspawner")
@@ -128,7 +128,8 @@ env.AddPrefabPostInit("forest", function(inst)
 			inst:RemoveComponent("um_areahandler")
 			inst:RemoveComponent("gmoosespawner")
 			inst:RemoveComponent("mock_dragonflyspawner")
-			inst:RemoveComponent("snowstorminitiator")
+			inst:RemoveComponent("um_snow_stormspawner")
+			inst:RemoveComponent("um_stormspawner")
 		end
 	end)
 end)

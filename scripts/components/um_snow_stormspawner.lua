@@ -35,45 +35,45 @@ return Class(function(self, inst)
 	--------------------------------------------------------------------------
 	--[[ Private member functions ]]
 	--------------------------------------------------------------------------
-	
+
 	local function StopStorming()
 		print("StopStorming")
 		_storming = false
-		
+
 		TheWorld:RemoveTag("snowstormstart")
-		
+
 		if TheWorld.net ~= nil then
 			TheWorld.net:RemoveTag("snowstormstartnet")
 		end
-		
+
 		if _worldsettingstimer:GetTimeLeft(UM_STORM_TIMERNAME) == nil then
-			_worldsettingstimer:StartTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0,120))
+			_worldsettingstimer:StartTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0, 120))
 		end
 
 		_worldsettingstimer:ResumeTimer(UM_STORM_TIMERNAME)
 	end
-	
+
 	local function StartStorming()
 		print("StartStorming")
 		_storming = true
-		
+
 		for i, v in ipairs(AllPlayers) do
 			--if v.components ~= nil and v.components.talker ~= nil and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
-				v.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
+			v.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
 			--end
 		end
-		
+
 		TheWorld:PushEvent("ms_forceprecipitation", true)
-		
+
 		TheWorld:DoTaskInTime(60, function()
 			print("TASK IN TIME STORM START!")
 			TheWorld:AddTag("snowstormstart")
 			if TheWorld.net ~= nil then
 				TheWorld.net:AddTag("snowstormstartnet")
 			end
-			
+
 			if _worldsettingstimer:GetTimeLeft(UM_STOPSTORM_TIMERNAME) == nil then
-				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
+				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
 			end
 
 			_worldsettingstimer:ResumeTimer(UM_STOPSTORM_TIMERNAME)
@@ -83,7 +83,7 @@ return Class(function(self, inst)
 	local function StartStorms()
 		print("StartStorms")
 		if _worldsettingstimer:GetTimeLeft(UM_STORM_TIMERNAME) == nil then
-			_worldsettingstimer:StartTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0,120))
+			_worldsettingstimer:StartTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0, 120))
 		end
 
 		_worldsettingstimer:ResumeTimer(UM_STORM_TIMERNAME)
@@ -101,12 +101,12 @@ return Class(function(self, inst)
 
 	local function OnSeasonChange(self)
 		if TheWorld.state.season == "winter" then
-			--if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
+			if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
 				if not _storming then
 					print("season change _storming")
 					StartStorms()
 				end
-			--end
+			end
 		else
 			print("season change not winter")
 			StopStorms()
@@ -124,16 +124,16 @@ return Class(function(self, inst)
 
 	function self:OnLoad(data)
 		_storming = data.storming or false
-		
+
 		if _storming then
 			print("load _storming start storm")
 			TheWorld:AddTag("snowstormstart")
 			if TheWorld.net ~= nil then
 				TheWorld.net:AddTag("snowstormstartnet")
 			end
-			
+
 			if _worldsettingstimer:GetTimeLeft(UM_STOPSTORM_TIMERNAME) == nil then
-				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120))
+				_worldsettingstimer:StartTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
 			end
 
 			_worldsettingstimer:ResumeTimer(UM_STOPSTORM_TIMERNAME)
@@ -141,8 +141,8 @@ return Class(function(self, inst)
 	end
 
 	function self:OnPostInit()
-		_worldsettingstimer:AddTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0,120), true, StartStorming)
-		_worldsettingstimer:AddTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80,120), true, StopStorming)
+		_worldsettingstimer:AddTimer(UM_STORM_TIMERNAME, _spawninterval + math.random(0, 120), true, StartStorming)
+		_worldsettingstimer:AddTimer(UM_STOPSTORM_TIMERNAME, _despawninterval + math.random(80, 120), true, StopStorming)
 
 		OnSeasonChange()
 	end

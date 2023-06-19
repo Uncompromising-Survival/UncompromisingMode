@@ -93,11 +93,11 @@ return Class(function(self, inst)
 
     local function OnSeasonChange(self)
         if TheWorld.state.season == "summer" then
-            -- if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
-            if not _storming then
-                StartHeatWaves()
+            if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
+                if not _storming then
+                    StartHeatWaves()
+                end
             end
-            -- end
         else
             StopHeatwave()
             StopHeatWaves()
