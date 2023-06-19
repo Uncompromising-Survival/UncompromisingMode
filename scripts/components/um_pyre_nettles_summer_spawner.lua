@@ -1,15 +1,17 @@
 -- This file handles the spawning of Pyre Nettles around the player during Summer.
-
+local _worldsettingstimer = TheWorld.components.worldsettingstimer
+local PYRENETTLES_TIMER = "um_pyre_nettles_timer"
+local _spawninterval = 1 --TUNING.TOTAL_DAY_TIME
 
 return Class(function(self, inst)
 	assert(TheWorld.ismastersim, "um_pyre_nettles_summer_spawner should not exist on client!")
 
 	self.inst = inst
+	inst.pyrenettle_attempts = 0
 
 	-- Spawn conditions are here.
 	local function SpawnPlants(inst)
-		local tempchance = (TheWorld.state.temperature * 2) * math.random()
-
+		local tempchance = (TheWorld.state.temperature * 2) * (math.random() + math.random())
 		if tempchance > 70 or TheWorld:HasTag("heatwavestart") then
 			for k, v in pairs(AllPlayers) do
 				local x, y, z = v.Transform:GetWorldPosition()
@@ -26,6 +28,10 @@ return Class(function(self, inst)
 
 				if #blockers > 0 or #nettlescrowding > 16 or #findnettles > 32 then
 					--SpawnPlants()
+					inst.pyrenettle_attempts = inst.pyrenettle_attempts + 1
+					if inst.pyrenettle_attempts < 5 then
+						SpawnPlants(inst)
+					end
 					return
 				end
 
@@ -42,21 +48,26 @@ return Class(function(self, inst)
 				--	end
 			end
 		end
+
+		if _worldsettingstimer:GetTimeLeft(PYRENETTLES_TIMER) == nil then
+			_worldsettingstimer:StartTimer(PYRENETTLES_TIMER, _spawninterval + math.random(0, 120))
+		end
 	end
 
 
 	local function OnSeasonChange()
 		if TheWorld.state.season == "summer" then
-			self.inst.SpawnChanceTask = self.inst:DoPeriodicTask(TUNING.TOTAL_DAY_TIME, SpawnPlants, 1)
-		elseif self.SpawnChanceTask ~= nil then
-			self.inst.SpawnChanceTask:Cancel()
+			if _worldsettingstimer:GetTimeLeft(PYRENETTLES_TIMER) == nil then
+				_worldsettingstimer:StartTimer(PYRENETTLES_TIMER, _spawninterval + math.random(-120, 120))
+			end
+		else
+			_worldsettingstimer:StopTimer(PYRENETTLES_TIMER)
 		end
 	end
 
 	function self:OnPostInit()
-		if TheWorld.state.season == "summer" then
-			OnSeasonChange()
-		end
+		_worldsettingstimer:AddTimer(PYRENETTLES_TIMER, _spawninterval + math.random(-120, 120), true, SpawnPlants)
+		OnSeasonChange()
 	end
 
 	function self:ForceSpawnNettles()
