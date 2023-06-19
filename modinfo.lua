@@ -330,8 +330,9 @@ configuration_options = {
         },
         default = 70
     },
-    BinaryConfig("toads", "Toads", "Sickly Toads replace Frogs in the second Autumn and occasionally release Spore Clouds on death.", true),
-        -- BinaryConfig("acidrain", "Acid Rain", "After the First Year, Toadstool will grow poisionous mushtrees aboveground and pollute the world, making the rain acidic.", true),
+    BinaryConfig("toads", "Toads",
+        "Sickly Toads replace Frogs in the second Autumn and occasionally release Spore Clouds on death.", true),
+    -- BinaryConfig("acidrain", "Acid Rain", "After the First Year, Toadstool will grow poisionous mushtrees aboveground and pollute the world, making the rain acidic.", true),
     SkipSpace(),
 
     {
@@ -344,8 +345,11 @@ configuration_options = {
             { description = "Third Year", data = 120 } },
         default = 5
     },
-    BinaryConfig("snowstorms", "Snowstorms", "Snowtorms impede on players' speed and vision if they are not wearing eye protection. Snowstorms also causes snow to build up on structures.", true),
-    BinaryConfig("winter_burning", "Harder Burning", "Winter makes it so setting stuff alight takes more time, and also finish burning faster.", true),
+    BinaryConfig("snowstorms", "Snowstorms",
+        "Snowtorms impede on players' speed and vision if they are not wearing eye protection. Snowstorms also causes snow to build up on structures.",
+        true),
+    BinaryConfig("winter_burning", "Harder Burning",
+        "Winter makes it so setting stuff alight takes more time, and also finish burning faster.", true),
     SkipSpace(),
 
     {
@@ -358,26 +362,32 @@ configuration_options = {
             { description = "Third Year", data = 120 } },
         default = 5
     },
-    BinaryConfig("hayfever_disable", "Hayfever", "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.", false),
+    BinaryConfig("hayfever_disable", "Hayfever",
+        "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.",
+        false),
     BinaryConfig("um_storms", "Tornadoes", "HELP SOMEONE DO A DESCRIPTION HERE", true),
     SkipSpace(),
 
     {
-	name = "weatherhazard_summer",
-	label = "Start Date for new Summer weather",
-	hover = "New Summer weather occurs in the first year, by default.",
-	options =
-	{
-		{description = "First Year", data = 22},
-		{description = "Second Year", data = 70},
-		{description = "Third Year", data = 120},
-	},
-	default = 22,
-	},
-    BinaryConfig("hotcaves", "Hotter Caves", "During Summer, caves are just hot enough to overheat you without any gear.", true),
-    BinaryConfig("heatwaves", "Heat Waves", "Heat waves at as a summer counterpart to snowstorms.\nWhile they don't do much on their own, aside from the temperature increase, they interact with Smog and Pyre Nettles.", true),
+        name = "weatherhazard_summer",
+        label = "Start Date for Summer weather",
+        hover = "New Summer weather occurs in the first year, by default.",
+        options =
+        {
+            { description = "First Year",  data = 22 },
+            { description = "Second Year", data = 70 },
+            { description = "Third Year",  data = 120 },
+        },
+        default = 22,
+    },
+    BinaryConfig("hotcaves", "Hotter Caves", "During Summer, caves are just hot enough to overheat you without any gear.",
+        true),
+    BinaryConfig("heatwaves", "Heat Waves",
+        "Heat waves at as a summer counterpart to snowstorms.\nWhile they don't do much on their own, aside from the temperature increase, they interact with Smog and Pyre Nettles.",
+        true),
     BinaryConfig("pyrenettles", "Pyre Nettles", "HELP", true),
-    BinaryConfig("smog", "Smog", "Burning plants in summer releases large quantities of smoke. Meant to interact with heatwaves.", true),
+    BinaryConfig("smog", "Smog",
+        "Burning plants in summer releases large quantities of smoke. Meant to interact with heatwaves.", true),
     SkipSpace(),
 
     --[[ This section disabled until we actually use it.
