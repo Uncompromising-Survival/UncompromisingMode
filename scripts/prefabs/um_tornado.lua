@@ -6,6 +6,7 @@ local assets =
 }
 
 local prefabs = { "collapse_small", "nightlight_flame" }
+local config = TUNING.DSTU.STORMS_PERFORMANCE
 
 local function Advance_Full(inst)
     if inst.Advance_Task ~= nil then
@@ -228,22 +229,25 @@ end
 
 local function TornadoEnviromentTask(inst)
     -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
-
     local x, y, z = inst.Transform:GetWorldPosition()
     -- PICKABLES
-    local pickables = TheSim:FindEntities(x, y, z, 12, { "pickable" })
+    local pickables = TheSim:FindEntities(x, y, z, 12, { "pickable" }, { "INLIMBO" })
     for k, v in ipairs(pickables) do
         if v.components.pickable:CanBePicked() then
-            if not v:IsAsleep() then
+            if not v:IsAsleep() and not config == "reduced" then
                 v.components.pickable:Pick(TheWorld)
             else
+                if v:IsAsleep() and config == "reduced" then
+                    return
+                end
                 v.components.pickable:Pick(inst)
             end
         end
     end
 
     -- WORKING
-    local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable" }, { "DIG_workable", "CHOP_workable" })
+    local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable", "INLIMBO" },
+        { "DIG_workable", "CHOP_workable" })
 
     for k, v in ipairs(workables) do
         if v.components.workable ~= nil and v.components.pickable == nil then
@@ -255,25 +259,30 @@ local function TornadoEnviromentTask(inst)
                 end
                 v.components.workable:WorkedBy(inst, 2.5)
             else
+                if config == "reduced" then
+                    return
+                end
                 v.components.workable:Destroy(inst)
             end
         end
     end
 
     -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
-    local items_suck = TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap"})
+    local items_suck = config == "reduced" and
+        TheSim:FindEntities(x, y, z, 12, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO" }) or
+        TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO" })
     local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
-
+    local angle_deviation = config == "reduced" and (66 * RADIANS) or 0
     for k, v in pairs(items_suck) do
         if v and v.Physics and v.components.inventoryitem and not v.components.inventoryitem:IsHeld() and v.replica.inventoryitem ~= nil and v.replica.inventoryitem:CanBePickedUp() and v.prefab ~= "bullkelp_beachedroot" then
             local _x, _y, _z = v:GetPosition():Get()
             local item_ground = TheWorld.Map:IsOceanAtPoint(_x, _y, _z)
             if ground == item_ground then
-                if not v:IsAsleep() then
+                if not v:IsAsleep() and not config == "reduced" then
                     _y = .1
                     v.Physics:Teleport(_x, _y, _z)
                     local dir = v:GetPosition() - inst:GetPosition()
-                    local angle = math.atan2(-dir.z, -dir.x) + 66 * RADIANS
+                    local angle = math.atan2(-dir.z, -dir.x) + angle_deviation
                     v.Physics:ClearMotorVelOverride()
                     v.Physics:SetMotorVelOverride(math.cos(angle) * 10, 0, math.sin(angle) * 10)
                 else
@@ -287,16 +296,20 @@ local function TornadoEnviromentTask(inst)
     end
 
     -- ITEM PICKING
-    local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" }, { "irreplaceable", "tornado_nosucky", "trap"})
+    local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" },
+        { "irreplaceable", "tornado_nosucky", "trap" })
     for k, v in ipairs(items_pick) do
         if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
+            if config == "reduced" and v:IsAsleep() then
+                return
+            end
             PickItem(v, inst)
         end
     end
 
     -- DAMAGING
     local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
-        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "INLIMBO" }
+        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
 
     local targets = TheSim:FindEntities(x, y, z, 4, { "_combat" }, AURA_EXCLUDE_TAGS)
 
@@ -617,8 +630,15 @@ local function fn()
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("um_tornado_destination_marker2").Transform:SetPosition(x, 0, z)
     end)
-    inst:DoPeriodicTask(5, TornadoItemTossTask)
-    inst:DoPeriodicTask(0.25, TornadoEnviromentTask)
+
+    if config ~= "minimal" then
+        inst:DoPeriodicTask(5, TornadoItemTossTask)
+        inst:DoPeriodicTask(0.25, TornadoEnviromentTask)
+    end
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
+
     return inst
 end
 

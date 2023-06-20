@@ -366,6 +366,19 @@ configuration_options = {
         "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.",
         false),
     BinaryConfig("um_storms", "Tornadoes", "HELP SOMEONE DO A DESCRIPTION HERE", true),
+    {
+        name = "um_storms_performance",
+        label = "Tornadoes: Less Lag",
+        hover =
+        "Simplifies some of tornadoes' interactions with the world to help with performance for lower-end systems.",
+        options = {
+            { description = "Disabled",        data = "off", hover = "Tornado does everything."},
+            { description = "Reduced Effects", data = "reduced", hover = "Simplified interactions, doesn't work off-screen." },
+            {description = "Minimal Effects", data = "minimal", hover = "Removes all direct non-player interactions."},
+            default = "off"
+        },
+
+    },
     SkipSpace(),
 
     {

@@ -373,6 +373,7 @@ TUNING.DSTU = {
     THE_COOLER_SACRED_CHEST = GetModConfigData("the_cooler_sacred_chest"),
     BOSS_RESISTANCE = GetModConfigData("bossresistance"),
     STORMS = GetModConfigData("um_storms"),
+    STORMS_PERFORMANCE = GetModConfigData("um_storms_performance"),
     PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
