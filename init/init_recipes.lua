@@ -313,7 +313,7 @@ AddRecipe2(
     { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) },
     TECH.SCIENCE_TWO,
     nil,
-    { "CLOTHING", "RAIN" }
+    { "CLOTHING", "RAIN", "SUMMER"}
 )
 ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
 ChangeSortKey("gasmask", "beehat", "RAIN", true)
@@ -323,10 +323,11 @@ AddRecipe2(
     { Ingredient("gasmask", 1), Ingredient("red_cap", 2), Ingredient("rat_tail", 4) },
     TECH.SCIENCE_TWO,
     nil,
-    { "CLOTHING", "RAIN" }
+    { "CLOTHING", "RAIN", "SUMMER"}
 )
 ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
+ChangeSortKey("plaguemask", "gasmask", "SUMMER", true)
 
 if GetModConfigData("sporehounds") then
     AddRecipe2(
