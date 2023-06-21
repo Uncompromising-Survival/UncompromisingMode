@@ -109,7 +109,9 @@ end
 modimport("init/init_weather/init_harder_weather")
 --modimport("init/init_weather/init_snowstorm")
 modimport("init/init_weather/init_snowstorm_structures")
-modimport("init/init_weather/init_smog")
+if GetModConfigData("smog") then
+	modimport("init/init_weather/init_smog")
+end
 --end
 
 if GetModConfigData("acidrain") then

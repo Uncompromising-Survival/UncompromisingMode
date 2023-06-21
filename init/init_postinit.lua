@@ -8,7 +8,6 @@ local component_post = {
     "kramped",
     "explosiveresist",
     "crop",
-    "wildfires",
     --	"beargerspawner",
     "workable",
     "sleepingbaguser",
@@ -449,6 +448,10 @@ end
 
 if GetModConfigData("bossresistance") ~= false then
     modimport("postinit/boss_resistance")
+end
+
+if GetModConfigData("heatwaves") then
+    table.insert(component_post, "wildfires")
 end
 
 modimport("postinit/sim")
