@@ -301,7 +301,7 @@ local function TornadoEnviromentTask(inst)
 
         -- ITEM PICKING
         local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" },
-            { "irreplaceable", "tornado_nosucky", "trap" })
+            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO"})
         for k, v in ipairs(items_pick) do
             if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
                 if config == "reduced" and v:IsAsleep() then
