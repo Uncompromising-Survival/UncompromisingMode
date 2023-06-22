@@ -130,7 +130,6 @@ local function fn()
 	
 	inst:AddComponent("projectile")
 	inst.components.projectile:SetSpeed(60)
-	inst.components.projectile.stimuli = "fire"
 	inst.components.projectile:SetOnHitFn(OnHit)
 	inst.components.projectile:SetOnThrownFn(OnThrown)
 	inst:ListenForEvent("onthrown", OnThrownListened)

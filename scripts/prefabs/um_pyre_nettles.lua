@@ -313,6 +313,10 @@ local function OnAttacked(inst, data)
 	if inst.components.health:GetPercent() > 0.01 then
 		if (math.random() * inst.stage) > 3 and not (data.attacker ~= nil and data.attacker:HasTag("HASHEATER")) then
 			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			
+			if data.weapon ~= nil and data.weapon.prefab == "voidcloth_scythe" then
+				inst.components.health:DoDelta(-TUNING.VOIDCLOTH_SCYTHE_DAMAGE * 2)
+			end
 		end
 		inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_hit", false)
 		inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
