@@ -8,26 +8,39 @@ env.AddPrefabPostInit("blowdart_fire", function(inst)
 	end
 	local _attackfn = inst.components.weapon.onattack -- Store the old function.
 	
-	SetSharedLootTable('um_firedart_splash_fires',
-	{
-		{ 'houndfire', 1.0 },
-		{ 'houndfire', 0.5 }
-	})
-	
 	local function fireattack(inst, attacker, target)
 		local groundfire = SpawnPrefab("houndfire")
 		groundfire.Transform:SetPosition(target.Transform:GetWorldPosition())
-		groundfire.Transform:SetScale(1.5, 1.5, 1.5)
+		groundfire.Transform:SetScale(1.1, 1.1, 1.1)
 		
-		inst.components.lootdropper:DropLoot(inst:GetPosition())
-		
-		if attacker:HasTag("pyromaniac") then
-			inst.components.lootdropper:DropLoot(inst:GetPosition())
-			inst.components.lootdropper:DropLoot(inst:GetPosition())
+		-- This next block is a very cut down version of the 'lootdropper' component.
+		local function spawn_extra_fire(target)
+			local dropitem = SpawnPrefab("houndfire")
+			local pt = target:GetPosition()
+			
+			local angle = math.random(359)
+			local sinangle = math.sin(angle)
+			local cosangle = math.cos(angle)
+			local speed = math.random() * 2
+			dropitem.Physics:SetVel(speed * cosangle, GetRandomWithVariance(8, 4), speed * -sinangle)
+			dropitem.Transform:SetPosition(pt.x + cosangle * 1, pt.y, pt.z - sinangle * 1)
+			dropitem.Transform:SetScale(0.5, 0.5, 0.5)
 		end
 		
+		spawn_extra_fire(target)
+		spawn_extra_fire(target)
+		
+		if attacker:HasTag("pyromaniac") then
+			groundfire.Transform:SetScale(1.5, 1.5, 1.5)
+			
+			spawn_extra_fire(target)
+			spawn_extra_fire(target)
+		end
+		
+		
+		
 		-- If the target is already on fire, do extra stuff.
-		if target ~= nil and target.components.burnable ~= nil and target.components.burnable:IsBurning() then
+		if target.components.burnable ~= nil and target.components.burnable:IsBurning() then
 			SpawnPrefab("magmafire").Transform:SetPosition(target.Transform:GetWorldPosition())
 			SpawnPrefab("explode_small").Transform:SetPosition(target.Transform:GetWorldPosition())
 			inst.SoundEmitter:PlaySound("dontstarve/common/balloon_pop")
@@ -58,9 +71,6 @@ env.AddPrefabPostInit("blowdart_fire", function(inst)
 	
 	inst.components.weapon:SetDamage(20)
 	inst.components.weapon:SetOnAttack(fireattack)
-	
-	inst:AddComponent("lootdropper")
-	inst.components.lootdropper:SetChanceLootTable("um_firedart_splash_fires")
 end)
 
 
