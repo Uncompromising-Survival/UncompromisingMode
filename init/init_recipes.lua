@@ -313,7 +313,7 @@ AddRecipe2(
     { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) },
     TECH.SCIENCE_TWO,
     nil,
-    { "CLOTHING", "RAIN", "SUMMER"}
+    { "CLOTHING", "RAIN", "SUMMER" }
 )
 ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
 ChangeSortKey("gasmask", "beehat", "RAIN", true)
@@ -323,7 +323,7 @@ AddRecipe2(
     { Ingredient("gasmask", 1), Ingredient("red_cap", 2), Ingredient("rat_tail", 4) },
     TECH.SCIENCE_TWO,
     nil,
-    { "CLOTHING", "RAIN", "SUMMER"}
+    { "CLOTHING", "RAIN", "SUMMER" }
 )
 ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
@@ -851,7 +851,7 @@ AddRecipe2(
     "hermitshop_waterplant",
     { Ingredient("messagebottleempty", 1) },
     TECH.HERMITCRABSHOP_THREE,
-    { nounlock = true, product = "yotc_seedpacket", sg_state = "give" }
+    { nounlock = true, product = "waterplant_planter", sg_state = "give" }
 )
 ChangeSortKey("hermitshop_waterplant", "hermitshop_chum", "CRAFTING_STATION", true)
 
