@@ -142,13 +142,17 @@ local function FindSpotToMoveTowardsTree(inst)
 	if TheWorld.Map:IsVisualGroundAtPoint(x_final,0,z_final) then
 		MoveGroup(inst,x_final,z_final)
 	else
-		local telepos
+		local telepos = {}
 		telepos.x = x_final
 		telepos.z = z_final
 		telepos.y = 0
 		local offset = FindWalkableOffset(telepos, math.random() * 2 * PI, 4, 4)
-		x_final, z_final = offset.x + telepos.x, offset.z + telepos.z
-		MoveGroup(inst,x_final,z_final)
+		if offset then
+			x_final, z_final = offset.x + telepos.x, offset.z + telepos.z
+			MoveGroup(inst,x_final,z_final)
+		else --Can't find an offset.... so we'll just let the nymph go and leave the aphids behind.
+			inst.Transform:SetPosition(x,0,z)
+		end
 	end
 end
 
