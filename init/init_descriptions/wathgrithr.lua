@@ -189,6 +189,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Tis not meat!"
 DESCRIBE.PITCHERPLANT = "A plant!"
 DESCRIBE.APHID = "Have at thee, bug!"
+DESCRIBE.NYMPH = "More bugs!"
 DESCRIBE.GIANT_TREE_INFESTED = "A plague is wrought upon it."
 DESCRIBE.GIANT_BLUEBERRY = "I shalln't be tempted!"
 DESCRIBE.STEAMEDHAMS = "'Tis obviously grilled!"
@@ -513,3 +514,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Fires of Hel!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Fires of Hel!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It shall keep the worst of the firey plants' wrath at bay."
 DESCRIBE.UM_BLOWDART_PYRE = "I'd rather be in the MIDST of the fire and brimstone!"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "You wish to challenge me, hel-beast?"
+DESCRIBE.UM_TORNADO = "Fight me, wind!"
+DESCRIBE.UM_WATERFALL = "You shall not drown me!"

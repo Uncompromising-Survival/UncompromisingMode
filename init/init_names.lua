@@ -483,6 +483,7 @@ STRINGS.SMALLFISHMEAT_DRIED = "Small Fish Jerky"
 
 STRINGS.WIXIEGUN =
 "The Glock 17 (Beretta 92FS in the HD Edition), also known as the 9mm Pistol, is a weapon featured in Half-Life and its expansions."
+------------------------
 
 STRINGS.WINONA_CATAPULT_ITEM = "Dismantled " .. STRINGS.WINONA_CATAPULT
 STRINGS.WINONA_SPOTLIGHT_ITEM = "Packed " .. STRINGS.WINONA_SPOTLIGHT
@@ -505,3 +506,8 @@ STRINGS.UM_PYRE_NETTLES = "Pyre Nettles"
 STRINGS.UM_SMOLDER_SPORE = "Smolder Spore"
 STRINGS.UM_ARMOR_PYRE_NETTLES = "Pyre Mantle"
 STRINGS.UM_BLOWDART_PYRE = "Pyre Dart"
+
+-- Under the Weather Part 1
+STRINGS.ALPHA_LIGHTNING_GOAT = "Alpha Voltgoat"
+STRINGS.UM_TORNADO = "Giant Tornado"
+STRINGS.UM_WATERFALL = "Waterfall"

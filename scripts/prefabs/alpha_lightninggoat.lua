@@ -31,7 +31,7 @@ local RETARGET_CANT_TAGS = { "lightninggoat", "wall" }
 local RETARGET_WALL_MUST_TAGS = { "_combat", "wall" }
 local RETARGET_WALL_CANT_TAGS = { "lightninggoat" }
 local function RetargetFn(inst)
-    if inst.charged or inst.pissed_count >= 3 then
+    if inst.charged or inst.pissed_count >= 2 then
         local function CheckTarget(guy)
             return inst.components.combat:CanTarget(guy)
         end

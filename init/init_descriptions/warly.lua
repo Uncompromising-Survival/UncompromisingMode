@@ -197,6 +197,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "I actually don't mind this one."
 DESCRIBE.PITCHERPLANT = "I wonder if it has any dew inside?"
 DESCRIBE.APHID = "A horrible pest."
+DESCRIBE.NYMPH = "Pests and pestilence."
 DESCRIBE.GIANT_TREE_INFESTED = "It seems rather sick."
 DESCRIBE.GIANT_BLUEBERRY = "Ohoho, I have plenty of ideas for you!"
 DESCRIBE.STEAMEDHAMS = "Tastes like fast food."
@@ -535,3 +536,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "That's-a spicy-a meat-a boll!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AAH!! I'm getting broiled!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A little something to keep the heat on..."
 DESCRIBE.UM_BLOWDART_PYRE = "Aren't you a spicy one?"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "A cut of tough meat."
+DESCRIBE.UM_TORNADO = "The storm has been brewed!"
+DESCRIBE.UM_WATERFALL = "A salty brine has entered the cavern!"

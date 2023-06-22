@@ -260,6 +260,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Agh, it's still terrifying!"
 DESCRIBE.PITCHERPLANT = "It's quite high up."
 DESCRIBE.APHID = "A horrible pest."
+DESCRIBE.NYMPH = "It's spreading the pestilence to more trees."
 DESCRIBE.GIANT_TREE_INFESTED = "It doesn't look too well."
 DESCRIBE.GIANT_BLUEBERRY = "This'll be messy, for sure."
 DESCRIBE.STEAMEDHAMS = "Science says it's a hamburger."
@@ -620,3 +621,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "What did I THINK would happen?!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oh, it's gone off! OH, IT'S GONE OFF!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "The plants won't suspect a thing!"
 DESCRIBE.UM_BLOWDART_PYRE = "The reaction is fascinating!"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "It'll leaving me bleeting! I mean, bleeding!"
+DESCRIBE.UM_TORNADO = "Hang on to your hats!"
+DESCRIBE.UM_WATERFALL = "Wheres a pair of wellingtons when you need them?"

@@ -217,6 +217,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "It seems to be connected to the pitcher plant somehow."
 DESCRIBE.PITCHERPLANT = "The fruit bats can be seen going in and out of it."
 DESCRIBE.APHID = "They're infesting the Sequoioideae."
+DESCRIBE.NYMPH = "It's seeking more Sequoioideae."
 DESCRIBE.GIANT_TREE_INFESTED = "This Sequoioideae is a bit worse for wear."
 DESCRIBE.GIANT_BLUEBERRY = "I hope that it's no longer volatile."
 DESCRIBE.STEAMEDHAMS = "I am prepared for an unforgettable luncheon."
@@ -580,3 +581,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "I suppose I was feeling nostalgic."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oh, that little specimen slipped my mind!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A basic natural camoflage and deterant."
 DESCRIBE.UM_BLOWDART_PYRE = "Equal parts conventional and psychological warfare! Er... Ahem."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "It's the protector of the herd."
+DESCRIBE.UM_TORNADO = "A natural phenomenon, or supernatural?"
+DESCRIBE.UM_WATERFALL = "The tornado appears to have punctured some resivoirs."

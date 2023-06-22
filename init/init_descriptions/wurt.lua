@@ -193,6 +193,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Glorp! Fruit alive?!"
 DESCRIBE.PITCHERPLANT = "Gluuurgh... can't reach."
 DESCRIBE.APHID = "It a bug, florp."
+DESCRIBE.NYMPH = "Where it going?"
 DESCRIBE.GIANT_TREE_INFESTED = "Bugs eating big tree."
 DESCRIBE.GIANT_BLUEBERRY = "Yum!"
 DESCRIBE.STEAMEDHAMS = "Glurgh... how you even \"steam\" ham?"
@@ -516,3 +517,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = {
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "FLURPT!! FORGOT HAD THAT!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Make scales hurty. Still bad plant, florp!"
 DESCRIBE.UM_BLOWDART_PYRE = "Go big pop! Make things run away!"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "You a king too?"
+DESCRIBE.UM_TORNADO = "Glurp, that look bad..."
+DESCRIBE.UM_WATERFALL = "Yay! Splashy comes to us!"

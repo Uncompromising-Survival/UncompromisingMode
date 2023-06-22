@@ -188,6 +188,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Flying fruity!"
 DESCRIBE.PITCHERPLANT = "If not skip leg day, Wolfgang could reach!"
 DESCRIBE.APHID = "Is tiny bug!"
+DESCRIBE.NYMPH = "Where is flying tiny bug going?"
 DESCRIBE.GIANT_TREE_INFESTED = "Tree is sick!"
 DESCRIBE.GIANT_BLUEBERRY = "Mighty berry, for mighty Wolfgang!"
 DESCRIBE.STEAMEDHAMS = "Is mouthwatering hamburgers."
@@ -517,3 +518,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Mouth not feeling mighty!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Pockets not feeling mighty!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Poke sometimes, but keep badies away."
 DESCRIBE.UM_BLOWDART_PYRE = "Not like. Give flashbacks of fire girl."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "Come! Wolfgang flip you!"
+DESCRIBE.UM_TORNADO = "Wolfgang would punch wind away! If Wolfgang wasn't scared..."
+DESCRIBE.UM_WATERFALL = "Wolfgang prefer bathes over showers."

@@ -198,6 +198,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Even uglier!"
 DESCRIBE.PITCHERPLANT = "It's a plant, but high up."
 DESCRIBE.APHID = "I don't like you."
+DESCRIBE.NYMPH = "It is searching for more trees."
 DESCRIBE.GIANT_TREE_INFESTED = "It's riddled with vermin."
 DESCRIBE.GIANT_BLUEBERRY = "This is going to get messy. Sigh."
 DESCRIBE.STEAMEDHAMS = "They're obviously grilled."
@@ -549,3 +550,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ah, yes. What a surprise."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I suppose I had that coming."
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A bit risky for my tastes, but it should keep the nettles at bay."
 DESCRIBE.UM_BLOWDART_PYRE = "These should thoroughly inconvenience whatever I point them toward..."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "You'd do well not to threaten me."
+DESCRIBE.UM_TORNADO = "The seal was an accident, I swear!"
+DESCRIBE.UM_WATERFALL = "No reprieve from the downpour."

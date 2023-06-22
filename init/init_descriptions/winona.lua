@@ -198,6 +198,7 @@ DESCRIBE.FRUITBAT = "I actually don't mind this one."
 DESCRIBE.FRUITBAT = "Flyin'... fruit?"
 DESCRIBE.PITCHERPLANT = "It's just a plant."
 DESCRIBE.APHID = "Just another pest."
+DESCRIBE.NYMPH = "The cause of the infestation."
 DESCRIBE.GIANT_TREE_INFESTED =
 "That seems to be where the buggers are comin' from."
 DESCRIBE.GIANT_BLUEBERRY = "It's packed to the brim with liquid!"
@@ -547,3 +548,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "This isn't a good kinda nostalgia!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "This isn't a good kinda nostalgia!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Is that really up to code?"
 DESCRIBE.UM_BLOWDART_PYRE = "I kind of feel bad for whatever's on the other end..."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "This ones a fighter!"
+DESCRIBE.UM_TORNADO = "My buildings aren't high wind certified!"
+DESCRIBE.UM_WATERFALL = "Where's some sandbags when you need them?"

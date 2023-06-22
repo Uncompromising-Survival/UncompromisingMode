@@ -49,9 +49,6 @@ end
 
 local function fn()
     local inst = CreateEntity()
-
-    inst:AddTag("NOCLICK")
-    inst:AddTag("FX")
     --[[Non-networked entity]]
     inst.entity:SetCanSleep(false)
 	
@@ -59,7 +56,11 @@ local function fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
+	
 	inst.AnimState:SetMultColour(1,1,1,0)
+
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
 	
     inst.AnimState:SetBank("um_whirlpool")
     inst.AnimState:SetBuild("um_whirlpool")

@@ -209,6 +209,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "I hope you do not explode like the ground ones."
 DESCRIBE.PITCHERPLANT = "Must climb to it I can smell the sweetness."
 DESCRIBE.APHID = "Get out of here, this is Rat-land now."
+DESCRIBE.NYMPH = "You're playing a losing game trying to outcompete me!"
 DESCRIBE.GIANT_TREE_INFESTED = "Must be full of worms."
 DESCRIBE.GIANT_BLUEBERRY = "I will pop it now into my mouth."
 DESCRIBE.STEAMEDHAMS =
@@ -554,3 +555,9 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "HELP ME YOU FOOLS!! IT HAS ATTACKED ME!
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AHH!! MY HOLDING CLUMPS ARE BURNING!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Stupid pointy trash."
 DESCRIBE.UM_BLOWDART_PYRE = "Oh no. Not thinking about it. Not again. Please no."
+ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AHH!! MY HOLDING CLUMPS!!"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "There is not enough room for the both of us!"
+DESCRIBE.UM_TORNADO = "Stupid wind has come back for revenge!"
+DESCRIBE.UM_WATERFALL = "I shower regularly."

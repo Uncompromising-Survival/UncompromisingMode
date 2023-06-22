@@ -199,6 +199,7 @@ DESCRIBE.FRUITBAT = "This timeline is weird."
 DESCRIBE.PITCHERPLANT = "It's out of my grasp."
 DESCRIBE.APHID =
 "They have such a short lifespan, yet they waste it eating twigs..."
+DESCRIBE.NYMPH = "Curious, the other insects lost their ability to fly for extended time."
 DESCRIBE.GIANT_TREE_INFESTED = "Has it grown old, or is something else at play?"
 DESCRIBE.GIANT_BLUEBERRY = "Disarmed, and ready to eat."
 DESCRIBE.STEAMEDHAMS = "Would've been easier to take it from the real chefs."
@@ -540,3 +541,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Blasted! If only they didn't taste so g
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AGKH! I missed the time window!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "I'd be better off just keeping my distance."
 DESCRIBE.UM_BLOWDART_PYRE = "Oh, what a waste..."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "It's gained wisdom through age. And mass."
+DESCRIBE.UM_TORNADO = "A wibbly wobbly... windy... thing!"
+DESCRIBE.UM_WATERFALL = "Time washes away everything."

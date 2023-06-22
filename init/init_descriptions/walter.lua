@@ -211,6 +211,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Maybe if we're lucky it'll turn me into a fruit!"
 DESCRIBE.PITCHERPLANT = "I could hit it with my sling for practice!"
 DESCRIBE.APHID = "It's fuzzy!"
+DESCRIBE.NYMPH = "I wonder what they're doing?"
 DESCRIBE.GIANT_TREE_INFESTED = "Get out'a there!"
 DESCRIBE.GIANT_BLUEBERRY =
     "Good thing a Pinetree Pioneer's outfit is resistant to water!"
@@ -554,3 +555,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Aah!! That wasn't edible!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "FIRE! FIRE!! DEFINITELY NOT MY FAULT!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "The craftsmanship is amazing! It's like the leaves never even came apart!"
 DESCRIBE.UM_BLOWDART_PYRE = "I'm confiscating these."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "Careful Woby! This goat looks mean!"
+DESCRIBE.UM_TORNADO = "Nail down our gear! Duck and cover! RUN FOR YOUR LIVES!!"
+DESCRIBE.UM_WATERFALL = "I love a good waterfall!"

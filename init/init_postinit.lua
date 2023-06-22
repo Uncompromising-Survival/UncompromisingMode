@@ -183,7 +183,9 @@ local prefab_post = {
     --	"renameable_items",
     "lightninggoatherd",
     "archive_centipede",
-    "firenettles"
+    "firenettles",
+	"staff_tornado",
+	"rainometer"
 }
 
 local stategraph_post = {
@@ -261,6 +263,7 @@ if GetModConfigData("wixie_walter") then
 
     modimport("wixie_postinit/walter_strings")
     modimport("wixie_postinit/wixie_strings")
+    modimport("wixie_postinit/wixie_shipwrecked")
 
     RemapSoundEvent("dontstarve/characters/wixie/death_voice", "wixie/characters/wixie/death_voice")
     RemapSoundEvent("dontstarve/characters/wixie/hurt", "wixie/characters/wixie/hurt")

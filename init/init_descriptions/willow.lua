@@ -199,6 +199,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "If it'd sit still I would burn it."
 DESCRIBE.PITCHERPLANT = "If it were lower down I'd burn it."
 DESCRIBE.APHID = "Your fuzzyness would make good tinder."
+DESCRIBE.NYMPH = "Your wax barely takes any heat to melt."
 DESCRIBE.GIANT_TREE_INFESTED = "Burn the insects out!"
 DESCRIBE.GIANT_BLUEBERRY = "My jaw is getting in the way!"
 DESCRIBE.STEAMEDHAMS = "It's a ham sandwich."
@@ -546,3 +547,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Spicy!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Oops! Tehe."
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "Feel the burn!"
 DESCRIBE.UM_BLOWDART_PYRE = "That one was MY idea! You're welcome."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "I like your color!"
+DESCRIBE.UM_TORNADO = "It's going to put out all my fires!"
+DESCRIBE.UM_WATERFALL = "Ugh! I came down here to ESCAPE all the water."

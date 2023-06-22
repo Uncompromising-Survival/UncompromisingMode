@@ -192,6 +192,7 @@ DESCRIBE.FRUITBAT = "It's our favorite color!"
 DESCRIBE.PITCHERPLANT =
 "If we could climb like the other spiders we could reach it."
 DESCRIBE.APHID = "Not a spider!"
+DESCRIBE.NYMPH = "These guys fly too?"
 DESCRIBE.GIANT_TREE_INFESTED = "It looks pretty sick."
 DESCRIBE.GIANT_BLUEBERRY = "The juice gets everywhere!"
 DESCRIBE.STEAMEDHAMS = "This is just a hamburger."
@@ -522,3 +523,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ack! Our fur's on fire!!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Ack! Our fur's on fire!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It pokes through our fur. Itchy."
 DESCRIBE.UM_BLOWDART_PYRE = "It might hurt our friends..."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "None of the goats back home were this ornery..."
+DESCRIBE.UM_TORNADO = "I hate tornadoes..."
+DESCRIBE.UM_WATERFALL = "Splishy splash!"

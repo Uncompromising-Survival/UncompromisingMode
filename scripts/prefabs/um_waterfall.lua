@@ -320,39 +320,47 @@ local function IsNearFloodTile(map, x, y, z)
 end
 
 local function OnEntitySleep(inst)
-	inst.SoundEmitter:KillSound("um_waterfall_loop")
-	
-	if inst.raindroptask ~= nil then
-		inst.raindroptask:Cancel()
-		inst.raindroptask = nil
+	if inst.persists then
+		inst.SoundEmitter:KillSound("um_waterfall_loop")
+		
+		if inst.raindroptask ~= nil then
+			inst.raindroptask:Cancel()
+			inst.raindroptask = nil
+		end
+	else
+		inst:Remove()
 	end
 end
 
 local function OnEntityWake(inst)
-	if not inst.SoundEmitter:PlayingSound("um_waterfall_loop") then
-		inst.SoundEmitter:PlaySound("UCSounds/um_waterfall/um_waterfall", "um_waterfall_loop")
-	end
-	
-	if inst.raindroptask == nil then
-		inst.raindroptask = inst:DoPeriodicTask(.25, function(inst)
-			local x, y, z = inst.Transform:GetWorldPosition()
-			
-			local x1 = x + math.random(-25, 25)
-			local z1 = z + math.random(-25, 25)
-			
-			local _map = TheWorld.Map
-			local current_tile = _map:GetTileAtPoint(x1, y, z1)
-			if current_tile == WORLD_TILES.UM_FLOODWATER then
-				if IsNearFloodTile(_map, x1, 0, z1) then
-					print("spawn rain")
-					local shimmer = SpawnPrefab("um_waterfall_wave")
-					shimmer.Transform:SetPosition(x1, 0, z1)
-					shimmer.Transform:SetScale(0.9, 0.9, 0.9)
-				else
-					print("no spawn rain")
+	if inst.persists then
+		if not inst.SoundEmitter:PlayingSound("um_waterfall_loop") then
+			inst.SoundEmitter:PlaySound("UCSounds/um_waterfall/um_waterfall", "um_waterfall_loop")
+		end
+		
+		if inst.raindroptask == nil then
+			inst.raindroptask = inst:DoPeriodicTask(.25, function(inst)
+				local x, y, z = inst.Transform:GetWorldPosition()
+				
+				local x1 = x + math.random(-25, 25)
+				local z1 = z + math.random(-25, 25)
+				
+				local _map = TheWorld.Map
+				local current_tile = _map:GetTileAtPoint(x1, y, z1)
+				if current_tile == WORLD_TILES.UM_FLOODWATER then
+					if IsNearFloodTile(_map, x1, 0, z1) then
+						print("spawn rain")
+						local shimmer = SpawnPrefab("um_waterfall_wave")
+						shimmer.Transform:SetPosition(x1, 0, z1)
+						shimmer.Transform:SetScale(0.9, 0.9, 0.9)
+					else
+						print("no spawn rain")
+					end
 				end
-			end
-		end)
+			end)
+		end
+	else
+		inst:Remove()
 	end
 end
 
@@ -380,7 +388,7 @@ local function Init(inst)
 	end)
 	
 	if not inst.components.timer:TimerExists("disappear") then
-		inst.components.timer:StartTimer("disappear", 2400)
+		inst.components.timer:StartTimer("disappear", (TheWorld.state.springlength / 4) * 480)
 	end
 end
 
@@ -431,7 +439,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("watersource")
-	inst.components.watersource.onusefn = function(inst) inst:Remove() end
+	--inst.components.watersource.onusefn = function(inst) inst:Remove() end
 	
 	inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
 

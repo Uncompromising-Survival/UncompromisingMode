@@ -2071,7 +2071,10 @@ Assets = {
 	Asset("ATLAS", "images/map_icons/telebase_active.xml"),
 	
 	Asset("IMAGE", "images/map_icons/um_pyre_nettles_map.tex"),
-	Asset("ATLAS", "images/map_icons/um_pyre_nettles_map.xml"),
+	Asset("ATLAS", "images/map_icons/um_pyre_nettles_map.xml"),	
+	
+	Asset("IMAGE", "images/map_icons/um_tornado_map.tex"),
+	Asset("ATLAS", "images/map_icons/um_tornado_map.xml"),
 
 	--BIGPORTRAITS
 	Asset("IMAGE", "bigportraits/willow.tex"),

@@ -194,6 +194,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "A flying fruit! I've seen it all!"
 DESCRIBE.PITCHERPLANT = "Behold, it's a plant, but this time it's high up!"
 DESCRIBE.APHID = "The trees had it coming to them!"
+DESCRIBE.NYMPH = "It's off to take more trees."
 DESCRIBE.GIANT_TREE_INFESTED = "What's bugging you?"
 DESCRIBE.GIANT_BLUEBERRY = "Could I use this like a waterballoon? Hyuyu!"
 DESCRIBE.STEAMEDHAMS = "This dish has got to be joking."
@@ -533,3 +534,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "This is fine, hyuyu."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Hyu!!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It doesn't quite match my fur, but I could get up to mischief..."
 DESCRIBE.UM_BLOWDART_PYRE = "These could ruin someone's whole LIFE in a heartbeat. How silly!"
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "We're much alike, me and you! Minus the bleeting."
+DESCRIBE.UM_TORNADO = "Hyu-hyu, this looks like fun!"
+DESCRIBE.UM_WATERFALL = "The water has come to us!"

@@ -195,6 +195,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "What?!"
 DESCRIBE.PITCHERPLANT = "Out of reach..."
 DESCRIBE.APHID = "They plague the trees."
+DESCRIBE.NYMPH = "The plague is spreading."
 DESCRIBE.GIANT_TREE_INFESTED = "It battles against death."
 DESCRIBE.GIANT_BLUEBERRY = "Will it explode in my mouth?"
 DESCRIBE.STEAMEDHAMS = "Old family recipe."
@@ -527,3 +528,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Let's just get this over with."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Maybe if I'd paid attention, it wouldn't have ended this way..."
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "A reminder of the constant pain that is life."
 DESCRIBE.UM_BLOWDART_PYRE = "Death delivered from afar."
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "Protector your own, lest you lose them..."
+DESCRIBE.UM_TORNADO = "There's no place like home..."
+DESCRIBE.UM_WATERFALL = "Wash our tears away."

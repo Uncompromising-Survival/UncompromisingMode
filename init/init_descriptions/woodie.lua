@@ -193,6 +193,7 @@ DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
 DESCRIBE.FRUITBAT = "Who taught that fruit to fly?"
 DESCRIBE.PITCHERPLANT = "It's a plant, but not the choppin' kind."
 DESCRIBE.APHID = "They like the trees too, eh?"
+DESCRIBE.NYMPH = "They're lookin' for more trees."
 DESCRIBE.GIANT_TREE_INFESTED = "Quit hoggin' it to yourselves, hosers!"
 DESCRIBE.GIANT_BLUEBERRY = "A lot of water in this, eh?"
 DESCRIBE.STEAMEDHAMS = "Mouth watering hamburgers."
@@ -532,3 +533,8 @@ ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "I feel like I coulda prevented that."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "I feel like I coulda prevented that."
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It makes me feel one with nature. Really hot, annoyin' nature."
 DESCRIBE.UM_BLOWDART_PYRE = "Feels real likely to spark up somethin' I care aboot." -- god what did i just write
+
+-- Under the Weather Part 1
+DESCRIBE.ALPHA_LIGHTNINGGOAT = "Steer clear of this bleeter."
+DESCRIBE.UM_TORNADO = "Mother nature is a cruel mistress."
+DESCRIBE.UM_WATERFALL = "What a disaster."

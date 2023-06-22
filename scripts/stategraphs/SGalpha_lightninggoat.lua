@@ -165,7 +165,7 @@ local states=
             inst.AnimState:PushAnimation("taunt")
             inst.AnimState:PushAnimation("taunt_pst", false)
 			
-			if inst.pissed_count < 3 then
+			if inst.pissed_count < 2 then
 				inst.pissed_count = inst.pissed_count + 1
 			end
         end,
