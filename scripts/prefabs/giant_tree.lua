@@ -605,9 +605,6 @@ local function Regrow(inst, data)
 		inst.AnimState:PlayAnimation("idle")
 		PickBuild(inst)
 	end
-	if data.name == "infest" then
-		InfestMe(inst)
-	end
 	if data.name == "remoss" then
 		ShowAllMoss(inst, true)
 	end
@@ -729,7 +726,7 @@ local function giant_treefn()
 
 	inst:DoTaskInTime(0, SpawnerInit)
 	inst:DoTaskInTime(0, InfestedInit)
-
+	inst.InfestMe = InfestMe
 	inst.PickBuild = PickBuild
 	inst.HideAllMoss = HideAllMoss
 	inst:DoTaskInTime(math.random(0, 0.1), function(inst) --Keep giant trees spaced out
@@ -758,6 +755,7 @@ local function MakeInfestedTree_gen(inst)
 	local infested_tree = SpawnPrefab("giant_tree")
 	infested_tree.Transform:SetPosition(x, y, z)
 	infested_tree.infested = true
+	inst:Remove()
 end
 
 local function infestedfn()
