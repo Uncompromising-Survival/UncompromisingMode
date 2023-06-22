@@ -505,7 +505,7 @@ DESCRIBE.MARA_BOSS1 = "I'm about to rattle your bones!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Arms to yourself, pokey!"
-DESCRIBE.UM_SMOLDER_SPORE = "Hey, target practice!"
+DESCRIBE.UM_SMOLDER_SPORE = "Hey, just the right size!"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Ack! I HATE spicy foods!."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Yeah, I'm on fire!! HELP!"
 DESCRIBE.UM_ARMOR_PYRE_NETTLES = "I guess it would keep OTHER stuff off me..."
