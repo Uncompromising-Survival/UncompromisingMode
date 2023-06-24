@@ -14,7 +14,7 @@ if TUNING.DSTU.WANDA_NERF then
 
     local function noentcheckfn(pt)
         return not TheWorld.Map:IsPointNearHole(pt) and
-        #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
+            #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
     end
 
     env.AddPrefabPostInit("wanda", function(inst)
@@ -72,18 +72,35 @@ if TUNING.DSTU.WANDA_NERF then
         inst.components.hauntable.hauntvalue = TUNING.HAUNT_SMALL
         if haunter:HasTag("pocketwatchcaster") and
             inst.components.pocketwatch:CastSpell(haunter, haunter) then
-            -- NOTHING! Enjoy the cooldown...
+            if TUNING.DSTU.WANDA_FINITEUSES then
+                inst.components.finiteuses:Use()
+            end
         else
             Launch(inst, haunter, TUNING.LAUNCH_SPEED_SMALL)
         end
     end
 
     env.AddPrefabPostInit("pocketwatch_revive", function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
         if inst.components.pocketwatch ~= nil then
             inst.components.pocketwatch.DoCastSpell = Revive_DoCastSpell
         end
         if inst.components.hauntable ~= nil then
             inst.components.hauntable:SetOnHauntFn(Revive_OnHaunt)
+        end
+
+        if TUNING.DSTU.WANDA_FINITEUSES then
+            inst:AddComponent("finiteuses")
+            inst.components.finiteuses:SetMaxUses(5)
+            inst.components.finiteuses:SetUses(5)
+            inst.components.finiteuses:SetOnFinished(function(inst)
+                inst.components.lootdropper:DropLoot()
+                SpawnPrefab("brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst:Remove()
+            end)
         end
     end)
 
