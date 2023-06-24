@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.1.8: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.8.1: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -20,7 +20,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.8"
+version = "Under the Weather Pt.1 v1.1.8.1"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -303,6 +303,8 @@ configuration_options = {
         true),
     BinaryConfig("wanda_nerf", "Wanda",
         "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
+    BinaryConfig("wanda_finiteuses", "Wanda: S.C.W. Durability",
+        "Gives the second chance watch 5 uses, depleted when reviving via haunting.", true),
     BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage",
         "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x.", true),
     BinaryConfig("wormwood_trapbuffs", "Wormwood: Trap Buffs",

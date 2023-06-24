@@ -75,10 +75,16 @@ local function fn()
         local players = TheSim:FindEntities(x, y, z, 12, nil, { "playerghost" }, { "player", "insect" })
         for k, v in ipairs(players) do
             if v.components.health ~= nil and v.prefab ~= "willow" and not v:HasTag("has_gasmask") and inst.mult >= 0.4 and math.random() > 0.5 then
-                v.components.health:DeltaPenalty(0.0125)
+                if v.components.oldager ~= nil then
+                    v.components.health:DoDelta(-1)
+                else
+                    v.components.health:DeltaPenalty(0.0125)
+                end
+
                 if v.components.talker ~= nil then
                     v.components.talker:Say(GetString(v, "GAS_DAMAGE"))
                 end
+
                 if v:HasTag("insect") then
                     v.components.health:DoDelta(-1)
                     if v.components.hauntable ~= nil and v.components.hauntable.panicable then

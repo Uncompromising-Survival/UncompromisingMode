@@ -173,9 +173,7 @@ local prefab_post = {
     "staffs", -- generic staffs.
     "stalker",
     "sacred_chest",
-    "soil_amender",
     "vetcurse_drops",
-    "charcoal",
     "mermhat",
     "wptags",
     "inventoryitem_classified",
@@ -185,7 +183,8 @@ local prefab_post = {
     "archive_centipede",
     "firenettles",
 	"staff_tornado",
-	"rainometer"
+	"rainometer",
+    "winterometer",
 }
 
 local stategraph_post = {

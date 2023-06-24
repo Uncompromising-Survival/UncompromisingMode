@@ -88,6 +88,8 @@ end
 
 
 if TUNING.DSTU.ICECREAMBUFF then
+	recipes.icecream.OldOnEat = recipes.icecream.oneatenfn
+
 	local ICECREAM =
 	{
 		"icecream",
@@ -101,15 +103,13 @@ if TUNING.DSTU.ICECREAMBUFF then
 		AddPrefabPostInit(v, function(inst)
 			if inst ~= nil and inst.components.edible ~= nil then
 				inst.components.edible.sanityvalue = 0
+				inst.components.edible:SetOnEatenFn(ApplyIcecreamBuff)
 			end
 		end)
 	end
-
-	recipes.icecream.OldOnEat = recipes.icecream.oneatenfn
-	recipes.icecream.oneatenfn = ApplyIcecreamBuff
 end
 
---[[local BACONEGGS = 
+--[[local BACONEGGS =
 {
 	"baconeggs",
 	"baconeggs_spice_chili",
@@ -553,8 +553,9 @@ for k, v in ipairs(froglegs) do
 		if not GLOBAL.TheWorld.ismastersim then
 			return
 		end
-
-		inst:AddComponent("tradable")
+		if inst.components.tradable == nil then
+			inst:AddComponent("tradable")
+		end
 		inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
 	end)
 end

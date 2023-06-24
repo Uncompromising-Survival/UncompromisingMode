@@ -83,7 +83,6 @@ modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
 modimport("init/init_vetcurse")
 
-
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
 modimport("init/init_recipes")
 modimport("init/init_food/init_crockpot")
@@ -92,6 +91,7 @@ modimport("init/init_food/monsterfoods")
 
 if GetModConfigData("rat_raids") then
 	modimport("init/init_ratraid")
+	modimport("init/init_noratcheck")
 end
 
 modimport("init/init_creatures/init_knockback")
