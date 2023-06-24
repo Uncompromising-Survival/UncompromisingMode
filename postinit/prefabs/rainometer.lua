@@ -18,7 +18,7 @@ end
 local function CheckForTornadoRevealers(inst)
 	if not inst:HasTag("burnt") then
 		local x, y, z = inst.Transform:GetWorldPosition()
-		local players = FindPlayersInRange(x, y, z, 3)
+		local players = FindPlayersInRange(x, y, z, 2)
 		
 		for i, v in pairs(players) do
 			if v ~= nil then
@@ -39,6 +39,29 @@ local function CheckForTornadoRevealers(inst)
 	end
 end
 
+local function OnActivate(inst, doer)
+	CheckForTornadoRevealers(inst)
+	local tornado = TheSim:FindFirstEntityWithTag("um_tornado")
+	
+	if tornado ~= nil and doer ~= nil and doer.player_classified ~= nil then
+		local x, y, z = tornado.Transform:GetWorldPosition()
+	
+		doer.player_classified.revealmapspot_worldx:set(x)
+		doer.player_classified.revealmapspot_worldz:set(z)
+		doer.player_classified.revealmapspotevent:push()
+	
+	--[[
+		local player = doer.player_classified
+		local px, py, pz = doer.Transform:GetWorldPosition()
+
+		if player ~= nil and player.HUD ~= nil then
+			player.HUD.controls:ShowMap(Vector3(x, y, z))
+		end]]
+	end
+
+    inst.components.activatable.inactive = true
+end
+
 env.AddPrefabPostInit("rainometer", function(inst)
 	if not TheWorld.ismastersim then
 		return
@@ -50,6 +73,11 @@ env.AddPrefabPostInit("rainometer", function(inst)
 	inst:AddComponent("mapspotrevealer")
 	inst.components.mapspotrevealer:SetGetTargetFn(getrevealtargetpos)
 	--inst.components.mapspotrevealer:SetPreRevealFn(prereveal)
+
+    inst:AddComponent("activatable")
+    inst.components.activatable.OnActivate = OnActivate
+    inst.components.activatable.inactive = true
+	inst.components.activatable.quickaction = true
 	
     inst:ListenForEvent("burntup", function()
 		inst:RemoveComponent("mapspotrevealer")
