@@ -183,7 +183,8 @@ local prefab_post = {
     "archive_centipede",
     "firenettles",
 	"staff_tornado",
-	"rainometer"
+	"rainometer",
+    "winterometer",
 }
 
 local stategraph_post = {
