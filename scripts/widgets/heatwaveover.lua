@@ -40,11 +40,9 @@ function HeatwaveOver:OnUpdate(dt)
     if (TheWorld.net:HasTag("heatwavestartnet") or TheWorld:HasTag("heatwavestart")) and not TheWorld.state.isnight then
         local delta = dt * self._alpha_speed
         self._alpha = math.clamp(self._alpha + delta, 0, 0.75)
-        print("self._alpha ON", self._alpha)
     else
         local delta = dt * self._alpha_speed
         self._alpha = math.clamp((1 - delta) * self._alpha, 0, 0.75)
-        print("self._alpha OFF", self._alpha)
     end
 
     -- Delay our alpha fade until the second half of the update period.
@@ -52,11 +50,10 @@ function HeatwaveOver:OnUpdate(dt)
     -- and fade from 1 to 0 in the other half.
     self.bg:SetTint(255 / 255, 165 / 255, 0, self._alpha)
     self.bg:SetFadeAlpha(self._alpha / 0.5)
+
     if self._alpha <= 0.01 then
-        print("HIDING")
         self:Hide()
     else
-        print("SHOWING")
         self:Show()
     end
 end
