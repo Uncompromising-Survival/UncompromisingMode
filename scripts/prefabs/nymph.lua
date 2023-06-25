@@ -223,7 +223,7 @@ local function minifn()
 	inst.OnLoad = function(inst,data)
 		if data then
 			if data.treetargetx then
-				TheNet:Announce("wehadthetree")
+				--TheNet:Announce("wehadthetree")
 				inst.treetarget = {}
 				inst.treetarget = Vector3(data.treetargetx,data.treetargety,data.treetargetz)
 				MakeAphidsNearbyFollow(inst)

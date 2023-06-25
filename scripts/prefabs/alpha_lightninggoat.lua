@@ -270,9 +270,9 @@ local function fn()
 	end)
 	
 	inst.Recharge = function(inst)
-		TheNet:Announce("StartRecharge")
+		--TheNet:Announce("StartRecharge")
 		inst.Recharging = inst:DoTaskInTime(10,function(inst)
-			TheNet:Announce("FinishRecharge")
+			--TheNet:Announce("FinishRecharge")
 			if inst.recharging_electric then
 				inst.recharging_electric = nil
 			end
