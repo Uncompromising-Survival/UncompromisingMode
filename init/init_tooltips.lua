@@ -54,7 +54,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
 	SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
 	SNOWGOGGLES = "- Grants protection against Snow Storms / Sand Storms when worn.",
-	GASMASK = "- Provides protection against spore clouds and smog.",
+	GASMASK = "- Provides protection against spore clouds.",
 	PLAGUEMASK = "- Provides protection against spore clouds.",
 	FLORAL_BANDAGE = "- Restores extra health over time.",
 	DISEASECUREBOMB = "- Restores health and sickly plants.",
@@ -162,6 +162,19 @@ if TUNING.DSTU.HAYFEVER then
 	TOOLTIP.MINIFAN = "- Staves off hayfever."
 	TOOLTIP.FEATHERFAN = "- Grants large amounts of Hayfever protection when blown."
 	TOOLTIP.PERDFAN = "- Grants large amounts of Hayfever protection when blown."
+end
+
+if TUNING.DSTU.SMOG then
+	TOOLTIP.GASMASK = TOOLTIP.GASMASK .. "\n- Protects against smog while worn."
+	TOOLTIP.PLAGUEMASK = TOOLTIP.PLAGUEMASK .. "\n- Protects against smog while worn"
+end
+
+if TUNING.DSTU.HEATWAVES then
+	TOOLTIP.WINTEROMETER = "- Can predict heatwaves before they occur."
+end
+
+if TUNING.DSTU.STORMS then
+	TOOLTIP.RAINOMETER = "- Can be interacted with to reveal a Tornado's position."
 end
 
 if TUNING.DSTU.GOTOBED ~= false then
