@@ -19,7 +19,7 @@ function DoGlow(inst)
 end
 
 function DoHeatwaveGlowCheck(inst)
-    if TheWorld:HasTag("heatwavestart") or TheWorld.net:HasTag("heatwavestartnet") or TheWorld.components.worldsettingstimer ~= nil and TheWorld.components.worldsettingstimer:GetTimeLeft("um_heatwave_timer") ~= nil and TheWorld.components.worldsettingstimer:GetTimeLeft("um_heatwave_timer") < 180 then
+    if TheWorld:HasTag("heatwavestart") or TheWorld.net:HasTag("heatwavestartnet") or TheWorld.components.worldsettingstimer ~= nil and TheWorld.components.worldsettingstimer:GetTimeLeft("um_heatwave_timer") ~= nil and TheWorld.components.worldsettingstimer:GetTimeLeft("um_heatwave_timer") < 120 then
         inst._glowing:set(true)
     else
         inst._glowing:set(false)
