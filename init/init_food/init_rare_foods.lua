@@ -100,6 +100,8 @@ end
 local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
 
 function GLOBAL.MakeNoGrowInWinter(inst)
+	print("toggle growable")
+
     inst:WatchWorldState("iswinter", ToggleGrowable)
     ToggleGrowable(inst, GLOBAL.TheWorld.state.iswinter)
     _MakeNoGrowInWinter(inst)
@@ -171,8 +173,10 @@ if GetModConfigData("nowintergrowing") then
 
         function self:Resume()
             if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
-                return false
+				print("growable Resume return false")
+				return false
             else
+				print("growable _OldResume")
                 return _OldResume(self)
             end
         end
@@ -180,11 +184,13 @@ if GetModConfigData("nowintergrowing") then
         local _OldStartGrowing = self.StartGrowing
 
         function self:StartGrowing(time)
-            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
-                return false
-            else
+            --[[if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+                print("growable StartGrowing return false")
+				return false
+            else]]
+			--	print("growable _OldStartGrowing")
                 return _OldStartGrowing(self, time)
-            end
+           -- end
         end
     end)
 
@@ -193,8 +199,10 @@ if GetModConfigData("nowintergrowing") then
 
         function self:Resume()
             if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
-                return false
+                print("pickable Resume return false")
+				return false
             else
+				print("pickable _OldResume")
                 return _OldResume(self)
             end
         end
