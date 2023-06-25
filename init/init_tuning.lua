@@ -377,7 +377,6 @@ TUNING.DSTU = {
     PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
-    WANDA_FINITEUSES = GetModConfigData("wanda_finiteuses"),
     -- boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),

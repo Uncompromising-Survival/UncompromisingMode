@@ -72,9 +72,9 @@ if TUNING.DSTU.WANDA_NERF then
         inst.components.hauntable.hauntvalue = TUNING.HAUNT_SMALL
         if haunter:HasTag("pocketwatchcaster") and
             inst.components.pocketwatch:CastSpell(haunter, haunter) then
-            if TUNING.DSTU.WANDA_FINITEUSES then
-                inst.components.finiteuses:Use()
-            end
+                inst.components.lootdropper:DropLoot()
+                SpawnPrefab("brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst:Remove()
         else
             Launch(inst, haunter, TUNING.LAUNCH_SPEED_SMALL)
         end
@@ -90,17 +90,6 @@ if TUNING.DSTU.WANDA_NERF then
         end
         if inst.components.hauntable ~= nil then
             inst.components.hauntable:SetOnHauntFn(Revive_OnHaunt)
-        end
-
-        if TUNING.DSTU.WANDA_FINITEUSES then
-            inst:AddComponent("finiteuses")
-            inst.components.finiteuses:SetMaxUses(5)
-            inst.components.finiteuses:SetUses(5)
-            inst.components.finiteuses:SetOnFinished(function(inst)
-                inst.components.lootdropper:DropLoot()
-                SpawnPrefab("brokentool").Transform:SetPosition(inst.Transform:GetWorldPosition())
-                inst:Remove()
-            end)
         end
     end)
 

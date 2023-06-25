@@ -303,8 +303,6 @@ configuration_options = {
         true),
     BinaryConfig("wanda_nerf", "Wanda",
         "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
-    BinaryConfig("wanda_finiteuses", "Wanda: S.C.W. Durability",
-        "Gives the second chance watch 5 uses, depleted when reviving via haunting.", true),
     BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage",
         "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x.", true),
     BinaryConfig("wormwood_trapbuffs", "Wormwood: Trap Buffs",
