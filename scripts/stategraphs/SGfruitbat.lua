@@ -273,7 +273,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(5, function(inst)
+            TimeEvent(10, function(inst)
                 inst.sg:GoToState("glide")
             end)
         },
