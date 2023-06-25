@@ -138,14 +138,7 @@ return Class(function(self, inst)
         -- self.old_temp = data.old_temp
 
         if _storming then
-            TheWorld:AddTag("heatwavestart")
-            if TheWorld.net ~= nil then
-                TheWorld.net:AddTag("heatwavestartnet")
-            end
-
-            if _worldsettingstimer:GetTimeLeft(UM_STOPHEATWAVE_TIMERNAME) == nil then
-                _worldsettingstimer:StartTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120))
-            end
+            StartHeatWaving()
         end
     end
 

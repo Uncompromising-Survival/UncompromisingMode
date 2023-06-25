@@ -31,6 +31,7 @@ env.AddComponentPostInit("weather", function(self)
                 _pollenfx.particles_per_tick = _pollenfx.particles_per_tick * 20 + 1 -- MOREEEEEEEEEEEEEEEE
             end
         end
+
         if ThePlayer ~= nil and ThePlayer:HasTag("under_the_weather") then
 			local tornado = TheSim:FindFirstEntityWithTag("um_tornado")
             if _hasfx and tornado ~= nil and tornado:IsValid() then
