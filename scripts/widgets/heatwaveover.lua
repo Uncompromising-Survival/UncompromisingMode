@@ -37,7 +37,7 @@ function HeatwaveOver:ToggleUpdating()
 end
 
 function HeatwaveOver:OnUpdate(dt)
-    if TheWorld.net:HasTag("heatwavestartnet") or TheWorld:HasTag("heatwavestart") then
+    if (TheWorld.net:HasTag("heatwavestartnet") or TheWorld:HasTag("heatwavestart")) and not TheWorld.state.isnight then
         local delta = dt * self._alpha_speed
         self._alpha = math.min(0.75, self._alpha + delta)
         print("self._alpha ON", self._alpha)
