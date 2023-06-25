@@ -365,7 +365,7 @@ configuration_options = {
     BinaryConfig("hayfever_disable", "Hayfever",
         "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.",
         false),
-    BinaryConfig("um_storms", "Tornadoes", "HELP SOMEONE DO A DESCRIPTION HERE", true),
+    BinaryConfig("um_storms", "Tornadoes", "Tornadoes sweep across the land and kidnap your cows.", true),
     {
         name = "um_storms_performance",
         label = "Tornadoes: Less Lag",
@@ -398,7 +398,7 @@ configuration_options = {
     BinaryConfig("heatwaves", "Heat Waves",
         "Heat waves at as a summer counterpart to snowstorms.\nWhile they don't do much on their own, aside from the temperature increase, they interact with Smog and Pyre Nettles.",
         true),
-    BinaryConfig("pyrenettles", "Pyre Nettles", "HELP", true),
+    BinaryConfig("pyrenettles", "Pyre Nettles", "Pyre Nettles are a new invasive plant that grows with heat.", true),
     BinaryConfig("smog", "Smog",
         "Burning plants in summer releases large quantities of smoke. Meant to interact with heatwaves.", true),
     SkipSpace(),
