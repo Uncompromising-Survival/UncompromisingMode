@@ -106,6 +106,13 @@ local function FadeOut(inst,fade)
 	if tree then
 		tree.InfestMe(tree)
 	end
+	if inst.posse then
+		for i,v in ipairs(inst.posse) do
+			if v and v:IsValid() and v.components.health and not v.components.health:IsDead() then
+				v.sg:GoToState("burrow")
+			end
+		end
+	end
 	inst:Remove()
 end
 
@@ -175,7 +182,7 @@ local function minifn()
 	inst:AddTag("insect")
     inst:AddTag("aphid")
     inst:AddTag("hostile")
-
+	inst:AddTag("nymph")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
