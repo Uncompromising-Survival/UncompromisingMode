@@ -39,11 +39,11 @@ end
 function HeatwaveOver:OnUpdate(dt)
     if (TheWorld.net:HasTag("heatwavestartnet") or TheWorld:HasTag("heatwavestart")) and not TheWorld.state.isnight then
         local delta = dt * self._alpha_speed
-        self._alpha = math.min(0.75, self._alpha + delta)
+        self._alpha = math.clamp(self._alpha + delta, 0, 0.75)
         print("self._alpha ON", self._alpha)
     else
         local delta = dt * self._alpha_speed
-        self._alpha = math.max(math.min(0.75, (1 - delta) * self._alpha), 0)
+        self._alpha = math.clamp((1 - delta) * self._alpha, 0, 0.75)
         print("self._alpha OFF", self._alpha)
     end
 
