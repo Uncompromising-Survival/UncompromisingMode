@@ -20,7 +20,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.8.2"
+version = "Under the Weather Pt.1 v1.1.8.3"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
