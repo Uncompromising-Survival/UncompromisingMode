@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.1.8.8: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.8.9: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -20,7 +20,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.8.8"
+version = "Under the Weather Pt.1 v1.1.8.9"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
