@@ -6,13 +6,13 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.1.9.0: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.1.9.1: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
 - New spring weather, uncluding storms, tornados, and cave flooding.
-- Alpha Goats will appear in goat herds, to protect their own, and have consisant loot.
+- Alpha Goats will appear in goat herds, to protect their own, and have consistant loot.
 - Krampii will more effectively steal things and do their job.
 - A ton of misc. changes, ranging from Wickerbottom's books to hounds.
 
@@ -20,7 +20,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.9.0"
+version = "Under the Weather Pt.1 v1.1.9.1"
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
