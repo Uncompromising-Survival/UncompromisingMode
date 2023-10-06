@@ -1,5 +1,5 @@
-local STRINGS = GLOBAL.STRINGS
 --moved into seperate file, was getting a bit too big.
+local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
 	AMULET =
@@ -72,7 +72,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing.",
 	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
-	
+
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees."
 }
 
@@ -287,3 +287,5 @@ end
 if TUNING.DSTU.DISABLE_MEGAFLARE then
 	TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end
+
+modimport("init/init_extrascrapbook")
