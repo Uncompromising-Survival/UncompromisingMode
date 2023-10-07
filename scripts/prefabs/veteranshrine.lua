@@ -170,6 +170,11 @@ local function fn(Sim)
 	
     MakeObstaclePhysics(inst, 1.8)
 	
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(320)
+    end
+
 	inst.entity:SetPristine()
 	
 	inst:AddComponent("talker")        

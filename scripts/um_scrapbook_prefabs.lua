@@ -288,7 +288,6 @@ local PREFABS =
     ["whisperpod_normal_ground"] = true,
     ["um_bear_trap_equippable_tooth"] = true,
     ["spider_trapdoor"] = true,
-    ["boat_bumper_copper_kit"] = true,
     ["stumpling"] = true,
     ["slingshotammo_moonglass"] = true,
     ["fruitbat"] = true,
