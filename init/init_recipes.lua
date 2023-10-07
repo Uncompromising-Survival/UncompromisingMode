@@ -24,7 +24,12 @@ local CRAFTING_FILTERS = GLOBAL.CRAFTING_FILTERS
 -- @recipe_name: (str) the recipe to sort
 -- @recipe_reference:(str) the recipe to place the given recipe next to
 -- @filter: (str) the crafting filter to sort in
--- @after: (bool) whether the recipe should be sorted after the reference
+-- @after: (bool) whether the recipe should be sorted after the references
+--vscode param defs
+---@param recipe_name string the recipe to sort
+---@param recipe_reference string the recipe to place the given recipe next to
+---@param filter string the crafting filter to sort in
+---@param after boolean whether the recipe should be sorted after the references
 local function ChangeSortKey(recipe_name, recipe_reference, filter, after)
     local recipes = CRAFTING_FILTERS[filter].recipes
     local recipe_name_index
