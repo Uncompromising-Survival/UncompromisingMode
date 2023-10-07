@@ -9,7 +9,9 @@ ReloadPreloadAssets()
 SignFiles = require("uncompromising_writeables")
 
 -- PUTTING THIS HERE SO IT LOADS BEFORE ALL POSTINITS, INITS, ETC
-AddPrefabPostInit("world", function(inst)
+AddPrefabPostInit("world", function(inst)    
+    GLOBAL.TUNING.DSTU.PREFABS = Prefabs
+
     if not inst.ismastersim then
         return
     end
@@ -392,3 +394,4 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 modimport("init/init_insightcompat")
+

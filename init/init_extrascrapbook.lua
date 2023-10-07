@@ -20,11 +20,54 @@ local function AddAddtionalScrapbookInfo(entry, info, overwrite)
         else
             SPECIALINFO[entry] = SPECIALINFO[entry] .. "\n\n󰀕 Uncompromising Mode Changes 󰀕\n\n" .. info
         end
-	end
+	else--add the specialinfo
+        SPECIALINFO[entry] = "󰀕 Uncompromising Mode Changes 󰀕\n\n" .. info
+    end
 end
 
 for k,v in pairs(STRINGS.UNCOMP_TOOLTIP) do
     AddAddtionalScrapbookInfo(k, ParseTooltip(v))
+end
+
+local statues = {
+	"HORNUCOPIA",
+	"PIPE",
+	"ANCHOR",
+	"PAWN",
+	"ROOK",
+	"KNIGHT",
+	"BISHOP",
+	"MUSE",
+	"FORMAL",
+	"DEERCLOPS",
+	"BEARGER",
+	"MOOSEGOOSE",
+	"DRAGONFLY",
+	"MINOTAUR",
+	"TOADSTOOL",
+	"BEEQUEEN",
+	"KLAUS",
+	"ANTLION",
+	"STALKER",
+	"MALBATROSS",
+	"CRABKING",
+	"BUTTERFLY",
+	"MOON",
+	"GUARDIANPHASE3",
+	"EYEOFTERROR",
+	"TWINSOFTERROR",
+	"CLAYHOUND",
+	"CLAYWARG",
+	"CARRAT",
+	"BEEFALO",
+	"KITCOON",
+	"CATCOON",
+	"MANRABBIT",
+	"DAYWALKER",
+}
+
+for k,v in pairs(statues) do
+    AddAddtionalScrapbookInfo("CHESSPIECE_"..v, "No longer has collision.")
 end
 
 local extrascrapbookdata = {

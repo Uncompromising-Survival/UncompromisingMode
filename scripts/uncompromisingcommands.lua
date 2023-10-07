@@ -261,3 +261,11 @@ function c_um_wobygodmode(player)
         end
     end
 end
+
+function c_um_listumprefabs()
+    print("HERE --- ALL UM PREFABS")
+    for k,v in pairs(TUNING.DSTU.PREFABS) do
+        print(k)
+        TheNet:Announce(k)
+    end
+end

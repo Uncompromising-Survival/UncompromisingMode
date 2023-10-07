@@ -75,6 +75,48 @@ STRINGS.UNCOMP_TOOLTIP = {
 
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees."
 }
+local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
+
+local statues = {
+	"HORNUCOPIA",
+	"PIPE",
+	"ANCHOR",
+	"PAWN",
+	"ROOK",
+	"KNIGHT",
+	"BISHOP",
+	"MUSE",
+	"FORMAL",
+	"DEERCLOPS",
+	"BEARGER",
+	"MOOSEGOOSE",
+	"DRAGONFLY",
+	"MINOTAUR",
+	"TOADSTOOL",
+	"BEEQUEEN",
+	"KLAUS",
+	"ANTLION",
+	"STALKER",
+	"MALBATROSS",
+	"CRABKING",
+	"BUTTERFLY",
+	"MOON",
+	"GUARDIANPHASE3",
+	"EYEOFTERROR",
+	"TWINSOFTERROR",
+	"CLAYHOUND",
+	"CLAYWARG",
+	"CARRAT",
+	"BEEFALO",
+	"KITCOON",
+	"CATCOON",
+	"MANRABBIT",
+	"DAYWALKER",
+}
+
+for k,v in pairs(statues) do
+	TOOLTIPS["CHESSPIECE_"..v.."_BUILDER"] = "- No longer has collision."
+end
 
 STRINGS.PINETREE_TOOLTIP = {
 	WALTERHAT = "- Wearing it makes scrapes and bruises feel less scary!",
@@ -105,7 +147,6 @@ if TUNING.DSTU.WINONA_PORTABLES then
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_HIGH = "- Now portable."
 end
 
-local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
 if TUNING.DSTU.TELESTAFF_REWORK then
 	TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses."
