@@ -172,7 +172,7 @@ local function fn(Sim)
 	
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
-        inst.components.pointofinterest:SetHeight(320)
+        inst.components.pointofinterest:SetHeight(0)
     end
 
 	inst.entity:SetPristine()

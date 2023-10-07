@@ -303,7 +303,6 @@ local PREFABS =
     ["wixie_wardrobe"] = true,
     ["green_vomit"] = true,
     ["cave_entrance_open_sunkdecid"] = true,
-    ["pollenmiteden"] = true,
     ["purplegem_cracked"] = true,
     ["winona_toolbox"] = true,
     ["pigking_pigguard"] = true,
