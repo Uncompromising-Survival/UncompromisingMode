@@ -43,6 +43,8 @@ STRINGS.UNCOMP_TOOLTIP = {
 	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
 	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
 	
+	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
+
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
 	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.",
@@ -72,8 +74,6 @@ STRINGS.UNCOMP_TOOLTIP = {
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing.",
 	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
-
-	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 

@@ -1,3 +1,13 @@
+--Damnit klei.
+local scrapbookdata = require("screens/redux/scrapbookdata")
+local specialinfo_ovewrite = {
+    blowdart_fire = "BLOWDART_FIRE",
+    turf_dragonfly = "TURF_DRAGONFLY"
+}
+
+for k,v in pairs(specialinfo_ovewrite) do
+    scrapbookdata[k]["specialinfo"] = v
+end
 
 local STRINGS = GLOBAL.STRINGS
 local SPECIALINFO = GLOBAL.STRINGS.SCRAPBOOK.SPECIALINFO
@@ -9,11 +19,6 @@ local function ParseTooltip(tooltip)
 end
 
 local function AddAddtionalScrapbookInfo(entry, info, overwrite)
-    if entry == "AMULET" then
-        entry = "REDAMULET" --what the fuck klei
-        overwrite = true
-    end
-
 	if SPECIALINFO[entry] ~= nil then
         if overwrite then
             SPECIALINFO[entry] = "󰀕 Uncompromising Mode Changes 󰀕\n\n" .. info
@@ -71,5 +76,10 @@ for k,v in pairs(statues) do
 end
 
 local extrascrapbookdata = {
-
+    REDAMULET = {ParseTooltip(STRINGS.UNCOMP_TOOLTIP.AMULET), true},
+    PURPLESTAFF = {"Can select its destination if multiple foci are avaible. Increased uses."}
 }
+
+for k,v in pairs(extrascrapbookdata) do
+    AddAddtionalScrapbookInfo(k, v[1], v[2])
+end
