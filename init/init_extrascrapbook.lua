@@ -52,6 +52,9 @@ local function AddAddtionalScrapbookInfo(page, info, overwrite)
 end
 
 for k,v in pairs(TOOLTIP) do --automatically add special scrabook info based on tooltips. Not all of these work.
+	if k == "BREAK" then --don't handle 
+		break
+	end
     AddAddtionalScrapbookInfo(k, ParseTooltip(v))
 end
 
@@ -114,7 +117,12 @@ local extrascrapbookdata = {
 	PUMPKINGLANTERN = {ParseTooltip(TOOLTIP.PUMPKIN_LANTERN)},
 	WALLS = {"Provides protection from Snow Storms."},
 	WALL_DREADSTONE = {ParseTooltip(TOOLTIP.WALL_DREADSTONE_ITEM)},
-	BOATCANNON = {ParseTooltip(TOOLTIP.BOAT_CANNON_KIT)}
+	BOATCANNON = {ParseTooltip(TOOLTIP.BOAT_CANNON_KIT)},
+
+
+	--Other stuff TODO TODO TODO
+	DRAGONFLY = {"No longer drops scales mid-fight, instead drops all 3 on death."},
+	SHIELDOFTERROR = {""},
 }
 
 --adds the addtional scrapbook info based on the table above.

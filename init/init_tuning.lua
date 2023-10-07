@@ -216,7 +216,7 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
     -- Warly
-	WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
+    WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
     WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
     WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
     WARLY_BUTCHER = GetModConfigData("warly_butcher_"),
@@ -235,10 +235,10 @@ TUNING.DSTU = {
     -- Wickerbottom
     WICKERNERF = GetModConfigData("wickerbottom"),
     WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
-	
-	-- Willow
-	WILLOW_INSULATION = GetModConfigData("willow insulation"),
-	
+
+    -- Willow
+    WILLOW_INSULATION = GetModConfigData("willow insulation"),
+
     -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
     WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
     WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
@@ -383,13 +383,13 @@ TUNING.DSTU = {
     PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
-	MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
-	MAXHUNGERDAMAGE = GetModConfigData("maxhungerdamage"),
-	HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
-	WINONA_PORTABLES = GetModConfigData("winona_portables_"),
-	TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
-	BEEBOX_NERF = GetModConfigData("beebox_nerf"),
-	CANEDURABILITY = GetModConfigData("canedurability"),
+    MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
+    MAXHUNGERDAMAGE = GetModConfigData("maxhungerdamage"),
+    HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
+    WINONA_PORTABLES = GetModConfigData("winona_portables_"),
+    TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
+    BEEBOX_NERF = GetModConfigData("beebox_nerf"),
+    CANEDURABILITY = GetModConfigData("canedurability"),
     -- boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
@@ -399,10 +399,10 @@ TUNING.DSTU = {
     --mod chekcs
     ISLAND_ADVENTURES = ia_check,
     TREATS_FOR_WEBBER = tfw_check,
-	
-	--MEME CONFIG
-	ADVERTISEMENTS = GetModConfigData("um_advertisements"),
-	SHRINK = GetModConfigData("um_shrink"),
+
+    --MEME CONFIG
+    ADVERTISEMENTS = GetModConfigData("um_advertisements"),
+    SHRINK = GetModConfigData("um_shrink"),
 
     --CLIENT CONFIGS
 
@@ -422,13 +422,13 @@ if GetModConfigData("wixie_walter") then
 
     TUNING.WOBY_SMALL_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_SMALL_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2
-	
-	TUNING.WOBY_BIG_SPEED =
-        {
-            FAST = 12,
-            MEDIUM = 11,
-            SLOW = 10
-        }
+
+    TUNING.WOBY_BIG_SPEED =
+    {
+        FAST = 12,
+        MEDIUM = 11,
+        SLOW = 10
+    }
 
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = { "walterhat", "meatrack_hat", "meat", "monstermeat" }
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = { "slingshot", "slingshotammo_rock", "slingshotammo_rock",
@@ -523,9 +523,7 @@ TUNING.MESSAGEBOTTLE_NOTE_CHANCE = 0.66
 
 -- nautopilot buff
 TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE = TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE * 2
-TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY *
-    10 -- No matter the boatspeed, nautopilots should be able to keep up.
-TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED = TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED * 100
+TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY * 10 --No matter the boatspeed, nautopilots should be able to keep up.
 
 -- lowered CK health
 -- TUNING.CRABKING_HEALTH = TUNING.CRABKING_HEALTH * 0.66
@@ -552,14 +550,14 @@ if GetModConfigData("heatwaves") then
 end
 
 if GetModConfigData("changed_shadowpieces") then
-	TUNING.SHADOW_BISHOP.ATTACK_RANGE = {8, 10, 12}
-	TUNING.SHADOW_BISHOP.ATTACK_PERIOD = {14, 15, 16}
-	--TUNING.SHADOW_BISHOP.HIT_RANGE = 2.5 --NUH UH
-	TUNING.SHADOW_BISHOP.DAMAGE = {15, 25, 35}
-	TUNING.SHADOW_KNIGHT.ATTACK_RANGE = 3.2
-	TUNING.SHADOW_KNIGHT.ATTACK_RANGE_LONG = 4
-	TUNING.SHADOW_KNIGHT.HEALTH = {600, 1800, 5400}
-	TUNING.SHADOW_KNIGHT.ATTACK_PERIOD = {3.5, 2.5, 1.5} --evilishly low
+    TUNING.SHADOW_BISHOP.ATTACK_RANGE = { 8, 10, 12 }
+    TUNING.SHADOW_BISHOP.ATTACK_PERIOD = { 14, 15, 16 }
+    --TUNING.SHADOW_BISHOP.HIT_RANGE = 2.5 --NUH UH
+    TUNING.SHADOW_BISHOP.DAMAGE = { 15, 25, 35 }
+    TUNING.SHADOW_KNIGHT.ATTACK_RANGE = 3.2
+    TUNING.SHADOW_KNIGHT.ATTACK_RANGE_LONG = 4
+    TUNING.SHADOW_KNIGHT.HEALTH = { 600, 1800, 5400 }
+    TUNING.SHADOW_KNIGHT.ATTACK_PERIOD = { 3.5, 2.5, 1.5 } --evilishly low
 end
 
 

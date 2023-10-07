@@ -191,6 +191,7 @@ local prefab_post = {
     "winterometer",
 	"mooneye",
     "dragoonegg",
+    "bomb_lunarplant",
 }
 
 local stategraph_post = {
