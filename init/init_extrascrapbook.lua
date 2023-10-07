@@ -1,16 +1,22 @@
+local STRINGS = GLOBAL.STRINGS
+local SPECIALINFO = GLOBAL.STRINGS.SCRAPBOOK.SPECIALINFO
+
 --Damnit klei.
 local scrapbookdata = require("screens/redux/scrapbookdata")
 local specialinfo_ovewrite = {
     blowdart_fire = "BLOWDART_FIRE",
-    turf_dragonfly = "TURF_DRAGONFLY"
+    turf_dragonfly = "TURF_DRAGONFLY",
+    premiumwateringcan = "PREMIUMWATERINGCAN",
 }
+--so it isn't an overwrite
+SPECIALINFO.BLOWDART_FIRE =  SPECIALINFO.REDSTAFF
+SPECIALINFO.TURF_DRAGONFLY = SPECIALINFO.TURF
+SPECIALINFO.PREMIUMWATERINGCAN = SPECIALINFO.WATERINGCAN
 
 for k,v in pairs(specialinfo_ovewrite) do
     scrapbookdata[k]["specialinfo"] = v
 end
 
-local STRINGS = GLOBAL.STRINGS
-local SPECIALINFO = GLOBAL.STRINGS.SCRAPBOOK.SPECIALINFO
 
 local function ParseTooltip(tooltip)
     local str = string.gsub(tooltip, "[\n- ]", " ")
@@ -77,7 +83,11 @@ end
 
 local extrascrapbookdata = {
     REDAMULET = {ParseTooltip(STRINGS.UNCOMP_TOOLTIP.AMULET), true},
-    PURPLESTAFF = {"Can select its destination if multiple foci are avaible. Increased uses."}
+    PURPLESTAFF = {"Can select its destination if multiple foci are avaible. Increased uses."},
+    WINONABATTERYLOW = {ParseTooltip(STRINGS.UNCOMP_TOOLTIP.WINONA_BATTERY_LOW)},
+	WINONABATTERYHIGH = {ParseTooltip(STRINGS.UNCOMP_TOOLTIP.WINONA_BATTERY_HIGH)},
+	STAFFTORNADO = {ParseTooltip(STRINGS.UNCOMP_TOOLTIP.STAFF_TORNADO)},
+
 }
 
 for k,v in pairs(extrascrapbookdata) do
