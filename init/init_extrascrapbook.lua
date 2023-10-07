@@ -9,11 +9,13 @@ local specialinfo_ovewrite = {
     blowdart_fire = "BLOWDART_FIRE",
     turf_dragonfly = "TURF_DRAGONFLY",
     premiumwateringcan = "PREMIUMWATERINGCAN",
+	wall_dreadstone = "WALL_DREADSTONE"
 }
 --define the original special info to the new one so it isn't an overwrite
 SPECIALINFO.BLOWDART_FIRE =  SPECIALINFO.REDSTAFF
 SPECIALINFO.TURF_DRAGONFLY = SPECIALINFO.TURF
 SPECIALINFO.PREMIUMWATERINGCAN = SPECIALINFO.WATERINGCAN
+SPECIALINFO.WALL_DREADSTONE = SPECIALINFO.WALLS
 
 --then change the special info.
 for k,v in pairs(specialinfo_ovewrite) do
@@ -37,6 +39,7 @@ end
 ---@param info string
 ---@param overwrite? boolean
 local function AddAddtionalScrapbookInfo(page, info, overwrite)
+	if string.match(page, "ITEM") ~= nil or string.match(page, "KIT") ~= nil then  return end -- only show for the actual buildings, not kit/item versions.
 	if SPECIALINFO[page] ~= nil then
         if overwrite then
             SPECIALINFO[page] = "󰀕 Uncompromising Mode Changes 󰀕\n\n" .. info
@@ -108,7 +111,10 @@ local extrascrapbookdata = {
 	WINONABATTERYHIGH = {ParseTooltip(TOOLTIP.WINONA_BATTERY_HIGH)},
 	STAFFTORNADO = {ParseTooltip(TOOLTIP.STAFF_TORNADO)},
 	ARMORSANITY = {ParseTooltip(TOOLTIP.ARMOR_SANITY)},
-	PUMPKINGLANTERN = {ParseTooltip(TOOLTIP.PUMPKIN_LANTERN)}
+	PUMPKINGLANTERN = {ParseTooltip(TOOLTIP.PUMPKIN_LANTERN)},
+	WALLS = {"Provides protection from Snow Storms."},
+	WALL_DREADSTONE = {ParseTooltip(TOOLTIP.WALL_DREADSTONE_ITEM)},
+	BOATCANNON = {ParseTooltip(TOOLTIP.BOAT_CANNON_KIT)}
 }
 
 --adds the addtional scrapbook info based on the table above.

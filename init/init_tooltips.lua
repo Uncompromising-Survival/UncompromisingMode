@@ -44,7 +44,9 @@ STRINGS.UNCOMP_TOOLTIP = {
 	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
 	
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
-
+	FIRESUPRESSOR = "- Reacts faster to nearby fires in Emergency Mode.\n- Ignores campfires and firepits.",
+	BOAT_CANNON_KIT = "- Increased firepower.\n- Can fire Seedshells.",
+	TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
 	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.",
@@ -193,11 +195,12 @@ if TUNING.DSTU.SNOWSTORMS then
 	TOOLTIPS.CAMPFIRE = "- Provides protection from Snow Storms."
 	TOOLTIPS.TORCH = "- Provides protection from Snow Storms."
 	TOOLTIPS.FIREPIT = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms."
+	TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM.."\n- Provides protection from Snow Storms when built."
 	TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from Snow Storms."
 	TOOLTIPS.MOLEHAT = "- Grants protection against Snow Storms / Sand Storms and Moon Storms when worn."
 	TOOLTIPS.DESERTHAT = "- Also works as protection against Snow Storms."
