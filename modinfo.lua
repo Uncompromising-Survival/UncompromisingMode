@@ -6,21 +6,19 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.5.0.0 Testing: "" ]
+󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- New spring weather, uncluding storms, tornados, and cave flooding.
-- Alpha Goats will appear in goat herds, to protect their own, and have consistant loot.
-- Krampii will more effectively steal things and do their job.
-- A ton of misc. changes, ranging from Wickerbottom's books to hounds.
+- Scrapbook integration!
+- To be revealed...
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain" ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.4.1.1"
+version = "Ghosts from the Past v1.5.0.0"
 -- VERSION SCHEME
 -- first num is major release (e.g. "Under the weather", so, 2, UTW2 will be 3, and so on.) DO NOT BRING THIS NUMBER *DOWN* AGAIN PLEASE
 -- second is new content (something like a new large addition)
