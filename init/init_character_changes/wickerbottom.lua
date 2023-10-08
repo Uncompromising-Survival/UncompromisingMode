@@ -401,7 +401,7 @@ local function WickerCaresForHerBooks(inst)
 end
 
 
-if TUNING.DSTU.WICKER_INV_REGEN then
+if TUNING.DSTU.WICKER_INV_REGEN == "inventory" then
     env.AddPrefabPostInit("wickerbottom", function(inst)
         if not TheWorld.ismastersim then
             return
@@ -409,7 +409,9 @@ if TUNING.DSTU.WICKER_INV_REGEN then
 
         inst:DoPeriodicTask(TUNING.BOOKSTATION_RESTORE_TIME, WickerCaresForHerBooks)
     end)
+end
 
+if TUNING.DSTU.WICKER_INV_REGEN ~= "vanilla" then
     env.AddPrefabPostInit("bookstation", function(inst)
         if not TheWorld.ismastersim then return end
 
