@@ -69,7 +69,6 @@ local PREFABS =
     ["hardshelltacos"] = true,
     ["um_pyre_nettles"] = true,
     ["mastupgrade_windturbine"] = true,
-    ["purplesteamedhams"] = true,
     ["greensteamedhams"] = true,
     ["screecher_trinket"] = true,
     ["slingshotammo_obsidian"] = true,
