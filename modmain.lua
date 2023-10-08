@@ -3,13 +3,14 @@ local require = GLOBAL.require
 require "um_pocketdimensioncontainers"
 
 PrefabFiles = require("uncompromising_prefabs")
-PreloadAssets = {Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml")}
+PreloadAssets = { Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml") }
 ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
--- PUTTING THIS HERE SO IT LOADS BEFORE ALL POSTINITS, INITS, ETC
-AddPrefabPostInit("world", function(inst)    
+
+AddPrefabPostInit("world", function(inst)
+   
     --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
     --NOTE: This is quite a bit of memory.
     if not inst.ismastersim then
@@ -285,7 +286,7 @@ end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, z, wise, dest_can_move)
     if not GLOBAL.TheWorld.ismastershard then
-        GLOBAL.TheWorld:PushEvent("spawncavetornado", {xdata = x, zdata = z, wisedata = wise, dest_can_movedata = dest_can_move})
+        GLOBAL.TheWorld:PushEvent("spawncavetornado", { xdata = x, zdata = z, wisedata = wise, dest_can_movedata = dest_can_move })
     end
 end)
 
@@ -293,11 +294,11 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
     if toggle then
         GLOBAL.TheWorld:AddTag("heatwavestart")
         GLOBAL.TheWorld.net:AddTag("heatwavestartnet")
-		GLOBAL.TheWorld:PushEvent("heatwavestart")
+        GLOBAL.TheWorld:PushEvent("heatwavestart")
     else
         GLOBAL.TheWorld:RemoveTag("heatwavestart")
         GLOBAL.TheWorld.net:RemoveTag("heatwavestartnet")
-		GLOBAL.TheWorld:PushEvent("heatwaveend")
+        GLOBAL.TheWorld:PushEvent("heatwaveend")
     end
 end)
 
@@ -394,4 +395,3 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 modimport("init/init_insightcompat")
-

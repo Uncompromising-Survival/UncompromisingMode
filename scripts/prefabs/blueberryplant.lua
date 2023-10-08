@@ -301,6 +301,7 @@ local function blueberryplant()
 	inst:AddTag("blueberrybomb")
     inst:AddTag("trapdamage")
     inst:AddTag("birdblocker")
+    inst.scrapbook_anim = "idle1"
 
     inst.entity:SetPristine()
 
