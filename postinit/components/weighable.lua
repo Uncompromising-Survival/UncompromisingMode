@@ -1,6 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local scrapbookdata = require "screens/redux/scrapbookdata"
+
 --fish meat buff code by Electroely#0066
 --1. remove existing drops (cook, perish, murder)
 --2. add fns in place of those drops to give the meat according to a variable inst.meatvalue
@@ -8,25 +10,25 @@ GLOBAL.setfenv(1, GLOBAL)
 --gold value is determined by meatvalue. rare fish (baitfish & lionfish) give x3 gold for their value
 local fishdata = {
     --{meatprefab, meatvalue, extraitems, israre }
-    oceanfish_medium_1 = {"fishmeat", 1}, --mudfish
-    oceanfish_medium_2 = {"fishmeat", 1}, --deep bass
-    oceanfish_medium_3 = {"fishmeat", 3, {"fishmeat_small"}, true}, --dandy lionfish
-    oceanfish_medium_4 = {"fishmeat", 2, {"fishmeat_small"}}, --black catfish
-    oceanfish_medium_5 = {"corn", 2, {"corn_seeds"}}, --corn cod
-    oceanfish_medium_6 = {"fishmeat", 2, nil, true}, --dappled koi
-    oceanfish_medium_7 = {"fishmeat", 2, nil, true}, --golden koi
-    oceanfish_medium_8 = {"fishmeat", 2, {"ice", "ice"}}, --ice bream
-    oceanfish_medium_9 = {"fishmeat", 2, {"honey", "honey"}}, --sweetish fish
+    oceanfish_medium_1 = { "fishmeat", 1 },                             --mudfish
+    oceanfish_medium_2 = { "fishmeat", 1 },                             --deep bass
+    oceanfish_medium_3 = { "fishmeat", 3, { "fishmeat_small" }, true }, --dandy lionfish
+    oceanfish_medium_4 = { "fishmeat", 2, { "fishmeat_small" } },       --black catfish
+    oceanfish_medium_5 = { "corn", 2, { "corn_seeds" } },               --corn cod
+    oceanfish_medium_6 = { "fishmeat", 2, nil, true },                  --dappled koi
+    oceanfish_medium_7 = { "fishmeat", 2, nil, true },                  --golden koi
+    oceanfish_medium_8 = { "fishmeat", 2, { "ice", "ice" } },           --ice bream
+    oceanfish_medium_9 = { "fishmeat", 2, { "honey", "honey" } },       --sweetish fish
 
-    oceanfish_small_1 = {"fishmeat_small", 1}, --runty guppy
-    oceanfish_small_2 = {"fishmeat_small", 1}, --needlenosed squirt
-    oceanfish_small_3 = {"fishmeat_small", 2, nil, true}, --bitty baitfish
-    oceanfish_small_4 = {"fishmeat_small", 1}, --smolt fry
-    oceanfish_small_5 = {"corn_cooked", 1, {"corn_seeds"}}, --popperfish
-    oceanfish_small_6 = {"plantmeat", 1}, --fallounder
-    oceanfish_small_7 = {"plantmeat", 1}, --bloomfin tuna
-    oceanfish_small_8 = {"fishmeat_small_cooked", 1, nil, true}, --scorching sunfish
-    oceanfish_small_9 = {"fishmeat_small", 2, nil, true} --spittlefish
+    oceanfish_small_1 = { "fishmeat_small", 1 },                        --runty guppy
+    oceanfish_small_2 = { "fishmeat_small", 1 },                        --needlenosed squirt
+    oceanfish_small_3 = { "fishmeat_small", 2, nil, true },             --bitty baitfish
+    oceanfish_small_4 = { "fishmeat_small", 1 },                        --smolt fry
+    oceanfish_small_5 = { "corn_cooked", 1, { "corn_seeds" } },         --popperfish
+    oceanfish_small_6 = { "plantmeat", 1 },                             --fallounder
+    oceanfish_small_7 = { "plantmeat", 1 },                             --bloomfin tuna
+    oceanfish_small_8 = { "fishmeat_small_cooked", 1, nil, true },      --scorching sunfish
+    oceanfish_small_9 = { "fishmeat_small", 2, nil, true }              --spittlefish
 }
 
 local function OnWeightChanged(inst)
@@ -83,6 +85,17 @@ for prefab, data in pairs(fishdata) do
     env.AddPrefabPostInit(
         prefab .. "_inv",
         function(inst)
+            if inst.scrapbook_adddeps == nil then
+                inst.scrapbook_adddeps = {}
+            end
+
+            if data[3] then
+                for k, v in pairs(data[3]) do
+                    table.insert(inst.scrapbook_adddeps, v)
+                end
+            end
+
+
             if not TheWorld.ismastersim then
                 return
             end
@@ -159,7 +172,7 @@ env.AddComponentPostInit(
     function(self)
         local SetWeight_old = self.SetWeight
         self.SetWeight = function(self, weight, ...)
-            local rtn = {SetWeight_old(self, weight, ...)}
+            local rtn = { SetWeight_old(self, weight, ...) }
             self.inst:PushEvent("weightchanged", weight)
             return unpack(rtn)
         end

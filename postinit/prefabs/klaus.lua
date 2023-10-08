@@ -12,7 +12,7 @@ end
 local function CheckForKrampSack(inst)
 	if inst:IsUnchained() and inst.enraged then
 		inst.components.lootdropper:AddChanceLoot("krampus_sack", 1)
-	end
+	end	
 	if TUNING.DSTU.VETCURSE ~= "off" then
 		inst.components.vetcurselootdropper.loot = "klaus_amulet"
 	end

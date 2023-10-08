@@ -67,7 +67,7 @@ local function fn()
     inst.entity:AddNetwork()
     inst.Transform:SetScale(2, 2, 2)
     inst.Physics:SetCylinder(0.25, 2)
-
+    inst.scrapbook_anim = "idle_1"
     inst.AnimState:SetBank("ancient_trepidation_arm")
     inst.AnimState:SetBuild("ancient_trepidation_arm")
     inst.AnimState:PlayAnimation("emerge")

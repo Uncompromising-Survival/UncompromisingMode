@@ -1099,6 +1099,10 @@ function d_create_um_scrapbookdata(print_missing_icons)
             end
         end
 
+        if t.components.vetcurselootdropper ~= nil and t.components.vetcurselootdropper.loot ~= nil then
+            deps[t.components.vetcurselootdropper.loot] = true
+        end
+
         -- Deployable / Kits.
         print("trying to add kit deps")
         local item_prefab = entry .. "_item"

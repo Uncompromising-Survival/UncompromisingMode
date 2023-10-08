@@ -23,6 +23,7 @@ end
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 
 local specinfo = {
+    --Tooltips for UM stuff.
     RAT_WHIP = "Stronger when the user is well fed.",
     AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.",
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
@@ -33,7 +34,7 @@ local specinfo = {
     "Slows down anything it's attached to.\nDeployable and throwable.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "Slows down anything it's attached to.\nDeployable and throwable.",
-    HAT_RATMASK = "- Finds rat burrows\nShows sources of unwanted attention.",
+    HAT_RATMASK = "Finds rat burrows\nShows sources of unwanted attention.",
     SKULLCHEST_CHILD = "Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "Grants protection against Snow Storms / Sand Storms when worn.",
     GASMASK = "Provides protection against spore clouds, smog and hayfever.",
@@ -48,6 +49,8 @@ local specinfo = {
     ARMOR_CRAB_MAXHP = "Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "Self-healing.",
     UM_ARMOR_PYRE_NETTLES = "Panics and damages nearby miscreants.\nIgnores tiny, shadow, or fire-aligned creatures.",
+
+    --New stuff
 }
 
 

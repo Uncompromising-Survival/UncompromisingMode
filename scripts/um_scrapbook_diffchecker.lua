@@ -1082,6 +1082,11 @@ function d_createscrapbookdata(print_missing_icons)
                     deps[dep] = true
                 end
             end
+            
+            if t.components.vetcurselootdropper ~= nil and t.components.vetcurselootdropper.loot ~= nil then
+                deps[t.components.vetcurselootdropper.loot] = true
+            end
+            
 
             -- Deployable / Kits.
             local item_prefab = entry .. "_item"
