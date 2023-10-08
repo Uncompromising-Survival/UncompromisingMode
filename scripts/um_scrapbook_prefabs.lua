@@ -264,7 +264,6 @@ local PREFABS =
     ["bluegem_cracked"] = true,
     ["redgem_cracked"] = true,
     ["um_dreamcatcher"] = true,
-    ["carapacecooler"] = true,
     ["hat_pigmask"] = true,
     ["hat_orangecatmask"] = true,
     ["hat_hockeymask"] = true,

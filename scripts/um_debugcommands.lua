@@ -276,7 +276,9 @@ end
 local function Scrapbook_DefineAnimation(t)
     local anim = nil
 
-    if t.scrapbook_anim then
+if t.prefab == "wixie_clock" then
+    anim = "complete"
+elseif t.scrapbook_anim then
         anim = t.scrapbook_anim
     elseif t:HasTag("campfire") and t.prefab ~= "cotl_tabernacle_level3" then
         anim = "scrapbook"
