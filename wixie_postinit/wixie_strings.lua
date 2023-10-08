@@ -205,7 +205,7 @@ DESCRIBE.CRITTERLAB_REAL_BROKEN =
 DESCRIBE.SLINGSHOTAMMO_FIRECRACKERS = DESCRIBE.FIRECRACKERS
 DESCRIBE.WALRUS_CAMP_SUMMER = DESCRIBE.WALRUS_CAMP
 DESCRIBE.CHARLIEPHONOGRAPH_100 = DESCRIBE.MAXWELLPHONOGRAPH
-DESCRIBE.BUGZAPPER = "You remind me of... me!"
+DESCRIBE.BUGZAPPER = "I won't be held accountable for any bugs that fly into it."
 DESCRIBE.STUMPLING = "You're barking up the wrong tree!"
 DESCRIBE.BIRCHLING = DESCRIBE.STUMPLING
 DESCRIBE.MOON_TEAR = "Quit crying! You're going to stain everything!"
@@ -242,8 +242,8 @@ DESCRIBE.GIANT_TREE_INFESTED =
     "What kind of weirdo would live in a place like that?"
 DESCRIBE.GIANT_BLUEBERRY = "That'd make a mess for sure!"
 DESCRIBE.STEAMEDHAMS = "At this time of day, in this part of the wilderness?"
-DESCRIBE.BLUEBERRYPANCAKES =
-    "Mum taught me how to make them! They're my favorite!"
+DESCRIBE.BLUEBERRYPANCAKES = "Mum taught me how to make them! They're my favorite!"
+DESCRIBE.DEVILSFRUITCAKE = "Hey! Who took the first slice!?"
 DESCRIBE.SIMPSALAD = "It's... leafy? And... purple?"
 DESCRIBE.BEEFALOWINGS = "Perfect for bulking up!"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE = "No one can knock me over!"

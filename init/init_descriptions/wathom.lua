@@ -62,7 +62,14 @@ DESCRIBE.WINKY = {
     GHOST = "%s, dead.",
     FIRESTARTER = "Problems, rodent-instigated, increasing constantly."
 }
-
+DESCRIBE.WIXIE = {
+    GENERIC = "Problems, often cause.",
+    ATTACKER = "Pick elsewhere, your fights.",
+    MURDERER = "With poor aim, slingshot ineffective!",
+    REVIVER = "You are bearable.",
+    GHOST = "Pick your fights, %s. Skill, valuable.",
+    FIRESTARTER = "Liabilities, mounting."
+}
 DESCRIBE.WATHOM = {
     GENERIC = "%s, meaning? Maker's replacement?",
     ATTACKER = "%s, self-sabotaging.",
@@ -204,8 +211,10 @@ DESCRIBE.APHID = "Fauna, unfamiliar."
 DESCRIBE.NYMPH = "Reminds of... bee? Curious."
 DESCRIBE.GIANT_TREE_INFESTED = "Inner tree, infestation. Craving sap, perhaps."
 DESCRIBE.GIANT_BLUEBERRY = "Root severed. Safety assured."
-DESCRIBE.STEAMEDHAMS = "\"Steamed hams\", never heard of."
+DESCRIBE.PURPLESTEAMEDHAMS = "\"Steamed hams\", never heard of."
+DESCRIBE.GREENSTEAMEDHAMS = "\"Steamed hams\", never heard of."
 DESCRIBE.BLUEBERRYPANCAKES = "Odd combination, survival-oriented."
+DESCRIBE.DEVILSFRUITCAKE = "Liquid nourishment, preserved in sugar."
 DESCRIBE.SIMPSALAD = "Just foliage?"
 DESCRIBE.BEEFALOWINGS = "Spirit-lifting, beefalo defeated!"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE = "Stopping, nothing!"
@@ -410,10 +419,16 @@ DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Conversion, power input."
 DESCRIBE.MINERHAT_ELECTRICAL = "Tinkered, manipulated."
 DESCRIBE.OCEAN_SPEAKER = "Curious, meaning, purpose."
 
-DESCRIBE.OCUPUS_BEAK = "."
-DESCRIBE.OCUPUS_TENTACLE = ""
-DESCRIBE.OCUPUS_TENTACLE_EYE = ""
-DESCRIBE.OCUPUS_TENTACLE_COOKED = ""
+DESCRIBE.OCUPUS_BEAK = "Apex predator of sea? Bah."
+DESCRIBE.OCUPUS_TENTACLE = "Not preferred."
+DESCRIBE.OCUPUS_TENTACLE_EYE = "Eyes are for losers."
+DESCRIBE.OCUPUS_TENTACLE_COOKED = "It is acceptible now, barely."
+DESCRIBE.UM_OCUPUS_EYE = "Watching, preying."
+DESCRIBE.UM_OCUPUS_EYETACLE = "Destroy sight, release."
+DESCRIBE.UM_OCUPUS_TENTACLE = "You're about to see who's in charge around here."
+DESCRIBE.UM_OCUPUS_BEAK = "Disrupting thoughts."
+DESCRIBE.BEAKBASHER = "Corrects mistakes, continues longer."
+DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Mandrake, eyes, early warning, prepare."
 
 DESCRIBE.ARMOR_REED_UM = "Luxury. Physical protection lacking."
 DESCRIBE.ARMOR_SHARKSUIT_UM = "Ocean be damned."
@@ -446,7 +461,7 @@ DESCRIBE.BRINE_BALM = "Painful stimuli, intensified."
 DESCRIBE.UNCOMPROMISING_FISHINGNET = "Fishing rod, no, irrelevant."
 DESCRIBE.UM_AMBER = "Curious, contents."
 DESCRIBE.UM_BEEGUN = "Natural hive, exploited."
-DESCRIBE.SUNKENCHEST_ROYAL_RANDOM = "It was a royal pain just to get this."
+DESCRIBE.SUNKENCHEST_ROYAL_RANDOM = "Treasure."
 DESCRIBE.SUNKENCHEST_ROYAL_RED = DESCRIBE.SUNKENCHEST_ROYAL_RANDOM
 DESCRIBE.SUNKENCHEST_ROYAL_BLUE = DESCRIBE.SUNKENCHEST_ROYAL_RANDOM
 DESCRIBE.SUNKENCHEST_ROYAL_PURPLE = DESCRIBE.SUNKENCHEST_ROYAL_RANDOM

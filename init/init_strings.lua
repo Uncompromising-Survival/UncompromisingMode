@@ -80,10 +80,16 @@ end
 STRINGS.CHARACTER_DESCRIPTIONS.wolfgang = STRINGS.CHARACTER_DESCRIPTIONS.wolfgang ..
 	"\n󰀕Too big to push around when mighty"
 
-if GetModConfigData("warly") then
+if GetModConfigData("warly_food_taste_") then
 	STRINGS.CHARACTER_DESCRIPTIONS.warly = STRINGS.CHARACTER_DESCRIPTIONS.warly ..
 		"\n󰀕Absorbs nutrients better, but prefers more variety"
 end
+
+if GetModConfigData("warly_butcher_") then
+	STRINGS.CHARACTER_DESCRIPTIONS.warly = STRINGS.CHARACTER_DESCRIPTIONS.warly ..
+		"\n󰀕Is a certified butcher"
+end
+
 if GetModConfigData("winona_gen_") then
 	STRINGS.CHARACTER_DESCRIPTIONS.winona = STRINGS.CHARACTER_DESCRIPTIONS.winona .. "\n󰀕Generators are for workers only"
 end
@@ -114,6 +120,17 @@ STRINGS.STANTON_POET2 = { "You better drink your drink and shut your mouth." }
 STRINGS.STANTON_POET3 = { "If you draw against his hand, you can never win." }
 STRINGS.STANTON_POET4 = { "Go ahead… drink with the living dead." }
 STRINGS.STANTON_POET5 = { "Drink with the living dead." }
+
+
+STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS = "Prevents Knockback"
+STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING = "Immunity to Hayfever"
+STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever Relief"
+STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever Relief"
+STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces Hunger Drain"
+STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns Friendly Al-'eyes'"
+STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Sanity For Spectacle"
+STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns Friendly Vipers"
+STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
 
 --TIDDLER FRIENDLY MAN STRINGS BELOW--
 

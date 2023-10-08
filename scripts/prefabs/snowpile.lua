@@ -36,8 +36,8 @@ end
 
 TUNING.SNOW_X_SCALE = 0 + math.random(0.3, 0.5)
 TUNING.SNOW_Y_SCALE = 0 + math.random(0.1, 0.3)
-TUNING.SNOW_REGROW_TIME = 120
-TUNING.SNOW_REGROW_VARIANCE = 80
+TUNING.SNOW_REGROW_TIME = 300
+TUNING.SNOW_REGROW_VARIANCE = 60
 TUNING.SNOW_DEPLETE_CHANCE = 0.25
 
 local AURA_EXCLUDE_TAGS = {"noauradamage", "INLIMBO", "notarget", "noattack", "flight", "invisible"}
@@ -76,7 +76,7 @@ local function FindSpreadSpot(inst)
         inst.redo = true
     end
 
-    if #TheSim:FindEntities(x, y, z, 64, {"snowpile"}) > 64 then -- limit all snowpiles in a big radius
+    if #TheSim:FindEntities(x, y, z, 64, {"snowpile"}) > 32 then -- limit all snowpiles in a big radius
         inst.redo = true
         inst.count = 9
     end
@@ -174,6 +174,9 @@ startregen = function(inst, regentime)
         if inst.task then
             inst.task:Cancel()
         end
+		
+		inst.task = nil
+		
         inst.task = inst:DoTaskInTime(regentime, onregen, "regen")
         inst.targettime = GetTime() + regentime
         --[[else
@@ -195,8 +198,6 @@ startregen = function(inst, regentime)
 end
 
 local function workcallback(inst, worker, workleft)
-    inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
-
     if worker ~= nil and worker:HasTag("wereplayer") and worker.components.moisture then
         worker.components.moisture:DoDelta(5)
     end
@@ -229,6 +230,7 @@ local function workcallback(inst, worker, workleft)
         inst:Remove()
     end
     if inst.components.workable.workleft <= 0 then
+		inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
         inst:Remove()
     else
         startregen(inst)
@@ -271,40 +273,37 @@ local function LongUpdate(inst, dt)
         end
     end
 end
-
-local function onwake(inst) end
-
 local function TryColdness(v)
     if v.components.moisture ~= nil then
         if v.components.inventory ~= nil and (v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ~= nil and v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab ~= "beargervest" or v.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil) or v.components.inventory == nil then
-            v.components.moisture:DoDelta(3)
+            v.components.moisture:DoDelta(5)
         end
     end
 end
 
-local NOTAGS = {"playerghost", "INLIMBO", "wall"}
+local NOTAGS = {"playerghost", "wall"}
 
 local function DoAreaColdness(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, NOTAGS, {"_health"})
+	
+    local ents = TheSim:FindEntities(x, y, z, inst.components.aura.radius, nil, NOTAGS)
+	
     for i, v in ipairs(ents) do
-        TryColdness(v)
-    end
+		if v:HasTag("player") then
+			TryColdness(v)
+		elseif v:HasTag("structure") then
+			if inst.components.workable.workleft and inst.components.workable.workleft > 1 then
+				inst:AddTag("snowpile")
 
-    if inst.components.workable.workleft and inst.components.workable.workleft > 1 then
-        inst:AddTag("snowpile")
+				v:AddTag("INLIMBO")
+			else
+				inst:RemoveTag("snowpile")
 
-        local structures = TheSim:FindEntities(x, y, z, inst.components.aura.radius, {"structure"}, NOTAGS)
-        for i, v1 in ipairs(structures) do
-            v1:AddTag("INLIMBO")
-        end
-    else
-        inst:RemoveTag("snowpile")
-
-        local inlimbostructures = TheSim:FindEntities(x, y, z, inst.components.aura.radius, {"structure", "INLIMBO"}, {"wall"})
-        for i, v2 in ipairs(inlimbostructures) do
-            v2:RemoveTag("INLIMBO")
-        end
+				if v:HasTag("INLIMBO") then
+					v:RemoveTag("INLIMBO")
+				end
+			end
+		end
     end
 end
 
@@ -407,13 +406,23 @@ local function OnSeasonChange(inst)
     end
 end
 
+local function onwake(inst)
+	if inst._coldtask == nil then
+		inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaColdness, inst.components.aura.tickperiod / 2)
+	end
+end
+
+local function onsleep(inst)
+	if inst._coldtask ~= nil then
+		inst._coldtask:Cancel()
+		inst._coldtask = nil
+	end
+end
+
+
 local function snowpilefn(Sim)
     -- print ('sandhillfn')
     local inst = CreateEntity()
-    inst.OnLongUpdate = LongUpdate
-    inst.OnSave = onsave
-    inst.OnLoad = onload
-    inst.OnEntityWake = onwake
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
@@ -448,12 +457,11 @@ local function snowpilefn(Sim)
     inst.components.aura.tickperiod = TUNING.TOADSTOOL_SPORECLOUD_TICK
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
-    inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod / 2, DoAreaColdness, inst.components.aura.tickperiod / 2)
+    inst._coldtask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaColdness, inst.components.aura.tickperiod)
 
     inst:AddComponent("unevenground")
     inst.components.unevenground.radius = 2
-
-    inst.OnLongUpdate = LongUpdate
+	
     ----------------------
     inst:AddComponent("inspectable")
     ----------------------
@@ -495,6 +503,12 @@ local function snowpilefn(Sim)
     startregen(inst)
     inst:DoTaskInTime(0, Init)
     inst.DoColdMenace = DoColdMenace
+	
+    inst.OnLongUpdate = LongUpdate
+    inst.OnSave = onsave
+    inst.OnLoad = onload
+    inst.OnEntityWake = onwake
+    inst.OnEntitySleep = onsleep
 
     inst:DoPeriodicTask(10, function(inst)
         if TheWorld.state.israining and not TheWorld.state.iswinter then

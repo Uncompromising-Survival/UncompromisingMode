@@ -85,15 +85,15 @@ local function updateclaustrophobia(inst)
 	if not TheWorld.ismastersim or not TheNet:IsDedicated() then
 		if inst._claustrophobiacdtask == nil then
 			local x, y, z = inst.Transform:GetWorldPosition()
-			local ents = TheSim:FindEntities(x, y, z, 5, { "_health", "_combat" }, { "noclaustrophobia", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player", "playerghost", "ghost", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "boatbumper", "spore", "pigelite", "oceanfishable", "trap" } )
-			local treesandwalls = TheSim:FindEntities(x, y, z, 5, nil, { "stump", "INLIMBO" }, { "tree", "wall" })
+			local ents = TheSim:FindEntities(x, y, z, 5, { "_health", "_combat" }, { "noclaustrophobia", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player", "playerghost", "ghost", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "boatbumper", "spore", "pigelite", "oceanfishable", "trap", "companion" } )
+			local treesandwallsandcompanions = TheSim:FindEntities(x, y, z, 5, nil, { "stump", "INLIMBO" }, { "tree", "wall", "companion" })
 			
-			if treesandwalls ~= nil then
-				for i, v in ipairs(treesandwalls) do
-					if objectmodifier < 0.25 then
-						objectmodifier = objectmodifier + 0.03
+			if treesandwallsandcompanions ~= nil then
+				for i, v in ipairs(treesandwallsandcompanions) do
+					if objectmodifier < .5 then
+						objectmodifier = objectmodifier + (v:HasTag("companion") and .5 or .05)
 					else
-						objectmodifier = 0.25
+						objectmodifier = .5
 					end
 				end
 			end
@@ -172,6 +172,14 @@ local function updateclaustrophobia(inst)
 end
 
 local function EquipedCount(inst, data)
+	if data ~= nil and data.item ~= nil and data.item.components.equippable ~= nil and data.item.components.equippable.equipslot ~= nil then
+		if data.item.components.equippable.equipslot == EQUIPSLOTS.BODY then
+			inst.components.talker:Say(GetString(inst, "UNCOMFORTABLE_ARMOR"))
+		elseif data.item.components.equippable.equipslot == EQUIPSLOTS.HEAD then
+			inst.components.talker:Say(GetString(inst, "UNCOMFORTABLE_HAT"))
+		end
+	end
+	
 	local headequipped = inst.components.inventory ~= nil and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) or nil
 	local bodyequipped = inst.components.inventory ~= nil and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) or nil
 
@@ -179,14 +187,6 @@ local function EquipedCount(inst, data)
 	inst.bodymodifier = bodyequipped ~= nil and bodyequipped.components.armor ~= nil and not bodyequipped:HasTag("grass") and not bodyequipped:HasTag("shadow_item") and 0.2 or 0
 
 	inst.claustrophobiamodifier = inst.headmodifier + inst.bodymodifier
-	
-	if inst.headmodifier > 0 then
-		inst.components.talker:Say(GetString(inst, "UNCOMFORTABLE_HAT"))
-	end
-	
-	if inst.bodymodifier > 0 then
-		inst.components.talker:Say(GetString(inst, "UNCOMFORTABLE_ARMOR"))
-	end
 	
 	SendModRPCToClient(GetClientModRPC("WixieTheDelinquent", "ClaustrophobiaEquipMult"), inst.userid, inst.claustrophobiamodifier)
 end
@@ -284,7 +284,6 @@ local function common_postinit(inst)
 	
 	if TheWorld.ismastersim	then
 		inst:ListenForEvent("equip", EquipedCount)
-		inst:ListenForEvent("unequip", EquipedCount)
 		inst:ListenForEvent("newstate", OnNewState)
 	end
 end

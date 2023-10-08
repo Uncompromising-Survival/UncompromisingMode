@@ -6,10 +6,10 @@ local assets =
 local easing = require("easing")
 
 local AURA_EXCLUDE_TAGS = { "player", "playerghost", "companion", "ghost", "shadow", "shadowminion", "noauradamage",
-    "INLIMBO", "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible" }
+    "INLIMBO", "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible", "rabbit", "bird" }
 
 local AURA_EXCLUDE_TAGS_DRAGONFLY = { "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO",
-    "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible" }
+    "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible", "rabbit", "bird" }
 
 local function OnLoad(inst, data)
     inst:Remove()
@@ -37,7 +37,7 @@ end
 local function TrySlowdown(inst, target)
     local debuffkey = inst.prefab
 
-    if not target:HasTag("player") then
+    if not target:HasTag("player") and target.components.locomotor ~= nil then
         if target._lavavomit_speedmulttask ~= nil then
             target._lavavomit_speedmulttask:Cancel()
         end
@@ -49,7 +49,7 @@ local function TrySlowdown(inst, target)
 
     if (inst.prefab ~= "lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") then
-        target.components.health:DoDelta(inst.prefab == "lavaspit_slobber" and -9 or -4)
+        target.components.health:DoFireDamage(inst.prefab == "lavaspit_slobber" and 6 or 4, inst.lobber, true)
 
         target:PushEvent("onignite")
 
@@ -58,6 +58,13 @@ local function TrySlowdown(inst, target)
         end
 
         SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(target.Transform:GetWorldPosition())
+		
+		--especial case handling for walls.
+        if target:HasTag("wall") and target.components.combat.onhitfn ~= nil then
+            target.components.health:DoDelta(inst.prefab == "lavaspit_slobber" and -6 or -4)
+
+            target.components.combat.onhitfn(target, inst.lobber, 0, 0) --fences don't really take damage to break, onhit they get hammered, normal walls update their visuals onhit.
+        end
     end
 end
 
@@ -76,6 +83,14 @@ local function DoAreaSlow(inst)
             if v.components ~= nil and v.components.locomotor ~= nil then
                 TrySlowdown(inst, v)
             end
+        end
+    end
+	
+	local walls = TheSim:FindEntities(x, y, z, inst.components.aura.radius, { "wall" }, { "INLIMBO", "_inventoryitem" })
+
+    for i, v in ipairs(walls) do
+        if v.components ~= nil then
+            TrySlowdown(inst, v)
         end
     end
 end

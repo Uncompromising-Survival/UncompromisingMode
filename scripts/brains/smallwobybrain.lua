@@ -194,13 +194,13 @@ local function HasWobyTarget(inst)
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
 			inst.wobytarget:HasTag("INLIMBO") and
-			(inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint() or TestForIA()) and
+			(TUNING.DSTU.ISLAND_ADVENTURES or inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint()) and
 			-- is my pal walter near?
 			(inst.components.follower.leader ~= nil and
             inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
-			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked) or
+			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith) or
 			-- Check for item to pick up		
 			(inst.wobytarget.components.inventoryitem ~= nil and inst.wobytarget.components.inventoryitem.canbepickedup and not inst.wobytarget.components.combat) or
 			-- Check for harvestable target	
@@ -219,13 +219,13 @@ local function DoTargetAction(inst)
 			inst.wobytarget:IsValid() and not
 			inst.wobytarget:HasTag("outofreach") and not
 			inst.wobytarget:HasTag("INLIMBO") and
-			(inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint() or TestForIA()) and
+			(TUNING.DSTU.ISLAND_ADVENTURES or inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint()) and
 			-- is my pal walter near?
 			(inst.components.follower.leader ~= nil and
             inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
-			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and
+			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith and
 			BufferedAction(inst, inst.wobytarget, ACTIONS.PICK)) or
 			-- Check for item to pick up		
 			(inst.wobytarget.components.inventoryitem ~= nil and inst.wobytarget.components.inventoryitem.canbepickedup and not inst.wobytarget.components.combat and
@@ -244,7 +244,7 @@ local function DoTargetAction(inst)
 end
 
 local function HasSitTarget(inst)
-    return inst.wobytarget ~= nil and inst.wobytarget:HasTag("wobysittarget") and (inst.wobytarget:IsOnPassablePoint() or TestForIA()) or nil
+    return inst.wobytarget ~= nil and inst.wobytarget:HasTag("wobysittarget") and (TUNING.DSTU.ISLAND_ADVENTURES or inst.wobytarget:IsOnPassablePoint()) or nil
 end
 
 local function GoSitAction(inst)
@@ -292,7 +292,7 @@ function SmallWobyBrain:OnStart()
 				
                 -- Combat Avoidance
 				PriorityNode{
-					JukeAndJive(self.inst, {tags={"_combat", "_health"}, notags={"player", "wall", "INLIMBO", "prey"}, fn=CombatAvoidanceFindEntityCheck(self)}, COMBAT_TOO_CLOSE_DIST, COMBAT_SAFE_TO_WATCH_FROM_DIST),
+					JukeAndJive(self.inst, {tags={"_combat", "_health"}, notags={"player", "wall", "INLIMBO", "rabbit", "bird"}, fn=CombatAvoidanceFindEntityCheck(self)}, COMBAT_TOO_CLOSE_DIST, COMBAT_SAFE_TO_WATCH_FROM_DIST),
 					WhileNode( function() return ValidateCombatAvoidance(self) end, "Is Near Combat",
 						FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
 				},
@@ -310,8 +310,14 @@ function SmallWobyBrain:OnStart()
                             StandStill(self.inst),
                         },
                     }),
-                Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
-                FailIfRunningDecorator(FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
+					
+                WhileNode(function() return TheWorld.state.isnight end, "NightFollow",
+					Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5)
+				),
+                
+				Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
+               
+				FailIfRunningDecorator(FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
                 WhileNode(function() return OwnerIsClose(self.inst) and self.inst:IsAffectionate() end, "Affection",
                     SequenceNode{
                         WaitNode(4),

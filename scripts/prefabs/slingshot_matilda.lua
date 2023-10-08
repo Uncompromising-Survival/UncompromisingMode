@@ -107,43 +107,45 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
 end
 
 local function LaunchSpit(inst, caster, target, fixedpowerlevel, shadow)
-    local x, y, z = caster.Transform:GetWorldPosition()
-	local ammo = shadow ~= nil and "slingshotammo_shadow_proj_secondary" or inst.components.weapon.projectile.."_secondary"
-	
-	if ammo ~= nil then
-		local targetpos = target:GetPosition()
-		targetpos.y = 0.5
+	if caster ~= nil then
+		local x, y, z = caster.Transform:GetWorldPosition()
+		local ammo = shadow ~= nil and "slingshotammo_shadow_proj_secondary" or inst.components.weapon.projectile.."_secondary"
+		
+		if ammo ~= nil then
+			local targetpos = target:GetPosition()
+			targetpos.y = 0.5
 
-		local projectile = SpawnPrefab(ammo)
-		projectile.Transform:SetPosition(x, y, z)
-		projectile.powerlevel = fixedpowerlevel
-		 
-		if projectile.components.complexprojectile ~= nil then
-			local theta = caster.Transform:GetRotation()
-			theta = theta*DEGREES
-	
-			local dx = targetpos.x - x
-			local dz = targetpos.z - z
+			local projectile = SpawnPrefab(ammo)
+			projectile.Transform:SetPosition(x, y, z)
+			projectile.powerlevel = fixedpowerlevel
+			 
+			if projectile.components.complexprojectile ~= nil then
+				local theta = caster.Transform:GetRotation()
+				theta = theta*DEGREES
+		
+				local dx = targetpos.x - x
+				local dz = targetpos.z - z
 
-			--local rangesq = (dx * dx + dz * dz) / 1.2
-			local rangesq = dx * dx + dz * dz
-			local maxrange = TUNING.FIRE_DETECTOR_RANGE * 2
-			--local speed = easing.linear(rangesq, 15, 3, maxrange * maxrange)
-			local speed = easing.linear(rangesq, maxrange, 1, maxrange * maxrange)
-			projectile.caster = caster
-			projectile.components.complexprojectile.usehigharc = true
-			projectile.components.complexprojectile:SetHorizontalSpeed(speed)
-			projectile.components.complexprojectile:SetGravity(-45)
-			projectile.components.complexprojectile:Launch(targetpos, caster, caster)
-			projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
-		else
-			if ammo == "slingshotammo_moonglass_proj_secondary" then
-				projectile.components.projectile:SetSpeed(20)
+				--local rangesq = (dx * dx + dz * dz) / 1.2
+				local rangesq = dx * dx + dz * dz
+				local maxrange = TUNING.FIRE_DETECTOR_RANGE * 2
+				--local speed = easing.linear(rangesq, 15, 3, maxrange * maxrange)
+				local speed = easing.linear(rangesq, maxrange, 1, maxrange * maxrange)
+				projectile.caster = caster
+				projectile.components.complexprojectile.usehigharc = true
+				projectile.components.complexprojectile:SetHorizontalSpeed(speed)
+				projectile.components.complexprojectile:SetGravity(-45)
+				projectile.components.complexprojectile:Launch(targetpos, caster, caster)
+				projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
 			else
-				projectile.components.projectile:SetSpeed(20)
+				if ammo == "slingshotammo_moonglass_proj_secondary" then
+					projectile.components.projectile:SetSpeed(20)
+				else
+					projectile.components.projectile:SetSpeed(20)
+				end
+					
+				projectile.components.projectile:Throw(caster, target, caster)
 			end
-				
-			projectile.components.projectile:Throw(caster, target, caster)
 		end
 	end
 end
@@ -253,7 +255,7 @@ local function createlight(inst, target, pos)
 end
 
 local function can_cast_fn(doer, target, pos)
-	if doer:HasTag("pebblemaker") then
+	if doer:HasTag("troublemaker") then
 		return true
 	else
 		return false
@@ -320,7 +322,7 @@ local function fn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshot_matilda.xml"
 
     inst:AddComponent("equippable")
-    inst.components.equippable.restrictedtag = "slingshot_sharpshooter"
+    inst.components.equippable.restrictedtag = "troublemaker"
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 

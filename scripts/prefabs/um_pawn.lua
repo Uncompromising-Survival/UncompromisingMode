@@ -13,7 +13,7 @@ local EFFECTS = {hot = "dr_hot_loop", warmer = "dr_warmer_loop", warm = "dr_warm
 
 SetSharedLootTable('um_pawn', {{'nightmarefuel', 0.2}, {'thulecite_pieces', 0.1}, {'trinket_6', 0.4}})
 
-local PAWN_DIVINING_DISTANCES = {{maxdist = 12, describe = "hot", pingtime = 1}, {maxdist = 24, describe = "warmer", pingtime = 2}, {maxdist = 48, describe = "warm", pingtime = 4}, {maxdist = 98, describe = "cold", pingtime = 8}}
+local PAWN_DIVINING_DISTANCES = {{maxdist = 12, describe = "hot", pingtime = 1}, {maxdist = 24, describe = "warmer", pingtime = 2}, {maxdist = 48, describe = "warm", pingtime = 3}, {maxdist = 98, describe = "cold", pingtime = 6}}
 
 local PAWN_DIVINING_MAXDIST = 72
 local PAWN_DIVINING_DEFAULTPING = 1.8
@@ -108,7 +108,11 @@ end
 
 local function StartDusk(inst) end
 
-local function OnAttacked(inst, data) if inst.components.health ~= nil and not inst.components.health:IsDead() then inst.sg:GoToState("hide_pre") end end
+local function OnAttacked(inst, data) 
+	if not inst.components.health:IsDead() then
+		inst.components.explosive:OnBurnt()
+	end
+end
 
 local function DisplayName(inst)
     if inst.sg:HasStateTag("invisible") then
@@ -252,6 +256,73 @@ local function FindTarget(inst, radius) return FindEntity(inst, radius, function
 
 local function NormalRetarget(inst) return FindTarget(inst, 8) end
 
+local function ExplodePing(inst)
+	--if inst.components.combat.target ~= nil then
+		if inst.task ~= nil then
+			inst.task:Cancel()
+			inst.task = nil
+		end
+		
+		if inst.explode_timer_count < 0.1 then
+			if not inst.components.health:IsDead() then
+				inst.components.explosive:OnBurnt()
+			end
+		else
+			inst.explode_timer_count = inst.explode_timer_count - .1
+			inst:DoTaskInTime(inst.explode_timer_count / 1.2, ExplodePing)
+			
+			local fxname = "dr_warm_loop_1"
+			
+			if inst.explode_timer_count < 0.8 and inst.explode_timer_count >= 0.6 then
+				fxname = "dr_warm_loop_2"
+			elseif inst.explode_timer_count < 0.6 and inst.explode_timer_count >= 0.3 then
+				fxname = "dr_warmer_loop"
+			elseif inst.explode_timer_count < 0.3 then
+				fxname = "dr_hot_loop"
+			end
+			
+			inst.fx = SpawnPrefab(fxname)
+            inst.fx.entity:AddFollower()
+            inst.fx.Follower:FollowSymbol(inst.GUID, "body", 0, -40, 0)
+
+            inst.fxlight = SpawnPrefab(fxname .. "_light" .. inst.pawntype)
+            inst.fxlight.entity:AddFollower()
+            inst.fxlight.Follower:FollowSymbol(inst.GUID, "body", 0, -40, 0)
+			
+			inst.sparks = SpawnPrefab("sparks")
+            inst.sparks.entity:AddFollower()
+            inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
+
+		end
+	--else
+		--if inst.task == nil then
+			--inst.task = inst:DoTaskInTime(PAWN_DIVINING_DEFAULTPING, CheckTargetPiece)
+		--end
+		
+		--inst.explode_timer_count = 1
+	--end
+end
+
+local function OnNewTarget(inst)
+	if inst.components.combat.target ~= nil and inst.force_explode == nil then
+		if inst.task ~= nil then
+			inst.task:Cancel()
+			inst.task = nil
+		end
+
+		inst.force_explode = true
+			
+		inst.sparks = SpawnPrefab("sparks")
+		inst.sparks.entity:AddFollower()
+		inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
+		
+		inst:ListenForEvent("attacked", OnAttacked)
+		
+		inst.explode_timer_count = 1
+		inst:DoTaskInTime(0, ExplodePing)
+	end
+end
+
 local function pawn_common(pawntype)
     local inst = CreateEntity()
     local shadow = inst.entity:AddDynamicShadow()
@@ -307,6 +378,10 @@ local function pawn_common(pawntype)
     inst.components.inspectable.getstatus = getstatus
 
     if inst.pawntype == "_nightmare" then
+		inst.explode_timer_count = 1
+	
+		inst:ListenForEvent("newcombattarget", OnNewTarget)
+	
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
         inst:AddComponent("explosive")
@@ -330,7 +405,7 @@ local function pawn_common(pawntype)
     -- inst:ListenForEvent("freeze", OnPause)
     -- inst:ListenForEvent("unfreeze", TryUnpause)
 
-    if inst.task == nil then inst.task = inst:DoTaskInTime(5, CheckTargetPiece) end
+    if inst.task == nil then inst.task = inst:DoTaskInTime(1, CheckTargetPiece) end
 
     inst:AddTag("soulless")
     inst.sg:GoToState("hide_post")

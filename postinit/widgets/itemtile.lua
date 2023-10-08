@@ -8,6 +8,8 @@ require("constants")
 env.AddClassPostConstruct("widgets/itemtile", function(self, invitem)
 	local _OldUpdateToolTip = self.UpdateTooltip
 
+
+
 	self.acid = self:AddChild(UIAnim())
 	self.acid:GetAnimState():SetBank("acid_meter")
 	self.acid:GetAnimState():SetBuild("acid_meter")
@@ -29,28 +31,19 @@ env.AddClassPostConstruct("widgets/itemtile", function(self, invitem)
 			return _OldUpdateToolTip(self)
 		end
 	end
+end)
 
-	local _SetPercent = self.SetPercent
+local ItemTile = require('widgets/itemtile')
+local _SetPercent = ItemTile.SetPercent
 
-	function self:SetPercent(percent)
-		if not self.item:HasTag("hide_percentage") and percent > 1 and self.item:HasTag("overchargeable") then
-			if not self.percent then
-				self.percent = self:AddChild(Text(NUMBERFONT, 42))
-				if JapaneseOnPS4() then
-					self.percent:SetHorizontalSqueeze(0.7)
-				end
-				self.percent:SetPosition(5, -32 + 15, 0)
-			end
-			local val_to_show = percent * 100
+function ItemTile:SetPercent(percent, ...)
+	_SetPercent(self, percent, ...)
 
-			if val_to_show > 0 and val_to_show < 1 then
-				val_to_show = 1
-			end
-
-			self.percent:SetString(string.format("%2.0f%%", val_to_show))
-			self.percent:SetColour({ 0.5, Lerp(0.5,1, percent-1), 0.5, 1 })
-		else
-			_SetPercent(self, percent)
+	if percent ~= nil and self.percent ~= nil and self.inst:HasTag("overchargeable") then
+		if percent > 1 then
+			self.percent:SetColour({ 1, 1, 0, 1 })
+		elseif percent > 0.99 and percent < 1 then --exactly at 1 just to reset it but not to break the coloured percent mod
+			self.percent:SetColour({ 1, 1, 1, 1 })
 		end
 	end
-end)
+end

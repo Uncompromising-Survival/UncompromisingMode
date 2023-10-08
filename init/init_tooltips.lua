@@ -40,7 +40,9 @@ STRINGS.UNCOMP_TOOLTIP = {
 	FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
 	BOAT_ROTATOR_KIT = "- Increases boat steering speed.\n- Helps doing sharp turns.",
 	STAFF_TORNADO = "- Can redirect Giant Tornadoes.",
-
+	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
+	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
+	
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
 	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.",
@@ -50,8 +52,10 @@ STRINGS.UNCOMP_TOOLTIP = {
 	HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
 	SALTPACK = "- Drops piles of salt, preventing buildup of Snow Piles.",
 	SPOREPACK = "- Provides lots of storage space.\n- Rots food, but refreshes Spores.",
-	UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "- Slows down anything it's attached to. Deployable and throwable.",
-	UM_BEAR_TRAP_EQUIPPABLE_GOLD = "- Slows down anything it's attached to. Deployable and throwable.",
+	UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
+	"- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
+	UM_BEAR_TRAP_EQUIPPABLE_GOLD =
+	"- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has even more uses.",
 	WATERMELON_LANTERN = "- Has a positive sanity aura.",
 	HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
 	SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
@@ -59,13 +63,17 @@ STRINGS.UNCOMP_TOOLTIP = {
 	GASMASK = "- Provides protection against spore clouds.",
 	PLAGUEMASK = "- Provides protection against spore clouds.",
 	FLORAL_BANDAGE = "- Restores extra health over time.",
-	DISEASECUREBOMB = "- Restores health and sickly plants.",
+	DISEASECUREBOMB = "- Fertilizes plants and get those ready for harvest.",
 	SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
-
+	ARMOR_SHARKSUIT_UM =
+	"- High wetness protection. \n- Works as electrical insulation.\n- Wearer will wash ashore with no penalties.",
 	HAT_CRAB = "- Repairs & sewing are twice as effective when worn.",
 	HAT_CRAB_ICE = "- Resistance scales with wetness.\n- Prevents the wearer from drying up.",
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
-	ARMOR_CRAB_REGEN = "- Self-healing."
+	ARMOR_CRAB_REGEN = "- Self-healing.",
+	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
+	
+	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees."
 }
 
 STRINGS.PINETREE_TOOLTIP = {
@@ -90,7 +98,7 @@ STRINGS.ENGINEERING_TOOLTIP = {
 	BUGZAPPER = "- Can be overcharged."
 }
 
-if GetModConfigData("winona_portables_") then
+if TUNING.DSTU.WINONA_PORTABLES then
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_CATAPULT = "- Now portable."
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_SPOTLIGHT = "- Now portable."
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_LOW = "- Now portable."
@@ -99,12 +107,12 @@ end
 
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
-if GetModConfigData("telestaff_rework") then
+if TUNING.DSTU.TELESTAFF_REWORK then
 	TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses."
 	TOOLTIPS.TELEBASE = "- No longer requires gems per teleport."
 end
 
-if GetModConfigData("beebox_nerf") then
+if TUNING.DSTU.BEEBOX_NERF then
 	TOOLTIPS.BEEBOX = "- Reduced maximum active Bees."
 end
 
@@ -176,7 +184,7 @@ if TUNING.DSTU.HEATWAVES then
 end
 
 if TUNING.DSTU.STORMS then
-	TOOLTIPS.RAINOMETER = "- Can track a Tornadoes location."
+	TOOLTIPS.RAINOMETER = "- Can track a Tornado's location."
 end
 
 if TUNING.DSTU.GOTOBED ~= false then
@@ -221,9 +229,11 @@ if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
 	TOOLTIPS.REFLECTIVEVEST = "- Now has pockets!"
 	TOOLTIPS.RAINCOAT = "- Now has pockets!"
 	TOOLTIPS.HAWAIIANSHIRT = "- Increased durability.\n- Now has pockets!"
+	TOOLTIPS.ARMOR_SNAKESKIN = "- Now has pockets!"
+	TOOLTIPS.ARMOR_WINDBREAKER = "- Now has pockets!"
 end
 
-if GetModConfigData("canedurability") then
+if TUNING.DSTU.CANEDURABILITY then
 	TOOLTIPS.CANE = "- Has durability, only drains when walking."
 end
 
@@ -240,7 +250,7 @@ if TUNING.DSTU.WICKERNERF_TENTACLES then
 	"- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
 end
 
-if GetModConfigData("woodie") then
+if TUNING.DSTU.WOODIE then
 	TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
 end
 
@@ -249,14 +259,14 @@ if TUNING.DSTU.WINONA_GEN then
 	TOOLTIPS.WINONA_BATTERY_LOW = TOOLTIPS.WINONA_BATTERY_LOW .. "\n- Access limited to Winona."
 end
 
-if GetModConfigData("lunar grimoire") then
+if TUNING.DSTU.WICKERNERF_MOONBOOK then
 	TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
 end
 
-if GetModConfigData("apicultural notes") then
-	TOOLTIPS.BOOK_BEES = "- Now adds Honey to 20 nearby Bee Boxes."
+if TUNING.DSTU.WICKERNERF_BEEBOOK then
+	TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
 end
 
-if GetModConfigData("disable_megaflare") then
+if TUNING.DSTU.DISABLE_MEGAFLARE then
 	TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end

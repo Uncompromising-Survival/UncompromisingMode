@@ -157,8 +157,8 @@ function c_um_setadrenaline(p)
     end
 end
 
-local function CountLocalPrefabs(prefab, pos)
-    local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
+local function CountLocalPrefabs(prefab, pos, set_radius)
+    local ents = TheSim:FindEntities(pos.x, 0, pos.z, set_radius)
     local count = 0
 
     for k, v in pairs(ents) do
@@ -170,18 +170,21 @@ local function CountLocalPrefabs(prefab, pos)
     print("There are ", count, prefab .. "s in this vicinity.")
 end
 
-function c_um_findents()
+function c_um_findents(radius, awake)
     local pos = ConsoleWorldPosition()
-    local ents = TheSim:FindEntities(pos.x, 0, pos.z, 50)
+    local set_radius = radius ~= nil and radius or 50
+    local ents = TheSim:FindEntities(pos.x, 0, pos.z, set_radius)
     local alreadycounted_ents = {}
 
     for i, v in ipairs(ents) do
-        local count = 0
+		if awake == nil or awake and v.entity:IsAwake() then
+			local count = 0
 
-        if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
-            table.insert(alreadycounted_ents, v.prefab)
-            CountLocalPrefabs(v.prefab, pos)
-        end
+			if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
+				table.insert(alreadycounted_ents, v.prefab)
+				CountLocalPrefabs(v.prefab, pos, set_radius)
+			end
+		end
     end
 end
 
@@ -193,6 +196,68 @@ function c_um_heatwave()
             print("starting heatwave...")
         else
             print("stopping heatwave")
+        end
+    end
+end
+
+local uncompfoods = {
+	"beefalowings",
+	"blueberrypancakes",
+	"californiaking",
+	"devilsfruitcake",
+	"hardshelltacos",
+	"liceloaf",
+	"seafoodpaella",
+	"snotroast",
+	"snowcone",
+	"stuffed_peeper_poppers",
+	"theatercorn",
+	"um_deviled_eggs",
+	"purplesteamedhams",
+	"greensteamedhams",
+	"viperjam",
+	"zaspberryparfait",
+}
+
+function c_um_givefoods()
+    if ThePlayer ~= nil then
+		for i, v in pairs(uncompfoods) do
+			if ThePlayer.components.inventory ~= nil then
+				local food = SpawnPrefab(v)
+				food.Transform:SetPosition(ThePlayer.Transform:GetWorldPosition())
+				
+				ThePlayer.components.inventory:GiveItem(food)
+			end
+		end
+    end
+end
+
+
+local function UM_ConsoleCommandPlayer()
+    return (c_sel() ~= nil and c_sel():HasTag("player") and c_sel()) or ThePlayer or AllPlayers[1]
+end
+
+local function ListingOrConsolePlayer(input)
+    if type(input) == "string" or type(input) == "number" then
+        return UserToPlayer(input)
+    end
+    return input or UM_ConsoleCommandPlayer()
+end
+
+function c_um_wobygodmode(player)
+
+    if TheWorld ~= nil and not TheWorld.ismastersim then
+        c_remote("c_um_wobygodmode()")
+        return
+    end
+
+    player = ListingOrConsolePlayer(player)
+    if player ~= nil and player.woby ~= nil then
+        SuUsed("c_um_wobygodmode", true)
+		if  player.woby.components.health ~= nil then
+            local godmode = player.woby.components.health.invincible
+            player.woby.components.health:SetInvincible(not godmode)
+            print("God mode: "..tostring(not godmode))
         end
     end
 end

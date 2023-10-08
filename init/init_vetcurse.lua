@@ -9,15 +9,15 @@ AddPlayerPostInit(function(inst)
 	local _OldOnSave = inst.OnSave
 	local _OldOnLoad = inst.OnLoad
 
-	local function OnSave(inst, data)
+	local function OnSave(inst, data, ...)
 		if inst.vetcurse ~= nil then
 			data.vetscurse = inst.vetcurse
 		end
 		
-		_OldOnSave(inst, data)
+		return _OldOnSave(inst, data, ...)
 	end
 
-	local function OnLoad(inst, data)
+	local function OnLoad(inst, data, ...)
 		if data ~= nil then
 		
 			if data.vetscurse then
@@ -37,7 +37,7 @@ AddPlayerPostInit(function(inst)
 			end
 		end
 	
-		_OldOnLoad(inst, data)
+		return _OldOnLoad(inst, data, ...)
 	end
 	
 	inst.OnSave = OnSave

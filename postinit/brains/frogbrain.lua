@@ -10,7 +10,7 @@ local AVOID_PLAYER_STOP = 12
 local AVOID_DIST = 10
 local AVOID_STOP = 12
 
-local FINDFOOD_CANT_TAGS = { "outofreach" }
+local FINDFOOD_CANT_TAGS = { "outofreach", "INLIMBO" }
 local function EatFoodAction(inst)
 	if inst.sg.currentstate.name == "fall" then
 		return nil
@@ -32,7 +32,7 @@ local function EatFoodAction(inst)
         FINDFOOD_CANT_TAGS
     )
     if target ~= nil then
-        return BufferedAction(inst, target, ACTIONS.EAT) or nil
+        return BufferedAction(inst, target, ACTIONS.PICKUP) or nil
     end
 end
 

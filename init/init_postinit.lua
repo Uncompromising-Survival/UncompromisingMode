@@ -44,7 +44,9 @@ local component_post = {
     "weather",
     "worldtemperature",
     "worldwind",
-	"planarentity"
+	"planarentity",
+    "geyserfx",
+    "firedetector",
 }
 
 local prefab_post = {
@@ -139,6 +141,7 @@ local prefab_post = {
     "siestahut",
     "bedroll_furry",
     "bees",
+	"beemine",
     "farmplants",
     "rainhat",
     "darts",
@@ -186,6 +189,8 @@ local prefab_post = {
 	"staff_tornado",
 	"rainometer",
     "winterometer",
+	"mooneye",
+    "dragoonegg",
 }
 
 local stategraph_post = {
@@ -236,7 +241,8 @@ if GetModConfigData("wixie_walter") then
         "wobybig",
         "wormhole",      -- wixie loses more sanity from wormholes
         "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
-        "coconut"        -- shoot a coconut
+        "coconut",       -- shoot a coconut
+		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
         "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
@@ -433,8 +439,18 @@ if GetModConfigData("reworked_ck") then
     table.insert(stategraph_post, "crabking")
 end
 
+if GetModConfigData("changed_shadowpieces") then
+	table.insert(prefab_post, "shadow_knight")
+	table.insert(stategraph_post, "shadow_bishop")
+	table.insert(stategraph_post, "shadow_knight")
+end
+
 if GetModConfigData("hambatnerf") then
     table.insert(prefab_post, "hambat")
+end
+
+if GetModConfigData("mermtweaks") then
+    table.insert(prefab_post, "mermhouse")
 end
 
 if GetModConfigData("townportal_rework") then

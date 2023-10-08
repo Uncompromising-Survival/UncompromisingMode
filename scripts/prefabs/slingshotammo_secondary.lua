@@ -3,7 +3,7 @@ if not TUNING.DSTU.WIXIE then
     return
 end
 
-local assets = {Asset("ANIM", "anim/slingshotammo.zip")}
+local assets = { Asset("ANIM", "anim/slingshotammo.zip") }
 
 local easing = require("easing")
 
@@ -30,6 +30,8 @@ local function OnAttack(inst, attacker, target)
         if inst.ammo_def ~= nil and inst.ammo_def.onhit ~= nil then
             inst.ammo_def.onhit(inst, attacker, target)
         end
+		
+        local weapon = attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 
         if inst.ammo_def ~= nil and inst.ammo_def.damage ~= nil then
             inst.finaldamage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
@@ -47,9 +49,9 @@ local function OnAttack(inst, attacker, target)
                     target.wixieammo_hitstuncd = nil
                 end)
 
-                target.components.combat:GetAttacked(inst, inst.finaldamage, inst)
+				target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.finaldamage, weapon)
             else
-                target.components.combat:GetAttacked(inst, 0, inst)
+                target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
                 target.components.health:DoDelta(-inst.finaldamage, false, attacker, false, attacker, false)
             end
@@ -62,13 +64,16 @@ local function OnAttack(inst, attacker, target)
         end
 
         if target.components.combat ~= nil then
-			target.components.combat:SetTarget(attacker)
             target.components.combat:RemoveShouldAvoidAggro(attacker)
         end
 
         if attacker.components.combat ~= nil then
             attacker.components.combat:SetTarget(target)
         end
+					
+		if target.components.health ~= nil and target.components.health:IsDead() then
+			attacker:PushEvent("killed", { victim = target, attacker = attacker })
+		end
     end
 end
 
@@ -100,7 +105,7 @@ local function OnHit_Thulecite(inst, attacker, target)
     ImpactFx(inst, attacker, target)
 
     if target ~= nil and target:IsValid() then
-        target:AddDebuff("wixiecurse_debuff", "wixiecurse_debuff", {powerlevel = inst.powerlevel})
+        target:AddDebuff("wixiecurse_debuff", "wixiecurse_debuff", { powerlevel = inst.powerlevel })
     end
 
     inst:Remove()
@@ -118,14 +123,14 @@ local function onunloadammo_ice(inst, data)
     end
 end
 
-local FREEZE_CANT_TAGS = {"noclaustrophobia", "player", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO"}
+local FREEZE_CANT_TAGS = { "noclaustrophobia", "player", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO" }
 
 local function GenerateSpiralSpikes(inst, powerlevel)
     local spawnpoints = {}
     local source = inst
     local x, y, z = source.Transform:GetWorldPosition()
     local spacing = 12 / powerlevel -- 2.5
-    local radius = powerlevel -- 5
+    local radius = powerlevel       -- 5
     local deltaradius = .2
     local angle = 2 * PI * math.random()
     local deltaanglemult = (inst.reversespikes and -2 or 2) * PI * spacing
@@ -143,7 +148,7 @@ local function GenerateSpiralSpikes(inst, powerlevel)
         local x1 = x + radius * math.cos(angle)
         local z1 = z + radius * math.sin(angle)
         if map:IsPassableAtPoint(x1, 0, z1) then
-            table.insert(spawnpoints, {t = delay, level = i / num, pts = {Vector3(x1, 0, z1)}})
+            table.insert(spawnpoints, { t = delay, level = i / num, pts = { Vector3(x1, 0, z1) } })
             delay = delay + deltadelay
         end
     end
@@ -152,7 +157,6 @@ end
 
 local function DoSpawnSpikes(inst, pts, level)
     for i, v in ipairs(pts) do
-
         local spike = SpawnPrefab("icespike_fx_" .. math.random(4))
         spike.Transform:SetPosition(v:Get())
         spike.persists = false
@@ -287,7 +291,7 @@ local function OnHit_Distraction(inst, attacker, target)
         local targets_target = target.components.combat.target
         if targets_target == nil or targets_target == attacker then
             attacker._doesnotdrawaggro = true
-            target:PushEvent("attacked", {attacker = attacker, damage = 0, weapon = inst})
+            target:PushEvent("attacked", { attacker = attacker, damage = 0, weapon = inst })
             attacker._doesnotdrawaggro = nil
 
             if not target:HasTag("epic") and target.components.combat ~= nil then
@@ -307,11 +311,7 @@ local function OnHit_Distraction(inst, attacker, target)
     inst:Remove()
 end
 
-local AURA_EXCLUDE_TAGS = {"noclaustrophobia", "rabbit", "playerghost", "abigail", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible"}
-
-if TUNING.DSTU.WIXIE_BIRDS then
-    table.insert(AURA_EXCLUDE_TAGS, "rabbit")
-end
+local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "abigail", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
 
 if not TheNet:GetPVPEnabled() then
     table.insert(AURA_EXCLUDE_TAGS, "player")
@@ -321,7 +321,6 @@ local function OnHit_Marble(inst, attacker, target)
     -- ImpactFx(inst, attacker, target)
 
     if target ~= nil and target:IsValid() and target.components and target.components.locomotor and not target:HasTag("stageusher") and not target:HasTag("toadstool") then
-
         local x, y, z = inst.Transform:GetWorldPosition()
         local tx, ty, tz = target.Transform:GetWorldPosition()
 
@@ -335,7 +334,7 @@ local function OnHit_Marble(inst, attacker, target)
                     local tx2, ty2, tz2 = target.Transform:GetWorldPosition()
 
                     -- local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-                    local velx = math.cos(rad) -- * 4.5
+                    local velx = math.cos(rad)  -- * 4.5
                     local velz = -math.sin(rad) -- * 4.5
 
                     local giantreduction = target:HasTag("epic") and 8 or target:HasTag("smallcreature") and 2 or 3
@@ -345,21 +344,14 @@ local function OnHit_Marble(inst, attacker, target)
                     local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
                     local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
                     local ocean = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-                    local on_water = nil
-
-                    if TUNING.DSTU.ISLAND_ADVENTURES then
-                        on_water = IsOnWater(dx, dy, dz)
-                    end
 
                     if not (target.sg ~= nil and (target.sg:HasStateTag("swimming") or target.sg:HasStateTag("invisible"))) then
                         if target ~= nil and target.components.locomotor ~= nil and dx ~= nil and (ground or boat or ocean and target.components.locomotor:CanPathfindOnWater() or target.components.tiletracker ~= nil and not target:HasTag("whale")) then
-                            if not target:HasTag("aquatic") and not on_water or target:HasTag("aquatic") and on_water then
-                                --[[if ocean and target.components.amphibiouscreature and not target.components.amphibiouscreature.in_water then
+                            --[[if ocean and target.components.amphibiouscreature and not target.components.amphibiouscreature.in_water then
 									target.components.amphibiouscreature:OnEnterOcean()
 								end]]
 
-                                target.Transform:SetPosition(dx, dy, dz)
-                            end
+                            target.Transform:SetPosition(dx, dy, dz)
                         end
                     end
                 end
@@ -405,27 +397,32 @@ local function OnHit_Gold(inst, attacker, target)
         goldshatter.Transform:SetPosition(target.Transform:GetWorldPosition())
         goldshatter.AnimState:PlayAnimation("level" .. inst.powerlevel)
 
-        local ents = TheSim:FindEntities(x, y, z, 1.5 + inst.powerlevel, {"_combat"}, AURA_EXCLUDE_TAGS)
+        local ents = TheSim:FindEntities(x, y, z, 1.5 + inst.powerlevel, { "_combat" }, AURA_EXCLUDE_TAGS)
         local damage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
 
         for i, v in ipairs(ents) do
-            if v ~= target and v:IsValid() and not v:IsInLimbo() and (v:HasTag("bird_mutant") or TUNING.DSTU.WIXIE_BIRDS and not v:HasTag("bird") or not TUNING.DSTU.WIXIE_BIRDS and v:HasTag("bird") or not v:HasTag("bird")) then
+            if v ~= target and v:IsValid() and not v:IsInLimbo() and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
                 if not (v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")) then
                     if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) then
                         if no_aggro(attacker, v) then
                             v.components.combat:SetShouldAvoidAggro(attacker)
                         end
+		
+						local weapon = attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 
-                        v.components.combat:GetAttacked(inst, damage, inst)
+						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, damage, weapon)
 
                         if v.components.sleeper ~= nil and v.components.sleeper:IsAsleep() then
                             v.components.sleeper:WakeUp()
                         end
 
                         if v.components.combat ~= nil then
-							v.components.combat:SetTarget(attacker)
                             v.components.combat:RemoveShouldAvoidAggro(attacker)
                         end
+						
+						if v.components.health ~= nil and v.components.health:IsDead() then
+							attacker:PushEvent("killed", { victim = v, attacker = attacker })
+						end
                     end
                 end
             end
@@ -437,8 +434,8 @@ local function CollisionCheck(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local attacker = inst.components.projectile.owner or nil
 
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, {"_combat"}, AURA_EXCLUDE_TAGS)) do
-        if v:GetPhysicsRadius(0) > 1.5 and v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or TUNING.DSTU.WIXIE_BIRDS and not v:HasTag("bird") or not TUNING.DSTU.WIXIE_BIRDS and v:HasTag("bird") or not v:HasTag("bird")) then
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, { "_combat" }, AURA_EXCLUDE_TAGS)) do
+        if v:GetPhysicsRadius(0) > 1.5 and v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
             if not (v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")) then
                 if not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost") or (v:HasTag("player") and not TheNet:GetPVPEnabled())) then
                     OnAttack(inst, attacker, v)
@@ -449,8 +446,8 @@ local function CollisionCheck(inst)
         end
     end
 
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, 2, {"_combat"}, AURA_EXCLUDE_TAGS)) do
-        if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or TUNING.DSTU.WIXIE_BIRDS and not v:HasTag("bird") or not TUNING.DSTU.WIXIE_BIRDS and v:HasTag("bird") or not v:HasTag("bird")) then
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, 2, { "_combat" }, AURA_EXCLUDE_TAGS)) do
+        if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
             if not (v.components.follower ~= nil and v.components.follower:GetLeader() ~= nil and v.components.follower:GetLeader():HasTag("player")) then
                 if not (v.components.health:IsDead() or v == attacker or v:HasTag("playerghost") or (v:HasTag("player") and not TheNet:GetPVPEnabled())) then
                     OnAttack(inst, attacker, v)
@@ -513,7 +510,7 @@ local function projectile_fn(ammo_def)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(ammo_def.damage)
-    inst.components.weapon:SetOnAttack(nil --[[OnAttack]] )
+    inst.components.weapon:SetOnAttack(nil --[[OnAttack]])
 
     inst.Physics:SetCollisionCallback(nil)
 
@@ -535,9 +532,9 @@ local function projectile_fn(ammo_def)
 end
 
 local ammo = {
-    {name = "slingshotammo_rock", damage = TUNING.SLINGSHOT_AMMO_DAMAGE_ROCKS, hit_sound = "dontstarve/characters/walter/slingshot/rock"},
-    {name = "slingshotammo_gold", symbol = "gold", onhit = OnHit_Gold, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_GOLD, hit_sound = "dontstarve/characters/walter/slingshot/gold"},
-    {name = "slingshotammo_marble", symbol = "marble", onhit = OnHit_Marble, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_MARBLE, hit_sound = "dontstarve/characters/walter/slingshot/marble"},
+    { name = "slingshotammo_rock",   damage = TUNING.SLINGSHOT_AMMO_DAMAGE_ROCKS, hit_sound = "dontstarve/characters/walter/slingshot/rock" },
+    { name = "slingshotammo_gold",   symbol = "gold",                             onhit = OnHit_Gold,                                       damage = TUNING.SLINGSHOT_AMMO_DAMAGE_GOLD,   hit_sound = "dontstarve/characters/walter/slingshot/gold" },
+    { name = "slingshotammo_marble", symbol = "marble",                           onhit = OnHit_Marble,                                     damage = TUNING.SLINGSHOT_AMMO_DAMAGE_MARBLE, hit_sound = "dontstarve/characters/walter/slingshot/marble" },
     {
         name = "slingshotammo_thulecite", -- chance to spawn a Shadow Tentacle
         symbol = "thulecite",
@@ -545,8 +542,8 @@ local ammo = {
         damage = TUNING.SLINGSHOT_AMMO_DAMAGE_THULECITE,
         hit_sound = "dontstarve/characters/walter/slingshot/gold"
     },
-    {name = "slingshotammo_freeze", symbol = "freeze", onhit = OnHit_Ice, tags = {"extinguisher"}, onloadammo = onloadammo_ice, onunloadammo = onunloadammo_ice, damage = nil, hit_sound = "dontstarve/characters/walter/slingshot/frozen"},
-    {name = "slingshotammo_slow", symbol = "slow", onhit = OnHit_Vortex, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_SLOW, hit_sound = "dontstarve/characters/walter/slingshot/slow"},
+    { name = "slingshotammo_freeze", symbol = "freeze", onhit = OnHit_Ice,    tags = { "extinguisher" },                  onloadammo = onloadammo_ice,                              onunloadammo = onunloadammo_ice, damage = nil, hit_sound = "dontstarve/characters/walter/slingshot/frozen" },
+    { name = "slingshotammo_slow",   symbol = "slow",   onhit = OnHit_Vortex, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_SLOW, hit_sound = "dontstarve/characters/walter/slingshot/slow" },
     {
         name = "slingshotammo_poop", -- distraction (drop target, note: hostile creatures will probably retarget you very shortly after)
         symbol = "poop",
@@ -555,14 +552,14 @@ local ammo = {
         hit_sound = "dontstarve/characters/walter/slingshot/poop",
         fuelvalue = TUNING.MED_FUEL / 10 -- 1/10th the value of using poop
     },
-    {name = "trinket_1", no_inv_item = true, symbol = "trinket_1", onhit = OnHit_Melty, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_TRINKET_1, hit_sound = "dontstarve/characters/walter/slingshot/trinket"}
+    { name = "trinket_1", no_inv_item = true, symbol = "trinket_1", onhit = OnHit_Melty, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_TRINKET_1, hit_sound = "dontstarve/characters/walter/slingshot/trinket" }
 }
 
 local ammo_prefabs = {}
 for _, v in ipairs(ammo) do
     v.impactfx = "slingshotammo_hitfx_" .. (v.symbol or "rock")
 
-    local prefabs = {"shatter"}
+    local prefabs = { "shatter" }
     table.insert(prefabs, v.impactfx)
     table.insert(ammo_prefabs, Prefab(v.name .. "_proj_secondary", function() return projectile_fn(v) end, assets, prefabs))
 end

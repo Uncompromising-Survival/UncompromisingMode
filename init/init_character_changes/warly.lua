@@ -8,21 +8,21 @@ env.AddPrefabPostInit("warly", function(inst)
 	end
 
 if TUNING.DSTU.WARLY_BUTCHER then
-	local function onbutchered(target, data)
-		local target = data.target
-		if target ~= nil and not target:HasTag("butchermark") then
-			target:AddTag("butchermark")
-		end	
-		if target ~= nil and target.butcher_cancel_task ~= nil then
-			target.butcher_cancel_task:Cancel()
-			target.butcher_cancel_task = nil
-		end
-		target.butcher_cancel_task = target:DoTaskInTime(3, function() target:RemoveTag("butchermark") end)
-	end
+	--local function onbutchered(target, data)
+		--local target = data.target
+		--if target ~= nil and not target:HasTag("butchermark") then
+			--target:AddTag("butchermark")
+		--end	
+		--if target ~= nil and target.butcher_cancel_task ~= nil then
+			--target.butcher_cancel_task:Cancel()
+			--target.butcher_cancel_task = nil
+		--end
+		--target.butcher_cancel_task = target:DoTaskInTime(3, function() target:RemoveTag("butchermark") end)
+	--end
 
 	local function inventorystuff(item, data)
 		local item = data.item
-		if item ~= nil and (item.components.health and item.components.inventoryitem.canbepickedupalive == true) and not item:HasTag("butchermark") then
+		if item ~= nil and ((item.components.health and item.components.inventoryitem.canbepickedupalive == true) or item.components.weighable ~= nil) and not item:HasTag("butchermark") then
 			item:AddTag("butchermark")
 		end
 		if item ~= nil and item.butcher_cancel_task ~= nil then
@@ -39,12 +39,16 @@ if TUNING.DSTU.WARLY_BUTCHER then
 	end
 	
 	if inst.components.combat ~= nil then
-		inst:ListenForEvent("onattackother", onbutchered)
+		--inst:ListenForEvent("onattackother", onbutchered)
 		inst:ListenForEvent("itemget", inventorystuff)
+		inst:ListenForEvent("inventoryfull", inventorystuff)
+		inst:ListenForEvent("gotnewitem", inventorystuff)
 		inst:ListenForEvent("dropitem", ondropitem)
+		inst:ListenForEvent("itemlose", ondropitem)
 	end
 end
 
+if TUNING.DSTU.WARLY_FOOD_TASTE then
 	local function oneat(inst, data)
 		local food = data.food
 		if food and food.components.edible then
@@ -66,17 +70,18 @@ end
 		end
 	end
 	
-		inst:AddTag("warlybuffed")
+	inst:AddTag("warlybuffed")
 		
-		if inst.components.eater ~= nil then
-			inst:ListenForEvent("oneat", oneat)
-			--inst.components.eater:SetOnEatFn(oneat)
-			--inst.components.eater:SetAbsorptionModifiers(1.2, 1.2, 1.2)
-		end
+	if inst.components.eater ~= nil then
+		inst:ListenForEvent("oneat", oneat)
+		--inst.components.eater:SetOnEatFn(oneat)
+		--inst.components.eater:SetAbsorptionModifiers(1.2, 1.2, 1.2)
+	end
 		
-		if inst.components.foodmemory ~= nil then
-			inst.components.foodmemory:SetDuration(TUNING.DSTU.WARLY_SAME_OLD_COOLDOWN)
-			inst.components.foodmemory:SetMultipliers(TUNING.DSTU.WARLY_SAME_OLD_MULTIPLIERS)
-		end
-		
+	if inst.components.foodmemory ~= nil then
+		inst.components.foodmemory:SetDuration(TUNING.DSTU.WARLY_SAME_OLD_COOLDOWN)
+		inst.components.foodmemory:SetMultipliers(TUNING.DSTU.WARLY_SAME_OLD_MULTIPLIERS)
+	end
+end
+
 end)

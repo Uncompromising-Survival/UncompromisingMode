@@ -68,7 +68,7 @@ local function retargetfn(inst)
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
     for i, v in ipairs(AllPlayers) do
-        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+        if v:IsValid() and inst:IsValid() and v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
                 if inst.components.shadowsubmissive:TargetHasDominance(v) then
@@ -152,7 +152,11 @@ end
 local function OnDeath(inst, data)
 	if inst.disguiseprefab ~= nil then
 		local px, py, pz = inst.disguiseprefab.Transform:GetWorldPosition()
-		SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
+		
+		if px ~= nil then
+			SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
+		end
+		
 		inst.disguiseprefab:Remove()
 		inst.disguiseprefab = nil
 	end
@@ -183,7 +187,11 @@ local function ShadowSuprise(inst)
 		
 		if inst.disguiseprefab ~= nil then
 			local px, py, pz = inst.disguiseprefab.Transform:GetWorldPosition()
-			SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
+			
+			if px ~= nil then
+				SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
+			end
+			
 			--inst.SoundEmitter:PlaySound("dontstarve/maxwell/disappear")
 			inst.disguiseprefab:Remove()
 			inst.disguiseprefab = nil
@@ -958,6 +966,8 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 			end
 		end
 	end)
+	
+	inst:DoTaskInTime(21, inst.Remove)
 	
 	MakeSnowCovered(inst)
 	

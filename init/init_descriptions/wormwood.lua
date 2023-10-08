@@ -182,8 +182,10 @@ DESCRIBE.APHID = "Eating big friends!"
 DESCRIBE.NYMPH = "No! No! No! Bad bug!"
 DESCRIBE.GIANT_TREE_INFESTED = "Big friend is sick"
 DESCRIBE.GIANT_BLUEBERRY = "Yay! Water!"
-DESCRIBE.STEAMEDHAMS = "Egads!"
+DESCRIBE.PURPLESTEAMEDHAMS = "Egads!"
+DESCRIBE.GREENSTEAMEDHAMS = "Egads!"
 DESCRIBE.BLUEBERRYPANCAKES = "Yummy boom juice"
+DESCRIBE.DEVILSFRUITCAKE = "Evil cake?"
 DESCRIBE.SIMPSALAD = "Need more than this"
 DESCRIBE.BEEFALOWINGS = "Crunch"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE = "No more push"
@@ -366,6 +368,12 @@ DESCRIBE.OCUPUS_BEAK = "Beaky nose"
 DESCRIBE.OCUPUS_TENTACLE = "Big suckers hand"
 DESCRIBE.OCUPUS_TENTACLE_EYE = "Dead looker"
 DESCRIBE.OCUPUS_TENTACLE_COOKED = "Sucker meat"
+DESCRIBE.UM_OCUPUS_EYE = "Looker field."
+DESCRIBE.UM_OCUPUS_EYETACLE = "Lookers keeping us here."
+DESCRIBE.UM_OCUPUS_TENTACLE = "Arms from the sea."
+DESCRIBE.UM_OCUPUS_BEAK = "Beaky hurts head."
+DESCRIBE.BEAKBASHER = "Beaky smasher."
+DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Merper watch for us."
 
 DESCRIBE.ARMOR_REED_UM = DESCRIBE.ARMORGRASS
 DESCRIBE.ARMOR_SHARKSUIT_UM = "Me chomper"
@@ -482,7 +490,15 @@ DESCRIBE.MARA_BOSS1 = "Not go right! Run!!"
 ANNOUNCE.GAS_DAMAGE = "kack! kack!"
 
 -- Pyre Nettle stuff
-DESCRIBE.UM_PYRE_NETTLES = "Big hot guys!"
+DESCRIBE.UM_PYRE_NETTLES = {
+	"Fire friend, scary",
+	"Fire friend, scary",
+	"Fire friend, scary",
+	"Fire friend, scary",
+	"Fire friend, scary",
+	"Fire friend, scary",
+	"Big hot guys!"
+}
 DESCRIBE.UM_SMOLDER_SPORE = "Shy, should leave alone"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "NO NO WHY YOU DO THAT"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "AAH!! BAD!! NOOOOOOO!!"

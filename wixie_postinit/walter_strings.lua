@@ -78,6 +78,8 @@ STRINGS = GLOBAL.STRINGS
 	ANNOUNCE.ANNOUNCE_TROUP_ATTACK = "Protect the troup!"
 	ANNOUNCE.ANNOUNCE_TROUP_ATTENTION = "To work, troup!"
 	ANNOUNCE.ANNOUNCE_TROUP_NEVERMIND = "Uh, nevermind, troup..."
+	ANNOUNCE.ANNOUNCE_WOBY_TOOSTACKED = "Woby can't carry any more of that!"
+	ANNOUNCE.ANNOUNCE_WOBY_TOOFULL = "Woby's pack is too full!"
 	
 	STRINGS.ACTIONS.WOBY_COMMAND = "Command!"
 	STRINGS.ACTIONS.WOBY_COMMAND_BARK = "Bark!"
@@ -98,6 +100,7 @@ STRINGS = GLOBAL.STRINGS
 	ACTIONFAIL.WOBY_COMMAND = {
 		WOBYHUNGRY = "I think Woby is hungry!",
 		WOBYTOOSMALL = "I think she's too small to do that!",
+		WOBYTOODANGEROUS = "Wait, Woby! That's too dangerous!",
 		WOBYNEEDTODISMOUNT = "Woby can't do that while I'm riding her!",
 		WOBYNEVERMIND = "Uh, nevermind, Woby...",
 		TROUPNEVERMIND = "Uh, nevermind, troup..."

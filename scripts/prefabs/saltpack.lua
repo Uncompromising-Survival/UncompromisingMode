@@ -3,7 +3,7 @@ local assets = {
     Asset("SOUND", "sound/wilson.fsb"), Asset("INV_IMAGE", "saltpack")
 }
 
-local prefabs = {"saltpack"}
+local prefabs = { "saltpack" }
 
 local function DoTurnOffSound(inst, owner)
     inst._soundtask = nil
@@ -42,24 +42,26 @@ local function Salted(inst)
     end
 
     local salted = SpawnPrefab("saltpile")
-    salted.Transform:SetPosition(x + math.random(-1, 1), y,z + math.random(-1, 1))
+    salted.Transform:SetPosition(x + math.random(-1, 1), y, z + math.random(-1, 1))
 
     inst.SoundEmitter:PlaySound("dontstarve/creatures/together/antlion/sfx/ground_break")
 
-    local ents = TheSim:FindEntities(x, y, z, 5, {"salt_workable"})
+    local ents = TheSim:FindEntities(x, y, z, 6, { "salt_workable" })
     if #ents > 0 then
         for i, v in ipairs(ents) do
             if v:IsValid() then
                 -- Don't net any insects when we do work
                 -- if self.destroyer and
-                if v.components.workable ~= nil and v.components.workable:CanBeWorked() and v.components.workable.action ~= ACTIONS.NET then
-                    v.components.workable:WorkedBy(inst, 1)
+
+                if v.components.workable ~= nil and v.components.workable:CanBeWorked() then
+                    SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
                 end
+                v:Remove()
             end
         end
     end
 
-    local ents2 = TheSim:FindEntities(x, y, z, 5, {"snowish"})
+    local ents2 = TheSim:FindEntities(x, y, z, 6, { "snowish" })
     if #ents2 > 0 then
         for i, v2 in ipairs(ents2) do
             if v2:IsValid() and v2.components.health ~= nil and not v2.components.health:IsDead() and inst.components.combat:CanTarget(v2) then
@@ -94,7 +96,7 @@ end
 
 local function OnUse(inst)
     if inst.components.rechargeable:IsCharged() and not inst.components.fueled:IsEmpty() then
-        inst.components.fueled:SetPercent(inst.components.fueled:GetPercent() - 0.025) -- test num, feel free to tune
+        inst.components.fueled:SetPercent(inst.components.fueled:GetPercent() - 0.0125) -- test num, feel free to tune
         Salted(inst)
         inst.components.rechargeable:Discharge(1)
     else
@@ -165,10 +167,10 @@ local function fn()
 
     inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.SALT
-    inst.components.fueled:InitializeFuelLevel(TUNING.TORCH_FUEL * 4)
+    inst.components.fueled:InitializeFuelLevel(TUNING.TORCH_FUEL * 2)
     inst.components.fueled:SetTakeFuelFn(ontakefuel)
     inst.components.fueled:SetDepletedFn(Depleted)
-    inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FUELED_CONSUMPTION * 2,TUNING.TURNON_FULL_FUELED_CONSUMPTION *2)
+    inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FUELED_CONSUMPTION * 2, TUNING.TURNON_FULL_FUELED_CONSUMPTION * 2)
     inst.components.fueled.accepting = true
     inst.components.fueled:StopConsuming()
 

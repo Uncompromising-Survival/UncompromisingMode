@@ -3,18 +3,16 @@
 -- I hope there's some useful stuff!
 -- Mara :D
 
-
 local prefabs = {
 	"firenettles",
 	"um_smolder_spore",
 	"umdebuff_pyre_toxin",
-	"character_fire"
+	"character_fire",
+	"um_pyre_nettles_blocker"
 }
 
-
 local plant_maxhealth = 300
-local spore_cooldown_max = 8
-
+local spore_cooldown_max = 60
 
 --local onsurface = false
 --local oncave = false
@@ -27,21 +25,24 @@ local spore_cooldown_max = 8
 --	end
 --end
 
-
 -- These tiles are where Smolder Spores can survive, when it isn't Summer.
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
 local HOME_TILES =
 {
 	[WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
-	--	[WORLD_TILES.MAGMA_ASH] = true,
-	--	[WORLD_TILES.MAGMA_ROCK] = true,
-	--	[WORLD_TILES.MAGMAFIELD] = true,
 }
+
+if WORLD_TILES.MAGMA_ASH ~= nil then
+	HOME_TILES[WORLD_TILES.MAGMA_ASH] = true --IA compat teehee
+	HOME_TILES[WORLD_TILES.MAGMA_ROCK] = true
+	HOLE_TILES[WORLD_TILES.MAGMAFIELD] = true
+end
 
 
 SetSharedLootTable('um_pyre_nettles_1',
 	{
-		{ 'firenettles', 1.0 }
+		{ 'firenettles', 1.0 },
+		{ 'um_pyre_nettles_blocker', 1.0 }
 	})
 SetSharedLootTable('um_pyre_nettles_2',
 	{
@@ -74,9 +75,9 @@ local function pyrenettle_bumped(inst)
 	if inst.stage > 3 then
 		bumpradius = inst.stage * 0.75
 	end
-	
+
 	local nextvictim = FindClosestEntity(inst, bumpradius, true, nil,
-		{ "PyreToxinImmune", "plantkin", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
+		{ "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
 	)
 
 	if nextvictim ~= nil
@@ -135,7 +136,7 @@ end
 -- Also does the actual spore spawn.
 local function NaturalSporeSpawnTimerReset(inst)
 	local time_remaining = inst.components.timer:GetTimeLeft("NaturalSporeSpawnTimer")
-	local timer_duration = (math.random(1, 30) + 30)
+	local timer_duration = (math.random(1, 30) + 60)
 
 	local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
 	if spore_cooldown_running == nil and inst.stage == 5 and math.random() > 0.5 then
@@ -250,7 +251,7 @@ local function OnGrow(inst)
 	elseif targetstage == 6 then
 		growsuccess = true
 	end
-	print("heatwave check", TheWorld:HasTag("heatwavestart"))
+
 	-- Outside Magma Caves, Pyre Nettles can't grow past stage 2.
 	if growsuccess == true
 		and not HOME_TILES[tile_at_position]
@@ -313,7 +314,7 @@ local function OnAttacked(inst, data)
 	if inst.components.health:GetPercent() > 0.01 then
 		if (math.random() * inst.stage) > 3 and not (data.attacker ~= nil and data.attacker:HasTag("HASHEATER")) then
 			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
-			
+
 			if data.weapon ~= nil and data.weapon.prefab == "voidcloth_scythe" then
 				inst.components.health:DoDelta(-TUNING.VOIDCLOTH_SCYTHE_DAMAGE * 2)
 			end
@@ -420,7 +421,7 @@ local function StageSpawner(name, SpawnAtStage)
 
 		inst.prefab = "um_pyre_nettles" -- In case we're a spawned-in stage-specifying prefab.
 
-	--	MakeObstaclePhysics(inst, 0.1)
+		--	MakeObstaclePhysics(inst, 0.1)
 
 		local minimap = inst.entity:AddMiniMapEntity()
 		inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
@@ -448,6 +449,7 @@ local function StageSpawner(name, SpawnAtStage)
 		inst:AddTag("PyreNettle")
 		inst:AddTag("PyreToxinImmune")
 		inst:AddTag("SmolderSporeAvoid")
+		inst:AddTag("snowpileblocker") -- SNOOOOOWWWW BLOCKERRRRRR
 		-- Vanilla tags
 		inst:AddTag("plant")
 		inst:AddTag("scarytoprey")
@@ -530,10 +532,48 @@ local function StageSpawner(name, SpawnAtStage)
 end
 
 
+-- Deletes nettle-spawning-blocker when its time is up.
+local function OnBlockerTimerDone(inst, data)
+	if data.name == "NettleBlockerTimer" then
+		inst:Remove()
+	end
+end
+
+-- Nettle-spawning-blocker. Makes Nettles avoid regrowing in places they've recently been removed from.
+local function nettleblocker_fn()
+	local inst = CreateEntity()
+	
+	inst.entity:AddTransform()
+	inst.entity:AddNetwork()
+	
+	inst:AddTag("PyreNettle")
+	
+	inst.entity:SetPristine()
+	
+	if not TheWorld.ismastersim then
+		return inst
+	end
+	
+	inst:AddComponent("timer")
+	inst:ListenForEvent("timerdone", OnBlockerTimerDone)
+	
+	local time_remaining = inst.components.timer:GetTimeLeft("NettleBlockerTimer")
+	local timer_duration = (math.random((TUNING.TOTAL_DAY_TIME * 3)) + (TUNING.TOTAL_DAY_TIME * 8)) -- Amount of time regrowth will be surpressed.
+	if time_remaining ~= nil then
+		inst.components.timer:SetTimeLeft("NettleBlockerTimer", timer_duration)
+	else
+		inst.components.timer:StartTimer("NettleBlockerTimer", timer_duration)
+	end
+	
+	return inst
+end
+
+
 local pyre_nettle_prefabs = {}
 for i = 1, 5 do
 	table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles_stage_" .. i, i))
 end
 table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles", 1))
+table.insert(pyre_nettle_prefabs, Prefab("um_pyre_nettles_blocker", nettleblocker_fn))
 
 return unpack(pyre_nettle_prefabs)

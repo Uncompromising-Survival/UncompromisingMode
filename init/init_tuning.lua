@@ -216,9 +216,10 @@ TUNING.DSTU = {
     WORMWOOD_CONFIG_PLANTS = GetModConfigData("wormwood_plants"),
     WORMWOOD_CONFIG_TRAPS = GetModConfigData("wormwood_trapbuffs"),
     -- Warly
+	WARLY_FOOD_TASTE = GetModConfigData("warly_food_taste_"),
     WARLY_SAME_OLD_COOLDOWN = total_day_time * 3,
     WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
-    WARLY_BUTCHER = GetModConfigData("warly_butcher"),
+    WARLY_BUTCHER = GetModConfigData("warly_butcher_"),
     --WARLY_FOOD = GetModConfigData("warly_food"),
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resis
@@ -234,11 +235,16 @@ TUNING.DSTU = {
     -- Wickerbottom
     WICKERNERF = GetModConfigData("wickerbottom"),
     WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
+	
+	-- Willow
+	WILLOW_INSULATION = GetModConfigData("willow insulation"),
+	
     -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
     WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
     WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
     WICKERBUFF_HORTICULTURE = GetModConfigData("lux aeterna"),
     WICKERBUFF_LIGHT = GetModConfigData("horticulture, expanded"),
+    WICKER_INV_REGEN = GetModConfigData("wicker_inv_regen"),
     -- Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
     -- Wortox
@@ -329,7 +335,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R25_REFRESH_WAXWELL"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R30_ST_WOODWOLFWORM"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     HUNGRY_VOID = GetModConfigData("hungry_void"),
@@ -377,6 +383,13 @@ TUNING.DSTU = {
     PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
+	MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
+	MAXHUNGERDAMAGE = GetModConfigData("maxhungerdamage"),
+	HARDER_TREPIDATION = GetModConfigData("nodespawn_trepidation"),
+	WINONA_PORTABLES = GetModConfigData("winona_portables_"),
+	TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
+	BEEBOX_NERF = GetModConfigData("beebox_nerf"),
+	CANEDURABILITY = GetModConfigData("canedurability"),
     -- boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
@@ -386,6 +399,14 @@ TUNING.DSTU = {
     --mod chekcs
     ISLAND_ADVENTURES = ia_check,
     TREATS_FOR_WEBBER = tfw_check,
+	
+	--MEME CONFIG
+	ADVERTISEMENTS = GetModConfigData("um_advertisements"),
+	SHRINK = GetModConfigData("um_shrink"),
+
+    --CLIENT CONFIGS
+
+    REDUCED_TORNADO_VFX = GetModConfigData("um_storms_over", true),
 }
 
 -- [              DST Related Overrides                  ]
@@ -401,6 +422,13 @@ if GetModConfigData("wixie_walter") then
 
     TUNING.WOBY_SMALL_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_SMALL_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2
+	
+	TUNING.WOBY_BIG_SPEED =
+        {
+            FAST = 12,
+            MEDIUM = 11,
+            SLOW = 10
+        }
 
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = { "walterhat", "meatrack_hat", "meat", "monstermeat" }
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = { "slingshot", "slingshotammo_rock", "slingshotammo_rock",
@@ -522,3 +550,23 @@ if GetModConfigData("heatwaves") then
     TUNING.WILDFIRE_CHANCE = TUNING.WILDFIRE_CHANCE * 10 --testing, fuck it why not?!
     TUNING.WILDFIRE_RETRY_TIME = TUNING.WILDFIRE_RETRY_TIME * 0.5
 end
+
+if GetModConfigData("changed_shadowpieces") then
+	TUNING.SHADOW_BISHOP.ATTACK_RANGE = {8, 10, 12}
+	TUNING.SHADOW_BISHOP.ATTACK_PERIOD = {14, 15, 16}
+	--TUNING.SHADOW_BISHOP.HIT_RANGE = 2.5 --NUH UH
+	TUNING.SHADOW_BISHOP.DAMAGE = {15, 25, 35}
+	TUNING.SHADOW_KNIGHT.ATTACK_RANGE = 3.2
+	TUNING.SHADOW_KNIGHT.ATTACK_RANGE_LONG = 4
+	TUNING.SHADOW_KNIGHT.HEALTH = {600, 1800, 5400}
+	TUNING.SHADOW_KNIGHT.ATTACK_PERIOD = {3.5, 2.5, 1.5} --evilishly low
+end
+
+
+--flingo emergency buff
+
+TUNING.EMERGENCY_BURNT_NUMBER = 1
+TUNING.EMERGENCY_BURNING_NUMBER = 1 -- number of fires to maintain warning level one automatically
+TUNING.EMERGENCY_WARNING_TIME = 3   -- minimum length of warning period
+TUNING.EMERGENCY_RESPONSE_TIME = 30 -- BURNT_NUMBER structures must burn within this time period to trigger flingomatic emergency response
+TUNING.EMERGENCY_SHUT_OFF_TIME = 10 -- stay on for this length of time

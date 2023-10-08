@@ -1,4 +1,4 @@
-name = "󰀕 [BETA] Uncompromising Mode"
+name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then
@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 description = [[
-󰀔 [ Version 1.1.9.1: "Under the Weather Pt.1" ]
+󰀔 [ Version 1.4.1.1: "Under the Weather Pt.1" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
@@ -20,7 +20,12 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Under the Weather Pt.1 v1.1.9.1"
+version = "Under the Weather Pt.1 v1.4.1.1"
+-- VERSION SCHEME
+-- first num is major release (e.g. "Under the weather", so, 2, UTW2 will be 3, and so on.) DO NOT BRING THIS NUMBER *DOWN* AGAIN PLEASE
+-- second is new content (something like a new large addition)
+-- third is minor (minor things like tweaks and some fixes)
+-- fourth is hotfix (bug fixes, very tiny misc changes)
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
@@ -46,6 +51,7 @@ priority = -10
 ------------------------------
 -- local functions to makes things prettier
 
+---@param title string
 local function Header(title)
     return {
         name = "",
@@ -66,6 +72,10 @@ local function SkipSpace()
     }
 end
 
+---@param name string
+---@param label string
+---@param hover string
+---@param default boolean
 local function BinaryConfig(name, label, hover, default)
     return {
         name = name,
@@ -90,6 +100,10 @@ configuration_options = {
     ------------------------------
     -- Core Gameplay --
     ------------------------------
+
+    Header("Client-Side"),
+    BinaryConfig("um_storms_over", "Tornadoes: Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false),
+
     Header("Mod Compatibility"),
     BinaryConfig("worldgenmastertoggle", "Worldgen Master Toggle", "Toggles ALL worldgen.", true),
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods.",
@@ -100,13 +114,14 @@ configuration_options = {
 
     Header("In Development"),
     BinaryConfig("ck_loot", "Additional Crab King Loot",
-        "Crab King now drops unique loot based on the gems used.\nMissing art assets.", true),
+        "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
     SkipSpace(),
 
     Header("Core Gameplay"),
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
+    BinaryConfig("maxhungerdamage", "Max Health Starving Damage", "Starving will deal max health damage after a brief delay.", true),
     BinaryConfig("caved", "[IMPORTANT] Cave Config",
         "Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
         true),
@@ -169,18 +184,16 @@ configuration_options = {
             {
                 description = "Dynamic",
                 hover = "Bosses change their resistance based on hits taken.",
-                data =
-                "Dynamic"
+                data = 1
             },
             {
                 description = "Static",
                 hover = "Bosses change their resistance based on nearby players.",
-                data =
-                "Static"
+                data = 2
             },
-            { description = "Disabled", data = false } },
-        default =
-        "dynamic"
+            { description = "Disabled", data = 3 },
+        },
+        default = 1,
     },
     {
         name = "vetcurse",
@@ -207,7 +220,7 @@ configuration_options = {
     BinaryConfig("wixie_walter", "Wixie & Walter Rework",
         "Enable Uncompromising Mode's Wixie, the Delinquent, who expands on Walter's slingshot, while Walter gets new interactions and mechanics with Woby!",
         true),
-    BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),
+    --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),
     BinaryConfig("holy fucking shit it's wathom", "Wathom", "Enable Uncompromising Mode's Wathom, the Forgotten Parody.",
         true),
     BinaryConfig("wathom_maxdmg", "Wathom: Damage Cap",
@@ -242,30 +255,53 @@ configuration_options = {
         default = true
     },
     BinaryConfig("willow", "Willow",
-        "Willow's Lighter now lasts forever when she holds it, and she will retaliate when attacked by shadows.", true),
+        "Willow's Lighter now lasts forever when she holds it, and she will retaliate when attacked by shadows.", true),	
+	BinaryConfig("willow insulation", "Willow's Experimental Insulation",
+		"Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
     BinaryConfig("bernie_buffs", "Willow: Bernie Buffs",
         "Bernie has 80% resistance against shadows\nHolding Bernie prevents shadows from aggro'ing.", true),
-    BinaryConfig("warly", "Warly",
-        "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.",
-        true),
-    BinaryConfig("warly_butcher", "Experimental Warly's Butchering",
-        "Warly is a certified butcher, he can sometimes get more resources from his kills.", true),
+    BinaryConfig("wolfgang", "Experimental Wolfgang",
+        "Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
+    BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
+    BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),		
+    BinaryConfig("wickerbottom", "Wickerbottom: Sane Reading",
+        "Wickerbottom/Maxwell can no longer read books while insane.", true),
+    BinaryConfig("on tentacles", "Wickerbottom: On Tentacles",
+        "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
+    BinaryConfig("applied horticulture", "Wickerbottom: Horticulture, Abr.",
+		"\"Horticulture, Abridged\" now takes 1 Leafy Meat, instead of 5 seeds.", true),
+    BinaryConfig("horticulture, expanded", "Wickerbottom: Horticulture, Exp.",
+        "\"Horticulture, Expanded\" now grows 20 plants, instead of 15. Now takes a Tree Jam, instead of a Feather Pencil.", true),
+    BinaryConfig("the angler", "Wickerbottom: The Angler's",
+		"\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
+	BinaryConfig("lux aeterna", "Wickerbottom: Lux and Redux",
+        "\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer. \"Lux Aeterna Redux\" now takes a Glow Berry, instead of a Feather Pencil. ", true),
+    BinaryConfig("lunar grimoire", "Wickerbottom: Lunar Grimoire",
+		"\"Lunar Grimoire\" now has 4 uses and mutates things around you. Now takes 2 Moon Rocks and 2 Moon Shrooms.", true),
+    BinaryConfig("apicultural notes", "Wickerbottom: Apicultural Notes",
+        "\"Apicultural Notes\" now adds 1 Honey to up to 20 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),
+    BinaryConfig("wicker_inv_regen", "Wickerbottom: Inventory Regen.",
+		"Wicker's books now regenerate in her inventory, instead of the Bookcase. Bookcase now takes 4 Boards, instead of 2 Living Logs.", false),
     BinaryConfig("waxwell", "Maxwell",
         "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!",
         true),
     --	BinaryConfig("wolfgang", "Improved/Balanced Wolfgang", "Wolfgang gains new perks and downsides. Read the patch notes included in the mod folder or workshop for details.", false),
     BinaryConfig("wigfrid", "Wigfrid", "Reduced Wigfrids combat leeching effect to more balanced levels.", true),
-    BinaryConfig("wolfgang", "Experimental Wolfgang",
-        "Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
     BinaryConfig("winonaworker", "Winona: Faster Working",
         "Winona now scales her work/picking efficiency, and tool/weapon durability, off of her hunger level. Drains hunger when taking actions.",
         true),
-    BinaryConfig("winonawackycats", "Experimental Winona Catapults",
-        "Catapults no longer regenerate, have reduced health, and deal 34 AOE damage.", false),
+	BinaryConfig("winona_portables_", "Winona: Portable Structures",
+        "Makes Winona's structures portable and changes what can be stored into Winona's Toolbox depending if it's enabled or not.", true),
     BinaryConfig("winona_gen_", "Winona: Generators",
         "Limits access to Winona's Generators to only allow her to use them.", false),
-    BinaryConfig("winona_portables_", "Winona: Portable Structures",
-        "Makes Winona's structures portable, and reworks the toolbox into the Contraption Container.", true),
+	BinaryConfig("winonawackycats", "Experimental Winona Catapults",
+        "Catapults no longer regenerate, have reduced health, and deal 34 AOE damage.", false),
+    BinaryConfig("warly_food_taste_", "Warly's Food Taste",
+        "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.",
+        true),
+    BinaryConfig("warly_butcher_", "Warly's Butchering",
+        "Warly is a certified butcher, he will get more resources from kills in his inventory.",
+        true),
     {
         name = "wortox",
         label = "Wortox",
@@ -284,25 +320,6 @@ configuration_options = {
         default =
         "UMNERF"
     },
-    BinaryConfig("wickerbottom", "Wickerbottom: Sane Reading",
-        "Wickerbottom/Maxwell can no longer read books while insane.", true),
-    BinaryConfig("on tentacles", "Wickerbottom: On Tentacles",
-        "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
-    -- BinaryConfig("applied horticulture", "Wickerbottom: Horticulture, Abr.",
-    -- "\"Horticulture, Abridged\" now takes 1 Leafy Meat instead of 5 seeds, to better balance it from being too easily spammable early game.",
-    -- true),
-    BinaryConfig("horticulture, expanded", "Wickerbottom: Horticulture, Exp.",
-        "\"Horticulture, Expanded\" now grows 20 plants, instead of 15.", true),
-    BinaryConfig("lux aeterna", "Wickerbottom: Lux and Redux",
-        "\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer.", true),
-    BinaryConfig("lunar grimoire", "Wickerbottom: Lunar Grimoire", "\"Lunar Grimoire\" now mutates things around you.",
-        true),
-    BinaryConfig("apicultural notes", "Wickerbottom: Apicultural Notes",
-        "\"Apicultural Notes\" now fills Bee Boxes around you to max.", true),
-    BinaryConfig("book_recipes", "Wickerbottom: Recipe Tweaks", "Changes some book recipes to be slightly more balanced.",
-        true),
-    BinaryConfig("wanda_nerf", "Wanda",
-        "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
     BinaryConfig("wormwood_extrafiredmg", "Wormwood: Extra Fire Damage",
         "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x.", true),
     BinaryConfig("wormwood_trapbuffs", "Wormwood: Trap Buffs",
@@ -310,8 +327,8 @@ configuration_options = {
         true),
     BinaryConfig("wormwood_plants", "Wormwood: Planting Sanity", "Increases the sanity loss from digging plants by 5.",
         true),
-    BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
-    BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),
+    BinaryConfig("wanda_nerf", "Wanda",
+        "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
     SkipSpace(),
 
     ------------------------------
@@ -351,7 +368,7 @@ configuration_options = {
     BinaryConfig("winter_burning", "Harder Burning",
         "Winter makes it so setting stuff alight takes more time, and also finish burning faster.", true),
     SkipSpace(),
-
+	
     {
         name = "weatherhazard_spring",
         label = "Start Date for Spring weather",
@@ -362,23 +379,22 @@ configuration_options = {
             { description = "Third Year", data = 120 } },
         default = 5
     },
-    BinaryConfig("hayfever_disable", "Hayfever",
-        "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.",
-        false),
-    BinaryConfig("um_storms", "Tornadoes", "Tornadoes sweep across the land and kidnap your cows.", true),
+    BinaryConfig("um_storms", "Tornadoes", "Tornadoes sweep across the land, bringing heavy rain and lightning!", true),
     {
         name = "um_storms_performance",
         label = "Tornadoes: Less Lag",
         hover =
         "Simplifies some of tornadoes' interactions with the world to help with performance for lower-end systems.",
         options = {
-            { description = "Disabled",        data = "off", hover = "Tornado does everything."},
+            { description = "Disabled",        data = "off",     hover = "Tornado does everything." },
             { description = "Reduced Effects", data = "reduced", hover = "Simplified interactions, doesn't work off-screen." },
-            {description = "Minimal Effects", data = "minimal", hover = "Removes all direct non-player interactions."},
-            default = "off"
+            { description = "Minimal Effects", data = "minimal", hover = "Removes all direct non-player interactions." },
         },
-
+        default = "off"
     },
+    BinaryConfig("hayfever_disable", "[BROKEN] Hayfever",
+        "Hayfever makes a return from Hamlet, but tweaked so it doesn't make you want to die. Prevent sneezing with antihistamines and certain hats.",
+        false),
     SkipSpace(),
 
     {
@@ -396,11 +412,12 @@ configuration_options = {
     BinaryConfig("hotcaves", "Hotter Caves", "During Summer, caves are just hot enough to overheat you without any gear.",
         true),
     BinaryConfig("heatwaves", "Heat Waves",
-        "Heat waves at as a summer counterpart to snowstorms.\nWhile they don't do much on their own, aside from the temperature increase, they interact with Smog and Pyre Nettles.",
+        "Heat waves act as a summer counterpart to snowstorms.\nWhile they don't do much on their own, aside from the temperature increase, they interact with Smog and Pyre Nettles.",
         true),
     BinaryConfig("pyrenettles", "Pyre Nettles", "Pyre Nettles are a new invasive plant that grows with heat.", true),
     BinaryConfig("smog", "Smog",
         "Burning plants in summer releases large quantities of smoke. Meant to interact with heatwaves.", true),
+	BinaryConfig("maxtempdamage", "Max Health Temperature Damage", "Freezing and Overheating will deal max health damage after a brief delay.", true),
     SkipSpace(),
 
     --[[ This section disabled until we actually use it.
@@ -573,7 +590,7 @@ configuration_options = {
     BinaryConfig("hambatnerf", "Ham Bat Nerf", "Spoils faster and minimum damage is lower.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
-    BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Beefalo take half of the damage taken, instead of all.", false),
+    BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Beefalo take half of the damage taken, instead of all.", true),
     SkipSpace(),
 
     -----------------------------
@@ -615,7 +632,7 @@ configuration_options = {
     Header("General Food Tweaks"),
     BinaryConfig("monstersmallmeat", "Monster Morsel",
         "Small creatures like Spiders drop monster morsels instead of Monster Meat.", true),
-    BinaryConfig("nowintergrowing", "No Winter Growing",
+    BinaryConfig("no_winter_growing", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
     BinaryConfig("beebox_nerf", "Bee Box Nerf", "Bee Boxes only release 2 Bees max.", true),
     {
@@ -734,6 +751,9 @@ configuration_options = {
     BinaryConfig("trepidations", "Ancient Trepidations",
         "Enabling this allows Trepidations to roam the halls of the ruins during the Nightmare Phase, seeking out the weak of mind.",
         true),
+    BinaryConfig("nodespawn_trepidation", "Harder Trepidations",
+        "Enabling this will prevent the Ancient Trepidation from despawning after the Nightmare Phase calms down.",
+        false),
     BinaryConfig("pawns", "Clockwork Pawns",
         "Enabling this allows Pawns to patrol the depths of the caves, drawing unwanted attention to the foolish and lost.",
         true),
@@ -744,7 +764,7 @@ configuration_options = {
     Header("Misc Monsters"),
     BinaryConfig("pigking_guards", "Pig King Guards",
         "Pig King now has neutral guards watching for any suspicious activity.", true),
-    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
+    BinaryConfig("bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
     BinaryConfig("desertscorpions", "Scorpions",
         "Scorpions plague the Oasis Desert during Dusk and Night. They will spawn from Scorpion Holes spread around the biome.",
         true),
@@ -763,6 +783,7 @@ configuration_options = {
     BinaryConfig("angrypenguins", "Territorial Penguins", "Penguins will aggresively defend their land.", true),
     BinaryConfig("harder_pigs", "Harder Pigs", "Pigs have a new counter and charge attack.", true),
     BinaryConfig("angry_werepigs", "Angry Werepigs", "Werepigs prioritize attacking over eating.", true),
+    BinaryConfig("mermtweaks", "Merm Tweaks", "- Regular Merms can now leave their houses during winter, Merm Guards respawn slower.", true),
     BinaryConfig("harder_walrus", "Harder MacTusk", "MacTusk has a counter attack and can throw traps.", true),
     BinaryConfig("harder_beefalo", "Harder Beefalo", "Beefalo ocasionally charge after a telegraph.", true),
     BinaryConfig("harder_koalefants", "Harder Koalefants", "Koalefants have brand new attacks and doubled health.", true),
@@ -835,6 +856,8 @@ configuration_options = {
         "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
     BinaryConfig("reworked_ck", "Reworked Crab King",
         "Crab King has his main attack altered, freeze removed, and some new mechanics.", true),
+    BinaryConfig("changed_shadowpieces", "Shadow Pieces tweaks",
+		"Shadow Bishop has a different attack and Shadow Knight had his values changed.", true),
     SkipSpace(),
 
     Header("Boss Quality of Life"),
@@ -956,6 +979,8 @@ configuration_options = {
 
     --	Header("General"),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),
+    BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
+    BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     --	BinaryConfig("boat_go_vroom", "Boat Tweak", "Allows greater player agency in directing boats.", false),
     --	BinaryConfig("self_combusting_traps", "Burningable Traps", "Back by unpopular demand! Conceptually expanded.", false),
     --	BinaryConfig("rat_arson", "Illegalize Rats", "Rats are now illegal. Please inform them of this.", false),

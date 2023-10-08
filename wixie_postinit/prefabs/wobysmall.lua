@@ -115,7 +115,7 @@ local function CheckForMoreTargets(inst)
 				
 	for i, v in ipairs(ents) do
 		if inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst.wobytarget:HasTag("outofreach") and not inst.wobytarget:HasTag("INLIMBO") or inst.components.hunger:GetPercent() == 0 then
- 			if inst._playerlink ~= nil and inst._playerlink:IsValid() and inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst._playerlink:IsNear(inst.wobytarget, 25) then
+ 			if inst._playerlink ~= nil and inst._playerlink:IsValid() and inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst._playerlink:IsNear(inst.wobytarget, 35) then
 				inst.oldwobytarget = inst.wobytarget
 				inst.wobytarget = nil
 			end
@@ -124,7 +124,7 @@ local function CheckForMoreTargets(inst)
 		end
 				
 		if v ~= nil and not v:HasTag("INLIMBO") and inst.oldwobytarget ~= nil and v ~= inst.oldwobytarget and v.prefab == inst.oldwobytarget.prefab and v:IsValid() then
-			if v.components.pickable == nil and v.components.harvestable == nil or v.components.pickable ~= nil and v.components.pickable.canbepicked or v.components.harvestable ~= nil and v.components.harvestable:CanBeHarvested() and v.components.combat == nil then
+			if v.components.pickable == nil and v.components.harvestable == nil or v.components.pickable ~= nil and v.components.pickable.canbepicked and v.components.pickable.caninteractwith or v.components.harvestable ~= nil and v.components.harvestable:CanBeHarvested() and v.components.combat == nil then
 				if v.components.inventoryitem then
 					for k = 1, inst.components.container.numslots do
 						if inst.components.container:GetItemInSlot(k) ~= nil and inst.components.container:GetItemInSlot(k).prefab == v.prefab and inst.components.container:GetItemInSlot(k).components.stackable ~= nil and not inst.components.container:GetItemInSlot(k).components.stackable:IsFull() then
@@ -153,6 +153,7 @@ env.AddPrefabPostInit("wobysmall", function(inst)
 	inst:AddTag("customwobytag")
 	inst:AddTag("noauradamage")
 	inst:AddTag("tiddlevirusimmune")
+    inst:AddTag("notraptrigger")
 	
 	if not TheWorld.ismastersim then
 		return
@@ -189,6 +190,21 @@ env.AddPrefabPostInit("wobysmall", function(inst)
 	if inst.components.inspectable ~= nil then
 		inst.components.inspectable.getstatus = inspect_woby
 	end
+	
+	if inst.components.health ~= nil then
+		inst.components.health.canheal = false
+	end
+
+	inst:ListenForEvent("woby_dropped_item", function(inst, data)
+		if inst._playerlink ~= nil and inst._playerlink.components.health ~= nil and not inst._playerlink.components.health:IsDead() then
+			if data.dropped_item == nil or data.dropped_item ~= nil and not data.dropped_item:HasTag("heavy") then
+				inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_WOBY_TOOFULL"))
+			end
+			
+			inst.wobytarget = nil
+			inst.oldwobytarget = nil
+		end
+	end)
 	
 	inst:DoPeriodicTask(2, CheckForMoreTargets)
 end)

@@ -28,7 +28,7 @@ local function Init(inst)
 
         inst.Advance_Task = inst:ListenForEvent("animover", Advance_Full)
 
-        SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOn"), nil)
+        --SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleLagCompOn"), nil)
         inst.is_full = true
     else
         Advance_Full(inst)
@@ -199,7 +199,7 @@ end
 
 
 local function PickItem(item, inst)
-    if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" and item:IsValid() then
+    if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" and item:IsValid() and not item:HasTag("heavy") then
         inst.components.inventory:GiveItem(item)
         local stacksize = item.components.stackable ~= nil and item.components.stackable:StackSize() or 1
 
@@ -238,7 +238,7 @@ local function TornadoEnviromentTask(inst)
     if config ~= "minimal" then
         -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
         -- PICKABLES
-        local pickables = TheSim:FindEntities(x, y, z, 12, { "pickable" }, { "INLIMBO", "trap" })
+        local pickables = TheSim:FindEntities(x, y, z, 12, { "pickable" }, { "INLIMBO", "trap", "flower" })
         for k, v in ipairs(pickables) do
             if v.components.pickable:CanBePicked() then
                 if not v:IsAsleep() and not config == "reduced" then
@@ -253,7 +253,7 @@ local function TornadoEnviromentTask(inst)
         end
 
         -- WORKING
-        local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable", "INLIMBO", "trap" },
+        local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable"},
             { "DIG_workable", "CHOP_workable" })
 
         for k, v in ipairs(workables) do
@@ -277,9 +277,10 @@ local function TornadoEnviromentTask(inst)
         -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
         local items_suck = config == "reduced" and
             TheSim:FindEntities(x, y, z, 12, { "_inventoryitem" },
-                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO" }) or
+                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy" }) or
             TheSim:FindEntities(x, y, z, 40, { "_inventoryitem" },
-                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO" })
+                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy" })
+
         local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
         local angle_deviation = config == "reduced" and (66 * RADIANS) or 0
         for k, v in pairs(items_suck) do
@@ -306,7 +307,7 @@ local function TornadoEnviromentTask(inst)
 
         -- ITEM PICKING
         local items_pick = TheSim:FindEntities(x, y, z, 4, { "_inventoryitem" },
-            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO" })
+            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy" })
         for k, v in ipairs(items_pick) do
             if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
                 if config == "reduced" and v:IsAsleep() then
@@ -374,7 +375,8 @@ local function TornadoItemTossTask(inst)
             x = x + math.random(-10, 10)
             z = z + math.random(-10, 10)
         end
-        if #inst.components.inventory.itemslots ~= 0 and x ~= nil then
+
+        if #inst.components.inventory.itemslots ~= 0 and x ~= nil and TheWorld.Map:IsPassableAtPoint(x, 0, z) then
             local item =
                 inst.components.inventory.itemslots
                 [math.random(#inst.components.inventory.itemslots)]
@@ -453,17 +455,18 @@ local function TornadoTask(inst)
     if inst.startmoving then
         local x, y, z = inst.Transform:GetWorldPosition()
         local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
-
         local players = TheSim:FindEntities(x, y, z, 300, nil, { "playerghost" }, { "player", "um_windturbine" })
 
-        if math.random() > 0.9 then
+        if math.random() > 0.99 and config ~= "minimal" then
             local lightning = SpawnPrefab("hound_lightning")
             lightning.Transform:SetPosition(x + math.random(-300, 300), 0, z + math.random(-300, 300))
+            lightning.NoTags = { "INLIMBO", "shadow", "structure", "wall", "companion", "abigail", "bird", "prey" }
             lightning.Delay = 1.5
         end
 
         for k, v in pairs(players) do
             local px, py, pz = v.Transform:GetWorldPosition()
+            print("player loc" .. px, py, pz)
 
             if v:HasTag("player") or v:HasTag("um_windturbine") then
                 v:AddTag("under_the_weather")
@@ -483,9 +486,11 @@ local function TornadoTask(inst)
             if not v:HasTag("um_windturbine") then
                 if not v:HasTag("um_windturbine") then
                     if math.random() > 0.99 then
-                        local lightning = SpawnPrefab("hound_lightning")
-                        lightning.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-                        lightning.Delay = 1.5
+                        local lightning_targeted = SpawnPrefab("hound_lightning")
+                        lightning_targeted.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
+                        lightning_targeted.NoTags = { "INLIMBO", "shadow", "structure", "wall", "companion", "abigail", "bird",
+                            "prey" }
+                        lightning_targeted.Delay = 1.5
                     end
 
                     if v ~= nil and v:IsValid() and v:HasTag("player") and v.sg ~= nil and not v.sg:HasStateTag("gotgrabbed") and v:GetDistanceSqToInst(inst) < 300 or v.prefab ~= "bullkelp_beachedroot" and v.components.inventoryitem ~= nil and v:GetDistanceSqToInst(inst) < 600 and not v:HasTag("tornado_nosucky") or v.components.oceanfishable ~= nil and not v:HasTag("INLIMBO") then
@@ -579,7 +584,8 @@ local function TornadoTask(inst)
 
                     for k, v in ipairs(inst.components.inventory.itemslots) do
                         local item = inst.components.inventory:RemoveItem(v)
-                        Launch2(item, inst, 2, 2, 5, 0, 10, math.random(360))
+                        local pos = getrandomposition(inst)
+                        item.Transform:SetPosition(pos.x + math.random(-8, 8), pos.y, pos.z + math.random(-8, 8))
                     end
 
                     if destination ~= nil then
@@ -602,7 +608,8 @@ local function TornadoTask(inst)
                 inst:ListenForEvent("animover", function()
                     for k, v in ipairs(inst.components.inventory.itemslots) do
                         local item = inst.components.inventory:RemoveItem(v)
-                        Launch2(item, inst, 2, 2, 5, 0, 10)
+                        local pos = getrandomposition(inst)
+                        item.Transform:SetPosition(pos.x + math.random(-8, 8), pos.y, pos.z + math.random(-8, 8))
                     end
 
                     inst.startmoving = false
@@ -614,7 +621,7 @@ local function TornadoTask(inst)
             end
         end
 
-        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) then
+        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) and not TestForIA() then
             inst.whirlpool = SpawnPrefab("um_whirlpool")
             inst.whirlpool.entity:SetParent(inst.entity)
             inst.whirlpool.Transform:SetPosition(0, 0, 0)
@@ -664,6 +671,10 @@ local function fn()
         return inst
     end
 
+    if not TUNING.DSTU.STORMS then
+        inst:DoTaskInTime(0, inst.Remove)
+    end
+
     inst.Advance_Task = nil
     inst.is_full = false
     inst.danumber = 0
@@ -682,10 +693,10 @@ local function fn()
     inst.components.inventory.maxslots = 100
     inst:DoTaskInTime(0, Init)
 
-    inst:DoPeriodicTask(30, function(inst)
+    --[[inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("um_tornado_destination_marker2").Transform:SetPosition(x, 0, z)
-    end)
+    end)]]
 
     if config ~= "minimal" then
         inst:DoPeriodicTask(5, TornadoItemTossTask)
@@ -829,10 +840,10 @@ local function cavefn()
 
     inst:DoPeriodicTask(5, TrySpawnWaterfall)
 
-    inst:DoPeriodicTask(30, function(inst)
+    --[[inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("um_tornado_destination_marker2").Transform:SetPosition(x, 0, z)
-    end)
+    end)]]
 
     return inst
 end
@@ -905,10 +916,10 @@ local function destfn()
 
     inst:DoPeriodicTask(1, MoveDestination)
 
-    inst:DoPeriodicTask(30, function(inst)
+    --[[inst:DoPeriodicTask(30, function(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab(inst.marker).Transform:SetPosition(x, 0, z)
-    end)
+    end)]]
 
     inst.OnSave = OnSave_Dest
     inst.OnLoad = OnLoad_Dest

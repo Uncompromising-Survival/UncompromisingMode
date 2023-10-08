@@ -45,7 +45,7 @@ local function Zap(inst)
 					
 				local damage = -10 * mult
 				
-				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not insulated then
+				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") and not v:HasTag("playerghost") then
 					v.sg:GoToState("electrocute")
 				end
 						
@@ -86,13 +86,12 @@ local function fn()
 
 	inst.NoTags = { "INLIMBO", "shadow", "structure", "wall" }
 
-	Sparks(inst)
-
 	inst.task = inst:DoPeriodicTask(0.05, Sparks)
 
-	inst.SoundEmitter:PlaySound("dontstarve/rain/thunder_far")
 	inst:DoTaskInTime(0, function() --modern problems require modern solutions
 		-- need this or else when something sets inst.Delay the task will already have started with 1.
+		inst.SoundEmitter:PlaySound("dontstarve/rain/thunder_far")
+		Sparks(inst)
 		inst:DoTaskInTime(inst.Delay ~= nil and inst.Delay or 1, Zap)
 	end)
 	return inst

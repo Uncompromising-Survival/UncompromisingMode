@@ -26,11 +26,11 @@ local function NewRetargetfn(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() then
         return FindEntity(inst, TUNING.FROG_TARGET_DIST, function(guy) 
             if not guy.components.health:IsDead() then
-                return guy.components.inventory ~= nil
+                return guy.components.inventory ~= nil and inst._um_oldretarget
             end
         end,
         {"_combat","_health"}, -- see entityreplica.lua
-        {"frog","toadstool","toad", "merm"} -- see entityreplica.lua
+        {"frog","toadstool","toad", "merm", "bird", "invisible", "wall", "structure"} -- see entityreplica.lua
         )
     end
 end
@@ -46,7 +46,11 @@ env.AddPrefabPostInit("frog", function (inst)
     end
 
 	if inst.components.combat ~= nil then
-		inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
+		if inst.components.combat.targetfn ~= nil then
+			inst._um_oldretarget = inst.components.combat.targetfn
+		
+			inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
+		end
 	end
 	
 	if not inst.components.eater then
@@ -56,7 +60,16 @@ env.AddPrefabPostInit("frog", function (inst)
 		inst.components.eater:SetCanEatRaw()
 		inst.components.eater.strongstomach = true -- can eat monster meat!
 	end
-
+	
+	if not inst.components.inventory then
+		inst:AddComponent("inventory")
+	end
+	
+	if not inst.components.um_dynamic_digester then
+		inst:AddComponent("um_dynamic_digester")
+		inst.components.um_dynamic_digester.digesttime = 5
+		inst.components.um_dynamic_digester.digest_per = 20
+	end
 end)
 
 env.AddPrefabPostInit("uncompromising_toad", function (inst)
@@ -71,5 +84,14 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
 		inst.components.eater:SetCanEatRaw()
 		inst.components.eater.strongstomach = true -- can eat monster meat!
 	end
-
+	
+	if not inst.components.inventory then
+		inst:AddComponent("inventory")
+	end
+	
+	if not inst.components.um_dynamic_digester then
+		inst:AddComponent("um_dynamic_digester")
+		inst.components.um_dynamic_digester.digesttime = 5
+		inst.components.um_dynamic_digester.digest_per = 20
+	end
 end)

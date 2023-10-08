@@ -26,7 +26,8 @@ if TUNING.DSTU.WICKERNERF_TENTACLES then
                     local result_offset = FindValidPositionByFan(theta, radius, 12, function(offset)
                         local pos = pt + offset
                         -- NOTE: The first search includes invisible entities
-                        return #TheSim:FindEntities(pos.x, 0, pos.z, 1, nil, {"INLIMBO", "FX"}) <= 0 and TheWorld.Map:IsPassableAtPoint(pos:Get()) and TheWorld.Map:IsDeployPointClear(pos, nil, 1)
+                        return #TheSim:FindEntities(pos.x, 0, pos.z, 1, nil, { "INLIMBO", "FX" }) <= 0 and
+                            TheWorld.Map:IsPassableAtPoint(pos:Get()) and TheWorld.Map:IsDeployPointClear(pos, nil, 1)
                     end)
 
                     if result_offset ~= nil then
@@ -53,6 +54,8 @@ if TUNING.DSTU.WICKERNERF_TENTACLES then
         if not TheWorld.ismastersim then
             return
         end
+
+        inst.components.book:SetReadSanity(-TUNING.SANITY_LARGE)
 
         if inst.components.book ~= nil then
             inst.components.book.onread = newtentacles
@@ -116,8 +119,9 @@ if TUNING.DSTU.WICKERBUFF_LIGHT then
 end
 
 if TUNING.DSTU.WICKERBUFF_HORTICULTURE then
-    local HORTICULTURE_ONEOF_TAGS = {"plant", "lichen", "oceanvine", "mushroom_farm", "kelp"}
-    local HORTICULTURE_CANT_TAGS = {"magicgrowth", "player", "FX", "leif", "pickable", "stump", "withered", "barren", "INLIMBO", "silviculture", "tree", "winter_tree"}
+    local HORTICULTURE_ONEOF_TAGS = { "plant", "lichen", "oceanvine", "mushroom_farm", "kelp" }
+    local HORTICULTURE_CANT_TAGS = { "magicgrowth", "player", "FX", "leif", "pickable", "stump", "withered", "barren",
+        "INLIMBO", "silviculture", "tree", "winter_tree" }
 
     local function MaximizePlant(inst)
         if inst.components.farmplantstress ~= nil then
@@ -130,13 +134,13 @@ if TUNING.DSTU.WICKERBUFF_HORTICULTURE then
             local x, y = TheWorld.Map:GetTileCoordsAtPoint(_x, _y, _z)
 
             local nutrient_consumption = inst.plant_def.nutrient_consumption
-            TheWorld.components.farming_manager:AddTileNutrients(x, y, nutrient_consumption[1] * 6, nutrient_consumption[2] * 6, nutrient_consumption[3] * 6)
+            TheWorld.components.farming_manager:AddTileNutrients(x, y, nutrient_consumption[1] * 6,
+                nutrient_consumption[2] * 6, nutrient_consumption[3] * 6)
         end
     end
 
     local function trygrowth(inst, maximize)
         if not inst:IsValid() or inst:IsInLimbo() or (inst.components.witherable ~= nil and inst.components.witherable:IsWithered()) then
-
             return false
         end
 
@@ -192,7 +196,6 @@ if TUNING.DSTU.WICKERBUFF_HORTICULTURE then
                     return true
                 end
             end
-
         end
 
         return false
@@ -271,8 +274,9 @@ if TUNING.DSTU.WICKERNERF_MOONBOOK then
 
     local function OnRead_moon(inst, reader)
         local x, y, z = reader.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 16, nil, {"player", "playerghost", "INLIMBO", "dead"}, {"halloweenmoonmutable", "werebeast"})
-        local woodies = TheSim:FindEntities(x, y, z, 16, {"wereness"}, {"playerghost", "INLIMBO", "dead"})
+        local ents = TheSim:FindEntities(x, y, z, 8, nil, { "player", "playerghost", "INLIMBO", "dead" },
+            { "halloweenmoonmutable", "werebeast" })
+        local woodies = TheSim:FindEntities(x, y, z, 8, { "wereness" }, { "playerghost", "INLIMBO", "dead" })
         local found = false
 
         for k, v in ipairs(ents) do
@@ -328,25 +332,32 @@ if TUNING.DSTU.WICKERNERF_MOONBOOK then
             return
         end
 
+        inst.components.book:SetReadSanity(-TUNING.SANITY_HUGE)
+
         if inst.components.book ~= nil then
             inst.components.book:SetOnRead(OnRead_moon)
             inst.components.book:SetOnPeruse(OnPerUse_moon)
+        end
+
+        if inst.components.finiteuses ~= nil then
+            inst.components.finiteuses:SetMaxUses(3)
+            inst.components.finiteuses:SetUses(3)
         end
     end)
 end
 
 local function OnRead_bees(inst, reader)
     local x, y, z = reader.Transform:GetWorldPosition()
-    local beeboxes = TheSim:FindEntities(x, y, z, 16, nil, nil, {"beebox", "beebox_hermit"}, {"burnt", "INLIMBO"})
+    local beeboxes = TheSim:FindEntities(x, y, z, 16, nil, nil, { "beebox", "beebox_hermit" }, { "burnt", "INLIMBO" })
     local found = false
 
     for k, v in ipairs(beeboxes) do
-        if k > 20 then
+        if k > 10 then
             break
         end
         local x, y, z = v.Transform:GetWorldPosition()
-			
-        if (v.components.harvestable.maxproduce - v.components.harvestable.produce) ~= 0 and not TheWorld.state.iswinter then
+
+        if (v.components.harvestable.maxproduce - v.components.harvestable.produce) ~= 0 and not TheWorld.state.iswinter and not TheWorld.state.isdusk and not TheWorld.state.isnight then
             v.components.harvestable:Grow(1)
             local fx = SpawnPrefab("fx_book_bees")
             fx.Transform:SetPosition(x, y, z)
@@ -365,39 +376,95 @@ if TUNING.DSTU.WICKERNERF_BEEBOOK then
             return
         end
 
+        inst.components.book:SetReadSanity(-TUNING.SANITY_HUGE)
+
         if inst.components.book ~= nil then
             inst.components.book:SetOnRead(OnRead_bees)
+        end
+
+        if inst.components.finiteuses ~= nil then
+            inst.components.finiteuses:SetMaxUses(5)
+            inst.components.finiteuses:SetUses(5)
         end
     end)
 end
 
 local function WickerCaresForHerBooks(inst)
-    for k,v in pairs(inst.components.inventory.itemslots) do
+    for k, v in pairs(inst.components.inventory.itemslots) do
         if v:HasTag("book") and v.components.finiteuses then
             local percent = v.components.finiteuses:GetPercent()
             if percent < 1 then
-                v.components.finiteuses:SetPercent(math.min(1, percent + TUNING.BOOKSTATION_RESTORE_AMOUNT))
+                v.components.finiteuses:SetPercent(math.min(1, percent + 0.01))
             end
         end
     end
 end
 
-env.AddPrefabPostInit("wickerbottom", function(inst) 
+
+if TUNING.DSTU.WICKER_INV_REGEN then
+    env.AddPrefabPostInit("wickerbottom", function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
+        inst:DoPeriodicTask(TUNING.BOOKSTATION_RESTORE_TIME, WickerCaresForHerBooks)
+    end)
+
+    env.AddPrefabPostInit("bookstation", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        inst:ListenForEvent("itemget", function(inst)
+            inst:DoTaskInTime(0, function()
+                if inst.RestoreTask ~= nil then
+                    inst.RestoreTask:Cancel()
+                end
+                inst.RestoreTask = nil
+            end)
+        end)
+    end)
+end
+
+env.AddPrefabPostInit("book_rain", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    inst:DoPeriodicTask(TUNING.BOOKSTATION_RESTORE_TIME, WickerCaresForHerBooks)
-end)
 
-env.AddPrefabPostInit("bookstation", function(inst)
-    if not TheWorld.ismastersim then return end
+    local _OnRead = inst.components.book.onread
 
-    inst:ListenForEvent("itemget", function(inst)
-        inst:DoTaskInTime(0, function()
-            if inst.RestoreTask ~= nil then
-                inst.RestoreTask:Cancel()
+    inst.components.book.onread = function(inst, reader)
+        if reader:HasTag("under_the_weather") then
+            local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
+            local tornado = TheSim:FindFirstEntityWithTag("um_tornado")
+
+            if destination ~= nil then
+                if destination.danumber ~= nil then
+                    tornado.danumber = destination.danumber
+
+                    if tornado.resetdanumber_task ~= nil then
+                        tornado.resetdanumber_task:Cancel()
+                    end
+
+                    tornado.resetdanumber_task = nil
+
+                    tornado.resetdanumber_task = tornado:DoTaskInTime(30, function()
+                        if tornado.resetdanumber_task ~= nil then
+                            tornado.resetdanumber_task:Cancel()
+                        end
+
+                        tornado.resetdanumber_task = nil
+                        tornado.danumber = 0
+                    end)
+                end
             end
-            inst.RestoreTask = nil
-        end)
-    end)
+
+            reader:DoTaskInTime(1, function(inst)
+                inst.components.talker:Say("This should steer the extreme weather away from here.")
+            end)
+
+            return true
+        end
+        if _OnRead ~= nil then
+            return _OnRead(inst, reader)
+        end
+    end
 end)

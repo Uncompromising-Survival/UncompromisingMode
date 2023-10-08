@@ -221,13 +221,13 @@ local function HasWobyTarget(inst)
             inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
-			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and not inst.wobytarget:HasTag("snowpile_basic")) or
+			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith and not inst.wobytarget:HasTag("snowpile_basic")) or
 			-- Check for item to pick up		
 			(inst.wobytarget.components.inventoryitem ~= nil and inst.wobytarget.components.inventoryitem.canbepickedup and not inst.wobytarget.components.combat) or
 			-- Check for harvestable target	
 			(inst.wobytarget.components.harvestable ~= nil and inst.wobytarget.components.harvestable:CanBeHarvested()) or 
 			-- I'm big AF and I can dig things
-			(inst.wobytarget.components.workable ~= nil and inst.wobytarget.components.workable:GetWorkAction() == ACTIONS.DIG and (inst.wobytarget:HasTag("snowpile_basic") or inst.wobytarget.components.pickable ~= nil and not inst.wobytarget.components.pickable.canbepicked or not inst.wobytarget.components.pickable)) or 
+			(inst.wobytarget.components.workable ~= nil and inst.wobytarget.components.workable:GetWorkAction() == ACTIONS.DIG and (inst.wobytarget:HasTag("snowpile_basic") or (inst.wobytarget.components.pickable ~= nil and (not inst.wobytarget.components.pickable.canbepicked or not inst.wobytarget.components.pickable.caninteractwith)) or inst.wobytarget.components.pickable == nil)) or 
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
 			inst.wobytarget.components.combat:CanTarget(inst) and not
@@ -248,7 +248,7 @@ local function DoTargetAction(inst)
             inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
-			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and not inst.wobytarget:HasTag("snowpile_basic") and
+			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith and not inst.wobytarget:HasTag("snowpile_basic") and
 			BufferedAction(inst, inst.wobytarget, ACTIONS.PICK)) or
 			-- Check for item to pick up		
 			(inst.wobytarget.components.inventoryitem ~= nil and inst.wobytarget.components.inventoryitem.canbepickedup and not inst.wobytarget.components.combat and
@@ -257,7 +257,7 @@ local function DoTargetAction(inst)
 			(inst.wobytarget.components.harvestable ~= nil and inst.wobytarget.components.harvestable:CanBeHarvested() and
 			BufferedAction(inst, inst.wobytarget, ACTIONS.HARVEST)) or 
 			-- I'm big AF and I can dig things
-			((inst.wobytarget.components.workable ~= nil and inst.wobytarget.components.workable:GetWorkAction() == ACTIONS.DIG and (inst.wobytarget:HasTag("snowpile_basic") or inst.wobytarget.components.pickable ~= nil and not inst.wobytarget.components.pickable.canbepicked or not inst.wobytarget.components.pickable)) and 
+			((inst.wobytarget.components.workable ~= nil and inst.wobytarget.components.workable:GetWorkAction() == ACTIONS.DIG and (inst.wobytarget:HasTag("snowpile_basic") or (inst.wobytarget.components.pickable ~= nil and (not inst.wobytarget.components.pickable.canbepicked or not inst.wobytarget.components.pickable.caninteractwith)) or inst.wobytarget.components.pickable == nil)) and 
 			BufferedAction(inst, inst.wobytarget, ACTIONS.DIG)) or 
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
@@ -270,7 +270,7 @@ local function DoTargetAction(inst)
 end
 
 local function HasSitTarget(inst)
-    return inst.wobytarget ~= nil and inst.wobytarget:HasTag("wobysittarget")  and inst.wobytarget:IsOnPassablePoint() or nil
+    return inst.wobytarget ~= nil and inst.wobytarget:HasTag("wobysittarget") and inst.wobytarget:IsOnPassablePoint() or nil
 end
 
 local function GoSitAction(inst)
@@ -317,7 +317,7 @@ function WobyBigBrain:OnStart()
 		),
 		
 		PriorityNode{
-			JukeAndJive(self.inst, {tags={"_combat", "_health"}, notags={"player", "wall", "INLIMBO", "prey"},
+			JukeAndJive(self.inst, {tags={"_combat", "_health"}, notags={"player", "wall", "INLIMBO", "rabbit", "bird"},
 					fn=CombatAvoidanceFindEntityCheck(self)},
 					COMBAT_TOO_CLOSE_DIST,
 					COMBAT_SAFE_TO_WATCH_FROM_DIST),
@@ -335,6 +335,11 @@ function WobyBigBrain:OnStart()
         FaceEntity(self.inst, GetRiderFn, KeepRiderFn),
         FaceEntity(self.inst, GetWalterInteractionFn, KeepGenericInteractionFn, nil, "sit_alert_tailwag"),
 
+		WhileNode(function() return TheWorld.state.isnight end, "NightFollow",
+			Follow(self.inst, function() return self.inst.components.follower.leader end,
+                     MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST / 1.5, MAX_FOLLOW_DIST / 1.5, true)
+		),
+		
         Follow(self.inst, function() return self.inst.components.follower.leader end,
                      MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST, true),
 

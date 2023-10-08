@@ -117,10 +117,13 @@ env.AddPrefabPostInit("forest", function(inst)
 	if TUNING.DSTU.HEATWAVES then
 		inst:AddComponent("um_heatwaves")
 	end
+
 	if TUNING.DSTU.STORMS then
 		inst:AddComponent("um_stormspawner")
 	end
-	inst:DoTaskInTime(0, function(inst)
+
+	inst:DoTaskInTime(0, function(inst)--doesn't work for some components, but works for others.
+		print("HERE TestForIA:", TestForIA())
 		if TestForIA() then --remove components if the world is IA island/volcano, instead of checking for the mod or delaying adding components.
 			inst:RemoveComponent("uncompromising_deerclopsspawner")
 			inst:RemoveComponent("toadrain")
@@ -132,7 +135,8 @@ env.AddPrefabPostInit("forest", function(inst)
 			inst:RemoveComponent("gmoosespawner")
 			inst:RemoveComponent("mock_dragonflyspawner")
 			inst:RemoveComponent("um_snow_stormspawner")
-			inst:RemoveComponent("um_stormspawner")
+			--inst:RemoveComponent("um_stormspawner")
+			--inst:AddComponent("um_pestilencecontroller")
 		end
 	end)
 end)
