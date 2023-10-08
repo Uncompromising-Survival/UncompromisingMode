@@ -509,6 +509,8 @@ local function item_fn()
     MakeInventoryFloatable(inst, "med", 0.25, 0.83)
 	inst.Physics:SetFriction(0.3)
 	
+    inst.scrapbook_anim = "idle_full"
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

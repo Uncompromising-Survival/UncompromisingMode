@@ -169,7 +169,7 @@ local function fn(Sim)
 	inst:DoTaskInTime(0, RegisterNetListeners)
 	
     MakeObstaclePhysics(inst, 1.8)
-	
+	inst.scrapbook_thingtype = "POI"
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
         inst.components.pointofinterest:SetHeight(0)

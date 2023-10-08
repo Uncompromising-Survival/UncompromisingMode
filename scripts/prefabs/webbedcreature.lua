@@ -422,7 +422,7 @@ local function fn()
 
 	inst:AddTag("noepicmusic")
 	inst:AddTag("webbedcreature")
-	inst:AddTag("structure")
+	--inst:AddTag("structure")
 	inst:AddTag("noauradamage")
 	--inst:AddTag("notarget")
 	inst:AddTag("houndfriend")
@@ -431,7 +431,7 @@ local function fn()
 	inst:AddTag("companion")
 	inst:AddTag("ignorewalkableplatforms")
 	inst:AddTag("ignorewalkableplatformdrowning")
-
+	inst.scrapbook_thingtype = "POI"
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
         inst.components.pointofinterest:SetHeight(0)
@@ -442,7 +442,8 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-
+	inst.scrapbook_anim = "idle_large"
+	inst.scrapbook_hidehealth = true
 	-------------------
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(1000000)

@@ -10,8 +10,8 @@ SignFiles = require("uncompromising_writeables")
 
 -- PUTTING THIS HERE SO IT LOADS BEFORE ALL POSTINITS, INITS, ETC
 AddPrefabPostInit("world", function(inst)    
-    GLOBAL.TUNING.DSTU.PREFABS = Prefabs
-
+    --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
+    --NOTE: This is quite a bit of memory.
     if not inst.ismastersim then
         return
     end

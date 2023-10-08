@@ -2,7 +2,6 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/portable_blender.zip"),
     Asset("ANIM", "anim/winona_spotlight.zip"),
     Asset("ANIM", "anim/winona_spotlight_placement.zip"),
     Asset("ANIM", "anim/winona_catapult.zip"),
@@ -18,7 +17,6 @@ local prefabs =
 {
     "collapse_small",
     "ash",
-    "portableblender_item",
 }
 
 local prefabs_item =

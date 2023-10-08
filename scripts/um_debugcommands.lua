@@ -53,7 +53,7 @@ local RECIPE_BUILDER_TAG_LOOKUP = {
 local function Scrapbook_AddInfo(tbl, key, value)
     if value == nil then return end
 
-    assert( checkstring(key), string.format("Parameter [key] must be of type string, and it's [%s].", type(key)) )
+    assert(checkstring(key), string.format("Parameter [key] must be of type string, and it's [%s].", type(key)))
 
     if type(value) == "table" then
         value = string.format('{"%s"}', table.concat(value, '", "'))
@@ -61,7 +61,7 @@ local function Scrapbook_AddInfo(tbl, key, value)
 
     local add_quotes = checkstring(value) and value:sub(1, 1) ~= "{"
 
-    table.insert(tbl, string.format('%s=%s', key, add_quotes and '"'..value..'"' or tostring(value)))
+    table.insert(tbl, string.format('%s=%s', key, add_quotes and '"' .. value .. '"' or tostring(value)))
 end
 
 local function Scrapbook_WriteToFile(buffer)
@@ -72,7 +72,7 @@ local function Scrapbook_WriteToFile(buffer)
         table.insert(entries, string.format('    %s = {%s},', prefab, table.concat(data, ", ")))
     end
 
-    local f = io.open(TUNING.DSTU.MODROOT.."scripts/screens/redux/um_scrapbookdata.lua", "w")
+    local f = io.open(TUNING.DSTU.MODROOT .. "scripts/screens/redux/um_scrapbookdata.lua", "w")
 
     if f ~= nil then
         f:write(string.format(str, table.concat(entries, "\n")))
@@ -162,15 +162,15 @@ local function Scrapbook_DefineSubCategory(t)
         subcat = "spider"
     elseif t:HasTag("insect") then
         subcat = "insect"
-    elseif (t:HasTag("tree") or table.contains({"cave_banana_tree"}, t.prefab)) and not t:HasOneOfTags({ "monster", "leif" }) then
+    elseif (t:HasTag("tree") or table.contains({ "cave_banana_tree" }, t.prefab)) and not t:HasOneOfTags({ "monster", "leif" }) then
         subcat = "tree"
-    elseif (t.prefab:find("atrium_")) and not table.contains({"atrium_key"}, t.prefab) then
+    elseif (t.prefab:find("atrium_")) and not table.contains({ "atrium_key" }, t.prefab) then
         subcat = "atrium"
     elseif Scrapbook_IsOnCraftingFilter("RIDING", t.prefab) then
         subcat = "riding"
     elseif Scrapbook_IsOnCraftingFilter("SEAFARING", t.prefab) or
-           Scrapbook_IsOnCraftingFilter("SEAFARING", t.prefab.."_item") or
-           Scrapbook_IsOnCraftingFilter("SEAFARING", t.prefab.."_kit")
+        Scrapbook_IsOnCraftingFilter("SEAFARING", t.prefab .. "_item") or
+        Scrapbook_IsOnCraftingFilter("SEAFARING", t.prefab .. "_kit")
     then
         subcat = "seafaring" -- Keep it low priority!
     elseif t:HasTag("structure") then
@@ -192,7 +192,10 @@ local SCRAPBOOK_NAME_LOOKUP =
     chessjunk1 = "chessjunk1",
     chessjunk2 = "chessjunk1",
     chessjunk3 = "chessjunk1",
-
+    rice = "rice1",
+    rice_cooked = "rice_cooked1",
+    riceplant = "riceplant1",
+    mothergoose = "mothergoose1",
     sketch = "sketch_scrapbook",
     tacklesketch = "tacklesketch_scrapbook",
     cookingrecipecard = "cookingrecipecard_scrapbook",
@@ -228,29 +231,22 @@ local function Scrapbook_DefineType(t, entry)
 
     if t.components.pointofinterest then
         thingtype = "POI"
-
     elseif t.scrapbook_thingtype then
         thingtype = t.scrapbook_thingtype
-
     elseif t:HasTag("oceanfish") then
         thingtype = "creature"
-
     elseif foodtype ~= nil and (
-        foodtype == FOODTYPE.GENERIC or foodtype == FOODTYPE.GOODIES or foodtype == FOODTYPE.MEAT or
-        foodtype == FOODTYPE.VEGGIE or foodtype == FOODTYPE.HORRIBLE or foodtype == FOODTYPE.INSECT or
-        foodtype == FOODTYPE.SEEDS or foodtype == FOODTYPE.RAW or foodtype == FOODTYPE.BERRY
-    ) then
+            foodtype == FOODTYPE.GENERIC or foodtype == FOODTYPE.GOODIES or foodtype == FOODTYPE.MEAT or
+            foodtype == FOODTYPE.VEGGIE or foodtype == FOODTYPE.HORRIBLE or foodtype == FOODTYPE.INSECT or
+            foodtype == FOODTYPE.SEEDS or foodtype == FOODTYPE.RAW or foodtype == FOODTYPE.BERRY
+        ) then
         thingtype = "food"
-
-    elseif t:HasOneOfTags({"epic", "crabking"}) or t.prefab == "shadow_rook" or t.prefab == "shadow_bishop" or t.prefab == "shadow_knight" then
+    elseif t:HasOneOfTags({ "epic", "crabking" }) or t.prefab == "shadow_rook" or t.prefab == "shadow_bishop" or t.prefab == "shadow_knight" then
         thingtype = "giant"
-
-    elseif entry == "balloonvest" or entry == "balloonhat"  or entry == "balloonspeed" then
+    elseif entry == "balloonvest" or entry == "balloonhat" or entry == "balloonspeed" then
         thingtype = "item"
-
     elseif t.prefab == "pumpkin_lantern" then
         thingtype = "thing"
-
     elseif t.prefab == "fused_shadeling_bomb" or
         t.prefab == "smallghost" or
         t.prefab == "mushgnome" or
@@ -258,16 +254,14 @@ local function Scrapbook_DefineType(t, entry)
         t.prefab == "stagehand"
     then
         thingtype = "creature"
-
     elseif t.components.health and
-        not t:HasOneOfTags({"structure", "farm_plant", "tree", "plant", "moonstorm_static", "wall", "boatbumper", "groundspike", "smashable", "boat"}) and
+        not t:HasOneOfTags({ "structure", "farm_plant", "tree", "plant", "moonstorm_static", "wall", "boatbumper", "groundspike", "smashable", "boat" }) and
         t.prefab ~= "hedgehound_bush" and
         t.prefab ~= "eyeturret" and
         t.prefab ~= "spiderhole" and
         t.prefab ~= "slurtlehole"
     then
         thingtype = "creature"
-
     elseif t.components.inventoryitem and not t.components.health then
         thingtype = "item"
     end
@@ -294,7 +288,7 @@ local function Scrapbook_DefineAnimation(t)
         anim = "kit"
     elseif t.prefab == "lunar_forge_kit" then
         anim = "kit"
-    elseif t:HasTag("tree") and not table.contains({"livingtree", "marsh_tree", "oceantree", "driftwood_tall", "driftwood_small1", "mushtree_tall_webbed"}, t.prefab) then
+    elseif t:HasTag("tree") and not table.contains({ "livingtree", "marsh_tree", "oceantree", "driftwood_tall", "driftwood_small1", "mushtree_tall_webbed" }, t.prefab) then
         anim = "idle_tall"
     elseif t.winter_ornamentid and t:HasTag("lightbattery") then
         anim = t.winter_ornamentid .. "_on"
@@ -361,7 +355,7 @@ local function Scrapbook_GetSanityAura(inst)
     end
 
     if inst:HasTag("brightmareboss") or inst:HasTag("brightmare_guard") then
-        sanity = sanity *-1
+        sanity = sanity * -1
     end
 
     return sanity ~= 0 and sanity or nil
@@ -434,13 +428,14 @@ local REPAIR_MATERIAL_DATA =
     moon_altar = { "moon_altar_icon", "moon_altar_crown", "moon_altar_glass", "moon_altar_idol", "moon_altar_seed", "moon_altar_ward" },
     nightmare = { "nightmarefuel", "horrorfuel" },
     dreadstone = { "wall_dreadstone_item", "dreadstone" },
-
+    sludge = { "sludge" },
     voidcloth = { "voidcloth_kit" },
     wagpunk_bits = { "wagpunkbits_kit" },
     lunarplant = { "lunarplant_kit" },
 }
 
 local scrapbookprefabs = require("um_scrapbook_prefabs")
+local vanilla_scrapbookprefabs = require("scrapbook_prefabs")
 
 function d_printscrapbookrepairmaterialsdata()
     local repair_data = {}
@@ -453,7 +448,7 @@ function d_printscrapbookrepairmaterialsdata()
 
         if material ~= nil then
             repair_data[material] = repair_data[material] or {}
-            
+
             table.insert(repair_data[material], t.scrapbook_prefab or entry)
         end
 
@@ -461,7 +456,7 @@ function d_printscrapbookrepairmaterialsdata()
 
         if forge_material ~= nil then
             forgerepair_data[forge_material] = forgerepair_data[forge_material] or {}
-            
+
             table.insert(forgerepair_data[forge_material], t.scrapbook_prefab or entry)
         end
 
@@ -477,7 +472,7 @@ function d_printscrapbookrepairmaterialsdata()
         table.insert(str, string.format('   %s = { "%s" },', material, table.concat(prefabs, '", "')))
     end
 
-    print("\n"..table.concat(str, "\n").."\n")
+    print("\n" .. table.concat(str, "\n") .. "\n")
 end
 
 local prettyline = "\n_________________________________________\n"
@@ -505,7 +500,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
 
     local AddInfo = function(...) Scrapbook_AddInfo(scrapbookdata[currententry], ...) end
 
-    local exporter_data_helper = io.open(TUNING.DSTU.MODROOT.."scripts/scrapbookdata_no_package.lua", "w")
+    local exporter_data_helper = io.open(TUNING.DSTU.MODROOT .. "scripts/scrapbookdata_no_package.lua", "w")
     exporter_data_helper:write("-- AUTOGENERATED FROM d_createscrapbookdata()\n")
     exporter_data_helper:write("return {\n")
 
@@ -552,7 +547,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
 
         ---------------------------------::   TEX   ::---------------------------------
 
-        local tex = (t.scrapbook_tex or (t.components.inventoryitem ~= nil and t.components.inventoryitem.imagename) or entry)..".tex"
+        local tex = (t.scrapbook_tex or (t.components.inventoryitem ~= nil and t.components.inventoryitem.imagename) or entry) .. ".tex"
 
         if thingtype == "item" or thingtype == "food" then
             if not GetInventoryItemAtlas(tex) then
@@ -563,8 +558,8 @@ function d_create_um_scrapbookdata(print_missing_icons)
                 if print_missing_icons then
                     local file = t.scrapbook_build or t.AnimState:GetBuild()
                     local icon = t.scrapbook_tex or entry
-                    
-                    table.insert(icons_missing, {icon=icon, file=file, anim=anim})
+
+                    table.insert(icons_missing, { icon = icon, file = file, anim = anim })
                 else
                     print(string.format("[!!!!]  Atlas for texture [ %s ] not found in scrapbook_iconsX!", tex))
                 end
@@ -575,17 +570,17 @@ function d_create_um_scrapbookdata(print_missing_icons)
         -- So we will save it to a file that does not get loaded for the game.
         exporter_data_helper:write(string.format("[\"%s\"] = 0x%X,\n", entry, hash(entry)))
 
-        AddInfo( "name", name )
-        AddInfo( "tex", tex )
-        AddInfo( "subcat", subcat )
-        AddInfo( "type", thingtype )
-        AddInfo( "prefab", t.scrapbook_prefab or entry )
+        AddInfo("name", name)
+        AddInfo("tex", tex)
+        AddInfo("subcat", subcat)
+        AddInfo("type", thingtype)
+        AddInfo("prefab", t.scrapbook_prefab or entry)
 
         ---------------------------------::   SPEECHNAME   ::---------------------------------
 
         local speechname = t.scrapbook_speechname or t.nameoverride or (t.components.inspectable ~= nil and t.components.inspectable.nameoverride) or nil
         if speechname ~= nil and string.upper(speechname) ~= string.upper(entry) then
-            AddInfo( "speechname", speechname )
+            AddInfo("speechname", speechname)
         end
 
         if t.scrapbook_speechname ~= nil and string.lower(t.scrapbook_speechname) == string.lower(entry) then
@@ -606,10 +601,9 @@ function d_create_um_scrapbookdata(print_missing_icons)
         ---------------------------------::   SANITY   ::---------------------------------
 
         if t.scrapbook_sanityaura then
-            AddInfo( "sanityaura", t.scrapbook_sanityaura )
-
+            AddInfo("sanityaura", t.scrapbook_sanityaura)
         elseif t.components.sanityaura and Scrapbook_GetSanityAura(t) then
-            AddInfo( "sanityaura", Scrapbook_GetSanityAura(t) )
+            AddInfo("sanityaura", Scrapbook_GetSanityAura(t))
         end
 
         ---------------------------------::   HEALTH   ::---------------------------------
@@ -620,7 +614,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
                 maxhealth = string.format("%d-%d", maxhealth[1], maxhealth[2])
             end
 
-            AddInfo( "health", maxhealth )
+            AddInfo("health", maxhealth)
         end
 
         ---------------------------------::   DAMAGE   ::---------------------------------
@@ -629,39 +623,39 @@ function d_create_um_scrapbookdata(print_missing_icons)
         if damage ~= nil then
             if type(damage) == "table" then
                 local mod = not t.scrapbook_ignoreplayerdamagemod and t.components.combat ~= nil and t.components.combat.playerdamagepercent or 1
-                damage = string.format("%d-%d", damage[1]*mod , damage[2]*mod)
+                damage = string.format("%d-%d", damage[1] * mod, damage[2] * mod)
             end
 
             if checkstring(damage) or damage > 0 then
-                AddInfo( "damage", (checkstring(damage) or t.scrapbook_damage) and damage or damage * (t.components.combat.playerdamagepercent or 1) )
+                AddInfo("damage", (checkstring(damage) or t.scrapbook_damage) and damage or damage * (t.components.combat.playerdamagepercent or 1))
             end
         end
 
         local planardamage = t.scrapbook_planardamage or (t.components.planardamage ~= nil and t.components.planardamage.basedamage) or nil
         if planardamage ~= nil and planardamage > 0 then
-            AddInfo( "planardamage", planardamage )
+            AddInfo("planardamage", planardamage)
         end
 
-        AddInfo( "areadamage", t.scrapbook_areadamage )
+        AddInfo("areadamage", t.scrapbook_areadamage)
 
         ---------------------------------::   STACK   ::---------------------------------
 
-        if t.components.stackable  then
+        if t.components.stackable then
             local stacksize = t.prefab == "wortox_soul" and TUNING.WORTOX_MAX_SOULS or t.components.stackable.maxsize
 
-            AddInfo( "stacksize", stacksize )
+            AddInfo("stacksize", stacksize)
         end
 
         ---------------------------------::   FOOD   ::---------------------------------
 
-        if t.components.edible  then
-            AddInfo( "hungervalue", t.scrapbook_hungervalue or t.components.edible.hungervalue )
-            AddInfo( "healthvalue", t.scrapbook_healthvalue or t.components.edible.healthvalue )
-            AddInfo( "sanityvalue", t.scrapbook_sanityvalue or t.components.edible.sanityvalue )
+        if t.components.edible then
+            AddInfo("hungervalue", t.scrapbook_hungervalue or t.components.edible.hungervalue)
+            AddInfo("healthvalue", t.scrapbook_healthvalue or t.components.edible.healthvalue)
+            AddInfo("sanityvalue", t.scrapbook_sanityvalue or t.components.edible.sanityvalue)
         end
 
-        if t.components.edible and t.components.edible.foodtype  then
-            AddInfo( "foodtype",   t.components.edible.foodtype )
+        if t.components.edible and t.components.edible.foodtype then
+            AddInfo("foodtype", t.components.edible.foodtype)
 
             if not STRINGS.SCRAPBOOK.FOODTYPE[t.components.edible.foodtype] then
                 print(string.format("[!!!!]  Food Type [ %s ] isn't defined in STRINGS.SCRAPBOOK.FOODTYPE!", t.components.edible.foodtype))
@@ -672,32 +666,30 @@ function d_create_um_scrapbookdata(print_missing_icons)
 
         if (t.components.weapon or t.scrapbook_weapondamage) and not t.scrapbook_nodamage then
             if t.prefab == "bomb_lunarplant" then
-                AddInfo( "weapondamage", t.components.weapon.damage )
-                AddInfo( "planardamage", TUNING.BOMB_LUNARPLANT_PLANAR_DAMAGE )
-                AddInfo( "weaponrange",  t.components.weapon.hitrange )
+                AddInfo("weapondamage", t.components.weapon.damage)
+                AddInfo("planardamage", TUNING.BOMB_LUNARPLANT_PLANAR_DAMAGE)
+                AddInfo("weaponrange", t.components.weapon.hitrange)
             else
                 if t.scrapbook_weapondamage or (t.components.weapon and t.components.weapon.damage) then
-
                     local weapondamage = t.scrapbook_weapondamage
 
                     if type(weapondamage) == "table" then
-                        weapondamage = string.format("%d-%d", weapondamage[1] , weapondamage[2])
+                        weapondamage = string.format("%d-%d", weapondamage[1], weapondamage[2])
                     end
 
                     if not weapondamage and type(t.components.weapon.damage) == "function" then
                         print(string.format(">> Prefab [ %s ] has a function defined for components.weapon.damage!", t.prefab))
-
                     else
                         if not weapondamage and t.components.weapon.damage then
                             weapondamage = t.components.weapon.damage
                         end
-                        AddInfo( "weapondamage", weapondamage )
+                        AddInfo("weapondamage", weapondamage)
                     end
                 end
 
                 local hitrange = t.scrapbook_weaponrange or (t.components.weapon ~= nil and t.components.weapon.hitrange) or nil
                 if hitrange ~= nil then
-                    AddInfo( "weaponrange", hitrange )
+                    AddInfo("weaponrange", hitrange)
                 end
             end
         end
@@ -705,58 +697,57 @@ function d_create_um_scrapbookdata(print_missing_icons)
         ---------------------------------::   ARMOR   ::---------------------------------
 
         if t.components.armor then
-            AddInfo( "armor", t.components.armor.maxcondition )
-            AddInfo( "absorb_percent", t.components.armor.absorb_percent )
+            AddInfo("armor", t.components.armor.maxcondition)
+            AddInfo("absorb_percent", t.components.armor.absorb_percent)
 
             if t.components.planardefense then
-                AddInfo( "armor_planardefense", t.components.planardefense.basedefense )
+                AddInfo("armor_planardefense", t.components.planardefense.basedefense)
             end
         end
 
         ---------------------------------::   TOOL   ::---------------------------------
 
-        if t.components.finiteuses  then
+        if t.components.finiteuses then
             -- FIXME(JBK): This is a bad assumption for tools that have multiple uses with different use rates but will fix up most cases.
             local count = 0
             for _ in pairs(t.components.finiteuses.consumption) do
                 count = count + 1
-        end
+            end
             local rate = 1
             if count == 1 then -- Only apply the modifier for if there is one consumer type.
                 local k, v = next(t.components.finiteuses.consumption)
                 rate = v
             end
 
-            AddInfo( "finiteuses", (t.components.finiteuses.total / rate) )
+            AddInfo("finiteuses", (t.components.finiteuses.total / rate))
         end
 
         local _forgerepairmaterial = t.components.forgerepairable ~= nil and t.components.forgerepairable.repairmaterial or nil
 
         if _forgerepairmaterial ~= nil and REPAIR_MATERIAL_DATA[_forgerepairmaterial] ~= nil then
-            AddInfo( "forgerepairable", REPAIR_MATERIAL_DATA[_forgerepairmaterial] )
+            AddInfo("forgerepairable", REPAIR_MATERIAL_DATA[_forgerepairmaterial])
         end
 
         local _repairmaterial = t.components.repairable ~= nil and t.components.repairable.repairmaterial or nil
         if _repairmaterial and REPAIR_MATERIAL_DATA[_repairmaterial] ~= nil then
             if not t.components.repairable.checkmaterialfn then
-                AddInfo( "repairitems", REPAIR_MATERIAL_DATA[_repairmaterial] )
-
+                AddInfo("repairitems", REPAIR_MATERIAL_DATA[_repairmaterial])
             else
                 local valid_materials = {}
 
                 for i, mat in ipairs(REPAIR_MATERIAL_DATA[_repairmaterial]) do
                     local mat_inst = SpawnPrefab(mat)
-                    
+
                     if mat_inst ~= nil and t.components.repairable.checkmaterialfn(t, mat_inst) then
                         table.insert(valid_materials, mat)
                     end
-                    
+
                     if mat_inst ~= nil then
                         mat_inst:Remove()
                     end
                 end
 
-                AddInfo( "repairitems", valid_materials )
+                AddInfo("repairitems", valid_materials)
             end
         end
 
@@ -765,26 +756,26 @@ function d_create_um_scrapbookdata(print_missing_icons)
             for action, _ in pairs(t.components.tool.actions) do
                 table.insert(actions, action.id)
             end
-            AddInfo( "toolactions", actions )
+            AddInfo("toolactions", actions)
         end
 
         ---------------------------------::   BUILD   ::---------------------------------
 
-        AddInfo( "scale", t.scrapbook_scale )
-        AddInfo( "animpercent", t.scrapbook_animpercent ~= nil and math.clamp(t.scrapbook_animpercent, 0, 1) or nil)
-        AddInfo( "overridebuild", t.scrapbook_overridebuild )
-        AddInfo( "hide", t.scrapbook_hide )
-        AddInfo( "hidesymbol", t.scrapbook_hidesymbol )
+        AddInfo("scale", t.scrapbook_scale)
+        AddInfo("animpercent", t.scrapbook_animpercent ~= nil and math.clamp(t.scrapbook_animpercent, 0, 1) or nil)
+        AddInfo("overridebuild", t.scrapbook_overridebuild)
+        AddInfo("hide", t.scrapbook_hide)
+        AddInfo("hidesymbol", t.scrapbook_hidesymbol)
 
-        AddInfo( "build", t.scrapbook_build or t.AnimState:GetBuild() )
-        AddInfo( "bank",  t.scrapbook_bank or t.AnimState:GetCurrentBankName() )
-        AddInfo( "anim",  anim )
+        AddInfo("build", t.scrapbook_build or t.AnimState:GetBuild())
+        AddInfo("bank", t.scrapbook_bank or t.AnimState:GetCurrentBankName())
+        AddInfo("anim", anim)
 
-        AddInfo( "alpha",  t.scrapbook_alpha )
+        AddInfo("alpha", t.scrapbook_alpha)
 
         if t.scrapbook_overridedata then
             if type(t.scrapbook_overridedata[1]) ~= "table" then
-                AddInfo( "overridesymbol", t.scrapbook_overridedata )
+                AddInfo("overridesymbol", t.scrapbook_overridedata)
             else
                 local overrides = {}
 
@@ -792,245 +783,247 @@ function d_create_um_scrapbookdata(print_missing_icons)
                     table.insert(overrides, string.format('{"%s"}', table.concat(tbl, '", "')))
                 end
 
-                AddInfo( "overridesymbol", string.format("{%s}", table.concat(overrides, ", ")))
+                AddInfo("overridesymbol", string.format("{%s}", table.concat(overrides, ", ")))
             end
-
         elseif t:HasTag("campfire") and entry ~= "cotl_tabernacle_level3" then
             local blueflame = t:HasTag("blueflame")
 
             local override = {
                 "flames_wide",                                      -- Campfire Symbol.
-                blueflame and "coldfire_fire"   or "campfire_fire", -- Fire Build.
+                blueflame and "coldfire_fire" or "campfire_fire",   -- Fire Build.
                 blueflame and "coldflames_wide" or "flames_wide",   -- Fire Symbol.
             }
 
-            AddInfo( "overridesymbol", override)
+            AddInfo("overridesymbol", override)
         end
 
         -- TODO(DiogoW): Refactor this.
 
         if t.prefab == "robin" then
-            AddInfo( "animoffsety",  -8 )
+            AddInfo("animoffsety", -8)
         end
         if t.prefab == "robin_winter" then
-            AddInfo( "animoffsety",  -15 )
-            AddInfo( "animoffsetbgy",  15 )
+            AddInfo("animoffsety", -15)
+            AddInfo("animoffsetbgy", 15)
         end
         if t.prefab == "friendlyfruitfly" then
-            AddInfo( "animoffsety",  65 )
+            AddInfo("animoffsety", 65)
         end
         if t.prefab == "fruitfly" then
-            AddInfo( "animoffsety",  65 )
+            AddInfo("animoffsety", 65)
         end
         -------------------
         if t.prefab == "minotaur" then
-            AddInfo( "animoffsetx",  5 )
+            AddInfo("animoffsetx", 5)
         end
         if t.prefab == "lordfruitfly" then
-            AddInfo( "animoffsety",  70 )
+            AddInfo("animoffsety", 70)
         end
         if t.prefab == "moonbutterfly" then
-            AddInfo( "animoffsetx",  15 )
+            AddInfo("animoffsetx", 15)
         end
-        if t.prefab == "bee" then
-            AddInfo( "animoffsety",  150 )
+        if t.prefab == "bee" or t.prefab == "bulletbee" then
+            AddInfo("animoffsety", 150)
         end
         if t.prefab == "killerbee" then
-            AddInfo( "animoffsety",  150 )
+            AddInfo("animoffsety", 150)
         end
         if t.prefab == "lightflier" then
-            AddInfo( "animoffsety",  70 )
+            AddInfo("animoffsety", 70)
         end
-        if t.prefab == "beeguard" then
-            AddInfo( "animoffsety",  100 )
+        if string.match(t.prefab, "beeguard") ~= nil then
+            AddInfo("animoffsety", 100)
+        end
+        if string.match(t.prefab, "siren") ~= nil then
+            AddInfo("animoffsety", -60)
         end
         if t.prefab == "mosquito" then
-            AddInfo( "animoffsety",  100 )
-            AddInfo( "animoffsetx",  -20 )
+            AddInfo("animoffsety", 100)
+            AddInfo("animoffsetx", -20)
         end
         if t.prefab == "moon_altar_seed" then
-            AddInfo( "animoffsety",  20 )
-            AddInfo( "animoffsetx",  25 )
+            AddInfo("animoffsety", 20)
+            AddInfo("animoffsetx", 25)
         end
         if t.prefab == "moon_altar_glass" then
-            AddInfo( "animoffsety",  20 )
-            AddInfo( "animoffsetx",  25 )
+            AddInfo("animoffsety", 20)
+            AddInfo("animoffsetx", 25)
         end
         if t.prefab == "moon_altar_icon" then
-            AddInfo( "animoffsety",  25 )
-            AddInfo( "animoffsetx",  25 )
+            AddInfo("animoffsety", 25)
+            AddInfo("animoffsetx", 25)
         end
         if t.prefab == "moon_altar_ward" then
-            AddInfo( "animoffsety",  20 )
-            AddInfo( "animoffsetx",  25 )
+            AddInfo("animoffsety", 20)
+            AddInfo("animoffsetx", 25)
         end
         if t.prefab == "moon_altar_crown" then
-            AddInfo( "animoffsety",  -20 )
-            AddInfo( "animoffsetx",  25 )
-            AddInfo( "animoffsetbgy",  30 )
+            AddInfo("animoffsety", -20)
+            AddInfo("animoffsetx", 25)
+            AddInfo("animoffsetbgy", 30)
         end
         if t.prefab == "shroomcake" then
-            AddInfo( "animoffsety",  -20 )
-            AddInfo( "animoffsetbgy",  25 )
+            AddInfo("animoffsety", -20)
+            AddInfo("animoffsetbgy", 25)
         end
         if t.prefab == "vegstinger" then
-            AddInfo( "animoffsety",  -10 )
+            AddInfo("animoffsety", -10)
         end
         if t.prefab == "watermelon_oversized" then
-            AddInfo( "animoffsety",  -20 )
-            AddInfo( "animoffsetbgy",  30 )
+            AddInfo("animoffsety", -20)
+            AddInfo("animoffsetbgy", 30)
         end
         if t.prefab == "saddle_war" then
-            AddInfo( "animoffsety",  -20 )
-            AddInfo( "animoffsetbgy",  30 )
+            AddInfo("animoffsety", -20)
+            AddInfo("animoffsetbgy", 30)
         end
         if t.prefab == "bunnyman" then
-            AddInfo( "animoffsetx",  20 )
+            AddInfo("animoffsetx", 20)
         end
         if t.prefab == "bernie_active" then
-            AddInfo( "animoffsety",  60 )
-            AddInfo( "animoffsetbgy",  -50 )
+            AddInfo("animoffsety", 60)
+            AddInfo("animoffsetbgy", -50)
         end
         if t.prefab == "lightcrab" then
-            AddInfo( "animoffsety",  60 )
-            AddInfo( "animoffsetbgy",  -50 )
+            AddInfo("animoffsety", 60)
+            AddInfo("animoffsetbgy", -50)
         end
         if t.prefab == "fused_shadeling_bomb" then
-            AddInfo( "animoffsety",  60 )
-            AddInfo( "animoffsetbgy",  -50 )
+            AddInfo("animoffsety", 60)
+            AddInfo("animoffsetbgy", -50)
         end
         if t.prefab == "smallghost" then
-            AddInfo( "animoffsety",  60 )
+            AddInfo("animoffsety", 60)
         end
         if t.prefab == "wx78_scanner_item" then
-            AddInfo( "animoffsety",  90 )
+            AddInfo("animoffsety", 90)
         end
         if t.prefab == "eyeofterror_mini" then
-            AddInfo( "animoffsety",  40 )
+            AddInfo("animoffsety", 40)
         end
         if t.prefab == "dug_trap_starfish" then
-            AddInfo( "animoffsetx",  160 )
-            AddInfo( "animoffsety",  10 )
+            AddInfo("animoffsetx", 160)
+            AddInfo("animoffsety", 10)
         end
         if t.prefab == "bananajuice" then
-            AddInfo( "animoffsety",  -20 )
+            AddInfo("animoffsety", -20)
         end
 
-        AddInfo( "animoffsetx",  t.scrapbook_animoffsetx )
-        AddInfo( "animoffsety",  t.scrapbook_animoffsety )
+        AddInfo("animoffsetx", t.scrapbook_animoffsetx)
+        AddInfo("animoffsety", t.scrapbook_animoffsety)
 
         ---------------------------------::   WATERPROOFER   ::---------------------------------
 
         if t.components.waterproofer and t.components.waterproofer:GetEffectiveness() > 0 then
-            AddInfo( "waterproofer",  t.components.waterproofer:GetEffectiveness() )
+            AddInfo("waterproofer", t.components.waterproofer:GetEffectiveness())
         end
 
         ---------------------------------::   INSULATOR   ::---------------------------------
 
         if t.components.insulator then
-            AddInfo( "insulator", t.components.insulator:GetInsulation() )
-            AddInfo( "insulator_type", t.components.insulator.type )
+            AddInfo("insulator", t.components.insulator:GetInsulation())
+            AddInfo("insulator_type", t.components.insulator.type)
         end
 
         ---------------------------------::   DAPPERNESS   ::---------------------------------
 
         if t.components.equippable and t.components.equippable.dapperness ~= 0 then
-            AddInfo( "dapperness",  t.components.equippable.dapperness )
+            AddInfo("dapperness", t.components.equippable.dapperness)
         end
 
         ---------------------------------::   FUELED   ::---------------------------------
 
         if t.components.fueled then
-            AddInfo( "fueledmax",    t.scrapbook_fueled_max or t.components.fueled.maxfuel  )
-            AddInfo( "fueledrate",   t.components.fueled.rate     )
-            AddInfo( "fueledtype1",  t.components.fueled.fueltype )
+            AddInfo("fueledmax", t.scrapbook_fueled_max or t.components.fueled.maxfuel)
+            AddInfo("fueledrate", t.components.fueled.rate)
+            AddInfo("fueledtype1", t.components.fueled.fueltype)
 
             if t.components.fueled.secondaryfueltype then
-                AddInfo( "fueledtype2",  t.components.fueled.secondaryfueltype )
+                AddInfo("fueledtype2", t.components.fueled.secondaryfueltype)
             end
         end
 
         local fueled = t.components.fueled
         if fueled ~= nil and (fueled.fueltype == FUELTYPE.USAGE or fueled.secondaryfueltype == FUELTYPE.USAGE) and not fueled.no_sewing then
-            AddInfo( "sewable", true )
+            AddInfo("sewable", true)
         end
 
         ---------------------------------::   FUEL   ::---------------------------------
 
         if t.components.fuel and t.components.inventoryitem then
-            AddInfo( "fueltype",  t.components.fuel.fueltype )
-            AddInfo( "fuelvalue",  t.components.fuel.fuelvalue )
+            AddInfo("fueltype", t.components.fuel.fueltype)
+            AddInfo("fuelvalue", t.components.fuel.fuelvalue)
         end
 
         if t:HasTag("lightbattery") then
-            AddInfo( "lightbattery", true )
+            AddInfo("lightbattery", true)
         end
 
         ---------------------------------::   PERISHABLE   ::---------------------------------
 
         if t.scrapbook_persishable then
-            AddInfo( "perishable",  t.scrapbook_persishable )
+            AddInfo("perishable", t.scrapbook_persishable)
         elseif t.components.perishable then
-            AddInfo( "perishable",  t.components.perishable.perishtime )
+            AddInfo("perishable", t.components.perishable.perishtime)
         end
 
         ---------------------------------::   OAR   ::---------------------------------
 
         if t.components.oar then
-            AddInfo( "oar_force",  t.components.oar.force )
-            AddInfo( "oar_velocity",  t.components.oar.max_velocity )
+            AddInfo("oar_force", t.components.oar.force)
+            AddInfo("oar_velocity", t.components.oar.max_velocity)
         end
 
         ---------------------------------::   TACKLE   ::---------------------------------
 
         if t.components.oceanfishingtackle ~= nil then
             if t.components.oceanfishingtackle.casting_data then
-                AddInfo( "float_range", t.components.oceanfishingtackle.casting_data.dist_max + 5)
-                AddInfo( "float_accuracy", t.components.oceanfishingtackle.casting_data.dist_min_accuracy)
+                AddInfo("float_range", t.components.oceanfishingtackle.casting_data.dist_max + 5)
+                AddInfo("float_accuracy", t.components.oceanfishingtackle.casting_data.dist_min_accuracy)
             end
             if t.components.oceanfishingtackle.lure_data then
-                AddInfo( "lure_charm", t.components.oceanfishingtackle.lure_data.charm)
-                AddInfo( "lure_dist", t.components.oceanfishingtackle.lure_data.dist_max)
-                AddInfo( "lure_radius", t.components.oceanfishingtackle.lure_data.radius)
+                AddInfo("lure_charm", t.components.oceanfishingtackle.lure_data.charm)
+                AddInfo("lure_dist", t.components.oceanfishingtackle.lure_data.dist_max)
+                AddInfo("lure_radius", t.components.oceanfishingtackle.lure_data.radius)
             end
         end
 
         ---------------------------------::   WORKABLE   ::---------------------------------
 
         if t.scrapbook_workable then
-            AddInfo( "workable",  t.scrapbook_workable )
+            AddInfo("workable", t.scrapbook_workable)
         elseif t.components.workable and t.components.workable.action and t.components.workable.workleft > 0 then
-            AddInfo( "workable",  t.components.workable.action.id )
+            AddInfo("workable", t.components.workable.action.id)
         end
 
         ---------------------------------::   PICKABLE   ::---------------------------------
 
         if t.components.pickable then
-            AddInfo( "picakble", true )
+            AddInfo("picakble", true)
         end
 
         ---------------------------------::   HARVESTABLE   ::---------------------------------
 
         if t.components.harvestable then
-            AddInfo( "harvestable", true )
+            AddInfo("harvestable", true)
         end
 
         ---------------------------------::   STEWER   ::---------------------------------
 
         if t.components.stewer then
-            AddInfo( "stewer", true )
+            AddInfo("stewer", true)
         end
 
         ---------------------------------::   ACTIVATABLE   ::---------------------------------
 
         if t.components.activatable ~= nil and t.GetActivateVerb ~= nil then
-            AddInfo( "activatable", t:GetActivateVerb(ThePlayer) )
+            AddInfo("activatable", t:GetActivateVerb(ThePlayer))
         end
 
         ---------------------------------::   FISHABLE   ::---------------------------------
 
         if t.components.fishable then
-            AddInfo( "fishable", true )
+            AddInfo("fishable", true)
         end
 
         ---------------------------------::   BURNABLE   ::---------------------------------
@@ -1038,12 +1031,14 @@ function d_create_um_scrapbookdata(print_missing_icons)
         if t.components.burnable ~= nil and
             not t.components.burnable.ignorefuel and
             t.components.burnable.canlight and
-            not table.contains({"creature", "giant"}, thingtype)
+            not table.contains({ "creature", "giant" }, thingtype)
         then
-            AddInfo( "burnable", true )
+            AddInfo("burnable", true)
         end
 
         ---------------------------------::   DEPENDENCIES   ::---------------------------------
+        print("HERE, DEPS START")
+        print("PREFAB:", t.prefab)
 
         local _deps = t.scrapbook_deps or shallowcopy(Prefabs[entry].deps)
 
@@ -1054,10 +1049,9 @@ function d_create_um_scrapbookdata(print_missing_icons)
         end
 
         if t.components.prototyper and t.prefab ~= "bookstation" then
-
             for recipe, recipedata in pairs(AllRecipes) do
                 local found = false
-                for tech,level in pairs(recipedata.level) do
+                for tech, level in pairs(recipedata.level) do
                     if level > 0 then
                         for tree, num in pairs(t.components.prototyper.trees) do
                             if tech == tree and num >= level then
@@ -1075,76 +1069,91 @@ function d_create_um_scrapbookdata(print_missing_icons)
         end
 
         local recipe = AllRecipes[t.prefab]
-
         if recipe ~= nil then
+            print("trying to add recipe deps")
             if recipe.builder_tag then
                 ------  CRAFTING ICON  ------
                 local character = RECIPE_BUILDER_TAG_LOOKUP[recipe.builder_tag]
 
                 if character ~= nil then
-                    AddInfo( "craftingprefab", character )
+                    AddInfo("craftingprefab", character)
                 else
                     print(string.format("[!!!!]  Recipe builder tag [%s] isn't in RECIPE_BUILDER_TAG_LOOKUP...", recipe.builder_tag))
                 end
             end
 
             for _, data in ipairs(recipe.ingredients) do
+                print("adding recipe deps")
                 deps[data.type] = true
             end
+            printwrap("DEPS ON RECIPE", deps)
         end
 
         -- Loot.
         if t.components.lootdropper ~= nil then
+            print("trying to add loot deps")
             for dep, _ in pairs(t.components.lootdropper:GetAllPossibleLoot(true)) do
                 deps[dep] = true
             end
         end
 
         -- Deployable / Kits.
-        local item_prefab = entry.."_item"
+        print("trying to add kit deps")
+        local item_prefab = entry .. "_item"
         if scrapbookprefabs[item_prefab] then
+            print("adding kit deps")
             deps[item_prefab] = true
         end
 
+        print("trying to add perishable deps")
         local _perishable = t.components.perishable
         if _perishable ~= nil and _perishable.onperishreplacement ~= nil then
+            print("adding perishable deps")
             deps[_perishable.onperishreplacement] = true
         end
 
         -- Spawners.
+        print("trying to add spawner deps")
         local _childspawner = t.components.childspawner
         if _childspawner ~= nil then
             if _childspawner.childname ~= "" then
+                print("adding 1")
                 deps[_childspawner.childname] = true
-
             end
             if _childspawner.rarechild ~= nil then
+                print("adding 2")
                 deps[_childspawner.rarechild] = true
             end
         end
 
         local _spawner = t.components.spawner
         if _spawner ~= nil and _spawner.childname ~= nil then
+            print("adding 3")
             deps[_spawner.childname] = true
         end
 
         local _periodicspawner = t.components.periodicspawner
         if _periodicspawner ~= nil and _periodicspawner.prefab ~= nil then
+            print("adding 4")
             deps[_periodicspawner.prefab] = true
         end
 
+        print("trying to add product deps")
         local product_components = { "pickable", "cookable", "dryable", "harvestable" }
 
         for i, cmpname in ipairs(product_components) do
             local _cmp = t.components[cmpname]
             if _cmp ~= nil then
                 if _cmp.product ~= nil then
+                    print("adding product deps")
                     deps[_cmp.product] = true
                 end
             end
         end
 
+        print("waxable")
         if t:HasTag("waxable") then
+            print("adding waxable deps")
             deps.beeswax = true
         end
 
@@ -1179,7 +1188,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
                 deps.blueprint = true
             end
 
-            if not scrapbookprefabs[dep] then
+            if not scrapbookprefabs[dep] and not vanilla_scrapbookprefabs[dep] then
                 deps[dep] = nil
             end
         end
@@ -1187,7 +1196,10 @@ function d_create_um_scrapbookdata(print_missing_icons)
         if next(deps) ~= nil then
             deps = table.getkeys(deps)
             table.sort(deps)
-            AddInfo( "deps", deps )
+            AddInfo("deps", deps)
+        end
+        if #deps > 1 then
+            printwrap("DEPS:", deps)
         end
 
         ---------------------------------::   NOTES   ::---------------------------------
@@ -1203,7 +1215,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
         end
 
         if next(notes) ~= nil then
-            AddInfo( "notes", string.format("{%s}", table.concat(notes, ", ")) )
+            AddInfo("notes", string.format("{%s}", table.concat(notes, ", ")))
         end
 
         ---------------------------------::   SPECIAL INFO   ::---------------------------------
@@ -1212,7 +1224,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
             local info = string.upper(t.scrapbook_specialinfo)
 
             if info ~= string.upper(t.scrapbook_prefab or entry) then
-                AddInfo( "specialinfo", info)
+                AddInfo("specialinfo", info)
                 specialinfo_list[info] = true
 
                 if not STRINGS.SCRAPBOOK.SPECIALINFO[info] then
@@ -1243,7 +1255,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
             table.insert(str, (string.format("%s:\n    File: %s.fla\n    Animation: %s", data.icon, data.file, data.anim)))
         end
 
-        print("\n"..table.concat(str, "\n\n"))
+        print("\n" .. table.concat(str, "\n\n"))
     end
 
     Scrapbook_WriteToFile(scrapbookdata)
