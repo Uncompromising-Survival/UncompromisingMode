@@ -5,10 +5,9 @@ local prefabs = {
 
 -- Default duration is pretty short. This can be changed by whatever inflicts the debuff, by passing data after the debuff name and prefab.
 local DebuffDuration = 2
-local DebuffDamageMult = 1
 
 
-local function debuff_OnDetached(inst, target)
+local function debuff_OnDetached(inst, target)	
 	if inst.fx ~= nil then
 		if inst.fx:IsValid() then
 		--	inst.fx:Remove()
@@ -39,10 +38,10 @@ local function DamageTarget(inst, target)
 	--	target.components.combat:GetAttacked(inst, 3, nil, nil, {planar = 5}) -- Planar based on vanilla's fused_shadeling_bomb.lua, line 103.
 		-- Not using that because we don't want this to hitstun, but it's a useful reference.
 		
-		local percenthealth = 0 - ((target.components.health.currenthealth * 0.05) * DebuffDamageMult)
+		local percenthealth = 0 - (target.components.health.currenthealth * 0.05)
 		
 		if target:HasTag("epic") then
-			percenthealth = 0 - ((target.components.health.currenthealth * 0.02) * DebuffDamageMult) -- Lower percent against bosses, so it isn't game-breaking.
+			percenthealth = 0 - (target.components.health.currenthealth * 0.02) -- Lower percent against bosses, so it isn't game-breaking.
 		end
 		
 		if not (target.components.inventory ~= nil and target.components.inventory:EquipHasSpDefenseForType("planar")) then -- Check for planar armor.
@@ -67,7 +66,7 @@ local function DamageTarget(inst, target)
 	end
 end
 
-local function debuff_OnAttached(inst, target, followsymbol, followoffset, data, data2)
+local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
 	and not target:HasTag("MoonburnImmune")
@@ -85,9 +84,6 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data,
 		inst.Transform:SetPosition(0, 0, 0)
 		if data ~= nil then
 			DebuffDuration = data
-		end
-		if data2 ~= nil then
-			DebuffDamageMult = data2
 		end
 		inst.components.timer:StartTimer("moonburnduration", DebuffDuration)
 		inst:ListenForEvent("death", function()
@@ -110,16 +106,19 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data,
 			if target.components.health ~= nil and not target.components.health:IsDead() then
 				inst:DoPeriodicTask(0.3, DamageTarget, 0, target)
 			end
-		end
-		
-		-- Haunt the victim.
-		if target.components.hauntable == nil then
-			target:AddComponent("hauntable")
-			target.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
-		end
-		if target.components.hauntable ~= nil then
-			inst:PushEvent("haunt", { target = target })
-			target.components.hauntable:DoHaunt(inst)
+			
+			-- Panic.
+			if target.components.hauntable ~= nil and target.components.hauntable.panicable then
+				if target:HasTag("epic") then
+					target.components.hauntable:Panic(3)
+				else
+					target.components.hauntable:Panic(5)
+				end
+			end
+			-- Trying to figure out how to do it without relying on hauntable...
+			--if target.brain ~= nil then
+			--	target.brain:PanicTrigger(target)
+			--end
 		end
 		
 		-- Begin the visual effects.
@@ -127,7 +126,7 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data,
 			inst.fx = SpawnPrefab("umdebuff_moonburn_fx")
 		end
 		if target.components.combat ~= nil then
-			inst.fx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+			inst.fx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, -4, 0) -- TODO: positioning is wrong aaaAAAA
 		else
 			inst.fx.entity:SetParent(target.entity)
 		end
@@ -144,7 +143,7 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data,
 	end
 end
 
-local function debuff_OnExtended(inst, target, followsymbol, followoffset, data, data2)
+local function debuff_OnExtended(inst, target, followsymbol, followoffset, data)
 	-- This sets the incomming debuff's duration.
 	if data ~= nil then
 		DebuffDuration = data
@@ -268,7 +267,7 @@ local function testingstick_SpellFn(inst, target, position)
 	end
 	
 	if owner.components.health ~= nil and not owner.components.health:IsDead() then
-		owner:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", DebuffDuration, DebuffDamageMult)
+		owner:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", DebuffDuration)
 	end
 end
 
@@ -278,7 +277,7 @@ local function testingstick_OnAttack(inst, attacker, target)
 	end
 	
 	if target.components.health ~= nil and not target.components.health:IsDead() then
-		target:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", DebuffDuration, DebuffDamageMult)
+		target:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", DebuffDuration)
 	end
 end
 
