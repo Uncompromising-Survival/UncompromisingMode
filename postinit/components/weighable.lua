@@ -17,7 +17,7 @@ local fishdata = {
     oceanfish_medium_5 = { "corn", 2, { "corn_seeds" } },               --corn cod
     oceanfish_medium_6 = { "fishmeat", 2, nil, true },                  --dappled koi
     oceanfish_medium_7 = { "fishmeat", 2, nil, true },                  --golden koi
-    oceanfish_medium_8 = { "fishmeat", 2, { "ice", "ice" } },           --ice bream
+    oceanfish_medium_8 = { "fishmeat", 2, { "ice", "ice" }, true},           --ice bream
     oceanfish_medium_9 = { "fishmeat", 2, { "honey", "honey" } },       --sweetish fish
 
     oceanfish_small_1 = { "fishmeat_small", 1 },                        --runty guppy
@@ -25,8 +25,8 @@ local fishdata = {
     oceanfish_small_3 = { "fishmeat_small", 2, nil, true },             --bitty baitfish
     oceanfish_small_4 = { "fishmeat_small", 1 },                        --smolt fry
     oceanfish_small_5 = { "corn_cooked", 1, { "corn_seeds" } },         --popperfish
-    oceanfish_small_6 = { "plantmeat", 1 },                             --fallounder
-    oceanfish_small_7 = { "plantmeat", 1 },                             --bloomfin tuna
+    oceanfish_small_6 = { "plantmeat", 1, nil, true},                   --fallounder
+    oceanfish_small_7 = { "plantmeat", 1, nil, true},                   --bloomfin tuna
     oceanfish_small_8 = { "fishmeat_small_cooked", 1, nil, true },      --scorching sunfish
     oceanfish_small_9 = { "fishmeat_small", 2, nil, true }              --spittlefish
 }
@@ -120,7 +120,14 @@ for prefab, data in pairs(fishdata) do
                     end
                     if data[3] then
                         for k, v in pairs(data[3]) do
-                            table.insert(loot, SpawnPrefab(v))
+                            local _loot = SpawnPrefab(v)
+                            local __loot
+                            if _loot.components.cookable ~= nil then
+                                __loot = _loot.components.cookable:Cook(cooker, chef)
+                                _loot:Remove()
+                                _loot = __loot
+                            end
+                            table.insert(loot, _loot)
                         end
                     end
                     for k, v in pairs(loot) do
