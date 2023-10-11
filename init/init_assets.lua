@@ -218,6 +218,9 @@ local inventoryitems =
 	"um_smolder_spore",
 	"um_armor_pyre_nettles",
 	"um_blowdart_pyre",
+	
+	-- Mutation Extrapolation
+	"um_staff_meteor",
 
 	--Wixie related inventory icons
 
@@ -1011,6 +1014,10 @@ Assets = {
 	Asset("ANIM", "anim/um_armor_pyre_nettles.zip"), -- This file is both a swap and a floor item. Hell if I know where to put it...so it's here!
 	Asset("ANIM", "anim/um_blowdart_pyre.zip"),
 	Asset("ANIM", "anim/swap_blowdart.zip"), -- Same here. Naming convention is vanilla, blame Mr. Kelly Entertainment.
+	
+	-- Mutation Extrapolation
+	Asset("ANIM", "anim/umdebuff_moonburn_fx.zip"),
+	Asset("ANIM", "anim/um_staff_meteor.zip"),
 
 
 
@@ -1904,6 +1911,10 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_armor_pyre_nettles.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_armor_pyre_nettles.tex"),
 	
+	Asset("ATLAS", "images/inventoryimages/um_staff_meteor.xml"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
+	
 	
 
 	--SWAPS
@@ -1959,6 +1970,8 @@ Assets = {
 	Asset("ANIM", "anim/swap_um_harpoon.zip"),
 
 	Asset("ANIM", "anim/swap_magnerang.zip"),
+	
+	Asset("ANIM", "anim/swap_um_staff_meteor.zip"),
 
 	Asset("ANIM", "anim/winona_toolbox.zip"),
 	Asset("ANIM", "anim/winona_upgradekit_electrical.zip"),
