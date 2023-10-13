@@ -81,9 +81,9 @@ local function OnAttack(inst, attacker, target, skipsanity)
             if k > 5 then break end
 
             if v.components.health ~= nil and not v.components.health:IsDead() and v.components.combat ~= nil then
-                v.components.combat:GetAttacked(inst.attacker, 10 * (0.25 + inst.intensity), nil, nil, { planar = 10 * (0.5 + inst.intensity) })
-                if v.components.debuffable ~= nil then
-                    v.components.debuffable:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", 3)
+                v.components.combat:GetAttacked(inst.attacker, 2.5 * (0.25 + inst.intensity), nil, nil, { planar = 5 * (0.5 + inst.intensity) })
+                if v.components.health ~= nil and not v.components.health:IsDead() then
+                    v:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", 3, 0.00005)
                 end
                 local _x, _y, _z = v.Transform:GetWorldPosition()
                 for i = 1, math.random(5) do
@@ -204,8 +204,8 @@ local function fn()
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(15)
-    inst.components.finiteuses:SetUses(15)
+    inst.components.finiteuses:SetMaxUses(6)
+    inst.components.finiteuses:SetUses(6)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     return inst
