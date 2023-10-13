@@ -82,6 +82,9 @@ local function OnAttack(inst, attacker, target, skipsanity)
 
             if v.components.health ~= nil and not v.components.health:IsDead() and v.components.combat ~= nil then
                 v.components.combat:GetAttacked(inst.attacker, 10 * (0.25 + inst.intensity), nil, nil, { planar = 10 * (0.5 + inst.intensity) })
+                if v.components.debuffable ~= nil then
+                    v.components.debuffable:AddDebuff("umdebuff_moonburn", "umdebuff_moonburn", 3)
+                end
                 local _x, _y, _z = v.Transform:GetWorldPosition()
                 for i = 1, math.random(5) do
                     local fx2 = SpawnPrefab("warg_mutated_breath_fx")

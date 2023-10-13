@@ -1,5 +1,4 @@
 STRINGS = GLOBAL.STRINGS
-local INFO = STRINGS.SCRAPBOOK.SPECIALINFO
 
 -- [              DSTU Related Overrides                  ]
 

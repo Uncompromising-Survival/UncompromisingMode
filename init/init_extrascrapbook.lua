@@ -95,7 +95,7 @@ local statues = {
 	"DAYWALKER",
 }
 
-local crops = 
+local crops =
 {
 	"asparagus",
 	"carrot",
@@ -118,9 +118,9 @@ for k, v in pairs(statues) do
 	AddAddtionalScrapbookInfo("CHESSPIECE_" .. v, "No longer has collision.")
 end
 
-for k,v in pairs(crops) do
-	AddAddtionalScrapbookInfo(string.upper(v).."_oversized", "No longer has collision.")
-	AddAddtionalScrapbookInfo("FARM_PLANT_"..string.upper(v), "No longer grows in Winter.")
+for k, v in pairs(crops) do
+	AddAddtionalScrapbookInfo(string.upper(v) .. "_oversized", "No longer has collision.")
+	AddAddtionalScrapbookInfo("FARM_PLANT_" .. string.upper(v), "No longer grows in Winter.")
 end
 
 --additional scrabookdata.
@@ -175,46 +175,46 @@ local um_specialinfo = {
 	KLAUS_SACK = "Stores all of Krampii's stolen loot.",
 	KRAMPUS = "Better at stealing items. Has a new attack.\nAll stolen items are stored inside the Loot Stash.",
 	WATERPLANT = "Seedshells no longer create leaks.",
-		ALTERGUARDIAN_PHASE1 = "Drops a blueprint.",
-		LANTERN = "May be upgraded by a certain survivor.",
-		MINERHAT = "May be upgraded by a certain survivor.",
-SHARK = "Deals less damage per bite.\nDrops a new resource.",
-SHADOW_KNIGHT = "Less attack range, but deals knockback.",
-SHADOW_BISHOP = "Attacks differently.",
-STINGER = "Self-stacks. Burnable as fuel.",
-		SLURTLE = "Faster attack speed but less health.",
-		SNURTLE = "Less health.",
-		ARCHIVE_CENTIPEDE = "Releases Moon Gleams on death.",
-		ANTLION = "May harrass survivors at sea.\nIncreased resistance against explosives.",
-		BEEQUEEN = "Reworked fight. Several new attacks and bees.",
-		MONKEY_MEDIUMHAT = "Increases boat steering speed.",
-		EYEMASKHAT = "Negative food stats no longer contribute for repairs.",
-		SPIDERHAT = "Works as goggles.",
-		FOSSILSTALKER = "No longer has collision.",
-		HOMESIGN = "No longer has collision.",
-		PENGUIN = "Aggressive near its breeding ground.",
-		CACTUS = "No longer grows in Winter.",
-		BANANABUSH = "No longer grows in Winter.",
-		MARSH_BUSH = "No longer grows in Winter.",
-		ROCK_AVOCADO_BUSH = "No longer grows in Winter",
-		CRAWLINGHORROR = "Drops shadow ink when teleporting.",
-		TERRORBEAK = "More evasive, attempts to reposition itself to get an attack.",
-		LAVAE = "Explodes after death.",
-		POWDERMONKEY = "More proficient with Boat Cannons.",
-		DEERCLOPS = "Has 3 variants, each with unique attacks.",
-		MOOSE = "Has new attacks.",
-		BEARGER = "Has new attacks.",
-		LEIF = "Has a new attack.",
-		MINOTAUR = "Second phase has been reworked.",
-		PIGMAN = "Has a new attack.",
-		WALRUS = "Makes use of Snap Traps.",
-		BEEFALO = "Has a new attack.",
-		SPIDERQUEEN = "Has a new attack.",
-		EYEOFTERROR = "Has a new attack.",
-		TWINOFTERROR1 = "Has new attacks, matching more closely to its source material.",
-		TWINOFTERROR2 = "Has new attacks, matching more closely to its source material.",
-		BUTTERFLY = "Immune to aura damage.",
-		CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
+	ALTERGUARDIAN_PHASE1 = "Drops a blueprint.",
+	LANTERN = "May be upgraded by a certain survivor.",
+	MINERHAT = "May be upgraded by a certain survivor.",
+	SHARK = "Deals less damage per bite.\nDrops a new resource.",
+	SHADOW_KNIGHT = "Less attack range, but deals knockback.",
+	SHADOW_BISHOP = "Attacks differently.",
+	STINGER = "Self-stacks. Burnable as fuel.",
+	SLURTLE = "Faster attack speed but less health.",
+	SNURTLE = "Less health.",
+	ARCHIVE_CENTIPEDE = "Releases Moon Gleams on death.",
+	ANTLION = "May harrass survivors at sea.\nIncreased resistance against explosives.",
+	BEEQUEEN = "Reworked fight. Several new attacks and bees.",
+	MONKEY_MEDIUMHAT = "Increases boat steering speed.",
+	EYEMASKHAT = "Negative food stats no longer contribute for repairs.",
+	SPIDERHAT = "Works as goggles.",
+	FOSSILSTALKER = "No longer has collision.",
+	HOMESIGN = "No longer has collision.",
+	PENGUIN = "Aggressive near its breeding ground.",
+	CACTUS = "No longer grows in Winter.",
+	BANANABUSH = "No longer grows in Winter.",
+	MARSH_BUSH = "No longer grows in Winter.",
+	ROCK_AVOCADO_BUSH = "No longer grows in Winter",
+	CRAWLINGHORROR = "Drops shadow ink when teleporting.",
+	TERRORBEAK = "More evasive, attempts to reposition itself to get an attack.",
+	LAVAE = "Explodes after death.",
+	POWDERMONKEY = "More proficient with Boat Cannons.",
+	DEERCLOPS = "Has 3 variants, each with unique attacks.",
+	MOOSE = "Has new attacks.",
+	BEARGER = "Has new attacks.",
+	LEIF = "Has a new attack.",
+	MINOTAUR = "Second phase has been reworked.",
+	PIGMAN = "Has a new attack.",
+	WALRUS = "Makes use of Snap Traps.",
+	BEEFALO = "Has a new attack.",
+	SPIDERQUEEN = "Has a new attack.",
+	EYEOFTERROR = "Has a new attack.",
+	TWINOFTERROR1 = "Has new attacks, matching more closely to its source material.",
+	TWINOFTERROR2 = "Has new attacks, matching more closely to its source material.",
+	BUTTERFLY = "Immune to aura damage.",
+	CRABKING = "Reworked fight.\nTakes damage from being rammed by boats, healing is interruped by cannons or by killing its claws. Main attack no longer creates leaks.",
 }
 
 --adds the addtional scrapbook info based on the table above.
@@ -232,9 +232,9 @@ local um_deps = {
 	telebase = { "featherpencil" },
 	moondial = { "moon_tear" },
 	klaus = { "krampus_sack", "klaus_amulet" },
-	alterguardian_phase1 = {"blueprint"},
-	lantern = {"winona_upgradekit_electrical"},
-	minerhat = {"winona_upgradekit_electrical"},
+	alterguardian_phase1 = { "blueprint" },
+	lantern = { "winona_upgradekit_electrical" },
+	minerhat = { "winona_upgradekit_electrical" },
 }
 
 for entry, deps in pairs(um_deps) do
@@ -244,6 +244,24 @@ for entry, deps in pairs(um_deps) do
 		end
 		for k, v in pairs(deps) do
 			table.insert(inst.scrapbook_adddeps, v)
+		end
+	end)
+end
+
+--scuffed, but the actual script is obfuscated, so i'm doing it via postinit.
+local wixiethings = {
+	"wardrobe",
+	"clock",
+	"piano"
+}
+
+for k, v in pairs(wixiethings) do
+	AddPrefabPostInit("wixie_" .. v, function(inst)
+		inst.scrapbook_thingtype = "POI"
+		inst.scrapbook_specialinfo = "WIXIEPUZZLE"
+		if not GLOBAL.TheNet:IsDedicated() then
+			inst:AddComponent("pointofinterest")
+			inst.components.pointofinterest:SetHeight(0)
 		end
 	end)
 end
