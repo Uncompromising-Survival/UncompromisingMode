@@ -596,8 +596,6 @@ Assets = {
 
 	Asset("ANIM", "anim/um_minotaur_actions.zip"),
 
-	Asset("ANIM", "anim/haul_pigman.zip"),
-
 	Asset("ANIM", "anim/wackycocoons.zip"),
 	Asset("ANIM", "anim/wackycocoonsmall.zip"), --Had to seperate into second build, too big for a single build
 
@@ -616,7 +614,8 @@ Assets = {
 	Asset("ANIM", "anim/deerclops_mutation_anims.zip"),
 	Asset("ANIM", "anim/deerclops_barrier.zip"),
 	Asset("ANIM", "anim/laserclops_anims.zip"),
-
+	Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE)
+	
 	Asset("ANIM", "anim/nymph.zip"),
 
 	Asset("ANIM", "anim/carnival_host_death.zip"),
@@ -779,7 +778,7 @@ Assets = {
 	--Asset("ANIM", "anim/yuleclops_actions_UM.zip"),
 	Asset("ANIM", "anim/deerclops_laser_hit_sparks_fx_blue.zip"),
 	Asset("ANIM", "anim/bearger_rockthrow.zip"),
-
+	Asset("ANIM", "anim/bearger_build_old.zip"),
 
 
 	--MISC.
