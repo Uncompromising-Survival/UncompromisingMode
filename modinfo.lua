@@ -205,7 +205,7 @@ configuration_options = {
         default =
         "default"
     },
-    BinaryConfig("moon_transformations", "Moon Transformations",
+    BinaryConfig("moon_transformations", "[BROKEN] Moon Transformations",
         "Certain things transform under the dim light of the full \"Moon\".", false),
 
     SkipSpace(),
@@ -253,6 +253,8 @@ configuration_options = {
             } },
         default = true
     },
+    BinaryConfig("wathom_undeath", "Wathom Undeath", "Enables Wathom undeath mechanic when he dies while his adrenaline is high.",
+        true),
     BinaryConfig("willow", "Willow",
         "Willow's Lighter now lasts forever when she holds it, and she will retaliate when attacked by shadows.", true),
     BinaryConfig("willow insulation", "Willow's Experimental Insulation",
@@ -610,6 +612,7 @@ configuration_options = {
         default = 1
     },
     BinaryConfig("hambatnerf", "Ham Bat Nerf", "Spoils faster and minimum damage is lower.", true),
+    BinaryConfig("lifeinjector_rework", "Booster Shot Rework", "The Booster Shot regenerates 50% of your max health loss overtime.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Beefalo take half of the damage taken, instead of all.", true),

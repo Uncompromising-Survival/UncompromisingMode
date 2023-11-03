@@ -147,7 +147,6 @@ local prefab_post = {
     "darts",
     "terrarium",
     "bandage",
-	"lifeinjector",
     "grassgekko",
     "minotaur_drops",
     "frog",
@@ -193,6 +192,7 @@ local prefab_post = {
 	"mooneye",
     "dragoonegg",
     "bomb_lunarplant",
+	"compostingbin",
 }
 
 local stategraph_post = {
@@ -473,6 +473,10 @@ end
 
 if GetModConfigData("heatwaves") then
     table.insert(component_post, "wildfires")
+end
+
+if GetModConfigData("lifeinjector_rework") then
+    table.insert(prefab_post, "lifeinjector")
 end
 
 modimport("postinit/sim")
