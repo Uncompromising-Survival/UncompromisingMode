@@ -23,7 +23,7 @@ end
 local S = STRINGS.SCRAPBOOK.SPECIALINFO
 
 local specinfo = {
-    --Tooltips for UM stuff.
+    --Tooltips for UM stuff. Usually more in-depth tooltips. TODO MOST OF THESE ARE JUST TOOLTIPS. PLEASE ADD DETAIL
     RAT_WHIP = "Stronger when the user is well fed.",
     AIR_CONDITIONER = "Can crush up Mushrooms for helpful stat clouds.",
     ANCIENT_AMULET_RED = "Drops soul orbs when attacked, which will replenish lost health when picked up.\nRevives players when haunted.",
