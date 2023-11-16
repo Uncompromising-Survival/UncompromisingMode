@@ -188,4 +188,3 @@ if GetModConfigData("hardcore") then
 end
 
 modimport("init/init_loadingtips")
-modimport("init/init_scrapbook")

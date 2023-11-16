@@ -333,4 +333,5 @@ if TUNING.DSTU.DISABLE_MEGAFLARE then
 	TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end
 
-modimport("init/init_extrascrapbook")
+modimport("init/init_scrapbook")
+modimport("init/init_scrapbook_um")
