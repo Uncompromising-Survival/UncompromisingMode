@@ -476,7 +476,7 @@ end
 
 local prettyline = "\n_________________________________________\n"
 
-function d_createscrapbookdata(print_missing_icons)
+function d_create_diffchecker_scrapbookdata(print_missing_icons)
     if not TheWorld.state.isautumn or TheWorld.state.israining then
         -- Force the season (many entities change the build/animation during certain seasons).
         TheWorld:PushEvent("ms_setseason", "autumn")
@@ -504,8 +504,6 @@ function d_createscrapbookdata(print_missing_icons)
     exporter_data_helper:write("return {\n")
 
     for entry, _ in pairs(scrapbookprefabs) do
-        print("what the fuck")
-        print(um_scrapbookprefabs[entry])
         if um_scrapbookprefabs[entry] == nil then
             currententry = entry
             scrapbookdata[entry] = {}

@@ -1306,3 +1306,9 @@ function d_checkmissingscrapbookentries()
         end
     end
 end
+
+function d_createall_um_scrapbookdata()
+    require('um_scrapbook_diffchecker')
+    d_create_um_scrapbookdata(true)
+    d_create_diffchecker_scrapbookdata()
+end
