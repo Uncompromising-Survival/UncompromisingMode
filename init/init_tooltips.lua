@@ -78,6 +78,9 @@ STRINGS.UNCOMP_TOOLTIP = {
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing.",
 	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
+    WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.",--putting these here for the icon
+    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel."
+
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -141,7 +144,9 @@ STRINGS.ENGINEERING_TOOLTIP = {
 	MINERHAT = " - May be upgraded.\n- Can be overcharged, if upgraded.",
 	LANTERN = "- May be upgraded.\n- Can be overcharged, if upgraded.",
 	NIGHTSTICK = "- Can be overcharged.",
-	BUGZAPPER = "- Can be overcharged."
+	BUGZAPPER = "- Can be overcharged.",
+    WINONA_TOOLBOX = "",--putting these here for the icon
+    WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
 
 if TUNING.DSTU.WINONA_PORTABLES then
