@@ -22,7 +22,8 @@ function setup_custom_loading_tips()
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_WIXIE_PUZZLE", "\"A mysterious wardrobe appeared, and I can't seem to get it open. Perhaps some outside assistance is required?\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_WIXIE", "\"Winifred? Never heard of her! Now stop asking!\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_POCKETS", "\"I taught the others to sew some pockets into their clothing. How did these dummies ever get by without me?\" - W")
-
+	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_SCRAPBOOK", "Uncompromising Mode now has Scrapbook integration! Make sure to revisit old pages and check out the new content in more detail than ever, in-game!")
+        
 	local tipcategorystartweights =
 	{
 		CONTROLS = 0.2,
