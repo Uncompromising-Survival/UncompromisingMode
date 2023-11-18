@@ -89,7 +89,21 @@ end
         Ingredient("compost", 1),
 		Ingredient("nitre", 1),
     }
-	
+    AllRecipes["compostingbin"].ingredients = {
+        Ingredient("boards", 3),
+        Ingredient("twigs", 2),
+		Ingredient("cutgrass", 1),
+    }
+    --wormwood stuffs
+    AllRecipes["ipecacsyrup"].ingredients = {Ingredient("red_cap", 1), Ingredient("honey", 1), Ingredient("compost", 1)}
+    AllRecipes["wormwood_berrybush"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries_juicy", 8)}
+    AllRecipes["wormwood_berrybush2"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries_juicy", 8)}
+    AllRecipes["wormwood_berrybush2"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries", 8)}
+
+    --turf
+    AllRecipes["turf_marsh"].ingredients = {Ingredient("cutreeds", 1), Ingredient("compost", 1)}
+    AllRecipes["wurt_turf_marsh"].ingredients = {Ingredient("cutreeds", 1), Ingredient("compost", 1)}
+
 
 if GetModConfigData("wanda_nerf") then
     AllRecipes["pocketwatch_revive"].ingredients = {
@@ -304,6 +318,9 @@ AllRecipes["mast_malbatross"].ingredients = {
 }
 
 AllRecipes["winona_spotlight"].ingredients = {Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("lightbulb", 1)}
+
+AllRecipes["featherpencil"].numtogive = 4 -- 8
+
 
 -- new recipes
 

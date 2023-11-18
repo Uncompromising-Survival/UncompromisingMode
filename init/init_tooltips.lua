@@ -45,6 +45,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
 	
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
+	COMPOSTINGBIN = "- Can hold up to 24 items.",
 	FIRESUPRESSOR = "- Reacts faster to nearby fires in Emergency Mode.\n- Ignores campfires and firepits.",
 	BOAT_CANNON_KIT = "- Increased firepower.\n- Can fire Seedshells.",
 	TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
