@@ -712,7 +712,7 @@ local function fn()
     end)]]
 
     if config ~= "minimal" then
-        inst:DoPeriodicTask(5, TornadoItemTossTask)
+        inst:DoPeriodicTask(2.5, TornadoItemTossTask)
     end
     inst:DoPeriodicTask(0.25, TornadoEnviromentTask)
 
