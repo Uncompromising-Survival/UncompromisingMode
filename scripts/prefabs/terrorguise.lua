@@ -72,18 +72,19 @@ local function fn()
 
 	inst:AddComponent("inspectable")
 
-	inst:AddComponent("armor")
-	inst.components.armor:InitCondition(TUNING.ARMOR_SANITY, 1)
+
 	
 	inst:AddComponent("equippable")
 	inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
 	inst.components.equippable:SetOnEquip(onequip)
 	inst.components.equippable:SetOnUnequip(onunequip)
-	inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
+	inst.components.equippable.dapperness = TUNING.CRAZINESS_LARGE
 
-	inst:AddComponent("shadowlevel")
-	inst.components.shadowlevel:SetDefaultLevel(TUNING.THURIBLE_SHADOW_LEVEL)
-
+	inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST) -- 6 days
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "spoiled_food"
+	
 	MakeHauntableLaunch(inst)
 	--------------------------------------------------------------
 
