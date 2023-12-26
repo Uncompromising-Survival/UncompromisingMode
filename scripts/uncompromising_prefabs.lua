@@ -295,7 +295,6 @@ local prefabs = {
 	"uncompromising_pollen_fx",
 	"um_areahandler",
 	"specter_shipwreck",
-	"proto_william",
 	"phantom",
 	--"resurrectionphonograph",
 	"winona_toolbox",
