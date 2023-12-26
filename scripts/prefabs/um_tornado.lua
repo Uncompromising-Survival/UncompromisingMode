@@ -419,8 +419,14 @@ local function TornadoItemTossTask(inst)
                 end
 
                 random_item:DoTaskInTime(8, function(inst) inst:RemoveTag("tornado_nosucky") end)
-                random_item.Physics:Teleport(x, 35, z)
-                random_item.Physics:SetMotorVel(0, math.random(-50, -33), 0)
+				
+				if random_item.Physics ~= nil then
+					random_item.Physics:Teleport(x, 35, z)
+					random_item.Physics:SetMotorVel(0, math.random(-50, -33), 0)
+				elseif random_item.Transform ~= nil then
+					random_item.Transform:SetPosition(x, 0, z)
+				end
+				
                 random_item.shadow = SpawnPrefab("warningshadow")
                 random_item.shadow:ListenForEvent("onremove", function(debris) debris.shadow:Remove() end, random_item)
                 random_item.shadow.Transform:SetPosition(x, 0, z)
@@ -430,7 +436,9 @@ local function TornadoItemTossTask(inst)
                 random_item.updatetask = random_item:DoPeriodicTask(FRAMES, _GroundDetectionUpdate, nil, 5)
 
                 random_item.updatetask_timeout = random_item:DoTaskInTime(30, function(inst)
-                    inst.Physics:ClearMotorVelOverride()
+					if random_item.Physics ~= nil then
+						inst.Physics:ClearMotorVelOverride()
+					end
 
                     if inst.updatetask ~= nil or inst.shadow ~= nil then
                         print("PANIC? FALLING ITEM TIMED OUT!")
@@ -501,7 +509,8 @@ local function TornadoTask(inst)
 
             if not v:HasTag("um_windturbine") then
                 if not v:HasTag("um_windturbine") then
-                    if math.random() > 0.99 then
+                    local rand = math.random()
+                    if (v.prefab == "wes" and rand > 0.95 or rand > 0.99) then
                         local lightning_targeted = SpawnPrefab("hound_lightning")
                         lightning_targeted.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
                         lightning_targeted.NoTags = { "INLIMBO", "shadow", "structure", "wall", "companion", "abigail", "bird",

@@ -39,13 +39,20 @@ local function common(bank, build, anim, tags, cookable)
     end
 
     MakeInventoryFloatable(inst)
-
+	
+	
+    local land_time = (POPULATING and 12*FRAMES) or 0
+    inst:DoTaskInTime(land_time, function(inst)
+        inst.components.floater:OnLandedServer()
+    end)	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-
+	inst.bank = bank
+	inst.build = build
+	
     inst:AddComponent("edible")
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
@@ -61,9 +68,9 @@ local function common(bank, build, anim, tags, cookable)
     inst.components.tradable.goldvalue = TUNING.GOLD_VALUES.MEAT
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
     inst.components.perishable:StartPerishing()
-    inst.components.perishable.onperishreplacement = "spoiled_food"
+    inst.components.perishable.onperishreplacement = "spoiled_fish"
 
     if cookable ~= nil then
         inst:AddComponent("cookable")
@@ -74,15 +81,15 @@ local function common(bank, build, anim, tags, cookable)
 end
 
 local function ocupus_tentacle()
-    local inst = common("ocupus_items", "ocupus_items", "idle_tentacle", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
+    local inst = common("um_ocupus", "ocupus", "tentacle_item", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst.components.edible.healthvalue = -TUNING.HEALING_MED
-    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL
-    inst.components.edible.sanityvalue = -TUNING.SANITY_LARGE
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    inst.components.edible.healthvalue = -20
+    inst.components.edible.hungervalue = 37.5
+    inst.components.edible.sanityvalue = -15
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
 
     inst.components.tradable.goldvalue = 1
 
@@ -93,15 +100,15 @@ local function ocupus_tentacle()
 end
 
 local function ocupus_tentacle_eye()
-    local inst = common("ocupus_items", "ocupus_items", "idle_eye", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
+    local inst = common("um_ocupus", "ocupus", "eyetacle_item", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst.components.edible.healthvalue = -TUNING.HEALING_MED
-    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL
-    inst.components.edible.sanityvalue = -TUNING.SANITY_LARGE
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    inst.components.edible.healthvalue = 20
+    inst.components.edible.hungervalue = 37.5
+    inst.components.edible.sanityvalue = -33
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
 
     inst.components.tradable.goldvalue = 1
 
@@ -117,10 +124,10 @@ local function ocupus_tentacle_cooked()
         return inst
     end
 
-    inst.components.edible.healthvalue = -TUNING.HEALING_MED
-    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL
-    inst.components.edible.sanityvalue = -TUNING.SANITY_LARGE
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    inst.components.edible.healthvalue = -3
+    inst.components.edible.hungervalue = 37.5
+    inst.components.edible.sanityvalue = -10
+    inst.components.perishable:SetPerishTime(3*TUNING.PERISH_FAST)
 
     inst.components.tradable.goldvalue = 1
 

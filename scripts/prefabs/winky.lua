@@ -110,7 +110,6 @@ local function master_postinit(inst)
     inst:AddTag("ratwhisperer")
 
 	-- choose which sounds this character will play
-	--inst.soundsname = "winnie"
 	inst.soundsname = "winky"
 	
     inst.components.foodaffinity:AddPrefabAffinity("powcake", 20)
@@ -123,6 +122,8 @@ local function master_postinit(inst)
 	
     inst.components.sanity.night_drain_mult = TUNING.WENDY_SANITY_MULT
     inst.components.sanity.neg_aura_mult = TUNING.WENDY_SANITY_MULT
+	
+	inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
 
 	-- todo: Add an example special power here.
 	inst.components.health:SetMaxHealth(175)

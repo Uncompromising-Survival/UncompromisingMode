@@ -45,7 +45,7 @@ local function Zap(inst)
 					
 				local damage = -10 * mult
 				
-				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") and not v:HasTag("playerghost") then
+				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and not insulated and v:HasTag("player") and not v:HasTag("playerghost") and v.components.health ~= nil and not v.components.health:IsDead() then
 					v.sg:GoToState("electrocute")
 				end
 						
@@ -56,9 +56,9 @@ local function Zap(inst)
 					v.components.playerlightningtarget:DoStrike()
 				end
 
-				if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") then
-					v.sg:GoToState("hit")
-				end
+				--if v.sg ~= nil and not v.sg:HasStateTag("nointerrupt") and v.components.health ~= nil and not v.components.health:IsDead() then
+					--v.sg:GoToState("hit")
+				--end
 			end
 		end
 	end
@@ -77,7 +77,8 @@ local function fn()
 
 	inst:AddTag("hound_lightning")
 	inst:AddTag("sharp")
-
+    inst:AddTag("ignorewalkableplatforms")
+    
 	inst.entity:SetPristine()
 
 	if not TheWorld.ismastersim then
