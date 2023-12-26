@@ -15,9 +15,9 @@ STRINGS.UNCOMP_TOOLTIP = {
 	NIGHTLIGHT = "- Fuels itself at night by taking nearby players sanity.",
 	ARMOR_SANITY = "- Reduced sanity drain on damage taken.",
 	TOPHAT = "- Reduces sanity loss from various magic items.",
-	MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items.",
+	MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
 	ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
-	GLASSCUTTER = "- Deals slightly more damage to Shadows.",
+	GLASSCUTTER = "- Deals more damage to Shadow Aligned Creatures.",
 	FEATHERHAT = "- Provides safety from territorial Pengulls.",
 	YELLOWAMULET = "- No longer breaks when empty.",
 	ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
@@ -41,9 +41,8 @@ STRINGS.UNCOMP_TOOLTIP = {
 	FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
 	BOAT_ROTATOR_KIT = "- Increases boat steering speed.\n- Helps doing sharp turns.",
 	STAFF_TORNADO = "- Can redirect Giant Tornadoes.",
-	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
 	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
-	
+	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
 	COMPOSTINGBIN = "- Can hold up to 24 items.",
 	FIRESUPRESSOR = "- Reacts faster to nearby fires in Emergency Mode.\n- Ignores campfires and firepits.",
@@ -52,7 +51,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	BREAK = "BREAK HERE",
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
-	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.",
+	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.\n- Provides cold in a small radius.\n- Removes smog in a large area.",
 	ANCIENT_AMULET_RED =
 	"- Drops soul orbs when attacked, which will replenish lost health when picked up.\n- Revives players when haunted.",
 	ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
@@ -79,7 +78,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing.",
 	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
-    WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.",
+    WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.",--putting these here for the icon
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel."
 
 }
@@ -319,7 +318,7 @@ if TUNING.DSTU.WICKERNERF_TENTACLES then
 	"- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
 end
 
-if TUNING.DSTU.WOODIE then
+if TUNING.DSTU.WOODIE_WET_GOOSE then
 	TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
 end
 
