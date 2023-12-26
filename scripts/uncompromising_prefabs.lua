@@ -297,7 +297,6 @@ local prefabs = {
 	"specter_shipwreck",
 	"proto_william",
 	"phantom",
-	"spider_crabbit",
 	--"resurrectionphonograph",
 	"winona_toolbox",
 	"searock_arches",
@@ -320,7 +319,6 @@ local prefabs = {
 	"driftwood_waterlogged",
 	"kelpstack",
 	"siren_throne",
-	"spider_crabbit_den",
 	--"um_siren_bird",
 --DAMNIT SCRIMBLES
 	"uncompromising_harpoon",
@@ -330,8 +328,6 @@ local prefabs = {
 	"uncompromising_fishingnetvisualizer",
 	"um_windturbine",
 	"mastupgrade_windturbine",
-
-	"siren_fish",
 
 	"armor_reed_um",
 	"armor_sharksuit_um",
@@ -362,12 +358,9 @@ local prefabs = {
 	"steeringwheel_copper",
 	"hermit_bundle_lures",
 	"um_cannonballs",
-	"um_dreamcatcher",
 	--"um_bombmixer_bombs",
 	"um_beeguards",
 	"um_beestinger_projectile",
-	"um_frog_ocean",
-	"um_tesla_tree",
 	"um_specter_amulet",
 	"um_walls",
 	"um_ocupus_eyetacle",
@@ -446,10 +439,6 @@ local prefabs = {
 	"trident_ground_fx",
 	"moon_beacon",
 	"goat_lightning",
-
-	--	"um_bombmixer1",
-	--	"um_bombmixer",
-	--	"um_bombmixer_bombs2",
 
 	"mara_boss1",
 	"mara_boss1_bullets",
