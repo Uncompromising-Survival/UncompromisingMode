@@ -198,6 +198,11 @@ DESCRIBE.GIANT_TREE = "A redwood tree! You can see it from miles away!"
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
 DESCRIBE.WIDOWSGRASP = "Woby, fetch!"
+
+DESCRIBE.SILKSACK = "I wonder if there are any baby spiders in there."
+DESCRIBE.SILKEN_BUNDLE = "Our provisions are stuck inside."
+
+
 DESCRIBE.WEBBEDCREATURE = "Ooh, I wonder what's in it!"
 ANNOUNCE.WEBBEDCREATURE = "How am I going to get her to unwrap this for me?"
 DESCRIBE.SNAPDRAGON_BUDDY = "Careful Woby! Those plants look hungry!"

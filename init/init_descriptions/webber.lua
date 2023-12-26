@@ -177,7 +177,11 @@ DESCRIBE.HOODEDWIDOW = "We're a spider too!! Why are you attacking us?!"
 DESCRIBE.GIANT_TREE = "It's probably super old."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Sorry..."
+DESCRIBE.SILKSACK = "Yikes!"
+DESCRIBE.SILKEN_BUNDLE = "We wish we could do it by ourselves."
+
 DESCRIBE.WEBBEDCREATURE = "Ooh! Are our friends storing gifts for us?"
 ANNOUNCE.WEBBEDCREATURE = "We need bigger hands, from a bigger spider!"
 DESCRIBE.SNAPDRAGON_BUDDY = "Golly! We're glad they don't eat meat!"

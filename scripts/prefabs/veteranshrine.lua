@@ -97,9 +97,9 @@ local function ToggleCursee(inst)
 			local function acceptance()
 				TheFrontEnd:PopScreen()
 			end
-			local title = "You Made Your Choice."
-			local bodytext = "Now you must live with the consequences..."
-			local yes_box = { text = "Ok", cb = acceptance }
+			local title = STRINGS.VETS_CONFIRMED_TITLE
+			local bodytext = STRINGS.VETS_CONFIRMED
+			local yes_box = { text = STRINGS.VETS_OK, cb = acceptance }
 
 			local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
 			bpds.title:SetPosition(0, 90, 0)
@@ -111,9 +111,9 @@ local function ToggleCursee(inst)
 				TheFrontEnd:PopScreen()
 			end
 
-			local title = "The Veterans Curse."
-			local bodytext = "You're about to be afflicted with a crippling curse.\nYour body will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
-			local yes_box = { text = "Ok", cb = start_curse }
+			local title = STRINGS.VETS_TITLE
+			local bodytext = STRINGS.VETS
+			local yes_box = { text = STRINGS.VETS_OK, cb = start_curse }
 
 			local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
 			bpds.title:SetPosition(0, 90, 0)
@@ -147,6 +147,24 @@ local function RegisterNetListeners(inst)
 	inst:ListenForEvent("SetCurseedirty", ToggleCursee)
 end
 
+local function OnGetItemFromPlayer(inst, giver, item)
+    if item.skull_effect ~= nil then
+		item.skull_effect(item, giver)
+	end
+end
+
+local function OnRefuseItem(inst, giver, item)
+	if not giver:HasTag("vetcurse") then
+		inst.components.talker:Say(GetString(giver, "NOT_VETERANCURSED"))
+	elseif not item:HasTag("vetskull") then
+		inst.components.talker:Say(GetString(giver, "NOT_VETERANSKULL"))
+	end
+end
+
+local function AcceptTest(inst, item, giver)
+    return giver:HasTag("vetcurse") and item:HasTag("vetskull")
+end
+
 local function fn(Sim)
     local inst = CreateEntity()
 	
@@ -163,6 +181,7 @@ local function fn(Sim)
     inst.AnimState:PlayAnimation("idle", true)
 	
     --inst.GetActivateVerb = GetVerb
+    inst:AddTag("trader")
 	
 	inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
@@ -197,6 +216,12 @@ local function fn(Sim)
     inst.components.activatable.inactive = true
 	inst.components.activatable.quickaction = false
 	--inst.components.activatable.standingaction = true
+
+    inst:AddComponent("trader")
+
+    inst.components.trader:SetAcceptTest(AcceptTest)
+    inst.components.trader.onaccept = OnGetItemFromPlayer
+    inst.components.trader.onrefuse = OnRefuseItem
 	
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()

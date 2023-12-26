@@ -201,7 +201,11 @@ DESCRIBE.HOODEDWIDOW =
 DESCRIBE.GIANT_TREE = "Sequoioideae, the redwood tree."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "The limb of the predator arachnid."
+DESCRIBE.SILKSACK = "It seems some of the internal organs still function, fascinating."
+DESCRIBE.SILKEN_BUNDLE = "Stickily bundled up nice and tight."
+
 DESCRIBE.WEBBEDCREATURE =
 "It doesnt appear to be a nest. I assume it contains something."
 ANNOUNCE.WEBBEDCREATURE =

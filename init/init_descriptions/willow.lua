@@ -184,7 +184,11 @@ DESCRIBE.HOODEDWIDOW = "I am NOT getting near that!"
 DESCRIBE.GIANT_TREE = "That's a big ol' tree."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Ugh, I don't wanna hold it!"
+DESCRIBE.SILKSACK = "Gross!"
+DESCRIBE.SILKEN_BUNDLE = "I don't care what's inside, it should be burned."
+
 DESCRIBE.WEBBEDCREATURE = "Why SHOULDN'T I burn them?"
 ANNOUNCE.WEBBEDCREATURE = "I can't get through! I need that thing's claw!"
 DESCRIBE.SNAPDRAGON_BUDDY = "This food's mine, you can't have it!"

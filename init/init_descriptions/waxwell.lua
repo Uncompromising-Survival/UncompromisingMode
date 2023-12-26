@@ -184,7 +184,11 @@ DESCRIBE.HOODEDWIDOW = "I want to stay FAR away from her."
 DESCRIBE.GIANT_TREE = "This tree is unusually large."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "It got blood on my suit!"
+DESCRIBE.SILKSACK = "I have no intent on wearing this hideous thing."
+DESCRIBE.SILKEN_BUNDLE = "Sticky, but snug."
+
 DESCRIBE.WEBBEDCREATURE = "There's probably carcasses in there."
 ANNOUNCE.WEBBEDCREATURE = "Only the spider can access the contents. Hmmm."
 DESCRIBE.SNAPDRAGON_BUDDY = "If I feed it, will it go away?"

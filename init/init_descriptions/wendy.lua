@@ -181,7 +181,11 @@ DESCRIBE.HOODEDWIDOW = "She could eat me in a single bite."
 DESCRIBE.GIANT_TREE = "Ancient, and full of life."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "It could've impaled my chest with ease. I wish it did."
+DESCRIBE.SILKSACK = "For carrying heavy and grotesque burdens."
+DESCRIBE.SILKEN_BUNDLE = "Whatever's in there is sticky now."
+
 DESCRIBE.WEBBEDCREATURE = "If I make a mistake, it could be me in one of those."
 ANNOUNCE.WEBBEDCREATURE = "Unraveling this would require a spiders touch..."
 DESCRIBE.SNAPDRAGON_BUDDY = "Lives for food, like everything else."

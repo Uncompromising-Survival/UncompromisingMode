@@ -72,38 +72,46 @@ if GetModConfigData("longpig") then
     }
 end
 
-
--- Rot Related Recipe Changes [AXE]
+if GetModConfigData("compostoverrot") then
+    -- Rot Related Recipe Changes [AXE]
     AllRecipes["lifeinjector"].ingredients = {
         Ingredient("nitre", 2),
         Ingredient("red_cap", 6),
-		Ingredient("stinger", 1),
+        Ingredient("stinger", 1),
     }
     AllRecipes["mushroom_farm"].ingredients = {
         Ingredient("compost", 4),
         Ingredient("poop", 5),
-		Ingredient("livinglog", 2),
+        Ingredient("livinglog", 2),
     }
     AllRecipes["compostwrap"].ingredients = {
         Ingredient("poop", 5),
         Ingredient("compost", 1),
-		Ingredient("nitre", 1),
+        Ingredient("nitre", 1),
     }
     AllRecipes["compostingbin"].ingredients = {
         Ingredient("boards", 3),
         Ingredient("twigs", 2),
-		Ingredient("cutgrass", 1),
+        Ingredient("cutgrass", 1),
     }
+
     --wormwood stuffs
-    AllRecipes["ipecacsyrup"].ingredients = {Ingredient("red_cap", 1), Ingredient("honey", 1), Ingredient("compost", 1)}
-    AllRecipes["wormwood_berrybush"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries_juicy", 8)}
-    AllRecipes["wormwood_berrybush2"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries_juicy", 8)}
-    AllRecipes["wormwood_juicyberrybush"].ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 10), Ingredient("compost", 2), Ingredient("berries", 8)}
+    AllRecipes["ipecacsyrup"].ingredients = { Ingredient("red_cap", 1), Ingredient("honey", 1), Ingredient("compost", 1) }
+    AllRecipes["wormwood_berrybush"].ingredients = { Ingredient("compost", 2), Ingredient("berries_juicy", 8) }
+    AllRecipes["wormwood_berrybush2"].ingredients = { Ingredient("compost", 2), Ingredient("berries_juicy", 8) }
+    AllRecipes["wormwood_juicyberrybush"].ingredients = { Ingredient("compost", 2), Ingredient("berries", 8) }
 
     --turf
-    AllRecipes["turf_marsh"].ingredients = {Ingredient("cutreeds", 1), Ingredient("compost", 1)}
-    AllRecipes["wurt_turf_marsh"].ingredients = {Ingredient("cutreeds", 1), Ingredient("compost", 1)}
+    AllRecipes["turf_marsh"].ingredients = { Ingredient("cutreeds", 1), Ingredient("compost", 1) }
+    AllRecipes["wurt_turf_marsh"].ingredients = { Ingredient("cutreeds", 1), Ingredient("compost", 1) }
+end
 
+--woodie stuff
+
+local config_skilltrees = GetModConfigData("woodie_skilltree")
+if config_skilltrees then
+	AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
+end
 
 if GetModConfigData("wanda_nerf") then
     AllRecipes["pocketwatch_revive"].ingredients = {
@@ -317,7 +325,7 @@ AllRecipes["mast_malbatross"].ingredients = {
     Ingredient("malbatross_feathered_weave", 3)
 }
 
-AllRecipes["winona_spotlight"].ingredients = {Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("lightbulb", 1)}
+AllRecipes["winona_spotlight"].ingredients = { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("lightbulb", 1) }
 
 AllRecipes["featherpencil"].numtogive = 4 -- 8
 
@@ -443,6 +451,17 @@ AddRecipe2(
     { "STRUCTURES" }
 )
 ChangeSortKey("air_conditioner", "firesuppressor", "STRUCTURES", true)
+
+AddRecipe2(
+    "houndious_observious",
+    { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) },
+    TECH.MAGIC_TWO,
+    { placer = "houndious_observious_placer" },
+    { "STRUCTURES", "MAGIC" }
+)
+ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
+ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
+GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
 
 AddRecipe2(
     "skullchest_child",
@@ -1334,6 +1353,16 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
 
+    AddRecipe2(
+        "beakbasher",
+        { Ingredient("boards", 1), Ingredient("rope", 2), Ingredient("ocupus_beak", 1) },
+        TECH.SCIENCE_TWO,
+        nil,
+        { "TOOLS" }
+    )
+    ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+    GLOBAL.STRINGS.RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick. Yo betatesters, I'm thinking about replacing the other items in this recipe with sea-based stuff to keep the trend, probably driftwood. What say you? What about a sea-based binding in place of rope."
+
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
     AddPrefabPostInit("forest", function(inst)
@@ -1349,7 +1378,7 @@ end
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
         if recipe.FindAndConvertIngredient ~= nil then
-            local tar = recipe:FindAndConvertIngredient("tar")    -- tar/sludge can replace eachother!
+            local tar = recipe:FindAndConvertIngredient("tar")             -- tar/sludge can replace eachother!
             local sludge = recipe:FindAndConvertIngredient("sludge")
             local shark_fin = recipe:FindAndConvertIngredient("shark_fin") -- shark fins/rockjaw leather can replace eachother!
             local rockjawleather = recipe:FindAndConvertIngredient("rockjawleather")
@@ -1432,10 +1461,6 @@ STRINGS.ACTIONS.OPEN_CRAFTING.BOMBMIXER = "Mix at"
 
 STRINGS.RECIPE_DESC.TRANSMUTE_MONSTERMEAT = "Transmute Monster Morsels into Monster Meat"
 STRINGS.RECIPE_DESC.TRANSMUTE_MONSTERSMALLMEAT = "Transmute Monster Morsels into Monster Meat"
-
-STRINGS.SKILLTREE.WILSON.WILSON_ALCHEMY_4_DESC =
-    STRINGS.SKILLTREE.WILSON.WILSON_ALCHEMY_4_DESC ..
-    "\nTransform 3 Monster Morsels into a Monster Meat.\nTransform a Monster Meat into 2 Monster Morsels."
 
 STRINGS.RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
 STRINGS.RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."

@@ -1,31 +1,38 @@
-require "behaviours/findclosest"
-require "behaviours/panic"
-require "behaviours/standstill"
-
-local SEE_LIGHT_DIST = 50
+require "behaviours/follow"
+require "behaviours/wander"
 
 local UM_ShamblerBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
 
-local function SafeLightDist(inst, target)
-    if target:HasTag("player") or target:HasTag("playerlight") then
-        return 4
-    end
-    local owner = target.components.inventoryitem ~= nil and target.components.inventoryitem:GetGrandOwner() or nil
-    return (owner ~= nil and owner:HasTag("player") and 4)
-        or (target.Light ~= nil and target.Light:GetCalculatedRadius())
-        or 4
+local function GetLeader(inst)
+	local leader = inst.components.follower.leader
+	
+	if leader ~= nil and not leader.components.health:IsDead() and
+		leader:IsValid() then
+			return leader
+	end
+	
+	return nil
 end
 
 function UM_ShamblerBrain:OnStart()
-    local root =
-        PriorityNode({
-            WhileNode(function() return self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
-            WhileNode(function() return self.inst:CanStandUp() and TheWorld.state.isnight end, "IsNight",
-                FindClosest(self.inst, SEE_LIGHT_DIST, SafeLightDist, { "fire" }, nil, { "campfire", "lighter" })),
-            StandStill(self.inst),
-        }, 1)
+    local root = PriorityNode(
+    {
+        
+        WhileNode(function() return GetLeader(self.inst) ~= nil and
+			(self.inst:GetDistanceSqToInst(GetLeader(self.inst)) > 300 or
+				self.inst:GetDistanceSqToInst(GetLeader(self.inst)) < 5)			
+			end, "FollowTarget",
+				Follow(self.inst, function() return GetLeader(self.inst) end, TUNING.GHOST_RADIUS*.25, TUNING.GHOST_RADIUS*.5, TUNING.GHOST_RADIUS, false)
+        ),
+        WhileNode(function() return GetLeader(self.inst) ~= nil end, "FollowTarget",
+				Follow(self.inst, function() return GetLeader(self.inst) end, TUNING.GHOST_RADIUS*.25, TUNING.GHOST_RADIUS*.5, TUNING.GHOST_RADIUS, true)
+        ),
+		WhileNode(function() return self.inst:GetTimeAlive() > 3 end, "Begone",
+			ActionNode(function() self.inst.sg:GoToState("dissipate") end)
+		),
+    }, 1)
 
     self.bt = BT(self.inst, root)
 end

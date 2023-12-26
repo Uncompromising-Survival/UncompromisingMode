@@ -260,7 +260,7 @@ local um_preparedfoods =
 
 	snowcone =
 	{
-		test = function(cooker, names, tags) return TUNING.DSTU.ICECROCKBLOCKER and ((names.ice and names.ice > 1) or (names.ice and names.twigs)) end,
+		test = function(cooker, names, tags) return TUNING.DSTU.ICECROCKBLOCKER == true and ((names.ice and names.ice > 1) or (names.ice and names.twigs)) end,
 		hunger = 9.375,
 		health = 3,
 		sanity = 5,
@@ -391,7 +391,9 @@ local um_preparedfoods =
 
 	um_deviled_eggs =
 	{
-		test = function(cooker, names, tags) return tags.monster and tags.monster >= 2 and tags.egg and not tags.meat end,
+		--test = function(cooker, names, tags) return tags.monster and tags.monster >= 2 and tags.egg and not tags.meat end,
+		test = function(cooker, names, tags) return tags.monster and tags.egg and not tags.meat and tags.monster > tags.egg end,
+		
 		hunger = 18.75,
 		health = -15,
 		sanity = -20,

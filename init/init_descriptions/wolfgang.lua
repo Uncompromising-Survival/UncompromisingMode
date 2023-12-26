@@ -174,7 +174,11 @@ DESCRIBE.HOODEDWIDOW = "AAAAH! AAAAAAAAAAHH!!"
 DESCRIBE.GIANT_TREE = "Mightiest tree!"
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Monster leg!"
+DESCRIBE.SILKSACK = "Carries more things, but is spooky."
+DESCRIBE.SILKEN_BUNDLE = "Scary surprise inside."
+
 DESCRIBE.WEBBEDCREATURE = "Wolfgang don't want to touch."
 ANNOUNCE.WEBBEDCREATURE = "Spider is not mightier!!"
 DESCRIBE.SNAPDRAGON_BUDDY = "Plant need food to grow strong like Wolfgang!"

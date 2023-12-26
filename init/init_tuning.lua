@@ -202,7 +202,7 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Woodie
     GOOSE_WATER_WETNESS_RATE = 3,
-    WOODIE = GetModConfigData("woodie"),
+    WOODIE_WET_GOOSE = GetModConfigData("woodie_wet_goose"),
     -- Wolfgang
     WOLFGANG_SANITY_MULTIPLIER = 1.3, -- prev was 1.1
     WOLFGANG_HUNGERMIGHTY = GetModConfigData("wolfgang"),
@@ -235,10 +235,10 @@ TUNING.DSTU = {
     -- Wickerbottom
     WICKERNERF = GetModConfigData("wickerbottom"),
     WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
-
-    -- Willow
-    WILLOW_INSULATION = GetModConfigData("willow insulation"),
-
+	
+	-- Willow
+	--WILLOW_INSULATION = GetModConfigData("willow insulation"),
+	
     -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
     WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
     WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
@@ -335,7 +335,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R30_ST_WOODWOLFWORM"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R32_ST_WATHGRITHRWILLOW"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     HUNGRY_VOID = GetModConfigData("hungry_void"),
@@ -344,7 +344,7 @@ TUNING.DSTU = {
     RAW_CROPS_NERF = GetModConfigData("rawcropsnerf"),
     WENDY_NERF = GetModConfigData("wendy"),
     TOADS = GetModConfigData("toads"),
-    MONSTER_EGGS = GetModConfigData("monstereggs"),
+    MONSTER_EGGS = GetModConfigData("monster_eggs"),
     IMPASSBLES = GetModConfigData("passibleimpassibles"),
     VETCURSE = GetModConfigData("vetcurse"),
     MOON_TRANSFORMATIONS = GetModConfigData("moon_transformations"),
@@ -391,6 +391,7 @@ TUNING.DSTU = {
     TELESTAFF_REWORK = GetModConfigData("telestaff_rework"),
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
     CANEDURABILITY = GetModConfigData("canedurability"),
+    AC_COOLING = GetModConfigData("ac_does_ac"),
     -- boss hp qol
     BEEQUEEN_HEALTH = GetModConfigData("bee queen health"),
     TOADSTOOL_HEALTH = GetModConfigData("toadstool health"),
@@ -417,6 +418,12 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_RELEASE_TIME = day_time * 1.5
 end
 
+
+--if GetModConfigData("woodie_skilltree") then
+--TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
+--TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
+--end
+
 if GetModConfigData("wixie_walter") then
     TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2
@@ -436,6 +443,14 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock",
         "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock" }
 end
+
+-- Wilson Torch Buff
+--TUNING.SKILLS.WILSON_TORCH_1 = 0.70
+--TUNING.SKILLS.WILSON_TORCH_2 = 0.40
+--TUNING.SKILLS.WILSON_TORCH_3 = 0.10
+--TUNING.SKILLS.WILSON_TORCH_4 = 3
+--TUNING.SKILLS.WILSON_TORCH_5 = 4
+--TUNING.SKILLS.WILSON_TORCH_6 = 5
 
 TUNING.NONLETHAL_TEMPERATURE = false
 TUNING.NONLETHAL_HUNGER = false
@@ -555,10 +570,10 @@ if GetModConfigData("changed_shadowpieces") then
     TUNING.SHADOW_BISHOP.ATTACK_PERIOD = { 14, 15, 16 }
     --TUNING.SHADOW_BISHOP.HIT_RANGE = 2.5 --NUH UH
     TUNING.SHADOW_BISHOP.DAMAGE = { 15, 25, 35 }
-    TUNING.SHADOW_KNIGHT.ATTACK_RANGE = 3.2
-    TUNING.SHADOW_KNIGHT.ATTACK_RANGE_LONG = 4
-    TUNING.SHADOW_KNIGHT.HEALTH = { 600, 1800, 5400 }
-    TUNING.SHADOW_KNIGHT.ATTACK_PERIOD = { 3.5, 2.5, 1.5 } --evilishly low
+    --TUNING.SHADOW_KNIGHT.ATTACK_RANGE = 3.2
+    --TUNING.SHADOW_KNIGHT.ATTACK_RANGE_LONG = 4
+    --TUNING.SHADOW_KNIGHT.HEALTH = {600, 1800, 5400}
+    --TUNING.SHADOW_KNIGHT.ATTACK_PERIOD = {3.5, 2.5, 1.5} --evilishly low
 end
 
 
@@ -580,4 +595,9 @@ local extraitems = {
 
 for k, v in ipairs(extraitems) do
     table.insert(TUNING.EXTRA_STARTING_ITEMS.winter, v)
+end
+
+-- Kramped buff
+if GetModConfigData("kramped_buff") then
+    TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
 end

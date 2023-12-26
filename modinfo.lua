@@ -1,9 +1,7 @@
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
-if not folder_name:find("workshop-") then
-    name = "[LOCAL] - " .. name
-end
+if not folder_name:find("workshop-") then name = "[DEV-LOCAL] - " .. name end
 
 description = [[
 󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past" ]
@@ -150,19 +148,19 @@ configuration_options = {
         "Sewing Kit has DOUBLE uses, but repairs HALF value. Pairs very well with Clothing Degredation, lets you keep clothing in top shape more easily.",
         true),
     BinaryConfig("lifeamulet", "Life Giving Amulet Changes",
-        "The Amulet won't revive ghosts, but it now interrupts death upon taking a fatal hit while wearing it.\nIts hunger > health conversion ticks much faster.",
+        "Won't revive ghosts, but it now interrupts death while wearing it.\nIts hunger > health conversion ticks much faster.",
         true),
-    BinaryConfig("longpig", "Long Pig", "Skeletons drop Long Pig to prevent Telltale Heart spam.", true),
+    BinaryConfig("longpig", "Long Pig", "Skeletons drop Long Pig, to prevent Telltale Heart spam.\n Telltale Heart and Spectral Cure-All recipes changed.", true),
     {
         name = "flingo_setting",
         label = "Flingomatic Nerf",
-        hover =
-        "Pick the Flingomatic nerf you would like to play around.",
+        hover = "Pick the Flingomatic nerf you would like to play around.",
         options = {
             { description = "Fuel loss in use",  data = "Fuelmuncher" },
-            { description = "No longer freezes", data = "Waterballs" }, { description = "None", data = "Newb" } },
-        default =
-        "Waterballs"
+            { description = "No longer freezes", data = "Waterballs" },
+            { description = "None",              data = "Newb" },
+        },
+        default = "Waterballs",
     },
     {
         name = "fireloot",
@@ -170,9 +168,11 @@ configuration_options = {
         hover =
         "Loot no longer gets destroyed when a mob is burnt to death. Mobs will explode on death, dealing damage and lighting things on fire, based on loot dropped.",
         options = {
-            { description = "Off",          data = 1 }, { description = "Explosion Off", data = 2 },
-            { description = "Explosion On", data = 3 } },
-        default = 3
+            { description = "Off",           data = 1 },
+            { description = "Explosion Off", data = 2 },
+            { description = "Explosion On",  data = 3 },
+        },
+        default = 3,
     },
     {
         name = "boss_resistance_",
@@ -191,6 +191,7 @@ configuration_options = {
                 data = 2
             },
             { description = "Disabled", data = 3 },
+
         },
         default = 3,
     },
@@ -216,10 +217,6 @@ configuration_options = {
     Header("Characters"),
     ------------------------------
     BinaryConfig("funny rat", "Winky", "Enable Uncompromising Mode's Winky, the Vile Vermin.", true),
-    BinaryConfig("wixie_walter", "Wixie & Walter Rework",
-        "Enable Uncompromising Mode's Wixie, the Delinquent, who expands on Walter's slingshot, while Walter gets new interactions and mechanics with Woby!",
-        true),
-    --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),
     BinaryConfig("holy fucking shit it's wathom", "Wathom", "Enable Uncompromising Mode's Wathom, the Forgotten Parody.",
         true),
     BinaryConfig("wathom_max_dmg", "Wathom - Damage Cap",
@@ -255,12 +252,16 @@ configuration_options = {
     },
     BinaryConfig("wathom_undeath", "Wathom Undeath", "Enables Wathom undeath mechanic when he dies while his adrenaline is high.",
         true),
-    BinaryConfig("willow", "Willow",
-        "Willow's Lighter now lasts forever when she holds it, and she will retaliate when attacked by shadows.", true),
-    BinaryConfig("willow insulation", "Willow's Experimental Insulation",
-        "Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
+    BinaryConfig("wixie_walter", "Wixie & Walter Rework",
+        "Enable Uncompromising Mode's Wixie, the Delinquent, who expands on Walter's slingshot, while Walter gets new interactions and mechanics with Woby!",
+        true),
+    --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),
+    BinaryConfig("willow", "Willow - Lighter Buffs",
+        "Willow's Lighter now lasts forever when she holds it.", true),
+    --BinaryConfig("willow insulation", "Willow's Experimental Insulation",
+        --"Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
     BinaryConfig("bernie_buffs", "Willow - Bernie Buffs",
-        "Bernie has 80% resistance against shadows\nHolding Bernie prevents shadows from aggro'ing.", true),
+        "Holding Bernie prevents shadows from aggroing.", true),
     BinaryConfig("wolfgang", "Experimental Wolfgang",
         "Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
     BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
@@ -305,7 +306,6 @@ configuration_options = {
         default = "inv",
 
     },
-
     BinaryConfig("waxwell", "Maxwell",
         "Maxwell gets buffed versions of his classic shadows by reading the Codex Umbra. Disable for Maxwell mod compatibility!",
         true),
@@ -353,6 +353,8 @@ configuration_options = {
         true),
     BinaryConfig("wanda_nerf", "Wanda",
         "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
+    BinaryConfig("woodie_skilltree", "Woodie Skilltree", "Some changes to Woodie's skilltrees to add trade-offs and buff underutilized skills.", true),
+
     SkipSpace(),
 
     ------------------------------
@@ -534,6 +536,8 @@ configuration_options = {
     -----------------------------
     Header("Items and Structures"),
     -----------------------------
+    BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
+    BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cooldown_orangestaff_", "Cooldown Based Lazy Explorer",
         "Lazy Explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.",
         false),
@@ -676,7 +680,7 @@ configuration_options = {
         "Farm crops are nerfed in their base value when raw/cooked to incentivize using Crockpot recipes.", true),
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
     {
-        name = "monstereggs",
+        name = "monster_eggs",
         label = "Monster Eggs",
         hover =
         "Birds now give Monster Eggs when fed Monster Meat.\nMonster Eggs are like Eggs, but have configurable monster value.",
@@ -684,7 +688,7 @@ configuration_options = {
             { description = "Off",         data = 0 }, { description = "0.25 Monster", data = 0.25 },
             { description = "0.5 Monster", data = 0.5 }, { description = "1 Monster", data = 1 },
             { description = "1.5 Monster", data = 1.5 } },
-        default = 1
+        default = 1.5
     },
     SkipSpace(),
 
@@ -789,17 +793,18 @@ configuration_options = {
     Header("Misc Monsters"),
     BinaryConfig("pigking_guards", "Pig King Guards",
         "Pig King now has neutral guards watching for any suspicious activity.", true),
-    BinaryConfig("bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
+    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
     BinaryConfig("desertscorpions", "Scorpions",
         "Scorpions plague the Oasis Desert during Dusk and Night. They will spawn from Scorpion Holes spread around the biome.",
         true),
     BinaryConfig("pinelings", "Pinelings",
         "Stumps will become pinelings if awoken by a treeguard, or if stumps are left for long enough.", true),
-    -- BinaryConfig("pollenmites", "Pollen Mites", "Pollen mites spawn in spring and quickly infest the nearby area.", false),
+    --BinaryConfig("pollenmites", "Pollen Mites", "Pollen mites spawn in spring and quickly infest the nearby area.", false),
     BinaryConfig("maxhphitters", "Max HP Damage",
         "Some monsters deal Max HP damage.\nTurn this off if you're having problems with mods which also interact Max HP.",
         true),
     BinaryConfig("harder_krampus", "Harder Krampus", "Krampii now have a new attack, with knockback.", true),
+    BinaryConfig("kramped_buff", "No Naughtiness Decay", "Prevents naughtiness decay.", true),
     BinaryConfig("noauradamage_butterfly", "AoE Immune Butterflies",
         "Butterflies are immune to AoE damage, such as catapults and Abigail.", true),
     SkipSpace(),
@@ -854,8 +859,8 @@ configuration_options = {
     SkipSpace(),
 
     Header("Giants & Bosses"),
-    BinaryConfig("harder_spiderqueen", "Harder Spider Queen",
-        "Spider Queens ocasionally spit web balls that trap players.", true),
+    BinaryConfig("harder_spider_queen", "Harder Spider Queen",
+        "Spider Queens ocasionally spit web balls that trap players.", false),
     BinaryConfig("harder_deerclops", "Deerclops Mutations",
         "Three different, harder variants of Deerclops can spawn, replacing the vanilla version.", true),
     BinaryConfig("caveclops", "Cave Deerclops",
@@ -882,7 +887,7 @@ configuration_options = {
     BinaryConfig("reworked_ck", "Reworked Crab King",
         "Crab King has his main attack altered, freeze removed, and some new mechanics.", true),
     BinaryConfig("changed_shadowpieces", "Shadow Pieces tweaks",
-        "Shadow Bishop has a different attack and Shadow Knight had his values changed.", true),
+        "Shadow Bishop has a different attack.", false),
     SkipSpace(),
 
     Header("Boss Quality of Life"),
@@ -973,12 +978,11 @@ configuration_options = {
     -----------------------------
     Header("> Legacy Options <"),
     -----------------------------
-    BinaryConfig("woodie", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
+    BinaryConfig("woodie_wet_goose", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
     BinaryConfig("wormwood_fire", "Extra Flamable Wormwood", "[BROKEN] Wormwood is highly flameable, like in Hamlet.",
         false),
     BinaryConfig("hangyperds", "Starving Gobblers",
         "Gobblers are now more agressive and will attempt to take berries out of the player's inventory.", false),
-    BinaryConfig("bernie", "Big Bernie", "Enable Big BERNIE!!", true),
     SkipSpace(),
 
     -----------------------------
