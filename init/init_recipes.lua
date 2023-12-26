@@ -700,6 +700,8 @@ if GetModConfigData("snowstorms") then
     ChangeSortKey("wall_stone_item", "wall_wood_item", "WINTER", true)
     AddRecipeToFilter("wall_moonrock_item", "WINTER")
     ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
+    AddRecipeToFilter("turf_dragonfly", "WINTER")
+    ChangeSortKey("turf_dragonfly", "dragonflyfurnace", "WINTER", true)
     AddRecipeToFilter("wall_dreadstone_item", "WINTER")
     ChangeSortKey("wall_dreadstone_item", "wall_dreadstone_item", "WINTER", true)
 end
@@ -789,7 +791,7 @@ AddRecipe2(
 ChangeSortKey("sludge_cork", "oceanfishingrod", "TOOLS", true)
 ChangeSortKey("sludge_cork", "boat_magnet_beacon", "SEAFARING", true)
 
-AddRecipe2(
+--[[AddRecipe2(
     "boat_bumper_copper_kit",
     { Ingredient("um_copper_pipe", 14) },
     TECH.SEAFARING_ONE,
@@ -805,7 +807,7 @@ AddRecipe2(
     nil,
     { "SEAFARING" }
 )
-ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)
+ChangeSortKey("steeringwheel_copper_item", "steeringwheel_item", "SEAFARING", true)]]
 
 if GetModConfigData("monstersmallmeat") then
     AddRecipe2(
@@ -852,7 +854,7 @@ AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), 
 AddDeconstructRecipe("staff_moonfall", { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
 
 ----deconstruct recipes for craftable items
-AddDeconstructRecipe("steeringwheel_copper", { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) })
+--AddDeconstructRecipe("steeringwheel_copper", { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) })
 
 -- Sailing Rebalance related recipes.
 
