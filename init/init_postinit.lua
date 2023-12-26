@@ -1,5 +1,6 @@
 -- Update this list when adding files
 local component_post = {
+    "healer",
     "groundpounder",
     "propagator",
     "moisture",
@@ -47,6 +48,7 @@ local component_post = {
     "planarentity",
     "geyserfx",
     "firedetector",
+	"unwrappable",
 }
 
 local prefab_post = {
@@ -162,7 +164,6 @@ local prefab_post = {
     "lantern",
     "minerhat",
     "shark",
-    --	"shadowchesspieces", Only bring this back when we make the fight cool
     "fertilizer",
     "stinger",
     "boat_pirate",
@@ -206,7 +207,8 @@ local stategraph_post = {
     "stalker_minion",
     --	"merm",
     "carnival_host",
-    "catcoon"
+    "catcoon",
+    "powdermonkey"
 }
 
 local class_post = {
@@ -244,7 +246,7 @@ if GetModConfigData("wixie_walter") then
         "wormhole",      -- wixie loses more sanity from wormholes
         "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
         "coconut",       -- shoot a coconut
-		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
+        "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
         "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
@@ -358,7 +360,7 @@ if GetModConfigData("harder_beefalo") then
     table.insert(stategraph_post, "Beefalo")
 end
 
-if GetModConfigData("harder_spiderqueen") then
+if GetModConfigData("harder_spider_queen") then
     table.insert(prefab_post, "spiderqueen")
     table.insert(stategraph_post, "spiderqueen")
 end
@@ -441,10 +443,12 @@ if GetModConfigData("reworked_ck") then
     table.insert(stategraph_post, "crabking")
 end
 
+table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)
+
 if GetModConfigData("changed_shadowpieces") then
-    table.insert(prefab_post, "shadow_knight")
+    --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
-    table.insert(stategraph_post, "shadow_knight")
+    --table.insert(stategraph_post, "shadow_knight")
 end
 
 if GetModConfigData("hambatnerf") then

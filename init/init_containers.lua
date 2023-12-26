@@ -25,7 +25,7 @@ function CheckWardrobeItem(container, item, slot)
         or (item.prefab == "razor" or item.prefab == "beef_bell") or item:HasTag("heatrock") or
         (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or
         item.prefab == "sewing_tape" or item.prefab == "sewing_kit" or item:HasTag("fan") or
-        string.match(item.prefab, "wx78module_") ~= nil or item:HasTag("mine") or item:HasTag("trap")
+        string.match(item.prefab, "wx78module_") ~= nil or item:HasTag("trap") or item:HasTag("mine") or item:HasTag("trap")
 end
 
 function CheckToolboxItem(container, item, slot)
@@ -159,6 +159,84 @@ modparams.puffvest_big =
 for y = 0, 2 do
     table.insert(modparams.puffvest_big.widget.slotpos, Vector3(-162, -75 * y + 75, 0))
     table.insert(modparams.puffvest_big.widget.slotpos, Vector3(-162 + 75, -75 * y + 75, 0))
+end
+
+
+modparams.silksack =
+{
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_backpack_2x4",
+        animbuild = "ui_backpack_2x4",
+        --pos = Vector3(-5, -70, 0),
+        pos = Vector3(-5, -70, 0),    
+        slotbg =
+        {
+            { image = "general_slot.tex",   atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",  atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",   atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",  atlas = "images/general_slot.xml" },
+            { image = "silk_slot.tex", atlas = "images/silk_slot.xml" },
+            { image = "bundle_slot.tex",  atlas = "images/bundle_slot.xml" },-- Eight
+        },
+        buttoninfo =
+        {
+            text = STRINGS.ACTIONS.WRAPBUNDLE,
+            position = Vector3(-125, -220, 0),
+        }
+    },
+    issidewidget = true,
+    type = "pack",
+    openlimit = 1,
+	
+}
+
+for y = 0, 3 do
+	table.insert(modparams.silksack.widget.slotpos, Vector3(-162, -75 * y + 114, 0))
+	table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 75, -75 * y + 114, 0))
+end
+
+--[[function modparams.silksack.itemtestfn(container, item, slot)
+	return (slot ~= 7 and slot ~= 8 and true) 
+		or (slot == 7 and item.prefab == "silk")
+		or (slot == 8 and item:HasTag("bundle"))
+end]]
+
+function modparams.silksack.widget.buttoninfo.fn(inst, doer)
+	
+	--[[if inst.components.container then
+		inst.WrapStuff(inst,doer)
+	end]]
+    if inst.components.container ~= nil then
+		GLOBAL.BufferedAction(owner, inst, ACTIONS.UM_SILKWRAP):Do()
+        --inst.WrapStuff(inst,doer)
+    elseif inst.replica.container ~= nil and not inst.replica.container:IsBusy() then
+        GLOBAL.SendRPCToServer(GLOBAL.RPC.DoWidgetButtonAction, ACTIONS.UM_SILKWRAP.code, inst, ACTIONS.UM_SILKWRAP.mod_name)
+    end
+end
+
+function modparams.silksack.widget.buttoninfo.validfn(inst)
+	--print("testing")
+	--print(inst.replica.container:GetItemInSlot(7))
+	--return inst.replica.container and inst.replica.container:GetItemInSlot(7) and inst.replica.container:GetItemInSlot(7).prefab == "silk"
+	if inst.replica.container then
+		local _container = inst.replica.container
+		--return _container:GetItemInSlot(7). == "silk"
+		return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).replica.stackable and _container:GetItemInSlot(7).replica.stackable:StackSize() >= 3 and 
+		not _container:GetItemInSlot(8) and
+		(_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(3) or 
+		_container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and 
+		not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
+		not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
+		not (_container:GetItemInSlot(3) and _container:GetItemInSlot(3):HasTag("bundle")) and
+		not (_container:GetItemInSlot(4) and _container:GetItemInSlot(4):HasTag("bundle")) and
+		not (_container:GetItemInSlot(5) and _container:GetItemInSlot(5):HasTag("bundle")) and
+		not (_container:GetItemInSlot(6) and _container:GetItemInSlot(6):HasTag("bundle"))
+		--and not inst:HasTag("busywrappingholdup")
+	end
 end
 
 modparams.crabclaw =

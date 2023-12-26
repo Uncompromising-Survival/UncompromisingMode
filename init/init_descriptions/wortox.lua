@@ -180,7 +180,11 @@ DESCRIBE.HOODEDWIDOW = "The soul guardian!"
 DESCRIBE.GIANT_TREE = "The bigger they are... Hyuyu!"
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "It costed it an arm and a leg! Hyuyu!"
+DESCRIBE.SILKSACK = "A grotesque burden to be carried."
+DESCRIBE.SILKEN_BUNDLE = "A sticky surprise awaits."
+
 DESCRIBE.WEBBEDCREATURE = "Theft is an old trick, but it never gets old!"
 ANNOUNCE.WEBBEDCREATURE = "It only opens up for spiders!"
 DESCRIBE.SNAPDRAGON_BUDDY = "It's quite a growler, for a flower!"

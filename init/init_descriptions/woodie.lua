@@ -178,7 +178,11 @@ DESCRIBE.HOODEDWIDOW = "That ain't no normal spider."
 DESCRIBE.GIANT_TREE = "That's a real beaut."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Maybe this could rip open those cocoons, eh?"
+DESCRIBE.SILKSACK = "That's a weird lookin rucksack."
+DESCRIBE.SILKEN_BUNDLE = "There better be logs in there."
+
 DESCRIBE.WEBBEDCREATURE =
 "Should I really put my neck out to find out what it has?"
 ANNOUNCE.WEBBEDCREATURE = "This ain't a cocoon Luce'll be choppin'. Best to leave 'em to the spiders."

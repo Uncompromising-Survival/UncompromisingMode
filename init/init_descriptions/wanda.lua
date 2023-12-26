@@ -184,7 +184,12 @@ DESCRIBE.GIANT_TREE =
 "They've had quite a long time to grow."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Might loosen up those cocoons."
+
+DESCRIBE.SILKSACK = "Some silk inside can compact our supplies."
+DESCRIBE.SILKEN_BUNDLE = "Stickily kept for efficient transport."
+
 DESCRIBE.WEBBEDCREATURE = "Preserved for later, I presume."
 ANNOUNCE.WEBBEDCREATURE = "I'll need something more fitting or else I'd just be wasting my time."
 DESCRIBE.SNAPDRAGON_BUDDY = "My very own time-saver!"

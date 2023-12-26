@@ -195,7 +195,11 @@ DESCRIBE.HOODEDWIDOW = "Ah! Who invited you!"
 DESCRIBE.GIANT_TREE = "I should climb up it, and eat the baby birds."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Haha, my personal toothpick."
+DESCRIBE.SILKSACK = "Wacky, I have no idea what to say about this stupid sack. Please help me papa."
+DESCRIBE.SILKEN_BUNDLE = "I bet I would say something about liking to hoard, but my papa, Wacky, would know better."
+
 DESCRIBE.WEBBEDCREATURE = ""
 ANNOUNCE.WEBBEDCREATURE = "I keep getting stuck when I try to rip it up!"
 DESCRIBE.SNAPDRAGON_BUDDY = "It looks hungry, I am hungry too."

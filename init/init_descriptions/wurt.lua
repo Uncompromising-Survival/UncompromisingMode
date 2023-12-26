@@ -179,7 +179,11 @@ DESCRIBE.HOODEDWIDOW = "Glorp!! Biggest spider ever!"
 DESCRIBE.GIANT_TREE = "It a really big tree!"
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "Took its claw!"
+DESCRIBE.SILKSACK = "For carry, gross though."
+DESCRIBE.SILKEN_BUNDLE = "Sticky stuff keep for later."
+
 DESCRIBE.WEBBEDCREATURE = "Belongs to Spiderfolk, florp."
 ANNOUNCE.WEBBEDCREATURE = "Can't break! Flurgh! How Spiderfolk break?"
 DESCRIBE.SNAPDRAGON_BUDDY = "Plant want to eat more plant?"

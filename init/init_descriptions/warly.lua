@@ -182,7 +182,11 @@ DESCRIBE.HOODEDWIDOW = "I don't think I'm getting any monster meat from it."
 DESCRIBE.GIANT_TREE = "What a marvel."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "I could fry it?"
+DESCRIBE.SILKSACK = "Not the best place to store produce."
+DESCRIBE.SILKEN_BUNDLE = "I doubt spider silk is going to keep our food for long."
+
 DESCRIBE.WEBBEDCREATURE = "Do I really want to get my ingredients from that?"
 ANNOUNCE.WEBBEDCREATURE =
 "I can't pierce it. My hands are different than a spider's."

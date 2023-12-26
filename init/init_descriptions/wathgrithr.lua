@@ -175,7 +175,11 @@ DESCRIBE.HOODEDWIDOW = "I... I am not fearful!"
 DESCRIBE.GIANT_TREE = "Surely I stand before Yggdrasil!"
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "A key to my spoils!"
+DESCRIBE.SILKSACK = "This will make a fine addition to my collection."
+DESCRIBE.SILKEN_BUNDLE = "Sticky supplies stored for an epic."
+
 DESCRIBE.WEBBEDCREATURE = "I see spoils!"
 ANNOUNCE.WEBBEDCREATURE = "Too tough! The spider hath the key!"
 DESCRIBE.SNAPDRAGON_BUDDY = "'Tis no warrior!"

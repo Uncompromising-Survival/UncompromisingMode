@@ -182,7 +182,11 @@ DESCRIBE.HOODEDWIDOW = "I'll, uh, stay over here."
 DESCRIBE.GIANT_TREE = "We're not chopping that one down any time soon."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
+
 DESCRIBE.WIDOWSGRASP = "We could bash open those cocoons now!"
+DESCRIBE.SILKSACK = "A gross way to play pack mule."
+DESCRIBE.SILKEN_BUNDLE = "It'll keep it in there, certainly not fresh though."
+
 DESCRIBE.WEBBEDCREATURE = "Hm, I'd like to crack it open!"
 ANNOUNCE.WEBBEDCREATURE =
 "Yeah, no, we're not breaking through that on our own."
