@@ -126,7 +126,6 @@ local prefabs = {
 	"wicker_tentacle",
 	"snapperturtle",
 	"snapperturtlenest",
-	"cursed_antler",
 	"marsh_grass",
 	"web_net_splat_fx",
 	"web_bomb",
@@ -176,15 +175,11 @@ local prefabs = {
 	"watermelon_lantern",
 	"gnome_organizer",
 	"fireball_throwable",
-	"crabclaw",
 	"ancient_trepidation",
 	"ancient_trepidation_anchor",
-	"klaus_amulet",
 	"ancient_amulet_red",
 	"buff_ancient_amulet_red",
 	"amulet_health_orb",
-	"nightcrawler",
-	--"um_nightcrawler",
 	"ancient_trepidation_arm",
 	--"steel_sweater",
 	"rat_whip",
@@ -222,14 +217,11 @@ local prefabs = {
 	"dragonfly_egg",
 	"um_trap_snare",
 	"um_bear_trap",
-	"gore_horn_hat",
-	"slobberlobber",
 	"uncompromising_birds",
 	"um_shambler",
+	"um_shadowfire",
 	"mothergoose_tornado",
 	"corncan",
-	"feather_frock",
-	"beargerclaw",
 	"skullchest",
 	"drink_with_the_living_dead",
 	"hoodedturfchanger",
@@ -265,8 +257,21 @@ local prefabs = {
 	"mindweaver",
 	"rneshadows",
 	"fuelseeker",
+	--"um_heckler",
 	"rnemushroombomb",
-
+	--"um_voxolophone",
+	--"um_haunt",
+	--"um_inkubator",
+	--"um_scrapper",
+	--"um_food_cubes",
+	--"um_nightcrawler",
+	--"um_shadow_leech",
+	--"um_shadowcloaked_smoke",
+	--"um_shadowcloaked_light",
+	--"um_shadow_miasma_cloud_fx",
+	--"night_terror_infected",
+	--"um_simple_dummyplayer",
+	
 	"wackymask",
 	"tiddlestranger_rne",
 	"rne_goodiebag",
@@ -287,9 +292,12 @@ local prefabs = {
 	"oculet_pets",
 	"terrarium",
 	"reedbuncher",
-	"itemscrapper",
+	"uncompromising_pollen_fx",
 	"um_areahandler",
 	"specter_shipwreck",
+	"proto_william",
+	"phantom",
+	"spider_crabbit",
 	--"resurrectionphonograph",
 	"winona_toolbox",
 	"searock_arches",
@@ -302,14 +310,19 @@ local prefabs = {
 	"sludge_sack",
 	"boatpatch_sludge",
 	"beequeen_beering",
+	"siren_bubble",
+	"siren_debrisbarrier",
 	"cave_entrance_lush",
 	"uncompromising_rocks",
 	--"uncompromising_superspawner",
 	"uncompromising_devcapture",
+	"crab_apple_plant",
 	"driftwood_waterlogged",
 	"kelpstack",
 	"siren_throne",
-
+	"spider_crabbit_den",
+	--"um_siren_bird",
+--DAMNIT SCRIMBLES
 	"uncompromising_harpoon",
 	"uncompromising_axepoon",
 	"uncompromising_magharpoon",
@@ -317,11 +330,15 @@ local prefabs = {
 	"uncompromising_fishingnetvisualizer",
 	"um_windturbine",
 	"mastupgrade_windturbine",
-	"um_beegun",
+
+	"siren_fish",
 
 	"armor_reed_um",
 	"armor_sharksuit_um",
 	"rockjawleather",
+	"ocupus_beak",
+	"ocupus_tentacles",
+	"beakbasher",
 	"winona_upgradekit",
 	"powercell",
 	"rr_powerline",
@@ -330,6 +347,7 @@ local prefabs = {
 
 	"figgypet",
 	"portableboat",
+	"umbral_hound",
 	"siren_bird_nest",
 	"um_scorpionhole",
 	"um_scorpionhole_organizer",
@@ -345,11 +363,16 @@ local prefabs = {
 	"hermit_bundle_lures",
 	"um_cannonballs",
 	"um_dreamcatcher",
+	--"um_bombmixer_bombs",
 	"um_beeguards",
 	"um_beestinger_projectile",
+	"um_frog_ocean",
+	"um_tesla_tree",
 	"um_specter_amulet",
 	"um_walls",
+	"um_ocupus_eyetacle",
 	"ocupus_items",
+	"houndious_observious",
 	"ums_biometable",
 	"umss_general",
 
@@ -365,6 +388,8 @@ local prefabs = {
 	"wathom",
 	"wathom_none",
 
+	"um_shadowarena",
+
 	"um_halloween_ornaments",
 	"trinket_wathom1",
 
@@ -377,6 +402,16 @@ local prefabs = {
 	"wixie_piano",
 	"wixie_clock",
 	"wixie_wardrobe",
+
+
+	"uncompromising_skins",
+
+	"um_ocupus",
+	"um_ocupus_tentacle",
+	"um_ocupus_beak",
+	"terrorguise",
+
+
 	"slingshotammo_secondary",
 	"slingshotammo_extras",
 	"slingshotammo_IA",
@@ -412,11 +447,15 @@ local prefabs = {
 	"moon_beacon",
 	"goat_lightning",
 
+	--	"um_bombmixer1",
+	--	"um_bombmixer",
+	--	"um_bombmixer_bombs2",
+
 	"mara_boss1",
 	"mara_boss1_bullets",
 	"um_sacred_chest",
 	"smog",
-	
+    
 	-- Pyre Nettle stuff
 	"um_pyre_nettles",
 	"um_smolder_spore",
@@ -426,10 +465,22 @@ local prefabs = {
 	
 	-- Mutation Extrapolation
 	"umdebuff_moonburn",
+	"um_pathfinderpulse",
 	
 	"um_preparedfoods",
 	"um_foliage",
 	"lifeinjector_redcap_buff",
+	
+	--The Cursed!
+	"cursed_antler",
+	"feather_frock",
+	"slobberlobber",
+	"beargerclaw",
+	"klaus_amulet",
+	"gore_horn_hat",
+	"crabclaw",
+	"um_beegun",
+	"silksack",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
