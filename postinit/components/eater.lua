@@ -27,4 +27,14 @@ AddComponentPostInit("eater", function(self)
 			end
 		end
 	end
+	
+	local _Eat = self.Eat
+
+	function self:Eat(food, feeder)
+		if self:PrefersToEat(food) then
+			self.inst:PushEvent("onpreeat", { food = food, feeder = feeder })
+		end
+			
+		return _Eat(self, food, feeder)
+	end
 end)

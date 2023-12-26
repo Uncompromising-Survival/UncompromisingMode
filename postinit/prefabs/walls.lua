@@ -118,7 +118,6 @@ local function DoRegen(inst)
 end
 
 local function ToggleOrRestartRegen(inst, delay)
-    print("toggle")
     --This will also reset the timer
     if inst._regentask ~= nil then
         inst._regentask:Cancel()
@@ -136,7 +135,7 @@ local function ToggleOrRestartRegen(inst, delay)
             inst.components.sanityaura.max_distsq = TUNING.SUPPORT_PILLAR_DREADSTONE_AURA_RADIUS * TUNING.SUPPORT_PILLAR_DREADSTONE_AURA_RADIUS
             inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
         end
-    elseif inst.components.sanityaura ~= nil then
+    elseif inst.components.sanityaura ~= nil or inst._regentask == nil then
         inst:RemoveComponent("sanityaura")
     end
 end
