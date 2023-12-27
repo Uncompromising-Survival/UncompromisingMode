@@ -1253,8 +1253,8 @@ function d_create_um_scrapbookdata(print_missing_icons)
             print(string.format("[!!!!]  Special Information [ %s ] is in STRINGS.SCRAPBOOK.SPECIALINFO, but it's unused!", info))
         end
     end
-
-    if print_missing_icons then
+    --TODO FIX
+    --[[if print_missing_icons then
         print("\n\nScrapbook Missing Icons:\n")
         local str = {}
         for i, data in ipairs(icons_missing) do
@@ -1262,7 +1262,7 @@ function d_create_um_scrapbookdata(print_missing_icons)
         end
 
         print("\n" .. table.concat(str, "\n\n"))
-    end
+    end]]
 
     Scrapbook_WriteToFile(scrapbookdata)
 
@@ -1310,5 +1310,5 @@ end
 function d_createall_um_scrapbookdata()
     require('um_scrapbook_diffchecker')
     d_create_um_scrapbookdata(true)
-    d_create_diffchecker_scrapbookdata()
+    d_create_diffchecker_scrapbookdata(false)
 end

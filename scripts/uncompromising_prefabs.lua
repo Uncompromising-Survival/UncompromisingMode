@@ -264,7 +264,7 @@ local prefabs = {
 	--"um_inkubator",
 	--"um_scrapper",
 	--"um_food_cubes",
-	--"um_nightcrawler",
+	-- "um_nightcrawler",
 	--"um_shadow_leech",
 	--"um_shadowcloaked_smoke",
 	--"um_shadowcloaked_light",
@@ -355,6 +355,7 @@ local prefabs = {
 	"ums_biometable",
 	"umss_general",
 
+    "uncompromising_bumpers",
 	"um_tornado",
 	"um_whirlpool",
 
