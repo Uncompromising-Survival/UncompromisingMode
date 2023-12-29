@@ -107,16 +107,21 @@ local function NearPoint(inst)
 end
 
 local function DoSpecial(inst)
-	if inst.repositionlimittask then
-		inst.repositionlimittask:Cancel()
-		inst.repositionlimittask = nil
-	end
-	--TheNet:Announce("Told to special")
-	if not inst.sg:HasStateTag("busy") then
-		if not inst.components.timer:TimerExists("pounce") then --If both are done from counter, first pounce THEN lob
-			return inst.sg:GoToState("preleapattack")
-		elseif not inst.components.timer:TimerExists("mortar") then
-			return inst.sg:GoToState("lobprojectile")
+	if inst.components.health and not inst.components.health:IsDead() then
+		if inst.repositionlimittask then
+			inst.repositionlimittask:Cancel()
+			inst.repositionlimittask = nil
+		end
+		--TheNet:Announce("Told to special")
+		if not inst.sg:HasStateTag("busy") and inst.components.combat and inst.components.combat.target then -- If we don't have a target, don't try it
+			if not inst.components.timer:TimerExists("pounce") then --If both are done from counter, first pounce THEN lob
+				return inst.sg:GoToState("preleapattack")
+			elseif not inst.components.timer:TimerExists("mortar") then
+				return inst.sg:GoToState("lobprojectile")
+			end
+		else
+			inst.components.timer:StartTimer("pounce",math.random(15,20)) --Restart Pounce
+			inst.components.timer:StartTimer("mortar",math.random(20,30)) --Restart Mortar	
 		end
 	end
 end

@@ -29,32 +29,53 @@ local function onunequip(inst, owner)
 	inst.components.container:Close(owner)
 end
 
-local function WrapStuff(inst,owner)
-	local bundle = SpawnPrefab("silken_bundle")
-	local pos = inst:GetPosition()
-	if owner then
-		pos = owner:GetPosition()
+local function ChecksOut(inst) -- The backpack is good to go
+	if inst.components.container then
+		local _container = inst.components.container
+		--return _container:GetItemInSlot(7). == "silk"
+		return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).components.stackable and _container:GetItemInSlot(7).components.stackable:StackSize() >= 3 and 
+		not _container:GetItemInSlot(8) and
+		(_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(3) or 
+		_container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and 
+		not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
+		not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
+		not (_container:GetItemInSlot(3) and _container:GetItemInSlot(3):HasTag("bundle")) and
+		not (_container:GetItemInSlot(4) and _container:GetItemInSlot(4):HasTag("bundle")) and
+		not (_container:GetItemInSlot(5) and _container:GetItemInSlot(5):HasTag("bundle")) and
+		not (_container:GetItemInSlot(6) and _container:GetItemInSlot(6):HasTag("bundle"))
 	end
-	
-	--Consume Silk
-	local silk = inst.components.container:GetItemInSlot(7)
-	if silk.components.stackable and silk.components.stackable.stacksize > 3 then
-		silk.components.stackable:SetStackSize(silk.components.stackable.stacksize-3)
-	else
-		inst.components.container:RemoveItemBySlot(7)
-	end
+end
 
-	local items = {}
-	for i = 1, 6 do
-		local item = inst.components.container:GetItemInSlot(i)
-		if item ~= nil then -- and not (item.components.edible and item.components.perishable) then --Initially disallowed food, instead rework to not protect against spoilage
-			table.insert(items, item)
-			inst.components.container:RemoveItemBySlot(i)
+local function WrapStuff(inst,owner)
+	if ChecksOut(inst) then
+		local bundle = SpawnPrefab("silken_bundle")
+		local pos = inst:GetPosition()
+		if owner then
+			pos = owner:GetPosition()
 		end
+		
+		--Consume Silk
+		local silk = inst.components.container:GetItemInSlot(7)
+		if silk.components.stackable and silk.components.stackable.stacksize > 3 then
+			silk.components.stackable:SetStackSize(silk.components.stackable.stacksize-3)
+		else
+			inst.components.container:RemoveItemBySlot(7)
+		end
+
+		local items = {}
+		for i = 1, 6 do
+			local item = inst.components.container:GetItemInSlot(i)
+			if item ~= nil then -- and not (item.components.edible and item.components.perishable) then --Initially disallowed food, instead rework to not protect against spoilage
+				table.insert(items, item)
+				inst.components.container:RemoveItemBySlot(i)
+			end
+		end
+		bundle.components.unwrappable:WrapItems(items, inst)
+		bundle.timebundled = (TheWorld.state.time+TheWorld.state.cycles)*8*60
+		inst.components.container:GiveItem(bundle, 8, pos, true)
+	elseif owner and owner.components.talker then
+		owner.components.talker:Say(ACTIONFAIL_GENERIC)
 	end
-	bundle.components.unwrappable:WrapItems(items, inst)
-	bundle.timebundled = (TheWorld.state.time+TheWorld.state.cycles)*8*60
-	inst.components.container:GiveItem(bundle, 8, pos, true)
 end
 
 local function fn()

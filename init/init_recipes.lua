@@ -464,6 +464,18 @@ ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
 GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
 
 AddRecipe2(
+    "terrorguise",
+    { Ingredient("ocupus_eyetacle_eye", 4), Ingredient("seaweed", 10), Ingredient("nightmarefuel", 5)},
+    TECH.MAGIC_TWO,
+    nil,
+    { "CLOTHING", "MAGIC" }
+)
+ChangeSortKey("terrorguise", "kelphat", "CLOTHING", true)
+ChangeSortKey("terrorguise", "magician_chest", "MAGIC", true)
+GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
+
+
+AddRecipe2(
     "skullchest_child",
     { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) },
     TECH.LOST,

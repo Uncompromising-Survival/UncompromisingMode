@@ -271,13 +271,14 @@ local states=
 
         onenter = function(inst, cb)
 			--TheNet:Announce("entered eat loop")
+			inst.AnimState:SetDeltaTimeMultiplier(1.2)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("eat_loop")
             inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream")
         end,
         timeline=
         {
-            TimeEvent(25*FRAMES, function(inst) 
+            TimeEvent(25*FRAMES/1.2, function(inst) 
 				inst.components.health:DoDelta(200)
 				inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt")
 				if inst.prey then
@@ -285,6 +286,10 @@ local states=
 				end
 			end),
         },
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+		
         events=
         {
 			EventHandler("animover", 
@@ -353,12 +358,13 @@ local states=
             inst.AnimState:PlayAnimation("shoot_pre")
             inst.AnimState:PushAnimation("shoot_loop", false)
             inst.AnimState:PushAnimation("shoot_pst", false)
+			inst.AnimState:SetDeltaTimeMultiplier(1.2)
         end,
         
         
         timeline=
         {
-            TimeEvent(47*FRAMES, function(inst)
+            TimeEvent(47*FRAMES/1.2, function(inst)
 			if inst.components.combat and inst.components.combat.target ~= nil and inst.components.combat:CanHitTarget(inst.components.combat.target) then
 				local target = inst.components.combat.target
 				if target.components.pinnable ~= nil then
@@ -386,6 +392,10 @@ local states=
 			inst.components.timer:StartTimer("mortar",time)
             end),
         },  
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+		
         events=
         {
             EventHandler("animqueueover", function(inst)
@@ -600,6 +610,9 @@ local states=
 		onexit = function(inst)
 			if inst.brain then
 				inst.brain:Start()
+			end
+			if inst.components.combat then
+				inst.components.combat:ResetCooldown()
 			end
 		end,
     },	
