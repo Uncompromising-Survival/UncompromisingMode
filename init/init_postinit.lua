@@ -49,6 +49,7 @@ local component_post = {
     "geyserfx",
     "firedetector",
 	"unwrappable",
+    "slipperyfeet"
 }
 
 local prefab_post = {
