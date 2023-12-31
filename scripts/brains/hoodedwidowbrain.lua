@@ -197,7 +197,7 @@ function HoodedWidowBrain:OnStart()
 		1, 1)), --Ready to pounce or Web, get some distance first
 		
 		--I've got no special tricks ready, all I can do is attack.
-		WhileNode(function() return not self.inst.prey and not (ReadyToLeapOrStick(self.inst) and (self.inst.components.combat.target and self.inst.components.combat:InCooldown())) end, "ChaseAndAttack", ChaseAndAttack(self.inst,30)), --Chase and attack for 30 seconds, if the player stops after that then quit and go home
+		WhileNode(function() return not (ReadyToLeapOrStick(self.inst) and (self.inst.components.combat.target and self.inst.components.combat:InCooldown())) end, "ChaseAndAttack", ChaseAndAttack(self.inst,30)), --Chase and attack for 30 seconds, if the player stops after that then quit and go home
 		
 		--Somehow there's noone willing to challenge Hooded Widow? Probably best to go home... though we'll wait a second just incase
 		WhileNode(function() return ShouldLeave(self.inst) end,"NoTarget", DoAction(self.inst, GoHomeAction)), --No target and done investigating? we should probably go home then.

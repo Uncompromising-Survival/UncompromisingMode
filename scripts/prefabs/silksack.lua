@@ -1,6 +1,6 @@
 
 local function onequip(inst, owner)
-    --[[if not owner:HasTag("vetcurse") then
+    if not owner:HasTag("vetcurse") then
         inst:DoTaskInTime(0, function(inst, owner)
             local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
             local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
@@ -16,11 +16,11 @@ local function onequip(inst, owner)
                 end
             end
         end)
-    else]]
+    else
 		owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "backpack")
 		owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
 		inst.components.container:Open(owner)
-	--end
+	end
 end
 
 local function onunequip(inst, owner)
