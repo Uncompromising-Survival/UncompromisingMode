@@ -465,14 +465,14 @@ GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
 
 AddRecipe2(
     "terrorguise",
-    { Ingredient("ocupus_eyetacle_eye", 4), Ingredient("seaweed", 10), Ingredient("nightmarefuel", 5)},
+    { Ingredient("ocupus_tentacle_eye", 4), Ingredient("kelp", 10), Ingredient("nightmarefuel", 5)},
     TECH.MAGIC_TWO,
     nil,
     { "CLOTHING", "MAGIC" }
 )
 ChangeSortKey("terrorguise", "kelphat", "CLOTHING", true)
 ChangeSortKey("terrorguise", "magician_chest", "MAGIC", true)
-GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
+GLOBAL.STRINGS.RECIPE_DESC.TERRORGUISE = "Scare your fears away."
 
 
 AddRecipe2(

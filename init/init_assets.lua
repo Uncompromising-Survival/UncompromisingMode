@@ -204,6 +204,7 @@ local inventoryitems =
 	"ocupus_tentacle_cooked",
 	"ocupus_beak",
 	"beakbasher",
+	"terrorguise",
 	"um_brineishmoss",
 	"brine_balm",
 	"sludge_oil",

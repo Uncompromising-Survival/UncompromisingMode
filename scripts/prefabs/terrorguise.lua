@@ -1,8 +1,8 @@
 local assets =
 {
-	Asset("ANIM", "anim/hat_shadowcrown.zip"),
-	Asset("ATLAS", "images/inventoryimages/shadow_crown.xml"),
-	Asset("IMAGE", "images/inventoryimages/shadow_crown.tex"),
+	Asset("ANIM", "anim/hat_terrorguise.zip"),
+	Asset("IMAGE", "images/inventoryimages/terrorguise.tex"),
+	Asset("ATLAS", "images/inventoryimages/terrorguise.xml"),
 }
 
 local function OnBlocked(owner) 
@@ -10,7 +10,7 @@ local function OnBlocked(owner)
 end
 
 local function onequip(inst, owner)
-owner.AnimState:OverrideSymbol("swap_hat", "hat_shadowcrown", "swap_hat")
+owner.AnimState:OverrideSymbol("swap_hat", "hat_terrorguise", "swap_hat")
 
 	owner.AnimState:Show("HAT")
 	owner.AnimState:Hide("HAIR_HAT")
@@ -50,7 +50,7 @@ local function fn()
 	MakeInventoryPhysics(inst)
 
 	inst.AnimState:SetBank("ruinshat")
-	inst.AnimState:SetBuild("hat_shadowcrown")
+	inst.AnimState:SetBuild("hat_terrorguise")
 	inst.AnimState:PlayAnimation("anim")
 
 	inst:AddTag("hat")
@@ -68,7 +68,7 @@ local function fn()
 	end
 
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/shadow_crown.xml"
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/terrorguise.xml"
 
 	inst:AddComponent("inspectable")
 
@@ -78,10 +78,10 @@ local function fn()
 	inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
 	inst.components.equippable:SetOnEquip(onequip)
 	inst.components.equippable:SetOnUnequip(onunequip)
-	inst.components.equippable.dapperness = TUNING.CRAZINESS_LARGE
+	inst.components.equippable.dapperness = 20*TUNING.CRAZINESS_MED
 
 	inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST) -- 6 days
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST/3) -- 2 days
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 	

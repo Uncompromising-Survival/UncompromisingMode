@@ -496,6 +496,7 @@ DESCRIBE.UM_OCUPUS_TENTACLE = "It's trying to sink us, hooray."
 DESCRIBE.UM_OCUPUS_BEAK = "Ah, a cousin of the Quacken, it would seem."
 DESCRIBE.BEAKBASHER = "I put the beak on the stick. Now what?"
 DESCRIBE.HOUNDIOUS_OBSERVIOUS = "IT'S ALIVE!"
+DESCRIBE.TERRORGUISE = "Uncompromising Devs need YOU to review this item (If you like it then halp with quotes)"
 
 DESCRIBE.ARMOR_REED_UM = "I'll still be light on my feet with it on."
 DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me feel like the alpha predator."
