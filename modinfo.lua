@@ -4,11 +4,11 @@ folder_name = folder_name or "workshop-"
 if not folder_name:find("workshop-") then name = "[DEV-LOCAL] - " .. name end
 
 description = [[
-󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past" ]
+󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Release ver: v1.0.0.0)]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
-Latest update features:
+Latest update features: 
 - Scrapbook integration!
 - To be revealed...
 
@@ -16,7 +16,7 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Ghosts from the Past v1.5.0.0"
+version = "Ghosts from the Past Testing v1.0.0.0"
 -- VERSION SCHEME
 -- first num is major release (e.g. "Under the weather", so, 2, UTW2 will be 3, and so on.) DO NOT BRING THIS NUMBER *DOWN* AGAIN PLEASE
 -- second is new content (something like a new large addition)
