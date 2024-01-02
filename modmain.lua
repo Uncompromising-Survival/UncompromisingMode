@@ -152,6 +152,7 @@ local function WathomMusicToggle(level)
     end
 end
 
+
 -- wathomcustomvoice/wathomvoiceevent
 local function DoAdrenalineUpStinger(sound)
     if type(sound) == "string" then
