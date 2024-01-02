@@ -23,7 +23,8 @@ function setup_custom_loading_tips()
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_WIXIE", "\"Winifred? Never heard of her! Now stop asking!\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_POCKETS", "\"I taught the others to sew some pockets into their clothing. How did these dummies ever get by without me?\" - W")
 	AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_SCRAPBOOK", "Uncompromising Mode now has Scrapbook integration! Make sure to revisit old pages and check out the new content in more detail than ever, in-game!")
-        
+    AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_CRAFTINGTOOLTIP", "Items with a small \"UM\" icon next to them in the crafting menu have been changed. You can mouse over the icon to get more information about the change!")
+
 	local tipcategorystartweights =
 	{
 		CONTROLS = 0.2,
