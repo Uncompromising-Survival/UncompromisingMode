@@ -3,7 +3,6 @@
 --TODO: UNMESS THIS
 
 local function ResetSkills(prefab)
-    print("Hello! RESET THE FUCKING SKILL TREES DAMNIT")
     if ThePlayer ~= nil then
         GLOBAL.TheSkillTree:RespecSkills(GLOBAL.ThePlayer.prefab)
         GLOBAL.TheSkillTree.skillxp[GLOBAL.ThePlayer.prefab] = GLOBAL.TheWorld.state.cycles --reset skillpoints.
@@ -11,7 +10,7 @@ local function ResetSkills(prefab)
         GLOBAL.TheSkillTree:RespecSkills(prefab)
         GLOBAL.TheSkillTree.skillxp[prefab] = GLOBAL.TheWorld.state.cycles --reset skillpoints.
     end
---[[
+    --[[
     GLOBAL.TheGenericKV:SetKV("wathgrithr_instantsong_uses", "0")
     GLOBAL.TheGenericKV:SetKV("wathgrithr_container_unlocked", "0")
     GLOBAL.TheGenericKV:SetKV("wathgrithr_horn_played", "0")
@@ -19,19 +18,43 @@ local function ResetSkills(prefab)
     GLOBAL.TheGenericKV:SetKV("fuelweaver_killed", "0")]]
 end
 
+local function SyncXp(prefab, xp)
+    GLOBAL.TheSkillTree.skillxp[prefab] = xp
 
+    if GLOBAL.TheSkillTree:GetAvailableSkillPoints() > 0 then
+        GLOBAL.ThePlayer.new_skill_available_popup = true
+        GLOBAL.ThePlayer:PushEvent("newskillpointupdated")
+    end
+end
 
-AddClientModRPCHandler("UncompromisingSurvival", "ResetSkills", ResetSkills)
+AddClientModRPCHandler("WorldlySkilltrees", "ResetSkills", ResetSkills)
+AddClientModRPCHandler("WorldlySkilltrees", "SyncXp", SyncXp)
 
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
+TUNING.SKILL_THRESHOLDS = {
+        0,  --1
+        5,  --2
+        5,  --3
+        5,  --4
+        5,  --5
+        10, --6
+        10, --7
+        10, --8
+        10, --9
+        10, --10
+        15, --11
+        15, --12
+        15, --13
+        15, --14
+        15, --15
+    },
 
-
-env.AddComponentPostInit("skilltreeupdater", function(self)
-    self.skip_validation = true
-end)
+    env.AddComponentPostInit("skilltreeupdater", function(self)
+        self.skip_validation = true
+    end)
 
 
 
@@ -40,29 +63,20 @@ local function ResetSkilltree(character)
     if TheSkillTree ~= nil then
         TheSkillTree.save_enabled = false
     end
-    print(character.hasresetskills)
-    print(character)
-    print(character.userid) --nil??
     if character.hasresetskills ~= true then
-        print("DO THE FUCKIN' THING")
-        SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ResetSkills"), ThePlayer ~= nil and ThePlayer.userid or character.userid, character.prefab)
+        SendModRPCToClient(GetClientModRPC("WorldlySkilltrees", "ResetSkills"), ThePlayer ~= nil and ThePlayer.userid or character.userid, character.prefab)
 
-        print("TASK")
         local skilltreeupdater = character.components.skilltreeupdater
 
         if skilltreeupdater ~= nil and skilltreeupdater:GetActivatedSkills() ~= nil then
             for k, v in pairs(skilltreeupdater:GetActivatedSkills()) do
-                print(k, v)
-
                 skilltreeupdater:DeactivateSkill(k)
             end
         end
 
 
-        print('\n')
 
         if skilltreeupdater ~= nil then
-            print("skilltreeupdater ~= nil")
             skilltreeupdater.skilltree.skillxp[character.prefab] = TheWorld.state.cycles --reset skillpoints.
         end
         character.hasresetskills = true
@@ -71,13 +85,8 @@ end
 
 env.AddPrefabPostInit("world", function(inst)
     TheWorld:ListenForEvent("ms_newplayercharacterspawned", function(inst, data)
-        print("ms_newplayercharacterspawned")
         if data ~= nil and data.mode ~= nil and data.player ~= nil then
-            print("data stuff not nil")
-            print(data.mode)
-            print(data.player)
             if data.mode ~= "Load" then
-                print("reset damnit")
                 ResetSkilltree(data.player)
             end
         end
@@ -85,16 +94,17 @@ env.AddPrefabPostInit("world", function(inst)
 end)
 
 env.AddPlayerPostInit(function(inst)
-    if not TheWorld.ismastersim then return end
-
     inst:ListenForEvent("boss_defeated", function(inst, boss)
         if inst.bosses_defeated == nil then inst.bosses_defeated = {} end
         if not inst.bosses_defeated[boss] then
             inst.bosses_defeated[boss] = true
-            inst.components.skilltreeupdater:AddSkillXP(10)
+            if inst.components.skilltreeupdater ~= nil then
+                inst.components.skilltreeupdater:AddSkillXP(10)
+            end
         end
     end)
 
+    if not TheWorld.ismastersim then return end
 
     local _OnSave = inst.OnSave
 
@@ -128,12 +138,37 @@ env.AddPlayerPostInit(function(inst)
 end)
 
 env.AddPrefabPostInitAny(function(inst)
-    if not TheWorld.ismastersim then return end
-    if inst ~= nil and inst:HasTag("epic") then
-        inst:ListenForEvent("death", function(inst)
-            for k, v in pairs(AllPlayers) do
-                v:PushEvent("boss_defeated", inst.prefab)
-            end
-        end)
+    if AllPlayers ~= nil then
+        if inst ~= nil and inst:HasTag("epic") then
+            inst:ListenForEvent("death", function(inst)
+                for k, v in pairs(AllPlayers) do
+                    v:PushEvent("boss_defeated", inst.prefab)
+                end
+            end)
+        end
     end
+end)
+
+env.AddComponentPostInit("experiencecollector", function(self)
+    local skilltreedefs = require "prefabs/skilltree_defs"
+
+    function self:UpdateXp()
+        if not skilltreedefs.SKILLTREE_DEFS[self.inst.prefab] then
+            return nil
+        end
+
+
+        local boss_bonus = 0
+        if self.inst.bosses_defeated ~= nil then
+            for k, v in pairs(self.inst.bosses_defeated) do
+                boss_bonus = boss_bonus + 10
+            end
+        end
+
+        self.inst.components.skilltreeupdater.skilltree.skillxp[self.inst.prefab] = TheWorld.state.cycles + boss_bonus --sync points for everyone with day count.
+        self.inst.components.skilltreeupdater:AddSkillXP(0)                                                            --scuffed, but I need to get an update.
+        SendModRPCToClient(GetClientModRPC("WorldlySkilltrees", "SyncXp"), ThePlayer ~= nil and ThePlayer.userid or self.inst.userid, self.inst.prefab, TheWorld.state.cycles + boss_bonus)
+    end
+
+    self.inst:DoTaskInTime(0, function() self:UpdateXp() end)
 end)
