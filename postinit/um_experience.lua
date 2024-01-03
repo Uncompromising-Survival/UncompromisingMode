@@ -11,12 +11,12 @@ local function ResetSkills(prefab)
         GLOBAL.TheSkillTree:RespecSkills(prefab)
         GLOBAL.TheSkillTree.skillxp[prefab] = GLOBAL.TheWorld.state.cycles --reset skillpoints.
     end
-
+--[[
     GLOBAL.TheGenericKV:SetKV("wathgrithr_instantsong_uses", "0")
     GLOBAL.TheGenericKV:SetKV("wathgrithr_container_unlocked", "0")
     GLOBAL.TheGenericKV:SetKV("wathgrithr_horn_played", "0")
     GLOBAL.TheGenericKV:SetKV("celestialchampion_killed", "0")
-    GLOBAL.TheGenericKV:SetKV("fuelweaver_killed", "0")
+    GLOBAL.TheGenericKV:SetKV("fuelweaver_killed", "0")]]
 end
 
 
