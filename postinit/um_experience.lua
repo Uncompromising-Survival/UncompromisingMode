@@ -94,12 +94,15 @@ env.AddPrefabPostInit("world", function(inst)
 end)
 
 env.AddPlayerPostInit(function(inst)
-    inst:ListenForEvent("boss_defeated", function(inst, boss)
+    inst:ListenForEvent("boss_defeated", function(inst, data)
+        local boss, trueboss = data.boss, data.trueboss
+
         if inst.bosses_defeated == nil then inst.bosses_defeated = {} end
+
         if not inst.bosses_defeated[boss] then
             inst.bosses_defeated[boss] = true
             if inst.components.skilltreeupdater ~= nil then
-                inst.components.skilltreeupdater:AddSkillXP(10)
+                inst.components.skilltreeupdater:AddSkillXP(trueboss and 10 or 5)
             end
         end
     end)
@@ -138,14 +141,14 @@ env.AddPlayerPostInit(function(inst)
 end)
 
 env.AddPrefabPostInitAny(function(inst)
-    if AllPlayers ~= nil then
-        if inst ~= nil and inst:HasTag("epic") then
-            inst:ListenForEvent("death", function(inst)
-                for k, v in pairs(AllPlayers) do
-                    v:PushEvent("boss_defeated", inst.prefab)
-                end
-            end)
-        end
+    if not TheWorld.ismastersim then return end
+
+    if inst ~= nil and inst:HasTag("epic") and inst.components.health ~= nil then
+        inst:ListenForEvent("death", function(inst)
+            for k, v in pairs(AllPlayers) do
+                v:PushEvent("boss_defeated", { boss = inst.prefab, trueboss = inst.components.health.maxhealth >= 3500 })
+            end
+        end)
     end
 end)
 
