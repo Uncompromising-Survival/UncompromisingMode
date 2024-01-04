@@ -19,47 +19,83 @@ local function ResetSkills(prefab)
 end
 
 local function SyncXp(prefab, xp)
-    GLOBAL.TheSkillTree.skillxp[prefab] = xp
-
+    print(xp)
+    if xp > 140 then
+        xp = 140
+    end
+    print(xp)
+    GLOBAL.TheSkillTree.skillxp[prefab] = math.min(xp, GLOBAL.TheSkillTree:GetMaximumExperiencePoints())
+    if GLOBAL.ThePlayer ~= nil and GLOBAL.ThePlayer.components.skilltreeupdater ~= nil and GLOBAL.ThePlayer.components.skilltreeupdater.skilltree ~= nil then
+        GLOBAL.ThePlayer.components.skilltreeupdater.skilltree.skillxp[prefab] = math.min(xp, GLOBAL.TheSkillTree:GetMaximumExperiencePoints()) --sync points for everyone with day count.
+    end
     if GLOBAL.TheSkillTree:GetAvailableSkillPoints() > 0 then
-        GLOBAL.ThePlayer.new_skill_available_popup = true
-        GLOBAL.ThePlayer:PushEvent("newskillpointupdated")
+        if GLOBAL.ThePlayer ~= nil then
+            GLOBAL.ThePlayer.new_skill_available_popup = true
+            GLOBAL.ThePlayer:PushEvent("newskillpointupdated")
+        end
+    end
+end
+
+
+local function SyncBossKills(sending_shard_id, boss, isminiboss)
+    print("Hi! Sync boss kills!")
+    print(sending_shard_id, boss_kills, miniboss_kills)
+    if isminiboss then
+        GLOBAL.TheWorld.minibosses_defeated[boss] = true
+    else
+        GLOBAL.TheWorld.bosses_defeated[boss] = true
     end
 end
 
 AddClientModRPCHandler("WorldlySkilltrees", "ResetSkills", ResetSkills)
 AddClientModRPCHandler("WorldlySkilltrees", "SyncXp", SyncXp)
+AddShardModRPCHandler("WorldlySkilltrees", "SyncBossKills", SyncBossKills)
 
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
 TUNING.SKILL_THRESHOLDS = {
-        0,  --1
-        5,  --2
-        5,  --3
-        5,  --4
-        5,  --5
-        10, --6
-        10, --7
-        10, --8
-        10, --9
-        10, --10
-        15, --11
-        15, --12
-        15, --13
-        15, --14
-        15, --15
-    },
+    0,  --1
+    10, --2
+    10, --3
+    10, --4
+    10, --5
+    10, --6
+    10, --7
+    10, --8
+    10, --9
+    10, --10
+    10, --11
+    10, --12
+    10, --13
+    10, --14
+    10, --15
+}
 
-    env.AddComponentPostInit("skilltreeupdater", function(self)
-        self.skip_validation = true
-    end)
 
+env.AddComponentPostInit("skilltreeupdater", function(self)
+    self.skip_validation = true
+end)
+
+
+local function GetBossXPBonus()
+    local boss_bonus = 0
+
+    for k, v in pairs(TheWorld.bosses_defeated) do
+        boss_bonus = boss_bonus + 7.5
+    end
+
+    for k, v in pairs(TheWorld.minibosses_defeated) do
+        boss_bonus = boss_bonus + 5
+    end
+
+    return boss_bonus
+end
 
 
 local TheSkillTree = require("skilltreedata")()
-local function ResetSkilltree(character)
+local function TrySkilltreeReset(character)
     if TheSkillTree ~= nil then
         TheSkillTree.save_enabled = false
     end
@@ -76,33 +112,43 @@ local function ResetSkilltree(character)
 
 
 
-        if skilltreeupdater ~= nil then
-            skilltreeupdater.skilltree.skillxp[character.prefab] = TheWorld.state.cycles --reset skillpoints.
+        if skilltreeupdater ~= nil then  
+            skilltreeupdater.skilltree.skillxp[character.prefab] = math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints()) --reset skillpoints.
         end
         character.hasresetskills = true
     end
 end
 
+local function __newindex(t, k, v)
+    print("__newindex")
+
+    for k, player in pairs(AllPlayers) do
+        player.components.skilltreeupdater.skilltree.skillxp[player.prefab] = math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints())
+        SendModRPCToClient(GetClientModRPC("WorldlySkilltrees", "SyncXp"), ThePlayer ~= nil and ThePlayer.userid or player.userid, player.prefab, math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints()))
+    end
+
+    rawset(t, k, v)
+end
+
 env.AddPrefabPostInit("world", function(inst)
+    if TheWorld.bosses_defeated == nil then
+        TheWorld.bosses_defeated = {}
+    end
+    if TheWorld.minibosses_defeated == nil then
+        TheWorld.minibosses_defeated = {}
+    end
+
+    setmetatable(TheWorld.bosses_defeated, {
+        __newindex = __newindex
+    })
+    setmetatable(TheWorld.minibosses_defeated, {
+        __newindex = __newindex
+    })
+
     TheWorld:ListenForEvent("ms_newplayercharacterspawned", function(inst, data)
         if data ~= nil and data.mode ~= nil and data.player ~= nil then
             if data.mode ~= "Load" then
-                ResetSkilltree(data.player)
-            end
-        end
-    end)
-end)
-
-env.AddPlayerPostInit(function(inst)
-    inst:ListenForEvent("boss_defeated", function(inst, data)
-        local boss, trueboss = data.boss, data.trueboss
-
-        if inst.bosses_defeated == nil then inst.bosses_defeated = {} end
-
-        if not inst.bosses_defeated[boss] then
-            inst.bosses_defeated[boss] = true
-            if inst.components.skilltreeupdater ~= nil then
-                inst.components.skilltreeupdater:AddSkillXP(trueboss and 10 or 5)
+                TrySkilltreeReset(data.player)
             end
         end
     end)
@@ -111,8 +157,42 @@ env.AddPlayerPostInit(function(inst)
 
     local _OnSave = inst.OnSave
 
+    TheWorld.OnSave = function(inst, data, ...)
+        data.bosses_defeated = TheWorld.bosses_defeated
+        data.minibosses_defeated = TheWorld.minibosses_defeated
+
+        if _OnSave ~= nil then
+            return _OnSave(inst, data, ...)
+        end
+    end
+
+    local _OnLoad = inst.OnLoad
+
+    TheWorld.OnLoad = function(inst, data, ...)
+        if data then
+            TheWorld.bosses_defeated = data.bosses_defeated
+            TheWorld.minibosses_defeated = data.minibosses_defeated
+
+            setmetatable(TheWorld.bosses_defeated, {
+                __newindex = __newindex
+            })
+            setmetatable(TheWorld.minibosses_defeated, {
+                __newindex = __newindex
+            })
+        end
+
+        if _OnLoad ~= nil then
+            return _OnLoad(inst, data, ...)
+        end
+    end
+end)
+
+env.AddPlayerPostInit(function(inst)
+    if not TheWorld.ismastersim then return end
+
+    local _OnSave = inst.OnSave
+
     inst.OnSave = function(inst, data, ...)
-        data.bosses_defeated = inst.bosses_defeated
         data.hasresetskills = inst.hasresetskills
         if _OnSave ~= nil then
             return _OnSave(inst, data, ...)
@@ -123,13 +203,10 @@ env.AddPlayerPostInit(function(inst)
 
     inst.OnLoad = function(inst, data, ...)
         if data then
-            if data.bosses_defeated then
-                inst.bosses_defeated = data.bosses_defeated
-            end
             if data.hasresetskills then
                 inst.hasresetskills = data.hasresetskills
                 if not inst.hasresetskills then
-                    ResetSkilltree(inst)
+                    TrySkilltreeReset(inst)
                 end
             end
         end
@@ -145,9 +222,12 @@ env.AddPrefabPostInitAny(function(inst)
 
     if inst ~= nil and inst:HasTag("epic") and inst.components.health ~= nil then
         inst:ListenForEvent("death", function(inst)
-            for k, v in pairs(AllPlayers) do
-                v:PushEvent("boss_defeated", { boss = inst.prefab, trueboss = inst.components.health.maxhealth >= 3500 })
+            if TheWorld.bosses_defeated[inst.prefab] ~= true and inst.components.health.maxhealth >= 3500 then
+                TheWorld.bosses_defeated[inst.prefab] = true
+            elseif TheWorld.minibosses_defeated[inst.prefab] ~= true then
+                TheWorld.minibosses_defeated[inst.prefab] = true
             end
+            SendModRPCToShard(GetShardModRPC("WorldlySkilltrees", "SyncBossKills"), nil, inst.prefab, inst.components.health.maxhealth < 3500)
         end)
     end
 end)
@@ -161,16 +241,9 @@ env.AddComponentPostInit("experiencecollector", function(self)
         end
 
 
-        local boss_bonus = 0
-        if self.inst.bosses_defeated ~= nil then
-            for k, v in pairs(self.inst.bosses_defeated) do
-                boss_bonus = boss_bonus + 10
-            end
-        end
-
-        self.inst.components.skilltreeupdater.skilltree.skillxp[self.inst.prefab] = TheWorld.state.cycles + boss_bonus --sync points for everyone with day count.
-        self.inst.components.skilltreeupdater:AddSkillXP(0)                                                            --scuffed, but I need to get an update.
-        SendModRPCToClient(GetClientModRPC("WorldlySkilltrees", "SyncXp"), ThePlayer ~= nil and ThePlayer.userid or self.inst.userid, self.inst.prefab, TheWorld.state.cycles + boss_bonus)
+        self.inst.components.skilltreeupdater.skilltree.skillxp[self.inst.prefab] = math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints()) --sync points for everyone with day count.
+        --self.inst.components.skilltreeupdater:AddSkillXP(0)                                                            --scuffed, but I need to get an update.
+        SendModRPCToClient(GetClientModRPC("WorldlySkilltrees", "SyncXp"), ThePlayer ~= nil and ThePlayer.userid or self.inst.userid, self.inst.prefab, math.min(TheWorld.state.cycles + GetBossXPBonus(), TheSkillTree:GetMaximumExperiencePoints()))
     end
 
     self.inst:DoTaskInTime(0, function() self:UpdateXp() end)
