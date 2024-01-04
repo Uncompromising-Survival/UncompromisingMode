@@ -49,7 +49,8 @@ local component_post = {
     "geyserfx",
     "firedetector",
 	"unwrappable",
-    "slipperyfeet"
+    "slipperyfeet",
+    "walkableplatformplayer",
 }
 
 local prefab_post = {
