@@ -169,7 +169,7 @@ env.AddPrefabPostInit("world", function(inst)
     local _OnLoad = inst.OnLoad
 
     TheWorld.OnLoad = function(inst, data, ...)
-        if data then
+        if data and data.bosses_defeated and data.minibosses_defeated then
             TheWorld.bosses_defeated = data.bosses_defeated
             TheWorld.minibosses_defeated = data.minibosses_defeated
 
