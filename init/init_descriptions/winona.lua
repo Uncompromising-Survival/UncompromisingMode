@@ -171,6 +171,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Charlie, what is this?"
 DESCRIBE.POLLENMITEDEN = "Yeesh, that could use some dismantlin'."
 DESCRIBE.POLLENMITES = "A nasty hazard of yard work."
 DESCRIBE.SHADOW_CROWN = "Makes my skin crawl, but at least I'm moving faster."
+DESCRIBE.UM_SHADOW_AXE = "Makes me feel like I'm back in the factory."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I preferred you when you had fewer eyes!"

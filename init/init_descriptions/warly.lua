@@ -171,6 +171,7 @@ DESCRIBE.SHADOW_TELEPORTER =
 DESCRIBE.POLLENMITEDEN = "I'd rather have a mound of chocolate."
 DESCRIBE.POLLENMITES = "The bugs are really bad around here."
 DESCRIBE.SHADOW_CROWN = "This thing is hexed, I'm sure of it!"
+DESCRIBE.UM_SHADOW_AXE = "Finally, I can get some help around here."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I'm not on the menu!"

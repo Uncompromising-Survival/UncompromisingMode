@@ -174,6 +174,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Ooh! Gimme!"
 DESCRIBE.POLLENMITEDEN = "Looks flammable. VERY flammable."
 DESCRIBE.POLLENMITES = "YES! They should burn easily!"
 DESCRIBE.SHADOW_CROWN = "I feel really uncomfortable wearing it."
+DESCRIBE.UM_SHADOW_AXE = "It lets me tell Wilson what to do."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.MARSH_GRASS = "Will it burn?"

@@ -187,6 +187,7 @@ DESCRIBE.POLLENMITEDEN = "Obviously the work of a eusocial insect."
 DESCRIBE.POLLENMITES =
 "A swarm of Melittiphis Alvearlus. Strange behavior for a parasite."
 DESCRIBE.SHADOW_CROWN = "It permeates a dark aura over it's wearer."
+DESCRIBE.UM_SHADOW_AXE = "There's a lingering aura connected to this axe."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.SUNGLASSES = "Time for some daylight reading."
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS

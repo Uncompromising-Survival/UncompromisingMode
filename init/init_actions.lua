@@ -130,6 +130,18 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     return _RummageFn(act)
 end
 
+
+local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
+
+GLOBAL.ACTIONS.CHOP.fn = function(act)
+	if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
+		local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+		axe.WorkEffect(axe, act.doer, act.target)
+	end
+	
+    return _ChopFn(act)
+end
+
 if TUNING.DSTU.WICKERNERF then
     local _ReadFn = GLOBAL.ACTIONS.READ.fn
 

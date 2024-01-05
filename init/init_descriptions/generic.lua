@@ -233,6 +233,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Hey! Let go of that gem!"
 DESCRIBE.POLLENMITEDEN = "Science says it mite be dangerous."
 DESCRIBE.POLLENMITES = "I mite want to keep my distance."
 DESCRIBE.SHADOW_CROWN = "I feel un-safer already."
+DESCRIBE.UM_SHADOW_AXE = "It seems awfully familiar."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "How bland."
 DESCRIBE.SUNGLASSES = "Stylish, and slightly over sized."

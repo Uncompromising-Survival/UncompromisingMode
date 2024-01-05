@@ -170,6 +170,7 @@ DESCRIBE.POLLENMITEDEN = "Ugh. The horde home."
 DESCRIBE.POLLENMITES = "Horde horrible."
 DESCRIBE.SHADOW_CROWN =
 "Darkness brings great power, but leaves your body fragile. I should know."
+DESCRIBE.UM_SHADOW_AXE = "A tool after my own heart."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "Upsettingly plain."
 DESCRIBE.SUNGLASSES = "It's not quite my style."

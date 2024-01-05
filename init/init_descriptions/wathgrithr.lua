@@ -162,6 +162,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Let us strike it down, and take it's treasure!"
 DESCRIBE.POLLENMITEDEN = "The Valhalla of bugs."
 DESCRIBE.POLLENMITES = "Infest not me, bugs!"
 DESCRIBE.SHADOW_CROWN = "I shall dodge with great swiftness!"
+DESCRIBE.UM_SHADOW_AXE = "The bearer of this weapon owns an army!"
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "Toss it back to the swampwater!"
 DESCRIBE.SUNGLASSES = "No longer can foes use the sunlight against me!"

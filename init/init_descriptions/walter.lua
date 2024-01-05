@@ -183,6 +183,7 @@ DESCRIBE.BIRCHLING = DESCRIBE.STUMPLING
 DESCRIBE.MOON_TEAR =
     "Far away from home, huh? Woby and I will keep you company!"
 DESCRIBE.SHADOW_CROWN = "A crown? A Pinetree Pioneer must stay humble!"
+DESCRIBE.UM_SHADOW_AXE = "I think someone's copying me."
 DESCRIBE.POLLENMITEDEN = "These little guys are spreading fast!"
 DESCRIBE.POLLENMITES = "My eyes are watering just looking at them."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST

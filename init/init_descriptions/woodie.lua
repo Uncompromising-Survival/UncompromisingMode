@@ -167,6 +167,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Well I'll be darned."
 DESCRIBE.POLLENMITEDEN = "Industrious little guys, eh Lucy?"
 DESCRIBE.POLLENMITES = "Lotta those guys in the lumber camps."
 DESCRIBE.SHADOW_CROWN = "I ain't a king of nothing, least of which fools."
+DESCRIBE.UM_SHADOW_AXE = "I still prefer Lucy, though this has its uses."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Not comin' for kit this time, eh?"

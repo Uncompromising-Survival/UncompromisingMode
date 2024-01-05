@@ -182,6 +182,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Maybe it won't notice me taking the gem."
 DESCRIBE.POLLENMITEDEN = "A snack shack, full of juicy bugs."
 DESCRIBE.POLLENMITES = "If only there was a good way to eat them."
 DESCRIBE.SHADOW_CROWN = "It matches my fur at least."
+DESCRIBE.UM_SHADOW_AXE = "Another keepsake, it'll never be used."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "I'll keep it for later."
 DESCRIBE.SUNGLASSES = "Eye Darkner."

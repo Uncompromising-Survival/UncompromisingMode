@@ -164,6 +164,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Are you giving me a present?"
 DESCRIBE.POLLENMITEDEN = "Arachnids aren't bugs!"
 DESCRIBE.POLLENMITES = "Don't bite us, little guys."
 DESCRIBE.SHADOW_CROWN = "Blah blah tortoise, blah blah hare..."
+DESCRIBE.UM_SHADOW_AXE = "We swear we keep seeing something when using this."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "It doesn't taste like anything."
 DESCRIBE.SUNGLASSES = "It kinda works if we shut most of our eyes."

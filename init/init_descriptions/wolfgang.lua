@@ -163,6 +163,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Test my might! I pry that gem out of tiny hand!"
 DESCRIBE.POLLENMITEDEN = "Wolfgang smash bug home!"
 DESCRIBE.POLLENMITES = "Tiny bugs! Wolfgang kill hundreds in ONE swing!"
 DESCRIBE.SHADOW_CROWN = "Make Wolfgang fast! But skin feel weak..."
+DESCRIBE.UM_SHADOW_AXE = "Scary tool, Wolfgang don't like."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "GAH! Hairpuff scare wolfgang!"

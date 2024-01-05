@@ -107,7 +107,7 @@ local prefabs = {
 	"sunglasses",
 	"cookiespikes",
 	"skeletonmeat",
-	"swilson",
+	"um_shadow_characters",
 	"veteranscurse",
 	"healthregenbuff_vetcurse",
 	"antlion_sinkhole_boat",
@@ -431,7 +431,8 @@ local prefabs = {
 	"mara_boss1_bullets",
 	"um_sacred_chest",
 	"smog",
-    
+    "um_axe",
+	
 	-- Pyre Nettle stuff
 	"um_pyre_nettles",
 	"um_smolder_spore",

@@ -172,6 +172,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Oh, how you tempt me..."
 DESCRIBE.POLLENMITEDEN = "They'll multiply in no time."
 DESCRIBE.POLLENMITES = "Don't you dare nest in my hair!"
 DESCRIBE.SHADOW_CROWN = "It makes me feel so... privileged."
+DESCRIBE.UM_SHADOW_AXE = "A rudimentary solution to being several places at once."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Oh botheration, what happened to you?"

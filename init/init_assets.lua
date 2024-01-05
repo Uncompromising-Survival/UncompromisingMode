@@ -1316,7 +1316,11 @@ Assets = {
 	Asset("ANIM", "anim/winona_portables.zip"),
 
 	--INVENTORY ITEMS [IMAGES & ATLAS]
-
+	
+	-- Shadow Char Items
+	Asset("IMAGE", "images/inventoryimages/um_shadow_axe.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_shadow_axe.xml"),
+	
 	Asset("ATLAS", "images/inventoryimages/hat_crab.xml"),
 	Asset("IMAGE", "images/inventoryimages/hat_crab.tex"),
 

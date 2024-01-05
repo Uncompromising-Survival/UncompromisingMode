@@ -169,6 +169,7 @@ DESCRIBE.POLLENMITEDEN = "They're building their own doom."
 DESCRIBE.POLLENMITES = "Like life, they wear you down little by little."
 DESCRIBE.SHADOW_CROWN =
 "Is this what youth feels like for older people? Energetic, yet fragile?"
+DESCRIBE.UM_SHADOW_AXE = "A ghoast from the past seems attached to it still."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.SUNGLASSES = "Wonderful, now the world is another shade darker."
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS

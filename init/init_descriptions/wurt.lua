@@ -168,6 +168,7 @@ DESCRIBE.POLLENMITEDEN = "It home for nasty itchy bugs!"
 DESCRIBE.POLLENMITES = "Glorp! Go away itchy bugs!"
 DESCRIBE.SHADOW_CROWN =
 "Queen Wur-..? ...Erm.... Maybe someone else can have this crown..."
+DESCRIBE.UM_SHADOW_AXE = "It seem strange, scale-less helping us?"
 DESCRIBE.RNEGHOST = "Glorp! Ghost might be cold, but can't have fire!"
 DESCRIBE.TRAPDOORGRASS = "Big grass."
 DESCRIBE.LUREPLAGUE_RAT = "Glorp! Something wrong with this squeaker!"
