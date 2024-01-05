@@ -19,7 +19,7 @@ local events=
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("locomote", function(inst)
-        if not inst.sg:HasStateTag("busy") and not inst:HasTag("INLIMBO") then
+        if not (inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) and not inst:HasTag("INLIMBO") then
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
             if not inst.sg:HasStateTag("attack") and is_moving ~= wants_to_move then
@@ -56,9 +56,14 @@ local function SpawnSwilsonCopies(inst)
 end
 
 local function AmLast(inst)
-	if FindEntity(inst,100,function(inst) return inst.prefab == "swilson" end) == nil then
-		return true
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local swilsons = TheSim:FindEntities(x,y,z,100,{"shadowchar_swilson"})
+	for i,v in ipairs(swilsons) do
+		if v ~= inst and v.components.health and not v.components.health:IsDead() then
+			return false -- There's another that's not me, and is not dead
+		end
 	end
+	return true -- Made it through, I'm truly the last
 end
 
 local states=
@@ -70,15 +75,15 @@ local states=
         onenter = function(inst)
 			inst.Physics:Stop()
             inst.AnimState:PlayAnimation("death")
-			if inst.prefab == "swilson" and AmLast(inst) then
+			if (inst.prefab == "swilson" and AmLast(inst)) and TUNING.DSTU.SHADOW_ITEMS then --If Shadow Items from Characters are Enabled.
 				inst.components.lootdropper:DropLoot(Vector3(inst.Transform:GetWorldPosition()))
 			end
         end,
 		timeline=
         {
-            TimeEvent(3*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
-			TimeEvent(6*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
-			TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
+            TimeEvent(3*FRAMES, function(inst) inst.PlaySound(inst,"death") end),
+			--TimeEvent(6*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
+			--TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
         },
     },
     State{
@@ -92,9 +97,7 @@ local states=
         end,
 		timeline=
         {
-            TimeEvent(3*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
-			TimeEvent(6*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
-			TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
+            TimeEvent(3*FRAMES, function(inst) inst.PlaySound(inst,"death") end),
         },
         events=
         {
@@ -264,7 +267,10 @@ local states=
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("emote_fistshake")
         end,
-        
+        timeline=
+        {
+            TimeEvent(3*FRAMES, function(inst) inst.PlaySound(inst,"taunt") end),
+        },       
         events=
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
@@ -299,12 +305,12 @@ local states=
             inst.AnimState:PlayAnimation("atk_pre")
 			inst.AnimState:PushAnimation("atk",false)
             inst.sg.statemem.target = target
-			inst.AnimState:SetDeltaTimeMultiplier(0.6)
+			--inst.AnimState:SetDeltaTimeMultiplier(0.6)
         end,
         
         timeline=
         {
-			TimeEvent(2*FRAMES, function(inst) inst.AnimState:SetDeltaTimeMultiplier(0.2) end),
+			TimeEvent(5*FRAMES, function(inst) inst.AnimState:SetDeltaTimeMultiplier(0) end),
 			TimeEvent(28*FRAMES, function(inst) 
 				inst.AnimState:SetDeltaTimeMultiplier(1)
 				if inst.components.combat and inst.components.combat.target then
@@ -312,7 +318,7 @@ local states=
 				end
 				inst.Physics:SetMotorVelOverride(50,0,0)
 			end),
-            TimeEvent(31*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") end),
+            TimeEvent(31*FRAMES, function(inst) inst.PlaySound(inst,"attack") end),
             TimeEvent(32*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
 			TimeEvent(36*FRAMES, function(inst)
 				inst.AnimState:SetDeltaTimeMultiplier(1)
@@ -336,7 +342,7 @@ local states=
 
     State{
         name = "hit",
-        
+        tags = {"hit"},
         onenter = function(inst)
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()

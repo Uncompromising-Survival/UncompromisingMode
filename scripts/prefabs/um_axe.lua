@@ -105,8 +105,6 @@ local function SendWilson(inst,attacker,target)
 		local x,y,z = target.Transform:GetWorldPosition()
 		swilson.Transform:SetPosition(x+1.5*math.cos(angle),y,z+1.5*math.sin(angle))
 		if attacker.prefab == "wilson" then
-			swilson.attack = 34
-			swilson.work = 1.5
 			swilson.Transform:SetScale(0.8,0.8,0.8)
 		end
 		if target.components.health then

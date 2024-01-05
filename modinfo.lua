@@ -137,6 +137,8 @@ configuration_options = {
             { description = "90%", data = 0.1 }, { description = "INSANITY", data = 0 } },
         default = 0.8
     },
+	BinaryConfig("shadow_items", "Shadow Character Items",
+			"Shadow Characters drop Unique Items", false),
     BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
         "Shadow Vortex now teleports you to some random place.", false),
     BinaryConfig("harder_shadows", "Harder Nightmare Creatures",

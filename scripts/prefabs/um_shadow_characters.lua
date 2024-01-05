@@ -3,8 +3,6 @@ local assets =
 {
 
 }
-    
-    
 local prefabs =
 {
 
@@ -14,6 +12,14 @@ SetSharedLootTable('swilson',
 {
     {'um_shadow_axe',     1.0},
 })
+
+
+local function PlaySound(inst,sound)
+	inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/attack_VO") --Currently just does this... Until the real sounds are here
+end
+
+
+
 
 local SHARE_TARGET_DIST = 30
 
@@ -80,6 +86,7 @@ local function fn(Sim)
 	inst:AddTag("monster")
     inst:AddTag("hostile")   
     inst:AddTag("swilson") 
+	inst:AddTag("shadowchar_swilson")
 	inst:AddTag("nightmarecreature")
 	inst:AddTag("shadow")
     inst:AddTag("shadow_aligned")
@@ -150,7 +157,7 @@ local function fn(Sim)
     inst:SetBrain(brain) 
 	inst:DoTaskInTime(0,EquipItems)
 	inst:WatchWorldState("isday", function(inst) inst:Remove() end)
-	
+	inst.PlaySound = PlaySound
     return inst
 end
 
@@ -246,7 +253,7 @@ local function fnlabotomized(Sim)
 	inst:DoTaskInTime(FRAMES,FadeIn)
 	inst.persists = false --Fallback
 	inst.work = 2
-	inst.attack = 51
+	inst.attack = 34
 	inst:DoTaskInTime(3,function(inst) inst:Remove() end) --Failsafe
     return inst
 end
