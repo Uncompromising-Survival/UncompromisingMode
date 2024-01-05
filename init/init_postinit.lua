@@ -492,7 +492,6 @@ end
 modimport("postinit/sim")
 modimport("postinit/any")
 modimport("postinit/player")
-modimport("postinit/um_experience")
 
 for _, v in pairs(component_post) do
     modimport("postinit/components/" .. v)
