@@ -732,7 +732,7 @@ CommonStates.AddWalkStates(states,
 },nil,nil,nil,
 {
 	startonenter = function(inst)
-		if inst._dodgedest and ReadyToLeapOrStick(inst) and inst:GetDistanceSqToPoint(inst._enemypos) < inst:GetDistanceSqToPoint(inst._dodgedest) then
+		if inst._dodgedest and ReadyToLeapOrStick(inst) and inst._enemypos and inst:GetDistanceSqToPoint(inst._enemypos) < inst:GetDistanceSqToPoint(inst._dodgedest) then
 			inst.AnimState:SetBank("widow_backup")
 			inst.AnimState:SetDeltaTimeMultiplier(-1)
 		else
