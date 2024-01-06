@@ -186,4 +186,6 @@ if GetModConfigData("hardcore") then
 end
 
 modimport("init/init_loadingtips")
+if GetModConfigData("worldlyskilltrees") then
 modimport("init/init_worldlyskilltrees")
+end

@@ -115,6 +115,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Core Gameplay"),
+    BinaryConfig("worldlyskilltrees", "Worldly Skilltrees", "Skilltrees and insight are per-world, instead of always being unlocked.\nBosses give insight XP.", true),
     BinaryConfig("foodregen", "Over Time Food Stats",
         "Health and Sanity from foods is applied over time, each food acting as a seperate stackable health or sanity regen buff.",
         true),
