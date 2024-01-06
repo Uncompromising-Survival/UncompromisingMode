@@ -1,3 +1,7 @@
+--[[
+    This file belongs to monti1811's "Configurable Skilltrees" mod; adapted for Uncompromising Mode. All credits go to Monti.
+]]
+
 -- List of all enabled prefabs where the changes of the skilltrees will be applied
 local enabled_prefabs = GLOBAL.DST_CHARACTERLIST 
 
