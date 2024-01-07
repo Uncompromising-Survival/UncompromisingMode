@@ -1,11 +1,13 @@
 name = "󰀕 Uncompromising Mode"
 -- borrowed from IA
 folder_name = folder_name or "workshop-"
-if not folder_name:find("workshop-") then name = "[DEV-LOCAL] - " .. name end
+if not folder_name:find("workshop-") then
+    name = "[LOCAL] - " .. name
+end
+local _version = "1.4.9.1"
 
 description = [[
-󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Release ver: v1.0.0.0)]
-
+    󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Beta ver: v]]..version..[[ ]
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features: 
@@ -16,12 +18,10 @@ Latest update features:
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Ghosts from the Past Testing v1.0.0.0"
--- VERSION SCHEME
--- first num is major release (e.g. "Under the weather", so, 2, UTW2 will be 3, and so on.) DO NOT BRING THIS NUMBER *DOWN* AGAIN PLEASE
--- second is new content (something like a new large addition)
--- third is minor (minor things like tweaks and some fixes)
--- fourth is hotfix (bug fixes, very tiny misc changes)
+
+--RELEASE.MAJOR.MINOR.FIX
+version = "Ghosts from the Past Testing v"..version
+
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
