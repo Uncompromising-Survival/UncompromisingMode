@@ -7,7 +7,7 @@ end
 local _version = "1.4.9.1"
 
 description = [[
-    󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Beta ver: v]]..version..[[ ]
+    󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Beta ver: v]].._version..[[ ]
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features: 
@@ -20,7 +20,7 @@ author = "󰀈 The Uncomp Dev Team 󰀈"
 
 
 --RELEASE.MAJOR.MINOR.FIX
-version = "Ghosts from the Past Testing v"..version
+version = "Ghosts from the Past Testing v".._version
 
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
