@@ -85,6 +85,7 @@ modimport("init/init_food/init_food_changes")
 modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
 modimport("init/init_vetcurse")
+modimport("init/init_bosshealth")
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
 modimport("init/init_recipes")
@@ -154,9 +155,9 @@ if GetModConfigData("lifeamulet") then
 	modimport("init/init_lifeamulet")
 end
 
-if GetModConfigData("caved") == false and GetModConfigData("acidrain") then
-	modimport("init/init_weather/init_overworld_toadstool")
-end
+--if GetModConfigData("caved") == false and GetModConfigData("acidrain") then
+	--modimport("init/init_weather/init_overworld_toadstool")
+--end
 
 if GetModConfigData("foodregen") then
 	modimport("init/init_food/init_foodregen")
@@ -174,7 +175,11 @@ modimport("init/init_character_changes/wathgrithr")
 modimport("init/init_character_changes/webber")
 modimport("init/init_character_changes/winona")
 modimport("init/init_character_changes/wanda")
-modimport("init/init_character_changes/wortox")
+
+if GetModConfigData("wortox") then
+	modimport("init/init_character_changes/wortox")
+end	
+
 modimport("init/init_character_changes/warly")
 
 if GetModConfigData("waxwell") then

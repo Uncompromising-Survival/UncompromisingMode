@@ -160,7 +160,7 @@ local function staff_fn()
     inst:AddTag("beargerclaw")
     inst:AddTag("quickcast")
 	inst:AddTag("vetcurse_item")
-	inst:AddTag("inventoryitem")
+
 	MakeInventoryFloatable(inst)
 
     inst.spelltype = "SCIENCE"

@@ -1,51 +1,35 @@
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
------------------------------------------------------------------
---Remove souls from insects and arachnids
---Relevant: soulless tag, wortox_soul_common.lua
------------------------------------------------------------------
-local function MakeSoulless(prefab)
-    AddPrefabPostInit(prefab, function(inst)
-        if inst ~= nil then
-            inst:AddTag("soulless")
-        end
-    end)
-end
 
+AddPrefabPostInitAny(function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return inst
+	end
+	--if inst.components.health ~= nil and inst:HasTag("insect") and inst.components.health ~= nil and not inst.components.health:IsDead() and inst.components.health.maxhealth <= 100 then
+	if inst:HasTag("butterfly") or inst:HasTag("bird") then
+		inst:AddTag("soulless")
+	end
+end)
+	
+--local function MakeSoulless(prefab)
+    --AddPrefabPostInit(prefab, function(inst)
+        --if inst ~= nil then
+            --inst:AddTag("soulless")
+        --end
+    --end)
+--end
 
-local REMOVE_SOULS =
-{
-    --"spider",
-    "mosquito",
-    "bee",
-    "killerbee",
-    "butterfly",
-    "birchnutdrake",
-    "lightflier",
-    --"mole",
-    --"beeguard",
-    --"bat",
-    --"rabbit",
-    --"crow",
-    --"canary",
-    --"robin",
-    --"robin_winter",
-    --"frog",
-    --"bird_mutant",
-    --"smallbird",
-    "moonbutterfly",
-    --"puffin",
-    --"bird_mutant_spitter",
-    --"fruitbat",
-    --"stumpling",
-    --"birchling",
-    --"aphid",
-}
+--local REMOVE_SOULS =
+--{
+	--"birchnutdrake",
+	--"stumpling",
+	--"birchling",
+--}
 
-if GLOBAL.TUNING.DSTU.WORTOX == "UMNERF" then
-    for k, v in pairs(REMOVE_SOULS) do
-        MakeSoulless(v)
-    end
-end
+--if GLOBAL.TUNING.DSTU.WORTOX == "UMNERF" then
+    --for k, v in pairs(REMOVE_SOULS) do
+        --MakeSoulless(v)
+    --end
+--end
 
 local function UncompromisingSoulHeal(inst)
     if GLOBAL.TUNING.BOOK_FIRE_RADIUS ~= nil then
@@ -90,15 +74,15 @@ local function UncompromisingSoulHeal(inst)
             end
         end
 
-        if TUNING.DSTU.WORTOX ~= "APOLLO" then
-            if sanitytargetscount > 0 then
-                local amt = TUNING.SANITY_TINY * 0.5
-                for i = 1, sanitytargetscount do
-                    local v = sanitytargets[i]
-                    v.components.sanity:DoDelta(amt)
-                end
-            end
-        end
+        --if TUNING.DSTU.WORTOX ~= "APOLLO" then
+            --if sanitytargetscount > 0 then
+                --local amt = TUNING.SANITY_TINY * 0.5
+                --for i = 1, sanitytargetscount do
+                    --local v = sanitytargets[i]
+                    --v.components.sanity:DoDelta(amt)
+                --end
+            --end
+        --end
     else
         local targets = {}
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -145,11 +129,11 @@ local function toground(inst)
 end
 
 --beta uses
-if GLOBAL.TUNING.DSTU.WORTOX == "SHOT" or GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
+--if GLOBAL.TUNING.DSTU.WORTOX == "SHOT" or GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
     AddPrefabPostInit("wortox_soul", function(inst)
         UpvalueHacker.SetUpvalue(GLOBAL.Prefabs.wortox_soul.fn, toground, "toground")
     end)
-end
+--end
 
 AddPrefabPostInit("wortox", function(inst)
 	if not GLOBAL.TheWorld.ismastersim then
@@ -160,7 +144,7 @@ AddPrefabPostInit("wortox", function(inst)
 		inst.components.foodaffinity:AddPrefabAffinity("devilsfruitcake", 1.24)
 	end
 	
-	if GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
+	--if GLOBAL.TUNING.DSTU.WORTOX == "APOLLO" then
         if inst.components.souleater ~= nil then
             local oneatsoulfn_ = inst.components.souleater.oneatsoulfn
 
@@ -169,5 +153,5 @@ AddPrefabPostInit("wortox", function(inst)
                 inst.components.sanity:DoDelta(-TUNING.SANITY_TINY)
             end
         end
-	end
+	--end
 end)

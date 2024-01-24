@@ -1,5 +1,5 @@
---moved into seperate file, was getting a bit too big.
 local STRINGS = GLOBAL.STRINGS
+--moved into seperate file, was getting a bit too big.
 
 STRINGS.UNCOMP_TOOLTIP = {
 	AMULET =
@@ -32,7 +32,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	WARDROBE = "- Can store a lot of equipment.",
 	WINONA_BATTERY_LOW = "- Can charge electrical equipment.",
 	WINONA_BATTERY_HIGH = "- Can charge electrical equipment.",
-    WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
+    WINONA_SPOTLIGHT = "Significantly increased range.\nDoubled radius.",
 	LIGHTNING_ROD = "- Can charge electrical equipment.",
 	LIGHTER = "- Lasts forever in the hands of a pyromaniac.",
 	BANDAGE = "- Restores a bit of extra health over time.",
@@ -40,15 +40,11 @@ STRINGS.UNCOMP_TOOLTIP = {
 	MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
 	FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
 	BOAT_ROTATOR_KIT = "- Increases boat steering speed.\n- Helps doing sharp turns.",
-	STAFF_TORNADO = "- Can redirect Giant Tornadoes.",
-	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
 	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
+	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
 	COMPOSTINGBIN = "- Can hold up to 24 items.",
-	FIRESUPRESSOR = "- Reacts faster to nearby fires in Emergency Mode.\n- Ignores campfires and firepits.",
-	BOAT_CANNON_KIT = "- Increased firepower.\n- Can fire Seedshells.",
-	TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
-	BREAK = "BREAK HERE",
+	
 	--uncomp content
 	RAT_WHIP = "- Stronger when well fed.",
 	AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.\n- Provides cold in a small radius.\n- Removes smog in a large area.",
@@ -78,52 +74,10 @@ STRINGS.UNCOMP_TOOLTIP = {
 	ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
 	ARMOR_CRAB_REGEN = "- Self-healing.",
 	UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
-    WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.",--putting these here for the icon
+    WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.",
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel."
 
 }
-local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
-
-local statues = {
-	"HORNUCOPIA",
-	"PIPE",
-	"ANCHOR",
-	"PAWN",
-	"ROOK",
-	"KNIGHT",
-	"BISHOP",
-	"MUSE",
-	"FORMAL",
-	"DEERCLOPS",
-	"BEARGER",
-	"MOOSEGOOSE",
-	"DRAGONFLY",
-	"MINOTAUR",
-	"TOADSTOOL",
-	"BEEQUEEN",
-	"KLAUS",
-	"ANTLION",
-	"STALKER",
-	"MALBATROSS",
-	"CRABKING",
-	"BUTTERFLY",
-	"MOON",
-	"GUARDIANPHASE3",
-	"EYEOFTERROR",
-	"TWINSOFTERROR",
-	"CLAYHOUND",
-	"CLAYWARG",
-	"CARRAT",
-	"BEEFALO",
-	"KITCOON",
-	"CATCOON",
-	"MANRABBIT",
-	"DAYWALKER",
-}
-
-for k,v in pairs(statues) do
-	TOOLTIPS["CHESSPIECE_"..v.."_BUILDER"] = "- No longer has collision."
-end
 
 STRINGS.PINETREE_TOOLTIP = {
 	WALTERHAT = "- Wearing it makes scrapes and bruises feel less scary!",
@@ -156,6 +110,7 @@ if TUNING.DSTU.WINONA_PORTABLES then
 	STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_HIGH = "- Now portable."
 end
 
+local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
 if TUNING.DSTU.TELESTAFF_REWORK then
 	TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses."
@@ -202,12 +157,11 @@ if TUNING.DSTU.SNOWSTORMS then
 	TOOLTIPS.CAMPFIRE = "- Provides protection from Snow Storms."
 	TOOLTIPS.TORCH = "- Provides protection from Snow Storms."
 	TOOLTIPS.FIREPIT = "- Provides protection from Snow Storms."
-	TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from Snow Storms when built."
-	TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from Snow Storms when built."
-	TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from Snow Storms when built."
-	TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from Snow Storms when built."
-	TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms when built."
-	TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM.."\n- Provides protection from Snow Storms when built."
+	TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from Snow Storms."
+	TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from Snow Storms."
+	TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from Snow Storms."
+	TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from Snow Storms."
+	TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms."
 	TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from Snow Storms."
 	TOOLTIPS.MOLEHAT = "- Grants protection against Snow Storms / Sand Storms and Moon Storms when worn."
 	TOOLTIPS.DESERTHAT = "- Also works as protection against Snow Storms."
@@ -339,5 +293,7 @@ if TUNING.DSTU.DISABLE_MEGAFLARE then
 	TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end
 
-modimport("init/init_scrapbook")
-modimport("init/init_scrapbook_um")
+if TUNING.DSTU.STORMS then
+	TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
+	TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
+end

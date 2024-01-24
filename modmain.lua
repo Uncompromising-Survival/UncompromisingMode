@@ -11,7 +11,6 @@ SignFiles = require("uncompromising_writeables")
 local vanilla = require "screens/redux/scrapbookdata"
 local uncomp = require "screens/redux/scrapbookdata_changes"
 
-AddPrefabPostInit("world", function(inst)
     inst:DoTaskInTime(0, function()
         for k, v in pairs(vanilla) do
             if uncomp[k] ~= nil then
@@ -22,10 +21,6 @@ AddPrefabPostInit("world", function(inst)
 
     --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
     --NOTE: This is quite a bit of memory.
-    if not inst.ismastersim then
-        return
-    end
-
     local count_skull, count_winky, items_skull, items_winky = 0, 0
     inst:DoTaskInTime(0, function()
         -- count all skullchests and winky burrows
@@ -295,7 +290,7 @@ end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, z, wise, dest_can_move)
     if not GLOBAL.TheWorld.ismastershard then
-        GLOBAL.TheWorld:PushEvent("spawncavetornado", { xdata = x, zdata = z, wisedata = wise, dest_can_movedata = dest_can_move })
+        GLOBAL.TheWorld:PushEvent("spawncavetornado", {xdata = x, zdata = z, wisedata = wise, dest_can_movedata = dest_can_move})
     end
 end)
 
@@ -303,11 +298,11 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
     if toggle then
         GLOBAL.TheWorld:AddTag("heatwavestart")
         GLOBAL.TheWorld.net:AddTag("heatwavestartnet")
-        GLOBAL.TheWorld:PushEvent("heatwavestart")
+		GLOBAL.TheWorld:PushEvent("heatwavestart")
     else
         GLOBAL.TheWorld:RemoveTag("heatwavestart")
         GLOBAL.TheWorld.net:RemoveTag("heatwavestartnet")
-        GLOBAL.TheWorld:PushEvent("heatwaveend")
+		GLOBAL.TheWorld:PushEvent("heatwaveend")
     end
 end)
 

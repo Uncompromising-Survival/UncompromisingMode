@@ -2,6 +2,7 @@ require "prefabutil"
 
 local assets =
 {
+    Asset("ANIM", "anim/portable_blender.zip"),
     Asset("ANIM", "anim/winona_spotlight.zip"),
     Asset("ANIM", "anim/winona_spotlight_placement.zip"),
     Asset("ANIM", "anim/winona_catapult.zip"),
@@ -17,10 +18,12 @@ local prefabs =
 {
     "collapse_small",
     "ash",
+    "portableblender_item",
 }
 
 local prefabs_item =
 {
+    "portableblender",
 }
 
 local function ondeploy_catapult(inst, pt, deployer)
@@ -124,8 +127,6 @@ local function fn(ondeploy, atlas, anim, uses_startingfuel)
     MakeInventoryFloatable(inst, nil, 0.05, 0.7)
 
     inst:AddTag("toolbox_item")
-
-    inst.scrapbook_adddeps = {"winona_"..anim}
 
     inst.entity:SetPristine()
 

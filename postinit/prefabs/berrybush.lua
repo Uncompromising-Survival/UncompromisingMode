@@ -71,10 +71,8 @@ local function dig_up_normal(inst, worker)
     dig_up_common(inst, worker, 1)
 end
 
-if env.GetModConfigData("_bushcrabs") then
+if env.GetModConfigData("bushcrabs") then
     env.AddPrefabPostInit("berrybush", function(inst)
-
-        inst.scrapbook_adddeps = {"bushcrab"}
 
         if not TheWorld.ismastersim then
             return
