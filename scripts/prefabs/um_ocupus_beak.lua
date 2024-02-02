@@ -183,6 +183,7 @@ local function fn()
     beak_inst:AddTag("ocupus")
     beak_inst:AddTag("hostile")
     beak_inst:AddTag("soulless")
+    inst:AddTag("noember")
 
     beak_inst.entity:SetPristine()
     if not TheWorld.ismastersim then

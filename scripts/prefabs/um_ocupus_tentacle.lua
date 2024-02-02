@@ -133,6 +133,7 @@ local function fn()
 	inst:AddTag("ocupus")
     inst:AddTag("um_ocupus_tentacle")
 	inst:AddTag("soulless")
+    inst:AddTag("noember")
 
     local s  = 1.2
     inst.Transform:SetScale(s, s, s)
