@@ -44,7 +44,6 @@ local function Eat(inst)
 	local webbedcreature = FindEntity(inst,2,nil,{"webbedcreature"})
 	if webbedcreature then -- Food's here! Time to dine
 		inst.prey = webbedcreature
-		--TheNet:Announce("told to eat")
 		inst.sg:GoToState("eat_pre")
 	else	-- The prey was fake or was removed before we could eat it. Bummer.
 		inst.prey = nil
@@ -148,7 +147,10 @@ local states=
 
         onenter = function(inst, target)
             inst.Physics:Stop()
-			if math.random() < 0.5/inst.combo and inst.components.health ~= nil and inst.components.health.currenthealth < TUNING.DSTU.WIDOW_HEALTH*0.5 then
+			if inst.prey then --If we manage to pull off a melee attack, we should forget about trying to heal
+				inst.prey = nil
+			end
+			if math.random() < 0.5/inst.combo and inst.components.health and inst.components.health.currenthealth < 8000*TUNING.DSTU.WIDOW_HEALTH*0.5 then
 				inst.docombo = true
 				if inst.combo == 1 then
 					inst.combosucceed = false
@@ -172,16 +174,14 @@ local states=
         events=
         {
             EventHandler("animover", function(inst)
-				--TheNet:Announce("combo is "..inst.combo)
-				if inst.components.health and inst.components.health.currenthealth < TUNING.DSTU.WIDOW_HEALTH*0.5 and inst.docombo then
+				
+				if inst.components.health and inst.components.health.currenthealth < 8000*TUNING.DSTU.WIDOW_HEALTH*0.5 and inst.docombo then
 					inst.docombo = false
-					--TheNet:SystemMessage(inst.combo)
 					inst.combo = inst.combo+2
 					inst.sg:RemoveStateTag("busy")
 					inst.sg:GoToState("attack")
 				else
 					if inst.combosucceed == false and inst.combo > 1 then
-						--TheNet:Announce("told_to_go_to_tired")
 						inst.combosucceed = true
 						inst.sg:GoToState("tired")
 					else
@@ -270,7 +270,6 @@ local states=
         tags = {"eating"}, --not busy! we want the player to hit widow out of this
 
         onenter = function(inst, cb)
-			--TheNet:Announce("entered eat loop")
 			inst.AnimState:SetDeltaTimeMultiplier(1.2)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("eat_loop")
@@ -376,10 +375,10 @@ local states=
 			end
 			WebMortar(inst,-15)
 			WebMortar(inst,15)
-			if inst.components.health and inst.components.health.currenthealth < TUNING.DSTU.WIDOW_HEALTH*0.66 and inst.components.health.currenthealth > TUNING.DSTU.WIDOW_HEALTH*0.33 then
+			if inst.components.health and inst.components.health.currenthealth < 8000*TUNING.DSTU.WIDOW_HEALTH*0.66 and inst.components.health.currenthealth > 8000*TUNING.DSTU.WIDOW_HEALTH*0.33 then
 				WebMortar(inst,0)
 			end
-			if inst.components.health and inst.components.health.currenthealth < TUNING.DSTU.WIDOW_HEALTH*0.33 then
+			if inst.components.health and inst.components.health.currenthealth < 8000*TUNING.DSTU.WIDOW_HEALTH*0.33 then
 				WebMortar(inst,-30)
 				WebMortar(inst,30)
 			end
