@@ -947,9 +947,9 @@ configuration_options = {
             { description = "Highest (x2)", data = 2 },
             { description = "Uncomp (x3)", data = 3 } },
         default = 1
-    },	
-	{	
-        name = "Crab King's Health",
+    },
+    {
+        name = "crabking_health",
         label = "Crab King's Health",
         hover = "Tweak Crab King's Health to your liking!",
         options = {
