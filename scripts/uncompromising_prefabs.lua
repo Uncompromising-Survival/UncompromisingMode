@@ -394,6 +394,7 @@ local prefabs = {
 
 	"um_ocupus",
 	"um_ocupus_tentacle",
+    "um_ocupus_eyetacle",
 	"um_ocupus_beak",
 	"terrorguise",
 
