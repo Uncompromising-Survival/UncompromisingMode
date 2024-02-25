@@ -1026,7 +1026,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "klaus_health",
+        name = "klaus_health_",
         label = "Klaus's Health",
         hover = "Tweak Klaus's Health to your liking!",
         options = {
