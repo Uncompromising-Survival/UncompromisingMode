@@ -871,7 +871,7 @@ configuration_options = {
 
     Header("Health Adjustment"),
     {
-        name = "stalker_atrium_health",
+        name = "stalker_atrium_health_",
         label = "Ancient Fuelweaver's Health",
         hover = "Tweak Ancient Fuelweaver's Health to your liking!",
         options = {
@@ -884,7 +884,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "minotaur_health",
+        name = "minotaur_health_",
         label = "Ancient Guardian's Health",
         hover = "Tweak Ancient Guardian's Health to your liking!",
         options = {
@@ -897,7 +897,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "antlion_health",
+        name = "antlion_health_",
         label = "Antlion's Health",
         hover = "Tweak Antlion's Health to your liking!",
         options = {
@@ -907,10 +907,10 @@ configuration_options = {
             { description = "Higher (x1.5)", data = 1.5 },
             { description = "Highest (x2)",  data = 2 },
             { description = "Uncomp (x3)",   data = 3 } },
-        default = 6000
+        default = 1
     },
     {
-        name = "bearger_health",
+        name = "bearger_health_",
         label = "Bearger's Health",
         hover = "Tweak Bearger's Health to your liking!",
         options = {
@@ -923,7 +923,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "beequeen_health",
+        name = "beequeen_health_",
         label = "Bee Queen's Health",
         hover = "Tweak Bee Queen's Health to your liking!",
         options = {
@@ -936,7 +936,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "alterguardian_health",
+        name = "alterguardian_health_",
         label = "Celestial Champion's Health",
         hover = "Tweak Celestial Champion's Health to your liking!",
         options = {
@@ -949,7 +949,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "crabking_health",
+        name = "crabking_health_",
         label = "Crab King's Health",
         hover = "Tweak Crab King's Health to your liking!",
         options = {
@@ -962,7 +962,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "deerclops_health",
+        name = "deerclops_health_",
         label = "Deerclops's Health",
         hover = "Tweak Deerclops's Health to your liking!",
         options = {
@@ -974,7 +974,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "dragonfly_health",
+        name = "dragonfly_health_",
         label = "Dragonfly's Health",
         hover = "Tweak Dragonfly's Health to your liking!",
         options = {
@@ -987,7 +987,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "eyeofterror_health",
+        name = "eyeofterror_health_",
         label = "Eye of Terror's Health",
         hover = "Tweak Eye of Terror's Health to your liking!",
         options = {
@@ -1000,7 +1000,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "sharkboi_health",
+        name = "sharkboi_health_",
         label = "Frostjaw's Health",
         hover = "Tweak Frostjaw's Health to your liking!",
         options = {
@@ -1013,7 +1013,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "hoodedwidow_health",
+        name = "hoodedwidow_health_",
         label = "Hooded Widow's Health",
         hover = "Tweak Hooded Widow's Health to your liking!",
         options = {
@@ -1039,7 +1039,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "lordfruitfly_health",
+        name = "lordfruitfly_health_",
         label = "Lord of the Fruit Flies's Health",
         hover = "Tweak Lord of the Fruit Flies's Health to your liking!",
         options = {
@@ -1052,7 +1052,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "malbatross_health",
+        name = "malbatross_health_",
         label = "Malbatross's Health",
         hover = "Tweak Malbatross's Health to your liking!",
         options = {
@@ -1065,7 +1065,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "toadstool_dark_health",
+        name = "toadstool_dark_health_",
         label = "Misery Toadstool's Health",
         hover = "Tweak Misery Toadstool's Health to your liking!",
         options = {
@@ -1078,7 +1078,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "moonmaw_dragonfly_health",
+        name = "moonmaw_dragonfly_health_",
         label = "Moonmaw Dragonfly's Health",
         hover = "Tweak Moonmaw Dragonfly's Health to your liking!",
         options = {
@@ -1091,7 +1091,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "moose_health",
+        name = "moose_health_",
         label = "Moose/Geese's Health",
         hover = "Tweak Moose/Geese's Health to your liking!",
         options = {
@@ -1104,7 +1104,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "mothergoose_health",
+        name = "mothergoose_health_",
         label = "Mother Goose's Health",
         hover = "Tweak Mother Goose's Health to your liking!",
         options = {
@@ -1117,7 +1117,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "daywalker_health",
+        name = "daywalker_health_",
         label = "Nightmare Werepig's Health",
         hover = "Tweak Nightmare Werepig's Health to your liking!",
         options = {
@@ -1130,7 +1130,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "stalker_atrium_health",
+        name = "stalker_atrium_health_",
         label = "Reanimated Skeleton's Health",
         hover = "Tweak Reanimated Skeleton's Health to your liking!",
         options = {
@@ -1143,7 +1143,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "shadowpieces_health",
+        name = "shadowpieces_health_",
         label = "Shadow Pieces's Health",
         hover = "Tweak Shadow Pieces's Health to your liking!",
         options = {
@@ -1156,7 +1156,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "spiderqueen_health",
+        name = "spiderqueen_health_",
         label = "Spider Queen's Health",
         hover = "Tweak Spider Queen's Health to your liking!",
         options = {
@@ -1169,7 +1169,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "toadstool_health",
+        name = "toadstool_health_",
         label = "Toadstool's Health",
         hover = "Tweak Toadstool's Health to your liking!",
         options = {
@@ -1182,7 +1182,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "leif_health",
+        name = "leif_health_",
         label = "Treeguard's Health",
         hover = "Tweak Treeguard's Health to your liking!",
         options = {
@@ -1192,10 +1192,10 @@ configuration_options = {
             { description = "Higher (x1.5)", data = 1.5 },
             { description = "Highest (x2)",  data = 2 },
             { description = "Uncomp (x3)",   data = 3 } },
-        default = 3000
+        default = 1
     },
     {
-        name = "twinofterror_health",
+        name = "twinofterror_health_",
         label = "Twins of Terror's Health",
         hover = "Tweak Twins of Terror's Health to your liking!",
         options = {
@@ -1208,7 +1208,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "mock_dragonfly_health",
+        name = "mock_dragonfly_health_",
         label = "Wilting Dragonfly's Health",
         hover = "Tweak Wilting Dragonfly's Health to your liking!",
         options = {
@@ -1221,7 +1221,7 @@ configuration_options = {
         default = 1
     },
     {
-        name = "mutated_deerclops_health",
+        name = "mutated_deerclops_health_",
         label = "Crystal Deerclops's Health",
         hover = "Tweak Crystal Deerclops Health to your liking!",
         options = {
@@ -1235,7 +1235,7 @@ configuration_options = {
     },
 
     {
-        name = "mutated_bearger_health",
+        name = "mutated_bearger_health_",
         label = "Armored Bearger's Health",
         hover = "Tweak Armored Bearger's Health to your liking!",
         options = {
@@ -1249,7 +1249,7 @@ configuration_options = {
     },
 
     {
-        name = "mutated_warg_health",
+        name = "mutated_warg_health_",
         label = "Possesed Varg's Health",
         hover = "Tweak Possesed Varg's Health to your liking!",
         options = {
