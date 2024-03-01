@@ -24,7 +24,7 @@ AddAction("INFEST", "INFEST", function(act)
 end)
 
 AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
-	act.target.WrapStuff(act.target)
+    act.target.WrapStuff(act.target)
     return true
 end)
 
@@ -115,10 +115,10 @@ charge_powercell.priority = HIGH_ACTION_PRIORITY
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
 GLOBAL.ACTIONS.CHOP.fn = function(act)
-	if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
-		local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
-		axe.WorkEffect(axe, act.doer, act.target)
-	end
+    if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
+        local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+        axe.WorkEffect(axe, act.doer, act.target)
+    end
 
     return _ChopFn(act)
 end
@@ -217,19 +217,21 @@ if TUNING.DSTU.WARLY_BUTCHER then
     GLOBAL.ACTIONS.MURDER.fn = function(act)
         local murdered = act.invobject or act.target
         if murdered ~= nil and (murdered.components.health ~= nil or murdered.components.murderable ~= nil) and act.doer ~= nil and act.doer:HasTag("masterchef") then
-            local murdered = act.invobject or act.target
             local stacksize = murdered.components.stackable ~= nil and murdered.components.stackable:StackSize() or 1
+            local x, y, z = act.doer.Transform:GetWorldPosition()
 
             if murdered.components.lootdropper ~= nil then
                 murdered.causeofdeath = act.doer
                 local pos = GLOBAL.Vector3(x, y, z)
                 for i = 1, stacksize do
                     local loots = murdered.components.lootdropper:GenerateLoot()
-
                     local lootprefab = loots[#loots > 1 and math.random(#loots) or 1]
-                    local loot = GLOBAL.SpawnPrefab(lootprefab)
-                    if loot ~= nil then
-                        act.doer.components.inventory:GiveItem(loot, nil, pos)
+
+                    if lootprefab ~= nil then
+                        local loot = GLOBAL.SpawnPrefab(lootprefab)
+                        if loot ~= nil then
+                            act.doer.components.inventory:GiveItem(loot, nil, pos)
+                        end
                     end
                 end
             end
