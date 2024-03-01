@@ -465,6 +465,9 @@ local prefabs = {
 	"crabclaw",
 	"um_beegun",
 	"silksack",
+
+    "dl_prefabs",
+    "dl_biometable",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
