@@ -468,6 +468,8 @@ local prefabs = {
 
     "dl_prefabs",
     "dl_biometable",
+
+    "sea_shadow",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

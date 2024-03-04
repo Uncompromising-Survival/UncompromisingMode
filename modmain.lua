@@ -14,7 +14,7 @@ local uncomp = require "screens/redux/scrapbookdata_changes"
 AddPrefabPostInit("world", function(inst)
     inst:DoTaskInTime(0, function()
         for k, v in pairs(vanilla) do
-            if uncomp[k] ~= nil then
+            if uncomp[k] ~= nil and uncomp[k] ~= vanilla[k] then
                 vanilla[k] = uncomp[k]
             end
         end

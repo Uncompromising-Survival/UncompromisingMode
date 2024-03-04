@@ -51,6 +51,7 @@ local component_post = {
 	"unwrappable",
     "slipperyfeet",
     "walkableplatformplayer",
+    "schoolspawner",
 }
 
 local prefab_post = {
