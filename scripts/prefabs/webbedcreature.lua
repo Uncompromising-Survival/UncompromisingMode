@@ -431,11 +431,6 @@ local function fn()
 	inst:AddTag("companion")
 	inst:AddTag("ignorewalkableplatforms")
 	inst:AddTag("ignorewalkableplatformdrowning")
-	inst.scrapbook_thingtype = "POI"
-    if not TheNet:IsDedicated() then
-        inst:AddComponent("pointofinterest")
-        inst.components.pointofinterest:SetHeight(0)
-    end
 
 	inst.entity:SetPristine()
 

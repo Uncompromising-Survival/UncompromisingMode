@@ -504,715 +504,717 @@ function d_create_diffchecker_scrapbookdata(print_missing_icons)
     exporter_data_helper:write("return {\n")
 
     for entry, _ in pairs(scrapbookprefabs) do
-        if um_scrapbookprefabs[entry] == nil then
-            currententry = entry
-            scrapbookdata[entry] = {}
+        if entry ~= "archive_switch_base" then
+            if um_scrapbookprefabs[entry] == nil then
+                currententry = entry
+                scrapbookdata[entry] = {}
 
-            local t = SpawnPrefab(entry)
+                local t = SpawnPrefab(entry)
 
-            if t == nil then
-                print(string.format("[!!!!]  Aborting data creation command! Entry [%s] is not a valid prefab!", entry))
-                return
-            end
-
-            t.Transform:SetRotation(90)
-
-            ---------------------------------::   NAME   ::---------------------------------
-
-            local name = Scrapbook_DefineName(t)
-
-            ---------------------------------::   SUB-CATEGORIES   ::---------------------------------
-
-            local subcat = Scrapbook_DefineSubCategory(t)
-
-            ---------------------------------::   TYPE   ::---------------------------------
-
-            local thingtype = Scrapbook_DefineType(t, entry)
-
-            ---------------------------------::   ANIMATION   ::---------------------------------
-
-            if t.sg and t.sg:HasState("idle") then
-                t.sg:GoToState("idle")
-            end
-
-            local anim = Scrapbook_DefineAnimation(t)
-
-            ---------------------------------::   TEX   ::---------------------------------
-
-            local tex = (t.scrapbook_tex or (t.components.inventoryitem ~= nil and t.components.inventoryitem.imagename) or entry) .. ".tex"
-
-            if thingtype == "item" or thingtype == "food" then
-                if not GetInventoryItemAtlas(tex) then
-                    print(string.format("[!!!!]  Atlas for texture [ %s ] not found in inventoryimagesX!", tex))
+                if t == nil then
+                    print(string.format("[!!!!]  Aborting data creation command! Entry [%s] is not a valid prefab!", entry))
+                    return
                 end
-            else
-                if not GetScrapbookIconAtlas(tex) then
-                    if print_missing_icons then
-                        local file = t.scrapbook_build or t.AnimState:GetBuild()
-                        local icon = t.scrapbook_tex or entry
 
-                        table.insert(icons_missing, { icon = icon, file = file, anim = anim })
-                    else
-                        print(string.format("[!!!!]  Atlas for texture [ %s ] not found in scrapbook_iconsX!", tex))
+                t.Transform:SetRotation(90)
+
+                ---------------------------------::   NAME   ::---------------------------------
+
+                local name = Scrapbook_DefineName(t)
+
+                ---------------------------------::   SUB-CATEGORIES   ::---------------------------------
+
+                local subcat = Scrapbook_DefineSubCategory(t)
+
+                ---------------------------------::   TYPE   ::---------------------------------
+
+                local thingtype = Scrapbook_DefineType(t, entry)
+
+                ---------------------------------::   ANIMATION   ::---------------------------------
+
+                if t.sg and t.sg:HasState("idle") then
+                    t.sg:GoToState("idle")
+                end
+
+                local anim = Scrapbook_DefineAnimation(t)
+
+                ---------------------------------::   TEX   ::---------------------------------
+
+                local tex = (t.scrapbook_tex or (t.components.inventoryitem ~= nil and t.components.inventoryitem.imagename) or entry) .. ".tex"
+
+                if thingtype == "item" or thingtype == "food" then
+                    if not GetInventoryItemAtlas(tex) then
+                        print(string.format("[!!!!]  Atlas for texture [ %s ] not found in inventoryimagesX!", tex))
                     end
-                end
-            end
-
-            -- NOTES(JBK): The hash is redundant data and is only here to aid the exporter for backend services.
-            -- So we will save it to a file that does not get loaded for the game.
-            exporter_data_helper:write(string.format("[\"%s\"] = 0x%X,\n", entry, hash(entry)))
-
-            AddInfo("name", name)
-            AddInfo("tex", tex)
-            AddInfo("subcat", subcat)
-            AddInfo("type", thingtype)
-            AddInfo("prefab", t.scrapbook_prefab or entry)
-
-            ---------------------------------::   SPEECHNAME   ::---------------------------------
-
-            local speechname = t.scrapbook_speechname or t.nameoverride or (t.components.inspectable ~= nil and t.components.inspectable.nameoverride) or nil
-            if speechname ~= nil and string.upper(speechname) ~= string.upper(entry) then
-                AddInfo("speechname", speechname)
-            end
-
-            if t.scrapbook_speechname ~= nil and string.lower(t.scrapbook_speechname) == string.lower(entry) then
-                print(string.format("[!!!!]  inst.scrapbook_speechname = %s is unecessary in entry [ %s ]!", t.scrapbook_speechname, entry))
-            end
-
-            if t.scrapbook_speechname ~= nil and not STRINGS.CHARACTERS.GENERIC.DESCRIBE[string.upper(t.scrapbook_speechname)] then
-                print(string.format("[!!!!]  Speech Name [ %s ] isn't defined in STRINGS.CHARACTERS.GENERIC.DESCRIBE!", t.scrapbook_speechname))
-            end
-
-            if t.scrapbook_inspectonseen == nil and
-                t.components.inspectable == nil and
-                t.components.health == nil
-            then
-                print(string.format("[!!!!] [ %s ] cannot be inspected! Please add \"inst.scrapbook_inspectonseen = true\" to the prefab (common).", entry))
-            end
-
-            ---------------------------------::   SANITY   ::---------------------------------
-
-            if t.scrapbook_sanityaura then
-                AddInfo("sanityaura", t.scrapbook_sanityaura)
-            elseif t.components.sanityaura and Scrapbook_GetSanityAura(t) then
-                AddInfo("sanityaura", Scrapbook_GetSanityAura(t))
-            end
-
-            ---------------------------------::   HEALTH   ::---------------------------------
-
-            local maxhealth = not t.scrapbook_hidehealth and (t.scrapbook_maxhealth or (t.components.health ~= nil and t.components.health.maxhealth)) or nil
-            if maxhealth ~= nil then
-                if type(maxhealth) == "table" then
-                    maxhealth = string.format("%d-%d", maxhealth[1], maxhealth[2])
-                end
-
-                AddInfo("health", maxhealth)
-            end
-
-            ---------------------------------::   DAMAGE   ::---------------------------------
-
-            local damage = t.scrapbook_damage or (t.components.combat ~= nil and t.components.combat.defaultdamage) or nil
-            if damage ~= nil then
-                if type(damage) == "table" then
-                    local mod = not t.scrapbook_ignoreplayerdamagemod and t.components.combat ~= nil and t.components.combat.playerdamagepercent or 1
-                    damage = string.format("%d-%d", damage[1] * mod, damage[2] * mod)
-                end
-
-                if checkstring(damage) or damage > 0 then
-                    AddInfo("damage", (checkstring(damage) or t.scrapbook_damage) and damage or damage * (t.components.combat.playerdamagepercent or 1))
-                end
-            end
-
-            local planardamage = t.scrapbook_planardamage or (t.components.planardamage ~= nil and t.components.planardamage.basedamage) or nil
-            if planardamage ~= nil and planardamage > 0 then
-                AddInfo("planardamage", planardamage)
-            end
-
-            AddInfo("areadamage", t.scrapbook_areadamage)
-
-            ---------------------------------::   STACK   ::---------------------------------
-
-            if t.components.stackable then
-                local stacksize = t.prefab == "wortox_soul" and TUNING.WORTOX_MAX_SOULS or t.components.stackable.maxsize
-
-                AddInfo("stacksize", stacksize)
-            end
-
-            ---------------------------------::   FOOD   ::---------------------------------
-
-            if t.components.edible then
-                AddInfo("hungervalue", t.scrapbook_hungervalue or t.components.edible.hungervalue)
-                AddInfo("healthvalue", t.scrapbook_healthvalue or t.components.edible.healthvalue)
-                AddInfo("sanityvalue", t.scrapbook_sanityvalue or t.components.edible.sanityvalue)
-            end
-
-            if t.components.edible and t.components.edible.foodtype then
-                AddInfo("foodtype", t.components.edible.foodtype)
-
-                if not STRINGS.SCRAPBOOK.FOODTYPE[t.components.edible.foodtype] then
-                    print(string.format("[!!!!]  Food Type [ %s ] isn't defined in STRINGS.SCRAPBOOK.FOODTYPE!", t.components.edible.foodtype))
-                end
-            end
-
-            ---------------------------------::   WEAPON   ::---------------------------------
-
-            if (t.components.weapon or t.scrapbook_weapondamage) and not t.scrapbook_nodamage then
-                if t.prefab == "bomb_lunarplant" then
-                    AddInfo("weapondamage", t.components.weapon.damage)
-                    AddInfo("planardamage", TUNING.BOMB_LUNARPLANT_PLANAR_DAMAGE)
-                    AddInfo("weaponrange", t.components.weapon.hitrange)
                 else
-                    if t.scrapbook_weapondamage or (t.components.weapon and t.components.weapon.damage) then
-                        local weapondamage = t.scrapbook_weapondamage
+                    if not GetScrapbookIconAtlas(tex) then
+                        if print_missing_icons then
+                            local file = t.scrapbook_build or t.AnimState:GetBuild()
+                            local icon = t.scrapbook_tex or entry
 
-                        if type(weapondamage) == "table" then
-                            weapondamage = string.format("%d-%d", weapondamage[1], weapondamage[2])
-                        end
-
-                        if not weapondamage and type(t.components.weapon.damage) == "function" then
-                            print(string.format(">> Prefab [ %s ] has a function defined for components.weapon.damage!", t.prefab))
+                            table.insert(icons_missing, { icon = icon, file = file, anim = anim })
                         else
-                            if not weapondamage and t.components.weapon.damage then
-                                weapondamage = t.components.weapon.damage
+                            print(string.format("[!!!!]  Atlas for texture [ %s ] not found in scrapbook_iconsX!", tex))
+                        end
+                    end
+                end
+
+                -- NOTES(JBK): The hash is redundant data and is only here to aid the exporter for backend services.
+                -- So we will save it to a file that does not get loaded for the game.
+                exporter_data_helper:write(string.format("[\"%s\"] = 0x%X,\n", entry, hash(entry)))
+
+                AddInfo("name", name)
+                AddInfo("tex", tex)
+                AddInfo("subcat", subcat)
+                AddInfo("type", thingtype)
+                AddInfo("prefab", t.scrapbook_prefab or entry)
+
+                ---------------------------------::   SPEECHNAME   ::---------------------------------
+
+                local speechname = t.scrapbook_speechname or t.nameoverride or (t.components.inspectable ~= nil and t.components.inspectable.nameoverride) or nil
+                if speechname ~= nil and string.upper(speechname) ~= string.upper(entry) then
+                    AddInfo("speechname", speechname)
+                end
+
+                if t.scrapbook_speechname ~= nil and string.lower(t.scrapbook_speechname) == string.lower(entry) then
+                    print(string.format("[!!!!]  inst.scrapbook_speechname = %s is unecessary in entry [ %s ]!", t.scrapbook_speechname, entry))
+                end
+
+                if t.scrapbook_speechname ~= nil and not STRINGS.CHARACTERS.GENERIC.DESCRIBE[string.upper(t.scrapbook_speechname)] then
+                    print(string.format("[!!!!]  Speech Name [ %s ] isn't defined in STRINGS.CHARACTERS.GENERIC.DESCRIBE!", t.scrapbook_speechname))
+                end
+
+                if t.scrapbook_inspectonseen == nil and
+                    t.components.inspectable == nil and
+                    t.components.health == nil
+                then
+                    print(string.format("[!!!!] [ %s ] cannot be inspected! Please add \"inst.scrapbook_inspectonseen = true\" to the prefab (common).", entry))
+                end
+
+                ---------------------------------::   SANITY   ::---------------------------------
+
+                if t.scrapbook_sanityaura then
+                    AddInfo("sanityaura", t.scrapbook_sanityaura)
+                elseif t.components.sanityaura and Scrapbook_GetSanityAura(t) then
+                    AddInfo("sanityaura", Scrapbook_GetSanityAura(t))
+                end
+
+                ---------------------------------::   HEALTH   ::---------------------------------
+
+                local maxhealth = not t.scrapbook_hidehealth and (t.scrapbook_maxhealth or (t.components.health ~= nil and t.components.health.maxhealth)) or nil
+                if maxhealth ~= nil then
+                    if type(maxhealth) == "table" then
+                        maxhealth = string.format("%d-%d", maxhealth[1], maxhealth[2])
+                    end
+
+                    AddInfo("health", maxhealth)
+                end
+
+                ---------------------------------::   DAMAGE   ::---------------------------------
+
+                local damage = t.scrapbook_damage or (t.components.combat ~= nil and t.components.combat.defaultdamage) or nil
+                if damage ~= nil then
+                    if type(damage) == "table" then
+                        local mod = not t.scrapbook_ignoreplayerdamagemod and t.components.combat ~= nil and t.components.combat.playerdamagepercent or 1
+                        damage = string.format("%d-%d", damage[1] * mod, damage[2] * mod)
+                    end
+
+                    if checkstring(damage) or damage > 0 then
+                        AddInfo("damage", (checkstring(damage) or t.scrapbook_damage) and damage or damage * (t.components.combat.playerdamagepercent or 1))
+                    end
+                end
+
+                local planardamage = t.scrapbook_planardamage or (t.components.planardamage ~= nil and t.components.planardamage.basedamage) or nil
+                if planardamage ~= nil and planardamage > 0 then
+                    AddInfo("planardamage", planardamage)
+                end
+
+                AddInfo("areadamage", t.scrapbook_areadamage)
+
+                ---------------------------------::   STACK   ::---------------------------------
+
+                if t.components.stackable then
+                    local stacksize = t.prefab == "wortox_soul" and TUNING.WORTOX_MAX_SOULS or t.components.stackable.maxsize
+
+                    AddInfo("stacksize", stacksize)
+                end
+
+                ---------------------------------::   FOOD   ::---------------------------------
+
+                if t.components.edible then
+                    AddInfo("hungervalue", t.scrapbook_hungervalue or t.components.edible.hungervalue)
+                    AddInfo("healthvalue", t.scrapbook_healthvalue or t.components.edible.healthvalue)
+                    AddInfo("sanityvalue", t.scrapbook_sanityvalue or t.components.edible.sanityvalue)
+                end
+
+                if t.components.edible and t.components.edible.foodtype then
+                    AddInfo("foodtype", t.components.edible.foodtype)
+
+                    if not STRINGS.SCRAPBOOK.FOODTYPE[t.components.edible.foodtype] then
+                        print(string.format("[!!!!]  Food Type [ %s ] isn't defined in STRINGS.SCRAPBOOK.FOODTYPE!", t.components.edible.foodtype))
+                    end
+                end
+
+                ---------------------------------::   WEAPON   ::---------------------------------
+
+                if (t.components.weapon or t.scrapbook_weapondamage) and not t.scrapbook_nodamage then
+                    if t.prefab == "bomb_lunarplant" then
+                        AddInfo("weapondamage", t.components.weapon.damage)
+                        AddInfo("planardamage", TUNING.BOMB_LUNARPLANT_PLANAR_DAMAGE)
+                        AddInfo("weaponrange", t.components.weapon.hitrange)
+                    else
+                        if t.scrapbook_weapondamage or (t.components.weapon and t.components.weapon.damage) then
+                            local weapondamage = t.scrapbook_weapondamage
+
+                            if type(weapondamage) == "table" then
+                                weapondamage = string.format("%d-%d", weapondamage[1], weapondamage[2])
                             end
-                            AddInfo("weapondamage", weapondamage)
-                        end
-                    end
 
-                    local hitrange = t.scrapbook_weaponrange or (t.components.weapon ~= nil and t.components.weapon.hitrange) or nil
-                    if hitrange ~= nil then
-                        AddInfo("weaponrange", hitrange)
-                    end
-                end
-            end
-
-            ---------------------------------::   ARMOR   ::---------------------------------
-
-            if t.components.armor then
-                AddInfo("armor", t.components.armor.maxcondition)
-                AddInfo("absorb_percent", t.components.armor.absorb_percent)
-
-                if t.components.planardefense then
-                    AddInfo("armor_planardefense", t.components.planardefense.basedefense)
-                end
-            end
-
-            ---------------------------------::   TOOL   ::---------------------------------
-
-            if t.components.finiteuses then
-                -- FIXME(JBK): This is a bad assumption for tools that have multiple uses with different use rates but will fix up most cases.
-                local count = 0
-                for _ in pairs(t.components.finiteuses.consumption) do
-                    count = count + 1
-                end
-                local rate = 1
-                if count == 1 then -- Only apply the modifier for if there is one consumer type.
-                    local k, v = next(t.components.finiteuses.consumption)
-                    rate = v
-                end
-
-                AddInfo("finiteuses", (t.components.finiteuses.total / rate))
-            end
-
-            local _forgerepairmaterial = t.components.forgerepairable ~= nil and t.components.forgerepairable.repairmaterial or nil
-
-            if _forgerepairmaterial ~= nil and REPAIR_MATERIAL_DATA[_forgerepairmaterial] ~= nil then
-                AddInfo("forgerepairable", REPAIR_MATERIAL_DATA[_forgerepairmaterial])
-            end
-
-            local _repairmaterial = t.components.repairable ~= nil and t.components.repairable.repairmaterial or nil
-            if _repairmaterial and REPAIR_MATERIAL_DATA[_repairmaterial] ~= nil then
-                if not t.components.repairable.checkmaterialfn then
-                    AddInfo("repairitems", REPAIR_MATERIAL_DATA[_repairmaterial])
-                else
-                    local valid_materials = {}
-
-                    for i, mat in ipairs(REPAIR_MATERIAL_DATA[_repairmaterial]) do
-                        local mat_inst = SpawnPrefab(mat)
-
-                        if mat_inst ~= nil and t.components.repairable.checkmaterialfn(t, mat_inst) then
-                            table.insert(valid_materials, mat)
+                            if not weapondamage and type(t.components.weapon.damage) == "function" then
+                                print(string.format(">> Prefab [ %s ] has a function defined for components.weapon.damage!", t.prefab))
+                            else
+                                if not weapondamage and t.components.weapon.damage then
+                                    weapondamage = t.components.weapon.damage
+                                end
+                                AddInfo("weapondamage", weapondamage)
+                            end
                         end
 
-                        if mat_inst ~= nil then
-                            mat_inst:Remove()
+                        local hitrange = t.scrapbook_weaponrange or (t.components.weapon ~= nil and t.components.weapon.hitrange) or nil
+                        if hitrange ~= nil then
+                            AddInfo("weaponrange", hitrange)
                         end
                     end
-
-                    AddInfo("repairitems", valid_materials)
                 end
-            end
 
-            if t.components.tool ~= nil then
-                local actions = {}
-                for action, _ in pairs(t.components.tool.actions) do
-                    table.insert(actions, action.id)
+                ---------------------------------::   ARMOR   ::---------------------------------
+
+                if t.components.armor then
+                    AddInfo("armor", t.components.armor.maxcondition)
+                    AddInfo("absorb_percent", t.components.armor.absorb_percent)
+
+                    if t.components.planardefense then
+                        AddInfo("armor_planardefense", t.components.planardefense.basedefense)
+                    end
                 end
-                AddInfo("toolactions", actions)
-            end
 
-            ---------------------------------::   BUILD   ::---------------------------------
+                ---------------------------------::   TOOL   ::---------------------------------
 
-            AddInfo("scale", t.scrapbook_scale)
-            AddInfo("animpercent", t.scrapbook_animpercent ~= nil and math.clamp(t.scrapbook_animpercent, 0, 1) or nil)
-            AddInfo("overridebuild", t.scrapbook_overridebuild)
-            AddInfo("hide", t.scrapbook_hide)
-            AddInfo("hidesymbol", t.scrapbook_hidesymbol)
-
-            AddInfo("build", t.scrapbook_build or t.AnimState:GetBuild())
-            AddInfo("bank", t.scrapbook_bank or t.AnimState:GetCurrentBankName())
-            AddInfo("anim", anim)
-
-            AddInfo("alpha", t.scrapbook_alpha)
-
-            if t.scrapbook_overridedata then
-                if type(t.scrapbook_overridedata[1]) ~= "table" then
-                    AddInfo("overridesymbol", t.scrapbook_overridedata)
-                else
-                    local overrides = {}
-
-                    for _, tbl in ipairs(t.scrapbook_overridedata) do
-                        table.insert(overrides, string.format('{"%s"}', table.concat(tbl, '", "')))
+                if t.components.finiteuses then
+                    -- FIXME(JBK): This is a bad assumption for tools that have multiple uses with different use rates but will fix up most cases.
+                    local count = 0
+                    for _ in pairs(t.components.finiteuses.consumption) do
+                        count = count + 1
+                    end
+                    local rate = 1
+                    if count == 1 then -- Only apply the modifier for if there is one consumer type.
+                        local k, v = next(t.components.finiteuses.consumption)
+                        rate = v
                     end
 
-                    AddInfo("overridesymbol", string.format("{%s}", table.concat(overrides, ", ")))
+                    AddInfo("finiteuses", (t.components.finiteuses.total / rate))
                 end
-            elseif t:HasTag("campfire") and entry ~= "cotl_tabernacle_level3" then
-                local blueflame = t:HasTag("blueflame")
 
-                local override = {
-                    "flames_wide",                                  -- Campfire Symbol.
-                    blueflame and "coldfire_fire" or "campfire_fire", -- Fire Build.
-                    blueflame and "coldflames_wide" or "flames_wide", -- Fire Symbol.
-                }
+                local _forgerepairmaterial = t.components.forgerepairable ~= nil and t.components.forgerepairable.repairmaterial or nil
 
-                AddInfo("overridesymbol", override)
-            end
-
-            -- TODO(DiogoW): Refactor this.
-
-            if t.prefab == "robin" then
-                AddInfo("animoffsety", -8)
-            end
-            if t.prefab == "robin_winter" then
-                AddInfo("animoffsety", -15)
-                AddInfo("animoffsetbgy", 15)
-            end
-            if t.prefab == "friendlyfruitfly" then
-                AddInfo("animoffsety", 65)
-            end
-            if t.prefab == "fruitfly" then
-                AddInfo("animoffsety", 65)
-            end
-            -------------------
-            if t.prefab == "minotaur" then
-                AddInfo("animoffsetx", 5)
-            end
-            if t.prefab == "lordfruitfly" then
-                AddInfo("animoffsety", 70)
-            end
-            if t.prefab == "moonbutterfly" then
-                AddInfo("animoffsetx", 15)
-            end
-            if t.prefab == "bee" then
-                AddInfo("animoffsety", 150)
-            end
-            if t.prefab == "killerbee" then
-                AddInfo("animoffsety", 150)
-            end
-            if t.prefab == "lightflier" then
-                AddInfo("animoffsety", 70)
-            end
-            if t.prefab == "beeguard" then
-                AddInfo("animoffsety", 100)
-            end
-            if t.prefab == "mosquito" then
-                AddInfo("animoffsety", 100)
-                AddInfo("animoffsetx", -20)
-            end
-            if t.prefab == "moon_altar_seed" then
-                AddInfo("animoffsety", 20)
-                AddInfo("animoffsetx", 25)
-            end
-            if t.prefab == "moon_altar_glass" then
-                AddInfo("animoffsety", 20)
-                AddInfo("animoffsetx", 25)
-            end
-            if t.prefab == "moon_altar_icon" then
-                AddInfo("animoffsety", 25)
-                AddInfo("animoffsetx", 25)
-            end
-            if t.prefab == "moon_altar_ward" then
-                AddInfo("animoffsety", 20)
-                AddInfo("animoffsetx", 25)
-            end
-            if t.prefab == "moon_altar_crown" then
-                AddInfo("animoffsety", -20)
-                AddInfo("animoffsetx", 25)
-                AddInfo("animoffsetbgy", 30)
-            end
-            if t.prefab == "shroomcake" then
-                AddInfo("animoffsety", -20)
-                AddInfo("animoffsetbgy", 25)
-            end
-            if t.prefab == "vegstinger" then
-                AddInfo("animoffsety", -10)
-            end
-            if t.prefab == "watermelon_oversized" then
-                AddInfo("animoffsety", -20)
-                AddInfo("animoffsetbgy", 30)
-            end
-            if t.prefab == "saddle_war" then
-                AddInfo("animoffsety", -20)
-                AddInfo("animoffsetbgy", 30)
-            end
-            if t.prefab == "bunnyman" then
-                AddInfo("animoffsetx", 20)
-            end
-            if t.prefab == "bernie_active" then
-                AddInfo("animoffsety", 60)
-                AddInfo("animoffsetbgy", -50)
-            end
-            if t.prefab == "lightcrab" then
-                AddInfo("animoffsety", 60)
-                AddInfo("animoffsetbgy", -50)
-            end
-            if t.prefab == "fused_shadeling_bomb" then
-                AddInfo("animoffsety", 60)
-                AddInfo("animoffsetbgy", -50)
-            end
-            if t.prefab == "smallghost" then
-                AddInfo("animoffsety", 60)
-            end
-            if t.prefab == "wx78_scanner_item" then
-                AddInfo("animoffsety", 90)
-            end
-            if t.prefab == "eyeofterror_mini" then
-                AddInfo("animoffsety", 40)
-            end
-            if t.prefab == "dug_trap_starfish" then
-                AddInfo("animoffsetx", 160)
-                AddInfo("animoffsety", 10)
-            end
-            if t.prefab == "bananajuice" then
-                AddInfo("animoffsety", -20)
-            end
-
-            AddInfo("animoffsetx", t.scrapbook_animoffsetx)
-            AddInfo("animoffsety", t.scrapbook_animoffsety)
-
-            ---------------------------------::   WATERPROOFER   ::---------------------------------
-
-            if t.components.waterproofer and t.components.waterproofer:GetEffectiveness() > 0 then
-                AddInfo("waterproofer", t.components.waterproofer:GetEffectiveness())
-            end
-
-            ---------------------------------::   INSULATOR   ::---------------------------------
-
-            if t.components.insulator then
-                AddInfo("insulator", t.components.insulator:GetInsulation())
-                AddInfo("insulator_type", t.components.insulator.type)
-            end
-
-            ---------------------------------::   DAPPERNESS   ::---------------------------------
-
-            if t.components.equippable and t.components.equippable.dapperness ~= 0 then
-                AddInfo("dapperness", t.components.equippable.dapperness)
-            end
-
-            ---------------------------------::   FUELED   ::---------------------------------
-
-            if t.components.fueled then
-                AddInfo("fueledmax", t.scrapbook_fueled_max or t.components.fueled.maxfuel)
-                AddInfo("fueledrate", t.components.fueled.rate)
-                AddInfo("fueledtype1", t.components.fueled.fueltype)
-
-                if t.components.fueled.secondaryfueltype then
-                    AddInfo("fueledtype2", t.components.fueled.secondaryfueltype)
+                if _forgerepairmaterial ~= nil and REPAIR_MATERIAL_DATA[_forgerepairmaterial] ~= nil then
+                    AddInfo("forgerepairable", REPAIR_MATERIAL_DATA[_forgerepairmaterial])
                 end
-            end
 
-            local fueled = t.components.fueled
-            if fueled ~= nil and (fueled.fueltype == FUELTYPE.USAGE or fueled.secondaryfueltype == FUELTYPE.USAGE) and not fueled.no_sewing then
-                AddInfo("sewable", true)
-            end
+                local _repairmaterial = t.components.repairable ~= nil and t.components.repairable.repairmaterial or nil
+                if _repairmaterial and REPAIR_MATERIAL_DATA[_repairmaterial] ~= nil then
+                    if not t.components.repairable.checkmaterialfn then
+                        AddInfo("repairitems", REPAIR_MATERIAL_DATA[_repairmaterial])
+                    else
+                        local valid_materials = {}
 
-            ---------------------------------::   FUEL   ::---------------------------------
+                        for i, mat in ipairs(REPAIR_MATERIAL_DATA[_repairmaterial]) do
+                            local mat_inst = SpawnPrefab(mat)
 
-            if t.components.fuel and t.components.inventoryitem then
-                AddInfo("fueltype", t.components.fuel.fueltype)
-                AddInfo("fuelvalue", t.components.fuel.fuelvalue)
-            end
+                            if mat_inst ~= nil and t.components.repairable.checkmaterialfn(t, mat_inst) then
+                                table.insert(valid_materials, mat)
+                            end
 
-            if t:HasTag("lightbattery") then
-                AddInfo("lightbattery", true)
-            end
+                            if mat_inst ~= nil then
+                                mat_inst:Remove()
+                            end
+                        end
 
-            ---------------------------------::   PERISHABLE   ::---------------------------------
-
-            if t.scrapbook_persishable then
-                AddInfo("perishable", t.scrapbook_persishable)
-            elseif t.components.perishable then
-                AddInfo("perishable", t.components.perishable.perishtime)
-            end
-
-            ---------------------------------::   OAR   ::---------------------------------
-
-            if t.components.oar then
-                AddInfo("oar_force", t.components.oar.force)
-                AddInfo("oar_velocity", t.components.oar.max_velocity)
-            end
-
-            ---------------------------------::   TACKLE   ::---------------------------------
-
-            if t.components.oceanfishingtackle ~= nil then
-                if t.components.oceanfishingtackle.casting_data then
-                    AddInfo("float_range", t.components.oceanfishingtackle.casting_data.dist_max + 5)
-                    AddInfo("float_accuracy", t.components.oceanfishingtackle.casting_data.dist_min_accuracy)
+                        AddInfo("repairitems", valid_materials)
+                    end
                 end
-                if t.components.oceanfishingtackle.lure_data then
-                    AddInfo("lure_charm", t.components.oceanfishingtackle.lure_data.charm)
-                    AddInfo("lure_dist", t.components.oceanfishingtackle.lure_data.dist_max)
-                    AddInfo("lure_radius", t.components.oceanfishingtackle.lure_data.radius)
+
+                if t.components.tool ~= nil then
+                    local actions = {}
+                    for action, _ in pairs(t.components.tool.actions) do
+                        table.insert(actions, action.id)
+                    end
+                    AddInfo("toolactions", actions)
                 end
-            end
 
-            ---------------------------------::   WORKABLE   ::---------------------------------
+                ---------------------------------::   BUILD   ::---------------------------------
 
-            if t.scrapbook_workable then
-                AddInfo("workable", t.scrapbook_workable)
-            elseif t.components.workable and t.components.workable.action and t.components.workable.workleft > 0 then
-                AddInfo("workable", t.components.workable.action.id)
-            end
+                AddInfo("scale", t.scrapbook_scale)
+                AddInfo("animpercent", t.scrapbook_animpercent ~= nil and math.clamp(t.scrapbook_animpercent, 0, 1) or nil)
+                AddInfo("overridebuild", t.scrapbook_overridebuild)
+                AddInfo("hide", t.scrapbook_hide)
+                AddInfo("hidesymbol", t.scrapbook_hidesymbol)
 
-            ---------------------------------::   PICKABLE   ::---------------------------------
+                AddInfo("build", t.scrapbook_build or t.AnimState:GetBuild())
+                AddInfo("bank", t.scrapbook_bank or t.AnimState:GetCurrentBankName())
+                AddInfo("anim", anim)
 
-            if t.components.pickable then
-                AddInfo("picakble", true)
-            end
+                AddInfo("alpha", t.scrapbook_alpha)
 
-            ---------------------------------::   HARVESTABLE   ::---------------------------------
+                if t.scrapbook_overridedata then
+                    if type(t.scrapbook_overridedata[1]) ~= "table" then
+                        AddInfo("overridesymbol", t.scrapbook_overridedata)
+                    else
+                        local overrides = {}
 
-            if t.components.harvestable then
-                AddInfo("harvestable", true)
-            end
+                        for _, tbl in ipairs(t.scrapbook_overridedata) do
+                            table.insert(overrides, string.format('{"%s"}', table.concat(tbl, '", "')))
+                        end
 
-            ---------------------------------::   STEWER   ::---------------------------------
+                        AddInfo("overridesymbol", string.format("{%s}", table.concat(overrides, ", ")))
+                    end
+                elseif t:HasTag("campfire") and entry ~= "cotl_tabernacle_level3" then
+                    local blueflame = t:HasTag("blueflame")
 
-            if t.components.stewer then
-                AddInfo("stewer", true)
-            end
+                    local override = {
+                        "flames_wide",                                -- Campfire Symbol.
+                        blueflame and "coldfire_fire" or "campfire_fire", -- Fire Build.
+                        blueflame and "coldflames_wide" or "flames_wide", -- Fire Symbol.
+                    }
 
-            ---------------------------------::   ACTIVATABLE   ::---------------------------------
+                    AddInfo("overridesymbol", override)
+                end
 
-            if t.components.activatable ~= nil and t.GetActivateVerb ~= nil then
-                AddInfo("activatable", t:GetActivateVerb(ThePlayer))
-            end
+                -- TODO(DiogoW): Refactor this.
 
-            ---------------------------------::   FISHABLE   ::---------------------------------
+                if t.prefab == "robin" then
+                    AddInfo("animoffsety", -8)
+                end
+                if t.prefab == "robin_winter" then
+                    AddInfo("animoffsety", -15)
+                    AddInfo("animoffsetbgy", 15)
+                end
+                if t.prefab == "friendlyfruitfly" then
+                    AddInfo("animoffsety", 65)
+                end
+                if t.prefab == "fruitfly" then
+                    AddInfo("animoffsety", 65)
+                end
+                -------------------
+                if t.prefab == "minotaur" then
+                    AddInfo("animoffsetx", 5)
+                end
+                if t.prefab == "lordfruitfly" then
+                    AddInfo("animoffsety", 70)
+                end
+                if t.prefab == "moonbutterfly" then
+                    AddInfo("animoffsetx", 15)
+                end
+                if t.prefab == "bee" then
+                    AddInfo("animoffsety", 150)
+                end
+                if t.prefab == "killerbee" then
+                    AddInfo("animoffsety", 150)
+                end
+                if t.prefab == "lightflier" then
+                    AddInfo("animoffsety", 70)
+                end
+                if t.prefab == "beeguard" then
+                    AddInfo("animoffsety", 100)
+                end
+                if t.prefab == "mosquito" then
+                    AddInfo("animoffsety", 100)
+                    AddInfo("animoffsetx", -20)
+                end
+                if t.prefab == "moon_altar_seed" then
+                    AddInfo("animoffsety", 20)
+                    AddInfo("animoffsetx", 25)
+                end
+                if t.prefab == "moon_altar_glass" then
+                    AddInfo("animoffsety", 20)
+                    AddInfo("animoffsetx", 25)
+                end
+                if t.prefab == "moon_altar_icon" then
+                    AddInfo("animoffsety", 25)
+                    AddInfo("animoffsetx", 25)
+                end
+                if t.prefab == "moon_altar_ward" then
+                    AddInfo("animoffsety", 20)
+                    AddInfo("animoffsetx", 25)
+                end
+                if t.prefab == "moon_altar_crown" then
+                    AddInfo("animoffsety", -20)
+                    AddInfo("animoffsetx", 25)
+                    AddInfo("animoffsetbgy", 30)
+                end
+                if t.prefab == "shroomcake" then
+                    AddInfo("animoffsety", -20)
+                    AddInfo("animoffsetbgy", 25)
+                end
+                if t.prefab == "vegstinger" then
+                    AddInfo("animoffsety", -10)
+                end
+                if t.prefab == "watermelon_oversized" then
+                    AddInfo("animoffsety", -20)
+                    AddInfo("animoffsetbgy", 30)
+                end
+                if t.prefab == "saddle_war" then
+                    AddInfo("animoffsety", -20)
+                    AddInfo("animoffsetbgy", 30)
+                end
+                if t.prefab == "bunnyman" then
+                    AddInfo("animoffsetx", 20)
+                end
+                if t.prefab == "bernie_active" then
+                    AddInfo("animoffsety", 60)
+                    AddInfo("animoffsetbgy", -50)
+                end
+                if t.prefab == "lightcrab" then
+                    AddInfo("animoffsety", 60)
+                    AddInfo("animoffsetbgy", -50)
+                end
+                if t.prefab == "fused_shadeling_bomb" then
+                    AddInfo("animoffsety", 60)
+                    AddInfo("animoffsetbgy", -50)
+                end
+                if t.prefab == "smallghost" then
+                    AddInfo("animoffsety", 60)
+                end
+                if t.prefab == "wx78_scanner_item" then
+                    AddInfo("animoffsety", 90)
+                end
+                if t.prefab == "eyeofterror_mini" then
+                    AddInfo("animoffsety", 40)
+                end
+                if t.prefab == "dug_trap_starfish" then
+                    AddInfo("animoffsetx", 160)
+                    AddInfo("animoffsety", 10)
+                end
+                if t.prefab == "bananajuice" then
+                    AddInfo("animoffsety", -20)
+                end
 
-            if t.components.fishable then
-                AddInfo("fishable", true)
-            end
+                AddInfo("animoffsetx", t.scrapbook_animoffsetx)
+                AddInfo("animoffsety", t.scrapbook_animoffsety)
 
-            ---------------------------------::   BURNABLE   ::---------------------------------
+                ---------------------------------::   WATERPROOFER   ::---------------------------------
 
-            if t.components.burnable ~= nil and
-                not t.components.burnable.ignorefuel and
-                t.components.burnable.canlight and
-                not table.contains({ "creature", "giant" }, thingtype)
-            then
-                AddInfo("burnable", true)
-            end
+                if t.components.waterproofer and t.components.waterproofer:GetEffectiveness() > 0 then
+                    AddInfo("waterproofer", t.components.waterproofer:GetEffectiveness())
+                end
 
-            ---------------------------------::   DEPENDENCIES   ::---------------------------------
+                ---------------------------------::   INSULATOR   ::---------------------------------
 
-            local _deps = t.scrapbook_deps or shallowcopy(Prefabs[entry].deps)
+                if t.components.insulator then
+                    AddInfo("insulator", t.components.insulator:GetInsulation())
+                    AddInfo("insulator_type", t.components.insulator.type)
+                end
 
-            local deps = {}
+                ---------------------------------::   DAPPERNESS   ::---------------------------------
 
-            for i, dep in ipairs(_deps) do
-                deps[dep] = true
-            end
+                if t.components.equippable and t.components.equippable.dapperness ~= 0 then
+                    AddInfo("dapperness", t.components.equippable.dapperness)
+                end
 
-            if t.components.prototyper and t.prefab ~= "bookstation" then
-                for recipe, recipedata in pairs(AllRecipes) do
-                    local found = false
-                    for tech, level in pairs(recipedata.level) do
-                        if level > 0 then
-                            for tree, num in pairs(t.components.prototyper.trees) do
-                                if tech == tree and num >= level then
-                                    deps[tostring(recipe)] = true
-                                    found = true
+                ---------------------------------::   FUELED   ::---------------------------------
+
+                if t.components.fueled then
+                    AddInfo("fueledmax", t.scrapbook_fueled_max or t.components.fueled.maxfuel)
+                    AddInfo("fueledrate", t.components.fueled.rate)
+                    AddInfo("fueledtype1", t.components.fueled.fueltype)
+
+                    if t.components.fueled.secondaryfueltype then
+                        AddInfo("fueledtype2", t.components.fueled.secondaryfueltype)
+                    end
+                end
+
+                local fueled = t.components.fueled
+                if fueled ~= nil and (fueled.fueltype == FUELTYPE.USAGE or fueled.secondaryfueltype == FUELTYPE.USAGE) and not fueled.no_sewing then
+                    AddInfo("sewable", true)
+                end
+
+                ---------------------------------::   FUEL   ::---------------------------------
+
+                if t.components.fuel and t.components.inventoryitem then
+                    AddInfo("fueltype", t.components.fuel.fueltype)
+                    AddInfo("fuelvalue", t.components.fuel.fuelvalue)
+                end
+
+                if t:HasTag("lightbattery") then
+                    AddInfo("lightbattery", true)
+                end
+
+                ---------------------------------::   PERISHABLE   ::---------------------------------
+
+                if t.scrapbook_persishable then
+                    AddInfo("perishable", t.scrapbook_persishable)
+                elseif t.components.perishable then
+                    AddInfo("perishable", t.components.perishable.perishtime)
+                end
+
+                ---------------------------------::   OAR   ::---------------------------------
+
+                if t.components.oar then
+                    AddInfo("oar_force", t.components.oar.force)
+                    AddInfo("oar_velocity", t.components.oar.max_velocity)
+                end
+
+                ---------------------------------::   TACKLE   ::---------------------------------
+
+                if t.components.oceanfishingtackle ~= nil then
+                    if t.components.oceanfishingtackle.casting_data then
+                        AddInfo("float_range", t.components.oceanfishingtackle.casting_data.dist_max + 5)
+                        AddInfo("float_accuracy", t.components.oceanfishingtackle.casting_data.dist_min_accuracy)
+                    end
+                    if t.components.oceanfishingtackle.lure_data then
+                        AddInfo("lure_charm", t.components.oceanfishingtackle.lure_data.charm)
+                        AddInfo("lure_dist", t.components.oceanfishingtackle.lure_data.dist_max)
+                        AddInfo("lure_radius", t.components.oceanfishingtackle.lure_data.radius)
+                    end
+                end
+
+                ---------------------------------::   WORKABLE   ::---------------------------------
+
+                if t.scrapbook_workable then
+                    AddInfo("workable", t.scrapbook_workable)
+                elseif t.components.workable and t.components.workable.action and t.components.workable.workleft > 0 then
+                    AddInfo("workable", t.components.workable.action.id)
+                end
+
+                ---------------------------------::   PICKABLE   ::---------------------------------
+
+                if t.components.pickable then
+                    AddInfo("picakble", true)
+                end
+
+                ---------------------------------::   HARVESTABLE   ::---------------------------------
+
+                if t.components.harvestable then
+                    AddInfo("harvestable", true)
+                end
+
+                ---------------------------------::   STEWER   ::---------------------------------
+
+                if t.components.stewer then
+                    AddInfo("stewer", true)
+                end
+
+                ---------------------------------::   ACTIVATABLE   ::---------------------------------
+
+                if t.components.activatable ~= nil and t.GetActivateVerb ~= nil then
+                    AddInfo("activatable", t:GetActivateVerb(ThePlayer))
+                end
+
+                ---------------------------------::   FISHABLE   ::---------------------------------
+
+                if t.components.fishable then
+                    AddInfo("fishable", true)
+                end
+
+                ---------------------------------::   BURNABLE   ::---------------------------------
+
+                if t.components.burnable ~= nil and
+                    not t.components.burnable.ignorefuel and
+                    t.components.burnable.canlight and
+                    not table.contains({ "creature", "giant" }, thingtype)
+                then
+                    AddInfo("burnable", true)
+                end
+
+                ---------------------------------::   DEPENDENCIES   ::---------------------------------
+
+                local _deps = t.scrapbook_deps or shallowcopy(Prefabs[entry].deps)
+
+                local deps = {}
+
+                for i, dep in ipairs(_deps) do
+                    deps[dep] = true
+                end
+
+                if t.components.prototyper and t.prefab ~= "bookstation" then
+                    for recipe, recipedata in pairs(AllRecipes) do
+                        local found = false
+                        for tech, level in pairs(recipedata.level) do
+                            if level > 0 then
+                                for tree, num in pairs(t.components.prototyper.trees) do
+                                    if tech == tree and num >= level then
+                                        deps[tostring(recipe)] = true
+                                        found = true
+                                        break
+                                    end
+                                end
+                                if found then
                                     break
                                 end
                             end
-                            if found then
-                                break
-                            end
                         end
                     end
                 end
-            end
 
-            local recipe = AllRecipes[t.prefab]
+                local recipe = AllRecipes[t.prefab]
 
-            if recipe ~= nil then
-                if recipe.builder_tag then
-                    ------  CRAFTING ICON  ------
-                    local character = RECIPE_BUILDER_TAG_LOOKUP[recipe.builder_tag]
+                if recipe ~= nil then
+                    if recipe.builder_tag then
+                        ------  CRAFTING ICON  ------
+                        local character = RECIPE_BUILDER_TAG_LOOKUP[recipe.builder_tag]
 
-                    if character ~= nil then
-                        AddInfo("craftingprefab", character)
-                    else
-                        print(string.format("[!!!!]  Recipe builder tag [%s] isn't in RECIPE_BUILDER_TAG_LOOKUP...", recipe.builder_tag))
+                        if character ~= nil then
+                            AddInfo("craftingprefab", character)
+                        else
+                            print(string.format("[!!!!]  Recipe builder tag [%s] isn't in RECIPE_BUILDER_TAG_LOOKUP...", recipe.builder_tag))
+                        end
+                    end
+
+                    for _, data in ipairs(recipe.ingredients) do
+                        deps[data.type] = true
                     end
                 end
 
-                for _, data in ipairs(recipe.ingredients) do
-                    deps[data.type] = true
-                end
-            end
-
-            -- Loot.
-            if t.components.lootdropper ~= nil then
-                for dep, _ in pairs(t.components.lootdropper:GetAllPossibleLoot(true)) do
-                    deps[dep] = true
-                end
-            end
-            
-            if t.components.vetcurselootdropper ~= nil and t.components.vetcurselootdropper.loot ~= nil then
-                deps[t.components.vetcurselootdropper.loot] = true
-            end
-            
-
-            -- Deployable / Kits.
-            local item_prefab = entry .. "_item"
-            if scrapbookprefabs[item_prefab] then
-                deps[item_prefab] = true
-            end
-
-            local _perishable = t.components.perishable
-            if _perishable ~= nil and _perishable.onperishreplacement ~= nil then
-                deps[_perishable.onperishreplacement] = true
-            end
-
-            -- Spawners.
-            local _childspawner = t.components.childspawner
-            if _childspawner ~= nil then
-                if _childspawner.childname ~= "" then
-                    deps[_childspawner.childname] = true
-                end
-                if _childspawner.rarechild ~= nil then
-                    deps[_childspawner.rarechild] = true
-                end
-            end
-
-            local _spawner = t.components.spawner
-            if _spawner ~= nil and _spawner.childname ~= nil then
-                deps[_spawner.childname] = true
-            end
-
-            local _periodicspawner = t.components.periodicspawner
-            if _periodicspawner ~= nil and _periodicspawner.prefab ~= nil then
-                deps[_periodicspawner.prefab] = true
-            end
-
-            local product_components = { "pickable", "cookable", "dryable", "harvestable" }
-
-            for i, cmpname in ipairs(product_components) do
-                local _cmp = t.components[cmpname]
-                if _cmp ~= nil then
-                    if _cmp.product ~= nil then
-                        deps[_cmp.product] = true
-                    end
-                end
-            end
-
-            if t:HasTag("waxable") then
-                deps.beeswax = true
-            end
-
-            -- Forge Repair Kits.
-            if _forgerepairmaterial ~= nil and REPAIR_MATERIAL_DATA[_forgerepairmaterial] ~= nil then
-                for i, mat in ipairs(REPAIR_MATERIAL_DATA[_forgerepairmaterial]) do
-                    deps[mat] = true
-                end
-            end
-
-            if t.scrapbook_adddeps then
-                for i, dep in ipairs(t.scrapbook_adddeps) do
-                    if not table.contains(deps, dep) then
+                -- Loot.
+                if t.components.lootdropper ~= nil then
+                    for dep, _ in pairs(t.components.lootdropper:GetAllPossibleLoot(true)) do
                         deps[dep] = true
-                    else
-                        print(string.format("[!!!!]  Dependency [%s] is duplicated in entry [%s]...", dep, entry))
                     end
                 end
-            end
 
-            if t.scrapbook_removedeps then
-                for i, dep in ipairs(t.scrapbook_removedeps) do
-                    deps[dep] = nil
-                end
-            end
-
-            -- Remove itself if it exists.
-            deps[entry] = nil
-
-            for dep, _ in pairs(shallowcopy(deps)) do
-                if checkstring(dep) and dep:find("_blueprint") and not deps.blueprint then
-                    deps.blueprint = true
+                if t.components.vetcurselootdropper ~= nil and t.components.vetcurselootdropper.loot ~= nil then
+                    deps[t.components.vetcurselootdropper.loot] = true
                 end
 
-                if not scrapbookprefabs[dep] then
-                    deps[dep] = nil
+
+                -- Deployable / Kits.
+                local item_prefab = entry .. "_item"
+                if scrapbookprefabs[item_prefab] then
+                    deps[item_prefab] = true
                 end
-            end
 
-            if next(deps) ~= nil then
-                deps = table.getkeys(deps)
-                table.sort(deps)
-                AddInfo("deps", deps)
-            end
+                local _perishable = t.components.perishable
+                if _perishable ~= nil and _perishable.onperishreplacement ~= nil then
+                    deps[_perishable.onperishreplacement] = true
+                end
 
-            ---------------------------------::   NOTES   ::---------------------------------
-
-            local notes = {} -- Array of strings.
-
-            if t:HasTag("shadow_aligned") then
-                table.insert(notes, "shadow_aligned=true")
-            end
-
-            if t:HasTag("lunar_aligned") then
-                table.insert(notes, "lunar_aligned=true")
-            end
-
-            if next(notes) ~= nil then
-                AddInfo("notes", string.format("{%s}", table.concat(notes, ", ")))
-            end
-
-            ---------------------------------::   SPECIAL INFO   ::---------------------------------
-
-            if t.scrapbook_specialinfo ~= nil then
-                local info = string.upper(t.scrapbook_specialinfo)
-
-                if info ~= string.upper(t.scrapbook_prefab or entry) then
-                    AddInfo("specialinfo", info)
-                    specialinfo_list[info] = true
-
-                    if not STRINGS.SCRAPBOOK.SPECIALINFO[info] then
-                        print(string.format("[!!!!]  Special Information [ %s ] for entry [ %s ] isn't defined in STRINGS.SCRAPBOOK.SPECIALINFO!", info, entry))
+                -- Spawners.
+                local _childspawner = t.components.childspawner
+                if _childspawner ~= nil then
+                    if _childspawner.childname ~= "" then
+                        deps[_childspawner.childname] = true
                     end
-                elseif not SKIP_SPECIALINFO_CHECK[info] then
-                    print(string.format("[!!!!]  Special Information [ %s ] for entry [ %s ] isn't required, as it's the name of the prefab!", info, entry))
+                    if _childspawner.rarechild ~= nil then
+                        deps[_childspawner.rarechild] = true
+                    end
                 end
-            else
-                specialinfo_list[string.upper(t.scrapbook_prefab or entry)] = true
+
+                local _spawner = t.components.spawner
+                if _spawner ~= nil and _spawner.childname ~= nil then
+                    deps[_spawner.childname] = true
+                end
+
+                local _periodicspawner = t.components.periodicspawner
+                if _periodicspawner ~= nil and _periodicspawner.prefab ~= nil then
+                    deps[_periodicspawner.prefab] = true
+                end
+
+                local product_components = { "pickable", "cookable", "dryable", "harvestable" }
+
+                for i, cmpname in ipairs(product_components) do
+                    local _cmp = t.components[cmpname]
+                    if _cmp ~= nil then
+                        if _cmp.product ~= nil then
+                            deps[_cmp.product] = true
+                        end
+                    end
+                end
+
+                if t:HasTag("waxable") then
+                    deps.beeswax = true
+                end
+
+                -- Forge Repair Kits.
+                if _forgerepairmaterial ~= nil and REPAIR_MATERIAL_DATA[_forgerepairmaterial] ~= nil then
+                    for i, mat in ipairs(REPAIR_MATERIAL_DATA[_forgerepairmaterial]) do
+                        deps[mat] = true
+                    end
+                end
+
+                if t.scrapbook_adddeps then
+                    for i, dep in ipairs(t.scrapbook_adddeps) do
+                        if not table.contains(deps, dep) then
+                            deps[dep] = true
+                        else
+                            print(string.format("[!!!!]  Dependency [%s] is duplicated in entry [%s]...", dep, entry))
+                        end
+                    end
+                end
+
+                if t.scrapbook_removedeps then
+                    for i, dep in ipairs(t.scrapbook_removedeps) do
+                        deps[dep] = nil
+                    end
+                end
+
+                -- Remove itself if it exists.
+                deps[entry] = nil
+
+                for dep, _ in pairs(shallowcopy(deps)) do
+                    if checkstring(dep) and dep:find("_blueprint") and not deps.blueprint then
+                        deps.blueprint = true
+                    end
+
+                    if not scrapbookprefabs[dep] then
+                        deps[dep] = nil
+                    end
+                end
+
+                if next(deps) ~= nil then
+                    deps = table.getkeys(deps)
+                    table.sort(deps)
+                    AddInfo("deps", deps)
+                end
+
+                ---------------------------------::   NOTES   ::---------------------------------
+
+                local notes = {} -- Array of strings.
+
+                if t:HasTag("shadow_aligned") then
+                    table.insert(notes, "shadow_aligned=true")
+                end
+
+                if t:HasTag("lunar_aligned") then
+                    table.insert(notes, "lunar_aligned=true")
+                end
+
+                if next(notes) ~= nil then
+                    AddInfo("notes", string.format("{%s}", table.concat(notes, ", ")))
+                end
+
+                ---------------------------------::   SPECIAL INFO   ::---------------------------------
+
+                if t.scrapbook_specialinfo ~= nil then
+                    local info = string.upper(t.scrapbook_specialinfo)
+
+                    if info ~= string.upper(t.scrapbook_prefab or entry) then
+                        AddInfo("specialinfo", info)
+                        specialinfo_list[info] = true
+
+                        if not STRINGS.SCRAPBOOK.SPECIALINFO[info] then
+                            print(string.format("[!!!!]  Special Information [ %s ] for entry [ %s ] isn't defined in STRINGS.SCRAPBOOK.SPECIALINFO!", info, entry))
+                        end
+                    elseif not SKIP_SPECIALINFO_CHECK[info] then
+                        print(string.format("[!!!!]  Special Information [ %s ] for entry [ %s ] isn't required, as it's the name of the prefab!", info, entry))
+                    end
+                else
+                    specialinfo_list[string.upper(t.scrapbook_prefab or entry)] = true
+                end
+
+                ---------------------------------::   END   ::---------------------------------
+
+                t:Remove()
             end
-
-            ---------------------------------::   END   ::---------------------------------
-
-            t:Remove()
         end
     end
 
@@ -1240,4 +1242,3 @@ function d_create_diffchecker_scrapbookdata(print_missing_icons)
 
     print(prettyline)
 end
-

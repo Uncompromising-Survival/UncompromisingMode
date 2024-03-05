@@ -91,6 +91,13 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 	inst.MiniMapEntity:SetIcon("hoodedwidow_map.tex")
+    inst.scrapbook_thingtype = "POI"
+
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(0)
+    end
+
     inst.entity:SetPristine()
 		
     if not TheWorld.ismastersim then

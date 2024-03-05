@@ -1,10 +1,20 @@
+require "um_scrapbook_diffchecker"
+
 local RECIPE_BUILDER_TAG_LOOKUP = {
     alchemist = "wilson",
     balloonomancer = "wes",
     battlesinger = "wathgrithr",
+    battlesongcontainermaker = "wathgrithr",
+    battlesonginstantrevivemaker = "wathgrithr",
+    battlesonglunaralignedmaker = "wathgrithr",
+    battlesongshadowalignedmaker = "wathgrithr",
+    berrybushcrafter = "wormwood",
     bookbuilder = "wickerbottom",
+    carratcrafter = "wormwood",
     clockmaker = "wanda",
     elixirbrewer = "wendy",
+    fire_mastery_1 = "willow",
+    fruitdragoncrafter = "wormwood",
     gem_alchemistI = "wilson",
     gem_alchemistII = "wilson",
     gem_alchemistIII = "wilson",
@@ -13,7 +23,10 @@ local RECIPE_BUILDER_TAG_LOOKUP = {
     ick_alchemistI = "wilson",
     ick_alchemistII = "wilson",
     ick_alchemistIII = "wilson",
+    juicyberrybushcrafter = "wormwood",
     leifidolcrafter = "woodie",
+    lightfliercrafter = "wormwood",
+    lureplantcrafter = "wormwood",
     masterchef = "warly",
     merm_builder = "wurt",
     ore_alchemistI = "wilson",
@@ -22,30 +35,29 @@ local RECIPE_BUILDER_TAG_LOOKUP = {
     pebblemaker = "walter",
     pinetreepioneer = "walter",
     plantkin = "wormwood",
-    saplingcrafter = "wormwood",
-    berrybushcrafter = "wormwood",
-    juicyberrybushcrafter = "wormwood",
-    reedscrafter = "wormwood",
-    lureplantcrafter = "wormwood",
-    syrupcrafter = "wormwood",
-    carratcrafter = "wormwood",
-    lightfliercrafter = "wormwood",
-    fruitdragoncrafter = "wormwood",
     professionalchef = "warly",
     pyromaniac = "willow",
+    reedscrafter = "wormwood",
+    saddlewathgrithrmaker = "wathgrithr",
+    saplingcrafter = "wormwood",
     shadowmagic = "waxwell",
     skill_wilson_allegiance_lunar = "wilson",
     skill_wilson_allegiance_shadow = "wilson",
+    spearwathgrithrlightningmaker = "wathgrithr",
     spiderwhisperer = "webber",
     strongman = "wolfgang",
+    syrupcrafter = "wormwood",
     upgrademoduleowner = "wx78",
     valkyrie = "wathgrithr",
+    wathgrithrimprovedhatmaker = "wathgrithr",
+    wathgrithrshieldmaker = "wathgrithr",
     werehuman = "woodie",
     wolfgang_coach = "wolfgang",
     wolfgang_dumbbell_crafting = "wolfgang",
     woodcarver1 = "woodie",
     woodcarver2 = "woodie",
     woodcarver3 = "woodie",
+
 }
 
 -- key: string
@@ -276,9 +288,9 @@ end
 local function Scrapbook_DefineAnimation(t)
     local anim = nil
 
-if t.prefab == "wixie_clock" then
-    anim = "complete"
-elseif t.scrapbook_anim then
+    if t.prefab == "wixie_clock" then
+        anim = "complete"
+    elseif t.scrapbook_anim then
         anim = t.scrapbook_anim
     elseif t:HasTag("campfire") and t.prefab ~= "cotl_tabernacle_level3" then
         anim = "scrapbook"
@@ -445,7 +457,10 @@ function d_printscrapbookrepairmaterialsdata()
 
     for entry, _ in pairs(scrapbookprefabs) do
         local t = SpawnPrefab(entry)
-
+        if type(STRINGS.NAMES[t.prefab]) ~= "string" then
+            print("HERE")
+            print(t.prefab .. " is missing a name! This will cause crashes when searching in the scrapbook!!!")
+        end
         local material = t.components.repairer ~= nil and t.components.repairer.repairmaterial or nil
 
         if material ~= nil then
@@ -791,9 +806,9 @@ function d_create_um_scrapbookdata(print_missing_icons)
             local blueflame = t:HasTag("blueflame")
 
             local override = {
-                "flames_wide",                                      -- Campfire Symbol.
-                blueflame and "coldfire_fire" or "campfire_fire",   -- Fire Build.
-                blueflame and "coldflames_wide" or "flames_wide",   -- Fire Symbol.
+                "flames_wide",                                    -- Campfire Symbol.
+                blueflame and "coldfire_fire" or "campfire_fire", -- Fire Build.
+                blueflame and "coldflames_wide" or "flames_wide", -- Fire Symbol.
             }
 
             AddInfo("overridesymbol", override)
@@ -1253,16 +1268,20 @@ function d_create_um_scrapbookdata(print_missing_icons)
             print(string.format("[!!!!]  Special Information [ %s ] is in STRINGS.SCRAPBOOK.SPECIALINFO, but it's unused!", info))
         end
     end
-    --TODO FIX
-    --[[if print_missing_icons then
+
+    if print_missing_icons then
         print("\n\nScrapbook Missing Icons:\n")
         local str = {}
         for i, data in ipairs(icons_missing) do
-            table.insert(str, (string.format("%s:\n    File: %s.fla\n    Animation: %s", data.icon, data.file, data.anim)))
+            if data.icon ~= nil and data.file ~= nil and data.anim ~= nil then
+                table.insert(str, (string.format("%s:\n    File: %s.fla\n    Animation: %s", data.icon, data.file, data.anim)))
+            else
+                print("Data is nil! ", data.icon, data.file, data.anim)
+            end
         end
 
         print("\n" .. table.concat(str, "\n\n"))
-    end]]
+    end
 
     Scrapbook_WriteToFile(scrapbookdata)
 
@@ -1310,5 +1329,5 @@ end
 function d_createall_um_scrapbookdata()
     require('um_scrapbook_diffchecker')
     d_create_um_scrapbookdata(true)
-    d_create_diffchecker_scrapbookdata(false)
+    d_create_diffchecker_scrapbookdata()
 end

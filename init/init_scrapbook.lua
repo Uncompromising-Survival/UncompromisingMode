@@ -122,7 +122,7 @@ for k, v in pairs(statues) do
 end
 
 for k, v in pairs(crops) do
-    AddAddtionalScrapbookInfo(string.upper(v) .. "_oversized", "No longer has collision.")
+    AddAddtionalScrapbookInfo(string.upper(v) .. "_OVERSIZED", "No longer has collision.")
     AddAddtionalScrapbookInfo("FARM_PLANT_" .. string.upper(v), "No longer grows in Winter.")
 end
 
