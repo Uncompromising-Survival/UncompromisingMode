@@ -27,7 +27,6 @@ local function TurnOff(inst, instant)
 
     inst.on = false
     if inst.speed_task ~= nil then
-        print("cancelling task!")
         inst.speed_task:Cancel()
         inst.speed_task = nil
     end
@@ -70,8 +69,6 @@ local function TurnOn(inst, instant)
         inst.components.heater.heat = inst.heat * 100
 
         if inst.heat >= 10 then
-            print('turning off')
-            print("fuel left:", inst.components.fueled:GetPercent())
             if not inst.did_overheat then
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level3", nil, 0.5)
             end
