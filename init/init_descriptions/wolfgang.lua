@@ -537,3 +537,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Come! Wolfgang flip you!"
 DESCRIBE.UM_TORNADO = "Wolfgang would punch wind away! If Wolfgang wasn't scared..."
 DESCRIBE.UM_WATERFALL = "Wolfgang prefer bathes over showers."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No scary tornadoes."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

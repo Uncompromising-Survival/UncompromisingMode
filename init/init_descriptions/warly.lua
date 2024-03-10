@@ -555,3 +555,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "A cut of tough meat."
 DESCRIBE.UM_TORNADO = "The storm has been brewed!"
 DESCRIBE.UM_WATERFALL = "A salty brine has entered the cavern!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes are brewing."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

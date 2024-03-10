@@ -542,3 +542,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "None of the goats back home were this ornery..."
 DESCRIBE.UM_TORNADO = "I hate tornadoes..."
 DESCRIBE.UM_WATERFALL = "Splishy splash!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Thankfully there are no tornadoes around!"
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

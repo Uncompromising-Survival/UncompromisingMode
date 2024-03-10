@@ -547,3 +547,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Protector your own, lest you lose them..."
 DESCRIBE.UM_TORNADO = "There's no place like home..."
 DESCRIBE.UM_WATERFALL = "Wash our tears away."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes to cause us misery."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

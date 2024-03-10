@@ -567,3 +567,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "This ones a fighter!"
 DESCRIBE.UM_TORNADO = "My buildings aren't high wind certified!"
 DESCRIBE.UM_WATERFALL = "Where's some sandbags when you need them?"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Seems like we're clear from any tornadoes."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "Much better than those rickety old masts!",
+    LOWFUEL = "It's runnin' low on fuel!",
+    OVERHEATING = "That's overheating! Shut it down!"
+}

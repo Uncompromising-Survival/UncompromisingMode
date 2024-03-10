@@ -641,3 +641,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "It'll leaving me bleating! I mean, bleeding!"
 DESCRIBE.UM_TORNADO = "Hang on to your hats!"
 DESCRIBE.UM_WATERFALL = "Wheres a pair of wellingtons when you need them?"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "There aren't any tornadoes around."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "Full speed ahead!",
+    LOWFUEL = "The fuel tank is getting a bit low.",
+    OVERHEATING = "It's getting a bit too hot!"
+}
