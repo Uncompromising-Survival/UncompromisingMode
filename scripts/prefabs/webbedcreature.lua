@@ -300,83 +300,83 @@ end
 local function SetSize(inst)
 	if inst.size == 1 then --Grumble Bee
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_BUGGY)
+		inst.components.named:SetName("Buggy Cocoon")
 	end	
 	if inst.size == 2 then --Pied Rat
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_GROSS)
+		inst.components.named:SetName("Grotesque Cocoon")
 	end
 	if inst.size == 3 then --Sussy peeper
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_GROSS)
+		inst.components.named:SetName("Grotesque Cocoon")
 	end
 	if inst.size == 4 then --Catcoon
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HAIRY)
+		inst.components.named:SetName("Hairy Cocoon")
 	end
 	if inst.size == 5 then --Volt goat
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HAIRY)
+		inst.components.named:SetName("Hairy Cocoon")
 	end	
 	if inst.size == 6 then --Clockwork Bishop
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HARD)
+		inst.components.named:SetName("Hardened Cocoon")
 	end
 	if inst.size == 7 then --Merm
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_LEATHER)
+		inst.components.named:SetName("Leathery Cocoon")
 	end
 	if inst.size == 8 then --Pigman
 		SetSmall(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_LEATHER)
+		inst.components.named:SetName("Leathery Cocoon")
 	end	
 	if inst.size == 9 then --Mossling
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_FEATHER)
+		inst.components.named:SetName("Feathery Cocoon")
 	end
 	if inst.size == 10 then --Tallbird
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_FEATHER)
+		inst.components.named:SetName("Feathery Cocoon")
 	end
 	if inst.size == 11 then --No Eyed Deer
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HAIRY)
+		inst.components.named:SetName("Hairy Cocoon")
 	end
 	if inst.size == 12 then --Krampus
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_GROSS)
+		inst.components.named:SetName("Grotesque Cocoon")
 	end
 	if inst.size == 13 then --Snapdragon
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_LEAFY)
+		inst.components.named:SetName("Leafy Cocoon")
 	end
 	if inst.size == 14 then --Mactusk
 		SetMedium(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_LEATHER)
+		inst.components.named:SetName("Leathery Cocoon")
 	end
 	if inst.size == 15 then --Lord of the Fruit Flies
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_BUGGY)
+		inst.components.named:SetName("Buggy Cocoon")
 	end
 	if inst.size == 16 then --SpiderQueen
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_GROSS)
+		inst.components.named:SetName("Grotesque Cocoon")
 	end
 	if inst.size == 17 then --Beefalo
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HAIRY)
+		inst.components.named:SetName("Hairy Cocoon")
 	end
 	if inst.size == 18 then --Varg
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HAIRY)
+		inst.components.named:SetName("Hairy Cocoon")
 	end
 	if inst.size == 19 then --Ewecus
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_HARD)
+		inst.components.named:SetName("Hardened Cocoon")
 	end
 	if inst.size == 20 then --koalefant
 		SetLarge(inst)
-		inst.components.named:SetName(STRINGS.WEBBEDCREATURE_LEATHER)
+		inst.components.named:SetName("Leathery Cocoon")
 	end
 end
 
@@ -422,7 +422,7 @@ local function fn()
 
 	inst:AddTag("noepicmusic")
 	inst:AddTag("webbedcreature")
-	--inst:AddTag("structure")
+	inst:AddTag("structure")
 	inst:AddTag("noauradamage")
 	--inst:AddTag("notarget")
 	inst:AddTag("houndfriend")
@@ -437,8 +437,7 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-	inst.scrapbook_anim = "idle_large"
-	inst.scrapbook_hidehealth = true
+
 	-------------------
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(1000000)

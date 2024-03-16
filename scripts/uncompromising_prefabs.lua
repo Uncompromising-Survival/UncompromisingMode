@@ -12,6 +12,7 @@ local prefabs = {
 	--"wonaldmcronald
 
 	"deathstick",
+	"scrimbles_vanishing_sword",
 	"uncompromising_toad",
 	"mushroomsprout_overworld",
 	"sporecloud_toad",
@@ -107,7 +108,7 @@ local prefabs = {
 	"sunglasses",
 	"cookiespikes",
 	"skeletonmeat",
-	"um_shadow_characters",
+	"swilson",
 	"veteranscurse",
 	"healthregenbuff_vetcurse",
 	"antlion_sinkhole_boat",
@@ -143,6 +144,7 @@ local prefabs = {
 	"berniebox",
 	"chomper",
 	"old_shadowwaxwell",
+	"real_shadowwaxwell",
 	"snapdragon",
 	"snapdragonherd",
 	"snapplant",
@@ -181,7 +183,6 @@ local prefabs = {
 	"buff_ancient_amulet_red",
 	"amulet_health_orb",
 	"nightcrawler",
-	--"um_nightcrawler",
 	"ancient_trepidation_arm",
 	--"steel_sweater",
 	"rat_whip",
@@ -221,7 +222,6 @@ local prefabs = {
 	"um_bear_trap",
 	"uncompromising_birds",
 	"um_shambler",
-	"um_shadowfire",
 	"mothergoose_tornado",
 	"corncan",
 	"skullchest",
@@ -259,21 +259,8 @@ local prefabs = {
 	"mindweaver",
 	"rneshadows",
 	"fuelseeker",
-	--"um_heckler",
 	"rnemushroombomb",
-	--"um_voxolophone",
-	--"um_haunt",
-	--"um_inkubator",
-	--"um_scrapper",
-	--"um_food_cubes",
-	-- "um_nightcrawler",
-	--"um_shadow_leech",
-	--"um_shadowcloaked_smoke",
-	--"um_shadowcloaked_light",
-	--"um_shadow_miasma_cloud_fx",
-	--"night_terror_infected",
-	--"um_simple_dummyplayer",
-	
+
 	"wackymask",
 	"tiddlestranger_rne",
 	"rne_goodiebag",
@@ -294,7 +281,6 @@ local prefabs = {
 	"oculet_pets",
 	"terrarium",
 	"reedbuncher",
-	"itemscrapper",
 	"um_areahandler",
 	"specter_shipwreck",
 	--"resurrectionphonograph",
@@ -316,7 +302,6 @@ local prefabs = {
 	"driftwood_waterlogged",
 	"kelpstack",
 	"siren_throne",
-
 	"uncompromising_harpoon",
 	"uncompromising_axepoon",
 	"uncompromising_magharpoon",
@@ -324,16 +309,13 @@ local prefabs = {
 	"uncompromising_fishingnetvisualizer",
 	"um_windturbine",
 	"mastupgrade_windturbine",
-	"um_beegun",
 
 	"armor_reed_um",
 	"armor_sharksuit_um",
 	"rockjawleather",
-	"ocupus_beak",
-	"ocupus_tentacles",
-	"beakbasher",
 	"winona_upgradekit",
 	"powercell",
+	"rr_powerline",
 	"eyeofterror_mini_ally",
 	"eyeofterror_mini_projectile_ally",
 
@@ -373,8 +355,7 @@ local prefabs = {
 
 	"wathom",
 	"wathom_none",
-
-	"um_shadowarena",
+	"wathom_heartbeat_ringfx",
 
 	"um_halloween_ornaments",
 	"trinket_wathom1",
@@ -382,6 +363,8 @@ local prefabs = {
 	"uncompromising_skins",
 
 	"codex_mantra",
+	"pact_armor_sanity",
+	"pact_sword_sanity",
 
 	--WIXIE RELATED PREFABS
 	"charles_t_horse",
@@ -392,11 +375,7 @@ local prefabs = {
 
 	"uncompromising_skins",
 
-	"um_ocupus",
-	"um_ocupus_tentacle",
-    "um_ocupus_eyetacle",
-	"um_ocupus_beak",
-	"terrorguise",
+	"codex_mantra",
 
 
 	"slingshotammo_secondary",
@@ -438,8 +417,7 @@ local prefabs = {
 	"mara_boss1_bullets",
 	"um_sacred_chest",
 	"smog",
-    "um_axe",
-	
+    
 	-- Pyre Nettle stuff
 	"um_pyre_nettles",
 	"um_smolder_spore",
@@ -464,14 +442,16 @@ local prefabs = {
 	"gore_horn_hat",
 	"crabclaw",
 	"um_beegun",
-	"silksack",
+	
+	"um_records",
 
     "dl_prefabs",
     "dl_biometable",
 
     "sea_shadow",
     "kaleidoscope",
-    "um_boat_engine"
+    "garbagepatchflotsam",
+    "garbagepatch_inventory",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

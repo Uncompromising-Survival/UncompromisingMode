@@ -130,6 +130,15 @@ DESCRIBE.MINOTAUR_BOULDER = "Watch out for land slides!"
 DESCRIBE.MINOTAUR_BOULDER_BIG = "That one could hurt it!"
 DESCRIBE.VETERANSHRINE =
     "I know it's a bad idea, but I want to investigate further!"
+DESCRIBE.VET_SKULL = "What do you think, Woby? Undead? Or just regular dead?"
+DESCRIBE.UM_BOSS_SOUL = "Have you come back to haunt us? Cool!"
+DESCRIBE.UM_DARK_VESTIGES = "I don't know what it is, but it's cool!"
+DESCRIBE.UM_VOXOLOPHONE = "Got any scary stories for me?"
+
+DESCRIBE.UM_EXHUMER = "Ooh! I've got the perfect story name! The tale of the \"Cursed Undertaker!\""
+DESCRIBE.UM_WINGSUIT = "I wish I could make you a pair too, Woby!"
+DESCRIBE.UM_MOONFLY_LANTERN = "What do you think, Woby? Alien magic?"
+
 DESCRIBE.SNOWBALL_THROWABLE =
     "Careful not to pack them with ice!"
 DESCRIBE.PLAGUEMASK = "Now I can be one with the birds!"
@@ -507,6 +516,9 @@ DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_BLOCKER =
     "That's fine, I wasn't planning on getting too close anyway!"
 
+DESCRIBE.PORTABLEBOAT_ITEM = "I learned to make rafts out of twigs and twine, but not this!"
+DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "That's the power of nature!"
+
 DESCRIBE.UM_ORNAMENT_OPOSSUM =
     "I love these little guys! I wish we had more up north..."
 DESCRIBE.UM_ORNAMENT_RAT = "All alone, little guy?"
@@ -538,6 +550,10 @@ DESCRIBE.SLINGSHOTAMMO_MOONGLASS = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_SALT = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_SLIME = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_GOOP = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_FLARE = DESCRIBE.SLINGSHOTAMMO_ROCK
+
+DESCRIBE.SLINGSHOTAMMO_INSANITY = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_LUNARVINE = DESCRIBE.SLINGSHOTAMMO_ROCK
 
 DESCRIBE.SLINGSHOTAMMO_LIMESTONE = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_TAR = DESCRIBE.SLINGSHOTAMMO_ROCK
@@ -575,9 +591,3 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Careful Woby! This goat looks mean!"
 DESCRIBE.UM_TORNADO = "Nail down our gear! Duck and cover! RUN FOR YOUR LIVES!!"
 DESCRIBE.UM_WATERFALL = "I love a good waterfall!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes around, I can tell!"
-
-DESCRIBE.UM_BOAT_ENGINE = {
-    ON = "PLEASE WRITE QUOTES",
-    LOWFUEL = "PLEASE WRITE QUOTES",
-    OVERHEATING = "PLEASE WRITE QUOTES"
-}

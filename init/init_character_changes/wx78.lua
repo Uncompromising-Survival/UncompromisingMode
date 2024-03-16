@@ -173,7 +173,7 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
 		print("slots in use now")
 		print(slotsinuse)]]
         else
-            print("All modules *should* be gone")
+           
             if inst._chip_inuse == 0 then
                 inst.components.timer:StopTimer(CHARGEDEGEN_TIMERNAME)
                 inst.components.timer:StartTimer(CHARGEREGEN_TIMERNAME, TUNING.WX78_CHARGE_REGENTIME)
@@ -462,7 +462,7 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
     TUNING.WX78_BEE_HEALTHPERTICK = 1
     TUNING.WX78_COLD_ICEMOISTURE = 35
     TUNING.WX78_PERISH_COLDRATE = 0.75
-    HUNGER_TABLES = { 0.5, 0.25, 0.00, 0.25 }
+    HUNGER_TABLES = { 0.5, 0.25, 0.00, -0.25 }
     TUNING.WX78_CHARGING_FOODS =
     {
         voltgoatjelly = 8,

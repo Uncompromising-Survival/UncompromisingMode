@@ -128,16 +128,18 @@ if GetModConfigData("snowstorms") then
     modimport("init/init_weather/init_snowstorm")
 end
 
+if GetModConfigData("hayfever_disable") then
+	modimport("init/init_weather/init_hayfever")
+	modimport("init/init_creatures/init_sneeze_hitters")
+end
+
 modimport("init/init_durability")
 
 modimport("init/init_character_changes/willow")
 
 modimport("init/init_character_changes/willow_bernie")
 
---[[if GetModConfigData("gamemode") == GAMEMODE_UNCOMPROMISING and GetModConfigData("waxwell") or
-	(GetModConfigData("gamemode") == GAMEMODE_CUSTOM_SETTINGS and GetModConfigData("waxwell")) then
-		modimport("init/init_character_changes/waxwell")
-	end]]
+modimport("init/init_character_changes/waxwell")
 
 --if GetModConfigData("warly") then
 --modimport("init/init_character_changes/warly")
@@ -150,7 +152,7 @@ modimport("init/init_character_changes/wormwood")
 --end
 
 -- All of these are wathgrightr changes
-if GetModConfigData("wathgrithr_rework") then
+if GetModConfigData("wathgrithr_rework_") == 1 then
 	modimport("postinit/prefabs/skilltree_wathgrithr")
 	modimport("postinit/prefabs/beefalo") -- Yes, even this one
 	modimport("postinit/prefabs/battlesongs")
@@ -161,7 +163,7 @@ end
 if GetModConfigData("wathgrithr_arsenal") then
 	modimport("postinit/prefabs/wathgrithr_shield")
 end
-modimport("postinit/prefabs/spear_wathgrithr")
+modimport("postinit/prefabs/spear_wathgrithr") -- Has stuff from both, don't put it inside the if
 
 modimport("init/init_skilltreeimports")
 
@@ -198,15 +200,8 @@ end
 
 modimport("init/init_character_changes/warly")
 
-if GetModConfigData("waxwell") then
-	modimport("init/init_character_changes/waxwell")
-end
-
 if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
 end
 
 modimport("init/init_loadingtips")
---if GetModConfigData("worldlyskilltrees") then
---modimport("init/init_worldlyskilltrees")
---end

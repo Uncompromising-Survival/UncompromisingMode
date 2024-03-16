@@ -1,6 +1,5 @@
 -- Update this list when adding files
 local component_post = {
-    "healer",
     "groundpounder",
     "propagator",
     "moisture",
@@ -48,7 +47,6 @@ local component_post = {
     "planarentity",
     "geyserfx",
     "firedetector",
-	"unwrappable",
     "slipperyfeet",
     "walkableplatformplayer",
     "schoolspawner",
@@ -173,7 +171,6 @@ local prefab_post = {
     "boat_pirate",
     "trident", -- for giving the leak a cause.
     "boat_bumpers",
-    "slurtle_shellpieces",
     "sludge_fueled",
     -- "nightsword",
     "bigshadowtentacle",
@@ -250,7 +247,7 @@ if GetModConfigData("wixie_walter") then
         "wormhole",      -- wixie loses more sanity from wormholes
         "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
         "coconut",       -- shoot a coconut
-        "sculptingtable" -- Sculpting table crashes if picker inventory is nil
+		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
         "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
@@ -291,6 +288,10 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/eye_rub_vo", "wixie/characters/wixie/eye_rub_vo")
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
+end
+
+if not GLOBAL.TUNING.DSTU.UPDATE_CHECK then
+    table.insert(prefab_post, "slurtle_shellpieces")
 end
 
 if GetModConfigData("hangyperds") then
@@ -448,7 +449,7 @@ end
 
 table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)
 
-if GetModConfigData("changed_shadowpieces") then
+if GetModConfigData("changed_shadow_pieces") then
     --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
     --table.insert(stategraph_post, "shadow_knight")

@@ -24,12 +24,7 @@ local CRAFTING_FILTERS = GLOBAL.CRAFTING_FILTERS
 -- @recipe_name: (str) the recipe to sort
 -- @recipe_reference:(str) the recipe to place the given recipe next to
 -- @filter: (str) the crafting filter to sort in
--- @after: (bool) whether the recipe should be sorted after the references
---vscode param defs
----@param recipe_name string the recipe to sort
----@param recipe_reference string the recipe to place the given recipe next to
----@param filter string the crafting filter to sort in
----@param after boolean whether the recipe should be sorted after the references
+-- @after: (bool) whether the recipe should be sorted after the reference
 local function ChangeSortKey(recipe_name, recipe_reference, filter, after)
     local recipes = CRAFTING_FILTERS[filter].recipes
     local recipe_name_index
@@ -110,7 +105,7 @@ end
 
 local config_skilltrees = GetModConfigData("woodie_skilltree")
 if config_skilltrees then
-	AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
+    AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
 end
 
 if GetModConfigData("wanda_nerf") then
@@ -122,12 +117,11 @@ if GetModConfigData("wanda_nerf") then
 end
 
 if TUNING.DSTU.GOTOBED ~= false then
-	AllRecipes["siestahut"].ingredients = {
+    AllRecipes["siestahut"].ingredients = {
         Ingredient("silk", 6),
         Ingredient("boards", 4),
         Ingredient("rope", 3)
-    }		
-		
+    }
 end
 
 if GetModConfigData("beebox_nerf") then
@@ -460,29 +454,6 @@ AddRecipe2(
     { "STRUCTURES" }
 )
 ChangeSortKey("air_conditioner", "firesuppressor", "STRUCTURES", true)
-
-AddRecipe2(
-    "houndious_observious",
-    { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) },
-    TECH.MAGIC_TWO,
-    { placer = "houndious_observious_placer" },
-    { "STRUCTURES", "MAGIC" }
-)
-ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
-ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
-GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
-
-AddRecipe2(
-    "terrorguise",
-    { Ingredient("ocupus_tentacle_eye", 4), Ingredient("kelp", 10), Ingredient("nightmarefuel", 5)},
-    TECH.MAGIC_TWO,
-    nil,
-    { "CLOTHING", "MAGIC" }
-)
-ChangeSortKey("terrorguise", "kelphat", "CLOTHING", true)
-ChangeSortKey("terrorguise", "magician_chest", "MAGIC", true)
-GLOBAL.STRINGS.RECIPE_DESC.TERRORGUISE = "Scare your fears away."
-
 
 AddRecipe2(
     "skullchest_child",
@@ -990,8 +961,10 @@ AllRecipes["chum"].ingredients = {
     Ingredient("rope", 1),
     Ingredient("waterplant_bomb", 1)
 }
-AllRecipes["hermitshop_chum"].ingredients = { Ingredient("messagebottleempty", 1) }
-AllRecipes["hermitshop_chum"].numtogive = 3
+if not GLOBAL.TUNING.DSTU.UPDATE_CHECK then
+    AllRecipes["hermitshop_chum"].ingredients = { Ingredient("messagebottleempty", 1) }
+    AllRecipes["hermitshop_chum"].numtogive = 3
+end
 --[[
 AddRecipe2(
 "hermitshop_oil",
@@ -1129,8 +1102,6 @@ if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
 end
 
-AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
-
 -- WIXIE RELATED CRAFTS
 if GetModConfigData("wixie_walter") then
     AddRecipe2(
@@ -1207,8 +1178,19 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("slingshotammo_freeze", "slingshotammo_poop", "WEAPONS", true)
     ChangeSortKey("slingshotammo_freeze", "slingshotammo_poop", "CHARACTER", true)
 
-    ChangeSortKey("slingshotammo_slow", "slingshotammo_freeze", "WEAPONS", true)
-    ChangeSortKey("slingshotammo_slow", "slingshotammo_freeze", "CHARACTER", true)
+    AddRecipe2(
+        "slingshotammo_flare",
+        { Ingredient("redgem", 1) },
+        GLOBAL.TECH.MAGIC_TWO,
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
+        { "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FLARE = "A scorching shot!"
+    ChangeSortKey("slingshotammo_flare", "slingshotammo_freeze", "WEAPONS", true)
+    ChangeSortKey("slingshotammo_flare", "slingshotammo_freeze", "CHARACTER", true)
+
+    ChangeSortKey("slingshotammo_slow", "slingshotammo_flare", "WEAPONS", true)
+    ChangeSortKey("slingshotammo_slow", "slingshotammo_flare", "CHARACTER", true)
 
     ChangeSortKey("slingshotammo_thulecite", "slingshotammo_slow", "WEAPONS", true)
     ChangeSortKey("slingshotammo_thulecite", "slingshotammo_slow", "CHARACTER", true)
@@ -1384,16 +1366,6 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
 
-    AddRecipe2(
-        "beakbasher",
-        { Ingredient("boards", 1), Ingredient("rope", 2), Ingredient("ocupus_beak", 1) },
-        TECH.SCIENCE_TWO,
-        nil,
-        { "TOOLS" }
-    )
-    ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
-    GLOBAL.STRINGS.RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick. Yo betatesters, I'm thinking about replacing the other items in this recipe with sea-based stuff to keep the trend, probably driftwood. What say you? What about a sea-based binding in place of rope."
-
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
     AddPrefabPostInit("forest", function(inst)
@@ -1404,6 +1376,33 @@ if GetModConfigData("wixie_walter") then
         end)
     end)
 end
+
+AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" },
+	{ "CHARACTER" })
+ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
+
+AddRecipe2(
+	"pact_armor_sanity",
+	{ Ingredient("nightmarefuel", 2) },
+	GLOBAL.TECH.NONE,
+	{ builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" },
+	{ "CHARACTER", "ARMOUR" }
+)
+AddRecipe2(
+	"pact_sword_sanity",
+	{ Ingredient("nightmarefuel", 2) },
+	GLOBAL.TECH.NONE,
+	{ builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" },
+	{ "CHARACTER", "WEAPONS" }
+)
+
+AddRecipe2("um_record_menu", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_menu.xml"}, {"DECOR"})
+AddRecipe2("um_record_wixie", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wixie.xml"}, {"DECOR"})
+AddRecipe2("um_record_walter", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_walter.xml"}, {"DECOR"})
+AddRecipe2("um_record_wathom", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wathom.xml"}, {"DECOR"})
+AddRecipe2("um_record_winky", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_winky.xml"}, {"DECOR"})
+AddRecipe2("um_record_hooded_widow", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_hooded_widow.xml"}, {"DECOR"})
+AddRecipe2("um_record_stranger", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_stranger.xml"}, {"DECOR"})
 
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
@@ -1566,7 +1565,9 @@ STRINGS.RECIPE_DESC.WINONA_CATAPULT_ITEM = STRINGS.RECIPE_DESC.WINONA_CATAPULT
 STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT_ITEM = STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT
 STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW
 STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH
-STRINGS.RECIPE_DESC.UM_BOAT_ENGINE = "Go full steam ahead on the high seas."
+
+GLOBAL.STRINGS.RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
+GLOBAL.STRINGS.RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
 
 -- [ PROTOTYPERS ] --
 GLOBAL.PROTOTYPER_DEFS.critterlab_real = GLOBAL.PROTOTYPER_DEFS.critterlab

@@ -139,6 +139,15 @@ DESCRIBE.LAVAE2 = DESCRIBE.LAVAE
 DESCRIBE.DISEASECUREBOMB = "Sack of rock oils."
 DESCRIBE.TOADLINGSPAWNER = "Smells smelly."
 DESCRIBE.VETERANSHRINE = "Why are you speaking..."
+DESCRIBE.VET_SKULL = "Stupid head, not even good for gnawing!"
+DESCRIBE.UM_BOSS_SOUL = "Can't eat it. What's the point?"
+DESCRIBE.UM_DARK_VESTIGES = "Chewy, tastes horrible!"
+DESCRIBE.UM_VOXOLOPHONE = "Stupid box is trying to talk to me."
+
+DESCRIBE.UM_EXHUMER = "Dirty bones, not worth chewing on."
+DESCRIBE.UM_WINGSUIT = "Now I can fly like those filthy birds!"
+DESCRIBE.UM_MOONFLY_LANTERN = "Another shiny thing for my collection."
+
 DESCRIBE.WICKER_TENTACLE = "Green and slimier."
 DESCRIBE.HONEY_LOG = "Crunchy and sweet, like beetles."
 
@@ -574,9 +583,3 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "There is not enough room for the both of us!"
 DESCRIBE.UM_TORNADO = "Stupid wind has come back for revenge!"
 DESCRIBE.UM_WATERFALL = "I shower regularly."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No dumb tornadoes to steal my things."
-
-DESCRIBE.UM_BOAT_ENGINE = {
-    ON = "PLEASE WRITE QUOTES",
-    LOWFUEL = "PLEASE WRITE QUOTES",
-    OVERHEATING = "PLEASE WRITE QUOTES"
-}

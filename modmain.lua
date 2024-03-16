@@ -3,25 +3,17 @@ local require = GLOBAL.require
 require "um_pocketdimensioncontainers"
 
 PrefabFiles = require("uncompromising_prefabs")
-PreloadAssets = { Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml") }
+PreloadAssets = {Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml")}
 ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
---local vanilla = require "screens/redux/scrapbookdata"
---local uncomp = require "screens/redux/scrapbookdata_changes"
-
+-- PUTTING THIS HERE SO IT LOADS BEFORE ALL POSTINITS, INITS, ETC
 AddPrefabPostInit("world", function(inst)
-    --[[inst:DoTaskInTime(0, function()
-        for k, v in pairs(vanilla) do
-            if uncomp[k] ~= nil and uncomp[k] ~= vanilla[k] then
-                vanilla[k] = uncomp[k]
-            end
-        end
-    end)]]
+    if not inst.ismastersim then
+        return
+    end
 
-    --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
-    --NOTE: This is quite a bit of memory.
     local count_skull, count_winky, items_skull, items_winky = 0, 0
     inst:DoTaskInTime(0, function()
         -- count all skullchests and winky burrows

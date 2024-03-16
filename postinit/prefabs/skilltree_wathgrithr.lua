@@ -184,9 +184,9 @@ local ONACTIVATE_FNS = {
         end
 
         if inst.components.battleborn ~= nil then
-			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_MULT)
-			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_MULT)
-            inst.components.battleborn:SetBattlebornBonus(TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_MULT)
+			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_CLAMP_MULT)
+			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_CLAMP_MULT)
+            inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_BONUS_MULT)
 		end
 
         if inst.components.hunger ~= nil then
@@ -224,7 +224,7 @@ local ONACTIVATE_FNS = {
         if inst.components.battleborn ~= nil then
 			--inst.components.battleborn:SetClampMin(0.33 * TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
 			--inst.components.battleborn:SetClampMax(2 * TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
-            --inst.components.battleborn:SetBattlebornBonus(TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
+            --inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
 
             inst.components.battleborn:SetHealthEnabled(false)
             inst.components.battleborn:SetSanityEnabled(false)
@@ -277,9 +277,9 @@ local ONDEACTIVATE_FNS = {
         end
 
         if inst.components.battleborn ~= nil then
-			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
-			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
-            inst.components.battleborn:SetBattlebornBonus(TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
+			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+            inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
 		end
 
         if inst.components.hunger ~= nil then
@@ -316,9 +316,9 @@ local ONDEACTIVATE_FNS = {
         end
 
         if inst.components.battleborn ~= nil then
-			--inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
-			--inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
-            --inst.components.battleborn:SetBattlebornBonus(TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_MULT)
+			--inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+			--inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+            --inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
 
             inst.components.battleborn:SetHealthEnabled(true)
             inst.components.battleborn:SetSanityEnabled(true)
@@ -741,11 +741,16 @@ SkillTreeDefs.SKILLTREE_ORDERS["wathgrithr"] = ORDERS
 	STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_2_DESC = "Combat Spears are 20% more durable when used by Wigfrid."
 	SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_spear_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_2_DESC
 
+    -- ELDIN SPEAR
+
     --STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_3_DESC = "Learn to craft the Elding Spear.\n It can be recharged like other Uncomp electrical weapons (Not yet implemented)"
 	--SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_spear_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_3_DESC
 
 	STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_4_DESC = "The Elding Spear can perform a special attack.\n This attack will consume additional durability per mob hit up to a limit."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_spear_4.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_4_DESC
+
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_5_DESC = "Upgrade the Elding Spear using Restrained Static to deal +20 Planar Damage. The Charged Elding Spear can be recharged with lightning."
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_spear_5.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_5_DESC
 
     -- HELMET
 
@@ -765,6 +770,10 @@ SkillTreeDefs.SKILLTREE_ORDERS["wathgrithr"] = ORDERS
 	SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC
 	STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = "Blocking increases damage on the next attack.\n Lose 20% less durability on block"
 	SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC
+
+    --------------------------------------------------------------------------
+	-- BEEFALO
+	--------------------------------------------------------------------------
 
 	STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = "Beefalos will be domesticated 15% faster and ridden 30% longer."
 	SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_1.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC

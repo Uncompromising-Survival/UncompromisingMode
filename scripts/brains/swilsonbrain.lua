@@ -13,10 +13,6 @@ local BrainCommon = require "brains/braincommon"
 local MAX_CHASE_TIME = 99
 local MAX_WANDER_DIST = 32
 
-local MIN_FOLLOW_DIST = 2
-local TARGET_FOLLOW_DIST = 5
-local MAX_FOLLOW_DIST = 9
-
 
 local SwilsonBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
@@ -45,8 +41,6 @@ return not FindEntity(target,
     )
 end
 end
-
-
 function SwilsonBrain:OnStart()
     local root =
         PriorityNode(
@@ -54,8 +48,6 @@ function SwilsonBrain:OnStart()
 			RunAway(self.inst, Conditions, 4, 8),
 			WhileNode(function() return TargetIsNotCloseToSpecialLight(self.inst) end, "",
                 ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME))),
-				
-					
             DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
             Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
         }, 1)

@@ -23,11 +23,6 @@ AddAction("INFEST", "INFEST", function(act)
     return true
 end)
 
-AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
-    act.target.WrapStuff(act.target)
-    return true
-end)
-
 AddAction("UNCOMPROMISING_PAWN_HIDE", "UNCOMPROMISING_PAWN_HIDE", function(act)
     -- Dummy action for pawn.
 end)
@@ -110,18 +105,6 @@ end)
 charge_powercell.instant = true
 charge_powercell.rmb = true
 charge_powercell.priority = HIGH_ACTION_PRIORITY
-
-
-local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
-
-GLOBAL.ACTIONS.CHOP.fn = function(act)
-    if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
-        local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
-        axe.WorkEffect(axe, act.doer, act.target)
-    end
-
-    return _ChopFn(act)
-end
 
 if TUNING.DSTU.WICKERNERF then
     local _ReadFn = GLOBAL.ACTIONS.READ.fn
@@ -242,4 +225,11 @@ if TUNING.DSTU.WARLY_BUTCHER then
         end
         return _murderfn(act)
     end
+end
+
+GLOBAL.STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
+
+local _Start_ChannelCastStrFn = GLOBAL.ACTIONS.START_CHANNELCAST.strfn
+GLOBAL.ACTIONS.START_CHANNELCAST.strfn = function(act)
+    return act.invobject and act.invobject:HasTag("moonfallstaff") and "MOONFALL" or _Start_ChannelCastStrFn(act) 
 end

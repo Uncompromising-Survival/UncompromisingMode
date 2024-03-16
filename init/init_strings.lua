@@ -1,5 +1,4 @@
 STRINGS = GLOBAL.STRINGS
-
 -- [              DSTU Related Overrides                  ]
 
 STRINGS.DSTU = {
@@ -48,6 +47,7 @@ STRINGS.ACTIONS.CASTSPELL.CHARLES_CHARGE = "Charge!"
 STRINGS.ACTIONS.CASTSPELL.SLINGSHOT = "Shoot"
 STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
 
+
 STRINGS.VETS_WIDGET_WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_CONFIRMED_TITLE = "You Made Your Choice."
@@ -58,6 +58,8 @@ STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nYour body 
 
 STRINGS.VETS_OK = "Ok"
 
+STRINGS.PACTSWORN_TITLE = "The Shadow Pact"
+STRINGS.PACTSWORN_TEXT = "A new path lies before you, if you give up the Codex Umbra. You will lose your spells, take 25% more damage, but you will gain a summonable sword, armor, and true classic shadows.\nThis canot be undone."
 
 STRINGS.PIG_REMEMBER_THREAT = { "REMEMBER YOU!", "YOU HURT US!", "YOU MEAN!" }
 STRINGS.PIG_GUARD_PIGKING_TALK_LOOKATWILSON = { "NO SMASH HOUSES", "US WATCHING YOU", "BE GOOD HERE", "WATCHING YOU" }

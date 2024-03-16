@@ -198,8 +198,18 @@ local function _GroundDetectionUpdate(debris, override_density)
 end
 
 
+local destroy_prefabs = {
+    "log",
+    "cutgrass",
+    "pinecone",
+    "twigs",
+    "spoiledfood",
+    "poop",
+}
+
 local function PickItem(item, inst)
     if item.components.inventoryitem ~= nil and item.prefab ~= "bullkelp_beachedroot" and item:IsValid() and not item:HasTag("heavy") then
+        if item.Physics ~= nil then item.Physics:Stop() end
         inst.components.inventory:GiveItem(item)
         local stacksize = item.components.stackable ~= nil and item.components.stackable:StackSize() or 1
 
@@ -238,8 +248,8 @@ local function TornadoEnviromentTask(inst)
     if config ~= "minimal" then
         -- if GetClosestInstWithTag("player", inst, PLAYER_CAMERA_SEE_DISTANCE * 1.125) ~= nil then -- tornado doesn't sleep. Using alt distance-based check.
         -- PICKABLES
-        local pickables = TheSim:FindEntities(x, y, z, 12, nil, { "INLIMBO", "trap", "flower", "tornado_nosucky"}, { "pickable", "HACK_workable" })
-        for k, v in ipairs(pickables) do		
+        local pickables = TheSim:FindEntities(x, y, z, 12, nil, { "INLIMBO", "trap", "flower", "tornado_nosucky" }, { "pickable", "HACK_workable" })
+        for k, v in ipairs(pickables) do
             if v.components.pickable ~= nil and v.components.pickable:CanBePicked() then
                 if not v:IsAsleep() and not config == "reduced" then
                     v.components.pickable:Pick(TheWorld)
@@ -247,24 +257,24 @@ local function TornadoEnviromentTask(inst)
                     if v:IsAsleep() and config == "reduced" then
                         return
                     end
-					
+
                     v.components.pickable:Pick(inst)
                 end
-			elseif v.components.hackable and v.components.hackable:CanBeHacked() then
+            elseif v.components.hackable and v.components.hackable:CanBeHacked() then
                 if not v:IsAsleep() and not config == "reduced" then
                     v.components.hackable:Hack(TheWorld, 1)
                 else
                     if v:IsAsleep() and config == "reduced" then
                         return
                     end
-					
+
                     v.components.hackable:Hack(inst, 1)
                 end
             end
         end
 
         -- WORKING
-        local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky"},
+        local workables = TheSim:FindEntities(x, y, z, 6, nil, { "irreplaceable", "INLIMBO", "trap", "winter_tree", "farm_plant", "_inventory", "sign", "drawable", "tornado_nosucky" },
             { "DIG_workable", "CHOP_workable" })
 
         for k, v in ipairs(workables) do
@@ -288,9 +298,9 @@ local function TornadoEnviromentTask(inst)
         -- ITEM SUCKING - Especifically *after* pickables/workables because it then will capture the items produced.
         local items_suck = config == "reduced" and
             TheSim:FindEntities(x, y, z, 12, { "_inventoryitem" },
-                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack"}) or
+                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" }) or
             TheSim:FindEntities(x, y, z, 24, { "_inventoryitem" },
-                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack"})
+                { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" })
 
         local ground = TheWorld.Map:IsOceanAtPoint(x, y, z)
         local angle_deviation = config == "reduced" and 0 or (66 * RADIANS)
@@ -310,7 +320,11 @@ local function TornadoEnviromentTask(inst)
                         v.Physics:ClearMotorVelOverride()
                         v.Physics:SetMotorVelOverride(math.cos(angle) * 5, 0, math.sin(angle) * 5)
                     else
-                        PickItem(v, inst) --skip all the steps above if you're just gonna do it off-screen.
+                        if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
+                            v:Remove()
+                        else
+                            PickItem(v, inst) --skip all the steps above if you're just gonna do it off-screen.
+                        end
                     end
                 end
             else
@@ -321,20 +335,24 @@ local function TornadoEnviromentTask(inst)
 
         -- ITEM PICKING
         local items_pick = TheSim:FindEntities(x, y, z, 2, { "_inventoryitem" },
-            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack"})
+            { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" })
         for k, v in ipairs(items_pick) do
             if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" and v.Physics ~= nil then
                 if config == "reduced" and v:IsAsleep() then
                     return
                 end
-                PickItem(v, inst)
+                if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
+                    v:Remove()
+                else
+                    PickItem(v, inst)
+                end
             end
         end
     end
 
     -- DAMAGING
     local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "player", "ghost", "shadow",
-        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky"}
+        "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible", "trap", "tornado_nosucky" }
 
     local targets = TheSim:FindEntities(x, y, z, 4, nil, AURA_EXCLUDE_TAGS, { "_combat", "um_tornado_redirector" })
 
@@ -417,26 +435,26 @@ local function TornadoItemTossTask(inst)
                 end
 
                 random_item:DoTaskInTime(8, function(inst) inst:RemoveTag("tornado_nosucky") end)
-				
-				if random_item.Physics ~= nil then
-					random_item.Physics:Teleport(x, 35, z)
-					random_item.Physics:SetMotorVel(0, math.random(-50, -33), 0)
-				elseif random_item.Transform ~= nil then
-					random_item.Transform:SetPosition(x, 0, z)
-				end
-				
+
+                if random_item.Physics ~= nil then
+                    random_item.Physics:Teleport(x, 35, z)
+                    random_item.Physics:SetMotorVel(0, math.random(-50, -33), 0)
+                elseif random_item.Transform ~= nil then
+                    random_item.Transform:SetPosition(x, 0, z)
+                end
+
                 random_item.shadow = SpawnPrefab("warningshadow")
                 random_item.shadow:ListenForEvent("onremove", function(debris) debris.shadow:Remove() end, random_item)
                 random_item.shadow.Transform:SetPosition(x, 0, z)
 
                 local scaleFactor = Lerp(.5, 1.5, 1)
                 random_item.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-                random_item.updatetask = random_item:DoPeriodicTask(FRAMES, _GroundDetectionUpdate, nil, 5)
+                random_item.updatetask = random_item:DoPeriodicTask(.1, _GroundDetectionUpdate, nil, 5)
 
                 random_item.updatetask_timeout = random_item:DoTaskInTime(30, function(inst)
-					if random_item.Physics ~= nil then
-						inst.Physics:ClearMotorVelOverride()
-					end
+                    if random_item.Physics ~= nil then
+                        inst.Physics:ClearMotorVelOverride()
+                    end
 
                     if inst.updatetask ~= nil or inst.shadow ~= nil then
                         print("PANIC? FALLING ITEM TIMED OUT!")
@@ -522,11 +540,11 @@ local function TornadoTask(inst)
                             hat:AddTag("tornado_nosucky")
                             hat:AddTag("gotgrabbed")
 
-                            hat:DoTaskInTime(0.5, function(inst)
+                            hat:DoTaskInTime(1.5, function(inst)
                                 hat:RemoveTag("tornado_nosucky")
                             end)
 
-                            hat:DoTaskInTime(2.5, function(inst)
+                            hat:DoTaskInTime(3.5, function(inst)
                                 hat:RemoveTag("gotgrabbed")
                             end)
 
@@ -534,7 +552,7 @@ local function TornadoTask(inst)
                             v.components.inventory:DropItem(hat, true, true)
                             if hat.Physics ~= nil then
                                 local x, y, z = hat.Transform:GetWorldPosition()
-                                hat.Physics:Teleport(x, .3, z)
+                                hat.Physics:Teleport(x, .8, z)
 
                                 local angle = (math.random() * 20 - 10) * DEGREES
                                 if inst ~= nil and inst:IsValid() then
@@ -572,8 +590,8 @@ local function TornadoTask(inst)
                             end
                         end
 
-                        local dx, dy, dz = px + (((FRAMES * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
-                            pz + (((FRAMES * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
+                        local dx, dy, dz = px + (((.1 * 5) * velx) / multiplierplayer) * inst.Transform:GetScale(), 0,
+                            pz + (((.1 * 5) * velz) / multiplierplayer) * inst.Transform:GetScale()
 
                         local ground = TheWorld.Map:IsOceanTileAtPoint(dx, dy, dz) -- changed to IsOceanTile for better ocean support, don't want tornado scuking things into the void.
                         local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
@@ -593,7 +611,7 @@ local function TornadoTask(inst)
             local dest_velx = math.cos(dest_rad)
             local dest_velz = -math.sin(dest_rad)
 
-            local x_dest2, y_dest2, z_dest2 = x + ((FRAMES * 3) * dest_velx), 0, z + ((FRAMES * 3) * dest_velz)
+            local x_dest2, y_dest2, z_dest2 = x + ((.1 * 3) * dest_velx), 0, z + ((.1 * 3) * dest_velz)
 
             if x_dest2 ~= nil then
                 inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
@@ -616,12 +634,11 @@ local function TornadoTask(inst)
                 inst:ListenForEvent("animover", function()
                     inst.startmoving = false
 
-                    for k, v in ipairs(inst.components.inventory.itemslots) do
-                        local item = inst.components.inventory:RemoveItem(v)
-                        local pos = getrandomposition(inst)
-                        item.Transform:SetPosition(pos.x + math.random(-8, 8), pos.y, pos.z + math.random(-8, 8))
-                    end
 
+                    local inv = TheWorld.components.garbagepatch_manager:GetInventory()
+                    inst.components.inventory:TransferInventory(inv)
+
+                    TheWorld.components.garbagepatch_manager:SpawnPatch()
                     if destination ~= nil then
                         destination:Remove()
                     end
@@ -641,7 +658,7 @@ local function TornadoTask(inst)
 
                 inst:ListenForEvent("animover", function()
                     for k, v in ipairs(inst.components.inventory.itemslots) do
-                        local item = inst.components.inventory:RemoveItem(v)
+                        local item = inst.components.inventory:RemoveItem(v, true)
                         local pos = getrandomposition(inst)
                         item.Transform:SetPosition(pos.x + math.random(-8, 8), pos.y, pos.z + math.random(-8, 8))
                     end
@@ -709,6 +726,32 @@ local function fn()
         inst:DoTaskInTime(0, inst.Remove)
     end
 
+    inst.ForceEnding = function()
+        local destination = TheSim:FindFirstEntityWithTag("um_tornado_destination")
+
+        inst.AnimState:PlayAnimation("tornado_pst", false)
+
+        inst:ListenForEvent("animover", function()
+            inst.startmoving = false
+
+            inst.components.inventory:TransferInventory(TheWorld.components.garbagepatch_manager:GetInventory())
+
+            TheWorld.components.garbagepatch_manager:SpawnPatch()
+
+            if destination ~= nil then
+                destination:Remove()
+            end
+
+            inst:Remove()
+        end)
+
+        inst.persists = false
+
+        if destination ~= nil then
+            destination.persists = false
+        end
+    end
+
     inst.Advance_Task = nil
     inst.is_full = false
     inst.danumber = 0
@@ -719,8 +762,10 @@ local function fn()
     inst.icon = SpawnPrefab("um_tornado_icon")
     inst.icon.entity:SetParent(inst.entity)
 
-    inst:AddComponent("updatelooper")
-    inst.components.updatelooper:AddOnUpdateFn(TornadoTask)
+    inst:DoPeriodicTask(.1, TornadoTask)
+
+    --inst:AddComponent("updatelooper")
+    -- inst.components.updatelooper:AddOnUpdateFn(TornadoTask)
 
     inst:AddComponent("inventory")
     inst.components.inventory.ignorescangoincontainer = true
@@ -793,7 +838,7 @@ local function CaveTornadoTask(inst)
         local dest_velx = math.cos(dest_rad)
         local dest_velz = -math.sin(dest_rad)
 
-        local x_dest2, y_dest2, z_dest2 = x + ((FRAMES * 3) * dest_velx), 0, z + ((FRAMES * 3) * dest_velz)
+        local x_dest2, y_dest2, z_dest2 = x + ((.1 * 3) * dest_velx), 0, z + ((.1 * 3) * dest_velz)
 
         if x_dest2 ~= nil then
             inst.Transform:SetPosition(x_dest2, y_dest2, z_dest2)
@@ -848,6 +893,11 @@ local function TrySpawnWaterfall(inst, x, z)
     if CanSpawnWaterfall(inst, x, y, z) then
         SpawnPrefab("um_waterfall_spawner").Transform:SetPosition(x, y, z)
     end
+
+    if not TheWorld.state.isspring then
+        inst.persists = false
+        inst:Remove()
+    end
 end
 
 local function cavefn()
@@ -869,8 +919,9 @@ local function cavefn()
         return inst
     end
 
-    inst:AddComponent("updatelooper")
-    inst.components.updatelooper:AddOnUpdateFn(CaveTornadoTask)
+    inst:DoPeriodicTask(.1, CaveTornadoTask)
+    --inst:AddComponent("updatelooper")
+    --inst.components.updatelooper:AddOnUpdateFn(CaveTornadoTask)
 
     inst:DoPeriodicTask(5, TrySpawnWaterfall)
 
@@ -902,12 +953,12 @@ local function MoveDestination(inst)
         inst.components.timer:StartTimer("delete_destination", (TheWorld.state.springlength / 4.5) * 480)
         --inst.components.timer:StartTimer("delete_destination", 30)
     end
-	
-	
+
+
     if not TheWorld.state.isspring then
         inst.persists = false
         inst:Remove()
-	end
+    end
 end
 
 local function OnSave_Dest(inst, data) data.danumber = inst.danumber end

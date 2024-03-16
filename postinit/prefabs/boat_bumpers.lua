@@ -3,8 +3,9 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 local bumpers = {
-    "boat_bumper_shell_kit",
-    "boat_bumper_kelp_kit",
+    "shell",
+    "kelp",
+    "yotd"
 }
 local BUMPER_DEPLOY_IGNORE_TAGS = { "NOBLOCK", "player", "FX", "INLIMBO", "DECOR", "walkableplatform", "structure" }
 

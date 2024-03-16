@@ -1,8 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local scrapbookdata = require "screens/redux/scrapbookdata"
-
 --fish meat buff code by Electroely#0066
 --1. remove existing drops (cook, perish, murder)
 --2. add fns in place of those drops to give the meat according to a variable inst.meatvalue
@@ -85,17 +83,6 @@ for prefab, data in pairs(fishdata) do
     env.AddPrefabPostInit(
         prefab .. "_inv",
         function(inst)
-            if inst.scrapbook_adddeps == nil then
-                inst.scrapbook_adddeps = {}
-            end
-
-            if data[3] then
-                for k, v in pairs(data[3]) do
-                    table.insert(inst.scrapbook_adddeps, v)
-                end
-            end
-
-
             if not TheWorld.ismastersim then
                 return
             end
@@ -179,7 +166,7 @@ env.AddComponentPostInit(
     function(self)
         local SetWeight_old = self.SetWeight
         self.SetWeight = function(self, weight, ...)
-            local rtn = { SetWeight_old(self, weight, ...) }
+            local rtn = {SetWeight_old(self, weight, ...)}
             self.inst:PushEvent("weightchanged", weight)
             return unpack(rtn)
         end

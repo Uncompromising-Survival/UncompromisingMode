@@ -133,6 +133,15 @@ DESCRIBE.MINOTAUR_BOULDER_BIG = "It's size may be to our benefit..."
 DESCRIBE.SNOWBALL_THROWABLE =
 "A handful of snow, mashed together so it can be thrown."
 DESCRIBE.VETERANSHRINE = "That's certainly not the best idea."
+DESCRIBE.VET_SKULL = "The skull of some strange homosapien."
+DESCRIBE.UM_BOSS_SOUL = "I normally don't believe in this kind of thing."
+DESCRIBE.UM_DARK_VESTIGES = "I'm not sure how to catagorize it..."
+DESCRIBE.UM_VOXOLOPHONE = "It is some kind of radio."
+
+DESCRIBE.UM_EXHUMER = "We've long since crossed into dark territory."
+DESCRIBE.UM_WINGSUIT = "Magic is at work here, no other explanation."
+DESCRIBE.UM_MOONFLY_LANTERN = "I'm not sure what powers it..."
+
 DESCRIBE.RAT_TAIL = "Goodness, I believe it's infected with the bubonic plague."
 DESCRIBE.PLAGUEMASK =
 "A mask, popularized by plague doctors during the bubonic plague."
@@ -563,6 +572,10 @@ DESCRIBE.SLINGSHOTAMMO_MOONGLASS = DESCRIBE.SLINGSHOTAMMO_THULECITE
 DESCRIBE.SLINGSHOTAMMO_SALT = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_SLIME = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_GOOP = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_FLARE = DESCRIBE.SLINGSHOTAMMO_ROCK
+
+DESCRIBE.SLINGSHOTAMMO_INSANITY = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_LUNARVINE = DESCRIBE.SLINGSHOTAMMO_ROCK
 
 DESCRIBE.SLINGSHOTAMMO_LIMESTONE = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_TAR = DESCRIBE.SLINGSHOTAMMO_ROCK
@@ -600,9 +613,3 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "It's the protector of the herd."
 DESCRIBE.UM_TORNADO = "A natural phenomenon, or supernatural?"
 DESCRIBE.UM_WATERFALL = "The tornado appears to have punctured some resivoirs."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes are being picked up by the machine."
-
-DESCRIBE.UM_BOAT_ENGINE = {
-    ON = "PLEASE WRITE QUOTES",
-    LOWFUEL = "PLEASE WRITE QUOTES",
-    OVERHEATING = "PLEASE WRITE QUOTES"
-}

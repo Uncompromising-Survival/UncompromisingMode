@@ -121,6 +121,15 @@ DESCRIBE.ICEBOOMERANG = "Quite a handy tool, ain't it?"
 DESCRIBE.MINOTAUR_BOULDER = "Hard hats, everyone! Safety first!"
 DESCRIBE.MINOTAUR_BOULDER_BIG = "Take a hit of this, ya big lug."
 DESCRIBE.VETERANSHRINE = "This doesn't look like Charlie's doing."
+DESCRIBE.VET_SKULL = "Some poor lug met their end."
+DESCRIBE.UM_BOSS_SOUL = "Can't let go, huh?"
+DESCRIBE.UM_DARK_VESTIGES = "Some kind of weird glue?"
+DESCRIBE.UM_VOXOLOPHONE = "The construction is familiar. Did the boss make this?"
+
+DESCRIBE.UM_EXHUMER = "Workers don't need lunch breaks if they're dead!"
+DESCRIBE.UM_WINGSUIT = "Flying is hard work!"
+DESCRIBE.UM_MOONFLY_LANTERN = "Magic power. Neat."
+
 DESCRIBE.SNOWBALL_THROWABLE = "Maybe I could load it in a catapult? Hmm, nah."
 DESCRIBE.RAT_TAIL = "Yeesh, I don't want to carry that around."
 DESCRIBE.PLAGUEMASK = "You gotta be careful not to bump the beak on anything."
@@ -530,6 +539,10 @@ DESCRIBE.SLINGSHOTAMMO_MOONGLASS = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_SALT = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_SLIME = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_GOOP = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_FLARE = DESCRIBE.SLINGSHOTAMMO_ROCK
+
+DESCRIBE.SLINGSHOTAMMO_INSANITY = DESCRIBE.SLINGSHOTAMMO_ROCK
+DESCRIBE.SLINGSHOTAMMO_LUNARVINE = DESCRIBE.SLINGSHOTAMMO_ROCK
 
 DESCRIBE.SLINGSHOTAMMO_LIMESTONE = DESCRIBE.SLINGSHOTAMMO_ROCK
 DESCRIBE.SLINGSHOTAMMO_TAR = DESCRIBE.SLINGSHOTAMMO_ROCK
@@ -567,9 +580,3 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "This ones a fighter!"
 DESCRIBE.UM_TORNADO = "My buildings aren't high wind certified!"
 DESCRIBE.UM_WATERFALL = "Where's some sandbags when you need them?"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Seems like we're clear from any tornadoes."
-
-DESCRIBE.UM_BOAT_ENGINE = {
-    ON = "Much better than those rickety old masts!",
-    LOWFUEL = "It's runnin' low on fuel!",
-    OVERHEATING = "That's overheating! Shut it down!"
-}

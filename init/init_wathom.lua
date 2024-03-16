@@ -413,7 +413,13 @@ AddStategraphPostInit("wilson", function(inst)
 				Effect(inst)
 				local buffaction = inst:GetBufferedAction()
 				local target = buffaction ~= nil and buffaction.target or nil
-				inst.components.combat:SetTarget(target)
+				
+				if target ~= nil and (target:HasTag("bird_mutant") or not target:HasTag("bird")) then
+					inst.components.combat:SetTarget(target)
+				else
+					inst.components.combat:SetTarget(nil)
+				end
+				
 				inst.components.combat:StartAttack()
 				--            inst.components.health:SetInvincible(true) -- I wonder why Tiddler did this?
 				--inst.AnimState:PlayAnimation("atk_leap_pre", false)
@@ -918,6 +924,17 @@ end
 
 AddClassPostConstruct("widgets/statusdisplays", AmpbadgeDisplays)
 
+-- New code for Wathom's echolocation! Needs to be controls so it doesnt screw with player hud!
+AddClassPostConstruct( "widgets/controls", function(self, inst)
+	local ownr = self.owner
+	if ownr == nil then return end
+	
+	if self.owner:HasTag("wathom") then
+		local Wathom_Sonar = require "widgets/wathom_sonar"
+		self.wathom_sonar = self:AddChild( Wathom_Sonar(self.owner) )
+		self.wathom_sonar:MoveToBack()
+	end
+end)
 -------------------------------------------------------
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.wathom = "The Forgotten Parody"

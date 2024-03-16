@@ -147,24 +147,6 @@ local function RegisterNetListeners(inst)
 	inst:ListenForEvent("SetCurseedirty", ToggleCursee)
 end
 
-local function OnGetItemFromPlayer(inst, giver, item)
-    if item.skull_effect ~= nil then
-		item.skull_effect(item, giver)
-	end
-end
-
-local function OnRefuseItem(inst, giver, item)
-	if not giver:HasTag("vetcurse") then
-		inst.components.talker:Say(GetString(giver, "NOT_VETERANCURSED"))
-	elseif not item:HasTag("vetskull") then
-		inst.components.talker:Say(GetString(giver, "NOT_VETERANSKULL"))
-	end
-end
-
-local function AcceptTest(inst, item, giver)
-    return giver:HasTag("vetcurse") and item:HasTag("vetskull")
-end
-
 local function fn(Sim)
     local inst = CreateEntity()
 	
@@ -181,19 +163,13 @@ local function fn(Sim)
     inst.AnimState:PlayAnimation("idle", true)
 	
     --inst.GetActivateVerb = GetVerb
-    inst:AddTag("trader")
 	
 	inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
 	inst:DoTaskInTime(0, RegisterNetListeners)
 	
     MakeObstaclePhysics(inst, 1.8)
-	inst.scrapbook_thingtype = "POI"
-    if not TheNet:IsDedicated() then
-        inst:AddComponent("pointofinterest")
-        inst.components.pointofinterest:SetHeight(0)
-    end
-
+	
 	inst.entity:SetPristine()
 	
 	inst:AddComponent("talker")        
@@ -216,12 +192,6 @@ local function fn(Sim)
     inst.components.activatable.inactive = true
 	inst.components.activatable.quickaction = false
 	--inst.components.activatable.standingaction = true
-
-    inst:AddComponent("trader")
-
-    inst.components.trader:SetAcceptTest(AcceptTest)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
-    inst.components.trader.onrefuse = OnRefuseItem
 	
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()

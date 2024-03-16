@@ -1,5 +1,5 @@
-local STRINGS = GLOBAL.STRINGS
 --moved into seperate file, was getting a bit too big.
+local STRINGS = GLOBAL.STRINGS
 
 STRINGS.UNCOMP_TOOLTIP = {
     AMULET =
@@ -78,8 +78,10 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_CRAB_REGEN = "- Self-healing.",
     UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
     WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.", --putting these here for the icon
-    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel."
-
+    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
+	CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
+	PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
+	PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -155,7 +157,6 @@ if TUNING.DSTU.WINONA_PORTABLES then
     STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_HIGH = "- Now portable."
 end
 
-local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
 if TUNING.DSTU.TELESTAFF_REWORK then
     TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses."
@@ -333,6 +334,11 @@ end
 
 if TUNING.DSTU.WICKERNERF_BEEBOOK then
     TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
+end
+
+if TUNING.DSTU.WATHGRITHR_ARSENAL then
+    TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- The lightning charge attack will consume additional durability per mob hit up to a limit.\n - The Charged Elding Spear can be recharged with lightning."
+    TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 60% of the damage taken.\n - Each additional perk reduces it by 20%."
 end
 
 if TUNING.DSTU.DISABLE_MEGAFLARE then
