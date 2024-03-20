@@ -157,7 +157,6 @@ local states=
 			inst.AnimState:PlayAnimation("appear")
             inst.sg:SetTimeout(5)
             PlayExtendedSound(inst, "appear")
-			PlayExtendedSound(inst, "taunt")
         end,
 		
         events=
@@ -175,7 +174,7 @@ local states=
         onenter = function(inst, start_anim)
 			inst:Hide()
 			inst:AddTag("INLIMBO")
-            PlayExtendedSound(inst, "idle")
+            --PlayExtendedSound(inst, "idle")
             
 			inst.AnimState:PlayAnimation("idle_above", true)
             --inst.sg:SetTimeout(5)
@@ -203,7 +202,7 @@ local states=
 			inst:Show()
 			inst:RemoveTag("INLIMBO")
 			inst.AnimState:PlayAnimation("grab")
-			PlayExtendedSound(inst, "taunt")
+			PlayExtendedSound(inst, "attack")
 			--[[
 			if inst.shadowtask ~= nil then
 				inst.shadowtask:Cancel()
@@ -297,7 +296,7 @@ local states=
         onenter = function(inst)
 			inst:AddTag("INLIMBO")
             inst.AnimState:PlayAnimation("retreat")
-			PlayExtendedSound(inst, "attack_grunt")
+			PlayExtendedSound(inst, "retreat")
 			
 			inst.DynamicShadow:SetSize(0, 0)
 			
@@ -318,7 +317,7 @@ local states=
         },
 		
         events=
-        {
+        { 
             EventHandler("animover", function(inst)
 				if TheWorld.state.isday or TheWorld.state.iscaveday then
 					OnAnimOverRemoveAfterSounds(inst)
@@ -360,6 +359,7 @@ local states=
         tags = { "moving", "canrotate" },
 
         onenter = function(inst)
+			PlayExtendedSound(inst, "appear")
 			inst:AddTag("INLIMBO")
             inst.components.locomotor:WalkForward()
             if not inst.AnimState:IsCurrentAnimation("idle_above") then

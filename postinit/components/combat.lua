@@ -54,7 +54,7 @@ env.AddComponentPostInit("combat", function(self)
             return
         end
 
-		self.inst:PushEvent("onattackother", { target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli })
+        self.inst:PushEvent("onattackother", { target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli, mockattack = true })
 
         if weapon ~= nil and projectile == nil then
             if weapon.components.projectile ~= nil then

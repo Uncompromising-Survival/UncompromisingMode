@@ -117,7 +117,7 @@ end
 
 local function CleanTable(inst,attacker)
 	for i,v in ipairs(inst.targettable) do
-		if v:IsValid() and (v:HasTag("stump") or v.components.health and v.components.health:IsDead() or (attacker:GetDistanceSqToInst(v) > 100^2 and v.components.combat)) then -- Far enough away? Remove it from the table
+		if v:IsValid() and ((v:HasTag("stump") or v.components.health and v.components.health:IsDead() or (attacker:GetDistanceSqToInst(v) > 100^2 and v.components.combat)) or (not v.components.health and not v.components.workable)) then -- Far enough away? Remove it from the table
 			table.remove(inst.targettable,i)
 			return CleanTable(inst,attacker)
 		end

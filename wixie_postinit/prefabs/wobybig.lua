@@ -158,6 +158,7 @@ local function RemoveTarget(inst)
 end
 
 env.AddPrefabPostInit("wobybig", function(inst)
+	inst.scrapbook_hidehealth = true
 
 	inst:AddTag("customwobytag")
 	inst:AddTag("noauradamage")

@@ -29,7 +29,6 @@ local function onunequip(inst, owner)
 	inst.components.container:Close(owner)
 end
 
-
 local function ChecksOut(inst) -- The backpack is good to go
 	if inst.components.container then
 		local _container = inst.components.container
@@ -113,6 +112,7 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")

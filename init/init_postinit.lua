@@ -1,5 +1,6 @@
 -- Update this list when adding files
 local component_post = {
+    "healer",
     "groundpounder",
     "propagator",
     "moisture",
@@ -47,6 +48,8 @@ local component_post = {
     "planarentity",
     "geyserfx",
     "firedetector",
+	"unwrappable",
+	"playeractionpicker", -- this exists to allow wingsuit to be used on ocean tiles and stuff
     "slipperyfeet",
     "walkableplatformplayer",
     "schoolspawner",
@@ -196,6 +199,7 @@ local prefab_post = {
     "compostingbin",
     "plantables",
     "compass",
+	"archive_lockbox",
 }
 
 local stategraph_post = {
@@ -247,7 +251,7 @@ if GetModConfigData("wixie_walter") then
         "wormhole",      -- wixie loses more sanity from wormholes
         "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
         "coconut",       -- shoot a coconut
-		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
+        "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
         "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
@@ -288,10 +292,6 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/eye_rub_vo", "wixie/characters/wixie/eye_rub_vo")
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
-end
-
-if not GLOBAL.TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "slurtle_shellpieces")
 end
 
 if GetModConfigData("hangyperds") then

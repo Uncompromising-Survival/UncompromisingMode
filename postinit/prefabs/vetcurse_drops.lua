@@ -13,10 +13,11 @@ local function VetCurseItem(inst, item)
 	end
 end
 
-env.AddPrefabPostInit("cherry_beequeen", function(inst) VetCurseItem(inst, "um_beegun_cherry") end)
-env.AddPrefabPostInit("beequeen", function(inst) VetCurseItem(inst, "um_beegun") end)
-env.AddPrefabPostInit("bearger", function(inst) VetCurseItem(inst, "beargerclaw") end)
-env.AddPrefabPostInit("deerclops", function(inst) VetCurseItem(inst, "cursed_antler") end)
-env.AddPrefabPostInit("crabking", function(inst) VetCurseItem(inst, "crabclaw") end)
-env.AddPrefabPostInit("minotaur", function(inst) VetCurseItem(inst, "gore_horn_hat") end)
-env.AddPrefabPostInit("dragonfly", function(inst) VetCurseItem(inst, "slobberlobber") end)
+env.AddPrefabPostInit("cherry_beequeen", function(inst) VetCurseItem(inst, "um_cherry_beequeen_soul") end)
+env.AddPrefabPostInit("beequeen", function(inst) VetCurseItem(inst, "um_beequeen_soul") end)
+env.AddPrefabPostInit("bearger", function(inst) VetCurseItem(inst, "um_bearger_soul") end)
+env.AddPrefabPostInit("deerclops", function(inst) VetCurseItem(inst, "um_deerclops_soul") end)
+env.AddPrefabPostInit("crabking", function(inst) VetCurseItem(inst, "um_crabking_soul") end)
+env.AddPrefabPostInit("minotaur", function(inst) VetCurseItem(inst, "um_minotaur_soul") end)
+env.AddPrefabPostInit("dragonfly", function(inst) VetCurseItem(inst, "um_dragonfly_soul") end)
+env.AddPrefabPostInit("malbatross", function(inst) VetCurseItem(inst, "um_malbatross_soul") end)

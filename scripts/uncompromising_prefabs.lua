@@ -108,7 +108,8 @@ local prefabs = {
 	"sunglasses",
 	"cookiespikes",
 	"skeletonmeat",
-	"swilson",
+	"um_shadow_characters",
+	"um_shadow_characters_temp",
 	"veteranscurse",
 	"healthregenbuff_vetcurse",
 	"antlion_sinkhole_boat",
@@ -182,7 +183,6 @@ local prefabs = {
 	"ancient_amulet_red",
 	"buff_ancient_amulet_red",
 	"amulet_health_orb",
-	"nightcrawler",
 	"ancient_trepidation_arm",
 	--"steel_sweater",
 	"rat_whip",
@@ -222,6 +222,7 @@ local prefabs = {
 	"um_bear_trap",
 	"uncompromising_birds",
 	"um_shambler",
+	"um_shadowfire",
 	"mothergoose_tornado",
 	"corncan",
 	"skullchest",
@@ -259,7 +260,23 @@ local prefabs = {
 	"mindweaver",
 	"rneshadows",
 	"fuelseeker",
+	"um_heckler",
 	"rnemushroombomb",
+	"um_voxolophone",
+	"um_haunt",
+	"um_inkubator",
+	"um_scrapper",
+	"um_food_cubes",
+	"um_nightcrawler",
+	"um_shadow_leech",
+	"um_shadowcloaked_smoke",
+	"um_shadowcloaked_shield",
+	"um_shadowcloaked_light",
+	"um_shadow_miasma_cloud_fx",
+	"um_shadow_characters",
+	"um_shadow_abigail",
+	
+	"veteranscurse_souls",
 
 	"wackymask",
 	"tiddlestranger_rne",
@@ -282,7 +299,6 @@ local prefabs = {
 	"terrarium",
 	"reedbuncher",
 	"um_areahandler",
-	"specter_shipwreck",
 	--"resurrectionphonograph",
 	"winona_toolbox",
 	"searock_arches",
@@ -357,6 +373,8 @@ local prefabs = {
 	"wathom_none",
 	"wathom_heartbeat_ringfx",
 
+	"um_shadowarena",
+
 	"um_halloween_ornaments",
 	"trinket_wathom1",
 
@@ -411,6 +429,8 @@ local prefabs = {
 	"hat_crab",
 	"trident_ground_fx",
 	"moon_beacon",
+
+	"moon_beacon",
 	"goat_lightning",
 
 	"mara_boss1",
@@ -443,6 +463,17 @@ local prefabs = {
 	"crabclaw",
 	"um_beegun",
 	
+	"silksack",
+	"um_moonfly_lantern",
+	"um_exhumer",
+	"um_wingsuit",
+	
+	--"um_twin_masks",
+	--"um_moon_flask",
+	--"um_web_staff",
+	--"um_wishbone",
+	--"um_sand_staff",
+	
 	"um_records",
 
     "dl_prefabs",
@@ -450,8 +481,13 @@ local prefabs = {
 
     "sea_shadow",
     "kaleidoscope",
+    "moonglow",
+    "um_boat_engine",
+
     "garbagepatchflotsam",
     "garbagepatch_inventory",
+	
+	"um_astral_projector",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

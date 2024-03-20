@@ -437,6 +437,7 @@ local function fn()
 
 	-------
 
+    inst:AddComponent("tradable")
 	inst:AddComponent("inspectable")
 
 	inst:AddComponent("inventoryitem")
@@ -518,7 +519,7 @@ local function buildgem_cracked(colour, precious, multiplier)
 		inst:DoTaskInTime(0.5, inst.Remove)
 	end
 
-	local function fn()
+	local function gemfn()
 		local inst = CreateEntity()
 
 		inst.entity:AddTransform()
@@ -571,7 +572,7 @@ local function buildgem_cracked(colour, precious, multiplier)
 		return inst
 	end
 
-	return Prefab(colour .. (precious and "preciousgem_cracked" or "gem_cracked"), fn, assets)
+	return Prefab(colour .. (precious and "preciousgem_cracked" or "gem_cracked"), gemfn, assets)
 end
 
 return Prefab("crabclaw", fn, assets, prefabs),

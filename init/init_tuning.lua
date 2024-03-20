@@ -227,7 +227,7 @@ TUNING.DSTU = {
     SHADOWWAXWELL_HEALTH_COST = 15,
     OLD_SHADOWWAXWELL_SANITY_COST = 55,
     OLD_SHADOWWAXWELL_SANITY_PENALTY = .275,
-    OLD_SHADOWWAXWELL = GetModConfigData("waxwell"),
+    WAXWELL = GetModConfigData("waxwell"),
     -- Winona
     WINONA_WORKER = GetModConfigData("winonaworker"),
     WINONA_WACKCATS = GetModConfigData("winonawackycats"),
@@ -267,6 +267,7 @@ TUNING.DSTU = {
     WEATHERHAZARD_START_DATE_SPRING = GetModConfigData("weatherhazard_spring"),
     WEATHERHAZARD_START_DATE_SUMMER = GetModConfigData("weatherhazard_summer"),
     RNE_CHANCE = GetModConfigData("rne chance"),
+    SHADOW_ITEMS = GetModConfigData("shadow_items"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
     MAX_DISTANCE_TO_SHADOWS = 1225, -- 35^2
@@ -306,7 +307,7 @@ TUNING.DSTU = {
     GREEN_VOMIT_NUTRIENTS = { 0, 0, 24 },
     PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
     PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
-    WAXWELL = GetModConfigData("waxwell"),
+
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
     ----------------------------------------------------------------------------
@@ -445,6 +446,14 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock" }
 end
 
+-- Wilson Torch Buff
+--TUNING.SKILLS.WILSON_TORCH_1 = 0.70
+--TUNING.SKILLS.WILSON_TORCH_2 = 0.40
+--TUNING.SKILLS.WILSON_TORCH_3 = 0.10
+--TUNING.SKILLS.WILSON_TORCH_4 = 3
+--TUNING.SKILLS.WILSON_TORCH_5 = 4
+--TUNING.SKILLS.WILSON_TORCH_6 = 5
+
 TUNING.NONLETHAL_TEMPERATURE = false
 TUNING.NONLETHAL_HUNGER = false
 TUNING.NONLETHAL_DARKNESS = false
@@ -527,9 +536,7 @@ TUNING.CANNONBALL_SPLASH_DAMAGE_PERCENT = 1
 
 -- sea weed changes
 TUNING.WATERPLANT.DAMAGE = TUNING.WATERPLANT.DAMAGE * 0.75
-if not TUNING.DSTU.UPDATE_CHECK then
-    TUNING.WATERPLANT.ITEM_DAMAGE = TUNING.WATERPLANT.ITEM_DAMAGE * 1.75
-end
+
 -- shark nerf
 TUNING.SHARK.DAMAGE = 50 / 3
 
@@ -538,9 +545,7 @@ TUNING.MESSAGEBOTTLE_NOTE_CHANCE = 0.66
 
 -- nautopilot buff
 TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE = TUNING.BOAT.BOAT_MAGNET.MAX_DISTANCE * 2
-TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY *
-    10 -- No matter the boatspeed, nautopilots should be able to keep up.
-TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED = TUNING.BOAT.BOAT_MAGNET.CATCH_UP_SPEED * 100
+TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY = TUNING.BOAT.BOAT_MAGNET.MAX_VELOCITY * 10 --No matter the boatspeed, nautopilots should be able to keep up.
 
 -- lowered CK health
 -- TUNING.CRABKING_HEALTH = TUNING.CRABKING_HEALTH * 0.66

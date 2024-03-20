@@ -23,6 +23,11 @@ AddAction("INFEST", "INFEST", function(act)
     return true
 end)
 
+AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
+    act.target.WrapStuff(act.target)
+    return true
+end)
+
 AddAction("UNCOMPROMISING_PAWN_HIDE", "UNCOMPROMISING_PAWN_HIDE", function(act)
     -- Dummy action for pawn.
 end)
@@ -53,14 +58,20 @@ AddAction("CASTLIGHTER", "CASTLIGHTER", function(act)
     end
 end)
 
-AddAction("WINGSUIT", "WINGSUIT", function(act)
+local wingsuit = AddAction("WINGSUIT", "WINGSUIT", function(act)
     local staff = act.invobject or act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.BODY)
     local act_pos = act:GetActionPoint()
-    if staff and staff.components.spellcaster and staff.components.spellcaster:CanCast(act.doer, act.target, act_pos) then
-        staff.components.spellcaster:CastSpell(act.target, act_pos)
+    if staff and staff:HasTag("um_wingsuit") then
+        act.doer:ForceFacePoint(act_pos.x, 0, act_pos.z)
+
         return true
     end
 end)
+
+wingsuit.priority = HIGH_ACTION_PRIORITY
+wingsuit.rmb = true
+wingsuit.distance = 20
+wingsuit.mount_valid = false
 
 local createburrow = AddAction("CREATE_BURROW", GLOBAL.STRINGS.ACTIONS.CREATE_BURROW, function(act)
     local act_pos = act:GetActionPoint()
@@ -91,6 +102,25 @@ createburrow.rmb = true
 createburrow.distance = 2
 createburrow.mount_valid = false
 
+local um_activatable_item = AddAction("UM_ACTIVATABLE_ITEM", GLOBAL.STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM, function(act)
+    local item = act.invobject
+    if item ~= nil and item.components.um_activatable_item ~= nil then
+        item.components.um_activatable_item:Activate(act.doer)
+        return true
+    end
+end)
+
+um_activatable_item.priority = 1
+um_activatable_item.mount_valid = true
+um_activatable_item.rmb = true
+
+
+AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
+    if inst ~= doer then
+        table.insert(actions, GLOBAL.ACTIONS.UM_ACTIVATABLE_ITEM)
+    end
+end)
+
 local charge_powercell = AddAction("CHARGE_POWERCELL", GLOBAL.STRINGS.ACTIONS.CHARGE_POWERCELL, function(act)
     local target = act.target or act.invobject
 
@@ -105,6 +135,18 @@ end)
 charge_powercell.instant = true
 charge_powercell.rmb = true
 charge_powercell.priority = HIGH_ACTION_PRIORITY
+
+
+local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
+
+GLOBAL.ACTIONS.CHOP.fn = function(act)
+    if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
+        local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+        axe.WorkEffect(axe, act.doer, act.target)
+    end
+
+    return _ChopFn(act)
+end
 
 if TUNING.DSTU.WICKERNERF then
     local _ReadFn = GLOBAL.ACTIONS.READ.fn

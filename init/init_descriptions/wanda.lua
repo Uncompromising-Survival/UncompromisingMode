@@ -573,3 +573,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "It's gained wisdom through age. And mass."
 DESCRIBE.UM_TORNADO = "A wibbly wobbly... windy... thing!"
 DESCRIBE.UM_WATERFALL = "Time washes away everything."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes yet, at least in this timeline..."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

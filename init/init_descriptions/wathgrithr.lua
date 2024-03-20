@@ -546,3 +546,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "You wish to challenge me, hel-beast?"
 DESCRIBE.UM_TORNADO = "Fight me, wind!"
 DESCRIBE.UM_WATERFALL = "You shall not drown me!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "We are free from Aeolus' winds."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

@@ -130,6 +130,14 @@ env.AddStategraphPostInit("moose", function(inst)
 					function(inst)
 						inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/moose/flap")
 					end)
+				
+				local target = inst.components.combat.target
+				local distsq = target ~= nil and target:IsValid() and inst:GetDistanceSqToInst(target) / 10 or 15
+				if distsq ~= nil and distsq > 7.5 then
+					distsq = 7.5
+				end
+				
+				inst.hop_speed = distsq + 7.5
 				--inst.sg:SetTimeout(.5)
 			end,
 
@@ -145,7 +153,7 @@ env.AddStategraphPostInit("moose", function(inst)
 			end,
 
 			onupdate = function(inst)
-				ArtificialLocomote(inst, inst.hopPoint, 15)
+				ArtificialLocomote(inst, inst.hopPoint, inst.hop_speed or 15)
 			end,
 
 			events =
@@ -296,11 +304,19 @@ env.AddStategraphPostInit("mothermoose", function(inst)
 					function(inst)
 						inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/moose/flap")
 					end)
+				
+				local target = inst.components.combat.target
+				local distsq = target ~= nil and target:IsValid() and inst:GetDistanceSqToInst(target) / 10 or 15
+				if distsq ~= nil and distsq > 7.5 then
+					distsq = 7.5
+				end
+				
+				inst.hop_speed = distsq + 7.5
 				--inst.sg:SetTimeout(.5)
 			end,
 
 			onupdate = function(inst)
-				ArtificialLocomote(inst, inst.hopPoint, 15)
+				ArtificialLocomote(inst, inst.hopPoint, inst.hop_speed or 15)
 			end,
 
 			onexit = function(inst)

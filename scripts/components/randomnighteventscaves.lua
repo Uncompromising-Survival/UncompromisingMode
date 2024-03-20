@@ -30,14 +30,14 @@ local function PlayerScaling(player)
 
 	if #ents >= 0 and #ents < 3 then
 		return 1
-	elseif #ents >= 2 and #ents < 5 then
+	elseif #ents >= 3 and #ents < 5 then
 		return 2
-	elseif #ents >= 5 and #ents < 7 then
+	elseif #ents >= 5 and #ents <= 6 then
 		return 3
 	elseif #ents > 6 then
 		return 4
 	end
-	
+
 	return 1
 end
 	

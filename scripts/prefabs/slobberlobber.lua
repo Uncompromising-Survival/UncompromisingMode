@@ -203,6 +203,7 @@ local function staff_fn()
 
     -------
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")

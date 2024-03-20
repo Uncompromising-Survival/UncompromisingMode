@@ -154,4 +154,4 @@ local shadow = inst.entity:AddDynamicShadow()
     return inst
 end
 
-return Prefab( "swilson", fn, assets, prefabs)
+return Prefab("deprecated_swilson", fn, assets, prefabs)

@@ -25,6 +25,38 @@ local function GetVerb()
     return "TOUCH"
 end
 
+local function SpawnLootPrefab(inst, lootprefab, shrine)
+    if lootprefab == nil then
+        return
+    end
+
+    local loot = SpawnPrefab(lootprefab)
+    if loot == nil then
+        return
+    end
+
+    local x, y, z = shrine.Transform:GetWorldPosition()
+
+    if loot.Physics ~= nil then
+        local angle = math.random() * 2 * PI
+        loot.Physics:SetVel(2 * math.cos(angle), 10, 2 * math.sin(angle))
+
+        if shrine.Physics ~= nil then
+            local len = loot:GetPhysicsRadius(0) + shrine:GetPhysicsRadius(0)
+            x = x + math.cos(angle) * len
+            z = z + math.sin(angle) * len
+        end
+
+		--loot:DoTaskInTime(1, CheckSpawnedLoot)
+    end
+
+    loot.Transform:SetPosition(x, y, z)
+
+	loot:PushEvent("on_loot_dropped", {dropper = inst})
+
+    return loot
+end
+
 local function ToggleCurse(inst, doer)
 	if doer.components.debuffable ~= nil then
 		if not doer.vetcurse then
@@ -42,6 +74,10 @@ local function ToggleCurse(inst, doer)
 			if fx ~= nil then
 				fx.Transform:SetPosition(x, y, z)
 				fx.Transform:SetScale(1.2,1.2,1.2)
+			end
+			
+			for i = 1, 2 do
+				SpawnLootPrefab(doer, "um_dark_vestiges", inst)
 			end
 		end
 	end
@@ -77,9 +113,9 @@ end
 local function onnear(inst, target)
 	if target ~= nil then
 		if target:HasTag("vetcurse") then
-			inst.components.talker:Say(GetString(target, "VETERANCURSED"))
+			inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.VETERANCURSED)
 		else
-			inst.components.talker:Say(GetString(target, "VETERANCURSETAUNT"))
+			inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.VETERANCURSETAUNT)
 		end
 	end
 	
@@ -147,6 +183,41 @@ local function RegisterNetListeners(inst)
 	inst:ListenForEvent("SetCurseedirty", ToggleCursee)
 end
 
+local function OnGetItemFromPlayer(inst, giver, item)
+    if item.skulldef ~= nil and item.skulldef.attachfn and item.skulldef.vestiges then
+		item.skulldef.attachfn(item, giver)
+		
+		for i = 1, item.skulldef.vestiges do
+			SpawnLootPrefab(item, "um_dark_vestiges", inst)
+		end
+	elseif item:HasTag("vetcurse_item") then
+		local recipe = AllRecipes[item.prefab]
+
+		for i, v in ipairs(recipe.ingredients) do
+			if string.sub(v.type, -5) == "_soul" or string.sub(v.type, -9) == "_vestiges" then
+				local amt = v.amount == 0 and 0 or v.amount
+				for n = 1, amt do
+					SpawnLootPrefab(item, v.type, inst)
+				end
+			end
+		end
+
+		inst.SoundEmitter:PlaySound("dontstarve/common/staff_dissassemble")
+	end
+end
+
+local function OnRefuseItem(inst, giver, item)
+	if not giver:HasTag("vetcurse") then
+		inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.NOT_VETERANCURSED)
+	elseif not item:HasTag("vetskull") or not item:HasTag("vetcurse_item") then
+		inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.NOT_VETERANSKULL)
+	end
+end
+
+local function AcceptTest(inst, item, giver)
+    return giver:HasTag("vetcurse") and item:HasTag("vetskull") or item:HasTag("vetcurse_item")
+end
+
 local function fn(Sim)
     local inst = CreateEntity()
 	
@@ -163,13 +234,19 @@ local function fn(Sim)
     inst.AnimState:PlayAnimation("idle", true)
 	
     --inst.GetActivateVerb = GetVerb
+    inst:AddTag("trader")
 	
 	inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
 	inst:DoTaskInTime(0, RegisterNetListeners)
 	
     MakeObstaclePhysics(inst, 1.8)
-	
+	inst.scrapbook_thingtype = "POI"
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("pointofinterest")
+        inst.components.pointofinterest:SetHeight(0)
+    end
+
 	inst.entity:SetPristine()
 	
 	inst:AddComponent("talker")        
@@ -192,11 +269,22 @@ local function fn(Sim)
     inst.components.activatable.inactive = true
 	inst.components.activatable.quickaction = false
 	--inst.components.activatable.standingaction = true
+
+    inst:AddComponent("trader")
+
+    inst.components.trader:SetAcceptTest(AcceptTest)
+    inst.components.trader.onaccept = OnGetItemFromPlayer
+    inst.components.trader.onrefuse = OnRefuseItem
 	
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()
 	
-	
+	inst:AddComponent("prototyper")
+	--inst.components.prototyper.onturnon = onturnon
+	--inst.components.prototyper.onturnoff = onturnoff
+	inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.VETERANSHRINE_ONE
+	--inst.components.prototyper.onactivate = onactivate
+
     inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(6, 10)
     inst.components.playerprox:SetOnPlayerNear(onnear)
@@ -214,5 +302,3 @@ local function fn(Sim)
 end
 
 return Prefab("veteranshrine", fn, assets, prefabs)
-
-

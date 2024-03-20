@@ -551,3 +551,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Hmm. No relation."
 DESCRIBE.UM_TORNADO = "Hyuyu, this looks like fun!"
 DESCRIBE.UM_WATERFALL = "Swimming gives me the wet imp smell." -- rewrite this later. -- never mind, good enough for now.
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "The fun's over!" 
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

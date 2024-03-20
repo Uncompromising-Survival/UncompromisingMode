@@ -14,7 +14,7 @@ local function CheckForKrampSack(inst)
 		--inst.components.lootdropper:AddChanceLoot("krampus_sack", 1)
 	--end
 	if TUNING.DSTU.VETCURSE ~= "off" then
-		inst.components.vetcurselootdropper.loot = "klaus_amulet"
+		inst.components.vetcurselootdropper.loot = "um_klaus_soul"
 	end
 end
 

@@ -13,6 +13,10 @@ local BrainCommon = require "brains/braincommon"
 local MAX_CHASE_TIME = 99
 local MAX_WANDER_DIST = 32
 
+local MIN_FOLLOW_DIST = 2
+local TARGET_FOLLOW_DIST = 5
+local MAX_FOLLOW_DIST = 9
+
 
 local SwilsonBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
@@ -24,31 +28,31 @@ local function InvestigateAction(inst)
     return investigatePos ~= nil and BufferedAction(inst, nil, ACTIONS.INVESTIGATE, nil, investigatePos, nil, 1) or nil
 end
 
-local function Conditions(guy)
-return guy:HasTag("funkylight") 
-end
 local FINDFOOD_CANT_TAGS = { "outofreach" } --Temp
 local function TargetIsNotCloseToSpecialLight(inst)
-if inst.components.combat ~= nil and inst.components.combat.target ~= nil then
-local target = inst.components.combat.target
-return not FindEntity(target,
-        5,
-        function(item)
-        return item:HasTag("funkylight")
-        end,
-        nil,
-        FINDFOOD_CANT_TAGS
-    )
+	if inst.components.combat ~= nil and inst.components.combat.target ~= nil then
+		local target = inst.components.combat.target
+		return not FindEntity(target,
+				5,
+				function(item)
+				return item:HasTag("funkylight")
+				end,
+				nil,
+				FINDFOOD_CANT_TAGS
+			)
+	end
 end
-end
+
+
 function SwilsonBrain:OnStart()
     local root =
         PriorityNode(
         {
-			RunAway(self.inst, Conditions, 4, 8),
 			WhileNode(function() return TargetIsNotCloseToSpecialLight(self.inst) end, "",
                 ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME))),
-            DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
+					
+ 
+			DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
             Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
         }, 1)
     self.bt = BT(self.inst, root)

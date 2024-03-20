@@ -449,6 +449,10 @@ local states =
 			tornado1.components.linearcircler:Start()
 			tornado1.components.linearcircler.randAng = 0
 			tornado1.components.linearcircler.clockwise = inst.tornadotype
+			
+			if inst.tornadotype then
+				tornado1.AnimState:SetMultColour(1, 1, .3, 1)
+			end
 			--tornado1.Physics:Teleport(0,0,0)
 			--inst:AddChild(tornado1)
            -- tornado1.Physics:Stop()
@@ -462,6 +466,10 @@ local states =
 			tornado2.components.linearcircler:Start()
 			tornado2.components.linearcircler.randAng = 0.25
 			tornado2.components.linearcircler.clockwise = inst.tornadotype
+			
+			if inst.tornadotype then
+				tornado2.AnimState:SetMultColour(1, 1, .3, 1)
+			end
 			--tornado2.Physics:Teleport(0,0,0)
 			--inst:AddChild(tornado2)
            -- tornado2.Physics:Stop()
@@ -475,6 +483,10 @@ local states =
 			tornado3.components.linearcircler:Start()
 			tornado3.components.linearcircler.randAng = 0.5
 			tornado3.components.linearcircler.clockwise = inst.tornadotype
+			
+			if inst.tornadotype then
+				tornado3.AnimState:SetMultColour(1, 1, .3, 1)
+			end
 			--tornado3.Physics:Teleport(0,0,0)
 			--inst:AddChild(tornado3)
            -- tornado3.Physics:Stop()
@@ -488,6 +500,10 @@ local states =
 			tornado4.components.linearcircler:Start()
 			tornado4.components.linearcircler.randAng = 0.75
 			tornado4.components.linearcircler.clockwise = inst.tornadotype
+			
+			if inst.tornadotype then
+				tornado4.AnimState:SetMultColour(1, 1, .3, 1)
+			end
 			--tornado4.Physics:Teleport(0,0,0)
 			--inst:AddChild(tornado4)
             --tornado4.Physics:Stop()

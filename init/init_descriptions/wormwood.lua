@@ -527,4 +527,10 @@ DESCRIBE.UM_BLOWDART_PYRE = "Sorry..."
 DESCRIBE.ALPHA_LIGHTNINGGOAT = "Why angry?"
 DESCRIBE.UM_TORNADO = "Scary whooshy"
 DESCRIBE.UM_WATERFALL = "Falling splashy"
-ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No scary whooshies."
+ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No scary whooshies"
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "Floater Woosher",
+    LOWFUEL = "Hungry",
+    OVERHEATING = "Too much!"
+}

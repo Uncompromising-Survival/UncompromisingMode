@@ -4,12 +4,12 @@ local assets =
 	Asset("ANIM", "anim/torso_amulets.zip"),
 }
 
-local function DoubleSlap(owner)
+local function DoubleSlap(owner, data)
 	local target = owner.components.combat ~= nil and owner.components.combat.target
 	local equip = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	--owner.components.combat:SetTarget(target)
 
-	if not owner.components.rider:IsRiding() and equip ~= nil and equip.components.weapon ~= nil and
+	if data ~= nil and not data.mockattack and not owner.components.rider:IsRiding() and equip ~= nil and equip.components.weapon ~= nil and
 		not (equip.components.projectile ~= nil or equip:HasTag("rangedweapon")) and target ~= nil then
 		local damage = equip.components.weapon ~= nil and equip.components.weapon:GetDamage(owner, target)
 		local damagemult = owner.components.combat.damagemultiplier ~= nil and owner.components.combat.damagemultiplier or 1
@@ -18,6 +18,7 @@ local function DoubleSlap(owner)
 		local range = owner.components.combat:GetAttackRange() or 0
 		--owner.components.combat:StartAttack()
 		owner.components.locomotor:StopMoving()
+		print("this is the part where you go into the double slap")
 		owner.sg:GoToState("force_klaus_attack")
 
 		local damagecalc = ((damage / 2) * damagemult) * damagemultex
@@ -102,6 +103,7 @@ local function fn()
 		return inst
 	end
 
+    inst:AddComponent("tradable")
 	inst:AddComponent("inspectable")
 
 	inst:AddComponent("equippable")

@@ -3,13 +3,25 @@ local require = GLOBAL.require
 require "um_pocketdimensioncontainers"
 
 PrefabFiles = require("uncompromising_prefabs")
-PreloadAssets = {Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml")}
+PreloadAssets = { Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml") }
 ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
--- PUTTING THIS HERE SO IT LOADS BEFORE ALL POSTINITS, INITS, ETC
+local vanilla = require "screens/redux/scrapbookdata"
+local uncomp = require "screens/redux/scrapbookdata_changes"
+
 AddPrefabPostInit("world", function(inst)
+    inst:DoTaskInTime(0, function()
+        for k, v in pairs(vanilla) do
+            if uncomp[k] ~= nil and uncomp[k] ~= vanilla[k] then
+                vanilla[k] = uncomp[k]
+            end
+        end
+    end)
+
+    --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
+    --NOTE: This is quite a bit of memory.
     if not inst.ismastersim then
         return
     end
@@ -291,11 +303,11 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
     if toggle then
         GLOBAL.TheWorld:AddTag("heatwavestart")
         GLOBAL.TheWorld.net:AddTag("heatwavestartnet")
-		GLOBAL.TheWorld:PushEvent("heatwavestart")
+        GLOBAL.TheWorld:PushEvent("heatwavestart")
     else
         GLOBAL.TheWorld:RemoveTag("heatwavestart")
         GLOBAL.TheWorld.net:RemoveTag("heatwavestartnet")
-		GLOBAL.TheWorld:PushEvent("heatwaveend")
+        GLOBAL.TheWorld:PushEvent("heatwaveend")
     end
 end)
 

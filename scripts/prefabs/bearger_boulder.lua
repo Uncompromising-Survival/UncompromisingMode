@@ -160,7 +160,7 @@ local NON_COLLAPSIBLE_TAGS_PLAYER = { "player", "bird", "rabbit", "playerghost",
                                                 --don't use biiiiiirrrddd the stupid moonstorm birds have that, I'll figure this out later.
 local function OnHitInk_claw(inst, attacker, target)
 	local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 3, nil, NON_COLLAPSIBLE_TAGS_PLAYER, COLLAPSIBLE_TAGS_PLAYER)
+    local ents = TheSim:FindEntities(x, 0, z, inst.biggy and 6 or 3, nil, NON_COLLAPSIBLE_TAGS_PLAYER, COLLAPSIBLE_TAGS_PLAYER)
     for i, v in ipairs(ents) do
         if v:IsValid() then
             if v.components.combat ~= nil
@@ -168,7 +168,7 @@ local function OnHitInk_claw(inst, attacker, target)
                 and not v:HasTag("player")
                 and not v.components.health:IsDead() then
                 if v.components.combat:CanBeAttacked() then
-                    v.components.combat:GetAttacked(inst.clawer, 20, inst)
+                    v.components.combat:GetAttacked(inst.clawer, inst.biggy and 60 or 20, inst)
                 end
             end
         end
@@ -191,7 +191,7 @@ local function OnHitInk_claw(inst, attacker, target)
 	SpawnPrefab(inst.fx).Transform:SetPosition(x, 0, z)
 	local ring = SpawnPrefab("groundpoundring_fx")
 	ring.Transform:SetPosition(x, 0, z)
-	ring.Transform:SetScale(0.4, 0.4, 0.4)
+	ring.Transform:SetScale(inst.biggy and 0.65 or 0.4, inst.biggy and 0.65 or 0.4, inst.biggy and 0.65 or 0.4)
 	
     inst:Remove()
 end
@@ -210,8 +210,6 @@ local function onthrown_claw(inst)
     inst.AnimState:SetBank("bearger_boulder")
     inst.AnimState:SetBuild("bearger_boulder")
     inst.AnimState:PlayAnimation("spin_loop"..math.random(4), true)
-
-	--inst.Transform:SetScale(0.9, 0.9, 0.9)
 	
     inst.Physics:SetMass(1)
     inst.Physics:SetFriction(10)
@@ -221,7 +219,11 @@ local function onthrown_claw(inst)
 	--inst.Physics:CollidesWith(COLLISION.WORLD)
     inst.Physics:CollidesWith(COLLISION.GIANTS)
     inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:SetCapsule(0.15, 0.15)
+    inst.Physics:SetCapsule(inst.biggy and 0.2 or 0.15, inst.biggy and 0.2 or 0.15)
+	
+	if inst.biggy then
+		inst.Transform:SetScale(1.5, 1.5, 1.5)
+	end
 	
     inst.Physics:SetCollisionCallback(oncollide_claw)
 end
@@ -249,6 +251,7 @@ local function clawprojectilefn()
     end
 
 	inst.clawer = nil
+	inst.biggy = false
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)

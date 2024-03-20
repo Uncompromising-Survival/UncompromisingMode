@@ -8,7 +8,7 @@ local function ForceToTakeMoreDamage(inst)
 	self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
 		if attacker and damage then
 			-- Take extra damage
-			damage = damage * 1.2
+			damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
 	end
@@ -18,9 +18,9 @@ local function ForceToTakeMoreHunger(inst)
 	local self = inst.components.hunger
 	local _DoDelta = self.DoDelta
 	self.DoDelta = function(self, delta, overtime, ignore_invincible)
-	if delta and overtime and delta < 0 then
-		-- Take extra hunger
-		delta = delta * 1.2
+		if delta and overtime and delta < 0 then
+			-- Take extra hunger
+			delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _DoDelta(self, delta, overtime, ignore_invincible)
 	end
@@ -30,9 +30,9 @@ local function ForceToTakeMoreTime(inst)
 	local self = inst.components.oldager
 	local _OnTakeDamage = self.OnTakeDamage
 	self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-	if amount and overtime and amount < 0 then
-		-- Take extra time
-		amount = amount * 1.2
+		if amount and overtime and amount < 0 then
+			-- Take extra time
+			amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
 	end
@@ -46,7 +46,7 @@ local function ForceToTakeUsualDamage(inst)
 	self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
 	if attacker and damage then
 			-- Take normal damage
-			damage = damage / 1.2
+			damage = damage / (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
 	end
@@ -58,7 +58,7 @@ local function ForceToTakeUsualHunger(inst)
 	self.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
 	if delta and overtime and delta < 0 then
 		-- Take normal hunger
-		delta = delta / 1.2
+		delta = delta / (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _DoDelta(self, delta, overtime, ignore_invincible, ...)
 	end
@@ -70,7 +70,7 @@ local function ForceToTakeUsualTime(inst)
 	self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
 	if amount and overtime and amount < 0 then
 		-- Take extra time
-		amount = amount / 1.2
+		amount = amount / (1 + ((inst.um_deathcount + 1) / 10))
 		end
 		return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
 	end
@@ -91,7 +91,7 @@ local function oneat(inst, data)
 		inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
 	end
 		
-	inst.components.eater:SetAbsorptionModifiers(0, inst.modded_hungerabsorption or 1, 0)
+	inst.components.eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
 		
 	local stack_mult = inst.components.eater.eatwholestack and data.food.components.stackable ~= nil and data.food.components.stackable:StackSize() or 1
         
@@ -100,12 +100,17 @@ local function oneat(inst, data)
 	local warlybuff = inst:HasTag("warlybuffed") and 1.2 or 1
 
 	local health_delta = 0
-	local sanity_delta = 0
 	local hunger_delta = 0
+	local sanity_delta = 0
 		
 	if inst.components.health ~= nil and
 		(data.food.components.edible.healthvalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
 		health_delta = data.food.components.edible:GetHealth(inst) * base_mult * inst.modded_healthabsorption * warlybuff
+	end
+		
+	if inst.components.hunger ~= nil and
+		(data.food.components.edible.hungervalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
+		hunger_delta = data.food.components.edible:GetHunger(inst) * base_mult * inst.modded_hungerabsorption * warlybuff
 	end
 		
 	if inst.components.sanity ~= nil and
@@ -117,13 +122,21 @@ local function oneat(inst, data)
 		health_delta, hunger_delta, sanity_delta = inst.components.eater.custom_stats_mod_fn(inst, health_delta, hunger_delta, sanity_delta, data.food, data.feeder)
 	end
 
-	local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
-	sanity_delta = sanity_delta + foodaffinitysanitybuff
+	--[[local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
+	sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 		
 	if health_delta > 3 then
 		inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
 	else
 		inst.components.health:DoDelta(health_delta)
+	end
+	
+	if inst.wolfgang_vetcurse then
+		if hunger_delta > 1 then
+			inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_"..data.food.prefab, "hungerregenbuff_vetcurse", {duration = (hunger_delta * 0.1)})
+		else
+			inst.components.hunger:DoDelta(hunger_delta)
+		end
 	end
 		
 	if sanity_delta > 3 then
@@ -146,7 +159,7 @@ local function ForceOvertimeFoodEffects(inst)
 		inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
 	end
 
-	inst.components.eater:SetAbsorptionModifiers(0, inst.modded_hungerabsorption or 1, 0)
+	inst.components.eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
 		
 	inst:ListenForEvent("oneat", oneat)
 end
@@ -157,7 +170,19 @@ local function ForceUsualFoodEffects(inst)
 	inst:RemoveEventCallback("oneat", oneat)
 end
 
+local function ForceWilsonCurse_On(inst, target)
+	target:AddTag("wilson_vetcurse")
+
+	target.wilson_vetcurse = true
+end
+
+local function ForceWilsonCurse_Off(inst, target)
+	target:RemoveTag("wilson_vetcurse")
+	target.wilson_vetcurse = nil
+end
+
 local function ForceWalterCurse_On(inst, target)
+	target:AddTag("walter_vetcurse")
 	target.walter_vetcurse = true
 
 	target.walter_curse = target:ListenForEvent("attacked", function(target, data)
@@ -170,6 +195,7 @@ local function ForceWalterCurse_On(inst, target)
 end
 
 local function ForceWalterCurse_Off(inst, target)
+	target:RemoveTag("walter_vetcurse")
 	
 	if target.walter_curse ~= nil then
 		target.walter_curse:Cancel()
@@ -180,23 +206,23 @@ local function ForceWalterCurse_Off(inst, target)
 end
 
 local function ForceWortoxCurse_On(inst, target)
+	target:AddTag("wortox_vetcurse")
 	target.wortox_vetcurse = true
 
 	target.wortox_curse = target:ListenForEvent("killed", function(target, data)
 		if data ~= nil and data.victim ~= nil and data.victim:IsValid() then
-			local explosive = SpawnPrefab("gunpowder")
+			local explosive = SpawnPrefab("explosive_vetscurse_soul")
 			explosive.Transform:SetPosition(data.victim.Transform:GetWorldPosition())
-			explosive.components.burnable:Ignite()
 			
 			if data.victim.components.health ~= nil then
-				explosive.components.explosive.explosivedamage = data.victim.components.health.maxhealth / 10
+				explosive.damage = data.victim.components.health.maxhealth / 10
 			end
 		end
 	end)
 end
 
 local function ForceWortoxCurse_Off(inst, target)
-	target:RemoveTag("wortox_vetskull")
+	target:RemoveTag("wortox_vetcurse")
 	
 	if target.wortox_curse ~= nil then
 		target.wortox_curse:Cancel()
@@ -227,8 +253,8 @@ local function ForceMaxwellCurse_Off(inst, target)
 end
 
 local function ForceWillowCurse_On(inst, target)
-	target.willow_vetcurse = true
 	target:AddTag("willow_vetcurse")
+	target.willow_vetcurse = true
 	
 	target.willow_curse_check = target:ListenForEvent("sanitydelta", function(target)
 		if target.components.sanity ~= nil and target.components.sanity:GetPercent() < 0.4 then
@@ -257,6 +283,7 @@ local function ForceWillowCurse_On(inst, target)
 end
 
 local function ForceWillowCurse_Off(inst, target)
+	target:RemoveTag("willow_vetcurse")
 	target.willow_vetcurse = nil
 	
 	if target.willow_curse_check ~= nil then
@@ -271,6 +298,7 @@ local function ForceWillowCurse_Off(inst, target)
 end
 
 local function ForceWarlyCurse_On(inst, target)
+	target:AddTag("warly_vetcurse")
 	target.warly_vetcurse = true
 	
 	target.warly_curse = target:ListenForEvent("onpreeat", function(target, data)
@@ -296,6 +324,7 @@ local function ForceWarlyCurse_On(inst, target)
 end
 
 local function ForceWarlyCurse_Off(inst, target)
+	target:RemoveTag("warly_vetcurse")
 	target.warly_vetcurse = nil
 	
 	if target.warly_curse ~= nil then
@@ -306,6 +335,7 @@ local function ForceWarlyCurse_Off(inst, target)
 end
 
 local function ForceWinkyCurse_On(inst, target)
+	target:AddTag("winky_vetcurse")
 	target.winky_vetcurse = true
 	
 	target.winky_curse = target:ListenForEvent("dropitem", function(target)
@@ -314,6 +344,7 @@ local function ForceWinkyCurse_On(inst, target)
 end
 
 local function ForceWinkyCurse_Off(inst, target)
+	target:RemoveTag("winky_vetcurse")
 	target.winky_vetcurse = nil
 	
 	if target.winky_curse ~= nil then
@@ -328,44 +359,51 @@ local function ResetSleepyCD(target)
 end
 
 local function ForceWickerbottomCurse_On(inst, target)
+	target:AddTag("wickerbottom_vetcurse")
 	target.wickerbottom_vetcurse = true
 	
 	target.wickerbottom_curse = target:DoPeriodicTask(1, function(target)
 		if target.vetcurse_sleepiness == nil then
 			target.vetcurse_sleepiness = 0
 		end
-		
-		if target.sg:HasStateTag("sleeping") or
-			target.sg:HasStateTag("bedroll") or
-			target.sg:HasStateTag("tent") or
-			target.sg:HasStateTag("waking") or
-			target.sg:HasStateTag("knockout") then 
-			if target.vetcurse_sleepiness > 0 then
-				target.vetcurse_sleepiness = target.vetcurse_sleepiness - (1 / target.components.grogginess:GetResistance())
-			elseif target.vetcurse_sleepiness < 0 then
-				target.vetcurse_sleepiness = 0
-			end
-		elseif target.vetcurse_sleepiness < 600 then
-			target.vetcurse_sleepiness = target.vetcurse_sleepiness + (1 * target.components.grogginess:GetResistance())
-		end
-		
-		if target.vetcurse_sleepycd == nil then
-			if target.vetcurse_sleepiness > 480 then
-				target:PushEvent("yawn", { grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50 })
-			elseif target.vetcurse_sleepiness <= 480 and target.vetcurse_sleepiness > 360 then
-				target:PushEvent("yawn", { grogginess = 2, knockoutduration = 0 })
-			elseif target.vetcurse_sleepiness <= 360 and target.vetcurse_sleepiness > 280 then
-				target:PushEvent("yawn", { grogginess = 0, knockoutduration = 0 })
+		if target.components.grogginess ~= nil then
+			if target.sg:HasStateTag("sleeping") or
+				target.sg:HasStateTag("bedroll") or
+				target.sg:HasStateTag("tent") or
+				target.sg:HasStateTag("waking") or
+				target.sg:HasStateTag("knockout") then 
+				if target.vetcurse_sleepiness > 0 then
+					target.vetcurse_sleepiness = target.vetcurse_sleepiness - ((1 / target.components.grogginess:GetResistance()) * 30)
+				elseif target.vetcurse_sleepiness < 0 then
+					target.vetcurse_sleepiness = 0
+				end
+			else
+				if target.vetcurse_sleepiness < 600 then
+					target.vetcurse_sleepiness = target.vetcurse_sleepiness + (1 * target.components.grogginess:GetResistance())
+				end
+				
+				if target.vetcurse_sleepycd == nil then
+					if target.vetcurse_sleepiness > 480 then
+						target:PushEvent("yawn", { grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50 })
+					elseif target.vetcurse_sleepiness <= 480 and target.vetcurse_sleepiness > 360 then
+						target:PushEvent("yawn", { grogginess = 2, knockoutduration = 0 })
+					elseif target.vetcurse_sleepiness <= 360 and target.vetcurse_sleepiness > 280 then
+						target:PushEvent("yawn", { grogginess = 0, knockoutduration = 0 })
+					end
+					
+					if target.vetcurse_sleepiness > 280 then
+						target.vetcurse_sleepycd = target:DoTaskInTime(240 / (target.vetcurse_sleepiness / 100), ResetSleepyCD)
+					end
+				end
 			end
 			
-			if target.vetcurse_sleepiness > 280 then
-				target.vetcurse_sleepycd = target:DoTaskInTime(240 / (target.vetcurse_sleepiness / 100), ResetSleepyCD)
-			end
+			print(target.vetcurse_sleepiness)
 		end
 	end)
 end
 
 local function ForceWickerbottomCurse_Off(inst, target)
+	target:RemoveTag("wickerbottom_vetcurse")
 	target.wickerbottom_vetcurse = nil
 	
 	if target.wickerbottom_curse ~= nil then
@@ -413,6 +451,7 @@ local function MakeAKrampusForPlayer(player)
 end
 
 local function ForceWixieCurse_On(inst, target)
+	target:AddTag("wixie_vetcurse")
 	target.wixie_vetcurse = true
 	
 	target.wixie_curse = target:ListenForEvent("killed", function(target, data)
@@ -434,6 +473,7 @@ local function ForceWixieCurse_On(inst, target)
 end
 
 local function ForceWixieCurse_Off(inst, target)
+	target:RemoveTag("wixie_vetcurse")
 	target.wixie_vetcurse = nil
 	
 	if target.wixie_curse ~= nil then
@@ -481,6 +521,7 @@ local function SpawnBirds(target, angle, prefab)
 end
 
 local function ForceWoodieCurse_On(inst, target)
+	target:AddTag("woodie_vetcurse")
 	target.woodie_vetcurse = true
 	
 	target.woodie_curse = target:DoPeriodicTask(15, function(target)
@@ -505,6 +546,7 @@ local function ForceWoodieCurse_On(inst, target)
 end
 
 local function ForceWoodieCurse_Off(inst, target)
+	target:RemoveTag("woodie_vetcurse")
 	target.woodie_vetcurse = nil
 	
 	if target.woodie_curse ~= nil then
@@ -514,61 +556,278 @@ local function ForceWoodieCurse_Off(inst, target)
 	target.woodie_curse = nil
 end
 
+local function ForceWolfgangCurse_On(inst, target)
+	target:AddTag("wolfgang_vetcurse")
+
+	target.wolfgang_vetcurse = true
+	
+	target.components.eater:SetAbsorptionModifiers(0, target.wolfgang_vetcurse and 0 or target.modded_hungerabsorption or 1, 0)
+	
+	target.wolfgang_curse = target:ListenForEvent("hungerdelta", function(target, data)
+		if target:HasTag("vetcurse") and target.components.hunger ~= nil then
+			local hunger_percent = target.components.hunger:GetPercent()
+			local key = "Wolfgang_Curse_DebuffKey"
+		
+			if hunger_percent > 0.5 then
+				if target.components.combat ~= nil then
+					target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
+				end
+				
+				if target.components.locomotor then
+					target.components.locomotor:RemoveExternalSpeedMultiplier(target, key)
+				end
+			else
+				if target.components.combat ~= nil then
+					target.components.combat.externaldamagemultipliers:SetModifier(target, (.5 - hunger_percent))
+				end
+				
+				if hunger_percent < 0.3 then
+					if target.components.locomotor then
+						target.components.locomotor:SetExternalSpeedMultiplier(target, key, 1 - (.3 - hunger_percent))
+					end
+				end
+			end
+		end
+	end)
+end
+
+local function ForceWolfgangCurse_Off(inst, target)
+	target:RemoveTag("wolfgang_vetcurse")
+	target.wolfgang_vetcurse = nil
+	
+	target.components.eater:SetAbsorptionModifiers(0, target.wolfgang_vetcurse and 0 or target.modded_hungerabsorption or 1, 0)
+	
+	local key = "Wolfgang_Curse_DebuffKey"
+				
+	if target.components.combat ~= nil then
+		target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
+	end
+				
+	if target.components.locomotor then
+		target.components.locomotor:RemoveExternalSpeedMultiplier(target, key)
+	end
+	
+	if target.wolfgang_curse ~= nil then
+		target.wolfgang_curse:Cancel()
+	end
+	
+	target.wolfgang_curse = nil
+end
+
+local function ForceWandaCurse_On(inst, target)
+	target:AddTag("wanda_vetcurse")
+
+	target.wanda_vetcurse = true
+	
+	target.wanda_curse = target:ListenForEvent("killed", function(target, data)
+		if target:HasTag("vetcurse") then
+			if data ~= nil and data.victim ~= nil and data.victim ~= nil then
+				if not data.victim:HasTag("shadow_aligned") and not data.victim:HasTag("lunar_aligned") then
+					local sanity = target.components.sanity ~= nil and target.components.sanity:GetPercent()
+					
+					if sanity ~= nil and (1 - sanity) < math.random() then
+						local shadow = math.random() > 0.5 and "crawlingnightmare" or "nightmarebeak"
+						SpawnPrefab(shadow).Transform:SetPosition(data.victim.Transform:GetWorldPosition())
+					end
+				end
+			end
+		end
+	end, target)
+end
+
+local function ForceWandaCurse_Off(inst, target)
+	target:RemoveTag("wanda_vetcurse")
+	target.wanda_vetcurse = nil
+	
+	if target.wanda_curse ~= nil then
+		target.wanda_curse:Cancel()
+	end
+	
+	target.wanda_curse = nil
+end
+
+local function ForceWathgrithrCurse_On(inst, target)
+	target:AddTag("wathgrithr_vetcurse")
+
+	target.wathgrithr_vetcurse = true
+end
+
+local function ForceWathgrithrCurse_Off(inst, target)
+	target:RemoveTag("wathgrithr_vetcurse")
+	target.wathgrithr_vetcurse = nil
+end
+
+local function ForceWesCurse_On(inst, target)
+	target:AddTag("wes_vetcurse")
+
+	target.wes_vetcurse = true
+end
+
+local function ForceWesCurse_Off(inst, target)
+	target:RemoveTag("wes_vetcurse")
+	target.wes_vetcurse = nil
+end
+
+local function WendyCurse(player)
+	if player.components.health ~= nil and player.components.sanity ~= nil and not player.components.sanity.inducedinsanity and player.components.health:GetPercent() > player.components.sanity:GetPercent() then
+		player.components.health:SetPercent(player.components.sanity:GetPercent())
+	end
+end
+
+local function ForceWendyCurse_On(inst, target)
+	target:AddTag("wendy_vetcurse")
+	
+	target:ListenForEvent("sanitydelta", WendyCurse, target)
+	target:ListenForEvent("healthdelta", WendyCurse, target)
+	
+	target.wendy_vetcurse = true
+end
+
+local function ForceWendyCurse_Off(inst, target)
+	target:RemoveTag("wendy_vetcurse")
+	
+    target:RemoveEventCallback("sanitydelta", WendyCurse, target)
+	target:RemoveEventCallback("healthdelta", WendyCurse, target)
+	
+	target.wendy_vetcurse = nil
+end
+
 local skull =
 {
+	{
+		name = "wilson_vetskull",
+		anim = "idle",
+		attachfn = ForceWilsonCurse_On,
+		detachfn = ForceWilsonCurse_Off,
+		description = STRINGS.VETSKULL.WILSON,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_survivorsguideone",
+	},
 	{
 		name = "walter_vetskull",
 		anim = "idle",
 		attachfn = ForceWalterCurse_On,
 		detachfn = ForceWalterCurse_Off,
+		description = STRINGS.VETSKULL.WALTER,
+		vestiges = 2,
+		music = "UMMusic/music/follow_me_woby_flat",
 	},
 	{
 		name = "wortox_vetskull",
 		anim = "idle",
 		attachfn = ForceWortoxCurse_On,
 		detachfn = ForceWortoxCurse_Off,
+		description = STRINGS.VETSKULL.WORTOX,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_survivorsguideone",
 	},
 	{
 		name = "maxwell_vetskull",
 		anim = "idle",
 		attachfn = ForceMaxwellCurse_On,
 		detachfn = ForceMaxwellCurse_Off,
+		description = STRINGS.VETSKULL.MAXWELL,
+		vestiges = 5,
+		music = "dontstarve/music/gramaphone_ragtime",
 	},
 	{
 		name = "willow_vetskull",
 		anim = "idle",
 		attachfn = ForceWillowCurse_On,
 		detachfn = ForceWillowCurse_Off,
+		description = STRINGS.VETSKULL.WILLOW,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_survivorsguideone",
 	},
 	{
 		name = "warly_vetskull",
 		anim = "idle",
 		attachfn = ForceWarlyCurse_On,
 		detachfn = ForceWarlyCurse_Off,
+		description = STRINGS.VETSKULL.WARLY,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_survivorsguideone",
 	},
 	{
 		name = "winky_vetskull",
 		anim = "idle",
 		attachfn = ForceWinkyCurse_On,
 		detachfn = ForceWinkyCurse_Off,
+		description = STRINGS.VETSKULL.WINKY,
+		vestiges = 4,
+		music = "UMMusic/gramaphone_record/winky_theme",
 	},
 	{
 		name = "wickerbottom_vetskull",
 		anim = "idle",
 		attachfn = ForceWickerbottomCurse_On,
 		detachfn = ForceWickerbottomCurse_Off,
+		description = STRINGS.VETSKULL.WICKERBOTTOM,
+		vestiges = 3,
+		music = "dontstarve/music/music_FE_wickerbottom",
 	},
 	{
 		name = "wixie_vetskull",
 		anim = "idle",
 		attachfn = ForceWixieCurse_On,
 		detachfn = ForceWixieCurse_Off,
+		description = STRINGS.VETSKULL.WIXIE,
+		vestiges = 1,
+		music = "UMMusic/music/wixie_the_delinquent",
 	},
 	{
 		name = "woodie_vetskull",
 		anim = "idle",
 		attachfn = ForceWoodieCurse_On,
 		detachfn = ForceWoodieCurse_Off,
+		description = STRINGS.VETSKULL.WOODIE,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_survivorsguideone",
+	},
+	{
+		name = "wolfgang_vetskull",
+		anim = "idle",
+		attachfn = ForceWolfgangCurse_On,
+		detachfn = ForceWolfgangCurse_Off,
+		description = STRINGS.VETSKULL.WOLFGANG,
+		vestiges = 2,
+		music = "dontstarve/music/music_FE_survivorsguideone",
+	},
+	{
+		name = "wanda_vetskull",
+		anim = "idle",
+		attachfn = ForceWandaCurse_On,
+		detachfn = ForceWandaCurse_Off,
+		description = STRINGS.VETSKULL.WANDA,
+		vestiges = 1,
+		music = "dontstarve/music/music_FE_wanda",
+	},
+	{
+		name = "wathgrithr_vetskull",
+		anim = "idle",
+		attachfn = ForceWathgrithrCurse_On,
+		detachfn = ForceWathgrithrCurse_Off,
+		description = STRINGS.VETSKULL.WATHGRITHR,
+		vestiges = 2,
+		music = "dontstarve/music/music_FE_survivorsguideone",
+	},
+	{
+		name = "wes_vetskull",
+		anim = "idle",
+		attachfn = ForceWesCurse_On,
+		detachfn = ForceWesCurse_Off,
+		description = STRINGS.VETSKULL.WES,
+		vestiges = 4,
+		music = "dontstarve/music/music_FE_survivorsguideone",
+	},
+	{
+		name = "wendy_vetskull",
+		anim = "idle",
+		attachfn = ForceWendyCurse_On,
+		detachfn = ForceWendyCurse_Off,
+		description = STRINGS.VETSKULL.WENDY,
+		vestiges = 4,
+		music = "dontstarve/music/music_FE_survivorsguideone",
 	},
 }
 
@@ -576,13 +835,8 @@ local skull =
 Wilson ?
 Wendy
 WX78
-Wolfgang
-Woodie
 Winona
-Wanda
-Wormwood
 Wurt
-Wigfrid
 Webber
 Wathom
 
@@ -603,7 +857,11 @@ local function AttachCurse(inst, target)
 		ForceOvertimeFoodEffects(target)
 		target:AddTag("vetcurse")
 		
-		target:DoTaskInTime(1, function()
+		target:DoTaskInTime(3, function()
+			if target.wilson_vetcurse then
+				ForceWilsonCurse_On(inst, target)
+			end
+			
 			if target.walter_vetcurse then
 				ForceWalterCurse_On(inst, target)
 			end
@@ -614,6 +872,50 @@ local function AttachCurse(inst, target)
 			
 			if target.maxwell_vetcurse then
 				ForceMaxwellCurse_On(inst, target)
+			end
+			
+			if target.willow_vetcurse then
+				ForceWillowCurse_On(inst, target)
+			end
+			
+			if target.warly_vetcurse then
+				ForceWarlyCurse_On(inst, target)
+			end
+			
+			if target.winky_vetcuse then
+				ForceWinkyCurse_On(inst, target)
+			end
+			
+			if target.wickerbottom_vetcurse then
+				ForceWickerbottomCurse_On(inst, target)
+			end
+			
+			if target.wixie_vetcurse then
+				ForceWixieCurse_On(inst, target)
+			end
+			
+			if target.woodie_vetcurse then
+				ForceWoodieCurse_On(inst, target)
+			end
+			
+			if target.wolfgang_vetcurse then
+				ForceWolfgangCurse_On(inst, target)
+			end
+			
+			if target.wanda_vetcurse then
+				ForceWandaCurse_On(inst, target)
+			end
+			
+			if target.wathgrithr_vetcurse then
+				ForceWathgrithrCurse_On(inst, target)
+			end
+			
+			if target.wes_vetcurse then
+				ForceWesCurse_On(inst, target)
+			end
+			
+			if target.wendy_vetcurse then
+				ForceWendyCurse_On(inst, target)
 			end
 		end)
 		
@@ -713,6 +1015,55 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
     return Prefab("buff_"..name, fn, nil, prefabs)
 end
 
+local BigPopupDialogScreen = require "screens/popupdialog"
+
+local function ToggleCursee(inst)
+	local player = inst.Cursee:value()
+	if player == ThePlayer then
+		local function acceptance()
+			TheFrontEnd:PopScreen()
+			TheFocalPoint.SoundEmitter:KillSound("skull_music")
+		end
+		local title = STRINGS.VETSKULL_TITLE
+		local bodytext = STRINGS.VETSKULL.DEFAULT.."\n"..inst.skulldef_client.description--inst.SkullDescription
+		local yes_box = { text = STRINGS.VETS_OK, cb = acceptance }
+
+		local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
+		bpds.title:SetPosition(0, 90, 0)
+		bpds.text:SetPosition(0, -15, 0)
+
+		TheFrontEnd:PushScreen(bpds)
+		TheFocalPoint.SoundEmitter:PlaySound(inst.skull_music, "skull_music")
+	end
+end
+
+local function SkullTalk(inst, doer)
+	if doer ~= nil and inst.skulldef ~= nil and inst.skulldef.description ~= nil then
+	
+		inst.valid_cursee_id = doer.userid
+		
+		--inst.SkullDescription:set_local(inst.skulldef.description)
+		--inst.SkullDescription:set(inst.skulldef.description)
+		
+		inst.Cursee:set_local(doer)
+		inst.Cursee:set(doer)
+		
+		
+		--[[inst.talknum = 0
+		
+		for i = 1, 4 do
+			inst:DoTaskInTime(3 * (i - 1), function(inst)
+				inst.components.talker:Say(inst.skulldef.description[i])
+				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/taunt")
+			end)
+		end]]
+	end
+end
+
+local function RegisterNetListeners(inst)
+	inst:ListenForEvent("SetCurseedirty", ToggleCursee)
+end
+
 local function skull_fn(skull_def)
     local inst = CreateEntity()
 
@@ -722,10 +1073,18 @@ local function skull_fn(skull_def)
     MakeInventoryPhysics(inst)
 	
 	inst:AddTag("vetskull")
+	
+	inst.skulldef_client = skull_def
+	inst.skull_music = skull_def.music
+	
+	inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
-    inst.AnimState:SetBank("slingshotammo")
-    inst.AnimState:SetBuild("slingshotammo")
-    inst.AnimState:PlayAnimation("idle", true)
+	inst:DoTaskInTime(0, RegisterNetListeners)
+
+    inst.AnimState:SetBank("um_vetskull")
+    inst.AnimState:SetBuild("um_vetskull")
+    inst.AnimState:PlayAnimation(skull_def.name, true)
+	inst.AnimState:SetScale(2.5, 2.5)
 
     inst.entity:SetPristine()
 
@@ -734,8 +1093,15 @@ local function skull_fn(skull_def)
     end
 	
     inst:AddComponent("tradable")
+    inst:AddComponent("talker")
 	
-	inst.skull_effect = skull_def.attachfn
+	inst:AddComponent("inspectable")
+    inst.components.inspectable.nameoverride = "VET_SKULL"
+	
+    inst:AddComponent("um_activatable_item")
+	inst.components.um_activatable_item.act_fn = SkullTalk
+	
+	inst.skulldef = skull_def
 	
     inst:AddComponent("inventoryitem")
 	--inst.components.inventoryitem.atlasname = "images/inventoryimages/"..skull_def.name..".xml"

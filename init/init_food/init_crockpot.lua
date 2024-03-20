@@ -128,6 +128,13 @@ AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })
 AddIngredientValues({ "aphid" }, { insectoid = 0.5, meat = 0.5, monster = 0.5 })
 AddIngredientValues({ "rabbit" }, { meat = 0.5 })
 
+AddIngredientValues({ "um_meat_cube" }, { meat = 0.5 })
+AddIngredientValues({ "um_monster_cube" }, { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
+AddIngredientValues({ "um_veggie_cube" }, { veggie = 0.5 })
+AddIngredientValues({ "um_sugar_cube" }, { sweetener = .5 })
+AddIngredientValues({ "um_roughage_cube" }, { inedible = 1 })
+AddIngredientValues({ "um_bland_cube" }, { decoration = 1 })
+
 recipes.koalefig_trunk.test = function(cooker, names, tags)
     return (names.trunk_summer or names.trunk_cooked or names.trunk_winter) and (names.fig or names.fig_cooked or names.aphid) and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)

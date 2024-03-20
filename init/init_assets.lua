@@ -45,6 +45,11 @@ local inventoryitems =
 	"crabclaw",
 	"critterlab_real",
 	"cursed_antler",
+	"um_exhumer",
+	"um_exhumer_powered",
+	"um_wingsuit",
+	"silksack",
+	"um_moonfly_lantern",
 	"dart_red",
 	"devilsfruitcake",
 	"diseasebomb",
@@ -104,6 +109,12 @@ local inventoryitems =
 	"nervoustick_6",
 	"nervoustick_7",
 	"nervoustick_8",
+	"um_meat_cube",
+	"um_monster_cube",
+	"um_veggie_cube",
+	"um_sugar_cube",
+	"um_roughage_cube",
+	"um_bland_cube",
 	"oculet",
 	"opalpreciousgem_cracked",
 	"orange_vomit",
@@ -221,6 +232,46 @@ local inventoryitems =
 	
 	-- Mutation Extrapolation
 	"um_staff_meteor",
+
+	-- Ghosts of the Past
+
+	"maxwell_vetskull",
+	"walter_vetskull",
+	"wanda_vetskull",
+	"warly_vetskull",
+	"webber_vetskull",
+	"wendy_vetskull",
+	"wes_vetskull",
+	"wickerbottom_vetskull",
+	"wathgrithr_vetskull",
+	"willow_vetskull",
+	"wilson_vetskull",
+	"wixie_vetskull",
+	"winona_vetskull",
+	"wolfgang_vetskull",
+	"wonkey_vetskull",
+	"woodie_vetskull",
+	"wormwood_vetskull",
+	"wortox_vetskull",
+	"wurt_vetskull",
+	"wx78_vetskull",
+	
+	-- Vet Souls
+	
+	"um_dark_vestiges",
+	"um_cherry_beequeen_soul",
+	"um_crabking_soul",
+	"um_deerclops_soul",
+	"um_goose_soul",
+	"um_malbatross_soul",
+	"um_beequeen_soul",
+	"um_dragonfly_soul",
+	"um_bearger_soul",
+	"um_klaus_soul",
+	"um_hoodedwidow_soul",
+	"um_fuelweaver_soul",
+	"um_minotaur_soul",
+	"um_moonmaw_soul",
 	
 	-- Records
 	
@@ -302,6 +353,9 @@ local inventoryitems =
 	--crab king items
 	"hat_crab",
 	"staff_starfall",
+	
+	--Night Terrors
+	"um_voxolophone",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -654,13 +708,16 @@ Assets = {
 	Asset("ANIM", "anim/rne_grabbylarge.zip"),
 	Asset("ANIM", "anim/rnesushadow.zip"),
 	Asset("ANIM", "anim/mindweaver.zip"),
-	Asset("ANIM", "anim/fuelseeker.zip"),
+	Asset("ANIM", "anim/um_fuelseeker.zip"),
+	Asset("ANIM", "anim/um_heckler.zip"),
 
 	Asset("ANIM", "anim/figgy_newton.zip"),
 
 	Asset("ANIM", "anim/shambler.zip"),
 
 	Asset("ANIM", "anim/nervoustick.zip"),
+
+	Asset("ANIM", "anim/um_food_cube.zip"),
 
 	Asset("ANIM", "anim/graspingfear.zip"),
 
@@ -699,6 +756,8 @@ Assets = {
 
 	Asset("ANIM", "anim/widow1.zip"),
 	Asset("ANIM", "anim/widow2.zip"),
+	
+	Asset("ANIM", "anim/silken_bundle.zip"),
 	
 	Asset("ANIM", "anim/sheeplet.zip"),
 	Asset("ANIM", "anim/sheepletbomb.zip"),
@@ -790,8 +849,6 @@ Assets = {
 	Asset("ANIM", "anim/hippo_water_attacks.zip"),
 	Asset("ANIM", "anim/hippo_water.zip"),
 
-	Asset("ANIM", "anim/nightcrawler_build.zip"),
-
 	Asset("ANIM", "anim/deerclops_yule_blue.zip"),
 	--Asset("ANIM", "anim/yuleclops_actions_UM.zip"),
 	Asset("ANIM", "anim/deerclops_laser_hit_sparks_fx_blue.zip"),
@@ -871,6 +928,10 @@ Assets = {
 	Asset("ANIM", "anim/lava_spitball.zip"),
 
 	Asset("ANIM", "anim/shadowvortex.zip"),
+	Asset("ANIM", "anim/shadow_leech_nt.zip"),
+	Asset("ANIM", "anim/um_voxolophone.zip"),
+	Asset("ANIM", "anim/um_haunt.zip"),
+	Asset("ANIM", "anim/um_nightcrawler.zip"),
 
 	Asset("ANIM", "anim/um_beegun_dart.zip"),
 	Asset("ANIM", "anim/um_beegun_ball.zip"),
@@ -940,6 +1001,11 @@ Assets = {
 	Asset("ANIM", "anim/air_conditioner_cloud.zip"),
 
 	Asset("ANIM", "anim/veteranshrine.zip"),
+	Asset("ANIM", "anim/um_vetskull.zip"),
+	Asset("ANIM", "anim/um_soul_ball.zip"),
+	
+	Asset("ANIM", "anim/wortox_soul_ball_blue.zip"),
+	Asset("ANIM", "anim/wortox_soul_ball_green.zip"),
 	
 	Asset("ANIM", "anim/um_records.zip"),
 
@@ -997,6 +1063,79 @@ Assets = {
 
 	Asset("ATLAS", "images/fx5.xml"),
 	Asset("IMAGE", "images/fx5.tex"),
+
+	--VET SKULLS
+	Asset("ATLAS", "images/inventoryimages/maxwell_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/maxwell_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/walter_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/walter_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wanda_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wanda_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/warly_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/warly_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/webber_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/webber_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wendy_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wendy_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wes_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wes_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wickerbottom_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wickerbottom_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wathgrithr_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wathgrithr_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/willow_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/willow_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wilson_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wilson_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wixie_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wixie_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/winona_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/winona_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wolfgang_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wolfgang_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wonkey_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wonkey_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/woodie_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/woodie_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wormwood_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wormwood_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wortox_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wortox_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wurt_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wurt_vetskull.tex"),
+	Asset("ATLAS", "images/inventoryimages/wx78_vetskull.xml"),
+	Asset("IMAGE", "images/inventoryimages/wx78_vetskull.tex"),
+	
+	-- Vet Souls
+	
+	Asset("ATLAS", "images/inventoryimages/um_dark_vestiges.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_dark_vestiges.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_cherry_beequeen_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_cherry_beequeen_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_crabking_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_crabking_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_deerclops_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_deerclops_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_goose_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_goose_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_malbatross_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_malbatross_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_beequeen_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_beequeen_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_dragonfly_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_dragonfly_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_bearger_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_bearger_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_klaus_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_klaus_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_hoodedwidow_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_hoodedwidow_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_fuelweaver_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_fuelweaver_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_minotaur_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_minotaur_soul.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_moonmaw_soul.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_moonmaw_soul.tex"),
 
 	--RECORDS
 	
@@ -1185,10 +1324,19 @@ Assets = {
 
 	Asset("ANIM", "anim/cursed_antler.zip"),
 	Asset("ANIM", "anim/twisted_antler.zip"),
-
+	
+	Asset("ANIM", "anim/swap_exhumer.zip"),
+	Asset("ANIM", "anim/swap_exhumer_powered.zip"),
+	
+	Asset("ANIM", "anim/um_moonfly_lantern.zip"),
+	
+	Asset("ANIM", "anim/um_astralpool.zip"),
+	
 	Asset("ANIM", "anim/blueberry.zip"),
 
 	Asset("ANIM", "anim/widowsgrasp.zip"),
+	Asset("ANIM", "anim/silksack.zip"),
+	Asset("ANIM", "anim/swap_silksack.zip"),
 	Asset("ANIM", "anim/hat_widowshead.zip"),
 
 	Asset("ANIM", "anim/greenfoliage.zip"),
@@ -1284,6 +1432,10 @@ Assets = {
 	Asset("ANIM", "anim/winona_portables.zip"),
 
 	--INVENTORY ITEMS [IMAGES & ATLAS]
+	
+	-- Shadow Char Items
+	Asset("IMAGE", "images/inventoryimages/um_shadow_axe.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_shadow_axe.xml"),
 	
 	Asset("ATLAS", "images/inventoryimages/hat_crab.xml"),
 	Asset("IMAGE", "images/inventoryimages/hat_crab.tex"),
@@ -1532,6 +1684,19 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/nervoustick_8.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/nervoustick_8.xml"),
 	Asset("ATLAS", "images/inventoryimages/nervoustick_8.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/um_meat_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_meat_cube.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_monster_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_monster_cube.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_veggie_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_veggie_cube.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_sugar_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_sugar_cube.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_roughage_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_roughage_cube.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_bland_cube.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_bland_cube.xml"),
 
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_beegun.xml"),
 	Asset("ATLAS", "images/inventoryimages/um_beegun.xml"),
@@ -1637,6 +1802,17 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/ms_twisted_antler.xml"),
 	Asset("ATLAS", "images/inventoryimages/ms_twisted_antler.xml"),
 	
+	Asset("IMAGE", "images/inventoryimages/um_exhumer.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_exhumer.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_exhumer_powered.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_exhumer_powered.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/um_wingsuit.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_wingsuit.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/um_moonfly_lantern.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_moonfly_lantern.xml"),
+	
 	Asset("IMAGE", "images/inventoryimages/seafoodpaella.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/seafoodpaella.xml"),
 	Asset("ATLAS", "images/inventoryimages/seafoodpaella.xml"),
@@ -1645,6 +1821,16 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/giant_blueberry.xml"),
 	Asset("IMAGE", "images/inventoryimages/widowsgrasp.tex"),
 	Asset("ATLAS", "images/inventoryimages/widowsgrasp.xml"),
+	Asset("IMAGE", "images/inventoryimages/silksack.tex"),
+	Asset("ATLAS", "images/inventoryimages/silksack.xml"),
+	
+	-- Silken Bundle
+	Asset("IMAGE", "images/inventoryimages/silken_bundle_large.tex"),
+	Asset("ATLAS", "images/inventoryimages/silken_bundle_large.xml"),
+	Asset("IMAGE", "images/inventoryimages/silken_bundle_medium.tex"),
+	Asset("ATLAS", "images/inventoryimages/silken_bundle_medium.xml"),
+	Asset("IMAGE", "images/inventoryimages/silken_bundle_small.tex"),
+	Asset("ATLAS", "images/inventoryimages/silken_bundle_small.xml"),
 	
 	
 	Asset("IMAGE", "images/inventoryimages/widowshead.tex"),
@@ -1954,6 +2140,10 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/um_staff_meteor.xml"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/um_voxolophone.xml"),
+	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_voxolophone.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_voxolophone.tex"),
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
@@ -1996,6 +2186,8 @@ Assets = {
 	Asset("ANIM", "anim/swap_crabclaw.zip"),
 
 	Asset("ANIM", "anim/swap_cursed_antler.zip"),
+	
+	Asset("ANIM", "anim/swap_exhumer.zip"),
 
 	Asset("ANIM", "anim/swap_twisted_antler.zip"),
 
@@ -2027,6 +2219,14 @@ Assets = {
 	Asset("ATLAS", "images/mushroom_slot.xml"),
 	Asset("IMAGE", "images/mushroom_slot.tex"),
 	
+	--Silk Sack
+	Asset("ATLAS", "images/silk_slot.xml"),
+	Asset("IMAGE", "images/silk_slot.tex"),
+	Asset("ATLAS", "images/general_slot.xml"),
+	Asset("IMAGE", "images/general_slot.tex"),
+	Asset("ATLAS", "images/bundle_slot.xml"),
+	Asset("IMAGE", "images/bundle_slot.tex"),
+	
 	Asset("ATLAS", "images/wardrobe_tool_slot.xml"),
 	Asset("IMAGE", "images/wardrobe_tool_slot.tex"),
 
@@ -2047,6 +2247,11 @@ Assets = {
 
 	Asset("ATLAS", "images/bee_slot.xml"),
 	Asset("IMAGE", "images/bee_slot.tex"),
+
+	Asset("ATLAS", "images/um_inkubator_fuelslot.xml"),
+	Asset("IMAGE", "images/um_inkubator_fuelslot.tex"),
+	Asset("ATLAS", "images/um_inkubator_meatslot.xml"),
+	Asset("IMAGE", "images/um_inkubator_meatslot.tex"),
 
 	Asset("ANIM", "anim/um_status_wx.zip"),
 

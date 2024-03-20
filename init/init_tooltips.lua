@@ -347,6 +347,9 @@ if TUNING.DSTU.DISABLE_MEGAFLARE then
     TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end
 
+modimport("init/init_scrapbook")
+modimport("init/init_scrapbook_um")
+
 if TUNING.DSTU.STORMS then
     TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."

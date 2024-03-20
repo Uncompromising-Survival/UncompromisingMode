@@ -30,15 +30,37 @@ local function charged(inst)
 	end
 end
 
+local function SpawnFx(inst, stage, scale)
+    local theta = math.random() * PI * 2
+    local num = 7
+    local radius = 1.6
+    local dtheta = TWOPI / num
+    local x, y, z = inst.Transform:GetWorldPosition()
+    SpawnPrefab("sinkhole_spawn_fx_"..math.random(3)).Transform:SetPosition(x, y, z)
+    for i = 1, num do
+        local dust = SpawnPrefab("sinkhole_spawn_fx_"..math.random(3))
+        dust.Transform:SetPosition(x + math.cos(theta) * radius * (1 + math.random() * .1), 0, z - math.sin(theta) * radius * (1 + math.random() * .1))
+        local s = scale + math.random() * .2
+        dust.Transform:SetScale(i % 2 == 0 and -s or s, s, s)
+        theta = theta + dtheta
+    end
+    inst.SoundEmitter:PlaySoundWithParams("dontstarve/creatures/together/antlion/sfx/ground_break", { size = math.pow(stage / 3, 2) })
+end
+
 local function LaunchSpit(caster, target)
     local x, y, z = caster.Transform:GetWorldPosition()
 	
 	local ents = TheSim:FindEntities(x, y, z, 5, {"antlion_sinkhole"})
 	local pt = caster:GetPosition()
 	local boat = TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z)
+	local biggy = #ents > 0
 	
-	if #ents == 0 and not boat then
-		for i = 1, 4 do 
+	if not boat then
+		if caster.SoundEmitter ~= nil then
+			caster.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/attack")
+		end
+	
+		for i = 1, biggy and 1 or 4 do 
 			local targetpos = target:GetPosition()
 
 			local projectile = SpawnPrefab("beargerclaw_boulder")
@@ -46,27 +68,36 @@ local function LaunchSpit(caster, target)
 			projectile.Transform:SetPosition(x, y, z)
 			projectile.clawer = caster
 			
-			targetpos.x = targetpos.x + math.random(-2, 2)
-			targetpos.z = targetpos.z + math.random(-2, 2)
+			targetpos.x = targetpos.x + (biggy and 0 or math.random(-2, 2))
+			targetpos.z = targetpos.z + (biggy and 0 or math.random(-2, 2))
 			
 			local dx = targetpos.x - x
 			local dz = targetpos.z - z
 			
-		
-			--local rangesq = (dx * dx + dz * dz) / 1.2
 			local rangesq = dx * dx + dz * dz
 			local maxrange = TUNING.FIRE_DETECTOR_RANGE
-			--local speed = easing.linear(rangesq, 15, 3, maxrange * maxrange)
+			
 			local speed = easing.linear(rangesq, maxrange, 5, maxrange * maxrange)
 			projectile.components.complexprojectile:SetHorizontalSpeed(speed * 1.1)
 			projectile.components.complexprojectile:SetGravity(-35)
 			projectile.components.complexprojectile:Launch(targetpos, caster, caster)
 			projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
+			projectile.biggy = biggy
 		end
 		
-		SpawnPrefab("beargerclaw_sinkhole").Transform:SetPosition(x, 0, z)
+		if biggy then
+			for i, v in pairs(ents) do
+				if v ~= nil and i == 1 then
+					ErodeAway(v)
+					SpawnFx(v, 1, .45)
+				end
+			end
+		else
+			local beager_sinkhole = SpawnPrefab("beargerclaw_sinkhole")
+			beager_sinkhole.Transform:SetPosition(x, 0, z)
+			--SpawnFx(beager_sinkhole, 3, .8)
+		end
 	end
-	
 	
 	if boat ~= nil then
 		boat:PushEvent("spawnnewboatleak", {pt = pt, leak_size = "small_leak", playsoundfx = true})
@@ -111,6 +142,13 @@ local function light_reticuletargetfn()
     return pos
 end
 
+local function Working(owner, data)
+	if owner ~= nil and owner:HasTag("player") and owner.components.hunger then
+		owner.components.hunger:DoDelta(-5)
+		inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/chew")
+	end
+end
+
 local function onequip(inst, owner)
 	if not owner:HasTag("vetcurse") then
 		inst:DoTaskInTime(0, function(inst, owner)
@@ -132,12 +170,17 @@ local function onequip(inst, owner)
 		owner.AnimState:OverrideSymbol("swap_object", "swap_beargerclaw", "swap_shovel")
 		owner.AnimState:Show("ARM_carry")
 		owner.AnimState:Hide("ARM_normal")
+		
+		
+        inst:ListenForEvent("working", Working, owner)
 	end
 end
 
 local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
+	
+	inst:RemoveEventCallback("working", Working, owner)
 end
 
 local function staff_fn()
@@ -160,7 +203,7 @@ local function staff_fn()
     inst:AddTag("beargerclaw")
     inst:AddTag("quickcast")
 	inst:AddTag("vetcurse_item")
-
+	inst:AddTag("inventoryitem")
 	MakeInventoryFloatable(inst)
 
     inst.spelltype = "SCIENCE"
@@ -176,6 +219,7 @@ local function staff_fn()
         return inst
     end
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")

@@ -33,7 +33,7 @@ end
 
 local function GetNearestLightPos_Stop(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 6)
+	local ents = TheSim:FindEntities(x, y, z, inst:HasTag("um_shadow_walter") and 3 or 6)
 
 	for i, v in ipairs(ents) do
 		if v.components.burnable ~= nil and v.components.fueled ~= nil and v.components.fueled.consuming then

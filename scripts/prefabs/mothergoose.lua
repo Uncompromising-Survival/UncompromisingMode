@@ -279,7 +279,7 @@ local function fn()
 	
     if TUNING.DSTU.VETCURSE ~= "off" then
         inst:AddComponent("vetcurselootdropper")
-	    inst.components.vetcurselootdropper.loot = "feather_frock"
+	    inst.components.vetcurselootdropper.loot = "um_goose_soul"
     end
     ------------------------------------------
 
