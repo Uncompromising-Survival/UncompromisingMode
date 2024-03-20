@@ -119,15 +119,6 @@ ANNOUNCE.SHADOWTALKER = {
     "CAN I REALLY TRUST THEM?"
 }
 
-ANNOUNCE.VETERANCURSETAUNT = {
-    "COME... CLOSER...", "THE... CHALLENGE...", "CURSE... WAY OUT..."
-}
-ANNOUNCE.VETERANCURSED = {
-    "NO... GOING... BACK...", "PACT... MADE...", "BRING... SKULLS..."
-}
-ANNOUNCE.NOT_VETERANCURSED = { "NOT... AFFLICTED..." }
-ANNOUNCE.NOT_VETERANSKULL = { "NOT... DESIRED..." }
-
 -- StantonStuff
 ANNOUNCE.STANTON_GREET = {
     "Care to drink with the dead?",
@@ -188,6 +179,15 @@ DESCRIBE.DISEASECUREBOMB =
 DESCRIBE.TOADLINGSPAWNER = "Uh oh."
 DESCRIBE.SNOWBALL_THROWABLE = "Not the face!"
 DESCRIBE.VETERANSHRINE = "I know what I'm doing... right?"
+DESCRIBE.VET_SKULL = "A fine specimen!"
+DESCRIBE.UM_BOSS_SOUL = "The bigger the body, the bigger the soul. Thats science!"
+DESCRIBE.UM_DARK_VESTIGES = "Lets see what happens when I poke it..."
+DESCRIBE.UM_VOXOLOPHONE = "Another stranger on the radio... what's the worst that could happen?"
+
+DESCRIBE.UM_EXHUMER = "Think of all the data I could get from a real living skeleton!"
+DESCRIBE.UM_WINGSUIT = "Aerodynamical!"
+DESCRIBE.UM_MOONFLY_LANTERN = "It's fueled by magic. Lots of magic."
+
 DESCRIBE.WICKER_TENTACLE = "Doubly sickening."
 DESCRIBE.HONEY_LOG = "I have a strange desire to eat it."
 
@@ -233,6 +233,7 @@ DESCRIBE.SHADOW_TELEPORTER = "Hey! Let go of that gem!"
 DESCRIBE.POLLENMITEDEN = "Science says it mite be dangerous."
 DESCRIBE.POLLENMITES = "I mite want to keep my distance."
 DESCRIBE.SHADOW_CROWN = "I feel un-safer already."
+DESCRIBE.UM_SHADOW_AXE = "It seems awfully familiar."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "How bland."
 DESCRIBE.SUNGLASSES = "Stylish, and slightly over sized."
@@ -249,6 +250,10 @@ DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
 DESCRIBE.WIDOWSGRASP = "Let's open up those cocoons!"
 DESCRIBE.WEBBEDCREATURE = "It wouldn't hurt to see what's inside, right?"
 ANNOUNCE.WEBBEDCREATURE = "Only a spider could rip through silk this tough!"
+
+DESCRIBE.SILKSACK = "I hope it isn't filled with cobwebs."
+DESCRIBE.SILKEN_BUNDLE = "Our supplies are somewhere stuck in there."
+
 DESCRIBE.SNAPDRAGON_BUDDY = "It looks hungry. Me too."
 DESCRIBE.SNAPDRAGON = "It looks nice enough."
 DESCRIBE.SNAPPLANT = "A little piece of home."
@@ -492,6 +497,7 @@ DESCRIBE.UM_OCUPUS_TENTACLE = "It's trying to sink us, hooray."
 DESCRIBE.UM_OCUPUS_BEAK = "Ah, a cousin of the Quacken, it would seem."
 DESCRIBE.BEAKBASHER = "I put the beak on the stick. Now what?"
 DESCRIBE.HOUNDIOUS_OBSERVIOUS = "IT'S ALIVE!"
+DESCRIBE.TERRORGUISE = "Uncompromising Devs need YOU to review this item (If you like it then halp with quotes)"
 
 DESCRIBE.ARMOR_REED_UM = "I'll still be light on my feet with it on."
 DESCRIBE.ARMOR_SHARKSUIT_UM = "It makes me feel like the alpha predator."
@@ -639,4 +645,10 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "It'll leaving me bleating! I mean, bleeding!"
 DESCRIBE.UM_TORNADO = "Hang on to your hats!"
 DESCRIBE.UM_WATERFALL = "Wheres a pair of wellingtons when you need them?"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "There aren't any tornadoes around."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "Full speed ahead!",
+    LOWFUEL = "The fuel tank is getting a bit low.",
+    OVERHEATING = "It's getting a bit too hot!"
+}
 DESCRIBE.GARBAGEPATCHFLOTSAM = "It must've been dragged here by that tornado!"

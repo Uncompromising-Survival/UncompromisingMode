@@ -45,6 +45,72 @@ function c_um_vetcurseitems()
     end
 end
 
+-- Klei doesnt have a console command that changes max health???
+
+function c_setmaxhealth(n)
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
+        player.components.health:SetPenalty(math.clamp(n, 0, TUNING.MAXIMUM_HEALTH_PENALTY))
+    end
+end
+
+-- Pauses Woby's hunger drain
+
+function c_woby_hunger()
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.woby ~= nil and player.woby.components.hunger ~= nil then
+		if player.woby.components.hunger:IsPaused() then
+			player.woby.components.hunger:Resume()
+		else
+			player.woby.components.hunger:Pause()
+		end
+    end
+end
+
+-- gives all current vet curse skulls
+
+local vetskulls = {
+	"walter_vetskull",
+	"wortox_vetskull",
+	"maxwell_vetskull",
+	"willow_vetskull",
+	"warly_vetskull",
+	"winky_vetskull",
+	"wickerbottom_vetskull",
+	"wixie_vetskull",
+	"woodie_vetskull",
+	"wolfgang_vetskull",
+	"wanda_vetskull",
+	"wathgrithr_vetskull",
+	"wes_vetskull",
+	"wendy_vetskull",
+}
+
+function c_um_givevetskulls()
+	for i, v in ipairs(vetskulls) do
+		c_give(v)
+	end
+end
+
+-- gives all current uncomp records
+
+local records = {
+	"um_record_menu",
+	"um_record_walter",
+	"um_record_wixie",
+	"um_record_shadow_wixie",
+	"um_record_hooded_widow",
+	"um_record_wathom",
+	"um_record_stranger",
+	"um_record_winky",
+}
+
+function c_um_giverecords()
+	for i, v in ipairs(records) do
+		c_give(v)
+	end
+end
+
 -- lists current rat score shenenigans.
 function c_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
@@ -259,5 +325,13 @@ function c_um_wobygodmode(player)
             player.woby.components.health:SetInvincible(not godmode)
             print("God mode: "..tostring(not godmode))
         end
+    end
+end
+
+function c_um_listumprefabs()
+    print("HERE --- ALL UM PREFABS")
+    for k,v in pairs(TUNING.DSTU.PREFABS) do
+        print(k)
+        TheNet:Announce(k)
     end
 end

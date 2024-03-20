@@ -591,3 +591,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Careful Woby! This goat looks mean!"
 DESCRIBE.UM_TORNADO = "Nail down our gear! Duck and cover! RUN FOR YOUR LIVES!!"
 DESCRIBE.UM_WATERFALL = "I love a good waterfall!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes around, I can tell!"
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

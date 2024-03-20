@@ -27,6 +27,14 @@ local function DoSplatFx(inst)
 	local goo
 	if inst.prefab == "shadow_goo" then -- A special different ground anim for our fancy goo
 		goo = SpawnPrefab("shadow_puff")
+	elseif inst.prefab == "heckler_goo" then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local theta = math.random() * PI2
+		local ox, oz = TILE_SCALE * math.cos(theta), TILE_SCALE * math.sin(theta)
+        local tx, ty = TheWorld.Map:GetTileCoordsAtPoint(x + ox, 0, z + oz)
+		
+		--SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(tx, 0, ty)
+		SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(x, 0, z)
 	elseif inst.organ then
 		goo = SpawnPrefab("minotaur_organ")
 	else
@@ -38,7 +46,10 @@ local function DoSplatFx(inst)
 			goo:DoTaskInTime(0,function(goo) goo:ListenForEvent("animover",function(goo) goo:Remove() end) end)
 		end
 	end
-	goo.Transform:SetPosition(x, 0, z)
+	
+	if goo ~= nil then
+		goo.Transform:SetPosition(x, 0, z)
+	end
 end
 
 local function doprojectilehit(inst, other)
@@ -98,6 +109,12 @@ local function mainprojectilefn(anim)
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 
+	inst.AnimState:SetBank(anim)
+	inst.AnimState:SetBuild(anim)
+	inst.AnimState:PushAnimation("spin_loop", true)
+	inst.AnimState:SetMultColour(0, 0, 0, 0.4)
+	inst.AnimState:UsePointFiltering(true)
+	
     inst.Physics:SetMass(10)
 	inst.Physics:SetFriction(.1)
 	inst.Physics:SetDamping(0)
@@ -108,16 +125,13 @@ local function mainprojectilefn(anim)
     inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     inst.Physics:CollidesWith(COLLISION.CHARACTERS)
 	inst.Physics:SetSphere(0.25)
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
-    end
+    end	
 	
-	inst.AnimState:SetBank(anim)
-	inst.AnimState:SetBuild(anim)
-	inst.AnimState:PushAnimation("spin_loop", true)
-	inst.AnimState:SetMultColour(0, 0, 0, 0.4)		
     inst.Physics:SetCollisionCallback(oncollide)
 
     inst.persists = false
@@ -143,6 +157,13 @@ local function guardian_goo()
     inst:AddTag("projectile")
 	inst:AddTag("weapon")
 	
+	inst.AnimState:SetBank("squid_watershoot")
+	inst.AnimState:SetBuild("squid_watershoot")
+	inst.AnimState:PlayAnimation("spin_loop",true)
+    inst:AddComponent("locomotor")
+	inst.AnimState:SetMultColour(1, 1, 1, .5)
+	inst.AnimState:UsePointFiltering(true)
+	
 	MakeInventoryPhysics(inst)
     RemovePhysicsColliders(inst)
 	
@@ -151,11 +172,6 @@ local function guardian_goo()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.AnimState:SetBank("squid_watershoot")
-	inst.AnimState:SetBuild("squid_watershoot")
-	inst.AnimState:PlayAnimation("spin_loop",true)
-    inst:AddComponent("locomotor")
-	inst.AnimState:SetMultColour(1, 1, 1, .5)
 	
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(40)
@@ -184,17 +200,20 @@ local function guardiansplat()
     inst.entity:AddPhysics()
     inst.entity:AddNetwork()
 	inst:AddTag("FX")
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
+	
 	inst.AnimState:SetMultColour(1, 1, 1, .5)
 	inst.Transform:SetScale(0.7,0.7,0.7)
 	inst.AnimState:SetBank("guardian_splat")
 	inst.AnimState:SetBuild("guardian_splat")
 	inst.AnimState:PlayAnimation("land")
 	inst.AnimState:PushAnimation("go away",false) --crap, forgot the "_" will fix later :sleep:
+	inst.AnimState:UsePointFiltering(true)
+	
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
 	
 	inst:AddComponent("sanityaura")
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_LARGE
@@ -203,5 +222,6 @@ local function guardiansplat()
     return inst
 end
 return Prefab("shadow_goo", shadow_goofn, projectile_assets, projectile_prefabs),
+Prefab("heckler_goo", guardian_goo),
 Prefab("guardian_goo", guardian_goo),
 Prefab("guardian_splat", guardiansplat)

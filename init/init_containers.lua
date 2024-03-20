@@ -25,7 +25,7 @@ function CheckWardrobeItem(container, item, slot)
         or (item.prefab == "razor" or item.prefab == "beef_bell") or item:HasTag("heatrock") or
         (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or
         item.prefab == "sewing_tape" or item.prefab == "sewing_kit" or item:HasTag("fan") or
-        string.match(item.prefab, "wx78module_") ~= nil or item:HasTag("mine") or item:HasTag("trap")
+        string.match(item.prefab, "wx78module_") ~= nil or item:HasTag("trap") or item:HasTag("mine") or item:HasTag("trap")
 end
 
 function CheckToolboxItem(container, item, slot)
@@ -60,6 +60,13 @@ function CheckNOTHING(container, item, slot)
     return false
 end
 
+function CheckInkubator(container, item, slot)
+    return not item:HasTag("irreplaceable") and
+		(slot == 1 and item:HasTag("um_inkubator_fuel") 
+		or slot == 2 and item:HasTag("um_inkubator_flesh")
+		or slot == 3)
+end
+
 local modparams = {}
 
 modparams.air_conditioner =
@@ -90,7 +97,7 @@ modparams.air_conditioner =
     type = "cooker",
 }
 
-modparams.itemscrapper =
+modparams.um_scrapper =
 {
     widget =
     {
@@ -101,19 +108,12 @@ modparams.itemscrapper =
             Vector3(-37.5, -(32 + 4), 0),
             Vector3(37.5, -(32 + 4), 0),
         },
-        slotbg =
-        {
-            { image = "mushroom_slot.tex", atlas = "images/mushroom_slot.xml" },
-            { image = "mushroom_slot.tex", atlas = "images/mushroom_slot.xml" },
-            { image = "mushroom_slot.tex", atlas = "images/mushroom_slot.xml" },
-            { image = "mushroom_slot.tex", atlas = "images/mushroom_slot.xml" },
-        },
         animbank = "ui_chest_2x2",
         animbuild = "ui_chest_2x2",
         pos = Vector3(200, 0, 0),
         side_align_tip = 120,
     },
-    itemtestfn = CheckEquipItem,
+    --itemtestfn = CheckEquipItem,
     acceptsstacks = false,
     type = "cooker",
 }
@@ -159,6 +159,84 @@ modparams.puffvest_big =
 for y = 0, 2 do
     table.insert(modparams.puffvest_big.widget.slotpos, Vector3(-162, -75 * y + 75, 0))
     table.insert(modparams.puffvest_big.widget.slotpos, Vector3(-162 + 75, -75 * y + 75, 0))
+end
+
+
+modparams.silksack =
+{
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_backpack_2x4",
+        animbuild = "ui_backpack_2x4",
+        --pos = Vector3(-5, -70, 0),
+        pos = Vector3(-5, -70, 0),    
+        slotbg =
+        {
+            { image = "general_slot.tex",   atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",  atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",   atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
+            { image = "general_slot.tex",  atlas = "images/general_slot.xml" },
+            { image = "silk_slot.tex", atlas = "images/silk_slot.xml" },
+            { image = "bundle_slot.tex",  atlas = "images/bundle_slot.xml" },-- Eight
+        },
+        buttoninfo =
+        {
+            text = STRINGS.ACTIONS.WRAPBUNDLE,
+            position = Vector3(-125, -220, 0),
+        }
+    },
+    issidewidget = true,
+    type = "pack",
+    openlimit = 1,
+	
+}
+
+for y = 0, 3 do
+	table.insert(modparams.silksack.widget.slotpos, Vector3(-162, -75 * y + 114, 0))
+	table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 75, -75 * y + 114, 0))
+end
+
+--[[function modparams.silksack.itemtestfn(container, item, slot)
+	return (slot ~= 7 and slot ~= 8 and true) 
+		or (slot == 7 and item.prefab == "silk")
+		or (slot == 8 and item:HasTag("bundle"))
+end]]
+
+function modparams.silksack.widget.buttoninfo.fn(inst, doer)
+	
+	--[[if inst.components.container then
+		inst.WrapStuff(inst,doer)
+	end]]
+    if inst.components.container ~= nil then
+		GLOBAL.BufferedAction(owner, inst, ACTIONS.UM_SILKWRAP):Do()
+        --inst.WrapStuff(inst,doer)
+    elseif inst.replica.container ~= nil and not inst.replica.container:IsBusy() then
+        GLOBAL.SendRPCToServer(GLOBAL.RPC.DoWidgetButtonAction, ACTIONS.UM_SILKWRAP.code, inst, ACTIONS.UM_SILKWRAP.mod_name)
+    end
+end
+
+function modparams.silksack.widget.buttoninfo.validfn(inst)
+	--print("testing")
+	--print(inst.replica.container:GetItemInSlot(7))
+	--return inst.replica.container and inst.replica.container:GetItemInSlot(7) and inst.replica.container:GetItemInSlot(7).prefab == "silk"
+	if inst.replica.container then
+		local _container = inst.replica.container
+		--return _container:GetItemInSlot(7). == "silk"
+		return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).replica.stackable and _container:GetItemInSlot(7).replica.stackable:StackSize() >= 3 and 
+		not _container:GetItemInSlot(8) and
+		(_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(3) or 
+		_container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and 
+		not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
+		not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
+		not (_container:GetItemInSlot(3) and _container:GetItemInSlot(3):HasTag("bundle")) and
+		not (_container:GetItemInSlot(4) and _container:GetItemInSlot(4):HasTag("bundle")) and
+		not (_container:GetItemInSlot(5) and _container:GetItemInSlot(5):HasTag("bundle")) and
+		not (_container:GetItemInSlot(6) and _container:GetItemInSlot(6):HasTag("bundle"))
+		--and not inst:HasTag("busywrappingholdup")
+	end
 end
 
 modparams.crabclaw =
@@ -494,6 +572,33 @@ modparams.sunkenchest_royal_rainbow = containers.params.shadowchester
 for k, v in pairs(modparams) do
     containers.MAXITEMSLOTS = math.max(containers.MAXITEMSLOTS, v.widget.slotpos ~= nil and #v.widget.slotpos or 0)
 end
+
+
+containers.params.um_inkubator =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 64 + 32 + 8 + 4, 0),
+            Vector3(0, 32 + 4, 0),
+            Vector3(0, -(32 + 4), 0),
+            --Vector3(0, -(64 + 32 + 8 + 4), 0),
+        },
+        slotbg =
+        {
+            { image = "um_inkubator_fuelslot.tex", atlas = "images/um_inkubator_fuelslot.xml" },
+            { image = "um_inkubator_meatslot.tex", atlas = "images/um_inkubator_meatslot.xml" },
+        },
+        animbank = "ui_cookpot_1x4",
+        animbuild = "ui_cookpot_1x4",
+        pos = Vector3(200, 0, 0),
+        side_align_tip = 100,
+    },
+    acceptsstacks = false,
+    type = "chest",
+    itemtestfn = CheckInkubator,
+}
 
 local function addItemSlotNetvarsInContainer(inst)
     if (#inst._itemspool < containers.MAXITEMSLOTS) then

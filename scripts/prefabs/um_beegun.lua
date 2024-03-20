@@ -258,6 +258,7 @@ local function fn(anim, name, swap, beetype)
     inst.beetype = beetype
 	inst.swap = swap
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")

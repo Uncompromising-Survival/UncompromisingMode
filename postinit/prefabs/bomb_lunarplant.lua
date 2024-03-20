@@ -22,4 +22,3 @@ env.AddPrefabPostInit("bomb_lunarplant", function(inst)
         end
     end
 end)
-

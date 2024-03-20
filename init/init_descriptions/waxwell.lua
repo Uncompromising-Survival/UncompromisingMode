@@ -582,3 +582,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "You'd do well not to threaten me."
 DESCRIBE.UM_TORNADO = "The seal was an accident, I swear!"
 DESCRIBE.UM_WATERFALL = "No reprieve from the downpour."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "We're free from any tornadoes, for now."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

@@ -1224,8 +1224,7 @@ function d_create_diffchecker_scrapbookdata(print_missing_icons)
         end
     end
 
-    --TODO FIX THIS IT CARHSES
-    --[[if print_missing_icons then
+    if print_missing_icons then
         print("\n\nScrapbook Missing Icons:\n")
         local str = {}
         for i, data in ipairs(icons_missing) do
@@ -1233,7 +1232,7 @@ function d_create_diffchecker_scrapbookdata(print_missing_icons)
         end
 
         print("\n" .. table.concat(str, "\n\n"))
-    end]]
+    end
 
     Scrapbook_WriteToFile(scrapbookdata)
 

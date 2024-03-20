@@ -9,11 +9,11 @@ local function Sparks(inst)
 	local x1 = x + math.random(-2, 2)
 	local z1 = z + math.random(-2, 2)
 
-	if math.random() >= 0.6 then
+	if math.random() >= 0.6 and not inst.shadowy then
 		SpawnPrefab("electricchargedfx").Transform:SetPosition(x1, 0, z1)
 	end
 
-	SpawnPrefab("sparks").Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
+	SpawnPrefab(inst.sparks).Transform:SetPosition(x1, 0 + 0.25 * math.random(), z1)
 end
 
 local function Zap(inst)
@@ -22,27 +22,15 @@ local function Zap(inst)
 	end
 
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local projectile = SpawnPrefab("lightning")
+	local projectile = SpawnPrefab(inst.shadowy and "cavehole_flick" or "lightning")
 	projectile.Transform:SetPosition(x, y + 2, z)
 
-	SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-	local ents = TheSim:FindEntities(x, y, z, 3.5, { "_health" }, inst.NoTags)
-    local chargeables = TheSim:FindEntities(x,y,z, 3.5, {"_inventoryitem",}, inst.NoTags)
-
-    for k,item in pairs(chargeables) do
-        print(k, item)
-        if item ~= nil and item.components.fueled ~= nil and item.components.fueled.fueltype == FUELTYPE.BATTERYPOWER then
-            item.components.fueled:DoDelta(TUNING.SMALL_FUEL)
-            item.components.fueled.ontakefuelfn(item, TUNING.SMALL_FUEL)
-            if item.components.fueled:GetPercent() > 1 then
-                item.components.fueled:SetPercent(1)
-            end    
-        end
-    end
+	for i = 1, 5 do
+		local spawnfx = SpawnPrefab(inst.sparks)
+		spawnfx.Transform:SetPosition(x, y + .25 + math.random() * 2, z)
+	end
+	
+	local ents = TheSim:FindEntities(x, y, z, 3.5, inst.MustTags, inst.NoTags)
 
 	for i, v in ipairs(ents) do
 		if v ~= nil and v.components.health ~= nil and not v.components.health:IsDead() and v.components.combat ~= nil then
@@ -97,7 +85,10 @@ local function fn()
 		return inst
 	end
 
+	inst.MustTags = { "_health" }
 	inst.NoTags = { "INLIMBO", "shadow", "structure", "wall" }
+	inst.shadowy = false
+	inst.sparks = "sparks"
 
 	inst.task = inst:DoPeriodicTask(0.05, Sparks)
 

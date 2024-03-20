@@ -1,0 +1,158 @@
+local assets =
+{
+    Asset("ANIM", "anim/player_ghost_withhat.zip"),
+    Asset("ANIM", "anim/ghost_build.zip"),
+    Asset("SOUND", "sound/ghost.fsb"),
+}
+
+local prefabs =
+{
+}
+
+local brain = require "brains/ghostbrain"
+--local brain = require "brains/abigailbrain"
+
+
+local function OnAttacked(inst, data)
+--    print("onattack", data.attacker, data.damage, data.damageresolved)
+
+    if data.attacker == nil then
+        inst.components.combat:SetTarget(nil)
+    elseif not data.attacker:HasTag("noauradamage") then
+       inst.components.combat:SetTarget(data.attacker)
+    end
+end
+
+local function KeepTargetFn(inst, target)
+    if target and inst:GetDistanceSqToInst(target) < TUNING.GHOST_FOLLOW_DSQ then
+        return true
+    end
+
+    inst.brain.followtarget = nil
+
+    return false
+end
+
+local COLLAPSIBLE_TAGS = { "player" }
+local NON_COLLAPSIBLE_TAGS = { "playerghost" }
+
+local function EmitBurst(inst)
+	local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, 0, z, 3, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
+    for i, v in ipairs(ents) do
+        if v:IsValid() then
+            if v.components.combat ~= nil
+                and v.components.health ~= nil
+                and not v:HasTag("bearger")
+                and not v.components.health:IsDead() then
+                if v.components.combat:CanBeAttacked() then
+                    v.components.combat:GetAttacked(inst, 30)
+                end
+            end
+        end
+    end
+
+    local cloud = SpawnPrefab("sporepack_circle")
+    cloud.entity:SetParent(inst.entity)
+	cloud.AnimState:SetMultColour(0,0,0,.6)
+end
+
+local function SpeedBoost(inst)
+	inst.components.locomotor.walkspeed = TUNING.GHOST_SPEED * 1.4
+	inst.components.locomotor.runspeed = TUNING.GHOST_SPEED * 1.4
+    inst.SoundEmitter:PlaySound("dontstarve/ghost/ghost_girl_attack_LP", "angry")
+	
+	inst.speeddebuff_task = inst:DoTaskInTime(3, function()
+		if inst.speeddebuff_task ~= nil then
+			inst.speeddebuff_task:Cancel()
+		end
+		
+		inst.speeddebuff_task = nil
+		inst.SoundEmitter:KillSound("angry")
+		
+		inst.components.locomotor.walkspeed = TUNING.GHOST_SPEED * .7
+		inst.components.locomotor.runspeed = TUNING.GHOST_SPEED * .7
+	end)
+end
+
+local function fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddLight()
+    inst.entity:AddNetwork()
+	
+    inst.Light:Enable(false)
+
+    MakeGhostPhysics(inst, .5, .5)
+
+    inst.AnimState:SetBank("ghost")
+    inst.AnimState:SetBuild("ghost_abigail_build")
+    inst.AnimState:PlayAnimation("idle", true)
+    inst.AnimState:SetMultColour(0,0,0,.6)
+	inst.AnimState:HideSymbol("face")
+
+    inst:AddTag("monster")
+    inst:AddTag("hostile")
+    inst:AddTag("ghost")
+    inst:AddTag("flying")
+    inst:AddTag("noauradamage")
+
+    --trader (from trader component) added to pristine state for optimization
+    inst:AddTag("trader")
+
+    inst.SoundEmitter:PlaySound("dontstarve/ghost/ghost_howl_LP", "howl")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:SetBrain(brain)
+
+    inst:AddComponent("locomotor")
+    inst.components.locomotor.walkspeed = TUNING.GHOST_SPEED * .7
+    inst.components.locomotor.runspeed = TUNING.GHOST_SPEED * .7
+    inst.components.locomotor.pathcaps = { allowocean = true, ignorecreep = true }
+    inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor.directdrive = true
+
+    inst:SetStateGraph("SGum_shadow_abigail")
+
+    inst:AddComponent("sanityaura")
+    inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
+
+    inst:AddComponent("inspectable")
+	
+    inst:AddComponent("trader")
+	
+    inst:AddComponent("follower")
+    inst.components.follower:KeepLeaderOnAttacked()
+    inst.components.follower.keepdeadleader = true
+
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(TUNING.GHOST_HEALTH)
+    inst.components.health.invincible = true
+
+    inst:AddComponent("combat")
+    inst.components.combat.defaultdamage = TUNING.GHOST_DAMAGE
+    inst.components.combat.playerdamagepercent = TUNING.GHOST_DMG_PLAYER_PERCENT
+    inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
+	
+	inst:DoPeriodicTask(TUNING.GHOST_DMG_PERIOD, EmitBurst, .5)
+	
+    inst.SpeedBoost = SpeedBoost
+	
+	inst.persists = false
+
+    inst:ListenForEvent("attacked", OnAttacked)
+
+    ------------------
+
+    return inst
+end
+
+return Prefab("um_shadow_abigail", fn, assets, prefabs)

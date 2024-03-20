@@ -613,3 +613,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "It's the protector of the herd."
 DESCRIBE.UM_TORNADO = "A natural phenomenon, or supernatural?"
 DESCRIBE.UM_WATERFALL = "The tornado appears to have punctured some resivoirs."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes are being picked up by the machine."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

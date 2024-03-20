@@ -12,14 +12,11 @@ local prefabs =
 
 local sounds =
 {
-    attack = "dontstarve/sanity/creature1/attack",
-    attack_grunt = "dontstarve/sanity/creature2/attack_grunt",
-    death = "dontstarve/sanity/creature2/die",
-    --idle = "dontstarve/sanity/creature2/idle",
-    idle = "dontstarve/sanity/creature1/idle",
-    taunt = "dontstarve/sanity/creature2/taunt",
-    appear = "dontstarve/sanity/creature2/appear",
-    disappear = "dontstarve/sanity/creature2/dissappear",
+    idle = "UCSounds/um_mindweaver/idle",
+    death = "UCSounds/um_mindweaver/death",
+    attack = "UCSounds/um_mindweaver/attack",
+    appear = "UCSounds/um_mindweaver/appear",
+    retreat = "UCSounds/um_mindweaver/retreat",
 }
 
 SetSharedLootTable("mindweaver",
@@ -75,16 +72,17 @@ local function ScanForPlayer(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	
 	if not inst.cooldown and inst:GetTimeAlive() >= 5 then
-		local ents = TheSim:FindEntities(x, y, z, 10, { "player" }, { "playerghost" })
+		local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" })
 	
 		if inst.components.follower.leader == nil then
 			for i, v in ipairs(ents) do
 				inst.Physics:Teleport(v.Transform:GetWorldPosition())
 				--inst.Transform:SetPosition(v.Transform:GetWorldPosition())
-				PlayExtendedSound(inst, "taunt")
 				inst.components.follower:SetLeader(v)
+				PlayExtendedSound(inst, "idle")
 				break
 			end
+			
 		elseif #ents > 0 and inst.components.follower.leader ~= nil then
 			if inst.shadowsize < 5 then
 				inst.shadowsize = inst.shadowsize + 0.1
@@ -174,6 +172,9 @@ local function fn(Sim)
     --inst.components.playerprox:SetPlayerAliveMode(true)
 	
     inst:AddComponent("combat")
+
+    --inst:AddComponent("um_shadowcloaked")
+	
     inst.sounds = sounds 
 	inst.cooldown = false
 	
@@ -192,7 +193,7 @@ local function fn(Sim)
 	end)
 	
 	inst:DoPeriodicTask(0.1, ScanForPlayer)
-	inst:DoTaskInTime(0,function(inst) PlayExtendedSound(inst, "taunt") end)
+	inst:DoTaskInTime(0,function(inst) PlayExtendedSound(inst, "appear") end)
 	--inst.ResetShadow = ResetShadow
 
     return inst

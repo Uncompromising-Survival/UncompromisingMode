@@ -145,11 +145,36 @@ local function RegisterNetListeners(inst)
 	inst:ListenForEvent("SetAdvertiseedirty", ToggleAdvertisee)
 end
 
+local function GetPointSpecialActions(inst, pos, useitem, right)
+	local rider = inst.replica.rider
+		
+    if right and useitem == nil and not TheWorld.Map:IsGroundTargetBlocked(pos) and 
+	(rider == nil or not rider:IsRiding()) and 
+	inst.replica.inventory and inst.replica.inventory:EquipHasTag("um_wingsuit") then
+		
+		return { ACTIONS.WINGSUIT }
+	end
+
+    return inst._Old_UM_pointspecialactionsfn ~= nil and inst._Old_UM_pointspecialactionsfn(inst, pos, useitem, right) or {}
+end
+
+local function OnSetOwner(inst)
+    if inst.components.playeractionpicker ~= nil then
+		if inst.components.playeractionpicker.pointspecialactionsfn ~= nil then
+			inst._Old_UM_pointspecialactionsfn = inst.components.playeractionpicker.pointspecialactionsfn
+		end
+	
+        inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
+    end
+end
+
 env.AddPlayerPostInit(function(inst)
 
 	inst.Advertisee = net_entity(inst.GUID, "SetAdvertisee.plyr", "SetAdvertiseedirty")
 	
 	inst:DoTaskInTime(0, RegisterNetListeners)
+	
+    inst:ListenForEvent("setowner", OnSetOwner)
 
     if inst.components.areaaware then
     inst.components.areaaware:StartWatchingTile(WORLD_TILES.UM_FLOODWATER)
@@ -263,24 +288,27 @@ env.AddPlayerPostInit(function(inst)
     local _OnLoad = inst.OnLoad
 
     inst.OnLoad = function(inst, data, ...)
-        if data and data.um_all_followers then
-            for k, v in pairs(data.um_all_followers) do
-                inst:DoTaskInTime(0.2 * math.random(), function(inst)
-                    local follower = SpawnSaveRecord(v)
-                    inst.components.leader:AddFollower(follower)
-                    follower:DoTaskInTime(0, function(follower)
-                        if inst:IsValid() and not follower:IsNear(inst, 8) then
-                            follower.Transform:SetPosition(
-                                inst.Transform:GetWorldPosition())
-                            follower.sg:GoToState("idle")
-                        end
-                    end)
-                    local fx = SpawnPrefab("spawn_fx_small")
-                    fx.Transform:SetPosition(
-                        follower.Transform:GetWorldPosition())
-                end)
-            end
+        if data then
+			if data.um_all_followers then
+				for k, v in pairs(data.um_all_followers) do
+					inst:DoTaskInTime(0.2 * math.random(), function(inst)
+						local follower = SpawnSaveRecord(v)
+						inst.components.leader:AddFollower(follower)
+						follower:DoTaskInTime(0, function(follower)
+							if inst:IsValid() and not follower:IsNear(inst, 8) then
+								follower.Transform:SetPosition(
+									inst.Transform:GetWorldPosition())
+								follower.sg:GoToState("idle")
+							end
+						end)
+						local fx = SpawnPrefab("spawn_fx_small")
+						fx.Transform:SetPosition(
+							follower.Transform:GetWorldPosition())
+					end)
+				end
+			end
         end
+		
 		
         if _OnLoad ~= nil then 
 			return _OnLoad(inst, data, ...) 

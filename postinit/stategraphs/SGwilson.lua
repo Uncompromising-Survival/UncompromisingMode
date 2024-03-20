@@ -2,6 +2,22 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("wilson", function(inst)
+	local function ToggleOffPhysics(inst)
+		inst.sg.statemem.isphysicstoggle = true
+		inst.Physics:ClearCollisionMask()
+		inst.Physics:CollidesWith(COLLISION.GROUND)
+	end
+
+	local function ToggleOnPhysics(inst)
+		inst.sg.statemem.isphysicstoggle = nil
+		inst.Physics:ClearCollisionMask()
+		inst.Physics:CollidesWith(COLLISION.WORLD)
+		inst.Physics:CollidesWith(COLLISION.OBSTACLES)
+		inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
+		inst.Physics:CollidesWith(COLLISION.CHARACTERS)
+		inst.Physics:CollidesWith(COLLISION.GIANTS)
+	end
+
     local function ClearStatusAilments(inst)
         if inst.components.freezable ~= nil and inst.components.freezable:IsFrozen() then
             inst.components.freezable:Unfreeze()
@@ -310,9 +326,19 @@ env.AddStategraphPostInit("wilson", function(inst)
                 return action.invobject ~= nil
                     and action.invobject:HasTag("lighter") and "castspelllighter"
             end),
+        ActionHandler(ACTIONS.WINGSUIT,
+            function(inst, action)
+                return (inst.sg.currentstate.name == "wingsuit_loop" or inst.sg.currentstate.name == "wingsuit_pst" or inst.sg.currentstate.name == "wingsuit_pre")
+				and "wingsuit_pre_quick" 
+				or "wingsuit_pre"
+            end),
         ActionHandler(ACTIONS.CREATE_BURROW,
             function(inst, action)
                 return "dolongaction"
+            end),
+        ActionHandler(ACTIONS.UM_ACTIVATABLE_ITEM,
+            function(inst, action)
+                return "doshortaction"
             end),
         ActionHandler(ACTIONS.CHARGE_POWERCELL,
             function(inst, action)
@@ -1780,6 +1806,202 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
 
         },
+
+        State {
+			name = "wingsuit_pre",
+			tags = { "doing", "nointerrupt", --[["busy",]] "boathopping", "jumping", "autopredict", "nomorph", "nosleep" },
+
+			onenter = function(inst)
+				
+				inst.um_wingsuit_flapcount = 0
+			
+				inst.Physics:SetMotorVelOverride(10, 0, 0)
+				inst:PerformBufferedAction()
+				inst.AnimState:PlayAnimation("boat_jump_pre")
+				
+				inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
+				inst.Physics:SetCollisionMask(COLLISION.GROUND)
+				if not TheWorld.ismastersim then
+					inst.Physics:SetLocalCollisionMask(COLLISION.GROUND)
+				end
+			end,
+
+			--timeline = timelines.hop_pre or nil,
+
+			ontimeout = function(inst)
+			end,
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					inst.sg:GoToState("wingsuit_loop")
+				end),
+			},
+
+			onexit = function(inst)
+				inst.Physics:ClearLocalCollisionMask()
+				if inst.sg.statemem.collisionmask ~= nil then
+					inst.Physics:SetCollisionMask(inst.sg.statemem.collisionmask)
+				end
+				inst:RemoveTag("ignorewalkableplatforms")
+
+				if inst.components.locomotor.isrunning then
+					inst:PushEvent("locomote")
+				end
+			end,
+        },
+
+        State {
+			name = "wingsuit_pre_quick",
+			tags = { "doing", --[["busy",]] "boathopping", "jumping", "autopredict", "nomorph", "nosleep" },
+
+			onenter = function(inst, data)
+				inst.Physics:SetMotorVelOverride(10, 0, 0)
+				inst:PerformBufferedAction()
+				inst.AnimState:PlayAnimation("boat_jump_loop")
+				
+				inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
+				inst.Physics:SetCollisionMask(COLLISION.GROUND)
+				if not TheWorld.ismastersim then
+					inst.Physics:SetLocalCollisionMask(COLLISION.GROUND)
+				end
+				inst:AddTag("ignorewalkableplatforms")
+			end,
+			
+            timeline =
+            {
+                TimeEvent(1 * FRAMES, function(inst)
+					inst.sg:GoToState("wingsuit_loop")
+                end),
+			},
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					inst.sg:GoToState("wingsuit_loop")
+				end),
+			},
+
+			onexit = function(inst)
+				inst.Physics:ClearLocalCollisionMask()
+				if inst.sg.statemem.collisionmask ~= nil then
+					inst.Physics:SetCollisionMask(inst.sg.statemem.collisionmask)
+				end
+				inst:RemoveTag("ignorewalkableplatforms")
+
+				if inst.components.locomotor.isrunning then
+					inst:PushEvent("locomote")
+				end
+			end,
+        },
+
+        State {
+            name = "wingsuit_loop",
+			tags = { "doing", "nointerrupt", --[["busy",]] "boathopping", "jumping", "autopredict", "nomorph", "nosleep" },
+
+			onenter = function(inst, data)
+				if inst.um_wingsuit_flapcount >= 10 then
+					inst.sg:AddStateTag("busy")
+				end
+			
+				SpawnPrefab("spikes_malbatross").entity:SetParent(inst.entity)
+				inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/flap")
+				inst.Physics:SetMotorVelOverride(10 - inst.um_wingsuit_flapcount, 0, 0)
+				
+				inst.um_wingsuit_flapcount = inst.um_wingsuit_flapcount + 1.25
+				inst:PerformBufferedAction()
+					
+				inst.AnimState:PlayAnimation("boat_jump_loop", true)
+				
+				inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
+				inst.Physics:SetCollisionMask(COLLISION.GROUND)
+				if not TheWorld.ismastersim then
+					inst.Physics:SetLocalCollisionMask(COLLISION.GROUND)
+				end
+				inst:AddTag("ignorewalkableplatforms")
+				
+				inst.sg:SetTimeout(1.1)
+			end,
+
+			ontimeout = function(inst)
+				inst.sg:GoToState("wingsuit_pst")
+			end,
+
+
+			timeline =
+			{
+				TimeEvent(.9, function(inst)
+					SpawnPrefab("spikes_malbatross").entity:SetParent(inst.entity)
+					inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/flap")
+				end),
+				TimeEvent(.75, function(inst)
+					SpawnPrefab("spikes_malbatross").entity:SetParent(inst.entity)
+					inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/flap")
+				end),
+				TimeEvent(.6, function(inst)
+					SpawnPrefab("spikes_malbatross").entity:SetParent(inst.entity)
+					inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/flap")
+				end),
+			},
+			--[[events =
+			{
+				EventHandler("animover", function(inst)
+				end),
+			},]]
+
+			onexit = function(inst)
+				inst.Physics:ClearLocalCollisionMask()
+				if inst.sg.statemem.collisionmask ~= nil then
+					inst.Physics:SetCollisionMask(inst.sg.statemem.collisionmask)
+				end
+				inst:RemoveTag("ignorewalkableplatforms")
+
+				if inst.components.locomotor.isrunning then
+					inst:PushEvent("locomote")
+				end
+			end,
+        },
+
+        State {
+            name = "wingsuit_pst",
+			tags = { "doing", "nointerrupt", "busy", "boathopping", "jumping", "autopredict", "nomorph", "nosleep" },
+
+			onenter = function(inst, data)
+				inst.Physics:SetMotorVelOverride(5, 0, 0)
+				inst.Physics:ClearMotorVelOverride()
+				inst.AnimState:PlayAnimation("boat_jump_pst")
+			end,
+
+			--timeline = timelines.hop_pst or nil,
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					inst.um_wingsuit_flapcount = 0
+					
+					local x, y, z = inst.Transform:GetWorldPosition()
+					
+					if TheWorld.Map:IsOceanAtPoint(x, y, z) then
+						inst.sg:GoToState("sink_fast")
+					else
+						inst.sg:GoToState("idle")
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				
+				inst.Physics:ClearLocalCollisionMask()
+				if inst.sg.statemem.collisionmask ~= nil then
+					inst.Physics:SetCollisionMask(inst.sg.statemem.collisionmask)
+				end
+				inst:RemoveTag("ignorewalkableplatforms")
+
+				if inst.components.locomotor.isrunning then
+					inst:PushEvent("locomote")
+				end
+			end,
+        },
 		
 		State{
 			name = "pact_armor_craft",
@@ -1888,6 +2110,206 @@ env.AddStategraphPostInit("wilson", function(inst)
 					end
 					
 					inst:ClearBufferedAction()
+				end
+			end,
+		},
+
+		State{
+			name = "enterastralportal",
+			tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+			onenter = function(inst, data)
+				ToggleOffPhysics(inst)
+				inst.Physics:Stop()
+				inst.components.locomotor:Stop()
+
+				inst.sg.statemem.target = data.teleporter
+				inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
+
+				inst.AnimState:PlayAnimation("townportal_enter_pre")
+
+				local astpool = SpawnPrefab("um_astral_pool")
+				astpool.Transform:SetScale(1, 1, 1)
+				astpool.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				astpool.components.colourtweener:StartTween({1,1,1,1}, .5)
+				astpool.components.timer:StartTimer("kill_whirlpool", 5)
+			end,
+
+			timeline =
+			{
+				TimeEvent(8 * FRAMES, function(inst)
+					local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+					puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+					inst.sg.statemem.isteleporting = true
+					inst.components.health:SetInvincible(true)
+					if inst.components.playercontroller ~= nil then
+						inst.components.playercontroller:Enable(false)
+					end
+					inst.DynamicShadow:Enable(false)
+				end),
+				TimeEvent(18 * FRAMES, function(inst)
+					inst:Hide()
+				end),
+				TimeEvent(26 * FRAMES, function(inst)
+					if inst.sg.statemem.target ~= nil and
+						inst.sg.statemem.target.components.teleporter ~= nil and
+						inst.sg.statemem.target.components.teleporter:Activate(inst) then
+						inst:Hide()
+					else
+						inst.sg:GoToState("exitastralportal")
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				if inst.sg.statemem.isphysicstoggle then
+					ToggleOnPhysics(inst)
+				end
+
+				if inst.sg.statemem.isteleporting then
+					inst.components.health:SetInvincible(false)
+					if inst.components.playercontroller ~= nil then
+						inst.components.playercontroller:Enable(true)
+					end
+					inst:Show()
+					inst.DynamicShadow:Enable(true)
+				end
+			end,
+		},
+
+		State{
+			name = "enterastralportal_nofx",
+			tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+			onenter = function(inst, data)
+				ToggleOffPhysics(inst)
+				inst.Physics:Stop()
+				inst.components.locomotor:Stop()
+
+				inst.sg.statemem.target = data.teleporter
+				inst.sg.statemem.teleportarrivestate = "exitastralportal_pre"
+
+				inst.AnimState:PlayAnimation("townportal_enter_pre")
+			end,
+
+			timeline =
+			{
+				TimeEvent(8 * FRAMES, function(inst)
+					local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+					puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				
+					inst.sg.statemem.isteleporting = true
+					inst.components.health:SetInvincible(true)
+					if inst.components.playercontroller ~= nil then
+						inst.components.playercontroller:Enable(false)
+					end
+					inst.DynamicShadow:Enable(false)
+				end),
+				TimeEvent(18 * FRAMES, function(inst)
+					inst:Hide()
+				end),
+				TimeEvent(26 * FRAMES, function(inst)
+					if inst.sg.statemem.target ~= nil and
+						inst.sg.statemem.target.components.teleporter ~= nil and
+						inst.sg.statemem.target.components.teleporter:Activate(inst) then
+						inst:Hide()
+					else
+						inst.sg:GoToState("exitastralportal")
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				if inst.sg.statemem.isphysicstoggle then
+					ToggleOnPhysics(inst)
+				end
+
+				if inst.sg.statemem.isteleporting then
+					inst.components.health:SetInvincible(false)
+					if inst.components.playercontroller ~= nil then
+						inst.components.playercontroller:Enable(true)
+					end
+					inst:Show()
+					inst.DynamicShadow:Enable(true)
+				end
+			end,
+		},
+
+		State{
+			name = "exitastralportal_pre",
+			tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+			onenter = function(inst)
+				ToggleOffPhysics(inst)
+				inst.components.locomotor:Stop()
+
+				inst:Hide()
+				inst.components.health:SetInvincible(true)
+				if inst.components.playercontroller ~= nil then
+					inst.components.playercontroller:Enable(false)
+				end
+				inst.DynamicShadow:Enable(false)
+
+				inst.sg:SetTimeout(32 * FRAMES)
+			end,
+
+			ontimeout = function(inst)
+				inst.sg:GoToState("exitastralportal")
+			end,
+
+			onexit = function(inst)
+				if inst.sg.statemem.isphysicstoggle then
+					ToggleOnPhysics(inst)
+				end
+
+				inst:Show()
+				inst.components.health:SetInvincible(false)
+				if inst.components.playercontroller ~= nil then
+					inst.components.playercontroller:Enable(true)
+				end
+				inst.DynamicShadow:Enable(true)
+			end,
+		},
+
+		State{
+			name = "exitastralportal",
+			tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
+
+			onenter = function(inst)
+				local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+				puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				
+				ToggleOffPhysics(inst)
+				inst.components.locomotor:Stop()
+
+				inst.AnimState:PlayAnimation("townportal_exit_pst")
+			end,
+
+			timeline =
+			{
+				TimeEvent(18 * FRAMES, function(inst)
+					if inst.sg.statemem.isphysicstoggle then
+						ToggleOnPhysics(inst)
+					end
+				end),
+				TimeEvent(26 * FRAMES, function(inst)
+					inst.sg:RemoveStateTag("busy")
+					inst.sg:RemoveStateTag("nopredict")
+				end),
+			},
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					if inst.AnimState:AnimDone() then
+						inst.sg:GoToState("idle")
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				if inst.sg.statemem.isphysicstoggle then
+					ToggleOnPhysics(inst)
 				end
 			end,
 		},

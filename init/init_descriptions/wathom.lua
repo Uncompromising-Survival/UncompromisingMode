@@ -578,3 +578,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Familiar aura, guardian."
 DESCRIBE.UM_TORNADO = "High winds, senses... confused."
 DESCRIBE.UM_WATERFALL = "Above, damage. Cracks in shell."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "High winds, nowhere near."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

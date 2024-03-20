@@ -86,26 +86,20 @@ local function ConsumeLight(inst)
 			
 			SpawnPrefab("fuelseeker_circle").Transform:SetPosition(v.Transform:GetWorldPosition())
 			
-			if inst.fire ~= nil then
-				inst.fire:LevelUp()
-			end
+			inst:LevelUp()
 		elseif v._light ~= nil and v.components.fueled ~= nil and v.components.fueled.consuming then
 			v.components.fueled:DoDelta(-8)
 			
 			SpawnPrefab("fuelseeker_circle").Transform:SetPosition(v.Transform:GetWorldPosition())
 			
-			if inst.fire ~= nil then
-				inst.fire:LevelUp()
-			end
+			inst:LevelUp()
 		elseif v._lastpulsesync ~= nil and v.components.timer then
 			if v.components.timer:GetTimeLeft("extinguish") ~= nil then
 				v.components.timer:SetTimeLeft("extinguish", v.components.timer:GetTimeLeft("extinguish") - 25)
 				
 				SpawnPrefab("fuelseeker_circle").Transform:SetPosition(v.Transform:GetWorldPosition())
 				
-				if inst.fire ~= nil then
-					inst.fire:LevelUp()
-				end
+				inst:LevelUp()
 			end
 		end
 	end
@@ -118,9 +112,6 @@ local states=
         tags = { "busy" },
 
         onenter = function(inst)
-			if inst.fire ~= nil then
-				inst.fire:Hide()
-			end
 			inst:AddTag("INLIMBO")
             PlayExtendedSound(inst, "death")
             inst.AnimState:PlayAnimation("disappear")
@@ -147,10 +138,6 @@ local states=
         tags = {"idle", "canrotate", "disappearing"},
 		
         onenter = function(inst)
-			if inst.fire ~= nil then
-				inst.fire:Show()
-			end
-			inst:RemoveTag("INLIMBO")
 			inst.AnimState:PlayAnimation("appear")
             PlayExtendedSound(inst, "appear")
         end,
@@ -198,7 +185,7 @@ local states=
         onenter = function(inst, start_anim)
             inst.components.locomotor:StopMoving()
 			
-            PlayExtendedSound(inst, "idle")
+            --PlayExtendedSound(inst, "idle")
             
 			inst.AnimState:PlayAnimation("idle_stealing_pre")
             --inst.sg:SetTimeout(5)
@@ -226,7 +213,7 @@ local states=
 				inst.consumetask = inst:DoPeriodicTask(0.5, ConsumeLight)
 			end
 			
-            PlayExtendedSound(inst, "attack_grunt")
+            PlayExtendedSound(inst, "suck")
             
 			inst.AnimState:PlayAnimation("idle_stealing", true)
             --inst.sg:SetTimeout(5)
@@ -242,7 +229,7 @@ local states=
         events=
         {
             EventHandler("animover", function(inst)
-				if inst.fire ~= nil and inst.fire.level >= 3 then
+				if inst.level >= 3 then
 					inst.sg:GoToState("burst")
 				elseif LightStealTarget(inst) then
 					inst.sg:GoToState("stealing")
@@ -260,31 +247,45 @@ local states=
         onenter = function(inst, start_anim)
             inst.components.locomotor:StopMoving()
 		
-            PlayExtendedSound(inst, "attack")
+			local fx = SpawnPrefab("fuelseeker_darkfire")
+			fx.entity:SetParent(inst.entity)
+			fx.entity:AddFollower()
+			fx.Follower:FollowSymbol(inst.GUID, "flames_wide", 0, 0, 0)
+		
+            PlayExtendedSound(inst, "windup")
             
 			inst.AnimState:PlayAnimation("burst")
             --inst.sg:SetTimeout(5)
         end,
-        
-        events=
+
+        timeline =
         {
-            EventHandler("animover", function(inst)
+            TimeEvent(31*FRAMES, function(inst)
+				PlayExtendedSound(inst, "burst")
 				
 				local x, y, z = inst.Transform:GetWorldPosition()
 				local ents = TheSim:FindEntities(x, y, z, 6, {"player"}, {"playerghost"})
-				local explosive = SpawnPrefab("shadow_puff_solid")
-				explosive.Transform:SetPosition(x, y, z)
-				explosive.Transform:SetScale(4, 4, 4)
+				
+				local burstring = SpawnPrefab("dreadeye_sanityburstring")
+				burstring.Transform:SetPosition(x, y, z)
+				burstring.Transform:SetScale(1.8, 1.8, 1.8)
+				
+				local fx = SpawnPrefab("fuelseeker_darkfirepuff")
+				fx.entity:SetParent(inst.entity)
+				fx.entity:AddFollower()
+				fx.Follower:FollowSymbol(inst.GUID, "fuelseeker_body", 0, 0, 0)
 				
 				for i, v in ipairs(ents) do
 					v.components.combat:GetAttacked(inst, 50, nil)
 				end
 				
-				
-				if inst.fire ~= nil then
-					inst.fire:Reset()
-				end
-				
+				inst:Reset()
+			end),
+        },
+        
+        events=
+        {
+            EventHandler("animover", function(inst)
 				inst.sg:GoToState("idle")
 			end),
         },
@@ -297,7 +298,7 @@ local states=
         onenter = function(inst, start_anim)
             inst.components.locomotor:StopMoving()
 		
-            PlayExtendedSound(inst, "idle")
+            --PlayExtendedSound(inst, "idle")
             
 			inst.AnimState:PlayAnimation("idle_stealing_pst")
             --inst.sg:SetTimeout(5)
@@ -326,27 +327,20 @@ local states=
         tags = { "busy", "hit", "disappearing" },
 
         onenter = function(inst)
-			if inst.fire ~= nil then
-				inst.fire:Hide()
-			end
-		
-			inst:AddTag("INLIMBO")
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("disappear")
-			PlayExtendedSound(inst, "death")
+			PlayExtendedSound(inst, "attacked")
         end,
 
         events =
         {
             EventHandler("animover", function(inst)
-                local max_tries = 4
-                for k = 1, max_tries do
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local offset = 10
-                    x = x + math.random(2 * offset) - offset
-                    z = z + math.random(2 * offset) - offset
-                    if TheWorld.Map:IsPassableAtPoint(x, y, z) then
-                        inst.Physics:Teleport(x, y, z)
+				local x0, y0, z0 = inst.Transform:GetWorldPosition()
+				for k = 1, 8 --[[# of attempts]] do
+					local x = x0 + math.random(-15, 15)
+					local z = z0 + math.random(-15, 15)
+					if TheWorld.Map:IsPassableAtPoint(x, 0, z) and #TheSim:FindEntities(x, 0, z, 5, { "player" }) == 0 then
+						inst.Physics:Teleport(x, 0, z)
                         break
                     end
                 end
@@ -362,10 +356,6 @@ local states=
         tags = {"busy", "disappearing"},
         
         onenter = function(inst)
-			if inst.fire ~= nil then
-				inst.fire:Hide()
-			end
-			inst:AddTag("INLIMBO")
             inst.AnimState:PlayAnimation("disappear")
 			PlayExtendedSound(inst, "death")
 			

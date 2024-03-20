@@ -1,4 +1,5 @@
 STRINGS = GLOBAL.STRINGS
+
 -- [              DSTU Related Overrides                  ]
 
 STRINGS.DSTU = {
@@ -32,6 +33,8 @@ STRINGS.SKIN_DESCRIPTIONS.winky_none = "She's a fan of shiny things."
 STRINGS.ACTIONS.CREATE_BURROW = "Make Burrow"
 STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
 
+STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = "Ponder"
+
 STRINGS.ACTIONS.TURNOFF.HARPOON = "Break Reel"
 STRINGS.ACTIONS.ACTIVATE.HARPOON = "Reel"
 STRINGS.ACTIONS.CASTSPELL.HARPOON = "Throw Magnerang"
@@ -47,19 +50,40 @@ STRINGS.ACTIONS.CASTSPELL.CHARLES_CHARGE = "Charge!"
 STRINGS.ACTIONS.CASTSPELL.SLINGSHOT = "Shoot"
 STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
 
-
 STRINGS.VETS_WIDGET_WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_CONFIRMED_TITLE = "You Made Your Choice."
 STRINGS.VETS_CONFIRMED = "Now you must live with the consequences..."
-
 STRINGS.VETS_TITLE = "The Veterans Curse."
 STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nYour body will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
-
 STRINGS.VETS_OK = "Ok"
+
+STRINGS.UI.CRAFTING.NEEDSVETERANSHRINE_ONE = "Require's something... darker."
+
+STRINGS.VETSKULL_TITLE = "The Veterans Skull"
+STRINGS.VETSKULL = {
+    --DEFAULT = "Return this skull to the Veterans Shrine\nYou will gain access to new items, but will be cursed.\nCurse Effects:\n-\n",
+    DEFAULT = "Return this skull to the Veterans Shrine\nCurse Effects:",
+    WILSON = "Deaths increase stat loss by 10%, up to 50%.",
+    WALTER = "Damage taken in combat increased by 50%\nThis damage applies over time, and can be cured with healing items.",
+    WORTOX = "Slain enemies will drop explosive souls.\nThese souls will deal damage based on the slain enemies max health.",
+    MAXWELL = "Chasing stalking never stopping always hunting.",
+    WILLOW = "...?",
+    WARLY = "Hunger gained past your maximum will make you drowsy.",
+    WINKY = "Dropping or breaking items will cause you pain.\nWait that sucks.",
+    WICKERBOTTOM = "Going without sleep for long periods of time will\neventually cause you to pass out.",
+    WIXIE = "Hostile Krampii may spawn when killing innocent creatures.",
+    WOODIE = "...?",
+    WOLFGANG = "Hunger is regained over time.\nFalling below 50% hunger will start to incur damage penalties.\nFalling below 30% will start to incur speed penalties.",
+    WANDA = "Nightmare creatures have a chance to spawn from slain enemies.\nChance is based on missing sanity.",
+    WATHGRITHR = "Your enemies have a chance to be buffed up, increasing their\nsize, speed, attack range, and attack speed.",
+    WES = "Your stats and clock are hidden from you.\nLow health will be indicated by a heartbeat.\nDusk announcements are restored.",
+    WENDY = "Health can never go higher than your current sanity percentage.",
+}
 
 STRINGS.PACTSWORN_TITLE = "The Shadow Pact"
 STRINGS.PACTSWORN_TEXT = "A new path lies before you, if you give up the Codex Umbra. You will lose your spells, take 25% more damage, but you will gain a summonable sword, armor, and true classic shadows.\nThis canot be undone."
+
 
 STRINGS.PIG_REMEMBER_THREAT = { "REMEMBER YOU!", "YOU HURT US!", "YOU MEAN!" }
 STRINGS.PIG_GUARD_PIGKING_TALK_LOOKATWILSON = { "NO SMASH HOUSES", "US WATCHING YOU", "BE GOOD HERE", "WATCHING YOU" }
@@ -339,6 +363,126 @@ STRINGS.STALKER_ATRIUM_WATHOM_BATTLECRY = {
     "Our mistakes shouldn't be repeated.",
     "Let the dead stay buried.",
     "I pity you, mimic.",
+}
+
+STRINGS.UM_VETERANSHRINE = {
+    VETERANCURSETAUNT = {
+        "COME... CLOSER...",
+        "THE... CHALLENGE...",
+        "CURSE... WAY OUT..."
+    },
+    VETERANCURSED = {
+        "NO... GOING... BACK...",
+        "PACT... MADE...",
+        "BRING... SKULLS..."
+    },
+    NOT_VETERANCURSED = {
+        "NOT... AFFLICTED..."
+    },
+    NOT_VETERANSKULL = {
+        "NOT... DESIRED..."
+    },
+    VETSKULL_COMMENT = {
+        WILSON = "A CURIOUS MIND... DESTINED FOR DANGER",
+        WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE",
+        WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING",
+        MAXWELL = "THINKS HIMSELF A KING... HE WAS ONLY EVER A PAWN",
+        WILLOW = "CAREFREE... CARELESS... MAY SHE FIND PEACE",
+        WARLY = "ALWAYS HUNGRY FOR MORE... NEVER SATED",
+        WINKY = "THE RESULT... OF THEIR MEDDLING...",
+        WICKERBOTTOM = "TOO EAGER... TO TAMPER... WITH DARK FORCES",
+        WIXIE = "DARKNESS INSIDE HER... THEIR FAVORITE FUEL SOURCE",
+        WOODIE = "TAMPERED ONCE... WITH OUR INFLUENCES",
+        WOLFGANG = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
+        WANDA = "ALWAYS RUNNING... HER TIME RUNS SHORT",
+        WATHGRITHR = "THEY FUEL HER DELUSIONS... SHE FUELS THEIR DESITRES",
+        WES = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
+        WENDY = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
+
+        WORMWOOD = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
+        WX78 = "A NEW SHELL... WITH NO SOUL TRANSFERRED",
+    },
+}
+
+STRINGS.UM_VOXOLOPHONE = {
+    SHADOW_WARNING = {
+        HECKLER = {
+            "AN AUDIENCE... DISAPPROVING... VENEMOUS TONGUE...",
+            "THEY SIT... IN DARKNESS... VILE SPIT.",
+            "SLINKING... SLURPING... SPITTING.",
+        },
+        MINDWEAVER = {
+            "LURKING... WAITING TO STRIKE... WATCH YOUR HEAD.",
+            "HIDING... ABOVE... WATCH YOUR SHADOW.",
+            "UNSEEN... WAITING... LISTEN FOR ITS WARNING.",
+        },
+        HIVE = {
+            "VOLATILE... MOTHER... KEEP YOUR DISTANCE.",
+            "INCUBATING... WANDERING... WAITING TO HATCH.",
+            "DEFENSLESS... CORNERED... WILL BE YOUR END.",
+        },
+        BREAKER = {
+            "THE FIRST LINE... HEADSTRONG... BREAKING.",
+            "WORKING... CRACKING... DESTRUCTION.",
+            "THEY REMEMBER... SEEKING... MINING.",
+        },
+        GRABBY = {
+            "GRASPING... CHASING... DRAGGED INTO DARKNESS.",
+            "A HUNDRED HANDS... SEEKING LIFE.",
+            "FINGERS... BONES... OUTSTRETCHED, WANTING.",
+        },
+        VORTEX = {
+            "CONSUMING... FORCE... KEEP AWAY.",
+            "SHADOWY INFLUENCE... A PORTAL... INTO DARKNESS.",
+            "BEWARE... THEIR FORCE... GROWING, CONSUMING.",
+        },
+        HAUNT = {
+            "LISTEN... CLOSELY... INVISIBLE THREAT.",
+            "HIDING... WAITING... SEEK IT OUT.",
+            "HAUNTING... LINGERING... CHASE IT OUT.",
+        },
+        FUELSEEKER = {
+            "THEY ARE HUNGRY... THEY FEAST ON LIGHT.",
+            "CHASING AWAY... WHAT LIGHT REMAINS...",
+            "THEY... CONSUME... DO NOT LET THEM.",
+        },
+        NIGHTCRAWLER = {
+            "GNAWING THINGS... PROTECT THE MACHINE.",
+            "THEY SEEK SILENCE... MY VOICE, CUT OFF.",
+            "GUARD THE MACHINE... PESTS ARE CLOSE.",
+        },
+        UM_LEECHES = {
+            "THE LIGHT... THEY FEAR... KEEP IT LIT.",
+            "THEY FEAST... IN DARKNESS... KEEP THE LIGHT CLOSE.",
+            "AFRAID... THEY SWARM... LIGHT REPULSES THEM.",
+        },
+        HANDS = {
+            "THEY SEEK... THEY TAKE... CHASE THEM BACK.",
+            "BITE THE HAND... THAT FEEDS.",
+            "STRETCHING OUT... SEEKING FLAME... STOMP THEM OUT.",
+        },
+        NIGHTMARECREATURE = {
+            "A LOWLY CREATURE... CORRUPTED... FIGHT THEM OFF.",
+            "A LOYAL SOLDIER... ONE OF MANY... FAMILIAR.",
+            "ANOTHER SERVANT... A WARPED VISAGE... DISPATCH.",
+        },
+        SHADOWCHARACTER = {
+            "THEY TAKE YOUR IMAGE... LEARN YOUR TRICKS.",
+            "THEY STUDY YOU WELL... AND MOCK YOUR VISAGE.",
+            "THEY MAKE YOU DANCE... LIKE A PUPPET ON A STRING.",
+        },
+    },
+    SPAWN_TALK = {
+        "F##LOW... MY... V##CE...",
+        "F#ND... #HE... MA#HINE...",
+        "CANN#T... SPE#K... LO#G",
+    },
+    NEWMOON_WARNING = {
+        "THE... LIGHT... FIND... LIGHT",
+        "LITTLE... TIME... REMAINING...",
+        "BEWARE... THE... DARK",
+        "KEEP... THE... MACHINE... CLOSE",
+    },
 }
 
 STRINGS.ACTIONS.SET_CUSTOM_NAME = "Set Custom Name"

@@ -564,3 +564,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Steer clear of this bleater."
 DESCRIBE.UM_TORNADO = "Mother nature is a cruel mistress."
 DESCRIBE.UM_WATERFALL = "What a disaster."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes around, but I coulda told you that."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

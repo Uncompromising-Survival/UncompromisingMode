@@ -5,18 +5,20 @@ if not folder_name:find("workshop-") then
     name = "[LOCAL] - " .. name
 end
 
-local _version = "1.4.9.3"
+local _version = "1.5.0.0"
 
 description = [[
     󰀔 [ Version 1.5.0.0 Testing: "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[ ]
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
+- Night Terrors!
+- New Veterans Curse Effects!
+- New Veterans Curse Items!
 - Scrapbook integration!
-- Ocupus!
 - To be revealed...
 
-󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain" ]]
+󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
@@ -114,6 +116,25 @@ configuration_options = {
     Header("In Development"),
     BinaryConfig("ck_loot", "Additional Crab King Loot",
         "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+
+    BinaryConfig("shadow_items", "Shadow Character Items",
+        "Shadow Characters drop Unique Items", false),
+
+    BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
+    {
+        name = "wathgrithr_rework_",
+        label = "Wigfrid - Rework",
+        hover = "Reduced Wigfrids combat leeching, revamped skill tree, added more meaningful alingment choices.",
+        options = {
+
+            { description = "Enabled",  data = 1, hover = "All changes enabled."},
+            { description = "Legacy",  data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
+            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
+
+        default = 1
+    },
+
+    BinaryConfig("worldlyskilltrees", "Worldly Skilltrees", "Skilltrees and insight are per-world, instead of always being unlocked.\nBosses give insight XP.", true),
     SkipSpace(),
 
     Header("Core Gameplay"),

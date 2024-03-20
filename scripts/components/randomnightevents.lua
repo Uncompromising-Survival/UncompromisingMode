@@ -35,9 +35,9 @@ local function PlayerScaling(player)
 
 	if #ents >= 0 and #ents < 3 then
 		return 1
-	elseif #ents >= 2 and #ents < 5 then
+	elseif #ents >= 3 and #ents < 5 then
 		return 2
-	elseif #ents >= 5 and #ents < 7 then
+	elseif #ents >= 5 and #ents <= 6 then
 		return 3
 	elseif #ents > 6 then
 		return 4
@@ -1363,7 +1363,7 @@ local function SpawnNightCrawlers(player)
 						local light = TheSim:GetLightAtPoint(x1, 0, z1)
 
 						if light <= 0.1 and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
-							local ent = SpawnPrefab("nightcrawler")
+							local ent = SpawnPrefab("um_nightcrawler")
 							ent.Transform:SetPosition(x1, 0, z1)
 							break
 						end
@@ -1574,12 +1574,12 @@ local BASE =
 	SkeleBros = { name = SkeleBros, weight = .3, },
 	Stanton = { name = Stanton, weight = .1, },
 	Earthquake = { name = Earthquake, weight = .1, },
-	SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
+	--[[SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
 	SpawnShadowVortex = { name = SpawnShadowVortex, weight = .5, },
 	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
 	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
 	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
+	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },]]
 }
 
 for k, v in pairs(BASE) do
@@ -1600,12 +1600,12 @@ local WILD =
 	SkeleBros = { name = SkeleBros, weight = .3, },
 	Stanton = { name = Stanton, weight = .1, },
 	Earthquake = { name = Earthquake, weight = .1, },
-	SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
+	--[[SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
 	SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
 	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
 	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
 	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
+	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },]]
 }
 
 for k, v in pairs(WILD) do

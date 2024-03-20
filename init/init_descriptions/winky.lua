@@ -583,3 +583,9 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "There is not enough room for the both of us!"
 DESCRIBE.UM_TORNADO = "Stupid wind has come back for revenge!"
 DESCRIBE.UM_WATERFALL = "I shower regularly."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No dumb tornadoes to steal my things."
+
+DESCRIBE.UM_BOAT_ENGINE = {
+    ON = "PLEASE WRITE QUOTES",
+    LOWFUEL = "PLEASE WRITE QUOTES",
+    OVERHEATING = "PLEASE WRITE QUOTES"
+}

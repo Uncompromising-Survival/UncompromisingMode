@@ -156,6 +156,7 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("weapon")

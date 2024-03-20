@@ -227,3 +227,13 @@ function EntityScript:AddPlatformFollower(child)
         RemovePhysicsColliders(child)                  --altough removing the structure collision instead of the player's seems like a more reasonable idea.
     end
 end
+
+env.AddPrefabPostInitAny(function(inst)
+    if not TheWorld.ismastersim then 
+		return inst 
+	end
+	
+    if not inst:HasTag("companion") and not inst:HasTag("abigail") and inst.components and inst.components.combat then
+		inst:AddComponent("um_spiritbuff")
+    end
+end)

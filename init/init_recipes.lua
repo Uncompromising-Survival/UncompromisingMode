@@ -24,7 +24,12 @@ local CRAFTING_FILTERS = GLOBAL.CRAFTING_FILTERS
 -- @recipe_name: (str) the recipe to sort
 -- @recipe_reference:(str) the recipe to place the given recipe next to
 -- @filter: (str) the crafting filter to sort in
--- @after: (bool) whether the recipe should be sorted after the reference
+-- @after: (bool) whether the recipe should be sorted after the references
+--vscode param defs
+---@param recipe_name string the recipe to sort
+---@param recipe_reference string the recipe to place the given recipe next to
+---@param filter string the crafting filter to sort in
+---@param after boolean whether the recipe should be sorted after the references
 local function ChangeSortKey(recipe_name, recipe_reference, filter, after)
     local recipes = CRAFTING_FILTERS[filter].recipes
     local recipe_name_index
@@ -693,8 +698,6 @@ if GetModConfigData("snowstorms") then
     ChangeSortKey("wall_stone_item", "wall_wood_item", "WINTER", true)
     AddRecipeToFilter("wall_moonrock_item", "WINTER")
     ChangeSortKey("wall_moonrock_item", "wall_stone_item", "WINTER", true)
-    AddRecipeToFilter("turf_dragonfly", "WINTER")
-    ChangeSortKey("turf_dragonfly", "dragonflyfurnace", "WINTER", true)
     AddRecipeToFilter("wall_dreadstone_item", "WINTER")
     ChangeSortKey("wall_dreadstone_item", "wall_moonrock_item", "WINTER", true)
 end
@@ -828,15 +831,143 @@ if GetModConfigData("monstersmallmeat") then
     ChangeSortKey("transmute_monstersmallmeat", "transmute_smallmeat", "CHARACTER", true)
 end
 
--- deconstruct recipes
-AddDeconstructRecipe("cursed_antler", { Ingredient("boneshard", 8), Ingredient("nightmarefuel", 2) })
-AddDeconstructRecipe("beargerclaw", { Ingredient("boneshard", 4), Ingredient("furtuft", 8) })
-AddDeconstructRecipe("klaus_amulet", { Ingredient("goldnugget", 4), Ingredient("nightmarefuel", 6) })
-AddDeconstructRecipe("feather_frock", { Ingredient("goose_feather", 6) })
-AddDeconstructRecipe("gore_horn_hat", { Ingredient("meat", 2), Ingredient("nightmarefuel", 4) })
-AddDeconstructRecipe("crabclaw", { Ingredient("rocks", 4), Ingredient("cutstone", 1) })
-AddDeconstructRecipe("slobberlobber", { Ingredient("dragon_scales", 1), Ingredient("meat", 1) })
-AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("royal_jelly", 2) })
+-- NEW Vets Curse Item Recipes
+local TechTree = require("techtree")
+table.insert(TechTree.AVAILABLE_TECH, "VETERANSHRINE")
+
+for k, v in pairs(TUNING.PROTOTYPER_TREES) do
+    v.VETERANSHRINE = 0
+end
+
+for k, v in pairs(AllRecipes) do
+    v.level.VETERANSHRINE = 0
+end
+
+TECH.NONE.VETERANSHRINE = 0
+
+TECH.VETERANSHRINE_ONE = { VETERANSHRINE = 1 }
+
+TUNING.PROTOTYPER_TREES.VETERANSHRINE_ONE = TechTree.Create({
+    VETERANSHRINE = 1,
+})
+
+AddRecipe2(
+    "cursed_antler",
+    { Ingredient("um_deerclops_soul", 1), Ingredient("boneshard", 6), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("armor_sharksuit_um", "armordragonfly", "MAGIC", true)
+
+AddRecipe2(
+    "beargerclaw",
+    { Ingredient("um_bearger_soul", 1), Ingredient("furtuft", 4), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("beargerclaw", "cursed_antler", "MAGIC", true)
+
+AddRecipe2(
+    "klaus_amulet",
+    { Ingredient("um_klaus_soul", 1), Ingredient("purplegem", 1), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("klaus_amulet", "beargerclaw", "MAGIC", true)
+
+AddRecipe2(
+    "silksack",
+    { Ingredient("um_hoodedwidow_soul", 1), Ingredient("silk", 6), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
+
+AddRecipe2(
+    "feather_frock",
+    { Ingredient("um_goose_soul", 1), Ingredient("goose_feather", 3), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
+
+AddRecipe2(
+    "gore_horn_hat",
+    { Ingredient("um_minotaur_soul", 1), Ingredient("catcoonhat", 1), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("gore_horn_hat", "feather_frock", "MAGIC", true)
+
+AddRecipe2(
+    "crabclaw",
+    { Ingredient("um_crabking_soul", 1), Ingredient("fishmeat", 3), Ingredient("um_dark_vestiges", 2) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("crabclaw", "gore_horn_hat", "MAGIC", true)
+
+AddRecipe2(
+    "slobberlobber",
+    { Ingredient("um_dragonfly_soul", 1), Ingredient("redgem", 2), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("slobberlobber", "crabclaw", "MAGIC", true)
+
+AddRecipe2(
+    "um_beegun",
+    { Ingredient("um_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("um_beegun", "slobberlobber", "MAGIC", true)
+
+AddRecipe2(
+    "um_wingsuit",
+    { Ingredient("um_malbatross_soul", 1), Ingredient("malbatross_feathered_weave", 2), Ingredient("um_dark_vestiges", 1) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("um_wingsuit", "um_beegun", "MAGIC", true)
+
+AddRecipe2(
+    "um_exhumer",
+    { Ingredient("um_fuelweaver_soul", 1), Ingredient("fossil_piece", 2), Ingredient("um_dark_vestiges", 2) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("um_exhumer", "um_wingsuit", "MAGIC", true)
+
+AddRecipe2(
+    "um_moonfly_lantern",
+    { Ingredient("um_moonmaw_soul", 1), Ingredient("fireflies", 2), Ingredient("um_dark_vestiges", 2) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("um_moonfly_lantern", "um_exhumer", "MAGIC", true)
+
+AddRecipe2(
+    "um_beegun_cherry",
+    { Ingredient("um_cherry_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) },
+    TECH.VETERANSHRINE_ONE,
+    { nounlock = true },
+    { "MAGIC" }
+)
+--ChangeSortKey("um_beegun_cherry", "um_wingsuit", "MAGIC", true)
+
 
 AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })
 AddDeconstructRecipe(
@@ -962,10 +1093,7 @@ AllRecipes["chum"].ingredients = {
     Ingredient("rope", 1),
     Ingredient("waterplant_bomb", 1)
 }
-if not GLOBAL.TUNING.DSTU.UPDATE_CHECK then
-    AllRecipes["hermitshop_chum"].ingredients = { Ingredient("messagebottleempty", 1) }
-    AllRecipes["hermitshop_chum"].numtogive = 3
-end
+
 --[[
 AddRecipe2(
 "hermitshop_oil",
@@ -1011,10 +1139,6 @@ AddRecipe2(
     { "SEAFARING" }
 )
 ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
-
-AddRecipe2("codex_mantra", { Ingredient("waxwelljournal", 1) }, TECH.NONE, { builder_tag = "shadowmagic" },
-    { "CHARACTER" })
-ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 AddRecipe2(
     "mastupgrade_windturbine_item",
@@ -1102,6 +1226,8 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
 end
+
+AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 
 -- WIXIE RELATED CRAFTS
 if GetModConfigData("wixie_walter") then
@@ -1405,6 +1531,48 @@ AddRecipe2("um_record_winky", {Ingredient("batwing", 1), Ingredient("charcoal", 
 AddRecipe2("um_record_hooded_widow", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_hooded_widow.xml"}, {"DECOR"})
 AddRecipe2("um_record_stranger", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_stranger.xml"}, {"DECOR"})
 
+    AddRecipe2(
+        "um_scrapper",
+        { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) },
+        GLOBAL.TECH.LOST,
+		{ placer = "um_scrapper_placer" },
+        { "STRUCTURES" }
+    )
+
+    GLOBAL.STRINGS.RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
+    AddRecipeToFilter("um_scrapper", "TOOLS")
+	
+    AddRecipe2(
+        "um_inkubator",
+        { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) },
+        GLOBAL.TECH.LOST,
+		{ placer = "um_inkubator_placer" },
+        { "STRUCTURES" }
+    )
+
+    GLOBAL.STRINGS.RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
+    AddRecipeToFilter("um_inkubator", "STRUCTURES")
+	
+    AddRecipe2(
+        "um_astral_projector",
+        { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) },
+        GLOBAL.TECH.LOST,
+		{ placer = "um_astral_projector_placer" },
+        { "STRUCTURES" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
+    AddRecipeToFilter("um_astral_projector", "STRUCTURES")
+	
+    AddRecipe2(
+        "um_astral_projector_target",
+        { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) },
+        GLOBAL.TECH.LOST,
+		{ placer = "um_astral_projector_target_placer" },
+        { "STRUCTURES" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
+    AddRecipeToFilter("um_astral_projector_target", "STRUCTURES")
+
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
@@ -1562,10 +1730,27 @@ STRINGS.RECIPE_DESC.HERMIT_BUNDLE_LURES = "Get to fishing, today!"
 STRINGS.RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
 STRINGS.RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
 
+-- Veteran Shrine Crafts
+
+STRINGS.RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
+STRINGS.RECIPE_DESC.BEARGERCLAW = "Fling some rocks!"
+STRINGS.RECIPE_DESC.KLAUS_AMULET = "Double slap!"
+STRINGS.RECIPE_DESC.SILKSACK = "Wrap up your valuables."
+STRINGS.RECIPE_DESC.FEATHER_FROCK = "Birds, feathers, etcetera."
+STRINGS.RECIPE_DESC.GORE_HORN_HAT = "Charge!!"
+STRINGS.RECIPE_DESC.CRABCLAW = "Socket gems, wield their power."
+STRINGS.RECIPE_DESC.SLOBBERLOBBER = "Molten loogies, everywhere!"
+STRINGS.RECIPE_DESC.UM_BEEGUN = "Bullet Bees!"
+STRINGS.RECIPE_DESC.UM_WINGSUIT = "Take flight!"
+STRINGS.RECIPE_DESC.UM_EXHUMER = "Judge, jury, resurrector."
+STRINGS.RECIPE_DESC.UM_BEEGUN_CHERRY = "Poisonous bullet bees!"
+STRINGS.RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"
+
 STRINGS.RECIPE_DESC.WINONA_CATAPULT_ITEM = STRINGS.RECIPE_DESC.WINONA_CATAPULT
 STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT_ITEM = STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT
 STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW
 STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH
+STRINGS.RECIPE_DESC.UM_BOAT_ENGINE = "Go full steam ahead on the high seas."
 
 GLOBAL.STRINGS.RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
 GLOBAL.STRINGS.RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."

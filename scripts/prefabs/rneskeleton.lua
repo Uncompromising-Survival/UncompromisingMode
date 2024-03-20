@@ -26,7 +26,7 @@ local function NormalRetarget(inst)
     return FindEntity(inst, targetDist, 
         function(guy) 
             if inst.components.combat:CanTarget(guy) then
-                return guy:HasTag("character") or guy:HasTag("pig")
+                return (guy:HasTag("character") or guy:HasTag("pig")) and not inst.components.follower ~= nil and inst.components.follower.leader == guy
             end
     end)
 end
@@ -43,10 +43,10 @@ local x,y,z = inst.Transform:GetWorldPosition()
 local ents = TheSim:FindEntities(x, 0, z, 50, {"rneskeleton"})
 	for k,v in pairs(ents) do
 	v.decided = true
-	if dance then
-	v.sg:GoToState("dance")
+	if dance and inst.components.follower.leader == nil then
+		v.sg:GoToState("dance")
 	else
-	--v.sg:GoToState("idle") Doesn't seem to get them to stop dancing
+		--v.sg:GoToState("idle") Doesn't seem to get them to stop dancing
 	end
 end
 end
@@ -64,12 +64,12 @@ local function CheckIfNearPlayer(inst)
 local bozo =FindEntity(inst, 7, 
     function(guy) 
             if inst.components.combat:CanTarget(guy) then
-                return guy:HasTag("character")
+                return guy:HasTag("character") and not (inst.components.follower.leader and guy:HasTag("player"))
             end
     end)
 	if bozo ~= nil and inst.decided == false then
 		inst.decided = true
-		if math.random() > 0.5 then
+		if math.random() > 0.5 and inst.components.follower.leader == nil then
 			inst.sg:GoToState("dance")
 			TellOthersTo(inst,true)
 		else
@@ -152,6 +152,7 @@ local function fn(Sim)
     inst:AddComponent("knownlocations")
     ------------------
     
+    inst:AddComponent("follower")
     
     ------------------
     
@@ -167,11 +168,16 @@ local function fn(Sim)
     inst:SetBrain(brain)
 	inst:DoPeriodicTask(1,CheckIfNearPlayer)
 	
-	inst:WatchWorldState("isday", function() 
-		inst.sg:GoToState("grounded")
+	inst:WatchWorldState("isday", function()
+		if inst.components.follower.leader == nil then
+			inst.sg:GoToState("grounded")
+		end
 	end)
+	
 	inst:WatchWorldState("iscaveday", function() 
-		inst.sg:GoToState("grounded")
+		if inst.components.follower.leader == nil then
+			inst.sg:GoToState("grounded")
+		end
 	end)
 	
 	inst.sg:GoToState("enter")
