@@ -82,7 +82,7 @@ STRINGS.VETSKULL = {
 }
 
 STRINGS.PACTSWORN_TITLE = "The Shadow Pact"
-STRINGS.PACTSWORN_TEXT = "A new path lies before you, if you give up the Codex Umbra. You will lose your spells, take 25% more damage, but you will gain a summonable sword, armor, and true classic shadows.\nThis canot be undone."
+STRINGS.PACTSWORN_TEXT = "A new path lies before you, if you give up the Codex Umbra. You will lose your spells and take 25% more damage, but you will gain a summonable sword, armor, and true classic shadows.\nThis cannot be undone."
 
 
 STRINGS.PIG_REMEMBER_THREAT = { "REMEMBER YOU!", "YOU HURT US!", "YOU MEAN!" }
