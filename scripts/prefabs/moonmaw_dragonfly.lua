@@ -663,8 +663,8 @@ local function fn(Sim)
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("entitysleep", OnEntitySleep)
 
-    -- inst:AddComponent("vetcurselootdropper")
-    -- inst.components.vetcurselootdropper.loot = "slobberlobber" Add a vetcurse drop later
+	inst:AddComponent("vetcurselootdropper")
+	inst.components.vetcurselootdropper.loot = "um_moonmaw_soul"
 
     inst:DoTaskInTime(10, CheckTarget)
 
