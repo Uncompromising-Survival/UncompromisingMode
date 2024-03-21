@@ -57,17 +57,19 @@ end
 local function TalkAboutIt(inst)
 	if inst.playingmusic then
 		inst.fx = SpawnPrefab("dr_warm_loop_1")
-		inst.fx.entity:AddFollower()
-		inst.components.talker:Say(STRINGS.UM_VOXOLOPHONE.SPAWN_TALK)
+		inst.fx.entity:SetParent(inst.entity)
+		inst.fx.Transform:SetPosition(0, 0, 0)
+		inst.components.talker:Say(STRINGS.UM_VOXOLOPHONE.SPAWN_TALK[math.random(#STRINGS.UM_VOXOLOPHONE.SPAWN_TALK)])
 	end
 end
 
 local function WarnPlayer(inst, data)
 	if data ~= nil and data.threat ~= nil then
-		print("Voxolophone Try Warning = "..data.threat)
+		print(data.threat)
 		inst.fx = SpawnPrefab("dr_warm_loop_1")
-		inst.fx.entity:AddFollower()
-		inst.components.talker:Say(STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.data.threat)
+		inst.fx.entity:SetParent(inst.entity)
+		inst.fx.Transform:SetPosition(0, 0, 0)
+		inst.components.talker:Say(data.threat[math.random(#data.threat)])
 	end
 end
 
@@ -105,6 +107,17 @@ local function fn()
     MakeInventoryFloatable(inst, "med", nil, 0.62)
 
     inst.entity:SetPristine()
+	
+    inst:AddComponent("talker")
+    inst.components.talker.fontsize = 28
+    inst.components.talker.font = TALKINGFONT
+    inst.components.talker.colour = Vector3(.9, .4, .4)
+    inst.components.talker.offset = Vector3(0, 3, 0)
+    inst.components.talker:MakeChatter()
+    inst.components.talker.lineduration = TUNING.HERMITCRAB.SPEAKTIME * 1.25 -0.5
+    --inst.components.talker.symbol = "swap_object"
+
+    inst:AddComponent("npc_talker")
 
     if not TheWorld.ismastersim then
         return inst
@@ -117,13 +130,6 @@ local function fn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_voxolophone.xml"
 
     MakeHauntableLaunch(inst)
-	
-    inst:AddComponent("talker")
-    inst.components.talker.fontsize = 28
-    inst.components.talker.font = TALKINGFONT
-    inst.components.talker.colour = Vector3(.9, .4, .4)
-    inst.components.talker.offset = Vector3(0, 0, 0)
-    --inst.components.talker.symbol = "swap_object"
 
     inst.playingmusic = false
     inst.StartMusic = StartMusic
@@ -131,10 +137,10 @@ local function fn()
     inst:ListenForEvent("onputininventory", topocket)
     inst:ListenForEvent("ondropped", toground)
 	
-	inst:DoPeriodicTask(10, TalkAboutIt)
+	--inst:DoPeriodicTask(10, TalkAboutIt)
 	
 	inst:ListenForEvent("um_voxolophone_warning", function(_, data)
-		inst:WarnPlayer(inst, data)
+		WarnPlayer(inst, data)
 	end, TheWorld)
 	
 	inst:ListenForEvent("ontalk", ontalk)

@@ -2,7 +2,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function OnPlayerNear(inst)
---[[
 	if inst.task == nil then
 		inst.task = inst:DoPeriodicTask(0.6, function(inst)
 			if inst.components.fueled:GetPercent() < 0.7 and (TheWorld.state.isnight or TheWorld:HasTag("cave")) and not TheWorld.state.isfullmoon then
@@ -20,23 +19,15 @@ local function OnPlayerNear(inst)
 				end
 			end
 		end)
-	end]]
+	end
 end
-
+	
 local function OnPlayerFar(inst)
 	if inst.task ~= nil then
 		inst.task:Cancel()
 	end
 	
 	inst.task = nil
-end
-	
-local function FuelMeUp(inst)
-	if TheWorld.state.isnewmoon then
-		inst:DoTaskInTime(math.random(2), function()
-			inst.components.fueled:SetPercent(1)
-		end)
-	end
 end
 
 env.AddPrefabPostInit("nightlight", function(inst)
@@ -54,6 +45,5 @@ env.AddPrefabPostInit("nightlight", function(inst)
     inst.components.playerprox:SetDist(20, 21)
     inst.components.playerprox:SetPlayerAliveMode(true)
 
-	inst:WatchWorldState("isnewmoon", FuelMeUp)
 
 end)

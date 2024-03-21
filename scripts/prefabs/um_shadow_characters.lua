@@ -1,5 +1,6 @@
 local brain = require "brains/swilsonbrain"
 local um_shadow_warly = require "brains/um_shadow_warly"
+local um_shadow_walter = require "brains/fuelseekerbrain"
 
 local assets =
 {
@@ -59,7 +60,7 @@ local function OnAttacked(inst, data)
     inst.components.combat:SetTarget(data.attacker)
 end
 
-local function fncommon(character, brainoverride)
+local function fncommon(character, brainoverride, buildoverride)
 	local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -75,7 +76,7 @@ local function fncommon(character, brainoverride)
 	inst.Physics:CollidesWith(COLLISION.SANITY)
 
     inst.AnimState:SetBank("wilson")
-    inst.AnimState:SetBuild(character)
+    inst.AnimState:SetBuild(buildoverride ~= nil and buildoverride or character)
 	inst.AnimState:HideSymbol("face")
     inst.AnimState:Hide("ARM_carry")
     inst.AnimState:Hide("hat")
@@ -482,7 +483,7 @@ local function StoryTime(inst)
 end
 
 local function walter()
-    local inst = fncommon("walter", "fuelseekerbrain")
+    local inst = fncommon("walter", um_shadow_walter)
 	
 	inst:AddTag("um_shadow_walter")
 
@@ -530,11 +531,13 @@ local function wes()
 end
 
 local function wortox()
-    local inst = fncommon("wortox")
+    local inst = fncommon("wortox", nil, "um_wortox_shadow")
 
     if not TheWorld.ismastersim then
         return inst
     end
+	
+	inst.AnimState:ShowSymbol("face")
 	
     inst.components.locomotor.walkspeed = 2
     inst.components.locomotor.runspeed = 8

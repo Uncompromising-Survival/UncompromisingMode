@@ -393,14 +393,14 @@ local states =
             local x, y, z = inst.Transform:GetWorldPosition()
             SpawnPrefab("wortox_portal_jumpin_fx").Transform:SetPosition(x, y, z)
 			
-            local dest = inst.components.combat.target and inst.components.combat.target
+            local dest = inst.components.combat.target and inst.components.combat.target:GetPosition()
             if dest ~= nil and math.random() > 0.2 then
                 inst.sg.statemem.dest = dest
-                inst:ForceFacePoint(dest:Get())
+                inst:ForceFacePoint(dest)
             else
 				local x, y, z = inst.Transform:GetWorldPosition()
                 inst.sg.statemem.dest = inst:GetPosition()
-                inst:ForceFacePoint(dest:Get())
+                inst:ForceFacePoint(dest)
             end
 			
 			
@@ -416,7 +416,7 @@ local states =
             TimeEvent(4 * FRAMES, function(inst)
                 inst.sg:AddStateTag("noattack")
                 inst.components.health:SetInvincible(true)
-                inst.DynamicShadow:Enable(false)
+				--inst.DynamicShadow:Enable(false)
             end),
 			
             TimeEvent(2, function(inst)
@@ -501,7 +501,7 @@ local states =
 				end
             end),
             TimeEvent(8 * FRAMES, function(inst)
-                inst.DynamicShadow:Enable(true)
+                --inst.DynamicShadow:Enable(true)
             end),
         },
 

@@ -482,7 +482,6 @@ local prefabs = {
     "sea_shadow",
     "kaleidoscope",
     "moonglow",
-    "um_boat_engine",
 
     "garbagepatchflotsam",
     "garbagepatch_inventory",

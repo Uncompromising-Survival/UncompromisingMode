@@ -220,7 +220,7 @@ return Class(function(self, inst)
 	        end
 	    end
 		
-		TheWorld:PushEvent("um_voxolophone_warning", { threat = "HANDS" })
+		TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HANDS })
 	end
 
 	local function SpawnShadowGrabby(player)
@@ -237,7 +237,7 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) then
 						local ent = SpawnPrefab("rne_grabbyshadows")
 						ent.Transform:SetPosition(x1, 0, z1)
-						TheWorld:PushEvent("um_voxolophone_warning", { threat = "GRABBY" })
+						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.GRABBY })
 						
 						break
 					end
@@ -258,7 +258,7 @@ return Class(function(self, inst)
 				if (light <= 0.3 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab("shadowvortex")
 					ent.Transform:SetPosition(x1, 0, z1)
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = "VORTEX" }) 
+					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.VORTEX }) 
 			
 					break
 				end
@@ -268,9 +268,9 @@ return Class(function(self, inst)
 
 	local function SpawnMindWeavers(player)
 		if TheWorld.state.isnight then
-			TheWorld:PushEvent("um_voxolophone_warning", { threat = "MINDWEAVER" }) 
+			TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.MINDWEAVER }) 
 			
-			for i = 1, PlayerScaling() do
+			for i = 1, PlayerScaling(player) do
 				local x, y, z = player.Transform:GetWorldPosition()
 				local ent = SpawnPrefab("mindweaver")
 				ent.Transform:SetPosition(x + math.random(-5, 5), y, z + math.random(-5, 5))
@@ -292,7 +292,7 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 						local ent = SpawnPrefab("um_nightcrawler")
 						ent.Transform:SetPosition(x1, 0, z1)
-						TheWorld:PushEvent("um_voxolophone_warning", { threat = "NIGHTCRAWLER" })
+						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTCRAWLER })
 						
 						break
 					end
@@ -315,7 +315,7 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 						local ent = SpawnPrefab("um_shadow_leech")
 						ent.Transform:SetPosition(x1, 0, z1)
-						TheWorld:PushEvent("um_voxolophone_warning", { threat = "UM_LEECH" })
+						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.UM_LEECH })
 						
 						break
 					end
@@ -327,8 +327,8 @@ return Class(function(self, inst)
 	local function SpawnFuelSeekers(player)
 		if TheWorld.state.isnight then
 			local has_spawned_threat = false
-			local daycale = DayScaling() / 2
-			local playerscale = PlayerScaling()
+			local dayscale = DayScaling() / 2
+			local playerscale = PlayerScaling(player)
 			
 			if dayscale > 3 then
 				dayscale = 3
@@ -354,7 +354,7 @@ return Class(function(self, inst)
 							has_spawned_threat = true
 							local ent = SpawnPrefab("fuelseeker")
 							ent.Transform:SetPosition(x1, 0, z1)
-							TheWorld:PushEvent("um_voxolophone_warning", { threat = "FUELSEEKER" }) 
+							TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.FUELSEEKER }) 
 					
 							break
 						end
@@ -383,7 +383,7 @@ return Class(function(self, inst)
 								local ent = SpawnPrefab("um_haunt")
 								ent.haunt_target = v
 								ent.Transform:SetPosition(x1, 0, z1)
-								TheWorld:PushEvent("um_voxolophone_warning", { threat = "HAUNT" }) 
+								TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HAUNT }) 
 
 								return
 							end
@@ -410,7 +410,7 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab("um_heckler")
 					ent.Transform:SetPosition(x1, 0, z1)
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = "HECKLER" })
+					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
 					
 					break
 				end
@@ -432,7 +432,7 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = math.random() > 0.66 and SpawnPrefab("nightmarebeak") or SpawnPrefab("crawlingnightmare")
 					ent.Transform:SetPosition(x1, 0, z1)
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = "NIGHTMARECREATURE" })
+					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTMARECREATURE })
 					count = count + 1
 					
 					if count >= 2 then
@@ -456,7 +456,7 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab(character)
 					ent.Transform:SetPosition(x1, 0, z1)
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = "HECKLER" })
+					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
 					
 					break
 				end
@@ -727,7 +727,7 @@ return Class(function(self, inst)
 							PickCharacter(player)
 						else
 							print("Night Terrors Pick Terror")
-							PickTerror(player)
+							self:PickTerror(player)
 						end
 						
 						self.terror_count = self.terror_count + 1

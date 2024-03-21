@@ -3,6 +3,7 @@ require "behaviours/runaway"
 require "behaviours/chaseandattack"
 require "behaviours/avoidlight"
 require "behaviours/findclosest"
+require "behaviours/jukeandjiveandattack"
 
 local AVOID_PLAYER_DIST = 3
 local AVOID_PLAYER_DIST_SQ = AVOID_PLAYER_DIST * AVOID_PLAYER_DIST
