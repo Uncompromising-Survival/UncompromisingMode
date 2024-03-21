@@ -35,7 +35,7 @@ local function ChecksOut(inst) -- The backpack is good to go
 		--return _container:GetItemInSlot(7). == "silk"
 		return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).components.stackable and _container:GetItemInSlot(7).components.stackable:StackSize() >= 3 and 
 		not _container:GetItemInSlot(8) and
-		(_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(3) or 
+		(_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(6) or 
 		_container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and 
 		not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
 		not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
@@ -56,8 +56,8 @@ local function WrapStuff(inst,owner)
 		
 		--Consume Silk
 		local silk = inst.components.container:GetItemInSlot(7)
-		if silk.components.stackable and silk.components.stackable.stacksize > 3 then
-			silk.components.stackable:SetStackSize(silk.components.stackable.stacksize-3)
+		if silk.components.stackable and silk.components.stackable.stacksize > 6 then
+			silk.components.stackable:SetStackSize(silk.components.stackable.stacksize-6)
 		else
 			inst.components.container:RemoveItemBySlot(7)
 		end
