@@ -12,7 +12,6 @@ local loot =
     "silk",
 	"widowsgrasp",
 	"widowshead",
-	"silksack",
 }
 
 
@@ -61,38 +60,57 @@ local function DoDespawn(inst)
 	
 end
 
+local function EquipWeapons(inst)
+    if inst.components.inventory ~= nil and not inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
+        local snotbomb = CreateEntity()
+        snotbomb.name = "Snotbomb"
+        --[[Non-networked entity]]
+        snotbomb.entity:AddTransform()
+        snotbomb:AddComponent("weapon")
+        snotbomb.components.weapon:SetDamage(TUNING.SPAT_PHLEGM_DAMAGE)
+        snotbomb.components.weapon:SetRange(TUNING.SPAT_PHLEGM_ATTACKRANGE)
+        snotbomb.components.weapon:SetProjectile("web_bomb")
+        snotbomb:AddComponent("inventoryitem")
+        snotbomb.persists = false
+        snotbomb.components.inventoryitem:SetOnDroppedFn(snotbomb.Remove)
+        snotbomb:AddComponent("equippable")
+        snotbomb:AddTag("snotbomb")
+
+        inst.components.inventory:GiveItem(snotbomb)
+        inst.weaponitems.snotbomb = snotbomb
+
+        local meleeweapon = CreateEntity()
+        meleeweapon.name = "Claw"
+        --[[Non-networked entity]]
+        meleeweapon.entity:AddTransform()
+        meleeweapon:AddComponent("weapon")
+        meleeweapon.components.weapon:SetDamage(160)
+        meleeweapon.components.weapon:SetRange(TUNING.SPAT_MELEE_ATTACKRANGE/4)
+        meleeweapon:AddComponent("inventoryitem")
+        meleeweapon.persists = false
+        meleeweapon.components.inventoryitem:SetOnDroppedFn(meleeweapon.Remove)
+        meleeweapon:AddComponent("equippable")
+        meleeweapon:AddTag("meleeweapon")
+
+        inst.components.inventory:GiveItem(meleeweapon)
+        inst.weaponitems.meleeweapon = meleeweapon
+
+    end
+end
+
 local function OnLoad(inst)
 	inst.investigated = false
 end
 
-local function ShouldDodge(inst)
-	--TheNet:Announce("Redefining")
-	local x,y,z = inst.Transform:GetWorldPosition() --This is actually a fallback incase widow somehow doesn't have a target when attempting to do a special (her abilities really depend on her having a target)
-	if inst.components.combat and inst.components.combat.target then
-		x,y,z = inst.components.combat.target.Transform:GetWorldPosition()
-	end
-	local mindist = 99999
-	local xtest,ztest,xnew,znew
-	xnew = x --Fallback if somehow xnew and znew aren't redefined in the loop below (they should be)
-	znew = z
-	for i = 1,8 do
-		xtest = x + 10*math.cos(3.14*i/4+0.01*math.random(-50,50))
-		ztest = z + 10*math.sin(3.14*i/4+0.01*math.random(-50,50))
-		--SpawnPrefab("maxwell_smoke").Transform:SetPosition(xtest,y,ztest) --For testing which points widow will dodge to with visuals
-		if mindist > inst:GetDistanceSqToPoint(xtest,y,ztest) and TheWorld.Map:IsAboveGroundAtPoint(xtest,y,ztest) and #TheSim:FindEntities(xtest,y,ztest,3,{"giant_tree"}) == 0 then --We're looking for the dodge position closest to widow
-			mindist = inst:GetDistanceSqToPoint(xtest,y,ztest)
-			xnew = xtest
-			znew = ztest
+local function TryPowerMove(inst,data)
+	if not inst.sg:HasStateTag("busy") and (inst.components.health ~= nil and not inst.components.health:IsDead()) and (inst.components.combat ~= nil and inst.components.combat.target ~= nil) and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("ability") then
+		if data and data.name == "pounce" then
+			inst.sg:GoToState("preleapattack")	
+		end
+		if data and data.name == "mortar" then
+			inst.sg:GoToState("lobprojectile")	
 		end
 	end
-    inst._dodgedest = Vector3(xnew,y,znew)
-	if inst.components.combat.target then
-		inst._enemypos = inst.components.combat.target:GetPosition()
-	end
-end
-
-local function TryPowerMove(inst)
-	ShouldDodge(inst) --Timer's up, lets get a position to dodge to
 end
 
 
@@ -101,23 +119,25 @@ local function Reset(inst)
 end
 
 local function OnKilledOther(inst)
-	if inst.components.combat ~= nil then
-		inst.components.combat:TryRetarget()
-	end
-	if inst.investigatedtask ~= nil then
-		inst.investigatedtask:Cancel()
-		inst.investigatedtask = nil
-	end
-	inst.investigated = nil
-	inst.investigatedtask = inst:DoTaskInTime(5, function(inst) inst.investigated = true end)
+  if inst.components.combat ~= nil then
+    inst.components.combat:TryRetarget()
+  end
+
+  if inst.investigatedtask ~= nil then
+    inst.investigatedtask:Cancel()
+    inst.investigatedtask = nil
+  end
+  inst.investigated = nil
+  inst.investigatedtask = inst:DoTaskInTime(5, function(inst) inst.investigated = true end)
 end
 
-local function EpicsCheck(inst)  --Widow will not tolerate being bullied by epics, you go fight them yourself!
+local function GettingBullied(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "hoodedwidow","leif" } )
-	
+    local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "hoodedwidow","leif" } )
 	if inst.components.homeseeker ~= nil and inst.components.homeseeker.home and inst:GetDistanceSqToInst(inst.components.homeseeker.home) > TUNING.DRAGONFLY_RESET_DIST*20 then
-		inst.bullier = true
+	inst.bullier = true
+	else
+	inst.bullier = false
 	end
 	
 	for i, v in pairs(ents) do
@@ -126,7 +146,7 @@ local function EpicsCheck(inst)  --Widow will not tolerate being bullied by epic
 		end
 	end
 end
-
+-----HE:LP [ASME] MEE 
 local function OnHitOther(inst, data)
 	local other = data.target
 	local blocked = false
@@ -134,7 +154,7 @@ local function OnHitOther(inst, data)
 		blocked = true
 	end
 	if other and not other:HasTag("webbedcreature") and blocked == false then
-		if not inst.combosucceed then
+		if inst.combosucceed == false then
 			--TheNet:SystemMessage("Combo Succeed!")
 			inst.combosucceed = true
 		end
@@ -142,35 +162,21 @@ local function OnHitOther(inst, data)
 			inst.combo = inst.combo/10
 		end
 	end
-	if other ~= nil and other.components.inventory ~= nil and inst.armorcrunch and blocked == false then -- Armor Crunch
+	if other ~= nil and other.components.inventory ~= nil and inst.armorcrunch and blocked == false then
 		local helm = other.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
 		local chest = other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
 		local hand = other.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if helm ~= nil and helm.components.armor ~= nil then
-			helm.components.armor:TakeDamage(167)
+			helm.components.armor:TakeDamage(200)
 		end
 		if chest ~= nil and chest.components.armor ~= nil then
-			chest.components.armor:TakeDamage(167)
+			chest.components.armor:TakeDamage(200)
 		end
 		if hand ~= nil and hand.components.armor ~= nil then
-			hand.components.armor:TakeDamage(167)
-		end
-	end	
-	inst.armorcrunch = nil
-	if other ~= nil and other.components.inventory ~= nil and blocked == false then -- Armor Crunch
-		local helm = other.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-		local chest = other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-		local hand = other.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-		if helm ~= nil and helm.components.armor ~= nil then
-			helm.components.armor:TakeDamage(33)
-		end
-		if chest ~= nil and chest.components.armor ~= nil then
-			chest.components.armor:TakeDamage(33)
-		end
-		if hand ~= nil and hand.components.armor ~= nil then
-			hand.components.armor:TakeDamage(33)
+			hand.components.armor:TakeDamage(200)
 		end
 	end
+	inst.armorcrunch = false
 end
 
 local function fn()
@@ -207,7 +213,7 @@ local function fn()
         return inst
     end
 
-	--inst.should_go_tired = false
+	inst.should_go_tired = false
 			
     inst:SetStateGraph("SGhoodedwidow")
 
@@ -225,13 +231,12 @@ local function fn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.DSTU.WIDOW_HEALTH)
     inst:AddComponent("healthtrigger")
-    --inst.components.healthtrigger:AddTrigger(0.5, function(inst)
-		--inst.should_go_tired = true
-	--end)
+    inst.components.healthtrigger:AddTrigger(0.5, function(inst)
+		inst.should_go_tired = true
+	end)
     ------------------
     inst:AddComponent("knownlocations")
     inst:AddComponent("combat")
-	inst.components.combat.battlecryenabled = false -- We want to taunt in only specific instances
     inst.components.combat:SetRange(TUNING.SPIDERQUEEN_ATTACKRANGE)
 	
     if inst.components.combat ~= nil then
@@ -250,7 +255,7 @@ local function fn()
 			return 1
 		end
 	end
-    inst.components.combat:SetAttackPeriod(2.25)
+    inst.components.combat:SetAttackPeriod(TUNING.SPIDERQUEEN_ATTACKPERIOD)
     inst.components.combat:SetRetargetFunction(1, Retarget)
 	inst:AddComponent("groundpounder")
     inst.components.groundpounder.damageRings = 2
@@ -273,7 +278,6 @@ local function fn()
     inst.components.locomotor:SetTriggersCreep(false)
     inst.components.locomotor.pathcaps = { ignorecreep = true }
     inst.components.locomotor.walkspeed = 3
-	inst.components.locomotor.runspeed = 3
 
     ------------------
 
@@ -301,6 +305,9 @@ local function fn()
 	inst.investigated = false
 	inst.Reset = Reset
     inst.DoDespawn = DoDespawn
+	inst:AddComponent("inventory")
+    inst.weaponitems = {}
+	EquipWeapons(inst)
     inst:SetBrain(brain)
 	inst.OnLoad = OnLoad
     inst:ListenForEvent("attacked", OnAttacked)
@@ -309,11 +316,11 @@ local function fn()
 	inst:ListenForEvent("timerdone", TryPowerMove)
 	inst.components.timer:StartTimer("pounce",10+math.random(-3,1))
 	inst.components.timer:StartTimer("mortar",20+math.random(-1,5))
-	inst:DoPeriodicTask(3, EpicsCheck)
-	inst.ShouldDodge = ShouldDodge
+	inst:DoPeriodicTask(3, GettingBullied)
+	inst.bullier = nil
+	inst.armorcrunch = false
 	inst.combosucceed = true
 	inst.docombo = false
-	
 	inst:ListenForEvent("killed", OnKilledOther)
 	inst:ListenForEvent("onhitother", OnHitOther)
 
