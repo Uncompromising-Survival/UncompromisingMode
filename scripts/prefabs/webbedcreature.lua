@@ -437,9 +437,8 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-	inst.scrapbook_anim = "idle_large"
-	inst.scrapbook_hidehealth = true
-	-------------------
+
+    -------------------
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(1000000)
 	inst.components.health.absorb = 1

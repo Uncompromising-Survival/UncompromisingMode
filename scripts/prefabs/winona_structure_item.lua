@@ -125,8 +125,6 @@ local function fn(ondeploy, atlas, anim, uses_startingfuel)
 
     inst:AddTag("toolbox_item")
 
-    inst.scrapbook_adddeps = {"winona_"..anim}
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

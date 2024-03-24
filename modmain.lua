@@ -8,18 +8,7 @@ ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
-local vanilla = require "screens/redux/scrapbookdata"
-local uncomp = require "screens/redux/scrapbookdata_changes"
-
 AddPrefabPostInit("world", function(inst)
-    inst:DoTaskInTime(0, function()
-        for k, v in pairs(vanilla) do
-            if uncomp[k] ~= nil and uncomp[k] ~= vanilla[k] then
-                vanilla[k] = uncomp[k]
-            end
-        end
-    end)
-
     --GLOBAL.TUNING.DSTU.PREFABS = Prefabs
     --NOTE: This is quite a bit of memory.
     if not inst.ismastersim then

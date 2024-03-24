@@ -73,9 +73,6 @@ end
 
 if env.GetModConfigData("_bushcrabs") then
     env.AddPrefabPostInit("berrybush", function(inst)
-
-        inst.scrapbook_adddeps = {"bushcrab"}
-
         if not TheWorld.ismastersim then
             return
         end
