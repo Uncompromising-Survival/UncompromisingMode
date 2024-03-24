@@ -16,7 +16,6 @@ local prefabs =
 {
     "collapse_small",
     "globalmapicon",
-    "townportalsandcoffin_fx",
 }
 
 local function OnEntityWake(inst)
@@ -44,23 +43,23 @@ local function StopSoundLoop(inst)
 end
 
 local function OnStartChanneling(inst, channeler)
-	local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
-	
+    local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
+
     inst.AnimState:PlayAnimation("turn_on")
     inst.AnimState:PushAnimation("idle_on_loop")
     StartSoundLoop(inst)
-	
-	if target ~= nil and not channeler.um_astral_projected then
-		channeler:AddTag("um_astral_projected")
-		channeler.um_astral_projected = true
-		inst.components.teleporter:Target(target)
 
-		if channeler ~= nil then
-			channeler.components.sanity.externalmodifiers:SetModifier("um_astral_projector", -TUNING.DAPPERNESS_SUPERHUGE)
-		end
-		
-		channeler.sg:GoToState("enterastralportal", { teleporter = inst })
-	end
+    if target ~= nil and not channeler.um_astral_projected then
+        channeler:AddTag("um_astral_projected")
+        channeler.um_astral_projected = true
+        inst.components.teleporter:Target(target)
+
+        if channeler ~= nil then
+            channeler.components.sanity.externalmodifiers:SetModifier("um_astral_projector", -TUNING.DAPPERNESS_SUPERHUGE)
+        end
+
+        channeler.sg:GoToState("enterastralportal", { teleporter = inst })
+    end
 end
 
 local function OnStopChanneling(inst, aborted)
@@ -71,43 +70,43 @@ end
 
 local function OnStartTeleporting(inst, doer)
     if doer:HasTag("player") then
-		doer:AddTag("um_astral_projected")
-		doer.um_astral_projected = true
-		
+        doer:AddTag("um_astral_projected")
+        doer.um_astral_projected = true
+
         if doer.components.talker ~= nil then
             doer.components.talker:ShutUp()
         end
-		
-		local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
-		if target ~= nil then
-			target.SpawnPool(target)
-		end
-		
-		if doer.um_astral_projected_returntask ~= nil then
-			doer.um_astral_projected_returntask:Cancel()
-		end
-		
-		doer.um_astral_projected_returntask = doer:DoPeriodicTask(0.5, function()
-			local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
-			local home = TheSim:FindFirstEntityWithTag("um_astral_projector")
-			local dist_to_exit = target ~= nil and target:IsValid() and doer:GetDistanceSqToInst(target)
-			
-			if home ~= nil then
-				if dist_to_exit ~= nil then
-					if dist_to_exit >= 530 then
-						target.OnStartChanneling_Target(target, doer)
-					end
-				else
-					if doer.components.health ~= nil then
-						doer.components.health:Kill()
-					end
-				end
-			else
-				if doer.components.health ~= nil then
-					doer.components.health:Kill()
-				end
-			end
-		end)
+
+        local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
+        if target ~= nil then
+            target.SpawnPool(target)
+        end
+
+        if doer.um_astral_projected_returntask ~= nil then
+            doer.um_astral_projected_returntask:Cancel()
+        end
+
+        doer.um_astral_projected_returntask = doer:DoPeriodicTask(0.5, function()
+            local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
+            local home = TheSim:FindFirstEntityWithTag("um_astral_projector")
+            local dist_to_exit = target ~= nil and target:IsValid() and doer:GetDistanceSqToInst(target)
+
+            if home ~= nil then
+                if dist_to_exit ~= nil then
+                    if dist_to_exit >= 530 then
+                        target.OnStartChanneling_Target(target, doer)
+                    end
+                else
+                    if doer.components.health ~= nil then
+                        doer.components.health:Kill()
+                    end
+                end
+            else
+                if doer.components.health ~= nil then
+                    doer.components.health:Kill()
+                end
+            end
+        end)
     end
 end
 
@@ -118,7 +117,6 @@ local function OnExitingTeleporter(inst, obj)
 end
 
 local function onhammered(inst)
-    inst.components.lootdropper:DropLoot()
     local fx = SpawnPrefab("collapse_small")
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("metal")
@@ -181,7 +179,7 @@ local function fn()
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector")
-	
+
     MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
@@ -252,7 +250,7 @@ local function fx_fn()
     inst.AnimState:SetBuild("teleport_sand_fx")
     inst.AnimState:OverrideSymbol("sand_splash", "sand_splash_fx", "sand_splash")
     inst.AnimState:PlayAnimation("portal_in")
-	inst.AnimState:SetFinalOffset(7)
+    inst.AnimState:SetFinalOffset(7)
 
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
@@ -273,23 +271,23 @@ local function fx_fn()
 end
 
 local function OnStartChanneling_Target(inst, channeler)
-	local target = TheSim:FindFirstEntityWithTag("um_astral_projector")
-	
+    local target = TheSim:FindFirstEntityWithTag("um_astral_projector")
+
     inst.AnimState:PlayAnimation("turn_on")
     inst.AnimState:PushAnimation("idle_on_loop")
     StartSoundLoop(inst)
-	
-	if target ~= nil and channeler.um_astral_projected then
-		channeler:RemoveTag("um_astral_projected")
-		channeler.um_astral_projected = false
-		inst.components.teleporter:Target(target)
 
-		if channeler ~= nil then
-			channeler.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
-		end
-		
-		channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
-	end
+    if target ~= nil and channeler.um_astral_projected then
+        channeler:RemoveTag("um_astral_projected")
+        channeler.um_astral_projected = false
+        inst.components.teleporter:Target(target)
+
+        if channeler ~= nil then
+            channeler.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
+        end
+
+        channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
+    end
 end
 
 local function OnStopChanneling_Target(inst, aborted)
@@ -305,31 +303,31 @@ local function OnExitingTeleporter_Target(inst, obj)
 end
 
 local function SpawnPool(inst)
-	if inst.astralpool == nil then
-		inst.astralpool = SpawnPrefab("um_astral_pool")
-		inst.astralpool.entity:SetParent(inst.entity)
-		inst.astralpool.Transform:SetPosition(0, 0, 0)
-		inst.astralpool.owner = inst
-	end
+    if inst.astralpool == nil then
+        inst.astralpool = SpawnPrefab("um_astral_pool")
+        inst.astralpool.entity:SetParent(inst.entity)
+        inst.astralpool.Transform:SetPosition(0, 0, 0)
+        inst.astralpool.owner = inst
+    end
 end
 
 local function OnStartTeleporting_Target(inst, doer)
     if doer:HasTag("player") then
-		doer:RemoveTag("um_astral_projected")
-		doer.um_astral_projected = false
-		
+        doer:RemoveTag("um_astral_projected")
+        doer.um_astral_projected = false
+
         if doer.components.talker ~= nil then
             doer.components.talker:ShutUp()
         end
-		
-		if doer.um_astral_projected_returntask ~= nil then
-			doer.um_astral_projected_returntask:Cancel()
-		end
-		
-		doer.um_astral_projected_returntask = nil
+
+        if doer.um_astral_projected_returntask ~= nil then
+            doer.um_astral_projected_returntask:Cancel()
+        end
+
+        doer.um_astral_projected_returntask = nil
     end
 end
-		
+
 local function targetfn()
     local inst = CreateEntity()
 
@@ -354,7 +352,7 @@ local function targetfn()
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector_target")
-	
+
     MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
@@ -362,7 +360,7 @@ local function targetfn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
+
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
@@ -378,11 +376,11 @@ local function targetfn()
     inst.components.teleporter.saveenabled = false
     inst.components.teleporter.travelcameratime = 2.9
     inst.components.teleporter.travelarrivetime = 2.8
-	
+
     inst:ListenForEvent("doneteleporting", OnExitingTeleporter_Target)
-	
-	inst.SpawnPool = SpawnPool
-	inst.OnStartChanneling_Target = OnStartChanneling_Target
+
+    inst.SpawnPool = SpawnPool
+    inst.OnStartChanneling_Target = OnStartChanneling_Target
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
@@ -391,78 +389,77 @@ local function targetfn()
 end
 
 local function Vac(inst)
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local projectors = TheSim:FindEntities(x, y, z, 23, {"um_astral_projected"})
-	
-	if projectors ~= nil and #projectors == 0 then
-		inst.components.timer:StartTimer("kill_whirlpool", 1)
-	end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local projectors = TheSim:FindEntities(x, y, z, 23, { "um_astral_projected" })
+
+    if projectors ~= nil and #projectors == 0 then
+        inst.components.timer:StartTimer("kill_whirlpool", 1)
+    end
 end
 
 local function StartChecks(inst)
-	if inst.vactask == nil then
-		inst.vactask = inst:DoPeriodicTask(.5, Vac)
-	end
+    if inst.vactask == nil then
+        inst.vactask = inst:DoPeriodicTask(.5, Vac)
+    end
 end
 
 local function Init(inst)
-	inst.SoundEmitter:PlaySound("UCSounds/um_whirlpool/um_whirlpool_loop", "whirlpool")
+    inst.SoundEmitter:PlaySound("UCSounds/um_whirlpool/um_whirlpool_loop", "whirlpool")
 end
 
 local function RemoveWhirlpool(inst)
-	inst.components.colourtweener:StartTween({1,1,1,0}, 5, inst.Remove)
-	inst.SoundEmitter:KillSound("whirlpool")
-	
-	if inst.owner ~= nil then
-		inst.owner.astralpool = nil
-	end
-	
+    inst.components.colourtweener:StartTween({ 1, 1, 1, 0 }, 5, inst.Remove)
+    inst.SoundEmitter:KillSound("whirlpool")
+
+    if inst.owner ~= nil then
+        inst.owner.astralpool = nil
+    end
+
     inst:Remove()
 end
 
 local function poolfn()
     local inst = CreateEntity()
-	
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-	
-	inst.AnimState:SetMultColour(1,1,1,0)
+
+    inst.AnimState:SetMultColour(1, 1, 1, 0)
 
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
-	
+
     inst.AnimState:SetBank("um_whirlpool")
     inst.AnimState:SetBuild("um_astralpool")
     inst.AnimState:PlayAnimation("spin2", true)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetSortOrder(3)
-	inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
-	
-	inst.Transform:SetScale(3, 3, 3)
-	
+
+    inst.Transform:SetScale(3, 3, 3)
+
     inst.entity:SetPristine()
-	
+
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst:AddComponent("colourtweener")
-	inst.components.colourtweener:StartTween({1,1,1,1}, 3, StartChecks)
-	
-	inst:AddComponent("timer")
-	inst:ListenForEvent("timerdone", RemoveWhirlpool)
-	
-	inst:DoTaskInTime(0, Init)
-	
+
+    inst:AddComponent("colourtweener")
+    inst.components.colourtweener:StartTween({ 1, 1, 1, 1 }, 3, StartChecks)
+
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", RemoveWhirlpool)
+
+    inst:DoTaskInTime(0, Init)
+
     return inst
 end
 
 return Prefab("um_astral_projector", fn, assets, prefabs),
     MakePlacer("um_astral_projector_placer", "townportal", "townportal", "idle"),
-	Prefab("um_astral_projector_target", targetfn, assets, prefabs),
+    Prefab("um_astral_projector_target", targetfn, assets, prefabs),
     MakePlacer("um_astral_projector_target_placer", "townportal", "townportal", "idle"),
-    Prefab("townportalsandcoffin_fx", fx_fn, fx_assets),
-	Prefab("um_astral_pool", poolfn, assets, prefabs)
+    Prefab("um_astral_pool", poolfn, assets, prefabs)
