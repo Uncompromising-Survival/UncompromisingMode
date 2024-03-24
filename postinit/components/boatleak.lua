@@ -37,7 +37,7 @@ env.AddComponentPostInit("boatleak", function(self)
                 if boat ~= nil then
                     boat.components.health:DoDelta(patch_item.components.repairer.healthrepairvalue)
                     boat.components.health:DoDelta(patch_item.components.repairer.healthrepairpercent *
-                    boat.components.health.maxhealth)
+                        boat.components.health.maxhealth)
                 end
             end
 

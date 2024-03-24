@@ -25,105 +25,102 @@ end)
 
 local skulls =
 {
-	{
-		name = "wilson_vetcurse",
-		--text = "\n - Die and die again, there's no limit!",
-		text = "\n - Death does not become you!",
-	},
-	{
-		name = "walter_vetcurse",
-		text = "\n - I'm bleeding! Does anyone know first aid?!",
-	},
-	{
-		name = "wortox_vetcurse",
-		text = "\n - Souls of the fallen are back for revenge!",
-	},
-	{
-		name = "shambler_target",
-		text = "\n - You are being hunted.",
-	},
-	{
-		name = "willow_vetcurse",
-		text = "\n - 'Creates fires when stressed'.",
-	},
-	{
-		name = "warly_vetcurse",
-		text = "\n - Don't be a glutton!",
-	},
-	{
-		name = "winky_vetcurse",
-		text = "\n - Lose your stuff, lose your health.",
-	},
-	{
-		name = "wickerbottom_vetcurse",
-		text = "\n - Lack of sleep is hazardous for your health",
-	},
-	{
-		name = "wixie_vetcurse",
-		text = "\n - Krampus' may take notice of haenous deeds...",
-	},
-	{
-		name = "woodie_vetcurse",
-		text = "\n - The birds! The birds I tell you!",
-	},
-	{
-		name = "wolfgang_vetcurse",
-		text = "\n - Getting Hungry? Getting Weak.",
-	},
-	{
-		name = "wanda_vetcurse",
-		text = "\n - Shadows may be lurking anywhere...",
-	},
-	{
-		name = "wathgrithr_vetcurse",
-		text = "\n - Some enemies may rise to the challenge!",
-	},
-	{
-		name = "wes_vetcurse",
-		text = "\n - Life is harder without stat displays.",
-	},
-	{
-		name = "wendy_vetcurse",
-		text = "\n - Mental health, life or death.",
-	},
+    {
+        name = "wilson_vetcurse",
+        --text = "\n - Die and die again, there's no limit!",
+        text = "\n - Death does not become you!",
+    },
+    {
+        name = "walter_vetcurse",
+        text = "\n - I'm bleeding! Does anyone know first aid?!",
+    },
+    {
+        name = "wortox_vetcurse",
+        text = "\n - Souls of the fallen are back for revenge!",
+    },
+    {
+        name = "shambler_target",
+        text = "\n - You are being hunted.",
+    },
+    {
+        name = "willow_vetcurse",
+        text = "\n - 'Creates fires when stressed'.",
+    },
+    {
+        name = "warly_vetcurse",
+        text = "\n - Don't be a glutton!",
+    },
+    {
+        name = "winky_vetcurse",
+        text = "\n - Lose your stuff, lose your health.",
+    },
+    {
+        name = "wickerbottom_vetcurse",
+        text = "\n - Lack of sleep is hazardous for your health",
+    },
+    {
+        name = "wixie_vetcurse",
+        text = "\n - Krampus' may take notice of haenous deeds...",
+    },
+    {
+        name = "woodie_vetcurse",
+        text = "\n - The birds! The birds I tell you!",
+    },
+    {
+        name = "wolfgang_vetcurse",
+        text = "\n - Getting Hungry? Getting Weak.",
+    },
+    {
+        name = "wanda_vetcurse",
+        text = "\n - Shadows may be lurking anywhere...",
+    },
+    {
+        name = "wathgrithr_vetcurse",
+        text = "\n - Some enemies may rise to the challenge!",
+    },
+    {
+        name = "wes_vetcurse",
+        text = "\n - Life is harder without stat displays.",
+    },
+    {
+        name = "wendy_vetcurse",
+        text = "\n - Mental health, life or death.",
+    },
 }
 
 function Vetcursewidget:RefreshTooltips()
-    local controller_id = TheInput:GetControllerID()
-	
-	
-	local vet_text = ""
+    local vet_text = ""
 
     if self.owner:HasTag("clockmaker") then
         vet_text = STRINGS.VETS_WIDGET_WANDA
     else
         vet_text = STRINGS.VETS_WIDGET
     end
-	
+
     if self.owner:HasTag("um_3_deaths") then
-		vet_text = vet_text.."\n - The curse is thriving! 50% increased stat drain."
+        vet_text = vet_text .. "\n - The curse is thriving! 50% increased stat drain."
     elseif self.owner:HasTag("um_2_deaths") then
-		vet_text = vet_text.."\n - The curse is strong. 40% increased stat drain."
+        vet_text = vet_text .. "\n - The curse is strong. 40% increased stat drain."
     elseif self.owner:HasTag("um_1_deaths") then
-		vet_text = vet_text.."\n - The curse is growing... 30% increased stat drain."
+        vet_text = vet_text .. "\n - The curse is growing... 30% increased stat drain."
     else
-		vet_text = vet_text.."\n - The curse has found you. 20% increased stat drain."
-	end
-	
-	local old_text = vet_text
-	for i, v in ipairs(skulls) do
-		if self.owner:HasTag(v.name) then
-			old_text = vet_text
-			vet_text = old_text .. v.text
-		end
-	end
-	
-	self.bg2:SetTooltip(vet_text)
+        vet_text = vet_text .. "\n - The curse has found you. 20% increased stat drain."
+    end
+
+    local old_text = vet_text
+    for i, v in ipairs(skulls) do
+        if self.owner:HasTag(v.name) then
+            old_text = vet_text
+            vet_text = old_text .. v.text
+        end
+    end
+
+    self.bg2:SetTooltip(vet_text)
 end
 
 function Vetcursewidget:OnUpdate(dt)
     if self.owner:HasTag("vetcurse") then
-		self:RefreshTooltips()
+        self:RefreshTooltips()
         self:Show()
     else
         self:Hide()
