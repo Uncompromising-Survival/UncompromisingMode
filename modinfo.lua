@@ -15,7 +15,6 @@ Latest update features:
 - Night Terrors!
 - New Veterans Curse Effects!
 - New Veterans Curse Items!
-- Scrapbook integration!
 - To be revealed...
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
