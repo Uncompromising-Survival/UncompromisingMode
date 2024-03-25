@@ -2,7 +2,7 @@ local function AddSilk(inst)
     local silk = SpawnPrefab("silk")
     inst.components.container:GiveItem(silk, 9)
 
-    inst.components.timer:StartTimer("webby", 60)
+    inst.components.timer:StartTimer("webby", 480)
 end
 
 local function onequip(inst, owner)
@@ -31,7 +31,7 @@ local function onequip(inst, owner)
     end
 
     if not inst.components.timer:TimerExists("webby") then
-        inst.components.timer:StartTimer("webby", 60)
+        inst.components.timer:StartTimer("webby", 480)
     else
         inst.components.timer:ResumeTimer("webby")
     end
