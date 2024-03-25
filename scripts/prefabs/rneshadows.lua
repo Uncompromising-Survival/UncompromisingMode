@@ -167,9 +167,6 @@ local function grabfn()
 	
 	inst.StartGrabbing = StartGrabbing
 	inst.StopGrabbing = StopGrabbing
-	
-	inst:WatchWorldState("isday", inst.Remove)
-	inst:WatchWorldState("iscaveday", inst.Remove)
 
 	return inst
 end
