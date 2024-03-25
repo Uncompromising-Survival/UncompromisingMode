@@ -1,3 +1,21 @@
+--local function WebMeUp(inst)
+    --local owner = inst.components.inventoryitem:GetGrandOwner()
+
+    --if owner ~= nil then		
+        --local silk = SpawnPrefab("silk")
+		--owner.components.inventory:GiveItem(silk, 7)
+    --end
+
+    --inst.components.timer:StartTimer("webby", 60)
+--end
+
+local function WebMeUp(inst)
+    local silk = SpawnPrefab("silk")
+    inst.components.container:GiveItem(silk, 7)
+
+    inst.components.timer:StartTimer("webby", 60)
+end
+
 local function onequip(inst, owner)
     if not owner:HasTag("vetcurse") then
         inst:DoTaskInTime(0, function(inst)
@@ -22,12 +40,27 @@ local function onequip(inst, owner)
         owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
         inst.components.container:Open(owner)
     end
+	
+    if not inst.components.timer:TimerExists("webby") then
+        inst.components.timer:StartTimer("webby", 60)
+    else
+        inst.components.timer:ResumeTimer("webby")
+    end	
 end
 
 local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner.AnimState:ClearOverrideSymbol("backpack")
     inst.components.container:Close(owner)
+    if inst.components.timer:TimerExists("webby") then
+		inst.components.timer:PauseTimer("webby")
+    end
+end
+
+local function OnTimerDone(inst, data)
+    if data.name == "webby" then
+        WebMeUp(inst)
+    end
 end
 
 local function ChecksOut(inst) -- The backpack is good to go
@@ -144,6 +177,10 @@ local function fn()
     MakeHauntableLaunchAndDropFirstItem(inst)
 
     inst.WrapStuff = WrapStuff
+
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", OnTimerDone)
+	
     return inst
 end
 
