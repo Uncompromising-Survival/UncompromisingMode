@@ -200,6 +200,7 @@ local prefab_post = {
     "plantables",
     "compass",
 	"archive_lockbox",
+    "seedpouch",
 }
 
 local stategraph_post = {
