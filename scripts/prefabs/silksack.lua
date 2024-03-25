@@ -1,17 +1,6 @@
---local function WebMeUp(inst)
-    --local owner = inst.components.inventoryitem:GetGrandOwner()
-
-    --if owner ~= nil then		
-        --local silk = SpawnPrefab("silk")
-		--owner.components.inventory:GiveItem(silk, 7)
-    --end
-
-    --inst.components.timer:StartTimer("webby", 60)
---end
-
-local function WebMeUp(inst)
+local function AddSilk(inst)
     local silk = SpawnPrefab("silk")
-    inst.components.container:GiveItem(silk, 7)
+    inst.components.container:GiveItem(silk, 9)
 
     inst.components.timer:StartTimer("webby", 60)
 end
@@ -19,8 +8,8 @@ end
 local function onequip(inst, owner)
     if not owner:HasTag("vetcurse") then
         inst:DoTaskInTime(0, function(inst)
-            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner--do we really need to get the owner again?
-            if owner ~= nil and not owner:HasTag("vetcurse") then     --check (again)
+            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner --do we really need to get the owner again?
+            if owner ~= nil and not owner:HasTag("vetcurse") then                                      --check (again)
                 local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 if tool ~= nil and owner ~= nil then
                     owner.components.inventory:Unequip(EQUIPSLOTS.BODY)
@@ -40,12 +29,12 @@ local function onequip(inst, owner)
         owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
         inst.components.container:Open(owner)
     end
-	
+
     if not inst.components.timer:TimerExists("webby") then
         inst.components.timer:StartTimer("webby", 60)
     else
         inst.components.timer:ResumeTimer("webby")
-    end	
+    end
 end
 
 local function onunequip(inst, owner)
@@ -53,35 +42,38 @@ local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("backpack")
     inst.components.container:Close(owner)
     if inst.components.timer:TimerExists("webby") then
-		inst.components.timer:PauseTimer("webby")
+        inst.components.timer:PauseTimer("webby")
     end
 end
 
 local function OnTimerDone(inst, data)
     if data.name == "webby" then
-        WebMeUp(inst)
+        AddSilk(inst)
     end
 end
 
-local function ChecksOut(inst) -- The backpack is good to go
-    if inst.components.container then
-        local _container = inst.components.container
-        --return _container:GetItemInSlot(7). == "silk"
-        return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).components.stackable and _container:GetItemInSlot(7).components.stackable:StackSize() >= 6 and
-            not _container:GetItemInSlot(8) and
-            (_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(6) or
-                _container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and
-            not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
-            not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
-            not (_container:GetItemInSlot(3) and _container:GetItemInSlot(3):HasTag("bundle")) and
-            not (_container:GetItemInSlot(4) and _container:GetItemInSlot(4):HasTag("bundle")) and
-            not (_container:GetItemInSlot(5) and _container:GetItemInSlot(5):HasTag("bundle")) and
-            not (_container:GetItemInSlot(6) and _container:GetItemInSlot(6):HasTag("bundle"))
+local function CanWrap(inst) -- The backpack is good to go
+    local container = inst.components.container
+
+    if container then
+        local silk, bundle
+        for i = 1, 9 do
+            local item = container:GetItemInSlot(i)
+            if item then
+                if item.prefab == "silk" then
+                    silk = item
+                elseif i ~= 7 and i ~= 8 and item.components.bundle then
+                    bundle = item
+                end
+
+            end
+        end
+        return silk and silk.components.stackable.stacksize >= 6 and not bundle
     end
 end
 
 local function WrapStuff(inst, owner)
-    if ChecksOut(inst) then
+    if CanWrap(inst) then
         local bundle = SpawnPrefab("silken_bundle")
         local pos = inst:GetPosition()
         if owner then
@@ -89,17 +81,17 @@ local function WrapStuff(inst, owner)
         end
 
         --Consume Silk
-        local silk = inst.components.container:GetItemInSlot(7)
+        local silk = inst.components.container:GetItemInSlot(9)
         if silk.components.stackable and silk.components.stackable.stacksize > 6 then
             silk.components.stackable:SetStackSize(silk.components.stackable.stacksize - 6)
         else
-            inst.components.container:RemoveItemBySlot(7)
+            inst.components.container:RemoveItemBySlot(9)
         end
 
         local items = {}
         for i = 1, 6 do
             local item = inst.components.container:GetItemInSlot(i)
-            if item ~= nil then -- and not (item.components.edible and item.components.perishable) then --Initially disallowed food, instead rework to not protect against spoilage
+            if item ~= nil and not item:HasTag("irreplaceable") then -- and not (item.components.edible and item.components.perishable) then --Initially disallowed food, instead rework to not protect against spoilage
                 table.insert(items, item)
                 inst.components.container:RemoveItemBySlot(i)
             end
@@ -109,10 +101,12 @@ local function WrapStuff(inst, owner)
         for i, v in ipairs(items) do
             v:Remove()
         end
-        bundle.timebundled = (TheWorld.state.time + TheWorld.state.cycles) * 8 * 60
-        inst.components.container:GiveItem(bundle, 8, pos, true)
+        bundle.timebundled = (TheWorld.state.time + TheWorld.state.cycles) * 8 * 60 --shouldn't we use GetTime instead?
+        inst.components.container:GiveItem(bundle, inst.components.container:GetItemInSlot(7) == nil and 7 or 8, pos, true)
+        return true
     elseif owner and owner.components.talker then
         owner.components.talker:Say(GetString(owner, "ACTIONFAIL_GENERIC"))
+        return false
     end
 end
 
@@ -180,7 +174,21 @@ local function fn()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", OnTimerDone)
-	
+
+    inst:ListenForEvent("itemget", function(inst, data)
+        --prefab check so no smart-asses try to use it to make other stuff than silk stack infinitely.
+        if data.slot ~= nil and data.slot == 9 and data.item ~= nil and data.item.prefab == "silk" and data.item.components.stackable ~= nil and TUNING.DSTU.UPDATE_CHECK then
+            data.item.components.stackable:SetIgnoreMaxSize(true)
+        end
+    end)
+
+    inst:ListenForEvent("itemlose", function(inst, data)
+        if data.slot ~= nil and data.slot == 9 and data.prev_item ~= nil and data.prev_item == "silk" and data.item.components.stackable ~= nil and TUNING.DSTU.UPDATE_CHECK  then
+            data.prev_item.components.stackable:SetIgnoreMaxSize(false)
+        end
+    end)
+
+
     return inst
 end
 

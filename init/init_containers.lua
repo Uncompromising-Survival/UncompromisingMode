@@ -194,20 +194,21 @@ modparams.silksack =
     widget =
     {
         slotpos = {},
-        animbank = "ui_backpack_2x4",
-        animbuild = "ui_backpack_2x4",
+        animbank = "ui_piggyback_2x6",
+        animbuild = "ui_piggyback_2x6",
         --pos = Vector3(-5, -70, 0),
         pos = Vector3(-5, -70, 0),
         slotbg =
         {
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "general_slot.tex", atlas = "images/general_slot.xml" },
-            { image = "silk_slot.tex",    atlas = "images/silk_slot.xml" },
-            { image = "bundle_slot.tex",  atlas = "images/bundle_slot.xml" }, -- Eight
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "bundle_slot.tex", atlas = "images/bundle_slot.xml" },
+            { image = "bundle_slot.tex", atlas = "images/bundle_slot.xml" },
+            { image = "silk_slot.tex",   atlas = "images/silk_slot.xml" },
         },
         buttoninfo =
         {
@@ -220,48 +221,46 @@ modparams.silksack =
     openlimit = 1,
 
 }
-
 for y = 0, 3 do
-    table.insert(modparams.silksack.widget.slotpos, Vector3(-162, -75 * y + 114, 0))
-    table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 75, -75 * y + 114, 0))
+    table.insert(modparams.silksack.widget.slotpos, Vector3(-162, -75 * y + 170, 0))
+    table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 75, -75 * y + 170, 0))
 end
 
---[[function modparams.silksack.itemtestfn(container, item, slot)
-	return (slot ~= 7 and slot ~= 8 and true)
-		or (slot == 7 and item.prefab == "silk")
-		or (slot == 8 and item:HasTag("bundle"))
-end]]
+table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
+
+
+function modparams.silksack.itemtestfn(container, item, slot)
+    return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
+end
 
 function modparams.silksack.widget.buttoninfo.fn(inst, doer)
-    --[[if inst.components.container then
-		inst.WrapStuff(inst,doer)
-	end]]
     if inst.components.container ~= nil then
-        GLOBAL.BufferedAction(owner, inst, ACTIONS.UM_SILKWRAP):Do()
+        GLOBAL.BufferedAction(doer, inst, ACTIONS.UM_SILKWRAP):Do()
         --inst.WrapStuff(inst,doer)
-    elseif inst.replica.container ~= nil and not inst.replica.container:IsBusy() then
+    elseif inst.replica.container ~= nil then
         GLOBAL.SendRPCToServer(GLOBAL.RPC.DoWidgetButtonAction, ACTIONS.UM_SILKWRAP.code, inst, ACTIONS.UM_SILKWRAP.mod_name)
     end
 end
 
 function modparams.silksack.widget.buttoninfo.validfn(inst)
-    --print("testing")
-    --print(inst.replica.container:GetItemInSlot(7))
-    --return inst.replica.container and inst.replica.container:GetItemInSlot(7) and inst.replica.container:GetItemInSlot(7).prefab == "silk"
-    if inst.replica.container then
-        local _container = inst.replica.container
-        --return _container:GetItemInSlot(7). == "silk"
-        return _container:GetItemInSlot(7) and _container:GetItemInSlot(7).prefab == "silk" and _container:GetItemInSlot(7).replica.stackable and _container:GetItemInSlot(7).replica.stackable:StackSize() >= 3 and
-            not _container:GetItemInSlot(8) and
-            (_container:GetItemInSlot(1) or _container:GetItemInSlot(2) or _container:GetItemInSlot(3) or
-                _container:GetItemInSlot(4) or _container:GetItemInSlot(5) or _container:GetItemInSlot(6)) and
-            not (_container:GetItemInSlot(1) and _container:GetItemInSlot(1):HasTag("bundle")) and
-            not (_container:GetItemInSlot(2) and _container:GetItemInSlot(2):HasTag("bundle")) and
-            not (_container:GetItemInSlot(3) and _container:GetItemInSlot(3):HasTag("bundle")) and
-            not (_container:GetItemInSlot(4) and _container:GetItemInSlot(4):HasTag("bundle")) and
-            not (_container:GetItemInSlot(5) and _container:GetItemInSlot(5):HasTag("bundle")) and
-            not (_container:GetItemInSlot(6) and _container:GetItemInSlot(6):HasTag("bundle"))
-        --and not inst:HasTag("busywrappingholdup")
+    local container = inst.replica.container ~= nil and inst.replica.container or inst.components.container
+
+    if container then
+        local has_items, bundle = false, false
+
+        for i = 1, 6 do
+            local item = container:GetItemInSlot(i)
+            if item ~= nil then
+                has_items = true
+                if item:HasTag("unwrappable") or item:HasTag("irreplaceable") then
+                    bundle = true
+                end
+            end
+        end
+
+        local silk = container:GetItemInSlot(9)
+
+        return has_items and silk and (silk.replica ~= nil and silk.replica.stackable ~= nil and silk.replica.stackable:StackSize() >= 6 or silk.components.stackable ~= nil and silk.components.stackable.stacksize >= 6) and not bundle
     end
 end
 

@@ -24,8 +24,7 @@ AddAction("INFEST", "INFEST", function(act)
 end)
 
 AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
-    act.target.WrapStuff(act.target)
-    return true
+    return act.target:WrapStuff(act.target)
 end)
 
 AddAction("UNCOMPROMISING_PAWN_HIDE", "UNCOMPROMISING_PAWN_HIDE", function(act)
