@@ -221,7 +221,7 @@ TUNING.DSTU = {
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resist
     WATHGRITHR_ARSENAL = GetModConfigData("wathgrithr_arsenal"),
-    WATHGRITHR_REWORK =  GetModConfigData("wathgrithr_rework_"),
+    WATHGRITHR_REWORK = GetModConfigData("wathgrithr_rework_"),
     -- Maxwell
     SHADOWWAXWELL_FUEL_COST = 2,
     SHADOWWAXWELL_HEALTH_COST = 15,
@@ -412,6 +412,19 @@ TUNING.DSTU = {
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
     MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
+
+    --hooded forest canoppy setttings
+
+    HOODEDFOREST_CANOPY_MAX_ROTATION = 20*2,
+    HOODEDFOREST_CANOPY_ROTATION_SPEED = 5*2,
+
+    HOODEDFOREST_CANOPY_MAX_TRANSLATION = 1*2,
+    HOODEDFOREST_CANOPY_TRANSLATION_SPEED = 5*2,
+
+    HOODEDFOREST_CANOPY_SCALE = 4*2,
+
+    HOODEDFOREST_CANOPY_MIN_STRENGTH = 0.2*2,
+    HOODEDFOREST_CANOPY_MAX_STRENGTH = 0.4*2,
 }
 
 -- [              DST Related Overrides                  ]
@@ -602,9 +615,9 @@ local um_naughtiness = {
     fruitbat = 4,
     woodpecker = 2,
     snapdragon = 4,
-    snapdragon_buddy = 8,--wtf!!! doin't do that!!
+    snapdragon_buddy = 8, --wtf!!! doin't do that!!
 }
-for k,v in pairs(um_naughtiness) do
+for k, v in pairs(um_naughtiness) do
     GLOBAL.NAUGHTY_VALUE[k] = v
 end
 
@@ -612,18 +625,18 @@ end
 if GetModConfigData("kramped_buff") then
     GLOBAL.NAUGHTY_VALUE["glommer"] = 100
     TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
-	TUNING.KRAMPUS_THRESHOLD = 60
+    TUNING.KRAMPUS_THRESHOLD = 60
     TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
 end
 
 if GetModConfigData("waxwell_nerf") then
     TUNING.SHADOWWAXWELL_SANITY_PENALTY.SHADOWPROTECTOR = 0.2 --can summon 3 fighters
-    TUNING.SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 2 -- lasts half of the duration
+    TUNING.SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 2    -- lasts half of the duration
     TUNING.SHADOW_PILLAR_DURATION_BOSS = 4
     TUNING.SHADOW_PILLAR_BREAK_MULT =
     {
-        MIN = 1,  -- but breaks slower
-        MAX = 2,   --breaks faster with the more attacked a cage is.
+        MIN = 1, -- but breaks slower
+        MAX = 2, --breaks faster with the more attacked a cage is.
     }
 
     TUNING.WAXWELLJOURNAL_SPELL_COST.SHADOW_PILLARS = 0.25 --costs 25%

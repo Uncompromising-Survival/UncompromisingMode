@@ -9,7 +9,8 @@ local assets =
 	Asset("ANIM", "anim/giant_tree1_sick.zip"),
 	Asset("ANIM", "anim/giant_tree2_sick.zip"),
 }
-local CANOPY_SHADOW_DATA = require("prefabs/canopyshadows")
+
+local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")
 
 -----------------------------Canopy and Lightning Handling
 local DROP_ITEMS_DIST_MIN = 6

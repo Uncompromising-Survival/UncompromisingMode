@@ -1,5 +1,5 @@
 require "prefabutil"
-local CANOPY_SHADOW_DATA = require("prefabs/canopyshadows")
+local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")
 
 local function removecanopyshadow(inst)
     if inst.canopy_data ~= nil then

@@ -1,3 +1,5 @@
+local package = GLOBAL.package
+
 -- Update this list when adding files
 local component_post = {
     "healer",
@@ -242,6 +244,27 @@ local brain_post = {
     "shadowwaxwell",
     "terrorguisestuff",
 }
+
+
+
+--package post system courtesy of IA team!
+local package_post = {
+    ["shadeeffects"] = "shadeeffects"
+}
+
+
+local _require = GLOBAL.require
+function GLOBAL.require(modulename, ...)
+    local post_modulename = package_post[modulename] or nil
+    local should_load = post_modulename and package.loaded[modulename] == nil and GLOBAL.kleifileexists("scripts/"..modulename..".lua") and GLOBAL.kleifileexists(MODROOT.."postinit/package/"..post_modulename..".lua")
+    local rets = {_require(modulename, ...)}
+    if should_load then
+        print("loading module post", "scripts/"..modulename, MODROOT.."postinit/package/"..post_modulename)
+        modimport("postinit/package/" .. post_modulename)
+    end
+    return GLOBAL.unpack(rets)
+end
+
 
 if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
