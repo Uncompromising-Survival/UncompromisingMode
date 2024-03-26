@@ -24,7 +24,7 @@ local function retargetfn(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
 	local players = TheSim:FindEntities(x, y, z, 40, { "player" })
     for i, v in ipairs(players) do
-		if inst.components.combat:CanTarget(v) then
+		if inst.components.combat ~= nil and inst.components.combat:CanTarget(v) then
 			target = v
 		end
     end
