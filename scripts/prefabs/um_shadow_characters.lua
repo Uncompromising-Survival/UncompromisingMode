@@ -204,7 +204,7 @@ local function RefeshShield(inst)
 end
 
 local function CommandAbby(inst)
-	if inst.abigail ~= nil and inst.components.combat.target ~= nil then
+	if inst.abigail ~= nil and inst.components.combat.target ~= nil and inst.abigail.components.combat ~= nil then
 		inst.abigail:SpeedBoost()
 		inst.abigail.components.combat:SuggestTarget(inst.components.combat.target)
 	end
