@@ -206,7 +206,6 @@ env.AddClassPostConstruct("widgets/healthbadge", function(self, owner)
 				end
 			
 				self._vet_updatetask = self.inst:DoTaskInTime(.1, function()
-					print("beat")
 					TheFocalPoint.SoundEmitter:SetParameter("heartbeat", "pitch", 1 - self.owner.replica.health:GetPercent())
 					self._vet_updatetask = nil
 				end)
