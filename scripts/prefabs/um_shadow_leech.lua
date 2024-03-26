@@ -239,14 +239,6 @@ local function fn()
 	inst.components.inventoryitem.canbepickedup = false
 	--inst.components.inventoryitem.cangoincontainer = true
 	inst.components.inventoryitem:SetSinks(false)
-	
-	inst:WatchWorldState("isday", function() 
-		--inst:Remove()
-	end)
-	
-	inst:WatchWorldState("iscaveday", function() 
-		--inst:Remove()
-	end)
 
 	inst:SetStateGraph("SGum_shadow_leech")
 	inst:SetBrain(brain)

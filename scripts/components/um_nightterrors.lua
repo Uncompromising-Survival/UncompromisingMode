@@ -62,6 +62,16 @@ return Class(function(self, inst)
             and not area:CurrentlyInTag("nohasslers")
     end
 
+    local function DespawnOnDay(ent)
+        ent:WatchWorldState("cycles", function() 
+			local x, y, z = ent.Transform:GetWorldPosition()
+			SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+			SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+							
+			ent:Remove()
+		end)
+    end
+
     local ATTACK_MUST_TAGS = { "structure" }
     local function PickAttackTarget()
         _targetplayer = nil
@@ -237,6 +247,8 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) then
 						local ent = SpawnPrefab("rne_grabbyshadows")
 						ent.Transform:SetPosition(x1, 0, z1)
+						DespawnOnDay(ent)
+
 						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.GRABBY })
 						
 						break
@@ -258,6 +270,8 @@ return Class(function(self, inst)
 				if (light <= 0.3 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab("shadowvortex")
 					ent.Transform:SetPosition(x1, 0, z1)
+					DespawnOnDay(ent)
+
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.VORTEX }) 
 			
 					break
@@ -292,6 +306,8 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 						local ent = SpawnPrefab("um_nightcrawler")
 						ent.Transform:SetPosition(x1, 0, z1)
+						DespawnOnDay(ent)
+
 						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTCRAWLER })
 						
 						break
@@ -315,6 +331,8 @@ return Class(function(self, inst)
 					if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 						local ent = SpawnPrefab("um_shadow_leech")
 						ent.Transform:SetPosition(x1, 0, z1)
+						DespawnOnDay(ent)
+
 						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.UM_LEECH })
 						
 						break
@@ -354,6 +372,8 @@ return Class(function(self, inst)
 							has_spawned_threat = true
 							local ent = SpawnPrefab("fuelseeker")
 							ent.Transform:SetPosition(x1, 0, z1)
+							DespawnOnDay(ent)
+
 							TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.FUELSEEKER }) 
 					
 							break
@@ -383,6 +403,8 @@ return Class(function(self, inst)
 								local ent = SpawnPrefab("um_haunt")
 								ent.haunt_target = v
 								ent.Transform:SetPosition(x1, 0, z1)
+								DespawnOnDay(ent)
+					
 								TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HAUNT }) 
 
 								return
@@ -410,6 +432,8 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab("um_heckler")
 					ent.Transform:SetPosition(x1, 0, z1)
+					DespawnOnDay(ent)
+					
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
 					
 					break
@@ -432,6 +456,8 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = math.random() > 0.66 and SpawnPrefab("nightmarebeak") or SpawnPrefab("crawlingnightmare")
 					ent.Transform:SetPosition(x1, 0, z1)
+					DespawnOnDay(ent)
+					
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTMARECREATURE })
 					count = count + 1
 					
@@ -456,6 +482,8 @@ return Class(function(self, inst)
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
 					local ent = SpawnPrefab(character)
 					ent.Transform:SetPosition(x1, 0, z1)
+					DespawnOnDay(ent)
+
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
 					
 					break

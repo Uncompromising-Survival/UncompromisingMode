@@ -960,6 +960,14 @@ local function shadow_canary()
 	
 	inst:DoTaskInTime(0, ShadowCanaryInit)
 	
+	inst:WatchWorldState("cycles", function() 
+		local x, y, z = inst.Transform:GetWorldPosition()
+		SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+		SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+		inst:Remove()
+	end)
+	
 	inst.persists = false
 
     return inst
@@ -1101,6 +1109,14 @@ local function crockpotfn()
 	--inst:DoPeriodicTask(1, AddIngredient)
 	
 	inst:ListenForEvent("attacked", CrockPotHit)
+	
+	inst:WatchWorldState("cycles", function() 
+		local x, y, z = inst.Transform:GetWorldPosition()
+		SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+		SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+		inst:Remove()
+	end)
 
     return inst
 end
@@ -1208,6 +1224,14 @@ local function warly_food()
     inst.components.complexprojectile.usehigharc = true
 	
 	inst:DoTaskInTime(30, function()
+		local x, y, z = inst.Transform:GetWorldPosition()
+		SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+		SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+		inst:Remove()
+	end)
+	
+	inst:WatchWorldState("cycles", function() 
 		local x, y, z = inst.Transform:GetWorldPosition()
 		SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
 		SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)

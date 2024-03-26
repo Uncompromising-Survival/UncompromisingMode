@@ -227,9 +227,6 @@ local function fn()
 
     inst:AddComponent("inspectable")
 	
-	inst:WatchWorldState("isday", inst.Remove)
-	inst:WatchWorldState("iscaveday", inst.Remove)
-	
     inst.LaunchProjectile = LaunchProjectile
 	
     return inst

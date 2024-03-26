@@ -162,9 +162,12 @@ end
 
 local function OnActivate(inst, doer)
 	if doer:HasTag("vetcurse") then
-		inst.valid_cursee_id = doer.userid
-		inst.Cursee:set_local(doer)
-		inst.Cursee:set(doer)
+		if doer.components.builder ~= nil then
+			doer.components.builder:UsePrototyper(inst)
+		end
+		--inst.valid_cursee_id = doer.userid
+		--inst.Cursee:set_local(doer)
+		--inst.Cursee:set(doer)
 	elseif doer:HasTag("vetcurse_warning") and not doer:HasTag("vetcurse") then
 		doer.sg:GoToState("curse_controlled")
 		ToggleCurse(inst, doer)
@@ -224,14 +227,16 @@ local function fn(Sim)
 	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddDynamicShadow()
-    inst.entity:AddNetwork()
 	inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
 	inst.MiniMapEntity:SetIcon("veteranshrine_map.tex")
 
     inst.AnimState:SetBuild("veteranshrine")    
     inst.AnimState:SetBank("veteranshrine")
     inst.AnimState:PlayAnimation("idle", true)
+	
+	--prototyper (from prototyper component) added to pristine state for uhhh something
+	inst:AddTag("prototyper")
 	
     --inst.GetActivateVerb = GetVerb
     inst:AddTag("trader")
@@ -241,11 +246,6 @@ local function fn(Sim)
 	inst:DoTaskInTime(0, RegisterNetListeners)
 	
     MakeObstaclePhysics(inst, 1.8)
-
-    if not TheNet:IsDedicated() then
-        inst:AddComponent("pointofinterest")
-        inst.components.pointofinterest:SetHeight(0)
-    end
 
 	inst.entity:SetPristine()
 	
@@ -271,7 +271,6 @@ local function fn(Sim)
 	--inst.components.activatable.standingaction = true
 
     inst:AddComponent("trader")
-
     inst.components.trader:SetAcceptTest(AcceptTest)
     inst.components.trader.onaccept = OnGetItemFromPlayer
     inst.components.trader.onrefuse = OnRefuseItem

@@ -341,6 +341,10 @@ local function SwilsonFn()
 	inst.components.lootdropper:SetChanceLootTable('swilson')
 	inst:AddTag("swilson") 
 	inst:AddTag("shadowchar_swilson")
+	
+    inst:AddComponent("lootdropper")
+    inst.components.lootdropper:SetLoot({ "wilson_vetskull" })
+	
 	return inst
 end
 
@@ -435,6 +439,10 @@ local function SWathgrithrFn()
 	inst.combo = 0
 	inst.rage = 0
 	inst.BuffShadows = BuffShadows
+	
+    inst:AddComponent("lootdropper")
+    inst.components.lootdropper:SetLoot({ "wathgrithr_vetskull" })
+	
 	return inst
 end
 

@@ -146,7 +146,7 @@ local function vestigefn()
 	inst.entity:AddNetwork()
 
 	MakeInventoryPhysics(inst)
-	RemovePhysicsColliders(inst)
+	--RemovePhysicsColliders(inst)
 
 	inst.AnimState:SetBank("wortox_soul_ball")
 	inst.AnimState:SetBuild("wortox_soul_ball")
@@ -163,8 +163,6 @@ local function vestigefn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-
-	inst:AddComponent("inventoryitem")
 
 	inst:AddComponent("inspectable")
 
@@ -217,7 +215,7 @@ local function MakeSoul(name, glow, glow2, swirl, multcolor, chaotic, colortype)
 		inst.entity:AddNetwork()
 
 		MakeInventoryPhysics(inst)
-		RemovePhysicsColliders(inst)
+		--RemovePhysicsColliders(inst)
 
 		inst.AnimState:SetBank("wortox_soul_ball")
 		

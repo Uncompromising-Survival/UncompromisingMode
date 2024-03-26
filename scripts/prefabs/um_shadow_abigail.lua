@@ -149,6 +149,16 @@ local function fn()
 	inst.persists = false
 
     inst:ListenForEvent("attacked", OnAttacked)
+	
+	inst:WatchWorldState("cycles", function() 
+		if not inst.components.health:IsDead() then
+			local x, y, z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("statue_transition").Transform:SetPosition(x, y, z)
+			SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
+			
+			inst:Remove()
+		end
+	end)
 
     ------------------
 
