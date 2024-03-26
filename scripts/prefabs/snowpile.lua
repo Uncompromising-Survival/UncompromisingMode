@@ -4,7 +4,6 @@ local anims = { "low", "med", "full" }
 
 local function DoColdMenace(inst)
     local snowattack = SpawnPrefab("snowmong")
-    local spawnpoint = inst.Transform:GetWorldPosition()
     snowattack.Transform:SetPosition(inst.Transform:GetWorldPosition())
     snowattack.sg:GoToState("enter")
     snowattack.SetTier(snowattack)
@@ -14,12 +13,12 @@ local function DoColdMenace(inst)
 end
 
 local function TryColdMenace(inst)
-    if math.random() > 0.9 and (inst.components.workable.workleft > 2 or inst.components.pickable.cycles_left > 2) and not inst.mongproof then -- This chance could be adjusted or scale with time.
+    if math.random() > 0.66 and (inst.components.workable.workleft > 2 or inst.components.pickable.cycles_left > 2) and not inst.mongproof then -- This chance could be adjusted or scale with time.
         inst:DoColdMenace(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         if math.random() > 0.3 then -- Have a good chance of spawning buddies with them.
             local sno = TheSim:FindEntities(x, y, z, 10, { "snowpile" })
-            local nummongs = math.random(1, 3)
+            local nummongs = math.random(2)
             for i, pile in ipairs(sno) do
                 if nummongs > 0 then
                     nummongs = nummongs - 1
