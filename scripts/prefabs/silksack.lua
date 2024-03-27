@@ -175,20 +175,6 @@ local function fn()
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", OnTimerDone)
 
-    inst:ListenForEvent("itemget", function(inst, data)
-        --prefab check so no smart-asses try to use it to make other stuff than silk stack infinitely.
-        if data.slot ~= nil and data.slot == 9 and data.item ~= nil and data.item.prefab == "silk" and data.item.components.stackable ~= nil and TUNING.DSTU.UPDATE_CHECK then
-            data.item.components.stackable:SetIgnoreMaxSize(true)
-        end
-    end)
-
-    inst:ListenForEvent("itemlose", function(inst, data)
-        if data.slot ~= nil and data.slot == 9 and data.prev_item ~= nil and data.prev_item == "silk" and data.item.components.stackable ~= nil and TUNING.DSTU.UPDATE_CHECK  then
-            data.prev_item.components.stackable:SetIgnoreMaxSize(false)
-        end
-    end)
-
-
     return inst
 end
 
