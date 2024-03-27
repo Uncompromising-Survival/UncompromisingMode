@@ -160,7 +160,6 @@ startregen = function(inst, regentime)
         -- more to grow
         -- regentime = regentime or (TUNING.SNOW_REGROW_TIME + math.random()*TUNING.SNOW_REGROW_VARIANCE)
         local snowmult, stormmult = TheWorld.state.issnowing and 0.75 or 1, TheWorld:HasTag("snowstormstart") and 0.25 or 1
-        print(snowmult, stormmult)
         regentime = (regentime or (TUNING.SNOW_REGROW_TIME + math.random() * TUNING.SNOW_REGROW_VARIANCE)) * snowmult * stormmult
 
 
