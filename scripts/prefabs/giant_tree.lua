@@ -749,9 +749,9 @@ local function giant_treefn()
 	end)]]
     inst:ListenForEvent("animover", AnimNext)
 
-    inst.OnRemove(function(inst)
+    inst.OnRemoveEntity = function(inst)
         removecanopyshadow(inst)
-    end)
+    end
 
     return inst
 end
