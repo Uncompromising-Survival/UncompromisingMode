@@ -51,7 +51,7 @@ AddRoom("AphidLand",
 				blueberryplantbuncher = 0.05,
 				hooded_mushtree_tall = 0.05,
 				hoodedtrapdoor = 0.05,
-				lightrays_canopy = 0.2,
+				lightrays_canopy = 0.4,
 			},
 
 			countprefabs =
@@ -112,7 +112,7 @@ AddRoom("SpideryGiantTrees",
 				hooded_fern = 0.5,
 				--giant_tree_infested = 0.006,
 				--webbedcreature = 0.2,
-				lightrays_canopy = 0.25,
+				lightrays_canopy = 0.6,
 			},
 			countprefabs =
 			{
