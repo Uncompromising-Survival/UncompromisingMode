@@ -5,10 +5,10 @@ if not folder_name:find("workshop-") then
     name = "[LOCAL] - " .. name
 end
 
-local _version = "1.5.0.5"
+local _version = "1.5.0.6"
 
 description = [[
-    󰀔 [ Version 1.5.0.5 Testing: "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[ ]
+    󰀔 [ Version 1.5.0.6 Testing: "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[ ]
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
