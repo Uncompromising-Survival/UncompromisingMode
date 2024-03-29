@@ -407,6 +407,15 @@ local EXPERIMENTS =
 		binding = "any",
 		timer = 30,
 	},
+    {
+		result = "grassgekko",
+		fuel = "nightmarefuel",
+		fuel2 = "moonglass",
+		flesh = "plantmeat",
+		binding = "cutgrass",
+		binding_2 = "dug_grass",
+		timer = 60,
+	},
 }
 
 local function onhammered(inst, worker)
@@ -414,7 +423,6 @@ local function onhammered(inst, worker)
         inst.components.burnable:Extinguish()
     end
 	
-    inst.components.lootdropper:DropLoot()
     local fx = SpawnPrefab("collapse_small")
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("wood")

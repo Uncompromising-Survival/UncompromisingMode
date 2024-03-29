@@ -23,16 +23,6 @@ local function OnAttacked(inst, data)
     end
 end
 
-local function KeepTargetFn(inst, target)
-    if target and inst:GetDistanceSqToInst(target) < TUNING.GHOST_FOLLOW_DSQ then
-        return true
-    end
-
-    inst.brain.followtarget = nil
-
-    return false
-end
-
 local COLLAPSIBLE_TAGS = { "player" }
 local NON_COLLAPSIBLE_TAGS = { "playerghost" }
 
@@ -140,7 +130,6 @@ local function fn()
     inst:AddComponent("combat")
     inst.components.combat.defaultdamage = TUNING.GHOST_DAMAGE
     inst.components.combat.playerdamagepercent = TUNING.GHOST_DMG_PLAYER_PERCENT
-    inst.components.combat:SetKeepTargetFunction(KeepTargetFn)
 	
 	inst:DoPeriodicTask(TUNING.GHOST_DMG_PERIOD, EmitBurst, .5)
 	

@@ -145,7 +145,7 @@ end
 local function Working(owner, data)
 	if owner ~= nil and owner:HasTag("player") and owner.components.hunger then
 		owner.components.hunger:DoDelta(-5)
-		inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/chew")
+		owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/chew")
 	end
 end
 

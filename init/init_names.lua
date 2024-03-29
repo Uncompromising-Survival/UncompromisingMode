@@ -11,6 +11,11 @@ STRINGS.BEESWAX = "Wax"
 
 
 
+-------------------------------------------------- Strings
+
+STRINGS.CREEPINGFEAR = "Creeping Fear"
+STRINGS.DREADEYE     = "Dread Eye"
+
 STRINGS.UNCOMPROMISING_RAT = "Rat"          -- Maybe change the name with a pun with Robber or Raider, any idea ?
 STRINGS.UNCOMPROMISING_CAVERAT = "Cave Rat" -- The aggressive cousin
 STRINGS.UNCOMPROMISING_PACKRAT = "Pack Rat" -- The hoarding cousin

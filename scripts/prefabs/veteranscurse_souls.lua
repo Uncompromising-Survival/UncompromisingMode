@@ -171,6 +171,8 @@ local function vestigefn()
 			
 	inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_dark_vestiges.xml"
+		
+	inst:AddComponent("stackable")
 
 	return inst
 end
@@ -258,8 +260,6 @@ local function MakeSoul(name, glow, glow2, swirl, multcolor, chaotic, colortype)
 			return inst
 		end
 
-		--inst:AddComponent("inventoryitem")
-
 		inst:AddComponent("inspectable")
 		inst.components.inspectable.nameoverride = "UM_BOSS_SOUL"
 
@@ -268,6 +268,8 @@ local function MakeSoul(name, glow, glow2, swirl, multcolor, chaotic, colortype)
 			
 		inst:AddComponent("inventoryitem")
 		inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
+		
+		inst:AddComponent("stackable")
 		
 		if chaotic then
 			inst:DoPeriodicTask(1, ColorRando)

@@ -34,12 +34,6 @@ PrefabFiles = {
     "uncompromising_shadow_projectile_fx",
 }
 --]]
--------------------------------------------------- Strings
-
-STRINGS                    = GLOBAL.STRINGS
-
-STRINGS.NAMES.CREEPINGFEAR = "Creeping Fear"
-STRINGS.NAMES.DREADEYE     = "Dread Eye"
 
 -------------------------------------------------- Turnings
 --[[
