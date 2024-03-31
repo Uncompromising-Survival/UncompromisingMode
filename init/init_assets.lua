@@ -2367,6 +2367,10 @@ Assets = {
     Asset("IMAGE", "fx/smog3.tex"),
     Asset("IMAGE", "fx/smog4.tex"),
 
+    --SHADER TEXTURES
+
+    Asset("IMAGE", "images/giant_tree.tex"),
+
 	-- SKILL TREES
 
 	Asset( "IMAGE", "images/wathgrithr_rework_skilltree.tex" ),
