@@ -18,13 +18,12 @@ SetSharedLootTable("um_daywalker2",
         { "wagpunk_bits",     1 },
         { "wagpunk_bits",     1 },
         { "wagpunk_bits",     1 },
+        { "wagpunk_bits",     1 },
         { "wagpunk_bits",     0.5 },
 
-        { "wagpunk_bits",     0.5 },
-        { "wagpunk_bits",     0.5 },
-        { "wagpunk_bits",     0.5 },
-
-        { "scrap_monoclehat", 1 },
+        { "armorwagpunk_blueprint",     1 },
+        { "wagpunkhat",     1 },
+        { "wagpunkbits_kit_blueprint",     1 },
     })
 
 
