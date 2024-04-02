@@ -204,7 +204,8 @@ local prefab_post = {
     "compass",
 	"archive_lockbox",
     "seedpouch",
-    "voidcloth_umbrella"
+    "voidcloth_umbrella",
+    "daywalker",
 }
 
 local stategraph_post = {

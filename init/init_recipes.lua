@@ -339,7 +339,15 @@ AllRecipes["winona_spotlight"].ingredients = { Ingredient("sewing_tape", 1), Ing
 AllRecipes["featherpencil"].numtogive = 4 -- 8
 
 
+AllRecipes["armorwagpunk"].ingredients = {Ingredient("armorwood", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2)}
+AllRecipes["wagpunkhat"].ingredients = {Ingredient("footballhat", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2)}
+
 -- new recipes
+
+AddRecipe2("scrap_monoclehat",
+{ Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+
+
 
 if GetModConfigData("snowstorms") then
     AddRecipe2(
@@ -1506,31 +1514,31 @@ if GetModConfigData("wixie_walter") then
 end
 
 AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" },
-	{ "CHARACTER" })
+    { "CHARACTER" })
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 AddRecipe2(
-	"pact_armor_sanity",
-	{ Ingredient("nightmarefuel", 2) },
-	GLOBAL.TECH.NONE,
-	{ builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" },
-	{ "CHARACTER", "ARMOUR" }
+    "pact_armor_sanity",
+    { Ingredient("nightmarefuel", 2) },
+    GLOBAL.TECH.NONE,
+    { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" },
+    { "CHARACTER", "ARMOUR" }
 )
 AddRecipe2(
-	"pact_sword_sanity",
-	{ Ingredient("nightmarefuel", 2) },
-	GLOBAL.TECH.NONE,
-	{ builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" },
-	{ "CHARACTER", "WEAPONS" }
+    "pact_sword_sanity",
+    { Ingredient("nightmarefuel", 2) },
+    GLOBAL.TECH.NONE,
+    { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" },
+    { "CHARACTER", "WEAPONS" }
 )
 
-AddRecipe2("um_record_menu", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_menu.xml"}, {"DECOR"})
-AddRecipe2("um_record_wixie", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wixie.xml"}, {"DECOR"})
-AddRecipe2("um_record_walter", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_walter.xml"}, {"DECOR"})
-AddRecipe2("um_record_wathom", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wathom.xml"}, {"DECOR"})
-AddRecipe2("um_record_winky", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_winky.xml"}, {"DECOR"})
-AddRecipe2("um_record_hooded_widow", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_hooded_widow.xml"}, {"DECOR"})
-AddRecipe2("um_record_stranger", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_stranger.xml"}, {"DECOR"})
+AddRecipe2("um_record_menu", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_menu.xml" }, { "DECOR" })
+AddRecipe2("um_record_wixie", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wixie.xml" }, { "DECOR" })
+AddRecipe2("um_record_walter", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_walter.xml" }, { "DECOR" })
+AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wathom.xml" }, { "DECOR" })
+AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
+AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
+AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
 
     AddRecipe2(
         "um_scrapper",
