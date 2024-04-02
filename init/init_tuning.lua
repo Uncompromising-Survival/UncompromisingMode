@@ -19,6 +19,13 @@ TUNING = GLOBAL.TUNING
 local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
 
+local function Date(month, day)
+    local current_time = os.time()
+    local current_date = os.date("*t", current_time)
+
+    return current_date.month == month and current_date.day == day or false
+end
+
 TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Armor
@@ -425,6 +432,10 @@ TUNING.DSTU = {
 
     HOODEDFOREST_CANOPY_MIN_STRENGTH = 0.4,
     HOODEDFOREST_CANOPY_MAX_STRENGTH = 0.6,
+
+    DATES = {
+        APRIL_FOOLS = Date(4, 1),
+    }
 }
 
 -- [              DST Related Overrides                  ]
