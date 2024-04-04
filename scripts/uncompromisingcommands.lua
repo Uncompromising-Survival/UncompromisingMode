@@ -7,7 +7,6 @@ function c_um_snowstorm()
             print("stopping snowstorm...")
         end
     end
-
 end
 
 -- toggles vetcurse
@@ -16,7 +15,7 @@ function c_um_vetcurse()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
             player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-            player:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+            player:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             print("added vetcurse")
         elseif player:HasTag("vetcurse") then
             player.components.debuffable:RemoveDebuff("buff_vetcurse")
@@ -27,14 +26,23 @@ end
 
 -- gives all current vet curse items
 function c_um_vetcurseitems()
-    c_give("cursed_antler")
-    c_give("beargerclaw")
-    c_give("slobberlobber")
-    c_give("feather_frock")
-    c_give("gore_horn_hat")
-    c_give("klaus_amulet")
-    c_give("crabclaw")
-    c_give("um_beegun")
+    local items = {
+        "cursed_antler",
+        "beargerclaw",
+        "slobberlobber",
+        "feather_frock",
+        "gore_horn_hat",
+        "klaus_amulet",
+        "crabclaw",
+        "um_beegun",
+        "um_wingsuit",
+        "um_exhumer",
+        "um_moonfly_lantern",
+        "silksack",
+    }
+    for k, v in ipairs(items) do
+        c_give(v)
+    end
     if KnownModIndex:IsModEnabled("workshop-1289779251") then
         c_give("um_beegun_cherry")
     end
@@ -54,56 +62,56 @@ end
 function c_woby_hunger()
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.woby ~= nil and player.woby.components.hunger ~= nil then
-		if player.woby.components.hunger:IsPaused() then
-			player.woby.components.hunger:Resume()
-		else
-			player.woby.components.hunger:Pause()
-		end
+        if player.woby.components.hunger:IsPaused() then
+            player.woby.components.hunger:Resume()
+        else
+            player.woby.components.hunger:Pause()
+        end
     end
 end
 
 -- gives all current vet curse skulls
 
 local vetskulls = {
-	"walter_vetskull",
-	"wortox_vetskull",
-	"maxwell_vetskull",
-	"willow_vetskull",
-	"warly_vetskull",
-	"winky_vetskull",
-	"wickerbottom_vetskull",
-	"wixie_vetskull",
-	"woodie_vetskull",
-	"wolfgang_vetskull",
-	"wanda_vetskull",
-	"wathgrithr_vetskull",
-	"wes_vetskull",
-	"wendy_vetskull",
+    "walter_vetskull",
+    "wortox_vetskull",
+    "maxwell_vetskull",
+    "willow_vetskull",
+    "warly_vetskull",
+    "winky_vetskull",
+    "wickerbottom_vetskull",
+    "wixie_vetskull",
+    "woodie_vetskull",
+    "wolfgang_vetskull",
+    "wanda_vetskull",
+    "wathgrithr_vetskull",
+    "wes_vetskull",
+    "wendy_vetskull",
 }
 
 function c_um_givevetskulls()
-	for i, v in ipairs(vetskulls) do
-		c_give(v)
-	end
+    for i, v in ipairs(vetskulls) do
+        c_give(v)
+    end
 end
 
 -- gives all current uncomp records
 
 local records = {
-	"um_record_menu",
-	"um_record_walter",
-	"um_record_wixie",
-	"um_record_shadow_wixie",
-	"um_record_hooded_widow",
-	"um_record_wathom",
-	"um_record_stranger",
-	"um_record_winky",
+    "um_record_menu",
+    "um_record_walter",
+    "um_record_wixie",
+    "um_record_shadow_wixie",
+    "um_record_hooded_widow",
+    "um_record_wathom",
+    "um_record_stranger",
+    "um_record_winky",
 }
 
 function c_um_giverecords()
-	for i, v in ipairs(records) do
-		c_give(v)
-	end
+    for i, v in ipairs(records) do
+        c_give(v)
+    end
 end
 
 -- lists current rat score shenenigans.
@@ -238,14 +246,14 @@ function c_um_findents(radius, awake)
     local alreadycounted_ents = {}
 
     for i, v in ipairs(ents) do
-		if awake == nil or awake and v.entity:IsAwake() then
-			local count = 0
+        if awake == nil or awake and v.entity:IsAwake() then
+            local count = 0
 
-			if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
-				table.insert(alreadycounted_ents, v.prefab)
-				CountLocalPrefabs(v.prefab, pos, set_radius)
-			end
-		end
+            if v ~= nil and v.prefab ~= nil and not table.contains(alreadycounted_ents, v.prefab) then
+                table.insert(alreadycounted_ents, v.prefab)
+                CountLocalPrefabs(v.prefab, pos, set_radius)
+            end
+        end
     end
 end
 
@@ -262,37 +270,36 @@ function c_um_heatwave()
 end
 
 local uncompfoods = {
-	"beefalowings",
-	"blueberrypancakes",
-	"californiaking",
-	"devilsfruitcake",
-	"hardshelltacos",
-	"liceloaf",
-	"seafoodpaella",
-	"snotroast",
-	"snowcone",
-	"stuffed_peeper_poppers",
-	"theatercorn",
-	"um_deviled_eggs",
-	"purplesteamedhams",
-	"greensteamedhams",
-	"viperjam",
-	"zaspberryparfait",
+    "beefalowings",
+    "blueberrypancakes",
+    "californiaking",
+    "devilsfruitcake",
+    "hardshelltacos",
+    "liceloaf",
+    "seafoodpaella",
+    "snotroast",
+    "snowcone",
+    "stuffed_peeper_poppers",
+    "theatercorn",
+    "um_deviled_eggs",
+    "purplesteamedhams",
+    "greensteamedhams",
+    "viperjam",
+    "zaspberryparfait",
 }
 
 function c_um_givefoods()
     if ThePlayer ~= nil then
-		for i, v in pairs(uncompfoods) do
-			if ThePlayer.components.inventory ~= nil then
-				local food = SpawnPrefab(v)
-				food.Transform:SetPosition(ThePlayer.Transform:GetWorldPosition())
-				
-				ThePlayer.components.inventory:GiveItem(food)
-			end
-		end
+        for i, v in pairs(uncompfoods) do
+            if ThePlayer.components.inventory ~= nil then
+                local food = SpawnPrefab(v)
+                food.Transform:SetPosition(ThePlayer.Transform:GetWorldPosition())
+
+                ThePlayer.components.inventory:GiveItem(food)
+            end
+        end
     end
 end
-
 
 local function UM_ConsoleCommandPlayer()
     return (c_sel() ~= nil and c_sel():HasTag("player") and c_sel()) or ThePlayer or AllPlayers[1]
@@ -306,7 +313,6 @@ local function ListingOrConsolePlayer(input)
 end
 
 function c_um_wobygodmode(player)
-
     if TheWorld ~= nil and not TheWorld.ismastersim then
         c_remote("c_um_wobygodmode()")
         return
@@ -315,17 +321,17 @@ function c_um_wobygodmode(player)
     player = ListingOrConsolePlayer(player)
     if player ~= nil and player.woby ~= nil then
         SuUsed("c_um_wobygodmode", true)
-		if  player.woby.components.health ~= nil then
+        if player.woby.components.health ~= nil then
             local godmode = player.woby.components.health.invincible
             player.woby.components.health:SetInvincible(not godmode)
-            print("God mode: "..tostring(not godmode))
+            print("God mode: " .. tostring(not godmode))
         end
     end
 end
 
 function c_um_listumprefabs()
     print("HERE --- ALL UM PREFABS")
-    for k,v in pairs(TUNING.DSTU.PREFABS) do
+    for k, v in pairs(TUNING.DSTU.PREFABS) do
         print(k)
         TheNet:Announce(k)
     end

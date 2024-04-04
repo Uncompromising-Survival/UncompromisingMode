@@ -197,7 +197,7 @@ modparams.silksack =
         animbank = "ui_piggyback_2x6",
         animbuild = "ui_piggyback_2x6",
         --pos = Vector3(-5, -70, 0),
-        pos = Vector3(-5, -70, 0),
+        pos = Vector3(-5, -90, 0),
         slotbg =
         {
             { image = "inv_slot.tex",    atlas = "images/hud.xml" },
