@@ -870,7 +870,7 @@ AddRecipe2(
 
 AddRecipe2(
     "beargerclaw",
-    { Ingredient("um_bearger_soul", 1), Ingredient("furtuft", 4), Ingredient("um_dark_vestiges", 1) },
+    { Ingredient("um_bearger_soul", 1), Ingredient("rocks", 10), Ingredient("um_dark_vestiges", 1) },
     TECH.VETERANSHRINE_ONE,
     { nounlock = true },
     { "MAGIC" }
@@ -888,7 +888,7 @@ AddRecipe2(
 
 AddRecipe2(
     "silksack",
-    { Ingredient("um_hoodedwidow_soul", 1), Ingredient("silk", 6), Ingredient("um_dark_vestiges", 1) },
+    { Ingredient("um_hoodedwidow_soul", 1), Ingredient("silk", 6), Ingredient("um_dark_vestiges", 2) },
     TECH.VETERANSHRINE_ONE,
     { nounlock = true },
     { "MAGIC" }
