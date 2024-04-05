@@ -188,8 +188,7 @@ local function ForceWalterCurse_On(inst, target)
     target.walter_curse = target:ListenForEvent("attacked", function(target, data)
         if data ~= nil and data.damage ~= nil then
             local attacker = data.attacker.prefab ~= nil and data.attacker.prefab or "_projectile_attack"
-
-            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", { duration = data.damage * 0.1, negative_value = true })
+            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", { duration = data.damage * 0.05, negative_value = true })
         end
     end)
 end
@@ -202,7 +201,7 @@ local function ForceWalterCurse_Off(inst, target)
     end
 
     target.walter_curse = nil
-    target.walter_vetcurse = nil
+	target.walter_vetcurse = nil
 end
 
 local function ForceWortoxCurse_On(inst, target)
@@ -686,7 +685,7 @@ local function ForceWendyCurse_Off(inst, target)
     target:RemoveTag("wendy_vetcurse")
 
     target:RemoveEventCallback("sanitydelta", WendyCurse, target)
-    target:RemoveEventCallback("healthdelta", WendyCurse, target)
+    --target:RemoveEventCallback("healthdelta", WendyCurse, target)
 
     target.wendy_vetcurse = nil
 end
@@ -695,6 +694,7 @@ local skull =
 {
     {
         name = "wilson_vetskull",
+        tag = "wilson_vetcurse",
         anim = "idle",
         attachfn = ForceWilsonCurse_On,
         detachfn = ForceWilsonCurse_Off,
@@ -704,15 +704,17 @@ local skull =
     },
     {
         name = "walter_vetskull",
+        tag = "walter_vetcurse",
         anim = "idle",
         attachfn = ForceWalterCurse_On,
         detachfn = ForceWalterCurse_Off,
         description = STRINGS.VETSKULL.WALTER,
-        vestiges = 2,
+        vestiges = 3,
         music = "UMMusic/music/follow_me_woby_flat",
     },
     {
         name = "wortox_vetskull",
+        tag = "wortox_vetcurse",
         anim = "idle",
         attachfn = ForceWortoxCurse_On,
         detachfn = ForceWortoxCurse_Off,
@@ -722,15 +724,17 @@ local skull =
     },
     {
         name = "maxwell_vetskull",
+        tag = "shambler_target",
         anim = "idle",
         attachfn = ForceMaxwellCurse_On,
         detachfn = ForceMaxwellCurse_Off,
         description = STRINGS.VETSKULL.MAXWELL,
-        vestiges = 5,
+        vestiges = 6,
         music = "dontstarve/music/gramaphone_ragtime",
     },
     {
         name = "willow_vetskull",
+        tag = "willow_vetcurse",
         anim = "idle",
         attachfn = ForceWillowCurse_On,
         detachfn = ForceWillowCurse_Off,
@@ -740,15 +744,17 @@ local skull =
     },
     {
         name = "warly_vetskull",
+        tag = "warly_vetcurse",
         anim = "idle",
         attachfn = ForceWarlyCurse_On,
         detachfn = ForceWarlyCurse_Off,
         description = STRINGS.VETSKULL.WARLY,
-        vestiges = 1,
+        vestiges = 2,
         music = "dontstarve/music/music_FE_survivorsguideone",
     },
     {
         name = "winky_vetskull",
+        tag = "winky_vetcurse",
         anim = "idle",
         attachfn = ForceWinkyCurse_On,
         detachfn = ForceWinkyCurse_Off,
@@ -758,6 +764,7 @@ local skull =
     },
     {
         name = "wickerbottom_vetskull",
+        tag = "wickerbottom_vetcurse",
         anim = "idle",
         attachfn = ForceWickerbottomCurse_On,
         detachfn = ForceWickerbottomCurse_Off,
@@ -767,6 +774,7 @@ local skull =
     },
     {
         name = "wixie_vetskull",
+        tag = "wixie_vetcurse",
         anim = "idle",
         attachfn = ForceWixieCurse_On,
         detachfn = ForceWixieCurse_Off,
@@ -776,6 +784,7 @@ local skull =
     },
     {
         name = "woodie_vetskull",
+        tag = "woodie_vetcurse",
         anim = "idle",
         attachfn = ForceWoodieCurse_On,
         detachfn = ForceWoodieCurse_Off,
@@ -785,6 +794,7 @@ local skull =
     },
     {
         name = "wolfgang_vetskull",
+        tag = "wolfgang_vetcurse",
         anim = "idle",
         attachfn = ForceWolfgangCurse_On,
         detachfn = ForceWolfgangCurse_Off,
@@ -794,6 +804,7 @@ local skull =
     },
     {
         name = "wanda_vetskull",
+        tag = "wanda_vetcurse",
         anim = "idle",
         attachfn = ForceWandaCurse_On,
         detachfn = ForceWandaCurse_Off,
@@ -803,6 +814,7 @@ local skull =
     },
     {
         name = "wathgrithr_vetskull",
+        tag = "wathgrithr_vetcurse",
         anim = "idle",
         attachfn = ForceWathgrithrCurse_On,
         detachfn = ForceWathgrithrCurse_Off,
@@ -812,6 +824,7 @@ local skull =
     },
     {
         name = "wes_vetskull",
+        tag = "wes_vetcurse",
         anim = "idle",
         attachfn = ForceWesCurse_On,
         detachfn = ForceWesCurse_Off,
@@ -821,6 +834,7 @@ local skull =
     },
     {
         name = "wendy_vetskull",
+        tag = "wendy_vetcurse",
         anim = "idle",
         attachfn = ForceWendyCurse_On,
         detachfn = ForceWendyCurse_Off,
@@ -952,8 +966,8 @@ local function DetachCurse(inst, target)
         target:RemoveTag("vetcurse")
 
 
-        for i, v in pairs(skull) do
-            if target:HasTag(v.name) then
+        for i, v in ipairs(skull) do
+            if target:HasTag(v.tag) then
                 v.detachfn(inst, target)
             end
         end

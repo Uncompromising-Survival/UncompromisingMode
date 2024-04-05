@@ -63,6 +63,8 @@ local function fn()
     inst:AddTag("grave")
 	inst:AddTag("buried")
 
+    inst.scrapbook_anim = "gravedirt"
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -233,6 +235,7 @@ local function shovelfn()
     inst:AddTag("tool")
 	inst:AddTag("weapon")
     inst:AddTag("um_exhumer")
+    inst:AddTag("vetcurse_item")
 	
     MakeInventoryFloatable(inst, "med", 0.05, {0.8, 0.4, 0.8})
 
