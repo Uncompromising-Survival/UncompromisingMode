@@ -6,7 +6,7 @@ env.AddComponentPostInit("playeractionpicker", function(self)
     local _OldGetRightClickActions = self.GetRightClickActions
 	
 	function self:GetRightClickActions(position, target, spellbook)
-		if self.inst.replica.inventory and self.inst.replica.inventory:EquipHasTag("um_wingsuit") then
+		if self.inst.replica.inventory and (self.inst.replica.inventory:EquipHasTag("um_wingsuit") or self.inst:HasTag("allow_action_on_impassable")) then
 			if self.disable_right_click then
 				return {}
 			end
