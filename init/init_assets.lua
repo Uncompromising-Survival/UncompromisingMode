@@ -2377,4 +2377,7 @@ Assets = {
 	Asset( "IMAGE", "images/wathgrithr_rework_skilltree.tex" ),
     Asset( "ATLAS", "images/wathgrithr_rework_skilltree.xml" ),
 
+	Asset( "IMAGE", "images/wolfgang_rework_skilltree.tex" ),
+    Asset( "ATLAS", "images/wolfgang_rework_skilltree.xml" ),
+
 }
