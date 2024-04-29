@@ -7,7 +7,10 @@ AddClassPostConstruct("screens/consolescreen", function(self, inst)
 	local prediction_command = {
 		"findents()",
 		"forcetornado()",
+		"giverecords()",
+		"givevetskulls()",
 		"heatwave()",
+		"listumprefabs()",
 		"ratcheck()",
 		"regenerateoceanbiomes()",
 		"rne()",
@@ -18,6 +21,7 @@ AddClassPostConstruct("screens/consolescreen", function(self, inst)
 		"umss(",
 		"vetcurse()",
 		"vetcurseitems()",
+		"wobygodmode()",
 	}
 	
 	self.console_edit:AddWordPredictionDictionary({words = prediction_command, delim = "c_um_", num_chars = 0})
