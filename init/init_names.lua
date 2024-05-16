@@ -640,4 +640,15 @@ STRINGS.GARBAGEPATCHFLOTSAM = "Storm Debris"
 
 STRINGS.PIGKING_PIGGUARD = STRINGS.PIGGUARD
 
+STRINGS.UM_BOAT_ENGINE = "Sludge Engine"
 STRINGS.SMOG = "suffocation"
+
+------------------------
+-- Broiling Hills --
+------------------------
+STRINGS.NAMES.SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
+STRINGS.NAMES.SNAILDRAKE_HOLE = "Snaildrake Hole"
+STRINGS.NAMES.SNAILDRAKE_MAGMA = "Magma Snaildrake"
+STRINGS.NAMES.SNAILDRAKE_SLIME = "Slime Snaildrake"
+STRINGS.NAMES.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
+STRINGS.NAMES.SNAPALM = "Snapalm"

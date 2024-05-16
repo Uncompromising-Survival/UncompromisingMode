@@ -501,6 +501,14 @@ local prefabs = {
     "garbagepatch_inventory",
 	
 	"um_astral_projector",
+	
+	-- Broiling Hills
+	"snaildrake_explosion",
+    "snaildrake_hole",
+    "snaildrake_projectiles",
+    "snaildrake_slime_debuff",
+    "snaildrake",
+    "snapalm",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

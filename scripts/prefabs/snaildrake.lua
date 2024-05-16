@@ -45,7 +45,7 @@ local function RetargetFn(inst)
 
     local new_target = FindEntity(inst, TUNING.SNAILDRAKE_AGGRO_DIST, function(ent)
         return inst.components.combat:CanTarget(ent)
-    end, nil, {"snaildrake","rocky"})
+    end, nil, {"snaildrake"})
 
     if new_target then
         inst.components.combat:SuggestTarget(new_target)

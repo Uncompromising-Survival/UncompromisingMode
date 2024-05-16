@@ -70,7 +70,7 @@ local function EatFoodAction(inst)
         return ba
     end
 end
--- For cherrypick to beta
+
 -- A Snaildrake will use its ranged attack if the ability is off cooldown
 -- and the target is 2-4 tiles away from it.
 local function ShouldUseRangedAttack(self)
