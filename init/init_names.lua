@@ -646,9 +646,9 @@ STRINGS.SMOG = "suffocation"
 ------------------------
 -- Broiling Hills --
 ------------------------
-STRINGS.NAMES.SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
-STRINGS.NAMES.SNAILDRAKE_HOLE = "Snaildrake Hole"
-STRINGS.NAMES.SNAILDRAKE_MAGMA = "Magma Snaildrake"
-STRINGS.NAMES.SNAILDRAKE_SLIME = "Slime Snaildrake"
-STRINGS.NAMES.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
-STRINGS.NAMES.SNAPALM = "Snapalm"
+STRINGS.SNAILDRAKE_EXPLOSION = "Snaildrake Explosion"
+STRINGS.SNAILDRAKE_HOLE = "Snaildrake Hole"
+STRINGS.SNAILDRAKE_MAGMA = "Magma Snaildrake"
+STRINGS.SNAILDRAKE_SLIME = "Slime Snaildrake"
+STRINGS.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
+STRINGS.SNAPALM = "Snapalm"
