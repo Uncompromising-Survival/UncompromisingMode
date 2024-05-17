@@ -107,6 +107,7 @@ local prefab_post = {
     "sweatervest",
     "fans",
     "skeletonhat",
+	"rocks",
     --	"rock_avocado_fruit_sprout_sapling",
     "icepack",
     "heatrock",
@@ -204,8 +205,11 @@ local prefab_post = {
     "compass",
 	"archive_lockbox",
     "seedpouch",
+
     "voidcloth_umbrella",
     "daywalker",
+
+	--"wormhole",
 }
 
 local stategraph_post = {

@@ -3,14 +3,15 @@ local UM_Ripplespawner = Class(function(self, inst)
     self.range = 3
 end)
 
+
+
 function UM_Ripplespawner:spawnripple(inst)
 	if inst ~= nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
 		
 		local _map = TheWorld.Map
 		local current_tile = _map:GetTileAtPoint(x, y, z)
-
-		if current_tile == WORLD_TILES.UM_FLOODWATER then
+		if current_tile == WORLD_TILES.UM_FLOODWATER or self.inst.prefab == "um_hotspring" then
 			if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() then
 				inst.components.burnable:Extinguish()
 			elseif inst.sg and inst.sg:HasStateTag("moving") then
@@ -53,10 +54,28 @@ function UM_Ripplespawner:spawnripple(inst)
 				ripple.AnimState:SetOceanBlendParams(.2)
 			end
 			
+			if self.inst.prefab == "um_hotspring" and inst.components.temperature then
+				inst.components.temperature:DoDelta(0.3)
+			end
+			
+			
+			if math.random () < 0.5 and  self.inst.prefab == "um_hotspring" then
+				local bubble = SpawnPrefab("crab_king_bubble"..tostring(math.random(1,3)))
+				bubble.Transform:SetPosition(x,y,z)
+			
+				if not inst:HasTag("largecreature") then
+					if inst:HasTag("isinventoryitem") then
+						bubble.Transform:SetScale(0.85,0.85,0.85)
+					end
+				else
+					bubble.Transform:SetScale(1.2,1.2,1.2)
+				end
+			end
+			
 			if inst.components.moisture ~= nil then
 				inst:AddTag("um_waterfall_moisture_override")
 					
-				if inst:IsValid() and self.inst ~= nil and self.inst:IsValid() and inst:GetDistanceSqToInst(self.inst) <= 6 then
+				if inst:IsValid() and self.inst ~= nil and self.inst:IsValid() and inst:GetDistanceSqToInst(self.inst) <= 6 and self.inst.prefab ~= "um_hotspring" then
 					inst:AddTag("um_waterfall_bonus")
 					local headsplash = SpawnPrefab("splash")
 					headsplash.entity:SetParent(inst.entity)

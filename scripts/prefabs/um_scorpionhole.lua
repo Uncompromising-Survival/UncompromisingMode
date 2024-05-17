@@ -78,10 +78,13 @@ end
 ---------------------------------------------------------------------------
 
 local function spawner_onworked(inst, worker, workleft)
+	local pos = inst:GetPosition()
+	SpawnPrefab("rock_break_fx").Transform:SetPosition(pos:Get())
+	local maxrocks = 5
+	for i = 1,maxrocks do
+		inst.components.lootdropper:DropLoot(pos)
+	end
     if workleft <= 0 then
-        local pos = inst:GetPosition()
-        SpawnPrefab("rock_break_fx").Transform:SetPosition(pos:Get())
-        inst.components.lootdropper:DropLoot(pos)
         inst:Remove()
     else
         set_stage(inst, workleft, false)
@@ -217,7 +220,11 @@ local function scorpionhole_fn()
     end
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('scorpionhole')
+    inst.components.lootdropper:AddRandomLoot("rocks", 0.4)
+    inst.components.lootdropper:AddRandomLoot("flint", 0.3)
+	inst.components.lootdropper:AddRandomLoot("nitre", 0.2)
+    inst.components.lootdropper:AddRandomLoot("goldnugget", 0.1)
+    inst.components.lootdropper.numrandomloot = 1
 
 
 

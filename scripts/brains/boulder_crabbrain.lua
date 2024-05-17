@@ -1,0 +1,102 @@
+require "behaviours/chaseandattack"
+require "behaviours/runaway"
+require "behaviours/wander"
+require "behaviours/doaction"
+require "behaviours/avoidlight"
+require "behaviours/panic"
+require "behaviours/attackwall"
+
+local BrainCommon = require "brains/braincommon"
+
+local SEE_FOOD_DIST = 10
+
+local MAX_WANDER_DIST = 16
+local START_FACE_DIST = 6
+local KEEP_FACE_DIST = 8
+
+local Boulder_crabBrain = Class(Brain, function(self, inst)
+    Brain._ctor(self, inst)
+end)
+
+local function GetFaceTargetFn(inst)
+    if not BrainCommon.ShouldSeekSalt(inst) then
+        local target = FindClosestPlayerToInst(inst, START_FACE_DIST, true)
+        return target ~= nil and not target:HasTag("notarget") and target or nil
+    end
+end
+
+local function KeepFaceTargetFn(inst, target)
+    return not BrainCommon.ShouldSeekSalt(inst)
+        and not target:HasTag("notarget")
+        and inst:IsNear(target, KEEP_FACE_DIST)
+end
+
+
+local EATFOOD_CANT_TAGS = { "outofreach" }
+local function EatFoodAction(inst)
+    local target = FindEntity(inst,
+        SEE_FOOD_DIST,
+        function(item)
+            return inst.components.eater:CanEat(item)
+                and item:IsOnValidGround()
+                and item:GetTimeAlive() > TUNING.SPIDER_EAT_DELAY
+        end,
+        nil,
+        EATFOOD_CANT_TAGS
+    )
+    return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
+end
+
+
+local function InvestigateAction(inst)
+    local investigatePos = inst.components.knownlocations ~= nil and inst.components.knownlocations:GetLocation("investigate") or nil
+    return investigatePos ~= nil and BufferedAction(inst, nil, ACTIONS.INVESTIGATE, nil, investigatePos, nil, 1) or nil
+end
+
+
+local AVOID_PLAYER_DIST = 6
+local AVOID_PLAYER_STOP = 9
+
+
+function Boulder_crabBrain:OnStart()
+
+    local pre_nodes = PriorityNode({
+        BrainCommon.PanicWhenScared(self.inst, .3),
+		
+		WhileNode(function() return not (self.inst.myrock and self.inst.myrock.components.workable) end, "Rockless", RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP)),
+        WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
+    })
+
+    local post_nodes = PriorityNode({
+		DoAction(self.inst, function() return EatFoodAction(self.inst) end ),
+		FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn, 0.25),
+        --DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
+        Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
+    })
+
+
+    local attack_nodes = PriorityNode({
+
+        WhileNode(function() return (self.inst.myrock and self.inst.myrock.components.workable) end, "Rockhard", ChaseAndAttack(self.inst, SpringCombatMod(TUNING.SPIDER_AGGRESSIVE_MAX_CHASE_TIME))),
+    })
+
+
+
+    local root =
+        PriorityNode(
+        {
+            pre_nodes,
+            attack_nodes,
+            post_nodes,
+
+        }, 1)
+        
+    self.bt = BT(self.inst, root)
+end
+
+function Boulder_crabBrain:OnInitializationComplete()
+    self.inst.components.knownlocations:RememberLocation("home", Point(self.inst.Transform:GetWorldPosition()))
+
+end
+
+return Boulder_crabBrain

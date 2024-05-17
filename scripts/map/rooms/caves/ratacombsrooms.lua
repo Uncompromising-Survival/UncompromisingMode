@@ -96,7 +96,7 @@ AddRoom("RattyWilds", {
 			ratacombs_totem_short = 0.33,
 			ratacombs_totem_medium = 0.33,
             ratacombs_totem_tall = 0.33,
-			ratgashole = 6,
+			--ratgashole = 6,
         },
     }
 })
@@ -126,7 +126,7 @@ AddRoom("RattyLock1", {
 			ratacombs_totem_short = 0.33,
 			ratacombs_totem_medium = 0.33,
             ratacombs_totem_tall = 0.33,
-			ratgashole = 3,
+			--ratgashole = 3,
         },
     }
 })
@@ -153,7 +153,7 @@ AddRoom("DeepRattyWilds", {
 			ratacombs_totem_short = 0.33,
 			ratacombs_totem_medium = 0.33,
             ratacombs_totem_tall = 0.33,
-			ratgashole = 3,
+			--ratgashole = 3,
         },
     }
 })

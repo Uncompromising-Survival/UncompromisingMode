@@ -1,0 +1,265 @@
+
+local function HotSpringCheck(inst)
+	return FindEntity(inst,2^2,function(inst) if inst.prefab == "um_hotspring" then return true end end)
+end
+
+
+local function fn1()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+	
+    inst:DoTaskInTime(1, function(inst)
+		if not HotSpringCheck(inst) then
+			local x,y,z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("rock1").Transform:SetPosition(x,y,z)
+			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+			-- Square
+			for i = -1,1 do
+				for j = -1,1 do
+					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				end
+			end
+		end
+		inst:Remove()
+	end)
+	
+    return inst
+end
+
+local function fn2()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		if not HotSpringCheck(inst) then
+			local x,y,z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("rock2").Transform:SetPosition(x,y,z)
+			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+			-- Square
+			for i = -1,1 do
+				for j = -1,1 do
+					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				end
+			end
+		end
+		inst:Remove()
+	end)
+
+    return inst
+end
+
+local function fn3()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		if not HotSpringCheck(inst) then
+			local x,y,z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("rock_flintless").Transform:SetPosition(x,y,z)
+			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+			
+			
+			-- Square
+			for i = -1,1 do
+				for j = -1,1 do
+					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				end
+			end
+		end
+		inst:Remove()
+	end)
+
+    return inst
+end
+
+
+local function SpawnBunch(inst,rock1,rock2)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local rocks = math.random(3,5)
+	for rock = 1,rocks do
+		local radius = math.random(1,5)
+		local angle = math.random(0,360)
+		if math.random() > 0.5 then
+			SpawnPrefab(rock1).Transform:SetPosition(x+radius*math.cos(angle),y,z+radius*math.sin(angle))
+		else
+			SpawnPrefab(rock2).Transform:SetPosition(x+radius*math.cos(angle),y,z+radius*math.sin(angle))
+		end
+	end
+end
+
+local function fnbunchflintless()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		SpawnBunch(inst,"rock1_hotspring","rock_flintless_hotspring")
+		inst:Remove()
+	end)
+
+    return inst
+end
+
+local function fnbunchgold()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		SpawnBunch(inst,"rock1_hotspring","rock2_hotspring")
+		inst:Remove()
+	end)
+
+    return inst
+end
+
+local function fnbunchcrabs()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		SpawnBunch(inst,"boulder_crab","rock2_hotspring")
+		inst:Remove()
+	end)
+
+    return inst
+end
+
+local function fnarenaturfer()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+
+		
+		-- Square
+		for i = -7,7 do
+			for j = -7,7 do
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+			end
+		end
+		
+		-- little extra
+		for i = -8,8 do
+			for j = -5,5 do
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+			end
+		end
+		
+		-- little extra
+		for i = -5,5 do
+			for j = -8,8 do
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+			end
+		end
+	end)
+
+    return inst
+end
+
+
+return	Prefab("hotspring_dragonfly_areana_turfer",fnarenaturfer), 
+Prefab("hotspring_rockbuncher_flintless",fnbunchflintless),
+Prefab("hotspring_rockbuncher_gold",fnbunchgold),
+Prefab("hotspring_rockbuncher_crabs",fnbunchcrabs),
+Prefab("rock1_hotspring",fn1),
+Prefab("rock2_hotspring",fn2),
+Prefab("rock_flintless_hotspring",fn3)

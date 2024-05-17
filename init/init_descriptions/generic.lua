@@ -653,3 +653,18 @@ DESCRIBE.UM_BOAT_ENGINE = {
     OVERHEATING = "It's getting a bit too hot!"
 }
 DESCRIBE.GARBAGEPATCHFLOTSAM = "It must've been dragged here by that tornado!"
+
+-- Broiling Fields
+DESCRIBE.BOULDER_CRAB =
+{
+	GENERIC = "It’s not a Lobster!",
+	NAKED = "I feel sorry for it.",
+	HOLE = "It's a hole.",
+}
+DESCRIBE.UM_HOTSPRING = "It's heated by lava."
+DESCRIBE.ROCK_LICHEN =
+{
+	GENERIC = "They like the humidity.",
+	PICKED = "The colony will regrow in time.",
+}
+

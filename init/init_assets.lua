@@ -1211,6 +1211,9 @@ Assets = {
 	Asset("ANIM", "anim/um_blowdart_pyre.zip"),
 	Asset("ANIM", "anim/swap_blowdart.zip"), -- Same here. Naming convention is vanilla, blame Mr. Kelly Entertainment.
 	
+	-- Rimeweed stuff
+	Asset("ANIM", "anim/rimeweed.zip"),
+	
 	-- Mutation Extrapolation
 	Asset("ANIM", "anim/umdebuff_moonburn_fx.zip"),
 	Asset("ANIM", "anim/um_staff_meteor.zip"),
@@ -2307,6 +2310,9 @@ Assets = {
 
 
 	--MAP ICONS
+	Asset("IMAGE", "images/map_icons/rock_lichen.tex"),
+	Asset("ATLAS", "images/map_icons/rock_lichen.xml"),
+	
 	Asset("IMAGE", "images/map_icons/riceplant.tex"),
 	Asset("ATLAS", "images/map_icons/riceplant.xml"),
 
@@ -2332,6 +2338,8 @@ Assets = {
 
 	Asset("IMAGE", "images/map_icons/lazychester_minimap.tex"),
 	Asset("ATLAS", "images/map_icons/lazychester_minimap.xml"),
+
+
 
 	Asset("IMAGE", "images/map_icons/hoodedwidow_map.tex"),
 	Asset("ATLAS", "images/map_icons/hoodedwidow_map.xml"),

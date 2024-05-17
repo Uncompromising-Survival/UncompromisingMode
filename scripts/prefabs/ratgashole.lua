@@ -94,7 +94,8 @@ local function fn(Sim)
 	local inst = CreateEntity()
 	inst.entity:AddSoundEmitter()
 	inst.entity:AddNetwork()
-
+	inst.entity:AddAnimState()
+	
 	inst.AnimState:SetBank("ratgas_hole")
 	inst.AnimState:SetBuild("ratgas_hole")
 	inst.AnimState:PlayAnimation("boil_loop", true)

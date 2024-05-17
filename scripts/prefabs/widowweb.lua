@@ -87,7 +87,6 @@ local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddGroundCreepEntity()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 	inst.MiniMapEntity:SetIcon("hoodedwidow_map.tex")
@@ -111,7 +110,6 @@ local function fn()
     inst.components.childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
     inst.components.childspawner.onchildkilledfn = OnKilled
     inst.components.childspawner:StopRegen()
-	inst.GroundCreepEntity:SetRadius(8)
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", ontimerdone)

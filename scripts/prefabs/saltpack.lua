@@ -94,6 +94,41 @@ local function ontakefuel(inst)
     inst.components.useableitem.inuse = false
 end
 
+
+-------------------------------------------------
+-- Changed to Turn on and off
+local function PeriodicSalt(inst)
+	if not FindEntity(inst,2^2,nil,{"salt"}) then
+		inst.components.fueled:SetPercent(inst.components.fueled:GetPercent() - 0.0125)
+		Salted(inst)
+		--inst.components.rechargeable:Discharge(1)
+		if inst.components.fueled:IsEmpty() then -- Just ran out
+			inst.SoundEmitter:PlaySound("dangerous_sea/common/water_pump/LP", "pump")
+			inst:DoTaskInTime(0.5, function(inst) inst.SoundEmitter:KillSound("pump") end)		
+			inst.salt_task:Cancel()
+			inst.salt_task = nil
+		end
+	end
+end
+
+local function OnUse(inst)
+	inst.components.rechargeable:Discharge(1)
+	if inst.salt_task then
+		inst.salt_task:Cancel()
+		inst.salt_task = nil
+	else
+		if not inst.components.fueled:IsEmpty() then
+			Salted(inst)
+			inst.salt_task = inst:DoPeriodicTask(0.25,PeriodicSalt)
+		else
+			inst.SoundEmitter:PlaySound("dangerous_sea/common/water_pump/LP", "pump")
+			inst:DoTaskInTime(0.5, function(inst) inst.SoundEmitter:KillSound("pump") end)
+		end
+	end
+end
+-------------------------------------------------
+
+--[[ Old OnUse
 local function OnUse(inst)
     if inst.components.rechargeable:IsCharged() and not inst.components.fueled:IsEmpty() then
         inst.components.fueled:SetPercent(inst.components.fueled:GetPercent() - 0.0125) -- test num, feel free to tune
@@ -103,7 +138,7 @@ local function OnUse(inst)
         inst.SoundEmitter:PlaySound("dangerous_sea/common/water_pump/LP", "pump")
         inst:DoTaskInTime(0.5, function(inst) inst.SoundEmitter:KillSound("pump") end)
     end
-end
+end]]
 
 local function OnCharged(inst)
     inst.components.useableitem.inuse = false

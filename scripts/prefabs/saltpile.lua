@@ -75,7 +75,7 @@ local function fn()
     inst:AddTag("snowpileblocker")
     inst:AddTag("NOBLOCK")
     inst:AddTag("NOCLICK")
-
+	inst:AddTag("salt")
     inst:AddComponent("despawnfader")
 
     inst.entity:SetPristine()

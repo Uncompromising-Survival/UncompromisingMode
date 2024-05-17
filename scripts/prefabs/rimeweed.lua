@@ -1,0 +1,517 @@
+-- [TODO]
+
+--[[
+
+	-- Check to see how growing works ingame [VERIFIED!]
+	-- Spreading Function
+	-- Saving Function
+	-- Implement Mara's Whip Art
+
+]]
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- Retaliation Spikes
+
+--DSV uses 4 but ignores physics radius
+local MAXRANGE = 3
+local NO_TAGS_NO_PLAYERS =	{ "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
+local NO_TAGS =				{ "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost" }
+local COMBAT_TARGET_TAGS = { "_combat" }
+
+
+
+local function Freeze(v)
+	-- Freeze
+	--TheNet:Announce("freeze code ran")
+	if v.components.freezable then -- Freeze
+		--TheNet:Announce("Add Coldness")
+		v.components.freezable:AddColdness(3) 
+	end
+	if v.components.temperature ~= nil then -- Chill
+		--TheNet:Announce("Got a lil chilly")
+		local mintemp = math.max(v.components.temperature.mintemp, 0)
+		local curtemp = v.components.temperature:GetCurrent()
+		if mintemp < curtemp then
+			v.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
+		end
+	end		
+end
+
+local function OnUpdateThorns(inst)
+    inst.range = inst.range + .75
+
+    local x, y, z = inst.Transform:GetWorldPosition()
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
+        if not inst.ignore[v] and
+            v:IsValid() and
+            v.entity:IsVisible() and
+            v.components.combat ~= nil and
+            not (v.components.inventory ~= nil and
+                v.components.inventory:EquipHasTag("bramble_resistant")) then
+            local range = inst.range + v:GetPhysicsRadius(0)
+            if v:GetDistanceSqToPoint(x, y, z) < range * range then
+                if inst.owner ~= nil and not inst.owner:IsValid() then
+                    inst.owner = nil
+                end
+                if inst.owner ~= nil then
+					if inst.owner.components.combat ~= nil and
+						inst.owner.components.combat:CanTarget(v) and
+						not inst.owner.components.combat:IsAlly(v)
+					then
+                        inst.ignore[v] = true
+                        v.components.combat:GetAttacked(v.components.follower ~= nil and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
+						Freeze(v)
+                        --V2C: wisecracks make more sense for being pricked by picking
+                        --v:PushEvent("thorns")
+                    end
+                elseif v.components.combat:CanBeAttacked() then
+					local isally = false
+					if not inst.canhitplayers then
+						--non-pvp, so don't hit any player followers (unless they are targeting a player!)
+						local leader = v.components.follower ~= nil and v.components.follower:GetLeader() or nil
+						isally = leader ~= nil and leader:HasTag("player") and
+							not (v.components.combat ~= nil and
+								v.components.combat.target ~= nil and
+								v.components.combat.target:HasTag("player"))
+					end
+					if not isally then
+						inst.ignore[v] = true
+						v.components.combat:GetAttacked(inst, inst.damage)
+						Freeze(v)					
+						
+						--v:PushEvent("thorns")
+					end
+                end
+            end
+        end
+    end
+
+    if inst.range >= MAXRANGE then
+        inst.components.updatelooper:RemoveOnUpdateFn(OnUpdateThorns)
+    end
+end
+
+local function SetFXOwner(inst, owner)
+    inst.Transform:SetPosition(owner.Transform:GetWorldPosition())
+    inst.owner = owner
+    inst.canhitplayers = not owner:HasTag("player") or TheNet:GetPVPEnabled()
+    inst.ignore[owner] = true
+end
+
+local function MakeFX(name, anim)
+    local function fn()
+        local inst = CreateEntity()
+
+        inst.entity:AddTransform()
+        inst.entity:AddAnimState()
+        inst.entity:AddNetwork()
+
+        inst:AddTag("FX")
+        inst:AddTag("thorny")
+        if name == "bramblefx_trap" then
+            inst:AddTag("trapdamage")
+        end
+
+        inst.Transform:SetFourFaced()
+
+        inst.AnimState:SetBank("bramblefx")
+        inst.AnimState:SetBuild("bramblefx")
+        inst.AnimState:PlayAnimation(anim)
+
+        inst:SetPrefabNameOverride("bramblefx")
+
+        inst.entity:SetPristine()
+
+        if not TheWorld.ismastersim then
+            return inst
+        end
+
+        inst:AddComponent("updatelooper")
+        inst.components.updatelooper:AddOnUpdateFn(OnUpdateThorns)
+
+        inst:ListenForEvent("animover", inst.Remove)
+        inst.persists = false
+        inst.damage = 20 -- This is where we define the damage of the thorns.
+        inst.range = .75
+        inst.ignore = {}
+        inst.canhitplayers = true
+        --inst.owner = nil
+
+        inst.SetFXOwner = SetFXOwner
+
+        return inst
+    end
+
+    return Prefab(name, fn)
+end
+
+
+
+--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+local function AnimateRetaliateOver(inst)
+	inst.retaliating = nil
+	inst.AnimState:PlayAnimation("spike_loop")
+	inst:RemoveEventCallback("animover", AnimateRetaliateOver)
+end
+
+local function Retaliate(inst)
+	if not inst.retaliating then
+		inst.retaliating = true
+
+		inst:DoTaskInTime(4*FRAMES,function(inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) end) -- Slight Delay
+
+		if inst.SoundEmitter then
+			inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+		end
+		if inst.components.health and not inst.components.health:IsDead() then
+			inst.AnimState:PlayAnimation("spike_hit")
+			inst:ListenForEvent("animover", function(inst)
+				AnimateRetaliateOver(inst)
+			end)
+		end
+	end
+end
+
+local function BarrierDie(inst)
+	--TheNet:Announce("DODEATH")
+	inst.AnimState:PlayAnimation("spike_pst",false)
+	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+end
+
+local function barrierweed()
+	local inst = CreateEntity()
+
+	inst.entity:AddTransform()
+	inst.entity:AddAnimState()
+	inst.entity:AddSoundEmitter()
+	inst.entity:AddNetwork()
+
+	inst.AnimState:SetBank("rimeweed")
+	inst.AnimState:SetBuild("rimeweed")
+
+	inst:AddTag("plant")
+	MakeObstaclePhysics(inst, 1)
+	inst.entity:SetPristine()
+
+	if not TheWorld.ismastersim then
+		return inst
+	end
+	inst.AnimState:PlayAnimation("spike_pre", false)
+	inst.AnimState:PushAnimation("spike_loop", true)
+	
+	inst:AddComponent("timer")
+	--inst:ListenForEvent("timerdone", TimerDone)
+	
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(200)
+    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+	inst:AddComponent("combat")
+	inst:AddComponent("inspectable")
+	local scale = 2
+	inst.Transform:SetScale(scale,scale,scale)
+	---------------------
+	inst:ListenForEvent("attacked", Retaliate)
+	inst:ListenForEvent("death", BarrierDie)
+	
+	MakeMediumBurnable(inst)
+	MakeSmallPropagator(inst)
+	MakeHauntableIgnite(inst)
+
+	return inst
+end
+
+local function OnSaveMain(inst,data)
+	data.stage = inst.stage
+	return data
+end
+
+local function OnLoadMain(inst,data)
+	if data then
+		if data.stage then
+			inst.stage = data.stage
+		end
+	end
+end
+
+local function OnLoadPostPassMain(newents, savedata)
+
+end
+
+local function MainDie(inst)
+	--TheNet:Announce("DODEATH")
+	inst:AddTag("dead")
+	inst.AnimState:PlayAnimation("dug",false)
+	if inst.stage == 3 then
+		inst.components.lootdropper:DropLoot()
+	end
+	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+end
+
+
+local function PlayStagedAnim(inst)
+	if inst.stage == 3 and not inst:HasTag("dead") then
+		inst.AnimState:PushAnimation("crop_full", true)
+	elseif inst.stage == 2 and not inst:HasTag("dead") then
+		inst.AnimState:PushAnimation("crop_med", true)
+	elseif inst.stage == 1 and not inst:HasTag("dead") then
+		inst.AnimState:PushAnimation("crop_small", true)
+	end
+end
+
+local function InitializePlant(inst)
+	inst.stage = 1
+	inst.components.timer:StartTimer("grow", 0.1*60)
+	inst.AnimState:PlayAnimation("grow_small", false)
+	inst:AddComponent("workable")
+	inst.components.workable:SetWorkAction(ACTIONS.DIG)
+	inst.components.workable:SetWorkLeft(1)
+	inst.components.workable:SetOnFinishCallback(MainDie)
+end
+
+local function SetStage(inst)
+	if not inst.stage then
+		InitializePlant(inst)
+	end
+	PlayStagedAnim(inst)
+end
+
+local function FindPlant(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local plants = TheSim:FindEntities(x,y,z,20,{"plant"})
+	for i,plant in ipairs(plants) do
+		if plant.components.pickable and plant.components.pickable:CanBePicked() then
+			return plant
+		end
+	end
+	for i,plant in ipairs(plants) do
+		if plant.components.pickable then
+			return plant
+		end
+	end	
+end
+
+local function GrowLine(inst,growPoint)
+
+end
+
+local function GrowRing(inst,growPoint)
+	
+	local maxRing = 6
+	local radius = 1.5
+	for i = 1,maxRing do
+		
+	end
+end
+
+local function GrowBranch(inst)
+	local plant = FindPlant(inst)
+	if plant then
+		local growPoint = Vector3(plant.Transform:GetWorldPosition())
+		
+
+		
+		GrowRing(inst,growPoint)
+		GrowLine(inst,growPoint)
+	else
+		inst:Remove()
+	end
+end
+
+local function TimerDone(inst,data)
+	if data and data.name == "grow" then
+		inst.stage = inst.stage + 1
+		if inst.stage == 2 and not inst:HasTag("dead") then
+			inst.AnimState:PlayAnimation("grow_med", false)
+		end
+		if inst.stage == 3 and not inst:HasTag("dead") then
+			if inst.components.workable then
+				inst:RemoveComponent("workable")
+			end
+			inst.AnimState:PlayAnimation("grow_full", false)
+			inst.components.timer:StartTimer("growbranch", 0.1*60)
+		end
+		if inst.stage < 3 then
+			inst.components.timer:StartTimer("grow", 0.1*60)
+		end
+		SetStage(inst)
+	end
+	
+	if data and data.name == "growbranch" then
+		inst.components.timer:StartTimer("growbranch", 0.1*60)
+		if inst.branch1 == nil and inst.branch2 == nil and inst.branch3 == nil then
+			GrowBranch(inst)
+		end
+	end
+end
+
+SetSharedLootTable('rimeweed',
+{
+    {'twigs', 1.00},
+    {'twigs', 1.00},
+    {'rimeweed_whip', 0.25},
+})
+
+
+local function mainweed()
+	local inst = CreateEntity()
+
+	inst.entity:AddTransform()
+	inst.entity:AddAnimState()
+	inst.entity:AddSoundEmitter()
+	inst.entity:AddNetwork()
+
+
+	inst.AnimState:SetBank("rimeweed")
+	inst.AnimState:SetBuild("rimeweed")
+	--inst.AnimState:PlayAnimation("crop_full", true)
+
+	inst:AddTag("plant")
+	inst:AddTag("lunarplant_target")
+
+
+	inst.entity:SetPristine()
+
+	if not TheWorld.ismastersim then
+		return inst
+	end
+
+	local scale = 2
+	inst.Transform:SetScale(scale,scale,scale)
+	
+	inst:AddComponent("lootdropper")
+	inst.components.lootdropper:SetChanceLootTable('rimeweed')
+	
+	inst:AddComponent("timer")
+	inst:ListenForEvent("timerdone", TimerDone)
+	inst:ListenForEvent("death", MainDie)
+
+
+	inst:AddComponent("inspectable")
+
+	
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(200)
+    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)	
+	---------------------
+	inst:AddComponent("combat")
+	
+	MakeMediumBurnable(inst)
+	MakeSmallPropagator(inst)
+	MakeHauntableIgnite(inst)
+	
+    inst.OnSave = OnSaveMain
+    inst.OnLoad = OnLoadMain
+    inst.OnLoadPostPass = OnLoadPostPassMain
+	inst:DoTaskInTime(0,SetStage)
+
+	return inst
+end
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+--[ Rime Lash ] ------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+local function onequip(inst, owner)
+    owner.AnimState:OverrideSymbol("swap_object", "swap_rat_whip", "swap_whip")
+    owner.AnimState:OverrideSymbol("whipline", "swap_rat_whip", "whipline")
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
+local function onunequip(inst, owner)
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+end
+
+local function onattackwhip(inst, attacker, target, naughtlock)
+	if target and target.components.combat and target.components.freezable then
+		local resistance = target.components.freezable:ResolveResistance()
+		local coldness = target.components.freezable.coldness
+		
+		local coldval = 1/resistance
+		if resistance > coldness + 2 then
+			target.components.freezable:AddColdness(coldval)
+		elseif resistance > coldness + 1 then
+			target.components.freezable:AddColdness(coldval/4)
+		else
+			target.components.freezable:AddColdness(coldval/8)
+		end
+		local bonusdamage = 68
+		bonusdamage = bonusdamage * coldness/resistance
+		
+		if target.sg ~= nil and target.sg:HasStateTag("frozen") then
+			SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
+		end
+		
+
+		target.components.combat:GetAttacked(attacker,bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
+		target.components.freezable:SpawnShatterFX()
+	end
+	if naughtlock == nil then 
+		inst.components.fueled:DoDelta(-1)
+	end
+end
+
+local function on_uses_finished(inst)
+    if inst.components.inventoryitem.owner ~= nil then
+        inst.components.inventoryitem.owner:PushEvent("toolbroke", { tool = inst })
+    end
+	
+    inst:Remove()
+end
+
+local function whip()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("whip")
+    inst.AnimState:SetBuild("rat_whip")
+    inst.AnimState:PlayAnimation("idle")
+
+    inst:AddTag("whip")
+
+    inst:AddTag("weapon")
+
+    MakeInventoryFloatable(inst, "med", nil, 0.9)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetRange(TUNING.WHIP_RANGE)
+    inst.components.weapon:SetOnAttack(onattackwhip)
+	
+	
+    inst:AddComponent("fueled")
+    inst.components.fueled:InitializeFuelLevel(100)
+    inst.components.fueled:SetDepletedFn(on_uses_finished)
+	inst.components.fueled.accepting = false
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/rat_whip.xml"
+
+    inst:AddComponent("equippable")
+    inst.components.equippable:SetOnEquip(onequip)
+    inst.components.equippable:SetOnUnequip(onunequip)
+
+    MakeHauntableLaunch(inst)
+
+    return inst
+end
+
+
+return Prefab("rimeweed_main", mainweed),
+Prefab("rimeweed_barrier", barrierweed),
+MakeFX("bramblefx_rime", "idle"),
+Prefab("rimeweed_whip", whip)
+
+

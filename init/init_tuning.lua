@@ -415,7 +415,7 @@ TUNING.DSTU = {
 
     -- boss hp qol
 
-    WIDOW_HEALTH = 8000 * GetModConfigData("hoodedwidow_health_"),
+    WIDOW_HEALTH = 12000 * GetModConfigData("hoodedwidow_health_"),
     MOONFLY_HEALTH = 8000 * GetModConfigData("moonmaw_dragonfly_health_"),
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
     MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),

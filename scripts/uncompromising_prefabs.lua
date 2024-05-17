@@ -83,6 +83,10 @@ local prefabs = {
 	"shadow_goo",
 	"mini_dreadeye",
 	"scorpion",
+	"rock_lichen",
+	"rocks_hotspring",
+	"um_hotspring",
+	"boulder_crab",
 	"vampirebat",
 	"icecreamsanityregenbuff",
 	"zaspberryparfait",
@@ -252,7 +256,7 @@ local prefabs = {
 	"uncompromising_bundles",
 	"ratacombs_cleanair",
 	"ratacombs_totem",
-	"ratgashole",
+	--"ratgashole",
 
 	"rneearthquake",
 	"shadowvortex",
@@ -451,6 +455,9 @@ local prefabs = {
 	"umdebuff_pyre_toxin",
 	"um_armor_pyre_nettles",
 	"um_blowdart_pyre",
+	
+	-- Rimeweed Stuff
+	"rimeweed",
 	
 	-- Mutation Extrapolation
 	"umdebuff_moonburn",

@@ -43,16 +43,92 @@ AddTile("HOODEDFOREST", -- tile_name 1
         anim = "hoodedmoss",
         bank_build = "hfturf"
     })
-
+	
 AddTile("ANCIENTHOODEDFOREST", "LAND", { ground_name = "ancienthoodedturf", old_static_id = 110 }, { name = "ancienthoodedturf.tex", atlas = "ancienthoodedturf.xml", noise_texture = "noise_jungle.tex", runsound = "dontstarve/movement/walk_grass", walksound = "dontstarve/movement/walk_grass", snowsound = "dontstarve/movement/run_snow", mudsound = "dontstarve/movement/run_mud", colors = GROUND_OCEAN_COLOR },
     { name = "ancienthoodedturf.tex", atlas = "ancienthoodedturf.xml", noise_texture = "mini_noise_jungle.tex" }, { name = "ancienthoodedturf", anim = "ancienthoodedturf", bank_build = "hfturf" })
 
 AddTile("UM_FLOODWATER", "LAND", { ground_name = "um_floodwater", old_static_id = 112 }, { name = "um_floodwater", noise_texture = "noise_um_floodwater", runsound = "dontstarve/movement/run_marsh", walksound = "dontstarve/movement/walk_marsh", snowsound = "dontstarve/movement/run_marsh", mudsound = "dontstarve/movement/run_marsh", colors = GROUND_OCEAN_COLOR, cannotbedug = true }, { name = "map_edge", noise_texture = "mini_noise_um_floodwater" },
     { name = "ancienthoodedturf", anim = "ancienthoodedturf", bank_build = "hfturf" })
 
---[[
+
+	
+AddTile("BOILINGFIELDS", -- tile_name 1
+    "LAND",             -- tile_range 2
+    {
+        -- tile_data 3
+        ground_name = "Savanna", -- <-- xenomeadow
+    }, {
+        -- ground_tile_def 4
+        name = "yellowgrass", -- <-- xenomeadow
+        noise_texture = "ground_xenomeadow.tex",
+        runsound = "dontstarve/movement/walk_grass",
+        walksound = "dontstarve/movement/walk_grass",
+        snowsound = "dontstarve/movement/run_snow",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    }, {
+        -- minimap_tile_def 5
+        name = "map_edge",
+        noise_texture = "mini_ground_xenomeadow.tex"
+    }, {
+        -- turf_def 6
+        name = "hoodedmoss",
+        anim = "hoodedmoss",
+        bank_build = "hfturf"
+    })
+	
+AddTile("BOILINGFIELDS_DIRTY", -- tile_name 1
+    "LAND",             -- tile_range 2
+    {
+        -- tile_data 3
+        ground_name = "Savanna", -- <-- xenomeadow
+    }, {
+        -- ground_tile_def 4
+        name = "yellowgrass", -- <-- xenomeadow
+        noise_texture = "ground_xenomeadow_dirty.tex",
+        runsound = "dontstarve/movement/walk_grass",
+        walksound = "dontstarve/movement/walk_grass",
+        snowsound = "dontstarve/movement/run_snow",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    }, {
+        -- minimap_tile_def 5
+        name = "map_edge",
+        noise_texture = "mini_ground_xenomeadow.tex"
+    }, {
+        -- turf_def 6
+        name = "hoodedmoss",
+        anim = "hoodedmoss",
+        bank_build = "hfturf"
+    })
+	
+AddTile("CRACKEDBASALT", -- tile_name 1
+    "LAND",             -- tile_range 2
+    {
+        -- tile_data 3
+        ground_name = "Rocky",
+    }, {
+        -- ground_tile_def 4
+        name = "rocky",
+        noise_texture = "ground_xenobasalt.tex",
+        runsound = "dontstarve/movement/walk_grass",
+        walksound = "dontstarve/movement/walk_grass",
+        snowsound = "dontstarve/movement/run_snow",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    }, {
+        -- minimap_tile_def 5
+        name = "map_edge",
+        noise_texture = "mini_ground_xenobasalt.tex"
+    }, {
+        -- turf_def 6
+        name = "hoodedmoss",
+        anim = "hoodedmoss",
+        bank_build = "hfturf"
+    })
+
 AddTile(
-    "MAGMA_ROCK", --tile_name 1
+    "UM_MAGMA", --tile_name 1
     "LAND", --tile_range 2
     { --tile_data 3
         ground_name = "magma_rock",
@@ -70,7 +146,7 @@ AddTile(
     { --minimap_tile_def 5
         name = "map_edge.tex",
         atlas = "ancienthoodedturf.xml",
-        noise_texture = "mini_ground_lava_rock.tex"
+        noise_texture = "mini_ground_xenobasalt.tex"
     },
     { --turf_def 6
         name = "magma_rock",
@@ -81,7 +157,7 @@ AddTile(
 
 
 AddTile(
-    "MAGMA_ASH", --tile_name 1
+    "UM_ASH", --tile_name 1
     "LAND", --tile_range 2
     { --tile_data 3
         ground_name = "magma_ash",
@@ -99,7 +175,7 @@ AddTile(
     { --minimap_tile_def 5
         name = "map_edge.tex",
         atlas = "ancienthoodedturf.xml",
-        noise_texture = "mini_ash.tex"
+        noise_texture = "mini_ground_xenobasalt.tex"
     },
     { --turf_def 6
         name = "magma_ash",
@@ -108,14 +184,49 @@ AddTile(
     }
 )
 
-ChangeTileRenderOrder(GLOBAL.WORLD_TILES.MAGMA_ROCK, GLOBAL.WORLD_TILES.DIRT)
-ChangeTileRenderOrder(GLOBAL.WORLD_TILES.MAGMA_ASH, GLOBAL.WORLD_TILES.DIRT)]]
+AddTile(
+    "UM_FLOORTOX", --tile_name 1
+    "LAND", --tile_range 2
+    { --tile_data 3
+        ground_name = "floortox",
+    },
+    { --ground_tile_def 4
+        name = "rocky.tex",
+        atlas = "rocky.xml",
+        noise_texture = "ground_floortox.tex",
+        runsound="dontstarve/movement/run_marsh",
+        walksound="dontstarve/movement/walk_marsh",
+        snowsound="dontstarve/movement/run_ice",
+        mudsound="dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    },
+    { --minimap_tile_def 5
+        name = "map_edge.tex",
+        atlas = "ancienthoodedturf.xml",
+        noise_texture = "mini_ground_xenobasalt.tex"
+    },
+    { --turf_def 6
+        name = "magma_rock",
+        anim = "magma_rock",
+        bank_build = "turf_archives"
+    }
+)
+
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.UM_MAGMA, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.UM_ASH, GLOBAL.WORLD_TILES.DIRT)
 ChangeTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 ChangeTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.CRACKEDBASALT, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.BOILINGFIELDS_DIRTY, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.BOILINGFIELDS, GLOBAL.WORLD_TILES.DIRT)
+ChangeTileRenderOrder(GLOBAL.WORLD_TILES.UM_FLOORTOX, GLOBAL.WORLD_TILES.DIRT)
+
 
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.HOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
 ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.ANCIENTHOODEDFOREST, GLOBAL.WORLD_TILES.DIRT)
-
+ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.CRACKEDBASALT, GLOBAL.WORLD_TILES.DIRT)
+ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.BOILINGFIELDS_DIRTY, GLOBAL.WORLD_TILES.DIRT)
+ChangeMiniMapTileRenderOrder(GLOBAL.WORLD_TILES.BOILINGFIELDS, GLOBAL.WORLD_TILES.DIRT)
 --[[local batplaces ={
 	"batplaces",
 	"BattyCave",
@@ -142,6 +253,9 @@ for i,v in ipairs(batplaces) do
 		room.contents.prefabdata.umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
 	end)
 end]]
+
+
+
 --[[
 GLOBAL.require("map/rooms/caves/moltenregions")
 
@@ -155,7 +269,10 @@ AddTaskPreInit("BigBatCave",
     }
     task.background_room="BGMoltenBatCaveRoom"
     task.room_bg=WORLD_TILES.MAGMA_ASH
-end)]]
+end)
+]]
+
+
 if GetModConfigData("worldgenmastertoggle") then
     -- <<Cave Update WIP: Toggle at your own risk you buffoons! (That means you atoba, don't leak it please eh?)>>
     -- I became a dev :sunglasses: - Atobá
@@ -233,6 +350,20 @@ if GetModConfigData("worldgenmastertoggle") then
             table.insert(tasksetdata.required_prefabs, "wixie_piano")
             table.insert(tasksetdata.required_prefabs, "charles_t_horse")
         end
+		
+		
+		-- Touch Stones
+		table.remove(tasksetdata.set_pieces["ResurrectionStone"].tasks,8)
+		table.insert(tasksetdata.set_pieces["ResurrectionStone"].tasks,"Lightning Bluff")
+		
+		-- Wormholes
+		table.remove(tasksetdata.set_pieces["WormholeGrass"].tasks,16)
+		table.insert(tasksetdata.set_pieces["WormholeGrass"].tasks,"Lightning Bluff")
+	
+	
+		-- New Badlands
+		table.insert(tasksetdata.required_prefabs, "dragonfly_spawner")
+		
     end)
 
     --if GetModConfigData("caved") == false then
@@ -256,7 +387,7 @@ if GetModConfigData("worldgenmastertoggle") then
     Layouts["impactfuldiscovery"] = StaticLayout.Get("map/static_layouts/umss_impactfuldiscovery")
     Layouts["boon_moonoil"] = StaticLayout.Get("map/static_layouts/umss_moonoil")
     Layouts["umss_biometable"] = StaticLayout.Get("map/static_layouts/umss_biometable")
-
+	Layouts["boilingfields_dragonfly_arena"] = StaticLayout.Get("map/static_layouts/boilingfields_dragonfly_arena")
     AddTaskSetPreInitAny(function(tasksetdata)
         if tasksetdata.location ~= "forest" or (tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.VOLCANO or tasksetdata.name == STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED) then
             return
@@ -308,11 +439,61 @@ if GetModConfigData("worldgenmastertoggle") then
         room.contents.countprefabs = { um_scorpionhole = math.random(0, 1) }
     end)
 
+    AddTaskSetPreInitAny(function(tasksetdata)
+        for _, task in pairs(tasksetdata.tasks) do
+            if task == "Make a Beehat" then --AddTaskPreInit doesn't work on optional tasks.
+				print("this code runs")
+				task.room_choices["GenericRockyNoThreat"] = function() return math.random(GLOBAL.SIZE_VARIATION) end 
+				task.room_choices["Rocky"] = 0 
+            end
+        end
+    end)
+
+
     AddTaskPreInit("Lightning Bluff", function(task)
         GLOBAL.require("map/rooms/forest/UM_LightningBluff")
         task.room_choices["LightningBluff_Scorpion"] = function() return math.random(3, 4) end
+		
+		
+		-- Oasis Renovation - Give Oasis versions of several Badlands rooms, but they can have sandstorm
+		task.room_choices["BarePlain_Oasis"] = 1 
+		task.room_choices["Badlands_Oasis"] = 2
+		task.room_choices["BuzzardyBadlands_Oasis"] = 1 
+		task.room_choices["BGLightningBluff"] = 0 -- No more BGLightningBluff
+		task.background_room = "BGBadlands_Oasis"
     end)
+	AddRoomPreInit("LightningBluffLightning", function(room) -- This effects the outer areas of the Triple Mac and The Major Beefalo Plains
+		room.tags = {"sandstorm"}
+	end)
+	AddRoomPreInit("LightningBluffAntlion", function(room) -- This effects the outer areas of the Triple Mac and The Major Beefalo Plains
+		room.tags = {"sandstorm"}
+	end)
+	
+	
 
+	-- Transform the Badlands into the BoilingFields (fuck it's "Broiling")
+    AddTaskPreInit("Badlands", function(task)
+        GLOBAL.require("map/rooms/forest/UM_BoilingFields")
+		
+		
+		-- Room removal! lots of desert things are gone now! Make room for hot springs
+		task.room_choices["Badlands"] = 0 
+		task.room_choices["BarePlain"] = 0 
+		task.room_choices["BuzzardyBadlands"] = 0 
+		task.room_choices["HoundyBadlands"] = 0 
+		task.room_choices["DragonflyArena"] = 0 
+
+		task.room_choices["BoilingFields_Crabby"] = 1 -- Crabs
+		task.room_choices["BoilingFields_Hotsprings"] = 1 -- Hotsprings
+		task.room_choices["BoilingFields_Rocky"] = 1 -- Snaildrakes
+		task.room_choices["BoilingFields_BasaltHounds"] = 2-- Hounds
+		task.room_choices["BoilingFields_DragonflyArena"] = 1 -- Dfly
+		task.background_room = "BoilingFields_Hotsprings"
+		--task.entrance_room= "BoilingFields_Rocky"
+		
+		
+    end)
+	
     -----------Ghost Walrus
     if GetModConfigData("ghostwalrus") ~= "disabled" then
         AddRoomPreInit("WalrusHut_Plains", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
@@ -471,8 +652,8 @@ if GetModConfigData("worldgenmastertoggle") then
         end)
     end
 
-    --[[
-        AddTaskSetPreInitAny(function(tasksetdata)
+    
+        --[[AddTaskSetPreInitAny(function(tasksetdata)
             if tasksetdata.location ~= "cave" then
                 return
             end

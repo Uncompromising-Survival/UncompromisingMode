@@ -10,7 +10,7 @@ local StaticLayout = require ("map/static_layout")
 -- Classic bat cave
 AddRoom("MoltenBatCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.MAGMA_ASH,
+    value = WORLD_TILES.UM_FLOORTOX,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -28,18 +28,18 @@ AddRoom("MoltenBatCave", {
             fissure = 0.05,
 			um_rockmaterial1 = 0.3,
 			um_rockmaterial2 = 0.1,
-			umss_general = 0.6,
+			--umss_general = 0.6,
         },
-		prefabdata = {
+		--[[prefabdata = {
 			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end,
-		},
+		},]]
     }
 })
 
 -- Very batty bat cave
 AddRoom("MoltenBattyCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.MAGMA_ASH,
+    value = WORLD_TILES.UM_FLOORTOX,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -57,17 +57,17 @@ AddRoom("MoltenBattyCave", {
             fissure = 0.05,
 			um_rockmaterial1 = 0.3,
 			um_rockmaterial2 = 0.1,
-			umss_general = 0.6,
+			--umss_general = 0.6,
         },
-		prefabdata = {
+		--[[prefabdata = {
 			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},
+		},]]
     }
 })
 -- Ferny bat cave
 AddRoom("MoltenFernyBatCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.MAGMA_ASH,
+    value = WORLD_TILES.UM_FLOORTOX,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -86,17 +86,17 @@ AddRoom("MoltenFernyBatCave", {
             fissure = 0.05,
 			um_rockmaterial1 = 0.3,
 			um_rockmaterial2 = 0.1,
-			umss_general = 0.3,
+			--umss_general = 0.3,
         },
-		prefabdata = {
+		--[[prefabdata = {
 			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},
+		},]]
     }
 })
 
 local bgbatcave = {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.MAGMA_ASH,
+    value = WORLD_TILES.UM_FLOORTOX,
     tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .13,
@@ -108,13 +108,13 @@ local bgbatcave = {
             stalagmite_tall_low=0.4,
             pillar_cave_rock = 0.01,
             fissure = 0.05,
-			umss_general = 0.6,
+			--umss_general = 0.6,
 			um_rockmaterial1 = 0.3,
 			um_rockmaterial2 = 0.1,
         },
-		prefabdata = {
+		--[[prefabdata = {
 			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},
+		},]]
     }
 }
 AddRoom("BGMoltenBatCave", bgbatcave)
