@@ -41,7 +41,7 @@ AddRoom("BoilingFields_Rocky", {
 						hotspring_rockbuncher_gold = 0.015,
 						--rock_flintless_hotspring = 1,
 						rock_lichen = 0.2,
-						slurtlehole = .05,
+						snaildrake_hole = .05,
 						um_hotspring = 0.05,
 					},
 				}

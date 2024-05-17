@@ -668,3 +668,7 @@ DESCRIBE.ROCK_LICHEN =
 	PICKED = "The colony will regrow in time.",
 }
 
+DESCRIBE.SNAILDRAKE_MAGMA = "They seem to have an explosive disposition."
+DESCRIBE.SNAILDRAKE_SLIME = DESCRIBE.SNAILDRAKE_MAGMA
+
+DESCRIBE.SNAPALM = "I’m not sure it’s safe to be holding this."

@@ -125,7 +125,7 @@ local function OnAttacked(inst, data)
     if data and data.attacker then
         inst.components.combat:SetTarget(data.attacker)
         inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-            function(dude) return dude:HasTag("rocky") and not dude.components.health:IsDead() end, 1)
+            function(dude) return dude:HasTag("rocky") and (dude.components.health and not dude.components.health:IsDead()) end, 1)
     end
 end
 
