@@ -25,6 +25,10 @@ local function OnAttached(inst, target)
     end, target)
 
     local function explode()
+        if inst.exploded then
+            return
+        end
+        inst.exploded = true
         local x, y, z = inst.Transform:GetWorldPosition()
         local explosion = SpawnPrefab("snaildrake_explosion")
         explosion.Transform:SetPosition(x, y, z)
@@ -88,6 +92,10 @@ local function fn()
     inst.components.timer:StartTimer("snaildrake_slime_debuff", TUNING.SNAILDRAKE_SLIME_DEBUFF_DURATION)
 
     inst:ListenForEvent("timerdone", OnTimerDone)
+
+    -- Prevents multiple explosions if multiple events
+    -- trigger the explosion simultaneously.
+    inst.exploded = false
 
     return inst
 end
