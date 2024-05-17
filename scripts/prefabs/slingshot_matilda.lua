@@ -44,30 +44,44 @@ end
 
 local function OnProjectileLaunched(inst, attacker, target)
 	if inst.components.container ~= nil then
-		local ammo_stack = inst.components.container:GetItemInSlot(1)
-		local item = inst.components.container:RemoveItem(ammo_stack, false)
-		if item ~= nil then
-			if item == ammo_stack then
-				item:PushEvent("ammounloaded", {slingshot = inst})
-			end
+		for i = 1, 3 do
+			local ammo_stack = inst.components.container:GetItemInSlot(i)
+			local item = inst.components.container:RemoveItem(ammo_stack, false)
+			if item ~= nil then
+				if item == ammo_stack then
+					item:PushEvent("ammounloaded", {slingshot = inst})
+				end
 
-			item:Remove()
+				item:Remove()
+			end
 		end
 	end
 end
 
 local function OnAmmoLoaded(inst, data)
 	if inst.components.weapon ~= nil then
-		if data ~= nil and data.item ~= nil then
-			inst.components.weapon:SetProjectile(data.item.prefab.."_proj")
+		if data ~= nil and data.slot ~= nil and data.item ~= nil then
+			if data.slot == 1 then
+				inst.loaded_projectile1 = data.item.prefab.."_proj"
+			elseif data.slot == 2 then
+				inst.loaded_projectile2 = data.item.prefab.."_proj"
+			elseif data.slot == 3 then
+				inst.loaded_projectile3 = data.item.prefab.."_proj"
+			end
 			data.item:PushEvent("ammoloaded", {slingshot = inst})
 		end
 	end
 end
 
 local function OnAmmoUnloaded(inst, data)
-	if inst.components.weapon ~= nil then
-		inst.components.weapon:SetProjectile(nil)
+	if inst.components.weapon ~= nil and data.slot ~= nil then
+			if data.slot == 1 then
+				inst.loaded_projectile1 = nil
+			elseif data.slot == 2 then
+				inst.loaded_projectile2 = nil
+			elseif data.slot == 3 then
+				inst.loaded_projectile3 = nil
+			end
 		if data ~= nil and data.prev_item ~= nil then
 			data.prev_item:PushEvent("ammounloaded", {slingshot = inst})
 		end
@@ -86,6 +100,11 @@ local function ReticuleMouseTargetFn(inst, mousepos)
         local dx = mousepos.x - x
         local dz = mousepos.z - z
         local l = dx * dx + dz * dz
+		
+		local dist = inst:GetDistanceSqToPoint(mousepos.x, 0, mousepos.z)
+		
+		inst.components.reticule.fadealpha = dist / 100
+		
         if l <= 0 then
             return inst.components.reticule.targetpos
         end
@@ -106,10 +125,9 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
     reticule.Transform:SetRotation(rot)
 end
 
-local function LaunchSpit(inst, caster, target, fixedpowerlevel, shadow)
+local function LaunchSpit(inst, caster, target, fixedpowerlevel, ammo)
 	if caster ~= nil then
 		local x, y, z = caster.Transform:GetWorldPosition()
-		local ammo = shadow ~= nil and "slingshotammo_shadow_proj_secondary" or inst.components.weapon.projectile.."_secondary"
 		
 		if ammo ~= nil then
 			local targetpos = target:GetPosition()
@@ -156,9 +174,9 @@ local function getspawnlocation(inst, target)
     return x1 + .15 * (x2 - x1), 0.5, z1 + .15 * (z2 - z1)
 end
 
-local function UnloadAmmo(inst)
+local function UnloadAmmo(inst, count)
 	if inst.components.container ~= nil then
-		local ammo_stack = inst.components.container:GetItemInSlot(1)
+		local ammo_stack = inst.components.container:GetItemInSlot(count)
 		local item = inst.components.container:RemoveItem(ammo_stack, false)
 		if item ~= nil then
 			if item == ammo_stack then
@@ -170,10 +188,15 @@ local function UnloadAmmo(inst)
 	end
 end
 
-local function Proxy_Shoot(inst, owner, fixedpowerlevel)
-	local ammo = inst.components.weapon.projectile and inst.components.weapon.projectile.."_secondary"
+local function Proxy_Shoot(inst, owner, fixedpowerlevel, shotcount)
+	local ammo = shotcount == 1 and inst.loaded_projectile1 and inst.loaded_projectile1.."_secondary"
+					or shotcount == 2 and inst.loaded_projectile2 and inst.loaded_projectile2.."_secondary"
+					or shotcount == 3 and inst.loaded_projectile3 and inst.loaded_projectile3.."_secondary"
 	
-	if inst.components.weapon.projectile ~= nil then
+	print(ammo)
+	if shotcount == 1 and inst.loaded_projectile1 or
+		shotcount == 2 and inst.loaded_projectile2 or
+		shotcount == 3 and inst.loaded_projectile3 then
 		local wx = nil
 		local wz = nil
 		
@@ -213,7 +236,7 @@ local function Proxy_Shoot(inst, owner, fixedpowerlevel)
 							zmod = owner.wixiepointz - 15*math.sin(theta)
 
 							spittarget.Transform:SetPosition(xmod, 0.5, zmod)
-							LaunchSpit(inst, caster, spittarget, fixedpowerlevel, true)
+							LaunchSpit(inst, caster, spittarget, fixedpowerlevel, ammo)
 							spittarget:DoTaskInTime(.1, spittarget.Remove)
 						end)
 					end
@@ -228,11 +251,11 @@ local function Proxy_Shoot(inst, owner, fixedpowerlevel)
 									
 					spittarget.Transform:SetPosition(wx, 0.5, wz)
 									
-					LaunchSpit(inst, caster, spittarget, fixedpowerlevel)
+					LaunchSpit(inst, caster, spittarget, fixedpowerlevel, ammo)
 					spittarget:DoTaskInTime(0, spittarget.Remove)
 				end
 				
-				UnloadAmmo(inst)
+				UnloadAmmo(inst, shotcount)
 			end
 		end
 	end
@@ -245,10 +268,12 @@ local function createlight(inst, target, pos)
 
 	for i = 1, inst.slingshot_amount do
 		inst:DoTaskInTime((i / 10) - 0.1, function(inst)
-			Proxy_Shoot(inst, owner, fixedpowerlevel)
+			Proxy_Shoot(inst, owner, fixedpowerlevel, i)
 			
 			if i > 1 then
-				inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/shoot")
+				if i == 2 and inst.loaded_projectile2 ~= nil or i == 3 and inst.loaded_projectile3 ~= nil then
+					inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/shoot")
+				end
 			end
 		end)
 	end
@@ -277,6 +302,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("rangedweapon")
+    inst:AddTag("wixie_weapon")
     inst:AddTag("slingshot")
     inst:AddTag("matilda")
     inst:AddTag("allow_action_on_impassable")
@@ -291,7 +317,7 @@ local function fn()
     inst.spelltype = "SLINGSHOT"
 
     inst:AddComponent("reticule")
-    inst.components.reticule.reticuleprefab = "reticuleline2"
+    inst.components.reticule.reticuleprefab = "wixie_reticuleline"
     inst.components.reticule.pingprefab = "reticulelongmultiping"
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
@@ -306,13 +332,15 @@ local function fn()
 
     if not TheWorld.ismastersim then
 		inst.OnEntityReplicated = function(inst) 
-			if inst.replica.container ~= nil then
-				inst.replica.container:WidgetSetup("slingshot") 
-			end
+			inst.replica.container:WidgetSetup("matilda") 
 		end
         return inst
     end
 
+	inst.loaded_projectile1 = nil
+	inst.loaded_projectile2 = nil
+	inst.loaded_projectile3 = nil
+	
 	inst.powerlevel = 1
 	inst.slingshot_amount = 1
 
@@ -343,7 +371,7 @@ local function fn()
     inst.components.spellcaster.canusefrominventory = false
 
     inst:AddComponent("container")
-    inst.components.container:WidgetSetup("slingshot")
+    inst.components.container:WidgetSetup("matilda")
 	inst.components.container.canbeopened = false
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)

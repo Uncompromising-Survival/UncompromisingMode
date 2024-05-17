@@ -10,6 +10,8 @@ if not TheNet:GetPVPEnabled() then
     table.insert(AURA_EXCLUDE_TAGS, "player")
 end
 
+require("wixie_shove")
+
 -- temp aggro system for the slingshots
 local function no_aggro(attacker, target)
     local targets_target = target.components.combat ~= nil and target.components.combat.target or nil
@@ -27,6 +29,15 @@ local function DealDamage(inst, attacker, target, salty)
                 inst.finaldamage = inst.finaldamage * 2
             end
         end
+		
+		if target.components.planarentity then
+			if not inst.planar_ammo then
+				inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
+				target.components.planarentity:OnResistNonPlanarAttack(attacker)
+			else
+				target.components.planarentity:OnPlanarAttackUndefended(target)
+			end
+		end
 
         if no_aggro(attacker, target) then
             target.components.combat:SetShouldAvoidAggro(attacker)
@@ -103,39 +114,7 @@ local function OnHit_Limestone(inst, attacker, target)
     DealDamage(inst, attacker, target)
     ImpactFx(inst, attacker, target)
 
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local tx, ty, tz = target.Transform:GetWorldPosition()
-
-    local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-
-    for i = 1, 50 do
-        target:DoTaskInTime((i - 1) / 50, function(target)
-            if target ~= nil and inst ~= nil then
-                -- local x, y, z = inst.Transform:GetWorldPosition()
-                -- local tx, ty, tz = target.Transform:GetWorldPosition()
-                local tx2, ty2, tz2 = target.Transform:GetWorldPosition()
-
-                -- local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-                local velx = math.cos(rad)  -- * 4.5
-                local velz = -math.sin(rad) -- * 4.5
-
-                local giantreduction = target:HasTag("epic") and 6 or target:HasTag("smallcreature") and 2 or 3
-
-                local dx, dy, dz = tx2 + (((inst.powerlevel) / (i + 1.5)) * velx) / giantreduction, ty2, tz2 + (((inst.powerlevel) / (i + 1.5)) * velz) / giantreduction
-                local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-                local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-                local ocean = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-                if not (target.sg ~= nil and (target.sg:HasStateTag("swimming") or target.sg:HasStateTag("invisible"))) then
-                    if target ~= nil and target.components.locomotor ~= nil and dx ~= nil and (ground or boat or ocean and target.components.locomotor:CanPathfindOnWater() or target.components.tiletracker ~= nil and not target:HasTag("whale")) then
-                        --[[if ocean and target.components.amphibiouscreature and not target.components.amphibiouscreature.in_water then
-								target.components.amphibiouscreature:OnEnterOcean()
-							end]]
-                        target.Transform:SetPosition(dx, dy, dz)
-                    end
-                end
-            end
-        end)
-    end
+	WixieShove(attacker, target, inst.powerlevel, false, nil, true, applyslow)
 
     inst:Remove()
 end
@@ -421,6 +400,7 @@ local function OnHit_Flare(inst, attacker, target)
     local flare = SpawnPrefab("slingshotammo_flare_projectile")
     flare.Transform:SetPosition(x, y, z)
 	flare.igniteradius = inst.powerlevel + 1
+    flare.planar_ammo = inst.planar_ammo
     Launch2(flare, target, 2, 1, 2, .45)
 
     inst:Remove()
@@ -504,6 +484,7 @@ local function secondaryproj_fn(symbol)
     end
 
     inst.persists = false
+    inst.planar_ammo = false
 
     if inst.powerlevel == nil then
         inst.powerlevel = 1
@@ -687,7 +668,7 @@ local function coconutproj_fn()
     return inst
 end
 
-local function fncommon(symbol, inv)
+local function fncommon(symbol, inv, special)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -702,6 +683,12 @@ local function fncommon(symbol, inv)
     inst.AnimState:SetBuild("wixieammo_IA")
     inst.AnimState:PlayAnimation("idle")
     inst.AnimState:OverrideSymbol("rock", "wixieammo_IA", symbol)
+
+	if special then
+		inst:AddTag("wixieammo_special")
+	else
+		inst:AddTag("wixieammo_basic")
+	end
 
     inst:AddTag("molebait")
     inst:AddTag("slingshotammo")
@@ -741,7 +728,7 @@ local function fncommon(symbol, inv)
 end
 
 local function limestone_fn()
-    local inst = fncommon("marble", "slingshotammo_limestone")
+    local inst = fncommon("marble", "slingshotammo_limestone", false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -751,7 +738,7 @@ local function limestone_fn()
 end
 
 local function tar_fn()
-    local inst = fncommon("poop", "slingshotammo_tar")
+    local inst = fncommon("poop", "slingshotammo_tar", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -761,7 +748,7 @@ local function tar_fn()
 end
 
 local function obsidian_fn()
-    local inst = fncommon("thulecite", "slingshotammo_obsidian")
+    local inst = fncommon("thulecite", "slingshotammo_obsidian", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -771,7 +758,7 @@ local function obsidian_fn()
 end
 
 local function insanity_fn()
-    local inst = fncommon("thulecite", "slingshotammo_obsidian")
+    local inst = fncommon("thulecite", "slingshotammo_obsidian", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -781,8 +768,8 @@ local function insanity_fn()
 end
 
 local function lunarvine_fn()
-    local inst = fncommon("thulecite", "slingshotammo_obsidian")
-
+    local inst = fncommon("thulecite", "slingshotammo_obsidian", true)
+	
     if not TheWorld.ismastersim then
         return inst
     end
@@ -791,7 +778,7 @@ local function lunarvine_fn()
 end
 
 local function flare_fn()
-    local inst = fncommon("trinket_1", "slingshotammo_flare")
+    local inst = fncommon("trinket_1", "slingshotammo_flare", true)
 
     if not TheWorld.ismastersim then
         return inst
@@ -946,12 +933,34 @@ local function doflareprojectilehit(inst, other)
 			if not v.components.burnable:IsBurning() then
 				v.components.burnable:Ignite()
 				
+				local damage = 15
+					
+				if v.components.planarentity then
+					if not inst.planar_ammo then
+						damage = (math.sqrt(damage * 4 + 64) - 8) * 4
+						v.components.planarentity:OnResistNonPlanarAttack(inst.attacker)
+					else
+						v.components.planarentity:OnPlanarAttackUndefended(v)
+					end
+				end
+				
 				if v.components.combat ~= nil and v.components.health ~= nil and not v.components.health:IsDead() then
-					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, 15, inst)
+					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, damage, inst)
 				end
 			else
+				local damage = 30
+					
+				if v.components.planarentity then
+					if not inst.planar_ammo then
+						damage = (math.sqrt(damage * 4 + 64) - 8) * 4
+						v.components.planarentity:OnResistNonPlanarAttack(inst.attacker)
+					else
+						v.components.planarentity:OnPlanarAttackUndefended(v)
+					end
+				end
+				
 				if v.components.combat ~= nil and v.components.health ~= nil and not v.components.health:IsDead() then
-					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, 30, inst)
+					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, damage, inst)
 				end
 			end
 		end

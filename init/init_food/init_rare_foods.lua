@@ -368,23 +368,6 @@ local function updatelevel(inst)
     end
 end
 
-local function onharvest(inst, picker, produce)
-    if not inst:HasTag("burnt") then
-        updatelevel(inst)
-		if (picker ~= nil and picker.components.skilltreeupdater ~= nil and picker.components.skilltreeupdater:IsActivated("wormwood_bugs")) then
-			if inst.components.childspawner ~= nil and not GLOBAL.TheWorld.state.iswinter and not GLOBAL.TheWorld.state.isdusk and not GLOBAL.TheWorld.state.isnight then
-				inst.components.childspawner:ReleaseAllChildren()
-			end
-		end
-        
-		if not (picker ~= nil and picker.components.skilltreeupdater ~= nil and picker.components.skilltreeupdater:IsActivated("wormwood_bugs")) then
-			if inst.components.childspawner ~= nil and not GLOBAL.TheWorld.state.iswinter then
-				inst.components.childspawner:ReleaseAllChildren(picker)
-			end
-		end
-	end
-end
-
 if GetModConfigData("beebox_nerf") then
     AddPrefabPostInit("beebox", function(inst)
         -- TODO, test this
@@ -393,10 +376,35 @@ if GetModConfigData("beebox_nerf") then
         end
 
         if inst.components.harvestable ~= nil then
-            inst.components.harvestable:SetUp("honey", HONEY_PER_STAGE[4], nil, onharvest, updatelevel)
+			inst.components.harvestable.maxproduce = HONEY_PER_STAGE[4]
+			
+			local _Oldonharvestfn = inst.components.harvestable.onharvestfn
+			
+			if _Oldonharvestfn ~= nil then
+				inst.components.harvestable.onharvestfn = function(inst, picker, produce, ...)
+					_Oldonharvestfn(inst, picker, produce, ...)
+					updatelevel(inst)
+				end
+			end
+			
+			local _Oldongrowfn = inst.components.harvestable.onongrowfn
+			
+			if _Oldongrowfn ~= nil then
+				inst.components.harvestable.onongrowfn = function(inst, produce, ...)
+					_Oldongrowfn(inst, produce, ...)
+					updatelevel(inst)
+				end
+			end
         end
 		
-		inst:ListenForEvent("onharvest", onharvest)
+		local _OnLoad = inst.OnLoad
+	
+		local function OnLoad(inst, data)
+			_OnLoad(inst, data) -- lord forgive me, lord forgive me for things i dont understand
+			updatelevel(inst)
+		end
+		
+		inst.OnLoad = OnLoad
 
         updatelevel(inst)
     end)

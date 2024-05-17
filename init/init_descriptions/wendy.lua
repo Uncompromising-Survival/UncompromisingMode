@@ -313,7 +313,7 @@ DESCRIBE.SKULLCHEST_CHILD =
 DESCRIBE.SLOBBERLOBBER = "Nature is disgusting."
 DESCRIBE.GORE_HORN_HAT = "Nature's dagger."
 DESCRIBE.BEARGERCLAW = "I've got dirt in my eye. For real this time."
-DESCRIBE.FEATHER_FROCK = "Ew! Gross! I don't want to wear it!"
+DESCRIBE.FEATHER_FROCK = "Dead and defeathered."
 
 DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM .. "\nI've ruined the magic."
 DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM .. "\nI've ruined the magic."

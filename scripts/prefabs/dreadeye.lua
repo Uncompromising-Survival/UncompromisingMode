@@ -862,6 +862,15 @@ local function shadowdisguise_fn(bank, build, anim, icon, tag, multcolour)
 							inst.AnimState:SetBuild(v.build)
 							
 							inst.AnimState:PlayAnimation(v.anim, true)
+
+							for i = 1, 3 do
+								local swap_name = "swap_acidglob" .. i
+								inst.AnimState:HideSymbol(swap_name)
+
+								swap_name = "swap_acidglob_bloom" .. i
+								inst.AnimState:HideSymbol(swap_name)
+							end
+		
 							return
 						end
 					end

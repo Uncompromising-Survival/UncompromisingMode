@@ -2,6 +2,23 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("wilson", function(inst)
+	local function DoTalkSound(inst)
+		if inst.talksoundoverride ~= nil then
+			inst.SoundEmitter:PlaySound(inst.talksoundoverride, "talk")
+			return true
+		elseif not inst:HasTag("mime") then
+			inst.SoundEmitter:PlaySound((inst.talker_path_override or "dontstarve/characters/")..(inst.soundsname or inst.prefab).."/talk_LP", "talk")
+			return true
+		end
+	end
+
+	local function StopTalkSound(inst, instant)
+		if not instant and inst.endtalksound ~= nil and inst.SoundEmitter:PlayingSound("talk") then
+			inst.SoundEmitter:PlaySound(inst.endtalksound)
+		end
+		inst.SoundEmitter:KillSound("talk")
+	end
+
 	local function ClearStatusAilments(inst)
 		if inst.components.freezable ~= nil and inst.components.freezable:IsFrozen() then
 			inst.components.freezable:Unfreeze()
@@ -130,10 +147,125 @@ env.AddStategraphPostInit("wilson", function(inst)
 		ActionHandler(ACTIONS.WOBY_OPEN,
 			function(inst, action)
 				return "doshortaction"
+			end),
+		ActionHandler(ACTIONS.WIXIE_TAUNT,
+			function(inst, action)
+				if action.target ~= nil then
+					inst.wixie_taunt_target = action.target
+				end
+				
+				inst.wixie_taunt_count = 0
+				
+				return "wixie_taunt"
 			end)
 	}
 
 	local states = {
+
+		State{
+			name = "wixie_taunt",
+			tags = { "talking", "acting" },
+
+			onenter = function(inst, noanim)
+				inst.sg:SetTimeout(2)
+				
+				inst.wixie_taunt_count = inst.wixie_taunt_count + 1
+				
+				if inst.wixie_taunt_count == 1 then
+					inst.components.talker:Say("Your life is NOTHING!")
+				elseif inst.wixie_taunt_count == 2 then
+					inst.components.talker:Say("You serve ZERO purpose!")
+				elseif inst.wixie_taunt_count == 3 then
+					inst.components.talker:Say("You should kill yourself NOW!")
+				end
+				
+				local function gettalk()
+					if math.random() < 0.5 then
+						return "acting_1"
+					else
+						return "acting_2"
+					end
+				end
+
+				if not noanim then
+					inst.AnimState:PlayAnimation(gettalk(), false)
+				end
+				
+				DoTalkSound(inst)
+			end,
+			
+			timeline =
+			{
+				TimeEvent(1, function(inst)
+					inst:SetCameraZoomed(true)
+				end),
+			},
+
+			ontimeout = function(inst)
+				inst:SetCameraZoomed(false)
+					
+				if inst.wixie_taunt_target ~= nil then
+					inst:PushEvent("wixie_taunt_lvl"..inst.wixie_taunt_count, inst.wixie_taunt_target)
+				end
+
+				if inst.wixie_taunt_count >= 3 then
+					if inst.wixie_taunt_target ~= nil then
+						for i = 1, 10 do
+							inst:DoTaskInTime(1 / i, function()
+								if inst.wixie_taunt_target ~= nil then
+									local pos = inst.wixie_taunt_target:GetPosition()
+									TheWorld:PushEvent("ms_sendlightningstrike", pos)
+								end
+							end)
+						end
+					end
+				end
+				
+				if inst.wixie_taunt_count >= 3 then
+					inst.sg:GoToState("idle")
+				else
+					inst.sg:GoToState("wixie_taunt")
+				end
+			end,
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					if inst.sg.statemem.talkdone then
+						local function getidle()
+							if math.random() < 0.5 then
+								return "acting_idle1"
+							else
+								return "acting_idle2"
+							end
+						end
+						
+						inst.AnimState:PlayAnimation(getidle())
+						StopTalkSound(inst)
+					else
+						local function gettalk()
+							if math.random() < 0.5 then
+								return "acting_1"
+							else
+								return "acting_2"
+							end
+						end
+						
+						inst.AnimState:PlayAnimation(gettalk())
+						inst.sg.statemem.talkdone = true
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				StopTalkSound(inst)
+				inst.sg.statemem.talkdone = false
+				
+				if inst.wixie_taunt_count >= 3 then
+					--inst.wixie_taunt_target = nil
+				end
+			end,
+		},
 
 		State {
 			name = "shove",
@@ -250,6 +382,8 @@ env.AddStategraphPostInit("wilson", function(inst)
 																v.components.combat:GetAttacked(nil,
 																	10 * giantdamagereduction)
 																v.components.combat:SuggestTarget(inst)
+																
+																v:AddDebuff("wixieshove_debuff", "wixieshove_debuff")
 															end
 
 															SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v
@@ -286,16 +420,20 @@ env.AddStategraphPostInit("wilson", function(inst)
 																		local vdebuffmultiplier = v.components.freezable ~=
 																			nil and v.components.freezable:IsFrozen() and
 																			1.25 or 1
+																		local skilltree_multiplier = inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_30") and 1.3 or
+																										inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_20") and 1.2 or
+																										inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_10") and 1.1 or 1
 
 																		local basepower = 10 / i or 10
 																		if px ~= nil then
 																			local vx, vy, vz =
 																				px +
-																				(((5 / (iv + 1)) * velx_collision) / finalreduction) *
-																				vdebuffmultiplier, py,
+																				((((5 / (iv + 1)) * velx_collision) / finalreduction) *
+																				vdebuffmultiplier) * skilltree_multiplier, 
+																				py,
 																				pz +
-																				(((5 / (iv + 1)) * velz_collision) / finalreduction) *
-																				vdebuffmultiplier
+																				((((5 / (iv + 1)) * velz_collision) / finalreduction) *
+																				vdebuffmultiplier) * skilltree_multiplier
 
 																			local ground_collision = TheWorld.Map:IsPassableAtPoint(vx, vy, vz)
 																			local boat_collision = TheWorld.Map:GetPlatformAtPoint(vx, vz)
@@ -344,10 +482,13 @@ env.AddStategraphPostInit("wilson", function(inst)
 													target.components.freezable ~= nil and
 													target.components.freezable:IsFrozen() and 1.25 or
 													1
+												local skilltree_multiplier = inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_30") and 1.3 or
+																				inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_20") and 1.2 or
+																				inst.components.skilltreeupdater:IsActivated("wixie_shovebuff_10") and 1.1 or 1
 
 												local dx, dy, dz =
-													tx + (((3 / (i + 2)) * velx) / giantreduction) * debuffmultiplier, ty,
-													tz + (((3 / (i + 2)) * velz) / giantreduction) * debuffmultiplier
+													tx + ((((3 / (i + 2)) * velx) / giantreduction) * debuffmultiplier) * skilltree_multiplier, ty,
+													tz + ((((3 / (i + 2)) * velz) / giantreduction) * debuffmultiplier) * skilltree_multiplier
 
 												local ground_target = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
 												local boat_target = TheWorld.Map:GetPlatformAtPoint(dx, dz)
@@ -779,12 +920,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 						equip.powerlevel = inst.slingshot_power
 						equip.slingshot_amount = inst.slingshot_amount
 
-						
-						if TUNING.DSTU.DATES.APRIL_FOOLS then
-							inst.SoundEmitter:PlaySound("wixie/characters/wixie/glock")
-						else
-							inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/shoot")
-						end
+						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/shoot")
 						
 						if gnasher_charged then
 							if equip ~= nil and equip.components.weapon ~= nil and equip.components.weapon.projectile ~= nil then

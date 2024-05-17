@@ -71,6 +71,14 @@ function CheckGem(container, item, slot)
     return not item:HasTag("irreplaceable") and item:HasTag("gem")
 end
 
+function CheckSlingshotAmmo(container, item, slot)
+	return item:HasTag("slingshotammo")
+end
+
+function CheckSlingshotAmmoJessie(container, item, slot)
+	return item:HasTag("slingshotammo") and container.inst:HasTag("can_take_ammo")
+end
+
 function CheckFish(container, item, slot)
     return item:HasTag("smalloceancreature")
 end
@@ -292,6 +300,58 @@ modparams.crabclaw =
     type = "hand_inv",
 }
 
+modparams.matilda =
+{
+    widget =
+    {
+        slotpos =
+        {
+			--Vector3(0,   32 + 4,  0),
+        },
+        slotbg =
+        {
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+        },
+        animbank = "ui_lamp_1x4",
+        animbuild = "ui_lamp_1x4",
+        pos = Vector3(0, 55, 0),
+    },
+    excludefromcrafting = true,
+    itemtestfn = CheckSlingshotAmmo,
+    type = "hand_inv",
+}
+
+modparams.jessie =
+{
+    widget =
+    {
+        slotpos =
+        {
+			--Vector3(0,   32 + 4,  0),
+        },
+        slotbg =
+        {
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+            { image = "slingshot_ammo_slot.tex" },
+        },
+        animbank = "ui_lamp_1x4",
+        animbuild = "ui_lamp_1x4",
+        pos = Vector3(0, 180, 0),
+    },
+    excludefromcrafting = true,
+    acceptsstacks = false,
+    itemtestfn = CheckSlingshotAmmoJessie, -- HEY SCRIMBLES! FOR SOME REASON IT SEEMS LIKE
+											-- JESSIE WONT ACCEPT AMMO DESPITE can_take_ammo BEING TRUE?
+											-- FIND WHAT 'container' REFERS TO
+    type = "hand_inv",
+}
+
 modparams.um_blowgun =
 {
     widget =
@@ -428,6 +488,12 @@ for y = 0, 3 do
 end
 for y = 0, 3 do
     table.insert(modparams.crabclaw.widget.slotpos, Vector3(-1, -75 * y + 110, 0))
+end
+for y = 0, 2 do
+    table.insert(modparams.matilda.widget.slotpos, Vector3(-1, -75 * y + 110, 0))
+end
+for y = 0, 5 do
+    table.insert(modparams.jessie.widget.slotpos, Vector3(-1, -75 * y + 110, 0))
 end
 for y = 0, 3 do
     table.insert(modparams.frigginbirdpail.widget.slotpos, Vector3(-1, -75 * y + 110, 0))

@@ -285,13 +285,13 @@ local function fn()
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
-    --[[inst.Physics:ClearCollisionMask()
+    inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.GROUND)
     --inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     --inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
     inst.Physics:CollidesWith(COLLISION.CHARACTERS)
     inst.Physics:CollidesWith(COLLISION.GIANTS)
-    inst.Physics:Teleport(inst.Transform:GetWorldPosition())]]
+    --inst.Physics:Teleport(inst.Transform:GetWorldPosition())
     inst.sounds = carratsounds
 
     inst:AddComponent("locomotor")
@@ -366,6 +366,7 @@ local function fn()
     inst.components.sleeper:SetResistance(1)
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.trappable = true
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.cangoincontainer = false
@@ -392,7 +393,7 @@ local function fn()
     inst:AddComponent("periodicspawner")
     inst.components.periodicspawner:SetPrefab("ratdroppings")
     inst.components.periodicspawner:SetRandomTimes(5, 15)
-    -- inst.components.periodicspawner:SetDensityInRange(20, 2)
+    inst.components.periodicspawner:SetDensityInRange(20, 2)
     inst.components.periodicspawner:SetMinimumSpacing(10)
     inst.components.periodicspawner:Start()
     -- inst.components.periodicspawner.spawnoffscreen = true
@@ -613,7 +614,7 @@ local function junkfn()
     inst:AddComponent("periodicspawner")
     inst.components.periodicspawner:SetPrefab("ratdroppings")
     inst.components.periodicspawner:SetRandomTimes(5, 15)
-    -- inst.components.periodicspawner:SetDensityInRange(20, 2)
+    inst.components.periodicspawner:SetDensityInRange(20, 2)
     inst.components.periodicspawner:SetMinimumSpacing(10)
     inst.components.periodicspawner:Start()
     -- inst.components.periodicspawner.spawnoffscreen = true
@@ -680,13 +681,13 @@ local function packfn()
 
     if inst.gooserippletask == nil then inst.gooserippletask = inst:DoPeriodicTask(.25, DoRipple, FRAMES) end
 
-    --[[inst.Physics:ClearCollisionMask()
+    inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.GROUND)
     --inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     --inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
     inst.Physics:CollidesWith(COLLISION.CHARACTERS)
     inst.Physics:CollidesWith(COLLISION.GIANTS)
-    inst.Physics:Teleport(inst.Transform:GetWorldPosition())]]
+    --inst.Physics:Teleport(inst.Transform:GetWorldPosition())
     inst.sounds = carratsounds
 
     inst:AddComponent("locomotor")
@@ -757,6 +758,7 @@ local function packfn()
     inst.components.sleeper:SetResistance(1)
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.trappable = true
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.cangoincontainer = false

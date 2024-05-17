@@ -124,13 +124,4 @@ STRINGS = GLOBAL.STRINGS
 	DESCRIBE.SLINGSHOTAMMO_FREEZE = "How resourceful! Now if she could just stay out of trouble..."
 	DESCRIBE.SLINGSHOTAMMO_POOP = "How resourceful! Now if she could just stay out of trouble..."
 
-
-
-
-
-
-
-
-
-
-
+	STRINGS.ACTIONS.WIXIE_TAUNT = "Taunt!"

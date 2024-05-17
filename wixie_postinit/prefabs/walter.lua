@@ -80,8 +80,10 @@ local function GetPointSpecialActions(inst, pos, useitem, right)
 		for i, v in pairs(walter) do
 			if v ~= nil and v == inst then
 				if rider ~= nil and rider:IsRiding() then
+					print("woby open")
 					return { ACTIONS.WOBY_OPEN }
 				else
+					print("woby open")
 					return { ACTIONS.WOBY_HERE }
 				end
 			end

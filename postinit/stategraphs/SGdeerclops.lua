@@ -368,7 +368,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
         if inst.components.health ~= nil and not inst.components.health:IsDead() and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
             if inst.components.timer ~= nil and not inst.components.timer:TimerExists("auratime") then
                 inst.sg:GoToState("aurafreeze_pre")
-                inst:DoTaskInTime(7, function(inst) inst.sg:GoToState("aurafreeze_pst") end)
             else
                 inst.sg:GoToState("aurattack")
             end
@@ -519,7 +518,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
             onexit = function(inst)
                 SetLightValueAndOverride(inst, 1, 0)
                 SetLightColour(inst, 1)
-                if not inst.sg.statemem.keepfacing then
+                if inst.SwitchToFourFaced ~= nil and not inst.sg.statemem.keepfacing then
 					inst:SwitchToFourFaced()
                 end
             end,
@@ -682,8 +681,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 FreezeEverything(inst)
             end,
 
-
-
             timeline =
             {
                 TimeEvent(5 * FRAMES, function(inst)
@@ -704,6 +701,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
         },
+		
         State {
             name = "aurafreeze_pst",
             tags = { "busy", "nosleep", "noshove" },
@@ -714,9 +712,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:PlayAnimation("fortresscast_pst")
                 inst.components.timer:StartTimer("auratime", 24 + math.random(1, 11))
             end,
-
-
-
+			
             timeline =
             {
                 TimeEvent(5 * FRAMES, function(inst)
@@ -733,11 +729,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
                     inst.sg:GoToState("idle")
                 end),
             },
+			
             onexit = function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
 
         },
+		
         State {
             name = "aurafreeze",
             tags = { "busy", "aurafreeze", "nosleep", "noshove"},
@@ -745,10 +743,16 @@ env.AddStategraphPostInit("deerclops", function(inst)
             onenter = function(inst)
 				inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
-                inst.AnimState:PushAnimation("fortresscast_loop")
+                inst.AnimState:PushAnimation("fortresscast_loop", true)
+				
+				inst.sg:SetTimeout(6)
             end,
 
-
+			ontimeout = function(inst)
+				if not inst.components.health:IsDead() then
+					inst.sg:GoToState("aurafreeze_pst")
+				end
+			end,
 
             timeline =
             {
@@ -757,16 +761,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
             end),]]
             },
-
-            events =
-            {
-                EventHandler("animover", function(inst) inst.sg:GoToState("aurafreeze") end),
-            },
+			
             onexit = function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
 
         },
+		
         State {
             name = "aurafreeze_hit",
             tags = { "busy", },
@@ -777,8 +778,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:PushAnimation("fortresscast_hit")
             end,
 
-
-
             timeline =
             {
 
@@ -791,11 +790,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
             {
                 EventHandler("animover", function(inst) inst.sg:GoToState("aurafreeze") end),
             },
+			
             onexit = function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
 
         },
+		
         State {
             name = "taunt",
             tags = { "busy" },

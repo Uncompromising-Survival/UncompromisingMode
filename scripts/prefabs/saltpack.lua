@@ -61,7 +61,7 @@ local function Salted(inst)
         end
     end
 
-    local ents2 = TheSim:FindEntities(x, y, z, 6, { "snowish" })
+    local ents2 = TheSim:FindEntities(x, y, z, 6, nil, nil, { "snowish", "slurtle", "snurtle" })
     if #ents2 > 0 then
         for i, v2 in ipairs(ents2) do
             if v2:IsValid() and v2.components.health ~= nil and not v2.components.health:IsDead() and inst.components.combat:CanTarget(v2) then

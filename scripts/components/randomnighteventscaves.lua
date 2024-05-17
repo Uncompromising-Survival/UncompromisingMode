@@ -566,7 +566,7 @@ local function SpawnNightCrawlers(player)
 						local light = TheSim:GetLightAtPoint(x1, 0, z1)
 			
 						if light <= 0.1 and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
-							local ent = SpawnPrefab("nightcrawler")
+							local ent = SpawnPrefab("um_nightcrawler")
 							ent.Transform:SetPosition(x1, 0, z1)
 							break
 						end

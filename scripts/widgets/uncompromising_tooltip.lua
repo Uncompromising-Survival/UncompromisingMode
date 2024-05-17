@@ -28,6 +28,12 @@ local Uncompromising_Tooltip = Class(Widget, function(self, owner)
 		self.icon3:SetScaleMode(0.01)
 		self.icon3:SetScale(.9, .9, .9)
 
+		self.icon4 = self:AddChild(Image("images/WIX_TT.xml", "WIX_TT.tex"))
+
+		self.icon4:SetPosition(300, 300, 0)
+		self.icon4:SetScaleMode(0.01)
+		self.icon4:SetScale(.9, .9, .9)
+
 		self:Hide()
 		self:RefreshTooltips()
 		self.item_tip = nil
@@ -58,19 +64,23 @@ function Uncompromising_Tooltip:RefreshTooltips()
 
 	local walter_tip = self.item_tip ~= nil and ThePlayer:HasTag("pinetreepioneer") and STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] ~= nil and
 		STRINGS.PINETREE_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
+		
+	local wixie_tip = self.item_tip ~= nil and ThePlayer:HasTag("troublemaker") and STRINGS.WIXIE_TOOLTIP[string.upper(self.item_tip)] ~= nil and
+		STRINGS.WIXIE_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
 
 	local winona_tip = self.item_tip ~= nil and ThePlayer:HasTag("handyperson") and STRINGS.ENGINEERING_TOOLTIP[string.upper(self.item_tip)] ~= nil and
 		STRINGS.ENGINEERING_TOOLTIP[string.upper(self.item_tip)] .. "\n" or ""
 
-	local tooltip = um_tip .. walter_tip .. winona_tip
+	local tooltip = um_tip .. walter_tip .. wixie_tip .. winona_tip
 
 	if self.item_tip ~= nil and winona_tip ~= "" and ThePlayer:HasTag("handyperson") then
 		self.icon3:SetTooltip(tooltip)
 
 		self.icon3:Show()
 
-		self.icon2:Hide()
 		self.icon1:Hide()
+		self.icon2:Hide()
+		self.icon4:Hide()
 	elseif self.item_tip ~= nil and walter_tip ~= "" and ThePlayer:HasTag("pinetreepioneer") then
 		self.icon2:SetTooltip(tooltip)
 
@@ -78,16 +88,27 @@ function Uncompromising_Tooltip:RefreshTooltips()
 
 		self.icon1:Hide()
 		self.icon3:Hide()
+		self.icon4:Hide()
+	elseif self.item_tip ~= nil and wixie_tip ~= "" and ThePlayer:HasTag("troublemaker") then
+		self.icon4:SetTooltip(tooltip)
+
+		self.icon4:Show()
+
+		self.icon1:Hide()
+		self.icon2:Hide()
+		self.icon3:Hide()
 	elseif self.item_tip ~= nil and um_tip ~= "" then
 		self.icon1:SetTooltip(tooltip)
 		self.icon1:Show()
 
 		self.icon2:Hide()
 		self.icon3:Hide()
+		self.icon4:Hide()
 	else
 		self.icon1:Hide()
 		self.icon2:Hide()
 		self.icon3:Hide()
+		self.icon4:Hide()
 	end
 end
 

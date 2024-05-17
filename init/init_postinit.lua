@@ -52,7 +52,7 @@ local component_post = {
     "firedetector",
 	"unwrappable",
 	"playeractionpicker", -- this exists to allow wingsuit to be used on ocean tiles and stuff
-    "slipperyfeet",
+    --"slipperyfeet",
     "walkableplatformplayer",
     "schoolspawner",
     "builder",
@@ -285,6 +285,7 @@ if GetModConfigData("wixie_walter") then
         "bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
         "wobypicking",    -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
         "dryer"           -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
+        "channelcastable" -- Just a dirty wrap of the component to stop it from removing the channelcastable component from her weapon when unequipped
 
     }
 

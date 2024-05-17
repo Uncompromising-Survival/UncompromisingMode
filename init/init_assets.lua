@@ -288,6 +288,8 @@ local inventoryitems =
 
 	"slingshot_gnasher",
 	"slingshot_matilda",
+	"slingshot_jessie",
+	"slingshot_claire",
 	"slingshotammo_firecrackers",
 	"slingshotammo_honey",
 	"slingshotammo_rubber",
@@ -353,9 +355,6 @@ local inventoryitems =
 	--crab king items
 	"hat_crab",
 	"staff_starfall",
-	
-	--Night Terrors
-	"um_voxolophone",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -370,6 +369,9 @@ Assets = {
 	Asset("ATLAS", "images/crafting_menu_avatars/avatar_winky.xml"),
 	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wathom.tex"),
 	Asset("ATLAS", "images/crafting_menu_avatars/avatar_wathom.xml"),
+
+	Asset("ATLAS", "images/wixie_skilltree.xml"),
+	Asset("IMAGE", "images/wixie_skilltree.tex"),
 
 	----TURF
 	Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
@@ -472,6 +474,11 @@ Assets = {
 	Asset("ANIM", "anim/wixie.zip"),
 	Asset("ANIM", "anim/ghost_wixie_build.zip"),
 	Asset("ANIM", "anim/wixie_idle.zip"),
+	Asset("ANIM", "anim/player_pistol.zip"),
+	
+	Asset("ANIM", "anim/swap_jessie_1.zip"),
+	Asset("ANIM", "anim/swap_jessie_2.zip"),
+	Asset("ANIM", "anim/swap_jessie_3.zip"),
 
 	Asset("ANIM", "anim/wixie_shadowclone.zip"),
 
@@ -486,6 +493,8 @@ Assets = {
 	Asset("ANIM", "anim/marblebag.zip"),
 	Asset("ANIM", "anim/swap_marblebag.zip"),
 	Asset("ANIM", "anim/baggedmarbles.zip"),
+	
+	Asset("ANIM", "anim/wixie_reticuleline.zip"),
 
 	Asset("ANIM", "anim/swap_wixiegun.zip"),
 
@@ -627,6 +636,16 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/slingshot_gnasher.xml"),
 	Asset("IMAGE", "images/inventoryimages/slingshot_matilda.tex"),
 	Asset("ATLAS", "images/inventoryimages/slingshot_matilda.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshot_jessie.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_jessie.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshot_jessie_1.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_jessie_1.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshot_jessie_2.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_jessie_2.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshot_jessie_3.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_jessie_3.xml"),
+	Asset("IMAGE", "images/inventoryimages/slingshot_claire.tex"),
+	Asset("ATLAS", "images/inventoryimages/slingshot_claire.xml"),
 	Asset("IMAGE", "images/inventoryimages/bagofmarbles.tex"),
 	Asset("ATLAS", "images/inventoryimages/bagofmarbles.xml"),
 	Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"),
@@ -2143,10 +2162,6 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/um_staff_meteor.xml"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
-	
-	Asset("ATLAS", "images/inventoryimages/um_voxolophone.xml"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_voxolophone.xml"),
-	Asset("IMAGE", "images/inventoryimages/um_voxolophone.tex"),
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
@@ -2270,6 +2285,9 @@ Assets = {
 	Asset("IMAGE", "images/PP_TT.tex"),
 	Asset("ATLAS", "images/PP_TT.xml"),
 
+	Asset("IMAGE", "images/WIX_TT.tex"),
+	Asset("ATLAS", "images/WIX_TT.xml"),
+
 	Asset("IMAGE", "images/engineering_tip.tex"),
 	Asset("ATLAS", "images/engineering_tip.xml"),
 
@@ -2381,3 +2399,16 @@ Assets = {
     Asset( "ATLAS", "images/wolfgang_rework_skilltree.xml" ),
 
 }
+
+local skilltree_defs = require("prefabs/skilltree_defs")
+local BuildSkillsData = require("prefabs/skilltree_wixie")
+
+if BuildSkillsData then
+	RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+	local data = BuildSkillsData(skilltree_defs.FN)
+	for k, v in pairs(data.SKILLS) do
+		if v.icon then
+			RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon..".tex")
+		end
+	end
+end

@@ -6,6 +6,8 @@ local assets =
 local SLEEPREPEL_MUST_TAGS = { "_combat" }
 local SLEEPREPEL_CANT_TAGS = { "player", "companion", "shadow", "playerghost", "INLIMBO", "toadstool", "notarget" }
 
+require("wixie_shove")
+
 local function StartRepel(inst)
 	if inst.host ~= nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
@@ -14,43 +16,11 @@ local function StartRepel(inst)
 
 		for i, v in ipairs(ents) do
 			if v.components.combat ~= nil then
-				--v.components.combat:GetAttacked(inst.host, 0, nil)
 				v:PushEvent("attacked", { attacker = inst.host, damage = 0, weapon = nil })
 			end
 
 			if v.components.locomotor ~= nil and not v:HasTag("stageusher") and (v.sg ~= nil and not v.sg:HasStateTag("noshove") or v.sg == nil) then
-				for i = 1, 50 do
-					v:DoTaskInTime((i - 1) / 50, function(v)
-						if v ~= nil and inst.host ~= nil then
-							local x, y, z = inst.host.Transform:GetWorldPosition()
-							local tx, ty, tz = v.Transform:GetWorldPosition()
-
-							if tx ~= nil then
-								local rad = math.rad(inst.host:GetAngleToPoint(tx, ty, tz))
-								local velx = math.cos(rad) --* 4.5
-								local velz = -math.sin(rad) --* 4.5
-
-								local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and 0.8 or 1
-								local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.5 or 1
-
-								local dx, dy, dz = tx + (((2 / (i + 3)) * velx) / giantreduction) * cursemultiplier, ty, tz + (((2 / (i + 3)) * velz) / giantreduction) * cursemultiplier
-								local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-								local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-								local ocean_collision = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-
-								if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
-									if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
-										--[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
-												v.components.amphibiouscreature:OnEnterOcean()
-											end]]
-
-										v.Transform:SetPosition(dx, dy, dz)
-									end
-								end
-							end
-						end
-					end)
-				end
+				WixieShove(inst.host, v, 2, false, nil, nil, true)
 			end
 		end
 	end

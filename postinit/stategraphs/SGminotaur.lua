@@ -81,17 +81,21 @@ env.AddStategraphPostInit("minotaur", function(inst)
 	
 	------------------------------------------------------------
 	inst.states["stun_pst"].onexit = function(inst)
-		if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
-			inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("belch") end)
-		end
+		inst:DoTaskInTime(0,function(inst) 
+			if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
+				inst.sg:GoToState("belch") 
+			end
+		end)
 	end
 	
 	local _OldOnExit = inst.states["leap_attack_pst"].onexit    --Both of these calls are to make AG belch if it can and is getting up from being stunned
 	
 	inst.states["leap_attack_pst"].onexit = function(inst)
-		if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
-			inst:DoTaskInTime(0,function(inst) inst.sg:GoToState("belch") end)
-		end
+		inst:DoTaskInTime(0,function(inst) 
+			if inst.forcebelch and inst.components.health and not inst.components.health:IsDead() then
+				inst.sg:GoToState("belch") 
+			end
+		end)
 		
 		if _OldOnExit ~= nil then
 			_OldOnExit(inst)

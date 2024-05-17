@@ -143,6 +143,40 @@ STRINGS.PINETREE_TOOLTIP = {
     BRINE_BALM = "- My first aid training helps me get more out of this!",
 }
 
+STRINGS.WIXIE_TOOLTIP = {
+    SLINGSHOTAMMO_ROCK = "- Plain and simple.",
+    SLINGSHOTAMMO_MARBLE = "- Knocks back enemies.",
+    SLINGSHOTAMMO_THULECITE = "- Curses targets, increasing damage taken, \nand boosting slingshot ammo effects.",
+    SLINGSHOTAMMO_GOLD = "- Shatters on impact, dealing damage in an area.",
+    SLINGSHOTAMMO_SLOW = "- Creates a vortex that pulls enemies in.",
+    SLINGSHOTAMMO_FREEZE = "- Freezes enemies in an area.",
+    SLINGSHOTAMMO_POOP = "- Panics targets.",
+    SLINGSHOTAMMO_FIRECRACKERS = "- Bounces multiple times, dealing damage in an area.",
+    SLINGSHOTAMMO_HONEY = "- Makes enemies leave a slowing trail of honey.",
+    SLINGSHOTAMMO_RUBBER = "- Bounces between enemies, dealing damage \nand knocking them back",
+    SLINGSHOTAMMO_TREMOR = "- Creates multiple tremors, damaging and knocking back\nenemies in an area.",
+    SLINGSHOTAMMO_MOONROCK = "- Able to hit shadows.",
+    SLINGSHOTAMMO_MOONGLASS = "- Passes through enemies, dealing rapid damage.\n- Able to hit shadows.",
+    SLINGSHOTAMMO_SALT = "- Deals up to triple damage based on enemies missing health.\n-Deals double damage to salt susceptible enemies.",
+    SLINGSHOTAMMO_TAR = "- Makes enemies leave a slowing, flamable tar trail.",
+	SLINGSHOTAMMO_OBSIDIAN = "- Rapidly deals bursts of fire damage in an area.",
+	SLINGSHOTAMMO_GOOP = "- Bounces between allies, healing them.",
+	SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n-Explodes when ignited.",
+	SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
+	SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
+	SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.n\- Burning targets take more damage from the explosion.\n- Ignites enemies.",
+		
+	SLINGSHOTAMMO_INSANITY = "...?",
+	SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",
+	
+	SLINGSHOT = "- Charge to increase damage and ammo effects.",
+	SLINGSHOT_MATILDA = "- Charge to fire up to 3 low effect shots.",
+	SLINGSHOT_GNASHER = "- Charges faster, but falls off if not released on time.",
+	SLINGSHOT_CLAIRE = "- Charge while moving.\n- Ammo ignores planar defense.",
+	SLINGSHOT_JESSIE = "- Can swap firing modes.\n- Holds 6 shots, which must be filled before firing.\n- Ammo ignores planar defense.",
+	BAGOFMARBLES = "- Scatters slippery marbles upon impact.",
+}
+
 STRINGS.ENGINEERING_TOOLTIP = {
     MINERHAT = " - May be upgraded.\n- Can be overcharged, if upgraded.",
     LANTERN = "- May be upgraded.\n- Can be overcharged, if upgraded.",

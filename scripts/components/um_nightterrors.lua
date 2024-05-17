@@ -765,66 +765,6 @@ return Class(function(self, inst)
 					end
 				end
 			end)
-			
-			self.snuffout_task = self.inst:DoPeriodicTask(0.25, function()
-				if #_activeplayers > 0 then
-					local player = _activeplayers[math.random(#_activeplayers)]
-					if player ~= nil then
-						local x, y, z = player.Transform:GetWorldPosition()
-						
-						--local lightsteal_target, lighttype = LightStealTarget(player, x, y, z)
-						
-						local fx = SpawnPrefab("um_shadow_attune_fx")
-						
-						if math.random() > 0.33 then
-							local lightsteal_targettable = self:LightStealTarget(player)
-							
-							if lightsteal_targettable ~= nil then
-								for i, v in ipairs(lightsteal_targettable) do
-									if v.targetsource ~= nil and v.light_type ~= nil then
-										local x1, y1, z1 = v.targetsource.Transform:GetWorldPosition()
-										local voxolophone1 = TheSim:FindEntities(x1, y1, z1, 10, { "um_voxolophone" }, { "INLIMBO" })
-										
-										if voxolophone1 == nil or #voxolophone1 == 0 then
-											local fx2 = SpawnPrefab("um_shadow_attune_fx")
-						
-											if v.light_type == "fire" then
-												fx2.Transform:SetPosition(x1, y1, z1)
-												v.targetsource.components.fueled:DoDelta(-24)
-											elseif v.light_type == "light" then
-												fx2.Transform:SetPosition(x1, y1, z1)
-												v.targetsource.components.fueled:DoDelta(-24)
-											elseif v.light_type == "star" then
-												fx2.Transform:SetPosition(x1, y1, z1)
-												v.targetsource.components.timer:SetTimeLeft("extinguish", v.targetsource.components.timer:GetTimeLeft("extinguish") - 100)
-											end
-											
-											if math.random() > 0.5 then
-												fx2.AnimState:PlayAnimation("attune_out")
-												fx2.SoundEmitter:PlaySound("dontstarve/common/fireOut")
-											end
-										end
-									end
-								end
-							end
-						end
-						
-						x = x + math.random(-30, 30)
-						z = z + math.random(-30, 30)
-							
-						local voxolophone = TheSim:FindEntities(x, y, z, 10, { "um_voxolophone" }, { "INLIMBO" })
-						if voxolophone ~= nil and #voxolophone > 0 then
-							fx.AnimState:SetMultColour(1, 1, 1, .6)
-						end
-
-						fx.Transform:SetPosition(x, 0, z)
-						
-						if math.random() > 0.5 then
-							fx.AnimState:PlayAnimation("attune_out")
-						end
-					end
-				end
-			end)
 		end
 	end
 
@@ -845,11 +785,6 @@ return Class(function(self, inst)
 		if self.terror_task ~= nil then
 			self.terror_task:Cancel()
 			self.terror_task = nil
-		end
-		
-		if self.snuffout_task ~= nil then
-			self.snuffout_task:Cancel()
-			self.snuffout_task = nil
 		end
 		
 		if TheWorld.state.cycles > 5 and data.moonphase == "new" then

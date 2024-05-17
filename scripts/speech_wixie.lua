@@ -666,6 +666,23 @@ return{
 		"Gotcha! Wait, no...",
 		"Can you just pretend you got hit?",
 	},
+		
+	ANNOUNCE_WIXIE_TAUNT_1 = {
+		"Think you're tough, huh?",
+		"Am I supposed to be impressed?",
+		"Should I be scared?",
+	},
+	ANNOUNCE_WIXIE_TAUNT_2 = {
+		"...With a mug as ugly as that?",
+		"...A wimp like you?",
+		"...Is this some kinda joke?",
+	},
+	ANNOUNCE_WIXIE_TAUNT_3 = {
+		"...You're barely worth my time!",
+		"...You could hardly hurt a fly!",
+		"...You'll just make a fool of yourself!",
+	},
+		
 	ANNOUNCE_STORYTELLING_ABORT_FIREWENTOUT =
 	{
         "And that's why Wacky stinks! The end.",
@@ -2117,7 +2134,7 @@ return{
 			GENERIC = "Hop along, slimey.",
 			SLEEPING = "Perfect time for a sneak attack!",
 		},
-		FROGGLEBUNWICH = "At least the breads looks good.",
+		FROGGLEBUNWICH = "At least the bread looks good.",
 		FROGLEGS = "It was mean and green. Now it's dead.", -- :)
 		FROGLEGS_COOKED = "And now it's cooked.",
 		FRUITMEDLEY = "It's a good pick-me-up!",
@@ -3809,6 +3826,10 @@ return{
 		SLINGSHOT = "Perfect for long distance harassment.",
 		SLINGSHOT_MATILDA = "Third time's the charm!",
 		SLINGSHOT_GNASHER = "You're barking up the wrong tree!",
+		SLINGSHOT_CLAIRE = "Whirl and whip!",
+		SLINGSHOT_JESSIE = "These shadows are mine to command!",
+		BAGOFMARBLES = "Check out my bag of tricks!",
+		
 		SLINGSHOTAMMO_ROCK = "It's more annoying than anything.",
 		SLINGSHOTAMMO_MARBLE = "These will knock the wind out of them!",
 		SLINGSHOTAMMO_THULECITE = "Perfect for the 'other' kind of cursing.",

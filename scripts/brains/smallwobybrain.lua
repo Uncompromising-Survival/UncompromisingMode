@@ -196,9 +196,6 @@ local function HasWobyTarget(inst)
 			inst.wobytarget:HasTag("outofreach") and not
 			inst.wobytarget:HasTag("INLIMBO") and
 			(TUNING.DSTU.ISLAND_ADVENTURES or inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint()) and
-			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
 			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith) or
@@ -208,6 +205,9 @@ local function HasWobyTarget(inst)
 			(inst.wobytarget.components.harvestable ~= nil and inst.wobytarget.components.harvestable:CanBeHarvested()) or 
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
+			-- is my pal walter near?
+			(inst.components.follower.leader ~= nil and
+            inst:IsNear(inst.components.follower.leader, 25)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")))
@@ -221,9 +221,6 @@ local function DoTargetAction(inst)
 			inst.wobytarget:HasTag("outofreach") and not
 			inst.wobytarget:HasTag("INLIMBO") and
 			(TUNING.DSTU.ISLAND_ADVENTURES or inst.wobytarget:IsOnPassablePoint() ~= nil and inst.wobytarget:IsOnPassablePoint()) and
-			-- is my pal walter near?
-			(inst.components.follower.leader ~= nil and
-            inst:IsNear(inst.components.follower.leader, 25)) and
 			(
 			-- Check for Picking (plants)
 			(inst.wobytarget.components.pickable ~= nil and inst.wobytarget.components.pickable.canbepicked and inst.wobytarget.components.pickable.caninteractwith and
@@ -236,6 +233,9 @@ local function DoTargetAction(inst)
 			BufferedAction(inst, inst.wobytarget, ACTIONS.HARVEST)) or 
 			-- Bark Bark! Attack me you dink!
 			(inst.wobytarget.components.combat ~= nil and 
+			-- is my pal walter near?
+			(inst.components.follower.leader ~= nil and
+            inst:IsNear(inst.components.follower.leader, 25)) and
 			inst.wobytarget.components.combat:CanTarget(inst) and not
 			(inst.wobytarget.components.combat:TargetIs(inst) or inst.wobytarget.components.grouptargeter ~= nil and inst.wobytarget.components.grouptargeter:IsTargeting(inst)) and not
 			(inst.wobytarget.sg ~= nil and inst.wobytarget.sg:HasStateTag("attack")) and

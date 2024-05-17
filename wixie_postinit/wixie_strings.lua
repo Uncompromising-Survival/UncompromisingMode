@@ -86,12 +86,12 @@ DESCRIBE.WINKY = {
     ATTACKER = "You'd better not have rabies!",
     MURDERER = "Go crawl back in your hole, %s!",
     REVIVER = "Don't beg!",
-    GHOST = "I wonder if any rats are haunting my house...",
+    GHOST = "I wonder if any rats are haunting my house?",
     FIRESTARTER = "Fire?! Couldn't you just chew on some furniture or something, %s?"
 }
 
 DESCRIBE.WATHOM = {
-    GENERIC = "You'll let flies in with that mouth, %s.",
+    GENERIC = "Should I speak slowly, %s?",
     ATTACKER = "I think %s has a taste for blood.",
     MURDERER = "%s has gone feral! Run for your lives!",
     REVIVER = "Well, atleast you didn't eat the heart!",
@@ -159,15 +159,6 @@ DESCRIBE.MINOTAUR_BOULDER_BIG =
 DESCRIBE.SNOWBALL_THROWABLE = "No one can match my aim!"
 DESCRIBE.VETERANSHRINE =
     "Hey, you uh, have goop coming out of your eyes. And nose... and mouth..."
-DESCRIBE.VET_SKULL = "Atleast it wasn't me!"
-DESCRIBE.UM_BOSS_SOUL = "Now I can taunt it from beyond the grave!"
-DESCRIBE.UM_DARK_VESTIGES = "Creepy."
-DESCRIBE.UM_VOXOLOPHONE = "Speak up! I can't hear you!"
-
-DESCRIBE.UM_EXHUMER = "The last thing I want is some smelly old bones stinking up the place!"
-DESCRIBE.UM_WINGSUIT = "Something about \"Don't fly too close to the sun?\" I forget, I hate morality lessons!"
-DESCRIBE.UM_MOONFLY_LANTERN = "I hope no one follows my trail!"
-
 DESCRIBE.RAT_TAIL = "Definetly not candy."
 DESCRIBE.PLAGUEMASK = "Now I can look like a dumb bird. Yay."
 DESCRIBE.SPIDER_TRAPDOOR =
@@ -496,9 +487,6 @@ DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_BLOCKER =
     "That's fine, I wasn't planning on getting too close anyway!"
-
-DESCRIBE.PORTABLEBOAT_ITEM = "It's like a bouncy castle from the fair, but boring."
-DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "The wind does the work for me!"
 
 DESCRIBE.WIXIE_PIANO = "I miss my piano lessons..."
 DESCRIBE.WIXIE_CLOCK = "Atleast it's ticking won't keep me up at night."

@@ -20,7 +20,7 @@ env.AddPlayerPostInit(function(inst)
     end)
 
     inst:ListenForEvent("itemlose", function(inst, data)
-        if data.prev_item.prefab == "compass" and not inst.components.inventory:HasItemWithTag("compass", 1) then
+        if data.prev_item and data.prev_item.prefab == "compass" and not inst.components.inventory:HasItemWithTag("compass", 1) then
             inst:RemoveTag("compassbearer")
 
             if inst.components.maprevealable ~= nil then

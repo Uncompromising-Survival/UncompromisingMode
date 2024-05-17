@@ -1,0 +1,29 @@
+﻿<Atlas>
+	<Texture filename="wixie_skilltree.tex" />
+	<Elements>
+		<Element name="wixie_allegiance_cheerful.tex" u1="0.001" u2="0.0615" v2="0.999" v1="0.9385" />
+		<Element name="wixie_allegiance_cherry.tex" u1="0.0635" u2="0.124" v2="0.999" v1="0.9385" />
+		<Element name="wixie_background.tex" u1="0.001" u2="0.829078125" v2="0.9365" v1="0.206078125" />
+		<Element name="wixie_befriend_beefalolobster.tex" u1="0.126" u2="0.1865" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_catcoongnarwail.tex" u1="0.1885" u2="0.249" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_cherryling.tex" u1="0.251" u2="0.3115" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_companion.tex" u1="0.3135" u2="0.374" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_more.tex" u1="0.376" u2="0.4365" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_pigbunny.tex" u1="0.4385" u2="0.499" v2="0.999" v1="0.9385" />
+		<Element name="wixie_befriend_tallbirdclockwork.tex" u1="0.501" u2="0.5615" v2="0.999" v1="0.9385" />
+		<Element name="wixie_candy1.tex" u1="0.5635" u2="0.624" v2="0.999" v1="0.9385" />
+		<Element name="wixie_candy2.tex" u1="0.626" u2="0.6865" v2="0.999" v1="0.9385" />
+		<Element name="wixie_candy3.tex" u1="0.6885" u2="0.749" v2="0.999" v1="0.9385" />
+		<Element name="wixie_candycraft.tex" u1="0.751" u2="0.8115" v2="0.999" v1="0.9385" />
+		<Element name="wixie_forest_bloomprint1.tex" u1="0.001" u2="0.0615" v2="0.204078125" v1="0.143578125" />
+		<Element name="wixie_forest_bloomprint2.tex" u1="0.8135" u2="0.874" v2="0.999" v1="0.9385" />
+		<Element name="wixie_forest_blossom.tex" u1="0.001" u2="0.0615" v2="0.141578125" v1="0.081078125" />
+		<Element name="wixie_forest_throw.tex" u1="0.0635" u2="0.124" v2="0.204078125" v1="0.143578125" />
+		<Element name="wixie_redhood_reputation1.tex" u1="0.876" u2="0.9365" v2="0.999" v1="0.9385" />
+		<Element name="wixie_redhood_reputation2.tex" u1="0.831078125" u2="0.891578125" v2="0.9365" v1="0.876" />
+		<Element name="wixie_redhood_sharing.tex" u1="0.0635" u2="0.124" v2="0.141578125" v1="0.081078125" />
+		<Element name="wixie_redhood_wave1.tex" u1="0.126" u2="0.1865" v2="0.204078125" v1="0.143578125" />
+		<Element name="wixie_redhood_wave2.tex" u1="0.001" u2="0.0615" v2="0.079078125" v1="0.018578125" />
+		<Element name="wixie_redhood_wetness.tex" u1="0.9385" u2="0.999" v2="0.999" v1="0.9385" />
+	</Elements>
+</Atlas>

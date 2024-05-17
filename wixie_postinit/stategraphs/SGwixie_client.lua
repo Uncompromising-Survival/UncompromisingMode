@@ -131,10 +131,34 @@ local actionhandlers =
 	ActionHandler(ACTIONS.WOBY_HERE,
         function(inst, action)
             return "play_woby_whistle"
-        end)
+        end),
+		ActionHandler(ACTIONS.WIXIE_TAUNT,
+			function(inst, action)
+				return "wixie_taunt"
+			end)
 }
 
 local states = {
+
+	State{
+		name = "wixie_taunt",
+		tags = { "talking", "acting" },
+
+		onenter = function(inst, noanim)
+				
+			local function gettalk()
+				if math.random() < 0.5 then
+					return "acting_1"
+				else
+					return "acting_2"
+				end
+			end
+
+			if not noanim then
+				inst.AnimState:PlayAnimation(gettalk(), false)
+			end
+		end,
+	},
 
 	State{
         name = "shove",

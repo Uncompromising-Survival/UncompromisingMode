@@ -51,24 +51,23 @@ function UM_SpiritBuff:OnUpdate(dt)
 				
 				self.buffed = true
 	
-				if self.inst.old_defaultdamage ~= nil then
-					self.inst.components.combat.defaultdamage = self.old_defaultdamage * 1.25
+				if self.old_defaultdamage ~= nil then
+					self.inst.components.combat:SetDefaultDamage(self.old_defaultdamage * 1.25)
 				end
 
-				if self.inst.old_attackrange ~= nil then
+				if self.old_attackrange ~= nil then
 					self.inst.components.combat.attackrange = self.old_attackrange * 1.25
 				end
 
-				if self.inst.old_hitrange ~= nil then
+				if self.old_hitrange ~= nil then
 					self.inst.components.combat.hitrange = self.old_hitrange * 1.25
 				end
 
-				if self.inst.old_min_attack_period ~= nil then
+				if self.old_min_attack_period ~= nil and not self.inst:HasTag("epic") then
 					self.inst.components.combat.min_attack_period = self.old_min_attack_period * 0.75
 				end
 				
 				self.inst.AnimState:SetScale(1.25, 1.25, 1.25)
-				--self.inst.Transform:SetScale(1.2, 1.2, 1.2)
 	
 				if self.inst.components.locomotor then
 					self.inst.components.locomotor.runspeed = self.old_runspeed * 1.25
@@ -82,19 +81,20 @@ function UM_SpiritBuff:OnUpdate(dt)
 				
 				self.buffed = false
 	
-				if self.inst.old_defaultdamage ~= nil then
-					self.inst.components.combat.defaultdamage = self.old_defaultdamage
+				if self.old_defaultdamage ~= nil then
+					self.inst.components.combat:SetDefaultDamage(self.old_defaultdamage)
+					--self.inst.components.combat.defaultdamage = self.old_defaultdamage
 				end
 
-				if self.inst.old_attackrange ~= nil then
+				if self.old_attackrange ~= nil then
 					self.inst.components.combat.attackrange = self.old_attackrange
 				end
 
-				if self.inst.old_hitrange ~= nil then
+				if self.old_hitrange ~= nil then
 					self.inst.components.combat.hitrange = self.old_hitrange
 				end
 
-				if self.inst.old_min_attack_period ~= nil then
+				if self.old_min_attack_period ~= nil and not self.inst:HasTag("epic") then
 					self.inst.components.combat.min_attack_period = self.old_min_attack_period
 				end
 				

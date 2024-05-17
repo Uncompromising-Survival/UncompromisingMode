@@ -1276,10 +1276,6 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT = "Cause all kinds of mischief!"
 
     GLOBAL.GetValidRecipe("slingshotammo_rock").numtogive = 15
-    GLOBAL.GetValidRecipe("slingshotammo_gold").numtogive = 15
-    GLOBAL.GetValidRecipe("slingshotammo_marble").numtogive = 15
-    GLOBAL.GetValidRecipe("slingshotammo_freeze").numtogive = 15
-    GLOBAL.GetValidRecipe("slingshotammo_slow").numtogive = 15
 
     GLOBAL.GetValidRecipe("slingshotammo_freeze").ingredients = { Ingredient("bluegem", 1) }
 
@@ -1356,7 +1352,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_firecrackers",
         { Ingredient("nitre", 1) },
         GLOBAL.TECH.SCIENCE_TWO,
-        { builder_tag = "pebblemaker", numtogive = 15, no_deconstruction = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
@@ -1378,7 +1374,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_rubber",
         { Ingredient("mosquitosack", 1) },
         GLOBAL.TECH.SCIENCE_ONE,
-        { builder_tag = "pebblemaker", numtogive = 15, no_deconstruction = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_RUBBER = "Rebounding Rounds."
@@ -1400,7 +1396,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_moonrock",
         { Ingredient("moonrocknugget", 1) },
         GLOBAL.TECH.SCIENCE_TWO,
-        { builder_tag = "pebblemaker", numtogive = 15, no_deconstruction = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_MOONROCK = "Take the fight to the next dimension."
@@ -1423,7 +1419,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_salt",
         { Ingredient("saltrock", 1) },
         GLOBAL.TECH.SCIENCE_TWO,
-        { builder_tag = "pebblemaker", numtogive = 15, no_deconstruction = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_SALT = "Salt in the wounds!"
@@ -1476,6 +1472,24 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("slingshotammo_obsidian", "armorobsidian", "CRAFTING_STATION", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "CHARACTER", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
+
+    AddRecipe2(
+        "slingshot_jessie",
+        { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
+        GLOBAL.TECH.SHADOWFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_shadow", nounlock=true, station_tag = "shadow_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
+	
+    AddRecipe2(
+        "slingshot_claire",
+        { Ingredient("purebrilliance", 2), Ingredient("lunarplant_husk", 2) },
+        GLOBAL.TECH.LUNARFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_lunar", nounlock=true, station_tag = "lunar_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
 
     AddRecipe2(
         "bagofmarbles",

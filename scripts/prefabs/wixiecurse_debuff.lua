@@ -18,10 +18,13 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 2, 0)
 	
-	if target.components.combat ~= nil and 
-	target.components.combat.hiteffectsymbol ~= nil and
-	target.components.combat.hiteffectsymbol ~= "marker" then
-		inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+	if target:IsValid() and target.components.combat ~= nil then
+		target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.15)
+		
+		if target.components.combat.hiteffectsymbol ~= nil and
+			target.components.combat.hiteffectsymbol ~= "marker" then
+			inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+		end
 	end
 	
 	inst:ListenForEvent("wixiebite", function(target, data)
@@ -39,6 +42,7 @@ end
 
 local function OnTimerDone(inst, data)
     if data.name == "buffover" then
+		
 		inst.spawnfactor = true
 		inst.AnimState:PlayAnimation("despawn")
 		inst.SoundEmitter:PlaySound("dontstarve/sanity/creature1/death")
@@ -54,6 +58,14 @@ local function OnExtended(inst, target, followsymbol, followoffset, data)
 
     inst.components.timer:StopTimer("buffover")
     inst.components.timer:StartTimer("buffover", duration)
+end
+
+local function buff_OnDetached(inst, target)
+	if target ~= nil and target:IsValid() and target.components.combat ~= nil then
+		target.components.combat.externaldamagetakenmultipliers:RemoveModifier(inst)
+	end
+	
+    inst:Remove()
 end
 
 local function fn()
@@ -84,7 +96,7 @@ local function fn()
 
     inst:AddComponent("debuff")
     inst.components.debuff:SetAttachedFn(OnAttached)
-    inst.components.debuff:SetDetachedFn(inst.Remove)
+    inst.components.debuff:SetDetachedFn(buff_OnDetached)
     inst.components.debuff:SetExtendedFn(OnExtended)
     inst.components.debuff.keepondespawn = true
 

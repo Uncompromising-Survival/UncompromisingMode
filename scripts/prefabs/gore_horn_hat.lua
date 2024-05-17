@@ -191,6 +191,7 @@ local function onequip(inst, owner)
 		owner.gorehorn = inst
 		if owner:HasTag("player") then
 			owner:ListenForEvent("locomote", speedcheck)
+			owner:ListenForEvent("onreachdestination", speedcheck)
 		end
 	end
 
@@ -214,6 +215,7 @@ local function onunequip(inst, owner)
 	end
 
 	owner:RemoveEventCallback("locomote", speedcheck)
+	owner:RemoveEventCallback("onreachdestination", speedcheck)
 	owner.runspeed = 1
 
 	if owner.physbox ~= nil then

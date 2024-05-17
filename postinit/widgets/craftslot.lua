@@ -17,7 +17,11 @@ env.AddClassPostConstruct("widgets/craftslot", function(self)
 
 		self.uncomptip = self:AddChild(UncompTooltip())
 
-		if self.uncomptip ~= nil and self.recipe ~= nil and self.recipepopup ~= nil and self.recipe.name and (STRINGS.UNCOMP_TOOLTIP[string.upper(self.recipe.name)] ~= nil or STRINGS.ENGINEERING_TOOLTIP[string.upper(self.recipe.name)] ~= nil or STRINGS.PINETREE_TOOLTIP[string.upper(self.recipe.name)] ~= nil) then
+		if self.uncomptip ~= nil and self.recipe ~= nil and self.recipepopup ~= nil and self.recipe.name and
+		(STRINGS.UNCOMP_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.ENGINEERING_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.PINETREE_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.WIXIE_TOOLTIP[string.upper(self.recipe.name)] ~= nil) then
 			self.uncomptip.item_tip = self.recipe.name
 			self.uncomptip.skins_spinner = self.recipepopup.skins_spinner or nil
 			self.uncomptip:ShowTip()
@@ -35,7 +39,11 @@ env.AddClassPostConstruct("widgets/craftslot", function(self)
 
 		self.uncomptip = self:AddChild(UncompTooltip())
 
-		if self.uncomptip ~= nil and self.recipe ~= nil and self.recipepopup ~= nil and self.recipe.name and (STRINGS.UNCOMP_TOOLTIP[string.upper(self.recipe.name)] ~= nil or STRINGS.ENGINEERING_TOOLTIP[string.upper(self.recipe.name)] ~= nil or STRINGS.PINETREE_TOOLTIP[string.upper(self.recipe.name)] ~= nil) then
+		if self.uncomptip ~= nil and self.recipe ~= nil and self.recipepopup ~= nil and self.recipe.name and
+		(STRINGS.UNCOMP_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.ENGINEERING_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.PINETREE_TOOLTIP[string.upper(self.recipe.name)] ~= nil or
+		STRINGS.WIXIE_TOOLTIP[string.upper(self.recipe.name)] ~= nil) then
 			self.uncomptip.item_tip = self.recipe.name
 			self.uncomptip.skins_spinner = self.recipepopup.skins_spinner or nil
 			self.uncomptip:ShowTip()
@@ -74,7 +82,9 @@ env.AddClassPostConstruct("widgets/redux/craftingmenu_hud", function(self)
 			self.craftingmenu.details_root.data.recipe ~= nil and
 			self.craftingmenu.details_root.data.recipe.name and
 			(STRINGS.UNCOMP_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil or
-			STRINGS.PINETREE_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil or STRINGS.ENGINEERING_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil) then
+			STRINGS.PINETREE_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil or 
+			STRINGS.ENGINEERING_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil or 
+			STRINGS.WIXIE_TOOLTIP[string.upper(self.craftingmenu.details_root.data.recipe.name)] ~= nil) then
 			self.uncomptip.item_tip = self.craftingmenu.details_root.data.recipe.name
 			self.uncomptip.skins_spinner = self.craftingmenu.details_root.skins_spinner or nil
 			self.uncomptip:ShowTip()

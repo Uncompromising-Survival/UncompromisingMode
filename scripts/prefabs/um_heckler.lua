@@ -221,7 +221,7 @@ local function fn()
     inst.components.combat:SetRetargetFunction(3, Retarget)
 
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(TUNING.BISHOP_HEALTH)
+    inst.components.health:SetMaxHealth(TUNING.BISHOP_HEALTH / 2)
 
     --inst:AddComponent("um_shadowcloaked")
 
