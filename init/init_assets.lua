@@ -216,6 +216,7 @@ local inventoryitems =
 	"beakbasher",
 	"houndious_observious",
 	"um_brineishmoss",
+	"terrorguise",
 	"brine_balm",
 	"sludge_oil",
 	"mastupgrade_windturbine_item",
