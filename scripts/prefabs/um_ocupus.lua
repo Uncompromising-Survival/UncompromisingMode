@@ -246,7 +246,7 @@ local function Evaluate(inst) -- This is the psuedo brain for the ocupus, this t
 		end
 		if tentaclesval < 3 then
 			SpawnTentacle(inst)
-			SpawnTentacle(inst)
+			--SpawnTentacle(inst)
 		else
 			if math.random() > 0.6 then --Don't always proc the tentacle to spawn, especially if there already is one
 				SpawnTentacle(inst)
