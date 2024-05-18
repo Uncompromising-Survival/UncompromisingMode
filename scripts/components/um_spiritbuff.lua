@@ -67,7 +67,9 @@ function UM_SpiritBuff:OnUpdate(dt)
 					self.inst.components.combat.min_attack_period = self.old_min_attack_period * 0.75
 				end
 				
-				self.inst.AnimState:SetScale(1.25, 1.25, 1.25)
+				if self.inst.AnimState then
+					self.inst.AnimState:SetScale(1.25, 1.25, 1.25)
+				end
 	
 				if self.inst.components.locomotor then
 					self.inst.components.locomotor.runspeed = self.old_runspeed * 1.25
@@ -97,8 +99,9 @@ function UM_SpiritBuff:OnUpdate(dt)
 				if self.old_min_attack_period ~= nil and not self.inst:HasTag("epic") then
 					self.inst.components.combat.min_attack_period = self.old_min_attack_period
 				end
-				
-				self.inst.AnimState:SetScale(1, 1, 1)
+				if self.inst.AnimState then
+					self.inst.AnimState:SetScale(1, 1, 1)
+				end
 				--self.inst.Transform:SetScale(1, 1, 1)
 	
 				if self.inst.components.locomotor then

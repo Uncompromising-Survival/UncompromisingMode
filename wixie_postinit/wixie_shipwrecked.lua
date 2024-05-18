@@ -664,4 +664,4 @@ DESCRIBE.WOODLEGS = {
             GHOST = "You'd better not curse me!",
             FIRESTARTER = "You can't loot anything if you burn everything, %s!",
 		}
-	}
+	
