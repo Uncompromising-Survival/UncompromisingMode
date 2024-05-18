@@ -72,8 +72,8 @@ AddTile("BOILINGFIELDS", -- tile_name 1
         noise_texture = "mini_ground_xenomeadow.tex"
     }, {
         -- turf_def 6
-        name = "hoodedmoss",
-        anim = "hoodedmoss",
+        name = "xenomeadow",
+        anim = "xenomeadow",
         bank_build = "hfturf"
     })
 	
@@ -122,8 +122,8 @@ AddTile("CRACKEDBASALT", -- tile_name 1
         noise_texture = "mini_ground_xenobasalt.tex"
     }, {
         -- turf_def 6
-        name = "hoodedmoss",
-        anim = "hoodedmoss",
+        name = "xenobasalt",
+        anim = "xenobasalt",
         bank_build = "hfturf"
     })
 

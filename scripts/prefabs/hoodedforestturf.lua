@@ -2,6 +2,8 @@ local GroundTiles =
 {
 	[WORLD_TILES.HOODEDFOREST] = 	{name = "hoodedmoss", 	anim = "hoodedmoss", 	bank_build = "hfturf"},
 	[WORLD_TILES.ANCIENTHOODEDFOREST] = 	{name = "ancienthoodedturf", 	anim = "ancienthoodedturf", 	bank_build = "hfturf"},
+	[WORLD_TILES.BOILINGFIELDS] = 	{name = "xenomeadow", 	anim = "xenomeadow", 	bank_build = "hfturf"},
+	[WORLD_TILES.CRACKEDBASALT] = 	{name = "xenobasalt", 	anim = "xenobasalt", 	bank_build = "hfturf"},
 }
 
 local assets =

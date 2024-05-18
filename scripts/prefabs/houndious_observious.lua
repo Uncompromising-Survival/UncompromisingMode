@@ -99,7 +99,7 @@ local function fn()
 
     MakeObstaclePhysics(inst, .4)
 	local minimap = inst.entity:AddMiniMapEntity()
-    inst.MiniMapEntity:SetIcon("houndious_observious_map.tex") --This isn't working...?
+    inst.MiniMapEntity:SetIcon("houndious_observious_map.tex")
 
     inst.AnimState:SetBank("houndious_observious")
     inst.AnimState:SetBuild("houndious_observious")
