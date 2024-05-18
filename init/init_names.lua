@@ -10,7 +10,6 @@ STRINGS.BEESWAX = "Wax"
 
 
 
-
 -------------------------------------------------- Strings
 
 STRINGS.CREEPINGFEAR = "Creeping Fear"
@@ -537,6 +536,21 @@ STRINGS.UM_VEGGIE_CUBE = "Veggie Cube"
 STRINGS.UM_SUGAR_CUBE = "Sugar Cube"
 STRINGS.UM_ROUGHAGE_CUBE = "Wooden Cube"
 STRINGS.UM_BLAND_CUBE = "Bland Cube"
+
+--Ocupus Parts
+STRINGS.UM_OCUPUS_EYE = "Eye Stalk"
+STRINGS.UM_OCUPUS_EYETACLE = "Eye Stalk"
+STRINGS.UM_OCUPUS_TENTACLE = "Tentacle"
+STRINGS.UM_OCUPUS_BEAK = "Beak"
+
+--Ocupus Items
+STRINGS.OCUPUS_TENTACLE = "Ocupus Tentacle"
+STRINGS.OCUPUS_TENTACLE_EYE = "Ocupus Eye"
+STRINGS.OCUPUS_TENTACLE_COOKED = "Cooked Tentacle"
+STRINGS.OCUPUS_BEAK = "Ocupus Beak"
+STRINGS.BEAKBASHER = "Beak Basher"
+STRINGS.HOUNDIOUS_OBSERVIOUS = "Houndious Observious"
+STRINGS.TERRORGUISE = "Terrorguise"
 
 -- WIXIE & WALTER RELATED STRINGS
 

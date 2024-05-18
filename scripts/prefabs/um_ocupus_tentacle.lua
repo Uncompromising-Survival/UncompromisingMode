@@ -242,6 +242,7 @@ local function fn()
 			end
 		end
 	end	
+	inst.persists = false
     return inst
 end
 

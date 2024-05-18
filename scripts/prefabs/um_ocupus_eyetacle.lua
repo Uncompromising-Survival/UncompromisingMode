@@ -350,6 +350,9 @@ local function fneye()
 		inst.AnimState:PlayAnimation("eye_retract")
 		inst:ListenForEvent("animover",function(inst) inst:Remove() end)
 	end
+	
+	inst.persists = false
+	
     return inst
 end
 
@@ -435,7 +438,7 @@ local function fnfishtentacle()
 	--inst.AnimState:SetMultColour(1, 1, 1, 0.2)
 	
     inst:AddComponent("inspectable")
-
+	inst.persists = false
     MakeHauntableLaunch(inst)
 	inst:DoTaskInTime(0,GrabFish)
     return inst
@@ -490,6 +493,7 @@ local function fnreapertentacle() --Reaper Tentacle is scrapped/shelved. It was 
 	
     inst:AddComponent("inspectable")
 	inst:Hide()
+	inst.persists = false
     MakeHauntableLaunch(inst)
     return inst
 end

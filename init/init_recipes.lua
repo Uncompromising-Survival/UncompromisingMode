@@ -470,6 +470,29 @@ AddRecipe2(
 ChangeSortKey("air_conditioner", "firesuppressor", "STRUCTURES", true)
 
 AddRecipe2(
+    "houndious_observious",
+    { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) },
+    TECH.MAGIC_TWO,
+    { placer = "houndious_observious_placer" },
+    { "STRUCTURES", "MAGIC" }
+)
+ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
+ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
+GLOBAL.STRINGS.RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
+
+AddRecipe2(
+    "terrorguise",
+    { Ingredient("ocupus_tentacle_eye", 4), Ingredient("kelp", 10), Ingredient("nightmarefuel", 5) },
+    TECH.MAGIC_TWO,
+    nil,
+    { "CLOTHING", "MAGIC" }
+)
+ChangeSortKey("terrorguise", "kelphat", "CLOTHING", true)
+ChangeSortKey("terrorguise", "magician_chest", "MAGIC", true)
+GLOBAL.STRINGS.RECIPE_DESC.TERRORGUISE = "Scare your fears away."
+
+
+AddRecipe2(
     "skullchest_child",
     { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) },
     TECH.LOST,
@@ -802,9 +825,9 @@ ChangeSortKey("sludge_cork", "boat_magnet_beacon", "SEAFARING", true)
     { numtogive = 2 },
     { "SEAFARING" }
 )
-ChangeSortKey("boat_bumper_copper_kit", "boat_bumper_shell_kit", "SEAFARING", true)
+ChangeSortKey("boat_bumper_copper_kit", "boat_bumper_shell_kit", "SEAFARING", true)]]
 
-AddRecipe2(
+--[[AddRecipe2(
     "steeringwheel_copper_item",
     { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) },
     TECH.SEAFARING_ONE,
@@ -1235,6 +1258,8 @@ if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
 end
 
+AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
+
 -- WIXIE RELATED CRAFTS
 if GetModConfigData("wixie_walter") then
     AddRecipe2(
@@ -1490,7 +1515,7 @@ if GetModConfigData("wixie_walter") then
         { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
-
+	
     AddRecipe2(
         "bagofmarbles",
         { Ingredient("slingshotammo_marble", 10), Ingredient("rope", 1) },
@@ -1512,6 +1537,16 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.STRINGS.RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
+
+    AddRecipe2(
+        "beakbasher",
+        { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) },
+        TECH.SCIENCE_TWO,
+        nil,
+        { "TOOLS" }
+    )
+    ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+    GLOBAL.STRINGS.RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick."
 
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
@@ -1734,7 +1769,7 @@ STRINGS.RECIPE_DESC.SLUDGE_CORK = "Impractically large for a boat."
 STRINGS.RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
 STRINGS.RECIPE_DESC.BRINE_BALM = "Rub salt in the wounds."
 STRINGS.RECIPE_DESC.CRITTER_FIGGY_BUILDER = "They like to put holes in things."
-STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
+--STRINGS.RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
 STRINGS.RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
 STRINGS.RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
 STRINGS.RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
@@ -1773,6 +1808,7 @@ STRINGS.RECIPE_DESC.WINONA_CATAPULT_ITEM = STRINGS.RECIPE_DESC.WINONA_CATAPULT
 STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT_ITEM = STRINGS.RECIPE_DESC.WINONA_SPOTLIGHT
 STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_LOW
 STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH_ITEM = STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH
+STRINGS.RECIPE_DESC.UM_BOAT_ENGINE = "Go full steam ahead on the high seas."
 
 GLOBAL.STRINGS.RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
 GLOBAL.STRINGS.RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
