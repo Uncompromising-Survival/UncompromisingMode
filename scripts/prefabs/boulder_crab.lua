@@ -50,10 +50,12 @@ local function GetRock(inst, rock)
     inst.myrock._oldcallback = inst.myrock.components.workable.onwork
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
-    if rock ~= "rock_moon" and rock ~= "rock_lichen" then
-        inst.components.health:SetAbsorptionAmount(0.9)  -- Effective 5000 health (mine the rock off you hooligan)
-    else
-        inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
+    if inst.components.health ~= nil then
+        if rock ~= "rock_moon" and rock ~= "rock_lichen" then
+            inst.components.health:SetAbsorptionAmount(0.9) -- Effective 5000 health (mine the rock off you hooligan)
+        else
+            inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
+        end
     end
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
@@ -245,7 +247,7 @@ local function fn()
     inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
     inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
     inst:ListenForEvent("attacked", OnAttacked)
-    
+
     --------SaveLoad
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
