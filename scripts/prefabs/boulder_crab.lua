@@ -30,6 +30,11 @@ end
 
 local function GetRock(inst, rock)
     --TheNet:Announce("got my rock")
+    if type(rock) ~= "string" then
+        inst.myrock = nil
+        return
+    end
+
     inst.favoriterock = rock
     inst.myrock = SpawnPrefab(rock)
     inst.myrock:Hide()
@@ -63,6 +68,7 @@ local function GetRock(inst, rock)
     end)
     inst.myrock.persists = false
 end
+
 local function GetStatus(inst, viewer)
     if inst.components.timer:TimerExists("regenrock") then
         return "HOLE"
@@ -93,7 +99,7 @@ end
 local function OnLoadPostPass(inst)
     if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end
 
-    if inst.components.health ~= nil then
+    if inst.components.health ~= nil and inst.myrock ~= nil then
         GetRock(inst, inst.myrock)
     end
 end
