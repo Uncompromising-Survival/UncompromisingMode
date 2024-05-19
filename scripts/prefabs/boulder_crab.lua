@@ -50,9 +50,9 @@ local function GetRock(inst, rock)
     inst.myrock._oldcallback = inst.myrock.components.workable.onwork
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
-    if inst.components.health ~= nil then -- Will leave this in incase it somehow bypasses
+    if inst.components.health ~= nil then                    -- Will leave this in incase it somehow bypasses
         if rock ~= "rock_moon" and rock ~= "rock_lichen" then
-            inst.components.health:SetAbsorptionAmount(0.9) -- Effective 5000 health (mine the rock off you hooligan)
+            inst.components.health:SetAbsorptionAmount(0.9)  -- Effective 5000 health (mine the rock off you hooligan)
         else
             inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
         end
@@ -83,28 +83,20 @@ end
 
 
 local function onsave(inst, data)
-	if inst.myrock and not inst.components.timer:TimerExists("regenrock") then
-		data.myrock = inst.myrock.prefab
-	end
-	if inst.favoriterock then
-		data.favoriterock = inst.favoriterock
-	end
+    if inst.myrock and not inst.components.timer:TimerExists("regenrock") then
+        data.myrock = inst.myrock.prefab
+    end
+    if inst.favoriterock then
+        data.favoriterock = inst.favoriterock
+    end
 end
 
 local function onload(inst, data)
     if data and data.myrock and inst.components.health then
-		GetRock(inst,data.myrock)
+        GetRock(inst, data.myrock)
     end
     if data and data.favoriterock then
         inst.favoriterock = data.favoriterock
-    end
-end
-
-local function OnLoadPostPass(inst)
-    if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end
-
-    if inst.components.health ~= nil and inst.myrock ~= nil then
-        GetRock(inst, inst.myrock)
     end
 end
 
@@ -185,7 +177,7 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-	inst.Transform:SetFourFaced()
+    inst.Transform:SetFourFaced()
     MakeCharacterPhysics(inst, 100, .5)
 
 
@@ -255,26 +247,26 @@ local function fn()
 
     inst.OnSave = onsave
     inst.OnLoad = onload
-	inst.OnLoadPostPass = function(inst) if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end end
-	
-	inst:AddComponent("named")
-	inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB) -- Can also be a hole
-	inst.GetRock = GetRock
-	inst:DoTaskInTime(0,function(inst)
-		if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
-			if math.random() > 0.5 then
-				GetRock(inst,"rock_flintless")
-			else
-				if math.random() > 0.5 then
-					GetRock(inst,"rock2")
-				else
-					GetRock(inst,"rock1")
-				end
-			end
-		end
-	end)
-	
-	
+    inst.OnLoadPostPass = function(inst) if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end end
+
+    inst:AddComponent("named")
+    inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB) -- Can also be a hole
+    inst.GetRock = GetRock
+    inst:DoTaskInTime(0, function(inst)
+        if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
+            if math.random() > 0.5 then
+                GetRock(inst, "rock_flintless")
+            else
+                if math.random() > 0.5 then
+                    GetRock(inst, "rock2")
+                else
+                    GetRock(inst, "rock1")
+                end
+            end
+        end
+    end)
+
+
     return inst
 end
 
