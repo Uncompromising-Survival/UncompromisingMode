@@ -1258,7 +1258,7 @@ if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
 end
 
-AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
+--AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 
 -- WIXIE RELATED CRAFTS
 if GetModConfigData("wixie_walter") then
