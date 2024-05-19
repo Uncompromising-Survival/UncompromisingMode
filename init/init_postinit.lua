@@ -48,10 +48,9 @@ local component_post = {
     "worldtemperature",
     "worldwind",
     "planarentity",
-    "geyserfx",
     "firedetector",
-	"unwrappable",
-	"playeractionpicker", -- this exists to allow wingsuit to be used on ocean tiles and stuff
+    "unwrappable",
+    "playeractionpicker", -- this exists to allow wingsuit to be used on ocean tiles and stuff
     --"slipperyfeet",
     "walkableplatformplayer",
     "schoolspawner",
@@ -107,7 +106,7 @@ local prefab_post = {
     "sweatervest",
     "fans",
     "skeletonhat",
-	"rocks",
+    "rocks",
     --	"rock_avocado_fruit_sprout_sapling",
     "icepack",
     "heatrock",
@@ -198,13 +197,13 @@ local prefab_post = {
     "rainometer",
     "winterometer",
     "mooneye",
-    "dragoonegg",
     "bomb_lunarplant",
     "compostingbin",
     "plantables",
     "compass",
-	"archive_lockbox",
+    "archive_lockbox",
     "seedpouch",
+    --"wormhole",
 
     "voidcloth_umbrella",
     "daywalker",
@@ -262,15 +261,14 @@ local package_post = {
 local _require = GLOBAL.require
 function GLOBAL.require(modulename, ...)
     local post_modulename = package_post[modulename] or nil
-    local should_load = post_modulename and package.loaded[modulename] == nil and GLOBAL.kleifileexists("scripts/"..modulename..".lua") and GLOBAL.kleifileexists(MODROOT.."postinit/package/"..post_modulename..".lua")
-    local rets = {_require(modulename, ...)}
+    local should_load = post_modulename and package.loaded[modulename] == nil and GLOBAL.kleifileexists("scripts/" .. modulename .. ".lua") and GLOBAL.kleifileexists(MODROOT .. "postinit/package/" .. post_modulename .. ".lua")
+    local rets = { _require(modulename, ...) }
     if should_load then
-        print("loading module post", "scripts/"..modulename, MODROOT.."postinit/package/"..post_modulename)
+        print("loading module post", "scripts/" .. modulename, MODROOT .. "postinit/package/" .. post_modulename)
         modimport("postinit/package/" .. post_modulename)
     end
     return GLOBAL.unpack(rets)
 end
-
 
 if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
@@ -518,6 +516,12 @@ end
 if GetModConfigData("lifeinjector_rework") then
     table.insert(prefab_post, "lifeinjector")
 end
+
+if GetModConfigData("smog") then
+    table.insert(prefab_post, "dragoonegg")
+    table.insert(component_post, "geyserfx")
+end
+
 
 if GetModConfigData("sharpshooter_monkeys_") then
     table.insert(brain_post, "powdermonkey")
