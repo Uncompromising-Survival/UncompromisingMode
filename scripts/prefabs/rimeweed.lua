@@ -456,9 +456,6 @@ local function onattackwhip(inst, attacker, target, naughtlock)
 		target.components.combat:GetAttacked(attacker,bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
 		target.components.freezable:SpawnShatterFX()
 	end
-	if naughtlock == nil then 
-		inst.components.fueled:DoDelta(-1)
-	end
 end
 
 
@@ -489,7 +486,7 @@ local function whip()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetDamage(51)
     inst.components.weapon:SetRange(TUNING.WHIP_RANGE)
     inst.components.weapon:SetOnAttack(onattackwhip)
 	
