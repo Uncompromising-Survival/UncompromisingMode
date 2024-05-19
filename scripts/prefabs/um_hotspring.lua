@@ -69,13 +69,19 @@ local function DoFx(inst) -- This is the hotspring's passive FX
 	end
 end
 
+local function OnBathBombed(inst)
+	inst.Light:Enable(true)
+	inst.fxtask2 = inst:DoPeriodicTask(.1*math.random(10,30),DoFx)
+	inst.components.timer:StartTimer("bubbly",8*60)
+end
+
 local function fn()
 	local inst = CreateEntity()
 	local trans = inst.entity:AddTransform()
 	inst.entity:AddAnimState()
 	local sound = inst.entity:AddSoundEmitter()
 	inst.entity:AddNetwork()
-
+	inst.entity:AddLight()
 	--MakeObstaclePhysics( inst, 3.5)
 
 	inst.AnimState:SetBuild("um_hotspring")
@@ -87,7 +93,11 @@ local function fn()
 	local minimap = inst.entity:AddMiniMapEntity()
 	minimap:SetIcon( "pond_cave.png" )
 
-
+    inst.Light:Enable(false)
+    inst.Light:SetRadius(TUNING.HOTSPRING_GLOW.RADIUS)
+    inst.Light:SetIntensity(TUNING.HOTSPRING_GLOW.INTENSITY)
+    inst.Light:SetFalloff(TUNING.HOTSPRING_GLOW.FALLOFF)
+    inst.Light:SetColour(0.1, 1.6, 2)
 
 	inst.entity:SetPristine()
 
@@ -114,6 +124,9 @@ local function fn()
 
 	inst:ListenForEvent("entitywake",function(inst)
 		inst.fxtask = inst:DoPeriodicTask(.1*math.random(10,30),DoFx)
+		if inst.components.timer:TimerExists("bubbly") then
+			inst.fxtask2 = inst:DoPeriodicTask(.1*math.random(10,30),DoFx)
+		end
 	end)
 	
 	inst:ListenForEvent("entitysleep",function(inst)
@@ -121,7 +134,31 @@ local function fn()
 			inst.fxtask:Cancel()
 			inst.fxtask = nil
 		end
+		if inst.fxtask2 then
+			inst.fxtask2:Cancel()
+			inst.fxtask2 = nil
+		end		
 	end)
+	inst:AddComponent("timer")
+    inst:AddComponent("bathbombable")
+	
+	inst:ListenForEvent("timer")
+	inst:ListenForEvent("timerdone", 
+		function(inst) 
+			inst.Light:Enable(false) 
+			if inst.fxtask2 then
+				inst.fxtask2:Cancel()
+				inst.fxtask2 = nil
+			end					
+		end)
+	inst.OnLoadPostPass = function(inst) 
+		if inst.components.timer:TimerExists("bubbly") then 
+			inst.Light:Enable(true) 
+			inst.fxtask2 = inst:DoPeriodicTask(.1*math.random(10,30),DoFx)
+		end 
+	end
+	
+    inst.components.bathbombable:SetOnBathBombedFn(OnBathBombed)
 	
 	return inst
 end

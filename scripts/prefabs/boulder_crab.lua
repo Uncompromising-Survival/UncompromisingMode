@@ -141,9 +141,9 @@ local function ShouldWake(inst)
 end
 
 local function Hide(inst)
-    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
+    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) and not inst.components.timer:TimerExists("regenrock") then
         inst.sg:GoToState("hide_pre")
-    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
+    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) and not inst.components.timer:TimerExists("regenrock") then
         inst:DoTaskInTime(5, Hide)
     end
 end
@@ -157,7 +157,7 @@ local function RegenRockDone(inst, data)
             GetRock(inst, inst.favoriterock)
             inst.sg:GoToState("emerge")
         end
-        if data.name == "startregenrock" then
+        if data.name == "startregenrock" and not inst.components.timer:TimerExists("regenrock") then
             if inst:IsAsleep() then
                 inst.sg:GoToState("dirt")
             else
@@ -178,7 +178,7 @@ local function fn()
     inst.entity:AddNetwork()
 
     inst.Transform:SetFourFaced()
-    MakeCharacterPhysics(inst, 100, .5)
+    MakeCharacterPhysics(inst, 400, .5)
 
 
 
@@ -241,7 +241,7 @@ local function fn()
     inst:ListenForEvent("timerdone", RegenRockDone)
 
     inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
-    inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
+    inst:WatchWorldState("startdusk", function(inst) if inst.hiding and not inst.components.timer:TimerExists("regenrock") then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
     inst:ListenForEvent("attacked", OnAttacked)
 
 
@@ -263,6 +263,9 @@ local function fn()
                     GetRock(inst, "rock1")
                 end
             end
+			if TheWorld.state.isday then
+				inst.sg:GoToState("hide_pre")
+			end
         end
     end)
 

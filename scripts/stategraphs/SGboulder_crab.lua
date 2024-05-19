@@ -46,16 +46,16 @@ local actionhandlers =
 local events=
 {
     EventHandler("attacked", function(inst)
-		if inst.hiding then -- This shouldn't happen, but if it does!
+		if inst.hiding and not inst.components.timer:TimerExists("regenrock") then -- This shouldn't happen, but if it does!
 			inst.sg:GoToState("hide_pst")
 		else
-			if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("attack") then 
+			if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("attack") and not inst.components.timer:TimerExists("regenrock") then 
 				inst.sg:GoToState("hit")  -- can't attack during hit reaction
 			end
 		end
     end),
     EventHandler("doattack", function(inst, data) 
-        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  and data and data.target  then 
+        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
 			inst.sg:GoToState("attack", data.target) 
         end 
     end),
@@ -65,7 +65,7 @@ local events=
     
     
     EventHandler("locomote", function(inst) 
-        if not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  then
+        if not inst.sg:HasStateTag("busy") and not inst.components.timer:TimerExists("regenrock") then
             
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
@@ -324,7 +324,7 @@ local states=
 			inst.Transform:SetFourFaced()
 			inst.hiding = false
 			local x,y,z = inst.Transform:GetWorldPosition()
-			MakeCharacterPhysics(inst, 100, .5)
+			MakeCharacterPhysics(inst, 400, .5)
 			inst.Transform:SetPosition(x,y,z)
 		end,
     },
@@ -529,7 +529,7 @@ local states=
 			inst.Transform:SetFourFaced()
 			inst.hiding = false
 			local x,y,z = inst.Transform:GetWorldPosition()
-			MakeCharacterPhysics(inst, 50, .5)
+			MakeCharacterPhysics(inst, 400, .5)
 			inst.Transform:SetPosition(x,y,z)
 		end,
         events=

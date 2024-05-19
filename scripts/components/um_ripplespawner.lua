@@ -54,8 +54,14 @@ function UM_Ripplespawner:spawnripple(inst)
 				ripple.AnimState:SetOceanBlendParams(.2)
 			end
 			
-			if self.inst.prefab == "um_hotspring" and inst.components.temperature then
-				inst.components.temperature:DoDelta(0.3)
+			if self.inst.prefab == "um_hotspring" then
+				if inst.components.temperature then
+					inst.components.temperature:DoDelta(0.3)
+				end
+				local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
+				if self.inst.components.timer:TimerExists("bubbly") and waterproofness < 1 then
+					inst.components.health:DeltaPenalty(-0.005)
+				end
 			end
 			
 			

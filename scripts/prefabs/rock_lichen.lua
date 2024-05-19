@@ -83,10 +83,10 @@ local function onworked(inst, worker, workleft)
         end
         inst:Remove()
     else
-        if workleft < TUNING.ROCKS_MINE*(1/3) then
+        if workleft < 2*TUNING.ROCKS_MINE*(1/3) then
             inst.AnimState:PlayAnimation("low")
             inst.components.pickable.paused = true
-        elseif workleft < TUNING.ROCKS_MINE*(2/3) then
+        elseif workleft < 2*TUNING.ROCKS_MINE*(2/3) then
             inst.AnimState:PlayAnimation("med")
             inst.components.pickable.paused = true
 		else
