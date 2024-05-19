@@ -2406,7 +2406,7 @@ Assets = {
     --SHADER TEXTURES
 
     --PRELOAD THESE IN MODMAIN INSTEAD!!    
-
+    Asset("IMAGE", "images/giant_tree.tex"),--OR NOT!!!!!
 	-- SKILL TREES
 
 	Asset( "IMAGE", "images/wathgrithr_rework_skilltree.tex" ),
