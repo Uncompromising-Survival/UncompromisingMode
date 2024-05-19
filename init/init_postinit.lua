@@ -51,7 +51,7 @@ local component_post = {
     "firedetector",
     "unwrappable",
     "playeractionpicker", -- this exists to allow wingsuit to be used on ocean tiles and stuff
-    --"slipperyfeet",
+    "slipperyfeet", --pls keep it its really funny.
     "walkableplatformplayer",
     "schoolspawner",
     "builder",
