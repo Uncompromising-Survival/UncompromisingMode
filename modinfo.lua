@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.11"
+local _version = "1.5.0.15"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -243,6 +243,7 @@ configuration_options = {
         true),
     BinaryConfig("bernie_buffs", "Willow - Bernie Buffs",
         "Holding Bernie prevents shadows from aggroing.", true),
+        BinaryConfig("no_bee_embers", "Willow - Reduced Embers", "All bees, birds and butterflies no longer drop embers.", true),
     --BinaryConfig("willow insulation", "Willow's Experimental Insulation",
     --"Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
     BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
@@ -320,6 +321,7 @@ configuration_options = {
     BinaryConfig("wortox", "Wortox",
         "Better teleports, worse sanity and healing from souls. Birds and butterflies are soulless.",
         true),
+        BinaryConfig("wortox_beesouls", "Wortox - Bee Souls", "Toggle wether or not bees have souls.", true),
     --{
     --name = "wortox",
     --label = "Wortox",

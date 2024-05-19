@@ -164,7 +164,7 @@ STRINGS.WIXIE_TOOLTIP = {
 	SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n-Explodes when ignited.",
 	SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
 	SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
-	SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.n\- Burning targets take more damage from the explosion.\n- Ignites enemies.",
+	SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.n\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
 		
 	SLINGSHOTAMMO_INSANITY = "...?",
 	SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",

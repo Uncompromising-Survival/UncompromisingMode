@@ -1,82 +1,84 @@
-
 local brain = require "brains/boulder_crabbrain"
 
 local assets =
 {
     Asset("ANIM", "anim/boulder_crab.zip"),
-	Asset("ANIM", "anim/rock1_nobottom.zip"),
-	Asset("ANIM", "anim/rock2_nobottom.zip"),
-	Asset("ANIM", "anim/rock_flintless_nobottom.zip"),
-	Asset("ANIM", "anim/rock7_nobottom.zip"),
-	Asset("ANIM", "anim/rock_lichen_nobottom.zip"),
+    Asset("ANIM", "anim/rock1_nobottom.zip"),
+    Asset("ANIM", "anim/rock2_nobottom.zip"),
+    Asset("ANIM", "anim/rock_flintless_nobottom.zip"),
+    Asset("ANIM", "anim/rock7_nobottom.zip"),
+    Asset("ANIM", "anim/rock_lichen_nobottom.zip"),
 }
 
-
 SetSharedLootTable('boulder_crab',
-{	
-    {'rocks',  1.0},
-    {'rocks',  1.0},
-	{'meat',  1.0},
-	{'meat',  1.0},
-    {'rocks',  0.5},
-})
+    {
+        { 'rocks', 1.0 },
+        { 'rocks', 1.0 },
+        { 'meat',  1.0 },
+        { 'meat',  1.0 },
+        { 'rocks', 0.5 },
+    })
 
 
 local function NewCallBack(inst, worker, workleft)
-	inst._oldcallback(inst, worker, workleft)
-	if workleft <= 0 then
-		--TheNet:Announce("rock broke")
-		inst.crab.myrock = nil -- Tell the crab his rock broke
-	end
+    inst._oldcallback(inst, worker, workleft)
+    if workleft <= 0 then
+        --TheNet:Announce("rock broke")
+        inst.crab.myrock = nil -- Tell the crab his rock broke
+    end
 end
 
-local function GetRock(inst,rock)
-	
+local function GetRock(inst, rock)
+    --TheNet:Announce("got my rock")
+    if type(rock) ~= "string" then
+        inst.myrock = nil
+        return
+    end
 
-	--TheNet:Announce("got my rock")
-	inst.favoriterock = rock
-	inst.myrock = SpawnPrefab(rock)
-	inst.myrock:Hide()
-	if rock ~= "rock_moon" then
-		inst.myrock.AnimState:SetBuild(rock.."_nobottom")
-	else
-		inst.myrock.AnimState:SetBuild("rock7_nobottom")
-	end
-	RemovePhysicsColliders(inst.myrock)   
-	--inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	inst.myrock.crab = inst
-	
-	inst.myrock._oldcallback = inst.myrock.components.workable.onwork
-	inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
+    inst.favoriterock = rock
+    inst.myrock = SpawnPrefab(rock)
+    inst.myrock:Hide()
+    if rock ~= "rock_moon" then
+        inst.myrock.AnimState:SetBuild(rock .. "_nobottom")
+    else
+        inst.myrock.AnimState:SetBuild("rock7_nobottom")
+    end
+    RemovePhysicsColliders(inst.myrock)
+    --inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst.myrock.crab = inst
 
-	if rock ~= "rock_moon" and rock ~= "rock_lichen" then
-		inst.components.health:SetAbsorptionAmount(0.9) -- Effective 5000 health (mine the rock off you hooligan)
-	else
-		inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
-	end
+    inst.myrock._oldcallback = inst.myrock.components.workable.onwork
+    inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
-	inst:DoTaskInTime(0,function(inst) -- Needs a delay.
-		inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 85, 0,true)
+    if inst.components.health ~= nil then -- Will leave this in incase it somehow bypasses
+        if rock ~= "rock_moon" and rock ~= "rock_lichen" then
+            inst.components.health:SetAbsorptionAmount(0.9) -- Effective 5000 health (mine the rock off you hooligan)
+        else
+            inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
+        end
+    end
 
-		if inst.temprock then
-			inst.temprock:Remove()
-			inst:Show()
-		end
-		inst.myrock:Show()
-	end)
-	inst.myrock.persists = false
+    inst:DoTaskInTime(0, function(inst) -- Needs a delay.
+        inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 85, 0, true)
+
+        if inst.temprock then
+            inst.temprock:Remove()
+            inst:Show()
+        end
+        inst.myrock:Show()
+    end)
+    inst.myrock.persists = false
 end
-
 
 local function GetStatus(inst, viewer)
-	if inst.components.timer:TimerExists("regenrock") then
-		return "HOLE"
-	elseif inst.components.timer:TimerExists("startregenrock") then
-		return "NAKED"
-	else
-		return "GENERIC"
-	end
+    if inst.components.timer:TimerExists("regenrock") then
+        return "HOLE"
+    elseif inst.components.timer:TimerExists("startregenrock") then
+        return "NAKED"
+    else
+        return "GENERIC"
+    end
 end
 
 
@@ -94,7 +96,15 @@ local function onload(inst, data)
 		GetRock(inst,data.myrock)
     end
     if data and data.favoriterock then
-		inst.favoriterock = data.favoriterock
+        inst.favoriterock = data.favoriterock
+    end
+end
+
+local function OnLoadPostPass(inst)
+    if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end
+
+    if inst.components.health ~= nil and inst.myrock ~= nil then
+        GetRock(inst, inst.myrock)
     end
 end
 
@@ -107,8 +117,8 @@ local function NormalRetarget(inst)
         function(guy)
             if inst.components.combat:CanTarget(guy) and not guy:HasTag("bird") and not guy:HasTag("butterfly") and not guy:HasTag("bee") then
                 return guy:HasTag("smallcreature") or guy:HasTag("tallbird")
-			else
-				return guy.prefab == "perd"
+            else
+                return guy.prefab == "perd"
             end
         end)
 end
@@ -139,30 +149,30 @@ local function ShouldWake(inst)
 end
 
 local function Hide(inst)
-	if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
-		inst.sg:GoToState("hide_pre")
-	elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6)  then
-		inst:DoTaskInTime(5,Hide)
-	end
+    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
+        inst.sg:GoToState("hide_pre")
+    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
+        inst:DoTaskInTime(5, Hide)
+    end
 end
 
 
-local function RegenRockDone(inst,data)
+local function RegenRockDone(inst, data)
     if data ~= nil then
         if data.name == "regenrock" then
-			inst:AddComponent("health")
-			inst.components.health:SetMaxHealth(500)
-			GetRock(inst,inst.favoriterock)
-			inst.sg:GoToState("emerge")
-		end
-		if data.name == "startregenrock" then
-			if inst:IsAsleep() then
-				inst.sg:GoToState("dirt")
-			else
-				inst.sg:GoToState("dig")
-			end
-		end
-	end
+            inst:AddComponent("health")
+            inst.components.health:SetMaxHealth(500)
+            GetRock(inst, inst.favoriterock)
+            inst.sg:GoToState("emerge")
+        end
+        if data.name == "startregenrock" then
+            if inst:IsAsleep() then
+                inst.sg:GoToState("dirt")
+            else
+                inst.sg:GoToState("dig")
+            end
+        end
+    end
 end
 
 
@@ -174,8 +184,10 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
+
 	inst.Transform:SetFourFaced()
     MakeCharacterPhysics(inst, 100, .5)
+
 
 
     inst.AnimState:SetBank("boulder_crab")
@@ -193,22 +205,22 @@ local function fn()
     inst:AddComponent("locomotor")
     inst.components.locomotor.walkspeed = 3
     inst.components.locomotor.runspeed = 3
-	
+
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetChanceLootTable('boulder_crab')
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
-	
+
 
     MakeMediumFreezableCharacter(inst, "body")
 
     inst:AddTag("animal")
-	inst:AddTag("rocky") -- Boulder crab is same faction as Rock lobster (They're cousins)
-	
+    inst:AddTag("rocky") -- Boulder crab is same faction as Rock lobster (They're cousins)
+
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(500)
-	
+
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "body"
     inst.components.combat:SetKeepTargetFunction(keeptargetfn)
@@ -216,30 +228,31 @@ local function fn()
     inst.components.combat:SetAttackPeriod(2)
     inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     inst.components.combat:SetRange(3, 3)
-	
+
     inst:AddComponent("sleeper")
     inst.components.sleeper:SetResistance(2)
     inst.components.sleeper:SetSleepTest(ShouldSleep)
     inst.components.sleeper:SetWakeTest(ShouldWake)
-	
+
     inst:AddComponent("knownlocations")
     ------------------
 
     inst:AddComponent("eater")
     inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
     inst.components.eater:SetCanEatHorrible()
-	
+
     inst:SetStateGraph("SGboulder_crab")
     inst:SetBrain(brain)
-	
-	
-	inst:AddComponent("timer")
-	inst:ListenForEvent("timerdone", RegenRockDone)
-	
-	inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6,10),Hide) end)
-	inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6,10),function(inst) inst.sg:GoToState("hide_pst") end) end end)
-	inst:ListenForEvent("attacked", OnAttacked)
-    --------SaveLoad
+
+
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", RegenRockDone)
+
+    inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
+    inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
+    inst:ListenForEvent("attacked", OnAttacked)
+
+
     inst.OnSave = onsave
     inst.OnLoad = onload
 	inst.OnLoadPostPass = function(inst) if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end end
@@ -260,7 +273,6 @@ local function fn()
 			end
 		end
 	end)
-	
 	
 	
     return inst
