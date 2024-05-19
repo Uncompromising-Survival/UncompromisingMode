@@ -81,7 +81,7 @@ end
 
 
 local function onsave(inst, data)
-	if inst.myrock then
+	if inst.myrock and not inst.components.timer:TimerExists("regenrock") then
 		data.myrock = inst.myrock.prefab
 	end
 	if inst.favoriterock then
@@ -90,7 +90,7 @@ local function onsave(inst, data)
 end
 
 local function onload(inst, data)
-    if data and data.myrock then
+    if data and data.myrock and inst.components.health then
 		GetRock(inst,data.myrock)
     end
     if data and data.favoriterock then
@@ -175,7 +175,7 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 	inst.Transform:SetFourFaced()
-    MakeCharacterPhysics(inst, 50, .5)
+    MakeCharacterPhysics(inst, 100, .5)
 
 
     inst.AnimState:SetBank("boulder_crab")
@@ -248,7 +248,7 @@ local function fn()
 	inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB) -- Can also be a hole
 	inst.GetRock = GetRock
 	inst:DoTaskInTime(0,function(inst)
-		if not inst.myrock then
+		if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
 			if math.random() > 0.5 then
 				GetRock(inst,"rock_flintless")
 			else

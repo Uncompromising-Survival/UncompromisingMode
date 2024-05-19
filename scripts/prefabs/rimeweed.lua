@@ -1,5 +1,16 @@
 -- [TODO]
 
+
+local assets =
+{
+    Asset("ANIM", "anim/um_rimelash.zip"),
+	--Asset("ANIM", "anim/swap_um_rimelash.zip"),
+}
+
+
+
+
+
 --[[
 
 	-- Check to see how growing works ingame [VERIFIED!]
@@ -410,8 +421,8 @@ end
 --[ Rime Lash ] ------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_rat_whip", "swap_whip")
-    owner.AnimState:OverrideSymbol("whipline", "swap_rat_whip", "whipline")
+    owner.AnimState:OverrideSymbol("swap_object", "um_swap_rimelash", "swap_whip")
+    owner.AnimState:OverrideSymbol("whipline", "um_swap_rimelash", "whipline")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -467,8 +478,8 @@ local function whip()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("whip")
-    inst.AnimState:SetBuild("rat_whip")
+    inst.AnimState:SetBank("um_rimelash")
+    inst.AnimState:SetBuild("um_rimelash")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("whip")
@@ -512,6 +523,6 @@ end
 return Prefab("rimeweed_main", mainweed),
 Prefab("rimeweed_barrier", barrierweed),
 MakeFX("bramblefx_rime", "idle"),
-Prefab("rimeweed_whip", whip)
+Prefab("rimeweed_whip", whip,assets)
 
 

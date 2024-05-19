@@ -122,6 +122,7 @@ local states=
         tags = {"moving", "canrotate"},
         
         onenter = function(inst)
+			inst.Transform:SetFourFaced() -- Incase somehow it got stuck on nofaced
             inst.components.locomotor:WalkForward()
             inst.AnimState:PlayAnimation("walk_pre")
         end,
@@ -323,7 +324,7 @@ local states=
 			inst.Transform:SetFourFaced()
 			inst.hiding = false
 			local x,y,z = inst.Transform:GetWorldPosition()
-			MakeCharacterPhysics(inst, 50, .5)
+			MakeCharacterPhysics(inst, 100, .5)
 			inst.Transform:SetPosition(x,y,z)
 		end,
     },
@@ -333,6 +334,7 @@ local states=
         
         onenter = function(inst)
             inst.Physics:Stop()
+			inst.Transform:SetFourFaced()
             inst.AnimState:PlayAnimation("hide_pst")
         end,
         timeline=
