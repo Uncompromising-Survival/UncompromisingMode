@@ -4,7 +4,7 @@
 local assets =
 {
     Asset("ANIM", "anim/um_rimelash.zip"),
-	--Asset("ANIM", "anim/swap_um_rimelash.zip"),
+	Asset("ANIM", "anim/swap_um_rimeweed.zip"),
 }
 
 
@@ -421,8 +421,8 @@ end
 --[ Rime Lash ] ------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "um_swap_rimelash", "swap_whip")
-    owner.AnimState:OverrideSymbol("whipline", "um_swap_rimelash", "whipline")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_um_rimeweed", "swap_whip")
+    owner.AnimState:OverrideSymbol("whipline", "swap_um_rimeweed", "whipline")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -461,13 +461,7 @@ local function onattackwhip(inst, attacker, target, naughtlock)
 	end
 end
 
-local function on_uses_finished(inst)
-    if inst.components.inventoryitem.owner ~= nil then
-        inst.components.inventoryitem.owner:PushEvent("toolbroke", { tool = inst })
-    end
-	
-    inst:Remove()
-end
+
 
 local function whip()
     local inst = CreateEntity()
@@ -500,15 +494,15 @@ local function whip()
     inst.components.weapon:SetOnAttack(onattackwhip)
 	
 	
-    inst:AddComponent("fueled")
-    inst.components.fueled:InitializeFuelLevel(100)
-    inst.components.fueled:SetDepletedFn(on_uses_finished)
-	inst.components.fueled.accepting = false
+    inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetMaxUses(150)
+    inst.components.finiteuses:SetUses(150)
+    inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/rat_whip.xml"
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/rimeweed_whip.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)

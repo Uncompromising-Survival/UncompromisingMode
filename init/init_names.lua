@@ -666,3 +666,11 @@ STRINGS.SNAILDRAKE_MAGMA = "Magma Snaildrake"
 STRINGS.SNAILDRAKE_SLIME = "Slime Snaildrake"
 STRINGS.SNAILDRAKE_MAGMA_SLUDGE = "Magma Sludge"
 STRINGS.SNAPALM = "Snapalm"
+
+
+------------------------
+-- Rimeweed --
+------------------------
+STRINGS.RIMEWEED_MAIN = "Spiny Rimeweed"
+STRINGS.RIMEWEED_BARRIER = "Rimeweed Bramble"
+STRINGS.RIMEWEED_WHIP = "Rime Lash"

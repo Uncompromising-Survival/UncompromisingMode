@@ -1606,8 +1606,11 @@ Assets = {
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/snotroast.xml"),
 	Asset("ATLAS", "images/inventoryimages/snotroast.xml"),
 
+	-- Rime Lash
+	Asset("IMAGE", "images/inventoryimages/rimeweed_whip.tex"),
+	Asset("ATLAS", "images/inventoryimages/rimeweed_whip.xml"),
+	
 	Asset("IMAGE", "images/inventoryimages/rne_goodiebag.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/rne_goodiebag.xml"),
 	Asset("ATLAS", "images/inventoryimages/rne_goodiebag.xml"),
 	Asset("IMAGE", "images/inventoryimages/hat_spectremask.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/hat_spectremask.xml"),
