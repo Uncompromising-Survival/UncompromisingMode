@@ -12,7 +12,7 @@ local loot =
     "silk",
 	"widowsgrasp",
 	"widowshead",
-	"silksack",
+	--"silksack",
 }
 
 
