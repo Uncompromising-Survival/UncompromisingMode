@@ -6,7 +6,7 @@ PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
     Asset("IMAGE", "images/UM_tip_icon.tex"),
     Asset("ATLAS", "images/UM_tip_icon.xml"),
-    Asset("IMAGE", "images/giant_tree.tex"),
+    --Asset("IMAGE", "images/giant_tree.tex"),
 }
 ReloadPreloadAssets()
 -- Start the game mode
