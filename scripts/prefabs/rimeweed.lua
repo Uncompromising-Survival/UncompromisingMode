@@ -203,7 +203,6 @@ local function BarrierDie(inst)
 	local weeds = TheSim:FindEntities(x,y,z,5,{"rimeweed"})
 	for i,v in ipairs(weeds) do
 		if v.prefab == "rimeweed_barrier" then
-			TheNet:Announce("told the barrier to die")
 			v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) if v.components.health and not v.components.health:IsDead() then v.components.health:Kill() end end)
 		end
 	end
@@ -273,6 +272,16 @@ end
 
 local function MainDie(inst)
 	inst:AddTag("dead")
+	
+	if #inst.bramble > 0 then
+		for i,v in ipairs(inst.bramble) do
+			--v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5, function(v)
+				if v.components.health and not v.components.health:IsDead() then
+					v.components.health:Kill()
+				end
+			--end)
+		end
+	end
 	if inst.stage >= 1 then
 		inst.components.lootdropper:SpawnLootPrefab("twigs")
 	end
@@ -371,7 +380,6 @@ end
 local function GrowBranch(inst)
 	local plant = FindPlant(inst)
 	if plant then	
-		TheNet:Announce("grew a ring")
 		GrowRing(inst,Vector3(plant.Transform:GetWorldPosition()))
 		--GrowLine(inst,growPoint)
 	else

@@ -175,14 +175,17 @@ local function AddEyeTentacle2(inst)
 		local x,y,z = inst.boatvictim.Transform:GetWorldPosition()
 		local offset = GetOffset(inst) --For this case, will need to make sure we don't accidentally spawn under a boat, using this nifty function gnarwails use.
 		
-		tent.Transform:SetPosition(x + offset.x,y + offset.y,z + offset.z)
-		tent.boatvictim = inst.boatvictim
-		if not inst.surfacetents then
-			inst.surfacetents = {}
+		
+		if offset then
+			tent.Transform:SetPosition(x + offset.x,y + offset.y,z + offset.z)
+			tent.boatvictim = inst.boatvictim
+			if not inst.surfacetents then
+				inst.surfacetents = {}
+			end
+			table.insert(inst.surfacetents,tent)
+			tent.number = #inst.surfacetents --Number, incase we need to refer to a specific one
+			inst.eyetentcount = #inst.surfacetents --Total
 		end
-		table.insert(inst.surfacetents,tent)
-		tent.number = #inst.surfacetents --Number, incase we need to refer to a specific one
-		inst.eyetentcount = #inst.surfacetents --Total
 	end
 end
 
