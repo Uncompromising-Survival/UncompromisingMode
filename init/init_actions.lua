@@ -101,25 +101,6 @@ createburrow.rmb = true
 createburrow.distance = 2
 createburrow.mount_valid = false
 
-local um_activatable_item = AddAction("UM_ACTIVATABLE_ITEM", GLOBAL.STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM, function(act)
-    local item = act.invobject
-    if item ~= nil and item.components.um_activatable_item ~= nil then
-        item.components.um_activatable_item:Activate(act.doer)
-        return true
-    end
-end)
-
-um_activatable_item.priority = 1
-um_activatable_item.mount_valid = true
-um_activatable_item.rmb = true
-
-
-AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
-    if inst ~= doer then
-        table.insert(actions, GLOBAL.ACTIONS.UM_ACTIVATABLE_ITEM)
-    end
-end)
-
 local charge_powercell = AddAction("CHARGE_POWERCELL", GLOBAL.STRINGS.ACTIONS.CHARGE_POWERCELL, function(act)
     local target = act.target or act.invobject
 
@@ -134,18 +115,6 @@ end)
 charge_powercell.instant = true
 charge_powercell.rmb = true
 charge_powercell.priority = HIGH_ACTION_PRIORITY
-
-
-local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
-
-GLOBAL.ACTIONS.CHOP.fn = function(act)
-    if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
-        local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
-        axe.WorkEffect(axe, act.doer, act.target)
-    end
-
-    return _ChopFn(act)
-end
 
 -- Rummaging is opening containers.
 -- Any character can open Warly's Portable Crock Pot.
@@ -168,6 +137,17 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
         return true
     end
     return _RummageFn(act)
+end
+
+local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
+
+GLOBAL.ACTIONS.CHOP.fn = function(act)
+    if act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS) and act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS).prefab == "um_shadow_axe" then --Shadow Axe Support
+        local axe = act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+        axe.WorkEffect(axe, act.doer, act.target)
+    end
+
+    return _ChopFn(act)
 end
 
 if TUNING.DSTU.WICKERNERF then
@@ -338,5 +318,34 @@ AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
         if inst:HasTag("SLUDGE_fuel") and (target:HasTag("BURNABLE_fueled") or target:HasTag("CHEMICAL_fueled") or target:HasTag("CAVE_fueled")) then
             table.insert(actions, inst:GetIsWet() and GLOBAL.ACTIONS.ADDWETFUEL or GLOBAL.ACTIONS.ADDFUEL)
         end
+    end
+end)
+
+
+
+local ENV = env
+
+GLOBAL.setfenv(1, GLOBAL)
+
+local UM_ACTIVATABLE_ITEM = Action({mount_valid = true, priority = 1, rmb = true})
+UM_ACTIVATABLE_ITEM.id = "UM_ACTIVATABLE_ITEM"
+UM_ACTIVATABLE_ITEM.str = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM
+ENV.AddAction(UM_ACTIVATABLE_ITEM)
+
+UM_ACTIVATABLE_ITEM.strfn = function(act)
+	return act.invobject ~= nil and act.invobject.actiontype ~= nil and act.invobject.actiontype or STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.GENERIC
+end
+
+UM_ACTIVATABLE_ITEM.fn = function(act)
+    local item = act.invobject
+    if item ~= nil and item.components.um_activatable_item ~= nil then
+        item.components.um_activatable_item:Activate(act.doer)
+        return true
+    end
+end
+
+ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
+    if inst ~= doer then
+        table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)

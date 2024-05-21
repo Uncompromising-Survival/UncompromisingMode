@@ -29,15 +29,6 @@ local function DealDamage(inst, attacker, target, salty)
                 inst.finaldamage = inst.finaldamage * 2
             end
         end
-		
-		if target.components.planarentity then
-			if not inst.planar_ammo then
-				inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
-				target.components.planarentity:OnResistNonPlanarAttack(attacker)
-			else
-				target.components.planarentity:OnPlanarAttackUndefended(target)
-			end
-		end
 
         if no_aggro(attacker, target) then
             target.components.combat:SetShouldAvoidAggro(attacker)
@@ -54,10 +45,19 @@ local function DealDamage(inst, attacker, target, salty)
                 target.wixieammo_hitstuncd = nil
             end)
 			
-			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.finaldamage, weapon)
+			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or inst.finaldamage, weapon, nil, {planar = inst.planar_ammo and inst.finaldamage or 0})
         else
 			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
+			if target.components.planarentity then
+				if not inst.planar_ammo then
+					inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
+					target.components.planarentity:OnResistNonPlanarAttack(attacker)
+				else
+					target.components.planarentity:OnPlanarAttackUndefended(target)
+				end
+			end
+		
             target.components.health:DoDelta(-inst.finaldamage, false, attacker, false, attacker, false)
         end
 
@@ -934,33 +934,15 @@ local function doflareprojectilehit(inst, other)
 				v.components.burnable:Ignite()
 				
 				local damage = 15
-					
-				if v.components.planarentity then
-					if not inst.planar_ammo then
-						damage = (math.sqrt(damage * 4 + 64) - 8) * 4
-						v.components.planarentity:OnResistNonPlanarAttack(inst.attacker)
-					else
-						v.components.planarentity:OnPlanarAttackUndefended(v)
-					end
-				end
 				
 				if v.components.combat ~= nil and v.components.health ~= nil and not v.components.health:IsDead() then
-					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, damage, inst)
+					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, inst.planar_ammo and 0 or damage, inst, nil, {planar = inst.planar_ammo and damage or 0})
 				end
 			else
 				local damage = 30
 					
-				if v.components.planarentity then
-					if not inst.planar_ammo then
-						damage = (math.sqrt(damage * 4 + 64) - 8) * 4
-						v.components.planarentity:OnResistNonPlanarAttack(inst.attacker)
-					else
-						v.components.planarentity:OnPlanarAttackUndefended(v)
-					end
-				end
-				
 				if v.components.combat ~= nil and v.components.health ~= nil and not v.components.health:IsDead() then
-					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, damage, inst)
+					v.components.combat:GetAttacked(inst.attacker ~= nil and inst.attacker or inst, inst.planar_ammo and 0 or damage, inst, nil, {planar = inst.planar_ammo and damage or 0})
 				end
 			end
 		end

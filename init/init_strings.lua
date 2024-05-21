@@ -33,7 +33,11 @@ STRINGS.SKIN_DESCRIPTIONS.winky_none = "She's a fan of shiny things."
 STRINGS.ACTIONS.CREATE_BURROW = "Make Burrow"
 STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
 
-STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = "Ponder"
+STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
+            GENERIC = "Use",
+            PONDER = "Ponder",
+            MORPH = "Morph",
+        }
 
 STRINGS.ACTIONS.TURNOFF.HARPOON = "Break Reel"
 STRINGS.ACTIONS.ACTIVATE.HARPOON = "Reel"

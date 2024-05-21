@@ -464,12 +464,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warm_loop_1")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 1
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						else
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)
@@ -502,12 +497,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warmer_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 2
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_hot_loop")
 							fx.entity:SetParent(inst.entity)
@@ -535,7 +525,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 							fx.entity:SetParent(inst.entity)
 							fx.Transform:SetPosition(0, 2.35, 0)
 
-							inst.slingshot_power = 1.5
+							inst.slingshot_power = 1.25
 							inst.slingshot_amount = 3
 							inst.SoundEmitter:PlaySound("wixie/characters/wixie/slingshot_med")
 						end
@@ -547,12 +537,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warmer_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 2
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_2")
 							fx.entity:SetParent(inst.entity)
@@ -576,12 +561,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_hot_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 3
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)

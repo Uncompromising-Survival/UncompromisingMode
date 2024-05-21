@@ -32,15 +32,6 @@ local function DealDamage(inst, attacker, target, salty)
             end
         end
 		
-		if target.components.planarentity then
-			if not inst.planar_ammo then
-				inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
-				target.components.planarentity:OnResistNonPlanarAttack(attacker)
-			else
-				target.components.planarentity:OnPlanarAttackUndefended(target)
-			end
-		end
-		
         if no_aggro(attacker, target) then
             target.components.combat:SetShouldAvoidAggro(attacker)
         end
@@ -56,10 +47,19 @@ local function DealDamage(inst, attacker, target, salty)
                 target.wixieammo_hitstuncd = nil
             end)
 
-			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.finaldamage, weapon)
+			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or inst.finaldamage, weapon, nil, {planar = inst.planar_ammo and inst.finaldamage or 0})
         else
 			target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
+			if target.components.planarentity then
+				if not inst.planar_ammo then
+					inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
+					target.components.planarentity:OnResistNonPlanarAttack(attacker)
+				else
+					target.components.planarentity:OnPlanarAttackUndefended(target)
+				end
+			end
+		
             target.components.health:DoDelta(-inst.finaldamage, false, attacker, false, attacker, false)
         end
 
@@ -605,6 +605,7 @@ local function OnHit_Tremor(inst, attacker, target)
         tremors.Transform:SetPosition(target.Transform:GetWorldPosition())
         tremors.powerlevel = inst.powerlevel
         tremors.attacker = attacker
+        tremors.planar_ammo = inst.planar_ammo
     end
 
     inst:Remove()
@@ -1072,18 +1073,10 @@ local function GlassCut(inst)
                         inst.finallevel = inst.finallevel + 1
                         v:PushEvent("wixiebite")
                     end
-					
-					if v.components.planarentity then
-						if not inst.planar_ammo then
-							inst.finallevel = (math.sqrt(inst.finallevel * 4 + 64) - 8) * 4
-							v.components.planarentity:OnResistNonPlanarAttack(attacker)
-						else
-							v.components.planarentity:OnPlanarAttackUndefended(v)
-						end
-					end
 		
 					local weapon = attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
-
+					local damage = 7
+					
                     if v:HasTag("shadowcreature") or v.sg == nil or v.wixieammo_hitstuncd == nil and not (v.sg:HasStateTag("busy") or v.sg:HasStateTag("caninterrupt")) or v.sg:HasStateTag("frozen") then
                         v.wixieammo_hitstuncd = v:DoTaskInTime(8, function()
                             if v.wixieammo_hitstuncd ~= nil then
@@ -1092,12 +1085,23 @@ local function GlassCut(inst)
 
                             v.wixieammo_hitstuncd = nil
                         end)
-
-						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, (7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1), weapon)
+						
+						damage = (damage * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
+						
+						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or damage, weapon, nil, {planar = inst.planar_ammo and damage or 0})
                     else
 						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
-                        v.components.health:DoDelta(-((7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, attacker, false, attacker, false)
+						if v.components.planarentity then
+							if not inst.planar_ammo then
+								damage = (math.sqrt(damage * 4 + 64) - 8) * 4
+								v.components.planarentity:OnResistNonPlanarAttack(attacker)
+							else
+								v.components.planarentity:OnPlanarAttackUndefended(v)
+							end
+						end
+					
+                        v.components.health:DoDelta(-((damage * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, attacker, false, attacker, false)
                     end
 
                     if v.components.sleeper ~= nil and v.components.sleeper:IsAsleep() then
@@ -1134,18 +1138,10 @@ local function GlassCut(inst)
                         inst.finallevel = inst.finallevel + 1
                         v:PushEvent("wixiebite")
                     end
-					
-					if v.components.planarentity then
-						if not inst.planar_ammo then
-							inst.finallevel = (math.sqrt(inst.finallevel * 4 + 64) - 8) * 4
-							v.components.planarentity:OnResistNonPlanarAttack(attacker)
-						else
-							v.components.planarentity:OnPlanarAttackUndefended(v)
-						end
-					end
 		
 					local weapon = attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
-
+					local damage = 7
+					
                     if v:HasTag("shadowcreature") or v.sg == nil or v.wixieammo_hitstuncd == nil and not (v.sg:HasStateTag("busy") or v.sg:HasStateTag("caninterrupt")) or v.sg:HasStateTag("frozen") then
                         v.wixieammo_hitstuncd = v:DoTaskInTime(8, function()
                             if v.wixieammo_hitstuncd ~= nil then
@@ -1154,12 +1150,23 @@ local function GlassCut(inst)
 
                             v.wixieammo_hitstuncd = nil
                         end)
-
-						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, (7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1), weapon)
+						
+						damage = (damage * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
+						
+						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or damage, weapon, nil, {planar = inst.planar_ammo and damage or 0})
                     else
 						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
-                        v.components.health:DoDelta(-((7 * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, attacker, false, attacker, false)
+						if v.components.planarentity then
+							if not inst.planar_ammo then
+								damage = (math.sqrt(damage * 4 + 64) - 8) * 4
+								v.components.planarentity:OnResistNonPlanarAttack(attacker)
+							else
+								v.components.planarentity:OnPlanarAttackUndefended(v)
+							end
+						end
+					
+                        v.components.health:DoDelta(-((damage * inst.finallevel) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)), false, attacker, false, attacker, false)
                     end
 
                     if v.components.sleeper ~= nil and v.components.sleeper:IsAsleep() then
@@ -1973,7 +1980,7 @@ local function Tremor(inst)
                         v.components.combat:SetShouldAvoidAggro(inst.attacker)
                     end
 
-                    v.components.combat:GetAttacked(inst, inst.finaldamage, inst)
+                    v.components.combat:GetAttacked(inst, inst.planar_ammo and 0 or inst.finaldamage, inst, nil, {planar = inst.planar_ammo and inst.finaldamage or 0})
 
                     if v.components.sleeper ~= nil and v.components.sleeper:IsAsleep() then
                         v.components.sleeper:WakeUp()
@@ -2024,6 +2031,7 @@ local function tremmorfn()
 
     inst.tremorcount = 0
     inst.attacker = nil
+    inst.planar_ammo = nil
 
     inst:DoTaskInTime(0, Tremor)
     inst:DoPeriodicTask(1, Tremor)

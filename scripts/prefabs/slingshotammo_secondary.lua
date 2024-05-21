@@ -37,14 +37,6 @@ local function OnAttack(inst, attacker, target)
         if inst.ammo_def ~= nil and inst.ammo_def.damage ~= nil then
             inst.finaldamage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
 
-			if target.components.planarentity then
-				if not inst.planar_ammo then
-					inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
-					target.components.planarentity:OnResistNonPlanarAttack(attacker)
-				else
-					target.components.planarentity:OnPlanarAttackUndefended(target)
-				end
-			end
 		
             if no_aggro(attacker, target) and target.components.combat ~= nil then
                 target.components.combat:SetShouldAvoidAggro(attacker)
@@ -59,10 +51,19 @@ local function OnAttack(inst, attacker, target)
                     target.wixieammo_hitstuncd = nil
                 end)
 
-				target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.finaldamage, weapon)
+				target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or inst.finaldamage, weapon, nil, {planar = inst.planar_ammo and inst.finaldamage or 0})
             else
                 target.components.combat:GetAttacked(weapon ~= nil and attacker or inst, 0, weapon)
 
+				if target.components.planarentity then
+					if not inst.planar_ammo then
+						inst.finaldamage = (math.sqrt(inst.finaldamage * 4 + 64) - 8) * 4
+						target.components.planarentity:OnResistNonPlanarAttack(attacker)
+					else
+						target.components.planarentity:OnPlanarAttackUndefended(target)
+					end
+				end
+			
                 target.components.health:DoDelta(-inst.finaldamage, false, attacker, false, attacker, false)
             end
         end
@@ -374,15 +375,6 @@ local function OnHit_Gold(inst, attacker, target)
 
         local ents = TheSim:FindEntities(x, y, z, 1.5 + inst.powerlevel, { "_combat" }, AURA_EXCLUDE_TAGS)
         local damage = (inst.ammo_def.damage * (1 + (inst.powerlevel / 2))) * (attacker.components.combat ~= nil and attacker.components.combat.externaldamagemultipliers:Get() or 1)
-
-		if target.components.planarentity then
-			if not inst.planar_ammo then
-				damage = (math.sqrt(damage * 4 + 64) - 8) * 4
-				target.components.planarentity:OnResistNonPlanarAttack(attacker)
-			else
-				target.components.planarentity:OnPlanarAttackUndefended(target)
-			end
-		end
 		
         for i, v in ipairs(ents) do
             if v ~= target and v:IsValid() and not v:IsInLimbo() and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then
@@ -394,7 +386,7 @@ local function OnHit_Gold(inst, attacker, target)
 		
 						local weapon = attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 
-						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, damage, weapon)
+						v.components.combat:GetAttacked(weapon ~= nil and attacker or inst, inst.planar_ammo and 0 or damage, weapon, nil, {planar = inst.planar_ammo and damage or 0})
 
                         if v.components.sleeper ~= nil and v.components.sleeper:IsAsleep() then
                             v.components.sleeper:WakeUp()

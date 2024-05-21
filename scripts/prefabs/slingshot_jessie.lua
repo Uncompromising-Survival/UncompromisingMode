@@ -13,10 +13,32 @@ local easing = require("easing")
 
 local PROJECTILE_DELAY = 2 * FRAMES
 
+local function Swap_Fire_Mode(inst)
+	inst.firing_mode = inst.firing_mode + 1
+	
+	if inst.firing_mode > 3 then
+		inst.firing_mode = 1
+	end
+	
+	
+	if inst.components.equippable:IsEquipped() then
+		local owner = inst.components.inventoryitem.owner
+		owner.AnimState:OverrideSymbol("swap_object", "swap_jessie_"..inst.firing_mode, "swap_jessie_"..inst.firing_mode)
+		
+		inst.SoundEmitter:PlaySound("wixie/characters/wixie/jessie_swap_"..inst.firing_mode)
+	end
+	
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshot_jessie_"..inst.firing_mode..".xml"
+	inst.components.inventoryitem:ChangeImageName("slingshot_jessie_"..inst.firing_mode.."")
+end
+
 local function OnEquip(inst, owner)
 	if inst.firing_mode ~= nil then
 		owner.AnimState:OverrideSymbol("swap_object", "swap_jessie_"..inst.firing_mode, "swap_jessie_"..inst.firing_mode)
 	end
+	
+    inst:AddComponent("um_activatable_item")
+    inst.components.um_activatable_item.act_fn = Swap_Fire_Mode
 	
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
@@ -33,6 +55,8 @@ local function OnUnequip(inst, owner)
     if skin_build ~= nil then
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
+	
+    inst:RemoveComponent("um_activatable_item")
 
     if inst.components.container ~= nil then
         inst.components.container:Close()
@@ -368,7 +392,7 @@ end
 
 local function createlight(inst, target, pos)
 	local owner = inst.components.inventoryitem.owner
-	local fixedpowerlevel = 2.5 - (inst.firing_mode / 2)
+	local fixedpowerlevel = 1.75 - (inst.firing_mode / 4)
 
 	for i = 1, inst.firing_mode do
 		if inst.firing_mode == 2 then
@@ -425,25 +449,6 @@ local function OnLoad(inst, data)
 	end
 end
 
-local function Swap_Fire_Mode(inst)
-	inst.firing_mode = inst.firing_mode + 1
-	
-	if inst.firing_mode > 3 then
-		inst.firing_mode = 1
-	end
-	
-	
-	if inst.components.equippable:IsEquipped() then
-		local owner = inst.components.inventoryitem.owner
-		owner.AnimState:OverrideSymbol("swap_object", "swap_jessie_"..inst.firing_mode, "swap_jessie_"..inst.firing_mode)
-		
-		inst.SoundEmitter:PlaySound("wixie/characters/wixie/jessie_swap_"..inst.firing_mode)
-	end
-	
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshot_jessie_"..inst.firing_mode..".xml"
-	inst.components.inventoryitem:ChangeImageName("slingshot_jessie_"..inst.firing_mode.."")
-end
-
 local function fn()
     local inst = CreateEntity()
 
@@ -472,6 +477,8 @@ local function fn()
     MakeInventoryFloatable(inst, "med", 0.075, {0.5, 0.4, 0.5}, true, -7, floater_swap_data)
 
     inst.spelltype = "SLINGSHOT"
+    inst.actiontype = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.MORPH
+	
 
     inst:AddComponent("reticule")
     inst.components.reticule.reticuleprefab = "wixie_reticuleline"
@@ -547,9 +554,6 @@ local function fn()
 	inst.components.container.canbeopened = false
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
-	
-    inst:AddComponent("um_activatable_item")
-    inst.components.um_activatable_item.act_fn = Swap_Fire_Mode
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)

@@ -102,7 +102,7 @@ local function updateclaustrophobia(inst)
 				if ents ~= nil and #ents >= 1 then
 					for i, v in ipairs(ents) do
 						local distsq = v:IsValid() and inst:GetDistanceSqToInst(v) or 1
-						local distance_rate = 1 - (distsq / 66)
+						local distance_rate = 1.5 - (distsq / 33)
 						print("distsq"..distsq)
 						print("distance_rate"..distance_rate)
 						if inst:GetClaustrophobia() < 1 then

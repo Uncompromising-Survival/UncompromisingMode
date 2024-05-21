@@ -1088,6 +1088,8 @@ local function skull_fn(skull_def)
 
     inst.skulldef_client = skull_def
     inst.skull_music = skull_def.music
+	
+    inst.actiontype = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.PONDER
 
     inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
