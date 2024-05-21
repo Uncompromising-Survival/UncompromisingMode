@@ -23,9 +23,9 @@ local assets =
 -- Retaliation Spikes
 
 --DSV uses 4 but ignores physics radius
-local MAXRANGE = 3
+local MAXRANGE = 4
 local NO_TAGS_NO_PLAYERS =	{ "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
-local NO_TAGS =				{ "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost" }
+local NO_TAGS =				{ "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost","rimeweed" }
 local COMBAT_TARGET_TAGS = { "_combat" }
 
 
@@ -48,7 +48,7 @@ local function Freeze(v)
 end
 
 local function OnUpdateThorns(inst)
-    inst.range = inst.range + .75
+    inst.range = inst.range + 1
 
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
@@ -161,7 +161,9 @@ end
 
 local function AnimateRetaliateOver(inst)
 	inst.retaliating = nil
-	inst.AnimState:PlayAnimation("spike_loop")
+	if inst.components.health and not inst.components.health:IsDead() then
+		inst.AnimState:PlayAnimation("barrier_idle")
+	end
 	inst:RemoveEventCallback("animover", AnimateRetaliateOver)
 end
 
@@ -169,13 +171,18 @@ local function Retaliate(inst)
 	if not inst.retaliating then
 		inst.retaliating = true
 
-		inst:DoTaskInTime(4*FRAMES,function(inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) end) -- Slight Delay
+		inst:DoTaskInTime(6*FRAMES,function(inst) 
+			SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) 
+			if inst.SoundEmitter then
+				inst.SoundEmitter:PlaySound("dontstarve/wilson/blowdart_shoot")
+			end			
+		end) -- Slight Delay
 
 		if inst.SoundEmitter then
 			inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
 		end
 		if inst.components.health and not inst.components.health:IsDead() then
-			inst.AnimState:PlayAnimation("spike_hit")
+			inst.AnimState:PlayAnimation("barrier_hit",false)
 			inst:ListenForEvent("animover", function(inst)
 				AnimateRetaliateOver(inst)
 			end)
@@ -185,8 +192,21 @@ end
 
 local function BarrierDie(inst)
 	--TheNet:Announce("DODEATH")
-	inst.AnimState:PlayAnimation("spike_pst",false)
-	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+	inst.AnimState:PlayAnimation("barrier_decline",false)
+	if math.random() < 0.25 then
+		inst.components.lootdropper:SpawnLootPrefab("twigs")
+	end
+	if math.random() < 0.05 then
+		inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
+	end
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local weeds = TheSim:FindEntities(x,y,z,5,{"rimeweed"})
+	for i,v in ipairs(weeds) do
+		if v.prefab == "rimeweed_barrier" then
+			TheNet:Announce("told the barrier to die")
+			v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) if v.components.health and not v.components.health:IsDead() then v.components.health:Kill() end end)
+		end
+	end
 end
 
 local function barrierweed()
@@ -201,16 +221,18 @@ local function barrierweed()
 	inst.AnimState:SetBuild("rimeweed")
 
 	inst:AddTag("plant")
+	inst:AddTag("rimeweed")
 	MakeObstaclePhysics(inst, 1)
 	inst.entity:SetPristine()
 
 	if not TheWorld.ismastersim then
 		return inst
 	end
-	inst.AnimState:PlayAnimation("spike_pre", false)
-	inst.AnimState:PushAnimation("spike_loop", true)
+	inst.AnimState:PlayAnimation("barrier_grow", false)
+	inst.AnimState:PushAnimation("barrier_idle", true)
 	
-	inst:AddComponent("timer")
+	
+	inst:AddComponent("lootdropper")
 	--inst:ListenForEvent("timerdone", TimerDone)
 	
     inst:AddComponent("health")
@@ -218,7 +240,7 @@ local function barrierweed()
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 	inst:AddComponent("combat")
 	inst:AddComponent("inspectable")
-	local scale = 2
+	local scale = 0.4
 	inst.Transform:SetScale(scale,scale,scale)
 	---------------------
 	inst:ListenForEvent("attacked", Retaliate)
@@ -230,6 +252,7 @@ local function barrierweed()
 
 	return inst
 end
+
 
 local function OnSaveMain(inst,data)
 	data.stage = inst.stage
@@ -249,30 +272,37 @@ local function OnLoadPostPassMain(newents, savedata)
 end
 
 local function MainDie(inst)
-	--TheNet:Announce("DODEATH")
 	inst:AddTag("dead")
-	inst.AnimState:PlayAnimation("dug",false)
-	if inst.stage == 3 then
-		inst.components.lootdropper:DropLoot()
+	if inst.stage >= 1 then
+		inst.components.lootdropper:SpawnLootPrefab("twigs")
 	end
-	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+	if inst.stage >= 2 then
+		inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+		inst.components.lootdropper:SpawnLootPrefab("twigs")
+	end
+	if inst.stage >= 3 then
+		inst.components.lootdropper:SpawnLootPrefab("plantmeat")
+		inst.AnimState:PlayAnimation("core_large_die")
+	else
+		inst:Remove()
+	end
 end
 
 
 local function PlayStagedAnim(inst)
-	if inst.stage == 3 and not inst:HasTag("dead") then
-		inst.AnimState:PushAnimation("crop_full", true)
+	if inst.stage >= 3 and not inst:HasTag("dead") then
+		inst.AnimState:PushAnimation("core_large", true)
 	elseif inst.stage == 2 and not inst:HasTag("dead") then
-		inst.AnimState:PushAnimation("crop_med", true)
+		inst.AnimState:PushAnimation("core_mid", true)
 	elseif inst.stage == 1 and not inst:HasTag("dead") then
-		inst.AnimState:PushAnimation("crop_small", true)
+		inst.AnimState:PushAnimation("core_small", true)
 	end
 end
 
 local function InitializePlant(inst)
 	inst.stage = 1
 	inst.components.timer:StartTimer("grow", 0.1*60)
-	inst.AnimState:PlayAnimation("grow_small", false)
+	inst.AnimState:PlayAnimation("core_appear", false)
 	inst:AddComponent("workable")
 	inst.components.workable:SetWorkAction(ACTIONS.DIG)
 	inst.components.workable:SetWorkLeft(1)
@@ -284,47 +314,68 @@ local function SetStage(inst)
 		InitializePlant(inst)
 	end
 	PlayStagedAnim(inst)
+	
+	if inst.stage < 3 then
+		inst:AddTag("notarget")
+		inst.components.health:SetInvincible(true)	
+	else
+		inst:RemoveTag("notarget")
+		inst.components.health:SetInvincible(false)
+	end
 end
 
 local function FindPlant(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local plants = TheSim:FindEntities(x,y,z,20,{"plant"})
 	for i,plant in ipairs(plants) do
-		if plant.components.pickable and plant.components.pickable:CanBePicked() then
+		if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant,6,nil,{"rimeweed"}) then
 			return plant
 		end
 	end
 	for i,plant in ipairs(plants) do
-		if plant.components.pickable then
+		if plant.components.pickable and not FindEntity(plant,6,nil,{"rimeweed"}) then
 			return plant
 		end
 	end	
 end
 
-local function GrowLine(inst,growPoint)
 
+local function TryGrowPoint(inst,x,z)
+	if TheWorld.Map:IsAboveGroundAtPoint(x, 0, z) then
+		local weed = SpawnPrefab("rimeweed_barrier")
+		weed.Transform:SetPosition(x,0,z)
+		table.insert(inst.bramble,weed)
+	end
+end
+
+local function GrowLine(inst,growPoint)
+	local distance = (inst:GetDistanceSqToPoint(growPoint))^0.5
+	local plants = math.floor(distance/2)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local distx = math.abs(x-growPoint)
 end
 
 local function GrowRing(inst,growPoint)
 	
-	local maxRing = 6
+	local maxRing = 8
 	local radius = 1.5
+	local random_angle = math.random(1,360)
 	for i = 1,maxRing do
-		
+	
+		local x = growPoint.x+radius*math.cos(random_angle+(i-1)/maxRing*180)
+		local z = growPoint.z+radius*math.sin(random_angle+(i-1)/maxRing*180)
+		TryGrowPoint(inst,x,z)
 	end
 end
 
 local function GrowBranch(inst)
 	local plant = FindPlant(inst)
-	if plant then
-		local growPoint = Vector3(plant.Transform:GetWorldPosition())
-		
-
-		
-		GrowRing(inst,growPoint)
-		GrowLine(inst,growPoint)
+	if plant then	
+		TheNet:Announce("grew a ring")
+		GrowRing(inst,Vector3(plant.Transform:GetWorldPosition()))
+		--GrowLine(inst,growPoint)
 	else
-		inst:Remove()
+		--inst:Remove()
 	end
 end
 
@@ -332,14 +383,17 @@ local function TimerDone(inst,data)
 	if data and data.name == "grow" then
 		inst.stage = inst.stage + 1
 		if inst.stage == 2 and not inst:HasTag("dead") then
-			inst.AnimState:PlayAnimation("grow_med", false)
+			inst.AnimState:PlayAnimation("core_small_grow", false)
+			inst.components.timer:StartTimer("growbranch", 0.1*60)
 		end
 		if inst.stage == 3 and not inst:HasTag("dead") then
 			if inst.components.workable then
 				inst:RemoveComponent("workable")
 			end
-			inst.AnimState:PlayAnimation("grow_full", false)
-			inst.components.timer:StartTimer("growbranch", 0.1*60)
+			inst.stage =inst.stage + 1
+			inst.AnimState:PlayAnimation("core_mid_grow", false)
+			
+			
 		end
 		if inst.stage < 3 then
 			inst.components.timer:StartTimer("grow", 0.1*60)
@@ -349,18 +403,9 @@ local function TimerDone(inst,data)
 	
 	if data and data.name == "growbranch" then
 		inst.components.timer:StartTimer("growbranch", 0.1*60)
-		if inst.branch1 == nil and inst.branch2 == nil and inst.branch3 == nil then
-			GrowBranch(inst)
-		end
+		GrowBranch(inst)
 	end
 end
-
-SetSharedLootTable('rimeweed',
-{
-    {'twigs', 1.00},
-    {'twigs', 1.00},
-    {'rimeweed_whip', 0.25},
-})
 
 
 local function mainweed()
@@ -377,8 +422,8 @@ local function mainweed()
 	--inst.AnimState:PlayAnimation("crop_full", true)
 
 	inst:AddTag("plant")
-	inst:AddTag("lunarplant_target")
-
+	--inst:AddTag("lunarplant_target")
+	inst:AddTag("rimeweed")
 
 	inst.entity:SetPristine()
 
@@ -386,11 +431,10 @@ local function mainweed()
 		return inst
 	end
 
-	local scale = 2
+	local scale = 0.4
 	inst.Transform:SetScale(scale,scale,scale)
 	
 	inst:AddComponent("lootdropper")
-	inst.components.lootdropper:SetChanceLootTable('rimeweed')
 	
 	inst:AddComponent("timer")
 	inst:ListenForEvent("timerdone", TimerDone)
@@ -399,12 +443,24 @@ local function mainweed()
 
 	inst:AddComponent("inspectable")
 
-	
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(200)
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)	
-	---------------------
 	inst:AddComponent("combat")
+	inst:ListenForEvent("attacked", function(inst)
+		if inst.components.health and not inst.components.health:IsDead() then
+
+			inst:DoTaskInTime(4*FRAMES,function(inst) SpawnPrefab("bramblefx_rime"):SetFXOwner(inst) end) -- Slight Delay
+
+			if inst.SoundEmitter then
+				inst.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+			end
+			inst.AnimState:PlayAnimation("core_large_hit")
+			inst.AnimState:PushAnimation("core_large",true)
+		end
+	end)
+	
+	---------------------
 	
 	MakeMediumBurnable(inst)
 	MakeSmallPropagator(inst)
@@ -414,7 +470,8 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
 	inst:DoTaskInTime(0,SetStage)
-
+	inst.bramble = {}
+	
 	return inst
 end
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -504,7 +561,7 @@ local function whip()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-
+	
     MakeHauntableLaunch(inst)
 
     return inst

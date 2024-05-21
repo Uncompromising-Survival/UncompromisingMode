@@ -160,8 +160,8 @@ local function GetOffset(inst)
 	local offset = FindSwimmableOffset(inst.boatvictim:GetPosition(), math.random() * PI * 2, math.random(6,12))
 	if offset then
 		return offset
-	elseif inst.boatvictim then
-		GetOffset(inst)
+	--elseif inst.boatvictim then
+		--GetOffset(inst)
 	else
 		RemoveAllTentacles(inst)
 		inst:DoTaskInTime(math.random(10,20),Born)		
