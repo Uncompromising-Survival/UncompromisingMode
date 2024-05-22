@@ -205,11 +205,9 @@ local prefab_post = {
     "archive_lockbox",
     "seedpouch",
     --"wormhole",
-
     "voidcloth_umbrella",
     "daywalker",
-
-	--"wormhole",
+	"mushroom_farm"
 }
 
 local stategraph_post = {

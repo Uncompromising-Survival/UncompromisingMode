@@ -80,9 +80,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
     WINONA_TOOLBOX = "- Portable storage for tools, dismantled structures and related items.", --putting these here for the icon
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
-	CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
-	PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
-	PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
+    CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
+    PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
+    PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
     BRINE_BALM = "- Hurts you a little, heals you, over time, a lot.\n- Restores lost maximum health."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
@@ -159,22 +159,22 @@ STRINGS.WIXIE_TOOLTIP = {
     SLINGSHOTAMMO_MOONGLASS = "- Passes through enemies, dealing rapid damage.\n- Able to hit shadows.",
     SLINGSHOTAMMO_SALT = "- Deals up to triple damage based on enemies missing health.\n-Deals double damage to salt susceptible enemies.",
     SLINGSHOTAMMO_TAR = "- Makes enemies leave a slowing, flamable tar trail.",
-	SLINGSHOTAMMO_OBSIDIAN = "- Rapidly deals bursts of fire damage in an area.",
-	SLINGSHOTAMMO_GOOP = "- Bounces between allies, healing them.",
-	SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n-Explodes when ignited.",
-	SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
-	SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
-	SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.n\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
-		
-	SLINGSHOTAMMO_INSANITY = "...?",
-	SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",
-	
-	SLINGSHOT = "- Charge to increase damage and ammo effects.",
-	SLINGSHOT_MATILDA = "- Charge to fire up to 3 low effect shots.",
-	SLINGSHOT_GNASHER = "- Charges faster, but falls off if not released on time.",
-	SLINGSHOT_CLAIRE = "- Charge while moving.\n- Ammo ignores planar defense.",
-	SLINGSHOT_JESSIE = "- Can swap firing modes.\n- Holds 6 shots, which must be filled before firing.\n- Ammo ignores planar defense.",
-	BAGOFMARBLES = "- Scatters slippery marbles upon impact.",
+    SLINGSHOTAMMO_OBSIDIAN = "- Rapidly deals bursts of fire damage in an area.",
+    SLINGSHOTAMMO_GOOP = "- Bounces between allies, healing them.",
+    SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n-Explodes when ignited.",
+    SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
+    SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
+    SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
+
+    SLINGSHOTAMMO_INSANITY = "...?",
+    SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",
+
+    SLINGSHOT = "- Charge to increase damage and ammo effects.",
+    SLINGSHOT_MATILDA = "- Charge to fire up to 3 low effect shots.",
+    SLINGSHOT_GNASHER = "- Charges faster, but falls off if not released on time.",
+    SLINGSHOT_CLAIRE = "- Charge while moving.\n- Ammo ignores planar defense.",
+    SLINGSHOT_JESSIE = "- Can swap firing modes.\n- Holds 6 shots, which must be filled before firing.\n- Ammo ignores planar defense.",
+    BAGOFMARBLES = "- Scatters slippery marbles upon impact.",
 }
 
 STRINGS.ENGINEERING_TOOLTIP = {

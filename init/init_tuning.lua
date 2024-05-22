@@ -315,6 +315,7 @@ TUNING.DSTU = {
     GREEN_VOMIT_NUTRIENTS = { 0, 0, 24 },
     PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
     PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
+	MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -514,8 +515,6 @@ TUNING.AFFINITY_15_CALORIES_SUPERHUGE = 1.034
 
 -- TUNING.ANTLION_RAGE_TIME_INITIAL = TUNING.TOTAL_DAY_TIME * 4
 -- TUNING.ANTLION_RAGE_TIME_MAX = TUNING.TOTAL_DAY_TIME * 5
-
-
 
 -- TUNING.ARMORBRAMBLE_DMG = 10
 
