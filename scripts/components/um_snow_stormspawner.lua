@@ -30,7 +30,7 @@ local function SpawnRimeweed(plant)
 end
 
 local function SpawnRimeweeds()
-	TheNet:Announce("trying to spawn rimeweeds")
+	--TheNet:Announce("trying to spawn rimeweeds")
 	local harvestible_plants = {}
 	local rimeweeds = 0
 	for i,ent in pairs(Ents) do
@@ -43,8 +43,8 @@ local function SpawnRimeweeds()
 	end
 	
 	if #harvestible_plants > 0 then
-		TheNet:Announce("Rimeweeds = ")
-		TheNet:Announce(rimeweeds)
+		--TheNet:Announce("Rimeweeds = ")
+		--TheNet:Announce(rimeweeds)
 		if rimeweeds < 3 then
 			local rnd = math.random(1,#harvestible_plants)
 			SpawnRimeweed(harvestible_plants[rnd])
@@ -62,7 +62,7 @@ local function SpawnRimeweeds()
 		end
 	end
     if _worldsettingstimer:GetTimeLeft(UM_STOPSNOWSTORM_TIMERNAME) then
-		TheNet:Announce("new timer")
+		--TheNet:Announce("new timer")
         _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30))
     end
 end
