@@ -392,7 +392,7 @@ end
 
 local function createlight(inst, target, pos)
 	local owner = inst.components.inventoryitem.owner
-	local fixedpowerlevel = 1.75 - (inst.firing_mode / 4)
+	local fixedpowerlevel = 2 - (inst.firing_mode / 4)
 
 	for i = 1, inst.firing_mode do
 		if inst.firing_mode == 2 then

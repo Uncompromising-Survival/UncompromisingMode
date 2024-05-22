@@ -198,13 +198,13 @@ end
 local function RefeshShield(inst)
 	--inst.components.um_shadowcloaked.shadowlevel = 20
 		
-	if inst.abigail ~= nil and inst.components.combat.target ~= nil then
+	if inst.abigail ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target:IsValid() and inst.abigail.components.combat ~= nil and inst.abigail.components.combat:CanTarget(inst.components.combat.target) then
 		inst.abigail.components.combat:SetTarget(inst.components.combat.target)
 	end
 end
 
 local function CommandAbby(inst)
-	if inst.abigail ~= nil and inst.components.combat.target ~= nil and inst.abigail.components.combat ~= nil then
+	if inst.abigail ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target:IsValid() and inst.abigail.components.combat ~= nil and inst.abigail.components.combat:CanTarget(inst.components.combat.target) then
 		inst.abigail:SpeedBoost()
 		inst.abigail.components.combat:SetTarget(inst.components.combat.target)
 	end
