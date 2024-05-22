@@ -362,7 +362,7 @@ end
 
 local function FindPlant(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local plants = TheSim:FindEntities(x,y,z,20,{"plant"})
+	local plants = TheSim:FindEntities(x,y,z,32,{"plant"})
 	for i,plant in ipairs(plants) do
 		if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant,3,nil,{"rimeweed"}) then
 			return plant
@@ -442,7 +442,7 @@ local function TimerDone(inst,data)
 	
 	if data and data.name == "growbranch" then
 		if TheWorld.state.iswinter then
-			inst.components.timer:StartTimer("growbranch", 0.25*8*60)
+			inst.components.timer:StartTimer("growbranch", 0.15*8*60)
 			GrowBranch(inst)
 		elseif inst.components.health and not inst.components.health:IsDead() then
 			inst.components.health:Kill()
