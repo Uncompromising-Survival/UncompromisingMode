@@ -26,7 +26,7 @@ end
 local function TryCrab(inst,worker)
 	local days_survived = worker.components.age ~= nil and worker.components.age:GetAgeInDays() or TheWorld.state.cycles
 	if days_survived >= 0 then --Maybe no min for crabbos? they're a lot easier than treeguards.
-		local chance = 0.025
+		local chance = 0.0125
 		if days_survived > 20 then -- After 1st season
 			chance = 2*chance
 		end

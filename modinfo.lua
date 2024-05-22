@@ -813,8 +813,7 @@ configuration_options = {
     BinaryConfig("kramped_buff", "No Naughtiness Decay", "Prevents naughtiness decay.", true),
     BinaryConfig("pigking_guards", "Pig King Guards",
         "Pig King now has neutral guards watching for any suspicious activity.", true),
-    BinaryConfig("pinelings", "Pinelings",
-        "Stumps will become pinelings if awoken by a treeguard, or if stumps are left for long enough.", true),
+
     BinaryConfig("desertscorpions", "Scorpions",
         "Scorpions plague the Oasis Desert during Dusk and Night. They will spawn from Scorpion Holes spread around the biome.",
         true),
@@ -1354,6 +1353,8 @@ configuration_options = {
     BinaryConfig("hangyperds", "Starving Gobblers",
         "Gobblers are now more agressive and will attempt to take berries out of the player's inventory.", false),
     BinaryConfig("woodie_wet_goose", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
+    BinaryConfig("pinelings", "Pinelings",
+        "Stumps will become pinelings if awoken by a treeguard, or if stumps are left for long enough.", false),
     BinaryConfig("cave_clops", "[BROKEN] Cave Deerclops",
         "During winter, Deerclops can break through the cave ceiling to reach you.", false),
     {

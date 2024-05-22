@@ -69,7 +69,7 @@ local bozo =FindEntity(inst, 7,
     end)
 	if bozo ~= nil and inst.decided == false then
 		inst.decided = true
-		if math.random() > 0.5 and inst.components.follower.leader == nil then
+		if math.random() > 0.95 and inst.components.follower.leader == nil then
 			inst.sg:GoToState("dance")
 			TellOthersTo(inst,true)
 		else

@@ -192,18 +192,23 @@ end
 
 local function BarrierDie(inst)
 	--TheNet:Announce("DODEATH")
+	RemovePhysicsColliders(inst)
 	inst.AnimState:PlayAnimation("barrier_decline",false)
 	if math.random() < 0.25 then
 		inst.components.lootdropper:SpawnLootPrefab("twigs")
 	end
-	if math.random() < 0.05 then
+	if math.random() < 0.01 then
 		inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
 	end
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local weeds = TheSim:FindEntities(x,y,z,5,{"rimeweed"})
-	for i,v in ipairs(weeds) do
-		if v.prefab == "rimeweed_barrier" then
-			v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) if v.components.health and not v.components.health:IsDead() then v.components.health:Kill() end end)
+	
+	if not inst.nospread then
+		for i,v in ipairs(weeds) do
+			if v.prefab == "rimeweed_barrier" then
+				v.nospread = true
+				v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) if v.components.health and not v.components.health:IsDead() then v.components.health:Kill() end end)
+			end
 		end
 	end
 end
@@ -254,8 +259,21 @@ end
 
 
 local function OnSaveMain(inst,data)
+    local ents = {}	
+    if inst.bramble then
+        data.bramble = {}
+        for i,v in pairs(inst.bramble)do
+            if v.prefab then
+                data.bramble[i] = v.GUID
+                table.insert(ents, v.GUID)
+            end
+        end
+    end
+	
+	
 	data.stage = inst.stage
-	return data
+
+    return ents
 end
 
 local function OnLoadMain(inst,data)
@@ -266,8 +284,17 @@ local function OnLoadMain(inst,data)
 	end
 end
 
-local function OnLoadPostPassMain(newents, savedata)
-
+local function OnLoadPostPassMain(inst, newents, data)
+    if data then
+        if data.bramble and #data.bramble > 0 then
+            inst.bramble = {}
+            for i,v in pairs(data.bramble) do
+                if newents[v] then
+                    inst.bramble[i] = newents[v].entity
+                end
+            end
+        end
+    end
 end
 
 local function MainDie(inst)
@@ -310,7 +337,7 @@ end
 
 local function InitializePlant(inst)
 	inst.stage = 1
-	inst.components.timer:StartTimer("grow", 0.1*60)
+	inst.components.timer:StartTimer("grow", 0.5*8*60)
 	inst.AnimState:PlayAnimation("core_appear", false)
 	inst:AddComponent("workable")
 	inst.components.workable:SetWorkAction(ACTIONS.DIG)
@@ -337,7 +364,7 @@ local function FindPlant(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local plants = TheSim:FindEntities(x,y,z,20,{"plant"})
 	for i,plant in ipairs(plants) do
-		if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant,6,nil,{"rimeweed"}) then
+		if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant,3,nil,{"rimeweed"}) then
 			return plant
 		end
 	end
@@ -359,9 +386,12 @@ end
 
 local function GrowLine(inst,growPoint)
 	local distance = (inst:GetDistanceSqToPoint(growPoint))^0.5
-	local plants = math.floor(distance/2)
+	local plants = math.floor(distance)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local distx = math.abs(x-growPoint)
+
+	for i = 1,plants-1 do
+		TryGrowPoint(inst,x+(growPoint.x-x)*i/plants+0.1*math.random(-5,5),z+(growPoint.z-z)*i/plants+0.1*math.random(-10,10))
+	end
 end
 
 local function GrowRing(inst,growPoint)
@@ -380,8 +410,9 @@ end
 local function GrowBranch(inst)
 	local plant = FindPlant(inst)
 	if plant then	
-		GrowRing(inst,Vector3(plant.Transform:GetWorldPosition()))
-		--GrowLine(inst,growPoint)
+		local growPoint = Vector3(plant.Transform:GetWorldPosition())
+		GrowRing(inst,growPoint)
+		GrowLine(inst,growPoint)
 	else
 		--inst:Remove()
 	end
@@ -392,7 +423,7 @@ local function TimerDone(inst,data)
 		inst.stage = inst.stage + 1
 		if inst.stage == 2 and not inst:HasTag("dead") then
 			inst.AnimState:PlayAnimation("core_small_grow", false)
-			inst.components.timer:StartTimer("growbranch", 0.1*60)
+			inst.components.timer:StartTimer("growbranch", 0.5*8*60)
 		end
 		if inst.stage == 3 and not inst:HasTag("dead") then
 			if inst.components.workable then
@@ -404,14 +435,20 @@ local function TimerDone(inst,data)
 			
 		end
 		if inst.stage < 3 then
-			inst.components.timer:StartTimer("grow", 0.1*60)
+			inst.components.timer:StartTimer("grow", 1*8*60)
 		end
 		SetStage(inst)
 	end
 	
 	if data and data.name == "growbranch" then
-		inst.components.timer:StartTimer("growbranch", 0.1*60)
-		GrowBranch(inst)
+		if TheWorld.state.iswinter then
+			inst.components.timer:StartTimer("growbranch", 0.25*8*60)
+			GrowBranch(inst)
+		elseif inst.components.health and not inst.components.health:IsDead() then
+			inst.components.health:Kill()
+		else
+			inst:Remove()
+		end
 	end
 end
 
@@ -478,7 +515,9 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
 	inst:DoTaskInTime(0,SetStage)
-	inst.bramble = {}
+	if not inst.bramble then
+		inst.bramble = {}
+	end
 	
 	return inst
 end
