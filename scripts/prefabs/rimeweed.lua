@@ -309,14 +309,14 @@ local function MainDie(inst)
 			--end)
 		end
 	end
-	if inst.stage >= 1 then
+	if inst.stage >= 1 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("twigs")
 	end
-	if inst.stage >= 2 then
+	if inst.stage >= 2 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
 		inst.components.lootdropper:SpawnLootPrefab("twigs")
 	end
-	if inst.stage >= 3 then
+	if inst.stage >= 3 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("plantmeat")
 		inst.AnimState:PlayAnimation("core_large_die")
 	else
@@ -386,17 +386,17 @@ end
 
 local function GrowLine(inst,growPoint)
 	local distance = (inst:GetDistanceSqToPoint(growPoint))^0.5
-	local plants = math.floor(distance)
+	local plants = math.floor(distance*0.75)
 	local x,y,z = inst.Transform:GetWorldPosition()
 
 	for i = 1,plants-1 do
-		TryGrowPoint(inst,x+(growPoint.x-x)*i/plants+0.1*math.random(-5,5),z+(growPoint.z-z)*i/plants+0.1*math.random(-10,10))
+		TryGrowPoint(inst,x+(growPoint.x-x)*i/plants+0.1*math.random(-2,2),z+(growPoint.z-z)*i/plants+0.1*math.random(-10,10))
 	end
 end
 
 local function GrowRing(inst,growPoint)
 	
-	local maxRing = 8
+	local maxRing = 6
 	local radius = 1.5
 	local random_angle = math.random(1,360)
 	for i = 1,maxRing do
@@ -444,7 +444,8 @@ local function TimerDone(inst,data)
 		if TheWorld.state.iswinter then
 			inst.components.timer:StartTimer("growbranch", 0.15*8*60)
 			GrowBranch(inst)
-		elseif inst.components.health and not inst.components.health:IsDead() then
+		elseif inst.stage >=3 and inst.components.health and not inst.components.health:IsDead() then
+			inst.noloot = true
 			inst.components.health:Kill()
 		else
 			inst:Remove()
