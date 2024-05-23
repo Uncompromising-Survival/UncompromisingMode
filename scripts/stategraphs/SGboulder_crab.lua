@@ -49,7 +49,7 @@ local events=
 		if inst.hiding and not inst.components.timer:TimerExists("regenrock") then -- This shouldn't happen, but if it does!
 			inst.sg:GoToState("hide_pst")
 		else
-			if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("attack") and not inst.components.timer:TimerExists("regenrock") then 
+			if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("attack") and not inst.components.timer:TimerExists("regenrock") then 
 				inst.sg:GoToState("hit")  -- can't attack during hit reaction
 			end
 		end
