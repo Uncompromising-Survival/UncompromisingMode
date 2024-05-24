@@ -207,7 +207,8 @@ local prefab_post = {
     --"wormhole",
     "voidcloth_umbrella",
     "daywalker",
-	"mushroom_farm"
+	"mushroom_farm",
+    "mushtrees"
 }
 
 local stategraph_post = {
