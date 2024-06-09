@@ -289,12 +289,12 @@ if GetModConfigData("telestaff_rework") then
         Ingredient("nightmarefuel", 4),
         Ingredient("livinglog", 4),
         Ingredient("goldnugget", 8),
-        Ingredient("purplegem", 3)		
+        Ingredient("purplegem", 3)
     }
     --AllRecipes["telestaff"].ingredients = {
-        --Ingredient("nightmarefuel", 2),
-        --Ingredient("spear", 1),
-        --Ingredient("purplegem", 1)
+    --Ingredient("nightmarefuel", 2),
+    --Ingredient("spear", 1),
+    --Ingredient("purplegem", 1)
     --}
     AllRecipes["purpleamulet"].ingredients = {
         Ingredient("goldnugget", 3),
@@ -340,13 +340,13 @@ AllRecipes["winona_spotlight"].ingredients = { Ingredient("sewing_tape", 1), Ing
 AllRecipes["featherpencil"].numtogive = 4 -- 8
 
 
-AllRecipes["armorwagpunk"].ingredients = {Ingredient("armorwood", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2)}
-AllRecipes["wagpunkhat"].ingredients = {Ingredient("footballhat", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2)}
+AllRecipes["armorwagpunk"].ingredients = { Ingredient("armorwood", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2) }
+AllRecipes["wagpunkhat"].ingredients = { Ingredient("footballhat", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2) }
 
 -- new recipes
 
 AddRecipe2("scrap_monoclehat",
-{ Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+    { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 
 
 
@@ -1113,19 +1113,20 @@ AddRecipe2(
 )
 ChangeSortKey("hermitshop_cookies", "hermitshop_supertacklecontainer", "CRAFTING_STATION", true)
 
-AddRecipe2(
-    "chum",
-    { Ingredient("spoiled_food", 2), Ingredient("rope", 1), Ingredient("waterplant_bomb", 1) },
-    TECH.FISHING_ONE,
-    { numtogive = 2 },
-    { "FISHING" }
-)
-AllRecipes["chum"].ingredients = {
-    Ingredient("spoiled_food", 1),
-    Ingredient("rope", 1),
-    Ingredient("waterplant_bomb", 1)
-}
-
+if not TUNING.DSTU.UPDATE_CHECK then
+    AddRecipe2(
+        "chum",
+        { Ingredient("spoiled_food", 2), Ingredient("rope", 1), Ingredient("waterplant_bomb", 1) },
+        TECH.FISHING_ONE,
+        { numtogive = 2 },
+        { "FISHING" }
+    )
+    AllRecipes["chum"].ingredients = {
+        Ingredient("spoiled_food", 1),
+        Ingredient("rope", 1),
+        Ingredient("waterplant_bomb", 1)
+    }
+end
 --[[
 AddRecipe2(
 "hermitshop_oil",
@@ -1503,20 +1504,20 @@ if GetModConfigData("wixie_walter") then
         "slingshot_jessie",
         { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
         GLOBAL.TECH.SHADOWFORGING_TWO,
-        { builder_tag = "skill_wixie_allegiance_shadow", nounlock=true, station_tag = "shadow_forge" },
+        { builder_tag = "skill_wixie_allegiance_shadow", nounlock = true, station_tag = "shadow_forge" },
         { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
-	
+
     AddRecipe2(
         "slingshot_claire",
         { Ingredient("purebrilliance", 2), Ingredient("lunarplant_husk", 2) },
         GLOBAL.TECH.LUNARFORGING_TWO,
-        { builder_tag = "skill_wixie_allegiance_lunar", nounlock=true, station_tag = "lunar_forge" },
+        { builder_tag = "skill_wixie_allegiance_lunar", nounlock = true, station_tag = "lunar_forge" },
         { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
-	
+
     AddRecipe2(
         "bagofmarbles",
         { Ingredient("slingshotammo_marble", 10), Ingredient("rope", 1) },
@@ -1590,47 +1591,47 @@ AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal",
 AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
 
-    AddRecipe2(
-        "um_scrapper",
-        { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) },
-        GLOBAL.TECH.LOST,
-		{ placer = "um_scrapper_placer" },
-        { "STRUCTURES" }
-    )
+AddRecipe2(
+    "um_scrapper",
+    { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) },
+    GLOBAL.TECH.LOST,
+    { placer = "um_scrapper_placer" },
+    { "STRUCTURES" }
+)
 
-    GLOBAL.STRINGS.RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
-    AddRecipeToFilter("um_scrapper", "TOOLS")
-	
-    AddRecipe2(
-        "um_inkubator",
-        { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) },
-        GLOBAL.TECH.LOST,
-		{ placer = "um_inkubator_placer" },
-        { "STRUCTURES" }
-    )
+GLOBAL.STRINGS.RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
+AddRecipeToFilter("um_scrapper", "TOOLS")
 
-    GLOBAL.STRINGS.RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
-    AddRecipeToFilter("um_inkubator", "STRUCTURES")
-	
-    AddRecipe2(
-        "um_astral_projector",
-        { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) },
-        GLOBAL.TECH.LOST,
-		{ placer = "um_astral_projector_placer" },
-        { "STRUCTURES" }
-    )
-    GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
-    AddRecipeToFilter("um_astral_projector", "STRUCTURES")
-	
-    AddRecipe2(
-        "um_astral_projector_target",
-        { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) },
-        GLOBAL.TECH.LOST,
-		{ placer = "um_astral_projector_target_placer" },
-        { "STRUCTURES" }
-    )
-    GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
-    AddRecipeToFilter("um_astral_projector_target", "STRUCTURES")
+AddRecipe2(
+    "um_inkubator",
+    { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) },
+    GLOBAL.TECH.LOST,
+    { placer = "um_inkubator_placer" },
+    { "STRUCTURES" }
+)
+
+GLOBAL.STRINGS.RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
+AddRecipeToFilter("um_inkubator", "STRUCTURES")
+
+AddRecipe2(
+    "um_astral_projector",
+    { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) },
+    GLOBAL.TECH.LOST,
+    { placer = "um_astral_projector_placer" },
+    { "STRUCTURES" }
+)
+GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
+AddRecipeToFilter("um_astral_projector", "STRUCTURES")
+
+AddRecipe2(
+    "um_astral_projector_target",
+    { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) },
+    GLOBAL.TECH.LOST,
+    { placer = "um_astral_projector_target_placer" },
+    { "STRUCTURES" }
+)
+GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
+AddRecipeToFilter("um_astral_projector_target", "STRUCTURES")
 
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
