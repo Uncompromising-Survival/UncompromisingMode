@@ -125,7 +125,8 @@ repourposing this file, but am gonna comment that ^ out since this file wasn't l
 local SNOWPILE_BLOCKERS =
 {
     "dragonflyfurnace",
-    "um_hotspring"
+    "um_hotspring",
+    "stafflight"
 }
 for k, v in pairs(SNOWPILE_BLOCKERS) do
     AddPrefabPostInit(v, function(inst)
