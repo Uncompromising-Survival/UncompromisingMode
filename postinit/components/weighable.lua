@@ -83,6 +83,17 @@ for prefab, data in pairs(fishdata) do
     env.AddPrefabPostInit(
         prefab .. "_inv",
         function(inst)
+            if inst.scrapbook_adddeps == nil then
+                inst.scrapbook_adddeps = {} 
+            end
+
+            if data[3] then
+                for k, v in pairs(data[3]) do
+                    table.insert(inst.scrapbook_adddeps, v) 
+                end
+            end
+
+
             if not TheWorld.ismastersim then
                 return
             end
