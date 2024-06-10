@@ -470,5 +470,5 @@ modimport("init/init_statusannouncements")
 
 
 AddSimPostInit(function()
-    GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedforestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
+    --GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedforestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
 end)
