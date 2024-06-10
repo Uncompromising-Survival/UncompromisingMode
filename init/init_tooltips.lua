@@ -47,7 +47,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     BOAT_CANNON_KIT = "- Increased firepower.\n- Can fire Seedshells.",
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
-    BREAK = "BREAK HERE",
+    SCRAP_MONOCLEHAT = "- Increases map reveal range.",
+    __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
     AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.\n- Provides cold in a small radius.\n- Removes smog in a large area.",

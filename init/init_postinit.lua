@@ -208,6 +208,7 @@ local prefab_post = {
     "mushroom_farm",
     "mushtrees",
     "toolbox_items",
+    "scrap_monoclehat",
 }
 
 local stategraph_post = {

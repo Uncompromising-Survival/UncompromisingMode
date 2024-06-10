@@ -347,7 +347,7 @@ AllRecipes["wagpunkhat"].ingredients = { Ingredient("footballhat", 1), Ingredien
 
 AddRecipe2("scrap_monoclehat",
     { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
-
+ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
 
 
 if GetModConfigData("snowstorms") then
