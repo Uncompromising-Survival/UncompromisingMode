@@ -15,11 +15,52 @@ SignFiles = require("uncompromising_writeables")
 local vanilla = require "screens/redux/scrapbookdata"
 local uncomp = require "screens/redux/scrapbookdata_changes"
 
+local valid_data = {
+    "health",
+    "damage",
+    "burnable",
+    "craftingprefab",
+    "deps",
+    "stacksize",
+    "hungervalue",
+    "healthvalue",
+    "sanityvalue",
+    "foodtype",
+    "perishable",
+    "specialinfo",
+    "notes",
+    "dapperness",
+    "fueltype",
+    "fuelvalue",
+    "sanityaura",
+    "finiteuses",
+    "waterproofer",
+    "damage",
+    "armor",
+    "absorb_percent",
+    "forgerepairable",
+    "armor_planardefense",
+    "fueledmax",
+    "fueledrate",
+    "fueledtype1",
+    "fueledtype2",
+    "fueleduses",
+    "weapondamage",
+    "picakble",
+    "insulator",
+    "insulator_type"
+}
+
 AddPrefabPostInit("world", function(inst)
     inst:DoTaskInTime(0, function()
-        for k, v in pairs(vanilla) do
-            if uncomp[k] ~= nil and uncomp[k] ~= vanilla[k] then
-                vanilla[k] = uncomp[k]
+        for entry, data in pairs(vanilla) do
+            print("Checking " .. entry, data)
+            for k, datatype in ipairs(valid_data) do
+                print("Checking " .. k, datatype)
+                if uncomp[entry] ~= nil and uncomp[entry][datatype] ~= nil and uncomp[entry][datatype] ~= vanilla[entry][datatype] then
+                    print("Changing " .. tostring(entry) .. " " .. tostring(datatype) .. " from " .. tostring(uncomp[entry][datatype]) .. " to " .. tostring(uncomp[entry][datatype]))
+                    vanilla[entry][datatype] = uncomp[entry][datatype]
+                end
             end
         end
     end)

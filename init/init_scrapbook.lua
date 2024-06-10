@@ -2,6 +2,7 @@
 local STRINGS = GLOBAL.STRINGS
 local SPECIALINFO = STRINGS.SCRAPBOOK.SPECIALINFO
 local TOOLTIP = STRINGS.UNCOMP_TOOLTIP
+
 --Damnit klei.
 --Sets the scrabookdata specialinfo of some entries to something else. These entries re-use something else.
 local scrapbookdata = require("screens/redux/scrapbookdata")
@@ -238,6 +239,7 @@ local um_deps = {
     alterguardian_phase1 = { "blueprint" },
     lantern = { "winona_upgradekit_electrical" },
     minerhat = { "winona_upgradekit_electrical" },
+    krampus = {"klaus_sack"}
 }
 
 for entry, deps in pairs(um_deps) do
