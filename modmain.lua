@@ -415,3 +415,8 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 modimport("init/init_insightcompat")
 modimport("init/init_statusannouncements")
+
+
+AddSimPostInit(function()
+    GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedforestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
+end)
