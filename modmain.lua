@@ -470,5 +470,7 @@ modimport("init/init_statusannouncements")
 
 
 AddSimPostInit(function()
-    --GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedforestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
+    if not GLOBAL.TheNet:IsDedicated() then
+        GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
+    end
 end)

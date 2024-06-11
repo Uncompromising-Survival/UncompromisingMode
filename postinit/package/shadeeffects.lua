@@ -9,29 +9,29 @@ if TheNet:IsDedicated() then
     return
 end
 
-ShadeTypes.HoodedforestCanopy = ShadeRenderer:CreateShadeType()
+ShadeTypes.HoodedForestCanopy = ShadeRenderer:CreateShadeType()
 
-ShadeRenderer:SetShadeMaxRotation(ShadeTypes.HoodedforestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_ROTATION)
-ShadeRenderer:SetShadeRotationSpeed(ShadeTypes.HoodedforestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_ROTATION_SPEED)
+ShadeRenderer:SetShadeMaxRotation(ShadeTypes.HoodedForestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_ROTATION)
+ShadeRenderer:SetShadeRotationSpeed(ShadeTypes.HoodedForestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_ROTATION_SPEED)
 
-ShadeRenderer:SetShadeMaxTranslation(ShadeTypes.HoodedforestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_TRANSLATION)
-ShadeRenderer:SetShadeTranslationSpeed(ShadeTypes.HoodedforestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_TRANSLATION_SPEED)
+ShadeRenderer:SetShadeMaxTranslation(ShadeTypes.HoodedForestCanopy, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_TRANSLATION)
+ShadeRenderer:SetShadeTranslationSpeed(ShadeTypes.HoodedForestCanopy, TUNINGw.DSTU.HOODEDFOREST_CANOPY_TRANSLATION_SPEED)
 
-ShadeRenderer:SetShadeTexture(ShadeTypes.HoodedforestCanopy, resolvefilepath("images/giant_tree.tex"))
+ShadeRenderer:SetShadeTexture(ShadeTypes.HoodedForestCanopy, resolvefilepath("images/giant_tree.tex"))
 
 function SpawnHoodedforestCanopy(x, z)
-    return ShadeRenderer:SpawnShade(ShadeTypes.HoodedforestCanopy, x, z, math.random() * 360, TUNING.DSTU.HOODEDFOREST_CANOPY_SCALE*GetRandomWithVariance(1, 0.25))
+    return ShadeRenderer:SpawnShade(ShadeTypes.HoodedForestCanopy, x, z, math.random() * 360, TUNING.DSTU.HOODEDFOREST_CANOPY_SCALE*GetRandomWithVariance(1, 0.25))
 end
 
 function DespawnHoodedforestCanopy(id)
-    ShadeRenderer:RemoveShade(ShadeTypes.HoodedforestCanopy, id)
+    ShadeRenderer:RemoveShade(ShadeTypes.HoodedForestCanopy, id)
 end
 
 local _ShadeEffectUpdate = ShadeEffectUpdate
 function ShadeEffectUpdate(dt, ...)
     local r, g, b = TheSim:GetAmbientColour()
 
-    ShadeRenderer:SetShadeStrength(ShadeTypes.HoodedforestCanopy, Lerp(TUNING.DSTU.HOODEDFOREST_CANOPY_MIN_STRENGTH, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_STRENGTH, ((r + g + b) / 3) / 255))
+    ShadeRenderer:SetShadeStrength(ShadeTypes.HoodedForestCanopy, Lerp(TUNING.DSTU.HOODEDFOREST_CANOPY_MIN_STRENGTH, TUNING.DSTU.HOODEDFOREST_CANOPY_MAX_STRENGTH, ((r + g + b) / 3) / 255))
     return _ShadeEffectUpdate(dt, ...)
 end
 
