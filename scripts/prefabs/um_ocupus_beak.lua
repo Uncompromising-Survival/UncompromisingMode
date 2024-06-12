@@ -26,11 +26,13 @@ local function EndbeakAttack(beak_inst)
 
     local boat = beak_inst:GetCurrentPlatform()
 	if boat then
-		beak_inst:DoTaskInTime(7*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
-		beak_inst:DoTaskInTime(14*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.damage) end)
-		beak_inst:DoTaskInTime(16*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
 		beak_inst:DoTaskInTime(19*FRAMES, function(i) i.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/jump_small") end)
-		beak_inst:DoTaskInTime(25*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
+		if not boat.sounds then
+			beak_inst:DoTaskInTime(7*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
+			beak_inst:DoTaskInTime(14*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.damage) end)
+			beak_inst:DoTaskInTime(16*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
+			beak_inst:DoTaskInTime(25*FRAMES, function(i) i.SoundEmitter:PlaySound(boat.sounds.thunk) end)
+		end
 	end
     beak_inst._beak_attack_ending = true
     beak_inst:RemoveEventCallback("attacked", OnBeakHit)
