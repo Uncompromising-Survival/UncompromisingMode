@@ -96,9 +96,9 @@ env.AddPrefabPostInit("forest", function(inst)
 	
 	inst:AddComponent("um_areahandler")
 	--inst:AddComponent("horriblenightmanager")
-	inst:AddComponent("um_pestilencecontroller")
-	inst:AddComponent("um_ocupusappearinator")
-	inst:AddComponent("um_oceantilelogger")
+	--inst:AddComponent("um_oceantilelogger")
+	--inst:AddComponent("um_ocupusappearinator")
+	--inst:AddComponent("um_pestilencecontroller")
 	if TUNING.DSTU.SPAWNMOTHERGOOSE then
 		inst:AddComponent("gmoosespawner")
 	end
