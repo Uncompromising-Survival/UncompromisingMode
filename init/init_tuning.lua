@@ -646,3 +646,7 @@ if GetModConfigData("waxwell_nerf") then
 end
 
 TUNING.COMPASS_FUEL = total_day_time * 5
+
+
+TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.med_leak = 75
+TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
