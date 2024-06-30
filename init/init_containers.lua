@@ -72,11 +72,11 @@ function CheckGem(container, item, slot)
 end
 
 function CheckSlingshotAmmo(container, item, slot)
-	return item:HasTag("slingshotammo")
+    return item:HasTag("slingshotammo")
 end
 
 function CheckSlingshotAmmoJessie(container, item, slot)
-	return item:HasTag("slingshotammo") and container.inst:HasTag("can_take_ammo")
+    return item:HasTag("slingshotammo") and container.inst:HasTag("can_take_ammo")
 end
 
 function CheckFish(container, item, slot)
@@ -306,7 +306,7 @@ modparams.matilda =
     {
         slotpos =
         {
-			--Vector3(0,   32 + 4,  0),
+            --Vector3(0,   32 + 4,  0),
         },
         slotbg =
         {
@@ -329,7 +329,7 @@ modparams.jessie =
     {
         slotpos =
         {
-			--Vector3(0,   32 + 4,  0),
+            --Vector3(0,   32 + 4,  0),
         },
         slotbg =
         {
@@ -347,8 +347,8 @@ modparams.jessie =
     excludefromcrafting = true,
     acceptsstacks = false,
     itemtestfn = CheckSlingshotAmmoJessie, -- HEY SCRIMBLES! FOR SOME REASON IT SEEMS LIKE
-											-- JESSIE WONT ACCEPT AMMO DESPITE can_take_ammo BEING TRUE?
-											-- FIND WHAT 'container' REFERS TO
+    -- JESSIE WONT ACCEPT AMMO DESPITE can_take_ammo BEING TRUE?
+    -- FIND WHAT 'container' REFERS TO
     type = "hand_inv",
 }
 
@@ -646,7 +646,7 @@ containers.params.winona_toolbox =
         side_align_tip = 160,
     },
     type = "chest",
-    itemtestfn = (GetModConfigData("winona_portables_") or TUNING.DSTU.UPDATE_CHECK) and CheckToolboxItem or CheckWardrobeItem,
+    itemtestfn = CheckToolboxItem,
 }
 
 containers.params.winona_toolbox.widget.slotpos = containers.params.shadowchester.widget.slotpos
@@ -690,6 +690,17 @@ containers.params.um_inkubator =
     type = "chest",
     itemtestfn = CheckInkubator,
 }
+
+containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
+containers.params.spicepack.itemtestfn = function(container, item, slot)
+    for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
+        if item:HasTag("edible_" .. v) or item:HasTag("spice") then return true end
+    end
+end
+
+for k, v in pairs(containers.params.spicepack.widget.slotbg) do
+    containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
+end
 
 local function addItemSlotNetvarsInContainer(inst)
     if (#inst._itemspool < containers.MAXITEMSLOTS) then

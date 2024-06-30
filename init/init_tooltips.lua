@@ -30,8 +30,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
     DRAGONFLYCHEST = "- Has even more item slots.\n- May hurt would be thieves.",
     WARDROBE = "- Can store a lot of equipment.",
-    WINONA_BATTERY_LOW = "- Can charge electrical equipment.",
-    WINONA_BATTERY_HIGH = "- Can charge electrical equipment.",
     WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
     LIGHTNING_ROD = "- Can charge electrical equipment.",
     BANDAGE = "- Restores a bit of extra health over time.",
@@ -48,6 +46,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
+    SPICEPACK = "- No longer a backpack.\n- Can only store food.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -186,13 +185,6 @@ STRINGS.ENGINEERING_TOOLTIP = {
     WINONA_TOOLBOX = "", --putting these here for the icon
     WINONA_UPGRADEKIT_ELECTRICAL = ""
 }
-
-if TUNING.DSTU.WINONA_PORTABLES and not TUNING.DSTU.UPDATE_CHECK then
-    STRINGS.ENGINEERING_TOOLTIP.WINONA_CATAPULT = "- Now portable."
-    STRINGS.ENGINEERING_TOOLTIP.WINONA_SPOTLIGHT = "- Now portable."
-    STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_LOW = "- Now portable."
-    STRINGS.ENGINEERING_TOOLTIP.WINONA_BATTERY_HIGH = "- Now portable."
-end
 
 
 if TUNING.DSTU.TELESTAFF_REWORK then
@@ -358,11 +350,6 @@ end
 
 if TUNING.DSTU.WOODIE_WET_GOOSE then
     TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
-end
-
-if TUNING.DSTU.WINONA_GEN then
-    TOOLTIPS.WINONA_BATTERY_HIGH = TOOLTIPS.WINONA_BATTERY_HIGH .. "\n- Access limited to Winona."
-    TOOLTIPS.WINONA_BATTERY_LOW = TOOLTIPS.WINONA_BATTERY_LOW .. "\n- Access limited to Winona."
 end
 
 if TUNING.DSTU.WICKERNERF_MOONBOOK then
