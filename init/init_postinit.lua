@@ -211,7 +211,8 @@ local prefab_post = {
     "scrap_monoclehat",
     "winona_telebrella",
 	"otter",
-    "stash_map"
+    "stash_map",
+    "monkeyhut"
 }
 
 local stategraph_post = {
