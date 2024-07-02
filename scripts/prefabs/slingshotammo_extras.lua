@@ -923,7 +923,6 @@ local function secondaryproj_fn(symbol, overridebuild)
     inst:AddComponent("locomotor")
 
     inst:AddComponent("weapon")
-    inst:AddComponent("projectile")
 
     inst:AddComponent("projectile")
     inst.components.projectile:SetSpeed(20)
@@ -1053,7 +1052,7 @@ end
 local function GlassCut(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local attacker = inst.components.projectile.owner or nil
-    local cant_tags = { "noclaustrophobia", "wall", "invisible", "player", "companion", "INLIMBO" }
+    local cant_tags = { "noclaustrophobia", "wall", "invisible", "player", "companion", "INLIMBO", "abigail" }
 
     for i, v in ipairs(TheSim:FindEntities(x, y, z, 3, "_combat", cant_tags)) do
         if v:GetPhysicsRadius(0) > 1.5 and v:IsValid() and v.components.combat ~= nil and v.components.combat ~= nil and v.components.health ~= nil and not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) and (v:HasTag("bird_mutant") or not v:HasTag("bird")) then

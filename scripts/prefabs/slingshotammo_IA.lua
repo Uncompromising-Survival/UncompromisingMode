@@ -114,7 +114,7 @@ local function OnHit_Limestone(inst, attacker, target)
     DealDamage(inst, attacker, target)
     ImpactFx(inst, attacker, target)
 
-	WixieShove(attacker, target, inst.powerlevel, false, nil, true, applyslow)
+	WixieShove(attacker, target, inst.powerlevel, false, nil, true, false)
 
     inst:Remove()
 end
@@ -406,6 +406,32 @@ local function OnHit_Flare(inst, attacker, target)
     inst:Remove()
 end
 
+local function SpawnGestalt(target, attacker)
+	local gestalt = SpawnPrefab("alterguardianhat_projectile")
+	local x, y, z = target.Transform:GetWorldPosition()
+	local r = GetRandomMinMax(3, 5)
+	local delta_angle = GetRandomMinMax(-90, 90)
+	local angle = (attacker:GetAngleToPoint(x, y, z) + delta_angle) * DEGREES
+	gestalt.Transform:SetPosition(x + r * math.cos(angle), y, z + r * -math.sin(angle))
+	gestalt:ForceFacePoint(x, y, z)
+	gestalt:SetTargetPosition(Vector3(x, y, z))
+	gestalt.components.follower:SetLeader(attacker)
+end
+
+local function OnHit_Alter(inst, attacker, target)
+	if attacker ~= nil then
+		local sanity = attacker.components.sanity ~= nil and attacker.components.sanity:GetPercent() or 0
+		if math.random() < TUNING.SLINGSHOT_AMMO_CHANCE_ALTER and sanity > TUNING.SANITY_BECOME_ENLIGHTENED_THRESH then
+			SpawnGestalt(target, attacker)
+			attacker.components.sanity:DoDelta(-1, true)
+		end
+	end
+	
+	DealDamage(inst, attacker, target)
+	ImpactFx(inst, attacker, target)
+	inst:Remove()
+end
+
 local function oncollide(inst, other)
     local attacker = inst.components.projectile.owner
     if other ~= nil and attacker ~= nil and other:IsValid() and other.components.combat ~= nil and not other:HasTag("projectile") and not other:HasTag("playerghost") and not other:HasTag("player") then
@@ -447,7 +473,7 @@ local function CollisionCheck(inst)
     end
 end
 
-local function secondaryproj_fn(symbol)
+local function secondaryproj_fn(symbol, special)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -471,7 +497,7 @@ local function secondaryproj_fn(symbol)
     inst.AnimState:SetBank("slingshotammo")
     inst.AnimState:SetBuild("wixieammo_IA")
     inst.AnimState:PlayAnimation("spin_loop", true)
-    inst.AnimState:OverrideSymbol("rock", "wixieammo_IA", symbol)
+    inst.AnimState:OverrideSymbol("rock", special ~= nil and special or "wixieammo_IA", symbol)
 
     -- projectile (from projectile component) added to pristine state for optimization
     inst:AddTag("projectile")
@@ -664,6 +690,60 @@ local function coconutproj_fn()
     inst.damage = TUNING.SLINGSHOT_AMMO_DAMAGE_GOLD
 
     inst.OnHit = OnHit_Coconut
+
+    return inst
+end
+
+local function CherryHit(inst, attacker, target)
+    if target:HasDebuff("wixiecurse_debuff") then
+        inst.powerlevel = inst.powerlevel + 1
+        target:PushEvent("wixiebite")
+    end
+	
+	inst.planar_ammo = true
+
+    DealDamage(inst, attacker, target)
+    ImpactFx(inst, attacker, target)
+
+    inst:Remove()
+end
+
+local function cherryproj_fn()
+    local inst = secondaryproj_fn("cherrift", "slingshotammo_cherrift")
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.Physics:SetCollisionCallback(nil)
+    inst.components.projectile:SetOnHitFn(CherryHit)
+
+    inst.impactfx = "slingshotammo_hitfx_slow"
+
+    inst.damage = TUNING.SLINGSHOT_AMMO_DAMAGE_MARBLE
+
+    inst.OnHit = CherryHit
+
+    return inst
+end
+
+local function alterproj_fn()
+    local inst = secondaryproj_fn("alter", "slingshotammo_alter")
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.Physics:SetCollisionCallback(nil)
+    inst.components.projectile:SetOnHitFn(OnHit_Alter)
+	
+	inst.planar_ammo = true
+
+	inst.impactfx = "slingshotammo_hitfx_alter"
+
+    inst.damage = TUNING.SLINGSHOT_AMMO_DAMAGE_ALTER or TUNING.SLINGSHOT_AMMO_DAMAGE_MARBLE
+
+	inst.OnHit = OnHit_Alter
 
     return inst
 end
@@ -1030,4 +1110,5 @@ return Prefab("slingshotammo_limestone", limestone_fn, assets, prefabs),
     Prefab("slingshotammo_lunarvine_proj_secondary", lunarvineproj_fn, assets, prefabs),
     Prefab("slingshotammo_flare", flare_fn, assets, prefabs),
     Prefab("slingshotammo_flare_proj_secondary", flareproj_fn, assets, prefabs),
-    Prefab("slingshotammo_flare_projectile", flareprojectilefn, assets, prefabs)
+    Prefab("slingshotammo_flare_projectile", flareprojectilefn, assets, prefabs),
+    Prefab("slingshotammo_cherrift_proj_secondary", cherryproj_fn, assets, prefabs)
