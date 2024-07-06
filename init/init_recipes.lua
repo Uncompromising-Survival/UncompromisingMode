@@ -687,6 +687,16 @@ AddRecipe2(
 )
 ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
+AddRecipe2(
+    "um_rimeweed_icepack",
+    { Ingredient("papyrus", 1), Ingredient("ice", 2),Ingredient("um_rimeweed_itemvine", 2)},
+    TECH.SCIENCE_TWO,
+    nil,
+    { "RESTORATION" }
+)
+ChangeSortKey("um_rimeweed_icepack", "floral_bandage", "RESTORATION", true)
+
+
 if GetModConfigData("winona_items") then
     AddRecipe2(
         "winona_toolbox",
@@ -697,7 +707,6 @@ if GetModConfigData("winona_items") then
     )
     ChangeSortKey("winona_toolbox", "treasurechest", "CONTAINERS", true)
     ChangeSortKey("winona_toolbox", "sewing_tape", "CHARACTER", true)
-
     AddRecipe2(
         "powercell",
         { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 1), Ingredient("nitre", 2) },
@@ -706,7 +715,6 @@ if GetModConfigData("winona_items") then
         { "CHARACTER" }
     )
     ChangeSortKey("powercell", "winona_battery_high", "CHARACTER", true)
-
     AddRecipe2(
         "winona_upgradekit_electrical",
         { Ingredient("goldnugget", 6), Ingredient("sewing_tape", 2), Ingredient("wagpunk_bits", 4) },
@@ -1758,6 +1766,7 @@ STRINGS.RECIPE_DESC.BOOK_RAIN_UM = "A catalogue of weather effects."
 STRINGS.RECIPE_DESC.RAIN_HORN = "Drown the world."
 STRINGS.RECIPE_DESC.HAT_RATMASK = "Sniff out some vermin!"
 STRINGS.RECIPE_DESC.FLORAL_BANDAGE = "Sweetened healing!"
+STRINGS.RECIPE_DESC.UM_RIMEWEED_ICEPACK = "Chilled healing!"
 STRINGS.RECIPE_DESC.WINONA_TOOLBOX = "An engineer is always prepared."
 STRINGS.RECIPE_DESC.POWERCELL = "Portable electricity!"
 STRINGS.RECIPE_DESC.WINONA_UPGRADEKIT_ELECTRICAL = "Any old light source can be electric now."

@@ -526,6 +526,17 @@ InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
+
+
+
+-- [Rimeweed] --
+InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemflower.xml", "um_rimeweed_itemflower.tex")
+
+InsertIngredientValues({ "um_rimeweed_itemvine" }, { ice = 1, inedible = 1,}, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
+
+
 if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
