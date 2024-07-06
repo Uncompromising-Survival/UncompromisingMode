@@ -573,7 +573,7 @@ local function whip()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("whip")
-
+    inst:AddTag("donotautopick")
     inst:AddTag("weapon")
 
     MakeInventoryFloatable(inst, "med", nil, 0.9)

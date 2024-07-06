@@ -51,7 +51,7 @@ local function frockfn()
 	inst:AddTag("um_wingsuit")
 	--inst:AddTag("backpack")
 	inst:AddTag("vetcurse_item")
-
+    inst:AddTag("donotautopick")
     inst:AddTag("allow_action_on_impassable")
 
 	MakeInventoryFloatable(inst)

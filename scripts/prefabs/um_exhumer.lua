@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/swap_exhumer.zip"),
-	Asset("ANIM", "anim/swap_exhumer_powered.zip"),
+    Asset("ANIM", "anim/swap_exhumer_powered.zip"),
 }
 
 local prefabs =
@@ -16,11 +16,11 @@ local function onfinishcallback(inst, worker)
         if worker.components.sanity ~= nil then
             worker.components.sanity:DoDelta(-TUNING.SANITY_SMALL)
         end
-		
-		local skeleton = SpawnPrefab("rneskeleton")
-		skeleton.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		worker:PushEvent("makefriend")
-		worker.components.leader:AddFollower(skeleton)
+
+        local skeleton = SpawnPrefab("rneskeleton")
+        skeleton.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        worker:PushEvent("makefriend")
+        worker.components.leader:AddFollower(skeleton)
     end
 end
 
@@ -61,7 +61,7 @@ local function fn()
     inst.AnimState:PlayAnimation("gravedirt")
 
     inst:AddTag("grave")
-	inst:AddTag("buried")
+    inst:AddTag("buried")
 
     inst.scrapbook_anim = "gravedirt"
 
@@ -84,9 +84,9 @@ local function fn()
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_SMALL)
     inst.components.hauntable:SetOnHauntFn(OnHaunt)
-	
-	inst:DoTaskInTime(60, inst.Remove)
-	inst.persists = false
+
+    inst:DoTaskInTime(60, inst.Remove)
+    inst.persists = false
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
@@ -95,43 +95,43 @@ local function fn()
 end
 
 local function UpdateBuild(inst, powered)
-	inst.charged = powered
+    inst.charged = powered
 
-	local owner = inst.components.inventoryitem.owner 
-	inst.build = powered and "_powered" or ""
-	
-	if owner ~= nil and inst.components.equippable:IsEquipped() then
-		owner.AnimState:OverrideSymbol("swap_object", "swap_exhumer"..inst.build, "swap_exhumer"..inst.build)
-	end
-	
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_exhumer"..inst.build..".xml"
-	inst.components.inventoryitem:ChangeImageName("um_exhumer"..inst.build)
-	
+    local owner = inst.components.inventoryitem.owner
+    inst.build = powered and "_powered" or ""
+
+    if owner ~= nil and inst.components.equippable:IsEquipped() then
+        owner.AnimState:OverrideSymbol("swap_object", "swap_exhumer" .. inst.build, "swap_exhumer" .. inst.build)
+    end
+
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_exhumer" .. inst.build .. ".xml"
+    inst.components.inventoryitem:ChangeImageName("um_exhumer" .. inst.build)
+
     --inst.AnimState:SetBuild(inst.build)
 end
 
 local function onequip(inst, owner)
-	if not owner:HasTag("vetcurse") then
-		inst:DoTaskInTime(0, function(inst, owner)
-			local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
-			local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			if tool ~= nil and owner ~= nil then
-				owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-				owner.components.inventory:DropItem(tool)
-				owner.components.inventory:GiveItem(inst)
-				owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
+    if not owner:HasTag("vetcurse") then
+        inst:DoTaskInTime(0, function(inst, owner)
+            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
+            local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            if tool ~= nil and owner ~= nil then
+                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
+                owner.components.inventory:DropItem(tool)
+                owner.components.inventory:GiveItem(inst)
+                owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
 
-				if owner.sg ~= nil then
-					owner.sg:GoToState("hit")
-				end
-			end
-		end)
-	else
-		owner.AnimState:OverrideSymbol("swap_object", "swap_exhumer"..inst.build, "swap_exhumer"..inst.build)
-		owner.AnimState:Show("ARM_carry")
-		owner.AnimState:Hide("ARM_normal")
-	end
+                if owner.sg ~= nil then
+                    owner.sg:GoToState("hit")
+                end
+            end
+        end)
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_exhumer" .. inst.build, "swap_exhumer" .. inst.build)
+        owner.AnimState:Show("ARM_carry")
+        owner.AnimState:Hide("ARM_normal")
+    end
 end
 
 local function onunequip(inst, owner)
@@ -141,28 +141,28 @@ end
 
 local function onattack(inst, attacker, target)
     if target ~= nil and target:IsValid() and target.components.health ~= nil then
-		local health_value = target.components.health.currenthealth
-		local maxhealth_value = target.components.health.maxhealth * 0.05
-		local owner = inst.components.inventoryitem.owner
-		
+        local health_value = target.components.health.currenthealth
+        local maxhealth_value = target.components.health.maxhealth * 0.05
+        local owner = inst.components.inventoryitem.owner
+
         if not (target:HasTag("wall") or target:HasTag("engineering") or target:HasTag("butterfly")) and health_value <= (maxhealth_value + 30) and target.components.combat ~= nil then
-			if owner ~= nil then
-				if owner.SoundEmitter ~= nil then
-					owner.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/attack1_pbaoe")
-				end
+            if owner ~= nil then
+                if owner.SoundEmitter ~= nil then
+                    owner.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/attack1_pbaoe")
+                end
 
-				if owner.components.health ~= nil then
-					owner.components.health:DoDelta(maxhealth_value / 2, false, "um_exhumer")
-				end
-			end
+                if owner.components.health ~= nil then
+                    owner.components.health:DoDelta(maxhealth_value / 2, false, "um_exhumer")
+                end
+            end
 
-			target.components.combat:GetAttacked(attacker, maxhealth_value, nil)
+            target.components.combat:GetAttacked(attacker, maxhealth_value, nil)
 
-			if target.components.health:IsDead() then
-				SpawnPrefab("shadow_despawn").Transform:SetPosition(target.Transform:GetWorldPosition())
-				SpawnPrefab("um_grave_mound").Transform:SetPosition(target.Transform:GetWorldPosition())
-			end
-		end
+            if target.components.health:IsDead() then
+                SpawnPrefab("shadow_despawn").Transform:SetPosition(target.Transform:GetWorldPosition())
+                SpawnPrefab("um_grave_mound").Transform:SetPosition(target.Transform:GetWorldPosition())
+            end
+        end
     end
 end
 
@@ -182,42 +182,42 @@ local function OnCharged(inst)
         fx.Transform:SetScale(1.33, 1.33, 1.33)
     end
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/charge")
-	inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/taunt_short", nil, .4)
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/taunt_short", nil, .4)
 end
 
 local function CheckCharge(inst)
-	local owner = inst.components.inventoryitem:GetGrandOwner()
-	if owner ~= nil then
-		local x, y, z = owner.Transform:GetWorldPosition()
-		local charging = false
-		local ents = TheSim:FindEntities(x, y, z, 10, { "_health", "_combat" }, { "player", "playerghost", "companion", "abigail", "wall", "engineering", "INLIMBO", "notarget", "NOCLICK", "butterfly", "bird" })
+    local owner = inst.components.inventoryitem:GetGrandOwner()
+    if owner ~= nil then
+        local x, y, z = owner.Transform:GetWorldPosition()
+        local charging = false
+        local ents = TheSim:FindEntities(x, y, z, 10, { "_health", "_combat" }, { "player", "playerghost", "companion", "abigail", "wall", "engineering", "INLIMBO", "notarget", "NOCLICK", "butterfly", "bird" })
 
-		if ents ~= nil then
-			for i, v in ipairs(ents) do
-				if v.components.health ~= nil and v.components.combat ~= nil then
-					local health_value = v.components.health.currenthealth
-					local maxhealth_value = v.components.health.maxhealth * 0.05
-						
-					if health_value <= (maxhealth_value + 30) then
-						charging = true
-					end
-				end
-			end
-		end
-		
-		if charging then
-			if not inst.charged then
-				OnCharged(inst)
-				UpdateBuild(inst, charging)
-			end
-		else
-			UpdateBuild(inst, charging)
-		end
-	else
-		UpdateBuild(inst, false)
-	end
+        if ents ~= nil then
+            for i, v in ipairs(ents) do
+                if v.components.health ~= nil and v.components.combat ~= nil then
+                    local health_value = v.components.health.currenthealth
+                    local maxhealth_value = v.components.health.maxhealth * 0.05
+
+                    if health_value <= (maxhealth_value + 30) then
+                        charging = true
+                    end
+                end
+            end
+        end
+
+        if charging then
+            if not inst.charged then
+                OnCharged(inst)
+                UpdateBuild(inst, charging)
+            end
+        else
+            UpdateBuild(inst, charging)
+        end
+    else
+        UpdateBuild(inst, false)
+    end
 end
-		
+
 local function shovelfn()
     local inst = CreateEntity()
 
@@ -233,24 +233,25 @@ local function shovelfn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("tool")
-	inst:AddTag("weapon")
+    inst:AddTag("weapon")
     inst:AddTag("um_exhumer")
     inst:AddTag("vetcurse_item")
-	
-    MakeInventoryFloatable(inst, "med", 0.05, {0.8, 0.4, 0.8})
+    inst:AddTag("donotautopick")
+
+    MakeInventoryFloatable(inst, "med", 0.05, { 0.8, 0.4, 0.8 })
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	
+
     inst:AddComponent("tool")
     inst.components.tool:SetAction(ACTIONS.DIG)
 
-	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE)
-	inst.components.weapon:SetOnAttack(onattack)
+    inst:AddComponent("weapon")
+    inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE)
+    inst.components.weapon:SetOnAttack(onattack)
 
     inst:AddInherentAction(ACTIONS.DIG)
 
@@ -268,17 +269,17 @@ local function shovelfn()
 
     inst:AddComponent("rechargeable")
     inst.components.rechargeable:SetOnChargedFn(OnCharged)
-	
-	inst:DoPeriodicTask(.2, CheckCharge)
+
+    inst:DoPeriodicTask(.2, CheckCharge)
 
     MakeHauntableLaunch(inst)
-	inst.build = ""
-	
-	inst.UpdateBuild = UpdateBuild
-	UpdateBuild(inst, false)
-	
+    inst.build = ""
+
+    inst.UpdateBuild = UpdateBuild
+    UpdateBuild(inst, false)
+
     return inst
 end
 
 return Prefab("um_grave_mound", fn, assets, prefabs),
-		Prefab("um_exhumer", shovelfn, assets, prefabs)
+    Prefab("um_exhumer", shovelfn, assets, prefabs)

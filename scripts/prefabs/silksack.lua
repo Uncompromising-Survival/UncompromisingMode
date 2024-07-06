@@ -156,7 +156,8 @@ local function fn()
 
     inst:AddTag("backpack")
     inst:AddTag("vetcurse_item")
-
+    inst:AddTag("donotautopick")
+    
     MakeInventoryFloatable(inst, "med", 0.1, 0.65)
 
     inst.entity:SetPristine()
