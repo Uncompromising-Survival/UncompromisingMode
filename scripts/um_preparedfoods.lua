@@ -522,6 +522,69 @@ local um_preparedfoods =
         end,
         card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "electricmilk", 1 } } },
     },
+	
+	
+	
+	
+	-- [Rimeweed] -----
+    um_rimeweed_spagett =
+    {
+        test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.um_rimeweed_itemvine and names.um_rimeweed_itemvine > 2 end,
+        hunger = 62.5,
+        health = 3,
+        sanity = 5,
+        priority = 200,
+        weight = 1,
+        cooktime = 1.8,
+        temperature = TUNING.COLD_FOOD_BONUS_TEMP,
+        temperatureduration = TUNING.FOOD_TEMP_AVERAGE,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 3 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "um_rimeweed_itemvine", 1 }, { "um_rimeweed_flower", 1 } } },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
+        oneatenfn = function(inst, eater)
+            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
+                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+                not eater:HasTag("playerghost") then
+				local x,y,z = eater.Transform:GetWorldPosition()
+                local fx = SpawnPrefab("deer_ice_burst")
+				fx.Transform:SetPosition(x,y,z)
+				fx.Transform:SetScale(3,3,3)
+				local ents = TheSim:FindEntities(x,y,z,6,{"_health"})
+				for i,ent in ipairs(ents) do
+					if ent ~= eater and ent.components.freezable then
+						ent.components.freezable:AddColdness(5)
+					end
+				end
+            end
+        end,
+    },
+	
+    um_rimeweed_tequila =
+    {
+        test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.ice end,
+        hunger = 12.5,
+        health = 3,
+        sanity = 33,
+        priority = 200,
+        weight = 1,
+        cooktime = 2,
+        temperature = TUNING.COLD_FOOD_BONUS_TEMP,
+        temperatureduration = TUNING.FOOD_TEMP_AVERAGE,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "um_rimeweed_flower", 1 }, { "ice", 1 } } },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
+        oneatenfn = function(inst, eater)
+            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
+                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+                not eater:HasTag("playerghost") then
+                eater.components.debuffable:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
+            end
+        end,
+    },
 }
 
 for k, v in pairs(um_preparedfoods) do
