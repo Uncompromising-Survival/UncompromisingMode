@@ -58,7 +58,7 @@ TUNING.DSTU = {
     FOOD_SPOILED_FOOD_SANITY = -5,
     FOOD_SEEDS_HUNGER = 1.5,
     -- Food production
-    FOOD_HONEY_PRODUCTION_PER_STAGE = { 0, 1, 3, 6 },
+    FOOD_HONEY_PRODUCTION_PER_STAGE = { 0, 1, 2, 3 },
     -- Respawn time increases
     BUNNYMAN_RESPAWN_TIME_DAYS = 3,
     ----------------------------------------------------------------------------""""
@@ -345,7 +345,7 @@ TUNING.DSTU = {
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
     UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R34_OCEANQOL_WINONAWURT"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
-    POCKET_POWERTRIP = GetModConfigData("pocket_powertrip"),
+    POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     HUNGRY_VOID = GetModConfigData("hungry_void"),
     BUTTERFLYWINGS_NERF = GetModConfigData("butterflywings_nerf"),
@@ -646,3 +646,8 @@ if GetModConfigData("waxwell_nerf") then
 end
 
 TUNING.COMPASS_FUEL = total_day_time * 5
+
+TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.med_leak = 75
+TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
+
+TUNING.MONKEY_PIRATE_TREASURE_BOAT_CHANCE = 0.5

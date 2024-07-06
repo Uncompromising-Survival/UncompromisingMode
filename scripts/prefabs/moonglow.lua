@@ -336,7 +336,8 @@ local function fn()
 
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
-
+    inst:AddTag("donotautopick")
+    
     MakeInventoryFloatable(inst, "small", 0.05, 0.8)
 
     inst.entity:SetPristine()

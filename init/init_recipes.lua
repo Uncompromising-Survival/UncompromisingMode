@@ -64,6 +64,12 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
 --while AllRecipes doesn't. Not sure if there's any issues with that.
 
 -- Recipe changes
+
+--I HATE FRAZZLED WIRES!!!!!!!!
+AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
+AllRecipes["boat_magnet"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
+AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}	
+
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 4), Ingredient("flint", 2) }
 
 if GetModConfigData("longpig") then
@@ -425,7 +431,7 @@ AddRecipe2(
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
-if GetModConfigData("pocket_powertrip") ~= 0 then
+if GetModConfigData("pocket_powertrip_") then
     AddRecipeToFilter("raincoat", "CONTAINERS")
     ChangeSortKey("raincoat", "sporepack", "CONTAINERS", true)
 
@@ -1546,9 +1552,6 @@ if GetModConfigData("wixie_walter") then
             if Prefabs["obsidian"] then
                 AllRecipes["slingshotammo_obsidian"].ingredients = { Ingredient("obsidian", 1) }
             end
-            if Prefabs["hail"] then
-                AllRecipes["ice"].ingredients = { Ingredient("hail", 4) }
-            end
         end)
     end)
 end
@@ -1622,6 +1625,9 @@ AddRecipe2(
 GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 AddRecipeToFilter("um_astral_projector_target", "STRUCTURES")
 
+AddRecipe2("boat_ancient_item", {Ingredient("livinglog", 16)}, GLOBAL.TECH.MAGIC_TWO, nil, { "SEAFARING"})
+ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
+
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
@@ -1631,6 +1637,8 @@ AddPrefabPostInit("forest", function(inst)
             local shark_fin = recipe:FindAndConvertIngredient("shark_fin") -- shark fins/rockjaw leather can replace eachother!
             local rockjawleather = recipe:FindAndConvertIngredient("rockjawleather")
             local mosquitosack = recipe:FindAndConvertIngredient("mosquitosack")
+            local snowball = recipe:FindAndConvertIngredient("snowball_throwable")
+            local hail = recipe:FindAndConvertIngredient("hail_ice")
 
             if tar and tar.AddDictionaryPrefab ~= nil then
                 tar:AddDictionaryPrefab("sludge")
@@ -1641,6 +1649,17 @@ AddPrefabPostInit("forest", function(inst)
                     sludge:AddDictionaryPrefab("tar")
                 end
             end
+
+            if hail and hail.AddDictionaryPrefab ~= nil then
+                hail:AddDictionaryPrefab("snowball_throwable")
+            end
+
+            if snowball and snowball.AddDictionaryPrefab ~= nil then
+                if GLOBAL.Prefabs["hail_ice"] ~= nil then
+                    snowball:AddDictionaryPrefab("hail_ice")
+                end
+            end
+
 
             if sludge and sludge.AddDictionaryPrefab ~= nil and GLOBAL.Prefabs["tar"] ~= nil then
                 sludge:AddDictionaryPrefab("tar")
@@ -1779,6 +1798,7 @@ STRINGS.RECIPE_DESC.HERMIT_BUNDLE_LURES = "Get to fishing, today!"
 -- Pyre Nettle stuff
 STRINGS.RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
 STRINGS.RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
+STRINGS.RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
 
 -- Veteran Shrine Crafts
 

@@ -211,7 +211,8 @@ local prefab_post = {
     "scrap_monoclehat",
     "winona_telebrella",
 	"otter",
-    "stash_map"
+    "stash_map",
+    "monkeyhut"
 }
 
 local stategraph_post = {
@@ -403,7 +404,7 @@ if GetModConfigData("harder_spider_queen") then
     table.insert(stategraph_post, "spiderqueen")
 end
 
-if GetModConfigData("pocket_powertrip") ~= 0 then
+if GetModConfigData("pocket_powertrip_") then
     table.insert(prefab_post, "pocket_powertrip")
 end
 

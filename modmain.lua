@@ -54,11 +54,8 @@ local valid_data = {
 AddPrefabPostInit("world", function(inst)
     inst:DoTaskInTime(0, function()
         for entry, data in pairs(vanilla) do
-            print("Checking " .. entry, data)
             for k, datatype in ipairs(valid_data) do
-                print("Checking " .. k, datatype)
                 if uncomp[entry] ~= nil and uncomp[entry][datatype] ~= nil and uncomp[entry][datatype] ~= vanilla[entry][datatype] then
-                    print("Changing " .. tostring(entry) .. " " .. tostring(datatype) .. " from " .. tostring(uncomp[entry][datatype]) .. " to " .. tostring(uncomp[entry][datatype]))
                     vanilla[entry][datatype] = uncomp[entry][datatype]
                 end
             end

@@ -202,7 +202,8 @@ local function fn()
     inst:AddTag("light")
     inst:AddTag("nopunch")
     inst:AddTag("vetcurse_item")
-
+    inst:AddTag("donotautopick")
+    
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

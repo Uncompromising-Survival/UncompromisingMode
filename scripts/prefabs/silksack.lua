@@ -65,7 +65,6 @@ local function CanWrap(inst) -- The backpack is good to go
                 elseif i ~= 7 and i ~= 8 and item.components.bundle then
                     bundle = item
                 end
-
             end
         end
         return silk and silk.components.stackable.stacksize >= 6 and not bundle
@@ -110,27 +109,11 @@ local function WrapStuff(inst, owner)
     end
 end
 
-local function Folded(inst)
-    if inst.components.container ~= nil then
-        inst:DoTaskInTime(0, function(inst)
-            local owner = inst.components.inventoryitem.owner
-
-            if not inst.components.equippable:IsEquipped() and owner ~= nil then
-                if #inst.components.container:FindItems(function(item) return item.components.inventoryitem ~= nil end) > 0 then
-                    if owner:HasTag("winky") then
-                        for i = 1, inst.components.container:NumItems() do
-                            owner.components.sanity:DoDelta(-5)
-                        end
-                    end
-
-                    if owner.SoundEmitter ~= nil then
-                        owner.SoundEmitter:PlaySound("dontstarve/common/tool_slip")
-                    end
-                end
-				
-				inst.components.container:DropEverything()
-            end
-        end)
+local function OnContainerChanged(inst)
+    if inst.components.container:IsEmpty() then
+        inst.components.inventoryitem.cangoincontainer = true
+    else
+        inst.components.inventoryitem.cangoincontainer = false
     end
 end
 
@@ -156,6 +139,7 @@ local function fn()
 
     inst:AddTag("backpack")
     inst:AddTag("vetcurse_item")
+    inst:AddTag("donotautopick")
 
     MakeInventoryFloatable(inst, "med", 0.1, 0.65)
 
@@ -168,14 +152,18 @@ local function fn()
         return inst
     end
 
+
+
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/silksack.xml"
-	inst.components.inventoryitem:SetOnPutInInventoryFn(Folded)
-    inst:ListenForEvent("itemget", Folded)
-		
+    --inst.components.inventoryitem:SetOnPutInInventoryFn(Folded)
+
+    inst:ListenForEvent("itemlose", OnContainerChanged)
+    inst:ListenForEvent("itemget", OnContainerChanged)
+
     inst:AddComponent("equippable")
     if EQUIPSLOTS["BACK"] ~= nil then
         inst.components.equippable.equipslot = EQUIPSLOTS.BACK
@@ -191,6 +179,13 @@ local function fn()
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("silksack")
+
+    inst.components.container.itemtestfn = function(inst, item, slot)
+        if inst.components.equippable.isequipped or not inst.components.equippable.isequipped and inst.components.container:IsEmpty() then
+            return true
+        end
+        return false
+    end
 
 
     MakeHauntableLaunchAndDropFirstItem(inst)

@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.30"
+local _version = "1.5.0.35"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -125,9 +125,8 @@ configuration_options = {
         label = "Wigfrid - Rework",
         hover = "Reduced Wigfrids combat leeching, revamped skill tree, added more meaningful alingment choices.",
         options = {
-
-            { description = "Enabled",  data = 1, hover = "All changes enabled."},
-            { description = "Legacy",  data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
+            { description = "Enabled",  data = 1, hover = "All changes enabled." },
+            { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
             { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
 
         default = 1
@@ -243,7 +242,7 @@ configuration_options = {
         true),
     BinaryConfig("bernie_buffs", "Willow - Bernie Buffs",
         "Holding Bernie prevents shadows from aggroing.", true),
-        BinaryConfig("no_bee_embers", "Willow - Reduced Embers", "All bees, birds and butterflies no longer drop embers.", true),
+    BinaryConfig("no_bee_embers", "Willow - Reduced Embers", "All bees, birds and butterflies no longer drop embers.", true),
     --BinaryConfig("willow insulation", "Willow's Experimental Insulation",
     --"Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
     BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
@@ -310,7 +309,7 @@ configuration_options = {
         true),
     BinaryConfig("winona_items", "Winona - New Items",
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
-        BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
+    BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
     BinaryConfig("warly_butcher_", "Warly - Butchering",
         "Warly is a certified butcher, he will get more resources from kills in his inventory.",
         true),
@@ -320,7 +319,7 @@ configuration_options = {
     BinaryConfig("wortox", "Wortox",
         "Better teleports, worse sanity and healing from souls. Birds and butterflies are soulless.",
         true),
-        BinaryConfig("wortox_beesouls", "Wortox - Bee Souls", "Toggle wether or not bees have souls.", true),
+    BinaryConfig("wortox_beesouls", "Wortox - Bee Souls", "Toggle wether or not bees have souls.", true),
     --{
     --name = "wortox",
     --label = "Wortox",
@@ -533,20 +532,8 @@ configuration_options = {
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
         false),
-    {
-        name = "pocket_powertrip",
-        label = "Clothing Pockets",
-        hover = "Gives some underused dress items pockets.",
-        options = {
-            { description = "On",  data = 1 },
-            {
-                description = "On (Backpack-like)",
-                data = 2,
-                hover = "Items with pockets act like backpacks. However, they can't be stored in the inventory."
-            },
-            { description = "Off", data = 0 } },
-        default = 1
-    },
+
+    BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
@@ -594,7 +581,7 @@ configuration_options = {
     BinaryConfig("passibleimpassibles", "Remove Cheese-able Collisions",
         "Removes collision from objects like statues to prevent cheesing mobs and bosses.", true),
     BinaryConfig("telestaff_rework", "Purple Gem Items",
-        "Many changes to items that are made with Purple Gems, including: Telelocator Staf, Telelocator Focus and Nightmare Amulet.", true),		
+        "Many changes to items that are made with Purple Gems, including: Telelocator Staf, Telelocator Focus and Nightmare Amulet.", true),
     BinaryConfig("scalemailbuff", "Scalemail Buff", "Scalemail now spawns 3 Dimvaes to help you in combat.", true),
     BinaryConfig("scaledchestbuff", "Scaled Chest Buff",
         "Enabling this buffs Scaled Chest to 25 slots. Toggling with Scaled Chests existing in the world may cause a crash.",
@@ -698,8 +685,8 @@ configuration_options = {
         "Small creatures like Spiders drop monster morsels instead of Monster Meat.", true),
     BinaryConfig("horriblefood", "More Horrible Foods",
         "More items are considered as the horrible food type.", true),
-	BinaryConfig("mushroom_changes", "Mushroom Changes",
-		"Mushroom Planter accepts more resources to replenish. Mushrooms and Mushtrees now give spores, instead of caps.", true),
+    BinaryConfig("mushroom_changes", "Mushroom Changes",
+        "Mushroom Planter accepts more resources to replenish. Mushrooms and Mushtrees now give spores, instead of caps.", true),
     BinaryConfig("no_winter_growing", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
     BinaryConfig("rawcropsnerf", "Raw Crops Nerf",
@@ -905,13 +892,13 @@ configuration_options = {
         label = "Ancient Fuelweaver's Health",
         hover = "Tweak Ancient Fuelweaver's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -919,13 +906,13 @@ configuration_options = {
         label = "Ancient Guardian's Health",
         hover = "Tweak Ancient Guardian's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -933,13 +920,13 @@ configuration_options = {
         label = "Antlion's Health",
         hover = "Tweak Antlion's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -947,13 +934,13 @@ configuration_options = {
         label = "Bearger's Health",
         hover = "Tweak Bearger's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -961,13 +948,13 @@ configuration_options = {
         label = "Bee Queen's Health",
         hover = "Tweak Bee Queen's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -975,13 +962,13 @@ configuration_options = {
         label = "Celestial Champion's Health",
         hover = "Tweak Celestial Champion's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -989,13 +976,13 @@ configuration_options = {
         label = "Crab King's Health",
         hover = "Tweak Crab King's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1003,12 +990,12 @@ configuration_options = {
         label = "Deerclops's Health",
         hover = "Tweak Deerclops's Health to your liking!",
         options = {
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1016,13 +1003,13 @@ configuration_options = {
         label = "Dragonfly's Health",
         hover = "Tweak Dragonfly's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1030,13 +1017,13 @@ configuration_options = {
         label = "Eye of Terror's Health",
         hover = "Tweak Eye of Terror's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1044,13 +1031,13 @@ configuration_options = {
         label = "Frostjaw's Health",
         hover = "Tweak Frostjaw's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1058,13 +1045,13 @@ configuration_options = {
         label = "Hooded Widow's Health",
         hover = "Tweak Hooded Widow's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1072,13 +1059,13 @@ configuration_options = {
         label = "Klaus's Health",
         hover = "Tweak Klaus's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1086,13 +1073,13 @@ configuration_options = {
         label = "Lord of the Fruit Flies's Health",
         hover = "Tweak Lord of the Fruit Flies's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1100,13 +1087,13 @@ configuration_options = {
         label = "Malbatross's Health",
         hover = "Tweak Malbatross's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1114,13 +1101,13 @@ configuration_options = {
         label = "Misery Toadstool's Health",
         hover = "Tweak Misery Toadstool's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1128,13 +1115,13 @@ configuration_options = {
         label = "Moonmaw Dragonfly's Health",
         hover = "Tweak Moonmaw Dragonfly's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1142,13 +1129,13 @@ configuration_options = {
         label = "Moose/Geese's Health",
         hover = "Tweak Moose/Geese's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1156,13 +1143,13 @@ configuration_options = {
         label = "Mother Goose's Health",
         hover = "Tweak Mother Goose's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1170,13 +1157,13 @@ configuration_options = {
         label = "Nightmare Werepig's Health",
         hover = "Tweak Nightmare Werepig's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     --{
@@ -1197,13 +1184,13 @@ configuration_options = {
         label = "Shadow Pieces's Health",
         hover = "Tweak Shadow Pieces's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1211,13 +1198,13 @@ configuration_options = {
         label = "Spider Queen's Health",
         hover = "Tweak Spider Queen's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1225,13 +1212,13 @@ configuration_options = {
         label = "Toadstool's Health",
         hover = "Tweak Toadstool's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1239,13 +1226,13 @@ configuration_options = {
         label = "Treeguard's Health",
         hover = "Tweak Treeguard's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1253,13 +1240,13 @@ configuration_options = {
         label = "Twins of Terror's Health",
         hover = "Tweak Twins of Terror's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1267,13 +1254,13 @@ configuration_options = {
         label = "Wilting Dragonfly's Health",
         hover = "Tweak Wilting Dragonfly's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
     {
@@ -1281,13 +1268,13 @@ configuration_options = {
         label = "Crystal Deerclops's Health",
         hover = "Tweak Crystal Deerclops Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
 
@@ -1296,13 +1283,13 @@ configuration_options = {
         label = "Armored Bearger's Health",
         hover = "Tweak Armored Bearger's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
 
@@ -1311,13 +1298,13 @@ configuration_options = {
         label = "Possesed Varg's Health",
         hover = "Tweak Possesed Varg's Health to your liking!",
         options = {
-            { description = "Lowest (/4)",   data = 0.25 },
-            { description = "Lowered (/2)",  data = 0.5 },
-            { description = "Default",       data = 1 },
-            { description = "Higher (x1.5)", data = 1.5 },
-            { description = "Highest (x2)",  data = 2 },
-			{ description = "Uncomp. (x3)",  data = 3 },
-            { description = "Unrelent. (x4)",data = 4 } },
+            { description = "Lowest (/4)",    data = 0.25 },
+            { description = "Lowered (/2)",   data = 0.5 },
+            { description = "Default",        data = 1 },
+            { description = "Higher (x1.5)",  data = 1.5 },
+            { description = "Highest (x2)",   data = 2 },
+            { description = "Uncomp. (x3)",   data = 3 },
+            { description = "Unrelent. (x4)", data = 4 } },
         default = 1
     },
 
@@ -1337,7 +1324,7 @@ configuration_options = {
     BinaryConfig("winonawackycats", "Experimental Winona Catapults",
         "Catapults no longer regenerate, have reduced health, and deal 34 AOE damage.", false),
     --BinaryConfig("wolfgang", "Experimental Wolfgang",
-        --"Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
+    --"Wolfgang gains mightiness based on hunger level. Hunger drain increases the longer mighty is maintained.", false),
     BinaryConfig("eyebrellarework", "Eyebrella Rework",
         "Eyebrella stats restored to Vanilla value, must be repaired with Milky Whites, 12 day durability. Isn't affected by clothing degradation.",
         false),
