@@ -110,27 +110,11 @@ local function WrapStuff(inst, owner)
     end
 end
 
-local function Folded(inst)
-    if inst.components.container ~= nil then
-        inst:DoTaskInTime(0, function(inst)
-            local owner = inst.components.inventoryitem.owner
-
-            if not inst.components.equippable:IsEquipped() and owner ~= nil then
-                if #inst.components.container:FindItems(function(item) return item.components.inventoryitem ~= nil end) > 0 then
-                    if owner:HasTag("winky") then
-                        for i = 1, inst.components.container:NumItems() do
-                            owner.components.sanity:DoDelta(-5)
-                        end
-                    end
-
-                    if owner.SoundEmitter ~= nil then
-                        owner.SoundEmitter:PlaySound("dontstarve/common/tool_slip")
-                    end
-                end
-				
-				inst.components.container:DropEverything()
-            end
-        end)
+local function OnContainerChanged(inst)
+    if inst.components.container:IsEmpty() then
+        inst.components.inventoryitem.cangoincontainer = true
+    else
+        inst.components.inventoryitem.cangoincontainer = false
     end
 end
 
@@ -174,8 +158,10 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/silksack.xml"
-	inst.components.inventoryitem:SetOnPutInInventoryFn(Folded)
-    inst:ListenForEvent("itemget", Folded)
+	--inst.components.inventoryitem:SetOnPutInInventoryFn(Folded)
+
+    inst:ListenForEvent("itemlose", OnContainerChanged)
+    inst:ListenForEvent("itemget", OnContainerChanged)
 		
     inst:AddComponent("equippable")
     if EQUIPSLOTS["BACK"] ~= nil then
