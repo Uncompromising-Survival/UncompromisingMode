@@ -533,20 +533,8 @@ configuration_options = {
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
         false),
-    {
-        name = "pocket_powertrip",
-        label = "Clothing Pockets",
-        hover = "Gives some underused dress items pockets.",
-        options = {
-            { description = "On",  data = 1 },
-            {
-                description = "On (Backpack-like)",
-                data = 2,
-                hover = "Items with pockets act like backpacks. However, they can't be stored in the inventory."
-            },
-            { description = "Off", data = 0 } },
-        default = 1
-    },
+
+    BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
