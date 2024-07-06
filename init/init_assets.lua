@@ -58,6 +58,7 @@ local inventoryitems =
 	"driftwoodfishingrod",
 	"feather_frock",
 	"floral_bandage",
+	"um_rimeweed_icepack",
 	"gasmask",
 	"giant_blueberry",
 	"glass_scales",
@@ -358,6 +359,17 @@ local inventoryitems =
 	--crab king items
 	"hat_crab",
 	"staff_starfall",
+	
+	
+	-- Rimeweed Stuff
+	"um_rimeweed_spagett",
+	"um_rimeweed_tequila",
+	"um_rimeweed_itemvine",
+	"um_rimeweed_itemflower",
+	
+	-- Snaildrake related
+	--"snaildrakehat",
+	--"snapalm",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -378,9 +390,6 @@ Assets = {
 
 	----TURF
 	Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
-	Asset("IMAGE", "levels/textures/mini_noise_jungle.tex"),
-	Asset("IMAGE", "levels/tiles/jungle.tex"),
-	Asset("FILE", "levels/tiles/jungle.xml"),
 	Asset("ANIM", "anim/hfturf.zip"),
 	Asset("ANIM", "anim/swturf.zip"),
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/turf_jungle.xml"),
@@ -1387,7 +1396,9 @@ Assets = {
 	Asset("ANIM", "anim/purplesteamedhams.zip"),
 	Asset("ANIM", "anim/greensteamedhams.zip"),
 	Asset("ANIM", "anim/hardshelltacos.zip"),
-
+	Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
+	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
+	
 	Asset("ANIM", "anim/berniebox.zip"),
 
 	Asset("ANIM", "anim/screecher_trinket.zip"),
@@ -1916,6 +1927,12 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/scorpioncarapacecooked.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/scorpioncarapacecooked.xml"),
 	Asset("ATLAS", "images/inventoryimages/scorpioncarapacecooked.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_rimeweed_itemvine.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rimeweed_itemvine.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/um_rimeweed_itemflower.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rimeweed_itemflower.xml"),
+
 
 	Asset("IMAGE", "images/inventoryimages/liceloaf.tex"),
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/liceloaf.xml"),
@@ -1966,6 +1983,11 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/zaspberryparfait.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/zaspberryparfait.xml"),
 	Asset("ATLAS", "images/inventoryimages/zaspberryparfait.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_rimeweed_spagett.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rimeweed_spagett.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_rimeweed_tequila.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rimeweed_tequila.xml"),
+
 
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/gasmask.xml"),
 	Asset("ATLAS", "images/inventoryimages/gasmask.xml"),

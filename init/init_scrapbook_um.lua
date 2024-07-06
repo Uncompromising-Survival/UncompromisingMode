@@ -40,6 +40,7 @@ local specinfo = {
     GASMASK = "Provides protection against spore clouds, smog and hayfever.",
     PLAGUEMASK = "Provides protection against spore clouds, smog and hayfever.",
     FLORAL_BANDAGE = "Restores extra health over time.",
+	UM_RIMEWEED_ICEPACK = "Cools the user down.",
     DISEASECUREBOMB = "Fertilizes plants and get those ready for harvest.",
     SLUDGE_OIL = "Multi-use fuel for fires and lanterns alike.",
     ARMOR_SHARKSUIT_UM =
