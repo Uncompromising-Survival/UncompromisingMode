@@ -3,9 +3,9 @@
 
 local assets =
 {
-    Asset("ANIM", "anim/um_rimeweed.zip"),
-    Asset("ANIM", "anim/um_rimelash.zip"),
-    Asset("ANIM", "anim/swap_um_rimeweed.zip"),
+    --Asset("ANIM", "anim/um_rimeweed.zip"),
+    --Asset("ANIM", "anim/um_rimelash.zip"),
+    --Asset("ANIM", "anim/swap_um_rimeweed.zip"),
 }
 
 
