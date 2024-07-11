@@ -50,12 +50,17 @@ local function SpawnRimeweeds()
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)
 		end
-		if rimeweeds < 10 then
+		if rimeweeds < 8 then
 			local rnd = math.random(1,#harvestible_plants)
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)
 		end
 		if rimeweeds < 20 then
+			local rnd = math.random(1,#harvestible_plants)
+			SpawnRimeweed(harvestible_plants[rnd])
+			table.remove(harvestible_plants,rnd)
+		end
+		if rimeweeds < 30 then
 			local rnd = math.random(1,#harvestible_plants)
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)

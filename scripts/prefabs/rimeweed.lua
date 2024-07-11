@@ -239,6 +239,7 @@ end
 local function BarrierLoad(inst, data)
     if data and data.type then
         inst.type = data.type
+		inst.AnimState:PushAnimation("bramble_"..inst.type.."_idle", true)
     end
 end
 
@@ -489,7 +490,7 @@ local function mainweed()
     if not TheWorld.ismastersim then
         return inst
     end
-
+	
     local scale = 1.5
     inst.Transform:SetScale(scale, scale, scale)
 

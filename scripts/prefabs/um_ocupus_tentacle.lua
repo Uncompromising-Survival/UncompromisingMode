@@ -41,7 +41,7 @@ local function clamp(inst)
         local pos = Vector3(inst.Transform:GetWorldPosition())
         local ents = TheSim:FindEntities(pos.x, pos.y, pos.z, 3, nil, CLAMPDAMAGE_CANT_TAGS)
 
-        for i, v in pairs(ents)do
+        --[[for i, v in pairs(ents)do
             if v ~= inst and v:IsValid() and not v:IsInLimbo() then
                 if      v.components.workable ~= nil and
                         v.components.workable:CanBeWorked() and
@@ -54,7 +54,7 @@ local function clamp(inst)
                     --inst.components.combat:DoAttack(v)
                 end
             end
-        end
+        end]]
 
 		ShakeAllCameras(CAMERASHAKE.VERTICAL, 0.3, 0.03, 0.5, inst.boat, inst.boat:GetPhysicsRadius(4))
 

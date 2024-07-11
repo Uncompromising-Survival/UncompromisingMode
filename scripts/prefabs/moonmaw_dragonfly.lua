@@ -379,7 +379,7 @@ local function SpawnShards(inst)
         inst.shards[i].components.linearcircler.setspeed = 0.2
         inst.shards[i].hidden = false
         inst.shards[i].destroy = true
-        inst.shards[i].timetill = i * 0.25 + 2.5
+        inst.shards[i].timetill = i * 0.125 + 2.5
     end
 end
 

@@ -78,6 +78,7 @@ local PREFABS =
     ["snowcone"] = true,
     ["trapdoorgrass"] = true,
     ["floral_bandage"] = true,
+	["um_rimeweed_icepack"] = true,
     ["beefalowings"] = true,
     ["um_blowdart_pyre"] = true,
     ["moonmaw_dragonfly"] = true,
