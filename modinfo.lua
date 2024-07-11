@@ -162,6 +162,7 @@ configuration_options = {
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
     --true),
+    BinaryConfig("nightterrors", "Night Terrors", "TODO TODO TODO TODO", true),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
         name = "fireloot",
@@ -186,9 +187,9 @@ configuration_options = {
     BinaryConfig("maxtempdamage", "Max Health Temperature", "Freezing and Overheating will deal max health damage after a brief delay.", true),
     {
         name = "rne chance",
-        label = "Night Terrors Chance",
+        label = "Random Night Event Chance",
         hover =
-        "Night Terrors have a default 40% chance to occur each night. Night Terrors are disabled before Day 5.",
+        "Random Night Events have a default 40% chance to occur each night. They are disabled before Day 5.",
         options = {
             { description = "None", data = 100 }, { description = "10%", data = 0.9 },
             { description = "20%",  data = 0.8 },
