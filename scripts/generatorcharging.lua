@@ -10,7 +10,7 @@ local function SetCharging(inst, powered, duration)
             inst._powertask:Cancel()
             inst._powertask = nil
             inst.components.fueled:StopConsuming()
-            inst.components.fueled.rate = 1
+            inst.components.fueled.rate = inst._oldrate or 1
             inst.components.fueled:SetUpdateFn(nil)
             inst.components.powerload:SetLoad(0)
             --RefreshLedStatus(inst)
@@ -19,7 +19,6 @@ local function SetCharging(inst, powered, duration)
         local waspowered = inst._powertask ~= nil
         local remaining = waspowered and GetTaskRemaining(inst._powertask) or 0
 
-
         if duration > remaining then
             if inst._powertask then
                 inst._powertask:Cancel()
@@ -27,6 +26,7 @@ local function SetCharging(inst, powered, duration)
             inst._powertask = inst:DoTaskInTime(duration, SetCharging, false)
             --idk why klei does the "not waspowered" thing here. doesn't seem to do anything other than prevent the thing from wokring???
             if waspowered then
+                inst._oldrate = inst.components.fueled.rate
                 inst.components.fueled.rate = (TUNING.WINONA_TELEBRELLA_RECHARGE_RATE / 2) * (inst._quickcharge and TUNING.SKILLS.WINONA.QUICKCHARGE_MULT or 1)
                 inst.components.fueled:SetUpdateFn(OnUpdateChargingFuel)
                 inst.components.fueled:StartConsuming()
@@ -198,9 +198,20 @@ local function fn(inst)
     inst:AddComponent("updatelooper")
     inst:AddComponent("colouradder")
 
+    local _onputininventoryfn = inst.components.inventoryitem.onputininventoryfn
+    inst.components.inventoryitem.onputininventoryfn = function(inst, owner)
+        if _onputininventoryfn ~= nil then _onputininventoryfn(inst) end
+        OnPutInInventory(inst, owner)
+    end
 
-    inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInventory)
-    inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
+
+    local _ondropfn = inst.components.inventoryitem.ondropfn
+    inst.components.inventoryitem.ondropfn = function(inst)
+        if _ondropfn ~= nil then 
+            _ondropfn(inst) 
+        end
+        OnDropped(inst)
+    end
 
 
     inst:AddComponent("circuitnode")

@@ -112,7 +112,7 @@ local function PeriodicSalt(inst)
 end
 
 local function OnUse(inst)
-	inst.components.rechargeable:Discharge(1)
+	inst.components.rechargeable:Discharge(0)
 	if inst.salt_task then
 		inst.salt_task:Cancel()
 		inst.salt_task = nil
@@ -142,6 +142,14 @@ end]]
 
 local function OnCharged(inst)
     inst.components.useableitem.inuse = false
+end
+
+
+local function OnPutOnInventory(inst, owner)
+    if inst.salt_task then
+		inst.salt_task:Cancel()
+    end
+    inst.salt_task = nil
 end
 
 --------------------------------------------------------------------------
@@ -180,7 +188,7 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/saltpack.xml"
-
+    inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutOnInventory)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY

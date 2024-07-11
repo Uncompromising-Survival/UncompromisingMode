@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.38"
+local _version = "1.5.0.39"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -74,14 +74,16 @@ end
 ---@param label string
 ---@param hover string
 ---@param default boolean
-local function BinaryConfig(name, label, hover, default)
+---@param client? boolean
+local function BinaryConfig(name, label, hover, default, client)
     return {
         name = name,
         label = label,
         hover = hover,
         options = { { description = "Enabled", data = true, hover = "Enabled." },
             { description = "Disabled", data = false, hover = "Disabled." } },
-        default = default
+        default = default,
+        client = client
     }
 end
 ------------------------------
@@ -100,8 +102,31 @@ configuration_options = {
     ------------------------------
 
     Header("Client-Side"),
-    BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true),
-    BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false),
+    {
+        name = "",
+        label = "How to access client section",
+        hover = "Access client options here:\nMain Menu → Mods → Server Mods → " .. name,
+        options =
+        {
+            { description = "󰀏", data = "", hover = "" },
+        },
+        default = "",
+    },
+    BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
+    BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
+    {
+        name = "wathom_nightvision",
+        label = "Wathom - Alt Night Vision Filter",
+        hover = "Enable this for a alternate Night Vision filter if you experience eye strain.",
+        options =
+        {
+            { description = "Red", data = "red", hover = "Red filter, like moggles." },
+            { description = "Black and White", data = "bnw", hover = "Black and White, like the original night vision." },
+            { description = "Default", data = "blue", hover = "Default, blue filter." }
+        },
+        default = "blue",
+    },
+
     SkipSpace(),
 
     Header("Mod Compatibility"),
@@ -131,14 +156,13 @@ configuration_options = {
 
         default = 1
     },
-
-    BinaryConfig("worldlyskilltrees", "Worldly Skilltrees", "Skilltrees and insight are per-world, instead of always being unlocked.\nBosses give insight XP.", true),
     SkipSpace(),
 
     Header("Core Gameplay"),
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
     --true),
+    BinaryConfig("nightterrors", "Night Terrors", "TODO TODO TODO TODO", true),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
         name = "fireloot",
@@ -163,9 +187,9 @@ configuration_options = {
     BinaryConfig("maxtempdamage", "Max Health Temperature", "Freezing and Overheating will deal max health damage after a brief delay.", true),
     {
         name = "rne chance",
-        label = "Night Terrors Chance",
+        label = "Random Night Event Chance",
         hover =
-        "Night Terrors have a default 40% chance to occur each night. Night Terrors are disabled before Day 5.",
+        "Random Night Events have a default 40% chance to occur each night. They are disabled before Day 5.",
         options = {
             { description = "None", data = 100 }, { description = "10%", data = 0.9 },
             { description = "20%",  data = 0.8 },

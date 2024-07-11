@@ -180,13 +180,9 @@ local function fn()
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("silksack")
 
-    inst.components.container.itemtestfn = function(inst, item, slot)
-        if inst.components.equippable.isequipped or not inst.components.equippable.isequipped and inst.components.container:IsEmpty() then
-            return true
-        end
-        return false
+    inst.components.container.itemtestfn = function(container, item, slot)
+        return container.inst.components.equippable.isequipped or not container.components.container:IsEmpty()
     end
-
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 
