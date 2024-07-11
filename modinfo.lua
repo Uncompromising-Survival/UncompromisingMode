@@ -156,8 +156,6 @@ configuration_options = {
 
         default = 1
     },
-
-    BinaryConfig("worldlyskilltrees", "Worldly Skilltrees", "Skilltrees and insight are per-world, instead of always being unlocked.\nBosses give insight XP.", true),
     SkipSpace(),
 
     Header("Core Gameplay"),
