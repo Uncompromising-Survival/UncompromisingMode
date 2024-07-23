@@ -1,12 +1,433 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.2.5) ~  Much Love, Ferib 
-
-]]--
-
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3= bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v8,v9)local v39={};for v75=1, #v8 do v6(v39,v0(v4(v1(v2(v8,v75,v75 + 1 )),v1(v2(v9,1 + ((v75-1)% #v9) ,1 + ((v75-1)% #v9) + 1 )))%256 ));end return v5(v39);end local v10={Asset(v7("\201\127\87\170","\136\49\30\231\62\133"),"anim/wixie_clock.zip"),Asset(v7("\106\167\114\105","\43\233\59\36\51\234\25\51"),"anim/wixie_clock_hands.zip"),Asset(v7("\158\99\145\145","\223\45\216\220"),"anim/wixie_dangley.zip"),Asset(v7("\252\117\198\173","\189\59\143\224\65\48\178\29"),"anim/wooden_queen_piece.zip")};local v11={};local function v12(v13)local v40=0 -0 ;local v41;local v42;local v43;while true do if (v40==2) then v13.minutedangle=SpawnPrefab(v7("\177\198\156\2\1\14\165\195\139\8\15\53\167\193\131\7\1\40\244","\198\175\228\107\100\81"));v13.minutedangle.host=v13;v13.hourdangle=SpawnPrefab(v7("\104\43\5\217\225\64\33\17\223\231\116\38\28\222\227\115\39\4\131","\31\66\125\176\132"));v40=2 + 1 ;end if (v40==(6 + 1)) then v13.seconddangle.Transform:SetPosition(v41,v42-(44.06 -(10 + 34)) ,v43);v13.seconddangle.myhand=v13.second;v13.minutedangle.Transform:SetPosition(v41,v42-0.06 ,v43);v40=1089 -(714 + 367) ;end if (v40==(1 + 4)) then v13.minute.entity:SetParent(v13.entity);v13.minute.Transform:SetPosition(0,0 + 0 ,0 + 0 );v13.entity:AddFollower();v40=11 -5 ;end if (v40==(1377 -(893 + 484))) then v41,v42,v43=v13.Transform:GetWorldPosition();v13.second=SpawnPrefab(v7("\217\34\193\178\231\209\118\194\36\218\176\234\239\123\202\20\202\190\225\225\123\202","\174\75\185\219\130\142\21"));v13.minute=SpawnPrefab(v7("\235\192\200\12\53\37\136\240\198\211\14\56\27\133\248\246\221\12\62\15\159\249","\156\169\176\101\80\122\235"));v40=1;end if (v40==(1 + 0)) then v13.hour=SpawnPrefab(v7("\101\231\28\59\30\188\201\168\125\237\15\58\26\141\206\155\122\225\17\32","\18\142\100\82\123\227\170\196"));v13.seconddangle=SpawnPrefab(v7("\64\161\94\167\253\104\171\74\161\251\92\172\71\160\255\91\173\95\255","\55\200\38\206\152"));v13.seconddangle.host=v13;v40=1509 -(937 + 570) ;end if (v40==(1 + 3)) then v13.second.entity:SetParent(v13.entity);v13.second.Transform:SetPosition(0 -0 ,0 -0 ,0 + 0 );v13.entity:AddFollower();v40=8 -3 ;end if (v40==(17 -11)) then v13.hour.entity:SetParent(v13.entity);v13.hour.Transform:SetPosition(0 + 0 ,0 + 0 ,0);v13.entity:AddFollower();v40=12 -5 ;end if (8==v40) then v13.minutedangle.myhand=v13.minute;v13.hourdangle.Transform:SetPosition(v41,v42-(0.06 + 0) ,v43);v13.hourdangle.myhand=v13.hour;break;end if (3==v40) then v13.hourdangle.host=v13;v13.front=SpawnPrefab(v7("\181\255\57\36\25\191\74\174\249\34\38\26\146\70\172\226","\194\150\65\77\124\224\41"));v13.front.Transform:SetPosition(v41,v42-(0.1 + 0) ,v43);v40=960 -(522 + 434) ;end end end local function v14(v13,v15)local v44=0 -0 ;while true do if (v44==(0 + 0)) then if ((v13.hourdangle~=nil) and (v13.seconddangle~=nil) and (v13.minutedangle~=nil)) then local v122=0 + 0 ;local v123;local v124;local v125;local v126;while true do if (v122==0) then v123,v124,v125=v13.Transform:GetWorldPosition();v126=TheSim:FindEntities(v123,v124,v125,1089 -(1034 + 25) ,{v7("\1\37\211\224\16\236","\113\73\178\153\117\158\218\78")});v122=1;end if (v122==(1 + 0)) then if (v13.final_code_ready and (v13.hourdangle.count==(10 + 2)) and (v13.minutedangle.count==(1 + 1)) and (v13.seconddangle.count==(18 -11))) then if ((v126~=nil) and ( #v126== #AllPlayers)) then local v147=0 -0 ;while true do if (v147==(729 -(417 + 312))) then local v155=0 + 0 ;while true do if (v155==1) then v147=1 -0 ;break;end if (v155==(0 -0)) then v13.canbeused=false;print(v7("\187\249\45\190\85\187\255\45\190\85\171\248\38\249\2\182\228\32\177\85\182\227\99\189\16\190\244","\223\144\67\217\117"));v155=2 -1 ;end end end if (v147==(1404 -(201 + 1202))) then local v156=0 -0 ;while true do if (0==v156) then for v161=1786 -(1665 + 120) ,6 + 2  do v13:DoTaskInTime((v161 * (8 -5)) -3 ,function()local v162=0;local v163;local v164;local v165;local v166;local v167;while true do if (v162==(1 + 0)) then v165=nil;v166=nil;v162=2 + 0 ;end if (v162==0) then v163=0;v164=nil;v162=293 -(225 + 67) ;end if ((948 -(474 + 472))==v162) then v167=nil;while true do if ((3 -2)==v163) then v166=TheSim:FindFirstEntityWithTag(v7("\213\121\163\14\32\253\103\186\21\33\208\127\185\2","\162\16\219\103\69"));if (v161==(833 -(41 + 784))) then v166:PushEvent(v7("\229\104\138\160\41\238\33\254\121\143\184\48\238\37\255\96","\150\24\235\215\71\177\82"));TheWorld:PushEvent(v7("\223\255\253\56\117\240\57\222\227\193\32\99\225\61\193","\178\140\162\75\16\132\90"),{[v7("\233\131\219","\141\226\162\37\79")]=1456 -(1012 + 444) ,[v7("\165\31\163\186","\193\106\208\209\147")]=0 -0 ,[v7("\178\1\229\20\223","\220\104\130\124\171\237")]=823 -(639 + 168) });else local v171=839 -(614 + 225) ;local v172;while true do if (v171==(0 -0)) then v172=1336 -(1005 + 331) ;while true do if (v172==(0 -0)) then v166:PushEvent(v7("\147\60\238\4\5\187\34\247\31\4\150\58\244\8\63\151\61\227\25\20\129\39","\228\85\150\109\96"));TheWorld:PushEvent(v7("\113\212\255\43\83\159\251\112\200\195\51\69\142\255\111","\28\167\160\88\54\235\152"),{[v7("\62\181\161","\90\212\216\195\204")]=0,[v7("\212\230\12\124","\176\147\127\23\168")]=v164,[v7("\233\222\52\174\45","\135\183\83\198\89\184\23\93")]=v165});break;end end break;end end end v163=2;end if (v163==(0 + 0)) then local v170=0 -0 ;while true do if ((0 + 0)==v170) then v164=(41 -25) -((v161-(1 -0)) * (946 -(928 + 16))) ;v165=(v161-(3 -2)) * (1 + 1) ;v170=3 -2 ;end if (v170==(99 -(48 + 50))) then v163=1 -0 ;break;end end end if (v163==(4 -2)) then v167=(856 -(418 + 429)) -v161 ;v13.SoundEmitter:PlaySound("UCSounds/wixie_clock/"   .. v167 );break;end end break;end end end);end v13.final_code_ready=false;v156=2 -1 ;end if (v156==(1 + 0)) then v147=2 + 0 ;break;end end end if (v147==(5 -3)) then v13.components.timer:StartTimer(v7("\224\204\255\207\75\196\81\225\204","\146\169\140\170\63\155\36"),9600);TheNet:SystemMessage(v7("\193\5\210\169\65\227\89\240\77\223\232\70\170\87\250\0\210\167\27\164","\149\109\183\137\53\138\52"));break;end end else TheNet:SystemMessage(v7("\216\206\129\98\193\32\231\237\130\143\39\140\50\245\237\202\136\48\201\49\180\251\199\139\45\222\48\180\224\205\152\98\207\52\250\185\210\159\45\207\48\241\253\140\195\108","\153\162\237\66\172\85\148"));end elseif ((v13.hourdangle.count==10) and (v13.minutedangle.count==(18 -9)) and (v13.seconddangle.count==(1 + 0))) then local v148=0;local v149;while true do if (v148==1) then v149.Transform:SetPosition(v13.Transform:GetWorldPosition());v149.name=v7("\113\78\237\193\10\30\198\86\66\244\145\30\0\131\81","\37\43\128\177\127\109\230");v148=3 -1 ;end if ((0 + 0)==v148) then print(v7("\36\221\190\184\49\44\216\80","\119\173\223\207\95\103\189\41"));v149=SpawnPrefab(v7("\209\81\89\177\116\22\214\81\64\182\126\22\197\89\83\188","\166\56\33\216\17\73"));v148=1;end if (v148==2) then Launch2(v149,v13,2,0 + 0 ,2 -1 ,1744.5 -(1019 + 725) );break;end end elseif ((v13.hourdangle.count==(1 + 0)) and (v13.minutedangle.count==(2 + 3)) and (v13.seconddangle.count==(1474 -(66 + 1400)))) then local v150=439 -(172 + 267) ;local v151;local v152;local v153;while true do if (v150==1) then v153=nil;while true do if (v151==(0 -0)) then v152=SpawnPrefab(v7("\188\117\182\11\1\48\9\26\190\127\188\1\59\46\63\14\168\127","\203\26\217\111\100\94\86\107"));v152.Transform:SetPosition(v13.Transform:GetWorldPosition());v151=1;end if (v151==(1 + 0)) then local v168=0;while true do if (v168==1) then v151=1519 -(477 + 1040) ;break;end if (v168==(0 -0)) then local v169=0;while true do if (v169==1) then v168=1;break;end if (v169==(1083 -(416 + 667))) then v152:AddTag(v7("\36\250\218\67\115\93\154\180\53\248\206","\84\143\160\57\31\56\233\196"));v153=((v15~=nil) and v15) or v13 ;v169=518 -(326 + 191) ;end end end end end if (v151==(2 + 0)) then Launch2(v152,v153,2,0,1,1645.5 -(843 + 802) );break;end end break;end if (v150==(0 + 0)) then local v158=0 + 0 ;while true do if (v158==(140 -(15 + 124))) then v150=1070 -(614 + 455) ;break;end if (v158==(0 + 0)) then v151=0;v152=nil;v158=1;end end end end else local v154=0;while true do if (v154==0) then if ((v15~=nil) and (v15.components.sanity~=nil)) then v15.components.sanity:DoDelta( -(3 + 7));end v13.SoundEmitter:PlaySound("dontstarve/common/chesspile_repair");break;end end end break;end end end v13.SoundEmitter:KillSound(v7("\11\254\211\166\5\219\91\32\244\220\162\15\222","\127\151\176\205\108\181\60"));break;end end end local function v16(v13)if (TheWorld.state.isday and v13.canbeused) then local v76=0;while true do if (v76==(1 + 0)) then v13:DoTaskInTime(13,function(v127)v127.components.activatable.inactive=false;v127.SoundEmitter:KillSound(v7("\79\251\213\129\123\71\92\205\213\134\125\74\80","\59\146\182\234\18\41"));end);break;end if (v76==0) then local v128=1225 -(923 + 302) ;while true do if (v128==(588 -(241 + 346))) then v76=1 + 0 ;break;end if (v128==(0 + 0)) then v13.components.activatable.inactive=true;v13.SoundEmitter:PlaySound("UCSounds/wixie_clock/ticking_clock",v7("\107\68\136\240\88\171\247\8\124\65\132\248\90","\31\45\235\155\49\197\144\87"));v128=4 -3 ;end end end end end end local function v17(v13,v18)if (v18.name==v7("\91\214\63\173\93\236\57\187\76","\41\179\76\200")) then v13.canbeused=true;end end local function v19(v13,v18)if (v13.canbeused~=nil) then v18.canbeused=v13.canbeused;end end local function v20(v13,v18)if ((v18~=nil) and (v18.canbeused~=nil)) then v13.canbeused=v18.canbeused;end end local function v21(v22)local v45=0;local v46;local v47;while true do if (v45==(0 + 0)) then local v103=1648 -(878 + 770) ;while true do if (v103==(0 + 0)) then v46=0 -0 ;v47=nil;v103=899 -(727 + 171) ;end if ((3 -2)==v103) then v45=1;break;end end end if (v45==(1 + 0)) then while true do if (v46==(23 -17)) then v47.OnLoad=v20;v47.MakeUsable=v16;v47:WatchWorldState(v7("\190\61\22\177\222","\215\78\114\208\167\52\206"),v16);return v47;end if (v46==(1571 -(508 + 1058))) then v47.components.activatable.quickaction=true;v47:AddComponent(v7("\144\238\26\48\150","\228\135\119\85"));v47:ListenForEvent(v7("\244\193\170\85\40\10\26\0\229","\128\168\199\48\90\110\117\110"),v17);v47.OnSave=v19;v46=6;end if ((1430 -(120 + 1307))==v46) then local v134=0 -0 ;while true do if (v134==(1 + 0)) then v47.final_code_ready=false;v47:AddComponent(v7("\22\223\228\106\176\28\197\246\120\185\26","\127\177\151\26\213"));v134=2;end if (0==v134) then v47.repaired=false;v47.canbeused=true;v134=1;end if (v134==(4 -2)) then v46=1 + 3 ;break;end end end if (v46==(0 -0)) then local v135=0 + 0 ;while true do if (v135==0) then v47=CreateEntity();v47.entity:AddTransform();v135=1983 -(704 + 1278) ;end if (2==v135) then v46=192 -(89 + 102) ;break;end if (v135==(1 + 0)) then v47.entity:AddAnimState();v47.entity:AddSoundEmitter();v135=1 + 1 ;end end end if (v46==2) then local v136=0;while true do if (v136==1) then v47.entity:SetPristine();if  not TheWorld.ismastersim then return v47;end v136=1210 -(1202 + 6) ;end if (v136==0) then v47.AnimState:PlayAnimation(v7("\181\65\66\217","\220\37\46\188\49\38\162"),true);v47:AddTag(v7("\59\57\78\185\238\204\163\21\35\51\93","\76\80\54\208\139\147\192\121"));v136=1;end if ((1 + 1)==v136) then v46=3 + 0 ;break;end end end if (v46==(525 -(177 + 344))) then v47:DoTaskInTime(1,v12);v47:AddComponent(v7("\34\226\59\22\226\29\180\34\227\35\26","\67\129\79\127\148\124\192"));v47.components.activatable.OnActivate=v14;v47.components.activatable.inactive=false;v46=668 -(136 + 527) ;end if (v46==(2 -1)) then v47.entity:AddDynamicShadow();v47.entity:AddNetwork();v47.AnimState:SetBuild(v7("\21\75\162\64\195\53\10\14\77\185\66","\98\34\218\41\166\106\105"));v47.AnimState:SetBank(v7("\248\33\172\117\251\208\43\184\115\253\228","\143\72\212\28\158"));v46=2;end end break;end end end local function v23(v24,v25)local v48=794 -(289 + 505) ;local v49;local v50;while true do if (v48==(726 -(661 + 65))) then local v104=0 -0 ;while true do if (v104==(1 + 0)) then v48=1;break;end if (v104==(876 -(771 + 105))) then v49=404 -(313 + 91) ;v50=nil;v104=1;end end end if (v48==(1458 -(979 + 478))) then while true do if ((3 + 0)==v49) then return v50;end if (v49==(1848 -(460 + 1387))) then local v139=1432 -(1096 + 336) ;while true do if ((1168 -(908 + 259))==v139) then v50.AnimState:PlayAnimation(v24   .. v25 ,false);v50:AddTag(v7("\213\143\12\237\122\17\213","\155\192\79\161\51\82\158"));v139=2 -0 ;end if ((714 -(181 + 533))==v139) then v50.AnimState:SetBuild(v7("\196\91\67\227\214\109\88\230\220\81\80\213\219\83\85\238\192","\179\50\59\138"));v50.AnimState:SetBank(v7("\63\36\22\140\45\18\13\137\39\46\5\186\32\44\0\129\59","\72\77\110\229"));v139=1;end if (v139==(1 + 1)) then v49=2;break;end end end if (v49==2) then v50.entity:SetPristine();if  not TheWorld.ismastersim then return v50;end v50.handtype=v24;v50.persists=false;v49=3;end if (v49==0) then v50=CreateEntity();v50.entity:AddTransform();v50.entity:AddAnimState();v50.entity:AddNetwork();v49=1258 -(410 + 847) ;end end break;end end end local function v26()local v51=1169 -(285 + 884) ;local v52;while true do if (v51==1) then return v52;end if (v51==(0 -0)) then local v105=0 + 0 ;while true do if (v105==(0 + 0)) then v52=v23(v7("\195\5\168","\174\108\198\65"),848 -(151 + 685) );if  not TheWorld.ismastersim then return v52;end v105=1142 -(1075 + 66) ;end if (v105==(1 + 0)) then v51=1 + 0 ;break;end end end end end local function v27()local v53=0;local v54;local v55;while true do if (v53==0) then v54=954 -(552 + 402) ;v55=nil;v53=1 -0 ;end if (v53==1) then while true do local v121=0;while true do if (v121==0) then if (v54==(1708 -(347 + 1361))) then v55=v23(v7("\216\93\235","\171\56\136\187\113"),386 -(30 + 352) );if  not TheWorld.ismastersim then return v55;end v54=1;end if (v54==(914 -(413 + 500))) then return v55;end break;end end end break;end end end local function v28()local v56=0 + 0 ;local v57;while true do if (v56==1) then return v57;end if (0==v56) then v57=v23(v7("\234\241\228\188","\130\158\145\206\182\93\225"),522 -(340 + 174) );if  not TheWorld.ismastersim then return v57;end v56=1;end end end local function v29(v13)if (v13.count>=(3 + 9)) then v13.count=4 -3 ;else v13.count=v13.count + 1 ;end if (v13.myhand~=nil) then local v84=0;local v85;local v86;while true do if (v84==0) then v85=0;v86=nil;v84=1 -0 ;end if (v84==(3 -2)) then while true do if (v85==(0 + 0)) then v86=0 + 0 ;while true do if (v86==(0 -0)) then v13.myhand.AnimState:PlayAnimation(v13.myhand.handtype   .. v13.count ,false);v13.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/chain");break;end end break;end end break;end end end v13.AnimState:SetPercent(v13.dangletype,((1420 -(698 + 721))/(1685 -(11 + 1662))) * v13.count );v13.components.activatable.inactive=true;end local function v30(v31,v25)local v59=CreateEntity();v59.entity:AddTransform();v59.entity:AddAnimState();v59.entity:AddSoundEmitter();v59.entity:AddNetwork();v59.AnimState:SetBuild(v7("\90\172\200\71\93\20\73\164\222\73\84\46\84","\45\197\176\46\56\75"));v59.AnimState:SetBank(v7("\146\85\72\142\128\99\84\134\139\91\92\130\156","\229\60\48\231"));v59.AnimState:SetPercent(v31,((1 + 0)/12) * v25 );v59.entity:SetPristine();if  not TheWorld.ismastersim then return v59;end v59.dangletype=v31;v59.myhand=nil;v59.count=v25;v59:AddComponent(v7("\199\191\169\181\208\189\169\189\196\176\184","\166\220\221\220"));v59.components.activatable.OnActivate=v29;v59.components.activatable.inactive=true;v59.components.activatable.quickaction=true;v59.persists=false;return v59;end local function v32()local v67=777 -(410 + 367) ;local v68;while true do if (v67==(1370 -(749 + 620))) then return v68;end if (0==v67) then v68=v30(v7("\49\123\167\178\57\127\176\228","\85\26\201\213"),693 -(557 + 132) );if  not TheWorld.ismastersim then return v68;end v67=2 -1 ;end end end local function v33()local v69=v30(v7("\168\206\115\161\160\202\100\244","\204\175\29\198"),12);if  not TheWorld.ismastersim then return v69;end return v69;end local function v34()local v70=v30(v7("\201\230\67\73\54\219\212\180","\173\135\45\46\90\190"),8);if  not TheWorld.ismastersim then return v70;end return v70;end local function v35()local v71=0;local v72;while true do if (v71==(6 -4)) then v72.entity:SetPristine();if  not TheWorld.ismastersim then return v72;end v72.persists=false;return v72;end if ((1606 -(1478 + 127))==v71) then v72.AnimState:SetBuild(v7("\164\66\149\35\236\65\52\121\188\72\134","\211\43\237\74\137\30\87\21"));v72.AnimState:SetBank(v7("\178\31\254\82\53\64\181\55\170\21\237","\197\118\134\59\80\31\214\91"));v72.AnimState:PlayAnimation(v7("\115\48\206\227","\17\81\173\136\109"));v72:AddTag(v7("\88\238\210\145\95\226\218","\22\161\145\221"));v71=2 -0 ;end if (v71==(0 -0)) then local v107=0 + 0 ;while true do if (v107==(2 + 0)) then v71=2 -1 ;break;end if ((1043 -(324 + 718))==v107) then v72.entity:AddAnimState();v72.entity:AddNetwork();v107=2 + 0 ;end if (v107==(0 + 0)) then v72=CreateEntity();v72.entity:AddTransform();v107=1 -0 ;end end end end end local function v36(v13,v37)return (v37:HasTag(v7("\98\99\27\99\116\125\17\123\119\122\17\100","\22\17\116\22")) and 'Oh, it\'s one of my moms carvings!\n\"VII\" is engraved on the back.') or '\"VII\" is engraved on the back.' ;end local function v38()local v73=0;local v74;while true do if (v73==(19 -14)) then v74:AddComponent(v7("\255\219\83\44\20\247\226\212\66\48\20","\150\181\32\92\113\148"));v74.components.inspectable.getspecialdescription=v36;v74:AddComponent(v7("\36\13\23\28\237\57\12\19\0\234\57\6\12","\77\99\97\121\131"));v74.components.inventoryitem.atlasname="images/inventoryimages/wooden_queen_piece.xml";v73=9 -3 ;end if (v73==(4 + 0)) then v74.components.fuel.fuelvalue=TUNING.MED_FUEL;MakeSmallBurnable(v74,TUNING.MED_BURNTIME);MakeSmallPropagator(v74);MakeHauntableLaunchAndIgnite(v74);v73=1910 -(582 + 1323) ;end if (v73==3) then v74.components.edible.foodtype=FOODTYPE.WOOD;v74.components.edible.healthvalue=0 -0 ;v74.components.edible.hungervalue=0;v74:AddComponent(v7("\197\231\86\94","\163\146\51\50\198"));v73=1122 -(504 + 614) ;end if (v73==(2 + 0)) then local v116=0;while true do if (v116==1) then if  not TheWorld.ismastersim then return v74;end v74:AddComponent(v7("\220\205\73\236\213\204","\185\169\32\142"));v116=2;end if (v116==(0 -0)) then MakeInventoryFloatable(v74,v7("\16\130\32","\125\231\68\67\229"),0.1,683.75 -(418 + 265) );v74.entity:SetPristine();v116=1 -0 ;end if (2==v116) then v73=3;break;end end end if (v73==(594 -(209 + 384))) then local v117=0 + 0 ;while true do if (v117==(1 + 0)) then v74.AnimState:SetBuild(v7("\149\231\139\222\48\45\179\147\253\129\223\59\28\156\139\237\135\223","\226\136\228\186\85\67\236"));v74.AnimState:PlayAnimation(v7("\230\73\135\47","\143\45\235\74"));v117=2;end if ((6 -4)==v117) then v73=227 -(214 + 11) ;break;end if (v117==0) then MakeInventoryPhysics(v74);v74.AnimState:SetBank(v7("\18\63\47\52\72\86\62\214\16\53\37\62\114\72\8\194\6\53","\101\80\64\80\45\56\97\167"));v117=31 -(10 + 20) ;end end end if (v73==0) then local v118=0;while true do if (v118==(1 + 0)) then v74.entity:AddAnimState();v74.entity:AddNetwork();v118=1005 -(843 + 160) ;end if (v118==(250 -(181 + 69))) then v74=CreateEntity();v74.entity:AddTransform();v118=1;end if (v118==2) then v73=1953 -(1901 + 51) ;break;end end end if (v73==(4 + 2)) then local v119=0;local v120;while true do if (v119==(0 + 0)) then v120=0 -0 ;while true do if (v120==(1 + 0)) then return v74;end if (v120==(0 + 0)) then v74:DoTaskInTime(0,function()if  not v74:HasTag(v7("\104\79\187\93\166\234\175\10\121\77\175","\24\58\193\39\202\143\220\122")) then v74:Remove();end end);v74.persists=false;v120=1;end end break;end end end end end return Prefab(v7("\85\33\155\56\173\125\43\143\62\171\73","\34\72\227\81\200"),v21,v10,v11),Prefab(v7("\253\197\38\184\239\243\61\189\229\207\53\185\235\194\58\142\231\197\48\164\254\201","\138\172\94\209"),v26,v10,v11),Prefab(v7("\227\29\198\213\50\125\185\68\251\23\213\212\54\76\190\119\231\17\221\211\57\70","\148\116\190\188\87\34\218\40"),v27,v10,v11),Prefab(v7("\23\57\205\189\10\202\3\60\218\183\4\253\1\62\209\139\7\250\21\34","\96\80\181\212\111\149"),v28,v10,v11),Prefab(v7("\71\76\228\44\199\111\70\240\42\193\91\65\253\43\197\92\64\229\116","\48\37\156\69\162"),v32,v10,v11),Prefab(v7("\201\125\239\170\122\39\221\120\248\160\116\28\223\122\240\175\122\1\140","\190\20\151\195\31\120"),v33,v10,v11),Prefab(v7("\171\46\223\140\16\29\220\176\40\196\142\17\35\209\187\43\194\156\70","\220\71\167\229\117\66\191"),v34,v10,v11),Prefab(v7("\110\241\190\54\84\70\251\170\48\82\114\254\180\48\95\109","\25\152\198\95\49"),v35,v10,v11),Prefab(v7("\96\204\218\52\87\3\72\210\192\53\87\3\72\211\220\53\81\8","\23\163\181\80\50\109"),v38,v10,v11);
+local v0 = string.char;
+local v1 = string.byte; local v2 = string.sub; local
+v3 = bit or bit; local v4 = v3.bxor; local v5 = table.concat; local
+v6 = table.insert; local function v7(v29, v30)
+    local v31 = {}; for v105 = 1, #
+    v29 do
+        v6(v31, v0(v4(v1(v2(v29, v105, v105 + 1)), v1(v2(v30, 1 + (v105 % #v30), 1
+            + (v105 % #v30) + 1))) % 256));
+    end
+    return v5(v31);
+end
+local v8 = { Asset(v7(
+    "\240\237\242\8", "\126\177\163\187\69\134\219\167"), v7(
+    "\34\195\35\200\179\52\196\50\204\249\28\206\38\202\255\40\131\48\204\236",
+    "\156\67\173\74\165")), Asset(v7("\21\153\96\59", "\38\84\215\41\118\220\70"), v7(
+    "\81\24\43\31\177\71\31\58\27\251\111\21\46\29\253\91\41\42\19\240\84\5\108\8\247\64",
+    "\158\48\118\66\114")), Asset(v7("\138\10\57\27", "\155\203\68\112\86\19\197"), v7(
+    "\71\211\63\241\15\111\236\224\79\216\9\248\65\118\226\244\67\196\120\230\73\104",
+    "\152\38\189\86\156\32\24\133")), Asset(v7("\221\121\142\107", "\38\156\55\199"), v7(
+    "\169\115\117\37\92\99\245\76\172\120\114\23\2\97\255\70\166\66\108\33\22\119\255\13\178\116\108",
+    "\35\200\29\28\72\115\20\154")) }; local v9 = {}; local function v10(v44)
+    local v45 = 1744 - (1344 + 400); local v46;
+    local v47; local v48; while true do
+        if (v45 == (1201 - (209 + 992))) then
+            v46, v47, v48 = v44.Transform:GetWorldPosition();
+            v44.second = SpawnPrefab(v7("\14\182\201\214\136\19\55\21\176\210\212\133\45\58\29\128\194\218\142\35\58\29",
+                "\84\121\223\177\191\237\76")); v44.minute = SpawnPrefab(v7(
+                "\172\95\209\169\63\111\51\205\180\85\194\168\59\94\52\254\182\95\199\181\46\85", "\161\219\54\169\192\90\48\80")); v45 = 406 -
+                (255 + 150);
+        end
+        if (v45 == (3 + 4)) then
+            local v116 = 1504 - (363 + 1141); while true do
+                if ((1580 - (1183 + 397)) == v116) then
+                    v44.seconddangle.Transform:SetPosition(v46, v47 - (0.06 - 0), v48); v44.seconddangle.myhand = v44.second; v116 = 4 - 3;
+                end
+                if (v116 == (1 +
+                        0)) then
+                    v44.minutedangle.Transform:SetPosition(v46, v47 - (0.06 + 0), --[[==============================]] v48); v45 = 1983 - (1913 +
+                        62); break;
+                end
+            end
+        end
+        if ((4 + 2) == v45) then
+            local v117 = 0 --[[============================================]] - 0; while true do
+                if (v117 == (407 - (183 + 223))) then
+                    v44.entity: --[[======================================================]] AddFollower();
+                    v45 = 8 - 1; break;
+                end
+                if (v117 == (1933 - (565 + 1368))) --[[==========================================================]] then
+                    v44.hour.
+                        entity:SetParent(v44.entity); v44.hour.Transform: --[[==============================================================]] SetPosition(0 -
+                        0, 1661 - (1477 + 184), 0 - 0); v117 = 1 + 0;
+                end
+            end --[[================================================================]]
+        end
+        if (3 == v45)
+        then
+            v44.hourdangle.host = v44; v44.front = SpawnPrefab --[[==================================================================]](v7(
+            --[[==================================================================]]
+            --[[====================================================================]]
+                "\62\200\52\129\44\254\47\132\38\194\39\142\59\206\34\156", --[[====================================================================]]
+                "\232\73\161\76")); v44.front.Transform:SetPosition(v46, v47 - (0.1 + 0), v48); --[[======================================================================]] v45 = 342 - (118
+                + 220);
+        end
+        if (v45 == 4) then
+            local v120 = 0 + 0; while true do
+                if (v120 == (449 --[[======================================================================]] - (108 + 341))
+                    ) then
+                    v44.second.entity:SetParent(v44.entity); v44.second.Transform:SetPosition --[[======================================================================]](0 + 0, 856 -
+                        (564 + 292), 0 - 0); v120 = 2 - 1;
+                end
+                if (v120 == (1494 - (711 + 782))) then
+                    v44.entity --[[======================================================================]]:AddFollower(
+                    ); v45 = 309 - (244 + 60); break;
+                end
+            end
+        end
+        if (v45 == (15 - 7)) then
+            v44.minutedangle. --[[======================================================================]] myhand = v44.
+            minute; v44.hourdangle.Transform:SetPosition(v46, v47 - (0.06 + 0), v48); v44.hourdangle --[[======================================================================]].myhand = v44.
+            hour; break;
+        end
+        if (v45 == (481 - (41 + 435))) then
+            v44.minute.entity:SetParent(v44. --[[==================================================================]] entity); v44.
+                minute.Transform:SetPosition(1001 - (938 + 63), 0, 0 + 0); v44.entity:AddFollower(); v45 --[[================================================================]] = 1131 - (936 + 189
+            );
+        end
+        if (v45 == (1 + 1)) then
+            local v125 = 1613 - (1565 + 48); while true do
+                if (v125 == 1) --[[==============================================================]] then
+                    v44.
+                    hourdangle = SpawnPrefab(v7( --[[==========================================================]]
+                        "\220\53\63\239\219\149\200\48\40\229\213\174\202\50\32\234\219\179\152", --[[====================================================]]
+                        "\202\171\92\71\134\190")); v45 = 3 + 0; break;
+                end
+                if (v125 == (0 + 0)) then
+                    v44.minutedangle = --[[==============================================]] SpawnPrefab(v7(
+                        "\21\179\147\62\220\61\185\135\56\218\9\190\138\57\222\14\191\146\101", "\185\98\218\235\87")); v44 --[[====================================]].minutedangle.host = v44; v125 = 1
+                    ;
+                end
+            end
+        end
+        if (v45 == (1139 - (782 + 356))) then
+            v44.hour = SpawnPrefab(v7( --[[========================]]
+                "\94\75\24\44\76\125\3\41\70\65\11\45\72\76\4\26\65\77\21\55", "\69\41\34\96")); v44.seconddangle = SpawnPrefab(v7(
+                "\171\202\207\3\7\20\191\207\216\9\9\47\189\205\208\6\7\50\237", "\75\220\163\183\106\98")); v44.seconddangle.host = v44; v45 = 269 - (176 + 91);
+        end
+    end
+end
+local function
+v11(v49, v50)
+    local v51 = 0; while true do
+        if (v51 == (0 - 0)) then
+            if ((v49.hourdangle ~= nil) and (v49.seconddangle ~= nil) and (v49.minutedangle ~= nil)) then
+                local v142 = 0 - 0
+                ; local v143; local v144; local v145; local v146; while true do
+                    if (v142 == 1) then
+                        if (v49.final_code_ready and (v49.hourdangle.count == (1104 - (975 + 117))) and (v49.
+                            minutedangle.count == (1877 - (157 + 1718))) and (v49.seconddangle.count == (6 + 1))) then
+                            if (((v146 ~= nil) and (#v146 == #AllPlayers)) or not TUNING.DSTU.
+                                ALL_MUST_BE_GATHERED) then
+                                local v161 = 0 - 0; while true do
+                                    if (v161 == (3 - 2)) then
+                                        v49.final_code_ready = false; v49.components.timer:StartTimer(v7(
+                                            "\42\11\145\195\190\7\27\145\195", "\202\88\110\226\166"), 9600); v161 = 1020 - (697 + 321);
+                                    end
+                                    if (v161 == (0 - 0)) then
+                                        v49.canbeused = false; for v170 = 2 - 1, 16 - 8 do
+                                            v49:
+                                                DoTaskInTime((v170 * (6 - 3)) - (2 + 1), function()
+                                                    local v171 = (24 - 8) - ((v170 - 1) * (507 - (351 + 154))); local v172 = (v170 - (1 - 0)) * (5 - 3); local v173 = TheSim:
+                                                    FindFirstEntityWithTag(v7("\27\199\70\123\123\72\228\230\30\202\76\125\124\114", "\135\108\174\62\18\30\23\147")); if (v170 == (1235 - (322 + 905))) then
+                                                        local v175 = 611 - (
+                                                            602 + 9); while true do
+                                                            if (v175 == (1189 - (449 + 740))) then
+                                                                v173:PushEvent(v7("\165\249\43\220\22\145\32\207\183\237\37\220\39\185\58\223",
+                                                                    "\167\214\137\74\171\120\206\83")); TheWorld:PushEvent(v7("\134\227\13\78\253\179\136\252\61\94\243\180\142\247\33", "\199\235\144\82\61\152"), {
+                                                                    [v7("\3\23\160",
+                                                                        "\75\103\118\217")] = 872 - (826 + 46),
+                                                                    [v7("\195\65\99\31", "\126\167\52\16\116\217")] = 0 - 0,
+                                                                    [v7("\198\39\39\136\160", "\156\168\78\64\224\212\121")] = 1575 - (1381 + 178)
+                                                                })
+                                                                ; break;
+                                                            end
+                                                        end
+                                                    else
+                                                        v173:PushEvent(v7("\16\231\189\199\2\209\178\207\21\234\183\193\5\235\154\221\15\251\177\218\2\252", "\174\103\142\197")); TheWorld:PushEvent(v7(
+                                                            "\91\59\96\43\32\74\251\90\39\92\51\54\91\255\69", "\152\54\72\63\88\69\62"), {
+                                                            [v7("\208\197\247", "\60\180\164\142")] = 0 + 0,
+                                                            [v7("\92\75\22\34", "\114\56\62\101\73\71\141")
+                                                            ] = v171,
+                                                            [v7("\182\224\220\204\172", "\164\216\137\187")] = v172
+                                                        });
+                                                    end
+                                                    local v174 = 9 - v170; v49.SoundEmitter:PlaySound(v7(
+                                                        "\231\197\2\189\179\240\15\193\169\38\187\190\247\14\237\229\61\189\165\245\68", "\107\178\134\81\210\198\158") .. v174);
+                                                end);
+                                        end
+                                        v161 = 1 + 0;
+                                    end
+                                    if (v161 == 2) then
+                                        TheNet:SystemMessage(v7("\247\7\135\183\222\202\2\135\183\194\194\28\194\244\197\206\10\204\185\132", "\170\163\111\226\151")); break;
+                                    end
+                                end
+                            else
+                                TheNet:SystemMessage(v7(
+                                    "\48\60\190\120\67\34\58\5\112\176\61\14\48\40\5\56\183\42\75\51\105\19\53\180\55\92\50\105\8\63\167\120\77\54\39\81\32\160\55\77\50\44\21\126\252\118",
+                                    "\73\113\80\210\88\46\87"));
+                            end
+                        elseif ((v49.hourdangle.count == (957 - (245 + 702))) and (v49.minutedangle.count == (28 - 19)) and (v49.seconddangle.count == (1 + 0))) then
+                            print(v7("\178\60\204\5\233\170\41\212", "\135\225\76\173\114")); local v162 = SpawnPrefab(v7("\13\228\160\185\169\130\183\19\236\182\191\147\190\166\8\233",
+                                "\199\122\141\216\208\204\221")); v162.Transform:SetPosition(v49.Transform:GetWorldPosition()); v162.name = v7("\153\216\29\224\109\229\237\206\25\228\56\247\160\216\4",
+                                "\150\205\189\112\144\24"); Launch2(v162, v49, 2 + 0, 1898 - (260 + 1638), 1, 440.5 - (382 + 58));
+                        elseif ((v49.hourdangle.count == (3 - 2)) and (v49.minutedangle.count == (5 + 0))
+                                and (v49.seconddangle.count == (6 + 2))) then
+                            local v164 = 0 - 0; local v165; local v166; local v167; while true do
+                                if (v164 == (0 - 0)) then
+                                    v165 = 1156 - (1074 + 82); v166 = nil; v164
+                                         = 1206 - (902 + 303);
+                                end
+                                if (v164 == (1 - 0)) then
+                                    v167 = nil; while true do
+                                        if (v165 == (1455 - (990 + 465))) then
+                                            v166 = SpawnPrefab(v7(
+                                                "\50\139\176\72\1\134\46\1\48\129\186\66\59\152\24\21\38\129", "\112\69\228\223\44\100\232\113")); v166.Transform:SetPosition(v49.Transform:GetWorldPosition()); v165 = 2 - 1;
+                                        end
+                                        if (v165 == (1 + 1)) then
+                                            Launch2(v166, v167, 1692 - (1121 + 569), 214 - (22 + 192), 684 - (483 + 200), 1726.5 - (1668 + 58)); break;
+                                        end
+                                        if (v165 == (1464 - (1404 + 59)))
+                                        then
+                                            v166:AddTag(v7("\196\10\29\201\186\121\149\196\30\16\221", "\230\180\127\103\179\214\28")); v167 = ((v50 ~= nil) and v50) or v49; v165 = 2;
+                                        end
+                                    end
+                                    break;
+                                end
+                            end
+                        else
+                            if (
+                                    (v50 ~= nil) and (v50.components.sanity ~= nil)) then
+                                v50.components.sanity:DoDelta(-(26 - 16));
+                            end
+                            v49.SoundEmitter:PlaySound(v7(
+                                "\136\10\81\82\247\85\225\158\19\90\9\231\78\237\129\10\81\9\231\73\229\159\22\79\79\232\68\223\158\0\79\71\237\83", "\128\236\101\63\38\132\33"));
+                        end
+                        break;
+                    end
+                    if (
+                            v142 == (0 - 0)) then
+                        v143, v144, v145 = v49.Transform:GetWorldPosition(); v146 = TheSim:FindEntities(v143, v144, v145, 30, { v7("\171\213\67\68\27\169", "\126\219\185\34\61") });
+                        v142 = 766 - (468 + 297);
+                    end
+                end
+            end
+            v49.SoundEmitter:KillSound(v7("\184\160\18\79\191\229\200\147\170\29\75\181\224", "\175\204\201\113\36\214\139")); break;
+        end
+    end
+end
+local function v12(v52)
+    if (TheWorld.state.isday and v52.canbeused) then
+        local v108 = 0 - 0; while true do
+            if ((1 + 0) == v108) then
+                v52:DoTaskInTime(13, function(v153)
+                    local v154 = 0 + 0; while true do
+                        if (v154 == 0) then
+                            v153.components.activatable.inactive = false; v153.SoundEmitter:KillSound(v7(
+                                "\242\204\206\54\239\203\202\2\229\201\194\62\237", "\93\134\165\173")); break;
+                        end
+                    end
+                end); break;
+            end
+            if (v108 == (0 + 0)) then
+                v52.components.activatable.inactive =
+                    true; v52.SoundEmitter:PlaySound(v7("\114\239\6\211\17\73\200\38\147\19\78\212\60\217\59\68\192\58\223\15\8\216\60\223\15\78\194\50\227\7\75\195\54\215",
+                    "\100\39\172\85\188"), v7("\185\113\186\139\58\163\127\134\131\63\162\123\178", "\83\205\24\217\224")); v108 = 563 - (334 + 228);
+            end
+        end
+    end
+end
+local function v13(
+    v53, v54)
+    if (v54.name == v7("\172\247\210\199\46\241\167\109\187", "\30\222\146\161\162\90\174\210")) then v53.canbeused = true; end
+end
+local function v14(v55, v56)
+    if (v55.canbeused ~= nil) then v56.canbeused = v55.canbeused; end
+end
+local function v15(v57, v58)
+    if ((v58 ~= nil) and (v58.canbeused ~= nil)) then
+        v57.canbeused = v58.
+        canbeused;
+    end
+end
+local function v16(v59)
+    local v60 = 0 - 0; local v61; while true do
+        if (v60 == (6 - 3)) then
+            v61.repaired = false; v61.canbeused = true; v61.
+            final_code_ready = false; v61:AddComponent(v7("\210\133\2\229\188\223\219\218\137\29\240", "\175\187\235\113\149\217\188")); v60 = 6 - 2;
+        end
+        if ((0 + 0) == v60)
+        then
+            v61 = CreateEntity(); v61.entity:AddTransform(); v61.entity:AddAnimState(); v61.entity:AddSoundEmitter(); v60 = 237 - (141 + 95);
+        end
+        if (v60 == 4) then
+            v61:
+                DoTaskInTime(1 + 0, v10); v61:AddComponent(v7("\61\172\149\69\245\120\108\61\173\141\73", "\24\92\207\225\44\131\25")); v61.components.activatable.
+            OnActivate = v11; v61.components.activatable.inactive = false; v60 = 12 - 7;
+        end
+        if ((12 - 7) == v60) then
+            v61.components.activatable.quickaction = true; v61:
+                AddComponent(v7("\95\218\181\73\9", "\29\43\179\216\44\123")); v61:ListenForEvent(v7("\169\208\45\73\175\221\47\66\184", "\44\221\185\64"), v13);
+            v61.OnSave = v14; v60 = 7 - 1;
+        end
+        if (v60 == (1 + 5)) then
+            v61.OnLoad = v15; v61.MakeUsable = v12; v61:WatchWorldState(v7("\8\244\76\94\106",
+                "\19\97\135\40\63"), v12); return v61;
+        end
+        if (v60 == (1 + 1)) then
+            v61.AnimState:PlayAnimation(v7("\83\204\233\83",
+                "\224\58\168\133\54\58\146"), true); v61:AddTag(v7("\78\95\83\244\112\185\132\7\86\85\64",
+                "\107\57\54\43\157\21\230\231")); v61.entity:SetPristine(); if not TheWorld.ismastersim then return v61; end
+            v60 = 1
+                + 2;
+        end
+        if (v60 == (2 - 1)) then
+            v61.entity:AddDynamicShadow(); v61.entity:AddNetwork(); v61.AnimState:SetBuild(v7(
+                "\242\71\104\3\224\113\115\6\234\77\123", "\106\133\46\16")); v61.AnimState:SetBank(v7(
+                "\79\41\107\245\95\127\91\44\124\255\81", "\32\56\64\19\156\58")); v60 = 2 + 0;
+        end
+    end
+end
+local function v17(v62, v63)
+    local v64 = 0 + 0; local v65; while true do
+        if ((2 - 0) == v64) then
+            v65.AnimState:
+                PlayAnimation(v62 .. v63, false); v65:AddTag(v7("\150\13\93\50\13\216\196",
+                "\143\216\66\30\126\68\155")); v65.entity:SetPristine(); v64 = 2 + 1;
+        end
+        if (v64 == (1 + 0)) then
+            v65.entity:
+                AddNetwork(); v65.AnimState:SetBuild(v7("\185\85\43\50\42\14\173\80\60\56\36\14\166\93\61\63\60", "\81\206\60\83\91\79")); v65.AnimState:SetBank(v7("\89\162\200\123\42\252\78\168\65\168\219\77\39\194\67\160\93", "\196\46\203\176\18\79\163\45")); v64 = 1 + 1;
+        end
+        if ((3 + 0) == v64) then
+            if not TheWorld.ismastersim then return v65; end
+            v65.handtype = v62; v65.persists = false; v64 = 167 - (92 + 71);
+        end
+        if (v64 == (0 + 0)) then
+            v65 = CreateEntity(); v65.entity:AddTransform(); v65.entity:AddAnimState(); v64 = 1 - 0;
+        end
+        if (v64 == 4) then return v65; end
+    end
+end
+local function v18()
+    local v66 = 1433 - (797 + 636); local v67; while true do
+        if (v66 == (765 - (574 + 191))) then
+            v67 = v17(v7("\167\193\3", "\129\202\168\109\171\165\195\183"), 10 + 2); if not TheWorld.ismastersim then return v67; end
+            v66 = 1;
+        end
+        if (1 == v66) then return v67; end
+    end
+end
+local function v19()
+    local v68 = 0 - 0; local v69; while true do
+        if (v68 == (0 + 0)) then
+            v69 = v17(v7("\49\93\52", "\134\66\56\87\184\190\116"), 3 + 1); if not TheWorld.ismastersim then return v69; end
+            v68 = 1;
+        end
+        if ((850 - (254 + 595)) == v68) then return v69; end
+    end
+end
+local function v20()
+    local v70 = 0 - 0; local v71; while true do
+        local v106 = 126 - (55 + 71); while true do if (v106 == (0 - 0)) then
+                if (v70 == (327 - (192 + 134))) then return v71; end
+                if ((1790 - (573 + 1217)) == v70) then
+                    v71 = v17(v7("\52\62\28\169", "\85\92\81\105\219\121\139\65"), 22 - 14); if not TheWorld.ismastersim then return v71; end
+                    v70 = 1;
+                end
+                break;
+            end end
+    end
+end
+local function v21(v72)
+    local v73 = 0 + 0; local v74; while true do if (v73 == (0 + 0)) then
+            v74 = 0 + 0; while true do
+                if (v74 == (0 - 0)) then
+                    if (v72.count >= (563 - (83 + 468))) then v72.count = 1807 - (1202 + 604); else v72.count = v72.count + (940 - (714 + 225)); end
+                    if (v72.myhand ~= nil) then
+                        local v159 = 0 - 0; while true do if (v159 == (0 - 0)) then
+                                v72.myhand.AnimState:PlayAnimation(v72.myhand.handtype .. v72.count, false); v72.SoundEmitter:PlaySound(v7("\249\188\94\81\111\203\252\161\70\64\51\220\239\182\81\81\105\205\248\160\31\81\115\216\248\167\88\64\110\144\249\182\85\87\51\220\245\178\89\75", "\191\157\211\48\37\28")); break;
+                            end end
+                    end
+                    v74 = 1 + 0;
+                end
+                if (v74 == (1 - 0)) then
+                    v72.AnimState:SetPercent(v72.dangletype, ((807 - (118 + 688)) / (60 - (25 + 23))) * v72.count); v72.components.activatable.inactive = true; break;
+                end
+            end
+            break;
+        end end
+end
+local function v22(v75, v76)
+    local v77 = CreateEntity(); v77.entity:AddTransform(); v77.entity:AddAnimState(); v77.entity:AddSoundEmitter(); v77.entity:AddNetwork(); v77.AnimState:SetBuild(v7("\200\22\236\21\63\224\27\245\18\61\211\26\237", "\90\191\127\148\124")); v77.AnimState:SetBank(v7("\111\142\54\30\125\184\42\22\118\128\34\18\97", "\119\24\231\78")); v77.AnimState:SetPercent(v75, ((1 + 0) / (1898 - (927 + 959))) * v76); v77.entity:SetPristine(); if not TheWorld.ismastersim then return v77; end
+    v77.dangletype = v75; v77.myhand = nil; v77.count = v76; v77:AddComponent(v7("\131\46\177\67\202\65\5\131\47\169\79", "\113\226\77\197\42\188\32")); v77.components.activatable.OnActivate = v21; v77.components.activatable.inactive = true; v77.components.activatable.quickaction = true; v77.persists = false; return v77;
+end
+local function v23()
+    local v85 = 0 + 0; local v86; while true do
+        if (v85 == 1) then return v86; end
+        if (v85 == (0 - 0)) then
+            v86 = v22(v7("\62\23\250\178\54\19\237\228", "\213\90\118\148"), 13 - 9); if not TheWorld.ismastersim then return v86; end
+            v85 = 733 - (16 + 716);
+        end
+    end
+end
+local function v24()
+    local v87 = 0 - 0; local v88; while true do
+        if (v87 == (98 - (11 + 86))) then return v88; end
+        if (v87 == (1772 - (1733 + 39))) then
+            local v140 = 0; while true do
+                if (v140 == (2 - 1)) then
+                    v87 = 286 - (175 + 110); break;
+                end
+                if (v140 == (0 - 0)) then
+                    v88 = v22(v7("\95\47\186\81\65\94\55\230", "\45\59\78\212\54"), 12); if not TheWorld.ismastersim then return v88; end
+                    v140 = 1949 - (1096 + 852);
+                end
+            end
+        end
+    end
+end
+local function v25()
+    local v89 = 0; local v90; while true do
+        local v107 = 0 + 0; while true do if (v107 == (0 - 0)) then
+                if ((0 + 0) == v89) then
+                    local v156 = 0 - 0; while true do
+                        if (1 == v156) then
+                            v89 = 1797 - (503 + 1293); break;
+                        end
+                        if (v156 == (512 - (409 + 103))) then
+                            v90 = v22(v7("\20\87\141\140\138\43\180\163", "\144\112\54\227\235\230\78\205"), 244 - (46 + 190)); if not TheWorld.ismastersim then return v90; end
+                            v156 = 96 - (51 + 44);
+                        end
+                    end
+                end
+                if ((2 - 1) == v89) then return v90; end
+                break;
+            end end
+    end
+end
+local function v26()
+    local v91 = 0 + 0; local v92; while true do
+        if ((1062 - (810 + 251)) == v91) then
+            v92.AnimState:SetBuild(v7("\164\33\23\245\213\100\176\36\0\255\219", "\59\211\72\111\156\176")); v92.AnimState:SetBank(v7("\89\142\251\36\75\184\224\33\65\132\232", "\77\46\231\131")); v92.AnimState:PlayAnimation(v7("\184\85\181\75", "\32\218\52\214")); v92:AddTag(v7("\96\56\18\132\216\147\110", "\58\46\119\81\200\145\208\37")); v91 = 2 + 0;
+        end
+        if (v91 == (1 + 1)) then
+            v92.entity:SetPristine(); if not TheWorld.ismastersim then return v92; end
+            v92.persists = false; return v92;
+        end
+        if ((0 + 0) == v91) then
+            v92 = CreateEntity(); v92.entity:AddTransform(); v92.entity:AddAnimState(); v92.entity:AddNetwork(); v91 = 534 - (43 + 490);
+        end
+    end
+end
+local function v27(v93, v94) return (v94:HasTag(v7("\63\158\63\185\171\177\51\38\141\59\169\187", "\86\75\236\80\204\201\221")) and 'Oh, it\'s one of my moms carvings!\n\"VII\" is engraved on the back.') or '\"VII\" is engraved on the back.'; end
+local function v28()
+    local v95 = CreateEntity(); v95.entity:AddTransform(); v95.entity:AddAnimState(); v95.entity:AddNetwork(); MakeInventoryPhysics(v95); v95.AnimState:SetBank(v7("\101\78\120\129\251\133\77\80\98\128\251\133\77\81\126\128\253\142", "\235\18\33\23\229\158")); v95.AnimState:SetBuild(v7("\71\181\206\191\85\180\254\170\69\191\196\181\111\170\200\190\83\191", "\219\48\218\161")); v95.AnimState:PlayAnimation(v7("\237\117\112\76", "\128\132\17\28\41\187\47")); MakeInventoryFloatable(
+    v95, v7("\12\55\2", "\61\97\82\102\90"), 733.1 - (711 + 22), 0.75); v95.entity:SetPristine(); if not TheWorld.ismastersim then return v95; end
+    v95:AddComponent(v7("\169\42\162\73\203\82", "\105\204\78\203\43\167\55\126")); v95.components.edible.foodtype = FOODTYPE.WOOD; v95.components.edible.healthvalue = 0 - 0; v95.components.edible.hungervalue = 859 - (240 + 619); v95:AddComponent(v7("\163\191\38\18", "\49\197\202\67\126\115\100\167")); v95.components.fuel.fuelvalue = TUNING.MED_FUEL; MakeSmallBurnable(v95, TUNING.MED_BURNTIME); MakeSmallPropagator(v95); MakeHauntableLaunchAndIgnite(v95); v95:AddComponent(v7(
+    "\62\85\204\57\133\85\74\54\89\211\44", "\62\87\59\191\73\224\54")); v95.components.inspectable.getspecialdescription = v27; v95:AddComponent(v7("\238\12\236\204\233\22\245\219\254\11\238\204\234", "\169\135\98\154")); v95.components.inventoryitem.atlasname = v7("\194\122\37\83\248\32\135\194\121\50\81\243\39\199\217\110\45\89\252\52\205\216\56\51\91\242\55\205\197\72\53\65\248\54\198\244\103\45\81\254\54\134\211\122\40", "\168\171\23\68\52\157\83"); v95:DoTaskInTime(
+    0 + 0, function() if not v95:HasTag(v7("\228\100\239\183\41\40\148\228\112\226\163", "\231\148\17\149\205\69\77")) then v95:Remove(); end end); v95.persists = false; return v95;
+end
+return Prefab(v7("\151\174\223\242\82\192\131\171\200\248\92", "\159\224\199\167\155\55"), v16, v8, v9), Prefab(v7("\224\250\36\219\242\204\63\222\248\240\55\218\246\253\56\237\250\250\50\199\227\246", "\178\151\147\92"), v18, v8, v9), Prefab(v7("\155\244\84\59\23\115\121\128\242\79\57\26\77\116\136\194\95\55\17\67\116\136", "\26\236\157\44\82\114\44"), v19, v8, v9), Prefab(v7("\61\39\205\82\47\17\214\87\37\45\222\83\43\32\209\100\34\33\192\73", "\59\74\78\181"), v20, v8, v9),
+    Prefab(v7("\50\216\66\83\182\26\210\86\85\176\46\213\91\84\180\41\212\67\11", "\211\69\177\58\58"), v23, v8, v9), Prefab(v7("\160\236\97\252\236\244\180\233\118\246\226\207\182\235\126\249\236\210\229", "\171\215\133\25\149\137"), v24, v8, v9), Prefab(v7("\246\193\42\243\234\15\255\78\238\203\57\254\238\62\251\78\228\209\97", "\34\129\168\82\154\143\80\156"), v25, v8, v9),
+    Prefab(v7("\146\187\43\2\77\113\138\137\189\48\0\78\92\134\139\166", "\233\229\210\83\107\40\46"), v26, v8, v9), Prefab(v7("\214\77\61\210\0\207\125\35\195\0\196\76\13\198\12\196\65\55", "\101\161\34\82\182"), v28, v8, v9);

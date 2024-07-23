@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.39"
+local _version = "1.5.0.40"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -120,9 +120,9 @@ configuration_options = {
         hover = "Enable this for a alternate Night Vision filter if you experience eye strain.",
         options =
         {
-            { description = "Red", data = "red", hover = "Red filter, like moggles." },
-            { description = "Black and White", data = "bnw", hover = "Black and White, like the original night vision." },
-            { description = "Default", data = "blue", hover = "Default, blue filter." }
+            { description = "Red",             data = "red",  hover = "Red filter, like moggles." },
+            { description = "Black and White", data = "bnw",  hover = "Black and White, like the original night vision." },
+            { description = "Default",         data = "blue", hover = "Default, blue filter." }
         },
         default = "blue",
     },
@@ -331,6 +331,8 @@ configuration_options = {
     BinaryConfig("winonaworker", "Winona - Faster Working",
         "Winona now scales her work/picking efficiency, and tool/weapon durability, off of her hunger level. Drains hunger when taking actions.",
         true),
+    BinaryConfig("winonarose", "Winona - Fragile Rose", "Nerfs the fragile rose to not revive the player, instead preventing death when taking lethal damage.", true),
+    BinaryConfig("winonafishing", "Winona - Catapult Fishing", "Nerfs catapult fishing. Instead of killing fishes, catapults now launch fish.", true),
     BinaryConfig("winona_items", "Winona - New Items",
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
     BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
@@ -680,7 +682,6 @@ configuration_options = {
     SkipSpace(),
 
     Header("General Food Tweaks"),
-    BinaryConfig("beebox_nerf", "Bee Box Nerf", "Bee Boxes only release 2 Bees max.", true),
     BinaryConfig("butterflywings_nerf", "Butterfly Wings Nerf",
         "Butterfly Wings have been nerfed to not be cheap healing.", true),
     {
@@ -693,6 +694,7 @@ configuration_options = {
             { description = "3x", data = 3 } },
         default = 1.5
     },
+    BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and 3 Honey at max. Bee Boxes deal damage to unprepared players. Honey stats nerfed.", true),	
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
     {
         name = "monster_eggs",
@@ -710,7 +712,7 @@ configuration_options = {
     BinaryConfig("horriblefood", "More Horrible Foods",
         "More items are considered as the horrible food type.", true),
     BinaryConfig("mushroom_changes", "Mushroom Changes",
-        "Mushroom Planter accepts more resources to replenish. Mushrooms and Mushtrees now give spores, instead of caps.", true),
+        "Mushroom Planter accepts more resources to replenish. Mushrooms now give spores, instead of caps. Mushtrees will give spores when off-season.", true),
     BinaryConfig("no_winter_growing", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
     BinaryConfig("rawcropsnerf", "Raw Crops Nerf",
@@ -1419,6 +1421,7 @@ configuration_options = {
     -- Mara =)
 
     --	Header("General"),
+	BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),	
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),
