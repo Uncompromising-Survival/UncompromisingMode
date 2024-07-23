@@ -89,7 +89,7 @@ local function SpawnTentacle(inst,data)
 			end			
 		end
 	else
-		inst:RemoveEventCallBack("onhitother", SpawnTentacle)
+		inst:RemoveEventCallback("onhitother", SpawnTentacle)
 	end
 end
 
@@ -113,8 +113,8 @@ local function bite(inst)
     
         inst.host.components.health:DeltaPenalty(-inst.red*0.01)
 		
-		if inst.gloomy == true then
-			if not inst.host.gloom_parasite then
+		if inst.gloomy == true  then
+			if not (inst.host.gloom_parasite and inst.host.gloom_parasite.components.health and not inst.host.gloom_parasite.components.health:IsDead()) then
 				inst.host.gloom_parasite = inst
 				inst.host:ListenForEvent("onhitother", SpawnTentacle)
 			end

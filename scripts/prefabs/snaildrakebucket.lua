@@ -181,7 +181,7 @@ local function OnLoad(inst, data)
 end
 
 local function ExplodeContents(inst)
-	if inst.contains then
+	if inst.contains and inst.uses ~= 0 then
 		if inst.contains == "water" and TheWorld.state.iswinter then
 			SpawnPrefab("ice").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		elseif inst.contains == "lava" then
@@ -194,7 +194,7 @@ local function ExplodeContents(inst)
 end
 
 local function EvaluateFueledRate(inst,iswinter)
-	if inst.contains and inst.contains == "water" then
+	if inst.contains and inst.contains == "water" and inst.uses ~= 0 then
 		if iswinter then
 			inst.components.fueled.rate = 20
 		else
@@ -204,7 +204,7 @@ local function EvaluateFueledRate(inst,iswinter)
 end
 
 local function getstatus(inst)
-	if inst.contains then
+	if inst.contains and inst.uses ~= 0 then
 		if inst.contains == "water" then
 			return "WATER"
 		elseif inst.contains == "lava" then

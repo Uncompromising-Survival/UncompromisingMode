@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/um_armor_bramble_rime.zip"),
-	Asset("ANIM", "anim/um_armor_bramble_rimeweed.zip"),
+	Asset("ANIM", "anim/um_armor_bramble_rimeweed.zip"), -- One of these is the ground sprite, the other is the swap for the body symbol...
 	Asset("ATLAS", "images/inventoryimages/um_armor_bramble_rimeweed.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_armor_bramble_rimeweed.tex"),
 }

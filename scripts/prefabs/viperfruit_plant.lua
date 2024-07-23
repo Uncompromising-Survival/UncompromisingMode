@@ -33,7 +33,9 @@ local function SpawnViperWorm(inst)
 		if worm.components.combat ~= nil then
 			worm.components.combat:SuggestTarget(bozo)
 			worm.sg:GoToState("taunt")
-		end	
+		end
+		inst.AnimState:PlayAnimation("atk_pre")
+		inst.AnimState:PushAnimation("berry_idle",true)
 	end
 end
 

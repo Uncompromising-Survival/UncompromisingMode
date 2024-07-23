@@ -126,9 +126,9 @@ local function maketree(name, data, state)
 		makestump(inst)
 		if other.components.sanity ~= nil and other.components.health ~= nil and not other.components.health:IsDead() and other.components.inkable then
 			other.components.inkable:Ink()
-			other.components.sanity:DoDelta(-15)
+			other.components.sanity:DoDelta(-5)
 		elseif other.components.sanity ~= nil then
-			other.components.sanity:DoDelta(-15)
+			other.components.sanity:DoDelta(-5)
 		end
 		inst.AnimState:PlayAnimation("fall")
 		inst.AnimState:PushAnimation("idle_stump")
@@ -138,7 +138,7 @@ local function maketree(name, data, state)
 	
     local function normal_tree(inst, instant)
 		inst:AddComponent("sanityaura")
-		inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
+		inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
         if inst._changetask ~= nil then
             inst._changetask:Cancel()
         end
