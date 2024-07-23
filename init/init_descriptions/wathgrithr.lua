@@ -224,6 +224,7 @@ DESCRIBE.WATERMELON_LANTERN = "Do you wish to fight, melon head?"
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "A serpent who fights a coward's way!"
 DESCRIBE.VIPERFRUIT = "A fruit from Loki himself!"
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Still sticky and gross, but contained."
 
 DESCRIBE.BLUEBERRYPLANT = {

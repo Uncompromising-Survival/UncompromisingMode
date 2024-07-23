@@ -15,7 +15,7 @@ local STAGEUP_TIME = 3
 
 local TILE_WIDTH_BY_STAGE = {0, 3, 6}
 local TERRAFORM_DELAY = 3
-
+local EEL_TIME = 60*8*3
 --------------------------------------------------------------------------------
 local function make_terraformer_proxy(inst, ix, iy, iz)
     local terraformer = SpawnPrefab("um_waterfall_terraformer")
@@ -119,6 +119,62 @@ local function try_stage_up(inst, force_finish_terraforming)
 end
 
 --------------------------------------------------------------------------------
+local function SpawnEel(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local pt = Vector3(x,y,z)
+	local offset = FindWalkableOffset(pt, math.random() * 2 * PI, 6, 16)
+	if offset then
+		local worm = SpawnPrefab("shockworm")
+		worm.Transform:SetPosition(x+offset.x,y,z+offset.z)
+		worm.from_waterhole = true
+	end
+end
+
+local function SpawnPlant(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local pt = Vector3(x,y,z)
+	local offset = FindWalkableOffset(pt, math.random() * 2 * PI, 6, 16)
+	if offset then
+		local plant = SpawnPrefab("zaspberry_plant")
+		plant.Transform:SetPosition(x+offset.x,y,z+offset.z)
+		plant.from_waterhole = true
+	end
+end
+
+local function ShockyStuff(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local eels = TheSim:FindEntities(x,y,z,24,{"worm","electricdamageimmune"})
+	if #eels > 3 then
+		--Nothing... For now...
+	elseif #eels > 2 then
+		SpawnEel(inst)
+		if math.random() > 0.5 then
+			SpawnEel(inst)
+		end
+	else
+		SpawnEel(inst)
+		if math.random() > 0.5 then
+			SpawnEel(inst)
+		end
+	end
+	local zappyplants = TheSim:FindEntities(x,y,z,24,{"shockwormplant"})
+	if #zappyplants > 6 then
+		--Nothing... For now...
+	elseif #zappyplants > 2 then
+		SpawnPlant(inst)
+		if math.random() > 0.5 then
+			SpawnPlant(inst)
+		end
+	else
+		SpawnPlant(inst)
+		SpawnPlant(inst)
+		if math.random() > 0.5 then
+			SpawnPlant(inst)
+		end
+	end
+	
+end
+
 local function on_timer_done(inst, data)
     -- If we're in the process of phasing out, don't fire any timers.
     if inst._finished then
@@ -139,6 +195,9 @@ local function on_timer_done(inst, data)
         do_stage_up(inst)
     elseif data.name == "do_forcefinishterraforming" then
         inst:ForceFinishTerraforming(inst)
+	elseif data.name == "growelectricalstuff" then
+		ShockyStuff(inst)
+		inst.components.timer:StartTimer("growelectricalstuff", EEL_TIME)
     end
 end
 
@@ -379,6 +438,9 @@ local function Init(inst)
 	
 	if not inst.components.timer:TimerExists("disappear") then
 		inst.components.timer:StartTimer("disappear", (TheWorld.state.springlength / 4) * 480)
+	end
+	if not inst.components.timer:TimerExists("growelectricalstuff") then
+		inst.components.timer:StartTimer("growelectricalstuff", EEL_TIME)
 	end
 end
 

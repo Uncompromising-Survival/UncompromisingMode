@@ -448,7 +448,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags)
             return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and names.viperfruit and names.giant_blueberry
+                and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser == 3)) and names.giant_blueberry
         end,
         hunger = 37.5,
         health = 40,
@@ -501,7 +501,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags)
             return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and names.zaspberry and tags.sweetener and tags.dairy
+                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser == 2)) and tags.sweetener and tags.dairy
         end,
         hunger = 37.5,
         health = 40,

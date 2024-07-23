@@ -2,6 +2,7 @@ require "map/room_functions"
 
 local Layouts = require ("map/layouts").Layouts
 local StaticLayout = require ("map/static_layout")
+Layouts["cave_exit_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_exit_magmabiome")
 
 ---------------------------------------------
 -- Bat Caves
@@ -10,7 +11,7 @@ local StaticLayout = require ("map/static_layout")
 -- Classic bat cave
 AddRoom("MoltenBatCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_FLOORTOX,
+    value = WORLD_TILES.CAVE,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -26,20 +27,16 @@ AddRoom("MoltenBatCave", {
             stalagmite_tall_low=0.4,
             pillar_cave_rock = 0.08,
             fissure = 0.05,
-			um_rockmaterial1 = 0.3,
-			um_rockmaterial2 = 0.1,
-			--umss_general = 0.6,
+			rock_magma = 0.2,
+			pool_magma = 0.2,
         },
-		--[[prefabdata = {
-			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end,
-		},]]
     }
 })
 
 -- Very batty bat cave
 AddRoom("MoltenBattyCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_FLOORTOX,
+    value = WORLD_TILES.CAVE,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -55,19 +52,15 @@ AddRoom("MoltenBattyCave", {
             stalagmite_tall_low=0.4,
             pillar_cave_rock = 0.08,
             fissure = 0.05,
-			um_rockmaterial1 = 0.3,
-			um_rockmaterial2 = 0.1,
-			--umss_general = 0.6,
+			rock_magma = 0.2,
+			pool_magma = 0.2,
         },
-		--[[prefabdata = {
-			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},]]
     }
 })
 -- Ferny bat cave
 AddRoom("MoltenFernyBatCave", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_FLOORTOX,
+    value = WORLD_TILES.CAVE,
     tags = {"Hutch_Fishbowl"},
     type = NODE_TYPE.Room,
     contents =  {
@@ -84,19 +77,97 @@ AddRoom("MoltenFernyBatCave", {
             stalagmite_tall_low=0.1,
             pillar_cave_rock = 0.08,
             fissure = 0.05,
-			um_rockmaterial1 = 0.3,
-			um_rockmaterial2 = 0.1,
-			--umss_general = 0.3,
+			rock_magma = 0.2,
+			pool_magma = 0.2,
         },
-		--[[prefabdata = {
-			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},]]
+    }
+})
+
+
+AddRoom("BGMagma", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_MAGMA,
+    contents =  {
+        distributepercent = .2,
+        distributeprefabs=
+        {
+			lava_pond_cave = 0.05,
+			magmarock1 = 0.1,
+			um_pyre_nettles_stage_4 = 0.1,
+			um_pyre_nettles_stage_5 = 0.1,
+        },
+    }
+})
+
+AddRoom("GrassMagma", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_GRASSMAGMA,
+    contents =  {
+        distributepercent = .2,
+        distributeprefabs=
+        {
+			lava_pond_cave = 0.1,
+			magmarock1 = 0.025,
+			mushtree_shadow = 0.025,
+			um_pyre_nettles_stage_2 = 0.1,
+			um_pyre_nettles_stage_5 = 0.1,
+        },
+    }
+})
+
+AddRoom("ShroomyMagma", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_MAGMA,
+    contents =  {
+        distributepercent = .5,
+        distributeprefabs=
+        {
+			fissure = 0.125,
+			lava_pond_cave = 0.05,
+			magmarock1 = 0.05,
+			mushtree_shadow = 0.9,
+			viperfruit_plant = 0.1,
+        },
+    }
+})
+
+AddRoom("FossilMagma", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_MAGMA,
+    contents =  {
+        distributepercent = .2,
+        distributeprefabs=
+        {
+			lava_pond_cave = 0.025,
+			magmarock1 = 0.025,
+			magmabone = 0.05,
+			um_pyre_nettles_stage_2 = 0.025,
+			um_pyre_nettles_stage_5 = 0.025,
+        },
+    }
+})
+
+AddRoom("GloomyMagma", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_MAGMA,
+    contents =  {
+        distributepercent = .15,
+        distributeprefabs=
+        {
+			fissure = 0.15,
+			lava_pond_cave = 0.1,
+			magmarock1 = 0.15,
+			viperfruit_plant = 0.25,
+			viperworm = 0.25,
+			um_pyre_nettles_stage_2 = 0.05,
+			um_pyre_nettles_stage_5 = 0.05,
+        },
     }
 })
 
 local bgbatcave = {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_FLOORTOX,
+    value = WORLD_TILES.CAVE,
     tags = {"Hutch_Fishbowl"},
     contents =  {
         distributepercent = .13,
@@ -108,15 +179,37 @@ local bgbatcave = {
             stalagmite_tall_low=0.4,
             pillar_cave_rock = 0.01,
             fissure = 0.05,
-			--umss_general = 0.6,
-			um_rockmaterial1 = 0.3,
-			um_rockmaterial2 = 0.1,
+			rock_magma = 0.4,
         },
-		--[[prefabdata = {
-			umss_general = function() return {table = "MAGMASPLOTCH"..math.random(1,4)} end
-		},]]
     }
 }
+
+AddRoom("MagmaStairs", {
+	colour={r=0,g=.9,b=0,a=.50},
+	value = WORLD_TILES.UM_MAGMA,
+	type = NODE_TYPE.Room,
+	contents =  {
+					countstaticlayouts = {
+						["cave_exit_magmabiome"] = 1,
+					},
+					distributepercent = .4,
+					distributeprefabs=
+					{
+						--sapling=.5,
+						--twiggytree=0.2,
+						rocks=.03,
+						flint=.03,
+						cavelight = 0.25,
+						cavelight_small = 0.1,
+						cavelight_tiny = 0.1,
+						flower_cave = 0.1,
+						lava_pond_cave = 0.1,
+						magmarock1 = 0.2,
+					},								
+				}
+
+})
+
 AddRoom("BGMoltenBatCave", bgbatcave)
 AddRoom("BGMoltenBatCaveRoom", Roomify(bgbatcave))
 

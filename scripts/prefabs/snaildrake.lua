@@ -1,7 +1,7 @@
 local assets =
 {
-    Asset("ANIM", "anim/slurtle.zip"),
-    Asset("ANIM", "anim/slurtle_snaily.zip"),
+    Asset("ANIM", "anim/snaildrake_spikeshell.zip"),
+    Asset("ANIM", "anim/snaildrake_holeshell.zip"),
     Asset("SOUND", "sound/slurtle.fsb"),
 }
 
@@ -28,11 +28,17 @@ TUNING.SNAILDRAKE_RANGED_ATTACK_CD = 15
 
 local easing = require("easing")
 
-SetSharedLootTable('snaildrake',
+SetSharedLootTable('snaildrake_slime',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'armorsnurtleshell', 0.75},
+    {'snaildrakebucket', 0.75},
+})
+SetSharedLootTable('snaildrake_magma',
+{
+    {'snapalm',      1.0},
+    {'snapalm',      1.0},
+    {'snaildrakehat', 0.75},
 })
 
 local snaildrake_brain = require("brains/snaildrakebrain")
@@ -226,10 +232,6 @@ local function common_fn(bank, build, tag)
 
     MakeCharacterPhysics(inst, 50, .5)
 
-    -- Change the bank and build to Snaildrake 
-    -- once Maradyne gets the art done.
-    inst.AnimState:SetBank("snurtle")
-    inst.AnimState:SetBuild("slurtle_snaily")
 
     inst:AddTag("animal")
     inst:AddTag("snaildrake")
@@ -249,7 +251,7 @@ local function common_fn(bank, build, tag)
     inst.components.eater:SetDiet({ FOODTYPE.ELEMENTAL }, { FOODTYPE.ELEMENTAL })
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('snaildrake')
+    inst.components.lootdropper:SetChanceLootTable(tag)
     inst.components.lootdropper:AddIfNotChanceLoot("slurtle_shellpieces")
 
     inst:AddComponent("inspectable")
@@ -265,7 +267,7 @@ local function common_fn(bank, build, tag)
     inst.components.combat:SetAttackPeriod(TUNING.SNAILDRAKE_ATTACK_PERIOD)
 
     inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(TUNING.SNAILDRAKE_HEALTH)
+    inst.components.health:SetMaxHealth(450)
 
     inst:AddComponent("attackdodger")
     inst.components.attackdodger:SetCanDodgeFn(CanDodgeFn)
@@ -288,7 +290,11 @@ local function common_fn(bank, build, tag)
     inst:ListenForEvent("ifnotchanceloot", OnNotChanceLoot)
 
     inst:ListenForEvent("entershield", OnEnterShield)
-
+	
+	inst:AddComponent("explosiveresist")
+	inst.components.explosiveresist:SetResistance(1)
+	inst.components.explosiveresist.decaytime = 9999
+	
     MakeMediumFreezableCharacter(inst, "shell")
     MakeMediumBurnableCharacter(inst, "shell")
     inst.components.burnable:SetOnIgniteFn(OnIgniteFn)
@@ -303,7 +309,8 @@ local function common_fn(bank, build, tag)
     inst.partner = nil
     inst.DoExplosion = DoExplosion
     inst.DoRangedAttack = DoRangedAttack
-
+	
+	inst.Transform:SetScale(1.2,1.2,1.2)
     return inst
 end
 
@@ -311,13 +318,11 @@ end
 local function magma_fn()
     local inst = common_fn("snurtle", "slurtle_snaily", "snaildrake_magma")
 
-    -- Visual differentiation for testing purposes. Need art from Maradyne.
-    inst.AnimState:SetHue(0.75)
-
     if not TheWorld.ismastersim then
         return inst
     end
-
+	inst.AnimState:SetBank("snaildrake_spikeshell")
+	inst.AnimState:SetBuild("snaildrake_spikeshell")
     inst.components.combat.onhitotherfn = OnHitOtherMagma
 
     inst.components.eater:SetOnEatFn(OnEatElementMagma)
@@ -331,13 +336,12 @@ end
 local function slime_fn()
     local inst = common_fn("snurtle", "slurtle_snaily", "snaildrake_slime")
 
-    -- Visual differentiation for testing purposes. Need art from Maradyne.
-    inst.AnimState:SetHue(0.25)
 
     if not TheWorld.ismastersim then
         return inst
     end
-
+	inst.AnimState:SetBank("snaildrake_holeshell")
+	inst.AnimState:SetBuild("snaildrake_holeshell")
     inst.components.eater:SetOnEatFn(OnEatElementSlime)
 
     inst.projectile_prefab = "snaildrake_slime_projectile"

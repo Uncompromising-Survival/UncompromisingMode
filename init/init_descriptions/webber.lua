@@ -226,6 +226,7 @@ DESCRIBE.WATERMELON_LANTERN = "Never tried this with a melon before!"
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "We don't like the looks of him!"
 DESCRIBE.VIPERFRUIT = "It reminds us of a strawberry."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "No more sticky fingies."
 
 DESCRIBE.BLUEBERRYPLANT = {

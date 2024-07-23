@@ -54,7 +54,8 @@ local component_post = {
     "walkableplatformplayer",
     "schoolspawner",
     "builder",
-    "raindome"
+    "raindome",
+	"fillable",
 }
 
 local prefab_post = {
@@ -212,7 +213,8 @@ local prefab_post = {
     "winona_telebrella",
 	"otter",
     "stash_map",
-    "monkeyhut"
+    "monkeyhut",
+	"lava_pond",
 }
 
 local stategraph_post = {

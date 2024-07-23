@@ -513,6 +513,15 @@ if GetModConfigData("hayfever_disable") then -- not in dev build since the confi
     )
     ChangeSortKey("honey_log", "livinglog", "CHARACTER", true)
 end
+AddRecipe2(
+	"um_armor_bramble_rimeweed",
+	{ Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8) },
+	TECH.NONE,
+	{ builder_tag = "plantkin" },
+	{ "CHARACTER" }
+)
+ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
+	
 
 AddRecipe2(
     "bugzapper",
@@ -1250,6 +1259,15 @@ AddRecipe2(
 )
 ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 
+AddRecipe2(
+    "um_blowdart_rime",
+    { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) },
+    TECH.SCIENCE_ONE,
+    nil,
+    { "WEAPONS" }
+)
+ChangeSortKey("um_blowdart_rime", "um_blowdart_pyre", "WEAPONS", true)
+
 -- Wormwood Crafts
 if GetModConfigData("wormwood_trapbuffs") then
     GLOBAL.GetValidRecipe("trap_bramble").numtogive = 2
@@ -1798,6 +1816,9 @@ STRINGS.RECIPE_DESC.HERMIT_BUNDLE_LURES = "Get to fishing, today!"
 -- Pyre Nettle stuff
 STRINGS.RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
 STRINGS.RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
+STRINGS.RECIPE_DESC.UM_ARMOR_BRAMBLE_RIMEWEED = "What do you think, Wormiest?"
+STRINGS.RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
+
 STRINGS.RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
 
 -- Veteran Shrine Crafts

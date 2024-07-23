@@ -55,8 +55,10 @@ local events=
 		end
     end),
     EventHandler("doattack", function(inst, data) 
-        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
+        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
 			inst.sg:GoToState("attack", data.target) 
+		elseif not inst.components.health and not inst.components.timer:TimerExists("regenrock") then
+			inst.sg:GoToState("dig")
         end 
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
@@ -484,7 +486,9 @@ local states=
             inst.AnimState:PlayAnimation("im_dirt")
 			inst.hiding = true
 			RemovePhysicsColliders(inst)  
-			inst:RemoveComponent("health")
+			if inst.components.health then
+				inst:RemoveComponent("health")
+			end
 
         end,     
     },	

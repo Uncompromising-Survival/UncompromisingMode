@@ -61,6 +61,38 @@ local function RemoveSmokeTag(inst)
 	end
 end
 
+local function NoHoles(pt)
+    return not TheWorld.Map:IsPointNearHole(pt)
+end
+
+local function SpawnTentacle(inst,data)
+	if inst.gloom_parasite and inst.gloom_parasite.components.health and not inst.gloom_parasite.components.health:IsDead() then
+		if math.random() < 0.33 then
+			local target = data.target
+			local pt
+			if target ~= nil and target:IsValid() then
+				pt = target:GetPosition()
+			else
+				pt = inst:GetPosition()
+				target = nil
+			end
+			local offset = FindWalkableOffset(pt, math.random() * TWOPI, 2, 3, false, true, NoHoles, false, true)
+			if offset ~= nil then
+				inst.SoundEmitter:PlaySound("dontstarve/common/shadowTentacleAttack_1")
+				inst.SoundEmitter:PlaySound("dontstarve/common/shadowTentacleAttack_2")
+				local tentacle = SpawnPrefab("shadowtentacle")
+				if tentacle ~= nil then
+					tentacle.inst = inst
+					tentacle.Transform:SetPosition(pt.x + offset.x, 0, pt.z + offset.z)
+					tentacle.components.combat:SetTarget(target)
+				end
+			end			
+		end
+	else
+		inst:RemoveEventCallBack("onhitother", SpawnTentacle)
+	end
+end
+
 local function bite(inst)
 	if inst.host ~= nil and inst.host:IsValid() and not inst.host:HasTag("playerghost") and inst:GetDistanceSqToInst(inst.host) <= 10 then
 		inst.host:AddTag("ac_smoke_host")
@@ -80,6 +112,13 @@ local function bite(inst)
 		end
     
         inst.host.components.health:DeltaPenalty(-inst.red*0.01)
+		
+		if inst.gloomy == true then
+			if not inst.host.gloom_parasite then
+				inst.host.gloom_parasite = inst
+				inst.host:ListenForEvent("onhitother", SpawnTentacle)
+			end
+		end
 	else
 		TimeToDie(inst)
 	end

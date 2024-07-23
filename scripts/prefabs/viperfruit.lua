@@ -1,8 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/zaspberry.zip"),
-    Asset("ATLAS", "images/inventoryimages/zaspberry.xml"),
-    Asset("IMAGE", "images/inventoryimages/zaspberry.tex"),
+	Asset("ANIM", "anim/viperfruit_lesser.zip"),
 }
 local easing = require("easing")
 local function create_light(eater, lightprefab)
@@ -52,9 +50,13 @@ local function oneatenfn(inst, eater)
         not (eater.components.health ~= nil and eater.components.health:IsDead()) and
         not eater:HasTag("playerghost") then
         create_light(eater, "wormlight_light")
-        for k = 1, 3 do
-            inst:DoTaskInTime(0, spawnfriends(inst))
-        end
+		if inst.prefab == "viperfruit" then
+			for k = 1, 3 do
+				inst:DoTaskInTime(0, spawnfriends(inst))
+			end
+		else
+			inst:DoTaskInTime(0, spawnfriends(inst)) -- Lesser only spawns 1.
+		end
     end
 end
 
@@ -109,4 +111,56 @@ local function fn()
     return inst
 end
 
-return Prefab("viperfruit", fn, assets)
+local function fnlesser()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddLight()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("viperfruit_lesser")
+    inst.AnimState:SetBuild("viperfruit_lesser")
+    inst.AnimState:PlayAnimation("idle")
+
+    MakeInventoryFloatable(inst)
+    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.Light:SetFalloff(0.7)
+    inst.Light:SetIntensity(.5)
+    inst.Light:SetRadius(0.5)
+    inst.Light:SetColour(237 / 255, 100 / 255, 100 / 255)
+    inst.Light:Enable(true)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/viperfruit_lesser.xml"
+    inst:AddComponent("edible")
+    inst.components.edible.healthvalue = 3
+    inst.components.edible.hungervalue = 12.5
+    inst.components.edible.sanityvalue = -15
+    inst.components.edible.foodtype = FOODTYPE.VEGGIE
+
+    inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime(3 * TUNING.PERISH_TWO_DAY)
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "spoiled_food"
+
+    MakeHauntableLaunchAndPerish(inst)
+    inst.components.edible:SetOnEatenFn(oneatenfn)
+    return inst
+end
+
+return Prefab("viperfruit", fn, assets),
+Prefab("viperfruit_lesser", fnlesser)

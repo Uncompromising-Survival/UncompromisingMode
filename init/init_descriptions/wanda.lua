@@ -236,6 +236,7 @@ DESCRIBE.WATERMELON_LANTERN = DESCRIBE.PUMPKIN_LANTERN
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "It's been affected by the fuel."
 DESCRIBE.VIPERFRUIT = "Tastes like shadows."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "I'm tempted to eat it straight out of the jar."
 
 DESCRIBE.BLUEBERRYPLANT = {

@@ -253,6 +253,20 @@ local function CustomOnHaunt(inst, haunter)
     return false
 end
 
+local function onsave(inst,data)
+	if inst.from_waterhole then
+		data.from_waterhole = inst.from_waterhole
+	end
+	return data
+end
+
+local function onload(inst,data)
+	if data and data.from_waterhole then
+		inst.from_waterhole = data.from_waterhole
+	end
+end
+
+
 local function fn()
     local inst = CreateEntity()
 
@@ -266,7 +280,7 @@ local function fn()
 
     inst.Transform:SetFourFaced()
 
-    inst.AnimState:SetBank("worm")
+    inst.AnimState:SetBank("shockworm")
     inst.AnimState:SetBuild("shockworm")
     inst.AnimState:PlayAnimation("idle_loop", true)
 
@@ -340,7 +354,7 @@ local function fn()
     inst.components.inspectable.getstatus = getstatus
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry" })
+    inst.components.lootdropper:SetLoot({ "monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry","moonglass","moonglass","moonglass" })
 
     --Disable this task for worm attacks
     inst.HomeTask = inst:DoPeriodicTask(3, LookForHome)
@@ -364,7 +378,14 @@ local function fn()
 	inst:ListenForEvent("unfreeze", function() 
 		inst:turnofflight()
 	end)
+	inst.OnSave = onsave
+	inst.OnLoad = onload
 
+	inst:WatchWorldState("iswinter",function(inst,iswinter) 
+		if iswinter and inst.from_waterhole then 
+			inst:Remove() 
+		end 
+	end)	
     return inst
 end
 

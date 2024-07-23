@@ -2,6 +2,9 @@ local assets =
 {
     Asset("ANIM", "anim/lava_vomit.zip"),
     Asset("ANIM", "anim/spat_splat.zip"),
+	Asset("ANIM", "anim/snapalm_bomb.zip"),
+	Asset("ANIM", "anim/snapalm_splat.zip"),
+	Asset("ANIM", "anim/goo_snapalm.zip"),
 }
 
 TUNING.SNAILDRAKE_SLUDGE_DAMAGE = 4
@@ -134,7 +137,7 @@ local function OnHitSlime(inst, attacker, other, dont_stick)
         -- function Pinnable:Stick(goo_build, splashfxlist)
         -- Refer to pinnable component for custom vfx
         if not dont_stick and other.components.pinnable then
-            other.components.pinnable:Stick()
+            other.components.pinnable:Stick("goo_snapalm")
         end
         other:AddDebuff("snaildrake_slime_debuff", "snaildrake_slime_debuff")
     else
@@ -168,6 +171,20 @@ local function DoAreaEffectSlime(inst)
     end
 end
 
+local function DoAreaEffectMeltSnowPiles(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local snow = TheSim:FindEntities(x, y, z, 6, "snowpile","_health")
+	
+	for i,v in ipairs(snow) do
+		if v:HasTag("snowpile") then
+			if  v.components.workable ~= nil and v.components.workable:CanBeWorked() then
+				SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
+			end
+			v:Remove()
+		end
+	end
+end
+
 local function magma_projectile_fn()
     local inst = Prefabs.lavaspit_projectile.fn()
 
@@ -195,9 +212,13 @@ local function magma_sludge_fn()
     end
 
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
-
+	
+    inst:AddComponent("heater")
+    inst.components.heater.heat = 500	
+	inst._melttask = inst:DoPeriodicTask(1, DoAreaEffectMeltSnowPiles)
+	
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectMagma, inst.components.aura.tickperiod * .5)
-
+	
     return inst
 end
 
@@ -224,9 +245,8 @@ local function slime_projectile_fn()
 
     -- Ewecus animations
     inst.AnimState:SetBank("spat_bomb")
-    inst.AnimState:SetBuild("spat_bomb")
+    inst.AnimState:SetBuild("snapalm_bomb")
     inst.AnimState:PlayAnimation("spin_loop", true)
-
 
     inst.entity:SetPristine()
 
@@ -260,21 +280,24 @@ local function slime_sludge_fn()
     inst.entity:AddNetwork()
 
     inst.AnimState:SetBank("spat_splat")
-    inst.AnimState:SetBuild("spat_splat")
+    inst.AnimState:SetBuild("snapalm_splat")
     inst.AnimState:PlayAnimation("idle")
 
     if not TheWorld.ismastersim then
         return inst
     end
-
+	
     inst:AddComponent("aura")
     inst.components.aura.radius = 3
     inst.components.aura.tickperiod = 0.6
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
+	
+
 
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectSlime, inst.components.aura.tickperiod * .5)
 
+	
     inst:DoTaskInTime(TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove)
 
     return inst

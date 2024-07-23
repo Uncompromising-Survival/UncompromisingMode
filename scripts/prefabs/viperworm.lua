@@ -132,7 +132,7 @@ end
 
 local function displaynamefn(inst)
     return STRINGS.NAMES[
-        (inst:HasTag("lure") and "WORM_PLANT") or
+        (inst:HasTag("lure") and "VIPERWORM_PLANT") or
             (inst:HasTag("dirt") and "WORM_DIRT") or
             "VIPERWORM"
         ]

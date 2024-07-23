@@ -35,7 +35,7 @@ SetSharedLootTable('um_smolder_spore',
 		{ 'houndfire', 1.0 },
 		{ 'houndfire', 0.5 },
 		{ 'houndfire', 0.25 },
-		{ 'smog',      1.0 }
+		--{ 'smog',      1.0 }
 	})
 
 

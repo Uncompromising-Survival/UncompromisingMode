@@ -240,6 +240,7 @@ DESCRIBE.SNOWCONE = "Just ice."
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "Whispering, antagonizing!"
 DESCRIBE.VIPERFRUIT = "Atmosphere manipulation, focus."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Favor, from Them."
 
 DESCRIBE.BLUEBERRYPLANT = {

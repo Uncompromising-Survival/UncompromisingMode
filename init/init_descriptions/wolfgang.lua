@@ -224,6 +224,7 @@ DESCRIBE.WATERMELON_LANTERN = "Is still scary!"
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "Snake makes scarier snakes!"
 DESCRIBE.VIPERFRUIT = "Snakes help Wolfgang?"
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Cannot ooze. Wolfgang is sad."
 
 DESCRIBE.BLUEBERRYPLANT = {

@@ -178,6 +178,7 @@ local inventoryitems =
 	"uncompromising_fishingnet",
 	"uncompromising_harpoon",
 	"viperfruit",
+	"viperfruit_lesser",
 	"viperjam",
 	"watermelon_lantern",
 	"whisperpod",
@@ -233,7 +234,7 @@ local inventoryitems =
 	"um_smolder_spore",
 	"um_armor_pyre_nettles",
 	"um_blowdart_pyre",
-	
+
 	-- Mutation Extrapolation
 	"um_staff_meteor",
 
@@ -366,10 +367,26 @@ local inventoryitems =
 	"um_rimeweed_tequila",
 	"um_rimeweed_itemvine",
 	"um_rimeweed_itemflower",
+	"um_blowdart_rime",
+	"um_armor_bramble_rimeweed",
 	
 	-- Snaildrake related
-	--"snaildrakehat",
-	--"snapalm",
+	"snaildrakehat",
+	"snaildrakebucket_empty",
+	
+	"snaildrakebucket_lava_low",
+	"snaildrakebucket_lava_med",
+	"snaildrakebucket_lava_full",
+	
+	"snaildrakebucket_water_low",
+	"snaildrakebucket_water_med",
+	"snaildrakebucket_water_full",
+	
+	"snapalm",
+	
+	-- Lava Caves
+	"gloomcap",
+	"gloomcap_cooked",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1223,6 +1240,7 @@ Assets = {
 	Asset("ANIM", "anim/umdebuff_pyre_toxin_fx.zip"),
 	Asset("ANIM", "anim/um_armor_pyre_nettles.zip"), -- This file is both a swap and a floor item. Hell if I know where to put it...so it's here!
 	Asset("ANIM", "anim/um_blowdart_pyre.zip"),
+	Asset("ANIM", "anim/um_blowdart_rime.zip"),
 	Asset("ANIM", "anim/swap_blowdart.zip"), -- Same here. Naming convention is vanilla, blame Mr. Kelly Entertainment.
 	
 	-- Rimeweed stuff
@@ -1606,9 +1624,10 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/corvushat.xml"),
 
 	Asset("IMAGE", "images/inventoryimages/viperfruit.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/viperfruit.xml"),
 	Asset("ATLAS", "images/inventoryimages/viperfruit.xml"),
-
+	Asset("IMAGE", "images/inventoryimages/viperfruit_lesser.tex"),
+	Asset("ATLAS", "images/inventoryimages/viperfruit_lesser.xml"),
+	
 	Asset("IMAGE", "images/inventoryimages/viperjam.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/viperjam.xml"),
 	Asset("ATLAS", "images/inventoryimages/viperjam.xml"),
@@ -2189,8 +2208,9 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/um_smolder_spore.tex"),
 	
 	Asset("ATLAS", "images/inventoryimages/um_blowdart_pyre.xml"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_blowdart_pyre.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_blowdart_pyre.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_blowdart_rime.xml"),
+	Asset("IMAGE", "images/inventoryimages/um_blowdart_rime.tex"),
 	
 	Asset("ATLAS", "images/inventoryimages/um_armor_pyre_nettles.xml"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_armor_pyre_nettles.xml"),

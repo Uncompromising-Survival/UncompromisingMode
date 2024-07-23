@@ -223,6 +223,7 @@ DESCRIBE.WATERMELON_LANTERN = "I don't get mortal customs at times. But the carv
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "A snake good at making fakes!"
 DESCRIBE.VIPERFRUIT = "It's cold and slippery."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "At least it comes in a jar. I hate getting jam on my paws."
 
 DESCRIBE.BLUEBERRYPLANT = {

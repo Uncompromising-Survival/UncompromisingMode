@@ -213,6 +213,7 @@ DESCRIBE.WATERMELON_LANTERN = "Nice smile"
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "Makes head feel funny"
 DESCRIBE.VIPERFRUIT = "Swirly"
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Home for friends"
 
 DESCRIBE.BLUEBERRYPLANT = {
@@ -534,3 +535,49 @@ DESCRIBE.UM_BOAT_ENGINE = {
     LOWFUEL = "Hungry",
     OVERHEATING = "Too much!"
 }
+
+-- Broiling Hills
+
+DESCRIBE.BOULDER_CRAB =
+{
+    GENERIC = "Oh! Rock has pinchy friend!", 
+    NAKED = "Oh... Lonely...",
+    HOLE = "Hello? Friend Inside?",
+}
+
+DESCRIBE.UM_HOTSPRING = "Hot puddle!"
+
+DESCRIBE.ROCK_LICHEN =
+{
+    GENERIC = "Rock has belly stuff! How kind!",
+    PICKED = "No more to offer.",
+}
+
+-- All things Snaildrake
+DESCRIBE.SNAILDRAKE_MAGMA = "Hot Shell! Stay away!"
+DESCRIBE.SNAILDRAKE_SLIME = "Hot Shell Friend."
+DESCRIBE.SNAPALM = "Machine food?"
+DESCRIBE.SNAILDRAKEHAT = "Spiky Head Shell."
+DESCRIBE.SNAILDRAKEBUCKET =
+{
+    GENERIC = "Carries puddles for us.",
+    WATER = "Sloshy Shell.",
+    LAVA = "Careful! Full of Earth Blood.",
+}
+DESCRIBE.SNAILDRAKE_HOLE = "Hot Shell Home."
+
+-- All things Rimeweed
+DESCRIBE.RIMEWEED_MAIN = "Pointy friend is very chilly!"
+DESCRIBE.RIMEWEED_BARRIER = "Friend gives cold hugs."
+
+DESCRIBE.UM_RIMEWEED_ITEMVINE = "Cold strings."
+DESCRIBE.UM_RIMEWEED_ITEMFLOWER = "Chilly friend! Hi!"
+
+DESCRIBE.RIMEWEED_WHIP = "Snap! Snap! Hehe."
+
+DESCRIBE.UM_RIMEWEED_TEQUILA = "Brrr! Chilly friend juice."
+DESCRIBE.UM_RIMEWEED_SPAGETT = "Tasty cold strings."
+
+-- Lava Caves
+DESCRIBE.MAGMAROCK1 = "Hot Rock!"
+DESCRIBE.MAGMABONE = "Dead from heat?"

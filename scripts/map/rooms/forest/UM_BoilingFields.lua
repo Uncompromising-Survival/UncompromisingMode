@@ -5,6 +5,8 @@ local StaticLayout = require("map/static_layout")
 
 
 Layouts["boilingfields_dragonfly_arena"] = StaticLayout.Get("map/static_layouts/boilingfields_dragonfly_arena")
+Layouts["cave_entrance_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_entrance_magmabiome")
+
 AddRoom("BoilingFields_BasaltHounds", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison"},
@@ -19,7 +21,6 @@ AddRoom("BoilingFields_BasaltHounds", {
 						marsh_tree = 1,
 						houndbone = .5,
 						houndmound = .15,
-						cactus = 0.2,
 						marsh_bush = 1,
 						rock_flintless = 1,
 						--basalt = 0.6,
@@ -84,17 +85,38 @@ AddRoom("BoilingFields_Hotsprings", {
 })
 
 AddRoom("BoilingFields_DragonflyArena", {
-					colour={r=0.3,g=0.2,b=0.1,a=0.3},
-					tags = {"RoadPoison"},
-					value = WORLD_TILES.CRACKEDBASALT,
-					contents =  {
-									countstaticlayouts={["boilingfields_dragonfly_arena"]=1}, -- using a static layout because this can force it to be in the center of the room
-									distributepercent = 0.2,
-									distributeprefabs =
-									{
-										marsh_bush = 0.25,
-										marsh_tree = 0.75,
-										houndbone = .3,
-									},
-					            }
-					})
+	colour={r=0.3,g=0.2,b=0.1,a=0.3},
+	tags = {"RoadPoison"},
+	value = WORLD_TILES.CRACKEDBASALT,
+	contents =  {
+					countstaticlayouts={["boilingfields_dragonfly_arena"]=1}, -- using a static layout because this can force it to be in the center of the room
+					distributepercent = 0.2,
+					distributeprefabs =
+					{
+						marsh_bush = 0.25,
+						marsh_tree = 0.75,
+						houndbone = .3,
+					},
+				}
+	})
+					
+AddRoom("BoilingFields_Sinkhole", {
+	colour={r=0,g=.9,b=0,a=.50},
+	value = WORLD_TILES.CRACKEDBASALT,
+	tags = {"RoadPoison"},
+	contents =  {
+					countstaticlayouts = {
+						["cave_entrance_magmabiome"] = 1,
+					},
+					distributepercent = .3,
+					distributeprefabs=
+					{
+						fireflies = 0.1,
+						marsh_bush=.5,
+						rocks=.03,
+						flint=.03,
+						
+					},
+				}
+
+})

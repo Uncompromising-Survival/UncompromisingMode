@@ -254,6 +254,7 @@ DESCRIBE.WATERMELON_LANTERN =
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "It appears to have hallucinogenic bile."
 DESCRIBE.VIPERFRUIT = "Consumption provides access to the snake's abilites."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "It seems to have amplified the berry's properties."
 
 DESCRIBE.BLUEBERRYPLANT = {

@@ -1,6 +1,8 @@
 local assets =
 {
-    Asset("ANIM", "anim/slurtle_slime.zip"),
+    Asset("ANIM", "anim/snapalm.zip"),
+	Asset("ATLAS", "images/inventoryimages/snapalm.xml"),
+	Asset("IMAGE", "images/inventoryimages/snapalm.tex"),
 }
 
 local prefabs =
@@ -23,15 +25,17 @@ end
 local function fn()
     local inst = Prefabs.slurtleslime.fn()
 
-    -- Replace anims with Snapalm.
-    -- inst.AnimState:SetBank("slurtle_slime")
-    -- inst.AnimState:SetBuild("slurtle_slime")
-    -- inst.AnimState:PlayAnimation("idle")
+	inst.AnimState:SetBank("snapalm")
+	inst.AnimState:SetBuild("snapalm")
+	inst.AnimState:PlayAnimation("idle")
 
     if not TheWorld.ismastersim then
         return inst
     end
 
+	inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/snapalm.xml"
+	
     inst.components.burnable:SetBurnTime(TUNING.SNAPALM_BURN_TIME + math.random() * TUNING.SNAPALM_BURN_TIME_VARIANCE)
 
     inst.components.explosive:SetOnExplodeFn(OnExplodeFn)

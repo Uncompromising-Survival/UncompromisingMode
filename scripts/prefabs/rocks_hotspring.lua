@@ -3,6 +3,10 @@ local function HotSpringCheck(inst)
 	return FindEntity(inst,2^2,function(inst) if inst.prefab == "um_hotspring" then return true end end)
 end
 
+local function LavaCheck(inst)
+	return FindEntity(inst,2^2,function(inst) if inst.prefab == "lava_pond" then return true end end)
+end
+
 
 local function fn1()
     local inst = CreateEntity()
@@ -25,7 +29,7 @@ local function fn1()
     inst:DoTaskInTime(1, function(inst)
 		if not HotSpringCheck(inst) then
 			local x,y,z = inst.Transform:GetWorldPosition()
-			SpawnPrefab("rock1").Transform:SetPosition(x,y,z)
+			SpawnPrefab("springrock1").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
 			for i = -1,1 do
@@ -33,6 +37,77 @@ local function fn1()
 					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
 				end
 			end
+		end
+		inst:Remove()
+	end)
+	
+    return inst
+end
+
+local function fnmagma1()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+	
+    inst:DoTaskInTime(1, function(inst)
+		if not HotSpringCheck(inst) then
+			local x,y,z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("magmarock1").Transform:SetPosition(x,y,z)
+			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+			-- Square
+			for i = -1,1 do
+				for j = -1,1 do
+					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_MAGMA)
+				end
+			end
+		end
+		inst:Remove()
+	end)
+	
+    return inst
+end
+local function fnmagma2()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+	
+    inst:DoTaskInTime(1, function(inst)
+		if not LavaCheck(inst) then
+			local x,y,z = inst.Transform:GetWorldPosition()
+			SpawnPrefab("lava_pond_cave").Transform:SetPosition(x,y,z)
+			--[[local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
+			-- Square
+			for i = -1,1 do
+				for j = -1,1 do
+					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_MAGMA)
+				end
+			end]]
 		end
 		inst:Remove()
 	end)
@@ -61,7 +136,7 @@ local function fn2()
     inst:DoTaskInTime(1, function(inst)
 		if not HotSpringCheck(inst) then
 			local x,y,z = inst.Transform:GetWorldPosition()
-			SpawnPrefab("rock2").Transform:SetPosition(x,y,z)
+			SpawnPrefab("springrock2").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
 			for i = -1,1 do
@@ -181,6 +256,32 @@ local function fnbunchgold()
     return inst
 end
 
+local function fnbunchmagma()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("CLASSIFIED")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("CLASSIFIED")
+
+    inst:DoTaskInTime(1, function(inst)
+		SpawnBunch(inst,"rock_magma","pool_magma")
+		inst:Remove()
+	end)
+
+    return inst
+end
+
 local function fnbunchcrabs()
     local inst = CreateEntity()
 
@@ -262,4 +363,7 @@ Prefab("hotspring_rockbuncher_gold",fnbunchgold),
 Prefab("hotspring_rockbuncher_crabs",fnbunchcrabs),
 Prefab("rock1_hotspring",fn1),
 Prefab("rock2_hotspring",fn2),
-Prefab("rock_flintless_hotspring",fn3)
+Prefab("rock_flintless_hotspring",fn3),
+Prefab("magma_rockbuncher",fnbunchmagma),
+Prefab("rock_magma",fnmagma1),
+Prefab("pool_magma",fnmagma2)

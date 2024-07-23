@@ -233,6 +233,7 @@ DESCRIBE.WATERMELON_LANTERN = "Why hello, Ms. Katrina."
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "This one's been blighted by the fuel."
 DESCRIBE.VIPERFRUIT = "More to the army, I suppose."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "My good gloves are safe, for now."
 
 DESCRIBE.BLUEBERRYPLANT = {

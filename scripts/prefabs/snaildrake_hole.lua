@@ -2,7 +2,9 @@ require("worldsettingsutil")
 
 local assets =
 {
-    Asset("ANIM", "anim/catcoon_den.zip"),
+    Asset("ANIM", "anim/snaildrake_hole.zip"),
+	Asset("IMAGE", "images/map_icons/snaildrake_hole.tex"),
+	Asset("ATLAS", "images/map_icons/snaildrake_hole.xml"),
 }
 
 local prefabs =
@@ -146,11 +148,11 @@ local function fn()
 
     MakeObstaclePhysics(inst, .5)
 
-    inst.MiniMapEntity:SetIcon("catcoonden.png")
+    inst.MiniMapEntity:SetIcon("snaildrake_hole.tex")
 
-    inst.AnimState:SetBank("catcoon_den")
-    inst.AnimState:SetBuild("catcoon_den")
-    inst.AnimState:PlayAnimation("dead", true)
+    inst.AnimState:SetBank("snaildrake_hole")
+    inst.AnimState:SetBuild("snaildrake_hole")
+    inst.AnimState:PlayAnimation("idle", true)
 
     -- Temporary VFX until we have custom art.
     inst.AnimState:SetHue(0.25)

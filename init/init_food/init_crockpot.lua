@@ -516,8 +516,13 @@ end
 
 InsertIngredientValues({ "zaspberry" }, { fruit = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/zaspberry.xml", "zaspberry.tex")
+InsertIngredientValues({ "zaspberry_lesser" }, { fruit = 0.5 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/zaspberry_lesser.xml", "zaspberry_lesser.tex")
+
 InsertIngredientValues({ "viperfruit" }, { fruit = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/viperfruit.xml", "viperfruit.tex")
+InsertIngredientValues({ "viperfruit_lesser" }, { fruit = 0.5 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/viperfruit_lesser.xml", "viperfruit_lesser.tex")
 InsertIngredientValues({ "giant_blueberry" }, { fruit = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/giant_blueberry.xml", "giant_blueberry.tex")
 InsertIngredientValues({ "iceboomerang" }, { ice = 1 }, true, false, false)
@@ -526,6 +531,11 @@ InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
 RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
+
+InsertIngredientValues({ "gloomcap" }, { veggie = 0.5, monster = 1 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
+InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5, monster = 1 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
 

@@ -114,59 +114,81 @@ end
 local function SmokePuff(inst, channeler)
     local x, y, z = inst.Transform:GetWorldPosition()
     if inst.components.container ~= nil then
-        local bluecaps = inst.components.container:FindItems(function(item) return item:HasTag("blue_mushroom_fuel") end)
-        local redcaps = inst.components.container:FindItems(function(item) return item:HasTag("red_mushroom_fuel") end)
-        local greencaps = inst.components.container:FindItems(function(item) return item:HasTag("green_mushroom_fuel") end)
+		if inst.components.container:FindItem(function(item) return item.prefab == "gloomcap" end) then
+			local gloomcap = inst.components.container:FindItem(function(item) return item.prefab == "gloomcap" end)
+			gloomcap:Remove()
+			local sporepuff = SpawnPrefab("air_conditioner_smoke")
+			sporepuff.Transform:SetPosition(x, 4, z)
+			sporepuff.AnimState:SetMultColour(0, 0, 0, 0.2)
 
-        local numbluecaps = #bluecaps
-        local numredcaps = #redcaps
-        local numgreencaps = #greencaps
+			local air_conditioner_cloud = SpawnPrefab("air_conditioner_cloud")
 
-        local blue = numbluecaps * 0.15 or 0.05
-        local red = numredcaps * 0.15 or 0.05
-        local green = numgreencaps * 0.15 or 0.05
+			if channeler ~= nil and channeler:IsValid() then
+				air_conditioner_cloud.Transform:SetPosition(channeler.Transform:GetWorldPosition())
+			else
+				air_conditioner_cloud.Transform:SetPosition(x + math.random(-10, 10), 0, z + math.random(-10, 10))
+			end
 
-        if red > 0 or blue > 0 or green > 0 then
-            local sporepuff = SpawnPrefab("air_conditioner_smoke")
-            sporepuff.Transform:SetPosition(x, 4, z)
-            sporepuff.AnimState:SetMultColour(red, green, blue, 0.2)
+			air_conditioner_cloud.AnimState:SetMultColour(0.1, 0, 0, 0.6)
+			air_conditioner_cloud.gloomy = true
+			inst.blue = 0
+			inst.red = 0
+			inst.green = 0
+		else
+			local bluecaps = inst.components.container:FindItems(function(item) return item:HasTag("blue_mushroom_fuel") end)
+			local redcaps = inst.components.container:FindItems(function(item) return item:HasTag("red_mushroom_fuel") end)
+			local greencaps = inst.components.container:FindItems(function(item) return item:HasTag("green_mushroom_fuel") end)
 
-            local air_conditioner_cloud = SpawnPrefab("air_conditioner_cloud")
+			local numbluecaps = #bluecaps
+			local numredcaps = #redcaps
+			local numgreencaps = #greencaps
 
-            if channeler ~= nil and channeler:IsValid() then
-                air_conditioner_cloud.Transform:SetPosition(channeler.Transform:GetWorldPosition())
-            else
-                air_conditioner_cloud.Transform:SetPosition(x + math.random(-10, 10), 0, z + math.random(-10, 10))
-            end
+			local blue = numbluecaps * 0.15 or 0.05
+			local red = numredcaps * 0.15 or 0.05
+			local green = numgreencaps * 0.15 or 0.05
 
-            air_conditioner_cloud.AnimState:SetMultColour(red, green, blue, 0.2)
-            air_conditioner_cloud.red = numredcaps
-            air_conditioner_cloud.blue = numbluecaps
-            air_conditioner_cloud.green = numgreencaps
-        end
-        for i, v in ipairs(bluecaps) do
-            if v.components.perishable:GetPercent() <= 0.2 then
-                v.components.perishable:Perish()
-            else
-                v.components.perishable:ReducePercent(0.2)
-            end
-        end
+			if red > 0 or blue > 0 or green > 0 then
+				local sporepuff = SpawnPrefab("air_conditioner_smoke")
+				sporepuff.Transform:SetPosition(x, 4, z)
+				sporepuff.AnimState:SetMultColour(red, green, blue, 0.2)
 
-        for i, v in ipairs(redcaps) do
-            if v.components.perishable:GetPercent() <= 0.2 then
-                v.components.perishable:Perish()
-            else
-                v.components.perishable:ReducePercent(0.2)
-            end
-        end
+				local air_conditioner_cloud = SpawnPrefab("air_conditioner_cloud")
 
-        for i, v in ipairs(greencaps) do
-            if v.components.perishable:GetPercent() <= 0.2 then
-                v.components.perishable:Perish()
-            else
-                v.components.perishable:ReducePercent(0.2)
-            end
-        end
+				if channeler ~= nil and channeler:IsValid() then
+					air_conditioner_cloud.Transform:SetPosition(channeler.Transform:GetWorldPosition())
+				else
+					air_conditioner_cloud.Transform:SetPosition(x + math.random(-10, 10), 0, z + math.random(-10, 10))
+				end
+
+				air_conditioner_cloud.AnimState:SetMultColour(red, green, blue, 0.2)
+				air_conditioner_cloud.red = numredcaps
+				air_conditioner_cloud.blue = numbluecaps
+				air_conditioner_cloud.green = numgreencaps
+			end
+			for i, v in ipairs(bluecaps) do
+				if v.components.perishable:GetPercent() <= 0.2 then
+					v.components.perishable:Perish()
+				else
+					v.components.perishable:ReducePercent(0.2)
+				end
+			end
+
+			for i, v in ipairs(redcaps) do
+				if v.components.perishable:GetPercent() <= 0.2 then
+					v.components.perishable:Perish()
+				else
+					v.components.perishable:ReducePercent(0.2)
+				end
+			end
+
+			for i, v in ipairs(greencaps) do
+				if v.components.perishable:GetPercent() <= 0.2 then
+					v.components.perishable:Perish()
+				else
+					v.components.perishable:ReducePercent(0.2)
+				end
+			end
+		end
     end
 end
 

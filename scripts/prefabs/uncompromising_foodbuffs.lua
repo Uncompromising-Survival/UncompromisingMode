@@ -187,11 +187,11 @@ end
 end
 
 local function stantonslumber_detach(inst, target)
-target.stantonslumberstack = nil
+	target.stantonslumberstack = nil
 end
 
 local function hypercourage_attach(inst,target)
-target.components.sanity.neg_aura_modifiers:SetModifier(inst, 0)
+	target.components.sanity.neg_aura_modifiers:SetModifier(inst, 0)
 end
 
 local function hypercourage_extend(inst,target)
@@ -199,8 +199,25 @@ local function hypercourage_extend(inst,target)
 end
 
 local function hypercourage_detach(inst,target)
-target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
+	target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
 end
+
+local function stantonslumber_detach(inst, target)
+	target.stantonslumberstack = nil
+end
+
+local function smallcourage_attach(inst,target)
+	target.components.sanity.neg_aura_modifiers:SetModifier(inst, 0.5)
+end
+
+local function smallcourage_extend(inst,target)
+
+end
+
+local function smallcourage_detach(inst,target)
+	target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
+end
+
 
 
 local function OnTickAmuse(inst, target)
@@ -326,4 +343,5 @@ MakeBuff("californiaking", californiaking_attach, californiaking_extend, califor
 MakeBuff("largehungerslow", largehungerslow_attach, largehungerslow_extend, largehungerslow_detach, TUNING.BUFF_ATTACK_DURATION*8, 2),
 MakeBuff("stantonslumber", stantonslumber_attach, stantonslumber_attach, stantonslumber_detach, TUNING.BUFF_ATTACK_DURATION, 2,true),
 MakeBuff("hypercourage", hypercourage_attach, hypercourage_extend, hypercourage_detach, 30, 2,true),
-MakeBuff("amusementcorn", OnAmuseAttach, OnAmuseExtended, OnAmuseDone, 15, 2,true)
+MakeBuff("amusementcorn", OnAmuseAttach, OnAmuseExtended, OnAmuseDone, 15, 2,true),
+MakeBuff("smallcourage", smallcourage_attach, smallcourage_extend, smallcourage_detach, 8*60, 2,true)

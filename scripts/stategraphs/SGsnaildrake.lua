@@ -143,7 +143,7 @@ local states =
 
         onenter = function(inst)
             inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("taunt")
+            inst.AnimState:PlayAnimation("spit")
             
         end,
 
@@ -152,8 +152,8 @@ local states =
             TimeEvent(7*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
             TimeEvent(14*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
             TimeEvent(21*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
-            TimeEvent(28*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
-            TimeEvent(35*FRAMES, function(inst) inst:DoRangedAttack() end ),
+            TimeEvent(26*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
+            TimeEvent(26*FRAMES, function(inst) inst:DoRangedAttack() end ),
         },
 
         events=

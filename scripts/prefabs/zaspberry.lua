@@ -3,6 +3,8 @@ local assets =
     Asset("ANIM", "anim/zaspberry.zip"),
 	Asset("ATLAS", "images/inventoryimages/zaspberry.xml"),
 	Asset("IMAGE", "images/inventoryimages/zaspberry.tex"),
+	Asset("ATLAS", "images/inventoryimages/zaspberry_lesser.xml"),
+	Asset("IMAGE", "images/inventoryimages/zaspberry_lesser.tex"),
 }
 
 local function create_light(eater, lightprefab)
@@ -37,7 +39,7 @@ local function oneatenfn(inst, eater)
 	end
 end
 
-local function fn()
+local function fn_common()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -49,7 +51,7 @@ local function fn()
 
     inst.AnimState:SetBank("zaspberry")
     inst.AnimState:SetBuild("zaspberry")
-    inst.AnimState:PlayAnimation("idle")
+    
 
     MakeInventoryFloatable(inst)
 	inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
@@ -71,11 +73,8 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry.xml"
     inst:AddComponent("edible")
-    inst.components.edible.healthvalue = 20
-    inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -25
+
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
 
     inst:AddComponent("perishable")
@@ -85,7 +84,35 @@ local function fn()
 
     MakeHauntableLaunchAndPerish(inst)
 	inst.components.edible:SetOnEatenFn(oneatenfn)
-    return inst
+	
+	return inst
+end
+local function fn_normal()
+	local inst = fn_common()
+    if not TheWorld.ismastersim then
+        return inst
+    end
+	inst.AnimState:PlayAnimation("idle")
+    inst.components.edible.healthvalue = 20
+    inst.components.edible.hungervalue = 25
+    inst.components.edible.sanityvalue = -25	
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry.xml"
+	
+	return inst
+end
+local function fn_lesser()
+	local inst = fn_common()
+    if not TheWorld.ismastersim then
+        return inst
+    end
+	inst.AnimState:PlayAnimation("idle_lesser")
+    inst.components.edible.healthvalue = 3
+    inst.components.edible.hungervalue = 12.5
+    inst.components.edible.sanityvalue = -15
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry_lesser.xml"
+	
+	return inst
 end
 
-return Prefab("zaspberry", fn, assets)
+return Prefab("zaspberry", fn_normal, assets),
+Prefab("zaspberry_lesser", fn_lesser)

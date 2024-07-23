@@ -82,7 +82,7 @@ AddRoom("BGBadlands_Oasis", {
 										grassgekko = 0.4,
 										houndbone = 0.2,
 										cactus = 0.2,
-										tumbleweedspawner = .05,
+										tumbleweedspawner = .1,
 									},
 					            }
 					})
@@ -100,5 +100,22 @@ AddRoom("BarePlain_Oasis", {
 					                    rabbithole=0.4,
 --					                    beefalo=0.2
 					                },
+					            }
+					})
+					
+AddRoom("Houndy_Oasis", {
+					colour={r=0.3,g=0.2,b=0.1,a=0.3},
+					tags = {"ExitPiece", "Chester_Eyebone", "Astral_2","sandstorm"},
+					value = WORLD_TILES.DIRT_NOISE,
+					contents =  {
+									distributepercent = 0.2,
+									distributeprefabs =
+									{
+										rock1 = .5,
+										rock2 = 1,
+										--rock_ice = .1,
+										houndbone = .5,
+										houndmound = .33,
+									},
 					            }
 					})

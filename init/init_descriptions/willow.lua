@@ -235,6 +235,7 @@ DESCRIBE.WATERMELON_LANTERN = "Keep burning bright, melon head."
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "Come on, Bernie! Do something!"
 DESCRIBE.VIPERFRUIT = "They're with us now, Bernie."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Hey, all the stickiness is contained!"
 
 DESCRIBE.BLUEBERRYPLANT = {

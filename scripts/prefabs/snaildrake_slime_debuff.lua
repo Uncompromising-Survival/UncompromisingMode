@@ -74,8 +74,7 @@ local function fn()
     inst.AnimState:PushAnimation("ink_loop")
     inst.AnimState:SetFinalOffset(3)
 
-    -- Visual VFX until we can get unique art assets.
-    inst.AnimState:SetAddColour(0.75, 0.75, 0.1, 1)
+    inst.AnimState:SetAddColour(1, 0.34, 0.22, 0.63)
 
     inst.entity:SetPristine()
 

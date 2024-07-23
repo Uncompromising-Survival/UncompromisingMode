@@ -248,6 +248,7 @@ DESCRIBE.WATERMELON_LANTERN =
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "I wonder how it's making those!"
 DESCRIBE.VIPERFRUIT = "I've always wanted a pet snake!"
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "I wish I could have some PB n' J."
 
 DESCRIBE.BLUEBERRYPLANT = {

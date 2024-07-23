@@ -244,6 +244,7 @@ DESCRIBE.SNOWCONE = "Why would anyone eat snow."
 -- Viperstuff Quotes
 DESCRIBE.VIPERWORM = "GET OUT OF MY HEAD, GET OUT!"
 DESCRIBE.VIPERFRUIT = "Juicy one, full of sweetness."
+DESCRIBE.VIPERFRUIT_LESSER = DESCRIBE.VIPERFRUIT
 DESCRIBE.VIPERJAM = "Thick slime, good stuff."
 
 DESCRIBE.BLUEBERRYPLANT = {

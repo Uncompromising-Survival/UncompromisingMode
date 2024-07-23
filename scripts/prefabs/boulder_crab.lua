@@ -8,6 +8,8 @@ local assets =
     Asset("ANIM", "anim/rock_flintless_nobottom.zip"),
     Asset("ANIM", "anim/rock7_nobottom.zip"),
     Asset("ANIM", "anim/rock_lichen_nobottom.zip"),
+    Asset("ANIM", "anim/springrock1_nobottom.zip"),
+    Asset("ANIM", "anim/springrock2_nobottom.zip"),
 }
 
 SetSharedLootTable('boulder_crab',
@@ -60,7 +62,7 @@ local function GetRock(inst, rock)
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
         inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 85, 0, true)
+        inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 110, 0, true)
 
         if inst.temprock then
             inst.temprock:Remove()
@@ -184,7 +186,7 @@ local function fn()
 
     inst.AnimState:SetBank("boulder_crab")
     inst.AnimState:SetBuild("boulder_crab")
-    inst.AnimState:PlayAnimation("test")
+    inst.AnimState:PlayAnimation("idle")
 
     --inst.MiniMapEntity:SetIcon("statue_small.png")
 
@@ -258,9 +260,9 @@ local function fn()
                 GetRock(inst, "rock_flintless")
             else
                 if math.random() > 0.5 then
-                    GetRock(inst, "rock2")
+                    GetRock(inst, "springrock2")
                 else
-                    GetRock(inst, "rock1")
+                    GetRock(inst, "springrock1")
                 end
             end
 			if TheWorld.state.isday then

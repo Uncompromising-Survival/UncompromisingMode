@@ -83,10 +83,21 @@ local prefabs = {
 	"shadow_goo",
 	"mini_dreadeye",
 	"scorpion",
+	
+	
+	-- Broiling Fields
 	"rock_lichen",
+	"springrocks",
 	"rocks_hotspring",
 	"um_hotspring",
-	"boulder_crab",
+	"boulder_crab",	
+	
+	-- Lava Caves
+	"lava_pond_cave",
+	"magmabone",
+	"magmarocks",
+	
+	
 	"vampirebat",
 	"icecreamsanityregenbuff",
 	"zaspberryparfait",
@@ -536,13 +547,24 @@ local prefabs = {
 	
 	"um_astral_projector",
 	
-	-- Broiling Hills
+	-- Broiling Hills & Magma Caves
 	"snaildrake_explosion",
     "snaildrake_hole",
     "snaildrake_projectiles",
     "snaildrake_slime_debuff",
     "snaildrake",
     "snapalm",
+	"snaildrakehat",
+	"snaildrakebucket",
+	"cave_entrance_magmabiome",
+	"cave_exit_magmabiome",
+	"mushtree_shadow",
+	"viperfruit_plant",
+	"zaspberry_plant",
+	"um_blowdart_rime",
+	"um_armor_bramble_rimeweed",
+	
+	--"coffbee",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
