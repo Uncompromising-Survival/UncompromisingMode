@@ -22,6 +22,7 @@ local function OnTimerDone(inst, data)
     elseif data.name == "respawn_slime" then
         inst.has_slime = true
     end
+	inst.SpawnSnaildrakes(inst)
 end
 
 -- Remove child listeners for Snaildrakes.
@@ -170,8 +171,9 @@ local function fn()
 
     inst:ListenForEvent("onwenthome", OnWentHome)
 
-    inst:WatchWorldState("startday", SpawnSnaildrakes)
-
+    inst:WatchWorldState("startday", SpawnSnaildrakes) -- This is a fallback now incase it somehow doesn't spawn a snaildrake as soon as it's ready
+	inst:DoTaskInTime(0,SpawnSnaildrakes)
+	
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
     inst.OnLoadPostPass = OnLoadPostPass
@@ -185,7 +187,8 @@ local function fn()
     end
 
     inst.SpawnSnaildrakes = SpawnSnaildrakes
-
+	inst:ListenForEvent("timerdone",OnTimerDone)
+	
     return inst
 end
 

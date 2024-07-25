@@ -23,17 +23,19 @@ local function onequip(inst, owner)
 end
 
 local function onunequip(inst, owner)
-    owner.AnimState:ClearOverrideSymbol("swap_hat")
-    owner.AnimState:Hide("HAT")
-    owner.AnimState:Hide("HAIR_HAT")
-    owner.AnimState:Show("HAIR_NOHAT")
-    owner.AnimState:Show("HAIR")
+	owner.AnimState:ClearOverrideSymbol("swap_hat")
+	owner.AnimState:Show("HAT")
+	owner.AnimState:Show("HAIR_HAT")
+	owner.AnimState:Hide("HAIR_NOHAT")
+	owner.AnimState:Hide("HAIR")
 
-    if owner:HasTag("player") then
-        owner.AnimState:Show("HEAD")
-        owner.AnimState:Hide("HEAD_HAT")
-    end
-	
+	if owner:HasTag("player") then
+		owner.AnimState:Hide("HEAD")
+		owner.AnimState:Show("HEAD_HAT")
+		owner.AnimState:Show("HEAD_HAT_NOHELM")
+		owner.AnimState:Hide("HEAD_HAT_HELM")
+	end
+
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
     end

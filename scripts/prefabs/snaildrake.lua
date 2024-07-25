@@ -268,7 +268,8 @@ local function common_fn(bank, build, tag)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(450)
-
+	inst.components.health.fire_damage_scale = 0
+	
     inst:AddComponent("attackdodger")
     inst.components.attackdodger:SetCanDodgeFn(CanDodgeFn)
 

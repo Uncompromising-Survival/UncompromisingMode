@@ -42,7 +42,7 @@ local function TryCrab(inst,worker)
 				EvolveIntoCrab(inst,worker)
 				for k = 1, (days_survived <= 30 and 1) or math.random(days_survived <= 80 and 3 or 6) do
 					local target = FindEntity(inst, TUNING.LEIF_MAXSPAWNDIST, nil, {"boulder"})
-					if target ~= nil and (target.prefab == "rock1" or target.prefab == "rock2" or target.prefab == "rock_flintless") then
+					if target ~= nil and (target.prefab == "rock1" or target.prefab == "rock2" or target.prefab == "rock_flintless" or target.prefab == "springrock1" or target.prefab == "springrock2") then
 						EvolveIntoCrab(target,worker)
 					end
 				end
@@ -63,7 +63,7 @@ local function NewCallBack(inst, worker, workleft)
 			end
 		end
 	end
-	local crabs = TheSim:FindEntities(x,y,z,20,{"rocky"})
+	local crabs = TheSim:FindEntities(x,y,z,16,{"rocky"})
 	for i,crab in ipairs(crabs) do
 		if crab.prefab == "boulder_crab" and crab.components.combat and (crab.components.sleeper and not crab.components.sleeper:IsAsleep()) then
 			crab.components.combat:SuggestTarget(worker)

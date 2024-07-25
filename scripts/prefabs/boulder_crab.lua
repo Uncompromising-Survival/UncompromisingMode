@@ -232,7 +232,7 @@ local function fn()
     ------------------
 
     inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
+    inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.ROUGHAGE })
     inst.components.eater:SetCanEatHorrible()
 
     inst:SetStateGraph("SGboulder_crab")
