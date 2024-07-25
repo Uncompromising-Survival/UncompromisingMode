@@ -125,10 +125,10 @@ local function oneat(inst, data)
     --[[local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
 	sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
-    if health_delta > 3 then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * 0.1) })
+    if health_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_healthregen")) then
+        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * 0.1), max_hp = maxhp_heal })
     else
-        inst.components.health:DoDelta(health_delta)
+        inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
     end
 
     if inst.wolfgang_vetcurse then
@@ -139,10 +139,10 @@ local function oneat(inst, data)
         end
     end
 
-    if sanity_delta > 3 then
+    if sanity_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_sanityregen")) then
         inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", { duration = (sanity_delta * 0.1) })
     else
-        inst.components.sanity:DoDelta(sanity_delta)
+        inst.components.sanity:DoDelta(sanity_delta, nil, data.food.prefab)
     end
 end
 

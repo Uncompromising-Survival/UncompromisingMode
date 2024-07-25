@@ -43,3 +43,11 @@ function Um_CustomLightCheck(inst, dark_val, light_val)
 		return inLight ~= false]]
 	end
 end
+
+env.AddPrefabPostInit("wonderwhy", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddTag("ignores_healthregen")
+end)
