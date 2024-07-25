@@ -61,14 +61,14 @@ end
 -- Spawn the Snaildrakes and link them together if both are alive.
 local function SpawnSnaildrakes(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if inst.has_magma then
+    if inst.has_magma and not inst.snaildrake_magma then
         inst.has_magma = false
         local magma = SpawnPrefab("snaildrake_magma")
         magma.Transform:SetPosition(x, y, z)
         InitializeSnaildrake(inst, magma)
         inst.snaildrake_magma = magma
     end
-    if inst.has_slime then
+    if inst.has_slime and not inst.snaildrake_slime then
         inst.has_slime = false
         local slime = SpawnPrefab("snaildrake_slime")
         slime.Transform:SetPosition(x, y, z)
@@ -79,6 +79,12 @@ local function SpawnSnaildrakes(inst)
         inst.snaildrake_magma.partner = inst.snaildrake_slime
         inst.snaildrake_slime.partner = inst.snaildrake_magma
     end
+	if not inst.components.timer:TimerExists("respawn_slime") and not inst.has_slime then -- Restart Timer if somehow the timer ended w/out resetting
+		inst.components.timer:StartTimer("respawn_slime", TUNING.SNAILDRAKE_RESPAWN_TIME)
+	end
+	if not inst.components.timer:TimerExists("respawn_magma") and not inst.has_magma then
+		inst.components.timer:StartTimer("respawn_magma", TUNING.SNAILDRAKE_RESPAWN_TIME)
+	end	
 end
 
 -- Update Snaildrake data.
