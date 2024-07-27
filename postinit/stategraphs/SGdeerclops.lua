@@ -9,7 +9,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
     local AREA_EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost" }
 
     local function SetLightValue(inst, val)
-        if inst.Light ~= nil then
+        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
             inst.Light:SetIntensity(.6 * val * val)
             inst.Light:SetRadius(8 * val)
             inst.Light:SetFalloff(3 * val)
@@ -17,7 +17,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
     end
 
     local function SetLightValueAndOverride(inst, val, override)
-        if inst.Light ~= nil then
+        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
             inst.Light:SetIntensity(.6 * val * val)
             inst.Light:SetRadius(8 * val)
             inst.Light:SetFalloff(3 * val)
@@ -26,7 +26,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
     end
 
     local function SetLightColour(inst, val)
-        if inst.Light ~= nil then
+        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
             inst.Light:SetColour(0, 0, val)
         end
     end
@@ -726,7 +726,9 @@ env.AddStategraphPostInit("deerclops", function(inst)
             events =
             {
                 EventHandler("animover", function(inst) --inst.components.sleeper:SetResistance(4)
-                    inst.sg:GoToState("idle")
+					if inst.components.health and not inst.components.health:IsDead() then
+						inst.sg:GoToState("idle")
+					end
                 end),
             },
 			
@@ -745,23 +747,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PushAnimation("fortresscast_loop", true)
 				
-				inst.sg:SetTimeout(6)
+				inst:DoTaskInTime(6,function(inst) -- May move to the "hit" state instead, so will need to make the taskintime independent of this state.
+					if inst.components.health and not inst.components.health:IsDead() then
+						inst.sg:GoToState("aurafreeze_pst")
+					end
+				end)
             end,
 
-			ontimeout = function(inst)
-				if not inst.components.health:IsDead() then
-					inst.sg:GoToState("aurafreeze_pst")
-				end
-			end,
-
-            timeline =
-            {
-
-                --[[TimeEvent(16 * FRAMES, function(inst)
-                inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
-            end),]]
-            },
-			
             onexit = function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
@@ -775,22 +767,10 @@ env.AddStategraphPostInit("deerclops", function(inst)
             onenter = function(inst)
 				inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
-                inst.AnimState:PushAnimation("fortresscast_hit")
+                inst.AnimState:PlayAnimation("fortresscast_hit")
+				inst.AnimState:PushAnimation("fortresscast_loop",true)
             end,
 
-            timeline =
-            {
-
-                --[[TimeEvent(16 * FRAMES, function(inst)
-                inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
-            end),]]
-            },
-
-            events =
-            {
-                EventHandler("animover", function(inst) inst.sg:GoToState("aurafreeze") end),
-            },
-			
             onexit = function(inst)
 				inst.AnimState:SetBuild("deerclops_build")
             end,
@@ -891,7 +871,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                             for i, ent in ipairs(ents) do
                                 if ent ~= inst then
                                     if inst.components.combat:CanTarget(ent) then
-                                        local x1, y1, z1 = target.Transform:GetWorldPosition()
+                                        local x1, y1, z1 = ent.Transform:GetWorldPosition()
                                         local angle = inst:GetAngleToPoint(x1, y1, z1)
                                         local diff = math.abs(inst.Transform:GetRotation() - angle)
 
@@ -974,7 +954,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                             for i, ent in ipairs(ents) do
                                 if ent ~= inst then
                                     if inst.components.combat:CanTarget(ent) then
-                                        local x1, y1, z1 = target.Transform:GetWorldPosition()
+                                        local x1, y1, z1 = ent.Transform:GetWorldPosition()
                                         local angle = inst:GetAngleToPoint(x1, y1, z1)
                                         local diff = math.abs(inst.Transform:GetRotation() - angle)
 
