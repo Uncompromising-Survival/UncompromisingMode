@@ -20,6 +20,22 @@ local function RemoveDurabilityMult(inst, equip)
 end
 
 local function CheckValidAttackData(attacker, data)
+    if attacker and attacker.components.combat and attacker.components.combat.target then
+        local target = attacker.components.combat.target
+        -- combat.target does not account for punching bag
+
+        -- Most passive mobs don't have a default damage set, so it defaults to 0
+        if target.components.combat ~= nil and target.components.combat.defaultdamage <= 0 then
+            return false
+        end
+
+        -- Additional checks for entities that manage to pass the damage check
+        if target:HasTag("eyeturret") then -- Houndious
+            return false
+        end
+    end
+
+
 	if data then
 		if data.projectile and data.projectile.components.projectile and data.projectile.components.projectile:IsBounced() then
 			--bounced projectiles don't count
