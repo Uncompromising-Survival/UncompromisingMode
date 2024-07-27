@@ -43,28 +43,29 @@ local function CheckValidAttackData(attacker, data)
 			--fake "weapons" used for detached aoe dmg don't count (e.g. flamethrower_fx)
 			return false
 		end
+        
+        -- Edge case where the target is not registered as a combat target
+        -- If non-valid target is inside wigfrid's current weapon range, disable song effects
+        local mustHaveTags = {"structure"}
+        local cantHaveTags = {"stageactor"} -- Exclude mannequin
+        local mustHaveOneOfTheseTags = {"equipmentmodel"} -- Include punching bag
+
+        local searchradius = 3
+        if if.data weapon and data.weapon.components.weapon and data.weapon.components.weapon.attackrange ~= nil then
+            searchradius = data.weapon.components.weapon.attackrange * 2.5
+            if searchradius > 7 then searchradius = 7 end -- Don't account for long range weapons as it gets really messy
+        end
+
+        local x,y,z = attacker.Transform:GetWorldPosition()
+
+        local ents = TheSim:FindEntities(x, y, z, searchradius, mustHaveTags, cantHaveTags, mustHaveOneOfTheseTags)
+
+        local next = next 
+        if next(ents) ~= nil then
+            return false
+        end
+        
 	end
-
-    -- Edge case where the target is not registered as a combat target
-    -- If non-valid target is inside wigfrid's current weapon range, disable song effects
-    local mustHaveTags = {"structure"}
-	local cantHaveTags = {"stageactor"} -- Exclude mannequin
-	local mustHaveOneOfTheseTags = {"equipmentmodel"} -- Include punching bag
-
-    local searchradius = 3
-    if data.weapon.components.weapon ~= nil and data.weapon.components.weapon.attackrange ~= nil then
-        searchradius = data.weapon.components.weapon.attackrange * 2.5
-        if searchradius > 7 then searchradius = 7 end -- Don't account for long range weapons as it gets really messy
-    end
-
-    local x,y,z = attacker.Transform:GetWorldPosition()
-
-	local ents = TheSim:FindEntities(x, y, z, searchradius, mustHaveTags, cantHaveTags, mustHaveOneOfTheseTags)
-
-    local next = next 
-    if next(ents) ~= nil then
-        return false
-    end
 
 	return true
 end
