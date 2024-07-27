@@ -51,7 +51,7 @@ local function CheckValidAttackData(attacker, data)
         local mustHaveOneOfTheseTags = {"equipmentmodel"} -- Include punching bag
 
         local searchradius = 3
-        if.data weapon and data.weapon.components.weapon and data.weapon.components.weapon.attackrange ~= nil then
+        if data.weapon and data.weapon.components.weapon and data.weapon.components.weapon.attackrange ~= nil then
             searchradius = data.weapon.components.weapon.attackrange * 2.5
             if searchradius > 7 then searchradius = 7 end -- Don't account for long range weapons as it gets really messy
         end
