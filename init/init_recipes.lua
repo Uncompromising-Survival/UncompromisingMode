@@ -515,7 +515,7 @@ if GetModConfigData("hayfever_disable") then -- not in dev build since the confi
 end
 AddRecipe2(
 	"um_armor_bramble_rimeweed",
-	{ Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8) },
+	{ Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8),Ingredient("um_rimeweed_itemflower", 8)},
 	TECH.NONE,
 	{ builder_tag = "plantkin" },
 	{ "CHARACTER" }

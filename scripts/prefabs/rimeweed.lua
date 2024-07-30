@@ -21,6 +21,15 @@ local assets =
 	Asset("IMAGE", "images/inventoryimages/um_rimeweed_icepack.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_rimeweed_icepack.xml"),
 
+	-- Map Icons
+	Asset("IMAGE", "images/map_icons/um_rimeweed_tree.tex"), -- Naming Convention parodies "stage" of rimeweed
+	Asset("ATLAS", "images/map_icons/um_rimeweed_tree.xml"),
+	
+	Asset("IMAGE", "images/map_icons/um_rimeweed_flower.tex"),
+	Asset("ATLAS", "images/map_icons/um_rimeweed_flower.xml"),
+	
+	Asset("IMAGE", "images/map_icons/um_rimeweed_plant.tex"),
+	Asset("ATLAS", "images/map_icons/um_rimeweed_plant.xml"),
 }
 
 
@@ -210,10 +219,10 @@ local function BarrierDie(inst)
 	--TheNet:Announce("DODEATH")
 	RemovePhysicsColliders(inst)
 	inst.AnimState:PlayAnimation("bramble_"..inst.type.."_shrink", false)
-	if math.random() < 0.1 then
+	if math.random() < 0.1 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
 	end
-	if math.random() < 0.01 then
+	if math.random() < 0.01 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
 	end
 	local x,y,z = inst.Transform:GetWorldPosition()
@@ -223,7 +232,11 @@ local function BarrierDie(inst)
 		for i,v in ipairs(weeds) do
 			if v.prefab == "rimeweed_barrier" then
 				v.nospread = true
-				v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) if v.components.health and not v.components.health:IsDead() then v.components.health:Kill() end end)
+				v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5,function(v) 
+					if v.components.health and not v.components.health:IsDead() then
+						v.components.health:Kill() 
+					end 
+				end)
 			end
 		end
 	end
@@ -256,7 +269,7 @@ local function barrierweed()
 
 	inst:AddTag("plant")
 	inst:AddTag("rimeweed")
-	MakeObstaclePhysics(inst, 1.5)
+	MakeObstaclePhysics(inst, 0.5)
 	inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -271,13 +284,14 @@ local function barrierweed()
     inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
 	inst:AddComponent("combat")
 	inst:AddComponent("inspectable")
-	local multsize = math.random(15,17)/10
+	local multsize = math.random(40,42)/20
 	
 	if math.random() > 0.5 then
-		inst.AnimState:SetScale(-multsize, multsize, multsize)
+		inst.AnimState:SetScale(-1, 1, 1)
 	else
-		inst.AnimState:SetScale(multsize, multsize, multsize)
+		inst.AnimState:SetScale(1, 1, 1)
 	end
+	inst.Transform:SetScale(multsize,multsize,multsize)
 	---------------------
 	inst:ListenForEvent("attacked", Retaliate)
 	inst:ListenForEvent("death", BarrierDie)
@@ -295,6 +309,13 @@ local function barrierweed()
 				inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
 			end
 		end)
+		
+	inst:WatchWorldState("isspring",function(inst) 
+		inst.noloot = true
+		inst.nospread = true
+		inst.components.health:Kill()	
+	end)
+	
 	return inst
 end
 
@@ -342,11 +363,10 @@ local function MainDie(inst)
 	
 	if #inst.bramble > 0 then
 		for i,v in ipairs(inst.bramble) do
-			--v:DoTaskInTime(0.5*inst:GetDistanceSqToInst(v)^0.5, function(v)
-				if v.components.health and not v.components.health:IsDead() then
-					v.components.health:Kill()
-				end
-			--end)
+			if v.components.health and not v.components.health:IsDead() then
+				v.noloot = true
+				v.components.health:Kill()
+			end
 		end
 	end
 	inst.AnimState:PlayAnimation("flower_"..(inst.stage-1).."_shrink",false)
@@ -360,6 +380,7 @@ local function MainDie(inst)
 	if inst.stage >= 3 and not inst.noloot then
 		inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
 		inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
+		inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
 	end
 end
 
@@ -376,11 +397,21 @@ local function InitializePlant(inst)
     inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
 end
 
+local function ChangeMiniMapIcon(inst)
+	inst.MiniMapEntity:SetIcon("um_rimeweed_plant.tex")
+	if inst.stage == 2 then
+		inst.MiniMapEntity:SetIcon("um_rimeweed_flower.tex")
+	elseif inst.stage == 3 then
+		inst.MiniMapEntity:SetIcon("um_rimeweed_tree.tex")
+	end
+end
+
 local function SetStage(inst)
     if not inst.stage then
         InitializePlant(inst)
     end
     PlayStagedAnim(inst)
+	ChangeMiniMapIcon(inst)
 end
 
 local function FindPlant(inst)
@@ -475,7 +506,7 @@ local function mainweed()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-
+	inst.entity:AddMiniMapEntity()
 
     inst.AnimState:SetBank("um_rimeweed")
     inst.AnimState:SetBuild("um_rimeweed")
@@ -532,6 +563,12 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
     inst:DoTaskInTime(0, SetStage)
+	
+	inst:WatchWorldState("isspring",function(inst) 
+		inst.noloot = true
+		inst.components.health:Kill()	
+	end)
+	
     if not inst.bramble then
         inst.bramble = {}
     end
