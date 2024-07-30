@@ -48,14 +48,6 @@ local function ChangeSprite(inst)
 	end	
 end
 
-
-
-local function onfinishwork(inst, worker)
-	inst.components.lootdropper:DropLoot()
-	inst.SoundEmitter:PlaySound("dontstarve/common/destroy_pot")
-	inst:Remove()
-end
-
 local ignoretags = { "FX", "DECOR", "INLIMBO", "burnt" }
 
 local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from WateryProtection because including that component tries to allow a "water" action on farms, this should not be the case... (This is the simplest way to circumvent)
@@ -250,11 +242,7 @@ local function fn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakebucket_empty.xml"
 	inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
 	
-	inst:AddComponent("workable")
-	inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-	inst.components.workable:SetWorkLeft(1)
-	inst.components.workable:SetOnFinishCallback(onfinishwork)
-	inst.components.workable.savestate = false
+
 	
 	inst:AddComponent("lootdropper")
 	inst.components.lootdropper:SetChanceLootTable("singingshell")
