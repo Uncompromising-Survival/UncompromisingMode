@@ -139,7 +139,7 @@ local function NaturalSporeSpawnTimerReset(inst)
 	local timer_duration = (math.random(1, 30) + 60)
 
 	local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
-	if spore_cooldown_running == nil and inst.stage == 5 and math.random() > 0.5 then
+	if spore_cooldown_running == nil and inst.stage == 5 and math.random() > 0.5 and not TheWorld.state.iswinter then
 		inst.AnimState:PlayAnimation("pn5_coof", false)
 		inst.AnimState:PushAnimation("pn5_idle", true)
 		SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
