@@ -128,11 +128,11 @@ end
 -- Update references to Snaildrake entities.
 local function OnLoadPostPass(inst, newents, savedata)
     if savedata then
-        if savedata.snaildrake_magma and newents then
+        if savedata.snaildrake_magma and newents and newents[savedata.snaildrake_magma] and newents[savedata.snaildrake_magma].entity then
             inst.snaildrake_magma = newents[savedata.snaildrake_magma].entity
             InitializeSnaildrake(inst, inst.snaildrake_magma)
         end
-        if savedata.snaildrake_slime and newents then
+        if savedata.snaildrake_slime and newents and newents[savedata.snaildrake_magma] and newents[savedata.snaildrake_magma].entity then
             inst.snaildrake_slime = newents[savedata.snaildrake_slime].entity
             InitializeSnaildrake(inst, inst.snaildrake_slime)
         end
