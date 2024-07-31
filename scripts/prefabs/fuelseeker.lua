@@ -169,13 +169,13 @@ end
 
 local function LevelUp(inst)
 	inst.level = inst.level + 0.2
-	inst.SoundEmitter:SetParameter("shadowfire", "intensity", inst.level / 3)
+	inst.SoundEmitter:SetParameter("shadowfire", "intensity", inst.level / 6)
 	inst.Transform:SetScale(inst.level / 2, inst.level / 2, inst.level / 2)
 end
 
 local function Reset(inst)
 	inst.level = 0
-	inst.SoundEmitter:SetParameter("shadowfire", "intensity", inst.level / 3)
+	inst.SoundEmitter:SetParameter("shadowfire", "intensity", inst.level / 6)
 	inst.Transform:SetScale(inst.level / 2, inst.level / 2, inst.level / 2)
 end
 
