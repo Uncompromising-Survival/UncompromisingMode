@@ -393,7 +393,51 @@ for k, v in ipairs(inventoryitems) do
 	RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. v .. ".xml"), v .. ".tex")
 end
 
+
+
 Assets = {
+	-- Cookbook HQ Icons
+	Asset("IMAGE", "images/cookbook_beefalowings.tex"),
+	Asset("ATLAS", "images/cookbook_beefalowings.xml"),
+	Asset("IMAGE", "images/cookbook_blueberrypancakes.tex"),
+	Asset("ATLAS", "images/cookbook_blueberrypancakes.xml"),
+	Asset("IMAGE", "images/cookbook_californiaking.tex"),
+	Asset("ATLAS", "images/cookbook_californiaking.xml"),
+	Asset("IMAGE", "images/cookbook_devilsfruitcake.tex"),
+	Asset("ATLAS", "images/cookbook_devilsfruitcake.xml"),
+	Asset("IMAGE", "images/cookbook_greensteamedhams.tex"),
+	Asset("ATLAS", "images/cookbook_greensteamedhams.xml"),
+	Asset("IMAGE", "images/cookbook_hardshelltacos.tex"),
+	Asset("ATLAS", "images/cookbook_hardshelltacos.xml"),
+	Asset("IMAGE", "images/cookbook_liceloaf.tex"),
+	Asset("ATLAS", "images/cookbook_liceloaf.xml"),
+	Asset("IMAGE", "images/cookbook_purplesteamedhams.tex"),
+	Asset("ATLAS", "images/cookbook_purplesteamedhams.xml"),
+	Asset("IMAGE", "images/cookbook_seafoodpaella.tex"),
+	Asset("ATLAS", "images/cookbook_seafoodpaella.xml"),
+	Asset("IMAGE", "images/cookbook_simpsalad.tex"),
+	Asset("ATLAS", "images/cookbook_simpsalad.xml"),
+	Asset("IMAGE", "images/cookbook_snotroast.tex"),
+	Asset("ATLAS", "images/cookbook_snotroast.xml"),
+	Asset("IMAGE", "images/cookbook_snowcone.tex"),
+	Asset("ATLAS", "images/cookbook_snowcone.xml"),
+	Asset("IMAGE", "images/cookbook_stuffed_peeper_poppers.tex"),
+	Asset("ATLAS", "images/cookbook_stuffed_peeper_poppers.xml"),
+	Asset("IMAGE", "images/cookbook_theatercorn.tex"),
+	Asset("ATLAS", "images/cookbook_theatercorn.xml"),
+	Asset("IMAGE", "images/cookbook_um_deviled_eggs.tex"),
+	Asset("ATLAS", "images/cookbook_um_deviled_eggs.xml"),
+	Asset("IMAGE", "images/cookbook_um_rimeweed_spagett.tex"),
+	Asset("ATLAS", "images/cookbook_um_rimeweed_spagett.xml"),
+	Asset("IMAGE", "images/cookbook_um_rimeweed_tequila.tex"),
+	Asset("ATLAS", "images/cookbook_um_rimeweed_tequila.xml"),
+	Asset("IMAGE", "images/cookbook_viperjam.tex"),
+	Asset("ATLAS", "images/cookbook_viperjam.xml"),
+	Asset("IMAGE", "images/cookbook_zaspberryparfait.tex"),
+	Asset("ATLAS", "images/cookbook_zaspberryparfait.xml"),
+	
+	
+	
 	--crafting menu avatars
 	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
 	Asset("ATLAS", "images/crafting_menu_avatars/avatar_wixie.xml"),

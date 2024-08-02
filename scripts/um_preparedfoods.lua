@@ -596,8 +596,10 @@ for k, v in pairs(um_preparedfoods) do
     v.atlasname = "images/inventoryimages/" .. k .. ".xml"
     v.cooktime = k.cooktime
     v.overridebuild = k
-    --v.cookbook_tex = "cookbook_"..k..".tex"
+	v.cookbook_atlas = "images/cookbook_"..k..".xml"
+    v.cookbook_tex = "cookbook_"..k..".tex"
     --v.cookbook_category = "cookpot"
 end
+
 
 return um_preparedfoods
