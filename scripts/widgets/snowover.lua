@@ -69,6 +69,16 @@ function SnowOver:VisionCheck()
 	end
 end
 --]]
+
+local function MiniBlizzNear(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local miniblizzards = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
+	if #miniblizzards > 0 then
+		return true
+	end
+end
+
+
 function SnowOver:OnUpdate(dt)
 	local x, y, z = self.owner.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(x, y, z, 7, { "wall" })
@@ -79,10 +89,10 @@ function SnowOver:OnUpdate(dt)
 	local suppressorNearby3 = 0.15 * #ents3
 	local ents4 = TheSim:FindEntities(x, y, z, 10, { "snowstorm_protection_high" })
 	local suppressorNearby4 = 0.8 * #ents4
-
+	
 	local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
-
-	if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) then
+	local localizedblizz = MiniBlizzNear(self.owner)
+	if TheWorld.state.iswinter and (localizedblizz or (TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) then
 		if self.alphaquation == nil then
 			self.alphaquation = 0
 		elseif self.alphaquation <= equationdingus then
@@ -98,7 +108,7 @@ function SnowOver:OnUpdate(dt)
 		end
 	end
 
-	if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then
+	if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or localizedblizz) and not IsUnderRainDomeAtXZ(x, z) then
 		if self.changed == nil then
 			self.changed = 0.01
 		elseif self.changed <= 0.8 then

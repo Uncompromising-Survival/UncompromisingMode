@@ -70,6 +70,15 @@ local function Freeze(v)
     end
 end
 
+local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probably be bothering something else, biting thorns hurts.
+	if v:HasTag("hound") or v:HasTag("EPIC") and v.components.combat then
+		local player = FindEntity(v,36,nil,{"player"},{"playerghost"})
+		if player then
+			v.components.combat:SuggestTarget(player)
+		end
+	end
+end
+
 local function OnUpdateThorns(inst)
     inst.range = inst.range + 1
 
@@ -94,6 +103,7 @@ local function OnUpdateThorns(inst)
                         inst.ignore[v] = true
                         v.components.combat:GetAttacked(v.components.follower ~= nil and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         Freeze(v)
+						TellToBuzzOff(v)
                         --V2C: wisecracks make more sense for being pricked by picking
                         --v:PushEvent("thorns")
                     end
@@ -110,6 +120,7 @@ local function OnUpdateThorns(inst)
                     if not isally then
                         inst.ignore[v] = true
                         v.components.combat:GetAttacked(inst, inst.damage)
+						TellToBuzzOff(v)
                         Freeze(v)
 
                         --v:PushEvent("thorns")
@@ -310,12 +321,20 @@ local function barrierweed()
 			end
 		end)
 		
+		
+		
 	inst:WatchWorldState("isspring",function(inst) 
 		inst.noloot = true
 		inst.nospread = true
 		inst.components.health:Kill()	
 	end)
-	
+	inst:WatchWorldState("startrain", function(inst) 
+		if not TheWorld.state.iswinter then
+			inst.noloot = true
+			inst.nospread = true
+			inst.components.health:Kill()	
+		end
+	end)
 	return inst
 end
 
@@ -412,11 +431,14 @@ local function SetStage(inst)
     end
     PlayStagedAnim(inst)
 	ChangeMiniMapIcon(inst)
+	if inst.stage >= 3 then
+		inst:AddTag("miniblizzard")
+	end
 end
 
 local function FindPlant(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local plants = TheSim:FindEntities(x, y, z, 32, { "plant" })
+    local plants = TheSim:FindEntities(x, y, z, 32, { "plant" },{"kelp","riceplant"})
     for i, plant in ipairs(plants) do
         if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant, 3, nil, { "rimeweed" }) then
             return plant
@@ -440,11 +462,34 @@ local function TryGrowPoint(inst, x, z)
     end
 end
 
-local function GrowLine(inst, growPoint)
-    local distance = (inst:GetDistanceSqToPoint(growPoint)) ^ 0.5
-    local plants = math.floor(distance)
-    local x, y, z = inst.Transform:GetWorldPosition()
+local function GetNearestRimeweed(growpoint) -- Make Weeds grow from other weeds first.
+	local weeds = TheSim:FindEntities(growpoint.x,growpoint.y,growpoint.z,16,{"rimeweed"})
+	local mindist = 99999
+	local minweed 
+	for i,weed in ipairs(weeds) do
+		if weed:GetDistanceSqToPoint(growpoint) < mindist then
+			mindist = weed:GetDistanceSqToPoint(growpoint)
+			minweed = weed
+		end
+	end
+	if minweed then
+		return minweed.Transform:GetWorldPosition()
+	end
+end
 
+local function GrowLine(inst, growPoint)
+    local distance
+    
+	
+	
+	local x,y,z = GetNearestRimeweed(growPoint)
+	if not x then -- No Rimeweeds found nearby
+		x, y, z = inst.Transform:GetWorldPosition()
+		distance = (inst:GetDistanceSqToPoint(growPoint)) ^ 0.5
+	else
+		distance = ((x-growPoint.x)^2+(z-growPoint.z)^2)^0.5
+	end
+	local plants = math.floor(distance)
     for i = 1, plants - 1 do
         TryGrowPoint(inst, x + (growPoint.x - x) * i / plants + 0.1 * math.random(-2, 2), z + (growPoint.z - z) * i / plants + 0.1 * math.random(-10, 10))
     end
@@ -465,8 +510,8 @@ local function GrowBranch(inst)
     local plant = FindPlant(inst)
     if plant then
         local growPoint = Vector3(plant.Transform:GetWorldPosition())
+		GrowLine(inst, growPoint)
         GrowRing(inst, growPoint)
-        GrowLine(inst, growPoint)
     else
         --inst:Remove()
     end
@@ -499,6 +544,37 @@ local function TimerDone(inst, data)
 end
 
 
+local function Coof(inst)
+	if inst.stage >= 3 then
+		inst.AnimState:PlayAnimation("flower_2_cough")
+		if not inst.fx then
+			inst.fx = SpawnPrefab("deer_ice_flakes")
+			inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		end		
+		PlayStagedAnim(inst)
+	end
+end
+
+local function OnEntityWake(inst)
+	if not inst.fx and inst.stage and inst.stage >= 3 then
+		inst.fx = SpawnPrefab("deer_ice_flakes")
+		inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	end
+	if not inst.cooftask then
+		inst.cooftask = inst:DoPeriodicTask(math.random(15,20),Coof)
+	end
+end
+
+local function OnEntitySleep(inst)
+	if inst.cooftask then
+		inst.cooftask:Cancel()
+		inst.cooftask = nil
+	end
+	if inst.fx then
+		inst.fx:Remove()
+	end
+end
+
 local function mainweed()
     local inst = CreateEntity()
 
@@ -515,7 +591,6 @@ local function mainweed()
     inst:AddTag("plant")
     --inst:AddTag("lunarplant_target")
     inst:AddTag("rimeweed")
-
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -568,11 +643,20 @@ local function mainweed()
 		inst.noloot = true
 		inst.components.health:Kill()	
 	end)
-	
+	inst:WatchWorldState("startrain", function(inst) 
+		if not TheWorld.state.iswinter then
+			inst.noloot = true
+			inst.components.health:Kill()
+		end
+	end)
     if not inst.bramble then
         inst.bramble = {}
     end
-
+	
+	-- Coofing Tasks
+	inst.OnEntitySleep = OnEntitySleep
+	inst.OnEntityWake = OnEntityWake
+	
     return inst
 end
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -822,13 +906,15 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function OnDetach(inst, target)
+local function OnExtended(inst, target)
     inst.components.timer:StopTimer("ice_resist_over")
 	inst.components.timer:StartTimer("ice_resist_over", 60*8*1.5)
 end
 
-local function OnExtended(inst, target)
-    inst.components.timer:StopTimer("ice_resist_over")
+local function OnDetach(inst, target)
+	if inst.components.timer:TimerExists("ice_resist_over") then
+		inst.components.timer:StopTimer("ice_resist_over")
+	end
 	if target:HasTag("pyromaniac") then
 		target.components.freezable:SetResistance(3)
 	else
@@ -870,7 +956,11 @@ end
 
 local function OnUseBandage(inst, target)
 	if target and target.components.temperature then
-		target.components.temperature:DoDelta(-40)
+		if target.components.temperature.current > 40 or TheWorld.state.iswinter then
+			target.components.temperature:DoDelta(-40)
+		else
+			target.components.temperature:SetTemperature(1)
+		end
 	end
 end
 

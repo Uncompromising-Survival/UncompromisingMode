@@ -68,6 +68,7 @@ local function fn()
 
     inst:AddTag("plant")
 	inst:AddTag("ignorewalkableplatforms")
+	inst:AddTag("riceplant")
     inst.AnimState:SetBank("riceplant")
     inst.AnimState:SetBuild("riceplant")
     inst.AnimState:PlayAnimation("idle", true)

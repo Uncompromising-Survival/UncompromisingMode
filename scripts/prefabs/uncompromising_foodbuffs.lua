@@ -111,11 +111,11 @@ end
 end
 
 local function kbimmune_attach(inst, target)
-target:DoTaskInTime(4, function(target)
-if not target:HasTag("foodknockbackimmune") then
-target:AddTag("foodknockbackimmune")
-end
-end)
+	target:DoTaskInTime(4, function(target)
+		if not target:HasTag("foodknockbackimmune") then
+			target:AddTag("foodknockbackimmune")
+		end
+	end)
 end
 
 local function kbimmune_extend(inst, target)
@@ -123,9 +123,9 @@ local function kbimmune_extend(inst, target)
 end
 
 local function kbimmune_detach(inst, target)
-if target:HasTag("foodknockbackimmune") then
-target:RemoveTag("foodknockbackimmune")
-end
+	if target:HasTag("foodknockbackimmune") then
+		target:RemoveTag("foodknockbackimmune")
+	end
 end
 
 local function largehungerslow_attach(inst, target)

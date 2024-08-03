@@ -10,7 +10,7 @@ local easing = require("easing")
 local _storming = false
 local _spawninterval = TUNING.TOTAL_DAY_TIME * 3
 local _despawninterval = TUNING.TOTAL_DAY_TIME / 2
-local _rimebasetime =  TUNING.TOTAL_DAY_TIME / 6 -- Enough to trigger at least twice during a snowstorm, more likely 3 times
+local _rimebasetime =  TUNING.TOTAL_DAY_TIME / 12 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
 local _worldsettingstimer = TheWorld.components.worldsettingstimer
 local UM_SNOWSTORM_TIMERNAME = "um_snowstorm_timer"
 local UM_STOPSNOWSTORM_TIMERNAME = "um_stopsnowstorm_timer"
@@ -33,8 +33,22 @@ local function SpawnRimeweeds()
 	--TheNet:Announce("trying to spawn rimeweeds")
 	local harvestible_plants = {}
 	local rimeweeds = 0
+	local allplants -- should target *all* plants
+	local chance = math.random() -- Chance to target specific plants
+	local specificplant
+	if chance > 0.75 then -- Wide Grass
+		specificplant = "trapdoorgrass"
+	elseif chance <= 0.75 and chance > 0.6 then -- Reeds
+		specificplant = "reeds"
+	elseif chance <= 0.6 and chance > 0.5 then -- Cactus
+		specificplant = "cactus"
+	elseif chance <= 0.5 and chance > 0.4 then -- Red Mushrooms
+		specificplant = "red_mushroom"
+	else
+		allplants = true
+	end
 	for i,ent in pairs(Ents) do
-		if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
+		if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
 			table.insert(harvestible_plants,ent)
 		end
 		if ent.prefab == "rimeweed_main" then
@@ -45,22 +59,12 @@ local function SpawnRimeweeds()
 	if #harvestible_plants > 0 then
 		--TheNet:Announce("Rimeweeds = ")
 		--TheNet:Announce(rimeweeds)
-		if rimeweeds < 3 then
-			local rnd = math.random(1,#harvestible_plants)
-			SpawnRimeweed(harvestible_plants[rnd])
-			table.remove(harvestible_plants,rnd)
-		end
-		if rimeweeds < 8 then
+		if rimeweeds < 10 then
 			local rnd = math.random(1,#harvestible_plants)
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)
 		end
 		if rimeweeds < 20 then
-			local rnd = math.random(1,#harvestible_plants)
-			SpawnRimeweed(harvestible_plants[rnd])
-			table.remove(harvestible_plants,rnd)
-		end
-		if rimeweeds < 30 then
 			local rnd = math.random(1,#harvestible_plants)
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)

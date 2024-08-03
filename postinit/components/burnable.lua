@@ -32,7 +32,7 @@ env.AddComponentPostInit("burnable", function(self)
     end
 
     function self:ExtendBurning()
-        if TheWorld.state.season == "winter" then
+        if TheWorld.state.season == "winter" and not self.inst:HasTag("PyreNettle") then
             if self.task ~= nil then
                 self.task:Cancel()
             end

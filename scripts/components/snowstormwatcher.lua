@@ -39,6 +39,14 @@ function SnowStormWatcher:SnowstormLevel()
     return self.snowstormstart
 end
 
+local function MiniBlizzNear(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local miniblizzard = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
+	if #miniblizzard > 0 then
+		return true
+	end
+end
+
 function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     local x, y, z = self.inst.Transform:GetWorldPosition()
 
@@ -55,7 +63,7 @@ function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     local suppressorNearby4 = (#ents4 > 0)
 
 
-    if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) then
+    if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
         if self.inst.components.playervision:HasGoggleVision() or
             self.inst.components.playervision:HasGhostVision() or
             self.inst.components.rider:IsRiding() or

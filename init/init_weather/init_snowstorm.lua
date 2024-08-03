@@ -1,5 +1,15 @@
 local require = GLOBAL.require
 
+local function MiniBlizzNear(inst)
+	if TheSim then
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local miniblizzards = TheSim:FindEntities(x,y,z,24,{"miniblizzard"})
+		if #miniblizzards > 0 then
+			return true
+		end
+	end
+end
+
 local function GetSandstormLevel(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     if TheSim ~= nil then
@@ -27,7 +37,7 @@ local function GetSandstormLevel(inst)
 	--]]
     end
 
-    if GLOBAL.TheWorld.state.iswinter and not suppressorNearby1 and not suppressorNearby2 and not suppressorNearby3 and not suppressorNearby4 and (GLOBAL.TheWorld:HasTag("snowstormstart") or (GLOBAL.TheWorld.net ~= nil and GLOBAL.TheWorld.net:HasTag("snowstormstartnet"))) then
+    if GLOBAL.TheWorld.state.iswinter and not suppressorNearby1 and not suppressorNearby2 and not suppressorNearby3 and not suppressorNearby4 and (GLOBAL.TheWorld:HasTag("snowstormstart") or (GLOBAL.TheWorld.net ~= nil and GLOBAL.TheWorld.net:HasTag("snowstormstartnet")) or MiniBlizzNear(inst)) then
         return 1
     else
         return inst.player_classified ~= nil and inst.player_classified.stormlevel:value() / 7 or 0
