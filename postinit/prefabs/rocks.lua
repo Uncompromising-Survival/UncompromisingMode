@@ -53,27 +53,29 @@ end
 
 local function NewCallBack(inst, worker, workleft)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	if inst.crab then -- If crab then use his position instead
-		x,y,z = inst.crab.Transform:GetWorldPosition()
-		if workleft <= 0 then
-			inst.crab.components.health:SetAbsorptionAmount(0)
-			inst.crab.components.timer:StartTimer("startregenrock",math.random(60*4,60*8))--half to a full day
-			if (inst.crab.components.sleeper and not inst.crab.components.sleeper:IsAsleep()) and inst.crab.components.health and not inst.crab.components.health:IsDead() then
-				inst.crab.sg:GoToState("fuckingsad")
+	if x then
+		if inst.crab and inst.crab:IsValid() and inst.crab.Transform:GetWorldPosition() then -- If crab then use his position instead
+			x,y,z = inst.crab.Transform:GetWorldPosition()
+			if workleft <= 0 then
+				inst.crab.components.health:SetAbsorptionAmount(0)
+				inst.crab.components.timer:StartTimer("startregenrock",math.random(60*4,60*8))--half to a full day
+				if (inst.crab.components.sleeper and not inst.crab.components.sleeper:IsAsleep()) and inst.crab.components.health and not inst.crab.components.health:IsDead() then
+					inst.crab.sg:GoToState("fuckingsad")
+				end
 			end
 		end
-	end
-	local crabs = TheSim:FindEntities(x,y,z,16,{"rocky"})
-	for i,crab in ipairs(crabs) do
-		if crab.prefab == "boulder_crab" and crab.components.combat and (crab.components.sleeper and not crab.components.sleeper:IsAsleep()) then
-			crab.components.combat:SuggestTarget(worker)
-			if crab.hiding and not crab.components.timer:TimerExists("regenrock") then
-				crab.sg:GoToState("hide_pst")
+		local crabs = TheSim:FindEntities(x,y,z,16,{"rocky"})
+		for i,crab in ipairs(crabs) do
+			if crab.prefab == "boulder_crab" and crab.components.combat and (crab.components.sleeper and not crab.components.sleeper:IsAsleep()) then
+				crab.components.combat:SuggestTarget(worker)
+				if crab.hiding and not crab.components.timer:TimerExists("regenrock") then
+					crab.sg:GoToState("hide_pst")
+				end
 			end
 		end
-	end
-	if workleft >= TUNING.ROCKS_MINE-2 and not inst.crab then
-		TryCrab(inst,worker)
+		if workleft >= TUNING.ROCKS_MINE-2 and not inst.crab then
+			TryCrab(inst,worker)
+		end
 	end
 	inst._oldcallworkableback(inst, worker, workleft)
 end
