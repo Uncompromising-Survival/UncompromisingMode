@@ -948,7 +948,7 @@ AddRecipe2(
 
 AddRecipe2(
     "gore_horn_hat",
-    { Ingredient("um_minotaur_soul", 1), Ingredient("catcoonhat", 1), Ingredient("um_dark_vestiges", 1) },
+    { Ingredient("um_minotaur_soul", 1), Ingredient("catcoonhat", 1), Ingredient("um_dark_vestiges", 2) },
     TECH.VETERANSHRINE_ONE,
     { nounlock = true },
     { "MAGIC" }
