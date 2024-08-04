@@ -220,6 +220,7 @@ local prefab_post = {
     "stash_map",
     "monkeyhut",
 	"lava_pond",
+	"cookiecutter",
 }
 
 local stategraph_post = {
