@@ -110,6 +110,17 @@ function GLOBAL.MakeNoGrowInWinter(inst)
     _MakeNoGrowInWinter(inst)
 end
 
+-- Probably gonna get a config for this eventually... I'm sure...
+GLOBAL.TUNING.ROCK_FRUIT_LOOT =
+        {
+            ANGLE = 65,
+            SPEED = -1.8,
+            HEIGHT = 0.5,
+            RIPE_CHANCE = 0.32,
+            SEED_CHANCE = 0.01,
+            MAX_SPAWNS = 10, 
+        }
+
 if GetModConfigData("no_winter_growing") then
     -- Stone fruits bushs
     AddPrefabPostInit("rock_avocado_bush", function(inst)

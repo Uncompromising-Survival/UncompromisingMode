@@ -194,7 +194,7 @@ local function fn()
 
     beak_inst:AddComponent("combat")
     beak_inst:AddComponent("health")
-    beak_inst.components.health:SetMaxHealth(2000)
+    beak_inst.components.health:SetMaxHealth(1500)
     beak_inst.components.health.nofadeout = true
 
     beak_inst:ListenForEvent("death", OnAttackBeakKilled)
