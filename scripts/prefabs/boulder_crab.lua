@@ -12,6 +12,11 @@ local assets =
     Asset("ANIM", "anim/springrock2_nobottom.zip"),
 }
 
+local prefabs = 
+{
+	"boulder_crab_hole",
+}
+
 SetSharedLootTable('boulder_crab',
     {
         { 'rocks', 1.0 },
@@ -85,7 +90,7 @@ end
 
 
 local function onsave(inst, data)
-    if inst.myrock and not inst.components.timer:TimerExists("regenrock") then
+    if inst.myrock then
         data.myrock = inst.myrock.prefab
     end
     if inst.favoriterock then
@@ -143,25 +148,27 @@ local function ShouldWake(inst)
 end
 
 local function Hide(inst)
-    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) and not inst.components.timer:TimerExists("regenrock") then
+    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
         inst.sg:GoToState("hide_pre")
-    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) and not inst.components.timer:TimerExists("regenrock") then
+    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
         inst:DoTaskInTime(5, Hide)
     end
 end
 
+local function SpawnHole(inst)
+	local hole = SpawnPrefab("boulder_crab_hole")
+	hole.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	hole.favoriterock = inst.favoriterock
+	local timetilgrow = (8*60)*8 -- 8 days standard
+	hole.components.timer:StartTimer("regenrock",timetilgrow)
+	inst:Remove()
+end
 
 local function RegenRockDone(inst, data)
     if data ~= nil then
-        if data.name == "regenrock" then
-            inst:AddComponent("health")
-            inst.components.health:SetMaxHealth(500)
-            GetRock(inst, inst.favoriterock)
-            inst.sg:GoToState("emerge")
-        end
-        if data.name == "startregenrock" and not inst.components.timer:TimerExists("regenrock") then
+        if data.name == "startregenrock" then
             if inst:IsAsleep() then
-                inst.sg:GoToState("dirt")
+                inst.SpawnHole(inst)
             else
                 inst.sg:GoToState("dig")
             end
@@ -176,7 +183,6 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     inst.Transform:SetFourFaced()
@@ -188,7 +194,6 @@ local function fn()
     inst.AnimState:SetBuild("boulder_crab")
     inst.AnimState:PlayAnimation("idle")
 
-    --inst.MiniMapEntity:SetIcon("statue_small.png")
 
     inst.entity:SetPristine()
 
@@ -243,16 +248,18 @@ local function fn()
     inst:ListenForEvent("timerdone", RegenRockDone)
 
     inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
-    inst:WatchWorldState("startdusk", function(inst) if inst.hiding and not inst.components.timer:TimerExists("regenrock") then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
+    inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
     inst:ListenForEvent("attacked", OnAttacked)
 
 
     inst.OnSave = onsave
     inst.OnLoad = onload
-    inst.OnLoadPostPass = function(inst) if inst.components.timer:TimerExists("regenrock") then inst.sg:GoToState("dirt") end end
-
+	
+	inst.SpawnHole = SpawnHole
+	
     inst:AddComponent("named")
-    inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB) -- Can also be a hole
+    inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB_HOLE) -- Can also be a hole
+	
     inst.GetRock = GetRock
     inst:DoTaskInTime(0, function(inst)
         if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
@@ -275,4 +282,81 @@ local function fn()
     return inst
 end
 
-return Prefab("boulder_crab", fn, assets)
+local function ReturnCrab(inst)
+	local crab = SpawnPrefab("boulder_crab")
+	crab.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	crab.favoriterock = inst.favoriterock
+	GetRock(crab,crab.favoriterock)
+	crab.sg:GoToState("emerge")
+	inst:Remove()
+end
+
+local function HoleTimerDone(inst, data)
+    if data ~= nil then
+        if data.name == "regenrock" then
+            ReturnCrab(inst)
+        end
+    end
+end
+
+local function onsavehole(inst, data)
+    if inst.favoriterock then
+        data.favoriterock = inst.favoriterock
+    end
+end
+
+local function onloadhole(inst, data)
+    if data and data.myrock and inst.components.health then
+        GetRock(inst, data.myrock)
+    end
+    if data and data.favoriterock then
+        inst.favoriterock = data.favoriterock
+    end
+end
+
+local function fnhole()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity() -- May add hole icon later? Maybe not bc the hole is removed after the crab returns
+    inst.entity:AddNetwork()
+
+    inst.Transform:SetNoFaced()
+    MakeCharacterPhysics(inst, 400, .5)
+	RemovePhysicsColliders(inst)
+    inst.AnimState:SetBank("boulder_crab")
+    inst.AnimState:SetBuild("boulder_crab")
+    inst.AnimState:PlayAnimation("im_dirt")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("inspectable")
+    inst.components.inspectable.getstatus = GetStatus
+	
+	
+
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", HoleTimerDone)
+	
+    inst.OnSave = onsavehole
+    inst.OnLoad = onloadhole
+    inst.OnLoadPostPass = function(inst) 
+		if inst.components.timer:TimerExists("regenrock") then 
+			inst.AnimState:PlayAnimation("im_dirt") 
+		else
+			inst:Remove()
+		end 
+	end
+
+    return inst
+end
+
+
+return Prefab("boulder_crab", fn, assets,prefabs),
+Prefab("boulder_crab_hole",fnhole)

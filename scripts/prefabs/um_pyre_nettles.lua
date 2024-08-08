@@ -69,6 +69,11 @@ SetSharedLootTable('um_pyre_nettles_5',
 		{ 'firenettles', 0.25 }
 	})
 
+local function TrySpawnSpore(inst)
+	if not inst:IsAsleep() then
+		SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+	end
+end
 
 local function pyrenettle_bumped(inst)
 	local bumpradius = 1
@@ -93,10 +98,10 @@ local function pyrenettle_bumped(inst)
 		local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
 		if spore_cooldown_running == nil and inst.stage > 3 then
 			if math.random() < 0.5 then
-				SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+				TrySpawnSpore(inst)
 			end
 			if inst.stage > 4 and math.random() < 0.5 then
-				SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+				TrySpawnSpore(inst)
 			end
 			inst.components.timer:StartTimer("SporeCooldownTimer", spore_cooldown_max)
 		end
@@ -142,7 +147,7 @@ local function NaturalSporeSpawnTimerReset(inst)
 	if spore_cooldown_running == nil and inst.stage == 5 and math.random() > 0.5 and not TheWorld.state.iswinter then
 		inst.AnimState:PlayAnimation("pn5_coof", false)
 		inst.AnimState:PushAnimation("pn5_idle", true)
-		SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		TrySpawnSpore(inst)
 		inst.components.timer:StartTimer("SporeCooldownTimer", spore_cooldown_max)
 
 		if time_remaining ~= nil then
@@ -280,7 +285,7 @@ local function OnGrow(inst)
 		if spore_cooldown_running == nil and targetstage == 6 then
 			inst.AnimState:PlayAnimation("pn5_coof", false)
 			inst.AnimState:PushAnimation("pn5_idle", true)
-			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			TrySpawnSpore(inst)
 			inst.components.timer:StartTimer("SporeCooldownTimer", spore_cooldown_max)
 		elseif targetstage < 6 then
 			inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
@@ -322,7 +327,7 @@ end
 local function OnAttacked(inst, data)
 	if inst.components.health:GetPercent() > 0.01 then
 		if (math.random() * inst.stage) > 3 and not (data.attacker ~= nil and data.attacker:HasTag("HASHEATER")) then
-			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			TrySpawnSpore(inst)
 
 			if data.weapon ~= nil and data.weapon.prefab == "voidcloth_scythe" then
 				inst.components.health:DoDelta(-TUNING.VOIDCLOTH_SCYTHE_DAMAGE * 2)
@@ -350,7 +355,7 @@ local function OnExplosion(inst)
 
 	if inst.stage == (4 or 5) then
 		for i = 1, math.random(2, 5) do
-			SpawnPrefab("um_smolder_spore").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			TrySpawnSpore(inst)
 		end
 	end
 

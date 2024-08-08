@@ -667,8 +667,10 @@ DESCRIBE.BOULDER_CRAB =
 {
 	GENERIC = "It’s not a rock!", 
 	NAKED = "I feel sorry for it.",
-	HOLE = "It's a hole.",
 }
+
+DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
+
 
 DESCRIBE.UM_HOTSPRING = "It's heated by lava."
 

@@ -254,6 +254,7 @@ local states=
         onenter = function(inst, start_anim)
 			inst.Physics:Stop()
 			inst.AnimState:PlayAnimation("fuck", true)
+			inst.components.timer:StartTimer("startregenrock",2*8*60)
         end,
         events=
         {
@@ -464,18 +465,14 @@ local states=
             TimeEvent(40*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
             TimeEvent(47*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
         }, 
-		onexit = function(inst)
-			local timetilgrow = (8*60)*8 -- 8 days standard
-			inst.components.timer:StartTimer("regenrock",timetilgrow)
-		end,
         events=
         {
             EventHandler("animover", function(inst) 
-				inst.sg:GoToState("dirt") 
+				inst.SpawnHole(inst)
 			end ),
         },		
     },	
-    State{
+--[[    State{
         name = "dirt",
         tags = {"busy","noattack","INLIMBO"},--You can only mine the boulder, they can't be attacked in this phase
         
@@ -491,7 +488,7 @@ local states=
 			end
 
         end,     
-    },	
+    },]]	
     State{
         name = "emerge",
         tags = {"busy","noattack","INLIMBO"},--You can only mine the boulder, they can't be attacked in this phase
