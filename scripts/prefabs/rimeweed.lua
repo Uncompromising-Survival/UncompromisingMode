@@ -379,7 +379,9 @@ end
 
 local function MainDie(inst)
 	inst:AddTag("dead")
-	
+	if inst.fx then
+		inst.fx:Remove()
+	end
 	if #inst.bramble > 0 then
 		for i,v in ipairs(inst.bramble) do
 			if v.components.health and not v.components.health:IsDead() then
@@ -545,7 +547,7 @@ end
 
 
 local function Coof(inst)
-	if inst.stage >= 3 then
+	if inst.stage >= 3 and inst.components.health and not inst.components.health:IsDead() then
 		inst.AnimState:PlayAnimation("flower_2_cough")
 		if not inst.fx then
 			inst.fx = SpawnPrefab("deer_ice_flakes")
