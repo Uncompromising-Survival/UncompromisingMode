@@ -132,7 +132,7 @@ local function OnLoadPostPass(inst, newents, savedata)
             inst.snaildrake_magma = newents[savedata.snaildrake_magma].entity
             InitializeSnaildrake(inst, inst.snaildrake_magma)
         end
-        if savedata.snaildrake_slime and newents and newents[savedata.snaildrake_magma] and newents[savedata.snaildrake_magma].entity then
+        if savedata.snaildrake_slime and newents and newents[savedata.snaildrake_slime] and newents[savedata.snaildrake_slime].entity then
             inst.snaildrake_slime = newents[savedata.snaildrake_slime].entity
             InitializeSnaildrake(inst, inst.snaildrake_slime)
         end
