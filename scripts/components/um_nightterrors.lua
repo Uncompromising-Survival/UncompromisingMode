@@ -596,7 +596,7 @@ return Class(function(self, inst)
 		SpawnShadowWanda = { weight = .5, character = "um_shadow_wanda", level = 1 },
 		SpawnShadowWathgrithr = { weight = .5, character = "swathgrithr", level = 2 },
 		SpawnShadowWes = { weight = .5, character = "um_shadow_wes", level = 1 },
-		SpawnShadowWendy = { weight = .5, character = "um_shadow_wendy", level = 1 },
+		--SpawnShadowWendy = { weight = .5, character = "um_shadow_wendy", level = 1 },
 	}
 
 	for k, v in pairs(HARASSMENT) do
