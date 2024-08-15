@@ -169,7 +169,7 @@ local function GetOffset(inst)
 end
 
 local function AddEyeTentacle2(inst)
-	if inst.boatvictim then
+	if inst.boatvictim and inst.boatvictim:IsValid() then
 		local tent = SpawnPrefab("um_ocupus_eyetacle")
 		tent.core = inst
 		local x,y,z = inst.boatvictim.Transform:GetWorldPosition()
