@@ -1,4 +1,4 @@
-local umss_tables = require("umss_tables")
+local umss_tables = require("map/misc_tools/umss_tables")
 -- Reworked tables, place them in umss_tables.lua
 -- may make them write themselves there now.
 -- reference with

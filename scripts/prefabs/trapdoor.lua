@@ -204,6 +204,14 @@ local function fn1()
     return inst
 end
 
+
+local function ApplyHooded(inst,child)
+	if child then
+		child.hooded = true
+		child.AnimState:SetBuild("spider_trapdoor_hooded")
+	end
+end
+
 local function fn2()
     local inst = CreateEntity()
 
@@ -248,7 +256,7 @@ local function fn2()
             inst.components.childspawner:SetMaxChildren(1)
             inst.components.childspawner:StartRegen()
         end
-
+		inst.components.childspawner:SetSpawnedFn(ApplyHooded)
         -------------------------
         -------------------------
         inst:AddComponent("playerprox")
@@ -257,15 +265,7 @@ local function fn2()
         inst.components.playerprox:SetPlayerAliveMode(
             inst.components.playerprox.AliveModes.AliveOnly)
     end
-    -------------------------
-    -- inst:AddComponent("combat")
-    -- wasp hive should trigger on proximity, release wasps.
-    -- inst.components.combat:SetOnHit(onhitbyplayer)
-    -- inst:ListenForEvent("death", OnKilled)
-    -------------------------
 
-    MakeSnowCovered(inst)
-    -------------------------
     inst:AddComponent("inspectable")
 
     inst:AddComponent("hauntable")
@@ -281,24 +281,12 @@ local function fn2()
     inst.components.workable:SetWorkLeft(TUNING.ROCKS_MINE)
 
     inst.components.workable:SetOnWorkCallback(workcallback)
-    --[[if not inst:HasTag("finishedgrass") then
-		inst:DoTaskInTime(0, function(inst)
-		-- Spawn Trapdoor Grass
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local grasschance = math.random()
-			if grasschance > 0.25 then
-			local grassycover = SpawnPrefab("trapdoorgrass")
-			grassycover.Transform:SetPosition(x, y, z)
-			--inst:AddChild(grassycover)
-			end
-			inst:AddTag("finishedgrass")
-		end)
-	end]]
     inst.AnimState:SetLayer(LAYER_WORLD_BACKGROUND)
 
     inst.SummonChildren = SummonChildren
-    -- inst.AnimState:SetSortOrder(1)
 
+	
+	
     MakeMediumPropagator(inst)
     inst:DoTaskInTime(0, Init)
 

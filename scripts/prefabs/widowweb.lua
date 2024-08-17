@@ -87,9 +87,7 @@ local function fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
-	inst.MiniMapEntity:SetIcon("hoodedwidow_map.tex")
 
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")

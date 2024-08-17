@@ -452,6 +452,20 @@ local function create_common(build)
     inst:ListenForEvent("startleashing", OnStartLeashing)
     inst:ListenForEvent("stopleashing", OnStopLeashing)
 	
+	-- "Hooded" variant of trapdoor spider
+	inst.OnSave = function(inst,data)
+		if inst.hooded then
+			data.hooded = inst.hooded
+			return data
+		end
+	end	
+	inst.OnLoad = function(inst,data)
+		if data and data.hooded then
+			inst.hooded = data.hooded
+			inst.AnimState:SetBuild("spider_trapdoor_hooded")
+		end
+	end
+	
     return inst
 end
 

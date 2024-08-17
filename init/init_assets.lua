@@ -903,7 +903,8 @@ Assets = {
 	Asset("ANIM", "anim/toadling.zip"),
 
 	Asset("ANIM", "anim/spider_trapdoor.zip"),
-
+	Asset("ANIM", "anim/spider_trapdoor_hooded.zip"),
+	
 	Asset("ANIM", "anim/pied_piper.zip"),
 
 	Asset("ANIM", "anim/uncompromising_packrat_water.zip"),
@@ -2439,9 +2440,13 @@ Assets = {
 
 
 
-	Asset("IMAGE", "images/map_icons/hoodedwidow_map.tex"),
-	Asset("ATLAS", "images/map_icons/hoodedwidow_map.xml"),
-
+	Asset("IMAGE", "images/map_icons/webbedcreature_small_minimap.tex"),
+	Asset("ATLAS", "images/map_icons/webbedcreature_small_minimap.xml"),
+	Asset("IMAGE", "images/map_icons/webbedcreature_medium_minimap.tex"),
+	Asset("ATLAS", "images/map_icons/webbedcreature_medium_minimap.xml"),
+	Asset("IMAGE", "images/map_icons/webbedcreature_large_minimap.tex"),
+	Asset("ATLAS", "images/map_icons/webbedcreature_large_minimap.xml"),	
+	
 	Asset("IMAGE", "images/map_icons/pollenmiteden_map.tex"),
 	Asset("ATLAS", "images/map_icons/pollenmiteden_map.xml"),
 

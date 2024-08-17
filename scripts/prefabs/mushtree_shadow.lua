@@ -23,6 +23,7 @@ local data =
 local function onsave(inst, data)
     data.stump = inst:HasTag("stump") or nil
 	data.scale = inst.scale
+	data.direction = inst.direction
 end
 
 local function swapbuild(inst, build)
@@ -268,8 +269,17 @@ local function maketree(name, data, state)
 			if not inst.scale then
 				inst.scale = math.random(10,17)/10
 			end
+			if not inst.direction then
+				if math.random() > 0.5 then
+					inst.direction = 1
+				else
+					inst.direction = -1
+				end
+			end
 			inst.Transform:SetScale(inst.scale,inst.scale,inst.scale)
+			inst.AnimState:SetScale(inst.direction, 1, 1)
 		end)
+		
         if state == "stump" then
             makestump(inst)
         else

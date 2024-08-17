@@ -368,7 +368,14 @@ local function webbingfn()
         end
     end)
 
-    --inst:DoPeriodicTask(3,function(inst) if inst.components.health ~= nil then inst.components.health:DoDelta(-5) end end)
+	inst:AddComponent("timer")
+	if not inst.components.timer:TimerExists("kill_web") then
+		inst.components.timer:StartTimer("kill_web",8*60*5) -- Auto break in 5 Days
+	end
+	
+	inst:ListenForEvent("timerdone",function(inst) if inst.components.health and not inst.components.health:IsDead() then inst.components.health:Kill() end end)
+	
+	
     return inst
 end
 

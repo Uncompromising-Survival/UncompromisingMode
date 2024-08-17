@@ -1,4 +1,3 @@
-
 AddTile("HOODEDFOREST", -- tile_name 1
     "LAND",             -- tile_range 2
     {

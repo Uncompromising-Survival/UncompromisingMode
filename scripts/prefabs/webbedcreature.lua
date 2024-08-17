@@ -14,7 +14,8 @@ local function SetSmall(inst)
 		inst:RemoveTag("largecocoon")
 	end
 	inst:AddTag("smallcocoon")
-
+	inst.MiniMapEntity:SetIcon("webbedcreature_small_minimap.tex")
+	
 	inst.AnimState:SetBank("wackycocoonsmall")
 	inst.AnimState:SetBuild("wackycocoonsmall")
 	inst.DynamicShadow:SetSize(3.5, 2.5)
@@ -37,7 +38,8 @@ local function SetMedium(inst)
 		inst:RemoveTag("largecocoon")
 	end
 	inst:AddTag("mediumcocoon")
-
+	inst.MiniMapEntity:SetIcon("webbedcreature_medium_minimap.tex")
+	
 	inst.DynamicShadow:SetSize(4, 3.5)
 	inst.components.lootdropper:AddChanceLoot("silk", 1.00)
 	inst.components.lootdropper:AddChanceLoot("silk", 1.00)
@@ -60,7 +62,7 @@ local function SetLarge(inst)
 		inst:RemoveTag("mediumcocoon")
 	end
 	inst:AddTag("largecocoon")
-
+	inst.MiniMapEntity:SetIcon("webbedcreature_large_minimap.tex")
 	inst.DynamicShadow:SetSize(5, 4)
 	inst.components.lootdropper:AddChanceLoot("silk", 1.00)
 	inst.components.lootdropper:AddChanceLoot("silk", 1.00)
@@ -413,9 +415,11 @@ local function fn()
 	inst.entity:AddNetwork()
 	inst.entity:AddDynamicShadow()
 	inst.entity:AddSoundEmitter()
-
-	--MakeObstaclePhysics(inst, .5)
-
+	inst.entity:AddMiniMapEntity()
+	
+	
+	--inst.MiniMapEntity:SetIcon("hoodedwidow_map.tex")
+	
 	inst.AnimState:SetBank("wackycocoons")
 	inst.AnimState:SetBuild("wackycocoons")
 	inst.AnimState:PlayAnimation("idle_small", true)

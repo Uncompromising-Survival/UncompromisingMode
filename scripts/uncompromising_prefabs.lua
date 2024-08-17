@@ -297,7 +297,7 @@ local prefabs = {
 	"tiddlestranger_rne",
 	"rne_goodiebag",
 
-	"backupcatcoonden",
+
 	--"moon_deerclops",
 	"um_books",
 	"rain_horn",
