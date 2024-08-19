@@ -63,7 +63,7 @@ STRINGS.VETS_TITLE = "The Veterans Curse."
 STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nYour body will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
 STRINGS.VETS_OK = "Ok"
 
-STRINGS.UI.CRAFTING.NEEDSVETERANSHRINE_ONE = "Require's something... darker."
+STRINGS.UI.CRAFTING.NEEDSVETERANSHRINE_ONE = "Requires something... darker."
 
 STRINGS.VETSKULL_TITLE = "The Veterans Skull"
 STRINGS.VETSKULL = {

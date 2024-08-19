@@ -212,7 +212,15 @@ local function SummonFriends(inst, attacker)
     end
 end
 
+local function FruitBatRetreat(inst)
+	inst.fruitbat_panic = true
+	inst:DoTaskInTime(60, function(inst) inst.fruitbat_panic = false end) -- Hide away for a minute.
+end
+
 local function OnAttacked(inst, data)
+	if data.attacker:HasTag("fruitbat") then
+		FruitBatRetreat(inst)
+	end
     inst.components.combat:SetTarget(data.attacker)
     inst.components.combat:ShareTarget(data.attacker, 30, function(dude)
         return dude:HasTag("spider")

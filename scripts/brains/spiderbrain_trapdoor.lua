@@ -113,6 +113,8 @@ local function CheckForWebber(itsame)
 	return false
 end
 
+
+
 function SpiderBrain_TrapDoor:OnStart()
     local root =
         PriorityNode(
@@ -120,8 +122,11 @@ function SpiderBrain_TrapDoor:OnStart()
             BrainCommon.PanicWhenScared(self.inst, .3),
             WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
             WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
-            IfNode(function() return self.inst:HasTag("spider_hider") end, "IsHider",
-                UseShield(self.inst, DAMAGE_UNTIL_SHIELD, SHIELD_TIME, AVOID_PROJECTILE_ATTACKS, HIDE_WHEN_SCARED)),
+			
+			
+			-- If being mauled by fruit bats, retreat! 
+			WhileNode(function() return self.inst.fruitbat_panic end, "OhShitBats",
+                    DoAction(self.inst, function() return GoHomeAction(self.inst) end ) ),
             
 			IfNode(function() return not self.inst.bedazzled and self.inst.components.follower.leader == nil end, "AttackWall",
 				AttackWall(self.inst)),

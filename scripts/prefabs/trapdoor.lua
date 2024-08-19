@@ -1,16 +1,18 @@
 SetSharedLootTable('trapdoor',
                    {{'rocks', 1.00}, {'rocks', 1.00}, {'rocks', 1.00}})
 
+
+local function FruitBatNearby(inst)
+	return FindEntity(inst,20,nil,{"fruitbat"})
+end
+
 local function onnear(inst, target)
-    if inst.components.childspawner ~= nil then
-        if not TheWorld.state.iswinter then
-            if target:HasTag("spiderwhisperer") or
-                target:HasTag("spiderdisguise") then
-                inst.components.childspawner:ReleaseAllChildren(nil,
-                                                                "spider_trapdoor")
+    if inst.components.childspawner then
+        if not TheWorld.state.iswinter and not FruitBatNearby(inst) then
+            if target:HasTag("spiderwhisperer") or target:HasTag("spiderdisguise") then
+                inst.components.childspawner:ReleaseAllChildren(nil, "spider_trapdoor")
             else
-                inst.components.childspawner:ReleaseAllChildren(target,
-                                                                "spider_trapdoor")
+                inst.components.childspawner:ReleaseAllChildren(target, "spider_trapdoor")
             end
         end
     end
@@ -35,10 +37,21 @@ local function OnHaunt(inst)
     return false
 end
 
-local function OpenMound(inst)
+local function ApplyHooded(inst,child)
+	if child then
+		child.hooded = true
+		child.AnimState:SetBuild("spider_trapdoor_hooded")
+		child.components.lootdropper:AddChanceLoot("silk", 1.00)
+	end
+end
+
+local function OpenMound(inst,child)
     inst.AnimState:PlayAnimation("idle_flipped")
     inst.AnimState:PushAnimation("flip_close")
     inst.AnimState:PushAnimation("idle")
+	if inst.prefab == "hoodedtrapdoor" and child and not child.hooded then -- If a hooded trapdoor make it a hooded trapdoor spider
+		ApplyHooded(inst,child)
+	end
 end
 
 local function CloseMound(inst)
@@ -167,7 +180,7 @@ local function fn1()
     inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
     local startrandomtest = math.random()
     inst.components.childspawner:StopRegen()
-    if startrandomtest >= 0.75 then
+    if startrandomtest >= 0 then -- Guaranteed
         inst.components.childspawner:SetMaxChildren(1)
         inst.components.childspawner:StartRegen()
     end
@@ -205,12 +218,7 @@ local function fn1()
 end
 
 
-local function ApplyHooded(inst,child)
-	if child then
-		child.hooded = true
-		child.AnimState:SetBuild("spider_trapdoor_hooded")
-	end
-end
+
 
 local function fn2()
     local inst = CreateEntity()
@@ -252,11 +260,10 @@ local function fn2()
         inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
         local startrandomtest = math.random()
         inst.components.childspawner:StopRegen()
-        if startrandomtest >= 0.75 then
+        if startrandomtest >= 0.25 then
             inst.components.childspawner:SetMaxChildren(1)
             inst.components.childspawner:StartRegen()
         end
-		inst.components.childspawner:SetSpawnedFn(ApplyHooded)
         -------------------------
         -------------------------
         inst:AddComponent("playerprox")

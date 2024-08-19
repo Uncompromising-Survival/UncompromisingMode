@@ -69,7 +69,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     data.target
                 )
             else
-				if inst.prefab == "spider_trapdoor" and not inst.web_cd then -- Trapdoor spider web attack
+				if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
 					return inst.sg:GoToState("spit_web")
 				else
 					_OldAttackEvent(inst, data)

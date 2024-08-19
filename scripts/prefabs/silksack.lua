@@ -138,6 +138,7 @@ local function fn()
     inst.foleysound = "dontstarve/movement/foley/backpack"
 
     inst:AddTag("backpack")
+    inst:AddTag("pocketbackpack")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
 
@@ -159,7 +160,6 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/silksack.xml"
-    --inst.components.inventoryitem:SetOnPutInInventoryFn(Folded)
 
     inst:ListenForEvent("itemlose", OnContainerChanged)
     inst:ListenForEvent("itemget", OnContainerChanged)
@@ -178,11 +178,11 @@ local function fn()
     inst.components.waterproofer:SetEffectiveness(0)
 
     inst:AddComponent("container")
+    inst.components.container.itemtestfn = function(container, item)
+        return true--container.inst.components.equippable.isequipped or not container:IsEmpty()
+    end
     inst.components.container:WidgetSetup("silksack")
 
-    inst.components.container.itemtestfn = function(container, item, slot)
-        return container.inst.components.equippable.isequipped or not container.components.container:IsEmpty()
-    end
 
     MakeHauntableLaunchAndDropFirstItem(inst)
 
@@ -190,6 +190,7 @@ local function fn()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", OnTimerDone)
+
 
     return inst
 end
