@@ -180,7 +180,7 @@ local function fn1()
     inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
     local startrandomtest = math.random()
     inst.components.childspawner:StopRegen()
-    if startrandomtest >= 0 then -- Guaranteed
+    if startrandomtest >= 0.75 then 
         inst.components.childspawner:SetMaxChildren(1)
         inst.components.childspawner:StartRegen()
     end
@@ -260,7 +260,7 @@ local function fn2()
         inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
         local startrandomtest = math.random()
         inst.components.childspawner:StopRegen()
-        if startrandomtest >= 0.25 then
+        if startrandomtest >= 0 then -- Guaranteed
             inst.components.childspawner:SetMaxChildren(1)
             inst.components.childspawner:StartRegen()
         end
