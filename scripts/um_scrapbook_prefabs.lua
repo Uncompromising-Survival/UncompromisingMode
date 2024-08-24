@@ -128,6 +128,7 @@ local PREFABS =
     ["um_magnerang"] = true,
     ["hat_opossummask"] = true,
     ["cctrinket_jazzy"] = true,
+	["cctrinket_names"] = true,
     ["eyeofterror_mini_ally"] = true,
     ["sunkenchest_royal_yellow"] = true,
     ["zaspberryparfait"] = true,
