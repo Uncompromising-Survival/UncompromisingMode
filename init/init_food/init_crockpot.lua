@@ -180,6 +180,8 @@ end
 
 -- Meats
 
+
+
 recipes.lobsterbisque.test = function(cooker, names, tags)
     return names.wobster_sheller_land and tags.frozen and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
@@ -285,9 +287,9 @@ recipes.bunnystew.test = function(cooker, names, tags)
 end
 -- Original: test = function(cooker, names, tags) return (tags.meat and tags.meat < 1) and (tags.frozen and tags.frozen >= 2) and (not tags.inedible) end
 if GetModConfigData("bonestew_nerf") then
-    recipes.bonestew.test = function(cooker, names, tags)
-        return tags.meat and tags.meat >= 3.5 and not tags.inedible
-    end
+	recipes.bonestew.test = function(cooker, names, tags)
+		return tags.meat and tags.meat >= 3 and names.boneshard
+	end
 end
 -- Original: test = function(cooker, names, tags) return tags.meat and tags.meat >= 3 and not tags.inedible end,
 
