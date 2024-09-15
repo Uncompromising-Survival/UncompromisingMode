@@ -146,7 +146,7 @@ local function MakeShadowCreature(data)
         if not TheWorld.ismastersim then
             return inst
         end
-		
+		inst.HostileToPlayerTest = true
         inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
 	    inst.components.locomotor:SetTriggersCreep(false)
         inst.components.locomotor.pathcaps = { ignorecreep = true }

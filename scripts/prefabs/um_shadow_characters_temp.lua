@@ -112,6 +112,7 @@ local function fn()
 	if not TheWorld.ismastersim then
         return inst
     end
+	inst.HostileToPlayerTest = true
 	inst.AnimState:HideSymbol("face")
 	inst.AnimState:SetBank("wilson")
 	inst.AnimState:SetMultColour(0, 0, 0, 0.6)

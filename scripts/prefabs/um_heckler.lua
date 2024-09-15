@@ -203,7 +203,7 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	
+	inst.HostileToPlayerTest = function() return true end
     inst.sounds = sounds
 
     inst:AddComponent("locomotor")

@@ -98,7 +98,7 @@ local function fn(Sim)
 	if not TheWorld.ismastersim then
         return inst
     end
-	
+	inst.HostileToPlayerTest = function() return true end
 	inst.old_fire_num = 1
 	inst.fire_num = 1
 	inst.level = 0
