@@ -406,6 +406,27 @@ if TUNING.DSTU.SEEDS then
 	end)
 end
 
+local barnsushi = {
+	"barnaclesushi",
+	"barnaclesushi_spice_chili",
+	"barnaclesushi_spice_garlic",
+	"barnaclesushi_spice_salt",
+	"barnaclesushi_spice_sugar"
+}
+
+
+for k, v in pairs(barnsushi) do
+	AddPrefabPostInit(
+		v,
+		function(inst)
+			if inst ~= nil and inst.components.edible ~= nil then
+				inst.components.edible.sanityvalue = 15
+			end
+		end
+	)
+end
+
+
 --sailing rebalanced related foood cahnges
 if GetModConfigData("sr_foodrebalance") then
 	local faf = GLOBAL.KnownModIndex:IsModEnabled("workshop-1908933602")

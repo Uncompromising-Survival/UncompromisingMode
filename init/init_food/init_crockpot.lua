@@ -603,10 +603,6 @@ end
 --sailing rebalance related food changes.
 
 if GetModConfigData("sr_foodrebalance") then
-    recipes.barnaclesushi.test = function(cooker, names, tags)
-        return (names.barnacle or names.barnacle_cooked) and (names.kelp or names.kelp_cooked) and
-            UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
-    end
     -- Original:	test = function(cooker, names, tags) return (names.barnacle or names.barnacle_cooked) and (names.kelp or names.kelp_cooked) and tags.egg and tags.egg >= 1
     recipes.surfnturf.test = function(cooker, names, tags)
         return tags.meat and tags.meat >= 2.5 and tags.fish and tags.fish >= 2.0 and not tags.frozen
