@@ -288,7 +288,7 @@ end
 -- Original: test = function(cooker, names, tags) return (tags.meat and tags.meat < 1) and (tags.frozen and tags.frozen >= 2) and (not tags.inedible) end
 if GetModConfigData("bonestew_nerf") then
 	recipes.bonestew.test = function(cooker, names, tags)
-		return tags.meat and tags.meat >= 3 and names.boneshard
+		return tags.meat and tags.meat >= 3 and names.boneshard and not (tags.monster and tags.monster > 2)
 	end
 end
 -- Original: test = function(cooker, names, tags) return tags.meat and tags.meat >= 3 and not tags.inedible end,
