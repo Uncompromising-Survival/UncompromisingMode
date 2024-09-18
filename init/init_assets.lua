@@ -1466,6 +1466,8 @@ Assets = {
 	Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
 	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
 	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),	
+	Asset("ANIM", "anim/smogquito_build.zip"),
+	Asset("ANIM", "anim/smogquito_nest_build.zip"),
 	
 	Asset("ANIM", "anim/berniebox.zip"),
 

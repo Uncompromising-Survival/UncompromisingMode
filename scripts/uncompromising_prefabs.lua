@@ -563,7 +563,8 @@ local prefabs = {
 	"zaspberry_plant",
 	"um_blowdart_rime",
 	"um_armor_bramble_rimeweed",
-	
+	"smogquito",
+	"smogquito_nest",
 	--"coffbee",
 }
 

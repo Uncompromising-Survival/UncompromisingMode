@@ -4,6 +4,8 @@
 --------------------------------------------------------------------------
 local easing = require("easing")
 
+
+
 --------------------------------------------------------------------------
 --[[ UM_Heatwaves class definition ]]
 --------------------------------------------------------------------------
@@ -13,7 +15,7 @@ return Class(function(self, inst)
     local _worldsettingstimer = TheWorld.components.worldsettingstimer
     local UM_HEATWAVE_TIMERNAME = "um_heatwave_timer"
     local UM_STOPHEATWAVE_TIMERNAME = "um_stopheatwave_timer"
-
+	local UM_SMOGQUITO_TIMERNAME = "um_smogquito_timer"
     --------------------------------------------------------------------------
     --[[ Public Member Variables ]]
     --------------------------------------------------------------------------
@@ -24,7 +26,7 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Private Member Variables ]]
     --------------------------------------------------------------------------
-
+	local _smogquitobasetime =  TUNING.TOTAL_DAY_TIME / 12 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
     local _storming = false
     local _spawninterval = TUNING.TOTAL_DAY_TIME * 3
     local _despawninterval = TUNING.TOTAL_DAY_TIME / 2
@@ -32,6 +34,40 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Private member functions ]]
     --------------------------------------------------------------------------
+	
+	--[[ Smogquito Functions ]]
+	local function SpawnSmogquito(plant)
+		local smog_nest = SpawnPrefab("smogquito_nest")
+		local x,y,z = plant.Transform:GetWorldPosition()
+		smog_nest.Transform:SetPosition(x,0,z)
+		smog_nest.components.growable:SetStage(2)
+		plant:Remove()
+	end
+
+	local function SpawnSmogquitos()
+		--TheNet:Announce("trying to spawn rimeweeds")
+		local trees = {}
+
+		for i,ent in pairs(Ents) do
+			if ent:HasTag("tree") then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
+				table.insert(trees,ent)
+			end
+		end
+		
+		if #trees > 0 then
+			local rnd = math.random(1,#trees)
+			SpawnSmogquito(trees[rnd])
+			table.remove(trees,rnd)
+			
+			local rnd = math.random(1,#trees)
+			SpawnSmogquito(trees[rnd])
+			table.remove(trees,rnd)
+		end
+		
+		if _worldsettingstimer:GetTimeLeft(UM_STOPHEATWAVE_TIMERNAME) then
+			_worldsettingstimer:StartTimer(UM_SMOGQUITO_TIMERNAME, _smogquitobasetime + math.random(0, 30))
+		end
+	end
 
     local function StopHeatwave()
         _storming = false
@@ -47,7 +83,9 @@ return Class(function(self, inst)
         if _worldsettingstimer:GetTimeLeft(UM_HEATWAVE_TIMERNAME) == nil then
             _worldsettingstimer:StartTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120))
         end
-
+		
+		_worldsettingstimer:StopTimer(UM_SMOGQUITO_TIMERNAME)
+		
         _worldsettingstimer:ResumeTimer(UM_HEATWAVE_TIMERNAME)
     end
 
@@ -71,6 +109,7 @@ return Class(function(self, inst)
             -- self.old_temp = TheWorld.state.temperature
             -- TheWorld.state.temperature = TheWorld.state.temperature * 2
             _worldsettingstimer:StartTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120))
+			_worldsettingstimer:StartTimer(UM_SMOGQUITO_TIMERNAME, _smogquitobasetime+math.random(0,30))
         end)
     end
 
@@ -87,6 +126,7 @@ return Class(function(self, inst)
     local function StopHeatWaves()
         _worldsettingstimer:StopTimer(UM_HEATWAVE_TIMERNAME)
         _worldsettingstimer:StopTimer(UM_STOPHEATWAVE_TIMERNAME)
+		_worldsettingstimer:StopTimer(UM_SMOGQUITO_TIMERNAME)
     end
 
     --------------------------------------------------------------------------
@@ -148,7 +188,11 @@ return Class(function(self, inst)
         _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
         _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
             StopHeatwave)
-
+				
+		if not _worldsettingstimer:ActiveTimerExists(UM_SMOGQUITO_TIMERNAME) then
+			_worldsettingstimer:AddTimer(UM_SMOGQUITO_TIMERNAME, _smogquitobasetime+math.random(0,30), true, SpawnSmogquitos)
+		end
+		
         OnSeasonChange()
     end
 
