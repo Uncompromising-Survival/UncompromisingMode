@@ -585,6 +585,37 @@ local um_preparedfoods =
             end
         end,
     },
+    um_durian_cream_marshcake =
+    {
+        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and not tags.inedible end,
+        hunger = 75,
+        health = 12,
+        sanity = 15,
+        priority = 51,
+        weight = 1,
+        cooktime = 2,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 } } },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
+        oneatenfn = function(inst, eater)
+            if eater and eater.components.health and eater.components.sanity then
+				if TheWorld then
+					if TheWorld.state.isssummer then
+						eater.components.health:DoDelta(6,true)
+						eater.components.sanity:DoDelta(20,true)
+					elseif TheWorld.state.isautumn then
+						eater.components.health:DoDelta(12,true)
+						eater.components.sanity:DoDelta(40,true)
+					elseif TheWorld.state.iswinter then
+						eater.components.health:DoDelta(18,true)
+						eater.components.sanity:DoDelta(60,true)
+					end
+				end
+			end
+        end,
+    },
 }
 
 for k, v in pairs(um_preparedfoods) do

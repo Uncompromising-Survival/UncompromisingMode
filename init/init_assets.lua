@@ -388,6 +388,9 @@ local inventoryitems =
 	-- Lava Caves
 	"gloomcap",
 	"gloomcap_cooked",
+	
+	-- Misc from this update
+	"um_durian_cream_marshcake",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1462,6 +1465,7 @@ Assets = {
 	Asset("ANIM", "anim/hardshelltacos.zip"),
 	Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
 	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
+	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),	
 	
 	Asset("ANIM", "anim/berniebox.zip"),
 
@@ -2053,6 +2057,8 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/um_rimeweed_tequila.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_rimeweed_tequila.xml"),
 
+	Asset("IMAGE", "images/inventoryimages/um_durian_cream_marshcake.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_durian_cream_marshcake.xml"),
 
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/gasmask.xml"),
 	Asset("ATLAS", "images/inventoryimages/gasmask.xml"),

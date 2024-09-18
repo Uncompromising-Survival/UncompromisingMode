@@ -134,7 +134,11 @@ local function grass(name, stage)
         MakeHauntableIgnite(inst)
 		inst.recentlypassed = false
         ---------------------
-
+		local multcolour = 0.5
+		if 0 <= multcolour and multcolour < 1 then
+			local colour = multcolour + math.random() * (1.0 - multcolour)
+			inst.AnimState:SetMultColour(colour, colour, colour, 1)
+		end
 
         return inst
     end

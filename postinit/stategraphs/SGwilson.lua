@@ -112,38 +112,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         if equip ~= nil and target ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
 			inst.components.combat:DoNaughtAttack(target)
         end
-        --[[
-        local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        local dist = target ~= nil and
-            distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) or false
-
-        if equip ~= nil and dist then
-            local damage = equip.components.weapon ~= nil and equip.components.weapon:GetDamage(inst, target)
-            local damagemult = inst.components.combat.damagemultiplier ~= nil and inst.components.combat
-                .damagemultiplier
-                or 1
-            local damagemultex = inst.components.combat.externaldamagemultipliers ~= nil and
-                inst.components.combat.externaldamagemultipliers:Get() or 1
-
-            local damagecalc = ((damage / 2) * damagemult) * damagemultex
-
-            if target ~= nil and inst.sg:HasStateTag("attack") then
-                local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-
-                if equip ~= nil then
-                    if equip.prefab == "pocketwatch_weapon" and equip.components.fueled ~= nil and
-                        not equip.components.fueled:IsEmpty() then
-                        equip.components.fueled:DoDelta(TUNING.TINY_FUEL)
-                    end
-
-                    equip.components.weapon:OnAttack_NoDurabilityLoss(inst, target)
-                end
-
-                if target.components.combat ~= nil then
-                    target.components.combat:GetAttacked(inst, damagecalc, equip)
-                end
-            end
-        end]]
     end
 
 
@@ -314,7 +282,385 @@ env.AddStategraphPostInit("wilson", function(inst)
             _OldDeathEvent(inst, data)
         end
     end
+	
+	
+	local function FindBlueFuncap(inst)
+		local helm = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+		if helm and helm.prefab == "blue_mushroomhat" then
+			return helm
+		end
+	end
+	--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	-- Blue Funcap Changes!
+	
+	-- Build
+	local _OldBuild = inst.actionhandlers[ACTIONS.BUILD].deststate
+    inst.actionhandlers[ACTIONS.BUILD].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				inst.temp_speed_mod = (inst:HasTag("hungrybuilder") and 0.5)
+					or (inst:HasTag("fastbuilder") and 0.05)
+					or (inst:HasTag("slowbuilder") and 2)
+					or 1
+				return "bluecap_general_action"
+			else
+				return _OldBuild(inst, action)
+			end
+        end
+		
+	-- Pick
+	local _OldPick = inst.actionhandlers[ACTIONS.PICK].deststate
+    inst.actionhandlers[ACTIONS.PICK].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				inst.temp_speed_mod = (action.target and action.target:HasTag("noquickpick") and 1) or -- Get Speed Mod
+                (inst:HasTag("farmplantfastpicker") and action.target ~= nil and action.target:HasTag("farm_plant") and 0.7) or
+				(inst.components.rider ~= nil and inst.components.rider:IsRiding() and (
+					(inst:HasTag("woodiequickpicker") and "dowoodiefastpick") or
+					1
+				)) or
+                (
+                    action.target ~= nil and
+                    (action.target.components.pickable ~= nil and
+                    (
+                        (action.target.components.pickable.jostlepick and 1) or
+                        (action.target.components.pickable.quickpick and 1) or
+                        (inst:HasTag("fastpicker") and 0.7) or
+						(inst:HasTag("woodiequickpicker") and 0.7) or
+                        (inst:HasTag("quagmire_fasthands") and 0.7) or
+                        1
+                    )) or
+                    (action.target.components.searchable ~= nil and
+                    (
+                        (action.target.components.searchable.jostlesearch and 1) or
+                        (action.target.components.searchable.quicksearch and 1) or
+                        1
+                    ))
+				)
+				if (action.target.components.pickable ~= nil and ((action.target.components.pickable.jostlepick) or (action.target.components.pickable.quickpick))) or
+					(action.target.components.searchable ~= nil and ((action.target.components.searchable.jostlesearch) or (action.target.components.searchable.quicksearch))) then
+					
+					return "bluecap_fast_action"
+				else
+					return "bluecap_general_action"
+				end
+			else
+				return _OldPick(inst, action)
+			end
+        end
+		
+		
+	-- Pick up
+	local _OldPickup = inst.actionhandlers[ACTIONS.PICKUP].deststate
+    inst.actionhandlers[ACTIONS.PICKUP].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return (inst.components.rider ~= nil and inst.components.rider:IsRiding()
+						and (action.target ~= nil and action.target:HasTag("heavy") and "dodismountaction"
+							or "bluecap_general_action")
+						)
+					or (action.target ~= nil and action.target:HasTag("minigameitem") and "dosilentshortaction")
+					or "bluecap_fast_action"
+			else
+				return _OldPickup(inst, action)
+			end
+        end
+		
+	-- Chop
+	local _OldChop = inst.actionhandlers[ACTIONS.CHOP].deststate
+    inst.actionhandlers[ACTIONS.CHOP].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				if inst:HasTag("beaver") then
+					return "bluecap_gnaw"
+				end
+				return not inst.sg:HasStateTag("prechop")
+					and (inst.sg:HasStateTag("chopping") and
+						"bluecap_chop" or
+						"bluecap_chop_start")
+					or nil
+			else
+				return _OldChop(inst, action)
+			end
+        end
 
+	-- Mine
+	local _OldMine = inst.actionhandlers[ACTIONS.MINE].deststate
+    inst.actionhandlers[ACTIONS.MINE].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				if inst:HasTag("beaver") then
+					return "bluecap_gnaw"
+				end
+				return not inst.sg:HasStateTag("premine")
+					and (inst.sg:HasStateTag("mine") and
+						"bluecap_mine" or
+						"bluecap_mine_start")
+					or nil
+			else
+				return _OldMine(inst, action)
+			end
+        end	
+	
+	-- Hammer
+	local _OldHammer = inst.actionhandlers[ACTIONS.HAMMER].deststate
+    inst.actionhandlers[ACTIONS.HAMMER].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				if inst:HasTag("beaver") then
+					return "bluecap_gnaw"
+				end
+				return not inst.sg:HasStateTag("prehammer")
+					and (inst.sg:HasStateTag("hammering") and
+						"bluecap_hammer" or
+						"bluecap_hammer_start")
+					or nil
+			else
+				return _OldHammer(inst, action)
+			end
+        end	
+		
+	-- Dig
+	local _OldDig = inst.actionhandlers[ACTIONS.DIG].deststate
+    inst.actionhandlers[ACTIONS.DIG].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				if inst:HasTag("beaver") then
+					return "bluecap_gnaw"
+				end
+				return not inst.sg:HasStateTag("predig")
+                and (inst.sg:HasStateTag("digging") and
+                    "bluecap_dig" or
+                    "bluecap_dig_start")
+					or nil
+			else
+				return _OldDig(inst, action)
+			end
+        end	
+		
+	-- Till
+	local _OldTill = inst.actionhandlers[ACTIONS.TILL].deststate
+    inst.actionhandlers[ACTIONS.TILL].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_till_start"
+			else
+				return _OldTill(inst, action)
+			end
+        end	
+
+	-- Terraform
+	local _OldTerraform = inst.actionhandlers[ACTIONS.TERRAFORM].deststate
+    inst.actionhandlers[ACTIONS.TERRAFORM].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_terraform"
+			else
+				return _OldTerraform(inst, action)
+			end
+        end		
+
+	-- Bugnet
+	local _OldBugnet = inst.actionhandlers[ACTIONS.NET].deststate
+    inst.actionhandlers[ACTIONS.NET].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return not inst.sg:HasStateTag("prenet") and (inst.sg:HasStateTag("netting") and "bluecap_bugnet" or "bluecap_bugnet_start") or nil
+			else
+				return _OldBugnet(inst, action)
+			end
+        end	
+		
+	-- Deploy
+	local _OldDeploy = inst.actionhandlers[ACTIONS.DEPLOY].deststate
+    inst.actionhandlers[ACTIONS.DEPLOY].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_fast_action"
+			else
+				return _OldDeploy(inst, action)
+			end
+        end		
+	
+	-- Deploy Tile Arrive
+	local _OldDeploy_TileArrive = inst.actionhandlers[ACTIONS.DEPLOY_TILEARRIVE].deststate
+    inst.actionhandlers[ACTIONS.DEPLOY_TILEARRIVE].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_fast_action"
+			else
+				return _OldDeploy_TileArrive(inst, action)
+			end
+        end		
+		
+	-- Store
+	local _OldStore  = inst.actionhandlers[ACTIONS.STORE].deststate
+    inst.actionhandlers[ACTIONS.STORE].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_fast_action"
+			else
+				return _OldStore(inst, action)
+			end
+        end		
+
+	-- Drop
+	local _OldDrop  = inst.actionhandlers[ACTIONS.DROP].deststate
+    inst.actionhandlers[ACTIONS.DROP].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return inst.components.inventory:IsHeavyLifting()
+					and not inst.components.rider:IsRiding()
+					and "heavylifting_drop"
+					or "bluecap_fast_action"
+			else
+				return _OldDrop(inst, action)
+			end
+        end		
+		
+	-- Row
+	local _OldRow  = inst.actionhandlers[ACTIONS.ROW].deststate
+    inst.actionhandlers[ACTIONS.ROW].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_row"
+			else
+				return _OldRow(inst, action)
+			end
+        end		
+	-- Heal
+	local _OldHeal  = inst.actionhandlers[ACTIONS.HEAL].deststate
+    inst.actionhandlers[ACTIONS.HEAL].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+            if funcap and funcap.charge > 0 then
+				return "bluecap_general_action"
+			else
+				return _OldHeal(inst, action)
+			end
+        end	
+
+	-- Need this for eating state:
+	
+	local function TryResumePocketRummage(inst)
+		local item = inst.sg.mem.pocket_rummage_item
+		if item then
+			if item.components.container and
+				item.components.container:IsOpenedBy(inst) and
+				item.components.inventoryitem and
+				item.components.inventoryitem:GetGrandOwner() == inst
+			then
+				inst.sg.statemem.keep_pocket_rummage_mem_onexit = true
+				inst.sg:GoToState("start_pocket_rummage", item)
+				return true
+			end
+			inst.sg.mem.pocket_rummage_item = nil
+		end
+		return false
+	end
+	--Call this when exiting a "keep_pocket_rummage" state
+	local function CheckPocketRummageMem(inst)
+		local item = inst.sg.mem.pocket_rummage_item
+		if item then
+			if not (item.components.container and
+					item.components.container:IsOpenedBy(inst) and
+					item.components.inventoryitem and
+					item.components.inventoryitem:GetGrandOwner() == inst)
+			then
+				SetPocketRummageMem(inst, nil)
+			else
+				local stayopen = inst.sg.statemem.keep_pocket_rummage_mem_onexit
+				if not stayopen and inst.sg.statemem.is_going_to_action_state then
+					local buffaction = inst:GetBufferedAction()
+					if buffaction and
+						(	buffaction.action == ACTIONS.BUILD or
+							(	buffaction.invobject and
+								buffaction.invobject.components.inventoryitem and
+								buffaction.invobject.components.inventoryitem:IsHeldBy(item)
+							)
+						)
+					then
+						stayopen = true
+					end
+				end
+				if not stayopen then
+					ClosePocketRummageMem(inst)
+				end
+			end
+		end
+	end
+		
+	-- Eat
+	local _OldEat  = inst.actionhandlers[ACTIONS.EAT].deststate
+    inst.actionhandlers[ACTIONS.EAT].deststate =
+        function(inst, action)
+			local funcap = FindBlueFuncap(inst)
+			if funcap and funcap.charge > 0 then
+				if inst.sg:HasStateTag("busy") then
+					return
+				end
+				local obj = action.target or action.invobject
+				if obj == nil then
+					return
+				elseif obj.components.edible ~= nil then
+					if not inst.components.eater:PrefersToEat(obj) then
+						inst:PushEvent("wonteatfood", { food = obj })
+						return
+					end
+				elseif obj.components.soul ~= nil then
+					if inst.components.souleater == nil then
+						inst:PushEvent("wonteatfood", { food = obj })
+						return
+					end
+				else
+					return
+				end
+				return (obj.components.soul ~= nil and "bluecap_eat")
+					or (obj.components.edible.foodtype == FOODTYPE.MEAT and "bluecap_eat")
+					or "bluecap_quickeat"
+			
+			else
+				if inst.sg:HasStateTag("busy") then
+					return
+				end
+				local obj = action.target or action.invobject
+				if obj == nil then
+					return
+				elseif obj.components.edible ~= nil then
+					if not inst.components.eater:PrefersToEat(obj) then
+						inst:PushEvent("wonteatfood", { food = obj })
+						return
+					end
+				elseif obj.components.soul ~= nil then
+					if inst.components.souleater == nil then
+						inst:PushEvent("wonteatfood", { food = obj })
+						return
+					end
+				else
+					return
+				end
+				return (obj.components.soul ~= nil and "eat")
+					or (obj.components.edible.foodtype == FOODTYPE.MEAT and "eat")
+					or "quickeat"
+			end
+        end	
+		
+	--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     local actionhandlers =
     {
         --[[ActionHandler(ACTIONS.CASTSPELL,
@@ -366,7 +712,13 @@ env.AddStategraphPostInit("wilson", function(inst)
             _OldEatState(inst, foodinfo)
         end
     end
-
+	
+	
+	local _dolongaction_onexit = inst.states["dolongaction"].onexit
+    inst.states["dolongaction"].onexit = function(inst)
+		inst.AnimState:SetDeltaTimeMultiplier(1)
+		_dolongaction_onexit(inst)
+    end
 
     local states = {
 
@@ -1157,11 +1509,11 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 --V2C: some of the woodie's were-transforms have shorter hit anims
                 local stun_frames = 160
-                if inst.components.playercontroller ~= nil then
+                --if inst.components.playercontroller ~= nil then
                     --Specify min frames of pause since "busy" tag may be
                     --removed too fast for our network update interval.
-                    inst.components.playercontroller:RemotePausePrediction(stun_frames)
-                end
+                    --inst.components.playercontroller:RemotePausePrediction(stun_frames)
+                --end
                 inst.sg:SetTimeout(stun_frames * FRAMES)
             end,
 
@@ -2315,7 +2667,2150 @@ env.AddStategraphPostInit("wilson", function(inst)
 				end
 			end,
 		},
+		
+		
+		-- Bluecap
+		State{
+			name = "bluecap_general_action",
 
+			onenter = function(inst)
+				local funcap = FindBlueFuncap(inst)
+				local mod = 1
+				if funcap.charge == 12 then
+					mod = 0.2
+				elseif funcap.charge > 6 then
+					mod = 0.4
+				else
+					mod = 0.7
+				end
+				if inst.temp_speed_mod then
+					mod = inst.temp_speed_mod * mod
+					inst.temp_speed_mod = nil
+				end
+				inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+				inst.sg:GoToState("dolongaction", mod)
+			end,
+		},
+		
+    State{
+        name = "bluecap_fast_action",
+		tags = { "doing", "busy", "keepchannelcasting" },
+
+        onenter = function(inst, silent)
+            inst.components.locomotor:Stop()
+            if inst:HasTag("beaver") then
+                inst.AnimState:PlayAnimation("atk_pre")
+                inst.AnimState:PushAnimation("atk", false)
+            else
+                inst.AnimState:PlayAnimation("pickup")
+                inst.AnimState:PushAnimation("pickup_pst", false)
+            end
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 1
+			if funcap.charge == 12 then
+				mod = 0.2
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			else
+				mod = 0.7
+			end
+			if inst.temp_speed_mod then
+				mod = inst.temp_speed_mod * mod
+				inst.temp_speed_mod = nil
+			end
+				
+            inst.sg.statemem.action = inst.bufferedaction
+            inst.sg.statemem.silent = silent
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+            inst.sg:SetTimeout(10 * mod * FRAMES)
+        end,
+
+        ontimeout = function(inst)
+			if inst.sg.statemem.silent then
+				inst.components.talker:IgnoreAll("silentpickup")
+				inst:PerformBufferedAction()
+				inst.components.talker:StopIgnoringAll("silentpickup")
+			else
+				inst:PerformBufferedAction()
+			end
+            inst.sg:GoToState("idle", true)
+        end,
+
+        onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+            if inst.bufferedaction == inst.sg.statemem.action and
+            (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
+                inst:ClearBufferedAction()
+            end
+        end,
+    },
+	
+	-- Bluecap chopping states
+    State{
+        name = "bluecap_chop_start",
+        tags = { "prechop", "working" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation(inst:HasTag("woodcutter") and "woodie_chop_pre" or "chop_pre")
+			inst:AddTag("prechop")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 1
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			else
+				mod = 0.7
+			end
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+        end,
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg.statemem.chopping = true
+                    inst.sg:GoToState("bluecap_chop")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			if not inst.sg.statemem.chopping then
+				inst:RemoveTag("prechop")
+			end
+		end,
+    },
+
+    State{
+        name = "bluecap_chop",
+        tags = { "prechop", "chopping", "working" },
+
+        onenter = function(inst)
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+            inst.sg.statemem.action = inst:GetBufferedAction()
+            inst.sg.statemem.iswoodcutter = inst:HasTag("woodcutter")
+            inst.AnimState:PlayAnimation(inst.sg.statemem.iswoodcutter and "woodie_chop_loop" or "chop_loop")
+			inst:AddTag("prechop")
+			
+			
+		end,
+		timeline =
+        {
+            ----------------------------------------------
+            --Woodcutter chop
+			
+			
+			-- 0.1
+            TimeEvent(2 * FRAMES * 0.1, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(5 * FRAMES * 0.1, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(10 * FRAMES * 0.1, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 and
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(12 * FRAMES * 0.1, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+			
+			-- 0.4
+			TimeEvent(2 * FRAMES * 0.4, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(5 * FRAMES * 0.4, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(10 * FRAMES * 0.4, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 and 
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(12 * FRAMES * 0.4, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+			
+			-- 0.7
+            TimeEvent(2 * FRAMES * 0.7, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(5 * FRAMES * 0.7, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(10 * FRAMES * 0.7, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 and
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(12 * FRAMES * 0.7, function(inst)
+                if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+			
+            ----------------------------------------------
+            --Normal chop
+			
+			-- 0.1
+            TimeEvent(2 * FRAMES * 0.1, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.1, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.1, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 and
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(16 * FRAMES * 0.1, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+			
+			-- 0.4
+            TimeEvent(2 * FRAMES * 0.4, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.4, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.4, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 and
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(16 * FRAMES * 0.4, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+			
+			-- 0.7
+            TimeEvent(2 * FRAMES * 0.7, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst:PerformBufferedAction()
+                end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.7, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst.sg:RemoveStateTag("prechop")
+					inst:RemoveTag("prechop")
+                end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.7, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 and
+                    inst.components.playercontroller ~= nil and
+                    inst.components.playercontroller:IsAnyOfControlsPressed(
+                        CONTROL_PRIMARY,
+                        CONTROL_ACTION,
+                        CONTROL_CONTROLLER_ACTION) and
+                    inst.sg.statemem.action ~= nil and
+                    inst.sg.statemem.action:IsValid() and
+                    inst.sg.statemem.action.target ~= nil and
+                    inst.sg.statemem.action.target.components.workable ~= nil and
+                    inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+                    inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+                    CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+					--No fast-forward when repeat initiated on server
+					inst.sg.statemem.action.options.no_predict_fastforward = true
+                    inst:ClearBufferedAction()
+                    inst:PushBufferedAction(inst.sg.statemem.action)
+                end
+            end),
+
+            TimeEvent(16 * FRAMES * 0.7, function(inst)
+                if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
+                    inst.sg:RemoveStateTag("chopping")
+                end
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    --We don't have a chop_pst animation
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)	
+			inst:RemoveTag("prechop")
+			inst.dyn_anim_mod = nil
+		end,
+    },
+
+	-- Bluecap mining states
+	
+    State{
+        name = "bluecap_mine_start",
+        tags = { "premine", "working" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("pickaxe_pre")
+			inst:AddTag("premine")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 1
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			else
+				mod = 0.7
+			end
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+			
+        end,
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg.statemem.mining = true
+                    inst.sg:GoToState("bluecap_mine")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			if not inst.sg.statemem.mining then
+				inst:RemoveTag("premine")
+			end
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+    },	
+	
+
+    State{
+        name = "bluecap_mine",
+        tags = { "premine", "mining", "working" },
+
+        onenter = function(inst)
+            inst.sg.statemem.action = inst:GetBufferedAction()
+            inst.AnimState:PlayAnimation("pickaxe_loop")
+			inst:AddTag("premine")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+        end,
+
+        timeline =
+        {
+		
+			-- 0.7
+            TimeEvent(7 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.action ~= nil then
+						PlayMiningFX(inst, inst.sg.statemem.action.target)
+					end
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst.sg:RemoveStateTag("premine")
+					inst:RemoveTag("premine")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_PRIMARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(7 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.action ~= nil then
+						PlayMiningFX(inst, inst.sg.statemem.action.target)
+					end
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst.sg:RemoveStateTag("premine")
+					inst:RemoveTag("premine")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_PRIMARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),			
+			
+			
+			-- 0.1
+            TimeEvent(7 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.action ~= nil then
+						PlayMiningFX(inst, inst.sg.statemem.action.target)
+					end
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst.sg:RemoveStateTag("premine")
+					inst:RemoveTag("premine")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_PRIMARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.AnimState:PlayAnimation("pickaxe_pst")
+                    inst.sg:GoToState("idle", true)
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			inst:RemoveTag("premine")
+			inst.dyn_anim_mod = nil
+		end,
+    },
+	
+
+    State{
+        name = "bluecap_hammer_start",
+        tags = { "prehammer", "working" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("pickaxe_pre")
+			inst:AddTag("prehammer")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 1
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			else
+				mod = 0.7
+			end
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+			
+        end,
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg.statemem.hammering = true
+                    inst.sg:GoToState("hammer")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			if not inst.sg.statemem.hammering then
+				inst:RemoveTag("prehammer")
+			end
+		end,
+    },
+
+    State{
+        name = "bluecap_hammer",
+        tags = { "prehammer", "hammering", "working" },
+
+        onenter = function(inst)	
+            inst.sg.statemem.action = inst:GetBufferedAction()
+            inst.AnimState:PlayAnimation("pickaxe_loop")
+			inst:AddTag("prehammer")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+        end,
+
+        timeline =
+        {
+			-- 0.7
+            TimeEvent(7 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod ==  0.7 then
+					inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod ==  0.7 then
+					inst.sg:RemoveStateTag("prehammer")
+					inst:RemoveTag("prehammer")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod ==  0.7 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ALTACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(7 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod ==  0.4 then
+					inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod ==  0.4 then
+					inst.sg:RemoveStateTag("prehammer")
+					inst:RemoveTag("prehammer")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod ==  0.4 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ALTACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),			
+			
+			-- 0.1
+            TimeEvent(7 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod ==  0.1 then
+					inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
+					inst.sg.statemem.recoilstate = "mine_recoil"
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(9 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod ==  0.1 then
+					inst.sg:RemoveStateTag("prehammer")
+					inst:RemoveTag("prehammer")
+				end
+            end),
+
+            TimeEvent(14 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod ==  0.1 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ALTACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),				
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.AnimState:PlayAnimation("pickaxe_pst")
+                    inst.sg:GoToState("idle", true)
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			inst:RemoveTag("prehammer")
+			inst.dyn_anim_mod = nil
+		end,
+    },
+	
+    State{
+        name = "bluecap_dig_start",
+        tags = { "predig", "working" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("shovel_pre")
+			inst:AddTag("predig")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 1
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			else
+				mod = 0.7
+			end
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+        end,
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg.statemem.digging = true
+                    inst.sg:GoToState("bluecap_dig")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			if not inst.sg.statemem.digging then
+				inst:RemoveTag("predig")
+			end
+		end,
+    },
+
+    State{
+        name = "bluecap_dig",
+        tags = { "predig", "digging", "working" },
+
+        onenter = function(inst)
+            inst.AnimState:PlayAnimation("shovel_loop")
+            inst.sg.statemem.action = inst:GetBufferedAction()
+			inst:AddTag("predig")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+        end,
+
+        timeline =
+        {	
+		
+		
+			-- 0.7
+            TimeEvent(15 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst.sg:RemoveStateTag("predig")
+					inst:RemoveTag("predig")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(35 * FRAMES*0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(15 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst.sg:RemoveStateTag("predig")
+					inst:RemoveTag("predig")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(35 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			
+			-- 0.1
+            TimeEvent(15 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst.sg:RemoveStateTag("predig")
+					inst:RemoveTag("predig")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(35 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.components.playercontroller ~= nil and
+						inst.components.playercontroller:IsAnyOfControlsPressed(
+							CONTROL_SECONDARY,
+							CONTROL_ACTION,
+							CONTROL_CONTROLLER_ACTION) and
+						inst.sg.statemem.action ~= nil and
+						inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target:IsActionValid(inst.sg.statemem.action.action, true) and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.AnimState:PlayAnimation("shovel_pst")
+                    inst.sg:GoToState("idle", true)
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			inst:RemoveTag("predig")
+		end,
+    },
+	
+    State{
+        name = "bluecap_till_start",
+        tags = { "doing", "busy" },
+
+        onenter = function(inst)
+	
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+            inst.components.locomotor:Stop()
+			local equippedTool = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			if equippedTool ~= nil and equippedTool.components.tool ~= nil and equippedTool.components.tool:CanDoAction(ACTIONS.DIG) then
+				--upside down tool build
+				inst.AnimState:PlayAnimation("till2_pre")
+			else
+				inst.AnimState:PlayAnimation("till_pre")
+			end
+        end,
+		
+		
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+		
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("bluecap_till")
+                end
+            end),
+        },
+    },
+
+    State{
+        name = "bluecap_till",
+        tags = { "doing", "busy", "tilling" },
+
+        onenter = function(inst)
+		
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+			local equippedTool = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			if equippedTool ~= nil and equippedTool.components.tool ~= nil and equippedTool.components.tool:CanDoAction(ACTIONS.DIG) then
+				--upside down tool build
+				inst.sg.statemem.fliptool = true
+				inst.AnimState:PlayAnimation("till2_loop")
+			else
+				inst.AnimState:PlayAnimation("till_loop")
+			end
+        end,
+
+        timeline =
+        {	
+			-- 0.7
+            TimeEvent(4 * FRAMES * 0.7, function(inst) if inst.dyn_anim_mod == 0.7 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
+            TimeEvent(11 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then 
+					inst:PerformBufferedAction()
+				end
+            end),
+            TimeEvent(12 * FRAMES * 0.7, function(inst) 
+				if inst.dyn_anim_mod == 0.7 then 
+					inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
+				end
+			end),
+            TimeEvent(22 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then 
+					inst.sg:RemoveStateTag("busy")
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(4 * FRAMES * 0.4, function(inst) if inst.dyn_anim_mod == 0.4 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
+            TimeEvent(11 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then 
+					inst:PerformBufferedAction()
+				end
+            end),
+            TimeEvent(12 * FRAMES * 0.4, function(inst) 
+				if inst.dyn_anim_mod == 0.4 then 
+					inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
+				end
+			end),
+            TimeEvent(22 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then 
+					inst.sg:RemoveStateTag("busy")
+				end
+            end),
+			
+			-- 0.1
+            TimeEvent(4 * FRAMES * 0.1, function(inst) if inst.dyn_anim_mod == 0.1 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
+            TimeEvent(11 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then 
+					inst:PerformBufferedAction()
+				end
+            end),
+            TimeEvent(12 * FRAMES * 0.1, function(inst) 
+				if inst.dyn_anim_mod == 0.1 then 
+					inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
+				end
+			end),
+            TimeEvent(22 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then 
+					inst.sg:RemoveStateTag("busy")
+				end
+            end),
+			
+			
+        },
+		
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+		
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.AnimState:PlayAnimation(inst.sg.statemem.fliptool and "till2_pst" or "till_pst")
+                    inst.sg:GoToState("idle", true)
+                end
+            end),
+        },
+    },
+	
+    State{
+        name = "bluecap_gnaw",
+        tags = { "gnawing", "working" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.sg.statemem.action = inst:GetBufferedAction()
+            inst.AnimState:PlayAnimation("atk_pre")
+            inst.AnimState:PushAnimation("atk", false)
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
+			inst:AddTag("gnawing")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+        end,
+
+        timeline =
+        {
+			-- 0.7
+            TimeEvent(6 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.action ~= nil then
+						local target = inst.sg.statemem.action.target
+						if target ~= nil and target:IsValid() then
+							if inst.sg.statemem.action.action == ACTIONS.MINE then
+								inst.sg.statemem.recoilstate = "gnaw_recoil"
+								PlayMiningFX(inst, target)
+							elseif inst.sg.statemem.action.action == ACTIONS.HAMMER then
+								inst.sg.statemem.rmb = true
+								inst.SoundEmitter:PlaySound("dontstarve/wilson/hit")
+							elseif inst.sg.statemem.action.action == ACTIONS.DIG then
+								inst.sg.statemem.rmb = target:HasTag("sign")
+								SpawnPrefab("shovel_dirt").Transform:SetPosition(target.Transform:GetWorldPosition())
+							end
+						end
+					end
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(7 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst.sg:RemoveStateTag("gnawing")
+					inst:RemoveTag("gnawing")
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.action == nil or
+						inst.sg.statemem.action.action == nil or
+						inst.components.playercontroller == nil then
+						return
+					end
+					if inst.sg.statemem.rmb then
+						if not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_SECONDARY,
+								CONTROL_CONTROLLER_ALTACTION) then
+							return
+						end
+					elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_PRIMARY,
+								CONTROL_ACTION,
+								CONTROL_CONTROLLER_ACTION) then
+						return
+					end
+					if inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target.components.workable:GetWorkAction() == inst.sg.statemem.action.action and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			-- 0.4
+            TimeEvent(6 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.action ~= nil then
+						local target = inst.sg.statemem.action.target
+						if target ~= nil and target:IsValid() then
+							if inst.sg.statemem.action.action == ACTIONS.MINE then
+								inst.sg.statemem.recoilstate = "gnaw_recoil"
+								PlayMiningFX(inst, target)
+							elseif inst.sg.statemem.action.action == ACTIONS.HAMMER then
+								inst.sg.statemem.rmb = true
+								inst.SoundEmitter:PlaySound("dontstarve/wilson/hit")
+							elseif inst.sg.statemem.action.action == ACTIONS.DIG then
+								inst.sg.statemem.rmb = target:HasTag("sign")
+								SpawnPrefab("shovel_dirt").Transform:SetPosition(target.Transform:GetWorldPosition())
+							end
+						end
+					end
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(7 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst.sg:RemoveStateTag("gnawing")
+					inst:RemoveTag("gnawing")
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.action == nil or
+						inst.sg.statemem.action.action == nil or
+						inst.components.playercontroller == nil then
+						return
+					end
+					if inst.sg.statemem.rmb then
+						if not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_SECONDARY,
+								CONTROL_CONTROLLER_ALTACTION) then
+							return
+						end
+					elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_PRIMARY,
+								CONTROL_ACTION,
+								CONTROL_CONTROLLER_ACTION) then
+						return
+					end
+					if inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target.components.workable:GetWorkAction() == inst.sg.statemem.action.action and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),
+			-- 0.1
+            TimeEvent(6 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.action ~= nil then
+						local target = inst.sg.statemem.action.target
+						if target ~= nil and target:IsValid() then
+							if inst.sg.statemem.action.action == ACTIONS.MINE then
+								inst.sg.statemem.recoilstate = "gnaw_recoil"
+								PlayMiningFX(inst, target)
+							elseif inst.sg.statemem.action.action == ACTIONS.HAMMER then
+								inst.sg.statemem.rmb = true
+								inst.SoundEmitter:PlaySound("dontstarve/wilson/hit")
+							elseif inst.sg.statemem.action.action == ACTIONS.DIG then
+								inst.sg.statemem.rmb = target:HasTag("sign")
+								SpawnPrefab("shovel_dirt").Transform:SetPosition(target.Transform:GetWorldPosition())
+							end
+						end
+					end
+					inst:PerformBufferedAction()
+				end
+            end),
+
+            TimeEvent(7 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst.sg:RemoveStateTag("gnawing")
+					inst:RemoveTag("gnawing")
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.action == nil or
+						inst.sg.statemem.action.action == nil or
+						inst.components.playercontroller == nil then
+						return
+					end
+					if inst.sg.statemem.rmb then
+						if not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_SECONDARY,
+								CONTROL_CONTROLLER_ALTACTION) then
+							return
+						end
+					elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
+								CONTROL_PRIMARY,
+								CONTROL_ACTION,
+								CONTROL_CONTROLLER_ACTION) then
+						return
+					end
+					if inst.sg.statemem.action:IsValid() and
+						inst.sg.statemem.action.target ~= nil and
+						inst.sg.statemem.action.target.components.workable ~= nil and
+						inst.sg.statemem.action.target.components.workable:CanBeWorked() and
+						inst.sg.statemem.action.target.components.workable:GetWorkAction() == inst.sg.statemem.action.action and
+						CanEntitySeeTarget(inst, inst.sg.statemem.action.target) then
+						--No fast-forward when repeat initiated on server
+						inst.sg.statemem.action.options.no_predict_fastforward = true
+						inst:ClearBufferedAction()
+						inst:PushBufferedAction(inst.sg.statemem.action)
+					end
+				end
+            end),			
+        },
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+			inst:RemoveTag("gnawing")
+		end,
+    },
+
+    State{
+        name = "bluecap_terraform",
+        tags = { "busy" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("shovel_pre")
+            inst.AnimState:PushAnimation("shovel_loop", false)
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+        
+        end,
+
+        timeline =
+        {
+			-- 0.1
+            TimeEvent(25 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("busy")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+				end
+            end),
+			-- 0.4
+            TimeEvent(25 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("busy")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+				end
+            end),
+			-- 0.7
+            TimeEvent(25 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("busy")
+					inst.SoundEmitter:PlaySound("dontstarve/wilson/dig")
+				end
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.AnimState:PlayAnimation("shovel_pst")
+                    inst.sg:GoToState("idle", true)
+                end
+            end),
+        },
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)	
+		end,
+    },
+
+    State{
+        name = "bluecap_bugnet_start",
+        tags = { "prenet", "working", "autopredict" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("bugnet_pre")
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+        end,
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("bluecap_bugnet")
+                end
+            end),
+        },
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+    },
+
+    State{
+        name = "bluecap_bugnet",
+        tags = { "prenet", "netting", "working", "autopredict" },
+
+        onenter = function(inst)
+            inst.AnimState:PlayAnimation("bugnet")
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/use_bugnet", nil, nil, true)
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+        end,
+
+        timeline =
+        {
+			-- 0.1
+            TimeEvent(10*FRAMES*0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					local buffaction = inst:GetBufferedAction()
+					local tool = buffaction ~= nil and buffaction.invobject or nil
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("prenet")
+					inst.SoundEmitter:PlaySound(tool ~= nil and tool.overridebugnetsound or "dontstarve/wilson/dig")
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(10*FRAMES*0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					local buffaction = inst:GetBufferedAction()
+					local tool = buffaction ~= nil and buffaction.invobject or nil
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("prenet")
+					inst.SoundEmitter:PlaySound(tool ~= nil and tool.overridebugnetsound or "dontstarve/wilson/dig")
+				end
+            end),
+
+			-- 0.7
+            TimeEvent(10*FRAMES*0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					local buffaction = inst:GetBufferedAction()
+					local tool = buffaction ~= nil and buffaction.invobject or nil
+					inst:PerformBufferedAction()
+					inst.sg:RemoveStateTag("prenet")
+					inst.SoundEmitter:PlaySound(tool ~= nil and tool.overridebugnetsound or "dontstarve/wilson/dig")
+				end
+            end),			
+        },
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+		
+		onexit = function(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+		end,
+		
+    },
+
+
+	State{
+        name = "bluecap_row",
+        tags = { "rowing", "doing" },
+
+        onenter = function(inst)
+            local locomotor = inst.components.locomotor
+            local target_pos = nil
+            if locomotor.bufferedaction then
+                target_pos = locomotor.bufferedaction:GetActionPoint()
+                if target_pos == nil then
+                    target_pos = locomotor.bufferedaction.target:GetPosition()
+                    inst:ForceFacePoint(target_pos:Get())
+                end
+            else
+                target_pos = Vector3(inst.Transform:GetWorldPosition())
+            end
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+            inst:AddTag("is_rowing")
+            inst.AnimState:PlayAnimation("row_pre")
+            locomotor:Stop()
+
+            local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
+            local boat_x, boat_y, boat_z = 0, 0, 0
+            local boat = inst:GetCurrentPlatform()
+            if boat ~= nil then
+                boat_x, boat_y, boat_z = boat.Transform:GetWorldPosition()
+            end
+
+            -- if is_client then
+                -- inst:PerformPreviewBufferedAction()
+            -- end
+
+            local target_x, target_z = nil,nil
+
+            if inst.components.playercontroller.isclientcontrollerattached then
+                local dir_x, dir_z = VecUtil_Normalize(my_x - boat_x, my_z - boat_z)
+                target_x, target_z = my_x + dir_x, my_z + dir_z
+            else
+                target_x, target_z = target_pos.x, target_pos.z
+            end
+
+            local delta_target_x, delta_target_z = target_x- my_x, target_z - my_z
+            local delta_boat_x, delta_boat_z = my_x - boat_x, my_z - boat_z
+
+            local camera_down_vec = TheCamera:GetDownVec()
+            local camera_right_vec = TheCamera:GetRightVec()
+
+            local camera_up_x, camera_up_z = -camera_down_vec.x, -camera_down_vec.z
+            local camera_right_x, camera_right_z = camera_right_vec.x, camera_right_vec.z
+
+            local delta_target_x_camera, delta_target_z_camera = delta_target_x * camera_right_x + delta_target_z * camera_right_z, delta_target_x * camera_up_x + delta_target_z * camera_up_z
+            local delta_boat_x_camera, delta_boat_z_camera = delta_boat_x * camera_right_x + delta_boat_z * camera_right_z, delta_boat_x * camera_up_x + delta_boat_z * camera_up_z
+
+            local target_anim = "row_medium"
+            local debug_id = ""
+            local is_facing_horizontal = math.abs(delta_target_x_camera) > math.abs(delta_target_z_camera)
+            local is_on_upper_half = delta_boat_z_camera > 0
+            local is_on_right_side = delta_boat_x_camera > 0
+            local is_facing_right = delta_target_x_camera > 0
+            local is_facing_up = delta_target_z_camera > 0
+
+            if is_facing_horizontal then
+                if is_on_upper_half then
+                    if is_facing_right then
+                        target_anim = "row_medium_off"
+                        debug_id = "is_facing_horizontal, is_on_upper_half, is_facing_right"
+                    else
+                        target_anim = "row_medium_off"
+                        debug_id = "is_facing_horizontal, is_on_upper_half, is_facing_left"
+                    end
+                else
+                    if is_facing_right then
+                        target_anim = "row_medium"
+                        debug_id = "is_facing_horizontal, is_on_lower_half, is_facing_right"
+                    else
+                        target_anim = "row_medium"
+                        debug_id = "is_facing_horizontal, is_on_lower_half, is_facing_left"
+                    end
+                end
+            else
+                if is_on_right_side then
+                    if is_facing_up then
+                        target_anim = "row_medium"
+                        debug_id = "is_facing_vertical, is_on_right_side, is_facing_up"
+                    else
+                        target_anim = "row_medium_off"
+                        debug_id = "is_facing_vertical, is_on_right_side, is_facing_down"
+                    end
+                else
+                    if is_facing_up then
+                        target_anim = "row_medium_off"
+                        debug_id = "is_facing_vertical, is_on_left_side, is_facing_up"
+                    else
+                        target_anim = "row_medium"
+                        debug_id = "is_facing_vertical, is_on_left_side, is_facing_down"
+                    end
+                end
+            end
+
+            inst.AnimState:PushAnimation(target_anim, false)
+
+            inst:ForceFacePoint(target_x, 0, target_z)
+        end,
+
+        onexit = function(inst)
+            inst:RemoveTag("is_rowing")
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+        end,
+
+        timeline =
+        {
+			-- 0.7
+            TimeEvent(5 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					--if not is_client then
+						inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+					--end
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					--if not is_client then
+						inst:PerformBufferedAction()
+					--end
+				end
+            end),
+
+            TimeEvent(13 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst.sg:RemoveStateTag("rowing")
+				end
+            end),
+			
+			-- 0.4
+            TimeEvent(5 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					--if not is_client then
+						inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+					--end
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					--if not is_client then
+						inst:PerformBufferedAction()
+					--end
+				end
+            end),
+
+            TimeEvent(13 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst.sg:RemoveStateTag("rowing")
+				end
+            end),
+			
+			-- 0.1
+            TimeEvent(5 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					--if not is_client then
+						inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+					--end
+				end
+            end),
+
+            TimeEvent(8 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					--if not is_client then
+						inst:PerformBufferedAction()
+					--end
+				end
+            end),
+
+            TimeEvent(13 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst.sg:RemoveStateTag("rowing")
+				end
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animqueueover", function(inst)
+                inst.sg:GoToState("row_idle")
+            end),
+        },
+
+        ontimeout = function(inst)
+            --if is_client then
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle")
+            --end
+        end,
+    },
+    State{
+        name = "bluecap_quickeat",
+		tags = { "busy", "keep_pocket_rummage" },
+
+        onenter = function(inst, foodinfo)
+            inst.components.locomotor:Stop()
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+            local feed = foodinfo and foodinfo.feed
+            if feed ~= nil then
+                inst.components.locomotor:Clear()
+                inst:ClearBufferedAction()
+                inst.sg.statemem.feed = foodinfo.feed
+                inst.sg.statemem.feeder = foodinfo.feeder
+                inst.sg:AddStateTag("pausepredict")
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:RemotePausePrediction()
+                end
+            elseif inst:GetBufferedAction() then
+                feed = inst:GetBufferedAction().invobject
+            end
+
+            if feed == nil or
+                feed.components.edible == nil or
+                feed.components.edible.foodtype ~= FOODTYPE.GEARS then
+                inst.SoundEmitter:PlaySound("dontstarve/wilson/eat", "eating")
+            end
+
+            if inst.components.inventory:IsHeavyLifting() and
+                not inst.components.rider:IsRiding() then
+                inst.AnimState:PlayAnimation("heavy_quick_eat")
+            else
+                inst.AnimState:PlayAnimation("quick_eat_pre")
+                inst.AnimState:PushAnimation("quick_eat", false)
+            end
+
+            inst.components.hunger:Pause()
+        end,
+
+        timeline =
+        {
+			-- 0.1
+            TimeEvent(12 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.feed ~= nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					else
+						inst:PerformBufferedAction()
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(21 * 0.1, function(inst)			
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					else
+						TryResumePocketRummage(inst)
+					end
+				end
+			end),
+			
+			-- 0.4
+            TimeEvent(12 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.feed ~= nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					else
+						inst:PerformBufferedAction()
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(21 * 0.4, function(inst)			
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					else
+						TryResumePocketRummage(inst)
+					end
+				end
+			end),
+			
+			-- 0.7
+            TimeEvent(12 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.feed ~= nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					else
+						inst:PerformBufferedAction()
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(21 * 0.7, function(inst)			
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					else
+						TryResumePocketRummage(inst)
+					end
+				end
+			end),
+        },
+
+        events =
+        {
+			EventHandler("queue_post_eat_state", function(inst, data)
+				--NOTE: this event can trigger instantly instead of buffered
+				if data ~= nil then
+					inst.sg.statemem.queued_post_eat_state = data.post_eat_state
+					if data.nointerrupt then
+						inst.sg:AddStateTag("nointerrupt")
+					end
+				end
+			end),
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state or "idle")
+                end
+            end),
+        },
+
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("eating")
+            if not GetGameModeProperty("no_hunger") then
+                inst.components.hunger:Resume()
+            end
+            if inst.sg.statemem.feed ~= nil and inst.sg.statemem.feed:IsValid() then
+                inst.sg.statemem.feed:Remove()
+            end
+			CheckPocketRummageMem(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+        end,
+    },	
+	
+    State{
+        name = "bluecap_eat",
+		tags = { "busy", "nodangle", "keep_pocket_rummage" },
+
+        onenter = function(inst, foodinfo)
+            inst.components.locomotor:Stop()
+			
+			local funcap = FindBlueFuncap(inst)
+			local mod = 0.7
+			if funcap.charge == 12 then
+				mod = 0.1
+			elseif funcap.charge > 6 then
+				mod = 0.4
+			end
+			
+			inst.dyn_anim_mod = mod
+			
+			
+			inst.AnimState:SetDeltaTimeMultiplier(1/mod)	
+			
+            local feed = foodinfo and foodinfo.feed
+            if feed ~= nil then
+                inst.components.locomotor:Clear()
+                inst:ClearBufferedAction()
+                inst.sg.statemem.feed = foodinfo.feed
+                inst.sg.statemem.feeder = foodinfo.feeder
+                inst.sg:AddStateTag("pausepredict")
+                if inst.components.playercontroller ~= nil then
+                    inst.components.playercontroller:RemotePausePrediction()
+                end
+            elseif inst:GetBufferedAction() then
+                feed = inst:GetBufferedAction().invobject
+            end
+
+            if feed == nil or
+                feed.components.edible == nil or
+                feed.components.edible.foodtype ~= FOODTYPE.GEARS then
+                inst.SoundEmitter:PlaySound("dontstarve/wilson/eat", "eating")
+            end
+
+            if feed ~= nil and feed.components.soul ~= nil then
+                inst.sg.statemem.soulfx = SpawnPrefab("wortox_eat_soul_fx")
+                inst.sg.statemem.soulfx.entity:SetParent(inst.entity)
+                if inst.components.rider:IsRiding() then
+                    inst.sg.statemem.soulfx:MakeMounted()
+                end
+            end
+
+            if inst.components.inventory:IsHeavyLifting() and
+                not inst.components.rider:IsRiding() then
+                inst.AnimState:PlayAnimation("heavy_eat")
+            else
+                inst.AnimState:PlayAnimation("eat_pre")
+                inst.AnimState:PushAnimation("eat", false)
+            end
+
+            inst.components.hunger:Pause()
+        end,
+
+        timeline =
+        {
+			-- 0.1
+            TimeEvent(28 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.feed == nil then
+						inst:PerformBufferedAction()
+					elseif inst.sg.statemem.feed.components.soul == nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					elseif inst.components.souleater ~= nil then
+						inst.components.souleater:EatSoul(inst.sg.statemem.feed)
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+				end
+            end),
+            TimeEvent(30 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(52 * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					end
+				end
+			end),
+            TimeEvent(70 * FRAMES * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					inst.SoundEmitter:KillSound("eating")
+				end
+            end),
+			FrameEvent(94 * 0.1, function(inst)
+				if inst.dyn_anim_mod == 0.1 then
+					TryResumePocketRummage(inst)
+				end
+			end),
+			
+			-- 0.4
+            TimeEvent(28 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.feed == nil then
+						inst:PerformBufferedAction()
+					elseif inst.sg.statemem.feed.components.soul == nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					elseif inst.components.souleater ~= nil then
+						inst.components.souleater:EatSoul(inst.sg.statemem.feed)
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+				end
+            end),
+            TimeEvent(30 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(52 * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					end
+				end
+			end),
+            TimeEvent(70 * FRAMES * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					inst.SoundEmitter:KillSound("eating")
+				end
+            end),
+			FrameEvent(94 * 0.4, function(inst)
+				if inst.dyn_anim_mod == 0.4 then
+					TryResumePocketRummage(inst)
+				end
+			end),
+			
+			-- 0.7
+            TimeEvent(28 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.feed == nil then
+						inst:PerformBufferedAction()
+					elseif inst.sg.statemem.feed.components.soul == nil then
+						inst.components.eater:Eat(inst.sg.statemem.feed, inst.sg.statemem.feeder)
+					elseif inst.components.souleater ~= nil then
+						inst.components.souleater:EatSoul(inst.sg.statemem.feed)
+					end
+					--NOTE: "queue_post_eat_state" can be triggered immediately from the eat action
+				end
+            end),
+            TimeEvent(30 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.queued_post_eat_state == nil then
+						inst.sg:RemoveStateTag("busy")
+						inst.sg:RemoveStateTag("pausepredict")
+					end
+				end
+            end),
+			FrameEvent(52 * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					if inst.sg.statemem.queued_post_eat_state ~= nil then
+						inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
+					end
+				end
+			end),
+            TimeEvent(70 * FRAMES * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					inst.SoundEmitter:KillSound("eating")
+				end
+            end),
+			FrameEvent(94 * 0.7, function(inst)
+				if inst.dyn_anim_mod == 0.7 then
+					TryResumePocketRummage(inst)
+				end
+			end),
+        },
+
+        events =
+        {
+			EventHandler("queue_post_eat_state", function(inst, data)
+				--NOTE: this event can trigger instantly instead of buffered
+				if data ~= nil then
+					inst.sg.statemem.queued_post_eat_state = data.post_eat_state
+					if data.nointerrupt then
+						inst.sg:AddStateTag("nointerrupt")
+					end
+				end
+			end),
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+					inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state or "idle")
+                end
+            end),
+        },
+
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("eating")
+            if not GetGameModeProperty("no_hunger") then
+                inst.components.hunger:Resume()
+            end
+            if inst.sg.statemem.feed ~= nil and inst.sg.statemem.feed:IsValid() then
+                inst.sg.statemem.feed:Remove()
+            end
+            if inst.sg.statemem.soulfx ~= nil then
+                inst.sg.statemem.soulfx:Remove()
+            end
+			CheckPocketRummageMem(inst)
+			inst.AnimState:SetDeltaTimeMultiplier(1)
+        end,
+    },
+
+	
+	
     }
 
     for k, v in pairs(events) do

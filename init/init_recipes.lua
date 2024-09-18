@@ -113,6 +113,25 @@ if GetModConfigData("compostoverrot") then
     AllRecipes["wurt_turf_marsh"].ingredients = { Ingredient("cutreeds", 1), Ingredient("compost", 1) }
 end
 
+-- Funcap Change
+
+AllRecipes["red_mushroomhat"].ingredients = {
+	Ingredient("red_cap", 6),
+	Ingredient("slurper_pelt", 4),
+}
+
+AllRecipes["green_mushroomhat"].ingredients = {
+	Ingredient("green_cap", 6),
+	Ingredient("slurper_pelt", 4),
+}
+
+AllRecipes["blue_mushroomhat"].ingredients = {
+	Ingredient("blue_cap", 6),
+	Ingredient("slurper_pelt", 4),
+}
+
+
+
 --woodie stuff
 
 local config_skilltrees = GetModConfigData("woodie_skilltree")

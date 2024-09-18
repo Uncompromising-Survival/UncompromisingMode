@@ -104,6 +104,7 @@ env.AddStategraphPostInit("wilson_client", function(inst)
         end
     end
 
+		
     --[[
 local _OldDeathEvent = inst.events["death"].fn
 	inst.events["death"].fn = function(inst, data)
@@ -883,6 +884,12 @@ local _OldEatState = inst.states["eat"].onenter
                 end
             end,
         },
+		
+		State{
+			name = "bluecap_general_action",
+			onenter = function(inst) inst.sg:GoToState("dolongaction") end,
+		},
+	
     }
 
     for k, v in pairs(events) do
