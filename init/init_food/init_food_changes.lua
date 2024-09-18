@@ -510,6 +510,41 @@ if GetModConfigData("sr_foodrebalance") then
 
 end
 
+
+local PUFFED_POTATOES =
+{
+	"potatosouffle",
+	"potatosouffle_spice_chili",
+	"potatosouffle_spice_garlic",
+	"potatosouffle_spice_salt",
+	"potatosouffle_spice_sugar",
+}
+
+for k, v in pairs(PUFFED_POTATOES) do
+	AddPrefabPostInit(v, function(inst)
+		if inst ~= nil and inst.components.edible ~= nil then
+			if not GLOBAL.TheWorld.ismastersim then
+				return
+			end
+			local _oneatenfn = inst.components.edible.oneaten
+			local function oneatenfn(inst, eater)
+				if eater:HasTag("player") then
+					if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
+						eater.components.debuffable:AddDebuff("buff_smallcourage", "buff_smallcourage")
+					end
+				end			
+				if _oneatenfn then
+					_oneatenfn(inst,eater)
+				end
+			end
+			inst.components.edible:SetOnEatenFn(oneatenfn)
+			
+		end
+	end)
+end
+
+
+
 --idk where else to put this
 local farmplants =
 {
