@@ -391,6 +391,7 @@ local inventoryitems =
 	
 	-- Misc from this update
 	"um_durian_cream_marshcake",
+	"um_chiles_en_nogada",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1465,7 +1466,8 @@ Assets = {
 	Asset("ANIM", "anim/hardshelltacos.zip"),
 	Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
 	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
-	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),	
+	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
+	Asset("ANIM", "anim/um_chiles_en_nogada.zip"),
 	Asset("ANIM", "anim/smogquito_build.zip"),
 	Asset("ANIM", "anim/smogquito_nest_build.zip"),
 	
@@ -2062,6 +2064,10 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/um_durian_cream_marshcake.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_durian_cream_marshcake.xml"),
 
+
+	Asset("IMAGE", "images/inventoryimages/um_chiles_en_nogada.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_chiles_en_nogada.xml"),
+	
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/gasmask.xml"),
 	Asset("ATLAS", "images/inventoryimages/gasmask.xml"),
 	Asset("IMAGE", "images/inventoryimages/gasmask.tex"),

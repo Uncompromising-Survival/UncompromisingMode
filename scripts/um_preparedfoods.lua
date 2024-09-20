@@ -598,7 +598,6 @@ local um_preparedfoods =
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 } } },
-        oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
 				if TheWorld then
@@ -616,6 +615,21 @@ local um_preparedfoods =
 			end
         end,
     },
+    um_chiles_en_nogada =
+    {
+        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and (names.acorn or names.acorn_cooked) and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > 0.5 end,
+        hunger = 37.5,
+        health = 20,
+        sanity = 50,
+        priority = 66,
+        weight = 1,
+        cooktime = 3,
+        foodtype = FOODTYPE.MEAT,
+        perishtime = 10 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "pomegranate", 1 }, { "pepper", 1 }, { "acorn", 1 }, { "meat", 1 } } },
+    },
+	
 }
 
 for k, v in pairs(um_preparedfoods) do
