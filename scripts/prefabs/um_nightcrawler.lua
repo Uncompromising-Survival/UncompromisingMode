@@ -226,7 +226,7 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-	inst.HostileToPlayerTest = true
+	inst.HostileToPlayerTest = function() return true end
     inst.sounds = sounds
 	inst.fat = false
 

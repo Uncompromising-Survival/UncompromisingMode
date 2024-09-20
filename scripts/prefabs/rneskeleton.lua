@@ -93,18 +93,15 @@ local function fn(Sim)
 
 	MakeCharacterPhysics(inst, 10, .5)
 	
-	inst:AddTag("plant")
-    inst:AddTag("swilson") 
-	--inst:AddTag("nightmarecreature")
-	--inst:AddTag("shadow")
-	inst:AddTag("noepicmusic")
 
+	inst:AddTag("hostile")
+	
 	inst.entity:SetPristine()
 	
 	if not TheWorld.ismastersim then
         return inst
     end
-	inst.HostileToPlayerTest = true
+	inst.HostileToPlayerTest = function() return true end
     inst.AnimState:SetBank("wilson")
     inst.AnimState:SetBuild("wilton")
     inst.AnimState:PlayAnimation("idle",true)

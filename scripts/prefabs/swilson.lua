@@ -107,7 +107,7 @@ local shadow = inst.entity:AddDynamicShadow()
     --inst.components.burnable.flammability = 0.33
     ---------------------       
     
-	inst.HostileToPlayerTest = true
+	inst.HostileToPlayerTest = function() return true end
 	inst:AddTag("monster")
     inst:AddTag("hostile")   
     inst:AddTag("swilson") 

@@ -149,7 +149,7 @@ local function fn(Sim)
 	if not TheWorld.ismastersim then
         return inst
     end
-	inst.HostileToPlayerTest = true
+	inst.HostileToPlayerTest = function() return true end
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(300)
 	

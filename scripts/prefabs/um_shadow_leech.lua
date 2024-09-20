@@ -205,7 +205,7 @@ local function fn()
 		return inst
 	end
 	
-	inst.HostileToPlayerTest = true
+	inst.HostileToPlayerTest = function() return true end
 	inst.wiggle_count = 0
 
 	inst:AddComponent("entitytracker")
