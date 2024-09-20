@@ -620,6 +620,50 @@ for y = 2.5, -1.5, -1 do
     end
 end
 
+containers.params.um_cookpot_wagstaff =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 64 + 32 + 8 + 4, 0),
+            Vector3(0, 32 + 4, 0),
+            Vector3(0, -(32 + 4), 0),
+            Vector3(0, -(64 + 32 + 8 + 4), 0),
+        },
+        animbank = "ui_cookpot_1x4",
+        animbuild = "ui_cookpot_1x4",
+        pos = Vector3(200, 0, 0),
+        side_align_tip = 100,
+        buttoninfo =
+        {
+            text = STRINGS.ACTIONS.COOK,
+            position = Vector3(0, -165, 0),
+        }
+    },
+    acceptsstacks = false,
+    type = "cooker",
+}
+
+local cooking = require("cooking")
+containers.params.um_cookpot_wagstaff.itemtestfn = function(container, item, slot)
+    return cooking.IsCookingIngredient(item.prefab) and not container.inst:HasTag("burnt")
+end
+
+containers.params.um_cookpot_wagstaff.widget.buttoninfo.fn = function(inst, doer)
+    if inst.components.container ~= nil then
+        GLOBAL.BufferedAction(doer, inst, ACTIONS.COOK):Do()
+    elseif inst.replica.container ~= nil and not inst.replica.container:IsBusy() then
+        GLOBAL.SendRPCToServer(GLOBAL.RPC.DoWidgetButtonAction, ACTIONS.COOK.code, inst, ACTIONS.COOK.mod_name)
+    end
+end
+
+containers.params.um_cookpot_wagstaff.widget.buttoninfo.validfn = function(inst)
+    return inst.replica.container ~= nil and inst.replica.container:IsFull()
+end
+
+
+
 containers.params.winona_toolbox =
 {
     widget =

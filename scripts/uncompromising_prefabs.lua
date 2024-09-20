@@ -565,7 +565,10 @@ local prefabs = {
 	"um_armor_bramble_rimeweed",
 	"smogquito",
 	"smogquito_nest",
+	--"flamethrower",
+	"flamethrower_projectile",
 	--"coffbee",
+	"um_cookpot_wagstaff",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
