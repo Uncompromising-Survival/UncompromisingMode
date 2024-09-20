@@ -95,7 +95,7 @@ local function fn(Sim)
 	
 	inst:AddTag("plant")
     inst:AddTag("swilson") 
-	inst:AddTag("nightmarecreature")
+	--inst:AddTag("nightmarecreature")
 	--inst:AddTag("shadow")
 	inst:AddTag("noepicmusic")
 
