@@ -22,7 +22,7 @@ local sounds =
     explode = "dontstarve/creatures/mosquito/mosquito_explo",
 }
 
-SetSharedLootTable('mosquito',
+SetSharedLootTable('smogquito',
 {
     {'mosquitosack', .75},
 	{'ash', 1.0},
@@ -195,7 +195,7 @@ local function mosquito()
     ---------------------
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('mosquito')
+    inst.components.lootdropper:SetChanceLootTable('smogquito')
 
     inst:AddComponent("tradable")
 

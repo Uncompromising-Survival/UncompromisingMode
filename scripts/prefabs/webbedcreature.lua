@@ -188,8 +188,11 @@ local function OnKilled(inst)
 			inst.components.lootdropper:AddChanceLoot("livinglog", 1.00)
 			inst.components.lootdropper:AddChanceLoot("livinglog", 1.00)
 			inst.components.lootdropper:AddChanceLoot("livinglog", 1.00)
-			inst.components.lootdropper:AddChanceLoot("livinglog", 1.00)
 			inst.components.lootdropper:AddChanceLoot("whisperpod", 1.00)
+			inst.components.lootdropper:AddChanceLoot("cactus_flower", 1)
+			inst.components.lootdropper:AddChanceLoot("cactus_flower", 1)
+			inst.components.lootdropper:AddChanceLoot("cactus_flower", 1)
+			inst.components.lootdropper:AddChanceLoot("cactus_flower", 0.5)
 		end
 		if inst.size == 14 then
 			creature = "walrus"
