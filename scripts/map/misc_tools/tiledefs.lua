@@ -153,8 +153,35 @@ AddTile(
         ground_name = "magma_rock",
     },
     {
-        name = "blocky",
+        name = "rocky_clear",
         noise_texture = "ground_magma_rock.tex", --Gearless's art
+        runsound = "dontstarve/movement/run_rock",
+        walksound = "dontstarve/movement/walk_rock",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    },
+    { --Placeholder minimap
+        name = "hoodedmoss.tex",
+        atlas = "ancienthoodedturf.xml",
+        noise_texture = "mini_um_magma.tex"
+    },
+    { --Placeholder turf
+        name = "magma_rock",
+        anim = "magma_rock",
+        bank_build = "turf_archives"
+    }
+)
+
+AddTile(
+    "UM_MAGMA_LAVABORDER", --tile_name 1
+    "LAND", --tile_range 2
+    { --tile_data 3
+        ground_name = "magma_rock",
+    },
+    {
+        name = "rocky_clear",
+        noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
         runsound = "dontstarve/movement/run_rock",
         walksound = "dontstarve/movement/walk_rock",
         snowsound = "dontstarve/movement/run_ice",

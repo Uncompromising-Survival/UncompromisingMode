@@ -392,6 +392,7 @@ local inventoryitems =
 	-- Misc from this update
 	"um_durian_cream_marshcake",
 	"um_chiles_en_nogada",
+	"um_rice_pudding",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1468,6 +1469,9 @@ Assets = {
 	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
 	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
 	Asset("ANIM", "anim/um_chiles_en_nogada.zip"),
+	Asset("ANIM", "anim/um_rice_pudding.zip"),
+	
+	
 	Asset("ANIM", "anim/smogquito_build.zip"),
 	Asset("ANIM", "anim/smogquito_nest_build.zip"),
 	
@@ -1544,7 +1548,12 @@ Assets = {
 
 	Asset("ANIM", "anim/winona_portables.zip"),
 
+	Asset("ANIM", "anim/ui_um_cookpot_wagstaff_1x4.zip"),
 	--INVENTORY ITEMS [IMAGES & ATLAS]
+
+	Asset("IMAGE", "images/inventoryimages/um_cookpot_wagstaff_lever.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_cookpot_wagstaff_lever.xml"),
+	
 	
 	-- Shadow Char Items
 	Asset("IMAGE", "images/inventoryimages/um_shadow_axe.tex"),
@@ -2067,6 +2076,10 @@ Assets = {
 
 	Asset("IMAGE", "images/inventoryimages/um_chiles_en_nogada.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_chiles_en_nogada.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/um_rice_pudding.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rice_pudding.xml"),
+
 	
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/gasmask.xml"),
 	Asset("ATLAS", "images/inventoryimages/gasmask.xml"),

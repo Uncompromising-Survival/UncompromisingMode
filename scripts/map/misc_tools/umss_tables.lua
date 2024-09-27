@@ -269,4 +269,9 @@ local UMSS_TABLES =
 		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = -4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 0, z = 4, prefab = "umdc_tileflag", ocean = false, tile = 264},{x = 0, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 264},	{x = 4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 264},},
 	},
 
+
+    wagstaffcooker = { 
+		name = "wagstaffcooker", rotate = true, tile_centered = true, 
+		content = {	{x = 3.1089782714844, z = 1.0288314819336, prefab = "grass", ocean = false},	{x = 3.3894348144531, z = -1.1127262115479, prefab = "grass", ocean = false},	{x = 3.9379577636719, z = 0.090305328369141, prefab = "um_cookpot_wagstaff", ocean = false},	{x = 4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 256},	{x = 4.8753051757813, z = 0.92127990722656, prefab = "grass", ocean = false},	{x = 3.8117370605469, z = 3.3258228302002, prefab = "junk_pile", ocean = false},	{x = 4, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 256},	{x = 4, z = 4, prefab = "umdc_tileflag", ocean = false, tile = 256},	{x = 6.3349914550781, z = -2.1307525634766, prefab = "junk_pile", ocean = false},	{x = 8, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 256},},
+	},
 } return UMSS_TABLES

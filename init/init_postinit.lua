@@ -221,6 +221,7 @@ local prefab_post = {
     "monkeyhut",
 	"lava_pond",
 	"cookiecutter",
+	"junk_pile_big",
 }
 
 local stategraph_post = {

@@ -15,7 +15,6 @@ local function UpdateFX(owner,color,helm)
 		-- Initialize FX
 		if helm.fx == nil or not helm.fx:IsValid() then 
 			helm.fx = SpawnPrefab("umdebuff_pyre_toxin_fx")
-
 			if owner.components.combat ~= nil then
 				helm.fx.entity:AddFollower():FollowSymbol(owner.GUID, owner.components.combat.hiteffectsymbol, 0, -100, 0)
 			else

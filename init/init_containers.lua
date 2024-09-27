@@ -631,13 +631,13 @@ containers.params.um_cookpot_wagstaff =
             Vector3(0, -(32 + 4), 0),
             Vector3(0, -(64 + 32 + 8 + 4), 0),
         },
-        animbank = "ui_cookpot_1x4",
-        animbuild = "ui_cookpot_1x4",
+        animbank = "ui_um_cookpot_wagstaff_1x4",
+        animbuild = "ui_um_cookpot_wagstaff_1x4",
         pos = Vector3(200, 0, 0),
         side_align_tip = 100,
         buttoninfo =
         {
-            text = STRINGS.ACTIONS.COOK,
+            text = "Atomize",
             position = Vector3(0, -165, 0),
         }
     },

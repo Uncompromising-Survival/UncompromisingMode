@@ -629,7 +629,21 @@ local um_preparedfoods =
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "pomegranate", 1 }, { "pepper", 1 }, { "acorn", 1 }, { "meat", 1 } } },
     },
-	
+    um_rice_pudding =
+    {
+        test = function(cooker, names, tags) return (tags.rice and tags.rice >= 2) and tags.sweetener and not tags.meat and not tags.inedible end,
+        hunger = 37.5,
+        health = 20,
+        sanity = 15,
+        priority = 66,
+        weight = 1,
+        cooktime = 1,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 6 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "rice", 1 }, { "rice", 1 }, { "honey", 1 }}},
+    },	
+
 }
 
 for k, v in pairs(um_preparedfoods) do

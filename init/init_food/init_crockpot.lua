@@ -766,3 +766,11 @@ if TUNING.DSTU.GOODIESNERF then
         inst.components.edible.foodtype = GLOBAL.FOODTYPE.VEGGIE
     end)
 end
+
+
+
+
+local foods = require("preparedfoods")
+for k,recipe in pairs (foods) do
+	AddCookerRecipe("um_cookpot_wagstaff",recipe)
+end

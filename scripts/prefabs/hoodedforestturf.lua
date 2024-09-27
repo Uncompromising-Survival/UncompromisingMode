@@ -5,6 +5,7 @@ local GroundTiles =
 	[WORLD_TILES.BOILINGFIELDS] = 	{name = "xenomeadow", 	anim = "xenomeadow", 	bank_build = "hfturf"},
 	[WORLD_TILES.CRACKEDBASALT] = 	{name = "xenobasalt", 	anim = "xenobasalt", 	bank_build = "hfturf"},
 	[WORLD_TILES.UM_MAGMA] = 	{name = "magma_rock", 	anim = "xenobasalt", 	bank_build = "hfturf"},
+	[WORLD_TILES.UM_MAGMA_LAVABORDER] = 	{name = "magma_rock", 	anim = "xenobasalt", 	bank_build = "hfturf"},
 	[WORLD_TILES.UM_GRASSMAGMA] = 	{name = "magma_grass", 	anim = "xenobasalt", 	bank_build = "hfturf"},
 }
 

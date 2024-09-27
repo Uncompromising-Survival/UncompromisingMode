@@ -342,6 +342,56 @@ AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
     end
 end)
 
+AddComponentAction("SCENE", "stewer_wagstaff", function(inst, doer, actions, right)
+	if not inst:HasTag("burnt") and not (doer.replica.rider ~= nil and doer.replica.rider:IsRiding()) then
+		if inst:HasTag("donecooking") then
+			table.insert(actions, GLOBAL.ACTIONS.HARVEST)
+		elseif right and (
+			(   inst:HasTag("readytocook") and
+				--(not inst:HasTag("professionalcookware") or doer:HasTag("professionalchef")) and
+				(not inst:HasTag("mastercookware") or doer:HasTag("masterchef"))
+			) or
+			(   inst.replica.container ~= nil and
+				inst.replica.container:IsFull() and
+				inst.replica.container:IsOpenedBy(doer)
+			)
+		) then
+			table.insert(actions, GLOBAL.ACTIONS.COOK)
+		end
+	end
+end)
+
+
+
+-- Wagstaff crockpot actions...
+local _OldCook = GLOBAL.ACTIONS.COOK.fn
+GLOBAL.ACTIONS.COOK.fn = function(act)
+	if act.target.prefab == "um_cookpot_wagstaff" then
+		if act.target.components.stewer_wagstaff:IsCooking() then
+			--Already cooking
+			return true
+		end
+		local container = act.target.components.container
+		if container ~= nil and container:IsOpenedByOthers(act.doer) then
+			return false, "INUSE"
+		elseif not act.target.components.stewer_wagstaff:CanCook() then
+			return false
+		end
+		act.target.components.stewer_wagstaff:StartCooking(act.doer)
+		return true
+	else
+		return _OldCook(act)
+	end
+end
+
+local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
+GLOBAL.ACTIONS.HARVEST.fn = function(act)
+	if act.target.prefab == "um_cookpot_wagstaff" then
+		return act.target.components.stewer_wagstaff:Harvest(act.doer)
+	else
+		return _OldHarvest(act)
+	end
+end
 
 
 local ENV = env
@@ -370,3 +420,6 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)
+
+
+

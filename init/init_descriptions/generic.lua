@@ -711,4 +711,5 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-
+DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
+DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
