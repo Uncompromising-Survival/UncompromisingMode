@@ -15,6 +15,7 @@ env.AddPrefabPostInit("lavae", function(inst)
 	end
 	
 	inst:AddTag("insect")
+	inst:AddTag("um_magmatic_defense")
 	
     inst:ListenForEvent("death", ondeath)
 end)

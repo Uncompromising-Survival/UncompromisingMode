@@ -682,6 +682,9 @@ local function onattackwhip(inst, attacker, target, naughtlock)
         local coldness = target.components.freezable.coldness
 
         local coldval = 1 / resistance
+		if target:HasTag("um_magmatic_defense") then
+			coldval = coldval*8
+		end
         if resistance > coldness + 2 then
             target.components.freezable:AddColdness(coldval)
         elseif resistance > coldness + 1 then
@@ -695,7 +698,11 @@ local function onattackwhip(inst, attacker, target, naughtlock)
         if target.sg ~= nil and target.sg:HasStateTag("frozen") then
             SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
         end
-
+		
+		-- Lavae Vanilla bug fix
+		if target.components.freezable.coldness >= resistance then
+			target:DoTaskInTime(0,function(target) target.components.freezable:AddColdness(20) end)	
+		end
 
         target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
         target.components.freezable:SpawnShatterFX()

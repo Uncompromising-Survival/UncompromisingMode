@@ -253,7 +253,9 @@ local function mosquito()
 
     MakeFeedableSmallLivestock(inst, TUNING.TOTAL_DAY_TIME * 2, OnPickedUp, OnDropped)
     inst.incineratesound = inst.sounds.death
-
+	
+	inst:AddTag("um_magmatic_defense")
+	
     return inst
 end
 

@@ -290,11 +290,15 @@ local function onload(inst, data)
 		if data.lever_ready then
 			inst.lever_ready = true
 			inst.display.ReadyTheLever(inst.display)
+			
 		end	
 		if data.lever then
 			inst.display.lever = true
 			inst.display.components.trader.enabled = false
 			inst.display.AnimState:ShowSymbol("lever")
+			if not data.lever_ready then
+				inst.display.AnimState:PlayAnimation("pull",false)
+			end
 		end
 	end
 
