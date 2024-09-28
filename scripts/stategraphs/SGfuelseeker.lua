@@ -38,7 +38,7 @@ local function FinishExtendedSound(inst, soundid)
     end
 end
 
-local function PlayExtendedSound(inst, soundname)
+local function PlayExtendedSound(inst, soundname,volume)
     if inst.sg.mem.soundcache == nil then
         inst.sg.mem.soundcache = {}
         inst.sg.mem.soundid = 0
@@ -47,6 +47,10 @@ local function PlayExtendedSound(inst, soundname)
     end
     inst.sg.mem.soundcache[inst.sg.mem.soundid] = true
     inst.SoundEmitter:PlaySound(inst.sounds[soundname], "sound_"..tostring(inst.sg.mem.soundid))
+	local volume = 0.2
+	if volume then
+		inst.SoundEmitter:SetVolume("sound_"..tostring(inst.sg.mem.soundid), volume)
+	end
     inst:DoTaskInTime(5, FinishExtendedSound, inst.sg.mem.soundid)
 end
 
