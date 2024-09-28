@@ -441,7 +441,15 @@ Assets = {
 	Asset("ATLAS", "images/cookbook_viperjam.xml"),
 	Asset("IMAGE", "images/cookbook_zaspberryparfait.tex"),
 	Asset("ATLAS", "images/cookbook_zaspberryparfait.xml"),
+
+	Asset("IMAGE", "images/cookbook_um_durian_cream_marshcake.tex"),
+	Asset("ATLAS", "images/cookbook_um_durian_cream_marshcake.xml"),
 	
+	Asset("IMAGE", "images/cookbook_um_chiles_en_nogada.tex"),
+	Asset("ATLAS", "images/cookbook_um_chiles_en_nogada.xml"),
+	
+	Asset("IMAGE", "images/cookbook_um_rice_pudding.tex"),
+	Asset("ATLAS", "images/cookbook_um_rice_pudding.xml"),
 	
 	
 	--crafting menu avatars

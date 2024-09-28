@@ -147,7 +147,17 @@ return Class(function(self, inst)
             end
         end
     end
-
+	
+	local function CalcDayTime()
+		local daytime = 6
+		if TheWorld.state.iswinter then
+			daytime = 4
+		elseif TheWorld.state.isautumn or TheWorld.state.isspring then
+			daytime = 5
+		end
+		return daytime
+	end
+	
     --------------------------------------------------------------------------
     --[[ Private event handlers ]]
     --------------------------------------------------------------------------
@@ -668,7 +678,8 @@ return Class(function(self, inst)
 	
 	local function onmoonphasechagned(inst, phase)
 		if TheWorld.state.moonphase == "new" then
-			TheWorld:PushEvent("ms_setclocksegs", {day = 0, dusk = 8, night = 8})
+			local daytime = CalcDayTime()
+			TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 		end
 	end
 	
@@ -788,12 +799,14 @@ return Class(function(self, inst)
 		end
 		
 		if TheWorld.state.cycles > 5 and data.moonphase == "new" then
-			TheWorld:PushEvent("ms_setclocksegs", {day = 0, dusk = 8, night = 8})
+			local daytime = CalcDayTime()
+			TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 		end
 	end
 	
 	local function ForceTerrors(inst, data)
-		TheWorld:PushEvent("ms_setclocksegs", {day = 0, dusk = 8, night = 8})
+		local daytime = CalcDayTime()
+		TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 	end
 	
     self.inst:ListenForEvent("ms_playerjoined", OnPlayerJoined, TheWorld)
