@@ -789,7 +789,7 @@ end
 local function pipethrown(inst)
     RemovePhysicsColliders(inst)
 
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    --inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:PlayAnimation("shoot")
     inst:AddTag("NOCLICK")
     inst.persists = false
@@ -837,13 +837,13 @@ local function fnglacial_proj()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-
+	
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("glacial_hound_projectile")
     inst.AnimState:SetBuild("glacial_hound_projectile")
     inst.AnimState:PlayAnimation("shoot_side")
-
+	inst.Transform:SetEightFaced()
     inst:AddTag("NOCLICK")
     inst:AddTag("sharp")
     inst:AddTag("weapon")
@@ -867,7 +867,7 @@ local function fnglacial_proj()
     inst.components.projectile:SetHitDist(math.sqrt(3))
     inst.components.projectile:SetOnHitFn(onhit)
     inst.components.projectile:SetOnMissFn(inst.Remove)
-    inst.components.projectile:SetLaunchOffset(Vector3(0, 2, 0))
+    --inst.components.projectile:SetLaunchOffset(Vector3(0, 2, 0))
 
     inst:DoTaskInTime(5, inst.Remove)
 
