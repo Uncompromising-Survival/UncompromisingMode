@@ -837,6 +837,9 @@ local function fnglacial_proj()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
+	inst.entity:AddDynamicShadow()
+
+	inst.DynamicShadow:SetSize(2, 2)
 	
     MakeInventoryPhysics(inst)
 
@@ -870,7 +873,7 @@ local function fnglacial_proj()
     --inst.components.projectile:SetLaunchOffset(Vector3(0, 2, 0))
 
     inst:DoTaskInTime(5, inst.Remove)
-
+	inst:DoTaskInTime(0,function(inst) SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst.Transform:GetWorldPosition()) end)
     inst.persists = false
 
     return inst
