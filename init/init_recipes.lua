@@ -434,6 +434,18 @@ ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
 ChangeSortKey("plaguemask", "gasmask", "SUMMER", true)
 
+if GetModConfigData("heatwaves") then
+    AddRecipe2(
+        "smogeater",
+        { Ingredient("gears", 1), Ingredient("steelwool", 1), Ingredient("smogquito", 1) },
+        TECH.SCIENCE_TWO,
+        nil,
+        { "TOOLS", "SUMMER" }
+    )
+    ChangeSortKey("smogeater", "diseasecurebomb", "TOOLS", true)
+    ChangeSortKey("smogeater", "featherfan", "SUMMER", true)
+end
+
 if GetModConfigData("sporehounds") then
     AddRecipe2(
         "shroom_skin",
@@ -1844,6 +1856,9 @@ STRINGS.RECIPE_DESC.UM_ARMOR_BRAMBLE_RIMEWEED = "What do you think, Wormiest?"
 STRINGS.RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
 
 STRINGS.RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
+
+-- Smoguito stuff
+STRINGS.RECIPE_DESC.SMOGEATER = "Suck all impurities from the air before your lungs do it first!"
 
 -- Veteran Shrine Crafts
 

@@ -565,6 +565,7 @@ local prefabs = {
 	"um_armor_bramble_rimeweed",
 	"smogquito",
 	"smogquito_nest",
+	"smogeater",
 	"um_robust_projectile",
 	--"coffbee",
 	"um_cookpot_wagstaff",

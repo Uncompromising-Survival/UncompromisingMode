@@ -85,7 +85,7 @@ local function SetMedium(inst)
 
     if inst.components.freezable ~= nil then
         inst.components.freezable:SetShatterFXLevel(5)
-        inst.components.freezable:SetResistance(2)
+        inst.components.freezable:SetResistance(3)
     end
     
     local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
@@ -101,7 +101,7 @@ local function SetLarge(inst)
 
     if inst.components.freezable ~= nil then
         inst.components.freezable:SetShatterFXLevel(6)
-        inst.components.freezable:SetResistance(3)
+        inst.components.freezable:SetResistance(4)
     end
 
     local my_x, my_y, my_z = inst.Transform:GetWorldPosition()
@@ -114,7 +114,7 @@ local function PlayLegBurstSound(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/legburst")
 end
 
-local function SpawnQueen(inst, should_duplicate)
+local function SpawnQueen(inst)
 	
     local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -124,7 +124,7 @@ local function SpawnQueen(inst, should_duplicate)
 	local land = TheWorld.Map:IsPassableAtPoint(x1, 0, z1)
 	local holes = TheWorld.Map:IsPointNearHole(Vector3(x1, 0, z1))
 	
-	if land and #TheSim:FindEntities(x1, y, z1, 5, nil, nil, { "smogquito_nest" }) < 1 and should_duplicate then
+	if land and #TheSim:FindEntities(x1, y, z1, 5, nil, nil, { "smogquito_nest" }) < 1 then
 
 
 		inst.AnimState:PushAnimation("cocoon_large_burst_pst")
@@ -155,12 +155,13 @@ local function AttemptMakeQueen(inst)
     end]]
 
     local check_range = 60
-    local cap = 10
+    local cap = 6
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, check_range, nil, nil, { "smogquito_nest" })
     local num_dens = #ents
-
-    inst:DoTaskInTime(35 * FRAMES, SpawnQueen, num_dens < cap)
+	if num_dens < cap then
+		inst:DoTaskInTime(35 * FRAMES, SpawnQueen)
+	end
     return true
 end
 
@@ -259,9 +260,6 @@ local function OnThaw(inst)
     inst.AnimState:PlayAnimation(inst.anims.thaw, true)
     inst.SoundEmitter:PlaySound("dontstarve/common/freezethaw", "thawing")
     inst.AnimState:OverrideSymbol("swap_frozen", "frozen", "frozen")
-    if inst.components.health ~= nil and not inst.components.health:IsDead() then
-		inst.components.health:DoDelta(-300)
-    end
 end
 
 local function OnUnFreeze(inst)
@@ -269,7 +267,7 @@ local function OnUnFreeze(inst)
     inst.SoundEmitter:KillSound("thawing")
     inst.AnimState:ClearOverrideSymbol("swap_frozen")
     if inst.components.health ~= nil and not inst.components.health:IsDead() then
-		inst.components.health:DoDelta(-300)
+		inst.components.health:DoDelta(-600)
     end
     if inst.components.growable ~= nil then
         inst.components.growable:Resume()
@@ -421,7 +419,8 @@ local function MakeSmogquitoNestFn(den_level)
         inst:AddTag("chewable") -- by werebeaver
         inst:AddTag("hostile")
         inst:AddTag("hive")
-
+		inst:AddTag("smogquito_nest")
+		
         MakeSnowCoveredPristine(inst)
 
         inst:SetPrefabName("smogquito_nest")
@@ -441,7 +440,7 @@ local function MakeSmogquitoNestFn(den_level)
         inst:AddComponent("health")
         inst.components.health:SetMaxHealth(600)
 		inst.components.health.invincible = false
-
+		inst.components.health.fire_damage_scale = 0
         -------------------
         inst:AddComponent("childspawner")
         inst.components.childspawner.childname = "smogquito"

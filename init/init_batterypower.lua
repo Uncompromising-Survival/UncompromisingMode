@@ -80,6 +80,27 @@ for k, v in pairs(SALT) do
 	end)
 end
 
+local WOOL =
+{
+	["steelwool"] =
+	{
+		power = TUNING.MED_FUEL * 2,
+	},
+}
+
+for k, v in pairs(WOOL) do
+	AddPrefabPostInit(k, function(inst)
+		if inst.components.fuel == nil then
+			inst:AddComponent("fuel")
+		end
+
+		if inst.components.fuel ~= nil then
+			inst.components.fuel.fuelvalue = v.power
+			inst.components.fuel.fueltype = GLOBAL.FUELTYPE.WOOL
+		end
+	end)
+end
+
 --I'm blaming Zark for this not uploading properly ::::::ASDFAFSDFASDAZCQWECQWEFCCQWEFQWFCQ --Scrimbles
 
 ---------	                           -----------

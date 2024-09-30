@@ -24,7 +24,7 @@ local sounds =
 
 SetSharedLootTable('smogquito',
 {
-    {'mosquitosack', .75},
+	{'ash', 1.0},
 	{'ash', 1.0},
     {'houndfire',   1.0},
 	{'smog',   1.0},
@@ -56,7 +56,7 @@ end
 local function OnDropped(inst)
     inst.sg:GoToState("idle")
     if inst.components.workable ~= nil then
-        inst.components.workable:SetWorkLeft(1)
+        inst.components.workable:SetWorkLeft(100)
     end
     if inst.brain ~= nil then
         inst.brain:Start()
@@ -78,9 +78,16 @@ local function OnDropped(inst)
     end
 end
 
+local function OnFreeze(inst)
+    if inst.components.health ~= nil and not inst.components.health:IsDead() then
+		inst.components.workable:SetWorkLeft(1)
+    end
+end
+
 local function OnUnFreeze(inst)
     if inst.components.health ~= nil and not inst.components.health:IsDead() then
 		inst.components.health:DoDelta(-300)
+		inst.components.workable:SetWorkLeft(100)
     end
 end
 
@@ -150,6 +157,7 @@ local function mosquito()
     inst:AddTag("mosquito")
     inst:AddTag("insect")
     inst:AddTag("flying")
+	inst:AddTag("smogimmune")
     inst:AddTag("ignorewalkableplatformdrowning")
     inst:AddTag("smallcreature")
     inst:AddTag("cattoyairborne")
@@ -202,7 +210,7 @@ local function mosquito()
      ------------------
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.NET)
-    inst.components.workable:SetWorkLeft(1)
+    inst.components.workable:SetWorkLeft(100)
     inst.components.workable:SetOnFinishCallback(OnWorked)
 
     MakeTinyFreezableCharacter(inst, "body", Vector3(0, -1, 1))
@@ -211,7 +219,8 @@ local function mosquito()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.MOSQUITO_HEALTH + 200)
 	------------------
-
+	
+	inst:ListenForEvent("freeze", OnFreeze)
     inst:ListenForEvent("unfreeze", OnUnFreeze)
 
     ------------------
@@ -253,9 +262,7 @@ local function mosquito()
 
     MakeFeedableSmallLivestock(inst, TUNING.TOTAL_DAY_TIME * 2, OnPickedUp, OnDropped)
     inst.incineratesound = inst.sounds.death
-	
-	inst:AddTag("um_magmatic_defense")
-	
+
     return inst
 end
 
