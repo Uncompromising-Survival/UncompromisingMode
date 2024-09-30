@@ -259,6 +259,22 @@ local function OnKilled(inst)
 	inst:Remove()
 end
 
+local function retargetfn2(inst)
+    local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
+    local rangesq = maxrangesq
+    local target = nil
+    for i, v in ipairs(AllPlayers) do
+        if --[[v.components.sanity:IsCrazy() and]] not v:HasTag("playerghost") then
+            local distsq = v:GetDistanceSqToInst(inst)
+            if distsq < rangesq then
+				target = v
+				rangesq = distsq
+            end
+        end
+    end
+    return target
+end
+
 local function denfn()
 	local inst = CreateEntity()
 
@@ -295,6 +311,7 @@ local function denfn()
     inst.components.childspawner.childreninside = 0
 	
 	inst:AddComponent("combat")
+	inst.components.combat:SetRetargetFunction(3, retargetfn2)
 	inst:ListenForEvent("death", OnKilled)
 	
     inst.beattask = inst:DoTaskInTime(.75 + math.random() * .75, beat)

@@ -109,6 +109,22 @@ local function ScanForPlayer(inst)
 	end
 end
 
+local function retargetfn(inst)
+    local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
+    local rangesq = maxrangesq
+    local target = nil
+    for i, v in ipairs(AllPlayers) do
+        if --[[v.components.sanity:IsCrazy() and]] not v:HasTag("playerghost") then
+            local distsq = v:GetDistanceSqToInst(inst)
+            if distsq < rangesq then
+				target = v
+				rangesq = distsq
+            end
+        end
+    end
+    return target
+end
+
 local function fn(Sim)
 	local inst = CreateEntity()
 
@@ -172,7 +188,7 @@ local function fn(Sim)
     --inst.components.playerprox:SetPlayerAliveMode(true)
 	
     inst:AddComponent("combat")
-
+	inst.components.combat:SetRetargetFunction(3, retargetfn)
     --inst:AddComponent("um_shadowcloaked")
 	
     inst.sounds = sounds 
