@@ -843,13 +843,24 @@ ChangeSortKey("boat_bumper_sludge_kit", "boat_bumper_shell_kit", "SEAFARING", tr
 
 AddRecipe2(
     "cannonball_sludge_item",
-    { Ingredient("sludge", 2), Ingredient("nitre", 1), Ingredient("charcoal", 1) },
+    { Ingredient("sludge", 1), Ingredient("nitre", 1), Ingredient("charcoal", 1) },
     TECH.SEAFARING_ONE,
-    { numtogive = 4 },
+    { numtogive = 6 },
     { "WEAPONS", "SEAFARING" }
 )
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "SEAFARING", true)
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "WEAPONS", true)
+
+AddRecipe2(
+    "cannonball_incendiary_item",
+    { Ingredient("snapalm", 1), Ingredient("gunpowder", 1), Ingredient("slurtle_shellpieces", 2) },
+    TECH.SEAFARING_ONE,
+    { numtogive = 4 },
+    { "WEAPONS", "SEAFARING" }
+)
+ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "SEAFARING", true)
+ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "WEAPONS", true)
+
 
 AddRecipe2(
     "sludge_oil",
