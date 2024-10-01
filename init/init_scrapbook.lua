@@ -204,7 +204,6 @@ local um_specialinfo = {
     CRAWLINGHORROR = "Drops shadow ink when teleporting.",
     TERRORBEAK = "More evasive, attempts to reposition itself to get an attack.",
     LAVAE = "Explodes after death.",
-    POWDERMONKEY = "More proficient with Boat Cannons.",
     DEERCLOPS = "Has 3 variants, each with unique attacks.",
     MOOSE = "Has new attacks.",
     BEARGER = "Has new attacks.",

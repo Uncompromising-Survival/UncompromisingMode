@@ -524,15 +524,6 @@ if GetModConfigData("smog") then
     table.insert(component_post, "geyserfx")
 end
 
-if not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "cannonballs")
-    table.insert(component_post, "weighable")
-end
-
-if GetModConfigData("sharpshooter_monkeys_") and not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(brain_post, "powdermonkey")
-end
-
 modimport("postinit/sim")
 modimport("postinit/any")
 modimport("postinit/player")
