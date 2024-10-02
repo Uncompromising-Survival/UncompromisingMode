@@ -222,6 +222,7 @@ local prefab_post = {
 	"lava_pond",
 	"cookiecutter",
 	"junk_pile_big",
+    "seastack", --loot changes
 }
 
 local stategraph_post = {
