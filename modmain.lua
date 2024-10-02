@@ -12,7 +12,6 @@ ReloadPreloadAssets()
 -- Start the game mode
 SignFiles = require("uncompromising_writeables")
 
---[[ Commenting out Scrapbook stuff till a fix is made
 local vanilla = require "screens/redux/scrapbookdata"
 local uncomp = require "screens/redux/scrapbookdata_changes"
 
@@ -67,7 +66,7 @@ AddPrefabPostInit("world", function(inst)
         return
     end
 end)
-]]
+
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_descriptions/announcestrings.lua")
