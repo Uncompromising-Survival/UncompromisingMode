@@ -125,6 +125,7 @@ configuration_options = {
             { description = "Default",         data = "blue", hover = "Default, blue filter." }
         },
         default = "blue",
+        client = true
     },
 
     SkipSpace(),
@@ -158,6 +159,8 @@ configuration_options = {
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
     --true),
+    BinaryConfig("no_winter_growing", "No Winter Growing",
+    "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", false),
     BinaryConfig("nightterrors", "Night Terrors", "TODO TODO TODO TODO", true),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
@@ -707,8 +710,6 @@ configuration_options = {
         "More items are considered as the horrible food type.", true),
     BinaryConfig("mushroom_changes", "Mushroom Changes",
         "Mushroom Planter accepts more resources to replenish. Mushrooms now give spores, instead of caps. Mushtrees will give spores when off-season.", true),
-    BinaryConfig("no_winter_growing_", "No Winter Growing",
-        "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", false),
     BinaryConfig("rawcropsnerf", "Raw Crops Nerf",
         "Farm crops are nerfed in their base value when raw/cooked to incentivize using Crockpot recipes.", true),
 
