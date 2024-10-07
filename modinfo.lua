@@ -161,7 +161,7 @@ configuration_options = {
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
     --true),
     BinaryConfig("no_winter_growing", "No Winter Growing",
-    "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", false),
+        "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", false),
     BinaryConfig("nightterrors", "Night Terrors", "TODO TODO TODO TODO", true),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
@@ -333,6 +333,7 @@ configuration_options = {
     BinaryConfig("winonafishing", "Winona - Catapult Fishing", "Nerfs catapult fishing. Instead of killing fishes, catapults now launch fish.", true),
     BinaryConfig("winona_items", "Winona - New Items",
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
+    BinaryConfig("toolbox_tools", "Winona - Toolbox", "Allows tools to go in the Contraption Container.", false),
     BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
     BinaryConfig("warly_butcher_", "Warly - Butchering",
         "Warly is a certified butcher, he will get more resources from kills in his inventory.",
@@ -637,8 +638,8 @@ configuration_options = {
     },
     BinaryConfig("insul_thermalstone", "Thermal Stone Rework",
         "Thermal Stones now have less insulation, but inherit some insulation from clothing.", true),
-	BinaryConfig("watering_thermal", "Watering Can Temperature",
-		"Watering Cans don't reduce temperature, removing its exploit with Thermal Stones.", true),
+    BinaryConfig("watering_thermal", "Watering Can Temperature",
+        "Watering Cans don't reduce temperature, removing its exploit with Thermal Stones.", true),
 
     SkipSpace(),
     -----------------------------
@@ -692,7 +693,7 @@ configuration_options = {
             { description = "3x", data = 3 } },
         default = 1.5
     },
-    BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and 3 Honey at max. Bee Boxes deal damage to unprepared players. Honey stats nerfed.", true),	
+    BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and 3 Honey at max. Bee Boxes deal damage to unprepared players. Honey stats nerfed.", true),
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
     {
         name = "monster_eggs",
@@ -1358,13 +1359,13 @@ configuration_options = {
     Header("> Legacy Options <"),
     -----------------------------	
     BinaryConfig("durability", "Clothing Degradation",
-        "Winter and Rain protection clothing items become less effective when their durability drops.", false),	
+        "Winter and Rain protection clothing items become less effective when their durability drops.", false),
     BinaryConfig("pinelings", "Pinelings",
-        "Stumps will become pinelings if awoken by a treeguard, or if stumps are left for long enough.", false),		
+        "Stumps will become pinelings if awoken by a treeguard, or if stumps are left for long enough.", false),
     BinaryConfig("hangyperds", "Starving Gobblers",
         "Gobblers are now more agressive and will attempt to take berries out of the player's inventory.", false),
     BinaryConfig("uncool_chester_", "Ther. Stone Snow Chester Nerf",
-        "Snow Chester will no longer freeze Thermal Stones.", false),			
+        "Snow Chester will no longer freeze Thermal Stones.", false),
     BinaryConfig("woodie_wet_goose", "Weregoose Wetness", "Weregoose gains wetness when over water.", false),
     BinaryConfig("cave_clops", "[BROKEN] Cave Deerclops",
         "During winter, Deerclops can break through the cave ceiling to reach you.", false),
@@ -1419,7 +1420,7 @@ configuration_options = {
     -- Mara =)
 
     --	Header("General"),
-	BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),	
+    BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),
