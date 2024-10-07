@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.6.2.0"
+local _version = "1.6.2.1"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -16,6 +16,7 @@ Latest update features:
 - Night Terrors!
 - New Veterans Curse Effects!
 - New Veterans Curse Items!
+- New Biomes!
 - To be revealed...
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
