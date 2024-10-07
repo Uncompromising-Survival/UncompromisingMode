@@ -696,7 +696,7 @@ nil,
 ChangeSortKey("uncompromising_harpoon_heavy", "uncompromising_harpoon", "TOOLS", true)]]
 AddRecipe2(
     "um_magnerang",
-    { Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("steelwool", 3) },
+    { Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("wagpunk_bits", 1) },
     TECH.SCIENCE_TWO,
     nil,
     { "WEAPONS" }
