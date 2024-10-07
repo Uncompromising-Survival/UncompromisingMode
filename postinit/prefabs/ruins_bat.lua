@@ -40,9 +40,6 @@ local function NewOnAttack(inst, attacker, target)
         end
     end
 
-    if target ~= nil and target:HasTag("lunar_aligned") and not target.components.health:IsDead() and target.components.combat ~= nil then
-        target.components.combat:GetAttacked(attacker, 17, nil)
-    end
 
     inst.components.weapon.attackwear = target ~= nil and target:IsValid()
         and target:HasTag("lunar_aligned")
@@ -59,4 +56,7 @@ env.AddPrefabPostInit("ruins_bat", function(inst)
     if inst.components.weapon ~= nil then
         inst.components.weapon:SetOnAttack(NewOnAttack) --The old one doesn't have anything that's really useful to this new version. Replacing.
     end
+
+    inst:AddComponent("damagetypebonus")
+    inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, 1+17 / 59)
 end)

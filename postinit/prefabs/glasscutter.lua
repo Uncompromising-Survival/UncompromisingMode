@@ -10,10 +10,6 @@ env.AddPrefabPostInit("glasscutter", function(inst)
 		local _OnAttack = inst.components.weapon.onattack
 
 		inst.components.weapon:SetOnAttack(function(inst, attacker, target, ...)
-			if target ~= nil and target:HasTag("shadow_aligned") and not target.components.health:IsDead() and target.components.combat ~= nil then
-				target.components.combat:GetAttacked(attacker, 17, nil)
-			end
-
 			inst.components.weapon.attackwear = target ~= nil and target:IsValid()
 				and target:HasTag("shadow_aligned")
 				and TUNING.GLASSCUTTER.SHADOW_WEAR
@@ -24,4 +20,7 @@ env.AddPrefabPostInit("glasscutter", function(inst)
 			end
 		end)
 	end
+
+    inst:AddComponent("damagetypebonus")
+    inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, 1+17 / 68)
 end)
