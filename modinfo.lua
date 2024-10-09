@@ -154,6 +154,7 @@ configuration_options = {
 
         default = 1
     },
+    BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
     SkipSpace(),
 
     Header("Core Gameplay"),

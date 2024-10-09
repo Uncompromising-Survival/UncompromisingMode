@@ -218,3 +218,8 @@ if GetModConfigData("hardcore") then
 end
 
 modimport("init/init_loadingtips")
+
+--food stats!
+if GetModConfigData("food_stats") then
+    modimport("init/init_food/init_food_stats")
+end
