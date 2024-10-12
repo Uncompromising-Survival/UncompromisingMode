@@ -61,6 +61,7 @@ local component_post = {
     --"raindome"
     "stewer",
     "boatmagnet",
+	"moosespawner",
 }
 
 local prefab_post = {
