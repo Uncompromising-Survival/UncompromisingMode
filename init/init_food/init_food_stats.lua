@@ -38,9 +38,9 @@ env.AddComponentPostInit("stewer", function(self)
                         v = product_pref
                     end
 
-                    self.food_stats[i].hunger = InvertVeggieStats(v, v.components.edible.hungervalue) + (v.potstats.hunger or 0)
-                    self.food_stats[i].health = InvertVeggieStats(v, v.components.edible.healthvalue) + (v.potstats.health or 0)
-                    self.food_stats[i].sanity = InvertVeggieStats(v, v.components.edible.sanityvalue) + (v.potstats.sanity or 0)
+                    self.food_stats[i].hunger = InvertVeggieStats(v, v.components.edible.hungervalue) + (v.potstats ~= nil and v.potstats.hunger or 0)
+                    self.food_stats[i].health = InvertVeggieStats(v, v.components.edible.healthvalue) + (v.potstats ~= nil and v.potstats.health or 0)
+                    self.food_stats[i].sanity = InvertVeggieStats(v, v.components.edible.sanityvalue) + (v.potstats ~= nil and v.potstats.sanity or 0)
 
 
                     if product_pref ~= nil then
