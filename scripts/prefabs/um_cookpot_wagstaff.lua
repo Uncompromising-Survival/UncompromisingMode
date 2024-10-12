@@ -328,7 +328,6 @@ end
 local dishes = {
 	"barnaclinguine",
 	"barnaclesushi",
-	"barnaclepita",
 	"californiaroll",
 	"dragonpie",
 	"figatoni",
@@ -337,41 +336,34 @@ local dishes = {
 	"waffles",
 	"pumpkincookie",
 	"pepperpopper",
-	"lobsterbisque",
 	"lobsterdinner",
+	
+	-- UM Specific
+	"theatercorn",
+	"viperjam",
+	"zaspberryparfait",
+	"devilsfruitcake",
+	"snotroast",
+	"stuffed_peeper_poppers",
 }
 
-local ingredients = {
-	"meat",
-	"cookedmeat",
+local effect_dishes = {
+	"dragonpie",
+	"waffles",
+	"pepperpopper",
+	"lobsterdinner",
+	"devilsfruitcake",
+	-- Buffer dishes, still decent, only if not wortox though
 	
-	"smallmeat",
-	"cookedsmallmeat",
-	
-	"berries",
-	"berries_cooked",
-	
-	"carrot",
-	"carrot_cooked",
-	
-	"kelp",
-	"kelp_cooked",
-	
-	"cactus_meat",
-	"cactus_meat_cooked",
-	
-	"red_cap",
-	"red_cap_cooked",
-	
-	"green_cap",
-	"green_cap_cooked",
-	
-	"blue_cap",
-	"blue_cap_cooked",
+	-- Effect Dishes
+	"theatercorn",
+	"viperjam",
+	"zaspberryparfait",
+	"snotroast",
+	"stuffed_peeper_poppers",
 }
 
-
-local function RedoTodays(inst)
+local function RedoTodays(inst,bias_to_effects)
 	inst.todays_ingredients = {}
 	inst.display.holograms = {}
 	for i = 1,4 do
@@ -440,6 +432,10 @@ local function RedoTodays(inst)
 		inst:DoTaskInTime(0,function(inst) Hologram(inst,ingredient,i) end)
 	end
 	local dish = dishes[math.random(#dishes)]
+	if bias_to_effects then
+		dish = effect_dishes[math.random(#effect_dishes)]
+	end
+	
 	inst.todays_dish = dish
 	inst:DoTaskInTime(0,function(inst) DishHologram(inst,dish) end)
 end
@@ -452,7 +448,7 @@ local function LeverReady(inst)
 		for i,v in ipairs(inst.holograms) do
 			v:Remove()
 		end
-		RedoTodays(inst.pot)
+		RedoTodays(inst.pot,true)
 
 		inst.pot.lever_ready = nil
 	end
