@@ -54,7 +54,6 @@ local _activeplayers = {}
 
 local function AllowedToAttack()
 	return  (#_activeplayers > 0 and
-            TheWorld.state.cycles > TUNING.DSTU.NO_MOTHER_GOOSE_BOSS_TIME and  
                 (_attackduringoffseason or
                 TheWorld.state.season == "spring"))
 end

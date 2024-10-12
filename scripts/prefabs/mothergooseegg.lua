@@ -110,8 +110,7 @@ local function fn()
 
     --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetBank("goosemoose_nest")
-    inst.AnimState:SetBuild("mothergoosemoose_nest")
-    inst.AnimState:PlayAnimation("nest")
+
 
     inst:AddTag("lightningrod")
     inst:AddTag("gmooseegg")
@@ -152,6 +151,18 @@ local function fn()
     inst.components.named:PickNewName()
     inst:DoPeriodicTask(5, rename)
 
+
+    
+	
+	if TUNING.DSTU.GOOSE_SETTING == "BOTH" then -- If we have both, differentiate by skin
+		inst.AnimState:SetBuild("mothergoosemoose_nest")
+		inst.components.named.possiblenames = {STRINGS.NAMES["MOTHERMOOSEEGG1"], STRINGS.NAMES["MOTHERMOOSEEGG1"]}
+    else
+		inst.AnimState:SetBuild("goosemoose_nest")
+		inst.components.named.possiblenames = {STRINGS.NAMES["GOOSEEGG1"], STRINGS.NAMES["GOOSEEGG2"]}
+	end
+	inst.AnimState:PlayAnimation("nest")
+    inst.components.named:PickNewName()
     inst.MakeWorkable = MakeWorkable
 
     inst:SetStateGraph("SGmothermooseegg")

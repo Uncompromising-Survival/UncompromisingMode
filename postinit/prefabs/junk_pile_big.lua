@@ -6,7 +6,7 @@ local function MakeCooker(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	
 
-	local offset = FindWalkableOffset(inst:GetPosition(), math.random() * 2 * PI, 6, 10, true)
+	local offset = FindWalkableOffset(inst:GetPosition(), math.random() * 2 * PI, 23, 30, true,true)
 
 	local spawner = SpawnPrefab("umss_general")
     spawner.DefineTable(spawner, "wagstaffcooker")
@@ -19,7 +19,7 @@ end
 
 
 local function LookForCooker(inst)
-	if not FindEntity(inst,20,function(ent) return ent.prefab == "um_cookpot_wagstaff" end) then
+	if not FindEntity(inst,30,function(ent) return ent.prefab == "um_cookpot_wagstaff" end) then
 		MakeCooker(inst)
 	end
 end

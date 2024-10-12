@@ -200,16 +200,23 @@ local function TornadoEnviromentTask(inst)
         local items_pick = TheSim:FindEntities(x, y, z, 6, { "_inventoryitem" }, --no dome check because dome component adds nosucky tag.
             { "irreplaceable", "tornado_nosucky", "trap", "INLIMBO", "heavy", "backpack" })
         for k, v in ipairs(items_pick) do
-            if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
-                if config == "reduced" and v:IsAsleep() then
-                    return
-                end
-                if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
-                    v:Remove()
-                else
-                    PickItem(v, inst)
-                end
-            end
+			if v.prefab == "staff_tornado" then
+				if not v.empowered then
+					v.ChargeUp(v)
+					SpawnPrefab("lightning").Transform:SetPosition(v.Transform:GetWorldPosition())
+				end
+			else
+				if v.components.inventoryitem ~= nil and v.prefab ~= "bullkelp_beachedroot" then
+					if config == "reduced" and v:IsAsleep() then
+						return
+					end
+					if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
+						v:Remove()
+					else
+						PickItem(v, inst)
+					end
+				end
+			end
         end
     end
 

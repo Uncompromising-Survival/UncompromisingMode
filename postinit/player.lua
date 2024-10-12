@@ -177,6 +177,17 @@ env.AddPlayerPostInit(function(inst)
     end
 
     if not TheWorld.ismastersim then
+		inst:DoPeriodicTask(0.5,function(inst)
+			local tornadoposition 
+			if TheInput:GetWorldEntityUnderMouse() then
+				tornadoposition = TheInput:GetWorldEntityUnderMouse():GetPosition()
+			else
+				tornadoposition = TheInput:GetWorldPosition()
+			end
+			if tornadoposition ~= nil then
+				SendModRPCToServer(GetModRPC("AllMouseGags", "GetTheInput"), tornadoposition.x, tornadoposition.y, tornadoposition.z)
+			end
+		end)
         return inst
     end
 

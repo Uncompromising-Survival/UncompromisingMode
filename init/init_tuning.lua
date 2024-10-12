@@ -153,7 +153,7 @@ TUNING.DSTU = {
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
     -- Spawn New Bosses
-    SPAWNMOTHERGOOSE = GetModConfigData("mother_goose"),
+    GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
     -- Hound inclusion
     SPOREHOUNDS = GetModConfigData("sporehounds"),
@@ -376,7 +376,7 @@ TUNING.DSTU = {
     MAXHPHITTERS = GetModConfigData("maxhphitters"),
     BEEFALO_NERF = GetModConfigData("beefalo_nerf"),
     NO_MOCK_DRAGONFLY_BOSS_TIME = GetModConfigData("wiltfly_spawn"),
-    NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
+    --NO_MOTHER_GOOSE_BOSS_TIME = GetModConfigData("mother_goose_spawn"),
     WATHOM_MAX_DAMAGE_CAP = GetModConfigData("wathom_max_dmg"),
     WATHOM_AMPED_VULNERABILITY = GetModConfigData("wathom_ampvulnerability"),
     WATHOM_ARMOR_DAMAGE = GetModConfigData("wathom_armordamage"),

@@ -849,8 +849,17 @@ configuration_options = {
     Header("Bosses"),
     -----------------------------
     Header("Additional Seasonal Giants"),
-    BinaryConfig("mother_goose", "Mother Goose",
-        "Mother Goose will now attack the player in Spring, similar to the Reign of Giants' Moose.", true),
+    {
+        name = "goose_setting",
+        label = "Goose",
+        hover = "How Meese can appear.",
+        options = {
+            { description = "ROG Moose", data = "ROG" },
+            { description = "DST Goose", data = "DST" },    
+            { description = "Both Meese", data = "BOTH" } 
+        },
+        default = "ROG"
+    },
     {
         name = "mother_goose_spawn",
         label = "Mother Goose - Spawn Date",
@@ -1148,8 +1157,8 @@ configuration_options = {
     },
     {
         name = "moose_health_",
-        label = "Moose/Geese's Health",
-        hover = "Tweak Moose/Geese's Health to your liking!",
+        label = "DST Moose Health",
+        hover = "Tweak DST Moose Health to your liking!",
         options = {
             { description = "Lowest (/4)",    data = 0.25 },
             { description = "Lowered (/2)",   data = 0.5 },
@@ -1162,8 +1171,8 @@ configuration_options = {
     },
     {
         name = "mothergoose_health_",
-        label = "Mother Goose's Health",
-        hover = "Tweak Mother Goose's Health to your liking!",
+        label = "ROG Goose's Health",
+        hover = "Tweak ROG Goose's Health to your liking!",
         options = {
             { description = "Lowest (/4)",    data = 0.25 },
             { description = "Lowered (/2)",   data = 0.5 },

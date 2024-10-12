@@ -190,8 +190,7 @@ local function fn()
     inst.Physics:SetCollisionCallback(OnCollide)
 
     inst.AnimState:SetBank("goosemoose")
-    inst.AnimState:SetBuild(IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) and "goosemoose_build" or "goosemoose_yule_build")
-    inst.AnimState:PlayAnimation("idle", true)
+
 
     ------------------------------------------
 
@@ -211,8 +210,28 @@ local function fn()
         return inst
     end
 
+
+	inst:RemoveTag("_named")
+    inst:AddComponent("named")
+    
+
+	if TUNING.DSTU.GOOSE_SETTING == "BOTH" then -- If we have both, differentiate by skin
+		inst.AnimState:SetBuild(IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) and "goosemoose_build" or "goosemoose_yule_build")
+		inst.components.named.possiblenames = {STRINGS.NAMES["MOTHERGOOSE1"], STRINGS.NAMES["MOTHERGOOSE2"]}
+    else
+		inst.AnimState:SetBuild(IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) and "goosemoose_yule_build" or "goosemoose_build")
+		inst.components.named.possiblenames = {STRINGS.NAMES["MOOSE1"], STRINGS.NAMES["MOOSE2"]}
+	end
+    inst.components.named:PickNewName()
+    inst:DoPeriodicTask(5, rename)
+		
+	
+	inst.AnimState:PlayAnimation("idle", true)
+	
+	
+	
     --Remove these tags so that they can be added properly when replicating components below
-    inst:RemoveTag("_named")
+    
 
     ------------------
 
@@ -257,10 +276,7 @@ local function fn()
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()
 
-    inst:AddComponent("named")
-    inst.components.named.possiblenames = {STRINGS.NAMES["MOTHERGOOSE1"], STRINGS.NAMES["MOTHERGOOSE2"]}
-    inst.components.named:PickNewName()
-    inst:DoPeriodicTask(5, rename)
+
 
     ------------------------------------------
 

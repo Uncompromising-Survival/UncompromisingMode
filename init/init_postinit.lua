@@ -64,6 +64,7 @@ local component_post = {
 }
 
 local prefab_post = {
+	"sewing_mannequin",
 	"bathbomb",
     "atrium_gate",
     "dragonfly",

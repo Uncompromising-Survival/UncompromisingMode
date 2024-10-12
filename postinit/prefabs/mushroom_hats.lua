@@ -79,12 +79,14 @@ end
 
 
 local function RemoveBuff(owner,color,helm)
-	if color == "red" then
-		owner.components.combat.externaldamagemultipliers:RemoveModifier(helm)
-	elseif color == "green" then
-		owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, "green_mushroomhat")
-	elseif color == "blue" then -- Handled elsewhere....
-		--owner:RemoveTag("bluemush_builder")
+	if owner.components.combat and owner.components.locomotor then
+		if color == "red" then
+			owner.components.combat.externaldamagemultipliers:RemoveModifier(helm)
+		elseif color == "green" then
+			owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, "green_mushroomhat")
+		elseif color == "blue" then -- Handled elsewhere....
+			--owner:RemoveTag("bluemush_builder")
+		end
 	end
 end
 
@@ -264,8 +266,9 @@ end
 local function InfestHost(inst, owner, color)
 	owner:ListenForEvent("oneat",OnEat)
 	inst.owner = owner
-	owner.components.talker:Say("I'm suddenly craving "..FindColor(inst).." caps.")
-	
+	if owner:HasTag("player") then
+		owner.components.talker:Say("I'm suddenly craving "..FindColor(inst).." caps.")
+	end
 	if owner.prefab == "woodie" then -- hide hat if that!
 		owner:ListenForEvent("startwereplayer",HideHat)
 		owner:ListenForEvent("stopwereplayer",ShowHat)
@@ -325,6 +328,7 @@ for i,color in ipairs(colors) do
 				inst:RemoveEventCallback("stopwereplayer",ShowHat)	
 				owner.fname_temp = nil
 			end	
+
 			_onunequip(inst, owner)
 		end
 						

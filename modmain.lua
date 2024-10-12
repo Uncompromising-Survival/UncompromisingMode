@@ -300,6 +300,30 @@ end
 
 AddModRPCHandler("WixieTheDelinquent", "GetTheInput", HandlerFunction)
 
+local function TornadoHandlingFunction(player, mouseposx, mouseposy, mouseposz)
+    if GLOBAL.TheWorld.ismastersim then
+        if mouseposx ~= nil then
+            player.tornadopointx = mouseposx
+        end
+
+        if mouseposy ~= nil then
+            player.tornadopointy = mouseposy
+        end
+
+        if mouseposz ~= nil then
+            player.tornadopointz = mouseposz
+        end
+    else
+        local tornadopoint = GLOBAL.TheInput:GetWorldPosition()
+
+        player.tornadopointz = tornadopoint.x
+        player.tornadopointz = tornadopoint.y
+        player.tornadopointz = tornadopoint.z
+    end
+end
+
+AddModRPCHandler("AllMouseGags", "GetTheInput", TornadoHandlingFunction)
+
 local function ClaustrophobiaPanic(player, inst)
     if inst.components.health ~= nil and not inst.components.health:IsDead() and not inst.sg:HasStateTag("wixiepanic") then
         inst.sg:GoToState("claustrophobic")
