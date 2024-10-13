@@ -122,38 +122,39 @@ env.AddComponentPostInit("stewer", function(self)
                             table.insert(sanity_values, self.food_stats[i].sanity ~= nil and self.food_stats[i].sanity > 0 and self.food_stats[i].sanity * (1 + sanity_mult) or 0)
                         end
 
+                        if loot.components.edible ~= nil and loot.components.edible.foodtype ~= FOODTYPE.ROUGHAGE then
+                            loot.components.edible.cookstat_hunger = hunger_values()
+                            loot.components.edible.cookstat_health = health_values()
+                            loot.components.edible.cookstat_sanity = sanity_values()
 
-                        loot.components.edible.cookstat_hunger = hunger_values()
-                        loot.components.edible.cookstat_health = health_values()
-                        loot.components.edible.cookstat_sanity = sanity_values()
+                            loot.components.edible.hungervalue = loot.components.edible.cookstat_hunger
+                            loot.components.edible.healthvalue = loot.components.edible.cookstat_health
+                            loot.components.edible.sanityvalue = loot.components.edible.cookstat_sanity
 
-                        loot.components.edible.hungervalue = loot.components.edible.cookstat_hunger
-                        loot.components.edible.healthvalue = loot.components.edible.cookstat_health
-                        loot.components.edible.sanityvalue = loot.components.edible.cookstat_sanity
+                            local mults = { hunger = hunger_values() / original_stats.hunger, health = health_values() / original_stats.health, sanity = sanity_values() / original_stats.sanity }
 
-                        local mults = { hunger = hunger_values() / original_stats.hunger, health = health_values() / original_stats.health, sanity = sanity_values() / original_stats.sanity }
+                            local high_mults = 0
 
-                        local high_mults = 0
+                            for k, v in pairs(mults) do
+                                if v > 2 then
+                                    high_mults = high_mults + 1
+                                end
+                            end
 
-                        for k, v in pairs(mults) do
-                            if v > 2 then
-                                high_mults = high_mults + 1
+                            loot.original_stats = original_stats
+                            loot.food_prefix = high_mults >= 2 and "BALANCED" or
+                                mults.hunger > 2 and "FILLING" or
+                                mults.health > 2 and "HEALTHY" or
+                                mults.sanity > 2 and "SOOTHING" or
+                                (hunger_values() < original_stats.hunger - 25 and "MEAGER") or
+                                (health_values() < original_stats.health - 25 and "UNHEALTHY") or
+                                (sanity_values() < original_stats.sanity - 25 and "RANCID") or nil
+                            if loot.food_prefix ~= nil then
+                                loot.net_food_prefix:set(loot.food_prefix)
                             end
                         end
-
-                        loot.original_stats = original_stats
-                        loot.food_prefix = high_mults >= 2 and "BALANCED" or
-                            mults.hunger > 2 and "FILLING" or
-                            mults.health > 2 and "HEALTHY" or
-                            mults.sanity > 2 and "SOOTHING" or
-                            (hunger_values() < original_stats.hunger - 25 and "MEAGER") or
-                            (health_values() < original_stats.health - 25 and "UNHEALTHY") or
-                            (sanity_values() < original_stats.sanity - 25 and "RANCID") or nil
-                        if loot.food_prefix ~= nil then
-                            loot.net_food_prefix:set(loot.food_prefix)
-                        end
                     end
-
+                    
                     if self.spoiltime ~= nil and loot.components.perishable ~= nil then
                         local spoilpercent = self:GetTimeToSpoil() / self.spoiltime
                         loot.components.perishable:SetPercent(self.product_spoilage * spoilpercent)
@@ -223,7 +224,7 @@ env.AddComponentPostInit("stewer", function(self)
         end
 
         printwrap("newdata", newdata)]]
-        return _oldData--newdata
+        return _oldData --newdata
     end
 end)
 
