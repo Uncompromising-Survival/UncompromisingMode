@@ -7,6 +7,15 @@ GLOBAL.setfenv(1, GLOBAL)
 - Give beefalo foods a stat bonus to compensate for their bad ingredients.
 ]]
 
+
+--initialize net var for clients to get the prefix string
+env.AddPrefabPostInitAny(function(inst)
+    if inst:HasTag("preparedfood") then
+        inst.net_food_prefix = net_string(inst.GUID, "loot_prefix", "loot_prefix_dirty")
+    end
+end)
+
+
 env.AddComponentPostInit("stewer", function(self)
     local _OldStartCooking = self.StartCooking
 
@@ -75,12 +84,12 @@ env.AddComponentPostInit("stewer", function(self)
                         harvester:PushEvent("learncookbookrecipe", { product = self.product, ingredients = self.ingredient_prefabs })
                     end
 
-                    local stacksize = recipe and recipe.stacksize or 1
+                    --[[local stacksize = recipe and recipe.stacksize or 1
                     if loot.components.edible == nil and stacksize > 1 then
                         loot.components.stackable:SetStackSize(stacksize)
                     else
                         loot:RemoveComponent("stackable") -- lord forgive me
-                    end
+                    end]]
 
                     if loot.components.edible ~= nil then
                         local hunger_mult = loot.components.edible.hungervalue ~= nil and loot.components.edible.hungervalue / 200 or 0
@@ -129,24 +138,32 @@ env.AddComponentPostInit("stewer", function(self)
                         local mults = { hunger = hunger_values() / original_stats.hunger, health = health_values() / original_stats.health, sanity = sanity_values() / original_stats.sanity }
                         printwrap("mults", mults)
                         local high_mults = 0
+
                         for k, v in pairs(mults) do
-                            if v > 3 then
+                            if v > 2 then
                                 high_mults = high_mults + 1
                             end
                         end
+
+                        loot.original_stats = original_stats
                         loot.food_prefix = high_mults >= 2 and "BALANCED" or
-                            mults.hunger > 3 and "FILLING" or
-                            mults.health > 3 and "HEALTHY" or
-                            mults.sanity > 3 and "SOOTHING" or
+                            mults.hunger > 2 and "FILLING" or
+                            mults.health > 2 and "HEALTHY" or
+                            mults.sanity > 2 and "SOOTHING" or
                             (hunger_values() < original_stats.hunger - 25 and "MEAGER") or
                             (health_values() < original_stats.health - 25 and "UNHEALTHY") or
                             (sanity_values() < original_stats.sanity - 25 and "RANCID") or nil
+                        if loot.food_prefix ~= nil then
+                            loot.net_food_prefix:set(loot.food_prefix)
+                        end
                     end
+
                     if self.spoiltime ~= nil and loot.components.perishable ~= nil then
                         local spoilpercent = self:GetTimeToSpoil() / self.spoiltime
                         loot.components.perishable:SetPercent(self.product_spoilage * spoilpercent)
                         loot.components.perishable:StartPerishing()
                     end
+
                     if harvester ~= nil and harvester.components.inventory ~= nil then
                         harvester.components.inventory:GiveItem(loot, nil, self.inst:GetPosition())
                     else
@@ -178,6 +195,11 @@ env.AddComponentPostInit("stewer", function(self)
 
     self.OnLoad = function(self, data)
         self.food_stats = data.food_stats
+        self.inst.food_prefix = data.food_prefix
+        if self.inst.food_prefix ~= nil then
+            self.inst.net_food_prefix:set(self.inst.food_prefix)
+        end
+        self.inst.original_stats = data.original_stats
         return _OldOnLoad(self, data)
     end
 
@@ -185,7 +207,9 @@ env.AddComponentPostInit("stewer", function(self)
     self.OnSave = function(self)
         local _oldData = _OnSave(self)
         local newdata = {
-            food_stats = self.food_stats
+            food_stats = self.food_stats,
+            food_prefix = self.inst.food_prefix,
+            original_stats = self.inst.original_stats
         }
 
         if _oldData ~= nil then
@@ -202,9 +226,9 @@ env.AddComponentPostInit("edible", function(self)
     local _OldOnLoad = self.OnLoad
 
     self.OnLoad = function(self, data)
-        if self.inst.components.stackable ~= nil then
+        --[[if self.inst.components.stackable ~= nil then
             self.inst:RemoveComponent("stackable")
-        end
+        end]]
 
         if data.cookstat_hunger ~= nil then
             self.cookstat_hunger = data.cookstat_hunger
@@ -241,41 +265,125 @@ env.AddComponentPostInit("edible", function(self)
 
         return newdata
     end
+    local _DiluteChill = self.DiluteChill
+
+    function self:DiluteChill(item, count)
+        _DiluteChill(self, item, count)
+
+        local stacksize = self.inst.components.stackable.stacksize
+
+        if item:HasTag("preparedfood") then
+            self.hungervalue = (stacksize * self.hungervalue + count * item.components.edible.hungervalue) / (stacksize + count)
+            self.healthvalue = (stacksize * self.healthvalue + count * item.components.edible.healthvalue) / (stacksize + count)
+            self.sanityvalue = (stacksize * self.sanityvalue + count * item.components.edible.sanityvalue) / (stacksize + count)
+        end
+
+        if self.inst.original_stats ~= nil then
+            local original_stats = self.inst.original_stats
+            local mults = { hunger = self.hungervalue / original_stats.hunger, health = self.healthvalue / original_stats.health, sanity = self.sanityvalue / original_stats.sanity }
+            printwrap("mults", mults)
+            local high_mults = 0
+
+            for k, v in pairs(mults) do
+                if v > 2 then
+                    high_mults = high_mults + 1
+                end
+            end
+
+            self.inst.food_prefix = high_mults >= 2 and "BALANCED" or
+                mults.hunger > 2 and "FILLING" or
+                mults.health > 2 and "HEALTHY" or
+                mults.sanity > 2 and "SOOTHING" or
+                (self.hungervalue < original_stats.hunger - 25 and "MEAGER") or
+                (self.healthvalue < original_stats.health - 25 and "UNHEALTHY") or
+                (self.sanityvalue < original_stats.sanity - 25 and "RANCID") or nil
+        end
+    end
 end)
 
 --Seperate from the edible cmp stats. Lets inedible ingredients to have stats.
 --Made global for mod compatibility.
 INGREDIENT_STATS =
 {
-    ["watermelon_cooked"] =
+    --farm crops
+    --explicity doing popcorn here because if I applied to both normal and popcorn it'd make normal corn REALLY good.
+    ["corn_cooked"] =
     {
+        hunger_mod = 25,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["onion"] = {
         hunger_mod = nil,
-        health_mod = 3,
-        sanity_mod = nil,
+        health_mod = 10,
+        sanity_mod = 10,
+    },
+    ["garlic"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["pepper"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["tomato"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 7.5,
+    },
+    ["watermelon"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 10,
+    },
+    ["dragonfruit"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["pumpkin"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 7.5,
+    },
+    ["pomegranate"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["asparagus"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 7.5,
+    },
+    ["durian"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["eggplant"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 5,
+    },
+    ["potato"] = {
+        hunger_mod = nil,
+        health_mod = nil,
+        sanity_mod = 10,
     },
     ["cave_banana"] =
     {
         hunger_mod = nil,
         health_mod = nil,
-        sanity_mod = 5,
-    },
-    ["cave_banana_cooked"] =
-    {
-        hunger_mod = nil,
-        health_mod = nil,
-        sanity_mod = 5,
-    },
-    ["corn_cooked"] =
-    {
-        hunger_mod = 25,
-        health_mod = nil,
-        sanity_mod = nil,
+        sanity_mod = 10,
     },
     ["honey"] =
     {
-        hunger_mod = nil,
+        hunger_mod = 6,
         health_mod = nil,
-        sanity_mod = 2,
+        sanity_mod = 7.5,
     },
     ["nightmarefuel"] =
     {
@@ -283,22 +391,53 @@ INGREDIENT_STATS =
         health_mod = nil,
         sanity_mod = -10,
     },
-    ["tallbirdegg_cooked"] =
+    ["tallbirdegg"] =
     {
         hunger_mod = nil,
-        health_mod = 3,
+        health_mod = 5,
         sanity_mod = nil,
     },
     ["boneshard"] = {
+        hunger_mod = 5,
+        health_mod = 5,
+        sanity_mod = nil
+    },
+    ["goatmilk"] = {
         hunger_mod = 10,
-        health_mod = 10,
+        health_mod = 5,
         sanity_mod = 10
-    }
+    },
+    ["fishmeat"] = {
+        hunger_mod = nil,
+        health_mod = 5,
+        sanity_mod = 5
+    },
+    ["fishmeat_small"] = {
+        hunger_mod = nil,
+        health_mod = 2.5,
+        sanity_mod = 2.5
+    },
+    ["acorn"] = {
+        hunger_mod = nil,
+        health_mod = 2.5,
+        sanity_mod = nil
+    },
 }
 
 for k, v in pairs(INGREDIENT_STATS) do
     env.AddPrefabPostInit(k, function(inst)
         if not TheWorld.ismastersim then return end --do we let the client also get this too??
+
+        inst.potstats = {
+            hunger = v.hunger_mod,
+            health = v.health_mod,
+            sanity = v.sanity_mod,
+        }
+    end)
+
+    --prefab postinit doesn't error when trying to postinit a non-existing prefab, so no need for a check here. Although maybe it affects performance slightly.
+    env.AddPrefabPostInit(k .. "_cooked", function(inst)
+        if not TheWorld.ismastersim then return end
 
         inst.potstats = {
             hunger = v.hunger_mod,
@@ -318,6 +457,7 @@ STRINGS.FOOD_PREFIX = {
     RANCID = "Rancid",
 }
 
+--I'm not even sure this is needed???
 USE_PREFIX[STRINGS.FOOD_PREFIX.FILLING] = true
 USE_PREFIX[STRINGS.FOOD_PREFIX.HEALTHY] = true
 USE_PREFIX[STRINGS.FOOD_PREFIX.SOOTHING] = true
@@ -329,10 +469,26 @@ USE_PREFIX[STRINGS.FOOD_PREFIX.RANCID] = true
 local _GetAdjectivedName = EntityScript.GetAdjectivedName
 EntityScript.GetAdjectivedName = function(self)
     local name = self:GetBasicDisplayName()
-
-    if self.food_prefix ~= nil then
-        return ConstructAdjectivedName(self, name, STRINGS.FOOD_PREFIX[self.food_prefix])
+    --what the fuck am I doing at this point
+    if self.food_prefix ~= nil or self.net_food_prefix ~= nil and self.net_food_prefix:value() ~= nil and self.net_food_prefix:value():len() > 0 then
+        return ConstructAdjectivedName(self, name, STRINGS.FOOD_PREFIX[self.net_food_prefix ~= nil and self.net_food_prefix:value() or self.food_prefix])
     else
         return _GetAdjectivedName(self)
     end
 end
+
+
+--to handle unstacking foods
+env.AddComponentPostInit("stackable", function(self)
+    local _Get = self.Get
+    function self:Get(num)
+        local instance = _Get(self, num)
+        if instance ~= nil and instance.components.edible ~= nil then
+            instance.components.edible.health = self.inst.components.edible.health
+            instance.components.edible.hungervalue = self.inst.components.edible.hungervalue
+            instance.components.edible.sanityvalue = self.inst.components.edible.sanityvalue
+        end
+
+        return instance
+    end
+end)
