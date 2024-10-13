@@ -122,10 +122,6 @@ env.AddComponentPostInit("stewer", function(self)
                             table.insert(sanity_values, self.food_stats[i].sanity ~= nil and self.food_stats[i].sanity > 0 and self.food_stats[i].sanity * (1 + sanity_mult) or 0)
                         end
 
-                        print(hunger_values())
-                        print(health_values())
-                        print(sanity_values())
-                        printwrap("original stats", original_stats)
 
                         loot.components.edible.cookstat_hunger = hunger_values()
                         loot.components.edible.cookstat_health = health_values()
@@ -136,7 +132,7 @@ env.AddComponentPostInit("stewer", function(self)
                         loot.components.edible.sanityvalue = loot.components.edible.cookstat_sanity
 
                         local mults = { hunger = hunger_values() / original_stats.hunger, health = health_values() / original_stats.health, sanity = sanity_values() / original_stats.sanity }
-                        printwrap("mults", mults)
+
                         local high_mults = 0
 
                         for k, v in pairs(mults) do
@@ -206,7 +202,15 @@ env.AddComponentPostInit("stewer", function(self)
     local _OnSave = self.OnSave
     self.OnSave = function(self)
         local _oldData = _OnSave(self)
-        local newdata = {
+
+        if _oldData ~= nil then
+            _oldData.food_stats = self.food_stats
+            _oldData.food_prefix = self.inst.food_prefix
+            _oldData.original_stats = self.inst.original_stats
+        end
+
+
+        --[[local newdata = {
             food_stats = self.food_stats,
             food_prefix = self.inst.food_prefix,
             original_stats = self.inst.original_stats
@@ -218,7 +222,8 @@ env.AddComponentPostInit("stewer", function(self)
             end
         end
 
-        return newdata
+        printwrap("newdata", newdata)]]
+        return _oldData--newdata
     end
 end)
 
@@ -245,6 +250,12 @@ env.AddComponentPostInit("edible", function(self)
             self.inst.components.edible.sanityvalue = data.cookstat_sanity
         end
 
+        self.inst.food_prefix = data.food_prefix
+        if self.inst.food_prefix ~= nil then
+            self.inst.net_food_prefix:set(self.inst.food_prefix)
+        end
+        self.inst.original_stats = data.original_stats
+
         return _OldOnLoad(self, data)
     end
 
@@ -255,6 +266,8 @@ env.AddComponentPostInit("edible", function(self)
             cookstat_hunger = self.cookstat_hunger,
             cookstat_health = self.cookstat_health,
             cookstat_sanity = self.cookstat_sanity,
+            original_stats = self.inst.original_stats,
+            food_prefix = self.inst.food_prefix
         }
 
         if _oldData ~= nil then
@@ -281,7 +294,7 @@ env.AddComponentPostInit("edible", function(self)
         if self.inst.original_stats ~= nil then
             local original_stats = self.inst.original_stats
             local mults = { hunger = self.hungervalue / original_stats.hunger, health = self.healthvalue / original_stats.health, sanity = self.sanityvalue / original_stats.sanity }
-            printwrap("mults", mults)
+
             local high_mults = 0
 
             for k, v in pairs(mults) do
