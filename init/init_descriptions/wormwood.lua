@@ -581,3 +581,5 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Tasty cold strings."
 -- Lava Caves
 DESCRIBE.MAGMAROCK1 = "Hot Rock!"
 DESCRIBE.MAGMABONE = "Dead from heat?"
+
+DESCRIBE.UM_RICE_PUDDING = "Put water friend babies in a stew!"
