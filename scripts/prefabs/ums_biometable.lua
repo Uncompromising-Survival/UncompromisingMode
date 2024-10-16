@@ -1,3 +1,6 @@
+
+
+-- Surface
 local DecidTable = {LazyBase = 1}
 local WixieTable = {wixie_puzzle = 2}
 local DesertTable = {sussyTable = 1}
@@ -13,15 +16,22 @@ local RockyTable = {singlefather = 1}
 local SavannaTable = {sos = 0.5, moxTable = 0.5, deadBodies = 2, grassTrap = 0.1}
 
 local MosaicTable = { -- need more mosaic setpieces
-
     impactfulDiscovery = 1,
     dudu_DUN_DUN = 0.01
-
 }
 
 local GeneralTable = {badfarmerTable = 0.5, baseFrag_smellyKitchen = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, moonFrag = 0.25, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
 
 local OceanTable = {sunkenboat = 0.5, failedFisherman = 0.5}
+-- Caves
+local GeneralTable_Caves = {wikimasters = 1}
+
+
+
+
+
+
+
 
 local function AddToTheWorld(inst, umss) table.insert(TheWorld.umsetpieces, umss) end
 
@@ -56,49 +66,56 @@ local function SpawnBiomeUMSS(inst)
             umss = weighted_random_choice(Table)
         end
     end
+	if TheWorld:HasTag("cave") then
 
-    if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
-        Table = inst.MarshTable
-        umss = weighted_random_choice(Table)
-    end
-    if tile == WORLD_TILES.HOODEDFOREST and weighted_random_choice(inst.HoodedTable) then
-        Table = inst.HoodedTable
-        umss = weighted_random_choice(Table)
-    end
-    if tile == WORLD_TILES.DESERT_DIRT and weighted_random_choice(inst.DesertTable) then
-        Table = inst.DesertTable
-        umss = weighted_random_choice(Table)
-    end
-    if tile == WORLD_TILES.DECIDUOUS and weighted_random_choice(inst.DecidTable) then
-        Table = inst.DecidTable
-        umss = weighted_random_choice(Table)
-    end
-    --[[if tile == WORLD_TILES.GRASS and weighted_random_choice(inst.WixieTable) then
-		Table = inst.WixieTable
-		umss = weighted_random_choice(Table)
-	end]]
-    if tile == WORLD_TILES.FOREST and weighted_random_choice(inst.DarkForestTable) then
-        Table = inst.DarkForestTable
-        umss = weighted_random_choice(Table)
-    end
-    if tile == WORLD_TILES.SAVANNA and weighted_random_choice(inst.SavannaTable) then
-        Table = inst.SavannaTable
-        umss = weighted_random_choice(Table)
-    end
-    if tile == WORLD_TILES.ROCKY and weighted_random_choice(inst.RockyTable) then
-        Table = inst.RockyTable
-        umss = weighted_random_choice(Table)
-    end
+		if not umss then
+			Table = inst.GeneralTable_Caves
+			umss = weighted_random_choice(Table)
+		end
+	else
+		if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
+			Table = inst.MarshTable
+			umss = weighted_random_choice(Table)
+		end
+		if tile == WORLD_TILES.HOODEDFOREST and weighted_random_choice(inst.HoodedTable) then
+			Table = inst.HoodedTable
+			umss = weighted_random_choice(Table)
+		end
+		if tile == WORLD_TILES.DESERT_DIRT and weighted_random_choice(inst.DesertTable) then
+			Table = inst.DesertTable
+			umss = weighted_random_choice(Table)
+		end
+		if tile == WORLD_TILES.DECIDUOUS and weighted_random_choice(inst.DecidTable) then
+			Table = inst.DecidTable
+			umss = weighted_random_choice(Table)
+		end
+		--[[if tile == WORLD_TILES.GRASS and weighted_random_choice(inst.WixieTable) then
+			Table = inst.WixieTable
+			umss = weighted_random_choice(Table)
+		end]]
+		if tile == WORLD_TILES.FOREST and weighted_random_choice(inst.DarkForestTable) then
+			Table = inst.DarkForestTable
+			umss = weighted_random_choice(Table)
+		end
+		if tile == WORLD_TILES.SAVANNA and weighted_random_choice(inst.SavannaTable) then
+			Table = inst.SavannaTable
+			umss = weighted_random_choice(Table)
+		end
+		if tile == WORLD_TILES.ROCKY and weighted_random_choice(inst.RockyTable) then
+			Table = inst.RockyTable
+			umss = weighted_random_choice(Table)
+		end
 
-    if inst.components.areaaware:CurrentlyInTag("oasis") then -- Also triggers for secondary meteor biome
-        Table = inst.MosaicTable
-        umss = weighted_random_choice(Table)
-    end
+		if inst.components.areaaware:CurrentlyInTag("oasis") then -- Also triggers for secondary meteor biome
+			Table = inst.MosaicTable
+			umss = weighted_random_choice(Table)
+		end
 
-    if not umss then
-        Table = inst.GeneralTable
-        umss = weighted_random_choice(Table)
-    end
+		if not umss then
+			Table = inst.GeneralTable
+			umss = weighted_random_choice(Table)
+		end
+	end
     if not TheWorld.umsetpieces then
         TheWorld.umsetpieces = {}
     end
@@ -137,6 +154,7 @@ local function makefn()
     if not TheWorld.ismastersim then
         return inst
     end
+	-- surface
     inst.DecidTable = DecidTable
     inst.WixieTable = WixieTable
     inst.DesertTable = DesertTable
@@ -148,6 +166,13 @@ local function makefn()
     inst.MosaicTable = MosaicTable
     inst.GeneralTable = GeneralTable
     inst.OceanTable = OceanTable
+	
+	-- caves
+	inst.GeneralTable_Caves = GeneralTable_Caves
+	
+	
+	
+	
     inst:AddComponent("areaaware")
     inst.count = 0
     inst:DoTaskInTime(0, SpawnBiomeUMSS)
