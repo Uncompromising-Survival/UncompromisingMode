@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 SetSharedLootTable( 'um_archive_centipede',
 {
-    {'purebrilliance',    1},
+    {'moonstorm_spark',    1},
 })
 
 env.AddPrefabPostInit("archive_centipede", function(inst)
