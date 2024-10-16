@@ -149,7 +149,7 @@ env.AddComponentPostInit("stewer", function(self)
                                 (hunger_values() < original_stats.hunger - 25 and "MEAGER") or
                                 (health_values() < original_stats.health - 25 and "UNHEALTHY") or
                                 (sanity_values() < original_stats.sanity - 25 and "RANCID") or nil
-                            if loot.food_prefix ~= nil then
+                            if loot.food_prefix ~= nil and loot.net_food_prefix ~= nil then
                                 loot.net_food_prefix:set(loot.food_prefix)
                             end
                         end
