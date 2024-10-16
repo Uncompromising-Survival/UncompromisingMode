@@ -33,7 +33,6 @@ local function fn()
         return inst
     end
 
-	inst:AddComponent("inventoryitem")
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/snapalm.xml"
 	
     inst.components.burnable:SetBurnTime(TUNING.SNAPALM_BURN_TIME + math.random() * TUNING.SNAPALM_BURN_TIME_VARIANCE)

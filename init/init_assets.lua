@@ -168,6 +168,13 @@ local inventoryitems =
 	"theatercorn",
 	"turf_ancienthoodedturf",
 	"turf_hoodedmoss",
+	
+	--[[
+	"turf_um_hotspring_grass",
+	"turf_um_hotspring_yellowrock",
+	"turf_um_hotspring_whiterock",
+	]]
+	
 	"um_bear_trap_equippable",
 	"um_bear_trap_equippable_gold",
 	"um_bear_trap_equippable_tooth",
@@ -1561,7 +1568,8 @@ Assets = {
 
 	Asset("IMAGE", "images/inventoryimages/um_cookpot_wagstaff_lever.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_cookpot_wagstaff_lever.xml"),
-	
+	Asset("IMAGE", "images/inventoryimages/um_cookpot_wagstaff_lever2.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"),	
 	
 	-- Shadow Char Items
 	Asset("IMAGE", "images/inventoryimages/um_shadow_axe.tex"),
@@ -1612,6 +1620,18 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/turf_xenobasalt.xml"),
 	Asset("IMAGE", "images/inventoryimages/turf_xenomeadow.tex"),
 	Asset("ATLAS", "images/inventoryimages/turf_xenomeadow.xml"),
+	
+	--[[
+	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_grass.tex"),
+	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_grass.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_whiterock.tex"),
+	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_whiterock.xml"),
+	
+	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_yellowrock.tex"),
+	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_yellowrock.xml"),
+	]]
+	
 	Asset("IMAGE", "images/inventoryimages/turf_ancienthoodedturf.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/turf_ancienthoodedturf.xml"),
 	Asset("ATLAS", "images/inventoryimages/turf_ancienthoodedturf.xml"),

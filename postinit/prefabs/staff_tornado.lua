@@ -213,7 +213,7 @@ env.AddPrefabPostInit("staff_tornado", function(inst)
 
     local old_OnLoad = inst.OnLoad
     inst.OnLoad = function(inst, data, ...)
-        if data.empowered then
+        if data and data.empowered then
 			LightningSpearPostInitFn_Charged(inst)
 		end
 
