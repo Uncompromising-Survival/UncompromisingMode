@@ -530,6 +530,9 @@ DESCRIBE.UM_TORNADO = "Quit yankin' my ribbon!"
 DESCRIBE.UM_WATERFALL = "Wish I had my splashin' clothes!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Ain't any stupid tornadoes to get in my way!"
 
+
+DESCRIBE.UM_RICE_PUDDING = "Sweet swamp plant mush, Yummy!"
+
 local general_scripts = require("play_generalscripts")
 
 STRINGS.STAGEACTOR.WIXIE1 = {

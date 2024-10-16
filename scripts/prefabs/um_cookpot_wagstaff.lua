@@ -10,6 +10,7 @@ local assets =
 	Asset("ANIM", "anim/um_cookpot_wagstaff.zip"),
 	Asset("ANIM", "anim/um_cookpot_wagstaff_display.zip"),
 	Asset("ANIM", "anim/um_cookpot_wagstaff_lever.zip"),
+	Asset("ANIM", "anim/um_cookpot_wagstaff_lever2.zip"),
 }
 
 local prefabs =
@@ -187,7 +188,15 @@ local function MakeHologram(hologram,inst,scale)
 	hologram.AnimState:SetErosionParams(0, -0.2, -1.0)
 	hologram.Transform:SetScale(scale,scale,scale)
 	hologram:RemoveComponent("inspectable")
-	hologram:DoTaskInTime(1,function(hologram) hologram:WatchWorldState("startday", function(hologram) hologram:Remove() end) end) -- need a delay, bc the "startday" command sometimes gets heard
+	hologram.pot = inst
+	hologram:DoTaskInTime(1,
+		function(hologram) hologram:WatchWorldState("startday", 
+			function(hologram) 
+				if not hologram.pot.keep_next then
+					hologram:Remove() 
+				end
+			end) 
+		end) -- need a delay
 	hologram:RemoveComponent("burnable")
 	hologram:RemoveComponent("perishable")
 end
@@ -214,7 +223,7 @@ local function Hologram(inst,ingredient,i)
 	if ingredient == "giant_blueberry" then
 		scale = 0.3
 	end
-
+	
 	MakeHologram(hologram,inst,scale)
 	table.insert(inst.display.holograms,hologram)
 	
@@ -247,6 +256,7 @@ local function MakeDisplay(inst)
 	inst.display.pot = inst
 	inst.display.Transform:SetPosition(x+inst.displayx,0,z+inst.displayz)
 	inst.display.AnimState:HideSymbol("lever")
+	inst.display.AnimState:HideSymbol("lever2")
 end
 
 local function onsave(inst, data)
@@ -267,6 +277,12 @@ local function onsave(inst, data)
 	if inst.display.lever then
 		data.lever = true
 	end
+	if inst.display.lever2 then
+		data.lever2 = true
+	end
+	if inst.keep_next then
+		data.keep_next = inst.keep_next
+	end
 end
 
 local function onload(inst, data)
@@ -275,7 +291,7 @@ local function onload(inst, data)
         inst.Light:Enable(false)
     end
 
-	if data.displayx and data.todays_dish then
+	if data and data.displayx and data.todays_dish then
 		inst.displayx = data.displayx
 		inst.displayz = data.displayz
 		inst.todays_dish = data.todays_dish
@@ -292,13 +308,22 @@ local function onload(inst, data)
 			inst.display.ReadyTheLever(inst.display)
 			
 		end	
-		if data.lever then
-			inst.display.lever = true
+		if data.lever or data.lever2 then
+			inst.display.EnableWorkable(inst.display)
+			if data.lever then
+				inst.display.lever = true
+				inst.display.AnimState:ShowSymbol("lever")
+			else
+				inst.display.lever2 = true
+				inst.display.AnimState:ShowSymbol("lever2")
+			end
 			inst.display.components.trader.enabled = false
-			inst.display.AnimState:ShowSymbol("lever")
 			if not data.lever_ready then
 				inst.display.AnimState:PlayAnimation("pull",false)
 			end
+		end
+		if data.keep_next then
+			inst.keep_next = data.keep_next
 		end
 	end
 
@@ -443,13 +468,18 @@ end
 local function LeverReady(inst)
 	inst:AddComponent("activatable")
     inst.components.activatable.OnActivate = function(inst)
-		inst:RemoveComponent("activatable")
-		inst.AnimState:PlayAnimation("pull",false)
-		for i,v in ipairs(inst.holograms) do
-			v:Remove()
-		end
-		RedoTodays(inst.pot,true)
+		if inst.lever then
+			for i,v in ipairs(inst.holograms) do
+				v:Remove()
+			end
+			RedoTodays(inst.pot,true)
 
+		elseif inst.lever2 then
+			inst.pot.keep_next = true
+		end
+		
+		inst:RemoveComponent("activatable")
+		inst.AnimState:PlayAnimation("pull",false)		
 		inst.pot.lever_ready = nil
 	end
     inst.components.activatable.inactive = true
@@ -544,12 +574,16 @@ local function MakeCookPot(name, common_postinit, master_postinit, assets, prefa
 		end)
 		
 		inst:WatchWorldState("startday",function(inst)
-				if inst.display and inst.display.lever and not inst.lever_ready then
+			if not inst.keep_next then
+				if inst.display and (inst.display.lever or inst.display.lever2) and not inst.lever_ready then
 					inst.display.AnimState:PlayAnimation("ready",false)
 					inst.display.AnimState:PushAnimation("idle",true)
 					inst.display:ReadyTheLever(inst.display)
 				end
-			RedoTodays(inst)
+				RedoTodays(inst)
+			else
+				inst:DoTaskInTime(2,function(inst) inst.keep_next = nil end)
+			end
 		end)
 		
         return inst
@@ -557,6 +591,40 @@ local function MakeCookPot(name, common_postinit, master_postinit, assets, prefa
 
     return Prefab(name, fn, assets, prefabs)
 end
+
+local function onhammered_display(inst, worker)
+    local fx = SpawnPrefab("collapse_small")
+    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    fx:SetMaterial("wood")
+	
+	if inst.lever then
+		inst.lever = nil
+		inst.AnimState:HideSymbol("lever")
+		inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever" })
+	elseif inst.lever2 then
+		inst.lever2 = nil
+		inst.AnimState:HideSymbol("lever2")
+		inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever2" })
+	end
+	inst.pot.keep_next = nil
+	inst.pot.lever_ready = nil
+		
+    inst.components.lootdropper:DropLoot()
+	inst.components.trader.enabled = true
+	inst:RemoveComponent("lootdropper")
+	inst:RemoveComponent("workable")
+	inst:RemoveComponent("activatable")
+end
+
+local function EnableWorkable(inst)
+	inst:AddComponent("lootdropper")
+	inst:AddComponent("workable")
+	inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+	inst.components.workable:SetWorkLeft(1)
+	inst.components.workable:SetOnFinishCallback(onhammered_display)
+end
+
+
 
 local function fndisplay()
 	local inst = CreateEntity()
@@ -600,19 +668,25 @@ local function fndisplay()
 	
 	inst:AddComponent("trader")
 	inst.components.trader.test = function(inst, item)
-		return item.prefab == "um_cookpot_wagstaff_lever"
+		return item.prefab == "um_cookpot_wagstaff_lever" or item.prefab == "um_cookpot_wagstaff_lever2"
 	end
 	inst.components.trader.enabled = true
     inst.components.trader.onaccept =
         function(inst, giver, item)
-			inst.AnimState:ShowSymbol("lever")
-            inst.AnimState:PlayAnimation("ready",false)
-			inst.AnimState:PushAnimation("idle",true)
-			LeverReady(inst)
-			inst.lever = true
+			EnableWorkable(inst)
+			if item.prefab == "um_cookpot_wagstaff_lever" then
+				inst.lever = true
+				inst.AnimState:ShowSymbol("lever")
+			else
+				inst.lever2 = true
+				inst.AnimState:ShowSymbol("lever2")
+			end
+            inst.AnimState:PlayAnimation("pull",false)
+			--LeverReady(inst)
+			
 			inst.components.trader.enabled = false
         end	
-	
+	inst.EnableWorkable = EnableWorkable
 	return inst
 end
 	
@@ -644,6 +718,36 @@ local function fnlever()
 	return inst
 end
 
+local function fnlever2()
+	local inst = CreateEntity()
+
+	inst.entity:AddTransform()
+	inst.entity:AddAnimState()
+	inst.entity:AddNetwork()
+
+
+
+    inst.AnimState:SetBank("um_cookpot_wagstaff_lever2")
+    inst.AnimState:SetBuild("um_cookpot_wagstaff_lever2")
+   
+	
+	inst.entity:SetPristine()
+
+	if not TheWorld.ismastersim then
+		return inst
+	end
+	inst.AnimState:PlayAnimation("idle",true)
+	inst:AddComponent("inspectable")
+
+	inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"
+
+	inst:AddComponent("tradable")
+	return inst
+end
+
+
 return MakeCookPot("um_cookpot_wagstaff", cookpot_common, cookpot_common_master,assets),
 Prefab("um_cookpot_wagstaff_display",fndisplay),
-Prefab("um_cookpot_wagstaff_lever",fnlever)
+Prefab("um_cookpot_wagstaff_lever",fnlever),
+Prefab("um_cookpot_wagstaff_lever2",fnlever2)

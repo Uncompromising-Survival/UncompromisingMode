@@ -713,3 +713,5 @@ DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
 DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+
+DESCRIBE.UM_RICE_PUDDING = "Some plain old rice pudding."

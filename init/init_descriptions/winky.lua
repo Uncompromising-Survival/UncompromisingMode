@@ -590,3 +590,5 @@ DESCRIBE.UM_BOAT_ENGINE = {
     LOWFUEL = "PLEASE WRITE QUOTES",
     OVERHEATING = "PLEASE WRITE QUOTES"
 }
+
+DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."
