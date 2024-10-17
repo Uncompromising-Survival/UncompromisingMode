@@ -263,11 +263,11 @@ AddShardModRPCHandler("UncompromisingSurvival", "CaveTornado", function(def, x, 
 end)
 
 AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(sender_list, toggle)
-    if toggle then
+    if toggle and GLOBAL.TheWorld ~= nil then
         GLOBAL.TheWorld:AddTag("heatwavestart")
         GLOBAL.TheWorld.net:AddTag("heatwavestartnet")
         GLOBAL.TheWorld:PushEvent("heatwavestart")
-    else
+    elseif GLOBAL.TheWorld ~= nil then
         GLOBAL.TheWorld:RemoveTag("heatwavestart")
         GLOBAL.TheWorld.net:RemoveTag("heatwavestartnet")
         GLOBAL.TheWorld:PushEvent("heatwaveend")
