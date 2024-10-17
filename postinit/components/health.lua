@@ -69,7 +69,9 @@ local function TriggerAmulet(self)
     if self.inst.components.freezable then
         self.inst.components.freezable:Reset()
     end
-
+    if self.inst.components.hunger then
+        self.inst.components.hunger:SetPercent(2 / 3, true)
+    end
     if self.inst.components.grogginess then
         self.inst.components.grogginess:ResetGrogginess()
     end
