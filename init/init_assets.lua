@@ -174,7 +174,6 @@ local inventoryitems =
 	"turf_um_hotspring_yellowrock",
 	"turf_um_hotspring_whiterock",
 	]]
-	
 	"um_bear_trap_equippable",
 	"um_bear_trap_equippable_gold",
 	"um_bear_trap_equippable_tooth",
@@ -400,6 +399,7 @@ local inventoryitems =
 	"um_durian_cream_marshcake",
 	"um_chiles_en_nogada",
 	"um_rice_pudding",
+	"um_kebab",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -458,6 +458,8 @@ Assets = {
 	Asset("IMAGE", "images/cookbook_um_rice_pudding.tex"),
 	Asset("ATLAS", "images/cookbook_um_rice_pudding.xml"),
 	
+	Asset("IMAGE", "images/cookbook_um_kebab.tex"),
+	Asset("ATLAS", "images/cookbook_um_kebab.xml"),
 	
 	--crafting menu avatars
 	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
@@ -1485,7 +1487,7 @@ Assets = {
 	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
 	Asset("ANIM", "anim/um_chiles_en_nogada.zip"),
 	Asset("ANIM", "anim/um_rice_pudding.zip"),
-	
+	Asset("ANIM", "anim/um_kebab.zip"),
 	
 	Asset("ANIM", "anim/smogquito_build.zip"),
 	Asset("ANIM", "anim/smogquito_nest_build.zip"),
@@ -1631,7 +1633,6 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_yellowrock.tex"),
 	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_yellowrock.xml"),
 	]]
-	
 	Asset("IMAGE", "images/inventoryimages/turf_ancienthoodedturf.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/turf_ancienthoodedturf.xml"),
 	Asset("ATLAS", "images/inventoryimages/turf_ancienthoodedturf.xml"),
@@ -2107,7 +2108,9 @@ Assets = {
 
 	Asset("IMAGE", "images/inventoryimages/um_rice_pudding.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_rice_pudding.xml"),
-
+	
+	Asset("IMAGE", "images/inventoryimages/um_kebab.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_kebab.xml"),
 	
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/gasmask.xml"),
 	Asset("ATLAS", "images/inventoryimages/gasmask.xml"),

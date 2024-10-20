@@ -643,7 +643,20 @@ local um_preparedfoods =
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "rice", 1 }, { "rice", 1 }, { "honey", 1 }}},
     },	
-
+    um_kebab =
+    {
+        test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) end,
+        hunger = 87.5,
+        health = 8,
+        sanity = 20,
+        priority = 200,
+        weight = 1,
+        cooktime = 1,
+        foodtype = FOODTYPE.MEAT,
+        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "meat", 3 }}},
+    },	
 }
 
 for k, v in pairs(um_preparedfoods) do
