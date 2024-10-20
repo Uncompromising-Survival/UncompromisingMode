@@ -63,6 +63,32 @@ local function TriggerAmulet(self)
     else
         self:DoDelta(49, false, item, true) --set 25%
     end
+    if self.inst.components.burnable then
+        self.inst.components.burnable:Extinguish(true, 0)
+    end
+    if self.inst.components.freezable then
+        self.inst.components.freezable:Reset()
+    end
+    if self.inst.components.hunger then
+        self.inst.components.hunger:SetPercent(2 / 3, true)
+    end
+    if self.inst.components.grogginess then
+        self.inst.components.grogginess:ResetGrogginess()
+    end
+
+    if self.inst.components.moisture then
+        self.inst.components.moisture:ForceDry(true, self.inst)
+        self.inst.components.moisture:ForceDry(false, self.inst)
+    end
+
+    if self.inst.components.temperature then
+        self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
+    end
+
+    if self.inst.components.debuffable then
+        self.inst.components.debuffable:Enable(false) --removes all debuffs
+        self.inst.components.debuffable:Enable(true)
+    end
 
     if self.inst:HasTag("wathom") then
         self.inst.AnimState:SetBuild("wathom")

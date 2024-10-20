@@ -20,8 +20,8 @@ SetSharedLootTable("um_daywalker2",
         { "wagpunk_bits",                     1 },
         { "wagpunk_bits",                     1 },
         { "wagpunk_bits",                     0.5 },
-		{ "um_cookpot_wagstaff_lever",        1 },
-		{ "um_cookpot_wagstaff_lever2",        1 },
+        { "um_cookpot_wagstaff_lever",        1 },
+        { "um_cookpot_wagstaff_lever2",       1 },
         { "armorwagpunk_blueprint",           1 },
         { "wagpunkhat_blueprint",             1 },
         { "wagpunkbits_kit_blueprint",        1 },
@@ -107,3 +107,26 @@ env.AddComponentPostInit("daywalkerspawner", function(self)
         self.first_time = data.first_time
     end
 end)
+
+local fx = {
+    "daywalker2_object_break_fx",
+    "daywalker2_spike_break_fx",
+    "daywalker2_cannon_break_fx",
+    "daywalker2_armor2_break_fx",
+    "daywalker2_cloth_break_fx"
+}
+
+for k, v in pairs(fx) do
+    env.AddPrefabPostInit(v, function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
+        inst:ListenForEvent("animover", function(inst)
+            --if math.random() > 0.33 then
+                local loot = SpawnPrefab("wagpunk_bits")
+                loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            --end
+        end)
+    end)
+end
