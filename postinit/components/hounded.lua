@@ -95,7 +95,7 @@ local wormspawn =
 {
     base_prefab = "worm",
     upgrade_spawn = "worm_boss",
-    winter_prefab = TUNING.DSTU.DEPTHSEELS and "depthseels" or "worm",
+    winter_prefab = TUNING.DSTU.DEPTHSEELS and "shockworm" or "worm",
     summer_prefab = TUNING.DSTU.DEPTHSVIPERS and "viperworm" or "worm",
 
     attack_levels =
