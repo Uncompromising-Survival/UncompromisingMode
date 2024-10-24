@@ -70,7 +70,7 @@ end
 -- WEAPON PERKS
 --------------------------------------------------------------------------
 
-if env.GetModConfigData("wathgrithr_arsenal") then -- Only with arsenal enabled
+if env.GetModConfigData("wathgrithr_rework_") then -- Only with rework enabled
 -- Spear
 TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES = 2 -- Base cost of lunge
 --TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES = 0.5 -- Durability lost per mob hit

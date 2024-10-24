@@ -141,12 +141,10 @@ configuration_options = {
 
     BinaryConfig("shadow_items", "Shadow Character Items",
         "Shadow Characters drop Unique Items", false),
-
-    BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
     {
         name = "wathgrithr_rework_",
         label = "Wigfrid - Rework",
-        hover = "Reduced Wigfrids combat leeching, revamped skill tree, added more meaningful alingment choices.",
+        hover = "Reduced Wigfrids combat leeching, revamped skill tree, adjusted item durability.",
         options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
