@@ -78,7 +78,7 @@ local postinit = function(inst)
         if inst.charge and inst.charge == 1 then
             local fx = SpawnPrefab("electricchargedfx")
             fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            inst.shocking = inst:DoTaskInTime(math.random(3, 10), Shocking)
+            inst.shocking = inst:DoTaskInTime(math.random(3, 5), Shocking)
         end
     end
 
