@@ -813,7 +813,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Misc Monsters"),
-    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
+    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", false),
     BinaryConfig("harder_krampus", "Harder Krampus", "Krampii now have a new attack, with knockback.", true),
     BinaryConfig("kramped_buff", "No Naughtiness Decay", "Prevents naughtiness decay.", true),
     BinaryConfig("pigking_guards", "Pig King Guards",
