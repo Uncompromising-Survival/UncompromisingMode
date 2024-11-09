@@ -116,7 +116,7 @@ local function YellowAmuletPostInit(inst)
     end
 
     local fueled = inst.components.fueled
-    if fueled then
+    if fueled ~= nil then
         local OldOnTakeFuelFn = fueled.ontakefuelfn
         local function ontakefuel(inst)
             if inst.components.equippable:IsEquipped() then
@@ -132,7 +132,7 @@ local function YellowAmuletPostInit(inst)
     end
 
     local equippable = inst.components.equippable
-    if equippable then
+    if equippable ~= nil then
         equippable:SetOnEquip(onequip)
         equippable:SetOnUnequip(onunequip)
         equippable.walkspeedmult = 1
@@ -259,7 +259,7 @@ local function OrangeAmuletPostInit(inst)
     fueled.accepting = true
 
     local equippable = inst.components.equippable
-    if equippable then
+    if equippable ~= nil then
         equippable:SetOnEquip(onequip_orange_UM)
     end
 end
@@ -278,7 +278,7 @@ end)
 
 local function CactusPostInit(inst)
     local pickable = inst.components.pickable
-    if pickable then
+    if pickable ~= nil then
         local _OnPick = pickable.onpickedfn
         local function onpickedchannel(inst, picker)
             inst.Physics:SetActive(false)
@@ -336,7 +336,7 @@ end)
 
 local function OasisCactusPostInit(inst)
     local pickable = inst.components.pickable
-    if pickable then
+    if pickable ~= nil then
         local _OnPick = pickable.onpickedfn
         local function onpickedchannel(inst, picker)
             inst.Physics:SetActive(false)
@@ -394,7 +394,7 @@ end)
 
 local function MarshBushPostInit(inst)
     local pickable = inst.components.pickable
-    if pickable then
+    if pickable ~= nil then
         local _OnPick = pickable.onpickedfn
         local function onpickedchannel(inst, picker)
             inst.AnimState:PlayAnimation("picking")
@@ -437,7 +437,7 @@ end)
 
 local function PurpleAmuletPostInit(inst)
     local equippable = inst.components.equippable
-    if equippable then
+    if equippable ~= nil then
         local onequip_ = equippable.onequipfn
         local onunequip_ = equippable.onunequipfn
         local function OnNewEquip(inst, owner)
