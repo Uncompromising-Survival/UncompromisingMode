@@ -141,7 +141,7 @@ env.AddPrefabPostInit("amulet", function(inst)
 
     if not TheWorld.ismastersim then
         --delayed because we don't want any old events
-		inst:DoTaskInTime(0, inst.ListenForEvent, "amulet.playfuelsound", CLIENT_PlayFuelSound)
+        inst:DoTaskInTime(0, inst.ListenForEvent, "amulet.playfuelsound", CLIENT_PlayFuelSound)
 
         return
     end
