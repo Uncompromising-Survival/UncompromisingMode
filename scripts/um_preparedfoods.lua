@@ -645,7 +645,7 @@ local um_preparedfoods =
     },	
     um_kebab =
     {
-        test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) end,
+        test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) and not names.boneshard end,
         hunger = 87.5,
         health = 8,
         sanity = 20,
