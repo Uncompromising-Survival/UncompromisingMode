@@ -42,7 +42,7 @@ all_clients_require_mod = true
 icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
-server_filter_tags = { "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
+server_filter_tags = { "uncomp", "UM", "uncompromising", "DSTU", "collab", "overhaul", "hard", "difficult", "madness", "challenge",
     "hardcore" }
 
 priority = -10
@@ -141,12 +141,10 @@ configuration_options = {
 
     BinaryConfig("shadow_items", "Shadow Character Items",
         "Shadow Characters drop Unique Items", false),
-
-    BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
     {
         name = "wathgrithr_rework_",
         label = "Wigfrid - Rework",
-        hover = "Reduced Wigfrids combat leeching, revamped skill tree, added more meaningful alingment choices.",
+        hover = "Reduced Wigfrids combat leeching, revamped skill tree, adjusted item durability.",
         options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
@@ -268,7 +266,7 @@ configuration_options = {
     BinaryConfig("no_bee_embers", "Willow - Reduced Embers", "All bees, birds and butterflies no longer drop embers.", true),
     --BinaryConfig("willow insulation", "Willow's Experimental Insulation",
     --"Willow's insulation is tweaked to be 120 on Summer and -120 on Winter.", false),
-    BinaryConfig("wendy", "Wendy", "Abigail is nerfed to not increase Wendy's maximum damage above average.", true),
+    BinaryConfig("wendy", "Wendy", "Petals inside Sisturn decay into Mourning Glory.", true),
     BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),
     BinaryConfig("wxless", "WX Rework",
         "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
@@ -313,7 +311,7 @@ configuration_options = {
         "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
     BinaryConfig("the angler", "Wickerbottom - The Angler's",
         "\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
-    BinaryConfig("woodie_skilltree", "Woodie's Skilltree", "Some changes to Woodie's skilltrees to add trade-offs and buff underutilized skills.", true),
+    --BinaryConfig("woodie_skilltree", "Woodie's Skilltree", "Some changes to Woodie's skilltrees to add trade-offs and buff underutilized skills.", true),
     BinaryConfig("waxwell_nerf", "Maxwell - Nerfs", "Several nerfs to Maxwell to bring him down in power.", true),
     BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
     {
@@ -815,9 +813,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Misc Monsters"),
-    BinaryConfig("noauradamage_butterfly", "AoE Immune Butterflies",
-        "Butterflies are immune to AoE damage, such as catapults and Abigail.", true),
-    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", true),
+    BinaryConfig("_bushcrabs", "Bush Crabs", "Bush Crabs ambush the player when digging up berry bushes.", false),
     BinaryConfig("harder_krampus", "Harder Krampus", "Krampii now have a new attack, with knockback.", true),
     BinaryConfig("kramped_buff", "No Naughtiness Decay", "Prevents naughtiness decay.", true),
     BinaryConfig("pigking_guards", "Pig King Guards",

@@ -37,7 +37,7 @@ local function DoPockets(inst, widget)
 
     inst:AddComponent("container")
     inst.components.container.itemtestfn = function(container, item)
-        return true--container.inst.components.equippable.isequipped or not container:IsEmpty()
+        return true --container.inst.components.equippable.isequipped or not container:IsEmpty()
     end
 
     inst.components.container:WidgetSetup(widget)
@@ -96,7 +96,6 @@ local function DoPockets(inst, widget)
 
     inst:ListenForEvent("itemget", OnContainerChanged)
     inst:ListenForEvent("itemlose", OnContainerChanged)
-
 end
 
 env.AddPrefabPostInit("trunkvest_summer", function(inst)
@@ -143,6 +142,7 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("frigginbirdpail")
     --inst.components.inventoryitem.cangoincontainer = false
+
     if inst.components.equippable ~= nil then
         local onequip_ = inst.components.equippable.onequipfn
         local onunequip_ = inst.components.equippable.onunequipfn
@@ -161,6 +161,7 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
         inst.components.equippable:SetOnEquip(OnEquipMalb)
         inst.components.equippable:SetOnUnequip(OnUnequipMalb)
     end
+
     if inst.components.fillable ~= nil then
         local OnFill_ = inst.components.fillable.overrideonfillfn
         local function NewOnFill(inst, from_object)
@@ -172,6 +173,7 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
         end
         inst.components.fillable.overrideonfillfn = NewOnFill
     end
+
     if inst.components.wateringcan ~= nil then
         local OnDeplete_ = inst.components.wateringcan.ondepletefn
         local function NewOnDeplete(inst)
@@ -185,6 +187,7 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
         end
         inst.components.wateringcan.ondepletefn = NewOnDeplete(inst)
     end
+
     local _OnLoad = inst.OnLoad
     local function OnLoad(inst, data)
         inst:DoTaskInTime(
@@ -196,7 +199,9 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
                 end
             end
         )
-        _OnLoad(inst, data)
+        if _OnLoad ~= nil then
+            _OnLoad(inst, data)
+        end
     end
     inst.OnLoad = OnLoad
 end)

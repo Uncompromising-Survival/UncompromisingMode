@@ -498,7 +498,7 @@ env.AddComponentPostInit("stackable", function(self)
     function self:Get(num)
         local instance = _Get(self, num)
         if instance ~= nil and instance.components.edible ~= nil then
-            instance.components.edible.health = self.inst.components.edible.health
+            instance.components.edible.healthvalue = self.inst.components.edible.healthvalue
             instance.components.edible.hungervalue = self.inst.components.edible.hungervalue
             instance.components.edible.sanityvalue = self.inst.components.edible.sanityvalue
         end

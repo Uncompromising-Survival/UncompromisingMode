@@ -365,7 +365,7 @@ if TUNING.DSTU.WICKERNERF_BEEBOOK then
     TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
 end
 
-if TUNING.DSTU.WATHGRITHR_ARSENAL then
+if TUNING.DSTU.WATHGRITHR_REWORK then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
     TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 60% of the damage taken.\n - Each additional perk reduces it by 20%."
 end

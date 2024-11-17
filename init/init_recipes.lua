@@ -134,10 +134,10 @@ AllRecipes["blue_mushroomhat"].ingredients = {
 
 --woodie stuff
 
-local config_skilltrees = GetModConfigData("woodie_skilltree")
-if config_skilltrees then
-    AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
-end
+--local config_skilltrees = GetModConfigData("woodie_skilltree")
+--if config_skilltrees then
+    --AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
+--end
 
 if GetModConfigData("wanda_nerf") then
     AllRecipes["pocketwatch_revive"].ingredients = {

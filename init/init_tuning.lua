@@ -230,7 +230,6 @@ TUNING.DSTU = {
     --WARLY_FOOD = GetModConfigData("warly_food"),
     -- Wigfrid
     BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resist
-    WATHGRITHR_ARSENAL = GetModConfigData("wathgrithr_arsenal"),
     WATHGRITHR_REWORK = GetModConfigData("wathgrithr_rework_"),
     -- Maxwell
     SHADOWWAXWELL_FUEL_COST = 2,
@@ -354,7 +353,7 @@ TUNING.DSTU = {
     BUTTERFLYWINGS_NERF = GetModConfigData("butterflywings_nerf"),
     LONGPIG = GetModConfigData("longpig"),
     RAW_CROPS_NERF = GetModConfigData("rawcropsnerf"),
-    WENDY_NERF = GetModConfigData("wendy"),
+    WENDY = GetModConfigData("wendy"),
     TOADS = GetModConfigData("toads"),
     MONSTER_EGGS = GetModConfigData("monster_eggs"),
     IMPASSBLES = GetModConfigData("passibleimpassibles"),
@@ -532,9 +531,9 @@ end
 
 TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 
-TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION = TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION * 4
-TUNING.SPAWNPROTECTIONBUFF_DURATION = 5
-TUNING.SPAWNPROTECTIONBUFF_SPAWN_DIST_SQ = 3 * 3
+--TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION = TUNING.SPAWNPROTECTIONBUFF_IDLE_DURATION * 4
+--TUNING.SPAWNPROTECTIONBUFF_DURATION = 5
+--TUNING.SPAWNPROTECTIONBUFF_SPAWN_DIST_SQ = 3 * 3
 
 TUNING.MULTITOOL_DAMAGE = TUNING.AXE_DAMAGE
 

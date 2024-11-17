@@ -170,11 +170,9 @@ if GetModConfigData("wathgrithr_rework_") == 1 then
 	modimport("postinit/components/singinginspiration")
 	modimport("postinit/components/battleborn")
 	modimport("postinit/widgets/inspirationbadge")
-end
-if GetModConfigData("wathgrithr_arsenal") then
 	modimport("postinit/prefabs/wathgrithr_shield")
+    modimport("postinit/prefabs/spear_wathgrithr")
 end
-modimport("postinit/prefabs/spear_wathgrithr") -- Has stuff from both, don't put it inside the if
 
 modimport("init/init_skilltreeimports")
 

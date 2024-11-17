@@ -10,7 +10,7 @@ env.AddComponentPostInit("playerspawner", function(self)
     local _SpawnAtLocation = self.SpawnAtLocation
 
     local SPAWNLIGHT_TAGS = {"spawnlight"}
-    function self:SpawnAtLocation(inst, player, x, y, z, isloading, platform_uid, rx, ry, rz)
+    function self:SpawnAtLocation(inst, player, x, y, z, isloading, platform_uid, rx, ry, rz, ...)
         if player:HasTag("troublemaker") and not isloading and TheSim:FindFirstEntityWithTag("wixie_wardrobe") ~= nil then
 
             player.sg:GoToState("wixie_spawn")
@@ -29,7 +29,7 @@ env.AddComponentPostInit("playerspawner", function(self)
 
             return _SpawnAtLocation(self, inst, player, x, y, z, true)
         else
-            return _SpawnAtLocation(self, inst, player, x, y, z, isloading, platform_uid, rx, ry, rz)
+            return _SpawnAtLocation(self, inst, player, x, y, z, isloading, platform_uid, rx, ry, rz, ...)
         end
     end
 end)
