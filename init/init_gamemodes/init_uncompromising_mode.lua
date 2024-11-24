@@ -202,13 +202,8 @@ modimport("init/init_character_changes/wathgrithr")
 modimport("init/init_character_changes/webber")
 modimport("init/init_character_changes/winona")
 modimport("init/init_character_changes/wanda")
-
-if GetModConfigData("wortox") then
-    modimport("init/init_character_changes/wortox")
-end
-
+modimport("init/init_character_changes/wortox")
 modimport("init/init_character_changes/warly")
-
 modimport("init/init_character_changes/waxwell")
 
 if GetModConfigData("hardcore") then

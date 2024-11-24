@@ -243,7 +243,8 @@ TUNING.DSTU = {
     -- Wickerbottom
     WICKERNERF = GetModConfigData("wickerbottom"),
     WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
-
+	-- Wortox
+	WORTOXCHANGES = GetModConfigData("wortox"),
     -- Willow
     --WILLOW_INSULATION = GetModConfigData("willow insulation"),
 
@@ -256,7 +257,7 @@ TUNING.DSTU = {
     -- Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
     -- Wortox
-    WORTOX = GetModConfigData("wortox"),
+    -- WORTOX = GetModConfigData("wortox"),
     -- Mobs
     RAIDRAT_HEALTH = 100,
     RAIDRAT_DAMAGE = 20,
@@ -578,10 +579,10 @@ TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE = TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE * 2
 -- TUNING.CRABKING_REGEN_BUFF = TUNING.CRABKING_REGEN * 0.33
 
 -- Wortox
-if GetModConfigData("wortox") then
-    TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL = 5
-    TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
-end
+--if GetModConfigData("wortox") then
+    --TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL = 5
+    --TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
+--end
 
 if GetModConfigData("heatwaves") then
     TUNING.WILDFIRE_CHANCE = TUNING.WILDFIRE_CHANCE * 10 --testing, fuck it why not?!
