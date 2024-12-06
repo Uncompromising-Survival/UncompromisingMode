@@ -22,7 +22,7 @@ TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_3_COST = 35
 TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_4_COST = 30
 TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_5_COST = 25
 
-TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO = 2
+TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO = 0.5
 TUNING.LUNAR_MIGHTY_FISHING_CATCH_GOLD_CHANCE = 0.5
 TUNING.LUNAR_MIGHTY_FISHING_CATCH_EXTRA_FISH_CHANCE = 0.75
 
@@ -95,33 +95,27 @@ local MIGHTYSWING = AddAction("MIGHTYSWING", "Mighty Strike", function(act)
 	end
 end)
 
-MIGHTYSWING.distance = TUNING.DEFAULT_ATTACK_RANGE * 1.1
+local function CanMightySwingCheck(doer, target)
+	local bufferedAction = doer:GetBufferedAction()
+	local reached_dest, invalid = false, false
+	if bufferedAction 
+		and bufferedAction.action == GLOBAL.ACTIONS.MIGHTYSWING 
+		and not (bufferedAction.forced and bufferedAction.target == nil)
+		then
+			local combat = doer.replica.combat
+			if combat then
+				reached_dest, invalid, in_cooldown = combat:LocomotorCanAttack(reached_dest, bufferedAction.target)
+			end
+		end
+	return reached_dest, invalid
+end
+
+MIGHTYSWING.priority = -1
+MIGHTYSWING.customarrivecheck = CanMightySwingCheck
 
 local MIGHTYLEAP = AddAction("MIGHTYJUMP", "Leap", function(act)
 	if act.doer ~= nil and act.doer.components.mightiness ~= nil and act.doer:HasTag("strongman") then
-		local mightiness = act.doer.components.mightiness:GetCurrent()
-		local leapexpert = act.doer.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs_expert")
-		local cost = 
-			(leapexpert and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_EXPERT_COST) or
-			(act.doer.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs_4") and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_4_COST) or
-			(act.doer.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs_3") and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_3_COST) or
-			(act.doer.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs_2") and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_2_COST) or
-			(act.doer.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs") and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_1_COST) or
-			TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_COST
-		local hunger = act.doer.components.hunger:GetPercent() * TUNING.WOLFGANG_HUNGER
-		local canmightyhunger = act.doer:HasTag("mighty_hunger") and (hunger >= (mightiness - cost)/TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO)
-		if mightiness >= cost or canmightyhunger then
-			act.doer.components.mightiness:DoDelta(-cost)
-			act.doer:AddTag("mighty_leap_cooldown")
-			act.doer:DoTaskInTime((leapexpert and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_EXPERT_COOLDOWN) or TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_COOLDOWN, function(inst) inst:RemoveTag("mighty_leap_cooldown") end)
-			if mightiness < cost then
-				act.doer:DoTaskInTime(1.25, function(inst) inst.components.hunger:DoDelta((mightiness - cost)/TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO) end) --to prevent it cancelling the jump with a transformation
-			end
-			return true
-		else
-			act.doer.sg:GoToState("idle")
-			return false
-		end
+		return act.doer.components.featsofstrength:MightyLeap(act)
 	else
 		act.doer.sg:GoToState("idle")
 		return false
@@ -221,7 +215,6 @@ local state_mightyjump = GLOBAL.State{ name = "mightyjump",
 		inst.Physics:CollidesWith(GLOBAL.COLLISION.GROUND)
 		inst.Physics:CollidesWith(GLOBAL.COLLISION.CHARACTERS)
 		inst.Physics:CollidesWith(GLOBAL.COLLISION.GIANTS)
-		inst:AddTag("voidimmune")
 		inst.AnimState:PlayAnimation("jumpout")
 		inst.Physics:SetMotorVel(13, 0, 0)
 		
@@ -280,15 +273,6 @@ local state_mightyjump = GLOBAL.State{ name = "mightyjump",
 		GLOBAL.ChangeToCharacterPhysics(inst)
 		local x,y,z = inst.Transform:GetWorldPosition()
 		inst.Transform:SetPosition(x,0,z)
-		inst:RemoveTag("voidimmune")
-		inst:DoTaskInTime(1.25, function(inst)
-			if GLOBAL.TheWorld:HasTag("cave") and not GLOBAL.TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
-				if not inst:HasTag("shadow_mighty") then 
-					inst.components.health:DeltaPenalty(GLOBAL.TUNING.DROWNING_DAMAGE.DEFAULT.HEALTH_PENALTY)
-				end
-				inst:PutBackOnGround()
-			end
-		end)
 		if inst.bufferedaction == inst.sg.statemem.action then
 			inst:ClearBufferedAction()
 		end
@@ -302,14 +286,36 @@ AddStategraphState("wilson", state_mightyjump)
 AddStategraphState("wilson_client", state_mightyjump)
 
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.MIGHTYSWING, function(inst, action)
-	if not inst.sg:HasStateTag("attack") then
+	local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
+	if weapon == nil then
 		return "attack"
+	elseif weapon:HasTag("slingshot") then
+		inst.sg.mem.localchainattack = true
+		return "slingshot_shoot"
 	end
+	return (weapon:HasOneOfTags({"blowdart", "blowpipe"}) and "blowdart")
+		or (weapon:HasTag("thrown") and "throw")
+		or (weapon:HasTag("pillow") and "attack_pillow_pre")
+		or (weapon:HasTag("propweapon") and "attack_prop_pre")
+		or (weapon:HasTag("multithruster") and "multithrust_pre")
+		or (weapon:HasTag("helmsplitter") and "helmsplitter_pre")
+		or "attack"
 end))
 
 AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.MIGHTYSWING, function(inst, action)
-	if not inst.sg:HasStateTag("attack") then
-		return "attack"
+	if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or IsEntityDead(inst)) then
+		local equip = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if equip == nil then
+			return "attack"
+		end
+		local inventoryitem = equip.replica.inventoryitem
+		return (not (inventoryitem ~= nil and inventoryitem:IsWeapon()) and "attack")
+			or (equip:HasTag("slingshot") and "slingshot_shoot")
+			or (equip:HasOneOfTags({"blowdart", "blowpipe"}) and "blowdart")
+			or (equip:HasTag("thrown") and "throw")
+			or (equip:HasTag("pillow") and "attack_pillow_pre")
+			or (equip:HasTag("propweapon") and "attack_prop_pre")
+			or "attack"
 	end
 end))
 
@@ -476,6 +482,7 @@ local function OnHitOther(inst, data)
 	if inst:HasTag("shadow_strikes") then
 		IncreaseCombo(inst, 1, data.target)
 	end
+	inst.components.combat.externaldamagemultipliers:RemoveModifier("mighty_swing")
 end
 
 local function OnAttacked(inst, data)
@@ -550,55 +557,7 @@ end
 local function SpecialWorkMultiplierFn(inst, action, target, tool, numworks, recoil)
 
 	if not recoil and numworks ~= 0 and not inst.components.mightiness:IsWimpy() then
-		local basecost = 
-			(inst.components.skilltreeupdater:IsActivated("wolfgang_critwork_expert") and TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST_EXPERT) or
-			(inst.components.skilltreeupdater:IsActivated("wolfgang_critwork_4") and TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST_4) or
-			(inst.components.skilltreeupdater:IsActivated("wolfgang_critwork_3") and TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST_3) or
-			(inst.components.skilltreeupdater:IsActivated("wolfgang_critwork_2") and TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST_2) or
-			(inst.components.skilltreeupdater:IsActivated("wolfgang_critwork_1") and TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST_1)	or
-			TUNING.SKILLS.WOLFGANG_MIGHTY_WORK_COST
-			
-		local mightiness = inst.components.mightiness:GetCurrent()
-		local hunger = inst.components.hunger:GetPercent() * TUNING.WOLFGANG_HUNGER
-		local workleft = target.components.hackable and target.components.hackable:GetHacksLeft() or target.components.workable:GetWorkLeft()
-		local work_action = target.components.hackable and ACTIONS.HACK or target.components.workable:GetWorkAction()
-		local work_type_mult = TUNING.WOLFGANG_MIGHTY_WORK_COST_MULT[work_action.id]
-		local cost = (basecost * workleft * work_type_mult) / numworks
-		local golden = string.match(tool.prefab, "golden*")
-		local uses = workleft/numworks
-		local tough = target.components.workable ~= nil and target.components.workable.tough
-		local tooltough = tool.components.tool ~= nil and tool.components.tool:CanDoToughWork()
-		local canmightyhunger = inst:HasTag("mighty_hunger") and inst:HasTag("mightiness_mighty") and hunger >= ((mightiness - cost)/TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO)
-		
-		if golden then
-			uses = uses / TUNING.GOLDENTOOLFACTOR
-		end
-		
-		if tough and not tooltough then
-			uses = uses * TUNING.HARD_MATERIAL_MULT
-			cost = cost * 2
-		end
-		
-		if workleft <= numworks then
-			return
-		end
-		
-		if mightiness >= cost or canmightyhunger then
-            if inst.player_classified ~= nil then
-                inst.player_classified.playworkcritsound:push()
-            end
-			inst.components.mightiness:DoDelta(-cost)
-			if mightiness < cost then
-				inst.components.hunger:DoDelta((mightiness - cost)/TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO)
-			end
-			if tool.components.finiteuses ~= nil then
-				tool.components.finiteuses:Use(uses)
-			end
-			if inst:HasTag("shadow_strikes") then
-				IncreaseCombo(inst, 1, target)
-			end
-			return 99999
-		end
+		return inst.components.featsofstrength:MightyWork(target, tool, numworks)
 	end
 end
 
