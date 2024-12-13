@@ -18,22 +18,12 @@ env.AddComponentPostInit("rider", function(self)
         -- We need to run this before setting redirectdamagefn since vanilla sets it as well in the original function.
         -- However, we have to do this after the first guard clause since self.riding would be true if we just used a ret from the first line of this function.
         local ret = _Mount(self, target, instant, ...)
-        self.inst.components.combat.redirectdamagefn =
-            function(inst, attacker, damage, weapon, stimuli)
-                return target:IsValid()
-                    and not (target.components.health ~= nil and target.components.health:IsDead())
-                    and not (weapon ~= nil and (
-                        weapon.components.projectile ~= nil or
-                        weapon.components.complexprojectile ~= nil or
-                        weapon.components.weapon ~= nil and weapon.components.weapon:CanRangedAttack()
-                    ))
-                    and stimuli ~= "electric"
-                    and stimuli ~= "darkness"
-                    and stimuli ~= "beefalo_half_damage"
-                    and target
-                    or nil
+        if self.inst.components.combat.redirectdamagefn ~= nil then -- Continue the function for mod/future-proof support.
+            local oldredirectdamagefn = self.inst.components.combat.redirectdamagefn
+            self.inst.components.combat.redirectdamagefn = function(inst, attacker, damage, weapon, stimuli, ...)
+                return stimuli ~= "beefalo_half_damage" and oldredirectdamagefn(inst, attacker, damage, weapon, stimuli, ...) or nil
             end
-
+        end
         return ret
     end
 end)
