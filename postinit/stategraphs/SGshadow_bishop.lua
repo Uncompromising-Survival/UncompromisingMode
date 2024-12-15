@@ -83,7 +83,7 @@ env.AddStategraphPostInit("shadow_bishop", function(inst) --First time properly 
                 inst.sg.statemem.target = target
                 inst.Physics:Stop()
 
-                local targetpos = inst.sg.statemem.target:GetPosition()
+                -- local targetpos = inst.sg.statemem.target:GetPosition()
                 local pos = inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() and inst.sg.statemem.target:GetPosition() or inst:GetPosition()
                 local bestoffset = nil
                 local minplayerdistsq = math.huge
