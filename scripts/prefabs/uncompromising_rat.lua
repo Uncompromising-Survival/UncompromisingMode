@@ -1578,8 +1578,6 @@ local function TimeForACheckUp(inst, dev)
                     if TUNING.DSTU.ITEMCHECK then
                         if (v:HasTag("_equippable") or v:HasTag("gem") or v:HasTag("tool")) then
                             inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-                        elseif v:HasTag("molebait") then
-                            inst.itemscore = inst.itemscore + 2  -- Oooh, wants wants! We steal!
                         end
                     end
                 end
