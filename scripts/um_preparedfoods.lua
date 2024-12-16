@@ -151,21 +151,6 @@ local um_preparedfoods =
         card_def = { ingredients = { { "pomegranate", 1 }, { "bird_egg", 2 } } },
     },
 
-    hardshelltacos =
-    {
-        test = function(cooker, names, tags) return names.scorpioncarapace and names.scorpioncarapace > 1 and tags.veggie end,
-        hunger = 37.5,
-        health = 20,
-        sanity = 5,
-        priority = 52,
-        weight = 1,
-        cooktime = 1,
-        foodtype = FOODTYPE.MEAT,
-        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "scorpioncarapace", 1 }, { "carrot", 1 } } },
-    },
-
     liceloaf =
     {
         test = function(cooker, names, tags)

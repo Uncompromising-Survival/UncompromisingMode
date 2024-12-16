@@ -71,7 +71,7 @@ end
 
 
 local function ShouldLeave(inst)
-	if inst.investigated and inst.components.combat.target == nil then
+	if inst.investigated and inst.components.combat.target == nil and inst.components.health and inst.components.health:GetPercent() >= 1 then
 		return true
 	end
 end
@@ -117,7 +117,12 @@ local function DoSpecial(inst)
 			if not inst.components.timer:TimerExists("pounce") then --If both are done from counter, first pounce THEN lob
 				--return inst.sg:GoToState("preleapattack")
 				inst.AnimState:SetBank("widow")
-				return inst.sg:GoToState("preleapattack") --inst.sg:GoToState("prechargeattack")
+				if inst.components.health:GetPercent() < 0.4 then
+					inst.treetarget = nil
+					return inst.sg:GoToState("prechargeattack")
+				else
+					return inst.sg:GoToState("preleapattack") --inst.sg:GoToState("prechargeattack")
+				end
 			elseif not inst.components.timer:TimerExists("mortar") then
 				inst.AnimState:SetBank("widow")
 				return inst.sg:GoToState("lobprojectile")

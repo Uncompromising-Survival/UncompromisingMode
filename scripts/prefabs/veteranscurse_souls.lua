@@ -255,7 +255,8 @@ local function MakeSoul(name, glow, glow2, swirl, multcolor, chaotic, colortype)
         inst:AddTag("vetsoul")
 
         inst:AddTag("waterproofer")
-
+		inst:AddTag("soul")
+		
         inst.entity:SetPristine()
 
         if not TheWorld.ismastersim then
@@ -282,7 +283,11 @@ local function MakeSoul(name, glow, glow2, swirl, multcolor, chaotic, colortype)
         inst:ListenForEvent("ondropped", toground)
         inst._task = nil
         toground(inst)
-
+		
+		inst:AddComponent("soul")
+		
+		
+		
         return inst
     end
 

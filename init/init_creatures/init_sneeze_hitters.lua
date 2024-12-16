@@ -34,10 +34,6 @@ local HITTERS =
     {
 		power = -20,
 	},
-	["scorpion"] =
-    {
-		power = -12,
-	},
 	--No klaus, since he does double attacks and has deer 
 }
 

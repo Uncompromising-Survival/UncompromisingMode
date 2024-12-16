@@ -82,7 +82,7 @@ local prefabs = {
 	"mothergooseegg",
 	"shadow_goo",
 	"mini_dreadeye",
-	"scorpion",
+
 	
 	
 	-- Broiling Fields
@@ -136,7 +136,6 @@ local prefabs = {
 	"shadow_teleporter_light",
 	"shadowtalker",
 	"shadow_crown",
-	"scorpioncarapace",
 	"trapdoorgrass",
 	"trapdoorspawner",
 	"lureplague_rat",
@@ -254,7 +253,7 @@ local prefabs = {
 	"driftwoodfishingrod",
 	"nightlightfuel",
 
-	"voorhams",
+	
 	"ratking",
 	"ratgas",
 	"ratacombs_junkpile",
@@ -370,13 +369,10 @@ local prefabs = {
 	"portableboat",
 	"umbral_hound",
 	"siren_bird_nest",
-	"um_scorpionhole",
-	"um_scorpionhole_organizer",
 	"um_amber",
 	"um_sorrel",
 	"brine_balm",
 	--"um_sandrock",
-	"um_scorpioneggs",
 	"giant_tree_birdnest",
 	"uncompromising_bumpers",
 	"um_copper_pipe",
@@ -569,6 +565,8 @@ local prefabs = {
 	"um_robust_projectile",
 	--"coffbee",
 	"um_cookpot_wagstaff",
+	
+	"um_waterfollow",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

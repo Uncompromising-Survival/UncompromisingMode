@@ -104,10 +104,6 @@ if TUNING.DSTU.CROCKPOTMONSTMEAT then
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 
-    AddIngredientValues({ "scorpioncarapace" },
-        { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE, insectoid = 0.5 }, true, true)
-    AddIngredientValues({ "scorpioncarapacecooked" },
-        { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE, insectoid = 0.5 }, true, true)
 else
     AddIngredientValues({ "monstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
     AddIngredientValues({ "cookedmonstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true) --2.5 monster total, Will be calculated with -1 meat
@@ -118,10 +114,6 @@ else
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 
-    AddIngredientValues({ "scorpioncarapace" }, { meat = 0.5, monster = 1, insectoid = 0.5 }, true, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/scorpioncarapace.xml", "scorpioncarapace.tex")
-    AddIngredientValues({ "scorpioncarapacecooked" }, { meat = 0.5, monster = 1, insectoid = 0.5 }, true, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/scorpioncarapacecooked.xml", "scorpioncarapacecooked.tex")
 end
 
 AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })

@@ -2,11 +2,16 @@ local GroundTiles =
 {
 	[WORLD_TILES.HOODEDFOREST] = 	{name = "hoodedmoss", 	anim = "hoodedmoss", 	bank_build = "hfturf"},
 	[WORLD_TILES.ANCIENTHOODEDFOREST] = 	{name = "ancienthoodedturf", 	anim = "ancienthoodedturf", 	bank_build = "hfturf"},
-	[WORLD_TILES.BOILINGFIELDS] = 	{name = "xenomeadow", 	anim = "xenomeadow", 	bank_build = "hfturf"},
-	[WORLD_TILES.CRACKEDBASALT] = 	{name = "xenobasalt", 	anim = "xenobasalt", 	bank_build = "hfturf"},
-	[WORLD_TILES.UM_MAGMA] = 	{name = "magma_rock", 	anim = "xenobasalt", 	bank_build = "hfturf"},
-	[WORLD_TILES.UM_MAGMA_LAVABORDER] = 	{name = "magma_rock", 	anim = "xenobasalt", 	bank_build = "hfturf"},
-	[WORLD_TILES.UM_GRASSMAGMA] = 	{name = "magma_grass", 	anim = "xenobasalt", 	bank_build = "hfturf"},
+	
+	-- broiling hills
+	[WORLD_TILES.UM_HOTSPRING_GRASS] = 	{name = "um_hotspring_grass", 	anim = "um_hotspring_grass", 	bank_build = "hfturf"},
+	[WORLD_TILES.UM_HOTSPRING_YELLOWROCK] = 	{name = "um_hotspring_yellowrock", 	anim = "um_hotspring_yellowrock", 	bank_build = "hfturf"},
+	[WORLD_TILES.UM_HOTSPRING_WHITEROCK] = 	{name = "um_hotspring_whiterock", 	anim = "um_hotspring_whiterock", 	bank_build = "hfturf"},	
+	
+	-- lava caves [need art]
+	[WORLD_TILES.UM_MAGMA] = 	{name = "um_hotspring_whiterock", 	anim = "um_hotspring_whiterock", 	bank_build = "hfturf"},
+	[WORLD_TILES.UM_MAGMA_LAVABORDER] = 	{name = "um_hotspring_whiterock", 	anim = "um_hotspring_whiterock", 	bank_build = "hfturf"},
+	[WORLD_TILES.UM_GRASSMAGMA] = 	{name = "um_hotspring_grass", 	anim = "um_hotspring_grass", 	bank_build = "hfturf"},
 }
 
 local assets =

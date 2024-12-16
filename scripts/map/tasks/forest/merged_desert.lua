@@ -3,7 +3,6 @@
 -- Redux the Lightning Bluff Task -- Oasis Renovation - Give Oasis versions of several Badlands rooms, but they can have sandstorm
 AddTaskPreInit("Lightning Bluff", function(task)
 	GLOBAL.require("map/rooms/forest/UM_LightningBluff")
-	task.room_choices["LightningBluff_Scorpion"] = function() return math.random(3, 4) end
 
 	task.room_choices["BarePlain_Oasis"] = 1
 	task.room_choices["Houndy_Oasis"] = 1 

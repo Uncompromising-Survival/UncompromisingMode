@@ -349,11 +349,7 @@ env.AddPrefabPostInit("spider_warrior", function(inst)
 	if inst.components.combat ~= nil then
 		inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
 	end
-	
-	if inst.components.health ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
-		inst.components.health:SetMaxHealth(300)
-	end
-	
+		
 	inst:AddComponent("tradable") -- For Moondial Mutation.
 end)
 

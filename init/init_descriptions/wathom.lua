@@ -158,11 +158,7 @@ DESCRIBE.HOODEDTRAPDOOR = DESCRIBE.TRAPDOOR
 DESCRIBE.SHROOM_SKIN_FRAGMENT = "Itself, useless."
 DESCRIBE.AIR_CONDITIONER = "Survival, conquered."
 
-DESCRIBE.UM_SCORPION = "Venom, incapacitating."
-DESCRIBE.UM_SCORPIONHOLE = "Animal den, seemingly."
-DESCRIBE.SCORPIONCARAPACE = "Texture, satisfying. Poisonous, sadly."
-DESCRIBE.SCORPIONCARAPACECOOKED = "Poisons, partially subsided."
-DESCRIBE.HARDSHELLTACOS = "Texture, satisfying. Crunch, then soft."
+
 
 DESCRIBE.SKELETONMEAT = "Flesh, human. Edible, however better uses, magic."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

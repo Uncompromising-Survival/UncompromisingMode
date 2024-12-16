@@ -132,7 +132,7 @@ TUNING.DSTU = {
     ICECROCKBLOCKER = GetModConfigData("icecrockblocker"),
     -- Crockpot Dish Changes
 
-    MEATBALL = GetModConfigData("meatball"),
+    MEATBALL = GetModConfigData("meatball_"),
     PIEROGI = GetModConfigData("perogi"),
     FARMFOODREDUX = GetModConfigData("farmfoodredux"),
     ICECREAMBUFF = GetModConfigData("icecream_buff"),
@@ -171,8 +171,7 @@ TUNING.DSTU = {
     -- Bats
     ADULTBATILISKS = GetModConfigData("adultbatilisks"),
     BATSPOOKING = GetModConfigData("batspooking"),
-    -- Scorpions
-    DESERTSCORPIONS = GetModConfigData("desertscorpions"),
+
     -- Pinelings
     PINELINGS = GetModConfigData("pinelings"),
     -- Ancient Trepidations

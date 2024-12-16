@@ -234,11 +234,6 @@ local spawner_data = {
 
     {name = "demoTable", table = umss_tables.demoTable, rotate = true},
 
-    {name = "scorpionOutskirts1", table = umss_tables.scorpionOutskirts1, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
-    {name = "scorpionOutskirts2", table = umss_tables.scorpionOutskirts2, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
-    {name = "scorpionOutskirts3", table = umss_tables.scorpionOutskirts3, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
-    {name = "scorpionOutskirts4", table = umss_tables.scorpionOutskirts4, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
-    {name = "scorpionCenter4", table = umss_tables.scorpionCenter1, rotate = true, tile_centered = true, spawninwater_prefab = false, spawninwater_tile = false},
 
     {name = "basefrag_rattyStorage", table = umss_tables.baseFrag_rattyStorage, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},
     {name = "basefrag_rattySmellyKitchen", table = umss_tables.baseFrag_smellyKitchen, rotate = true, spawninwater_prefab = false, spawninwater_tile = false},

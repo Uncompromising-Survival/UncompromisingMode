@@ -54,48 +54,6 @@ env.AddPrefabPostInit("dragonfly", function (inst)
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetOnPlayerFar(onfar)
 
-	inst.components.damagetracker.damage_threshold_fn = nil
-	
-	SetSharedLootTable('dragonfly', -- Altered loot table
-	{
-		{'dragon_scales',             1.00},
-		{'dragon_scales',             1.00},
-		{'dragon_scales',             1.00},
-		{'dragonflyfurnace_blueprint',1.00},
-		{'chesspiece_dragonfly_sketch', 1.00},
-		{'lavae_egg',                 1.00},
-
-		{'meat',             1.00},
-		{'meat',             1.00},
-		{'meat',             1.00},
-		{'meat',             1.00},
-		{'meat',             1.00},
-		{'meat',             1.00},
-
-		{'goldnugget',       1.00},
-		{'goldnugget',       1.00},
-		{'goldnugget',       1.00},
-		{'goldnugget',       1.00},
-
-		{'goldnugget',       0.50},
-		{'goldnugget',       0.50},
-		{'goldnugget',       0.50},
-		{'goldnugget',       0.50},
-
-		{'redgem',           1.00},
-		{'bluegem',          1.00},
-		{'purplegem',        1.00},
-		{'orangegem',        1.00},
-		{'yellowgem',        1.00},
-		{'greengem',         1.00},
-
-		{'redgem',           1.00},
-		{'bluegem',          1.00},
-		{'purplegem',        0.50},
-		{'orangegem',        0.50},
-		{'yellowgem',        0.50},
-		{'greengem',         0.50},
-	})
 	
 		--local function OnHitOther(inst, other)
 			--if inst.sg.currentstate.name ~= "pound" then

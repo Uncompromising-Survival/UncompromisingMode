@@ -23,7 +23,7 @@ local function OnExplodeFn(inst)
 end
 
 local function fn()
-    local inst = Prefabs.slurtleslime.fn()
+    local inst = Prefabs.gunpowder.fn()
 
 	inst.AnimState:SetBank("snapalm")
 	inst.AnimState:SetBuild("snapalm")

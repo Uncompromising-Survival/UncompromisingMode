@@ -54,7 +54,7 @@ local function TrySlowdown(inst, target)
     if (not target:HasTag("player") or target == inst.lobber) and (inst.prefab ~= "lavaspit_slobber" and inst.components.propagator ~= nil or inst.prefab == "lavaspit_slobber") and target.components.combat ~= nil and target.components.health ~= nil and
         not target:HasTag("dragonfly") and not target:HasTag("lavae") and target.components.burnable ~= nil then
 
-        target.components.health:DoFireDamage(inst.prefab == "lavaspit_slobber" and 6 or 4, inst.lobber, true)
+        target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then
                 target.components.freezable:Unfreeze()

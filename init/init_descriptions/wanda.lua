@@ -152,10 +152,7 @@ DESCRIBE.AIR_CONDITIONER =
 DESCRIBE.SPOREPACK = "It's going to spread it's spores on everything. Gross!"
 DESCRIBE.SALTPACK = "Saves time on shoveling."
 
-DESCRIBE.SCORPION = "Getting stung would be quite the bother!"
-DESCRIBE.SCORPIONCARAPACE = "Slightly poisonous."
-DESCRIBE.SCORPIONCARAPACECOOKED = "Not any more edible."
-DESCRIBE.HARDSHELLTACOS = "Despite the carapace, it seems to be a lot better."
+
 
 DESCRIBE.SKELETONMEAT = "A bit off-putting, but might be useful in the future."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

@@ -274,7 +274,6 @@ local uncompfoods = {
     "blueberrypancakes",
     "californiaking",
     "devilsfruitcake",
-    "hardshelltacos",
     "liceloaf",
     "seafoodpaella",
     "snotroast",

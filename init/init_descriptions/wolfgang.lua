@@ -141,11 +141,6 @@ DESCRIBE.AIR_CONDITIONER = "Keeps Wolfgang's lungs mighty!"
 DESCRIBE.SPOREPACK = "Mushroom bag stinks."
 DESCRIBE.SALTPACK = "Wolfgang is stronger than snow!"
 
-DESCRIBE.UM_SCORPION = "Stay away from Wolfgang!"
-DESCRIBE.SCORPIONCARAPACE = "Is not fit for mighty belly!"
-DESCRIBE.SCORPIONCARAPACECOOKED = "Still is not fit for mighty belly!"
-DESCRIBE.HARDSHELLTACOS = "Is fit for mighty belly!"
-
 DESCRIBE.SKELETONMEAT = "Is... Person...?"
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "Friend, no! Is Wolfgang!"

@@ -26,6 +26,20 @@ SetSharedLootTable('toadystool',
     {"green_cap",     1.00},
     {"green_cap",     0.33},
     {"green_cap",     0.33},
+	
+
+	{"sleepbomb",     1.00},
+	{"sleepbomb",     1.00},
+	{"sleepbomb",     1.00},
+	{"sleepbomb",     1.00},
+	{"sleepbomb",     1.00},
+	
+	{"sleepbomb",     0.50},
+	{"sleepbomb",     0.50},
+	{"sleepbomb",     0.50},
+	{"sleepbomb",     0.50},
+	{"sleepbomb",     0.50},
+
 })
 
 SetSharedLootTable('toadystool_dark',
@@ -130,8 +144,8 @@ env.AddPrefabPostInit("toadstool", function(inst)
 		return
 	end
 	
-    inst.components.healthtrigger:AddTrigger(PHASE2_HEALTH, EnterPhase2Trigger)
-    inst.components.healthtrigger:AddTrigger(PHASE3_HEALTH, EnterPhase3Trigger)
+    -- inst.components.healthtrigger:AddTrigger(PHASE2_HEALTH, EnterPhase2Trigger)
+    -- inst.components.healthtrigger:AddTrigger(PHASE3_HEALTH, EnterPhase3Trigger)
 	
 	--if inst.components.health ~= nil then
 		--inst.components.health:SetMaxHealth(TUNING.DSTU.TOADSTOOL_HEALTH)
@@ -149,9 +163,9 @@ env.AddPrefabPostInit("toadstool_dark", function(inst)
 	end
 	
 	
-    inst.components.healthtrigger:AddTrigger(PHASE2_HEALTH, EnterPhase2Trigger)
-    inst.components.healthtrigger:AddTrigger(PHASE3_HEALTH, EnterPhase3TriggerDark)
-    inst.components.healthtrigger:AddTrigger(PHASE4_HEALTH, EnterPhase4TriggerDark)
+    -- inst.components.healthtrigger:AddTrigger(PHASE2_HEALTH, EnterPhase2Trigger)
+    -- inst.components.healthtrigger:AddTrigger(PHASE3_HEALTH, EnterPhase3TriggerDark)
+    -- inst.components.healthtrigger:AddTrigger(PHASE4_HEALTH, EnterPhase4TriggerDark)
 	
 	if inst.components.lootdropper ~= nil then
 		inst.components.lootdropper:SetChanceLootTable("toadystool_dark")

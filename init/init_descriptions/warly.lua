@@ -148,11 +148,6 @@ DESCRIBE.AIR_CONDITIONER = "Aah, my lungs are clear!"
 DESCRIBE.SPOREPACK = "Absolutely not."
 DESCRIBE.SALTPACK = "Would anyone mind if I use this salt?"
 
-DESCRIBE.UM_SCORPION = "Fried scorpion? Too dangerous."
-DESCRIBE.SCORPIONCARAPACE =
-"I wouldn't dare eat this without a gallon of fry oil."
-DESCRIBE.SCORPIONCARAPACECOOKED = "It's still not good."
-DESCRIBE.HARDSHELLTACOS = "The shell is actually surprisingly pallatable."
 
 DESCRIBE.SKELETONMEAT = "Some dishes probably shouldn't be made."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

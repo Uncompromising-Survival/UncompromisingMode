@@ -84,6 +84,7 @@ local function fn_common()
 
     MakeHauntableLaunchAndPerish(inst)
 	inst.components.edible:SetOnEatenFn(oneatenfn)
+	inst:AddComponent("tradable")
 	
 	return inst
 end

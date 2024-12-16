@@ -1,5 +1,12 @@
 if GetModConfigData("hoodedforest") then -- Lock Everything Behind the Mod Config
 
+AddTaskSetPreInitAny(function(tasksetdata)
+	if tasksetdata.location ~= "forest" then -- HF only spawns on Surface
+		return
+	end
+table.insert(tasksetdata.required_prefabs, "widowwebspawner") 
+end)
+	
 -- Giant Trees (Hooded Forest) replaces the "Forest hunters" task. In DST layman's speak this is the moonbase forest with the single mactusk camp.
 AddTaskPreInit("Forest hunters", function(task)
 	GLOBAL.require("map/rooms/forest/gianttreesrooms")

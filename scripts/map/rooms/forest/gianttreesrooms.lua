@@ -4,6 +4,7 @@ local Layouts = require("map/layouts").Layouts
 local StaticLayout = require("map/static_layout")
 
 Layouts["cave_entrance_lush"] = StaticLayout.Get("map/static_layouts/cave_entrance_lush")
+Layouts["widow_arena"] = StaticLayout.Get("map/static_layouts/widow_arena")
 
 AddRoom("GiantTrees",
 	{
@@ -101,6 +102,9 @@ AddRoom("SpideryGiantTrees",
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
+			countstaticlayouts = {
+				["widow_arena"] = 1,
+			},
 			distributepercent = 0.3,
 			distributeprefabs =
 			{
@@ -118,7 +122,6 @@ AddRoom("SpideryGiantTrees",
 			{
 				giant_tree = function() return 3 + math.random(0, 1) end,
 				extracanopyspawner = function() return 10 + math.random(0, 1) end,
-				widowwebspawner = 1
 			},
 		}
 	})

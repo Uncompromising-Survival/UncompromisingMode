@@ -129,7 +129,7 @@ local felloots =
 {
     log = 2,
     oceantree_leaf_fx_fall = 1,
-    bird_egg = 0.5,
+    bird_egg = 0.25,
     feather = 0.5,
     spider = 0.01,
     frog = 0.05,
@@ -149,7 +149,7 @@ local QUAKEDEBRIS_CANT_TAGS = { "quakedebris" }
 local QUAKEDEBRIS_ONEOF_TAGS = { "INLIMBO" }
 local SMASHABLE_TAGS = { "smashable", "_combat" }
 local NON_SMASHABLE_TAGS = { "INLIMBO", "playerghost", "irreplaceable" }
-local function _GroundDetectionUpdate(debris, override_density)
+local function _GroundDetectionUpdate(debris, override_density,force_shatter)
     local x, y, z = debris.Transform:GetWorldPosition()
     if y <= .2 then
         if debris.prefab == "giant_tree_birdnest" then
@@ -219,6 +219,9 @@ local function _GroundDetectionUpdate(debris, override_density)
             elseif debris.components.inventoryitem then
                 debris.components.inventoryitem.canbepickedup = true
             end
+			if force_shatter then
+				debris:Remove()
+			end
         end
     elseif debris:GetTimeAlive() < 3 then
         if y < 2 then
@@ -274,9 +277,11 @@ local function GetDebris(loottable)
 end
 
 
-local function SpawnDebris(inst, chopper, loottable)
+local function SpawnDebris(inst, chopper, loottable,loc_override,force_shatter)
     local x, y, z = inst.Transform:GetWorldPosition()
-
+	if loc_override then
+		x,y,z = loc_override.Transform:GetWorldPosition()
+	end
     local radius = math.random(3, 5)
     local angle = math.random(0, 2 * PI)
     x = x + radius * math.sin(angle)
@@ -307,21 +312,29 @@ local function SpawnDebris(inst, chopper, loottable)
                 debris.shadow.Transform:SetPosition(x, 0, z)
                 local scaleFactor = Lerp(.5, 1.5, 1)
                 debris.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-                debris.updatetask = debris:DoPeriodicTask(FRAMES, _GroundDetectionUpdate, nil, 5)
+                debris.updatetask = debris:DoPeriodicTask(FRAMES, _GroundDetectionUpdate, nil, 5,force_shatter)
             else
                 if TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
                     if debris:HasTag("spider") then
+						if debris.prefab == "spider_trapdoor" then
+							debris.AnimState:SetBuild("spider_trapdoor_hooded")
+							debris.hooded = true
+						end
                         debris.Physics:Teleport(x, y, z)
                         debris.sg:GoToState("dropper_enter")
-                        if debris.components.combat ~= nil and not chopper:HasTag("spiderwhisperer") then
-                            debris.components.combat:SuggestTarget(chopper)
-                        end
+						if chopper then
+							if debris.components.combat ~= nil and not chopper:HasTag("spiderwhisperer") then
+								debris.components.combat:SuggestTarget(chopper)
+							end
+						end
                     end
                     if debris:HasTag("aphid") then
                         debris.Physics:Teleport(x, y, z)
-                        if debris.components.combat ~= nil and not chopper:HasTag("spiderwhisperer") then
-                            debris.components.combat:SuggestTarget(chopper)
-                        end
+						if chopper then
+							if debris.components.combat then
+								debris.components.combat:SuggestTarget(chopper)
+							end
+						end
                         debris.sg:GoToState("enter_loop")
                     end
                 else
@@ -731,7 +744,7 @@ local function giant_treefn()
     inst.PickBuild = PickBuild
     inst.HideAllMoss = HideAllMoss
     inst:DoTaskInTime(math.random(0, 0.1), function(inst) --Keep giant trees spaced out
-        if FindEntity(inst, 2 ^ 2, nil, { "giant_tree" }) then
+        if FindEntity(inst, 3 ^ 2, nil, { "giant_tree" }) then
             inst:Remove()
         end
     end)
@@ -752,7 +765,9 @@ local function giant_treefn()
     inst.OnRemoveEntity = function(inst)
         removecanopyshadow(inst)
     end
-
+	
+	inst.SpawnDebris = SpawnDebris
+	
     return inst
 end
 

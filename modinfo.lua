@@ -666,7 +666,7 @@ configuration_options = {
     BinaryConfig("sr_foodrebalance", "Fish Foods Rebalance", "Several fish based foods have their stats tweaked.", true),
     BinaryConfig("goodies_nerf", "Goodies Food Type Changes", "The food type of more avaliable Goodies were changed into either Veggie or Generic.", true),
     BinaryConfig("icecream_buff", "Ice Cream Buff", "Ice Cream now restores 100 sanity.", true),
-    BinaryConfig("meatball", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", true),
+    BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
     BinaryConfig("bonestew_nerf", "Meaty Stew Nerf", "Makes meaty stew require 3.5 meat value to be cooked.", true),
     {
         name = "perogi",
@@ -819,9 +819,6 @@ configuration_options = {
     BinaryConfig("pigking_guards", "Pig King Guards",
         "Pig King now has neutral guards watching for any suspicious activity.", true),
 
-    BinaryConfig("desertscorpions", "Scorpions",
-        "Scorpions plague the Oasis Desert during Dusk and Night. They will spawn from Scorpion Holes spread around the biome.",
-        true),
     --BinaryConfig("pollenmites", "Pollen Mites", "Pollen mites spawn in spring and quickly infest the nearby area.", false),
     SkipSpace(),
 

@@ -12,6 +12,13 @@ local rock2_assets =
 	Asset("ATLAS", "images/map_icons/springrock2.xml"),
 }
 
+local rock3_assets =
+{
+    Asset("ANIM", "anim/springrock3.zip"),
+	Asset("IMAGE", "images/map_icons/springrock3.tex"),
+	Asset("ATLAS", "images/map_icons/springrock3.xml"),
+}
+
 local function OnWork(inst, worker, workleft)
     if workleft <= 0 then
         local pt = inst:GetPosition()
@@ -125,7 +132,7 @@ local function rock1_fn()
         return inst
     end
 
-    inst.components.lootdropper:SetChanceLootTable('rock1')
+    inst.components.lootdropper:SetChanceLootTable('rock_flintless')
 
     return inst
 end
@@ -137,10 +144,23 @@ local function rock2_fn()
         return inst
     end
 
+    inst.components.lootdropper:SetChanceLootTable('rock1')
+
+    return inst
+end
+
+local function rock3_fn()
+    local inst = baserock_fn("springrock3", "springrock3", "full", "springrock3.tex")
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
     inst.components.lootdropper:SetChanceLootTable('rock2')
 
     return inst
 end
 
 return Prefab("springrock1", rock1_fn, rock1_assets),
-    Prefab("springrock2", rock2_fn, rock2_assets)
+    Prefab("springrock2", rock2_fn, rock2_assets),
+	Prefab("springrock3", rock3_fn, rock3_assets)

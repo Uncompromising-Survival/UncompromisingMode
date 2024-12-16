@@ -34,7 +34,7 @@ local function TrySlowdownMagma(inst, target)
     if (target.components.combat and target.components.health and
         not target:HasOneOfTags({"dragonfly", "lavae", "snaildrake"}) and target.components.burnable
     ) then
-        target.components.health:DoFireDamage(TUNING.SNAILDRAKE_SLUDGE_DAMAGE, inst.lobber, true)
+        target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then
                 target.components.freezable:Unfreeze()

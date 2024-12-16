@@ -10,6 +10,7 @@ local rocks = {
 	"rock_lichen",
 	"springrock1",
 	"springrock2",
+	"springrock3",
 }
 
 local function EvolveIntoCrab(inst,worker)

@@ -10,19 +10,17 @@ Layouts["cave_entrance_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_
 AddRoom("BoilingFields_BasaltHounds", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison"},
-	value = WORLD_TILES.CRACKEDBASALT,
+	value = WORLD_TILES.UM_HOTSPRING_YELLOWROCK,
 	contents =  {
 					distributepercent = 0.3,
 					distributeprefabs =
 					{
-						hotspring_rockbuncher_flintless = .05, --These rocks place fun tiles below them
-						hotspring_rockbuncher_gold = 0.015,
 						--rock_ice = .1,
 						marsh_tree = 1,
 						houndbone = .5,
 						houndmound = .15,
-						marsh_bush = 1,
-						rock_flintless = 1,
+						marsh_bush = 0.1,
+						springrock1 = 0.1,
 						--basalt = 0.6,
 						rock_lichen = 0.1,
 						um_hotspring = 0.1,
@@ -33,16 +31,17 @@ AddRoom("BoilingFields_BasaltHounds", {
 AddRoom("BoilingFields_Rocky", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison","Mist"},
-	value = WORLD_TILES.BOILINGFIELDS,
+	value = WORLD_TILES.UM_HOTSPRING,
 	contents =  {
-					distributepercent = 0.08,
+					distributepercent = 1,
 					distributeprefabs =
 					{
-						hotspring_rockbuncher_flintless = .02, --These rocks place fun tiles below them
-						hotspring_rockbuncher_gold = 0.015,
-						--rock_flintless_hotspring = 1,
-						rock_lichen = 0.2,
+						springrock2 = 0.1, --These rocks place fun tiles below them
+						springrock3 = 0.1, --These rocks place fun tiles below them
+						rock_lichen = 0.05,
 						um_hotspring = 0.05,
+						nothing = 3,
+						evergreen_sparse = 10,
 					},
 					countprefabs = {
 						snaildrake_hole = function() return math.random(2, 3) end,
@@ -52,34 +51,41 @@ AddRoom("BoilingFields_Rocky", {
 AddRoom("BoilingFields_Crabby", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison","Mist"},
-	value = WORLD_TILES.BOILINGFIELDS,
+	value = WORLD_TILES.UM_HOTSPRING,
 	contents =  {
-					distributepercent = 0.08,
+					distributepercent = 1,
 					distributeprefabs =
 					{
-						hotspring_rockbuncher_crabs = .03, --These rocks place fun tiles below them
-						--rock_flintless_hotspring = 1,
-						rock_lichen = 0.2,
+						springrock3 = 0.1,
+						springrock2 = 0.2,
+						rock_lichen = 0.05,
 						molehill = 0.02,
 						um_hotspring = 0.05,
+						nothing = 1.5,
+						evergreen_sparse = 10,
 					},
+					countprefabs = {
+						boulder_crab = function() return math.random(4, 6) end,
+					}
 				}
 })
 AddRoom("BoilingFields_Hotsprings", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison","Mist"},
-	value = WORLD_TILES.BOILINGFIELDS,
+	value = WORLD_TILES.UM_HOTSPRING,
 	contents =  {
-					distributepercent = 0.05,
+					distributepercent = 1,
 					distributeprefabs =
 					{
-						hotspring_rockbuncher_flintless = .03, --These rocks place fun tiles below them
-						hotspring_rockbuncher_gold = 0.02,
-						hotspring_rockbuncher_crabs = .01,
+						springrock1 = 0.08, --These rocks place fun tiles below them
+						springrock2 = 0.04,
+						boulder_crab = .01,
 						rock_lichen = 0.025,
-						um_hotspring = 0.1,
+						um_hotspring = 0.09,
 						rabbithole = 0.01,
 						molehill = 0.02,
+						nothing = 3,
+						evergreen_sparse = 10,
 					},
 				}
 })
@@ -87,7 +93,7 @@ AddRoom("BoilingFields_Hotsprings", {
 AddRoom("BoilingFields_DragonflyArena", {
 	colour={r=0.3,g=0.2,b=0.1,a=0.3},
 	tags = {"RoadPoison"},
-	value = WORLD_TILES.CRACKEDBASALT,
+	value = WORLD_TILES.UM_HOTSPRING_YELLOWROCK,
 	contents =  {
 					countstaticlayouts={["boilingfields_dragonfly_arena"]=1}, -- using a static layout because this can force it to be in the center of the room
 					distributepercent = 0.2,
@@ -102,7 +108,7 @@ AddRoom("BoilingFields_DragonflyArena", {
 					
 AddRoom("BoilingFields_Sinkhole", {
 	colour={r=0,g=.9,b=0,a=.50},
-	value = WORLD_TILES.CRACKEDBASALT,
+	value = WORLD_TILES.UM_HOTSPRING,
 	tags = {"RoadPoison"},
 	contents =  {
 					countstaticlayouts = {
@@ -112,7 +118,7 @@ AddRoom("BoilingFields_Sinkhole", {
 					distributeprefabs=
 					{
 						fireflies = 0.1,
-						marsh_bush=.5,
+						marsh_bush=.25,
 						rocks=.03,
 						flint=.03,
 						

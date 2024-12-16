@@ -97,6 +97,7 @@ local function OnKilled(inst)
 			inst.components.lootdropper:AddChanceLoot("honey", 1.00)
 			inst.components.lootdropper:AddChanceLoot("honey", 0.50)
 			inst.components.lootdropper:AddChanceLoot("stinger", 0.10)
+			inst.components.lootdropper:AddChanceLoot("royal_jelly", 1)
 		end
 		if inst.size == 2 then
 			creature = "pied_rat"
@@ -116,6 +117,9 @@ local function OnKilled(inst)
 		if inst.size == 4 then
 			creature = "catcoon"
 			inst.components.lootdropper:AddChanceLoot("meat", 0.50)
+			inst.components.lootdropper:AddChanceLoot("coontail", 1.00)
+			inst.components.lootdropper:AddChanceLoot("coontail", 1.00)
+			inst.components.lootdropper:AddChanceLoot("coontail", 1.00)
 			inst.components.lootdropper:AddChanceLoot("coontail", 1.00)
 		end
 		if inst.size == 5 then
@@ -385,6 +389,13 @@ local function SetSize(inst)
 	end
 end
 
+
+local function PlayHitAnimations(inst)
+	inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
+	inst.AnimState:PlayAnimation(inst.anims.hit)
+	inst.AnimState:PushAnimation(inst.anims.idle)
+end
+
 local function Regen(inst, attacker)
 	---TheNet:Announce("attacked")
 	if not attacker:HasTag("player") then
@@ -400,9 +411,7 @@ local function Regen(inst, attacker)
 			widowweb.SpawnInvestigators(widowweb, attacker)
 		end
 
-		inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
-		inst.AnimState:PlayAnimation(inst.anims.hit)
-		inst.AnimState:PushAnimation(inst.anims.idle)
+		PlayHitAnimations(inst)
 		if attacker:HasTag("widowsgrasp") and not (attacker.components.rider ~= nil and attacker.components.rider:IsRiding()) then
 			--inst.components.health:Kill()
 		elseif attacker:HasTag("player") and not attacker:HasTag("mime") and not attacker:HasTag("widowsgrasp") then
@@ -467,6 +476,8 @@ local function fn()
 	inst.OnEntitySleep = OnEntitySleep
 	inst.OnEntityWake = OnEntityWake
 	inst.size = math.random(1, 20)
+	
+	inst.PlayHitAnimations = PlayHitAnimations
 	return inst
 end
 

@@ -102,7 +102,6 @@ local states =
         tags = { "busy" },
 
         onenter = function(inst)
-            --inst.SoundEmitter:PlaySound("UCSounds/Scorpion/death")
             inst.Physics:Stop()
             PlayExtendedSound(inst, "death")
             PlayExtendedSound(inst, "death")
@@ -251,7 +250,6 @@ local states =
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("give_life")
-            --inst.SoundEmitter:PlaySound("UCSounds/Scorpion/taunt")
         end,
 
         events =

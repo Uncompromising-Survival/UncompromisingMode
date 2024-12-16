@@ -32,11 +32,11 @@ local function fn1()
 			SpawnPrefab("springrock1").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
-			for i = -1,1 do
-				for j = -1,1 do
-					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
-				end
-			end
+			-- for i = -1,1 do
+				-- for j = -1,1 do
+					-- TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_WHITEROCK)
+				-- end
+			-- end
 		end
 		inst:Remove()
 	end)
@@ -68,11 +68,11 @@ local function fnmagma1()
 			SpawnPrefab("magmarock1").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
-			for i = -1,1 do
-				for j = -1,1 do
-					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_MAGMA)
-				end
-			end
+			-- for i = -1,1 do
+				-- for j = -1,1 do
+					-- TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_MAGMA)
+				-- end
+			-- end
 		end
 		inst:Remove()
 	end)
@@ -139,11 +139,11 @@ local function fn2()
 			SpawnPrefab("springrock2").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
-			for i = -1,1 do
-				for j = -1,1 do
-					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
-				end
-			end
+			-- for i = -1,1 do
+				-- for j = -1,1 do
+					-- TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_WHITEROCK)
+				-- end
+			-- end
 		end
 		inst:Remove()
 	end)
@@ -172,16 +172,16 @@ local function fn3()
     inst:DoTaskInTime(1, function(inst)
 		if not HotSpringCheck(inst) then
 			local x,y,z = inst.Transform:GetWorldPosition()
-			SpawnPrefab("rock_flintless").Transform:SetPosition(x,y,z)
+			SpawnPrefab("springrock3").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			
 			
 			-- Square
-			for i = -1,1 do
-				for j = -1,1 do
-					TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
-				end
-			end
+			-- for i = -1,1 do
+				-- for j = -1,1 do
+					-- TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_WHITEROCK)
+				-- end
+			-- end
 		end
 		inst:Remove()
 	end)
@@ -189,17 +189,18 @@ local function fn3()
     return inst
 end
 
+local function NoOtherRocks(pt)
+	return #TheSim:FindEntities(pt.x, 0, pt.z, 5, {"boulder"}) == 0
+end
 
 local function SpawnBunch(inst,rock1,rock2)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local rocks = math.random(3,5)
-	for rock = 1,rocks do
-		local radius = math.random(1,5)
-		local angle = math.random(0,360)
-		if math.random() > 0.5 then
-			SpawnPrefab(rock1).Transform:SetPosition(x+radius*math.cos(angle),y,z+radius*math.sin(angle))
-		else
-			SpawnPrefab(rock2).Transform:SetPosition(x+radius*math.cos(angle),y,z+radius*math.sin(angle))
+	local pos = inst:GetPosition()
+	for rock = 1,rocks do 
+		local offset = FindWalkableOffset(pos, math.random() * PI2*rock/rocks, rock, 10, false, nil, NoOtherRocks, false, false)
+		if offset then
+			SpawnPrefab(math.random() > 0.5 and rock1 or rock2).Transform:SetPosition(x+offset.x,y,z+offset.z)
 		end
 	end
 end
@@ -334,21 +335,21 @@ local function fnarenaturfer()
 		-- Square
 		for i = -7,7 do
 			for j = -7,7 do
-				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_YELLOWROCK)
 			end
 		end
 		
 		-- little extra
 		for i = -8,8 do
 			for j = -5,5 do
-				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_YELLOWROCK)
 			end
 		end
 		
 		-- little extra
 		for i = -5,5 do
 			for j = -8,8 do
-				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.CRACKEDBASALT)
+				TheWorld.Map:SetTile(tx+i,tz+j,WORLD_TILES.UM_HOTSPRING_YELLOWROCK)
 			end
 		end
 	end)

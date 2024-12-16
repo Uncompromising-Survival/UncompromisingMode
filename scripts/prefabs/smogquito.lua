@@ -148,6 +148,7 @@ local function mosquito()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
+	inst.entity:AddLight()
 
     MakeFlyingCharacterPhysics(inst, 1, .5)
 
@@ -171,6 +172,12 @@ local function mosquito()
 
     MakeFeedableSmallLivestockPristine(inst)
 
+    inst.Light:SetRadius(1)
+    inst.Light:SetFalloff(0.5)
+    inst.Light:SetIntensity(0.75)
+    inst.Light:SetColour(235/255, 121/255, 12/255)
+    inst.Light:Enable(true)
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -180,7 +187,9 @@ local function mosquito()
     inst:SetBrain(brain)
 
     ----------
-
+	inst:AddComponent("heater")
+	inst.components.heater.heat = 100 -- Save as a "full" extra adorable lavae
+	
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
     inst.components.locomotor:SetTriggersCreep(false)

@@ -108,6 +108,9 @@ local function fn()
 
     MakeHauntableLaunchAndPerish(inst)
     inst.components.edible:SetOnEatenFn(oneatenfn)
+	inst:AddComponent("tradable")
+	
+	
     return inst
 end
 
@@ -159,6 +162,9 @@ local function fnlesser()
 
     MakeHauntableLaunchAndPerish(inst)
     inst.components.edible:SetOnEatenFn(oneatenfn)
+	inst:AddComponent("tradable")
+	
+	
     return inst
 end
 

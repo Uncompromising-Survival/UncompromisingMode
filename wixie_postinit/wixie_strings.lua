@@ -187,12 +187,6 @@ DESCRIBE.AIR_CONDITIONER = "It doesn't cool me off... and it smells!"
 DESCRIBE.SPOREPACK = "It better not give me a rash."
 DESCRIBE.SALTPACK = "Salt your sidewalks, or else!"
 
-DESCRIBE.UM_SCORPION = "What are YOU smiling at?!"
-DESCRIBE.SCORPIONCARAPACE = "Is it... edible?"
-DESCRIBE.SCORPIONCARAPACECOOKED =
-    "Did that improve it? Only one way to find out..."
-DESCRIBE.HARDSHELLTACOS = "Ah, street food! How I missed you..."
-
 DESCRIBE.SKELETONMEAT =
     "I've read enough horror stories to know this is a BAD idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

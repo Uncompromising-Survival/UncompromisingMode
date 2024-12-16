@@ -102,8 +102,8 @@ local function onequip(inst, owner)
         owner.sporespoil_task = nil
     end
 
-    owner.sporepack_task = owner:DoPeriodicTask(3, InitFX)
-    owner.sporespoil_task = owner:DoPeriodicTask(3, DoAreaSpoil)
+    --owner.sporepack_task = owner:DoPeriodicTask(3, InitFX)
+    --owner.sporespoil_task = owner:DoPeriodicTask(3, DoAreaSpoil)
 end
 
 local function onunequip(inst, owner)

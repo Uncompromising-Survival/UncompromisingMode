@@ -88,7 +88,7 @@ STRINGS.CHARACTER_QUOTES.wathom = "\"I HEAR YOU BREATHING.\""
 STRINGS.CHARACTER_ABOUTME.wathom = "A hunter with an uncontrollable surplus of energy, Wathom lives on after crawling out of the Abyss he was imprisoned in."
 STRINGS.CHARACTER_BIOS.wathom = {
  { title = "Birthday", desc = "January 20" },
- { title = "Favorite Food", desc = "Hardshell Tacos" },
+ { title = "Favorite Food", desc = "Kebab" },
  { title = "From the Abyss", desc = "The civilization that once occupied the ruins always piqued Maxwell's curiosity. Even he on the throne didn't know all the secrets buried within the Constant. Using dusted bones and nightmare fuel, the Shadow King breathed life into a mimic of the ancient race, with the purpose to understand those who came before them. \n \nWathom never knew anything other than dank caverns and pulsating ruins - and when he didn't provide the secrets that he was born to uncover, the only thing he knew from then on was the indefinite darkness of the Abyss, banished and forgotten. At least, until the fallen moon provided climbable cracks in the walls."},
 }
 STRINGS.CHARACTER_SURVIVABILITY.wathom = "Slim"

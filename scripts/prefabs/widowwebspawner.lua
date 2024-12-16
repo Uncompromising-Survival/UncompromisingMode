@@ -14,8 +14,8 @@ local function SpawnWidowWeb(inst)
 end
 
 local function TrySpawnCocoon(x, z)
-    local xi = x + math.random(-12, 12)
-    local zi = z + math.random(-12, 12)
+    local xi = x + math.random(-8, 8)
+    local zi = z + math.random(-8, 8)
     if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
        #TheSim:FindEntities(xi, 0, zi, 5, {"webbedcreature"}) < 6 then

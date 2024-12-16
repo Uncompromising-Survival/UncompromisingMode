@@ -10,6 +10,7 @@ local assets =
     Asset("ANIM", "anim/rock_lichen_nobottom.zip"),
     Asset("ANIM", "anim/springrock1_nobottom.zip"),
     Asset("ANIM", "anim/springrock2_nobottom.zip"),
+	Asset("ANIM", "anim/springrock3_nobottom.zip"),
 }
 
 local prefabs = 
@@ -257,19 +258,18 @@ local function fn()
 	
 	inst.SpawnHole = SpawnHole
 	
-    inst:AddComponent("named")
-    inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB_HOLE) -- Can also be a hole
+
 	
     inst.GetRock = GetRock
     inst:DoTaskInTime(0, function(inst)
         if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
             if math.random() > 0.5 then
-                GetRock(inst, "rock_flintless")
+                GetRock(inst, "springrock1")
             else
                 if math.random() > 0.5 then
-                    GetRock(inst, "springrock2")
+                    GetRock(inst, "springrock3")
                 else
-                    GetRock(inst, "springrock1")
+                    GetRock(inst, "springrock2")
                 end
             end
 			if TheWorld.state.isday then

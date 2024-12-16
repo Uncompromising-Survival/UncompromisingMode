@@ -116,7 +116,7 @@ end)
 
 AddPrefabPostInit("wathom", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-		["hardshelltacos"] = 10,
+		["kebab"] = 10,
     }
 end)
 

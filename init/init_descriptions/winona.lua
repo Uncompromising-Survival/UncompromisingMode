@@ -148,11 +148,6 @@ DESCRIBE.AIR_CONDITIONER = "I could nab that design for something..."
 DESCRIBE.SPOREPACK = "Wow, that smell is a punch in the face."
 DESCRIBE.SALTPACK = "I should've thought of this sooner!"
 
-DESCRIBE.UM_SCORPION = "I don't want to see the business end of that stinger!"
-DESCRIBE.SCORPIONCARAPACE = "I'm sure I could find something else to eat."
-DESCRIBE.SCORPIONCARAPACECOOKED =
-"There must be something better to eat nearby..."
-DESCRIBE.HARDSHELLTACOS = "It has a nice crunch."
 
 DESCRIBE.SKELETONMEAT = "This is a terrible idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

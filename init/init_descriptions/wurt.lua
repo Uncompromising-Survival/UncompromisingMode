@@ -143,10 +143,7 @@ DESCRIBE.AIR_CONDITIONER = "Smells weird, florp."
 DESCRIBE.SPOREPACK = "Smells like home!"
 DESCRIBE.SALTPACK = "Glargh! Eyes on fire!!"
 
-DESCRIBE.SCORPION = "Look like Spiderfolk?"
-DESCRIBE.SCORPIONCARAPACE = "Glurgh... yucky stuff is worse than just meat!"
-DESCRIBE.SCORPIONCARAPACECOOKED = "Gluuurrrgh!"
-DESCRIBE.HARDSHELLTACOS = "Gluuuuuuurrrrrrgh!!"
+
 
 DESCRIBE.SKELETONMEAT = "Glurph, don't wanna hold this for long."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

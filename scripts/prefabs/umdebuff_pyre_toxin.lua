@@ -43,7 +43,6 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	and not (target:HasTag("bee") and not target:HasTag("monster"))
 	and not target:HasTag("wall")
 	and not target:HasTag("structure")
---	and not target:HasTag("scorpion")
 	and target.prefab ~= "firehound"
 	then
 		-- Basic debuff stuff.

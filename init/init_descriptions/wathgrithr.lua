@@ -143,10 +143,6 @@ DESCRIBE.AIR_CONDITIONER = "It fends off the airborne threats!"
 DESCRIBE.SPOREPACK = "It masks my scent!"
 DESCRIBE.SALTPACK = "It clears the battlefield!"
 
-DESCRIBE.UM_SCORPION = "Your pointy tail is no match for me!"
-DESCRIBE.SCORPIONCARAPACE = "Meat! Trapped within a black shell!"
-DESCRIBE.SCORPIONCARAPACECOOKED = "The fire slightly freed the reward inside."
-DESCRIBE.HARDSHELLTACOS = "The scorpion's reward!"
 
 DESCRIBE.SKELETONMEAT = "A... spoil of... war..."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY

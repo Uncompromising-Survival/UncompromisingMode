@@ -67,7 +67,7 @@ env.AddPrefabPostInit("spider_healer", function(inst)
 		return
 	end
 	
-    inst.components.health:SetMaxHealth(200)
+    inst.components.health:SetMaxHealth(225)
 	
     inst.OldDoHeal = inst.DoHeal
     inst.DoHeal = DoHeal

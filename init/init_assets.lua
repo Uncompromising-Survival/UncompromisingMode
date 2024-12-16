@@ -70,7 +70,6 @@ local inventoryitems =
 	"greenfoliage",
 	"greengem_cracked",
 	"greensteamedhams",
-	"hardshelltacos",
 	"hat_bagmask",
 	"hat_blackcatmask",
 	"hat_clownmask",
@@ -141,8 +140,6 @@ local inventoryitems =
 	"rne_goodiebag",
 	"saltpack",
 	--"sand",
-	"scorpioncarapace",
-	"scorpioncarapacecooked",
 	"screecher_trinket",
 	"seafoodpaella",
 	"shadow_crown",
@@ -169,11 +166,11 @@ local inventoryitems =
 	"turf_ancienthoodedturf",
 	"turf_hoodedmoss",
 	
-	--[[
+
 	"turf_um_hotspring_grass",
 	"turf_um_hotspring_yellowrock",
 	"turf_um_hotspring_whiterock",
-	]]
+
 	"um_bear_trap_equippable",
 	"um_bear_trap_equippable_gold",
 	"um_bear_trap_equippable_tooth",
@@ -420,8 +417,6 @@ Assets = {
 	Asset("ATLAS", "images/cookbook_devilsfruitcake.xml"),
 	Asset("IMAGE", "images/cookbook_greensteamedhams.tex"),
 	Asset("ATLAS", "images/cookbook_greensteamedhams.xml"),
-	Asset("IMAGE", "images/cookbook_hardshelltacos.tex"),
-	Asset("ATLAS", "images/cookbook_hardshelltacos.xml"),
 	Asset("IMAGE", "images/cookbook_liceloaf.tex"),
 	Asset("ATLAS", "images/cookbook_liceloaf.xml"),
 	Asset("IMAGE", "images/cookbook_purplesteamedhams.tex"),
@@ -778,8 +773,6 @@ Assets = {
 	Asset("IMAGE", "images/claustrophobia.tex"),
 
 
-	--CREATURES
-	Asset("ANIM", "anim/voorhams.zip"),
 
 	Asset("ANIM", "anim/um_minotaur_actions.zip"),
 
@@ -893,10 +886,6 @@ Assets = {
 	Asset("ANIM", "anim/stumpling.zip"),
 	Asset("ANIM", "anim/birchling.zip"),
 
-	Asset("ANIM", "anim/scorpion_basic.zip"),
-	Asset("ANIM", "anim/scorpion_build.zip"),
-	Asset("ANIM", "anim/scorpion_new.zip"),
-	Asset("ANIM", "anim/scorpion_leave.zip"),
 
 	Asset("ANIM", "anim/bat_vamp_build.zip"),
 	Asset("ANIM", "anim/bat_vamp_shadow.zip"),
@@ -1468,8 +1457,6 @@ Assets = {
 
 	Asset("ANIM", "anim/snowcone.zip"),
 
-	Asset("ANIM", "anim/scorpioncarapace.zip"),
-	Asset("ANIM", "anim/scorpioncarapace_dried.zip"),
 
 	Asset("ANIM", "anim/liceloaf.zip"),
 	Asset("ANIM", "anim/stuffed_peeper_poppers.zip"),
@@ -1481,7 +1468,6 @@ Assets = {
 	Asset("ANIM", "anim/simpsalad.zip"),
 	Asset("ANIM", "anim/purplesteamedhams.zip"),
 	Asset("ANIM", "anim/greensteamedhams.zip"),
-	Asset("ANIM", "anim/hardshelltacos.zip"),
 	Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
 	Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
 	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
@@ -1623,7 +1609,7 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/turf_xenomeadow.tex"),
 	Asset("ATLAS", "images/inventoryimages/turf_xenomeadow.xml"),
 	
-	--[[
+	
 	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_grass.tex"),
 	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_grass.xml"),
 	
@@ -1632,7 +1618,7 @@ Assets = {
 	
 	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_yellowrock.tex"),
 	Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_yellowrock.xml"),
-	]]
+	
 	Asset("IMAGE", "images/inventoryimages/turf_ancienthoodedturf.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/turf_ancienthoodedturf.xml"),
 	Asset("ATLAS", "images/inventoryimages/turf_ancienthoodedturf.xml"),
@@ -2029,15 +2015,6 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/californiaking.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/californiaking.xml"),
 	Asset("ATLAS", "images/inventoryimages/californiaking.xml"),
-	Asset("IMAGE", "images/inventoryimages/hardshelltacos.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/hardshelltacos.xml"),
-	Asset("ATLAS", "images/inventoryimages/hardshelltacos.xml"),
-	Asset("IMAGE", "images/inventoryimages/scorpioncarapace.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/scorpioncarapace.xml"),
-	Asset("ATLAS", "images/inventoryimages/scorpioncarapace.xml"),
-	Asset("IMAGE", "images/inventoryimages/scorpioncarapacecooked.tex"),
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/scorpioncarapacecooked.xml"),
-	Asset("ATLAS", "images/inventoryimages/scorpioncarapacecooked.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_rimeweed_itemvine.tex"),
 	Asset("ATLAS", "images/inventoryimages/um_rimeweed_itemvine.xml"),
 	

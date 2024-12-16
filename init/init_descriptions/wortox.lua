@@ -141,10 +141,6 @@ DESCRIBE.AIR_CONDITIONER = "Hyuyu, the mortals invented a wind machine."
 DESCRIBE.SPOREPACK = "Ooo, this bears a fun stink!"
 DESCRIBE.SALTPACK = "You needn't go to such lengths just to keep me away."
 
-DESCRIBE.UM_SCORPION = "Stinging scorpion, begone, begone!"
-DESCRIBE.SCORPIONCARAPACE = "Even for mortal food, this is a new low."
-DESCRIBE.SCORPIONCARAPACECOOKED = "I do not want it."
-DESCRIBE.HARDSHELLTACOS = "Looks crunchy. I hate crunchy food."
 DESCRIBE.FRUITBAT = "You are what you eat. Literally."
 
 DESCRIBE.SKELETONMEAT = "This is just wrong."

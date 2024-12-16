@@ -9,11 +9,11 @@ local prefabs =
 }
 
 local function TrySpawnCocoon(x, z)
-    local xi = x + math.random(-12, 12)
-    local zi = z + math.random(-12, 12)
+    local xi = x + math.random(-8, 8)
+    local zi = z + math.random(-8, 8)
     if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
-       #TheSim:FindEntities(xi, 0, zi, 5, {"webbedcreature"}) < 6 then
+       #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
     else
@@ -70,6 +70,12 @@ local function ontimerdone(inst, data)
     end
 end
 
+local function SpawnFX(inst,num)
+	for i = 1,num do
+		SpawnPrefab("oceantree_leaf_fx_fall").Transform:SetPosition(math.random(-8,8),0,math.random(-8,8))
+	end
+end
+
 local function SpawnInvestigators(inst, target)
 	local x, y, z = inst.Transform:GetWorldPosition()
     if inst.components.childspawner and target then
@@ -79,6 +85,7 @@ local function SpawnInvestigators(inst, target)
             spider.sg:GoToState("fall")
 			spider.suggesttarget = target
 			spider:DoTaskInTime(0.5,function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
+			SpawnFX(inst,4)
         end
     end
 end

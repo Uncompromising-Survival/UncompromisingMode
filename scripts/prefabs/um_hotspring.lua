@@ -36,10 +36,15 @@ local sizes =
 }
 
 local function SetSize(inst, size)
-    inst.size = math.random(1, #sizes)
+	if not size then
+		inst.size = math.random(1, #sizes)
+	else
+		inst.size = size
+	end
     inst.AnimState:PlayAnimation(sizes[inst.size].anim, true)
     --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
     SpawnPlants(inst, "marsh_plant", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
+	inst.components.unevenground.radius = sizes[inst.size].plantrad
 end
 
 local function onsave(inst, data)
@@ -116,11 +121,15 @@ local function fn()
 
     inst.OnSave = onsave
     inst.OnLoad = onload
-
+	inst:AddComponent("unevenground")
+    inst.components.unevenground.radius = TUNING.ANTLION_SINKHOLE.UNEVENGROUND_RADIUS
     SetSize(inst)
     inst:AddComponent("um_ripplespawner")
     inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
+	
+	
 
+	
     inst:ListenForEvent("entitywake", function(inst)
         inst.fxtask = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
         if inst.components.timer:TimerExists("bubbly") then

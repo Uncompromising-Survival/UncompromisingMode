@@ -29,7 +29,7 @@ function UM_Ripplespawner:spawnripple(inst)
 				
 				if inst.components.moisture ~= nil then
 					local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
-					inst.components.moisture:DoDelta(1 * (1 - waterproofness), true)
+					inst.components.moisture:DoDelta(2 * (1 - waterproofness), true)
 				end
 			end    
 			
@@ -130,8 +130,18 @@ function UM_Ripplespawner:OnUpdate(dt)
     for i, ent in ipairs(ents) do
 		if ent.um_rippletask == nil then
 			ent.um_rippletask = ent:DoTaskInTime(ent.components.locomotor ~= nil and (1.8 / ent.components.locomotor:GetRunSpeed()) or .3,
-				function(ent) 
-				self:spawnripple(ent) end)
+				function(ent)  
+					if not ent:HasTag("flying") or ent:HasTag("ghostplayer") then
+						self:spawnripple(ent) 
+					end 
+				end)
+		end
+		if not ent.water_goo and not ent:HasTag("flying") or ent:HasTag("playerghost") then
+			ent.water_goo = SpawnPrefab("um_waterfollow")
+			ent.water_goo:SetupBlob(ent, ent)	
+			ent.water_goo.stay = true
+		elseif ent.water_goo then -- still nearby, keep the goo
+			ent.water_goo.stay = true
 		end
     end
 end
