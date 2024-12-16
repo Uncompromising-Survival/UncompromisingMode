@@ -477,7 +477,6 @@ local states=
         tags = {"busy","noattack","INLIMBO"},--You can only mine the boulder, they can't be attacked in this phase
         
         onenter = function(inst)
-			inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB_HOLE)
 			inst.Transform:SetNoFaced()
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("im_dirt")
@@ -495,7 +494,6 @@ local states=
         
         onenter = function(inst)
 			--inst.Transform:SetNoFaced()
-			inst.components.named:SetName(STRINGS.NAMES.BOULDER_CRAB)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("emerge_pop")
 			inst.hiding = true
