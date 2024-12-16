@@ -212,7 +212,7 @@ local function TornadoEnviromentTask(inst)
 					end
 					if table.contains(destroy_prefabs, v.prefab) and math.random() > 0.5 then
 						v:Remove()
-					else
+                    elseif v.components.inventoryitem.canbepickedup then
 						PickItem(v, inst)
 					end
 				end
