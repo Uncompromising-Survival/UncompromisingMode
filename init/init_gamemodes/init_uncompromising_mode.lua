@@ -216,3 +216,7 @@ modimport("init/init_loadingtips")
 if GetModConfigData("food_stats") then
     modimport("init/init_food/init_food_stats")
 end
+
+if GetModConfigData("armorrework") then
+    modimport("postinit/armor_rework")
+end
