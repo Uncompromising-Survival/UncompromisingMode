@@ -207,6 +207,7 @@ modimport("init/init_character_changes/wanda")
 modimport("init/init_character_changes/wortox")
 modimport("init/init_character_changes/warly")
 modimport("init/init_character_changes/waxwell")
+modimport("init/lagcomp_warning")
 
 if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
