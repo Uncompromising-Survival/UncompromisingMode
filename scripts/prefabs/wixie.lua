@@ -85,7 +85,7 @@ local function updateclaustrophobia(inst)
 	if not TheWorld.ismastersim or not TheNet:IsDedicated() then
 		if inst._claustrophobiacdtask == nil then
 			local x, y, z = inst.Transform:GetWorldPosition()
-			local ents = TheSim:FindEntities(x, y, z, 5, { "_health", "_combat" }, { "noclaustrophobia", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player", "playerghost", "ghost", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "boatbumper", "spore", "pigelite", "oceanfishable", "trap", "companion" } )
+			local ents = TheSim:FindEntities(x, y, z, 6, { "_health", "_combat" }, { "noclaustrophobia", "baloon", "structure", "wall", "fx", "NOCLICK", "INLIMBO", "invisible", "player", "playerghost", "ghost", "shadow", "shadowcreature", "shadowminion", "stalkerminion", "shadowchesspiece", "boatbumper", "spore", "pigelite", "oceanfishable", "trap", "companion" } )
 			local treesandwallsandcompanions = TheSim:FindEntities(x, y, z, 5, nil, { "stump", "INLIMBO" }, { "tree", "wall", "companion" })
 			
 			if treesandwallsandcompanions ~= nil then
