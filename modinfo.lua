@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.6.2.10"
+local _version = "1.6.2.13"
 
 description = [[
     󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
@@ -153,6 +153,9 @@ configuration_options = {
         default = 1
     },
     BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
+    BinaryConfig("armorrework", "Armor Rework",
+        "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
+        false),
     SkipSpace(),
 
     Header("Core Gameplay"),
@@ -341,9 +344,9 @@ configuration_options = {
         "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.",
         true),
     BinaryConfig("wortox", "Wortox",
-        "Better teleports, worse sanity and healing from souls. Birds and butterflies are soulless.",
+        "Healing from souls are now overtime. Birds and Butterflies are soulless.",
         true),
-    BinaryConfig("wortox_beesouls", "Wortox - Bee Souls", "Toggle wether or not bees have souls.", true),
+    --BinaryConfig("wortox_beesouls", "Wortox - Bee Souls", "Toggle wether or not bees have souls.", true),
     --{
     --name = "wortox",
     --label = "Wortox",

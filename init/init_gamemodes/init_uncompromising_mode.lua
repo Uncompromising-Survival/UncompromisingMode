@@ -202,13 +202,8 @@ modimport("init/init_character_changes/wathgrithr")
 modimport("init/init_character_changes/webber")
 modimport("init/init_character_changes/winona")
 modimport("init/init_character_changes/wanda")
-
-if GetModConfigData("wortox") then
-    modimport("init/init_character_changes/wortox")
-end
-
+modimport("init/init_character_changes/wortox")
 modimport("init/init_character_changes/warly")
-
 modimport("init/init_character_changes/waxwell")
 
 if GetModConfigData("hardcore") then
@@ -220,4 +215,8 @@ modimport("init/init_loadingtips")
 --food stats!
 if GetModConfigData("food_stats") then
     modimport("init/init_food/init_food_stats")
+end
+
+if GetModConfigData("armorrework") then
+    modimport("postinit/armor_rework")
 end
