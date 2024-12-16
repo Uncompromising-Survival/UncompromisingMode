@@ -155,7 +155,7 @@ configuration_options = {
     BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
     BinaryConfig("armorrework", "Armor Rework",
         "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
-        false),
+        true),
     SkipSpace(),
 
     Header("Core Gameplay"),
