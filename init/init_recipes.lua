@@ -421,7 +421,7 @@ if GetModConfigData("rat_raids") then
         "ratpoisonbottle",
         { Ingredient("red_cap", 2), Ingredient("jammypreserves", 1), Ingredient("rocks", 1) },
         TECH.SCIENCE_ONE,
-        nil,
+        {numtogive=4},
         { "TOOLS" }
     )
     ChangeSortKey("ratpoisonbottle", "trap", "TOOLS", true)
