@@ -118,7 +118,7 @@ function FeatsOfStrength:MightyWork(target, tool, numworks)
 			tool.components.finiteuses:Use(uses)
 		end
 		if self.inst:HasTag("shadow_strikes") then
-			self.inst:IncreaseCombo(self.inst, 1, target)
+			self.inst:IncreaseCombo(1, target)
 		end
 		return 99999
 	end
