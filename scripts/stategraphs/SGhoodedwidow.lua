@@ -239,14 +239,15 @@ local function ChargeTurn(inst)
 	end]]
 end
 
-local function ChargeAttacked(inst) --Cone attack (beef it up if it's too lenient)
+local function ChargeAttacked(inst) -- Charge uses a slightly different attack, could probably be unified before going to live
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local targets = TheSim:FindEntities(x,y,z,inst.components.combat:GetHitRange(),{"_combat"},{"webbedcreature","ghost","bear_trap"})
 	for i,target in ipairs(targets) do
 		local angle = inst:GetAngleToPoint(target:GetPosition())
 		local my_angle = inst.Transform:GetRotation()
 		if target and (math.abs(angle-my_angle) < 90 or inst:GetDistanceSqToInst(target) < 3^2) and target ~= inst then -- Relatively wide, but not completely to her side. (FUCKING SHE WAS KILLING HERSELF GODDAMN IT)
-			target.components.combat:GetAttacked(inst,inst.components.combat.defaultdamage)
+			local dmg = inst.components.combat:CalcDamage(target)
+			target.components.combat:GetAttacked(inst,dmg)
 		end
 	end
 end

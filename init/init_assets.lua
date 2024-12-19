@@ -1604,10 +1604,6 @@ Assets = {
 	Asset("IMAGE", "images/inventoryimages/turf_hoodedmoss.tex"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/turf_hoodedmoss.xml"),
 	Asset("ATLAS", "images/inventoryimages/turf_hoodedmoss.xml"),
-	Asset("IMAGE", "images/inventoryimages/turf_xenobasalt.tex"),
-	Asset("ATLAS", "images/inventoryimages/turf_xenobasalt.xml"),
-	Asset("IMAGE", "images/inventoryimages/turf_xenomeadow.tex"),
-	Asset("ATLAS", "images/inventoryimages/turf_xenomeadow.xml"),
 	
 	
 	Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_grass.tex"),

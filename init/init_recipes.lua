@@ -113,6 +113,37 @@ if GetModConfigData("compostoverrot") then
     AllRecipes["wurt_turf_marsh"].ingredients = { Ingredient("cutreeds", 1), Ingredient("compost", 1) }
 end
 
+-- Broiling Hills and Magma Caves Turfs
+AddRecipe2(
+	"turf_um_hotspring_grass",
+	{ Ingredient("cutlichen", 2), Ingredient("pinecone", 2) },
+	TECH.TURFCRAFTING_TWO,
+	{ numtogive = 4 },
+	{ "DECOR" }
+)
+ChangeSortKey("turf_um_hotspring_grass", "turf_um_hotspring_grass", "DECOR", true)
+
+AddRecipe2(
+	"turf_um_hotspring_whiterock",
+	{ Ingredient("rocks", 2), Ingredient("marble", 2) },
+	TECH.TURFCRAFTING_TWO,
+	{ numtogive = 4 },
+	{ "DECOR" }
+)
+ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_whiterock", "DECOR", true)
+
+AddRecipe2(
+	"turf_um_hotspring_yellowrock",
+	{ Ingredient("rocks", 2), Ingredient("nitre", 2) },
+	TECH.TURFCRAFTING_TWO,
+	{ numtogive = 4 },
+	{ "DECOR" }
+)
+ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_yellowrock", "DECOR", true)
+
+
+	
+	
 -- Funcap Change
 
 AllRecipes["red_mushroomhat"].ingredients = {
