@@ -47,7 +47,28 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Private member functions ]]
     --------------------------------------------------------------------------
-
+	
+	local function ShadowPieceNearby(player)
+		local x,y,z = player.Transform:GetWorldPosition()
+		if TheWorld.state.cycles < 31 and #TheSim:FindEntities(x,y,z,40,{"shadowchesspiece"}) > 0 then -- This exception only applies to day 21, or another day if you mess with the moon cycle
+			return true
+		end
+	end
+	
+	local function DelayHoundsAndGiantsIfNecessary()
+		--TheNet:Announce("tried to delay")
+		if self.inst.components.hounded then
+			local houndtime = self.inst.components.hounded:GetTimeToAttack()/(60*8) --Convert seconds to DS days 
+			if houndtime < 1200 then
+				--TheNet:Announce(houndtime)
+				self.inst.components.hounded:DelayHoundWave(60*8) -- delay by a day
+				--TheNet:Announce(houndtime)
+			end	
+		end
+	end
+	
+	
+	
     local function AllowedToAttack(data)
         return #_activeplayers > 0 and
             ((data and data.skipcycles) or TheWorld.state.cycles > TUNING.NO_BOSS_TIME) and
@@ -245,14 +266,20 @@ return Class(function(self, inst)
 
 	local function SpawnShadowGrabby(player)
 		if TheWorld.state.isnight then
-			local radius = 15 + math.random() * 15
-			local theta = math.random() * 2 * PI
-			local x, y, z = player.Transform:GetWorldPosition()
-			local x1 = x + radius * math.cos(theta)
-			local z1 = z - radius * math.sin(theta)
-			local light = TheSim:GetLightAtPoint(x1, 0, z1)
-			
 			for i = 1, 2 + math.random(2) do
+				local radius = 15 + math.random() * 15
+				local theta = math.random() * 2 * PI
+				local targetplayer = FindEntity(player,20^2,nil,{"player"})
+				local x,y,z
+				if targetplayer then
+					x,y,z = targetplayer.Transform:GetWorldPosition()
+				else
+					x,y,z = player.Transform:GetWorldPosition()
+				end
+				local x1 = x + radius * math.cos(theta)
+				local z1 = z - radius * math.sin(theta)
+				local light = TheSim:GetLightAtPoint(x1, 0, z1)
+			
 				for i = 1, 8 do
 					if (light <= 0.2 or i == 8) then
 						local ent = SpawnPrefab("rne_grabbyshadows")
@@ -314,6 +341,7 @@ return Class(function(self, inst)
 					local light = TheSim:GetLightAtPoint(x1, 0, z1)
 
 					if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
+						
 						local ent = SpawnPrefab("um_nightcrawler")
 						ent.Transform:SetPosition(x1, 0, z1)
 						DespawnOnDay(ent)
@@ -371,6 +399,7 @@ return Class(function(self, inst)
 			if self:LightStealTarget(player) then
 				for i = 1, totalscale do
 					for i = 1, 8 do
+						
 						local radius = 15 + math.random() * 15
 						local theta = math.random() * 2 * PI
 						local x, y, z = player.Transform:GetWorldPosition()
@@ -408,7 +437,7 @@ return Class(function(self, inst)
 					for i = 1, 3 do
 						if v ~= nil then
 							local players = TheSim:FindEntities(x, y, z, 8, { "player" })
-										
+							local x1,y1,z1 = players
 							if players == nil or #players == 0 then
 								local ent = SpawnPrefab("um_haunt")
 								ent.haunt_target = v
@@ -490,11 +519,12 @@ return Class(function(self, inst)
 				local light = TheSim:GetLightAtPoint(x1, 0, z1)
 
 				if (light <= 0.2 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
+					--TheNet:Announce(character)
 					local ent = SpawnPrefab(character)
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
 
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
+					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.SHADOWCHARACTER })
 					
 					break
 				end
@@ -644,6 +674,8 @@ return Class(function(self, inst)
 						v.name(player)
 						
 						return
+					else
+						--TheNet:Announce("NT spawn failed!")
 					end
 				end
 			end
@@ -745,7 +777,8 @@ return Class(function(self, inst)
 	local function StartNightTerrors()
 		if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
 			local voxo_check = TheSim:FindFirstEntityWithTag("um_voxolophone")
-			
+			--TheNet:Announce("starting night terrors")
+			DelayHoundsAndGiantsIfNecessary()
 			if voxo_check == nil then
 				if #_activeplayers > 0 then
 					local spawn_vox_for = _activeplayers[math.random(#_activeplayers)]
@@ -755,24 +788,25 @@ return Class(function(self, inst)
 					end
 				end
 			end
-		
+			local voxo = TheSim:FindFirstEntityWithTag("um_voxolophone")
 			local cycles = (TheWorld.state.cycles / 20)
 			self.terror_count = 0
 			
 			self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
+				--TheNet:Announce("tried Terror")
 				if #_activeplayers > 0 then
 					local player = _activeplayers[math.random(#_activeplayers)]
-
-					if player ~= nil then
+					
+					if player ~= nil and not ShadowPieceNearby(player) then
 						if self.terror_count == 8 then
 							print("Night Terrors Pick Character")
-							PickCharacter(player)
+							PickCharacter(voxo)
 						else
 							print("Night Terrors Pick Terror")
-							self:PickTerror(player)
+							self:PickTerror(voxo)
 						end
 						
-						self.terror_count = self.terror_count + 1
+						self.terror_count = self.terror_count + 1					
 					end
 				end
 			end)

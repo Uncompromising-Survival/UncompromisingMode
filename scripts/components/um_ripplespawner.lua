@@ -3,6 +3,18 @@ local UM_Ripplespawner = Class(function(self, inst)
     self.range = 3
 end)
 
+local function CheckLeftPond(ent,self)
+	if self.inst:GetDistanceSqToInst(ent) > self.range^2 then
+		if not (ent.components.inventory and ent.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) and ent.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "purpleamulet") then
+			ent.components.sanity:SetInducedInsanity(ent, false)
+            if ent:HasTag("fuelfarming") then
+                ent:RemoveTag("fuelfarming")
+            end
+		end 
+		ent.um_pond_induced_insanity:Cancel()
+		ent.um_pond_induced_insanity = nil
+	end
+end
 
 
 function UM_Ripplespawner:spawnripple(inst)
@@ -26,7 +38,9 @@ function UM_Ripplespawner:spawnripple(inst)
 						splash.Transform:SetScale(0.75,0.75,0.75)
 					end
 				end
-				
+				if self.inst:HasTag("pond_inducedinsanity") then
+					--splash.AnimState:SetMultColour(0,0,0,1)
+				end
 				if inst.components.moisture ~= nil then
 					local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
 					inst.components.moisture:DoDelta(2 * (1 - waterproofness), true)
@@ -52,6 +66,9 @@ function UM_Ripplespawner:spawnripple(inst)
 			
 			if ripple.AnimState ~= nil then
 				ripple.AnimState:SetOceanBlendParams(.2)
+			end
+			if self.inst:HasTag("pond_inducedinsanity") then
+				--ripple.AnimState:SetMultColour(0,0,0,1)
 			end
 			
 			if self.inst.prefab == "um_hotspring" then
@@ -136,13 +153,20 @@ function UM_Ripplespawner:OnUpdate(dt)
 					end 
 				end)
 		end
-		if not ent.water_goo and not ent:HasTag("flying") or ent:HasTag("playerghost") then
-			ent.water_goo = SpawnPrefab("um_waterfollow")
-			ent.water_goo:SetupBlob(ent, ent)	
-			ent.water_goo.stay = true
-		elseif ent.water_goo then -- still nearby, keep the goo
-			ent.water_goo.stay = true
+		if self.inst:HasTag("pond_inducedinsanity") and not ent.um_pond_induced_insanity and ent.components.sanity then
+			ent.components.sanity:SetInducedInsanity(ent, true)
+			if not ent:HasTag("fuelfarming") then
+                ent:AddTag("fuelfarming")
+            end			
+			ent.um_pond_induced_insanity = ent:DoPeriodicTask(FRAMES, CheckLeftPond, nil, self)
 		end
+		-- if not ent.water_goo and not ent:HasTag("flying") or ent:HasTag("playerghost") then -- They didn't like the water goo, so commented out
+			-- ent.water_goo = SpawnPrefab("um_waterfollow")
+			-- ent.water_goo:SetupBlob(ent, ent)	
+			-- ent.water_goo.stay = true
+		-- elseif ent.water_goo then -- still nearby, keep the goo
+			-- ent.water_goo.stay = true
+		-- end
     end
 end
 

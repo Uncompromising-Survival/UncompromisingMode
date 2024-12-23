@@ -143,6 +143,7 @@ AddRoom("FossilMagma", {
 			magmabone = 0.05,
 			um_pyre_nettles_stage_2 = 0.025,
 			um_pyre_nettles_stage_5 = 0.025,
+			um_ghost_pepper = 0.025,
         },
     }
 })

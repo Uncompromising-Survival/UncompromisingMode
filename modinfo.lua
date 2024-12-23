@@ -185,21 +185,21 @@ configuration_options = {
         true),
     BinaryConfig("maxhungerdamage", "Max Health Starving", "Starving will deal max health damage after a brief delay.", true),
     BinaryConfig("maxtempdamage", "Max Health Temperature", "Freezing and Overheating will deal max health damage after a brief delay.", true),
-    {
-        name = "rne chance",
-        label = "Random Night Event Chance",
-        hover =
-        "Random Night Events have a default 40% chance to occur each night. They are disabled before Day 5.",
-        options = {
-            { description = "None", data = 100 }, { description = "10%", data = 0.9 },
-            { description = "20%",  data = 0.8 },
-            { description = "30%",  data = 0.7 }, { description = "40%", data = 0.6 },
-            { description = "50%", data = 0.5 },
-            { description = "60%", data = 0.4 }, { description = "70%", data = 0.3 },
-            { description = "80%", data = 0.2 },
-            { description = "90%", data = 0.1 }, { description = "INSANITY", data = 0 } },
-        default = 0.8
-    },
+    -- {
+        -- name = "rne chance",
+        -- label = "Random Night Event Chance",
+        -- hover =
+        -- "Random Night Events have a default 40% chance to occur each night. They are disabled before Day 5.",
+        -- options = {
+            -- { description = "None", data = 100 }, { description = "10%", data = 0.9 },
+            -- { description = "20%",  data = 0.8 },
+            -- { description = "30%",  data = 0.7 }, { description = "40%", data = 0.6 },
+            -- { description = "50%", data = 0.5 },
+            -- { description = "60%", data = 0.4 }, { description = "70%", data = 0.3 },
+            -- { description = "80%", data = 0.2 },
+            -- { description = "90%", data = 0.1 }, { description = "INSANITY", data = 0 } },
+        -- default = 0.8
+    -- },
     BinaryConfig("compromising_vortex", "Non-lethal Shadow Vortex",
         "Shadow Vortex now teleports you to some random place.", false),
     BinaryConfig("foodregen", "Over Time Food Stats",

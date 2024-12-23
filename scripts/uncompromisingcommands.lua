@@ -132,10 +132,10 @@ function c_um_ratcheck()
 end
 
 -- forces an RNE.
-function c_um_rne()
-    local rne = TheWorld.components.randomnightevents
-    rne:ForceRNE(true)
-end
+-- function c_um_rne()
+    -- local rne = TheWorld.components.randomnightevents
+    -- rne:ForceRNE(true)
+-- end
 
 -- spawns a sunken chest at mouse pos
 -- @royal: whether to spawn royal chest

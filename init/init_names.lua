@@ -696,7 +696,8 @@ STRINGS.VIPERFRUIT = "Gloomberry"
 STRINGS.VIPERFRUIT_LESSER = "Lesser Gloomberry"
 STRINGS.VIPERJAM = "Gloomberry Jam"
 STRINGS.VIPERFRUIT_PLANT = "Ominous Plant"
-
+STRINGS.UM_GHOST_PEPPER = "Faded Vine"
+STRINGS.UM_GHOST_PEPPER_ITEM = "Ghost Pepper"
 ------------------------
 -- Rimeweed --
 ------------------------

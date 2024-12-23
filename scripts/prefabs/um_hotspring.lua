@@ -3,30 +3,7 @@ local assets =
     Asset("ANIM", "anim/um_hotspring.zip")
 }
 
-local function SpawnPlants(inst, plantname, count, maxradius)
-    if inst.decor then
-        for i, item in ipairs(inst.decor) do
-            item:Remove()
-        end
-    end
-    inst.decor = {}
 
-    local plant_offsets = {}
-
-    for i = 1, math.random(math.ceil(count / 2), count) do
-        local a = math.random() * math.pi * 2
-        local x = math.sin(a) * maxradius + math.random() * 0.2
-        local z = math.cos(a) * maxradius + math.random() * 0.2
-        table.insert(plant_offsets, { x, 0, z })
-    end
-
-    for k, offset in pairs(plant_offsets) do
-        local plant = SpawnPrefab(plantname)
-        plant.entity:SetParent(inst.entity)
-        plant.Transform:SetPosition(offset[1], offset[2], offset[3])
-        table.insert(inst.decor, plant)
-    end
-end
 
 local sizes =
 {
@@ -43,7 +20,6 @@ local function SetSize(inst, size)
 	end
     inst.AnimState:PlayAnimation(sizes[inst.size].anim, true)
     --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
-    SpawnPlants(inst, "marsh_plant", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
 	inst.components.unevenground.radius = sizes[inst.size].plantrad
 end
 
@@ -58,26 +34,69 @@ local function onload(inst, data, newents)
 end
 
 local function DoFx(inst) -- This is the hotspring's passive FX
-    local pos = Vector3(inst.Transform:GetWorldPosition())
+	
+		local pos = Vector3(inst.Transform:GetWorldPosition())
 
-    local spawnrad = math.random(1, 8) * sizes[inst.size].rad / 10
-    local offset = FindWalkableOffset(pos, math.random() * 2 * PI, spawnrad)
-    if math.random() > 0.75 then
-        SpawnPrefab("crab_king_bubble" .. tostring(math.random(1, 3))).Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
-    else
-        if math.random() > 0.5 then
-            SpawnPrefab("crater_steam_fx" .. tostring(math.random(1, 4))).Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
-        else
-            SpawnPrefab("slow_steam_fx" .. tostring(math.random(1, 4))).Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
-        end
-    end
+		local spawnrad = math.random(1, 8) * sizes[inst.size].rad / 10
+		local offset = FindWalkableOffset(pos, math.random() * 2 * PI, spawnrad)
+		local fx
+		if not inst:HasTag("pond_inducedinsanity") then
+			if math.random() > 0.75 then
+				fx = SpawnPrefab("crab_king_bubble" .. tostring(math.random(1, 3)))
+			else
+				if math.random() > 0.5 then
+					fx = SpawnPrefab("crater_steam_fx" .. tostring(math.random(1, 4)))
+				else
+					fx = SpawnPrefab("slow_steam_fx" .. tostring(math.random(1, 4)))
+				end
+			end
+		else
+			fx = SpawnPrefab("tophat_shadow_fx")
+			fx:DoTaskInTime(1.5,function(fx) fx:Remove() end)
+		end
+		fx.Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
+		-- if TheWorld.state.isnewmoon then
+			-- fx.AnimState:SetMultColour(0,0,0,1)
+		-- end
 end
 
 local function OnBathBombed(inst)
-    inst.Light:Enable(true)
-    inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
-    inst.components.timer:StartTimer("bubbly", 8 * 60)
+	if not TheWorld.state.isnewmoon then
+		inst.Light:Enable(true)
+		inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
+		inst.components.timer:StartTimer("bubbly", 8 * 60)
+	end
 end
+
+local function FadeToNormal(inst)
+	if not inst.color then
+		inst.color = 0
+	end
+	inst:RemoveTag("pond_inducedinsanity")
+	inst.color = inst.color + FRAMES
+	if inst.color > 1 then
+		inst.color = 1
+	else
+		inst:DoTaskInTime(2*FRAMES, FadeToNormal)
+	end
+	inst.AnimState:SetMultColour(inst.color,inst.color,inst.color,1)
+end
+
+local function FadeToDark(inst)
+	if not inst.color then
+		inst.color = 1
+	end
+	inst:AddTag("pond_inducedinsanity")
+	inst.color = inst.color - FRAMES
+	if inst.color < 0.2 then
+		inst.color = 0.1
+	else
+		inst:DoTaskInTime(2*FRAMES, FadeToDark)
+	end
+	inst.AnimState:SetMultColour(inst.color,inst.color,inst.color,1)
+end
+
+
 
 local function fn()
     local inst = CreateEntity()
@@ -164,46 +183,31 @@ local function fn()
             inst.Light:Enable(true)
             inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
         end
+		if TheWorld.state.isnewmoon then
+			if not inst.components.timer:TimerExists("bubbly") then
+				inst.shadowfx = {}
+				FadeToDark(inst)
+			end
+		end
     end
 
     inst.components.bathbombable:SetOnBathBombedFn(OnBathBombed)
 
-    return inst
-end
 
-local function fn2()
-    local inst = CreateEntity()
+	inst:WatchWorldState("isnewmoon", function(inst) 
+		if not inst.components.timer:TimerExists("bubbly") then
+			inst.shadowfx = {}
+			FadeToDark(inst)
+		end
+	end)
+	inst:WatchWorldState("isday", function(inst) 		
+		if not inst.components.timer:TimerExists("bubbly") and inst.color and inst.color < 1 then
+			FadeToNormal(inst)
+		end
+	end)
 
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
-    inst.entity:AddNetwork()
-
-    --inst:AddTag("CLASSIFIED")
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-    --inst:AddTag("CLASSIFIED")
-
-    inst:DoTaskInTime(1.1, function(inst)
-        local x, y, z = inst.Transform:GetWorldPosition()
-        SpawnPrefab("um_hotspring").Transform:SetPosition(x, y, z)
-        local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
-        -- Square
-        for i = -1, 1 do
-            for j = -1, 1 do
-                TheWorld.Map:SetTile(tx + i, tz + j, WORLD_TILES.BOILINGFIELDS_DIRTY)
-            end
-        end
-        inst:Remove()
-    end)
 
     return inst
 end
 
-return Prefab("um_hotspring", fn, assets),
-    Prefab("um_hotspring_placer", fn2)
+return Prefab("um_hotspring", fn, assets)

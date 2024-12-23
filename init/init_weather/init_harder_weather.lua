@@ -57,25 +57,25 @@ env.AddPrefabPostInit("cave", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    if TUNING.DSTU.CAVECLOPS then
-        inst:AddComponent("cavedeerclopsspawner")
-    end
-    inst:AddComponent("randomnighteventscaves")
-    inst:AddComponent("ratacombs_junk_manager")
+    -- if TUNING.DSTU.CAVECLOPS then
+        -- inst:AddComponent("cavedeerclopsspawner")
+    -- end
+    -- inst:AddComponent("randomnighteventscaves")
+    -- inst:AddComponent("ratacombs_junk_manager")
 
-    inst:AddComponent("um_stormspawner")
+    -- inst:AddComponent("um_stormspawner")
 
     if TUNING.DSTU.PYRENETTLES then
         inst:AddComponent("um_pyre_nettles_summer_spawner")
     end
 
-    inst:DoTaskInTime(0, function(inst)
-        if TestForIA() then
-            inst:RemoveComponent("cavedeerclopsspawner")
-            inst:RemoveComponent("randomnighteventscaves")
-            inst:RemoveComponent("ratacombs_junk_manager")
-        end
-    end)
+    -- inst:DoTaskInTime(0, function(inst)
+        -- if TestForIA() then
+            -- inst:RemoveComponent("cavedeerclopsspawner")
+            -- inst:RemoveComponent("randomnighteventscaves")
+            -- inst:RemoveComponent("ratacombs_junk_manager")
+        -- end
+    -- end)
 end)
 
 env.AddPrefabPostInit("forest", function(inst)
@@ -89,7 +89,7 @@ env.AddPrefabPostInit("forest", function(inst)
     --inst:AddComponent("hayfever_tracker")
     inst:AddComponent("firefallwarning")
     inst:AddComponent("pollenmitedenspawner")
-    inst:AddComponent("randomnightevents")
+    -- inst:AddComponent("randomnightevents")
 
     if env.GetModConfigData("nightterrors") then
         inst:AddComponent("um_nightterrors")
@@ -136,7 +136,7 @@ env.AddPrefabPostInit("forest", function(inst)
             --inst:RemoveComponent("hayfever_tracker")
             inst:RemoveComponent("firefallwarning")
             inst:RemoveComponent("pollenmitedenspawner")
-            inst:RemoveComponent("randomnightevents")
+            --inst:RemoveComponent("randomnightevents")
             inst:RemoveComponent("um_areahandler")
             inst:RemoveComponent("gmoosespawner")
             inst:RemoveComponent("mock_dragonflyspawner")

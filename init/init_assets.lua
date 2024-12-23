@@ -16,6 +16,7 @@ RemapSoundEvent("dontstarve/characters/winky/sinking", "winky/characters/winky/s
 --PLEASE keep atlas names and image names the same so we can continue to do this like this.
 local inventoryitems =
 {
+	"um_ghost_pepper_item",
 	"air_conditioner",
 	"ancient_amulet_red",
 	"aphid",
@@ -803,7 +804,6 @@ Assets = {
 	Asset("ANIM", "anim/wilton.zip"),
 
 	Asset("ANIM", "anim/magmahound.zip"),
-
 	Asset("ANIM", "anim/viperworm.zip"),
 
 	Asset("ANIM", "anim/bight.zip"),

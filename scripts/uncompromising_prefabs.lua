@@ -565,8 +565,7 @@ local prefabs = {
 	"um_robust_projectile",
 	--"coffbee",
 	"um_cookpot_wagstaff",
-	
-	"um_waterfollow",
+	"um_ghost_peppers",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

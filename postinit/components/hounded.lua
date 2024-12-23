@@ -89,6 +89,10 @@ env.AddComponentPostInit("hounded", function(self)
     end
 
     UpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
+	
+	function self:DelayHoundWave(value)
+		--_timetoattack = _timetoattack + delay
+	end
 end)
 
 local wormspawn =
