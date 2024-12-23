@@ -103,8 +103,13 @@ local function SetProductSymbol(inst, product, overridebuild)
     local recipe = cooking.GetRecipe(inst.prefab, product)
     local potlevel = recipe ~= nil and recipe.potlevel or nil
     local build = (recipe ~= nil and recipe.overridebuild ~= nil and recipe.overridebuild) or "cook_pot_food"
-    local overridesymbol = (recipe ~= nil and recipe.overridesymbolname) or product
 
+    local overridesymbol = (recipe ~= nil and recipe.overridesymbolname) or product
+	
+	if not recipe then
+		overridesymbol = product
+		build = product
+	end
     if potlevel == "high" then
         inst.AnimState:Show("swap_high")
         inst.AnimState:Hide("swap_mid")

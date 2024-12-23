@@ -164,27 +164,31 @@ function Stewer_Wagstaff:StartCooking(doer)
 		else
 			self.product = "wetgoop"
 		end
-		local cooktime = cooking.GetRecipe(self.inst.prefab, self.product).cooktime or 1
-        local productperishtime = cooking.GetRecipe(self.inst.prefab, self.product).perishtime or 0
+		-- TheNet:Announce(self.inst.prefab)
+		-- TheNet:Announce(self.product)
+		-- TheNet:Announce(cooking.GetRecipe(self.inst.prefab, self.product))
+		-- TheNet:Announce(cooking.GetRecipe(self.inst.prefab, self.product).perishtime)
+		-- local cooktime = cooking.GetRecipe(self.inst.prefab, self.product).cooktime or 1
+        -- local productperishtime = cooking.GetRecipe(self.inst.prefab, self.product).perishtime or 0
 
-        if productperishtime > 0 then
-			local spoilage_total = 0
-			local spoilage_n = 0
-			for k, v in pairs (self.inst.components.container.slots) do
-				if v.components.perishable ~= nil then
-					spoilage_n = spoilage_n + 1
-					spoilage_total = spoilage_total + v.components.perishable:GetPercent()
-				end
-			end
-            self.product_spoilage =
-                (spoilage_n <= 0 and 1) or
-                (self.keepspoilage and spoilage_total / spoilage_n) or
-                1 - (1 - spoilage_total / spoilage_n) * .5
-		else
-			self.product_spoilage = nil
-		end
-
-        cooktime = TUNING.BASE_COOK_TIME * cooktime * self.cooktimemult * 1/2.25
+        -- if productperishtime > 0 then
+			-- local spoilage_total = 0
+			-- local spoilage_n = 0
+			-- for k, v in pairs (self.inst.components.container.slots) do
+				-- if v.components.perishable ~= nil then
+					-- spoilage_n = spoilage_n + 1
+					-- spoilage_total = spoilage_total + v.components.perishable:GetPercent()
+				-- end
+			-- end
+            -- self.product_spoilage =
+                -- (spoilage_n <= 0 and 1) or
+                -- (self.keepspoilage and spoilage_total / spoilage_n) or
+                -- 1 - (1 - spoilage_total / spoilage_n) * .5
+		-- else
+			-- self.product_spoilage = nil
+		-- end
+		self.product_spoilage = 1
+        local cooktime = TUNING.BASE_COOK_TIME * self.cooktimemult * 1/2.25
         self.targettime = GetTime() + cooktime
         if self.task ~= nil then
             self.task:Cancel()

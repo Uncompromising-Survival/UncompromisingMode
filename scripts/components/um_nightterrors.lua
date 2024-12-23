@@ -440,13 +440,15 @@ return Class(function(self, inst)
 							local x1,y1,z1 = players
 							if players == nil or #players == 0 then
 								local ent = SpawnPrefab("um_haunt")
-								ent.haunt_target = v
-								ent.Transform:SetPosition(x1, 0, z1)
-								DespawnOnDay(ent)
-					
-								TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HAUNT }) 
+								if ent then
+									ent.haunt_target = v
+									ent.Transform:SetPosition(x1, 0, z1)
+									DespawnOnDay(ent)
+						
+									TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HAUNT }) 
 
-								return
+									return
+								end
 							end
 						end
 					end
@@ -604,7 +606,7 @@ return Class(function(self, inst)
 		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
 		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
 		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
-		SpawnLeeches = { name = SpawnHaunt, weight = .5, },
+		--SpawnLeeches = { name = SpawnHaunt, weight = .5, },
 	}
 	
 	local TERRORS =
