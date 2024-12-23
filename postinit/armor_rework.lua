@@ -2,9 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local armor_overrides = {
-    -- ["armorgrass"] = 0.4,
-    -- ["armorwood"] = 0.5,
-    -- ["armorruins"] = 0.7,
+    ["beehat"] = 0.8,
+    ["armorruins"] = 0.8,
+    ["footballhat"] = 0.65,
+    ["eyemaskhat"] = 0.65
 }
 
 local armor_mapping = {
