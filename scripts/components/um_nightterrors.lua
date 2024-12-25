@@ -605,7 +605,7 @@ return Class(function(self, inst)
 		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
 		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
 		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
+		--SpawnHaunt = { name = SpawnHaunt, weight = .5, },
 		--SpawnLeeches = { name = SpawnHaunt, weight = .5, },
 	}
 	
