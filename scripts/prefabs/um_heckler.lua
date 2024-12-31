@@ -56,112 +56,35 @@ local function LaunchProjectile(inst)
 	if target ~= nil then
 		local targetfocus = target
 		local ix, iy, iz = inst.Transform:GetWorldPosition()
-		for i = 1, 4 do 
-			local delay = (i - 1) / 20
+		local targetpos = targetfocus:GetPosition()
+
+		if targetfocus ~= nil then
+			local rad = math.rad(inst:GetAngleToPoint(targetpos.x, 0, targetpos.z))
+			local velx = math.cos(rad) * 4.5
+			local velz = -math.sin(rad) * 4.5
 		
-			--local px, py, pz = targetfocus.Transform:GetWorldPosition()
-			local targetpos = targetfocus:GetPosition()
-			inst:DoTaskInTime(delay, function()
-				if targetfocus ~= nil then
-					--local px, py, pz = targetfocus.Transform:GetWorldPosition()
-					local rad = math.rad(inst:GetAngleToPoint(targetpos.x, 0, targetpos.z))
-					local velx = math.cos(rad) * 4.5
-					local velz = -math.sin(rad) * 4.5
-				
-					--local dx, dy, dz = ix + (i * velx), 0, iz + (i * velz)
-					targetpos.x = ix + (i * velx)
-					targetpos.z = iz + (i * velz)
-					
-					
-					local dx = targetpos.x - ix
-					local dz = targetpos.z - iz
-					local rangesq = dx * dx + dz * dz
-					local maxrange = TUNING.FIRE_DETECTOR_RANGE + 5
-					local speed = easing.linear(rangesq, 15, 3, maxrange * maxrange)
-					
-					
-					local projectile = SpawnPrefab("heckler_goo")
-					projectile.Transform:SetPosition(ix, iy, iz)
-					
-					projectile.components.complexprojectile:SetLaunchOffset(Vector3(4, 3, 0))
-					projectile.components.complexprojectile:SetHorizontalSpeed(speed)
-					projectile.components.complexprojectile:SetGravity(-35)
-					projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-					
-					--[[
-					local maxrange = 40
-					local bigNum = 30
-					local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-					
-					
-					local projectile = SpawnPrefab("guardian_goo")
-					projectile.Transform:SetPosition(ix, iy, iz)
-					
-					projectile.components.complexprojectile:SetLaunchOffset(Vector3(5, 4, 0))
-					projectile.components.complexprojectile:SetHorizontalSpeed(speed)
-					projectile.components.complexprojectile:SetGravity(-65)
-					projectile.components.complexprojectile:Launch(targetpos, inst, inst)]]
-				end
-			end)
-		
-		--[[
-			local x, y, z = inst.Transform:GetWorldPosition()
-			local projectile = SpawnPrefab("guardian_goo")
-			projectile.Transform:SetPosition(x, y, z)
-			local a, b, c = target.Transform:GetWorldPosition()
-			local targetpos = target:GetPosition()
-			targetpos.x = targetpos.x + math.random(-3, 3)
-			targetpos.z = targetpos.z + math.random(-3, 3)
-			local dx = a - x
-			local dz = c - z
+			targetpos.x = ix + (4 * velx)
+			targetpos.z = iz + (4 * velz)
+			
+			
+			local dx = targetpos.x - ix
+			local dz = targetpos.z - iz
 			local rangesq = dx * dx + dz * dz
-			local maxrange = 20
-			local bigNum = 15
-			local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-			projectile:AddTag("canthit")
-
-
-			projectile.components.complexprojectile:SetLaunchOffset(Vector3(5, 4, 0))
-			--projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
-			projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-			projectile.components.complexprojectile:SetGravity(-65)
-			projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-			projectile:Show()]]
-		end
-	end
-	
-	--[[
-	--for i = 1, 4 do 
-		if target ~= nil then
-	
-			local x, y, z = inst.Transform:GetWorldPosition()
-			local a, b, c = target.Transform:GetWorldPosition()
+			local maxrange = TUNING.FIRE_DETECTOR_RANGE + 5
+			local speed = easing.linear(rangesq, 15, 3, maxrange * maxrange)
+			
+			
 			local projectile = SpawnPrefab("heckler_goo")
-			projectile.Transform:SetPosition(x, y, z)
-			local targetpos = target:GetPosition()
 			
-			local tx, ty = TheWorld.Map:GetTileCoordsAtPoint(targetpos.x, 0, targetpos.z)
-	
-			targetpos.x = tx
-			targetpos.z = ty
+			projectile.Transform:SetPosition(ix, iy, iz)
 			
-			local dx = a - x
-			local dz = c - z
-			local rangesq = dx * dx + dz * dz
-			local maxrange = 20
-			local bigNum = 15
-			local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-			projectile:AddTag("canthit")
-
-
 			projectile.components.complexprojectile:SetLaunchOffset(Vector3(4, 3, 0))
-			--projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
-			projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-			projectile.components.complexprojectile:SetGravity(-65)
+			projectile.components.complexprojectile:SetHorizontalSpeed(speed)
+			projectile.components.complexprojectile:SetGravity(-35)
 			projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-			projectile:Show()
 		end
-	--end]]
+
+	end
 end
 
 local function fn()
@@ -177,7 +100,6 @@ local function fn()
 	RemovePhysicsColliders(inst)
 	inst.Physics:SetCollisionGroup(COLLISION.SANITY)
 	inst.Physics:CollidesWith(COLLISION.SANITY)
-	--inst.Physics:CollidesWith(COLLISION.WORLD)
 	
     inst.Transform:SetTwoFaced()
 	

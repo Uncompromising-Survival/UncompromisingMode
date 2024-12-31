@@ -13,6 +13,7 @@ if GetModConfigData("worldgenmastertoggle") then
 		"broiling_hills", -- Changes Badlands -> Broiling Hills
 		"giant_trees", -- Changes Forest Hunters -> Hooded Forest
 		"the_hunters", -- Adds Trapdoors and Ghost Walruses
+		"for_a_nice_walk", -- Guarantees a living tree spawns
 		"ocean_general", -- All Ocean Changes (For Now)
 	}
 

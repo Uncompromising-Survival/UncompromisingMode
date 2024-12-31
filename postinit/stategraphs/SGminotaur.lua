@@ -110,12 +110,6 @@ env.AddStategraphPostInit("minotaur", function(inst)
         BounceStuff(inst)
 		----------------------------------------------- Break any organ shields.
 		local x,y,z = inst.Transform:GetWorldPosition()
-		local organs = TheSim:FindEntities(x,y,z,7,{"minotaur_organ"})
-		if organs then
-			for i,organ in ipairs(organs) do
-				organ:DeactivateShield(organ)
-			end
-		end
 		if inst.components.combat and inst.components.combat.target and ((inst.combo < math.random(2,3) and (inst.components.health:GetPercent() > 0.3 and inst.components.health:GetPercent() < 0.6)) or (inst.combo < math.random(4,5) and inst.components.health:GetPercent() < 0.3)) then
 			inst.sg:GoToState("leap_attack_pre_quick",inst.components.combat.target) 		-- Leap attack combo depends on how much health the AG has
 			inst.SoundEmitter:PlaySound("ancientguardian_rework/minotaur2/groundpound")		-- it won't combo if it doesn't have low enough health and

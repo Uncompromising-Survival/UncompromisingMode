@@ -225,18 +225,6 @@ local function ChargeTurn(inst)
 			inst.sg:GoToState("chargeover")
 		end
 	end
-	
-	--[[--Knockback Task (Scrapped, was unfun)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local entities = TheSim:FindEntities(x,y,z,4,{"_health"},{"webbedcreature"})
-	for i,other in ipairs(entities) do
-		if other and other.components.inventory and not other:HasTag("fat_gang") and not other:HasTag("foodknockbackimmune") and not other.sg:HasStateTag("knockback") and
-			--Don't knockback if you wear marble
-			(other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil or not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
-			--other.tempknockbackimmune = other:DoTaskInTime(1,function(other) other.tempknockbackimmune = nil end)
-			other:PushEvent("knockback", { knocker = inst, radius = 30, strengthmult = 1 })
-		end
-	end]]
 end
 
 local function ChargeAttacked(inst) -- Charge uses a slightly different attack, could probably be unified before going to live

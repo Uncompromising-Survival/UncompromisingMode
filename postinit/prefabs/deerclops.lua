@@ -32,7 +32,6 @@ local function OnNewState(inst, data)
 end
 
 local function MakeEnrageable(inst)
-    inst.components.health:SetMaxHealth(TUNING.DEERCLOPS_HEALTH)
     inst.upgrade = "enrage_mutation"
 	inst:AddComponent("timer")
 	inst.components.timer:StartTimer("laserbeam_cd", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(3) - .5))
@@ -58,14 +57,12 @@ local function DisableYule(inst)
 end
 local function MakeStrong(inst)
 	DisableYule(inst)
-    inst.components.health:SetMaxHealth(TUNING.DEERCLOPS_HEALTH * 1.125)
     inst.upgrade = "strength_mutation"
     inst:DoTaskInTime(0.1, function(inst) inst:AddComponent("timer") end)
 end
 
 local function MakeIcey(inst)
 	DisableYule(inst)
-    inst.components.health:SetMaxHealth(TUNING.DEERCLOPS_HEALTH * 0.875)
     inst.upgrade = "ice_mutation"
     if inst.components.freezable ~= nil then
         inst:RemoveComponent("freezable")

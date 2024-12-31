@@ -138,6 +138,7 @@ local function ontakefuel(inst, owner)
 end
 
 --------------------------------------------------------------------------
+local bugzapper_range = 4
 
 local function onattack(inst, attacker, target)
 	if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and
@@ -151,7 +152,7 @@ local function onattack(inst, attacker, target)
 			SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
 
 			local x, y, z = target.Transform:GetWorldPosition()
-			local ents = TheSim:FindEntities(x, y, z, 3.5, nil, { "INLIMBO", "player", "abigail" },
+			local ents = TheSim:FindEntities(x, y, z, bugzapper_range, nil, { "INLIMBO", "player", "abigail" },
 				{ "insect", "spider", "hoodedwidow" })
 
 			for i, v in ipairs(ents) do
@@ -179,7 +180,7 @@ local function onattack(inst, attacker, target)
 			SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
 
 			local x, y, z = target.Transform:GetWorldPosition()
-			local ents = TheSim:FindEntities(x, y, z, 3.5, nil, { "INLIMBO", "player", "abigail" },
+			local ents = TheSim:FindEntities(x, y, z, bugzapper_range, nil, { "INLIMBO", "player", "abigail" },
 				{ "insect", "spider", "hoodedwidow" })
 
 			for i, v in ipairs(ents) do

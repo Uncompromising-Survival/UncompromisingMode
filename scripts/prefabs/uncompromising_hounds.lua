@@ -102,7 +102,7 @@ SetSharedLootTable('hound_glacial',
 
 SetSharedLootTable('hound_spore',
     {
-        { 'monstermeat',          1.0 },
+        { 'spoiled_food',          1.0 },
         { 'houndstooth',          1.0 },		
         { 'sporecloud_toad',      1.0 },
         { 'shroom_skin_fragment', 0.5 },		

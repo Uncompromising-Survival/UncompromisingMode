@@ -202,6 +202,7 @@ local function OnKilled(inst)
 			creature = "walrus"
 			inst.components.lootdropper:AddChanceLoot("meat", 0.50)
 			inst.components.lootdropper:AddChanceLoot("walrus_tusk", 1.00)
+			inst.components.lootdropper:AddChanceLoot("um_bear_trap_equippable_tooth", 0.50)
 		end
 		if inst.size == 15 then
 			creature = "lordfruitfly"

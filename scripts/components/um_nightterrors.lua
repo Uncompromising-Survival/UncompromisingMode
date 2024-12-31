@@ -56,17 +56,42 @@ return Class(function(self, inst)
 	end
 	
 	local function DelayHoundsAndGiantsIfNecessary()
-		--TheNet:Announce("tried to delay")
 		if self.inst.components.hounded then
 			local houndtime = self.inst.components.hounded:GetTimeToAttack()/(60*8) --Convert seconds to DS days 
-			if houndtime < 1200 then
-				--TheNet:Announce(houndtime)
-				self.inst.components.hounded:DelayHoundWave(60*8) -- delay by a day
-				--TheNet:Announce(houndtime)
+			if houndtime < 5*60*8 then
+				self.inst.components.hounded:OnUpdate(-5*60*8) -- Tell it to back up
 			end	
 		end
 	end
 	
+	local function DropVoxolophone(inst, data)
+		local other = data.target
+		if other and other.components.inventory then
+			
+			local inv = other.components.inventory
+			local voxolophone
+			local pack = inv:GetEquippedItem(EQUIPSLOTS.BODY)
+			local validfood = {}
+			if pack and pack.components.container then
+				for k = 1, pack.components.container.numslots do
+					local item = pack.components.container.slots[k]
+					if item and item.prefab == "um_voxolophone" then
+						voxolophone = item
+					end
+				end
+			end
+
+			for k = 1, inv.maxslots do
+				local item = inv.itemslots[k]
+				if item and item.prefab == "um_voxolophone" then
+					voxolophone = item
+				end
+			end
+			if voxolophone then
+				other.components.inventory:DropItem(voxolophone)
+			end
+		end
+	end
 	
 	
     local function AllowedToAttack(data)
@@ -501,10 +526,13 @@ return Class(function(self, inst)
 					
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTMARECREATURE })
 					count = count + 1
-					
+					ent:ListenForEvent("onhitother", DropVoxolophone)
 					if count >= 2 then
 						break
 					end
+					
+					
+					
 				end
 			end
 		end
@@ -604,7 +632,9 @@ return Class(function(self, inst)
 		SpawnHand = { name = SpawnHand, weight = .3, },
 		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
 		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
-		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+
+		--SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+
 		--SpawnHaunt = { name = SpawnHaunt, weight = .5, },
 		--SpawnLeeches = { name = SpawnHaunt, weight = .5, },
 	}

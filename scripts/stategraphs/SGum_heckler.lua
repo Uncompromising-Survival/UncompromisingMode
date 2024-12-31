@@ -156,7 +156,7 @@ local states=
 
 		timeline =
 		{   
-            TimeEvent(20*FRAMES, function(inst) 
+            TimeEvent(18*FRAMES, function(inst) 
 				PlayExtendedSound(inst, "attack_grunt")
 			
 				if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then

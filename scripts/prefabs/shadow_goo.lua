@@ -22,29 +22,43 @@ local splashfxlist =
     "icing_splash_fx_melted",
 }
 
+local AURA_EXCLUDE_TAGS = { "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "flight"}
+
+
+local function SpawnHecklerGooTrail(inst,despawn_on_day)
+	local fx = SpawnPrefab("shadow_goo_trail")
+	fx.AnimState:SetMultColour(0,0,0,0.8)
+	local variation = math.random(-2,2)
+	local angle = 0
+	local x,y,z = inst.Transform:GetWorldPosition()
+	fx.Transform:SetPosition(x + 2 * math.cos(angle) + variation * math.cos(angle + 3.14 / 2), 0,
+		z + 2 * math.sin(angle) + variation * math.sin(angle + 3.14 / 2))
+	if despawn_on_day then
+		fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 480)
+        fx:WatchWorldState("cycles", function() 	
+			fx:Remove()
+		end)	
+	else
+		fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 45)
+	end
+	fx.angle = angle
+
+end
+
+
 local function DoSplatFx(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	local goo
 	if inst.prefab == "shadow_goo" then -- A special different ground anim for our fancy goo
 		goo = SpawnPrefab("shadow_puff")
 	elseif inst.prefab == "heckler_goo" then
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local theta = math.random() * PI2
-		local ox, oz = TILE_SCALE * math.cos(theta), TILE_SCALE * math.sin(theta)
-        local tx, ty = TheWorld.Map:GetTileCoordsAtPoint(x + ox, 0, z + oz)
 		
 		--SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(tx, 0, ty)
-		SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(x, 0, z)
+		SpawnHecklerGooTrail(inst,true)
 	elseif inst.organ then
 		goo = SpawnPrefab("minotaur_organ")
 	else
-		goo = SpawnPrefab("guardian_splat")
-		if inst.tentacle then
-			local tent = SpawnPrefab("bigshadowtentacle")
-			tent.Transform:SetPosition(x,0,z)
-			tent:PushEvent("arrive")
-			goo:DoTaskInTime(0,function(goo) goo:ListenForEvent("animover",function(goo) goo:Remove() end) end)
-		end
+		SpawnHecklerGooTrail(inst)
 	end
 	
 	if goo ~= nil then
@@ -146,6 +160,7 @@ local function shadow_goofn(inst)
 	return mainprojectilefn("warg_gingerbread_bomb")
 end
 
+
 local function guardian_goo()
     local inst = CreateEntity()
 
@@ -184,10 +199,14 @@ local function guardian_goo()
 	inst:Hide()
 	inst:DoTaskInTime(0.2,function(inst) inst:Show() end)	
 	
+	
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
     inst.components.weapon:SetRange(20, 10)
-
+	
+	
+	inst:DoPeriodicTask(0.1,SpawnHecklerGooTrail)
+	
     return inst
 end
 
@@ -221,7 +240,111 @@ local function guardiansplat()
 	inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
     return inst
 end
+--- From Honey_trail
+
+
+local function OnUpdate(inst, x, y, z, rad)
+	local should_tentacle
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, rad, { "locomotor" }, { "flying", "playerghost", "INLIMBO","shadow"})) do
+		should_tentacle = true
+    end
+	if should_tentacle and not FindEntity(inst, 3, function(ent) return ent.prefab == "bigshadowtentacle" end) then
+		local tent = SpawnPrefab("bigshadowtentacle")
+		tent.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		tent:PushEvent("arrive")
+	end
+end
+
+
+local function OnIsFadingDirty(inst)
+    if inst._isfading:value() then
+        inst.task:Cancel()
+    end
+end
+
+local function OnStartFade(inst)
+    inst.AnimState:PlayAnimation(inst.trailname.."_pst")
+    inst._isfading:set(true)
+    inst.task:Cancel()
+end
+
+local function OnAnimOver(inst)
+    if inst.AnimState:IsCurrentAnimation(inst.trailname.."_pre") then
+        inst.AnimState:PlayAnimation(inst.trailname)
+        inst:DoTaskInTime(inst.duration, OnStartFade)
+    elseif inst.AnimState:IsCurrentAnimation(inst.trailname.."_pst") then
+        inst:Remove()
+    end
+end
+
+local function OnInit(inst, scale)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    if scale == nil then
+        scale = inst.Transform:GetScale()
+    end
+    inst.task:Cancel()
+    local onupdatefn = OnUpdate
+    inst.task = inst:DoPeriodicTask(0.25, onupdatefn, nil, x, y, z, scale) -- larger gap in dotaskintime to improve performance
+    onupdatefn(inst, x, y, z, scale)
+	inst:AddComponent("unevenground") -- unevenground will handle the slowing
+    inst.components.unevenground.radius = scale
+end
+
+local function SetVariation(inst, rand, scale, duration)
+    if inst.trailname == nil then
+        inst.Transform:SetScale(scale, scale, scale)
+
+        inst.trailname = "trail"..tostring(rand)
+        inst.duration = duration
+        inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/honey_drip")
+        inst.AnimState:PlayAnimation(inst.trailname.."_pre")
+        inst:ListenForEvent("animover", OnAnimOver)
+
+        OnInit(inst, scale)
+    end
+end
+
+local function fngoo()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    --inst:AddTag("FX")
+	inst:AddTag("withered") -- easy way to make flingos and watering cans target this.
+	inst:AddTag("witherable")
+    inst.AnimState:SetBank("honey_trail")
+    inst.AnimState:SetBuild("honey_trail")
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+
+    inst._isfading = net_bool(inst.GUID, "honey_trail._isfading", "isfadingdirty")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        inst:ListenForEvent("isfadingdirty", OnIsFadingDirty)
+        inst.task = inst:DoPeriodicTask(0, OnInit)
+
+        return inst
+    end
+	inst:AddTag("um_washable_goo")
+
+    inst.SetVariation = SetVariation
+	inst:AddComponent("witherable")
+	inst.components.witherable:ForceWither() -- Back way to get fire detectors to target the goo as well as watering cans...
+	
+    inst.persists = false
+    inst.task = inst:DoTaskInTime(0, inst.Remove)
+	inst.OnStartFade = OnStartFade
+
+    return inst
+end
+
 return Prefab("shadow_goo", shadow_goofn, projectile_assets, projectile_prefabs),
 Prefab("heckler_goo", guardian_goo),
 Prefab("guardian_goo", guardian_goo),
-Prefab("guardian_splat", guardiansplat)
+Prefab("guardian_splat", guardiansplat),
+Prefab("shadow_goo_trail", fngoo)

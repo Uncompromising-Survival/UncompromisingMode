@@ -78,6 +78,9 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("inventoryitem")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ghost_pepper_item.xml"
+	
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
 

@@ -28,12 +28,6 @@ local function AnimNext(inst)
 	end
 end
 
-local function OnAttacked(inst)
-	if inst:HasTag("forcefield") then
-		inst._fx.AnimState:PlayAnimation("hit")
-		inst._fx.AnimState:PushAnimation("idle_loop")
-	end
-end
 
 local function DeactivateShield(inst)
 	inst.Physics:ClearCollisionMask()
@@ -52,22 +46,6 @@ local function DeactivateShield(inst)
 end
 
 local function ActivateShield(inst)
-	if inst.components.health and not inst.components.health:IsDead() then
-		inst:AddTag("forcefield")
-		if inst._fx ~= nil then
-			inst._fx:kill_fx()
-		end
-		inst._fx = SpawnPrefab("forcefieldfx")
-		inst._fx.entity:SetParent(inst.entity)
-		inst._fx.Transform:SetPosition(0, -0.2, 0)
-		inst._fx.Transform:SetScale(1,1,1)
-		inst._fx.AnimState:SetMultColour(0, 0, 0, 1)
-
-		if inst._unshieldtask ~= nil then
-			inst._unshieldtask:Cancel()
-		end
-		inst._unshieldtask = inst:DoTaskInTime(20, DeactivateShield) --If somehow AG can't reach this, we'll give a pity timer of 20 seconds.
-	end
 	if TheSim:FindFirstEntityWithTag("minotaur") and not inst.minotaur then --Updating it this way till we get a fix
 		local minotaur = TheSim:FindFirstEntityWithTag("minotaur")
 		inst.minotaur = minotaur
@@ -75,10 +53,6 @@ local function ActivateShield(inst)
 	elseif inst.minotaur then
 		minotaur:OrganUpdate(minotaur)
 	end
-end
-
-local function nodmgshielded(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-    return inst:HasTag("forcefield") and amount <= 0 and not ignore_absorb or afflicter ~= nil and afflicter:HasTag("quakedebris")
 end
 
 local function oncollide(inst, other)
@@ -113,12 +87,10 @@ local function organfn()
 
 	inst:AddComponent("health")
 	inst.components.health:SetMaxHealth(1)
-	inst.components.health.redirect = nodmgshielded --This lets the heart know not to take damage if its got a forcefield.
 	
 	inst:AddComponent("combat")
 	inst:ListenForEvent("death", OnKilled) --Forces the death animation as soon as the organ is killed.
 	inst:ListenForEvent("animqueueover",AnimNext) --Dynamically changes heartbeat based on how close players are and wether or not the organ has a shield.
-	inst:ListenForEvent("attacked",OnAttacked) --This updates the shield fx if you attack it when it's not ready.
 	inst:DoTaskInTime(1,ActivateShield)
 	inst.DeactivateShield = DeactivateShield
 	

@@ -188,7 +188,7 @@ local function ForceWalterCurse_On(inst, target)
 
     target.walter_curse = target:ListenForEvent("attacked", function(target, data)
         if data ~= nil and data.damage ~= nil then
-            local attacker = data.attacker.prefab ~= nil and data.attacker.prefab or "_projectile_attack"
+            local attacker = (data.attacker ~= nil and data.attacker.prefab ~= nil) and data.attacker.prefab or "_projectile_attack"
             target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", { duration = data.damage * 0.05, negative_value = true })
         end
     end)
