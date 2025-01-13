@@ -505,7 +505,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_electricretaliation", "buff_electricretaliation")
             end
         end,
-        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "electricmilk", 1 } } },
+        card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "goatmilk", 1 } } },
     },
 	
 	
