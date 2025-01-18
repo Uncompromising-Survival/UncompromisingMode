@@ -28,7 +28,6 @@ end
 ARMOR_ABSORPTION_OVERRIDES = {
     ["beehat"] = 0.75,
     ["armorruins"] = 0.85,
-    ["armorwood"] = 0.65,
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
