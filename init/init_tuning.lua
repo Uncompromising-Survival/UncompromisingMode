@@ -453,6 +453,10 @@ end
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
 --end
 
+if GetModConfigData("armorrework") then
+	TUNING.WEREMOOSE_ABSORPTION = 0.85
+end
+
 if GetModConfigData("wixie_walter") then
     TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2.5

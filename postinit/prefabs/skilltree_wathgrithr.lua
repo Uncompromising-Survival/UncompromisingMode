@@ -177,6 +177,10 @@ local ONACTIVATE_FNS = {
         --if inst.components.hunger ~= nil then
             --inst.components.health:SetMaxHealth(TUNING.WATHGRITHR_HEALTH * TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT)
         --end
+		
+		if inst.components.health ~= nil then
+			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION * TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
+		end
 
         UpdateInspirationBadge(inst)
     end,
