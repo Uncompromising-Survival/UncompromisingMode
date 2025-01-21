@@ -22,7 +22,7 @@ TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_3_COST = 35
 TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_4_COST = 30
 TUNING.FEAT_OF_STRENGTH_MIGHTY_STRIKE_5_COST = 25
 
-TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO = 0.5
+TUNING.LUNAR_MIGHTY_HUNGER_TO_MIGHTINESS_RATIO = 0.33
 TUNING.LUNAR_MIGHTY_FISHING_CATCH_GOLD_CHANCE = 0.5
 TUNING.LUNAR_MIGHTY_FISHING_CATCH_EXTRA_FISH_CHANCE = 0.75
 
@@ -518,7 +518,7 @@ local function OnSetOwner(inst)
 end
 
 local function getFishingBonus(inst, data)
-	if data ~= nil and inst:HasTag("lunar_mighty") and inst:HasTag("mightiness_mighty") then
+	if data ~= nil and inst:HasTag("lunar_mighty") and not inst:HasTag("mightiness_wimpy") then
 		if math.random() >= TUNING.LUNAR_MIGHTY_FISHING_CATCH_GOLD_CHANCE then
 			local gold = SpawnPrefab("goldnugget")
 			inst.components.inventory:GiveItem(gold)

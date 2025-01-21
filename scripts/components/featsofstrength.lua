@@ -57,7 +57,7 @@ function FeatsOfStrength:MightySwing(target)
 				self.inst:IncreaseCombo(1, target)
 			end
 			if self.inst:HasTag("mighty_hunger") and target.components.freezable ~= nil then
-				target.components.freezable:AddColdness(1)
+				target.components.freezable:AddColdness(2)
 			end
 			if doubledplanar then
 				weapon.components.planardamage:RemoveMultiplier(self.inst, "mighty_strikes")
