@@ -1,6 +1,6 @@
 local assets =
 {
-    Asset("ANIM", "anim/snowball.zip"),
+    Asset("ANIM", "anim/um_snowball.zip"),
 }
 
 local prefabs =
@@ -136,8 +136,8 @@ local function fn()
 
     --projectile (from complexprojectile component) added to pristine state for optimization
 	
-    inst.AnimState:SetBank("snowball")
-    inst.AnimState:SetBuild("snowball")
+    inst.AnimState:SetBank("um_snowball")
+    inst.AnimState:SetBuild("um_snowball")
     inst.AnimState:PlayAnimation("idle")
 	
     inst:AddTag("projectile")
