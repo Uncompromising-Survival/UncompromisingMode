@@ -26,21 +26,18 @@ end
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
 -- using the armor_mappings table.
 ARMOR_ABSORPTION_OVERRIDES = {
-    ["beehat"] = 0.8,
-    ["armorruins"] = 0.8,
-    ["footballhat"] = 0.65,
-    ["eyemaskhat"] = 0.65
+    ["beehat"] = 0.75,
+    ["armorruins"] = 0.85,
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
--- protection value of 0.8 will be lowered to 0.6, not 0.7.
+-- protection value of 0.8 will be lowered to 0.7, not 0.75.
 local armor_mappings = {
-    {min_val = 0.9, max_val = 0.95, new_absorb = 0.8},
-    {min_val = 0.85, max_val = 0.9, new_absorb = 0.75},
-    {min_val = 0.8, max_val = 0.85, new_absorb = 0.7},
-    {min_val = 0.7, max_val = 0.8, new_absorb = 0.6},
-    {min_val = 0.6, max_val = 0.7, new_absorb = 0.55},
-    {min_val = 0.5, max_val = 0.6, new_absorb = 0.5},
+    {min_val = 0.9, max_val = 0.95, new_absorb = 0.85},
+    {min_val = 0.85, max_val = 0.9, new_absorb = 0.8},
+    {min_val = 0.8, max_val = 0.85, new_absorb = 0.75},
+    {min_val = 0.7, max_val = 0.8, new_absorb = 0.7},
+    {min_val = 0.6, max_val = 0.7, new_absorb = 0.6},
 }
 
 -- Adjust armor protection values based on the above tables.

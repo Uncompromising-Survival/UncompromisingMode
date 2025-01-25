@@ -374,7 +374,7 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-                if math.random() < 0.333 then
+                if math.random() < 0.666 then
                     --inst.components.combat:SetTarget(nil)
                     inst.components.combat:DropTarget()
                     inst.sg:GoToState("taunt")

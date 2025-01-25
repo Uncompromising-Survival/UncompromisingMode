@@ -453,6 +453,10 @@ end
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
 --end
 
+if GetModConfigData("armorrework") then
+	TUNING.WEREMOOSE_ABSORPTION = 0.85
+end
+
 if GetModConfigData("wixie_walter") then
     TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2.5
@@ -490,6 +494,7 @@ TUNING.WINONA_BATTERY_MIN_LOAD = 0 -- generators don't drain when not powering a
 
 -- shield buff
 TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+TUNING.SHIELDOFTERROR_ABSORPTION = 0.85
 
 -- shelmet nerf
 TUNING.ARMOR_SLURTLEHAT_ABSORPTION = 0.85
