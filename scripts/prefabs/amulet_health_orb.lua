@@ -138,4 +138,4 @@ local function projectile_fn()
 end
 
 return Prefab("amulet_health_orb", fn),
-		Prefab("amulet_health_orb_projectile", projectile_fn)
+    Prefab("amulet_health_orb_projectile", projectile_fn)
