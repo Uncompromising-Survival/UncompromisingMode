@@ -10,19 +10,23 @@ env.AddComponentPostInit("hounded", function(self)
     local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
     function self:GetSpawnData() return _spawndata end
 
-    print("hounded postinit!")
-
-
     local _spawnwintervariant = UpvalueHacker.GetUpvalue(self.SetWinterVariant, "_spawnwintervariant")
     local _spawnsummervariant = UpvalueHacker.GetUpvalue(self.SetSummerVariant, "_spawnsummervariant")
 
-    local GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(self.ForceReleaseSpawn, "ReleaseSpawn", "SummonSpawn", "GetSpawnPrefab", "GetSpecialSpawnChance")
+    local SummonSpawn = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn")
+    local _GetSpawnPrefab = UpvalueHacker.GetUpvalue(SummonSpawn, "GetSpawnPrefab")
+    local GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "GetSpecialSpawnChance")
     local GetSpawnPoint = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
+    local _OldGetSpawnPrefab = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
+
+    --Winterlands compat. 
+    if _OldGetSpawnPrefab or not GetSpawnPoint then
+        GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
+        GetSpawnPoint = UpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
+    end
 
     local function GetSpawnPrefab(upgrade)
         --not good, but I need to be able to refresh this spawn data for caves.
-
-        print("get spawn prefab", upgrade)
         if upgrade and _spawndata.upgrade_spawn then
             return (TheWorld.state.iswinter and _spawndata.upgrade_spawn_summer ~= nil and _spawndata.upgrade_spawn_winter or TheWorld.state.issummer and _spawndata.upgrade_spawn_summer ~= nil and _spawndata.upgrade_spawn_summer or _spawndata.upgrade_spawn)
         end
@@ -46,7 +50,6 @@ env.AddComponentPostInit("hounded", function(self)
     local SPAWN_DIST = 30
 
     local function GetMagmaSpawnPoint(pt)
-        print("get magma spawn point", pt)
         if not TheWorld.Map:IsAboveGroundAtPoint(pt:Get()) then
             pt = FindNearbyLand(pt, 1) or pt
         end
@@ -61,7 +64,6 @@ env.AddComponentPostInit("hounded", function(self)
 
 
     local function SummonSpawn(pt, upgrade, radius_override)
-        print("summon spawn", pt, upgrade, radius_override)
         local prefab = GetSpawnPrefab(upgrade)
         local spawn_pt = prefab == "magmahound" and GetMagmaSpawnPoint(pt) or GetSpawnPoint(pt, radius_override)
         if spawn_pt ~= nil then
@@ -100,11 +102,11 @@ local wormspawn =
 
     attack_levels =
     {
-        intro = { warnduration = function() return 120 end, numspawns = function() return 1 end },                     -- 1
-        light = { warnduration = function() return 60 end, numspawns = function() return 1 + math.random(0, 1) end },  -- 1-2
-        med   = { warnduration = function() return 45 end, numspawns = function() return 1 + math.random(0, 1) end },  -- 1-2
-        heavy = { warnduration = function() return 30 end, numspawns = function() return 2 + math.random(0, 1) end },  -- 2-3
-        crazy = { warnduration = function() return 30 end, numspawns = function() return 3 + math.random(0, 2) end },  -- 3-5
+        intro = { warnduration = function() return 120 end, numspawns = function() return 1 end },                    -- 1
+        light = { warnduration = function() return 60 end, numspawns = function() return 1 + math.random(0, 1) end }, -- 1-2
+        med   = { warnduration = function() return 45 end, numspawns = function() return 1 + math.random(0, 1) end }, -- 1-2
+        heavy = { warnduration = function() return 30 end, numspawns = function() return 2 + math.random(0, 1) end }, -- 2-3
+        crazy = { warnduration = function() return 30 end, numspawns = function() return 3 + math.random(0, 2) end }, -- 3-5
     },
 
     attack_delays =
@@ -173,7 +175,7 @@ env.AddPrefabPostInit("cave", function(inst)
 
     if inst.components.hounded ~= nil then
         local spawndata = inst.components.hounded:GetSpawnData()
-        for k,v in pairs(wormspawn) do
+        for k, v in pairs(wormspawn) do
             spawndata[k] = v
         end
         inst.components.hounded:SetSpawnData(wormspawn)
