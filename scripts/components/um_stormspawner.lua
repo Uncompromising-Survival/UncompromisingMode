@@ -231,7 +231,7 @@ return Class(function(self, inst)
 	--------------------------------------------------------------------------
 
 	local function OnSeasonChange(self)
-		if TestForIA() and TheWorld.state.season == "winter" or TheWorld.state.season == "spring" and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SPRING then
+		if TestForIA() and TheWorld.state.iswetseason or TheWorld.state.season == "spring" and TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SPRING then
 			StartStorms()
 		else
 			_locationtags = {

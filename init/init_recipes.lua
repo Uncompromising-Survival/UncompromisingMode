@@ -66,9 +66,9 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
 -- Recipe changes
 
 --I HATE FRAZZLED WIRES!!!!!!!!
-AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
-AllRecipes["boat_magnet"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
-AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}	
+AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
 
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
 
@@ -115,50 +115,50 @@ end
 
 -- Broiling Hills and Magma Caves Turfs
 AddRecipe2(
-	"turf_um_hotspring_grass",
-	{ Ingredient("cutlichen", 2), Ingredient("pinecone", 2) },
-	TECH.TURFCRAFTING_TWO,
-	{ numtogive = 4 },
-	{ "DECOR" }
+    "turf_um_hotspring_grass",
+    { Ingredient("cutlichen", 2), Ingredient("pinecone", 2) },
+    TECH.TURFCRAFTING_TWO,
+    { numtogive = 4 },
+    { "DECOR" }
 )
 ChangeSortKey("turf_um_hotspring_grass", "turf_um_hotspring_grass", "DECOR", true)
 
 AddRecipe2(
-	"turf_um_hotspring_whiterock",
-	{ Ingredient("rocks", 2), Ingredient("marble", 2) },
-	TECH.TURFCRAFTING_TWO,
-	{ numtogive = 4 },
-	{ "DECOR" }
+    "turf_um_hotspring_whiterock",
+    { Ingredient("rocks", 2), Ingredient("marble", 2) },
+    TECH.TURFCRAFTING_TWO,
+    { numtogive = 4 },
+    { "DECOR" }
 )
 ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_whiterock", "DECOR", true)
 
 AddRecipe2(
-	"turf_um_hotspring_yellowrock",
-	{ Ingredient("rocks", 2), Ingredient("nitre", 2) },
-	TECH.TURFCRAFTING_TWO,
-	{ numtogive = 4 },
-	{ "DECOR" }
+    "turf_um_hotspring_yellowrock",
+    { Ingredient("rocks", 2), Ingredient("nitre", 2) },
+    TECH.TURFCRAFTING_TWO,
+    { numtogive = 4 },
+    { "DECOR" }
 )
 ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_yellowrock", "DECOR", true)
 
 
-	
-	
+
+
 -- Funcap Change
 
 AllRecipes["red_mushroomhat"].ingredients = {
-	Ingredient("red_cap", 6),
-	Ingredient("slurper_pelt", 4),
+    Ingredient("red_cap", 6),
+    Ingredient("slurper_pelt", 4),
 }
 
 AllRecipes["green_mushroomhat"].ingredients = {
-	Ingredient("green_cap", 6),
-	Ingredient("slurper_pelt", 4),
+    Ingredient("green_cap", 6),
+    Ingredient("slurper_pelt", 4),
 }
 
 AllRecipes["blue_mushroomhat"].ingredients = {
-	Ingredient("blue_cap", 6),
-	Ingredient("slurper_pelt", 4),
+    Ingredient("blue_cap", 6),
+    Ingredient("slurper_pelt", 4),
 }
 
 
@@ -167,7 +167,7 @@ AllRecipes["blue_mushroomhat"].ingredients = {
 
 --local config_skilltrees = GetModConfigData("woodie_skilltree")
 --if config_skilltrees then
-    --AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
+--AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
 --end
 
 if GetModConfigData("wanda_nerf") then
@@ -439,7 +439,7 @@ ChangeSortKey("diseasecurebomb", "premiumwateringcan", "TOOLS", true)
 ChangeSortKey("diseasecurebomb", "lifeinjector", "RESTORATION", true)
 
 if GetModConfigData("snowstorms") then
-    AddRecipe2("ice", { Ingredient("snowball_throwable", 4) }, TECH.SCIENCE_ONE, nil,
+    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil,
         { "REFINE" })
     ChangeSortKey("ice_snowball", "beeswax", "REFINE", true)
 end
@@ -581,14 +581,14 @@ if GetModConfigData("hayfever_disable") then -- not in dev build since the confi
     ChangeSortKey("honey_log", "livinglog", "CHARACTER", true)
 end
 AddRecipe2(
-	"um_armor_bramble_rimeweed",
-	{ Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8),Ingredient("um_rimeweed_itemflower", 1)},
-	TECH.NONE,
-	{ builder_tag = "plantkin" },
-	{ "CHARACTER" }
+    "um_armor_bramble_rimeweed",
+    { Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8), Ingredient("um_rimeweed_itemflower", 1) },
+    TECH.NONE,
+    { builder_tag = "plantkin" },
+    { "CHARACTER" }
 )
 ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
-	
+
 
 AddRecipe2(
     "bugzapper",
@@ -765,7 +765,7 @@ ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
 AddRecipe2(
     "um_rimeweed_icepack",
-    { Ingredient("papyrus", 1), Ingredient("ice", 2),Ingredient("um_rimeweed_itemvine", 2)},
+    { Ingredient("papyrus", 1), Ingredient("ice", 2), Ingredient("um_rimeweed_itemvine", 2) },
     TECH.SCIENCE_TWO,
     nil,
     { "RESTORATION" }
@@ -927,7 +927,7 @@ if GetModConfigData("monstersmallmeat") then
         "transmute_monstermeat",
         { Ingredient("monstersmallmeat", 3) },
         TECH.NONE,
-        { product = "monstermeat", builder_skill="wilson_alchemy_4", description = "transmute_monstermeat" },
+        { product = "monstermeat", builder_skill = "wilson_alchemy_4", description = "transmute_monstermeat" },
         { "CHARACTER" }
     )
 
@@ -937,7 +937,7 @@ if GetModConfigData("monstersmallmeat") then
         TECH.NONE,
         {
             product = "monstersmallmeat",
-            builder_skill="wilson_alchemy_4",
+            builder_skill = "wilson_alchemy_4",
             description = "transmute_monstersmallmeat",
             numtogive = 2
         },
@@ -1710,10 +1710,78 @@ AddRecipe2(
 GLOBAL.STRINGS.RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 AddRecipeToFilter("um_astral_projector_target", "STRUCTURES")
 
-AddRecipe2("boat_ancient_item", {Ingredient("livinglog", 16)}, GLOBAL.TECH.MAGIC_TWO, nil, { "SEAFARING"})
+AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, GLOBAL.TECH.MAGIC_TWO, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
---recipe postinits
+
+if GLOBAL.NAUGHTY_VALUE["glowfly"]  ~= nil then
+    local RECIPE_GAMETYPE_DEFS = require("prefabs/recipe_gametype_defs")
+    local RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
+    local RECIPE_BOAT_TYPE = GLOBAL.RECIPE_BOAT_TYPE
+
+    local VALID_FOR_ROG_ONLY = {
+        "boat_bumper_sludge_kit",
+        "boatpatch_sludge",
+        "sludge_sack",
+        "armor_sharksuit_um",
+        "sludge_oil",
+        "sludge_cork",
+        "cannonball_sludge_item",
+        "um_armor_pyre_nettles",
+        "driftwoodfishingrod",
+        "saltpack",
+        "um_magnerang",
+        "winona_upgradekit_electrical",
+        "sporepack",
+        "scrap_monoclehat",
+        "floral_bandage",
+        "um_rimeweed_icepack",
+        "diseasecurebomb",
+        "houndious_observious",
+        "terrorguise",
+        "slingshotammo_goop",
+        "slingshotammo_slime",
+        "slingshotammo_tremor",
+    }
+
+    local VALID_FOR_DST_BOATS_ONLY = {
+        "boat_bumper_sludge_kit",
+        "boatpatch_sludge",
+        "mastupgrade_windturbine_item",
+        "portableboat_item"
+    }
+
+
+    local SetRecipeIngredientsForGameTypes = RECIPE_GAMETYPE_DEFS.SetRecipeIngredientsForGameTypes
+    local SetRecipeValidForBoatType = RECIPE_GAMETYPE_DEFS.SetRecipeValidForBoatType
+    local SetRecipeValidForGameTypes = RECIPE_GAMETYPE_DEFS.SetRecipeValidForGameTypes
+
+    for k, v in pairs(VALID_FOR_ROG_ONLY) do
+        SetRecipeValidForGameTypes(v, { RECIPE_GAME_TYPE.ROG })
+    end
+
+    for k, v in pairs(VALID_FOR_DST_BOATS_ONLY) do
+        SetRecipeValidForBoatType(v, { RECIPE_BOAT_TYPE.DST })
+    end
+
+    SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.SW, { Ingredient("hail_ice", 4) })
+    SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.ROG, { Ingredient("snowball_item", 4) })
+
+    SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.SW, { Ingredient("tar", 1) })
+    SetRecipeIngredientsForGameTypes("slingshotammo_tar", RECIPE_GAME_TYPE.ROG, { Ingredient("sludge", 1) })
+
+    SetRecipeValidForGameTypes("slingshotammo_obsidian", { RECIPE_GAME_TYPE.SW })
+
+    SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) })
+    SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) })
+    SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) })
+    SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) })
+    SetRecipeIngredientsForGameTypes("gasmask", RECIPE_GAME_TYPE.SW, { Ingredient("doydoyfeather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) })
+
+    SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
+end
+
+--MARKED FOR REMOVAL!! VVV REFER ABOVE FOR REPLACEMENT!
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
         if recipe.FindAndConvertIngredient ~= nil then
@@ -1722,8 +1790,6 @@ AddPrefabPostInit("forest", function(inst)
             local shark_fin = recipe:FindAndConvertIngredient("shark_fin") -- shark fins/rockjaw leather can replace eachother!
             local rockjawleather = recipe:FindAndConvertIngredient("rockjawleather")
             local mosquitosack = recipe:FindAndConvertIngredient("mosquitosack")
-            local snowball = recipe:FindAndConvertIngredient("snowball_throwable")
-            local hail = recipe:FindAndConvertIngredient("hail_ice")
 
             if tar and tar.AddDictionaryPrefab ~= nil then
                 tar:AddDictionaryPrefab("sludge")
@@ -1734,17 +1800,6 @@ AddPrefabPostInit("forest", function(inst)
                     sludge:AddDictionaryPrefab("tar")
                 end
             end
-
-            if hail and hail.AddDictionaryPrefab ~= nil then
-                hail:AddDictionaryPrefab("snowball_throwable")
-            end
-
-            if snowball and snowball.AddDictionaryPrefab ~= nil then
-                if GLOBAL.Prefabs["hail_ice"] ~= nil then
-                    snowball:AddDictionaryPrefab("hail_ice")
-                end
-            end
-
 
             if sludge and sludge.AddDictionaryPrefab ~= nil and GLOBAL.Prefabs["tar"] ~= nil then
                 sludge:AddDictionaryPrefab("tar")
@@ -1805,6 +1860,7 @@ AddPrefabPostInit("forest", function(inst)
         end
     end)
 end)
+
 
 
 

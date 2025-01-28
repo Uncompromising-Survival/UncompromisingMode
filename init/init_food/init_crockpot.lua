@@ -618,7 +618,6 @@ AddPrefabPostInitAny(function(inst)
 end)
 
 if TUNING.DSTU.GOODIESNERF then
-    print("HERE")
     local foods = {
         GENERIC = { "icecream", "taffy",
         },
