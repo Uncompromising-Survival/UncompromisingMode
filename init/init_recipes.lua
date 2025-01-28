@@ -1,6 +1,6 @@
---  [           Required stuff          ]   --
--- The global objects needed for recipe changes
--- Find the default recipes in recipes.lua
+--ATTENTION!!!!!!
+--THIS FILE IS DEPRECATED. REFER TO THE init/init_recipes *FOLDER* INSTEAD.
+--THIS FILE WILL BE REMOVED SOON.
 local require = GLOBAL.require
 require("recipe")
 

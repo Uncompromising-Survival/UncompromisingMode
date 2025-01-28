@@ -90,7 +90,9 @@ modimport("init/init_vetcurse")
 modimport("init/init_bosshealth")
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
-modimport("init/init_recipes")
+--modimport("init/init_recipes") -- Deprecated, keeping the file just to prevent any merge conflicts.
+modimport("init/init_recipes/init_recipes")
+
 modimport("init/init_food/init_crockpot")
 modimport("init/init_food/monsterfoods")
 --end
