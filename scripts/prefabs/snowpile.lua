@@ -216,11 +216,11 @@ local function workcallback(inst, worker, workleft)
         inst:Remove()
     end
     if inst.components.workable.workleft <= 0 then
-	inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
+	inst.components.lootdropper:SpawnLootPrefab("snowball_item")
 	if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) or worker:HasTag("weerclops") then --IT'S INSANE HOW JOLLY AND FESTIVE I AM BRAGHHGGH
 		local more_balls = math.floor(math.random(1.5,4))
 		for i = 1, more_balls do
-			local ball = inst.components.lootdropper:SpawnLootPrefab("snowball_throwable")
+			local ball = inst.components.lootdropper:SpawnLootPrefab("snowball_item")
 			local strength = math.random(1, 2.25)
 			Launch(ball, inst, strength)
 		end
@@ -479,7 +479,7 @@ local function snowpilefn(Sim)
     inst.components.pickable.makefullfn = makefullfn
     inst.components.pickable.max_cycles = 3
     inst.components.pickable.cycles_left = 1
-    inst.components.pickable:SetUp("snowball_throwable", 0, balls_count)
+    inst.components.pickable:SetUp("snowball_item", 0, balls_count)
     inst.components.pickable.transplanted = true
 
     local x, y, z = inst.Transform:GetWorldPosition()

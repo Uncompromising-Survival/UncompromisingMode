@@ -138,9 +138,6 @@ DESCRIBE.UM_VOXOLOPHONE = "Got any scary stories for me?"
 DESCRIBE.UM_EXHUMER = "Ooh! I've got the perfect story name! The tale of the \"Cursed Undertaker!\""
 DESCRIBE.UM_WINGSUIT = "I wish I could make you a pair too, Woby!"
 DESCRIBE.UM_MOONFLY_LANTERN = "What do you think, Woby? Alien magic?"
-
-DESCRIBE.SNOWBALL_THROWABLE =
-    "Careful not to pack them with ice!"
 DESCRIBE.PLAGUEMASK = "Now I can be one with the birds!"
 DESCRIBE.SPIDER_TRAPDOOR = "I told you!"
 DESCRIBE.TRAPDOOR = "Careful, some spiders use these as hiding places!"

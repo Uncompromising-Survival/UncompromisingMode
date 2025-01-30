@@ -1,20 +1,8 @@
-local assets =
-{
-    Asset("ANIM", "anim/snowball.zip"),
-}
-
-local prefabs =
-{
-    "splash_snow_fx",
-}
-
 local function OnEntityWake(inst)
     inst.SoundEmitter:PlaySound("dontstarve/sanity/creature2/taunt")
 end
 
 local function onnear(inst, target)
-    --hive pop open? Maybe rustle to indicate danger?
-    --more and more come out the closer you get to the nest?
 	if not inst.finished then
 		if target.components.health ~= nil and not target.components.health:IsDead() then
 			target.components.health:DoDelta(inst.healthvalue or 0)

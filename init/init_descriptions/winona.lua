@@ -130,7 +130,6 @@ DESCRIBE.UM_EXHUMER = "Workers don't need lunch breaks if they're dead!"
 DESCRIBE.UM_WINGSUIT = "Flying is hard work!"
 DESCRIBE.UM_MOONFLY_LANTERN = "Magic power. Neat."
 
-DESCRIBE.SNOWBALL_THROWABLE = "Maybe I could load it in a catapult? Hmm, nah."
 DESCRIBE.RAT_TAIL = "Yeesh, I don't want to carry that around."
 DESCRIBE.PLAGUEMASK = "You gotta be careful not to bump the beak on anything."
 DESCRIBE.SPIDER_TRAPDOOR = "I might have to steal that \"trapdoor\" idea."

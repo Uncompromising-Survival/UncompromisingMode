@@ -179,7 +179,6 @@ DESCRIBE.LAVAE2 = DESCRIBE.LAVAE
 DESCRIBE.DISEASECUREBOMB =
 "Finally, a practical use for the moons transformative properties."
 DESCRIBE.TOADLINGSPAWNER = "Uh oh."
-DESCRIBE.SNOWBALL_THROWABLE = "Not the face!"
 DESCRIBE.VETERANSHRINE = "I know what I'm doing... right?"
 DESCRIBE.VET_SKULL = "A fine specimen!"
 DESCRIBE.UM_BOSS_SOUL = "The bigger the body, the bigger the soul. Thats science!"
@@ -197,7 +196,6 @@ DESCRIBE.RAT_TAIL = "It reeks of a pestilence."
 DESCRIBE.PLAGUEMASK = "The mushrooms stuffed in the beak smell nice."
 DESCRIBE.SALTPACK = "It breaks down the snow around me!"
 DESCRIBE.SPOREPACK = "It's huge, and smelly."
-DESCRIBE.SNOWBALL_THROWABLE = "Not the face!"
 DESCRIBE.SPIDER_TRAPDOOR = "Agh! An ambush!"
 DESCRIBE.TRAPDOOR = "Nothing out of the ordinary here."
 DESCRIBE.HOODEDTRAPDOOR = DESCRIBE.TRAPDOOR

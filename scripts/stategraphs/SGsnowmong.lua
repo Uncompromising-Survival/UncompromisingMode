@@ -210,15 +210,7 @@ local states =
 
 		timeline =
 		{
-			TimeEvent(8 * FRAMES, function(inst) 
-			if math.random() > 0.3 then
-			inst.components.combat:DoAttack()
-			else
-			inst.AnimState:PlayAnimation("hit")
-			inst:DoSnowballBelch(inst)
-			inst.SoundEmitter:PlaySound("UCSounds/Grub/emerge")
-			end
-			end),
+			TimeEvent(8 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
 			TimeEvent(2 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/attack") end),
 		},
 

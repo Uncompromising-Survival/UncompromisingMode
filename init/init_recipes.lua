@@ -438,12 +438,6 @@ ChangeSortKey("diseasecurebomb", "compostwrap", "GARDENING", true)
 ChangeSortKey("diseasecurebomb", "premiumwateringcan", "TOOLS", true)
 ChangeSortKey("diseasecurebomb", "lifeinjector", "RESTORATION", true)
 
-if GetModConfigData("snowstorms") then
-    AddRecipe2("ice", { Ingredient("snowball_throwable", 4) }, TECH.SCIENCE_ONE, nil,
-        { "REFINE" })
-    ChangeSortKey("ice_snowball", "beeswax", "REFINE", true)
-end
-
 AddRecipe2(
     "gasmask",
     { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) },
@@ -1722,7 +1716,6 @@ AddPrefabPostInit("forest", function(inst)
             local shark_fin = recipe:FindAndConvertIngredient("shark_fin") -- shark fins/rockjaw leather can replace eachother!
             local rockjawleather = recipe:FindAndConvertIngredient("rockjawleather")
             local mosquitosack = recipe:FindAndConvertIngredient("mosquitosack")
-            local snowball = recipe:FindAndConvertIngredient("snowball_throwable")
             local hail = recipe:FindAndConvertIngredient("hail_ice")
 
             if tar and tar.AddDictionaryPrefab ~= nil then
@@ -1734,17 +1727,6 @@ AddPrefabPostInit("forest", function(inst)
                     sludge:AddDictionaryPrefab("tar")
                 end
             end
-
-            if hail and hail.AddDictionaryPrefab ~= nil then
-                hail:AddDictionaryPrefab("snowball_throwable")
-            end
-
-            if snowball and snowball.AddDictionaryPrefab ~= nil then
-                if GLOBAL.Prefabs["hail_ice"] ~= nil then
-                    snowball:AddDictionaryPrefab("hail_ice")
-                end
-            end
-
 
             if sludge and sludge.AddDictionaryPrefab ~= nil and GLOBAL.Prefabs["tar"] ~= nil then
                 sludge:AddDictionaryPrefab("tar")

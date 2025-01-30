@@ -116,7 +116,6 @@ DESCRIBE.UM_EXHUMER = "Dead friends?"
 DESCRIBE.UM_WINGSUIT = "Like tweeter friends!"
 DESCRIBE.UM_MOONFLY_LANTERN = "Bright friends inside"
 
-DESCRIBE.SNOWBALL_THROWABLE = "Fun!"
 DESCRIBE.RAT_TAIL = "From Squeaker butt"
 DESCRIBE.PLAGUEMASK = "Bird face"
 DESCRIBE.SPIDER_TRAPDOOR = "No hair on leggy bug?"

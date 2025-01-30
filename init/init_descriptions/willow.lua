@@ -120,8 +120,6 @@ DESCRIBE.ZASPBERRYPARFAIT = "My tongue tingles when I lick it."
 DESCRIBE.ICEBOOMERANG = "I mean, I guess I can use it."
 DESCRIBE.MINOTAUR_BOULDER = "Careful where you're dropping those thing!"
 DESCRIBE.MINOTAUR_BOULDER_BIG = "Over here dummy! Ram yourself into this!"
-DESCRIBE.SNOWBALL_THROWABLE =
-"Ugh, snow is boring! Let's throw fireballs instead!"
 DESCRIBE.VETERANSHRINE = "Ew, it's covered in that gunk."
 DESCRIBE.VET_SKULL = "Alas, poor... whoever you are!"
 DESCRIBE.UM_BOSS_SOUL = "Spooky!"

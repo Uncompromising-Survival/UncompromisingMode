@@ -117,7 +117,6 @@ DESCRIBE.ZASPBERRYPARFAIT =
 DESCRIBE.ICEBOOMERANG = "This is just Canada on a stick, eh?"
 DESCRIBE.MINOTAUR_BOULDER = "That guys causing some serious damage."
 DESCRIBE.MINOTAUR_BOULDER_BIG = "Wreck this one, why dont'cha!"
-DESCRIBE.SNOWBALL_THROWABLE = "I'm an expert on snowball fights!"
 DESCRIBE.VETERANSHRINE = "It makes my skin crawl, eh?"
 DESCRIBE.VET_SKULL = "What a shame, eh?"
 DESCRIBE.UM_BOSS_SOUL = "Stuck in limbo, eh?"

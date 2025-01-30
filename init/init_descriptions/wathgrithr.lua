@@ -125,7 +125,6 @@ DESCRIBE.UM_EXHUMER = "Ripped from the underworld, I command thine soul!"
 DESCRIBE.UM_WINGSUIT = "I shall grace the skies like a true Valkrie!"
 DESCRIBE.UM_MOONFLY_LANTERN = "Like a comet in the sky, with a blazing trail!"
 
-DESCRIBE.SNOWBALL_THROWABLE = "Aim betwixt the eyes!"
 DESCRIBE.PLAGUEMASK = "I am a warrior against Pestilence!"
 DESCRIBE.SPIDER_TRAPDOOR = "My own battle tactics, used against me!"
 DESCRIBE.TRAPDOOR = "Nothing here."

@@ -124,7 +124,6 @@ DESCRIBE.UM_EXHUMER = "An army of pranksters in the palm of my hand!"
 DESCRIBE.UM_WINGSUIT = "Flying doesn't appeal to me."
 DESCRIBE.UM_MOONFLY_LANTERN = "Hyuyuyu! What a brilliant dance of lights!"
 
-DESCRIBE.SNOWBALL_THROWABLE = "Hyuyu! I like this game!"
 DESCRIBE.RAT_TAIL = "A furred tail is much nicer!"
 DESCRIBE.PLAGUEMASK = "A crow's beak. For when things are bleak."
 DESCRIBE.SPIDER_TRAPDOOR = "A mean little prankster, this one."

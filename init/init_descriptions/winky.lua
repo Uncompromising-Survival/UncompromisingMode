@@ -156,7 +156,6 @@ DESCRIBE.PLAGUEMASK = "Why would I want to smell nice things."
 DESCRIBE.SALTPACK = "AAH, I think It got my EYE!"
 DESCRIBE.SPOREPACK =
 "We do a little bit of farding, we do a little Farding, yes."
-DESCRIBE.SNOWBALL_THROWABLE = "Haha, I wish I had thumbs sooner."
 DESCRIBE.SPIDER_TRAPDOOR = "Go back in your ugly hole."
 DESCRIBE.TRAPDOOR = "Flatter, worse looking rock."
 DESCRIBE.HOODEDTRAPDOOR = DESCRIBE.TRAPDOOR

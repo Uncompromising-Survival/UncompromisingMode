@@ -702,13 +702,9 @@ NERFS:
 
 * [x] Snowpiles form around players during snowstorms, can be destroyed by hand or with a shovel.
 
-* [x] Snowballs added: makes targets cold when thrown, can be used to freeze targets. Very good for killing birds!
-
 * [x] [FEAR THE DARK!] Snow piles will damage players who clean them with their bare hands, better not get frostbite! Try using a shovel!
 
 * [x] New mob: Abominamole, spawns out of snow piles.
-
-* [x] [FEAR THE DARK!] Abominamoles will now belch a bunch of snowballs at the player on occasion, dodge enough that you aren't frozen!
 
 * [x] [GOODIES GALORE!] New item: Frozen pincer, rarely dropped by abominamoles, functions as an ice boomerang, can be repaired with ice. Can melt.
 

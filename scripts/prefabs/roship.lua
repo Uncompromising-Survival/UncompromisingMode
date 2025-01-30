@@ -65,7 +65,7 @@ local function Zapp(inst, target)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)
     end
 end
-local function DoSnowballBelch(inst)
+local function ShootBolt(inst)
     local maxsnow = 1
     for k = 1, maxsnow do
         if inst.components.combat.target ~= nil then
@@ -149,7 +149,7 @@ local function fn(Sim)
     inst.components.sleeper:SetResistance(3)
 
     ------------------
-    inst.DoSnowballBelch = DoSnowballBelch
+    inst.DoSnowballBelch = ShootBolt
     inst:AddComponent("inspectable")
 
     ------------------

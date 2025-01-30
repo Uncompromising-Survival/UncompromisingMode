@@ -1,13 +1,3 @@
-local assets =
-{
-    Asset("ANIM", "anim/snowball.zip"),
-}
-
-local prefabs =
-{
-    "splash_snow_fx",
-}
-
 local function OnHitFire(inst, attacker, target)
 	local firesplash = SpawnPrefab("cursed_firesplash")
     firesplash.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -424,9 +414,9 @@ local function fneye_proj()
     return inst
 end
 
-return Prefab("eyeofterror_fireball", fn, assets, prefabs),
-		Prefab("cursed_fire", cursedfirefn, assets, prefabs),
-		Prefab("cursed_firesplash", cursedfiresplashfn, assets, prefabs),
-		Prefab("cursed_firespawn", cursedfirespawnfn, assets, prefabs),
-		Prefab("eyeofterror_chargepulse", chargepulsefn, assets, prefabs),
-		Prefab("eyeofterror_minieye_projectile", fneye_proj, assets, prefabs)
+return Prefab("eyeofterror_fireball", fn),
+		Prefab("cursed_fire", cursedfirefn),
+		Prefab("cursed_firesplash", cursedfiresplashfn),
+		Prefab("cursed_firespawn", cursedfirespawnfn),
+		Prefab("eyeofterror_chargepulse", chargepulsefn),
+		Prefab("eyeofterror_minieye_projectile", fneye_proj)

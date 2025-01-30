@@ -130,8 +130,6 @@ DESCRIBE.ICEBOOMERANG =
 DESCRIBE.MINOTAUR_BOULDER =
 "My my! It will bring the whole place down on our heads!"
 DESCRIBE.MINOTAUR_BOULDER_BIG = "It's size may be to our benefit..."
-DESCRIBE.SNOWBALL_THROWABLE =
-"A handful of snow, mashed together so it can be thrown."
 DESCRIBE.VETERANSHRINE = "That's certainly not the best idea."
 DESCRIBE.VET_SKULL = "The skull of some strange homosapien."
 DESCRIBE.UM_BOSS_SOUL = "I normally don't believe in this kind of thing."

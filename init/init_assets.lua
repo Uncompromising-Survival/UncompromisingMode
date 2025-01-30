@@ -153,7 +153,6 @@ local inventoryitems =
 	"slobberlobber",
 	"snapplant",
 	"snotroast",
-	"snowball_throwable",
 	"snowcone",
 	"snowgoggles",
 	"spider_trapdoor",
@@ -1502,8 +1501,6 @@ Assets = {
 
 	Asset("ANIM", "anim/saltpack.zip"),
 
-	Asset("ANIM", "anim/snowball.zip"),
-
 	Asset("ANIM", "anim/sporepack.zip"),
 
 	Asset("ANIM", "anim/honey_log.zip"),
@@ -2109,10 +2106,6 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/diseasecurebomb.xml"),
 	Asset("IMAGE", "images/inventoryimages/diseasecurebomb.tex"),
 
-	--ASSET("ATLAS_BUILD", "images/inventoryimages/snowball_throwable.xml"),
-	Asset("ATLAS", "images/inventoryimages/snowball_throwable.xml"),
-	Asset("IMAGE", "images/inventoryimages/snowball_throwable.tex"),
-
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/skeletonmeat.xml"),
 	Asset("ATLAS", "images/inventoryimages/skeletonmeat.xml"),
 	Asset("IMAGE", "images/inventoryimages/skeletonmeat.tex"),
@@ -2318,8 +2311,6 @@ Assets = {
 	Asset("ANIM", "anim/swap_um_beartrap.zip"),
 	Asset("ANIM", "anim/swap_um_beartrap_tooth.zip"),
 	Asset("ANIM", "anim/swap_um_beartrap_gold.zip"),
-
-	Asset("ANIM", "anim/swap_snowball_throwable.zip"),
 
 	Asset("ANIM", "anim/swap_sporepack.zip"),
 

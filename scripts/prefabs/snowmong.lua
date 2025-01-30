@@ -17,8 +17,8 @@ SetSharedLootTable( 'snowmong',
 	{'ice',  			 	1.00},
 	{'ice',  			 	1.00},
     {'iceboomerang',      	0.10},
-	{'snowball_throwable',  1.00},
-	{'snowball_throwable',  2.00},
+	{'snowball_item',  1.00},
+	{'snowball_item',  2.00},
 	
 })
 
@@ -27,7 +27,7 @@ SetSharedLootTable( 'snowmong_melting',
     {'charcoal',            1.00},
 	{'charcoal',            1.00},
     {'ice',  			 	1.00},
-	{'snowball_throwable',  1.00},
+	{'snowball_item',  1.00},
 	
 })
 
@@ -70,37 +70,6 @@ end
 
 local function OnRemove(inst)
     inst.SoundEmitter:KillAllSounds()
-end
-
-local function SnowballBelch(inst, target)
-	if target ~= nil then
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local projectile = SpawnPrefab("snowball_throwable")
-		projectile.Transform:SetPosition(x, y, z)
-		local a, b, c = target.Transform:GetWorldPosition()
-		local targetpos = target:GetPosition()
-		targetpos.x = targetpos.x + math.random(-3,3)
-		targetpos.z = targetpos.z + math.random(-3,3)
-		local dx = a - x
-		local dz = c - z
-		local rangesq = dx * dx + dz * dz
-		local maxrange = 15
-		local bigNum = 10
-		local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange)
-		projectile:AddTag("canthit")
-		projectile.components.complexprojectile:SetHorizontalSpeed(speed+math.random(4,9))
-		projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-	end
-end
-
-local function DoSnowballBelch(inst)
-	local maxsnow =  math.floor(math.random(8,12))
-	for k = 1, maxsnow do
-	   if inst.components.combat.target ~= nil then
-		   local target = inst.components.combat.target
-		   inst:DoTaskInTime(FRAMES+math.random()*0.1, SnowballBelch, target)
-	   end
-	end
 end
 
 local function melting(inst)
@@ -206,7 +175,6 @@ local function fn(Sim)
 
 	inst.attackUponSurfacing = false
 	
-	inst.DoSnowballBelch = DoSnowballBelch
 	inst.OnEntitySleep = OnSleep
     inst.OnRemoveEntity = OnRemove
     inst:ListenForEvent("enterlimbo", OnRemove)

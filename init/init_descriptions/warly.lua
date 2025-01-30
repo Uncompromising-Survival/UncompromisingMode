@@ -120,8 +120,6 @@ DESCRIBE.ICEBOOMERANG = "Maybe if I dip it in flavor, and save it for Summer?"
 DESCRIBE.MINOTAUR_BOULDER = "Watch your heads!"
 DESCRIBE.MINOTAUR_BOULDER_BIG =
 "Let's give that thing a taste of its own medicine!"
-DESCRIBE.SNOWBALL_THROWABLE =
-"I wasn't ever able to play with snow; I never saw any where I'm from."
 DESCRIBE.VETERANSHRINE = "The lengths I go for ingredients..."
 DESCRIBE.VET_SKULL = "No use boiling these bones."
 DESCRIBE.UM_BOSS_SOUL = "The most important part of the dish we call 'life'."

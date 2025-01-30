@@ -156,7 +156,6 @@ DESCRIBE.ICEBOOMERANG = "Not as good as my slingshot, but it sure is fun!"
 DESCRIBE.MINOTAUR_BOULDER = "How did THIS get here?"
 DESCRIBE.MINOTAUR_BOULDER_BIG =
     "Hey, Klei! Why'd you have to go and copy my rework, Huh? HUH?!"
-DESCRIBE.SNOWBALL_THROWABLE = "No one can match my aim!"
 DESCRIBE.VETERANSHRINE =
     "Hey, you uh, have goop coming out of your eyes. And nose... and mouth..."
 DESCRIBE.VET_SKULL = "Atleast it wasn't me!"

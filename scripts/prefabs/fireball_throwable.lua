@@ -1,13 +1,3 @@
-local assets =
-{
-    Asset("ANIM", "anim/snowball.zip"),
-}
-
-local prefabs =
-{
-    "splash_snow_fx",
-}
-
 local function OnHitFire(inst, attacker, target)
     SpawnPrefab("firesplash_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
 	
@@ -91,4 +81,4 @@ local function fn()
     return inst
 end
 
-return Prefab("fireball_throwable", fn, assets, prefabs)
+return Prefab("fireball_throwable", fn)

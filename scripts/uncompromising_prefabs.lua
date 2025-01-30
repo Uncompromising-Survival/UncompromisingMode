@@ -63,7 +63,6 @@ local prefabs = {
 	"iceboomerang",
 	"diseasecure",
 	"toadlingspawner",
-	"snowball_throwable",
 	"extra_monsterfoods",
 	"sporepack",
 	"saltpack",

@@ -277,7 +277,6 @@ local PREFABS =
     ["winona_battery_high_item"] = true,
     ["armor_crab_regen"] = true,
     ["snotroast"] = true,
-    ["snowball_throwable"] = true,
 }
 
 return PREFABS
