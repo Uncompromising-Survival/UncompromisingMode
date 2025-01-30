@@ -13,7 +13,8 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
         "sludge_oil",
         "sludge_cork",
         "cannonball_sludge_item",
-        "um_armor_pyre_nettles",
+        --"um_armor_pyre_nettles", tteeeeechnically still craftable.
+        --"um_blowdart_pyre"
         "driftwoodfishingrod",
         "saltpack",
         "um_magnerang",
@@ -22,19 +23,23 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
         "scrap_monoclehat",
         "floral_bandage",
         "um_rimeweed_icepack",
+        "um_armor_bramble_rimeweed",
+        "um_blowdart_rime",
         "diseasecurebomb",
         "houndious_observious",
         "terrorguise",
         "slingshotammo_goop",
         "slingshotammo_slime",
         "slingshotammo_tremor",
+        "beakbasher"
     }
 
     local VALID_FOR_DST_BOATS_ONLY = {
         "boat_bumper_sludge_kit",
         "boatpatch_sludge",
         "mastupgrade_windturbine_item",
-        "portableboat_item"
+        "portableboat_item",
+        "boat_ancient_item"
     }
 
 
@@ -63,6 +68,14 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
     SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) })
     SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) })
     SetRecipeIngredientsForGameTypes("gasmask", RECIPE_GAME_TYPE.SW, { Ingredient("doydoyfeather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) })
+
+    SetRecipeIngredientsForGameTypes("um_record_menu", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_wixie", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_walter", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_wathom", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_winky", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_hooded_widow", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
+    SetRecipeIngredientsForGameTypes("um_record_stranger", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
 
     SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
 end
