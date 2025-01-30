@@ -458,7 +458,6 @@ function d_printscrapbookrepairmaterialsdata()
     for entry, _ in pairs(scrapbookprefabs) do
         local t = SpawnPrefab(entry)
         if type(STRINGS.NAMES[t.prefab]) ~= "string" then
-            print("HERE")
             print(t.prefab .. " is missing a name! This will cause crashes when searching in the scrapbook!!!")
         end
         local material = t.components.repairer ~= nil and t.components.repairer.repairmaterial or nil
@@ -1054,7 +1053,6 @@ function d_create_um_scrapbookdata(print_missing_icons)
         end
 
         ---------------------------------::   DEPENDENCIES   ::---------------------------------
-        print("HERE, DEPS START")
         print("PREFAB:", t.prefab)
 
         local _deps = t.scrapbook_deps or shallowcopy(Prefabs[entry].deps)
