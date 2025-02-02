@@ -136,8 +136,8 @@ if GetModConfigData("rat_raids") then
 end
 
 if GetModConfigData("snowstorms") then
-    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil, { "REFINE" })
-    ChangeSortKey("ice_snowball", "beeswax", "REFINE", true)
+    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil, { "REFINE", "COOKING" })
+    ChangeSortKey("ice", "beeswax", "REFINE", true)
 end
 
 if GetModConfigData("sporehounds") then
