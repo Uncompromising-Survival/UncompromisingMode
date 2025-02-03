@@ -48,11 +48,15 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
     local SetRecipeValidForGameTypes = RECIPE_GAMETYPE_DEFS.SetRecipeValidForGameTypes
 
     for k, v in pairs(VALID_FOR_ROG_ONLY) do
-        SetRecipeValidForGameTypes(v, { RECIPE_GAME_TYPE.ROG })
+        if AllRecipes[v] ~= nil then
+            SetRecipeValidForGameTypes(v, { RECIPE_GAME_TYPE.ROG })
+        end
     end
 
     for k, v in pairs(VALID_FOR_DST_BOATS_ONLY) do
-        SetRecipeValidForBoatType(v, RECIPE_BOAT_TYPE.DST)
+        if AllRecipes[v] ~= nil then
+            SetRecipeValidForBoatType(v, RECIPE_BOAT_TYPE.DST)
+        end
     end
 
     SetRecipeIngredientsForGameTypes("ice", RECIPE_GAME_TYPE.SW, { Ingredient("hail_ice", 4) })
