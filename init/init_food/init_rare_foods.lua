@@ -153,7 +153,7 @@ if GetModConfigData("no_winter_growing_") then
         local _OldResume = self.Resume
 
         function self:Resume()
-            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush")]] and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldResume(self)
