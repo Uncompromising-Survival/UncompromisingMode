@@ -1,4 +1,5 @@
 local Ingredient = GLOBAL.Ingredient
+local AllRecipes = GLOBAL.AllRecipes
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
     local RECIPE_GAMETYPE_DEFS = require("prefabs/recipe_gametype_defs")
