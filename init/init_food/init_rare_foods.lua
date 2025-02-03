@@ -116,7 +116,7 @@ GLOBAL.TUNING.ROCK_FRUIT_LOOT =
 
 if GetModConfigData("no_winter_growing_") then
     local nowintergrowing = {
-        "rock_avocado_bush",
+        --"rock_avocado_bush",
         "cherrytomato_planted",
         "cactus",
         "oasis_cactus",
@@ -153,7 +153,7 @@ if GetModConfigData("no_winter_growing_") then
         local _OldResume = self.Resume
 
         function self:Resume()
-            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush")]] and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldResume(self)
@@ -163,7 +163,7 @@ if GetModConfigData("no_winter_growing_") then
         local _OldStartGrowing = self.StartGrowing
 
         function self:StartGrowing(time)
-            if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldStartGrowing(self, time)
@@ -175,7 +175,7 @@ if GetModConfigData("no_winter_growing_") then
         local _OldResume = self.Resume
 
         function self:Resume()
-            if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldResume(self)
