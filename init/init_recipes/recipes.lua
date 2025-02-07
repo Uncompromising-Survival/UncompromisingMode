@@ -426,3 +426,5 @@ ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
 ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+
+AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })

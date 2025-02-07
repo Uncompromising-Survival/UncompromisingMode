@@ -10,10 +10,6 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
     Ingredient("moonglass", 5)
 }
 
---I HATE FRAZZLED WIRES!!!!!!!!
-AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
-AllRecipes["boat_magnet"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
-AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
 
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
 
@@ -288,6 +284,17 @@ if GetModConfigData("longpig") then
     )
 end
 
+
+--I HATE FRAZZLED WIRES!!!!!!!!
+AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
+
+AllRecipes["anchor_item"].ingredients = { Ingredient("boards", 2), Ingredient("rope", 2), Ingredient("cutstone", 1) }
+AllRecipes["anchor"].ingredients = { Ingredient("boards", 2), Ingredient("rope", 2), Ingredient("cutstone", 1) }
+
+AllRecipes["steeringwheel_item"].ingredients = {Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1)}
+AllRecipes["steeringwheel"].ingredients = {Ingredient("boards", 1), Ingredient("twigs", 4), Ingredient("rope", 1)}
 
 AllRecipes["mast_item"].ingredients = { Ingredient("log", 3), Ingredient("rope", 2), Ingredient("silk", 3) }
 AllRecipes["mast"].ingredients = { Ingredient("log", 2), Ingredient("rope", 2), Ingredient("silk", 3) }
