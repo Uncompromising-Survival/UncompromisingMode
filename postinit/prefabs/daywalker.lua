@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function lootsetfn(lootdropper)
     lootdropper:ClearRandomLoot()
     if TheWorld.components.riftspawner and TheWorld.components.riftspawner:GetLunarRiftsEnabled() then
-        lootdropper:AddRandomLoot("chestupgrade_stacksize_blueprint", 1)
+        lootdropper:AddRandomLoot("um_boatbottle_blueprint", 1)
     end
 
     lootdropper.numrandomloot = 1

@@ -261,10 +261,89 @@ end
 
 GLOBAL.ACTIONS.CHANGEIN.rmb = true
 GLOBAL.ACTIONS.CHANGEIN.priority = 10
-
 GLOBAL.ACTIONS.REPAIR.distance = 2.5
 
-AddComponentAction("USEITEM", "drawingtool", function(inst, doer, target, actions, right) if target:HasTag("telebase") or target.prefab == "pocketwatch_recall" or target.prefab == "pocketwatch_portal" then table.insert(actions, GLOBAL.ACTIONS.SET_CUSTOM_NAME) end end)
+local STORE_BOAT = GLOBAL.Action({ distance = 10, mount_valid = false })
+STORE_BOAT.id = "STORE_BOAT"
+STORE_BOAT.str = "Store Boat"
+
+STORE_BOAT.fn = function(act)
+    local shore_pt
+    local boat, bottle = act.target, act.invobject
+
+    if boat ~= nil and boat:HasTag("walkableplatform") and boat.components.walkableplatform ~= nil then
+        for k in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
+            if k:HasTag("player") then
+                return false, "PLAYER_ON_PLATFORM"
+            end
+            
+            if k.components.container ~= nil then
+                k.components.container:DropEverything()
+            end
+
+            if k.components.inventory ~= nil then
+                k.components.inventory:DropEverything()
+            end
+
+        end
+
+        bottle.components.boatbottle:DoFullRecord(act.target)
+        local collected_entities = {}
+
+        for k in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
+
+
+            if k.components.drownable ~= nil then
+                if shore_pt == nil then
+                    shore_pt = GLOBAL.Vector3(GLOBAL.FindRandomPointOnShoreFromOcean(k.Transform:GetWorldPosition()))
+                end
+                k:PushEvent("onsink", { boat = boat, shore_pt = shore_pt })
+            end
+
+            if not k:HasOneOfTags("ignorewalkableplatforms", "ignorewalkableplatformdrowning", "activeprojectile", "flying", "FX", "DECOR", "INLIMBO", "player") and not k.components.drownable ~= nil then
+                table.insert(collected_entities, k)
+            end
+        end
+
+        for k, v in ipairs(collected_entities) do
+            if v.components.mast ~= nil then
+                v:AddTag("no_mast_sinking")
+            end
+            v:Remove()
+        end
+
+        GLOBAL.SpawnPrefab("fx_boat_pop").Transform:SetPosition(boat.Transform:GetWorldPosition())
+        boat:Remove()
+
+        return true
+    end
+    return false
+end
+
+AddAction(STORE_BOAT)
+--RELEVANT: playeractionpicker postinit
+
+
+AddComponentAction("USEITEM", "drawingtool",
+    function(inst, doer, target, actions, right)
+        if target:HasTag("telebase") or
+            target.prefab == "pocketwatch_recall" or
+            target.prefab == "pocketwatch_portal" then
+            table.insert(actions, GLOBAL.ACTIONS.SET_CUSTOM_NAME)
+        end
+    end)
+
+AddComponentAction("USEITEM", "boatbottle",
+    function(inst, doer, target, actions, right)
+        if target:HasTag("walkableplatform") and not inst:HasTag("filled_boat_bottle") then
+            table.insert(actions, GLOBAL.ACTIONS.STORE_BOAT)
+        end
+    end)
+
+AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
+AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
+
+
 if TUNING.DSTU.WARLY_BUTCHER then
     local _murderfn = GLOBAL.ACTIONS.MURDER.fn
     GLOBAL.ACTIONS.MURDER.fn = function(act)
@@ -298,23 +377,23 @@ if TUNING.DSTU.WARLY_BUTCHER then
 end
 
 if TUNING.DSTU.WXLESS then
-	local BREAK_DOWN_MODULE = GLOBAL.Action({ priority=4, mount_valid=true})
-	BREAK_DOWN_MODULE.id = "BREAK_DOWN_MODULE"
-	BREAK_DOWN_MODULE.str = "Dismantle"
-	AddAction(BREAK_DOWN_MODULE)
-	BREAK_DOWN_MODULE.fn = function(act)
-		if act.invobject and act.invobject.components.data_extractor and act.target.components.upgrademodule then
-			return act.invobject.components.data_extractor:BreakDown(act.target, act.doer)
-		end
-	end
-	AddComponentAction("USEITEM", "data_extractor", function(inst, doer, target, actions, right) 
-		if doer:HasTag('upgrademoduleowner') and target:HasTag('upgrademodule') then 
-			table.insert(actions, GLOBAL.ACTIONS.BREAK_DOWN_MODULE) 
-		end 
-	end)
+    local BREAK_DOWN_MODULE = GLOBAL.Action({ priority = 4, mount_valid = true })
+    BREAK_DOWN_MODULE.id = "BREAK_DOWN_MODULE"
+    BREAK_DOWN_MODULE.str = "Dismantle"
+    AddAction(BREAK_DOWN_MODULE)
+    BREAK_DOWN_MODULE.fn = function(act)
+        if act.invobject and act.invobject.components.data_extractor and act.target.components.upgrademodule then
+            return act.invobject.components.data_extractor:BreakDown(act.target, act.doer)
+        end
+    end
+    AddComponentAction("USEITEM", "data_extractor", function(inst, doer, target, actions, right)
+        if doer:HasTag('upgrademoduleowner') and target:HasTag('upgrademodule') then
+            table.insert(actions, GLOBAL.ACTIONS.BREAK_DOWN_MODULE)
+        end
+    end)
 
-	AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
-	AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
+    AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
+    AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
 end
 
 GLOBAL.STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
@@ -343,22 +422,22 @@ AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
 end)
 
 AddComponentAction("SCENE", "stewer_wagstaff", function(inst, doer, actions, right)
-	if not inst:HasTag("burnt") and not (doer.replica.rider ~= nil and doer.replica.rider:IsRiding()) then
-		if inst:HasTag("donecooking") then
-			table.insert(actions, GLOBAL.ACTIONS.HARVEST)
-		elseif right and (
-			(   inst:HasTag("readytocook") and
-				--(not inst:HasTag("professionalcookware") or doer:HasTag("professionalchef")) and
-				(not inst:HasTag("mastercookware") or doer:HasTag("masterchef"))
-			) or
-			(   inst.replica.container ~= nil and
-				inst.replica.container:IsFull() and
-				inst.replica.container:IsOpenedBy(doer)
-			)
-		) then
-			table.insert(actions, GLOBAL.ACTIONS.COOK)
-		end
-	end
+    if not inst:HasTag("burnt") and not (doer.replica.rider ~= nil and doer.replica.rider:IsRiding()) then
+        if inst:HasTag("donecooking") then
+            table.insert(actions, GLOBAL.ACTIONS.HARVEST)
+        elseif right and (
+                (inst:HasTag("readytocook") and
+                    --(not inst:HasTag("professionalcookware") or doer:HasTag("professionalchef")) and
+                    (not inst:HasTag("mastercookware") or doer:HasTag("masterchef"))
+                ) or
+                (inst.replica.container ~= nil and
+                    inst.replica.container:IsFull() and
+                    inst.replica.container:IsOpenedBy(doer)
+                )
+            ) then
+            table.insert(actions, GLOBAL.ACTIONS.COOK)
+        end
+    end
 end)
 
 
@@ -366,31 +445,31 @@ end)
 -- Wagstaff crockpot actions...
 local _OldCook = GLOBAL.ACTIONS.COOK.fn
 GLOBAL.ACTIONS.COOK.fn = function(act)
-	if act.target.prefab == "um_cookpot_wagstaff" then
-		if act.target.components.stewer_wagstaff:IsCooking() then
-			--Already cooking
-			return true
-		end
-		local container = act.target.components.container
-		if container ~= nil and container:IsOpenedByOthers(act.doer) then
-			return false, "INUSE"
-		elseif not act.target.components.stewer_wagstaff:CanCook() then
-			return false
-		end
-		act.target.components.stewer_wagstaff:StartCooking(act.doer)
-		return true
-	else
-		return _OldCook(act)
-	end
+    if act.target.prefab == "um_cookpot_wagstaff" then
+        if act.target.components.stewer_wagstaff:IsCooking() then
+            --Already cooking
+            return true
+        end
+        local container = act.target.components.container
+        if container ~= nil and container:IsOpenedByOthers(act.doer) then
+            return false, "INUSE"
+        elseif not act.target.components.stewer_wagstaff:CanCook() then
+            return false
+        end
+        act.target.components.stewer_wagstaff:StartCooking(act.doer)
+        return true
+    else
+        return _OldCook(act)
+    end
 end
 
 local _OldHarvest = GLOBAL.ACTIONS.HARVEST.fn
 GLOBAL.ACTIONS.HARVEST.fn = function(act)
-	if act.target.prefab == "um_cookpot_wagstaff" then
-		return act.target.components.stewer_wagstaff:Harvest(act.doer)
-	else
-		return _OldHarvest(act)
-	end
+    if act.target.prefab == "um_cookpot_wagstaff" then
+        return act.target.components.stewer_wagstaff:Harvest(act.doer)
+    else
+        return _OldHarvest(act)
+    end
 end
 
 
@@ -398,13 +477,13 @@ local ENV = env
 
 GLOBAL.setfenv(1, GLOBAL)
 
-local UM_ACTIVATABLE_ITEM = Action({mount_valid = true, priority = 1, rmb = true})
+local UM_ACTIVATABLE_ITEM = Action({ mount_valid = true, priority = 1, rmb = true })
 UM_ACTIVATABLE_ITEM.id = "UM_ACTIVATABLE_ITEM"
 UM_ACTIVATABLE_ITEM.str = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM
 ENV.AddAction(UM_ACTIVATABLE_ITEM)
 
 UM_ACTIVATABLE_ITEM.strfn = function(act)
-	return act.invobject ~= nil and act.invobject.actiontype ~= nil and act.invobject.actiontype or STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.GENERIC
+    return act.invobject ~= nil and act.invobject.actiontype ~= nil and act.invobject.actiontype or STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.GENERIC
 end
 
 UM_ACTIVATABLE_ITEM.fn = function(act)
@@ -420,6 +499,3 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)
-
-
-

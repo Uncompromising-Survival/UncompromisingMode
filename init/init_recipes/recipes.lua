@@ -428,3 +428,4 @@ AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8)
 ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
+AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
