@@ -353,3 +353,5 @@ if GetModConfigData("snowstorms") then
     AddRecipeToFilter("wall_dreadstone_item", "WINTER")
     ChangeSortKey("wall_dreadstone_item", "wall_moonrock_item", "WINTER", true)
 end
+
+AllRecipes["seafaring_prototyper"].ingredients = { Ingredient("transistor", 1), Ingredient("board", 1) }
