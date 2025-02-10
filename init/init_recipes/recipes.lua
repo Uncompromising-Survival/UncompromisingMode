@@ -57,12 +57,6 @@ ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
 ChangeSortKey("plaguemask", "gasmask", "SUMMER", true)
 
-if GetModConfigData("heatwaves") then
-    AddRecipe2("smogeater", { Ingredient("gears", 1), Ingredient("steelwool", 1), Ingredient("smogquito", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "SUMMER" })
-    ChangeSortKey("smogeater", "diseasecurebomb", "TOOLS", true)
-    ChangeSortKey("smogeater", "featherfan", "SUMMER", true)
-end
-
 AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), Ingredient("spoiled_food", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "CONTAINERS" })
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)

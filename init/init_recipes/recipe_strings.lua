@@ -80,8 +80,6 @@ RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
 
 RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
 
--- Smoguito stuff
-RECIPE_DESC.SMOGEATER = "Suck all impurities from the air before your lungs do it first!"
 
 -- Veteran Shrine Crafts
 
