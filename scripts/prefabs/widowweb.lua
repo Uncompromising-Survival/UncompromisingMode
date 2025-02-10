@@ -8,7 +8,7 @@ local prefabs =
     "spider_dropper",
 }
 
-local function TrySpawnCocoon(x, z)
+local function TrySpawnCocoon(x, z,size)
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
     if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
@@ -16,18 +16,14 @@ local function TrySpawnCocoon(x, z)
        #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
+		if size then
+			cocoon.size = size
+		end
     else
         TrySpawnCocoon(x, z)
     end
 end
 
-local function SpawnCocoon(inst)
-    local cap = math.random(8, 10)
-    local x, y, z = inst.Transform:GetWorldPosition()
-    for i = 1, cap do
-        TrySpawnCocoon(x, z)
-    end
-end
 
 local function RerollCocoons(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -36,10 +32,13 @@ local function RerollCocoons(inst)
 	
     if widowweb ~= nil--[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-            v:Remove()
-        end
-		
-        SpawnCocoon(inst)
+			if v.size == 13 or v.size == 14 or v.size == 12 then
+			else
+				local size = math.random(1,20)
+				v:Remove()
+				TrySpawnCocoon(x, z,size)
+			end
+        end      
     end
 end
 

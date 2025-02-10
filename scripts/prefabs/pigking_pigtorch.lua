@@ -306,93 +306,17 @@ local function SetGuardPig(inst)
     inst.components.lootdropper:AddRandomLoot("pigskin", 1)
     inst.components.lootdropper.numrandomloot = 1
 
-    inst.components.trader:Enable()
     inst.components.talker:StopIgnoringAll("becamewerepig")
     inst.components.follower:SetLeader(nil)
 end
 
-local function ShouldAcceptItem(inst, item)
-    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD then
-        return true
-    elseif inst.components.eater:CanEat(item) then
-        local foodtype = item.components.edible.foodtype
-        if foodtype == FOODTYPE.MEAT or foodtype == FOODTYPE.HORRIBLE then
-            return inst.components.follower.leader == nil or
-                inst.components.follower:GetLoyaltyPercent() <= TUNING.PIG_FULL_LOYALTY_PERCENT
-        elseif foodtype == FOODTYPE.VEGGIE or foodtype == FOODTYPE.RAW then
-            local last_eat_time = inst.components.eater:TimeSinceLastEating()
-            return (last_eat_time == nil or
-                last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
-                and (inst.components.inventory == nil or
-                    not inst.components.inventory:Has(item.prefab, 1))
-        end
-        return true
-    end
-end
 
 local function ontalk(inst, script)
     inst.SoundEmitter:PlaySound("dontstarve/pig/grunt")
 end
 
-local function OnGetItemFromPlayer(inst, giver, item)
-    --I eat food
-    if item.components.edible ~= nil then
-        --meat makes us friends (unless I'm a guard)
-        if (item.components.edible.foodtype == FOODTYPE.MEAT or
-            item.components.edible.foodtype == FOODTYPE.HORRIBLE
-            ) and
-            item.components.inventoryitem ~= nil and
-            (--make sure it didn't drop due to pockets full
-            item.components.inventoryitem:GetGrandOwner() == inst or
-                --could be merged into a stack
-                (not item:IsValid() and
-                    inst.components.inventory:FindItem(function(obj)
-                        return obj.prefab == item.prefab
-                            and obj.components.stackable ~= nil
-                            and obj.components.stackable:IsStack()
-                    end) ~= nil)
-            ) then
-            if inst.components.combat:TargetIs(giver) then
-                inst.components.combat:SetTarget(nil) --hmmmm I wonder if I have the guard tag or not?
-            elseif giver.components.leader ~= nil and
-                not (inst:HasTag("guard") or giver:HasTag("monster") or giver:HasTag("merm")) then
-
-                if giver.components.minigame_participator == nil then
-                    giver:PushEvent("makefriend")
-                    giver.components.leader:AddFollower(inst)
-                end
-                inst.components.follower:AddLoyaltyTime(item.components.edible:GetHunger() *
-                    TUNING.PIG_LOYALTY_PER_HUNGER)
-                inst.components.follower.maxfollowtime =
-                giver:HasTag("polite")
-                    and TUNING.PIG_LOYALTY_MAXTIME + TUNING.PIG_LOYALTY_POLITENESS_MAXTIME_BONUS
-                    or TUNING.PIG_LOYALTY_MAXTIME
-            end
-        end
-        if inst.components.sleeper:IsAsleep() then
-            inst.components.sleeper:WakeUp()
-        end
-    end
-
-    --I wear hats
-    if item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD then
-        local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-        if current ~= nil then
-            inst.components.inventory:DropItem(current)
-        end
-        inst.components.inventory:Equip(item)
-        inst.AnimState:Show("hat")
-    end
-end
-
 local MAX_TARGET_SHARES = 5
 local SHARE_TARGET_DIST = 30
-local function OnRefuseItem(inst, item)
-    inst.sg:GoToState("refuse")
-    if inst.components.sleeper:IsAsleep() then
-        inst.components.sleeper:WakeUp()
-    end
-end
 
 local function CustomOnHaunt(inst)
     if not inst:HasTag("werepig") and math.random() <= TUNING.HAUNT_CHANCE_OCCASIONAL then
@@ -473,7 +397,7 @@ local function SetWerePig(inst)
     inst.components.combat:SetRetargetFunction(3, WerepigRetargetFn)
     inst.components.combat:SetKeepTargetFunction(WerepigKeepTargetFn)
 
-    inst.components.trader:Disable()
+
     inst.components.follower:SetLeader(nil)
     inst.components.talker:IgnoreAll("becamewerepig")
 end
@@ -618,8 +542,6 @@ local function common(moonbeast)
     --Sneak these into pristine state for optimization
     inst:AddTag("_named")
 
-    --trader (from trader component) added to pristine state for optimization
-    inst:AddTag("trader")
 
     inst:AddComponent("talker")
     inst.components.talker.fontsize = 35
@@ -691,11 +613,6 @@ local function common(moonbeast)
 
     ------------------------------------------
 
-    inst:AddComponent("trader")
-    inst.components.trader:SetAcceptTest(ShouldAcceptItem)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
-    inst.components.trader.onrefuse = OnRefuseItem
-    inst.components.trader.deleteitemonaccept = false
 
     ------------------------------------------
 

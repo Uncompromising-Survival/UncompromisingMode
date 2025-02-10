@@ -51,6 +51,7 @@ AddTaskSetPreInitAny(function(tasksetdata)
     table.insert(tasksetdata.required_prefabs, "cave_entrance_magmabiome")
 end)
 
+
 AddTask("BrolingHills_IA", {
     locks = { LOCKS.ISLAND2 },
     keys_given = { KEYS.ISLAND3 },
@@ -67,6 +68,23 @@ AddTask("BrolingHills_IA", {
     background_room = {"BoilingFields_Hotsprings_IA"},
     colour = { r = .1, g = .1, b = .1, a = 1 }
 })
+
+-- Chance to Swap Mosaic and Broiling Hills
+if math.random() > 0.5 then
+	AddTaskPreInit("Dig that rock", function(task)
+		task.locks={LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER4}
+		task.keys_given={KEYS.HOUNDS,KEYS.TIER5, KEYS.ROCKS}
+	end)
+
+	AddTaskPreInit("Badlands", function(task)
+		task.locks={LOCKS.ROCKS}
+		task.keys_given={KEYS.TRINKETS,KEYS.STONE,KEYS.WOOD,KEYS.TIER1}	
+	end)
+end
+
+
+
+
 
 AddTask("BrolingHills_IA_2", {
     locks = { LOCKS.ISLAND4 },

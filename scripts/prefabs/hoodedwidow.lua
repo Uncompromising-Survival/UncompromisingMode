@@ -140,11 +140,11 @@ end
 local function OnHitOther(inst, data)
 	local other = data.target
 	if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < 0.5) then -- these guys get KO-ed
-		if not inst.components.health:IsDead() and not inst.sg:HasStateTag("ability") then
+		if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
 
-			inst.components.health:DoDelta(150)
+			inst.components.health:DoDelta(50)
 			if other.prefab == "spider_trapdoor" then
-				inst.components.health:DoDelta(150)
+				inst.components.health:DoDelta(50)
 			end
 			if not inst.sg:HasStateTag("eating") then
 				inst.sg:GoToState("eat_small")
@@ -166,9 +166,7 @@ local impact_loot =
 
 local minion_loot =
 {
-    spider = 2,
-    aphid = 0.5,
-    frog = 0.5,
+    spider = 1,
 }
 
 local fx_loot =
@@ -274,12 +272,11 @@ local function ShakeTree(inst,tree)
 	-- Enemies
 	--tree.SpawnDebris(tree, inst, minion_loot)
 	--tree.SpawnDebris(tree, inst, minion_loot)
-	tree.SpawnDebris(tree, nil, minion_loot)		
-
-	if inst.components.health:GetPercent() < 0.5 then
+	if inst.components.health:GetPercent() >= 0.5 then
+		tree.SpawnDebris(tree, nil, minion_loot)		
+	elseif inst.components.health:GetPercent() < 0.5 then
 		tree.SpawnDebris(tree, nil, minion_loot2)	
-	end
-	if inst.components.health:GetPercent() < 0.25 then
+	elseif inst.components.health:GetPercent() < 0.25 then
 		tree.SpawnDebris(tree, nil, minion_loot3)	
 	end
 			

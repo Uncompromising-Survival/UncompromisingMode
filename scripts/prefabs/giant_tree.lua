@@ -168,7 +168,7 @@ local function _GroundDetectionUpdate(debris, override_density,force_shatter)
             if debris:HasTag("heavy") then
                 local ents = TheSim:FindEntities(x, 0, z, 2, nil, HEAVY_NON_SMASHABLE_TAGS, HEAVY_SMASHABLE_TAGS)
                 for i, v in ipairs(ents) do
-                    if v ~= debris and v:IsValid() and not v:IsInLimbo() then
+                    if v ~= debris and v:IsValid() and not v:IsInLimbo() and not (v.sg and v.sg.currentstate.name == "dropper_enter") then
                         softbounce = true
                         if v.components.combat ~= nil then
                             v.components.combat:GetAttacked(debris, 30, nil)
@@ -185,7 +185,7 @@ local function _GroundDetectionUpdate(debris, override_density,force_shatter)
                 for i, v in ipairs(ents) do
                     if v ~= debris and v:IsValid() and not v:IsInLimbo() then
                         softbounce = true
-                        if v.components.combat ~= nil and not (v:HasTag("epic") or v:HasTag("wall")) then
+                        if v.components.combat ~= nil and not (v:HasTag("epic") or v:HasTag("wall")) and not (v.sg and v.sg.currentstate.name == "dropper_enter") then
                             v.components.combat:GetAttacked(debris, 20, nil)
                         end
                     end

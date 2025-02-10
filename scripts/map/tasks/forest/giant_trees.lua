@@ -19,9 +19,8 @@ AddTaskPreInit("Forest hunters", function(task)
 			["SpideryGiantTrees"] = 1,
 			["WalrusGiantTrees"] = 1,
 			["MoonBaseGiantTrees"] = 1,
-
-			["AphidLand"] = function() return math.random(0,1) end,
-			["ShroomInfestedGiantTrees"] = function() return math.random(0,1) end,
+			["AphidLand"] = 1,
+			
 			["HoodedTown"] = function() return math.random(0,1) end,
 			["HFHolidays"] = function() return math.random(0,1) end,
 			["RoseGarden"] = function() return math.random(0,1) end,
