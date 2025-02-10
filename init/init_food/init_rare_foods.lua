@@ -96,13 +96,14 @@ local _MakeNoGrowInWinter = GLOBAL.MakeNoGrowInWinter
 function GLOBAL.MakeNoGrowInWinter(inst)
     if inst.components.pickable then
         _MakeNoGrowInWinter(inst)
-    elseif inst.components.growable then
+    end --making this not an elseif to do BOTH if something has both pickable and growable
+    if inst.components.growable then
         inst.components.growable:WatchWorldState("iswinter", ToggleGrowable)
         ToggleGrowable(inst.components.growable, GLOBAL.TheWorld.state.iswinter)
     end
 end
 
--- Probably gonna get a config for this eventually... I'm sure...
+-- TODO: Config
 GLOBAL.TUNING.ROCK_FRUIT_LOOT =
 {
     ANGLE = 65,
@@ -113,18 +114,16 @@ GLOBAL.TUNING.ROCK_FRUIT_LOOT =
     MAX_SPAWNS = 10,
 }
 
-if GetModConfigData("no_winter_growing") then
+if GetModConfigData("no_winter_growing_") then
     local nowintergrowing = {
-        "rock_avocado_bush",
+        --"rock_avocado_bush",
         "cherrytomato_planted",
         "cactus",
         "oasis_cactus",
         "bullkelp_plant",
-
     }
 
     for k, v in pairs(nowintergrowing) do
-        print(k, v)
         AddPrefabPostInit(v, function(inst)
             if not GLOBAL.TheWorld.ismastersim then return end
             GLOBAL.MakeNoGrowInWinter(inst)
@@ -134,17 +133,15 @@ if GetModConfigData("no_winter_growing") then
     -- Farm Crops
     local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
     for k, v in pairs(PLANT_DEFS) do
-        print(k, v)
         AddPrefabPostInit(v.prefab, function(inst)
             if not GLOBAL.TheWorld.ismastersim then return end
             GLOBAL.MakeNoGrowInWinter(inst)
         end)
-    end 
+    end
 
     -- Weeds
     local WEED_DEFS = require("prefabs/weed_defs").WEED_DEFS
     for k, v in pairs(WEED_DEFS) do
-        print(k, v)
         AddPrefabPostInit(v.prefab, function(inst)
             if not GLOBAL.TheWorld.ismastersim then return end
             GLOBAL.MakeNoGrowInWinter(inst)
@@ -156,7 +153,7 @@ if GetModConfigData("no_winter_growing") then
         local _OldResume = self.Resume
 
         function self:Resume()
-            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldResume(self)
@@ -166,7 +163,7 @@ if GetModConfigData("no_winter_growing") then
         local _OldStartGrowing = self.StartGrowing
 
         function self:StartGrowing(time)
-            if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldStartGrowing(self, time)
@@ -178,7 +175,7 @@ if GetModConfigData("no_winter_growing") then
         local _OldResume = self.Resume
 
         function self:Resume()
-            if (self.inst:HasTag("bananabush") or self.inst.prefab == "rock_avocado_bush") and GLOBAL.TheWorld.state.iswinter then
+            if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
             else
                 return _OldResume(self)

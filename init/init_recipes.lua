@@ -1,6 +1,6 @@
---  [           Required stuff          ]   --
--- The global objects needed for recipe changes
--- Find the default recipes in recipes.lua
+--ATTENTION!!!!!!
+--THIS FILE IS DEPRECATED. REFER TO THE init/init_recipes *FOLDER* INSTEAD.
+--THIS FILE WILL BE REMOVED SOON.
 local require = GLOBAL.require
 require("recipe")
 
@@ -421,7 +421,7 @@ if GetModConfigData("rat_raids") then
         "ratpoisonbottle",
         { Ingredient("red_cap", 2), Ingredient("jammypreserves", 1), Ingredient("rocks", 1) },
         TECH.SCIENCE_ONE,
-        nil,
+        {numtogive=4},
         { "TOOLS" }
     )
     ChangeSortKey("ratpoisonbottle", "trap", "TOOLS", true)
@@ -843,13 +843,24 @@ ChangeSortKey("boat_bumper_sludge_kit", "boat_bumper_shell_kit", "SEAFARING", tr
 
 AddRecipe2(
     "cannonball_sludge_item",
-    { Ingredient("sludge", 2), Ingredient("nitre", 1), Ingredient("charcoal", 1) },
+    { Ingredient("sludge", 1), Ingredient("nitre", 1), Ingredient("charcoal", 1) },
     TECH.SEAFARING_ONE,
-    { numtogive = 4 },
+    { numtogive = 6 },
     { "WEAPONS", "SEAFARING" }
 )
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "SEAFARING", true)
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "WEAPONS", true)
+
+AddRecipe2(
+    "cannonball_incendiary_item",
+    { Ingredient("snapalm", 1), Ingredient("gunpowder", 1), Ingredient("slurtle_shellpieces", 2) },
+    TECH.SEAFARING_ONE,
+    { numtogive = 4 },
+    { "WEAPONS", "SEAFARING" }
+)
+ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "SEAFARING", true)
+ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "WEAPONS", true)
+
 
 AddRecipe2(
     "sludge_oil",
