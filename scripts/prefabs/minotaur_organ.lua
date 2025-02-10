@@ -69,11 +69,18 @@ local function organfn()
 	inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-
+    inst.entity:AddLight()
     inst.AnimState:SetBank("minotaur_organ")
     inst.AnimState:SetBuild("minotaur_organ")
     inst.AnimState:PlayAnimation("enter",false)
 	inst.AnimState:PushAnimation("beat",false)
+
+    inst.Light:SetRadius(0)
+    inst.Light:SetIntensity(.9)
+    inst.Light:SetFalloff(.9)
+    inst.Light:SetColour(1, 1, 1)
+    inst.Light:Enable(true)
+    inst.Light:EnableClientModulation(true)
 	
 
 	inst:AddTag("minotaur_organ")

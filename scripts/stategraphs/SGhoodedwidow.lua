@@ -59,7 +59,9 @@ end
 local events=
 {
     EventHandler("attacked", function(inst) 
-		if not inst.components.health:IsDead() and inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
+		if inst.components.sleeper and inst.components.sleeper:IsAsleep() then
+			inst.components.sleeper:WakeUp()
+		elseif not inst.components.health:IsDead() and inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
 			inst.sg:GoToState("chargeover")
 		elseif not inst.components.health:IsDead() then
 			if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then 
@@ -226,14 +228,53 @@ local function ChargeTurn(inst)
 		end
 	end
 end
+-- From Bearger
+local COLLAPSIBLE_WORK_ACTIONS =
+{
+	CHOP = true,
+	DIG = true,
+	HAMMER = true,
+	MINE = true,
+}
+local COLLAPSIBLE_TAGS = { "NPC_workable" }
+for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
+	table.insert(COLLAPSIBLE_TAGS, k.."_workable")
+end
+local NON_COLLAPSIBLE_TAGS = { "FX", --[["NOCLICK",]] "DECOR", "INLIMBO" }
+
+local function DestroyStuff(inst,x,y,z,rot, dist, radius, arc, nofx)
+	if dist ~= 0 then
+		x = x + dist * math.cos(rot)
+		z = z - dist * math.sin(rot)
+	end
+	for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)) do
+		if v:IsValid() and not v:IsInLimbo() and v.components.workable ~= nil then
+			local x1, y1, z1 = v.Transform:GetWorldPosition()
+			if arc == nil or ((x1 ~= x or z1 ~= z) and DiffAngleRad(rot, math.atan2(z - z1, x1 - x)) < arc) then
+				local work_action = v.components.workable:GetWorkAction()
+				--V2C: nil action for NPC_workable (e.g. campfires)
+				if (work_action == nil and v:HasTag("NPC_workable")) or
+					(v.components.workable:CanBeWorked() and work_action ~= nil and COLLAPSIBLE_WORK_ACTIONS[work_action.id])
+				then
+					if not nofx then
+						SpawnPrefab("collapse_small").Transform:SetPosition(x1, y1, z1)
+					end
+					v.components.workable:Destroy(inst)
+				end
+			end
+		end
+    end
+end
+-- From Bearger
 
 local function ChargeAttacked(inst) -- Charge uses a slightly different attack, could probably be unified before going to live
 	local x,y,z = inst.Transform:GetWorldPosition()
+	local rot = inst.Transform:GetRotation()
+	DestroyStuff(inst,x,y,z,rot, 3, 3, 90, false)
 	local targets = TheSim:FindEntities(x,y,z,inst.components.combat:GetHitRange(),{"_combat"},{"webbedcreature","ghost","bear_trap"})
 	for i,target in ipairs(targets) do
 		local angle = inst:GetAngleToPoint(target:GetPosition())
-		local my_angle = inst.Transform:GetRotation()
-		if target and (math.abs(angle-my_angle) < 90 or inst:GetDistanceSqToInst(target) < 3^2) and target ~= inst then -- Relatively wide, but not completely to her side. (FUCKING SHE WAS KILLING HERSELF GODDAMN IT)
+		if target and (math.abs(angle-rot) < 90 or inst:GetDistanceSqToInst(target) < 3^2) and target ~= inst then -- Relatively wide, but not completely to her side. (FUCKING SHE WAS KILLING HERSELF GODDAMN IT)
 			local dmg = inst.components.combat:CalcDamage(target)
 			target.components.combat:GetAttacked(inst,dmg)
 		end
@@ -248,11 +289,12 @@ local AOE_TARGET_MUSTHAVE_TAGS = { "_combat" }
 local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack"}
 local MAX_SIDE_TOSS_STR = 0.8
 
-local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, targets)
+local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, targets,web)
 	inst.components.combat.ignorehitrange = true
 	local x, y, z = inst.Transform:GetWorldPosition()
 	local rot = inst.Transform:GetRotation() * DEGREES
 	local x0, z0
+	local web_other
 	if dist ~= 0 then
 		if dist > 0 and ((mult ~= nil and mult > 1) or (heavymult ~= nil and heavymult > 1)) then
 			x0, z0 = x, z
@@ -280,11 +322,23 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
 					local xv,yv,zv = v.Transform:GetWorldPosition()
 					SpawnPrefab("widow_web_combat").Transform:SetPosition(math.random(-1,1)+xv,0,math.random(-1,1)+zv)
 				else
-					inst.components.combat:DoAttack(v)
+					if web then
+						if v.components.pinnable ~= nil then
+							v.components.pinnable:Stick("web_net_trap",splashprefabs)
+							v:DoTaskInTime(1, function(v) v.components.pinnable:Unstick() end)
+						end
+						web_other = true
+					else
+						inst.components.combat:DoAttack(v)
+					end
 				end
 				inst.hit_other = true
 			end
 		end
+	end
+	
+	if web_other == true then
+		inst.sg:GoToState("attack")
 	end
 	inst.components.combat.ignorehitrange = false
 end
@@ -474,7 +528,7 @@ local states=
 
 	State{
 		name = "eat_small",
-        tags = {"busy","ability"}, -- don't get taken out of the animation 
+        tags = {"busy","ability","eating"}, -- don't get taken out of the animation 
 
         onenter = function(inst, cb)
 			inst.AnimState:HideSymbol("c1")
@@ -550,23 +604,20 @@ local states=
             inst.AnimState:PushAnimation("shoot_loop", false)
             inst.AnimState:PushAnimation("shoot_pst", false)
 			inst.AnimState:SetDeltaTimeMultiplier(1.5)
+			if inst.components.combat.target then
+				inst.sg.statemem.original_target = inst.components.combat.target
+			end
         end,
         
         
         timeline=
         {
             TimeEvent(47*FRAMES/1.5, function(inst)
-				if inst.components.combat and inst.components.combat.target ~= nil and inst.components.combat:CanHitTarget(inst.components.combat.target) then
-					local target = inst.components.combat.target
-					if target.components.pinnable ~= nil then
-						target.components.pinnable:Stick("web_net_trap",splashprefabs)
-						target:DoTaskInTime(1, function(target) target.components.pinnable:Unstick() end)
-					end
-					inst.armorcrunch = true --! Someone was WAAY too close.
-					inst.sg:GoToState("attack")
+				DoArcAttack(inst, 0, TUNING.SPIDERQUEEN_ATTACKRANGE, nil, nil, nil, inst.sg.statemem.targets,true)
+
+				if not inst.hit_other then
+					inst:PushEvent("onmissother", { target = inst.sg.statemem.original_target })
 				end
-				
-				
 				WebMortar(inst,-15)
 				WebMortar(inst,15)
 				WebMortar(inst,0)
@@ -809,6 +860,9 @@ local states=
 			if inst:IsValid() and inst.prey and inst.prey:IsValid() and inst:GetDistanceSqToInst(inst.prey) < 2^2 then
 				inst.Physics:SetMotorVelOverride(0,0,0)
 			elseif inst.prey and not inst.prey:IsValid() then
+				print("found prey")
+				print(inst.prey)
+				print(inst.prey.prefab)
 				local x,y,z = inst.prey.Transform:GetWorldPosition()
 				inst.Transform:SetPosition(x,y,z)
 				inst.Physics:SetMotorVelOverride(0,0,0)
@@ -1247,8 +1301,8 @@ local states=
         events=
         {
             EventHandler("animqueueover", function(inst) 
-				inst.Physics:ClearCollisionMask()
-				inst.Physics:CollidesWith(COLLISION.WORLD)
+				-- inst.Physics:ClearCollisionMask()
+				-- inst.Physics:CollidesWith(COLLISION.WORLD)
 				inst.components.locomotor:EnableGroundSpeedMultiplier(false)
 				if inst.brain then
 					inst.brain:Stop()

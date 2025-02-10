@@ -62,11 +62,11 @@ local function fn()
 
     inst:AddComponent("insulator")
     inst.components.insulator:SetSummer()
-    inst.components.insulator:SetInsulation(TUNING.INSULATION_SMALL)
+    inst.components.insulator:SetInsulation(TUNING.INSULATION_MED)
 
     inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.USAGE
-    inst.components.fueled:InitializeFuelLevel(TUNING.UMBRELLA_PERISHTIME)
+    inst.components.fueled:InitializeFuelLevel(TUNING.WALRUSHAT_PERISHTIME)
     inst.components.fueled:SetDepletedFn(inst.Remove)
 
     inst.components.equippable:SetOnEquip(onequip)

@@ -79,7 +79,7 @@ local function Capture(inst)
         end
         v:AddTag("DEVBEHOLDER")
     end
-
+	TheNet:Announce(inst.range)
     local ents = TheSim:FindEntities(x, y, z, inst.range, nil, {"DEVBEHOLDER", "player", "bird", "NOCLICK", "CLASSIFIED", "FX", "INLIMBO", "smalloceancreature", "DECOR"})
     local totaltable_number = tostring(math.random(1000))
     local tableName = string.gsub(inst.components.writeable.text, " ", "_") or not inst.components.writeable.text and "returnedTable" .. totaltable_number
@@ -159,9 +159,10 @@ local function Capture(inst)
 
     local file_name = TUNING.DSTU.MODROOT .. "scripts/map/misc_tools/umss_tables.lua"
 
-   
-   
 
+	TheNet:Announce(totaltable)
+	print(totaltable)
+	
     local file = io.open(file_name, "r+")
     if file then
         local file_string = file:read("*a")

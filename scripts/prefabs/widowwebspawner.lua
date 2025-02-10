@@ -13,26 +13,34 @@ local function SpawnWidowWeb(inst)
     web.Transform:SetPosition(x, y, z)
 end
 
-local function TrySpawnCocoon(x, z)
+local function TrySpawnCocoon(x, z,size)
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
     if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
-       #TheSim:FindEntities(xi, 0, zi, 5, {"webbedcreature"}) < 6 then
+       #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
+		if size then
+			cocoon.size = size
+		end
     else
-        TrySpawnCocoon(x, z)
+        TrySpawnCocoon(x, z,size)
     end
 end
 
 local function SpawnCocoon(inst)
-    local cap = math.random(8, 10)
+    local cap = math.random(6, 8)
     local x, y, z = inst.Transform:GetWorldPosition()
     for i = 1, cap do
         TrySpawnCocoon(x, z)
     end
+	
+	-- guaranteed mactusk and snapdragon
+	TrySpawnCocoon(x, z,14)
+	TrySpawnCocoon(x, z,13)
 end
+
 
 local function TrySpawnDecor(x, z, type)
     local xi = x + math.random(-12, 12)

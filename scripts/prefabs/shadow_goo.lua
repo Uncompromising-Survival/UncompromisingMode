@@ -26,6 +26,7 @@ local AURA_EXCLUDE_TAGS = { "shadow", "shadowminion", "INLIMBO", "notarget", "no
 
 
 local function SpawnHecklerGooTrail(inst,despawn_on_day)
+	
 	local fx = SpawnPrefab("shadow_goo_trail")
 	fx.AnimState:SetMultColour(0,0,0,0.8)
 	local variation = math.random(-2,2)
@@ -38,11 +39,12 @@ local function SpawnHecklerGooTrail(inst,despawn_on_day)
         fx:WatchWorldState("cycles", function() 	
 			fx:Remove()
 		end)	
+	elseif TheWorld.state.israining then
+		fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 3)
 	else
 		fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 45)
 	end
 	fx.angle = angle
-
 end
 
 

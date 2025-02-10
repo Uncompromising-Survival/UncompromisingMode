@@ -138,6 +138,23 @@ local function maketree(name, data, state)
 	end
 	
     local function normal_tree(inst, instant)
+	
+		if inst.components.workable then -- Reset components
+			inst:RemoveComponent("workable")
+		end
+		if inst.components.lootdropper then
+			inst:RemoveComponent("lootdropper")
+		end
+		if inst.components.sanityaura then
+			inst:RemoveComponent("sanityaura")
+		end		
+		if inst.components.sanityaura then
+			inst:RemoveComponent("sanityaura")
+		end		
+		if inst.components.periodicspawner then
+			inst:RemoveComponent("periodicspawner")
+		end		
+		
 		inst:AddComponent("sanityaura")
 		inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
         if inst._changetask ~= nil then

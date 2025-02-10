@@ -4,9 +4,10 @@ local DesertTable = {sussyTable = 1}
 local MarshTable = {fooltrap1Table = 1}
 local HoodedTable = {
 
-    ancientwalrusTable = 1
+    ancientwalrusTable = 1,
     -- Guardian_Of_Nothing = 0.5, -- Lacking the skins used to make it, looks kinda bad as a result. Might remake it?
-
+	Aphidpit = 1,
+	MadTeaParty = 1,
 }
 local DarkForestTable = {walterifgood = 1}
 local RockyTable = {singlefather = 1}
@@ -15,7 +16,19 @@ local SavannaTable = {sos = 0.5, moxTable = 0.5, deadBodies = 2, grassTrap = 0.1
 local MosaicTable = { -- need more mosaic setpieces
 
     impactfulDiscovery = 1,
-    dudu_DUN_DUN = 0.01
+    dudu_DUN_DUN = 0.01, -- We need to check to see what this even is
+	farmbutbad = 1,
+	en_passant = 0.5,
+	ratatoing = 1,
+	Snappyhoarders = 0.25,
+	middle_of_nowhere = 1,
+	sulfurhint = 1,
+	baseFrag_smellyKitchen = 1, 
+	baseFrag_rattyStorage = 1,
+		
+	megabaseruins_intersection = 0.25, 
+	megabaseruins_centerpiece = 0.25, 
+	megabaseruins_road = 0.25
 
 }
 
@@ -56,7 +69,7 @@ local function SpawnBiomeUMSS(inst)
             umss = weighted_random_choice(Table)
         end
     end
-
+	inst.components.areaaware:UpdatePosition(x, y, z)
     if tile == WORLD_TILES.MARSH and weighted_random_choice(inst.MarshTable) then
         Table = inst.MarshTable
         umss = weighted_random_choice(Table)
@@ -90,7 +103,7 @@ local function SpawnBiomeUMSS(inst)
         umss = weighted_random_choice(Table)
     end
 
-    if inst.components.areaaware:CurrentlyInTag("oasis") then -- Also triggers for secondary meteor biome
+    if inst.components.areaaware and inst.components.areaaware:CurrentlyInTag("mosaic") then -- Also triggers for secondary meteor biome
         Table = inst.MosaicTable
         umss = weighted_random_choice(Table)
     end
@@ -127,11 +140,14 @@ local function SpawnBiomeUMSS(inst)
     FinalizeSpawn(inst, umss, x, y, z)
 end
 
-local function makefn()
+local function makefn(Sim)
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
     inst.entity:AddNetwork()
+	
+	
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

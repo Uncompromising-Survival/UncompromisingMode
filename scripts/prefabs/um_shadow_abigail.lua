@@ -9,8 +9,8 @@ local prefabs =
 {
 }
 
-local brain = require "brains/ghostbrain"
---local brain = require "brains/abigailbrain"
+--local brain = require "brains/ghostbrain"
+local brain = require "brains/um_shadow_abigailbrain"
 
 local function retargetfn(inst)
     local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST

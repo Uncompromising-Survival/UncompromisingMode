@@ -60,7 +60,7 @@ local function TargetLeavingArena(inst)
 			local dx, dy, dz = target.Transform:GetWorldPosition()
 			local spx, spy, spz = home.Transform:GetWorldPosition()
 			
-			return target ~= nil and home ~= nil and distsq(spx, spz, dx, dz) >= (TUNING.DRAGONFLY_RESET_DIST*7)
+			return target ~= nil and home ~= nil and math.sqrt(distsq(spx, spz, dx, dz)) >= (24)
 		else
 			return false
 		end
