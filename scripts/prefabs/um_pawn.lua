@@ -4,7 +4,7 @@ local assets = {
 }
 
 local prefabs = {}
--- pawn update
+
 local EFFECTS = {hot = "dr_hot_loop", warmer = "dr_warmer_loop", warm = "dr_warm_loop_2", cold = "dr_warm_loop_1"}
 
 SetSharedLootTable('um_pawn', {{'nightmarefuel', 0.2}, {'thulecite_pieces', 0.1}, {'trinket_6', 0.4}})
@@ -327,7 +327,6 @@ local function pawn_common(pawntype)
     inst.entity:AddPhysics()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
-    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     shadow:SetSize(1.5, .5)
@@ -415,7 +414,6 @@ end
 local function pawn()
     local inst = pawn_common("")
 
-    inst.MiniMapEntity:SetIcon("um_pawn.tex")
 
     if not TheWorld.ismastersim then return inst end
 
@@ -431,7 +429,6 @@ end
 local function pawn_nightmare()
     local inst = pawn_common("_nightmare")
 
-    inst.MiniMapEntity:SetIcon("um_pawn_nightmare.tex")
 
     if not TheWorld.ismastersim then return inst end
 
