@@ -843,8 +843,8 @@ Assets = {
 
 	Asset("ANIM", "anim/hound_jump_attack.zip"),
 	-- update for pawn
-	Asset("ANIM", "anim/uncompromising_pawn_build.zip"),
-	Asset("ANIM", "anim/uncompromising_pawn_nightmare_build.zip"),
+	Asset("ANIM", "anim/um_pawn.zip"),
+	Asset("ANIM", "anim/um_pawn_nightmare.zip"),
 
 	Asset("ANIM", "anim/krampus_bag_smack.zip"),
 
