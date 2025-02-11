@@ -8,7 +8,7 @@ local assets = {
 }
 
 local prefabs = {}
-
+-- pawn update
 local EFFECTS = {hot = "dr_hot_loop", warmer = "dr_warmer_loop", warm = "dr_warm_loop_2", cold = "dr_warm_loop_1"}
 
 SetSharedLootTable('um_pawn', {{'nightmarefuel', 0.2}, {'thulecite_pieces', 0.1}, {'trinket_6', 0.4}})
