@@ -5,7 +5,6 @@ require("stategraphs/commonstates")
 
 local actionhandlers = 
 {
-    ActionHandler(ACTIONS.EAT, "eat"),
     ActionHandler(ACTIONS.UNCOMPROMISING_PAWN_HIDE, function(inst)
 		if inst.pawntype == "_nightmare" then
 			inst.sg:GoToState("hide_pre_nightmare")
@@ -21,7 +20,7 @@ local events=
     CommonHandlers.OnSleep(),
     CommonHandlers.OnFreeze(),
     CommonHandlers.OnLocomote(true, true),
-    EventHandler("attacked", function(inst) if inst.components.health:GetPercent() > 0 then inst.sg:GoToState("hit") end end),
+    EventHandler("attacked", function(inst) if not inst.components.health:IsDead() then inst.sg:GoToState("hit") end end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("trapped", function(inst) inst.sg:GoToState("trapped") end),
     EventHandler("locomote",
@@ -60,12 +59,12 @@ local states=
             inst.donelooking = nil
             
             if math.random() > .5 then
-                inst.AnimState:PlayAnimation("lookup_pre")
-                inst.AnimState:PushAnimation("lookup_loop", true)
+                inst.AnimState:PlayAnimation("idle")
+                inst.AnimState:PushAnimation("idle", true)
                 inst.lookingup = true
             else
-                inst.AnimState:PlayAnimation("lookdown_pre")
-                inst.AnimState:PushAnimation("lookdown_loop", true)
+                inst.AnimState:PlayAnimation("idle")
+                inst.AnimState:PushAnimation("idle", true)
             end
             
             inst.sg:SetTimeout(2.5 + math.random()*0.5)
@@ -74,9 +73,9 @@ local states=
         ontimeout = function(inst)
             inst.donelooking = true
             if inst.lookingup then
-                inst.AnimState:PlayAnimation("lookup_pst")
+                inst.AnimState:PlayAnimation("idle")
             else
-                inst.AnimState:PlayAnimation("lookdown_pst")
+                inst.AnimState:PlayAnimation("idle")
             end
         end,
         
@@ -140,26 +139,6 @@ local states=
             EventHandler("animover", function (inst, data) inst.sg:GoToState("idle") end),
         }
     },    
-    
-    State{
-        name = "eat",
-        
-        onenter = function(inst)
-            inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("rabbit_eat_pre", false)
-            inst.AnimState:PushAnimation("rabbit_eat_loop", true)
-            inst.sg:SetTimeout(1+math.random())
-        end,
-        
-        ontimeout = function(inst)
-            inst:PerformBufferedAction()
-            inst.sg:GoToState("idle", "rabbit_eat_pst")
-        end,
-
-        onexit = function(inst)
-            inst:ClearBufferedAction()
-        end,
-    },    
 
     State{
         name = "hop",
@@ -186,7 +165,7 @@ local states=
 
         onenter = function(inst) 
             inst.AnimState:PlayAnimation("walk_pre")
-            inst.AnimState:PushAnimation("walk")
+            inst.AnimState:PushAnimation("walk_loop")
             inst.components.locomotor:WalkForward()
             inst.sg:SetTimeout(1.25+math.random())
         end,
@@ -214,7 +193,7 @@ local states=
             if play_scream then
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/knight/hurt")
             end
-            inst.AnimState:PlayAnimation("run_pre")
+            inst.AnimState:PlayAnimation("walk_pre")
             inst.components.locomotor:RunForward()
         end,
 
@@ -229,7 +208,7 @@ local states=
         tags = {"moving", "running", "canrotate"},
 
         onenter = function(inst) 
-            inst.AnimState:PlayAnimation("run")
+            inst.AnimState:PlayAnimation("walk_loop")
             inst.SoundEmitter:PlaySound("UCSounds/Scorpion/walk")
             inst.components.locomotor:RunForward()
         end,
@@ -255,46 +234,12 @@ local states=
     }, 
 
     State{
-        name = "fall",
-        tags = {"busy", "stunned"},
-        onenter = function(inst)
-            inst.Physics:SetDamping(0)
-            inst.Physics:SetMotorVel(0,-20+math.random()*10,0)
-            inst.AnimState:PlayAnimation("stunned_loop", true)
-            inst:CheckTransformState()
-        end,
-        
-        onupdate = function(inst)
-            local pt = Point(inst.Transform:GetWorldPosition())
-            if pt.y < 2 then
-                inst.Physics:SetMotorVel(0,0,0)
-            end
-            
-            if pt.y <= .1 then
-                pt.y = 0
-
-                inst.Physics:Stop()
-                inst.Physics:SetDamping(5)
-                inst.Physics:Teleport(pt.x,pt.y,pt.z)
-                inst.DynamicShadow:Enable(true)
-                inst.sg:GoToState("stunned")
-            end
-        end,
-
-        onexit = function(inst)
-            local pt = inst:GetPosition()
-            pt.y = 0
-            inst.Transform:SetPosition(pt:Get())
-        end,
-    },
-
-    State{
         name = "stunned",
         tags = {"busy", "stunned"},
         
         onenter = function(inst) 
             --inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("stunned_loop", true)
+            inst.AnimState:PlayAnimation("frozen_loop_pst", true)
             inst.sg:SetTimeout(GetRandomWithVariance(6, 2) )
             if inst.components.inventoryitem then
                 inst.components.inventoryitem.canbepickedup = true
@@ -316,7 +261,7 @@ local states=
 
         onenter = function(inst)
             inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("stunned_pst")
+            inst.AnimState:PlayAnimation("frozen_loop_pst")
         end,
 
         events=
@@ -332,7 +277,7 @@ local states=
         onenter = function(inst) 
             inst.Physics:Stop()
 			inst:ClearBufferedAction()
-            inst.AnimState:PlayAnimation("stunned_loop", true)
+            inst.AnimState:PlayAnimation("frozen", true)
             inst.sg:SetTimeout(1)
         end,
 
@@ -361,7 +306,8 @@ local states=
 
         onenter = function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/knight/hurt")
-            inst.AnimState:PlayAnimation("hide")
+            inst.AnimState:PlayAnimation("dig")
+
             inst.Physics:Stop()
             --inst:PerformBufferedAction()
             ChangeToInventoryPhysics(inst)
@@ -387,7 +333,9 @@ local states=
 
         events=
         {
-            EventHandler("animover", function(inst) inst:Remove() end ),
+            EventHandler("animover", function(inst) 
+				inst:Remove() 
+			end ),
         },
     },
 
@@ -397,7 +345,7 @@ local states=
 
         onenter = function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/knight/hurt")
-            inst.AnimState:PlayAnimation("hide")
+            inst.AnimState:PlayAnimation("idle")
             inst.Physics:Stop()
             --inst:PerformBufferedAction()
             ChangeToInventoryPhysics(inst)
@@ -508,7 +456,7 @@ local states=
 
         onenter = function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/knight/hurt")
-            inst.AnimState:PlayAnimation("hide_pst")
+            inst.AnimState:PlayAnimation("emerge")
             inst.Physics:Stop()
         end,
 
