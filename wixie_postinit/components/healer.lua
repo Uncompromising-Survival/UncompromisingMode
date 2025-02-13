@@ -3,8 +3,8 @@ GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
 env.AddComponentPostInit("healer", function(self)
 	local _OldHeal = self.Heal
-	
-	function self:Heal(target)
+	--(12/02 - And *this* is why we use varargs when doing postinits...)
+	function self:Heal(target, ...)
 		if self.health
 			and (self.inst.components.inventoryitem ~= nil 
 			and self.inst.components.inventoryitem.owner
@@ -21,6 +21,6 @@ env.AddComponentPostInit("healer", function(self)
 			end
 		end
 		
-		return _OldHeal(self, target)
+		return _OldHeal(self, target, ...)
 	end
 end)
