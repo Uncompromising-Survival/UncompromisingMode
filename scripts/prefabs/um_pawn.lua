@@ -1,10 +1,6 @@
 local assets = {
-    --[[
-	Asset("ANIM", "anim/uncompromising_pawn_build.zip"),
-
-	Asset("SOUND", "sound/dontstarve_shipwreckedSFX.fsb"),
-	Asset("INV_IMAGE", "crabbit_beardling"),
-	]]
+	Asset("ANIM", "anim/um_pawn.zip"),
+	Asset("ANIM", "anim/um_pawn_nightmare.zip"),
 }
 
 local prefabs = {}
@@ -338,8 +334,8 @@ local function pawn_common(pawntype)
 
     MakeCharacterPhysics(inst, 1, 0.5)
 
-    inst.AnimState:SetBank("uncompromising_pawn")
-    inst.AnimState:SetBuild("uncompromising_pawn" .. pawntype .. "_build")
+    inst.AnimState:SetBank("um_pawn")
+    inst.AnimState:SetBuild("um_pawn" .. pawntype)
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph

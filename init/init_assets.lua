@@ -842,9 +842,9 @@ Assets = {
 	Asset("ANIM", "anim/lazy_chester.zip"),
 
 	Asset("ANIM", "anim/hound_jump_attack.zip"),
-
-	Asset("ANIM", "anim/uncompromising_pawn_build.zip"),
-	Asset("ANIM", "anim/uncompromising_pawn_nightmare_build.zip"),
+	-- update for pawn
+	Asset("ANIM", "anim/um_pawn.zip"),
+	Asset("ANIM", "anim/um_pawn_nightmare.zip"),
 
 	Asset("ANIM", "anim/krampus_bag_smack.zip"),
 
@@ -1474,8 +1474,6 @@ Assets = {
 	Asset("ANIM", "anim/um_rice_pudding.zip"),
 	Asset("ANIM", "anim/um_kebab.zip"),
 	
-	Asset("ANIM", "anim/smogquito_build.zip"),
-	Asset("ANIM", "anim/smogquito_nest_build.zip"),
 	
 	Asset("ANIM", "anim/berniebox.zip"),
 
