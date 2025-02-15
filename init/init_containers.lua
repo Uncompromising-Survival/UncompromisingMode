@@ -662,21 +662,6 @@ containers.params.winona_toolbox =
     widget =
     {
         slotpos = {},
-        slotbg =
-        {
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
-        },
         animbank = "ui_chester_shadow_3x4",
         animbuild = "ui_chester_shadow_3x4",
         pos = Vector3(0, 220, 0),
@@ -685,6 +670,24 @@ containers.params.winona_toolbox =
     type = "chest",
     itemtestfn = CheckToolboxItem,
 }
+
+if GetModConfigData("toolbox_tools") then
+    containers.params.winona_toolbox.widget.slotgb =
+    {
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+    }
+end
 
 containers.params.winona_toolbox.widget.slotpos = containers.params.shadowchester.widget.slotpos
 
