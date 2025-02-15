@@ -1070,7 +1070,7 @@ Assets = {
 
 	Asset("ANIM", "anim/blueberryplant.zip"),
 
-	Asset("ANIM", "anim/hooded_ferns.zip"),
+
 	Asset("ANIM", "anim/largefern.zip"),
 
 	Asset("ANIM", "anim/pitcher.zip"),
