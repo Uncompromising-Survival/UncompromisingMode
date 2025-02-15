@@ -24,7 +24,10 @@ local function onequip(inst, owner)
     if not owner:HasTag("scp049") then
         owner:AddTag("has_gasmask")
         owner:AddTag("hasplaguemask")
+        owner:AddTag("tiddlevirusmask")
+
     end
+
 
     inst.components.fueled:StartConsuming()
 end
@@ -44,6 +47,7 @@ local function onunequip(inst, owner)
     if not owner:HasTag("scp049") then
         owner:RemoveTag("has_gasmask")
         owner:RemoveTag("hasplaguemask")
+        owner:RemoveTag("tiddlevirusmask")
     end
 
     inst.components.fueled:StopConsuming()
