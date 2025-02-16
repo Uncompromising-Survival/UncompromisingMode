@@ -15,3 +15,4 @@ sound/.fsbcache/*
 *.log
 *-log.txt
 *.bak
+/.idea
