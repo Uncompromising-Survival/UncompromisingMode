@@ -72,26 +72,12 @@ end
 
 
 env.AddPrefabPostInit("waxwelljournal", function(inst)
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
     inst:AddComponent("tradable")
 end)
-
-
-local function DoEffects(pet)
-    local x, y, z = pet.Transform:GetWorldPosition()
-
-    SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
-
-    if pet.components.follower.leader ~= nil then
-        local x1, y1, z1 = pet.components.follower.leader.Transform:GetWorldPosition()
-        SpawnPrefab("statue_transition").Transform:SetPosition(x1, y1, z1)
-    end
-end
-
---[[local function doeffects(inst, pos)
-    SpawnPrefab("statue_transition").Transform:SetPosition(pos:Get())
-    SpawnPrefab("statue_transition_2").Transform:SetPosition(pos:Get())
-end]]
-
 
 local function CalculateMaxHealthLoss(inst, data)
     if inst.components.health ~= nil and not inst.components.health:IsDead() then
@@ -100,35 +86,62 @@ local function CalculateMaxHealthLoss(inst, data)
     end
 end
 
-local function KillPet(pet)
-    pet.components.health:Kill()
-end
+local function WaxwellPetLeashStuff(inst)
+    local function DoEffects(pet)
+        local x, y, z = pet.Transform:GetWorldPosition()
 
-local function OnSpawnPet(inst, pet)
-    if pet:HasTag("classicshadow") then
-        --Delayed in case we need to relocate for migration spawning
-        pet:DoTaskInTime(0, DoEffects)
+        SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
 
-        if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
-            inst.components.sanity:AddSanityPenalty(pet, TUNING.DSTU.OLD_SHADOWWAXWELL_SANITY_PENALTY)
-            inst:ListenForEvent("onremove", inst._onpetlost, pet)
-            pet.components.skinner:CopySkinsFromPlayer(inst)
-        elseif pet._killtask == nil then
-            pet._killtask = pet:DoTaskInTime(math.random(), KillPet)
+        if pet.components.follower.leader ~= nil then
+            local x1, y1, z1 = pet.components.follower.leader.Transform:GetWorldPosition()
+            SpawnPrefab("statue_transition").Transform:SetPosition(x1, y1, z1)
         end
-    else
-        return inst.OldSpawnPet(inst, pet)
+    end
+
+    --[[local function doeffects(inst, pos)
+        SpawnPrefab("statue_transition").Transform:SetPosition(pos:Get())
+        SpawnPrefab("statue_transition_2").Transform:SetPosition(pos:Get())
+    end]]
+
+    local function KillPet(pet)
+        pet.components.health:Kill()
+    end
+
+    if inst.components.petleash ~= nil then
+        local OldOnSpawnPet = inst.components.petleash.onspawnfn
+        local OldOnDespawnPet = inst.components.petleash.ondespawnfn
+
+        local function OnSpawnPet(inst, pet)
+            if pet:HasTag("classicshadow") then
+                --Delayed in case we need to relocate for migration spawning
+                pet:DoTaskInTime(0, DoEffects)
+
+                if not (inst.components.health:IsDead() or inst:HasTag("playerghost")) then
+                    inst.components.sanity:AddSanityPenalty(pet, TUNING.DSTU.OLD_SHADOWWAXWELL_SANITY_PENALTY)
+                    inst:ListenForEvent("onremove", inst._onpetlost, pet)
+                    pet.components.skinner:CopySkinsFromPlayer(inst)
+                elseif pet._killtask == nil then
+                    pet._killtask = pet:DoTaskInTime(math.random(), KillPet)
+                end
+            else
+                OldOnSpawnPet(inst, pet)
+            end
+        end
+
+        local function OnDespawnPet(inst, pet)
+            if pet:HasTag("classicshadow") then
+                DoEffects(pet)
+                pet:Remove()
+            else
+                OldOnDespawnPet(inst, pet)
+            end
+        end
+
+        inst.components.petleash:SetOnSpawnFn(OnSpawnPet)
+        inst.components.petleash:SetOnDespawnFn(OnDespawnPet)
     end
 end
 
-local function OnDespawnPet(inst, pet)
-    if pet:HasTag("classicshadow") then
-        DoEffects(pet)
-        pet:Remove()
-    else
-        return inst.OldOnDespawnPet(inst, pet)
-    end
-end
 local portals = {
     "multiplayer_portal",
     "multiplayer_portal_moonrock_constr",
@@ -196,7 +209,7 @@ end
 
 env.AddPrefabPostInit("waxwell", function(inst)
     if not TheWorld.ismastersim then
-        return
+        return inst
     end
 
     inst.pact_sworn = false
@@ -243,13 +256,7 @@ env.AddPrefabPostInit("waxwell", function(inst)
     inst:ListenForEvent("onskinschanged", OnSkinsChanged) -- Fashion Shadows.
     inst:ListenForEvent("ms_becameghost", OnBecameGhost)
 
-    if inst.components.petleash ~= nil then
-        inst.OldSpawnPet = inst.components.petleash.onspawnfn
-        inst.components.petleash:SetOnSpawnFn(OnSpawnPet)
-
-        inst.OldOnDespawnPet = inst.components.petleash.ondespawnfn
-        inst.components.petleash:SetOnDespawnFn(OnDespawnPet)
-    end
+    WaxwellPetLeashStuff(inst)
 
     if TUNING.DSTU.MAX_HEALTH_WELL then
         inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
