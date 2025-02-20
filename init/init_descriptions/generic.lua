@@ -660,8 +660,8 @@ DESCRIBE.GARBAGEPATCHFLOTSAM = "It must've been dragged here by that tornado!"
 
 DESCRIBE.BOULDER_CRAB =
 {
-	GENERIC = "It’s not a rock!", 
-	NAKED = "I feel sorry for it.",
+    GENERIC = "It’s not a rock!",
+    NAKED = "I feel sorry for it.",
 }
 
 DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
@@ -671,8 +671,8 @@ DESCRIBE.UM_HOTSPRING = "It's heated by lava."
 
 DESCRIBE.ROCK_LICHEN =
 {
-	GENERIC = "They like the humidity.",
-	PICKED = "The colony will regrow in time.",
+    GENERIC = "They like the humidity.",
+    PICKED = "The colony will regrow in time.",
 }
 
 -- All things Snaildrake
@@ -682,9 +682,9 @@ DESCRIBE.SNAPALM = "I’m not sure it’s safe to be holding this."
 DESCRIBE.SNAILDRAKEHAT = "It'll mess up my hair."
 DESCRIBE.SNAILDRAKEBUCKET =
 {
-	GENERIC = "Looks like it could be filled.",
-	WATER = "I have fetched a snail of water.",
-	LAVA = "Hot Stuff.",
+    GENERIC = "Looks like it could be filled.",
+    WATER = "I have fetched a snail of water.",
+    LAVA = "Hot Stuff.",
 }
 DESCRIBE.SNAILDRAKE_HOLE = "It's just a hole."
 
@@ -708,3 +708,8 @@ DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
 DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
 
 DESCRIBE.UM_RICE_PUDDING = "Some plain old rice pudding."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "Either the bottles too small, or the boats too big, because I don't think a boat will fit in here.",
+    EMPTY = "If I rearrange every particle in my boat, is it still the same boat?"
+}

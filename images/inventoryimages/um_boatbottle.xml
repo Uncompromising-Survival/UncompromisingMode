@@ -1,0 +1,7 @@
+<Atlas>
+    <Texture filename="um_boatbottle.tex"/>
+    <Elements>
+        <Element name="um_boatbottle.tex" u1="0" u2="0.265625" v1="0.5" v2="1"/>
+        <Element name="um_boatbottle_full.tex" u1="0.265625" u2="0.53125" v1="0.5" v2="1"/>
+    </Elements>
+</Atlas>

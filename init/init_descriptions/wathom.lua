@@ -581,3 +581,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "And yet, no."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "Micro storage, boat required.",
+    EMPTY = "Minaturized, boat. Release needs water."
+}

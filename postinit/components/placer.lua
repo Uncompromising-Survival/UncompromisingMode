@@ -13,4 +13,15 @@ env.AddComponentPostInit("placer", function(self)
 
         return ret
     end
+
+    local _ToggleHideInvIcon = self.ToggleHideInvIcon
+    function self:ToggleHideInvIcon(hide, ...)
+        if self.invobject:HasTag("boatbottle") and not self.invobject:HasTag("filled_boat_bottle") then
+            self.hide_inv_icon = false
+            self.builder:PushEvent("onplacerhidden")
+            return
+        end
+
+        return _ToggleHideInvIcon(self, hide, ...)
+    end
 end)

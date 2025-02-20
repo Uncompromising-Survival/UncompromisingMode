@@ -10,18 +10,18 @@ STRINGS.NAMES.WIXIE = "Wixie"
 STRINGS.CHARACTER_TITLES.wixie = "The Delinquent"
 STRINGS.CHARACTER_NAMES.wixie = "Wixie"
 STRINGS.CHARACTER_DESCRIPTIONS.wixie =
-    "*Good with a slingshot\n*Has a mighty shove\n*Is Claustrophobic"
+"*Good with a slingshot\n*Has a mighty shove\n*Is Claustrophobic"
 STRINGS.CHARACTER_QUOTES.wixie = "\"It wasn't me!\""
 
 STRINGS.SKIN_NAMES.wixie_none = "Wixie"
 
 STRINGS.SKIN_QUOTES.wixie_none = "\"It wasn't me!\""
 STRINGS.SKIN_DESCRIPTIONS.wixie_none =
-    "A troubled youth that gets up to trouble."
+"A troubled youth that gets up to trouble."
 
 if GetModConfigData("wixie_walter") then
     STRINGS.CHARACTER_DESCRIPTIONS.walter =
-        "*Not afraid of anything, except getting hurt\n󰀕Is a master of survival tactics\n󰀕Is an expert dog trainer\n*Allergic to bees\n*Has no interest in fashion"
+    "*Not afraid of anything, except getting hurt\n󰀕Is a master of survival tactics\n󰀕Is an expert dog trainer\n*Allergic to bees\n*Has no interest in fashion"
 end
 
 --	[ 		Wixie Descriptions		]	--
@@ -38,12 +38,12 @@ ANNOUNCE.UNCOMFORTABLE_ARMOR = "This armor is making me uncomfortable..."
 
 ANNOUNCE.DREADEYE_SPOOKED = "Hey! Get back here and let me hit you!"
 ANNOUNCE.ANNOUNCE_HARDCORE_RES =
-    "Are you reading this? Then let us know! Because it NO?"
+"Are you reading this? Then let us know! Because it NO?"
 ANNOUNCE.ANNOUNCE_WINONAGEN = "Mom told me never to play with electricity!"
 ANNOUNCE.ANNOUNCE_RATRAID = "Oh no, I know what THAT sound means..."
 ANNOUNCE.ANNOUNCE_RATRAID_SPAWN = "Rats?! Why'd it have to be rats..."
 ANNOUNCE.ANNOUNCE_RATRAID_OVER =
-    "My things! My beautiful things! Come back here!"
+"My things! My beautiful things! Come back here!"
 ANNOUNCE.ANNOUNCE_ACIDRAIN = {
     "Ow! Stop the pollution!", "I thought 'water never hurt anyone'!",
     "OUCH! I hope it doesn't burn through my clothes..."
@@ -65,7 +65,7 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_FROZENFURY = "I think I've thawed out."
 
 -- CaliforniaKing
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_CALIFORNIAKING =
-    "That hit my stomach like a truck..."
+"That hit my stomach like a truck..."
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Now I just have a headache..."
 DESCRIBE.CALIFORNIAKING = "I don't think I'm old enough to drink this."
 -- CaliforniaKing
@@ -73,13 +73,13 @@ DESCRIBE.CALIFORNIAKING = "I don't think I'm old enough to drink this."
 ANNOUNCE.ANNOUNCE_RNEFOG = "Whose out there? Show yourself!"
 DESCRIBE.UNCOMPROMISING_RAT = "Begone, you mangey thing!"
 DESCRIBE.UNCOMPROMISING_RATHERD =
-    "Even if we fill it in, they will find another way."
+"Even if we fill it in, they will find another way."
 DESCRIBE.UNCOMPROMISING_RATBURROW =
-    "Even if we fill it in, they will find another way."
+"Even if we fill it in, they will find another way."
 DESCRIBE.UNCOMPROMISING_WINKYBURROW =
-    "What treasures lie within? We may never know..."
+"What treasures lie within? We may never know..."
 DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
-    "Not sure I want anything from a hole like that."
+"Not sure I want anything from a hole like that."
 
 DESCRIBE.WINKY = {
     GENERIC = "Go bother someone else, pea brain!",
@@ -101,11 +101,11 @@ DESCRIBE.WATHOM = {
 
 DESCRIBE.RATPOISONBOTTLE = "Troubles a' brewing!"
 DESCRIBE.RATPOISON =
-    "It seems a cruel, but those jerks need to be taken care of!"
+"It seems a cruel, but those jerks need to be taken care of!"
 
 DESCRIBE.MONSTERSMALLMEAT = "It's more monster than meat."
 DESCRIBE.COOKEDMONSTERSMALLMEAT =
-    "I've smoked out the monster. And most of the meat too..."
+"I've smoked out the monster. And most of the meat too..."
 DESCRIBE.MONSTERSMALLMEAT_DRIED = "Maybe that helped?"
 
 DESCRIBE.UM_MONSTEREGG = "Just a bad egg, like me!"
@@ -121,9 +121,9 @@ DESCRIBE.SPIDERQUEENCORPSE = "Ah, she caught the rigor mortis."
 ANNOUNCE.ANNOUNCE_SNEEZE = "aaaAAAGLSCHOO!!"
 ANNOUNCE.ANNOUNCE_HAYFEVER = "Agh, my nose is getting claustrophobic..."
 ANNOUNCE.ANNOUNCE_HAYFEVER_OFF =
-    "*sniff* *sniff* Aahhh, finally, my allergies are gone!"
+"*sniff* *sniff* Aahhh, finally, my allergies are gone!"
 ANNOUNCE.ANNOUNCE_SNOWSTORM =
-    "Board up the windows, there is definetly a storm coming!"
+"Board up the windows, there is definetly a storm coming!"
 ANNOUNCE.ANNOUNCE_FIREFALL = {
     "Hey, this shouldn't be a feature!", "Go tell a dev, you jerk!",
     "I thought we removed this!"
@@ -138,7 +138,7 @@ DESCRIBE.UM_BEAR_TRAP = "Just like grans dentures!"
 DESCRIBE.UM_BEAR_TRAP_OLD = "Old and flakey, just like gran."
 DESCRIBE.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "Get em, sharky!"
 DESCRIBE.UM_BEAR_TRAP_EQUIPPABLE_GOLD =
-    "It's shiny bait and a trap, all in one!"
+"It's shiny bait and a trap, all in one!"
 ANNOUNCE.ANNOUNCE_OVER_EAT = {
     STUFFED = "I couldn't help myself, I was hungry!",
     OVERSTUFFED = "I shouldn't have treated my stomach as an extra pocket..."
@@ -155,9 +155,9 @@ DESCRIBE.ZASPBERRYPARFAIT = "Everything is better with electricity!"
 DESCRIBE.ICEBOOMERANG = "Not as good as my slingshot, but it sure is fun!"
 DESCRIBE.MINOTAUR_BOULDER = "How did THIS get here?"
 DESCRIBE.MINOTAUR_BOULDER_BIG =
-    "Hey, Klei! Why'd you have to go and copy my rework, Huh? HUH?!"
+"Hey, Klei! Why'd you have to go and copy my rework, Huh? HUH?!"
 DESCRIBE.VETERANSHRINE =
-    "Hey, you uh, have goop coming out of your eyes. And nose... and mouth..."
+"Hey, you uh, have goop coming out of your eyes. And nose... and mouth..."
 DESCRIBE.VET_SKULL = "Atleast it wasn't me!"
 DESCRIBE.UM_BOSS_SOUL = "Now I can taunt it from beyond the grave!"
 DESCRIBE.UM_DARK_VESTIGES = "Creepy."
@@ -170,7 +170,7 @@ DESCRIBE.UM_MOONFLY_LANTERN = "I hope no one follows my trail!"
 DESCRIBE.RAT_TAIL = "Definetly not candy."
 DESCRIBE.PLAGUEMASK = "Now I can look like a dumb bird. Yay."
 DESCRIBE.SPIDER_TRAPDOOR =
-    "You MUST be living under a rock if you're facing ME!"
+"You MUST be living under a rock if you're facing ME!"
 DESCRIBE.TRAPDOOR = "I bet I could skip this rock if I tried hard enough."
 DESCRIBE.HOODEDTRAPDOOR = DESCRIBE.TRAPDOOR
 DESCRIBE.WICKER_TENTACLE = "It's some kind of gross severed limb!"
@@ -179,15 +179,15 @@ DESCRIBE.HONEY_LOG = "You... TWIG HEAD! THAT WAS MY HONEY!!"
 DESCRIBE.BUSHCRAB = "My berries! Give them back!"
 DESCRIBE.LAVAE2 = DESCRIBE.LAVAE
 DESCRIBE.DISEASECUREBOMB =
-    "Why fix what's broke, when you can break it even more?"
+"Why fix what's broke, when you can break it even more?"
 DESCRIBE.SHROOM_SKIN_FRAGMENT =
-    "I could stitch some of these together, I guess."
+"I could stitch some of these together, I guess."
 DESCRIBE.AIR_CONDITIONER = "It doesn't cool me off... and it smells!"
 DESCRIBE.SPOREPACK = "It better not give me a rash."
 DESCRIBE.SALTPACK = "Salt your sidewalks, or else!"
 
 DESCRIBE.SKELETONMEAT =
-    "I've read enough horror stories to know this is a BAD idea."
+"I've read enough horror stories to know this is a BAD idea."
 DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = ""
 DESCRIBE.VAMPIREBAT = "I vaaant you to gooo avaaay!"
@@ -203,7 +203,7 @@ DESCRIBE.SUNGLASSES = "They make me look cool!"
 
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
 DESCRIBE.CRITTERLAB_REAL_BROKEN =
-    "It's better off broken, but I COULD repair it with some moon rocks."
+"It's better off broken, but I COULD repair it with some moon rocks."
 DESCRIBE.SLINGSHOTAMMO_FIRECRACKERS = DESCRIBE.FIRECRACKERS
 DESCRIBE.WALRUS_CAMP_SUMMER = DESCRIBE.WALRUS_CAMP
 DESCRIBE.CHARLIEPHONOGRAPH_100 = DESCRIBE.MAXWELLPHONOGRAPH
@@ -223,7 +223,7 @@ DESCRIBE.BERNIEBOX = "The writing is all gibberish!"
 DESCRIBE.HOODED_FERN = "That's horse food, not people food!"
 DESCRIBE.HOODEDWIDOW = "Nope! Nope! Definetly not!"
 DESCRIBE.GIANT_TREE =
-    "It's tall. And imposing. And... I don't like looking at it."
+"It's tall. And imposing. And... I don't like looking at it."
 DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
 DESCRIBE.WIDOWSGRASP = "Just seven more and I could pretend to be a spider!"
@@ -241,7 +241,7 @@ DESCRIBE.FRUITBAT = "I'd like to take a bite out of it."
 DESCRIBE.PITCHERPLANT = "We want a pitcher, not a belly itcher!"
 DESCRIBE.APHID = "Don't go biting holes in my clothes, you dork!"
 DESCRIBE.GIANT_TREE_INFESTED =
-    "What kind of weirdo would live in a place like that?"
+"What kind of weirdo would live in a place like that?"
 DESCRIBE.GIANT_BLUEBERRY = "That'd make a mess for sure!"
 DESCRIBE.STEAMEDHAMS = "At this time of day, in this part of the wilderness?"
 DESCRIBE.BLUEBERRYPANCAKES = "Mum taught me how to make them! They're my favorite!"
@@ -250,7 +250,7 @@ DESCRIBE.SIMPSALAD = "It's... leafy? And... purple?"
 DESCRIBE.BEEFALOWINGS = "Perfect for bulking up!"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE = "No one can knock me over!"
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_KNOCKBACKIMMUNE =
-    "Ah, well... I still can't be pushed around!"
+"Ah, well... I still can't be pushed around!"
 DESCRIBE.WIDOWSHEAD = "It's still fresh. And disgusting."
 DESCRIBE.HOODED_MUSHTREE_TALL = DESCRIBE.MUSHTREE_TALL
 DESCRIBE.HOODED_MUSHTREE_MEDIUM = DESCRIBE.MUSHTREE_MEDIUM
@@ -272,7 +272,7 @@ DESCRIBE.ANTIHISTAMINE = "\"Snot nosed\"?! I'll show them!"
 ANNOUNCE.CURSED_ITEM_EQUIP = "ACK! My hand! Who dares?"
 DESCRIBE.VETSITEM = "I don't let peer pressure get to me!"
 DESCRIBE.SCREECHER_TRINKET = "Mum never carved stuff like this..."
-ACTIONFAIL.GIVE = {NOTNIGHT = "Something tells me I need to wait for night."}
+ACTIONFAIL.GIVE = { NOTNIGHT = "Something tells me I need to wait for night." }
 
 DESCRIBE.MAGMAHOUND = "Begone, scabby!"
 DESCRIBE.LIGHTNINGHOUND = "Stop shouting, you loudmouth! "
@@ -326,19 +326,19 @@ DESCRIBE.BEARGERCLAW = "I'm diggin this!"
 DESCRIBE.FEATHER_FROCK = "No way I'm flying in this thing."
 
 DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM ..
-                              "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM ..
-                               "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.ORANGEGEM_CRACKED = DESCRIBE.ORANGEGEM ..
-                                 "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM ..
-                                "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM ..
-                                 "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM ..
-                                 "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 DESCRIBE.OPALPRECIOUSGEM_CRACKED = DESCRIBE.OPALPRECIOUSGEM ..
-                                       "\nI didn't mean to- I mean, I didn't break it!"
+    "\nI didn't mean to- I mean, I didn't break it!"
 
 DESCRIBE.RED_MUSHED_ROOM = "I crushed it!"
 DESCRIBE.GREEN_MUSHED_ROOM = "I crushed it!"
@@ -352,7 +352,7 @@ DESCRIBE.STANTON_SHADOW_TONIC_FANCY = DESCRIBE.STANTON_SHADOW_TONIC
 DESCRIBE.STANTON = "No thanks, creep."
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_HYPERCOURAGE = "Now I'm extra unafraid!"
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_HYPERCOURAGE =
-    "Back to normal levels of toughness."
+"Back to normal levels of toughness."
 -- StantonStuff
 
 DESCRIBE.ARMORLAVAE = DESCRIBE.LAVAE
@@ -387,7 +387,7 @@ DESCRIBE.FLORAL_BANDAGE = "I don't want that goop in my wounds..."
 DESCRIBE.DORMANT_RAIN_HORN = "I hate the ocean."
 DESCRIBE.RAIN_HORN = "I hope it makes a loud, annoying noise."
 DESCRIBE.DRIFTWOODFISHINGROD =
-    "It comes from the sea, so it will work better. Right?"
+"It comes from the sea, so it will work better. Right?"
 
 ANNOUNCE.ANNOUNCE_RATSNIFFER_ITEMS = {
     LEVEL_1 = "I hate cleaning my room, but I don't want rats, so..."
@@ -418,10 +418,10 @@ DESCRIBE.WINONA_TOOLBOX = "It belongs to the lug-head."
 ACTIONFAIL.WINONATOOLBOX = "What is she hiding?!"
 DESCRIBE.POWERCELL = "It's big, heavy, and dangerous. I like it!"
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-    "Neat. I don't know what it is, but it's neat!"
+"Neat. I don't know what it is, but it's neat!"
 DESCRIBE.MINERHAT_ELECTRICAL = "Electricity makes everything better!"
 DESCRIBE.OCEAN_SPEAKER =
-    "Is it... making noise? I can't tell... my head hurts..."
+"Is it... making noise? I can't tell... my head hurts..."
 -- DESCRIBE.UM_SIREN = "Oh yeah!? I can blow bubbles twice as big! Watch!"
 
 -- DESCRIBE.OCUPUS_BEAK = ""
@@ -488,7 +488,7 @@ DESCRIBE.LAVASPIT_SLUDGE = "Whole lotta hot goop."
 DESCRIBE.UM_BEEGUARD_SHOOTER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_BLOCKER =
-    "That's fine, I wasn't planning on getting too close anyway!"
+"That's fine, I wasn't planning on getting too close anyway!"
 
 DESCRIBE.PORTABLEBOAT_ITEM = "It's like a bouncy castle from the fair, but boring."
 DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "The wind does the work for me!"
@@ -539,32 +539,32 @@ STRINGS.STAGEACTOR.WIXIE1 = {
 }
 
 general_scripts.WIXIE1 = {
-    cast = {"wixie"},
+    cast = { "wixie" },
     lines = {
-        {roles = {"wixie"}, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[1]},
+        { roles = { "wixie" }, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[1] },
         {
-            roles = {"wixie"},
+            roles = { "wixie" },
             duration = 3.5,
             line = STRINGS.STAGEACTOR.WIXIE1[2],
             anim = "idle_wilson"
         },
-        {roles = {"wixie"}, duration = 2.5, line = STRINGS.STAGEACTOR.WIXIE1[3]},
+        { roles = { "wixie" }, duration = 2.5, line = STRINGS.STAGEACTOR.WIXIE1[3] },
         {
-            roles = {"wixie"},
+            roles = { "wixie" },
             duration = 4,
             line = STRINGS.STAGEACTOR.WIXIE1[4],
             anim = "idle_wendy"
         },
-        {roles = {"wixie"}, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[5]},
+        { roles = { "wixie" }, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[5] },
         {
-            roles = {"wixie"},
+            roles = { "wixie" },
             duration = 4.0,
             line = STRINGS.STAGEACTOR.WIXIE1[6],
             anim = "idle_walter"
         },
-        {roles = {"wixie"}, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[7]},
+        { roles = { "wixie" }, duration = 3.0, line = STRINGS.STAGEACTOR.WIXIE1[7] },
         {
-            roles = {"wixie"},
+            roles = { "wixie" },
             duration = 1.5,
             line = STRINGS.STAGEACTOR.WIXIE1[8],
             anim = "emote_jumpcheer"
@@ -595,3 +595,8 @@ general_scripts.WIXIE1 = {
 			{roles = {"wixie"},     duration = 2.0, line = STRINGS.STAGEACTOR.WIXIE2[7], anim = "emote_impatient"},
 		}
 	}]]
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "This is one of those toys for old people.",
+    EMPTY = "How am I supposed to play with the boat if it's stuck in this stupid bottle?"
+}

@@ -553,3 +553,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "Is pudding with rice in it."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "Is bottle for whole boat?",
+    EMPTY = "I can lift whole boat now! But it is not very impressive."
+}
