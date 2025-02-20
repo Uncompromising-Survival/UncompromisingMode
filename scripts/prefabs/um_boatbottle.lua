@@ -78,6 +78,9 @@ local function OnThrown(inst)
     inst.persists = false
 
     inst.AnimState:PlayAnimation("spin", true)
+    if inst.fx ~= nil then
+        inst.fx.AnimState:PlayAnimation("spin", true)
+    end
 end
 
 local function fn()
