@@ -140,8 +140,6 @@ modimport("init/init_character_changes/willow")
 
 modimport("init/init_character_changes/willow_bernie")
 
-modimport("init/init_character_changes/waxwell")
-
 --if GetModConfigData("warly") then
 --modimport("init/init_character_changes/warly")
 --end
