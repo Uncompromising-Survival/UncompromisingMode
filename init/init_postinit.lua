@@ -301,10 +301,6 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
 
-if not GLOBAL.TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "slurtle_shellpieces")
-end
-
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")
     table.insert(brain_post, "perdhungry")
@@ -487,15 +483,6 @@ end
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
-end
-
-if not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "cannonballs")
-    table.insert(component_post, "weighable")
-end
-
-if GetModConfigData("sharpshooter_monkeys_") and not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(brain_post, "powdermonkey")
 end
 
 modimport("postinit/sim")
