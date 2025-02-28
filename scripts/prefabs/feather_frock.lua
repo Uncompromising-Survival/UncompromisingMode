@@ -13,7 +13,48 @@ local NO_TAGS_NO_PLAYERS = { "INLIMBO", "notarget", "noattack", "flight", "invis
 	"companion" }
 local COMBAT_TARGET_TAGS = { "_combat" }
 
-local function SpawnThorns(inst, feather, owner)
+local feather_defs =
+{
+	{
+		name = "feather_robin",
+		sound = "dontstarve/birds/takeoff_robin",
+		damage = 20,
+		damage_reduction = 5,
+	},
+	{
+		name = "feather_robin_winter",
+		sound = "dontstarve/birds/takeoff_junco",
+		damage = 40,
+		damage_reduction = 7,
+	},
+	{
+		name = "feather_crow",
+		sound = "dontstarve/birds/takeoff_crow",
+		damage = 20,
+		damage_reduction = 5,
+	},
+	{
+		name = "feather_canary",
+		sound = "dontstarve/birds/takeoff_canary",
+		fx = "spikes_canary",
+		damage = 30,
+		damage_reduction = 7,
+	},
+	{
+		name = "goose_feather",
+		sound = "dontstarve_DLC001/creatures/mossling/honk",
+		damage = 10,
+		damage_reduction = 15,
+	},
+	{
+		name = "malbatross_feather",
+		sound = "saltydog/creatures/boss/malbatross/attack_call",
+		damage = 50,
+		damage_reduction = 10,
+	},
+}
+
+local function SpawnThorns(inst, feather, owner, damage)
 
 	local owner = inst.components.inventoryitem.owner
 	local impactfx = SpawnPrefab("impact")
@@ -34,21 +75,21 @@ local function SpawnThorns(inst, feather, owner)
 			end
 			if owner ~= nil then
 				if owner.components.combat ~= nil and owner.components.combat:CanTarget(v) then
-					if feather == "robin" and v.components.fueled == nil and
+					if feather == "feather_robin" and v.components.fueled == nil and
 						v.components.burnable ~= nil and
 						not v.components.burnable:IsBurning() and
 						not v:HasTag("burnt") then
 						v.components.burnable:Ignite(nil, owner, owner)
-						v.components.combat:GetAttacked(owner, 40)
+						v.components.combat:GetAttacked(owner, damage)
 
 						if v.components.freezable then
 							v.components.freezable:Unfreeze()
 						end
-					elseif feather == "robin_winter" then
-						v.components.combat:GetAttacked(owner, 80)
+					elseif feather == "feather_robin_winter" then
+						v.components.combat:GetAttacked(owner, damage)
 
 						inst.fxscale = 1.5
-					elseif feather == "crow" and v.components.locomotor ~= nil then
+					elseif feather == "feather_crow" and v.components.locomotor ~= nil then
 						local debuffkey = inst.prefab
 
 						if v._wingsuit_speedmulttask ~= nil then
@@ -60,13 +101,13 @@ local function SpawnThorns(inst, feather, owner)
 						local slowamount = 0.7
 
 						v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, slowamount)
-						v.components.combat:GetAttacked(owner, 30)
-					elseif feather == "canary" then
+						v.components.combat:GetAttacked(owner, damage)
+					elseif feather == "feather_canary" then
 						SpawnPrefab("electricchargedfx"):SetTarget(v)
 						SpawnPrefab("shockotherfx"):SetFXOwner(owner)
-						v.components.combat:GetAttacked(owner, 10)
-					elseif feather == "malbatross" then
-						v.components.combat:GetAttacked(owner, 80)
+						v.components.combat:GetAttacked(owner, damage)
+					elseif feather == "malbatross_feather" then
+						v.components.combat:GetAttacked(owner, damage)
 					end
 				end
 
@@ -82,7 +123,7 @@ local function SpawnThorns(inst, feather, owner)
 		end
 	end
 
-	if feather == "goose" then
+	if feather == "goose_feather" then
 		local tornado1 = SpawnPrefab("mini_mothergoose_tornado")
 		tornado1.WINDSTAFF_CASTER = owner
 		tornado1.components.linearcircler:SetCircleTarget(owner)
@@ -146,57 +187,26 @@ local function OnBlocked(owner, data, inst)
 	end
 
 	if inst ~= nil then
-		local feather = inst.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
-
-		if feather and inst._cdtask == nil and data ~= nil and not data.redirected then
+		if inst.feather and inst._cdtask == nil and data ~= nil and not data.redirected then
 			--V2C: tiny CD to limit chain reactions
 
 			inst.components.useableitem.inuse = true
-			inst._cdtask = inst:DoTaskInTime(3, OnCooldown)
-			inst.components.rechargeable:Discharge(3)
-
-			local robin = inst.components.container:Has("feather_robin", 1)
-			local robin_winter = inst.components.container:Has("feather_robin_winter", 1)
-			local crow = inst.components.container:Has("feather_crow", 1)
-			local canary = inst.components.container:Has("feather_canary", 1)
-			local goose = inst.components.container:Has("goose_feather", 1)
-			local malbatross = inst.components.container:Has("malbatross_feather", 1)
-
-			if robin then
-				inst.components.container:ConsumeByName("feather_robin", 1)
-				SpawnThorns(inst, "robin", owner)
-				SpawnPrefab("spikes_robin").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_robin")
-			elseif robin_winter then
-				inst.components.container:ConsumeByName("feather_robin_winter", 1)
-				SpawnThorns(inst, "robin_winter", owner)
-				SpawnPrefab("spikes_robinwinter").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_junco")
-			elseif crow then
-				inst.components.container:ConsumeByName("feather_crow", 1)
-				SpawnThorns(inst, "crow", owner)
-				SpawnPrefab("spikes_crow").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_crow")
-			elseif canary then
-				inst.components.container:ConsumeByName("feather_canary", 1)
-				SpawnThorns(inst, "canary", owner)
-				SpawnPrefab("spikes_canary").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
-			elseif goose then
-				inst.components.container:ConsumeByName("goose_feather", 1)
-				SpawnThorns(inst, "goose", owner)
-				SpawnPrefab("spikes_goose").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
-			elseif malbatross then
-				inst.components.container:ConsumeByName("malbatross_feather", 1)
-				SpawnThorns(inst, "malbatross", owner)
-				SpawnPrefab("spikes_malbatross").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
+			inst._cdtask = inst:DoTaskInTime(0.33, OnCooldown)
+			inst.components.rechargeable:Discharge(0.33)
+			
+			for i, v in ipairs(feather_defs) do
+				if v.name == inst.feather.prefab then
+					SpawnThorns(inst, v.name, owner, v.damage)
+					SpawnPrefab("spikes_"..v.name).entity:SetParent(owner.entity)
+					inst.SoundEmitter:PlaySound(v.sound)
+					if owner.SoundEmitter ~= nil then
+						owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+					end
+				end
 			end
-
-			if owner.SoundEmitter ~= nil then
-				owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-			end
+			
+			local item = inst.components.container:RemoveItem(inst.components.container:GetItemInSlot(1), false)
+			item:Remove()
 		end
 	end
 end
@@ -205,55 +215,25 @@ local function OnUse(inst)
 	local owner = inst.components.inventoryitem.owner
 
 	if inst ~= nil then
-		local feather = inst.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
-
-		if feather and inst._cdtask == nil then
+		if inst.feather ~= nil and inst._cdtask == nil then
 			--V2C: tiny CD to limit chain reactions
-			inst._cdtask = inst:DoTaskInTime(3, OnCooldown)
-			inst.components.rechargeable:Discharge(3)
-
-			local robin = inst.components.container:Has("feather_robin", 1)
-			local robin_winter = inst.components.container:Has("feather_robin_winter", 1)
-			local crow = inst.components.container:Has("feather_crow", 1)
-			local canary = inst.components.container:Has("feather_canary", 1)
-			local goose = inst.components.container:Has("goose_feather", 1)
-			local malbatross = inst.components.container:Has("malbatross_feather", 1)
-
-			if robin then
-				inst.components.container:ConsumeByName("feather_robin", 1)
-				SpawnThorns(inst, "robin", owner)
-				SpawnPrefab("spikes_robin").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_robin")
-			elseif robin_winter then
-				inst.components.container:ConsumeByName("feather_robin_winter", 1)
-				SpawnThorns(inst, "robin_winter", owner)
-				SpawnPrefab("spikes_robinwinter").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_junco")
-			elseif crow then
-				inst.components.container:ConsumeByName("feather_crow", 1)
-				SpawnThorns(inst, "crow", owner)
-				SpawnPrefab("spikes_crow").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_crow")
-			elseif canary then
-				inst.components.container:ConsumeByName("feather_canary", 1)
-				SpawnThorns(inst, "canary", owner)
-				SpawnPrefab("spikes_canary").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
-			elseif goose then
-				inst.components.container:ConsumeByName("goose_feather", 1)
-				SpawnThorns(inst, "goose", owner)
-				SpawnPrefab("spikes_goose").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
-			elseif malbatross then
-				inst.components.container:ConsumeByName("malbatross_feather", 1)
-				SpawnThorns(inst, "malbatross", owner)
-				SpawnPrefab("spikes_malbatross").entity:SetParent(owner.entity)
-				inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
+			
+			inst._cdtask = inst:DoTaskInTime(.33, OnCooldown)
+			inst.components.rechargeable:Discharge(.33)
+			
+			for i, v in ipairs(feather_defs) do
+				if v.name == inst.feather.prefab then
+					SpawnThorns(inst, v.name, owner, v.damage)
+					SpawnPrefab("spikes_"..v.name).entity:SetParent(owner.entity)
+					inst.SoundEmitter:PlaySound(v.sound)
+					if owner.SoundEmitter ~= nil then
+						owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
+					end
+				end
 			end
-
-			if owner.SoundEmitter ~= nil then
-				owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-			end
+			
+			local item = inst.components.container:RemoveItem(inst.components.container:GetItemInSlot(1), false)
+			item:Remove()
 		end
 	end
 end
@@ -320,6 +300,40 @@ end
 local function onstopuse()
 end
 
+local function OnAmmoLoaded(inst, data)
+	local feather = inst.components.inventory:GetItemInSlot(1)
+	
+	if feather ~= nil then
+		for i, v in ipairs(feather_defs) do
+			if feather.name == feather.prefab then
+				inst.feather = feather
+				inst.frock_damage_reduction = feather.damage_reduction
+				
+				return
+			end
+		end
+	end
+	
+	inst.feather = nil
+end
+
+local function OnAmmoUnloaded(inst, data)
+	local feather = inst.components.inventory:GetItemInSlot(1)
+	
+	if feather ~= nil then
+		for i, v in ipairs(feather_defs) do
+			if feather.name == feather.prefab then
+				inst.feather = feather
+				inst.frock_damage_reduction = feather.damage_reduction
+				
+				return
+			end
+		end
+	end
+	
+	inst.feather = nil
+end
+
 local function frockfn()
 	local inst = CreateEntity()
 
@@ -350,6 +364,9 @@ local function frockfn()
 		end
 		return inst
 	end
+	
+	inst.feather = nil
+	inst.frock_damage_reduction = 0
 
     inst:AddComponent("tradable")
 	inst:AddComponent("inspectable")
@@ -372,6 +389,9 @@ local function frockfn()
 
 	inst:AddComponent("useableitem")
 	inst.components.useableitem:SetOnUseFn(OnUse)
+	
+    inst:ListenForEvent("itemget", OnAmmoLoaded)
+    inst:ListenForEvent("itemlose", OnAmmoUnloaded)
 
 	MakeHauntableLaunch(inst)
 

@@ -444,6 +444,8 @@ local prefabs = {
 	"wixie_panicshield",
 	"wixiecurse_debuff",
 	"wixietaunt_debuff",
+	"wixie_shockscrap_debuff",
+	"wixie_stinger_debuff",
 	"meatrack_hat",
 	"walterbonus_buff",
 	"bagofmarbles",

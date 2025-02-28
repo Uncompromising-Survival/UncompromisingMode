@@ -13,43 +13,46 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
     inst.components.timer:StartTimer("buffover", 20)
 
     inst.entity:SetParent(target.entity)
+	inst.AnimState:PlayAnimation("level2_controlled_burn", true)
 	
 	if target ~= nil and target:IsValid() and target.components.combat ~= nil and target.components.locomotor ~= nil then
 			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .06 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .04 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .02) or 0
+								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
+								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
+								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
 		print(taunt_bonus)
 							
-		target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.1 + taunt_bonus)
+		target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.1)
 		target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.1 - taunt_bonus)
 	
 		inst:ListenForEvent("wixie_taunt_lvl2", function(target, data)
 			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .06 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .04 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .02) or 0
+								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
+								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
+								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
 		print(taunt_bonus)
 		
-			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.15 + taunt_bonus)
+			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.15)
 			target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.15 - taunt_bonus)
 			inst.components.timer:StopTimer("buffover")
 			inst.components.timer:StartTimer("buffover", 20)
-			inst.AnimState:SetMultColour(1, .15, .15, 0.8)
+			inst.AnimState:PushAnimation("level3_controlled_burn", true)
+			inst.AnimState:SetMultColour(1, .5, 0, 0.7)
 		end, target)
 		
 		inst:ListenForEvent("wixie_taunt_lvl3", function(target, data)
 			local taunt_bonus = data ~= nil and data.inflicter ~= nil and 
-								(data.inflicter:HasTag("wixie_taunteffect_3") and .06 or 
-								data.inflicter:HasTag("wixie_taunteffect_2") and .04 or 
-								data.inflicter:HasTag("wixie_taunteffect_1") and .02) or 0
+								(data.inflicter:HasTag("wixie_taunteffect_3") and .15 or 
+								data.inflicter:HasTag("wixie_taunteffect_2") and .1 or 
+								data.inflicter:HasTag("wixie_taunteffect_1") and .05) or 0
 		print(taunt_bonus)
 								
-			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.2 + taunt_bonus)
-			target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.2 - taunt_bonus)
+			target.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 1.2)
+			target.components.locomotor:SetExternalSpeedMultiplier(target, "wixie_taunt", 1.25 - taunt_bonus)
 			inst.components.timer:StopTimer("buffover")
 			inst.components.timer:StartTimer("buffover", 20)
-			inst.AnimState:SetMultColour(1, 0, 0, 1)
+			inst.AnimState:PushAnimation("level4_controlled_burn", true)
+			inst.AnimState:SetMultColour(1, .5, 0, 0.8)
 		end, target)
 	end
 	
@@ -95,15 +98,13 @@ local function fn()
 	
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")
-	
-    inst.AnimState:SetBank ("fx_book_web")
-    inst.AnimState:SetBuild("fx_book_web")
-    inst.AnimState:PlayAnimation("spawn", true)
-	inst.Transform:SetScale(0.65, 0.65, 0.65)
-	inst.AnimState:SetMultColour(1, .3, .3, 0.6)
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    inst.AnimState:SetLayer(LAYER_BACKGROUND)
-    inst.AnimState:SetSortOrder(3)
+
+    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.AnimState:SetBank("fire")
+    inst.AnimState:SetBuild("fire")
+    inst.AnimState:SetRayTestOnBB(true)
+    inst.AnimState:SetFinalOffset(FINALOFFSET_MAX)
+	inst.AnimState:SetMultColour(1, .5, 0, 0.6)
 
     inst.entity:SetPristine()
 

@@ -15,6 +15,10 @@ local wobycommand = AddAction(
 	"WOBY_COMMAND_FETCH",
 	function(act)
 	
+	if act.doer and act.doer.woby_commands_classified then
+		act.doer.woby_commands_classified:RecallWoby()
+	end
+	
 	local hasfollowers = false
 	local hasmerms = false
 	
@@ -191,6 +195,11 @@ local wobystay = AddAction(
 	"WOBY_STAY",
 	"WOBY_STAY",
 	function(act)
+	
+	if act.doer and act.doer.woby_commands_classified then
+		act.doer.woby_commands_classified:RecallWoby()
+	end
+	
 	local act_pos = act:GetActionPoint()
 	local hasfollowers = false
 	
@@ -245,6 +254,10 @@ local wobyhere = AddAction(
 	"WOBY_HERE",
 	"WOBY_HERE",
 	function(act)
+	
+	if act.doer and act.doer.woby_commands_classified then
+		act.doer.woby_commands_classified:RecallWoby()
+	end
 	
 	local hasfollowers = false
 	
@@ -373,6 +386,40 @@ wixie_taunt.priority = HIGH_ACTION_PRIORITY
 wixie_taunt.rmb = true
 wixie_taunt.distance = 36
 wixie_taunt.mount_valid = false
+
+local _OldWhistle = GLOBAL.ACTIONS.WHISTLE.fn
+
+GLOBAL.ACTIONS.WHISTLE.fn = function(act)
+	print("Whistle")
+	if act.doer and act.doer.woby ~= nil then
+		act.doer.woby.wobytarget = nil
+		act.doer.woby.oldwobytarget = nil
+		
+		if act.doer.woby.brain ~= nil then
+			act.doer.woby.brain:Stop()
+			act.doer.woby.brain:Start()
+		end
+	end
+	
+	return _OldWhistle(act)
+end
+
+local _OldDirectCourier = GLOBAL.ACTIONS.DIRECTCOURIER_MAP.fn
+
+GLOBAL.ACTIONS.DIRECTCOURIER_MAP.fn = function(act)
+	print("Direct Courier")
+	if act.doer and act.doer.woby ~= nil then
+		act.doer.woby.wobytarget = nil
+		act.doer.woby.oldwobytarget = nil
+		
+		if act.doer.woby.brain ~= nil then
+			act.doer.woby.brain:Stop()
+			act.doer.woby.brain:Start()
+		end
+	end
+	
+	return _OldDirectCourier(act)
+end
 
 GLOBAL.ACTIONS.CAST_NET.mount_valid = false
 GLOBAL.ACTIONS.DRY.mount_valid = true

@@ -387,7 +387,7 @@ local function master_postinit(inst)
 	
 	inst.soundsname = "wixie"
 	
-	inst:ListenForEvent("builditem", OnBuildAmmo)
+	--inst:ListenForEvent("builditem", OnBuildAmmo)
 	
 	inst.OnNewSpawn = OnNewSpawn
 end

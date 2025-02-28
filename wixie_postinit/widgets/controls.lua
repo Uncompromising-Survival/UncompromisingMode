@@ -20,28 +20,35 @@ local function GetModName(modname) -- modinfo's modname and internal modname is 
 end
 
 AddClassPostConstruct( "widgets/statusdisplays", function(self, owner)
-	if owner:HasTag("pinetreepioneer") then
-		local WobyHungerDisplay = require "widgets/WobyHungerDisplay"
-		self.WobyHungerDisplay = self:AddChild(WobyHungerDisplay(owner, config))
-		--self.WobyHungerDisplay:SetPosition(-82.5, -42.5, 0)
-		
-		self.combinedmod = GetModName("Combined Status")
-		if self.combinedmod ~= nil then
-			local pos = self.stomach:GetPosition()
+	if TUNING.DSTU.WOBYHUNGER_CLASSIC then
+		if owner:HasTag("pinetreepioneer") then
 			
-			self.WobyHungerDisplay:SetPosition(pos.x - 70, pos.z, 0)
-		else
-			self.WobyHungerDisplay:SetPosition(-40, -100, 0)
-			self.moisturemeter:SetPosition(40, -100, 0)
-		end
-		
-		self.WobyHungerDisplay:MoveToBack()
-		
-		self.owner:DoTaskInTime(0.1, function(owner)
-			owner.player_classified:ListenForEvent("WobyHungerDirty", function(inst)
-				self.WobyHungerDisplay:UpdateHunger(inst.WobyHunger:value())
+			local WobyHungerDisplay = require "widgets/WobyHungerDisplay"
+			self.WobyHungerDisplay = self:AddChild(WobyHungerDisplay(owner, config))
+			--self.WobyHungerDisplay:SetPosition(-82.5, -42.5, 0)
+			
+			self.combinedmod = GetModName("Combined Status")
+			if self.combinedmod ~= nil then
+				local pos = self.stomach:GetPosition()
+				
+				self.WobyHungerDisplay:SetPosition(pos.x - 70, pos.z, 0)
+			else
+				self.WobyHungerDisplay:SetPosition(-40, -100, 0)
+				self.moisturemeter:SetPosition(40, -100, 0)
+			end
+			
+			self.WobyHungerDisplay:MoveToBack()
+			
+			self.owner:DoTaskInTime(0.1, function(owner)
+				if self.pethungerbadge ~= nil then
+					self.pethungerbadge:Hide()
+				end
+
+				owner.player_classified:ListenForEvent("WobyHungerDirty", function(inst)
+					self.WobyHungerDisplay:UpdateHunger(inst.WobyHunger:value())
+				end)
 			end)
-		end)
+		end
 	end
 end)
 

@@ -133,6 +133,18 @@ env.AddComponentPostInit("combat", function(self)
                 spdamage = {planar = 10}
             end
         end
+		
+		local feather_frock = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+
+		if feather_frock ~= nil and feather_frock:HasTag("um_feather_frock") then
+			local frock_damage_reduction = feather_frock.frock_damage_reduction
+			
+			if damage - frock_damage_reduction <= 0 then
+				damage = 1
+			else
+				damage = damage - frock_damage_reduction
+			end
+		end
 
         local weapon_check = weapon ~= nil and weapon:IsValid() and weapon or nil
 
@@ -185,6 +197,6 @@ env.AddComponentPostInit("combat", function(self)
         end
 
 
-            return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
+		return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
     end
 end)

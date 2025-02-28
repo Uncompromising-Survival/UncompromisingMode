@@ -473,7 +473,6 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
     end
 end
 
-
 local ENV = env
 
 GLOBAL.setfenv(1, GLOBAL)

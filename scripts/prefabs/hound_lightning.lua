@@ -24,12 +24,11 @@ local function Zap(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("lightning")
     projectile.Transform:SetPosition(x, y + 2, z)
-
-    SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-    SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-    SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-    SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
-    SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
+	
+	for i = 1, 5 do
+		SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
+	end
+	
     local ents = TheSim:FindEntities(x, y, z, 3.5, { "_health" }, inst.NoTags)
     local chargeables = TheSim:FindEntities(x, y, z, 3.5, { "_inventoryitem", }, inst.NoTags)
 

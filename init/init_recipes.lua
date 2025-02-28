@@ -1469,7 +1469,7 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_HONEY = "Oh bother!"
     ChangeSortKey("slingshotammo_honey", "slingshotammo_firecrackers", "WEAPONS", true)
     ChangeSortKey("slingshotammo_honey", "slingshotammo_firecrackers", "CHARACTER", true)
-
+	
     AddRecipe2(
         "slingshotammo_rubber",
         { Ingredient("mosquitosack", 1) },
@@ -1572,8 +1572,27 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("slingshotammo_obsidian", "armorobsidian", "CRAFTING_STATION", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "CHARACTER", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
-
-    AddRecipe2(
+	
+	AllRecipes["slingshotammo_stinger"].builder_skill = "wixie_slingshot_ammo_stinger"
+	AllRecipes["slingshotammo_dreadstone"].builder_skill = "wixie_slingshot_ammo_dreadstone"
+	AllRecipes["slingshotammo_scrapfeather"].builder_skill = "wixie_slingshot_ammo_scrapfeather"
+	AllRecipes["slingshotammo_gunpowder"].builder_skill = "wixie_slingshot_ammo_gunpowder"
+	AllRecipes["slingshotammo_lunarplanthusk"].builder_skill = "wixie_allegiance_lunar"
+	AllRecipes["slingshotammo_purebrilliance"].builder_skill = "wixie_allegiance_lunar"
+	AllRecipes["slingshotammo_gelblob"].builder_skill = "wixie_allegiance_shadow"
+	AllRecipes["slingshotammo_horrorfuel"].builder_skill = "wixie_allegiance_shadow"
+	AllRecipes["slingshotammo_container"].builder_skill = "wixie_ammo_bag"
+	AllRecipes["slingshotammo_stinger"].numtogive = 10
+	AllRecipes["slingshotammo_dreadstone"].numtogive = 10
+	AllRecipes["slingshotammo_scrapfeather"].numtogive = 10
+	AllRecipes["slingshotammo_gunpowder"].numtogive = 10
+	AllRecipes["slingshotammo_lunarplanthusk"].numtogive = 10
+	AllRecipes["slingshotammo_purebrilliance"].numtogive = 10
+	AllRecipes["slingshotammo_gelblob"].numtogive = 10
+	AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
+	AllRecipes["slingshotammo_container"].numtogive = 10
+	
+	AddRecipe2(
         "slingshot_jessie",
         { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
         GLOBAL.TECH.SHADOWFORGING_TWO,
