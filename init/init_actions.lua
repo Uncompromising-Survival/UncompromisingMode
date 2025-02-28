@@ -320,3 +320,30 @@ AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
         end
     end
 end)
+
+local ENV = env
+
+GLOBAL.setfenv(1, GLOBAL)
+
+local UM_ACTIVATABLE_ITEM = Action({ mount_valid = true, priority = 1, rmb = true })
+UM_ACTIVATABLE_ITEM.id = "UM_ACTIVATABLE_ITEM"
+UM_ACTIVATABLE_ITEM.str = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM
+ENV.AddAction(UM_ACTIVATABLE_ITEM)
+
+UM_ACTIVATABLE_ITEM.strfn = function(act)
+    return act.invobject ~= nil and act.invobject.actiontype ~= nil and act.invobject.actiontype or STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.GENERIC
+end
+
+UM_ACTIVATABLE_ITEM.fn = function(act)
+    local item = act.invobject
+    if item ~= nil and item.components.um_activatable_item ~= nil then
+        item.components.um_activatable_item:Activate(act.doer)
+        return true
+    end
+end
+
+ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, actions, right)
+    if inst ~= doer then
+        table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
+    end
+end)

@@ -54,7 +54,7 @@ env.AddComponentPostInit("combat", function(self)
             return
         end
 
-		self.inst:PushEvent("onattackother", { target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli })
+        self.inst:PushEvent("onattackother", { target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli, mockattack = true })
 
         if weapon ~= nil and projectile == nil then
             if weapon.components.projectile ~= nil then
@@ -133,6 +133,18 @@ env.AddComponentPostInit("combat", function(self)
                 spdamage = {planar = 10}
             end
         end
+		
+		local feather_frock = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+
+		if feather_frock ~= nil and feather_frock:HasTag("um_feather_frock") then
+			local frock_damage_reduction = feather_frock.frock_damage_reduction
+			
+			if damage - frock_damage_reduction <= 0 then
+				damage = 1
+			else
+				damage = damage - frock_damage_reduction
+			end
+		end
 
         local weapon_check = weapon ~= nil and weapon:IsValid() and weapon or nil
 
@@ -155,7 +167,7 @@ env.AddComponentPostInit("combat", function(self)
         if self.inst ~= nil and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier ~= nil and damage and (self.inst.components.rider ~= nil and not self.inst.components.rider:IsRiding() or self.inst.components.rider == nil) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             damage = damage * self.inst.AmpDamageTakenModifier
-            return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
+            return _GetAttacked(self, attacker, damage, weapon_check, stimuli)
         elseif self.inst ~= nil and self.inst.components.upgrademoduleowner and damage and (self.inst.components.rider ~= nil and not self.inst.components.rider:IsRiding() or self.inst.components.rider == nil) and TUNING.DSTU.WXLESS then
             -- Hardy circuit flat damage reduction
             local small_absorb_table = {0, 2, 4, 5.5, 7, 8, 9, 9.5, 10}
@@ -172,7 +184,7 @@ env.AddComponentPostInit("combat", function(self)
 	        damage = damage - hpmodulereduct
 	        if damage < 5 then damage = 5 end
 	    end
-            return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
+            return _GetAttacked(self, attacker, damage, weapon_check, stimuli, ...)
         elseif self.inst ~= nil and attacker ~= nil and attacker:HasTag("wathom") and TUNING.DSTU.WATHOM_MAX_DAMAGE_CAP then
             if damage > 600 then damage = 600 end
             return _GetAttacked(self, attacker, damage, weapon_check, stimuli, ...)
@@ -185,6 +197,6 @@ env.AddComponentPostInit("combat", function(self)
         end
 
 
-            return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
+		return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
     end
 end)

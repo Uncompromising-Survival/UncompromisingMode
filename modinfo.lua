@@ -6,17 +6,16 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.4.21.16"
+local _version = "1.5"
 description = [[
-󰀔 [ Version: ]] .. _version .. [[ - "Under the Weather Pt.1" ]
+󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- New spring weather, uncluding storms, tornados, and cave flooding.
-- Alpha Goats will appear in goat herds, to protect their own, and have consistant loot.
-- Krampii will more effectively steal things and do their job.
-- A ton of misc. changes, ranging from Wickerbottom's books to hounds.
+- Implemented work in progress skilltrees for Wixie.
+- Added updated functionality and options for Walter (mostly Woby).
+- Reworked the Feather Frock to block flat amounts of damage using feathers.
 
 󰀏 NEXT UPDATE: ?????? ?? ??? ????]]
 
@@ -206,6 +205,9 @@ configuration_options = {
     ------------------------------
     BinaryConfig("wixie_walter", "Wixie & Walter Rework",
         "Enable Uncompromising Mode's Wixie, the Delinquent, who expands on Walter's slingshot, while Walter gets new interactions and mechanics with Woby!",
+        true),
+    BinaryConfig("woby_hunger_classic", "Classic Woby Hunger Meter",
+        "Enables the classic Uncompromising Mode version of Woby's hunger meter.",
         true),
     --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),			
     BinaryConfig("funny rat", "Winky", "Enable Uncompromising Mode's Winky, the Vile Vermin.", true),

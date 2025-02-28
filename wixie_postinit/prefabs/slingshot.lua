@@ -18,6 +18,11 @@ local function ReticuleMouseTargetFn(inst, mousepos)
         local dx = mousepos.x - x
         local dz = mousepos.z - z
         local l = dx * dx + dz * dz
+		
+		local dist = inst:GetDistanceSqToPoint(mousepos.x, 0, mousepos.z)
+		
+		inst.components.reticule.fadealpha = dist / 100
+		
         if l <= 0 then
             return inst.components.reticule.targetpos
         end
@@ -114,7 +119,7 @@ local function LaunchSpit(inst, caster, target, shadow)
                     projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
                 else
                     if ammo == "slingshotammo_moonglass_proj_secondary" then
-                        projectile.components.projectile:SetSpeed(10 + 10 * projectile.powerlevel)
+                        projectile.components.projectile:SetSpeed(20)
                     else
                         projectile.components.projectile:SetSpeed(10 + 10 * projectile.powerlevel)
                     end
@@ -214,9 +219,10 @@ env.AddPrefabPostInit("slingshot", function(inst)
     inst.spelltype = "SLINGSHOT"
 
     inst:AddTag("allow_action_on_impassable")
+    inst:AddTag("wixie_weapon")
 
     inst:AddComponent("reticule")
-    inst.components.reticule.reticuleprefab = "reticuleline2"
+    inst.components.reticule.reticuleprefab = "wixie_reticuleline"
     inst.components.reticule.pingprefab = "reticulelongping"
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.mousetargetfn = ReticuleMouseTargetFn
@@ -264,5 +270,15 @@ env.AddPrefabPostInit("slingshot", function(inst)
                 end
             end)
         end
+    end
+end)
+
+env.AddPrefabPostInit("slingshotammo_container", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    if inst.components.container ~= nil then
+    inst.components.container.restrictedtag = "troublemaker"
     end
 end)

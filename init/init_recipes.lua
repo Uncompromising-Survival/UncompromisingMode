@@ -1330,11 +1330,48 @@ if GetModConfigData("wixie_walter") then
         { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true, nounlock = true },
         { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
     )
-
+	
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_OBSIDIAN = "A playful bit of arson."
     ChangeSortKey("slingshotammo_obsidian", "armorobsidian", "CRAFTING_STATION", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "CHARACTER", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
+	
+	AllRecipes["slingshotammo_stinger"].builder_skill = "wixie_slingshot_ammo_stinger"
+	AllRecipes["slingshotammo_dreadstone"].builder_skill = "wixie_slingshot_ammo_dreadstone"
+	AllRecipes["slingshotammo_scrapfeather"].builder_skill = "wixie_slingshot_ammo_scrapfeather"
+	AllRecipes["slingshotammo_gunpowder"].builder_skill = "wixie_slingshot_ammo_gunpowder"
+	AllRecipes["slingshotammo_lunarplanthusk"].builder_skill = "wixie_allegiance_lunar"
+	AllRecipes["slingshotammo_purebrilliance"].builder_skill = "wixie_allegiance_lunar"
+	AllRecipes["slingshotammo_gelblob"].builder_skill = "wixie_allegiance_shadow"
+	AllRecipes["slingshotammo_horrorfuel"].builder_skill = "wixie_allegiance_shadow"
+	AllRecipes["slingshotammo_container"].builder_skill = "wixie_ammo_bag"
+	AllRecipes["slingshotammo_stinger"].numtogive = 10
+	AllRecipes["slingshotammo_dreadstone"].numtogive = 10
+	AllRecipes["slingshotammo_scrapfeather"].numtogive = 10
+	AllRecipes["slingshotammo_gunpowder"].numtogive = 10
+	AllRecipes["slingshotammo_lunarplanthusk"].numtogive = 10
+	AllRecipes["slingshotammo_purebrilliance"].numtogive = 10
+	AllRecipes["slingshotammo_gelblob"].numtogive = 10
+	AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
+	AllRecipes["slingshotammo_container"].numtogive = 10
+	
+	AddRecipe2(
+        "slingshot_jessie",
+        { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
+        GLOBAL.TECH.SHADOWFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_shadow", nounlock = true, station_tag = "shadow_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
+
+    AddRecipe2(
+        "slingshot_claire",
+        { Ingredient("purebrilliance", 2), Ingredient("lunarplant_husk", 2) },
+        GLOBAL.TECH.LUNARFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_lunar", nounlock = true, station_tag = "lunar_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
 
     AddRecipe2(
         "bagofmarbles",

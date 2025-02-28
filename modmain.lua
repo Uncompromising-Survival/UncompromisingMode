@@ -276,6 +276,22 @@ if GetModConfigData("wixie_walter") then
             GLOBAL.CLOTHING[k].symbol_overrides_by_character.wixie = v.symbol_overrides_by_character.walter
         end
     end
+
+    local skilltree_defs = require("prefabs/skilltree_defs")
+    local BuildSkillsData = require("prefabs/skilltree_wixie")
+    if BuildSkillsData then
+        local data = BuildSkillsData(skilltree_defs.FN)
+
+        skilltree_defs.CreateSkillTreeFor("wixie", data.SKILLS)
+        skilltree_defs.SKILLTREE_ORDERS["wixie"] = data.ORDERS
+
+        RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+        for k, v in pairs(data.SKILLS) do
+            if v.icon then
+                RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+            end
+        end
+    end
 end
 
 --[[

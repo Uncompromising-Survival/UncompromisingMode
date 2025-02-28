@@ -10,11 +10,11 @@ local function OnFinished(inst)
     inst:ListenForEvent("animover", inst.Remove)
 end
 
- local function OnEquip(inst, owner)        
+local function OnEquip(inst, owner)        
 	owner.AnimState:OverrideSymbol("swap_object", "swap_iceboomerang", "swap_iceboomerang")        
 	owner.AnimState:Show("ARM_carry")        
 	owner.AnimState:Hide("ARM_normal")    
- end    
+end    
  
  
  
@@ -72,12 +72,17 @@ local function OnHit(inst, owner, target)
 			end
 			
             impactfx:FacePoint(inst.Transform:GetWorldPosition())
+			local coldval = 2
+			if target:HasTag("um_magmatic_defense") then
+				coldval = coldval*5
+			end
+			
 			if target.components.freezable ~= nil then
 				if target.components.freezable ~= nil and not target:HasTag("player") then
-					target.components.freezable:AddColdness(2)
+					target.components.freezable:AddColdness(coldval)
 					target.components.freezable:SpawnShatterFX()
 				elseif target.components.freezable ~= nil and target:HasTag("player") then
-					target.components.freezable:AddColdness(4)
+					target.components.freezable:AddColdness(2*coldval)
 					target.components.freezable:SpawnShatterFX()
 				end
 			end

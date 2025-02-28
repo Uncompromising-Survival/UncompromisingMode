@@ -314,6 +314,10 @@ env.AddStategraphPostInit("wilson", function(inst)
             function(inst, action)
                 return "dolongaction"
             end),
+        ActionHandler(ACTIONS.UM_ACTIVATABLE_ITEM,
+            function(inst, action)
+                return "doshortaction"
+            end),
         ActionHandler(ACTIONS.CHARGE_POWERCELL,
             function(inst, action)
                 return action.invobject ~= nil and action.invobject:HasTag("powercell") and "doshortaction"

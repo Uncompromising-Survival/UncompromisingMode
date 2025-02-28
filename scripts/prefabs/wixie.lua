@@ -101,19 +101,23 @@ local function updateclaustrophobia(inst)
 			if inst:CanGainClaustrophobia() and not inst.wixiepanic and ents ~= nil and #ents >= 1 or inst.claustrophobiarate > 0 or inst.replica.rider ~= nil and inst.replica.rider:IsRiding() then
 				if ents ~= nil and #ents >= 1 then
 					for i, v in ipairs(ents) do
+						local distsq = v:IsValid() and inst:GetDistanceSqToInst(v) or 1
+						local distance_rate = 1.5 - (distsq / 33)
+						print("distsq"..distsq)
+						print("distance_rate"..distance_rate)
 						if inst:GetClaustrophobia() < 1 then
 							if v:HasTag("smallcreature") and v:HasTag("insect") or v:HasTag("rabbit") or v:HasTag("bird") or v:HasTag("companion") then
-								inst.claustrophobiarate = inst.claustrophobiarate + 0.0005
+								inst.claustrophobiarate = inst.claustrophobiarate + (0.0005 * distance_rate)
 							elseif v:HasTag("smallcreature") then
-								inst.claustrophobiarate = inst.claustrophobiarate + 0.0008
+								inst.claustrophobiarate = inst.claustrophobiarate + (0.0008 * distance_rate)
 							elseif v:HasTag("epic") then
 								if v.prefab == "klaus" then
-									inst.claustrophobiarate = inst.claustrophobiarate + 0.008
+									inst.claustrophobiarate = inst.claustrophobiarate + (0.008 * distance_rate)
 								else
-									inst.claustrophobiarate = inst.claustrophobiarate + 0.006
+									inst.claustrophobiarate = inst.claustrophobiarate + (0.006 * distance_rate)
 								end
 							else
-								inst.claustrophobiarate = inst.claustrophobiarate + 0.0025
+								inst.claustrophobiarate = inst.claustrophobiarate + (0.0025 * distance_rate)
 							end
 						end
 					end
@@ -271,7 +275,71 @@ local function OnNewSpawn(inst)
 	TheWorld:PushEvent("ms_newplayerspawned", inst)
 end
 
+local function RightClickPicker(inst, target, pos)
+
+    local actions = {}
+    local notexamine = false
+	if target ~= nil then
+		actions = inst.components.playeractionpicker:GetSceneActions(target, true)
+		
+        for i, v in pairs(actions) do
+			if target:IsActionValid(v.action, true) or v.action.rmb or v.action ~= ACTIONS.WALKTO and v.action ~= ACTIONS.LOOKAT and v.action ~= ACTIONS.PICKUP and v.action ~= ACTIONS.DIG and v.action ~= ACTIONS.HARVEST and v.action ~= ACTIONS.PICK and v.action ~= ACTIONS.FEED then
+				notexamine = true
+			end
+		end
+	end
+
+    local equipactions = nil
+    local validtargetaction = nil
+    local useitem = inst.replica.inventory:GetActiveItem() or nil
+    local equipitem = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+	
+	if equipitem ~= nil and equipitem:IsValid() then
+		if target ~= nil then
+			equipactions = inst.components.playeractionpicker:GetEquippedItemActions(target, equipitem, true)
+			for i, v in pairs(equipactions) do
+				validtargetaction = v
+			end
+		end
+	end
+
+	return inst:HasTag("wixie_tauntlevel_1") and
+			target ~= nil and
+			target ~= inst and
+			target:HasTag("_combat") and not
+			target:HasTag("shadow") and not
+			target:HasTag("shadowcreature") and not
+			target:HasTag("shadowminion") and not
+			target:HasTag("heavy") and not
+			target:HasTag("heavyobject") and not
+			target:HasTag("player") and
+			validtargetaction == nil and not
+			notexamine and
+			useitem == nil and
+			inst.components.playeractionpicker:SortActionList({ ACTIONS.WIXIE_TAUNT }, target, nil)
+		or nil, true
+end
+local function OnSetOwner(inst)
+    if inst.components.playeractionpicker ~= nil then
+		inst.components.playeractionpicker.rightclickoverride = RightClickPicker
+    end
+end
+
+local function OnBuildAmmo(inst, data)
+	if data.recipe.product ~= nil and data.item ~= nil then
+		if inst:HasTag("wixie_ammocraft_3") and data.item:HasTag("wixieammo_special") or inst:HasTag("wixie_ammocraft_2") and data.item:HasTag("wixieammo_basic") then
+			for i = 1, 5 do
+				print("give me the special ammo")
+				local addt_prod = SpawnPrefab(data.recipe.product)
+				inst.components.inventory:GiveItem(addt_prod, nil, inst:GetPosition())
+			end
+		end
+	end
+end
+
 local function common_postinit(inst)
+    inst:ListenForEvent("setowner", OnSetOwner)
+	
     inst.avatar_tex   = "avatar_wixie.tex"
     inst.avatar_atlas = "images/avatars/avatar_wixie.xml"
 
@@ -318,6 +386,8 @@ local function master_postinit(inst)
 	--inst:ListenForEvent("killed", OnKilledOther)
 	
 	inst.soundsname = "wixie"
+	
+	--inst:ListenForEvent("builditem", OnBuildAmmo)
 	
 	inst.OnNewSpawn = OnNewSpawn
 end

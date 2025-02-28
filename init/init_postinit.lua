@@ -252,11 +252,11 @@ if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
         "extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
         "slingshot",                   -- stuff for new slingshot aiming and wixie exclusivity
+		"slingshotammo",                   -- no skill
         "walter",                      -- all of walters things, including woby action
         "wobysmall",
         "wobybig",
         "wormhole",      -- wixie loses more sanity from wormholes
-        "slingshotammo", -- removes hunger value from slingshot ammo, preventing slurtle feeding strats
         "coconut",       -- shoot a coconut
 		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }

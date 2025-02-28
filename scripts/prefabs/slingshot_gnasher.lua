@@ -86,6 +86,11 @@ local function ReticuleMouseTargetFn(inst, mousepos)
         local dx = mousepos.x - x
         local dz = mousepos.z - z
         local l = dx * dx + dz * dz
+		
+		local dist = inst:GetDistanceSqToPoint(mousepos.x, 0, mousepos.z)
+		
+		inst.components.reticule.fadealpha = dist / 100
+		
         if l <= 0 then
             return inst.components.reticule.targetpos
         end
@@ -139,7 +144,7 @@ local function LaunchSpit(inst, caster, target, shadow)
 				projectile.components.complexprojectile:SetLaunchOffset(Vector3(1.5, 1.5, 0))
 			else
 				if ammo == "slingshotammo_moonglass_proj_secondary" then
-					projectile.components.projectile:SetSpeed(10 + 10 * projectile.powerlevel)
+					projectile.components.projectile:SetSpeed(20)
 				else
 					projectile.components.projectile:SetSpeed(10 + 10 * projectile.powerlevel)
 				end
@@ -249,6 +254,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("rangedweapon")
+    inst:AddTag("wixie_weapon")
     inst:AddTag("slingshot")
     inst:AddTag("gnasher")
     inst:AddTag("allow_action_on_impassable")
@@ -263,7 +269,7 @@ local function fn()
     inst.spelltype = "SLINGSHOT"
 
     inst:AddComponent("reticule")
-    inst.components.reticule.reticuleprefab = "reticuleline2"
+    inst.components.reticule.reticuleprefab = "wixie_reticuleline"
     inst.components.reticule.pingprefab = "reticulelongping"
     --inst.components.reticule.reticuleprefab = "reticuleline2"
     --inst.components.reticule.pingprefab = "reticulelineping"

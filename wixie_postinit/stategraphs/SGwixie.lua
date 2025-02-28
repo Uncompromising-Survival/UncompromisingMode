@@ -1,7 +1,26 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+require("wixie_shove")
+
 env.AddStategraphPostInit("wilson", function(inst)
+	local function DoTalkSound(inst)
+		if inst.talksoundoverride ~= nil then
+			inst.SoundEmitter:PlaySound(inst.talksoundoverride, "talk")
+			return true
+		elseif not inst:HasTag("mime") then
+			inst.SoundEmitter:PlaySound((inst.talker_path_override or "dontstarve/characters/")..(inst.soundsname or inst.prefab).."/talk_LP", "talk")
+			return true
+		end
+	end
+
+	local function StopTalkSound(inst, instant)
+		if not instant and inst.endtalksound ~= nil and inst.SoundEmitter:PlayingSound("talk") then
+			inst.SoundEmitter:PlaySound(inst.endtalksound)
+		end
+		inst.SoundEmitter:KillSound("talk")
+	end
+
 	local function ClearStatusAilments(inst)
 		if inst.components.freezable ~= nil and inst.components.freezable:IsFrozen() then
 			inst.components.freezable:Unfreeze()
@@ -26,7 +45,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 		function(inst, action, ...)
 			if inst:HasTag("troublemaker") and not inst.components.rider:IsRiding() then
 				local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
-				if weapon ~= nil and weapon:HasTag("slingshot") then
+				if weapon ~= nil and weapon:HasTag("wixie_weapon") then
 					if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or inst.components.health:IsDead()) then
 						inst.sg.mem.localchainattack = not action.forced or nil
 
@@ -55,7 +74,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 		function(inst, action, ...)
 			local rec = GetValidRecipe(action.recipe)
 
-			return (inst:HasTag("troublemaker") and rec ~= nil and rec.builder_tag == "pebblemaker" and "domediumaction")
+			return (inst:HasTag("troublemaker") and inst:HasTag("wixie_ammocraft_1") and rec ~= nil and rec.builder_tag == "pebblemaker" and "domediumaction")
 				--or (inst:HasTag("pinetreepioneer") and rec ~= nil and rec.tab.str == "SURVIVAL" and "domediumaction")
 				or _OldBuild(inst, action, ...)
 		end
@@ -77,6 +96,19 @@ env.AddStategraphPostInit("wilson", function(inst)
 				else
 					return
 				end
+			end
+
+			if action.invobject ~= nil and action.invobject:HasTag("slingshot_claire") then
+				print("go to channel")
+				if inst.components.channelcaster:IsChanneling() then
+					--inst.components.channelcaster:StartChanneling(action.invobject)
+					--return "throw_keep_equip"
+					return "wixie_slings_a_rock"
+				else
+					--inst.components.channelcaster:StopChanneling(action.invobject)
+					return "start_channelcast"
+				end
+				
 			end
 
 			if action.invobject ~= nil and action.invobject:HasTag("wixiegun") then
@@ -130,10 +162,118 @@ env.AddStategraphPostInit("wilson", function(inst)
 		ActionHandler(ACTIONS.WOBY_OPEN,
 			function(inst, action)
 				return "doshortaction"
+			end),
+		ActionHandler(ACTIONS.WIXIE_TAUNT,
+			function(inst, action)
+				if action.target ~= nil then
+					inst.wixie_taunt_target = action.target
+				end
+				
+				inst.wixie_taunt_count = 0
+				
+				return "wixie_taunt"
 			end)
 	}
 
 	local states = {
+
+		State{
+			name = "wixie_taunt",
+			tags = { "talking", "acting" },
+
+			onenter = function(inst, noanim)
+				inst.sg:SetTimeout(2)
+				
+				inst.wixie_taunt_count = inst.wixie_taunt_count + 1
+				
+				if inst.wixie_taunt_count == 1 then
+					inst.components.talker:Say(GetString(inst, "ANNOUNCE_WIXIE_TAUNT_1"))
+				elseif inst.wixie_taunt_count == 2 then
+					inst.components.talker:Say(GetString(inst, "ANNOUNCE_WIXIE_TAUNT_2"))
+				elseif inst.wixie_taunt_count == 3 then
+					inst.components.talker:Say(GetString(inst, "ANNOUNCE_WIXIE_TAUNT_3"))
+				end
+				
+				local function gettalk()
+					if math.random() < 0.5 then
+						return "acting_1"
+					else
+						return "acting_2"
+					end
+				end
+
+				if not noanim then
+					inst.AnimState:PlayAnimation(gettalk(), false)
+				end
+				
+				DoTalkSound(inst)
+			end,
+
+			ontimeout = function(inst)
+				if inst.wixie_taunt_target ~= nil then
+					if inst.wixie_taunt_target.components.combat ~= nil then
+						inst.wixie_taunt_target.components.combat:SuggestTarget(inst)
+					end
+
+					if inst.wixie_taunt_count == 1 then
+						inst.wixie_taunt_target:AddDebuff("wixietaunt_debuff", "wixietaunt_debuff", {inflicter = inst})
+					elseif inst.wixie_taunt_count == 2 then
+                        inst.wixie_taunt_target:PushEvent("wixie_taunt_lvl2", {inflicter = inst})
+					elseif inst.wixie_taunt_count == 3 then
+                        inst.wixie_taunt_target:PushEvent("wixie_taunt_lvl3", {inflicter = inst})
+					end
+				end
+				
+				local wixie_taunt_level = inst:HasTag("wixie_tauntlevel_3") and 3 or
+											inst:HasTag("wixie_tauntlevel_2") and 2 or
+											inst:HasTag("wixie_tauntlevel_1") and 1
+											
+				
+				if inst.wixie_taunt_count >= wixie_taunt_level then
+					inst.sg:GoToState("idle")
+				else
+					inst.sg:GoToState("wixie_taunt")
+				end
+			end,
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					if inst.sg.statemem.talkdone then
+						local function getidle()
+							if math.random() < 0.5 then
+								return "acting_idle1"
+							else
+								return "acting_idle2"
+							end
+						end
+						
+						inst.AnimState:PlayAnimation(getidle())
+						StopTalkSound(inst)
+					else
+						local function gettalk()
+							if math.random() < 0.5 then
+								return "acting_1"
+							else
+								return "acting_2"
+							end
+						end
+						
+						inst.AnimState:PlayAnimation(gettalk())
+						inst.sg.statemem.talkdone = true
+					end
+				end),
+			},
+
+			onexit = function(inst)
+				StopTalkSound(inst)
+				inst.sg.statemem.talkdone = false
+				
+				if inst.wixie_taunt_count >= 3 then
+					--inst.wixie_taunt_target = nil
+				end
+			end,
+		},
 
 		State {
 			name = "shove",
@@ -186,195 +326,8 @@ env.AddStategraphPostInit("wilson", function(inst)
 							if (target.sg == nil or target.sg ~= nil and not target.sg:HasStateTag("notarget")) and target.components.combat ~= nil and target.components.freezable == nil or (target.sg == nil or target.sg ~= nil and not target.sg:HasStateTag("notarget")) and not (target.components.freezable ~= nil and target.components.freezable:IsFrozen()) then
 								target.components.combat:GetAttacked(inst, 10)
 							end
-
-							if target ~= nil and
-								inst ~= nil and not
-								target:HasTag("wixieshoved") and not
-								target:HasTag("shadow") and not
-								target:HasTag("shadowcreature") and not
-								target:HasTag("shadowminion") and not
-								target:HasTag("stalkerminion") and not
-								target:HasTag("shadowchesspiece") and not
-								target:HasTag("bowlingpin") and
-								target.prefab ~= "ancient_trepidation" and
-								target.sg ~= nil and
-								not target.sg:HasStateTag("noshove") and
-								target.components and
-								target.components.locomotor then
-								if target:HasTag("toadstool") then
-									inst.components.talker:Say(GetString(inst, "SHOVE_TARGET_TOO_FAT"))
-									return
-								end
-
-								SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(target.Transform:GetWorldPosition())
-
-								target:AddTag("wixieshoved")
-								target:PushEvent("wixieshoved")
-
-								if target:HasDebuff("wixiecurse_debuff") then
-									target:PushEvent("wixiebite")
-								end
-
-
-								local x, y, z = inst.Transform:GetWorldPosition()
-
-								for i = 1, 50 do
-									inst:DoTaskInTime((i - 1) / 50, function(inst)
-										if not target:HasTag("eyeplant") then
-											local tx, ty, tz = target.Transform:GetWorldPosition()
-											if tx ~= nil then
-												local EXCLUDE_TAGS = { "player", "playerghost", "ghost", "shadow",
-													"shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack",
-													"invisible", "wixieshoved" }
-
-												if i > 1 then
-													local ents = TheSim:FindEntities(tx, ty, tz,
-														1.5 + target:GetPhysicsRadius(0), { "_combat" }, EXCLUDE_TAGS)
-
-													for iv, v in ipairs(ents) do
-														if v ~= target and v.components.locomotor then
-															if not target:HasTag("epic") and target:HasDebuff("wixiecurse_stinkdebuff") and not v:HasDebuff("wixiecurse_stinkdebuff") then
-																if v.components.combat then
-																	v.components.combat:DropTarget()
-																end
-
-																v:AddDebuff("wixiecurse_debuff", "wixiecurse_debuff",
-																	{ powerlevel = 1 })
-															end
-
-															v:PushEvent("wixieshoved")
-															local giantdamagereduction = target:HasTag("epic") and 2 or
-																target:HasTag("smallcreature") and 0.5 or 1
-
-															if v.components.combat ~= nil and v.components.freezable == nil or not (v.components.freezable ~= nil and v.components.freezable:IsFrozen()) then
-																v.components.combat:GetAttacked(nil,
-																	10 * giantdamagereduction)
-																v.components.combat:SuggestTarget(inst)
-															end
-
-															SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v
-																.Transform:GetWorldPosition())
-
-															v:AddTag("wixieshoved")
-															--[[
-															if v.components.freezable == nil or not (v.components.freezable ~= nil and v.components.freezable:IsFrozen()) then
-																inst.components.combat:DoAttack(v, nil, nil)
-															end]]
-															for iv = 1, 50 do
-																inst:DoTaskInTime((iv - 1) / 50, function(inst)
-																	if v ~= nil and v.Transform:GetWorldPosition() and target ~= nil and tx ~= nil then
-																		if v == 1 then
-																			v.components.locomotor
-																				:SetExternalSpeedMultiplier(target,
-																					"wixieshoved", .01)
-																			--v.components.locomotor:RemoveExternalSpeedMultiplier(v, "wixieshoved")
-																		end
-
-																		local px, py, pz = v.Transform:GetWorldPosition()
-																		local rad_collision = -math.rad(v
-																			:GetAngleToPoint(tx, ty, tz))
-																		local velx_collision = math.cos(rad_collision) --* 4.5
-																		local velz_collision = -math.sin(rad_collision) --* 4.5
-
-
-																		local targetreduction = target:HasTag("epic") and
-																			1 or target:HasTag("smallcreature") and 3 or 2
-																		local vreduction = v:HasTag("epic") and 3 or
-																			v:HasTag("smallcreature") and 1 or 2
-																		local finalreduction = targetreduction +
-																			vreduction
-																		local vdebuffmultiplier = v.components.freezable ~=
-																			nil and v.components.freezable:IsFrozen() and
-																			1.25 or 1
-
-																		local basepower = 10 / i or 10
-																		if px ~= nil then
-																			local vx, vy, vz =
-																				px +
-																				(((5 / (iv + 1)) * velx_collision) / finalreduction) *
-																				vdebuffmultiplier, py,
-																				pz +
-																				(((5 / (iv + 1)) * velz_collision) / finalreduction) *
-																				vdebuffmultiplier
-
-																			local ground_collision = TheWorld.Map:IsPassableAtPoint(vx, vy, vz)
-																			local boat_collision = TheWorld.Map:GetPlatformAtPoint(vx, vz)
-																			local ocean_collision = TheWorld.Map:IsOceanAtPoint(vx, vy, vz)
-
-																			if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
-																				if v ~= nil and v.components.locomotor ~= nil and vx ~= nil and (ground_collision or boat_collision or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
-																					v.Transform:SetPosition(vx, vy, vz)
-																				end
-																			end
-																		end
-																	end
-
-																	if iv >= 50 then
-																		v:RemoveTag("wixieshoved")
-																		v.components.locomotor:RemoveExternalSpeedMultiplier(v, "wixieshoved")
-																	end
-																end)
-															end
-														end
-													end
-												else
-													target.components.locomotor:SetExternalSpeedMultiplier(target,
-														"wixieshoved", .01)
-												end
-
-												local scale = 0.5 - (i / 40)
-												if scale > 0 then
-													if not target:HasTag("flying") and target.sg ~= nil and not target.sg:HasStateTag("flight") and not target:HasTag("aquatic") then
-														local dirtpuff = SpawnPrefab("dirt_puff")
-														dirtpuff.Transform:SetPosition(target.Transform:GetWorldPosition())
-														dirtpuff.Transform:SetScale(scale, scale, scale)
-													end
-												end
-
-												local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
-												local velx = math.cos(rad) --* 4.5
-												local velz = -math.sin(rad) --* 4.5
-
-												local giantreduction = target:HasTag("epic") and 1.5 or
-													target:HasTag("smallcreature") and 0.8 or 1
-												local debuffmultiplier = target.components.freezable ~= nil and
-													target.components.freezable:IsFrozen() and
-													target:HasDebuff("wixiecurse_debuff") and 1.75 or
-													target:HasDebuff("wixiecurse_debuff") and 1.5 or
-													target.components.freezable ~= nil and
-													target.components.freezable:IsFrozen() and 1.25 or
-													1
-
-												local dx, dy, dz =
-													tx + (((3 / (i + 2)) * velx) / giantreduction) * debuffmultiplier, ty,
-													tz + (((3 / (i + 2)) * velz) / giantreduction) * debuffmultiplier
-
-												local ground_target = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-												local boat_target = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-												local ocean_target = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-
-												if not (target.sg ~= nil and (target.sg:HasStateTag("swimming") or target.sg:HasStateTag("invisible"))) then
-													if target ~= nil and target.components.locomotor ~= nil and dx ~= nil and (ground_target or boat_target or ocean_target and target.components.locomotor:CanPathfindOnWater() or target.components.tiletracker ~= nil and not target:HasTag("whale")) then
-														--[[if ocean_target and target.components.amphibiouscreature and not target.components.amphibiouscreature.in_water then
-																target.components.amphibiouscreature:OnEnterOcean()
-															end]]
-														target.Transform:SetPosition(dx, dy, dz)
-													end
-												end
-											end
-										end
-
-										if i >= 50 then
-											target:RemoveTag("wixieshoved")
-
-											if target.components.locomotor ~= nil then
-												target.components.locomotor:RemoveExternalSpeedMultiplier(target,
-													"wixieshoved")
-											end
-										end
-									end)
-								end
-							end
+							
+							WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
 						elseif weapon ~= nil and weapon:HasTag("extinguisher") and target.components.burnable ~= nil and target.components.burnable:IsBurning() then
 							inst:PerformBufferedAction()
 						end
@@ -511,12 +464,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warm_loop_1")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 1
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						else
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)
@@ -549,12 +497,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warmer_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 2
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_hot_loop")
 							fx.entity:SetParent(inst.entity)
@@ -582,7 +525,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 							fx.entity:SetParent(inst.entity)
 							fx.Transform:SetPosition(0, 2.35, 0)
 
-							inst.slingshot_power = 1.5
+							inst.slingshot_power = 1.25
 							inst.slingshot_amount = 3
 							inst.SoundEmitter:PlaySound("wixie/characters/wixie/slingshot_med")
 						end
@@ -594,12 +537,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_warmer_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 2
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_2")
 							fx.entity:SetParent(inst.entity)
@@ -623,12 +561,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							--[[local fx = SpawnPrefab("dr_hot_loop")
-						fx.entity:SetParent(inst.entity)
-						fx.Transform:SetPosition(0, 2.35, 0)
-
-						inst.slingshot_power = 3
-						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/stretch")]]
+							inst.slingshot_power = 1.25
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)
@@ -691,10 +624,6 @@ env.AddStategraphPostInit("wilson", function(inst)
 					return
 				end
 
-				if inst.wixiepointx ~= nil then
-					inst:ForceFacePoint(inst.wixiepointx, inst.wixiepointy, inst.wixiepointz)
-				end
-
 				inst.sg.statemem.abouttoattack = true
 
 				--inst.AnimState:PlayAnimation("atk_leap_pre")
@@ -723,12 +652,16 @@ env.AddStategraphPostInit("wilson", function(inst)
 			end,
 
 			onupdate = function(inst, dt)
+				if inst.wixiepointx ~= nil then
+					inst:ForceFacePoint(inst.wixiepointx, inst.wixiepointy, inst.wixiepointz)
+				end
+				
 				inst.framecount = inst.framecount + (FRAMES * 2)
 				if inst.framecount < 1 then
 					inst.AnimState:SetPercent("slingshot", inst.framecount)
 				else
 					local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-					if equip ~= nil and equip.components.weapon ~= nil and equip.components.weapon.projectile ~= nil then
+					if equip ~= nil and equip.components.weapon ~= nil and (equip.components.weapon.projectile ~= nil or equip:HasTag("matilda") and (equip.loaded_projectile1 ~= nil or equip.loaded_projectile2 ~= nil or equip.loaded_projectile3 ~= nil)) then
 						inst.wixiequickshot = true
 						inst.sg:GoToState("slingshot_charge")
 					else
@@ -749,7 +682,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 				TimeEvent(3 * FRAMES, function(inst)
 					local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-					if equip ~= nil and equip.components.weapon ~= nil and equip.components.weapon.projectile ~= nil then
+					if equip ~= nil and equip.components.weapon ~= nil and (equip.components.weapon.projectile ~= nil or equip:HasTag("matilda") and (equip.loaded_projectile1 ~= nil or equip.loaded_projectile2 ~= nil or equip.loaded_projectile3 ~= nil)) then
 						inst.sg.statemem.abouttoattack = false
 
 						if inst.slingshot_power == nil then
@@ -782,7 +715,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 						
 						if TUNING.DSTU.DATES.APRIL_FOOLS then
 							inst.SoundEmitter:PlaySound("wixie/characters/wixie/glock")
-						else
+						elseif not equip:HasTag("matilda") or equip.loaded_projectile1 ~= nil then
 							inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/shoot")
 						end
 						
@@ -795,7 +728,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 							end
 						end
 						
-					else -- out of ammo
+					elseif not (equip ~= nil and equip:HasTag("matilda")) then -- out of ammo
 						inst:ClearBufferedAction()
 						inst.components.talker:Say(GetString(inst, "ANNOUNCE_SLINGHSOT_OUT_OF_AMMO"))
 						inst.SoundEmitter:PlaySound("dontstarve/characters/walter/slingshot/no_ammo")
@@ -1131,19 +1064,47 @@ env.AddStategraphPostInit("wilson", function(inst)
 		},
 
 		State {
-			name = "wixieshootsagun",
-			tags = { "doing", "canrotate", "busy" },
+			name = "wixie_slings_a_rock",
+			tags = { "doing", "canrotate", "busy", "keepchannelcasting" },
 
 			onenter = function(inst)
 				inst.components.locomotor:Stop()
-				inst.AnimState:PlayAnimation("punch")
-
-				inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_weapon")
+            inst.AnimState:PlayAnimation("atk_prop_pre")
+            inst.AnimState:PushAnimation("atk_prop", false)
 			end,
 
 			timeline =
 			{
-				TimeEvent(6 * FRAMES, function(inst)
+				TimeEvent(7 * FRAMES, function(inst)
+					inst:PerformBufferedAction()
+				end),
+				TimeEvent(10 * FRAMES, function(inst)
+					inst.sg:RemoveStateTag("busy")
+				end),
+			},
+
+			events =
+			{
+				EventHandler("animover", function(inst)
+					if inst.AnimState:AnimDone() then
+						inst.sg:GoToState("idle")
+					end
+				end),
+			},
+		},
+
+		State {
+			name = "wixieshootsagun",
+			tags = { "doing", "canrotate", "busy", "keepchannelcasting" },
+
+			onenter = function(inst)
+				inst.components.locomotor:Stop()
+				inst.AnimState:PlayAnimation("hand_shoot")
+			end,
+
+			timeline =
+			{
+				TimeEvent(17 * FRAMES, function(inst)
 					inst:PerformBufferedAction()
 					inst.sg:RemoveStateTag("busy")
 				end),

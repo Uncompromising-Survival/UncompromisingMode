@@ -8,7 +8,7 @@ env.AddGlobalClassPostConstruct("bufferedaction", "BufferedAction", function(sel
         local _OldGetDynamicActionPoint = self.GetDynamicActionPoint
 
         self.GetDynamicActionPoint = function(self, ...)
-            if self.doer ~= nil and self.doer:HasTag("troublemaker") and self.invobject ~= nil and (self.invobject:HasTag("slingshot") or self.invobject:HasTag("wixiegun")) then
+            if self.doer ~= nil and self.doer:HasTag("troublemaker") and self.invobject ~= nil and self.invobject:HasTag("wixie_weapon") then
                 local wixieposition = TheInput:GetWorldPosition()
                 if wixieposition ~= nil then
                     SendModRPCToServer(GetModRPC("WixieTheDelinquent", "GetTheInput"), wixieposition.x, wixieposition.y, wixieposition.z)
@@ -21,7 +21,7 @@ env.AddGlobalClassPostConstruct("bufferedaction", "BufferedAction", function(sel
         local _OldGetActionPoint = self.GetActionPoint
 
         self.GetActionPoint = function(self, ...)
-            if self.doer ~= nil and self.doer:HasTag("troublemaker") and self.invobject ~= nil and (self.invobject:HasTag("slingshot") or self.invobject:HasTag("wixiegun")) then
+            if self.doer ~= nil and self.doer:HasTag("troublemaker") and self.invobject ~= nil and self.invobject:HasTag("wixie_weapon") then
                 local wixieposition = TheInput:GetWorldPosition()
                 if wixieposition ~= nil then
                     SendModRPCToServer(GetModRPC("WixieTheDelinquent", "GetTheInput"), wixieposition.x, wixieposition.y, wixieposition.z)
