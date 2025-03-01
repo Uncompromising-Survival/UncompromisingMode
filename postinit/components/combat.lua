@@ -137,7 +137,6 @@ env.AddComponentPostInit("combat", function(self)
 		local feather_frock = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
 
 		if feather_frock ~= nil and feather_frock:HasTag("um_feather_frock") then
-			local frock_damage_reduction = feather_frock.frock_damage_reduction
 			
 			if damage - frock_damage_reduction <= 0 then
 				damage = 1

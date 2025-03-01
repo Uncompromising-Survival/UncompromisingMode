@@ -301,13 +301,13 @@ local function onstopuse()
 end
 
 local function OnAmmoLoaded(inst, data)
-	local feather = inst.components.inventory:GetItemInSlot(1)
+	local feather = inst.components.container:GetItemInSlot(1)
 	
 	if feather ~= nil then
 		for i, v in ipairs(feather_defs) do
-			if feather.name == feather.prefab then
+			if v.name == feather.prefab then
 				inst.feather = feather
-				inst.frock_damage_reduction = feather.damage_reduction
+				inst.frock_damage_reduction = v.damage_reduction
 				
 				return
 			end
@@ -318,13 +318,13 @@ local function OnAmmoLoaded(inst, data)
 end
 
 local function OnAmmoUnloaded(inst, data)
-	local feather = inst.components.inventory:GetItemInSlot(1)
+	local feather = inst.components.container:GetItemInSlot(1)
 	
 	if feather ~= nil then
 		for i, v in ipairs(feather_defs) do
-			if feather.name == feather.prefab then
+			if v.name == feather.prefab then
 				inst.feather = feather
-				inst.frock_damage_reduction = feather.damage_reduction
+				inst.frock_damage_reduction = v.damage_reduction
 				
 				return
 			end
@@ -352,6 +352,7 @@ local function frockfn()
 	--inst:AddTag("backpack")
 	inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
+    inst:AddTag("um_feather_frock")
 	--inst.foleysound = "dontstarve/movement/foley/cactus_armor"
 
 	MakeInventoryFloatable(inst)
