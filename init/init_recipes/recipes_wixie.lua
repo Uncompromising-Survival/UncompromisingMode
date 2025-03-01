@@ -134,7 +134,6 @@ AllRecipes["slingshotammo_lunarplanthusk"].numtogive = 10
 AllRecipes["slingshotammo_purebrilliance"].numtogive = 10
 AllRecipes["slingshotammo_gelblob"].numtogive = 10
 AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
-AllRecipes["slingshotammo_container"].numtogive = 10
 
 AddRecipe2("slingshot_jessie", { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) }, TECH.SHADOWFORGING_TWO, { builder_tag = "skill_wixie_allegiance_shadow", nounlock = true, station_tag = "shadow_forge" }, { "CRAFTING_STATION", "CHARACTER", "WEAPONS" })
 
