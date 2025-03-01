@@ -212,3 +212,10 @@ env.AddPrefabPostInit("beeguard", function(inst)
 		inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
 	end
 end)
+
+env.AddPrefabPostInit("bandage_butterflywings", function(inst)	
+    if inst.components.healer ~= nil then
+		local old_health = inst.components.healer.health
+		inst.components.healer:SetHealthAmount(old_health / 2.4)
+	end
+end)

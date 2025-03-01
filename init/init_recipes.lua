@@ -1394,6 +1394,8 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
 
+	AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1) }
+
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
     AddPrefabPostInit("forest", function(inst)
