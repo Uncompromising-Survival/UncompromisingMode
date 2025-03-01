@@ -20,7 +20,7 @@ local function AddFx(inst, followsymbol, followoffset, data)
 		for i, v in ipairs(inst.stingercounter) do
 			v:DoTaskInTime(i / 10, function()
 				if inst.initialtarget:IsValid() and inst.initialtarget.components.health ~= nil then
-					inst.initialtarget.components.health:DoDelta(-5, nil, inst)
+					inst.initialtarget.components.health:DoDelta(-2, nil, inst)
 				end
 				
 				v.SoundEmitter:PlaySound("dontstarve/bee/bee_attack")

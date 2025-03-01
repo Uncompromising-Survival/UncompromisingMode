@@ -1353,7 +1353,6 @@ if GetModConfigData("wixie_walter") then
 	AllRecipes["slingshotammo_purebrilliance"].numtogive = 10
 	AllRecipes["slingshotammo_gelblob"].numtogive = 10
 	AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
-	AllRecipes["slingshotammo_container"].numtogive = 10
 	
 	AddRecipe2(
         "slingshot_jessie",
