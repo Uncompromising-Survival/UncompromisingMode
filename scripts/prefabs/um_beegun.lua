@@ -1,7 +1,6 @@
 local assets =
 {
     Asset("ANIM", "anim/slingshot.zip"),
-    Asset("ANIM", "anim/swap_slingshot.zip"),
 }
 
 local prefabs =
@@ -258,6 +257,7 @@ local function fn(anim, name, swap, beetype)
     inst.beetype = beetype
 	inst.swap = swap
 
+    inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")

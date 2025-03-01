@@ -190,9 +190,9 @@ local function malbatrossfn()
 end
 
 return Prefab("cookiespikes", fn, assets),
-    Prefab("spikes_robin", robinfn, assets),
-    Prefab("spikes_robinwinter", robinwinterfn, assets),
-    Prefab("spikes_crow", crowfn, assets),
-    Prefab("spikes_canary", canaryfn, assets),
-    Prefab("spikes_goose", goosefn, assets),
-    Prefab("spikes_malbatross", malbatrossfn, assets)
+    Prefab("spikes_feather_robin", robinfn, assets),
+    Prefab("spikes_feather_robin_winter", robinwinterfn, assets),
+    Prefab("spikes_feather_crow", crowfn, assets),
+    Prefab("spikes_feather_canary", canaryfn, assets),
+    Prefab("spikes_goose_feather", goosefn, assets),
+    Prefab("spikes_malbatross_feather", malbatrossfn, assets)

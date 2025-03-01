@@ -14,13 +14,19 @@ local easing = require("easing")
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-    local skin_build = inst:GetSkinBuild()
+	--[[local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
         owner.AnimState:OverrideItemSkinSymbol("swap_object", skin_build, "swap_slingshot", inst.GUID, "swap_slingshot")
     else
-        owner.AnimState:OverrideSymbol("swap_object", "swap_slingshot_matilda", "swap_slingshot")
-    end
+		owner.AnimState:OverrideSymbol("swap_object", "slingshot_matilda", "swap_empty")
+		owner.AnimState:OverrideSymbol("swap_band_btm", "slingshot_matilda", "swap_band_btm")
+		owner.AnimState:OverrideSymbol("swap_band_top", "slingshot_matilda", "swap_band_top")
+		owner.AnimState:OverrideSymbol("swap_handle", "slingshot_matilda", "swap_slingshot")
+    end]]
+	
+	owner.AnimState:OverrideSymbol("swap_object", "swap_slingshot_matilda", "swap_slingshot")
+	
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 

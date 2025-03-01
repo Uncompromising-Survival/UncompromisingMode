@@ -47,8 +47,6 @@ local function OnAmmoUnloaded(inst, data)
     end
 end
 
-local floater_swap_data = { sym_build = "swap_slingshot" }
-
 local function fn()
     local inst = CreateEntity()
 

@@ -214,8 +214,8 @@ env.AddPrefabPostInit("beeguard", function(inst)
 end)
 
 env.AddPrefabPostInit("bandage_butterflywings", function(inst)	
-    if inst.components.healer ~= nil then
+    if inst.components.healer ~= nil and inst.components.healer.health ~= nil then
 		local old_health = inst.components.healer.health
-		inst.components.healer:SetHealthAmount(old_health / 2.4)
+		inst.components.healer:SetHealthAmount(old_health / 3)
 	end
 end)

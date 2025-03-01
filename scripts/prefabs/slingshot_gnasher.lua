@@ -14,13 +14,17 @@ local easing = require("easing")
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("equipskinneditem", inst:GetSkinName())
-        owner.AnimState:OverrideItemSkinSymbol("swap_object", skin_build, "swap_slingshot", inst.GUID, "swap_slingshot")
-    else
-        owner.AnimState:OverrideSymbol("swap_object", "swap_slingshot_gnasher", "swap_slingshot")
-    end
+	--[[owner.AnimState:OverrideSymbol("swap_object", "slingshot", "swap_empty")
+	owner.AnimState:OverrideSymbol("swap_band_btm", "slingshot", "swap_band_btm_gnasher")
+	owner.AnimState:OverrideSymbol("swap_band_top", "slingshot", "swap_band_top_gnasher")
+	owner.AnimState:OverrideSymbol("swap_handle", "slingshot", "swap_slingshot_gnasher")
+	
+	inst.AnimState:ClearOverrideSymbol("swap_handle")
+	inst.AnimState:ClearOverrideSymbol("swap_band_top")
+	inst.AnimState:ClearOverrideSymbol("swap_band_btm")]]
+
+	owner.AnimState:OverrideSymbol("swap_object", "swap_slingshot_gnasher", "swap_slingshot")
+    
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 
@@ -249,7 +253,7 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("slingshot")
+    inst.AnimState:SetBank("slingshot_gnasher")
     inst.AnimState:SetBuild("slingshot_gnasher")
     inst.AnimState:PlayAnimation("idle")
 

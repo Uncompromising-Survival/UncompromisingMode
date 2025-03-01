@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.2"
+local _version = "1.5.0.3"
 description = [[
 󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
 

@@ -1,7 +1,6 @@
 local assets =
 {
     Asset("ANIM", "anim/slingshot.zip"),
-    Asset("ANIM", "anim/swap_slingshot.zip"),
 }
 
 local prefabs =
@@ -17,44 +16,6 @@ local function onremove(inst)
     if inst._wheel ~= nil then
         inst._wheel:Remove()
         inst._wheel = nil
-    end
-end
-
-local function OnEquip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_minifan", "swap_minifan")
-    owner.AnimState:Show("ARM_carry")
-    owner.AnimState:Hide("ARM_normal")
-
-    if inst._wheel ~= nil then
-        inst._wheel:Remove()
-    end
-    inst._wheel = SpawnPrefab("fan_wheel")
-    inst._wheel.entity:SetParent(owner.entity)
-    inst._wheel:ListenForEvent("onremove", onremove, inst)
-
-    if inst.components.container ~= nil then
-        inst.components.container:Open(owner)
-    end
-end
-
-local function OnUnequip(inst, owner)
-	owner.components.channelcaster:StopChanneling(inst)
-	owner.SoundEmitter:KillSound("twirl")
-	
-    if inst._wheel ~= nil then
-        inst._wheel:StartUnequipping(inst)
-        inst._wheel = nil
-    end
-
-    if inst._owner ~= nil then
-        inst._owner = nil
-    end
-	
-    owner.AnimState:Hide("ARM_carry")
-    owner.AnimState:Show("ARM_normal")
-
-    if inst.components.container ~= nil then
-        inst.components.container:Close()
     end
 end
 
@@ -319,6 +280,62 @@ local function ForceChannel(inst, target, pos)
 	end
 end
 
+local function OnEquip(inst, owner)
+	inst:AddComponent("channelcastable")
+	inst.components.channelcastable:SetStrafing(false)
+	inst.components.channelcastable:SetOnStartChannelingFn(OnStartChanneling)
+	inst.components.channelcastable:SetOnStopChannelingFn(Stop_Channeling)
+	
+    inst:AddComponent("spellcaster")
+    inst.components.spellcaster:SetSpellFn(ForceChannel)
+    inst.components.spellcaster:SetCanCastFn(CanChannel)
+    inst.components.spellcaster.veryquickcast = true
+    inst.components.spellcaster.canuseontargets = true
+    inst.components.spellcaster.canuseondead = true
+    inst.components.spellcaster.canuseonpoint = true
+    inst.components.spellcaster.canuseonpoint_water = true
+    inst.components.spellcaster.canusefrominventory = false
+	
+    owner.AnimState:OverrideSymbol("swap_object", "swap_minifan", "swap_minifan")
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+
+    if inst._wheel ~= nil then
+        inst._wheel:Remove()
+    end
+    inst._wheel = SpawnPrefab("fan_wheel")
+    inst._wheel.entity:SetParent(owner.entity)
+    inst._wheel:ListenForEvent("onremove", onremove, inst)
+
+    if inst.components.container ~= nil then
+        inst.components.container:Open(owner)
+    end
+end
+
+local function OnUnequip(inst, owner)
+	inst:RemoveComponent("channelcastable")
+	inst:RemoveComponent("spellcaster")
+	
+	owner.components.channelcaster:StopChanneling(inst)
+	owner.SoundEmitter:KillSound("twirl")
+	
+    if inst._wheel ~= nil then
+        inst._wheel:StartUnequipping(inst)
+        inst._wheel = nil
+    end
+
+    if inst._owner ~= nil then
+        inst._owner = nil
+    end
+	
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+
+    if inst.components.container ~= nil then
+        inst.components.container:Close()
+    end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -329,8 +346,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("slingshot")
-    inst.AnimState:SetBuild("slingshot_gnasher")
+    inst.AnimState:SetBank("minifan")
+    inst.AnimState:SetBuild("minifan")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("rangedweapon")
@@ -391,21 +408,6 @@ local function fn()
     inst.components.weapon:SetOnProjectileLaunched(OnProjectileLaunched)
     inst.components.weapon:SetProjectile(nil)
 	inst.components.weapon:SetProjectileOffset(1)
-	
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(ForceChannel)
-    inst.components.spellcaster:SetCanCastFn(CanChannel)
-    inst.components.spellcaster.veryquickcast = true
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canuseondead = true
-    inst.components.spellcaster.canuseonpoint = true
-    inst.components.spellcaster.canuseonpoint_water = true
-    inst.components.spellcaster.canusefrominventory = false
-	
-	inst:AddComponent("channelcastable")
-	inst.components.channelcastable:SetStrafing(false)
-	inst.components.channelcastable:SetOnStartChannelingFn(OnStartChanneling)
-	inst.components.channelcastable:SetOnStopChannelingFn(Stop_Channeling)
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("slingshot")
