@@ -147,14 +147,19 @@ local state_mightyjump_pre = GLOBAL.State{ name = "mightyjump_pre",
 		inst.AnimState:PlayAnimation("jump_pre")
 		inst.sg:SetTimeout(GLOBAL.FRAMES*18)
 		
+		local x, y, z = inst.Transform:GetWorldPosition()
 		local buffaction = inst:GetBufferedAction()
-		if buffaction ~= nil then
-			inst:PerformPreviewBufferedAction()
-
-			if buffaction.pos ~= nil then
-				inst:ForceFacePoint(buffaction:GetActionPoint():Get())
-			end
+		
+		buffaction.preview_cb = function()
+			GLOBAL.SendRPCToServer(GLOBAL.RPC.LeftClick, buffaction.action.code, x, z)
 		end
+		
+		if buffaction.pos ~= nil then
+			inst:ForceFacePoint(buffaction:GetActionPoint():Get())
+		end
+		
+		inst:PerformPreviewBufferedAction()
+
 	end,
 
 	timeline =
@@ -199,10 +204,8 @@ local state_mightyjump_pre = GLOBAL.State{ name = "mightyjump_pre",
 		inst.sg.statemem.action = nil
 	end,
 }
-AddStategraphState("wilson", state_mightyjump_pre)
-AddStategraphState("wilson_client", state_mightyjump_pre)
 
-AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
+local state_mightyjump = GLOBAL.State{ name = "mightyjump",
 	tags = { "doing", "busy" },
 
 	onenter = function(inst)
@@ -232,7 +235,9 @@ AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
 			inst.Physics:SetMotorVel(25, -30, 0)
 		end),
 		GLOBAL.TimeEvent(15.2 * GLOBAL.FRAMES, function(inst)
-			inst.components.featsofstrength:MightyLeapLanding()
+			if GLOBAL.TheWorld.ismastersim then
+				inst.components.featsofstrength:MightyLeapLanding()
+			end
 		end),
 		GLOBAL.TimeEvent(16 * GLOBAL.FRAMES, function(inst)
 			inst.Physics:SetMotorVel(2, 0, 0)
@@ -273,7 +278,12 @@ AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
 		end
 		inst.sg.statemem.action = nil
 	end,
-})
+}
+
+AddStategraphState("wilson", state_mightyjump_pre)
+AddStategraphState("wilson_client", state_mightyjump_pre)
+AddStategraphState("wilson", state_mightyjump)
+AddStategraphState("wilson_client", state_mightyjump)
 
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.MIGHTYSWING, function(inst, action)
 	local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
