@@ -153,14 +153,19 @@ local state_mightyjump_pre = GLOBAL.State{ name = "mightyjump_pre",
 		inst.AnimState:PlayAnimation("jump_pre")
 		inst.sg:SetTimeout(GLOBAL.FRAMES*18)
 		
+		local x, y, z = inst.Transform:GetWorldPosition()
 		local buffaction = inst:GetBufferedAction()
-		if buffaction ~= nil then
-			inst:PerformPreviewBufferedAction()
-
-			if buffaction.pos ~= nil then
-				inst:ForceFacePoint(buffaction:GetActionPoint():Get())
-			end
+		
+		buffaction.preview_cb = function()
+			GLOBAL.SendRPCToServer(GLOBAL.RPC.LeftClick, buffaction.action.code, x, z)
 		end
+		
+		if buffaction.pos ~= nil then
+			inst:ForceFacePoint(buffaction:GetActionPoint():Get())
+		end
+		
+		inst:PerformPreviewBufferedAction()
+
 	end,
 
 	timeline =
@@ -205,10 +210,8 @@ local state_mightyjump_pre = GLOBAL.State{ name = "mightyjump_pre",
 		inst.sg.statemem.action = nil
 	end,
 }
-AddStategraphState("wilson", state_mightyjump_pre)
-AddStategraphState("wilson_client", state_mightyjump_pre)
 
-AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
+local state_mightyjump = GLOBAL.State{ name = "mightyjump",
 	tags = { "doing", "busy" },
 
 	onenter = function(inst)
@@ -239,99 +242,8 @@ AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
 			inst.Physics:SetMotorVel(25, -30, 0)
 		end),
 		GLOBAL.TimeEvent(15.2 * GLOBAL.FRAMES, function(inst)
-			local function HasFriendlyLeader(inst, target)
-				local target_leader = (target.components.follower ~= nil) and target.components.follower.leader or nil
-				
-				if target_leader ~= nil then
-
-					if target_leader.components.inventoryitem then
-						target_leader = target_leader.components.inventoryitem:GetGrandOwner()
-					end
-
-					local PVP_enabled = GLOBAL.TheNet:GetPVPEnabled()
-					return (target_leader ~= nil 
-							and (target_leader:HasTag("player") 
-							and not PVP_enabled)) or
-							(target.components.domesticatable and target.components.domesticatable:IsDomesticated() 
-							and not PVP_enabled) or
-							(target.components.saltlicker and target.components.saltlicker.salted
-							and not PVP_enabled)
-				end
-
-				return false
-			end
-
-			local function CanDamage(inst, target)
-				if target.components.minigame_participator ~= nil or target.components.combat == nil then
-					return false
-				end
-
-				if target:HasTag("player") and not GLOBAL.TheNet:GetPVPEnabled() then
-					return false
-				end
-
-				if target:HasTag("playerghost") and not target:HasTag("INLIMBO") then
-					return false
-				end
-
-				if target:HasTag("monster") and not GLOBAL.TheNet:GetPVPEnabled() and 
-				   ((target.components.follower and target.components.follower.leader ~= nil and 
-					 target.components.follower.leader:HasTag("player")) or target.bedazzled) then
-					return false
-				end
-
-				if HasFriendlyLeader(inst, target) then
-					return false
-				end
-
-				return true
-			end
-			local x,y,z = inst.Transform:GetWorldPosition()
-			local AOE_ATTACK_MUST_TAGS = {"_combat", "_health"}
-			local AOE_ATTACK_NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO"}
-			local isHeavyLifting = inst.components.inventory and inst.components.inventory:IsHeavyLifting()
-			local range = (isHeavyLifting and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_AOE_RANGE_HEAVY) or TUNING.DEFAULT_ATTACK_RANGE
-			local damage = (isHeavyLifting and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_DAMAGE_HEAVY) or
-				(inst:HasTag("mightiness_mighty") and TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_DAMAGE_MIGHTY) or
-				TUNING.FEAT_OF_STRENGTH_MIGHTY_LEAP_DAMAGE
-			local ents = GLOBAL.TheSim:FindEntities(x, y, z, range, AOE_ATTACK_MUST_TAGS, AOE_ATTACK_NO_TAGS)
-			if GLOBAL.TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
-				if isHeavyLifting then
-					GLOBAL.SpawnPrefab("groundpound_fx").Transform:SetPosition(x,y,z)
-					local groundpound = GLOBAL.SpawnPrefab("groundpoundring_fx")
-					groundpound.Transform:SetScale(0.6, 0.6, 0.6)
-					groundpound.Transform:SetPosition(x,y,z)
-					inst:ShakeCamera(GLOBAL.CAMERASHAKE.VERTICAL, 0.1, 0.03, 1)
-				else
-					GLOBAL.SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(x,y-1,z)
-					inst.SoundEmitter:PlaySound("dontstarve/common/deathpoof")
-					inst:ShakeCamera(GLOBAL.CAMERASHAKE.VERTICAL, 0.1, 0.03, 1)
-				end
-				if inst.components.skilltreeupdater:IsActivated("wolfgang_mighty_legs") then
-					for i, ent in ipairs(ents) do
-						local canfreeze = inst:HasTag("mighty_hunger")
-						if CanDamage(inst, ent) then
-							ent.components.combat:GetAttacked(inst, damage)
-							if canfreeze then
-								if ent.components.freezable ~= nil then
-									ent.components.freezable:AddColdness(1)
-								end
-							end
-						end
-					end
-				end
-			elseif inst:HasTag("mighty_hunger") and inst.components.drownable and inst.components.drownable:IsOverWater(x,y,z) then
-				local iceboat = GLOBAL.SpawnPrefab("boat_ice")
-				iceboat.Transform:SetPosition(x,y-1,z)
-				iceboat:DoTaskInTime(28, function(inst)
-					GLOBAL.SpawnPrefab("degrade_fx_ice").Transform:SetPosition(inst.Transform:GetWorldPosition())
-					inst:Remove() 
-				end)
-				GLOBAL.SpawnPrefab("degrade_fx_ice").Transform:SetPosition(x,y-1,z)
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/iceboulder_hit")
-			end
-			if inst:HasTag("shadow_strikes") then
-				inst:IncreaseCombo(1)
+			if GLOBAL.TheWorld.ismastersim then
+				inst.components.featsofstrength:MightyLeapLanding()
 			end
 		end),
 		GLOBAL.TimeEvent(16 * GLOBAL.FRAMES, function(inst)
@@ -382,7 +294,12 @@ AddStategraphState("wilson", GLOBAL.State{ name = "mightyjump",
 		end
 		inst.sg.statemem.action = nil
 	end,
-})
+}
+
+AddStategraphState("wilson", state_mightyjump_pre)
+AddStategraphState("wilson_client", state_mightyjump_pre)
+AddStategraphState("wilson", state_mightyjump)
+AddStategraphState("wilson_client", state_mightyjump)
 
 AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.MIGHTYSWING, function(inst, action)
 	if not inst.sg:HasStateTag("attack") then
