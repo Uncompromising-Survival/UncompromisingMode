@@ -163,6 +163,8 @@ local function fn()
     inst:AddTag("scarytoprey")
     inst:AddTag("NOBLOCK")
     inst:AddTag("classicshadow")
+    inst:AddTag("companion")
+    inst:AddTag("noclaustrophobia")
     --inst:AddTag("NOCLICK")
 
     inst.entity:SetPristine()

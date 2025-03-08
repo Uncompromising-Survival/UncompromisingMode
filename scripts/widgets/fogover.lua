@@ -58,7 +58,7 @@ function FogOver:OnUpdate(dt)
 	self:Show()
         self.time = self.transitiontime
         self.alphagoal = 0.6
-		
+		TheFocalPoint.SoundEmitter:KillSound("busy")
 		TheFocalPoint.SoundEmitter:PlaySound("UMMusic/music/night_terrors", "fogfear")
 		--TheFocalPoint.SoundEmitter:PlaySound("UCSounds/screecher/feer", "fogfear")
 	else

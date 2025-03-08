@@ -322,7 +322,7 @@ DESCRIBE.THEATERCORN = "Can watch friends now"
 DESCRIBE.DEERCLOPS_BARRIER = "Break weak ones"
 
 DESCRIBE.MOONMAW_DRAGONFLY =
-"Mooniest fly"                              -- Reference to WormiestWood, who suggested this first. We love our community :)
+"Mooniest fly" -- Reference to WormiestWood, who suggested this first. We love our community :)
 DESCRIBE.MOONMAW_LAVAE = "Familiar"
 DESCRIBE.SNAPPERTURTLE = "Hello"
 DESCRIBE.SNAPPERTURTLEBABY = "Small"
@@ -505,13 +505,13 @@ ANNOUNCE.GAS_DAMAGE = "kack! kack!"
 
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = {
-	"Fire friend, scary",
-	"Fire friend, scary",
-	"Fire friend, scary",
-	"Fire friend, scary",
-	"Fire friend, scary",
-	"Fire friend, scary",
-	"Big hot guys!"
+    "Fire friend, scary",
+    "Fire friend, scary",
+    "Fire friend, scary",
+    "Fire friend, scary",
+    "Fire friend, scary",
+    "Fire friend, scary",
+    "Big hot guys!"
 }
 DESCRIBE.UM_SMOLDER_SPORE = "Shy, should leave alone"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "NO NO WHY YOU DO THAT"
@@ -535,7 +535,7 @@ DESCRIBE.UM_BOAT_ENGINE = {
 
 DESCRIBE.BOULDER_CRAB =
 {
-    GENERIC = "Oh! Rock has pinchy friend!", 
+    GENERIC = "Oh! Rock has pinchy friend!",
     NAKED = "Oh... Lonely...",
     HOLE = "Hello? Friend Inside?",
 }
@@ -578,3 +578,8 @@ DESCRIBE.MAGMAROCK1 = "Hot Rock!"
 DESCRIBE.MAGMABONE = "Dead from heat?"
 
 DESCRIBE.UM_RICE_PUDDING = "Put water friend babies in a stew!"
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "Need floater to stretch down",
+    EMPTY = "Pretty glowy keep floater small"
+}

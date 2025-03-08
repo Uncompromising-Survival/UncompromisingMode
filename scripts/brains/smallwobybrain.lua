@@ -6,6 +6,9 @@ require "behaviours/doaction"
 require "behaviours/jukeandjive"
 require "behaviours/wobydance"
 
+local BrainCommon = require "brains/braincommon"
+local WobyBrainCommon = require "brains/wobycommon"
+
 local TARGET_FOLLOW_DIST = 4
 local MAX_FOLLOW_DIST = 4.5
 
@@ -169,24 +172,6 @@ local function ValidateCombatAvoidance(self)
     return true
 end
 
---- Minigames
-local function WatchingMinigame(inst)
-	return (inst.components.follower.leader ~= nil and inst.components.follower.leader.components.minigame_participator ~= nil) and inst.components.follower.leader.components.minigame_participator:GetMinigame() or nil
-end
-local function WatchingMinigame_MinDist(inst)
-	local minigame = WatchingMinigame(inst)
-	return minigame ~= nil and minigame.components.minigame.watchdist_min or 0
-end
-local function WatchingMinigame_TargetDist(inst)
-	local minigame = WatchingMinigame(inst)
-	return minigame ~= nil and minigame.components.minigame.watchdist_target or 0
-end
-local function WatchingMinigame_MaxDist(inst)
-	local minigame = WatchingMinigame(inst)
-	return minigame ~= nil and minigame.components.minigame.watchdist_max or 0
-end
-
-
 -------------------------------------------------------------------------------
 -- CUSTOM FUNCTIONS FOR WOBY ACTIONS
 
@@ -278,34 +263,47 @@ local SmallWobyBrain = Class(Brain, function(self, inst)
 end)
 
 function SmallWobyBrain:OnStart()
-	local watch_game = WhileNode( function() return WatchingMinigame(self.inst) end, "Watching Game",
-        PriorityNode{
-				Follow(self.inst, WatchingMinigame, WatchingMinigame_MinDist, WatchingMinigame_TargetDist, WatchingMinigame_MaxDist),
-				RunAway(self.inst, "minigame_participator", 5, 7),
-				FaceEntity(self.inst, WatchingMinigame, WatchingMinigame ),
-        }, 0.1)
-
-    local root = PriorityNode({
+    local main_nodes = PriorityNode({
         WhileNode( function() return self.inst.components.follower.leader end, "Has Owner",
             PriorityNode{
-					
-				watch_game,
-				
+				WobyBrainCommon.CourierNode(self.inst),
+				WobyBrainCommon.SitStillNode(self.inst),
+				WobyBrainCommon.WatchingMinigameNode(self.inst),
 				
 				WhileNode( function() return HasWobyTarget(self.inst) end, "Has Target",
 					DoAction(self.inst, DoTargetAction, nil, true )
 				),
 				
-                -- Combat Avoidance
-				PriorityNode{
+			-- Combat Avoidance
+			WhileNode(function() return not WobyBrainCommon.IsWheelOpen(self.inst) end, "combat avoidance",
+				PriorityNode({
 					JukeAndJive(self.inst, {tags={"_combat", "_health"}, notags={"player", "wall", "INLIMBO", "rabbit", "bird"}, fn=CombatAvoidanceFindEntityCheck(self)}, COMBAT_TOO_CLOSE_DIST, COMBAT_SAFE_TO_WATCH_FROM_DIST),
-					WhileNode( function() return ValidateCombatAvoidance(self) end, "Is Near Combat",
-						FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
-				},
+
+					WhileNode(function() return ValidateCombatAvoidance(self) end, "Is Near Combat",
+						PriorityNode({
+							WobyBrainCommon.PickUpAmmoNode(self.inst),
+							FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)
+						}, 0.25)),
+				}, 0.25)),
+
+				WhileNode(function() return WobyBrainCommon.IsWheelOpen(self.inst) and ValidateCombatAvoidance(self) end, "wheel open near combat",
+					FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
+
+				FaceEntity(self.inst, WobyBrainCommon.GetWalterInteractionFn, WobyBrainCommon.KeepGenericInteractionFn),
+				WhileNode(function() return WobyBrainCommon.IsWheelOpen(self.inst) end, "wheel open",
+					FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
 				
 				WhileNode( function() return HasSitTarget(self.inst) end, "Has Target",
 					DoAction(self.inst, GoSitAction, nil, true )
 				),
+				
+				--When recalling Woby, temporarily block helper actions until she's fully returned to you.
+				WobyBrainCommon.RecallNode(self.inst,
+					Follow(self.inst, function() return self.inst.components.follower:GetLeader() end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST)),
+
+				WobyBrainCommon.ForagerNode(self.inst),
+				WobyBrainCommon.RetrieveAmmoNode(self.inst),
+				WobyBrainCommon.FetchingActionNode(self.inst),
 				
 				WhileNode(function() return ShouldDanceParty(self.inst) end, "Dance Party",
 					PriorityNode({
@@ -327,7 +325,6 @@ function SmallWobyBrain:OnStart()
 				),
                 
 				Follow(self.inst, function() return self.inst.components.follower.leader end, 0, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
-               
 				FailIfRunningDecorator(FaceEntity(self.inst, GetOwner, KeepFaceTargetFn)),
                 WhileNode(function() return OwnerIsClose(self.inst) and self.inst:IsAffectionate() end, "Affection",
                     SequenceNode{
@@ -339,6 +336,20 @@ function SmallWobyBrain:OnStart()
 
         StandStill(self.inst),
     }, .25)
+
+    local root = PriorityNode({
+        WhileNode(
+            function()
+                return not self.inst.sg:HasStateTag("jumping") and (self.inst.sg.currentstate == nil or self.inst.sg.currentstate.name ~= "transform")
+            end,
+            "<busy state guard>",
+            PriorityNode({
+                WhileNode(function() return GetOwner(self.inst) ~= nil end, "Has Owner", main_nodes),
+                StandStill(self.inst),
+            }, .25)
+        ),
+    }, .25)
+	
     self.bt = BT(self.inst, root)
 end
 

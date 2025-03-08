@@ -550,3 +550,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "Vile sweetend rice slop."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "A display for a vessel most worthy.",
+    EMPTY = "A vessel ready to be used at a moments notice!"
+}

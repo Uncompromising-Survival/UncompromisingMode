@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function lootsetfn(lootdropper)
     lootdropper:ClearRandomLoot()
     if TheWorld.components.riftspawner and TheWorld.components.riftspawner:GetLunarRiftsEnabled() then
-        lootdropper:AddRandomLoot("um_boatbottle_blueprint", 1)
+        --lootdropper:AddRandomLoot("um_boatbottle_blueprint", 1)
     end
 
     lootdropper.numrandomloot = 1
@@ -13,7 +13,6 @@ end
 SetSharedLootTable("um_daywalker2",
     {
         { "gears",                            0.5 },
-
         { "wagpunk_bits",                     1 },
         { "wagpunk_bits",                     1 },
         { "wagpunk_bits",                     1 },
@@ -25,6 +24,7 @@ SetSharedLootTable("um_daywalker2",
         { "armorwagpunk_blueprint",           1 },
         { "wagpunkhat_blueprint",             1 },
         { "wagpunkbits_kit_blueprint",        1 },
+        { "um_boatbottle_blueprint",          1 },
         { "chestupgrade_stacksize_blueprint", 1 }
     })
 
@@ -124,8 +124,8 @@ for k, v in pairs(fx) do
 
         inst:ListenForEvent("animover", function(inst)
             --if math.random() > 0.33 then
-                local loot = SpawnPrefab("wagpunk_bits")
-                loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            local loot = SpawnPrefab("wagpunk_bits")
+            loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
             --end
         end)
     end)

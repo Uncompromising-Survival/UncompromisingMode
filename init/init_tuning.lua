@@ -386,6 +386,7 @@ TUNING.DSTU = {
     COMPROMISING_SHADOWVORTEX = GetModConfigData("compromising_vortex"),
     DISABLE_MEGAFLARE = GetModConfigData("disable_megaflare"),
     WIXIE = GetModConfigData("wixie_walter"),
+    WOBYHUNGER_CLASSIC = GetModConfigData("woby_hunger_classic"),
     WIXIE_BIRDS = GetModConfigData("wixie_birds"),
     MONSTERSMALLMEAT = GetModConfigData("monstersmallmeat"),
     THE_COOLER_SACRED_CHEST = GetModConfigData("the_cooler_sacred_chest"),

@@ -272,3 +272,13 @@ env.AddPrefabPostInit("slingshot", function(inst)
         end
     end
 end)
+
+env.AddPrefabPostInit("slingshotammo_container", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    if inst.components.container ~= nil then
+    inst.components.container.restrictedtag = "troublemaker"
+    end
+end)

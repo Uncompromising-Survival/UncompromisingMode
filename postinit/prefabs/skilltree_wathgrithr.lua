@@ -555,6 +555,9 @@ local skills =
     wathgrithr_songs_container = {
         group        = "songs",
         --root = true,
+
+        onactivate   = CreateAddTagFn("battlesongcontaineruser"),
+        ondeactivate = CreateRemoveTagFn("battlesongcontaineruser"),
     },
 
     --[[

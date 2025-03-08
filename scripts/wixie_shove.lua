@@ -137,7 +137,7 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
 												inst:HasTag("wixie_shove_2") and 1.20 or
 												inst:HasTag("wixie_shove_1") and 1.10 or
 												1
-					local distancemultiplier = distancemod ~= nil and 1 + (distancemod / 10) or 1										
+					local distancemultiplier = distancemod ~= nil and 1 + (distancemod / 10) or 1
 					local dx, dy, dz = tx + ((((3 / (i + 2)) * velx) / giantreduction) * debuffmultiplier) / distancemultiplier, ty, tz + ((((3 / (i + 2)) * velz) / giantreduction) * debuffmultiplier) / distancemultiplier
 					local ground_target = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
 					local boat_target = TheWorld.Map:GetPlatformAtPoint(dx, dz)

@@ -12,7 +12,11 @@ local function destroystuff(inst)
                 if v.components.health ~= nil and not v.components.health:IsDead() and v.components.combat ~= nil and v.components.combat:CanBeAttacked() then
                     local damage = 5
                     v.components.combat:GetAttacked(inst, damage, nil, "glass")
-                    v.SoundEmitter:PlaySound("turnoftides/common/together/moon_glass/mine", nil, 0.5)
+					
+					if v.SoundEmitter ~= nil then
+						v.SoundEmitter:PlaySound("turnoftides/common/together/moon_glass/mine", nil, 0.5)
+					end
+					
                     if v:HasTag("player") and not (v.components.rider ~= nil and v.components.rider:IsRiding()) then
                         if v.moonmaw_lavae_stun == nil then v.moonmaw_lavae_stun = 0 end
                         v.moonmaw_lavae_stun = v.moonmaw_lavae_stun + 1

@@ -83,7 +83,7 @@ DESCRIBE.MUSHROOMSPROUT_OVERWORLD =
 "I do believe it's spreading spores!"
 DESCRIBE.TOADLING = "Just another toad on the road." -- rewrite this later.
 
-DESCRIBE.GASMASK = "A mask to place upon my face." -- ?
+DESCRIBE.GASMASK = "A mask to place upon my face."   -- ?
 DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
 DESCRIBE.MOTHERGOOSE = DESCRIBE.MOOSE
 DESCRIBE.SPIDERQUEENCORPSE = "Her majesty's gone and met her end."
@@ -96,7 +96,7 @@ ANNOUNCE.ANNOUNCE_SNOWSTORM = "The wind stirs!"
 ANNOUNCE.SHADOWTALKER = {
     "MY EXISTENCE IS A CURSE.", "THE SOUL HUNGER STIRS WITHIN.",
     "THE MORTALS WILL FEAR ME, SOONER OR LATER.",
-	"HOW I MISS OUR BETTER DAYS, KRAMPUS.", "I'M GUILTY."
+    "HOW I MISS OUR BETTER DAYS, KRAMPUS.", "I'M GUILTY."
 }
 ANNOUNCE.ANNOUNCE_OVER_EAT = {
     STUFFED = "I'm full to the brim, I really am.",
@@ -188,7 +188,7 @@ DESCRIBE.SILKSACK = "A grotesque burden to be carried."
 DESCRIBE.SILKEN_BUNDLE = "A sticky surprise awaits."
 DESCRIBE.SNAPDRAGON_BUDDY = "It seems we've made a new plant friend!"
 DESCRIBE.SNAPDRAGON = "Goodness me, you're huge as can be!" -- rewrite this later. -- done
-DESCRIBE.SNAPPLANT = "They have a captive audience!" -- rewrite this later. -- nevermind
+DESCRIBE.SNAPPLANT = "They have a captive audience!"        -- rewrite this later. -- nevermind
 DESCRIBE.WHISPERPOD = "It's a tiny little baby plant!"
 DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
     GENERIC = "It has a need to feed on seeds!",
@@ -207,8 +207,8 @@ DESCRIBE.DEVILSFRUITCAKE = "Seven layers of devilishly good cake!"
 DESCRIBE.SIMPSALAD = "I don't think the mortals like this one too much."
 DESCRIBE.BEEFALOWINGS = "It's not bad, for mortal food."
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE =
-"I am immovable!"-- rewrite this later. -- you uncreative piece of shit.
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_KNOCKBACKIMMUNE = "That's not right, now I feel rather light."-- rewrite this later. -- eh, could do better.
+"I am immovable!"                                                                            -- rewrite this later. -- you uncreative piece of shit.
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_KNOCKBACKIMMUNE = "That's not right, now I feel rather light." -- rewrite this later. -- eh, could do better.
 DESCRIBE.WIDOWSHEAD = "She's dead, so off with her head."
 DESCRIBE.HOODED_MUSHTREE_TALL = DESCRIBE.MUSHTREE_TALL
 DESCRIBE.HOODED_MUSHTREE_MEDIUM = DESCRIBE.MUSHTREE_MEDIUM
@@ -275,8 +275,8 @@ DESCRIBE.BIGHT = "We should put it out of its misery."
 DESCRIBE.KNOOK = "A fellow hopper, assembled improper!"
 DESCRIBE.ROSHIP = "Hyuyu, it's a jumbled mess."
 
-DESCRIBE.UM_PAWN = "It's meant to be a lure, I'm sure."-- rewrite this later. -- stil not inspired, wait for v3
-DESCRIBE.UM_PAWN_NIGHTMARE = "It's meant to be a lure, I'm sure."-- rewrite this later. -- stil not inspired, wait for v3
+DESCRIBE.UM_PAWN = "It's meant to be a lure, I'm sure."           -- rewrite this later. -- stil not inspired, wait for v3
+DESCRIBE.UM_PAWN_NIGHTMARE = "It's meant to be a lure, I'm sure." -- rewrite this later. -- stil not inspired, wait for v3
 
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
@@ -295,7 +295,7 @@ DESCRIBE.UM_BEAR_TRAP = "A trap, left out in the open."
 DESCRIBE.UM_BEAR_TRAP_OLD = "A trap, left out in the open."
 DESCRIBE.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "My, what large teeth you have!"
 DESCRIBE.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My, what large teeth you have!"
-DESCRIBE.CORNCAN = "I cannot pry it open, I'm afraid." -- boo this stinks in particular
+DESCRIBE.CORNCAN = "I cannot pry it open, I'm afraid."       -- boo this stinks in particular
 DESCRIBE.SKULLCHEST_CHILD = "It's my very best magic chest!" -- maybe think up something better
 
 DESCRIBE.SLOBBERLOBBER = "I'm a fire-breathing imp!"
@@ -339,12 +339,12 @@ DESCRIBE.DEERCLOPS_BARRIER = "You can't contain me for long!"
 
 DESCRIBE.MOONMAW_DRAGONFLY = "Looks like you flew too close to the moon!"
 DESCRIBE.MOONMAW_LAVAE = "They took up after momma, hyuyu!"
-DESCRIBE.SNAPPERTURTLE = "Shall I tip you over?" --irrelevant
+DESCRIBE.SNAPPERTURTLE = "Shall I tip you over?"                     --irrelevant
 DESCRIBE.SNAPPERTURTLEBABY = "Stay close to your momma, little one." --irrelevant
-DESCRIBE.SNAPPERTURTLENEST = "Sleep tight." --irrelevant
+DESCRIBE.SNAPPERTURTLENEST = "Sleep tight."                          --irrelevant
 DESCRIBE.GLASS_SCALES = "Look at how they glister in the moonlight."
 DESCRIBE.MOONGLASS_GEODE = "It's brimming with potential."
-DESCRIBE.ARMOR_GLASSMAIL = "Oh no, it's not my color at all." -- rewrite this later. -- alright for now.
+DESCRIBE.ARMOR_GLASSMAIL = "Oh no, it's not my color at all."                  -- rewrite this later. -- alright for now.
 DESCRIBE.ARMOR_GLASSMAIL_SHARDS = "Don't you just want to come give me a hug?" -- Uninspired. -- maybe revisit.
 DESCRIBE.MOONMAW_GLASSSHARDS_RING = "I'd best steer clear of those!"
 DESCRIBE.MOONMAW_GLASSSHARDS = "I'd best steer clear of those!"
@@ -396,19 +396,19 @@ DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "It's just a bunch of unfun stuff!"
 DESCRIBE.POWERCELL = "A fair bit of energy lies within."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "A wiring kit, this seems to be."
 DESCRIBE.MINERHAT_ELECTRICAL = "It feeds on elemental energy."
-DESCRIBE.OCEAN_SPEAKER = "It plays a tune that could spell our doom. Hyuyu!" -- Oh gee oh fuck I'm out of luck!!!!! -- youve done well soldier 
+DESCRIBE.OCEAN_SPEAKER = "It plays a tune that could spell our doom. Hyuyu!" -- Oh gee oh fuck I'm out of luck!!!!! -- youve done well soldier
 -- DESCRIBE.UM_SIREN = "My, is that a siren on the horizon?"
 
-DESCRIBE.OCUPUS_BEAK = "Got your nose." --Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.OCUPUS_TENTACLE = "You'd have to be a real sucker to eat this."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.OCUPUS_TENTACLE_EYE = "I'm glad we're seeing eye to eye now."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.OCUPUS_TENTACLE_COOKED = "Burnt sucker."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_OCUPUS_EYE = "Something is looking for a certain imp."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_OCUPUS_EYETACLE = "It'll leave us be if it cannot see!"--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_OCUPUS_TENTACLE = "It's big and wet and trying to get me!"--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_OCUPUS_BEAK = "It really wants me dead right now."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.BEAKBASHER = "To establish the new pecking order."--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Wowee golly those eyes are like holly."--Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.OCUPUS_BEAK = "Got your nose."                                  --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.OCUPUS_TENTACLE = "You'd have to be a real sucker to eat this." --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.OCUPUS_TENTACLE_EYE = "I'm glad we're seeing eye to eye now."   --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.OCUPUS_TENTACLE_COOKED = "Burnt sucker."                        --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_OCUPUS_EYE = "Something is looking for a certain imp."       --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_OCUPUS_EYETACLE = "It'll leave us be if it cannot see!"      --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_OCUPUS_TENTACLE = "It's big and wet and trying to get me!"   --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_OCUPUS_BEAK = "It really wants me dead right now."           --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.BEAKBASHER = "To establish the new pecking order."              --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Wowee golly those eyes are like holly." --Currently doesn't seem to exist, to be rewritten maybe idk
 
 DESCRIBE.ARMOR_REED_UM = "I've woven it well, oh yes."
 DESCRIBE.ARMOR_SHARKSUIT_UM = "Ooo, I've always wanted to try fish scales."
@@ -450,15 +450,15 @@ DESCRIBE.STEERINGWHEEL_COPPER = "It's just a wheel. Where's the appeal?"
 DESCRIBE.STEERINGWHEEL_COPPER_ITEM = "Why build things when you can play?"
 DESCRIBE.BOAT_BUMPER_COPPER = "Crashing everywhere is the fun side of sailing."
 DESCRIBE.BOAT_BUMPER_COPPER_KIT = "All work and no play makes for an unhappy imp."
-DESCRIBE.UM_DREAMCATCHER = "Oh me, Oh my, a door into your mind!"--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_BRINEISHMOSS = "I'm the boss of this moss, see?"--Currently doesn't seem to exist, to be rewritten maybe idk
-DESCRIBE.UM_COALESCED_NIGHTMARE = "The minds of men are black with corruption and must needs be cleansed!"--Currently doesn't seem to exist, to be rewritten maybe idk -- lol
-DESCRIBE.SLUDGE_CORK = "A plug to fit snug, like a bug in a rug." -- there was an attempt ok
-DESCRIBE.SLUDGESTACK = "Hyuyu, gross!"     -- yea
-DESCRIBE.SPECTER_SHIPWRECK = "A place of ruin, much too soon."--Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_DREAMCATCHER = "Oh me, Oh my, a door into your mind!"                                          --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_BRINEISHMOSS = "I'm the boss of this moss, see?"                                               --Currently doesn't seem to exist, to be rewritten maybe idk
+DESCRIBE.UM_COALESCED_NIGHTMARE = "The minds of men are black with corruption and must needs be cleansed!" --Currently doesn't seem to exist, to be rewritten maybe idk -- lol
+DESCRIBE.SLUDGE_CORK = "A plug to fit snug, like a bug in a rug."                                          -- there was an attempt ok
+DESCRIBE.SLUDGESTACK = "Hyuyu, gross!"                                                                     -- yea
+DESCRIBE.SPECTER_SHIPWRECK = "A place of ruin, much too soon."                                             --Currently doesn't seem to exist, to be rewritten maybe idk
 
 DESCRIBE.UNCOMPROMISING_HARPOON =
-"Impaling things comes terrifyingly naturally to me." 
+"Impaling things comes terrifyingly naturally to me."
 DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
 DESCRIBE.UM_MAGNERANG = "Round and round it goes!"
@@ -484,7 +484,7 @@ DESCRIBE.CODEX_MANTRA = DESCRIBE.WAXWELLJOURNAL
 
 DESCRIBE.WIXIE_PIANO = "It wants to play a certain tune!"
 DESCRIBE.WIXIE_CLOCK = "Time is difficult to grasp."
-DESCRIBE.WIXIE_WARDROBE = "What fun games might we play in there?" -- rewrite this later.
+DESCRIBE.WIXIE_WARDROBE = "What fun games might we play in there?"            -- rewrite this later.
 DESCRIBE.CHARLES_T_HORSE = "Won't you show me the true colours of your soul?" -- rewrite this later maybe.
 DESCRIBE.THE_REAL_CHARLES_T_HORSE = "It has revealed itself!"
 DESCRIBE.SLINGSHOT_MATILDA = "I'm sure she'll have a lot of fun with this."
@@ -528,10 +528,10 @@ DESCRIBE.WIXIEGUN = "Slay!"
 
 DESCRIBE.MARA_BOSS1 = "It's just a specter!"
 ANNOUNCE.GAS_DAMAGE = {
-	"COUGH! COUGH- Hyuyuyuyu...",
-	"Cough- Can't breathe-",
-	"I should... Hop out-Cough.",
-	"COUGH! Hyuyu-Cough cough!"
+    "COUGH! COUGH- Hyuyuyuyu...",
+    "Cough- Can't breathe-",
+    "I should... Hop out-Cough.",
+    "COUGH! Hyuyu-Cough cough!"
 }
 
 -- Pyre Nettle stuff
@@ -539,14 +539,14 @@ DESCRIBE.UM_PYRE_NETTLES = "It's a nettle infestation!"
 DESCRIBE.UM_SMOLDER_SPORE = "Hyuyu, it's spreading!" -- rewrite this later. -- eh its fine
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "This is fine, hyuyu."
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_INVENTORY_POP = "Hyuyu!"
-DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It is a tad painful on my delicate imp skin."-- rewrite this later. -- up to rewrite v3 now
+DESCRIBE.UM_ARMOR_PYRE_NETTLES = "It is a tad painful on my delicate imp skin." -- rewrite this later. -- up to rewrite v3 now
 DESCRIBE.UM_BLOWDART_PYRE = "Ptew!"
 
 -- Under the Weather Part 1
 DESCRIBE.ALPHA_LIGHTNINGGOAT = "Hmm. No relation."
 DESCRIBE.UM_TORNADO = "Hyuyu, this looks like fun!"
 DESCRIBE.UM_WATERFALL = "Swimming gives me the wet imp smell." -- rewrite this later. -- never mind, good enough for now.
-ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "The fun's over!" 
+ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "The fun's over!"
 
 DESCRIBE.UM_BOAT_ENGINE = {
     ON = "PLEASE WRITE QUOTES",
@@ -554,4 +554,9 @@ DESCRIBE.UM_BOAT_ENGINE = {
     OVERHEATING = "PLEASE WRITE QUOTES"
 }
 
-DESCRIBE.UM_RICE_PUDDING = "What's my name? Pudding Taine, ask me again and I’ll tell you the same!"
+DESCRIBE.UM_RICE_PUDDING = "What's my name? Pudding Taine, ask me again and I'll tell you the same!"
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "The real trick would be to snatch up a boat and teleport away! Hyuhuhu!",
+    EMPTY = "I've heard of genies in bottles, but this is ridiculous!"
+}

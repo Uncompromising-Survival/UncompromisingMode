@@ -441,7 +441,7 @@ DESCRIBE.SLUDGE_OIL = "A drink of death."
 DESCRIBE.SLUDGE_SACK = "A soggy sack."
 DESCRIBE.CANNONBALL_SLUDGE_ITEM = "May those on the other end face a quick end."
 DESCRIBE.BOAT_BUMPER_SLUDGE =
-"It will only prolong the inevitable."                               -- listen if klei can be lazy with her quotes i can too
+"It will only prolong the inevitable." -- listen if klei can be lazy with her quotes i can too
 DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "It will only prolong the inevitable."
 DESCRIBE.BOATPATCH_SLUDGE = "Temporary protection from the cruelty of the sea."
 DESCRIBE.UM_COPPER_PIPE = "Hollow."
@@ -565,3 +565,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "This at least has taste to it."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "The power to move entire ships at my finger tips.",
+    EMPTY = "Removed from where it once sailed, for now."
+}

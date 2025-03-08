@@ -12,9 +12,9 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("meat_rack_food")
-    inst.AnimState:SetBuild("meat_rack_food")
-    inst.AnimState:PlayAnimation("idle_dried_human")
+    inst.AnimState:SetBank("meat_human")
+    inst.AnimState:SetBuild("meat_human")
+    inst.AnimState:PlayAnimation("raw")
 
     MakeInventoryFloatable(inst)
 

@@ -556,13 +556,13 @@ ANNOUNCE.GAS_DAMAGE = "Cough. Cough. It's like smoke without the fire." --change
 -- Pyre Nettle stuff
 DESCRIBE.UM_PYRE_NETTLES = "Ooh, pretty! But it could be prettier..."
 ANNOUNCE.ANNOUNCE_FIRENETTLE_TOXIN = {
-	"Alright, bring on the heat!",
-	"Things are heating up!",
-	"That's more like it!",
-	"Hey, this is kinda comfy.",
-	"I'm starting to feel all warm and fuzzy inside.",
-	"There's fire in my veins! Uh, literally?",
-	"Hey, this is fine actually."
+    "Alright, bring on the heat!",
+    "Things are heating up!",
+    "That's more like it!",
+    "Hey, this is kinda comfy.",
+    "I'm starting to feel all warm and fuzzy inside.",
+    "There's fire in my veins! Uh, literally?",
+    "Hey, this is fine actually."
 }
 DESCRIBE.UM_SMOLDER_SPORE = "Aw, aren't you a little ball of a potential?"
 ANNOUNCE.ANNOUNCE_SMOLDER_SPORE_EATEN = "Spicy!"
@@ -583,3 +583,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "Hey, can I cook this again so it tastes better?"
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "Why would I even want to stuff a boat in here, I don't even like sailing.",
+    EMPTY = "It's safe from fire in there, let's fix that by opening it!"
+}

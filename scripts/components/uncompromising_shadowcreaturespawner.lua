@@ -101,6 +101,24 @@ return Class(function(self, inst)
         )
     end
 
+    local function HasShadowDominance(inst)
+        local shadowdominancetags = {"shadowdominance", "inherentshadowdominance", "fuelfarming"}
+        if inst ~= nil then
+            if inst.components.inventory ~= nil then
+                for k, v in pairs(inst.components.inventory.equipslots) do
+                    if v.components.shadowdominance ~= nil then
+                        return true
+                    end
+                end
+            end
+            for _, tag in pairs(shadowdominancetags) do
+                if inst:HasTag(tag) then
+                    return true
+                end
+            end
+        end
+    end
+
     function self:SpawnShadowCreature(player, params)
         params = params or _players[player]
 
@@ -137,10 +155,7 @@ return Class(function(self, inst)
             end
         end
 
-        if player:HasTag("shadowdominance") or
-            player:HasTag("fuelfarming") or
-            bossesnearby > 0 or
-            sanity > TUNING.DSTU.CREEPINGFEAR_SPAWN_THRESH then
+        if HasShadowDominance(player) or bossesnearby > 0 or sanity > TUNING.DSTU.CREEPINGFEAR_SPAWN_THRESH then
             spawndrifter = false
         end
         -- END OF CREEPING FEAR CODE

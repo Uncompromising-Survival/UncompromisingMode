@@ -464,7 +464,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 						else
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)
@@ -485,7 +485,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 							fx.entity:SetParent(inst.entity)
 							fx.Transform:SetPosition(0, 2.35, 0)
 
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 							inst.slingshot_amount = 2
 							inst.SoundEmitter:PlaySound("wixie/characters/wixie/slingshot_low")
 						end
@@ -497,7 +497,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_hot_loop")
 							fx.entity:SetParent(inst.entity)
@@ -525,7 +525,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 							fx.entity:SetParent(inst.entity)
 							fx.Transform:SetPosition(0, 2.35, 0)
 
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 							inst.slingshot_amount = 3
 							inst.SoundEmitter:PlaySound("wixie/characters/wixie/slingshot_med")
 						end
@@ -537,7 +537,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_2")
 							fx.entity:SetParent(inst.entity)
@@ -561,7 +561,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
 					if weapon ~= nil then
 						if weapon:HasTag("matilda") then
-							inst.slingshot_power = 1.25
+							inst.slingshot_power = 1
 						elseif weapon:HasTag("gnasher") then
 							local fx = SpawnPrefab("dr_warm_loop_1")
 							fx.entity:SetParent(inst.entity)

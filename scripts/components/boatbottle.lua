@@ -6,6 +6,17 @@ local function OnBoatChange(self, data)
     else
         self.inst:RemoveTag("filled_boat_bottle")
     end
+
+    self.inst.AnimState:PlayAnimation(self.isfull and "idleboat2" or "idle2")
+
+    if self.isfull then
+        self.inst.AnimState:HideSymbol("boat")
+        self.inst.AnimState:SetSymbolBloom("antennae")
+        self.inst.AnimState:SetSymbolLightOverride("antennae", 0.5)
+    else
+        self.inst.AnimState:ClearSymbolBloom("antennae")
+        self.inst.AnimState:SetSymbolLightOverride("antennae", 0)
+    end
 end
 
 local function OnBoatPrefabChange(self, data)

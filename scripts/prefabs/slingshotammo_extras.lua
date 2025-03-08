@@ -5,7 +5,7 @@ local assets_firecrackers = { Asset("ANIM", "anim/firecrackers.zip") }
 local prefabs_firecrackers = { "explode_firecrackers" }
 
 local AURA_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "abigail", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "invisible" }
-local GOOP_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "invisible" }
+local GOOP_EXCLUDE_TAGS = { "noclaustrophobia", "rabbit", "playerghost", "shadow", "shadowminion", "INLIMBO", "notarget", "noattack", "invisible", "webbedcreature", "bee" }
 
 if not TheNet:GetPVPEnabled() then
     table.insert(AURA_EXCLUDE_TAGS, "player")
@@ -669,7 +669,7 @@ local function OnHit_Goop(inst, attacker, target)
         local playerdetected = false
         local goop = SpawnPrefab("slingshotammo_goop_proj_secondary")
 
-        local players = TheSim:FindEntities(x, y, z, 10, { "_combat" }, { "noclaustrophobia", "playerghost" }, { "companion", "player" })
+        local players = TheSim:FindEntities(x, y, z, 10, { "_combat" }, { "noclaustrophobia", "playerghost", "webbedcreature", "bee" }, { "companion", "player" })
         local ents = TheSim:FindEntities(x, y, z, 10, { "_combat" }, GOOP_EXCLUDE_TAGS)
 
         for i, v in pairs(players) do
@@ -741,8 +741,10 @@ local function OnHit_Slime(inst, attacker, target)
                 hitfx.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
             elseif target:HasTag("smallcreature") then
                 hitfx.Transform:SetPosition(0, .5, 0)
+			elseif target:HasTag("epic") then
+				hitfx.Transform:SetPosition(0, 2.5, 0)
             else
-                hitfx.Transform:SetPosition(0, 2, 0)
+                hitfx.Transform:SetPosition(0, 1.5, 0)
             end
 
             hitfx.target = target
@@ -2086,6 +2088,91 @@ local function crackerexplosion_fn()
     return inst
 end
 
+local function Shock_Rebound(inst, attacker, target)
+    if target ~= nil then
+        local set_attacker = attacker ~= nil and attacker or inst
+
+        ImpactFx(inst, attacker, target)
+
+        if not target:HasTag("wall") and not target:HasTag("structure") and target.components.health ~= nil and not target.components.health:IsDead() then
+            if no_aggro(set_attacker, target) then
+                target.components.combat:SetShouldAvoidAggro(attacker)
+            end
+
+            if target.components.combat ~= nil then
+				target.components.combat:GetAttacked(inst, 20, inst, "electric")
+            end
+
+            if target.components.sleeper ~= nil and target.components.sleeper:IsAsleep() then
+                target.components.sleeper:WakeUp()
+            end
+
+            if target.components.combat ~= nil then
+                target.components.combat:SetTarget(set_attacker)
+                target.components.combat:RemoveShouldAvoidAggro(attacker)
+            end
+				
+			if target.components.health ~= nil and target.components.health:IsDead() then
+				attacker:PushEvent("killed", { victim = target, attacker = attacker })
+			end
+
+			if not (
+				target:HasTag("electricdamageimmune") or
+				(target.components.inventory ~= nil and target.components.inventory:IsInsulated())
+			) and
+				target:GetIsWet()
+			then
+				SpawnPrefab("electrichitsparks"):AlignToTarget(target, inst, true)
+			end
+	   end
+    end
+
+    inst:Remove()
+end
+
+local function shockscrap_rebound()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+    inst.AnimState:SetBank("bishop_attack")
+    inst.AnimState:SetBuild("bishop_attack")
+    inst.AnimState:PlayAnimation("idle")
+
+    -- weapon (from weapon component) added to pristine state for optimization
+    inst:AddTag("weapon")
+
+    -- projectile (from projectile component) added to pristine state for optimization
+    inst:AddTag("projectile")
+
+    RemovePhysicsColliders(inst)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("weapon")
+
+    inst:AddComponent("projectile")
+    inst.components.projectile:SetSpeed(13)
+    inst.components.projectile:SetOnHitFn(Shock_Rebound)
+	
+    inst.impactfx = "bishop_charge_hit"
+
+    inst.persists = false
+    inst:DoTaskInTime(2, inst.Remove)
+
+    MakeHauntableLaunch(inst)
+
+    return inst
+end
+
 return Prefab("slingshotammo_firecrackers", cracker_fn, assets, prefabs),
     Prefab("slingshotammo_firecrackers_proj_secondary", crackerproj_fn, assets, prefabs),
     Prefab("firecrackers_slingshot", fn, assets_firecrackers, prefabs_firecrackers),
@@ -2121,4 +2208,5 @@ return Prefab("slingshotammo_firecrackers", cracker_fn, assets, prefabs),
     Prefab("slingshotammo_lazy_impact", impactlazyfn, assets, prefabs),
     Prefab("slingshotammo_shadow", shadow_fn, assets, prefabs),
     Prefab("slingshotammo_shadow_proj_secondary", shadowproj_fn, assets, prefabs),
-    Prefab("wixie_shadowclone", shadowclone_fn, assets, prefabs)
+    Prefab("wixie_shadowclone", shadowclone_fn, assets, prefabs),
+	Prefab("slingshotammo_scrapfeather_rebound", shockscrap_rebound)

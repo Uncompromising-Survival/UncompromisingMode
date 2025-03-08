@@ -2,7 +2,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("wilson_client", function(inst)
-
     local TIMEOUT = 2
 
     local function ClearStatusAilments(inst)
@@ -67,44 +66,49 @@ env.AddStategraphPostInit("wilson_client", function(inst)
 
     local _OldSpellCast = inst.actionhandlers[ACTIONS.CASTSPELL].deststate
     inst.actionhandlers[ACTIONS.CASTSPELL].deststate =
-    function(inst, action, ...)
-        if action.invobject ~= nil then
-            if action.invobject:HasTag("lighter") then
-                return "castspelllighter"
-            elseif action.invobject:HasTag("beargerclaw") then
-                if inst.components.rider and inst.components.rider:IsRiding() then
-                    inst.components.rider:Dismount()
-                else
-                    return "bearclaw_dig_start"
+        function(inst, action, ...)
+            if action.invobject ~= nil then
+                if action.invobject:HasTag("lighter") then
+                    return "castspelllighter"
+                elseif action.invobject:HasTag("beargerclaw") then
+                    if inst.components.rider and inst.components.rider:IsRiding() then
+                        inst.components.rider:Dismount()
+                    else
+                        return "bearclaw_dig_start"
+                    end
                 end
             end
+            return _OldSpellCast(inst, action, ...)
         end
-        return _OldSpellCast(inst, action, ...)
-    end
 
     local _OldPlay = inst.actionhandlers[ACTIONS.PLAY].deststate
     inst.actionhandlers[ACTIONS.PLAY].deststate =
-    function(inst, action, ...)
-        if action.invobject ~= nil then
-            if action.invobject:HasTag("pied_piper_flute") then
-                return "play_pied_piper_flute"
+        function(inst, action, ...)
+            if action.invobject ~= nil then
+                if action.invobject:HasTag("pied_piper_flute") then
+                    return "play_pied_piper_flute"
+                end
             end
+            return _OldPlay(inst, action, ...)
         end
-        return _OldPlay(inst, action, ...)
-    end
 
     local _OldChannel = inst.actionhandlers[ACTIONS.STARTCHANNELING].deststate
     inst.actionhandlers[ACTIONS.STARTCHANNELING].deststate =
-    function(inst, action, ...)
-        if action.target and action.target.components.channelable and
-            action.target.components.channelable.use_channel_longaction_noloop then
-            return "dostandingaction"
-        else
-            return _OldChannel(inst, action, ...)
+        function(inst, action, ...)
+            if action.target and action.target.components.channelable and
+                action.target.components.channelable.use_channel_longaction_noloop then
+                return "dostandingaction"
+            else
+                return _OldChannel(inst, action, ...)
+            end
         end
-    end
 
-		
+    local _OldMurder = inst.actionhandlers[ACTIONS.MURDER].deststate
+    inst.actionhandlers[ACTIONS.MURDER].deststate =
+        function(inst, action, ...)
+            return inst:HasTag("masterchef") and "domediumaction" or _OldMurder(inst, action, ...)
+        end
+
     --[[
 local _OldDeathEvent = inst.events["death"].fn
 	inst.events["death"].fn = function(inst, data)
@@ -144,9 +148,9 @@ local _OldDeathEvent = inst.events["death"].fn
         ActionHandler(ACTIONS.CHARGE_POWERCELL,
             function(inst, action)
                 return action.invobject ~= nil
-                and action.invobject:HasTag("powercell") and "doshortaction"
+                    and action.invobject:HasTag("powercell") and "doshortaction"
             end),
-            ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
+        ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
     }
 
     --[[
@@ -341,7 +345,7 @@ local _OldEatState = inst.states["eat"].onenter
                             inst.sg.statemem.projectiledelay = 8 * FRAMES - equip.projectiledelay
                             if inst.sg.statemem.projectiledelay > FRAMES then
                                 inst.sg.statemem.projectilesound =
-                                (equip:HasTag("icestaff") and "dontstarve/wilson/attack_icestaff") or
+                                    (equip:HasTag("icestaff") and "dontstarve/wilson/attack_icestaff") or
                                     (equip:HasTag("firestaff") and "dontstarve/wilson/attack_firestaff") or
                                     "dontstarve/wilson/attack_weapon"
                             elseif inst.sg.statemem.projectiledelay <= 0 then
@@ -364,7 +368,6 @@ local _OldEatState = inst.states["eat"].onenter
                         cooldown = math.max(cooldown, 16 * FRAMES)
                     end
                 elseif equip ~= nil and equip:HasTag("toolpunch") then
-
                     -- **** ANIMATION WARNING ****
                     -- **** ANIMATION WARNING ****
                     -- **** ANIMATION WARNING ****
@@ -417,7 +420,7 @@ local _OldEatState = inst.states["eat"].onenter
                         inst.sg.statemem.projectiledelay = 8 * FRAMES - equip.projectiledelay
                         if inst.sg.statemem.projectiledelay > FRAMES then
                             inst.sg.statemem.projectilesound =
-                            (equip:HasTag("icestaff") and "dontstarve/wilson/attack_icestaff") or
+                                (equip:HasTag("icestaff") and "dontstarve/wilson/attack_icestaff") or
                                 (equip:HasTag("firestaff") and "dontstarve/wilson/attack_firestaff") or
                                 "dontstarve/wilson/attack_weapon"
                         elseif inst.sg.statemem.projectiledelay <= 0 then
@@ -449,7 +452,7 @@ local _OldEatState = inst.states["eat"].onenter
                     inst.sg.statemem.ismoose = true
                     inst.AnimState:PlayAnimation(
                         (
-                        (inst.AnimState:IsCurrentAnimation("punch_a") or inst.AnimState:IsCurrentAnimation("punch_c"))
+                            (inst.AnimState:IsCurrentAnimation("punch_a") or inst.AnimState:IsCurrentAnimation("punch_c"))
                             and "punch_b") or
                         (inst.AnimState:IsCurrentAnimation("punch_b") and "punch_c") or
                         "punch_a"
@@ -511,9 +514,9 @@ local _OldEatState = inst.states["eat"].onenter
                 end),
                 TimeEvent(8 * FRAMES, function(inst)
                     if not (inst.sg.statemem.isbeaver or
-                        inst.sg.statemem.ismoose or
-                        inst.sg.statemem.iswhip or
-                        inst.sg.statemem.isbook) and
+                            inst.sg.statemem.ismoose or
+                            inst.sg.statemem.iswhip or
+                            inst.sg.statemem.isbook) and
                         inst.sg.statemem.projectiledelay == nil then
                         inst:PerformBufferedAction()
                         inst.sg:RemoveStateTag("abouttoattack")
@@ -791,8 +794,8 @@ local _OldEatState = inst.states["eat"].onenter
                     inst:ForceFacePoint(attacker.Transform:GetWorldPosition())
                 end
 
-				inst.AnimState:PlayAnimation("idle_sanity_pre", false)
-				inst.AnimState:PushAnimation("idle_sanity_loop", true)
+                inst.AnimState:PlayAnimation("idle_sanity_pre", false)
+                inst.AnimState:PushAnimation("idle_sanity_loop", true)
 
                 inst.SoundEmitter:PlaySound("dontstarve/wilson/hit")
                 DoHurtSound(inst)
@@ -854,11 +857,11 @@ local _OldEatState = inst.states["eat"].onenter
                     end
                     if DoTalkSound(inst) then
                         inst.sg.statemem.talktask =
-                        inst:DoTaskInTime(1.5 + math.random() * .5,
-                            function()
-                                inst.sg.statemem.talktask = nil
-                                StopTalkSound(inst)
-                            end)
+                            inst:DoTaskInTime(1.5 + math.random() * .5,
+                                function()
+                                    inst.sg.statemem.talktask = nil
+                                    StopTalkSound(inst)
+                                end)
                     end
                 end),
                 EventHandler("donetalking", function(inst)
@@ -884,12 +887,12 @@ local _OldEatState = inst.states["eat"].onenter
                 end
             end,
         },
-		
-		State{
-			name = "bluecap_general_action",
-			onenter = function(inst) inst.sg:GoToState("dolongaction") end,
-		},
-	
+
+        State {
+            name = "bluecap_general_action",
+            onenter = function(inst) inst.sg:GoToState("dolongaction") end,
+        },
+
     }
 
     for k, v in pairs(events) do
@@ -906,5 +909,4 @@ local _OldEatState = inst.states["eat"].onenter
         assert(v:is_a(ActionHandler), "Non-action added in mod state table!")
         inst.actionhandlers[v.action] = v
     end
-
 end)

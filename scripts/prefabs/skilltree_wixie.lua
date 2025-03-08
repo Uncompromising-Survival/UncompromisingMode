@@ -145,34 +145,34 @@ local function BuildSkillsData(SkillTreeFns)
                     inst:AddTag("wixie_ammocraft_3")
                 end,
         }, 
-
         wixie_shove_1 = {
             title = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_1_TITLE,
             desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_1_DESC,
-            --icon = "wilson_alchemy_1",
-            pos = {66,176},
-            --pos = {0,0},
-            group = "shove",
-            tags = {"shove"},
+            --icon = "wilson_torch_brightness_1",
+            pos = {-214+38,176},        
+            --pos = {1,0},
             onactivate = function(inst, fromload)
                     inst:AddTag("wixie_shove_1")
                 end,
+            group = "shove",
+            tags = {"shove"},
             root = true,
             connects = {
                 "wixie_shove_2",
             },
+            defaultfocus = true,
         },
         wixie_shove_2 = {
             title = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_2_TITLE,
             desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_2_DESC,
-            --icon = "wilson_alchemy_1",
-            pos = {66,176-38},
-            --pos = {0,-1},
-            group = "shove",
-            tags = {"shove"},
+            --icon = "wilson_torch_brightness_2",
+            pos = {-214+38,176-38},
+            --pos = {1,-1},
             onactivate = function(inst, fromload)
                     inst:AddTag("wixie_shove_2")
                 end,
+            group = "shove",
+            tags = {"shove"},
             connects = {
                 "wixie_shove_3",
             },
@@ -180,15 +180,104 @@ local function BuildSkillsData(SkillTreeFns)
         wixie_shove_3 = {
             title = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_3_TITLE,
             desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SHOVE_3_DESC,
-            --icon = "wilson_alchemy_1",
-            pos = {66,176-38-38},
-            --pos = {0,-2},
-            group = "shove",
+            --icon = "wilson_torch_brightness_3",
+            pos = {-214+38,176-38-38},
+            --pos = {1,-2},
             onactivate = function(inst, fromload)
                     inst:AddTag("wixie_shove_3")
                 end,
+            group = "shove",
             tags = {"shove"},
+        }, 
+
+		--[[wixie_slingshot_ammo_honey = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_HONEY_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_HONEY_DESC,
+            --icon = "wilson_alchemy_1",
+            pos = {66,176},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_honey")
+                end,
+            tags = {"wixie_slingshot_ammo_honey"},
+            root = true,
+        },]]
+        wixie_slingshot_ammo_stinger = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_STINGER_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_STINGER_DESC,
+            --icon = "wilson_alchemy_1",
+            pos = {66,176-38},
+            --pos = {0,-1},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_stinger")
+                end,
+            tags = {"wixie_slingshot_ammo_stinger"},
+            root = true,
         },
+        wixie_slingshot_ammo_scrapfeather = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_DESC,
+            --icon = "wilson_alchemy_1",
+            pos = {66,176-38-38},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_scrapfeather")
+                end,
+            tags = {"wixie_slingshot_ammo_scrapfeather"},
+            root = true,
+        },
+
+        --[[wixie_slingshot_ammo_moonglass = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_MOONGLASS_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_MOONGLASS_DESC,
+			--icon = "wilson_beard_speed_1",
+            pos = {66+38,176},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_moonglass")
+                end,
+            tags = {"wixie_slingshot_ammo_moonglass"},
+            root = true,
+        },]]
+        wixie_slingshot_ammo_gunpowder = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_GUNPOWDER_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_GUNPOWDER_DESC,
+            --icon = "wilson_beard_speed_2",
+            pos = {66+38,176-38},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_gunpowder")
+                end,
+            tags = {"wixie_slingshot_ammo_gunpowder"},
+            root = true,
+        },
+        wixie_slingshot_ammo_dreadstone = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_DREADSTONE_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_SLINGSHOT_AMMO_DREADSTONE_DESC,
+            --icon = "wilson_beard_speed_3",
+            pos = {66+38,176-38-38},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_slingshot_ammo_dreadstone")
+                end,
+            tags = {"wixie_slingshot_ammo_dreadstone"},
+            root = true,
+        },
+		
+		wixie_ammo_bag = {
+            title = STRINGS.SKILLTREE.WIXIE.WIXIE_AMMO_BAG_TITLE,
+            desc = STRINGS.SKILLTREE.WIXIE.WIXIE_AMMO_BAG_DESC,
+            --icon = "wilson_torch_throw",
+            pos = {-214+18,58-38},        
+            --pos = {2,-1},
+            group = "wixie_ammo",
+            onactivate = function(inst, fromload)
+                    inst:AddTag("wixie_ammo_bag")
+                end,
+            tags = {"wixie_ammo_bag"},
+            root = true,
+        },   
 
         wixie_allegiance_lock_1 = {
             desc = STRINGS.SKILLTREE.WIXIE.WIXIE_ALLEGIANCE_LOCK_1_DESC,

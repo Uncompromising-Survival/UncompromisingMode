@@ -10,11 +10,11 @@ local function OnFinished(inst)
     inst:ListenForEvent("animover", inst.Remove)
 end
 
- local function OnEquip(inst, owner)        
+local function OnEquip(inst, owner)        
 	owner.AnimState:OverrideSymbol("swap_object", "swap_iceboomerang", "swap_iceboomerang")        
 	owner.AnimState:Show("ARM_carry")        
 	owner.AnimState:Hide("ARM_normal")    
- end    
+end    
  
  
  

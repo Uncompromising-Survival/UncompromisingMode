@@ -586,3 +586,8 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 
 DESCRIBE.UM_RICE_PUDDING = "Would make for good dessert I guess."
+
+DESCRIBE.UM_BOATBOTTLE = {
+    FULL = "A practical way to move boats out of the water. A little too practical.",
+    EMPTY = "I wouldn't want to know what happens if it breaks open in my pocket."
+}
