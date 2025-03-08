@@ -14,11 +14,6 @@ local wobycommand = AddAction(
 	"WOBY_COMMAND",
 	"WOBY_COMMAND_FETCH",
 	function(act)
-	
-	if act.doer and act.doer.woby_commands_classified then
-		act.doer.woby_commands_classified:RecallWoby()
-	end
-	
 	local hasfollowers = false
 	local hasmerms = false
 	
@@ -195,11 +190,6 @@ local wobystay = AddAction(
 	"WOBY_STAY",
 	"WOBY_STAY",
 	function(act)
-	
-	if act.doer and act.doer.woby_commands_classified then
-		act.doer.woby_commands_classified:RecallWoby()
-	end
-	
 	local act_pos = act:GetActionPoint()
 	local hasfollowers = false
 	

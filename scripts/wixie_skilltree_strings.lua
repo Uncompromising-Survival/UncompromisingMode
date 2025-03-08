@@ -45,10 +45,10 @@ STRINGS.SKILLTREE.WIXIE = {
 	WIXIE_SHOVE_3_DESC = "Increase shove distance by 30%",
 	
 	WIXIE_ALLEGIANCE_SHADOW_TITLE = "Nightmare Maker",
-	WIXIE_ALLEGIANCE_SHADOW_DESC = "Unlock the ability to craft 'Jessie', Gelblob Rounds, and Pure Horror Rounds.",
+	WIXIE_ALLEGIANCE_SHADOW_DESC = "Unlock the ability to craft 'Jessie', Gelblob Rounds, and Pure Horror Rounds.\n ART FOR JESSIE IS UNFINISHED",
 	
 	WIXIE_ALLEGIANCE_LUNAR_TITLE = "Dream Invader",
-	WIXIE_ALLEGIANCE_LUNAR_DESC = "Unlock the ability to craft 'Claire', Lunarhusk Rounds, and Pure Brilliance Rounds.",
+	WIXIE_ALLEGIANCE_LUNAR_DESC = "Unlock the ability to craft 'Claire', Lunarhusk Rounds, and Pure Brilliance Rounds.\n ART FOR CLAIRE IS UNFINISHED",
 	
 	WIXIE_ALLEGIANCE_LOCK_1_DESC = "Learn 12 skills to unlock.",
 	
