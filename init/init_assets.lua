@@ -397,6 +397,8 @@ local inventoryitems =
 	"um_chiles_en_nogada",
 	"um_rice_pudding",
 	"um_kebab",
+	"jawed_scythe",
+	"snappy_jaw",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -469,6 +471,7 @@ Assets = {
 
 	----TURF
 	Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
+	Asset("IMAGE", "levels/textures/ground_noise_hoodedfoliage.tex"),
 	Asset("ANIM", "anim/hfturf.zip"),
 	Asset("ANIM", "anim/swturf.zip"),
 	----ASSET("ATLAS_BUILD", "images/inventoryimages/turf_jungle.xml"),

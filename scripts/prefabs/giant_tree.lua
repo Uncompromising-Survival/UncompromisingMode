@@ -437,12 +437,10 @@ local function on_chop(inst, chopper, remaining_chops)
         if remaining_chops == 0 or remaining_chops < 0 then
             phase = 4
         end
-        --TheNet:Announce("I told new anim")
-        --inst.AnimState:PlayAnimation("damaged-"..phase,true)
     end
 end
 
-local function BringTheForestDown(inst, chopper) --!
+local function BringTheForestDown(inst, chopper) 
     for i = 1, math.random(2, 3) do
         SpawnDebris(inst, chopper, felloots)
         inst:DoTaskInTime(math.random(1, 2), SpawnDebris(inst, chopper, felloots))

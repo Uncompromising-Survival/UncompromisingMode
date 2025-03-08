@@ -145,7 +145,7 @@ local function OnExplode(inst, target)
                             target, debuffkey, 0.5 + 0.15)
                     else
                         target.components.locomotor:SetExternalSpeedMultiplier(
-                            target, debuffkey, 0.5)
+                            target, debuffkey, 0.7)
                     end
                     target._bear_trap_speedmulttask =
                         target:DoTaskInTime(10, function(i)
@@ -238,6 +238,14 @@ local function OnHaunt(inst, haunter)
     return false
 end
 
+local function BecomeItem(inst)
+	local jaw = SpawnPrefab("snappy_jaw")
+	jaw.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	jaw.AnimState:PlayAnimation("become_item",false)
+	jaw.AnimState:PushAnimation("item",true)
+	inst:Remove()
+end
+
 local function OnAttacked(inst, worker)
     if not inst.components.health:IsDead() then
         if inst.Snapped then
@@ -245,7 +253,11 @@ local function OnAttacked(inst, worker)
                 "dontstarve/impacts/impact_metal_armour_dull")
             inst.AnimState:PlayAnimation("hit")
         else
-            OnExplode(inst, nil)
+			if inst.prefab == "um_bear_trap_old" then
+				BecomeItem(inst)
+			else
+				OnExplode(inst, nil)
+			end
         end
     end
 end

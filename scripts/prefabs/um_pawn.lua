@@ -443,15 +443,15 @@ local function create_common(r, g, b)
 
     inst.entity:AddTransform()
     inst.entity:AddSoundEmitter()
-    -- inst.entity:AddLight()
+    inst.entity:AddLight()
     inst.entity:AddNetwork()
 
     inst:AddTag("FX")
 
-    -- inst.Light:SetRadius(2)
-    -- inst.Light:SetFalloff(.7)
-    -- inst.Light:SetIntensity(.65)
-    -- inst.Light:SetColour(r / 255, g / 255, b / 255)
+    inst.Light:SetRadius(2)
+    inst.Light:SetFalloff(.7)
+    inst.Light:SetIntensity(.65)
+    inst.Light:SetColour(r / 255, g / 255, b / 255)
 
     inst.entity:SetPristine()
 
@@ -460,10 +460,10 @@ local function create_common(r, g, b)
     inst.radius = 2
 
     inst.persists = false
-    -- inst:DoPeriodicTask(0.1, function(inst)
-        -- inst.radius = inst.radius - 0.1
-        -- inst.Light:SetRadius(inst.radius)
-    -- end)
+    inst:DoPeriodicTask(0.1, function(inst)
+        inst.radius = inst.radius - 0.1
+        inst.Light:SetRadius(inst.radius)
+    end)
 
     inst:DoTaskInTime(1, inst.Remove)
 

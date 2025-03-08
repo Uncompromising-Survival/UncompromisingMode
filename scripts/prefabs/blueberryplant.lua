@@ -307,7 +307,8 @@ local function blueberryplant()
 	inst:AddTag("blueberrybomb")
     inst:AddTag("trapdamage")
     inst:AddTag("birdblocker")
-
+	inst:AddTag("plant")
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then

@@ -44,6 +44,57 @@ AddTile("ANCIENTHOODEDFOREST",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
+	
+AddTile("HOODEDFOREST_FOLIAGE", -- tile_name 1
+    "LAND",             -- tile_range 2
+    {
+        -- tile_data 3
+        ground_name = "hoodedfoliage",
+    }, {
+        -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
+        name = "grass",  -- From Grass
+        noise_texture = "ground_noise_hoodedfoliage",
+        runsound = "dontstarve/movement/walk_grass",
+        walksound = "dontstarve/movement/walk_grass",
+        snowsound = "dontstarve/movement/run_snow",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR,
+        cannotbedug = true
+    }, {
+        -- minimap_tile_def 5
+        name = "hoodedmoss",
+        noise_texture = "mini_noise_hoodedmoss.tex"
+    }, {
+        -- turf_def 6
+        name = "hoodedmoss",
+        anim = "hoodedmoss",
+        bank_build = "hfturf"
+    })
+	
+AddTile("HOODEDFOREST_FOLIAGE_DARK", -- tile_name 1
+    "LAND",             -- tile_range 2
+    {
+        -- tile_data 3
+        ground_name = "hoodedfoliage",
+    }, {
+        -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
+        name = "forest",  -- From Forest
+        noise_texture = "ground_noise_hoodedfoliage",
+        runsound = "dontstarve/movement/walk_grass",
+        walksound = "dontstarve/movement/walk_grass",
+        snowsound = "dontstarve/movement/run_snow",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    }, {
+        -- minimap_tile_def 5
+        name = "hoodedmoss",
+        noise_texture = "mini_noise_hoodedmoss.tex"
+    }, {
+        -- turf_def 6
+        name = "hoodedmoss",
+        anim = "hoodedmoss",
+        bank_build = "hfturf"
+    })
 
 AddTile("UM_FLOODWATER",
     "LAND",
@@ -277,6 +328,12 @@ local function GetTileForHotspring(noise)
     return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
 end
 
+local function GetTileForHoodedForest(noise)
+    if noise < 0.4 then
+        return WORLD_TILES.HOODEDFOREST_FOLIAGE
+    end
+    return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
+end
 
 local function GetTileForHotspringIA(noise)
     if noise < 0.3 then
@@ -299,11 +356,14 @@ end
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
 AddTile("UM_HOTSPRING_FORESTY", "NOISE")
+AddTile("UM_HOODED_FOREST", "NOISE")
 local NoiseTileFunctions = require("noisetilefunctions")
 
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING] = GetTileForHotspring
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_IA] = GetTileForHotspringIA
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_FORESTY] = GetTileForHotspring_Foresty
+
+NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST] = GetTileForHoodedForest
 
 require("map/terrain")
 --require("map/torreniv_terrain")
@@ -313,11 +373,14 @@ local filters = {
     ["springrock2"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
     ["springrock3"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
 
-    ["evergreen_sparse"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
-    ["evergreen_sparse_normal"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
-    ["evergreen_sparse_short"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
-    ["evergreen_sparse_tall"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
-
+    ["evergreen_sparse"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_normal"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_short"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_tall"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+	
+	["thicket_builder"] = {WORLD_TILES.HOODEDFOREST_FOLIAGE},
+	["hoodedtrapdoor"] = {WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK},
+	
     ["um_hotspring"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS },
     ["magmarock"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
     ["magmarock1"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
@@ -328,3 +391,10 @@ local filters = {
 for k, v in pairs(filters) do
     GLOBAL.terrain.filter[k] = v
 end
+
+GLOBAL.HOODED_GROUND_TYPES = {
+	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3
+}
+GLOBAL.HOODED_ARENA_GROUND_TYPES = {
+	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2,3
+}

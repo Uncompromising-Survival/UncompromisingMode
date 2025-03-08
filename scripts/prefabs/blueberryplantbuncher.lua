@@ -1,3 +1,10 @@
+local function RemoveThicket(x,y,z)
+	local thicket = TheSim:FindEntities(x,y,z,2,{"briar_plants"})
+	for i,v in ipairs(thicket) do
+		v:Remove()	
+	end
+end
+
 local function SpawnBlueberryBunches(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 	x = x - 2
@@ -7,12 +14,14 @@ local function SpawnBlueberryBunches(inst)
 			if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
 				local plant = SpawnPrefab("blueberryplant")
 				plant.Transform:SetPosition(x, y, z)
+				RemoveThicket(x,y,z)
 			end
 			x = x + math.random()+math.random()+0.6
 			z = z - 0.5 +math.random()
 			if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
 				local sorrel = SpawnPrefab("um_sorrel")
 				sorrel.Transform:SetPosition(x, y, z)
+				RemoveThicket(x,y,z)
 			end
 		end
 		x = x - 3 * math.random()- 3 * math.random() - 0.75
@@ -35,7 +44,7 @@ local function makefn()
         if not TheWorld.ismastersim then
             return inst
         end
-		inst:DoTaskInTime(0,SpawnBlueberryBunches)
+		inst:DoTaskInTime(1,SpawnBlueberryBunches)
         return inst
 end
 

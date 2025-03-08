@@ -144,7 +144,6 @@ local prefabs = {
 	"marsh_grass",
 	"web_net_splat_fx",
 	"web_bomb",
-	--"hoodedforestturf",
 	"poopregenbuff",
 	"giant_tree",
 	"webbedcreature",
@@ -565,7 +564,8 @@ local prefabs = {
 	"um_cookpot_wagstaff",
 	"um_ghost_peppers",
 
-    "um_boatbottle"
+    "um_boatbottle",
+	"jawed_scythe",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

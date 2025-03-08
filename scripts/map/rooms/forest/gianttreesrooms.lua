@@ -4,280 +4,305 @@ local Layouts = require("map/layouts").Layouts
 local StaticLayout = require("map/static_layout")
 
 Layouts["cave_entrance_lush"] = StaticLayout.Get("map/static_layouts/cave_entrance_lush")
+
 Layouts["widow_arena"] = StaticLayout.Get("map/static_layouts/widow_arena")
+Layouts["widow_arena"].ground_types = HOODED_ARENA_GROUND_TYPES
+
+Layouts["giant_tree_generic"] = StaticLayout.Get("map/static_layouts/giant_tree_generic")
+Layouts["giant_tree_generic"].ground_types = HOODED_GROUND_TYPES
+
+Layouts["giant_tree_pond"] = StaticLayout.Get("map/static_layouts/giant_tree_pond")
+Layouts["giant_tree_pond"].ground_types = HOODED_GROUND_TYPES
+
+Layouts["hf_holidays"] = StaticLayout.Get("map/static_layouts/hf_holidays")
+Layouts["hf_holidays"].ground_types = HOODED_GROUND_TYPES
 
 AddRoom("GiantTrees",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST,
+		value = WORLD_TILES.UM_HOODED_FOREST,
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
-			distributepercent = 0.3,
+			distributepercent = 0.6,
 			distributeprefabs = {
 				sapling = 0.2,
 				evergreen_sparse = 0.5,
-				hooded_fern = 0.5,
+				thicket_builder = 1,
 				ghost_walrus = 0.005,
-				blueberryplantbuncher = 0.05,
+				blueberryplantbuncher = 0.1,
 				red_mushroom = 0.05,
 				hoodedtrapdoor = 0.05,
-				giant_tree_infested = 0.01,
-				lightrays_canopy = 0.25,
+				lightrays_canopy = 0.05,
+				um_bear_trap_old = 0.1,
 			},
             countprefabs =
             {
-                giant_tree = function() return 6 + math.random(1, 2) end,
-                extracanopyspawner = function() return 10 + math.random(0, 1) end,
-                pitcherplant = function() return math.random(1, 2) end,
-
-            }
+                extracanopyspawner = 4,
+                pitcherplant = function() return math.random(3, 5) end,
+            },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(1,3) end,
+				["giant_tree_pond"] = function() return math.random(0,2) end,
+			}
         }
     })
-AddRoom("AphidLand",
+AddRoom("HoodedEntrance",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST,
+		value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
-			distributepercent = 0.3,
+			distributepercent = 0.5,
 			distributeprefabs = {
-				um_bear_trap_old = 0.05,
 				sapling = 0.2,
-				evergreen_sparse = 0.5,
-				hooded_fern = 0.5,
-				ghost_walrus = 0.05,
-				blueberryplantbuncher = 0.05,
-				blue_mushroom = 0.05,
+				thicket_builder = 1,
+				ghost_walrus = 0.005,
+				blueberryplantbuncher = 0.1,
+				red_mushroom = 0.05,
 				hoodedtrapdoor = 0.05,
-				lightrays_canopy = 0.4,
+				lightrays_canopy = 0.01,
+				um_bear_trap_old = 0.1,
+				hoodedtrapdoor = 0.05,
 			},
             countprefabs =
             {
-                giant_tree_infested = function() return 6 + math.random(1, 2) end,
-                extracanopyspawner = function() return 10 + math.random(0, 1) end,
-                pitcherplant = function() return math.random(1, 2) end,
-
-            }
+				pitcherplant = function() return math.random(1, 2) end,
+            },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(3,4) end,
+			}
         }
     })
 AddRoom("SpideryGiantTrees",
     {
         colour = { r = 1, g = 1, b = 1, a = .50 },
-        value = WORLD_TILES.HOODEDFOREST,
+        value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
         tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
         contents =
         {
             countstaticlayouts = {
                 ["widow_arena"] = 1,
             },
-            distributepercent = 0.3,
+            distributepercent = 0.4,
             distributeprefabs =
             {
-                um_bear_trap_old = 0.05,
-                giant_tree = 0.01,
-                houndbone = 0.25,
-                ghost_walrus = 0.01,
-                extracanopyspawner = 1,
-                hooded_fern = 0.5,
-                --giant_tree_infested = 0.006,
-                --webbedcreature = 0.2,
-                lightrays_canopy = 0.6,
+                um_bear_trap_old = 0.1,
+                thicket_builder = 1,
+                lightrays_canopy = 0.1,
+				ghost_walrus = 0.005,
+				hoodedtrapdoor = 0.05,
             },
             countprefabs =
             {
-                giant_tree = function() return 3 + math.random(0, 1) end,
-                extracanopyspawner = function() return 10 + math.random(0, 1) end,
+                extracanopyspawner = 4,
             },
         }
     })
 AddRoom("WalrusGiantTrees",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST,
+		value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
 		tags = { "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
-			distributepercent = 0.3,
+			distributepercent = 0.6,
 			distributeprefabs = {
 				um_bear_trap_old = 0.1,
 				sapling = 0.2,
 				evergreen_sparse = 0.5,
-				hooded_fern = 0.5,
+				thicket_builder = 1,
 				ghost_walrus = 0.5,
-				blueberryplantbuncher = 0.02,
+				blueberryplantbuncher = 0.1,
 				green_mushroom = 0.05,
 				hoodedtrapdoor = 0.2,
-				giant_tree_infested = 0.005,
 				lightrays_canopy = 0.25,
 			},
             countprefabs =
             {
-                giant_tree = function() return 6 + math.random(1, 2) end,
-                extracanopyspawner = function() return 10 + math.random(0, 1) end,
-                pitcherplant = function() return math.random(0, 1) end,
+                extracanopyspawner = 4,
+                pitcherplant = 1,
                 walrus_camp = 1,
 
-            }
+            },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(7,10) end,
+				["giant_tree_pond"] = function() return math.random(0,2) end,
+			}
         }
     })
 AddRoom("BGGiantTrees",
 	{
 		colour = { r = 1, g = 1, b = 1, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST,
+		value = WORLD_TILES.UM_HOODED_FOREST,
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
-			distributepercent = 0.3,
+			distributepercent = 0.6,
 			distributeprefabs = {
 				sapling = 0.2,
 				evergreen_sparse = 0.5,
-				hooded_fern = 0.5,
-				ghost_walrus = 0.005,
-				blueberryplantbuncher = 0.035,
+				thicket_builder = 1,
+				ghost_walrus = 0.03,
+				blueberryplantbuncher = 0.1,
 				blue_mushroom = 0.05,
-				giant_tree_infested = 0.005,
 				lightrays_canopy = 0.25,
+				um_bear_trap_old = 0.1,
+				hoodedtrapdoor = 0.05,
 			},
 			countprefabs =
 			{
-                giant_tree = function() return 6 + math.random(0, 1) end,
                 extracanopyspawner = function() return 10 + math.random(0, 1) end,
                 pitcherplant = function() return math.random(0, 1) end,
 
-            }
+            },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(7,10) end,
+			}
         }
+
     })
 AddRoom("SnapDragons",
     {
         colour = { r = 1, g = 1, b = 1, a = .50 },
-        value = WORLD_TILES.MUD,
+        value = WORLD_TILES.UM_HOODED_FOREST,
         tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
         contents =
         {
-            distributepercent = .05,
-            distributeprefabs =
-            {
-                hooded_fern = 0.02,
-                giant_tree = 0.005,
-                giant_tree_infested = 0.005,
-            },
+		
             countprefabs =
             {
+				thicket_builder = function() return math.random(2,3) end,
                 snapdragon = function() return 1 + math.random(3, 4) end,
-                giant_tree = function() return 3 + math.random(0, 1) end,
-                extracanopyspawner = function() return 10 + math.random(0, 1) end,
+                extracanopyspawner = 4,
+				hoodedtrapdoor = function() return math.random (3,4) end,
             },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(7,10) end,
+			}
         }
+
     })
 AddRoom("MoonBaseGiantTrees", {
     colour = { r = .8, g = 0.5, b = .6, a = .50 },
-    value = WORLD_TILES.HOODEDFOREST,
+    value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
     tags = { "RoadPoison", "hoodedcanopy" },
     contents = {
-        countprefabs = {
-            giant_tree = function() return 3 + math.random(0, 1) end,
-        },
-        countstaticlayouts = { ["MoonbaseOne"] = 1 },
-
-        distributepercent = .8,
+		countstaticlayouts = {
+			["MoonbaseOne"] = 1
+		},
+        distributepercent = 0.3,
         distributeprefabs =
         {
             sapling = 0.2,
             evergreen_sparse = 0.5,
-            hooded_fern = 0.5,
-            blueberryplantbuncher = 0.001,
-            pitcherplant = 0.0001,
+            thicket_builder = 1,
+            blueberryplantbuncher = 0.1,
+            pitcherplant = 0.001,
+			um_bear_trap_old = 0.05,
+			hoodedtrapdoor = 0.05,
+			
         },
+		countprefabs =
+		{
+			extracanopyspawner = 4,
+		},
     }
+
 })
 AddRoom("QuestionableDecisions",
     {
         colour = { r = 1, g = 1, b = 1, a = .50 },
-        value = WORLD_TILES.HOODEDFOREST,
+        value = WORLD_TILES.UM_HOODED_FOREST,
         tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
         contents =
         {
-            distributepercent = 0.7,
+            distributepercent = 0.3,
             distributeprefabs =
             {
-                giant_tree = 0.01,
-                hooded_fern = 20,
+                thicket_builder = 1,
                 lightrays_canopy = 0.25,
             },
             countstaticlayouts = { ["cave_entrance_lush"] = 1 },
-            countprefabs =
-            {
-                giant_tree = function() return 1 + math.random(0, 1) end,
-            },
         }
     })
 AddRoom("HoodedTown", {
     colour = { r = .8, g = 0.5, b = .6, a = .50 },
-    value = WORLD_TILES.HOODEDFOREST,
+    value = WORLD_TILES.UM_HOODED_FOREST,
     tags = { "RoadPoison", "hoodedcanopy" },
     contents = {
         countprefabs = {
-            giant_tree = function() return 3 + math.random(0, 1) end,
             extracanopyspawner = function() return 10 + math.random(0, 1) end,
+			
         },
 
-        distributepercent = .4,
+        distributepercent = 0.3,
         distributeprefabs =
         {
             sapling = 0.2,
             evergreen_sparse = 0.4,
-            hooded_fern = 0.3,
+            thicket_builder = 1,
             ghost_walrus = 0.02,
-            blueberryplantbuncher = 0.001,
-            pitcherplant = 0.0001,
+            blueberryplantbuncher = 0.1,
+            pitcherplant = 0.001,
             lightrays_canopy = 0.25,
+			um_bear_trap_old = 0.1,
+			hoodedtrapdoor = 0.05,
         },
+		countstaticlayouts = {
+			["giant_tree_generic"] = function() return math.random(1,2) end,
+		}
     }
 })
 AddRoom("RoseGarden", {
     colour = { r = .8, g = 0.5, b = .6, a = .50 },
-    value = WORLD_TILES.HOODEDFOREST,
+    value = WORLD_TILES.UM_HOODED_FOREST,
     tags = { "RoadPoison", "hoodedcanopy" },
     contents = {
         countprefabs = {
-            giant_tree = function() return 3 + math.random(0, 1) end,
             extracanopyspawner = function() return 10 + math.random(0, 1) end,
         },
 
-        distributepercent = .4,
+        distributepercent = 0.3,
         distributeprefabs =
         {
             sapling = 0.2,
             evergreen_sparse = 0.4,
-            hooded_fern = 0.3,
+            thicket_builder = 1,
             ghost_walrus = 0.005,
-            blueberryplantbuncher = 0.001,
+            blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
+			um_bear_trap_old = 0.1,
+			hoodedtrapdoor = 0.05,
         },
+		countstaticlayouts = {
+			["hf_holidays"] = 1,
+			["giant_tree_generic"] = function() return math.random(1,2) end,
+		},
     }
 })
 AddRoom("HFHolidays", {
     colour = { r = .8, g = 0.5, b = .6, a = .50 },
-    value = WORLD_TILES.HOODEDFOREST,
+    value = WORLD_TILES.UM_HOODED_FOREST,
     tags = { "RoadPoison", "hoodedcanopy" },
     contents = {
         countprefabs = {
-            giant_tree = function() return 3 + math.random(0, 1) end,
             extracanopyspawner = function() return 10 + math.random(0, 1) end,
         },
 
-        distributepercent = .4,
+        distributepercent = 0.6,
         distributeprefabs =
         {
-            um_bear_trap_old = 0.05,
-            ghost_walrus = 0.006,
+            um_bear_trap_old = 0.1,
+            ghost_walrus = 0.01,
             sapling = 0.2,
             evergreen_sparse = 0.4,
-            hooded_fern = 0.3,
-            blueberryplantbuncher = 0.001,
+            thicket_builder = 1,
+            blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
+			um_bear_trap_old = 0.1,
+			hoodedtrapdoor = 0.05,
         },
     }
 })

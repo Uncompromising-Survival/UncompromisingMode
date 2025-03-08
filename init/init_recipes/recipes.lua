@@ -81,10 +81,22 @@ AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("night
 ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
 
 
-AddRecipe2("um_bear_trap_equippable_tooth", { Ingredient("cutstone", 2), Ingredient("houndstooth", 3), Ingredient("rope", 1) }, TECH.SCIENCE_TWO, { nil }, { "WEAPONS" })
-ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
+-- AddRecipe2(
+    -- "um_bear_trap_equippable_tooth",
+    -- { Ingredient("twigs", 4), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
+    -- TECH.SCIENCE_ONE,
+    -- { nil },
+    -- { "WEAPONS" }
+-- )
+-- ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
 
-AddRecipe2("um_bear_trap_equippable_gold", { Ingredient("goldnugget", 4), Ingredient("houndstooth", 3), Ingredient("rope", 1) }, TECH.SCIENCE_TWO, { nil }, { "WEAPONS" })
+AddRecipe2(
+    "um_bear_trap_equippable_gold",
+    { Ingredient("goldnugget", 1), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1)},
+    TECH.SCIENCE_TWO,
+    { nil },
+    { "WEAPONS" }
+)
 ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
 
 if GetModConfigData("wiltfly") then
@@ -420,6 +432,17 @@ ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
 ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+
+AddRecipe2(
+	"jawed_scythe",
+	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 1) },
+	TECH.SCIENCE_ONE,
+	nil,
+	{ "TOOLS" }
+)
+ChangeSortKey("jawed_scythe", "hammer", "TOOLS", true)
+GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense thickets."
+
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})

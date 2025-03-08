@@ -37,6 +37,27 @@ local function KnockOutWeapon(inst,data)
     end
 end
 
+
+-- Spirit wanted the boulder crab to explode into rocks upon death. I can't remember where 12 came from, but that's how many rocks we're going with I guess.
+-- Wanted nitre less than flint for some reason, can't recall at the moment of coding.
+local function ExplodeIntoRockyLoot(inst)
+	local weighted_rock_loot = {}
+	weighted_rock_loot["rocks"] = 0.6
+	weighted_rock_loot["flint"] = 0.2
+	weighted_rock_loot["nitre"] = 0.15
+	weighted_rock_loot["goldnugget"] = 0.05
+	for i = 1,12 do
+		local pt = inst:GetPosition()
+        local r = math.random()
+        local theta = TWOPI * math.random()
+		local offset = FindWalkableOffset(pt, theta, r, 1, true, true, nil, true, true)
+		if offset then
+			inst.components.lootdropper:FlingItem(SpawnPrefab(weighted_random_choice(weighted_rock_loot)), pt+offset)
+		end
+	end
+end
+
+
 local actionhandlers = 
 {
     ActionHandler(ACTIONS.EAT, "eat"),
@@ -109,6 +130,7 @@ local states=
             inst.AnimState:PlayAnimation("death")
 			RemovePhysicsColliders(inst)   
             inst.components.lootdropper:DropLoot(Vector3(inst.Transform:GetWorldPosition()))
+			ExplodeIntoRockyLoot(inst)
 			if inst.myrock and inst.myrock:IsValid() and inst.myrock.components.workable then
 				inst.myrock.components.workable:Destroy(inst)
 			elseif inst.myrock then
