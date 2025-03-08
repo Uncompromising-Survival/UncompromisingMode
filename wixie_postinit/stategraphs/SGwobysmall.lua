@@ -1,7 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-env.AddStategraphPostInit("SGcritter_puppy", function(inst)
+env.AddStategraphPostInit("wobysmall", function(inst)
 
 local actionhandlers =
 {
