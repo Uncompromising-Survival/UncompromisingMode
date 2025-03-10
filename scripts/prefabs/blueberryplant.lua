@@ -296,10 +296,6 @@ local function blueberryplant()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    local minimap = inst.entity:AddMiniMapEntity()
-    inst.entity:AddNetwork()
-
-    inst.MiniMapEntity:SetIcon("blueberryplant_map.tex")
 
     inst.AnimState:SetBank("blueberryplant")
     inst.AnimState:SetBuild("blueberryplant")
