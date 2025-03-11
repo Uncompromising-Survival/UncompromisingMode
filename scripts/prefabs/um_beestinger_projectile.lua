@@ -3,7 +3,7 @@ local assets =
     Asset("ANIM", "anim/um_beestinger_projectile.zip"),
 }
 
-local TARGET_IGNORE_TAGS = { "INLIMBO", "bee" }
+local TARGET_IGNORE_TAGS = {"INLIMBO", "dead", "playerghost", "bee", "noattack"}
 
 local function pipethrown(inst)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
@@ -12,30 +12,26 @@ local function pipethrown(inst)
     inst.persists = false
 end
 
+local function TargetHasTheseIgnoreTags(target, tags)
+	return target:HasAnyTag(tags) or target.sg and target.sg:HasAnyStateTag(tags)
+end
+
 local function onhit(inst, attacker, target)
-
-    if not target:IsValid() or target:HasTag("bee") then
-        --target killed or removed in combat damage phase
-        return
+    if target:IsValid() and not TargetHasTheseIgnoreTags(target, TARGET_IGNORE_TAGS) then
+        if target.components.sleeper ~= nil and target.components.sleeper:IsAsleep() then
+            target.components.sleeper:WakeUp()
+        end
+        if target.components.combat ~= nil then
+            target.components.combat:SuggestTarget(attacker)
+            target.components.combat:GetAttacked(attacker, 50, inst)
+        end
     end
-
-    if target.components.sleeper ~= nil and target.components.sleeper:IsAsleep() then
-        target.components.sleeper:WakeUp()
-    end
-
-
-    if target.components.combat ~= nil then
-        target.components.combat:SuggestTarget(attacker)
-    end
-
-    target.components.combat:GetAttacked(attacker, 50, inst)
-
     inst:Remove()
 end
 
 local function PhysTest(inst)
-    local ent = FindEntity(inst, inst.hitdist, nil, { "_combat" }, { "INLIMBO", "dead", "playerghost" })
-    if ent and not ent:HasTag("bee") and ent:IsValid() then
+    local ent = FindEntity(inst, inst.hitdist, nil, {"_combat"}, TARGET_IGNORE_TAGS)
+    if ent and ent:IsValid() then
         onhit(inst, inst, ent)
     end
 end
