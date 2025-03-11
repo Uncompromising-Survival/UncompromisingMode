@@ -13,7 +13,7 @@ local function pipethrown(inst)
 end
 
 local function TargetHasTheseIgnoreTags(target, tags)
-	return target:HasAnyTag(tags) or target.sg and target.sg:HasAnyStateTag(tags)
+    return target:HasAnyTag(tags) or target.sg and (type(tags) == "table" and target.sg:HasAnyStateTag(unpack(tags)) or target.sg:HasAnyStateTag(tags))
 end
 
 local function onhit(inst, attacker, target)
