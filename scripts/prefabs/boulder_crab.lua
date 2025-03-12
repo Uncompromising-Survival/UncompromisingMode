@@ -23,7 +23,6 @@ SetSharedLootTable('boulder_crab',
         { 'rocks', 1.0 },
         { 'rocks', 1.0 },
         { 'meat',  1.0 },
-        { 'meat',  1.0 },
         { 'rocks', 0.5 },
     })
 

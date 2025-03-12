@@ -56,12 +56,39 @@ local function StartWatchingNight(inst)
     OnIsNight(inst, TheWorld.state.isnight)
 end
 
+local function Ascend(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	if y < 10 then
+		inst.Transform:SetPosition(x,y+0.1,z)
+	end
+end
+
+local function Descend(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	if y > 0 then
+		inst.Transform:SetPosition(x,y-0.1,z)
+	end
+end
+
+local function FernsQuestionMark(inst)
+	if FindEntity(inst,2,nil,{"briar_plants"}) then
+		Ascend(inst)
+	else
+		Descend(inst)
+	end
+end
+
+
 local function OnEntitySleep(inst)
     inst:ListenForEvent("enterlimbo", StopWatchingNight)
     inst:ListenForEvent("exitlimbo", StartWatchingNight)
     if not inst:IsInLimbo() then
         StartWatchingNight(inst)
     end
+	if inst.FernsTask then
+		inst.FernsTask:Cancel()
+		inst.FernsTask = nil
+	end
 end
 
 local function OnEntityWake(inst)
@@ -70,6 +97,7 @@ local function OnEntityWake(inst)
     if not inst:IsInLimbo() then
         StopWatchingNight(inst)
     end
+	inst.FernsTask = inst:DoPeriodicTask(FRAMES,FernsQuestionMark)
 end
 
 -- TEAM ATTACKER STUFF
@@ -233,7 +261,8 @@ local function fn()
     inst.OnLoad = onload
 
     inst.cavebat = false
-
+	
+	
     return inst
 end
 

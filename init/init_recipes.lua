@@ -631,21 +631,21 @@ end
 
 AddRecipe2(
     "um_bear_trap_equippable_tooth",
-    { Ingredient("cutstone", 2), Ingredient("houndstooth", 3), Ingredient("rope", 1) },
-    TECH.SCIENCE_TWO,
+    { Ingredient("twigs", 4), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
+    TECH.SCIENCE_ONE,
     { nil },
     { "WEAPONS" }
 )
 ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
 
-AddRecipe2(
-    "um_bear_trap_equippable_gold",
-    { Ingredient("goldnugget", 4), Ingredient("houndstooth", 3), Ingredient("rope", 1) },
-    TECH.SCIENCE_TWO,
-    { nil },
-    { "WEAPONS" }
-)
-ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
+-- AddRecipe2(
+    -- "um_bear_trap_equippable_gold",
+    -- { Ingredient("goldnugget", 4), Ingredient("houndstooth", 3), Ingredient("rope", 1) },
+    -- TECH.SCIENCE_TWO,
+    -- { nil },
+    -- { "WEAPONS" }
+-- )
+-- ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
 
 if GetModConfigData("wiltfly") then
     AddRecipe2(
@@ -1630,18 +1630,11 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.STRINGS.RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
-	
+
 	AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1))
     
-	AddRecipe2(
-        "beakbasher",
-        { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) },
-        TECH.SCIENCE_TWO,
-        nil,
-        { "TOOLS" }
-    )
-    ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
-    GLOBAL.STRINGS.RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick."
+
+
 
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
@@ -1654,6 +1647,26 @@ if GetModConfigData("wixie_walter") then
     end)
 end
 
+AddRecipe2(
+	"beakbasher",
+	{ Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) },
+	TECH.SCIENCE_TWO,
+	nil,
+	{ "TOOLS" }
+)
+ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+GLOBAL.STRINGS.RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick."
+
+AddRecipe2(
+	"jawed_scythe",
+	{ Ingredient("twigs", 4), Ingredient("steelwool", 2), Ingredient("snappy_jaw", 1) },
+	TECH.SCIENCE_ONE,
+	nil,
+	{ "TOOLS" }
+)
+ChangeSortKey("jawed_scythe", "hammer", "TOOLS", true)
+GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense thickets."
+	
 AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" },
     { "CHARACTER" })
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
