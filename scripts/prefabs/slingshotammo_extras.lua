@@ -310,7 +310,7 @@ local function fn()
     inst.attacker = nil
 
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_PELLET
 
     inst:AddComponent("inventoryitem")
 
@@ -1483,6 +1483,7 @@ local function fncommon(symbol, inv, overridebuild, special)
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
+    MakeInventoryFloatable(inst, "small", .2, { .85, .9, .85 })
 
     inst.AnimState:SetRayTestOnBB(true)
     inst.AnimState:SetBank("slingshotammo")
@@ -1496,7 +1497,6 @@ local function fncommon(symbol, inv, overridebuild, special)
 		inst:AddTag("wixieammo_basic")
 	end
 	
-    inst:AddTag("molebait")
     inst:AddTag("slingshotammo")
     inst:AddTag("reloaditem_ammo")
 
@@ -1514,20 +1514,14 @@ local function fncommon(symbol, inv, overridebuild, special)
 
     inst:AddComponent("tradable")
 
-    inst:AddComponent("edible")
-    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
-    inst.components.edible.hungervalue = 0
-
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_TINYITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_PELLET
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/" .. inv .. ".xml"
-    inst.components.inventoryitem:SetSinks(true)
 
-    inst:AddComponent("bait")
     MakeHauntableLaunch(inst)
 
     return inst
@@ -1539,7 +1533,14 @@ local function cracker_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+    inst.components.edible.healthvalue = -10
+    inst.components.inventoryitem:SetSinks(true)
 
+    inst:AddComponent("bait")
     return inst
 end
 
@@ -1552,9 +1553,9 @@ local function honey_fn()
 
     inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.GOODIES
-    inst.components.edible.hungervalue = 0
-    inst.components.edible.sanityvalue = 1
-    inst.components.edible.healthvalue = 1
+    inst.components.edible.hungervalue = 0.5 --Adjusted to account for skill tree's extra ammo per craft AND UM's stats for Honey * 3. -CB
+    inst.components.edible.sanityvalue = 0.65
+    inst.components.edible.healthvalue = 0.2
 
     return inst
 end
@@ -1575,6 +1576,7 @@ local function tremor_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst.components.inventoryitem:SetSinks(true)
 
     return inst
 end
@@ -1585,7 +1587,12 @@ local function moonrock_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst.components.inventoryitem:SetSinks(true)
 
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+    inst.components.edible.sanityvalue = 1
     return inst
 end
 
@@ -1595,6 +1602,7 @@ local function moonglass_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst.components.inventoryitem:SetSinks(true)
 
     return inst
 end
@@ -1605,7 +1613,16 @@ local function salt_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+	
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.MED_FUEL / 7.5 --Fuels Salt Shaker 3000 by the same amount as 1 Salt Crystal. -CB
+    inst.components.fuel.fueltype = FUELTYPE.SALT
+	
+    inst:AddComponent("bait")
     return inst
 end
 
@@ -1615,7 +1632,14 @@ local function goop_fn()
     if not TheWorld.ismastersim then
         return inst
     end
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.GENERIC
+    inst.components.edible.hungervalue = 0.94 --Glommer Goop divided by 10 -CB
+    inst.components.edible.sanityvalue = -5
+    inst.components.edible.healthvalue = 4
 
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL / 10
     return inst
 end
 
@@ -1635,7 +1659,13 @@ local function lazy_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+    inst.components.inventoryitem:SetSinks(true)
+	
+    inst:AddComponent("bait")
     return inst
 end
 
@@ -1645,7 +1675,15 @@ local function shadow_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("waterproofer") --Does not get wet, like Nightmare Fuel! -CB
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(0)
+    inst:AddComponent("fuel")
+    inst.components.fuel.fueltype = FUELTYPE.NIGHTMARE
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL / 15
+    inst:AddComponent("repairer")
+    inst.components.repairer.repairmaterial = MATERIALS.NIGHTMARE
+    inst.components.repairer.finiteusesrepairvalue = TUNING.NIGHTMAREFUEL_FINITEUSESREPAIRVALUE / 15
     return inst
 end
 
