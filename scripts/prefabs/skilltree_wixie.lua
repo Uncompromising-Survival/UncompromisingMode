@@ -2,8 +2,8 @@ require("wixie_skilltree_strings")
 
 local ORDERS =
 {
-    {"ammocraft",           { -214+18   , 176 + 30 }},
-    {"taunt",         { -62       , 176 + 30 }},
+    {"ammocraft",       { -214+18   , 176 + 30 }},
+    {"taunt",           { -62       , 176 + 30 }},
     {"shove",           { 66+18     , 176 + 30 }},
     {"allegiance",      { 204       , 176 + 30 }},
 }
@@ -440,6 +440,17 @@ local function BuildSkillsData(SkillTreeFns)
             end,
         },
     }
+
+    for name, data in pairs(skills) do
+        -- If it's not a lock.
+        if not data.lock_open then
+            data.icon = data.icon or name
+
+            if not table.contains(data.tags, data.group) then
+                table.insert(data.tags, data.group)
+            end
+        end
+    end
 
     return {
         SKILLS = skills,
