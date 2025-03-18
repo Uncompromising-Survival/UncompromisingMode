@@ -256,7 +256,7 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
 	end, timeline = {TimeEvent(3 * FRAMES, function(inst)
 		inst.SoundEmitter:PlaySound(inst.sounds.attack)
 		inst.components.combat:SetDefaultDamage(2 * TUNING.BEEGUARD_DAMAGE)
-		inst.components.combat:DoAreaAttack(inst, 2, nil, nil, nil, {"INLIMBO", "bee", "notarget", "invisible", "playerghost", "shadow"})
+		inst.components.combat:DoAreaAttack(inst, 2, nil, nil, nil, {"INLIMBO", "bee", "notarget", "noattack", "invisible", "playerghost", "shadow"})
 		inst.components.combat:SetDefaultDamage(TUNING.BEEGUARD_DAMAGE)
 		if inst.prefab == "um_beeguard_seeker" and inst.components.health and not inst.components.health:IsDead() then
 			inst.stabdied = true
