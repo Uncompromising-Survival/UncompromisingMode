@@ -1,12 +1,12 @@
-local assets =
+--[[local assets =
 {
-    Asset("ANIM", "anim/slingshot.zip"),
+    Asset("ANIM", "anim/assetshere.zip"),
 }
 
 local prefabs =
 {
-    "slingshotammo_rock_proj",
-}
+    "prefabshere",
+}]]
 
 local PROJECTILE_DELAY = 2 * FRAMES
 
@@ -72,7 +72,7 @@ local function OnAmmoLoaded(inst, data)
 
     if inst.components.weapon ~= nil then
         if data ~= nil and data.item ~= nil then
-			local beecheck = inst.beetype
+            local beecheck = inst.beetype
 
             if data.item.prefab ~= beecheck then
                 local stacksize = data.item.components.stackable:StackSize()
@@ -204,11 +204,11 @@ local function can_cast_fn(doer, target, pos)
 end
 
 local function onattack(inst, attacker, target)
-	if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and attacker:HasTag("vetcurse") then
-		if target.components.health ~= nil and not target.components.health:IsDead() and target.components.combat ~= nil then
-			target.components.combat:GetAttacked(attacker, 10, nil)
-		end
-	end
+    if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and attacker:HasTag("vetcurse") then
+        if target.components.health ~= nil and not target.components.health:IsDead() and target.components.combat ~= nil then
+            target.components.combat:GetAttacked(attacker, 10, nil)
+        end
+    end
 end
 
 local function fn(anim, name, swap, beetype)
@@ -237,10 +237,11 @@ local function fn(anim, name, swap, beetype)
 
     MakeInventoryFloatable(inst, "med", 0.075, { 0.5, 0.4, 0.5 }, true, -7, floater_swap_data)
 
-    inst:AddComponent("reticule")
-    inst.components.reticule.targetfn = ReticuleTargetFn
-    inst.components.reticule.ease = true
-    inst.components.reticule.mouseenabled = true
+    local reticule = inst:AddComponent("reticule")
+    reticule.targetfn = ReticuleTargetFn
+    reticule.ease = true
+    reticule.mouseenabled = true
+    reticule.ispassableatallpoints = true
 
     inst.entity:SetPristine()
 
@@ -251,43 +252,44 @@ local function fn(anim, name, swap, beetype)
         return inst
     end
 
-	inst:AddComponent("shadowlevel")
-	inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
 
     inst.beetype = beetype
-	inst.swap = swap
+    inst.swap = swap
 
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
 
-    inst:AddComponent("equippable")
-    inst.components.equippable:SetOnEquip(OnEquip)
-    inst.components.equippable:SetOnUnequip(OnUnequip)
+    local equippable = inst:AddComponent("equippable")
+    equippable:SetOnEquip(OnEquip)
+    equippable:SetOnUnequip(OnUnequip)
 
-    inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(0)
-	inst.components.weapon:SetOnAttack(onattack)
-    inst.components.weapon:SetRange(TUNING.SLINGSHOT_DISTANCE, TUNING.SLINGSHOT_DISTANCE_MAX)
-    inst.components.weapon:SetOnProjectileLaunched(OnProjectileLaunched)
-    inst.components.weapon:SetProjectile(nil)
-    inst.components.weapon:SetProjectileOffset(1)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(0)
+    weapon:SetOnAttack(onattack)
+    weapon:SetRange(TUNING.SLINGSHOT_DISTANCE, TUNING.SLINGSHOT_DISTANCE_MAX)
+    weapon:SetOnProjectileLaunched(OnProjectileLaunched)
+    weapon:SetProjectile(nil)
+    weapon:SetProjectileOffset(1)
 
-    inst:AddComponent("container")
-    inst.components.container:WidgetSetup("um_beegun")
-    inst.components.container.canbeopened = false
+    local container = inst:AddComponent("container")
+    container:WidgetSetup("um_beegun")
+    container.canbeopened = false
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
 
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster:SetSpellFn(collectbees)
-    inst.components.spellcaster:SetCanCastFn(can_cast_fn)
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.canuseonpoint = true
+    local spellcaster = inst:AddComponent("spellcaster")
+    spellcaster:SetSpellFn(collectbees)
+    spellcaster:SetCanCastFn(can_cast_fn)
+    spellcaster.canuseontargets = true
+    spellcaster.canonlyuseonworkable = true
+    spellcaster.canonlyuseoncombat = true
+    spellcaster.canuseonpoint = true
+    spellcaster.canuseonpoint_water = true
 
     --MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     --MakeSmallPropagator(inst)
@@ -375,17 +377,17 @@ local function bullet(beetype, anim, ischerry)
     inst.sound = "dontstarve/bee/killerbee_attack"
     inst.anim = anim
 
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(10)
-    inst.components.weapon:SetRange(8, 10)
+    local weapon = inst:AddComponent("weapon")
+    weapon:SetDamage(10)
+    weapon:SetRange(8, 10)
 
-    inst:AddComponent("projectile")
-    inst.components.projectile:SetSpeed(20)
-    inst.components.projectile:SetOnHitFn(onhit)
-    inst.components.projectile:SetOnThrownFn(pipethrown)
-    inst.components.projectile:SetLaunchOffset(Vector3(.5, .5, 0))
-    --inst.components.projectile:SetLaunchOffset(Vector3(.5, 1.5, 0))
-    inst.components.projectile:SetHitDist(math.sqrt(5))
+    local projectile = inst:AddComponent("projectile")
+    projectile:SetSpeed(20)
+    projectile:SetOnHitFn(onhit)
+    projectile:SetOnThrownFn(pipethrown)
+    projectile:SetLaunchOffset(Vector3(.5, .5, 0))
+    --projectile:SetLaunchOffset(Vector3(.5, 1.5, 0))
+    projectile:SetHitDist(math.sqrt(5))
     -------
 
     --inst:AddComponent("inspectable")
@@ -474,13 +476,13 @@ local function commonball(anim, beetype, sound, ischerry)
     inst.anim = anim
     inst.ischerry = ischerry
 
-    inst:AddComponent("complexprojectile")
-    inst.components.complexprojectile:SetHorizontalSpeed(25)
-    inst.components.complexprojectile:SetGravity(-30)
-    inst.components.complexprojectile:SetLaunchOffset(Vector3(0, 1, 0))
-    inst.components.complexprojectile:SetOnLaunch(onthrown_ball)
-    inst.components.complexprojectile:SetOnHit(OnHitBall)
-    inst.components.complexprojectile.usehigharc = true
+    local complexprojectile = inst:AddComponent("complexprojectile")
+    complexprojectile:SetHorizontalSpeed(25)
+    complexprojectile:SetGravity(-30)
+    complexprojectile:SetLaunchOffset(Vector3(0, 1, 0))
+    complexprojectile:SetOnLaunch(onthrown_ball)
+    complexprojectile:SetOnHit(OnHitBall)
+    complexprojectile.usehigharc = true
 
     inst.persists = false
 
@@ -531,22 +533,20 @@ local function OnWorked(inst, worker)
 end
 
 local function bonus_damage_via_allergy(inst, target, damage, weapon)
-	if target.components.inventory ~= nil then
-		local helm = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-		if target.components.inventory ~= nil and helm and helm.components.armor and helm.components.armor.tags then
-			for i, tag in ipairs(helm.components.armor.tags) do
-				if tag == "bee" then
-					return (target:HasTag("allergictobees") and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE) or 0
-				else
-					return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-				end	
-			end
-		else 	
-			return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-		end	
-	else
-		return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-	end
+    local targetinventory = target.components.inventory
+    local hasbeearmor
+    if targetinventory ~= nil then
+        local helm = targetinventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+        local helmarmor = helm and helm.components.armor
+        if helmarmor and helmarmor.tags then
+            for i, tag in ipairs(helmarmor.tags) do
+                if tag == "bee" then
+                    hasbeearmor = true
+                end
+            end
+        end
+    end
+    return (target:HasTag("allergictobees") and (hasbeearmor ~= nil and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE or TUNING.BEE_ALLERGY_EXTRADAMAGE)) or 0
 end
 
 local function OnDropped(inst)
@@ -707,13 +707,13 @@ local function bulletfn(ischerry)
     inst:AddTag("noember")
 
     inst.AnimState:SetBank("bee")
-	
+
     if ischerry then
         inst.AnimState:SetBuild("cherrybee_build")
     else
         inst.AnimState:SetBuild("bulletbee_build")
     end
-	
+
     inst.AnimState:PlayAnimation("idle", true)
     inst.AnimState:SetRayTestOnBB(true)
 
@@ -729,54 +729,54 @@ local function bulletfn(ischerry)
         return inst
     end
 
-    inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.walkspeed = 8
-    inst.components.locomotor.runspeed = 12
-    inst.components.locomotor:EnableGroundSpeedMultiplier(false)
-    inst.components.locomotor:SetTriggersCreep(false)
+    local locomotor = inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
+    locomotor.walkspeed = 8
+    locomotor.runspeed = 12
+    locomotor:EnableGroundSpeedMultiplier(false)
+    locomotor:SetTriggersCreep(false)
     inst:SetStateGraph("SGbee")
 
     inst:AddComponent("stackable")
-    inst:AddComponent("inventoryitem")
-	
+    local inventoryitem = inst:AddComponent("inventoryitem")
+
     if ischerry then
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/cherrybulletbee.xml"
-	else
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
-	end
-	
-    inst.components.inventoryitem.nobounce = true
-    inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true
-    inst.components.inventoryitem.pushlandedevents = false
+        inventoryitem.atlasname = "images/inventoryimages/cherrybulletbee.xml"
+    else
+        inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
+    end
+
+    inventoryitem.nobounce = true
+    inventoryitem.canbepickedup = false
+    inventoryitem.canbepickedupalive = true
+    inventoryitem.pushlandedevents = false
 
     ------------------
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.NET)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(OnWorked)
+    local workable = inst:AddComponent("workable")
+    workable:SetWorkAction(ACTIONS.NET)
+    workable:SetWorkLeft(1)
+    workable:SetOnFinishCallback(OnWorked)
 
     MakeSmallBurnableCharacter(inst, "body", Vector3(0, -1, 1))
     MakeTinyFreezableCharacter(inst, "body", Vector3(0, -1, 1))
 
     ------------------
 
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(10)
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(10)
 
-    inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(TUNING.BEE_DAMAGE)
-    inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD)
-    inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
-    inst.components.combat.hiteffectsymbol = "body"
-    inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
-    inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
-    inst.components.combat:SetRetargetFunction(2, BeeRetarget)
+    local combat = inst:AddComponent("combat")
+    combat:SetDefaultDamage(TUNING.BEE_DAMAGE)
+    combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD)
+    combat:SetRange(TUNING.BEE_ATTACK_RANGE)
+    combat.hiteffectsymbol = "body"
+    combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
+    combat.bonusdamagefn = bonus_damage_via_allergy
+    combat:SetRetargetFunction(2, BeeRetarget)
 
     if ischerry then
-        inst.components.combat.onhitotherfn = CherryPoison
-	else
-		inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
+        combat.onhitotherfn = CherryPoison
+    else
+        combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD / 2)
     end
 
     ------------------
@@ -815,7 +815,7 @@ end
 
 local function bulletbee()
     local inst = bulletfn(false)
-	
+
     return inst
 end
 
@@ -825,14 +825,14 @@ local function cherrybee()
     return inst
 end
 
-return Prefab("um_beegun", um_gun, assets, prefabs),
-    Prefab("um_beegun_cherry", cherry_gun, assets, prefabs),
-    Prefab("um_bulletbee_proj", bulletproj, assets, prefabs),
-    Prefab("um_cherrybulletbee_proj", cherryproj, assets, prefabs),
-    Prefab("um_bee_ball", yellowball, assets, prefabs),
-    Prefab("um_killerbee_ball", redball, assets, prefabs),
-    Prefab("um_bulletbee_ball", greenball, assets, prefabs),
-    Prefab("um_cherry_bee_ball", cherryball, assets, prefabs),
-    Prefab("um_cherrybulletbee_ball", cherryball, assets, prefabs),
+return Prefab("um_beegun", um_gun),
+    Prefab("um_beegun_cherry", cherry_gun),
+    Prefab("um_bulletbee_proj", bulletproj),
+    Prefab("um_cherrybulletbee_proj", cherryproj),
+    Prefab("um_bee_ball", yellowball),
+    Prefab("um_killerbee_ball", redball),
+    Prefab("um_bulletbee_ball", greenball),
+    Prefab("um_cherry_bee_ball", cherryball),
+    Prefab("um_cherrybulletbee_ball", cherryball),
     Prefab("bulletbee", bulletbee),
     Prefab("cherrybulletbee", cherrybee)
