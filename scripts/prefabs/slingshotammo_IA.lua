@@ -215,6 +215,12 @@ local function OnHit_Tar(inst, attacker, target)
     inst:Remove()
 end
 
+local function ontaken(inst, target)
+	if target:HasTag("campfire") then
+		target:AddDebuff("halloweenpotion_embers_buff", "halloweenpotion_embers_buff")
+	end
+end
+
 local OBSIDIAN_AURA_EXCLUDE_TAGS = { "noclaustrophobia", "player", "playerghost", "companion", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO", "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible" }
 
 local function DoAreaBurn(inst)
@@ -757,6 +763,7 @@ local function fncommon(symbol, inv, special)
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
+    MakeInventoryFloatable(inst, "small", .2, { .85, .9, .85 })
 
     inst.AnimState:SetRayTestOnBB(true)
     inst.AnimState:SetBank("slingshotammo")
@@ -770,7 +777,6 @@ local function fncommon(symbol, inv, special)
 		inst:AddTag("wixieammo_basic")
 	end
 
-    inst:AddTag("molebait")
     inst:AddTag("slingshotammo")
     inst:AddTag("reloaditem_ammo")
 
@@ -788,20 +794,14 @@ local function fncommon(symbol, inv, special)
 
     inst:AddComponent("tradable")
 
-    inst:AddComponent("edible")
-    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
-    inst.components.edible.hungervalue = 0
-
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_TINYITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_PELLET
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/" .. inv .. ".xml"
-    inst.components.inventoryitem:SetSinks(true)
 
-    inst:AddComponent("bait")
     MakeHauntableLaunch(inst)
 
     return inst
@@ -813,7 +813,12 @@ local function limestone_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 0.1
+	
+    inst:AddComponent("bait")
     return inst
 end
 
@@ -823,7 +828,10 @@ local function tar_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL / 15
+    inst.components.fuel.fueltype = FUELTYPE.SLUDGE
+    inst.components.fuel:SetOnTakenFn(ontaken) --Just like Sludge, it applies a buff that makes campfires last longer. -CB
     return inst
 end
 
@@ -833,7 +841,12 @@ local function obsidian_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+	
+    inst:AddComponent("bait")
     return inst
 end
 
@@ -863,7 +876,14 @@ local function flare_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddTag("molebait")
+    inst:AddComponent("edible")
+    inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+    inst.components.edible.hungervalue = 1
+    inst.components.edible.healthvalue = 3
+    inst.components.inventoryitem:SetSinks(true)
+	
+    inst:AddComponent("bait")
     return inst
 end
 
