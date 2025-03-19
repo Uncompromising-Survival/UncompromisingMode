@@ -39,22 +39,24 @@ local function DoFx(inst) -- This is the hotspring's passive FX
 
 		local spawnrad = math.random(1, 8) * sizes[inst.size].rad / 10
 		local offset = FindWalkableOffset(pos, math.random() * 2 * PI, spawnrad)
-		local fx
-		if not inst:HasTag("pond_inducedinsanity") then
-			if math.random() > 0.75 then
-				fx = SpawnPrefab("crab_king_bubble" .. tostring(math.random(1, 3)))
-			else
-				if math.random() > 0.5 then
-					fx = SpawnPrefab("crater_steam_fx" .. tostring(math.random(1, 4)))
+		if offset then
+			local fx
+			if not inst:HasTag("pond_inducedinsanity") then
+				if math.random() > 0.75 then
+					fx = SpawnPrefab("crab_king_bubble" .. tostring(math.random(1, 3)))
 				else
-					fx = SpawnPrefab("slow_steam_fx" .. tostring(math.random(1, 4)))
+					if math.random() > 0.5 then
+						fx = SpawnPrefab("crater_steam_fx" .. tostring(math.random(1, 4)))
+					else
+						fx = SpawnPrefab("slow_steam_fx" .. tostring(math.random(1, 4)))
+					end
 				end
+			else
+				fx = SpawnPrefab("tophat_shadow_fx")
+				fx:DoTaskInTime(1.5,function(fx) fx:Remove() end)
 			end
-		else
-			fx = SpawnPrefab("tophat_shadow_fx")
-			fx:DoTaskInTime(1.5,function(fx) fx:Remove() end)
+			fx.Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
 		end
-		fx.Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
 		-- if TheWorld.state.isnewmoon then
 			-- fx.AnimState:SetMultColour(0,0,0,1)
 		-- end

@@ -288,7 +288,6 @@ local prefabs = {
 	"um_shadow_characters",
 	"um_shadow_abigail",
 	
-	"veteranscurse_souls",
 
 	"wackymask",
 	"tiddlestranger_rne",

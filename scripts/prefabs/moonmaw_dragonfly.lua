@@ -650,7 +650,7 @@ local function fn(Sim)
 	
 	if TUNING.DSTU.VETCURSE ~= "off" then
         inst:AddComponent("vetcurselootdropper")
-        inst.components.vetcurselootdropper.loot = "um_moonmaw_soul"
+        inst.components.vetcurselootdropper.loot = "um_moonfly_lantern"
     end
 
     inst:AddComponent("inspectable")

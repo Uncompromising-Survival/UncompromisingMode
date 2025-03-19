@@ -454,7 +454,7 @@ local function fn()
     ------------------
 
 	inst:AddComponent("vetcurselootdropper")
-	inst.components.vetcurselootdropper.loot = "um_hoodedwidow_soul"
+	inst.components.vetcurselootdropper.loot = "silksack"
 	
     ------------------
 

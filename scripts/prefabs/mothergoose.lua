@@ -293,10 +293,7 @@ local function fn()
     inst.components.eater.eatwholestack = true
 	
 	
-    if TUNING.DSTU.VETCURSE ~= "off" then
-        inst:AddComponent("vetcurselootdropper")
-	    inst.components.vetcurselootdropper.loot = "um_goose_soul"
-    end
+
     ------------------------------------------
 
     inst:WatchWorldState("isspring", OnSpringChange)

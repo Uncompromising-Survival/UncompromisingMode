@@ -171,7 +171,6 @@ local prefab_post = {
     "grassgekko",
     "minotaur_drops",
     "frog",
-    "klaus",
     "klaus_sack",
     "krampus",
     "krampus_sack",
@@ -520,9 +519,6 @@ if GetModConfigData("heatwaves") then
     table.insert(component_post, "wildfires")
 end
 
-if GetModConfigData("lifeinjector_rework") then
-    table.insert(prefab_post, "lifeinjector")
-end
 
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")

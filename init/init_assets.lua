@@ -265,23 +265,6 @@ local inventoryitems =
     "wurt_vetskull",
     "wx78_vetskull",
 
-    -- Vet Souls
-
-    "um_dark_vestiges",
-    "um_cherry_beequeen_soul",
-    "um_crabking_soul",
-    "um_deerclops_soul",
-    "um_goose_soul",
-    "um_malbatross_soul",
-    "um_beequeen_soul",
-    "um_dragonfly_soul",
-    "um_bearger_soul",
-    "um_klaus_soul",
-    "um_hoodedwidow_soul",
-    "um_fuelweaver_soul",
-    "um_minotaur_soul",
-    "um_moonmaw_soul",
-
     -- Records
 
     "um_record_menu",
@@ -1491,36 +1474,6 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/wx78_vetskull.xml"),
     Asset("IMAGE", "images/inventoryimages/wx78_vetskull.tex"),
 
-    -- Vet Souls
-
-    Asset("ATLAS", "images/inventoryimages/um_dark_vestiges.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_dark_vestiges.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_cherry_beequeen_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_cherry_beequeen_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_crabking_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_crabking_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_deerclops_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_deerclops_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_goose_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_goose_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_malbatross_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_malbatross_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_beequeen_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_beequeen_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_dragonfly_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_dragonfly_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_bearger_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_bearger_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_klaus_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_klaus_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_hoodedwidow_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_hoodedwidow_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_fuelweaver_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_fuelweaver_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_minotaur_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_minotaur_soul.tex"),
-    Asset("ATLAS", "images/inventoryimages/um_moonmaw_soul.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_moonmaw_soul.tex"),
 
     --RECORDS
 

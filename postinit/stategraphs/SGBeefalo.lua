@@ -45,7 +45,7 @@ local states = {
             EventHandler("animqueueover", function(inst)
 			if inst.components.combat.target ~= nil then
 			
-				if math.random() < 0.33 and not inst.justcharged then
+				if math.random() < 1 and not inst.justcharged then
 					inst.justcharged = true
 					inst.sg:GoToState("charge_start")
 				else
@@ -65,6 +65,7 @@ local states = {
             tags = {"moving", "running", "charging", "busy", "atk_pre", "canrotate"},
             
             onenter = function(inst)
+				inst.AnimState:SetDeltaTimeMultiplier(1.2)
                 inst.Physics:Stop()
 				inst.components.locomotor:StopMoving()
 				
@@ -72,39 +73,32 @@ local states = {
 				inst.SoundEmitter:PlaySound(inst.sounds.angry)
 				--	inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT*2.29  --should be equal to rook
 				inst:AddTag("chargespeed")
+				inst.sg:SetTimeout(1)
             end,
             
-
-            
-            timeline=
-            {
-			TimeEvent(5*FRAMES, PlayFootstep),
-			TimeEvent(10*FRAMES, PlayFootstep),
-            },        
-
-			events =
-            {
-                EventHandler("animover", function(inst) 		
+			ontimeout = function(inst)
 				if inst.components.rideable and inst.components.rideable:GetRider() ~= nil then
-				inst:ApplyBuildOverrides(inst.components.rideable:GetRider().AnimState)
+					inst:ApplyBuildOverrides(inst.components.rideable:GetRider().AnimState)
 				end
                 inst.sg:GoToState("charge")
                 inst:PushEvent("attackstart")
-				if inst.components.combat ~= nil then
-				inst.components.combat:ResetCooldown()
+				if inst.components.combat then -- Somehow combat was removed in a prior bug report
+					inst.components.combat:ResetCooldown()
 				end
-				inst:DoTaskInTime(1.25,function(inst) if inst:HasTag("chargespeed") then inst:RemoveTag("chargespeed") end end)
-				end),
-            },
+		
+			
+			end,
+			onexit = function(inst)
+				inst.AnimState:SetDeltaTimeMultiplier(1)
+			end,
         },
 
     State{  name = "charge",
             tags = {"moving", "charging", "busy", "running"},
             
             onenter = function(inst) 
+				inst.AnimState:SetDeltaTimeMultiplier(1.2)
 				inst.components.combat:ResetCooldown()
-				inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT*2.29
-                inst.components.locomotor:RunForward()
                 if inst.components.combat.target and inst.components.combat.target:IsValid() then
 					inst:ForceFacePoint(inst.components.combat.target:GetPosition() )
 				end
@@ -113,6 +107,10 @@ local states = {
                 end
                 --inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
             end,
+			onupdate = function(inst)
+				inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT*2.29
+				inst.components.locomotor:RunForward()
+			end,
             timeline=
             {
 		        --TimeEvent(5*FRAMES,  function(inst) inst.SoundEmitter:PlaySound(inst.effortsound) end ),
@@ -129,32 +127,17 @@ local states = {
                                         SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
 										
                                     end ),
-				TimeEvent(15*FRAMES, PlayFootstep),
-				TimeEvent(24*FRAMES, function(inst)
-                                        SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-										
-                                    end ),
-				TimeEvent(25*FRAMES, PlayFootstep),
-				TimeEvent(29*FRAMES, function(inst)
-                                        SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
-										
-                                    end ),
-				TimeEvent(30*FRAMES, function(inst)
-                    local MAXDIST = 5 
-					
-                    local distance = (inst ~= nil and inst.components.combat.target ~= nil and inst:GetDistanceSqToInst(inst.components.combat.target)) or 6
-                    if distance ~= nil then
-						if distance > MAXDIST then
-							inst.sg:GoToState("idle")
-						end
-					else
-                        inst.sg:GoToState("idle")
-                    end
+				TimeEvent(15*FRAMES, function(inst)
+					inst.sg:GoToState("idle")
+					if inst:HasTag("chargespeed") then 
+						inst:RemoveTag("chargespeed") 
+					end 
 				end ),
             },
             
 			onexit = function(inst)
-					inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
+				inst.AnimState:SetDeltaTimeMultiplier(1)
+				inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
 			end,
 		
             {   

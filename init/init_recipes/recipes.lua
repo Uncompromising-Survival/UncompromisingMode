@@ -270,44 +270,44 @@ if GetModConfigData("monstersmallmeat") then
 end
 
 
-AddRecipe2("cursed_antler", { Ingredient("um_deerclops_soul", 1), Ingredient("boneshard", 6), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("armor_sharksuit_um", "armordragonfly", "MAGIC", true)
+-- AddRecipe2("cursed_antler", { Ingredient("um_deerclops_soul", 1), Ingredient("boneshard", 6), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("armor_sharksuit_um", "armordragonfly", "MAGIC", true)
 
-AddRecipe2("beargerclaw", { Ingredient("um_bearger_soul", 1), Ingredient("rocks", 10), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("beargerclaw", "cursed_antler", "MAGIC", true)
+-- AddRecipe2("beargerclaw", { Ingredient("um_bearger_soul", 1), Ingredient("rocks", 10), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("beargerclaw", "cursed_antler", "MAGIC", true)
 
-AddRecipe2("klaus_amulet", { Ingredient("um_klaus_soul", 1), Ingredient("purplegem", 1), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("klaus_amulet", "beargerclaw", "MAGIC", true)
+-- AddRecipe2("klaus_amulet", { Ingredient("um_klaus_soul", 1), Ingredient("purplegem", 1), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("klaus_amulet", "beargerclaw", "MAGIC", true)
 
-AddRecipe2("silksack", { Ingredient("um_hoodedwidow_soul", 1), Ingredient("silk", 6), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
+-- AddRecipe2("silksack", { Ingredient("um_hoodedwidow_soul", 1), Ingredient("silk", 6), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
 
-AddRecipe2("feather_frock", { Ingredient("um_goose_soul", 1), Ingredient("goose_feather", 3), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
+-- AddRecipe2("feather_frock", { Ingredient("um_goose_soul", 1), Ingredient("goose_feather", 3), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("feather_frock", "klaus_amulet", "MAGIC", true)
 
-AddRecipe2("gore_horn_hat", { Ingredient("um_minotaur_soul", 1), Ingredient("catcoonhat", 1), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("gore_horn_hat", "feather_frock", "MAGIC", true)
+-- AddRecipe2("gore_horn_hat", { Ingredient("um_minotaur_soul", 1), Ingredient("catcoonhat", 1), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("gore_horn_hat", "feather_frock", "MAGIC", true)
 
-AddRecipe2("crabclaw", { Ingredient("um_crabking_soul", 1), Ingredient("fishmeat", 3), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("crabclaw", "gore_horn_hat", "MAGIC", true)
+-- AddRecipe2("crabclaw", { Ingredient("um_crabking_soul", 1), Ingredient("fishmeat", 3), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("crabclaw", "gore_horn_hat", "MAGIC", true)
 
-AddRecipe2("slobberlobber", { Ingredient("um_dragonfly_soul", 1), Ingredient("redgem", 2), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("slobberlobber", "crabclaw", "MAGIC", true)
+-- AddRecipe2("slobberlobber", { Ingredient("um_dragonfly_soul", 1), Ingredient("redgem", 2), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("slobberlobber", "crabclaw", "MAGIC", true)
 
-AddRecipe2("um_beegun", { Ingredient("um_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("um_beegun", "slobberlobber", "MAGIC", true)
+-- AddRecipe2("um_beegun", { Ingredient("um_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("um_beegun", "slobberlobber", "MAGIC", true)
 
-AddRecipe2("um_wingsuit", { Ingredient("um_malbatross_soul", 1), Ingredient("malbatross_feathered_weave", 2), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("um_wingsuit", "um_beegun", "MAGIC", true)
+-- AddRecipe2("um_wingsuit", { Ingredient("um_malbatross_soul", 1), Ingredient("malbatross_feathered_weave", 2), Ingredient("um_dark_vestiges", 1) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("um_wingsuit", "um_beegun", "MAGIC", true)
 
-AddRecipe2("um_exhumer", { Ingredient("um_fuelweaver_soul", 1), Ingredient("fossil_piece", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("um_exhumer", "um_wingsuit", "MAGIC", true)
+-- AddRecipe2("um_exhumer", { Ingredient("um_fuelweaver_soul", 1), Ingredient("fossil_piece", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("um_exhumer", "um_wingsuit", "MAGIC", true)
 
-AddRecipe2("um_moonfly_lantern", { Ingredient("um_moonmaw_soul", 1), Ingredient("fireflies", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("um_moonfly_lantern", "um_exhumer", "MAGIC", true)
+-- AddRecipe2("um_moonfly_lantern", { Ingredient("um_moonmaw_soul", 1), Ingredient("fireflies", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("um_moonfly_lantern", "um_exhumer", "MAGIC", true)
 
-AddRecipe2("um_beegun_cherry", { Ingredient("um_cherry_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
---ChangeSortKey("um_beegun_cherry", "um_wingsuit", "MAGIC", true)
+-- AddRecipe2("um_beegun_cherry", { Ingredient("um_cherry_beequeen_soul", 1), Ingredient("royal_jelly", 2), Ingredient("um_dark_vestiges", 2) }, TECH.VETERANSHRINE_ONE, { nounlock = true }, { "MAGIC" })
+-- --ChangeSortKey("um_beegun_cherry", "um_wingsuit", "MAGIC", true)
 
 
 AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })

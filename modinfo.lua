@@ -558,7 +558,6 @@ configuration_options = {
     -----------------------------
 
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
-    BinaryConfig("lifeinjector_rework", "Booster Shot Rework", "The Booster Shot regenerates 50% of your max health loss overtime.", true),
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
         false),

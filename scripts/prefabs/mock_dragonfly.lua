@@ -541,7 +541,7 @@ local function fn(Sim)
 
     if TUNING.DSTU.VETCURSE ~= "off" then
         inst:AddComponent("vetcurselootdropper")
-        inst.components.vetcurselootdropper.loot = "um_dragonfly_soul"
+        inst.components.vetcurselootdropper.loot = "slobberlobber"
     end
     inst:DoTaskInTime(10, CheckTarget)
 

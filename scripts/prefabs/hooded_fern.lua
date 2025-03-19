@@ -4,6 +4,8 @@ local assets =
 }
 
 local function onregenfn(inst)
+	inst:Show()
+	inst.hidden = nil
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
 	inst:AddTag("briar_plants")
@@ -105,7 +107,11 @@ local function onpickedfn(inst, picker)
     inst.AnimState:PlayAnimation("pick")
 	
 	if math.random() < 0.2 then
-		GenerateLoot(inst,picker)
+		if inst.hidden then
+			Launch(inst.components.lootdropper:SpawnLootPrefab("ash"), inst, 1.5)
+		else
+			GenerateLoot(inst,picker)
+		end
 	end
     inst.AnimState:PushAnimation("empty", false)
 	inst:RemoveTag("briar_plants")
@@ -222,17 +228,37 @@ local function grass(name, stage)
 		inst.components.playerprox:SetDist(1.75, 3) --set specific values
 		inst.components.playerprox:SetOnPlayerNear(onnear)
 		inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
-		inst.components.playerprox:SetTargetMode(inst.components.playerprox.TargetModes.LockAndKeepPlayer)
         MakeMediumBurnable(inst)
         MakeNoGrowInWinter(inst)
         MakeHauntableIgnite(inst)
 		
 		
 		inst.components.burnable:SetBurnTime(0.75)
+		inst.components.burnable:SetOnBurntFn(function(inst)
+			inst.hidden = true
+			inst.components.pickable:Pick(TheWorld)
+			inst.hidden = true
+			inst:Hide()
+		end)
 		inst.playertracking = {}
+		
+		inst.OnSave = function(inst,data)
+			if inst.hidden then
+				data = {}
+				data.hidden = true
+			end
+		end
+		inst.OnLoad = function(inst,data)
+			if data and data.hidden then
+				inst.hidden = true
+				inst:Hide()
+			end
+		end
+		
         return inst
     end
 
+	
     return Prefab(name, fn, assets)
 end
 
@@ -247,17 +273,19 @@ local function fnthicket()
 	end
 	
 	local function LargeFernCheck(x,y,z)
-		if #TheSim:FindEntities(x,y,z,1.5,{"plant"}) > 0 and not FindEntity(inst,4,function(ent) return ent.prefab == "sculpture_knighthead" end) and not FindEntity(inst,4,function(ent) return ent.prefab == "sculpture_bishophead" end) and not FindEntity(inst,4,function(ent) return ent.prefab == "sculpture_rookhead" end) then
+		local plants = #TheSim:FindEntities(x,y,z,2.25,{"plant"})
+		local sculpture = #TheSim:FindEntities(x,y,z,4,{"sculpture"})-- The spacing for the sculpture is larger so it doesn't cover them up
+		if plants > 0 or sculpture > 0 then
 			return true
 		end
 	
 	end
 	inst:DoTaskInTime(0,function(inst)
 		local x,y,z = inst.Transform:GetWorldPosition()
-		for i = -15, 15, 1 do
-			for j = -15, 15, 1 do
-				local x1 = x + i + math.random(-1,1)/math.random(1,3)
-				local z1 = z + j + math.random(-1,1)/math.random(1,3)
+		for i = -15, 15, 0.5 do
+			for j = -15, 15, 0.5 do
+				local x1 = x + i + math.random(-1,1)/math.random(2,4)
+				local z1 = z + j + math.random(-1,1)/math.random(2,4)
 				if TheWorld.Map:GetTileAtPoint(x1, y, z1) == WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK and not LargeFernCheck(x1,y,z1) then
 					SpawnPrefab("hooded_fern").Transform:SetPosition(x1,y,z1)
 				end

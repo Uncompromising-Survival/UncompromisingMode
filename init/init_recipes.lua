@@ -83,7 +83,7 @@ if GetModConfigData("compostoverrot") then
     -- Rot Related Recipe Changes [AXE]
     AllRecipes["lifeinjector"].ingredients = {
         Ingredient("nitre", 2),
-        Ingredient("red_cap", 4),
+        Ingredient("red_cap", 8),
         Ingredient("stinger", 1),
     }
     AllRecipes["mushroom_farm"].ingredients = {
@@ -2012,3 +2012,4 @@ AddPrototyperDef(
         filter_text = STRINGS.UI.CRAFTING_STATION_FILTERS.MADSCIENCE
     }
 )
+poop

@@ -807,42 +807,42 @@ return Class(function(self, inst)
 	end
 
 	local function StartNightTerrors()
-		if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
-			local voxo_check = TheSim:FindFirstEntityWithTag("um_voxolophone")
-			--TheNet:Announce("starting night terrors")
-			DelayHoundsAndGiantsIfNecessary()
-			if voxo_check == nil then
-				if #_activeplayers > 0 then
-					local spawn_vox_for = _activeplayers[math.random(#_activeplayers)]
+		-- if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
+			-- local voxo_check = TheSim:FindFirstEntityWithTag("um_voxolophone")
+			-- --TheNet:Announce("starting night terrors")
+			-- DelayHoundsAndGiantsIfNecessary()
+			-- if voxo_check == nil then
+				-- if #_activeplayers > 0 then
+					-- local spawn_vox_for = _activeplayers[math.random(#_activeplayers)]
 					
-					if spawn_vox_for ~= nil then
-						SpawnPrefab("um_voxolophone").Transform:SetPosition(spawn_vox_for.Transform:GetWorldPosition())
-					end
-				end
-			end
-			local voxo = TheSim:FindFirstEntityWithTag("um_voxolophone")
-			local cycles = (TheWorld.state.cycles / 20)
-			self.terror_count = 0
+					-- if spawn_vox_for ~= nil then
+						-- SpawnPrefab("um_voxolophone").Transform:SetPosition(spawn_vox_for.Transform:GetWorldPosition())
+					-- end
+				-- end
+			-- end
+			-- local voxo = TheSim:FindFirstEntityWithTag("um_voxolophone")
+			-- local cycles = (TheWorld.state.cycles / 20)
+			-- self.terror_count = 0
 			
-			self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
-				--TheNet:Announce("tried Terror")
-				if #_activeplayers > 0 then
-					local player = _activeplayers[math.random(#_activeplayers)]
+			-- self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
+				-- --TheNet:Announce("tried Terror")
+				-- if #_activeplayers > 0 then
+					-- local player = _activeplayers[math.random(#_activeplayers)]
 					
-					if player ~= nil and not ShadowPieceNearby(player) then
-						if self.terror_count == 8 then
-							print("Night Terrors Pick Character")
-							PickCharacter(voxo)
-						else
-							print("Night Terrors Pick Terror")
-							self:PickTerror(voxo)
-						end
+					-- if player ~= nil and not ShadowPieceNearby(player) then
+						-- if self.terror_count == 8 then
+							-- print("Night Terrors Pick Character")
+							-- PickCharacter(voxo)
+						-- else
+							-- print("Night Terrors Pick Terror")
+							-- self:PickTerror(voxo)
+						-- end
 						
-						self.terror_count = self.terror_count + 1					
-					end
-				end
-			end)
-		end
+						-- self.terror_count = self.terror_count + 1					
+					-- end
+				-- end
+			-- end)
+		-- end
 	end
 
     --------------------------------------------------------------------------
