@@ -99,7 +99,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 			end
 
 			if action.invobject ~= nil and action.invobject:HasTag("slingshot_claire") then
-				print("go to channel")
+				--print("go to channel")
 				if inst.components.channelcaster:IsChanneling() then
 					--inst.components.channelcaster:StartChanneling(action.invobject)
 					--return "throw_keep_equip"

@@ -17,8 +17,7 @@ local SMOG_PARTICLE_RADIUS = MIASMA_PARTICLE_RADIUS * 1.25
 
 -- Small overlap is good to make sure players are always in a fog when all squares are in one.
 local SMOG_RADIUS = math.ceil(SMOG_SPACING_RADIUS) - math.random()
-local SMOKE_RADIUS = SMOG_RADIUS -
-0.75 * 1.3                                    -- 1.3 is scale factor for texture size and is constant to the smoke "cloud.
+local SMOKE_RADIUS = SMOG_RADIUS - 0.75 * 1.3 -- 1.3 is scale factor for texture size and is constant to the smoke "cloud.
 
 
 local _OldHeading = nil
@@ -316,8 +315,8 @@ local function fn()
                     v.components.health:DeltaPenalty(0.025)
                 end
 
-                if v.sg ~= nil and not v.sg:HasStateTag("dead") and not v.sg:HasStateTag("um_smog_cough") and v:HasTag("player") then
-                    v.sg:GoToState("um_smog_cough", true)
+                if v.sg ~= nil and v:HasTag("player") then
+                    v:PushEvent("um_smog_cough", {talk = true})
                 end
 
                 if v:HasTag("insect") then
