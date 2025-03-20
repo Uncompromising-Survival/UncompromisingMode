@@ -39,7 +39,7 @@ local function FindSleepable(inst)
     end
 end
 
-local function TriggerAmulet(self)
+local function TriggerPocketRessurection(self,item)
     if self.inst.components.timer ~= nil and self.inst:HasTag("wathom") then
         if self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             self.inst.components.timer:StopTimer("shadowwathomcooldown")
@@ -48,74 +48,93 @@ local function TriggerAmulet(self)
             self.inst.components.timer:StartTimer("shadowwathomcooldown", TUNING.TOTAL_DAY_TIME)
         end
     end
+	
+    if item.prefab == "amulet" then
+		FindSleepable(self.inst)
+		if self.inst.components.grogginess then
+			self.inst.components.grogginess:ResetGrogginess()
+		end
 
-    local item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
-    if item == nil then
-        item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-    end
+		if self.inst.components.moisture then
+			self.inst.components.moisture:ForceDry(true, self.inst)
+			self.inst.components.moisture:ForceDry(false, self.inst)
+		end
+		if self.inst.components.hunger then
+			self.inst.components.hunger:SetPercent(2 / 3, true)
+		end
+		if self.inst.components.temperature then
+			self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
+		end
+		if self.inst.components.debuffable then
+			self.inst.components.debuffable:Enable(false) --removes all debuffs
+			self.inst.components.debuffable:Enable(true)
+		end
+		if self.inst.components.burnable then
+			self.inst.components.burnable:Extinguish(true, 0)
+		end
+		if self.inst.components.freezable then
+			self.inst.components.freezable:Reset()
+		end
+		if self.inst.components.sanity then
+			self.inst.components.sanity:SetPercent(0.25)
+		end
+		SpawnPrefab("slingshotammo_hitfx_gold").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
+		SpawnPrefab("shadow_despawn").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
+	elseif item.prefab == "wortox_reviver" then -- Preserves debuffs and hunger
+		local fx = SpawnPrefab("wortox_soul_heal_fx")
+		fx.entity:AddFollower():FollowSymbol(self.inst.GUID, self.inst.components.combat.hiteffectsymbol, 0, -50, 0)
+		fx:Setup(self.inst)	
+		
+		local linkeditem = item.components.linkeditem
+		local owner = linkeditem and linkeditem:GetOwnerInst() or nil
+		if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_lifebringer_2") then
+			self.inst.components.health:DeltaPenalty(0.125)
+		else
+			self.inst.components.health:DeltaPenalty(0.25)
+		end
+	end
+	
+	
+	self:SetCurrentHealth(1)
+	if self.inst.components.oldager ~= nil then
+		self.inst.components.oldager:StopDamageOverTime()
+		self:DoDelta(49, true, "pocketwatch_heal", true)
+	else
+		self:DoDelta(49, false, item, true) --set 25%
+	end
 
-    local item2
-    FindSleepable(self.inst)
-    self:SetCurrentHealth(1)
-    if self.inst.components.oldager ~= nil then
-        self.inst.components.oldager:StopDamageOverTime()
-        self:DoDelta(49, true, "pocketwatch_heal", true)
-    else
-        self:DoDelta(49, false, item, true) --set 25%
-    end
-    if self.inst.components.burnable then
-        self.inst.components.burnable:Extinguish(true, 0)
-    end
-    if self.inst.components.freezable then
-        self.inst.components.freezable:Reset()
-    end
-    if self.inst.components.hunger then
-        self.inst.components.hunger:SetPercent(2 / 3, true)
-    end
-    if self.inst.components.grogginess then
-        self.inst.components.grogginess:ResetGrogginess()
-    end
 
-    if self.inst.components.moisture then
-        self.inst.components.moisture:ForceDry(true, self.inst)
-        self.inst.components.moisture:ForceDry(false, self.inst)
-    end
 
-    if self.inst.components.temperature then
-        self.inst.components.temperature:SetTemperature(TUNING.STARTING_TEMP)
-    end
 
-    if self.inst.components.debuffable then
-        self.inst.components.debuffable:Enable(false) --removes all debuffs
-        self.inst.components.debuffable:Enable(true)
-    end
 
     if self.inst:HasTag("wathom") then
         self.inst.AnimState:SetBuild("wathom")
     end
 
-    SpawnPrefab("slingshotammo_hitfx_gold").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
-    SpawnPrefab("shadow_despawn").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
+
 
     self:SetInvincible(true)
-
-    if self.inst.components.sanity then
-        self.inst.components.sanity:SetPercent(0.25)
-    end
-
-    self.inst:DoTaskInTime(1,
-        function(inst) if inst.components.health then inst.components.health:SetInvincible(false) end end)
+    self.inst:DoTaskInTime(1, function(inst) 
+		if inst.components.health then 
+			inst.components.health:SetInvincible(false) 
+		end 
+	end)
     item:DoTaskInTime(0, function(item) item:Remove() end)
 end
 
-local function HasLLA(self)
+local function HasPocketRessurection(self)
     if self.inst.components.inventory then
         local item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
         if item == nil then
             item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
         end
         if item and item.prefab == "amulet" and self.inst.components.timer ~= nil and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
-            return true
+            return item
+		elseif self.inst.components.timer ~= nil and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
+			local item = self.inst.components.inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
+			if item then
+				return item
+			end
         end
     end
 end
@@ -160,19 +179,20 @@ env.AddComponentPostInit("health", function(self)
     local _DoDelta = self.DoDelta
     --(self:HasTag("wathom") and self:HasTag("amped")
     function self:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+		local res_item = HasPocketRessurection(self)
         if TUNING.DSTU.SHADOW_WATHOM and self.inst:HasTag("wathom") then
             if MayKill(self, amount) and cause == "shadowvortex" and TUNING.DSTU.COMPROMISING_SHADOWVORTEX and not self.inst.sg:HasStateTag("blackpuddle_death") then
                 self.inst.components.rider:ActualDismount()
                 self.inst.sg:GoToState("blackpuddle_death")
                 return 1
-            elseif MayKill(self, amount) and HasLLA(self) and not self.inst:HasTag("deathamp") then --and not (self.inst:HasTag("deathamp")) then
-                TriggerAmulet(self)
+            elseif MayKill(self, amount) and res_item and not self.inst:HasTag("deathamp") then --and not (self.inst:HasTag("deathamp")) then
+                TriggerPocketRessurection(self,res_item)
                 return 49
-            elseif MayKill(self, amount) and HasLLA(self) and self.inst:HasTag("deathamp") and cause == "deathamp" and self.inst.components.timer ~= nil and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
+            elseif MayKill(self, amount) and res_item and self.inst:HasTag("deathamp") and cause == "deathamp" and self.inst.components.timer ~= nil and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
                 if not self.inst:HasTag("playerghost") and self.inst.ToggleUndeathState ~= nil then
                     self.inst:ToggleUndeathState(self.inst, false)
                 end
-                TriggerAmulet(self) --Don't trigger the LLA here, let it happen in our own component, so this doesn't break whenever canis moves it to his own mod.
+                TriggerPocketRessurection(self,res_item) --Don't trigger the LLA here, let it happen in our own component, so this doesn't break whenever canis moves it to his own mod.
                 return 49
             elseif self.inst:HasTag("deathamp") and cause ~= "deathamp" then
                 self.inst.components.adrenaline:DoDelta(amount * 1)
@@ -185,8 +205,8 @@ env.AddComponentPostInit("health", function(self)
             elseif not self.inst:HasTag("deathamp") then                                                              -- No positive healing if you're on your last breath
                 return _DoDelta(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
             end
-        elseif MayKill(self, amount) and HasLLA(self) then
-            TriggerAmulet(self)
+        elseif MayKill(self, amount) and res_item then
+            TriggerPocketRessurection(self,res_item)
             return 49
         elseif env.GetModConfigData("winonarose") and self.inst:HasTag("handyperson") and self.inst.components.inventory ~= nil and MayKill(self, amount) and HasCharlieRose(self) then
             TriggerRose(self)

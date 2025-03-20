@@ -29,6 +29,9 @@ end
 
 local function OnAttached(inst, target, followsymbol, followoffset, data)
     local duration = data ~= nil and data.duration and (data.duration / 2) or 1
+	duration = duration*1.5 -- triple the required length to fully heal
+	
+	
     local dohealmaxhealth = data ~= nil and data.max_hp
     if dohealmaxhealth then
         local health = (duration * 2) * 10
@@ -61,7 +64,7 @@ end
 
 local function OnExtended(inst, target, followsymbol, followoffset, data)
     local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-
+	duration = duration*1.5 -- triple the required length to fully heal
     --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
     local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse") and 0.8 or 1
 
@@ -140,7 +143,7 @@ local function OnAttached2(inst, target, followsymbol, followoffset, data)
 
     --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
     local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse") and 0.8 or 1
-
+	duration = duration*1.5 -- triple the required length to fully sanify
     duration = duration / warlybuff
     -- sync the buff tick rate with the game's tick rate
     duration = math.floor(duration / FRAMES) * FRAMES
@@ -165,7 +168,7 @@ end
 
 local function OnExtended2(inst, target, followsymbol, followoffset, data)
     local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-
+	duration = duration*1.5 -- triple the required length to fully sanify
     --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
     local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse") and 0.8 or 1
     duration = duration / warlybuff

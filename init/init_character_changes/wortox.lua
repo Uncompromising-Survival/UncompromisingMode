@@ -6,32 +6,11 @@ if TUNING.DSTU.WORTOXCHANGES then
 			return inst
 		end
 		--if inst.components.health ~= nil and inst:HasTag("insect") and inst.components.health ~= nil and not inst.components.health:IsDead() and inst.components.health.maxhealth <= 100 then
-		if inst:HasTag("butterfly") or inst:HasTag("bird") --[[or (not GetModConfigData("wortox_beesouls") and inst:HasTag("bee"))]] then
+		if inst:HasTag("butterfly") --[[or (not GetModConfigData("wortox_beesouls") and inst:HasTag("bee"))]] then
 			inst:AddTag("soulless")
 		end
 	end)
 	
-	--local function MakeSoulless(prefab)
-		--AddPrefabPostInit(prefab, function(inst)
-			--if inst ~= nil then
-				--inst:AddTag("soulless")
-			--end
-		--end)
-	--end
-
-	--local REMOVE_SOULS =
-	--{
-		--"birchnutdrake",
-		--"stumpling",
-		--"birchling",
-	--}
-
-	--if GLOBAL.TUNING.DSTU.WORTOX == "UMNERF" then
-		--for k, v in pairs(REMOVE_SOULS) do
-			--MakeSoulless(v)
-	--end
-	--end
-
 	local function UncompromisingSoulHeal(inst)
 		if GLOBAL.TUNING.BOOK_FIRE_RADIUS ~= nil then
 			--wicker rework doesn't have a release ID :/ had to use this as a workaround
@@ -110,8 +89,30 @@ if TUNING.DSTU.WORTOXCHANGES then
 	end
 
 	--beta uses
-		local wortox_soul_common = require("prefabs/wortox_soul_common")
-		wortox_soul_common.DoHeal = UncompromisingSoulHeal
+	local wortox_soul_common = require("prefabs/wortox_soul_common")
+	wortox_soul_common.DoHeal = UncompromisingSoulHeal
+		
+
+	AddPrefabPostInit("wortox_reviver", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		inst:RemoveTag("reviver")
+	end)
+	
+	
+	
+	local STRINGS = GLOBAL.STRINGS
+	-- Skilltree Text Changes
+	STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life." 
+	STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Reduces max penalties from using Twintailed Heart."
+	
+	local SkillTreeDefs = GLOBAL.require("prefabs/skilltree_defs")
+	if SkillTreeDefs.SKILLTREE_DEFS["wortox"] ~= nil then
+		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_lifebringer_1.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC
+		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_lifebringer_2.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC
+	end
+
 end
 
 AddPrefabPostInit("wortox", function(inst)
@@ -123,13 +124,5 @@ AddPrefabPostInit("wortox", function(inst)
 		inst.components.foodaffinity:AddPrefabAffinity("devilsfruitcake", 1.24)
 	end
 	
-        --if inst.components.souleater ~= nil then
-            --local oneatsoulfn_ = inst.components.souleater.oneatsoulfn
-
-            --inst.components.souleater.oneatsoulfn = function(inst, soul)
-                --oneatsoulfn_(inst, soul)
-                --inst.components.sanity:DoDelta(-TUNING.SANITY_TINY)
-            --end
-        --end
 end)
 

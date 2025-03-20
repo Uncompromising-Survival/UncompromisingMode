@@ -376,8 +376,7 @@ configuration_options = {
         "Bramble traps do no player damage, reset when you are bloomed near them, and create multiple when crafted.",
         true),
     BinaryConfig("wormwood_photosynthesis", "Wormwood - SkillTree", "Enables changes to a few of the skills in Wormwood's tree.", true), --kept the name but this should be an overall skilltree config now for potential future changes
-    BinaryConfig("wanda_nerf", "Wanda",
-        "A bunch of changes to some of Wanda's more overpowered items to make them more balanced.", true),
+    BinaryConfig("wanda_nerf", "Wanda", "Tune down some of Wanda's scaling alarming clock damage. Does not affect dark swords.", false),
     SkipSpace(),
 
     ------------------------------
