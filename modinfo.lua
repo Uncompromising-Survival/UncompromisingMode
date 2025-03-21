@@ -178,7 +178,7 @@ configuration_options = {
     },
     BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
         "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
-    BinaryConfig("longpig", "Long Pig", "Skeletons drop Long Pig to prevent Telltale Heart spam.", true),
+    BinaryConfig("longpig", "Long Pig", "Telltale Hearts now require 'Long Pig' from skeletons to hinder amassing large numbers of them.", false),
 
     BinaryConfig("maxhphitters", "Max Health Mob",
         "Some monsters deal Max HP damage.\nTurn this off if you're having problems with mods which also interact Max HP.",
