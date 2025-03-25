@@ -1,6 +1,11 @@
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 
 if TUNING.DSTU.WORTOXCHANGES then
+
+
+
+
+	--- Soul Changes, will eventually remove them after these lower-effort enemies have more nuance to killing a lot of them
 	AddPrefabPostInitAny(function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
 			return inst
@@ -10,6 +15,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 			inst:AddTag("soulless")
 		end
 	end)
+		
+	
 	
 	local function UncompromisingSoulHeal(inst)
 		local healtargets = {}
@@ -70,8 +77,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 				if souls > 20 then -- linearly reduce effectiveness of souls if wortox is holding more than 20
 					adjusted_amt = adjusted_amt + 20 - souls
 				end
-				if adjusted_amt < 0 then
-					adjusted_amt = 0
+				if adjusted_amt < 5 then
+					adjusted_amt = 5
 				end
 				
 				if inst.soul_doburst then -- Soul bastion 1 allows you to bypass SHOT
@@ -81,7 +88,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 							{ duration = (adjusted_amt * 0.1) })
 				end		
 				if inst.soul_heal_player_efficient then -- Soul bastion 2 Recovers some maximum health
-					v.components.health:DeltaPenalty(-0.02)
+					v.components.health:DeltaPenalty(-0.01)
 				end
 				
 				if v.components.combat then -- Always show fx now that the heals do special targeting to show the player that it stops working when everyone is full.
@@ -105,7 +112,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	end
 
 
-	--beta uses
+	--Override the healing function with a new one
 	local wortox_soul_common = require("prefabs/wortox_soul_common")
 	wortox_soul_common.DoHeal = UncompromisingSoulHeal
 		
@@ -116,36 +123,223 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 		inst:RemoveTag("reviver")
 	end)
+	
+	
+	local SOULPROTECTOR_TICK_TIME = 0.1
 	AddPrefabPostInit("wortox_soul", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
 			return
 		end
-		local _ModifyStats = inst.ModifyStats
-		
-		local function ModifyStats(inst,owner)
+		local function ModifyStats(inst,owner) 
+			local skilltreeupdater = owner.components.skilltreeupdater
+			if skilltreeupdater then
+				if skilltreeupdater:IsActivated("wortox_soulprotector_1") then
+					inst.soul_heal_range_modifier = (inst.soul_heal_range_modifier or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_RANGE
+					inst.soul_follow_speed = (inst.soul_follow_speed or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_SPEED
+					inst.soulprotector_task = inst:DoPeriodicTask(SOULPROTECTOR_TICK_TIME, inst.SoulProtectorTick, 0.3)
+				end
+				if skilltreeupdater:IsActivated("wortox_soulprotector_3") then
+					inst.soul_doburst = true
+				end
+				if skilltreeupdater:IsActivated("wortox_soulprotector_4") then
+					inst.soul_follow_speed = (inst.soul_follow_speed or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_4_SPEED
+					inst.soul_doburst_faster = true
+					inst.soul_heal_player_efficient = true
+				end
+			end
 			inst.owner = owner -- need to pass the owner so each soul can count how many souls the owner has
-			_ModifyStats(inst,owner)
 		end
-		inst.ModifyStats = ModifyStats
-	end)	
-	
-	local STRINGS = GLOBAL.STRINGS
-	-- Skilltree Text Changes
-	STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life." 
-	STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Reduces max penalties from using Twintailed Heart."
-	
-	STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
-	STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also recover health penalties."
-	
-	local SkillTreeDefs = GLOBAL.require("prefabs/skilltree_defs")
-	if SkillTreeDefs.SKILLTREE_DEFS["wortox"] ~= nil then
-		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_lifebringer_1.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC
-		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_lifebringer_2.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC
 		
-		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_soulprotector_3.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC
-		SkillTreeDefs.SKILLTREE_DEFS["wortox"].wortox_soulprotector_4.desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC
+		inst:AddComponent("tradable")
+
+		inst:AddComponent("upgrader")
+		inst.components.upgrader.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+		inst.components.upgrader.upgradevalue = 2
+
+		inst.ModifyStats = ModifyStats
+	end)
+	
+	AddPrefabPostInit("wortox_soul_spawn", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		local _OnThrownFn = inst.components.projectile.onthrown
+		
+		local function OnThrownTimeout(inst)
+			inst._timeouttask = nil
+			inst.components.projectile:Miss(inst.components.projectile.target)
+		end
+		
+		local function OnThrown(inst, owner, target, attacker)
+			_OnThrownFn(inst, owner, target, attacker) -- we don't want to have to replace the whole function, just recheck the timeout
+	
+			
+			local duration = TUNING.WORTOX_SOUL_PROJECTILE_LIFETIME
+			if target and target.components.skilltreeupdater then --redo the timer w/ thief 1 instead of relying on thief 2
+				if target.components.skilltreeupdater:IsActivated("wortox_thief_1") then
+					if inst._timeouttask ~= nil then
+						inst._timeouttask:Cancel()
+						inst._timeouttask = nil
+					end
+					duration = duration + TUNING.SKILLS.WORTOX.SOUL_PROJECTILE_LIFETIME_BONUS
+					inst._timeouttask = inst:DoTaskInTime(duration, OnThrownTimeout)
+				end
+			end
+		end	
+		inst.components.projectile:SetOnThrownFn(OnThrown)
+		
+	end)		
+	
+
+	local function SpawnWovenShadow(inst, upgrade_performer, obj)
+		if inst.components.stackable then
+			inst.components.stackable:Get(1):Remove()
+			inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
+			inst:AddComponent("upgradeable")
+			inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+			inst.components.upgradeable.onupgradefn = SpawnWovenShadow		
+		else
+			inst:Remove()
+		end
+		
+		local rnd = math.random()
+		
+		
+		local crechure = "stalker_minion"
+		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
+			if rnd < 0.02 then
+				crechure = "ruinsnightmare"
+			elseif rnd < 0.12 then
+				crechure = "nightmarebeak"
+			elseif rnd < 0.4 then
+				crechure = "crawlingnightmare"
+			end
+		else
+			if rnd < 0.01 then
+				crechure = "ruinsnightmare"
+			elseif rnd < 0.06 then
+				crechure = "nightmarebeak"
+			elseif rnd < 0.2 then
+				crechure = "crawlingnightmare"
+			end
+		end
+		local shadow = GLOBAL.SpawnPrefab(crechure) 
+		shadow.wortox_minion = true -- These Guys are minions of Wortox
+		
+		local x,y,z = upgrade_performer.Transform:GetWorldPosition()
+		local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
+		if offset then -- So it doesn't crash if the player is godmode on the ocean and tries to weave a shadow
+			x = x + offset.x
+			z = z + offset.z
+		end
+		shadow.Transform:SetPosition(x,y,z)
+		    
+		local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
+		despawn.Transform:SetPosition(x, y, z)
+	
+		
+		shadow:AddComponent("follower")
+		upgrade_performer.components.leader:AddFollower(shadow)
+
+		if crechure == "stalker_minion" then
+			shadow.die_off = shadow:DoTaskInTime(60,function(shadow) 
+				if shadow.components.health and not shadow.components.health:IsDead() then 
+					shadow.components.health:Kill() 
+				end 
+			end)
+		else
+			shadow.die_off = shadow:DoPeriodicTask(1,function(shadow) 
+				if shadow.components.health and not shadow.components.health:IsDead() then 
+					shadow.components.health:DoDelta(-5)
+				end 
+			end)		
+		end
+		
+		--shadow.persists = false
+        local fx = GLOBAL.SpawnPrefab("wortox_soulecho_buff_fx")
+        shadow.bufffx = fx
+        fx.entity:SetParent(shadow.entity)
+		fx.Transform:SetScale(2,2,2)
+		shadow:ListenForEvent("ondeath",function(shadow)
+			if inst.bufffx and inst.bufffx:IsValid() then
+				inst.bufffx:Remove()
+			end
+			inst.bufffx = nil
+			inst:Remove()	
+		end)
+		if shadow.components.lootdropper then
+			shadow.components.lootdropper:SetLoot(nil)
+			shadow.components.lootdropper:SetChanceLootTable(nil)
+		end
+		if crechure == "stalker_minion" then
+			shadow.sg:GoToState("emerge_noburst")
+			shadow:OnSpawnedBy(upgrade_performer)
+		end
+	end
+	
+	AddPrefabPostInit("nightmarefuel", function(inst)
+		inst:AddTag("SOUL_SHADOW_upgradeable")
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		
+		inst:AddComponent("upgradeable")
+		inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+		inst.components.upgradeable.onupgradefn = SpawnWovenShadow		
+	end)
+	
+	AddPrefabPostInit("voidcloth_scythe", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		
+		local _OnAttack = inst.components.weapon.onattack
+	
+		local function OnAttack(inst, attacker, target) 
+			local skilltreeupdater = attacker.components.skilltreeupdater
+			local max_health = target.components.health ~= nil and target.components.health.maxhealth
+			if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") and max_health then
+				local x,y,z = attacker.Transform:GetWorldPosition()
+				local shadows = TheSim:FindEntities(x,y,z,20,{"shadow"})
+				local k = 0
+				for i,shadow in ipairs(shadows) do -- find the division of health
+					if shadow.wortox_minion then
+						k = k + 1
+					end
+				end
+				for i,shadow in ipairs(shadows) do
+					if shadow.wortox_minion then
+						GLOBAL.SpawnPrefab("shadow_despawn").Transform:SetPosition(shadow.Transform:GetWorldPosition())
+						shadow.components.health:DoDelta(max_health/k)
+					end
+				end
+			end
+			_OnAttack(inst,attacker,target)
+		end
+				
+		inst.components.weapon:SetOnAttack(OnAttack)
+	end)
+	
+	local MIN_FOLLOW_LEADER = 2
+	local MAX_FOLLOW_LEADER = 6
+	local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
+	-- make woven shadow creatures follow wortox
+	local function GetLeader(inst)
+		return inst.components.follower ~= nil and inst.components.follower.leader or nil
+	end
+	
+	local function ShadowCreatureFollow(self)
+		table.insert(self.bt.root.children, 1, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+            GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
 	end
 
+	AddBrainPostInit("nightmarecreaturebrain", ShadowCreatureFollow)
+	
+	modimport("init/init_character_changes/skilltree_wortox") -- Import New Wortox Tree
+
+    AllRecipes["wortox_reviver"].ingredients = {
+        Ingredient("wortox_soul", 20),
+    }	
 end
 
 AddPrefabPostInit("wortox", function(inst)

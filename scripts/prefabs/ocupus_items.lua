@@ -118,7 +118,7 @@ local function ocupus_tentacle_eye()
 end
 
 local function ocupus_tentacle_cooked()
-    local inst = common("ocupus_items", "ocupus_items", "idle_cooked", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
+    local inst = common("ocupus_items", "ocupus_items", "idle_cooked", { "catfood", "rawmeat" })
 
     if not TheWorld.ismastersim then
         return inst

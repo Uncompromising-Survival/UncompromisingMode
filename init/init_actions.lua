@@ -192,6 +192,7 @@ local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
     if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
+	if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
     return _UpgradeStrFn(act)
 end
 

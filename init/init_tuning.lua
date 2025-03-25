@@ -439,7 +439,12 @@ TUNING.DSTU = {
 
     DATES = {
         APRIL_FOOLS = Date(1, 4),
-    }
+    },
+		
+	-- Shadow Damage tuning
+	RUINSNIGHTMARE_DAMAGE = 75
+	
+	
 }
 
 -- [              DST Related Overrides                  ]

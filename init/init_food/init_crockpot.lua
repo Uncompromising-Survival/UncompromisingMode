@@ -531,6 +531,10 @@ InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5, monster = 1 }, tru
 RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
+InsertIngredientValues({ "ocupus_tentacle" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle.xml", "ocupus_tentacle.tex")
+InsertIngredientValues({ "ocupus_tentacle_cooked" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
+RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle_cooked.xml", "ocupus_tentacle_cooked.tex")
 
 -- [Rimeweed] --
 InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false, false)

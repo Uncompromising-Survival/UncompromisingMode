@@ -169,6 +169,14 @@ AddPrefabPostInit("terrorbeak", purplepostinit)
 AddPrefabPostInit("creepingfear", purplepostinit)
 AddPrefabPostInit("dreadeye", purplepostinit)
 
+AddPrefabPostInit("ruinsnightmare", function(inst) -- Increase the damage of the ruins nightmare to 75, why? because it's going to make it more effective as wortox's minion when he gets really lucky and rolls it
+	inst:AddTag("SOUL_SHADOW_upgradeable")
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	inst.components.combat:SetDefaultDamage(GLOBAL.TUNING.DSTU.RUINSNIGHTMARE_DAMAGE)	
+end)
+	
 -------------------------------------------------- StategraphState
 
 local state_teleport_disapper = GLOBAL.State { name = "teleport_disapper",
