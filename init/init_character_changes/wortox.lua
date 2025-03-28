@@ -299,7 +299,6 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local crechure = "stalker_minion"
 		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
 		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-			GLOBAL.TheNet:Announce(rnd)
 			if rnd < 0.02 then
 				crechure = "ruinsnightmare"
 			elseif rnd < 0.12 then
