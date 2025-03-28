@@ -16,15 +16,15 @@ STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC = "Souls are created and attracted 
 STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC = "Requires the skill below and 4 total Nice and/or Neutral skills to unlock."
 STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC = "Requires the skill below and 4 total Naughty and/or Neutral skills to unlock."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE = "Shadow Harvester II"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen will reward your loyalty by unlocking power from wielding a Shadow Reaper. Souls waiting to be freed in a Soul Echo will cause damage dealt to spread out to close enemies or hit one target twice, and expire the timer."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE = "Shadow Harvester"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The flattered shadow queen has shared the secrets of weaving shadows with you. Weaving will yield better results. Souls waiting to be freed during an echo timer are consumed by the shadow reaper to deal double damage, or share the pain in an area. Kills accomplished with the scythe nourish live shadow minions relative to the lifeforce of the mob."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Harvester I"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Your observations of the Fuelweaver allow you to Weave shadows with souls and nightmare fuel."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Weaver"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the fuelweaver closely inspired you to weave your own creations to life. You can infuse nightmare fuel with souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen will reward your loyalty by empowering the Shadow Reaper and improving your Shadow Weaving. Souls waiting in a Soul Echo will spread damage to close enemies or hit one target twice, and expire the timer. Kills with the Reaper extend the life of your Woven Shadows."
 
-
+STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 souls will periodically release a soul from your inventory to pierce."
 
 
 

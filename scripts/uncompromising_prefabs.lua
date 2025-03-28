@@ -227,7 +227,7 @@ local prefabs = {
 	"pawn_spawn",
 	"pigking_pigtorch",
 	"armor_dragonfly_light",
-	"haul_hound",
+
 	"mothermossling",
 	"dragonfly_egg",
 	"um_trap_snare",

@@ -294,6 +294,24 @@ env.AddStategraphPostInit("wilson", function(inst)
 	--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	-- Blue Funcap Changes!
 	
+	-- upgrade
+    local _OldUpgrade = inst.actionhandlers[ACTIONS.UPGRADE].deststate
+    inst.actionhandlers[ACTIONS.UPGRADE].deststate = function(inst, action, ...)
+		local funcap = FindBlueFuncap(inst)
+		if funcap and funcap.charge > 0 or (action and action.target and action.target.prefab == "nightmarefuel") then
+			inst.temp_speed_mod = (inst:HasTag("hungrybuilder") and 0.5)
+				or (inst:HasTag("fastbuilder") and 0.05)
+				or (inst:HasTag("slowbuilder") and 2)
+				or 1
+			if (action and action.target and action.target.prefab == "nightmarefuel") then
+				inst.temp_speed_mod = 0.8
+			end
+			return "bluecap_general_action"
+        else
+            return _OldUpgrade(inst, action, ...)
+        end
+    end
+	
 	-- Build
 	local _OldBuild = inst.actionhandlers[ACTIONS.BUILD].deststate
     inst.actionhandlers[ACTIONS.BUILD].deststate =
@@ -2677,11 +2695,11 @@ env.AddStategraphPostInit("wilson", function(inst)
 			onenter = function(inst)
 				local funcap = FindBlueFuncap(inst)
 				local mod = 1
-				if funcap.charge == 12 then
+				if funcap and funcap.charge == 12 then
 					mod = 0.2
-				elseif funcap.charge > 6 then
+				elseif funcap and funcap.charge > 6 then
 					mod = 0.4
-				else
+				elseif funcap then
 					mod = 0.7
 				end
 				if inst.temp_speed_mod then

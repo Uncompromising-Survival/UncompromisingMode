@@ -1,11 +1,14 @@
+require "behaviours/chaseandattack"
+
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 
 if TUNING.DSTU.WORTOXCHANGES then
 
 
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Soul Changes, will eventually remove them after these lower-effort enemies have more nuance to killing a lot of them ] ----
+	--------------------------------------------------------------------------------------------------------------------------------
 
-
-	--- Soul Changes, will eventually remove them after these lower-effort enemies have more nuance to killing a lot of them
 	AddPrefabPostInitAny(function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
 			return inst
@@ -16,8 +19,12 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 	end)
 		
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------	
 	
-	
+	local SOULPROTECTOR_TICK_TIME = 0.1
+		
 	local function UncompromisingSoulHeal(inst)
 		local healtargets = {}
 		local healtargetscount = 0
@@ -51,35 +58,12 @@ if TUNING.DSTU.WORTOXCHANGES then
 			local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, (TUNING.HEALING_MED * (inst.soul_heal_premult or 1) - loss_per_player * (healtargetscount - 1)) * (inst.soul_heal_mult or 1))
 			local amt_naughty = amt * TUNING.SKILLS.WORTOX.NAUGHTY_SOULHEAL_RECEIVED_MULT
 
-			local souls = 0
-			local wortox = inst.owner or nil
-			if wortox then
-				wortox.components.inventory:ForEachItemSlot(function(item)
-					if item.prefab == "wortox_soul" then
-						souls = souls + (item.components.stackable and item.components.stackable:StackSize() or 1)
-					elseif item.prefab == "wortox_souljar" then
-						souls = souls + item.soulcount
-					end
-				end)
-				local activeitem = wortox.components.inventory:GetActiveItem()
-				if activeitem then
-					if activeitem.prefab == "wortox_soul" then
-						souls = souls + (activeitem.components.stackable and activeitem.components.stackable:StackSize() or 1)
-					elseif activeitem.prefab == "wortox_souljar" then
-						souls = souls + activeitem.soulcount
-					end
-				end
-			end
+
 			for i = 1, healtargetscount do
 				local v = healtargets[i]
 				local adjusted_amt = v.wortox_inclination == "naughty" and amt_naughty or amt
 				
-				if souls > 20 then -- linearly reduce effectiveness of souls if wortox is holding more than 20
-					adjusted_amt = adjusted_amt + 20 - souls
-				end
-				if adjusted_amt < 5 then
-					adjusted_amt = 5
-				end
+				adjusted_amt = adjusted_amt/2
 				
 				if inst.soul_doburst then -- Soul bastion 1 allows you to bypass SHOT
 					v.components.health:DoDelta(adjusted_amt, nil, inst.prefab)
@@ -115,17 +99,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	--Override the healing function with a new one
 	local wortox_soul_common = require("prefabs/wortox_soul_common")
 	wortox_soul_common.DoHeal = UncompromisingSoulHeal
-		
 
-	AddPrefabPostInit("wortox_reviver", function(inst)
-		if not GLOBAL.TheWorld.ismastersim then
-			return
-		end
-		inst:RemoveTag("reviver")
-	end)
-	
-	
-	local SOULPROTECTOR_TICK_TIME = 0.1
 	AddPrefabPostInit("wortox_soul", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
 			return
@@ -159,6 +133,34 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.ModifyStats = ModifyStats
 	end)
 	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Twin Tailed Heart ] -------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------		
+
+	AddPrefabPostInit("wortox_reviver", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		inst:RemoveTag("reviver")
+		
+		local function OnConsume(inst, owner)
+			if inst.components.perishable and inst.components.perishable:GetPercent() > 0.5 then
+				inst.components.perishable:SetPercent(inst.components.perishable:GetPercent()-0.5) -- take 1/2 freshhness
+			else	
+				inst:Remove()
+			end
+		end		
+			
+		inst.OnConsume = OnConsume
+	end)
+    AllRecipes["wortox_reviver"].ingredients = {
+        Ingredient("wortox_soul", 20),
+    }		
+	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Soul Pierce Changes ] -----------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------		
+
 	AddPrefabPostInit("wortox_soul_spawn", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
 			return
@@ -189,8 +191,98 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.projectile:SetOnThrownFn(OnThrown)
 		
 	end)		
-	
 
+	local function OnHit(inst, attacker, target)
+		if target ~= nil then
+			local x, y, z = inst.Transform:GetWorldPosition()
+			local fx = GLOBAL.SpawnPrefab("wortox_soul_in_fx")
+			fx.Transform:SetPosition(x, y, z)
+			fx:Setup(target)
+			--ignore .isvisible, as long as it's .isopen
+			if target.components.inventory ~= nil and target.components.inventory.isopen then
+				target.components.inventory:GiveItem(GLOBAL.SpawnPrefab("wortox_soul"), nil, target:GetPosition())
+			else
+				--reuse fx variable
+				fx = GLOBAL.SpawnPrefab("wortox_soul")
+				fx.Transform:SetPosition(x, y, z)
+				fx.components.inventoryitem:OnDropped(true)
+			end
+		end
+		inst:Remove()
+	end
+	
+	local function RethrowProjectile(inst, speed, soulthiefreceiver)
+		if soulthiefreceiver:IsValid() then
+			inst.components.projectile:SetSpeed(speed)
+			inst.components.projectile:SetHoming(true)
+
+			local x, y, z = inst.Transform:GetWorldPosition()
+			inst.components.projectile:SetBounced(true)
+			inst.components.projectile.overridestartpos = GLOBAL.Vector3(x, 0, z)
+			inst.components.projectile:SetOnHitFn(OnHit)
+			inst.components.projectile:Throw(inst, soulthiefreceiver, soulthiefreceiver)
+		end
+	end
+	
+	local function ReleaseSoul(inst,target,inv_soul) -- manually throw the soul
+		if inv_soul.components.stackable ~= nil and inv_soul.components.stackable:IsStack() then
+			inv_soul.components.stackable:Get():Remove()
+		else
+			inv_soul:Remove()
+		end
+		local x1,y1,z1 = inst.Transform:GetWorldPosition()
+		local x2,y2,z2 = target.Transform:GetWorldPosition()
+		local x = (x1+x2)/2
+		local z = (z1+z2)/2
+		local soul = GLOBAL.SpawnPrefab("wortox_soul_spawn")
+		soul.Transform:SetPosition(x,0,z)
+		
+		soul.soul_spear_task = soul:DoPeriodicTask(0.1, soul.SoulSpearTick, 0, inst)
+		
+		local speed = TUNING.WORTOX_SOUL_PROJECTILE_SPEED
+		soul.components.projectile:SetSpeed(-speed)
+		soul.components.projectile:SetHoming(false)
+		soul:DoTaskInTime(TUNING.SKILLS.WORTOX.SOUL_PROJECTILE_REPEL_DURATION, RethrowProjectile, speed, inst)
+		soul.components.projectile:SetOnHitFn(OnHit)
+        soul.components.projectile:Throw(soul, inst, inst)
+		soul.components.projectile:SetOnHitFn(function(soul) end)
+	end
+	
+	local function GenerateSouls(inst,data)
+		if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wortox_thief_4") then
+			local souls = 0
+			local ref_item = nil
+			inst.components.inventory:ForEachItemSlot(function(item)
+				if item.prefab == "wortox_soul" then
+					souls = souls + (item.components.stackable and item.components.stackable:StackSize() or 1)
+					ref_item = item
+				end
+			end)
+			if souls >= 10 then
+				if not inst.wortox_damage_recent then
+					inst.wortox_damage_recent = 0
+				end
+				inst.wortox_damage_recent = inst.wortox_damage_recent + data.damage		
+				if inst.wortox_damage_recent >= 176 then
+					inst.wortox_damage_recent = 0
+					ReleaseSoul(inst,data.target,ref_item)
+				end				
+			end
+		end
+	end
+	
+	AddPrefabPostInit("wortox", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		
+		inst:ListenForEvent("onhitother", GenerateSouls)
+		
+	end)	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Shadow Weaving ] ----------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------	
+	
 	local function SpawnWovenShadow(inst, upgrade_performer, obj)
 		if inst.components.stackable then
 			inst.components.stackable:Get(1):Remove()
@@ -204,9 +296,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		
 		local rnd = math.random()
 		
-		
 		local crechure = "stalker_minion"
+		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
 		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
+			GLOBAL.TheNet:Announce(rnd)
 			if rnd < 0.02 then
 				crechure = "ruinsnightmare"
 			elseif rnd < 0.12 then
@@ -275,7 +368,13 @@ if TUNING.DSTU.WORTOXCHANGES then
 			shadow.sg:GoToState("emerge_noburst")
 			shadow:OnSpawnedBy(upgrade_performer)
 		end
+		
+		shadow:RemoveComponent("sanityaura")
 	end
+
+	--------------------------------------------
+	--[ Make Nightmarefuel "Upgradeable" ] -----
+	--------------------------------------------
 	
 	AddPrefabPostInit("nightmarefuel", function(inst)
 		inst:AddTag("SOUL_SHADOW_upgradeable")
@@ -287,6 +386,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
 		inst.components.upgradeable.onupgradefn = SpawnWovenShadow		
 	end)
+	
+	--------------------------------------------
+	--[ Scythe Extending Lifetime of Shadows] --
+	--------------------------------------------
 	
 	AddPrefabPostInit("voidcloth_scythe", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
@@ -320,6 +423,11 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.weapon:SetOnAttack(OnAttack)
 	end)
 	
+	-----------------------------
+	--[ Shadow Brain Changes ] --
+	-----------------------------
+		
+	--- Wortox Shadow brain changes
 	local MIN_FOLLOW_LEADER = 2
 	local MAX_FOLLOW_LEADER = 6
 	local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
@@ -327,25 +435,102 @@ if TUNING.DSTU.WORTOXCHANGES then
 	local function GetLeader(inst)
 		return inst.components.follower ~= nil and inst.components.follower.leader or nil
 	end
-	
+
 	local function ShadowCreatureFollow(self)
+
 		table.insert(self.bt.root.children, 1, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
             GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
 	end
 
 	AddBrainPostInit("nightmarecreaturebrain", ShadowCreatureFollow)
 	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Nabbag Damage Calculation Tweak ] -----------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------	
+	
+	AddPrefabPostInit("wortox_nabbag", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		
+		local BUCKET_NAMES = {
+			"_empty",
+			"_medium",
+			"_full",
+		}
+		local BUCKET_SIZE = #BUCKET_NAMES
+
+		local function UpdateStats(inst, percent, souls)
+			-- Make the sizes into buckets.
+			local bucket = math.clamp(math.ceil(percent * BUCKET_SIZE), 1, BUCKET_SIZE)
+			local old_size = inst.nabbag_size
+			inst.nabbag_size = BUCKET_NAMES[bucket]
+			-- Scale percent to be percent of bucket.
+			percent = (bucket - 1) / (BUCKET_SIZE - 1)
+
+			local vfx_level = 0
+			local owner = inst.components.inventoryitem.owner
+			if inst.components.weapon then
+				local maxdamage = 51
+				local mindamage = TUNING.SKILLS.WORTOX.NABBAG_DAMAGE_MIN
+				local damage = (maxdamage - mindamage) * percent + mindamage
+				if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_souljar_3") then
+					local souls_max = TUNING.SKILLS.WORTOX.SOUL_DAMAGE_MAX_SOULS
+					local souls_clamped = math.min(souls, souls_max)
+					if souls_clamped == souls_max then -- NOTES(JBK): This is done like this to keep floating point precision out of the equation.
+						vfx_level = 3
+					elseif souls_clamped >= souls_max * 0.50 then
+						vfx_level = 2
+					elseif souls_clamped >= souls_max * 0.25 then
+						vfx_level = 1
+					end
+					local damage_percent = souls_clamped / souls_max
+					damage = damage * ((1 + (TUNING.SKILLS.WORTOX.SOUL_DAMAGE_NABBAG_BONUS_MULT - 1)/3 * damage_percent))
+				end
+				inst.components.weapon:SetDamage(damage)
+				inst.components.weapon.attackwearmultipliers:SetModifier(inst, percent)
+			end
+
+			if inst.wortox_nabbag_body ~= nil then
+				inst.wortox_nabbag_body.bodysize_netvar:set(bucket - 1)
+				inst.wortox_nabbag_body.bodyvfx_souls:set(vfx_level)
+				inst.wortox_nabbag_body:UpdateBodySize()
+				if inst.wortox_nabbag_body.hiding then
+					if owner then
+						owner.AnimState:OverrideSymbol("swap_object", "swap_wortox_nabbag", "swap_wortox_nabbag" .. inst.nabbag_size)
+					end
+				end
+			end
+			if inst.nabbag_size == "_empty" then
+				inst.components.inventoryitem:ChangeImageName(nil) -- Default image name is the prefab name itself as a network optimization.
+			else
+				inst.components.inventoryitem:ChangeImageName("wortox_nabbag" .. inst.nabbag_size)
+			end
+		end
+
+		inst.UpdateStats = UpdateStats
+			
+	end)
+	
+
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+	
 	modimport("init/init_character_changes/skilltree_wortox") -- Import New Wortox Tree
 
-    AllRecipes["wortox_reviver"].ingredients = {
-        Ingredient("wortox_soul", 20),
-    }	
+
 end
+
 
 AddPrefabPostInit("wortox", function(inst)
 	if not GLOBAL.TheWorld.ismastersim then
 		return
 	end
+	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Give Wortox devil food cake affinity ] ------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
 	
 	if inst.components.foodaffinity ~= nil then
 		inst.components.foodaffinity:AddPrefabAffinity("devilsfruitcake", 1.24)

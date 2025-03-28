@@ -103,9 +103,6 @@ local function TriggerPocketRessurection(self,item)
 	end
 
 
-
-
-
     if self.inst:HasTag("wathom") then
         self.inst.AnimState:SetBuild("wathom")
     end
@@ -113,7 +110,7 @@ local function TriggerPocketRessurection(self,item)
 
 
     self:SetInvincible(true)
-    self.inst:DoTaskInTime(1, function(inst) 
+    self.inst:DoTaskInTime(0.2, function(inst) 
 		if inst.components.health then 
 			inst.components.health:SetInvincible(false) 
 		end 
