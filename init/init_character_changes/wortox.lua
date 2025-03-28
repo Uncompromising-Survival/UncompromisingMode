@@ -437,7 +437,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	local function ShadowCreatureFollow(self)
 
-		table.insert(self.bt.root.children, 1, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+		table.insert(self.bt.root.children, 2, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
             GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
 	end
 

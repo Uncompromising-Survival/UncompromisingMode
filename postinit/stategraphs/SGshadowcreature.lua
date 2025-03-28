@@ -17,22 +17,6 @@ env.AddStategraphPostInit("shadowcreature", function(inst)
 			end
 		end
 	end
-	inst.states["attack"].events =
-        {
-            EventHandler("animqueueover", function(inst)
-				if math.random() < .333 then
-					if inst:HasTag("terrorbeak") and inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("player") then --taunt teleporting is only really useful against a player
-						inst.sg:GoToState("tauntport")
-					else
-						TryDropTarget(inst)
-						inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
-						inst.sg:GoToState("idle")
-					end
-				else
-					inst.sg:GoToState("idle")
-				end
-            end),
-        }
 		
 	local _OldAttacked = inst.events["attacked"].fn -- crawling h/n have a special hit state
 	inst.events["attacked"].fn = function(inst, data)
@@ -80,6 +64,17 @@ local function PlayExtendedSound(inst, soundname)
     inst:DoTaskInTime(5, FinishExtendedSound, inst.sg.mem.soundid)
 end
 
+	-- stop taunting if wortox summoned
+	local _OldTauntEnter = inst.states["taunt"].onenter
+	inst.states["taunt"].onenter = function(inst,...)
+		if inst.wortox_minion then
+			inst.sg:GoToState("idle")
+		else
+			_OldTauntEnter(inst,...)
+		end
+	end
+
+		
 local states = {
 
 	State{
@@ -159,10 +154,11 @@ local states = {
         {
             EventHandler("animqueueover", function(inst)
 				if math.random() < .333 then
-					if inst:HasTag("terrorbeak") then
+					if inst:HasTag("terrorbeak") and inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("player") then --taunt teleporting is only really useful against a player
 						inst.sg:GoToState("tauntport")
 					else
-						inst.components.combat:SetTarget(nil)
+						TryDropTarget(inst)
+						inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
 						inst.sg:GoToState("taunt")
 					end
 				else
