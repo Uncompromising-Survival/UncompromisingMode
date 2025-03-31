@@ -42,6 +42,10 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Goodie nerf
     GOODIESNERF = GetModConfigData("goodies_nerf"),
+    -- Daywalker
+    DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
+	DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
+	
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
     FOOD_BERRY_NORMAL_APPEARANCE_PERCENT = 0.6,
@@ -54,9 +58,6 @@ TUNING.DSTU = {
     TREE_GROWTH_TIME_INCREASE = 1.00,
     BERRYBUSH_JUICY_CYCLES = 2,
     -- Food stats
-    FOOD_BUTTERFLY_WING_HEALTH = 1,
-    FOOD_BUTTERFLY_WING_HUNGER = 2.5,
-    FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2,
     FOOD_SPOILED_FOOD_HEALTH = -5,
     FOOD_SPOILED_FOOD_SANITY = -5,
     FOOD_SEEDS_HUNGER = 1.5,
@@ -350,7 +351,7 @@ TUNING.DSTU = {
     UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R36_ST_WENDWALTWORT"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
-    BUTTERFLYWINGS_NERF = GetModConfigData("butterflywings_nerf"),
+    BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
     LONGPIG = GetModConfigData("longpig"),
     RAW_CROPS_NERF = GetModConfigData("rawcropsnerf"),
     WENDY = GetModConfigData("wendy"),
@@ -668,4 +669,11 @@ TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.med_leak = 75
 TUNING.BOAT.GRASSBOAT_LEAK_DAMAGE.small_leak = 50
 
 TUNING.MONKEY_PIRATE_TREASURE_BOAT_CHANCE = 0.5
-TUNING.FISHINGROD_USES = TUNING.FISHINGROD_USES + 1 
+
+if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
+    FOOD_BUTTERFLY_WING_HEALTH = 1
+    FOOD_BUTTERFLY_WING_HUNGER = 2.5
+    FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2
+end
+
+

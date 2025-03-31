@@ -68,6 +68,7 @@ local component_post = {
 }
 
 local prefab_post = {
+	"butterfly",
 	"ressurectionstone",
 	"sewing_mannequin",
 	"bathbomb",

@@ -56,7 +56,7 @@ env.AddPrefabPostInit("junk_pile_big", function(inst)
     inst.OnEntityWake = OnEntityWake
 end)
 
-env.AddShardModRPCHandler(env.modname, "DayWalkerDeathPenalty", function(shard_id, data)
+env.AddShardModRPCHandler("UncompromisingSurvival", "DayWalkerDeathPenalty", function(shardid, segs)
     if TheWorld ~= nil and TheWorld.components.forestdaywalkerspawner ~= nil then
         TheWorld.components.forestdaywalkerspawner:TryToSetDayWalkerJunkPile()
         if TheWorld.components.forestdaywalkerspawner.bigjunk ~= nil then
@@ -66,19 +66,23 @@ env.AddShardModRPCHandler(env.modname, "DayWalkerDeathPenalty", function(shard_i
 end)
 
 env.AddComponentPostInit("daywalkerspawner", function(self)
-    if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then 
+		return 
+	end
 
     local _SpawnDayWalkerArena = self.SpawnDayWalkerArena
 
     function self:SpawnDayWalkerArena(x, y, z, ...)
-        if math.random() > 0.5 and not self.first_time then
+        if ((math.random() > 0.5 and TUNING.DSTU.DAYWALKERSPAWN == "random") or TUNING.DSTU.DAYWALKERSPAWN == "surface") and not self.first_time then
             local daywalker = SpawnPrefab("daywalker")
-            daywalker.components.lootdropper:SetLootSetupFn(nil)
-            daywalker.components.health:Kill()
-            daywalker.defeated = true
-            daywalker:DoTaskInTime(20, function(inst)
-                inst:Remove()
-                SendModRPCToShard(GetShardModRPC(env.modname, "DayWalkerDeathPenalty"), nil)
+            daywalker:DoTaskInTime(30, function(daywalker)
+				daywalker.components.lootdropper:SetLootSetupFn(nil)
+				daywalker.defeated = true
+				
+				daywalker.components.health:Kill()
+				SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "DayWalkerDeathPenalty"), nil)
+                daywalker:Remove()
+                
             end)
             self.first_time = true
             return daywalker

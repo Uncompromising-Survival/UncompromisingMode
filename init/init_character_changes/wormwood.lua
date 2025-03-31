@@ -185,61 +185,12 @@ end
 
 
 if env.GetModConfigData("wormwood_photosynthesis") then
-    local SkillTreeDefs = require("prefabs/skilltree_defs")
 
-    local function OnSeasonChange(inst, season)
-        if (season == "summer" or season == "spring") and not inst:HasTag("playerghost") and inst.components.skilltreeupdater ~= nil and inst.components.skilltreeupdater:IsActivated("wormwood_blooming_photosynthesis") then
-            inst.components.bloomness:Fertilize()
-        end
-    end
-
-    if SkillTreeDefs.SKILLTREE_DEFS["wormwood"] ~= nil then
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_photosynthesis.onactivate   = function(inst)
-            inst:WatchWorldState("season", OnSeasonChange)
-        end
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_photosynthesis.ondeactivate = function(inst)
-            inst:StopWatchingWorldState("season", OnSeasonChange)
-        end
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_speed1.onactivate           = function(inst) --These are here just to make a skill take an immediate effect after picking it
-            local bloomness = inst.components.bloomness
-            if bloomness then
-                local skilltreeupdater = inst.components.skilltreeupdater
-                if not skilltreeupdater:IsActivated("wormwood_blooming_speed2") and inst._movetreebonus ~= true and bloomness:GetLevel() >= 3 and inst.components.health:GetPercent() >= 0.9 then
-                    inst._movetreebonus = true
-                    inst.components.locomotor.runspeed = inst.components.locomotor.runspeed + 0.3
-                end
-            end
-        end
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_speed2.onactivate           = function(inst)
-            local bloomness = inst.components.bloomness
-            if bloomness then
-                local skilltreeupdater = inst.components.skilltreeupdater
-                if inst._movetreebonus ~= true and bloomness:GetLevel() >= 3 and inst.components.health:GetPercent() >= 0.8 then
-                    inst._movetreebonus = true
-                    inst.components.locomotor.runspeed = inst.components.locomotor.runspeed + 0.3
-                end
-            end
-        end
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_max_upgrade.onactivate      = function(inst)
-            inst.components.bloomness:SetDurations(240, inst.components.bloomness.full_bloom_duration) -- half a day instead of 2/3 of vanilla
-        end
-
-        STRINGS.SKILLTREE.WORMWOOD.BLOOMING_PHOTOSYNTHESIS_DESC                                = "Continue naturally blooming into Summer."
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_photosynthesis.desc         = STRINGS.SKILLTREE.WORMWOOD.BLOOMING_PHOTOSYNTHESIS_DESC
-
-        STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED1_DESC                                        = "During full bloom move 5% faster while above 90% health."
-        STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED2_DESC                                        = "During full bloom move 5% faster while above 80% health."
-        STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                                   = "Fertilization of Wormwood is boosted 30%.\nReach full bloom much quicker."
-
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_speed1.desc                 = STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED1_DESC
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_speed2.desc                 = STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED2_DESC
-        SkillTreeDefs.SKILLTREE_DEFS["wormwood"].wormwood_blooming_max_upgrade.desc            = STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC
-    end
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+	
+	env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wortox Tree
 
     env.AddPrefabPostInit("wormwood", function(inst)
         if not TheWorld.ismastersim then return end

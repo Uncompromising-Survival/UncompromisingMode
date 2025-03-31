@@ -22,12 +22,12 @@ STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The flattered shadow
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Weaver"
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the fuelweaver closely inspired you to weave your own creations to life. You can infuse nightmare fuel with souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen will reward your loyalty by empowering the Shadow Reaper and improving your Shadow Weaving. Souls waiting in a Soul Echo will spread damage to close enemies or hit one target twice, and expire the timer. Kills with the Reaper extend the life of your Woven Shadows."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The flattered shadow queen has shared the secrets of weaving shadows with you. Weaving will yield better results. Souls waiting to be freed during an echo timer are consumed by the shadow reaper to deal double damage, or share the pain in an area. Kills accomplished with the scythe nourish live shadow minions relative to the lifeforce of the mob."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 souls will periodically release a soul from your inventory to pierce."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC = "Held Souls and Souls inside of Soul Jars increases the damage of the Knabsack, up to 100 total Souls collected."
 
-
-
+STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of soul pierce and decoy."
 
 
 
@@ -348,7 +348,7 @@ local skills = {
 				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
 				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow"] and "shadow") or nil
+				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 				if affinitytype then
 					if diff < 0 then
 						diff = diff - 1
@@ -395,7 +395,7 @@ local skills = {
 				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
 				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow"] and "shadow") or nil
+				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 				if affinitytype then
 					if diff < 0 then
 						diff = diff - 1
@@ -432,7 +432,7 @@ local skills = {
 		lock_open = function(prefabname, activatedskills, readonly)
 			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow"] and "shadow") or nil
+			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "nice"
 		end,
 	},
@@ -451,7 +451,7 @@ local skills = {
 		lock_open = function(prefabname, activatedskills, readonly)
 			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow"] and "shadow") or nil
+			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "naughty"
 		end,
 	},

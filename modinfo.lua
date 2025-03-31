@@ -684,8 +684,6 @@ configuration_options = {
     SkipSpace(),
 
     Header("General Food Tweaks"),
-    BinaryConfig("butterflywings_nerf", "Butterfly Wings Nerf",
-        "Butterfly Wings have been nerfed to not be cheap healing.", true),
     {
         name = "more perishing",
         label = "Increased Food Spoilage",
@@ -827,6 +825,16 @@ configuration_options = {
     SkipSpace(),
 
     Header("Standard Creatures"),
+    {
+        name = "butterfly_tweaks",
+        label = "Adjusted Butterflies",
+        hover = "Butterflies are changed to even the playing field with respect to early game healing.",
+        options = {
+            { description = "Slippery", data = "slippery" }, 
+            { description = "Nerfed Stats", data = "stat_nerf" }, 
+            { description = "Disabled", data = "nothing" } },
+        default = "slippery"
+    },
     BinaryConfig("angry_werepigs", "Angry Werepigs", "Werepigs prioritize attacking over eating.", true),
     BinaryConfig("cowardfrogs", "Frog Anti-cheese", "Frogs flee from bosses to prevent cheesing.", true),
     BinaryConfig("harder_beefalo", "Harder Beefalo", "Beefalo ocasionally charge after a telegraph.", true),
@@ -912,6 +920,17 @@ configuration_options = {
         "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
     BinaryConfig("changed_shadow_pieces", "Shadow Pieces Rework",
         "Shadow Bishop has a different attack.", true),
+    {
+        name = "daywalker_spawn",
+        label = "Daywalker Spawn Location",
+        hover =
+        "Daywalker can be customized to spawn on the surface or in the caves.",
+        options = {
+            { description = "Random", data = "random" }, 
+			{ description = "Caves", data = "caves" },
+            { description = "Surface", data = "surface" } },
+        default = "random"
+    },
     SkipSpace(),
 
     Header("Health Adjustment"),

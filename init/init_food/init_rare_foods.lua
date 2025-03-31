@@ -65,7 +65,6 @@ end
 AddPrefabPostInit("world", function(inst)
 
 end)]]
-GLOBAL.TUNING.BUTTERFLY_SPAWN_TIME = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_SPAWN_TIME_INCREASE
 -- TODO: Fix, this doesn't work
 
 -----------------------------------------------------------------

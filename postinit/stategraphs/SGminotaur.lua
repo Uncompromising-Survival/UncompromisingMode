@@ -42,7 +42,7 @@ local function BounceStuff(inst) --Possibly upvaluehack this function in the fut
 end
 
 local function SetUpProjectiles(inst)
-	for i = 1,5 do
+	for i = 1,2 do
 		inst:LaunchProjectile(inst)
 	end
 end

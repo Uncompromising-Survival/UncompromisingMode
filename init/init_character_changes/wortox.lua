@@ -8,17 +8,16 @@ if TUNING.DSTU.WORTOXCHANGES then
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Soul Changes, will eventually remove them after these lower-effort enemies have more nuance to killing a lot of them ] ----
 	--------------------------------------------------------------------------------------------------------------------------------
-
-	AddPrefabPostInitAny(function(inst)
-		if not GLOBAL.TheWorld.ismastersim then
-			return inst
-		end
-		--if inst.components.health ~= nil and inst:HasTag("insect") and inst.components.health ~= nil and not inst.components.health:IsDead() and inst.components.health.maxhealth <= 100 then
-		if inst:HasTag("butterfly") --[[or (not GetModConfigData("wortox_beesouls") and inst:HasTag("bee"))]] then
-			inst:AddTag("soulless")
-		end
-	end)
-		
+	if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
+		AddPrefabPostInitAny(function(inst)
+			if not GLOBAL.TheWorld.ismastersim then
+				return inst
+			end
+			if inst:HasTag("butterfly") then
+				inst:AddTag("soulless")
+			end
+		end)
+	end
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------	
@@ -56,7 +55,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 				loss_per_player = loss_per_player * TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_4_LOSS_PER_PLAYER_MULT
 			end
 			local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, (TUNING.HEALING_MED * (inst.soul_heal_premult or 1) - loss_per_player * (healtargetscount - 1)) * (inst.soul_heal_mult or 1))
-			local amt_naughty = amt * TUNING.SKILLS.WORTOX.NAUGHTY_SOULHEAL_RECEIVED_MULT
+			local amt_naughty = amt * 0.5
 
 
 			for i = 1, healtargetscount do
@@ -156,10 +155,153 @@ if TUNING.DSTU.WORTOXCHANGES then
     AllRecipes["wortox_reviver"].ingredients = {
         Ingredient("wortox_soul", 20),
     }		
-	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Soul Decoy Changes ] ------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------	
+
+	AddPrefabPostInit("wortox_decoy", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return
+		end
+		local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
+		local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
+				
+		local function DoThorns_decoy(inst)
+			local ent = inst.decoythornstarget
+			if ent and ent:IsValid() and ent.entity:IsVisible() and
+				ent:HasAllTags(COMBAT_MUSTHAVE_TAGS) and not ent:HasAnyTag(COMBAT_CANTHAVE_TAGS) and
+				inst.components.combat:CanTarget(ent) then
+				local initial_damage = inst.components.combat.defaultdamage
+
+				local decoyowner = inst.decoyowner and inst.decoyowner:IsValid() and inst.decoyowner or nil
+				local damage = initial_damage * TUNING.SKILLS.WORTOX.SOULDECOY_THORNS_DAMAGE_MULT
+				if decoyowner and decoyowner.wortox_inclination and decoyowner.wortox_inclination == "naughty" then
+					damage = damage * 1.5
+					inst.components.combat:SetDefaultDamage(damage)
+				end
+				if wortox_soul_common.SoulDamageTest(inst, ent, decoyowner) then
+					local x, y, z = ent.Transform:GetWorldPosition()
+					local fx = GLOBAL.SpawnPrefab("wortox_soul_spawn_fx")
+					fx.Transform:SetPosition(x, y, z)
+					if decoyowner then
+						local damagetoent = damage
+						local explosiveresist = ent.components.explosiveresist
+						if explosiveresist then
+							damagetoent = damagetoent * (1 - explosiveresist:GetResistance())
+							explosiveresist:OnExplosiveDamage(damagetoent, decoyowner)
+						end
+						ent.components.combat:GetAttacked(decoyowner, damagetoent, nil, "soul")
+					else
+						inst.components.combat:DoAttack(ent)
+					end
+				end
+
+				inst.components.combat:SetDefaultDamage(initial_damage)
+			end
+		end
+
+
+		local function DoExplosion_decoy(inst)
+			if inst.decoythorns then
+				inst:DoThorns()
+			end
+			local decoyowner = inst.decoyowner and inst.decoyowner:IsValid() and inst.decoyowner or nil
+			local damage = inst.components.combat.defaultdamage
+			if decoyowner and decoyowner.wortox_inclination and decoyowner.wortox_inclination == "naughty" then
+				damage = damage * 1.5
+				inst.components.combat:SetDefaultDamage(damage)
+			end
+			local x, y, z = inst.Transform:GetWorldPosition()
+			local ents = TheSim:FindEntities(x, y, z, TUNING.SKILLS.WORTOX.SOULDECOY_EXPLODE_RADIUS, COMBAT_MUSTHAVE_TAGS, COMBAT_CANTHAVE_TAGS)
+			for _, ent in ipairs(ents) do
+				if ent:IsValid() and ent.entity:IsVisible() then
+					if inst.components.combat:CanTarget(ent) then
+						local shouldharm = inst.decoylured[ent]
+						if not shouldharm then
+							if ent.components.combat then
+								if ent.components.combat:TargetIs(inst) or decoyowner and ent.components.combat:TargetIs(decoyowner) then
+									if wortox_soul_common.SoulDamageTest(inst, ent, decoyowner) then
+										shouldharm = true
+									end
+								end
+							end
+						end
+						if shouldharm then
+							if decoyowner then
+								local damagetoent = damage
+								local explosiveresist = ent.components.explosiveresist
+								if explosiveresist then
+									damagetoent = damagetoent * (1 - explosiveresist:GetResistance())
+									explosiveresist:OnExplosiveDamage(damagetoent, decoyowner)
+								end
+								ent.components.combat:GetAttacked(decoyowner, damagetoent, nil, "soul")
+							else
+								inst.components.combat:DoAttack(ent)
+							end
+						end
+					end
+				end
+			end
+		end
+		inst.DoExplosion = DoExplosion_decoy
+		inst.DoThorns = DoThorns_decoy
+	end)	
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Soul Pierce Changes ] -----------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------		
+
+	local SOUL_SPEAR_TICK_TIME = 0.1
+	local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
+	local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
+	local function SoulSpearTick(inst, owner)
+		if not owner:IsValid() then
+			return
+		end
+
+		if inst.soul_spear_cooldown then
+			inst.soul_spear_cooldown = inst.soul_spear_cooldown - 1
+			if inst.soul_spear_cooldown <= 0 then
+				inst.soul_spear_cooldown = nil
+			else
+				return
+			end
+		end
+
+		local damage = TUNING.SKILLS.WORTOX.SOUL_SPEAR_DAMAGE
+		if owner.wortox_inclination and owner.wortox_inclination == "naughty" then
+			damage = damage * 1.5
+		end
+
+
+		local hitsomething = false
+		local r = inst:GetPhysicsRadius(0) + 0.5 -- Extra padding for visual ambiguity.
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, GLOBAL.MAX_PHYSICS_RADIUS, COMBAT_MUSTHAVE_TAGS, COMBAT_CANTHAVE_TAGS)
+		for _, ent in ipairs(ents) do
+			if ent.components.combat then
+				local r2 = ent:GetPhysicsRadius(0)
+				local x2, y2, z2 = ent.Transform:GetWorldPosition()
+				local dx, dz = x2 - x, z2 - z
+				local dsq = dx * dx + dz * dz
+				local dr = r2 + r
+				if dsq < dr * dr and wortox_soul_common.SoulDamageTest(inst, ent, owner) then
+					local damagetoent = damage
+					local explosiveresist = ent.components.explosiveresist
+					if explosiveresist then
+						damagetoent = damagetoent * (1 - explosiveresist:GetResistance())
+						explosiveresist:OnExplosiveDamage(damagetoent, owner)
+					end
+					ent.components.combat:GetAttacked(owner, damagetoent, nil, "soul")
+					hitsomething = true
+				end
+			end
+		end
+
+		if hitsomething then
+			inst.soul_spear_cooldown = TUNING.SKILLS.WORTOX.SOUL_SPEAR_HIT_COOLDOWN / SOUL_SPEAR_TICK_TIME
+		end
+	end
+
 
 	AddPrefabPostInit("wortox_soul_spawn", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
@@ -189,7 +331,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 			end
 		end	
 		inst.components.projectile:SetOnThrownFn(OnThrown)
-		
+		inst.SoulSpearTick = SoulSpearTick
 	end)		
 
 	local function OnHit(inst, attacker, target)
@@ -224,6 +366,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 	end
 	
+
 	local function ReleaseSoul(inst,target,inv_soul) -- manually throw the soul
 		if inv_soul.components.stackable ~= nil and inv_soul.components.stackable:IsStack() then
 			inv_soul.components.stackable:Get():Remove()
@@ -282,7 +425,30 @@ if TUNING.DSTU.WORTOXCHANGES then
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Shadow Weaving ] ----------------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------	
-	
+	local function CheckToRemoveFollower(inst)
+		if inst.components.leader then
+			local shadows = inst.components.leader:GetFollowersByTag("shadow")
+			if #shadows > 3 then
+				local removed
+				for i,v in ipairs(shadows) do
+					if (v.prefab == "stalker_minion1" or v.prefab == "stalker_minion2") and not removed then
+						inst.components.leader:RemoveFollower(v)
+						v.components.health:Kill()
+						removed = true
+					end
+				end
+				if not removed then
+					local shadow = shadows[1]
+					inst.components.leader:RemoveFollower(shadow)
+					shadow.components.health:Kill()
+				end
+				return 0.05
+			else
+				return 0
+			end
+		end
+		return 0
+	end
 	local function SpawnWovenShadow(inst, upgrade_performer, obj)
 		if inst.components.stackable then
 			inst.components.stackable:Get(1):Remove()
@@ -298,6 +464,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 		
 		local crechure = "stalker_minion"
 		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
+		local mod = CheckToRemoveFollower(upgrade_performer)
+		
+		rnd = rnd - mod
 		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
 			if rnd < 0.02 then
 				crechure = "ruinsnightmare"
@@ -332,8 +501,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 		
 		shadow:AddComponent("follower")
 		upgrade_performer.components.leader:AddFollower(shadow)
-
+		
 		if crechure == "stalker_minion" then
+			shadow:AddTag("shadow")
 			shadow.die_off = shadow:DoTaskInTime(60,function(shadow) 
 				if shadow.components.health and not shadow.components.health:IsDead() then 
 					shadow.components.health:Kill() 
@@ -470,7 +640,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 			local vfx_level = 0
 			local owner = inst.components.inventoryitem.owner
 			if inst.components.weapon then
-				local maxdamage = 51
+				local maxdamage = 34
+				if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_souljar_3") then
+					maxdamage = 51
+				end
 				local mindamage = TUNING.SKILLS.WORTOX.NABBAG_DAMAGE_MIN
 				local damage = (maxdamage - mindamage) * percent + mindamage
 				if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_souljar_3") then
