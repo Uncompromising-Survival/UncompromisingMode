@@ -288,27 +288,14 @@ env.AddPrefabPostInit("spider", function(inst)
 	if not TheWorld.ismastersim then
 		return
 	end
-	--[[
-	inst:RemoveComponent("lootdropper")
-	
-	inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("monstermorsel", 1)
-    inst.components.lootdropper:AddRandomLoot("silk", .5)
-    inst.components.lootdropper:AddRandomLoot("spidergland", .5)
-    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
-    inst.components.lootdropper.numrandomloot = 1
-	--]]
+
 	inst:AddTag("spider_regular")
 	
 	if inst.components.combat ~= nil and TUNING.DSTU.REGSPIDERJUMP then
-        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE*0.5, TUNING.SPIDER_WARRIOR_HIT_RANGE*0.8)
+        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
 		--inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
 	end
-	
-	if inst.components.locomotor ~= nil and TUNING.DSTU.REGSPIDERJUMP then --I don't know if this actually does anything, I'm just adding config in JIC -AXE
-		inst.components.locomotor.walkspeed = TUNING.SPIDER_WARRIOR_WALK_SPEED
-		inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED
-	end
+
 	
    --[[ inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(5, 13) --set specific values
@@ -320,11 +307,10 @@ env.AddPrefabPostInit("spider", function(inst)
 		OnFullMoon(inst, TheWorld.state.isfullmoon)
 	end
 	
-    --inst.task = inst:DoTaskInTime(3, CheckTargetPiece)
 
 	inst.DoSpikeAttack = DoSpikeAttack
 	
-	inst:AddComponent("tradable") -- For Moondial Mutation.
+	inst:AddComponent("tradable") 
 end)
 
 SetSharedLootTable( 'spider_warrior',

@@ -101,7 +101,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	AddPrefabPostInit("wortox_soul", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		local function ModifyStats(inst,owner) 
 			local skilltreeupdater = owner.components.skilltreeupdater
@@ -138,7 +138,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	AddPrefabPostInit("wortox_reviver", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		inst:RemoveTag("reviver")
 		
@@ -161,7 +161,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	AddPrefabPostInit("wortox_decoy", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
 		local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
@@ -175,8 +175,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 				local decoyowner = inst.decoyowner and inst.decoyowner:IsValid() and inst.decoyowner or nil
 				local damage = initial_damage * TUNING.SKILLS.WORTOX.SOULDECOY_THORNS_DAMAGE_MULT
+				local souls_max = TUNING.SKILLS.WORTOX.SOUL_DAMAGE_MAX_SOULS
+				local damage_percent = math.min(inst.decoyowner.soulcount or 0, souls_max)*.5/souls_max+1
 				if decoyowner and decoyowner.wortox_inclination and decoyowner.wortox_inclination == "naughty" then
-					damage = damage * 1.5
+					damage = damage * damage_percent
 					inst.components.combat:SetDefaultDamage(damage)
 				end
 				if wortox_soul_common.SoulDamageTest(inst, ent, decoyowner) then
@@ -207,8 +209,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 			end
 			local decoyowner = inst.decoyowner and inst.decoyowner:IsValid() and inst.decoyowner or nil
 			local damage = inst.components.combat.defaultdamage
+			local souls_max = TUNING.SKILLS.WORTOX.SOUL_DAMAGE_MAX_SOULS
+			local damage_percent = math.min(inst.decoyowner.soulcount or 0, souls_max)*.5/souls_max+1
 			if decoyowner and decoyowner.wortox_inclination and decoyowner.wortox_inclination == "naughty" then
-				damage = damage * 1.5
+				damage = damage * damage_percent
 				inst.components.combat:SetDefaultDamage(damage)
 			end
 			local x, y, z = inst.Transform:GetWorldPosition()
@@ -268,8 +272,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 
 		local damage = TUNING.SKILLS.WORTOX.SOUL_SPEAR_DAMAGE
+		local souls_max = TUNING.SKILLS.WORTOX.SOUL_DAMAGE_MAX_SOULS
+		local damage_percent = math.min(owner.soulcount or 0, souls_max)*.5/souls_max+1
 		if owner.wortox_inclination and owner.wortox_inclination == "naughty" then
-			damage = damage * 1.5
+			damage = damage * damage_percent
 		end
 
 
@@ -305,7 +311,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	AddPrefabPostInit("wortox_soul_spawn", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		local _OnThrownFn = inst.components.projectile.onthrown
 		
@@ -333,7 +339,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.projectile:SetOnThrownFn(OnThrown)
 		inst.SoulSpearTick = SoulSpearTick
 	end)		
-
+	--------------------------------------------------- -- This is the cause...
 	local function OnHit(inst, attacker, target)
 		if target ~= nil then
 			local x, y, z = inst.Transform:GetWorldPosition()
@@ -378,10 +384,11 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local x = (x1+x2)/2
 		local z = (z1+z2)/2
 		local soul = GLOBAL.SpawnPrefab("wortox_soul_spawn")
+
 		soul.Transform:SetPosition(x,0,z)
 		
 		soul.soul_spear_task = soul:DoPeriodicTask(0.1, soul.SoulSpearTick, 0, inst)
-		
+		soul:Setup(inst)
 		local speed = TUNING.WORTOX_SOUL_PROJECTILE_SPEED
 		soul.components.projectile:SetSpeed(-speed)
 		soul.components.projectile:SetHoming(false)
@@ -389,6 +396,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 		soul.components.projectile:SetOnHitFn(OnHit)
         soul.components.projectile:Throw(soul, inst, inst)
 		soul.components.projectile:SetOnHitFn(function(soul) end)
+
+    
 	end
 	
 	local function GenerateSouls(inst,data)
@@ -416,12 +425,12 @@ if TUNING.DSTU.WORTOXCHANGES then
 	
 	AddPrefabPostInit("wortox", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		
 		inst:ListenForEvent("onhitother", GenerateSouls)
 		
-	end)	
+	end)	 -- This is the cause of tint crash, if it happens again.
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Shadow Weaving ] ----------------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------	
@@ -548,7 +557,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	AddPrefabPostInit("nightmarefuel", function(inst)
 		inst:AddTag("SOUL_SHADOW_upgradeable")
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		
 		inst:AddComponent("upgradeable")
@@ -562,7 +571,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	
 	AddPrefabPostInit("voidcloth_scythe", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		
 		local _OnAttack = inst.components.weapon.onattack
@@ -619,7 +628,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	
 	AddPrefabPostInit("wortox_nabbag", function(inst)
 		if not GLOBAL.TheWorld.ismastersim then
-			return
+			return inst
 		end
 		
 		local BUCKET_NAMES = {
@@ -697,7 +706,7 @@ end
 
 AddPrefabPostInit("wortox", function(inst)
 	if not GLOBAL.TheWorld.ismastersim then
-		return
+		return inst
 	end
 	
 	--------------------------------------------------------------------------------------------------------------------------------
