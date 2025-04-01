@@ -461,7 +461,7 @@ end
 --end
 
 if GetModConfigData("armorrework") then
-	TUNING.WEREMOOSE_ABSORPTION = 0.85
+	TUNING.WEREMOOSE_ABSORPTION = 0.8
 end
 
 if GetModConfigData("wixie_walter") then
