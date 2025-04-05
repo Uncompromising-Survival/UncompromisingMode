@@ -1,6 +1,22 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local all_darts = {
+	"blowdart_sleep",
+	"blowdart_fire",
+	"blowdart_pipe",
+	"blowdart_yellow",
+}
+
+for i,v in ipairs(all_darts) do
+	env.AddPrefabPostInit(v, function(inst)
+		if not TheWorld.ismastersim then
+			return
+		end
+		inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+	end)
+end
+
 
 env.AddPrefabPostInit("blowdart_fire", function(inst)
 	if not TheWorld.ismastersim then

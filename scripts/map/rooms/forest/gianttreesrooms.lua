@@ -39,7 +39,7 @@ AddRoom("GiantTrees",
             countprefabs =
             {
                 extracanopyspawner = 4,
-                pitcherplant = function() return math.random(3, 5) end,
+                pitcherplant = function() return math.random(1, 2) end,
             },
 			countstaticlayouts = {
 				["giant_tree_generic"] = function() return math.random(1,3) end,
@@ -68,7 +68,7 @@ AddRoom("HoodedEntrance",
 			},
             countprefabs =
             {
-				pitcherplant = function() return math.random(1, 2) end,
+				pitcherplant = 1,
             },
 			countstaticlayouts = {
 				["giant_tree_generic"] = function() return math.random(3,4) end,
@@ -154,7 +154,7 @@ AddRoom("BGGiantTrees",
 			countprefabs =
 			{
                 extracanopyspawner = function() return 10 + math.random(0, 1) end,
-                pitcherplant = function() return math.random(0, 1) end,
+                --pitcherplant = function() return math.random(0, 1) end,
 
             },
 			countstaticlayouts = {

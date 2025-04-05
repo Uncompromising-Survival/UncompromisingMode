@@ -38,7 +38,7 @@ local function OnAttacked(inst, data)
 		if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
 			data.attacker.components.combat ~= nil and not data.attacker.components.combat.ignoredamagereflect and
 			(data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-			not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
+			not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and not (data.stimuli and data.stimuli == "soul") then
 
 			data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
 			

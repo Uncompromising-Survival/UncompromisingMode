@@ -29,7 +29,10 @@ STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC = "Held Souls and Souls inside of
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of soul pierce and decoy."
 
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE = "Lunar Summoner"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC = "Use lune blossoms and souls to summon allied gestalts from Alter. They are eager to carry any burden."
 
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a soul echo to do additional damage. In addition, this empowered attack will steal items off of enemies, you never know what they'll be carrying."
 
 local SkillTreeDefs = GLOBAL.require("prefabs/skilltree_defs")
 local SkillTreeFns = SkillTreeDefs.FN
@@ -163,7 +166,7 @@ local CUSTOM_FUNCTIONS;CUSTOM_FUNCTIONS = {
         end
 
         local owner = item.components.inventoryitem.owner
-        if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
+        if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar_1") then
             if owner.finishportalhoptask ~= nil and owner:TryToPortalHop(1, false) then
                 return true
             end
@@ -200,13 +203,13 @@ local CUSTOM_FUNCTIONS;CUSTOM_FUNCTIONS = {
         "caveindebris",
         "trapdamage",
     },
-    SetupLunarResists = function(item)
-        local resistance = item:AddComponent("resistance")
-        for _, v in ipairs(CUSTOM_FUNCTIONS.LunarResists) do
-            resistance:AddResistance(v)
-        end
-        resistance:SetShouldResistFn(CUSTOM_FUNCTIONS.ShouldResistFn)
-        resistance:SetOnResistDamageFn(CUSTOM_FUNCTIONS.OnResistDamage)
+    SetupLunarResists = function(item) -- don't actually resist.. we're replacing this
+        -- local resistance = item:AddComponent("resistance")
+        -- for _, v in ipairs(CUSTOM_FUNCTIONS.LunarResists) do
+            -- resistance:AddResistance(v)
+        -- end
+        -- resistance:SetShouldResistFn(CUSTOM_FUNCTIONS.ShouldResistFn)
+        -- resistance:SetOnResistDamageFn(CUSTOM_FUNCTIONS.OnResistDamage)
     end,
     TryResetPanfluteTimer = function(inst)
         if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wortox_panflute_playing") then
@@ -348,7 +351,7 @@ local skills = {
 				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
 				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 				if affinitytype then
 					if diff < 0 then
 						diff = diff - 1
@@ -395,7 +398,7 @@ local skills = {
 				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
 				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 				if affinitytype then
 					if diff < 0 then
 						diff = diff - 1
@@ -432,7 +435,7 @@ local skills = {
 		lock_open = function(prefabname, activatedskills, readonly)
 			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "nice"
 		end,
 	},
@@ -451,7 +454,7 @@ local skills = {
 		lock_open = function(prefabname, activatedskills, readonly)
 			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
 			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
 			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "naughty"
 		end,
 	},
@@ -826,16 +829,53 @@ local skills = {
 	------------------------------------------------------------------------------------------------------------------------
 	-- ALLEGIANCE
 	------------------------------------------------------------------------------------------------------------------------
-	wortox_allegiance_lunar_lock_1 = SkillTreeFns.MakeCelestialChampionLock(
-		{
-			pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
-		}
-	),
-	wortox_allegiance_lunar_lock_2 = SkillTreeFns.MakeNoShadowLock(
-		{
-			pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
-		}
-	),
+	wortox_allegiance_lunar_lock_1 = {
+		desc = "Find and defeat the Celestial Champion and have no shadow affinity.",
+		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
+
+		root = true,
+        group = "allegiance",
+        tags = {"allegiance", "lock"},
+		lock_open = function(prefabname, activatedskills, readonly)
+            if readonly then
+                return "question"
+            end
+            if SkillTreeFns.CountTags(prefabname, "shadow_favor", activatedskills) == 0 then
+                return TheGenericKV:GetKV("celestialchampion_killed") == "1"
+            end
+            return nil
+		end,
+	},
+	wortox_allegiance_lunar_1 = {
+		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE,
+		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC,
+		icon = "wilson_favor_lunar",
+		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
+		group = "allegiance",
+		tags = {"lunar_favor", "neutral", "allegiance"},
+		locks = {"wortox_allegiance_lunar_lock_1"},
+		onactivate = function(inst)
+			inst:AddTag("player_lunar_aligned")
+			inst:AddTag("SOUL_LUNAR_upgradeuser")
+			if inst.components.damagetyperesist ~= nil then
+				inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
+			end
+			if inst.components.damagetypebonus ~= nil then
+				inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
+			end
+		end,
+		ondeactivate = function(inst)
+			inst:RemoveTag("player_lunar_aligned")
+			inst:RemoveTag("SOUL_LUNAR_upgradeuser")
+			if inst.components.damagetyperesist ~= nil then
+				inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
+			end
+			if inst.components.damagetypebonus ~= nil then
+				inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
+			end
+		end,
+		connects = {"wortox_allegiance_lunar"},
+	},
 	wortox_allegiance_lunar = {
 		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_TITLE,
 		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC,
@@ -843,7 +883,6 @@ local skills = {
 		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER * 2},
 		group = "allegiance",
 		tags = {"lunar_favor", "neutral", "allegiance"},
-		locks = {"wortox_allegiance_lunar_lock_1", "wortox_allegiance_lunar_lock_2"},
 		onactivate = function(inst)
 			inst:AddTag("player_lunar_aligned")
 			if inst.components.damagetyperesist ~= nil then

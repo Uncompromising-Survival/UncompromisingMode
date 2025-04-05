@@ -1,5 +1,5 @@
 local function RemoveThicket(x,y,z)
-	local thicket = TheSim:FindEntities(x,y,z,2,{"briar_plants"})
+	local thicket = TheSim:FindEntities(x,y,z,4,{"briar_plants"})
 	for i,v in ipairs(thicket) do
 		v:Remove()	
 	end

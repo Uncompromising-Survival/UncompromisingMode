@@ -28,14 +28,18 @@ local function spawnfriends(inst)
 	projectile:Remove()
 	end
 end
+
+
 local function oneatenfn(inst, eater)
 	inst.count = 0
 	if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-				for k = 1,6 do
-				inst:DoTaskInTime(0,spawnfriends(inst))
-				end
+		not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+		not eater:HasTag("playerghost") then
+		TheNet:Announce("eaten")
+		local i = GetWorms(eater)
+		for k = 1,i do
+			inst:DoTaskInTime(0,spawnfriends(inst))
+		end
 	end
 end
 local function fn()
@@ -86,7 +90,6 @@ local function fn()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
     MakeHauntableLaunchAndPerish(inst)
-	inst.components.edible:SetOnEatenFn(oneatenfn)
 	inst:AddTag("preparedfood")
     return inst
 end

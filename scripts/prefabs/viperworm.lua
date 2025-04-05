@@ -407,7 +407,10 @@ local function fnviperlingfriend()
     inst:SetStateGraph("SGviperworm")
     inst:SetBrain(viperlingbrain)
     inst.ShadowDespawn = ShadowDespawn
-    inst:DoTaskInTime(60, ShadowDespawn)
+	inst:AddComponent("timer")
+	inst:ListenForEvent("timerover",ShadowDespawn)
+	inst.components.timer:StartTimer("despawn",60)
+
     inst:DoTaskInTime(0, FindPerson)
     inst.persists = false
 

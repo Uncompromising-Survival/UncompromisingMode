@@ -1,10 +1,11 @@
 require "behaviours/chaseandattack"
 
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
+local TheNet = GLOBAL.TheNet
 
 if TUNING.DSTU.WORTOXCHANGES then
 
-
+	
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Soul Changes, will eventually remove them after these lower-effort enemies have more nuance to killing a lot of them ] ----
 	--------------------------------------------------------------------------------------------------------------------------------
@@ -103,6 +104,22 @@ if TUNING.DSTU.WORTOXCHANGES then
 		if not GLOBAL.TheWorld.ismastersim then
 			return inst
 		end
+		
+		local function CheckAllegiance(inst,owner)
+			local skilltreeupdater = owner.components.skilltreeupdater
+			if skilltreeupdater then
+				if skilltreeupdater:IsActivated("wortox_allegiance_shadow_1") then
+					inst.components.upgrader.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+				elseif skilltreeupdater:IsActivated("wortox_allegiance_lunar_1") then
+					inst.components.upgrader.upgradetype = GLOBAL.UPGRADETYPES.SOUL_LUNAR
+				else
+					inst.components.upgrader.upgradetype = nil
+				end
+			else
+				inst.components.upgrader.upgradetype = nil
+			end
+		end
+		
 		local function ModifyStats(inst,owner) 
 			local skilltreeupdater = owner.components.skilltreeupdater
 			if skilltreeupdater then
@@ -126,9 +143,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst:AddComponent("tradable")
 
 		inst:AddComponent("upgrader")
-		inst.components.upgrader.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+		
 		inst.components.upgrader.upgradevalue = 2
-
+		
+		inst.components.inventoryitem:SetOnPutInInventoryFn(CheckAllegiance)
 		inst.ModifyStats = ModifyStats
 	end)
 	
@@ -401,7 +419,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	end
 	
 	local function GenerateSouls(inst,data)
-		if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wortox_thief_4") then
+		if inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wortox_thief_4") and not (data.stimuli and data.stimuli == "soul") then
 			local souls = 0
 			local ref_item = nil
 			inst.components.inventory:ForEachItemSlot(function(item)
@@ -437,10 +455,24 @@ if TUNING.DSTU.WORTOXCHANGES then
 	local function CheckToRemoveFollower(inst)
 		if inst.components.leader then
 			local shadows = inst.components.leader:GetFollowersByTag("shadow")
-			if #shadows > 3 then
+			if #shadows > 2 then
 				local removed
 				for i,v in ipairs(shadows) do
 					if (v.prefab == "stalker_minion1" or v.prefab == "stalker_minion2") and not removed then
+						inst.components.leader:RemoveFollower(v)
+						v.components.health:Kill()
+						removed = true
+					end
+				end
+				for i,v in ipairs(shadows) do
+					if (v.prefab == "crawlingnightmare") and not removed then
+						inst.components.leader:RemoveFollower(v)
+						v.components.health:Kill()
+						removed = true
+					end
+				end
+				for i,v in ipairs(shadows) do
+					if (v.prefab == "nightmarebeak") and not removed then
 						inst.components.leader:RemoveFollower(v)
 						v.components.health:Kill()
 						removed = true
@@ -579,7 +611,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local function OnAttack(inst, attacker, target) 
 			local skilltreeupdater = attacker.components.skilltreeupdater
 			local max_health = target.components.health ~= nil and target.components.health.maxhealth
-			if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") and max_health then
+			if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") and max_health and not (target:HasTag("soulless") or target:HasTag("chess") or target:HasTag("shadow"))then
 				local x,y,z = attacker.Transform:GetWorldPosition()
 				local shadows = TheSim:FindEntities(x,y,z,20,{"shadow"})
 				local k = 0
@@ -601,6 +633,47 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.weapon:SetOnAttack(OnAttack)
 	end)
 	
+	-- Other Shadow Weaponry
+	local hitsparks_fx_colouroverride = {1, 0, 0} -- Try to get lunar colored
+	local function TryToSparkOn(target, attacker)
+		if target ~= nil and target:IsValid() then
+			local spark = SpawnPrefab("hitsparks_fx")
+			spark:Setup(attacker, target, nil, hitsparks_fx_colouroverride)
+			spark.black:set(true)
+		end
+	end
+	
+	local function DoShadowAttack(inst, owner, target)
+		if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
+			if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasTag("structure") and not target:HasTag("wall")) then
+				target.components.combat:GetAttacked(owner,34,inst)
+				TryToSparkOn(target, owner)
+			end
+		end
+	end
+	
+	local shadow_weapons = {"nightsword"}
+	
+	for i,v in ipairs(shadow_weapons) do
+		AddPrefabPostInit(v, function(inst)
+			if not GLOBAL.TheWorld.ismastersim then
+				return inst
+			end
+			
+		local _OnAttack = inst.components.weapon.onattack
+			local function OnAttack(inst, attacker, target) 
+				local skilltreeupdater = attacker.components.skilltreeupdater
+				if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then
+					DoShadowAttack(inst, attacker, target)
+				end
+				
+				_OnAttack(inst,attacker,target)
+			end
+					
+			inst.components.weapon:SetOnAttack(OnAttack)
+		end)
+	end
+	
 	-----------------------------
 	--[ Shadow Brain Changes ] --
 	-----------------------------
@@ -615,7 +688,6 @@ if TUNING.DSTU.WORTOXCHANGES then
 	end
 
 	local function ShadowCreatureFollow(self)
-
 		table.insert(self.bt.root.children, 2, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
             GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
 	end
@@ -692,8 +764,394 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.UpdateStats = UpdateStats
 			
 	end)
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Lunar I Stuff ] --=--------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+	local function DeleteBackItem(inst)
+		if inst._item ~= nil then
+			inst._item:Remove()
+		end
+		inst.components.inventory:DropEverything()
+	end
+	
+	local function HauntItem(inst)
+		inst.AnimState:SetMultColour(0,0,0,0)
+		--inst._item.floating:Cancel()
+		--inst._item.floating = nil
+		inst._item.entity:SetParent(inst.entity)
+		inst._item.entity:AddFollower()
+		inst._item.Follower:FollowSymbol(inst.GUID, "blob_body", 0, 0, 0)
+		inst._item.Transform:SetScale(1.25,1.25,1.25) -- offset scaling down the other gestalt
+
+		inst._item:AddComponent("pickable")
+		inst._item.components.pickable.quickpick = true
+		inst._item.components.pickable.canbepicked = true
+		inst._item.components.pickable.onpickedfn = function()
+			inst.components.inventory:DropEverything()
+			inst._item:Remove()
+			inst:Remove()
+		end
+		inst._item.AnimState:SetHaunted(true)		
+	end
+	
+	local function StartBrain(inst)
+		inst:RemoveEventCallback("animover",StartBrain)
+		inst.brain:Start()
+		HauntItem(inst)
+	end
+	
+	local function Floattask(inst)
+		local x,y,z = inst.Transform:GetWorldPosition()
+		inst.Transform:SetPosition(x,y+0.5/FRAMES,z)	
+	end
+	
+	local function GestaltGotItem(inst, giver, item, count)
+		inst.components.trader.enabled = false
+        local item = string.lower(item.prefab) ~= nil and string.lower(item.prefab)
+		
+        inst._item = GLOBAL.SpawnPrefab(item)
+        if inst._item ~= nil then
+			inst._item.Transform:SetPosition(inst.Transform:GetWorldPosition())
+			inst._item.components.inventoryitem.canbepickedup = false
+			inst.components.locomotor:Stop()
+			inst.brain:Stop()
+			--inst._item.floating = inst._item:DoPeriodicTask(FRAMES,Floattask)
+			inst:DoTaskInTime(0,function(inst)
+				inst.AnimState:PlayAnimation("infest")
+				inst:ListenForEvent("animover",StartBrain)
+				
+			end)
+				
+		end		
+	end
+	
+	local function SpawnGestalt(inst, upgrade_performer, obj)
+		if inst.components.stackable then
+			inst.components.stackable:Get(1):Remove()
+			inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
+			inst:AddComponent("upgradeable")
+			inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_LUNAR
+			inst.components.upgradeable.onupgradefn = SpawnGestalt		
+		else
+			inst:Remove()
+		end
+		
+
+		local crechure = "lunarthrall_plant_gestalt"
+		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
+		local gestalt = GLOBAL.SpawnPrefab(crechure) 
+		gestalt.wortox_minion = true -- These Guys are minions of Wortox
+		
+		local x,y,z = upgrade_performer.Transform:GetWorldPosition()
+		local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
+		if offset then -- So it doesn't crash if the player is godmode on the ocean and tries to weave a gestalt
+			x = x + offset.x
+			z = z + offset.z
+		end
+		gestalt.Transform:SetPosition(x,y,z)
+		gestalt.Transform:SetScale(0.75,0.75,0.75)
+		--local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
+		--despawn.Transform:SetPosition(x, y, z)
+	
+		
+		gestalt:AddComponent("follower")
+		upgrade_performer.components.leader:AddFollower(gestalt)
+		
+
+		gestalt.die_off = gestalt:DoTaskInTime(60*8,function(gestalt) 
+			DeleteBackItem(gestalt)
+			gestalt:Remove()
+		end)
+
+		--shadow.persists = false
+        local fx = GLOBAL.SpawnPrefab("wortox_soulecho_buff_fx")
+        gestalt.bufffx = fx
+        fx.entity:SetParent(gestalt.entity)
+		fx.Transform:SetScale(2,2,2)
+		gestalt:ListenForEvent("onremoved",function(gestalt)
+			if gestalt.bufffx and gestalt.bufffx:IsValid() then
+				gestalt.bufffx:Remove()
+			end
+			gestalt.bufffx = nil
+			gestalt:Remove()	
+		end)
+		gestalt.wortox = upgrade_performer
+		gestalt:AddComponent("trader")
+		gestalt:AddComponent("inventory")
+		gestalt.components.trader.enabled = true
+		gestalt.components.trader.test = function(inst, item, giver, count) return giver == gestalt.wortox end
+		gestalt.components.trader.onaccept = GestaltGotItem
+		gestalt.components.trader:SetAcceptStacks()
+		gestalt.components.trader.deleteitemonaccept = false
+		gestalt:RemoveComponent("sanityaura")	
+		
+		gestalt.sg:GoToState("spawn")
+	end
+	
+	--------------------------------------------
+	--[ Make Moon Blossoms "Upgradeable" ] -----
+	--------------------------------------------
+		
+	AddPrefabPostInit("moon_tree_blossom", function(inst)
+		inst:AddTag("SOUL_LUNAR_upgradeable")
+		if not GLOBAL.TheWorld.ismastersim then
+			return inst
+		end
+		
+		inst:AddComponent("upgradeable")
+		inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_LUNAR
+		inst.components.upgradeable.onupgradefn = SpawnGestalt		
+	end)
+	
+	-----------------------------
+	--[ Lunarthrall Changes ] ---
+	-----------------------------
+	require "behaviours/faceentity"
+	require "behaviours/doaction"
+	local function GetFaceTargetFn(inst)
+		return inst.components.follower.leader
+	end	
+	
+	local function KeepFaceTargetFn(inst, target)
+		return inst.components.follower.leader == target
+	end
+
+
+	local NO_TAGS = {"FX", "NOCLICK", "DECOR", "INLIMBO", "planted", "trap", "raidrat", "spider", "catchable", "fire", "irreplaceable", "heavy", "prey", "bird", "outofreach", "_container" }
+
+	local function ItemNearby(inst)
+		local prefab = inst._item.prefab
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local items = GLOBAL.TheSim:FindEntities(x,y,z, 24, {"_inventoryitem"},NO_TAGS)
+		for i,item in ipairs(items) do
+			if item.components.inventoryitem.canbepickedup and item.prefab == prefab and item ~= inst._item then
+				return item
+			end
+		end
+	end
+	
+	local function StealAction(inst,item)
+		return GLOBAL.BufferedAction(inst, item, GLOBAL.ACTIONS.PICKUP)
+	end
+		
+	local function LunarCreatureFollow(self)
+		table.insert(self.bt.root.children, 1,  GLOBAL.WhileNode(function() return self.inst._item ~= nil and ItemNearby(self.inst) end, "HasItem",
+			GLOBAL.DoAction(self.inst, function() return StealAction(self.inst,ItemNearby(self.inst)) end, "steal", true),.25))
+		table.insert(self.bt.root.children, 2, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+            GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
+		table.insert(self.bt.root.children, 3, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+            GLOBAL.FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn )))
+	end
+
+	AddBrainPostInit("lunarthrall_plant_gestalt_brain", LunarCreatureFollow)
+	
+	AddStategraphPostInit("lunarthrall_plant_gestalt", function(inst)
+		local states = {
+			GLOBAL.State{
+				name = "steal",
+				tags = {"busy"},
+
+				onenter = function(inst)
+					inst.Physics:Stop()
+					inst.AnimState:PlayAnimation("idle", true)
+					inst:DoTaskInTime(0.25,function(inst) 
+						inst:PerformBufferedAction()
+						inst.sg:GoToState("idle")
+					end)
+				end,
+			}, 
+		}
+
+		for k, v in pairs(states) do
+			inst.states[v.name] = v
+		end
+
+	end)
+	AddStategraphActionHandler("lunarthrall_plant_gestalt", GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICKUP, "steal"))
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Lunar II Stuff ] --=-------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+	
+	-- Generic Prevention of repeat stealing... doesn't apply to despawning/respawning mobs...
+	AddPrefabPostInitAny(function(inst)
+		if inst.components.health then
+			local old_OnSave = inst.OnSave
+			inst.OnSave = function(inst, data, ...)
+				if inst.wortox_stolen then
+					data.wortox_stolen = true
+				end
+
+				if old_OnSave ~= nil then
+					return old_OnSave(inst, data, ...)
+				end
+			end
+			local old_OnLoad = inst.OnLoad
+			inst.OnLoad = function(inst, data, ...)
+				if data and data.wortox_stolen then
+					inst.wortox_stolen = true
+				end
+
+				if old_OnLoad ~= nil then
+					return old_OnLoad(inst, data, ...)
+				end
+			end
+		end
+	end)
+	
+	
+	
+	
+	local STEAL_TABLE = GLOBAL.require("wortox_steals")
+
+	local function findGuy(stringTable) -- We randomly weighted a table string name, now find it in umss_tables
+		for i, v in pairs(STEAL_TABLE) do
+			if v.name == stringTable then
+				return v
+			end
+		end
+	end
 	
 
+	
+	local function SpecialSteal(inst,target)
+		if not target.wortox_stolen then
+			target.wortox_stolen = true
+			local item
+			local count
+			local bonus
+			local bonus_pool -- for multiple tries
+			local bonus_count 
+			local instakill 
+			local matching = findGuy(target.prefab)
+			--TheNet:Announce("looting")
+			if matching then
+				item = GLOBAL.weighted_random_choice(matching.weight)
+				if matching.count and matching.count[item] then
+					count = matching.count[item]
+				end
+				if matching.bonus and matching.bonus[item] then
+					bonus = matching.bonus[item]
+				end
+				if matching.bonus_pool then
+					bonus_pool = matching.bonus_pool
+				end				
+				if matching.bonus_count then
+					bonus_count = matching.bonus_count
+				end
+				if matching.instakill and matching.instakill[item] then
+					instakill = matching.instakill[item]
+				end
+			-- TheNet:Announce("found")
+			-- TheNet:Announce(item)	
+			elseif target.components.lootdropper then
+				--TheNet:Announce("didn't find")
+				local loots = target.components.lootdropper:GenerateLoot()
+				local omits = {}
+				for i,v in ipairs(loots) do
+				--TheNet:Announce(v)
+				end
+				local j = 1
+				for i,prefab in ipairs(loots) do
+					if (prefab == "meat" or prefab == "monstermeat" or prefab == "monstersmallmeat" or prefab == "smallmeat" or prefab == "froglegs" or prefab == "drumstick"
+					or prefab == "pondfish" or prefab == "batwing" or prefab == "fishmeat" or prefab == "leafymeat") then -- filter out meats
+						omits[j] = i
+						j = j + 1
+					end
+				end
+				if #omits > 0 then
+					for i = #omits,1,-1 do
+						table.remove(loots,omits[i])
+					end
+				end
+				--TheNet:Announce("omitting")
+				for i,v in ipairs(loots) do
+				--TheNet:Announce(v)
+				end
+				--TheNet:Announce(#loots)
+				if #loots > 0 then
+					item = loots[math.random(1,#loots)]
+				else
+					item = loots[1]
+				end
+				
+			end	
+			
+			if item then
+				if not target.components.lootdropper then
+					target:AddComponent("lootdropper")
+				end
+				if not count then
+					count = 2
+				end
+				for i = 1,(count-1) do
+					target.components.lootdropper:SpawnLootPrefab(item)
+				end
+				if bonus then
+					target.components.lootdropper:SpawnLootPrefab(bonus)
+				end
+				if bonus_count then
+					for i = 1,bonus_count do
+						local temploot = bonus_pool[math.random(1,#bonus_pool)]
+						target.components.lootdropper:SpawnLootPrefab(temploot)
+					end
+				end
+				if instakill then
+					target.components.health:Kill()
+				end
+			end		
+		end
+	end
+	
+	local function GenericSteal(inst,target)
+		for i = 1, 100 do --Just do it a bunch, no way to steal "all" the inventory from thief component
+			inst.components.thief:StealItem(target)
+		end
+	end
+	
+	local hitsparks_fx_colouroverride = {0, 1, 1} -- Try to get lunar colored
+	local function TryToSparkOn(target, attacker)
+		if target ~= nil and target:IsValid() then
+			local spark = GLOBAL.SpawnPrefab("hitsparks_fx")
+			spark:Setup(attacker, target, nil, hitsparks_fx_colouroverride)
+			--spark.black:set(true)
+		end
+	end
+	
+	local function DoLunarAttack(inst, owner, target)
+		if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
+			if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasTag("structure") and not target:HasTag("wall")) then
+				owner:AddComponent("thief")
+				GenericSteal(owner,target)
+				TryToSparkOn(target, owner)
+				SpecialSteal(owner,target)
+				target.components.combat:GetAttacked(owner,42.5,inst)
+				owner:RemoveComponent("thief") -- just need thief for a second
+			end
+		end
+	end
+	
+	local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
+	
+	for i,v in ipairs(moon_weapons) do
+		AddPrefabPostInit(v, function(inst)
+			if not GLOBAL.TheWorld.ismastersim then
+				return inst
+			end
+			
+			local _OnAttack = inst.components.weapon.onattack
+		
+			local function OnAttack(inst, attacker, target) 
+				if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
+					if attacker.finishportalhoptask ~= nil and attacker:TryToPortalHop(1, false) then
+						DoLunarAttack(inst, attacker, target)
+					end
+				end				
+				_OnAttack(inst,attacker,target)
+			end
+					
+			inst.components.weapon:SetOnAttack(OnAttack)
+		end)
+	end
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------

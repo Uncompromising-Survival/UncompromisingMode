@@ -274,8 +274,9 @@ local function fnthicket()
 	
 	local function LargeFernCheck(x,y,z)
 		local plants = #TheSim:FindEntities(x,y,z,2.25,{"plant"})
-		local sculpture = #TheSim:FindEntities(x,y,z,4,{"sculpture"})-- The spacing for the sculpture is larger so it doesn't cover them up
-		if plants > 0 or sculpture > 0 then
+		local sculpture = #TheSim:FindEntities(x,y,z,7,{"heavy"})-- The spacing for the sculpture is larger so it doesn't cover them up 
+		local sinkhole_bockers = #TheSim:FindEntities(x,y,z,7,{"antlion_sinkhole_blocker"})
+		if plants > 0 or sculpture > 0 or sinkhole_bockers > 0 then
 			return true
 		end
 	

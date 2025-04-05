@@ -1,23 +1,36 @@
 local function OnLand(inst)
+
+	
     local x, y, z = inst.Transform:GetWorldPosition()
-    local worm = SpawnPrefab("viperling")
-    if inst:HasTag("friendly") then
-        worm = SpawnPrefab("viperlingfriend")
-    end
-    worm.Transform:SetPosition(x, y, z)
-    if worm.components.combat ~= nil then
-        local bozo = FindEntity(inst, 10,
-            function(guy)
-                if worm.components.combat:CanTarget(guy) then
-                    return guy:HasTag("character")
-                end
-            end)
-        if bozo ~= nil and not inst:HasTag("viperlingfriend") then
-            bozo.components.combat:SuggestTarget(bozo)
-        end
-        worm.sg:GoToState("taunt")
-    end
-    inst:Remove()
+	
+	local worms = TheSim:FindEntities(x,y,z,40,{"viperlingfriend"})
+	local worm_friends = {}
+	local player = inst.eater
+	for i,v in ipairs(worms) do
+		if v.components.follower and v.components.follower.leader and v.components.follower.leader == player then
+			table.insert(worm_friends,v)
+		end
+	end
+	if inst.max_worms > #worm_friends then
+		local worm = SpawnPrefab("viperling")
+		if inst:HasTag("friendly") then
+			worm = SpawnPrefab("viperlingfriend")
+		end
+		worm.Transform:SetPosition(x, y, z)
+		if worm.components.combat ~= nil then
+			local bozo = FindEntity(inst, 10,
+				function(guy)
+					if worm.components.combat:CanTarget(guy) then
+						return guy:HasTag("character")
+					end
+				end)
+			if bozo ~= nil and not inst:HasTag("viperlingfriend") then
+				bozo.components.combat:SuggestTarget(bozo)
+			end
+			worm.sg:GoToState("taunt")
+		end
+	end
+	inst:Remove()
 end
 
 local function TestProjectileLand(inst)

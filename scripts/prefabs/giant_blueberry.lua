@@ -45,7 +45,7 @@ local function fn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/giant_blueberry.xml"
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 1
-    inst.components.edible.hungervalue = 12.5
+    inst.components.edible.hungervalue = 18.75
     inst.components.edible.sanityvalue = 0
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
 	inst.components.edible:SetOnEatenFn(oneatenfn)

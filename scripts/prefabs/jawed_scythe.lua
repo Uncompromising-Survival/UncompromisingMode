@@ -231,7 +231,7 @@ local function ScytheFn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-		inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
+		--inst:ListenForEvent("isbrokendirty", OnIsBrokenDirty)
 
         return inst
     end
@@ -253,7 +253,7 @@ local function ScytheFn()
     finiteuses:SetMaxUses(175)
     finiteuses:SetUses(175)
     finiteuses:SetConsumption(ACTIONS.SCYTHE, 1)
-
+	finiteuses:SetOnFinished(inst.Remove)
 	SetupComponents(inst)
 
     MakeHauntableLaunch(inst)

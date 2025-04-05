@@ -238,12 +238,18 @@ local function OnHaunt(inst, haunter)
     return false
 end
 
+
 local function BecomeItem(inst)
 	local jaw = SpawnPrefab("snappy_jaw")
 	jaw.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	jaw.AnimState:PlayAnimation("become_item",false)
-	jaw.AnimState:PushAnimation("item",true)
+	--jaw.AnimState:PlayAnimation("become_item",false)
+	jaw.AnimState:PlayAnimation("item",true)
 	inst:Remove()
+end
+
+local function AlmostBecomeItem(inst)
+	inst.AnimState:PlayAnimation("become_item",false)
+	inst:ListenForEvent("animover",BecomeItem)
 end
 
 local function OnAttacked(inst, worker)
@@ -254,7 +260,9 @@ local function OnAttacked(inst, worker)
             inst.AnimState:PlayAnimation("hit")
         else
 			if inst.prefab == "um_bear_trap_old" then
-				BecomeItem(inst)
+				inst.SoundEmitter:PlaySound(
+					"dontstarve/impacts/impact_metal_armour_dull")
+				AlmostBecomeItem(inst)
 			else
 				OnExplode(inst, nil)
 			end

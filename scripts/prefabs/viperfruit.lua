@@ -25,7 +25,7 @@ local function create_light(eater, lightprefab)
     end
 end
 
-local function spawnfriends(inst)
+local function spawnfriends(inst,count)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectile = SpawnPrefab("viperprojectile")
     projectile.Transform:SetPosition(x, y, z)
@@ -36,14 +36,38 @@ local function spawnfriends(inst)
     projectile:AddTag("canthit")
     projectile:AddTag("friendly")
     --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
+	projectile.max_worms = count
+	projectile.eater = inst
     projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
     if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
         projectile.components.complexprojectile:Launch(pt, inst, inst)
     else
-        inst:DoTaskInTime(0, spawnfriends(inst))
+        inst:DoTaskInTime(0, spawnfriends(inst,count))
         projectile:Remove()
     end
 end
+
+local function GetWorms(inst,count,time_to_add)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local worms = TheSim:FindEntities(x,y,z,40,{"viperlingfriend"})
+	local worm_friends = {}
+	for i,v in ipairs(worms) do
+		if inst.components.leader and inst.components.leader:IsFollower(v) then
+			table.insert(worm_friends,v)
+		end
+	end
+	for i,v in ipairs(worm_friends) do -- need specifically *that players* worms
+		SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
+		local more_time = v.components.timer:GetTimeLeft("despawn") or 0
+		v.components.timer:SetTimeLeft("despawn", time_to_add + more_time)
+	end
+	local nworms = #worm_friends
+	if #worm_friends > count then
+		nworms = count
+	end
+	return count-nworms
+end
+
 
 local function oneatenfn(inst, eater)
     if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -51,11 +75,15 @@ local function oneatenfn(inst, eater)
         not eater:HasTag("playerghost") then
         create_light(eater, "wormlight_light")
 		if inst.prefab == "viperfruit" then
-			for k = 1, 3 do
-				inst:DoTaskInTime(0, spawnfriends(inst))
+			local i = GetWorms(eater,3,30)
+			for k = 1, i do
+				eater:DoTaskInTime(0, spawnfriends(eater,3))
 			end
 		else
-			inst:DoTaskInTime(0, spawnfriends(inst)) -- Lesser only spawns 1.
+			local i = GetWorms(eater,1,15)
+			if i > 0 then 
+				eater:DoTaskInTime(0, spawnfriends(eater,1)) -- Lesser only spawns 1.
+			end
 		end
     end
 end

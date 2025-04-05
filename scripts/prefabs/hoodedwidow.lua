@@ -494,7 +494,7 @@ local function fn()
 	inst:ListenForEvent("killed", OnKilledOther)
 	inst:ListenForEvent("onhitother", OnHitOther)
 	
-	inst.DecideWhatTreeToBe = DecideWhatTreeToBe
+	inst.DecideWhatTreeToBe = DecideWhatTreeToBe -- This looks for which tree she's gonna hop to.
 	inst.FindTreeToShake = FindTreeToShake
 	inst.ShakeTree = ShakeTree
 	

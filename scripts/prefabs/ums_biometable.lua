@@ -28,11 +28,12 @@ local MosaicTable = { -- need more mosaic setpieces
 		
 	megabaseruins_intersection = 0.25, 
 	megabaseruins_centerpiece = 0.25, 
-	megabaseruins_road = 0.25
+	megabaseruins_road = 0.25,
+	moonFrag = 0.25
 
 }
 
-local GeneralTable = {badfarmerTable = 0.5, baseFrag_smellyKitchen = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, moonFrag = 0.25, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
+local GeneralTable = {badfarmerTable = 0.5, baseFrag_smellyKitchen = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
 
 local OceanTable = {sunkenboat = 0.5, failedFisherman = 0.5}
 

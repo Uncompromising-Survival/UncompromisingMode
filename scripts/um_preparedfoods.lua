@@ -35,6 +35,7 @@ local function UncompromisingFillers(tags)
         TUNING.DSTU.GENERALCROCKBLOCKER) or TUNING.DSTU.GENERALCROCKBLOCKER == false
 end
 
+
 local um_preparedfoods =
 {
     beefalowings =
@@ -446,6 +447,29 @@ local um_preparedfoods =
         floater = { nil, 0.1, 0.6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_VIPERJAM,
         oneatenfn = function(inst, eater)
+		
+			local function GetWorms(inst)
+				local x,y,z = inst.Transform:GetWorldPosition()
+				local worms = TheSim:FindEntities(x,y,z,40,{"viperlingfriend"})
+				local worm_friends = {}
+				for i,v in ipairs(worms) do
+					if inst.components.leader and inst.components.leader:IsFollower(v) then
+						table.insert(worm_friends,v)
+					end
+				end
+				for i,v in ipairs(worm_friends) do -- need specifically *that players* worms
+					SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
+					local more_time = v.components.timer:GetTimeLeft("despawn") or 0
+					v.components.timer:SetTimeLeft("despawn", 60 + more_time)
+				end
+				local nworms = #worm_friends
+				if #worm_friends > 6 then
+					nworms = 6
+				end
+				return 6-nworms
+			end
+
+
             local function SpawnVipers(inst)
                 local x, y, z = inst.Transform:GetWorldPosition()
                 local projectile = SpawnPrefab("viperprojectile")
@@ -458,6 +482,8 @@ local um_preparedfoods =
                 projectile:AddTag("friendly")
                 --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
                 projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
+				projectile.eater = inst
+				projectile.max_worms = 6
                 if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
                     inst.count = 0
                     projectile.components.complexprojectile:Launch(pt, inst, inst)
@@ -474,8 +500,9 @@ local um_preparedfoods =
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
-                for k = 1, 6 do
-                    inst:DoTaskInTime(0, SpawnVipers(inst))
+				local i = GetWorms(eater)
+                for k = 1, i do
+                    eater:DoTaskInTime(0, SpawnVipers(eater))
                 end
             end
         end,

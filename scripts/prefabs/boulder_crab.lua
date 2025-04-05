@@ -262,19 +262,24 @@ local function fn()
     inst.GetRock = GetRock
     inst:DoTaskInTime(0, function(inst)
         if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
-            if math.random() > 0.5 then
-                GetRock(inst, "springrock1")
-            else
-                if math.random() > 0.5 then
-                    GetRock(inst, "springrock3")
-                else
-                    GetRock(inst, "springrock2")
-                end
-            end
+			local rock = FindEntity(inst,60,nil,{"boulder"})
+			if rock then
+				GetRock(inst, rock.prefab)
+			else
+				if math.random() > 0.5 then
+					GetRock(inst, "springrock1")
+				else
+					if math.random() > 0.5 then
+						GetRock(inst, "springrock3")
+					else
+						GetRock(inst, "springrock2")
+					end
+				end			
+			end
 			if TheWorld.state.isday then
 				inst.sg:GoToState("hide_pre")
-			end
-        end
+			end			
+		end
     end)
 
 
