@@ -461,7 +461,7 @@ end
 --end
 
 if GetModConfigData("armorrework") then
-	TUNING.WEREMOOSE_ABSORPTION = 0.85
+	TUNING.WEREMOOSE_ABSORPTION = 0.8
 end
 
 if GetModConfigData("wixie_walter") then
@@ -642,12 +642,12 @@ for k, v in pairs(um_naughtiness) do
 end
 
 -- Kramped buff
-if GetModConfigData("kramped_buff") then
-    GLOBAL.NAUGHTY_VALUE["glommer"] = 100
-    TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
-    TUNING.KRAMPUS_THRESHOLD = 60
-    TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
-end
+--if GetModConfigData("kramped_buff") then
+    --GLOBAL.NAUGHTY_VALUE["glommer"] = 100
+    --TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
+    --TUNING.KRAMPUS_THRESHOLD = 60
+    --TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
+--end
 
 if GetModConfigData("waxwell_nerf") then
     TUNING.SHADOWWAXWELL_SANITY_PENALTY.SHADOWPROTECTOR = 0.2 --can summon 3 fighters
