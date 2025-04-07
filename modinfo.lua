@@ -178,6 +178,8 @@ configuration_options = {
     },
     BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
         "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
+    BinaryConfig("dreadeye", "Dread Eye",
+        "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
     BinaryConfig("longpig", "Long Pig", "Telltale Hearts now require 'Long Pig' from skeletons to hinder amassing large numbers of them.", false),
 
     BinaryConfig("maxhphitters", "Max Health Mob",

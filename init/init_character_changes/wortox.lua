@@ -815,6 +815,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 			inst._item.components.inventoryitem.canbepickedup = false
 			inst.components.locomotor:Stop()
 			inst.brain:Stop()
+			if inst._item.components.edible then
+				 inst._item:RemoveComponent("edible")
+			end
 			--inst._item.floating = inst._item:DoPeriodicTask(FRAMES,Floattask)
 			inst:DoTaskInTime(0,function(inst)
 				inst.AnimState:PlayAnimation("infest")
@@ -858,7 +861,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		upgrade_performer.components.leader:AddFollower(gestalt)
 		
 
-		gestalt.die_off = gestalt:DoTaskInTime(60*8,function(gestalt) 
+		gestalt.die_off = gestalt:DoTaskInTime(60*8*2,function(gestalt) 
 			DeleteBackItem(gestalt)
 			gestalt:Remove()
 		end)

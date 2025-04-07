@@ -56,7 +56,7 @@ local function SpawnRimeweeds()
 		end
 	end
 	
-	if #harvestible_plants > 0 then
+	if harvestible_plants and #harvestible_plants > 1 then
 		--TheNet:Announce("Rimeweeds = ")
 		--TheNet:Announce(rimeweeds)
 		if rimeweeds < 10 then
@@ -65,7 +65,7 @@ local function SpawnRimeweeds()
 			table.remove(harvestible_plants,rnd)
 		end
 		if rimeweeds < 20 then
-			local rnd = math.random(1,#harvestible_plants)
+			local rnd = math.random(1,#harvestible_plants) --crash point
 			SpawnRimeweed(harvestible_plants[rnd])
 			table.remove(harvestible_plants,rnd)
 		end

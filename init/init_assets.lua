@@ -2524,6 +2524,10 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
     Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
 
+
+    Asset("ATLAS", "images/wortox_lunar_stealer.xml"),
+    Asset("IMAGE", "images/wortox_lunar_stealer.tex"),
+	
     --SWAPS
     Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
     Asset("ANIM", "anim/torso_amulets_klaus.zip"), --Not quite sure...

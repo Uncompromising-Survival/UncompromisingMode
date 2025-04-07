@@ -248,6 +248,10 @@ local function BecomeItem(inst)
 end
 
 local function AlmostBecomeItem(inst)
+	inst:RemoveComponent("combat")
+	inst:RemoveComponent("health")
+	inst:RemoveComponent("mine")
+	inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
 	inst.AnimState:PlayAnimation("become_item",false)
 	inst:ListenForEvent("animover",BecomeItem)
 end
@@ -260,8 +264,6 @@ local function OnAttacked(inst, worker)
             inst.AnimState:PlayAnimation("hit")
         else
 			if inst.prefab == "um_bear_trap_old" then
-				inst.SoundEmitter:PlaySound(
-					"dontstarve/impacts/impact_metal_armour_dull")
 				AlmostBecomeItem(inst)
 			else
 				OnExplode(inst, nil)

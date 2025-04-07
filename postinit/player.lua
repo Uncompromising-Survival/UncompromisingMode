@@ -166,6 +166,30 @@ local function OnSetOwner(inst)
 end
 
 env.AddPlayerPostInit(function(inst)
+
+
+
+
+	---------------------------------------------------------------------------------------
+	-- [ Code that makes the player play the hands-up animation in Thickets or Similar ] --
+	---------------------------------------------------------------------------------------
+	
+
+	local _IsInAnyStormOrCloud = inst.IsInAnyStormOrCloud
+		
+	local function IsInAnyStormOrCloud(inst)
+		if inst.thicketcheck then
+			return true
+		else
+			return _IsInAnyStormOrCloud(inst)
+		end	
+	end
+	
+	inst.IsInAnyStormOrCloud = IsInAnyStormOrCloud
+
+
+
+
     inst.Advertisee = net_entity(inst.GUID, "SetAdvertisee.plyr", "SetAdvertiseedirty")
 
     inst:DoTaskInTime(0, RegisterNetListeners)

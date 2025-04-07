@@ -8,7 +8,7 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Constants ]]
     --------------------------------------------------------------------------
-
+	local dread_eyes_allowed = TUNING.DSTU.DREAD_EYE
     local NON_INSANITY_MODE_DESPAWN_INTERVAL = 0.1
     local NON_INSANITY_MODE_DESPAWN_VARIANCE = 0.1
 
@@ -86,7 +86,7 @@ return Class(function(self, inst)
         return SpawnPrefab(spawndrifter and "creepingfear" or
             player.components.sanity:GetPercent() < .5 and
             (random_chance < 0.2 and "terrorbeak" or
-                random_chance < 0.8 and "dreadeye") or
+                (random_chance < 0.8 and dread_eyes_allowed and "dreadeye")) or
             "crawlinghorror"
         )
     end
@@ -96,7 +96,7 @@ return Class(function(self, inst)
 
         return SpawnPrefab(spawndrifter and "creepingfear" or
             player.components.sanity:GetPercent() < .5 and
-            random_chance < 0.2 and "dreadeye" or
+            (random_chance < 0.2 and dread_eyes_allowed and "dreadeye") or
             "oceanhorror"
         )
     end

@@ -280,6 +280,7 @@ TUNING.DSTU = {
     SHADOW_ITEMS = GetModConfigData("shadow_items"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
+	DREAD_EYE = GetModConfigData("dreadeye"),
     MAX_DISTANCE_TO_SHADOWS = 1225, -- 35^2
     CREEPINGFEAR_SPEED = 4.8,
     CREEPINGFEAR_HEALTH = 1600,
