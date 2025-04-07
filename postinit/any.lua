@@ -229,12 +229,15 @@ function EntityScript:AddPlatformFollower(child)
     end
 end
 
+local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then 
-		return inst 
-	end
-	
-    if not inst:HasTag("companion") and not inst:HasTag("abigail") and inst.components and inst.components.combat then
-		inst:AddComponent("um_spiritbuff")
+        return inst
+    end
+
+    if not inst:HasAnyTag(NO_UM_SPIRITBUFF_TAGS) and inst.components and inst.components.combat then
+        inst:AddComponent("um_spiritbuff")
     end
 end)
+
+

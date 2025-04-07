@@ -31,6 +31,10 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 		})	
 		
 	AddTaskSetPreInitAny(function(tasksetdata)
+		if tasksetdata.location ~= "forest" then
+			return
+		end
+		
 		for i,task in ipairs(tasksetdata.optionaltasks) do
 			if task == "The hunters" then
 				tasksetdata.optionaltasks[i] = "UMTheHunters"

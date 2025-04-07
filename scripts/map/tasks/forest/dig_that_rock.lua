@@ -41,6 +41,9 @@ AddTask("UMMakeABeehat", { --AddTaskPreInit does not work for optional tasks, Re
 	
 	
 AddTaskSetPreInitAny(function(tasksetdata)
+	if tasksetdata.location ~= "forest" then
+		return
+	end
 	for i,task in ipairs(tasksetdata.optionaltasks) do
 		print("task = "..task)
 		if task == "Make a Beehat" then
