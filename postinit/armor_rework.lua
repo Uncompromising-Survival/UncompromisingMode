@@ -28,6 +28,12 @@ end
 ARMOR_ABSORPTION_OVERRIDES = {
     ["beehat"] = 0.7,
     ["armorruins"] = 0.8,
+	--["shieldofterror"] = 0.75,
+	["cookiecutterhat"] = 0.7,
+	["wathgrithrhat"] = 0.7,
+	["wathgrithr_improvedhat"] = 0.7,
+	["armor_bramble"] = 0.7,
+	["armor_lunarplant_husk"] = 0.7,
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a

@@ -120,7 +120,7 @@ local function fn()
     MakeSmallPropagator(inst)
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(TUNING.ARMORBRAMBLE, TUNING.ARMORBRAMBLE_ABSORPTION)
+    inst.components.armor:InitCondition(TUNING.ARMORBRAMBLE, TUNING.ARMORPUNK_ABSORPTION)
     inst.components.armor:AddWeakness("beaver", TUNING.BEAVER_WOOD_DAMAGE)
 
     inst:AddComponent("equippable")

@@ -66,7 +66,7 @@ local function fn()
  	inst:AddComponent("flotationdevice")
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(TUNING.ARMORMARBLE, TUNING.ARMORWOOD_ABSORPTION)
+    inst.components.armor:InitCondition(TUNING.ARMORMARBLE, TUNING.ARMORDREADSTONE_ABSORPTION)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
