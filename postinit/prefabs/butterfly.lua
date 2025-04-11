@@ -21,16 +21,39 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 		end
 	end
 
-
+	local function SittingStill(statename)
+		return statename and statename == "pollinate" or statename == "land_idle" or statename == "frozen" or statename == "thaw"
+	end
+	
+	local function ByPassWeapon(weapon)
+		return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("rangedweapon") or weapon:HasTag("projectile")) and not weapon.prefab == "icestaff"
+	end
+	
+	local function ByStimuli(stimuli)
+		return stimuli and (stimuli == "soul")
+	end
+	
 	local function SlipAway(inst,data)
 		local statename = inst.sg.currentstate.name
-		if data and data.attacker and not (statename == "pollinate" or statename == "land_idle") then -- Can only attack when idle
-			inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-			if inst.components.health then
-				inst.components.health:SetPercent(1)
+		--TheNet:Announce(statename)
+
+		if data.stimuli then
+			--TheNet:Announce(data.stimuli)
+		end
+		local weapon = data.attacker.components.combat:GetWeapon() or nil
+		if weapon then
+			--TheNet:Announce(weapon.prefab)
+		end
+		--TheNet:Announce(data.attacker.prefab)
+		if data and data.attacker and (not SittingStill(statename) and not ByPassWeapon(weapon) and not ByStimuli(data.stimuli)) then -- Can only attack when idle
+			if not (weapon and weapon.prefab == "icestaff") then -- ice staff doesn't kill but doesn't slip either
+				inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+				if inst.components.health then
+					inst.components.health:SetPercent(1)
+				end
+				
+				Slippy(data.attacker,inst)
 			end
-			
-			Slippy(data.attacker,inst)
 		else --  any other condition needs to instantly kill the butterfly, feigning having 1 health
 			inst.components.health:Kill()
 		end
@@ -66,6 +89,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 			else
 				local speed = 6
 				speed = 12 - mindist 
+				
 				if speed > 10 then -- clamp the speed at some maximum value
 					speed = 10
 				end

@@ -491,6 +491,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 		return 0
 	end
 	local function SpawnWovenShadow(inst, upgrade_performer, obj)
+		
+		local mod2 = (inst.prefab == "horrorfuel" and 0.2) or 0
 		if inst.components.stackable then
 			inst.components.stackable:Get(1):Remove()
 			inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
@@ -507,7 +509,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
 		local mod = CheckToRemoveFollower(upgrade_performer)
 		
-		rnd = rnd - mod
+		rnd = rnd - mod - mod2
 		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
 			if rnd < 0.02 then
 				crechure = "ruinsnightmare"
@@ -597,6 +599,17 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.components.upgradeable.onupgradefn = SpawnWovenShadow		
 	end)
 	
+	AddPrefabPostInit("horrorfuel", function(inst)
+		inst:AddTag("SOUL_SHADOW_upgradeable")
+		if not GLOBAL.TheWorld.ismastersim then
+			return inst
+		end
+		
+		inst:AddComponent("upgradeable")
+		inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_SHADOW
+		inst.components.upgradeable.onupgradefn = SpawnWovenShadow		
+	end)
+	
 	--------------------------------------------
 	--[ Scythe Extending Lifetime of Shadows] --
 	--------------------------------------------
@@ -652,27 +665,26 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 	end
 	
-	local shadow_weapons = {"nightsword"}
-	
-	for i,v in ipairs(shadow_weapons) do
-		AddPrefabPostInit(v, function(inst)
-			if not GLOBAL.TheWorld.ismastersim then
-				return inst
-			end
-			
-		local _OnAttack = inst.components.weapon.onattack
-			local function OnAttack(inst, attacker, target) 
-				local skilltreeupdater = attacker.components.skilltreeupdater
-				if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then
-					DoShadowAttack(inst, attacker, target)
-				end
-				
-				_OnAttack(inst,attacker,target)
-			end
-					
-			inst.components.weapon:SetOnAttack(OnAttack)
-		end)
-	end
+    local shadow_weapons = {"nightsword"}
+    for i,v in ipairs(shadow_weapons) do
+        AddPrefabPostInit(v, function(inst)
+            if not GLOBAL.TheWorld.ismastersim then
+                return inst
+            end
+
+            local _OnAttack = inst.components.weapon.onattack or function() end -- Dummy function here as the Fix if the weapon doesn't have an onattack.
+            local function OnAttack(inst, attacker, target, ...) 
+                local skilltreeupdater = attacker.components.skilltreeupdater
+                if target.components.health ~= nil and target.components.health:IsDead() and not target:HasTag("structure") and skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then
+                    DoShadowAttack(inst, attacker, target)
+                end
+
+                _OnAttack(inst, attacker, target, ...)
+            end
+
+            inst.components.weapon:SetOnAttack(OnAttack)
+        end)
+    end
 	
 	-----------------------------
 	--[ Shadow Brain Changes ] --
@@ -784,12 +796,14 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst._item.Transform:SetScale(1.25,1.25,1.25) -- offset scaling down the other gestalt
 
 		inst._item:AddComponent("pickable")
-		inst._item.components.pickable.quickpick = true
 		inst._item.components.pickable.canbepicked = true
+		inst._item:RemoveComponent("stackable")
 		inst._item.components.pickable.onpickedfn = function()
-			inst.components.inventory:DropEverything()
 			inst._item:Remove()
-			inst:Remove()
+			inst._item = nil
+			inst.components.inventory:DropEverything()
+			inst.components.trader.enabled = true
+			inst.AnimState:SetMultColour(1,1,1,1)
 		end
 		inst._item.AnimState:SetHaunted(true)		
 	end
@@ -971,6 +985,20 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	end)
 	AddStategraphActionHandler("lunarthrall_plant_gestalt", GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICKUP, "steal"))
+	
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Make all inventoryitems tradeable, what could possibly go wrong? ] --=-----------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+	
+	AddPrefabPostInitAny(function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return inst
+		end
+		if inst.components.tradable == nil and inst.components.inventoryitem and not inst:HasTag("irreplaceable") then
+			inst:AddComponent("tradable")
+		end
+	end)	
+	
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Lunar II Stuff ] --=-------------------------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------
@@ -1099,6 +1127,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 					end
 				end
 				if instakill then
+					target.components.lootdropper:SetLoot(nil)
 					target.components.health:Kill()
 				end
 			end		

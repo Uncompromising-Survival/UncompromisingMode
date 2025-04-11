@@ -2528,6 +2528,12 @@ Assets = {
     Asset("ATLAS", "images/wortox_lunar_stealer.xml"),
     Asset("IMAGE", "images/wortox_lunar_stealer.tex"),
 	
+    Asset("ATLAS", "images/wortox_lunar_summoner.xml"),
+    Asset("IMAGE", "images/wortox_lunar_summoner.tex"),
+	
+    Asset("ATLAS", "images/wortox_shadow_weaver.xml"),
+    Asset("IMAGE", "images/wortox_shadow_weaver.tex"),
+	
     --SWAPS
     Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
     Asset("ANIM", "anim/torso_amulets_klaus.zip"), --Not quite sure...
@@ -2771,6 +2777,10 @@ Assets = {
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
 
 }
+
+RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")
+RegisterSkilltreeIconsAtlas("images/wortox_lunar_summoner.xml", "wortox_lunar_summoner.tex")
+RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_weaver.tex")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")

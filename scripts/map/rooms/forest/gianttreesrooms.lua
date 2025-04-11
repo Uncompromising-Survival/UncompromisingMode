@@ -47,6 +47,36 @@ AddRoom("GiantTrees",
 			}
         }
     })
+	
+AddRoom("RockyGiantTrees",
+{
+	colour = { r = .6, g = .2, b = .8, a = .50 },
+	value = WORLD_TILES.UM_HOODED_FOREST,
+	tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
+	contents =
+	{
+		distributepercent = 0.6,
+		distributeprefabs = {
+			sapling = 0.2,
+			evergreen_sparse = 0.5,
+			thicket_builder = 1,
+			ghost_walrus = 0.005,
+			blueberryplantbuncher = 0.1,
+			red_mushroom = 0.05,
+			lightrays_canopy = 0.05,
+			um_bear_trap_old = 0.1,
+			rock1 = 0.5,
+			rock2 = 0.4,
+		},
+		countprefabs =
+		{
+			extracanopyspawner = 4,
+		},
+		countstaticlayouts = {
+			["giant_tree_generic"] = function() return math.random(1,3) end,
+		}
+	}
+})
 AddRoom("HoodedEntrance",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },

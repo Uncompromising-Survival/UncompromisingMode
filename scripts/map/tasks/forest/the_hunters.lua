@@ -22,7 +22,7 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 			keys_given={KEYS.WALRUS,KEYS.TIER5},
 			room_choices={
 			["WalrusGiantTrees"] = 3,
-			["GiantTrees"] = 3,
+			["RockyGiantTrees"] = 3,
 			["Rocky_crabs"] = 2,
 			},
 			room_bg=WORLD_TILES.HOODEDFOREST,

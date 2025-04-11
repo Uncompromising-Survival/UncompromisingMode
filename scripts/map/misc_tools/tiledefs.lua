@@ -335,6 +335,13 @@ local function GetTileForHoodedForest(noise)
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
 end
 
+local function GetTileForRockyHoodedForest(noise)
+    if noise < 0.4 then
+        return WORLD_TILES.ROCKY
+    end
+    return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
+end
+
 local function GetTileForHotspringIA(noise)
     if noise < 0.3 then
         return WORLD_TILES.MAGMAFIELD
@@ -357,6 +364,7 @@ AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
 AddTile("UM_HOTSPRING_FORESTY", "NOISE")
 AddTile("UM_HOODED_FOREST", "NOISE")
+AddTile("UM_HOODED_ROCKY", "NOISE")
 local NoiseTileFunctions = require("noisetilefunctions")
 
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING] = GetTileForHotspring
@@ -365,6 +373,8 @@ NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_FORESTY] = GetTileForHotspring_Fores
 
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST] = GetTileForHoodedForest
 
+NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
+
 require("map/terrain")
 --require("map/torreniv_terrain")
 
@@ -372,6 +382,9 @@ local filters = {
     ["springrock1"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
     ["springrock2"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
     ["springrock3"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
+	
+
+	
 
     ["evergreen_sparse"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
     ["evergreen_sparse_normal"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
@@ -391,6 +404,9 @@ local filters = {
 for k, v in pairs(filters) do
     GLOBAL.terrain.filter[k] = v
 end
+
+table.insert(GLOBAL.terrain.filter["rock1"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
+table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
 
 GLOBAL.HOODED_GROUND_TYPES = {
 	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3
