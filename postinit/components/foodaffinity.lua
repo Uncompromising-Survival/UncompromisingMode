@@ -48,27 +48,45 @@ AddComponentPostInit("foodaffinity", function(self)
     end)
 end)
 
+AddPrefabPostInit("wilson", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["baconeggs"] = 15,
+    }
+end)
+
 AddPrefabPostInit("willow", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["hotchili"] = 10,
+	    ["hotchili"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wolfgang", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["potato_cooked"] = 15,
     }
 end)
 
 AddPrefabPostInit("wendy", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["bananapop"] = 10,
+	    ["bananapop"] = 15,
     }
 end)
 
 AddPrefabPostInit("wx78", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["butterflymuffin"] = 10,
+	    ["butterflymuffin"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wickerbottom", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["surfnturf"] = 15,
     }
 end)
 
 AddPrefabPostInit("woodie", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["honeynuggets"] = 10,
+	    ["honeynuggets"] = 15,
     }
 end)
 
@@ -84,6 +102,12 @@ AddPrefabPostInit("waxwell", function(inst)
     }
 end)
 
+AddPrefabPostInit("wathgrithr", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["turkeydinner"] = 15,
+    }
+end)
+
 AddPrefabPostInit("webber", function(inst)
     inst.components.foodaffinity.favorite_foods = {
 	    ["icecream"] = 15,
@@ -92,36 +116,68 @@ end)
 
 AddPrefabPostInit("winona", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["vegstinger"] = 10,
+	    ["vegstinger"] = 15,
     }
 end)
 
---AddPrefabPostInit("wurt", function(inst)
-    --inst.components.foodaffinity.favorite_foods = {
-		--["durian"] = 10,
-		--["durian_cooked"] = 10,
-    --}
---end)
+AddPrefabPostInit("wortox", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["pomegranate"] = 15,
+		["pomegranate_cooked"] = 15,
+		["devilsfruitcake"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wormwood", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["cave_banana_cooked"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wurt", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+		["durian"] = 15,
+		["durian_cooked"] = 15,
+    }
+end)
 
 AddPrefabPostInit("walter", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-	    ["smallmeat_dried"] = 10,
+	    ["smallmeat_dried"] = 15,
         ["meat_dried"] = 15,
-        ["kelp_dried"] = 5,
-		["smallfishmeat_dried"] = 10,
+        ["kelp_dried"] = 15,
+		["smallfishmeat_dried"] = 15,
 		["fishmeat_dried"] = 15,
-		["trailmix"] = 10,
+		["trailmix"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wanda", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["taffy"] = 15,
     }
 end)
 
 AddPrefabPostInit("wathom", function(inst)
     inst.components.foodaffinity.favorite_foods = {
-		["kebab"] = 10,
+		["um_kebab"] = 15,
     }
 end)
 
 AddPrefabPostInit("winky", function(inst)
     inst.components.foodaffinity.favorite_foods = {
 		["powcake"] = 0,
+    }
+end)
+
+AddPrefabPostInit("wixie", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["blueberrypancakes"] = 15,
+    }
+end)
+
+AddPrefabPostInit("wonkey", function(inst)
+    inst.components.foodaffinity.favorite_foods = {
+	    ["cave_banana"] = 15,
     }
 end)

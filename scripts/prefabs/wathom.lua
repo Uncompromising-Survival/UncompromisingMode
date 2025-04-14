@@ -525,7 +525,7 @@ local master_postinit = function(inst)
 
     inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 
-    inst.components.foodaffinity:AddPrefabAffinity("kebab", 20)
+    inst.components.foodaffinity:AddPrefabAffinity("um_kebab", 20)
 
     -- Stats
     inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)

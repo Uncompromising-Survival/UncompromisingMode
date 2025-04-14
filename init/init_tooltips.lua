@@ -56,7 +56,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
     HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
     SALTPACK = "- Drops piles of salt, preventing buildup of Snow Piles.",
-    SPOREPACK = "- Provides lots of storage space.\n- Rots food, but refreshes Spores.",
+    --SPOREPACK = "- Provides lots of storage space.\n- Rots food, but refreshes Spores.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =

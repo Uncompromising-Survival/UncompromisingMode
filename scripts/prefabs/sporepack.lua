@@ -1,7 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/backpack.zip"),
-    Asset("ANIM", "anim/swap_krampus_sack.zip"),
+    Asset("ANIM", "anim/swap_piggyback.zip"),
 }
 
 local function TryPerish(item)
@@ -152,7 +152,7 @@ local function fn()
 
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
-            inst.replica.container:WidgetSetup("krampus_sack")
+            inst.replica.container:WidgetSetup("piggyback")
         end
         return inst
     end
@@ -177,7 +177,7 @@ local function fn()
     inst.components.waterproofer:SetEffectiveness(0)
 
     inst:AddComponent("container")
-    inst.components.container:WidgetSetup("krampus_sack")
+    inst.components.container:WidgetSetup("piggyback")
 
     inst:AddComponent("preserver")
     inst.components.preserver:SetPerishRateMultiplier(2)
