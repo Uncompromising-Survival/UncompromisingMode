@@ -339,6 +339,9 @@ local function GetTileForRockyHoodedForest(noise)
     if noise < 0.4 then
         return WORLD_TILES.ROCKY
     end
+    if noise < 0.5 then
+        return WORLD_TILES.HOODEDFOREST_FOLIAGE
+    end
     return WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK
 end
 
@@ -406,7 +409,9 @@ for k, v in pairs(filters) do
 end
 
 table.insert(GLOBAL.terrain.filter["rock1"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
+table.insert(GLOBAL.terrain.filter["rock1"],WORLD_TILES.HOODEDFOREST_FOLIAGE)
 table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
+table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE)
 
 GLOBAL.HOODED_GROUND_TYPES = {
 	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3

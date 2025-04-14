@@ -210,8 +210,6 @@ DESCRIBE.NYMPH = "The cause of the infestation."
 DESCRIBE.GIANT_TREE_INFESTED =
 "That seems to be where the buggers are comin' from."
 DESCRIBE.GIANT_BLUEBERRY = "It's packed to the brim with liquid!"
-DESCRIBE.PURPLESTEAMEDHAMS = "It's obviously grilled."
-DESCRIBE.GREENSTEAMEDHAMS = "It's obviously grilled."
 DESCRIBE.BLUEBERRYPANCAKES = "It was messy, but it was worth it."
 DESCRIBE.DEVILSFRUITCAKE = "That's a sturdy cake right there."
 DESCRIBE.SIMPSALAD = "It's just some roughage."

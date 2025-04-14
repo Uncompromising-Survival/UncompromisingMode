@@ -103,6 +103,10 @@ local function onpickedfn(inst, picker)
 		inst.BrushingTest:Cancel()
 		inst.BrushingTest = nil
 	end
+	if picker.components.combat ~= nil and not (picker.components.inventory ~= nil and picker.components.inventory:EquipHasTag("bramble_resistant")) then
+		picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
+		picker:PushEvent("thorns")
+	end
     inst.SoundEmitter:PlaySound("dontstarve/wilson/pickup_reeds")
     inst.AnimState:PlayAnimation("pick")
 	
@@ -119,10 +123,15 @@ local function onpickedfn(inst, picker)
 end
 
 local function OutOfTheWoodsYet(target)
-	if not FindEntity(target,1.75,nil,{"briar_plants"}) then
+	local the_bush = FindEntity(target,1.75,nil,{"briar_plants"})
+	if not the_bush then
 		target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
 		target.thicketcheck:Cancel()
 		target.thicketcheck = nil
+	elseif target.components.combat ~= nil and not (target.components.inventory ~= nil and target.components.inventory:EquipHasTag("bramble_resistant")) and math.random() < 0.05 and not target.thorns_cooldown then
+		target.thorns_cooldown = target:DoTaskInTime(1,function(target) target.thorns_cooldown = nil end) -- can't get repeatedly pricked
+		target.components.combat:GetAttacked(the_bush, TUNING.CACTUS_DAMAGE)
+		target:PushEvent("thorns")	
 	end
 end
 
@@ -130,7 +139,7 @@ end
 
 local function CheckToSeeIfTargetsMoving(inst)
 	for i,v in ipairs(inst.playertracking) do
-		if inst:GetDistanceSqToInst(v) <= 1.5^2 then	
+		if v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5^2 then	
 			if v.sg:HasStateTag("moving") and inst.busyanimation == false then
 				inst.AnimState:PlayAnimation("bounce",false)
 				inst.busyanimation = true

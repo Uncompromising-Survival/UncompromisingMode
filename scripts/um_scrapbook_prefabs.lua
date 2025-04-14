@@ -62,7 +62,6 @@ local PREFABS =
     ["hat_skullmask"] = true,
     ["stuffed_peeper_poppers"] = true,
     ["mastupgrade_windturbine"] = true,
-    ["greensteamedhams"] = true,
     ["screecher_trinket"] = true,
     ["slingshotammo_obsidian"] = true,
     ["monstersmallmeat"] = true,

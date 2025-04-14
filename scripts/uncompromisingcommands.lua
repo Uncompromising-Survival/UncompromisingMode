@@ -281,8 +281,6 @@ local uncompfoods = {
     "stuffed_peeper_poppers",
     "theatercorn",
     "um_deviled_eggs",
-    "purplesteamedhams",
-    "greensteamedhams",
     "viperjam",
     "zaspberryparfait",
 }

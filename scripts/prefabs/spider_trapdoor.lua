@@ -483,8 +483,8 @@ local function create_trapdoor()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst:AddTag("tauntless")
-    inst.components.health:SetMaxHealth(250)
+	--inst:AddTag("tauntless")
+    inst.components.health:SetMaxHealth(200)
 
     inst.components.combat:SetDefaultDamage(33)
     inst.components.combat:SetAttackPeriod(TUNING.SPIDER_WARRIOR_ATTACK_PERIOD + math.random() * 2)

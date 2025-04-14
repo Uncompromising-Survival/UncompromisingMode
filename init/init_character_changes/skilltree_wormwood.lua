@@ -193,7 +193,7 @@ local skills =
 	},
 
 	wormwood_allegiance_lunar_plant_gear_1 = {
-		title = SKILLTREESTRINGS.LUNAR_GEAR_1_TITLE,
+		title = SKILLTREESTRINGS.LUNAR_GEAR_1_TITLE, --"Lunar Guardian I": Armors worn by Wormwood will have reduced durability loss while bloomed, number up to interpretation. (By Thaumoking)
 		desc = SKILLTREESTRINGS.LUNAR_GEAR_1_DESC,
 		icon = "wormwood_allegiance_lunar_plant_gear_1",
 		pos = {UI_RIGHT - 3.5, UI_TOP + 25},
@@ -228,7 +228,7 @@ local skills =
 			"wormwood_allegiance_lunar_plant_gear_2",
 		},
 	},
-	wormwood_allegiance_lunar_plant_gear_2 = {
+	wormwood_allegiance_lunar_plant_gear_2 = { --"Lunar Guardian II"
 		title = SKILLTREESTRINGS.LUNAR_GEAR_2_TITLE,
 		desc = SKILLTREESTRINGS.LUNAR_GEAR_2_DESC,
 		icon = "wormwood_allegiance_lunar_plant_gear_2",
@@ -306,7 +306,7 @@ local skills =
 		end,
 	},
 	wormwood_blooming_max_upgrade = {
-		title = SKILLTREESTRINGS.BLOOMING_MAX_UPGRADE_TITLE,
+		title = SKILLTREESTRINGS.BLOOMING_MAX_UPGRADE_TITLE, --"Flower Power":  "+30% nutrients gained" applies to all nutrients. (Should be done)
 		desc = SKILLTREESTRINGS.BLOOMING_MAX_UPGRADE_DESC,
 		icon = "wormwood_blooming_speed3",
 		pos = {UI_VERTICAL_MIDDLE + 105 + 100, UI_BOTTOM + 10},

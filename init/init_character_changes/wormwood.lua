@@ -244,5 +244,31 @@ if env.GetModConfigData("wormwood_photosynthesis") then
         inst:ListenForEvent("healthdelta", function(inst)
             skilltreemovespeed(inst)
         end)
+		
+		
+
+		local function OnFertilizedWithCompost(inst, value)
+			if value > 0 and inst.components.health and not inst.components.health:IsDead() then
+				local healing = TUNING.WORMWOOD_COMPOST_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_COMPOST_HEAL_VALUES[1]
+				if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
+					healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
+				end
+				
+				inst:AddDebuff("compostheal_buff", "compostheal_buff", {duration = healing * (TUNING.WORMWOOD_COMPOST_HEALOVERTIME_TICK/TUNING.WORMWOOD_COMPOST_HEALOVERTIME_HEALTH)})
+			end
+		end
+		inst.OnFertilizedWithCompost = OnFertilizedWithCompost
+		
+		local function OnFertilizedWithManure(inst, value, src)
+			if value > 0 and inst.components.bloomness then
+				local healing = TUNING.WORMWOOD_MANURE_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_MANURE_HEAL_VALUES[1]
+				if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
+					healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
+				end				
+				inst.components.health:DoDelta(healing, false, src.prefab)
+			end
+		end
+		inst.OnFertilizedWithManure = OnFertilizedWithManure
+		
     end)
 end

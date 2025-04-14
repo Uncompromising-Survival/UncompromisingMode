@@ -490,6 +490,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end
 		return 0
 	end
+	
 	local function SpawnWovenShadow(inst, upgrade_performer, obj)
 		
 		local mod2 = (inst.prefab == "horrorfuel" and 0.2) or 0
@@ -583,7 +584,6 @@ if TUNING.DSTU.WORTOXCHANGES then
 		
 		shadow:RemoveComponent("sanityaura")
 	end
-
 	--------------------------------------------
 	--[ Make Nightmarefuel "Upgradeable" ] -----
 	--------------------------------------------
@@ -803,7 +803,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 			inst._item = nil
 			inst.components.inventory:DropEverything()
 			inst.components.trader.enabled = true
-			inst.AnimState:SetMultColour(1,1,1,1)
+			inst.AnimState:SetMultColour(1,1,1,0.6)
 		end
 		inst._item.AnimState:SetHaunted(true)		
 	end
@@ -819,9 +819,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 		inst.Transform:SetPosition(x,y+0.5/FRAMES,z)	
 	end
 	
-	local function GestaltGotItem(inst, giver, item, count)
+	local function GestaltGotItem(inst, giver, item, count, name)
 		inst.components.trader.enabled = false
-        local item = string.lower(item.prefab) ~= nil and string.lower(item.prefab)
+        local item = string.lower(item.prefab) ~= nil and string.lower(item.prefab) or name ~= nil and name
 		
         inst._item = GLOBAL.SpawnPrefab(item)
         if inst._item ~= nil then
@@ -832,6 +832,15 @@ if TUNING.DSTU.WORTOXCHANGES then
 			if inst._item.components.edible then
 				 inst._item:RemoveComponent("edible")
 			end
+			if inst._item.components.perishable then
+				inst._item:RemoveComponent("perishable")
+			end
+			if inst._item.components.health then
+				inst._item:RemoveComponent("health")
+			end		
+			if inst._item.brain then
+				inst._item.brain:Stop()
+			end	
 			--inst._item.floating = inst._item:DoPeriodicTask(FRAMES,Floattask)
 			inst:DoTaskInTime(0,function(inst)
 				inst.AnimState:PlayAnimation("infest")
@@ -842,14 +851,14 @@ if TUNING.DSTU.WORTOXCHANGES then
 		end		
 	end
 	
-	local function SpawnGestalt(inst, upgrade_performer, obj)
-		if inst.components.stackable then
+	local function SpawnGestalt(inst, upgrade_performer, obj,time_left,inventory)
+		if inst and inst.components.stackable then
 			inst.components.stackable:Get(1):Remove()
 			inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
 			inst:AddComponent("upgradeable")
 			inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_LUNAR
 			inst.components.upgradeable.onupgradefn = SpawnGestalt		
-		else
+		elseif inst then
 			inst:Remove()
 		end
 		
@@ -874,10 +883,12 @@ if TUNING.DSTU.WORTOXCHANGES then
 		gestalt:AddComponent("follower")
 		upgrade_performer.components.leader:AddFollower(gestalt)
 		
-
-		gestalt.die_off = gestalt:DoTaskInTime(60*8*2,function(gestalt) 
+		gestalt:AddComponent("timer")
+		gestalt.components.timer:StartTimer("despawn",time_left ~= nil and time_left or 60*8*2)
+		gestalt:ListenForEvent("timerdone",function(gestalt)
 			DeleteBackItem(gestalt)
-			gestalt:Remove()
+			gestalt:Remove()	
+		
 		end)
 
 		--shadow.persists = false
@@ -895,13 +906,20 @@ if TUNING.DSTU.WORTOXCHANGES then
 		gestalt.wortox = upgrade_performer
 		gestalt:AddComponent("trader")
 		gestalt:AddComponent("inventory")
+		if inventory then
+			gestalt.components.inventory = inventory
+			local item = gestalt.components.inventory:GetItemInSlot(1)
+			if item then
+				GestaltGotItem(gestalt, nil, item)
+			end
+		end
 		gestalt.components.trader.enabled = true
 		gestalt.components.trader.test = function(inst, item, giver, count) return giver == gestalt.wortox end
 		gestalt.components.trader.onaccept = GestaltGotItem
 		gestalt.components.trader:SetAcceptStacks()
 		gestalt.components.trader.deleteitemonaccept = false
 		gestalt:RemoveComponent("sanityaura")	
-		
+		--gestalt.persists = false
 		gestalt.sg:GoToState("spawn")
 	end
 	
@@ -1045,8 +1063,18 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	
 	local function SpecialSteal(inst,target)
-		if not target.wortox_stolen then
-			target.wortox_stolen = true
+		if (not target:HasTag("epic") and not target.wortox_stolen) or (target:HasTag("epic") and not inst.components.timer:TimerExists(target.prefab.."_stolen")) then
+			if target:HasTag("epic") then
+				inst.components.timer:StartTimer(target.prefab.."_stolen",60*8*10)
+			else
+				target.wortox_stolen = true
+			end
+			
+			-- FX
+			local fx = SpawnPrefab("abigail_gestalt_hit_fx")
+			fx.Transform:SetPosition(target.Transform:GetWorldPosition())
+			fx.Transform:SetScale(0.75,0.75,0.75)		
+			
 			local item
 			local count
 			local bonus
@@ -1191,6 +1219,126 @@ if TUNING.DSTU.WORTOXCHANGES then
 	modimport("init/init_character_changes/skilltree_wortox") -- Import New Wortox Tree
 
 
+	--------------------------------------------------------------------------------------------------------------------------------
+	-- [ Wortox Remembers His Minions ] ---------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------
+
+	-- local function SaveLunarAllies(inst)
+		-- local gestalts = inst.components.leader:GetFollowersByTag("brightmare")
+		-- if gestalts then
+			-- local saved_gestalts
+			-- for i,v in ipairs(gestalts) do
+				-- saved_gestalts[i].inventory = v.components.inventory
+				-- saved_gestalts[i].time_left = v.components.timer:GetTimeLeft("despawn")
+			-- end
+			-- return saved_gestalts
+		-- end
+	-- end
+
+	-- local function LoadLunarAllies(inst,crechures)
+		-- for i,v in ipairs(crechures) do
+			-- SpawnGestalt(nil, inst, obj,v.time_left,v.inventory)
+		-- end
+	-- end
+	
+	
+	
+	
+	-- local function KeepShadowsAndGestalts(inst)
+		-- if not GLOBAL.TheWorld.ismastersim then
+			-- return
+		-- end
+		-- inst.follower_table = {}
+
+		-- local old_OnDespawn = inst.OnDespawn
+		-- inst.OnDespawn = function(inst, migrationdata, ...)
+			-- for k, v in pairs(inst.components.leader.followers) do
+				-- if k:HasTag("gestalt") or k:HasTag("shadow") then
+					-- local savedata = k:GetSaveRecord()
+					-- table.insert(inst.follower_table, savedata)
+					-- k:AddTag("notarget")
+					-- k:AddTag("NOCLICK")
+					-- k.persists = false
+					-- if k.components.health then
+						-- k.components.health:SetInvincible(true)
+					-- end
+					-- k:DoTaskInTime(math.random()*0.2, function(k)
+						-- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
+						-- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
+						-- if not k.components.colourtweener then
+							-- k:AddComponent("colourtweener")
+						-- end
+						-- k.components.colourtweener:StartTween({ 0, 0, 0, 1 }, 13 * GLOBAL.FRAMES, k.Remove)
+					-- end)
+				-- end
+			-- end
+			-- return old_OnDespawn(inst, migrationdata, ...)
+		-- end
+
+		-- local old_OnSave = inst.OnSave
+		-- inst.OnSave = function(inst, data, ...)
+			-- print("saving")
+			-- if not data.follower_table then
+				-- for k, v in pairs(inst.components.leader.followers) do
+					-- if k:HasTag("gestalt") or k:HasTag("shadow") then
+						-- print("saving shadow")
+						-- local savedata = k:GetSaveRecord()
+						-- table.insert(inst.follower_table, savedata)
+						-- k:AddTag("notarget")
+						-- k:AddTag("NOCLICK")
+						-- if k.components.health then
+							-- k.components.health:SetInvincible(true)
+						-- end
+						-- k:DoTaskInTime(math.random()*0.2, function(k)
+							-- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
+							-- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
+							-- if not k.components.colourtweener then
+								-- k:AddComponent("colourtweener")
+							-- end
+							-- k.components.colourtweener:StartTween({ 0, 0, 0, 1 }, 13 * GLOBAL.FRAMES)--, k.Remove)
+						-- end)
+					-- end
+				-- end
+			-- else
+				-- data.follower_table = inst.follower_table
+			-- end
+			-- if old_OnSave ~= nil then
+				-- return old_OnSave(inst, data, ...)
+			-- end
+		-- end
+
+		-- local old_OnLoad = inst.OnLoad
+		-- inst.OnLoad = function(inst, data, ...)
+			-- print("loading")
+			-- if data and data.follower_table then
+				-- for k, v in pairs(data.follower_table) do
+					-- print("loading shadow")
+					-- inst:DoTaskInTime(0.1, function(inst)
+						-- local follower = GLOBAL.SpawnSaveRecord(v)
+						-- inst.components.leader:AddFollower(follower)
+						-- follower:DoTaskInTime(0, function(follower)
+							-- local x, y, z = inst.Transform:GetWorldPosition()
+							-- if inst:IsValid() and not follower:IsNear(inst, 10) then
+								-- follower.Transform:SetPosition(x+math.random(-5, 5), y, z+math.random(-5, 5))
+								-- follower.sg:GoToState("idle")
+							-- end
+
+							-- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
+							-- fx.Transform:SetPosition(follower.Transform:GetWorldPosition())
+						-- end)
+					-- end)
+				-- end
+			-- end
+			-- if old_OnLoad ~= nil then
+				-- return old_OnLoad(inst, data, ...)
+			-- end
+		-- end
+	-- end	
+
+	
+	
+	--AddPrefabPostInit("wortox", KeepShadowsAndGestalts)
+	
 end
 
 
@@ -1202,7 +1350,8 @@ AddPrefabPostInit("wortox", function(inst)
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Give Wortox devil food cake affinity ] ------------------------------------------------------------------------------------
 	--------------------------------------------------------------------------------------------------------------------------------
-	
+
+			
 	if inst.components.foodaffinity ~= nil then
 		inst.components.foodaffinity:AddPrefabAffinity("devilsfruitcake", 1.24)
 	end

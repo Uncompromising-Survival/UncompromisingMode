@@ -140,7 +140,7 @@ end
 local function OnHitOther(inst, data)
 	local other = data.target
 	if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < 0.5) then -- these guys get KO-ed
-		if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
+		if not inst.components.health:IsDead() and not inst.sg:HasStateTag("ability") then
 
 			inst.components.health:DoDelta(50)
 			if other.prefab == "spider_trapdoor" then

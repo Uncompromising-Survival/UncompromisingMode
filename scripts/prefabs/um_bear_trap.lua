@@ -4,7 +4,9 @@ local function onfinished_normal(inst)
     if inst.components.finiteuses ~= nil then
         inst.components.finiteuses:Use(1)
     end
-
+	if inst.components.health then
+		inst:RemoveComponent("health")
+	end
     if inst.components.finiteuses ~= nil and
         inst.components.finiteuses:GetUses() > 0 and inst.traptype ~= nil then
         local trapprefab = SpawnPrefab("um_bear_trap_equippable_" ..

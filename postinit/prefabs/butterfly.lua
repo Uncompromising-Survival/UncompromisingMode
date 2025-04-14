@@ -30,29 +30,23 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 	end
 	
 	local function ByStimuli(stimuli)
-		return stimuli and (stimuli == "soul")
+		return stimuli and (stimuli == "soul" or stimuli == "projectile")
 	end
 	
 	local function SlipAway(inst,data)
 		local statename = inst.sg.currentstate.name
-		--TheNet:Announce(statename)
 
-		if data.stimuli then
-			--TheNet:Announce(data.stimuli)
-		end
+
 		local weapon = data.attacker.components.combat:GetWeapon() or nil
-		if weapon then
-			--TheNet:Announce(weapon.prefab)
-		end
-		--TheNet:Announce(data.attacker.prefab)
 		if data and data.attacker and (not SittingStill(statename) and not ByPassWeapon(weapon) and not ByStimuli(data.stimuli)) then -- Can only attack when idle
-			if not (weapon and weapon.prefab == "icestaff") then -- ice staff doesn't kill but doesn't slip either
-				inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-				if inst.components.health then
-					inst.components.health:SetPercent(1)
-				end
-				
-				Slippy(data.attacker,inst)
+			inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+			if inst.components.health then
+				inst.components.health:SetPercent(1)
+			end
+			
+			Slippy(data.attacker,inst)
+			if data.attacker.components.talker then
+				data.attacker.components.talker:Say(GetString(data.attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
 			end
 		else --  any other condition needs to instantly kill the butterfly, feigning having 1 health
 			inst.components.health:Kill()
@@ -77,21 +71,21 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 			if statename == "pollinate" or statename == "land_idle" and not inst.takeoff then
 				inst.takeoff = 	inst:DoTaskInTime(1,function(inst)
 					local statename = inst.sg.currentstate.name
-					if statename == "pollinate" or statename == "land_idle" then
+					if statename == "pollinate" or statename == "land_idle" and TheWorld.state.isday then
 						inst.sg:GoToState("takeoff")
 					end
 					inst.takeoff = nil				
 				end)
-			elseif inst.bufferedaction then
+			elseif inst.bufferedaction and TheWorld.state.isday then
 				inst.bufferedaction = nil
-			elseif statename == "idle" and mindist < 4 then --uhoh getting close! 
+			elseif statename == "idle" and mindist < 4 and TheWorld.state.isday then --uhoh getting close! 
 				inst.sg:GoToState("moving")
 			else
 				local speed = 6
 				speed = 12 - mindist 
 				
-				if speed > 10 then -- clamp the speed at some maximum value
-					speed = 10
+				if speed > 8 then -- clamp the speed at some maximum value
+					speed = 8
 				end
 				inst.components.locomotor.runspeed = speed
 				inst.components.locomotor.walkspeed = speed
@@ -130,4 +124,64 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 		
 		inst:DoPeriodicTask(2,CheckForNearbyBozos)
 	end)
+
+	local ranged = {"blowdart_sleep","blowdart_fire","blowdart_pipe","blowdart_yellow","um_blowdart_rime","um_blowdart_pyre","boomerang"}
+	for i,v in ipairs(ranged) do
+		env.AddPrefabPostInit(v, function(inst)
+
+			if not TheWorld.ismastersim then
+				return
+			end
+			inst.components.projectile.stimuli = "projectile"
+		end)
+	end
+
+
+	local function ReEnableButterfly(inst)
+		if inst.spawned_butterfly then
+			inst.spawned_butterfly = nil
+		end
+	end
+	
+	local flower_types = {"flower","flower_evil"}
+	for i,v in ipairs(flower_types) do
+		env.AddPrefabPostInit(v, function(inst)
+			if not TheWorld.ismastersim then
+				return
+			end
+			inst:WatchWorldState("isday",ReEnableButterfly)
+		end)
+	end
+
+	local FLOWER_TAGS = { "flower" }
+	local BUTTERFLY_TAGS = { "butterfly" }
+	
+	local function GetSpawnPoint(player)
+		local rad = 25
+		local mindistance = 36
+		local x, y, z = player.Transform:GetWorldPosition()
+		local flowers = TheSim:FindEntities(x, y, z, rad, FLOWER_TAGS)
+
+		for i, v in ipairs(flowers) do
+			while v ~= nil and player:GetDistanceSqToInst(v) <= mindistance or (v ~= nil and v.spawned_butterfly) do
+				table.remove(flowers, i)
+				v = flowers[i]
+			end
+		end
+		
+		local chosen_flower
+		if next(flowers) then
+			chosen_flower = flowers[math.random(1, #flowers)]
+			chosen_flower.spawned_butterfly = true
+			
+		end
+		return chosen_flower ~= nil and chosen_flower or nil
+	end
+
+	local UpvalueHacker = require("tools/upvaluehacker")
+	env.AddComponentPostInit("butterflyspawner", function(cmp)
+		local _GetSpawnPoint, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(cmp.OnPostInit, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
+
+		debug.setupvalue(scope_fn, _fn_i,GetSpawnPoint)
+	end)	
 end

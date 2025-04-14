@@ -11,7 +11,7 @@ local function OnLand(inst)
 			table.insert(worm_friends,v)
 		end
 	end
-	if inst.max_worms > #worm_friends then
+	if (inst.max_worms and inst.max_worms > #worm_friends) or not inst:HasTag("friendly") then
 		local worm = SpawnPrefab("viperling")
 		if inst:HasTag("friendly") then
 			worm = SpawnPrefab("viperlingfriend")
