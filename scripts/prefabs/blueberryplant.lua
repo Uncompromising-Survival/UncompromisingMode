@@ -39,6 +39,18 @@ local function on_deactivate(inst)
     end
 end
 
+local function OnPickedFn(inst,picker)
+	if not inst.components.mine.issprung then
+		inst.components.mine:Explode()
+	end
+	
+	on_deactivate(inst)
+	inst.AnimState:PlayAnimation("dig")
+	inst.AnimState:PushAnimation("spawn")
+	inst.AnimState:PushAnimation("trap_idle")
+	inst.components.workable:SetWorkable(true)
+end
+
 local function on_blueberry_dug_up(inst, digger)
 	if digger:HasTag("player") then
 		if inst.harvestable == "full" then
@@ -331,6 +343,14 @@ local function blueberryplant()
 
     inst:AddComponent("lootdropper")
 
+
+    -- inst:AddComponent("pickable")
+    -- inst.components.pickable:SetUp(nil, 0)
+    -- inst.components.pickable.onpickedfn = OnPickedFn
+    -- inst.components.pickable.max_cycles  = TUNING.JUNK_PILE_STAGES
+    -- inst.components.pickable.cycles_left = TUNING.JUNK_PILE_STAGES
+    -- inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
+	
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)

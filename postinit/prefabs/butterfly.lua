@@ -26,7 +26,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 	end
 	
 	local function ByPassWeapon(weapon)
-		return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("rangedweapon") or weapon:HasTag("projectile")) and not weapon.prefab == "icestaff"
+		return weapon and (weapon.prefab == "bugzapper")
 	end
 	
 	local function ByStimuli(stimuli)
@@ -36,8 +36,11 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 	local function SlipAway(inst,data)
 		local statename = inst.sg.currentstate.name
 
-
-		local weapon = data.attacker.components.combat:GetWeapon() or nil
+		
+		local weapon = data.attacker.components.combat and data.attacker.components.combat:GetWeapon() or nil
+		if weapon then
+			TheNet:Announce(weapon.prefab)
+		end
 		if data and data.attacker and (not SittingStill(statename) and not ByPassWeapon(weapon) and not ByStimuli(data.stimuli)) then -- Can only attack when idle
 			inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
 			if inst.components.health then

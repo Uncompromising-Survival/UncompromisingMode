@@ -1071,7 +1071,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 			end
 			
 			-- FX
-			local fx = SpawnPrefab("abigail_gestalt_hit_fx")
+			local fx = GLOBAL.SpawnPrefab("abigail_gestalt_hit_fx")
 			fx.Transform:SetPosition(target.Transform:GetWorldPosition())
 			fx.Transform:SetScale(0.75,0.75,0.75)		
 			
