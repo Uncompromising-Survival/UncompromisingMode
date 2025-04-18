@@ -16,6 +16,7 @@ RemapSoundEvent("dontstarve/characters/winky/sinking", "winky/characters/winky/s
 --PLEASE keep atlas names and image names the same so we can continue to do this like this.
 local inventoryitems =
 {
+	"um_buttery_fly",
     "um_ghost_pepper_item",
     "air_conditioner",
     "ancient_amulet_red",
@@ -1098,7 +1099,9 @@ Assets = {
     Asset("ANIM", "anim/ds_pig_uppercut.zip"),
 
     Asset("ANIM", "anim/lazy_chester.zip"),
-
+	
+	Asset("ANIM", "anim/um_buttery_fly.zip"),
+	 
     Asset("ANIM", "anim/hound_jump_attack.zip"),
 
     Asset("ANIM", "anim/krampus_bag_smack.zip"),
@@ -1919,6 +1922,8 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/corvushat.xml"),
     Asset("ATLAS", "images/inventoryimages/corvushat.xml"),
 
+    Asset("IMAGE", "images/inventoryimages/um_buttery_fly.tex"),
+    Asset("ATLAS", "images/inventoryimages/um_buttery_fly.xml"),
     Asset("IMAGE", "images/inventoryimages/viperfruit.tex"),
     Asset("ATLAS", "images/inventoryimages/viperfruit.xml"),
     Asset("IMAGE", "images/inventoryimages/viperfruit_lesser.tex"),
@@ -2770,6 +2775,18 @@ RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_we
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
+
+if BuildSkillsData then
+    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    local data = BuildSkillsData(skilltree_defs.FN)
+    for k, v in pairs(data.SKILLS) do
+        if v.icon then
+            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        end
+    end
+end
+
+local BuildSkillsData = require("prefabs/skilltree_wathom")
 
 if BuildSkillsData then
     RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")

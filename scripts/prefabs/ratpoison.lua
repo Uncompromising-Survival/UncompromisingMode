@@ -44,9 +44,9 @@ local function OnLoad(inst,data)
 	end
 end
 
-local function OnPicked(inst)
-	inst:Remove()
-end
+-- local function OnPicked(inst)
+	-- inst:Remove()
+-- end
 	
 local function fn()
     local inst = CreateEntity()
@@ -67,24 +67,28 @@ local function fn()
 	inst.entity:SetPristine()
 
 	inst:AddTag("NORATCHECK")
-	
+	inst:AddTag("_named")
 	if not TheWorld.ismastersim then 
 		return inst
 	end
+	inst:AddTag("um_washable_goo")
+	inst:AddComponent("witherable")
+	inst.components.witherable:ForceWither() -- Back way to get fire detectors to target the goo as well as watering cans...
 	
 	inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.VEGGIE --Horrible is generally unedible
-	inst.components.edible.healthvalue = -15
+	inst.components.edible.healthvalue = -60
 	inst.components.edible:SetOnEatenFn(oneaten)
 	
 	inst:AddComponent("bait")
-	
+	inst:AddComponent("named")
+	inst.components.named:SetName("Poisonous Jam")
 	inst:AddComponent("inspectable")
 	
-    inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem:SetOnPutInInventoryFn(OnPicked)
-	inst.components.inventoryitem:SetOnPickupFn(OnPicked)
-	inst.components.inventoryitem.cangoincontainer = false
+    -- inst:AddComponent("inventoryitem")
+	-- inst.components.inventoryitem:SetOnPutInInventoryFn(OnPicked)
+	-- inst.components.inventoryitem:SetOnPickupFn(OnPicked)
+	-- inst.components.inventoryitem.cangoincontainer = false
 	
 	inst:AddComponent("perishable")
 	inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)

@@ -38,9 +38,9 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
 		
 		local weapon = data.attacker.components.combat and data.attacker.components.combat:GetWeapon() or nil
-		if weapon then
-			TheNet:Announce(weapon.prefab)
-		end
+		-- if weapon then
+			-- TheNet:Announce(weapon.prefab)
+		-- end
 		if data and data.attacker and (not SittingStill(statename) and not ByPassWeapon(weapon) and not ByStimuli(data.stimuli)) then -- Can only attack when idle
 			inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
 			if inst.components.health then
@@ -110,9 +110,21 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 			inst.active_monitoring = nil
 		end
 	end
+	
+	
+	local function MakeButtery(inst)
+		inst.AnimState:SetBuild("um_buttery_fly")
+		inst:AddComponent("named")
+		inst.components.named:SetName("Buttery Fly")
+		inst.components.lootdropper:SetLoot({"butter"})
+		inst:RemoveComponent("stackable")
+		inst.components.inventoryitem.atlasname = "images/inventoryimages/um_buttery_fly.xml"
+		inst.components.inventoryitem:ChangeImageName("um_buttery_fly")
+	end
+	
 
 	env.AddPrefabPostInit("butterfly", function(inst)
-
+		inst:AddTag("_named")
 		if not TheWorld.ismastersim then
 			return
 		end
@@ -126,6 +138,40 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 		inst:AddComponent("playerprox")
 		
 		inst:DoPeriodicTask(2,CheckForNearbyBozos)
+		
+		
+		
+		inst.OnSave = function(inst,data)
+			if inst.buttery then
+				data.buttery = inst.buttery
+			end
+		end
+		inst.OnLoad = function(inst,data)
+			if data.buttery then
+				inst.buttery = data.buttery
+			end
+			if inst.buttery then
+				MakeButtery(inst)
+			else
+				inst.components.lootdropper:SetLoot({"butterflywings"})
+			end
+			return data
+		end
+		inst:DoTaskInTime(0,function(inst)
+			if not inst.buttery then
+				inst.buttery = math.random(1,100)
+				if inst.buttery >= 98 then
+					MakeButtery(inst)
+				else
+					inst.components.lootdropper:SetLoot({"butterflywings"})
+				end
+			elseif inst.buttery >= 98 then
+				MakeButtery(inst)
+			else
+				inst.components.lootdropper:SetLoot({"butterflywings"})
+			end
+		end)
+		
 	end)
 
 	local ranged = {"blowdart_sleep","blowdart_fire","blowdart_pipe","blowdart_yellow","um_blowdart_rime","um_blowdart_pyre","boomerang"}

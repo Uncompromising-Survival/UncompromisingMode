@@ -337,7 +337,8 @@ local function fngoo()
     inst.SetVariation = SetVariation
 	inst:AddComponent("witherable")
 	inst.components.witherable:ForceWither() -- Back way to get fire detectors to target the goo as well as watering cans...
-	
+	inst:AddComponent("named")
+	inst.components.named:SetName("Poison Jam")	
     inst.persists = false
     inst.task = inst:DoTaskInTime(0, inst.Remove)
 	inst.OnStartFade = OnStartFade

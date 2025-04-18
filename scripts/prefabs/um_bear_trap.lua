@@ -1,89 +1,80 @@
 require "prefabutil"
 
 local function onfinished_normal(inst)
-    if inst.components.finiteuses ~= nil then
+    if inst.components.finiteuses then
         inst.components.finiteuses:Use(1)
+        if inst.components.finiteuses:GetUses() > 0 and inst.traptype then
+            local trapprefab = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype)
+            if trapprefab then
+                local pos = inst.latchedtarget ~= nil and inst.latchedtarget:IsValid() and inst.latchedtarget or inst
+                trapprefab.Transform:SetPosition(pos.Transform:GetWorldPosition())
+                trapprefab.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+                trapprefab.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
+                trapprefab.AnimState:PlayAnimation("hit")
+            end
+            inst:Remove()
+            return
+        end
     end
-	if inst.components.health then
-		inst:RemoveComponent("health")
-	end
-    if inst.components.finiteuses ~= nil and
-        inst.components.finiteuses:GetUses() > 0 and inst.traptype ~= nil then
-        local trapprefab = SpawnPrefab("um_bear_trap_equippable_" ..
-            inst.traptype)
 
-        if inst.latchedtarget ~= nil then
-            trapprefab.Transform:SetPosition(
-                inst.latchedtarget.Transform:GetWorldPosition())
-            trapprefab.components.finiteuses:SetUses(
-                inst.components.finiteuses:GetUses())
-            trapprefab.SoundEmitter:PlaySound(
-                "dontstarve/impacts/impact_metal_armour_dull")
-            trapprefab.AnimState:PlayAnimation("hit")
+    for _, tag in pairs({"notarget", "noattack"}) do
+        inst:AddTag(tag)
+    end
 
-            inst:Remove()
-        else
-            trapprefab.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            trapprefab.components.finiteuses:SetUses(
-                inst.components.finiteuses:GetUses())
-            trapprefab.SoundEmitter:PlaySound(
-                "dontstarve/impacts/impact_metal_armour_dull")
-            trapprefab.AnimState:PlayAnimation("hit")
+    if inst.DynamicShadow then
+        inst.DynamicShadow:Enable(false)
+    end
 
-            inst:Remove()
-        end
-    else
-        if inst.DynamicShadow ~= nil then
-            inst.DynamicShadow:Enable(false)
-        end
-
-        if inst.deathtask ~= nil then inst.deathtask:Cancel() end
+    if inst.deathtask then
+        inst.deathtask:Cancel()
         inst.deathtask = nil
-        inst:RemoveComponent("inventoryitem")
-        inst:RemoveComponent("mine")
-        inst:RemoveComponent("combat")
+    end
 
-        inst:AddTag("NOCLICK")
+    inst:RemoveComponent("inventoryitem")
+    inst:RemoveComponent("mine")
 
-        inst.persists = false
-        inst.Physics:SetActive(false)
+    inst:AddTag("NOCLICK")
 
-        if not inst.Snapped then
-            inst.AnimState:PlayAnimation("activate")
-            inst.AnimState:PushAnimation("death", false)
-        else
-            inst.AnimState:PushAnimation("death", false)
-        end
+    inst.persists = false
+    inst.Physics:SetActive(false)
 
-        inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
-        inst:DoTaskInTime(3, inst.Remove)
+    if not (inst.Snapped or inst.AnimState:IsCurrentAnimation("hit")) then
+        inst.AnimState:PlayAnimation("activate")
+    end
+    inst.AnimState:PushAnimation("death", false)
 
-        if inst.latchedtarget ~= nil then
-            local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
-            if inst.latchedtarget.components.locomotor ~= nil then
-                inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(
-                    inst.latchedtarget, "um_bear_trap")
+    inst.SoundEmitter:PlaySound("dontstarve/common/destroy_stone")
+    inst:DoTaskInTime(3, inst.Remove)
+
+    if inst.latchedtarget and inst.latchedtarget:IsValid() then
+        local pos = Vector3(inst.latchedtarget.Transform:GetWorldPosition())
+        if inst.latchedtarget.components.locomotor then
+            inst.latchedtarget.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, inst.prefab)
+            if inst.latchedtarget._bear_trap_speedmulttask then
+                inst.latchedtarget._bear_trap_speedmulttask:Cancel()
                 inst.latchedtarget._bear_trap_speedmulttask = nil
             end
-            inst.latchedtarget:RemoveChild(inst)
-            inst.Physics:Teleport(pos.x, pos.y, pos.z)
         end
+        inst.latchedtarget:RemoveChild(inst)
+        inst.Physics:Teleport(pos.x, pos.y, pos.z)
     end
 end
 
 local function debuffremoval(inst)
-    if inst.latchedtarget ~= nil and inst.components.locomotor ~= nil then
-        inst.components.locomotor:RemoveExternalSpeedMultiplier(
-            inst.latchedtarget, "um_bear_trap")
-        inst._bear_trap_speedmulttask = nil
+    if inst.latchedtarget and inst.components.locomotor then
+        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, "um_bear_trap")
+        if inst._bear_trap_speedmulttask then
+            inst._bear_trap_speedmulttask:Cancel()
+            inst._bear_trap_speedmulttask = nil
+        end
     end
 end
 
 local function OnExplode(inst, target)
-    if target == nil then
+    if not target or not target:IsValid() then
         onfinished_normal(inst)
     else
-        if inst.deathtask == nil then
+        if not inst.deathtask then
             inst.deathtask = inst:DoTaskInTime(30, onfinished_normal)
         end
 
@@ -92,84 +83,51 @@ local function OnExplode(inst, target)
         -- inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_sharp")
 
         inst.AnimState:PlayAnimation("activate")
-        if target ~= nil then
-            if target.SoundEmitter ~= nil then
-                target.SoundEmitter:PlaySound(
-                    "dontstarve/common/trap_teeth_trigger")
-            end
+        if target.SoundEmitter then
+            target.SoundEmitter:PlaySound("dontstarve/common/trap_teeth_trigger")
+        end
 
-            if inst.deathtask ~= nil then inst.deathtask:Cancel() end
+        if inst.deathtask then
+            inst.deathtask:Cancel()
             inst.deathtask = nil
+        end
 
-            if inst.traptype == "gold" then
-                if target.components.combat.target ~= nil then
-                    target.components.combat:GetAttacked(target.components
-                        .combat.target,
-                        TUNING.TRAP_TEETH_DAMAGE *
-                        1.5)
-                else
-                    target.components.combat:GetAttacked(inst,
-                        TUNING.TRAP_TEETH_DAMAGE *
-                        1.5)
-                end
-            else
-                if target.components.combat.target ~= nil then
-                    target.components.combat:GetAttacked(target.components
-                        .combat.target,
-                        TUNING.TRAP_TEETH_DAMAGE)
-                else
-                    target.components.combat:GetAttacked(inst,
-                        TUNING.TRAP_TEETH_DAMAGE)
-                end
-            end
+        target.components.combat:GetAttacked(target.components.combat and target.components.combat.target or inst, TUNING.TRAP_TEETH_DAMAGE * (inst.traptype == "gold" and 1.5 or 1))
 
-            inst.latchedtarget = target
+        inst.latchedtarget = target
 
-            inst.AnimState:SetFinalOffset(1)
-            inst.Physics:Teleport(0, 0, 0)
-            target:AddChild(inst)
-            -- inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
+        inst.AnimState:SetFinalOffset(1)
+        inst.Physics:Teleport(0, 0, 0)
+        target:AddChild(inst)
+        -- inst.entity:AddFollower():FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol or "body", 0, --[[-50]]0, 0)
 
-            if target ~= nil and target.components.health:IsDead() then
-                inst.components.health:Kill()
-            else
-                local debuffkey = inst.prefab
+        if target.components.health and target.components.health:IsDead() then
+            inst.components.health:Kill()
+        else
+            local debuffkey = inst.prefab
 
-                inst:ListenForEvent("death", function(player)
-                    onfinished_normal(inst)
-                end, target)
-                inst:ListenForEvent("onremoved", function(player)
-                    onfinished_normal(inst)
-                end, target)
-                if target.components.locomotor ~= nil then
-                    if inst.traptype ~= nil then
-                        target.components.locomotor:SetExternalSpeedMultiplier(
-                            target, debuffkey, 0.5 + 0.15)
-                    else
-                        target.components.locomotor:SetExternalSpeedMultiplier(
-                            target, debuffkey, 0.7)
-                    end
-                    target._bear_trap_speedmulttask =
-                        target:DoTaskInTime(10, function(i)
-                            i.components.locomotor:RemoveExternalSpeedMultiplier(
-                                i, debuffkey)
-                            i._bear_trap_speedmulttask = nil
-                        end)
-
-                    local function RemoveSpeed(inst)
-                        inst.components.locomotor:RemoveExternalSpeedMultiplier(
-                            i, debuffkey)
-                        inst._bear_trap_speedmulttask = nil
-                    end
-
-                    target:ListenForEvent("onremoved", RemoveSpeed, inst)
-                end
-                inst:DoTaskInTime(10, function(inst)
-                    inst.components.health:Kill()
+            inst:ListenForEvent("death", function(player) onfinished_normal(inst) end, target)
+            inst:ListenForEvent("onremoved", function(player) onfinished_normal(inst) end, target)
+            if target.components.locomotor then
+                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.5 + 0.15 or 0.7)
+                target._bear_trap_speedmulttask = target:DoTaskInTime(10, function(i)
+                    i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                    i._bear_trap_speedmulttask = nil
                 end)
 
-                inst.persists = false
+                local function RemoveSpeed(inst)
+                    inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, debuffkey)
+                    if inst._bear_trap_speedmulttask then
+                        inst._bear_trap_speedmulttask:Cancel()
+                        inst._bear_trap_speedmulttask = nil
+                    end
+                end
+
+                target:ListenForEvent("onremoved", RemoveSpeed, inst)
             end
+            inst:DoTaskInTime(10, function(inst) inst.components.health:Kill() end)
+
+            inst.persists = false
         end
 
         inst:RemoveComponent("inventoryitem")
@@ -184,7 +142,7 @@ local function OnReset(inst)
     -- inst:SetPhysicsRadiusOverride(3)
     inst.Physics:CollidesWith(COLLISION.WORLD)
 
-    if inst.components.inventoryitem ~= nil then
+    if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
     end
 
@@ -196,7 +154,7 @@ local function OnReset(inst)
 end
 
 local function SetSprung(inst)
-    if inst.components.inventoryitem ~= nil then
+    if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = true
     end
     if not inst:IsInLimbo() then end
@@ -204,7 +162,7 @@ local function SetSprung(inst)
 end
 
 local function SetInactive(inst)
-    if inst.components.inventoryitem ~= nil then
+    if inst.components.inventoryitem then
         inst.components.inventoryitem.nobounce = false
     end
     inst.AnimState:PlayAnimation("idle")
@@ -223,10 +181,10 @@ local function ondeploy(inst, pt, deployer)
 end
 
 local function OnHaunt(inst, haunter)
-    if inst.components.mine ~= nil and not inst.components.mine.issprung then
+    if inst.components.mine and not inst.components.mine.issprung then
         OnExplode(inst, nil)
         return true
-    elseif inst.components.mine == nil or inst.components.mine.inactive then
+    elseif not inst.components.mine or inst.components.mine.inactive then
         inst.components.hauntable.hauntvalue = TUNING.HAUNT_TINY
         Launch(inst, haunter, TUNING.LAUNCH_SPEED_SMALL)
         return true
@@ -242,41 +200,55 @@ end
 
 
 local function BecomeItem(inst)
-	local jaw = SpawnPrefab("snappy_jaw")
-	jaw.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	--jaw.AnimState:PlayAnimation("become_item",false)
-	jaw.AnimState:PlayAnimation("item",true)
-	inst:Remove()
+    local jaw = SpawnPrefab("snappy_jaw")
+    jaw.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    --jaw.AnimState:PlayAnimation("become_item", false)
+    jaw.AnimState:PlayAnimation("item",true)
+    inst:Remove()
 end
 
 local function AlmostBecomeItem(inst)
-	inst:RemoveComponent("combat")
-	inst:RemoveComponent("health")
-	inst:RemoveComponent("mine")
-	inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
-	inst.AnimState:PlayAnimation("become_item",false)
-	inst:ListenForEvent("animover",BecomeItem)
+    inst.um_dropping_bear_trap = true
+    for _, tag in pairs({"notarget", "noattack"}) do
+        inst:AddTag(tag)
+    end
+    inst:RemoveComponent("mine")
+    inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
+    inst.AnimState:PlayAnimation("become_item", false)
+    inst:ListenForEvent("animover", BecomeItem)
 end
 
 local function OnAttacked(inst, worker)
-    if not inst.components.health:IsDead() then
+    if not (inst.components.health and inst.components.health:IsDead() or inst.um_dropping_bear_trap) then
         if inst.Snapped then
-            inst.SoundEmitter:PlaySound(
-                "dontstarve/impacts/impact_metal_armour_dull")
+            inst.SoundEmitter:PlaySound("dontstarve/impacts/impact_metal_armour_dull")
             inst.AnimState:PlayAnimation("hit")
         else
-			if inst.prefab == "um_bear_trap_old" then
-				AlmostBecomeItem(inst)
-			else
-				OnExplode(inst, nil)
-			end
+            if inst.prefab == "um_bear_trap_old" then
+                AlmostBecomeItem(inst)
+            else
+                OnExplode(inst, nil)
+            end
         end
     end
 end
 
 local function calculate_mine_test_time()
-    return TUNING.STARFISH_TRAP_TIMING.BASE +
-        (math.random() * TUNING.STARFISH_TRAP_TIMING.VARIANCE)
+    return TUNING.STARFISH_TRAP_TIMING.BASE + (math.random() * TUNING.STARFISH_TRAP_TIMING.VARIANCE)
+end
+
+local function CommonMine(inst, alignment, reset)
+    local mine = inst:AddComponent("mine")
+    mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
+    mine:SetAlignment(alignment)
+    mine:SetOnExplodeFn(OnExplode)
+    mine:SetOnResetFn(OnReset)
+    mine:SetOnSprungFn(SetSprung)
+    mine:SetOnDeactivateFn(SetInactive)
+    mine:SetTestTimeFn(calculate_mine_test_time)
+    if reset then
+        mine:Reset()
+    end
 end
 
 local function common_fn()
@@ -327,15 +299,7 @@ local function common_fn()
     -- inst:AddComponent("inventoryitem")
     -- inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
-    inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
-    inst.components.mine:SetAlignment("bear_trap_immune")
-    inst.components.mine:SetOnExplodeFn(OnExplode)
-    inst.components.mine:SetOnResetFn(OnReset)
-    inst.components.mine:SetOnSprungFn(SetSprung)
-    inst.components.mine:SetOnDeactivateFn(SetInactive)
-    inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
-    inst.components.mine:Reset()
+    CommonMine(inst, "bear_trap_immune", true)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
@@ -397,15 +361,7 @@ local function old_fn(build)
     -- inst:AddComponent("inventoryitem")
     -- inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
-    inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
-    inst.components.mine:SetAlignment("bear_trap_immune")
-    inst.components.mine:SetOnExplodeFn(OnExplode)
-    inst.components.mine:SetOnResetFn(OnReset)
-    inst.components.mine:SetOnSprungFn(SetSprung)
-    inst.components.mine:SetOnDeactivateFn(SetInactive)
-    inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
-    inst.components.mine:Reset()
+    CommonMine(inst, "bear_trap_immune", true)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH)
@@ -432,8 +388,7 @@ local function OnHitInk(inst, target)
     inst.trap = SpawnPrefab("um_bear_trap")
     inst.trap.Transform:SetPosition(x, 0, z)
 
-    if inst.components.finiteuses ~= nil and inst.trap.components.finiteuses ~=
-        nil then
+    if inst.components.finiteuses and inst.trap.components.finiteuses then
         inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
     end
 
@@ -445,10 +400,9 @@ local function OnHitTarget(inst, target)
 
     inst.trap = SpawnPrefab("um_bear_trap")
     inst.trap.Transform:SetPosition(x, 0, z)
-    if target ~= nil then inst.trap.components.mine:Explode(target) end
+    if target then inst.trap.components.mine:Explode(target) end
 
-    if inst.components.finiteuses ~= nil and inst.trap.components.finiteuses ~=
-        nil then
+    if inst.components.finiteuses and inst.trap.components.finiteuses then
         inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
     end
 
@@ -457,7 +411,7 @@ end
 
 local function oncollide(inst, other)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if other ~= nil and not other:HasTag("walrus") and not other:HasTag("hound") and
+    if other and not other:HasTag("walrus") and not other:HasTag("hound") and
         other:IsValid() and other:HasTag("_combat") then
         OnHitTarget(inst, other)
     elseif y <= inst:GetPhysicsRadius() + 0.001 then
@@ -612,8 +566,7 @@ local function ghost_walrusfn() -- ghost walrus
         if TheWorld.state.iswinter then
             if not inst.components.timer:TimerExists("spawntrap") and
                 TheWorld.state.iswinter then
-                inst.components.timer:StartTimer("spawntrap",
-                    600 + math.random(0, 300))                              -- ghost walrus leaves bear traps in the player's fridge
+                inst.components.timer:StartTimer("spawntrap", 600 + math.random(0, 300)) -- ghost walrus leaves bear traps in the player's fridge
             end
         end
     end)
@@ -627,7 +580,7 @@ local function OnHitInk(inst, target)
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
-    if inst.components.mine ~= nil then
+    if inst.components.mine then
         local x, y, z = inst.Transform:GetWorldPosition()
 
         MakeInventoryPhysics(inst)
@@ -646,7 +599,7 @@ local function OnHitTarget_player(inst, target)
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
-    if inst.components.mine ~= nil then
+    if inst.components.mine then
         local x, y, z = inst.Transform:GetWorldPosition()
 
         MakeInventoryPhysics(inst)
@@ -656,7 +609,7 @@ local function OnHitTarget_player(inst, target)
         inst.Transform:SetPosition(x, y, z)
         -- inst.trap = SpawnPrefab("um_bear_trap")
         -- inst.trap.Transform:SetPosition(x, 0, z)
-        if target ~= nil then
+        if target then
             -- inst.trap.components.mine:Explode(target)
             inst.components.mine:Explode(target)
         end
@@ -668,7 +621,7 @@ end
 local function oncollide_player(inst, other)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    if other ~= nil and not other:HasTag("player") and
+    if other and not other:HasTag("player") and
         not other:HasTag("notraptrigger") and not other:HasTag("player") and
         not other:HasTag("flying") and not other:HasTag("ghost") and
         not other:HasTag("playerghost") and not other:HasTag("spawnprotection") and
@@ -680,9 +633,7 @@ local function oncollide_player(inst, other)
 end
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object",
-        "swap_um_beartrap_" .. inst.traptype,
-        "swap_um_beartrap")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_um_beartrap_" .. inst.traptype, "swap_um_beartrap")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -779,14 +730,7 @@ local function equiptoothfn()
 
     inst:AddComponent("locomotor")
 
-    inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
-    inst.components.mine:SetAlignment("player")
-    inst.components.mine:SetOnExplodeFn(OnExplode)
-    inst.components.mine:SetOnResetFn(OnReset)
-    inst.components.mine:SetOnSprungFn(SetSprung)
-    inst.components.mine:SetOnDeactivateFn(SetInactive)
-    inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
+    CommonMine(inst, "player")
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
@@ -801,8 +745,7 @@ local function equiptoothfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst.components.inventoryitem.atlasname =
-    "images/inventoryimages/um_bear_trap_equippable_tooth.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_bear_trap_equippable_tooth.xml"
 
     inst:AddComponent("inspectable")
 
@@ -877,14 +820,7 @@ local function equipgoldfn()
 
     inst:AddComponent("locomotor")
 
-    inst:AddComponent("mine")
-    inst.components.mine:SetRadius(TUNING.TRAP_TEETH_RADIUS * 1.3)
-    inst.components.mine:SetAlignment("player")
-    inst.components.mine:SetOnExplodeFn(OnExplode)
-    inst.components.mine:SetOnResetFn(OnReset)
-    inst.components.mine:SetOnSprungFn(SetSprung)
-    inst.components.mine:SetOnDeactivateFn(SetInactive)
-    inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
+    CommonMine(inst, "player")
 
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(15)
@@ -899,8 +835,7 @@ local function equipgoldfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst.components.inventoryitem.atlasname =
-    "images/inventoryimages/um_bear_trap_equippable_gold.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_bear_trap_equippable_gold.xml"
 
     inst:AddComponent("inspectable")
 

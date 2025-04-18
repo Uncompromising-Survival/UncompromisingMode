@@ -381,6 +381,23 @@ if GetModConfigData("wixie_walter") then
     end
 end
 
+-- local skilltree_defs = require("prefabs/skilltree_defs")
+-- local BuildSkillsData = require("prefabs/skilltree_wathom")
+-- if BuildSkillsData then
+	-- local data = BuildSkillsData(skilltree_defs.FN)
+
+	-- skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
+	-- skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
+
+	-- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+	-- for k, v in pairs(data.SKILLS) do
+		-- if v.icon then
+			-- RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+		-- end
+	-- end
+-- end
+
+
 --[[
 AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsUpdate", function(shard_id, data)
     GLOBAL.TheWorld:PushEvent("acidmushroomsdirty", {shard_id = shard_id, uuid = data.uuid, targets = data.targets})

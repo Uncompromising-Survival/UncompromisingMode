@@ -12,6 +12,26 @@ local sizes =
     { anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.4 },
 }
 
+local function SetSize2(inst,size)
+	inst.AnimState:PlayAnimation(sizes[size].anim, true)
+	--inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
+	inst.components.unevenground.radius = sizes[size].plantrad
+
+end
+
+local function DetermineSize(inst,fitting)
+	inst.size = math.random(1, fitting ~= nil and fitting or #sizes)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x,y,z,sizes[inst.size].rad,nil,nil,{"plant","pond","boulder","rock"})
+	for i,v in ipairs(ents) do
+		if v ~= inst and inst.size ~= 1 then
+			DetermineSize(inst,2)
+			break 
+		end
+	end
+	SetSize2(inst,inst.size)
+end
+
 local function SetSize(inst, size)
 	if not size then
 		inst.size = math.random(1, #sizes)

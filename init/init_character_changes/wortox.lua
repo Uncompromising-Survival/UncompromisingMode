@@ -493,7 +493,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	
 	local function SpawnWovenShadow(inst, upgrade_performer, obj)
 		
-		local mod2 = (inst.prefab == "horrorfuel" and 0.2) or 0
+		
 		if inst.components.stackable then
 			inst.components.stackable:Get(1):Remove()
 			inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
@@ -510,22 +510,46 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
 		local mod = CheckToRemoveFollower(upgrade_performer)
 		
-		rnd = rnd - mod - mod2
-		if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-			if rnd < 0.02 then
-				crechure = "ruinsnightmare"
-			elseif rnd < 0.12 then
-				crechure = "nightmarebeak"
-			elseif rnd < 0.4 then
-				crechure = "crawlingnightmare"
-			end
+		rnd = rnd - mod
+		if (inst.prefab == "horrorfuel") then
+			if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
+				if rnd < 0.05 then -- If Pure Horro then crawlingnightmare, nightmarebeak, ruinsnightmare, shadowthrall_mouth (rictus)
+					crechure = "shadowthrall_mouth"
+				elseif rnd < 0.2 then
+					crechure = "ruinsnightmare"
+				elseif rnd < 0.6 then
+					crechure = "nightmarebeak"
+				else
+					crechure = "crawlingnightmare"
+				end
+			else
+				if rnd < 0.025 then
+					crechure = "shadowthrall_mouth"
+				elseif rnd < 0.15 then
+					crechure = "ruinsnightmare"
+				elseif rnd < 0.4 then
+					crechure = "nightmarebeak"
+				else
+					crechure = "crawlingnightmare"
+				end
+			end		
 		else
-			if rnd < 0.01 then
-				crechure = "ruinsnightmare"
-			elseif rnd < 0.06 then
-				crechure = "nightmarebeak"
-			elseif rnd < 0.2 then
-				crechure = "crawlingnightmare"
+			if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
+				if rnd < 0.02 then -- If Nightmarefuel then woven shadow, crawling nightmare, nightmarebeak, lurking nightmare
+					crechure = "ruinsnightmare"
+				elseif rnd < 0.12 then
+					crechure = "nightmarebeak"
+				elseif rnd < 0.4 then
+					crechure = "crawlingnightmare"
+				end
+			else
+				if rnd < 0.01 then
+					crechure = "ruinsnightmare"
+				elseif rnd < 0.06 then
+					crechure = "nightmarebeak"
+				elseif rnd < 0.2 then
+					crechure = "crawlingnightmare"
+				end
 			end
 		end
 		local shadow = GLOBAL.SpawnPrefab(crechure) 
@@ -582,6 +606,11 @@ if TUNING.DSTU.WORTOXCHANGES then
 			shadow:OnSpawnedBy(upgrade_performer)
 		end
 		
+		if crechure == "shadowthrall_mouth" then
+			shadow:AddTag("shadow")
+			shadow.components.combat:SetRetargetFunction(3, nil)
+			shadow.components.combat:SetKeepTargetFunction(function(shadow) return true end)
+		end
 		shadow:RemoveComponent("sanityaura")
 	end
 	--------------------------------------------
@@ -705,6 +734,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 	end
 
 	AddBrainPostInit("nightmarecreaturebrain", ShadowCreatureFollow)
+	AddBrainPostInit("shadowthrall_mouth_brain", ShadowCreatureFollow)
 	
 	--------------------------------------------------------------------------------------------------------------------------------
 	-- [ Nabbag Damage Calculation Tweak ] -----------------------------------------------------------------------------------------
@@ -867,6 +897,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		local skilltreeupdater = upgrade_performer.components.skilltreeupdater
 		local gestalt = GLOBAL.SpawnPrefab(crechure) 
 		gestalt.wortox_minion = true -- These Guys are minions of Wortox
+
+		GLOBAL.MakeFlyingCharacterPhysics(gestalt, 1, .5)
+		gestalt:AddTag("flying")
+
 		
 		local x,y,z = upgrade_performer.Transform:GetWorldPosition()
 		local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
@@ -974,7 +1008,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 			GLOBAL.DoAction(self.inst, function() return StealAction(self.inst,ItemNearby(self.inst)) end, "steal", true),.25))
 		table.insert(self.bt.root.children, 2, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
             GLOBAL.Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER)))
-		table.insert(self.bt.root.children, 3, GLOBAL.WhileNode(function() return GetLeader(self.inst) end, "HasLeader",
+		table.insert(self.bt.root.children, 3, GLOBAL.WhileNode(function() return GetLeader(self.inst) and not (self.inst._item ~= nil and ItemNearby(self.inst)) end, "HasLeader",
             GLOBAL.FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn )))
 	end
 
@@ -991,7 +1025,12 @@ if TUNING.DSTU.WORTOXCHANGES then
 					inst.AnimState:PlayAnimation("idle", true)
 					inst:DoTaskInTime(0.25,function(inst) 
 						inst:PerformBufferedAction()
-						inst.sg:GoToState("idle")
+						inst:DoTaskInTime(0,function(inst) 
+							if inst:GetBufferedAction() then
+								inst:ClearBufferedAction()
+							end
+							inst.sg:GoToState("idle") 
+						end) -- need a delay
 					end)
 				end,
 			}, 
@@ -1000,7 +1039,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 		for k, v in pairs(states) do
 			inst.states[v.name] = v
 		end
-
+		
+		--inst.states["idle"].onexit = function(inst) inst:ClearBufferedAction() end -- can sometimes get stuck in the idle animation (no way to clear the buffered action for picking)
 	end)
 	AddStategraphActionHandler("lunarthrall_plant_gestalt", GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICKUP, "steal"))
 	
