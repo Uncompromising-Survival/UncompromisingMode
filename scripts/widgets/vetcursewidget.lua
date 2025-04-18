@@ -93,17 +93,19 @@ function Vetcursewidget:RefreshTooltips()
 
     if self.owner:HasTag("clockmaker") then
         vet_text = STRINGS.VETS_WIDGET_WANDA
+	elseif self.owner:HasTag("mime") then	
+		vet_text = STRINGS.VETS_WIDGET_WES
     else
         vet_text = STRINGS.VETS_WIDGET
     end
 
-    if self.owner:HasTag("um_3_deaths") then
+    if self.owner:HasTag("um_3_deaths") and self.owner:HasTag("wilson_vetcurse") then
         vet_text = vet_text .. "\n - The curse is thriving! 50% increased stat drain."
-    elseif self.owner:HasTag("um_2_deaths") then
+    elseif self.owner:HasTag("um_2_deaths") and self.owner:HasTag("wilson_vetcurse") then
         vet_text = vet_text .. "\n - The curse is strong. 40% increased stat drain."
-    elseif self.owner:HasTag("um_1_deaths") then
+    elseif self.owner:HasTag("um_1_deaths") and self.owner:HasTag("wilson_vetcurse") then
         vet_text = vet_text .. "\n - The curse is growing... 30% increased stat drain."
-    else
+    elseif self.owner:HasTag("wilson_vetcurse") then
         vet_text = vet_text .. "\n - The curse has found you. 20% increased stat drain."
     end
 
