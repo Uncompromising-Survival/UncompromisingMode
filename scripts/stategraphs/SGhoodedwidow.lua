@@ -328,7 +328,7 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
 							v:DoTaskInTime(1, function(v) v.components.pinnable:Unstick() end)
 						end
 						web_other = true
-					else
+					elseif v:IsValid() then
 						inst.components.combat:DoAttack(v)
 					end
 				end

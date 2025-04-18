@@ -25,7 +25,7 @@ local function OnHitInk(inst, attacker, target)
                 and not v:HasTag("bearger")
                 and not v.components.health:IsDead() then
                 if v.components.combat:CanBeAttacked() then
-                    v.components.combat:GetAttacked(inst, 30)
+                    v.components.combat:GetAttacked(inst, 30,nil,"projectile")
                 end
             end
         end
@@ -168,7 +168,7 @@ local function OnHitInk_claw(inst, attacker, target)
                 and not v:HasTag("player")
                 and not v.components.health:IsDead() then
                 if v.components.combat:CanBeAttacked() then
-                    v.components.combat:GetAttacked(inst.clawer, inst.biggy and 60 or 20, inst)
+                    v.components.combat:GetAttacked(inst.clawer, inst.biggy and 60 or 20, inst,"projectile")
                 end
             end
         end

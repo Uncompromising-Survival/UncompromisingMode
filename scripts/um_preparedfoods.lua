@@ -392,44 +392,7 @@ local um_preparedfoods =
         floater = { nil, 0.1, 0.6 },
         tags = { "monstermeat" },
     },
-
-    purplesteamedhams =
-    {
-        test = function(cooker, names, tags)
-            return (names.foliage or names.forgetmelots) and tags.veggie and
-                tags.veggie >= 1.5 and (tags.meat and tags.meat >= 1) and
-                not (tags.monster or tags.inedible or names.smallmeat or names.cookedsmallmeat or tags.fish)
-        end,
-        hunger = 37.5,
-        health = 40,
-        sanity = 15,
-        priority = 30,
-        weight = 30,
-        cooktime = 1,
-        foodtype = FOODTYPE.MEAT,
-        perishtime = 3 * TUNING.PERISH_TWO_DAY,
-        floater = { nil, 0.1, 0.6 },
-    },
-
-    greensteamedhams =
-    {
-        test = function(cooker, names, tags)
-            return (names.greenfoliage or names.firenettles) and tags.veggie and tags.veggie >= 1.5 and
-                (tags.meat and tags.meat >= 1) and
-                not (tags.monster or tags.inedible or names.smallmeat or names.cookedsmallmeat or tags.fish)
-        end,
-        hunger = 37.5,
-        health = 40,
-        sanity = 15,
-        priority = 30,
-        weight = 30,
-        cooktime = 1,
-        foodtype = FOODTYPE.MEAT,
-        perishtime = 3 * TUNING.PERISH_TWO_DAY,
-        floater = { nil, 0.1, 0.6 },
-        card_def = { ingredients = { { "greenfoliage", 1 }, { "carrot", 2 }, { "meat", 1 } } },
-    },
-
+	
     viperjam =
     {
         test = function(cooker, names, tags)

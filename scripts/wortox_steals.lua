@@ -456,7 +456,40 @@ stealtable= {
 		count = {
 			purebrilliance = 7,
 		},
-	},      viperworm = {
+	},	alterguardian_phase1 = {
+		name = "alterguardian_phase1",
+		weight = {
+			moonglass = 1,
+			moonrock_nugget = 1,
+			alterguardianhatshard = 1,
+		},
+		count = {
+			moonglass = 7,
+			moonrock_nugget = 7,
+		},
+	},	alterguardian_phase2 = {
+		name = "alterguardian_phase2",
+		weight = {
+			moonglass = 1,
+			moonrock_nugget = 1,
+			alterguardianhatshard = 1,
+		},
+		count = {
+			moonglass = 7,
+			moonrock_nugget = 7,
+		},
+	},	alterguardian_phase3 = {
+		name = "alterguardian_phase3",
+		weight = {
+			purebrilliance = 1,
+			moonrock_nugget = 1,
+			alterguardianhatshard = 1,
+		},
+		count = {
+			purebrilliance = 7,
+			moonrock_nugget = 7,
+		},
+	},   viperworm = {
 		name = "viperworm",
 		weight = {
 			viperfruit = 1,

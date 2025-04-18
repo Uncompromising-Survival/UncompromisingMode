@@ -243,7 +243,6 @@ DESCRIBE.APHID = "Don't go biting holes in my clothes, you dork!"
 DESCRIBE.GIANT_TREE_INFESTED =
 "What kind of weirdo would live in a place like that?"
 DESCRIBE.GIANT_BLUEBERRY = "That'd make a mess for sure!"
-DESCRIBE.STEAMEDHAMS = "At this time of day, in this part of the wilderness?"
 DESCRIBE.BLUEBERRYPANCAKES = "Mum taught me how to make them! They're my favorite!"
 DESCRIBE.DEVILSFRUITCAKE = "Hey! Who took the first slice!?"
 DESCRIBE.SIMPSALAD = "It's... leafy? And... purple?"

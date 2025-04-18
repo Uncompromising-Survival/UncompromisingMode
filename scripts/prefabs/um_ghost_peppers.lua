@@ -149,15 +149,6 @@ local function patchfn(Sim)
 	return inst
 end
 
-local COCOON_TAGS = {"webbed"}
-local function alert_nearby_cocoons(inst, picker, loot)
-    local px, py, pz = inst.Transform:GetWorldPosition()
-    local nearby_cocoons = TheSim:FindEntities(px, py, pz, TUNING.OCEANVINE_COCOON_SPIDER_RADIUS, COCOON_TAGS)
-    for _, cocoon in ipairs(nearby_cocoons) do
-        cocoon:PushEvent("activated", {target = picker})
-    end
-end
-
 local function OnStartBurnAnim(inst)
     inst.persists = false
 
@@ -199,7 +190,6 @@ local function falldown(inst)
 end
 
 local function onpicked(inst, picker, loot)
-    alert_nearby_cocoons(inst, picker, loot)
 
     inst.AnimState:PlayAnimation("harvest", false)
     inst.AnimState:PushAnimation("idle_nofruit", true)
@@ -288,7 +278,7 @@ end
 
 local function Fading(inst)
 	if inst.color == 0 then
-		if inst.components.pickable then
+		if inst.components.pickable and not inst.components.pickable.targettime then
 			inst.components.pickable.canbepicked = true
 		end
 		inst.shadow:Enable(true)

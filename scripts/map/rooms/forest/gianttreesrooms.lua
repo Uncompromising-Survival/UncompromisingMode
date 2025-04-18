@@ -47,36 +47,79 @@ AddRoom("GiantTrees",
 			}
         }
     })
-	
+local PrefabSwaps = require("prefabswaps")	
+PrefabSwaps.AddPrefabProxy("perma_berrybush_juicy", "berrybush_juicy") -- To spawn juicy berries all the time here, need to add this proxy.
+
 AddRoom("RockyGiantTrees",
 {
 	colour = { r = .6, g = .2, b = .8, a = .50 },
-	value = WORLD_TILES.UM_HOODED_FOREST,
+	value = WORLD_TILES.UM_HOODED_ROCKY,
 	tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 	contents =
 	{
-		distributepercent = 0.6,
+		distributepercent = 0.4,
 		distributeprefabs = {
-			sapling = 0.2,
-			evergreen_sparse = 0.5,
+			perma_sapling = 0.2,
+			perma_grass = 0.2,
+			perma_berrybush_juicy = 0.1,
 			thicket_builder = 1,
 			ghost_walrus = 0.005,
-			blueberryplantbuncher = 0.1,
-			red_mushroom = 0.05,
+			--blueberryplantbuncher = 0.1,
 			lightrays_canopy = 0.05,
 			um_bear_trap_old = 0.1,
-			rock1 = 0.5,
-			rock2 = 0.4,
+			rock1 = 0.25,
+			rock2 = 0.2,
+			red_mushrom = 0.03,
+			green_mushroom = 0.03,
+			blue_mushroom = 0.03,
 		},
 		countprefabs =
 		{
 			extracanopyspawner = 4,
+			tallbirdnest = function() return math.random(0,1) end,
 		},
 		countstaticlayouts = {
 			["giant_tree_generic"] = function() return math.random(1,3) end,
 		}
 	}
 })
+
+AddRoom("RockyWalrusGiantTrees",
+	{
+		colour = { r = .6, g = .2, b = .8, a = .50 },
+		value = WORLD_TILES.UM_HOODED_ROCKY,
+		tags = {"hoodedcanopy" },
+		contents =
+		{
+			distributepercent = 0.6,
+			distributeprefabs = {
+				um_bear_trap_old = 0.1,
+				perma_sapling = 0.2,
+				perma_grass = 0.2,
+				perma_berrybush_juicy = 0.1,
+				thicket_builder = 1,
+				ghost_walrus = 0.5,
+				--blueberryplantbuncher = 0.1,
+				red_mushrom = 0.07,
+				green_mushroom = 0.07,
+				blue_mushroom = 0.07,
+				lightrays_canopy = 0.25,
+				rock1 = 0.25,
+				rock2 = 0.2,
+			},
+            countprefabs =
+            {
+                extracanopyspawner = 4,
+                walrus_camp = 1,
+				tallbirdnest = function() return math.random(0,2) end,
+
+            },
+			countstaticlayouts = {
+				["giant_tree_generic"] = function() return math.random(3,5) end,
+			}
+        }
+    })
+	
 AddRoom("HoodedEntrance",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
@@ -162,6 +205,7 @@ AddRoom("WalrusGiantTrees",
 			}
         }
     })
+
 AddRoom("BGGiantTrees",
 	{
 		colour = { r = 1, g = 1, b = 1, a = .50 },

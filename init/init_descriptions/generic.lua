@@ -263,8 +263,6 @@ DESCRIBE.APHID = "A horrible pest."
 DESCRIBE.NYMPH = "It's spreading the pestilence to more trees."
 DESCRIBE.GIANT_TREE_INFESTED = "It doesn't look too well."
 DESCRIBE.GIANT_BLUEBERRY = "This'll be messy, for sure."
-DESCRIBE.PURPLESTEAMEDHAMS = "Science says it's a hamburger."
-DESCRIBE.GREENSTEAMEDHAMS = "Science says it's a hamburger."
 DESCRIBE.BLUEBERRYPANCAKES = "Exploding with flavor."
 DESCRIBE.DEVILSFRUITCAKE = "Devillisious!"
 DESCRIBE.SIMPSALAD = "It's a rather light meal."
@@ -713,3 +711,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Either the bottles too small, or the boats too big, because I don't think a boat will fit in here.",
     EMPTY = "If I rearrange every particle in my boat, is it still the same boat?"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
+    "Maybe I should wait till it sits still.",
+    "I can't hit it while it's fluttering about.",
+    "Drat, it got away again. It'll be easier to hit when it rests.",
+    "It might be easier to hit if it's landed."}

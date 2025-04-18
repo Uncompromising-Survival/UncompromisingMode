@@ -113,8 +113,6 @@ local function CheckForWebber(itsame)
 	return false
 end
 
-
-
 function SpiderBrain_TrapDoor:OnStart()
     local root =
         PriorityNode(
@@ -133,15 +131,15 @@ function SpiderBrain_TrapDoor:OnStart()
 			
 			WhileNode(function() return CanAttackNow(self.inst) end, "AttackMomentarily", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
 			WhileNode(function() return CheckForWebber(self.inst) and not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, "scarytoprey", 4, 8)),
-			WhileNode(function() return not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, RUN_AWAY_PARAMS, 4, 8)),
+			WhileNode(function() return not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, RUN_AWAY_PARAMS, 8, 12)),
+			--WhileNode(function() return CanAttackNow(self.inst) end, "ReadyToAttack", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
 			
-			ChaseAndAttack(self.inst, MAX_CHASE_TIME),
             DoAction(self.inst, function() return EatFoodAction(self.inst) end ),
             Follow(self.inst, function() return self.inst.components.follower.leader end, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),
             IfNode(function() return self.inst.components.follower.leader ~= nil end, "HasLeader",
                 FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn )),
             DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
-            WhileNode(function() return TheWorld.state.iscaveday end, "IsDay",
+            WhileNode(function() return TheWorld.state.iscaveday and not (self.inst.components.combat and self.inst.components.combat.target) end, "IsDay",
                     DoAction(self.inst, function() return GoHomeAction(self.inst) end ) ),
             FaceEntity(self.inst, GetTraderFn, KeepTraderFn),
             Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)

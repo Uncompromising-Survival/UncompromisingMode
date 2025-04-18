@@ -16,6 +16,7 @@ RemapSoundEvent("dontstarve/characters/winky/sinking", "winky/characters/winky/s
 --PLEASE keep atlas names and image names the same so we can continue to do this like this.
 local inventoryitems =
 {
+	"um_buttery_fly",
     "um_ghost_pepper_item",
     "air_conditioner",
     "ancient_amulet_red",
@@ -70,7 +71,6 @@ local inventoryitems =
     "green_vomit",
     "greenfoliage",
     "greengem_cracked",
-    "greensteamedhams",
     "hat_bagmask",
     "hat_blackcatmask",
     "hat_clownmask",
@@ -127,7 +127,6 @@ local inventoryitems =
     "plaguemask",
     "purple_vomit",
     "purplegem_cracked",
-    "purplesteamedhams",
     "rain_horn",
     "rat_fur",
     "rat_tail",
@@ -159,7 +158,6 @@ local inventoryitems =
     "sporepack",
     "stanton_shadow_tonic",
     "stanton_shadow_tonic_fancy",
-    "steamedhams",
     "stuffed_peeper_poppers",
     "sunglasses",
     "theatercorn",
@@ -403,12 +401,8 @@ Assets = {
 	Asset("ATLAS", "images/cookbook_californiaking.xml"),
 	Asset("IMAGE", "images/cookbook_devilsfruitcake.tex"),
 	Asset("ATLAS", "images/cookbook_devilsfruitcake.xml"),
-	Asset("IMAGE", "images/cookbook_greensteamedhams.tex"),
-	Asset("ATLAS", "images/cookbook_greensteamedhams.xml"),
 	Asset("IMAGE", "images/cookbook_liceloaf.tex"),
 	Asset("ATLAS", "images/cookbook_liceloaf.xml"),
-	Asset("IMAGE", "images/cookbook_purplesteamedhams.tex"),
-	Asset("ATLAS", "images/cookbook_purplesteamedhams.xml"),
 	Asset("IMAGE", "images/cookbook_seafoodpaella.tex"),
 	Asset("ATLAS", "images/cookbook_seafoodpaella.xml"),
 	Asset("IMAGE", "images/cookbook_simpsalad.tex"),
@@ -1105,7 +1099,9 @@ Assets = {
     Asset("ANIM", "anim/ds_pig_uppercut.zip"),
 
     Asset("ANIM", "anim/lazy_chester.zip"),
-
+	
+	Asset("ANIM", "anim/um_buttery_fly.zip"),
+	 
     Asset("ANIM", "anim/hound_jump_attack.zip"),
 
     Asset("ANIM", "anim/krampus_bag_smack.zip"),
@@ -1698,8 +1694,6 @@ Assets = {
     Asset("ANIM", "anim/blueberrypancakes.zip"),
     Asset("ANIM", "anim/devilsfruitcake.zip"),
     Asset("ANIM", "anim/simpsalad.zip"),
-    Asset("ANIM", "anim/purplesteamedhams.zip"),
-    Asset("ANIM", "anim/greensteamedhams.zip"),
     Asset("ANIM", "anim/um_rimeweed_spagett.zip"),
     Asset("ANIM", "anim/um_rimeweed_tequila.zip"),
     Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
@@ -1928,6 +1922,8 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/corvushat.xml"),
     Asset("ATLAS", "images/inventoryimages/corvushat.xml"),
 
+    Asset("IMAGE", "images/inventoryimages/um_buttery_fly.tex"),
+    Asset("ATLAS", "images/inventoryimages/um_buttery_fly.xml"),
     Asset("IMAGE", "images/inventoryimages/viperfruit.tex"),
     Asset("ATLAS", "images/inventoryimages/viperfruit.xml"),
     Asset("IMAGE", "images/inventoryimages/viperfruit_lesser.tex"),
@@ -2209,12 +2205,7 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/widowshead.xml"),
     Asset("ATLAS", "images/inventoryimages/widowshead.xml"),
 
-    --ASSET("ATLAS_BUILD", "images/inventoryimages/purplesteamedhams.xml"),
-    Asset("ATLAS", "images/inventoryimages/purplesteamedhams.xml"),
-    Asset("IMAGE", "images/inventoryimages/purplesteamedhams.tex"),
-    --ASSET("ATLAS_BUILD", "images/inventoryimages/greensteamedhams.xml"),
-    Asset("ATLAS", "images/inventoryimages/greensteamedhams.xml"),
-    Asset("IMAGE", "images/inventoryimages/greensteamedhams.tex"),
+
     Asset("IMAGE", "images/inventoryimages/greenfoliage.tex"),
     --ASSET("ATLAS_BUILD", "images/inventoryimages/greenfoliage.xml"),
     Asset("ATLAS", "images/inventoryimages/greenfoliage.xml"),
@@ -2784,6 +2775,18 @@ RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_we
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
+
+if BuildSkillsData then
+    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    local data = BuildSkillsData(skilltree_defs.FN)
+    for k, v in pairs(data.SKILLS) do
+        if v.icon then
+            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        end
+    end
+end
+
+local BuildSkillsData = require("prefabs/skilltree_wathom")
 
 if BuildSkillsData then
     RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")

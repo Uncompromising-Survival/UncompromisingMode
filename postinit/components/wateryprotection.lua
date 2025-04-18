@@ -9,7 +9,9 @@ env.AddComponentPostInit("wateryprotection", function(self)
 	function self:SpreadProtectionAtPoint(x, y, z, dist, noextinguish)
 		local ents = TheSim:FindEntities(x, y, z, dist or self.protection_dist or 4, {"um_washable_goo"})
 		for i, v in ipairs(ents) do
-			if not v._isfading:value() then
+			if v.prefab == "ratpoison" then
+				v:Remove()
+			elseif not (v.isfading and v._isfading:value()) then
 				v.OnStartFade(v)
 			end
 		end

@@ -76,7 +76,9 @@ local function SpreadProtectionAtPoint(x, y, z, dist) -- This is taken from Wate
     -- Goo
 	local ents = TheSim:FindEntities(x, y, z, 2*dist, {"um_washable_goo"})
     for i, v in ipairs(ents) do
-		if not v._isfading:value() then
+		if v.prefab == "ratpoison" then
+			v:Remove()
+		elseif not (v.isfading and v._isfading:value()) then
 			v.OnStartFade(v)
 		end
     end

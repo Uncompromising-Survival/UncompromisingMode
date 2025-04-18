@@ -45,7 +45,6 @@ return {
 ["slingshot_matilda"] = 0x41677E44,
 ["snowgoggles"] = 0xA9BEC46F,
 ["magmahound"] = 0xB06EE97D,
-["greensteamedhams"] = 0x8A153FCB,
 ["shadow_crown"] = 0xEA0EC9B8,
 ["wixie_clock"] = 0x19ACF991,
 ["alpha_lightninggoat"] = 0xFBB77F04,

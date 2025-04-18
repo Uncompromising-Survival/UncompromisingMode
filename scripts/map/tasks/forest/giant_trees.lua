@@ -1,7 +1,11 @@
 if GetModConfigData("hoodedforest") then               -- Lock Everything Behind the Mod Config
     GLOBAL.require("map/rooms/forest/gianttreesrooms") -- just in case
 
+	
+	
+	
 
+	
 	AddTaskSetPreInitAny(function(tasksetdata)
 		if tasksetdata.location ~= "forest" then -- HF only spawns on Surface
 			return

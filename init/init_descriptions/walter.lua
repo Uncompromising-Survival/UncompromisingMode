@@ -221,8 +221,6 @@ DESCRIBE.NYMPH = "I wonder what they're doing?"
 DESCRIBE.GIANT_TREE_INFESTED = "Get out of there!"
 DESCRIBE.GIANT_BLUEBERRY =
 "Good thing a Pinetree Pioneer's outfit is resistant to stains!"
-DESCRIBE.PURPLESTEAMEDHAMS = "I'm ready for an unforgettable luncheon!"
-DESCRIBE.GREENSTEAMEDHAMS = "I'm ready for an unforgettable luncheon!"
 DESCRIBE.BLUEBERRYPANCAKES = "Ah, sweet eats!"
 DESCRIBE.DEVILSFRUITCAKE = "Sorry Woby, chocolate is bad for dogs!"
 DESCRIBE.SIMPSALAD = "A Pinetree Pioneer always eats his... er... purples!"

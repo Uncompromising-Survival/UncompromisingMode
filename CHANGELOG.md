@@ -921,8 +921,6 @@ Opal's will increase the effects of all other gems slotted
 
 * [x] [HOODED FOREST] Ferns can be used in the crockpot, but be careful doing so...
 
-* [x] [HOODED FOREST] Added in steamed hams from hamlet, because if we didn't we'd be trampled by an angry mob. Uses the same recipe and stats from hamlet: 1 meat/cooked meat, 1 or more vegetables, and 1 fern. 40 health 37.5 hunger 15 sanity
-
 * [x] [HOODED FOREST] Added simple salad, this food prevents the player from using ferns in crockpot dishes not meant to have ferns in them (Don't want any cheap meatballs eh!)
 
 * [x] [HOODED FOREST] Simple salad can still be beneficial if you use 4 ferns or 1 fern 3 twigs. Requirements for dish is 1 fern and has a very high priority, but not higher than steamed hams. Dish restores 12.5 hunger 3 health 5 sanity.
