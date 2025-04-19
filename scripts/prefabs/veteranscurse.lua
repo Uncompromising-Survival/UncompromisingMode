@@ -7,8 +7,10 @@ local function ForceToTakeMoreDamage(inst)
     local _GetAttacked = self.GetAttacked
     self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
         if attacker and damage then
-            -- Take extra damage
-            damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
+			if not inst:HasTag("mime") then
+				-- Take extra damage
+				damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
+			end
         end
         return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
     end
@@ -19,8 +21,10 @@ local function ForceToTakeMoreHunger(inst)
     local _DoDelta = self.DoDelta
     self.DoDelta = function(self, delta, overtime, ignore_invincible)
         if delta and overtime and delta < 0 then
-            -- Take extra hunger
-            delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
+			if not inst:HasTag("mime") then
+				-- Take extra hunger
+				delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
+			end
         end
         return _DoDelta(self, delta, overtime, ignore_invincible)
     end
@@ -31,8 +35,10 @@ local function ForceToTakeMoreTime(inst)
     local _OnTakeDamage = self.OnTakeDamage
     self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
         if amount and overtime and amount < 0 then
-            -- Take extra time
-            amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
+			if not inst:HasTag("mime") then
+			    -- Take extra time
+				amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
+			end
         end
         return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
     end
