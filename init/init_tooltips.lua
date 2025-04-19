@@ -395,7 +395,7 @@ if TUNING.DSTU.WXLESS then
         MAXSANITY = "- Provides a bit more sanity over time.\n- Reduces insanity aura effects.\n- Now increases sanity by 75.",
         MAXSANITY1 = "- Provides a bit of sanity over time.\n- Slighly reduces insanity aura effects.\n- Now increases sanity by 30.",
         TASER = "- Getting hit stuns the attacker.\n- Gives you charge when you attack a shocked target enough times.",
-        COLD = "- Periodically produces ice.\n- No longer changes max and min temperature.\n- Decreases food spoilage rate.\n- Decreased drying threshold\n- Chills you significantly, if idle.",
+        COLD = "- Periodically produces ice.\n- No longer changes max and min temperature.\n- Decreased drying threshold\n- Freezes objects and enemies, cooling you and you friends down.\n- The more frozen object is, the easier it is to break.",
         MAXHUNGER = "- Slows down charge drain.\n- Now increases hunger by 75.", --WHOEVER AT KLEI WHO DECIDED THEY'D MAKE THE MAXHUNGER1 THE WEAK VERSION AND MAXHUNGER THE STRONG VERSION SHOULD HAVE THEIR FINGERS BOILED.
         MAXHUNGER1 = "- Slightly slows down hunger drain.\n- Now increases hunger by 30",
     }

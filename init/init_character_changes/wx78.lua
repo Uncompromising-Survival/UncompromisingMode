@@ -378,8 +378,8 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
 			emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE
 		end]]
             --emitting_temp = TUNING.WX78_HEATERTEMPPERMODULE + 10
-            emitting_temp = (current < 20 and TUNING.WX78_HEATERTEMPPERMODULE * 2) or
-                (current < 45 and easing.linear(current - 20, TUNING.WX78_HEATERTEMPPERMODULE, TUNING.WX78_HEATERTEMPPERMODULE, 25)) or 0
+            emitting_temp = (current < 10 and TUNING.WX78_HEATERTEMPPERMODULE * 2) or
+                (current < 35 and easing.linear(35 - current, TUNING.WX78_HEATERTEMPPERMODULE, TUNING.WX78_HEATERTEMPPERMODULE, 25)) or 0
         end
         --if emitting_temp < 0 then emitting_temp = 0 end
 	if inst._cherriftchips and inst._cherriftchips > 0 then emitting_temp = emitting_temp * (1.15 ^ inst._cherriftchips) end

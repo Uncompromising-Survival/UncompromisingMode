@@ -225,18 +225,21 @@ end
 
 local function accelaratefn(wx, inst)
     local accelarate_limit = 12 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1]
+	local timebeforecharge = 1.75
+	local speedincrease = 0.03 * (5 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
     if wx._cherriftchips and wx._cherriftchips > 0 then accelarate_limit = accelarate_limit + 0.5*wx._cherriftchips end
     --local accelarate_increase = 0.025 * (1.2 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1] * 0.08) --why this? math --I think too much math causes the game to crash sometimes wth
     --No seriously it stopped crashing after I changed it to static value, was this really the reason? Sad cause I wanted it to be faster the more modules you have
-    if wx.components.locomotor ~= nil and not wx.components.rider:IsRiding() and wx.sg:HasStateTag("running") and wx.accelarate_speed ~= nil and wx.components.locomotor:GetTimeMoving() >= (TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1] - 1) then
+    if wx.components.locomotor ~= nil and not wx.components.rider:IsRiding() and wx.sg:HasStateTag("running") and wx.accelarate_speed ~= nil and wx.components.locomotor:GetTimeMoving() >= (timebeforecharge) then
         if wx.speedloosetask ~= nil then
             wx.speedloosetask:Cancel()
             wx.speedloosetask = nil
         end
 		
         if wx.accelarate_speed <= accelarate_limit then
-            wx.accelarate_speed = wx.accelarate_speed + 0.015
+            wx.accelarate_speed = wx.accelarate_speed + speedincrease
         end
+		--print(speedincrease)
         --print(wx.accelarate_speed)
         if wx.accelarate_speed >= 9 then
             if wx.rooksoundtask == nil then
@@ -256,18 +259,18 @@ local function accelaratefn(wx, inst)
             end
         end
     else
-        if wx.accelarate_speed > 8.95 then wx.accelarate_speed = 8.95 end
-	if wx.speedloosetask == nil then
-		wx.speedloosetask = wx:DoPeriodicTask(0.2, function(wx)
+       if wx.accelarate_speed > 8.95 then wx.accelarate_speed = 8.95 end
+		if wx.speedloosetask == nil then
+			wx.speedloosetask = wx:DoPeriodicTask(0.1, function(wx)
 		    if wx.accelarate_speed > TUNING.WILSON_RUN_SPEED then
-			wx.accelarate_speed = wx.accelarate_speed - 0.1
+			wx.accelarate_speed = wx.accelarate_speed - 0.06
 		    elseif wx.accelarate_speed < TUNING.WILSON_RUN_SPEED then
 			wx.accelarate_speed = TUNING.WILSON_RUN_SPEED
 			wx.speedloosetask:Cancel()
 			wx.speedloosetask = nil
 		    end
-		end)
-	end
+			end)
+		end
         if wx.rooksoundtask ~= nil then
             wx.rooksoundtask:Cancel()
             wx.rooksoundtask = nil
@@ -288,8 +291,15 @@ local function movespeed_activate(inst, wx)
 
     wx._movespeed_chips = (wx._movespeed_chips or 0) + 1
     wx.accelarate_speed = TUNING.WILSON_RUN_SPEED
-    wx:ListenForEvent("locomote", inst.accelarate, wx) --Listenning on WX just to not cause any real troubles with multiple modules
-    --wx.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED * (1 + TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+    --wx:ListenForEvent("locomote", inst.accelarate, wx) --Listenning on WX just to not cause any real troubles with multiple modules
+	--listening for locmotion event caused issues when just clicking on destination once and idk how to work around that other than another periodic task
+	if wx.movechecktask == nil then
+		wx.movechecktask = wx:DoPeriodicTask(0.075, function(wx)
+			--if wx.sg:HasStateTag('running') then 
+			inst.accelarate(wx, inst) 
+			--end
+		end)
+	end
 end
 
 local function movespeed_deactivate(inst, wx)
@@ -298,6 +308,10 @@ local function movespeed_deactivate(inst, wx)
     wx.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
     if TUNING.DSTU.WXLESSSPEEDBUMP == false then
         wx.Physics:SetCollisionCallback(nil)
+    end
+    if wx.movechecktask ~= nil and wx._movespeed_chips <= 0 then
+        wx.movechecktask:Cancel()
+        wx.movechecktask = nil
     end
     if wx.rooksoundtask ~= nil then
         wx.rooksoundtask:Cancel()
@@ -308,7 +322,7 @@ local function movespeed_deactivate(inst, wx)
         wx.speedloosetask = nil
     end
 
-    wx:RemoveEventCallback("locomote", inst.accelarate, wx)
+    --wx:RemoveEventCallback("locomote", inst.accelarate, wx)
 end
 
 local MOVESPEED_MODULE_DATA =
@@ -545,6 +559,96 @@ table.insert(module_definitions, NIGHTVISION_MODULE_DATA)
 AddCreatureScanDataDefinition("mole", "nightvision", 4)
 
 ---------------------------------------------------------------
+local FREEZE_COLOUR = { 82 / 255, 115 / 255, 124 / 255, 0 }
+
+local function PushColour(inst, r, g, b, a) -- we emulate the object having freezable properties without bothering with the actual component
+    if inst.components.colouradder ~= nil then
+        inst.components.colouradder:PushColour("wx78module_cold", r, g, b, a)
+    else
+        inst.AnimState:SetAddColour(r, g, b, a)
+    end
+end
+
+local function PopColour(inst)
+    if inst.components.colouradder ~= nil then
+        inst.components.colouradder:PopColour("wx78module_cold")
+    else
+        inst.AnimState:SetAddColour(0, 0, 0, 0)
+    end
+end
+
+local function workmultiplierfn(obj, wx, numworks)
+	return 1 + (obj._modulecoldhits or 0)*0.25
+end
+
+local function thawtask(obj, wx)
+	obj._modulecoldhits = (obj._modulecoldhits or 0) - 1
+	local percent = obj._modulecoldhits * 0.1
+	if percent > 0 then
+		PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
+	else
+		PopColour(obj)
+		obj._objectthawtask:Cancel()
+		obj._objectthawtask = nil
+	end
+end
+
+local function onobjectfreeze(wx, data, inst)
+	--print('pluh')
+	local obj = data.target
+	if obj._objectthawtask ~= nil then 
+		obj._objectthawtask:Cancel()
+		obj._objectthawtask = nil
+	end
+	obj._modulecoldhits = (obj._modulecoldhits or 0) + 1
+	local percent = obj._modulecoldhits * 0.075
+	if not obj:HasTag("frozen") then
+		if obj.components.workable.workmultiplierfn == nil then obj.components.workable:SetWorkMultiplierFn(workmultiplierfn) end
+		
+		PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
+		if percent > 0 then SpawnPrefab("mining_ice_fx").Transform:SetPosition(obj.Transform:GetWorldPosition()) end
+		
+		if obj.components.workable.workleft <= 0 then
+			PopColour(obj)
+		else
+			obj._objectthawtask = obj:DoPeriodicTask(5, function(obj, wx)
+				thawtask(obj, wx)
+			end)
+		end
+		
+		local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
+		local x, y, z = obj.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, 8, WORKCOOLINGTAGS_MUST)
+		for i, v in ipairs(ents) do
+		--wx.components.talker:Say('plug')
+        if v.components.temperature ~= nil then
+	    local cur = wx.components.temperature.current
+            v.components.temperature:SetTemperature(cur - (0.5 + obj._modulecoldhits*0.1))
+        end
+    end
+	end
+	
+end
+
+local function onfreezehit(wx, data, inst)
+	local target = data.target
+	if target.components.freezable ~= nil and target:IsValid() then
+        target.components.freezable:AddColdness(0.2)
+        target.components.freezable:SpawnShatterFX()
+		--wx.components.temperature:SetTemperature(wx.components.temperature.current - 0.5)
+		local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
+		local x, y, z = target.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, 4, WORKCOOLINGTAGS_MUST)
+		for i, v in ipairs(ents) do
+		--wx.components.talker:Say('plug')
+			if v.components.temperature ~= nil then
+				local cur = wx.components.temperature.current
+				v.components.temperature:SetTemperature(cur - 0.5)
+			end
+		end
+    end
+end
+
 
 local function OnFreeze(inst)
     inst.components.temperature:DoDelta(-math.random(5, 10))
@@ -555,18 +659,7 @@ local function cold_activate(inst, wx)
     --wx.components.temperature.maxtemp = wx.components.temperature.maxtemp - TUNING.WX78_MINTEMPCHANGEPERMODULE
     --wx.components.temperature.mintemp = wx.components.temperature.mintemp - TUNING.WX78_MINTEMPCHANGEPERMODULE
 
-    --[[if wx._oncoldstop == nil then
-        wx._oncoldstop = function(owner, data)
-            StopAddFreeze(owner, data, inst)
-        end
-    end
-	
-	if wx._oncoldmove == nil then
-        wx._oncoldmove = function(owner, data)
-            MoveStopFreeze(owner, data, inst)
-        end
-    end]]
-    inst:ListenForEvent("freeze", OnFreeze, wx)
+    --[[inst:ListenForEvent("freeze", OnFreeze, wx)
     if inst.stoppedfreezetask == nil then
         inst.stoppedfreezetask = wx:DoPeriodicTask(0.5, function(wx)
             if wx.sg:HasStateTag("idle") then
@@ -575,9 +668,23 @@ local function cold_activate(inst, wx)
                 wx.components.temperature:DoDelta(-1.25)
             end
         end)
+    end]]
+	
+	if wx._oncoldwork == nil then
+        wx._oncoldwork = function(owner, data)
+            onobjectfreeze(owner, data, inst)
+        end
     end
 
-
+    if wx._oncoldattack == nil then
+        wx._oncoldattack = function(owner, data)
+            onfreezehit(owner, data, inst)
+        end
+    end
+	
+	inst:ListenForEvent("working", wx._oncoldwork, wx)
+    inst:ListenForEvent("onattackother", wx._oncoldattack, wx)
+	
 
     if inst.icemakertask == nil then
 	local ice_timer = 25
@@ -593,8 +700,6 @@ local function cold_activate(inst, wx)
         end)
     end
 
-    --wx:ListenForEvent("onreachdestination", wx._oncoldstop, wx)
-    --inst:ListenForEvent("locomote", wx._oncoldmove, wx)
 
     if wx.AddTemperatureModuleLeaning ~= nil then
         wx:AddTemperatureModuleLeaning(-1)
@@ -602,7 +707,7 @@ local function cold_activate(inst, wx)
 
     --local modvalue = 40 * wx._temperature_modulelean
     --wx.components.temperature:SetModifier("wx78module_cold", modvalue)
-    
+    --superior_combo(inst, wx)
 end
 
 local function cold_deactivate(inst, wx)
@@ -610,6 +715,8 @@ local function cold_deactivate(inst, wx)
     --wx.components.temperature.mintemp = wx.components.temperature.mintemp + TUNING.WX78_MINTEMPCHANGEPERMODULE
 
     inst:RemoveEventCallback("freeze", OnFreeze, wx)
+	inst:RemoveEventCallback("working", wx._oncoldwork, wx)
+    inst:RemoveEventCallback("onattackother", wx._oncoldattack, wx)
 
 
     if wx.AddTemperatureModuleLeaning ~= nil then
@@ -618,21 +725,16 @@ local function cold_deactivate(inst, wx)
 
     --local modvalue = 45 * wx._temperature_modulelean
 
-    if inst.stoppedfreezetask ~= nil then
+  --[[  if inst.stoppedfreezetask ~= nil then
         inst.stoppedfreezetask:Cancel()
         inst.stoppedfreezetask = nil
-    end
+    end]]
 
     if inst.icemakertask ~= nil then
         inst.icemakertask:Cancel()
         inst.icemakertask = nil
     end
 
-    --inst:RemoveEventCallback("locomote", wx._oncoldmove, wx)
-    --[[wx.components.temperature:RemoveModifier("wx78module_cold")
-	if modvalue ~= 0 then
-		wx.components.temperature:SetModifier("wx78module_cold", modvalue)
-	end]]
 end
 
 local COLD_MODULE_DATA =
