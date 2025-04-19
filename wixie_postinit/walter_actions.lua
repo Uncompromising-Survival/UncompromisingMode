@@ -415,6 +415,3 @@ GLOBAL.ACTIONS.CAST_NET.mount_valid = false
 GLOBAL.ACTIONS.DRY.mount_valid = true
 GLOBAL.ACTIONS.ACTIVATE.mount_valid = true
 GLOBAL.ACTIONS.CASTSPELL.distance = 40
--- Increasing the HEAL priority allows you to heal other players, instead of giving them the item.
--- This lets Walter put his bonus healing perk to good use on other players!
-GLOBAL.ACTIONS.HEAL.priority = 4
