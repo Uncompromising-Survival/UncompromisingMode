@@ -49,9 +49,9 @@ local CHAOS_RADIUS = 16
 local SPECIAL_RADIUS = 4
 
 local function BountyOnYourHead(inst)
-    --if not inst:HasTag("vetcurse") then
-        --return
-    --end
+    if not inst:HasTag("vetcurse") then
+        return
+    end
     local x, y, z = inst.Transform:GetWorldPosition()
     local targets = TheSim:FindEntities(x, y, z, CHAOS_RADIUS, {"wesmustdie"}, {"player", "INLIMBO"})
     for i, target in ipairs(targets) do
@@ -82,9 +82,9 @@ local function BountyOnYourHead(inst)
 end
 
 local function SpecialBountyOnYourHead(inst)
-    --if not inst:HasTag("vetcurse") then
-        --return
-    --end
+    if not inst:HasTag("vetcurse") then
+        return
+    end
     local x, y, z = inst.Transform:GetWorldPosition()
     local targets = TheSim:FindEntities(x, y, z, SPECIAL_RADIUS, {"wesmustdie"}, {"player", "INLIMBO"})
     for i, target in ipairs(targets) do
