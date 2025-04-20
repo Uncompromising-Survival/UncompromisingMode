@@ -68,7 +68,7 @@ local function BountyOnYourHead(inst)
 			local TARGET_TARGETING_PLAYER_FOLLOWERS = false
 			if WHAT_MY_TARGET_IS_TARGETING and WHAT_MY_TARGET_IS_TARGETING.components.follower then
 				local THE_MAN_OR_THE_WOMAN = WHAT_MY_TARGET_IS_TARGETING.components.follower.leader
-				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") then
+				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell") then
 					TARGET_TARGETING_PLAYER_FOLLOWERS = true
 				end
 			end
@@ -101,7 +101,7 @@ local function SpecialBountyOnYourHead(inst)
 			local TARGET_TARGETING_PLAYER_FOLLOWERS = false
 			if WHAT_MY_TARGET_IS_TARGETING and WHAT_MY_TARGET_IS_TARGETING.components.follower then
 				local THE_MAN_OR_THE_WOMAN = WHAT_MY_TARGET_IS_TARGETING.components.follower.leader
-				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") then
+				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell") then
 					TARGET_TARGETING_PLAYER_FOLLOWERS = true
 				end
 			end
