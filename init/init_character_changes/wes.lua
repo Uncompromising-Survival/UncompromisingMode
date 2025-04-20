@@ -8,8 +8,8 @@ AddPrefabPostInitAny(function(inst)
 end)
 
 local LEAVE_HIM_BE = {
-    player = true,
-    playerghost = true,
+	player = true,
+	playerghost = true,
 	shadowcreature = true,
 	structure = true,
 	wall = true,
@@ -40,35 +40,36 @@ local function LookAtHim(entity, taglist)
 end
 
 local SPECIAL_FELLOWS = {
-    buzzard = true,
-    tentacle = true,
+	buzzard = true,
+	tentacle = true,
 	eyeplant = true,
+	mosquito = true,
 }
 
 local CHAOS_RADIUS = 16
 local SPECIAL_RADIUS = 4
 
 local function BountyOnYourHead(inst)
-    if not inst:HasTag("vetcurse") then
+    if inst == nil or not inst:HasTag("vetcurse") then
         return
     end
     local x, y, z = inst.Transform:GetWorldPosition()
     local targets = TheSim:FindEntities(x, y, z, CHAOS_RADIUS, {"wesmustdie"}, {"player", "INLIMBO"})
     for i, target in ipairs(targets) do
-		if target.components.combat and target.components.combat:CanTarget(inst) and not CanLeaveHimBe(target, LEAVE_HIM_BE) then
+		if target ~= nil and target.components ~= nil and target.components.combat ~= nil and target.components.combat:CanTarget(inst) and not CanLeaveHimBe(target, LEAVE_HIM_BE) then
 			local TARGET_IS_A_FOLLOWER = false
-			if target.components.follower then
+			if target.components.follower ~= nil then
 				local THE_LEADER = target.components.follower.leader
-				if THE_LEADER and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
+				if THE_LEADER ~= nil and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
 					TARGET_IS_A_FOLLOWER = true
 				end
 			end
 			local WHAT_MY_TARGET_IS_TARGETING = target.components.combat.target
-			local LOOK_AT_HIM_NOT_ME = WHAT_MY_TARGET_IS_TARGETING and LookAtHim(WHAT_MY_TARGET_IS_TARGETING, NOT_ME)
+			local LOOK_AT_HIM_NOT_ME = WHAT_MY_TARGET_IS_TARGETING ~= nil and LookAtHim(WHAT_MY_TARGET_IS_TARGETING, NOT_ME)
 			local TARGET_TARGETING_PLAYER_FOLLOWERS = false
-			if WHAT_MY_TARGET_IS_TARGETING and WHAT_MY_TARGET_IS_TARGETING.components.follower then
+			if WHAT_MY_TARGET_IS_TARGETING ~= nil and WHAT_MY_TARGET_IS_TARGETING.components ~= nil and WHAT_MY_TARGET_IS_TARGETING.components.follower ~= nil then
 				local THE_MAN_OR_THE_WOMAN = WHAT_MY_TARGET_IS_TARGETING.components.follower.leader
-				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell") then
+				if THE_MAN_OR_THE_WOMAN ~= nil and (THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell")) then
 					TARGET_TARGETING_PLAYER_FOLLOWERS = true
 				end
 			end
@@ -82,26 +83,26 @@ local function BountyOnYourHead(inst)
 end
 
 local function SpecialBountyOnYourHead(inst)
-    if not inst:HasTag("vetcurse") then
+    if inst == nil or not inst:HasTag("vetcurse") then
         return
     end
     local x, y, z = inst.Transform:GetWorldPosition()
     local targets = TheSim:FindEntities(x, y, z, SPECIAL_RADIUS, {"wesmustdie"}, {"player", "INLIMBO"})
     for i, target in ipairs(targets) do
-		if target.components.combat and target.components.combat:CanTarget(inst) and not CanLeaveHimBe(target, LEAVE_HIM_BE) then
+		if target ~= nil and target.components ~= nil and target.components.combat ~= nil and target.components.combat:CanTarget(inst) and not CanLeaveHimBe(target, LEAVE_HIM_BE) then
 			local TARGET_IS_A_FOLLOWER = false
-			if target.components.follower then
+			if target.components.follower ~= nil then
 				local THE_LEADER = target.components.follower.leader
-				if THE_LEADER and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
+				if THE_LEADER ~= nil and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
 					TARGET_IS_A_FOLLOWER = true
 				end
 			end
 			local WHAT_MY_TARGET_IS_TARGETING = target.components.combat.target
-			local LOOK_AT_HIM_NOT_ME = WHAT_MY_TARGET_IS_TARGETING and LookAtHim(WHAT_MY_TARGET_IS_TARGETING, NOT_ME)
+			local LOOK_AT_HIM_NOT_ME = WHAT_MY_TARGET_IS_TARGETING ~= nil and LookAtHim(WHAT_MY_TARGET_IS_TARGETING, NOT_ME)
 			local TARGET_TARGETING_PLAYER_FOLLOWERS = false
-			if WHAT_MY_TARGET_IS_TARGETING and WHAT_MY_TARGET_IS_TARGETING.components.follower then
+			if WHAT_MY_TARGET_IS_TARGETING ~= nil and WHAT_MY_TARGET_IS_TARGETING.components ~= nil and WHAT_MY_TARGET_IS_TARGETING.components.follower ~= nil then
 				local THE_MAN_OR_THE_WOMAN = WHAT_MY_TARGET_IS_TARGETING.components.follower.leader
-				if THE_MAN_OR_THE_WOMAN and THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell") then
+				if THE_MAN_OR_THE_WOMAN ~= nil and (THE_MAN_OR_THE_WOMAN:HasTag("player") or THE_MAN_OR_THE_WOMAN:HasTag("bell")) then
 					TARGET_TARGETING_PLAYER_FOLLOWERS = true
 				end
 			end
@@ -152,6 +153,34 @@ AddPrefabPostInit("bat", function(inst)
 	
 end)
 
+AddPrefabPostInit("vampirebat", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return inst
+	end
+	local _keeptargetfn = inst.components.combat.keeptargetfn
+	
+	local function KeepTarget(inst, target)
+		if target:HasTag("the_mime") then
+			return true
+		else
+			return _keeptargetfn(inst,target)
+		end
+	end	
+	
+	inst.components.combat:SetKeepTargetFunction(KeepTarget)
+	
+	local _targetfn = inst.components.combat.targetfn
+	
+	local function Retarget(inst)
+		if inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("the_mime") then
+			-- Dont retarget...
+		else
+			return _targetfn(inst)
+		end
+	end	
+	inst.components.combat:SetRetargetFunction(3, Retarget)
+	
+end)
 
 AddPrefabPostInit("mosquito", function(inst)
 	if not GLOBAL.TheWorld.ismastersim then
