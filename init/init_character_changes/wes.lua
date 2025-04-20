@@ -64,8 +64,12 @@ local function BountyOnYourHead(inst)
            target.components.combat:CanTarget(inst) and
            not CanLeaveHimBe(target, LEAVE_HIM_BE) then
 
-            local TARGET_IS_A_FOLLOWER = false
-            local THE_LEADER = target.components.follower ~= nil and target.components.follower.leader or nil
+            local TARGET_IS_A_FOLLOWER = false			
+			local THE_LEADER = nil
+			
+			if target.components.follower ~= nil then
+				THE_LEADER = target.components.follower.leader
+			end
 
             if THE_LEADER ~= nil and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
                 TARGET_IS_A_FOLLOWER = true
@@ -114,7 +118,11 @@ local function SpecialBountyOnYourHead(inst)
            not CanLeaveHimBe(target, LEAVE_HIM_BE) then
 
             local TARGET_IS_A_FOLLOWER = false
-            local THE_LEADER = target.components.follower ~= nil and target.components.follower.leader or nil
+			local THE_LEADER = nil
+			
+			if target.components.follower ~= nil then
+				THE_LEADER = target.components.follower.leader
+			end
 
             if THE_LEADER ~= nil and (THE_LEADER:HasTag("player") or THE_LEADER:HasTag("bell")) then
                 TARGET_IS_A_FOLLOWER = true
