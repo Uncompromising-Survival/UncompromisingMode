@@ -1,8 +1,8 @@
 local assets =
 {
     Asset("ANIM", "anim/snaildrakehat.zip"),
-	Asset("ATLAS", "images/inventoryimages/snaildrakehat.xml"),
-	Asset("IMAGE", "images/inventoryimages/snaildrakehat.tex"),
+    Asset("ATLAS", "images/inventoryimages/snaildrakehat.xml"),
+    Asset("IMAGE", "images/inventoryimages/snaildrakehat.tex"),
 }
 
 
@@ -10,31 +10,35 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "snaildrakehat", "swap_hat")
 
     owner.AnimState:Show("HAT")
-    owner.AnimState:Hide("HAIR_HAT")
-    owner.AnimState:Show("HAIR_NOHAT")
-    owner.AnimState:Show("HAIR")
+    owner.AnimState:Show("HAIR_HAT")
+    owner.AnimState:Hide("HAIR_NOHAT")
+    owner.AnimState:Hide("HAIR")
 
-    owner.AnimState:Show("HEAD")
-    owner.AnimState:Hide("HEAD_HAT")
-	
+    if owner:HasTag("player") then
+        owner.AnimState:Hide("HEAD")
+        owner.AnimState:Show("HEAD_HAT")
+        owner.AnimState:Show("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
+    end
+    
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:SetModifier(inst, 1 - TUNING.ARMORDRAGONFLY_FIRE_RESIST)
     end
 end
 
 local function onunequip(inst, owner)
-	owner.AnimState:ClearOverrideSymbol("swap_hat")
-	owner.AnimState:Show("HAT")
-	owner.AnimState:Show("HAIR_HAT")
-	owner.AnimState:Hide("HAIR_NOHAT")
-	owner.AnimState:Hide("HAIR")
+    owner.AnimState:ClearOverrideSymbol("swap_hat")
+    owner.AnimState:Hide("HAT")
+    owner.AnimState:Hide("HAIR_HAT")
+    owner.AnimState:Show("HAIR_NOHAT")
+    owner.AnimState:Show("HAIR")
 
-	if owner:HasTag("player") then
-		owner.AnimState:Hide("HEAD")
-		owner.AnimState:Show("HEAD_HAT")
-		owner.AnimState:Show("HEAD_HAT_NOHELM")
-		owner.AnimState:Hide("HEAD_HAT_HELM")
-	end
+    if owner:HasTag("player") then
+        owner.AnimState:Show("HEAD")
+        owner.AnimState:Hide("HEAD_HAT")
+        owner.AnimState:Hide("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
+    end
 
     if owner.components.health ~= nil then
         owner.components.health.externalfiredamagemultipliers:RemoveModifier(inst)
@@ -54,7 +58,7 @@ local function fn()
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("hat")
-	inst:AddTag("waterproofer")
+    inst:AddTag("waterproofer")
 
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
@@ -65,7 +69,7 @@ local function fn()
     end
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/shadow_crown.xml"
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakehat.xml"
 
     inst:AddComponent("inspectable")
 
@@ -76,13 +80,11 @@ local function fn()
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-	
-	inst:AddComponent("waterproofer")
-	inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
+    
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
 
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakehat.xml"
-	
+    
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------
 

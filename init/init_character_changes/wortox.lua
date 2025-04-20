@@ -1186,7 +1186,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 					target.components.lootdropper:SpawnLootPrefab(item)
 				end
 				if bonus then
-					target.components.lootdropper:SpawnLootPrefab(bonus)
+					for i,v in ipairs(bonus) do
+						target.components.lootdropper:SpawnLootPrefab(v)
+					end
 				end
 				if bonus_count then
 					for i = 1,bonus_count do
@@ -1195,7 +1197,8 @@ if TUNING.DSTU.WORTOXCHANGES then
 					end
 				end
 				if instakill then
-					target.components.lootdropper:SetLoot(nil)
+					target.components.lootdropper:SetLoot(nil) -- no loot
+					target.components.lootdropper.chanceloottable = nil
 					target.components.health:Kill()
 				end
 			end		

@@ -48,7 +48,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 			end
 			
 			Slippy(data.attacker,inst)
-			if data.attacker.components.talker then
+			if data.attacker.components.talker and data.attacker:HasTag("player") then
 				data.attacker.components.talker:Say(GetString(data.attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
 			end
 		else --  any other condition needs to instantly kill the butterfly, feigning having 1 health

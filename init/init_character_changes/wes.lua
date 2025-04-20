@@ -122,3 +122,52 @@ AddPrefabPostInit("wes", function(inst)
 	inst:DoPeriodicTask(0, BountyOnYourHead)	
 	inst:DoPeriodicTask(0, SpecialBountyOnYourHead)
 end)
+
+AddPrefabPostInit("bat", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return inst
+	end
+	local _keeptargetfn = inst.components.combat.keeptargetfn
+	
+	local function KeepTarget(inst, target)
+		if target:HasTag("the_mime") then
+			return true
+		else
+			return _keeptargetfn(inst,target)
+		end
+	end	
+	
+	inst.components.combat:SetKeepTargetFunction(KeepTarget)
+	
+	local _targetfn = inst.components.combat.targetfn
+	
+	local function Retarget(inst)
+		if inst.components.combat and inst.components.combat.target and inst.components.combat.target:HasTag("the_mime") then
+			-- Dont retarget...
+		else
+			return _targetfn(inst)
+		end
+	end	
+	inst.components.combat:SetRetargetFunction(3, Retarget)
+	
+end)
+
+
+AddPrefabPostInit("mosquito", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return inst
+	end
+	
+	local function KeepTarget(inst, target)
+		if target:HasTag("the_mime") and inst.components.combat.min_attack_period ~= 2 then
+			inst.components.combat:SetAttackPeriod(2) -- their problem is they just have a long attack CD... making them reset it to a diff value 
+			return true
+		elseif inst.components.combat.min_attack_period ~= TUNING.MOSQUITO_ATTACK_PERIOD then
+			inst.components.combat:SetAttackPeriod(TUNING.MOSQUITO_ATTACK_PERIOD)
+			return true
+		else
+			return true
+		end
+	end		
+	inst.components.combat:SetKeepTargetFunction(KeepTarget)
+end)

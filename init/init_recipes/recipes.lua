@@ -396,10 +396,10 @@ AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 5), Ingredient("
 ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
 ChangeSortKey("um_armor_pyre_nettles", "sweatervest", "WINTER", false)
 -- Pyre Dart
-AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_ONE, nil, { "WEAPONS" })
+AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 
-AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_ONE, nil, { "WEAPONS" })
+AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("um_blowdart_rime", "um_blowdart_pyre", "WEAPONS", true)
 
 

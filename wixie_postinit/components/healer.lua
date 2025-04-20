@@ -8,9 +8,9 @@ env.AddComponentPostInit("healer", function(self)
 		if self.health
 			and (self.inst.components.inventoryitem ~= nil 
 			and self.inst.components.inventoryitem.owner
-			and self.inst.components.inventoryitem.owner:HasTag("pinetreepioneer") 
+			and self.inst.components.inventoryitem.owner:HasTag("um_fieldmedic") 
 			and target.components.health ~= nil
-			or target:HasTag("pinetreepioneer")) then
+			or target:HasTag("um_fieldmedic")) then
 			
 			if self.inst.prefab == "tillweedsalve" then
 				target:AddDebuff("walterbonus_buff_"..self.inst.prefab, "walterbonus_buff", {duration = 32})

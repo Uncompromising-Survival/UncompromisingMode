@@ -117,6 +117,8 @@ local function Mounted(inst)
 	end
 end
 
+env.modimport("init/init_character_changes/skilltree_walter") -- Import New Walter Tree
+
 env.AddPrefabPostInit("walter", function(inst) 
 
 	inst:AddTag("polite")

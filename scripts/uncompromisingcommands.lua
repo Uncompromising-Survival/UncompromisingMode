@@ -326,6 +326,13 @@ function c_um_wobygodmode(player)
     end
 end
 
+function c_um_setwobyhunger(p)
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.woby ~= nil then
+        player.woby.components.hunger:SetPercent(p)
+    end
+end
+
 function c_um_listumprefabs()
     print("HERE --- ALL UM PREFABS")
     for k, v in pairs(TUNING.DSTU.PREFABS) do

@@ -131,18 +131,12 @@ end
 
 STRINGS.PINETREE_TOOLTIP = {
     WALTERHAT = "- Wearing it makes scrapes and bruises feel less scary!",
-    HEALINGSALVE = "- My first aid training helps me get more out of this!",
-    TILLWEEDSALVE = "- My first aid training helps me get more out of this!",
-    BANDAGE = "- My first aid training helps me get more out of this!",
-	UM_RIMEWEED_ICEPACK = "- My first aid training helps me get more out of this!",
-    FLORAL_BANDAGE = "- My first aid training helps me get more out of this!",
     BEDROLL_STRAW = "- A pine tree pioneer knows how to conserve energy when relaxing!",
     BEDROLL_FURRY = "- A pine tree pioneer knows how to conserve energy when relaxing!",
     TENT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
     SIESTAHUT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
     PORTABLETENT_ITEM = "- A pine tree pioneer knows how to conserve energy when relaxing!",
     MEATRACK_HAT = "- If I go fast enough, it will dry even faster!",
-    BRINE_BALM = "- My first aid training helps me get more out of this!",
 	BEEHAT = "- Wearing it should help me deal with my allergy!",
 }
 
@@ -168,6 +162,14 @@ STRINGS.WIXIE_TOOLTIP = {
     SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
     SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
     SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
+	SLINGSHOTAMMO_STINGER = "- Gets stuck on the target, hurts more with every stinger hit.",
+	SLINGSHOTAMMO_SCRAPFEATHER = "- Periodically shocks the target and all nearby enemies.",
+	SLINGSHOTAMMO_GUNPOWDER = "- Knocks back all enemies around the target.",
+	SLINGSHOTAMMO_DREADSTONE = "- Has a chance to not break on impact.",
+	SLINGSHOTAMMO_HORRORFUEL = "- Periodically deals Planar damage on the target.",
+	SLINGSHOTAMMO_GELBLOB = "- Summons 1-3 Shadow Tentacles on hit.",
+	SLINGSHOTAMMO_LUNARPLANTHUSK = "- Summons 1-3 Brightshade Vines on hit.",
+	SLINGSHOTAMMO_PUREBRILLIANCE = "- Enemies take extra Planar damage from\nPlanar weapons for a bit.",
 
     SLINGSHOTAMMO_INSANITY = "...?",
     SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",
@@ -178,6 +180,7 @@ STRINGS.WIXIE_TOOLTIP = {
     SLINGSHOT_CLAIRE = "- Charge while moving.\n- Ammo ignores planar defense.",
     SLINGSHOT_JESSIE = "- Can swap firing modes.\n- Holds 6 shots, which must be filled before firing.\n- Ammo ignores planar defense.",
     BAGOFMARBLES = "- Scatters slippery marbles upon impact.",
+	SLINGSHOTAMMO_CONTAINER = "- Has 6 slots for ammo.",
 }
 
 STRINGS.ENGINEERING_TOOLTIP = {
@@ -395,7 +398,7 @@ if TUNING.DSTU.WXLESS then
         MAXSANITY = "- Provides a bit more sanity over time.\n- Reduces insanity aura effects.\n- Now increases sanity by 75.",
         MAXSANITY1 = "- Provides a bit of sanity over time.\n- Slighly reduces insanity aura effects.\n- Now increases sanity by 30.",
         TASER = "- Getting hit stuns the attacker.\n- Gives you charge when you attack a shocked target enough times.",
-        COLD = "- Periodically produces ice.\n- No longer changes max and min temperature.\n- Decreased drying threshold\n- Freezes objects and enemies, cooling you and you friends down.\n- The more frozen object is, the easier it is to break.",
+        COLD = "- Periodically produces ice.\n- No longer changes max and min temperature.\n- Decreases food spoilage rate.\n- Decreased drying threshold\n- Chills you significantly, if idle.",
         MAXHUNGER = "- Slows down charge drain.\n- Now increases hunger by 75.", --WHOEVER AT KLEI WHO DECIDED THEY'D MAKE THE MAXHUNGER1 THE WEAK VERSION AND MAXHUNGER THE STRONG VERSION SHOULD HAVE THEIR FINGERS BOILED.
         MAXHUNGER1 = "- Slightly slows down hunger drain.\n- Now increases hunger by 30",
     }

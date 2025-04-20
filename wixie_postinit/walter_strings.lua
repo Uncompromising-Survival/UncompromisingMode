@@ -123,6 +123,34 @@ STRINGS = GLOBAL.STRINGS
 	DESCRIBE.SLINGSHOTAMMO_SLOW = "How resourceful! Now if she could just stay out of trouble..."
 	DESCRIBE.SLINGSHOTAMMO_FREEZE = "How resourceful! Now if she could just stay out of trouble..."
 	DESCRIBE.SLINGSHOTAMMO_POOP = "How resourceful! Now if she could just stay out of trouble..."
+	
+	ANNOUNCE.ANNOUNCE_WOBY_WORK =
+	{
+		"Woby, come help me!",
+		"Lend a paw, girl! Heh.",
+		"Wanna help, Wobes?",
+		"You gotta minute, Woby?",
+		"Who's my special helper?",
+		"Could always use your help, Woby!",
+		"Could you lend me a paw? Heh.",
+		"When life gives you huge horns, you put them to use! Pretty please?",
+		"This task is nothing for the biggest, bestest girl!",
+		"You'll get a special surprise for doing a little wooork! C'mon!",
+		"Remember, try to use your horns, not your head!",
+		"If we work together, this will be done in a blink! Or maybe a few blinks.",
+		"Go, Woby! Show everyone how strong you are!",
+		"Yes, even cuties have to work too! Survival is of the fittest!",
+		"Don't think of it as work! Think of it as... exercise! Yeah!",
+	}
+	ANNOUNCE.ANNOUNCE_WOBY_SIT =
+	{
+		"Woby, stay!",
+		"Stay, girl!",
+		"Take a break, Wobers!",
+		"Stay, Wobes! That's it.",
+		"Paws there Woby! Heh.",
+		"Sit! Stay? Just... don't move!",
+	}
 
 	STRINGS.ACTIONS.WIXIE_TAUNT = "Taunt!"
 	

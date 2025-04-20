@@ -137,7 +137,8 @@ local wobycommand = AddAction(
 					else
 						if hasfollowers and (act.target:HasTag("CHOP_workable") or hasmerms and act.target:HasTag("MINE_workable")) then
 							act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_TROUP_ATTENTION"))
-						
+						elseif act.doer.components.skilltreeupdater:IsActivated("walter_woby_taskaid") and act.doer.woby:HasTag("woby") and (act.target:HasTag("CHOP_workable") or act.target:HasTag("MINE_workable")) then
+							act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_WOBY_WORK"))
 							return true
 						else
 							if (act.target.components.pickable == nil and
@@ -227,7 +228,7 @@ local wobystay = AddAction(
 		if hasfollowers then
 			act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_TROUP_STAY"))
 		else
-			act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_WOBY_STAY"))
+			act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_WOBY_SIT"))
 		end
 		
 		return true
@@ -287,8 +288,6 @@ local wobyhere = AddAction(
 		
 		if hasfollowers then
 			act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_TROUP_STAY"))
-		else
-			act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "ANNOUNCE_WOBY_HERE"))
 		end
 		
 		return true

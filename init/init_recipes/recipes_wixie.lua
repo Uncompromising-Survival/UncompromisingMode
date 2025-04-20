@@ -149,6 +149,12 @@ ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
 
 AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1) }
 
+AllRecipes["woby_treat"].numtogive = 1
+ChangeSortKey("woby_treat", "portabletent_item", "CHARACTER", false)
+
+AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true}, { "CHARACTER" })
+ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
+
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
 AddPrefabPostInit("forest", function(inst)

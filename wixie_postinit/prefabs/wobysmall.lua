@@ -3,11 +3,11 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local brain = require("brains/smallwobybrain")
 
-local function checkfav(inst, food)
+--[[local function checkfav(inst, food)
 	if food ~= nil and (food.prefab == "monstermeat_dried" or food.prefab == "monstersmallmeat_dried") then
 		inst.components.hunger:DoDelta(15)
 	end
-end
+end]]--
 
 local function OnAttacked(inst, food)
 	inst.AnimState:PlayAnimation("hit")
@@ -27,7 +27,7 @@ local function TriggerTransformation(inst)
 end
 
 local function OnHungerDelta2(inst, data)
-    if data.newpercent >= 0.90 then
+    if data.newpercent >= 0.95 then
         TriggerTransformation(inst)
     end
 	
@@ -125,6 +125,14 @@ local function CheckForMoreTargets(inst)
 	end
 end
 	
+local function CustomFoodStatsMod(inst, health_delta, hunger_delta, sanity_delta, food, feeder)
+	if food and (food.prefab == "woby_treat" or food.prefab == "monstersmallmeat_dried") and hunger_delta and hunger_delta > 0 then
+		hunger_delta = hunger_delta + 16.85 --26.25 x 4 = 105 (Tranformation threshold)
+	elseif food and food.prefab == "monstermeat_dried" and hunger_delta and hunger_delta > 0 then
+		hunger_delta = hunger_delta + 16.2 --35 x 3 = 105 (Tranformation threshold)
+	end
+	return health_delta, hunger_delta, sanity_delta
+end
 
 env.AddPrefabPostInit("wobysmall", function(inst) 
 
@@ -140,7 +148,7 @@ env.AddPrefabPostInit("wobysmall", function(inst)
     inst:SetBrain(brain)
 	
 	if inst.components.eater ~= nil then
-		inst.components.eater:SetOnEatFn(checkfav)
+		inst.components.eater.custom_stats_mod_fn = CustomFoodStatsMod
 	end
 	
 	inst.wobystarving = false
