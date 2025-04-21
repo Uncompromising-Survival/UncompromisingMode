@@ -73,9 +73,6 @@ end
 local function MakeIcey(inst)
     DisableYule(inst)
     inst.upgrade = "ice_mutation"
-    if inst.components.freezable then
-        inst:RemoveComponent("freezable")
-    end
     inst:DoTaskInTime(0.1, function(inst)
         if not inst.components.timer then
             inst:AddComponent("timer")
