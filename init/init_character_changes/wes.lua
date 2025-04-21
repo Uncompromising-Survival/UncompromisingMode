@@ -11,14 +11,20 @@ local LEAVE_HIM_BE = {
 	player = true,
 	playerghost = true,
 	shadowcreature = true,
-	structure = true,
-	wall = true,
 	bird = true,
 	butterfly = true,
+	structure = true,
+	wall = true,
+	friendlyfruitfly = true,
+	companion = true,
 }
 
 local NOT_ME = {
 	player = true,
+	structure = true,
+	wall = true,
+	friendlyfruitfly = true,
+	companion = true,
 }
 
 local function CanLeaveHimBe(entity, taglist)

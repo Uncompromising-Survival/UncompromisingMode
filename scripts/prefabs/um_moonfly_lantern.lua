@@ -286,7 +286,7 @@ local function lanternlightfn()
 
     inst.Light:SetColour(0 / 255, 155 / 255, 255 / 255)
     inst.Light:SetIntensity(.6)
-    inst.Light:SetRadius(5)
+    inst.Light:SetRadius(6)
     inst.Light:SetFalloff(.9)
 
     inst.entity:SetPristine()
