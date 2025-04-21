@@ -121,7 +121,6 @@ local prefab_post = {
     "fans",
     "rocks",
     --	"rock_avocado_fruit_sprout_sapling",
-    "icepack",
     "heatrock",
     "dragonfly_spawner",
     "rneghostfire",
