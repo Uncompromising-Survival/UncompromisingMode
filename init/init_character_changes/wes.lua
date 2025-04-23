@@ -44,11 +44,13 @@ end
 local they_love_me = {
 	buzzard = true,
 	tentacle = true,
+	tentacle_pillar_arm = true,
 	eyeplant = true,
 	mosquito = true,
 	gestalt = true,
 	um_pawn = true,
 	shadowtentacle = true,
+	bigshadowtentacle = true,
 }
 
 local hate = 16
