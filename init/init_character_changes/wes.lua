@@ -1,9 +1,7 @@
 local wes_must_live = {
-	shadowcreature = true,
 	player = true,
 	companion = true,
-	structure = true,
-	wall = true,
+	shadowcreature = true,
 }
 
 AddPrefabPostInitAny(function(inst)
@@ -19,10 +17,9 @@ AddPrefabPostInitAny(function(inst)
 
 	if inst.components and inst.components.combat then
 		local damage = inst.components.combat.defaultdamage and inst.components.combat.defaultdamage > 0
-		local target = inst.components.combat.targetfn or inst.components.combat.keeptargetfn
-		local state = inst.sg ~= nil and inst.sg:HasState("attack")
+		local target = inst.components.combat.targetfn
 
-		if damage or target or state then
+		if damage or target then
 			inst:AddTag("wesmustdie")
 		end
 	end
