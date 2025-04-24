@@ -140,7 +140,10 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Mob changes
     ----------------------------------------------------------------------------
-    -- ratraid
+    -- Armor Rework
+	ARMORREWORK = GetModConfigData("armorrework"),
+	
+	-- ratraid
     RATRAID_TIMERSTART = GetModConfigData("rattimer"),
     RATRAID_GRACE = GetModConfigData("ratgrace"),
     RATSNIFFER_TIMER = GetModConfigData("ratsnifftimer"),
@@ -463,6 +466,7 @@ end
 
 if GetModConfigData("armorrework") then
 	TUNING.WEREMOOSE_ABSORPTION = 0.8
+	TUNING.SHIELDOFTERROR_DAMAGE = 59.5
 end
 
 if GetModConfigData("wixie_walter") then
@@ -499,13 +503,6 @@ TUNING.NONLETHAL_DARKNESS = false
 TUNING.NONLETHAL_PERCENT = 0
 
 TUNING.WINONA_BATTERY_MIN_LOAD = 0 -- generators don't drain when not powering anything, I think.
-
--- shield buff
-TUNING.SHIELDOFTERROR_DAMAGE = 59.5
-TUNING.SHIELDOFTERROR_ABSORPTION = 0.9
-
--- shelmet nerf
-TUNING.ARMOR_SLURTLEHAT_ABSORPTION = 0.85
 
 TUNING.NO_BOSS_TIME = 24
 -- TUNING.DISEASE_DELAY_TIME = total_day_time * 50 / 1.5
