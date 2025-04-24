@@ -76,8 +76,11 @@ local function speedcheck(inst)
 		elseif inst.facing_angle_old ~= nil and inst.facing_angle_old > 350 and inst.facing_angle < 10 then
 			inst.angleadjustment2 = -360
 		end
+		
+		local x, y, z = inst.Physics:GetVelocity()
+		local R_Y_N_O = (x * x + y * y + z * z) > 0.01
 
-		if inst.gorehorn ~= nil and inst.gorehorn.components.fueled:GetPercent() > 0 and inst.components.inventory and inst.components.inventory:EquipHasTag("gore_horn") and inst.sg:HasStateTag("moving") and inst.facing_angle ~= nil and inst.facing_angle_old ~= nil and
+		if inst.gorehorn ~= nil and inst.gorehorn.components.fueled:GetPercent() > 0 and inst.components.inventory and inst.components.inventory:EquipHasTag("gore_horn") and inst.sg:HasStateTag("moving") and R_Y_N_O and inst.facing_angle ~= nil and inst.facing_angle_old ~= nil and
 			(inst.facing_angle >= inst.facing_angle_old + inst.angleadjustment2 - 10 and inst.facing_angle <= inst.facing_angle_old + inst.angleadjustment1 + 10)
 			and inst.components.locomotor ~= nil
 			and not inst.components.rider:IsRiding() then
