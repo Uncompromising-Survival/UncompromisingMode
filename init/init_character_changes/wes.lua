@@ -2,6 +2,8 @@ local wes_must_live = {
 	player = true,
 	companion = true,
 	shadowcreature = true,
+	mosquito = true,
+	brightmare_gestalt = true,	
 }
 
 AddPrefabPostInitAny(function(inst)
@@ -15,13 +17,8 @@ AddPrefabPostInitAny(function(inst)
 		end
 	end
 
-	if inst.components and inst.components.combat then
-		local damage = inst.components.combat.defaultdamage and inst.components.combat.defaultdamage > 0
-		local target = inst.components.combat.targetfn
-
-		if damage or target then
-			inst:AddTag("wesmustdie")
-		end
+	if inst.components and inst.components.combat and inst.components.combat.targetfn then
+		inst:AddTag("wesmustdie")
 	end
 end)
 
@@ -42,14 +39,9 @@ local function IgnoreMe(entity, taglist)
 end
 
 local they_love_me = {
-	buzzard = true,
 	tentacle = true,
 	tentacle_pillar_arm = true,
 	eyeplant = true,
-	mosquito = true,
-	gestalt = true,
-	um_pawn = true,
-	shadowtentacle = true,
 	bigshadowtentacle = true,
 }
 
@@ -221,23 +213,4 @@ AddPrefabPostInit("vampirebat", function(inst)
 		end
 	end
 	inst.components.combat:SetRetargetFunction(3, Retarget)
-end)
-
-AddPrefabPostInit("mosquito", function(inst)
-	if not GLOBAL.TheWorld.ismastersim then
-		return inst
-	end
-
-	local function KeepTarget(inst, target)
-		if target:HasTag("the_mime") and inst.components.combat.min_attack_period ~= 2 then
-			inst.components.combat:SetAttackPeriod(2)
-			return true
-		elseif inst.components.combat.min_attack_period ~= TUNING.MOSQUITO_ATTACK_PERIOD then
-			inst.components.combat:SetAttackPeriod(TUNING.MOSQUITO_ATTACK_PERIOD)
-			return true
-		else
-			return true
-		end
-	end
-	inst.components.combat:SetKeepTargetFunction(KeepTarget)
 end)
