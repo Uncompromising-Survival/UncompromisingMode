@@ -237,9 +237,9 @@ end
 table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
 
 
-function modparams.silksack.itemtestfn(container, item, slot)
-    return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
-end
+--function modparams.silksack.itemtestfn(container, item, slot)
+    --return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
+--end
 
 function modparams.silksack.widget.buttoninfo.fn(inst, doer)
     if inst.components.container ~= nil then
