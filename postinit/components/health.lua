@@ -2,9 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function MayKill(self, amount)
-    if self.currenthealth + amount <= 0 then
-        return true
-    end
+    return self.currenthealth + (self.inst.components.oldager and -self.inst.components.oldager.damage_remaining or amount) <= 0
 end
 
 local function DoSleep(inst, revived)

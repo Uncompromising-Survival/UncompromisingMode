@@ -72,7 +72,6 @@ local function OnSave(inst, data)
     if data ~= nil then
         data.maxhealth = inst.components.health.maxhealth
     end
-    return data
 end
 
 local function OnLoad(inst, data)

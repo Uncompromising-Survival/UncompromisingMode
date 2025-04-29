@@ -37,15 +37,12 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 		local statename = inst.sg.currentstate.name
 
 		
-		local weapon = data.attacker.components.combat and data.attacker.components.combat:GetWeapon() or nil
+		local weapon = data and data.attacker and data.attacker.components.combat and data.attacker.components.combat:GetWeapon() or nil 
 		-- if weapon then
 			-- TheNet:Announce(weapon.prefab)
 		-- end
 		if data and data.attacker and (not SittingStill(statename) and not ByPassWeapon(weapon) and not ByStimuli(data.stimuli)) then -- Can only attack when idle
 			inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-			if inst.components.health then
-				inst.components.health:SetPercent(1)
-			end
 			
 			Slippy(data.attacker,inst)
 			if data.attacker.components.talker and data.attacker:HasTag("player") then
@@ -55,7 +52,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 			inst.components.health:Kill()
 		end
 	end
-
 
 
 	local function BozoUpdate(inst)

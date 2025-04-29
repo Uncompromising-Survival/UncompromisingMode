@@ -256,7 +256,6 @@ end
 local function BarrierSave(inst, data)
     if inst.type then
         data.type = inst.type
-        return data
     end
 end
 
