@@ -147,7 +147,7 @@ local function fn()
     inst.entity:SetPristine()
 
     inst:AddComponent("heater")
-    inst.components.heater.heat = TUNING.HOTSPRING_HEAT.PASSIVE
+    inst.components.heater.heat = 300
 
     if not TheWorld.ismastersim then
         return inst

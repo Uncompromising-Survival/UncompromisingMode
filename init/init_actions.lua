@@ -476,6 +476,9 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
     end
 end
 
+-- Scythes can reach into the thicket without needing to be on top of them
+GLOBAL.ACTIONS.SCYTHE.distance = 2.5
+
 local ENV = env
 
 GLOBAL.setfenv(1, GLOBAL)
@@ -502,3 +505,5 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)
+
+

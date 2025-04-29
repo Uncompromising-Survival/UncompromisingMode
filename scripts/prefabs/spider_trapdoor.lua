@@ -486,7 +486,7 @@ local function create_trapdoor()
 	--inst:AddTag("tauntless")
     inst.components.health:SetMaxHealth(200)
 
-    inst.components.combat:SetDefaultDamage(33)
+    inst.components.combat:SetDefaultDamage(34)
     inst.components.combat:SetAttackPeriod(TUNING.SPIDER_WARRIOR_ATTACK_PERIOD + math.random() * 2)
     inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
     inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
