@@ -16,13 +16,13 @@ local function SetSize2(inst,size)
 	inst.AnimState:PlayAnimation(sizes[size].anim, true)
 	--inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
 	inst.components.unevenground.radius = sizes[size].plantrad
-
+	inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
 end
 
 local function DetermineSize(inst,fitting)
 	inst.size = math.random(1, fitting ~= nil and fitting or #sizes)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x,y,z,sizes[inst.size].rad,nil,nil,{"plant","pond","boulder","rock"})
+	local ents = TheSim:FindEntities(x,y,z,sizes[inst.size].rad,nil,nil,{"plant","pond","boulder","rock","tree"})
 	for i,v in ipairs(ents) do
 		if v ~= inst and inst.size ~= 1 then
 			DetermineSize(inst,2)
@@ -41,6 +41,7 @@ local function SetSize(inst, size)
     inst.AnimState:PlayAnimation(sizes[inst.size].anim, true)
     --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
 	inst.components.unevenground.radius = sizes[inst.size].plantrad
+	inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
 end
 
 local function onsave(inst, data)
@@ -164,9 +165,9 @@ local function fn()
     inst.OnLoad = onload
 	inst:AddComponent("unevenground")
     inst.components.unevenground.radius = TUNING.ANTLION_SINKHOLE.UNEVENGROUND_RADIUS
-    SetSize(inst)
+    inst:DoTaskInTime(0,DetermineSize)
     inst:AddComponent("um_ripplespawner")
-    inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
+    
 	
 	
 

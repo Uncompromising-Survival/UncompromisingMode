@@ -1432,6 +1432,8 @@ configuration_options = {
     -----------------------------
     BinaryConfig("announce_basestatus", "[DEV] Announce Ratsniffer",
         "[Developer Tool] Prints the exact rat sniff values to chat to be viewed in real time.", false),
+    BinaryConfig("uncompromising_spawnprotection", "[DEV] Improved Spawnprotection",
+        "Spawnprotection triggers more often and for longer, more likely to save laggy players in transition.", false),
     --	BinaryConfig("chartest_tools", "[DEV] Character Tools","[Developer Tool] Certain characters spawn with items that help test their mechanics.",false),
     SkipSpace(),
 
