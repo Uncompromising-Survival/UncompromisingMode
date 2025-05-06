@@ -5,12 +5,15 @@
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
     local _GetAttacked = self.GetAttacked
+    if not inst.OldCombatGetAttacked then
+        inst.OldCombatGetAttacked = _GetAttacked
+    end
     self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
         if attacker and damage then
-			if not inst:HasTag("mime") then
-				-- Take extra damage
-				damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
-			end
+            if not inst:HasTag("mime") then
+                -- Take extra damage
+                damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
+            end
         end
         return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
     end
@@ -19,12 +22,15 @@ end
 local function ForceToTakeMoreHunger(inst)
     local self = inst.components.hunger
     local _DoDelta = self.DoDelta
+    if not inst.OldHungerDoDelta then
+        inst.OldHungerDoDelta = _DoDelta
+    end
     self.DoDelta = function(self, delta, overtime, ignore_invincible)
         if delta and overtime and delta < 0 then
-			if not inst:HasTag("mime") then
-				-- Take extra hunger
-				delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
-			end
+            if not inst:HasTag("mime") then
+                -- Take extra hunger
+                delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
+            end
         end
         return _DoDelta(self, delta, overtime, ignore_invincible)
     end
@@ -33,75 +39,62 @@ end
 local function ForceToTakeMoreTime(inst)
     local self = inst.components.oldager
     local _OnTakeDamage = self.OnTakeDamage
+    if not inst.OldOldAgerOnTakeDamage then
+        inst.OldOldAgerOnTakeDamage = _OnTakeDamage
+    end
     self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
         if amount and overtime and amount < 0 then
-			if not inst:HasTag("mime") then
-			    -- Take extra time
-				amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
-			end
+            if not inst:HasTag("mime") then
+                -- Take extra time
+                amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
+            end
         end
         return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
     end
 end
-
 ----------------------------------DETACH---------------------------------
-
 local function ForceToTakeUsualDamage(inst)
     local self = inst.components.combat
-    local _GetAttacked = self.GetAttacked
-    self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
-        if attacker and damage then
-            -- Take normal damage
-            damage = damage / (1 + ((inst.um_deathcount + 1) / 10))
-        end
-        return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
+    if inst.OldCombatGetAttacked then
+        self.GetAttacked = inst.OldCombatGetAttacked
+        inst.OldCombatGetAttacked = nil
     end
 end
 
 local function ForceToTakeUsualHunger(inst)
     local self = inst.components.hunger
-    local _DoDelta = self.DoDelta
-    self.DoDelta = function(self, delta, overtime, ignore_invincible, ...)
-        if delta and overtime and delta < 0 then
-            -- Take normal hunger
-            delta = delta / (1 + ((inst.um_deathcount + 1) / 10))
-        end
-        return _DoDelta(self, delta, overtime, ignore_invincible, ...)
+    if inst.OldHungerDoDelta then
+        self.DoDelta = inst.OldHungerDoDelta
+        inst.OldHungerDoDelta = nil
     end
 end
 
 local function ForceToTakeUsualTime(inst)
     local self = inst.components.oldager
-    local _OnTakeDamage = self.OnTakeDamage
-    self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-        if amount and overtime and amount < 0 then
-            -- Take extra time
-            amount = amount / (1 + ((inst.um_deathcount + 1) / 10))
-        end
-        return _OnTakeDamage(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+    if inst.OldOldAgerOnTakeDamage then
+        self.OnTakeDamage = inst.OldOldAgerOnTakeDamage
+        inst.OldOldAgerOnTakeDamage = nil
     end
 end
-
 --------------------------------------------------------------------------
-
 local function oneat(inst, data)
-    if inst.modded_healthabsorption == nil then
+    if not inst.modded_healthabsorption then
         inst.modded_healthabsorption = inst.components.eater.healthabsorption
     end
 
-    if inst.modded_hungerabsorption == nil then
+    if not inst.modded_hungerabsorption then
         inst.modded_hungerabsorption = inst.components.eater.hungerabsorption
     end
 
-    if inst.modded_sanityabsorption == nil then
+    if not inst.modded_sanityabsorption then
         inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
     end
 
     inst.components.eater:SetAbsorptionModifiers(0, inst.wolfgang_vetcurse and 0 or inst.modded_hungerabsorption or 1, 0)
 
-    local stack_mult = inst.components.eater.eatwholestack and data.food.components.stackable ~= nil and data.food.components.stackable:StackSize() or 1
+    local stack_mult = inst.components.eater.eatwholestack and data.food.components.stackable and data.food.components.stackable:StackSize() or 1
 
-    local base_mult = inst.components.foodmemory ~= nil and inst.components.foodmemory:GetFoodMultiplier(data.food.prefab) or 1
+    local base_mult = inst.components.foodmemory and inst.components.foodmemory:GetFoodMultiplier(data.food.prefab) or 1
     local maxhp_heal = string.find(data.food.prefab, "spice_salt") ~= nil
 
     local warlybuff = inst:HasTag("warlybuffed") and 1.2 or 1
@@ -110,59 +103,59 @@ local function oneat(inst, data)
     local hunger_delta = 0
     local sanity_delta = 0
 
-    if inst.components.health ~= nil and
+    if inst.components.health and
         (data.food.components.edible.healthvalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
         health_delta = data.food.components.edible:GetHealth(inst) * base_mult * inst.modded_healthabsorption * warlybuff
     end
 
-    if inst.components.hunger ~= nil and
+    if inst.components.hunger and
         (data.food.components.edible.hungervalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
         hunger_delta = data.food.components.edible:GetHunger(inst) * base_mult * inst.modded_hungerabsorption * warlybuff
     end
 
-    if inst.components.sanity ~= nil and
+    if inst.components.sanity and
         (data.food.components.edible.sanityvalue >= 0 or inst.components.eater:DoFoodEffects(data.food)) then
         sanity_delta = data.food.components.edible:GetSanity(inst) * base_mult * inst.modded_sanityabsorption * warlybuff
     end
 
-    if inst.components.eater.custom_stats_mod_fn ~= nil then
+    if inst.components.eater.custom_stats_mod_fn then
         health_delta, hunger_delta, sanity_delta = inst.components.eater.custom_stats_mod_fn(inst, health_delta, hunger_delta, sanity_delta, data.food, data.feeder)
     end
 
     --[[local foodaffinitysanitybuff = inst:HasTag("playermerm") and (data.food.prefab == "kelp" or data.food.prefab == "kelp_cooked") and 0 or inst.components.foodaffinity:HasPrefabAffinity(data.food) and 15 or 0
-	sanity_delta = sanity_delta + foodaffinitysanitybuff]]
+    sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
     if health_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_healthregen")) then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", { duration = (health_delta * 0.1), max_hp = maxhp_heal })
+        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = maxhp_heal})
     else
         inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
     end
 
     if inst.wolfgang_vetcurse then
         if hunger_delta > 1 then
-            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_" .. data.food.prefab, "hungerregenbuff_vetcurse", { duration = (hunger_delta * 0.1) })
+            inst.components.debuffable:AddDebuff("hungerregenbuff_vetcurse_" .. data.food.prefab, "hungerregenbuff_vetcurse", {duration = (hunger_delta * 0.1)})
         else
             inst.components.hunger:DoDelta(hunger_delta)
         end
     end
 
     if sanity_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_sanityregen")) then
-        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", { duration = (sanity_delta * 0.1) })
+        inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_" .. data.food.prefab, "sanityregenbuff_vetcurse", {duration = (sanity_delta * 0.1)})
     else
         inst.components.sanity:DoDelta(sanity_delta, nil, data.food.prefab)
     end
 end
 
 local function ForceOvertimeFoodEffects(inst)
-    if inst.modded_healthabsorption == nil then
+    if not inst.modded_healthabsorption then
         inst.modded_healthabsorption = inst.components.eater.healthabsorption
     end
 
-    if inst.modded_hungerabsorption == nil then
+    if not inst.modded_hungerabsorption then
         inst.modded_hungerabsorption = inst.components.eater.hungerabsorption
     end
 
-    if inst.modded_sanityabsorption == nil then
+    if not inst.modded_sanityabsorption then
         inst.modded_sanityabsorption = inst.components.eater.sanityabsorption
     end
 
@@ -193,9 +186,9 @@ local function ForceWalterCurse_On(inst, target)
     target.walter_vetcurse = true
 
     target.walter_curse = target:ListenForEvent("attacked", function(target, data)
-        if data ~= nil and data.damage ~= nil then
-            local attacker = (data.attacker ~= nil and data.attacker.prefab ~= nil) and data.attacker.prefab or "_projectile_attack"
-            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", { duration = data.damage * 0.05, negative_value = true })
+        if data and data.damage then
+            local attacker = data.attacker and data.attacker.prefab or "_projectile_attack"
+            target.components.debuffable:AddDebuff("healthregenbuff_vetcurse_walter_curse" .. attacker, "healthregenbuff_vetcurse_walter_curse", {duration = data.damage * 0.05, negative_value = true})
         end
     end)
 end
@@ -203,12 +196,12 @@ end
 local function ForceWalterCurse_Off(inst, target)
     target:RemoveTag("walter_vetcurse")
 
-    if target.walter_curse ~= nil then
+    if target.walter_curse then
         target.walter_curse:Cancel()
+        target.walter_curse = nil
     end
 
-    target.walter_curse = nil
-	target.walter_vetcurse = nil
+    target.walter_vetcurse = nil
 end
 
 local function ForceWortoxCurse_On(inst, target)
@@ -216,11 +209,11 @@ local function ForceWortoxCurse_On(inst, target)
     target.wortox_vetcurse = true
 
     target.wortox_curse = target:ListenForEvent("killed", function(target, data)
-        if data ~= nil and data.victim ~= nil and data.victim:IsValid() then
+        if data and data.victim and data.victim:IsValid() then
             local explosive = SpawnPrefab("explosive_vetscurse_soul")
             explosive.Transform:SetPosition(data.victim.Transform:GetWorldPosition())
 
-            if data.victim.components.health ~= nil then
+            if data.victim.components.health then
                 explosive.damage = data.victim.components.health.maxhealth / 10
             end
         end
@@ -230,8 +223,9 @@ end
 local function ForceWortoxCurse_Off(inst, target)
     target:RemoveTag("wortox_vetcurse")
 
-    if target.wortox_curse ~= nil then
+    if target.wortox_curse then
         target.wortox_curse:Cancel()
+        target.wortox_curse = nil
     end
 
     target.wortox_curse = nil
@@ -241,7 +235,7 @@ end
 local function ForceMaxwellCurse_On(inst, target)
     target.maxwell_vetcurse = true
     target:AddTag("shambler_target")
-    if target.maxwell_shambler == nil then
+    if not target.maxwell_shambler then
         local shambler = SpawnPrefab("um_shambler")
         target.maxwell_shambler = shambler
         shambler:LinkToPlayer(target)
@@ -253,7 +247,7 @@ local function ForceMaxwellCurse_Off(inst, target)
     target.maxwell_vetcurse = nil
     target:RemoveTag("shambler_target")
 
-    if target.maxwell_shambler ~= nil then
+    if target.maxwell_shambler then
         target.maxwell_shambler.sg:GoToState("disssipate")
     end
 end
@@ -263,12 +257,12 @@ local function ForceWillowCurse_On(inst, target)
     target.willow_vetcurse = true
 
     target.willow_curse_check = target:ListenForEvent("sanitydelta", function(target)
-        if target.components.sanity ~= nil and target.components.sanity:GetPercent() < 0.4 then
-            if target.willow_curse == nil then
+        if target.components.sanity and target.components.sanity:GetPercent() < 0.4 then
+            if not target.willow_curse then
                 target.willow_curse = target:DoPeriodicTask(1, function(target)
-                    if target.components.sanity ~= nil and target.components.sanity:GetPercent() <= 0.4 then
+                    if target.components.sanity and target.components.sanity:GetPercent() <= 0.4 then
                         local x, y, z = target.Transform:GetWorldPosition()
-                        local fires = TheSim:FindEntities(x, y, z, 3, { "um_shadowfire" })
+                        local fires = TheSim:FindEntities(x, y, z, 3, {"um_shadowfire"})
 
                         if #fires > 0 then
                             fire:AdvanceStage()
@@ -279,11 +273,10 @@ local function ForceWillowCurse_On(inst, target)
                 end)
             end
         else
-            if target.willow_curse ~= nil then
+            if target.willow_curse then
                 target.willow_curse:Cancel()
+                target.willow_curse = nil
             end
-
-            target.willow_curse = nil
         end
     end)
 end
@@ -292,15 +285,14 @@ local function ForceWillowCurse_Off(inst, target)
     target:RemoveTag("willow_vetcurse")
     target.willow_vetcurse = nil
 
-    if target.willow_curse_check ~= nil then
+    if target.willow_curse_check then
         target.willow_curse_check:Cancel()
     end
 
-    if target.willow_curse ~= nil then
+    if target.willow_curse then
         target.willow_curse:Cancel()
+        target.willow_curse = nil
     end
-
-    target.willow_curse = nil
 end
 
 local function ForceWarlyCurse_On(inst, target)
@@ -308,12 +300,12 @@ local function ForceWarlyCurse_On(inst, target)
     target.warly_vetcurse = true
 
     target.warly_curse = target:ListenForEvent("onpreeat", function(target, data)
-        if target:HasTag("vetcurse") and data.food ~= nil and data.food.components.edible ~= nil and data.food.components.edible.hungervalue ~= nil then
+        if target:HasTag("vetcurse") and data.food and data.food.components.edible and data.food.components.edible.hungervalue then
             local overstuffed = target.components.hunger.current + (data.food.components.edible.hungervalue * target.components.eater.hungerabsorption)
             local maxhunger = target.components.hunger.max
             local clampvalue = overstuffed - maxhunger
 
-            if target.components.grogginess ~= nil then
+            if target.components.grogginess then
                 if overstuffed > maxhunger then
                     if target.components.grogginess:HasGrogginess() then
                         target.components.talker:Say(GetString(target, "ANNOUNCE_OVER_EAT", "OVERSTUFFED"))
@@ -333,11 +325,10 @@ local function ForceWarlyCurse_Off(inst, target)
     target:RemoveTag("warly_vetcurse")
     target.warly_vetcurse = nil
 
-    if target.warly_curse ~= nil then
+    if target.warly_curse then
         target.warly_curse:Cancel()
+        target.warly_curse = nil
     end
-
-    target.warly_curse = nil
 end
 
 local function ForceWinkyCurse_On(inst, target)
@@ -353,11 +344,10 @@ local function ForceWinkyCurse_Off(inst, target)
     target:RemoveTag("winky_vetcurse")
     target.winky_vetcurse = nil
 
-    if target.winky_curse ~= nil then
+    if target.winky_curse then
         target.winky_curse:Cancel()
+        target.winky_curse = nil
     end
-
-    target.winky_curse = nil
 end
 
 local function ResetSleepyCD(target)
@@ -369,10 +359,10 @@ local function ForceWickerbottomCurse_On(inst, target)
     target.wickerbottom_vetcurse = true
 
     target.wickerbottom_curse = target:DoPeriodicTask(1, function(target)
-        if target.vetcurse_sleepiness == nil then
+        if not target.vetcurse_sleepiness then
             target.vetcurse_sleepiness = 0
         end
-        if target.components.grogginess ~= nil then
+        if target.components.grogginess then
             if target.sg:HasStateTag("sleeping") or
                 target.sg:HasStateTag("bedroll") or
                 target.sg:HasStateTag("tent") or
@@ -388,13 +378,13 @@ local function ForceWickerbottomCurse_On(inst, target)
                     target.vetcurse_sleepiness = target.vetcurse_sleepiness + (1 * target.components.grogginess:GetResistance())
                 end
 
-                if target.vetcurse_sleepycd == nil then
+                if not target.vetcurse_sleepycd then
                     if target.vetcurse_sleepiness > 480 then
-                        target:PushEvent("yawn", { grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50 })
+                        target:PushEvent("yawn", {grogginess = 4, knockoutduration = target.vetcurse_sleepiness / 50})
                     elseif target.vetcurse_sleepiness <= 480 and target.vetcurse_sleepiness > 360 then
-                        target:PushEvent("yawn", { grogginess = 2, knockoutduration = 0 })
+                        target:PushEvent("yawn", {grogginess = 2, knockoutduration = 0})
                     elseif target.vetcurse_sleepiness <= 360 and target.vetcurse_sleepiness > 280 then
-                        target:PushEvent("yawn", { grogginess = 0, knockoutduration = 0 })
+                        target:PushEvent("yawn", {grogginess = 0, knockoutduration = 0})
                     end
 
                     if target.vetcurse_sleepiness > 280 then
@@ -402,8 +392,7 @@ local function ForceWickerbottomCurse_On(inst, target)
                     end
                 end
             end
-
-            print(target.vetcurse_sleepiness)
+            --print(target.vetcurse_sleepiness)
         end
     end)
 end
@@ -412,17 +401,15 @@ local function ForceWickerbottomCurse_Off(inst, target)
     target:RemoveTag("wickerbottom_vetcurse")
     target.wickerbottom_vetcurse = nil
 
-    if target.wickerbottom_curse ~= nil then
+    if target.wickerbottom_curse then
         target.wickerbottom_curse:Cancel()
+        target.wickerbottom_curse = nil
     end
 
-    if target.vetcurse_sleepycd ~= nil then
+    if target.vetcurse_sleepycd then
         target.vetcurse_sleepycd:Cancel()
+        target.vetcurse_sleepycd = nil
     end
-
-    target.vetcurse_sleepycd = nil
-
-    target.wickerbottom_curse = nil
 end
 
 local SPAWN_DIST = 30
@@ -436,7 +423,7 @@ local function GetSpawnPoint(pt)
         pt = FindNearbyLand(pt, 1) or pt
     end
     local offset = FindWalkableOffset(pt, math.random() * 2 * PI, SPAWN_DIST, 12, true, true, NoHoles)
-    if offset ~= nil then
+    if offset then
         offset.x = offset.x + pt.x
         offset.z = offset.z + pt.z
         return offset
@@ -446,7 +433,7 @@ end
 local function MakeAKrampusForPlayer(player)
     local pt = player:GetPosition()
     local spawn_pt = GetSpawnPoint(pt)
-    if spawn_pt ~= nil then
+    if spawn_pt then
         local kramp = SpawnPrefab("krampus")
         kramp.Physics:Teleport(spawn_pt:Get())
         kramp:FacePoint(pt)
@@ -461,11 +448,11 @@ local function ForceWixieCurse_On(inst, target)
     target.wixie_vetcurse = true
 
     target.wixie_curse = target:ListenForEvent("killed", function(target, data)
-        if data ~= nil and data.victim ~= nil and data.victim.prefab ~= nil then
+        if data and data.victim and data.victim.prefab then
             local naughtiness = NAUGHTY_VALUE[data.victim.prefab]
-            if naughtiness ~= nil then
+            if naughtiness then
                 if not (data.victim.prefab == "pigman" and
-                        data.victim.components.werebeast ~= nil and
+                        data.victim.components.werebeast and
                         data.victim.components.werebeast:IsInWereState()) then
                     local naughty_val = FunctionOrValue(naughtiness, target, data)
                     if math.random() > (1 - naughty_val / 50) then
@@ -481,15 +468,14 @@ local function ForceWixieCurse_Off(inst, target)
     target:RemoveTag("wixie_vetcurse")
     target.wixie_vetcurse = nil
 
-    if target.wixie_curse ~= nil then
+    if target.wixie_curse then
         target.wixie_curse:Cancel()
+        target.wixie_curse = nil
     end
-
-    target.wixie_curse = nil
 end
 
-local MUTANT_BIRD_MUST_HAVE = { "bird_mutant" }
-local MUTANT_BIRD_MUST_NOT_HAVE = { "INLIMBO" }
+local MUTANT_BIRD_MUST_HAVE = {"bird_mutant"}
+local MUTANT_BIRD_MUST_NOT_HAVE = {"INLIMBO"}
 
 
 local BIRDBLOCKER_TAGS = { "birdblocker" }
@@ -554,11 +540,10 @@ local function ForceWoodieCurse_Off(inst, target)
     target:RemoveTag("woodie_vetcurse")
     target.woodie_vetcurse = nil
 
-    if target.woodie_curse ~= nil then
+    if target.woodie_curse then
         target.woodie_curse:Cancel()
+        target.woodie_curse = nil
     end
-
-    target.woodie_curse = nil
 end
 
 local function ForceWolfgangCurse_On(inst, target)
@@ -569,12 +554,12 @@ local function ForceWolfgangCurse_On(inst, target)
     target.components.eater:SetAbsorptionModifiers(0, target.wolfgang_vetcurse and 0 or target.modded_hungerabsorption or 1, 0)
 
     target.wolfgang_curse = target:ListenForEvent("hungerdelta", function(target, data)
-        if target:HasTag("vetcurse") and target.components.hunger ~= nil then
+        if target:HasTag("vetcurse") and target.components.hunger then
             local hunger_percent = target.components.hunger:GetPercent()
             local key = "Wolfgang_Curse_DebuffKey"
 
             if hunger_percent > 0.5 then
-                if target.components.combat ~= nil then
+                if target.components.combat then
                     target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
                 end
 
@@ -582,7 +567,7 @@ local function ForceWolfgangCurse_On(inst, target)
                     target.components.locomotor:RemoveExternalSpeedMultiplier(target, key)
                 end
             else
-                if target.components.combat ~= nil then
+                if target.components.combat then
                     target.components.combat.externaldamagemultipliers:SetModifier(target, (.5 - hunger_percent))
                 end
 
@@ -604,7 +589,7 @@ local function ForceWolfgangCurse_Off(inst, target)
 
     local key = "Wolfgang_Curse_DebuffKey"
 
-    if target.components.combat ~= nil then
+    if target.components.combat then
         target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
     end
 
@@ -612,11 +597,10 @@ local function ForceWolfgangCurse_Off(inst, target)
         target.components.locomotor:RemoveExternalSpeedMultiplier(target, key)
     end
 
-    if target.wolfgang_curse ~= nil then
+    if target.wolfgang_curse then
         target.wolfgang_curse:Cancel()
+        target.wolfgang_curse = nil
     end
-
-    target.wolfgang_curse = nil
 end
 
 local function ForceWandaCurse_On(inst, target)
@@ -626,11 +610,11 @@ local function ForceWandaCurse_On(inst, target)
 
     target.wanda_curse = target:ListenForEvent("killed", function(target, data)
         if target:HasTag("vetcurse") then
-            if data ~= nil and data.victim ~= nil and data.victim ~= nil then
+            if data and data.victim and data.victim:IsValid() then
                 if not data.victim:HasTag("shadow_aligned") and not data.victim:HasTag("lunar_aligned") then
-                    local sanity = target.components.sanity ~= nil and target.components.sanity:GetPercent()
+                    local sanity = target.components.sanity and target.components.sanity:GetPercent()
 
-                    if sanity ~= nil and (1 - sanity) < math.random() then
+                    if sanity and (1 - sanity) < math.random() then
                         local shadow = math.random() > 0.5 and "crawlingnightmare" or "nightmarebeak"
                         SpawnPrefab(shadow).Transform:SetPosition(data.victim.Transform:GetWorldPosition())
                     end
@@ -644,16 +628,14 @@ local function ForceWandaCurse_Off(inst, target)
     target:RemoveTag("wanda_vetcurse")
     target.wanda_vetcurse = nil
 
-    if target.wanda_curse ~= nil then
+    if target.wanda_curse then
         target.wanda_curse:Cancel()
+        target.wanda_curse = nil
     end
-
-    target.wanda_curse = nil
 end
 
 local function ForceWathgrithrCurse_On(inst, target)
     target:AddTag("wathgrithr_vetcurse")
-
     target.wathgrithr_vetcurse = true
 end
 
@@ -664,7 +646,6 @@ end
 
 local function ForceWesCurse_On(inst, target)
     target:AddTag("wes_vetcurse")
-
     target.wes_vetcurse = true
 end
 
@@ -674,7 +655,7 @@ local function ForceWesCurse_Off(inst, target)
 end
 
 local function WendyCurse(player)
-    if player.components.health ~= nil and player.components.sanity ~= nil and not player.components.sanity.inducedinsanity and player.components.health:GetPercent() > player.components.sanity:GetPercent() then
+    if player.components.health and player.components.sanity and not player.components.sanity.inducedinsanity and player.components.health:GetPercent() > player.components.sanity:GetPercent() then
         player.components.health:SetPercent(player.components.sanity:GetPercent())
     end
 end
@@ -859,15 +840,14 @@ Winona
 Wurt
 Webber
 Wathom
-
 ]]
 
 local function AttachCurse(inst, target)
-    if target.components.combat ~= nil then
-        --target.components.combat.externaldamagemultipliers:SetModifier(inst, .75)    Effect Removed
+    if target.components.combat then
+        --target.components.combat.externaldamagemultipliers:SetModifier(inst, .75) -- Effect Removed
         target.vetcurse = true
 
-        if target.components ~= nil and target.components.oldager ~= nil then
+        if target.components and target.components.oldager then
             ForceToTakeMoreTime(target)
         else
             ForceToTakeMoreDamage(target)
@@ -958,11 +938,11 @@ local function AttachCurse(inst, target)
 end
 
 local function DetachCurse(inst, target)
-    if target.components.combat ~= nil then
+    if target.components.combat then
         --target.components.combat.externaldamagemultipliers:RemoveModifier(inst)
-        --target.vetcurse = false
+        target.vetcurse = nil
 
-        if target.components ~= nil and target.components.oldager ~= nil then --taking a guess thats what her tag is, I swear, I actually don't know
+        if target.components and target.components.oldager then --taking a guess thats what her tag is, I swear, I actually don't know
             ForceToTakeUsualTime(target)
         else
             ForceToTakeUsualDamage(target)
@@ -989,19 +969,19 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
             inst.components.debuff:Stop()
         end, target)]]
 
-        --target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_"..string.upper(name), priority = priority })
-        if onattachedfn ~= nil then
+        --target:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_"..string.upper(name), priority = priority})
+        if onattachedfn then
             onattachedfn(inst, target)
         end
     end
 
 
     local function OnDetached(inst, target)
-        if ondetachedfn ~= nil then
+        if ondetachedfn then
             ondetachedfn(inst, target)
         end
 
-        --target:PushEvent("foodbuffdetached", { buff = "ANNOUNCE_DETACH_BUFF_"..string.upper(name), priority = priority })
+        --target:PushEvent("foodbuffdetached", {buff = "ANNOUNCE_DETACH_BUFF_"..string.upper(name), priority = priority})
         inst:Remove()
     end
 
@@ -1048,7 +1028,7 @@ local function ToggleCursee(inst)
         local bodytext = STRINGS.VETSKULL.DEFAULT .. "\n" .. inst.skulldef_client.description --inst.SkullDescription
         local yes_box = { text = STRINGS.VETS_OK, cb = acceptance }
 
-        local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
+        local bpds = BigPopupDialogScreen(title, bodytext, {yes_box})
         bpds.title:SetPosition(0, 90, 0)
         bpds.text:SetPosition(0, -15, 0)
 
@@ -1058,7 +1038,7 @@ local function ToggleCursee(inst)
 end
 
 local function SkullTalk(inst, doer)
-    if doer ~= nil and inst.skulldef ~= nil and inst.skulldef.description ~= nil then
+    if doer and inst.skulldef and inst.skulldef.description then
         inst.valid_cursee_id = doer.userid
 
         --inst.SkullDescription:set_local(inst.skulldef.description)
@@ -1069,13 +1049,13 @@ local function SkullTalk(inst, doer)
 
 
         --[[inst.talknum = 0
-		
-		for i = 1, 4 do
-			inst:DoTaskInTime(3 * (i - 1), function(inst)
-				inst.components.talker:Say(inst.skulldef.description[i])
-				inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/taunt")
-			end)
-		end]]
+        
+        for i = 1, 4 do
+            inst:DoTaskInTime(3 * (i - 1), function(inst)
+                inst.components.talker:Say(inst.skulldef.description[i])
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/together/stalker/taunt")
+            end)
+        end]]
     end
 end
 
@@ -1095,7 +1075,7 @@ local function skull_fn(skull_def)
 
     inst.skulldef_client = skull_def
     inst.skull_music = skull_def.music
-	
+    
     inst.actiontype = STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM.PONDER
 
     inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
