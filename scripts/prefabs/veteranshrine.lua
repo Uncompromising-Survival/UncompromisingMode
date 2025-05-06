@@ -2,13 +2,12 @@ local BigPopupDialogScreen = require "screens/popupdialog"
 
 local assets =
 {
-    Asset("ANIM", "anim/veteranshrine.zip"),      
+    Asset("ANIM", "anim/veteranshrine.zip"),
 }
 
-local prefabs =
+--[[local prefabs =
 {
-}
-
+}]]
 
 --[[
 local function makeactive(inst)
@@ -25,66 +24,8 @@ local function GetVerb()
     return "TOUCH"
 end
 
-local function SpawnLootPrefab(inst, lootprefab, shrine)
-    if lootprefab == nil then
-        return
-    end
-
-    local loot = SpawnPrefab(lootprefab)
-    if loot == nil then
-        return
-    end
-
-    local x, y, z = shrine.Transform:GetWorldPosition()
-
-    if loot.Physics ~= nil then
-        local angle = math.random() * 2 * PI
-        loot.Physics:SetVel(2 * math.cos(angle), 10, 2 * math.sin(angle))
-
-        if shrine.Physics ~= nil then
-            local len = loot:GetPhysicsRadius(0) + shrine:GetPhysicsRadius(0)
-            x = x + math.cos(angle) * len
-            z = z + math.sin(angle) * len
-        end
-
-		--loot:DoTaskInTime(1, CheckSpawnedLoot)
-    end
-
-    loot.Transform:SetPosition(x, y, z)
-
-	loot:PushEvent("on_loot_dropped", {dropper = inst})
-
-    return loot
-end
-
-local function ToggleCurse(inst, doer)
-	if doer.components.debuffable ~= nil then
-		if not doer.vetcurse then
-			inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_maxwelllaugh")
-			doer.SoundEmitter:PlaySound("dontstarve/sanity/creature2/taunt")
-			doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-			doer:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
-			local x, y, z = inst.Transform:GetWorldPosition()
-			local fx = SpawnPrefab("statue_transition_2")
-			if fx ~= nil then
-				fx.Transform:SetPosition(x, y, z)
-				fx.Transform:SetScale(1.2,1.2,1.2)
-			end
-			fx = SpawnPrefab("statue_transition")
-			if fx ~= nil then
-				fx.Transform:SetPosition(x, y, z)
-				fx.Transform:SetScale(1.2,1.2,1.2)
-			end
-			
-			for i = 1, 2 do
-				SpawnLootPrefab(doer, "um_dark_vestiges", inst)
-			end
-		end
-	end
-end
-
 local function OnDoneTalking(inst)
-    if inst.talktask ~= nil then
+    if inst.talktask then
         inst.talktask:Cancel()
         inst.talktask = nil
     end
@@ -92,16 +33,16 @@ local function OnDoneTalking(inst)
 end
 
 local function StartRagtime(inst)
-	if inst.ragtime_playing == nil then
-		inst.ragtime_playing = true
-		inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/ragtime", "ragtime")
-	else
-		inst.SoundEmitter:SetVolume("ragtime", 1)
-	end
+    if not inst.ragtime_playing then
+        inst.ragtime_playing = true
+        inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/ragtime", "ragtime")
+    else
+        inst.SoundEmitter:SetVolume("ragtime", 1)
+    end
 end
 
 local function ShutUpRagtime(inst)
-	inst.SoundEmitter:SetVolume("ragtime", 0)
+    inst.SoundEmitter:SetVolume("ragtime", 0)
 end
 
 local function OnTalk(inst)
@@ -111,151 +52,112 @@ local function OnTalk(inst)
 end
 
 local function onnear(inst, target)
-	if target ~= nil then
-		if target:HasTag("vetcurse") then
-			inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.VETERANCURSED)
-		else
-			inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.VETERANCURSETAUNT)
-		end
-	end
-	
-	inst:DoTaskInTime(0, StartRagtime)
+    if target then
+        local quotes = target:HasTag("vetcurse") and STRINGS.UM_VETERANSHRINE.VETERANCURSED or STRINGS.UM_VETERANSHRINE.VETERANCURSETAUNT
+        inst.components.talker:Say(quotes[math.random(1, #quotes)])
+    end
+    inst:DoTaskInTime(0, StartRagtime)
 end
 
 local function onfar(inst, target)
-	inst:DoTaskInTime(0, ShutUpRagtime)
+    inst:DoTaskInTime(0, ShutUpRagtime)
 end
 
-local function ToggleCursee(inst)
-	local player = inst.Cursee:value()
-	if player == ThePlayer then
-		if player:HasTag("vetcurse") then
-			local function acceptance()
-				TheFrontEnd:PopScreen()
-			end
-			local title = STRINGS.VETS_CONFIRMED_TITLE
-			local bodytext = STRINGS.VETS_CONFIRMED
-			local yes_box = { text = STRINGS.VETS_OK, cb = acceptance }
-
-			local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
-			bpds.title:SetPosition(0, 90, 0)
-			bpds.text:SetPosition(0, -15, 0)
-
-			TheFrontEnd:PushScreen(bpds)
-		else
-			local function start_curse(inst)
-				TheFrontEnd:PopScreen()
-			end
-
-			local title = STRINGS.VETS_TITLE
-			local bodytext = STRINGS.VETS
-			local yes_box = { text = STRINGS.VETS_OK, cb = start_curse }
-
-			local bpds = BigPopupDialogScreen(title, bodytext, { yes_box })
-			bpds.title:SetPosition(0, 90, 0)
-			bpds.text:SetPosition(0, -15, 0)
-
-			TheFrontEnd:PushScreen(bpds)
-		end
-	end
+local function ToggleCurse(inst, doer)
+    if doer.components.debuffable then
+        if not doer.vetcurse then
+            local sounds = {"common/teleportato/teleportato_maxwelllaugh", "sanity/creature2/taunt"}
+            for _, sound in pairs(sounds) do
+                doer.SoundEmitter:PlaySound("dontstarve/"..sound)
+            end
+            doer.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+            doer:PushEvent("foodbuffattached", {buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1})
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local fxlist = {"statue_transition_2", "statue_transition"}
+            for _, fx in pairs(fxlist) do
+                local fx = _G.Prefabs[fx] and SpawnPrefab(fx)
+                if fx then
+                    fx.Transform:SetPosition(x, y, z)
+                    fx.Transform:SetScale(1.2, 1.2, 1.2)
+                end
+            end
+        end
+    end
 end
 
 local function OnActivate(inst, doer)
-	if doer:HasTag("vetcurse") then
-		if doer.components.builder ~= nil then
-			doer.components.builder:UsePrototyper(inst)
-		end
-		--inst.valid_cursee_id = doer.userid
-		--inst.Cursee:set_local(doer)
-		--inst.Cursee:set(doer)
-	elseif doer:HasTag("vetcurse_warning") and not doer:HasTag("vetcurse") then
-		doer.sg:GoToState("curse_controlled")
-		ToggleCurse(inst, doer)
-		doer:RemoveTag("vetcurse_warning")
-	else
-		inst.valid_cursee_id = doer.userid
-		inst.Cursee:set_local(doer)
-		inst.Cursee:set(doer)
-		doer:AddTag("vetcurse_warning")
-	end
-	
-	inst.components.activatable.inactive = true
+    if not doer:HasTag("vetcurse_warning") then
+        inst.valid_cursee_id = doer.userid
+        inst.Cursee:set_local(doer)
+        inst.Cursee:set(doer)
+        if not doer:HasTag("vetcurse") then
+            doer:AddTag("vetcurse_warning")
+        end
+    else
+        if not doer:HasTag("vetcurse") then
+            doer.sg:GoToState("curse_controlled")
+            ToggleCurse(inst, doer)
+        end
+        doer:RemoveTag("vetcurse_warning")
+    end
+    inst.components.activatable.inactive = true
+end
+
+local function ToggleCursee(inst)
+    local player = inst.Cursee:value()
+    if player == ThePlayer then
+        local function pop_screen()
+            TheFrontEnd:PopScreen()
+        end
+        local title = STRINGS.VETS_TITLE
+        local bodytext = STRINGS.VETS
+        if player:HasTag("vetcurse") then
+            title = STRINGS.VETS_CONFIRMED_TITLE
+            bodytext = STRINGS.VETS_CONFIRMED
+        end
+        local bpds = BigPopupDialogScreen(title, bodytext, {{text = STRINGS.VETS_OK, cb = pop_screen}})
+        bpds.title:SetPosition(0, 90, 0)
+        bpds.text:SetPosition(0, -15, 0)
+
+        TheFrontEnd:PushScreen(bpds)
+    end
 end
 
 local function RegisterNetListeners(inst)
-	inst:ListenForEvent("SetCurseedirty", ToggleCursee)
-end
-
-local function OnGetItemFromPlayer(inst, giver, item)
-    if item.skulldef ~= nil and item.skulldef.attachfn and item.skulldef.vestiges then
-		item.skulldef.attachfn(item, giver)
-		
-		for i = 1, item.skulldef.vestiges do
-			SpawnLootPrefab(item, "um_dark_vestiges", inst)
-		end
-	elseif item:HasTag("vetcurse_item") then
-		local recipe = AllRecipes[item.prefab]
-
-		for i, v in ipairs(recipe.ingredients) do
-			if string.sub(v.type, -5) == "_soul" or string.sub(v.type, -9) == "_vestiges" then
-				local amt = v.amount == 0 and 0 or v.amount
-				for n = 1, amt do
-					SpawnLootPrefab(item, v.type, inst)
-				end
-			end
-		end
-
-		inst.SoundEmitter:PlaySound("dontstarve/common/staff_dissassemble")
-	end
-end
-
-local function OnRefuseItem(inst, giver, item)
-	if not giver:HasTag("vetcurse") then
-		inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.NOT_VETERANCURSED)
-	elseif not item:HasTag("vetskull") or not item:HasTag("vetcurse_item") then
-		inst.components.talker:Say(STRINGS.UM_VETERANSHRINE.NOT_VETERANSKULL)
-	end
-end
-
-local function AcceptTest(inst, item, giver)
-    return giver:HasTag("vetcurse") and item:HasTag("vetskull") or item:HasTag("vetcurse_item")
+    inst:ListenForEvent("SetCurseedirty", ToggleCursee)
 end
 
 local function fn(Sim)
     local inst = CreateEntity()
-	
-	inst.entity:AddTransform()
+    
+    inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-	inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
-	inst.MiniMapEntity:SetIcon("veteranshrine_map.tex")
+    inst.MiniMapEntity:SetIcon("veteranshrine_map.tex")
 
-    inst.AnimState:SetBuild("veteranshrine")    
+    inst.AnimState:SetBuild("veteranshrine")
     inst.AnimState:SetBank("veteranshrine")
     inst.AnimState:PlayAnimation("idle", true)
-	
-	--prototyper (from prototyper component) added to pristine state for uhhh something
-	inst:AddTag("prototyper")
-	
-    --inst.GetActivateVerb = GetVerb
-    inst:AddTag("trader")
-	
-	inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
 
-	inst:DoTaskInTime(0, RegisterNetListeners)
-	
+    --inst.GetActivateVerb = GetVerb
+    
+    inst.Cursee = net_entity(inst.GUID, "SetCursee.plyr", "SetCurseedirty")
+
+    inst:DoTaskInTime(0, RegisterNetListeners)
+    
     MakeObstaclePhysics(inst, 1.8)
 
-	inst.entity:SetPristine()
-	
-	inst:AddComponent("talker")        
+    inst.entity:SetPristine()
+
+    inst:AddComponent("talker")
     inst.components.talker.colour = Vector3(252/255, 226/255, 219/255)
     inst.components.talker.offset = Vector3(0, -500, 0)
     inst.components.talker:MakeChatter()
     inst.components.talker.lineduration = TUNING.HERMITCRAB.SPEAKTIME * 2 -0.5
     if LOC.GetTextScale() == 1 then
-		inst.components.talker.fontsize = 30
+        inst.components.talker.fontsize = 30
     end
     inst.components.talker.font = TALKINGFONT_HERMIT
     inst:AddComponent("npc_talker")
@@ -263,26 +165,15 @@ local function fn(Sim)
     if not TheWorld.ismastersim then
         return inst
     end
-	
+
     inst:AddComponent("activatable")
     inst.components.activatable.OnActivate = OnActivate
     inst.components.activatable.inactive = true
-	inst.components.activatable.quickaction = false
-	--inst.components.activatable.standingaction = true
+    inst.components.activatable.quickaction = false
+    --inst.components.activatable.standingaction = true
 
-    inst:AddComponent("trader")
-    inst.components.trader:SetAcceptTest(AcceptTest)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
-    inst.components.trader.onrefuse = OnRefuseItem
-	
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()
-	
-	inst:AddComponent("prototyper")
-	--inst.components.prototyper.onturnon = onturnon
-	--inst.components.prototyper.onturnoff = onturnoff
-	inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.VETERANSHRINE_ONE
-	--inst.components.prototyper.onactivate = onactivate
 
     inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(6, 10)
@@ -291,13 +182,13 @@ local function fn(Sim)
 
     --inst.deactivate = deactivate
 
-    --inst.OnSave = onsave 
+    --inst.OnSave = onsave
     --inst.OnLoad = onload
-	
+
     inst:ListenForEvent("ontalk", OnTalk)
     inst:ListenForEvent("donetalking", OnDoneTalking)
 
     return inst
 end
 
-return Prefab("veteranshrine", fn, assets, prefabs)
+return Prefab("veteranshrine", fn, assets)
