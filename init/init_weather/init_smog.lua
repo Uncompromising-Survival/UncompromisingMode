@@ -2,12 +2,13 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function DoSmog(inst)
-    local smog = SpawnPrefab("smog")
-    local x, y, z = inst.Transform:GetWorldPosition()
+    if c_countprefabs("smog", true) <= 150 then
+        local smog = SpawnPrefab("smog")
+        local x, y, z = inst.Transform:GetWorldPosition()
 
-    smog.Transform:SetPosition(x + math.random(-160, 160) / 10, math.random(0, 4),
-        z + math.random(-160, 160) / 10)
-    if inst.components.burnable ~= nil and inst.components.burnable:IsBurning() then
+        smog.Transform:SetPosition(x + math.random(-160, 160) / 10, math.random(0, 4), z + math.random(-160, 160) / 10)
+    end
+    if inst.components.burnable and inst.components.burnable:IsBurning() then
         inst.smog_task = inst:DoTaskInTime(math.random(5, 15) / 10, DoSmog)
     end
 end
@@ -84,7 +85,7 @@ env.AddStategraphState("wilson", State {
             talker:Say(GetString(inst, "GAS_DAMAGE"))
             inst.SoundEmitter:KillSound("talk")
         end
-		inst.sg:SetTimeout(UM_SMOG_COUGH_STATE_TIME)
+        inst.sg:SetTimeout(UM_SMOG_COUGH_STATE_TIME)
     end,
 
     timeline =
