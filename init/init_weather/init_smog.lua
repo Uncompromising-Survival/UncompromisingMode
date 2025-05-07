@@ -16,7 +16,7 @@ end
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then return end
     inst:DoTaskInTime(0, function(inst) -- Maybe delaying this by a frame does something.
-        if (inst:HasTag("plant") or inst:HasTag("tree")) and inst.components.burnable ~= nil then
+        if inst.components.burnable and inst:HasAnyTag("plant", "tree") and not inst:HasTag("PyreNettle") then
             local _OnIgnite = inst.components.burnable.onignite
 
             inst.components.burnable.onignite = function(inst, source, doer, ...)
@@ -24,7 +24,7 @@ env.AddPrefabPostInitAny(function(inst)
                     inst.smog_task = inst:DoTaskInTime(math.random(5, 15) / 10, DoSmog)
                 end
 
-                if _OnIgnite ~= nil then
+                if _OnIgnite then
                     _OnIgnite(inst, source, doer, ...)
                 end
             end
@@ -42,26 +42,23 @@ local function FadeCoughSound(inst, steps, volumeMult)
 
     if inst.um_coughVolume <= 0 then
         inst.SoundEmitter:KillSound("um_smog_cough")
-        if inst.um_fadeCoughTask ~= nil then inst.um_fadeCoughTask:Cancel() end
+        if inst.um_fadeCoughTask then inst.um_fadeCoughTask:Cancel() end
     end
 end
 
 local function DoCoughSound(inst, fadeSteps, volumeMult)
     inst.SoundEmitter:KillSound("um_smog_cough")
-    if inst.um_fadeCoughTask ~= nil then inst.um_fadeCoughTask:Cancel() end
+    if inst.um_fadeCoughTask then inst.um_fadeCoughTask:Cancel() end
 
-    if inst.hurtsoundoverride ~= nil then
+    if inst.hurtsoundoverride then
         inst.SoundEmitter:PlaySound(inst.hurtsoundoverride, "um_smog_cough", inst.hurtsoundvolume)
     elseif not inst:HasTag("mime") then
-        inst.SoundEmitter:PlaySound(
-            (inst.talker_path_override or "dontstarve/characters/") .. (inst.soundsname or inst.prefab) .. "/hurt",
-            "um_smog_cough",
-            inst.hurtsoundvolume)
+        inst.SoundEmitter:PlaySound((inst.talker_path_override or "dontstarve/characters/")..(inst.soundsname or inst.prefab).."/hurt",
+            "um_smog_cough", inst.hurtsoundvolume)
     end
 
     inst.um_coughVolume = (inst.hurtsoundvolume or 1) * volumeMult
-    inst.um_fadeCoughTask = inst:DoPeriodicTask(COUGH_FADE_TASK_RATE,
-        function() FadeCoughSound(inst, fadeSteps, volumeMult) end)
+    inst.um_fadeCoughTask = inst:DoPeriodicTask(COUGH_FADE_TASK_RATE, function() FadeCoughSound(inst, fadeSteps, volumeMult) end)
 end
 
 local UM_SMOG_COUGH_STATE_TIME = 1.66666675
@@ -81,7 +78,7 @@ env.AddStategraphState("wilson", State {
         inst.AnimState:HideSymbol("fx_icon")
 
         local talker = inst.components.talker
-        if talker ~= nil and sayQuote ~= nil then
+        if talker and sayQuote then
             talker:Say(GetString(inst, "GAS_DAMAGE"))
             inst.SoundEmitter:KillSound("talk")
         end
@@ -130,7 +127,7 @@ local function CantGoToCough(inst, tags)
 end
 
 local function CoughEventFunction(inst, data)
-    if inst.sg.mem.um_recent_smog_cough == true or CantGoToCough(inst, CANT_GO_TO_COUGH_NONSTATE_TAGS) or inst.components.freezable ~= nil and inst.components.freezable:IsFrozen() then return end
+    if inst.sg.mem.um_recent_smog_cough or CantGoToCough(inst, CANT_GO_TO_COUGH_NONSTATE_TAGS) or inst.components.freezable and inst.components.freezable:IsFrozen() then return end
     inst.sg.mem.um_recent_smog_cough = true
     inst.sg.mem.um_cough_cant_talk = true
     local talker = inst.components.talker
@@ -149,7 +146,7 @@ env.AddStategraphPostInit("wilson", function(sg)
     local idlestate = sg.states["idle"]
 
     sg.events["um_smog_cough"] = EventHandler("um_smog_cough", function(inst, data)
-        if inst.sg:HasStateTag("idle") and not (CantGoToCough(inst, CANT_GO_TO_COUGH_STATE_TAGS)) then
+        if inst.sg:HasStateTag("idle") and not CantGoToCough(inst, CANT_GO_TO_COUGH_STATE_TAGS) then
             inst.sg:GoToState("um_smog_cough", data and data.talk or nil)
             return
         end
@@ -158,14 +155,14 @@ env.AddStategraphPostInit("wilson", function(sg)
 
     local oldontalkeventhandler_fn = ontalkeventhandler.fn
     ontalkeventhandler.fn = function(inst, data, ...)
-        if inst.sg.mem.um_cough_cant_talk ~= nil then return end -- In the middle of hacking up some smog, give me a second.
+        if inst.sg.mem.um_cough_cant_talk then return end -- In the middle of hacking up some smog, give me a second.
         oldontalkeventhandler_fn(inst, data, ...)
     end
 
     local oldidlestate_onenter = idlestate.onenter
     idlestate.onenter = function(inst, pushanim, ...)
         local timeRemaining = inst.sg.mem.queuetalk_timeout ~= nil and inst.sg.mem.queuetalk_timeout - GetTime() or nil
-        if inst.sg.mem.um_smog_cough == nil or timeRemaining == nil or timeRemaining <= 1 then
+        if not inst.sg.mem.um_smog_cough or not timeRemaining or timeRemaining <= 1 then
             oldidlestate_onenter(inst, pushanim, ...)
             inst.sg.mem.um_smog_cough = nil
             return
