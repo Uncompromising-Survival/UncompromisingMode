@@ -110,7 +110,6 @@ local prefab_post = {
     "mushrooms",
 	"mushroom_hats",
     "rock_ice",
-    "toadstool",
     "oasislake",
     --	"shadowcreature",
     "lureplant",
