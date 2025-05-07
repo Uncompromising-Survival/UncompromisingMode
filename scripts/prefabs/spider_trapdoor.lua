@@ -464,7 +464,6 @@ local function create_common(build)
 	inst.OnSave = function(inst,data)
 		if inst.hooded then
 			data.hooded = inst.hooded
-			return data
 		end
 	end	
 	inst.OnLoad = function(inst,data)
