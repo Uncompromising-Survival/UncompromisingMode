@@ -16,7 +16,7 @@ local RuinsRespawner = require "prefabs/ruinsrespawner"
 local assets =
 {
     Asset("ANIM", "anim/worm.zip"),
-	Asset("ANIM", "anim/shockworm.zip"),
+    Asset("ANIM", "anim/shockworm.zip"),
     Asset("SOUND", "sound/worm.fsb"),
     Asset("SCRIPT", "scripts/prefabs/ruinsrespawner.lua"),
 }
@@ -26,7 +26,7 @@ local prefabs =
     "monstermeat",
     "zaspberry",
     "worm_ruinsrespawner_inst",
-	"sparks",
+    "sparks",
 }
 
 local brain = require("brains/shockwormbrain")
@@ -35,20 +35,20 @@ local MAX_LIGHT_FRAME = 20
 ---Added Stuff
 local function OnAttacked(inst, data)
     if data ~= nil and data.attacker ~= nil and not data.redirected then
-		if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-			data.attacker.components.combat ~= nil and not data.attacker.components.combat.ignoredamagereflect and
-			(data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-			not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and not (data.stimuli and data.stimuli == "soul") then
+        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+            data.attacker.components.combat ~= nil and not data.attacker.components.combat.ignoredamagereflect and
+            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
+            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and not (data.stimuli and data.stimuli == "soul") then
 
-			data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
-			
-			if data.attacker:HasTag("player") and not data.attacker.sg:HasStateTag("dead") then
-				data.attacker.sg:GoToState("electrocute")
-			end
-		end
-	end
-		
-	inst.components.combat:SetTarget(data.attacker)
+            data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
+            
+            if data.attacker:HasTag("player") and not data.attacker.sg:HasStateTag("dead") then
+                data.attacker.sg:GoToState("electrocute")
+            end
+        end
+    end
+        
+    inst.components.combat:SetTarget(data.attacker)
 end
 
 
@@ -59,8 +59,8 @@ local function OnAttackOther(inst, data)
                 not (data.target.components.inventory ~= nil and data.target.components.inventory:IsInsulated()) then
 
                 if data.target:HasTag("player") then
-					local shockvictim = data.target.sg:GoToState("electrocute")
-					inst:DoTaskInTime(2, shockvictim)
+                    local shockvictim = data.target.sg:GoToState("electrocute")
+                    inst:DoTaskInTime(2, shockvictim)
                 end
             end
         end
@@ -253,19 +253,17 @@ local function CustomOnHaunt(inst, haunter)
     return false
 end
 
-local function onsave(inst,data)
-	if inst.from_waterhole then
-		data.from_waterhole = inst.from_waterhole
-	end
-	return data
+local function onsave(inst, data)
+    if inst.from_waterhole then
+        data.from_waterhole = inst.from_waterhole
+    end
 end
 
-local function onload(inst,data)
-	if data and data.from_waterhole then
-		inst.from_waterhole = data.from_waterhole
-	end
+local function onload(inst, data)
+    if data and data.from_waterhole then
+        inst.from_waterhole = data.from_waterhole
+    end
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -289,7 +287,7 @@ local function fn()
     inst:AddTag("wet")
     inst:AddTag("worm")
     inst:AddTag("cavedweller")
-	inst:AddTag("electricdamageimmune")
+    inst:AddTag("electricdamageimmune")
     inst.Light:SetRadius(0)
     inst.Light:SetIntensity(.8)
     inst.Light:SetFalloff(.5)
@@ -367,30 +365,30 @@ local function fn()
 
     inst:SetStateGraph("SGshockworm")
     inst:SetBrain(brain)
-	
-	inst:ListenForEvent("attacked", OnAttacked)
-	inst:ListenForEvent("onattackother", OnAttackOther)
-	
-	inst:ListenForEvent("freeze", function()
-		inst:turnonlight()
-	end)    
+    
+    inst:ListenForEvent("attacked", OnAttacked)
+    inst:ListenForEvent("onattackother", OnAttackOther)
+    
+    inst:ListenForEvent("freeze", function()
+        inst:turnonlight()
+    end)    
 
-	inst:ListenForEvent("unfreeze", function() 
-		inst:turnofflight()
-	end)
-	inst.OnSave = onsave
-	inst.OnLoad = onload
+    inst:ListenForEvent("unfreeze", function() 
+        inst:turnofflight()
+    end)
+    inst.OnSave = onsave
+    inst.OnLoad = onload
 
-	inst:WatchWorldState("iswinter",function(inst,iswinter) 
-		if iswinter and inst.from_waterhole then 
-			inst:Remove() 
-		end 
-	end)	
+    inst:WatchWorldState("iswinter",function(inst,iswinter) 
+        if iswinter and inst.from_waterhole then 
+            inst:Remove() 
+        end 
+    end)    
     return inst
 end
 
 local function onruinsrespawn(inst)
-	inst.sg:GoToState("lure_enter") 
+    inst.sg:GoToState("lure_enter") 
 end
 
 return Prefab("shockworm", fn, assets, prefabs),
