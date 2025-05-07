@@ -26,7 +26,6 @@ local function onsave(inst,data)
 	if inst.from_waterhole then
 		data.from_waterhole = inst.from_waterhole
 	end
-	return data
 end
 
 local function onload(inst,data)
