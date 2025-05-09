@@ -213,21 +213,23 @@ local function SummonFriends(inst, attacker)
 end
 
 local function FruitBatRetreat(inst)
-	inst.fruitbat_panic = true
-	inst:DoTaskInTime(60, function(inst) inst.fruitbat_panic = false end) -- Hide away for a minute.
+    inst.fruitbat_panic = true
+    inst:DoTaskInTime(60, function(inst) inst.fruitbat_panic = false end) -- Hide away for a minute.
 end
 
 local function OnAttacked(inst, data)
-	if data.attacker:HasTag("fruitbat") then
-		FruitBatRetreat(inst)
-	end
-    inst.components.combat:SetTarget(data.attacker)
-    inst.components.combat:ShareTarget(data.attacker, 30, function(dude)
-        return dude:HasTag("spider")
-            and not dude.components.health:IsDead()
-            and dude.components.follower ~= nil
-            and dude.components.follower.leader == inst.components.follower.leader
-    end, 10)
+    if data and data.attacker then
+        if data.attacker:HasTag("fruitbat") then
+            FruitBatRetreat(inst)
+        end
+        inst.components.combat:SetTarget(data.attacker)
+        inst.components.combat:ShareTarget(data.attacker, 30, function(dude)
+            return dude:HasTag("spider")
+                and not dude.components.health:IsDead()
+                and dude.components.follower ~= nil
+                and dude.components.follower.leader == inst.components.follower.leader
+        end, 10)
+    end
 end
 
 local function OnIsCaveDay(inst, iscaveday)
@@ -248,18 +250,18 @@ local function CalcSanityAura(inst, observer)
 end
 
 local function HalloweenMoonMutate(inst, new_inst)
-	local leader = inst ~= nil and inst.components.follower ~= nil
-		and new_inst ~= nil and new_inst.components.follower ~= nil
-		and inst.components.follower:GetLeader()
-		or nil
+    local leader = inst ~= nil and inst.components.follower ~= nil
+        and new_inst ~= nil and new_inst.components.follower ~= nil
+        and inst.components.follower:GetLeader()
+        or nil
 
-	if leader ~= nil then
-		new_inst.components.follower:SetLeader(leader)
-		new_inst.components.follower:AddLoyaltyTime(
-			inst.components.follower:GetLoyaltyPercent()
-			* (new_inst.components.follower.maxfollowtime or inst.components.follower.maxfollowtime)
-		)
-	end
+    if leader ~= nil then
+        new_inst.components.follower:SetLeader(leader)
+        new_inst.components.follower:AddLoyaltyTime(
+            inst.components.follower:GetLoyaltyPercent()
+            * (new_inst.components.follower.maxfollowtime or inst.components.follower.maxfollowtime)
+        )
+    end
 end
 local function OnTrapped(inst, data)
     inst.components.inventory:DropEverything()
@@ -337,7 +339,7 @@ local function create_common(build)
     inst:AddTag("spider")
     inst:AddTag("drop_inventory_pickup")
     inst:AddTag("drop_inventory_murder")
-	inst:AddTag("spider_warrior")
+    inst:AddTag("spider_warrior")
 
     --trader (from trader component) added to pristine state for optimization
     inst:AddTag("trader")
@@ -351,7 +353,7 @@ local function create_common(build)
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.Transform:SetScale(1.1,1.1,1.1)
+    inst.Transform:SetScale(1.1,1.1,1.1)
     ----------
     inst.OnEntitySleep = OnEntitySleep
 
@@ -360,10 +362,10 @@ local function create_common(build)
     inst.components.locomotor:SetSlowMultiplier( 1 )
     inst.components.locomotor:SetTriggersCreep(false)
     inst.components.locomotor.pathcaps = { ignorecreep = true }
-	inst.components.locomotor:SetAllowPlatformHopping(true)
-	
+    inst.components.locomotor:SetAllowPlatformHopping(true)
+    
     inst.SoundPath = SoundPath
-	
+    
     inst:SetStateGraph("SGspider")
 
     inst:AddComponent("lootdropper")
@@ -372,7 +374,7 @@ local function create_common(build)
     inst.components.lootdropper:AddRandomLoot("spidergland", 1)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
-	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
+    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
 
     ---------------------        
     MakeMediumBurnableCharacter(inst, "body")
@@ -409,15 +411,15 @@ local function create_common(build)
     ------------------
 
     inst:AddComponent("inspectable")
-	inst:AddComponent("debuffable")
+    inst:AddComponent("debuffable")
     inst:AddComponent("inventory")
-	-----------------
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/spider_trapdoor.xml"
+    -----------------
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/spider_trapdoor.xml"
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true	
-	
+    inst.components.inventoryitem.canbepickedupalive = true    
+    
     inst:ListenForEvent("gotosleep", OnGoToSleep)
     inst:ListenForEvent("onwakeup", OnWakeUp)
     ------------------
@@ -434,17 +436,17 @@ local function create_common(build)
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.aurafn = CalcSanityAura
 
-	------------------
+    ------------------
 
-	inst:AddComponent("halloweenmoonmutable")
-	inst.components.halloweenmoonmutable:SetPrefabMutated("spider_moon")
-	inst.components.halloweenmoonmutable:SetOnMutateFn(HalloweenMoonMutate)
-	
+    inst:AddComponent("halloweenmoonmutable")
+    inst.components.halloweenmoonmutable:SetPrefabMutated("spider_moon")
+    inst.components.halloweenmoonmutable:SetOnMutateFn(HalloweenMoonMutate)
+    
     MakeFeedableSmallLivestock(inst, TUNING.SPIDER_PERISH_TIME)
     MakeHauntablePanic(inst)
-	
-	inst:AddComponent("embarker")
-	inst:AddComponent("drownable")
+    
+    inst:AddComponent("embarker")
+    inst:AddComponent("drownable")
     inst:SetBrain(brain)
 
     inst:ListenForEvent("attacked", OnAttacked)
@@ -452,27 +454,27 @@ local function create_common(build)
     inst:WatchWorldState("iscaveday", OnIsCaveDay)
     OnIsCaveDay(inst, TheWorld.state.iscaveday)
     inst:ListenForEvent("ontrapped", OnTrapped)
-	
-	inst.recipe = "mutator_trapdoor"
-	
+    
+    inst.recipe = "mutator_trapdoor"
+    
     inst.SetHappyFace = SetHappyFace
-	
+    
     inst:ListenForEvent("startleashing", OnStartLeashing)
     inst:ListenForEvent("stopleashing", OnStopLeashing)
-	
-	-- "Hooded" variant of trapdoor spider
-	inst.OnSave = function(inst,data)
-		if inst.hooded then
-			data.hooded = inst.hooded
-		end
-	end	
-	inst.OnLoad = function(inst,data)
-		if data and data.hooded then
-			inst.hooded = data.hooded
-			inst.AnimState:SetBuild("spider_trapdoor_hooded")
-		end
-	end
-	
+    
+    -- "Hooded" variant of trapdoor spider
+    inst.OnSave = function(inst,data)
+        if inst.hooded then
+            data.hooded = inst.hooded
+        end
+    end    
+    inst.OnLoad = function(inst,data)
+        if data and data.hooded then
+            inst.hooded = data.hooded
+            inst.AnimState:SetBuild("spider_trapdoor_hooded")
+        end
+    end
+    
     return inst
 end
 
@@ -482,7 +484,7 @@ local function create_trapdoor()
     if not TheWorld.ismastersim then
         return inst
     end
-	--inst:AddTag("tauntless")
+    --inst:AddTag("tauntless")
     inst.components.health:SetMaxHealth(200)
 
     inst.components.combat:SetDefaultDamage(34)
@@ -493,7 +495,7 @@ local function create_trapdoor()
     inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED*1.1
 
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
-	inst:AddTag("trapdoorspider")
+    inst:AddTag("trapdoorspider")
     return inst
 end
 
