@@ -80,7 +80,7 @@ env.AddStategraphPostInit("spider", function(inst)
 
     local _OldAttackedEvent = inst.events["attacked"].fn
     inst.events["attacked"].fn = function(inst)
-        if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") then
+        if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") and not inst.sg:HasStateTag("caninterrupt") then
             if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
                 if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and
                     inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
