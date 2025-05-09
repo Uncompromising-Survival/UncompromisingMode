@@ -2,36 +2,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("pig", function(inst)
-    local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn)
-        local on_cooldown = false
-        if (inst._last_hitreact_time ~= nil and inst._last_hitreact_time + (delay or inst.hit_recovery or TUNING.DEFAULT_HIT_RECOVERY) >= GetTime()) then -- is hit react is on cooldown?
-            max_hitreacts = max_hitreacts or inst._max_hitreacts
-            if max_hitreacts then
-                if inst._hitreact_count == nil then
-                    inst._hitreact_count = 2
-                    return false
-                elseif inst._hitreact_count < max_hitreacts then
-                    inst._hitreact_count = inst._hitreact_count + 1
-                    return false
-                end
-            end
-
-            skip_cooldown_fn = skip_cooldown_fn or inst._hitreact_skip_cooldown_fn
-            if skip_cooldown_fn ~= nil then
-                on_cooldown = not skip_cooldown_fn(inst, inst._last_hitreact_time, delay)
-            elseif inst.components.combat ~= nil then
-                on_cooldown = not (inst.components.combat:InCooldown() and inst.sg:HasStateTag("idle")) -- skip the hit react cooldown if the creature is ready to attack
-            else
-                on_cooldown = true
-            end
-        end
-
-        if inst._hitreact_count ~= nil and not on_cooldown then
-            inst._hitreact_count = 1
-        end
-        return on_cooldown
-    end
-
     local events =
     {
         EventHandler("doattack", function(inst, data)
@@ -43,49 +13,43 @@ env.AddStategraphPostInit("pig", function(inst)
                 if inst.sg:HasStateTag("charging") then
                     nstate = "charge_attack"
                 end
-                if inst.components.health and not inst.components.health:IsDead()
+                if not (inst.components.health and inst.components.health:IsDead())
                     and not inst.sg:HasStateTag("busy") then
                     inst.sg:GoToState(nstate)
                 end
                 --inst.sg:GoToState("attack", data.target)
             end
         end),
+    }
 
-
-        EventHandler("attacked", function(inst)
-            if inst:HasTag("pigattacker") and not inst:HasTag("werepig") and inst.components.health ~= nil and not inst.components.health:IsDead() and not inst.sg:HasStateTag("counter") then
-                if inst.counter ~= nil then
-                    inst.counter = inst.counter + 1
-                    if inst.countertask ~= nil then
-                        inst.countertask:Cancel()
-                        inst.countertask = nil
-                    end
-                else
-                    inst.counter = 1
+    local _OldAttackedEvent = inst.events["attacked"].fn
+    inst.events["attacked"].fn = function(inst, data, ...)
+        if inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not (inst.components.health and inst.components.health:IsDead())
+            and not inst.sg:HasStateTag("counter") and not inst.sg:HasStateTag("caninterrupt") then
+            if inst.counter then
+                inst.counter = inst.counter + 1
+                if inst.countertask then
+                    inst.countertask:Cancel()
+                    inst.countertask = nil
                 end
-
-                inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
-
-                if inst.counter ~= nil and inst.counter >= math.random(3, 4) then
-                    if inst.countertask ~= nil then
-                        inst.countertask:Cancel()
-                        inst.countertask = nil
-                    end
-                    inst.counter = 0
-                    inst.sg:GoToState("counterattack_pre")
-                    return
-                end
+            else
+                inst.counter = 1
             end
 
-			if inst.components.health ~= nil and not inst.components.health:IsDead()
-				and not hit_recovery_delay(inst)
-				and (not inst.sg:HasStateTag("busy")
-					or inst.sg:HasStateTag("caninterrupt")
-					or inst.sg:HasStateTag("frozen")) then
-						inst.sg:GoToState("hit")
-			end	
-        end),
-    }
+            inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
+
+            if inst.counter and inst.counter >= math.random(3, 4) then
+                if inst.countertask ~= nil then
+                    inst.countertask:Cancel()
+                    inst.countertask = nil
+                end
+                inst.counter = 0
+                inst.sg:GoToState("counterattack_pre")
+                return
+            end
+        end
+        _OldAttackedEvent(inst, data, ...)
+    end
 
     local states = {
         State {
@@ -280,99 +244,99 @@ local AOE_TARGET_MUSTHAVE_TAGS = { "_combat" }
 local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack","werepig"}
 
 local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, targets)
-	inst.components.combat.ignorehitrange = true
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local rot = inst.Transform:GetRotation() * DEGREES
-	local x0, z0
-	if dist ~= 0 then
-		if dist > 0 and ((mult ~= nil and mult > 1) or (heavymult ~= nil and heavymult > 1)) then
-			x0, z0 = x, z
-		end
-		x = x + dist * math.cos(rot)
-		z = z - dist * math.sin(rot)
-	end
-	for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, AOE_TARGET_MUSTHAVE_TAGS, AOE_TARGET_CANT_TAGS)) do
-		if v ~= inst and
-			not (targets ~= nil and targets[v]) and -- For some reason this is failing when the werepig is targetting wilson, it doesn't fail for widow or bearger...
-			v:IsValid() and not v:IsInLimbo()
-			and not (v.components.health ~= nil and v.components.health:IsDead()) --and not v.prefab == "moonhound" -- No tags to grab onto for moonhounds
-		then
-			local range = radius + v:GetPhysicsRadius(0)
-			local x1, y1, z1 = v.Transform:GetWorldPosition()
-			local dx = x1 - x
-			local dz = z1 - z
-			local distsq = dx * dx + dz * dz
-			if distsq > 0 and distsq < range * range and
-				DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC and
-				inst.components.combat:CanTarget(v)
-			then
-				inst.components.combat:DoAttack(v)
-				inst.hit_other = true
-			end
-		end
-	end
-	inst.components.combat.ignorehitrange = false
+    inst.components.combat.ignorehitrange = true
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local rot = inst.Transform:GetRotation() * DEGREES
+    local x0, z0
+    if dist ~= 0 then
+        if dist > 0 and ((mult ~= nil and mult > 1) or (heavymult ~= nil and heavymult > 1)) then
+            x0, z0 = x, z
+        end
+        x = x + dist * math.cos(rot)
+        z = z - dist * math.sin(rot)
+    end
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, radius, AOE_TARGET_MUSTHAVE_TAGS, AOE_TARGET_CANT_TAGS)) do
+        if v ~= inst and
+            not (targets ~= nil and targets[v]) and -- For some reason this is failing when the werepig is targetting wilson, it doesn't fail for widow or bearger...
+            v:IsValid() and not v:IsInLimbo()
+            and not (v.components.health ~= nil and v.components.health:IsDead()) --and not v.prefab == "moonhound" -- No tags to grab onto for moonhounds
+        then
+            local range = radius + v:GetPhysicsRadius(0)
+            local x1, y1, z1 = v.Transform:GetWorldPosition()
+            local dx = x1 - x
+            local dz = z1 - z
+            local distsq = dx * dx + dz * dz
+            if distsq > 0 and distsq < range * range and
+                DiffAngleRad(rot, math.atan2(-dz, dx)) < ARC and
+                inst.components.combat:CanTarget(v)
+            then
+                inst.components.combat:DoAttack(v)
+                inst.hit_other = true
+            end
+        end
+    end
+    inst.components.combat.ignorehitrange = false
 end
 
 
 
 local werepigs = {"moonpig","werepig"}
 for i,werepig in ipairs(werepigs) do
-	env.AddStategraphPostInit(werepig, function(inst)
-		local states = {
-			State{
-				name = "attack",
-				tags = { "attack", "busy" },
+    env.AddStategraphPostInit(werepig, function(inst)
+        local states = {
+            State{
+                name = "attack",
+                tags = { "attack", "busy" },
 
-				onenter = function(inst,target)
-					inst.components.combat:StartAttack()
-					inst.AnimState:PlayAnimation("were_atk_pre")
-					inst.AnimState:PushAnimation("were_atk", false)
-					inst.hit_other = nil
-					inst.sg.statemem.original_target = target and target or inst.components.combat.target
-				end,
+                onenter = function(inst,target)
+                    inst.components.combat:StartAttack()
+                    inst.AnimState:PlayAnimation("were_atk_pre")
+                    inst.AnimState:PushAnimation("were_atk", false)
+                    inst.hit_other = nil
+                    inst.sg.statemem.original_target = target and target or inst.components.combat.target
+                end,
 
-				timeline =
-				{
-					TimeEvent(15*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/werepig/attack") end),
-					TimeEvent(16*FRAMES, function(inst) DoArcAttack(inst, 0, 3, nil, nil, nil, inst.sg.statemem.targets) 
-					if not inst.hit_other then
-						inst:PushEvent("onmissother", { target = inst.sg.statemem.original_target })
-					end
-					--inst.Physics:Stop() -- May consider stopping movement here...
-				end),
-				},
+                timeline =
+                {
+                    TimeEvent(15*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/werepig/attack") end),
+                    TimeEvent(16*FRAMES, function(inst) DoArcAttack(inst, 0, 3, nil, nil, nil, inst.sg.statemem.targets) 
+                    if not inst.hit_other then
+                        inst:PushEvent("onmissother", { target = inst.sg.statemem.original_target })
+                    end
+                    --inst.Physics:Stop() -- May consider stopping movement here...
+                end),
+                },
 
-				events =
-				{
-					EventHandler("animqueueover", function(inst)
-						inst.sg:GoToState(
-							not inst.components.combat:HasTarget() and
-							math.random() < 0.3 and
-							"howl" or
-							"idle")
-					end),
-				},
-			},
-		}
+                events =
+                {
+                    EventHandler("animqueueover", function(inst)
+                        inst.sg:GoToState(
+                            not inst.components.combat:HasTarget() and
+                            math.random() < 0.3 and
+                            "howl" or
+                            "idle")
+                    end),
+                },
+            },
+        }
 
-		local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
-		{
-			EventHandler("attacked", function(inst) 
-				if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("busy") and inst.components.combat:InCooldown() then
-					inst.sg:GoToState("hit") 
-				end 
-			end),
-		}
+        local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
+        {
+            EventHandler("attacked", function(inst) 
+                if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("busy") and inst.components.combat:InCooldown() then
+                    inst.sg:GoToState("hit")
+                end
+            end),
+        }
 
-		for k, v in pairs(events) do
-			assert(v:is_a(EventHandler), "Non-event added in mod events table!")
-			inst.events[v.name] = v
-		end
-	
-		for k, v in pairs(states) do
-			assert(v:is_a(State), "Non-state added in mod state table!")
-			inst.states[v.name] = v
-		end
-	end)
+        for k, v in pairs(events) do
+            assert(v:is_a(EventHandler), "Non-event added in mod events table!")
+            inst.events[v.name] = v
+        end
+
+        for k, v in pairs(states) do
+            assert(v:is_a(State), "Non-state added in mod state table!")
+            inst.states[v.name] = v
+        end
+    end)
 end
