@@ -218,7 +218,7 @@ local function FruitBatRetreat(inst)
 end
 
 local function OnAttacked(inst, data)
-    if data and data.attacker then
+    if data.attacker then
         if data.attacker:HasTag("fruitbat") then
             FruitBatRetreat(inst)
         end
