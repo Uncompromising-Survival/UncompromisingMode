@@ -9,17 +9,17 @@ local brain = require "brains/butterflybrain"
 
 local function OnDropped(inst)
     inst.sg:GoToState("idle")
-    if inst.butterflyspawner ~= nil then
+    if inst.butterflyspawner then
         inst.butterflyspawner:StartTracking(inst)
     end
-    if inst.components.workable ~= nil then
+    if inst.components.workable then
         inst.components.workable:SetWorkLeft(1)
     end
-    if inst.components.stackable ~= nil then
+    if inst.components.stackable then
         while inst.components.stackable:StackSize() > 1 do
             local item = inst.components.stackable:Get()
-            if item ~= nil then
-                if item.components.inventoryitem ~= nil then
+            if item then
+                if item.components.inventoryitem then
                     item.components.inventoryitem:OnDropped()
                 end
                 item.Physics:Teleport(inst.Transform:GetWorldPosition())
@@ -29,14 +29,14 @@ local function OnDropped(inst)
 end
 
 local function OnPickedUp(inst)
-    if inst.butterflyspawner ~= nil then
+    if inst.butterflyspawner then
         inst.butterflyspawner:StopTracking(inst)
     end
 end
 
 local function OnWorked(inst, worker)
-    if worker.components.inventory ~= nil then
-        if inst.butterflyspawner ~= nil then
+    if worker.components.inventory then
+        if inst.butterflyspawner then
             inst.butterflyspawner:StopTracking(inst)
         end
         worker.components.inventory:GiveItem(inst, nil, inst:GetPosition())
@@ -59,7 +59,7 @@ local function OnDeploy(inst, pt, deployer)
 end
 
 local function OnMutate(inst, transformed_inst)
-	if transformed_inst ~= nil then
+	if transformed_inst then
 		transformed_inst.sg:GoToState("idle")
 	end
 end
@@ -170,7 +170,7 @@ local function fn()
     inst:SetBrain(brain)
 
     inst.butterflyspawner = TheWorld.components.butterflyspawner
-    if inst.butterflyspawner ~= nil then
+    if inst.butterflyspawner then
         inst.components.inventoryitem:SetOnPutInInventoryFn(inst.butterflyspawner.StopTrackingFn)
         inst:ListenForEvent("onremove", inst.butterflyspawner.StopTrackingFn)
         inst.butterflyspawner:StartTracking(inst)
