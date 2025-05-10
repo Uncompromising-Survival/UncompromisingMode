@@ -1099,8 +1099,6 @@ Assets = {
     Asset("ANIM", "anim/ds_pig_uppercut.zip"),
 
     Asset("ANIM", "anim/lazy_chester.zip"),
-	
-	Asset("ANIM", "anim/um_buttery_fly.zip"),
 	 
     Asset("ANIM", "anim/hound_jump_attack.zip"),
 
