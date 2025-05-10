@@ -776,7 +776,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
             events =
             {
                 EventHandler("animover", function(inst) --inst.components.sleeper:SetResistance(4)
-                    if inst.components.health and not inst.components.health:IsDead() then
+                    if not (inst.components.health and inst.components.health:IsDead()) then
                         inst.sg:GoToState("idle")
                     end
                 end),
@@ -801,11 +801,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
             events =
             {
                 EventHandler("animover", function(inst)
-                    if not inst.aurafreezetimertask then
-                        inst.sg:GoToState("aurafreeze_pst")
-                    else
-                        inst.sg:GoToState("aurafreeze")
-                    end
+                    inst.sg:GoToState(not inst.aurafreezetimertask and "aurafreeze_pst" or "aurafreeze")
                 end),
             },
 
