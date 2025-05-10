@@ -26,7 +26,7 @@ local function maxhealth_change(inst, wx, amount, isloading)
     if wx.components.health ~= nil then
         local current_health_percent = wx.components.health:GetPercent()
 
-	if wx._cherriftchips and wx._cherriftchips > 0 then amount = amount*(1 + 0.5*wx._cherriftchips) end
+    if wx._cherriftchips and wx._cherriftchips > 0 then amount = amount*(1 + 0.5*wx._cherriftchips) end
         wx.components.health.maxhealth = wx.components.health.maxhealth + amount
 
         if not isloading then
@@ -65,12 +65,12 @@ local function maxsanity1_activate(inst, wx, isloading)
         local current_sanity_percent = wx.components.sanity:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.DAPPERNESS_TINY*(1 + 0.75*wx._cherriftchips)
-		wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY1_BOOST*(1 + 0.5*wx._cherriftchips))
-	else
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.DAPPERNESS_TINY
-		wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY1_BOOST)
-	end
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.DAPPERNESS_TINY*(1 + 0.75*wx._cherriftchips)
+        wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY1_BOOST*(1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.DAPPERNESS_TINY
+        wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY1_BOOST)
+    end
         wx.components.sanity.neg_aura_modifiers:SetModifier(inst, 0.925)
 
         if not isloading then
@@ -83,12 +83,12 @@ local function maxsanity1_deactivate(inst, wx)
     if wx.components.sanity ~= nil then
         local current_sanity_percent = wx.components.sanity:GetPercent()
         if wx._cherriftchips and wx._cherriftchips > 0 then
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.DAPPERNESS_TINY*(1 + 0.75*wx._cherriftchips)
-		wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY1_BOOST*(1 + 0.5*wx._cherriftchips))
-	else
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.DAPPERNESS_TINY
-		wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY1_BOOST)
-	end
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.DAPPERNESS_TINY*(1 + 0.75*wx._cherriftchips)
+        wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY1_BOOST*(1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.DAPPERNESS_TINY
+        wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY1_BOOST)
+    end
         wx.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
         wx.components.sanity:SetPercent(current_sanity_percent, false)
     end
@@ -112,12 +112,12 @@ local function maxsanity_activate(inst, wx, isloading)
         local current_sanity_percent = wx.components.sanity:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.WX78_MAXSANITY_DAPPERNESS*(1 + 0.75*wx._cherriftchips)
-		wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY_BOOST*(1 + 0.5*wx._cherriftchips))
-	else
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.WX78_MAXSANITY_DAPPERNESS
-		wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY_BOOST)
-	end
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.WX78_MAXSANITY_DAPPERNESS*(1 + 0.75*wx._cherriftchips)
+        wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY_BOOST*(1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness + TUNING.WX78_MAXSANITY_DAPPERNESS
+        wx.components.sanity:SetMax(wx.components.sanity.max + TUNING.WX78_MAXSANITY_BOOST)
+    end
         wx.components.sanity.neg_aura_modifiers:SetModifier(inst, 0.8)
 
         if not isloading then
@@ -131,12 +131,12 @@ local function maxsanity_deactivate(inst, wx)
         local current_sanity_percent = wx.components.sanity:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.WX78_MAXSANITY_DAPPERNESS*(1 + 0.75*wx._cherriftchips)
-		wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY_BOOST*(1 + 0.5*wx._cherriftchips))
-	else
-		wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.WX78_MAXSANITY_DAPPERNESS
-		wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY_BOOST)
-	end
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.WX78_MAXSANITY_DAPPERNESS*(1 + 0.75*wx._cherriftchips)
+        wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY_BOOST*(1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.sanity.dapperness = wx.components.sanity.dapperness - TUNING.WX78_MAXSANITY_DAPPERNESS
+        wx.components.sanity:SetMax(wx.components.sanity.max - TUNING.WX78_MAXSANITY_BOOST)
+    end
         wx.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
         wx.components.sanity:SetPercent(current_sanity_percent, false)
     end
@@ -200,20 +200,20 @@ local function collidelikerookandstuff(wx, other) --This system has gone under s
         return
         --[[elseif other:HasTag("smashable") and other.components.health ~= nil then
         other.components.combat:GetAttacked(wx, collidedamage)
-		collideknocking(wx)
+        collideknocking(wx)
     elseif other.components.workable ~= nil
         and other.components.workable:CanBeWorked()
         and other.components.workable.action ~= ACTIONS.NET then
-		if other.components.workable:GetWorkAction() == ACTIONS.CHOP then
-			other.components.workable:WorkedBy(wx, 30/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
-			collideknocking(wx)
-		elseif other.components.workable:GetWorkAction() == ACTIONS.MINE then
-			other.components.workable:WorkedBy(wx, 12/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
-			collideknocking(wx)
-		elseif other.components.workable:GetWorkAction() == ACTIONS.HAMMER and not other.components.health then
-			other.components.workable:WorkedBy(wx, 4/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
-			collideknocking(wx)
-		end]]
+        if other.components.workable:GetWorkAction() == ACTIONS.CHOP then
+            other.components.workable:WorkedBy(wx, 30/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+            collideknocking(wx)
+        elseif other.components.workable:GetWorkAction() == ACTIONS.MINE then
+            other.components.workable:WorkedBy(wx, 12/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+            collideknocking(wx)
+        elseif other.components.workable:GetWorkAction() == ACTIONS.HAMMER and not other.components.health then
+            other.components.workable:WorkedBy(wx, 4/TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+            collideknocking(wx)
+        end]]
     elseif other.components.health ~= nil and not other.components.health:IsDead() and iscollidable(other) then
         wx.SoundEmitter:PlaySound("dontstarve/creatures/rook/explo")
         collideknocking(wx)
@@ -225,8 +225,8 @@ end
 
 local function accelaratefn(wx, inst)
     local accelarate_limit = 12 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1]
-	local timebeforecharge = 1.75
-	local speedincrease = 0.03 * (5 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
+    local timebeforecharge = 1.75
+    local speedincrease = 0.03 * (5 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1])
     if wx._cherriftchips and wx._cherriftchips > 0 then accelarate_limit = accelarate_limit + 0.5*wx._cherriftchips end
     --local accelarate_increase = 0.025 * (1.2 - TUNING.WX78_MOVESPEED_CHIPBOOSTS[wx._movespeed_chips + 1] * 0.08) --why this? math --I think too much math causes the game to crash sometimes wth
     --No seriously it stopped crashing after I changed it to static value, was this really the reason? Sad cause I wanted it to be faster the more modules you have
@@ -235,11 +235,11 @@ local function accelaratefn(wx, inst)
             wx.speedloosetask:Cancel()
             wx.speedloosetask = nil
         end
-		
+        
         if wx.accelarate_speed <= accelarate_limit then
             wx.accelarate_speed = wx.accelarate_speed + speedincrease
         end
-		--print(speedincrease)
+        --print(speedincrease)
         --print(wx.accelarate_speed)
         if wx.accelarate_speed >= 9 then
             if wx.rooksoundtask == nil then
@@ -260,17 +260,17 @@ local function accelaratefn(wx, inst)
         end
     else
        if wx.accelarate_speed > 8.95 then wx.accelarate_speed = 8.95 end
-		if wx.speedloosetask == nil then
-			wx.speedloosetask = wx:DoPeriodicTask(0.1, function(wx)
-		    if wx.accelarate_speed > TUNING.WILSON_RUN_SPEED then
-			wx.accelarate_speed = wx.accelarate_speed - 0.06
-		    elseif wx.accelarate_speed < TUNING.WILSON_RUN_SPEED then
-			wx.accelarate_speed = TUNING.WILSON_RUN_SPEED
-			wx.speedloosetask:Cancel()
-			wx.speedloosetask = nil
-		    end
-			end)
-		end
+        if wx.speedloosetask == nil then
+            wx.speedloosetask = wx:DoPeriodicTask(0.1, function(wx)
+            if wx.accelarate_speed > TUNING.WILSON_RUN_SPEED then
+            wx.accelarate_speed = wx.accelarate_speed - 0.06
+            elseif wx.accelarate_speed < TUNING.WILSON_RUN_SPEED then
+            wx.accelarate_speed = TUNING.WILSON_RUN_SPEED
+            wx.speedloosetask:Cancel()
+            wx.speedloosetask = nil
+            end
+            end)
+        end
         if wx.rooksoundtask ~= nil then
             wx.rooksoundtask:Cancel()
             wx.rooksoundtask = nil
@@ -292,14 +292,14 @@ local function movespeed_activate(inst, wx)
     wx._movespeed_chips = (wx._movespeed_chips or 0) + 1
     wx.accelarate_speed = TUNING.WILSON_RUN_SPEED
     --wx:ListenForEvent("locomote", inst.accelarate, wx) --Listenning on WX just to not cause any real troubles with multiple modules
-	--listening for locmotion event caused issues when just clicking on destination once and idk how to work around that other than another periodic task
-	if wx.movechecktask == nil then
-		wx.movechecktask = wx:DoPeriodicTask(0.075, function(wx)
-			--if wx.sg:HasStateTag('running') then 
-			inst.accelarate(wx, inst) 
-			--end
-		end)
-	end
+    --listening for locmotion event caused issues when just clicking on destination once and idk how to work around that other than another periodic task
+    if wx.movechecktask == nil then
+        wx.movechecktask = wx:DoPeriodicTask(0.075, function(wx)
+            --if wx.sg:HasStateTag('running') then 
+            inst.accelarate(wx, inst) 
+            --end
+        end)
+    end
 end
 
 local function movespeed_deactivate(inst, wx)
@@ -377,12 +377,12 @@ local function ontemperaturechange(wx, data, inst)
     end
 
     --[[if cur >= 50 then
-		workmult = 2.5 + extraheat_bonus
-	elseif cur >= 35 then
-		workmult = 2 + extraheat_bonus
-	elseif cur >= 20 then
-		workmult = 1.5 + extraheat_bonus
-	end]]
+        workmult = 2.5 + extraheat_bonus
+    elseif cur >= 35 then
+        workmult = 2 + extraheat_bonus
+    elseif cur >= 20 then
+        workmult = 1.5 + extraheat_bonus
+    end]]
 
     workmult = (cur > 60 and 2.5 + extraheat_bonus) or (cur > 20 and easing.linear(cur - 20, 1, 2.5 + extraheat_bonus - 1, 40)) or 1
 
@@ -393,11 +393,11 @@ local function ontemperaturechange(wx, data, inst)
         wx.components.workmultiplier:AddMultiplier(act, workmult, inst)
     end
     if workmult > 1 then
-	wx.components.expertsailor:SetRowForceMultiplier(1+workmult/8)
-	wx.components.expertsailor:SetRowExtraMaxVelocity(workmult/6)
+    wx.components.expertsailor:SetRowForceMultiplier(1+workmult/8)
+    wx.components.expertsailor:SetRowExtraMaxVelocity(workmult/6)
     else
-	wx.components.expertsailor:SetRowForceMultiplier(1)
-	wx.components.expertsailor:SetRowExtraMaxVelocity(0)
+    wx.components.expertsailor:SetRowForceMultiplier(1)
+    wx.components.expertsailor:SetRowExtraMaxVelocity(0)
     end
 end
 
@@ -420,7 +420,7 @@ local function heat_activate(inst, wx)
     if wx.components.expertsailor == nil then
         wx:AddComponent('expertsailor')
     end
-	
+    
     if wx._ontempmodulechange == nil then
         wx._ontempmodulechange = function(owner, data)
             ontemperaturechange(owner, data, inst)
@@ -462,11 +462,11 @@ local function heat_deactivate(inst, wx)
     -- wx.components.temperature.maxtemp = wx.components.temperature.maxtemp - TUNING.WX78_MINTEMPCHANGEPERMODULE
 
     --[[if wx._heat_chips == 1 then
-		wx.components.temperature:RemoveModifier("1_heat_module_warm")
-	elseif wx._heat_chips == 2 then
-		wx.components.temperature:RemoveModifier("2_heat_module_warm")
-		wx.components.temperature:SetModifier("1_heat_module_warm", 60)
-	end]]
+        wx.components.temperature:RemoveModifier("1_heat_module_warm")
+    elseif wx._heat_chips == 2 then
+        wx.components.temperature:RemoveModifier("2_heat_module_warm")
+        wx.components.temperature:SetModifier("1_heat_module_warm", 60)
+    end]]
 
     inst:RemoveEventCallback("temperaturedelta", wx._ontempmodulechange, wx)
     inst:RemoveEventCallback("working", wx._onworktemp, wx)
@@ -523,9 +523,9 @@ local function nightvision_activate(inst, wx)
         end
     end
     if wx._nightvision_modcount > 1 or (wx._cherriftchips and wx._cherriftchips > 0) then
-	if wx._cherriftchips == nil then wx._cherriftchips = 0 end --should already be 0 due to wx78.lua but still a good failsafe
-	local view_dist = 14*math.max(0, wx._nightvision_modcount-1) + 2*wx._cherriftchips
-	wx:AddCameraExtraDistance(inst, view_dist)
+    if wx._cherriftchips == nil then wx._cherriftchips = 0 end --should already be 0 due to wx78.lua but still a good failsafe
+    local view_dist = 14*math.max(0, wx._nightvision_modcount-1) + 2*wx._cherriftchips
+    wx:AddCameraExtraDistance(inst, view_dist)
     end
     
 end
@@ -543,7 +543,7 @@ local function nightvision_deactivate(inst, wx)
         end
     end
     if wx._nightvision_modcount <= 1 then
-	wx:RemoveCameraExtraDistance(inst)
+    wx:RemoveCameraExtraDistance(inst)
     end
 end
 
@@ -578,74 +578,74 @@ local function PopColour(inst)
 end
 
 local function workmultiplierfn(obj, wx, numworks)
-	return 1 + (obj._modulecoldhits or 0)*0.25
+    return 1 + (obj._modulecoldhits or 0)*0.25
 end
 
 local function thawtask(obj, wx)
-	obj._modulecoldhits = (obj._modulecoldhits or 0) - 1
-	local percent = obj._modulecoldhits * 0.1
-	if percent > 0 then
-		PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
-	else
-		PopColour(obj)
-		obj._objectthawtask:Cancel()
-		obj._objectthawtask = nil
-	end
+    obj._modulecoldhits = (obj._modulecoldhits or 0) - 1
+    local percent = obj._modulecoldhits * 0.1
+    if percent > 0 then
+        PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
+    else
+        PopColour(obj)
+        obj._objectthawtask:Cancel()
+        obj._objectthawtask = nil
+    end
 end
 
 local function onobjectfreeze(wx, data, inst)
-	--print('pluh')
-	local obj = data.target
-	if obj._objectthawtask ~= nil then 
-		obj._objectthawtask:Cancel()
-		obj._objectthawtask = nil
-	end
-	obj._modulecoldhits = (obj._modulecoldhits or 0) + 1
-	local percent = obj._modulecoldhits * 0.075
-	if not obj:HasTag("frozen") then
-		if obj.components.workable.workmultiplierfn == nil then obj.components.workable:SetWorkMultiplierFn(workmultiplierfn) end
-		
-		PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
-		if percent > 0 then SpawnPrefab("mining_ice_fx").Transform:SetPosition(obj.Transform:GetWorldPosition()) end
-		
-		if obj.components.workable.workleft <= 0 then
-			PopColour(obj)
-		else
-			obj._objectthawtask = obj:DoPeriodicTask(5, function(obj, wx)
-				thawtask(obj, wx)
-			end)
-		end
-		
-		local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
-		local x, y, z = obj.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 8, WORKCOOLINGTAGS_MUST)
-		for i, v in ipairs(ents) do
-		--wx.components.talker:Say('plug')
+    --print('pluh')
+    local obj = data.target
+    if obj._objectthawtask ~= nil then 
+        obj._objectthawtask:Cancel()
+        obj._objectthawtask = nil
+    end
+    obj._modulecoldhits = (obj._modulecoldhits or 0) + 1
+    local percent = obj._modulecoldhits * 0.075
+    if not obj:HasTag("frozen") then
+        if obj.components.workable.workmultiplierfn == nil then obj.components.workable:SetWorkMultiplierFn(workmultiplierfn) end
+        
+        PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
+        if percent > 0 then SpawnPrefab("mining_ice_fx").Transform:SetPosition(obj.Transform:GetWorldPosition()) end
+        
+        if obj.components.workable.workleft <= 0 then
+            PopColour(obj)
+        else
+            obj._objectthawtask = obj:DoPeriodicTask(5, function(obj, wx)
+                thawtask(obj, wx)
+            end)
+        end
+        
+        local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
+        local x, y, z = obj.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 8, WORKCOOLINGTAGS_MUST)
+        for i, v in ipairs(ents) do
+        --wx.components.talker:Say('plug')
         if v.components.temperature ~= nil then
-	    local cur = wx.components.temperature.current
+        local cur = wx.components.temperature.current
             v.components.temperature:SetTemperature(cur - (0.5 + obj._modulecoldhits*0.1))
         end
     end
-	end
-	
+    end
+    
 end
 
 local function onfreezehit(wx, data, inst)
-	local target = data.target
-	if target.components.freezable ~= nil and target:IsValid() then
+    local target = data.target
+    if target.components.freezable ~= nil and target:IsValid() then
         target.components.freezable:AddColdness(0.2)
         target.components.freezable:SpawnShatterFX()
-		--wx.components.temperature:SetTemperature(wx.components.temperature.current - 0.5)
-		local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
-		local x, y, z = target.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 4, WORKCOOLINGTAGS_MUST)
-		for i, v in ipairs(ents) do
-		--wx.components.talker:Say('plug')
-			if v.components.temperature ~= nil then
-				local cur = wx.components.temperature.current
-				v.components.temperature:SetTemperature(cur - 0.5)
-			end
-		end
+        --wx.components.temperature:SetTemperature(wx.components.temperature.current - 0.5)
+        local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
+        local x, y, z = target.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 4, WORKCOOLINGTAGS_MUST)
+        for i, v in ipairs(ents) do
+        --wx.components.talker:Say('plug')
+            if v.components.temperature ~= nil then
+                local cur = wx.components.temperature.current
+                v.components.temperature:SetTemperature(cur - 0.5)
+            end
+        end
     end
 end
 
@@ -669,8 +669,8 @@ local function cold_activate(inst, wx)
             end
         end)
     end]]
-	
-	if wx._oncoldwork == nil then
+    
+    if wx._oncoldwork == nil then
         wx._oncoldwork = function(owner, data)
             onobjectfreeze(owner, data, inst)
         end
@@ -681,15 +681,15 @@ local function cold_activate(inst, wx)
             onfreezehit(owner, data, inst)
         end
     end
-	
-	inst:ListenForEvent("working", wx._oncoldwork, wx)
+    
+    inst:ListenForEvent("working", wx._oncoldwork, wx)
     inst:ListenForEvent("onattackother", wx._oncoldattack, wx)
-	
+    
 
     if inst.icemakertask == nil then
-	local ice_timer = 25
-	if wx._cherriftchips and wx._cherriftchips > 0 then ice_timer = ice_timer - 2*wx._cherriftchips end
-		
+    local ice_timer = 25
+    if wx._cherriftchips and wx._cherriftchips > 0 then ice_timer = ice_timer - 2*wx._cherriftchips end
+        
         inst.icemakertask = wx:DoPeriodicTask(ice_timer, function(wx)
             local x, y, z = wx.Transform:GetWorldPosition()
             --for i = 1, TUNING.WX78_COLD_ICECOUNT do
@@ -715,7 +715,7 @@ local function cold_deactivate(inst, wx)
     --wx.components.temperature.mintemp = wx.components.temperature.mintemp + TUNING.WX78_MINTEMPCHANGEPERMODULE
 
     inst:RemoveEventCallback("freeze", OnFreeze, wx)
-	inst:RemoveEventCallback("working", wx._oncoldwork, wx)
+    inst:RemoveEventCallback("working", wx._oncoldwork, wx)
     inst:RemoveEventCallback("onattackother", wx._oncoldattack, wx)
 
 
@@ -754,39 +754,28 @@ local function taser_cooldown(inst)
     inst._cdtask = nil
 end
 
-
+local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit", "moving"}
 local function taser_onblockedorattacked(wx, data, inst)
-    if (data ~= nil and data.attacker ~= nil and not data.redirected) and inst._cdtask == nil then
+    if (data and data.attacker and not data.redirected) and not inst._cdtask then
         inst._cdtask = inst:DoTaskInTime(0.3, taser_cooldown)
 
-        if data.attacker.components.combat ~= nil
-            and (data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead())
+        if data.attacker.components.combat and not (data.attacker.components.health and data.attacker.components.health:IsDead())
             and (data.attacker.components.inventory == nil or not data.attacker.components.inventory:IsInsulated())
-            and (data.weapon == nil or
-                (data.weapon.components.projectile == nil
-                    and (data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil))
-            ) then
+            and (not data.weapon or (not data.weapon.components.projectile and (not data.weapon.components.weapon or not data.weapon.components.weapon.projectile))) then
             SpawnPrefab("electrichitsparks"):AlignToTarget(data.attacker, wx, true)
 
             local damage_mult = 1
-            if not (data.attacker:HasTag("electricdamageimmune") or
-                    (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated())) then
+            if not (data.attacker:HasTag("electricdamageimmune") or (data.attacker.components.inventory and data.attacker.components.inventory:IsInsulated())) then
                 damage_mult = TUNING.ELECTRIC_DAMAGE_MULT
 
-                local wetness_mult = (data.attacker.components.moisture ~= nil and data.attacker.components.moisture:GetMoisturePercent())
-                    or (data.attacker:GetIsWet() and 1)
-                    or 0
+                local wetness_mult = (data.attacker.components.moisture and data.attacker.components.moisture:GetMoisturePercent())
+                    or (data.attacker:GetIsWet() and 1) or 0
                 damage_mult = damage_mult + wetness_mult
             end
 
-            if wx._cherriftchips and wx._cherriftchips > 0 then
-		data.attacker.components.combat:GetAttacked(wx, damage_mult * (TUNING.WX78_TASERDAMAGE + 10*wx._cherriftchips), nil, "electric")
-	    else
-		data.attacker.components.combat:GetAttacked(wx, damage_mult * TUNING.WX78_TASERDAMAGE, nil, "electric")
-	    end
+            data.attacker.components.combat:GetAttacked(wx, damage_mult * (TUNING.WX78_TASERDAMAGE + (wx._cherriftchips and wx._cherriftchips > 0 and 10 * wx._cherriftchips or 0)), nil, "electric")
 
-
-            if data.attacker._chargeharvestable == nil then
+            if not data.attacker._chargeharvestable then
                 data.attacker._chargeharvestable = true
                 data.attacker:DoTaskInTime(3.5, function() data.attacker._chargeharvestable = nil end)
             end
@@ -795,18 +784,31 @@ local function taser_onblockedorattacked(wx, data, inst)
             --end
 
             local tased_duration = wx._taser_chips / 1.25
-
-            if data.attacker.sg ~= nil and not data.attacker.sg.statemem.devoured and not (data.attacker:HasTag("Epic") or data.attacker:HasTag("shadowthrall") or data.attacker:HasTag("shadow") or data.attacker:HasTag("trepidation")) then
-                data.attacker.sg:GoToState("hit")
-                if data.attacker.tased_stunlocktask == nil then
+            if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("epic", "shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant") then
+                if not data.attacker.tased_stunlocktask then
                     data.attacker.tased_stunlocktask = data.attacker:DoPeriodicTask(0.15, function()
-                        if data.attacker ~= nil and not data.attacker.components.health:IsDead() then
-                            --print("WORKS TOTALLY")
-                            if data.attacker:HasTag("spider") then
-                                data.attacker.sg:GoToState("hit_stunlock")
-                            else
-                                data.attacker.sg:GoToState("hit")
-                                if data.attacker.components.combat.hurtsound ~= nil then
+                        if data.attacker and not (data.attacker.components.health and data.attacker.components.health:IsDead()) then
+                            if data.attacker.brain then
+                                data.attacker.brain:Stop()
+                            end
+                            if data.attacker.sg and data.attacker.sg.currentstate and data.attacker.sg.currentstate.name ~= "shield_start"
+                                and data.attacker.sg.currentstate.name ~= "shield" then -- Grabbed from shockstundebuff.lua. Check this file for stun stuff.
+                                for _, tag in pairs(removetaglist) do
+                                    if data.attacker.sg:HasStateTag(tag) then
+                                        data.attacker.sg:RemoveStateTag(tag)
+                                    end
+                                end
+                                if not data.attacker.sg:HasStateTag("caninterrupt") then
+                                    data.attacker.sg:AddStateTag("caninterrupt")
+                                end
+                                data.attacker.um_forcestundebuff = true
+                            end
+                            data.attacker:PushEvent("attacked", {attacker = wx or nil, damage = 0})
+                            if data.attacker.components.combat then
+                                if data.attacker.components.combat.laststartattacktime then
+                                    data.attacker.components.combat.laststartattacktime = data.attacker.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
+                                end
+                                if data.attacker.components.combat.hurtsound then
                                     data.attacker.SoundEmitter:PlaySound(data.attacker.components.combat.hurtsound)
                                 end
                             end
@@ -815,9 +817,12 @@ local function taser_onblockedorattacked(wx, data, inst)
                     end)
                 end
                 data.attacker:DoTaskInTime(tased_duration, function()
-                    if data.attacker.tased_stunlocktask ~= nil then
+                    if data.attacker.tased_stunlocktask then
                         data.attacker.tased_stunlocktask:Cancel()
                         data.attacker.tased_stunlocktask = nil
+                    end
+                    if data.attacker.brain and not (data.attacker.components.health and data.attacker.components.health:IsDead()) then
+                        data.attacker.brain:Start()
                     end
                 end)
             end
@@ -894,7 +899,7 @@ local function light_activate(inst, wx)
     if wx._cherriftchips and wx._cherriftchips > 0 then
         wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS + 1.5 * wx._cherriftchips)
     else
-	wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS)
+    wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS)
     end
 
     -- If we had 0 before, set up the light properties.
@@ -921,10 +926,10 @@ local function light_deactivate(inst, wx)
         wx.Light:Enable(false)
     else
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS + 1.5 * wx._cherriftchips)
-	else
-	    wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS)
-	end
+        wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS + 1.5 * wx._cherriftchips)
+    else
+        wx.Light:SetRadius(TUNING.WX78_LIGHT_BASERADIUS + (wx._light_modules - 1) * TUNING.WX78_LIGHT_EXTRARADIUS)
+    end
     end
 end
 
@@ -952,10 +957,10 @@ local function maxhunger_activate(inst, wx, isloading)
         local current_hunger_percent = wx.components.hunger:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER_BOOST * (1 + 0.5*wx._cherriftchips))
-	else
-	    wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER_BOOST)
-	end
+        wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER_BOOST * (1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER_BOOST)
+    end
 
         if not isloading then
             wx.components.hunger:SetPercent(current_hunger_percent, false)
@@ -964,15 +969,15 @@ local function maxhunger_activate(inst, wx, isloading)
         wx._hunger_chips = (wx._hunger_chips or 0) + 1
 
         --[[if wx.components.eater.custom_stats_mod_fn == nil then
-			wx.components.eater.custom_stats_mod_fn = stats_negate
-		end]]
+            wx.components.eater.custom_stats_mod_fn = stats_negate
+        end]]
 
         -- Tie it to the module instance so we don't have to think too much about removing them.
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.WX78_MAXHUNGER_SLOWPERCENT * (0.9 ^ wx._cherriftchips))
-	else
-	    wx.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.WX78_MAXHUNGER_SLOWPERCENT)
-	end
+        wx.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.WX78_MAXHUNGER_SLOWPERCENT * (0.9 ^ wx._cherriftchips))
+    else
+        wx.components.hunger.burnratemodifiers:SetModifier(inst, TUNING.WX78_MAXHUNGER_SLOWPERCENT)
+    end
     end
     
 end
@@ -982,10 +987,10 @@ local function maxhunger_deactivate(inst, wx)
         local current_hunger_percent = wx.components.hunger:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER_BOOST * (1 + 0.5*wx._cherriftchips))
-	else
-	    wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER_BOOST)
-	end
+        wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER_BOOST * (1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER_BOOST)
+    end
         wx.components.hunger:SetPercent(current_hunger_percent, false)
 
         wx._hunger_chips = math.max(0, wx._hunger_chips - 1)
@@ -1012,20 +1017,20 @@ local function maxhunger1_activate(inst, wx, isloading)
         local current_hunger_percent = wx.components.hunger:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER1_BOOST * (1 + 0.5*wx._cherriftchips))
-	else
-	    wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER1_BOOST)
-	end
+        wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER1_BOOST * (1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.hunger:SetMax(wx.components.hunger.max + TUNING.WX78_MAXHUNGER1_BOOST)
+    end
 
         if not isloading then
             wx.components.hunger:SetPercent(current_hunger_percent, false)
         end
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger.burnratemodifiers:SetModifier(inst, 0.925 * (0.95 ^ wx._cherriftchips))
-	else
+        wx.components.hunger.burnratemodifiers:SetModifier(inst, 0.925 * (0.95 ^ wx._cherriftchips))
+    else
             wx.components.hunger.burnratemodifiers:SetModifier(inst, 0.925)
-	end
+    end
     end
 end
 
@@ -1034,10 +1039,10 @@ local function maxhunger1_deactivate(inst, wx)
         local current_hunger_percent = wx.components.hunger:GetPercent()
 
         if wx._cherriftchips and wx._cherriftchips > 0 then
-	    wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER1_BOOST * (1 + 0.5*wx._cherriftchips))
-	else
-	    wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER1_BOOST)
-	end
+        wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER1_BOOST * (1 + 0.5*wx._cherriftchips))
+    else
+        wx.components.hunger:SetMax(wx.components.hunger.max - TUNING.WX78_MAXHUNGER1_BOOST)
+    end
         wx.components.hunger:SetPercent(current_hunger_percent, false)
 
         wx.components.hunger.burnratemodifiers:RemoveModifier(inst)
@@ -1161,7 +1166,7 @@ AddCreatureScanDataDefinition("hermitcrab", "music", 4)
 local function bee_tick(wx, inst)
     if wx._bee_modcount and wx._bee_modcount > 0 and wx.components.inventory ~= nil then
         local health_tick = wx._bee_modcount * TUNING.WX78_BEE_HEALTHPERTICK
-	if wx._cherriftchips and wx._cherriftchips > 0 then health_tick = health_tick + 0.25 * wx._cherriftchips end
+    if wx._cherriftchips and wx._cherriftchips > 0 then health_tick = health_tick + 0.25 * wx._cherriftchips end
         wx.components.health:DoDelta(health_tick, false, inst, true)
     end
 end
@@ -1231,58 +1236,58 @@ table.insert(module_definitions, MAXHEALTH2_MODULE_DATA)
 AddCreatureScanDataDefinition("spider_healer", "maxhealth2", 4)
 
 ---------------------------------------------------------------
----CHERRY FOREST COOL CIRCUIT COMPATIBALITY---		---surely there's a way better way to go about this but this is simple enough
+---CHERRY FOREST COOL CIRCUIT COMPATIBALITY---        ---surely there's a way better way to go about this but this is simple enough
 local function modulesrefresh(inst, wx, isactivate)
-	for _, module in ipairs(wx.components.upgrademoduleowner.modules) do --This looks ugly
-		if wx.components.upgrademoduleowner.charge_level ~= 0 and module.prefab ~= "wx78module_cherrift" then
-			--print("found one")
-			module.components.upgrademodule:TryDeactivate() --Mr. Klei told me to not use these Activate functions outside of upgrademoduleowner component so if something's wrong
-		end												-- just disable them and make module incrase/decrease wx._cherriftchips count.
-	end
-	
-	if isactivate then 
-		wx._cherriftchips = (wx._cherriftchips or 0) + 1
-	else
-		wx._cherriftchips = math.max(0, wx._cherriftchips - 1)
-	end
-	
-	for _, module in ipairs(wx.components.upgrademoduleowner.modules) do
-		if wx.components.upgrademoduleowner.charge_level ~= 0 and module.prefab ~= "wx78module_cherrift" then
-		--print("found one")
+    for _, module in ipairs(wx.components.upgrademoduleowner.modules) do --This looks ugly
+        if wx.components.upgrademoduleowner.charge_level ~= 0 and module.prefab ~= "wx78module_cherrift" then
+            --print("found one")
+            module.components.upgrademodule:TryDeactivate() --Mr. Klei told me to not use these Activate functions outside of upgrademoduleowner component so if something's wrong
+        end                                                -- just disable them and make module incrase/decrease wx._cherriftchips count.
+    end
+    
+    if isactivate then 
+        wx._cherriftchips = (wx._cherriftchips or 0) + 1
+    else
+        wx._cherriftchips = math.max(0, wx._cherriftchips - 1)
+    end
+    
+    for _, module in ipairs(wx.components.upgrademoduleowner.modules) do
+        if wx.components.upgrademoduleowner.charge_level ~= 0 and module.prefab ~= "wx78module_cherrift" then
+        --print("found one")
        -- module.components.upgrademodule:TryDeactivate()
-		module.components.upgrademodule:TryActivate()
-		module:PushEvent("upgrademodule_moduleactivated")
-	end
+        module.components.upgrademodule:TryActivate()
+        module:PushEvent("upgrademodule_moduleactivated")
+    end
     end
 end
 
 
 local function cherrift_activate(inst, wx)
-	modulesrefresh(inst, wx, true)
-	--wx._cherriftchips = (wx._cherriftchips or 0) + 1
-	--wx.components.upgrademoduleowner:UpdateActivatedModules()
-	
+    modulesrefresh(inst, wx, true)
+    --wx._cherriftchips = (wx._cherriftchips or 0) + 1
+    --wx.components.upgrademoduleowner:UpdateActivatedModules()
+    
 end
 
 local function cherrift_deactivate(inst, wx)
-	--wx.components.upgrademoduleowner:UpdateActivatedModules()
-	--wx._cherriftchips = math.max(0, wx._cherriftchips - 1) --this is after Update so it would use an older value for deactivation function --SCRAP ALL OF THIS SHIT
-	--[[for _, module in ipairs(wx.components.upgrademoduleowner.modules) do
-		if wx._cherriftchips and wx._cherriftchips == 0 and module.prefab ~= "wx78module_cherrift" then
-			module._cherryboosted = false
-		end
+    --wx.components.upgrademoduleowner:UpdateActivatedModules()
+    --wx._cherriftchips = math.max(0, wx._cherriftchips - 1) --this is after Update so it would use an older value for deactivation function --SCRAP ALL OF THIS SHIT
+    --[[for _, module in ipairs(wx.components.upgrademoduleowner.modules) do
+        if wx._cherriftchips and wx._cherriftchips == 0 and module.prefab ~= "wx78module_cherrift" then
+            module._cherryboosted = false
+        end
         --module:PushEvent("upgrademodule_moduleactivated")
     end]]
-	modulesrefresh(inst, wx, false)
+    modulesrefresh(inst, wx, false)
 end
 
 local CHERRIFT_MODULE_DATA =
 {
-	name = "cherrift",
-	cherriftitem = true,
-	slots = 1,
-	activatefn = cherrift_activate,
-	deactivatefn = cherrift_deactivate,
+    name = "cherrift",
+    cherriftitem = true,
+    slots = 1,
+    activatefn = cherrift_activate,
+    deactivatefn = cherrift_deactivate,
 }
 table.insert(module_definitions, CHERRIFT_MODULE_DATA)
 
