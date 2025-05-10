@@ -315,8 +315,8 @@ local function KillRopes(inst)
     else
         local x, y, z = inst.Transform:GetWorldPosition()
         local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
+        if magnerang.components.finiteuses and inst.uses then
+            magnerang.components.finiteuses.current = inst.uses
             if magnerang.components.finiteuses.current <= 0 then
                 OnFinished(magnerang)
             end
