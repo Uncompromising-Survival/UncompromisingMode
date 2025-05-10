@@ -77,17 +77,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             elseif statename == "idle" and statename ~= "idle_flutter" and not (inst.components.locomotor and inst.components.locomotor:WantsToMoveForward())
                 and mindist < 4 and TheWorld.state.isday  then --uhoh getting close!
                 inst.sg:GoToState("idle_flutter")
-            else
-                local speed = 12 - mindist
-                if speed > 8 then -- clamp the speed at some maximum value
-                    speed = 8
-                end
-                inst.components.locomotor.runspeed = speed
-                inst.components.locomotor.walkspeed = speed
             end
-        else
-            inst.components.locomotor.runspeed = 6
-            inst.components.locomotor.walkspeed = 4
         end
     end
 
