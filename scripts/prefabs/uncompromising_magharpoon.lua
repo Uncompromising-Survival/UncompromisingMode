@@ -35,81 +35,89 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
-local function onhit(inst, attacker, target)
-    local impactfx = SpawnPrefab("impact")
-    if impactfx ~= nil and target.components.combat ~= nil then
-        local follower = impactfx.entity:AddFollower()
-        follower:FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
-        if attacker ~= nil and attacker:IsValid() then
-            impactfx:FacePoint(attacker.Transform:GetWorldPosition())
-        end
-    end
-
-
-    if inst.x ~= nil then
-        local ground = TheWorld.Map:IsPassableAtPoint(inst.x, inst.y, inst.z)
-        local boat = TheWorld.Map:GetPlatformAtPoint(inst.x, inst.z)
-
-        if ground or boat then
-            local reel = SpawnPrefab("um_magnerangreel")
-            if inst.uses then
-                reel.uses = inst.uses
-            end
-            reel.Transform:SetPosition(inst.x, inst.y, inst.z)
-            reel.target = target
-
-            if boat then
-                reel.AnimState:PlayAnimation("place_boat")
-            else
-                reel.AnimState:PlayAnimation("place")
-            end
-        end
-    end
-
-    inst:Remove()
-end
-
-local function pipethrown(inst, owner, target)
-    if owner ~= nil then
-        local x, y, z = owner.Transform:GetWorldPosition()
-        inst.x = x
-        inst.y = y
-        inst.z = z
-    end
-
-    inst.SoundEmitter:PlaySound("dontstarve/wilson/boomerang_throw")
-    inst.AnimState:PlayAnimation("spin_loop", true)
-    inst:AddTag("NOCLICK")
-    inst.persists = false
-end
-
-local function spawntornado(inst, target)
-    local owner = inst.components.inventoryitem.owner
-
-    if owner == nil then
-        return
-    end
-
-    local x, y, z = owner.Transform:GetWorldPosition()
-    local boat = TheWorld.Map:GetPlatformAtPoint(x, z)
-
-    if target.components ~= nil and target.components.workable and not owner:GetCurrentPlatform() then
-        return
-    end
-
-    local proj = SpawnPrefab("um_magnerang_projectile")
-    if inst.components.finiteuses and inst.components.finiteuses.current then
-        proj.uses = inst.components.finiteuses.current
-    end
-    proj.Transform:SetPosition(x, y, z)
-    proj.components.projectile:Throw(owner, target)
-
-    inst:Remove()
-end
-
 local function OnFinished(inst)
+    if inst.components.inventoryitem then
+        inst.components.inventoryitem.canbepickedup = false
+    end
     inst.AnimState:PlayAnimation("used")
     inst:ListenForEvent("animover", inst.Remove)
+end
+
+local function OnDropped(inst)
+    inst.AnimState:PlayAnimation("idle")
+    inst.components.inventoryitem.pushlandedevents = true
+    inst:PushEvent("on_landed")
+end
+
+local function OnHit(inst, owner, target)
+    if not inst.reel then
+        local impactfx = SpawnPrefab("impact")
+        if impactfx and target.components.combat then
+            local follower = impactfx.entity:AddFollower()
+            follower:FollowSymbol(target.GUID, target.components.combat.hiteffectsymbol, 0, 0, 0)
+            if owner and owner:IsValid() then
+                impactfx:FacePoint(owner.Transform:GetWorldPosition())
+            end
+        end
+        local x, y, z = owner.Transform:GetWorldPosition()
+        if x then
+            local ground = TheWorld.Map:IsPassableAtPoint(x, y, z)
+            local boat = TheWorld.Map:GetPlatformAtPoint(x, z)
+
+            if ground or boat then
+                local reel = SpawnPrefab("um_magnerangreel")
+                if inst.components.finiteuses and inst.components.finiteuses.current then
+                    reel.uses = inst.components.finiteuses.current
+                end
+                reel.Transform:SetPosition(x, y, z)
+                reel.target = target
+
+                reel.AnimState:PlayAnimation(boat and "place_boat" or "place")
+            end
+        end
+
+        inst:Remove()
+    else
+        local x, y, z = target.Transform:GetWorldPosition()
+        inst.Transform:SetPosition(x, 1.5, z)
+        if inst.components.finiteuses and inst.components.finiteuses.current <= 0 then
+            OnFinished(inst)
+        else
+            OnDropped(inst)
+        end
+        inst.reel.AnimState:PlayAnimation("break")
+        inst.reel:ListenForEvent("animover", inst.Remove)
+        inst.reel = nil
+    end
+end
+
+local function OnThrown(inst, owner, target)
+    if target ~= owner then
+        owner.SoundEmitter:PlaySound("dontstarve/wilson/boomerang_throw")
+    end
+    inst.AnimState:PlayAnimation("spin_loop", true)
+    inst.components.inventoryitem.pushlandedevents = false
+end
+
+local function OnCaught(inst, catcher)
+    if catcher and catcher.components.inventory and catcher.components.inventory.isopen then
+        if inst.components.equippable and not catcher.components.inventory:GetEquippedItem(inst.components.equippable.equipslot) then
+            catcher.components.inventory:Equip(inst)
+        else
+            catcher.components.inventory:GiveItem(inst)
+        end
+        catcher:PushEvent("catch")
+    end
+end
+
+local function OnMiss(inst, owner, target)
+    OnDropped(inst)
+    inst.components.projectile:Stop()
+    inst.Physics:Stop()
+    if inst.reel then
+        inst.reel.AnimState:PlayAnimation("break")
+        inst.reel:ListenForEvent("animover", inst.Remove)
+    end
 end
 
 local function fncommon()
@@ -120,20 +128,20 @@ local function fncommon()
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
+    RemovePhysicsColliders(inst)
 
     inst.AnimState:SetBank("boomerang")
     inst.AnimState:SetBuild("magnerang")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("sharp")
-    inst:AddTag("quickcast")
-    inst:AddTag("nopunch")
-    inst:AddTag("donotautopick")
-
-    inst.spelltype = "HARPOON"
+    inst:AddTag("thrown")
 
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
+
+    --projectile (from projectile component) added to pristine state for optimization
+    inst:AddTag("projectile")
 
     MakeInventoryFloatable(inst, "small", 0.05, { 0.75, 0.5, 0.75 })
 
@@ -144,23 +152,23 @@ local function fncommon()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(10)
+    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetRange(TUNING.BOOMERANG_DISTANCE, TUNING.BOOMERANG_DISTANCE + 2)
     -------
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.atlasname = "images/inventoryimages/um_magnerang.xml"
+    inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
-    inst:AddComponent("spellcaster")
-    inst.components.spellcaster.canuseontargets = true
-    inst.components.spellcaster.canonlyuseonworkable = true
-    inst.components.spellcaster.canonlyuseoncombat = true
-    inst.components.spellcaster.quickcast = true
-    inst.components.spellcaster.canuseonpoint = false
-    inst.components.spellcaster.canuseonpoint_water = false
-    inst.components.spellcaster:SetSpellFn(spawntornado)
-    inst.components.spellcaster.castingstate = "castspell_tornado"
+    inst:AddComponent("projectile")
+    inst.components.projectile:SetSpeed(10)
+    inst.components.projectile:SetCanCatch(true)
+    inst.components.projectile:SetOnThrownFn(OnThrown)
+    inst.components.projectile:SetOnHitFn(OnHit)
+    inst.components.projectile:SetOnMissFn(OnMiss)
+    inst.components.projectile:SetOnCaughtFn(OnCaught)
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
@@ -172,151 +180,6 @@ local function fncommon()
     inst.components.finiteuses:SetOnFinished(OnFinished)
 
     MakeHauntableLaunch(inst)
-
-    return inst
-end
-
-local function onhit_return(inst, attacker, target)
-    if target ~= nil then
-        local x, y, z = target.Transform:GetWorldPosition()
-        local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
-            if magnerang.components.finiteuses.current <= 0 then
-                OnFinished(magnerang)
-            end
-        end
-        magnerang.Transform:SetPosition(x, 1.5, z)
-        magnerang.target = target
-    elseif attacker ~= nil then
-        local x, y, z = attacker.Transform:GetWorldPosition()
-        local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
-            if magnerang.components.finiteuses.current <= 0 then
-                OnFinished(magnerang)
-            end
-        end
-        magnerang.Transform:SetPosition(x, 1.5, z)
-        magnerang.target = target
-    end
-
-    if inst.reel ~= nil then
-        inst.reel.AnimState:PlayAnimation("break")
-        inst.reel:ListenForEvent("animover", inst.Remove)
-    end
-
-    inst:Remove()
-end
-
-local function onmiss_return(inst, attacker, target)
-    if inst.reel ~= nil then
-        inst.reel.AnimState:PlayAnimation("break")
-        inst.reel:ListenForEvent("animover", inst.Remove)
-    end
-
-    if target ~= nil and target.Transform:GetWorldPosition() ~= nil then
-        local x, y, z = target.Transform:GetWorldPosition()
-        local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
-            if magnerang.components.finiteuses.current <= 0 then
-                OnFinished(magnerang)
-            end
-        end
-        magnerang.Transform:SetPosition(x, 1.5, z)
-        magnerang.target = target
-    elseif attacker ~= nil and attacker.Transform:GetWorldPosition() then
-        local x, y, z = attacker.Transform:GetWorldPosition()
-        local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
-            if magnerang.components.finiteuses.current <= 0 then
-                OnFinished(magnerang)
-            end
-        end
-        magnerang.Transform:SetPosition(x, 1.5, z)
-        magnerang.target = target
-    end
-
-    inst:Remove()
-end
-
-local function ReturnToTarget(inst, attacker, target)
-    if attacker ~= nil then
-        local x, y, z = inst.Transform:GetWorldPosition()
-
-        local proj = SpawnPrefab("um_magnerang_projectile")
-
-        proj.Transform:SetPosition(x, 1.5, z)
-        proj.components.projectile:Throw(attacker, inst)
-        if inst.uses then --Pass the uses from the magnerang
-            proj.uses = inst.uses
-        end
-        proj.components.projectile:SetOnHitFn(onhit_return)
-        proj.components.projectile:SetOnMissFn(onmiss_return)
-    elseif attacker ~= nil then
-        local x, y, z = attacker.Transform:GetWorldPosition()
-        local magnerang = SpawnPrefab("um_magnerang")
-        if inst.uses and magnerang.components.finiteuses then
-            magnerang.components.finiteuses.current = inst.uses - 1
-            if magnerang.components.finiteuses.current <= 0 then
-                OnFinished(magnerang)
-            end
-        end
-        magnerang.Transform:SetPosition(x, 1.5, z)
-        magnerang.target = target
-    end
-
-    inst.AnimState:PlayAnimation("break")
-    inst:ListenForEvent("animover", inst.Remove)
-end
-
-local function harpoon()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("boomerang")
-    inst.AnimState:SetBuild("magnerang")
-    inst.AnimState:PlayAnimation("idle")
-    inst.AnimState:SetRayTestOnBB(true)
-
-    inst:AddTag("thrown")
-    inst:AddTag("weapon")
-    inst:AddTag("sharp")
-    inst:AddTag("weapon")
-    inst:AddTag("projectile")
-    inst:AddTag("NOCLICK")
-    RemovePhysicsColliders(inst)
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
-    inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(10)
-    inst.components.weapon:SetRange(8, 10)
-
-    inst:AddComponent("projectile")
-    inst.components.projectile:SetOnThrownFn(pipethrown)
-    inst.components.projectile:SetRange(TUNING.WALRUS_DART_RANGE)
-    inst.components.projectile:SetHoming(true)
-    inst.components.projectile:SetOnMissFn(ReturnToTarget)
-    inst.components.projectile:SetLaunchOffset(Vector3(3, 2, 0))
-    inst.components.projectile:SetSpeed(10)
-    inst.components.projectile:SetOnHitFn(onhit)
-
-
-
-    inst.persists = false
 
     return inst
 end
@@ -428,21 +291,23 @@ local function KillRopes(inst)
     if inst.target ~= nil and inst.target:IsValid() and not inst.target:HasTag("INLIMBO") then
         local x, y, z = inst.target.Transform:GetWorldPosition()
 
-        local proj = SpawnPrefab("um_magnerang_projectile")
-        if x ~= nil then
+        local proj = SpawnPrefab("um_magnerang")
+        if x then
             proj.Transform:SetPosition(x, 1.5, z)
             proj.components.projectile:Throw(inst.target, inst)
             if inst.target.components ~= nil and inst.target.components.combat ~= nil and inst.uses then --Pass the uses from the magnerang
-                proj.uses = inst.uses
+                if proj.components.finiteuses then
+                    proj.components.finiteuses.current = inst.uses
+                end
             end
-            proj.components.projectile:SetOnHitFn(onhit_return)
-            proj.components.projectile:SetOnMissFn(onmiss_return)
+            --proj.components.projectile:SetOnHitFn(onhit_return)
+            --proj.components.projectile:SetOnMissFn(onmiss_return)
             proj.reel = inst
         else
             proj.Transform:SetPosition(inst.Transform:GetWorldPosition())
             proj.components.projectile:Throw(inst, inst)
-            proj.components.projectile:SetOnHitFn(onhit_return)
-            proj.components.projectile:SetOnMissFn(onmiss_return)
+            --proj.components.projectile:SetOnHitFn(onhit_return)
+            --proj.components.projectile:SetOnMissFn(onmiss_return)
             proj.reel = inst
         end
 
@@ -539,7 +404,7 @@ local function reel()
     --[[inst:AddComponent("activatable")
     inst.components.activatable.OnActivate = DoPuff
     inst.components.activatable.inactive = true
-	inst.components.activatable.quickaction = true]]
+    inst.components.activatable.quickaction = true]]
 
     inst:AddComponent("machine")
     inst.components.machine.turnonfn = KillRopes
@@ -553,6 +418,8 @@ local function reel()
 
     inst:AddComponent("updatelooper")
     inst.components.updatelooper:AddOnUpdateFn(Vac)
+	
+    inst:DoTaskInTime(0, function() inst.SoundEmitter:PlaySound("monkeyisland/autopilot/magnet_lp_start") end)
 
     inst:DoTaskInTime(60, KillRopes)
 
@@ -584,14 +451,11 @@ local function fnhit()
         return inst
     end
 
-    inst.SoundEmitter:PlaySound("monkeyisland/autopilot/magnet_lp_start")
-
     inst.persists = false
 
     return inst
 end
 -------------------------------------------------------------------------------
 return Prefab("um_magnerang", fncommon, assets, prefabs),
-    Prefab("um_magnerang_projectile", harpoon, assets, prefabs),
     Prefab("um_magnerangreel", reel, assets, prefabs),
     Prefab("um_magneranghitfx", fnhit, assets, prefabs)
