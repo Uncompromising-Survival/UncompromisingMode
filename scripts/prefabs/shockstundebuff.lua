@@ -64,9 +64,12 @@ local function OhCrap(inst, target)
             end
             target.um_forcestundebuff = true
         end
+        if target.components.combat.hurtsound then
+            target.SoundEmitter:PlaySound(target.components.combat.hurtsound)
+        end
         target:PushEvent("attacked", {attacker = target.shock_owner or nil, damage = 2})
         if target.components.combat and target.components.combat.laststartattacktime then
-            target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 --This apparently resets the targets attack timer making it a true "stun"
+            target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
         end
     else
         inst.components.debuff:Stop()
