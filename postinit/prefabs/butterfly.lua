@@ -198,4 +198,25 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
         debug.setupvalue(scope_fn, _fn_i,GetSpawnPoint)
     end)
+
+    env.AddStategraphState("butterfly", State{
+        name = "idle_flutter",
+        tags = {"idle"},
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            if not inst.AnimState:IsCurrentAnimation("flight_cycle") then
+                inst.AnimState:PlayAnimation("flight_cycle", true)
+            end
+            inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
+        end,
+
+        ontimeout = function(inst)
+            if inst.sg.statemem.wantstomove then
+                inst.sg:GoToState("moving")
+            else
+                inst.sg:GoToState("idle")
+            end
+        end,
+    })
 end
