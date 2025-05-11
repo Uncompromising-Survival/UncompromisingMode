@@ -1,6 +1,6 @@
 local assets = {
-	Asset("ANIM", "anim/um_pawn.zip"),
-	Asset("ANIM", "anim/um_pawn_nightmare.zip"),
+    Asset("ANIM", "anim/um_pawn.zip"),
+    Asset("ANIM", "anim/um_pawn_nightmare.zip"),
 }
 
 local prefabs = {}
@@ -105,9 +105,9 @@ end
 local function StartDusk(inst) end
 
 local function OnAttacked(inst, data) 
-	if not inst.components.health:IsDead() then
-		inst.components.explosive:OnBurnt()
-	end
+    if not inst.components.health:IsDead() then
+        inst.components.explosive:OnBurnt()
+    end
 end
 
 local function DisplayName(inst)
@@ -248,75 +248,79 @@ local function onfar(inst)
     end
 end
 
-local function FindTarget(inst, radius) return FindEntity(inst, radius, function(guy) return guy:HasTag("player") and (guy.sg == nil or guy.sg ~= nil and not guy.sg:HasStateTag("hiding")) and inst.components.combat:CanTarget(guy) and not inst.components.freezable:IsFrozen() end, "player", "playerghost") end
+local function FindTarget(inst, radius)
+    return FindEntity(inst, radius, function(guy)
+        return (not guy.sg or guy.sg:HasStateTag("hiding")) and inst.components.combat:CanTarget(guy) and inst.components.freezable and not inst.components.freezable:IsFrozen()
+    end, "_combat", "playerghost", "player")
+end
 
 local function NormalRetarget(inst) return FindTarget(inst, 8) end
 
 local function ExplodePing(inst)
-	--if inst.components.combat.target ~= nil then
-		if inst.task ~= nil then
-			inst.task:Cancel()
-			inst.task = nil
-		end
-		
-		if inst.explode_timer_count < 0.1 then
-			if not inst.components.health:IsDead() then
-				inst.components.explosive:OnBurnt()
-			end
-		else
-			inst.explode_timer_count = inst.explode_timer_count - .1
-			inst:DoTaskInTime(inst.explode_timer_count / 1.2, ExplodePing)
-			
-			local fxname = "dr_warm_loop_1"
-			
-			if inst.explode_timer_count < 0.8 and inst.explode_timer_count >= 0.6 then
-				fxname = "dr_warm_loop_2"
-			elseif inst.explode_timer_count < 0.6 and inst.explode_timer_count >= 0.3 then
-				fxname = "dr_warmer_loop"
-			elseif inst.explode_timer_count < 0.3 then
-				fxname = "dr_hot_loop"
-			end
-			
-			inst.fx = SpawnPrefab(fxname)
+    --if inst.components.combat.target ~= nil then
+        if inst.task ~= nil then
+            inst.task:Cancel()
+            inst.task = nil
+        end
+        
+        if inst.explode_timer_count < 0.1 then
+            if not inst.components.health:IsDead() then
+                inst.components.explosive:OnBurnt()
+            end
+        else
+            inst.explode_timer_count = inst.explode_timer_count - .1
+            inst:DoTaskInTime(inst.explode_timer_count / 1.2, ExplodePing)
+            
+            local fxname = "dr_warm_loop_1"
+            
+            if inst.explode_timer_count < 0.8 and inst.explode_timer_count >= 0.6 then
+                fxname = "dr_warm_loop_2"
+            elseif inst.explode_timer_count < 0.6 and inst.explode_timer_count >= 0.3 then
+                fxname = "dr_warmer_loop"
+            elseif inst.explode_timer_count < 0.3 then
+                fxname = "dr_hot_loop"
+            end
+            
+            inst.fx = SpawnPrefab(fxname)
             inst.fx.entity:AddFollower()
             inst.fx.Follower:FollowSymbol(inst.GUID, "body", 0, -40, 0)
 
             inst.fxlight = SpawnPrefab(fxname .. "_light" .. inst.pawntype)
             inst.fxlight.entity:AddFollower()
             inst.fxlight.Follower:FollowSymbol(inst.GUID, "body", 0, -40, 0)
-			
-			inst.sparks = SpawnPrefab("sparks")
+            
+            inst.sparks = SpawnPrefab("sparks")
             inst.sparks.entity:AddFollower()
             inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
 
-		end
-	--else
-		--if inst.task == nil then
-			--inst.task = inst:DoTaskInTime(PAWN_DIVINING_DEFAULTPING, CheckTargetPiece)
-		--end
-		
-		--inst.explode_timer_count = 1
-	--end
+        end
+    --else
+        --if inst.task == nil then
+            --inst.task = inst:DoTaskInTime(PAWN_DIVINING_DEFAULTPING, CheckTargetPiece)
+        --end
+        
+        --inst.explode_timer_count = 1
+    --end
 end
 
 local function OnNewTarget(inst)
-	if inst.components.combat.target ~= nil and inst.force_explode == nil then
-		if inst.task ~= nil then
-			inst.task:Cancel()
-			inst.task = nil
-		end
+    if inst.components.combat.target ~= nil and inst.force_explode == nil then
+        if inst.task ~= nil then
+            inst.task:Cancel()
+            inst.task = nil
+        end
 
-		inst.force_explode = true
-			
-		inst.sparks = SpawnPrefab("sparks")
-		inst.sparks.entity:AddFollower()
-		inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
-		
-		inst:ListenForEvent("attacked", OnAttacked)
-		
-		inst.explode_timer_count = 1
-		inst:DoTaskInTime(0, ExplodePing)
-	end
+        inst.force_explode = true
+            
+        inst.sparks = SpawnPrefab("sparks")
+        inst.sparks.entity:AddFollower()
+        inst.sparks.Follower:FollowSymbol(inst.GUID, "body", 0 + math.random(-0.2, .2), -40, 0 + math.random(-0.2, .2))
+        
+        inst:ListenForEvent("attacked", OnAttacked)
+        
+        inst.explode_timer_count = 1
+        inst:DoTaskInTime(0, ExplodePing)
+    end
 end
 
 local function pawn_common(pawntype)
@@ -371,22 +375,22 @@ local function pawn_common(pawntype)
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = getstatus
-	
-	inst:AddComponent("burnable")
-	inst.components.burnable:SetOnIgniteFn(function(inst) inst.components.explosive:OnBurnt() end)
-	
-	inst:AddComponent("explosive")
-	inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
-	inst.components.explosive.explosiverange = 6
-	inst.components.explosive.buildingdamage = 0
-	inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
+    
+    inst:AddComponent("burnable")
+    inst.components.burnable:SetOnIgniteFn(function(inst) inst.components.explosive:OnBurnt() end)
+    
+    inst:AddComponent("explosive")
+    inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
+    inst.components.explosive.explosiverange = 6
+    inst.components.explosive.buildingdamage = 0
+    inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE
 
     if inst.pawntype == "_nightmare" then
-		inst.components.locomotor.runspeed = 6.5
-		inst.explode_timer_count = 1
-	
-		inst:ListenForEvent("newcombattarget", OnNewTarget)
-	
+        inst.components.locomotor.runspeed = 6.5
+        inst.explode_timer_count = 1
+    
+        inst:ListenForEvent("newcombattarget", OnNewTarget)
+    
         inst:AddTag("uncompromising_nightmarepawn")
         inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     end
@@ -433,7 +437,7 @@ local function pawn_nightmare()
     if not TheWorld.ismastersim then return inst end
 
     inst:AddTag("landmine")
-	inst:AddTag("shadow_aligned")
+    inst:AddTag("shadow_aligned")
 
     return inst
 end
