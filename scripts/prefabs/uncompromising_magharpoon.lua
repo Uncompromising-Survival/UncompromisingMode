@@ -287,6 +287,9 @@ local function Link(inst, option)
 end
 
 local function KillRopes(inst)
+    if inst.killedropes then return end
+    inst.killedropes = true
+
     inst.SoundEmitter:PlaySound("UCSounds/harpoon/break")
 
     inst:AddTag("NOCLICK")
