@@ -297,7 +297,7 @@ local function KillRopes(inst)
         inst.hitfx:Remove()
     end
 
-    if inst.target ~= nil and inst.target:IsValid() and not inst.target:HasTag("INLIMBO") then
+    if inst.target and inst.target:IsValid() and not inst.target:HasTag("INLIMBO") then
         local x, y, z = inst.target.Transform:GetWorldPosition()
         local proj = SpawnPrefab("um_magnerang")
         if x then
