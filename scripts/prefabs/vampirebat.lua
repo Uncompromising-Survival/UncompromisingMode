@@ -1,6 +1,3 @@
-require "brains/vampirebatbrain"
-require "stategraphs/SGvampirebat"
-
 local assets =
 {
     Asset("ANIM", "anim/bat_basic.zip"),
@@ -17,6 +14,9 @@ local prefabs =
     "pigskin",
     "monstersmallmeat",
 }
+
+local brain = require "brains/batbrain"
+
 if TUNING.DSTU.MONSTERSMALLMEAT then
     SetSharedLootTable('vampirebat',
         {
@@ -39,7 +39,6 @@ local MAX_CHASEAWAY_DIST = 80
 local MAX_TARGET_SHARES = 100
 local SHARE_TARGET_DIST = 100
 
-
 local function MakeTeam(inst, attacker)
     local leader = SpawnPrefab("teamleader")
     leader.components.teamleader:SetUp(attacker, inst)
@@ -50,23 +49,94 @@ local function OnWingDown(inst)
     inst.SoundEmitter:PlaySound("UCSounds/vampirebat/flap")
 end
 
-local function OnWingDownShadow(inst)
-    inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/distant_flap")
+-- TEAM ATTACKER STUFF
+
+local RETARGET_CANT_TAGS = {"bat"}
+local RETARGET_ONEOF_TAGS = {"character", "monster"}
+local function Retarget(inst)
+    local ta = inst.components.teamattacker
+
+    local newtarget = FindEntity(inst, TUNING.BAT_TARGET_DIST, function(guy)
+            return inst.components.combat:CanTarget(guy)
+        end, nil, RETARGET_CANT_TAGS, RETARGET_ONEOF_TAGS)
+
+    if newtarget and not ta.inteam and not ta:SearchForTeam() then
+        MakeTeam(inst, newtarget)
+    end
+
+    if ta.inteam and not ta.teamleader:CanAttack() then
+        return newtarget
+    end
 end
+
+local function KeepTarget(inst, target)
+    return (inst.components.teamattacker.inteam and not inst.components.teamattacker.teamleader:CanAttack())
+        or inst.components.teamattacker.orders == ORDERS.ATTACK
+end
+
+local function IsBat(dude)
+    return dude:HasTag("bat")
+end
+
+local function OnAttacked(inst, data)
+    local attacker = data and data.attacker
+    if not attacker then
+        return
+    end
+
+    if not inst.components.teamattacker.inteam and not inst.components.teamattacker:SearchForTeam() then
+        MakeTeam(inst, data.attacker)
+    elseif inst.components.teamattacker.teamleader then
+        inst.components.teamattacker.teamleader:BroadcastDistress() -- Ask for help!
+    end
+
+    if inst.components.teamattacker.inteam and not inst.components.teamattacker.teamleader:CanAttack() then
+        inst.components.combat:SetTarget(attacker)
+        inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, IsBat, MAX_TARGET_SHARES)
+    end
+end
+
+local function OnAttackOther(inst, data)
+    inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST,
+    function(dude) return IsBat(dude) and not dude.components.health:IsDead() end, 5)
+end
+
+local function onsave(inst, data)
+    if inst:HasTag("batfrenzy") then
+        data.batfrenzy = true
+    end
+    if inst.sg:HasStateTag("sleeping") then
+        data.forcesleep = true
+    end
+end
+
+local function onload(inst, data)
+    if data then
+        if data.batfrenzy then
+            inst:AddTag("batfrenzy")
+        end
+        if data.forcesleep then
+            inst.sg:GoToState("forcesleep")
+            inst.components.sleeper.hibernate = true
+            inst.components.sleeper:GoToSleep()
+        end
+    end
+end
+
 local function OnSleepGoHome(inst)
     inst._hometask = nil
-    local home = inst.components.homeseeker ~= nil and inst.components.homeseeker.home or nil
-    if home ~= nil and home:IsValid() and home.components.childspawner ~= nil then
+    local home = inst.components.homeseeker and inst.components.homeseeker.home
+    if home and home:IsValid() and home.components.childspawner then
         home.components.childspawner:GoHome(inst)
     end
 end
 
 local function OnIsDay(inst, isday)
     if isday then
-        if inst._hometask == nil then
+        if not inst._hometask then
             inst._hometask = inst:DoTaskInTime(10 + math.random(), OnSleepGoHome)
         end
-    elseif inst._hometask ~= nil then
+    elseif inst._hometask then
         inst._hometask:Cancel()
         inst._hometask = nil
     end
@@ -74,7 +144,7 @@ end
 
 local function StopWatchingDay(inst)
     inst:StopWatchingWorldState("isday", OnIsDay)
-    if inst._hometask ~= nil then
+    if inst._hometask then
         inst._hometask:Cancel()
         inst._hometask = nil
     end
@@ -101,81 +171,47 @@ local function OnEntityWake(inst)
     end
 end
 
--- TEAM ATTACKER STUFF
-
-local RETARGET_CANT_TAGS = { "bat" }
-local RETARGET_ONEOF_TAGS = { "character", "monster" }
-local function Retarget(inst)
-    local ta = inst.components.teamattacker
-
-    local newtarget = FindEntity(inst, TUNING.BAT_TARGET_DIST, function(guy)
-            return inst.components.combat:CanTarget(guy)
-        end,
-        nil,
-        RETARGET_CANT_TAGS,
-        RETARGET_ONEOF_TAGS
-    )
-
-    if newtarget and not ta.inteam and not ta:SearchForTeam() then
-        MakeTeam(inst, newtarget)
-    end
-
-    if ta.inteam and not ta.teamleader:CanAttack() then
-        return newtarget
-    end
-end
-
-local function KeepTarget(inst, target)
-    return (inst.components.teamattacker.inteam and not inst.components.teamattacker.teamleader:CanAttack())
-        or inst.components.teamattacker.orders == ORDERS.ATTACK
-end
-
-local function OnAttacked(inst, data)
-    if not inst.components.teamattacker.inteam and not inst.components.teamattacker:SearchForTeam() then
-        MakeTeam(inst, data.attacker)
-    elseif inst.components.teamattacker.teamleader then
-        inst.components.teamattacker.teamleader:BroadcastDistress() --Ask for  help!
-    end
-
-    if inst.components.teamattacker.inteam and not inst.components.teamattacker.teamleader:CanAttack() then
-        local attacker = data and data.attacker
-        inst.components.combat:SetTarget(attacker)
-        inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude) return dude:HasTag("bat") end,
-        MAX_TARGET_SHARES)
-    end
-end
-
-local function OnAttackOther(inst, data)
-    inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST,
-    function(dude) return dude:HasTag("bat") and not dude.components.health:IsDead() end, 5)
-end
-
-local function onsave(inst, data)
-    if inst:HasTag("batfrenzy") then
-        data.batfrenzy = true
-    end
-    if inst.sg:HasStateTag("sleeping") then
-        data.forcesleep = true
-    end
-end
-
-local function onload(inst, data)
-    if data then
-        if data.batfrenzy then
-            inst:AddTag("batfrenzy")
-        end
-        if data.forcesleep then
-            inst.sg:GoToState("forcesleep")
-            inst.components.sleeper.hibernate = true
-            inst.components.sleeper:GoToSleep()
-        end
-    end
-end
-
 local function OnPreLoad(inst, data)
     local x, y, z = inst.Transform:GetWorldPosition()
     if y > 0 then
         inst.Transform:SetPosition(x, 0, z)
+    end
+end
+
+local function BatSleepTest(inst, ...)
+    if inst.components.acidinfusible and inst.components.acidinfusible:IsInfused() then
+        return false
+    end
+    return NocturnalSleepTest(inst, ...)
+end
+
+local function OnInfuse(inst)
+    inst.AnimState:SetSymbolAddColour("bat_eye", .2, .5, 0, 0)
+    inst.AnimState:SetSymbolLightOverride("bat_eye", .5)
+
+    inst.components.lootdropper:SetChanceLootTable("bat_acidinfused")
+
+    inst.components.combat:SetRetargetFunction(1, Retarget)
+
+    inst.components.eater:SetCanEatNitre(true)
+
+    if not inst.components.thief then
+        inst:AddComponent("thief")
+    end
+end
+
+local function OnUninfuse(inst)
+    inst.AnimState:SetSymbolAddColour("bat_eye", 0, 0, 0, 0)
+    inst.AnimState:SetSymbolLightOverride("bat_eye", 0)
+
+    inst.components.lootdropper:SetChanceLootTable("bat")
+
+    inst.components.combat:SetRetargetFunction(3, Retarget)
+
+    inst.components.eater:SetCanEatNitre(false)
+
+    if inst.components.thief then
+        inst:RemoveComponent("thief")
     end
 end
 
@@ -185,11 +221,9 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-
-    local shadow = inst.entity:AddDynamicShadow()
-    shadow:SetSize(1.5, .75)
+    inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
-    inst.entity:AddLightWatcher()
+    --inst.entity:AddLightWatcher()
 
     MakeGhostPhysics(inst, 1, .5)
 
@@ -216,65 +250,78 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-    inst:AddComponent("locomotor")
-    inst.components.locomotor:SetSlowMultiplier(1)
-    inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = { ignorecreep = true }
-    inst.components.locomotor.walkspeed = 10
 
-    inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
-    inst.components.eater:SetCanEatHorrible()
-    inst.components.eater.strongstomach = true -- can eat monster meat!
-
-    inst.components.eater.strongstomach = true -- can eat monster meat!
-
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(130)
-
-    inst:AddComponent("sanityaura")
-    inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
-
-    inst:AddComponent("combat")
-    inst.components.combat:SetDefaultDamage(25)
-    inst.components.combat:SetAttackPeriod(1.8)
-    inst.components.combat:SetRetargetFunction(3, Retarget)
-    inst.components.combat:SetKeepTargetFunction(KeepTarget)
-
-    inst:AddComponent("sleeper")
-    inst.components.sleeper:SetResistance(3)
-    inst.components.sleeper.sleeptestfn = NocturnalSleepTest
-    inst.components.sleeper.waketestfn = NocturnalWakeTest
+    local locomotor = inst:AddComponent("locomotor")
+    locomotor:EnableGroundSpeedMultiplier(false)
+    locomotor:SetTriggersCreep(false)
+    locomotor.walkspeed = 10
+    locomotor.pathcaps = {allowocean = true}
 
     inst:SetStateGraph("SGvampirebat")
-
-    local brain = require "brains/vampirebatbrain"
     inst:SetBrain(brain)
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable('vampirebat')
+    local eater = inst:AddComponent("eater")
+    eater:SetDiet({FOODTYPE.MEAT}, {FOODTYPE.MEAT})
+    eater:SetStrongStomach(true)
+
+    local sleeper = inst:AddComponent("sleeper")
+    sleeper:SetResistance(3)
+    sleeper.sleeptestfn = BatSleepTest
+    sleeper.waketestfn = NocturnalWakeTest
+
+    local combat = inst:AddComponent("combat")
+    combat.hiteffectsymbol = "bat_body"
+    combat:SetDefaultDamage(25)
+    combat:SetAttackPeriod(1.8)
+    combat:SetRetargetFunction(3, Retarget)
+    combat:SetKeepTargetFunction(KeepTarget)
+
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(130)
+
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:SetChanceLootTable("vampirebat")
 
     inst:AddComponent("inventory")
 
+    local periodicspawner = inst:AddComponent("periodicspawner")
+    periodicspawner:SetPrefab("guano")
+    periodicspawner:SetRandomTimes(120, 240)
+    periodicspawner:SetDensityInRange(30, 2)
+    periodicspawner:SetMinimumSpacing(8)
+    periodicspawner:Start()
+
     inst:AddComponent("inspectable")
+
     inst:AddComponent("knownlocations")
 
-    --inst:DoTaskInTime(1*FRAMES, function() inst.components.knownlocations:RememberLocation("home", Vector3(inst.Transform:GetWorldPosition()), true) end)
+    MakeMediumBurnableCharacter(inst, "bat_body")
+    MakeMediumFreezableCharacter(inst, "bat_body")
 
-    inst:ListenForEvent("wingdown", OnWingDown)
-    inst:ListenForEvent("attacked", OnAttacked)
-    inst:ListenForEvent("onattackother", OnAttackOther)
-    --inst:ListenForEvent("death", OnKilled)
+    local sanityaura = inst:AddComponent("sanityaura")
+    sanityaura.aura = -TUNING.SANITYAURA_MED
+
+    --inst:DoTaskInTime(1*FRAMES, function() inst.components.knownlocations:RememberLocation("home", Vector3(inst.Transform:GetWorldPosition()), true) end)
 
     --inst:AddComponent("tiletracker")
     --inst.components.tiletracker:SetOnWaterChangeFn(OnWaterChange)
 
-    inst:AddComponent("teamattacker")
-    inst.components.teamattacker.team_type = "vampirebat"
-    inst.MakeTeam = MakeTeam
+    local teamattacker = inst:AddComponent("teamattacker")
+    teamattacker.team_type = "vampirebat"
+
+    inst:ListenForEvent("attacked", OnAttacked)
+    inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("wingdown", OnWingDown)
+    --inst:ListenForEvent("death", OnKilled)
+
+    local acidinfusible = inst:AddComponent("acidinfusible")
+    acidinfusible:SetFXLevel(3)
+    acidinfusible:SetDamageMultiplier(TUNING.ACIDRAIN_BAT_DAMAGE_MULT)
+    acidinfusible:SetSpeedMultiplier(TUNING.ACIDRAIN_BAT_SPEED_MULT)
+    acidinfusible:SetOnInfuseFn(OnInfuse)
+    acidinfusible:SetOnUninfuseFn(OnUninfuse)
+
     MakeHauntablePanic(inst)
-    MakeMediumBurnableCharacter(inst, "bat_body")
-    MakeMediumFreezableCharacter(inst, "bat_body")
 
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
@@ -286,6 +333,10 @@ local function fn()
     inst.cavebat = false
 
     return inst
+end
+
+--[[local function OnWingDownShadow(inst)
+    inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/distant_flap")
 end
 
 local function dodive(inst)
@@ -360,9 +411,11 @@ local function circlingbatfn()
     -- flap sound
     inst:DoPeriodicTask(10 / 30, function() inst:PushEvent("wingdown") end)
     -- screech sound
-    inst:DoPeriodicTask(1,
-    function() if math.random() < 0.1 then inst.SoundEmitter:PlaySound(
-            "dontstarve_DLC003/creatures/enemy/vampire_bat/distant_taunt") end end)
+    inst:DoPeriodicTask(1, function()
+        if math.random() < 0.1 then
+            inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/distant_taunt")
+        end
+    end)
 
     inst:ListenForEvent("daytime", function()
         if not GetSeasonManager() or not GetSeasonManager():IsWinter() then
@@ -380,7 +433,7 @@ local function circlingbatfn()
     inst.OnLoad = onloadshadow
 
     return inst
-end
+end]]
 
 return Prefab("vampirebat", fn, assets, prefabs) --,
 --Prefab("badlands/objects/circlingbat", circlingbatfn, assets, prefabs)
