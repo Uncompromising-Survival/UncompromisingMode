@@ -4,40 +4,40 @@ GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("spider", function(inst)
 
-	local function ShadowFade(inst)
-		inst.scaleFactor = inst.scaleFactor - 0.01
-		inst.Transform:SetScale(inst.scaleFactor, inst.scaleFactor, inst.scaleFactor)
-		if inst.scaleFactor < 0.05 then
-			inst:Remove()
-		end
-	end
-	
-	local function WebMortar(inst,angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
-		if inst.components.combat.target ~= nil then
-			local target = inst.components.combat.target
-			local x, y, z = inst.Transform:GetWorldPosition()
-			local projectile = SpawnPrefab("web_mortar")
-			projectile.Transform:SetPosition(x,y,z)
-			local scaleFactor = Lerp(.5, 1.5, 1)
-			projectile.shadow = SpawnPrefab("warningshadow")
-			projectile.shadow.scaleFactor = scaleFactor
-			projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-			projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)	
-			local a, b, c = target.Transform:GetWorldPosition()
-			local targetpos = target:GetPosition()
-			if not angle then
-				angle = 0
-			end
-			local theta = inst.Transform:GetRotation()+angle
-			theta = theta*DEGREES
-			targetpos.x = targetpos.x + 15*math.cos(theta)
-			targetpos.z = targetpos.z - 15*math.sin(theta)
-			
-			projectile.components.complexprojectile:SetHorizontalSpeed(20)
-			projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-		end
-	end
-	
+    local function ShadowFade(inst)
+        inst.scaleFactor = inst.scaleFactor - 0.01
+        inst.Transform:SetScale(inst.scaleFactor, inst.scaleFactor, inst.scaleFactor)
+        if inst.scaleFactor < 0.05 then
+            inst:Remove()
+        end
+    end
+    
+    local function WebMortar(inst,angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
+        if inst.components.combat.target ~= nil then
+            local target = inst.components.combat.target
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local projectile = SpawnPrefab("web_mortar")
+            projectile.Transform:SetPosition(x,y,z)
+            local scaleFactor = Lerp(.5, 1.5, 1)
+            projectile.shadow = SpawnPrefab("warningshadow")
+            projectile.shadow.scaleFactor = scaleFactor
+            projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
+            projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)    
+            local a, b, c = target.Transform:GetWorldPosition()
+            local targetpos = target:GetPosition()
+            if not angle then
+                angle = 0
+            end
+            local theta = inst.Transform:GetRotation() + angle
+            theta = theta*DEGREES
+            targetpos.x = targetpos.x + 15 * math.cos(theta)
+            targetpos.z = targetpos.z - 15 * math.sin(theta)
+            
+            projectile.components.complexprojectile:SetHorizontalSpeed(20)
+            projectile.components.complexprojectile:Launch(targetpos, inst, inst)
+        end
+    end
+    
     local function SoundPath(inst, event)
         local creature = "spider"
 
@@ -69,18 +69,18 @@ env.AddStategraphPostInit("spider", function(inst)
                     data.target
                 )
             else
-				if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
-					return inst.sg:GoToState("spit_web")
-				else
-					_OldAttackEvent(inst, data)
-				end
+                if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
+                    return inst.sg:GoToState("spit_web")
+                else
+                    _OldAttackEvent(inst, data)
+                end
             end
         end
     end
 
     local _OldAttackedEvent = inst.events["attacked"].fn
     inst.events["attacked"].fn = function(inst)
-        if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") and not inst.sg:HasStateTag("caninterrupt") then
+        if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") and not (inst.sg:HasStateTag("caninterrupt") or inst:HasTag("forcestunned")) then
             if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
                 if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and
                     inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
@@ -95,16 +95,16 @@ env.AddStategraphPostInit("spider", function(inst)
     end
 
     --[[local events =
-{	
-	EventHandler("attacked", function(inst)
+{    
+    EventHandler("attacked", function(inst)
         if not inst.components.health:IsDead() then
             if inst:HasTag("spider_warrior") or inst:HasTag("spider_spitter") or inst:HasTag("spider_moon") then
                 if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
-					if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
-					inst.sg:GoToState("evade_loop")
-					else
+                    if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
+                    inst.sg:GoToState("evade_loop")
+                    else
                     inst.sg:GoToState("hit") -- can still attack
-					end
+                    end
                 end
             elseif not inst.sg:HasStateTag("shield") then
                 inst.sg:GoToState("hit_stunlock")  -- can't attack during hit reaction
@@ -130,7 +130,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     or "attack",
                     data.target
                 )
-			elseif inst:HasTag("spider_moon") then
+            elseif inst:HasTag("spider_moon") then
                 inst.sg:GoToState(
                     data.target:IsValid()
                     and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
@@ -176,7 +176,7 @@ env.AddStategraphPostInit("spider", function(inst)
             --TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
             TimeEvent(20*FRAMES,
                 function(inst)
-					inst.components.combat:DoAttack(inst.sg.statemem.target)
+                    inst.components.combat:DoAttack(inst.sg.statemem.target)
                     inst.Physics:ClearMotorVelOverride()
                     inst.components.locomotor:Stop()
                 end),
@@ -185,12 +185,12 @@ env.AddStategraphPostInit("spider", function(inst)
         events=
         {
             EventHandler("animover", 
-			function(inst) 
-			inst.sg:GoToState("taunt")
-			end),
+            function(inst) 
+            inst.sg:GoToState("taunt")
+            end),
         },
     },
-	State{
+    State{
         name = "taunt",
         tags = {"busy","taunting"},
 
@@ -315,7 +315,7 @@ env.AddStategraphPostInit("spider", function(inst)
                         local JUMP_DISTANCE = 3
 
                         local distance = inst:GetDistanceSqToInst(inst.components.combat.target)
-						
+                        
                         if distance > JUMP_DISTANCE * JUMP_DISTANCE then
                             inst.sg:GoToState("warrior_attack", inst.components.combat.target)
                         else
@@ -334,55 +334,55 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
             end,
         },
-		State{
-			name = "spit_web",
-			tags = {"attack", "busy", "spitting"},
+        State{
+            name = "spit_web",
+            tags = {"attack", "busy", "spitting"},
 
-			onenter = function(inst, target)
-				inst.components.locomotor:Stop()
-				inst.AnimState:PlayAnimation("atk")
+            onenter = function(inst, target)
+                inst.components.locomotor:Stop()
+                inst.AnimState:PlayAnimation("atk")
 
-				if target ~= nil and target:IsValid() then
-					inst.sg.statemem.target = target
-					inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
-				end
-				
-				inst.web_cd = true
-				inst:DoTaskInTime(10,function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
-			end,
+                if target ~= nil and target:IsValid() then
+                    inst.sg.statemem.target = target
+                    inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+                end
+                
+                inst.web_cd = true
+                inst:DoTaskInTime(10,function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
+            end,
 
-			onupdate = function(inst)
-				if inst.sg.statemem.target ~= nil then
-					if inst.sg.statemem.target:IsValid() then
-						local pos = inst.sg.statemem.targetpos
+            onupdate = function(inst)
+                if inst.sg.statemem.target ~= nil then
+                    if inst.sg.statemem.target:IsValid() then
+                        local pos = inst.sg.statemem.targetpos
 
-						pos.x, pos.y, pos.z = inst.sg.statemem.target.Transform:GetWorldPosition()
-					else
-						inst.sg.statemem.target = nil
-					end
-				end
+                        pos.x, pos.y, pos.z = inst.sg.statemem.target.Transform:GetWorldPosition()
+                    else
+                        inst.sg.statemem.target = nil
+                    end
+                end
 
-				if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
-					inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
-				end
-			end,
+                if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
+                    inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+                end
+            end,
 
 
-			timeline =
-			{
-				FrameEvent(14, function(inst)
-					WebMortar(inst,0)
-					inst.SoundEmitter:PlaySound("dontstarve/creatures/cavespider/spit_web")
-				end),
-			},
+            timeline =
+            {
+                FrameEvent(14, function(inst)
+                    WebMortar(inst,0)
+                    inst.SoundEmitter:PlaySound("dontstarve/creatures/cavespider/spit_web")
+                end),
+            },
 
-			events =
-			{
-				EventHandler("animover", function(inst) 
-					inst.sg:GoToState("idle") 
-				end),
-			},
-		},
+            events =
+            {
+                EventHandler("animover", function(inst) 
+                    inst.sg:GoToState("idle") 
+                end),
+            },
+        },
     }
 
 
