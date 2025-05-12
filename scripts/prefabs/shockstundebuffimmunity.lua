@@ -1,33 +1,34 @@
 local function OhCrap(inst, target)
     if target.components.health ~= nil and not target.components.health:IsDead() and
         not target:HasTag("playerghost") then
-		local x,y,z = target.Transform:GetWorldPosition()
-		SpawnPrefab("sparks").Transform:SetPosition(x,y,z)
+        local x,y,z = target.Transform:GetWorldPosition()
+        SpawnPrefab("sparks").Transform:SetPosition(x,y,z)
     else
         inst.components.debuff:Stop()
     end
 end
 
 local function OnAttached(inst, target)
-	target:AddTag("electricstunimmune")
+    target:AddTag("electricstunimmune")
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
     inst.task = inst:DoPeriodicTask(math.random(1.5,2), OhCrap, nil, target)
     inst:ListenForEvent("death", function()
         inst.components.debuff:Stop()
     end, target)
-	local x,y,z = target.Transform:GetWorldPosition()
-	SpawnPrefab("sparks").Transform:SetPosition(x,y,z)
+    local x,y,z = target.Transform:GetWorldPosition()
+    SpawnPrefab("sparks").Transform:SetPosition(x,y,z)
 end
 
 local function OnRemoved(inst,target)
-target:RemoveTag("electricstunimmune")
+    target:RemoveTag("electricstunimmune")
+    inst:Remove()
 end
 
 local function OnTimerDone(inst, data)
     if data.name == "immunityover" then
         inst.components.debuff:Stop()
-		inst.task:Cancel()
+        inst.task:Cancel()
     end
 end
 
