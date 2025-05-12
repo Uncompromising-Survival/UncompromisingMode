@@ -12,56 +12,46 @@ local function DelayedMarkTalker(player)
 end
 
 local function noentcheckfn(pt)
-    return not TheWorld.Map:IsPointNearHole(pt) and
-        #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
+    return not TheWorld.Map:IsPointNearHole(pt) and #TheSim:FindEntities(pt.x, pt.y, pt.z, 1, nil, NOTENTCHECK_CANT_TAGS) == 0
 end
 
 if TUNING.DSTU.WANDA_NERF then
     env.AddPrefabPostInit("wanda", function(inst)
-        if inst.components.combat ~= nil then
-            local _CustomCombatDamage = inst.components.combat
-                .customdamagemultfn
-
-            local function CustomCombatDamage(inst, target, weapon, multiplier,
-                                              mount)
-                if mount == nil then
-                    if weapon ~= nil and weapon.prefab == "pocketwatch_weapon" and not weapon.components.fueled:IsEmpty() then
-                        return inst.age_state == "old" and 102 / 51 or
-                            inst.age_state == "normal" and 68 / 51 or 1
+        if inst.components.combat then
+            local _CustomCombatDamage = inst.components.combat.customdamagemultfn
+            local function CustomCombatDamage(inst, target, weapon, multiplier, mount)
+                if not mount then
+                    if weapon and weapon.prefab == "pocketwatch_weapon" and not weapon.components.fueled:IsEmpty() then
+                        return inst.age_state == "old" and 102 / 51 or inst.age_state == "normal" and 68 / 51 or 1
                     end
-                    return _CustomCombatDamage(inst, target, weapon, multiplier,
-                        mount)
+                    return _CustomCombatDamage(inst, target, weapon, multiplier, mount)
                 end
             end
-
             inst.components.combat.customdamagemultfn = CustomCombatDamage
+        end
+        if inst.components.damagetyperesist then
+            inst.components.damagetyperesist:AddResist("shadow_aligned", inst, 1.25, "runningfromshadows")
         end
     end)
 
     local function Revive_CanTarget(inst, doer, target)
         -- This is a client side function
-        return target ~= nil and target:HasTag("playerghost") and
-            not target:HasTag("reviving")
+        return target ~= nil and target:HasTag("playerghost") and not target:HasTag("reviving")
     end
 
     local function Revive_DoCastSpell(inst, doer, target)
         if Revive_CanTarget(inst, doer, target) and
             inst.components.pocketwatch.inactive then
-            if target.last_death_shardid ~= nil and target.last_death_shardid ~=
-                TheShard:GetShardId() then
+            if target.last_death_shardid ~= nil and target.last_death_shardid ~= TheShard:GetShardId() then
                 -- if the player is about to get teleported to another shard, give them this item so they will revive on the other side
-                target.components.inventory:GiveItem(SpawnPrefab(
-                    "pocketwatch_revive_reviver"))
+                target.components.inventory:GiveItem(SpawnPrefab("pocketwatch_revive_reviver"))
             end
 
-            target:PushEvent("respawnfromghost",
-                { source = inst, from_haunt = doer == target })
-            if target.components.health ~= nil and
-                target.components.health:GetPenaltyPercent() < 0.75 then
+            target:PushEvent("respawnfromghost", {source = inst, from_haunt = doer == target})
+            if target.components.health and target.components.health:GetPenaltyPercent() < 0.75 then
                 target.components.health:DeltaPenalty(0.25)
             end
-            inst.components.rechargeable:Discharge(
-                TUNING.POCKETWATCH_REVIVE_COOLDOWN)
+            inst.components.rechargeable:Discharge(TUNING.POCKETWATCH_REVIVE_COOLDOWN)
             return true
         end
 
@@ -118,9 +108,7 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
 
     inst.displaynamefn = function(_inst)
         local name = _inst.dest_name:value()
-        return name ~= "" and name ~= nil and
-            STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" ..
-            name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
+        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)].."\n\"" ..name.."\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
     end
 
     if not TheWorld.ismastersim then return end
@@ -129,21 +117,19 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
     inst.components.writeable:SetDefaultWriteable(false)
     inst.components.writeable:SetAutomaticDescriptionEnabled(false)
     local _Write = inst.components.writeable.Write
-    inst.components.writeable.Write =
-        function(self, doer, text, ...)
-            if not text then
-                text = self.text
-                if doer and doer.tool_prefab then
-                    doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
-                end
-            else
-                inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
-            end
+    inst.components.writeable.Write = function(self, doer, text, ...)
+		if not text then
+			text = self.text
+			if doer and doer.tool_prefab then
+				doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
+			end
+		else
+			inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
+		end
 
-            inst.dest_name:set(text and text ~= "" and text or "")
-
-            _Write(self, doer, text, ...)
-        end
+		inst.dest_name:set(text and text ~= "" and text or "")
+		_Write(self, doer, text, ...)
+	end
 
     local _OnLoad = inst.components.writeable.OnLoad
     inst.components.writeable.OnLoad = function(self, ...)
@@ -154,29 +140,26 @@ env.AddPrefabPostInit("pocketwatch_recall", function(inst)
 
     -- local _onaccept = inst.components.trader.onaccept
 
-    inst.components.trader.onaccept =
-        function(inst, giver, item)
-            local portal_watch = SpawnPrefab("pocketwatch_portal")
-            portal_watch:onPreBuilt(giver,
-                { pocketwatch_recall = { [inst] = 1 } })
+    inst.components.trader.onaccept = function(inst, giver, item)
+		local portal_watch = SpawnPrefab("pocketwatch_portal")
+		portal_watch:onPreBuilt(giver, {pocketwatch_recall = {[inst] = 1}})
 
-            if inst.dest_name ~= nil then
-                portal_watch.dest_name:set(inst.dest_name:value())
-            end
+		if inst.dest_name then
+			portal_watch.dest_name:set(inst.dest_name:value())
+		end
 
-            local container = inst.components.inventoryitem:GetContainer()
-            if container ~= nil then
-                local slot = inst.components.inventoryitem:GetSlotNum()
-                inst:Remove()
-                container:GiveItem(portal_watch, slot)
-            else
-                local x, y, z = inst.Transform:GetWorldPosition()
-                inst:Remove()
-                portal_watch.Transform:SetPosition(x, y, z)
-            end
-            portal_watch.SoundEmitter:PlaySound(
-                "dontstarve/common/telebase_gemplace")
-        end
+		local container = inst.components.inventoryitem:GetContainer()
+		if container then
+			local slot = inst.components.inventoryitem:GetSlotNum()
+			inst:Remove()
+			container:GiveItem(portal_watch, slot)
+		else
+			local x, y, z = inst.Transform:GetWorldPosition()
+			inst:Remove()
+			portal_watch.Transform:SetPosition(x, y, z)
+		end
+		portal_watch.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+	end
 end)
 
 env.AddPrefabPostInit("pocketwatch_portal", function(inst)
@@ -184,9 +167,7 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
     inst.displaynamefn = function(_inst)
         local name = _inst.dest_name:value()
-        return name ~= "" and name ~= nil and
-            STRINGS.NAMES[string.upper(_inst.prefab)] .. "\n\"" ..
-            name .. "\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
+        return name ~= "" and name and STRINGS.NAMES[string.upper(_inst.prefab)].."\n\"" ..name.."\"" or STRINGS.NAMES[string.upper(_inst.prefab)]
     end
 
     if not TheWorld.ismastersim then return end
@@ -195,21 +176,19 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
     inst.components.writeable:SetDefaultWriteable(false)
     inst.components.writeable:SetAutomaticDescriptionEnabled(false)
     local _Write = inst.components.writeable.Write
-    inst.components.writeable.Write =
-        function(self, doer, text, ...)
-            if not text then
-                text = self.text
-                if doer and doer.tool_prefab then
-                    doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
-                end
-            else
-                inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
-            end
+    inst.components.writeable.Write = function(self, doer, text, ...)
+		if not text then
+			text = self.text
+			if doer and doer.tool_prefab then
+				doer.components.inventory:GiveItem(SpawnPrefab(doer.tool_prefab), nil, inst:GetPosition())
+			end
+		else
+			inst.SoundEmitter:PlaySound("dontstarve/common/together/draw")
+		end
 
-            inst.dest_name:set(text and text ~= "" and text or "")
-
-            _Write(self, doer, text, ...)
-        end
+		inst.dest_name:set(text and text ~= "" and text or "")
+		_Write(self, doer, text, ...)
+	end
 
     local _OnLoad = inst.components.writeable.OnLoad
     inst.components.writeable.OnLoad = function(self, ...)
@@ -223,13 +202,10 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
         if recallmark:IsMarked() then
             local pt = doer:GetPosition()
-            local offset = FindWalkableOffset(pt, math.random() * 2 * PI, 3 + math.random(), 16, false, true,
-                    noentcheckfn, true, true)
-                or FindWalkableOffset(pt, math.random() * 2 * PI, 5 + math.random(), 16, false, true, noentcheckfn,
-                    true, true)
-                or FindWalkableOffset(pt, math.random() * 2 * PI, 7 + math.random(), 16, false, true, noentcheckfn,
-                    true, true)
-            if offset ~= nil then
+            local offset = FindWalkableOffset(pt, math.random() * 2 * PI, 3 + math.random(), 16, false, true, noentcheckfn, true, true)
+                or FindWalkableOffset(pt, math.random() * 2 * PI, 5 + math.random(), 16, false, true, noentcheckfn, true, true)
+                or FindWalkableOffset(pt, math.random() * 2 * PI, 7 + math.random(), 16, false, true, noentcheckfn, true, true)
+            if offset then
                 pt = pt + offset
             end
 
@@ -239,8 +215,7 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
 
             local portal = SpawnPrefab("pocketwatch_portal_entrance")
             portal.Transform:SetPosition(pt:Get())
-            portal:SpawnExit(recallmark.recall_worldid, recallmark.recall_x, recallmark.recall_y, recallmark
-                .recall_z)
+            portal:SpawnExit(recallmark.recall_worldid, recallmark.recall_x, recallmark.recall_y, recallmark.recall_z)
             inst.SoundEmitter:PlaySound("wanda1/wanda/portal_entrance_pre")
 
             local new_watch = SpawnPrefab("pocketwatch_recall")
@@ -251,9 +226,9 @@ env.AddPrefabPostInit("pocketwatch_portal", function(inst)
             new_watch.Transform:SetPosition(x, y, z)
             new_watch.components.rechargeable:Discharge(TUNING.POCKETWATCH_RECALL_COOLDOWN)
 
-            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner or nil
-            local holder = owner ~= nil and (owner.components.inventory or owner.components.container) or nil
-            if holder ~= nil then
+            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
+            local holder = owner and (owner.components.inventory or owner.components.container)
+            if holder then
                 local slot = holder:GetItemSlot(inst)
                 inst:Remove()
                 holder:GiveItem(new_watch, slot, Vector3(x, y, z))
