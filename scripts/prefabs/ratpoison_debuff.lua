@@ -1,47 +1,28 @@
 local function OnTick(inst, target)
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
+    if not (target.components.health and target.components.health:IsDead()) and
         not target:HasTag("playerghost") then
-		
-		local damage = -2
-		
-		if target:HasTag("raidrat") then
-			damage = -5
-		end
-		
-		
-		if inst.attackcount ~= nil then
-			if target.components.combat ~= nil then
-				inst.attackcount = inst.attackcount + 1
-				if inst.attackcount >= 5 then
-					inst.attackcount = 1
-					target.components.combat:GetAttacked(inst, -damage, nil)
-				else
-					target.components.health:DoDelta(damage, nil, "ratpoison")
-				end
-			else
-				target.components.health:DoDelta(damage, nil, "ratpoison")
-			end
-		else
-			inst.attackcount = 1
-		end
-				
-		
-		--SpawnPrefab("crab_king_bubble"..math.random(3)).Transform:SetPosition(target.Transform:GetWorldPosition())
-	else
+
+        local damage = target:HasTag("raidrat") and 5 or 2
+        inst.attackcount = (inst.attackcount or 1) + 1
+        if target.components.combat and inst.attackcount >= 5 then
+            inst.attackcount = 1
+            target.components.combat:GetAttacked(inst, damage, nil)
+        else
+            target.components.health:DoDelta(-damage, nil, "ratpoison")
+        end
+        --SpawnPrefab("crab_king_bubble"..math.random(3)).Transform:SetPosition(target.Transform:GetWorldPosition())
+    else
         inst.components.debuff:Stop()
     end
 end
 
 local function OnAttached(inst, target)
-	target:AddTag("ratpoisoned")
+    target:AddTag("ratpoisoned")
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
     inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
-    inst:ListenForEvent("death", function()
-        inst.components.debuff:Stop()
-    end, target)
+    inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
 local function OnTimerDone(inst, data)

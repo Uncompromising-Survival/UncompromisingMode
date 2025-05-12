@@ -192,9 +192,9 @@ local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
     if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
-	if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
-	if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
-	if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+    if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
+    if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
+    if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 
@@ -407,7 +407,6 @@ GLOBAL.ACTIONS.START_CHANNELCAST.strfn = function(act)
     return act.invobject and act.invobject:HasTag("moonfallstaff") and "MOONFALL" or _Start_ChannelCastStrFn(act)
 end
 
-
 AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
     if not (doer.replica.rider ~= nil and doer.replica.rider:IsRiding())
         or (target.replica.inventoryitem ~= nil and target.replica.inventoryitem:IsGrandOwner(doer)) then
@@ -422,6 +421,12 @@ AddComponentAction("USEITEM", "fuel", function(inst, doer, target, actions)
         if inst:HasTag("SLUDGE_fuel") and (target:HasTag("BURNABLE_fueled") or target:HasTag("CHEMICAL_fueled") or target:HasTag("CAVE_fueled")) then
             table.insert(actions, inst:GetIsWet() and GLOBAL.ACTIONS.ADDWETFUEL or GLOBAL.ACTIONS.ADDFUEL)
         end
+    end
+end)
+
+AddComponentAction("EQUIPPED", "wateryprotection", function(inst, doer, target, actions, right) -- Washable stuff.
+    if right and target:HasTag("um_washable_goo") then
+        table.insert(actions, GLOBAL.ACTIONS.POUR_WATER)
     end
 end)
 
@@ -443,8 +448,6 @@ AddComponentAction("SCENE", "stewer_wagstaff", function(inst, doer, actions, rig
         end
     end
 end)
-
-
 
 -- Wagstaff crockpot actions...
 local _OldCook = GLOBAL.ACTIONS.COOK.fn
@@ -480,7 +483,6 @@ end
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 
 local ENV = env
-
 GLOBAL.setfenv(1, GLOBAL)
 
 local UM_ACTIVATABLE_ITEM = Action({ mount_valid = true, priority = 1, rmb = true })
@@ -505,5 +507,3 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)
-
-
