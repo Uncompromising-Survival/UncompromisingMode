@@ -2,7 +2,6 @@ local UpvalueHacker = require("tools/upvaluehacker")
 local OldHitRecoverDelay = CommonHandlers.HitRecoveryDelay
 CommonHandlers.HitRecoveryDelay = function(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
     if inst.um_forcestundebuff then
-        inst.um_forcestundebuff = nil
         return false
     end
     return OldHitRecoverDelay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
@@ -12,7 +11,6 @@ local Oldhit_recovery_delay = UpvalueHacker.GetUpvalue(CommonHandlers.OnAttacked
 if Oldhit_recovery_delay then
     local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
         if inst.um_forcestundebuff then
-            inst.um_forcestundebuff = nil
             return false
         end
         return Oldhit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
@@ -32,7 +30,6 @@ if minotaurattackedeventhandler then
     if Oldhit_recovery_delay_minotaur then
         local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
             if inst.um_forcestundebuff then
-                inst.um_forcestundebuff = nil
                 return false
             end
             return Oldhit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
@@ -45,13 +42,16 @@ if minotaurattackedeventhandler then
     end
 end
 
-local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit", "moving"}
+local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
 local function OhCrap(inst, target)
     if not (target.components.health and target.components.health:IsDead()) and not target:HasTag("playerghost") then
         SpawnPrefab("electricchargedfx"):SetTarget(target)
         target.components.health:DoDelta(-2, nil, "Electricity")
         if target.brain then
             target.brain:Stop()
+        end
+        if target.components.locomotor then
+            target.components.locomotor:Stop()
         end
         if target.sg and target.sg.currentstate and target.sg.currentstate.name ~= "shield_start" and target.sg.currentstate.name ~= "shield" then
             for _, tag in pairs(removetaglist) do
@@ -62,7 +62,12 @@ local function OhCrap(inst, target)
             if not target.sg:HasStateTag("caninterrupt") then
                 target.sg:AddStateTag("caninterrupt")
             end
-            target.um_forcestundebuff = true
+            if not target.um_forcestundebuff then
+                target.um_forcestundebuff = true
+            end
+        end
+        if not target:HasTag("forcestunned") then
+            target:AddTag("forcestunned")
         end
         target:PushEvent("attacked", {attacker = target.shock_owner or nil, damage = 2})
         if target.components.combat then
@@ -97,9 +102,16 @@ local function OnRemoved(inst, target)
     if target.brain and not (target.components.health and target.components.health:IsDead()) then
         target.brain:Start()
     end
+    if target:HasTag("forcestunned") then
+        target:RemoveTag("forcestunned")
+    end
+    if target.um_forcestundebuff then
+        target.um_forcestundebuff = nil
+    end
     if target.shock_owner then
         target.shock_owner = nil
     end
+    inst:Remove()
 end
 
 local function OnTimerDone(inst, data)
