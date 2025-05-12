@@ -5,7 +5,7 @@ local assets =
 
 --DSV uses 4 but ignores physics radius
 local MAXRANGE = 3
-local NO_TAGS = {"bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "companion", "abigail"}
+local NO_TAGS = {"electricdamageimmune", "electricstunimmune", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "companion", "abigail", "shadowminion"}
 local NO_TAGS_NO_PLAYERS = JoinArrays(NO_TAGS, {"player"})
 
 local function OnUpdateThorns(inst)
@@ -14,22 +14,17 @@ local function OnUpdateThorns(inst)
     for i = 1, 10 do -- How does one make a "do 15" times in lua? This is how we do it.
         SpawnPrefab("sparks").Transform:SetPosition(x - 1 + math.random() * 2, y + .25 + math.random() * 2, z)
     end
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, { "_combat" }, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
-        if not inst.ignore[v] and
-            v:IsValid() and
-            v.entity:IsVisible() and
-            v.components.combat ~= nil and
-            not (v.components.inventory ~= nil and
-                v.components.inventory:EquipHasTag("bramble_resistant")) then
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, {"_combat"}, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
+        if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat then
             local range = inst.range + v:GetPhysicsRadius(0)
-            if v:GetDistanceSqToPoint(x, y, z) < range * range and not v:HasTag("electricdamageimmune") then
-                if inst.owner ~= nil and not inst.owner:IsValid() then
+            if v:GetDistanceSqToPoint(x, y, z) < range * range then
+                if inst.owner and not inst.owner:IsValid() then
                     inst.owner = nil
                 end
-                if inst.owner ~= nil then
+                if inst.owner then
                     if inst.owner.components.combat ~= nil and inst.owner.components.combat:CanTarget(v) then
                         inst.ignore[v] = true
-                        v.shock_owner = inst
+                        v.shock_owner = inst.owner
                         v:AddDebuff("shockstundebuff", "shockstundebuff")
                         --v.components.combat:GetAttacked(v.components.follower ~= nil and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         --V2C: wisecracks make more sense for being pricked by picking
