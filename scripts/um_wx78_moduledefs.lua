@@ -754,7 +754,7 @@ local function taser_cooldown(inst)
     inst._cdtask = nil
 end
 
-local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit", "moving"}
+local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
 local function taser_onblockedorattacked(wx, data, inst)
     if (data and data.attacker and not data.redirected) and not inst._cdtask then
         inst._cdtask = inst:DoTaskInTime(0.3, taser_cooldown)
@@ -791,6 +791,9 @@ local function taser_onblockedorattacked(wx, data, inst)
                             if data.attacker.brain then
                                 data.attacker.brain:Stop()
                             end
+                            if data.attacker.components.locomotor then
+                                data.attacker.components.locomotor:Stop()
+                            end
                             if data.attacker.sg and data.attacker.sg.currentstate and data.attacker.sg.currentstate.name ~= "shield_start"
                                 and data.attacker.sg.currentstate.name ~= "shield" then -- Grabbed from shockstundebuff.lua. Check this file for stun stuff.
                                 for _, tag in pairs(removetaglist) do
@@ -801,7 +804,12 @@ local function taser_onblockedorattacked(wx, data, inst)
                                 if not data.attacker.sg:HasStateTag("caninterrupt") then
                                     data.attacker.sg:AddStateTag("caninterrupt")
                                 end
-                                data.attacker.um_forcestundebuff = true
+                                if not data.attacker.um_forcestundebuff then
+                                    data.attacker.um_forcestundebuff = true
+                                end
+                            end
+                            if not data.attacker:HasTag("forcestunned") then
+                                data.attacker:AddTag("forcestunned")
                             end
                             data.attacker:PushEvent("attacked", {attacker = wx or nil, damage = 0})
                             if data.attacker.components.combat then
@@ -823,6 +831,12 @@ local function taser_onblockedorattacked(wx, data, inst)
                     end
                     if data.attacker.brain and not (data.attacker.components.health and data.attacker.components.health:IsDead()) then
                         data.attacker.brain:Start()
+                    end
+                    if data.attacker:HasTag("forcestunned") then
+                        data.attacker:RemoveTag("forcestunned")
+                    end
+                    if data.attacker.um_forcestundebuff then
+                        data.attacker.um_forcestundebuff = nil
                     end
                 end)
             end
