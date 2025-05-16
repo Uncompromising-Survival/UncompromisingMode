@@ -97,7 +97,7 @@ end
 local function startwiggling(inst, data)
 	inst.randomimage = math.random(1, 8)
 	
-	--inst.components.inventoryitem.atlasname = "images/inventoryimages/nervoustick_"..inst.randomimage..".xml"
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/nervoustick_"..inst.randomimage..".xml" -- Needs a "nervoustick.xml"
 	inst.components.inventoryitem:ChangeImageName("nervoustick_"..inst.randomimage.."")
 end
 
@@ -321,7 +321,6 @@ local function denfn()
 
 	return inst
 end
-
 
 return Prefab("nervoustick", fn, assets),
 		Prefab("nervoustickden", denfn, assets, prefabs)
