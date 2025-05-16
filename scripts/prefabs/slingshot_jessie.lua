@@ -523,7 +523,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshot_jessie_1.xml"
 	inst.components.inventoryitem:ChangeImageName("slingshot_jessie_1")
 
     inst:AddComponent("equippable")

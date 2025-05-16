@@ -74,7 +74,6 @@ local function fn()
     inst.components.finiteuses:SetConsumption(ACTIONS.PLAY, 1)
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/pied_piper_flute.xml"
 
     MakeHauntableLaunch(inst)
 

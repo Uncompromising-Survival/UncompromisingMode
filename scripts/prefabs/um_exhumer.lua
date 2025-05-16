@@ -104,7 +104,7 @@ local function UpdateBuild(inst, powered)
         owner.AnimState:OverrideSymbol("swap_object", "swap_exhumer" .. inst.build, "swap_exhumer" .. inst.build)
     end
 
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_exhumer" .. inst.build .. ".xml"
+    --inst.components.inventoryitem.atlasname = "images/inventoryimages/um_exhumer" .. inst.build .. ".xml"
     inst.components.inventoryitem:ChangeImageName("um_exhumer" .. inst.build)
 
     --inst.AnimState:SetBuild(inst.build)

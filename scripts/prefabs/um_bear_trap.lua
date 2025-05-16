@@ -745,7 +745,6 @@ local function equiptoothfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_bear_trap_equippable_tooth.xml"
 
     inst:AddComponent("inspectable")
 
@@ -835,7 +834,6 @@ local function equipgoldfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_bear_trap_equippable_gold.xml"
 
     inst:AddComponent("inspectable")
 

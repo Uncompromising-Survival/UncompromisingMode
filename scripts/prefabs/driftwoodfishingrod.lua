@@ -72,8 +72,8 @@ local function fn()
 	inst:ListenForEvent("fishingcollect", onfished)
 
     inst:AddComponent("inspectable")
+
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/driftwoodfishingrod.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)

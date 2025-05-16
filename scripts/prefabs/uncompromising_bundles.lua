@@ -289,7 +289,6 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
                 (variations == nil and "_large" or (onesize and "1" or "_large1"))
             )
         end
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name.."_large.xml"
 		
         inst:AddComponent("unwrappable")
         inst.components.unwrappable:SetOnWrappedFn(OnWrapped)

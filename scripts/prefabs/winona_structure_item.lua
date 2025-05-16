@@ -135,7 +135,6 @@ local function fn(ondeploy, atlas, anim, uses_startingfuel)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/"..atlas..".xml"
 
     inst:AddComponent("deployable")
     inst.components.deployable.restrictedtag = "handyperson"

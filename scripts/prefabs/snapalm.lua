@@ -32,8 +32,6 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/snapalm.xml"
 	
     inst.components.burnable:SetBurnTime(TUNING.SNAPALM_BURN_TIME + math.random() * TUNING.SNAPALM_BURN_TIME_VARIANCE)
 

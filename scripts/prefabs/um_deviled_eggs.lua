@@ -33,7 +33,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_deviled_eggs.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = -15
     inst.components.edible.hungervalue = 18.75

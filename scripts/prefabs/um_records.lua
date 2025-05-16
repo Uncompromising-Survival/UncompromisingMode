@@ -32,7 +32,6 @@ local function MakeSoul(name, music)
         inst:AddComponent("tradable")
 
         inst:AddComponent("inventoryitem")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
 
         inst:AddComponent("fuel")
         inst.components.fuel.fuelvalue = TUNING.MED_FUEL

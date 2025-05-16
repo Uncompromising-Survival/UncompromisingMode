@@ -102,7 +102,7 @@ local function fn()
     inst.components.equippable.is_magic_dapperness = true
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/ancient_amulet_red.xml"
+    inst.components.inventoryitem:ChangeImageName("ancient_amulet_red")
 
     inst.components.equippable:SetOnEquip(onequip_spec)
     inst.components.equippable:SetOnUnequip(onunequip_spec)

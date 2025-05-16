@@ -749,7 +749,6 @@ local function whip()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/rimeweed_whip.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
@@ -821,8 +820,6 @@ local function fnvine()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_rimeweed_itemvine.xml"
-
 
     inst:AddComponent("forcecompostable")
     inst.components.forcecompostable.brown = true
@@ -875,7 +872,6 @@ local function fnflower()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_rimeweed_itemflower.xml"
 
     inst:AddComponent("edible")
     inst.components.edible.hungervalue = 25
@@ -1012,7 +1008,6 @@ local function bandage_fn()
 	inst.components.healer.onhealfn = OnUseBandage
 	
     MakeHauntableLaunch(inst)
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_rimeweed_icepack.xml"
 	
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(10 * TUNING.PERISH_TWO_DAY)
@@ -1031,5 +1026,3 @@ Prefab("um_rimeweed_itemflower", fnflower),
 Prefab("rimeweed_whip", whip,assets),
 Prefab("um_rimeweed_tequila_buff", buff_fn),
 Prefab("um_rimeweed_icepack", bandage_fn)
-
-

@@ -471,7 +471,6 @@ local function bombfn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/diseasecurebomb.xml"
 
     inst:AddComponent("stackable")
 

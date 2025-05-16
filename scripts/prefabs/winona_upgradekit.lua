@@ -41,7 +41,6 @@ local function itemfn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/winona_upgradekit_electrical.xml"
     inst.components.inventoryitem:SetSinks(false)
 
     inst:AddComponent("upgrader")

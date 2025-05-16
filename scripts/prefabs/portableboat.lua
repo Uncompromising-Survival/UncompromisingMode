@@ -563,8 +563,8 @@ local function item_fn()
     inst.components.deployable:SetDeployMode(DEPLOYMODE.WATER)
 
     inst:AddComponent("inspectable")
+
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/portableboat_item.xml"
 
     MakeLargePropagator(inst)
     MakeHauntableLaunch(inst)

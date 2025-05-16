@@ -351,8 +351,7 @@ local function fn()
 
     inst:AddComponent("inspectable")
 
-    local inventoryitem = inst:AddComponent("inventoryitem")
-    inventoryitem.atlasname = "images/inventoryimages/slingshot_claire.xml"
+    inst:AddComponent("inventoryitem")
 
     local equippable = inst:AddComponent("equippable")
     equippable.restrictedtag = "troublemaker"

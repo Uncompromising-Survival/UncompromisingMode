@@ -48,8 +48,8 @@ local function MakeVomit(name, color)
 		end
 
 		inst:AddComponent("inspectable")
+
 		inst:AddComponent("inventoryitem")
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/"..color.."_vomit.xml"
 		
 		inst:AddComponent("stackable")
 

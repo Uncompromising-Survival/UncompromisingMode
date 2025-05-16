@@ -235,8 +235,8 @@ local function fn()
 	inst.swap_build = "book_maxwell"
 
     inst:AddComponent("inspectable")
+
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/codex_mantra.xml"
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.MED_FUEL

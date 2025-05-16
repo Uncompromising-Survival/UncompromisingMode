@@ -83,7 +83,6 @@ local function sludge_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge.xml"
 
     return inst
 end
@@ -135,7 +134,6 @@ local function oil_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_oil.xml"
     inst.components.inventoryitem.onactiveitemfn = onactiveitem
 
     return inst
@@ -180,7 +178,6 @@ local function bucket_fn()
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_cork.xml"
 
     inst:AddComponent("tradable")
     inst:AddComponent("upgrader")

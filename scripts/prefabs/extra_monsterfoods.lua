@@ -103,8 +103,7 @@ local function monstersmallmeat_fn()
     inst.components.edible.healthvalue = -15 -- -15 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
     inst.components.edible.sanityvalue = -10 -- -15 sanity
-    
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/monstersmallmeat.xml"
+
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST) -- 2 days
     
     if inst.components.dryable then
@@ -142,7 +141,6 @@ local function cookedmonstersmallmeat_fn()
     
     inst.components.floater:SetVerticalOffset(0.05)
 
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/cookedmonstersmallmeat.xml"
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
 
     return inst
@@ -165,8 +163,6 @@ local function monstersmallmeat_dried_fn()
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FASTISH)
 
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
-
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/monstersmallmeat_dried.xml"
     
     return inst
 end
@@ -237,8 +233,6 @@ local function defaultfn()
         return inst
     end
 
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_monsteregg.xml"
-
     inst.components.edible.healthvalue = -15 -- -15 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
     inst.components.edible.sanityvalue = -10 -- -15 sanity
@@ -259,8 +253,6 @@ local function cookedfn()
     if not TheWorld.ismastersim then
         return inst
     end
-
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_monsteregg_cooked.xml"
 
     inst.components.edible.healthvalue = -5 -- -5 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger

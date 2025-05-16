@@ -308,7 +308,6 @@ local function makebird(name, soundname, no_feather, bank, custom_loot_setup, wa
         inst.components.inventoryitem.nobounce = true
         inst.components.inventoryitem.canbepickedup = false
         inst.components.inventoryitem.canbepickedupalive = true
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/woodpecker.xml"
         if water_bank == nil then
             inst.components.inventoryitem:SetSinks(true)
         end

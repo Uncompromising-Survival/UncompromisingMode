@@ -75,8 +75,8 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/sludge_sack.xml"
     inst.components.inventoryitem.cangoincontainer = false
+
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.BODY
     --inst.components.equippable.dapperness = TUNING.MOISTURE_SANITY_PENALTY_MAX

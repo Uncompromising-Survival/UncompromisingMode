@@ -102,7 +102,6 @@ local function fn()
     inst.components.burnable:SetOnBurntFn(OnBurnt)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/powercell.xml"
     inst.components.inventoryitem.sinks = true --throw batteries in the ocean wOOOOOOOO
 
     --inst:AddComponent("battery")

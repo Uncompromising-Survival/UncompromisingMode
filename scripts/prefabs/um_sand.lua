@@ -26,7 +26,7 @@ local function sandfn(Sim)
 	----------------------
 	
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/sand.xml"
+	inst.components.inventoryitem:ChangeImageName("sand")
 	
 	return inst
 end

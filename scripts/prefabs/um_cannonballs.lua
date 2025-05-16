@@ -204,7 +204,7 @@ local function mortarball_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
+    inst.components.inventoryitem:ChangeImageName("cannonball_sludge_item")
 
     inst.components.inventoryitem:SetSinks(true)
 
@@ -365,7 +365,6 @@ local function cannonball_sludge_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
 
     inst.components.inventoryitem:SetSinks(true)
 
@@ -399,7 +398,7 @@ local function cannonball_incendiary_item_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/cannonball_sludge_item.xml"
+    inst.components.inventoryitem:ChangeImageName("cannonball_sludge_item")
 
     inst.components.inventoryitem:SetSinks(true)
 

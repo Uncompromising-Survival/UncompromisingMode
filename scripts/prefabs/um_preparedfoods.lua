@@ -150,8 +150,8 @@ local function MakePreparedFood(data)
 			inst.components.inventoryitem:ChangeImageName(spicename.."_over")
 		elseif data.basename ~= nil then
 			inst.components.inventoryitem:ChangeImageName(data.basename)
-		else
-			inst.components.inventoryitem.atlasname = data.atlasname
+		--else
+			--inst.components.inventoryitem.atlasname = data.atlasname
 		end
 		
 		inst.OnSave = onsave

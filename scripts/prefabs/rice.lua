@@ -25,54 +25,54 @@ local function rename(inst)
 end
 
 local function fn()
-        local inst = CreateEntity()
+    local inst = CreateEntity()
 
-        inst.entity:AddTransform()
-        inst.entity:AddAnimState()
-        inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
 
-        MakeInventoryPhysics(inst)
+    MakeInventoryPhysics(inst)
 
-        inst.AnimState:SetBank("rice")
-        inst.AnimState:SetBuild("rice")
-        inst.AnimState:PlayAnimation("idle")
-		MakeInventoryFloatable(inst, "med", 0.05, 0.68)
-        --cookable (from cookable component) added to pristine state for optimization
-		inst:AddTag("cookable")
-		
-		inst:AddTag("_named")
+    inst.AnimState:SetBank("rice")
+    inst.AnimState:SetBuild("rice")
+    inst.AnimState:PlayAnimation("idle")
+    MakeInventoryFloatable(inst, "med", 0.05, 0.68)
+    --cookable (from cookable component) added to pristine state for optimization
+    inst:AddTag("cookable")
+    
+    inst:AddTag("_named")
 
-        inst.entity:SetPristine()
+    inst.entity:SetPristine()
 
-        if not TheWorld.ismastersim then
-            return inst
-        end
-		
-		inst:RemoveTag("_named")
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    
+    inst:RemoveTag("_named")
 
-        inst:AddComponent("edible")
-        inst.components.edible.healthvalue = 0
-        inst.components.edible.hungervalue = 9.8
-        inst.components.edible.sanityvalue = 0      
-        inst.components.edible.foodtype = FOODTYPE.HORRIBLE
+    inst:AddComponent("edible")
+    inst.components.edible.healthvalue = 0
+    inst.components.edible.hungervalue = 9.8
+    inst.components.edible.sanityvalue = 0      
+    inst.components.edible.foodtype = FOODTYPE.HORRIBLE
 
-        --inst:AddComponent("perishable")
-        --inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
-        --inst.components.perishable:StartPerishing()
-        --inst.components.perishable.onperishreplacement = "spoiled_food"
+    --inst:AddComponent("perishable")
+    --inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    --inst.components.perishable:StartPerishing()
+    --inst.components.perishable.onperishreplacement = "spoiled_food"
 
-        inst:AddComponent("stackable")
-        inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
-        inst:AddComponent("inspectable")
-		
-		inst:AddComponent("named")
-		inst.components.named.possiblenames = {STRINGS.NAMES["RICE1"], STRINGS.NAMES["RICE2"]}
-		inst.components.named:PickNewName()
-		inst:DoPeriodicTask(5, rename)
+    inst:AddComponent("inspectable")
+    
+    inst:AddComponent("named")
+    inst.components.named.possiblenames = {STRINGS.NAMES["RICE1"], STRINGS.NAMES["RICE2"]}
+    inst.components.named:PickNewName()
+    inst:DoPeriodicTask(5, rename)
 		
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/rice.xml"
+
     MakeSmallBurnable(inst)
     MakeSmallPropagator(inst)
     ---------------------        

@@ -460,7 +460,7 @@ local function fnfood()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ghost_pepper_item.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = -3
     inst.components.edible.hungervalue = 12.5

@@ -30,7 +30,6 @@ local function fncommon(anim, healthval, hungerval, sanityval)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/"..anim..".xml"
 	
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = healthval

@@ -122,7 +122,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/viperfruit.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 25
@@ -176,7 +176,7 @@ local function fnlesser()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/viperfruit_lesser.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 12.5

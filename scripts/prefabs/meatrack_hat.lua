@@ -180,7 +180,6 @@ local function fn()
     inst.components.inspectable.getstatus = getstatus
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/meatrack_hat.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.HEAD

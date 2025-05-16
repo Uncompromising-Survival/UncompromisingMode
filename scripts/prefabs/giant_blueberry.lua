@@ -42,7 +42,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/giant_blueberry.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 1
     inst.components.edible.hungervalue = 18.75

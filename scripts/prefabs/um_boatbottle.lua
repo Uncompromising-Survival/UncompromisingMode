@@ -143,7 +143,6 @@ local function fn()
     end
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_boatbottle.xml"
 
     MakeHauntableLaunch(inst)
     return inst

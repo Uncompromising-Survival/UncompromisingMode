@@ -52,7 +52,7 @@ end
 local function startwiggling(inst, data)
 	inst.randomimage = math.random(1, 8)
 	
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/nervoustick_"..inst.randomimage..".xml"
+	--inst.components.inventoryitem.atlasname = "images/inventoryimages/nervoustick_"..inst.randomimage..".xml"
 	inst.components.inventoryitem:ChangeImageName("nervoustick_"..inst.randomimage.."")
 end
 

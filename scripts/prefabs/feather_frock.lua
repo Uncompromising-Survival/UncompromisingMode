@@ -372,7 +372,6 @@ local function frockfn()
     inst:AddComponent("tradable")
 	inst:AddComponent("inspectable")
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/feather_frock.xml"
 	inst:AddComponent("rechargeable")
 
 	inst:AddComponent("shadowlevel")

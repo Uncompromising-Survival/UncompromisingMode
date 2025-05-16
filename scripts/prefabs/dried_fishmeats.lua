@@ -79,8 +79,6 @@ local function fishmeat_dried_fn()
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
 
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM -- 10 days
-
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/fishmeat_dried.xml"
     
     return inst
 end
@@ -101,8 +99,6 @@ local function smallfishmeat_dried_fn()
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
 
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM -- 10 days
-
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/smallfishmeat_dried.xml"
     
     return inst
 end

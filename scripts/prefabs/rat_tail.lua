@@ -35,7 +35,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/rat_tail.xml"
 	
     inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.HORRIBLE

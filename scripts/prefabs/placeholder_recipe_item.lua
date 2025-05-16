@@ -15,7 +15,6 @@ local function fn_ia()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/placeholder_ingredient_ia.xml"
 
     --incredibly scuffed, but I needed a way to add recipes *after/during* prefab loading.
     return inst
@@ -38,7 +37,6 @@ local function fn_ia_um()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/placeholder_ingredient_ia_um.xml"
 
     --incredibly scuffed, but I needed a way to add recipes *after/during* prefab loading.
     return inst

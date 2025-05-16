@@ -37,7 +37,6 @@ local function fn_tonic()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/stanton_shadow_tonic.xml"
     --inst.components.inventoryitem.cangoincontainer = false
     MakeHauntableLaunch(inst)
     inst.oneatenfn = oneatenfn
@@ -87,7 +86,6 @@ local function fn_tonic_fancy()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/stanton_shadow_tonic_fancy.xml"
     --inst.components.inventoryitem.cangoincontainer = false
     MakeHauntableLaunch(inst)
     inst.oneatenfn = oneatenfn
@@ -445,7 +443,7 @@ local function fn_flask()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/skullflask.xml"
+
     MakeHauntableLaunch(inst)
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 0
@@ -498,7 +496,7 @@ local function fn_flask_empty()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/skullflask_empty.xml"
+
     MakeHauntableLaunch(inst)
     inst:AddComponent("rechargeable")
     inst.components.rechargeable:Discharge(8 * 60)

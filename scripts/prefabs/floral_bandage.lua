@@ -38,7 +38,6 @@ local function fn()                     --Y Add This Item?       --Cactus flower
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/floral_bandage.xml"
 	
     inst:AddComponent("healer")
     inst.components.healer:SetHealthAmount(45)

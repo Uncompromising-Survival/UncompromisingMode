@@ -73,7 +73,6 @@ local function fn()
     end
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/widowshead.xml"
 
     inst:AddComponent("inspectable")
 

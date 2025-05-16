@@ -52,7 +52,6 @@ local function fn()
     inst.components.weapon:SetDamage(51) --Tentacle spike damage, from a massive many tentacled creature.
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/beakbasher.xml"
     -----
     inst:AddComponent("tool")
     inst.components.tool:SetAction(ACTIONS.HAMMER,2) --Significantly improve on the basic hammer efficiency due to how baseline hammer ingredients are.

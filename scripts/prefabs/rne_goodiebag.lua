@@ -161,8 +161,8 @@ local function fn()
 	inst.size = math.random(1,23)
 
 	inst:AddComponent("inspectable")
+
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/rne_goodiebag.xml"
 	
 	inst:AddComponent("lootdropper")
 		

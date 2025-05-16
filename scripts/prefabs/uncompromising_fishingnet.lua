@@ -66,7 +66,6 @@ local function fn()
     --inst.components.finiteuses:SetConsumption(ACTIONS.CAST_NET, 1)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/uncompromising_fishingnet.xml"
 
     inst:AddComponent("fishingnet")
     inst:AddComponent("inspectable")

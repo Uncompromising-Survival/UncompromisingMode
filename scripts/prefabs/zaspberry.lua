@@ -97,7 +97,6 @@ local function fn_normal()
     inst.components.edible.healthvalue = 20
     inst.components.edible.hungervalue = 25
     inst.components.edible.sanityvalue = -25	
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry.xml"
 	
 	return inst
 end
@@ -110,7 +109,6 @@ local function fn_lesser()
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 12.5
     inst.components.edible.sanityvalue = -15
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/zaspberry_lesser.xml"
 	
 	return inst
 end

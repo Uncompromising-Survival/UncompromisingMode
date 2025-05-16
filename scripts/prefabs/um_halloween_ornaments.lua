@@ -33,8 +33,8 @@ local function fncommon(name, symboloverride)
 	inst.halloween_ornamentsymboloverride = symboloverride
 
 	inst:AddComponent("inspectable")
+
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
 
 	inst:AddComponent("fuel")
 	inst.components.fuel.fuelvalue = TUNING.TINY_FUEL

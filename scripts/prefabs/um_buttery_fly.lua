@@ -123,7 +123,6 @@ local function fn()
     inst.components.inventoryitem.canbepickedupalive = true
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.pushlandedevents = false
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_buttery_fly.xml"
 
     ------------------
     inst:AddComponent("pollinator")

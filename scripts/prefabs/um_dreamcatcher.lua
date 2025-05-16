@@ -366,7 +366,6 @@ local function fnmoss(inst)
     inst:AddComponent("inspectable")
 	inst:AddComponent("tradable")
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_brineishmoss.xml"
 
     return inst
 end

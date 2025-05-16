@@ -165,7 +165,6 @@ local function fn()
     inst.components.weapon:SetOnAttack(onattack)
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/cursed_antler.xml"
 
     inst:AddComponent("shadowlevel")
     inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)

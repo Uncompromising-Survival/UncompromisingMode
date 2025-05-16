@@ -401,11 +401,10 @@ local function fnjaw()
     MakeHauntableLaunchAndIgnite(inst)
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/snappy_jaw.xml"
+
     return inst
 end
 
 return Prefab("jawed_scythe", ScytheFn, assets),
 Prefab("jawed_scythe_fx", FollowSymbolFxFn),
 Prefab("snappy_jaw", fnjaw)
-

@@ -159,7 +159,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/silksack.xml"
 
     inst:ListenForEvent("itemlose", OnContainerChanged)
     inst:ListenForEvent("itemget", OnContainerChanged)

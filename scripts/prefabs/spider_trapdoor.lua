@@ -415,7 +415,6 @@ local function create_common(build)
     inst:AddComponent("inventory")
     -----------------
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/spider_trapdoor.xml"
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
     inst.components.inventoryitem.canbepickedupalive = true    

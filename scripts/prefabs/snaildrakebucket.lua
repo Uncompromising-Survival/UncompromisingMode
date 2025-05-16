@@ -26,7 +26,7 @@ local assets =
 }
 
 local function UpdateInvAndAnim(inst,name)
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakebucket_"..name..".xml"
+	--inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakebucket_"..name..".xml"
 	inst.components.inventoryitem:ChangeImageName("snaildrakebucket_"..name)
 	inst.AnimState:PlayAnimation(name)
 end
@@ -248,7 +248,6 @@ local function fn()
     inst.components.inspectable.getstatus = getstatus
 	
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/snaildrakebucket_empty.xml"
 	inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
 	
 

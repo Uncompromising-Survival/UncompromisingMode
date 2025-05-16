@@ -261,8 +261,7 @@ local function fn(anim, name, swap, beetype)
     inst:AddComponent("tradable")
     inst:AddComponent("inspectable")
 
-    local inventoryitem = inst:AddComponent("inventoryitem")
-    inventoryitem.atlasname = "images/inventoryimages/"..name..".xml"
+    inst:AddComponent("inventoryitem")
 
     local equippable = inst:AddComponent("equippable")
     equippable:SetOnEquip(OnEquip)

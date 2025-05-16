@@ -168,7 +168,6 @@ local function fncommon()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_magnerang.xml"
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
 
     inst:AddComponent("projectile")

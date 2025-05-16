@@ -96,9 +96,7 @@ local function fn() --Drown the world.
     inst:AddComponent("inspectable")
 
     ---------------------------------------------------------------------
-
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/rain_horn.xml"
     ---------------------------------------------------------------------
 
     inst:AddComponent("tradable")

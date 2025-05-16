@@ -38,7 +38,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/brine_balm.xml"
 
     inst:AddComponent("healer")
     inst.components.healer:SetHealthAmount(-TUNING.HEALING_MED)

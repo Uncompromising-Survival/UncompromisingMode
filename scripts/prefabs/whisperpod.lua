@@ -47,7 +47,6 @@ local function fn()
     inst.components.deployable.ondeploy = OnDeploy
 	
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/whisperpod.xml"
 
     inst:AddComponent("inspectable")
 	

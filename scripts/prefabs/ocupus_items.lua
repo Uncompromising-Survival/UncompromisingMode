@@ -3,7 +3,6 @@ local assets =
     Asset("ANIM", "anim/ocupus_items.zip"),
 }
 
-
 local prefabs =
 {
     "ocupus_tentacle",
@@ -11,7 +10,6 @@ local prefabs =
     "ocupus_tentacle_cooked",
     "ocupus_beak",
 }
-
 
 local function common(bank, build, anim, tags, cookable)
     local inst = CreateEntity()
@@ -93,9 +91,6 @@ local function ocupus_tentacle()
 
     inst.components.tradable.goldvalue = 1
 
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/ocupus_tentacle.xml"
-
-
     return inst
 end
 
@@ -111,8 +106,6 @@ local function ocupus_tentacle_eye()
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*1.5)
 
     inst.components.tradable.goldvalue = 1
-
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/ocupus_tentacle_eye.xml"
 
     return inst
 end
@@ -131,7 +124,6 @@ local function ocupus_tentacle_cooked()
 
     inst.components.tradable.goldvalue = 1
 
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/ocupus_tentacle_cooked.xml"
     return inst
 end
 
@@ -159,7 +151,6 @@ local function ocupus_beak()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/ocupus_beak.xml"
 
     inst:AddComponent("stackable")
 

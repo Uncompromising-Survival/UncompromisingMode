@@ -110,8 +110,8 @@ local function fn()
     inst._hitcount = nil
 
     inst:AddComponent("inspectable")
+
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_armor_bramble_rimeweed.xml"
 	
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
