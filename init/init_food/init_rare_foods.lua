@@ -321,7 +321,7 @@ if TUNING.DSTU.BEEBOX_NERF then
     }
 
     local function ReleaseBees(inst, picker)
-        if not inst:HasTag("burnt") and picker and not GLOBAL.TheWorld.state.iswinter then
+        if not inst:HasTag("burnt") and picker and picker:HasTag("player") and not GLOBAL.TheWorld.state.iswinter then
             local protection
             local isspring = GLOBAL.TheWorld.state.isspring
 
@@ -340,32 +340,12 @@ if TUNING.DSTU.BEEBOX_NERF then
             end
 
             if picker.components.combat and picker.components.skilltreeupdater and not picker.components.skilltreeupdater:IsActivated("wormwood_bugs") then
-                if isspring then
-                    if protection then
-                        protection.components.armor:TakeDamage(40)
-                    elseif picker:HasTag("pinetreepioneer") then
-                        picker.components.health:DoDelta(-30, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    elseif picker:HasTag("valkyrie") then
-                        picker.components.health:DoDelta(-15, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    else
-                        picker.components.health:DoDelta(-20, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    end
+                if protection then
+                    protection.components.armor:TakeDamage(isspring and 40 or 20)
                 else
-                    if protection then
-                        protection.components.armor:TakeDamage(20)
-                    elseif picker:HasTag("pinetreepioneer") then
-                        picker.components.health:DoDelta(-20, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    elseif picker:HasTag("valkyrie") then
-                        picker.components.health:DoDelta(-7.5, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    else
-                        picker.components.health:DoDelta(-10, false, inst.prefab, false, nil, inst, false)
-                        picker.sg:GoToState("hit", inst)
-                    end
+                    local damagetotake = (isspring and 20 or 10) + (picker:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE or 0)
+                    picker.components.health:DoDelta(-damagetotake, nil, inst.prefab, nil, inst)
+                    picker:PushEvent("attacked", {damage = -damagetotake})
                 end
             end
 
@@ -381,11 +361,10 @@ if TUNING.DSTU.BEEBOX_NERF then
             for i, amt in pairs(HONEY_PER_STAGE) do
                 if inst.components.harvestable.produce == amt or i >= #HONEY_PER_STAGE then
                     inst.anims = {
-                        idle = amt <= 0 and "bees_loop" or "honey" .. i - 1,
-                        hit = amt <= 0 and "hit_idle" or "hit_honey" .. i - 1,
+                        idle = amt <= 0 and "bees_loop" or "honey"..i - 1,
+                        hit = amt <= 0 and "hit_idle" or "hit_honey"..i - 1,
                     }
                     inst.AnimState:PlayAnimation(inst.anims.idle)
-
                     break
                 end
             end
