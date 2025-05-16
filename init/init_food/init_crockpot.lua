@@ -91,18 +91,18 @@ if TUNING.DSTU.CROCKPOTMONSTMEAT then
         monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE
     }, true, true) --2 monster total, Will be calculated with -1 meat
 
-    RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat.xml", "monstersmallmeat.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat.xml", "monstersmallmeat.tex")
     AddIngredientValues({ "cookedmonstersmallmeat" },
         { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE }, true, true) --2.5 monster total, Will be calculated with -1 meat
-    RegisterInventoryItemAtlas("images/inventoryimages/cookedmonstersmallmeat.xml", "cookedmonstersmallmeat.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/cookedmonstersmallmeat.xml", "cookedmonstersmallmeat.tex")
     AddIngredientValues({ "monstersmallmeat_dried" },
         { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_DRIED_MONSTER_VALUE }, true, true) --2 monster total, Will be calculated with -1 meat
-    RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat_dried.xml", "monstersmallmeat_dried.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/monstersmallmeat_dried.xml", "monstersmallmeat_dried.tex")
 
     AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 
 else
     AddIngredientValues({ "monstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
@@ -110,9 +110,9 @@ else
     AddIngredientValues({ "monstersmallmeat_dried" }, { meat = 0.5, monster = 1 }, true, true) --2 monster total, Will be calculated with -1 meat
 
     AddIngredientValues({ "um_monsteregg" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
+    --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
 
 end
 
@@ -508,57 +508,56 @@ function InsertIngredientValues(names, tags, cancook, candry, keepoldvalues) -- 
 end
 
 InsertIngredientValues({ "zaspberry" }, { fruit = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/zaspberry.xml", "zaspberry.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/zaspberry.xml", "zaspberry.tex")
 InsertIngredientValues({ "zaspberry_lesser" }, { fruit = 0.5 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/zaspberry_lesser.xml", "zaspberry_lesser.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/zaspberry_lesser.xml", "zaspberry_lesser.tex")
 
 InsertIngredientValues({ "viperfruit" }, { fruit = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/viperfruit.xml", "viperfruit.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/viperfruit.xml", "viperfruit.tex")
 InsertIngredientValues({ "viperfruit_lesser" }, { fruit = 0.5 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/viperfruit_lesser.xml", "viperfruit_lesser.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/viperfruit_lesser.xml", "viperfruit_lesser.tex")
 InsertIngredientValues({ "giant_blueberry" }, { fruit = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/giant_blueberry.xml", "giant_blueberry.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/giant_blueberry.xml", "giant_blueberry.tex")
 InsertIngredientValues({ "iceboomerang" }, { ice = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/iceboomerang.xml", "iceboomerang.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/iceboomerang.xml", "iceboomerang.tex")
 InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/rice.xml", "rice.tex")
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 
 InsertIngredientValues({ "gloomcap" }, { veggie = 0.5, monster = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
 InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5, monster = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
 InsertIngredientValues({ "ocupus_tentacle" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle.xml", "ocupus_tentacle.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle.xml", "ocupus_tentacle.tex")
 InsertIngredientValues({ "ocupus_tentacle_cooked" }, { fish = 1, meat = 0.5, monster = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle_cooked.xml", "ocupus_tentacle_cooked.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle_cooked.xml", "ocupus_tentacle_cooked.tex")
 
 -- [Rimeweed] --
 InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemflower.xml", "um_rimeweed_itemflower.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemflower.xml", "um_rimeweed_itemflower.tex")
 
 InsertIngredientValues({ "um_rimeweed_itemvine" }, { ice = 1, inedible = 1, }, true, false, false)
-RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
-
+--RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
 
 if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, true, false, false)
 end
-RegisterInventoryItemAtlas("images/inventoryimages/greenfoliage.xml", "greenfoliage.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/greenfoliage.xml", "greenfoliage.tex")
 InsertIngredientValues({ "horn" }, { meat = 1 }, true, false, false)
 InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, true, false, false)
 
 InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
-RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
 InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
-RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+--RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {
@@ -585,7 +584,7 @@ if TUNING.DSTU.NEWRECIPES then
                 end
             end
 
-            RegisterInventoryItemAtlas(b.atlasname, b.name .. ".tex")
+            --RegisterInventoryItemAtlas(b.atlasname, b.name .. ".tex")
         end
     end
 
@@ -652,9 +651,6 @@ if TUNING.DSTU.GOODIESNERF then
         end
     end
 end
-
-
-
 
 local foods = require("preparedfoods")
 for k, recipe in pairs(foods) do
