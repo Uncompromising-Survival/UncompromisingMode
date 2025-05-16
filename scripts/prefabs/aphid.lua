@@ -189,9 +189,6 @@ local function fn()
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.pushlandedevents = false
 
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/aphid.xml"
-
-
 	inst.NymphGroundCheck = function(inst)	
 		--TheNet:Announce("checking")
 		if inst.nymph and inst.nymph:IsValid() and inst.nymph.components.health and not inst.nymph.components.health:IsDead() then
