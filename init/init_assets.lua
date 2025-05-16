@@ -60,6 +60,7 @@ local inventoryitems =
     "dormant_rain_horn",
     "driftwoodfishingrod",
     "feather_frock",
+    "fishmeat_dried",
     "floral_bandage",
     "um_rimeweed_icepack",
     "gasmask",
@@ -150,6 +151,7 @@ local inventoryitems =
     "skullflask",
     "skullflask_empty",
     "slobberlobber",
+    "smallfishmeat_dried",
     "snapplant",
     "snotroast",
     "snowcone",
@@ -354,6 +356,7 @@ local inventoryitems =
     "um_rimeweed_itemflower",
     "um_blowdart_rime",
     "um_armor_bramble_rimeweed",
+    "rimeweed_whip",
 
     -- Snaildrake related
     "snaildrakehat",
@@ -1099,6 +1102,8 @@ Assets = {
     Asset("ANIM", "anim/lazy_chester.zip"),
     
     Asset("ANIM", "anim/um_buttery_fly.zip"),
+
+    Asset("ANIM", "anim/um_ghost_pepper_item.zip"),
      
     Asset("ANIM", "anim/hound_jump_attack.zip"),
 
@@ -1533,8 +1538,6 @@ Assets = {
     Asset("ANIM", "anim/um_staff_meteor.zip"),
     Asset("ANIM", "anim/um_pathfinderpulse.zip"),
 
-
-
     --INVENTORY ITEMS [ANIMS & INV_IMAGE]
     Asset("ANIM", "anim/um_boatbottle.zip"),
     Asset("ANIM", "anim/hat_crab.zip"),
@@ -1683,7 +1686,6 @@ Assets = {
 
     Asset("ANIM", "anim/snowcone.zip"),
 
-
     Asset("ANIM", "anim/liceloaf.zip"),
     Asset("ANIM", "anim/stuffed_peeper_poppers.zip"),
     Asset("ANIM", "anim/seafoodpaella.zip"),
@@ -1699,6 +1701,7 @@ Assets = {
     Asset("ANIM", "anim/um_rice_pudding.zip"),
     Asset("ANIM", "anim/um_kebab.zip"),
 
+    Asset("ANIM", "anim/cctrinkets.zip"),
 
     Asset("ANIM", "anim/berniebox.zip"),
 
@@ -1774,6 +1777,18 @@ Assets = {
     Asset("ANIM", "anim/ui_um_cookpot_wagstaff_1x4.zip"),
 
     --INVENTORY ITEMS [IMAGES & ATLAS]
+    Asset("ATLAS", "images/inventoryimages/cctrinket_don.xml"),
+    Asset("IMAGE", "images/inventoryimages/cctrinket_don.tex"),
+
+    Asset("ATLAS", "images/inventoryimages/cctrinket_jazzy.xml"),
+    Asset("IMAGE", "images/inventoryimages/cctrinket_jazzy.tex"),
+
+    Asset("ATLAS", "images/inventoryimages/cctrinket_freddo.xml"),
+    Asset("IMAGE", "images/inventoryimages/cctrinket_freddo.tex"),
+
+    Asset("ATLAS", "images/inventoryimages/cctrinket_freddo.xml"),
+    Asset("IMAGE", "images/inventoryimages/cctrinket_freddo.tex"),
+
     Asset("IMAGE", "images/inventoryimages/um_boatbottle.tex"),
     Asset("ATLAS", "images/inventoryimages/um_boatbottle.xml"),
 
@@ -1827,7 +1842,6 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/turf_hoodedmoss.tex"),
     --ASSET("ATLAS_BUILD", "images/inventoryimages/turf_hoodedmoss.xml"),
     Asset("ATLAS", "images/inventoryimages/turf_hoodedmoss.xml"),
-
 
     Asset("IMAGE", "images/inventoryimages/turf_um_hotspring_grass.tex"),
     Asset("ATLAS", "images/inventoryimages/turf_um_hotspring_grass.xml"),
@@ -1922,6 +1936,10 @@ Assets = {
 
     Asset("IMAGE", "images/inventoryimages/um_buttery_fly.tex"),
     Asset("ATLAS", "images/inventoryimages/um_buttery_fly.xml"),
+
+    Asset("ATLAS", "images/inventoryimages/um_ghost_pepper_item.xml"),
+    Asset("IMAGE", "images/inventoryimages/um_ghost_pepper_item.tex"),
+
     Asset("IMAGE", "images/inventoryimages/viperfruit.tex"),
     Asset("ATLAS", "images/inventoryimages/viperfruit.xml"),
     Asset("IMAGE", "images/inventoryimages/viperfruit_lesser.tex"),
@@ -1934,10 +1952,6 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/snotroast.tex"),
     --ASSET("ATLAS_BUILD", "images/inventoryimages/snotroast.xml"),
     Asset("ATLAS", "images/inventoryimages/snotroast.xml"),
-
-    -- Rime Lash
-    Asset("IMAGE", "images/inventoryimages/rimeweed_whip.tex"),
-    Asset("ATLAS", "images/inventoryimages/rimeweed_whip.xml"),
 
     Asset("IMAGE", "images/inventoryimages/rne_goodiebag.tex"),
     Asset("ATLAS", "images/inventoryimages/rne_goodiebag.xml"),
@@ -2203,7 +2217,6 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/widowshead.xml"),
     Asset("ATLAS", "images/inventoryimages/widowshead.xml"),
 
-
     Asset("IMAGE", "images/inventoryimages/greenfoliage.tex"),
     --ASSET("ATLAS_BUILD", "images/inventoryimages/greenfoliage.xml"),
     Asset("ATLAS", "images/inventoryimages/greenfoliage.xml"),
@@ -2237,6 +2250,12 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/um_rimeweed_itemflower.tex"),
     Asset("ATLAS", "images/inventoryimages/um_rimeweed_itemflower.xml"),
 
+    Asset("IMAGE", "images/inventoryimages/um_rimeweed_icepack.tex"),
+    Asset("ATLAS", "images/inventoryimages/um_rimeweed_icepack.xml"),
+
+    -- Rime Lash
+    Asset("IMAGE", "images/inventoryimages/rimeweed_whip.tex"),
+    Asset("ATLAS", "images/inventoryimages/rimeweed_whip.xml"),
 
     Asset("IMAGE", "images/inventoryimages/liceloaf.tex"),
     ----ASSET("ATLAS_BUILD", "images/inventoryimages/liceloaf.xml"),
