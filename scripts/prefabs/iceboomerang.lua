@@ -197,7 +197,6 @@ local function fn()
     inst.components.projectile:SetOnCaughtFn(OnCaught)
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/iceboomerang.xml"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(OnEquip)
