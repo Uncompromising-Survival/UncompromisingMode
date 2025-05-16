@@ -21,11 +21,10 @@ local sounds =
 
 local brain = require("brains/nervoustickbrain") -----------------------------------------
 
-
 local function retargetfn(inst)
-	local target = 
-	FindEntity(
-				inst,
+    local target = 
+    FindEntity(
+                inst,
                 8,
                 function(guy)
                     return inst.components.combat:CanTarget(guy)
@@ -34,7 +33,7 @@ local function retargetfn(inst)
                 { "playerghost" }
             )
         or FindEntity(
-				inst,
+                inst,
                 15,
                 function(guy)
                     return inst.components.combat:CanTarget(guy) and not guy:IsInLight()
@@ -43,8 +42,8 @@ local function retargetfn(inst)
                 { "playerghost" }
             )
         or nil
-	
-	return target
+
+    return target
 end
 
 local function NotifyBrainOfTarget(inst, target)
@@ -55,28 +54,18 @@ end
 
 local function onkilledbyother(inst, attacker)
     if attacker ~= nil and attacker.components.sanity ~= nil then
-	
-		inst.sanityreward = 1
-	
+        inst.sanityreward = 1
         attacker.components.sanity:DoDelta(0.1)
-		
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 10, { "player" }, { "playerghost" } )
-		
-		for i, v in ipairs(ents) do
-			if v ~= attacker and v.components.sanity ~= nil and v.components.sanity:IsInsane() then
-				inst.halfreward = ((v.components.sanity.max * 0.25) + 10) / 2
-				inst.quarterreward = ((v.components.sanity.max * 0.25) + 10) / 4
-				
-				v.components.sanity:DoDelta(inst.halfreward)
-				
-				if v.components.sanity:IsInsane() then
-					v.components.sanity:DoDelta(inst.halfreward)
-				else
-					v.components.sanity:DoDelta(inst.quarterreward)
-				end
-			end
-		end
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 10, { "player" }, { "playerghost" } )
+        for i, v in ipairs(ents) do
+            if v ~= attacker and v.components.sanity ~= nil and v.components.sanity:IsInsane() then
+                inst.halfreward = ((v.components.sanity.max * 0.25) + 10) / 2
+                inst.quarterreward = ((v.components.sanity.max * 0.25) + 10) / 4
+                v.components.sanity:DoDelta(inst.halfreward)
+                v.components.sanity:DoDelta(v.components.sanity:IsInsane() and inst.halfreward or inst.quarterreward)
+            end
+        end
     end
 end
 
@@ -95,68 +84,68 @@ local function OnNewCombatTarget(inst, data)
 end
 
 local function startwiggling(inst, data)
-	inst.randomimage = math.random(1, 8)
-	
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/nervoustick_"..inst.randomimage..".xml" -- Needs a "nervoustick.xml"
-	inst.components.inventoryitem:ChangeImageName("nervoustick_"..inst.randomimage.."")
+    inst.randomimage = math.random(1, 8)
+
+    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/nervoustick_"..inst.randomimage..".xml")
+    inst.components.inventoryitem:ChangeImageName("nervoustick_"..inst.randomimage.."")
 end
 
 local function startdamaging(inst, data)
     inst.owner = inst.components.inventoryitem.owner
-	
-	if inst.owner ~= nil and inst.owner.components.inventoryitem ~= nil then
-		inst.owner = inst.owner.components.inventoryitem.owner
-	end
-	
+
+    if inst.owner ~= nil and inst.owner.components.inventoryitem ~= nil then
+        inst.owner = inst.owner.components.inventoryitem.owner
+    end
+
     if inst.owner ~= nil then
-		if inst.owner.components.health ~= nil and not inst.owner.components.health:IsDead() then
-			inst.owner.components.health:DoDelta(-1)
-		end
-	else
-		if inst.task ~= nil then
-			inst.task:Cancel()
-		end
-		inst.task = nil
-	end
+        if inst.owner.components.health ~= nil and not inst.owner.components.health:IsDead() then
+            inst.owner.components.health:DoDelta(-1)
+        end
+    else
+        if inst.task ~= nil then
+            inst.task:Cancel()
+        end
+        inst.task = nil
+    end
 end
 
 local function topocket(inst, owner)
     --cancelblink(inst)
-	if inst.task == nil then
-		inst.task = inst:DoPeriodicTask(0.2, startwiggling)
-		inst.damagetask = inst:DoPeriodicTask(1, startdamaging)
-	end
+    if inst.task == nil then
+        inst.task = inst:DoPeriodicTask(0.2, startwiggling)
+        inst.damagetask = inst:DoPeriodicTask(1, startdamaging)
+    end
     --tostore(inst, owner)
 end
 
 local function toground(inst)
-	if inst.damagetask ~= nil then
-		inst.damagetask:Cancel()
-		inst.damagetask = nil
-	end
-	
-	if inst.task ~= nil then
-		inst.task:Cancel()
-		inst.task = nil
-	end
+    if inst.damagetask ~= nil then
+        inst.damagetask:Cancel()
+        inst.damagetask = nil
+    end
+
+    if inst.task ~= nil then
+        inst.task:Cancel()
+        inst.task = nil
+    end
 end
 
 local function OnHitOther(inst, other)
-	if other.components.inventory:IsFull() then
-		inst.components.thief:StealItem(other)
-	end
+    if other.components.inventory:IsFull() then
+        inst.components.thief:StealItem(other)
+    end
 end
 
 local function Invade(inst, data)
-	if data.target ~= nil and data.target:HasTag("player") and not data.target.components.inventory ~= nil then
-		if data.target.components.inventory:IsFull() then
-			inst.components.thief:StealItem(data.target)
-		end
-		--inst.components.inventoryitem.canbepickedup = true
-		inst.components.combat:ShareTarget(data.target, 30, ShareTargetFn, 1)
-		
-		data.target.components.inventory:GiveItem(inst)
-	end
+    if data.target ~= nil and data.target:HasTag("player") and not data.target.components.inventory ~= nil then
+        if data.target.components.inventory:IsFull() then
+            inst.components.thief:StealItem(data.target)
+        end
+        --inst.components.inventoryitem.canbepickedup = true
+        inst.components.combat:ShareTarget(data.target, 30, ShareTargetFn, 1)
+        
+        data.target.components.inventory:GiveItem(inst)
+    end
 end
 
 local function fn()
@@ -177,8 +166,8 @@ local function fn()
     inst:AddTag("monster")
     inst:AddTag("hostile")
     inst:AddTag("swilson") 
-	inst:AddTag("nightmarecreature")
-	inst:AddTag("shadow")
+    inst:AddTag("nightmarecreature")
+    inst:AddTag("shadow")
     inst:AddTag("shadow_aligned")
     inst:AddTag("nervoustick")
     inst:AddTag("notraptrigger")
@@ -197,11 +186,12 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.HostileToPlayerTest = function() return true end
+
+    inst.HostileToPlayerTest = function() return true end
     inst:AddComponent("locomotor")
     inst.components.locomotor.walkspeed = 5
     inst.components.locomotor.runspeed = 5
-	inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor:SetTriggersCreep(false)
     inst.sounds = sounds
     inst:SetStateGraph("SGnervoustick")
 
@@ -216,32 +206,32 @@ local function fn()
     inst.components.health.nofadeout = true
 
     inst:AddComponent("combat")
-	inst.components.combat:SetDefaultDamage(0.1)
+    inst.components.combat:SetDefaultDamage(0.1)
     inst.components.combat:SetAttackPeriod(0.8)
     inst.components.combat:SetRange(1, 4)
     inst.components.combat.onkilledbyother = onkilledbyother
     inst.components.combat:SetRetargetFunction(3, retargetfn)
     --inst.components.combat.onhitotherfn = OnHitOther
 
-	inst.components.health:SetMaxHealth(1)
+    inst.components.health:SetMaxHealth(1)
 
     --inst:AddComponent("shadowsubmissive")
     inst:AddComponent("lootdropper")
     inst:AddComponent("thief")
-	
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.nobounce = true
-	inst.components.inventoryitem.canbepickedup = false
-	--inst.components.inventoryitem.cangoincontainer = true
-	inst.components.inventoryitem:SetSinks(false)
-	
+
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.nobounce = true
+    inst.components.inventoryitem.canbepickedup = false
+    --inst.components.inventoryitem.cangoincontainer = true
+    inst.components.inventoryitem:SetSinks(false)
+
     inst:ListenForEvent("onputininventory", topocket)
     inst:ListenForEvent("ondropped", toground)
-	
-	inst:ListenForEvent("onattackother", Invade)
-	
-	inst:WatchWorldState("isday", inst.Remove)
-	inst:WatchWorldState("iscaveday", inst.Remove)
+
+    inst:ListenForEvent("onattackother", Invade)
+
+    inst:WatchWorldState("isday", inst.Remove)
+    inst:WatchWorldState("iscaveday", inst.Remove)
 
     inst.persists = true
 
@@ -255,8 +245,8 @@ local function beat(inst)
 end
 
 local function OnKilled(inst)
-	SpawnPrefab("shadow_despawn").Transform:SetPosition(inst.Transform:GetWorldPosition())
-	inst:Remove()
+    SpawnPrefab("shadow_despawn").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst:Remove()
 end
 
 local function retargetfn2(inst)
@@ -267,8 +257,8 @@ local function retargetfn2(inst)
         if --[[v.components.sanity:IsCrazy() and]] not v:HasTag("playerghost") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
-				target = v
-				rangesq = distsq
+                target = v
+                rangesq = distsq
             end
         end
     end
@@ -276,10 +266,10 @@ local function retargetfn2(inst)
 end
 
 local function denfn()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
@@ -287,40 +277,40 @@ local function denfn()
     inst.AnimState:SetBuild("shadowheart")
     inst.AnimState:PlayAnimation("idle")
     inst.AnimState:SetMultColour(0, 0, 0, .5)
-	
+
     inst:AddTag("swilson") 
-	inst:AddTag("nightmarecreature")
-	inst:AddTag("shadow")
+    inst:AddTag("nightmarecreature")
+    inst:AddTag("shadow")
     inst:AddTag("shadow_aligned")
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-	inst:AddComponent("health")
-	inst.components.health:SetMaxHealth(300)
-		
-	inst:AddComponent("childspawner")
-	inst.components.childspawner:SetRegenPeriod(3)
-	inst.components.childspawner:SetSpawnPeriod(3)
-	inst.components.childspawner:SetMaxChildren(8)
-	inst.components.childspawner.childname = "nervoustick"
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(300)
+
+    inst:AddComponent("childspawner")
+    inst.components.childspawner:SetRegenPeriod(3)
+    inst.components.childspawner:SetSpawnPeriod(3)
+    inst.components.childspawner:SetMaxChildren(8)
+    inst.components.childspawner.childname = "nervoustick"
     inst.components.childspawner:StartSpawning()
     inst.components.childspawner:StartRegen()
     -- initialize with no children
     inst.components.childspawner.childreninside = 0
-	
-	inst:AddComponent("combat")
-	inst.components.combat:SetRetargetFunction(3, retargetfn2)
-	inst:ListenForEvent("death", OnKilled)
-	
-    inst.beattask = inst:DoTaskInTime(.75 + math.random() * .75, beat)
-	
-	inst:WatchWorldState("isday", inst.Remove)
-	inst:WatchWorldState("iscaveday", inst.Remove)
 
-	return inst
+    inst:AddComponent("combat")
+    inst.components.combat:SetRetargetFunction(3, retargetfn2)
+    inst:ListenForEvent("death", OnKilled)
+
+    inst.beattask = inst:DoTaskInTime(.75 + math.random() * .75, beat)
+
+    inst:WatchWorldState("isday", inst.Remove)
+    inst:WatchWorldState("iscaveday", inst.Remove)
+
+    return inst
 end
 
 return Prefab("nervoustick", fn, assets),
-		Prefab("nervoustickden", denfn, assets, prefabs)
+    Prefab("nervoustickden", denfn, assets, prefabs)
