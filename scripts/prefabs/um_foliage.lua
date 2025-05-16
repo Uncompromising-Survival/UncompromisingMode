@@ -35,7 +35,7 @@ local function fnfoliagegreen()
     MakeSmallPropagator(inst)
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/greenfoliage.xml"
+
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 0.5
     inst.components.edible.hungervalue = 0
