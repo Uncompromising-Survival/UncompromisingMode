@@ -523,7 +523,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem:ChangeImageName("slingshot_jessie_1")
+	--inst.components.inventoryitem:ChangeImageName("slingshot_jessie_1")
 
     inst:AddComponent("equippable")
     inst.components.equippable.restrictedtag = "troublemaker"
