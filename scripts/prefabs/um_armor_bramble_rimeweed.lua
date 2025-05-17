@@ -6,7 +6,6 @@ local assets =
 	Asset("IMAGE", "images/inventoryimages/um_armor_bramble_rimeweed.tex"),
 }
 
-
 local function OnCooldown(inst)
     inst._cdtask = nil
 end

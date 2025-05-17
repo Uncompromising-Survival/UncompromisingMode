@@ -52,6 +52,9 @@ local inventoryitems =
     "um_exhumer_powered",
     "um_wingsuit",
     "silksack",
+    "silken_bundle_large",
+    "silken_bundle_medium",
+    "silken_bundle_small",
     "um_moonfly_lantern",
     "dart_red",
     "devilsfruitcake",
@@ -388,8 +391,8 @@ local inventoryitems =
     "snappy_jaw",
 }
 
-for k, v in ipairs(inventoryitems) do
-    RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/"..v..".xml"), v..".tex")
+for _, item in ipairs(inventoryitems) do
+    RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/"..item..".xml"), item..".tex")
 end
 
 Assets = {
@@ -497,8 +500,6 @@ Assets = {
 
     Asset("SOUNDPACKAGE", "sound/winky.fev"),
     Asset("SOUND", "sound/winky.fsb"),
-
-
 
     -- WATHOM!!!
     Asset("ANIM", "anim/vvathom_run.zip"),
@@ -618,7 +619,7 @@ Assets = {
     Asset("ANIM", "anim/woby_big_command.zip"),
     Asset("ANIM", "anim/woby_does_a_flip.zip"),
 
-    Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
+    --[[Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
     Asset("ATLAS", "images/inventoryimages/slingshotammo_firecrackers.xml"),
     Asset("IMAGE", "images/inventoryimages/slingshotammo_honey.tex"),
     Asset("ATLAS", "images/inventoryimages/slingshotammo_honey.xml"),
@@ -728,7 +729,7 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"),
     Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"),
     Asset("IMAGE", "images/inventoryimages/wixiegun.tex"),
-    Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),
+    Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),]]
 
     Asset("IMAGE", "bigportraits/wixie.tex"),
     Asset("ATLAS", "bigportraits/wixie.xml"),
@@ -890,7 +891,7 @@ Assets = {
     Asset("ANIM", "anim/woby_big_command.zip"),
     Asset("ANIM", "anim/woby_does_a_flip.zip"),
 
-    Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
+    --[[Asset("IMAGE", "images/inventoryimages/slingshotammo_firecrackers.tex"),
     Asset("ATLAS", "images/inventoryimages/slingshotammo_firecrackers.xml"),
     Asset("IMAGE", "images/inventoryimages/slingshotammo_honey.tex"),
     Asset("ATLAS", "images/inventoryimages/slingshotammo_honey.xml"),
@@ -1000,7 +1001,7 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"),
     Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"),
     Asset("IMAGE", "images/inventoryimages/wixiegun.tex"),
-    Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),
+    Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),]]
 
     Asset("IMAGE", "bigportraits/wixie.tex"),
     Asset("ATLAS", "bigportraits/wixie.xml"),
@@ -1432,7 +1433,7 @@ Assets = {
     Asset("IMAGE", "images/fx5.tex"),
 
     --VET SKULLS
-    Asset("ATLAS", "images/inventoryimages/maxwell_vetskull.xml"),
+    --[[Asset("ATLAS", "images/inventoryimages/maxwell_vetskull.xml"),
     Asset("IMAGE", "images/inventoryimages/maxwell_vetskull.tex"),
     Asset("ATLAS", "images/inventoryimages/walter_vetskull.xml"),
     Asset("IMAGE", "images/inventoryimages/walter_vetskull.tex"),
@@ -1491,17 +1492,17 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/um_record_stranger.xml"),
     Asset("IMAGE", "images/inventoryimages/um_record_stranger.tex"),
     Asset("ATLAS", "images/inventoryimages/um_record_winky.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_record_winky.tex"),
+    Asset("IMAGE", "images/inventoryimages/um_record_winky.tex"),]]
 
     --
     Asset("ATLAS", "images/wixiepiano_whitekey.xml"),
     Asset("IMAGE", "images/wixiepiano_whitekey.tex"),
     Asset("ATLAS", "images/wixiepiano_blackkey.xml"),
     Asset("IMAGE", "images/wixiepiano_blackkey.tex"),
-    Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
+    --[[Asset("IMAGE", "images/inventoryimages/charles_t_horse.tex"),
     Asset("ATLAS", "images/inventoryimages/charles_t_horse.xml"),
     Asset("IMAGE", "images/inventoryimages/the_real_charles_t_horse.tex"),
-    Asset("ATLAS", "images/inventoryimages/the_real_charles_t_horse.xml"),
+    Asset("ATLAS", "images/inventoryimages/the_real_charles_t_horse.xml"),]]
 
     Asset("ANIM", "anim/swap_charles_shadow.zip"),
 
@@ -1532,6 +1533,8 @@ Assets = {
 
     -- Rimeweed stuff
     Asset("ANIM", "anim/rimeweed.zip"),
+    Asset("ANIM", "anim/um_armor_bramble_rime.zip"),
+    Asset("ANIM", "anim/um_armor_bramble_rimeweed.zip"), -- One of these is the ground sprite, the other is the swap for the body symbol...
 
     -- Mutation Extrapolation
     Asset("ANIM", "anim/umdebuff_moonburn_fx.zip"),
@@ -1562,8 +1565,8 @@ Assets = {
     Asset("ANIM", "anim/moonglass_geode.zip"),
     Asset("ANIM", "anim/armor_glassmail.zip"),
 
-    Asset("INV_IMAGE", "images/inventoryimages/chester_eyebone_closed_lazy"),
-    Asset("INV_IMAGE", "images/inventoryimages/chester_eyebone_lazy"),
+    --[[Asset("INV_IMAGE", "images/inventoryimages/chester_eyebone_closed_lazy"),
+    Asset("INV_IMAGE", "images/inventoryimages/chester_eyebone_lazy"),]]
 
     Asset("ANIM", "anim/hat_corvus.zip"),
 
@@ -1777,7 +1780,7 @@ Assets = {
     Asset("ANIM", "anim/ui_um_cookpot_wagstaff_1x4.zip"),
 
     --INVENTORY ITEMS [IMAGES & ATLAS]
-    Asset("ATLAS", "images/inventoryimages/cctrinket_don.xml"),
+    --[[Asset("ATLAS", "images/inventoryimages/cctrinket_don.xml"),
     Asset("IMAGE", "images/inventoryimages/cctrinket_don.tex"),
 
     Asset("ATLAS", "images/inventoryimages/cctrinket_jazzy.xml"),
@@ -2528,9 +2531,12 @@ Assets = {
     --ASSET("ATLAS_BUILD", "images/inventoryimages/um_armor_pyre_nettles.xml"),
     Asset("IMAGE", "images/inventoryimages/um_armor_pyre_nettles.tex"),
 
+    Asset("ATLAS", "images/inventoryimages/um_armor_bramble_rimeweed.xml"),
+    Asset("IMAGE", "images/inventoryimages/um_armor_bramble_rimeweed.tex"),
+
     Asset("ATLAS", "images/inventoryimages/um_staff_meteor.xml"),
     --ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
-    Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
+    Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),]]
 
 
     Asset("ATLAS", "images/wortox_lunar_stealer.xml"),
@@ -2785,8 +2791,10 @@ Assets = {
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
 }
 
-for k, v in pairs(inventoryitems) do
-    table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/"..v..".xml", 256))
+for _, asset in pairs(inventoryitems) do
+    table.insert(Assets, Asset("IMAGE", "images/inventoryimages/"..asset..".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/inventoryimages/"..asset..".xml"))
+    table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/"..asset..".xml", 256))
 end
 
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")

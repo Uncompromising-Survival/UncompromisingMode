@@ -463,8 +463,6 @@ local function realfn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname =
-        "images/inventoryimages/the_real_charles_t_horse.xml"
 
     inst:AddComponent("equippable")
 

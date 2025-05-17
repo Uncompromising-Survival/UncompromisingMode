@@ -45,7 +45,7 @@ local function MakeWrap(name, containerprefab, tag, cheapfuel)
         inst:AddComponent("inspectable")
         inst:AddComponent("inventoryitem")
         inst.components.inventoryitem:SetSinks(true)
-	
+    
         inst:AddComponent("bundlemaker")
         inst.components.bundlemaker:SetBundlingPrefabs(containerprefab, name)
         inst.components.bundlemaker:SetOnStartBundlingFn(OnStartBundling)
@@ -167,7 +167,7 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
                 inst.components.inventoryitem:ChangeImageName(name..suffix)
             end
         end
-		inst.components.inventoryitem.atlasname = "images/inventoryimages/"..name..suffix..".xml"
+        inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/"..name..suffix..".xml")
     end
 
 
@@ -230,18 +230,18 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
     end or name == "silken_bundle" and function(inst, data)
         data.timebundled = inst.timebundled
     end
-	or nil
+    or nil
 
     local OnPreLoad = variations ~= nil and function(inst, data)
         if data ~= nil then
             inst.variation = data.variation
         end
     end or name == "silken_bundle" and function(inst, data) 
-		if data ~= nil then
-			inst.timebundled = data.timebundled
-		end
-	end
-	or nil
+        if data ~= nil then
+            inst.timebundled = data.timebundled
+        end
+    end
+    or nil
 
     local function fn()
         local inst = CreateEntity()
@@ -254,11 +254,7 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
 
         inst.AnimState:SetBank(bank or name)
         inst.AnimState:SetBuild(build or name)
-        inst.AnimState:PlayAnimation(
-            variations ~= nil and
-            (onesize and "idle_onesize1" or "idle_large1") or
-            (onesize and "idle_onesize" or "idle_large")
-        )
+        inst.AnimState:PlayAnimation(variations and (onesize and "idle_onesize1" or "idle_large1") or (onesize and "idle_onesize" or "idle_large"))
 
         inst:AddTag("bundle")
         --unwrappable (from unwrappable component) added to pristine state for optimization
@@ -282,14 +278,12 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
         if inventoryimage then
             inst.components.inventoryitem:ChangeImageName(inventoryimage)
         end
-		
-        if variations ~= nil or not onesize then
-            inst.components.inventoryitem:ChangeImageName(
-                name..
-                (variations == nil and "_large" or (onesize and "1" or "_large1"))
-            )
+
+        if variations or not onesize then
+            inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/"..name..(variations == nil and "_large" or (onesize and "1" or "_large1"))..".xml")
+            inst.components.inventoryitem:ChangeImageName(name..(variations == nil and "_large" or (onesize and "1" or "_large1")))
         end
-		
+
         inst:AddComponent("unwrappable")
         inst.components.unwrappable:SetOnWrappedFn(OnWrapped)
         inst.components.unwrappable:SetOnUnwrappedFn(OnUnwrapped)

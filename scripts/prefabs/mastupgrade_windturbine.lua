@@ -252,7 +252,6 @@ local function itemfn()
 	inst:AddComponent("inspectable")
 
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/mastupgrade_windturbine_item.xml"
 	inst.components.inventoryitem:SetSinks(false)
 
 	inst:AddComponent("upgrader")

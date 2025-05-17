@@ -81,7 +81,6 @@ local function fn()
     end
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/shadow_crown.xml"
 
     inst:AddComponent("inspectable")
 
@@ -105,6 +104,5 @@ local function fn()
 
     return inst
 end
-
 
 return Prefab("shadow_crown", fn, assets)
