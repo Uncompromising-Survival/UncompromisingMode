@@ -459,6 +459,23 @@ local function OnAttacked(inst, data)
     --	end
 end
 
+local function Exclamationfy(string)
+    if not ThePlayer:HasTag("amped") then
+        return string
+    end
+
+    local ret = ""
+    for i = 1, #string do
+        local c = string:sub(i,i)
+        if (c == "." or c == "!") then
+            ret = ret .. ((c == "." and "!") or (c == "!" and "!!") or c)
+        else
+            ret = ret .. c
+        end
+    end
+    return ret
+end
+
 local function UpdateMusic(inst)
     SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
 end
@@ -514,7 +531,7 @@ local master_postinit = function(inst)
     -- choose which sounds this character will play
     inst.soundsname = "wathomvoiceevent"
     inst.talker_path_override = "wathomcustomvoice/"
-
+    inst.components.talker.mod_str_fn = Exclamationfy
     -- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
     --inst.talker_path_override = "dontstarve_DLC001/characters/"
 
