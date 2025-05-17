@@ -54,6 +54,7 @@ local function common(bank, build, anim, tags, cookable)
     inst:AddComponent("edible")
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
+    inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
 
     inst:AddComponent("bait")
 
@@ -79,7 +80,7 @@ local function common(bank, build, anim, tags, cookable)
 end
 
 local function ocupus_tentacle()
-    local inst = common("um_ocupus", "ocupus", "tentacle_item", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
+    local inst = common("um_ocupus", "ocupus", "tentacle_item", { "catfood", "monstermeat" }, { product = "ocupus_tentacle_cooked" })
     if not TheWorld.ismastersim then
         return inst
     end
@@ -95,7 +96,7 @@ local function ocupus_tentacle()
 end
 
 local function ocupus_tentacle_eye()
-    local inst = common("um_ocupus", "ocupus", "eyetacle_item", { "catfood", "rawmeat" }, { product = "ocupus_tentacle_cooked" })
+    local inst = common("um_ocupus", "ocupus", "eyetacle_item", { "catfood", "monstermeat" }, { product = "ocupus_tentacle_cooked" })
     if not TheWorld.ismastersim then
         return inst
     end
@@ -111,7 +112,7 @@ local function ocupus_tentacle_eye()
 end
 
 local function ocupus_tentacle_cooked()
-    local inst = common("ocupus_items", "ocupus_items", "idle_cooked", { "catfood", "rawmeat" })
+    local inst = common("ocupus_items", "ocupus_items", "idle_cooked", { "catfood", "monstermeat" })
 
     if not TheWorld.ismastersim then
         return inst
