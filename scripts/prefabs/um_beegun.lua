@@ -708,11 +708,7 @@ local function bulletfn(ischerry)
 
     inst.AnimState:SetBank("bee")
 
-    if ischerry then
-        inst.AnimState:SetBuild("cherrybee_build")
-    else
-        inst.AnimState:SetBuild("bulletbee_build")
-    end
+    inst.AnimState:SetBuild(ischerry and "cherrybee_build" or "bulletbee_build")
 
     inst.AnimState:PlayAnimation("idle", true)
     inst.AnimState:SetRayTestOnBB(true)
@@ -738,18 +734,10 @@ local function bulletfn(ischerry)
 
     inst:AddComponent("stackable")
     local inventoryitem = inst:AddComponent("inventoryitem")
-
-    if ischerry then
-        inventoryitem.atlasname = "images/inventoryimages/cherrybulletbee.xml"
-    else
-        inventoryitem.atlasname = "images/inventoryimages/bulletbee.xml"
-    end
-
     inventoryitem.nobounce = true
     inventoryitem.canbepickedup = false
     inventoryitem.canbepickedupalive = true
     inventoryitem.pushlandedevents = false
-
     ------------------
     local workable = inst:AddComponent("workable")
     workable:SetWorkAction(ACTIONS.NET)
