@@ -534,18 +534,19 @@ end
 local function bonus_damage_via_allergy(inst, target, damage, weapon)
     local targetinventory = target.components.inventory
     local hasbeearmor
-    if targetinventory ~= nil then
+    if targetinventory then
         local helm = targetinventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         local helmarmor = helm and helm.components.armor
         if helmarmor and helmarmor.tags then
             for i, tag in ipairs(helmarmor.tags) do
                 if tag == "bee" then
                     hasbeearmor = true
+                    break
                 end
             end
         end
     end
-    return (target:HasTag("allergictobees") and (hasbeearmor ~= nil and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE or TUNING.BEE_ALLERGY_EXTRADAMAGE)) or 0
+    return (target:HasTag("allergictobees") and (hasbeearmor and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE or TUNING.BEE_ALLERGY_EXTRADAMAGE)) or 0
 end
 
 local function OnDropped(inst)

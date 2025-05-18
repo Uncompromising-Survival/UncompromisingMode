@@ -2,222 +2,185 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-local function NewCustom(inst, dt)
-	local wobystarving = inst.woby ~= nil and inst.woby.wobystarving and -0.1 or 0
-	
-	local rate = inst._OldRate(inst, dt)
-
-    return rate + wobystarving
-end
-
+local NO_RIGHTCLICK_TAGS = {"woby", "customwobytag", "shadow", "shadowcreature", "shadowminion", "heavy", "heavyobject", "player"}
 local function RightClickPicker(inst, target, pos)
+    local notexamine
+    if target then
+        local actions = inst.components.playeractionpicker:GetSceneActions(target, true)
+        --CollectActions("SCENE")
 
-    local actions = {}
-    local notexamine = false
-	if target ~= nil then
-		actions = inst.components.playeractionpicker:GetSceneActions(target, true)
-		--CollectActions("SCENE")
-		
-		--inst:CollectActions("SCENE", target, inst, actions, right)
-		
-		
-		
+        --inst:CollectActions("SCENE", target, inst, actions, right)
+
         for i, v in pairs(actions) do
-			if target:IsActionValid(v.action, true) or v.action.rmb or v.action ~= ACTIONS.WALKTO and v.action ~= ACTIONS.LOOKAT and v.action ~= ACTIONS.PICKUP and v.action ~= ACTIONS.DIG and v.action ~= ACTIONS.HARVEST and v.action ~= ACTIONS.PICK and v.action ~= ACTIONS.FEED then
-				notexamine = true
-			end
-		end
-	end
+            if target:IsActionValid(v.action, true) or v.action.rmb or v.action ~= ACTIONS.WALKTO and v.action ~= ACTIONS.LOOKAT and v.action ~= ACTIONS.PICKUP and v.action ~= ACTIONS.DIG and v.action ~= ACTIONS.HARVEST and v.action ~= ACTIONS.PICK and v.action ~= ACTIONS.FEED then
+                notexamine = true
+            end
+        end
+    end
 
-    local equipactions = nil
-    local validtargetaction = nil
-    local useitem = inst.replica.inventory:GetActiveItem() or nil
+    local validtargetaction
+    local useitem = inst.replica.inventory:GetActiveItem()
     local equipitem = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-	
-	if equipitem ~= nil and equipitem:IsValid() then
-		if target ~= nil then
-			equipactions = inst.components.playeractionpicker:GetEquippedItemActions(target, equipitem, true)
-			for i, v in pairs(equipactions) do
-				validtargetaction = v
-			end
-		end
-	end
+    if equipitem and equipitem:IsValid() then
+        if target then
+            local equipactions = inst.components.playeractionpicker:GetEquippedItemActions(target, equipitem, true)
+            for i, v in pairs(equipactions) do
+                validtargetaction = v
+            end
+        end
+    end
 
-	return target ~= nil and
-			target ~= inst and
-			(inst:GetCurrentPlatform() == nil and not target:HasTag("outofreach") and (TUNING.DSTU.ISLAND_ADVENTURES or target:IsOnPassablePoint()) or target:HasTag("_combat")) and not
-			target:HasTag("woby") and not
-			target:HasTag("customwobytag") and not
-			target:HasTag("shadow") and not
-			target:HasTag("shadowcreature") and not
-			target:HasTag("shadowminion") and not
-			target:HasTag("heavy") and not
-			target:HasTag("heavyobject") and not
-			target:HasTag("player") and
-			validtargetaction == nil and not
-			notexamine and
-			useitem == nil and
-			inst.components.playeractionpicker:SortActionList({ ACTIONS.WOBY_COMMAND }, target, nil)
-		or nil, true
+    return target and target ~= inst and (not inst:GetCurrentPlatform() and not target:HasTag("outofreach")
+        and (TUNING.DSTU.ISLAND_ADVENTURES or target:IsOnPassablePoint()) or target:HasTag("_combat"))
+        and not target:HasAnyTag(NO_RIGHTCLICK_TAGS) and not validtargetaction and not notexamine and not useitem
+        and inst.components.playeractionpicker:SortActionList({ACTIONS.WOBY_COMMAND}, target, nil) or nil, true
 end
 
 local function GetPointSpecialActions(inst, pos, useitem, right)
-    if right and useitem == nil and not TheWorld.Map:IsGroundTargetBlocked(pos) then
+    if right and not useitem and not TheWorld.Map:IsGroundTargetBlocked(pos) then
         local rider = inst.replica.rider
-		--[[
-		local walter = TheSim:FindEntities(pos.x, 0, pos.z, 3, {"pinetreepioneer"})
-		for i, v in pairs(walter) do
-			if v ~= nil and v == inst then
-				if rider ~= nil and rider:IsRiding() then
-					return { ACTIONS.WOBY_OPEN }
-				else
-					return { ACTIONS.WOBY_HERE }
-				end
-			end
-		end]]
-		
-		if rider == nil or not rider:IsRiding() then
-			local walter = TheSim:FindEntities(pos.x, 0, pos.z, 3, {"pinetreepioneer"})
-			for i, v in pairs(walter) do
-				if v ~= nil and v == inst then
-					return { ACTIONS.WOBY_HERE }
-				end
-			end
-		end
-
-		return { ACTIONS.WOBY_STAY }
-	end
-	
+        --[[local walter = TheSim:FindEntities(pos.x, 0, pos.z, 3, {"pinetreepioneer"})
+        for i, v in pairs(walter) do
+            if v and v == inst then
+                if rider and rider:IsRiding() then
+                    return {ACTIONS.WOBY_OPEN}
+                else
+                    return {ACTIONS.WOBY_HERE}
+                end
+            end
+        end]]
+        if not rider or not rider:IsRiding() then
+            local walter = TheSim:FindEntities(pos.x, 0, pos.z, 3, {"pinetreepioneer"})
+            for i, v in pairs(walter) do
+                if v ~= nil and v == inst then
+                    return {ACTIONS.WOBY_HERE}
+                end
+            end
+        end
+        return {ACTIONS.WOBY_STAY}
+    end
     return {}
 end
 
 local function OnSetOwner(inst)
-    if inst.components.playeractionpicker ~= nil then
-		inst.components.playeractionpicker.rightclickoverride = RightClickPicker
+    if inst.components.playeractionpicker then
+        inst.components.playeractionpicker.rightclickoverride = RightClickPicker
         inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
     end
 end
 
 local function OnKilledOther(inst, data)
-    if data ~= nil and data.victim ~= nil and data.victim.prefab ~= nil then
+    if data and data.victim and data.victim.prefab then
         local naughtiness = NAUGHTY_VALUE[data.victim.prefab]
         if naughtiness ~= nil then
-			local naughty_val = FunctionOrValue(naughtiness, inst, data)
-			local naughtyresolve = naughty_val * (data.stackmult or 1)
-			inst.components.sanity:DoDelta(-naughtyresolve)
+            local naughty_val = FunctionOrValue(naughtiness, inst, data)
+            local naughtyresolve = naughty_val * (data.stackmult or 1)
+            inst.components.sanity:DoDelta(-naughtyresolve)
         end
     end
 end
 
 local function Mounted(inst)
-	if (inst.replica.rider ~= nil and inst.replica.rider:IsRiding()) and not inst:HasTag("dismounting") 
-	and inst.replica.rider:GetMount() ~= nil and inst.replica.rider:GetMount():HasTag("woby") and not
-	TheWorld.state.isnight then
-		inst:PushEvent("playwobymusic")
-	end
+    if inst.replica.rider and inst.replica.rider:IsRiding() and inst.replica.rider:GetMount() and inst.replica.rider:GetMount():HasTag("woby")
+        and not inst:HasTag("dismounting") and not TheWorld.state.isnight then
+        inst:PushEvent("playwobymusic")
+    end
 end
 
 env.modimport("init/init_character_changes/skilltree_walter") -- Import New Walter Tree
 
-env.AddPrefabPostInit("walter", function(inst) 
-
-	inst:AddTag("polite")
-	inst:RemoveTag("pebblemaker")
-	inst:RemoveTag("slingshot_sharpshooter")
-	inst:RemoveTag("allow_special_point_action_on_impassable")
-	
-    inst:ListenForEvent("setowner", OnSetOwner)
-	
-	inst:DoPeriodicTask(2, Mounted)
-	
-	if not TheWorld.ismastersim then
-		return
-	end
-
-	if inst._update_tree_sanity_task ~= nil then
-		inst._update_tree_sanity_task:Cancel()
-		inst._update_tree_sanity_task = nil
-	end
+local function WalterFunctions(inst)
+    if inst._update_tree_sanity_task then
+        inst._update_tree_sanity_task:Cancel()
+        inst._update_tree_sanity_task = nil
+    end
 
     inst.starting_inventory = {"walterhat", "meatrack_hat", "meat", "monstermeat"}
-	
-	if inst.components.foodaffinity ~= nil then
-		inst.components.foodaffinity:AddPrefabAffinity("meat_dried", TUNING.AFFINITY_15_CALORIES_MED)
-		inst.components.foodaffinity:AddPrefabAffinity("smallmeat_dried", TUNING.AFFINITY_15_CALORIES_SMALL)
-		inst.components.foodaffinity:AddPrefabAffinity("kelp_dried", TUNING.AFFINITY_15_CALORIES_TINY)
-		inst.components.foodaffinity:AddPrefabAffinity("fishmeat_dried", TUNING.AFFINITY_15_CALORIES_MED)
-		inst.components.foodaffinity:AddPrefabAffinity("smallfishmeat_dried", TUNING.AFFINITY_15_CALORIES_SMALL)
-		inst.components.foodaffinity:AddPrefabAffinity("seaweed_dried", TUNING.AFFINITY_15_CALORIES_SMALL)
-		inst.components.foodaffinity:AddPrefabAffinity("jellyjerky", TUNING.AFFINITY_15_CALORIES_MED)
-	end
-	
-	if inst.components.builder ~= nil then
-		inst.components.builder:UnlockRecipe("trap")
-		inst.components.builder:UnlockRecipe("birdtrap")
-		inst.components.builder:UnlockRecipe("fishingrod")
-		inst.components.builder:UnlockRecipe("healingsalve")
-		inst.components.builder:UnlockRecipe("bandage")
-		inst.components.builder:UnlockRecipe("floral_bandage")
-		inst.components.builder:UnlockRecipe("um_rimeweed_icepack")
-		inst.components.builder:UnlockRecipe("tillweedsalve")
-		inst.components.builder:UnlockRecipe("rope")
-		inst.components.builder:UnlockRecipe("papyrus")
-	end
-	
-	if inst.components.sanity.custom_rate_fn ~= nil then
-		inst._OldRate = inst.components.sanity.custom_rate_fn
-		inst.components.sanity.custom_rate_fn = NewCustom
-	end
-	
-	--inst:ListenForEvent("killed", OnKilledOther)
+
+    if inst.components.foodaffinity then
+        local foodaffinities = {
+            ["meat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
+            ["fishmeat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
+            ["jellyjerky"] = TUNING.AFFINITY_15_CALORIES_MED,
+            ["smallmeat_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
+            ["smallfishmeat_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
+            ["seaweed_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
+            ["kelp_dried"] = TUNING.AFFINITY_15_CALORIES_TINY
+        }
+        for name, gain in pairs(foodaffinities) do
+            inst.components.foodaffinity:AddPrefabAffinity(name, gain)
+        end
+    end
+
+    if inst.components.builder then
+        local unlockrecipes = {"trap", "birdtrap", "fishingrod", "healingsalve", "bandage", "floral_bandage", "um_rimeweed_icepack", "tillweedsalve", "rope", "papyrus"}
+        for _, recipe in pairs(unlockrecipes) do
+            inst.components.builder:UnlockRecipe(recipe)
+        end
+    end
+
+    if inst.components.sanity.custom_rate_fn then
+        local _OldRate = inst.components.sanity.custom_rate_fn
+        local function NewCustom(inst, dt)
+            local wobystarving = inst.woby and inst.woby.wobystarving and -0.1 or 0
+            
+            local rate = _OldRate(inst, dt)
+
+            return rate + wobystarving
+        end
+        inst.components.sanity.custom_rate_fn = NewCustom
+    end
+
+    --inst:ListenForEvent("killed", OnKilledOther)
+end
+
+env.AddPrefabPostInit("walter", function(inst) 
+    inst:AddTag("polite")
+    inst:RemoveTag("pebblemaker")
+    inst:RemoveTag("slingshot_sharpshooter")
+    inst:RemoveTag("allow_special_point_action_on_impassable")
+
+    inst:ListenForEvent("setowner", OnSetOwner)
+
+    inst:DoPeriodicTask(2, Mounted)
+
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    WalterFunctions(inst)
 end)
 
 local function new_bonus_damage_via_allergy(inst, target, damage, weapon)
-	if target.components.inventory ~= nil then
-		local helm = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-		if target.components.inventory ~= nil and helm and helm.components.armor and helm.components.armor.tags then
-			for i, tag in ipairs(helm.components.armor.tags) do
-				if tag == "bee" then
-					return (target:HasTag("allergictobees") and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE) or 0
-				else
-					return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-				end	
-			end
-		else 	
-			return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-		end	
-	else
-		return (target:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE) or 0
-	end
+    local targetinventory = target.components.inventory
+    local hasbeearmor
+    if targetinventory then
+        local helm = targetinventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+        local helmarmor = helm and helm.components.armor
+        if helmarmor and helmarmor.tags then
+            for i, tag in ipairs(helmarmor.tags) do
+                if tag == "bee" then
+                    hasbeearmor = true
+                    break
+                end
+            end
+        end
+    end
+    return (target:HasTag("allergictobees") and (hasbeearmor and TUNING.DSTU.BEE_ALLERGY_PROTECTION_EXTRADAMAGE or TUNING.BEE_ALLERGY_EXTRADAMAGE)) or 0
 end
 
-env.AddPrefabPostInit("bee", function(inst)	
-    if inst.components.combat ~= nil then	
-		inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
-	end
-end)
+local bonus_dmg_via_allergy_prefablist = {"bee", "killerbee", "beequeen", "beeguard"}
+for _, bee in pairs(bonus_dmg_via_allergy_prefablist) do
+    env.AddPrefabPostInit(bee, function(inst)
+        if inst.components.combat then
+            inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
+        end
+    end)
+end
 
-env.AddPrefabPostInit("killerbee", function(inst)	
-    if inst.components.combat ~= nil then	
-		inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
-	end
-end)
-
-env.AddPrefabPostInit("beequeen", function(inst)	
-    if inst.components.combat ~= nil then	
-		inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
-	end
-end)
-
-env.AddPrefabPostInit("beeguard", function(inst)	
-    if inst.components.combat ~= nil then	
-		inst.components.combat.bonusdamagefn = new_bonus_damage_via_allergy
-	end
-end)
-
-env.AddPrefabPostInit("bandage_butterflywings", function(inst)	
+env.AddPrefabPostInit("bandage_butterflywings", function(inst)    
     if inst.components.healer ~= nil and inst.components.healer.health ~= nil then
-		local old_health = inst.components.healer.health
-		inst.components.healer:SetHealthAmount(old_health / 3)
-	end
+        local old_health = inst.components.healer.health
+        inst.components.healer:SetHealthAmount(old_health / 3)
+    end
 end)
