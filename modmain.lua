@@ -327,7 +327,7 @@ end
 AddModRPCHandler("AllMouseGags", "GetTheInput", TornadoHandlingFunction)
 
 local function ClaustrophobiaPanic(player, inst)
-    if inst.components.health ~= nil and not inst.components.health:IsDead() and not inst.sg:HasStateTag("wixiepanic") then
+    if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("wixiepanic") then
         inst.sg:GoToState("claustrophobic")
     end
 end
@@ -335,15 +335,15 @@ end
 AddModRPCHandler("WixieTheDelinquent", "ClaustrophobiaPanic", ClaustrophobiaPanic)
 
 local function ClaustrophobiaEquipMult(claustrophobiamodifier)
-    if GLOBAL.ThePlayer ~= nil then
-        GLOBAL.ThePlayer.claustrophobiamodifier = claustrophobiamodifier
+    if GLOBAL.ThePlayer then
+        GLOBAL.ThePlayer.claustrophobiamodifier = type(claustrophobiamodifier) == "string" and GLOBAL.tonumber(claustrophobiamodifier) or claustrophobiamodifier
     end
 end
 
 AddClientModRPCHandler("WixieTheDelinquent", "ClaustrophobiaEquipMult", ClaustrophobiaEquipMult)
 
 local function ClaustrophobiaHidden(claustrophobiahidden)
-    if GLOBAL.ThePlayer ~= nil then
+    if GLOBAL.ThePlayer then
         GLOBAL.ThePlayer.claustrophobiahidden = claustrophobiahidden
     end
 end
@@ -427,7 +427,6 @@ GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
 modimport("init/init_insightcompat")
 modimport("init/init_statusannouncements")
-
 
 AddSimPostInit(function()
     if not GLOBAL.TheNet:IsDedicated() then
