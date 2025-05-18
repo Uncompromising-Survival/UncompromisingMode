@@ -309,7 +309,8 @@ if GetModConfigData("wixie_walter") then
         "wobypicking",    -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
         "dryer",           -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
         "channelcastable", -- Just a dirty wrap of the component to stop it from removing the channelcastable component from her weapon when unequipped
-
+        "combat", -- Avoid using the weapon when shoving.
+        "weapon" -- Avoid using the weapon when shoving.
     }
 
     for k, v in ipairs(wixie_prefabs) do

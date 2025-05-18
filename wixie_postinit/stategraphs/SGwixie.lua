@@ -233,9 +233,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.sg:GoToState("idle", true)
                     return
                 end
-
+                if inst.sg.laststate == inst.sg.currentstate then
+                    inst.sg.statemem.chained = true
+                end
                 local buffaction = inst:GetBufferedAction()
-                local target = buffaction ~= nil and buffaction.target or nil
+                local target = buffaction and buffaction.target or nil
                 inst.components.combat:SetTarget(target)
                 inst.components.combat:StartAttack()
                 inst.components.locomotor:Stop()
@@ -250,11 +252,12 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                 inst.sg:SetTimeout(cooldown)
 
-                if target ~= nil then
+                if target then
                     inst.components.combat:BattleCry()
                     if target:IsValid() then
                         inst:FacePoint(target:GetPosition())
                         inst.sg.statemem.attacktarget = target
+                        inst.sg.statemem.retarget = target
                     end
                 end
             end,
@@ -262,23 +265,22 @@ env.AddStategraphPostInit("wilson", function(inst)
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-                    local target = inst.sg.statemem.attacktarget ~= nil and inst.sg.statemem.attacktarget or nil
-                    local dist = target ~= nil and
-                        distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) or
-                        false
-                    local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
+                    local target = inst.sg.statemem.attacktarget and inst.sg.statemem.attacktarget
+                    local dist = target and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) or false
+                    local weapon = inst.components.combat and inst.components.combat:GetWeapon()
 
-                    if target ~= nil and dist then
-                        if target.components.combat ~= nil then
-                            inst:PerformBufferedAction()
+                    if target and dist then
+                        if target.components.combat then
+                            if not (target.components.freezable and target.components.freezable:IsFrozen()) then
+                                inst.sg:AddStateTag("dontuseweaponinstate")
+                                inst:PerformBufferedAction()
+                            end
 
                             WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
-                        elseif weapon ~= nil and weapon:HasTag("extinguisher") and target.components.burnable ~= nil and target.components.burnable:IsBurning() then
+                        elseif weapon and weapon:HasTag("extinguisher") and target.components.burnable and target.components.burnable:IsBurning() then
                             inst:PerformBufferedAction()
                         end
                     end
-
-                    inst.sg:RemoveStateTag("abouttoattack")
                 end),
             },
 
@@ -300,12 +302,12 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
 
             onexit = function(inst)
-                if inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
+                --[[if inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) then
                     --inst.AnimState:Show("ARM_carry")
                     --inst.AnimState:Hide("ARM_normal")
                 end
 
-                inst:ClearBufferedAction()
+                inst:ClearBufferedAction()]]
                 inst.components.combat:SetTarget(nil)
                 if inst.sg:HasStateTag("abouttoattack") then
                     inst.components.combat:CancelAttack()
