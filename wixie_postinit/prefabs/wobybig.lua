@@ -172,10 +172,10 @@ env.AddPrefabPostInit("wobybig", function(inst)
     
     if inst.components.eater ~= nil then
         inst.components.eater.custom_stats_mod_fn = CustomFoodStatsMod
+        inst.components.eater:SetStrongStomach(true)
     end
     
     if inst.components.hunger ~= nil then
-        inst.components.eater:SetStrongStomach(true)
         inst:ListenForEvent("hungerdelta", OnHungerDelta2)
     end
         
