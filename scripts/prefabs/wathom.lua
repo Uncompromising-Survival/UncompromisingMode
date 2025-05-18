@@ -474,10 +474,9 @@ local function master_postinit(inst)
 
     -- Carnivore
     if inst.components.eater then
-        inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODTYPE.MEAT, FOODTYPE.GOODIES })
+        inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES})
+        inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
     end
-
-    inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 
     inst.components.foodaffinity:AddPrefabAffinity("um_kebab", 20)
 
