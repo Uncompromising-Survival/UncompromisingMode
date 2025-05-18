@@ -266,21 +266,18 @@ env.AddStategraphPostInit("wilson", function(inst)
             {
                 TimeEvent(8 * FRAMES, function(inst)
                     local target = inst.sg.statemem.attacktarget and inst.sg.statemem.attacktarget
-                    local dist = target and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) or false
                     local weapon = inst.components.combat and inst.components.combat:GetWeapon()
-
-                    if target and dist then
-                        if target.components.combat then
+                    if target then
+                        if not (weapon and weapon:HasTag("extinguisher") and target.components.burnable and target.components.burnable:IsBurning()) then
                             if not (target.components.freezable and target.components.freezable:IsFrozen()) then
                                 inst.sg:AddStateTag("dontuseweaponinstate")
-                                inst:PerformBufferedAction()
                             end
 
                             WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
-                        elseif weapon and weapon:HasTag("extinguisher") and target.components.burnable and target.components.burnable:IsBurning() then
-                            inst:PerformBufferedAction()
                         end
                     end
+                    inst:PerformBufferedAction()
+                    inst.sg:RemoveStateTag("abouttoattack")
                 end),
             },
 
