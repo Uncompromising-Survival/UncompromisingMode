@@ -279,11 +279,7 @@ local wobyhere = AddAction(
 		end
 		
 		if act.doer.woby.sg.currentstate.name ~= "transform" then
-			if act.doer.woby:IsNear(act.doer, 3) then
-				act.doer.woby.sg:GoToState("woby_does_a_flip")
-			else
-				act.doer.woby.sg:GoToState("bark_clearaction")
-			end
+			act.doer.woby.sg:GoToState(act.doer.woby:IsNear(act.doer, 3) and act.doer.woby.sg:HasState("woby_does_a_flip") and "woby_does_a_flip" or "bark_clearaction")
 		end
 		
 		if hasfollowers then
