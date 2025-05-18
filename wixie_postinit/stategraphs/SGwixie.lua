@@ -270,9 +270,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
                     if target ~= nil and dist then
                         if target.components.combat ~= nil then
-                            if (target.sg == nil or target.sg ~= nil and not target.sg:HasStateTag("notarget")) and target.components.combat ~= nil and target.components.freezable == nil or (target.sg == nil or target.sg ~= nil and not target.sg:HasStateTag("notarget")) and not (target.components.freezable ~= nil and target.components.freezable:IsFrozen()) then
-                                target.components.combat:GetAttacked(inst, 10)
-                            end
+                            inst:PerformBufferedAction()
 
                             WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
                         elseif weapon ~= nil and weapon:HasTag("extinguisher") and target.components.burnable ~= nil and target.components.burnable:IsBurning() then
