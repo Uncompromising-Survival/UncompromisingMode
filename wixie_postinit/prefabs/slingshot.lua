@@ -18,11 +18,11 @@ local function ReticuleMouseTargetFn(inst, mousepos)
         local dx = mousepos.x - x
         local dz = mousepos.z - z
         local l = dx * dx + dz * dz
-		
-		local dist = inst:GetDistanceSqToPoint(mousepos.x, 0, mousepos.z)
-		
-		inst.components.reticule.fadealpha = dist / 100
-		
+        
+        local dist = inst:GetDistanceSqToPoint(mousepos.x, 0, mousepos.z)
+        
+        inst.components.reticule.fadealpha = dist / 100
+        
         if l <= 0 then
             return inst.components.reticule.targetpos
         end
@@ -44,24 +44,24 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
 end
 --[[
 local function createlight(staff, target, pos)
-	local ammo = staff.components.weapon.projectile.."_secondary"
-	local spittarget = SpawnPrefab("lavaspit_target")
-	
-	if ammo ~= nil then
-		if pos ~= nil then
-			spittarget.Transform:SetPosition(pos:Get())
-			spittarget:DoTaskInTime(1, spittarget.Remove)
-			local proj = SpawnPrefab(ammo)
-			local x, y, z = staff.Transform:GetWorldPosition()
-			proj.Transform:SetPosition(x, y, z)
-			proj.components.projectile:Throw(staff, spittarget, staff)
-		elseif target ~= nil then
-			local proj = SpawnPrefab(ammo)
-			local x, y, z = staff.Transform:GetWorldPosition()
-			proj.Transform:SetPosition(x, y, z)
-			proj.components.projectile:Throw(staff, target, staff)
-		end
-	end
+    local ammo = staff.components.weapon.projectile.."_secondary"
+    local spittarget = SpawnPrefab("lavaspit_target")
+    
+    if ammo ~= nil then
+        if pos ~= nil then
+            spittarget.Transform:SetPosition(pos:Get())
+            spittarget:DoTaskInTime(1, spittarget.Remove)
+            local proj = SpawnPrefab(ammo)
+            local x, y, z = staff.Transform:GetWorldPosition()
+            proj.Transform:SetPosition(x, y, z)
+            proj.components.projectile:Throw(staff, spittarget, staff)
+        elseif target ~= nil then
+            local proj = SpawnPrefab(ammo)
+            local x, y, z = staff.Transform:GetWorldPosition()
+            proj.Transform:SetPosition(x, y, z)
+            proj.components.projectile:Throw(staff, target, staff)
+        end
+    end
 end]]
 
 
@@ -208,11 +208,7 @@ local function createlight(inst, target, pos)
 end
 
 local function can_cast_fn(doer, target, pos)
-    if doer:HasTag("troublemaker") then
-        return true
-    else
-        return false
-    end
+    return doer:HasTag("troublemaker")
 end
 
 env.AddPrefabPostInit("slingshot", function(inst)
@@ -278,7 +274,7 @@ env.AddPrefabPostInit("slingshotammo_container", function(inst)
         return
     end
 
-    if inst.components.container ~= nil then
-    inst.components.container.restrictedtag = "troublemaker"
+    if inst.components.container then
+        inst.components.container.restrictedtag = "troublemaker"
     end
 end)

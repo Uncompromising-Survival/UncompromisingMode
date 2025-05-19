@@ -251,6 +251,25 @@ local function OnBuildAmmo(inst, data)
     end
 end
 
+local function OnAttackOther(inst, data)
+    local target, weapon = data and data.target, data and data.weapon
+    local isriding = inst.components.rider and inst.components.rider:IsRiding()
+    local shouldshove = target and (not weapon or weapon:HasTag("wixie_weapon"))
+    if inst.sg then
+        local shouldextinguish = weapon and not (weapon:HasTag("extinguisher") and target and target.components.burnable and target.components.burnable:IsBurning())
+        local shovefrozen = not isriding and shouldshove and target and target.components.freezable and target.components.freezable:IsFrozen()
+        if shouldshove and shouldextinguish or inst.sg.mem.dontuseweaponinstate then
+            inst.sg.mem.dontuseweaponinstate = shouldshove and shouldextinguish or nil
+        end
+        if shovefrozen or inst.sg.mem.wixiefrozentargetshove then
+            inst.sg.mem.wixiefrozentargetshove = shovefrozen or nil
+        end
+    end
+    if not isriding and shouldshove then
+        WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
+    end
+end
+
 local function common_postinit(inst)
     inst:ListenForEvent("setowner", OnSetOwner)
 
@@ -295,6 +314,7 @@ local function master_postinit(inst)
 
     inst.components.foodaffinity:AddPrefabAffinity("blueberrypancakes", 1.2)
 
+    inst:ListenForEvent("onattackother", OnAttackOther)
     --inst:ListenForEvent("killed", OnKilledOther)
 
     inst.soundsname = "wixie"

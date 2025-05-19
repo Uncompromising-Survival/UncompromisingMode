@@ -405,11 +405,7 @@ local function createlight(inst, target, pos)
 end
 
 local function can_cast_fn(doer, target, pos)
-	if doer:HasTag("troublemaker") then
-		return true
-	else
-		return false
-	end
+    return doer:HasTag("troublemaker")
 end
 
 local function OnSave(inst, data)

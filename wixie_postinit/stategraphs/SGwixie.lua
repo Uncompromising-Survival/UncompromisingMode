@@ -38,22 +38,10 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local _OldAttack = inst.actionhandlers[ACTIONS.ATTACK].deststate
     inst.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
-        if inst:HasTag("troublemaker") and not inst.components.rider:IsRiding() then
-            local weapon = inst.components.combat and inst.components.combat:GetWeapon()
-            if weapon and weapon:HasTag("wixie_weapon") then
-                if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or inst.components.health:IsDead()) then
-                    inst.sg.mem.localchainattack = not action.forced or nil
-                end
-            end
-            return (weapon and weapon:HasTag("slingshot") or not weapon) and "shove" or _OldAttack(inst, action, ...)
-        --[[elseif inst:HasTag("pinetreepioneer") and inst.components.rider:IsRiding() and inst.components.rider.mount:HasTag("woby") then
-            local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            
-            if equip ~= nil and not (equip.components.projectile ~= nil or equip:HasTag("rangedweapon")) then
-                return "special_woby_attack"
-            else
-                return "shake"
-            end]]
+        local weapon = inst.components.combat and inst.components.combat:GetWeapon()
+        if inst:HasTag("troublemaker") and weapon and weapon:HasTag("slingshot") then
+            inst.sg.mem.localchainattack = not action.forced or nil
+            return not (inst.components.rider and inst.components.rider:IsRiding()) and "shove" or "attack"
         end
         return _OldAttack(inst, action, ...)
     end
@@ -265,19 +253,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-                    local target = inst.sg.statemem.attacktarget and inst.sg.statemem.attacktarget
-                    local weapon = inst.components.combat and inst.components.combat:GetWeapon()
-                    if target and inst.components.combat:CanHitTarget(target, weapon) then
-                        if not (weapon and weapon:HasTag("extinguisher") and target.components.burnable and target.components.burnable:IsBurning()) then
-                            inst.sg:AddStateTag("dontuseweaponinstate")
-                            WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
-                        end
-                    end
-                    if target and target.components.freezable and target.components.freezable:IsFrozen() then
-                        inst:ClearBufferedAction()
-                    else
-                        inst:PerformBufferedAction()
-                    end
+                    inst:PerformBufferedAction()
                     inst.sg:RemoveStateTag("abouttoattack")
                 end),
             },

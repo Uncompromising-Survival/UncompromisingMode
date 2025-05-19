@@ -19,14 +19,10 @@ env.AddStategraphPostInit("wilson_client", function(inst)
 
     local _OldAttack = inst.actionhandlers[ACTIONS.ATTACK].deststate
     inst.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
-        if inst:HasTag("troublemaker") and not inst.replica.rider:IsRiding() then
-            local weapon = inst.replica.combat and inst.replica.combat:GetWeapon()
-            if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or IsEntityDead(inst)) then
-                if weapon and weapon:HasTag("slingshot") then
-                    inst.sg.mem.localchainattack = not action.forced or nil
-                end
-                return (weapon and weapon:HasTag("slingshot") or not weapon) and "shove" or _OldAttack(inst, action, ...)
-            end
+        local weapon = inst.replica.combat and inst.replica.combat:GetWeapon()
+        if inst:HasTag("troublemaker") and weapon and weapon:HasTag("slingshot") then
+            inst.sg.mem.localchainattack = not action.forced or nil
+            return not (inst.replica.rider and inst.replica.rider:IsRiding()) and "shove" or "attack"
         end
         return _OldAttack(inst, action, ...)
     end
