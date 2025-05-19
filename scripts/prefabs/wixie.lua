@@ -71,7 +71,7 @@ local function updateclaustrophobia(inst)
     if not inst._claustrophobiacdtask and inst:CanGainClaustrophobia() then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 6, {"_health", "_combat"}, NOT_CLAUSTROPHOBIC_TAGS)
-        local treesandwallsandcompanions = TheSim:FindEntities(x, y, z, 5, nil, {"stump", "INLIMBO", "isdead"}, {"tree", "wall", "companion"})
+        local treesandwallsandcompanions = TheSim:FindEntities(x, y, z, 5, nil, {"stump", "critter", "INLIMBO", "isdead"}, {"tree", "wall", "companion"})
 
         if treesandwallsandcompanions then
             for i, v in ipairs(treesandwallsandcompanions) do
