@@ -36,37 +36,6 @@ env.AddStategraphPostInit("wilson_client", function(inst)
             or _OldBuild(inst, action, ...)
     end
 
-    local _OldSpellCast = inst.actionhandlers[ACTIONS.CASTSPELL].deststate
-    inst.actionhandlers[ACTIONS.CASTSPELL].deststate = function(inst, action, ...)
-        if action.invobject and action.invobject:HasTag("slingshot") then
-            if inst:HasTag("pebblemaker") then
-                if Profile:GetMovementPredictionEnabled() then
-                    ThePlayer:EnableMovementPrediction(false)
-                    Profile:SetMovementPredictionEnabled(false)
-                    
-                    --ThePlayer.HUD.controls.networkchatqueue:DisplaySystemMessage("The shadows have turned lag compensation off, it will be restored on nights end.")
-                    --TheNet:Announce("The shadows have turned lag compensation off, it will be restored on nights end.")
-                        
-                    if ThePlayer.components.playercontroller:CanLocomote() then
-                        ThePlayer.components.playercontroller.locomotor:Stop()
-                    else
-                        ThePlayer.components.playercontroller:RemoteStopWalking()
-                    end
-                    return
-                end
-                return inst.sg.slingshot_charge and "slingshot_cast" or "slingshot_charge"
-            end
-        end
-
-        if action.invobject and action.invobject:HasTag("wixiegun") then
-            return "wixieshootsagun"
-        end
-        
-        if not inst.sg.currentstate.name ~= "slingshot_charge" then
-            return _OldSpellCast(inst, action, ...)
-        end
-    end
-
     local _OldPick = inst.actionhandlers[ACTIONS.PICK].deststate
     inst.actionhandlers[ACTIONS.PICK].deststate = function(inst, action, ...)
         return (inst.replica.rider ~= nil and 
@@ -93,7 +62,24 @@ env.AddStategraphPostInit("wilson_client", function(inst)
         ActionHandler(ACTIONS.WOBY_COMMAND, function(inst, action) return "play_woby_whistle" end),
         ActionHandler(ACTIONS.WOBY_STAY, function(inst, action) return "play_woby_whistle" end),
         ActionHandler(ACTIONS.WOBY_HERE, function(inst, action) return "play_woby_whistle" end),
-        ActionHandler(ACTIONS.WIXIE_TAUNT, function(inst, action) return "wixie_taunt" end)
+        ActionHandler(ACTIONS.WIXIE_TAUNT, function(inst, action) return "wixie_taunt" end),
+        ActionHandler(ACTIONS.WIXIE_SLINGSHOT, function(inst, action)
+            if Profile:GetMovementPredictionEnabled() then
+                ThePlayer:EnableMovementPrediction(false)
+                Profile:SetMovementPredictionEnabled(false)
+
+                --ThePlayer.HUD.controls.networkchatqueue:DisplaySystemMessage("The shadows have turned lag compensation off, it will be restored on nights end.")
+                --TheNet:Announce("The shadows have turned lag compensation off, it will be restored on nights end.")
+
+                if ThePlayer.components.playercontroller:CanLocomote() then
+                    ThePlayer.components.playercontroller.locomotor:Stop()
+                else
+                    ThePlayer.components.playercontroller:RemoteStopWalking()
+                end
+                return
+            end
+            return "idle"
+        end)
     }
 
     local states = {

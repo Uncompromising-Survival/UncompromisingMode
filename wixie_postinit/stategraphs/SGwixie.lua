@@ -55,25 +55,6 @@ env.AddStategraphPostInit("wilson", function(inst)
             or _OldBuild(inst, action, ...)
     end
 
-    local _OldSpellCast = inst.actionhandlers[ACTIONS.CASTSPELL].deststate
-    inst.actionhandlers[ACTIONS.CASTSPELL].deststate = function(inst, action, ...)
-        if action.invobject and action.invobject:HasTag("slingshot") then
-            return inst:HasTag("pebblemaker") and (inst.sg.slingshot_charge and inst.sg:HasStateTag("slingshot_ready") and "slingshot_cast" or "slingshot_charge")
-        end
-
-        if action.invobject and action.invobject:HasTag("slingshot_claire") then
-            return inst.components.channelcaster:IsChanneling() and "wixie_slings_a_rock" or "start_channelcast"
-        end
-
-        if action.invobject and action.invobject:HasTag("wixiegun") then
-            return "wixieshootsagun"
-        end
-
-        if not inst.sg.currentstate.name ~= "slingshot_charge" then
-            return _OldSpellCast(inst, action, ...)
-        end
-    end
-
     local _OldPick = inst.actionhandlers[ACTIONS.PICK].deststate
     inst.actionhandlers[ACTIONS.PICK].deststate = function(inst, action, ...)
         return (inst.components.rider ~= nil and
@@ -96,8 +77,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             or _OldPickUp(inst, action, ...)
     end
 
-    local actionhandlers =
-    {
+    local actionhandlers = {
         ActionHandler(ACTIONS.WOBY_COMMAND, function(inst, action) return "play_woby_whistle" end),
         ActionHandler(ACTIONS.WOBY_STAY, function(inst, action) return "play_woby_whistle" end),
         ActionHandler(ACTIONS.WOBY_HERE, function(inst, action) return "play_woby_whistle" end),
@@ -110,6 +90,11 @@ env.AddStategraphPostInit("wilson", function(inst)
             inst.wixie_taunt_count = 0
 
             return "wixie_taunt"
+        end),
+        ActionHandler(ACTIONS.WIXIE_SLINGSHOT, function(inst, action)
+            return action.invobject and (action.invobject:HasTag("slingshot") and inst:HasTag("pebblemaker") and (inst.sg.slingshot_charge and inst.sg:HasStateTag("slingshot_ready") and "slingshot_cast" or "slingshot_charge")
+                or action.invobject:HasTag("slingshot_claire") and (inst.components.channelcaster:IsChanneling() and "wixie_slings_a_rock" or "start_channelcast")
+                or action.invobject:HasTag("wixiegun") and "wixieshootsagun")
         end)
     }
 

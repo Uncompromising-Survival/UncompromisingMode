@@ -123,7 +123,6 @@ STRINGS = GLOBAL.STRINGS
 	DESCRIBE.SLINGSHOTAMMO_SLOW = "How resourceful! Now if she could just stay out of trouble..."
 	DESCRIBE.SLINGSHOTAMMO_FREEZE = "How resourceful! Now if she could just stay out of trouble..."
 	DESCRIBE.SLINGSHOTAMMO_POOP = "How resourceful! Now if she could just stay out of trouble..."
-	
 	ANNOUNCE.ANNOUNCE_WOBY_WORK =
 	{
 		"Woby, come help me!",
@@ -151,9 +150,6 @@ STRINGS = GLOBAL.STRINGS
 		"Paws there Woby! Heh.",
 		"Sit! Stay? Just... don't move!",
 	}
-
-	STRINGS.ACTIONS.WIXIE_TAUNT = "Taunt!"
-	
 	STRINGS.SKILLTREE.WALTER.WALTER_AMMO_SHATTERSHOTS_TITLE = "Deprecated"
 	STRINGS.SKILLTREE.WALTER.WALTER_AMMO_SHATTERSHOTS_DESC = "No longer helps Walter."
 	STRINGS.SKILLTREE.WALTER.WALTER_AMMO_LUCKY_TITLE = "Deprecated"
