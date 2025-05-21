@@ -195,8 +195,8 @@ local inventoryitems =
     "yellow_vomit",
     "yellowgem_cracked",
     "zaspberry",
+    "zaspberry_lesser",
     "zaspberryparfait",
-
     "um_beegun",
     "um_beegun_cherry",
     "bulletbee",
