@@ -1,12 +1,135 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.2.4) ~  Much Love, Ferib 
+local WixiePiano = require("screens/WixiePiano")
 
-]]--
+local assets = {
+    Asset("ANIM", "anim/wixie_piano.zip")
+}
 
-local v0=require("screens/WixiePiano");local v1={Asset("ANIM","anim/wixie_piano.zip")};local v2={};local function v3(v4)local v16=v4.Pianoe:value();if (v16==ThePlayer) then local v38=v0();TheFrontEnd:PushScreen(v38);end end local function v5(v4,v6)v4.valid_cursee_id=v6.userid;v4.Pianoe:set_local(v6);v4.Pianoe:set(v6);v4.components.activatable.inactive=true;end local function v7(v4)v4:ListenForEvent("SetPianoedirty",v3);end local function v8(v4)v4.SoundEmitter:PlaySound("dontstarve/sanity/creature2/dissappear");local v20=SpawnPrefab("wixie_piano_card");v20.Transform:SetPosition(v4.Transform:GetWorldPosition());v20.name="Dulce Vetus Melodias";Launch2(v20,v4,2,0,1,0.5);end local function v9(v4)v4.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_pulled");local v22=TheSim:FindFirstEntityWithTag("puzzle_charles");v22.final_code_ready=true;TheNet:SystemMessage("Music is in the air...");SpawnPrefab("statue_transition").Transform:SetPosition(v4:GetPosition():Get());SpawnPrefab("statue_transition_2").Transform:SetPosition(v4:GetPosition():Get());end local function v10(v4)v4.SoundEmitter:PlaySound("dontstarve/maxwell/breakchains");local v24=SpawnPrefab("wixie_piano_card");v24.Transform:SetPosition(v4.Transform:GetWorldPosition());v24.name="Umbra magi";Launch2(v24,v4,2,0,1,0.5);end local function v11(v12)local v26=CreateEntity();v26.entity:AddTransform();v26.entity:AddAnimState();v26.entity:AddSoundEmitter();v26.entity:AddDynamicShadow();v26.entity:AddNetwork();v26.AnimState:SetBuild("wixie_piano");v26.AnimState:SetBank("wixie_piano");v26.AnimState:PlayAnimation("idle",true);v26.Pianoe=net_entity(v26.GUID,"SetPianoe.plyr","SetPianoedirty");v26:DoTaskInTime(0,v7);MakeObstaclePhysics(v26,1);v26:AddTag("wixie_piano");v26.entity:SetPristine();if  not TheWorld.ismastersim then return v26;end v26:AddComponent("activatable");v26.components.activatable.OnActivate=v5;v26.components.activatable.inactive=true;v26.components.activatable.quickaction=true;v26.components.activatable.standingaction=true;v26:AddComponent("inspectable");v26:ListenForEvent("pianopuzzlecomplete_1",v8);v26:ListenForEvent("pianopuzzlecomplete_2",v9);v26:ListenForEvent("pianopuzzlecomplete_3",v10);return v26;end local function v13(v4,v14)return ((v4.name~=nil) and v4.name) or nil;end local function v15()local v32=CreateEntity();v32.entity:AddTransform();v32.entity:AddAnimState();v32.entity:AddSoundEmitter();v32.entity:AddNetwork();MakeInventoryPhysics(v32);v32.AnimState:SetBank("mapscroll");v32.AnimState:SetBuild("mapscroll");v32.AnimState:PlayAnimation("idle");MakeInventoryFloatable(v32,"med",nil,0.75);v32:AddTag("irreplacable");v32.entity:SetPristine();if  not TheWorld.ismastersim then return v32;end v32:AddComponent("inspectable");v32.components.inspectable.getspecialdescription=v13;v32:AddComponent("named");v32:AddComponent("inventoryitem");v32:AddComponent("fuel");v32.components.fuel.fuelvalue=TUNING.SMALL_FUEL;MakeSmallBurnable(v32,TUNING.SMALL_BURNTIME);MakeSmallPropagator(v32);MakeHauntableLaunch(v32);v32.persists=false;return v32;end return Prefab("wixie_piano",v11,v1,v2),Prefab("wixie_piano_card",v15);
+local function OnPianoedDirty(inst)
+    if inst.Pianoed:value() == ThePlayer then
+        TheFrontEnd:PushScreen(WixiePiano())
+    end
+end
+
+local function OnActivate(inst, doer)
+    inst.valid_cursee_id = doer.userid
+    inst.Pianoed:set_local(doer)
+    inst.Pianoed:set(doer)
+    inst.components.activatable.inactive = true
+end
+
+local function SetupPianoedDirty(inst)
+    inst:ListenForEvent("SetPianoeDirty", OnPianoedDirty)
+end
+
+local function piano1(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/sanity/creature2/dissappear")
+    local card = SpawnPrefab("wixie_piano_card")
+    card.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    card.name = "Dulce Vetus Melodias"
+    Launch2(card, inst, 2, 0, 1, 0.5)
+end
+
+local function piano2(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/common/teleportato/teleportato_pulled")
+    local charles = TheSim:FindFirstEntityWithTag("puzzle_charles")
+    charles.final_code_ready = true
+    TheNet:SystemMessage("Music is in the air...")
+    SpawnPrefab("statue_transition").Transform:SetPosition(inst:GetPosition():Get())
+    SpawnPrefab("statue_transition_2").Transform:SetPosition(inst:GetPosition():Get())
+end
+
+local function piano3(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/maxwell/breakchains")
+    local card = SpawnPrefab("wixie_piano_card")
+    card.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    card.name = "Umbra magi"
+    Launch2(card, inst, 2, 0, 1, 0.5)
+end
+
+local function fn(v12)
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddDynamicShadow()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBuild("wixie_piano")
+    inst.AnimState:SetBank("wixie_piano")
+    inst.AnimState:PlayAnimation("idle", true)
+
+    inst.Pianoed = net_entity(inst.GUID, "Pianoed.wixie_piano", "SetPianoeDirty")
+
+    inst:DoTaskInTime(0, SetupPianoedDirty)
+
+    MakeObstaclePhysics(inst, 1)
+
+    inst:AddTag("wixie_piano")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("activatable")
+    inst.components.activatable.OnActivate = OnActivate
+    inst.components.activatable.inactive = true
+    inst.components.activatable.quickaction = true
+    inst.components.activatable.standingaction = true
+
+    inst:AddComponent("inspectable")
+
+    inst:ListenForEvent("pianopuzzlecomplete_1", piano1)
+    inst:ListenForEvent("pianopuzzlecomplete_2", piano2)
+    inst:ListenForEvent("pianopuzzlecomplete_3", piano3)
+
+    return inst
+end
+
+local function getdesc(inst, viewer)
+    return inst.name
+end
+
+local function pianocardfn()
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+    MakeInventoryFloatable(inst, "med", nil, 0.75)
+
+    inst.AnimState:SetBank("mapscroll")
+    inst.AnimState:SetBuild("mapscroll")
+    inst.AnimState:PlayAnimation("idle")
+
+    inst:AddTag("irreplacable")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("inspectable")
+    inst.components.inspectable.getspecialdescription = getdesc
+
+    inst:AddComponent("named")
+
+    inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
+
+    MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+    MakeSmallPropagator(inst)
+    MakeHauntableLaunch(inst)
+
+    inst.persists = false
+
+    return inst
+end
+
+return Prefab("wixie_piano", fn, assets), Prefab("wixie_piano_card", pianocardfn)
