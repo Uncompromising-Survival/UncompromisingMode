@@ -75,17 +75,17 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
                                                     local ground_collision = TheWorld.Map:IsPassableAtPoint(vx, vy, vz)
                                                     local boat_collision = TheWorld.Map:GetPlatformAtPoint(vx, vz)
                                                     local ocean_collision = TheWorld.Map:IsOceanAtPoint(vx, vy, vz)
-                                                    local on_water = nil
+                                                    --local on_water = nil
 
-                                                    if TUNING.DSTU.ISLAND_ADVENTURES then
+                                                    --[[if TUNING.DSTU.ISLAND_ADVENTURES then
                                                         on_water = IsOnWater(vx, vy, vz)
-                                                    end
+                                                    end]]
 
                                                     if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
                                                         if v ~= nil and v.components.locomotor ~= nil and vx ~= nil and (ground_collision or boat_collision or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
-                                                            if not v:HasTag("aquatic") and not on_water or v:HasTag("aquatic") and on_water then
+                                                            --if not v:HasTag("aquatic") and not on_water or v:HasTag("aquatic") and on_water then
                                                                 v.Transform:SetPosition(vx, vy, vz)
-                                                            end
+                                                            --end
                                                         end
                                                     end
                                                 end
@@ -127,17 +127,17 @@ function WixieShove(inst, target, speed, billiard, distancemod, bonus_ammo_reduc
                     local ground_target = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
                     local boat_target = TheWorld.Map:GetPlatformAtPoint(dx, dz)
                     local ocean_target = TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
-                    local on_water_target = nil
+                    --local on_water_target = nil
 
-                    if TUNING.DSTU.ISLAND_ADVENTURES then
+                    --[[if TUNING.DSTU.ISLAND_ADVENTURES then
                         on_water_target = IsOnWater(dx, dy, dz)
-                    end
+                    end]]
 
                     if not (target.sg ~= nil and (target.sg:HasStateTag("swimming") or target.sg:HasStateTag("invisible"))) then
                         if target ~= nil and target.components.locomotor ~= nil and dx ~= nil and (ground_target or boat_target or ocean_target and target.components.locomotor:CanPathfindOnWater() or target.components.tiletracker ~= nil and not target:HasTag("whale")) then
-                            if not target:HasTag("aquatic") and not on_water_target or target:HasTag("aquatic") and on_water_target then
+                            --if not target:HasTag("aquatic") and not on_water_target or target:HasTag("aquatic") and on_water_target then
                                 target.Transform:SetPosition(dx, dy, dz)
-                            end
+                            --end
                         end
                     end
                 end
