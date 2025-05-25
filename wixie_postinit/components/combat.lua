@@ -10,7 +10,10 @@ env.AddComponentPostInit("combat", function(self)
 
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
-        if attacker and attacker.sg and attacker.sg.mem.wixiefrozentargetshove then return true end
+        if attacker and attacker.sg then
+            if attacker.sg.mem.wixiefrozentargetshove then return true end
+            if attacker.sg.mem.dontuseweaponinstate then weapon = nil end
+        end
         return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
 end)
