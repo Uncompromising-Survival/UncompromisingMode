@@ -108,16 +108,16 @@ local function TriggerPocketResurrection(self, item)
 end
 
 local function HasPocketResurrection(self)
-    if self.inst.components.inventory then
-        local item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
-        if not item then
-            item = self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-        end
-        if not item then
-            item = self.inst.components.inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
+    local inventory = self.inst.components.inventory
+    if inventory then
+        local item = inventory:GetEquippedItem(EQUIPSLOTS.NECK)
+        if not item or not (item.prefab == "amulet" or item:HasTag("resurrector")) then
+            local bodyslot = inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+            item = bodyslot ~= nil and (bodyslot.prefab == "amulet" or bodyslot:HasTag("resurrector")) and bodyslot
+                or inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
         end
         if self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
-            if item and (item.prefab == "amulet" or item.prefab == "wortox_reviver") then
+            if item then
                 return item
             end
         end
@@ -160,7 +160,7 @@ end
 
 local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     local res_item = HasPocketResurrection(self)
-    local maykill = amount <= 0
+    local maykill = math.max(amount, self.minhealth) <= 0
     if TUNING.DSTU.SHADOW_WATHOM and self.inst:HasTag("wathom") then
         if maykill and cause == "shadowvortex" and TUNING.DSTU.COMPROMISING_SHADOWVORTEX and not self.inst.sg:HasStateTag("blackpuddle_death") then
             self.inst.components.rider:ActualDismount()
