@@ -250,8 +250,8 @@ end
 
 local function FindTarget(inst, radius)
     return FindEntity(inst, radius, function(guy)
-        return (not guy.sg or guy.sg:HasStateTag("hiding")) and inst.components.combat:CanTarget(guy) and inst.components.freezable and not inst.components.freezable:IsFrozen()
-    end, "_combat", "playerghost", "player")
+        return (not guy.sg or not guy.sg:HasStateTag("hiding")) and inst.components.combat:CanTarget(guy) and not (inst.components.freezable and inst.components.freezable:IsFrozen())
+    end, {"_combat", "player"}, "playerghost")
 end
 
 local function NormalRetarget(inst) return FindTarget(inst, 8) end
