@@ -25,7 +25,7 @@ STRINGS = GLOBAL.STRINGS
 	ANNOUNCE.ANNOUNCE_SHARX = "Come and get me you bottom feeders!"
 	
 	ANNOUNCE.ANNOUNCE_TREASURE = "Ye Ol' Dublooms? Or maybe something I can eat?"
-	ANNOUNCE.ANNOUNCE_TREASURE_DISCOVER = "Were off to find some treasure! (And it's all mine!)"
+	ANNOUNCE.ANNOUNCE_TREASURE_DISCOVER = "We're off to find some treasure! (And it's all mine!)"
 	ANNOUNCE.ANNOUNCE_MORETREASURE = "More treasure abound? This day just keeps getting better?"
 	ANNOUNCE.ANNOUNCE_OTHER_WORLD_TREASURE = "This treasure is half way across the world!"
 	ANNOUNCE.ANNOUNCE_OTHER_WORLD_PLANT = "Wrong climate, I think? I ain't no green thumb!"
@@ -120,7 +120,7 @@ DESCRIBE.CAVIAR = "It's some stupid fancy rich folk food."
 DESCRIBE.CORMORANT = "No idea what kind of bird that is."
 DESCRIBE.SEAGULL = "Hey! You're the one that ate my chips at the boardwalk!"
 DESCRIBE.SEAGULL_WATER = "Hey! You're the one that ate my chips at the boardwalk!"
-DESCRIBE.TOUCAN = "I like it's colors. Thankfully it's a bird, and it won't understand me."
+DESCRIBE.TOUCAN = "I like its colors. Thankfully it's a bird, and it won't understand me."
 DESCRIBE.PARROT = "Repeat after me: I am an idiot! Wait, I mean-"
 DESCRIBE.PARROT_PIRATE = "You're pillaging days are over when I get my hands on you!"
 
@@ -147,7 +147,7 @@ DESCRIBE.TAR_EXTRACTOR =
 		{
 			ON = "Get that goop out of the ocean!",
 			OFF = "It ain't uncooping anything right now.",
-			LOWFUEL = "It needs fuel to do it's job. Ugh!.",
+			LOWFUEL = "It needs fuel to do its job. Ugh!.",
 		}
 
 DESCRIBE.TAR = "It's sticky, smelly, and highly flamable!"
@@ -233,7 +233,7 @@ DESCRIBE.CUTLASS = "I'll keep it for the style, but I'd rather stick to my sling
 
 DESCRIBE.SUNKEN_BOAT_TRINKET_1 = "I'm not old enough to ask questions." --sextant
 DESCRIBE.SUNKEN_BOAT_TRINKET_2 = "I'd sink you in a second!" --toy boat
-DESCRIBE.SUNKEN_BOAT_TRINKET_3 = "It's wick isn't even flamable!" --candle
+DESCRIBE.SUNKEN_BOAT_TRINKET_3 = "Its wick isn't even flamable!" --candle
 DESCRIBE.SUNKEN_BOAT_TRINKET_4 = "It's not very sea worthy." --sea worther
 DESCRIBE.SUNKEN_BOAT_TRINKET_5 = "I caught a boot! Score!" --boot
 DESCRIBE.TRINKET_IA_13 = "Delicious soder..." --orange soda
@@ -245,7 +245,7 @@ DESCRIBE.TRINKET_IA_18 = "I hate porcelain!" --vase
 DESCRIBE.TRINKET_IA_19 = "I HATE the pill." --brain cloud pill
 DESCRIBE.TRINKET_IA_20 = "I'm not old enough to ask questions." --sextant
 DESCRIBE.TRINKET_IA_21 = "I'd sink you in a second!" --toy boat
-DESCRIBE.TRINKET_IA_22 = "It's wick isn't even flammable!" --wine candle
+DESCRIBE.TRINKET_IA_22 = "Its wick isn't even flammable!" --wine candle
 DESCRIBE.TRINKET_IA_23 = "Water and electronics don't go well together." --broken aac device
 DESCRIBE.EARRING = "Mom said I could get one when I'm older!"
 		
@@ -410,7 +410,7 @@ DESCRIBE.WIND_CONCH = "Alright magic conch, what do we do now?\n...Nothing?"
 DESCRIBE.WINDSTAFF = "I'm a wind wizard!"
 
 DESCRIBE.DRAGOON = "You know what rhymes with Dragoon! Buffoon! Hah!"
-DESCRIBE.DRAGOONHEART = "I'll eat it, and gain it's power! Or just heartburn..."
+DESCRIBE.DRAGOONHEART = "I'll eat it, and gain its power! Or just heartburn..."
 DESCRIBE.DRAGOONSPIT = "Hah! Nice one!"
 DESCRIBE.DRAGOONEGG = "It's already hard boiled."
 DESCRIBE.DRAGOONDEN = "I KNEW Wolfgang was a cave man!"
