@@ -128,10 +128,6 @@ local function OutOfTheWoodsYet(target)
 		target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
 		target.thicketcheck:Cancel()
 		target.thicketcheck = nil
-	elseif target.components.combat ~= nil and not (target.components.inventory ~= nil and target.components.inventory:EquipHasTag("bramble_resistant")) and math.random() < 0.05 and not target.thorns_cooldown then
-		target.thorns_cooldown = target:DoTaskInTime(1,function(target) target.thorns_cooldown = nil end) -- can't get repeatedly pricked
-		target.components.combat:GetAttacked(the_bush, TUNING.CACTUS_DAMAGE)
-		target:PushEvent("thorns")	
 	end
 end
 

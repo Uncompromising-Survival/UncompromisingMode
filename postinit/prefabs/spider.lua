@@ -291,11 +291,6 @@ env.AddPrefabPostInit("spider", function(inst)
 
 	inst:AddTag("spider_regular")
 	
-	if inst.components.combat ~= nil and TUNING.DSTU.REGSPIDERJUMP then
-        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
-		--inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
-	end
-
 	
    --[[ inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(5, 13) --set specific values
