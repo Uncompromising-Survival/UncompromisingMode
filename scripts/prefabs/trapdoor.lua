@@ -41,6 +41,7 @@ local function ApplyHooded(inst,child)
 	if child then
 		child.hooded = true
 		child.AnimState:SetBuild("spider_trapdoor_hooded")
+        child.components.named:SetName("Hooded Widower")
 		child.components.lootdropper:AddChanceLoot("silk", 1.00)
 	end
 end
@@ -112,6 +113,7 @@ local function workcallback(inst, worker, workleft)
         local pos = inst:GetPosition()
         SpawnPrefab("rock_break_fx").Transform:SetPosition(pos:Get())
         inst.components.lootdropper:DropLoot(pos)
+        inst.components.childspawner:ReleaseAllChildren(nil, "spider_trapdoor")
         local grass = FindEntity(inst, 0.5, nil, "trapdoorgrass")
         if grass ~= nil and grass.components.workable ~= nil then
             grass.components.workable:WorkedBy(worker)
