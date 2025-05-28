@@ -385,4 +385,4 @@ local states =
     },
 }
 
-return StateGraph("shadowmaxwell", states, events, "idle", actionhandlers)
+return StateGraph("real_shadowmaxwell", states, events, "idle", actionhandlers)

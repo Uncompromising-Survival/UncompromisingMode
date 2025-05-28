@@ -391,7 +391,7 @@ local function OnAttacked(inst, data)
 end
 
 local function Exclamationfy(string)
-    if not ThePlayer:HasTag("amped") then
+    if not ThePlayer or not ThePlayer:HasTag("amped") then
         return string
     end
 
@@ -416,6 +416,8 @@ local function common_postinit(inst)
     inst:AddTag("monster")
     inst:AddTag("playermonster")
     inst:AddTag("nightvision")
+
+    inst.components.talker.mod_str_fn = Exclamationfy
 
     inst.OnLoad = onload
     inst.OnNewSpawn = onload
@@ -468,7 +470,6 @@ local function master_postinit(inst)
     -- choose which sounds this character will play
     inst.soundsname = "wathomvoiceevent"
     inst.talker_path_override = "wathomcustomvoice/"
-    inst.components.talker.mod_str_fn = Exclamationfy
     -- Uncomment if "wathgrithr"(Wigfrid) or "webber" voice is used
     --inst.talker_path_override = "dontstarve_DLC001/characters/"
 

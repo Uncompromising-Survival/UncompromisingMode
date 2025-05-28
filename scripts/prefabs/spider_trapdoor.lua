@@ -413,6 +413,8 @@ local function create_common(build)
     inst:AddComponent("inspectable")
     inst:AddComponent("debuffable")
     inst:AddComponent("inventory")
+    inst:AddComponent("named")
+
     -----------------
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.nobounce = true

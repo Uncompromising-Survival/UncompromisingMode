@@ -44,20 +44,6 @@ local function OnWorked(inst, worker)
     end
 end
 
-local function OnDeploy(inst, pt, deployer)
-    local flower = SpawnPrefab("planted_flower")
-    if flower then
-        flower:PushEvent("growfrombutterfly")
-        flower.Transform:SetPosition(pt:Get())
-        inst.components.stackable:Get():Remove()
-        AwardPlayerAchievement("growfrombutterfly", deployer)
-        TheWorld:PushEvent("CHEVO_growfrombutterfly",{target=flower,doer=deployer})
-        if deployer and deployer.SoundEmitter then
-            deployer.SoundEmitter:PlaySound("dontstarve/common/plant")
-        end
-    end
-end
-
 local function OnMutate(inst, transformed_inst)
 	if transformed_inst then
 		transformed_inst.sg:GoToState("idle")
@@ -103,7 +89,6 @@ local function fn()
 
     MakeFeedableSmallLivestockPristine(inst)
 
-	inst:AddTag("_named")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -115,7 +100,6 @@ local function fn()
     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
     inst.components.locomotor:SetTriggersCreep(false)
     inst:SetStateGraph("SGbutterfly")
-
     ---------------------
     inst:AddComponent("stackable")
     inst:AddComponent("inventoryitem")
@@ -123,47 +107,34 @@ local function fn()
     inst.components.inventoryitem.canbepickedupalive = true
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.pushlandedevents = false
-
     ------------------
     inst:AddComponent("pollinator")
-
     ------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(1)
-
     ------------------
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "butterfly_body"
-
     ------------------
     inst:AddComponent("knownlocations")
 
     MakeSmallBurnableCharacter(inst, "butterfly_body")
     MakeTinyFreezableCharacter(inst, "butterfly_body")
-
     ------------------
     inst:AddComponent("inspectable")
 	inst.components.inspectable.nameoverride = "BUTTERFLY"
     ------------------
-	
-	inst:AddComponent("named")
-	inst.components.named:SetName("Buttery Fly")
-		
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:AddRandomLoot("butter", 1)
     inst.components.lootdropper.numrandomloot = 1
-
     ------------------
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.NET)
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(OnWorked)
-
     ------------------
     inst:AddComponent("tradable")
-
     ------------------
-
     MakeHauntablePanicAndIgnite(inst)
 
     inst:SetBrain(brain)

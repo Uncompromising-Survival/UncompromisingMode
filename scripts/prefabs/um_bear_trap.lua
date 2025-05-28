@@ -60,16 +60,6 @@ local function onfinished_normal(inst)
     end
 end
 
-local function debuffremoval(inst)
-    if inst.latchedtarget and inst.components.locomotor then
-        inst.components.locomotor:RemoveExternalSpeedMultiplier(inst.latchedtarget, "um_bear_trap")
-        if inst._bear_trap_speedmulttask then
-            inst._bear_trap_speedmulttask:Cancel()
-            inst._bear_trap_speedmulttask = nil
-        end
-    end
-end
-
 local function OnExplode(inst, target)
     if not target or not target:IsValid() then
         onfinished_normal(inst)
@@ -467,8 +457,6 @@ local function projectilefn()
 
     inst.persists = false
 
-    inst:AddComponent("locomotor")
-
     -- inst:DoTaskInTime(0.1, function(inst) inst:DoPeriodicTask(0, TestProjectileLand) end)
 
     return inst
@@ -728,8 +716,6 @@ local function equiptoothfn()
     inst.latchedtarget = nil
     inst.Snapped = false
 
-    inst:AddComponent("locomotor")
-
     CommonMine(inst, "player")
 
     inst:AddComponent("complexprojectile")
@@ -816,8 +802,6 @@ local function equipgoldfn()
 
     inst.latchedtarget = nil
     inst.Snapped = false
-
-    inst:AddComponent("locomotor")
 
     CommonMine(inst, "player")
 

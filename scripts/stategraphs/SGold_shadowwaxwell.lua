@@ -750,4 +750,4 @@ local states =
     }
 }
 
-return StateGraph("shadowmaxwell", states, events, "idle", actionhandlers)
+return StateGraph("old_shadowmaxwell", states, events, "idle", actionhandlers)
