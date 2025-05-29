@@ -320,7 +320,6 @@ local function fn()
                 end
 
                 if v:HasTag("insect") then
-                    v.components.health:DoDelta(-1, false, "smog")
                     if v.components.hauntable ~= nil and v.components.hauntable.panicable then
                         v.components.hauntable:Panic(5 + math.random(5))
                     end
