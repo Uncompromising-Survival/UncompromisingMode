@@ -61,12 +61,11 @@ AddPrefabPostInit("world", function(inst)
             end
         end
     end)
-
+	GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
     if not inst.ismastersim then
         return
     end
 end)
-
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_descriptions/announcestrings.lua")
@@ -433,3 +432,5 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
+
+
