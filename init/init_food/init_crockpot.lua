@@ -277,6 +277,7 @@ recipes.bunnystew.test = function(cooker, names, tags)
     return (names.rabbit) and (tags.frozen and tags.frozen == 2) and
         (not tags.inedible) and (not tags.foliage)
 end
+recipes.bunnystew.card_def = { ingredients = { { "rabbit", 1 }, { "ice", 2 }}}
 -- Original: test = function(cooker, names, tags) return (tags.meat and tags.meat < 1) and (tags.frozen and tags.frozen >= 2) and (not tags.inedible) end
 if GetModConfigData("bonestew_nerf") then
     recipes.bonestew.test = function(cooker, names, tags)
