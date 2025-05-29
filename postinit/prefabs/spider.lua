@@ -16,7 +16,7 @@ local SPIDER_DIVINING_DISTANCES =
             {maxdist=20, describe="warm", pingtime=3},
             {maxdist=30, describe="cold", pingtime=5},
         }
-		
+        
 local SPIDER_DIVINING_MAXDIST = 30000
 local SPIDER_DIVINING_DEFAULTPING = 3
 
@@ -51,7 +51,7 @@ end
 
 local function CheckTargetPiece(inst)
     --if inst.components.equippable:IsEquipped() and inst.components.inventoryitem.owner then
-		inst.SoundEmitter:KillSound("ping")
+        inst.SoundEmitter:KillSound("ping")
         local intensity = 0
         local closeness = nil
         local fxname = nil
@@ -59,18 +59,18 @@ local function CheckTargetPiece(inst)
         local nextpingtime = SPIDER_DIVINING_DEFAULTPING
         if target ~= nil then
             local distsq = inst:GetDistanceSqToInst(target)
-			
-			if distsq < 50 then
-				intensity = 1
-			elseif distsq < 80 and distsq >= 50 then
-				intensity = 0.8
-			elseif distsq < 120 and distsq >= 80 then
-				intensity = 0.6
-			elseif distsq < 150 and distsq >= 120 then
-				intensity = 0.4
-			else
-				intensity = 0.2
-			end
+            
+            if distsq < 50 then
+                intensity = 1
+            elseif distsq < 80 and distsq >= 50 then
+                intensity = 0.8
+            elseif distsq < 120 and distsq >= 80 then
+                intensity = 0.6
+            elseif distsq < 150 and distsq >= 120 then
+                intensity = 0.4
+            else
+                intensity = 0.2
+            end
             --intensity = math.max(0, 1 - (distsq/(SPIDER_DIVINING_MAXDIST*SPIDER_DIVINING_MAXDIST) ))
             for k,v in ipairs(SPIDER_DIVINING_DISTANCES) do
                 closeness = v
@@ -94,11 +94,11 @@ local function CheckTargetPiece(inst)
         --inst.SoundEmitter:PlaySound("dontstarve/common/diviningrod_ping")
         inst.SoundEmitter:PlaySound("dontstarve/common/diviningrod_ping", "ping")
         inst.SoundEmitter:SetParameter("ping", "intensity", intensity)
-		inst.task:Cancel()
-		inst.task = nil
-		if not inst.components.health:IsDead() then
-			inst.task = inst:DoTaskInTime(nextpingtime or 1, CheckTargetPiece)
-		end
+        inst.task:Cancel()
+        inst.task = nil
+        if not inst.components.health:IsDead() then
+            inst.task = inst:DoTaskInTime(nextpingtime or 1, CheckTargetPiece)
+        end
         --inst.alarmtask = inst:DoTaskInTime(2, CheckTargetPiece)
     --end 
 end
@@ -153,28 +153,25 @@ local function DoSpawnSpikes(inst, pts, level, cache)
             end
 
             local spike = SpawnPrefab("nightmaregrowth")
-				spike.Transform:SetPosition(v:Get())
-				spike:growfn()
-				
-				spike:WatchWorldState("isday", function()
-					spike:DoTaskInTime(0.5 + math.random(), function(spike)
-						local despawnfx = SpawnPrefab("shadow_despawn")
-						despawnfx.Transform:SetPosition(spike.Transform:GetWorldPosition())
-						spike.AnimState:PlayAnimation("shrink")
-						spike:ListenForEvent("animover", spike.Remove)
-					end)
-				end)
-				
-			local x, y, z = spike.Transform:GetWorldPosition()
-			if #TheSim:FindEntities(x, y, z, 5, {"structure", "tree", "boulder"}) > 0 then
-				spike:Remove()
-			end
+            spike.Transform:SetPosition(v:Get())
+            spike:growfn()
+            spike:WatchWorldState("isday", function()
+                spike:DoTaskInTime(0.5 + math.random(), function(spike)
+                    local despawnfx = SpawnPrefab("shadow_despawn")
+                    despawnfx.Transform:SetPosition(spike.Transform:GetWorldPosition())
+                    spike.AnimState:PlayAnimation("shrink")
+                    spike:ListenForEvent("animover", spike.Remove)
+                end)
+            end)
+            local x, y, z = spike.Transform:GetWorldPosition()
+            if #TheSim:FindEntities(x, y, z, 5, {"structure", "tree", "boulder"}) > 0 then
+                spike:Remove()
+            end
         end
     end
 end
 
 local function SpawnSpikes(inst)
-
     local spikes, source = GenerateSpiralSpikes(inst)
     if #spikes > 0 then
         local cache =
@@ -195,76 +192,91 @@ local function onnear(inst, target)
     SpawnSpikes(target)
 end
 
-
-
-
-
-
-
-
 local variations = {1, 2, 3, 4, 5}
 
 local function DoSpikeAttack(inst, pt)
-	local x, y, z = pt:Get()
-	local inital_r = 1
-	x = GetRandomWithVariance(x, inital_r)
-	z = GetRandomWithVariance(z, inital_r)
+    local x, y, z = pt:Get()
+    local inital_r = 1
+    x = GetRandomWithVariance(x, inital_r)
+    z = GetRandomWithVariance(z, inital_r)
 
-	shuffleArray(variations)
+    shuffleArray(variations)
 
-	local num = math.random(2, 4)
+    local num = math.random(2, 4)
     local dtheta = PI * 2 / num
     local thetaoffset = math.random() * PI * 2
     local delaytoggle = 0
-	for i = 1, num do
-		local r = 1.1 + math.random() * 1.75
-		local theta = i * dtheta + math.random() * dtheta * 0.8 + dtheta * 0.2
+    for i = 1, num do
+        local r = 1.1 + math.random() * 1.75
+        local theta = i * dtheta + math.random() * dtheta * 0.8 + dtheta * 0.2
         local x1 = x + r * math.cos(theta)
         local z1 = z + r * math.sin(theta)
         if TheWorld.Map:IsVisualGroundAtPoint(x1, 0, z1) and not TheWorld.Map:IsPointNearHole(Vector3(x1, 0, z1)) then
             local spike = SpawnPrefab("minimoonspider_spike")
             spike.Transform:SetPosition(x1, 0, z1)
-			spike:SetOwner(inst)
-			if variations[i + 1] ~= 1 then
-				spike.AnimState:OverrideSymbol("spike01", "spider_spike", "spike0"..tostring(variations[i + 1]))
-			end
+            spike:SetOwner(inst)
+            if variations[i + 1] ~= 1 then
+                spike.AnimState:OverrideSymbol("spike01", "spider_spike", "spike0"..tostring(variations[i + 1]))
+            end
         end
     end
 end
 
-local function OnFullMoon(self, inst, isfullmoon)
-
-	local node = TheWorld.Map:FindNodeAtPoint(self.Transform:GetWorldPosition())
-
-	if TheWorld.state.isfullmoon and not self.sg:HasStateTag("jumping") and not self.components.health:IsDead() then
-		self:DoTaskInTime(math.random(2,5), function(inst)
-		local mspuff = SpawnPrefab("halloween_moonpuff")
-		mspuff.Transform:SetPosition(self.Transform:GetWorldPosition())
-			--self.components.halloweenmoonmutable:Mutate()
-			inst:AddTag("spider_moon")
-			inst:RemoveTag("spider_regular")	
-			inst.AnimState:SetBank("spider_moon")
-			inst.AnimState:SetBuild("DS_spider_moon")
-			
-			inst.sg:GoToState("taunt")
-			end)
-	elseif node ~= nil and node.tags ~= nil and not table.contains(node.tags, "lunacyarea") and not self.sg:HasStateTag("jumping") and not self.components.health:IsDead() then
-		
-		self:DoTaskInTime(math.random(2,5), function(inst)
-			if inst:HasTag("spider_moon") then
-				local mspuff = SpawnPrefab("halloween_moonpuff")
-				mspuff.Transform:SetPosition(self.Transform:GetWorldPosition())
-				inst:RemoveTag("spider_moon")
-				inst:AddTag("spider_regular")
-				inst.AnimState:SetBank("spider")
-				inst.AnimState:SetBuild("spider_build")
-				
-				inst.sg:GoToState("taunt")
-			end
-		end)
-	end
-
+local function OnFullMoon(inst, isfullmoon)
+    local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+    if inst.components.health and inst.components.health:IsDead() then return end
+    inst:DoTaskInTime(math.random(2,5), function(inst)
+        if inst.components.health and inst.components.health:IsDead() then return end
+        local transform
+        if isfullmoon then
+            --inst.components.halloweenmoonmutable:Mutate()
+            inst:AddTag("spider_moon")
+            inst.AnimState:SetBank("spider_moon")
+            inst.AnimState:SetBuild("DS_spider_moon")
+            transform = true
+        elseif node and node.tags and not table.contains(node.tags, "lunacyarea") and inst:HasTag("spider_moon") then
+            inst:RemoveTag("spider_moon")
+            inst.AnimState:SetBank("spider")
+            inst.AnimState:SetBuild("spider_build")
+            transform = true
+        end
+        if transform then
+            local mspuff = SpawnPrefab("halloween_moonpuff")
+            mspuff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            if not (inst.components.sleeper and inst.components.sleeper:IsAsleep() or inst.components.freezable and inst.components.freezable:IsFrozen()) then
+                inst.sg:GoToState("taunt")
+            end
+        end
+    end)
 end
+
+--[[local function OnFullMoon(inst, isfullmoon)
+    local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+    if TheWorld.state.isfullmoon and not inst.sg:HasStateTag("jumping") and not inst.components.health:IsDead() then
+        inst:DoTaskInTime(math.random(2,5), function(inst)
+            local mspuff = SpawnPrefab("halloween_moonpuff")
+            mspuff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            --inst.components.halloweenmoonmutable:Mutate()
+            inst:AddTag("spider_moon")
+            inst:RemoveTag("spider_regular")    
+            inst.AnimState:SetBank("spider_moon")
+            inst.AnimState:SetBuild("DS_spider_moon")
+            inst.sg:GoToState("taunt")
+        end)
+    elseif node ~= nil and node.tags ~= nil and not table.contains(node.tags, "lunacyarea") and not inst.sg:HasStateTag("jumping") and not inst.components.health:IsDead() then
+        inst:DoTaskInTime(math.random(2,5), function(inst)
+            if inst:HasTag("spider_moon") then
+                local mspuff = SpawnPrefab("halloween_moonpuff")
+                mspuff.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                inst:RemoveTag("spider_moon")
+                inst:AddTag("spider_regular")
+                inst.AnimState:SetBank("spider")
+                inst.AnimState:SetBuild("spider_build")
+                inst.sg:GoToState("taunt")
+            end
+        end)
+    end
+end]]
 
 local function FindTarget(inst, radius)
     return FindEntity(
@@ -285,27 +297,23 @@ local function WarriorRetarget(inst)
 end--]]
 
 env.AddPrefabPostInit("spider", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
+    if not TheWorld.ismastersim then
+        return
+    end
 
-	inst:AddTag("spider_regular")
-	
-	
    --[[ inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(5, 13) --set specific values
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)]]
-	
-	if TUNING.DSTU.MOON_TRANSFORMATIONS then
-		inst:WatchWorldState("isfullmoon", OnFullMoon)
-		OnFullMoon(inst, TheWorld.state.isfullmoon)
-	end
-	
 
-	inst.DoSpikeAttack = DoSpikeAttack
-	
-	inst:AddComponent("tradable") 
+    if TUNING.DSTU.MOON_TRANSFORMATIONS then
+        inst:WatchWorldState("isfullmoon", OnFullMoon)
+        OnFullMoon(inst, TheWorld.state.isfullmoon)
+    end
+
+    inst.DoSpikeAttack = DoSpikeAttack
+
+    inst:AddComponent("tradable") 
 end)
 
 SetSharedLootTable( 'spider_warrior',
@@ -314,32 +322,32 @@ SetSharedLootTable( 'spider_warrior',
 })
 
 env.AddPrefabPostInit("spider_warrior", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	
-	inst:RemoveComponent("lootdropper")
-	
+    if not TheWorld.ismastersim then
+        return
+    end
+    
+    inst:RemoveComponent("lootdropper")
+    
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:AddRandomLoot("silk", 1)
     inst.components.lootdropper:AddRandomLoot("spidergland", 1)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
-	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
-	
-	if inst.components.combat ~= nil then
-		inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
-	end
-		
-	inst:AddComponent("tradable") -- For Moondial Mutation.
+    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
+    
+    if inst.components.combat ~= nil then
+        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
+    end
+        
+    inst:AddComponent("tradable") -- For Moondial Mutation.
 end)
 
 env.AddPrefabPostInit("spider_dropper", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	if inst.components.combat ~= nil then
-		inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
-	end
-	
+    if not TheWorld.ismastersim then
+        return
+    end
+    if inst.components.combat ~= nil then
+        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
+    end
+    
 end)

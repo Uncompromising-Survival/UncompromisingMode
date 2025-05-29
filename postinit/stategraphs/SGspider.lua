@@ -53,43 +53,28 @@ env.AddStategraphPostInit("spider", function(inst)
         return "dontstarve/creatures/" .. creature .. "/" .. event
     end
 
-    local _OldAttackEvent = inst.events["doattack"] ~= nil and inst.events["doattack"].fn or nil
+    local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and not inst:HasTag("spider_regular") then
-                inst.sg:GoToState(
-                    data.target:IsValid()
-                    and
-                    not
-                    (
-                    inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) or
-                        (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular")))
-                    and "warrior_attack" --Do leap attack
-                    or "attack",
-                    data.target
-                )
-            else
-                if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
-                    return inst.sg:GoToState("spit_web")
-                else
-                    _OldAttackEvent(inst, data)
-                end
+            if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
+                inst.sg:GoToState("spit_web")
+                return
             end
+            _OldAttackEvent(inst, data)
         end
     end
 
-    local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst)
-        if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") and not (inst.sg:HasStateTag("caninterrupt") or inst:HasTag("forcestunned")) then
-            if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
-                if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and
-                    inst.components.combat.target ~= nil and TUNING.DSTU.SPIDERWARRIORCOUNTER then
-                    inst.sg:GoToState("evade_loop")
-                else
-                    _OldAttackedEvent(inst)
+    local _OldAttackedEvent = inst.events["attacked"] and inst.events["attacked"].fn
+    if _OldAttackedEvent then
+        inst.events["attacked"].fn = function(inst)
+            if not inst.components.health:IsDead() and inst:HasTag("spider_warrior") and not (inst.sg:HasStateTag("caninterrupt") or inst:HasTag("forcestunned")) then
+                if not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("evade") then -- don't interrupt attack or exit shield
+                    if inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider") and inst.components.combat.target and TUNING.DSTU.SPIDERWARRIORCOUNTER then
+                        inst.sg:GoToState("evade_loop")
+                        return
+                    end
                 end
             end
-        else
             _OldAttackedEvent(inst)
         end
     end
