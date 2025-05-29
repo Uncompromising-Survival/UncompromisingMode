@@ -64,7 +64,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_knockbackimmune", "buff_knockbackimmune")
             end
         end,
-        card_def = { ingredients = { { "carrot", 1 }, { "horn", 1 }, { "batwing", 1 } } },
+        card_def = { ingredients = { { "horn", 1 }, { "batwing", 2 }, { "carrot", 1 } } },
     },
 
     blueberrypancakes =
@@ -197,7 +197,7 @@ local um_preparedfoods =
                 eater.components.hayfever:SetNextSneezeTime(1440)
             end
         end,
-        card_def = { ingredients = { { "wobster_sheller_land", 1 }, { "rice", 1 }, { "carrot", 1 } } },
+        card_def = { ingredients = { { "wobster_sheller_land", 1 }, { "rice1", 1 }, { "carrot", 1 } } },
     },
 
     simpsalad =
@@ -516,7 +516,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 3 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "um_rimeweed_itemvine", 1 }, { "um_rimeweed_flower", 1 } } },
+        card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_rimeweed_itemflower", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -550,7 +550,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "um_rimeweed_flower", 1 }, { "ice", 1 } } },
+        card_def = { ingredients = { { "um_rimeweed_itemflower", 1 }, { "ice", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -616,7 +616,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 6 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "rice", 1 }, { "rice", 1 }, { "honey", 1 }}},
+        card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 }}},
     },	
     um_kebab =
     {
