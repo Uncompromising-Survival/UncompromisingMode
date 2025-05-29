@@ -429,11 +429,6 @@ local function fn()
 
     ------------------
 
-    inst:AddComponent("vetcurselootdropper")
-    inst.components.vetcurselootdropper.loot = "silksack"
-
-    ------------------
-
     inst:AddComponent("inspectable")
 
     inst:AddComponent("leader")

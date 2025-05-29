@@ -539,10 +539,6 @@ local function fn(Sim)
     inst:ListenForEvent("freeze", OnFreeze)
     inst:ListenForEvent("unfreeze", OnUnfreeze)
 
-    if TUNING.DSTU.VETCURSE ~= "off" then
-        inst:AddComponent("vetcurselootdropper")
-        inst.components.vetcurselootdropper.loot = "slobberlobber"
-    end
     inst:DoTaskInTime(10, CheckTarget)
 
     inst.SeenBase = false
