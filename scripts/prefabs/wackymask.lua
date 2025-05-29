@@ -401,7 +401,7 @@ end
 
 local function FoodScoreCalculations(container, v, owner)
     local intensity = container and (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75)
-        or v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8 or IsAVersionOfRot(v) and 1
+        or v:HasTag("fresh") and not container and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8 or IsAVersionOfRot(v) and 1
     if not intensity then return end
     TrySpawnIcon(v, owner, intensity)
 end
@@ -411,15 +411,17 @@ local function Sniffertime(owner)
     local ents = TheSim:FindEntities(x, 0, z, 20, {"_inventoryitem"}, NOTAGS)
     if ents then
         for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner() and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon") or false
+            local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner() and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon" or v.components.inventoryitem:GetGrandOwner():HasTag("lamp") or v.components.inventoryitem:GetGrandOwner():HasTag("yots_post")) or false
             if not v:HasTag("frozen") and not v.components.farmplantable then
                 FoodScoreCalculations(container, v, owner)
             end
-            if not v:HasAnyTag("balloon", "heavy", "projectile") then
-                if v:HasAnyTag("_equippable", "tool") then
-                    TrySpawnIcon(v, owner, .5)
-                end
-            end
+			if TUNING.DSTU.ITEMCHECK then
+				if not v:HasAnyTag("balloon", "heavy", "projectile") then
+					if v:HasAnyTag("_equippable", "tool") and not container then
+						TrySpawnIcon(v, owner, .5)
+					end
+				end
+			end
         end
     end
 end

@@ -1569,7 +1569,7 @@ local function TimeForACheckUp(inst, dev)
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
                 if v.components.inventoryitem:IsHeld() then
-                    if v.components.inventoryitem and v.components.inventoryitem:GetGrandOwner() ~= nil and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon") then
+                    if v.components.inventoryitem and v.components.inventoryitem:GetGrandOwner() ~= nil and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon" or v.components.inventoryitem:GetGrandOwner():HasTag("lamp") or v.components.inventoryitem:GetGrandOwner():HasTag("yots_post")) then
                         if not (v:HasTag("frozen") or v:HasTag("NORATCHECK")) then
                             FoodScoreCalculations(inst, true, v)
                         end
