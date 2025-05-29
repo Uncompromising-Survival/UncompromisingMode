@@ -268,7 +268,6 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
-    "terrorguisestuff",
 }
 
 

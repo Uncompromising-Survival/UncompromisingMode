@@ -427,8 +427,6 @@ local prefabs = {
 	"um_ocupus",
 	"um_ocupus_tentacle",
 	"um_ocupus_beak",
-	--"terrorguise",
-
 
 	"slingshotammo_secondary",
 	"slingshotammo_extras",
