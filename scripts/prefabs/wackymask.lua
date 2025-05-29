@@ -370,13 +370,6 @@ local function OnCooldown(inst)
     inst.components.useableitem.inuse = false
 end
 
-local NOTAGS = {
-    "smallcreature",
-    "_container",
-    "spore",
-    "NORATCHECK",
-}
-
 local function IsAVersionOfRot(v)
     local rotprefabs = {"spoiled_food", "rottenegg", "spoiled_fish", "spoiled_fish_small"}
     for _, rotprefab in pairs(rotprefabs) do
@@ -406,22 +399,20 @@ local function FoodScoreCalculations(container, v, owner)
     TrySpawnIcon(v, owner, intensity)
 end
 
+local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen"}
 local function Sniffertime(owner)
     local x, y, z = owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 20, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
     if ents then
         for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner() and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon" or v.components.inventoryitem:GetGrandOwner():HasTag("lamp") or v.components.inventoryitem:GetGrandOwner():HasTag("yots_post")) or false
-            if not v:HasTag("frozen") and not v.components.farmplantable then
+            local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
+            local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post")) or false
+            if not v.components.farmplantable then
                 FoodScoreCalculations(container, v, owner)
             end
-			if TUNING.DSTU.ITEMCHECK then
-				if not v:HasAnyTag("balloon", "heavy", "projectile") then
-					if v:HasAnyTag("_equippable", "tool") and not container then
-						TrySpawnIcon(v, owner, .5)
-					end
-				end
-			end
+            if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
+                TrySpawnIcon(v, owner, .5)
+            end
         end
     end
 end
