@@ -15,14 +15,14 @@ if TUNING.DSTU.MONSTERSMALLMEAT then
         {
             --{'weevole_carapace', 1},
             { 'monstersmallmeat', 0.25 },
-            { 'steelwool', 0.25 },
+            { 'steelwool', 0.33 },
         })
 else
     SetSharedLootTable("aphid_loot",
         {
             --{'weevole_carapace', 1},
             { 'monstermeat', 0.25 },
-            { 'steelwool', 0.25 },
+            { 'steelwool', 0.33 },
         })
 end
 
