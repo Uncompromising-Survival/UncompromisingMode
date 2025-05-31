@@ -231,7 +231,7 @@ end
 
 local _SpawnChild = EntityScript.SpawnChild
 function EntityScript:SpawnChild(name, ...)
-    if self:HasTag("no_epichealthbar_proxy") and name == "epichealth_proxy" then return end
+    if self:HasTag("no_epichealth_proxy") and name == "epichealth_proxy" then return end
     return _SpawnChild(self, name, ...)
 end
 
