@@ -29,6 +29,8 @@ local spore_cooldown_max = 60
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
 local HOME_TILES =
 {
+    --[WORLD_TILES.UM_MAGMA] = true,
+    --[WORLD_TILES.UM_GRASSMAGMA] = true,
     [WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
 }
 
@@ -153,7 +155,7 @@ local function SetStage(inst)
         print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
         inst.stage = 5
     elseif inst.stage < 1 then
-        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
+        --print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
         inst:Remove()
     end
 
@@ -254,7 +256,7 @@ local function OnGrow(inst)
 end
 
 local function OnShrink(inst)
-    local targetstage = math.clamp(inst.stage - 1, 1, 5)
+    local targetstage = math.clamp(inst.stage - 1, 0, 5)
 
     if inst.components.pickable then
         inst.components.pickable.canbepicked = false
