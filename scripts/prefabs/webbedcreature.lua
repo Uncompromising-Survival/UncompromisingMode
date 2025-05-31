@@ -1,79 +1,3 @@
-local function SetStage(inst, stage)
-    if stage <= 3 then
-        inst.AnimState:PlayAnimation(inst.anims.init)
-        inst.AnimState:PushAnimation(inst.anims.idle, true)
-        inst:DoTaskInTime(3, function(inst) inst.AnimState:SetTime(math.random() * 2) end)
-    end
-end
-
-local function SetSmall(inst)
-    if inst:HasTag("mediumcocoon") then
-        inst:RemoveTag("mediumcocoon")
-    end
-    if inst:HasTag("largecocoon") then
-        inst:RemoveTag("largecocoon")
-    end
-    inst:AddTag("smallcocoon")
-    inst.MiniMapEntity:SetIcon("webbedcreature_small_minimap.tex")
-    inst.AnimState:SetBank("wackycocoonsmall")
-    inst.AnimState:SetBuild("wackycocoonsmall")
-    inst.DynamicShadow:SetSize(3.5, 2.5)
-    for i = 1, 2 do
-        inst.components.lootdropper:AddChanceLoot("silk", 1)
-    end
-    inst.anims = {
-        hit = "hit_small",
-        idle = "idle_small",
-        kill = "break_small",
-        init = "appear_small",
-    }
-    SetStage(inst, 1)
-end
-
-local function SetMedium(inst)
-    if inst:HasTag("smallcocoon") then
-        inst:RemoveTag("smallcocoon")
-    end
-    if inst:HasTag("largecocoon") then
-        inst:RemoveTag("largecocoon")
-    end
-    inst:AddTag("mediumcocoon")
-    inst.MiniMapEntity:SetIcon("webbedcreature_medium_minimap.tex")
-    inst.DynamicShadow:SetSize(4, 3.5)
-    for i = 1, 4 do
-        inst.components.lootdropper:AddChanceLoot("silk", 1)
-    end
-    inst.anims = {
-        hit = "hit_medium",
-        idle = "idle_medium",
-        kill = "break_medium",
-        init = "appear_medium",
-    }
-    SetStage(inst, 2)
-end
-
-local function SetLarge(inst)
-    if inst:HasTag("smallcocoon") then
-        inst:RemoveTag("smallcocoon")
-    end
-    if inst:HasTag("mediumcocoon") then
-        inst:RemoveTag("mediumcocoon")
-    end
-    inst:AddTag("largecocoon")
-    inst.MiniMapEntity:SetIcon("webbedcreature_large_minimap.tex")
-    inst.DynamicShadow:SetSize(5, 4)
-    for i = 1, 6 do
-        inst.components.lootdropper:AddChanceLoot("silk", 1)
-    end
-    inst.anims = {
-        hit = "hit_large",
-        idle = "idle_large",
-        kill = "break_large",
-        init = "appear_large",
-    }
-    SetStage(inst, 3)
-end
-
 local function AddChanceLoot(inst, prefab, chance, amount)
     for i = 1, (amount or 1) do
         inst.components.lootdropper:AddChanceLoot(prefab, chance or 1)
@@ -90,7 +14,7 @@ local cocoontable = {
             AddChanceLoot(inst, "stinger", .1)
             AddChanceLoot(inst, "royal_jelly")
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Buggy",
     },
     [2] = {
@@ -100,7 +24,7 @@ local cocoontable = {
             AddChanceLoot(inst, "monstermeat", .5)
             AddChanceLoot(inst, "rat_tail", nil, 2)
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Grotesque",
     },
     [3] = {
@@ -110,7 +34,7 @@ local cocoontable = {
             AddChanceLoot(inst, "monstermeat")
             AddChanceLoot(inst, "monstermeat", .5)
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Grotesque",
     },
     [4] = {
@@ -119,7 +43,7 @@ local cocoontable = {
             AddChanceLoot(inst, "meat", .5)
             AddChanceLoot(inst, "coontail", nil, 4)
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Hairy",
     },
     [5] = {
@@ -129,7 +53,7 @@ local cocoontable = {
             AddChanceLoot(inst, "meat", .25)
             AddChanceLoot(inst, "lightninggoathorn", nil, 2)
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Hairy",
     },
     [6] = {
@@ -137,7 +61,7 @@ local cocoontable = {
         lootfn = function(inst)
             AddChanceLoot(inst, "trinket_6", nil, 2)
         end,
-        cocoonsize = SetSmall,
+        cocoonsize = "small",
         cocoonname = "Hardened",
     },
     [7] = {
@@ -146,7 +70,7 @@ local cocoontable = {
             AddChanceLoot(inst, "froglegs", .5)
             AddChanceLoot(inst, "tentaclespots", nil, 2)
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Leathery",
     },
     [8] = {
@@ -157,12 +81,12 @@ local cocoontable = {
             AddChanceLoot(inst, "tophat")
             AddChanceLoot(inst, "pig_token", .1)
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Leathery",
     },
     [9] = {
         creature = "mossling",
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Feathery",
     },
     [10] = {
@@ -180,7 +104,7 @@ local cocoontable = {
             AddChanceLoot(inst, "feather_canary", nil, 2)
             AddChanceLoot(inst, "feather_canary", .25)
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Feathery",
     },
     [11] = {
@@ -192,7 +116,7 @@ local cocoontable = {
             AddChanceLoot(inst, "bluegem")
             AddChanceLoot(inst, "redgem")
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Hairy",
     },
     [12] = {
@@ -205,7 +129,7 @@ local cocoontable = {
             AddChanceLoot(inst, "bluegem")
             AddChanceLoot(inst, "redgem")
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Grotesque",
     },
     [13] = {
@@ -217,7 +141,7 @@ local cocoontable = {
             AddChanceLoot(inst, "cactus_flower", nil, 3)
             AddChanceLoot(inst, "cactus_flower", .5)
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Leafy",
     },
     [14] = {
@@ -227,7 +151,7 @@ local cocoontable = {
             AddChanceLoot(inst, "walrus_tusk")
             AddChanceLoot(inst, "um_bear_trap_equippable_tooth", .5)
         end,
-        cocoonsize = SetMedium,
+        cocoonsize = "medium",
         cocoonname = "Leathery",
     },
     [15] = {
@@ -237,7 +161,7 @@ local cocoontable = {
             AddChanceLoot(inst, "seeds", nil, 4)
             AddChanceLoot(inst, "seeds", .25, 4)
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Buggy",
     },
     [16] = {
@@ -248,7 +172,7 @@ local cocoontable = {
             AddChanceLoot(inst, "silk")
             AddChanceLoot(inst, "silk", .5)
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Grotesque",
     },
     [17] = {
@@ -261,7 +185,7 @@ local cocoontable = {
             AddChanceLoot(inst, "horn")
             AddChanceLoot(inst, "poop", .5)
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Hairy",
     },
     [18] = {
@@ -275,7 +199,7 @@ local cocoontable = {
             AddChanceLoot(inst, "bluegem")
             AddChanceLoot(inst, "redgem")
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Hairy",
     },
     [19] = {
@@ -287,7 +211,7 @@ local cocoontable = {
             AddChanceLoot(inst, "steelwool", .5)
             AddChanceLoot(inst, "phlegm", nil, 2)
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Hardened",
     },
     [20] = {
@@ -297,7 +221,7 @@ local cocoontable = {
             AddChanceLoot(inst, "meat", .5)
             AddChanceLoot(inst, "poop", .5)
         end,
-        cocoonsize = SetLarge,
+        cocoonsize = "large",
         cocoonname = "Leathery",
     },
 }
@@ -307,8 +231,8 @@ local function OnKilled(inst)
     inst.SoundEmitter:KillSound("loop")
     inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_destroy")
     local creature
-    if inst.size then
-        for num, mob in pairs(cocoontable) do
+    if inst.size and inst.cocoontable then
+        for num, mob in ipairs(inst.cocoontable) do
             if inst.size == num then
                 creature = mob.creature
                 if mob.lootfn then
@@ -351,26 +275,66 @@ end
 local function onsave(inst, data)
     if inst.size then
         data.size = inst.size
-    else
-        data.size = math.random(1, 20)
     end
 end
 
 local function onload(inst, data)
     if data and data.size then
         inst.size = data.size
-    else
-        inst.size = math.random(1, 20)
     end
 end
 
+local function SetStage(inst, stage)
+    if stage <= 3 then
+        inst.AnimState:PlayAnimation(inst.anims.init)
+        inst.AnimState:PushAnimation(inst.anims.idle, true)
+        inst:DoTaskInTime(inst.AnimState:GetCurrentAnimationNumFrames() * FRAMES, function(inst) inst.AnimState:SetTime(math.random() * 2) end)
+    end
+end
+
+local function GetCocoonFeatures(size)
+    local shadowx, shadowy, silk, stage
+    if size == "small" then
+        shadowx, shadowy, silk, stage = 3.5, 2.5, 2, 1
+    elseif size == "medium" then
+        shadowx, shadowy, silk, stage = 4, 3.5, 4, 2
+    end
+    return shadowx, shadowy, silk, stage
+end
+
+local function SetCocoonSize(inst, size)
+    if size ~= "small" and inst:HasTag("smallcocoon") then
+        inst:RemoveTag("smallcocoon")
+    end
+    if size ~= "medium" and inst:HasTag("mediumcocoon") then
+        inst:RemoveTag("mediumcocoon")
+    end
+    if size ~= "large" and inst:HasTag("largecocoon") then
+        inst:RemoveTag("largecocoon")
+    end
+    local shadowx, shadowy, silk, stage = GetCocoonFeatures(size)
+    inst:AddTag(size.."cocoon")
+    inst.MiniMapEntity:SetIcon("webbedcreature_"..size.."_minimap.tex")
+    inst.DynamicShadow:SetSize(shadowx or 5, shadowy or 4)
+    for i = 1, (silk or 6) do
+        inst.components.lootdropper:AddChanceLoot("silk", 1)
+    end
+    inst.anims = {
+        hit = "hit_"..size,
+        idle = "idle_"..size,
+        kill = "break_"..size,
+        init = "appear_"..size,
+    }
+    SetStage(inst, stage or 3)
+end
+
 local function SetSize(inst)
-    for num, mob in pairs(cocoontable) do
-        if inst.size == num then
-            if mob.cocoonsize then
-                mob.cocoonsize(inst)
+    if inst.cocoontable then
+        for num, mob in ipairs(inst.cocoontable) do
+            if inst.size == num then
+                SetCocoonSize(inst, mob.cocoonsize or "large")
+                inst.components.named:SetName(mob.cocoonname.." Cocoon")
             end
-            inst.components.named:SetName(mob.cocoonname.." Cocoon")
         end
     end
 end
@@ -390,10 +354,8 @@ local function Regen(inst, data)
     ---TheNet:Announce("attacked")
     local attacker = data.attacker
     if attacker then
-        if not attacker:HasTag("player") then
-            if attacker.components.combat and attacker.components.combat.target then
-                attacker.components.combat:DropTarget()
-            end
+        if not attacker:HasTag("player") and attacker.components.combat and attacker.components.combat.target then
+            attacker.components.combat:DropTarget()
         end
         if not inst.components.health:IsDead() and not attacker:HasTag("hoodedwidow") then
             --TheNet:Announce("advancing")
@@ -403,9 +365,8 @@ local function Regen(inst, data)
                 widowweb:SpawnInvestigators(attacker)
             end
             PlayHitAnimations(inst)
-            if attacker:HasTag("widowsgrasp") and not (attacker.components.rider and attacker.components.rider:IsRiding()) then
-                --inst.components.health:Kill()
-            elseif attacker:HasTag("player") and not attacker:HasTag("mime") and not attacker:HasTag("widowsgrasp") then
+            if attacker:HasTag("player") and not attacker:HasTag("mime") and (not attacker:HasTag("widowsgrasp")
+                or (attacker.components.rider and attacker.components.rider:IsRiding())) then
                 attacker.components.talker:Say(GetString(attacker.prefab, "WEBBEDCREATURE"))
             end
         end
@@ -425,7 +386,7 @@ local function fn()
 
     inst.AnimState:SetBank("wackycocoons")
     inst.AnimState:SetBuild("wackycocoons")
-    inst.AnimState:PlayAnimation("idle_small", true)
+    --inst.AnimState:PlayAnimation("idle_small", true)
 
     inst:AddTag("noepicmusic")
     inst:AddTag("webbedcreature")
@@ -450,6 +411,7 @@ local function fn()
     inst.components.health:SetMaxHealth(1000000)
     inst.components.health.absorb = 1
     --inst.components.health.invincible = true
+
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", Regen)
     inst:ListenForEvent("death", OnKilled)
@@ -460,41 +422,18 @@ local function fn()
     MakeLargePropagator(inst)
 
     inst:AddComponent("inspectable")
-    inst:DoTaskInTime(0, SetSize)
+
     MakeSnowCovered(inst)
     inst.OnSave = onsave
     inst.OnLoad = onload
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
-    inst.size = math.random(1, 20)
-    
+    inst.cocoontable = cocoontable
+    inst.size = math.random(1, #inst.cocoontable)
+    inst:DoTaskInTime(0, SetSize)
     inst.PlayHitAnimations = PlayHitAnimations
+
     return inst
-end
-
-local function on_anim_over(inst)
-    if inst.components.mine.issprung then
-        return
-    end
-
-    if inst.froze then
-        if inst.Harvestable then
-            inst.AnimState:PushAnimation("idle_frozen", true)
-        else
-            inst.AnimState:PushAnimation("trap_idle", true)
-        end
-    else
-        local random_value = math.random()
-        if random_value < 0.4 then
-            inst.AnimState:PushAnimation("idle_2")
-            -- inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/idle")
-            inst.AnimState:PushAnimation("idle", true)
-        elseif random_value < 0.8 then
-            inst.AnimState:PushAnimation("idle_3")
-            -- inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/idle")
-            inst.AnimState:PushAnimation("idle", true)
-        end
-    end
 end
 
 local function on_anim_over(inst)
@@ -535,6 +474,7 @@ local function fndecor()
     inst:ListenForEvent("animover", on_anim_over)
     inst.OnSave = decorsave
     inst.OnLoad = decorload
+
     return inst
 end
 
