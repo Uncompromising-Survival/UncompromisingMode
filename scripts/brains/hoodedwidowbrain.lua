@@ -14,9 +14,8 @@ end)
 local FORCE_MELEE_DIST = 4
 local MAX_WANDER_DIST = 7
 
-
 local function GoHomeAction(inst)
-    local home = inst.components.homeseeker and inst.components.homeseeker.home or nil
+    local home = inst.components.homeseeker and inst.components.homeseeker.home
     return home and home:IsValid() and home.components.childspawner
         and (home.components.health == nil or not home.components.health:IsDead())
         and BufferedAction(inst, home, ACTIONS.GOHOME)
@@ -30,7 +29,7 @@ local function WebSlingerAction(inst)
 end
 
 local function JumpHomeAction(inst)
-    local home = inst.components.homeseeker and inst.components.homeseeker.home or nil
+    local home = inst.components.homeseeker and inst.components.homeseeker.home
     return home and home:IsValid() and home.components.childspawner
         and (home.components.health == nil or not home.components.health:IsDead())
         and inst.sg:GoToState("jumphome") --Instead we should be just jumping back into the canopy
