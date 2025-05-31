@@ -229,6 +229,12 @@ function EntityScript:AddPlatformFollower(child)
     end
 end
 
+local _SpawnChild = EntityScript.SpawnChild
+function EntityScript:SpawnChild(name, ...)
+    if self:HasTag("no_epichealthbar_proxy") and name == "epichealth_proxy" then return end
+    return _SpawnChild(self, name, ...)
+end
+
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then 

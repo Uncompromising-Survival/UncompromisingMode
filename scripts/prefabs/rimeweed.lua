@@ -256,6 +256,7 @@ local function barrierweed()
 
     inst:AddTag("plant")
     inst:AddTag("rimeweed")
+    inst:AddTag("no_epichealthbar_proxy")
     MakeObstaclePhysics(inst, .5)
     inst.entity:SetPristine()
 
