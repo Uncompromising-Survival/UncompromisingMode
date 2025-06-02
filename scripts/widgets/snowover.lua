@@ -73,13 +73,13 @@ function SnowOver:OnUpdate(dt)
     if TheNet:IsServerPaused() then return end
     local x, y, z = self.owner.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 7, {"wall"})
-    local suppressorNearby1 = 0.25 * #ents
+    local suppressorNearby1 = .25 * #ents
     local ents2 = TheSim:FindEntities(x, y, z, 9, {"fire"})
-    local suppressorNearby2 = 0.6 * #ents2
+    local suppressorNearby2 = .6 * #ents2
     local ents3 = TheSim:FindEntities(x, y, z, 6, {"shelter"})
-    local suppressorNearby3 = 0.15 * #ents3
+    local suppressorNearby3 = .15 * #ents3
     local ents4 = TheSim:FindEntities(x, y, z, 10, {"snowstorm_protection_high"})
-    local suppressorNearby4 = 0.8 * #ents4
+    local suppressorNearby4 = .8 * #ents4
 
     local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
     local localizedblizz = MiniBlizzNear(self.owner)
@@ -87,30 +87,23 @@ function SnowOver:OnUpdate(dt)
         if not self.alphaquation then
             self.alphaquation = 0
         elseif self.alphaquation <= equationdingus then
-            self.alphaquation = self.alphaquation + 0.01
+            self.alphaquation = self.alphaquation + .01
         elseif self.alphaquation >= equationdingus then
-            self.alphaquation = self.alphaquation - 0.01
+            self.alphaquation = self.alphaquation - .01
         end
     else
         if not self.alphaquation then
             self.alphaquation = 0
         elseif self.alphaquation > 0 then
-            self.alphaquation = self.alphaquation - 0.001
+            self.alphaquation = self.alphaquation - .001
         end
     end
 
     if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or localizedblizz) and not IsUnderRainDomeAtXZ(x, z) then
         if not self.changed then
-            self.changed = 0.01
-        elseif self.changed <= 0.7 then
-            self.changed = self.changed + 0.001
-            self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed - 0.4)
-
-            if self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() then
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, 0)
-            else
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed)
-            end
+            self.changed = .01
+        elseif self.changed <= .7 then
+            self.changed = math.clamp(self.changed + .001, 0, .7)
 
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm")
             TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", self.changed)
@@ -120,14 +113,7 @@ function SnowOver:OnUpdate(dt)
         if not self.changed then
             self.changed = 0
         elseif self.changed >= 0 then
-            self.changed = self.changed - 0.001
-            self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed - 0.4)
-
-            if self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() then
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, 0)
-            else
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed)
-            end
+            self.changed = math.clamp(self.changed - .001, 0, .7)
 
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm")
             TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", self.changed)
@@ -143,9 +129,11 @@ function SnowOver:OnUpdate(dt)
 
     if self.owner.components.playervision then
         if self.bg.shown and self.owner.components.playervision:HasGoggleVision() then
-            self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed > 0.15 and 0.15 - self.alphaquation or self.changed - self.alphaquation)
+            self.bg:GetAnimState():SetMultColour(1, 1, 1, --[[self.changed > .15 and .15 - self.alphaquation or self.changed - self.alphaquation]] 0)
+            self.bg2:GetAnimState():SetMultColour(1, 1, 1, math.clamp(self.changed, 0, .3))
         elseif self.changed then
             self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed - self.alphaquation)
+            self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed)
         end
     end
 end
