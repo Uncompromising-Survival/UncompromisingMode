@@ -1,13 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
-
-local function CheckDeathForVetDrop(inst)
-	if TUNING.DSTU.VETCURSE ~= "off" then
-		inst.components.vetcurselootdropper.loot = "um_fuelweaver_soul"
-	end
-end
-
 env.AddPrefabPostInit("stalker_atrium", function(inst)
 	if not TheWorld.ismastersim then
 		return
@@ -25,10 +18,4 @@ env.AddPrefabPostInit("stalker_atrium", function(inst)
     end
     
     inst.components.combat.GetBattleCryString = AtriumBattleCry
-	
-    if TUNING.DSTU.VETCURSE ~= "off" then
-		inst:AddComponent("vetcurselootdropper")
-	end
-
-	inst:ListenForEvent("death", CheckDeathForVetDrop)
 end)

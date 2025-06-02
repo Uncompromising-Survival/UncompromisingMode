@@ -647,11 +647,6 @@ local function fn(Sim)
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetLoot(loot)
-	
-	if TUNING.DSTU.VETCURSE ~= "off" then
-        inst:AddComponent("vetcurselootdropper")
-        inst.components.vetcurselootdropper.loot = "um_moonfly_lantern"
-    end
 
     inst:AddComponent("inspectable")
     inst.components.inspectable:RecordViews()

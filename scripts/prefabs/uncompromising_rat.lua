@@ -33,8 +33,8 @@ local function OnAttackOther(inst, data)
     if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and not data.target:HasTag("ratfriend") and not data.target:HasTag("automaton") and TUNING.DSTU.MAXHPHITTERS then data.target.components.health:DeltaPenalty(0.01) end
 
     --[[if data.target ~= nil and data.target:HasTag("player") and inst.components.thief ~= nil then
-		inst.components.thief:StealItem(data.target)
-	end]]
+        inst.components.thief:StealItem(data.target)
+    end]]
 end
 
 local function OnAttacked(inst, data)
@@ -483,10 +483,10 @@ local function OnJunkAttacked(inst, data)
     inst.task = inst:DoTaskInTime(math.random(55, 65), _ForgetTarget) -- Forget about target after a minute
 
     --[[inst.components.combat:ShareTarget(data.attacker, 30, function(dude) --Don't Share Target
-		return dude:HasTag("raidrat")
-			and not dude.components.health:IsDead()
-			and not dude:HasTag("packrat")
-	end, 10)]]
+        return dude:HasTag("raidrat")
+            and not dude.components.health:IsDead()
+            and not dude:HasTag("packrat")
+    end, 10)]]
 end
 
 local function FindTargetOfInterest(inst)
@@ -825,25 +825,25 @@ local function OnSpawned(inst, newent)
     if inst.components.herd ~= nil then inst.components.herd:AddMember(newent) end
 
     --[[if TheWorld.state.cycles > 50 then
-		local x, y, z = inst.Transform:GetWorldPosition()
+        local x, y, z = inst.Transform:GetWorldPosition()
 
-		local ents = #TheSim:FindEntities(x, y, z, 40, {"player"})
+        local ents = #TheSim:FindEntities(x, y, z, 40, {"player"})
 
-		if ents ~= nil and ents == 0 then
-			if inst.ratguard then
-				inst.ratguard = false
-				inst.components.periodicspawner:TrySpawn("uncompromising_buffrat")
-			end
-		end
-	end]]
+        if ents ~= nil and ents == 0 then
+            if inst.ratguard then
+                inst.ratguard = false
+                inst.components.periodicspawner:TrySpawn("uncompromising_buffrat")
+            end
+        end
+    end]]
 end
 
 local function BurrowKilled(inst)
     --[[if inst.components.periodicspawner ~= nil then
-		inst.components.periodicspawner:Stop()
-	end
+        inst.components.periodicspawner:Stop()
+    end
 
-	inst:Remove()]]
+    inst:Remove()]]
 end
 
 local function BurrowAnim(inst)
@@ -1526,38 +1526,34 @@ local function fn_scoutburrow()
     return inst
 end
 
-local function IsAVersionOfRot(v) if v.prefab == "spoiled_food" or v.prefab == "rottenegg" or v.prefab == "spoiled_fish" or v.prefab == "spoiled_fish_small" then return true end end
-
-local NOTAGS = { "engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen" }
-
-local function FoodScoreCalculations(inst, container, v)
-    local delta = 0
-    inst.multiplier = v.components.stackable and v.components.stackable:StackSize() or 1
-    inst.preparedmultiplier = v:HasTag("preparedfood") and 2 or 1
-
-    if container then
-        if v:HasTag("stale") and v.components.farmplantable == nil then delta = ((2.5 * inst.preparedmultiplier) * inst.multiplier) end
-        if v:HasTag("spoiled") and v.components.farmplantable == nil then delta = ((5 * inst.preparedmultiplier) * inst.multiplier) end
-        if IsAVersionOfRot(v) then delta = ((5 * inst.preparedmultiplier) * inst.multiplier) end
-    else
-        if v:HasTag("fresh") and v.components.farmplantable == nil then delta = ((5 * inst.preparedmultiplier) * inst.multiplier) end
-        if v:HasTag("stale") and v.components.farmplantable == nil then delta = ((10 * inst.preparedmultiplier) * inst.multiplier) end
-        if v:HasTag("spoiled") and v.components.farmplantable == nil then delta = ((15 * inst.preparedmultiplier) * inst.multiplier) end
-        if IsAVersionOfRot(v) then delta = ((15 * inst.preparedmultiplier) * inst.multiplier) end
+local function IsAVersionOfRot(v)
+    local rotprefabs = {"spoiled_food", "rottenegg", "spoiled_fish", "spoiled_fish_small"}
+    for _, rotprefab in pairs(rotprefabs) do
+        if v.prefab == rotprefab then
+            return true
+        end
     end
-    inst.foodscore = inst.foodscore + delta
 end
 
+local function FoodScoreCalculations(inst, container, v)
+    inst.multiplier = v.components.stackable and v.components.stackable:StackSize() or 1
+    inst.preparedmultiplier = v:HasTag("preparedfood") and 2 or 1
+    local delta = not v.components.farmplantable and (container and (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5)
+        or v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15) or 0
+    inst.foodscore = inst.foodscore + (delta > 0 and ((delta * inst.preparedmultiplier) * inst.multiplier) or delta)
+end
+
+local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen"}
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
 
-    local ents = TheSim:FindEntities(x, 0, z, 40, { "_inventoryitem" }, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
-	print("                o")
-	print("    =========B  *sniff* *sniff*")
-	print("---========vv")
-	print("   ========")
-	print("    V V    V V")]]
+    print("                o")
+    print("    =========B  *sniff* *sniff*")
+    print("---========vv")
+    print("   ========")
+    print("    V V    V V")]]
     inst.ratscore = -60
     inst.itemscore = 0
     inst.foodscore = 0
@@ -1568,19 +1564,14 @@ local function TimeForACheckUp(inst, dev)
     if ents ~= nil then
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
-                if v.components.inventoryitem:IsHeld() then
-                    if v.components.inventoryitem and v.components.inventoryitem:GetGrandOwner() ~= nil and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon") then
-                        if not (v:HasTag("frozen") or v:HasTag("NORATCHECK")) then
-                            FoodScoreCalculations(inst, true, v)
-                        end
-                    end
+                local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
+                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post"))
+                if container then
+                    FoodScoreCalculations(inst, true, v)
                 else
-                    if not (v:HasTag("frozen") or v:HasTag("NORATCHECK")) then FoodScoreCalculations(inst, false, v) end
-
-                    if TUNING.DSTU.ITEMCHECK then
-                        if (v:HasTag("_equippable") or v:HasTag("gem") or v:HasTag("tool")) then
-                            inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-                        end
+                    FoodScoreCalculations(inst, false, v)
+                    if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+                        inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
                     end
                 end
             end
@@ -1615,16 +1606,16 @@ local function TimeForACheckUp(inst, dev)
         inst.ratwarning = inst.ratscore / 48
 
         --[[
-			for c = 1, (inst.ratwarning) do
-				inst:DoTaskInTime((c/4), function(inst)
-					local warning = SpawnPrefab("uncompromising_ratwarning")
-					warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
-					--warning.entity:SetParent(b)
-					--b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
-					--warning.entity:SetParent(TheFocalPoint.b.entity)
-				end)
-			end
-		end]]
+            for c = 1, (inst.ratwarning) do
+                inst:DoTaskInTime((c/4), function(inst)
+                    local warning = SpawnPrefab("uncompromising_ratwarning")
+                    warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    --warning.entity:SetParent(b)
+                    --b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
+                    --warning.entity:SetParent(TheFocalPoint.b.entity)
+                end)
+            end
+        end]]
         if inst.ratscore >= 60 then
             if math.random() > 0.85 then
                 if inst.ratwarning > 5 then inst.ratwarning = 5 end
@@ -1639,16 +1630,13 @@ local function TimeForACheckUp(inst, dev)
                     end)
                 end
 
-                local players = TheSim:FindEntities(x, y, z, 40, { "player" }, { "playerghost" })
+                local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
                 for a, b in ipairs(players) do
                     if math.random() > 0.5 then
-                        if inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_BURROWS", "LEVEL_1")) end)
-                        elseif inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_ITEMS", "LEVEL_1")) end)
-                        elseif inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_FOOD", "LEVEL_1")) end)
-                        end
+                        local str = inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore and "BURROWS"
+                            or inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore and "ITEMS"
+                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD"
+                        b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
                     end
                 end
             end
