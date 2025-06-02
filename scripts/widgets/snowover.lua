@@ -28,10 +28,10 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
 
     self.bg2 = dustlayer
     self.bg2:GetAnimState():SetAddColour(1, 1, 1, 1)
-    self.bg2:Show()
+    self.bg2:Hide()
 
     self:Hide()
-    self:OnUpdate(0)
+    --self:OnUpdate(0)
     self:StartUpdating()
 
     if owner then
@@ -98,13 +98,14 @@ function SnowOver:OnUpdate(dt)
             self.alphaquation = self.alphaquation - .001
         end
     end
-
     if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or localizedblizz) and not IsUnderRainDomeAtXZ(x, z) then
         if not self.changed then
             self.changed = .01
-        elseif self.changed <= .7 then
+        elseif self.changed < .7 then
+            if not self.bg2.shown then
+                self.bg2:Show()
+            end
             self.changed = math.clamp(self.changed + .001, 0, .7)
-
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm")
             TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", self.changed)
         end
@@ -112,16 +113,18 @@ function SnowOver:OnUpdate(dt)
     else
         if not self.changed then
             self.changed = 0
-        elseif self.changed >= 0 then
+        elseif self.changed > 0 then
+            if not self.bg2.shown then
+                self.bg2:Show()
+            end
             self.changed = math.clamp(self.changed - .001, 0, .7)
-
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm")
             TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", self.changed)
-
-            --self.blindto < 1 and 0 or .5)
-
             self:Show()
         elseif self.changed <= 0 then
+            if self.bg2.shown then
+                self.bg2:Hide()
+            end
             self:Hide()
             TheFocalPoint.SoundEmitter:KillSound("snowstorm")
         end

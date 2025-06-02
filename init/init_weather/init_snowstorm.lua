@@ -58,7 +58,7 @@ AddPlayerPostInit(function(inst)
     SetInstanceFunctions2(inst)
 end)
 
-local overlaystosort = {"um_heatwaveover", "snowover", "um_stormover", "raindomeover", "leafcanopy", "drops_vig", "vig"} 
+local overlaystosort = {"um_heatwaveover", "snowover", "snowdustover", "um_stormover", "sanddustover", "storm_overlays", "storm_root", "raindomeover", "leafcanopy", "drops_vig", "vig"} 
 local function SortOverlays(self)
     for _, overlay in pairs(overlaystosort) do
         if self[overlay] then
@@ -69,6 +69,7 @@ end
 
 AddClassPostConstruct("screens/playerhud", function(inst)
     local SnowOver = require("widgets/snowover")
+	local SnowDustOver = require("widgets/sanddustover")
     local Um_StormOver = require("widgets/um_stormover")
     local HeatwaveOver = require("widgets/heatwaveover")
 
@@ -76,7 +77,8 @@ AddClassPostConstruct("screens/playerhud", function(inst)
     function inst:CreateOverlays(owner)
         fn(self, owner)
         self.um_stormover = self.overlayroot:AddChild(Um_StormOver(owner))
-        self.snowover = self.overlayroot:AddChild(SnowOver(owner, self.sanddustover))
+        self.snowdustover = self.storm_overlays:AddChild(SnowDustOver(owner))
+        self.snowover = self.overlayroot:AddChild(SnowOver(owner, self.snowdustover))
         self.um_heatwaveover = self.overlayroot:AddChild(HeatwaveOver(owner))
         SortOverlays(self)
     end
