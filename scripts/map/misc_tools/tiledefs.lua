@@ -244,9 +244,9 @@ AddTile(
         noise_texture = "mini_um_magma.tex"
     },
     { --Placeholder turf
-        name = "magma_rock",
-        anim = "magma_rock",
-        bank_build = "turf_archives"
+        name = "um_magma",
+        anim = "um_magma",
+        bank_build = "hfturf"
     }
 )
 
@@ -363,11 +363,20 @@ local function GetTileForHotspring_Foresty(noise)
     return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
 end
 
+local function GetTileForLushMagma(noise)
+    if noise < 0.5 then
+        return WORLD_TILES.UM_GRASSMAGMA
+	end
+	
+    return WORLD_TILES.UM_MAGMA
+end
+
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
 AddTile("UM_HOTSPRING_FORESTY", "NOISE")
 AddTile("UM_HOODED_FOREST", "NOISE")
 AddTile("UM_HOODED_ROCKY", "NOISE")
+AddTile("UM_MAGMA_JUNGLY", "NOISE")
 local NoiseTileFunctions = require("noisetilefunctions")
 
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING] = GetTileForHotspring
@@ -377,6 +386,9 @@ NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING_FORESTY] = GetTileForHotspring_Fores
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST] = GetTileForHoodedForest
 
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
+
+
+NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
 
 require("map/terrain")
 --require("map/torreniv_terrain")
@@ -401,7 +413,9 @@ local filters = {
     ["magmarock"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
     ["magmarock1"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
     ["magmarock_gold"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
-    ["jungletree_burnt"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK}
+    ["jungletree_burnt"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
+	
+	["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
 }
 
 for k, v in pairs(filters) do

@@ -27,10 +27,10 @@ AddTask("MagmaCaves", {
 		room_choices={
 			["GrassMagma"] = 2,
 			["GloomyMagma"] = 1,
-			["FossilMagma"] = 2,		
-			["ShroomyMagma"] = 2,
+			["FossilMagma"] = 1,		
+			["ShroomyMagma"] = 1,
 		},
-		background_room="BGMagma",
+		background_room="GrassMagma",
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
 })

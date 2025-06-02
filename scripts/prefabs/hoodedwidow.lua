@@ -292,7 +292,7 @@ end
 
 local function DecideWhatTreeToBe(inst)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local trees = TheSim:FindEntities(x, y, z, 35, {"giant_tree"})
+    local trees = TheSim:FindEntities(x, y, z, 50, {"giant_tree"})
     local mindist = 15 ^ 2
     for i,tree in ipairs(trees) do
         local treedist = inst:GetDistanceSqToInst(tree)

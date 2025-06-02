@@ -173,7 +173,8 @@ local inventoryitems =
     "turf_um_hotspring_grass",
     "turf_um_hotspring_yellowrock",
     "turf_um_hotspring_whiterock",
-
+	"turf_um_magma",
+	
     "um_bear_trap_equippable",
     "um_bear_trap_equippable_gold",
     "um_bear_trap_equippable_tooth",

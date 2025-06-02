@@ -12,9 +12,8 @@ local function onregenfn(inst)
 end
 
 local function makeemptyfn(inst)
-
-        inst.AnimState:PlayAnimation("picked")
-		inst.AnimState:PushAnimation("empty")
+	inst.AnimState:PlayAnimation("pick")
+	inst.AnimState:PushAnimation("empty")
 end
 
 local function makebarrenfn(inst, wasempty)
@@ -109,7 +108,7 @@ local function onpickedfn(inst, picker)
 	end
     inst.SoundEmitter:PlaySound("dontstarve/wilson/pickup_reeds")
     inst.AnimState:PlayAnimation("pick")
-	
+	SpawnPrefab("oceantree_leaf_fx_chop").Transform:SetPosition(inst.Transform:GetWorldPosition())
 	if math.random() < 0.2 then
 		if inst.hidden then
 			Launch(inst.components.lootdropper:SpawnLootPrefab("ash"), inst, 1.5)
@@ -267,44 +266,6 @@ local function grass(name, stage)
     return Prefab(name, fn, assets)
 end
 
-local function fnthicket()
-	local inst = CreateEntity()
-
-	inst.entity:AddTransform()
-	inst.entity:AddNetwork()
-
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	
-	local function LargeFernCheck(x,y,z)
-		local plants = #TheSim:FindEntities(x,y,z,2.3,{"plant"})
-		local sculpture = #TheSim:FindEntities(x,y,z,7,{"heavy"})-- The spacing for the sculpture is larger so it doesn't cover them up 
-		local sinkhole_bockers = #TheSim:FindEntities(x,y,z,7,{"antlion_sinkhole_blocker"})
-		if plants > 0 or sculpture > 0 or sinkhole_bockers > 0 then
-			return true
-		end
-	
-	end
-	inst:DoTaskInTime(0,function(inst)
-		local x,y,z = inst.Transform:GetWorldPosition()
-		for i = -15, 15, 0.5 do
-			for j = -15, 15, 0.5 do
-				local x1 = x + i + math.random(-1,1)/math.random(2,4)
-				local z1 = z + j + math.random(-1,1)/math.random(2,4)
-				if TheWorld.Map:GetTileAtPoint(x1, y, z1) == WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK and not LargeFernCheck(x1,y,z1) then
-					SpawnPrefab("hooded_fern").Transform:SetPosition(x1,y,z1)
-				end
-			end
-		end
-		inst:Remove()
-	end)
-	
-	return inst
-end
-
 
 return grass("hooded_fern", 0),
-    grass("depleted_hooded_fern", 1),
-	Prefab("thicket_builder", fnthicket)
-	
+    grass("depleted_hooded_fern", 1)

@@ -46,7 +46,7 @@ local function onnear(inst)
 end
 
 local function onfar(inst)
-	if not FindEntity(inst,12^2,nil,{"player"},{"playerghost"}) then
+	if not FindEntity(inst,12^2,nil,{"player"},{"playerghost"}) and inst.vipertask then
 		inst.vipertask:Cancel()
 		inst.vipertask = nil
 	end

@@ -9,13 +9,7 @@ local assets=
 
 local BURN_DURATION = 2
 
---[[
-local function round(x)
-  x = x *10
-  local num = x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
-  return num/10
-end
-]]
+
 local function placegoffgrids(inst, radiusMax, prefab,tags)
     local x,y,z = inst.Transform:GetWorldPosition()
     local offgrid = false
@@ -258,7 +252,7 @@ local function FadingOut(inst)
 		inst:DoTaskInTime(2*FRAMES,FadingOut)
 	end
 	inst.Light:SetIntensity(inst.color*0.6)
-    inst.Light:SetRadius(inst.color*0.6)
+    inst.Light:SetRadius(inst.color*0.6+0.01)
     inst.Light:SetFalloff(inst.color*0.6)
 	inst.AnimState:SetMultColour(1,1,1,inst.color)	
 end
@@ -271,7 +265,7 @@ local function FadingIn(inst)
 		inst:DoTaskInTime(2*FRAMES,FadingIn)
 	end
 	inst.Light:SetIntensity(inst.color*0.6)
-    inst.Light:SetRadius(inst.color*0.6)
+    inst.Light:SetRadius(inst.color*0.6+0.01)
     inst.Light:SetFalloff(inst.color*0.6)
 	inst.AnimState:SetMultColour(1,1,1,inst.color)	
 end
@@ -279,13 +273,13 @@ end
 local function Fading(inst)
 	if inst.color == 0 then
 		if inst.components.pickable and not inst.components.pickable.targettime then
-			inst.components.pickable.canbepicked = true
+			inst.components.pickable.caninteractwith = true
 		end
 		inst.shadow:Enable(true)
 		FadingIn(inst)
 	else
 		if inst.components.pickable then
-			inst.components.pickable.canbepicked = false
+			inst.components.pickable.caninteractwith = false
 		end
 		inst.shadow:Enable(false)
 		FadingOut(inst)
@@ -371,18 +365,21 @@ local function commonfn(Sim)
 	if math.random() > 0.5 then
 		inst.color = 1
 		inst.shadow:Enable(false)
-		inst.components.pickable.canbepicked = false
+		inst.components.pickable.caninteractwith = false
 		FadingOut(inst)	
 	else
 		inst.color = 0
 		inst.shadow:Enable(true)
-		inst.components.pickable.canbepicked = true
+		inst.components.pickable.caninteractwith = true
 		FadingIn(inst)
 	end
 	
 	return inst
 end
 
+--===================================================================================================
+--[[ Ghost Pepper Item  ]] ------------
+--===================================================================================================
 
 local function UnGhost(eater)
     if not (eater:HasTag("psuedo_ghost") or eater:HasTag("playerghost")) then
@@ -398,7 +395,6 @@ local function UnGhost(eater)
         eater.AnimState:SetHaunted(false)
     end
 end
-
 
 local function Ghost(eater)
     if eater.flashingtask then

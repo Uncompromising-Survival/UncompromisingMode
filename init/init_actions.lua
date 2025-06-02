@@ -195,6 +195,7 @@ GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
     if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
     if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
     if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+	if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 

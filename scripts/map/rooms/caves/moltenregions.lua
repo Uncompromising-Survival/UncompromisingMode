@@ -93,15 +93,15 @@ AddRoom("BGMagma", {
         {
 			lava_pond_cave = 0.05,
 			magmarock1 = 0.1,
-			um_pyre_nettles_stage_4 = 0.1,
-			um_pyre_nettles_stage_5 = 0.1,
+			--um_pyre_nettles_stage_4 = 0.1,
+			--um_pyre_nettles_stage_5 = 0.1,
         },
     }
 })
 
 AddRoom("GrassMagma", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_GRASSMAGMA,
+    value = WORLD_TILES.UM_MAGMA_JUNGLY,
     contents =  {
         distributepercent = .2,
         distributeprefabs=
@@ -109,8 +109,9 @@ AddRoom("GrassMagma", {
 			lava_pond_cave = 0.1,
 			magmarock1 = 0.025,
 			mushtree_shadow = 0.025,
-			um_pyre_nettles_stage_2 = 0.1,
-			um_pyre_nettles_stage_5 = 0.1,
+			pyrethicket_builder = 0.5,
+			--um_pyre_nettles_stage_2 = 0.1,
+			--um_pyre_nettles_stage_5 = 0.1,
         },
     }
 })
@@ -141,8 +142,8 @@ AddRoom("FossilMagma", {
 			lava_pond_cave = 0.025,
 			magmarock1 = 0.025,
 			magmabone = 0.05,
-			um_pyre_nettles_stage_2 = 0.025,
-			um_pyre_nettles_stage_5 = 0.025,
+			--um_pyre_nettles_stage_2 = 0.025,
+			--um_pyre_nettles_stage_5 = 0.025,
 			um_ghost_pepper = 0.025,
         },
     }
@@ -160,8 +161,8 @@ AddRoom("GloomyMagma", {
 			magmarock1 = 0.15,
 			viperfruit_plant = 0.25,
 			viperworm = 0.25,
-			um_pyre_nettles_stage_2 = 0.05,
-			um_pyre_nettles_stage_5 = 0.05,
+			--um_pyre_nettles_stage_2 = 0.05,
+			--um_pyre_nettles_stage_5 = 0.05,
         },
     }
 })

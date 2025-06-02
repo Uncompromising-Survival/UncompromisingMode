@@ -918,6 +918,10 @@ if TUNING.DSTU.WORTOXCHANGES then
 		upgrade_performer.components.leader:AddFollower(gestalt)
 		
 		gestalt:AddComponent("timer")
+		
+		if (inst.prefab == "purebrilliance") then
+			time_left = 60*8*8
+		end
 		gestalt.components.timer:StartTimer("despawn",time_left ~= nil and time_left or 60*8*2)
 		gestalt:ListenForEvent("timerdone",function(gestalt)
 			DeleteBackItem(gestalt)
@@ -962,6 +966,17 @@ if TUNING.DSTU.WORTOXCHANGES then
 	--------------------------------------------
 		
 	AddPrefabPostInit("moon_tree_blossom", function(inst)
+		inst:AddTag("SOUL_LUNAR_upgradeable")
+		if not GLOBAL.TheWorld.ismastersim then
+			return inst
+		end
+		
+		inst:AddComponent("upgradeable")
+		inst.components.upgradeable.upgradetype = GLOBAL.UPGRADETYPES.SOUL_LUNAR
+		inst.components.upgradeable.onupgradefn = SpawnGestalt		
+	end)
+	
+	AddPrefabPostInit("purebrilliance", function(inst)
 		inst:AddTag("SOUL_LUNAR_upgradeable")
 		if not GLOBAL.TheWorld.ismastersim then
 			return inst

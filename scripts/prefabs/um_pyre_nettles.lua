@@ -29,7 +29,7 @@ local spore_cooldown_max = 60
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
 local HOME_TILES =
 {
-    [WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
+    [WORLD_TILES.UM_GRASSMAGMA] = true, -- PLACEHOLDER
 }
 
 if WORLD_TILES.MAGMA_ASH then
@@ -254,7 +254,7 @@ local function OnGrow(inst)
 end
 
 local function OnShrink(inst)
-    local targetstage = math.clamp(inst.stage - 1, 1, 5)
+    local targetstage = math.clamp(inst.stage - 1, 0, 5)
 
     if inst.components.pickable then
         inst.components.pickable.canbepicked = false
@@ -265,14 +265,18 @@ local function OnShrink(inst)
     inst.stage = targetstage
 
     inst:ListenForEvent("animover", function()
-        local x, y, z = inst.Transform:GetWorldPosition()
-        local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
+		if inst.stage == 0 then
+			inst:Remove()
+		else
+			local x, y, z = inst.Transform:GetWorldPosition()
+			local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
 
-        if TheWorld.state.season ~= "summer" and not HOME_TILES[tile_at_position] then
-            inst:DoTaskInTime(((30 * 3 * math.random()) + 30), OnShrink)
-        end
+			if TheWorld.state.season ~= "summer" and not HOME_TILES[tile_at_position] then
+				inst:DoTaskInTime(((30 * 3 * math.random()) + 30), OnShrink)
+			end
 
-        SetStage(inst)
+			SetStage(inst)
+		end
     end)
 end
 
@@ -384,16 +388,16 @@ local function StageSpawner(name, SpawnAtStage)
         inst.entity:AddTransform()
         inst.entity:AddAnimState()
         inst.entity:AddSoundEmitter()
-        inst.entity:AddMiniMapEntity()
+        --inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
         inst.prefab = "um_pyre_nettles" -- In case we're a spawned-in stage-specifying prefab.
 
         --    MakeObstaclePhysics(inst, 0.1)
 
-        local minimap = inst.entity:AddMiniMapEntity()
-        inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
-        inst.MiniMapEntity:SetPriority(-1)
+        -- local minimap = inst.entity:AddMiniMapEntity()
+        -- inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
+        -- inst.MiniMapEntity:SetPriority(-1)
 
         -- Stage setting
         if not inst.stage then
