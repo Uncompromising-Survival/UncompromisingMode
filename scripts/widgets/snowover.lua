@@ -2,7 +2,7 @@ local Widget = require "widgets/widget"
 local Image = require "widgets/image"
 local UIAnim = require "widgets/uianim"
 
-local BGCOLOR = { 0 / 255, 132 / 255, 0 / 255, 255 / 255 }
+local BGCOLOR = {0 / 255, 132 / 255, 0 / 255, 255 / 255}
 
 local SnowOver = Class(Widget, function(self, owner, dustlayer)
     self.owner = owner
@@ -20,13 +20,14 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
     self.bg:SetScaleMode(SCALEMODE_PROPORTIONAL)
     self.bg = self.bg:AddChild(UIAnim())
     self.bg:GetAnimState():SetBank("sand_over")
-    self.bg:GetAnimState():SetBuild("snow_over")
+    self.bg:GetAnimState():SetBuild("sand_over")
     self.bg:GetAnimState():PlayAnimation("blind_loop", true)
+    self.bg:GetAnimState():SetAddColour(1, 1, 1, 1)
     self.bg:GetAnimState():AnimateWhilePaused(false)
     --self.bg:SetTint(1,1,1,.8)
 
     self.bg2 = dustlayer
-    self.bg2:GetAnimState():SetBuild("snow_over")
+    self.bg2:GetAnimState():SetAddColour(1, 1, 1, 1)
     self.bg2:Show()
 
     self:Hide()
