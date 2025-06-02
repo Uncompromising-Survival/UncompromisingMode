@@ -4,7 +4,7 @@ local UIAnim = require "widgets/uianim"
 
 local BGCOLOR = { 0 / 255, 132 / 255, 0 / 255, 255 / 255 }
 
-local SnowOver = Class(Widget, function(self, owner, storm_overlays)
+local SnowOver = Class(Widget, function(self, owner, dustlayer)
     self.owner = owner
     Widget._ctor(self, "SnowOver")
     self:UpdateWhilePaused(false)
@@ -13,8 +13,7 @@ local SnowOver = Class(Widget, function(self, owner, storm_overlays)
 
     self.minscale = .9 --min scale supported by art size
     self.maxscale = 1.20625 --defaults to 1 based on camera [15, 50] (default 30)
-    --[[self.storm_overlays = storm_overlays
-    self.storm_root = storm_overlays:GetParent()]]
+
     self.bg = self:AddChild(Widget("blind_root"))
     self.bg:SetHAnchor(ANCHOR_MIDDLE)
     self.bg:SetVAnchor(ANCHOR_MIDDLE)
@@ -26,34 +25,24 @@ local SnowOver = Class(Widget, function(self, owner, storm_overlays)
     self.bg:GetAnimState():AnimateWhilePaused(false)
     --self.bg:SetTint(1,1,1,.8)
 
-    self.bg2 = self:AddChild(Widget("dust_root"))
-    self.bg2:SetHAnchor(ANCHOR_MIDDLE)
-    self.bg2:SetVAnchor(ANCHOR_MIDDLE)
-    self.bg2:SetScaleMode(SCALEMODE_FIXEDSCREEN_NONDYNAMIC)
-    self.bg2 = self.bg2:AddChild(UIAnim())
-    self.bg2:GetAnimState():SetBank("sand_over")
+    self.bg2 = dustlayer
     self.bg2:GetAnimState():SetBuild("snow_over")
-    self.bg2:GetAnimState():PlayAnimation("dust_loop", true)
-    self.bg2:GetAnimState():AnimateWhilePaused(false)
-    self.bg2:GetAnimState():SetMultColour(1, 1, 1, .8)
+    self.bg2:Show()
 
     self:Hide()
     self:OnUpdate(0)
     self:StartUpdating()
 
-    if owner ~= nil then
+    if owner then
         --self.owner:ListenForEvent("snowon", function(owner) return self:SnowOn() end, owner)
         self.owner:ListenForEvent("snowoff", function(owner) return self:SnowOn() end, owner)
         --self.owner:ListenForEvent("checksnowvision", function(owner) return self:VisionCheck() end, owner)
         --self.owner:DoTaskInTime(0.1, function() return self:SnowOn() end)
         --self.owner:DoTaskInTime(0.1, function() return self:VisionCheck() end)
         --self.inst:ListenForEvent("weathertick", function(owner) return self:SnowOn() end, owner)
-
         self.inst:ListenForEvent("seasontick", function(owner) return self:ToggleUpdating() end, owner)
         --self.owner:ListenForEvent("weathertick", function(owner) return self:SnowOn() end, owner)
         --self:ListenForEvent("weathertick", function(owner) return self:SnowOn() end, owner)
-
-
         --self:SnowOn()
     end
 end)
@@ -72,29 +61,29 @@ end
 --]]
 
 local function MiniBlizzNear(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local miniblizzards = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local miniblizzards = TheSim:FindEntities(x, y, z, 32, {"miniblizzard"})
     if #miniblizzards > 0 then
         return true
     end
 end
 
-
 function SnowOver:OnUpdate(dt)
+    if TheNet:IsServerPaused() then return end
     local x, y, z = self.owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 7, { "wall" })
+    local ents = TheSim:FindEntities(x, y, z, 7, {"wall"})
     local suppressorNearby1 = 0.25 * #ents
-    local ents2 = TheSim:FindEntities(x, y, z, 9, { "fire" })
+    local ents2 = TheSim:FindEntities(x, y, z, 9, {"fire"})
     local suppressorNearby2 = 0.6 * #ents2
-    local ents3 = TheSim:FindEntities(x, y, z, 6, { "shelter" })
+    local ents3 = TheSim:FindEntities(x, y, z, 6, {"shelter"})
     local suppressorNearby3 = 0.15 * #ents3
-    local ents4 = TheSim:FindEntities(x, y, z, 10, { "snowstorm_protection_high" })
+    local ents4 = TheSim:FindEntities(x, y, z, 10, {"snowstorm_protection_high"})
     local suppressorNearby4 = 0.8 * #ents4
-    
+
     local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
     local localizedblizz = MiniBlizzNear(self.owner)
-    if TheWorld.state.iswinter and (localizedblizz or (TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) then
-        if self.alphaquation == nil then
+    if TheWorld.state.iswinter and (localizedblizz or (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) then
+        if not self.alphaquation then
             self.alphaquation = 0
         elseif self.alphaquation <= equationdingus then
             self.alphaquation = self.alphaquation + 0.01
@@ -102,21 +91,21 @@ function SnowOver:OnUpdate(dt)
             self.alphaquation = self.alphaquation - 0.01
         end
     else
-        if self.alphaquation == nil then
+        if not self.alphaquation then
             self.alphaquation = 0
         elseif self.alphaquation > 0 then
             self.alphaquation = self.alphaquation - 0.001
         end
     end
 
-    if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or localizedblizz) and not IsUnderRainDomeAtXZ(x, z) then
-        if self.changed == nil then
+    if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or localizedblizz) and not IsUnderRainDomeAtXZ(x, z) then
+        if not self.changed then
             self.changed = 0.01
-        elseif self.changed <= 0.8 then
+        elseif self.changed <= 0.7 then
             self.changed = self.changed + 0.001
             self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed - 0.4)
 
-            if self.owner.components.playervision ~= nil and self.owner.components.playervision:HasGoggleVision() then
+            if self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() then
                 self.bg:GetAnimState():SetMultColour(1, 1, 1, 0)
             else
                 self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed)
@@ -127,12 +116,13 @@ function SnowOver:OnUpdate(dt)
         end
         self:Show()
     else
-        if self.changed == nil then
+        if not self.changed then
             self.changed = 0
         elseif self.changed >= 0 then
             self.changed = self.changed - 0.001
             self.bg2:GetAnimState():SetMultColour(1, 1, 1, self.changed - 0.4)
-            if self.owner.components.playervision ~= nil and self.owner.components.playervision:HasGoggleVision() then
+
+            if self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() then
                 self.bg:GetAnimState():SetMultColour(1, 1, 1, 0)
             else
                 self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed)
@@ -150,15 +140,10 @@ function SnowOver:OnUpdate(dt)
         end
     end
 
-    if self.owner.components.playervision ~= nil then
-        if self.bg.shown and
-            self.owner.components.playervision:HasGoggleVision() then
-            if self.changed > 0.15 then
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, 0.15 - self.alphaquation)
-            else
-                self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed - self.alphaquation)
-            end
-        elseif self.changed ~= nil then
+    if self.owner.components.playervision then
+        if self.bg.shown and self.owner.components.playervision:HasGoggleVision() then
+            self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed > 0.15 and 0.15 - self.alphaquation or self.changed - self.alphaquation)
+        elseif self.changed then
             self.bg:GetAnimState():SetMultColour(1, 1, 1, self.changed - self.alphaquation)
         end
     end
