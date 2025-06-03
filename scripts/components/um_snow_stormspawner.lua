@@ -108,18 +108,13 @@ local function StartStorming()
     _storming = true
 
     TheWorld:PushEvent("ms_forceprecipitation", true)
-	local frametime = TheWorld.snowinstant and 0 or 60
+    local frametime = TheWorld.snowinstant and 0 or 60
     for i, v in ipairs(AllPlayers) do
         if v.components.talker then
             v:DoTaskInTime(math.random() * 4, function(inst)
                 inst.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
             end)
         end
-        v:DoTaskInTime(frametime, function()
-            if v.player_classified then
-                v.player_classified.snowover:set(true)
-            end
-        end)
     end
 
     TheWorld.snowstorm_task = TheWorld:DoTaskInTime(frametime, function()
@@ -127,7 +122,13 @@ local function StartStorming()
         if TheWorld.net ~= nil then
             TheWorld.net:AddTag("snowstormstartnet")
         end
-        
+
+        for i, v in ipairs(AllPlayers) do
+            if v.player_classified then
+                v.player_classified.snowover:set(true)
+            end
+        end
+
         _worldsettingstimer:StartTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
         
         _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30))
