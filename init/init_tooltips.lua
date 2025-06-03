@@ -56,11 +56,12 @@ STRINGS.UNCOMP_TOOLTIP = {
     ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
     HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
     SALTPACK = "- Drops piles of salt, preventing buildup of Snow Piles.",
-    --SPOREPACK = "- Provides lots of storage space.\n- Rots food, but refreshes Spores.",
+    SPOREPACK = "- Items inside spoil twice as fast.",
+    SLUDGE_SACK = "- It's always wet.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
-    "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has even more uses.",
+    "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
     HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
@@ -69,7 +70,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
 	UM_RIMEWEED_ICEPACK = "- Cools the player.",
-    DISEASECUREBOMB = "- Fertilizes plants and get those ready for harvest.",
+    DISEASECUREBOMB = "- Fertilizes plants and gets them ready for harvest.",
     SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
     ARMOR_SHARKSUIT_UM =
     "- High wetness protection. \n- Works as electrical insulation.\n- Wearer will wash ashore with no penalties.",
@@ -78,13 +79,14 @@ STRINGS.UNCOMP_TOOLTIP = {
     KALEIDOSCOPE = "- Hitting enemies allows allies to deal Planar damage against it for a short time",
     ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "- Self-healing.",
-    UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.\n- Ignores tiny, shadow, or fire-aligned creatures.",
+    UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.",
     WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
     CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
     PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
     PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
-    BRINE_BALM = "- Hurts you a little, heals you, over time, a lot.\n- Restores lost maximum health."
+    BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
+    PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -293,16 +295,28 @@ if TUNING.DSTU.STORMS then
     TOOLTIPS.RAINOMETER = "- Can track a Tornado's location."
 end
 
-if TUNING.DSTU.GOTOBED ~= false then
-    TOOLTIPS.BEDROLL_STRAW = "- May restore maximum health."
+if TUNING.DSTU.GOTOBED == "default" then
+    TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health, if penalty isn't severe."
 
-    TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- May restore maximum health."
+    TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health, if penalty isn't severe."
 
-    TOOLTIPS.TENT = "- May restore maximum health."
+    TOOLTIPS.TENT = "- Restores maximum health, if penalty isn't severe."
 
-    TOOLTIPS.PORTABLETENT_ITEM = "- May restore maximum health."
+    TOOLTIPS.PORTABLETENT_ITEM = "- Restores maximum health, if penalty isn't severe."
 
-    TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- May restore maximum health."
+    TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health, if penalty isn't severe."
+	
+elseif TUNING.DSTU.GOTOBED == "legacy" then
+
+	TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health."
+
+    TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health."
+
+    TOOLTIPS.TENT = "- Restores maximum health."
+
+    TOOLTIPS.PORTABLETENT_ITEM = "- Restores maximum health."
+
+    TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health."
 end
 
 if TUNING.DSTU.SLEEPINGBUFF > 1 then
@@ -398,9 +412,9 @@ if TUNING.DSTU.WXLESS then
         MAXSANITY = "- Provides a bit more sanity over time.\n- Reduces insanity aura effects.\n- Now increases sanity by 75.",
         MAXSANITY1 = "- Provides a bit of sanity over time.\n- Slighly reduces insanity aura effects.\n- Now increases sanity by 30.",
         TASER = "- Getting hit stuns the attacker.\n- Gives you charge when you attack a shocked target enough times.",
-        COLD = "- Periodically produces ice.\n- No longer changes max and min temperature.\n- Decreases food spoilage rate.\n- Decreased drying threshold\n- Chills you significantly, if idle.",
+        COLD = "- Now decreases temperature when working or attacking.\n- No longer changes max and min temperature.\n- Periodically produces ice.\n- Decreases food spoilage rate.\n- Structures worked on get more brittle with each work.\n- Applies a weak freezing effect to enemies.",
         MAXHUNGER = "- Slows down charge drain.\n- Now increases hunger by 75.", --WHOEVER AT KLEI WHO DECIDED THEY'D MAKE THE MAXHUNGER1 THE WEAK VERSION AND MAXHUNGER THE STRONG VERSION SHOULD HAVE THEIR FINGERS BOILED.
-        MAXHUNGER1 = "- Slightly slows down hunger drain.\n- Now increases hunger by 30",
+        MAXHUNGER1 = "- Slightly slows down hunger drain.\n- Now increases hunger by 30.",
     }
     for k, v in pairs(CircuitDefs) do
         TOOLTIPS["WX78MODULE_" .. k] = v
