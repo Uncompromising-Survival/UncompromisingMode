@@ -58,7 +58,7 @@ AddPlayerPostInit(function(inst)
     SetInstanceFunctions2(inst)
 end)
 
-local overlaystosort = {"um_heatwaveover", "snowover", "snowdustover", "um_stormover", "sanddustover", "storm_overlays", "storm_root", "raindomeover", "leafcanopy", "drops_vig", "vig"} 
+local overlaystosort = {"um_heatwaveover", "snowover", "snowdustover", "um_stormover", "raindomeover", "leafcanopy", "drops_vig", "vig"} 
 local function SortOverlays(self)
     for _, overlay in pairs(overlaystosort) do
         if self[overlay] then
@@ -69,7 +69,7 @@ end
 
 AddClassPostConstruct("screens/playerhud", function(inst)
     local SnowOver = require("widgets/snowover")
-	local SnowDustOver = require("widgets/sanddustover")
+    local SnowDustOver = require("widgets/sanddustover")
     local Um_StormOver = require("widgets/um_stormover")
     local HeatwaveOver = require("widgets/heatwaveover")
 
@@ -82,4 +82,21 @@ AddClassPostConstruct("screens/playerhud", function(inst)
         self.um_heatwaveover = self.overlayroot:AddChild(HeatwaveOver(owner))
         SortOverlays(self)
     end
+end)
+
+local function OnSpy(inst)
+    --inst._parent.HUD.snowover:SnowOn()
+    inst._parent:PushEvent("snowover")
+end
+
+--[[local function OffSpy(inst)
+    if inst._parent then
+        --ThePlayer.HUD.snowover:Show()
+        inst._parent.HUD.snowover:SnowOn()
+    end
+end]]
+
+AddPrefabPostInit("player_classified", function(inst)
+    inst.snowover = GLOBAL.net_bool(inst.GUID, "snow.snowover", "snowdirty")
+    inst:ListenForEvent("snowdirty", OnSpy)
 end)
