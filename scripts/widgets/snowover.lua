@@ -89,7 +89,6 @@ function SnowOver:GetAlpha()
     local ents4 = TheSim:FindEntities(x, y, z, 10, {"snowstorm_protection_high"})
     local suppressorNearby4 = .8 * #ents4
     local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
-    self.equationdingus = equationdingus
     if IsInSnowstorm(self.owner) then
         if equationdingus > 0 then
             self.alphaquation = math.clamp(self.alphaquation + .01, 0, equationdingus)
