@@ -159,7 +159,7 @@ function SnowOver:ApplyLevels()
         local k = Lerp(1, .7, self.brightness)
         local f = self.alpha * (1 - k) + math.min(1, self.fade * 1.5) * k
         local c = .15 + .85 * self.brightness
-        self.dust:GetAnimState():SetMultColour(c, c, c, math.clamp(f, 0, self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() and .3 or .7 - math.clamp(self.alphaquation, 0, .5)))
+        self.dust:GetAnimState():SetMultColour(c, c, c, math.clamp(f, 0, self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() and .3 or .7 - math.clamp(self.alphaquation, 0, .4)))
         if not self.dust.shown then
             self.dust:Show()
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm", self.fade)
