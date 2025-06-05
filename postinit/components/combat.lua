@@ -122,21 +122,19 @@ env.AddComponentPostInit("combat", function(self)
             end
         end
 
-        local weapon_check = weapon ~= nil and weapon:IsValid() and weapon
-
         if stimuli and stimuli == "fire" and self.inst.components.health and self.inst.components.health:GetFireDamageScale() then
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
 
-        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon_check, stimuli)
+        local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
 
         local redirect_combat = damageredirecttarget and damageredirecttarget.components.combat
         if redirect_combat and TUNING.DSTU.BEEFALO_NERF then
             if self.inst.components.health and not self.inst.components.health:IsDead() then
-                redirect_combat:GetAttacked(attacker, damage, weapon_check, stimuli)
-                return _GetAttacked(self, attacker, damage / 2, weapon_check, "beefalo_half_damage", ...) -- added new stimuli to prevent Stackoverflow
+                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
+                return _GetAttacked(self, attacker, damage / 2, weapon, "beefalo_half_damage", ...) -- added new stimuli to prevent Stackoverflow
             else
-                redirect_combat:GetAttacked(attacker, damage, weapon_check, stimuli)
+                redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
             end
         end
 
@@ -163,11 +161,11 @@ env.AddComponentPostInit("combat", function(self)
             if damage > 600 then damage = 600 end
             --elseif self.inst ~= nil and (self.inst.prefab == "bernie_active" or self.inst.prefab == "bernie_big") and attacker ~= nil and attacker:HasTag("shadow") and TUNING.DSTU.BERNIE_BUFF then
             --damage = damage * 0.2
-            --return _GetAttacked(self, attacker, damage, weapon_check, stimuli, ...)
+            --return _GetAttacked(self, attacker, damage, weapon, stimuli, ...)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
 
-        return _GetAttacked(self, attacker, damage, weapon_check, stimuli, spdamage, ...)
+        return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
 end)
