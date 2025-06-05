@@ -267,8 +267,9 @@ function modparams.silksack.widget.buttoninfo.validfn(inst)
         end
 
         local silk = container:GetItemInSlot(9)
-
-        return has_items and silk and (silk.replica ~= nil and silk.replica.stackable ~= nil and silk.replica.stackable:StackSize() >= 6 or silk.components.stackable ~= nil and silk.components.stackable.stacksize >= 6) and not bundle
+		if silk ~= nil and silk.prefab == "silk" then
+			return has_items and silk and (silk.replica ~= nil and silk.replica.stackable ~= nil and silk.replica.stackable:StackSize() >= 6 or silk.components.stackable ~= nil and silk.components.stackable.stacksize >= 6) and not bundle
+		end
     end
 end
 
