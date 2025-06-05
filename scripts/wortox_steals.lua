@@ -8,6 +8,13 @@ stealtable= {
 			honey = 1,
 		},
 	},
+    lureplant = {
+		name = "lureplant",
+		weight = {
+			twigs = 99,
+			plantmeat = 1,
+		},
+	},
     pigguard = {
 		name = "pigguard",
 		weight = {
