@@ -46,29 +46,24 @@ function SnowStormWatcher:SnowstormLevel()
 end
 
 local function MiniBlizzNear(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local miniblizzard = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
-    if #miniblizzard > 0 then
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local miniblizzards = TheSim:FindEntities(x, y, z, 32, {"miniblizzard"})
+    if #miniblizzards > 0 then
         return true
     end
 end
 
 function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     local x, y, z = self.inst.Transform:GetWorldPosition()
-
-    local ents = TheSim:FindEntities(x, y, z, 4, { "wall" })
+    local ents = TheSim:FindEntities(x, y, z, 4, {"wall"})
     local suppressorNearby1 = (#ents > 2)
-
-    local ents2 = TheSim:FindEntities(x, y, z, 6, { "fire" })
+    local ents2 = TheSim:FindEntities(x, y, z, 6, {"fire"})
     local suppressorNearby2 = (#ents2 > 0)
-
-    local ents3 = TheSim:FindEntities(x, y, z, 5.5, { "shelter" })
+    local ents3 = TheSim:FindEntities(x, y, z, 5.5, {"shelter"})
     local suppressorNearby3 = (#ents3 > 2)
-
-    local ents4 = TheSim:FindEntities(x, y, z, 6, { "snowstorm_protection_high" })
+    local ents4 = TheSim:FindEntities(x, y, z, 6, {"snowstorm_protection_high"})
     local suppressorNearby4 = (#ents4 > 0)
     local snowstorming = false
-
     if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
         if self.inst.components.playervision:HasGoggleVision() or self.inst.components.playervision:HasGhostVision() or self.inst.components.rider:IsRiding()
             or suppressorNearby1 or suppressorNearby2 or suppressorNearby3 or suppressorNearby4
