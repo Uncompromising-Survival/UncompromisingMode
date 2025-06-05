@@ -80,20 +80,14 @@ end
 local function StopSnowstorm()
     _storming = false
 
-    for i, v in ipairs(AllPlayers) do
-        if v.player_classified then
-            v.player_classified.snowover:set(false)
-        end
-    end
-
-    if TheWorld.snowstorm_task ~= nil then
+    if TheWorld.snowstorm_task then
         TheWorld.snowstorm_task:Cancel()
         TheWorld.snowstorm_task = nil
     end
 
     TheWorld:RemoveTag("snowstormstart")
 
-    if TheWorld.net ~= nil then
+    if TheWorld.net then
         TheWorld.net:RemoveTag("snowstormstartnet")
     end
 
@@ -110,27 +104,21 @@ local function StartStorming()
     TheWorld:PushEvent("ms_forceprecipitation", true)
     local frametime = TheWorld.snowinstant and 0 or 60
     for i, v in ipairs(AllPlayers) do
-        if v.components.talker then
-            v:DoTaskInTime(math.random() * 4, function(inst)
-                inst.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
-            end)
-        end
+        v:DoTaskInTime(math.random() * 4, function(inst)
+            if inst.components.talker then
+                inst.components.talker:Say(GetString(inst, "ANNOUNCE_SNOWSTORM"))
+            end
+        end)
     end
 
     TheWorld.snowstorm_task = TheWorld:DoTaskInTime(frametime, function()
         TheWorld:AddTag("snowstormstart")
-        if TheWorld.net ~= nil then
+        if TheWorld.net then
             TheWorld.net:AddTag("snowstormstartnet")
         end
 
-        for i, v in ipairs(AllPlayers) do
-            if v.player_classified then
-                v.player_classified.snowover:set(true)
-            end
-        end
-
         _worldsettingstimer:StartTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
-        
+
         _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30))
     end)
 end

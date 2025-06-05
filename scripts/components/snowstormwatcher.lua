@@ -27,8 +27,9 @@ function SnowStormWatcher:ToggleSnowstorms(active, src, data)
         self.inst:StartUpdatingComponent(self)
     else
         self.inst:StopUpdatingComponent(self)
-		-- Test Failsafe
-		self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
+        -- Test Failsafe
+        self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
+        self.inst:PushEvent("checksnowvision")
     end
 end
 
@@ -42,11 +43,11 @@ function SnowStormWatcher:SnowstormLevel()
 end
 
 local function MiniBlizzNear(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local miniblizzard = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
-	if #miniblizzard > 0 then
-		return true
-	end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local miniblizzard = TheSim:FindEntities(x,y,z,32,{"miniblizzard"})
+    if #miniblizzard > 0 then
+        return true
+    end
 end
 
 function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
@@ -63,27 +64,26 @@ function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
 
     local ents4 = TheSim:FindEntities(x, y, z, 6, { "snowstorm_protection_high" })
     local suppressorNearby4 = (#ents4 > 0)
+    local snowstorming = false
 
-
-    if TheWorld.state.iswinter and ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
-        if self.inst.components.playervision:HasGoggleVision() or
-            self.inst.components.playervision:HasGhostVision() or
-            self.inst.components.rider:IsRiding() or
-            suppressorNearby1 or suppressorNearby2 or suppressorNearby3 or suppressorNearby4 or
-            (
-                self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ~= nil and
-                self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest") or IsUnderRainDomeAtXZ(x, z) or self.inst:HasTag("weerclops")
-        then
+    if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
+        if self.inst.components.playervision:HasGoggleVision() or self.inst.components.playervision:HasGhostVision() or self.inst.components.rider:IsRiding()
+            or suppressorNearby1 or suppressorNearby2 or suppressorNearby3 or suppressorNearby4
+            or (self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+            and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest")
+            or IsUnderRainDomeAtXZ(x, z) or self.inst:HasTag("weerclops") then
             self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
-            self.inst:PushEvent("checksnowvision")
         else
             self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "snowstorm", self.snowstormspeedmult)
-            self.inst:PushEvent("checksnowvision")
         end
+        snowstorming = true
     else
         self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
-        self.inst:PushEvent("checksnowvision")
     end
+    if self.inst.player_classified and self.inst.player_classified.snowover then
+        self.inst.player_classified.snowover:set(snowstorming)
+    end
+    --self.inst:PushEvent("checksnowvision")
 end
 
 function TrySpawning(v)
@@ -93,7 +93,7 @@ function TrySpawning(v)
     local playervalue2 = #nearbyplayers2 * 0.1
 
     if TheWorld.state.iswinter and
-        ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and
+        ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and
         TheWorld.Map:IsPassableAtPoint(x1, y1, z1, false, true) then --and self.snowstormstart then
         if math.random() <= 0.25 - playervalue2 then
             --local spawn_pt = GetSpawnPoint(origin_pt, PLAYER_CHECK_DISTANCE + 5)
@@ -123,7 +123,7 @@ local function SnowpileChance(inst, self)
     local playervalue1 = #nearbyplayers1 * 0.025
 
     if TheWorld.state.iswinter and
-        ((TheWorld.net ~= nil and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then --and self.snowstormstart then
+        ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then --and self.snowstormstart then
         if chancer < 0.40 - playervalue1 then
             local xrandom = math.random(-20, 20)
             local zrandom = math.random(-20, 20)
@@ -144,7 +144,7 @@ local function SnowpileChance(inst, self)
         end
     end
 
-    if self.task ~= nil then
+    if self.task then
         self.task:Cancel()
         self.task = nil
     end
@@ -153,9 +153,8 @@ end
 TUNING.SNOW_CHANCE_TIME = 15
 TUNING.SNOW_CHANCE_VARIANCE = 15
 
-
 function SnowStormWatcher:StartSnowPileTask()
-    if self.task == nil then
+    if not self.task then
         self.task = self.inst:DoTaskInTime(TUNING.SNOW_CHANCE_TIME + math.random() * TUNING.SNOW_CHANCE_VARIANCE,
             SnowpileChance, self) --, self)
     end
