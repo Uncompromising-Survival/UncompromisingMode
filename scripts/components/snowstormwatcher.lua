@@ -29,7 +29,10 @@ function SnowStormWatcher:ToggleSnowstorms(active, src, data)
         self.inst:StopUpdatingComponent(self)
         -- Test Failsafe
         self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
-        self.inst:PushEvent("checksnowvision")
+        --self.inst:PushEvent("checksnowvision")
+        if self.inst.player_classified and self.inst.player_classified.snowover then
+            self.inst.player_classified.snowover:set(false)
+        end
     end
 end
 
