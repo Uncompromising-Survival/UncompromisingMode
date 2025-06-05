@@ -18,7 +18,7 @@ local function DoubleSlap(owner, data)
 		local range = owner.components.combat:GetAttackRange() or 0
 		--owner.components.combat:StartAttack()
 		owner.components.locomotor:StopMoving()
-		print("this is the part where you go into the double slap")
+		--print("this is the part where you go into the double slap")
 		owner.sg:GoToState("force_klaus_attack")
 
 		local damagecalc = ((damage / 2) * damagemult) * damagemultex
