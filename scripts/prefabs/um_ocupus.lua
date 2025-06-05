@@ -3,10 +3,6 @@ local assets =
     Asset("ANIM", "anim/ocupus.zip"),
 }
 
-local prefabs =
-{
-}
-
 SetSharedLootTable( 'um_ocupus_eyetacle',
 {
     {'um_ocupus_eyetacle_item',  1.00},
@@ -16,19 +12,19 @@ local function RemoveAllTentacles(inst) --This is mainly meant to catch any stra
 	--TheNet:Announce("toldtoremove")
 	if inst.surfacetents then
 		for i,v in ipairs(inst.surfacetents) do
-			if v then
-				v.Leave(v)
+			if v and v:IsValid() then
+				v:Leave()
 			end
 		end
 	end
 	if inst.regulartents then
 		for i,v in ipairs(inst.regulartents) do
-			if v then
-				v.Leave(v)
+			if v and v:IsValid() then
+				v:Leave()
 			end
 		end
 	end
-	if inst.beak then
+	if inst.beak and inst.beak:IsValid() then
 		inst.beak.boat = nil
 		inst.beak:AddTag("notarget")
 	end
@@ -423,6 +419,5 @@ local function fn()
 	inst:DoPeriodicTask(10,Bubbles)
     return inst
 end
-
 
 return Prefab("um_ocupus", fn, assets)

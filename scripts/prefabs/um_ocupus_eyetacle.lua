@@ -3,10 +3,6 @@ local assets =
     Asset("ANIM", "anim/ocupus.zip"),
 }
 
-local prefabs =
-{
-}
-
 SetSharedLootTable( 'um_ocupus_eyetacle',
 {
     {'um_ocupus_eyetacle_item',  1.00},
@@ -193,7 +189,7 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
 	inst:Hide()
 	inst:DoTaskInTime(0,function(inst)
-		inst.Appear(inst)
+		inst:Appear()
 		inst:DoPeriodicTask(math.random(5,7),EvaluateDistanceToBoat)
 	end)
 
@@ -221,7 +217,7 @@ local function fn()
 		inst.AnimState:PushAnimation("eyetacle_idle",true)
 		inst.AnimState:SetDeltaTimeMultiplier(math.random(-5,5)*0.01+1)
 		inst:DoPeriodicTask(1,function(inst) --Keep the eyetacle looking at the boat
-			if inst.boatvictim and inst.boatvictim.Transform:GetWorldPosition() then
+			if inst.boatvictim and inst.boatvictim:IsValid() then
 				inst:ForceFacePoint(inst.boatvictim.Transform:GetWorldPosition())
 			end
 		end)
@@ -246,7 +242,7 @@ local function LookForVictims(inst)
 end
 
 local function Redirect(inst)
-	if inst.interestpoint and inst.interestpoint.Transform:GetWorldPosition() then
+	if inst.interestpoint and inst.interestpoint:IsValid() then
 		inst:ForceFacePoint(inst.interestpoint.Transform:GetWorldPosition())
 	else
 		local x,z = inst.homex,inst.homez
@@ -499,7 +495,7 @@ local function fnreapertentacle() --Reaper Tentacle is scrapped/shelved. It was 
 end
 
 local function UpperTentAppear(inst)
-	inst.tent.Appear(inst.tent)
+	inst.tent:Appear()
 	inst.AnimState:PlayAnimation("eyetacle_under",true)
 	inst:RemoveEventCallback("animover",UpperTentAppear)
 end
@@ -520,15 +516,13 @@ local function fneyetacleunder()
     inst.AnimState:SetSortOrder(ANIM_SORT_ORDER_BELOW_GROUND.UNDERWATER)
 	inst.AnimState:SetLayer(LAYER_WIP_BELOW_OCEAN)
 	
-	
 	inst:AddTag("NOCLICK")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	
+
 	inst.Appear = function(inst) --A tentacle is coming!
 		if inst.noeyes then
 			--TheNet:Announce("no eyes!")
@@ -563,4 +557,3 @@ return Prefab("um_ocupus_eyetacle", fn, assets),
 Prefab("um_ocupus_eye", fneye, assets),
 Prefab("um_ocupus_tentacle_fisher",fnfishtentacle),
 Prefab("um_ocupus_tentacle_reaper",fnreapertentacle)
-

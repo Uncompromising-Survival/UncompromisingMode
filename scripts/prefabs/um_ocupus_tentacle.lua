@@ -2,10 +2,12 @@ local brain = require "brains/um_ocupus_tentaclebrain"
 
 SetSharedLootTable( 'um_ocupus_tentacle',
 {
-    {'um_ocupus_tentacle_item',  1.00},
+    {'um_ocupus_tentacle_item', 1.00},
+    {'monstermeat', 1.00},
 })
+
 local function releaseclamp(inst, immediate)
-	if inst.boat then
+	if inst.boat and inst.boat:IsValid() then
 		if inst.boat.components.boatphysics ~= nil then
 			inst.boat.components.boatphysics:RemoveBoatDrag(inst)
 		end
@@ -105,10 +107,6 @@ local function OnDead(inst)
 	end)
 end
 
-SetSharedLootTable( 'um_ocupus_tentacle',
-{
-    {'monstermeat',                                1.00},
-})
 local function isnotocupus(ent)
 	if ent ~= nil and not ent:HasTag("ocupus") then -- fix to friendly AOE: refer for later AOE mobs -Axe
 		return true
@@ -247,4 +245,3 @@ local function fn()
 end
 
 return Prefab("um_ocupus_tentacle",fn)
-

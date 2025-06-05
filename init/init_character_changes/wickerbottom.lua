@@ -420,9 +420,10 @@ env.AddPrefabPostInit("wickerbottom", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    inst:AddComponent("prototyper")
-    inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.SCIENCEMACHINE
-    inst.components.prototyper.restrictedtag = "notwickerbottom"
+
+    local prototyper = inst:AddComponent("prototyper")
+    prototyper.trees = TUNING.PROTOTYPER_TREES.SCIENCEMACHINE
+    prototyper.restrictedtag = "notwickerbottom"
 end)
 
 if TUNING.DSTU.WICKER_INV_REGEN ~= "vanilla" then
@@ -484,7 +485,6 @@ env.AddPrefabPostInit("book_rain", function(inst)
         end
     end
 end)
-
 
 env.AddPlayerPostInit(function(inst)
     if inst.prefab ~= "wickerbottom" then

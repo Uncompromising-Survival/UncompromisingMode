@@ -196,7 +196,6 @@ AddRoom("BoilingFields_Sinkhole", {
             marsh_bush = .25,
             rocks = .03,
             flint = .03,
-
         },
     }
 })
@@ -218,7 +217,6 @@ if KnownModIndex:IsModEnabled("workshop-1467214795") then
                 marsh_bush = .25,
                 rocks = .03,
                 flint = .03,
-
             },
         }
     })

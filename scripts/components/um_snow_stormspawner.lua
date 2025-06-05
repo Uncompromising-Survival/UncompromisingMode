@@ -18,60 +18,58 @@ local UM_RIMEWEED_TIMERNAME = "um_rimeweed_timer"
 
 local _stormtask = nil
 
-
-
 local function SpawnRimeweed(plant)
-	local offset = FindWalkableOffset(Vector3(plant.Transform:GetWorldPosition()), math.random()*2*PI, 4, 12)
-	if offset then
-		local rimeweed = SpawnPrefab("rimeweed_main")
-		local x,y,z = plant.Transform:GetWorldPosition()
-		rimeweed.Transform:SetPosition(x+offset.x,0,z+offset.z)
-	end
+    local offset = FindWalkableOffset(Vector3(plant.Transform:GetWorldPosition()), math.random()*2*PI, 4, 12)
+    if offset then
+        local rimeweed = SpawnPrefab("rimeweed_main")
+        local x,y,z = plant.Transform:GetWorldPosition()
+        rimeweed.Transform:SetPosition(x+offset.x,0,z+offset.z)
+    end
 end
 
 local function SpawnRimeweeds()
-	--TheNet:Announce("trying to spawn rimeweeds")
-	local harvestible_plants = {}
-	local rimeweeds = 0
-	local allplants -- should target *all* plants
-	local chance = math.random() -- Chance to target specific plants
-	local specificplant
-	if chance > 0.75 then -- Wide Grass
-		specificplant = "trapdoorgrass"
-	elseif chance <= 0.75 and chance > 0.6 then -- Reeds
-		specificplant = "reeds"
-	elseif chance <= 0.6 and chance > 0.5 then -- Cactus
-		specificplant = "cactus"
-	elseif chance <= 0.5 and chance > 0.4 then -- Red Mushrooms
-		specificplant = "red_mushroom"
-	else
-		allplants = true
-	end
-	for i,ent in pairs(Ents) do
-		if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
-			table.insert(harvestible_plants,ent)
-		end
-		if ent.prefab == "rimeweed_main" then
-			rimeweeds = rimeweeds + 1
-		end
-	end
-	
-	if harvestible_plants and #harvestible_plants > 1 then
-		--TheNet:Announce("Rimeweeds = ")
-		--TheNet:Announce(rimeweeds)
-		if rimeweeds < 10 then
-			local rnd = math.random(1,#harvestible_plants)
-			SpawnRimeweed(harvestible_plants[rnd])
-			table.remove(harvestible_plants,rnd)
-		end
-		if rimeweeds < 20 then
-			local rnd = math.random(1,#harvestible_plants) --crash point
-			SpawnRimeweed(harvestible_plants[rnd])
-			table.remove(harvestible_plants,rnd)
-		end
-	end
+    --TheNet:Announce("trying to spawn rimeweeds")
+    local harvestible_plants = {}
+    local rimeweeds = 0
+    local allplants -- should target *all* plants
+    local chance = math.random() -- Chance to target specific plants
+    local specificplant
+    if chance > 0.75 then -- Wide Grass
+        specificplant = "trapdoorgrass"
+    elseif chance <= 0.75 and chance > 0.6 then -- Reeds
+        specificplant = "reeds"
+    elseif chance <= 0.6 and chance > 0.5 then -- Cactus
+        specificplant = "cactus"
+    elseif chance <= 0.5 and chance > 0.4 then -- Red Mushrooms
+        specificplant = "red_mushroom"
+    else
+        allplants = true
+    end
+    for i,ent in pairs(Ents) do
+        if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
+            table.insert(harvestible_plants,ent)
+        end
+        if ent.prefab == "rimeweed_main" then
+            rimeweeds = rimeweeds + 1
+        end
+    end
+    
+    if harvestible_plants and #harvestible_plants > 1 then
+        --TheNet:Announce("Rimeweeds = ")
+        --TheNet:Announce(rimeweeds)
+        if rimeweeds < 10 then
+            local rnd = math.random(1,#harvestible_plants)
+            SpawnRimeweed(harvestible_plants[rnd])
+            table.remove(harvestible_plants,rnd)
+        end
+        if rimeweeds < 20 then
+            local rnd = math.random(1,#harvestible_plants) --crash point
+            SpawnRimeweed(harvestible_plants[rnd])
+            table.remove(harvestible_plants,rnd)
+        end
+    end
     if _worldsettingstimer:GetTimeLeft(UM_STOPSNOWSTORM_TIMERNAME) then
-		--TheNet:Announce("new timer")
+        --TheNet:Announce("new timer")
         _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30))
     end
 end
@@ -81,6 +79,12 @@ end
 
 local function StopSnowstorm()
     _storming = false
+
+    for i, v in ipairs(AllPlayers) do
+        if v.player_classified then
+            v.player_classified.snowover:set(false)
+        end
+    end
 
     if TheWorld.snowstorm_task ~= nil then
         TheWorld.snowstorm_task:Cancel()
@@ -96,7 +100,7 @@ local function StopSnowstorm()
     if _worldsettingstimer:GetTimeLeft(UM_SNOWSTORM_TIMERNAME) == nil then
         _worldsettingstimer:StartTimer(UM_SNOWSTORM_TIMERNAME, _spawninterval + math.random(0, 120))
     end
-	_worldsettingstimer:StopTimer(UM_RIMEWEED_TIMERNAME)
+    _worldsettingstimer:StopTimer(UM_RIMEWEED_TIMERNAME)
     _worldsettingstimer:ResumeTimer(UM_SNOWSTORM_TIMERNAME)
 end
 
@@ -104,24 +108,30 @@ local function StartStorming()
     _storming = true
 
     TheWorld:PushEvent("ms_forceprecipitation", true)
-
+    local frametime = TheWorld.snowinstant and 0 or 60
     for i, v in ipairs(AllPlayers) do
-        if v.components.talker ~= nil then
+        if v.components.talker then
             v:DoTaskInTime(math.random() * 4, function(inst)
                 inst.components.talker:Say(GetString(v, "ANNOUNCE_SNOWSTORM"))
             end)
         end
     end
 
-    TheWorld.snowstorm_task = TheWorld:DoTaskInTime(60, function()
+    TheWorld.snowstorm_task = TheWorld:DoTaskInTime(frametime, function()
         TheWorld:AddTag("snowstormstart")
         if TheWorld.net ~= nil then
             TheWorld.net:AddTag("snowstormstartnet")
         end
-		
+
+        for i, v in ipairs(AllPlayers) do
+            if v.player_classified then
+                v.player_classified.snowover:set(true)
+            end
+        end
+
         _worldsettingstimer:StartTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
-		
-		_worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30))
+        
+        _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30))
     end)
 end
 
@@ -138,7 +148,7 @@ end
 local function StopSnowstorms()
     _worldsettingstimer:StopTimer(UM_SNOWSTORM_TIMERNAME)
     _worldsettingstimer:StopTimer(UM_STOPSNOWSTORM_TIMERNAME)
-	_worldsettingstimer:StopTimer(UM_RIMEWEED_TIMERNAME)
+    _worldsettingstimer:StopTimer(UM_RIMEWEED_TIMERNAME)
 end
 
 local function OnSeasonChange(self)
@@ -172,7 +182,7 @@ end)
 
 function SnowstormInitiator:OnPostInit()
 
-	-- Snowstorm
+    -- Snowstorm
     if not _worldsettingstimer:ActiveTimerExists(UM_SNOWSTORM_TIMERNAME) then
         _worldsettingstimer:AddTimer(UM_SNOWSTORM_TIMERNAME, _spawninterval + math.random(0, 120), true, StartStorming)
     end
@@ -180,13 +190,13 @@ function SnowstormInitiator:OnPostInit()
         _worldsettingstimer:AddTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120), true,
             StopSnowstorm)
     end
-	
-	-- Rimeweed
-	if not _worldsettingstimer:ActiveTimerExists(UM_RIMEWEED_TIMERNAME) then
+    
+    -- Rimeweed
+    if not _worldsettingstimer:ActiveTimerExists(UM_RIMEWEED_TIMERNAME) then
         _worldsettingstimer:AddTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30), true, SpawnRimeweeds)
     end
-	
-	
+    
+    
     OnSeasonChange()
 end
 

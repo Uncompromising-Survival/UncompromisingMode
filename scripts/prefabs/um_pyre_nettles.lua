@@ -29,9 +29,8 @@ local spore_cooldown_max = 60
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
 local HOME_TILES =
 {
-    --[WORLD_TILES.UM_MAGMA] = true,
-    --[WORLD_TILES.UM_GRASSMAGMA] = true,
-    [WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
+    [WORLD_TILES.UM_MAGMA] = true,
+    [WORLD_TILES.UM_GRASSMAGMA] = true,
 }
 
 if WORLD_TILES.MAGMA_ASH then
@@ -155,7 +154,7 @@ local function SetStage(inst)
         print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
         inst.stage = 5
     elseif inst.stage < 1 then
-        --print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
+        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
         inst:Remove()
     end
 
@@ -267,6 +266,7 @@ local function OnShrink(inst)
     inst.stage = targetstage
 
     inst:ListenForEvent("animover", function()
+        if inst.stage < 1 then inst:Remove() return end
         local x, y, z = inst.Transform:GetWorldPosition()
         local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
 
@@ -386,16 +386,16 @@ local function StageSpawner(name, SpawnAtStage)
         inst.entity:AddTransform()
         inst.entity:AddAnimState()
         inst.entity:AddSoundEmitter()
-        inst.entity:AddMiniMapEntity()
+        --inst.entity:AddMiniMapEntity()
         inst.entity:AddNetwork()
 
         inst.prefab = "um_pyre_nettles" -- In case we're a spawned-in stage-specifying prefab.
 
         --    MakeObstaclePhysics(inst, 0.1)
 
-        local minimap = inst.entity:AddMiniMapEntity()
-        inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
-        inst.MiniMapEntity:SetPriority(-1)
+        --local minimap = inst.entity:AddMiniMapEntity()
+        --inst.MiniMapEntity:SetIcon("um_pyre_nettles_map.tex")
+        --inst.MiniMapEntity:SetPriority(-1)
 
         -- Stage setting
         if not inst.stage then
