@@ -20,7 +20,7 @@ local function YellowAmuletPostInit(inst)
 
     local function turnon(inst, owner)
         if not inst.components.fueled:IsEmpty() then
-            if inst.components.fueled ~= nil then
+            if inst.components.fueled then
                 inst.components.fueled:StartConsuming()
             end
             inst.components.equippable.walkspeedmult = 1.2
@@ -28,14 +28,14 @@ local function YellowAmuletPostInit(inst)
 
             local owner = inst.components.inventoryitem.owner
 
-            if inst._light == nil or not inst._light:IsValid() then
+            if not inst._light or not inst._light:IsValid() then
                 inst._light = SpawnPrefab("yellowamuletlight")
                 inst._light._yellowamulet = inst
                 inst:ListenForEvent("onremove", onremovelight, inst._light)
             end
             inst._light.entity:SetParent((owner or inst).entity)
 
-            if owner.components.bloomer ~= nil then
+            if owner.components.bloomer then
                 owner.components.bloomer:PushBloom(inst, "shaders/anim.ksh", 1)
             else
                 owner.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
@@ -47,17 +47,17 @@ local function YellowAmuletPostInit(inst)
         inst.components.equippable.walkspeedmult = 1
         inst.components.equippable.dapperness = 0
 
-        if owner.components.bloomer ~= nil then
+        if owner.components.bloomer then
             owner.components.bloomer:PopBloom(inst)
         else
             owner.AnimState:ClearBloomEffectHandle()
         end
 
-        if inst.components.fueled ~= nil then
+        if inst.components.fueled then
             inst.components.fueled:StopConsuming()
         end
 
-        if inst._light ~= nil then
+        if inst._light then
             if inst._light:IsValid() then
                 inst._light:Remove()
             end
@@ -65,7 +65,7 @@ local function YellowAmuletPostInit(inst)
     end
 
     local function nofuel(inst)
-        if inst.components.equippable:IsEquipped() and inst.components.inventoryitem.owner ~= nil then
+        if inst.components.equippable:IsEquipped() and inst.components.inventoryitem.owner then
             local data = {
                 prefab = inst.prefab,
                 equipslot = inst.components.equippable.equipslot
@@ -81,7 +81,7 @@ local function YellowAmuletPostInit(inst)
         inst._owner = owner
 
         local skin_build = inst:GetSkinBuild()
-        if skin_build ~= nil then
+        if skin_build then
             owner:PushEvent("equipskinneditem", inst:GetSkinName())
             owner.AnimState:OverrideItemSkinSymbol("swap_body", skin_build, "swap_body", inst.GUID, "torso_amulets")
         else
@@ -96,7 +96,7 @@ local function YellowAmuletPostInit(inst)
         owner.AnimState:ClearOverrideSymbol("swap_body")
 
         local skin_build = inst:GetSkinBuild()
-        if skin_build ~= nil then
+        if skin_build then
             owner:PushEvent("unequipskinneditem", inst:GetSkinName())
         end
 
@@ -122,7 +122,7 @@ local function YellowAmuletPostInit(inst)
             if inst.components.equippable:IsEquipped() then
                 turnon(inst, inst._owner)
             end
-            if OldOnTakeFuelFn ~= nil then
+            if OldOnTakeFuelFn then
                 return OldOnTakeFuelFn(inst)
             end
         end
@@ -177,20 +177,20 @@ local function OrangeAmuletPostInit(inst)
     }
 
     local function pickup_UM(inst, owner)
-        if owner == nil or owner.components.inventory == nil then
+        if not owner or not owner.components.inventory then
             return
         end
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 1.2 * TUNING.ORANGEAMULET_RANGE, nil, ORANGE_PICKUP_CANT_TAGS, ORANGE_PICKUP_MUST_TAGS)
         for i, v in ipairs(ents) do
-            if v.components.inventoryitem ~= nil and --Inventory stuff
+            if v.components.inventoryitem and --Inventory stuff
                 v.components.inventoryitem.canbepickedup and
                 v.components.inventoryitem.cangoincontainer and
                 not v.components.inventoryitem:IsHeld() and
                 owner.components.inventory:CanAcceptCount(v, 1) > 0 then
-                if owner.components.minigame_participator ~= nil then
+                if owner.components.minigame_participator then
                     local minigame = owner.components.minigame_participator:GetMinigame()
-                    if minigame ~= nil then
+                    if minigame then
                         minigame:PushEvent("pickupcheat", {cheater = owner, item = v})
                         inst.components.fueled:DoDelta(-2)
                     end
@@ -200,18 +200,18 @@ local function OrangeAmuletPostInit(inst)
                 SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
 
                 local v_pos = v:GetPosition()
-                if v.components.stackable ~= nil then
+                if v.components.stackable then
                     v = v.components.stackable:Get()
                 end
                 inst.components.fueled:DoDelta(-2)
-                if v.components.trap ~= nil and v.components.trap:IsSprung() then
+                if v.components.trap and v.components.trap:IsSprung() then
                     v.components.trap:Harvest(owner)
                 else
                     owner.components.inventory:GiveItem(v, nil, v_pos)
                 end
                 return
             end
-            if v.components.pickable ~= nil and v.components.pickable:CanBePicked() then --Pickable stuff
+            if v.components.pickable and v.components.pickable:CanBePicked() then --Pickable stuff
                 v.components.pickable:Pick(owner)
                 inst.components.fueled:DoDelta(-2)
                 SpawnPrefab("sand_puff").Transform:SetPosition(v.Transform:GetWorldPosition())
@@ -223,7 +223,7 @@ local function OrangeAmuletPostInit(inst)
 
     local function onequip_orange_UM(inst, owner)
         owner.AnimState:OverrideSymbol("swap_body", "torso_amulets", "orangeamulet")
-        if inst.components.fueled ~= nil and not inst.components.fueled:IsEmpty() then
+        if inst.components.fueled and not inst.components.fueled:IsEmpty() then
             inst.task = inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD, pickup_UM, nil, owner)
         end
         inst._owner = owner
@@ -231,18 +231,18 @@ local function OrangeAmuletPostInit(inst)
 
     local function ontakefuel_orange(inst)
         local SERVER_PlayFuelSound = UpvalueHacker.GetUpvalue(_G.Prefabs.orangeamulet.fn, "SERVER_PlayFuelSound")
-        if SERVER_PlayFuelSound ~= nil then
+        if SERVER_PlayFuelSound then
             SERVER_PlayFuelSound(inst)
         end
         if inst.components.equippable:IsEquipped() then
-            if inst.task == nil then
+            if not inst.task then
                 inst.task = inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD, pickup_UM, nil, inst._owner)
             end
         end
     end
 
     local function nofuel_orange(inst)
-        if inst.task ~= nil then
+        if inst.task then
             inst.task:Cancel()
             inst.task = nil
         end
@@ -284,12 +284,12 @@ local function CactusPostInit(inst)
             inst.Physics:SetActive(false)
             inst.AnimState:PlayAnimation(inst.has_flower and "picked_flower" or "picked")
             inst.AnimState:PushAnimation("empty", true)
-            if picker ~= nil then
+            if picker then
                 if inst.has_flower then
                     -- You get a cactus flower, yay.
                     local loot = SpawnPrefab("cactus_flower")
                     loot.components.inventoryitem:InheritMoisture(TheWorld.state.wetness, TheWorld.state.iswet)
-                    if picker.components.inventory ~= nil then
+                    if picker.components.inventory then
                         picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
                     else
                         local x, y, z = inst.Transform:GetWorldPosition()
@@ -301,12 +301,12 @@ local function CactusPostInit(inst)
         end
 
         local function OnPickNew(inst, picker)
-            if (picker.components.inventory ~= nil and picker.components.inventory:EquipHasTag("lazy_forager")) then
+            if picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
                 local amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
-                if amulet == nil then
+                if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet ~= nil and amulet.components.fueled ~= nil and not amulet.components.fueled:IsEmpty() then
+                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")
@@ -342,12 +342,12 @@ local function OasisCactusPostInit(inst)
             inst.Physics:SetActive(false)
             inst.AnimState:PlayAnimation(inst.has_flower and "picked_flower" or "picked")
             inst.AnimState:PushAnimation("empty", true)
-            if picker ~= nil then
+            if picker then
                 if inst.has_flower then
                     -- You get a cactus flower, yay.
                     local loot = SpawnPrefab("cactus_flower")
                     loot.components.inventoryitem:InheritMoisture(TheWorld.state.wetness, TheWorld.state.iswet)
-                    if picker.components.inventory ~= nil then
+                    if picker.components.inventory then
                         picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
                     else
                         local x, y, z = inst.Transform:GetWorldPosition()
@@ -359,12 +359,12 @@ local function OasisCactusPostInit(inst)
         end
 
         local function OnPickNew(inst, picker)
-            if (picker.components.inventory ~= nil and picker.components.inventory:EquipHasTag("lazy_forager")) then
+            if picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
                 local amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
-                if amulet == nil then
+                if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet ~= nil and amulet.components.fueled ~= nil and not amulet.components.fueled:IsEmpty() then
+                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")
@@ -402,12 +402,12 @@ local function MarshBushPostInit(inst)
         end
 
         local function OnPickNew(inst, picker)
-            if (picker.components.inventory ~= nil and picker.components.inventory:EquipHasTag("lazy_forager")) then
+            if picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
                 local amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
-                if amulet == nil then
+                if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
                 end
-                if amulet ~= nil and amulet.components.fueled ~= nil and not amulet.components.fueled:IsEmpty() then
+                if amulet and not (amulet.components.fueled and amulet.components.fueled:IsEmpty()) then
                     amulet:AddTag("bramble_resistant")
                     _OnPick(inst, picker)
                     amulet:RemoveTag("bramble_resistant")

@@ -90,17 +90,17 @@ function SnowOver:GetAlpha()
     local suppressorNearby4 = .8 * #ents4
     local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
     if IsInSnowstorm(self.owner) then
-        if equationdingus > 0 then
+        --[[if equationdingus > 0 then
             self.alphaquation = math.clamp(self.alphaquation + .01, 0, equationdingus)
         else
             self.alphaquation = math.clamp(self.alphaquation - .01, 0, 10)
-        end
+        end]]
+        self.alphaquation = equationdingus
     else
         if self.alphaquation > 0 then
-            self.alphaquation = math.clamp(self.alphaquation - .001, 0, 10)
+            self.alphaquation = 0 --math.clamp(self.alphaquation - .001, 0, 10)
         end
     end
-    local blindto = self.blindto
     if self.alphaquation <= equationdingus and not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
         self:BlindTo(math.clamp(1 - self.alphaquation, 0, 1), TheFrontEnd:GetFadeLevel() >= 1)
     end
