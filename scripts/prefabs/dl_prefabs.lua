@@ -2,7 +2,7 @@ require "prefabutil"
 require "json"
 
 local io = require("io")
-local output_file = TUNING.DSTU.MODROOT .. "scripts/capture_output.json"
+local output_file = "unsafedata/capture_output.json"
 local NO_CAPTURE_TAGS = {
     "NOCAPTURE",
     "player",
