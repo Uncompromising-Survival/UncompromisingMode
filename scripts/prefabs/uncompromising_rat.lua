@@ -1554,7 +1554,7 @@ local function TimeForACheckUp(inst, dev)
     print("---========vv")
     print("   ========")
     print("    V V    V V")]]
-    inst.ratscore = 100
+    inst.ratscore = -60
     inst.itemscore = 0
     inst.foodscore = 0
 
