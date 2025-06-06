@@ -34,16 +34,3 @@ env.AddPrefabPostInit("lighter", function(inst)
         end
     end
 end)
-
-
-if env.GetModConfigData("no_bee_embers") then
-    env.AddPrefabPostInitAny(function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
-        --if inst.components.health ~= nil and inst:HasTag("insect") and inst.components.health ~= nil and not inst.components.health:IsDead() and inst.components.health.maxhealth <= 100 then
-        if inst:HasTag("butterfly") or inst:HasTag("bird") or inst:HasTag("bee") then
-            inst:AddTag("noember")
-        end
-    end)
-end
