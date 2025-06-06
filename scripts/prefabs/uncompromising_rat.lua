@@ -1635,8 +1635,10 @@ local function TimeForACheckUp(inst, dev)
                     if math.random() > 0.5 then
                         local str = inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore and "BURROWS"
                             or inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore and "ITEMS"
-                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD"
-                        b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
+                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD" or nil
+                        if str then
+                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
+                        end
                     end
                 end
             end
