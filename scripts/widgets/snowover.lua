@@ -97,11 +97,11 @@ function SnowOver:GetAlpha()
         end]]
         self.alphaquation = equationdingus
     else
-        if self.alphaquation > 0 then
-            self.alphaquation = 0 --math.clamp(self.alphaquation - .001, 0, 10)
-        end
+        --if self.alphaquation > 0 then
+            --self.alphaquation = 0 --math.clamp(self.alphaquation - .001, 0, 10)
+        --end
     end
-    if self.alphaquation <= equationdingus and not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
+    if not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
         self:BlindTo(math.clamp(1 - self.alphaquation, 0, 1), TheFrontEnd:GetFadeLevel() >= 1)
     end
 end
@@ -175,7 +175,7 @@ end
 function SnowOver:OnUpdate(dt)
     if TheNet:IsServerPaused() then return end
     self:GetAlpha()
-    local dirty = self.alphaquation > 0 or false
+    local dirty = false
     if self.blindto < self.blind then
         self.blind = math.max(self.blindto, self.blind - dt / self.blindtime)
         dirty = true
