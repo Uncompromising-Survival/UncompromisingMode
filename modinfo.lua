@@ -693,7 +693,7 @@ configuration_options = {
             { description = "3x", data = 3 } },
         default = 1.5
     },
-    BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and deal damage to unprepared players.", true),
+    BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and deal damage to unprepared players. Honey stats lowered.", true),
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
     {
         name = "monster_eggs",
