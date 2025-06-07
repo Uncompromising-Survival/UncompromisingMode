@@ -394,7 +394,7 @@ end
 
 local function FoodScoreCalculations(container, v, owner)
     local intensity = container and (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75)
-        or v:HasTag("fresh") and not container and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8 or IsAVersionOfRot(v) and 1
+        or not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8) or IsAVersionOfRot(v) and 1
     if not intensity then return end
     TrySpawnIcon(v, owner, intensity)
 end
