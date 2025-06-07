@@ -314,8 +314,8 @@ end
 
 AddPrefabPostInit("honey", function(inst)
 	if inst ~= nil and inst.components.edible ~= nil and TUNING.DSTU.BEEBOX_NERF then
-		inst.components.edible.healthvalue = 1
-		inst.components.edible.hungervalue = 2.5		
+		inst.components.edible.healthvalue = TUNING.HEALING_SMALL / 2
+		inst.components.edible.hungervalue = TUNING.CALORIES_TINY / 2
 	end
 end)
 AddPrefabPostInit("butterflywings", function(inst)
