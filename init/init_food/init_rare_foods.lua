@@ -309,11 +309,9 @@ AddPrefabPostInit("killerbee", function(inst)
         inst.components.lootdropper:SetLoot(stinger_only)
     end
 end)
------------------------------------------------------------------
--- Bee box levels are 0,1,2,4 honey (from 0,1,3,6)
------------------------------------------------------------------
+
 if TUNING.DSTU.BEEBOX_NERF then
-    local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
+    --local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
 
     local beebox_prefabs = {
         "beebox",
@@ -356,20 +354,20 @@ if TUNING.DSTU.BEEBOX_NERF then
         end
     end
 
-    local function UpdateHoneyLevels(inst)
-        if inst.components.harvestable then
-            for i, amt in pairs(HONEY_PER_STAGE) do
-                if inst.components.harvestable.produce == amt or i >= #HONEY_PER_STAGE then
-                    inst.anims = {
-                        idle = amt <= 0 and "bees_loop" or "honey"..i - 1,
-                        hit = amt <= 0 and "hit_idle" or "hit_honey"..i - 1,
-                    }
-                    inst.AnimState:PlayAnimation(inst.anims.idle)
-                    break
-                end
-            end
-        end
-    end
+    --local function UpdateHoneyLevels(inst)
+        --if inst.components.harvestable then
+            --for i, amt in pairs(HONEY_PER_STAGE) do
+                --if inst.components.harvestable.produce == amt or i >= #HONEY_PER_STAGE then
+                    --inst.anims = {
+                        --idle = amt <= 0 and "bees_loop" or "honey"..i - 1,
+                        --hit = amt <= 0 and "hit_idle" or "hit_honey"..i - 1,
+                    --}
+                    --inst.AnimState:PlayAnimation(inst.anims.idle)
+                    --break
+                --end
+            --end
+        --end
+    --end
 
     for i, v in ipairs(beebox_prefabs) do
         AddPrefabPostInit(v, function(inst)
@@ -378,7 +376,7 @@ if TUNING.DSTU.BEEBOX_NERF then
             end
 
             inst.ReleaseBees = ReleaseBees
-            inst.UpdateHoneyLevels = UpdateHoneyLevels
+            --inst.UpdateHoneyLevels = UpdateHoneyLevels
 
             if inst.components.harvestable then
                 local OldOnGrow
@@ -402,7 +400,7 @@ if TUNING.DSTU.BEEBOX_NERF then
                         OldOnGrow(inst, ...)
                     end
 
-                    inst:UpdateHoneyLevels(inst)
+                    --inst:UpdateHoneyLevels(inst)
                 end
 
                 local function OnHarvest(inst, picker, ...)
@@ -412,7 +410,7 @@ if TUNING.DSTU.BEEBOX_NERF then
                         OldOnHarvest(inst, picker, ...)
                     end
 
-                    inst:UpdateHoneyLevels(inst)
+                    --inst:UpdateHoneyLevels(inst)
                 end
 
                 local function OnLoad(inst, ...)
@@ -420,16 +418,16 @@ if TUNING.DSTU.BEEBOX_NERF then
                         OldOnLoad(inst, ...)
                     end
 
-                    inst:UpdateHoneyLevels(inst)
+                    --inst:UpdateHoneyLevels(inst)
                 end
 
-                inst.components.harvestable.maxproduce = HONEY_PER_STAGE[4]
+                --inst.components.harvestable.maxproduce = HONEY_PER_STAGE[4]
                 inst.components.harvestable.ongrowfn = OnGrow
                 inst.components.harvestable.onharvestfn = OnHarvest
 
                 inst.OnLoad = OnLoad
 
-                inst:UpdateHoneyLevels(inst)
+                --inst:UpdateHoneyLevels(inst)
             end
         end)
     end

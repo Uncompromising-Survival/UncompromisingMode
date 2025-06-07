@@ -320,12 +320,12 @@ end
 -----------------------------------------------------------------
 -- butterfly health reduced
 -----------------------------------------------------------------
-AddPrefabPostInit("honey", function(inst)
-	if inst ~= nil and inst.components.edible ~= nil and TUNING.DSTU.BEEBOX_NERF then
-		inst.components.edible.healthvalue = 1
-		inst.components.edible.hungervalue = 2.5		
-	end
-end)
+--AddPrefabPostInit("honey", function(inst)
+	--if inst ~= nil and inst.components.edible ~= nil and TUNING.DSTU.BEEBOX_NERF then
+		--inst.components.edible.healthvalue = 1
+		--inst.components.edible.hungervalue = 2.5		
+	--end
+--end)
 AddPrefabPostInit("butterflywings", function(inst)
 	inst:AddTag("snapdragons_cant_eat")
 
