@@ -64,7 +64,7 @@ function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     local ents4 = TheSim:FindEntities(x, y, z, 6, {"snowstorm_protection_high"})
     local suppressorNearby4 = (#ents4 > 0)
     local snowstorming = false
-    if TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
+    if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
         if self.inst.components.playervision:HasGoggleVision() or self.inst.components.playervision:HasGhostVision() or self.inst.components.rider:IsRiding()
             or suppressorNearby1 or suppressorNearby2 or suppressorNearby3 or suppressorNearby4
             or (self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
@@ -73,8 +73,8 @@ function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
             self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
         else
             self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "snowstorm", self.snowstormspeedmult)
+            snowstorming = true
         end
-        snowstorming = true
     else
         self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
     end
@@ -90,8 +90,7 @@ function TrySpawning(v)
 
     local playervalue2 = #nearbyplayers2 * 0.1
 
-    if TheWorld.state.iswinter and
-        ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and
+    if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart")) and
         TheWorld.Map:IsPassableAtPoint(x1, y1, z1, false, true) then --and self.snowstormstart then
         if math.random() <= 0.25 - playervalue2 then
             --local spawn_pt = GetSpawnPoint(origin_pt, PLAYER_CHECK_DISTANCE + 5)
@@ -120,8 +119,7 @@ local function SnowpileChance(inst, self)
 
     local playervalue1 = #nearbyplayers1 * 0.025
 
-    if TheWorld.state.iswinter and
-        ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")) or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then --and self.snowstormstart then
+    if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart")) and not IsUnderRainDomeAtXZ(x, z) then --and self.snowstormstart then
         if chancer < 0.40 - playervalue1 then
             local xrandom = math.random(-20, 20)
             local zrandom = math.random(-20, 20)
