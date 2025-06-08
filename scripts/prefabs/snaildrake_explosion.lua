@@ -40,6 +40,7 @@ local function fn()
     end
 
     MakeSmallBurnable(inst, 0)
+	MakeSmallPropagator(inst)
     --V2C: Remove default OnBurnt handler, as it conflicts with
     --explosive component's OnBurnt handler for removing itself
     inst.components.burnable:SetOnBurntFn(nil)

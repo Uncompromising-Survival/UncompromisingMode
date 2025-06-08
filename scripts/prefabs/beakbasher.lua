@@ -7,7 +7,7 @@ local assets =
 }
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_beak_basher", "swap_beak_basher")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_beak_basher", "swap_hammer")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -27,13 +27,13 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("beak_basher_ground")
-    inst.AnimState:SetBuild("beak_basher_ground")
+    inst.AnimState:SetBank("hammer")
+    inst.AnimState:SetBuild("swap_beak_basher")
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("hammer")
 
-    MakeInventoryFloatable(inst, "med", nil, 0.9)
+    MakeInventoryFloatable(inst, "med", 0.05, {0.7, 0.4, 0.7}, true, -13, {sym_build = "swap_beak_basher"})
 
     --tool (from tool component) added to pristine state for optimization
     inst:AddTag("tool")

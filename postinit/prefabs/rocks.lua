@@ -23,7 +23,7 @@ local function EvolveIntoCrab(inst,worker)
 	crab.temprock = inst
 	crab:DoTaskInTime(1,function(inst) inst.components.combat:SetTarget(inst.futuretarget) end)
 	crab.sg:GoToState("hide_pst")
-	--inst:Remove()
+	inst:Remove() -- Try this back on
 end
 
 local function TryCrab(inst,worker)
