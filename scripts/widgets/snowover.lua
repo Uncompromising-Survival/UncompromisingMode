@@ -219,6 +219,9 @@ function SnowOver:OnUpdate(dt)
 
     if self.fade <= 0 and self.fadeto <= 0 then
         self.blind = self.blindto
+        if self.alphaquation > 0 then
+            self.alphaquation = 0
+        end
         self:StopUpdating()
     end
 end
