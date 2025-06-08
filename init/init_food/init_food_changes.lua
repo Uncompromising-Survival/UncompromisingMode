@@ -312,18 +312,10 @@ if TUNING.DSTU.FARMFOODREDUX then
 	end
 end
 
------------------------------------------------------------------
--- Prevent cooked eggs birdcage infinite loop
------------------------------------------------------------------
-
-
------------------------------------------------------------------
--- butterfly health reduced
------------------------------------------------------------------
 AddPrefabPostInit("honey", function(inst)
 	if inst ~= nil and inst.components.edible ~= nil and TUNING.DSTU.BEEBOX_NERF then
-		inst.components.edible.healthvalue = 1
-		inst.components.edible.hungervalue = 2.5		
+		inst.components.edible.healthvalue = TUNING.HEALING_SMALL / 3
+		inst.components.edible.hungervalue = TUNING.CALORIES_TINY / 3
 	end
 end)
 AddPrefabPostInit("butterflywings", function(inst)

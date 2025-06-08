@@ -14,8 +14,8 @@ end
 
 local function IsInSnowstorm(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    return TheWorld.state.iswinter and ((TheWorld.net and TheWorld.net:HasTag("snowstormstartnet"))
-        or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(inst)) and not IsUnderRainDomeAtXZ(x, z)
+    return TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet")
+        or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(inst)) and not IsUnderRainDomeAtXZ(x, z) or false
 end
 
 local SnowOver = Class(Widget, function(self, owner, dustlayer)
@@ -65,15 +65,15 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
 
     if owner then
         self.inst:ListenForEvent("gogglevision", function(owner, data) self:BlindTo(data and data.enabled and 0 or 1, TheFrontEnd:GetFadeLevel() >= 1) end, owner)
-        self.inst:ListenForEvent("seasontick", function(owner) return self:ToggleUpdating() end, owner)
-        self.inst:ListenForEvent("snowover", function(owner)
-            self:FadeTo(IsInSnowstorm(owner) and 1 or 0, TheFrontEnd:GetFadeLevel() >= 1)
+        --self.inst:ListenForEvent("seasontick", function(owner) return self:ToggleUpdating() end, owner)
+        self.inst:ListenForEvent("snowover", function(owner, data)
+            self:FadeTo(data and data.enabled and 1 or 0, TheFrontEnd:GetFadeLevel() >= 1)
         end, owner)
         if owner.components.playervision and owner.components.playervision:HasGoggleVision() then
             self:BlindTo(0, true)
         end
-        if IsInSnowstorm(self.owner) then
-            self:FadeTo(1, true)
+        if owner.GetSnowstormLevel then
+            self:FadeTo(owner:GetSnowstormLevel(), true)
         end
     end
 end)
@@ -89,19 +89,10 @@ function SnowOver:GetAlpha()
     local ents4 = TheSim:FindEntities(x, y, z, 10, {"snowstorm_protection_high"})
     local suppressorNearby4 = .8 * #ents4
     local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
-    if IsInSnowstorm(self.owner) then
-        --[[if equationdingus > 0 then
-            self.alphaquation = math.clamp(self.alphaquation + .01, 0, equationdingus)
-        else
-            self.alphaquation = math.clamp(self.alphaquation - .01, 0, 10)
-        end]]
+    if self.owner:GetSnowstormLevel() == 1 then
         self.alphaquation = equationdingus
-    else
-        if self.alphaquation > 0 then
-            self.alphaquation = 0 --math.clamp(self.alphaquation - .001, 0, 10)
-        end
     end
-    if self.alphaquation <= equationdingus and not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
+    if not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
         self:BlindTo(math.clamp(1 - self.alphaquation, 0, 1), TheFrontEnd:GetFadeLevel() >= 1)
     end
 end
@@ -123,7 +114,7 @@ function SnowOver:BlindTo(blindto, instant)
 end
 
 function SnowOver:FadeTo(fadeto, instant)
-    if self.owner and not IsInSnowstorm(self.owner) then
+    if self.owner and not (self.owner.player_classified and self.owner.player_classified.snowover:value()) then
         fadeto = 0
     end
 
@@ -175,7 +166,7 @@ end
 function SnowOver:OnUpdate(dt)
     if TheNet:IsServerPaused() then return end
     self:GetAlpha()
-    local dirty = self.alphaquation > 0 or false
+    local dirty = false
     if self.blindto < self.blind then
         self.blind = math.max(self.blindto, self.blind - dt / self.blindtime)
         dirty = true
@@ -219,6 +210,9 @@ function SnowOver:OnUpdate(dt)
 
     if self.fade <= 0 and self.fadeto <= 0 then
         self.blind = self.blindto
+        if self.alphaquation > 0 then
+            self.alphaquation = 0
+        end
         self:StopUpdating()
     end
 end

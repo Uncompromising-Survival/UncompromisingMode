@@ -1538,8 +1538,8 @@ end
 local function FoodScoreCalculations(inst, container, v)
     inst.multiplier = v.components.stackable and v.components.stackable:StackSize() or 1
     inst.preparedmultiplier = v:HasTag("preparedfood") and 2 or 1
-    local delta = not v.components.farmplantable and (container and (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5)
-        or v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15) or 0
+    local delta = not v.components.farmplantable and (not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
+        or (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5)) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * inst.preparedmultiplier) * inst.multiplier) or delta)
 end
 
