@@ -53,30 +53,30 @@ local function MiniBlizzNear(inst)
     end
 end
 
+local function SnowstormImmune(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 6, {"wall", "fire", "shelter", "snowstorm_protection_high"})
+    local suppressorNearby = (#ents > 0)
+    return inst.components.playervision:HasGoggleVision() or inst.components.playervision:HasGhostVision() or inst.components.rider:IsRiding()
+        or suppressorNearby or (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest")
+        or IsUnderRainDomeAtXZ(x, z) or inst:HasTag("weerclops")
+end
+
 function SnowStormWatcher:UpdateSnowstormWalkSpeed(src, data)
     local x, y, z = self.inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 4, {"wall"})
-    local suppressorNearby1 = (#ents > 2)
-    local ents2 = TheSim:FindEntities(x, y, z, 6, {"fire"})
-    local suppressorNearby2 = (#ents2 > 0)
-    local ents3 = TheSim:FindEntities(x, y, z, 5.5, {"shelter"})
-    local suppressorNearby3 = (#ents3 > 2)
-    local ents4 = TheSim:FindEntities(x, y, z, 6, {"snowstorm_protection_high"})
-    local suppressorNearby4 = (#ents4 > 0)
+    local shouldremove = true
     local snowstorming = false
     if TheWorld.state.iswinter and (TheWorld.net and TheWorld.net:HasTag("snowstormstartnet") or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(self.inst)) then
-        if self.inst.components.playervision:HasGoggleVision() or self.inst.components.playervision:HasGhostVision() or self.inst.components.rider:IsRiding()
-            or suppressorNearby1 or suppressorNearby2 or suppressorNearby3 or suppressorNearby4
-            or (self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-            and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "beargervest")
-            or IsUnderRainDomeAtXZ(x, z) or self.inst:HasTag("weerclops") then
-            self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
-        else
-            self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "snowstorm", self.snowstormspeedmult)
-            snowstorming = true
+        if not SnowstormImmune(self.inst) then
+            shouldremove = false
         end
-    else
+        snowstorming = not IsUnderRainDomeAtXZ(x, z)
+    end
+    if shouldremove then
         self.inst.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "snowstorm")
+    else
+        self.inst.components.locomotor:SetExternalSpeedMultiplier(self.inst, "snowstorm", self.snowstormspeedmult)
     end
     if self.inst.player_classified and self.inst.player_classified.snowover then
         self.inst.player_classified.snowover:set(snowstorming)
