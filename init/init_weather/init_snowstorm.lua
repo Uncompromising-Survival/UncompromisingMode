@@ -12,11 +12,8 @@ end
 
 local function GetSnowstormLevel(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    if GLOBAL.TheWorld.state.iswinter and (GLOBAL.TheWorld.net and GLOBAL.TheWorld.net:HasTag("snowstormstartnet") or GLOBAL.TheWorld:HasTag("snowstormstart") or MiniBlizzNear(inst)) and not GLOBAL.IsUnderRainDomeAtXZ(x, z) then
-        return 1
-    else
-        return 0
-    end
+    return GLOBAL.TheWorld.state.iswinter and (GLOBAL.TheWorld.net and GLOBAL.TheWorld.net:HasTag("snowstormstartnet")
+        or GLOBAL.TheWorld:HasTag("snowstormstart") or MiniBlizzNear(inst)) and not GLOBAL.IsUnderRainDomeAtXZ(x, z) and 1 or 0
 end
 
 local function SetInstanceFunctions2(inst)

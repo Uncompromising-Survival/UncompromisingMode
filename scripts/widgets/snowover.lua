@@ -80,15 +80,11 @@ end)
 
 function SnowOver:GetAlpha()
     local x, y, z = self.owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 7, {"wall"})
-    local suppressorNearby1 = .25 * #ents
-    local ents2 = TheSim:FindEntities(x, y, z, 9, {"fire"})
-    local suppressorNearby2 = .6 * #ents2
-    local ents3 = TheSim:FindEntities(x, y, z, 6, {"shelter"})
-    local suppressorNearby3 = .15 * #ents3
-    local ents4 = TheSim:FindEntities(x, y, z, 10, {"snowstorm_protection_high"})
-    local suppressorNearby4 = .8 * #ents4
-    local equationdingus = suppressorNearby1 + suppressorNearby2 + suppressorNearby3 + suppressorNearby4
+    local equationdingus = 0
+    for k, v in pairs(TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})) do
+        equationdingus = equationdingus + (v:HasTag("wall") and .25 or 0) + (v:HasTag("fire") and .6 or 0)
+            + (v:HasTag("shelter") and .15 or 0) + (v:HasTag("snowstorm_protection_high") and .8 or 0)
+    end
     if self.owner:GetSnowstormLevel() == 1 then
         self.alphaquation = equationdingus
     end
