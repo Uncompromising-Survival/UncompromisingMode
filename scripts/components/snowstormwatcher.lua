@@ -55,7 +55,7 @@ end
 
 local function SnowstormImmune(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 6, {"wall", "fire", "shelter", "snowstorm_protection_high"})
+    local ents = TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})
     local suppressorNearby = (#ents > 0)
     return inst.components.playervision:HasGoggleVision() or inst.components.playervision:HasGhostVision() or inst.components.rider:IsRiding()
         or suppressorNearby or (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
