@@ -24,16 +24,14 @@ local function OnUpdateThorns(inst)
                 if inst.owner then
                     if inst.owner.components.combat ~= nil and inst.owner.components.combat:CanTarget(v) then
                         inst.ignore[v] = true
-                        v.shock_owner = inst.owner
-                        v:AddDebuff("shockstundebuff", "shockstundebuff")
+                        v:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = inst.owner})
                         --v.components.combat:GetAttacked(v.components.follower ~= nil and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         --V2C: wisecracks make more sense for being pricked by picking
                         --v:PushEvent("thorns")
                     end
                 elseif v.components.combat:CanBeAttacked() then
                     inst.ignore[v] = true
-                    v.shock_owner = inst
-                    v:AddDebuff("shockstundebuff", "shockstundebuff")
+                    v:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = inst.owner})
                     --v.components.combat:GetAttacked(inst, inst.damage)
                     --v:PushEvent("thorns")
                 end

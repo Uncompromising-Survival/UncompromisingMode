@@ -209,22 +209,15 @@ local function onfuelchange(newsection, oldsection, inst)
 end
 
 local function onattack(inst, attacker, target)
-    if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and
-        inst.components.weapon.stimuli == "electric" then
+    if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.weapon.stimuli == "electric" then
         SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
-    end
-
-    if inst.overcharged and target:IsValid() then
-        if not target.components.debuffable then
-            target:AddComponent("debuffable")
-        end
-
-        if not target:HasTag("epic") and not target:HasTag("shadow") or (target:HasTag("chess") or target:HasTag("uncompromising_pawn")) then
-            target.components.debuffable:AddDebuff("shockstundebuff", "shockstundebuff")
-        end
-
-        if (target:HasTag("chess") or target:HasTag("uncompromising_pawn") or target:HasTag("twinofterror") and not target:HasTag("fleshyeye")) and (target.components.health ~= nil and not target.components.health:IsDead()) and not target.sg:HasStateTag("noattack") then
-            target.components.health:DoDelta(-17, false, attacker, false, attacker)
+        if inst.overcharged then
+            if not target:HasAnyTag("shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
+                target:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = attacker})
+            end
+            if target:HasAnyTag("chess", "uncompromising_pawn", "twinofterror") and not target:HasTag("fleshyeye") and not (target.components.health and target.components.health:IsDead()) and not target.sg:HasStateTag("noattack") then
+                target.components.health:DoDelta(-17, false, attacker, false, attacker)
+            end
         end
     end
 end

@@ -784,7 +784,8 @@ local function taser_onblockedorattacked(wx, data, inst)
             --end
 
             local tased_duration = wx._taser_chips / 1.25
-            if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("epic", "shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant") then
+            if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant")
+                and (data.attacker:HasTag("smallepic") or not data.attacker:HasTag("epic")) then
                 if not data.attacker.tased_stunlocktask then
                     data.attacker.tased_stunlocktask = data.attacker:DoPeriodicTask(0.15, function()
                         if data.attacker and not (data.attacker.components.health and data.attacker.components.health:IsDead()) then

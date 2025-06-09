@@ -43,7 +43,7 @@ if minotaurattackedeventhandler then
 end
 
 local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
-local function OhCrap(inst, target)
+local function OhCrap(inst, target, attacker)
     if not (target.components.health and target.components.health:IsDead()) and not target:HasTag("playerghost") then
         SpawnPrefab("electricchargedfx"):SetTarget(target)
         target.components.health:DoDelta(-2, nil, "Electricity")
@@ -69,7 +69,7 @@ local function OhCrap(inst, target)
         if not target:HasTag("forcestunned") then
             target:AddTag("forcestunned")
         end
-        target:PushEvent("attacked", {attacker = target.shock_owner or nil, damage = 2})
+        target:PushEvent("attacked", {attacker = attacker, damage = 2})
         if target.components.combat then
             if target.components.combat.laststartattacktime then
                 target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
@@ -83,12 +83,12 @@ local function OhCrap(inst, target)
     end
 end
 
-local function OnAttached(inst, target)
+local function OnAttached(inst, target, followsymbol, followoffset, data)
     if not target:HasTag("electricstunimmune") then
         target:AddDebuff("shockstundebuffimmunity", "shockstundebuffimmunity")
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
-        inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target)
+        inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target, data and data.attacker)
         inst:ListenForEvent("death", function()
             inst.components.debuff:Stop()
         end, target)
@@ -107,9 +107,6 @@ local function OnRemoved(inst, target)
     end
     if target.um_forcestundebuff then
         target.um_forcestundebuff = nil
-    end
-    if target.shock_owner then
-        target.shock_owner = nil
     end
     inst:Remove()
 end
