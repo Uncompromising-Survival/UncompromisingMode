@@ -108,8 +108,8 @@ env.AddPrefabPostInit("blowdart_yellow", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
     local _attackfn = inst.components.weapon.onattack
-    
     local function yellowattack(inst, attacker, target)
         if target and target:IsValid() then
             if not target:HasAnyTag("shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
