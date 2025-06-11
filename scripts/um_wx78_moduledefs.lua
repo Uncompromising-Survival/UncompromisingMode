@@ -784,7 +784,7 @@ local function taser_onblockedorattacked(wx, data, inst)
             --end
 
             local tased_duration = wx._taser_chips / 1.25
-            if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("shadowthrall", "shadow", "trepidation", "shadowminion", "lunarthrall_plant")
+            if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant")
                 and (data.attacker:HasTag("smallepic") or not data.attacker:HasTag("epic")) then
                 if not data.attacker.tased_stunlocktask then
                     data.attacker.tased_stunlocktask = data.attacker:DoPeriodicTask(0.15, function()
@@ -812,7 +812,7 @@ local function taser_onblockedorattacked(wx, data, inst)
                             if not data.attacker:HasTag("forcestunned") then
                                 data.attacker:AddTag("forcestunned")
                             end
-                            data.attacker:PushEvent("attacked", {attacker = wx or nil, damage = 0})
+                            data.attacker:PushEvent("attacked", {attacker = wx, damage = 0, stimuli = "soul"})
                             if data.attacker.components.combat then
                                 if data.attacker.components.combat.laststartattacktime then
                                     data.attacker.components.combat.laststartattacktime = data.attacker.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
