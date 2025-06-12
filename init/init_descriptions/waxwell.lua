@@ -221,21 +221,7 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It's been frozen solid, good.",
     REGROWING = "It'll grow more."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It's seen better days.",
-    GENERIC = "It makes me a little nostalgic.",
-    ASHLEY_BROKEN = "It's seen better days.",
-    ASHLEY = "It makes me a little nostalgic."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Just what am I looking at here?",
-    ASHLEY = "Just what am I looking at here?"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "How truly unnerving.",
-    ASHLEY = "How truly unnerving."
-}
 DESCRIBE.ANTIHISTAMINE = "It'll help keep allergies down."
 ANNOUNCE.CURSED_ITEM_EQUIP = "It seems I've lost my touch!"
 DESCRIBE.VETSITEM = "They are tempting us with fancy trinkets. Shall we tap into darker powers?"
@@ -386,8 +372,9 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.POWERCELL = "Time flies when you're stuck in here."
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She's just full of bright ideas."
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She thinks she's full of bright ideas."
 DESCRIBE.MINERHAT_ELECTRICAL = "I guess that solves the firefly problem."
+DESCRIBE.LANTERN_ELECTRICAL = "Now I either talk to her or risk getting electrocuted charging this. Great."
 DESCRIBE.OCEAN_SPEAKER = "You know, I used to be king. Here I am unable to recognize half the stuff I find in these wretched waters."
 -- DESCRIBE.UM_SIREN = "How grotesque. Yet somewhat alluring... hrmpf."
 

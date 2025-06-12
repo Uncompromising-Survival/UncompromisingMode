@@ -224,23 +224,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Ha! Wolfgang can see reflection in berry!",
     REGROWING = "Berry not gone?"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "Is so broken.",
-    GENERIC = "Is so cuddly!",
-    ASHLEY_BROKEN = "Is so broken.",
-    ASHLEY = "Is so cuddly!"
-}
 
-DESCRIBE.BERNIE_ACTIVE = { GENERIC = "Is so brave!", ASHLEY = "Is so brave!" }
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "Oh no! Wolfgang has shrunken!",
-    ASHLEY = "Oh no! Wolfgang has shrunken!"
-}
 DESCRIBE.ANTIHISTAMINE = "Good for sneeze time."
 ANNOUNCE.CURSED_ITEM_EQUIP = "The harder Wolfgang squeeze, the more it hurts!"
 DESCRIBE.VETSITEM = "What you say? Need more curses?"
 DESCRIBE.SCREECHER_TRINKET = "Ah! Looks scary!"
-ACTIONFAIL.GIVE = { NOTNIGHT = "Needs big moon?" }
+ACTIONFAIL.GIVE.NOTNIGHT = "Needs big moon?"
 
 DESCRIBE.MAGMAHOUND = "Arf, arf!"
 DESCRIBE.LIGHTNINGHOUND = "Yip yip!"
@@ -395,8 +384,9 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "For lifting?"
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "For lifting?"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "For lifting?"
 DESCRIBE.POWERCELL = "Is a box of shock."
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Must connect to lamp now."
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Wolfgang is confused. Where do blue wires go again?"
 DESCRIBE.MINERHAT_ELECTRICAL = "Head lamp is now electric head lamp."
+DESCRIBE.LANTERN_ELECTRICAL = "Ha! Wolfgang is even safer from dark!"
 DESCRIBE.OCEAN_SPEAKER = "Is speaker! Had many in circus!"
 -- DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
 

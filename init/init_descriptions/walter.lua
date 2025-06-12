@@ -245,29 +245,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It froze solid, neat!",
     REGROWING = "It'll come back, right?"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "I-I'm sure we can fix him.",
-    GENERIC = "He burnt himself out.",
-    ASHLEY_BROKEN = "I-I'm sure we can fix her.",
-    ASHLEY = "She burnt herself out."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Woah! Is your bear haunted? Cursed?",
-    ASHLEY = "Woah! Is your cat haunted? Cursed?"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "If you play with fire, you're gonna get Bernie'd. Heh...",
-    ASHLEY = "If you play with fire, you'll turn to Ash-ley. Heh..."
-}
 DESCRIBE.ANTIHISTAMINE = "It'll keep my allergies from flaring up!"
 ANNOUNCE.CURSED_ITEM_EQUIP = "OWWW! First aid please!"
 DESCRIBE.VETSITEM = "Are more curses required? I hope so!"
 DESCRIBE.SCREECHER_TRINKET =
 "Our Scout Masters told us to keep away from symbols like this."
-ACTIONFAIL.GIVE = {
-    NOTNIGHT = "I think moon power works best when the moon is around."
-}
+ACTIONFAIL.GIVE.NOTNIGHT = "I think moon power works best when the moon is around."
 
 DESCRIBE.MAGMAHOUND = "You're not supposed to play with fire!"
 DESCRIBE.LIGHTNINGHOUND =
@@ -426,7 +410,8 @@ DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM =
 DESCRIBE.POWERCELL = "Is this safe?"
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
 "It'd be more useful powering something."
-DESCRIBE.MINERHAT_ELECTRICAL = "This makes refueling a lot easier."
+DESCRIBE.MINERHAT_ELECTRICAL = "Don't bite this little electric box thing, okay, girl? It might hurt you!"
+DESCRIBE.LANTERN_ELECTRICAL = "A reliable light source is essential for any camping trip!"
 DESCRIBE.OCEAN_SPEAKER = "I wonder if Woby can hear its frequency?"
 -- DESCRIBE.UM_SIREN = "Woah!! A REAL sea monster!!"
 

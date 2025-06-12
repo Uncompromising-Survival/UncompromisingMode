@@ -232,23 +232,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "You can't be used in this state mon amie!",
     REGROWING = "Oh good, it'll come back. I desire more!"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "Poor little fellow.",
-    GENERIC = "I've been told his name is \"Bernie\".",
-    ASHLEY_BROKEN = "Poor little fellow.",
-    ASHLEY = "I've been told her name is \"Ashley\"."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "What a silly fellow.",
-    ASHLEY = "What a silly fellow."
-}
-DESCRIBE.BERNIE_BIG = { GENERIC = "Tres géant!", ASHLEY = "Tres géant!" }
 DESCRIBE.ANTIHISTAMINE = "I hate sneezing near food, this will help."
 ANNOUNCE.CURSED_ITEM_EQUIP = "My hands been sizzled!"
 DESCRIBE.VETSITEM = "I seem to be missing some dark ingredient."
 DESCRIBE.SCREECHER_TRINKET = "Something dark stirs."
-ACTIONFAIL.GIVE = { NOTNIGHT = "Some dishes are best served in the evening." }
+ACTIONFAIL.GIVE.NOTNIGHT = "Some dishes are best served in the evening."
 
 DESCRIBE.MAGMAHOUND = "A walking furnace. If only they could be domesticated..."
 DESCRIBE.LIGHTNINGHOUND = "Definitely from the tropics."
@@ -408,8 +397,9 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "I'll stick to my kitchenware."
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "I'll stick to my kitchenware."
 DESCRIBE.POWERCELL = "Food for the batteries, I suppose."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-"I could use a battery charged... well, everything."
-DESCRIBE.MINERHAT_ELECTRICAL = "Would make cooking in the dark easier."
+"I could use a battery powered... well, everything."
+DESCRIBE.MINERHAT_ELECTRICAL = "This will make cooking in the dark easier."
+DESCRIBE.LANTERN_ELECTRICAL = "She cooked up this upgrade in no time, impressive!"
 DESCRIBE.OCEAN_SPEAKER = "I never was one for machines."
 -- DESCRIBE.UM_SIREN = "Apologies Mademoiselle Wigfrid, but it she the supperior singer!"
 

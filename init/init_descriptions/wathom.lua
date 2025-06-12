@@ -240,18 +240,7 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Dead, likely.",
     REGROWING = "Constant pumping, roots. Curious. Quickly severed, in-tact fruits?"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "Worn, torn, everything here.",
-    GENERIC = "Staring. Judging.",
-    BROKEN_ASHLEY = "Worn, torn, everything here.",
-    ASHLEY = "Staring. Judging."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    BERNIE_ACTIVE = "Staring, unwavering. Distrustful.",
-    ASHLEY = "Staring, unwavering. Distrustful."
-}
-DESCRIBE.BERNIE_BIG = { GENERIC = "Not me! Not me!", ASHLEY = "Not me! Not me!" }
 DESCRIBE.ANTIHISTAMINE = "Properties, illness-alleviating."
 
 DESCRIBE.HEATROCK_LEVEL = {
@@ -269,8 +258,8 @@ DESCRIBE.DURABILITY_LEVEL = {
     FULL = "Condition, perfect."
 }
 
-ACTIONFAIL.READ = { GENERIC = "Magic, inert." }
-ACTIONFAIL.GIVE = { NOTNIGHT = "Presence required, Alter's gaze." }
+--ACTIONFAIL.READ.GENERIC = "Magic, inert."
+ACTIONFAIL.GIVE.NOTNIGHT = "Presence required, Alter's gaze."
 
 RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
@@ -421,6 +410,7 @@ DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Collapsed, machines."
 DESCRIBE.POWERCELL = "Power source, electrical. Design limiting."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Conversion, power input."
 DESCRIBE.MINERHAT_ELECTRICAL = "Tinkered, manipulated."
+DESCRIBE.LANTERN_ELECTRICAL = "Enhanced, but unneeded still."
 DESCRIBE.OCEAN_SPEAKER = "Curious, meaning, purpose."
 
 DESCRIBE.OCUPUS_BEAK = "Apex predator of sea? Bah."

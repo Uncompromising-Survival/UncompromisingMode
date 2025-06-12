@@ -229,24 +229,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Look chilly.",
     REGROWING = "Glorp! Aww, it gone...!"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "Aww...",
-    GENERIC = "No playing anymore?",
-    ASHLEY_BROKEN = "Aww...",
-    ASHLEY = "No playing anymore?"
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Wanna play with it!",
-    ASHLEY = "Wanna play with it!"
-}
-DESCRIBE.BERNIE_BIG = { GENERIC = "Fun toy, flurp!", ASHLEY = "Fun toy, flurp!" }
 DESCRIBE.ANTIHISTAMINE = "Keep nose strong!"
 ANNOUNCE.CURSED_ITEM_EQUIP = "GLORP! HURTS!"
 DESCRIBE.VETSITEM =
 "Wants me to curse? ...Maybe will when not in front of Wicker-lady..."
 DESCRIBE.SCREECHER_TRINKET = "Glurp, not wanna touch that one!"
-ACTIONFAIL.GIVE = { NOTNIGHT = "It sleepy? Wake up at night maybe." }
+ACTIONFAIL.GIVE.NOTNIGHT = "It sleepy? Wake up at night maybe."
 
 DESCRIBE.MAGMAHOUND = "GLORP! It shooting fire! Run!!"
 DESCRIBE.LIGHTNINGHOUND = "Lightning doggy! LIGHTNING DOGGY!!"
@@ -392,8 +381,9 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "One of tough ladies things."
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "One of tough ladies things."
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "One of tough ladies things."
 DESCRIBE.POWERCELL = "Do not lick!"
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Give box to lights."
-DESCRIBE.MINERHAT_ELECTRICAL = "Has a box now."
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "How can little box make light brighter, flort?"
+DESCRIBE.MINERHAT_ELECTRICAL = "Why Weenowna-lady put bees to buzz in head-light?"
+DESCRIBE.LANTERN_ELECTRICAL = "Oooh! It sparky now!"
 DESCRIBE.OCEAN_SPEAKER = "What it yelling at?"
 -- DESCRIBE.UM_SIREN = "Glorp is traitor!! Me think...?"
 

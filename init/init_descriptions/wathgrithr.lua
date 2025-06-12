@@ -225,26 +225,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It can't fight back anymore.",
     REGROWING = "Honorable. Still isn't meat."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It has gone to Valhalla.",
-    GENERIC = "It's a stuffed beast.",
-    ASHLEY_BROKEN = "It has gone to Valhalla.",
-    ASHLEY = "It's a stuffed beast."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "What a brave beast!",
-    ASHLEY = "What a brave beast!"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "The beast hath been imbued with a fighting spirit!",
-    ASHLEY = "The beast hath been imbued with a fighting spirit!"
-}
 DESCRIBE.ANTIHISTAMINE = "It shall keep mine nose safe!"
 ANNOUNCE.CURSED_ITEM_EQUIP = "This tool fights back!"
 DESCRIBE.VETSITEM = "I must challenge myself further in order to use this!"
 DESCRIBE.SCREECHER_TRINKET = "A cursed symbol, no doubt!"
-ACTIONFAIL.GIVE = { NOTNIGHT = "The great moon in the sky will give it power." }
+ACTIONFAIL.GIVE.NOTNIGHT = "The great moon in the sky will give it power."
 
 DESCRIBE.MAGMAHOUND = "It battles from afar, thy coward!"
 DESCRIBE.LIGHTNINGHOUND = "Thor's minion? What hath I done to gain his ire?"
@@ -389,8 +375,9 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "An evil contraption!"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "An evil contraption!"
 DESCRIBE.POWERCELL = "She has harenessed thors might into a box."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-"She has harenessed thors might into a box."
-DESCRIBE.MINERHAT_ELECTRICAL = "Thors boons are without doubt."
+"Oh great tinkerer, do bless my equipment so it shall relish with Thor's power!"
+DESCRIBE.MINERHAT_ELECTRICAL = "The tinkerer has once again warded us from darkness' evil hands!"
+DESCRIBE.LANTERN_ELECTRICAL = "The power of lightning shall keep darkness at bay!"
 DESCRIBE.OCEAN_SPEAKER = "It echoes songs unfit for battle!"
 -- DESCRIBE.UM_SIREN = "Finally a worthy opponent, our battle shall be legendary!"
 

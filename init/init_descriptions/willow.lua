@@ -236,21 +236,6 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Aw man! It's stuck in there!",
     REGROWING = "That was fun!"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "I need to fix Bernie up.",
-    GENERIC = "My childhood buddy - Bernie!",
-    ASHLEY_BROKEN = "I need to fix Ashley up.",
-    ASHLEY = "My childhood buddy - Ashley!"
-}
-
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Help me, Bernie!",
-    ASHLEY = "Help me, Ashley!"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "GET'EM, BERNIE!!",
-    ASHLEY = "GET'EM, ASHLEY!!"
-}
 
 ANNOUNCE.ANNOUNCE_UNCOMP_LIGHTFIRE = {
     "Teehee!", "Pretty!", "Oops!", "I made a fire!", "Burn!",
@@ -260,7 +245,7 @@ DESCRIBE.ANTIHISTAMINE = "It'll clear my snot."
 ANNOUNCE.CURSED_ITEM_EQUIP = "OUCH! Is that what burning feels like?"
 DESCRIBE.VETSITEM = "What's that? You want me to curse myself? If you say so..."
 DESCRIBE.SCREECHER_TRINKET = "I... I don't think I should burn this."
-ACTIONFAIL.GIVE = { NOTNIGHT = "I'll try waiting until night. UGH." }
+ACTIONFAIL.GIVE.NOTNIGHT = "I'll try waiting until night. UGH."
 
 DESCRIBE.MAGMAHOUND = "YES! SHOWER ME IN FIRE!"
 DESCRIBE.LIGHTNINGHOUND = "Lightning is just burning without the fun part!"
@@ -408,8 +393,9 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "Dumb machines!"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Dumb machines!"
 DESCRIBE.POWERCELL = "Yeah, yeah, it's nice, but how well does it burn."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-"Let's hope an electrical fire doesn't break out, right?"
-DESCRIBE.MINERHAT_ELECTRICAL = "Why cant I energize it with fire!"
+"Let's hope an electrical fire doesn't break out, right? Heh heh."
+DESCRIBE.MINERHAT_ELECTRICAL = "A REAL upgrade would be putting a candle in it or something!"
+DESCRIBE.LANTERN_ELECTRICAL = "Couldn't she make an oil lantern instead?"
 DESCRIBE.OCEAN_SPEAKER =
 "What's this big dumb machine doing all the way out here?"
 -- DESCRIBE.UM_SIREN = "Oh yeah!? I can blow bubbles twice as big! Watch!"

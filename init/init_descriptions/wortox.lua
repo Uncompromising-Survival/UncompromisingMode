@@ -224,26 +224,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It finally chilled out!",
     REGROWING = "Hyuyu, what fun!"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "He seemed a fine chap.",
-    GENERIC = "What a pity.",
-    ASHLEY_BROKEN = "She seemed a fine gal.",
-    ASHLEY = "What a pity."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Good sir, are you aware you've no soul?",
-    ASHLEY = "Madam, are you aware you've no soul?"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "It's grown to new heights to win all our fights!",
-    ASHLEY = "It's grown to new heights to win all our fights!"
-}
 DESCRIBE.ANTIHISTAMINE = "It will relieve my snout."
 ANNOUNCE.CURSED_ITEM_EQUIP = "It burns! There's no silver embedded in it, is there?!"
 DESCRIBE.VETSITEM = "It only allows people bearing a certain curse besides mine, I'm afraid."
 DESCRIBE.SCREECHER_TRINKET = "And just what dimension are you from, friend?"
-ACTIONFAIL.GIVE = { NOTNIGHT = "We will play once night comes." }
+ACTIONFAIL.GIVE.NOTNIGHT = "We will play once night comes."
 
 DESCRIBE.MAGMAHOUND = "Things seem dire, now the hounds breathe fire!"
 DESCRIBE.LIGHTNINGHOUND = "Oh now what, a zapping mutt?"
@@ -393,7 +379,8 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "It's just a bunch of unfun stuff!"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "It's just a bunch of unfun stuff!"
 DESCRIBE.POWERCELL = "A fair bit of energy lies within."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "A wiring kit, this seems to be."
-DESCRIBE.MINERHAT_ELECTRICAL = "It feeds on elemental energy."
+DESCRIBE.MINERHAT_ELECTRICAL = "That little box feeds it with elemental energy."
+DESCRIBE.LANTERN_ELECTRICAL = "It's quite the shocking contraption!"
 DESCRIBE.OCEAN_SPEAKER = "It plays a tune that could spell our doom. Hyuyu!" -- Oh gee oh fuck I'm out of luck!!!!! -- youve done well soldier
 -- DESCRIBE.UM_SIREN = "My, is that a siren on the horizon?"
 

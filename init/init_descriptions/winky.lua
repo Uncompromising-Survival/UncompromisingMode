@@ -246,21 +246,7 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Hard and cold.",
     REGROWING = "Maybe using my claws was a bad idea."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "He is dead.",
-    GENERIC = "Smells like that burning girl.",
-    ASHLEY_BROKEN = "She is dead.",
-    ASHLEY = "Smells like that burning girl."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "You are a jitter-bug.",
-    ASHLEY = "You are a jitter-bug."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "He is a big brute now!",
-    ASHLEY = "He is a big brute now!"
-}
 DESCRIBE.ANTIHISTAMINE = "My nose will no longer be itchy!"
 
 DESCRIBE.HEATROCK_LEVEL = {
@@ -278,8 +264,8 @@ DESCRIBE.DURABILITY_LEVEL = {
     FULL = "This is nice."
 }
 
-ACTIONFAIL.READ = { GENERIC = "Of course I know what I'm doing." }
-ACTIONFAIL.GIVE = { NOTNIGHT = "Maybe if I hit it hard, it will work?" }
+ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
+ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 
 RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
@@ -461,6 +447,7 @@ DESCRIBE.POWERCELL = "I feel I should chew on this."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
 "Thing with wires to put on other things."
 DESCRIBE.MINERHAT_ELECTRICAL = "It is all wired up now."
+DESCRIBE.LANTERN_ELECTRICAL = "Hurts my eyes."
 DESCRIBE.OCEAN_SPEAKER = "loud terrible thing."
 -- DESCRIBE.UM_SIREN = "You are smelling fishy to me."
 

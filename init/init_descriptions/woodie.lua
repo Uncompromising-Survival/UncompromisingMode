@@ -228,29 +228,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Well, it's not moving anymore.",
     REGROWING = "That was an ordeal, eh?"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "Poor lil thing.",
-    GENERIC = "Cute, isn't it Luce?",
-    ASHLEY_BROKEN = "Poor lil thing.",
-    ASHLEY = "Cute, isn't it Luce?"
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "I guess I should be used to weird stuff by now.",
-    ASHLEY = "I guess I should be used to weird stuff by now."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "Hm. Yep. Just another day.",
-    ASHLEY = "Hm. Yep. Just another day."
-}
 DESCRIBE.ANTIHISTAMINE = "It'll clear your nose up come hayfever season."
 ANNOUNCE.CURSED_ITEM_EQUIP = "Ouch, this ones a jumper!"
 DESCRIBE.VETSITEM = "I'm usually not the cursing type, despite my curse."
 DESCRIBE.SCREECHER_TRINKET =
 "Symbols like these are what got me in trouble in the first place."
-ACTIONFAIL.GIVE = {
-    NOTNIGHT = "Perhaps I should try again when the moons out, eh?"
-}
+ACTIONFAIL.GIVE.NOTNIGHT = "Perhaps I should try again when the moons out, eh?"
 
 DESCRIBE.MAGMAHOUND = "That thing'll burn a forest down!!"
 DESCRIBE.LIGHTNINGHOUND = "Lightning never strikes twice... Right, Lucy?"
@@ -403,8 +387,9 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "Is it broken?"
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "Is it broken?"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Is it broken?"
 DESCRIBE.POWERCELL = "Some kind of electrical doohickey."
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "."
-DESCRIBE.MINERHAT_ELECTRICAL = "Eh, Why didn't I think of that."
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She's tinkering with other equipment now too, eh?"
+DESCRIBE.MINERHAT_ELECTRICAL = "Aboot time she shared some of her gadgets, eh?"
+DESCRIBE.LANTERN_ELECTRICAL = "This'll help me have an even brighter view on life."
 DESCRIBE.OCEAN_SPEAKER = "Ya think what it's saying is important, Lucy?"
 -- DESCRIBE.UM_SIREN = "Not half bad lookin' for an ocean critter, eh?"
 

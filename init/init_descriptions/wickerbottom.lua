@@ -253,30 +253,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Normal Cyanococcus berries don't freeze solid either.",
     REGROWING = "It appears that the root is still intact."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "That bear is in need of repair.",
-    GENERIC = "It's a teddy bear.",
-    ASHLEY_BROKEN = "That kitten is in need of repair.",
-    ASHLEY = "It's a plush cat."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "That teddy bear seems to be animated somehow.",
-    ASHLEY = "That toy seems to be animated somehow."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "As whimsical as it is befuddling.",
-    ASHLEY = "As whimsical as it is befuddling."
-}
-
-ACTIONFAIL.READ = { GENERIC = "I cannot concentrate under these conditions!" }
+ACTIONFAIL.READ.GENERIC = "I cannot concentrate under these conditions!"
 DESCRIBE.ANTIHISTAMINE = "I believe this has antihistamine properties."
 ANNOUNCE.CURSED_ITEM_EQUIP = "It seems a cursed power lingers here."
 DESCRIBE.VETSITEM = "Curses? There is no such thing, and I shall prove it!"
 DESCRIBE.SCREECHER_TRINKET = "A pagan symbol, perhaps?"
-ACTIONFAIL.GIVE = {
-    NOTNIGHT = "Moon magic seems to work best when the moon is around."
-}
+ACTIONFAIL.GIVE.NOTNIGHT = "Moon magic seems to work best when the moon is around."
 
 DESCRIBE.MAGMAHOUND = "A hound that projectile vomits magma."
 DESCRIBE.LIGHTNINGHOUND = "I must watch my step, they electrify the earth."
@@ -446,9 +429,10 @@ DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM =
 "I can't tell what it is, it needs to be put together."
 DESCRIBE.POWERCELL = "A box full of electricty, I'm not too familiar with this."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-"The whole is greater than the sum of its parts."
+"The whole will be greater than the sum of its parts."
 DESCRIBE.MINERHAT_ELECTRICAL =
-"Now that it's electric it will be quite beneficial."
+"Now that it's charged with electricity, it will be quite beneficial."
+DESCRIBE.LANTERN_ELECTRICAL = "This should help it conserve more energy than before."
 DESCRIBE.OCEAN_SPEAKER =
 "My, not something you'd expect to see all the way out here."
 -- DESCRIBE.UM_SIREN = "My, she appears to carry a very maniuplative frequency."

@@ -231,26 +231,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Out of reach, just like Abigail.",
     REGROWING = "Oh, it's still there."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It has passed.",
-    GENERIC = "It's had a rough life.",
-    ASHLEY_BROKEN = "It has passed.",
-    ASHLEY = "It's had a rough life."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "It dances to forget the pain.",
-    ASHLEY = "It dances to forget the pain."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "Wow... What a big stuffy.",
-    ASHLEY = "Wow... What a big stuffy."
-}
 DESCRIBE.ANTIHISTAMINE = "I suppose this would clear blocked sinuses."
 ANNOUNCE.CURSED_ITEM_EQUIP = "It burns at the touch."
 DESCRIBE.VETSITEM = "It believes my hands are pure, and untainted."
 DESCRIBE.SCREECHER_TRINKET = "The stench of death lingers here."
-ACTIONFAIL.GIVE = { NOTNIGHT = "It's waiting for nightfall." }
+ACTIONFAIL.GIVE.NOTNIGHT = "It's waiting for nightfall."
 
 DESCRIBE.MAGMAHOUND = "It rains hell upon the damned."
 DESCRIBE.LIGHTNINGHOUND = "Death from above!"
@@ -403,6 +389,7 @@ DESCRIBE.POWERCELL = "It sustains the electronics."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
 "Perhaps this is the future of humanity?"
 DESCRIBE.MINERHAT_ELECTRICAL = "Light is light, who am I to complain?"
+DESCRIBE.LANTERN_ELECTRICAL = "Brighter lights bring even deeper shadows."
 DESCRIBE.OCEAN_SPEAKER =
 "It's busted and hollow inside. Only playing dreary tunes."
 -- DESCRIBE.UM_SIREN = "She manipulates her pawns through song. A very potentent ability..."
