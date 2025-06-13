@@ -137,4 +137,10 @@ RECIPE_DESC.SLINGSHOTAMMO_MOONGLASS = "Watch your hands!"
 RECIPE_DESC.SLINGSHOTAMMO_SALT = "Salt in the wounds!"
 RECIPE_DESC.SLINGSHOTAMMO_SLIME = "It's slime time!"
 RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
+
+--Other new stuff that I want to put at the bottom because yes (Atoba started this I swear!!)
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
+RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."
+RECIPE_DESC.TURF_UM_HOTSPRING_GRASS = "A patch of steamy wet grass."
+RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Boiling Fields."
+RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Boiling Fields."

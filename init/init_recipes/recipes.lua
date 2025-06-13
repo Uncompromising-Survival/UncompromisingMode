@@ -34,8 +34,9 @@ end
 -------Equipment-------
 -----------------------
 
-AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "TOOLS" })
 ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
+ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
 if GetModConfigData("snowstorms") then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
