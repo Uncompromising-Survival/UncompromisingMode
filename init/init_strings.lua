@@ -557,6 +557,7 @@ STRINGS.UM_LOADINGTIPS = {
     OCEAN_STEERING = "Boat rudders help with steering boats, increasing turn speed and allowing the boat to make sharper turns. The Captain's Hat also further increases steering speed.",
     HEAVYFISH = "\"That's a big one! We'll have seafood the entire season with that!\" - W",
     WILTFLY = "Hungry and weak during summer, the Dragonfly takes flight, searching for food. Ash and unprepared survivors are her favorite!",
+    SURVIVORCOCOONS = "The Hooded Widow seems to have acquired a taste for survivors, even bundling them up together in bigger cocoons to finish devouring them later.",
 
     --tooltips
     --i'd preffer if we got character quotes for some of these.
@@ -595,6 +596,9 @@ STRINGS.UM_LOADINGTIPS = {
     THERMAL_STONE = "Thermal Stones now become much better with proper clothing, and much worse without.",
     LIFE_AMULET = "Ghosts can no longer haunt Life Amulets to revive. Unless those amulets are of the rare and ancient variety.",
     PEARL_SHOP = "Pearl has expanded her shop, having a few more bits and baubles to sell.",
+    FEATHER_FROCK = "The Feather Frock from Moose/Goose uses feathers for special effects, damaging enemies, speeding you up, and blocking a flat amount of incoming damage! The Veteran's Curse awaits you...",
+    MOONFLY_LANTERN = "The Moonfly Lantern from Moonmaw Dragonfly speeds you up, while also leaving a glowing trail behind you that also speeds up fellow survivors! The Veteran's Curse awaits you...",
+    SILKEN_SACK = "The Silken Sack from Hooded Widow is a Backpack that generates Silk every day, and can also bundle up items in exchange of Silk! The Veteran's Curse awaits you...",
 
     --character specific
     WARLY_BUTCHER = "\"Warly is a great friend to have. I have been capturing these creatures alive lately. He has a way with a knife that I cannot match.\" - W",
