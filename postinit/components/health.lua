@@ -160,7 +160,7 @@ end
 
 local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     local res_item = HasPocketResurrection(self)
-    local maykill = math.max(amount, self.minhealth) <= 0
+    local maykill = math.max(amount, self.minhealth or 0) <= 0
     if TUNING.DSTU.SHADOW_WATHOM and self.inst:HasTag("wathom") then
         if maykill and cause == "shadowvortex" and TUNING.DSTU.COMPROMISING_SHADOWVORTEX and not self.inst.sg:HasStateTag("blackpuddle_death") then
             self.inst.components.rider:ActualDismount()
