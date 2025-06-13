@@ -212,7 +212,7 @@ local function onattack(inst, attacker, target)
     if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.weapon.stimuli == "electric" then
         SpawnPrefab("electrichitsparks"):AlignToTarget(target, attacker, true)
         if inst.overcharged then
-            if not target:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
+            if not target:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant", "brightmare") and (target:HasTag("smallepic") or not target:HasTag("epic")) then
                 target:AddDebuff("shockstundebuff", "shockstundebuff", {attacker = attacker})
             end
             if target:HasAnyTag("chess", "uncompromising_pawn", "twinofterror") and not target:HasTag("fleshyeye") and not (target.components.health and target.components.health:IsDead()) and not target.sg:HasStateTag("noattack") then
