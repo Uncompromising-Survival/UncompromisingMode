@@ -37,7 +37,10 @@ local wardrobe_prefabs = {
     "pocketwatch",
     "pocketwatch_dismantler",
     "sewing_tape",
-    "sewing_kit"
+    "sewing_kit",
+	"spiderden_bedazzler",
+	"spider_whistle",
+	"spider_repellent"
 }
 
 function CheckWardrobeItem(container, item, slot)

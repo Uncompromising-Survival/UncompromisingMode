@@ -4,13 +4,15 @@ local assets =
     Asset("ATLAS", "images/inventoryimages/widowshead.xml"),
     Asset("IMAGE", "images/inventoryimages/widowshead.tex"),
 }
-local BEAVERVISION_COLOURCUBES =
+
+--[[local BEAVERVISION_COLOURCUBES =
 {
     day = "images/colour_cubes/beaver_vision_cc.tex",
     dusk = "images/colour_cubes/beaver_vision_cc.tex",
     night = "images/colour_cubes/beaver_vision_cc.tex",
     full_moon = "images/colour_cubes/beaver_vision_cc.tex",
-}
+}]]
+
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "hat_widowshead", "swap_hat")
 
@@ -22,11 +24,13 @@ local function onequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Hide("HEAD")
         owner.AnimState:Show("HEAD_HAT")
+        owner.AnimState:Show("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
     end
     --[[if owner.components.playervision ~= nil then   --Colorcubes don't listen....
-		owner.components.playervision:SetCustomCCTable(BEAVERVISION_COLOURCUBES)
+        owner.components.playervision:SetCustomCCTable(BEAVERVISION_COLOURCUBES)
         owner.components.playervision:ForceNightVision(true)
-		end]]
+        end]]
 end
 
 local function onunequip(inst, owner)
@@ -39,14 +43,14 @@ local function onunequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Show("HEAD")
         owner.AnimState:Hide("HEAD_HAT")
+        owner.AnimState:Hide("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
     end
     --[[if owner.components.playervision ~= nil then
-		owner.components.playervision:SetCustomCCTable(nil)
-		owner.components.playervision:ForceNightVision(false)
-		end]]
+        owner.components.playervision:SetCustomCCTable(nil)
+        owner.components.playervision:ForceNightVision(false)
+        end]]
 end
-
-
 
 local function fn()
     local inst = CreateEntity()
@@ -95,6 +99,5 @@ local function fn()
 
     return inst
 end
-
 
 return Prefab("widowshead", fn, assets)

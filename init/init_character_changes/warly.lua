@@ -109,7 +109,7 @@ env.AddPrefabPostInit("spicepack", function(inst)
     inst.components.inventoryitem.cangoincontainer = true
     inst.components.inventoryitem.canonlygoinpocket = true
 
-    inst.components.container.restrictedtag = "masterchef"
+    --inst.components.container.restrictedtag = "masterchef"
     inst.components.container.skipclosesnd = true
     inst.components.container.skipopensnd = true
     inst.components.container.droponopen = true

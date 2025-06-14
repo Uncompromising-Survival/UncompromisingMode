@@ -77,7 +77,7 @@ end)
 
 local function CalculateMaxHealthLoss(inst, data)
     if inst.components.health and not inst.components.health:IsDead() then
-        local healthloss = ((data.damageresolved and data.damageresolved or data.damage) * 0.2) / 75
+        local healthloss = ((data.damageresolved or data.damage) * 0.2) / 75
         inst.components.health:DeltaPenalty(healthloss)
     end
 end
@@ -87,7 +87,7 @@ local function DoEffects(pet)
 
     SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
 
-    if pet.components.follower.leader ~= nil then
+    if pet.components.follower.leader then
         local x1, y1, z1 = pet.components.follower.leader.Transform:GetWorldPosition()
         SpawnPrefab("statue_transition").Transform:SetPosition(x1, y1, z1)
     end
@@ -179,6 +179,25 @@ local function ForceDespawnShadowMinions(inst)
     end
 end
 
+local SHADOWMAGIC_TAGS = {"shadowmagic", "NIGHTMARE_fuel"}
+local function OnGetItem(inst, data)
+    local item = data and data.item
+    if item and item:HasAnyTag(SHADOWMAGIC_TAGS) then
+        item.components.inventoryitem.keepondeath = true
+        item.components.inventoryitem.keepondrown = true
+        item:AddTag("nosteal")
+    end
+end
+
+local function OnLoseItem(inst, data)
+    local item = data and (data.prev_item or data.item)
+    if item and item:IsValid() and item:HasAnyTag(SHADOWMAGIC_TAGS) then
+        item.components.inventoryitem.keepondeath = false
+        item.components.inventoryitem.keepondrown = false
+        item:RemoveTag("nosteal")
+    end
+end
+
 local function WaxwellUMStuff(inst)
     inst.pact_sworn = false
 
@@ -221,6 +240,11 @@ local function WaxwellUMStuff(inst)
     inst:ListenForEvent("onskinschanged", OnSkinsChanged) -- Fashion Shadows.
     inst:ListenForEvent("ms_becameghost", OnBecameGhost)
     inst:ListenForEvent("ms_playerreroll", ForceDespawnShadowMinions)
+
+    inst:ListenForEvent("itemget", OnGetItem)
+    inst:ListenForEvent("equip", OnGetItem)
+    inst:ListenForEvent("itemlose", OnLoseItem)
+    inst:ListenForEvent("unequip", OnLoseItem)
 
     local petleash = inst.components.petleash
     if petleash then
