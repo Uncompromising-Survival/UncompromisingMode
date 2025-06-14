@@ -735,12 +735,20 @@ containers.params.um_inkubator =
 containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
 containers.params.spicepack.itemtestfn = function(container, item, slot)
     for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
-        if item:HasTag("edible_" .. v) or item:HasTag("spice") then return true end
+        if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
     end
 end
 
 for k, v in pairs(containers.params.spicepack.widget.slotbg) do
     containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
+end
+
+local oldicebox = containers.params.icebox.itemtestfn
+function containers.params.icebox.itemtestfn(container, item, slot, ...)
+	if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") then
+		return true
+	end
+    return oldicebox(container, item, slot, ...)
 end
 
 local function addItemSlotNetvarsInContainer(inst)

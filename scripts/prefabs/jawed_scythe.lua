@@ -101,6 +101,15 @@ local function HarvestPickable(inst, ent, doer)
             Launch(item, doer, 1.5)
         end
     end
+
+    if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
+        inst.components.finiteuses:Use(0.25)
+    end
+
+   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
+        inst.components.finiteuses:Use(0.2)
+    end
+	
 end
 
 local function IsEntityInFront(inst, entity, doer_rotation, doer_pos)
@@ -250,9 +259,9 @@ local function ScytheFn()
 	inst.components.inventoryitem.atlasname = "images/inventoryimages/jawed_scythe.xml"
 	
     local finiteuses = inst:AddComponent("finiteuses")
-    finiteuses:SetMaxUses(175)
-    finiteuses:SetUses(175)
-    finiteuses:SetConsumption(ACTIONS.SCYTHE, 1)
+    finiteuses:SetMaxUses(100)
+    finiteuses:SetUses(100)
+    --finiteuses:SetConsumption(ACTIONS.SCYTHE, 0)
 	finiteuses:SetOnFinished(inst.Remove)
 	SetupComponents(inst)
 

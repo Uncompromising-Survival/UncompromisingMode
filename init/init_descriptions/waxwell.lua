@@ -5,12 +5,10 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WAXWELL.ACTIONFAIL
 --	[ 		Maxwell Descriptions		]	--
 
 ANNOUNCE.DREADEYE_SPOOKED = "Charlie? No... it was something else..."
-ANNOUNCE.ANNOUNCE_HARDCORE_RES =
-"I'll have to impart this heart to their rotting corpse."
+ANNOUNCE.ANNOUNCE_HARDCORE_RES = "I'll have to impart this heart to their rotting corpse."
 ANNOUNCE.ANNOUNCE_WINONAGEN = "I'm more of a \"magic and dark arts\" man."
 ANNOUNCE.ANNOUNCE_RATRAID = "Oh, no."
-ANNOUNCE.ANNOUNCE_RATRAID_SPAWN =
-"...Come now Charlie, is this really nessecary?"
+ANNOUNCE.ANNOUNCE_RATRAID_SPAWN = "...Come now, Charlie, is this really necessary?"
 -- Yes. Enjoy.
 ANNOUNCE.ANNOUNCE_RATRAID_OVER = "How dare you? Get back here!"
 ANNOUNCE.ANNOUNCE_ACIDRAIN = {
@@ -19,32 +17,25 @@ ANNOUNCE.ANNOUNCE_ACIDRAIN = {
 }
 ANNOUNCE.ANNOUNCE_TOADSTOOLED = "Vile spore-spawn!"
 -- FoodBuffs
-ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LESSERELECTRICATTACK =
-    ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICATTACK
-ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICRETALIATION =
-    ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICATTACK
+ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LESSERELECTRICATTACK = ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICATTACK
+ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICRETALIATION = ANNOUNCE.ANNOUNCE_ATTACH_BUFF_ELECTRICATTACK
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_FROZENFURY = "ssSsooo cCccold"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_VETCURSE = "I could perish at any moment!"
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_LESSERELECTRICATTACK =
-    ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICATTACK
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICRETALIATION =
-    ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICATTACK
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_LESSERELECTRICATTACK = ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICATTACK
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICRETALIATION = ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICATTACK
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_FROZENFURY = "Feeling better now."
 -- FoodBuffs
 
 -- CaliforniaKing
-ANNOUNCE.ANNOUNCE_ATTACH_BUFF_CALIFORNIAKING = "That was probably a bad Idea."
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING =
-"I think I prefered the throne over that..."
+ANNOUNCE.ANNOUNCE_ATTACH_BUFF_CALIFORNIAKING = "That was probably a bad idea."
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "I think I prefered the throne over that..."
 DESCRIBE.CALIFORNIAKING = "What foul amalgam is this?"
 -- CaliforniaKing
 
 ANNOUNCE.ANNOUNCE_RNEFOG = "It's not just Charlie out there, is it?"
 DESCRIBE.UNCOMPROMISING_RAT = "Filthy vermin!"
-DESCRIBE.UNCOMPROMISING_RATHERD =
-"I don't recall granting you vermin permission to settle in my world."
-DESCRIBE.UNCOMPROMISING_RATBURROW =
-"I don't recall granting you vermin permission to settle in my world."
+DESCRIBE.UNCOMPROMISING_RATHERD = "I don't recall granting you vermin permission to settle in my world."
+DESCRIBE.UNCOMPROMISING_RATBURROW = "I don't recall granting you vermin permission to settle in my world."
 DESCRIBE.UNCOMPROMISING_WINKYBURROW = "I hope that wont be causing any issues."
 DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW = "Filthy and full of junk"
 
@@ -83,8 +74,7 @@ DESCRIBE.MONSTERSMALLMEAT_DRIED = "My teeth are getting too old for this."
 DESCRIBE.UM_MONSTEREGG = "What evil lies within?"
 DESCRIBE.UM_MONSTEREGG_COOKED = "Foul yolk and hairy egg whites, apparently."
 
-DESCRIBE.MUSHROOMSPROUT_OVERWORLD =
-"It seems to be polluting the air with spores."
+DESCRIBE.MUSHROOMSPROUT_OVERWORLD = "It seems to be polluting the air with spores."
 DESCRIBE.TOADLING = "They've been overtaken by some sort of fungal hive-mind."
 
 DESCRIBE.GASMASK = "This clears the vapors."
@@ -95,20 +85,22 @@ ANNOUNCE.ANNOUNCE_SNEEZE = "ah...CHOOOO!"
 ANNOUNCE.ANNOUNCE_HAYFEVER = "Ugh. Allergies."
 ANNOUNCE.ANNOUNCE_HAYFEVER_OFF = "Ah... I can breathe again."
 ANNOUNCE.ANNOUNCE_FIREFALL = {
-    "Never a moment of peace.", "That mangy thing is getting worked up.",
+    "Never a moment of peace.",
+    "That mangy thing is getting worked up.",
     "That's probably not good."
 }
 ANNOUNCE.ANNOUNCE_ROOTING = "It's roots have taken hold!"
 ANNOUNCE.ANNOUNCE_SNOWSTORM = "The wind is picking up. Something is wrong here."
 ANNOUNCE.SHADOWTALKER = {
-    "IM SO SORRY CHARLIE", "THEY WONT LET US GO", "I CANNOT BE FORGIVEN"
+    "IM SO SORRY CHARLIE", 
+    "THEY WONT LET US GO", 
+    "I CANNOT BE FORGIVEN"
 }
 ANNOUNCE.ANNOUNCE_OVER_EAT = {
     STUFFED = "What can I say? I'm a gluttonous king.",
     OVERSTUFFED = "Gluttony is a sin, and I've sinned enough!"
 }
-DESCRIBE.UM_SAND =
-"Rocks so thoroughly beaten down they are no longer recognizable."
+DESCRIBE.UM_SAND = "Rocks so thoroughly beaten down they are no longer recognizable."
 DESCRIBE.UM_SANDHILL = "A little mound of yellow sand."
 DESCRIBE.SNOWPILE = "Remove it, before it gets in my boots."
 DESCRIBE.SNOWGOGGLES = "..."
@@ -136,8 +128,7 @@ DESCRIBE.PLAGUEMASK = "The beak looks ridiculous."
 DESCRIBE.SPIDER_TRAPDOOR = "Oh great, they're getting smarter."
 DESCRIBE.TRAPDOOR = "Something's off here, I can feel it."
 DESCRIBE.HOODEDTRAPDOOR = "Those ambushing spiders are here too, aren't they."
-DESCRIBE.WICKER_TENTACLE =
-"They have been ripped from their plane of existence."
+DESCRIBE.WICKER_TENTACLE = "They have been ripped from their plane of existence."
 DESCRIBE.HONEY_LOG = "...I've got nothing."
 
 DESCRIBE.BUSHCRAB = "I guess they've finally hatched."
@@ -155,8 +146,7 @@ DESCRIBE.CHIMP = DESCRIBE.MONKEY
 DESCRIBE.SWILSON = "I... I thought I killed you!"
 DESCRIBE.VAMPIREBAT = "I remember you being... different."
 DESCRIBE.CRITTERLAB_REAL = DESCRIBE.CRITTERLAB
-DESCRIBE.CRITTERLAB_REAL_BROKEN =
-"With moon rocks, I could foster some filthy creatures."
+DESCRIBE.CRITTERLAB_REAL_BROKEN = "With moon rocks, I could foster some filthy creatures."
 DESCRIBE.WALRUS_CAMP_SUMMER = DESCRIBE.WALRUS_CAMP
 DESCRIBE.CHARLIEPHONOGRAPH_100 = DESCRIBE.MAXWELLPHONOGRAPH
 DESCRIBE.BUGZAPPER = "Mundane, but it keeps the bugs out."
@@ -168,19 +158,17 @@ DESCRIBE.SEAFOODPAELLA = "A fine meal!"
 
 DESCRIBE.STUMPLING = "They are revolting!"
 DESCRIBE.BIRCHLING = DESCRIBE.STUMPLING
-DESCRIBE.MOON_TEAR = "Another one of the \"Moon's\" gifts."
+DESCRIBE.MOON_TEAR = "Another one of the \"moon's\" gifts."
 DESCRIBE.SHADOW_TELEPORTER = "Oh, please. I know a trick when I see one."
 DESCRIBE.POLLENMITEDEN = "Ugh. The horde home."
 DESCRIBE.POLLENMITES = "Horde horrible."
-DESCRIBE.SHADOW_CROWN =
-"Darkness brings great power, but leaves your body fragile. I should know."
+DESCRIBE.SHADOW_CROWN = "Darkness brings great power, but leaves your body fragile. I should know."
 DESCRIBE.UM_SHADOW_AXE = "A tool after my own heart."
 DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.LICELOAF = "Upsettingly plain."
 DESCRIBE.SUNGLASSES = "It's not quite my style."
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
-DESCRIBE.LUREPLAGUE_RAT =
-"This isn't right, eyeplants, on rats? Is this your doing Charlie?"
+DESCRIBE.LUREPLAGUE_RAT = "This isn't right, eyeplants, on rats? Is this your doing Charlie?"
 DESCRIBE.MARSH_GRASS = "I should have let them in, this place is a real drab."
 DESCRIBE.CURSED_ANTLER = "You expect me to carry this?!"
 DESCRIBE.BERNIEBOX = "Great power lies within."
@@ -214,8 +202,7 @@ DESCRIBE.BLUEBERRYPANCAKES = "It was a mess to make."
 DESCRIBE.DEVILSFRUITCAKE = "A cake made of dark magic. Or dark chocolate."
 DESCRIBE.SIMPSALAD = "It's nothing more than a bit of roughage."
 DESCRIBE.BEEFALOWINGS = "Beefalo in heat."
-ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE =
-"I may be frail, but you aren't moving me!"
+ANNOUNCE.ANNOUNCE_ATTACH_BUFF_KNOCKBACKIMMUNE = "I may be frail, but you aren't moving me!"
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_KNOCKBACKIMMUNE = "I've lost my footing."
 DESCRIBE.WIDOWSHEAD = "It seems the cortex is still semi-functional."
 DESCRIBE.HOODED_MUSHTREE_TALL = DESCRIBE.MUSHTREE_TALL
@@ -234,33 +221,16 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It's been frozen solid, good.",
     REGROWING = "It'll grow more."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It's seen better days.",
-    GENERIC = "It makes me a little nostalgic.",
-    ASHLEY_BROKEN = "It's seen better days.",
-    ASHLEY = "It makes me a little nostalgic."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Just what am I looking at here?",
-    ASHLEY = "Just what am I looking at here?"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "How truly unnerving.",
-    ASHLEY = "How truly unnerving."
-}
 DESCRIBE.ANTIHISTAMINE = "It'll help keep allergies down."
 ANNOUNCE.CURSED_ITEM_EQUIP = "It seems I've lost my touch!"
-DESCRIBE.VETSITEM =
-"They are tempting us with fancy trinkets. Shall we tap into darker powers?"
+DESCRIBE.VETSITEM = "They are tempting us with fancy trinkets. Shall we tap into darker powers?"
 DESCRIBE.SCREECHER_TRINKET = "It came from someplace far away."
 
 ANNOUNCE.ANNOUNCE_NOSANITY = "I have the worst headache!"
 ANNOUNCE.ANNOUNCE_NOHEALTH = "My body is too frail!"
 ANNOUNCE.ANNOUNCE_NOFUEL = "I need some nightmare fuel."
-ACTIONFAIL.GIVE = {
-    NOTNIGHT = "Maybe we should try this again when the MOON is out?"
-}
+ACTIONFAIL.GIVE.NOTNIGHT = "Maybe we should try this again when the \"moon\" is out?"
 
 DESCRIBE.MAGMAHOUND = "I'm jealous, I shouldve made red hounds do that."
 DESCRIBE.LIGHTNINGHOUND = "Why didn't I think of that? Tsk."
@@ -318,19 +288,13 @@ DESCRIBE.GORE_HORN_HAT = "I feel slightly bad wearing this."
 DESCRIBE.BEARGERCLAW = "I'll gladly get someone elses hands dirty."
 DESCRIBE.FEATHER_FROCK = "Feather grease will get all over my suit."
 
-DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM .. "\nIt won't conduct properly now."
-DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM ..
-    "\nIt won't conduct properly now."
-DESCRIBE.ORANGEGEM_CRACKED = DESCRIBE.ORANGEGEM ..
-    "\nIt won't conduct properly now."
-DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM ..
-    "\nIt won't conduct properly now."
-DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM ..
-    "\nIt won't conduct properly now."
-DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM ..
-    "\nIt won't conduct properly now."
-DESCRIBE.OPALPRECIOUSGEM_CRACKED = DESCRIBE.OPALPRECIOUSGEM ..
-    "\nIt won't conduct properly now."
+DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM.."\nIt won't conduct properly now."
+DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM.."\nIt won't conduct properly now."
+DESCRIBE.ORANGEGEM_CRACKED = DESCRIBE.ORANGEGEM.."\nIt won't conduct properly now."
+DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM.."\nIt won't conduct properly now."
+DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM.."\nIt won't conduct properly now."
+DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM.."\nIt won't conduct properly now."
+DESCRIBE.OPALPRECIOUSGEM_CRACKED = DESCRIBE.OPALPRECIOUSGEM.."\nIt won't conduct properly now."
 
 DESCRIBE.RED_MUSHED_ROOM = "I've mushed it into a paste."
 DESCRIBE.GREEN_MUSHED_ROOM = "I've mushed it into a paste."
@@ -338,34 +302,26 @@ DESCRIBE.BLUE_MUSHED_ROOM = "I've mushed it into a paste."
 
 -- StantonStuff
 DESCRIBE.SKULLFLASK = "His mixture is actually quite impressive."
-DESCRIBE.SKULLFLASK_EMPTY =
-"The flask appears to be enchanted as well, brilliant."
-DESCRIBE.STANTON_SHADOW_TONIC =
-"A fuel cocktail? Please, I could do this all night!"
+DESCRIBE.SKULLFLASK_EMPTY = "The flask appears to be enchanted as well, brilliant."
+DESCRIBE.STANTON_SHADOW_TONIC = "A fuel cocktail? Please, I could do this all night!"
 DESCRIBE.STANTON_SHADOW_TONIC_FANCY = DESCRIBE.STANTON_SHADOW_TONIC
 DESCRIBE.STANTON = "Who are you? Did I kill you?"
-ANNOUNCE.ANNOUNCE_ATTACH_BUFF_HYPERCOURAGE =
-"A comforting effect as well, almost like eggnog."
+ANNOUNCE.ANNOUNCE_ATTACH_BUFF_HYPERCOURAGE = "A comforting effect as well, almost like eggnog."
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_HYPERCOURAGE = "I would desire more."
 -- StantonStuff
 
 DESCRIBE.ARMORLAVAE = DESCRIBE.LAVAE
 
 DESCRIBE.THEATERCORN = "Brings back old memories."
-DESCRIBE.DEERCLOPS_BARRIER =
-"She's becoming more efficient in her use of magic! I'm so proud!"
+DESCRIBE.DEERCLOPS_BARRIER = "She's becoming more efficient in her use of magic! I'm so proud!"
 
 DESCRIBE.MOONMAW_DRAGONFLY = "Oh! I can't even look at you!"
-DESCRIBE.MOONMAW_LAVAE =
-"My favorite: A spike that's the size of my entire body."
+DESCRIBE.MOONMAW_LAVAE = "My favorite: A spike that's the size of my entire body."
 DESCRIBE.SNAPPERTURTLE = "Snap at me and I'll kill you."
-DESCRIBE.SNAPPERTURTLEBABY =
-"Don't think your age excuses your actions, mister."
-DESCRIBE.SNAPPERTURTLENEST =
-"Must've been from the ocean. I've never seen them on the island before."
+DESCRIBE.SNAPPERTURTLEBABY = "Don't think your age excuses your actions, mister."
+DESCRIBE.SNAPPERTURTLENEST = "Must've been from the ocean. I've never seen them on the island before."
 DESCRIBE.GLASS_SCALES = "I'm still not used to lunar-type magic."
-DESCRIBE.MOONGLASS_GEODE =
-"A concentrated mass of lunar energy. I could use this."
+DESCRIBE.MOONGLASS_GEODE = "A concentrated mass of lunar energy. I could use this."
 DESCRIBE.ARMOR_GLASSMAIL = "I'm not dying anytime soon!"
 DESCRIBE.ARMOR_GLASSMAIL_SHARDS = "Come closer if you don't value your life."
 DESCRIBE.MOONMAW_GLASSSHARDS_RING = DESCRIBE.ARMOR_GLASSMAIL_SHARDS
@@ -380,10 +336,8 @@ ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LARGEHUNGERSLOW = "We will never speak of this."
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_LARGEHUNGERSLOW = ""
 DESCRIBE.BOOK_RAIN_UM = "Tampering with lunar magic too, are we?"
 DESCRIBE.FLORAL_BANDAGE = "Sweet bandage."
-DESCRIBE.DORMANT_RAIN_HORN =
-"A shell capable of channeling some magical energy."
-DESCRIBE.RAIN_HORN =
-"That hold carapace knows more about magic than she leads on..."
+DESCRIBE.DORMANT_RAIN_HORN = "A shell capable of channeling some magical energy."
+DESCRIBE.RAIN_HORN = "That hold carapace knows more about magic than she leads on..."
 DESCRIBE.DRIFTWOODFISHINGROD = "The driftwood must have made it fishier."
 
 ANNOUNCE.ANNOUNCE_RATSNIFFER_ITEMS = {
@@ -397,8 +351,7 @@ ANNOUNCE.ANNOUNCE_RATSNIFFER_BURROWS = {
 }
 
 DESCRIBE.PIED_RAT = "That poor suit, ruined!"
-DESCRIBE.PIED_PIPER_FLUTE =
-"I am NOT touching that, let alone putting it on my mouth."
+DESCRIBE.PIED_PIPER_FLUTE = "I am NOT touching that, let alone putting it on my mouth."
 DESCRIBE.UNCOMPROMISING_PACKRAT = "Think you're clever, do you?"
 
 ANNOUNCE.ANNOUNCE_PORTABLEBOAT_SINK = "If I drown, I'm leaving you behind."
@@ -407,8 +360,8 @@ ACTIONFAIL.CHARGE_FROM = {
     NOT_ENOUGH_CHARGE = "No power, what a shame.",
     CHARGE_FULL = "That would be overkill."
 }
-ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_INSULATED = "Charged and raring to go"
-ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED = "That's Smarts!"
+ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_INSULATED = "Charged and raring to go."
+ANNOUNCE.ANNOUNCE_CHARGE_SUCCESS_ELECTROCUTED = "That smarts!"
 
 ----UNDER THE WEATHER----
 
@@ -419,16 +372,15 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Some days I miss my clockworks."
 DESCRIBE.POWERCELL = "Time flies when you're stuck in here."
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She's just full of bright ideas."
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "She thinks she's full of bright ideas."
 DESCRIBE.MINERHAT_ELECTRICAL = "I guess that solves the firefly problem."
-DESCRIBE.OCEAN_SPEAKER =
-"You know, I used to be king. Here I am unable to recognize half the stuff I find in these wretched waters."
+DESCRIBE.LANTERN_ELECTRICAL = "Now I either talk to her or risk getting electrocuted charging this. Great."
+DESCRIBE.OCEAN_SPEAKER = "You know, I used to be king. Here I am unable to recognize half the stuff I find in these wretched waters."
 -- DESCRIBE.UM_SIREN = "How grotesque. Yet somewhat alluring... hrmpf."
 
 DESCRIBE.OCUPUS_BEAK = "Not quite as big as the one from the archipelago."
 DESCRIBE.OCUPUS_TENTACLE = "Inky black and probably tastes like ink too."
-DESCRIBE.OCUPUS_TENTACLE_EYE =
-"I'm not sure if the eye makes it less or more appetizing."
+DESCRIBE.OCUPUS_TENTACLE_EYE = "I'm not sure if the eye makes it less or more appetizing."
 DESCRIBE.OCUPUS_TENTACLE_COOKED = "Nice and grilled now at least."
 DESCRIBE.UM_OCUPUS_EYE = "I don't recognize this."
 DESCRIBE.UM_OCUPUS_EYETACLE = "If we remove the eyes, we will be freed."
@@ -438,8 +390,7 @@ DESCRIBE.BEAKBASHER = "Another tool of destruction."
 DESCRIBE.HOUNDIOUS_OBSERVIOUS = "My, it didn't require any fuel and still turned out monstrous."
 
 DESCRIBE.ARMOR_REED_UM = "At least it'll keep my suit clean."
-DESCRIBE.ARMOR_SHARKSUIT_UM =
-"Do I really need to wear clothes made from a fish?"
+DESCRIBE.ARMOR_SHARKSUIT_UM = "Do I really need to wear clothes made from a fish?"
 DESCRIBE.ROCKJAWLEATHER = "It's already starting to smell bad."
 
 DESCRIBE.EYEOFTERROR_MINI_ALLY = "Great, they've imprinted on us."
@@ -447,8 +398,7 @@ DESCRIBE.EYEOFTERROR_MINI_GROUNDED_ALLY = DESCRIBE.EYEOFTERROR_MINI_GROUNDED
 
 DESCRIBE.STUFFED_PEEPER_POPPERS = "I have lost my appetite."
 DESCRIBE.UM_DEVILED_EGGS = "Everything I touch seems to turn out this way."
-DESCRIBE.LUSH_ENTRANCE =
-"Hmpf, I know better than to go poking my nose in places I shouldn't."
+DESCRIBE.LUSH_ENTRANCE = "Hmpf, I know better than to go poking my nose in places I shouldn't."
 DESCRIBE.CRITTER_FIGGY = "Mandibles off the suit, pal."
 DESCRIBE.GIANT_TREE_BIRDNEST = "It's just begging to be stomped on."
 
@@ -456,8 +406,7 @@ DESCRIBE.SLUDGE = "Disgusting gunk, it sticks to everything."
 DESCRIBE.SLUDGE_OIL = "At least it's contained now."
 DESCRIBE.SLUDGE_SACK = "It's very unorthadox when you think about it."
 DESCRIBE.CANNONBALL_SLUDGE_ITEM = "Trying to emulate Greek fire now, are we."
-DESCRIBE.BOAT_BUMPER_SLUDGE =
-"That should keep things away from my ship. For one reason, or another."
+DESCRIBE.BOAT_BUMPER_SLUDGE = "That should keep things away from my ship. For one reason, or another."
 DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "At least this gunk won't get on me."
 DESCRIBE.BOATPATCH_SLUDGE = "It better stay in that hole."
 DESCRIBE.UM_COPPER_PIPE = "Where else did you think they come from around here?"
@@ -485,11 +434,9 @@ DESCRIBE.UM_BRINEISHMOSS = "Moss isn't too noteworthy."
 DESCRIBE.UM_COALESCED_NIGHTMARE = "A recipe for disaster."
 DESCRIBE.SLUDGE_CORK = "What exactly am I going to plug with this, a sink hole?"
 DESCRIBE.SLUDGESTACK = "Someone else can harvest it."
-DESCRIBE.SPECTER_SHIPWRECK =
-"Wouldn't be the first to an attempt an escape through sea."
+DESCRIBE.SPECTER_SHIPWRECK = "Wouldn't be the first to an attempt an escape through sea."
 
-DESCRIBE.UNCOMPROMISING_HARPOON =
-"Stabbing things from a distance has never been easier."
+DESCRIBE.UNCOMPROMISING_HARPOON = "Stabbing things from a distance has never been easier."
 DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "It's not as heavy as it looks."
 DESCRIBE.UNCOMPROMISING_HARPOONREEL = "It's the reel deal."
 DESCRIBE.UM_MAGNERANG = "I don't imagine this will throw very far."
@@ -502,15 +449,14 @@ DESCRIBE.UM_BEEGUARD_SEEKER = DESCRIBE.BEEGUARD
 DESCRIBE.UM_BEEGUARD_BLOCKER = "We must find a way around them."
 
 DESCRIBE.PORTABLEBOAT_ITEM = "I wouldn't trust it with my life."
-DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM =
-"We have taken advantage of nature, once again."
+DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "We have taken advantage of nature, once again."
 
 DESCRIBE.UM_ORNAMENT_OPOSSUM = "It's not dead, it's merely an act. I think."
 DESCRIBE.UM_ORNAMENT_RAT = "Begone, vile thing!"
 
 DESCRIBE.TRINKET_WATHOM1 = "No wonder he's been having heart attacks."
 
-DESCRIBE.CODEX_MANTRA = "I'm so sorry Charlie."
+DESCRIBE.CODEX_MANTRA = "I'm so sorry, Charlie."
 
 -- WIXIE RELATED STRINGS
 
@@ -519,8 +465,7 @@ DESCRIBE.WIXIE_CLOCK = "A shame it's not in working condition."
 DESCRIBE.WIXIE_WARDROBE = "It's some kind of one way portal..."
 DESCRIBE.CHARLES_T_HORSE = "They have reclaimed it."
 DESCRIBE.THE_REAL_CHARLES_T_HORSE = "How quaint."
-DESCRIBE.SLINGSHOT_MATILDA =
-"It's surprisingly sturdy, given the materials used."
+DESCRIBE.SLINGSHOT_MATILDA = "It's surprisingly sturdy, given the materials used."
 DESCRIBE.SLINGSHOT_GNASHER = "What a sick joke."
 
 DESCRIBE.SLINGSHOTAMMO_LAZY = DESCRIBE.SLINGSHOTAMMO_THULECITE
@@ -555,8 +500,7 @@ DESCRIBE.MEATRACK_HAT = {
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
 DESCRIBE.FISHMEAT_DRIED = "It's softer than regular jerky."
-DESCRIBE.SMALLFISHMEAT_DRIED =
-"It's softer than regular jerky, and a bit smaller."
+DESCRIBE.SMALLFISHMEAT_DRIED = "It's softer than regular jerky, and a bit smaller."
 
 DESCRIBE.WIXIEGUN = "What magic is this?!"
 

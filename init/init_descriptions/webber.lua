@@ -227,27 +227,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "I can see the berry trapped within! Oh...",
     REGROWING = "Exploding must be exhausting."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It's all busted up.",
-    GENERIC = "A teddy bear.",
-    ASHLEY_BROKEN = "It's all busted up.",
-    ASHLEY = "A stuffed kitty."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "That teddy bear is moving!",
-    ASHLEY = "That kitten is moving!"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "It's creepy and cute at the same time!!",
-    ASHLEY = "It's creepy and cute at the same time!!"
-}
 DESCRIBE.ANTIHISTAMINE =
 "It stops us from sneezing! We're not sure how, but it does!"
 ANNOUNCE.CURSED_ITEM_EQUIP = "Ouchies!"
 DESCRIBE.VETSITEM = "Our hands aren't cursed enough for this!"
 DESCRIBE.SCREECHER_TRINKET = "I don't like it."
-ACTIONFAIL.GIVE = { NOTNIGHT = "I think its sleeping? But, in the day time?" }
+ACTIONFAIL.GIVE.NOTNIGHT = "I think it's sleeping? But, in day time?"
 
 DESCRIBE.MAGMAHOUND = "Eep, he spits!"
 DESCRIBE.LIGHTNINGHOUND = "Ouch ouch ouch! Our feetsies!"
@@ -398,8 +384,9 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "I don't want to lose an arm!"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "I don't want to lose an arm!"
 DESCRIBE.POWERCELL = "That's a big battery."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
-"Makes everything we put in on a battery!"
-DESCRIBE.MINERHAT_ELECTRICAL = "Now We can charge it too."
+"Winona uses it to make anything battery powered! Must be complicated."
+DESCRIBE.MINERHAT_ELECTRICAL = "Oh... she just taped a little box on it?"
+DESCRIBE.LANTERN_ELECTRICAL = "Hope she won't mind if we ask for a quick charge from time to time."
 DESCRIBE.OCEAN_SPEAKER = "I want to get closer but he seems weary."
 -- DESCRIBE.UM_SIREN = "Her songs make our head all fuzzy..."
 

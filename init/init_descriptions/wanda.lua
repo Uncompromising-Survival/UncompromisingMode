@@ -238,24 +238,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It's clock has stopped.",
     REGROWING = "Give it time, it will come back."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "This can't be the end. We'll fix this!",
-    GENERIC = "It looks well-loved."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "How incredible that this isn't even the strangest thing I've seen.",
-    ASHLEY = "How incredible that this isn't even the strangest thing I've seen."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "I could've sworn you were smaller...",
-    ASHLEY = "I could've sworn you were smaller..."
-}
 DESCRIBE.ANTIHISTAMINE = "May give some allergy protection, for a time."
 ANNOUNCE.CURSED_ITEM_EQUIP = "Ouch! It's not meant for uncursed hands."
 DESCRIBE.VETSITEM = "It's not meant for uncursed hands."
 DESCRIBE.SCREECHER_TRINKET = "It's from another timeline."
-ACTIONFAIL.GIVE = { NOTNIGHT = "The moon needs to be out." }
+ACTIONFAIL.GIVE.NOTNIGHT = "The moon needs to be out."
 
 DESCRIBE.MAGMAHOUND = "Don't slobber on me!"
 DESCRIBE.LIGHTNINGHOUND = "You can't control the lightning! Don't even try!"
@@ -412,7 +400,8 @@ DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "I'm not much of an electronics person."
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "I'm not much of an electronics person."
 DESCRIBE.POWERCELL = "With clockwork, you don't need these things!"
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Puts an annoying buzz on my equipment."
-DESCRIBE.MINERHAT_ELECTRICAL = "It works, but it doesn't beat tradition."
+DESCRIBE.MINERHAT_ELECTRICAL = "It's improved, but far too bright now."
+DESCRIBE.LANTERN_ELECTRICAL = "Any brighter and my eyes will burn right out of my sockets!"
 DESCRIBE.OCEAN_SPEAKER =
 "I remember these! I can't quite... remember what they do though..."
 -- DESCRIBE.UM_SIREN = "Oh botheration! Its YOU again."

@@ -330,6 +330,9 @@ end
 
 local function SetSize(inst)
     if inst.cocoontable then
+        if not inst.size or inst.size < 1 or inst.size > #inst.cocoontable then
+            inst.size = math.random(1, #inst.cocoontable)
+        end
         for num, mob in ipairs(inst.cocoontable) do
             if inst.size == num then
                 SetCocoonSize(inst, mob.cocoonsize or "large")
@@ -364,7 +367,7 @@ local function Regen(inst, data)
                 --TheNet:Announce("tellingwidow")
                 widowweb:SpawnInvestigators(attacker)
             end
-            PlayHitAnimations(inst)
+            inst:PlayHitAnimations()
             if attacker:HasTag("player") and not attacker:HasTag("mime") and (not attacker:HasTag("widowsgrasp")
                 or (attacker.components.rider and attacker.components.rider:IsRiding())) then
                 attacker.components.talker:Say(GetString(attacker.prefab, "WEBBEDCREATURE"))
@@ -424,14 +427,13 @@ local function fn()
     inst:AddComponent("inspectable")
 
     MakeSnowCovered(inst)
+    inst.cocoontable = cocoontable
+    inst:DoTaskInTime(0, SetSize)
+    inst.PlayHitAnimations = PlayHitAnimations
     inst.OnSave = onsave
     inst.OnLoad = onload
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
-    inst.cocoontable = cocoontable
-    inst.size = math.random(1, #inst.cocoontable)
-    inst:DoTaskInTime(0, SetSize)
-    inst.PlayHitAnimations = PlayHitAnimations
 
     return inst
 end

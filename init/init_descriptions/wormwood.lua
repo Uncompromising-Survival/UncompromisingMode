@@ -214,26 +214,12 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Cold boom fruit",
     REGROWING = "Grow!"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "What happened?",
-    GENERIC = "Hello, Squishy Friend!",
-    ASHLEY_BROKEN = "What happened?",
-    ASHLEY = "Hello, Squishy Friend!"
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Yay! Squishy Friend can play!",
-    ASHLEY = "Yay! Squishy Friend can play!"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "Big Squishy Friend!",
-    ASHLEY = "Big Squishy Friend!"
-}
 DESCRIBE.ANTIHISTAMINE = "Sniff food"
 ANNOUNCE.CURSED_ITEM_EQUIP = "No good!"
 DESCRIBE.VETSITEM = "Wants curses."
 DESCRIBE.SCREECHER_TRINKET = "Scary, not friend"
-ACTIONFAIL.GIVE = { NOTNIGHT = "Needs moon" }
+ACTIONFAIL.GIVE.NOTNIGHT = "Needs moon"
 
 DESCRIBE.MAGMAHOUND = "Bad! Bad!"
 DESCRIBE.LIGHTNINGHOUND = "Zzzt woofer!"
@@ -367,8 +353,9 @@ DESCRIBE.WINONA_SPOTLIGHT_ITEM_UM = "Heavy metal!"
 DESCRIBE.WINONA_BATTERY_LOW_ITEM_UM = "Heavy metal!"
 DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "Heavy metal!"
 DESCRIBE.POWERCELL = "Bzzzzzzzzt box"
-DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Roots for Bzzz zzzt"
-DESCRIBE.MINERHAT_ELECTRICAL = "Can zap it"
+DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "Roots for zzzt"
+DESCRIBE.MINERHAT_ELECTRICAL = "Hat humming! Hummm…"
+DESCRIBE.LANTERN_ELECTRICAL = "Zzzt now"
 DESCRIBE.OCEAN_SPEAKER = "Song box friend? No..."
 DESCRIBE.UM_SIREN = "Is song glub lady"
 

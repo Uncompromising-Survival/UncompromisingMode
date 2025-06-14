@@ -288,21 +288,7 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "It's frozen solid.",
     REGROWING = "That plant survived, it'll probably grow back?"
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "It finally fell apart.",
-    GENERIC = "It's all scorched.",
-    ASHLEY_BROKEN = "It finally fell apart.",
-    ASHLEY = "It's all scorched."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "That teddy bear is moving around. Interesting.",
-    ASHLEY = "That stuffed cat is moving around. Interesting."
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "Remind me not to get on Willow's bad side.",
-    ASHLEY = "Remind me not to get on Willow's bad side."
-}
 DESCRIBE.ANTIHISTAMINE = "It's useful for ailing a stuffy nose!"
 
 DESCRIBE.HEATROCK_LEVEL = {
@@ -320,8 +306,8 @@ DESCRIBE.DURABILITY_LEVEL = {
     FULL = "It's in perfect condition."
 }
 
-ACTIONFAIL.READ = { GENERIC = "It seems the magic is inert in this state." }
-ACTIONFAIL.GIVE = { NOTNIGHT = "I should wait until the moon is out." }
+ACTIONFAIL.READ.GENERIC = "It seems the magic is inert in this state."
+ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
 
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
@@ -479,6 +465,7 @@ DESCRIBE.POWERCELL = "It's like carrying around a little box of electricty."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL =
 "Of course I know how this works! I could've made one myself."
 DESCRIBE.MINERHAT_ELECTRICAL = "Hands-free and scientifically powered!"
+DESCRIBE.LANTERN_ELECTRICAL = "A modern take on the lantern."
 DESCRIBE.OCEAN_SPEAKER = "Well this seems awfully out of place." -- Lame guy. Lame quote.
 
 DESCRIBE.OCUPUS_BEAK = "Better that I ate you, than you eat me."
@@ -703,6 +690,9 @@ DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
 DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
 
 DESCRIBE.UM_RICE_PUDDING = "Some plain old rice pudding."
 

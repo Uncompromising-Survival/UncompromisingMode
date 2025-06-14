@@ -34,8 +34,9 @@ end
 -------Equipment-------
 -----------------------
 
-AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "TOOLS" })
 ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
+ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
 if GetModConfigData("snowstorms") then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
@@ -65,10 +66,23 @@ if GetModConfigData("snowstorms") then
     AddRecipe2("saltpack", { Ingredient("gears", 1), Ingredient("boards", 2), Ingredient("saltrock", 4) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "WINTER" })
     ChangeSortKey("saltpack", "brush", "TOOLS", true)
     ChangeSortKey("saltpack", "beargervest", "WINTER", true)
+
+	AddRecipe2("um_armor_bramble_rimeweed", { Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8), Ingredient("um_rimeweed_itemflower", 1) }, TECH.NONE, { builder_tag = "plantkin" }, { "CHARACTER", "ARMOUR" })
+	ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
+	ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "ARMOUR", true)
+	
+	AddRecipe2("um_rimeweed_icepack", { Ingredient("papyrus", 1), Ingredient("ice", 2), Ingredient("um_rimeweed_itemvine", 2) }, TECH.SCIENCE_TWO, nil, { "RESTORATION", "SUMMER" })
+	ChangeSortKey("um_rimeweed_icepack", "healingsalve_acid", "RESTORATION", true)
+	ChangeSortKey("um_rimeweed_icepack", "blueamulet", "SUMMER", false)
+
+	AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
+	ChangeSortKey("um_blowdart_rime", "blowdart_pipe", "WEAPONS", true)
 end
+
 
 AddRecipe2("um_armor_bramble_rimeweed", { Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8), Ingredient("um_rimeweed_itemflower", 1) }, TECH.NONE, { builder_tag = "plantkin" }, { "CHARACTER" })
 ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
+
 
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
@@ -162,9 +176,6 @@ end
 
 AddRecipe2("floral_bandage", { Ingredient("bandage", 1), Ingredient("cactus_flower", 2) }, TECH.SCIENCE_TWO, nil, { "RESTORATION" })
 ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
-
-AddRecipe2("um_rimeweed_icepack", { Ingredient("papyrus", 1), Ingredient("ice", 2), Ingredient("um_rimeweed_itemvine", 2) }, TECH.SCIENCE_TWO, nil, { "RESTORATION" })
-ChangeSortKey("um_rimeweed_icepack", "floral_bandage", "RESTORATION", true)
 
 if GetModConfigData("winona_items") then
     AddRecipe2("winona_toolbox", { Ingredient("boards", 2), Ingredient("goldnugget", 4), Ingredient("sewing_tape", 2) }, TECH.NONE, { builder_tag = "handyperson" }, { "CONTAINERS", "CHARACTER" })
@@ -394,10 +405,6 @@ ChangeSortKey("um_armor_pyre_nettles", "sweatervest", "WINTER", false)
 -- Pyre Dart
 AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
-
-AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
-ChangeSortKey("um_blowdart_rime", "um_blowdart_pyre", "WEAPONS", true)
-
 
 --AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 

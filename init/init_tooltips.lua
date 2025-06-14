@@ -46,7 +46,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
-    SPICEPACK = "- No longer a backpack.\n- Can only store food.",
+    SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",

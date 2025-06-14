@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 
 local BOUNCESTUFF_MUST_TAGS = {"_inventoryitem"}
 local BOUNCESTUFF_CANT_TAGS = {"locomotor", "INLIMBO"}
@@ -73,6 +74,29 @@ env.AddStategraphPostInit("minotaur", function(inst)
                 inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
             else
                 _OldAttackEvent(inst, data)
+            end
+        end
+    end
+
+    local minotaurattackedeventhandler = inst.events["attacked"] -- This needs to be patched on Klei's side. Also, electric hitstun stuff.
+    if minotaurattackedeventhandler then
+        local Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "hit_recovery_delay")
+        local option = 1
+        if not Oldhit_recovery_delay_minotaur then
+            Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "_OldAttackedEvent", "hit_recovery_delay")
+            option = 2
+        end
+        if Oldhit_recovery_delay_minotaur then
+            local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
+                if inst.um_forcestundebuff then
+                    return false
+                end
+                return Oldhit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
+            end
+            if option == 1 then
+                UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "hit_recovery_delay")
+            else
+                UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "_OldAttackedEvent", "hit_recovery_delay")
             end
         end
     end

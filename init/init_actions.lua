@@ -495,6 +495,11 @@ end
 -- Scythes can reach into the thicket without needing to be on top of them
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 
+-- Card actions are instant for now.
+GLOBAL.ACTIONS.DRAW_FROM_DECK.instant = true
+GLOBAL.ACTIONS.FLIP_DECK.instant = true
+GLOBAL.ACTIONS.ADD_CARD_TO_DECK.instant = true
+
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)
 

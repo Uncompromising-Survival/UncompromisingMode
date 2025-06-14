@@ -234,27 +234,13 @@ DESCRIBE.BLUEBERRYPLANT = {
     FROZE = "Just a block of ice now.",
     REGROWING = "That must be the root."
 }
-DESCRIBE.BERNIE_INACTIVE = {
-    BROKEN = "He's a bit of a fixer-upper.",
-    GENERIC = "This little guy's been well loved.",
-    ASHLEY_BROKEN = "She's a bit of a fixer-upper.",
-    ASHLEY = "This little ladies' been well loved."
-}
 
-DESCRIBE.BERNIE_ACTIVE = {
-    GENERIC = "Is he clockwork? Can I peek inside?",
-    ASHLEY = "Is she clockwork? Can I peek inside?"
-}
-DESCRIBE.BERNIE_BIG = {
-    GENERIC = "That girl knows how to put on a show.",
-    ASHLEY = "That girl knows how to put on a show."
-}
 DESCRIBE.ANTIHISTAMINE = "It'll help my lungs stay clean."
 ANNOUNCE.CURSED_ITEM_EQUIP = "Seems like safety gloves aren't enough!"
 DESCRIBE.VETSITEM = "I'd accept any bargain to use a tool like this!"
 DESCRIBE.SCREECHER_TRINKET =
 "What practical use does it have, other than being creepy?"
-ACTIONFAIL.GIVE = { NOTNIGHT = "This one's a night owl." }
+ACTIONFAIL.GIVE.NOTNIGHT = "This one's a night owl."
 
 DESCRIBE.MAGMAHOUND = "He's got a case of hot breath."
 DESCRIBE.LIGHTNINGHOUND = "A walkin' generator!"
@@ -416,6 +402,7 @@ DESCRIBE.WINONA_BATTERY_HIGH_ITEM_UM = "None of that magic made it any lighter."
 DESCRIBE.POWERCELL = "Lil' ingenuity and elbow grease go a long way."
 DESCRIBE.WINONA_UPGRADEKIT_ELECTRICAL = "I designed it from scratch."
 DESCRIBE.MINERHAT_ELECTRICAL = "A lil' tinkering makes all the difference."
+DESCRIBE.LANTERN_ELECTRICAL = "Now we're talking! This will be much easier to use."
 DESCRIBE.OCEAN_SPEAKER = "Now if I could just see its insides..."
 -- DESCRIBE.UM_SIREN = "Heh, she certainly knows how to run her workplace."
 

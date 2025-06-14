@@ -18,32 +18,8 @@ if Oldhit_recovery_delay then
     UpvalueHacker.SetUpvalue(CommonHandlers.OnAttacked, hit_recovery_delay, "onattacked", "hit_recovery_delay")
 end
 
-local minotaur = require("stategraphs/SGminotaur") -- This needs to be patched on Klei's side.
-local minotaurattackedeventhandler = minotaur.events["attacked"]
-if minotaurattackedeventhandler then
-    local Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "hit_recovery_delay")
-    local option = 1
-    if not Oldhit_recovery_delay_minotaur then
-        Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "_OldAttackedEvent", "hit_recovery_delay")
-        option = 2
-    end
-    if Oldhit_recovery_delay_minotaur then
-        local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
-            if inst.um_forcestundebuff then
-                return false
-            end
-            return Oldhit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
-        end
-        if option == 1 then
-            UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "hit_recovery_delay")
-        else
-            UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "_OldAttackedEvent", "hit_recovery_delay")
-        end
-    end
-end
-
 local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
-local function OhCrap(inst, target)
+local function OhCrap(inst, target, attacker)
     if not (target.components.health and target.components.health:IsDead()) and not target:HasTag("playerghost") then
         SpawnPrefab("electricchargedfx"):SetTarget(target)
         target.components.health:DoDelta(-2, nil, "Electricity")
@@ -69,7 +45,7 @@ local function OhCrap(inst, target)
         if not target:HasTag("forcestunned") then
             target:AddTag("forcestunned")
         end
-        target:PushEvent("attacked", {attacker = target.shock_owner or nil, damage = 2})
+        target:PushEvent("attacked", {attacker = attacker, damage = 0, stimuli = "soul"})
         if target.components.combat then
             if target.components.combat.laststartattacktime then
                 target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
@@ -83,12 +59,12 @@ local function OhCrap(inst, target)
     end
 end
 
-local function OnAttached(inst, target)
+local function OnAttached(inst, target, followsymbol, followoffset, data)
     if not target:HasTag("electricstunimmune") then
         target:AddDebuff("shockstundebuffimmunity", "shockstundebuffimmunity")
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
-        inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target)
+        inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target, data and data.attacker)
         inst:ListenForEvent("death", function()
             inst.components.debuff:Stop()
         end, target)
@@ -107,9 +83,6 @@ local function OnRemoved(inst, target)
     end
     if target.um_forcestundebuff then
         target.um_forcestundebuff = nil
-    end
-    if target.shock_owner then
-        target.shock_owner = nil
     end
     inst:Remove()
 end

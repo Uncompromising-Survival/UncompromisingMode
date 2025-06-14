@@ -24,7 +24,7 @@ env.AddComponentPostInit("raindome", function(self)
                 oldtargets[v] = nil
             else
                 if not v:HasTag("tornado_nosucky") then
-                    print("adding tag!")
+                    --print("adding tag!")
                     v:AddTag("tornado_nosucky")
                 end
             end
