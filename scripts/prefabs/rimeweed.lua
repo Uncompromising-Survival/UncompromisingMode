@@ -411,7 +411,7 @@ end
 
 local function FindPlant(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local plants = TheSim:FindEntities(x, y, z, 32, { "plant" },{"kelp","riceplant"})
+    local plants = TheSim:FindEntities(x, y, z, 32, { "plant" },{"kelp","riceplant","briar_plants"})
     for i, plant in ipairs(plants) do
         if plant.components.pickable and plant.components.pickable:CanBePicked() and not FindEntity(plant, 3, nil, { "rimeweed" }) then
             return plant

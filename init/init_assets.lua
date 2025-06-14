@@ -391,6 +391,7 @@ local inventoryitems =
     "snappy_jaw",
 	"um_hat_leafwing",
 	"um_leafwing",
+	"um_detonator",
 }
 
 for _, item in ipairs(inventoryitems) do
