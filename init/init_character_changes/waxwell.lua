@@ -179,10 +179,9 @@ local function ForceDespawnShadowMinions(inst)
     end
 end
 
-local SHADOWMAGIC_TAGS = {"shadowmagic", "NIGHTMARE_fuel"}
 local function OnGetItem(inst, data)
     local item = data and data.item
-    if item and item:HasAnyTag(SHADOWMAGIC_TAGS) then
+    if item and item:HasTag("shadowmagic") then
         item.components.inventoryitem.keepondeath = true
         item.components.inventoryitem.keepondrown = true
         item:AddTag("nosteal")
@@ -191,7 +190,7 @@ end
 
 local function OnLoseItem(inst, data)
     local item = data and (data.prev_item or data.item)
-    if item and item:IsValid() and item:HasAnyTag(SHADOWMAGIC_TAGS) then
+    if item and item:IsValid() and item:HasTag("shadowmagic") then
         item.components.inventoryitem.keepondeath = false
         item.components.inventoryitem.keepondrown = false
         item:RemoveTag("nosteal")
