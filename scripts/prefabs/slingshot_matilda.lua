@@ -289,6 +289,11 @@ local function can_cast_fn(doer, target, pos)
     return doer:HasTag("troublemaker")
 end
 
+local function OnBurnt(inst)
+    inst.components.container:DropEverything()
+    DefaultBurntFn(inst)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -379,6 +384,8 @@ local function fn()
 
     MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
     MakeSmallPropagator(inst)
+    inst.components.burnable:SetOnBurntFn(OnBurnt)
+
     MakeHauntableLaunch(inst)
 
     return inst
