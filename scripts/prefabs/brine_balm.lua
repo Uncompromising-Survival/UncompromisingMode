@@ -6,7 +6,7 @@ local assets =
 local function OnUse(inst, target)
     local health = target.components.health
     if not (health and health:IsDead()) then
-        health:DoDelta(math.max(-TUNING.HEALING_MED, (health.currenthealth <= 20 and -health.currenthealth + 1 or -TUNING.HEALING_MED)), false, inst.prefab, nil, nil, true)
+        health:DoDelta(math.max(-TUNING.HEALING_MED, (not TUNING.DSTU.DATES.APRIL_FOOLS and health.currenthealth <= 20 and -health.currenthealth + 1 or -TUNING.HEALING_MED)), false, inst.prefab, nil, nil, true)
         health:DeltaPenalty(-.125)
         target:AddDebuff("confighealbuff", "confighealbuff", {amount = 70})
     end
