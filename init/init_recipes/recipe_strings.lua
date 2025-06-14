@@ -111,7 +111,7 @@ RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
 RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
 RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
-RECIPE_DESC.TERRORGUISE = "Scare your fears away."
+
 
 --Wixie
 RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
@@ -138,3 +138,5 @@ RECIPE_DESC.SLINGSHOTAMMO_SALT = "Salt in the wounds!"
 RECIPE_DESC.SLINGSHOTAMMO_SLIME = "It's slime time!"
 RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
+RECIPE_DESC.UM_HAT_LEAFWING = "Embody the fleeting fruit bat."
+

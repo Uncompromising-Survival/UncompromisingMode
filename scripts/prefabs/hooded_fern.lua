@@ -121,9 +121,24 @@ local function onpickedfn(inst, picker)
 	
 end
 
+local thicket_equipment = {"um_hat_leafwing","armor_bramble","um_armor_bramble_rimeweed","armor_lunarplant_husk"}
+
+
+local function WearingThicketResist(inst)
+	local head
+	local body
+	if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) then
+		head = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab
+	end
+	if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) then
+		body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab
+	end
+	return (head and table.contains(thicket_equipment, head)) or (body and table.contains(thicket_equipment, body))
+end
+
 local function OutOfTheWoodsYet(target)
 	local the_bush = FindEntity(target,1.75,nil,{"briar_plants"})
-	if not the_bush then
+	if not the_bush or WearingThicketResist(target) then
 		target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
 		target.thicketcheck:Cancel()
 		target.thicketcheck = nil
@@ -153,8 +168,9 @@ local function CheckToSeeIfTargetsMoving(inst)
 end
 
 
+
 local function onnear(inst, target)
-	if inst.components.pickable and inst.components.pickable:CanBePicked() then
+	if inst.components.pickable and inst.components.pickable:CanBePicked() and not WearingThicketResist(target) then
 		if math.random() > 0.8 then
 			SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		end

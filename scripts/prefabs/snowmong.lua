@@ -114,7 +114,7 @@ local function fn(Sim)
 
     inst.Transform:SetFourFaced()
 
-	inst.Transform:SetScale(3, 3, 3)
+	inst.Transform:SetScale(2, 2, 2)
 
 	MakeCharacterPhysics(inst, 99999, 0.5)
 	inst.entity:SetPristine()

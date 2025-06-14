@@ -450,6 +450,18 @@ AddComponentAction("SCENE", "stewer_wagstaff", function(inst, doer, actions, rig
     end
 end)
 
+-- AddComponentAction("SCENE", "pickable", function(inst, doer, actions)
+	-- if (inst:HasTag("pickable") and not (inst:HasTag("fire") or inst:HasTag("intense"))) or actions == GLOBAL.ACTIONS.SCYTHE then
+		-- table.insert(actions, GLOBAL.ACTIONS.PICK)
+	-- end
+-- end)
+		
+-- AddComponentAction("VALID", "pickable", function(inst, action, right)
+	-- local valid = right and action == GLOBAL.ACTIONS.SCYTHE -- Can scythe the air
+
+	-- if valid then return true end
+-- end)
+	
 -- Wagstaff crockpot actions...
 local _OldCook = GLOBAL.ACTIONS.COOK.fn
 GLOBAL.ACTIONS.COOK.fn = function(act)

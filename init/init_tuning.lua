@@ -672,3 +672,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
     FOOD_BUTTERFLY_WING_HUNGER = 2.5
     FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2
 end
+
+-- Faster Daywalker Regen
+TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.

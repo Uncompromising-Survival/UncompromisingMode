@@ -29,7 +29,6 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
         "um_blowdart_rime",
         "diseasecurebomb",
         "houndious_observious",
-        "terrorguise",
         "slingshotammo_goop",
         "slingshotammo_slime",
         "slingshotammo_tremor",

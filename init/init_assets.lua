@@ -226,7 +226,6 @@ local inventoryitems =
     "beakbasher",
     "houndious_observious",
     "um_brineishmoss",
-    "terrorguise",
     "brine_balm",
     "sludge_oil",
     "mastupgrade_windturbine_item",
@@ -390,6 +389,8 @@ local inventoryitems =
     "um_boatbottle",
     "jawed_scythe",
     "snappy_jaw",
+	"um_hat_leafwing",
+	"um_leafwing",
 }
 
 for _, item in ipairs(inventoryitems) do

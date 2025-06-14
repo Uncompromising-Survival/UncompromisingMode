@@ -56,81 +56,81 @@ env.AddPrefabPostInit("junk_pile_big", function(inst)
     inst.OnEntityWake = OnEntityWake
 end)
 
-env.AddShardModRPCHandler("UncompromisingSurvival", "DayWalkerDeathPenalty", function(shardid, segs)
-    if TheWorld ~= nil and TheWorld.components.forestdaywalkerspawner ~= nil then
-        TheWorld.components.forestdaywalkerspawner:TryToSetDayWalkerJunkPile()
-        if TheWorld.components.forestdaywalkerspawner.bigjunk ~= nil then
-            TheWorld.components.forestdaywalkerspawner.bigjunk:StartDaywalkerBuried()
-        end
-    end
-end)
+-- env.AddShardModRPCHandler("UncompromisingSurvival", "DayWalkerDeathPenalty", function(shardid, segs)
+    -- if TheWorld ~= nil and TheWorld.components.forestdaywalkerspawner ~= nil then
+        -- TheWorld.components.forestdaywalkerspawner:TryToSetDayWalkerJunkPile()
+        -- if TheWorld.components.forestdaywalkerspawner.bigjunk ~= nil then
+            -- TheWorld.components.forestdaywalkerspawner.bigjunk:StartDaywalkerBuried()
+        -- end
+    -- end
+-- end)
 
-env.AddComponentPostInit("daywalkerspawner", function(self)
-    if not TheWorld.ismastersim then 
-		return 
-	end
+-- env.AddComponentPostInit("daywalkerspawner", function(self)
+    -- if not TheWorld.ismastersim then 
+		-- return 
+	-- end
 
-    local _SpawnDayWalkerArena = self.SpawnDayWalkerArena
+    -- local _SpawnDayWalkerArena = self.SpawnDayWalkerArena
 
-    function self:SpawnDayWalkerArena(x, y, z, ...)
-        if ((math.random() > 0.5 and TUNING.DSTU.DAYWALKERSPAWN == "random") or TUNING.DSTU.DAYWALKERSPAWN == "surface") and not self.first_time then
-            local daywalker = SpawnPrefab("daywalker")
-            daywalker:DoTaskInTime(30, function(daywalker)
-				daywalker.components.lootdropper:SetLootSetupFn(nil)
-				daywalker.defeated = true
+    -- function self:SpawnDayWalkerArena(x, y, z, ...)
+        -- if ((math.random() > 0.5 and TUNING.DSTU.DAYWALKERSPAWN == "random") or TUNING.DSTU.DAYWALKERSPAWN == "surface") and not self.first_time then
+            -- local daywalker = SpawnPrefab("daywalker")
+            -- daywalker:DoTaskInTime(30, function(daywalker)
+				-- daywalker.components.lootdropper:SetLootSetupFn(nil)
+				-- daywalker.defeated = true
 				
-				daywalker.components.health:Kill()
-				SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "DayWalkerDeathPenalty"), nil)
-                daywalker:Remove()
+				-- daywalker.components.health:Kill()
+				-- SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "DayWalkerDeathPenalty"), nil)
+                -- daywalker:Remove()
                 
-            end)
-            self.first_time = true
-            return daywalker
-        else
-            self.first_time = true
-            return _SpawnDayWalkerArena(self, x, y, z, ...)
-        end
-    end
+            -- end)
+            -- self.first_time = true
+            -- return daywalker
+        -- else
+            -- self.first_time = true
+            -- return _SpawnDayWalkerArena(self, x, y, z, ...)
+        -- end
+    -- end
 
-    local _OnSave = self.OnSave
+    -- local _OnSave = self.OnSave
 
-    function self:OnSave(...)
-        local data, refs = _OnSave(self, ...)
-        data.first_time = self.first_time
-        return data, refs
-    end
+    -- function self:OnSave(...)
+        -- local data, refs = _OnSave(self, ...)
+        -- data.first_time = self.first_time
+        -- return data, refs
+    -- end
 
-    local _OnLoad = self.OnLoad
-    function self:OnLoad(data, ...)
-        _OnLoad(self, data, ...)
+    -- local _OnLoad = self.OnLoad
+    -- function self:OnLoad(data, ...)
+        -- _OnLoad(self, data, ...)
 
-        if not data then
-            return
-        end
+        -- if not data then
+            -- return
+        -- end
 
-        self.first_time = data.first_time
-    end
-end)
+        -- self.first_time = data.first_time
+    -- end
+-- end)
 
-local fx = {
-    "daywalker2_object_break_fx",
-    "daywalker2_spike_break_fx",
-    "daywalker2_cannon_break_fx",
-    "daywalker2_armor2_break_fx",
-    "daywalker2_cloth_break_fx"
-}
+-- local fx = {
+    -- "daywalker2_object_break_fx",
+    -- "daywalker2_spike_break_fx",
+    -- "daywalker2_cannon_break_fx",
+    -- "daywalker2_armor2_break_fx",
+    -- "daywalker2_cloth_break_fx"
+-- }
 
-for k, v in pairs(fx) do
-    env.AddPrefabPostInit(v, function(inst)
-        if not TheWorld.ismastersim then
-            return
-        end
+-- for k, v in pairs(fx) do
+    -- env.AddPrefabPostInit(v, function(inst)
+        -- if not TheWorld.ismastersim then
+            -- return
+        -- end
 
-        inst:ListenForEvent("animover", function(inst)
-            --if math.random() > 0.33 then
-            local loot = SpawnPrefab("wagpunk_bits")
-            loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            --end
-        end)
-    end)
-end
+        -- inst:ListenForEvent("animover", function(inst)
+            -- --if math.random() > 0.33 then
+            -- local loot = SpawnPrefab("wagpunk_bits")
+            -- loot.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            -- --end
+        -- end)
+    -- end)
+-- end

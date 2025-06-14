@@ -543,6 +543,8 @@ InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false
 
 InsertIngredientValues({ "um_rimeweed_itemvine" }, { ice = 1, inedible = 1, }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
+InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 0.5  })
+
 
 if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)

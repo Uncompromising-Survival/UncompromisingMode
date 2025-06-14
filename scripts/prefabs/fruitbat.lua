@@ -4,7 +4,7 @@ require "stategraphs/SGfruitbat"
 SetSharedLootTable('fruitbat',
     {
         { 'giant_blueberry', 1 },
-        { 'batwing', .5 },
+        { 'um_leafwing', .33 },
     })
 
 
@@ -225,7 +225,8 @@ local function fn()
     inst:SetBrain(brain)
 
     inst:AddComponent("lootdropper")
-
+	inst.components.lootdropper:SetChanceLootTable('fruitbat')
+	
     inst:AddComponent("inventory")
 
     inst:AddComponent("inspectable")

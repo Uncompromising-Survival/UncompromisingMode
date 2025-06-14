@@ -67,10 +67,6 @@ if GetModConfigData("snowstorms") then
     ChangeSortKey("saltpack", "beargervest", "WINTER", true)
 end
 
-AddRecipe2("terrorguise", { Ingredient("ocupus_tentacle_eye", 4), Ingredient("kelp", 10), Ingredient("nightmarefuel", 5) }, TECH.MAGIC_TWO, nil, { "CLOTHING", "MAGIC" })
-ChangeSortKey("terrorguise", "kelphat", "CLOTHING", true)
-ChangeSortKey("terrorguise", "magician_chest", "MAGIC", true)
-
 AddRecipe2("um_armor_bramble_rimeweed", { Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8), Ingredient("um_rimeweed_itemflower", 1) }, TECH.NONE, { builder_tag = "plantkin" }, { "CHARACTER" })
 ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
 
@@ -433,9 +429,13 @@ ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
 ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
 
+AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("foliage", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
+
+
 AddRecipe2(
 	"jawed_scythe",
-	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 1) },
+	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
 	TECH.SCIENCE_ONE,
 	nil,
 	{ "TOOLS" }

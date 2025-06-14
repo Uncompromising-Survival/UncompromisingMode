@@ -919,17 +919,17 @@ configuration_options = {
         "Eye of Terror and the Twins have new attacks, inspired by their Terraria counterparts.", true),
     BinaryConfig("changed_shadow_pieces", "Shadow Pieces Rework",
         "Shadow Bishop has a different attack.", true),
-    {
-        name = "daywalker_spawn",
-        label = "Daywalker Spawn Location",
-        hover =
-        "Daywalker can be customized to spawn on the surface or in the caves.",
-        options = {
-            { description = "Random", data = "random" }, 
-			{ description = "Caves", data = "caves" },
-            { description = "Surface", data = "surface" } },
-        default = "random"
-    },
+    -- {
+        -- name = "daywalker_spawn",
+        -- label = "Daywalker Spawn Location",
+        -- hover =
+        -- "Daywalker can be customized to spawn on the surface or in the caves.",
+        -- options = {
+            -- { description = "Random", data = "random" }, 
+			-- { description = "Caves", data = "caves" },
+            -- { description = "Surface", data = "surface" } },
+        -- default = "random"
+    -- },
     SkipSpace(),
 
     Header("Health Adjustment"),

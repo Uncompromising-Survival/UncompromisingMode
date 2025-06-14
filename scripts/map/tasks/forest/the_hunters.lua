@@ -16,35 +16,36 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 	AddRoomPreInit("WalrusHut_Grassy", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 	AddRoomPreInit("WalrusHut_Rocky", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 
-	if not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
-		AddTask("UMTheHunters", { -- Alternative tasks for whatever reason are not responsive to AddTaskPreInit.... So use AddTask as a workaround
-				locks={LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER4},
-				keys_given={KEYS.WALRUS,KEYS.TIER5},
-				room_choices={
-				["RockyWalrusGiantTrees"] = 3,
-				["RockyGiantTrees"] = 1,
-				["Rocky_crabs"] = 2,
-				},
-				room_bg=WORLD_TILES.HOODEDFOREST,
-				background_room="RockyGiantTrees",
-				colour={r=0,g=1,b=0,a=1}
-			})	
+	-- if not GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795") then
+		-- AddTask("UMTheHunters", { -- Alternative tasks for whatever reason are not responsive to AddTaskPreInit.... So use AddTask as a workaround
+				-- locks={LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER4},
+				-- keys_given={KEYS.WALRUS,KEYS.TIER5},
+				-- room_choices={
+				-- ["RockyWalrusGiantTrees"] = 3,
+				-- ["RockyGiantTrees"] = 1,
+				-- ["Rocky_crabs"] = 2,
+				-- },
+				-- room_bg=WORLD_TILES.HOODEDFOREST,
+				-- background_room="RockyGiantTrees",
+				-- colour={r=0,g=1,b=0,a=1}
+			-- })	
 			
-		AddTaskSetPreInitAny(function(tasksetdata)
-			if tasksetdata.location ~= "forest" then
-				return
-			end
+		-- AddTaskSetPreInitAny(function(tasksetdata)
+			-- if tasksetdata.location ~= "forest" then
+				-- return
+			-- end
 			
-			for i,task in ipairs(tasksetdata.optionaltasks) do
-				if task == "The hunters" then
-					tasksetdata.optionaltasks[i] = "UMTheHunters"
-				end
-			end
-		end)
-	end
+			-- for i,task in ipairs(tasksetdata.optionaltasks) do
+				-- if task == "The hunters" then
+					-- tasksetdata.optionaltasks[i] = "UMTheHunters"
+				-- end
+			-- end
+		-- end)
+	-- end
 		
 
-elseif GetModConfigData("ghostwalrus") ~= "disabled" then
+end
+if GetModConfigData("ghostwalrus") ~= "disabled" then
 	AddRoomPreInit("WalrusHut_Plains", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 	AddRoomPreInit("WalrusHut_Grassy", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
 	AddRoomPreInit("WalrusHut_Rocky", function(room) room.contents.countprefabs = { um_bear_trap_old = function() return math.random(6, 8) end, ghost_walrus = function() return math.random(2, 4) end, walrus_camp = 1 } end)
