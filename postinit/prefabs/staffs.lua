@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 -----------------------------------------------------------------
 
 env.AddPrefabPostInit("icestaff", function(inst)
@@ -533,8 +534,6 @@ if env.GetModConfigData("telestaff_rework") then
     end)
 end
 
-
-
 local function SpikeWaves(inst, target, attacker, angle)
     local target_index = {}
     local ix, iy, iz = inst.Transform:GetWorldPosition()
@@ -572,25 +571,61 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    local _onattack = inst.components.weapon.onattack
 
-    local function OnAttack(inst, attacker, target, skipsanity)
+    local equippable = inst.components.equippable
+    local weapon = inst.components.weapon
+    local forgerepairable = inst.components.forgerepairable
+
+    local _OnEquip = equippable and equippable.onequipfn
+    local function OnEquip(inst, owner, ...)
+        if _OnEquip then
+            _OnEquip(inst, owner, ...)
+        end
+        local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
+        if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
+            inst.components.weapon:SetProjectile(projectile)
+        end
+    end
+    if equippable then
+        equippable:SetOnEquip(OnEquip)
+    end
+
+    local _OnAttack = weapon and weapon.onattack
+    local function OnAttack(inst, attacker, target, skipsanity, ...)
         if attacker:HasTag("wathom") then
-            inst.components.weapon:SetProjectile(nil)
-            local ret = _onattack(inst, attacker, target, skipsanity)
+            local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
 
             for angle = -20, 20, 4 do
                 SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                target.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 34 })
+                target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 34})
             end
             inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
 
-            return ret
-        else
-            inst.components.weapon:SetProjectile("brilliance_projectile_fx")
-            return _onattack(inst, attacker, target, skipsanity)
+            if ret then
+                return ret
+            end
+        end
+        if _OnAttack then
+            return _OnAttack(inst, attacker, target, skipsanity, ...)
         end
     end
+    if weapon then
+        weapon:SetOnAttack(OnAttack)
+    end
 
-    inst.components.weapon:SetOnAttack(OnAttack)
+    if forgerepairable then
+        local _OnRepaired = forgerepairable.onrepaired
+        local function OnRepaired(inst, ...)
+			if _OnRepaired then
+				_OnRepaired(inst, ...)
+			end
+            if inst.components.equippable then
+                inst.components.equippable:SetOnEquip(OnEquip)
+            end
+            if inst.components.weapon then
+                inst.components.weapon:SetOnAttack(OnAttack)
+            end
+        end
+        forgerepairable:SetOnRepaired(OnRepaired)
+    end
 end)
