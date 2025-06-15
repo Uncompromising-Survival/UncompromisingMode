@@ -409,11 +409,13 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 
 
-AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
-ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
+--AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
+--ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
-AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, GLOBAL.TECH.NONE, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
-AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, GLOBAL.TECH.NONE, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
+AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"ARMOUR"})
+AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"WEAPONS"})
+--AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
+--AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
 
 AddRecipe2("um_record_menu", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_menu.xml" }, { "DECOR" })
 AddRecipe2("um_record_wixie", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wixie.xml" }, { "DECOR" })

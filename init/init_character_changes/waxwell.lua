@@ -65,7 +65,7 @@ local function ShadowPactSwordFn(inst, doer)
         doer.components.inventory:Equip(SpawnPrefab("pact_sword_sanity"))
         return true
     end
-end]]
+end
 
 env.AddPrefabPostInit("waxwelljournal", function(inst)
     if not TheWorld.ismastersim then
@@ -73,16 +73,16 @@ env.AddPrefabPostInit("waxwelljournal", function(inst)
     end
 
     inst:AddComponent("tradable")
-end)
+end)]]
 
 local function CalculateMaxHealthLoss(inst, data)
-    if inst.components.health and not inst.components.health:IsDead() then
+    if not (inst.components.health and inst.components.health:IsDead()) then
         local healthloss = ((data.damageresolved or data.damage) * 0.2) / 75
         inst.components.health:DeltaPenalty(healthloss)
     end
 end
 
-local function DoEffects(pet)
+--[[local function DoEffects(pet)
     local x, y, z = pet.Transform:GetWorldPosition()
 
     SpawnPrefab("statue_transition_2").Transform:SetPosition(x, y, z)
@@ -93,10 +93,10 @@ local function DoEffects(pet)
     end
 end
 
---[[local function doeffects(inst, pos)
+local function doeffects(inst, pos)
     SpawnPrefab("statue_transition").Transform:SetPosition(pos:Get())
     SpawnPrefab("statue_transition_2").Transform:SetPosition(pos:Get())
-end]]
+end
 
 local function KillPet(pet)
     pet.components.health:Kill()
@@ -177,7 +177,7 @@ local function ForceDespawnShadowMinions(inst)
     for i, v in ipairs(todespawn) do
         inst.components.petleash:DespawnPet(v)
     end
-end
+end]]
 
 local function OnGetItem(inst, data)
     local item = data and data.item
@@ -197,8 +197,21 @@ local function OnLoseItem(inst, data)
     end
 end
 
+local function UnlockShadowGear(inst, data)
+    if not data or not data.item or data.item.prefab ~= "armor_sanity" and data.item.prefab ~= "nightsword" then
+        return
+    end
+
+    local builder = inst.components.builder
+    local shadowgeartolearn = data.item.prefab == "armor_sanity" and "um_maxwell_armor_sanity" or "um_maxwell_nightsword"
+    if builder and not builder:KnowsRecipe(shadowgeartolearn, true) then
+        builder:UnlockRecipe(shadowgeartolearn)
+        inst:PushEvent("learnrecipe", {teacher = inst, recipe = shadowgeartolearn})
+    end
+end
+
 local function WaxwellUMStuff(inst)
-    inst.pact_sworn = false
+    --[[inst.pact_sworn = false
 
     local _OnSave = inst.OnSave
     local _OnLoad = inst.OnLoad
@@ -238,14 +251,15 @@ local function WaxwellUMStuff(inst)
 
     inst:ListenForEvent("onskinschanged", OnSkinsChanged) -- Fashion Shadows.
     inst:ListenForEvent("ms_becameghost", OnBecameGhost)
-    inst:ListenForEvent("ms_playerreroll", ForceDespawnShadowMinions)
+    inst:ListenForEvent("ms_playerreroll", ForceDespawnShadowMinions)]]
 
     inst:ListenForEvent("itemget", OnGetItem)
     inst:ListenForEvent("equip", OnGetItem)
     inst:ListenForEvent("itemlose", OnLoseItem)
     inst:ListenForEvent("unequip", OnLoseItem)
+    inst:ListenForEvent("builditem", UnlockShadowGear)
 
-    local petleash = inst.components.petleash
+    --[[local petleash = inst.components.petleash
     if petleash then
         local OldOnSpawnPet = petleash.onspawnfn
         local OldOnDespawnPet = petleash.ondespawnfn
@@ -274,7 +288,7 @@ local function WaxwellUMStuff(inst)
         end
         petleash:SetOnSpawnFn(OnSpawnPet)
         petleash:SetOnDespawnFn(OnDespawnPet)
-    end
+    end]]
 
     if TUNING.DSTU.MAX_HEALTH_WELL then
         inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
@@ -288,3 +302,80 @@ env.AddPrefabPostInit("waxwell", function(inst)
 
     WaxwellUMStuff(inst)
 end)
+
+local function ShadowGearClientFunctions(inst, maxwell_recipe)
+    local function ShadowGearDisplayNameFn(inst)
+        return inst:HasTag("maxwellsummon") and STRINGS.NAMES[string.upper(maxwell_recipe)] or nil
+    end
+
+    inst.displaynamefn = ShadowGearDisplayNameFn
+end
+
+local function ShadowGearFunctions(inst, maxwell_recipe)
+    local function ConvertToMaxwellSummon(inst)
+        inst:AddTag("nosteal")
+        inst:AddTag("maxwellsummon")
+		local inventoryitem = inst.components.inventoryitem
+        if inventoryitem then
+            inventoryitem.keepondeath = true
+            inventoryitem.keepondrown = true
+            inventoryitem.canonlygoinpocket = true
+            local function ShadowGearOnDropped(inst)
+                local fx = SpawnPrefab("um_shadow_attune_fx")
+                fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                fx.AnimState:PlayAnimation("attune_out")
+                fx.SoundEmitter:PlaySound("dontstarve/sanity/creature2/die")
+                inst:DoTaskInTime(0, inst.Remove)
+            end
+            inst:ListenForEvent("ondropped", ShadowGearOnDropped)
+        end
+    end
+
+    local _OnSave = inst.OnSave
+    local function ShadowGearOnSave(inst, data, ...)
+        if inst:HasTag("maxwellsummon") then
+            data.maxwellsummon = true
+        end
+        if _OnSave then
+            return _OnSave(inst, data, ...)
+        end
+    end
+
+    local _OnLoad = inst.OnLoad
+    local function ShadowGearOnLoad(inst, data, ...)
+        if data and data.maxwellsummon then
+            inst:ConvertToMaxwellSummon()
+        end
+        if _OnLoad then
+            return _OldLoad(inst, data, ...)
+        end
+    end
+
+    local _onPreBuilt = inst.onPreBuilt
+    local function ShadowGearOnPreBuilt(inst, builder, materials, recipe, ...)
+        if recipe.name == maxwell_recipe then
+            inst:ConvertToMaxwellSummon()
+        end
+        if _onPreBuilt then
+            return _onPreBuilt(inst, builder, materials, recipe, ...)
+        end
+    end
+
+    inst.ConvertToMaxwellSummon = ConvertToMaxwellSummon
+    inst.OnSave = ShadowGearOnSave
+    inst.OnLoad = ShadowGearOnLoad
+    inst.onPreBuilt = ShadowGearOnPreBuilt
+end
+
+local shadowgear = {"nightsword", "armor_sanity"}
+for _, prefab in pairs(shadowgear) do
+	env.AddPrefabPostInit(prefab, function(inst)
+		ShadowGearClientFunctions(inst, "um_maxwell_"..prefab)
+
+		if not TheWorld.ismastersim then
+			return inst
+		end
+
+		ShadowGearFunctions(inst, "um_maxwell_"..prefab)
+	end)
+end

@@ -616,8 +616,10 @@ STRINGS.SMALLFISHMEAT_DRIED = "Small Fish Jerky"
 STRINGS.WIXIEGUN =
 "The Glock 17 (Beretta 92FS in the HD Edition), also known as the 9mm Pistol, is a weapon featured in Half-Life and its expansions."
 
-STRINGS.PACT_ARMOR_SANITY = "Shadow Pact Armor"
-STRINGS.PACT_SWORD_SANITY = "Shadow Pact Sword"
+STRINGS.UM_MAXWELL_ARMOR_SANITY = "Magician's Night Armor"
+STRINGS.UM_MAXWELL_NIGHTSWORD = "Magician's Dark Sword"
+--STRINGS.PACT_ARMOR_SANITY = "Shadow Pact Armor"
+--STRINGS.PACT_SWORD_SANITY = "Shadow Pact Sword"
 ------------------------
 
 STRINGS.WINONA_CATAPULT_ITEM_UM = "Dismantled " .. STRINGS.WINONA_CATAPULT
