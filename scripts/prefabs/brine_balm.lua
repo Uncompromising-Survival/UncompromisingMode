@@ -8,7 +8,7 @@ local function OnUse(inst, target)
     if not (health and health:IsDead()) then
         health:DoDelta(math.max(-TUNING.HEALING_MED, (not TUNING.DSTU.DATES.APRIL_FOOLS and health.currenthealth <= 20 and -health.currenthealth + 1 or -TUNING.HEALING_MED)), false, inst.prefab, nil, nil, true)
         health:DeltaPenalty(-.125)
-        target:AddDebuff("confighealbuff", "confighealbuff", {amount = 70})
+        target:AddDebuff("confighealbuff", "confighealbuff", {time = 70})
     end
 end
 
