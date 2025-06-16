@@ -141,17 +141,6 @@ configuration_options = {
 
     BinaryConfig("shadow_items", "Shadow Character Items",
         "Shadow Characters drop Unique Items", false),
-    {
-        name = "wathgrithr_rework_",
-        label = "Wigfrid - Rework",
-        hover = "Reduced Wigfrids combat leeching, revamped skill tree, adjusted item durability.",
-        options = {
-            { description = "Enabled",  data = 1, hover = "All changes enabled." },
-            { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
-            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
-
-        default = 1
-    },
     BinaryConfig("food_stats", "Dynamic Food Stats", "Makes crockpot dishes take into account the ingredients it was made with.\nMakes crockpot dishes unstacklable.", false),
     BinaryConfig("armorrework", "Armor Rework",
         "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
@@ -277,47 +266,47 @@ configuration_options = {
         "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
     BinaryConfig("wxlessspeedbump", "WX Speed circuit collision",
         "Enable to make reworked WX not bump into mobs with speed circuits", false),
-    {
-        name = "wicker_inv_regen",
-        label = "Wicker's Regeneration",
-        hover = "Configure how Wickerbottom's books regen.",
-        options = {
-            {
-                description = "Inventory",
-                data = "inv",
-                hover = "Additionally, bookcase now takes 4 Boards, instead of 2 Living Logs."
-            },
-            {
-                description = "No Regen",
-                data = "noregen",
-                hover = "Completely disables book regen."
-            },
-            {
-                description = "Bookcase",
-                data = "vanilla",
-                hover = "Like vanilla."
-            }
-        },
-        default = "vanilla",
-    },
-    BinaryConfig("wickerbottom", "Wicker's Sane Reading",
-        "Wickerbottom/Maxwell can no longer read books while insane.", true),
-    BinaryConfig("apicultural notes", "Wickerbottom - Apicultural Notes",
-        "\"Apicultural Notes\" now adds 1 Honey to up to 10 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),
-    BinaryConfig("applied horticulture", "Wickerbottom - Horti., Abridged",
-        "\"Horticulture, Abridged\" now takes 1 Leafy Meat, instead of 5 seeds.", true),
-    BinaryConfig("horticulture, expanded", "Wickerbottom - Horti., Expanded",
-        "\"Horticulture, Expanded\" now grows 20 plants, instead of 15. Now takes a Tree Jam, instead of a Feather Pencil.", true),
-    BinaryConfig("lunar grimoire", "Wickerbottom - Lunar Grimoire",
-        "\"Lunar Grimoire\" now has 4 uses and mutates things around you. Now takes 2 Moon Rocks and 2 Moon Shrooms.", true),
-    BinaryConfig("lux aeterna", "Wickerbottom - Lux and Redux",
-        "\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer. \"Lux Aeterna Redux\" now takes a Glow Berry, instead of a Feather Pencil. ", true),
-    BinaryConfig("on tentacles", "Wickerbottom - On Tentacles",
-        "On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
-    BinaryConfig("the angler", "Wickerbottom - The Angler's",
-        "\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
-    --BinaryConfig("woodie_skilltree", "Woodie's Skilltree", "Some changes to Woodie's skilltrees to add trade-offs and buff underutilized skills.", true),
-    BinaryConfig("waxwell_nerf", "Maxwell - Nerfs", "Several nerfs to Maxwell to bring him down in power.", true),
+    --{
+        --name = "wicker_inv_regen",
+        --label = "Wicker's Regeneration",
+        --hover = "Configure how Wickerbottom's books regen.",
+        --options = {
+            --{
+                --description = "Inventory",
+                --data = "inv",
+                --hover = "Additionally, bookcase now takes 4 Boards, instead of 2 Living Logs."
+            --},
+            --{
+                --description = "No Regen",
+                --data = "noregen",
+                --hover = "Completely disables book regen."
+            --},
+            --{
+                --description = "Bookcase",
+                --data = "vanilla",
+                --hover = "Like vanilla."
+            --}
+        --},
+        --default = "vanilla",
+    --},
+    BinaryConfig("wickerbottom", "Wickerbottom",
+        "Wickerbottom passively teaches the basics to those around her.\nPractical Rain Rituals can drive Tornadoes away.", true),
+    --BinaryConfig("apicultural notes", "Wickerbottom - Apicultural Notes",
+        --"\"Apicultural Notes\" now adds 1 Honey to up to 10 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),
+    --BinaryConfig("applied horticulture", "Wickerbottom - Horti., Abridged",
+        --"\"Horticulture, Abridged\" now takes 1 Leafy Meat, instead of 5 seeds.", true),
+    --BinaryConfig("horticulture, expanded", "Wickerbottom - Horti., Expanded",
+        --"\"Horticulture, Expanded\" now grows 20 plants, instead of 15. Now takes a Tree Jam, instead of a Feather Pencil.", true),
+    --BinaryConfig("lunar grimoire", "Wickerbottom - Lunar Grimoire",
+        --"\"Lunar Grimoire\" now has 4 uses and mutates things around you. Now takes 2 Moon Rocks and 2 Moon Shrooms.", true),
+    --BinaryConfig("lux aeterna", "Wickerbottom - Lux and Redux",
+        --"\"Lux Aeterna\" and \"Lux Aeterna Redux\" now both last longer. \"Lux Aeterna Redux\" now takes a Glow Berry, instead of a Feather Pencil. ", true),
+    --BinaryConfig("on tentacles", "Wickerbottom - On Tentacles",
+        --"On Tentacles now spawns friendly tentacles that die over time, and do not drop tentacle spots.", true),
+    --BinaryConfig("the angler", "Wickerbottom - The Angler's",
+        --"\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
+
+    BinaryConfig("waxwell_nerf", "Maxwell", "Several nerfs to Maxwell to bring him down in power.", true),
     BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
     {
         name = "wathgrithr_rework_",
@@ -327,6 +316,7 @@ configuration_options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
             { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
+
         default = 1
     },
     BinaryConfig("wolfgang", "Wolfgang Rework", "Wolfgang has a new skill tree, and mightiness is now a resource you spend to use special abilities.", true),

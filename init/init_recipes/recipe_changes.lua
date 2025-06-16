@@ -150,60 +150,60 @@ AllRecipes["walterhat"].ingredients = {
     Ingredient("pinecone", 1)
 }
 
-if GetModConfigData("wicker_inv_regen") ~= "vanilla" then
-    AllRecipes["bookstation"].ingredients = {
-        Ingredient("boards", 4),
-        Ingredient("papyrus", 4),
-        Ingredient("featherpencil", 1)
-    }
-end
+--if GetModConfigData("wicker_inv_regen") ~= "vanilla" then
+    --AllRecipes["bookstation"].ingredients = {
+        --Ingredient("boards", 4),
+        --Ingredient("papyrus", 4),
+        --Ingredient("featherpencil", 1)
+    --}
+--end
 
-if GetModConfigData("applied horticulture") then
-    AllRecipes["book_horticulture"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("plantmeat", 1),
-        Ingredient("poop", 5)
-    }
-end
+--if GetModConfigData("applied horticulture") then
+    --AllRecipes["book_horticulture"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("plantmeat", 1),
+        --Ingredient("poop", 5)
+    --}
+--end
 
-if GetModConfigData("horticulture, expanded") then
-    AllRecipes["book_horticulture_upgraded"].ingredients = {
-        Ingredient("book_horticulture", 1),
-        Ingredient("treegrowthsolution", 1),
-        Ingredient("papyrus", 2)
-    }
-end
+--if GetModConfigData("horticulture, expanded") then
+    --AllRecipes["book_horticulture_upgraded"].ingredients = {
+        --Ingredient("book_horticulture", 1),
+        --Ingredient("treegrowthsolution", 1),
+        --Ingredient("papyrus", 2)
+    --}
+--end
 
-if GetModConfigData("the angler") then
-    AllRecipes["book_fish"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("oceanfishingbobber_oval", 2)
-    }
-end
+--if GetModConfigData("the angler") then
+    --AllRecipes["book_fish"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("oceanfishingbobber_oval", 2)
+    --}
+--end
 
-if GetModConfigData("lux aeterna") then
-    AllRecipes["book_light_upgraded"].ingredients = {
-        Ingredient("book_light", 1),
-        Ingredient("wormlight", 1),
-        Ingredient("papyrus", 2)
-    }
-end
+--if GetModConfigData("lux aeterna") then
+    --AllRecipes["book_light_upgraded"].ingredients = {
+        --Ingredient("book_light", 1),
+        --Ingredient("wormlight", 1),
+        --Ingredient("papyrus", 2)
+    --}
+--end
 
-if GetModConfigData("lunar grimoire") then
-    AllRecipes["book_moon"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("moonrocknugget", 2),
-        Ingredient("moon_cap", 2)
-    }
-end
+--if GetModConfigData("lunar grimoire") then
+    --AllRecipes["book_moon"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("moonrocknugget", 2),
+        --Ingredient("moon_cap", 2)
+    --}
+--end
 
-if GetModConfigData("apicultural notes") then
-    AllRecipes["book_bees"].ingredients = {
-        Ingredient("papyrus", 2),
-        Ingredient("honeycomb", 1),
-        Ingredient("stinger", 8)
-    }
-end
+--if GetModConfigData("apicultural notes") then
+    --AllRecipes["book_bees"].ingredients = {
+        --Ingredient("papyrus", 2),
+        --Ingredient("honeycomb", 1),
+        --Ingredient("stinger", 8)
+    --}
+--end
 
 -- magnets and dock
 if GetModConfigData("no4crafts") then -- :desolate:
