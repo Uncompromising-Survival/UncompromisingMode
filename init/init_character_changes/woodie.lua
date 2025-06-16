@@ -80,19 +80,7 @@ AddPrefabPostInit("woodie", function(inst)
     if TUNING.DSTU.WOODIE_WET_GOOSE then
         inst:DoTaskInTime(GLOBAL.TUNING.WEREGOOSE_RUN_DRAIN_TIME_DURATION, OnGooseOverWater)
     end
-	
-	
-	local _RecalculateWereformSpeed = inst.RecalculateWereformSpeed --somewhere in the code, something is changing the moose damage, this should "fix" it by pausing for 0 seconds to swap his damage back to moose value (this function is called when woodie becomes a weremoose)
-	
-	local function RecalculateWereformSpeed(inst)
-		if inst:IsWeremoose() then
-			inst:DoTaskInTime(0,function(inst) inst.components.combat:SetDefaultDamage(TUNING.WEREMOOSE_DAMAGE) end)
-		end
-		_RecalculateWereformSpeed(inst)
-	end
-	
-	inst.RecalculateWereformSpeed = RecalculateWereformSpeed
-	
+
     --if config_skilltrees then
         --inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD, pickup_UM_Beaver) --, nil, inst)
 		--inst:DoPeriodicTask(0, WoodieMaxHealth)
