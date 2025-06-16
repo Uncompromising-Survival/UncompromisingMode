@@ -55,7 +55,7 @@ STRINGS.ACTIONS.CASTSPELL.WIXIE_SLING = "Sling"
 STRINGS.ACTIONS.ACTIVATE.UM_TORNADOTRACKER = "Locate Tornadoes -"
 
 STRINGS.UI.HUD.UM_VETSKULL = {
-    DEFAULT = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses.",
+    DEFAULT = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time.",
     WILLOW = "Veteran's Curse:\n - WilloWIP",
     WOLFGANG = "Veteran's Curse:\n - WIP",
     WENDY = "Veteran's Curse:\n - WIP",
@@ -71,20 +71,20 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WORTOX = "Veteran's Curse:\n - WIP",
     WORMWOOD = "Veteran's Curse:\n - WIP",
 	WURT = "Veteran's Curse:\n - WIP",
-	WALTER = "Veteran's Curse:\n - WIP",
-	WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses.",
+	WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself overtime.",
+	WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
 	WINKY = "Veteran's Curse:\n - WIP",
 	WATHOM = "Veteran's Curse:\n - WIP",
 	WIXIE = "Veteran's Curse:\n - WIP",
 }
-
+STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - Be able to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET_WES = "Veteran's Curse:\n - Wes Must Die."
 STRINGS.VETS_WIDGET_WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_CONFIRMED_TITLE = "You Made Your Choice."
 STRINGS.VETS_CONFIRMED = "Now you must live with the consequences..."
 STRINGS.VETS_TITLE = "The Veterans Curse."
-STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nYour body will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
+STRINGS.VETS = "You're about to be afflicted with a crippling curse.\nThe Constant will treat you more harshly,\nhowever fortune favors the bold (or foolish)! \n \nTouch the skull again to seal your fate."
 STRINGS.VETS_OK = "Ok"
 
 STRINGS.UI.CRAFTING.NEEDSVETERANSHRINE_ONE = "Requires something... darker."
