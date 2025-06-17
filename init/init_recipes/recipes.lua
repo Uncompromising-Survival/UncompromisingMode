@@ -386,16 +386,16 @@ ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 AddRecipe2("mastupgrade_windturbine_item", { Ingredient("cutstone", 2), Ingredient("transistor", 2) }, TECH.SEAFARING_ONE, nil, { "SEAFARING" })
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 
-if GetModConfigData("ck_loot") then
-    AddRecipe2("hat_crab", { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "CLOTHING" })
-    AddRecipe2("hat_crab_ice", { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("armor_crab_maxhp", { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("armor_crab_regen", { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("staff_starfall", { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) }, TECH.LOST, nil, { "WEAPONS", "SHADOWMAGIC" })
-    AddRecipe2("kaleidoscope", { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1), Ingredient("bluegem", 1) }, TECH.LOST, nil, { "WEAPONS" })
-    ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
-    ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
-end
+--if GetModConfigData("ck_loot") then
+    --AddRecipe2("hat_crab", { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "CLOTHING" })
+    --AddRecipe2("hat_crab_ice", { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("armor_crab_maxhp", { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("armor_crab_regen", { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("staff_starfall", { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) }, TECH.LOST, nil, { "WEAPONS", "SHADOWMAGIC" })
+    --AddRecipe2("kaleidoscope", { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1), Ingredient("bluegem", 1) }, TECH.LOST, nil, { "WEAPONS" })
+    --ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
+    --ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
+--end
 
 -- Pyre Nettles stuff
 -- Pyre Mantle
