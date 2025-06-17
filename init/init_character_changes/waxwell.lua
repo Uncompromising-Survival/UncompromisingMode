@@ -210,17 +210,6 @@ local function UnlockShadowGear(inst, data)
     end
 end
 
-if GetModConfigData("waxwell_nerf") then
-    --[[TUNING.SHADOWWAXWELL_SANITY_PENALTY.SHADOWPROTECTOR = 0.2 --can summon 4 fighters
-    TUNING.SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 2    -- lasts half of the duration]]
-    TUNING.SHADOW_PILLAR_DURATION_BOSS = 4
-    local SHADOW_PILLAR_BREAK_MULT = TUNING.SHADOW_PILLAR_BREAK_MULT
-    SHADOW_PILLAR_BREAK_MULT.MIN = 1 -- but breaks slower
-    SHADOW_PILLAR_BREAK_MULT.MAX = 2 --breaks faster with the more attacked a cage is.
-    TUNING.WAXWELLJOURNAL_SPELL_COST.SHADOW_PILLARS = 0.25 --costs 25%
-    --TUNING.SHADOWWAXWELL_PROTECTOR_HEALTH_CLAMP_TAKEN = 30 --double min dmg take
-end
-
 local function WaxwellUMStuff(inst)
     --[[inst.pact_sworn = false
 
