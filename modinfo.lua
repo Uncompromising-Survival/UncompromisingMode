@@ -136,8 +136,8 @@ configuration_options = {
     SkipSpace(),
 
     Header("In Development"),
-    BinaryConfig("ck_loot", "Additional Crab King Loot",
-        "Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
+    --BinaryConfig("ck_loot", "Additional Crab King Loot",
+        --"Crab King now drops unique loot based on the gems used.\nMissing art assets.", false),
 
     BinaryConfig("shadow_items", "Shadow Character Items",
         "Shadow Characters drop Unique Items", false),
