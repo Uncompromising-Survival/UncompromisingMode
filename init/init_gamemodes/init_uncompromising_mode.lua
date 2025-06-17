@@ -206,7 +206,9 @@ modimport("init/init_character_changes/winona")
 modimport("init/init_character_changes/wanda")
 modimport("init/init_character_changes/wortox")
 modimport("init/init_character_changes/warly")
-modimport("init/init_character_changes/waxwell")
+if TUNING.DSTU.WAXWELL then
+    modimport("init/init_character_changes/waxwell")
+end
 modimport("init/init_character_changes/walter")
 modimport("init/lagcomp_warning")
 

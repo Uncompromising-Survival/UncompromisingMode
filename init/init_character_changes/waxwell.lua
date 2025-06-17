@@ -369,13 +369,14 @@ end
 
 local shadowgear = {"nightsword", "armor_sanity"}
 for _, prefab in pairs(shadowgear) do
+    local name = "um_maxwell_"..prefab
 	env.AddPrefabPostInit(prefab, function(inst)
-		ShadowGearClientFunctions(inst, "um_maxwell_"..prefab)
+		ShadowGearClientFunctions(inst, name)
 
 		if not TheWorld.ismastersim then
 			return inst
 		end
 
-		ShadowGearFunctions(inst, "um_maxwell_"..prefab)
+		ShadowGearFunctions(inst, name)
 	end)
 end

@@ -650,7 +650,7 @@ end
     --TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
 --end
 
-if GetModConfigData("waxwell") then
+if TUNING.DSTU.WAXWELL then
     --[[TUNING.SHADOWWAXWELL_SANITY_PENALTY.SHADOWPROTECTOR = 0.2 --can summon 4 fighters
     TUNING.SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 2    -- lasts half of the duration]]
     TUNING.SHADOW_PILLAR_DURATION_BOSS = 4
