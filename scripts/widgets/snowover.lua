@@ -18,6 +18,10 @@ local function IsInSnowstorm(inst)
         or TheWorld:HasTag("snowstormstart") or MiniBlizzNear(inst)) and not IsUnderRainDomeAtXZ(x, z) or false
 end
 
+local function HasGoggleVision(inst)
+    return inst.components.playervision and inst.components.playervision:HasGoggleVision()
+end
+
 local SnowOver = Class(Widget, function(self, owner, dustlayer)
     self.owner = owner
     Widget._ctor(self, "SnowOver")
@@ -64,12 +68,15 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
     --self:StartUpdating()
 
     if owner then
-        self.inst:ListenForEvent("gogglevision", function(owner, data) self:BlindTo(data and data.enabled and 0 or 1, TheFrontEnd:GetFadeLevel() >= 1) end, owner)
+        self.inst:ListenForEvent("gogglevision", function(owner, data)
+            self.woregoggles = true
+            self:BlindTo(data and data.enabled and 0 or 1, TheFrontEnd:GetFadeLevel() >= 1)
+        end, owner)
         --self.inst:ListenForEvent("seasontick", function(owner) return self:ToggleUpdating() end, owner)
         self.inst:ListenForEvent("snowover", function(owner, data)
             self:FadeTo(data and data.enabled and 1 or 0, TheFrontEnd:GetFadeLevel() >= 1)
         end, owner)
-        if owner.components.playervision and owner.components.playervision:HasGoggleVision() then
+        if HasGoggleVision(owner) then
             self:BlindTo(0, true)
         end
         if owner.GetSnowstormLevel then
@@ -78,23 +85,9 @@ local SnowOver = Class(Widget, function(self, owner, dustlayer)
     end
 end)
 
-function SnowOver:GetAlpha()
-    local x, y, z = self.owner.Transform:GetWorldPosition()
-    local equationdingus = 0
-    for k, v in pairs(TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})) do
-        equationdingus = equationdingus + (v:HasTag("wall") and .25 or 0) + (v:HasTag("fire") and .6 or 0)
-            + (v:HasTag("shelter") and .15 or 0) + (v:HasTag("snowstorm_protection_high") and .8 or 0)
-    end
-    if self.owner:GetSnowstormLevel() == 1 then
-        self.alphaquation = equationdingus
-    end
-    if not (self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision()) then
-        self:BlindTo(math.clamp(1 - self.alphaquation, 0, 1), TheFrontEnd:GetFadeLevel() >= 1)
-    end
-end
-
-function SnowOver:BlindTo(blindto, instant)
+function SnowOver:BlindTo(blindto, instant, blindtime)
     blindto = math.clamp(blindto, 0, 1)
+    self.blindtime = not self.woregoggles and blindtime or .2
     if self.blindto ~= blindto then
         self.blindto = blindto
         if self.fade <= 0 and self.fadeto <= 0 then
@@ -105,7 +98,7 @@ function SnowOver:BlindTo(blindto, instant)
         end
     end
     if self.dust.shown then
-        TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", blindto < 1 and self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() and 0 or .5)
+        TheFocalPoint.SoundEmitter:SetParameter("snowstorm", "intensity", blindto < 1 and HasGoggleVision(self.owner) and 0 or .5)
     end
 end
 
@@ -145,7 +138,7 @@ function SnowOver:ApplyLevels()
         local k = Lerp(1, .7, self.brightness)
         local f = self.alpha * (1 - k) + math.min(1, self.fade * 1.5) * k
         local c = .15 + .85 * self.brightness
-        self.dust:GetAnimState():SetMultColour(c, c, c, math.clamp(f, 0, self.owner.components.playervision and self.owner.components.playervision:HasGoggleVision() and .3 or .7 - math.clamp(self.alphaquation, 0, .4)))
+        self.dust:GetAnimState():SetMultColour(c, c, c, math.clamp(f, 0, math.max(.3, .7 * self.blind)))
         if not self.dust.shown then
             self.dust:Show()
             TheFocalPoint.SoundEmitter:PlaySound("dontstarve/common/together/sandstorm", "snowstorm", self.fade)
@@ -159,6 +152,21 @@ function SnowOver:ApplyLevels()
     end
 end
 
+function SnowOver:GetAlpha()
+    local x, y, z = self.owner.Transform:GetWorldPosition()
+    local equationdingus = 0
+    for k, v in pairs(TheSim:FindEntities(x, y, z, 6, nil, nil, {"wall", "fire", "shelter", "snowstorm_protection_high"})) do
+        equationdingus = equationdingus + (v:HasTag("wall") and .25 or 0) + (v:HasTag("fire") and .6 or 0)
+            + (v:HasTag("shelter") and .15 or 0) + (v:HasTag("snowstorm_protection_high") and .8 or 0)
+    end
+    if self.owner:GetSnowstormLevel() == 1 then
+        self.alphaquation = equationdingus
+    end
+    if not HasGoggleVision(self.owner) then
+        self:BlindTo(math.clamp(1 - self.alphaquation, 0, 1), TheFrontEnd:GetFadeLevel() >= 1, .6)
+    end
+end
+
 function SnowOver:OnUpdate(dt)
     if TheNet:IsServerPaused() then return end
     self:GetAlpha()
@@ -169,6 +177,10 @@ function SnowOver:OnUpdate(dt)
     elseif self.blindto > self.blind then
         self.blind = math.min(self.blindto, self.blind + dt / self.blindtime)
         dirty = true
+    end
+
+    if self.blindto == self.blind and self.woregoggles then
+        self.woregoggles = nil
     end
 
     if self.fadeto < self.fade then
