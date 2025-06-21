@@ -8,6 +8,7 @@ local function OnHitFyre(inst, attacker, target)
 	local fx = SpawnPrefab("explosivehit")
 	fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	fx.Transform:SetScale(1.25,1.25,1.25)
+	fx:DoTaskInTime(2,function(fx) fx:Remove() end)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(x, y, z, 3, nil,
 		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })

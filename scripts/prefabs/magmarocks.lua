@@ -56,6 +56,7 @@ local function OnWork(inst, worker, workleft)
 		local fx = SpawnPrefab("explosivehit")
 		fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 		fx.Transform:SetScale(1.25,1.25,1.25)
+		fx:DoTaskInTime(2,function(fx) fx:Remove() end)
 		DamageSurroundings(inst)
 	end
 	
