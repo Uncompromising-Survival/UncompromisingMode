@@ -411,7 +411,7 @@ end
     --end)
 --end
 
-if not TUNING.DSTU.WICKERCHANGES == 0 then
+if TUNING.DSTU.WICKERCHANGES ~= 0 then
 	PROTOTYPER_DEFS.wickerbottom = { icon_atlas = "images/crafting_menu_avatars.xml", icon_image = "avatar_wickerbottom.tex", action_str = "WICKERBOTTOM", is_crafting_station = false }
 	STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn with"
 

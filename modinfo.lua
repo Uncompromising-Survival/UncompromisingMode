@@ -295,7 +295,7 @@ configuration_options = {
         hover = "Wickerbottom teaches the basics to those around her. Practical Rain Rituals can drive Tornadoes away. Lunar Grimoire only mutates those around it.",
         options = {
             { description = "Enabled",  data = 2, hover = "All changes enabled." },
-            { description = "No Changes",   data = 1, hover = "No Lunar Grimoire change." },
+            { description = "No Nerf",   data = 1, hover = "No Lunar Grimoire nerf." },
             { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
         default = 2
     },

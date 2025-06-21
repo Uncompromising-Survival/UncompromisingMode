@@ -376,9 +376,9 @@ if TUNING.DSTU.WOODIE_WET_GOOSE then
     TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
 end
 
---if TUNING.DSTU.WICKERNERF_MOONBOOK then
-    --TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
---end
+if TUNING.DSTU.WICKERCHANGES == 2 then
+    TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
+end
 
 --if TUNING.DSTU.WICKERNERF_BEEBOOK then
     --TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
