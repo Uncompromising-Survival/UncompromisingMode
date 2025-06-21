@@ -264,87 +264,87 @@ GLOBAL.setfenv(1, GLOBAL)
     --end)
 --end
 
---if TUNING.DSTU.WICKERNERF_MOONBOOK then
+if TUNING.DSTU.WICKERCHANGES == 2 then
     -- just a little convinience thing for me
-    --env.AddComponentPostInit("werebeast", function(self)
-        --if self.inst ~= nil then
-            --self.inst:AddTag("werebeast")
-        --end
-    --end)
+    env.AddComponentPostInit("werebeast", function(self)
+        if self.inst ~= nil then
+            self.inst:AddTag("werebeast")
+        end
+    end)
 
-    --local function OnRead_moon(inst, reader)
-        --local x, y, z = reader.Transform:GetWorldPosition()
-        --local ents = TheSim:FindEntities(x, y, z, 8, nil, { "player", "playerghost", "INLIMBO", "dead" },
-            --{ "halloweenmoonmutable", "werebeast" })
-        --local woodies = TheSim:FindEntities(x, y, z, 8, { "wereness" }, { "playerghost", "INLIMBO", "dead" })
-        --local found = false
+    local function OnRead_moon(inst, reader)
+        local x, y, z = reader.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 8, nil, { "player", "playerghost", "INLIMBO", "dead" },
+            { "halloweenmoonmutable", "werebeast" })
+        local woodies = TheSim:FindEntities(x, y, z, 8, { "wereness" }, { "playerghost", "INLIMBO", "dead" })
+        local found = false
 
-        --for k, v in ipairs(ents) do
-            --x, y, z = v.Transform:GetWorldPosition()
+        for k, v in ipairs(ents) do
+            x, y, z = v.Transform:GetWorldPosition()
 
-            --if v.components.halloweenmoonmutable ~= nil then
-                --v.components.halloweenmoonmutable:Mutate()
-                --local fx = SpawnPrefab("halloween_moonpuff")
-                --fx.Transform:SetPosition(x, y, z)
-            --end -- should this be an elseif?
+            if v.components.halloweenmoonmutable ~= nil then
+                v.components.halloweenmoonmutable:Mutate()
+                local fx = SpawnPrefab("halloween_moonpuff")
+                fx.Transform:SetPosition(x, y, z)
+            end -- should this be an elseif?
 
-            --if v.components.werebeast ~= nil and not v.components.werebeast:IsInWereState() then
-                --v.components.werebeast:SetWere(1)
-                --local fx = SpawnPrefab("halloween_moonpuff")
-                --fx.Transform:SetPosition(x, y, z)
-            --end
+            if v.components.werebeast ~= nil and not v.components.werebeast:IsInWereState() then
+                v.components.werebeast:SetWere(1)
+                local fx = SpawnPrefab("halloween_moonpuff")
+                fx.Transform:SetPosition(x, y, z)
+            end
 
-            --found = true
-        --end
+            found = true
+        end
 
-        --for k, v in ipairs(woodies) do
-            --x, y, z = v.Transform:GetWorldPosition()
+        for k, v in ipairs(woodies) do
+            x, y, z = v.Transform:GetWorldPosition()
 
-            --local pct = v.components.wereness:GetPercent()
-            --if pct > 0 then
-                --v.components.wereness:SetPercent(1)
-                --local fx = SpawnPrefab("halloween_moonpuff")
-                --fx.Transform:SetPosition(x, y, z)
-            --else
-                --v.components.wereness:SetPercent(1, true)
-                --v.components.wereeater:ForceTransformToWere()
-                --local fx = SpawnPrefab("halloween_moonpuff")
-                --fx.Transform:SetPosition(x, y, z)
-            --end
-            --found = true
-        --end
+            local pct = v.components.wereness:GetPercent()
+            if pct > 0 then
+                v.components.wereness:SetPercent(1)
+                local fx = SpawnPrefab("halloween_moonpuff")
+                fx.Transform:SetPosition(x, y, z)
+            else
+                v.components.wereness:SetPercent(1, true)
+                v.components.wereeater:ForceTransformToWere()
+                local fx = SpawnPrefab("halloween_moonpuff")
+                fx.Transform:SetPosition(x, y, z)
+            end
+            found = true
+        end
 
-        --if found then
-            --return true
-        --end
-    --end
+        if found then
+            return true
+        end
+    end
 
-    --local function OnPerUse_moon(inst, reader)
+    local function OnPerUse_moon(inst, reader)
         -- if reader.peruse_moon then
         --    reader.peruse_moon(reader)
         -- end
         -- reader.components.talker:Say(GetString(reader, "ANNOUNCE_READ_BOOK","BOOK_MOON"))
-        --return true
-    --end
+        return true
+    end
 
-    --env.AddPrefabPostInit("book_moon", function(inst)
-        --if not TheWorld.ismastersim then
-            --return
-        --end
+    env.AddPrefabPostInit("book_moon", function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
 
-        --inst.components.book:SetReadSanity(-TUNING.SANITY_HUGE)
+        inst.components.book:SetReadSanity(-TUNING.SANITY_HUGE)
 
-        --if inst.components.book ~= nil then
-            --inst.components.book:SetOnRead(OnRead_moon)
-            --inst.components.book:SetOnPeruse(OnPerUse_moon)
-        --end
+        if inst.components.book ~= nil then
+            inst.components.book:SetOnRead(OnRead_moon)
+            inst.components.book:SetOnPeruse(OnPerUse_moon)
+        end
 
-        --if inst.components.finiteuses ~= nil then
-            --inst.components.finiteuses:SetMaxUses(3)
-            --inst.components.finiteuses:SetUses(3)
-        --end
-    --end)
---end
+        if inst.components.finiteuses ~= nil then
+            inst.components.finiteuses:SetMaxUses(3)
+            inst.components.finiteuses:SetUses(3)
+        end
+    end)
+end
 
 --local function OnRead_bees(inst, reader)
     --local x, y, z = reader.Transform:GetWorldPosition()
@@ -411,7 +411,7 @@ GLOBAL.setfenv(1, GLOBAL)
     --end)
 --end
 
-if TUNING.DSTU.WICKERCHANGES then
+if not TUNING.DSTU.WICKERCHANGES == 0 then
 	PROTOTYPER_DEFS.wickerbottom = { icon_atlas = "images/crafting_menu_avatars.xml", icon_image = "avatar_wickerbottom.tex", action_str = "WICKERBOTTOM", is_crafting_station = false }
 	STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn with"
 

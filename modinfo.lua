@@ -289,8 +289,16 @@ configuration_options = {
         --},
         --default = "vanilla",
     --},
-    BinaryConfig("wickerbottom", "Wickerbottom",
-        "Wickerbottom passively teaches the basics to those around her.\nPractical Rain Rituals can drive Tornadoes away.", true),
+    {
+        name = "wickerbottom",
+        label = "Wickerbottom",
+        hover = "Wickerbottom teaches the basics to those around her. Practical Rain Rituals can drive Tornadoes away. Lunar Grimoire only mutates those around it.",
+        options = {
+            { description = "Enabled",  data = 2, hover = "All changes enabled." },
+            { description = "No Changes",   data = 1, hover = "No Lunar Grimoire change." },
+            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
+        default = 2
+    },
     --BinaryConfig("apicultural notes", "Wickerbottom - Apicultural Notes",
         --"\"Apicultural Notes\" now adds 1 Honey to up to 10 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),
     --BinaryConfig("applied horticulture", "Wickerbottom - Horti., Abridged",

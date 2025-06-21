@@ -244,7 +244,7 @@ TUNING.DSTU = {
     WINONA_WORKER = GetModConfigData("winonaworker"),
     WINONA_WACKCATS = GetModConfigData("winonawackycats"),
     -- Wickerbottom
-    WICKERCHANGES = GetModConfigData("wickerbottom"),
+    WICKERCHANGES = GetModConfigData("wickerbottom_changes"),
 	--WICKERNERF = GetModConfigData("wickerbottom"),
     --WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
 	-- Wortox

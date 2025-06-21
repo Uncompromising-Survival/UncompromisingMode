@@ -189,13 +189,13 @@ AllRecipes["walterhat"].ingredients = {
     --}
 --end
 
---if GetModConfigData("lunar grimoire") then
-    --AllRecipes["book_moon"].ingredients = {
-        --Ingredient("papyrus", 2),
-        --Ingredient("moonrocknugget", 2),
-        --Ingredient("moon_cap", 2)
-    --}
---end
+if TUNING.DSTU.WICKERCHANGES == 2 then
+    AllRecipes["book_moon"].ingredients = {
+        Ingredient("papyrus", 2),
+        Ingredient("moonrocknugget", 2),
+        Ingredient("moon_cap", 2)
+    }
+end
 
 --if GetModConfigData("apicultural notes") then
     --AllRecipes["book_bees"].ingredients = {
