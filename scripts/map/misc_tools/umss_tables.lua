@@ -84,7 +84,7 @@ local UMSS_TABLES =
     },
 	baseFrag_rattyStorage = {
 		name = "baseFrag_rattyStorage",
-		content ={{x = 2.5805172920227, z = 0.28851318359375, prefab = "treasurechest"},	{x = 0.85051727294922, z = -2.9224853515625, prefab = "wardrobe"},	{x = 1.850549697876, z = 3.2639770507813, prefab = "uncompromising_rat"},	{x = 3.784517288208, z = -0.760498046875, prefab = "treasurechest"},	{x = 3.8845171928406, z = 1.573486328125, prefab = "treasurechest"},	{x = 5.0455174446106, z = 0.489501953125, prefab = "treasurechest"},	{x = 5.2435173988342, z = 2.8895263671875, prefab = "treasurechest"},	{x = 4.4615173339844, z = -4.6304931640625, prefab = "fence"},	{x = 6.2955173254013, z = 1.7335205078125, prefab = "treasurechest"},	{x = 1.4615173339844, z = 6.3695068359375, prefab = "wall_wood"},	{x = 5.4615173339844, z = -3.6304931640625, prefab = "wall_wood"},	{x = 5.4615173339844, z = 4.3695068359375, prefab = "wall_wood"},	{x = 3.4615173339844, z = 6.3695068359375, prefab = "fence"},	{x = 6.4615173339844, z = 3.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = 0.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -0.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 1.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -1.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 2.3695068359375, prefab = "wall_wood"},},
+		content ={{x = 0.85051727294922, z = -2.9224853515625, prefab = "wardrobe"},	{x = 1.850549697876, z = 3.2639770507813, prefab = "uncompromising_rat"},{x = 5.2435173988342, z = 2.8895263671875, prefab = "treasurechest"},	{x = 4.4615173339844, z = -4.6304931640625, prefab = "fence"},	{x = 6.2955173254013, z = 1.7335205078125, prefab = "treasurechest"},	{x = 1.4615173339844, z = 6.3695068359375, prefab = "wall_wood"},	{x = 5.4615173339844, z = -3.6304931640625, prefab = "wall_wood"},	{x = 5.4615173339844, z = 4.3695068359375, prefab = "wall_wood"},	{x = 3.4615173339844, z = 6.3695068359375, prefab = "fence"},	{x = 6.4615173339844, z = 3.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = 0.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -0.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 1.3695068359375, prefab = "wall_wood"},	{x = 7.4615173339844, z = -1.6304931640625, prefab = "wall_wood"},	{x = 7.4615173339844, z = 2.3695068359375, prefab = "wall_wood"},},
     },
 	baseFrag_smellyKitchen = {
 		name = "baseFrag_smellyKitchen",
@@ -192,22 +192,6 @@ local UMSS_TABLES =
 	},
 
     --auto-generated
-
-    returnedTable475 = {
-		name = "startPortal", rotate = true, tile_centered = true,
-		content = {	{x = 0, z = 0, prefab = "multiplayer_portal", ocean = false, tile = 6},	{x = -5, z = -2, prefab = "flower", ocean = false, tile = 6},	{x = 6.2265014648438, z = -1.9998168945313, prefab = "seeds", ocean = false, tile = 7},	{x = -7, z = 2, prefab = "flower", ocean = false, tile = 6},	{x = -3.6891784667969, z = 6.7010803222656, prefab = "butterfly", ocean = false, tile = 7, health = 1},	{x = -1, z = 8, prefab = "flower", ocean = false, tile = 6},	{x = 7.5400085449219, z = -12.139999389648, prefab = "grass", ocean = false, tile = 5},	{x = 15.420013427734, z = 4.5899963378906, prefab = "trapdoor", ocean = false, tile = 5},	{x = 15.420013427734, z = 4.5899963378906, prefab = "trapdoorgrass", ocean = false, tile = 5},	{x = 16.25, z = -3.2899932861328, prefab = "trapdoor", ocean = false, tile = 5},	{x = 16.25, z = -3.2899932861328, prefab = "trapdoorgrass", ocean = false, tile = 5},	{x = 15.600006103516, z = -11.630004882813, prefab = "grass", ocean = false, tile = 5},},
-	},
-
-    funniPortal567 = {
-		name = "funniPortal", rotate = true, tile_centered = true,
-		content = {	{x = 0, z = 0, prefab = "multiplayer_portal", ocean = false, tile = 6},	{x = -2, z = -5, prefab = "flower", ocean = false, tile = 6},	{x = 2, z = -7, prefab = "flower", ocean = false, tile = 6},	{x = 8, z = -1, prefab = "flower", ocean = false, tile = 6},},
-	},
-
-
-    returnedTable273 = {
-		name = "returnedTable273", rotate = true, tile_centered = true,
-		content = {},
-	},
 
     wixie_puzzle = {
 		name = "wixie_puzzle", rotate = true, tile_centered = true,

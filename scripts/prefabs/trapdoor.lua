@@ -252,7 +252,7 @@ local function fn2()
     if TUNING.DSTU.TRAPDOORSPIDERS then
         inst:AddComponent("childspawner")
         -- Set spawner to wasp. Change tuning values to wasp values.
-        inst.components.childspawner.childspawner = "spider_trapdoor"
+        inst.components.childspawner.childspawner = "spider_trapdoor_hooded"
         inst.components.childspawner:SetMaxChildren(0)
         inst.components.childspawner:SetEmergencyRadius(
             TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)

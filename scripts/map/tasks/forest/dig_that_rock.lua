@@ -13,7 +13,7 @@ for k, v in pairs(mosaic_rooms) do
 end	
 
 AddRoomPreInit("BGNoise", function(room)
-	room.contents.countprefabs.ums_biometable = function() return math.random(0,2) end
+	room.contents.countprefabs.ums_biometable = function() return math.random(0,1) end
 end)
 
 AddRoomPreInit("Graveyard", function(room)

@@ -345,7 +345,7 @@ local function create_common(build)
     inst:AddTag("trader")
 
     inst.AnimState:SetBank("spider")
-    inst.AnimState:SetBuild("spider_trapdoor")
+    inst.AnimState:SetBuild(build)
     inst.AnimState:PlayAnimation("idle")
 
     inst.entity:SetPristine()
@@ -462,20 +462,7 @@ local function create_common(build)
     
     inst:ListenForEvent("startleashing", OnStartLeashing)
     inst:ListenForEvent("stopleashing", OnStopLeashing)
-    
-    -- "Hooded" variant of trapdoor spider
-    inst.OnSave = function(inst,data)
-        if inst.hooded then
-            data.hooded = inst.hooded
-        end
-    end    
-    inst.OnLoad = function(inst,data)
-        if data and data.hooded then
-            inst.hooded = data.hooded
-            inst.AnimState:SetBuild("spider_trapdoor_hooded")
-        end
-    end
-    
+ 
     return inst
 end
 
@@ -500,4 +487,30 @@ local function create_trapdoor()
     return inst
 end
 
-return Prefab("spider_trapdoor", create_trapdoor)
+local function create_trapdoor_hooded()
+    local inst = create_common("spider_trapdoor_hooded")
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    --inst:AddTag("tauntless")
+    inst.components.health:SetMaxHealth(200)
+
+    inst.components.combat:SetDefaultDamage(34)
+    inst.components.combat:SetAttackPeriod(TUNING.SPIDER_WARRIOR_ATTACK_PERIOD + math.random() * 2)
+    inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
+    inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
+    inst.components.locomotor.walkspeed = TUNING.SPIDER_WARRIOR_WALK_SPEED
+    inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED*1.1
+
+    inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
+    inst:AddTag("trapdoorspider")
+	inst.hooded = true
+	
+	--inst.components.inspectable.nameoverride = "SPIDER_TRAPDOOR"
+	
+    return inst
+end
+
+return Prefab("spider_trapdoor", create_trapdoor),
+Prefab("spider_trapdoor_hooded", create_trapdoor_hooded)

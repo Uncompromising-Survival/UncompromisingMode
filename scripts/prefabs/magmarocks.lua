@@ -1,6 +1,7 @@
 local rock1_assets =
 {
     Asset("ANIM", "anim/magmarock1.zip"),
+	Asset("ANIM", "anim/fyriterock.zip"),
     --Asset("MINIMAP_IMAGE", "magmarock1"),
 	Asset("IMAGE", "images/map_icons/magmarock1.tex"),
 	Asset("ATLAS", "images/map_icons/magmarock1.xml"),	
@@ -18,11 +19,46 @@ SetSharedLootTable( 'magmarock1',
     {'fossil_piece',0.2},
     {'goldnugget',  0.25},
     {'flint',       0.60},
-    {'bluegem',     0.05},
+    {'redgem',      0.1},
+})
+
+SetSharedLootTable( 'fyriterock',
+{
+    {'rocks',       1.00},
+    {'rocks',       1.00},
+    {'rocks',       1.00},
+    {'um_fyrite',  1.00},
+    {'flint',       1.00},
+    {'fossil_piece',0.2},
+    {'um_fyrite',  0.25},
+    {'flint',       0.60},
     {'redgem',      0.1},
 })
 	
+local function DamageSurroundings(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, y, z, 2, nil,
+		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+	if #ents > 0 then
+		for i, v in pairs(ents) do
+			if v.components.burnable ~= nil then
+				v.components.burnable:Ignite()
+			end
+			if v.components.combat then
+				v.components.combat:GetAttacked(inst,50)
+			end
+		end
+	end
+end
+	
 local function OnWork(inst, worker, workleft)
+	if inst.prefab == "fyriterock" then
+		local fx = SpawnPrefab("explosivehit")
+		fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		fx.Transform:SetScale(1.25,1.25,1.25)
+		DamageSurroundings(inst)
+	end
+	
     if workleft <= 0 then
         local pt = inst:GetPosition()
         SpawnPrefab("rock_break_fx").Transform:SetPosition(pt.x, pt.y, pt.z)
@@ -32,7 +68,6 @@ local function OnWork(inst, worker, workleft)
             local fx = SpawnPrefab("collapse_small")
             fx.Transform:SetPosition(pt.x, pt.y, pt.z)
         end
-
 		if not inst.doNotRemoveOnWorkDone then
 	        inst:Remove()
 		end
@@ -140,5 +175,17 @@ local function rock1_fn()
     return inst
 end
 
+local function rock2_fn()
+    local inst = baserock_fn("fyriterock", "fyriterock", "full", "magmarock1.tex")
 
-return Prefab("magmarock1", rock1_fn, rock1_assets)
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.components.lootdropper:SetChanceLootTable('fyriterock')
+
+    return inst
+end
+
+return Prefab("magmarock1", rock1_fn, rock1_assets),
+Prefab("fyriterock", rock2_fn, rock1_assets)

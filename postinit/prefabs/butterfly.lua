@@ -74,9 +74,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
                 if inst.components.locomotor then
                     inst.components.locomotor:Clear()
                 end
-            elseif statename == "idle" and statename ~= "idle_flutter" and not (inst.components.locomotor and inst.components.locomotor:WantsToMoveForward())
-                and mindist < 4 and TheWorld.state.isday  then --uhoh getting close!
-                inst.sg:GoToState("idle_flutter")
             end
         end
     end

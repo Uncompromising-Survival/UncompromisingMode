@@ -160,6 +160,7 @@ local inventoryitems =
     "snowcone",
     "snowgoggles",
     "spider_trapdoor",
+	"spider_trapdoor_hooded",
     "sporepack",
     "stanton_shadow_tonic",
     "stanton_shadow_tonic_fancy",
@@ -241,7 +242,8 @@ local inventoryitems =
     "um_smolder_spore",
     "um_armor_pyre_nettles",
     "um_blowdart_pyre",
-
+	"um_fyrite",
+	"um_fyre_bomb",
     -- Mutation Extrapolation
     "um_staff_meteor",
 
@@ -395,6 +397,8 @@ local inventoryitems =
 	"um_hat_leafwing",
 	"um_leafwing",
 	"um_detonator",
+	"um_bee_moon",
+	"um_fyre_bomb",
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -2616,7 +2620,8 @@ Assets = {
     Asset("ANIM", "anim/um_goo_honey.zip"),
 
     Asset("ANIM", "anim/um_alpha_lightninggoat.zip"),
-
+	Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
+	
     --UI
     Asset("IMAGE", "images/dragonflycontainerborder.tex"),
     Asset("ATLAS", "images/dragonflycontainerborder.xml"),

@@ -416,6 +416,8 @@ local filters = {
     ["jungletree_burnt"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
 	
 	["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
+	["magmarock1"] = { WORLD_TILES.UM_GRASSMAGMA },
+	["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
 }
 
 for k, v in pairs(filters) do

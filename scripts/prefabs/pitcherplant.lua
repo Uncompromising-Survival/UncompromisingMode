@@ -39,20 +39,6 @@ local function onchildgoinghome(inst, data)
     end
 end
 
-local function SeasonalSpawnChanges(inst, season)
-    if inst.components.childspawner then
-        if season == SEASONS.SPRING then
-            inst.components.childspawner:SetRegenPeriod(TUNING.BEEBOX_REGEN_TIME / TUNING.SPRING_COMBAT_MOD)
-            inst.components.childspawner:SetSpawnPeriod(TUNING.BEEBOX_RELEASE_TIME / TUNING.SPRING_COMBAT_MOD)
-            inst.components.childspawner:SetMaxChildren(1)
-        else
-            inst.components.childspawner:SetRegenPeriod(TUNING.BEEBOX_REGEN_TIME)
-            inst.components.childspawner:SetSpawnPeriod(TUNING.BEEBOX_RELEASE_TIME)
-            inst.components.childspawner:SetMaxChildren(1)
-        end
-    end
-end
-
 local function onsave(inst, data)
     data.count = inst.count
 end
@@ -132,8 +118,11 @@ local function MakeBeebox(name, common_postinit)
         inst:AddComponent("childspawner")
         inst.components.childspawner.childname = "fruitbat"
         inst.components.childspawner.allowwater = true
-        SeasonalSpawnChanges(inst, TheWorld.state.season)
-        inst:WatchWorldState("season", SeasonalSpawnChanges)
+		
+		inst:AddComponent("spawner")
+		inst.components.spawner:Configure("fruitbat", 60*8)
+		inst.components.spawner:SetWaterSpawning(true, true)
+		inst.components.spawner:CancelSpawning()
 
         if TheWorld.state.isday and not TheWorld.state.iswinter then
             inst.components.childspawner:StartSpawning()

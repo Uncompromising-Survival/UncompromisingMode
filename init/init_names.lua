@@ -144,6 +144,7 @@ SKINS.wormwood_shadow = "The Corrupted" -- personal vendetta, bruh that shit ain
 
 STRINGS.TRAPDOOR = "Inconspicuous Mound"
 STRINGS.SPIDER_TRAPDOOR = "Trapdoor Spider"
+STRINGS.SPIDER_TRAPDOOR_HOODED = "Hooded Widower"
 STRINGS.MUTATOR_TRAPDOOR = "Trapdoor Switcherdoodle"
 STRINGS.DECIDUOUS_ROOT = "Living Tree Root"
 STRINGS.LAVAESLIME = "Lavae Slime"
@@ -730,3 +731,9 @@ STRINGS.UM_BUTTERY_FLY = "Buttery Fly"
 STRINGS.UM_HAT_LEAFWING = "Fleeting Leafy Helm"
 STRINGS.UM_LEAFWING = "Leafy Wing"
 STRINGS.UM_DETONATOR = "Universal Detonator"
+
+STRINGS.UM_BEE_MOON = "Vulture Bee"
+STRINGS.UM_BEEHIVE_MOON ="Vulture Bee Hive"
+STRINGS.FYRITEROCK = "Fyrite Outcropping"
+STRINGS.UM_FYRITE = "Fyrite"
+STRINGS.UM_FYRE_BOMB = "Fyre Bomb"

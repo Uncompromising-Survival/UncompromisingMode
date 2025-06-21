@@ -15,6 +15,7 @@ if GetModConfigData("worldgenmastertoggle") then
 		"the_hunters", -- Adds Trapdoors and Ghost Walruses
 		"for_a_nice_walk", -- Guarantees a living tree spawns
 		"ocean_general", -- All Ocean Changes (For Now)
+		"moonisland", -- Lunar Bees
 	}
 
 	---- XX[[ Cave Task Adjustments ]]XX ----

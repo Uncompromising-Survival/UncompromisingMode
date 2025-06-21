@@ -103,13 +103,14 @@ AddRoom("GrassMagma", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.UM_MAGMA_JUNGLY,
     contents =  {
-        distributepercent = .2,
+        distributepercent = .4,
         distributeprefabs=
         {
 			lava_pond_cave = 0.1,
 			magmarock1 = 0.025,
 			mushtree_shadow = 0.025,
 			pyrethicket_builder = 0.5,
+			fyriterock = 0.05
 			--um_pyre_nettles_stage_2 = 0.1,
 			--um_pyre_nettles_stage_5 = 0.1,
         },
