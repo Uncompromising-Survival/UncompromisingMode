@@ -290,7 +290,7 @@ configuration_options = {
         --default = "vanilla",
     --},
     {
-        name = "wickerbottom",
+        name = "wickerbottom_changes",
         label = "Wickerbottom",
         hover = "Wickerbottom teaches the basics to those around her. Practical Rain Rituals can drive Tornadoes away. Lunar Grimoire only mutates those around it.",
         options = {
