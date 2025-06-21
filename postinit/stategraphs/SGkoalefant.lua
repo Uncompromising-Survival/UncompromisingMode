@@ -30,14 +30,13 @@ EventHandler("attacked", function(inst, data)
 	end
 end),
 }
-	
-	
+
 local function DisarmTarget(inst, target)
 	local item = nil
 	if target and target.components.inventory and not target:HasTag("stronggrip") then
 		item = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	end
-	if item and item.Physics then
+	if item and not item:HasTag("nosteal") and item.Physics then
 		target.components.inventory:DropItem(item)
 		local x, y, z = item:GetPosition():Get()
 		y = .1

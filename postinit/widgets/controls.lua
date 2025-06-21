@@ -13,9 +13,9 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 	self.fogover = self:AddChild( FogOver(ownr) )
 	self.fogover:MoveToBack()
 
-	local Vetcursewidget = require "widgets/vetcursewidget"
+	--[[local Vetcursewidget = require "widgets/vetcursewidget"
 	self.vetcursewidget = self:AddChild( Vetcursewidget(ownr) )
-	self.vetcursewidget:MoveToBack()
+	self.vetcursewidget:MoveToBack()]]
 
 	local californiakingoverlay = require "widgets/californiakingoverlay"
 	self.californiakingoverlay = self:AddChild( californiakingoverlay(ownr) )

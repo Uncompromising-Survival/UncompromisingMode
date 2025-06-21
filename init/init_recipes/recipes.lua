@@ -389,16 +389,16 @@ ChangeSortKey("portableboat_item", "boat_item", "SEAFARING", true)
 AddRecipe2("mastupgrade_windturbine_item", { Ingredient("cutstone", 2), Ingredient("transistor", 2) }, TECH.SEAFARING_ONE, nil, { "SEAFARING" })
 ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "SEAFARING", true)
 
-if GetModConfigData("ck_loot") then
-    AddRecipe2("hat_crab", { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "CLOTHING" })
-    AddRecipe2("hat_crab_ice", { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("armor_crab_maxhp", { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("armor_crab_regen", { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
-    AddRecipe2("staff_starfall", { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) }, TECH.LOST, nil, { "WEAPONS", "SHADOWMAGIC" })
-    AddRecipe2("kaleidoscope", { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1), Ingredient("bluegem", 1) }, TECH.LOST, nil, { "WEAPONS" })
-    ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
-    ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
-end
+--if GetModConfigData("ck_loot") then
+    --AddRecipe2("hat_crab", { Ingredient("cutstone", 2), Ingredient("orangegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "CLOTHING" })
+    --AddRecipe2("hat_crab_ice", { Ingredient("cutstone", 2), Ingredient("bluegem", 2), Ingredient("slurtle_shellpieces", 1) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("armor_crab_maxhp", { Ingredient("cutstone", 1), Ingredient("redgem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("armor_crab_regen", { Ingredient("cutstone", 1), Ingredient("greengem", 3), Ingredient("slurtle_shellpieces", 3) }, TECH.LOST, nil, { "ARMOUR" })
+    --AddRecipe2("staff_starfall", { Ingredient("yellowgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) }, TECH.LOST, nil, { "WEAPONS", "SHADOWMAGIC" })
+    --AddRecipe2("kaleidoscope", { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1), Ingredient("bluegem", 1) }, TECH.LOST, nil, { "WEAPONS" })
+    --ChangeSortKey("staff_starfall", "firestaff", "WEAPONS", true)
+    --ChangeSortKey("staff_starfall", "firestaff", "MAGIC", true)
+--end
 
 -- Pyre Nettles stuff
 -- Pyre Mantle
@@ -412,11 +412,13 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })
 
 
-AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
-ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
+--AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
+--ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
-AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, GLOBAL.TECH.NONE, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
-AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, GLOBAL.TECH.NONE, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
+AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"ARMOUR"})
+AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"WEAPONS"})
+--AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
+--AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
 
 AddRecipe2("um_record_menu", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_menu.xml" }, { "DECOR" })
 AddRecipe2("um_record_wixie", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_wixie.xml" }, { "DECOR" })

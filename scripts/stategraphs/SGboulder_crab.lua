@@ -11,7 +11,7 @@ end
 
 
 local function LaunchItem(inst, target, item)
-    if item.Physics ~= nil and item.Physics:IsActive() then
+    if item.Physics and item.Physics:IsActive() then
         local x, y, z = item.Transform:GetWorldPosition()
         item.Physics:Teleport(x, .1, z)
 
@@ -28,15 +28,14 @@ local function KnockOutWeapon(inst,data)
         return
     end
 
-	if data.target ~= nil and data.target.components.inventory ~= nil and not data.target:HasTag("stronggrip") then
+	if data.target and data.target.components.inventory and not data.target:HasTag("stronggrip") then
         local item = data.target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if item ~= nil then
+        if item and not item:HasTag("nosteal") then
             data.target.components.inventory:DropItem(item)
             LaunchItem(inst, data.target, item)
         end
     end
 end
-
 
 -- Spirit wanted the boulder crab to explode into rocks upon death. I can't remember where 12 came from, but that's how many rocks we're going with I guess.
 -- Wanted nitre less than flint for some reason, can't recall at the moment of coding.

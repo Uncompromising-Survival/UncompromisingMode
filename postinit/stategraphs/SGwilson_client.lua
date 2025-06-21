@@ -175,6 +175,44 @@ local _OldEatState = inst.states["eat"].onenter
 
     local states = {
 
+        State{
+            name = "usewaxwelljournal_pre",
+            tags = {"doing", "busy"},
+            server_states = {"usewaxwelljournal_pre", "usewaxwelljournal"},
+
+            onenter = function(inst)
+                inst.components.locomotor:Stop()
+                inst.AnimState:SetDeltaTimeMultiplier(2)
+
+                inst.AnimState:PlayAnimation("action_uniqueitem_pre")
+                inst.AnimState:PushAnimation("action_uniqueitem_lag", false)
+
+                inst:PerformPreviewBufferedAction()
+                inst.sg:SetTimeout(2)
+            end,
+
+            onupdate = function(inst)
+                if inst.sg:ServerStateMatches() then
+                    if inst.entity:FlattenMovementPrediction() then
+                        inst.sg:GoToState("idle", "noanim")
+                    end
+                elseif not inst.bufferedaction then
+                    inst.AnimState:SetDeltaTimeMultiplier(1)
+                    inst.AnimState:PlayAnimation("book")
+                    inst.AnimState:SetFrame(72)
+                    inst.sg:GoToState("idle", true)
+                end
+            end,
+
+            ontimeout = function(inst)
+                inst:ClearBufferedAction()
+                inst.AnimState:SetDeltaTimeMultiplier(1)
+                inst.AnimState:PlayAnimation("book")
+                inst.AnimState:SetFrame(72)
+                inst.sg:GoToState("idle", true)
+            end,
+        },
+
         State {
             name = "castspelllighter",
             tags = { "doing", "busy", "canrotate" },

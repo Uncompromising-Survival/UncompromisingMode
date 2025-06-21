@@ -365,22 +365,22 @@ if TUNING.DSTU.INSUL_THERMALSTONE then
     TOOLTIPS.HEATROCK = "- Reduced inherent insulation.\n- Inherits part of players insulation."
 end
 
-if TUNING.DSTU.WICKERNERF_TENTACLES then
-    TOOLTIPS.BOOK_TENTACLES =
-    "- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
-end
+--if TUNING.DSTU.WICKERNERF_TENTACLES then
+    --TOOLTIPS.BOOK_TENTACLES =
+    --"- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
+--end
 
 if TUNING.DSTU.WOODIE_WET_GOOSE then
     TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
 end
 
-if TUNING.DSTU.WICKERNERF_MOONBOOK then
-    TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
-end
+--if TUNING.DSTU.WICKERNERF_MOONBOOK then
+    --TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
+--end
 
-if TUNING.DSTU.WICKERNERF_BEEBOOK then
-    TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
-end
+--if TUNING.DSTU.WICKERNERF_BEEBOOK then
+    --TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
+--end
 
 if TUNING.DSTU.WATHGRITHR_REWORK then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."

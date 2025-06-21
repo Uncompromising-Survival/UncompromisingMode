@@ -86,7 +86,7 @@ local function GenerateLoot(inst, picker)
 			mound.persists = false
 			mound:DoTaskInTime(60*8,function(mound) mound:Remove() end) -- disappear after a day
 		else
-			if picker.components.inventory ~= nil and loot ~= "spider" and loot ~= "aphid" then
+			if picker and picker.components.inventory and loot ~= "spider" and loot ~= "aphid" then
 				picker.components.inventory:GiveItem(SpawnPrefab(loot), nil, inst:GetPosition())
 			else
 				Launch(inst.components.lootdropper:SpawnLootPrefab(loot), inst, 1.5)
@@ -102,7 +102,7 @@ local function onpickedfn(inst, picker)
 		inst.BrushingTest:Cancel()
 		inst.BrushingTest = nil
 	end
-	if picker.components.combat ~= nil and not (picker.components.inventory ~= nil and picker.components.inventory:EquipHasTag("bramble_resistant")) then
+	if picker and picker.components.combat and not (picker.components.inventory and picker.components.inventory:EquipHasTag("bramble_resistant")) and not picker:HasTag("shadowminion") then
 		picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
 		picker:PushEvent("thorns")
 	end
@@ -113,12 +113,11 @@ local function onpickedfn(inst, picker)
 		if inst.hidden then
 			Launch(inst.components.lootdropper:SpawnLootPrefab("ash"), inst, 1.5)
 		else
-			GenerateLoot(inst,picker)
+			GenerateLoot(inst, picker)
 		end
 	end
     inst.AnimState:PushAnimation("empty", false)
 	inst:RemoveTag("briar_plants")
-	
 end
 
 local thicket_equipment = {"um_hat_leafwing","armor_bramble","um_armor_bramble_rimeweed","armor_lunarplant_husk"}

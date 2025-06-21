@@ -70,7 +70,7 @@ local cocoontable = {
             AddChanceLoot(inst, "froglegs", .5)
             AddChanceLoot(inst, "tentaclespots", nil, 2)
         end,
-        cocoonsize = "medium",
+        cocoonsize = "small",
         cocoonname = "Leathery",
     },
     [8] = {
@@ -81,7 +81,7 @@ local cocoontable = {
             AddChanceLoot(inst, "tophat")
             AddChanceLoot(inst, "pig_token", .1)
         end,
-        cocoonsize = "medium",
+        cocoonsize = "small",
         cocoonname = "Leathery",
     },
     [9] = {

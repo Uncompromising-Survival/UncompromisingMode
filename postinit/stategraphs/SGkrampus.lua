@@ -119,7 +119,7 @@ local states = {
 					if v ~= nil and v.components.inventory ~= nil then 
 						if not v:HasTag("stronggrip") then
 							local item = v.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-							if item ~= nil then
+							if item and not item:HasTag("nosteal") then
 								v.components.inventory:DropItem(item)
 								LaunchItem(inst, v, item)
 							end

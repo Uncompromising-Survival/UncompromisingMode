@@ -1,24 +1,16 @@
 local function OnTick(inst, target)
-    if target.components.health ~= nil
-        and not target.components.health:IsDead()
-		and target.components.sanity ~= nil
-        and not target:HasTag("playerghost") then
+    if not (target.components.health and target.components.health:IsDead() or target:HasTag("playerghost")) then
         target.components.health:DoDelta(1, nil, "tillweedsalve")
     else
         inst.components.debuff:Stop()
     end
 end
 
-local function OnAttached(inst, target)
+local function OnAttached(inst, target, followsymbol, followoffset, data, buffer)
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
     inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
-	local heal = 5
-	if target.configheal ~= nil then
-		heal = target.configheal
-		target.configheal = nil
-	end
-	inst.components.timer:StartTimer("regenover", heal)
+    inst.components.timer:StartTimer("regenover", data and data.time or 5)
     inst:ListenForEvent("death", function()
         inst.components.debuff:Stop()
     end, target)
@@ -30,18 +22,12 @@ local function OnTimerDone(inst, data)
     end
 end
 
-local function OnExtended(inst, target)
+local function OnExtended(inst, target, followsymbol, followoffset, data, buffer)
     inst.components.timer:StopTimer("regenover")
-	local heal = 5
-	if target.configheal ~= nil then
-		heal = target.configheal
-		target.configheal = nil
-	end
-    inst.components.timer:StartTimer("regenover", heal)
+    inst.components.timer:StartTimer("regenover", data and data.time or 5)
     inst.task:Cancel()
     inst.task = inst:DoPeriodicTask(1, OnTick, nil, target)
 end
-
 
 local function buff_fn()
     local inst = CreateEntity()
@@ -73,6 +59,5 @@ local function buff_fn()
 
     return inst
 end
-
 
 return Prefab("confighealbuff", buff_fn)

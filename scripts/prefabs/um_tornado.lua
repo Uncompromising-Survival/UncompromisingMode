@@ -268,7 +268,7 @@ local function TornadoTask(inst)
                 local lightning = SpawnPrefab("hound_lightning")
 
                 lightning.Transform:SetPosition(_x, _y, _z)
-                lightning.NoTags = { "INLIMBO", "shadow", "structure", "wall", "companion", "abigail", "bird", "prey" }
+                lightning.NoTags = JoinArrays(lightning.NoTags, {"companion", "abigail", "bird", "prey"})
                 lightning.Delay = 1.25 + math.random() / 2
             end
         end
@@ -296,8 +296,7 @@ local function TornadoTask(inst)
                     if (v.prefab == "wes" and rand > 0.95 or rand > 0.99) then
                         local lightning_targeted = SpawnPrefab("hound_lightning")
                         lightning_targeted.Transform:SetPosition(px + math.random(-5, 5), 0, pz + math.random(-5, 5))
-                        lightning_targeted.NoTags = { "INLIMBO", "shadow", "structure", "wall", "companion", "abigail", "bird",
-                            "prey" }
+                        lightning_targeted.NoTags = JoinArrays(lightning_targeted.NoTags, {"companion", "abigail", "bird", "prey"})
                         lightning_targeted.Delay = 1.5
                     end
 

@@ -244,19 +244,20 @@ TUNING.DSTU = {
     WINONA_WORKER = GetModConfigData("winonaworker"),
     WINONA_WACKCATS = GetModConfigData("winonawackycats"),
     -- Wickerbottom
-    WICKERNERF = GetModConfigData("wickerbottom"),
-    WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
+    WICKERCHANGES = GetModConfigData("wickerbottom"),
+	--WICKERNERF = GetModConfigData("wickerbottom"),
+    --WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
 	-- Wortox
 	WORTOXCHANGES = GetModConfigData("wortox"),
     -- Willow
     --WILLOW_INSULATION = GetModConfigData("willow insulation"),
 
-    -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
-    WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
-    WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
-    WICKERBUFF_HORTICULTURE = GetModConfigData("horticulture, expanded"),
-    WICKERBUFF_LIGHT = GetModConfigData("lux aeterna"),
-    WICKER_INV_REGEN = GetModConfigData("wicker_inv_regen"),
+    --WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
+    --WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
+    --WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
+    --WICKERBUFF_HORTICULTURE = GetModConfigData("horticulture, expanded"),
+    --WICKERBUFF_LIGHT = GetModConfigData("lux aeterna"),
+    --WICKER_INV_REGEN = GetModConfigData("wicker_inv_regen"),
     -- Wanda
     WANDA_NERF = GetModConfigData("wanda_nerf"),
     -- Wortox
@@ -649,7 +650,7 @@ end
     --TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
 --end
 
-if GetModConfigData("waxwell_nerf") then
+if TUNING.DSTU.WAXWELL then
     --[[TUNING.SHADOWWAXWELL_SANITY_PENALTY.SHADOWPROTECTOR = 0.2 --can summon 4 fighters
     TUNING.SHADOWWAXWELL_PROTECTOR_DURATION = seg_time * 2    -- lasts half of the duration]]
     TUNING.SHADOW_PILLAR_DURATION_BOSS = 4

@@ -102,14 +102,14 @@ env.AddPrefabPostInit("moose", function(inst)
 						local target = inst.components.combat.target ~= nil and inst.components.combat.target or nil
 						if target ~= nil and math.random() > 0.95 then
 							local LightningStorm = SpawnPrefab("hound_lightning")
-							LightningStorm.NoTags = { "INLIMBO", "shadow", "moose", "mossling" }
+							LightningStorm.NoTags = JoinArrays(LightningStorm.NoTags, {"moose", "mossling"})
 							LightningStorm.Transform:SetPosition(target.Transform:GetWorldPosition())
 						else
 							local x, y, z = inst.Transform:GetWorldPosition()
 							local x1 = x + math.random(-15, 15)
 							local z1 = z + math.random(-15, 15)
 							local LightningStorm = SpawnPrefab("hound_lightning")
-							LightningStorm.NoTags = { "INLIMBO", "shadow", "moose", "mossling" }
+							LightningStorm.NoTags = JoinArrays(LightningStorm.NoTags, {"moose", "mossling"})
 							LightningStorm.Transform:SetPosition(x1, y, z1)
 						end
 					end
@@ -208,14 +208,14 @@ env.AddPrefabPostInit("mothergoose", function(inst)
 						local target = inst.components.combat.target ~= nil and inst.components.combat.target or nil
 						if target ~= nil and math.random() > 0.95 then
 							local LightningStorm = SpawnPrefab("hound_lightning")
-							LightningStorm.NoTags = { "INLIMBO", "shadow", "moose", "mossling" }
+							LightningStorm.NoTags = JoinArrays(LightningStorm.NoTags, {"moose", "mossling"})
 							LightningStorm.Transform:SetPosition(target.Transform:GetWorldPosition())
 						else
 							local x, y, z = inst.Transform:GetWorldPosition()
 							local x1 = x + math.random(-15, 15)
 							local z1 = z + math.random(-15, 15)
 							local LightningStorm = SpawnPrefab("hound_lightning")
-							LightningStorm.NoTags = { "INLIMBO", "shadow", "moose", "mossling" }
+							LightningStorm.NoTags = JoinArrays(LightningStorm.NoTags, {"moose", "mossling"})
 							LightningStorm.Transform:SetPosition(x1, y, z1)
 						end
 					end

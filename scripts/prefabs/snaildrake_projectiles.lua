@@ -31,9 +31,7 @@ local function TrySlowdownMagma(inst, target)
         target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, 0.5)
     end
 
-    if (target.components.combat and target.components.health and
-        not target:HasOneOfTags({"dragonfly", "lavae", "snaildrake"}) and target.components.burnable
-    ) then
+    if target.components.combat and target.components.health and target.components.burnable and not target:HasAnyTag({"dragonfly", "lavae", "snaildrake"}) then
         target.components.health:DoFireDamage(20, inst.lobber, true)
         if target.components.freezable ~= nil then
             if target.components.freezable:IsFrozen() then

@@ -4,10 +4,11 @@ local assets =
 }
 
 local function OnUse(inst, target)
-    if target.components.debuffable ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
-        target.components.health:DeltaPenalty(-.125)
-        target.configheal = 70
-        target.components.debuffable:AddDebuff("confighealbuff", "confighealbuff")
+    local health = target.components.health
+    if not (health and health:IsDead()) then
+        health:DoDelta(math.max(-TUNING.HEALING_MED, (not TUNING.DSTU.DATES.APRIL_FOOLS and health.currenthealth <= 20 and -health.currenthealth + 1 or -TUNING.HEALING_MED)), false, inst.prefab)
+        health:DeltaPenalty(-.125)
+        target:AddDebuff("confighealbuff", "confighealbuff", {time = 70})
     end
 end
 
@@ -40,8 +41,9 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("healer")
-    inst.components.healer:SetHealthAmount(-TUNING.HEALING_MED)
+    inst.components.healer:SetHealthAmount(0)
     inst.components.healer.onhealfn = OnUse
+
     MakeHauntableLaunch(inst)
 
     return inst

@@ -201,41 +201,41 @@ local gems =
 	"yellow",
 	"green",
 }
-if env.GetModConfigData("ck_loot") then
-	SetSharedLootTable('crabkingy',
-		{
-			{ "chesspiece_crabking_sketch", 1.00 },
+--if env.GetModConfigData("ck_loot") then
+	--SetSharedLootTable('crabkingy',
+		--{
+			--{ "chesspiece_crabking_sketch", 1.00 },
 			--{"trident_blueprint",                   1.00},
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ 'meat',                       1.00 },
-			{ "singingshell_octave5",       1.00 },
-			{ "singingshell_octave5",       1.00 },
-			{ "singingshell_octave5",       1.00 },
-			{ "singingshell_octave5",       1.00 },
-			{ "singingshell_octave5",       0.50 },
-			{ "singingshell_octave5",       0.25 },
-			{ "singingshell_octave4",       1.00 },
-			{ "singingshell_octave4",       1.00 },
-			{ "singingshell_octave4",       1.00 },
-			{ "singingshell_octave4",       0.50 },
-			{ "singingshell_octave4",       0.25 },
-			{ "singingshell_octave3",       1.00 },
-			{ "singingshell_octave3",       1.00 },
-			{ "singingshell_octave3",       0.50 },
-			{ "barnacle",                   1.00 },
-			{ "barnacle",                   1.00 },
-			{ "barnacle",                   1.00 },
-			{ "barnacle",                   0.25 },
-			{ "barnacle",                   0.25 },
-			{ "barnacle",                   0.25 },
-			{ "barnacle",                   0.25 },
-		})
-end
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ 'meat',                       1.00 },
+			--{ "singingshell_octave5",       1.00 },
+			--{ "singingshell_octave5",       1.00 },
+			--{ "singingshell_octave5",       1.00 },
+			--{ "singingshell_octave5",       1.00 },
+			--{ "singingshell_octave5",       0.50 },
+			--{ "singingshell_octave5",       0.25 },
+			--{ "singingshell_octave4",       1.00 },
+			--{ "singingshell_octave4",       1.00 },
+			--{ "singingshell_octave4",       1.00 },
+			--{ "singingshell_octave4",       0.50 },
+			--{ "singingshell_octave4",       0.25 },
+			--{ "singingshell_octave3",       1.00 },
+			--{ "singingshell_octave3",       1.00 },
+			--{ "singingshell_octave3",       0.50 },
+			--{ "barnacle",                   1.00 },
+			--{ "barnacle",                   1.00 },
+			--{ "barnacle",                   1.00 },
+			--{ "barnacle",                   0.25 },
+			--{ "barnacle",                   0.25 },
+			--{ "barnacle",                   0.25 },
+			--{ "barnacle",                   0.25 },
+		--})
+--end
 
 local function OnAttacked(inst, data)
 	if data.attacker.ck_attack_quote_cd ~= nil then
@@ -264,11 +264,11 @@ env.AddPrefabPostInit("crabking", function(inst)
 	inst:RemoveComponent("burnable")
 	inst:RemoveComponent("propagator")
 
-	if env.GetModConfigData("ck_loot") then
-		if inst.components.lootdropper ~= nil then
-			inst.components.lootdropper:SetChanceLootTable('crabkingy')
-		end
-	end
+	--if env.GetModConfigData("ck_loot") then
+		--if inst.components.lootdropper ~= nil then
+			--inst.components.lootdropper:SetChanceLootTable('crabkingy')
+		--end
+	--end
 
 	inst.attack_count = 0
 
@@ -371,78 +371,78 @@ env.AddPrefabPostInit("crabking", function(inst)
 			inst.long_cd = nil
 		end
 
-		if env.GetModConfigData("ck_loot") then
-			TheWorld.crabking_active = false
+		--if env.GetModConfigData("ck_loot") then
+			--TheWorld.crabking_active = false
 
-			local pos = inst:GetPosition()
-			local messagebottletreasures = require("messagebottletreasures_um")
-			local pearl = inst.countgems(inst).pearl
-			local red = inst.countgems(inst).red + pearl
-			local blue = inst.countgems(inst).blue + pearl
-			local purple = inst.countgems(inst).purple + pearl
-			local yellow = inst.countgems(inst).yellow + pearl
-			local orange = inst.countgems(inst).orange + pearl
-			local green = inst.countgems(inst).green + pearl
-			local opal = inst.countgems(inst).opal + pearl
-			local count = 0
+			--local pos = inst:GetPosition()
+			--local messagebottletreasures = require("messagebottletreasures_um")
+			--local pearl = inst.countgems(inst).pearl
+			--local red = inst.countgems(inst).red + pearl
+			--local blue = inst.countgems(inst).blue + pearl
+			--local purple = inst.countgems(inst).purple + pearl
+			--local yellow = inst.countgems(inst).yellow + pearl
+			--local orange = inst.countgems(inst).orange + pearl
+			--local green = inst.countgems(inst).green + pearl
+			--local opal = inst.countgems(inst).opal + pearl
+			--local count = 0
 
-			if math.random(6) <= opal then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= opal then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_rainbow").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= red then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= red then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_red").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= blue then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= blue then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_blue").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= purple then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= purple then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_purple").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= yellow then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= yellow then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_yellow").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= orange then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= orange then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_orange").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if math.random(6) <= green then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-				if count > 3 then return end
-			end
+			--if math.random(6) <= green then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_green").Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+				--if count > 3 then return end
+			--end
 
-			if count == 0 then
-				messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_" .. types[math.random(#types)])
-					.Transform:SetPosition(
-					pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
-				count = count + 1
-			end
-		end
-	end)
+			--if count == 0 then
+				--messagebottletreasures.GenerateTreasure(pos, "sunkenchest_royal_" .. types[math.random(#types)])
+					--.Transform:SetPosition(
+					--pos.x + math.random(-4, 4), pos.y, pos.z + math.random(-4, 4))
+				--count = count + 1
+			--end
+		--end
+	--end)
 
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics

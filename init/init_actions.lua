@@ -150,16 +150,16 @@ GLOBAL.ACTIONS.CHOP.fn = function(act)
     return _ChopFn(act)
 end
 
-if TUNING.DSTU.WICKERNERF then
-    local _ReadFn = GLOBAL.ACTIONS.READ.fn
+--if TUNING.DSTU.WICKERNERF then
+    --local _ReadFn = GLOBAL.ACTIONS.READ.fn
 
-    GLOBAL.ACTIONS.READ.fn = function(act)
-        local targ = act.target or act.invobject
-        if targ ~= nil and act.doer ~= nil and not act.doer:HasTag("aspiring_bookworm") then if targ.components.book ~= nil and act.doer.components.reader ~= nil and act.doer.components.sanity ~= nil and act.doer.components.sanity:IsInsane() then return false end end
+    --GLOBAL.ACTIONS.READ.fn = function(act)
+        --local targ = act.target or act.invobject
+        --if targ ~= nil and act.doer ~= nil and not act.doer:HasTag("aspiring_bookworm") then if targ.components.book ~= nil and act.doer.components.reader ~= nil and act.doer.components.sanity ~= nil and act.doer.components.sanity:IsInsane() then return false end end
 
-        return _ReadFn(act)
-    end
-end
+        --return _ReadFn(act)
+    --end
+--end
 
 -- Storing is drag-clicking an item into a container.
 -- Any character can store items into Warly's Portable Crock Pot.

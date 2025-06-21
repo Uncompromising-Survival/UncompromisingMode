@@ -358,7 +358,7 @@ local states =
                 inst.components.health:SetInvincible(false)
 
                 local x, y, z = inst.Transform:GetWorldPosition()
-                local attackents = TheSim:FindEntities(x, y, z, 2.5, "player", "playerghost")
+                local attackents = TheSim:FindEntities(x, y, z, 2.5, {"player"}, {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost"})
 
                 for i, v in pairs(attackents) do
                     if v.components.health ~= nil and not v.components.health:IsDead()
