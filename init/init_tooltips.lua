@@ -83,8 +83,10 @@ STRINGS.UNCOMP_TOOLTIP = {
     WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
     CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
-    PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
-    PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
+    --PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
+    --PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
+    UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
+    UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
     PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."
 }
