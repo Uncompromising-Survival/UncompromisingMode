@@ -142,12 +142,12 @@ local function light_reticuletargetfn()
     return pos
 end
 
-local function Working(owner, data)
-	if owner ~= nil and owner:HasTag("player") and owner.components.hunger then
-		owner.components.hunger:DoDelta(-5)
-		owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/chew")
-	end
-end
+--local function Working(owner, data)
+	--if owner ~= nil and owner:HasTag("player") and owner.components.hunger then
+		--owner.components.hunger:DoDelta(-5)
+		--owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/bearger/chew")
+	--end
+--end
 
 local function onequip(inst, owner)
 	if not owner:HasTag("vetcurse") then
@@ -172,7 +172,7 @@ local function onequip(inst, owner)
 		owner.AnimState:Hide("ARM_normal")
 		
 		
-        inst:ListenForEvent("working", Working, owner)
+        --inst:ListenForEvent("working", Working, owner)
 	end
 end
 
@@ -180,7 +180,7 @@ local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
 	
-	inst:RemoveEventCallback("working", Working, owner)
+	--inst:RemoveEventCallback("working", Working, owner)
 end
 
 local function staff_fn()

@@ -156,8 +156,8 @@ local function projectilefn()
 end
 
 local COLLAPSIBLE_TAGS_PLAYER = { "_combat", "pickable", "NPC_workable" }
-local NON_COLLAPSIBLE_TAGS_PLAYER = { "player", "bird", "rabbit", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "wall", "companion"}
-                                                --don't use biiiiiirrrddd the stupid moonstorm birds have that, I'll figure this out later.
+local NON_COLLAPSIBLE_TAGS_PLAYER = { "player", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "companion"}
+
 local function OnHitInk_claw(inst, attacker, target)
 	local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, inst.biggy and 6 or 3, nil, NON_COLLAPSIBLE_TAGS_PLAYER, COLLAPSIBLE_TAGS_PLAYER)
