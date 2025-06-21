@@ -12,7 +12,7 @@ local function VetCurseMaxSanityLoss(inst, data)
         local sanitypenalty = math.min(((data.damageresolved or data.damage) / TUNING.WALTER_SANITY) * inst._sanity_damage_protection:Get() + inst.components.sanity:GetPenaltyPercent(), .75)
 		inst.components.sanity:AddSanityPenalty(inst, sanitypenalty)
 		if not inst.components.timer:TimerExists("um_walterpenalty_passiveheal") then
-			inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME / 2)
+			inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
 		--[[else
 			inst.components.timer:SetTimeLeft("um_walterpenalty_passiveheal", timeleft + health_drain)]]--
 		end
@@ -24,7 +24,7 @@ local function OnPenaltyTimerDone(inst)
 	local takethepenaltyaway = inst.components.sanity:GetPenaltyPercent() - .2
 	inst.components.sanity:AddSanityPenalty(inst, math.max(takethepenaltyaway, 0))
 	if inst.components.sanity:GetPenaltyPercent() ~= 0 then
-		inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME / 2)
+		inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
 	end
 end
 
