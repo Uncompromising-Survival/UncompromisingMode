@@ -6,7 +6,14 @@ local assets =
 local function OnUse(inst, target)
     local health = target.components.health
     if not (health and health:IsDead()) then
-        health:DoDelta(math.max(-TUNING.HEALING_MED, (not TUNING.DSTU.DATES.APRIL_FOOLS and health.currenthealth <= 20 and -health.currenthealth + 1 or -TUNING.HEALING_MED)), false, inst.prefab)
+        local _minhealth = health.minhealth
+        if not TUNING.DSTU.DATES.APRIL_FOOLS then
+            health:SetMinHealth(_minhealth and _minhealth > 0 and _minhealth or 1)
+        end
+        health:DoDelta(-TUNING.HEALING_MED, false, inst.prefab)
+        if not TUNING.DSTU.DATES.APRIL_FOOLS then
+            health:SetMinHealth(_minhealth)
+        end
         health:DeltaPenalty(-.125)
         target:AddDebuff("confighealbuff", "confighealbuff", {time = 70})
     end
@@ -25,7 +32,7 @@ local function fn()
     inst.AnimState:SetBuild("brine_balm")
     inst.AnimState:PlayAnimation("idle")
 
-    MakeInventoryFloatable(inst, "small", 0.05, 0.95)
+    MakeInventoryFloatable(inst, "small", .05, .95)
 
     inst.entity:SetPristine()
 
