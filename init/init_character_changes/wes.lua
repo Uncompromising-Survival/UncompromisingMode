@@ -36,19 +36,19 @@ local love = 4
 local midrange = 12
 
 local function HatefulBounty(inst, target)
-    if target.prefab and not they_love_me[target.prefab] and not midrange_list[target.prefab] then
+    if target.prefab and not table.contains(they_love_me, target.prefab) and not table.contains(midrange_list, target.prefab) then
         target.components.combat:SetTarget(inst)
     end
 end
 
 local function LovableBounty(inst, target)
-    if target.prefab and they_love_me[target.prefab] then
+    if target.prefab and table.contains(they_love_me, target.prefab) then
         target.components.combat:SetTarget(inst)
     end
 end
 
 local function MidrangeBounty(inst, target)
-    if target.prefab and midrange_list[target.prefab] then
+    if target.prefab and table.contains(midrange_list, target.prefab) then
         target.components.combat:SetTarget(inst)
     end
 end
