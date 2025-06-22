@@ -3,7 +3,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("spider", function(inst)
-
     local function ShadowFade(inst)
         inst.scaleFactor = inst.scaleFactor - 0.01
         inst.Transform:SetScale(inst.scaleFactor, inst.scaleFactor, inst.scaleFactor)
@@ -77,6 +76,17 @@ env.AddStategraphPostInit("spider", function(inst)
             _OldAttackedEvent(inst)
         end
     end
+
+    -- Remove when Klei fixes this!
+    local healstate = inst.states["heal"]
+    if healstate then
+        local healstate_onenter = inst.states["heal"].onenter
+        healstate.onenter = function(inst, target, ...)
+            healstate_onenter(inst, target, ...)
+            inst.SoundEmitter:PlaySound("webber1/creatures/spider_cannonfodder/heal") -- Missing Content Fix!
+        end
+    end
+    --
 
     --[[local events =
 {    
@@ -371,13 +381,12 @@ env.AddStategraphPostInit("spider", function(inst)
 
 
     --[[for k, v in pairs(events) do
-    assert(v:is_a(EventHandler), "Non-event added in mod events table!")
-    inst.events[v.name] = v
-end]]
+        assert(v:is_a(EventHandler), "Non-event added in mod events table!")
+        inst.events[v.name] = v
+    end]]
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
         inst.states[v.name] = v
     end
-
 end)

@@ -409,6 +409,7 @@ TUNING.DSTU = {
     BEEBOX_NERF = GetModConfigData("beebox_nerf"),
     CANEDURABILITY = GetModConfigData("canedurability"),
     AC_COOLING = GetModConfigData("ac_does_ac"),
+    HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
 
     --mod chekcs
     ISLAND_ADVENTURES = ia_check,
