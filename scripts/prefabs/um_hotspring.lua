@@ -119,6 +119,22 @@ local function FadeToDark(inst)
 	inst.AnimState:SetMultColour(inst.color,inst.color,inst.color,1)
 end
 
+local function EmitSteam(inst)
+	if not TheWorld.state.isnewmoon then
+		local x,y,z = inst.Transform:GetWorldPosition()
+		if inst.size == 1 then
+			SpawnPrefab("um_steamcloud").Transform:SetPosition(x,y,z)
+		else
+			for i = 1,(inst.size*2-1) do
+				inst:DoTaskInTime(i*0.66,function(inst)
+					local steam = SpawnPrefab("um_steamcloud")
+					local offset = FindWalkableOffset(inst:GetPosition(), math.random(PI * 2*((i-1)/3),PI * 2*(i/3)), inst.size*math.random(1,2))
+					steam.Transform:SetPosition(x+offset.x,y,z+offset.z)
+				end)
+			end
+		end
+	end
+end
 
 
 local function fn()
@@ -177,6 +193,10 @@ local function fn()
         if inst.components.timer:TimerExists("bubbly") then
             inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
         end
+		if math.random() > 0.5 then
+			EmitSteam(inst)
+		end
+		inst.steamy = inst:DoPeriodicTask(math.random(30,60),EmitSteam)
     end)
 
     inst:ListenForEvent("entitysleep", function(inst)
@@ -188,6 +208,10 @@ local function fn()
             inst.fxtask2:Cancel()
             inst.fxtask2 = nil
         end
+		if inst.steamy then
+			inst.steamy:Cancel()
+			inst.steamy = nil
+		end
     end)
     inst:AddComponent("timer")
     inst:AddComponent("bathbombable")

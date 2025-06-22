@@ -1395,8 +1395,13 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 	
 	
-	--AddPrefabPostInit("wortox", KeepShadowsAndGestalts)
-	
+
+	AddPrefabPostInit("wortox_souljar", function(inst)
+		if not GLOBAL.TheWorld.ismastersim then
+			return inst
+		end
+		inst:AddTag("nosteal")	
+	end)
 end
 
 

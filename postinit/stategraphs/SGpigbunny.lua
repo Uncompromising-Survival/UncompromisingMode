@@ -38,7 +38,7 @@ env.AddStategraphPostInit("pig", function(inst)
 
             inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
 
-            if inst.counter and inst.counter >= math.random(3, 4) then
+            if inst.counter and inst.counter >= math.random(3, 4) and (data.attacker and inst:GetDistanceSqToInst(data.attacker) < 5^2) then -- Added a range check
                 if inst.countertask ~= nil then
                     inst.countertask:Cancel()
                     inst.countertask = nil

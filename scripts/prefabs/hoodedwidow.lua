@@ -99,18 +99,6 @@ local function Reset(inst)
     inst.reset = true
 end
 
-local function OnKilledOther(inst,data)
-    if inst.components.combat then
-        inst.components.combat:TryRetarget()
-    end
-    if inst.investigatedtask then
-        inst.investigatedtask:Cancel()
-        inst.investigatedtask = nil
-    end
-    inst.investigated = nil
-    inst.investigatedtask = inst:DoTaskInTime(5, function(inst) inst.investigated = true end)
-end
-
 local function EpicsCheck(inst)  -- Widow will not tolerate being bullied by epics, you go fight them yourself!
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 20, {"epic"}, {"hoodedwidow", "leif"})
@@ -137,7 +125,7 @@ end
 local function OnHitOther(inst, data)
     local other = data.target
     if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < 0.5) then -- these guys get KO-ed
-        if not inst.components.health:IsDead() and not inst.sg:HasStateTag("ability") then
+        if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
             inst.components.health:DoDelta(50)
             --[[if other.prefab == "spider_trapdoor" then
                 inst.components.health:DoDelta(50)
@@ -461,7 +449,6 @@ local function fn()
     inst.turns = 0
     inst.chargespeed = 7 / 3
 
-    inst:ListenForEvent("killed", OnKilledOther)
     inst:ListenForEvent("onhitother", OnHitOther)
 
     inst.DecideWhatTreeToBe = DecideWhatTreeToBe -- This looks for which tree she's gonna hop to.

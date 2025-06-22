@@ -43,7 +43,7 @@ function UM_Ripplespawner:spawnripple(inst)
 				end
 				if inst.components.moisture ~= nil then
 					local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
-					inst.components.moisture:DoDelta(2 * (1 - waterproofness), true)
+					inst.components.moisture:DoDelta(10 * (1 - waterproofness), true)
 				end
 			end    
 			
