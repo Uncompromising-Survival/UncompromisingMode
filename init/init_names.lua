@@ -736,6 +736,9 @@ STRINGS.UM_DETONATOR = "Universal Detonator"
 
 STRINGS.UM_BEE_MOON = "Vulture Bee"
 STRINGS.UM_BEEHIVE_MOON ="Vulture Bee Hive"
+STRINGS.UM_MEATCOMB = "Vulture Honeycomb"
+STRINGS.UM_MEATHONEY ="Vulture Honey"
+
 STRINGS.FYRITEROCK = "Fyrite Outcropping"
 STRINGS.UM_FYRITE = "Fyrite"
 STRINGS.UM_FYRE_BOMB = "Fyre Bomb"

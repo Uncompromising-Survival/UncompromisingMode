@@ -190,7 +190,7 @@ local function fn()
 
     ---------------------
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "honey", "honey", "honey", "honeycomb" })
+    inst.components.lootdropper:SetLoot({ "um_meathoney", "um_meathoney", "um_meathoney", "um_meatcomb" })
     ---------------------
 
     ---------------------

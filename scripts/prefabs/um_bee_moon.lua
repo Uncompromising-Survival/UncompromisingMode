@@ -111,15 +111,22 @@ local function SpringBeeRetarget(inst)
 			RETARGET_ONEOF_TAGS)
         or nil
 end
-local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection","bee"}
+local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection","bee","beehive"}
 local function Explode(inst)
 	local spore = SpawnPrefab("spore_moon")
 	spore:AddTag("bee")
 	spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	spore.components.combat:SetDefaultDamage(75)
+	
 	spore.AnimState:PlayAnimation("explode")
     spore.SoundEmitter:PlaySound("dontstarve/common/balloon_pop")
-    spore.components.combat:DoAreaAttack(inst, TUNING.MOONSPORE_ATTACK_RANGE, nil, nil, nil, AREAATTACK_EXCLUDETAGS)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x,y,z, TUNING.MOONSPORE_ATTACK_RANGE,{"_combat","_health"},AREAATTACK_EXCLUDETAGS)
+    for i,v in ipairs(ents) do
+		if not v.components.health:IsDead() then
+			local value = 75
+			v.components.combat:GetAttacked(inst,value)
+		end
+	end
 	spore:ListenForEvent("animover",function(inst) inst:Remove() end)
 end
 
@@ -229,7 +236,7 @@ local function fn()
     ---------------------
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("honey", 2)
+    inst.components.lootdropper:AddRandomLoot("um_meathoney", 2)
     inst.components.lootdropper:AddRandomLoot("houndstooth", 1)
     inst.components.lootdropper.numrandomloot = 1
 

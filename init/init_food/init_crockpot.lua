@@ -254,7 +254,7 @@ end
 -- Original:	test = function(cooker, names, tags) return tags.meat and names.twigs and (not tags.monster or tags.monster <= 1) and (tags.inedible and tags.inedible <= 1) end,
 
 recipes.honeynuggets.test = function(cooker, names, tags)
-    return names.honey and tags.meat and tags.meat <= 1.5 and
+    return tags.sweetener and tags.meat and tags.meat <= 1.5 and
         not tags.inedible and UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return names.honey and tags.meat and tags.meat <= 1.5 and not tags.inedible end,
@@ -319,7 +319,7 @@ end
 -- Original:	test = function(cooker, names, tags) return (names.potato or names.potato_cooked) and names.twigs and (not tags.monster or tags.monster <= 1) and not tags.meat and (tags.inedible and tags.inedible <= 2) end,
 
 recipes.powcake.test = function(cooker, names, tags)
-    return names.twigs and names.honey and (names.corn or names.corn_cooked) and
+    return names.twigs and tags.sweetener and (names.corn or names.corn_cooked) and
         not tags.frozen and not tags.foliage
 end
 -- Original:	test = function(cooker, names, tags) return names.twigs and names.honey and (names.corn or names.corn_cooked) end,
@@ -561,6 +561,9 @@ InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
 --RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
 InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
 --RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+
+InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5 }, true, false, false)
+InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {

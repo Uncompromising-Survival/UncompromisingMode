@@ -193,10 +193,10 @@ local function fn()
         if inst.components.timer:TimerExists("bubbly") then
             inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
         end
-		if math.random() > 0.5 then
-			EmitSteam(inst)
-		end
-		inst.steamy = inst:DoPeriodicTask(math.random(30,60),EmitSteam)
+		-- if math.random() > 0.5 then
+			-- EmitSteam(inst)
+		-- end
+		-- inst.steamy = inst:DoPeriodicTask(math.random(30,60),EmitSteam)
     end)
 
     inst:ListenForEvent("entitysleep", function(inst)
