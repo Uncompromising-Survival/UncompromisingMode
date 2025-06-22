@@ -415,8 +415,10 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" }, { "CHARACTER" })
 --ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
-AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"ARMOUR"})
-AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"WEAPONS"})
+if TUNING.DSTU.WAXWELL then
+    AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"ARMOUR"})
+    AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"WEAPONS"})
+end
 --AddRecipe2("pact_armor_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" }, { "CHARACTER", "ARMOUR" })
 --AddRecipe2("pact_sword_sanity", { Ingredient("nightmarefuel", 2) }, TECH.LOST, { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" }, { "CHARACTER", "WEAPONS" })
 
