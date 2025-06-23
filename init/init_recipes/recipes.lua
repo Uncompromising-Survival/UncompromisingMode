@@ -90,6 +90,9 @@ ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
 ChangeSortKey("um_fyre_bomb", "nightstick", "WEAPONS", true)
 
+AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3),Ingredient("silk", 1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "ARMOUR" })
+ChangeSortKey("um_hat_bee_moon", "armor_glassmail", "ARMOUR", true)
+
 AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { nounlock = true }, { "CRAFTING_STATION" })
 ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
 

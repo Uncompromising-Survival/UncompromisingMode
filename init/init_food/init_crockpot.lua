@@ -259,6 +259,10 @@ recipes.honeynuggets.test = function(cooker, names, tags)
 end
 -- Original:	test = function(cooker, names, tags) return names.honey and tags.meat and tags.meat <= 1.5 and not tags.inedible end,
 
+recipes.honeyham.test = function(cooker, names, tags)
+    return tags.sweetener and tags.meat and tags.meat > 1.5 and not tags.inedible
+end
+
 recipes.frogglebunwich.test = function(cooker, names, tags)
     return (names.froglegs or names.froglegs_cooked) and tags.veggie and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)

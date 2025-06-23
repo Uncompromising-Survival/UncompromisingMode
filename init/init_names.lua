@@ -743,3 +743,5 @@ STRINGS.FYRITEROCK = "Fyrite Outcropping"
 STRINGS.UM_FYRITE = "Fyrite"
 STRINGS.UM_FYRE_BOMB = "Fyre Bomb"
 STRINGS.UM_MANNY = "Plaunt Manny"
+
+STRINGS.UM_HAT_BEE_MOON = "Beeret"

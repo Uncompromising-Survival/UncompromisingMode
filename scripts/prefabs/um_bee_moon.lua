@@ -111,6 +111,8 @@ local function SpringBeeRetarget(inst)
 			RETARGET_ONEOF_TAGS)
         or nil
 end
+
+	
 local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection","bee","beehive"}
 local function Explode(inst)
 	local spore = SpawnPrefab("spore_moon")
@@ -124,6 +126,9 @@ local function Explode(inst)
     for i,v in ipairs(ents) do
 		if not v.components.health:IsDead() then
 			local value = 75
+			if v.components.inventory and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_bee_moon" then 
+				value = value * 0.25
+			end
 			v.components.combat:GetAttacked(inst,value)
 		end
 	end
@@ -246,15 +251,15 @@ local function fn()
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(OnWorked)
 
-    MakeSmallBurnableCharacter(inst, "body", Vector3(0, -1, 1))
-    MakeTinyFreezableCharacter(inst, "body", Vector3(0, -1, 1))
+    MakeSmallBurnableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
+    MakeTinyFreezableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
 
     ------------------
 
     inst:AddComponent("health")
     inst:AddComponent("combat")
     inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
-    inst.components.combat.hiteffectsymbol = "body"
+    inst.components.combat.hiteffectsymbol = "moonbee_torso-0"
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
 
