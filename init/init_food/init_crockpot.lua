@@ -566,8 +566,8 @@ InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
 InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
 --RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
 
-InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5 }, true, false, false)
-InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5 }, true, false, false)
+InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
+InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {

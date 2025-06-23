@@ -24,13 +24,19 @@ local function SpawnBeeVsOther(inst,data)
 	bee:AddComponent("lootdropper") -- wipe the lootdropper component
 	bee.persists = false -- temp minion, no save/load
 	bee:RemoveComponent("workable")
+	bee:AddTag("soulless")
 end
 
 local function AttackOther(inst,data)
-	inst.um_hat_bee_moon_count = inst.um_hat_bee_moon_count + 1
-	if inst.um_hat_bee_moon_count > 3 and data.target and data.target.components.health and data.target.components.health:GetMaxWithPenalty() > 50 then
-		inst.um_hat_bee_moon_count = 0
-		SpawnBeeVsOther(inst,data)
+	if inst.components.leader then
+		local bees = inst.components.leader:GetFollowersByTag("bee")
+		if #bees < 3 then
+			inst.um_hat_bee_moon_count = inst.um_hat_bee_moon_count + 1
+			if inst.um_hat_bee_moon_count > 3 and data.target and data.target.components.health and data.target.components.health:GetMaxWithPenalty() > 50 then
+				inst.um_hat_bee_moon_count = 0
+				SpawnBeeVsOther(inst,data)
+			end
+		end
 	end
 end
 
@@ -106,7 +112,7 @@ local function fn()
 	inst.components.insulator:SetInsulation(TUNING.INSULATION_SMALL)
 	
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime((4 * TUNING.PERISH_TWO_DAY))
+    inst.components.perishable:SetPerishTime((3 * TUNING.PERISH_TWO_DAY))
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 

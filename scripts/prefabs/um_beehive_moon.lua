@@ -166,7 +166,7 @@ local function fn()
     -------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(900)
-
+	inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
     -------------------
     inst:AddComponent("childspawner")
     inst.components.childspawner.childname = "um_bee_moon"

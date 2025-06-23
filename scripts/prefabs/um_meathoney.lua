@@ -34,7 +34,7 @@ local function fn()
     inst:AddComponent("edible")
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 9.8
-	inst.components.edible.sanityvalue = -5
+	inst.components.edible.sanityvalue = -10
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM

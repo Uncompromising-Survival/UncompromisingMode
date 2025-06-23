@@ -22,9 +22,17 @@ local function OnHitFyre(inst, attacker, target)
 			end
 		end
 	end
-	local ents = TheSim:FindEntities(x,y,z,3,nil,{ "INLIMBO", "DIG_workable" }, { "CHOP_workable", "MINE_workable" })
+	local ents = TheSim:FindEntities(x,y,z,3,nil,{ "INLIMBO"}, { "CHOP_workable", "MINE_workable","HAMMER_workable","DIG_workable" })
 	for i,v in ipairs(ents) do
-		v.components.workable:WorkedBy(attacker, 3)
+		if v:HasTag("CHOP_workable") then
+			v.components.workable:WorkedBy(attacker, 15)
+		elseif v:HasTag("HAMMER_workable") then
+			v.components.workable:WorkedBy(attacker,4)
+		elseif v:HasTag("DIG_workable") then
+			v.components.workable:WorkedBy(attacker,1)
+		else
+			v.components.workable:WorkedBy(attacker, 3)
+		end
 	end
     inst:Remove()
 end

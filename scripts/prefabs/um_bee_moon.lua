@@ -132,7 +132,7 @@ local function Explode(inst)
 			v.components.combat:GetAttacked(inst,value)
 		end
 	end
-	spore:ListenForEvent("animover",function(inst) inst:Remove() end)
+	spore:ListenForEvent("animover",function(spore) spore:Remove() end)
 end
 
 local function OnDeath(inst)
