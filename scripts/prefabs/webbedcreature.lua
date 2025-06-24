@@ -10,9 +10,8 @@ local function AddDurabilityLoot(inst, prefab, chance, amount)
         if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition())
             local itemcomponent = item.components.finiteuses or item.components.fueled or item.components.perishable or item.components.armor
-            local percent = math.random(25, 100) / 100
             if itemcomponent then
-                itemcomponent:SetPercent(percent)
+                itemcomponent:SetPercent(math.random(25, 100) / 100)
             else
                 print(prefab.." has no durability-esque component in webbedcreature.lua!")
             end
