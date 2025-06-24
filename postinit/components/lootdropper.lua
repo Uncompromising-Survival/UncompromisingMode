@@ -5,17 +5,8 @@ GLOBAL.setfenv(1, GLOBAL)
 ------------------------Fire spread is less efficient in winter-----------------------------------------
 env.AddComponentPostInit("lootdropper", function(self)
     local _DropLoot = self.DropLoot
-    local _GenerateLoot = self.GenerateLoot
-    local _SpawnLootPrefab = self.SpawnLootPrefab
-    function self:SpawnLootPrefab(lootPrefab, ...)
-        local loot = _SpawnLootPrefab(self, lootPrefab, ...)
-        if not loot then return loot end
-
-        local onDropFn = self.um_lootOnDropFns and self.um_lootOnDropFns[lootPrefab]
-        if onDropFn then onDropFn(loot, self.inst) end
-        return loot
-    end
-    --[[if TUNING.DSTU.WARLY_BUTCHER then
+    --[[local _GenerateLoot = self.GenerateLoot
+    if TUNING.DSTU.WARLY_BUTCHER then
 		function self:GenerateLoot()
 			if self.inst:HasTag("butchermark") then
 				local loots = {}

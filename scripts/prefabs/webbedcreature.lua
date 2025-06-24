@@ -21,10 +21,7 @@ local function AddDurabilityLoot(inst, prefab, chance, amount)
 end
 
 local function AddLootOnDropFn(inst, prefab, onDropFn)
-    -- When this loot prefab is dropped, onDropFn is called! -- Thanks Summerrr :) -- Max note: Baby appear on your face, Summerrr!
-    local lootDropper = inst.components.lootdropper
-    if not lootDropper.um_lootOnDropFns then lootDropper.um_lootOnDropFns = {} end
-    lootDropper.um_lootOnDropFns[prefab] = onDropFn
+    if onDropFn then onDropFn(inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition()), inst) end
 end
 
 local char_cocoon_list = {
@@ -60,7 +57,7 @@ if GetModConfigData("holy fucking shit it's wathom") then
 end
 if GetModConfigData("wixie_walter") then
     table.insert(char_cocoon_list, "wixie")
-end]]--
+end]]
 if KnownModIndex:IsModEnabled("workshop-3484995444") then
     table.insert(char_cocoon_list, "wieneke")
 end
@@ -340,7 +337,7 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "koalefant_carcass")
         AddLootOnDropFn(inst, "koalefant_carcass", function(loot, cocoon)
             if not loot.SetMeatPct then return end
-            loot:SetMeatPct(.25)     -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
+            loot:SetMeatPct(.25) -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
         end)
         AddChanceLoot(inst, "glommerfuel", nil, 2)
         AddChanceLoot(inst, "glommerfuel", .5)
@@ -359,7 +356,7 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "spellprint")
         AddLootOnDropFn(inst, "spellprint", function(loot, cocoon)
             if not loot.TryRevealSpell then return end
-            local flaire = FindClosestEntity(loot, 40, true, { "flaire" })
+            local flaire = FindClosestEntity(loot, 40, true, {"flaire"})
             if flaire then
                 loot:TryRevealSpell(flaire)
             else
