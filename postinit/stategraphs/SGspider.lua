@@ -55,10 +55,13 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data)
-            if inst.prefab == "spider_trapdoor" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
+            if inst.prefab == "spider_trapdoor_hooded" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
                 inst.sg:GoToState("spit_web")
                 return
             end
+			if inst.prefab == "spider_trapdoor" or inst.prefab == "spider_trapdoor_hooded" then
+				inst.sg:GoToState("trapdoor_attack")
+			end
             _OldAttackEvent(inst, data)
         end
     end
@@ -142,8 +145,8 @@ env.AddStategraphPostInit("spider", function(inst)
 
     local states = {
 
-        --[[State{
-        name = "warrior_attack",
+        State{
+        name = "trapdoor_attack",
         tags = {"attack", "canrotate", "busy", "jumping"},
 
         onenter = function(inst, target)
@@ -151,7 +154,7 @@ env.AddStategraphPostInit("spider", function(inst)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
 
             inst.components.combat:StartAttack()
-            inst.AnimState:PlayAnimation("warrior_atk")
+            inst.AnimState:PlayAnimation("trapdoor_atk")
             inst.sg.statemem.target = target
         end,
 
@@ -183,7 +186,7 @@ env.AddStategraphPostInit("spider", function(inst)
             inst.sg:GoToState("taunt")
             end),
         },
-    },
+    },--[[
     State{
         name = "taunt",
         tags = {"busy","taunting"},

@@ -1190,7 +1190,8 @@ Assets = {
 
     Asset("ANIM", "anim/spider_trapdoor.zip"),
     Asset("ANIM", "anim/spider_trapdoor_hooded.zip"),
-
+	Asset("ANIM", "anim/spider_trapdoor_action.zip"),
+	
     Asset("ANIM", "anim/pied_piper.zip"),
 
     Asset("ANIM", "anim/uncompromising_packrat_water.zip"),
