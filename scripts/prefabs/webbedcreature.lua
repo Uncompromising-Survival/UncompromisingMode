@@ -143,7 +143,6 @@ local function SurvivorCocoon(inst)
         AddDurabilityLoot(inst, "featherhat")
         AddDurabilityLoot(inst, "green_cap", nil, 2)
         AddDurabilityLoot(inst, "green_cap", .5, 4)
-        AddChanceLoot(inst, "fx_book_birds")
         AddLootOnDropFn(inst, "fx_book_birds", function(loot, cocoon)
             local birdspawner = TheWorld.components.birdspawner
             if not birdspawner then return false end
@@ -336,7 +335,6 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "balloonvest")
         AddChanceLoot(inst, "waterballoon", .3, 10)
     elseif random_char_cocoon == "wieneke" then
-        AddChanceLoot(inst, "koalefant_carcass")
         AddLootOnDropFn(inst, "koalefant_carcass", function(loot, cocoon)
             if not loot.SetMeatPct then return end
             loot:SetMeatPct(.25) -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
@@ -355,7 +353,6 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "redgem")
         AddChanceLoot(inst, "goldnugget", nil, 2)
         AddChanceLoot(inst, "goldnugget", .5, 4)
-        AddChanceLoot(inst, "spellprint")
         AddLootOnDropFn(inst, "spellprint", function(loot, cocoon)
             if not loot.TryRevealSpell then return end
             local flaire = FindClosestEntity(loot, 40, true, {"flaire"})
