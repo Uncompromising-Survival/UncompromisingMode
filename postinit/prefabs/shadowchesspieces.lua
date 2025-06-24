@@ -11,29 +11,6 @@ local pieces =
 }
 
 
-local function lootsetfn(lootdropper)
-    local loot = {}
-
-    if lootdropper.inst.level >= 2 then
-        for i = 1, math.random(2, 3) do
-            table.insert(loot, "nightmarefuel")
-        end
-
-        if lootdropper.inst.level >= 3 then
-            table.insert(loot, "shadowheart")
-            table.insert(loot, "nightmarefuel")
-            --TODO: replace with shadow equipment drops --fun fact this comment is from klei lmao
-            --table.insert(loot, "armor_sanity")
-            --table.insert(loot, "nightsword")
-            table.insert(loot, "shadow_crown")
-            if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then
-                table.insert(loot, GetRandomBasicWinterOrnament())
-            end
-        end
-    end
-
-    lootdropper:SetLoot(loot)
-end
 
 for k, v in ipairs(pieces) do
     env.AddPrefabPostInit(v, function(inst)
@@ -43,6 +20,15 @@ for k, v in ipairs(pieces) do
         inst.Physics:ClearCollisionMask()
         inst.Physics:CollidesWith(COLLISION.GROUND)
 
+		local _lootsetupfn = inst.components.lootdropper.lootsetupfn
+
+		local function lootsetfn(lootdropper)
+			_lootsetupfn(lootdropper)
+			if lootdropper.inst.level >=3 then
+				table.insert(lootdropper.loot,"shadow_crown")
+			end
+		end
+		
         if inst.components.lootdropper ~= nil then
             inst.components.lootdropper:SetLootSetupFn(lootsetfn)
         end
