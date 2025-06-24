@@ -9,10 +9,10 @@ env.AddComponentPostInit("lootdropper", function(self)
     local _SpawnLootPrefab = self.SpawnLootPrefab
     function self:SpawnLootPrefab(lootPrefab, ...)
         local loot = _SpawnLootPrefab(self, lootPrefab, ...)
-        if loot == nil then return loot end
+        if not loot then return loot end
 
-        local onDropFn = self.um_lootOnDropFns ~= nil and self.um_lootOnDropFns[lootPrefab] or nil
-        if onDropFn ~= nil then onDropFn(loot, self.inst) end
+        local onDropFn = self.um_lootOnDropFns and self.um_lootOnDropFns[lootPrefab]
+        if onDropFn then onDropFn(loot, self.inst) end
         return loot
     end
     --[[if TUNING.DSTU.WARLY_BUTCHER then
