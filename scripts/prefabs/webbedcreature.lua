@@ -21,6 +21,8 @@ local function AddDurabilityLoot(inst, prefab, chance, amount)
 end
 
 local function AddLootOnDropFn(inst, prefab, onDropFn)
+    -- When this loot prefab is dropped, onDropFn is called! -- Thanks Summerrr :) -Carlos
+    -- I love you, Summerrr! You're the best, and I wouldn't be here without you! -Max
     if onDropFn then onDropFn(inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition()), inst) end
 end
 
@@ -42,7 +44,7 @@ local char_cocoon_list = {
     "wurt",
     "walter",
     "wanda",
-    --"wonkey", --Wilbur stole your loot idk what to do with you. :^) -C
+    --"wonkey", --Wilbur stole your loot idk what to do with you. :^) -Carlos
     "winky",
     "wathom",
     "wixie",
