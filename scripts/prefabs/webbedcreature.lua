@@ -7,7 +7,7 @@ end
 local function AddDurabilityLoot(inst, prefab, chance, amount)
     local chance = chance or 1
     for i = 1, (amount or 1) do
-        if chance >= 1.0 or math.random() < chance then
+        if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition())
             local itemcomponent = item.components.finiteuses or item.components.fueled or item.components.perishable or item.components.armor
             local percent = math.random(25, 100) / 100
