@@ -55,13 +55,10 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data)
-            if inst:HasTag("trapdoorspider") then
-                if not inst.web_cd and inst.hooded then
-                    inst.sg:GoToState("spit_web") -- *Hooded* Trapdoor spider web attack
-                else
-                    inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
-                        and "trapdoor_attack" or "attack", data.target)
-                end
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst:HasTag("trapdoorspider") then
+                inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
+                    or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack"
+                    or "attack", data.target)
             end
             _OldAttackEvent(inst, data)
         end
@@ -334,17 +331,17 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("atk")
 
-                if target ~= nil and target:IsValid() then
-                    inst.sg.statemem.target = target
+                inst.sg.statemem.target = target
+                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                     inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
                 end
-                
+
                 inst.web_cd = true
                 inst:DoTaskInTime(10,function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
             end,
 
             onupdate = function(inst)
-                if inst.sg.statemem.target ~= nil then
+                if inst.sg.statemem.target then
                     if inst.sg.statemem.target:IsValid() then
                         local pos = inst.sg.statemem.targetpos
 
@@ -354,7 +351,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     end
                 end
 
-                if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
+                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                     inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
                 end
             end,
