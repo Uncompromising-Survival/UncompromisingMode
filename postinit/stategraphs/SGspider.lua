@@ -59,9 +59,9 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.sg:GoToState("spit_web")
                 return
             end
-			if inst.prefab == "spider_trapdoor" or inst.prefab == "spider_trapdoor_hooded" then
-				inst.sg:GoToState("trapdoor_attack")
-			end
+            if inst.prefab == "spider_trapdoor" or inst.prefab == "spider_trapdoor_hooded" then
+                inst.sg:GoToState("trapdoor_attack")
+            end
             _OldAttackEvent(inst, data)
         end
     end
