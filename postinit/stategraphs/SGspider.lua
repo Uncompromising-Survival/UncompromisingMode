@@ -55,14 +55,13 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data)
-            if inst:HasTag("trapdoorspider") and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
-                inst.sg:GoToState("spit_web")
-                return
-            end
             if inst:HasTag("trapdoorspider") then
-                inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
-                    and "trapdoor_attack" or "attack", data.target)
-                return
+                if not inst.web_cd and inst.hooded then
+                    inst.sg:GoToState("spit_web") -- *Hooded* Trapdoor spider web attack
+                else
+                    inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
+                        and "trapdoor_attack" or "attack", data.target)
+                end
             end
             _OldAttackEvent(inst, data)
         end
