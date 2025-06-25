@@ -16,7 +16,7 @@ local function EquipWeapon(inst)
         weapon.persists = false
         weapon.components.inventoryitem:SetOnDroppedFn(inst.Remove)
         weapon:AddComponent("equippable")
-        
+
         inst.components.inventory:Equip(weapon)
     end
 end
@@ -29,12 +29,10 @@ local function TeleportToFood(inst)
         if player_pos then
             local angle = PlayerPosition:GetAngleToPoint(init_pos)
             local offset = FindWalkableOffset(player_pos, angle*DEGREES, 30, 10)
-                
-            if offset ~= nil then
+            if offset then
                 local pos = player_pos + offset
                 if pos --[[and distsq(player_pos, init_pos) > 1600]] then
                     inst.components.combat:SetTarget(nil)
-                    
                     inst:DoTaskInTime(.1, function() 
                         inst.Transform:SetPosition(pos:Get())
                     end)
@@ -43,17 +41,14 @@ local function TeleportToFood(inst)
             end
         end
     end
-    
     inst.components.timer:StopTimer("FindNewFood")
     inst.components.timer:StartTimer("FindNewFood", 10)
-    
 end
 
 local function RockThrowTimer(inst, data)
     if data.name == "RockThrow" then
         inst.rockthrow = true
     end
-    
     if data.name == "FindNewFood" then
         inst.findnewfood = true
     end
@@ -61,65 +56,44 @@ end
 --[[
 local function LaunchProjectile(inst, targetpos)
     local x, y, z = inst.Transform:GetWorldPosition()
-    
     inst.rockthrow = false
     local theta = inst.Transform:GetRotation()
     local a, b, c = targetpos
-
     local projectile = SpawnPrefab("bearger_boulder")
     projectile.Transform:SetPosition(x, y, z)
-    
     theta = theta*DEGREES
-    
     targetpos.x = targetpos.x + 15*math.cos(theta)
-    
     targetpos.z = targetpos.z - 15*math.sin(theta)
-    
     local rangesq = ((a-x)^2) + ((c-z)^2)
     local maxrange = 15
     local bigNum = 10
     local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange)
     --targetpos = targetpos.x, 0, targetpos.z
-    
     projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-    
     --projectile.usehigharc = false
 end]]
 
 local function LaunchProjectile(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
-    
     for i = 1, 5 do
         if target ~= nil then
             inst.rockthrow = false
-            
             local a, b, c = target.Transform:GetWorldPosition()
             local targetpos = target:GetPosition()
             --local theta = inst.Transform:GetRotation()
-            
-            
-            
             local theta = (inst:GetAngleToPoint(a, 0, c) + (-30 + ((i-1)*15))) * DEGREES
             --local theta = (inst:GetAngleToPoint(a, 0, c) + GetRandomWithVariance(0, 30)) * DEGREES
-            
             --theta = theta*DEGREES
-            
             --local variableanglex = math.random(0, 30)
             --local variableanglez = math.random(0, 30)
-            
             local variableanglex = (i - 1) * 7.5
             local variableanglez = (5 - i) * 7.5
-            
-            
-            
             targetpos.x = targetpos.x + 15*math.cos(theta)
             targetpos.z = targetpos.z - 15*math.sin(theta)
-            
             local rangesq = ((a-x)^2) + ((c-z)^2)
             local maxrange = 15
             local bigNum = 10
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange)
-            
             local projectile = SpawnPrefab("bearger_boulder")
             projectile.Transform:SetPosition(x, y, z)
             projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 6))
@@ -129,59 +103,44 @@ local function LaunchProjectile(inst, target)
     end
 end
 
-local function Sinkholes(inst)
-    local target = inst.components.combat.target ~= nil and inst.components.combat.target or nil
-    if target ~= nil then
-        local target_index = {}
-        local found_targets = {}
-        local ix, iy, iz = inst.Transform:GetWorldPosition()
-        local targetfocus = target
-        
-        for i = 1,5 do
-            local delay = i / 10
-        
-            local px, py, pz = targetfocus.Transform:GetWorldPosition()
-            inst:DoTaskInTime(FRAMES * i * 1.5 + delay, function()
-                if targetfocus ~= nil then
-                    --local px, py, pz = targetfocus.Transform:GetWorldPosition()
-                    local rad = math.rad(inst:GetAngleToPoint(px, py, pz))
-                    local velx = math.cos(rad) * 4.5
-                    local velz = -math.sin(rad) * 4.5
-                
-                    local dx, dy, dz = ix + (i * velx), 0, iz + (i * velz)
-                    
-                    local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
-                    local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
-                    local pt = dx, 0, dz
-                    
-                    if boat then
-                        local fx1 = SpawnPrefab("antlion_sinkhole_boat")
-                        fx1.Transform:SetPosition(dx, dy, dz)
-                    elseif ground and not boat then
-                        local fx1 = SpawnPrefab("um_bearger_sinkhole")
-                        fx1.Transform:SetPosition(dx, dy, dz)
-                        fx1:PushEvent("startcollapse")
-                        fx1.bearger = inst
-                    else
-                        local fx1 = SpawnPrefab("splash_green")
-                        fx1.Transform:SetPosition(dx, dy, dz)
-                    end
-                end
-            end)
-        end
-    end
-end
-
-env.AddPrefabPostInit("bearger", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+local function BeargerFunctions(inst)
     inst.entity:SetCanSleep(false)
 
     if inst.components.groundpounder then
-        --inst.components.groundpounder.sinkhole = true
-        inst.components.groundpounder.groundpoundFn = Sinkholes
+        local _groundpoundFn = inst.components.groundpounder.groundpoundFn
+        local function OnGroundPound(inst, ...)
+            local target = inst.components.combat.target
+            if target then
+                local target_index = {}
+                local found_targets = {}
+                local ix, iy, iz = inst.Transform:GetWorldPosition()
+                local px, py, pz = target.Transform:GetWorldPosition()
+                for i = 1, 5 do
+                    local delay = i / 10
+                    inst:DoTaskInTime(FRAMES * i * 1.5 + delay, function()
+                        if target and target:IsValid() then
+                            local rad = math.rad(inst:GetAngleToPoint(px, py, pz))
+                            local velx = math.cos(rad) * 4.5
+                            local velz = -math.sin(rad) * 4.5
+                            local dx, dy, dz = ix + (i * velx), 0, iz + (i * velz)
+                            local ground = TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+                            local boat = TheWorld.Map:GetPlatformAtPoint(dx, dz)
+                            local pt = dx, 0, dz
+                            local fx = SpawnPrefab(boat and "antlion_sinkhole_boat" or ground and not boat and "um_bearger_sinkhole" or "splash_green")
+                            fx.Transform:SetPosition(dx, dy, dz)
+                            if fx.prefab == "um_bearger_sinkhole" then
+                                fx:PushEvent("startcollapse")
+                                fx.bearger = inst
+                            end
+                        end
+                    end)
+                end
+            end
+            if _groundpoundFn then
+                _groundpoundFn(inst, ...)
+            end
+        end
+        inst.components.groundpounder.groundpoundFn = OnGroundPound
     end
 
     inst:ListenForEvent("timerdone", RockThrowTimer)
@@ -205,19 +164,27 @@ env.AddPrefabPostInit("bearger", function(inst)
             end
         end]]
     --end)
-        --local function OnHitOther(inst, other)
-            --if other:HasTag("creatureknockbackable") then
+    --local function OnHitOther(inst, other)
+        --if other:HasTag("creatureknockbackable") then
+        --other:PushEvent("knockback", {knocker = inst, radius = 125, strengthmult = 1})
+        --else
+        --if other ~= nil and other.components.inventory ~= nil and not other:HasTag("fat_gang") and not other:HasTag("foodknockbackimmune") and not (other.components.rider ~= nil and other.components.rider:IsRiding()) and 
+        --Don't knockback if you wear marble
+        --(other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ==nil or not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
             --other:PushEvent("knockback", {knocker = inst, radius = 125, strengthmult = 1})
-            --else
-            --if other ~= nil and other.components.inventory ~= nil and not other:HasTag("fat_gang") and not other:HasTag("foodknockbackimmune") and not (other.components.rider ~= nil and other.components.rider:IsRiding()) and 
-            --Don't knockback if you wear marble
-            --(other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) ==nil or not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not other.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
-                --other:PushEvent("knockback", {knocker = inst, radius = 125, strengthmult = 1})
-            --end
-            --end
         --end
-    
-        --if inst.components.combat ~= nil then
-            --inst.components.combat.onhitotherfn = OnHitOther
         --end
+    --end
+
+    --if inst.components.combat ~= nil then
+        --inst.components.combat.onhitotherfn = OnHitOther
+    --end
+end
+
+env.AddPrefabPostInit("bearger", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    BeargerFunctions(inst)
 end)
