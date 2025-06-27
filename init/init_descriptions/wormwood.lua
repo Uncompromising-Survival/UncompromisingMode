@@ -568,3 +568,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Need floater to stretch down",
     EMPTY = "Pretty glowy keep floater small"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Why running, friend?",
+    "Wheee",
+    "Not right",
+    "Whoops",
+    "Friend is funny"}

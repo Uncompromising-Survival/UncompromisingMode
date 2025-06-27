@@ -574,3 +574,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Micro storage, boat required.",
     EMPTY = "Minaturized, boat. Release needs water."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Prey's instincts, must interpret.",
+    "Time to strike, not yet.",
+    "Exhausting prey. Wait for its rest.",
+    "Endless chasing grants no success.",
+    "Current tactics, unsuccessful. Patience, needed."}

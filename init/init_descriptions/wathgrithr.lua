@@ -540,3 +540,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "A display for a vessel most worthy.",
     EMPTY = "A vessel ready to be used at a moments notice!"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"All this chase, and for what?",
+    "I am not an expertise at airborne opponents.",
+    "A true warrior does not spend their days fighting insects.",
+    "Of all the monsters of this realm, why must I stoop to this?",
+    "Nobody would ever tell the tale of the valkyrie who slayed a butterfly."}

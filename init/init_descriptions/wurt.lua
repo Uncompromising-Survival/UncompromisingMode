@@ -545,3 +545,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Need boat to go in here, How that work?",
     EMPTY = "How get it out now? Glorp."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hee-hee, chasing is fun.",
+    "Stop moving! Wanna catch you!",
+    "Should try a sneak attack, florp.",
+    "Glurph, get back here!",
+    "Can't keep flying forever, flort."}

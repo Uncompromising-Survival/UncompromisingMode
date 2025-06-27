@@ -579,3 +579,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Let's go find a boat to put inside!",
     EMPTY = "Remember, Woby, only break it open incase of emergencies."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a lot easier to catch these when they're busy.",
+    "I know better than to try to catch one while it's still flying.",
+    "Look Woby, I got it this time! Whoops, maybe not.",
+    "Come on, I'm usually so good at this! Next time I gotta sneak up on it.",
+    "I'll get it when it lands. For sure this time!"}
