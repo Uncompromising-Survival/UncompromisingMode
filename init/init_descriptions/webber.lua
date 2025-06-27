@@ -549,3 +549,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "We can't just put any boat in there, it has to be our favourite.",
     EMPTY = "Yay! Now it's a toy boat!"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"We should try to catch it by surprise!",
+    "Hey! Flying away isn't fair!",
+    "We should wait for the right time to attack, like a real predator!",
+    "I wish we had our web. Or maybe a net.",
+    "We should try again when it's landed."}

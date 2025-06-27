@@ -580,7 +580,7 @@ STRINGS.UM_LOADINGTIPS = {
     ALPHAGOAT = "\"Today I saw some mean lookin' goat with the herd. The kids wanted to chase them down as play, but guess the big guy took it as a threat. Better not approach them again.\" - W",
     SNOWSTORMS = "\"Board up the windows, there is definitely a storm coming!\" - W",
     OCEAN_STEERING = "Boat rudders help with steering boats, increasing turn speed and allowing the boat to make sharper turns. The Captain's Hat also further increases steering speed.",
-    HEAVYFISH = "\"That's a big one! We'll have seafood the entire season with that!\" - W",
+    --HEAVYFISH = "\"That's a big one! We'll have seafood the entire season with that!\" - W",
     WILTFLY = "Hungry and weak during summer, the Dragonfly takes flight, searching for food. Ash and unprepared survivors are her favorite!",
     SURVIVORCOCOONS = "The Hooded Widow seems to have acquired a taste for survivors, even bundling them up together in bigger cocoons to finish devouring them later.",
 
@@ -594,7 +594,7 @@ STRINGS.UM_LOADINGTIPS = {
     TOWNPORTAL = "The Lazy Deserter now picks items and harvests anything near it when used. This includes Grass Tufts, Drying Racks, Bee Boxes, and more.",
     PUMPKIN_LANTERN = "Pumpkin Lanterns have a positive sanity aura.",
     NIGHTLIGHT = "Night Lights drain sanity from nearby players to automatically fuel themselves as needed.",
-    MOONDIAL = "Moon Dials now work as a water source for Watering Cans. They can also be upgraded with a Moon Tear to allow mutating things during full moons.",
+    --MOONDIAL = "Moon Dials now work as a water source for Watering Cans. They can also be upgraded with a Moon Tear to allow mutating things during full moons.",
     ARMOR_DRAGONFLY = "The Scalemail now summons Dimvaes when worn to help you in combat.",
     GLASSCUTTER = "The Glass Cutter now deals extra damage against shadow-aligned enemies, as well as having increased durability against them",
     FEATHERHAT = "The Feather Hat provides safety against territorial Pengulls.",

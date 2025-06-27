@@ -563,3 +563,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Surely this can't be safe idea?",
     EMPTY = "Well, it seems like just another thing I can carry around now."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Now now, patience is key.",
+    "A watched pot never boils.",
+    "I should wait for it to let its guard down.",
+    "Gah! Now now, think of the butter. This'll all be worth it.",
+    "It might be easier to hit if it's landed."}

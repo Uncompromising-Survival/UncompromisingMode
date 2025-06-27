@@ -704,5 +704,5 @@ DESCRIBE.UM_BOATBOTTLE = {
 ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
     "Maybe I should wait till it sits still.",
     "I can't hit it while it's fluttering about.",
-    "Drat, it got away again. It'll be easier to hit when it rests.",
+    "It'll be easier to hit when it rests.",
     "It might be easier to hit if it's landed."}

@@ -555,3 +555,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "I think building a new boat would've been less work than making this.",
     EMPTY = "Not as heavy as I thought it would be."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Quite the slippery catch, eh?",
+    "Ope, it squeezed right by me.",
+    "Gotta wait for it to get tuckered out.",
+    "You think I'm being too blunt aboot this, Luce?",
+    "This'd be easier to smack if it's landed."}

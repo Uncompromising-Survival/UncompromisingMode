@@ -545,3 +545,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "The real trick would be to snatch up a boat and teleport away! Hyuhuhu!",
     EMPTY = "I've heard of genies in bottles, but this is ridiculous!"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hyuhu, are you trying to play a game with me?",
+    "You're making me feel worse for this than I already do.",
+    "You may have won this match, but next time I'll get the catch!",
+    "Flying away? I only want to play.",
+    "Once that bug lands, it's soul will be in my hands."}

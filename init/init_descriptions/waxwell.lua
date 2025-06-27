@@ -533,3 +533,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "A practical way to move boats out of the water. A little too practical.",
     EMPTY = "I wouldn't want to know what happens if it breaks open in my pocket."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"This isn't exactly my forte.",
+    "Don't make this harder than it needs to be.",
+    "I'm making a fool of myself!",
+    "How troublesome, why won't you sit still?",
+    "How humiliating... I'll try again once it's landed."}

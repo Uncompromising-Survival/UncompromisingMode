@@ -64,7 +64,6 @@ local function ondeploy(inst, pt, deployer)
     fx.AnimState:PlayAnimation("blue_shatter")
     fx.Transform:SetPosition(pt.x, pt.y, pt.z)
 
-
     return boat
 end
 
@@ -107,7 +106,6 @@ local function fn()
 
     inst.entity:SetPristine()
 
-
     inst.fx = SpawnPrefab("um_boatbottle_fx")
     inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst.fx.entity:SetParent(inst.entity)
@@ -115,7 +113,6 @@ local function fn()
     inst.fx.Follower:FollowSymbol(inst.GUID, "boat", 0, 50, 0) --TODO, check offsets.
     inst.fx.components.highlightchild:SetOwner(inst)
     inst.fx:Hide()
-
 
     if not TheWorld.ismastersim then
         return inst
@@ -136,13 +133,13 @@ local function fn()
 
     inst:AddComponent("boatbottle")
 
-
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = function(inst, viewer)
         return inst:HasTag("filled_boat_bottle") and "FULL" or "EMPTY"
     end
 
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/um_boatbottle.xml")
 
     MakeHauntableLaunch(inst)
     return inst
@@ -172,7 +169,6 @@ local function fn_follow_fx(inst)
 
     return inst
 end
-
 
 return Prefab("um_boatbottle", fn, assets),
     MakePlacer("um_boatbottle_placer", "boat_01", "boat_test", "idle_full", true, false, false, nil, nil, nil, ControllerPlacer_Boat_SpotFinder, 6),

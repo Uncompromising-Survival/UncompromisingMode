@@ -572,3 +572,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Why would I even want to stuff a boat in here, I don't even like sailing.",
     EMPTY = "It's safe from fire in there, let's fix that by opening it!"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I don't have the patience for this!",
+    "Stay still while I hit you!",
+    "You think you're so pretty and elegant. I'll show you.",
+    "I'll burn those stupid flowers you love sitting on so much!",
+    "This would be easier if it sat still for once."}

@@ -570,3 +570,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "An easy way organize my boats with my watches.",
     EMPTY = "I hope I can remember which boat this was, I should start labeling these."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I remember this being easier...",
+    "Is it worth my time to wait for an opening?",
+    "Hm. My timing is off. I should wait for it to sit still.",
+    "Oh botheration, do I really have to wait for it to rest?",
+    "It might be easier to hit if it's landed."}

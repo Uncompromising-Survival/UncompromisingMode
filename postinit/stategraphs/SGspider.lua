@@ -10,7 +10,7 @@ env.AddStategraphPostInit("spider", function(inst)
             inst:Remove()
         end
     end
-    
+
     local function WebMortar(inst,angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
         if inst.components.combat.target ~= nil then
             local target = inst.components.combat.target
@@ -36,7 +36,7 @@ env.AddStategraphPostInit("spider", function(inst)
             projectile.components.complexprojectile:Launch(targetpos, inst, inst)
         end
     end
-    
+
     local function SoundPath(inst, event)
         local creature = "spider"
 
@@ -55,13 +55,11 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data)
-            if inst.prefab == "spider_trapdoor_hooded" and not inst.web_cd and inst.hooded then -- *Hooded* Trapdoor spider web attack
-                inst.sg:GoToState("spit_web")
-                return
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst:HasTag("trapdoorspider") then
+                inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
+                    or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack"
+                    or "attack", data.target)
             end
-			if inst.prefab == "spider_trapdoor" or inst.prefab == "spider_trapdoor_hooded" then
-				inst.sg:GoToState("trapdoor_attack")
-			end
             _OldAttackEvent(inst, data)
         end
     end
@@ -144,48 +142,42 @@ env.AddStategraphPostInit("spider", function(inst)
 }]]
 
     local states = {
-
         State{
-        name = "trapdoor_attack",
-        tags = {"attack", "canrotate", "busy", "jumping"},
-
-        onenter = function(inst, target)
-            inst.components.locomotor:Stop()
-            inst.components.locomotor:EnableGroundSpeedMultiplier(false)
-
-            inst.components.combat:StartAttack()
-            inst.AnimState:PlayAnimation("trapdoor_atk")
-            inst.sg.statemem.target = target
-        end,
-
-        onexit = function(inst)
-            inst.components.locomotor:Stop()
-            inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-            inst.Physics:ClearMotorVelOverride()
-        end,
-
-        timeline =
-        {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt")) end),
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Jump")) end),
-            TimeEvent(8*FRAMES, function(inst) inst.Physics:SetMotorVelOverride(20,0,0) end),
-            TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Attack")) end),
-            --TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
-            TimeEvent(20*FRAMES,
-                function(inst)
-                    inst.components.combat:DoAttack(inst.sg.statemem.target)
+            name = "trapdoor_attack",
+            tags = {"attack", "canrotate", "busy", "jumping"},
+    
+            onenter = function(inst, target)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+    
+                inst.components.combat:StartAttack()
+                inst.AnimState:PlayAnimation("trapdoor_atk")
+                inst.sg.statemem.target = target
+            end,
+    
+            onexit = function(inst)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+                inst.Physics:ClearMotorVelOverride()
+            end,
+    
+            timeline =
+            {
+                TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt")) end),
+                TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Jump")) end),
+                TimeEvent(8*FRAMES, function(inst) inst.Physics:SetMotorVelOverride(20,0,0) end),
+                TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Attack")) end),
+                TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
+                TimeEvent(20*FRAMES, function(inst)
                     inst.Physics:ClearMotorVelOverride()
                     inst.components.locomotor:Stop()
                 end),
-        },
-
-        events=
-        {
-            EventHandler("animover", 
-            function(inst) 
-            inst.sg:GoToState("taunt")
-            end),
-        },
+            },
+    
+            events =
+            {
+                EventHandler("animover", function(inst) inst.sg:GoToState("taunt") end),
+            },
     },--[[
     State{
         name = "taunt",
@@ -339,17 +331,17 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("atk")
 
-                if target ~= nil and target:IsValid() then
-                    inst.sg.statemem.target = target
+                inst.sg.statemem.target = target
+                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                     inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
                 end
-                
+
                 inst.web_cd = true
                 inst:DoTaskInTime(10,function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
             end,
 
             onupdate = function(inst)
-                if inst.sg.statemem.target ~= nil then
+                if inst.sg.statemem.target then
                     if inst.sg.statemem.target:IsValid() then
                         local pos = inst.sg.statemem.targetpos
 
@@ -359,7 +351,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     end
                 end
 
-                if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
+                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
                     inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
                 end
             end,

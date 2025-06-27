@@ -573,3 +573,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "Whew, that sure was some effort making this, just to move a boat.",
     EMPTY = "Should be safe enough."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I'll try again when it's on break.",
+    "Just gimme a sec. I almost got this down.",
+    "I betcha I could build something to get this done faster.",
+    "The dainty thing should be taking a break any second now.",
+    "Might be easier to hit when it's landed."}

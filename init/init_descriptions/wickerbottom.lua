@@ -602,3 +602,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "I could use the free time I have to recreate a model of the Mayflower.",
     EMPTY = "I do believe this breaks some law of quantum mechanics."
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"In just a moment, it should rest soon.",
+    "Catching an insect like this would be a fool's errand.",
+    "It would be ill advised to catch one while it's still flying.",
+    "I should catch this Lepidoptera once it is busy pollinating.",
+    "Its oily properties make it a difficult catch by hand."}

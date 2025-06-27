@@ -43,11 +43,6 @@ function BoatBottle:SetIsFull(isfull)
         end
         self.inst:RemoveTag("filled_boat_bottle")
     end
-
-    local inventoryitem = self.inst.replica.inventoryitem
-    if inventoryitem ~= nil then
-        inventoryitem:SetImage(isfull and "um_boatbottle_full" or "um_boatbottle")
-    end
 end
 
 function BoatBottle:SetBoatPrefab(prefab)
