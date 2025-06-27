@@ -599,3 +599,9 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "This is one of those toys for old people.",
     EMPTY = "How am I supposed to play with the boat if it's stuck in this stupid bottle?"
 }
+
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You gotta be kidding me!",
+    "I won't let a stupid bug get the best of me!",
+    "Just sit still! I won't hit you, promise!",
+    "Come on, take a break. All the flowers told me they missed you.",
+    "Maybe I'll pretend like I don't care, then WHAM!"}
