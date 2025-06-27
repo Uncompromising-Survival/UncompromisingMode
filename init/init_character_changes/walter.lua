@@ -29,13 +29,11 @@ local function OnPenaltyTimerDone(inst)
 end
 
 env.AddPrefabPostInit("walter", function(inst) 
-
+	if not TheWorld.ismastersim then
+		return
+	end
 	inst:ListenForEvent("attacked", VetCurseMaxSanityLoss)
     --inst:RemoveEventCallback("healthdelta",_OnHealthDelta)
     --UpvalueHacker.SetUpvalue(Prefabs.walter.master_postinit, OnHealthDelta, "OnHealthDelta")
 	inst:ListenForEvent("timerdone", OnPenaltyTimerDone) --Question is, am I replacing OnAttacked and OnTimerDone? I dunno! -C
-	if not TheWorld.ismastersim then
-		return
-	end
-
 end)
