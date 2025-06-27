@@ -148,3 +148,5 @@ RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Boi
 RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Boiling Fields."
 RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
 RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
+RECIPE_DESC.UM_EYEBALM = "Eye debris no longer impacts your stride."
+RECIPE_DESC.UM_BEEMINE_MOON_ITEM = "Weaponized mutant bees. This can only go horribly."
