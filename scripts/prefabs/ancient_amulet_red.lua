@@ -102,10 +102,6 @@ local function OnHaunt(inst, haunter)
 	haunter:PushEvent("respawnfromghost", { source = inst })
     haunter.Physics:Teleport(inst.Transform:GetWorldPosition())
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local amulets = TheSim:FindEntities(x,y,z,12,{"resurrector"})
-	for i,v in ipairs(amulets) do
-		v.onfar(v) -- Tell them to check for ghosts.
-	end
 	haunter:DoTaskInTime(3, aac_proc)
 
 	inst:DoTaskInTime(1, function(inst)
@@ -224,8 +220,7 @@ local function fn()
     inst.components.playerprox:SetDist(4, 6)
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetOnPlayerFar(onfar)
-	
-	inst.onfar = onfar
+
 	inst.floating = false
     return inst
 end
