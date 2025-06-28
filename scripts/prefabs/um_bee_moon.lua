@@ -125,7 +125,7 @@ local function Explode(inst)
 	local ents = TheSim:FindEntities(x,y,z, TUNING.MOONSPORE_ATTACK_RANGE,{"_combat","_health"},AREAATTACK_EXCLUDETAGS)
     for i,v in ipairs(ents) do
 		if not v.components.health:IsDead() then
-			local value = 75
+			local value = 50
 			if v.components.inventory and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_bee_moon" then 
 				value = value * 0.25
 			end
