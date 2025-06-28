@@ -4,13 +4,6 @@ local assets =
     Asset("ATLAS", "images/inventoryimages/widowshead.xml"),
     Asset("IMAGE", "images/inventoryimages/widowshead.tex"),
 }
-local BEAVERVISION_COLOURCUBES =
-{
-    day = "images/colour_cubes/beaver_vision_cc.tex",
-    dusk = "images/colour_cubes/beaver_vision_cc.tex",
-    night = "images/colour_cubes/beaver_vision_cc.tex",
-    full_moon = "images/colour_cubes/beaver_vision_cc.tex",
-}
 
 local function SpawnBeeVsOther(inst,data)
 	local bee = SpawnPrefab("um_bee_moon")
@@ -51,6 +44,8 @@ local function onequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Hide("HEAD")
         owner.AnimState:Show("HEAD_HAT")
+        owner.AnimState:Show("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
     end
 	owner.um_hat_bee_moon_count = 0
 	owner:ListenForEvent("onattackother", AttackOther)
@@ -66,11 +61,11 @@ local function onunequip(inst, owner)
     if owner:HasTag("player") then
         owner.AnimState:Show("HEAD")
         owner.AnimState:Hide("HEAD_HAT")
+        owner.AnimState:Hide("HEAD_HAT_NOHELM")
+        owner.AnimState:Hide("HEAD_HAT_HELM")
     end
 	owner:RemoveEventCallback("onattackother", AttackOther)
 end
-
-
 
 local function fn()
     local inst = CreateEntity()
@@ -124,6 +119,5 @@ local function fn()
 
     return inst
 end
-
 
 return Prefab("um_hat_bee_moon", fn, assets)
