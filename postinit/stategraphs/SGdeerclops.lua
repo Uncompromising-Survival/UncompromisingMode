@@ -1,414 +1,421 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local SHAKE_DIST = 40
 
-env.AddStategraphPostInit("deerclops", function(inst)
-    local SHAKE_DIST = 40
+local AREAATTACK_MUST_TAGS = { "_combat" }
+local AREA_EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost" }
 
-    local AREAATTACK_MUST_TAGS = { "_combat" }
-    local AREA_EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost" }
-
-    local function SetLightValue(inst, val)
-        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
-            inst.Light:SetIntensity(.6 * val * val)
-            inst.Light:SetRadius(8 * val)
-            inst.Light:SetFalloff(3 * val)
-        end
+local function SetLightValue(inst, val)
+    if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
+        inst.Light:SetIntensity(.6 * val * val)
+        inst.Light:SetRadius(8 * val)
+        inst.Light:SetFalloff(3 * val)
     end
+end
 
-    local function SetLightValueAndOverride(inst, val, override)
-        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
-            inst.Light:SetIntensity(.6 * val * val)
-            inst.Light:SetRadius(8 * val)
-            inst.Light:SetFalloff(3 * val)
-            inst.AnimState:SetLightOverride(override)
-        end
+local function SetLightValueAndOverride(inst, val, override)
+    if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
+        inst.Light:SetIntensity(.6 * val * val)
+        inst.Light:SetRadius(8 * val)
+        inst.Light:SetFalloff(3 * val)
+        inst.AnimState:SetLightOverride(override)
     end
+end
 
-    local function SetLightColour(inst, val)
-        if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
-            inst.Light:SetColour(0, 0, val)
-        end
+local function SetLightColour(inst, val)
+    if inst.Light ~= nil and inst.upgrade == "enrage_mutation" then
+        inst.Light:SetColour(0, 0, val)
     end
+end
 
-    local function DoSpawnIceSpike(inst, x, z)
-        SpawnPrefab("icespike_fx_" .. tostring(math.random(1, 4))).Transform:SetPosition(x, 0, z)
+local function DoSpawnIceSpike(inst, x, z)
+    SpawnPrefab("icespike_fx_" .. tostring(math.random(1, 4))).Transform:SetPosition(x, 0, z)
+end
+
+local function SpawnIceFx(inst, target)
+    if target == nil or not target:IsValid() then
+        return
     end
+    local numFX = math.random(15, 20)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local x1, y1, z1 = target.Transform:GetWorldPosition()
+    local dx, dz = x1 - x, z1 - z
+    local dist = dx * dx + dz * dz
+    if dist > 0 then
+        dist = math.sqrt(dist)
+        dx, dz = dx / dist, dz / dist
+    end
+    for i = 1, numFX do
+        local offset = GetRandomMinMax(dist * .25, dist)
+        inst:DoTaskInTime(math.random() * .25, DoSpawnIceSpike, x + dx * offset + GetRandomWithVariance(0, 3),
+            z + dz * offset + GetRandomWithVariance(0, 3))
+    end
+end
 
-    local function SpawnIceFx(inst, target)
-        if target == nil or not target:IsValid() then
-            return
-        end
-        local numFX = math.random(15, 20)
+local function SpawnAttackAuras(inst)
+    for sweep = -30, 30, 15 do
         local x, y, z = inst.Transform:GetWorldPosition()
-        local x1, y1, z1 = target.Transform:GetWorldPosition()
-        local dx, dz = x1 - x, z1 - z
-        local dist = dx * dx + dz * dz
-        if dist > 0 then
-            dist = math.sqrt(dist)
-            dx, dz = dx / dist, dz / dist
-        end
-        for i = 1, numFX do
-            local offset = GetRandomMinMax(dist * .25, dist)
-            inst:DoTaskInTime(math.random() * .25, DoSpawnIceSpike, x + dx * offset + GetRandomWithVariance(0, 3),
-                z + dz * offset + GetRandomWithVariance(0, 3))
-        end
-    end
-
-    local function SpawnAttackAuras(inst)
-        for sweep = -30, 30, 15 do
-            local x, y, z = inst.Transform:GetWorldPosition()
-            local angle = (inst.Transform:GetRotation() + 90 + sweep) * DEGREES
-            local dist = 10
-            local ground = TheWorld.Map
-            local aura, x1, z1
-            x1 = x + dist * math.sin(angle)
-            z1 = z + dist * math.cos(angle)
-            if ground:IsPassableAtPoint(x1, 0, z1) then
-                aura = SpawnPrefab("deer_ice_circle")
-                aura.Transform:SetPosition(x1, 0, z1)
-                aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
-                aura:DoTaskInTime(9, aura.KillFX)
-            end
-        end
-    end
-
-    local function SpawnLaser_Blue(inst)
-        local numsteps = 10
-        local x, y, z = inst.Transform:GetWorldPosition()
-        local angle = (inst.Transform:GetRotation() + 90) * DEGREES
-        local step = .75
-        local offset = 2 - step --should still hit players right up against us
+        local angle = (inst.Transform:GetRotation() + 90 + sweep) * DEGREES
+        local dist = 10
         local ground = TheWorld.Map
-        local targets, skiptoss = {}, {}
-        local i = -1
-        local noground = false
-        local fx, dist, delay, x1, z1
-        while i < numsteps do
-            i = i + 1
-            dist = i * step + offset
-            delay = math.max(0, i - 1)
-            x1 = x + dist * math.sin(angle)
-            z1 = z + dist * math.cos(angle)
-            if not ground:IsPassableAtPoint(x1, 0, z1) then
-                if i <= 0 then
-                    return
-                end
-                noground = true
-            end
+        local aura, x1, z1
+        x1 = x + dist * math.sin(angle)
+        z1 = z + dist * math.cos(angle)
+        if ground:IsPassableAtPoint(x1, 0, z1) then
+            aura = SpawnPrefab("deer_ice_circle")
+            aura.Transform:SetPosition(x1, 0, z1)
+            aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
+            aura:DoTaskInTime(9, aura.KillFX)
+        end
+    end
+end
 
-            fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty")
-
-            if inst.components.health:GetPercent() <= 0.5 then
-                fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+local function SpawnLaser_Blue(inst)
+    local numsteps = 10
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local angle = (inst.Transform:GetRotation() + 90) * DEGREES
+    local step = .75
+    local offset = 2 - step --should still hit players right up against us
+    local ground = TheWorld.Map
+    local targets, skiptoss = {}, {}
+    local i = -1
+    local noground = false
+    local fx, dist, delay, x1, z1
+    while i < numsteps do
+        i = i + 1
+        dist = i * step + offset
+        delay = math.max(0, i - 1)
+        x1 = x + dist * math.sin(angle)
+        z1 = z + dist * math.cos(angle)
+        if not ground:IsPassableAtPoint(x1, 0, z1) then
+            if i <= 0 then
+                return
             end
-
-            fx.caster = inst
-            fx.Transform:SetPosition(x1, 0, z1)
-            fx:Trigger(delay * FRAMES, targets, skiptoss)
-            if i == 0 then
-                ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .6, fx, 30)
-            end
-            if noground then
-                break
-            end
+            noground = true
         end
 
-        if i < numsteps then
-            dist = (i + .5) * step + offset
-            x1 = x + dist * math.sin(angle)
-            z1 = z + dist * math.cos(angle)
-        end
-
-        fx = SpawnPrefab("deerclops_laser_blue")
+        fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty")
 
         if inst.components.health:GetPercent() <= 0.5 then
             fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
         end
 
+        fx.caster = inst
         fx.Transform:SetPosition(x1, 0, z1)
-        fx:Trigger((delay + 1) * FRAMES, targets, skiptoss)
-
-        fx = SpawnPrefab("deerclops_laser_blue")
-
-        if inst.components.health:GetPercent() <= 0.5 then
-            fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+        fx:Trigger(delay * FRAMES, targets, skiptoss)
+        if i == 0 then
+            ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .6, fx, 30)
         end
-
-        fx.Transform:SetPosition(x1, 0, z1)
-        fx:Trigger((delay + 2) * FRAMES, targets, skiptoss)
+        if noground then
+            break
+        end
     end
 
-    local BASE_NUM_ANGULAR_STEPS = 75
-    local SWEEP_ANGULAR_LENGTH = 360
-    local MIN_SWEEP_DISTANCE = 1
-    local function SpawnSweep(inst, target_pos, BASE_SWEEP_DISTANCE)
-        local gx, gy, gz = inst.Transform:GetWorldPosition()
+    if i < numsteps then
+        dist = (i + .5) * step + offset
+        x1 = x + dist * math.sin(angle)
+        z1 = z + dist * math.cos(angle)
+    end
 
-        local angle = nil
-        local dist = nil
-        local angle_step_dir = 1
-        local x_dir = 1
+    fx = SpawnPrefab("deerclops_laser_blue")
 
-        if target_pos == nil then
-            angle = DEGREES * (inst.Transform:GetRotation() + (SWEEP_ANGULAR_LENGTH)) + 90 * DEGREES
-            dist = BASE_SWEEP_DISTANCE
-            x_dir = -1
-            angle_step_dir = -1
-        else
-            angle = math.atan2(gz - target_pos.z, gx - target_pos.x) - (SWEEP_ANGULAR_LENGTH * DEGREES)
-            dist = math.max(math.sqrt(inst:GetDistanceSqToPoint(target_pos:Get())), MIN_SWEEP_DISTANCE)
-        end
+    if inst.components.health:GetPercent() <= 0.5 then
+        fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+    end
 
-        local num_angle_steps = BASE_NUM_ANGULAR_STEPS + RoundBiasedDown((math.abs(dist) - BASE_SWEEP_DISTANCE))
-        local angle_step = (SWEEP_ANGULAR_LENGTH / num_angle_steps) * DEGREES
+    fx.Transform:SetPosition(x1, 0, z1)
+    fx:Trigger((delay + 1) * FRAMES, targets, skiptoss)
 
-        local targets, skiptoss = {}, {}
+    fx = SpawnPrefab("deerclops_laser_blue")
 
-        local fx = nil
-        local delay = nil
-        local x1, z1 = nil, nil
+    if inst.components.health:GetPercent() <= 0.5 then
+        fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+    end
 
-        local i = -1
-        while i < num_angle_steps do
-            i = i + 1
-            delay = math.max(0, i - 1)
+    fx.Transform:SetPosition(x1, 0, z1)
+    fx:Trigger((delay + 2) * FRAMES, targets, skiptoss)
+end
 
-            x1 = gx - (x_dir * dist * math.cos(angle))
-            z1 = gz - dist * math.sin(angle)
-            angle = angle + (angle_step_dir * angle_step)
+local BASE_NUM_ANGULAR_STEPS = 75
+local SWEEP_ANGULAR_LENGTH = 360
+local MIN_SWEEP_DISTANCE = 1
+local function SpawnSweep(inst, target_pos, BASE_SWEEP_DISTANCE)
+    local gx, gy, gz = inst.Transform:GetWorldPosition()
 
-            fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
-            if BASE_SWEEP_DISTANCE == 10 then
-                fx.deerclops = inst
-            else
-                fx.ice = false
-            end
-            fx.ice = false
-            fx.caster = inst
-            fx.Transform:SetPosition(x1, 0, z1)
-            fx:Trigger(delay * FRAMES, targets, skiptoss)
-            if i == 0 then
-                ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .6, target_pos or fx, 30)
-            end
-        end
+    local angle = nil
+    local dist = nil
+    local angle_step_dir = 1
+    local x_dir = 1
+
+    if target_pos == nil then
+        angle = DEGREES * (inst.Transform:GetRotation() + (SWEEP_ANGULAR_LENGTH)) + 90 * DEGREES
+        dist = BASE_SWEEP_DISTANCE
+        x_dir = -1
+        angle_step_dir = -1
+    else
+        angle = math.atan2(gz - target_pos.z, gx - target_pos.x) - (SWEEP_ANGULAR_LENGTH * DEGREES)
+        dist = math.max(math.sqrt(inst:GetDistanceSqToPoint(target_pos:Get())), MIN_SWEEP_DISTANCE)
+    end
+
+    local num_angle_steps = BASE_NUM_ANGULAR_STEPS + RoundBiasedDown((math.abs(dist) - BASE_SWEEP_DISTANCE))
+    local angle_step = (SWEEP_ANGULAR_LENGTH / num_angle_steps) * DEGREES
+
+    local targets, skiptoss = {}, {}
+
+    local fx = nil
+    local delay = nil
+    local x1, z1 = nil, nil
+
+    local i = -1
+    while i < num_angle_steps do
+        i = i + 1
+        delay = math.max(0, i - 1)
+
+        x1 = gx - (x_dir * dist * math.cos(angle))
+        z1 = gz - dist * math.sin(angle)
+        angle = angle + (angle_step_dir * angle_step)
 
         fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
-        fx.ice = false
         if BASE_SWEEP_DISTANCE == 10 then
             fx.deerclops = inst
         else
             fx.ice = false
         end
+        fx.ice = false
+        fx.caster = inst
         fx.Transform:SetPosition(x1, 0, z1)
-
-        fx:Trigger(math.max(1, i) * FRAMES, targets, skiptoss)
-
-
-        if inst.components.health:GetPercent() <= 0.5 then
-            fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
-            if BASE_SWEEP_DISTANCE == 10 then
-                fx.deerclops = inst
-            else
-                fx.ice = false
-            end
-        end
-        fx.Transform:SetPosition(x1, 0, z1)
-        fx:Trigger(math.max(2, i + 1) * FRAMES, targets, skiptoss)
-    end
-
-    local function EnableEightFaced(inst)
-        if not inst.sg.mem.eightfaced then
-            inst.sg.mem.eightfaced = true
-            inst.Transform:SetEightFaced()
+        fx:Trigger(delay * FRAMES, targets, skiptoss)
+        if i == 0 then
+            ShakeAllCameras(CAMERASHAKE.FULL, .7, .02, .6, target_pos or fx, 30)
         end
     end
 
-    local function DisableEightFaced(inst)
-        if inst.sg.mem.eightfaced then
-            inst.sg.mem.eightfaced = false
-            inst.Transform:SetFourFaced()
-        end
+    fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+    fx.ice = false
+    if BASE_SWEEP_DISTANCE == 10 then
+        fx.deerclops = inst
+    else
+        fx.ice = false
     end
+    fx.Transform:SetPosition(x1, 0, z1)
 
-    local function EnrageAttackBank(inst, data)
-        if inst.components.health ~= nil and not inst.components.health:IsDead() then
-            if (inst.components.timer ~= nil and not inst.components.timer:TimerExists("laserbeam_cd")) then
-                inst.sg:GoToState("laserbeam_blue", inst.components.combat.target)
-            else
-                inst.sg:GoToState("attack")
-            end
-        end
-    end
+    fx:Trigger(math.max(1, i) * FRAMES, targets, skiptoss)
 
-    local function CanSpawnSpikeAt(pos, size)
-        local radius = 1.1
-        for i, v in ipairs(TheSim:FindEntities(pos.x, 0, pos.z, radius + 1.5, nil, { "antlion_sinkhole" }, { "groundspike" })) do
-            if v.Physics == nil then
-                return false
-            end
-            local spacing = radius + v:GetPhysicsRadius(0)
-            if v:GetDistanceSqToPoint(pos) < spacing * spacing then
-                return false
-            end
-        end
-        return true
-    end
-
-    local function SpawnBlock(inst, x, z, cracked)
-        local blockade = SpawnPrefab("deerclops_barrier")
-        if cracked then
-            blockade:AddTag("cracked")
-            blockade.AnimState:PlayAnimation("form_cracked")
-            blockade.AnimState:PushAnimation("full_cracked")
-            blockade.components.workable:SetWorkLeft(2)
+    if inst.components.health:GetPercent() <= 0.5 then
+        fx = SpawnPrefab(i > 0 and "deerclops_laser_blue" or "deerclops_laserempty_blue")
+        if BASE_SWEEP_DISTANCE == 10 then
+            fx.deerclops = inst
         else
-            blockade.AnimState:PlayAnimation("form")
-            blockade.AnimState:PushAnimation("full")
+            fx.ice = false
         end
-        blockade.Transform:SetPosition(x, 0, z)
-        blockade:DoTaskInTime(17, function(blockade)
-            if blockade.components.workable ~= nil and blockade.components.workable.workleft > 0 then
-                blockade:RemoveIt(blockade)
+    end
+    fx.Transform:SetPosition(x1, 0, z1)
+    fx:Trigger(math.max(2, i + 1) * FRAMES, targets, skiptoss)
+end
+
+local function EnableEightFaced(inst)
+    if not inst.sg.mem.eightfaced then
+        inst.sg.mem.eightfaced = true
+        inst.Transform:SetEightFaced()
+    end
+end
+
+local function DisableEightFaced(inst)
+    if inst.sg.mem.eightfaced then
+        inst.sg.mem.eightfaced = false
+        inst.Transform:SetFourFaced()
+    end
+end
+
+local function EnrageAttackBank(inst, data)
+    if inst.components.health ~= nil and not inst.components.health:IsDead() then
+        if (inst.components.timer ~= nil and not inst.components.timer:TimerExists("laserbeam_cd")) then
+            inst.sg:GoToState("laserbeam_blue", inst.components.combat.target)
+        else
+            inst.sg:GoToState("attack")
+        end
+    end
+end
+
+local function CanSpawnSpikeAt(pos, size)
+    local radius = 1.1
+    for i, v in ipairs(TheSim:FindEntities(pos.x, 0, pos.z, radius + 1.5, nil, { "antlion_sinkhole" }, { "groundspike" })) do
+        if v.Physics == nil then
+            return false
+        end
+        local spacing = radius + v:GetPhysicsRadius(0)
+        if v:GetDistanceSqToPoint(pos) < spacing * spacing then
+            return false
+        end
+    end
+    return true
+end
+
+local function SpawnBlock(inst, x, z, cracked)
+    local blockade = SpawnPrefab("deerclops_barrier")
+    if cracked then
+        blockade:AddTag("cracked")
+        blockade.AnimState:PlayAnimation("form_cracked")
+        blockade.AnimState:PushAnimation("full_cracked")
+        blockade.components.workable:SetWorkLeft(2)
+    else
+        blockade.AnimState:PlayAnimation("form")
+        blockade.AnimState:PushAnimation("full")
+    end
+    blockade.Transform:SetPosition(x, 0, z)
+    blockade:DoTaskInTime(17, function(blockade)
+        if blockade.components.workable ~= nil and blockade.components.workable.workleft > 0 then
+            blockade:RemoveIt(blockade)
+        end
+    end)
+end
+
+local function SpawnBlocks(inst, pos, count)
+    if count > 0 then
+        local dtheta = PI * 2 / count
+        local thetaoffset = math.random() * PI * 2
+        inst.blockrun = 0
+        inst.crackblocks = 0
+        for theta = math.random() * dtheta, PI * 2, dtheta do
+            inst.blockrun = inst.blockrun + 1
+            local offset = FindWalkableOffset(pos, theta + thetaoffset, 8 + math.random(), 3, false, true,
+                function(pt)
+                    return CanSpawnSpikeAt(pt, "block")
+                end)
+            if offset ~= nil then
+                local blockcrack = false
+                if inst.blockrun > 5 and inst.crackblocks <= 2 then
+                    if math.random() > 0.75 then
+                        blockcrack = true
+                    else
+                        blockcrack = false
+                    end
+                else
+                    blockcrack = true
+                end
+                if inst.blockrun > 10 and inst.crackblocks <= 4 then
+                    if math.random() > 0.75 then
+                        blockcrack = true
+                    else
+                        blockcrack = false
+                    end
+                else
+                    blockcrack = true
+                end
+                if theta < dtheta then
+                    SpawnBlock(inst, pos.x + offset.x, pos.z + offset.z, blockcrack)
+                else
+                    inst:DoTaskInTime(math.random() * .5, SpawnBlock, pos.x + offset.x, pos.z + offset.z, blockcrack)
+                end
+            end
+        end
+    end
+end
+
+local function FreezeEverything(inst)
+    if inst.components.combat.target ~= nil then
+        local target = inst.components.combat.target
+        inst:ForceFacePoint(target.Transform:GetWorldPosition())
+        local aura = SpawnPrefab("deer_ice_circle")
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local theta = inst.Transform:GetRotation() * DEGREES
+        x = x + 2 * math.cos(theta)
+        z = z - 2 * math.sin(theta)
+        aura.Transform:SetPosition(x, y, z)
+        aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
+        aura:DoTaskInTime(9, aura.KillFX)
+
+        local side = math.random( -1, 1)
+        side = 0
+        for i = 1, 2 do
+            if i == 2 then
+
+            else
+                for n = 1, 5 do
+                    local aura = SpawnPrefab("deer_ice_circle")
+                    local x, y, z = inst.Transform:GetWorldPosition()
+                    local theta = inst.Transform:GetRotation() * DEGREES
+                    theta = theta + (n - 2) / 1.1 + side
+                    x = x + 5 * i * math.cos(theta)
+                    z = z - 5 * i * math.sin(theta)
+                    aura.Transform:SetPosition(x, y, z)
+                    aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
+                    aura:DoTaskInTime(9, aura.KillFX)
+                end
+            end
+        end
+    end
+end
+
+local function StrongAttackBank(inst, data)
+    if inst.components.health ~= nil and not inst.components.health:IsDead()
+        and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
+        if inst.components.timer ~= nil and not inst.components.timer:TimerExists("uppercuttime") then
+            if inst.components.health:GetPercent() >= 0.5 then
+                inst.sg:GoToState("uppercut")
+            else
+                inst.sg:GoToState("uppercutcombo")
+            end
+        else
+            inst.sg:GoToState("attack")
+        end
+    end
+end
+
+local function IceAttackBank(inst, data)
+    if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
+        if inst.components.timer and not inst.components.timer:TimerExists("auratime") then
+            inst.sg:GoToState("aurafreeze_pre")
+        else
+            inst.sg:GoToState("aurattack")
+        end
+    end
+end
+
+env.AddStategraphPostInit("deerclops", function(inst)
+    local events = {
+        EventHandler("start_aurafreeze", function(inst, data)
+            if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasAnyStateTag("busy", "aurafreeze") or inst.sg:HasStateTag("hit")) then
+                inst.sg:GoToState("aurafreeze_pre")
             end
         end)
-    end
-    local function SpawnBlocks(inst, pos, count)
-        if count > 0 then
-            local dtheta = PI * 2 / count
-            local thetaoffset = math.random() * PI * 2
-            inst.blockrun = 0
-            inst.crackblocks = 0
-            for theta = math.random() * dtheta, PI * 2, dtheta do
-                inst.blockrun = inst.blockrun + 1
-                local offset = FindWalkableOffset(pos, theta + thetaoffset, 8 + math.random(), 3, false, true,
-                    function(pt)
-                        return CanSpawnSpikeAt(pt, "block")
-                    end)
-                if offset ~= nil then
-                    local blockcrack = false
-                    if inst.blockrun > 5 and inst.crackblocks <= 2 then
-                        if math.random() > 0.75 then
-                            blockcrack = true
-                        else
-                            blockcrack = false
-                        end
-                    else
-                        blockcrack = true
-                    end
-                    if inst.blockrun > 10 and inst.crackblocks <= 4 then
-                        if math.random() > 0.75 then
-                            blockcrack = true
-                        else
-                            blockcrack = false
-                        end
-                    else
-                        blockcrack = true
-                    end
-                    if theta < dtheta then
-                        SpawnBlock(inst, pos.x + offset.x, pos.z + offset.z, blockcrack)
-                    else
-                        inst:DoTaskInTime(math.random() * .5, SpawnBlock, pos.x + offset.x, pos.z + offset.z, blockcrack)
-                    end
-                end
-            end
-        end
-    end
-    local function FreezeEverything(inst)
-        if inst.components.combat.target ~= nil then
-            local target = inst.components.combat.target
-            inst:ForceFacePoint(target.Transform:GetWorldPosition())
-            local aura = SpawnPrefab("deer_ice_circle")
-            local x, y, z = inst.Transform:GetWorldPosition()
-            local theta = inst.Transform:GetRotation() * DEGREES
-            x = x + 2 * math.cos(theta)
-            z = z - 2 * math.sin(theta)
-            aura.Transform:SetPosition(x, y, z)
-            aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
-            aura:DoTaskInTime(9, aura.KillFX)
+    }
 
-            local side = math.random( -1, 1)
-            side = 0
-            for i = 1, 2 do
-                if i == 2 then
-
-                else
-                    for n = 1, 5 do
-                        local aura = SpawnPrefab("deer_ice_circle")
-                        local x, y, z = inst.Transform:GetWorldPosition()
-                        local theta = inst.Transform:GetRotation() * DEGREES
-                        theta = theta + (n - 2) / 1.1 + side
-                        x = x + 5 * i * math.cos(theta)
-                        z = z - 5 * i * math.sin(theta)
-                        aura.Transform:SetPosition(x, y, z)
-                        aura:DoTaskInTime(6, function(aura) aura:TriggerFX() end)
-                        aura:DoTaskInTime(9, aura.KillFX)
-                    end
-                end
-            end
+    local _OldAttackEvent = inst.events["doattack"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
+    inst.events["doattack"].fn = function(inst, data)
+        if inst.upgrade == "enrage_mutation" then
+            EnrageAttackBank(inst, data)
+        elseif inst.upgrade == "strength_mutation" then
+            StrongAttackBank(inst, data)
+        elseif inst.upgrade == "ice_mutation" then
+            IceAttackBank(inst, data)
+        else
+            _OldAttackEvent(inst, data)
         end
     end
 
-    local function StrongAttackBank(inst, data)
-        if inst.components.health ~= nil and not inst.components.health:IsDead()
-            and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
-            if inst.components.timer ~= nil and not inst.components.timer:TimerExists("uppercuttime") then
-                if inst.components.health:GetPercent() >= 0.5 then
-                    inst.sg:GoToState("uppercut")
-                else
-                    inst.sg:GoToState("uppercutcombo")
-                end
-            else
-                inst.sg:GoToState("attack")
-            end
+    local _OldAttacked = inst.events["attacked"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
+    inst.events["attacked"].fn = function(inst, data)
+        if inst.components.health ~= nil and not inst.components.health:IsDead() and
+            ((not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("frozen")) or inst.sg:HasStateTag("aurafreeze")) and 
+            inst.sg:HasStateTag("aurafreeze") then
+            inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
+            inst.sg:GoToState("aurafreeze_hit")
+        else
+            _OldAttacked(inst, data)
         end
     end
-
-    local function IceAttackBank(inst, data)
-        if inst.components.health ~= nil and not inst.components.health:IsDead() and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
-            if inst.components.timer ~= nil and not inst.components.timer:TimerExists("auratime") then
-                inst.sg:GoToState("aurafreeze_pre")
-            else
-                inst.sg:GoToState("aurattack")
-            end
-        end
-    end
-
-	local _OldAttackEvent = inst.events["doattack"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
-	inst.events["doattack"].fn = function(inst, data)
-		if inst.upgrade == "enrage_mutation" then
-			EnrageAttackBank(inst, data)
-		elseif inst.upgrade == "strength_mutation" then
-			StrongAttackBank(inst, data)
-		elseif inst.upgrade == "ice_mutation" then
-			IceAttackBank(inst, data)
-		else
-			_OldAttackEvent(inst, data)
-		end
-	end
-
-	local _OldAttacked = inst.events["attacked"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
-	inst.events["attacked"].fn = function(inst, data)
-		if inst.components.health ~= nil and not inst.components.health:IsDead() and
-			((not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("frozen")) or inst.sg:HasStateTag("aurafreeze")) and 
-			inst.sg:HasStateTag("aurafreeze") then
-			inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
-			inst.sg:GoToState("aurafreeze_hit")
-		else
-			_OldAttacked(inst, data)
-		end
-	end
 
     local states = {
-
         State {
             name = "laserbeam_blue",
-            tags = { "busy" },
+            tags = {"busy"},
 
             onenter = function(inst, target)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("atk2")
-				inst:SwitchToEightFaced()
+                inst:SwitchToEightFaced()
                 if target ~= nil and target:IsValid() then
                     if inst.components.combat:TargetIs(target) then
                         inst.components.combat:StartAttack()
@@ -519,14 +526,14 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 SetLightValueAndOverride(inst, 1, 0)
                 SetLightColour(inst, 1)
                 if inst.SwitchToFourFaced ~= nil and not inst.sg.statemem.keepfacing then
-					inst:SwitchToFourFaced()
+                    inst:SwitchToFourFaced()
                 end
             end,
         },
 
         State {
             name = "spinbeam_pre",
-            tags = { "busy", "nosleep" },
+            tags = {"busy", "nosleep"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -562,6 +569,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
                 end),
             },
+
             events =
             {
                 EventHandler("animover", function(inst)
@@ -569,9 +577,10 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end),
             },
         },
+
         State {
             name = "spinbeam",
-            tags = { "busy", "attack", "nosleep" },
+            tags = {"busy", "attack", "nosleep"},
 
             onenter = function(inst, target)
                 EnableEightFaced(inst)
@@ -648,12 +657,12 @@ env.AddStategraphPostInit("deerclops", function(inst)
             },
 
             --[[events =
-        {
-            EventHandler("animover", function(inst)
-                inst.sg.statemem.keepfacing = true
-                inst.sg:GoToState("idle")
-            end),
-        },]]
+            {
+                EventHandler("animover", function(inst)
+                    inst.sg.statemem.keepfacing = true
+                    inst.sg:GoToState("idle")
+                end),
+            },]]
 
             onexit = function(inst)
                 inst.components.combat.laststartattacktime = 3
@@ -668,13 +677,14 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end
             end,
         },
+
         State {
             name = "aurafreeze_pre",
-            tags = { "busy", "nosleep", "noshove" },
+            tags = {"busy", "nosleep", "noshove"},
 
             onenter = function(inst)
                 --inst.components.sleeper:SetResistance(400)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("fortresscast_pre")
                 SpawnBlocks(inst, inst:GetPosition(), 19)
@@ -697,22 +707,62 @@ env.AddStategraphPostInit("deerclops", function(inst)
                     inst.sg:GoToState("aurafreeze")
                 end),
             },
+
             onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.AnimState:SetBuild("deerclops_build")
             end,
         },
-		
+
         State {
-            name = "aurafreeze_pst",
-            tags = { "busy", "nosleep", "noshove" },
+            name = "aurafreeze",
+            tags = {"busy", "aurafreeze", "nosleep", "noshove"},
 
             onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
+                inst.Physics:Stop()
+                inst.AnimState:PushAnimation("fortresscast_loop", true)
+                if not inst.aurafreezetimertask then
+                    inst.aurafreezetimertask = inst:DoTaskInTime(7, function()
+                        if inst.aurafreezetimertask then
+                            inst.aurafreezetimertask:Cancel()
+                            inst.aurafreezetimertask = nil
+                        end
+                    end)
+                end
+            end,
+
+            events =
+            {
+                EventHandler("animover", function(inst)
+                    if not inst.aurafreezetimertask then
+                        inst.sg:GoToState("aurafreeze_pst")
+                    end
+                end),
+            },
+
+            onexit = function(inst)
+                inst.AnimState:SetBuild("deerclops_build")
+            end,
+
+            onupdate = function(inst)
+                if not inst.aurafreezetimertask then
+                    inst.sg:GoToState("aurafreeze_pst")
+                end
+            end,
+        },
+
+        State {
+            name = "aurafreeze_pst",
+            tags = {"busy", "nosleep", "noshove"},
+
+            onenter = function(inst)
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("fortresscast_pst")
+                inst.components.timer:StopTimer("auratime")
                 inst.components.timer:StartTimer("auratime", 24 + math.random(1, 11))
             end,
-			
+
             timeline =
             {
                 TimeEvent(5 * FRAMES, function(inst)
@@ -726,60 +776,48 @@ env.AddStategraphPostInit("deerclops", function(inst)
             events =
             {
                 EventHandler("animover", function(inst) --inst.components.sleeper:SetResistance(4)
-					if inst.components.health and not inst.components.health:IsDead() then
-						inst.sg:GoToState("idle")
-					end
+                    if inst.components.health and not inst.components.health:IsDead() then
+                        inst.sg:GoToState("idle")
+                    end
                 end),
             },
-			
-            onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
-            end,
-
-        },
-		
-        State {
-            name = "aurafreeze",
-            tags = { "busy", "aurafreeze", "nosleep", "noshove"},
-
-            onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
-                inst.Physics:Stop()
-                inst.AnimState:PushAnimation("fortresscast_loop", true)
-				
-				inst:DoTaskInTime(6,function(inst) -- May move to the "hit" state instead, so will need to make the taskintime independent of this state.
-					if inst.components.health and not inst.components.health:IsDead() then
-						inst.sg:GoToState("aurafreeze_pst")
-					end
-				end)
-            end,
 
             onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.AnimState:SetBuild("deerclops_build")
             end,
-
         },
-		
+
         State {
             name = "aurafreeze_hit",
-            tags = { "busy", },
+            tags = {"busy"},
 
             onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("fortresscast_hit")
-				inst.AnimState:PushAnimation("fortresscast_loop",true)
+                inst.AnimState:PushAnimation("fortresscast_loop",true)
             end,
 
+            events =
+            {
+                EventHandler("animover", function(inst)
+                    if not inst.aurafreezetimertask then
+                        inst.sg:GoToState("aurafreeze_pst")
+                    else
+                        inst.sg:GoToState("aurafreeze")
+                    end
+                end),
+            },
+
             onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.AnimState:SetBuild("deerclops_build")
             end,
 
         },
-		
+
         State {
             name = "taunt",
-            tags = { "busy" },
+            tags = {"busy"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -837,22 +875,19 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 SetLightColour(inst, 1)
             end,
         },
+
         State {
             name = "uppercut",
-            tags = { "attack", "busy", "heavyhit" },
+            tags = {"attack", "busy", "heavyhit"},
 
             onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("uppercut")
                 inst.components.combat:StartAttack()
                 inst.components.timer:StopTimer("uppercuttime")
                 inst.components.timer:StartTimer("uppercuttime", TUNING.DEERCLOPS_ATTACK_PERIOD * (math.random(1, 3)))
                 inst.components.combat:SetDefaultDamage(1.5 * TUNING.DEERCLOPS_DAMAGE)
-            end,
-
-            onexit = function(inst)
-                inst.components.combat:SetDefaultDamage(TUNING.DEERCLOPS_DAMAGE)
             end,
 
             timeline =
@@ -911,16 +946,19 @@ env.AddStategraphPostInit("deerclops", function(inst)
             {
                 EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
             },
+
             onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.components.combat:SetDefaultDamage(TUNING.DEERCLOPS_DAMAGE)
+                inst.AnimState:SetBuild("deerclops_build")
             end,
         },
+
         State {
             name = "uppercutcombo",
-            tags = { "attack", "busy", "heavyhit", "noice" },
+            tags = {"attack", "busy", "heavyhit", "noice"},
 
             onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("uppercutcombo")
                 inst.components.combat:StartAttack()
@@ -1001,7 +1039,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                     inst.components.locomotor.walkspeed = 20
                     inst.components.locomotor:WalkForward()
                 end),
-
                 TimeEvent(70 * FRAMES, function(inst)
                     inst.components.combat:DoAreaAttack(inst, 6, nil, nil, nil,
                         { "INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost", "shadow",
@@ -1013,8 +1050,8 @@ env.AddStategraphPostInit("deerclops", function(inst)
             },
 
             onexit = function(inst)
-				inst.components.locomotor.walkspeed = 3
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.components.locomotor.walkspeed = 3
+                inst.AnimState:SetBuild("deerclops_build")
             end,
 
             events =
@@ -1024,17 +1061,17 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end),
             },
         },
+
         State {
             name = "aurattack",
-            tags = { "attack", "busy", },
+            tags = {"attack", "busy"},
 
             onenter = function(inst)
-				inst.AnimState:SetBuild("deerclops_build_old")
+                inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("atk")
                 inst.components.combat:StartAttack()
             end,
-
 
             timeline =
             {
@@ -1071,18 +1108,22 @@ env.AddStategraphPostInit("deerclops", function(inst)
             {
                 EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
             },
+
             onexit = function(inst)
-				inst.AnimState:SetBuild("deerclops_build")
+                inst.AnimState:SetBuild("deerclops_build")
             end,
         },
     }
+
+    for k, v in pairs(events) do
+        assert(v:is_a(EventHandler), "Non-event added in mod events table!")
+        inst.events[v.name] = v
+    end
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
         inst.states[v.name] = v
     end
-
-
 
     CommonStates.AddCombatStates(states,
         {
@@ -1090,19 +1131,20 @@ env.AddStategraphPostInit("deerclops", function(inst)
             {
                 TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/hurt") end),
             },
+
             attacktimeline =
             {
                 TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/attack") end),
                 TimeEvent(29 * FRAMES, function(inst) SpawnIceFx(inst, inst.components.combat.target) end),
                 TimeEvent(35 * FRAMES, function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/swipe")
-					
+
                     if inst.upgrade == "ice_mutation" then
                         SpawnAttackAuras(inst)
                     end
-					
+
                     inst.components.combat:DoAttack(inst.sg.statemem.target)
-					
+
                     if inst.bufferedaction ~= nil and inst.bufferedaction.action == ACTIONS.HAMMER then
                         local target = inst.bufferedaction.target
                         inst:ClearBufferedAction()
@@ -1114,12 +1156,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
                             target.components.workable:Destroy(inst)
                         end
                     end
-					
+                    
                     ShakeAllCameras(CAMERASHAKE.FULL, .5, .025, 1.25, inst, SHAKE_DIST)
                 end),
                 TimeEvent(36 * FRAMES, function(inst) inst.sg:RemoveStateTag("attack") end),
             },
-			--[[deathtimeline =
+
+            --[[deathtimeline =
             {
                 TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/death") end),
                 TimeEvent(3 * FRAMES, function(inst) SetLightValue(inst, 1.01) end),
@@ -1190,10 +1233,12 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 TimeEvent(40 * FRAMES, function(inst) SetLightColour(inst, .8) end),
                 TimeEvent(41 * FRAMES, function(inst) SetLightColour(inst, .75) end),
             },
-            sleeptimeline =
+
+            --[[sleeptimeline =
             {
-                --TimeEvent(46*FRAMES, function(inst) inst.SoundEmitter:PlaySound(inst.sounds.grunt) end)
-            },
+                TimeEvent(46*FRAMES, function(inst) inst.SoundEmitter:PlaySound(inst.sounds.grunt) end)
+            },]]
+
             waketimeline =
             {
                 TimeEvent(2 * FRAMES, function(inst) SetLightColour(inst, .9) end),
@@ -1207,17 +1252,20 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 SetLightValue(inst, 1)
                 SetLightColour(inst, 1)
             end,
+
             onwake = function(inst)
                 SetLightValue(inst, .945)
                 SetLightColour(inst, .75)
             end,
-        })
+        }
+    )
 end)
 
 env.AddStategraphState("deerclops",
     State {
         name = "fall",
-        tags = { "busy" },
+        tags = {"busy"},
+
         onenter = function(inst, data)
             inst.Physics:SetDamping(0)
             inst.Physics:SetMotorVel(0, -20 + math.random() * 10, 0)
@@ -1246,13 +1294,14 @@ env.AddStategraphState("deerclops",
                 inst.sg:GoToState("groundpound")
             end
         end,
-
     }
 )
+
 env.AddStategraphState("deerclops",
     State {
         name = "groundpound",
-        tags = { "busy" },
+        tags = {"busy"},
+
         onenter = function(inst, data)
             inst.AnimState:PlayAnimation("fallattack", true)
         end,
