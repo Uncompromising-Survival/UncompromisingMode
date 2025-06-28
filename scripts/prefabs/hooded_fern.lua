@@ -102,7 +102,7 @@ local function onpickedfn(inst, picker)
 		inst.BrushingTest:Cancel()
 		inst.BrushingTest = nil
 	end
-	if picker and picker.components.combat and not (picker.components.inventory and picker.components.inventory:EquipHasTag("bramble_resistant")) and not picker:HasTag("shadowminion") then
+	if picker and picker.components.combat and not (picker.components.inventory and picker.components.inventory:EquipHasTag("bramble_resistant")) and not picker:HasTag("shadowminion") and not picker:HasTag("channelingpicker") then
 		picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
 		picker:PushEvent("thorns")
 	end
@@ -209,6 +209,7 @@ local function grass(name, stage)
 
         inst:AddTag("plant")
 		inst:AddTag("briar_plants")
+		inst:AddTag("thorny")
         inst:AddTag("lunarplant_target")
 		inst:AddTag("walrus_trap_spot")
 
