@@ -218,6 +218,7 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst:RemoveTag("hiding")
             end,
         },
+
         State {
             name = "evade",
             tags = { "busy", "evade", "no_stun" },
@@ -232,11 +233,7 @@ env.AddStategraphPostInit("spider", function(inst)
             events =
             {
                 EventHandler("animover", function(inst)
-                    if inst.components.combat.target ~= nil then
-                        inst.sg:GoToState("evade_loop")
-                    else
-                        inst.sg:GoToState("hit")
-                    end
+                    inst.sg:GoToState(inst.components.combat.target and "evade_loop" or "hit")
                 end),
             },
         },
@@ -244,7 +241,6 @@ env.AddStategraphPostInit("spider", function(inst)
         State {
             name = "evade_loop",
             tags = { "busy", "evade", "no_stun" },
-
 
             onenter = function(inst)
                 if inst ~= nil then
@@ -260,19 +256,18 @@ env.AddStategraphPostInit("spider", function(inst)
                     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
                 end
             end,
-            --[[
-        events=
-        {
-            EventHandler("animover", function(inst) 
-                inst.sg:GoToState("evade_pst") 
-            end ),
-        },  
-]]
+            --[[events =
+            {
+                EventHandler("animover", function(inst) 
+                    inst.sg:GoToState("evade_pst") 
+                end ),
+            },]]
             timeline =
             {
                 TimeEvent(3 * FRAMES, function(inst) inst.Physics:SetMotorVel(-20, 0, 0) end),
 
             },
+
             ontimeout = function(inst)
                 inst.sg:GoToState("evade_pst")
             end,
@@ -300,11 +295,9 @@ env.AddStategraphPostInit("spider", function(inst)
             {
                 EventHandler("animover", function(inst)
                     if inst.components.combat.target and inst.components.combat.target:IsValid() then
-
                         local JUMP_DISTANCE = 3
-
                         local distance = inst:GetDistanceSqToInst(inst.components.combat.target)
-                        
+
                         if distance > JUMP_DISTANCE * JUMP_DISTANCE then
                             inst.sg:GoToState("warrior_attack", inst.components.combat.target)
                         else
@@ -313,7 +306,6 @@ env.AddStategraphPostInit("spider", function(inst)
                     else
                         inst.sg:GoToState("idle")
                     end
-
                 end),
             },
 
@@ -323,6 +315,7 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
             end,
         },
+
         State{
             name = "spit_web",
             tags = {"attack", "busy", "spitting"},
@@ -332,12 +325,14 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.AnimState:PlayAnimation("atk")
 
                 inst.sg.statemem.target = target
-                if inst.sg.statemem.target and inst.sg.statemem.target:IsValid() then
-                    inst:ForceFacePoint(inst.sg.statemem.target:GetPosition())
+                if target and target:IsValid() then
+                    inst.sg.statemem.target = target
+                    inst.sg.statemem.targetpos = target:GetPosition()
+                    inst:ForceFacePoint(inst.sg.statemem.targetpos)
                 end
 
                 inst.web_cd = true
-                inst:DoTaskInTime(10,function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
+                inst:DoTaskInTime(10, function(inst) inst.web_cd = nil end) -- Cooldown for the web attack, don't need to bother with a timer component
             end,
 
             onupdate = function(inst)
@@ -356,11 +351,10 @@ env.AddStategraphPostInit("spider", function(inst)
                 end
             end,
 
-
             timeline =
             {
                 FrameEvent(14, function(inst)
-                    WebMortar(inst,0)
+                    WebMortar(inst, 0)
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/cavespider/spit_web")
                 end),
             },
