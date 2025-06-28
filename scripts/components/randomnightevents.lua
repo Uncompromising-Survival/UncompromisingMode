@@ -64,7 +64,7 @@ player.components.talker:Say(GetString(player, "ANNOUNCE_RNEFOG"))
 end
 
 local function StartFogAuto(player,x) --This should deactivate fog after 15 seconds or x time if you don't want to include StopFog(player)
-player.components.talker:Say(GetString(player, "ANNOUNCE_RNEFOG"))
+	player.components.talker:Say(GetString(player, "ANNOUNCE_RNEFOG"))
 	if not player:HasTag("infog") then
 		player:AddTag("infog")
 	end
@@ -76,11 +76,11 @@ player.components.talker:Say(GetString(player, "ANNOUNCE_RNEFOG"))
 end
 
 local function MultiFogAuto(player,x)
-StartFogAuto(player,x)
-local m,n,o = player.Transform:GetWorldPosition()
-local fogtargets = TheSim:FindEntities(m,n,o, STRUCTURE_DIST, {"player"})
+	StartFogAuto(player,x)
+	local m,n,o = player.Transform:GetWorldPosition()
+	local fogtargets = TheSim:FindEntities(m,n,o, STRUCTURE_DIST, {"player"})
 	for k,v in pairs(fogtargets) do
-	StartFogAuto(v,x)
+		StartFogAuto(v,x)
 	end
 end
 
@@ -89,8 +89,8 @@ end
 ----------------------------------------------------
 
 local function DayBreak(mob)
-	mob.persists = false
-	mob:WatchWorldState("isday", function()
+		mob.persists = false
+		mob:WatchWorldState("isday", function()
 		local x, y, z = mob.Transform:GetWorldPosition()
 		local despawnfx = SpawnPrefab("shadow_despawn")
 		despawnfx.Transform:SetPosition(x, y, z)
@@ -106,28 +106,28 @@ end
 --RNE list below
 ----------------------------------------------------
 local function SkeleBros(player)
-MultiFogAuto(player,10)
-player:DoTaskInTime(8,function(player)
-local CHANNELER_SPAWN_RADIUS = 30
-    if player.components.health:IsDead() then
-        return
-    end
-	for i = 1,3 do
-	local x, y, z = player.Transform:GetWorldPosition()
-    local angle = math.random() * 2 * PI
-    x = x + CHANNELER_SPAWN_RADIUS * math.cos(angle)
-    z = z + CHANNELER_SPAWN_RADIUS * math.sin(angle)
-	if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
-        local skele = SpawnPrefab("rneskeleton")
-		if skele.components.combat ~= nil then
-		skele.components.combat:SuggestTarget(player)
+	MultiFogAuto(player,10)
+	player:DoTaskInTime(8,function(player)
+		local CHANNELER_SPAWN_RADIUS = 30
+		if player.components.health:IsDead() then
+			return
 		end
-        skele.Transform:SetPosition(x, 0, z)
-	else
-	CHANNELER_SPAWN_RADIUS = CHANNELER_SPAWN_RADIUS/2
-    end
-	end
-end)
+		for i = 1,3 do
+			local x, y, z = player.Transform:GetWorldPosition()
+			local angle = math.random() * 2 * PI
+			x = x + CHANNELER_SPAWN_RADIUS * math.cos(angle)
+			z = z + CHANNELER_SPAWN_RADIUS * math.sin(angle)
+			if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
+				local skele = SpawnPrefab("rneskeleton")
+				if skele.components.combat ~= nil then
+					skele.components.combat:SuggestTarget(player)
+				end
+				skele.Transform:SetPosition(x, 0, z)
+			else
+				CHANNELER_SPAWN_RADIUS = CHANNELER_SPAWN_RADIUS/2
+			end
+		end
+	end)
 end
 
 local function TrySpawnStanton(player)
@@ -1062,8 +1062,6 @@ local function Earthquake(player)
 	end)
 end
 
-
-
 local function SpawnLesserShadowVortex(player)
 	if TheWorld.state.isnight then
 		for i = 1, 2 do
@@ -1436,14 +1434,14 @@ end
 ---RNE list above
 ---------------------------------------------------
 
-local function AddWildEvent(name, weight)
+local function AddWildEvent(name, fn, weight)
     if not self.wildevents then
         self.wildevents = {}
         self.totalrandomwildweight = 0
     end
 
 	if not table.contains(self.wildevents, name) then
-		table.insert(self.wildevents, { name = name, weight = weight })
+		table.insert(self.wildevents, {name = name, fn = fn, weight = weight})
 		self.totalrandomwildweight = self.totalrandomwildweight + weight
 	end
 end
@@ -1462,24 +1460,24 @@ local function RemoveWildEvent(name, weight)
 	end
 end
 
-local function AddSecondaryWildEvent(name, weight)
+local function AddSecondaryWildEvent(name, fn, weight)
     if not self.secondarywildevents then
         self.secondarywildevents = {}
         self.totalrandomsecondarywildweight = 0
     end
 
-    table.insert(self.secondarywildevents, { name = name, weight = weight })
+    table.insert(self.secondarywildevents, {name = name, fn = fn, weight = weight})
     self.totalrandomsecondarywildweight = self.totalrandomsecondarywildweight + weight
 end
 
-local function AddBaseEvent(name, weight)
+local function AddBaseEvent(name, fn, weight)
     if not self.baseevents then
         self.baseevents = {}
         self.totalrandombaseweight = 0
     end
 	
 	if not table.contains(self.baseevents, name) then
-		table.insert(self.baseevents, { name = name, weight = weight })
+		table.insert(self.baseevents, {name = name, fn = fn, weight = weight})
 		self.totalrandombaseweight = self.totalrandombaseweight + weight
 	end
 end
@@ -1498,33 +1496,33 @@ local function RemoveBaseEvent(name, weight)
 	end
 end
 
-local function AddOceanEvent(name, weight)
+local function AddOceanEvent(name, fn, weight)
     if not self.oceanevents then
         self.oceanevents = {}
         self.totalrandomoceanweight = 0
     end
 
-    table.insert(self.oceanevents, { name = name, weight = weight })
+    table.insert(self.oceanevents, {name = name, fn = fn, weight = weight})
     self.totalrandomoceanweight = self.totalrandomoceanweight + weight
 end
 
-local function AddFullMoonEvent(name, weight)
+local function AddFullMoonEvent(name, fn, weight)
     if not self.fullmoonevents then
         self.fullmoonevents = {}
         self.totalrandomfullmoonweight = 0
     end
 
-    table.insert(self.fullmoonevents, { name = name, weight = weight })
+    table.insert(self.fullmoonevents, {name = name, fn = fn, weight = weight})
     self.totalrandomfullmoonweight = self.totalrandomfullmoonweight + weight
 end
 
-local function AddNewMoonEvent(name, weight)
+local function AddNewMoonEvent(name, fn, weight)
     if not self.newmoonevents then
         self.newmoonevents = {}
         self.totalrandomnewmoonweight = 0
     end
 
-    table.insert(self.newmoonevents, { name = name, weight = weight })
+    table.insert(self.newmoonevents, {name = name, fn = fn, weight = weight})
     self.totalrandomnewmoonweight = self.totalrandomnewmoonweight + weight
 end
 
@@ -1534,127 +1532,127 @@ end
 
 local AUTUMN =
 {
-	SpawnMushbooms = { name = SpawnMushbooms, weight = 0.3, },
+	SpawnMushbooms = {name = "SpawnMushbooms", fn = SpawnMushbooms, weight = .3,},
 }
 
 local WINTER =
 {
-	SpawnKrampus = { name = SpawnKrampus, weight = .2, },
-	SpawnGingerDeadPig = { name = SpawnGingerDeadPig, weight = 0.6, },
+	SpawnKrampus = {name = "SpawnKrampus", fn = SpawnKrampus, weight = .2,},
+	SpawnGingerDeadPig = {name = "SpawnGingerDeadPig", fn = SpawnGingerDeadPig, weight = .6,},
 }
 
 local SPRING =
 {
-	SpawnThunderFar = { name = SpawnThunderFar, weight = 0.3, },
-	SpawnLureplagueRat = { name = SpawnLureplagueRat, weight = 0.1, },
+	SpawnThunderFar = {name = "SpawnThunderFar", fn = SpawnThunderFar, weight = .3,},
+	SpawnLureplagueRat = {name = "SpawnLureplagueRat", fn = SpawnLureplagueRat, weight = .1,},
 }
 
 local SUMMER =
 {
-	--SpawnWalrusHunt = { name = SpawnWalrusHunt, weight = 1, },
+	--SpawnWalrusHunt = {name = "SpawnWalrusHunt", fn = SpawnWalrusHunt, weight = 1,},
 }
 
-local _maskmanchance = IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) and .8 or 0.1
+local _maskmanchance = IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) and .8 or .1
 
 local BASE =
 {
-	MaskMan = { name = MaskMan, weight = _maskmanchance, },
-	SpawnBaseBats = { name = SpawnBaseBats, weight = .3, },
-	SpawnFissures = { name = SpawnFissures, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .5, },
-	--FireHungryGhostAttack = { name = FireHungryGhostAttack, weight = .2, },
-	SpawnShadowChars = { name = SpawnShadowChars, weight = .3, },
-	SpawnMonkeys = { name = SpawnMonkeys, weight = .1, },
-	LeifAttack = { name = LeifAttack, weight = .1, },
-	--SpawnShadowTeleporter = { name = SpawnShadowTeleporter, weight = .1, },
-	--StumpsAttack = { name = StumpsAttack, weight = .2, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .6, },
-	SpawnShadowBoomer = { name = SpawnShadowBoomer, weight = .3, },
-	SpawnGnomes = { name = SpawnGnomes, weight = .1, },
-	SkeleBros = { name = SkeleBros, weight = .3, },
-	Stanton = { name = Stanton, weight = .1, },
-	Earthquake = { name = Earthquake, weight = .1, },
-	--[[SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	SpawnShadowVortex = { name = SpawnShadowVortex, weight = .5, },
-	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
-	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },]]
+	MaskMan = {name = "MaskMan", fn = MaskMan, weight = _maskmanchance,},
+	SpawnBaseBats = {name = "SpawnBaseBats", fn = SpawnBaseBats, weight = .3,},
+	SpawnFissures = {name = "SpawnFissures", fn = SpawnFissures, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .5, },
+	--FireHungryGhostAttack = {name = "FireHungryGhostAttack", fn = FireHungryGhostAttack, weight = .2,},
+	SpawnShadowChars = {name = "SpawnShadowChars", fn = SpawnShadowChars, weight = .3,},
+	SpawnMonkeys = {name = "SpawnMonkeys", fn = SpawnMonkeys, weight = .1,},
+	LeifAttack = {name = "LeifAttack", fn = LeifAttack, weight = .1,},
+	--SpawnShadowTeleporter = {name = "SpawnShadowTeleporter", fn = SpawnShadowTeleporter, weight = .1,},
+	--StumpsAttack = {name = "StumpsAttack", fn = StumpsAttack, weight = .2,},
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .6,},
+	SpawnShadowBoomer = {name = "SpawnShadowBoomer", fn = SpawnShadowBoomer, weight = .3,},
+	SpawnGnomes = {name = "SpawnGnomes", fn = SpawnGnomes, weight = .1,},
+	SkeleBros = {name = "SkeleBros", fn = SkeleBros, weight = .3,},
+	Stanton = {name = "Stanton", fn = Stanton, weight = .1, },
+	Earthquake = {name = "Earthquake", fn = Earthquake, weight = .1,},
+	--[[SpawnShadowGrabby = {name = "SpawnShadowGrabby", fn = SpawnShadowGrabby, weight = .5,},
+	SpawnShadowVortex = {name = "SpawnShadowVortex", fn = SpawnShadowVortex, weight = .5,},
+	SpawnMindWeavers = {name = "SpawnMindWeavers", fn = SpawnMindWeavers, weight = .5,},
+	SpawnNervousTicks = {name = "SpawnNervousTicks", fn = SpawnNervousTicks, weight = .5,},
+	SpawnNightCrawlers = {name = "SpawnNightCrawlers", fn = SpawnNightCrawlers, weight = .5,},
+	SpawnFuelSeekers = {name = "SpawnFuelSeekers", fn = SpawnFuelSeekers, weight = .5,},]]
 }
 
 for k, v in pairs(BASE) do
-	AddBaseEvent(v.name, v.weight)
+	AddBaseEvent(v.name, v.fn, v.weight)
 end
 
 local WILD =
 {
-	SpawnBats = { name = SpawnBats, weight = .3, },
-	SpawnLightFlowersNFerns = { name = SpawnLightFlowersNFerns, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .5, },
-	SpawnMonkeys = { name = SpawnMonkeys, weight = .1, },
-	LeifAttack = { name = LeifAttack, weight = .1, },
-	--SpawnShadowTeleporter = { name = SpawnShadowTeleporter, weight = .1, },
-	--StumpsAttack = { name = StumpsAttack, weight = .2, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .6, },
-	SpawnShadowBoomer = { name = SpawnShadowBoomer, weight = .3, },
-	SkeleBros = { name = SkeleBros, weight = .3, },
-	Stanton = { name = Stanton, weight = .1, },
-	Earthquake = { name = Earthquake, weight = .1, },
-	--[[SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },
-	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
-	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },]]
+	SpawnBats = {name = "SpawnBats", fn = SpawnBats, weight = .3,},
+	SpawnLightFlowersNFerns = {name = "SpawnLightFlowersNFerns", fn = SpawnLightFlowersNFerns, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .5,},
+	SpawnMonkeys = {name = "SpawnMonkeys", fn = SpawnMonkeys, weight = .1,},
+	LeifAttack = {name = "LeifAttack", fn = LeifAttack, weight = .1,},
+	--SpawnShadowTeleporter = {name = "SpawnShadowTeleporter", fn = SpawnShadowTeleporter, weight = .1,},
+	--StumpsAttack = {name = "StumpsAttack", fn = StumpsAttack, weight = .2, },
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .6,},
+	SpawnShadowBoomer = {name = "SpawnShadowBoomer", fn = SpawnShadowBoomer, weight = .3,},
+	SkeleBros = {name = "SkeleBros", fn = SkeleBros, weight = .3,},
+	Stanton = {name = "Stanton", fn = Stanton, weight = .1,},
+	Earthquake = {name = "Earthquake", fn = Earthquake, weight = .1,},
+	--[[SpawnShadowGrabby = {name = "SpawnShadowGrabby", fn = SpawnShadowGrabby, weight = .5,},
+	SpawnShadowVortex = {name = "SpawnShadowVortex", fn = SpawnShadowVortex, weight = .4,},
+	SpawnMindWeavers = {name = "SpawnMindWeavers", fn = SpawnMindWeavers, weight = .5,},
+	SpawnNervousTicks = {name = "SpawnNervousTicks", fn = SpawnNervousTicks, weight = .5,},
+	SpawnNightCrawlers = {name = "SpawnNightCrawlers", fn = SpawnNightCrawlers, weight = .5,},
+	SpawnFuelSeekers = {name = "SpawnFuelSeekers", fn = SpawnFuelSeekers, weight = .5,},]]
 }
 
 for k, v in pairs(WILD) do
-	AddWildEvent(v.name, v.weight)
+	AddWildEvent(v.name, v.fn, v.weight)
 end
 
 local SECONDARYWILD =
 {
-	SpawnBaseBats = { name = SpawnBaseBats, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .5, },
-	SpawnLightFlowersNFerns = { name = SpawnLightFlowersNFerns, weight = .2, },
-	--StumpsAttack = { name = StumpsAttack, weight = .3, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .6, },
-	SpawnShadowBoomer = { name = SpawnShadowBoomer, weight = .2, },
+	SpawnBaseBats = {name = "SpawnBaseBats", fn = SpawnBaseBats, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .5, },
+	SpawnLightFlowersNFerns = {name = "SpawnLightFlowersNFerns", fn = SpawnLightFlowersNFerns, weight = .2,},
+	--StumpsAttack = {name = "StumpsAttack", fn = StumpsAttack, weight = .3, },
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .6,},
+	SpawnShadowBoomer = {name = "SpawnShadowBoomer", fn = SpawnShadowBoomer, weight = .2,},
 }
 
 for k, v in pairs(SECONDARYWILD) do
-	AddSecondaryWildEvent(v.name, v.weight)
+	AddSecondaryWildEvent(v.name, v.fn, v.weight)
 end
 
 local FULLMOON =
 {
-	MoonTear = { name = MoonTear, weight = 1, },
+	MoonTear = {name = "MoonTear", fn = MoonTear, weight = 1, },
 }
 
 for k, v in pairs(FULLMOON) do
-	AddFullMoonEvent(v.name, v.weight)
+	AddFullMoonEvent(v.name, v.fn, v.weight)
 end
 
 local NEWMOON =
 {
-	SpawnPhonograph = { name = SpawnPhonograph, weight = 1, },
-	SpawnShadowTeleporter = { name = SpawnShadowTeleporter, weight = 1, },
+	SpawnPhonograph = {name = "SpawnPhonograph", fn = SpawnPhonograph, weight = 1,},
+	SpawnShadowTeleporter = {name = "SpawnShadowTeleporter", fn = SpawnShadowTeleporter, weight = 1,},
 }
 
 for k, v in pairs(NEWMOON) do
-	AddNewMoonEvent(v.name, v.weight)
+	AddNewMoonEvent(v.name, v.fn, v.weight)
 end
 
 local OCEAN =
 {
-	SpawnSquids = { name = SpawnSquids, weight = .6, },
-	SpawnBats = { name = SpawnBats, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .4, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .5, },
+	SpawnSquids = {name = "SpawnSquids", fn = SpawnSquids, weight = .6,},
+	SpawnBats = {name = "SpawnBats", fn = SpawnBats, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .4,},
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .5,},
 }
 
 for k, v in pairs(OCEAN) do
-	AddOceanEvent(v.name, v.weight)
+	AddOceanEvent(v.name, v.fn, v.weight)
 end
 
 local function OnSeasonTick(src, data)
@@ -1680,23 +1678,23 @@ local function OnSeasonTick(src, data)
 
 	if TheWorld.state.isautumn or (data ~= nil and data.season == "autumn") then
 		for k, v in pairs(AUTUMN) do
-			AddBaseEvent(v.name, v.weight)
-			AddWildEvent(v.name, v.weight)
+			AddBaseEvent(v.name, v.fn, v.weight)
+			AddWildEvent(v.name, v.fn, v.weight)
 		end
 	elseif TheWorld.state.iswinter or (data ~= nil and data.season == "winter") then
 		for k, v in pairs(WINTER) do
-			AddBaseEvent(v.name, v.weight)
-			AddWildEvent(v.name, v.weight)
+			AddBaseEvent(v.name, v.fn, v.weight)
+			AddWildEvent(v.name, v.fn, v.weight)
 		end
 	elseif TheWorld.state.spring or (data ~= nil and data.season == "spring") then
 		for k, v in pairs(SPRING) do
-			AddBaseEvent(v.name, v.weight)
-			AddWildEvent(v.name, v.weight)
+			AddBaseEvent(v.name, v.fn, v.weight)
+			AddWildEvent(v.name, v.fn, v.weight)
 		end
 	elseif TheWorld.state.summer or (data ~= nil and data.season == "summer") then
 		for k, v in pairs(SUMMER) do
-			AddBaseEvent(v.name, v.weight)
-			AddWildEvent(v.name, v.weight)
+			AddBaseEvent(v.name, v.fn, v.weight)
+			AddWildEvent(v.name, v.fn, v.weight)
 		end
 	end
 end
@@ -1714,11 +1712,8 @@ local function DoBaseRNE(player)
 					if #self.storedrne >= 10 then
 						table.remove(self.storedrne, 1)
 					end
-
-
-
 					table.insert(self.storedrne, v.name)
-					v.name(player)
+					v.fn(player)
 					return
 				end
 			end
@@ -1736,8 +1731,7 @@ local function DoWildRNE(player)
 					if #self.storedrne >= 10 then
 						table.remove(self.storedrne, 1)
 					end
-
-					v.name(player)
+					v.fn(player)
 					table.insert(self.storedrne, v.name)
 					return
 				end
@@ -1753,8 +1747,8 @@ local function DoSecondaryWildRNE(player)
 			for k,v in pairs(self.secondarywildevents) do
 				rnd = rnd - v.weight
 				if rnd <= 0 then
-				v.name(player)
-				return
+					v.fn(player)
+					return
 				end
 			end
 		end
@@ -1768,8 +1762,8 @@ local function DoOceanRNE(player)
 			for k,v in pairs(self.springevents) do
 				rnd = rnd - v.weight
 				if rnd <= 0 then
-				v.name(player)
-				return
+					v.fn(player)
+					return
 				end
 			end
 		end
@@ -1779,8 +1773,8 @@ local function DoOceanRNE(player)
 			for k,v in pairs(self.oceanevents) do
 				rnd = rnd - v.weight
 				if rnd <= 0 then
-				v.name(player)
-				return
+					v.fn(player)
+					return
 				end
 			end
 		end
@@ -1795,8 +1789,8 @@ local function DoFullMoonRNE(player)
 			for k,v in pairs(self.fullmoonevents) do
 				rnd = rnd - v.weight
 				if rnd <= 0 then
-				v.name(player)
-				return
+					v.fn(player)
+					return
 				end
 			end
 		end
@@ -1811,7 +1805,7 @@ local function DoNewMoonRNE(player)
 				rnd = rnd - v.weight
 				if rnd <= 0 and v.name ~= self.LastNewMoonRNE then
 					self.LastNewMoonRNE = v.name
-					v.name(player)
+					v.fn(player)
 					return
 				end
 			end
@@ -1826,8 +1820,8 @@ local function DoCaveRNE(player)
 			for k,v in pairs(self.caveevents) do
 				rnd = rnd - v.weight
 				if rnd <= 0 then
-				v.name(player)
-				return
+					v.fn(player)
+					return
 				end
 			end
 		end

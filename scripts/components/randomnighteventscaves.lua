@@ -37,7 +37,7 @@ local function PlayerScaling(player)
 	elseif #ents > 6 then
 		return 4
 	end
-
+	
 	return 1
 end
 	
@@ -566,7 +566,7 @@ local function SpawnNightCrawlers(player)
 						local light = TheSim:GetLightAtPoint(x1, 0, z1)
 			
 						if light <= 0.1 and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
-							local ent = SpawnPrefab("um_nightcrawler")
+							local ent = SpawnPrefab("nightcrawler")
 							ent.Transform:SetPosition(x1, 0, z1)
 							break
 						end
@@ -608,26 +608,26 @@ end
 ---RNE list above
 ---------------------------------------------------
 
-local function AddCaveEvent(name, weight)
+local function AddCaveEvent(name, fn, weight)
     if not self.caveevents then
         self.caveevents = {}
         self.totalrandomcaveweight = 0
     end
 	
 	if not table.contains(self.caveevents, name) then
-		table.insert(self.caveevents, { name = name, weight = weight })
+		table.insert(self.caveevents, {name = name, fn = fn, weight = weight})
 		self.totalrandomcaveweight = self.totalrandomcaveweight + weight
 	end
 end
 
-local function AddSecondaryCaveEvent(name, weight)
+local function AddSecondaryCaveEvent(name, fn, weight)
     if not self.secondarycaveevents then
         self.secondarycaveevents = {}
         self.totalrandomsecondarycaveweight = 0
     end
 	
 	if not table.contains(self.secondarycaveevents, name) then
-		table.insert(self.secondarycaveevents, { name = name, weight = weight })
+		table.insert(self.secondarycaveevents, {name = name, fn = fn, weight = weight})
 		self.totalrandomsecondarycaveweight = self.totalrandomsecondarycaveweight + weight
 	end
 end
@@ -638,41 +638,41 @@ end
 
 local CAVE = 
 {
-	SpawnBats = { name = SpawnBats, weight = .3, },
-	SpawnFissures = { name = SpawnFissures, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .5, },
-	SpawnShadowChars = { name = SpawnShadowChars, weight = .3, },
-	SpawnMonkeys = { name = SpawnMonkeys, weight = .1, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .6, },
-	SpawnShadowBoomer = { name = SpawnShadowBoomer, weight = .3, },
-	SkeleBros = { name = SkeleBros, weight = .3, },
-	--SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	SpawnShadowVortex = { name = SpawnShadowVortex, weight = .5, },
-	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
-	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
+	SpawnBats = {name = "SpawnBats", fn = SpawnBats, weight = .3,},
+	SpawnFissures = {name = "SpawnFissures", fn = SpawnFissures, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .5,},
+	SpawnShadowChars = {name = "SpawnShadowChars", fn = SpawnShadowChars, weight = .3,},
+	SpawnMonkeys = {name = "SpawnMonkeys", fn = SpawnMonkeys, weight = .1, },
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .6,},
+	SpawnShadowBoomer = {name = "SpawnShadowBoomer", fn = SpawnShadowBoomer, weight = .3,},
+	SkeleBros = {name = "SkeleBros", fn = SkeleBros, weight = .3,},
+	--SpawnShadowGrabby = {name = "SpawnShadowGrabby", fn = SpawnShadowGrabby, weight = .5,},
+	SpawnShadowVortex = {name = "SpawnShadowVortex", fn = SpawnShadowVortex, weight = .5,},
+	SpawnMindWeavers = {name = "SpawnMindWeavers", fn = SpawnMindWeavers, weight = .5,},
+	SpawnNervousTicks = {name = "SpawnNervousTicks", fn = SpawnNervousTicks, weight = .5,},
+	SpawnNightCrawlers = {name = "SpawnNightCrawlers", fn = SpawnNightCrawlers, weight = .5,},
+	SpawnFuelSeekers = {name = "SpawnFuelSeekers", fn = SpawnFuelSeekers, weight = .5,},
 }
 
 for k, v in pairs(CAVE) do
-	AddCaveEvent(v.name, v.weight)
+	AddCaveEvent(v.name, v.fn, v.weight)
 end
 
 local SECONDARYCAVE = 
 {
-	SpawnBats = { name = SpawnBats, weight = .3, },
-	SpawnSkitts = { name = SpawnSkitts, weight = .5, },
-	SpawnShadowTalker = { name = SpawnShadowTalker, weight = .6, },
-	SkeleBros = { name = SkeleBros, weight = .3, },
-	--SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
-	SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
-	SpawnNervousTicks = { name = SpawnNervousTicks, weight = .5, },
-	SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
-	SpawnFuelSeekers = { name = SpawnFuelSeekers, weight = .5, },
+	SpawnBats = {name = "SpawnBats", fn = SpawnBats, weight = .3,},
+	SpawnSkitts = {name = "SpawnSkitts", fn = SpawnSkitts, weight = .5,},
+	SpawnShadowTalker = {name = "SpawnShadowTalker", fn = SpawnShadowTalker, weight = .6,},
+	SkeleBros = {name = "SkeleBros", fn = SkeleBros, weight = .3,},
+	--SpawnShadowGrabby = {name = "SpawnShadowGrabby", fn = SpawnShadowGrabby, weight = .5,},
+	SpawnMindWeavers = {name = "SpawnMindWeavers", fn = SpawnMindWeavers, weight = .5,},
+	SpawnNervousTicks = {name = "SpawnNervousTicks", fn = SpawnNervousTicks, weight = .5,},
+	SpawnNightCrawlers = {name = "SpawnNightCrawlers", fn = SpawnNightCrawlers, weight = .5,},
+	SpawnFuelSeekers = {name = "SpawnFuelSeekers", fn = SpawnFuelSeekers, weight = .5,},
 }
 
 for k, v in pairs(SECONDARYCAVE) do
-	AddSecondaryCaveEvent(v.name, v.weight)
+	AddSecondaryCaveEvent(v.name, v.fn, v.weight)
 end
 ------------------------
 --Inclusion and Tuning
@@ -688,11 +688,8 @@ local function DoCaveRNE(player)
 					if #self.storedcaverne >= 9 then
 						table.remove(self.storedcaverne, 1)
 					end
-					
-					
-					
 					table.insert(self.storedcaverne, v.name)
-					v.name(player)
+					v.fn(player)
 					return
 				end
 			end
@@ -710,11 +707,8 @@ local function DoSecondaryCaveRNE(player)
 					if #self.storedcaverne >= 9 then
 						table.remove(self.storedcaverne, 1)
 					end
-					
-					
-					
 					table.insert(self.storedcaverne, v.name)
-					v.name(player)
+					v.fn(player)
 					return
 				end
 			end
