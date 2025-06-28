@@ -85,6 +85,9 @@ end
 if KnownModIndex:IsModEnabled("workshop-1982562290") then
     table.insert(char_cocoon_list, "wade")
 end
+if KnownModIndex:IsModEnabled("workshop-2879092392") then
+    table.insert(char_cocoon_list, "wonderwhy")
+end
 
 local function SurvivorCocoon(inst)
     local random_char_cocoon = char_cocoon_list[math.random(#char_cocoon_list)]
@@ -472,6 +475,20 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "tiddlelog", .3)
         AddChanceLoot(inst, "spoiled_food", nil, 4)
         AddChanceLoot(inst, "spoiled_food", .5, 4)
+    elseif random_char_cocoon == "wonderwhy" then
+        AddChanceLoot(inst, "thulecite_pieces", nil, 6)
+        AddChanceLoot(inst, "thulecite_pieces", .5, 6)
+		AddChanceLoot(inst, "nitre", nil, 3)
+        AddChanceLoot(inst, "nitre", .5, 3)
+		AddChanceLoot(inst, "boneshard", nil, 4)
+        AddChanceLoot(inst, "boneshard", .5, 2)
+        AddChanceLoot(inst, "ancientdreams_gemshard", nil, 3)
+        AddChanceLoot(inst, "ancientdreams_gemshard", .5, 3)
+        AddChanceLoot(inst, math.random() > .75 and "moonglass" or math.random() > .5 and "moonrocknugget" or "goldnugget", nil, 4)
+		AddDurabilityLoot(inst, math.random() > .75 and "why_refined_butterfly_moon" or math.random() > .5 and "why_refined_butterfly" or "why_refined_lightbulb")
+        AddChanceLoot(inst, math.random() > .5 and "redgem" or "bluegem")
+        AddChanceLoot(inst, math.random() > .75 and "orangegem" or "purplegem")
+        AddChanceLoot(inst, math.random() > .75 and "greengem" or "yellowgem", .5)
     else
         AddChanceLoot(inst, "skeleton")
         AddChanceLoot(inst, "boneshard", nil, 2)
