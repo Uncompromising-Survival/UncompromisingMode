@@ -98,8 +98,14 @@ local function aac_proc(haunter)
 end
 
 local function OnHaunt(inst, haunter)
+	inst.haunting = true
 	haunter:PushEvent("respawnfromghost", { source = inst })
     haunter.Physics:Teleport(inst.Transform:GetWorldPosition())
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local amulets = TheSim:FindEntities(x,y,z,12,{"resurrector"})
+	for i,v in ipairs(amulets) do
+		v.onfar(v) -- Tell them to check for ghosts.
+	end
 	haunter:DoTaskInTime(3, aac_proc)
 
 	inst:DoTaskInTime(1, function(inst)
@@ -115,26 +121,43 @@ local function OnHaunt(inst, haunter)
 end
 
 local function onfar(inst) --doesn't have the player part for some reason....
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local players = FindPlayersInRange(x, y, z, 6)
-	local ghostplayers = false
-	for i, v in ipairs(players) do
-		if v:HasTag("playerghost") then
-			local ghostplayers = true
-		end
-	end
-    if inst.floating and ghostplayers == false then
-		inst.floating = false
-		inst.AnimState:PlayAnimation("Hover_pst")
-		inst.AnimState:PushAnimation("Idle",true)
-    end
+	-- local x,y,z = inst.Transform:GetWorldPosition()
+	-- local players = FindPlayersInRange(x, y, z, 6)
+	-- local ghostplayers = false
+	-- for i, v in ipairs(players) do
+		-- if v:HasTag("playerghost") then
+			-- local ghostplayers = true
+		-- end
+	-- end
+    -- if inst.floating and ghostplayers == false then
+		-- inst.floating = false
+		-- inst.AnimState:PlayAnimation("Hover_pst")
+		-- inst.AnimState:PushAnimation("Idle",true)
+    -- end
 end
 
 local function onnear(inst,player)
-    if player ~= nil and player:HasTag("playerghost") and inst.floating == false then
-		inst.floating = true
+    if player ~= nil and player:HasTag("playerghost") and not inst.floating then
 		inst.AnimState:PlayAnimation("Idle_pre")
 		inst.AnimState:PushAnimation("Hover",true)
+		inst.floating = inst:DoPeriodicTask(0.5,function(inst)
+			local x,y,z = inst.Transform:GetWorldPosition()
+			local players = FindPlayersInRange(x, y, z, 6)
+			local ghostplayers = false
+			for i, v in ipairs(players) do
+				if v:HasTag("playerghost") then
+					ghostplayers = true
+				end
+			end
+			if ghostplayers == false and not inst.haunting then
+				inst.floating:Cancel()
+				inst.floating = nil
+				inst.AnimState:PlayAnimation("Hover_pst")
+				inst.AnimState:PushAnimation("Idle",true)
+				
+			end			
+		end)
+
     end
 end
 
@@ -201,6 +224,8 @@ local function fn()
     inst.components.playerprox:SetDist(4, 6)
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetOnPlayerFar(onfar)
+	
+	inst.onfar = onfar
 	inst.floating = false
     return inst
 end

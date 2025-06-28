@@ -89,7 +89,7 @@ local RETARGET_MUST_TAGS = { "_combat", "_health" }
 local RETARGET_CANT_TAGS = { "insect", "INLIMBO", "plantkin" }
 local RETARGET_ONEOF_TAGS = { "character", "animal", "monster" }
 local function KillerRetarget(inst)
-    return FindEntity(inst, 16,
+    return FindEntity(inst, 14,
         function(guy)
             return inst.components.combat:CanTarget(guy) and
                 not (guy.components.skilltreeupdater and guy.components.skilltreeupdater:IsActivated("wormwood_bugs"))
@@ -223,8 +223,8 @@ local function fn()
     end
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-	inst.components.locomotor.runspeed = 8
-	inst.components.locomotor.walkspeed = 8 
+	inst.components.locomotor.runspeed = 7
+	inst.components.locomotor.walkspeed = 7 
     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
     inst.components.locomotor:SetTriggersCreep(false)
     inst:SetStateGraph("SGbee")
