@@ -254,7 +254,7 @@ local function OnGrow(inst)
 end
 
 local function OnShrink(inst)
-    local targetstage = math.clamp(inst.stage - 1, 1, 5)
+    local targetstage = math.clamp(inst.stage - 1, 0, 5)
 
     if inst.components.pickable then
         inst.components.pickable.canbepicked = false
@@ -265,6 +265,7 @@ local function OnShrink(inst)
     inst.stage = targetstage
 
     inst:ListenForEvent("animover", function()
+        if inst.stage < 1 then inst:Remove() return end
         local x, y, z = inst.Transform:GetWorldPosition()
         local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
 
