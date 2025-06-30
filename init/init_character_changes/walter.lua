@@ -9,7 +9,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local function VetCurseMaxSanityLoss(inst, data)
     if inst:HasTag("vetcurse") then
-        local sanitypenalty = math.min(((data.damageresolved or data.damage) / TUNING.WALTER_SANITY) * inst._sanity_damage_protection:Get() + inst.components.sanity:GetPenaltyPercent(), .75)
+        local sanitypenalty = math.min((((data.damageresolved or data.damage) * 0.5) / TUNING.WALTER_SANITY) * inst._sanity_damage_protection:Get() + inst.components.sanity:GetPenaltyPercent(), .75)
 		inst.components.sanity:AddSanityPenalty(inst, sanitypenalty)
 		if not inst.components.timer:TimerExists("um_walterpenalty_passiveheal") then
 			inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
@@ -21,7 +21,7 @@ local function VetCurseMaxSanityLoss(inst, data)
 end
 
 local function OnPenaltyTimerDone(inst)
-	local takethepenaltyaway = inst.components.sanity:GetPenaltyPercent() - .2
+	local takethepenaltyaway = inst.components.sanity:GetPenaltyPercent() - .1
 	inst.components.sanity:AddSanityPenalty(inst, math.max(takethepenaltyaway, 0))
 	if inst.components.sanity:GetPenaltyPercent() ~= 0 then
 		inst.components.timer:StartTimer("um_walterpenalty_passiveheal", TUNING.TOTAL_DAY_TIME)
