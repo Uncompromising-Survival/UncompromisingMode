@@ -172,6 +172,7 @@ configuration_options = {
         "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
     BinaryConfig("longpig", "Long Pig", "Telltale Hearts now require 'Long Pig' from skeletons to hinder amassing large numbers of them.", false),
 
+    BinaryConfig("maxhpdeath", "Max Health Death", "Dying in any way will leave you with reduced Max HP, stacking with the penalties from some revival methods.", true),
     BinaryConfig("maxhphitters", "Max Health Mob",
         "Some monsters deal Max HP damage.\nTurn this off if you're having problems with mods which also interact Max HP.",
         true),
@@ -692,6 +693,7 @@ configuration_options = {
             { description = "3x", data = 3 } },
         default = 1.5
     },
+    BinaryConfig("um_icebox_tweaks", "Ice Box Tweaks", "The Ice Box now accepts any item that can be used in a Crock Pot.\n Ice/Salt Box have lower priority than Crock Pots when shift-clicking items.", true),
     BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and deal damage to unprepared players. Honey stats reduced to one-third.", true),
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
     {

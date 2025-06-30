@@ -40,6 +40,7 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Food changes
     ----------------------------------------------------------------------------
+    ICEBOX_TWEAKS = GetModConfigData("um_icebox_tweaks"),
     -- Goodie nerf
     GOODIESNERF = GetModConfigData("goodies_nerf"),
     -- Daywalker
@@ -378,6 +379,7 @@ TUNING.DSTU = {
     HOTCAVES = GetModConfigData("hotcaves"),
     ITEMCHECK = GetModConfigData("itemcheck"),
     SEEDS = GetModConfigData("seeds"),
+    MAXHPDEATH = GetModConfigData("maxhpdeath"),
     MAXHPHITTERS = GetModConfigData("maxhphitters"),
     BEEFALO_NERF = GetModConfigData("beefalo_nerf"),
     NO_MOCK_DRAGONFLY_BOSS_TIME = GetModConfigData("wiltfly_spawn"),
