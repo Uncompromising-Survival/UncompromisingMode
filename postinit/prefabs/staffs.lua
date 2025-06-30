@@ -278,16 +278,16 @@ if env.GetModConfigData("telestaff_rework") then
             spell.target_focus = v
 
             local skin = spell.target_focus.AnimState:GetBuild()
-            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or "images/tele_icon1.xml"
+            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or skin == "telebase_mystical" and "images/tele_icon5.xml" or "images/tele_icon1.xml"
 
-            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or "tele_icon1.tex"
+            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or skin == "telebase_mystical" and "tele_icon5.tex" or "tele_icon1.tex"
 
             if spell.target_focus == inst.target_focus then
                 -- spell.widget_scale = ICON_SCALE * 2
 
-                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or "images/tele_icon1b.xml"
+                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or skin == "telebase_mystical" and "images/tele_icon5b.xml" or "images/tele_icon1b.xml"
 
-                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or "tele_icon1b.tex"
+                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or skin == "telebase_mystical" and "tele_icon5b.tex" or "tele_icon1b.tex"
             end
 
             if spell.target_focus.spell_location ~= nil then
