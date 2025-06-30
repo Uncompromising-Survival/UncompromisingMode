@@ -470,8 +470,8 @@ local function fn_cooked()
 
 	MakeInventoryPhysics(inst)
 
-	inst.AnimState:SetBank("gloomcap")
-	inst.AnimState:SetBuild("gloomcap")
+	inst.AnimState:SetBank("gloomcap_item")
+	inst.AnimState:SetBuild("gloomcap_item")
 	inst.AnimState:PlayAnimation("cooked")
 	
 	inst.entity:SetPristine()
