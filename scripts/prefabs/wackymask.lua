@@ -335,15 +335,14 @@ local function FindClosestPart(owner)
     local ix, iy, iz = owner.Transform:GetWorldPosition()
 
     local burrows = TheSim:FindEntities(ix, iy, iz, 2000, { "ratburrow" })
-    if burrows ~= nil then
+    if burrows then
         for i, v in ipairs(burrows) do
-            if owner.SoundEmitter ~= nil then
+            if owner.SoundEmitter then
                 owner:DoTaskInTime(i, function(owner)
                     for i = 1, 5 do
                         local delay = i / 10
-
                         owner:DoTaskInTime(FRAMES * i * 1.5 + delay, function()
-                            if v ~= nil then
+                            if v then
                                 local x, y, z = owner.Transform:GetWorldPosition()
                                 local px, py, pz = v.Transform:GetWorldPosition()
                                 local rad = math.rad(owner:GetAngleToPoint(px, py, pz))
@@ -362,7 +361,7 @@ local function FindClosestPart(owner)
                 end)
             end
         end
-    elseif burrows == nil or burrows <= 0 then
+    elseif not burrows or burrows <= 0 then
         inst.components.talker:Say(GetString(owner, "ANNOUNCE_NORATBURROWS"))
     end
 end
@@ -371,77 +370,54 @@ local function OnCooldown(inst)
     inst.components.useableitem.inuse = false
 end
 
-local NOTAGS =
-{
+local NOTAGS = {
     "smallcreature",
     "_container",
     "spore",
+    "NORATCHECK",
 }
+
 local function IsAVersionOfRot(v)
-    if v.prefab == "spoiled_food" or v.prefab == "rottenegg" or v.prefab == "spoiled_fish" or v.prefab == "spoiled_fish_small" then
-        return true
+    local rotprefabs = {"spoiled_food", "rottenegg", "spoiled_fish", "spoiled_fish_small"}
+    for _, rotprefab in pairs(rotprefabs) do
+        if v.prefab == rotprefab then
+            return true
+        end
     end
 end
 
-local function TrySpawnIcon(v, intensity)
-    local nearbyicon = FindEntity(v, 2, nil, { "ratmask_stinklines" })
-    if nearbyicon ~= nil then
+local function TrySpawnIcon(v, owner, intensity)
+    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    if nearbyicon then
         nearbyicon.Resize(nearbyicon, intensity)
     else
         local icon = SpawnPrefab("ratmask_stinklines")
         local x, y, z = v.Transform:GetWorldPosition()
+        icon.Network:SetClassifiedTarget(owner)
         icon.Transform:SetPosition(x, y, z)
         icon.Resize(icon, intensity)
     end
 end
 
-local function FoodScoreCalculations(container, v)
-    if container then
-        if v:HasTag("stale") then
-            TrySpawnIcon(v, .5)
-        end
-        if v:HasTag("spoiled") then
-            TrySpawnIcon(v, .75)
-        end
-        if IsAVersionOfRot(v) then
-            TrySpawnIcon(v, 1)
-        end
-    else
-        if v:HasTag("fresh") then
-            TrySpawnIcon(v, .5)
-        end
-        if v:HasTag("stale") then
-            TrySpawnIcon(v, .75)
-        end
-        if v:HasTag("spoiled") then
-            TrySpawnIcon(v, .8)
-        end
-        if IsAVersionOfRot(v) then
-            TrySpawnIcon(v, 1)
-        end
-    end
+local function FoodScoreCalculations(container, v, owner)
+    local intensity = container and (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75)
+        or v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8 or IsAVersionOfRot(v) and 1
+    if not intensity then return end
+    TrySpawnIcon(v, owner, intensity)
 end
 
 local function Sniffertime(owner)
     local x, y, z = owner.Transform:GetWorldPosition()
-
-    local ents = TheSim:FindEntities(x, 0, z, 20, { "_inventoryitem" }, NOTAGS)
-    if ents ~= nil then
+    local ents = TheSim:FindEntities(x, 0, z, 20, {"_inventoryitem"}, NOTAGS)
+    if ents then
         for i, v in ipairs(ents) do
-            if v.components.inventoryitem:IsHeld() then
-                if v.components.inventoryitem and v.components.inventoryitem:GetGrandOwner() ~= nil and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon") then
-                    if not (v:HasTag("frozen") or v:HasTag("NORATCHECK")) and v.components.farmplantable == nil then
-                        FoodScoreCalculations(true, v)
-                    end
-                end
-            else
-                if not (v:HasTag("frozen") or v:HasTag("NORATCHECK")) and v.components.farmplantable == nil then
-                    FoodScoreCalculations(false, v)
-                end
-                if not (v:HasTag("balloon") or v:HasTag("heavy") or v:HasTag("projectile") or v:HasTag("NORATCHECK")) then
-                    if (v:HasTag("_equippable") or v:HasTag("tool")) then
-                        TrySpawnIcon(v, .5)
-                    end
+            local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner() and not (v.components.inventoryitem:GetGrandOwner().prefab == "lureplant" or v.components.inventoryitem:GetGrandOwner().prefab == "catcoon") or false
+            if not v:HasTag("frozen") and not v.components.farmplantable then
+                FoodScoreCalculations(container, v, owner)
+            end
+            if not v:HasAnyTag("balloon", "heavy", "projectile") then
+                if v:HasAnyTag("_equippable", "tool") then
+                    TrySpawnIcon(v, owner, .5)
                 end
             end
         end
@@ -450,8 +426,7 @@ end
 
 local function CheckTargetPiece(inst)
     local owner = inst.components.inventoryitem.owner
-
-    if owner ~= nil then
+    if owner then
         FindClosestPart(owner)
         inst.fx = SpawnPrefab("ratring_fx")
         inst.fx.entity:AddFollower()
@@ -460,18 +435,16 @@ local function CheckTargetPiece(inst)
 
         inst.SoundEmitter:KillSound("ratping")
         inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
+        if FindEntity(owner, 40, nil, {"rat_sniffer"}) then
+            Sniffertime(owner)
+        end
     end
-    if owner ~= nil and FindEntity(owner, 40, nil, { "rat_sniffer" }) ~= nil then
-        Sniffertime(owner)
-    end
-
     inst.components.rechargeable:Discharge(8)
 end
 
 local function rat_enable(inst)
     local owner = inst.components.inventoryitem.owner
-
-    if owner ~= nil and not owner:HasTag("equipmentmodel") then
+    if owner and not owner:HasTag("equipmentmodel") then
         inst.components.fueled:StartConsuming()
         owner:AddTag("ratfriend")
         owner.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/emerge")
@@ -481,10 +454,13 @@ end
 
 local function rat_disable(inst)
     inst.components.fueled:StopConsuming()
-
     local owner = inst.components.inventoryitem.owner
     if owner then
         owner:RemoveTag("ratfriend")
+        if owner.rat_task then
+            owner.rat_task:Cancel()
+            owner.rat_task = nil
+        end
     end
 end
 
@@ -1017,6 +993,7 @@ end
 
 local function ratmask_stinkfn()
     local inst = CreateEntity()
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
@@ -1074,7 +1051,6 @@ local function ratfn()
     inst.components.rechargeable:SetOnChargedFn(OnCooldown)
     inst.components.rechargeable:SetCharge(1011111)
 
-    inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.USAGE
     inst.components.fueled:InitializeFuelLevel(TUNING.MOLEHAT_PERISHTIME)
     inst.components.fueled:SetDepletedFn( --[[generic_perish]] inst.Remove)
