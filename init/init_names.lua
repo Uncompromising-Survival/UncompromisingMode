@@ -739,9 +739,9 @@ STRINGS.UM_BEEHIVE_MOON ="Vulture Bee Hive"
 STRINGS.UM_MEATCOMB = "Vulture Honeycomb"
 STRINGS.UM_MEATHONEY ="Vulture Honey"
 
-STRINGS.FYRITEROCK = "Fyrite Outcropping"
-STRINGS.UM_FYRITE = "Fyrite"
-STRINGS.UM_FYRE_BOMB = "Fyre Bomb"
+STRINGS.FYRITEROCK = "Pyrite Outcropping"
+STRINGS.UM_FYRITE = "Pyrite"
+STRINGS.UM_FYRE_BOMB = "Pyre Bomb"
 STRINGS.UM_MANNY = "Plaunt Manny"
 
 STRINGS.UM_HAT_BEE_MOON = "Beeret"

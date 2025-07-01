@@ -481,7 +481,11 @@ if TUNING.DSTU.WORTOXCHANGES then
 				if not removed then
 					local shadow = shadows[1]
 					inst.components.leader:RemoveFollower(shadow)
-					shadow.components.health:Kill()
+					if shadow.components.health then
+						shadow.components.health:Kill()
+					else
+						shadow:Remove()
+					end
 				end
 				return 0.05
 			else

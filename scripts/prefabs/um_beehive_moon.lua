@@ -44,6 +44,31 @@ end
     -- end
 -- end
 
+local function BeginDegrade(inst)
+	inst.components.timer:StartTimer("degrade",60*8+math.random()*60*8*4)
+end
+
+local function Revert(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local hives = TheSim:FindEntities(x,y,z,32,{"beehive"})
+	if #hives < 3 and math.random() < 0.25 then
+		SpawnPrefab("beehive").Transform:SetPosition(x,y,z)
+	end
+	local childspawner = inst.components.childspawner
+	if childspawner then
+		for i,bee in ipairs(childspawner.childrenoutside) do
+			if bee.components.health and not bee.components.health:IsDead() then
+				bee:RemoveComponent("lootdropper")
+				bee:AddComponent("lootdropper") -- wipe the lootdropper component
+				bee:RemoveComponent("workable")
+				bee.components.health:Kill()
+			end
+		end
+	end
+	
+	inst:Remove()
+end
+
 local function OnIgnite(inst)
     if inst.components.childspawner ~= nil then
         inst.components.childspawner:ReleaseAllChildren()
@@ -147,7 +172,8 @@ local function fn()
 
     inst.AnimState:SetBank("um_beehive_moon")
     inst.AnimState:SetBuild("um_beehive_moon")
-    inst.AnimState:PlayAnimation("idle", true)
+	inst.AnimState:PlayAnimation("enter", false)
+    inst.AnimState:PushAnimation("idle", true)
 	
     inst:AddTag("structure")
 	inst:AddTag("lifedrainable") -- by batbat (since it normally doesn't drain from structures)
@@ -225,7 +251,10 @@ local function fn()
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
 
-
+	inst.BeginDegrade = BeginDegrade
+	inst:AddComponent("timer")
+	inst:ListenForEvent("timerdone",Revert)
+	
     return inst
 end
 
