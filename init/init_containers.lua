@@ -746,12 +746,16 @@ for k, v in pairs(containers.params.spicepack.widget.slotbg) do
     containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
 end
 
-local oldicebox = containers.params.icebox.itemtestfn
-function containers.params.icebox.itemtestfn(container, item, slot, ...)
-	if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") then
-		return true
+if TUNING.DSTU.ICEBOX_TWEAKS then
+    containers.params.saltbox.lowpriorityselection = true
+	containers.params.icebox.lowpriorityselection = true
+	local oldicebox = containers.params.icebox.itemtestfn
+	function containers.params.icebox.itemtestfn(container, item, slot, ...)
+		if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") then
+			return true
+		end
+		return oldicebox(container, item, slot, ...)
 	end
-    return oldicebox(container, item, slot, ...)
 end
 
 local function addItemSlotNetvarsInContainer(inst)
