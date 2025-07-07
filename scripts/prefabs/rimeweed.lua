@@ -322,7 +322,7 @@ local function OnSaveMain(inst, data)
     if inst.bramble then
         data.bramble = {}
         for i, v in pairs(inst.bramble) do
-            if v.prefab then
+            if v:IsValid() and v.prefab then
                 data.bramble[i] = v.GUID
                 table.insert(ents, v.GUID)
             end
