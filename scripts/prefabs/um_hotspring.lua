@@ -3,57 +3,63 @@ local assets =
     Asset("ANIM", "anim/um_hotspring.zip")
 }
 
-
 local function SpawnPlants(inst, plantname, count, maxradius)
+    if inst.decor then
+        for i,item in ipairs(inst.decor) do
+            item:Remove()
+        end
+    end
+    inst.decor = {}
 
-	if inst.decor then
-		for i,item in ipairs(inst.decor) do
-			item:Remove()
-		end
-	end
-	inst.decor = {}
+    local plant_offsets = {}
 
-	local plant_offsets = {}
+    for i=1,math.random(math.ceil(count / 2), count) do
+        local a = math.random() * math.pi * 2
+        local x = math.sin(a) * maxradius + math.random() * 0.2
+        local z = math.cos(a) * maxradius + math.random() * 0.2
+        table.insert(plant_offsets, {x, 0, z})
+    end
 
-	for i=1,math.random(math.ceil(count/2),count) do
-		local a = math.random()*math.pi*2
-		local x = math.sin(a)*maxradius+math.random()*0.2
-		local z = math.cos(a)*maxradius+math.random()*0.2
-		table.insert(plant_offsets, {x,0,z})
-	end
-
-	for k, offset in pairs( plant_offsets ) do
-		local plant = SpawnPrefab( plantname )
-		plant.entity:SetParent( inst.entity )
-		plant.Transform:SetPosition( offset[1], offset[2], offset[3] )
-		table.insert( inst.decor, plant )
-	end
+    for k, offset in pairs(plant_offsets) do
+        local plant = SpawnPrefab(plantname)
+        plant.entity:SetParent(inst.entity)
+        plant.Transform:SetPosition(offset[1], offset[2], offset[3])
+        table.insert(inst.decor, plant)
+    end
 end
 
 local sizes =
 {
-    {anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 1.6},
-    {anim = "med_idle", rad = 2.6, plantcount = 3, plantrad = 2.5},
-    {anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.4},
+    {anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 2.0},
+    {anim = "med_idle", rad = 2.6, plantcount = 3, plantrad = 2.9},
+    {anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.8},
 }
 
-local function SetSize2(inst,size)
+local function SetSize2(inst, size)
     inst.AnimState:PlayAnimation(sizes[size].anim, true)
     --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
     inst.components.unevenground.radius = sizes[size].plantrad
     inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
-	SpawnPlants(inst, "um_plant_hotsprings", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
+    SpawnPlants(inst, "um_plant_hotsprings", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
 end
 
-local function DetermineSize(inst, fitting)
-    if not inst.size then
-        inst.size = math.random(1, fitting ~= nil and fitting or #sizes)
-        local x,y,z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x,y,z,sizes[inst.size].rad,nil,nil,{"plant","pond","boulder","rock","tree"})
-        for i,v in ipairs(ents) do
+local function DetermineSize(inst, fitting, removepond)
+    if not inst.size or fitting then
+        inst.size = math.random(1, fitting or #sizes)
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, sizes[inst.size].rad, nil, nil, {"plant", "pond", "boulder", "rock", "tree"})
+        for i, v in ipairs(ents) do
             if v ~= inst and inst.size ~= 1 then
                 DetermineSize(inst, 2)
                 break 
+            end
+        end
+        if removepond then
+            local ents = TheSim:FindEntities(x, y, z, sizes[3].rad * 2, {"watersource"})
+            for i, v in ipairs(ents) do
+                if v ~= inst and v.prefab == "um_hotspring" then
+                    inst:Remove()
+                end
             end
         end
         SetSize2(inst, inst.size)
@@ -67,24 +73,17 @@ end
 
 local function DoFx(inst) -- This is the hotspring's passive FX
     local pos = Vector3(inst.Transform:GetWorldPosition())
-
     local spawnrad = math.random(1, 8) * sizes[inst.size].rad / 10
     local offset = FindWalkableOffset(pos, math.random() * 2 * PI, spawnrad)
     if offset then
         local fx
         if not inst:HasTag("pond_inducedinsanity") then
-            if math.random() > .75 then
-                fx = SpawnPrefab("crab_king_bubble" .. tostring(math.random(1, 3)))
-            else
-                if math.random() > .5 then
-                    fx = SpawnPrefab("crater_steam_fx" .. tostring(math.random(1, 4)))
-                else
-                    fx = SpawnPrefab("slow_steam_fx" .. tostring(math.random(1, 4)))
-                end
-            end
+            fx = SpawnPrefab(math.random() > .75 and "crab_king_bubble"..tostring(math.random(1, 3))
+                or (math.random() > .5 and "crater_steam_fx"..tostring(math.random(1, 4))
+                or "slow_steam_fx"..tostring(math.random(1, 4))))
         else
             fx = SpawnPrefab("tophat_shadow_fx")
-            fx:DoTaskInTime(1.5,function(fx) fx:Remove() end)
+            fx:DoTaskInTime(1.5, function(fx) fx:Remove() end)
         end
         fx.Transform:SetPosition(pos.x + offset.x, 0, pos.z + offset.z)
     end
@@ -121,7 +120,7 @@ local function FadeToNormal(inst)
     if inst.color > 1 then
         inst.color = 1
     else
-        inst:DoTaskInTime(2*FRAMES, FadeToNormal)
+        inst:DoTaskInTime(2 * FRAMES, FadeToNormal)
     end
     inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
     inst.components.bathbombable:Reset()
@@ -136,7 +135,7 @@ local function FadeToDark(inst)
     if inst.color < .2 then
         inst.color = .1
     else
-        inst:DoTaskInTime(2*FRAMES, FadeToDark)
+        inst:DoTaskInTime(2 * FRAMES, FadeToDark)
     end
     inst.AnimState:SetMultColour(inst.color, inst.color, inst.color,1)
     inst.components.bathbombable:DisableBathBombing()
@@ -146,13 +145,13 @@ local function EmitSteam(inst)
     if not TheWorld.state.isnewmoon then
         local x,y,z = inst.Transform:GetWorldPosition()
         if inst.size == 1 then
-            SpawnPrefab("um_steamcloud").Transform:SetPosition(x,y,z)
+            SpawnPrefab("um_steamcloud").Transform:SetPosition(x, y, z)
         else
             for i = 1,(inst.size*2-1) do
                 inst:DoTaskInTime(i * .66,function(inst)
                     local steam = SpawnPrefab("um_steamcloud")
-                    local offset = FindWalkableOffset(inst:GetPosition(), math.random(PI * 2*((i-1)/3),PI * 2*(i/3)), inst.size*math.random(1,2))
-                    steam.Transform:SetPosition(x+offset.x,y,z+offset.z)
+                    local offset = FindWalkableOffset(inst:GetPosition(), math.random(PI * 2 * ((i - 1) / 3), PI * 2 * (i / 3)), inst.size * math.random(1, 2))
+                    steam.Transform:SetPosition(x + offset.x, y, z + offset.z)
                 end)
             end
         end
@@ -204,10 +203,10 @@ local function OnEntityWake(inst)
     if inst.components.bathbombable.is_bathbombed and not inst.fxtask2 then
         inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
     end
-    -- if math.random() > 0.5 then
+    -- if math.random() > .5 then
         -- EmitSteam(inst)
     -- end
-    -- inst.steamy = inst:DoPeriodicTask(math.random(30,60),EmitSteam)
+    -- inst.steamy = inst:DoPeriodicTask(math.random(30, 60),EmitSteam)
 end
 
 local function fn()
@@ -238,6 +237,8 @@ local function fn()
 
     inst:AddTag("watersource")
     inst:AddTag("HASHEATER")
+    inst:AddTag("antlion_sinkhole_blocker")
+    inst:AddTag("birdblocker")
 
     inst.no_wet_prefix = true
 
@@ -273,7 +274,7 @@ local function fn()
     inst.OnEntitySleep = OnEntitySleep
     inst.OnEntityWake = OnEntityWake
 
-    inst:DoTaskInTime(0, DetermineSize)
+    inst:DoTaskInTime(0, DetermineSize, nil, true)
 
     inst:WatchWorldState("isnewmoon", function(inst) 
         if not inst.components.bathbombable.is_bathbombed then
