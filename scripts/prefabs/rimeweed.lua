@@ -79,7 +79,7 @@ local function OnUpdateThorns(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 2, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
         if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat and not (v.components.inventory
-			and v.components.inventory:EquipHasTag("bramble_resistant")) then
+            and v.components.inventory:EquipHasTag("bramble_resistant")) then
             local range = inst.range + v:GetPhysicsRadius(0)
             if v:GetDistanceSqToPoint(x, y, z) < range * range then
                 if inst.owner and not inst.owner:IsValid() then
@@ -206,7 +206,7 @@ end
 local function BarrierDie(inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
-    inst.AnimState:PlayAnimation("bramble_"..inst.type.."_shrink", false)
+    inst.AnimState:PlayAnimation("bramble_"..(inst.type or math.random(0, 2)).."_shrink", false)
     if math.random() < .1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
@@ -240,6 +240,22 @@ local function BarrierLoad(inst, data)
     if data and data.type then
         inst.type = data.type
         inst.AnimState:PushAnimation("bramble_"..inst.type.."_idle", true)
+    end
+end
+
+local function KillOffRimeweed(inst)
+    if not TheWorld.state.iswinter then
+        inst.noloot = true
+        inst.nospread = true
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            inst.components.health:Kill()
+        end
+    end
+end
+
+local function KillOffRimeweedAwake(inst)
+    if inst.entity:IsAwake() then
+        KillOffRimeweed(inst)
     end
 end
 
@@ -290,23 +306,14 @@ local function barrierweed()
     inst.OnSave = BarrierSave
     inst.OnLoad = BarrierLoad
     inst:DoTaskInTime(0, function(inst)
-        if not inst.type then 
+        if not inst.type then
             inst.type = math.random(0, 2)
             inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
         end
     end)
-    inst:WatchWorldState("isspring",function(inst)
-        inst.noloot = true
-        inst.nospread = true
-        inst.components.health:Kill()
-    end)
-    inst:WatchWorldState("startrain", function(inst)
-        if not TheWorld.state.iswinter then
-            inst.noloot = true
-            inst.nospread = true
-            inst.components.health:Kill()
-        end
-    end)
+    inst:WatchWorldState("isspring", KillOffRimeweedAwake)
+    inst:WatchWorldState("startrain", KillOffRimeweedAwake)
+    inst.OnEntityWake = KillOffRimeweed
     return inst
 end
 
@@ -315,7 +322,7 @@ local function OnSaveMain(inst, data)
     if inst.bramble then
         data.bramble = {}
         for i, v in pairs(inst.bramble) do
-            if v.prefab then
+            if v:IsValid() and v.prefab then
                 data.bramble[i] = v.GUID
                 table.insert(ents, v.GUID)
             end
@@ -353,7 +360,7 @@ local function MainDie(inst)
     if inst.fx then
         inst.fx:Remove()
     end
-    if #inst.bramble > 0 then
+    if #inst.bramble > 0 and not inst.nospread then
         for i,v in ipairs(inst.bramble) do
             if not (v.components.health and v.components.health:IsDead()) then
                 v.noloot = true
@@ -361,7 +368,8 @@ local function MainDie(inst)
             end
         end
     end
-    inst.AnimState:PlayAnimation("flower_"..(inst.stage - 1).."_shrink",false)
+    inst.AnimState:PlayAnimation("flower_"..((inst.stage or 1) - 1).."_shrink", false)
+    if not inst.stage then return end
     if inst.stage >= 1 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
@@ -504,15 +512,16 @@ local function TimerDone(inst, data)
         if TheWorld.state.iswinter then
             inst.components.timer:StartTimer("growbranch", .15 * 8 * 60)
             GrowBranch(inst)
-        elseif not (inst.components.health and inst.components.health:IsDead()) and inst.replica and inst.replica.health then --Why the replica check? I don't know either but it was crashing @ line 19 in health.lua
-            inst.noloot = true
-            inst.components.health:Kill()
-        else
-            inst:Remove()
+        elseif inst.entity:IsAwake() then
+            if not (inst.components.health and inst.components.health:IsDead()) and inst.replica and inst.replica.health then --Why the replica check? I don't know either but it was crashing @ line 19 in health.lua
+                inst.noloot = true
+                inst.components.health:Kill()
+            else
+                inst:Remove()
+            end
         end
     end
 end
-
 
 local function Coof(inst)
     if inst.stage >= 3 and not (inst.components.health and inst.components.health:IsDead()) then
@@ -533,6 +542,7 @@ local function OnEntityWake(inst)
     if not inst.cooftask then
         inst.cooftask = inst:DoPeriodicTask(math.random(15, 20), Coof)
     end
+    KillOffRimeweed(inst)
 end
 
 local function OnEntitySleep(inst)
@@ -576,7 +586,6 @@ local function mainweed()
     inst:ListenForEvent("timerdone", TimerDone)
     inst:ListenForEvent("death", MainDie)
 
-
     inst:AddComponent("inspectable")
 
     inst:AddComponent("health")
@@ -607,17 +616,8 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
     inst:DoTaskInTime(0, SetStage)
-
-    inst:WatchWorldState("isspring",function(inst) 
-        inst.noloot = true
-        inst.components.health:Kill()    
-    end)
-    inst:WatchWorldState("startrain", function(inst) 
-        if not TheWorld.state.iswinter then
-            inst.noloot = true
-            inst.components.health:Kill()
-        end
-    end)
+    inst:WatchWorldState("isspring", KillOffRimeweedAwake)
+    inst:WatchWorldState("startrain", KillOffRimeweedAwake)
     if not inst.bramble then
         inst.bramble = {}
     end
@@ -784,7 +784,6 @@ local function fnvine()
     inst.components.forcecompostable.brown = true
 
     MakeHauntableLaunchAndIgnite(inst)
-
 
     return inst
 end

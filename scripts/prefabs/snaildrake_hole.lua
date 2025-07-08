@@ -28,6 +28,7 @@ end
 -- Remove child listeners for Snaildrakes.
 local function RemoveChildListeners(inst, child)
     inst:RemoveEventCallback("death", inst.onchildkilled, child)
+    inst:RemoveEventCallback("onremove", inst.onchildkilled, child)
 end
 
 -- Start respawn timers when Snaildrakes are killed.
@@ -47,6 +48,7 @@ end
 -- Add child listeners for Snaildrakes.
 local function AddChildListeners(inst, child)
     inst:ListenForEvent("death", inst.onchildkilled, child)
+    inst:ListenForEvent("onremove", inst.onchildkilled, child)
 end
 
 -- Setup linking information between a Snaildrake and its home.

@@ -46,7 +46,7 @@ local function SpawnRimeweeds()
         allplants = true
     end
     for i,ent in pairs(Ents) do
-        if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
+        if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and not ent:HasTag("briar_plants") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
             table.insert(harvestible_plants,ent)
         end
         if ent.prefab == "rimeweed_main" then

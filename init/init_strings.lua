@@ -114,7 +114,6 @@ STRINGS.VETSKULL = {
 STRINGS.PACTSWORN_TITLE = "The Shadow Pact"
 STRINGS.PACTSWORN_TEXT = "A new path lies before you, if you give up the Codex Umbra. You will lose your spells and take 25% more damage, but you will gain a summonable sword, armor, and true classic shadows.\nThis cannot be undone."
 
-
 STRINGS.PIG_REMEMBER_THREAT = { "REMEMBER YOU!", "YOU HURT US!", "YOU MEAN!" }
 STRINGS.PIG_GUARD_PIGKING_TALK_LOOKATWILSON = { "NO SMASH HOUSES", "US WATCHING YOU", "BE GOOD HERE", "WATCHING YOU" }
 STRINGS.PIG_GUARD_PIGKING_TALK_LOOKATWILSON_NIGHT = { "KING SLEEPING, YOU GO NOW", "YOU LEAVE NOW",
@@ -140,7 +139,9 @@ if GetModConfigData("wickerbottom") then
         "\n󰀕Reading requires brainpower"
 end
 STRINGS.CHARACTER_DESCRIPTIONS.wes = STRINGS.CHARACTER_DESCRIPTIONS.wes .. "\n󰀕Expanded inner dialogue" --"\n󰀕Pengulls are fond of mimes"
-STRINGS.CHARACTER_DESCRIPTIONS.waxwell = STRINGS.CHARACTER_DESCRIPTIONS.waxwell .. "\n󰀕Can make a pact to regain his old tricks"
+if TUNING.DSTU.WAXWELL then
+    STRINGS.CHARACTER_DESCRIPTIONS.waxwell = STRINGS.CHARACTER_DESCRIPTIONS.waxwell .. "\n󰀕Can learn to summon shadowy gear" --"\n󰀕Can make a pact to regain his old tricks"
+end
 if GetModConfigData("wolfgang") then
     STRINGS.CHARACTER_DESCRIPTIONS.wolfgang = "󰀕Stronger on a full belly\n󰀕Grows mightier when fed and calm\n󰀕Is quite the showboat\n*Is afraid of monsters and the dark"
 end
