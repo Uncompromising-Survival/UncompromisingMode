@@ -241,6 +241,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_largehungerslow", "buff_largehungerslow")
             end
         end,
+		idlename = "idle_ground",
         card_def = { ingredients = { { "onion", 1 }, { "potato", 1 }, { "carrot", 1 }, { "trunk_summer", 1 } } },
     },
 
@@ -372,6 +373,7 @@ local um_preparedfoods =
                 end)
             end
         end,
+		idlename = "ground",
         card_def = { ingredients = { { "corn", 2 }, { "butter", 1 } } },
     },
 

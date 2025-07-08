@@ -79,7 +79,11 @@ local function MakePreparedFood(data)
             inst.AnimState:SetBuild(data.name)
             inst.AnimState:SetBank(data.name)
         end
-        inst.AnimState:PlayAnimation("idle")
+		
+		inst.AnimState:PlayAnimation("idle")
+		if data.idlename then
+			inst:ListenForEvent("ondropped", function(inst) inst.AnimState:PlayAnimation(data.idlename) end)
+		end
         inst.AnimState:OverrideSymbol("swap_food", data.basename or data.name, data.basename or data.name)
         
         inst:AddTag("preparedfood")

@@ -7,9 +7,6 @@ local assets=
 	Asset("IMAGE", "images/inventoryimages/um_ghost_pepper_item.tex"),
 }
 
-local BURN_DURATION = 2
-
-
 local function placegoffgrids(inst, radiusMax, prefab,tags)
     local x,y,z = inst.Transform:GetWorldPosition()
     local offgrid = false
@@ -141,41 +138,6 @@ local function patchfn(Sim)
     inst.OnLoad = onload
     inst.spawnNewVine = spawnNewVine
 	return inst
-end
-
-local function OnStartBurnAnim(inst)
-    inst.persists = false
-
-    if inst.components.inspectable ~= nil then
-        inst:RemoveComponent("inspectable")
-    end
-
-    if inst.components.pickable ~= nil then
-        inst:RemoveComponent("pickable")
-    end
-
-    inst.components.burnable:SetOnExtinguishFn(inst.Remove)
-
-    inst.AnimState:PlayAnimation("burn")
-    inst:ListenForEvent("animover", inst.Remove)
-
-    local theta = math.random() * TWOPI
-    local spd = math.random() * 2
-    local ash = SpawnPrefab("ash")
-    ash.Transform:SetPosition(inst:GetPosition():Get())
-    ash.Physics:SetVel(math.cos(theta) * spd, 8 + math.random() * 4, math.sin(theta) * spd)
-end
-
-local function OnExtinguishNotFinishedBurning(inst)
-    if inst.burn_anim_task ~= nil then
-        inst.burn_anim_task:Cancel()
-        inst.burn_anim_task = nil
-    end
-end
-
-local function OnIgnite(inst, source, doer)
-    inst.burn_anim_task = inst:DoTaskInTime(BURN_DURATION, OnStartBurnAnim)
-    inst.components.burnable:SetOnExtinguishFn(OnExtinguishNotFinishedBurning)
 end
 
 local function falldown(inst)
@@ -332,7 +294,6 @@ local function commonfn(Sim)
 
     -- inst.source_tree = nil -- source_tree is only used to tally number of vines per watertree_pillar on loading in the world after creation, doesn't hold a saved reference after that
     inst.fall_down_fn = falldown
-    -- inst.burn_anim_task = nil
 
 	inst:AddComponent("inspectable")
     
@@ -345,17 +306,8 @@ local function commonfn(Sim)
     inst.components.pickable.max_cycles = nil
     inst.components.pickable.cycles_left = 1
 
-    MakeSmallBurnable(inst, nil, nil, nil, "swap_fire")
-    inst.components.burnable.fxdata[1].prefab = "character_fire"
-    inst.components.burnable.fxdata[1].followaschild = true
-    inst.components.burnable:SetFXOffset(0, 1, 0)
-    inst.components.burnable:SetBurnTime(BURN_DURATION + 5) -- 5 = a value considerably higher than the burn anim duration
-    inst.components.burnable:SetOnIgniteFn(OnIgnite)
-    inst.components.burnable:SetOnBurntFn(inst.Remove) -- Burning is handled differently, but if it ever gets to this point it's better to just remove the object
     MakeSmallPropagator(inst)
 
-    MakeHauntableIgnite(inst)
-    
     inst.placegoffgrids = placegoffgrids
     inst.fall = fall
     inst.OnLoadPostPass = onloadpostpass

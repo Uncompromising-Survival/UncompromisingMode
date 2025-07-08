@@ -26,7 +26,6 @@ AddRoom("GiantTrees",
 		{
 			distributepercent = 0.6,
 			distributeprefabs = {
-				sapling = 0.2,
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.005,
@@ -59,7 +58,6 @@ AddRoom("RockyGiantTrees",
 	{
 		distributepercent = 0.4,
 		distributeprefabs = {
-			perma_sapling = 0.2,
 			perma_grass = 0.2,
 			perma_berrybush_juicy = 0.1,
 			thicket_builder = 1,
@@ -94,7 +92,6 @@ AddRoom("RockyWalrusGiantTrees",
 			distributepercent = 0.6,
 			distributeprefabs = {
 				um_bear_trap_old = 0.1,
-				perma_sapling = 0.2,
 				perma_grass = 0.2,
 				perma_berrybush_juicy = 0.1,
 				thicket_builder = 1,
@@ -123,13 +120,12 @@ AddRoom("RockyWalrusGiantTrees",
 AddRoom("HoodedEntrance",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
+		value = WORLD_TILES.UM_HOODED_FOREST,
 		tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
 			distributepercent = 0.5,
 			distributeprefabs = {
-				sapling = 0.2,
 				thicket_builder = 1,
 				ghost_walrus = 0.005,
 				blueberryplantbuncher = 0.1,
@@ -151,7 +147,7 @@ AddRoom("HoodedEntrance",
 AddRoom("SpideryGiantTrees",
     {
         colour = { r = 1, g = 1, b = 1, a = .50 },
-        value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
+        value = WORLD_TILES.UM_HOODED_FOREST,
         tags = { "RoadPoison", "hoodedcanopy" }, --"ForceDisconnected"
         contents =
         {
@@ -176,14 +172,13 @@ AddRoom("SpideryGiantTrees",
 AddRoom("WalrusGiantTrees",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,
+		value = WORLD_TILES.UM_HOODED_FOREST,
 		tags = { "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
 			distributepercent = 0.6,
 			distributeprefabs = {
 				um_bear_trap_old = 0.1,
-				sapling = 0.2,
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.5,
@@ -215,7 +210,6 @@ AddRoom("BGGiantTrees",
 		{
 			distributepercent = 0.6,
 			distributeprefabs = {
-				sapling = 0.2,
 				evergreen_sparse = 0.5,
 				thicket_builder = 1,
 				ghost_walrus = 0.03,
@@ -269,7 +263,6 @@ AddRoom("MoonBaseGiantTrees", {
         distributepercent = 0.3,
         distributeprefabs =
         {
-            sapling = 0.2,
             evergreen_sparse = 0.5,
             thicket_builder = 1,
             blueberryplantbuncher = 0.1,
@@ -314,7 +307,6 @@ AddRoom("HoodedTown", {
         distributepercent = 0.3,
         distributeprefabs =
         {
-            sapling = 0.2,
             evergreen_sparse = 0.4,
             thicket_builder = 1,
             ghost_walrus = 0.02,
@@ -341,7 +333,6 @@ AddRoom("RoseGarden", {
         distributepercent = 0.3,
         distributeprefabs =
         {
-            sapling = 0.2,
             evergreen_sparse = 0.4,
             thicket_builder = 1,
             ghost_walrus = 0.005,
@@ -370,7 +361,6 @@ AddRoom("HFHolidays", {
         {
             um_bear_trap_old = 0.1,
             ghost_walrus = 0.01,
-            sapling = 0.2,
             evergreen_sparse = 0.4,
             thicket_builder = 1,
             blueberryplantbuncher = 0.01,

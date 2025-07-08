@@ -25,6 +25,22 @@ for i,bee in ipairs(bees) do
 		if not TheWorld.ismastersim then
 			return
 		end
-	inst:ListenForEvent("onhitother",ShareTarget)
+		inst:AddComponent("halloweenmoonmutable")
+		inst.components.halloweenmoonmutable:SetPrefabMutated("um_bee_moon")
+		
+		inst:ListenForEvent("onhitother",ShareTarget)
 	end)
 end
+
+local hives = {
+	"beehive",
+	"wasphive",
+}
+
+env.AddPrefabPostInit(hives, function(inst)
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst:AddComponent("halloweenmoonmutable")
+	inst.components.halloweenmoonmutable:SetPrefabMutated("um_beehive_moon")
+end)

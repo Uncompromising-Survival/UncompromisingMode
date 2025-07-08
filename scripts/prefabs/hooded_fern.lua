@@ -68,12 +68,12 @@ end
 local function GenerateLoot(inst, picker)
 	local weighted_briar_loot = {}
 	weighted_briar_loot["seeds"] = 0.2
-	weighted_briar_loot["crop_seed"] = 0.4
-	weighted_briar_loot["cutgrass"] = 0.2
-	weighted_briar_loot["twigs"] = 0.4
-	weighted_briar_loot["aphid"] = 0.01
-	weighted_briar_loot["spider"] = 0.01
-	weighted_briar_loot["mound"] = 0.01
+	weighted_briar_loot["crop_seed"] = 0.2
+	weighted_briar_loot["cutgrass"] = 0.4
+	weighted_briar_loot["twigs"] = 0.15
+	weighted_briar_loot["aphid"] = 0.025
+	weighted_briar_loot["spider"] = 0.0125
+	weighted_briar_loot["mound"] = 0.0125
 	
 	local loot = weighted_random_choice(weighted_briar_loot)
 	if loot == "crop_seed" then

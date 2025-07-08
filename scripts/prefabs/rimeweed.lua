@@ -904,11 +904,7 @@ end
 
 local function OnUseBandage(inst, target)
     if target and target.components.temperature then
-        if target.components.temperature.current > 40 or TheWorld.state.iswinter then
-            target.components.temperature:DoDelta(-40)
-        else
-            target.components.temperature:SetTemperature(1)
-        end
+        target.components.temperature:DoDelta(-80)
     end
 end
 
@@ -946,7 +942,7 @@ local function bandage_fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("healer")
-    inst.components.healer:SetHealthAmount(20)
+    inst.components.healer:SetHealthAmount(30)
     inst.components.healer.onhealfn = OnUseBandage
 
     MakeHauntableLaunch(inst)

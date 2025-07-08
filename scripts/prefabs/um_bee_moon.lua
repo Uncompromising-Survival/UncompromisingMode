@@ -153,6 +153,9 @@ local SHARE_TARGET_DIST = 30
 local MAX_TARGET_SHARES = 10
 
 local function OnAttacked(inst, data)
+	if data and data.stimuli == "electric" and inst.components.health and not inst.components.health:IsDead() then
+		inst.components.health:Kill()
+	end
     local attacker = data and data.attacker
     inst.components.combat:SetTarget(attacker)
     local targetshares = MAX_TARGET_SHARES

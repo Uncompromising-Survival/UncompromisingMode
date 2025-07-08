@@ -3,6 +3,10 @@ require "map/room_functions"
 local Layouts = require ("map/layouts").Layouts
 local StaticLayout = require ("map/static_layout")
 Layouts["cave_exit_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_exit_magmabiome")
+Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
+
+Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
+Layouts["um_pepperdragon_nest"].ground_types = PYRE_THICKET_GROUND_TYPES
 
 ---------------------------------------------
 -- Bat Caves
@@ -114,6 +118,13 @@ AddRoom("GrassMagma", {
 			--um_pyre_nettles_stage_2 = 0.1,
 			--um_pyre_nettles_stage_5 = 0.1,
         },
+		countstaticlayouts = {
+			["um_pepperdragon_nest"] = 1,
+		},
+        countprefabs=
+        {
+            um_ghost_pepper = function() return math.random(6,9) end,
+        },
     }
 })
 
@@ -145,9 +156,13 @@ AddRoom("FossilMagma", {
 			magmabone = 0.05,
 			--um_pyre_nettles_stage_2 = 0.025,
 			--um_pyre_nettles_stage_5 = 0.025,
-			um_ghost_pepper = 0.025,
         },
+		countprefabs=
+		{
+			um_ghost_pepper = function() return math.random(4,7) end,
+		},
     }
+
 })
 
 AddRoom("GloomyMagma", {
@@ -164,6 +179,10 @@ AddRoom("GloomyMagma", {
 			viperworm = 0.25,
 			--um_pyre_nettles_stage_2 = 0.05,
 			--um_pyre_nettles_stage_5 = 0.05,
+        },
+        countprefabs=
+        {
+            um_ghost_pepper = function() return math.random(1,2) end,
         },
     }
 })

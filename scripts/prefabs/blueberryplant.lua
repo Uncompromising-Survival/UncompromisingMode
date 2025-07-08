@@ -14,23 +14,23 @@ local mine_must_tags = { "_combat" }
 local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "snapdragon" }
 
 local function on_deactivate(inst)
-    if inst.components.lootdropper ~= nil then
-        if inst.harvestable == "full" then
-            if math.random() > 0.1 then
-                inst.components.lootdropper:SpawnLootPrefab("giant_blueberry")
-				local x, y, z = inst.Transform:GetWorldPosition()
-				local otherbombs = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
-					for i, target in ipairs(otherbombs) do
-                if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
-                    target.components.mine:Explode(target)
-                end
-            end				
-            else
-                local berryman = SpawnPrefab("fruitbat")
-                berryman.Transform:SetPosition(inst.Transform:GetWorldPosition())
-            end
-        end    
-    end
+    -- if inst.components.lootdropper ~= nil then
+        -- if inst.harvestable == "full" then
+            -- if math.random() > 0.1 then
+                -- inst.components.lootdropper:SpawnLootPrefab("giant_blueberry")
+				-- local x, y, z = inst.Transform:GetWorldPosition()
+				-- local otherbombs = TheSim:FindEntities(x, y, z, 1.1*TUNING.STARFISH_TRAP_RADIUS, {"blueberrybomb"}, mine_no_tags)
+				-- for i, target in ipairs(otherbombs) do
+					-- if target ~= inst and target.components.mine and not target.components.mine.issprung and not target.froze then
+						-- target.components.mine:Explode(target)
+					-- end
+				-- end				
+            -- else
+                -- local berryman = SpawnPrefab("fruitbat")
+                -- berryman.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            -- end
+        -- end    
+    -- end
     if inst.harvestable == "regrow" then
         inst:Remove()
     else

@@ -4,12 +4,37 @@ local assets =
 }
 
 
+local function SpawnPlants(inst, plantname, count, maxradius)
+
+	if inst.decor then
+		for i,item in ipairs(inst.decor) do
+			item:Remove()
+		end
+	end
+	inst.decor = {}
+
+	local plant_offsets = {}
+
+	for i=1,math.random(math.ceil(count/2),count) do
+		local a = math.random()*math.pi*2
+		local x = math.sin(a)*maxradius+math.random()*0.2
+		local z = math.cos(a)*maxradius+math.random()*0.2
+		table.insert(plant_offsets, {x,0,z})
+	end
+
+	for k, offset in pairs( plant_offsets ) do
+		local plant = SpawnPrefab( plantname )
+		plant.entity:SetParent( inst.entity )
+		plant.Transform:SetPosition( offset[1], offset[2], offset[3] )
+		table.insert( inst.decor, plant )
+	end
+end
 
 local sizes =
 {
-    { anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 1.6 },
-    { anim = "med_idle", rad = 2.6, plantcount = 3, plantrad = 2.5 },
-    { anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.4 },
+    { anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 2.0 },
+    { anim = "med_idle", rad = 2.6, plantcount = 3, plantrad = 2.9 },
+    { anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.8 },
 }
 
 local function SetSize2(inst,size)
@@ -17,6 +42,7 @@ local function SetSize2(inst,size)
 	--inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
 	inst.components.unevenground.radius = sizes[size].plantrad
 	inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
+	SpawnPlants(inst, "um_plant_hotsprings", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
 end
 
 local function DetermineSize(inst,fitting)
@@ -27,6 +53,12 @@ local function DetermineSize(inst,fitting)
 		if v ~= inst and inst.size ~= 1 then
 			DetermineSize(inst,2)
 			break 
+		end
+	end
+	local ents = TheSim:FindEntities(x,y,z,sizes[3].rad*2,nil,nil,{"pond"})
+	for i,v in ipairs(ents) do
+		if v ~= inst and v.prefab == "um_hotspring" then
+			inst:Remove()
 		end
 	end
 	SetSize2(inst,inst.size)

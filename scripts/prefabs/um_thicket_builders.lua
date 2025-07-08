@@ -1,14 +1,14 @@
 
-local function LargeFernCheck(x,y,z)
-	local plants = #TheSim:FindEntities(x,y,z,2.4,{"plant"})
+local function LargeFernCheck(x,y,z,thickness)
+	local plants = #TheSim:FindEntities(x,y,z,thickness,{"plant"})
 	local sculpture = #TheSim:FindEntities(x,y,z,7,{"heavy"})-- The spacing for the sculpture is larger so it doesn't cover them up 
-	local sinkhole_bockers = #TheSim:FindEntities(x,y,z,7,{"antlion_sinkhole_blocker"})
+	local sinkhole_bockers = #TheSim:FindEntities(x,y,z,3,{"antlion_sinkhole_blocker"})
 	if plants > 0 or sculpture > 0 or sinkhole_bockers > 0 then
 		return true
 	end
 end
 
-local function Populate(inst,tile,plant)
+local function Populate(inst,tile,plant,thickness)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	for i = -15, 15, 0.5 do
 		for j = -15, 15, 0.5 do
@@ -20,7 +20,7 @@ local function Populate(inst,tile,plant)
 			end
 			local x1 = x + i + math.random(-1,1)/math.random(2,4)
 			local z1 = z + j + math.random(-1,1)/math.random(2,4)
-			if TheWorld.Map:GetTileAtPoint(x1, y, z1) == tile and not LargeFernCheck(x1,y,z1) then
+			if TheWorld.Map:GetTileAtPoint(x1, y, z1) == tile and not LargeFernCheck(x1,y,z1,thickness) then
 				SpawnPrefab(to_spawn).Transform:SetPosition(x1,y,z1)
 			end
 		end
@@ -40,7 +40,7 @@ local function fnthicket()
 	end
 	
 	inst:DoTaskInTime(0,function(inst)
-		Populate(inst,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,"hooded_fern")
+		Populate(inst,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK,"hooded_fern",2.4)
 	end)
 	
 	return inst
@@ -57,7 +57,7 @@ local function fnpyrethicket()
 	end
 	
 	inst:DoTaskInTime(0,function(inst)
-		Populate(inst,WORLD_TILES.UM_GRASSMAGMA,"um_pyre_nettles_stage_")
+		Populate(inst,WORLD_TILES.UM_GRASSMAGMA,"um_pyre_nettles_stage_",4)
 	end)
 	
 	return inst

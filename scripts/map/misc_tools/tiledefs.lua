@@ -62,8 +62,8 @@ AddTile("HOODEDFOREST_FOLIAGE", -- tile_name 1
         cannotbedug = true
     }, {
         -- minimap_tile_def 5
-        name = "hoodedmoss",
-        noise_texture = "mini_noise_hoodedmoss.tex"
+        name="map_edge",
+        noise_texture="mini_grass_noise",
     }, {
         -- turf_def 6
         name = "hoodedmoss",
@@ -87,8 +87,8 @@ AddTile("HOODEDFOREST_FOLIAGE_DARK", -- tile_name 1
         colors = GROUND_OCEAN_COLOR
     }, {
         -- minimap_tile_def 5
-        name = "hoodedmoss",
-        noise_texture = "mini_noise_hoodedmoss.tex"
+        name="map_edge",
+        noise_texture="mini_forest_noise",
     }, {
         -- turf_def 6
         name = "hoodedmoss",
@@ -418,6 +418,7 @@ local filters = {
 	["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
 	["magmarock1"] = { WORLD_TILES.UM_GRASSMAGMA },
 	["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
+	["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
 }
 
 for k, v in pairs(filters) do
@@ -432,6 +433,9 @@ table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE)
 GLOBAL.HOODED_GROUND_TYPES = {
 	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3
 }
+GLOBAL.PYRE_THICKET_GROUND_TYPES = {
+	WORLD_TILES.UM_GRASSMAGMA, -- 1,2
+}
 GLOBAL.HOODED_ARENA_GROUND_TYPES = {
-	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2,3
+	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2
 }

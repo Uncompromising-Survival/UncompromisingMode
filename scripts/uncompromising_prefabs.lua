@@ -585,6 +585,9 @@ local prefabs = {
 	"um_hat_bee_moon",
 	"um_eyebalm",
 	"um_beemine_moon",
+	"um_plants_decor",
+	
+	"um_pepperdragon_nest",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
