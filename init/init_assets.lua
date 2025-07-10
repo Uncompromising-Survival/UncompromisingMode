@@ -157,6 +157,8 @@ local inventoryitems =
     "smallfishmeat_dried",
     "snapplant",
     "snotroast",
+	"um_ghost_fajita",
+	"um_boom_tart",
     "snowcone",
     "snowgoggles",
     "spider_trapdoor",
@@ -1600,7 +1602,8 @@ Assets = {
     Asset("ANIM", "anim/viperjam.zip"),
 
     Asset("ANIM", "anim/snotroast.zip"),
-
+	Asset("ANIM", "anim/um_ghost_fajita.zip"),
+	Asset("ANIM", "anim/um_boom_tart.zip"),
     Asset("ANIM", "anim/rne_goodiebag.zip"),
 
     Asset("ANIM", "anim/hat_spectremask.zip"),

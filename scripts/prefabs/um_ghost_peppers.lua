@@ -368,8 +368,7 @@ local function Ghost(eater)
 end
 
 local function oneatenfn(inst, eater)
-	if  eater.components.moisture ~= nil and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+	if  not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
                 Ghost(eater)
 	end

@@ -97,6 +97,7 @@ AddRoom("BGMagma", {
         {
 			lava_pond_cave = 0.05,
 			magmarock1 = 0.1,
+			
 			--um_pyre_nettles_stage_4 = 0.1,
 			--um_pyre_nettles_stage_5 = 0.1,
         },
@@ -114,9 +115,10 @@ AddRoom("GrassMagma", {
 			magmarock1 = 0.025,
 			mushtree_shadow = 0.025,
 			pyrethicket_builder = 0.5,
-			fyriterock = 0.05
+			fyriterock = 0.05,
 			--um_pyre_nettles_stage_2 = 0.1,
 			--um_pyre_nettles_stage_5 = 0.1,
+			um_pyrite_ceiling = 0.05,
         },
 		countstaticlayouts = {
 			["um_pepperdragon_nest"] = 1,
@@ -154,6 +156,7 @@ AddRoom("FossilMagma", {
 			lava_pond_cave = 0.025,
 			magmarock1 = 0.025,
 			magmabone = 0.05,
+			um_pyrite_ceiling = 0.005,
 			--um_pyre_nettles_stage_2 = 0.025,
 			--um_pyre_nettles_stage_5 = 0.025,
         },
@@ -177,6 +180,7 @@ AddRoom("GloomyMagma", {
 			magmarock1 = 0.15,
 			viperfruit_plant = 0.25,
 			viperworm = 0.25,
+			um_pyrite_ceiling = 0.05,
 			--um_pyre_nettles_stage_2 = 0.05,
 			--um_pyre_nettles_stage_5 = 0.05,
         },
@@ -214,7 +218,7 @@ AddRoom("MagmaStairs", {
 					countstaticlayouts = {
 						["cave_exit_magmabiome"] = 1,
 					},
-					distributepercent = .4,
+					distributepercent = .2,
 					distributeprefabs=
 					{
 						--sapling=.5,

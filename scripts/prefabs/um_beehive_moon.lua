@@ -22,19 +22,19 @@ local function OnEntitySleep(inst)
     inst.SoundEmitter:KillSound("loop")
 end
 
--- local function StartSpawning(inst)
-    -- if inst.components.childspawner ~= nil
-        -- and not TheWorld.state.iswinter
-        -- and not (inst.components.freezable ~= nil and inst.components.freezable:IsFrozen()) then
-        -- inst.components.childspawner:StartSpawning()
-    -- end
--- end
+local function StartSpawning(inst)
+    if inst.components.childspawner ~= nil
+        and not TheWorld.state.iswinter
+        and not (inst.components.freezable ~= nil and inst.components.freezable:IsFrozen()) then
+        inst.components.childspawner:StartSpawning()
+    end
+end
 
--- local function StopSpawning(inst)
-    -- if inst.components.childspawner ~= nil then
-        -- inst.components.childspawner:StopSpawning()
-    -- end
--- end
+local function StopSpawning(inst)
+    if inst.components.childspawner ~= nil then
+        inst.components.childspawner:StopSpawning()
+    end
+end
 
 -- local function OnIsDay(inst, isday)
     -- if isday then

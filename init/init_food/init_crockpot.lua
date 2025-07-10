@@ -530,9 +530,9 @@ InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 
-InsertIngredientValues({ "gloomcap" }, { veggie = 0.5, monster = 1 }, true, false, false)
+InsertIngredientValues({ "gloomcap" }, { veggie = 0.5}, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
-InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5, monster = 1 }, true, false, false)
+InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5}, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
@@ -548,7 +548,7 @@ InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false
 InsertIngredientValues({ "um_rimeweed_itemvine" }, { ice = 1, inedible = 1, }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
 InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 0.5  })
-
+InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1  })
 
 if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)

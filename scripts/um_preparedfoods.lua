@@ -35,6 +35,39 @@ local function UncompromisingFillers(tags)
         TUNING.DSTU.GENERALCROCKBLOCKER) or TUNING.DSTU.GENERALCROCKBLOCKER == false
 end
 
+local function UnGhost(eater)
+    if not (eater:HasTag("psuedo_ghost") or eater:HasTag("playerghost")) then
+        if eater.flashingtask then
+            eater.flashingtask:Cancel()
+            eater.flashghost = nil
+            eater.flashingtask = nil
+        end
+        eater.Physics:CollidesWith(COLLISION.OBSTACLES)
+        eater.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
+        eater.Physics:CollidesWith(COLLISION.CHARACTERS)
+        eater.Physics:CollidesWith(COLLISION.FLYERS)
+        eater.AnimState:SetHaunted(false)
+    end
+end
+
+local function Ghost(eater)
+    if eater.flashingtask then
+        eater.flashingtask:Cancel()
+        eater.flashghost = nil
+        eater.flashingtask = nil
+    end
+
+    eater.Physics:ClearCollidesWith(COLLISION.OBSTACLES)
+    eater.Physics:ClearCollidesWith(COLLISION.SMALLOBSTACLES)
+    eater.Physics:ClearCollidesWith(COLLISION.CHARACTERS)
+    eater.Physics:ClearCollidesWith(COLLISION.FLYERS)
+    eater.AnimState:SetHaunted(true)
+	if eater.unghosttask then
+		eater.unghosttask:Cancel()
+		eater.unghosttask = nil
+	end
+	eater.unghosttask = eater:DoTaskInTime(60,UnGhost)
+end
 
 local um_preparedfoods =
 {
@@ -70,8 +103,8 @@ local um_preparedfoods =
     blueberrypancakes =
     {
         test = function(cooker, names, tags)
-            return names.giant_blueberry and names.giant_blueberry >= 2 and tags.egg and
-                tags.egg > 1
+            return names.giant_blueberry and names.giant_blueberry >= 2 and tags.egg and tags.egg >=2
+			
         end,
         hunger = 75,
         health = 5,
@@ -243,6 +276,55 @@ local um_preparedfoods =
         end,
 		idlename = "idle_ground",
         card_def = { ingredients = { { "onion", 1 }, { "potato", 1 }, { "carrot", 1 }, { "trunk_summer", 1 } } },
+    },
+
+    um_ghost_fajita =
+    {
+        test = function(cooker, names, tags)
+            return tags.meat and names.um_ghost_pepper_item and tags.veggie >= 2
+        end,
+        hunger = 37.5,
+        health = 40,
+        sanity = -10,
+        priority = 10,
+        weight = 1,
+        cooktime = 1.8,
+        foodtype = FOODTYPE.MEAT,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
+        oneatenfn = function(inst, eater)
+			if not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+				not eater:HasTag("playerghost") then
+				Ghost(eater)
+			end
+        end,
+        floater = { "med", nil, 0.65 },
+		idlename = "idle_ground",
+        card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 }} },
+    },
+	
+    um_boom_tart =
+    {
+        test = function(cooker, names, tags)
+            return names.giant_blueberry and names.giant_blueberry == 2 and tags.sweetener and tags.sweetener == 2
+        end,
+        hunger = 37.5,
+        health = 3,
+        sanity = 33,
+        priority = 10,
+        weight = 1,
+        cooktime = 0.9,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
+        oneatenfn = function(inst, eater)
+            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
+                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+                not eater:HasTag("playerghost") then
+                eater.components.debuffable:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
+            end			
+        end,
+        floater = { "med", nil, 0.65 },
+		idlename = "idle_ground",
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 }} },
     },
 
     snowcone =

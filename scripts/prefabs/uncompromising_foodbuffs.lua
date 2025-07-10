@@ -73,6 +73,39 @@ local function removeretaliationdamageretaliationdamage(inst, target)
     target:RemoveEventCallback("attacked", Retaliate, target)
 end
 
+local function OnHitOtherBoomberry(inst, data)
+    local other = data.target
+    if other ~= nil and not other.um_boomberry_exploded then
+		local x,y,z = other.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x,y,z,2,{"_health"},{"player"})
+		local weapon = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil 
+		local damage = 34
+		if weapon and weapon.components.weapon then
+			damage = weapon.components.weapon.damage*0.75
+		end
+		if other.SoundEmitter then
+			other.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+		end
+		for i,v in ipairs(ents) do
+			if not v.components.health:IsDead() and v ~= inst and v ~= other then
+				v.um_boomberry_exploded = true
+				v.components.combat:GetAttacked(inst, damage)
+				v:DoTaskInTime(0.3,function(v) v.um_boomberry_exploded = nil end)
+			end
+		end
+		SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
+		SpawnPrefab("blueberrypuddle").Transform:SetPosition(other.Transform:GetWorldPosition())
+    end
+end
+
+local function attachboomberry(inst, target)
+    target:ListenForEvent("onhitother", OnHitOtherBoomberry, target)
+end
+
+local function removeboomberry(inst, target)
+    target:RemoveEventCallback("onhitother", OnHitOtherBoomberry, target)
+end
+
 local function OnHitOtherFreeze(inst, data)
     local other = data.target
     if other ~= nil then
@@ -336,6 +369,7 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
 end
 
 return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, TUNING.BUFF_ELECTRICATTACK_DURATION, 2, { "electrichitsparks", "electricchargedfx" }),
+MakeBuff("boomberryattacks", attachboomberry, nil, removeboomberry, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
 MakeBuff("frozenfury", attachfrozenness, nil, removefrozenness, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
 MakeBuff("lesserelectricattack", electric_attach, electric_extend, electric_detach, 30, 2, { "electrichitsparks", "electricchargedfx" }),
 MakeBuff("knockbackimmune", kbimmune_attach, kbimmune_extend, kbimmune_detach, TUNING.BUFF_ATTACK_DURATION, 2),

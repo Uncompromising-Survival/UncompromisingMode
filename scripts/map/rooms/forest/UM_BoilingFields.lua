@@ -58,8 +58,8 @@ AddRoom("BoilingFields_Rocky", {
         distributepercent = 1,
         distributeprefabs =
         {
-            springrock2 = 0.1, --These rocks place fun tiles below them
-            springrock3 = 0.1, --These rocks place fun tiles below them
+            springrock2 = 0.1,
+            springrock3 = 0.1,
             rock_lichen = 0.05,
             um_hotspring = 0.05,
             shadow_puff = 3,
@@ -128,7 +128,7 @@ AddRoom("BoilingFields_Hotsprings", {
         distributepercent = 1,
         distributeprefabs =
         {
-            springrock1 = 0.08, --These rocks place fun tiles below them
+            springrock1 = 0.08,
             springrock2 = 0.04,
             boulder_crab = .01,
             rock_lichen = 0.025,
@@ -150,7 +150,7 @@ AddRoom("BoilingFields_Hotsprings_IA", {
         distributepercent = 1,
         distributeprefabs =
         {
-            springrock1 = 0.08, --These rocks place fun tiles below them
+            springrock1 = 0.08, 
             springrock2 = 0.04,
             boulder_crab = .01,
             rock_limpet = 0.025,

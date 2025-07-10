@@ -11,7 +11,13 @@ local function onnear(inst, target)
 			SpawnPrefab("collapse_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
 			inst.SoundEmitter:PlaySound("dontstarve/creatures/rook/explo")
 			SpawnPrefab("critterlab_real_broken").Transform:SetPosition(inst.Transform:GetWorldPosition())
-			inst.components.childspawner:ReleaseAllChildren(target, "mutatedhound")
+			if math.random() > 0.5 then
+				inst.components.childspawner.childname = "firehound"
+				inst.components.childspawner:ReleaseAllChildren(target, "firehound")
+			else
+				inst.components.childspawner.childname = "icehound"
+				inst.components.childspawner:ReleaseAllChildren(target, "icehound")
+			end
 			inst:DoTaskInTime(0, function() inst:Remove() end)
 		end
 	end
@@ -46,7 +52,7 @@ env.AddPrefabPostInit("critterlab", function (inst)
 	inst.repaired = false
 
 	inst:AddComponent("childspawner")
-	inst.components.childspawner.childname = "mutatedhound"
+	inst.components.childspawner.childname = "firehound"
 	inst.components.childspawner:SetRegenPeriod(TUNING.HOUNDMOUND_REGEN_TIME)
 	inst.components.childspawner:SetMaxChildren(2)
 	

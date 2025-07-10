@@ -588,6 +588,7 @@ local prefabs = {
 	"um_plants_decor",
 	
 	"um_pepperdragon_nest",
+	"um_pyrite_ceiling",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
