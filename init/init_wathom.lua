@@ -151,11 +151,12 @@ local function ConfigureRunState(inst)
 	end
 end
 
+
 AddStategraphPostInit("wilson", function(inst)
 	local _RunOnEnter = inst.states["run_start"].onenter
 
 	local function NewOnEnter(inst)
-		if inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider == nil then
+		if (inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider ~= nil and not inst.components.rider:IsRiding()) or (inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider == nil) then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
 			return
@@ -208,7 +209,9 @@ AddStategraphPostInit("wilson", function(inst)
 
 			onenter = function(inst)
 				ConfigureRunState(inst)
-				inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+				if inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.75 then
+					inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+				end
 				--inst.components.hunger:SetRate(TUNING.WILSON_HUNGER_RATE * TUNING.WONKEY_RUN_HUNGER_RATE_MULT)
 				inst.components.locomotor:RunForward()
 				RunUpdateTools(inst)
@@ -553,7 +556,7 @@ AddStategraphPostInit("wilson_client", function(inst)
 	local _RunOnEnter = inst.states["run_start"].onenter
 
 	local function NewOnEnter(inst)
-		if inst:HasTag("wathom") and inst:HasTag("wathomrun") then
+		if (inst:HasTag("wathom") and inst:HasTag("wathomrun")) then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
 			return
@@ -579,7 +582,9 @@ AddStategraphPostInit("wilson_client", function(inst)
 
 			onenter = function(inst)
 				ConfigureRunState(inst)
-				inst.components.locomotor.predictrunspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+				if inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.75 then
+					inst.components.locomotor.predictrunspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+				end
 				inst.components.locomotor:RunForward()
 				RunUpdateTools(inst, true)
 				if not inst.AnimState:IsCurrentAnimation("umrun") then

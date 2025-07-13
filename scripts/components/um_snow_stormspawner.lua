@@ -10,7 +10,7 @@ local easing = require("easing")
 local _storming = false
 local _spawninterval = TUNING.TOTAL_DAY_TIME * 3
 local _despawninterval = TUNING.TOTAL_DAY_TIME / 2
-local _rimebasetime =  TUNING.TOTAL_DAY_TIME / 12 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
+local _rimebasetime =  TUNING.TOTAL_DAY_TIME / 24 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
 local _worldsettingstimer = TheWorld.components.worldsettingstimer
 local UM_SNOWSTORM_TIMERNAME = "um_snowstorm_timer"
 local UM_STOPSNOWSTORM_TIMERNAME = "um_stopsnowstorm_timer"
@@ -34,14 +34,12 @@ local function SpawnRimeweeds()
     local allplants -- should target *all* plants
     local chance = math.random() -- Chance to target specific plants
     local specificplant
-    if chance > 0.75 then -- Wide Grass
+    if chance > 0.9 then -- Wide Grass
         specificplant = "trapdoorgrass"
-    elseif chance <= 0.75 and chance > 0.6 then -- Reeds
+    elseif chance <= 0.9 and chance > 0.8 then -- Reeds
         specificplant = "reeds"
-    elseif chance <= 0.6 and chance > 0.5 then -- Cactus
+    elseif chance <= 0.8 and chance > 0.7 then -- Cactus
         specificplant = "cactus"
-    elseif chance <= 0.5 and chance > 0.4 then -- Red Mushrooms
-        specificplant = "red_mushroom"
     else
         allplants = true
     end
@@ -70,7 +68,7 @@ local function SpawnRimeweeds()
     end
     if _worldsettingstimer:GetTimeLeft(UM_STOPSNOWSTORM_TIMERNAME) then
         --TheNet:Announce("new timer")
-        _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30))
+        _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 10))
     end
 end
 

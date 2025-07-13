@@ -6,6 +6,8 @@ local rock1_assets =
 	Asset("IMAGE", "images/map_icons/magmarock1.tex"),
 	Asset("ATLAS", "images/map_icons/magmarock1.xml"),	
 
+	Asset("IMAGE", "images/map_icons/um_fyriterock.tex"),
+	Asset("ATLAS", "images/map_icons/um_fyriterock.xml"),	
 	
 }
 	
@@ -177,7 +179,7 @@ local function rock1_fn()
 end
 
 local function rock2_fn()
-    local inst = baserock_fn("fyriterock", "fyriterock", "full", "magmarock1.tex")
+    local inst = baserock_fn("fyriterock", "fyriterock", "full", "um_fyriterock.tex")
 
     if not TheWorld.ismastersim then
         return inst

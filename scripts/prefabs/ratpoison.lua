@@ -1,12 +1,13 @@
 local itemassets =
 {
-    Asset("ANIM", "anim/tar.zip"),
+    Asset("ANIM", "anim/um_ratpoison.zip"),
 }
 
 local assets =
 {
-    Asset("ANIM", "anim/tar_trap.zip"),
+
     Asset("ANIM", "anim/um_goo.zip"),
+	
 }
 
 local itemprefabs=
@@ -117,8 +118,8 @@ local function itemfn()
     
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("tar")
-    inst.AnimState:SetBuild("tar")
+    inst.AnimState:SetBank("um_ratpoison")
+    inst.AnimState:SetBuild("um_ratpoison")
     inst.AnimState:PlayAnimation("idle")
     
     inst:AddTag("donotautopick")

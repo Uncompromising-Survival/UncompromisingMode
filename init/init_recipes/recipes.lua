@@ -90,8 +90,9 @@ ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
 ChangeSortKey("um_fyre_bomb", "nightstick", "WEAPONS", true)
 
-AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3),Ingredient("silk", 1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "ARMOUR" })
-ChangeSortKey("um_hat_bee_moon", "armor_glassmail", "ARMOUR", true)
+AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3),Ingredient("silk", 1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "CLOTHING","WEAPONS" })
+ChangeSortKey("um_hat_bee_moon", "roseglasseshat", "CLOTHING", true)
+ChangeSortKey("um_hat_bee_moon", "armor_glassmail", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
 ChangeSortKey("um_eyebalm", "floral_bandage", "RESTORATION", true)
@@ -103,14 +104,14 @@ AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("night
 ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
 
 
--- AddRecipe2(
-    -- "um_bear_trap_equippable_tooth",
-    -- { Ingredient("twigs", 4), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
-    -- TECH.SCIENCE_ONE,
-    -- { nil },
-    -- { "WEAPONS" }
--- )
--- ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
+AddRecipe2(
+    "um_bear_trap_equippable_tooth",
+    { Ingredient("twigs", 4), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
+    TECH.SCIENCE_ONE,
+    { nil },
+    { "WEAPONS" }
+)
+ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
 
 AddRecipe2(
     "um_bear_trap_equippable_gold",
@@ -121,13 +122,23 @@ AddRecipe2(
 )
 ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "WEAPONS", true)
 
+AddRecipe2(
+    "um_detonator",
+    { Ingredient("moonstorm_spark", 6), Ingredient("wagpunk_bits", 2), Ingredient("lightninggoathorn", 1)},
+    TECH.SCIENCE_TWO,
+    { nil },
+    { "WEAPONS" }
+)
+ChangeSortKey("um_detonator", "um_bear_trap_equippable_gold", "WEAPONS", true)
+
+
 if GetModConfigData("wiltfly") then
     AddRecipe2("armor_glassmail", { Ingredient("glass_scales", 1), Ingredient("moonglass_charged", 10) }, TECH.CELESTIAL_THREE, { nounlock = true }, { "CRAFTING_STATION" })
     ChangeSortKey("armor_glassmail", "glasscutter", "CRAFTING_STATION", true)
 end
 
 if GetModConfigData("rat_raids") or GetModConfigData("funny rat") then
-    AddRecipe2("rat_whip", { Ingredient("twigs", 3), Ingredient("rope", 1), Ingredient("rat_tail", 3) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
+    AddRecipe2("rat_whip", { Ingredient("twigs", 3), Ingredient("mosquitosack", 1), Ingredient("rat_tail", 3) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
     ChangeSortKey("rat_whip", "whip", "WEAPONS", true)
 end
 
@@ -247,9 +258,9 @@ AddRecipe2("cannonball_sludge_item", { Ingredient("sludge", 1), Ingredient("nitr
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "SEAFARING", true)
 ChangeSortKey("cannonball_sludge_item", "cannonball_rock_item", "WEAPONS", true)
 
-AddRecipe2("cannonball_incendiary_item", { Ingredient("snapalm", 1), Ingredient("gunpowder", 1), Ingredient("slurtle_shellpieces", 2) }, TECH.SEAFARING_ONE, { numtogive = 4 }, { "WEAPONS", "SEAFARING" })
-ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "SEAFARING", true)
-ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "WEAPONS", true)
+-- AddRecipe2("cannonball_incendiary_item", { Ingredient("snapalm", 1), Ingredient("gunpowder", 1), Ingredient("slurtle_shellpieces", 2) }, TECH.SEAFARING_ONE, { numtogive = 4 }, { "WEAPONS", "SEAFARING" })
+-- ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "SEAFARING", true)
+-- ChangeSortKey("cannonball_incendiary_item", "cannonball_sludge_item", "WEAPONS", true)
 
 
 AddRecipe2("sludge_oil", { Ingredient("sludge", 3), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "LIGHT" })

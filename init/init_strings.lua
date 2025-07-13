@@ -640,4 +640,5 @@ STRINGS.UM_LOADINGTIPS = {
     --WANDA_SHADOWS = "\"Wanda's time spent messing with time has really made her body more vulnerable to those nightmare monstrosities.\" - W",
 }
 
+STRINGS.ACTIONS.USESPELLBOOK.UM_DETONATE = "Detonate"
 --SCRAPBOOK

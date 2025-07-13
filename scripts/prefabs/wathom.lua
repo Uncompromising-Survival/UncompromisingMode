@@ -308,6 +308,26 @@ local function onload(inst, data)
     end
 end
 
+local function HoldingCane(inst)
+	return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" and true
+end
+
+local function CheckForCaneRun(inst)
+	local AmpLevel = inst.components.adrenaline:GetPercent()
+    if (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst)) and
+        (inst.components.rider and not inst.components.rider:IsRiding() or not inst.components.rider) then --Handle VVathom Running
+        inst:AddTag("wathomrun")
+		if inst.sg:HasStateTag("running") then
+			inst.sg:GoToState("idle")
+		end
+    elseif inst:HasTag("wathomrun") and not (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst)) or inst.components.rider and inst.components.rider:IsRiding() then
+        inst:RemoveTag("wathomrun")
+		if inst.sg:HasStateTag("running") then
+			inst.sg:GoToState("idle")
+		end
+    end
+end
+
 local function UpdateAdrenaline(inst, data)
     SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
     local AmpLevel = inst.components.adrenaline:GetPercent()
@@ -331,12 +351,7 @@ local function UpdateAdrenaline(inst, data)
         SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomAdrenalineStinger"), inst.userid, "wathom_breathe")
     end
 
-    if (AmpLevel >= 0.75 or inst:HasTag("amped")) and
-        (inst.components.rider and not inst.components.rider:IsRiding() or not inst.components.rider) then --Handle VVathom Running
-        inst:AddTag("wathomrun")
-    elseif inst:HasTag("wathomrun") and not (AmpLevel >= 0.75 or inst:HasTag("amped")) or inst.components.rider and inst.components.rider:IsRiding() then
-        inst:RemoveTag("wathomrun")
-    end
+	CheckForCaneRun(inst)
 
     if AmpLevel == 0 and inst:HasTag("amped") then
         UnAmp(inst)
@@ -567,6 +582,9 @@ local function master_postinit(inst)
 
     inst.OnNewSpawn = onload
     inst.ToggleUndeathState = ToggleUndeathState
+	
+	inst:ListenForEvent("equip",CheckForCaneRun)
+	inst:ListenForEvent("unequip",CheckForCaneRun)
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, prefabs)

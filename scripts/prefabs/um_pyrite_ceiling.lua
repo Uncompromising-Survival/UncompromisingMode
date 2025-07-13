@@ -1,6 +1,9 @@
 local assets =
 {
     Asset("ANIM", "anim/um_pyrite_ceiling.zip"),
+	
+	Asset("IMAGE", "images/map_icons/um_pyrite_ceiling.tex"),
+	Asset("ATLAS", "images/map_icons/um_pyrite_ceiling.xml"),	
 }
 
 local function Regrow(inst,data)
@@ -48,14 +51,20 @@ local function DropLoot(inst)
 	if inst.fullness ~= 0 then
 		inst.fullness = inst.fullness - 1
 		if inst.fullness == 0 then
-			inst.AnimState:PlayAnimation("idle_empty",true)
+			inst.AnimState:PlayAnimation("shatter_empty")
+			inst.AnimState:PushAnimation("idle_empty",true)
 		else
-			inst.AnimState:PlayAnimation("idle_medium",true)
+			inst.AnimState:PlayAnimation("shatter_medium",true)
+			inst.AnimState:PushAnimation("idle_medium",true)
 		end
 	end
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local pyre = SpawnPrefab("um_fyrite")
 	pyre.Transform:SetPosition(x+math.random(-2,2),y+10,z+math.random(-2,2))
+	local fx = SpawnPrefab("explosivehit")
+	fx.Transform:SetPosition(pyre.Transform:GetWorldPosition())
+	fx.Transform:SetScale(1.25,1.25,1.25)
+	fx:DoTaskInTime(2,function(fx) fx:Remove() end)
 	ListenForCrash(pyre)
 	
 	if math.random() > 0.9 then
@@ -74,7 +83,7 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-
+	inst.entity:AddMiniMapEntity()
     inst.Transform:SetTwoFaced()
 
     inst.AnimState:SetBuild("um_pyrite_ceiling")
@@ -82,7 +91,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_full", true)
 
     inst:AddTag("NOCLICK")
-
+	inst.MiniMapEntity:SetIcon("um_pyrite_ceiling.tex")
     inst.no_wet_prefix = true
 
 

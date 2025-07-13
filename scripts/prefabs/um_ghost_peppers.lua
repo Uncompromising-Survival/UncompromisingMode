@@ -214,8 +214,8 @@ local function FadingOut(inst)
 		inst:DoTaskInTime(2*FRAMES,FadingOut)
 	end
 	inst.Light:SetIntensity(inst.color*0.6)
-    inst.Light:SetRadius(inst.color*0.6+0.01)
-    inst.Light:SetFalloff(inst.color*0.6)
+    -- inst.Light:SetRadius(inst.color*0.6+0.01)
+    -- inst.Light:SetFalloff(inst.color*0.6)
 	inst.AnimState:SetMultColour(1,1,1,inst.color)	
 end
 
@@ -226,9 +226,9 @@ local function FadingIn(inst)
 	else
 		inst:DoTaskInTime(2*FRAMES,FadingIn)
 	end
-	inst.Light:SetIntensity(inst.color*0.6)
-    inst.Light:SetRadius(inst.color*0.6+0.01)
-    inst.Light:SetFalloff(inst.color*0.6)
+	inst.Light:SetIntensity(0.6)
+    -- inst.Light:SetRadius(inst.color*0.6+0.01)
+    -- inst.Light:SetFalloff(inst.color*0.6)
 	inst.AnimState:SetMultColour(1,1,1,inst.color)	
 end
 
@@ -264,7 +264,7 @@ local function commonfn(Sim)
     
 	
 	inst.Light:SetIntensity(.6)
-    inst.Light:SetRadius(.5)
+    inst.Light:SetRadius(.6)
     inst.Light:SetFalloff(.6)
     inst.Light:Enable(true)
     inst.Light:SetColour(180/255, 195/255, 225/255)   

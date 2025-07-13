@@ -283,12 +283,13 @@ local function MakeBundle(name, onesize, variations, loot, tossloot, setupdata, 
             inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/"..name..(variations == nil and "_large" or (onesize and "1" or "_large1"))..".xml")
             inst.components.inventoryitem:ChangeImageName(name..(variations == nil and "_large" or (onesize and "1" or "_large1")))
         end
-
+		
         inst:AddComponent("unwrappable")
         inst.components.unwrappable:SetOnWrappedFn(OnWrapped)
         inst.components.unwrappable:SetOnUnwrappedFn(OnUnwrapped)
         inst.UpdateInventoryImage = UpdateInventoryImage
-
+		inst.components.unwrappable:SetPeekContainer("silksack")
+		
         MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
         MakeSmallPropagator(inst)
         inst.components.propagator.flashpoint = 10 + math.random() * 5

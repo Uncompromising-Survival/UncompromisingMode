@@ -746,6 +746,10 @@ for k, v in pairs(containers.params.spicepack.widget.slotbg) do
     containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
 end
 
+
+containers.params.silken_bundle = GLOBAL.deepcopy(containers.params.beargerfur_sack)
+
+
 if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.saltbox.lowpriorityselection = true
 	containers.params.icebox.lowpriorityselection = true

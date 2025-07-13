@@ -2711,8 +2711,10 @@ Assets = {
     Asset("SOUNDPACKAGE", "sound/stmpwyfs.fev"),
     Asset("SOUND", "sound/stmpwyfs.fsb"),
 
-
-
+	Asset("SOUNDPACKAGE", "sound/um_detonator.fev"),
+	Asset("SOUND", "sound/um_detonator_bank00.fsb"),
+	
+	
     --MAP ICONS
     Asset("IMAGE", "images/map_icons/rock_lichen.tex"),
     Asset("ATLAS", "images/map_icons/rock_lichen.xml"),

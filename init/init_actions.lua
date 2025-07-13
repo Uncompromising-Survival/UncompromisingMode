@@ -150,6 +150,15 @@ GLOBAL.ACTIONS.CHOP.fn = function(act)
     return _ChopFn(act)
 end
 
+local _spellbookstrfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
+GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
+	if act.invobject.prefab == "um_detonator" then
+		return "UM_DETONATE"
+	else
+		return _spellbookstrfn(act)
+	end
+end
+
 --if TUNING.DSTU.WICKERNERF then
     --local _ReadFn = GLOBAL.ACTIONS.READ.fn
 
