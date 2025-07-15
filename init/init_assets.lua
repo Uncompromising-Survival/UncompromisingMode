@@ -2571,6 +2571,9 @@ Assets = {
     Asset("ATLAS", "images/wortox_shadow_weaver.xml"),
     Asset("IMAGE", "images/wortox_shadow_weaver.tex"),
     
+	
+
+	
     --SWAPS
     Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
     Asset("ANIM", "anim/torso_amulets_klaus.zip"), --Not quite sure...
@@ -2829,18 +2832,6 @@ RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_we
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
-
-if BuildSkillsData then
-    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
-    local data = BuildSkillsData(skilltree_defs.FN)
-    for k, v in pairs(data.SKILLS) do
-        if v.icon then
-            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
-        end
-    end
-end
-
-local BuildSkillsData = require("prefabs/skilltree_wathom")
 
 if BuildSkillsData then
     RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
