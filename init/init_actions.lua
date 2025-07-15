@@ -152,7 +152,7 @@ end
 
 local _spellbookstrfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
 GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-	if act.invobject.prefab == "um_detonator" then
+	if act and act.invobject and act.invobject.prefab == "um_detonator" then
 		return "UM_DETONATE"
 	else
 		return _spellbookstrfn(act)
