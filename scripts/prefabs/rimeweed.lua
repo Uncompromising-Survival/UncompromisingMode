@@ -374,13 +374,18 @@ local function MainDie(inst)
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage == 2 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+		if math.random() < 0.25 then
+			inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+		end
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage >= 3 and not inst.noloot then
-        inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-        inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+		if math.random() > 0.5 then
+			inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
+		else
+			inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
+		end
     end
 end
 

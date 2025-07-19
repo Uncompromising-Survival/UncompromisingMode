@@ -3,6 +3,10 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local SpDamageUtil = require("components/spdamageutil")
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
 env.AddComponentPostInit("combat", function(self)
     if not TheWorld.ismastersim then return end
 
@@ -140,7 +144,13 @@ env.AddComponentPostInit("combat", function(self)
 
         if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
-            damage = damage * self.inst.AmpDamageTakenModifier
+			if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") then
+				damage = damage * self.inst.AmpDamageTakenModifier*0.5
+				self.inst.components.adrenaline:DoDelta(-damage/3)
+			else
+				damage = damage * self.inst.AmpDamageTakenModifier
+			end
+            
         elseif self.inst and self.inst.components.upgrademoduleowner and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WXLESS then
             -- Hardy circuit flat damage reduction
             local small_absorb_table = {0, 2, 4, 5.5, 7, 8, 9, 9.5, 10}

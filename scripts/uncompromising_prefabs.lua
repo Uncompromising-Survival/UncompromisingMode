@@ -402,6 +402,7 @@ local prefabs = {
 	"wathom",
 	"wathom_none",
 	"wathom_heartbeat_ringfx",
+	"wathom_puddle",
 
 	"um_shadowarena",
 
@@ -589,6 +590,9 @@ local prefabs = {
 	
 	"um_pepperdragon_nest",
 	"um_pyrite_ceiling",
+	"um_ribopod",
+	"um_gemologygems",
+	
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

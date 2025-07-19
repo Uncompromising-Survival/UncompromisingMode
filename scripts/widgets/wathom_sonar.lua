@@ -1,6 +1,10 @@
 local Widget = require "widgets/widget"
 local UIAnim = require "widgets/uianim"
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
 local Wathom_Sonar = Class(Widget, function(self, owner)
     self.owner = owner
     Widget._ctor(self, "Wathom_Sonar")
@@ -73,9 +77,12 @@ function Wathom_Sonar:StopSonar()
 end
 
 function Wathom_Sonar:UpdateAlpha(dt)
-
     if self.time > 0 then
-        self.time = math.max(0, self.time - dt)
+		if self.owner:HasTag("echolocation") and TheWorld:HasTag("cave") then
+			self.time = math.max(0, self.time - dt*1.5)
+		else
+			self.time = math.max(0, self.time - dt)
+		end
     else
         if self.currentstate == "out" then
 			if self.owner:HasTag("WathomInDark") then
@@ -100,7 +107,7 @@ function Wathom_Sonar:UpdateAlpha(dt)
         elseif self.currentstate == "in" and self.owner:HasTag("WathomInDark") then
             self.currentstate = "out"
             self.alphagoal = 1
-            self.time = self.transitiontimeOUT - (self.current_adrenaline / 25)
+            self.time = (self.transitiontimeOUT - (self.current_adrenaline / 25))
         end                
     end
 

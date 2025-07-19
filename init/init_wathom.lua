@@ -18,6 +18,16 @@ local ActionHandler = GLOBAL.ActionHandler
 
 -- Setting up new actions
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
+local function HoldingCane(inst)
+	return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and 
+	(inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" or inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "orangestaff" or
+	inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "walking_stick") and true
+end
+
 local function OnCooldownBark(inst)
 	inst._barkcdtask = nil
 end
@@ -56,6 +66,8 @@ local function Attack_New(inst, action)
 	if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown") or (weapon:HasTag("rangedweapon") and not table.contains(special_staff, weapon.prefab)))) and inst:HasTag("wathom") and
 		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) then
 		return ("wathomleap")
+	elseif not weapon and HasSkill(inst,"bite_1") then
+		return ("wathombite")
 	else
 		return Attack_Old(inst, action)
 	end
@@ -75,27 +87,13 @@ local function AttackClient_New(inst, action)
 	if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown"))) and inst:HasTag("wathom") and
 		not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding() or inst.replica.rider ~= nil and not inst.replica.rider:IsRiding()) then
 		return ("wathomleap_pre")
-	else
+	elseif not weapon and HasSkill(inst,"bite_1") then
+		return ("wathombite")
+	else	
 		return ClientAttack_Old(inst, action)
 	end
 end
 
-local function RunUpdateTools(inst, client, exiting)
-	--[[local method
-	if client then
-		method = inst.replica
-	else
-		method = inst.components
-	end
-	local weapon = method.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
-	if exiting and weapon then
-		inst.AnimState:Show("ARM_carry")
-		inst.AnimState:Hide("ARM_normal")
-	elseif weapon then
-		inst.AnimState:Hide("ARM_carry")
-		inst.AnimState:Show("ARM_normal")
-	end]]
-end
 
 --Pack it up
 
@@ -151,11 +149,196 @@ local function ConfigureRunState(inst)
 	end
 end
 
+local skilltree_defs = require("prefabs/skilltree_defs")
+local BuildSkillsData = require("prefabs/skilltree_wathom")
+if BuildSkillsData then
+	local data = BuildSkillsData(skilltree_defs.FN)
+
+	
+	skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
+	skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
+
+	-- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wathom")
+	
+	for k, v in pairs(data.SKILLS) do
+		if v.icon then
+			table.insert(Assets, Asset("IMAGE", "images/"..v.icon..".tex"))
+			table.insert(Assets, Asset("ATLAS", "images/"..v.icon..".xml"))
+			RegisterSkilltreeIconsAtlas("images/".. v.icon ..".xml", v.icon .. ".tex")
+		end
+	end
+end
+	
+local function GetAdrenalShove(inst)
+	if inst.components.adrenaline then
+		return inst:HasTag("amped") and 1 or 0.5+inst.components.adrenaline:GetPercent()*0.5
+	else
+		return 0.5
+	end
+end
+	
+-- This is Scrimble's Shove Code, it's used for both Charles T Horse and Wixie, be appreciative, swine.
+local SLEEPREPEL_MUST_TAGS = { "_combat" }
+local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadow", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+	"hiding", "NOTARGET", "flight", "toadstool" }
+
+local function Check_Bowling(inst,target)
+	if inst ~= nil then
+		local x, y, z = inst.Transform:GetWorldPosition()
+
+		local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
+
+		for i, v in ipairs(ents) do
+			--if (not target) or (target and v ~= target) then 
+				v:AddTag("wixieshoved")
+				SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
+
+				if v.components.combat ~= nil then -- but we checked combat in the search query...
+					v.components.combat:GetAttacked(inst, 0)
+				end
+
+
+				if v.components.health and not v.components.health:IsDead() and HasSkill(inst,"rampage_2") and inst.components.adrenaline then
+					local damage = inst:HasTag("amped") and 25 or 12.5 + 2*12.5*inst.components.adrenaline:GetPercent()  
+					v.components.combat:GetAttacked(inst, damage)
+				end
+
+
+				if v.components.locomotor ~= nil and not v:HasTag("stageusher") then
+					for i = 1, 50 do
+						v:DoTaskInTime((i - 1) / 50, function(v)
+							if v ~= nil and inst ~= nil then
+								local x, y, z = inst.Transform:GetWorldPosition()
+								local tx, ty, tz = v.Transform:GetWorldPosition()
+
+								local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
+								local velx = math.cos(rad)  --* 4.5
+								local velz = -math.sin(rad) --* 4.5
+
+								local giantreduction = v:HasTag("epic") and 1.5 or v:HasTag("smallcreature") and 0.8 or 1
+								local cursemultiplier = v:HasDebuff("wixiecurse_debuff") and 1.75 or 1.25
+								local shovevalue = GetAdrenalShove(inst)
+
+								local dx, dy, dz =
+									tx + (((shovevalue / (i + 3)) * velx) / giantreduction) * cursemultiplier, ty,
+									tz + (((shovevalue / (i + 3)) * velz) / giantreduction) * cursemultiplier
+								local ground = GLOBAL.TheWorld.Map:IsPassableAtPoint(dx, dy, dz)
+								local boat = GLOBAL.TheWorld.Map:GetPlatformAtPoint(dx, dz)
+								local ocean_collision = GLOBAL.TheWorld.Map:IsOceanAtPoint(dx, dy, dz)
+
+								if not (v.sg ~= nil and (v.sg:HasStateTag("swimming") or v.sg:HasStateTag("invisible"))) then
+									if v ~= nil and dx ~= nil and (ground or boat or ocean_collision and v.components.locomotor:CanPathfindOnWater() or v.components.tiletracker ~= nil and not v:HasTag("whale")) then
+										--[[if ocean_collision and v.components.amphibiouscreature and not v.components.amphibiouscreature.in_water then
+												v.components.amphibiouscreature:OnEnterOcean()
+											end]]
+										v.Transform:SetPosition(dx, dy, dz)
+									end
+								end
+
+								if i >= 50 then
+									v:RemoveTag("wixieshoved")
+								end
+							end
+						end)
+					end
+				--end
+			end
+		end
+	end
+end	
+
+
+
+
+
+AddStategraphPostInit("wilsonghost", function(inst)
+	local _RunOnEnter = inst.states["run"].onenter
+
+	local function NewOnEnter(inst)
+		_RunOnEnter(inst)
+		if HasSkill(inst,"shadow_wathom_2") then
+			inst.AnimState:PlayAnimation("umrun",true)
+		end
+	end
+
+	inst.states["run"].onenter = NewOnEnter
+	
+	local _haunt = inst.states["haunt_pre"].onenter
+
+	local function NewOnEnter(inst)
+		_haunt(inst)
+		if HasSkill(inst,"shadow_wathom_2") then
+			inst.AnimState:PlayAnimation("emote_angry", false)
+		end
+	end
+
+	inst.states["haunt_pre"].onenter = NewOnEnter
+	
+	local _haunt = inst.states["haunt"].onenter
+
+	local function NewOnEnter(inst)
+		_haunt(inst)
+		if HasSkill(inst,"shadow_wathom_2") then
+			inst.AnimState:PlayAnimation("idle", false)
+		end
+	end
+
+	inst.states["haunt"].onenter = NewOnEnter
+	
+	
+	inst.states["run"].onexit = function(inst) 		
+		if HasSkill(inst,"shadow_wathom_2") then
+			inst.AnimState:PlayAnimation("idle",true)
+		end 
+	end
+end)
+	
+local function MarkDontEatFoods(inst,target)
+	local x,y,z = target.Transform:GetWorldPosition()
+	local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
+	for i,v in ipairs(loot) do
+		if v:HasTag("meat") and v.components.edible then
+			v.wathom_dont_eat = true
+			v:DoTaskInTime(3,function(v) v.wathom_dont_eat = nil end)
+		end
+	end
+end
+	
+local function CheckIfDead(inst,target)
+	
+	if (target and target.components.health and target.components.health:IsDead()) and not (target:HasTag("shadow") or target:HasTag("chess")) then
+		if HasSkill(inst,"bite_mastery") and inst.components.health then
+			inst.components.health:DeltaPenalty(-0.01)
+		end
+		inst.components.health:DoDelta(4)
+		if HasSkill(inst,"bite_2") then
+			local x,y,z = target.Transform:GetWorldPosition()
+			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
+			for i,v in ipairs(loot) do
+				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat then
+					local health_restore = v.components.edible.healthvalue
+					local hunger_restore = v.components.edible.hungervalue
+					if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
+						inst.components.hunger:DoDelta(hunger_restore)
+						if health_restore < 0 then
+							health_restore = 0
+						end
+						inst.components.health:DoDelta(health_restore)
+						SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
+						v:Remove()
+					end
+				end
+			end
+		end
+	end
+
+end
 
 AddStategraphPostInit("wilson", function(inst)
 	local _RunOnEnter = inst.states["run_start"].onenter
 
 	local function NewOnEnter(inst)
+
 		if (inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider ~= nil and not inst.components.rider:IsRiding()) or (inst:HasTag("wathom") and inst:HasTag("wathomrun") and inst.components.rider == nil) then
 			inst.sg.mem.footsteps = 0
 			inst.sg:GoToState("run_wathom")
@@ -209,12 +392,13 @@ AddStategraphPostInit("wilson", function(inst)
 
 			onenter = function(inst)
 				ConfigureRunState(inst)
-				if inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.75 then
+				if ((inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.75) or (HasSkill(inst,"digitigrade_1") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.48)) or inst:HasTag("amped") then
 					inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
 				end
+
 				--inst.components.hunger:SetRate(TUNING.WILSON_HUNGER_RATE * TUNING.WONKEY_RUN_HUNGER_RATE_MULT)
 				inst.components.locomotor:RunForward()
-				RunUpdateTools(inst)
+				
 				if not inst.AnimState:IsCurrentAnimation("umrun") then
 					inst.AnimState:PlayAnimation("umrun", true)
 				end
@@ -235,7 +419,7 @@ AddStategraphPostInit("wilson", function(inst)
 					return
 				end
 				inst.components.locomotor:RunForward()
-				RunUpdateTools(inst)
+				
 			end,
 
 			events =
@@ -264,9 +448,11 @@ AddStategraphPostInit("wilson", function(inst)
 
 			onexit = function(inst)
 				if not inst.sg.statemem.funkyrunning then
-					RunUpdateTools(inst, false, true)
 					inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
 					inst.Transform:ClearPredictedFacingModel()
+				end
+				if HoldingCane(inst) and HasSkill(inst,"digitigrade_2") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() < 0.51 then
+					inst.components.adrenaline:DoDelta(1)
 				end
 			end,
 		},
@@ -474,6 +660,10 @@ AddStategraphPostInit("wilson", function(inst)
 								inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
 									inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
 							end
+							if HasSkill(inst,"rampage_1") then
+								target:AddTag("wixieshoved")
+								target:DoTaskInTime(1,function(target) target:RemoveTag("wixieshoved") end)
+							end
 						end
 					end
 					inst.SoundEmitter:PlaySound("turnoftides/common/together/boat/jump")
@@ -497,18 +687,33 @@ AddStategraphPostInit("wilson", function(inst)
 						inst.leapvelocity = 15
 					elseif inst.components.adrenaline:GetPercent() > 0.24 and inst.components.adrenaline:GetPercent() < 0.51 and not inst:HasTag("wearingheavyarmor") then
 						inst.leapvelocity = 7.5 -- originally 10, lets see how this goes.
-					elseif inst.components.adrenaline:GetPercent() > 0.50 and inst.components.adrenaline:GetPercent() < 0.75 and not inst:HasTag("wearingheavyarmor") then
+					elseif inst.components.adrenaline:GetPercent() > 0.50 and inst.components.adrenaline:GetPercent() < 0.75 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
 						inst.leapvelocity = 10 -- * (inst.components.adrenaline:GetPercent() + .5)
-					elseif inst.components.adrenaline:GetPercent() > 0.74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") then
+					elseif inst.components.adrenaline:GetPercent() > 0.74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_2") then
 						inst.leapvelocity = 12.5 -- this is used in between 75 and 100 (Amped).
+					elseif inst.components.adrenaline:GetPercent() > 0.74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
+						inst.leapvelocity = 10
+					elseif inst.components.adrenaline:GetPercent() > 0.24 then
+						inst.leapvelocity = 7.5
 					else
 						inst.leapvelocity = 0 --Either Wathom has the "wearingheavyarmor" tag, is under 25 adrenaline (ie fatigued) or the game is somehow not reading the Adrenaline meter.
 					end
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
+					
+					if HasSkill(inst,"rampage_1") then
+						local buffaction = inst:GetBufferedAction()
+						local target = buffaction ~= nil and buffaction.target or nil
+						Check_Bowling(inst,target)
+					end
 				end),
 
 				TimeEvent(19 * FRAMES, function(inst)
 					SpawnPrefab("dirt_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())
+					if HasSkill(inst,"rampage_1") then
+						local buffaction = inst:GetBufferedAction()
+						local target = buffaction ~= nil and buffaction.target or nil
+						Check_Bowling(inst,target)
+					end
 				end),
 
 				TimeEvent(24 * FRAMES, function(inst)
@@ -522,6 +727,11 @@ AddStategraphPostInit("wilson", function(inst)
 					inst.Physics:Stop()
 					inst.Physics:CollidesWith(GLOBAL.COLLISION.CHARACTERS) -- Re-enabling Wathom's normal collision.
 					inst.components.playercontroller:Enable(true)
+					if HasSkill(inst,"rampage_1") then
+						local buffaction = inst:GetBufferedAction()
+						local target = buffaction ~= nil and buffaction.target or nil
+						Check_Bowling(inst,target)
+					end
 				end),
 
 			},
@@ -533,6 +743,91 @@ AddStategraphPostInit("wilson", function(inst)
 			events =
 			{
 				EventHandler("animover", function(inst)
+					inst.sg:GoToState("idle")
+				end),
+			},
+		},
+		
+		GLOBAL.State {
+			name = "cantbark",
+			tags = { busy },
+
+			onenter = function(inst)
+				inst:ClearBufferedAction()
+
+				--				inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
+
+				inst.AnimState:PlayAnimation("sing_fail", false)
+
+				inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
+			end,
+			timeline =
+			{
+				TimeEvent(12 * FRAMES, function(inst)
+					inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
+				end),                                                       --bark twice.
+			},
+			events =
+			{
+				EventHandler("animover", function(inst)
+					if inst.AnimState:AnimDone() then
+						inst.sg:GoToState("idle")
+						inst.sg:RemoveStateTag("busy")
+						inst:ClearBufferedAction()
+					end
+				end),
+			}
+		},
+
+		GLOBAL.State {
+			name = "wathombite",
+			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+
+			onenter = function(inst, data)
+				local buffaction = inst:GetBufferedAction()
+				local target = buffaction ~= nil and buffaction.target or nil
+				
+
+				inst.components.combat:StartAttack()
+				--            inst.components.health:SetInvincible(true) -- I wonder why Tiddler did this?
+				--inst.AnimState:PlayAnimation("atk_leap_pre", false)
+                inst.AnimState:PlayAnimation("feast_eat_pre_pre")
+                inst.AnimState:PushAnimation("feast_eat_pre", false)
+				inst.components.locomotor:Stop()
+				inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+
+				inst.AnimState:SetDeltaTimeMultiplier(1.2)
+			end,
+
+			onexit = function(inst)
+				inst.AnimState:SetDeltaTimeMultiplier(1)
+			end,	
+
+			timeline =
+			{
+				TimeEvent(8 * FRAMES, function(inst)
+					inst.sg:RemoveStateTag("abouttoattack")
+					inst.components.locomotor:Stop()
+					local buffaction = inst:GetBufferedAction()
+					local target = buffaction ~= nil and buffaction.target or nil
+					inst:PerformBufferedAction()
+					inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+					inst.AnimState:SetFrame(5)
+					
+					if target then
+						MarkDontEatFoods(inst,target)
+						inst:DoTaskInTime(0.25,function(inst) CheckIfDead(inst,target) end)
+					end
+				end),
+				TimeEvent(12 * FRAMES, function(inst)
+					inst.sg:GoToState("idle")
+				end),
+
+
+			},
+			events = -- if somehow he gets stuck
+			{
+				EventHandler("animqueueover", function(inst)
 					inst.sg:GoToState("idle")
 				end),
 			},
@@ -586,7 +881,6 @@ AddStategraphPostInit("wilson_client", function(inst)
 					inst.components.locomotor.predictrunspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
 				end
 				inst.components.locomotor:RunForward()
-				RunUpdateTools(inst, true)
 				if not inst.AnimState:IsCurrentAnimation("umrun") then
 					inst.AnimState:PlayAnimation("umrun", true)
 				end
@@ -607,7 +901,6 @@ AddStategraphPostInit("wilson_client", function(inst)
 					inst.sg:GoToState("run")
 					return
 				end
-				RunUpdateTools(inst, true)
 				inst.components.locomotor:RunForward()
 			end,
 
@@ -637,13 +930,14 @@ AddStategraphPostInit("wilson_client", function(inst)
 
 			onexit = function(inst)
 				if not inst.sg.statemem.funkyrunning then
-					RunUpdateTools(inst, true, true)
 					inst.components.locomotor.predictrunspeed = nil
 					inst.Transform:ClearPredictedFacingModel()
 				end
+
 			end,
 		},
 
+		
 		GLOBAL.State {
 			name = "wathomleap_pre",
 			tags = { "busy" },
@@ -682,6 +976,39 @@ AddStategraphPostInit("wilson_client", function(inst)
 			end,
 		},
 
+		GLOBAL.State {
+			name = "wathombite",
+			tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+
+			onenter = function(inst, data)
+				inst.components.locomotor:Stop()
+
+				inst.AnimState:PlayAnimation("feast_eat_pre_pre", false)
+				inst.AnimState:PushAnimation("feast_eat_pre", false)
+
+				local buffaction = inst:GetBufferedAction()
+				if buffaction ~= nil then
+					inst:PerformPreviewBufferedAction()
+
+					if buffaction.pos ~= nil then
+						inst:ForceFacePoint(buffaction:GetActionPoint():Get())
+					end
+				end
+
+				inst.sg:SetTimeout(2)
+
+
+			end,
+
+			onexit = function(inst)
+			
+			end,
+
+			ontimeout = function(inst)
+				inst:ClearBufferedAction()
+				inst.sg:GoToState("idle")
+			end,
+		},
 		GLOBAL.State {
 			name = "wathombark_pre",
 			tags = { "busy" },
@@ -751,9 +1078,19 @@ local function AddEnemyDebuffFx(fx, target)
 	end)
 end
 
---helper function so I can merge the action handler and action checks easily
-local function DoBark(act)
-
+local function SpreadGoo(inst,number)
+	local circle = number*2+3
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local radius = number*2
+	for i = 1,circle do
+		local x1 = x+radius*math.cos(2*3.14*i/circle)
+		local z1 = z+radius*math.sin(2*3.14*i/circle)
+		GLOBAL.SpawnPrefab("wathom_puddle").Transform:SetPosition(x1,y,z1)
+	end
+	
+	if number < 4 then
+		inst:DoTaskInTime(0.2,function(inst) SpreadGoo(inst,number+1) end)
+	end
 end
 
 local wathombark = AddAction(
@@ -761,6 +1098,9 @@ local wathombark = AddAction(
 	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		local inst = act.doer
+		if HasSkill(inst,"bark_mastery") then
+			SpreadGoo(inst,1)
+		end
 		if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
 			local inst = act.doer
 			inst.AnimState:AddOverrideBuild("emote_angry")
@@ -852,13 +1192,105 @@ local function GetModOptionValue(knownmodname, known_option_name)
 	end
 end
 
+
+
+
+local DEERCLOPS_TIMERNAME = "deerclops_timetoattack"
+local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
+local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
+local BEARGER_TIMERNAME = "bearger_timetospawn"
+
+local function Say(inst,text)
+	inst.components.talker:Say(text)
+end
+
+local function WathomWarnsEarly(inst,threattype,stage)
+	
+	if threattype == "megafauna" then
+		if stage == 1 then
+			Say(inst,"Distant Roar. Awoken, megafauna. Far away, still.")
+		else
+			Say(inst,"Distant Megafauna. Time for preparation.")
+		end
+	elseif threattype == "dogs" then
+		if GLOBAL.TheWorld:HasTag("cave") then
+			if stage == 1 then
+				Say(inst,"Howling, distant dogs. Hunt began. Far away, still.")
+			else
+				Say(inst,"Worms. Our footsteps, felt. Soon, attack.")
+			end	
+		else
+			if stage == 1 then
+				Say(inst,"Vocalizations, depth worms. Hunt began. Far away, still.")
+			else
+				Say(inst,"Worms. Our footsteps, felt. Soon, attack.")
+			end			
+		end
+	end
+end
+
+local function HoundTask(inst)
+	local _worldsettingstimer = GLOBAL.TheWorld.components.worldsettingstimer
+	if GLOBAL.TheWorld.components.hounded then
+		local houndtime = GLOBAL.TheWorld.components.hounded:GetTimeToAttack()/60
+		if houndtime < 8.5 and houndtime > 7.5 then
+			WathomWarnsEarly(inst,"dogs",1)
+		end
+		if houndtime < 4.5 and houndtime > 3.5 then
+			WathomWarnsEarly(inst,"dogs",2)
+		end
+	end
+	
+	
+	if _worldsettingstimer then
+		if _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) then
+			local timeleft = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
+			if timeleft < 8.5 and timeleft > 7.5 then
+				WathomWarnsEarly(inst,"megafauna",1)
+			end
+			if timeleft < 4.5 and timeleft > 3.5 then
+				WathomWarnsEarly(inst,"megafauna",2)
+			end
+		end
+		if _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME) then
+			local timeleft = _worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME)
+			if timeleft > 8.5 and timeleft > 7.5 then
+				WathomWarnsEarly(inst,"megafauna",1)
+			end
+			if timeleft < 4.5 and timeleft > 3.5 then
+				WathomWarnsEarly(inst,"megafauna",2)
+			end
+		end
+		if _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) then
+			local timeleft = _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME)
+			if timeleft < 8.5 and timeleft > 7.5 then
+				WathomWarnsEarly(inst,"megafauna",1)
+			end
+			if timeleft < 4.5 and timeleft > 3.5 then
+				WathomWarnsEarly(inst,"megafauna",2)
+			end
+		end
+		if _worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME) then
+			local timeleft = _worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME)
+			if timeleft < 8.5 and timeleft > 7.5 then
+				WathomWarnsEarly(inst,"megafauna",1)
+			end
+			if timeleft < 4.5 and timeleft > 3.5 then
+				WathomWarnsEarly(inst,"megafauna",2)
+			end
+		end
+	end
+end
+
 AddPlayerPostInit(function(inst)
 	if inst:HasTag("wathom") then
 		inst.counter_max = GLOBAL.net_shortint(inst.GUID, "counter_max", "counter_maxdirty")
 		inst.counter_current = GLOBAL.net_shortint(inst.GUID, "counter_current", "counter_currentdirty")
-
+	
+		
 		if GLOBAL.TheWorld.ismastersim then
-			inst:AddComponent("adrenaline")
+			inst.HoundTask = HoundTask
+			inst:AddComponent("adrenaline")	
 		end
 		inst:ListenForEvent("onattackother", AttackOther)
 	end
@@ -940,6 +1372,221 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 		self.wathom_sonar:MoveToBack()
 	end
 end)
+
+
+GLOBAL.FOODTYPE.LICHEN = "LICHEN"
+table.insert(GLOBAL.FOODGROUP.OMNI.types,GLOBAL.FOODTYPE.LICHEN)
+
+AddPrefabPostInit("cutlichen", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	
+	inst:AddComponent("edible")
+	inst.components.edible.secondaryfoodtype = GLOBAL.FOODTYPE.LICHEN
+	
+end)
+
+local function ruinshat_fxanim(inst)
+	inst._fx.AnimState:PlayAnimation("hit")
+	inst._fx.AnimState:PushAnimation("idle_loop")
+end
+
+local function ruinshat_oncooldown(inst)
+	inst._task = nil
+end
+
+local function ruinshat_unproc(inst)
+	if inst:HasTag("forcefield") then
+		inst:RemoveTag("forcefield")
+		if inst._fx ~= nil then
+			inst._fx:kill_fx()
+			inst._fx = nil
+		end
+		inst:RemoveEventCallback("armordamaged", ruinshat_fxanim)
+
+		inst.components.armor:SetAbsorption(GLOBAL.TUNING.ARMOR_RUINSHAT_ABSORPTION)
+		inst.components.armor.ontakedamage = nil
+
+		if inst._task ~= nil then
+			inst._task:Cancel()
+		end
+		inst._task = inst:DoTaskInTime(GLOBAL.TUNING.ARMOR_RUINSHAT_COOLDOWN, ruinshat_oncooldown)
+	end
+end
+
+local function ruinshat_proc(inst, owner)
+	inst:AddTag("forcefield")
+	if inst._fx ~= nil then
+		inst._fx:kill_fx()
+	end
+	inst._fx = GLOBAL.SpawnPrefab("forcefieldfx")
+	inst._fx.entity:SetParent(owner.entity)
+	inst._fx.Transform:SetPosition(0, 0.2, 0)
+	inst:ListenForEvent("armordamaged", ruinshat_fxanim)
+
+	inst.components.armor:SetAbsorption(GLOBAL.TUNING.FULL_ABSORPTION)
+	inst.components.armor.ontakedamage = function(inst, damage_amount)
+		if owner ~= nil and owner.components.sanity ~= nil then
+			owner.components.sanity:DoDelta(-damage_amount * GLOBAL.TUNING.ARMOR_RUINSHAT_DMG_AS_SANITY, false)
+		end
+	end
+
+	if inst._task ~= nil then
+		inst._task:Cancel()
+	end
+	inst._task = inst:DoTaskInTime(GLOBAL.TUNING.ARMOR_RUINSHAT_DURATION, ruinshat_unproc)
+end
+
+local function tryproc(inst, owner, data) -- Wathom with ancient allegiance almost always procs
+	if inst._task == nil and
+		(data and not data.redirected) or not data and
+		math.random() < 0.7 then
+		ruinshat_proc(inst, owner)
+	end
+end
+	
+AddPrefabPostInit("ruinshat", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	
+	inst._umoldproc = inst.procfn
+	local _OnUnEquip = inst.components.equippable.onunequipfn
+	local _OnEquip = inst.components.equippable.onequipfn
+	
+	local function OnEquip(inst, owner)
+		if HasSkill(owner,"ancient_kinship_2") then
+			if inst.procfn then
+				inst.procfn = nil
+			end
+			inst.procfn = function(owner, data) tryproc(inst, owner, data) end
+		end
+		if HasSkill(owner,"ancient_kinship_5") then
+			inst:AddComponent("planardefense")
+			inst.components.planardefense:SetBaseDefense(10)
+		end
+		
+		_OnEquip(inst,owner)
+	end
+	
+	local function OnUnEquip(inst, owner)
+		inst.procfn = inst._umoldproc
+		if inst.components.planardefense then
+			inst:RemoveComponent("planardefense")
+		end
+		inst.ondetach()
+		_OnUnEquip(inst,owner)
+	end
+	
+	inst.components.equippable:SetOnEquip(OnEquip)
+	inst.components.equippable:SetOnUnequip(OnUnEquip)
+end)
+
+AddPrefabPostInit("armorruins", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	local _OnUnEquip = inst.components.equippable.onunequipfn
+	local _OnEquip = inst.components.equippable.onequipfn		
+	local function OnEquip(inst, owner)
+		if HasSkill(owner,"ancient_kinship_5") then
+			inst:AddComponent("planardefense")
+			inst.components.planardefense:SetBaseDefense(10)
+		end
+		
+		_OnEquip(inst,owner)
+	end
+	
+	local function OnUnEquip(inst, owner)
+		if inst.components.planardefense then
+			inst:RemoveComponent("planardefense")
+		end
+		_OnUnEquip(inst,owner)
+	end
+	inst.components.equippable:SetOnEquip(OnEquip)
+	inst.components.equippable:SetOnUnequip(OnUnEquip)	
+end)
+
+AddPrefabPostInit("ruins_bat", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	local _OnUnEquip = inst.components.equippable.onunequipfn
+	local _OnEquip = inst.components.equippable.onequipfn		
+	local function OnEquip(inst, owner)
+		if HasSkill(owner,"ancient_kinship_5") then
+			inst:AddComponent("planardamage")
+			inst.components.planardamage:SetBaseDamage(20)
+		end
+		
+		_OnEquip(inst,owner)
+	end
+	
+	local function OnUnEquip(inst, owner)
+		if inst.components.planardefense then
+			inst:RemoveComponent("planardefense")
+		end
+		_OnUnEquip(inst,owner)
+	end
+	inst.components.equippable:SetOnEquip(OnEquip)
+	inst.components.equippable:SetOnUnequip(OnUnEquip)	
+end)
+
+AddPrefabPostInit("ancient_altar", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	
+	local _complete_onturnon = inst.components.prototyper.onturnon
+
+	local function TurnOn(inst)
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local players = TheSim:FindEntities(x,y,z,16,{"player"})
+		for i,player in ipairs(players) do
+			if HasSkill(player,"ancient_kinship_3") and not player.found_station then
+				player.found_station = true
+				player:AddComponent("prototyper")
+				player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
+				player.components.talker:Say("Hmm... understand now.")
+			end
+		end
+		_complete_onturnon(inst)
+	end
+	inst.components.prototyper.onturnon = TurnOn 
+end)
+
+AddPrefabPostInit("shadow_battleaxe", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+	
+	local _attack = inst.components.weapon.onattack
+	
+	local function OnAttack(inst, owner, target) -- Basically trigger the restoration component twice
+		_attack(inst,owner,target)
+
+		if target.components.health ~= nil and target.components.health:IsDead() then
+			inst.components.hunger:DoDelta(GLOBAL.TUNING.SHADOW_BATTLEAXE.HUNGER_GAIN_ONKILL, false)
+
+			if inst._trackedentities[target] == nil then -- The tracking will give us the kill stack.
+				local is_epic = inst:CheckForEpicCreatureKilled(target)
+
+				if owner ~= nil and not is_epic then
+					inst:SayRegularChatLine("creature_killed", owner)
+				end
+			end
+
+		elseif inst:IsEpicCreature(target) and
+			inst.epic_kill_count < GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS[#GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS]
+		then
+			inst:TrackTarget(target)
+		end	
+	end
+	
+	inst.components.weapon:SetOnAttack(OnAttack)
+end)
+
 -------------------------------------------------------
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.wathom = "The Forgotten Parody"

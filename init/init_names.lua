@@ -754,3 +754,4 @@ STRINGS.UM_PEPPERDRAGON_NEST = "Capsidragon Nest"
 
 STRINGS.UM_GHOST_FAJITA = "Ghastly Fajita"
 STRINGS.UM_BOOM_TART = "Boomberry Tart"
+STRINGS.UM_RIBOPOD = "Ribopod"

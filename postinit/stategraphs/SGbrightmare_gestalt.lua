@@ -32,10 +32,18 @@ local function GestaltHungrySleep(target)
 	end
 end
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
 local function DoSpecialAttack(inst, target)
 	if target.components.sanity ~= nil then
 		target.components.sanity:DoDelta(TUNING.GESTALT_ATTACK_DAMAGE_SANITY)
 	end
+	if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
+		target.components.health:DeltaPenalty(1/6)
+	end
+	
 	local grogginess = target.components.grogginess
 	if grogginess ~= nil then
 		grogginess:AddGrogginess(TUNING.GESTALT_ATTACK_DAMAGE_GROGGINESS, TUNING.GESTALT_ATTACK_DAMAGE_KO_TIME)

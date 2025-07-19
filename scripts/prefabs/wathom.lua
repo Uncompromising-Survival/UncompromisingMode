@@ -13,6 +13,10 @@ TUNING.WATHOM_HEALTH = 225
 TUNING.WATHOM_HUNGER = 120
 TUNING.WATHOM_SANITY = 120
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
 local start_inv = {}
 for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
     start_inv[string.lower(k)] = v.WATHOM
@@ -20,7 +24,7 @@ end
 local prefabs = FlattenTree(start_inv, true)
 
 local function TurnOffShadowForm(inst)
-    inst.AnimState:SetBuild(inst.AnimState:GetBuild() == "wathom_shadow" and "wathom" or "wathom_triumphant")
+    inst.AnimState:SetBuild("wathom")
     inst:RemoveEventCallback("animqueueover", TurnOffShadowForm)
 end
 
@@ -89,9 +93,34 @@ local function UnAmp(inst)
         end
 
         if not (inst.components.health and inst.components.health:IsDead()) then
-            inst.components.health:DoDelta(-225, nil, "deathamp")
+			if HasSkill(inst,"ancient_terror_5") then
+				inst.components.health:SetPercent(10/225) -- Meager 10 health
+				inst:ToggleUndeathState(inst, false)
+			else
+				inst.components.health:DoDelta(-225, nil, "deathamp")
+			end
         end
     end
+	if HasSkill(inst,"ancient_terror_5") then
+		inst:ToggleUndeathState(inst, false)
+	end
+end
+
+local function RegurgitateFuel(inst)
+	local fuel = SpawnPrefab("nightmarefuel")
+	fuel.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	fuel:DoTaskInTime(0,function(fuel)
+		Launch(fuel, inst, 3) -- need to set it to our location first, the 2nd entry does not do that, I tested it in a world, if you fail to do this it'll toss it at 0,0,0
+	end)
+end
+
+local function ShouldRegurgitate(inst)
+	if inst:HasTag("amped") then
+		RegurgitateFuel(inst)
+	else
+		inst.um_wathom_regurgitatetask:Cancel()
+		inst.um_wathom_regurgitatetask = nil
+	end
 end
 
 local function Amp(inst)
@@ -122,6 +151,16 @@ local function Amp(inst)
         inst.components.health.invincible = true
         inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
     end
+	
+	if HasSkill(inst,"ancient_terror_2") then
+		RegurgitateFuel(inst)
+		RegurgitateFuel(inst)
+		RegurgitateFuel(inst)
+		inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
+	end
+	if HasSkill(inst,"ancient_terror_5") then
+		inst:ToggleUndeathState(inst, true)
+	end
 end
 
 -- When the character is revived from human
@@ -142,6 +181,73 @@ end
 
 -------------------------------------------
 
+local function SapTask(inst)
+	local hands = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+	local chest = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+	local hat = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+	if HasSkill(inst,"wathom_allegiance_neutral") then
+		if chest and (chest.components.fueled and chest.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and chest.components.fueled:GetPercent() < 1 then
+			local maxfuel = chest.components.fueled.maxfuel
+			chest.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+		if hands and (hands.components.fueled and hands.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hands.components.fueled:GetPercent() < 1 then
+			local maxfuel = hands.components.fueled.maxfuel
+			hands.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+		if hat and (hat.components.fueled and hat.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hat.components.fueled:GetPercent() < 1 then
+			local maxfuel = hat.components.fueled.maxfuel
+			hat.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end	
+	end
+	if HasSkill(inst,"ancient_kinship_4") then
+		if chest and chest.prefab == "greenamulet" and chest.components.finiteuses:GetPercent() < 1 then
+			local maxuses = chest.components.finiteuses.total
+			chest.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+		if hands and (hands.prefab == "yellowstaff" or hands.prefab == "greenstaff" or hands.prefab == "orangestaff" or hands.prefab == "multitool_axe_pickaxe") and hands.components.finiteuses:GetPercent() < 1 then
+			local maxuses = hands.components.finiteuses.total
+			hands.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+	end
+	
+	if HasSkill(inst,"ancient_kinship_5") then
+		if chest and chest.prefab == "armorruins" and chest.components.armor:GetPercent() < 1 then
+			local maxfuel = chest.components.armor.maxcondition
+			chest.components.armor:Repair(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+		if hands and hands.prefab == "ruins_bat" and hands.components.finiteuses:GetPercent() < 1 then
+			local maxuses = hands.components.finiteuses.total
+			hands.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end
+		if hat and (hat.prefab == "ruinshat") and hat.components.armor:GetPercent() < 1 then
+			local maxfuel = hat.components.armor.maxcondition
+			hat.components.armor:Repair(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
+			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+		end	
+	end
+	if HasSkill(inst,"ancient_terror_4") and inst:HasTag("amped") then
+		if chest and chest.prefab == "armor_voidcloth" and chest.components.armor:GetPercent() < 1 then
+			
+			local maxfuel = chest.components.armor.maxcondition
+			chest.components.armor:Repair(0.005*maxfuel)
+		end
+		if hat and hat.prefab == "voidclothhat" and hat.components.armor:GetPercent() < 1 then
+			local maxfuel = hat.components.armor.maxcondition
+			hat.components.armor:Repair(0.005*maxfuel)
+		end	
+	end
+	
+	if HasSkill(inst,"ancient_terror_5") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() then
+		inst.components.health:DeltaPenalty(-0.001) -- VERY slow
+	end
+end
 
 local function AmpTimer(inst)
     if inst.components.grogginess ~= nil and
@@ -176,11 +282,11 @@ local function AmpTimer(inst)
     elseif AmpLevel < 0.25 and not inst:HasTag("amped") then
         inst.components.combat.attackrange = 2
     elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 4 or 2
+        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 4) or 2
     elseif AmpLevel < 0.75 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 6 or 2
+        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 5) or 2
     elseif AmpLevel < 1 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 7 or 2
+		inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
     end
 end
 
@@ -305,26 +411,33 @@ local function onload(inst, data)
             inst:AddTag("deathamp")
             SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "WathomMusicToggle"), inst.userid, GetMusicValues(inst))
         end
+		if data.found_station then
+			inst.found_station = true
+			inst:AddComponent("prototyper")
+			inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
+		end
     end
 end
 
 local function HoldingCane(inst)
-	return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" and true
+	return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and 
+	(inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" or inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "orangestaff" or
+	inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "walking_stick") and true
 end
 
 local function CheckForCaneRun(inst)
 	local AmpLevel = inst.components.adrenaline:GetPercent()
-    if (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst)) and
+    if (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst) or (HasSkill(inst,"digitigrade_1") and inst.components.adrenaline and inst.components.adrenaline:GetPercent() > 0.48)) and
         (inst.components.rider and not inst.components.rider:IsRiding() or not inst.components.rider) then --Handle VVathom Running
         inst:AddTag("wathomrun")
-		if inst.sg:HasStateTag("running") then
-			inst.sg:GoToState("idle")
-		end
+		-- if inst.sg:HasStateTag("running") then
+			-- inst.sg:GoToState("idle")
+		-- end
     elseif inst:HasTag("wathomrun") and not (AmpLevel >= 0.75 or inst:HasTag("amped") or HoldingCane(inst)) or inst.components.rider and inst.components.rider:IsRiding() then
         inst:RemoveTag("wathomrun")
-		if inst.sg:HasStateTag("running") then
-			inst.sg:GoToState("idle")
-		end
+		-- if inst.sg:HasStateTag("running") then
+			-- inst.sg:GoToState("idle")
+		-- end
     end
 end
 
@@ -361,16 +474,20 @@ local function UpdateAdrenaline(inst, data)
     elseif AmpLevel < 0.5 and not inst:HasTag("amped") then
         inst.components.combat.attackrange = item and 4 or 2
         inst.AmpDamageTakenModifier = 1
-    elseif AmpLevel >= 1 and not inst:HasTag("amped") then
+    elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
         Amp(inst)
         inst.AmpDamageTakenModifier = TUNING.DSTU.WATHOM_AMPED_VULNERABILITY
+	elseif AmpLevel >= 1 and not inst:HasTag("amped") and HasSkill(inst,"amp_3") then
+        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
+        --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
+        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1	
     elseif AmpLevel >= 0.75 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 6 or 2
-        inst.components.health:SetAbsorptionAmount(-0.50)
-        inst.AmpDamageTakenModifier = 2
+        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_2") and 6 or HasSkill(inst,"amp_1") and 5) or 2
+        --inst.components.health:SetAbsorptionAmount(HasSkill(inst,"amp_2") and -0.5 or HasSkill(inst,"amp_2") and -0.25 or 0)
+        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_2") and 2 or HasSkill(inst,"amp_1") and 1.5 or 1
     elseif AmpLevel >= 0.5 and not inst:HasTag("amped") then
-        inst.components.combat.attackrange = item and 5 or 2
-        inst.AmpDamageTakenModifier = 1.5
+        inst.components.combat.attackrange = item and (HasSkill(inst,"amp_1") and 5) or 2
+        inst.AmpDamageTakenModifier = HasSkill(inst,"amp_1") and 1.5 or 1
     end
 
     if inst.components.rider and inst.components.rider:IsRiding() then
@@ -395,8 +512,11 @@ local function OnAttacked(inst, data)
     end
     inst.adrenalresume = inst:DoTaskInTime(10, function(inst) inst.adrenalpause = false end)
     if not TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
+		local dmgmod = inst.AmpDamageTakenModifier
+	
+		
         if data.damageresolved then
-            inst.components.health:DoDelta(-((data.damageresolved * inst.AmpDamageTakenModifier) - data.damageresolved), nil, data.attacker)
+            inst.components.health:DoDelta(-((data.damageresolved * dmgmod) - data.damageresolved), nil, data.attacker)
         end
     end
     --    if data.attacker:HasTag("brightmare") then
@@ -466,6 +586,29 @@ local function SetupKnockOutTest(inst)
     inst.components.grogginess:SetKnockOutTest(KnockOutTest)
 end
 
+local function SeeIfShouldBecomeShadow(inst)
+	if HasSkill(inst,"shadow_wathom_2") then
+		inst.AnimState:SetBuild("wathom")
+		inst.AnimState:SetBank("wilson")
+		inst.AnimState:SetMultColour(0,0,0,0.6)
+		inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+	end
+end
+
+local function StopBeingShadow(inst)
+	if HasSkill(inst,"shadow_wathom_2") then
+		inst.AnimState:SetMultColour(1,1,1,1)
+		inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED
+	end
+end
+
+
+local function WathomWarnsEarly(inst,threattype)
+	inst.owner.components.talker:Say("Others can't hear, "+threattype+ " is coming.")
+end
+
+
+
 -- This initializes for the server only. Components are added here.
 local function master_postinit(inst)
     --    inst.components.sanity:EnableLunacy(true, "wathomlunacy")
@@ -523,7 +666,8 @@ local function master_postinit(inst)
 
     -- stuff relating to Wathom's adrenaline timer. This can most likely be optimized.
     inst:DoPeriodicTask(1.5, function() AmpTimer(inst) end)
-
+	inst:DoPeriodicTask(1, function() SapTask(inst) end)
+	
     inst:ListenForEvent("healthdelta", OnHealthDelta)
     inst:ListenForEvent("onattackother", OnAttackOther)
     inst:ListenForEvent("attacked", OnAttacked)
@@ -572,6 +716,10 @@ local function master_postinit(inst)
         if inst:HasTag("deathamp") then
             data.deathamped = true
         end
+		if inst.found_station then
+			data.found_station = true
+		end
+		
         if _onsave ~= nil then
             return _onsave(inst, data)
         end
@@ -585,6 +733,11 @@ local function master_postinit(inst)
 	
 	inst:ListenForEvent("equip",CheckForCaneRun)
 	inst:ListenForEvent("unequip",CheckForCaneRun)
+	
+	
+	inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
+	inst:ListenForEvent("ms_respawnedfromghost",StopBeingShadow)
+
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, prefabs)

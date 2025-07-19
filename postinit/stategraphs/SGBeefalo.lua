@@ -2,17 +2,21 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 env.AddStategraphPostInit("beefalo", function(inst)
+
+
+
+	
 local events={
 	EventHandler("doattack", function(inst)
         local nstate = "attack"
-			if inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed") then
+			if inst.sg:HasStateTag("charging") then
 				nstate = "chargeattack"
 			end
 			if inst.components.health and not inst.components.health:IsDead() and (inst.sg:HasStateTag("hit") or not inst.sg:HasStateTag("busy")) then
 				inst.sg:GoToState(nstate)
             end
     end),
-	EventHandler("attacked", function(inst) if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("charging") then inst.sg:GoToState("hit") end end),
+	--EventHandler("attacked", function(inst) if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("charging") then inst.sg:GoToState("hit") end end),
 }
 
 
@@ -62,7 +66,7 @@ local states = {
     },
 	
     State{  name = "charge_start",
-            tags = {"moving", "running", "charging", "busy", "atk_pre", "canrotate"},
+            tags = {"moving", "running", "charging", "busy", "attack", "canrotate"},
             
             onenter = function(inst)
 				inst.AnimState:SetDeltaTimeMultiplier(1.2)
@@ -94,7 +98,7 @@ local states = {
         },
 
     State{  name = "charge",
-            tags = {"moving", "charging", "busy", "running"},
+            tags = {"moving", "charging", "busy", "attack","running"},
             
             onenter = function(inst) 
 				inst.AnimState:SetDeltaTimeMultiplier(1.2)
@@ -147,7 +151,7 @@ local states = {
         },
     
     State{  name = "charge_stop",
-            tags = {"canrotate", "busy", "idle","charging"},
+            tags = {"canrotate", "busy","attack", "idle","charging"},
             
             onenter = function(inst) 
                 --inst.SoundEmitter:KillSound("charge")
@@ -169,7 +173,7 @@ local states = {
         },    
 
     State{  name = "chargeattack",
-            tags = {"busy", "runningattack","charging","nointerrupt"},
+            tags = {"busy", "runningattack","charging","nointerrupt","attack"},
             
             onenter = function(inst)
                 --inst.SoundEmitter:KillSound("charge")
