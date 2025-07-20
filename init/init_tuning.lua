@@ -354,7 +354,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R37_LUNAR_CAGE"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R38_ELECTROCUTE"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
