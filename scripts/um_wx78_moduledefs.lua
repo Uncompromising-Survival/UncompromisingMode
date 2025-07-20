@@ -796,7 +796,7 @@ local function taser_onblockedorattacked(wx, data, inst)
                                 data.attacker.components.locomotor:Stop()
                             end
                             if data.attacker.sg and data.attacker.sg.currentstate and data.attacker.sg.currentstate.name ~= "shield_start"
-                                and data.attacker.sg.currentstate.name ~= "shield" then -- Grabbed from shockstundebuff.lua. Check this file for stun stuff.
+                                and data.attacker.sg.currentstate.name ~= "shield" and not data.attacker.sg:HasStateTag("electrocute") then -- Grabbed from shockstundebuff.lua. Check this file for stun stuff.
                                 for _, tag in pairs(removetaglist) do
                                     if data.attacker.sg:HasStateTag(tag) then
                                         data.attacker.sg:RemoveStateTag(tag)
