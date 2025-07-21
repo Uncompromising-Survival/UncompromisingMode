@@ -29,7 +29,8 @@ local function OhCrap(inst, target, attacker)
         if target.components.locomotor then
             target.components.locomotor:Stop()
         end
-        if target.sg and target.sg.currentstate and target.sg.currentstate.name ~= "shield_start" and target.sg.currentstate.name ~= "shield" then
+        if target.sg and target.sg.currentstate and target.sg.currentstate.name ~= "shield_start" and target.sg.currentstate.name ~= "shield"
+            and not target.sg:HasAnyStateTag("electrocute", "stunned", "channeling", "notiredhit") then
             for _, tag in pairs(removetaglist) do
                 if target.sg:HasStateTag(tag) then
                     target.sg:RemoveStateTag(tag)
