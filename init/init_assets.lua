@@ -395,6 +395,7 @@ local inventoryitems =
     --Boat bottle
     "um_boatbottle",
     "jawed_scythe",
+	"um_ice_sicle",
     "snappy_jaw",
 	"um_hat_leafwing",
 	"um_leafwing",

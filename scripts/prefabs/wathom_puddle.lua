@@ -54,7 +54,7 @@ local function puddle()
 	inst.Transform:SetScale(1.5,1.5,1.5)
     inst.AnimState:PlayAnimation("pre_idle", false)
 	inst.AnimState:PushAnimation("idle", false)
-	inst.AnimState:SetMultColour(0,0,0,1)
+	inst.AnimState:SetMultColour(0,0,0,0.6)
 	inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(0.4) end)
 	inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
 	inst.persists = false

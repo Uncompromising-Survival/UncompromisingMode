@@ -315,8 +315,8 @@ local function CheckIfDead(inst,target)
 			local x,y,z = target.Transform:GetWorldPosition()
 			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
 			for i,v in ipairs(loot) do
-				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat then
-					local health_restore = v.components.edible.healthvalue
+				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and not v:HasTag("monster") then
+					local health_restore = v.components.edible.healthvalue*1.1
 					local hunger_restore = v.components.edible.hungervalue
 					if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
 						inst.components.hunger:DoDelta(hunger_restore)
@@ -1088,7 +1088,7 @@ local function SpreadGoo(inst,number)
 		GLOBAL.SpawnPrefab("wathom_puddle").Transform:SetPosition(x1,y,z1)
 	end
 	
-	if number < 4 then
+	if number < 2 then
 		inst:DoTaskInTime(0.2,function(inst) SpreadGoo(inst,number+1) end)
 	end
 end

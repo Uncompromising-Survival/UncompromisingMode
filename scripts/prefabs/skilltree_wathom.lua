@@ -209,7 +209,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
         bite_2 = {
             title = "Bite II",
-            desc = "Automatically devour meat drops of enemies, if able. Monster meat does not bother you if you eat it this way.",
+            desc = "Biting a creature to death will automatically consume meat that would've dropped from the target, replenishing 10% more hunger than usual. Wathom will ignore poisoned or high-value foods, like monster meat and eyeballs.",
 			icon = "wathom_bite_2",
             pos = {-214+38+38,58-38+38},
             group = "bite",
@@ -218,8 +218,12 @@ local function BuildSkillsData(SkillTreeFns)
 
         bite_mastery = {
             title = "Abyssal Metabolism",
-            desc = "Replenished health from creatures slain by your bite will replenish lost Max health as well.",
+            desc = "Replenished health from creatures slain by your bite will replenish lost Max health as well. Can eat lichen.",
 			icon = "wathom_bite_mastery",
+            onactivate = function(inst, fromload)
+				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
+				inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
+			end,
             pos = {-214+38+38/2,58-38+38+38+38},
             group = "bite",
             tags = {"bite"},
@@ -236,24 +240,38 @@ local function BuildSkillsData(SkillTreeFns)
 		
 		
         echolocation_1 = {
-            title = "Echolocation I",
-            desc = "Echo rapidly underground. Learn to eat lichen.",
+            title = "Echo I",
+            desc = "Your echolocation ability is empowered when underground, pulsing more frequently while increasing your map reveal radius.",
             icon = "wathom_echolocation_1",
             pos = {-214+38,58-38},
             group = "echo",
             tags = {"echo"},
             root = true,
             onactivate = function(inst, fromload)
-				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
-				inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 				inst:AddTag("echolocation")
+				if not inst.mapexplorerbonus then
+					-- Increases map exploration radius
+					local radius = 20
+					local intervals = 25
+					local theta = 0
+					inst.mapexplorerbonus = inst:DoPeriodicTask(FRAMES, function()
+						local pt = Vector3(inst.Transform:GetWorldPosition())
+						local offset = Vector3(radius * math.cos(theta), 0, -radius * math.sin(theta))
+						theta = theta + (2 * PI / intervals)
+						if inst.player_classified ~= nil then
+							inst.player_classified.MapExplorer:RevealArea((pt + offset):Get())
+							inst.player_classified.MapExplorer:RevealArea((pt - offset):Get())
+						end
+					end)
+				end
+		
 			end,
             connects = {
                 "echolocation_2",
             },
         },
         echolocation_2 = {
-            title = "Echolocation II",
+            title = "Echo II",
             desc = "Wathom will say if hounds or giants are approaching in greater advance.",
             icon = "wathom_echolocation_2",
             pos = {-214+38,58-38+38},
@@ -324,7 +342,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_bite_lock = {
-            desc = "Unlock Bite II and Echolocation II",
+            desc = "Unlock Bite II and Echo II",
             pos = {-214+38+38/2,58-38+38+38},  
 			group = "bite",
             --pos = {0,-1},
@@ -390,6 +408,9 @@ local function BuildSkillsData(SkillTreeFns)
 				inst.components.sanity.night_drain_mult=8
 				inst.components.sanity.dapperness = TUNING.DAPPERNESS_HUGE
 				inst.components.sanity.light_drain_immune = false
+				
+				local pct = inst.components.sanity:GetPercent()
+				inst.components.sanity:SetPercent(1-pct)
 				inst.components.sanity:EnableLunacy(true, "ancientterror")			
                 inst:AddTag("skill_wathom_allegiance_shadow")
                 inst:AddTag("player_shadow_aligned")
@@ -521,7 +542,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_neutral = {
             title = "Ancient Kinship I",
-            desc = "When wearing a magic item that accepts Nightmare Fuel as a fuel source, the item may instead take from your Adrenaline if available",
+            desc = "Being Amped Up will replenish the durability of magical items in your inventory over time, assuming they take Nightmare Fuel as a fuel source.",
             icon = "wathom_ancient_kinship_1",
             pos = {204+22+2 ,176-110-38+10},
             --pos = {0,-2},
@@ -550,7 +571,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_kinship_3 = {
             title = "Ancient Kinship III",
-            desc = "After you see a complete ancient alter with this skill active, you may learn to craft those ancient items.",
+            desc = "Unlock the ability to prototype recipes from the Pseudoscience Station, allowing you to craft subsequent items regardless of location.",
             icon = "wathom_ancient_kinship_3",
             pos = {204+22+2 ,176-110-38+10+38+38},
             --pos = {0,-2},
@@ -563,7 +584,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_kinship_4 = {
             title = "Ancient Kinship IV",
-            desc = "Ancient staves, tools, and amulets will sap your adrenaline to recover their durability.", 
+            desc = "Being Amped Up will now replenish the durability of ancient magical items in your inventory regardless of fuel source.", 
             icon = "wathom_ancient_kinship_4",
             pos = {204+22+2 ,176-110-38+10+38+38+38},
             --pos = {0,-2},
@@ -576,7 +597,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_kinship_5 = {
             title = "Ancient Kinship V",
-            desc = "Thulecite armor and weapons gains planar protection and damage. These may also be repaired with sapped adrenaline.",
+            desc = "PENDING",
             icon = "wathom_ancient_kinship_5",
             pos = {204+22+2 ,176-110-38+10+38+38+38+38},
             --pos = {0,-2},

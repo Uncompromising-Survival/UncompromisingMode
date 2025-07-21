@@ -566,6 +566,7 @@ local prefabs = {
 
     "um_boatbottle",
 	"jawed_scythe",
+	"um_ice_sicle",
 	"um_fire_projectile",
 	"um_buttery_fly",
 	

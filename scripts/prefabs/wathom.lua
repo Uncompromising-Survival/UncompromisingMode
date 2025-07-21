@@ -35,7 +35,7 @@ local function ToggleUndeathState(inst, toggle)
 
     if toggle then
         if not inst:HasTag("playerghost") then
-            inst.AnimState:SetBuild(inst.AnimState:GetBuild() == "wathom" and "wathom_shadow" or "wathom_shadow_triumphant")
+            inst.AnimState:SetBuild("wathom_shadow")
         end
         local x, y, z = inst.Transform:GetWorldPosition()
         SpawnPrefab("shadow_shield1").Transform:SetPosition(x, y, z)
@@ -95,13 +95,13 @@ local function UnAmp(inst)
         if not (inst.components.health and inst.components.health:IsDead()) then
 			if HasSkill(inst,"ancient_terror_5") then
 				inst.components.health:SetPercent(10/225) -- Meager 10 health
-				inst:ToggleUndeathState(inst, false)
+				inst.components.adrenaline:SetPercent(0)
 			else
 				inst.components.health:DoDelta(-225, nil, "deathamp")
 			end
         end
     end
-	if HasSkill(inst,"ancient_terror_5") then
+	if HasSkill(inst,"ancient_terror_3") then
 		inst:ToggleUndeathState(inst, false)
 	end
 end
@@ -158,7 +158,7 @@ local function Amp(inst)
 		RegurgitateFuel(inst)
 		inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
 	end
-	if HasSkill(inst,"ancient_terror_5") then
+	if HasSkill(inst,"ancient_terror_3") then
 		inst:ToggleUndeathState(inst, true)
 	end
 end
@@ -186,50 +186,42 @@ local function SapTask(inst)
 	local chest = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
 	local hat = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
 	if HasSkill(inst,"wathom_allegiance_neutral") then
-		if chest and (chest.components.fueled and chest.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and chest.components.fueled:GetPercent() < 1 then
+		if chest and inst:HasTag("amped") and (chest.components.fueled and chest.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and chest.components.fueled:GetPercent() < 1 then
 			local maxfuel = chest.components.fueled.maxfuel
-			chest.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			chest.components.fueled:DoDelta(0.005*maxfuel)
 		end
-		if hands and (hands.components.fueled and hands.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hands.components.fueled:GetPercent() < 1 then
+		if hands and inst:HasTag("amped") and (hands.components.fueled and hands.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hands.components.fueled:GetPercent() < 1 then
 			local maxfuel = hands.components.fueled.maxfuel
-			hands.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			hands.components.fueled:DoDelta(0.005*maxfuel)
 		end
-		if hat and (hat.components.fueled and hat.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hat.components.fueled:GetPercent() < 1 then
+		if hat and inst:HasTag("amped") and (hat.components.fueled and hat.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hat.components.fueled:GetPercent() < 1 then
 			local maxfuel = hat.components.fueled.maxfuel
-			hat.components.fueled:DoDelta(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			hat.components.fueled:DoDelta(0.005*maxfuel)
 		end	
 	end
 	if HasSkill(inst,"ancient_kinship_4") then
-		if chest and chest.prefab == "greenamulet" and chest.components.finiteuses:GetPercent() < 1 then
+		if chest and chest.prefab == "greenamulet" and chest.components.finiteuses:GetPercent() < 1 and inst:HasTag("amped")  then
 			local maxuses = chest.components.finiteuses.total
-			chest.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			chest.components.finiteuses:Use(-0.005*maxuses)
 		end
-		if hands and (hands.prefab == "yellowstaff" or hands.prefab == "greenstaff" or hands.prefab == "orangestaff" or hands.prefab == "multitool_axe_pickaxe") and hands.components.finiteuses:GetPercent() < 1 then
+		if hands and inst:HasTag("amped") and (hands.prefab == "yellowstaff" or hands.prefab == "greenstaff" or hands.prefab == "orangestaff" or hands.prefab == "multitool_axe_pickaxe") and hands.components.finiteuses:GetPercent() < 1 then
 			local maxuses = hands.components.finiteuses.total
-			hands.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			hands.components.finiteuses:Use(-0.005*maxuses)
 		end
 	end
 	
 	if HasSkill(inst,"ancient_kinship_5") then
-		if chest and chest.prefab == "armorruins" and chest.components.armor:GetPercent() < 1 then
+		if chest and chest.prefab == "armorruins" and chest.components.armor:GetPercent() < 1 and inst:HasTag("amped") then
 			local maxfuel = chest.components.armor.maxcondition
-			chest.components.armor:Repair(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			chest.components.armor:Repair(0.005*maxfuel)
 		end
-		if hands and hands.prefab == "ruins_bat" and hands.components.finiteuses:GetPercent() < 1 then
+		if hands and hands.prefab == "ruins_bat" and hands.components.finiteuses:GetPercent() < 1 and inst:HasTag("amped") then
 			local maxuses = hands.components.finiteuses.total
-			hands.components.finiteuses:Use(inst:HasTag("amped") and -0.005*maxuses or -0.0025*maxuses)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			hands.components.finiteuses:Use(-0.005*maxuses)
 		end
-		if hat and (hat.prefab == "ruinshat") and hat.components.armor:GetPercent() < 1 then
+		if hat and (hat.prefab == "ruinshat") and hat.components.armor:GetPercent() < 1 and inst:HasTag("amped") then
 			local maxfuel = hat.components.armor.maxcondition
-			hat.components.armor:Repair(inst:HasTag("amped") and 0.005*maxfuel or 0.0025*maxfuel)
-			inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 0 or -0.5)
+			hat.components.armor:Repair(0.005*maxfuel)
 		end	
 	end
 	if HasSkill(inst,"ancient_terror_4") and inst:HasTag("amped") then
