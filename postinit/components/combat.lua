@@ -144,7 +144,7 @@ env.AddComponentPostInit("combat", function(self)
 
         if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
-			if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") then
+			if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
 				damage = damage * self.inst.AmpDamageTakenModifier*0.5
 				self.inst.components.adrenaline:DoDelta(-damage/3)
 			else

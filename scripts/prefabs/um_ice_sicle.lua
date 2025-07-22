@@ -132,14 +132,36 @@ local function DoScythe(inst, target, doer)
             if ent:IsValid() and ent.components.pickable ~= nil then
                 if inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                     inst:HarvestPickable(ent, doer)
+					doer.components.temperature:DoDelta(-3)
                 end
             end
         end
     end
 end
 
-local function OnAttack(inst, attacker, target) -- Save for "wounded" effect
+local function onattack_blue(inst, attacker, target, skipsanity)
+    if not target:IsValid() then
+        --target killed or removed in combat damage phase
+        return
+    end
 
+    if target.components.sleeper ~= nil and target.components.sleeper:IsAsleep() then
+        target.components.sleeper:WakeUp()
+    end
+
+    if target.components.burnable ~= nil then
+        if target.components.burnable:IsBurning() then
+            target.components.burnable:Extinguish()
+        elseif target.components.burnable:IsSmoldering() then
+            target.components.burnable:SmotherSmolder()
+        end
+    end
+
+	--V2C: valid check in case any of the previous callbacks or events removed the target
+	if target.components.freezable ~= nil and target:IsValid() then
+        target.components.freezable:AddColdness(2)
+        target.components.freezable:SpawnShatterFX()
+    end
 end
 
 local function SetupComponents(inst)
@@ -149,8 +171,8 @@ local function SetupComponents(inst)
 
 	inst:AddComponent("weapon")
 	inst.components.weapon:SetDamage(44)
-	inst.components.weapon:SetOnAttack(OnAttack)
-
+	inst.components.weapon:SetOnAttack(onattack_blue)
+	
 	inst:AddComponent("tool")
 	inst.components.tool:SetAction(ACTIONS.SCYTHE)
 end
@@ -255,12 +277,12 @@ local function ScytheFn()
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
+	--inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
 	
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED*2)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED*4/10)
     inst.components.perishable:StartPerishing()
-    inst.components.perishable.onperishreplacement = "spoiled_food"
+    inst.components.perishable.onperishreplacement = "twigs"
 	SetupComponents(inst)
 
     MakeHauntableLaunch(inst)

@@ -174,6 +174,7 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
             if self.inst:HasTag("deathamp") and not self.inst:HasTag("playerghost") and self.inst.ToggleUndeathState then
                 self.inst:ToggleUndeathState(self.inst, false)
             end
+
             TriggerPocketResurrection(self, res_item) -- Don't trigger the LLA here, let it happen in our own component, so this doesn't break whenever canis moves it to his own mod.
             return true
         elseif maykill and (self.inst:HasTag("wathom") and self.inst:HasTag("amped")) and not self.inst:HasTag("deathamp") and cause ~= "deathamp" and HasSkill(self.inst,"shadow_wathom_1") then -- Suggest that we add a trigger here to show that wathom is still being hit, despite his lack of flinching or anything.

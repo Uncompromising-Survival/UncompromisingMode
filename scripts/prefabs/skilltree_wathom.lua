@@ -558,7 +558,7 @@ local function BuildSkillsData(SkillTreeFns)
 		
         ancient_kinship_2 = {
             title = "Ancient Kinship II",
-            desc = "Thulecite Crowns will generate a force field twice as often when used by Wathom. Thulecite Clubs will accelerate Adrenaline growth when used in combat.",
+            desc = "Thulecite Crowns will generate a force field twice as often when used by Wathom. Thulecite Clubs will always generate tentacles and accelerate Adrenaline growth when used in combat.",
             icon = "wathom_ancient_kinship_2",
             pos = {204+22+2 ,176-110-38+10+38},
             --pos = {0,-2},
@@ -597,7 +597,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_kinship_5 = {
             title = "Ancient Kinship V",
-            desc = "PENDING",
+            desc = "Upgrade Thulecite armor and weapons repair themselves when you are amped up. They permanently have additional planar attack and defense when used by you.",
             icon = "wathom_ancient_kinship_5",
             pos = {204+22+2 ,176-110-38+10+38+38+38+38},
             --pos = {0,-2},

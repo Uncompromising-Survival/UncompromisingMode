@@ -28,7 +28,7 @@ local function TurnOffShadowForm(inst)
     inst:RemoveEventCallback("animqueueover", TurnOffShadowForm)
 end
 
-local function ToggleUndeathState(inst, toggle)
+local function ToggleUndeathState(inst, toggle,fake)
     if inst.components.timer and inst.components.timer:TimerExists("shadowwathomcooldown") then
         return
     end
@@ -94,15 +94,16 @@ local function UnAmp(inst)
 
         if not (inst.components.health and inst.components.health:IsDead()) then
 			if HasSkill(inst,"ancient_terror_5") then
-				inst.components.health:SetPercent(10/225) -- Meager 10 health
-				inst.components.adrenaline:SetPercent(0)
+				inst.components.health.currenthealth = 10
 			else
 				inst.components.health:DoDelta(-225, nil, "deathamp")
 			end
         end
     end
 	if HasSkill(inst,"ancient_terror_3") then
-		inst:ToggleUndeathState(inst, false)
+        if not inst:HasTag("playerghost") then
+            inst.AnimState:SetBuild("wathom")
+        end
 	end
 end
 
@@ -159,7 +160,9 @@ local function Amp(inst)
 		inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
 	end
 	if HasSkill(inst,"ancient_terror_3") then
-		inst:ToggleUndeathState(inst, true)
+        if not inst:HasTag("playerghost") then
+            inst.AnimState:SetBuild("wathom_shadow")
+        end
 	end
 end
 

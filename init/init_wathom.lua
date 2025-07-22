@@ -315,14 +315,11 @@ local function CheckIfDead(inst,target)
 			local x,y,z = target.Transform:GetWorldPosition()
 			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
 			for i,v in ipairs(loot) do
-				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and not v:HasTag("monster") then
+				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 then
 					local health_restore = v.components.edible.healthvalue*1.1
 					local hunger_restore = v.components.edible.hungervalue
 					if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
 						inst.components.hunger:DoDelta(hunger_restore)
-						if health_restore < 0 then
-							health_restore = 0
-						end
 						inst.components.health:DoDelta(health_restore)
 						SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
 						v:Remove()

@@ -19,11 +19,13 @@ end
 local function DamageSurroundings(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(x, y, z, 2, nil,
-		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost","irreplaceable"})
 	if #ents > 0 then
 		for i, v in pairs(ents) do
 			if v.components.burnable ~= nil then
 				v.components.burnable:Ignite()
+			elseif v.components.inventoryitem then
+				v:Remove()
 			end
 			if v.components.combat then
 				v.components.combat:GetAttacked(inst,50)

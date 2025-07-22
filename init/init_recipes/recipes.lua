@@ -475,7 +475,17 @@ AddRecipe2(
 	{ "TOOLS" }
 )
 ChangeSortKey("jawed_scythe", "hammer", "TOOLS", true)
-GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense thickets."
+GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
+
+AddRecipe2(
+	"um_ice_sicle",
+	{ Ingredient("icestaff", 1), Ingredient("livinglog", 1), Ingredient("um_rimeweed_itemflower", 1) },
+	TECH.MAGIC_TWO,
+	nil,
+	{ "TOOLS" }
+)
+ChangeSortKey("um_ice_sicle", "jawed_scythe", "TOOLS", true)
+GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
 
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })

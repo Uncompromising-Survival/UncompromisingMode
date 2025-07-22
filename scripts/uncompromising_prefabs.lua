@@ -557,7 +557,7 @@ local prefabs = {
 	"zaspberry_plant",
 	"um_blowdart_rime",
 	"um_armor_bramble_rimeweed",
-
+	"um_hat_rime",
 
 	"um_robust_projectile",
 	--"coffbee",

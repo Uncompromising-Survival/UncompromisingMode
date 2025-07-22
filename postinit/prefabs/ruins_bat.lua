@@ -27,11 +27,15 @@ local function TentacleErupt(inst, owner, target)
     end
 end
 
+local function HasSkill(inst,name)
+	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
 local function NewOnAttack(inst, attacker, target)
     if target and target.components.combat and target.components.combat.defaultdamage > 0 then
         if target.components.combat.ruinsbatstack then
             target.components.combat.ruinsbatstack = target.components.combat.ruinsbatstack + 1
-            if target.components.combat.ruinsbatstack > 3.1 then
+            if target.components.combat.ruinsbatstack > 3.1 or HasSkill(attacker,"ancient_kinship_2") then
                 TentacleErupt(inst, attacker, target)
                 target.components.combat.ruinsbatstack = nil
             end
@@ -39,7 +43,9 @@ local function NewOnAttack(inst, attacker, target)
             target.components.combat.ruinsbatstack = 1
         end
     end
-
+	if attacker:HasTag("wathom") and attacker.components.adrenaline and HasSkill(attacker,"ancient_kinship_2") then
+		attacker.components.adrenaline:DoDelta(3)
+	end
 
     inst.components.weapon.attackwear = target ~= nil and target:IsValid()
         and target:HasTag("lunar_aligned")
