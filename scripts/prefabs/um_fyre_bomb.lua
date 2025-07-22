@@ -150,7 +150,8 @@ local function fyre_bomb_fn()
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.ease = true
-
+	inst.components.reticule.ispassableatallpoints = true
+	inst.components.reticule.validfn = function(inst) return true end
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
 
     -- From watersource component
