@@ -5,18 +5,17 @@ local brain = require "brains/snowmongbrain"
 local assets =
 {
 	Asset("ANIM", "anim/snowmong.zip"),
+	Asset("ANIM", "anim/um_ice_tail.zip"),
 }
 
 SetSharedLootTable( 'snowmong',
 {
     {'charcoal',            1.00},
 	{'charcoal',            1.00},
-	{'charcoal',            1.00},
-	{'charcoal',            1.00},
     {'ice',  			 	1.00},
 	{'ice',  			 	1.00},
 	{'ice',  			 	1.00},
-    {'iceboomerang',      	0.10},
+    {'um_ice_tail',      	0.25},
 	{'snowball_item',  1.00},
 	{'snowball_item',  2.00},
 	
@@ -28,6 +27,7 @@ SetSharedLootTable( 'snowmong_melting',
 	{'charcoal',            1.00},
     {'ice',  			 	1.00},
 	{'snowball_item',  1.00},
+	{'smallmeat',  0.25},
 	
 })
 
@@ -191,4 +191,49 @@ local function fn(Sim)
 	return inst
 end
 
-return Prefab("snowmong", fn, assets)
+local function fntail()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("um_ice_tail")
+    inst.AnimState:SetBuild("um_ice_tail")
+    inst.AnimState:PlayAnimation("idle")
+
+    MakeInventoryFloatable(inst)
+	
+    inst:AddTag("icebox_valid")
+    inst:AddTag("show_spoilage")
+    inst:AddTag("frozen")
+	
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+	
+	
+    inst:AddComponent("stackable")
+
+    inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "smallmeat"
+
+	inst.Transform:SetScale(1.5,1.5,1.5)
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+
+    MakeHauntableLaunchAndPerish(inst)
+
+    return inst
+end
+
+return Prefab("snowmong", fn, assets),
+Prefab("um_ice_tail",fntail)

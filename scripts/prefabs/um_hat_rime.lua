@@ -3,7 +3,20 @@ local assets =
     Asset("ANIM", "anim/um_hat_rime.zip"),
 }
 
+local function TemperatureChange(owner)
+	local hat = owner.components.inventory and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+	if hat and owner.components.temperature then
+		local temp = owner.components.temperature.current
+		local defense = 0.75 - 0.01*(temp)
+		if defense < 0.4 then
+			defense = 0.4
+		elseif defense > 0.75 then
+			defense = 0.75
+		end
+		hat.components.armor:InitIndestructible(defense)
+	end
 
+end
 
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "um_hat_rime", "swap_hat")
@@ -19,6 +32,8 @@ local function onequip(inst, owner)
         owner.AnimState:Show("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
+
+	owner:ListenForEvent("temperaturedelta", TemperatureChange)
 end
 
 local function onunequip(inst, owner)
@@ -34,6 +49,7 @@ local function onunequip(inst, owner)
         owner.AnimState:Hide("HEAD_HAT_NOHELM")
         owner.AnimState:Hide("HEAD_HAT_HELM")
     end
+	owner:RemoveEventCallback("temperaturedelta",TemperatureChange)
 end
 
 local function fn()
@@ -52,7 +68,7 @@ local function fn()
     inst:AddTag("donotautopick")
     inst:AddTag("show_spoilage")
     inst:AddTag("icebox_valid")
-	
+	inst:AddTag("hide_percentage")
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 
     inst.entity:SetPristine()
@@ -75,7 +91,12 @@ local function fn()
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "twigs"
 
-	
+	inst:AddComponent("waterproofer")
+	inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
+
+	inst:AddComponent("armor")
+	inst.components.armor:InitIndestructible(0.6)
+		
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------
 

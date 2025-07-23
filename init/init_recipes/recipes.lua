@@ -487,6 +487,16 @@ AddRecipe2(
 ChangeSortKey("um_ice_sicle", "jawed_scythe", "TOOLS", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
 
+AddRecipe2(
+	"um_hat_rime",
+	{ Ingredient("um_ice_tail", 1), Ingredient("um_rimeweed_itemflower", 1), Ingredient("rocks", 3) },
+	TECH.MAGIC_ONE,
+	nil,
+	{ "ARMOUR" }
+)
+ChangeSortKey("um_hat_rime", "armor_sharksuit_um", "ARMOUR", true)
+GLOBAL.STRINGS.RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
+
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
