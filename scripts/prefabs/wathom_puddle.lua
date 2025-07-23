@@ -23,8 +23,8 @@ local function ApplySlows(inst)
 			v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
 				v.components.follower ~= nil and v.components.follower:GetLeader() and
 				v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
-			if not v:HasTag("bird") and v.components.combat then
-				v.components.combat:SetTarget(act.doer)
+			if not v:HasTag("bird") and v.components.combat and inst.wathom then
+				v.components.combat:SetTarget(inst.wathom)
 			end
 		end
 	end

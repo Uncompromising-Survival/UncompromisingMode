@@ -1082,7 +1082,9 @@ local function SpreadGoo(inst,number)
 	for i = 1,circle do
 		local x1 = x+radius*math.cos(2*3.14*i/circle)
 		local z1 = z+radius*math.sin(2*3.14*i/circle)
-		GLOBAL.SpawnPrefab("wathom_puddle").Transform:SetPosition(x1,y,z1)
+		local puddle = 	GLOBAL.SpawnPrefab("wathom_puddle")
+		puddle.Transform:SetPosition(x1,y,z1)
+		puddle.wathom = inst
 	end
 	
 	if number < 2 then
