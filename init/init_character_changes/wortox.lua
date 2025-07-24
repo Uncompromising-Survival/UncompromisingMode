@@ -72,7 +72,9 @@ if TUNING.DSTU.WORTOXCHANGES then
 							{ duration = (adjusted_amt * 0.1) })
 				end		
 				if inst.soul_heal_player_efficient then -- Soul bastion 2 Recovers some maximum health
-					v.components.health:DeltaPenalty(-0.01)
+					if v:HasTag("soulstealer") then
+						v.components.health:DeltaPenalty(-0.01)
+					end
 				end
 				
 				if v.components.combat then -- Always show fx now that the heals do special targeting to show the player that it stops working when everyone is full.

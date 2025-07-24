@@ -5,7 +5,7 @@ STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls
 STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Twintailed Heart releases its souls when it saves the bearer's life."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also recover health penalties."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also recover the health penalties of imps."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE = "Reaching Souls"
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC = "Dropped Souls will move towards hurt players, and heal at an increased range."
