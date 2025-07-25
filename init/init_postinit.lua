@@ -230,7 +230,8 @@ local prefab_post = {
     "seastack", --loot changes
     "ruins_bat",
     "mushgnome_spawner",
-    "spiderqueen"
+    "spiderqueen",
+    "snowman"
 }
 
 local stategraph_post = {

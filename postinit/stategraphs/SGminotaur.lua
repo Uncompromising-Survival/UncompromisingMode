@@ -65,33 +65,34 @@ env.AddStategraphPostInit("minotaur", function(inst)
         end)
     }
 
-    local _OldAttackEvent = inst.events["doattack"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
-    inst.events["doattack"].fn = function(inst, data)
-        if inst.forcebelch and inst.components.combat and inst.components.combat.target and not inst.sg:HasStateTag("running") then
-            inst.sg:GoToState("belch")
-        else
-            if inst.forceleap and inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and inst:GetDistanceSqToInst(inst.components.combat.target) < 15^2 then
-                inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
+    local doattackeventhandler = inst.events["doattack"] --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if inst.forcebelch and inst.components.combat and inst.components.combat.target and not inst.sg:HasStateTag("running") then
+                inst.sg:GoToState("belch")
             else
-                _OldAttackEvent(inst, data)
+                if inst.forceleap and inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and inst:GetDistanceSqToInst(inst.components.combat.target) < 15^2 then
+                    inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
+                else
+                    doattackeventhandler_fn(inst, data, ...)
+                end
             end
         end
     end
 
     local minotaurattackedeventhandler = inst.events["attacked"] -- This needs to be patched on Klei's side. Also, electric hitstun stuff.
     if minotaurattackedeventhandler then
-        local Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "hit_recovery_delay")
+        local _hit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "hit_recovery_delay")
         local option = 1
-        if not Oldhit_recovery_delay_minotaur then
-            Oldhit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "_OldAttackedEvent", "hit_recovery_delay")
+        if not _hit_recovery_delay_minotaur then
+            _hit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "_OldAttackedEvent", "hit_recovery_delay")
             option = 2
         end
-        if Oldhit_recovery_delay_minotaur then
+        if _hit_recovery_delay_minotaur then
             local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
-                if inst.um_forcestundebuff then
-                    return false
-                end
-                return Oldhit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
+                if inst.um_forcestundebuff then return false end
+                return _hit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
             end
             if option == 1 then
                 UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "hit_recovery_delay")
