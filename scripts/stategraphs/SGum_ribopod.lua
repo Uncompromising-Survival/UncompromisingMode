@@ -4,7 +4,7 @@ require("stategraphs/commonstates")
 local actionhandlers =
 {
     ActionHandler(ACTIONS.GOHOME, "action"),
-	ActionHandler(ACTIONS.PICKUP, "eat"),
+	--ActionHandler(ACTIONS.PICKUP, "eat"),
 }
 
 
@@ -260,28 +260,32 @@ local states=
         end,
     },
 	
-	State{
+    State{
         name = "eat",
+        tags = {"busy"},
+
+        onenter = function(inst, forced)
+            inst.Physics:Stop()
+            --inst.AnimState:PlayAnimation("eat")
+            
+			inst.sg:GoToState("eat_loop")
+        end,
+    },
+
+    State{
+        name = "eat_loop",
         tags = {"busy"},
 
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("eat", true)
-			inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt"))
-            --inst.sg:SetTimeout(1+math.random()*1)
+            inst.sg:SetTimeout(1+math.random()*1)
         end,
 
-        timeline=
-        {
-            TimeEvent(6*FRAMES, function(inst) inst:PerformBufferedAction() end),
-        },
-		
-        events =
-        {
-			EventHandler("animover", function(inst)
-				inst.sg:GoToState("idle")
-            end),
-		},     
+        ontimeout = function(inst)
+            inst.SoundEmitter:KillSound("eating")
+            inst.sg:GoToState("idle", "eat_pst")
+        end,
     },
 
 }
