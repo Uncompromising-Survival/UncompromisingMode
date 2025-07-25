@@ -12,6 +12,8 @@ local assets =
 {
     Asset("ANIM", "anim/um_beehive_moon.zip"),
     Asset("SOUND", "sound/bee.fsb"),
+    Asset("IMAGE", "images/map_icons/um_beehive_moon.tex"),
+    Asset("ATLAS", "images/map_icons/um_beehive_moon.xml"),
 }
 
 local function OnEntityWake(inst)
@@ -163,12 +165,12 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    --inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     MakeObstaclePhysics(inst, .5)
 
-    --inst.MiniMapEntity:SetIcon("beehive.png")
+    inst.MiniMapEntity:SetIcon("um_beehive_moon.tex")
 
     inst.AnimState:SetBank("um_beehive_moon")
     inst.AnimState:SetBuild("um_beehive_moon")

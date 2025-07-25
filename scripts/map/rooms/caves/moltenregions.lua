@@ -157,6 +157,7 @@ AddRoom("FossilMagma", {
 			magmarock1 = 0.025,
 			magmabone = 0.05,
 			um_pyrite_ceiling = 0.0025,
+			um_ribopodden = 0.0025,
 			--um_pyre_nettles_stage_2 = 0.025,
 			--um_pyre_nettles_stage_5 = 0.025,
         },

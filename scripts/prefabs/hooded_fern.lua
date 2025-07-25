@@ -274,11 +274,15 @@ local function grass(name, stage)
 				inst:Hide()
 			end
 		end
-		
+		inst:DoTaskInTime(0,function(inst)
+			if math.random() > 0.5 then
+				inst.AnimState:SetScale(-1,1)
+			end
+		end)		
         return inst
     end
 
-	
+
     return Prefab(name, fn, assets)
 end
 

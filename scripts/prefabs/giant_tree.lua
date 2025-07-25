@@ -2,12 +2,14 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/giant_tree1.zip"),
-    Asset("ANIM", "anim/giant_tree1_damaged.zip"),
-    Asset("ANIM", "anim/giant_tree2_damaged.zip"),
-    Asset("ANIM", "anim/giant_tree2.zip"),
-    Asset("ANIM", "anim/giant_tree1_sick.zip"),
-    Asset("ANIM", "anim/giant_tree2_sick.zip"),
+    -- Asset("ANIM", "anim/giant_tree1.zip"),
+    -- Asset("ANIM", "anim/giant_tree1_damaged.zip"),
+    -- Asset("ANIM", "anim/giant_tree2_damaged.zip"),
+    -- Asset("ANIM", "anim/giant_tree2.zip"),
+    -- Asset("ANIM", "anim/giant_tree1_sick.zip"),
+    -- Asset("ANIM", "anim/giant_tree2_sick.zip"),
+	
+	Asset("ANIM", "anim/um_hoodedtree.zip"),
 }
 
 local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")
@@ -455,7 +457,11 @@ local function on_chopped_down(inst, chopper)
         inst.components.workable:SetWorkLeft(inst.previouschops)
         inst.components.workable:SetOnWorkCallback(on_chop)
         inst.components.workable:SetOnFinishCallback(on_chopped_down)
-        inst.AnimState:PlayAnimation("idle")
+		if inst.components.timer:TimerExists("remoss") then
+			inst.AnimState:PlayAnimation("idle")
+		else
+			inst.AnimState:PlayAnimation("idle_moss_full")
+		end
     else
         inst.previouschops = 0
         inst.chopped = true
@@ -467,8 +473,9 @@ local function on_chopped_down(inst, chopper)
             UnInfestMe(inst)
             inst:RemoveComponent("workable")
         end
-        inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
-        inst.AnimState:PlayAnimation("idle")
+        --inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
+		
+        inst.AnimState:PlayAnimation("idle_damaged")
         inst.components.timer:StartTimer("regrow", 3840)
         if inst.mossy then
             inst.HideAllMoss(inst, true)
@@ -542,6 +549,7 @@ end
 local function ShowAllMoss(inst, poof)
     --TheNet:Announce("inst.mossy is true")
     inst.mossy = true
+	inst.AnimState:PlayAnimation("idle_moss_full")
     for i, moss in ipairs(mosses) do
         if poof then
             local pine = SpawnPrefab("pine_needles_chop")
@@ -553,50 +561,61 @@ local function ShowAllMoss(inst, poof)
 end
 
 local function PickType(inst)
-    inst.bankType = math.random(1, 2) --RN only have 2 type
+    --inst.bankType = math.random(1, 2) --RN only have 2 type
     if math.random() > 0.6 then
         inst.reverse = true
     end
     inst.stretchx = math.random(-0.1, 0.1)
-    inst.stretchy = math.random(-0.1, 0.1)
+    --inst.stretchy = math.random(-0.1, 0.1)
     if math.random() > 0.9 then
-        ShowAllMoss(inst, false)
+		inst.mossy = true
+		inst.AnimState:PlayAnimation("idle_moss_full")
+        --ShowAllMoss(inst, false)
     else
         inst.components.timer:StartTimer("remoss", 3000 + math.random(1000, 4000))
-        HideAllMoss(inst, false)
+        --HideAllMoss(inst, false)
     end
 end
 
 local function AnimNext(inst)
     if inst.components.workable and inst.components.workable:CanBeWorked() then
-        inst.AnimState:PlayAnimation("idle")
+		if inst.components.timer:TimerExists("remoss") then
+			inst.AnimState:PlayAnimation("idle")
+		else
+			inst.AnimState:PlayAnimation("idle_moss_full")
+		end
     else
-        inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
-        inst.AnimState:PlayAnimation("idle")
+        --inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
+        inst.AnimState:PlayAnimation("idle_damaged")
     end
 end
 
 local function PickBuild(inst)
-    local bank
-    if inst.bankType then
-        bank = "giant_tree" .. inst.bankType
-        if inst.components.workable then
-            bank = "giant_tree" .. inst.bankType
-        else
-            bank = "giant_tree" .. inst.bankType .. "_damaged"
-        end
-        if inst.infested then
-            bank = bank .. "_sick"
-        end
-        inst.AnimState:SetBank("giant_tree")
-        inst.AnimState:SetBuild(bank)
-        inst.AnimState:PlayAnimation("idle")
+    --local bank
+   if inst.stretchx then
+        -- bank = "giant_tree" .. inst.bankType
+        -- if inst.components.workable then
+            -- bank = "giant_tree" .. inst.bankType
+        -- else
+            -- bank = "giant_tree" .. inst.bankType .. "_damaged"
+        -- end
+        -- if inst.infested then
+            -- bank = bank .. "_sick"
+        -- end
+        inst.AnimState:SetBank("um_hoodedtree")
+        inst.AnimState:SetBuild("um_hoodedtree")
+		if inst.components.timer:TimerExists("remoss") then
+			inst.AnimState:PlayAnimation("idle")
+		else
+			inst.AnimState:PlayAnimation("idle_moss_full")
+		end
         local mult = 1
         if inst.reverse then
             mult = -1
         end
-        inst.AnimState:SetScale(mult * (1 + inst.stretchx), 1 + inst.stretchy)
-
+        inst.AnimState:SetScale(mult * (1 + inst.stretchx),1)-- 1 + inst.stretchy)
+        local colour = 0.5 + math.random() * (1.0 - 0.5)
+        inst.AnimState:SetMultColour(colour, colour, colour, 1)
         AnimNext(inst)
     else
         PickType(inst)
@@ -614,7 +633,7 @@ local function Regrow(inst, data)
         inst.components.workable:SetWorkLeft(25)
         inst.components.workable:SetOnWorkCallback(on_chop)
         inst.components.workable:SetOnFinishCallback(on_chopped_down)
-        inst.AnimState:PlayAnimation("idle")
+
         PickBuild(inst)
     end
     if data.name == "remoss" then
@@ -630,7 +649,7 @@ local function onsave(inst, data)
     data.bankType = inst.bankType
     data.infested = inst.infested
     data.stretchx = inst.stretchx
-    data.stretchy = inst.stretchy
+    --data.stretchy = inst.stretchy
     if inst.reverse then
         data.reverse = inst.reverse
     end
@@ -655,9 +674,9 @@ local function onload(inst, data)
         if data.stretchx then
             inst.stretchx = data.stretchx
         end
-        if data.stretchy then
-            inst.stretchy = data.stretchy
-        end
+        -- if data.stretchy then
+            -- inst.stretchy = data.stretchy
+        -- end
         if data.mossy then
             inst.mossy = data.mossy
             ShowAllMoss(inst)
@@ -683,7 +702,7 @@ local function giant_treefn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddDynamicShadow()
 
-    inst.MiniMapEntity:SetIcon("giant_tree.tex")
+    inst.MiniMapEntity:SetIcon("um_hoodedtree.tex")
     inst.MiniMapEntity:SetPriority(-1)
     MakeObstaclePhysics(inst, 2.35)
 

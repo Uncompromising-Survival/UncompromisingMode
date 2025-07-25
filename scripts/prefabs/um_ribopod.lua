@@ -23,7 +23,9 @@ local RETARGET_MUST_TAGS = { "_combat", "_health" }
 local RETARGET_CANT_TAGS = { "um_ribopod" }
 
 local function retargetfn(inst)
-	if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) then
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local buddies = TheSim:FindEntities(x,y,z,12,{"um_ribopod"})
+	if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) and #buddies >= 3 then
         local target_dist = 12
 
         return FindEntity(inst, target_dist, function(guy)
@@ -48,6 +50,9 @@ end
 
 local function OnGoingHome(inst)
     SpawnPrefab("poof_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+end
+
+local function OnTrapped(inst, data)
 end
 
 local function commonfn()
@@ -127,6 +132,14 @@ local function commonfn()
     return inst
 end -- No burnable, fireproof
 
+local function OnDropped(inst)
+
+end
+
+local function SoundPath(inst, event)
+    return "dontstarve/creatures/spider/" .. event
+end
+
 local function normalfn()
     local inst = commonfn()
 
@@ -145,6 +158,19 @@ local function normalfn()
     inst.components.combat:SetAttackPeriod(TUNING.FROG_ATTACK_PERIOD)
 	
 	inst.Transform:SetScale(1.2,1.2,1.2)
+	
+	inst:ListenForEvent("ontrapped", OnTrapped)
+	
+
+    -----------------
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.nobounce = true
+    inst.components.inventoryitem.canbepickedup = false
+    inst.components.inventoryitem.canbepickedupalive = true    
+	
+	MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, nil, OnDropped)
+	
+	inst.SoundPath = SoundPath
     return inst
 end
 

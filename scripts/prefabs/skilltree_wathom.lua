@@ -68,7 +68,7 @@ local function PissOfGestalts(inst)
 		end
 	end
 
-	CheckForGreater(inst)
+	--CheckForGreater(inst)
 	CheckForMORE(inst)
 end
 

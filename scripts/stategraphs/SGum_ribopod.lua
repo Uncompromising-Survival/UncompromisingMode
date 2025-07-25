@@ -48,7 +48,10 @@ local events=
     end),
 }
 
-local FROG_TAGS = {"frog"}
+local function SoundPath(inst, event)
+    return inst:SoundPath(event)
+end
+
 local states=
 {
     State{
@@ -76,12 +79,6 @@ local states=
             if inst.components.locomotor:WantsToMoveForward() then
                 inst.sg:GoToState("hop")
             else
-                local x,y,z = inst.Transform:GetWorldPosition()
-                local ents = TheSim:FindEntities(x,y,z, 10, FROG_TAGS)
-
-                local volume = math.max(0.5, 1 - (#ents - 1)*0.1)
-                inst.SoundEmitter:PlaySound(inst.sounds.grunt, nil, volume)
-
                 inst.sg:GoToState("idle")
             end
         end,
@@ -112,8 +109,11 @@ local states=
             TimeEvent(5*FRAMES, function(inst)
                 inst.components.locomotor:RunForward()
             end ),
+            TimeEvent(19*FRAMES, function(inst)
+                inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
+            end ),
             TimeEvent(20*FRAMES, function(inst)
-                inst.SoundEmitter:PlaySound(inst.sounds.walk)
+                inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
                 inst.Physics:Stop()
             end ),
         },
@@ -140,8 +140,11 @@ local states=
             TimeEvent(5*FRAMES, function(inst)
                 inst.components.locomotor:WalkForward()
             end ),
+            TimeEvent(19*FRAMES, function(inst)
+                inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
+            end ),
             TimeEvent(20*FRAMES, function(inst)
-                inst.SoundEmitter:PlaySound(inst.sounds.walk)
+                inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
                 inst.Physics:Stop()
             end ),
         },
@@ -171,8 +174,7 @@ local states=
 
         timeline=
         {
-            TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound(inst.sounds.attack_spit) end),
-            TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound(inst.sounds.attack_voice) end),
+            TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt")) end),
             TimeEvent(12*FRAMES, function(inst) inst.components.combat:DoAttack() end),
         },
 
@@ -206,7 +208,7 @@ local states=
 				inst.Physics:SetDamping(5)
                 inst.Physics:Teleport(pt.x,pt.y,pt.z)
 	            inst.DynamicShadow:Enable(true)
-                inst.SoundEmitter:PlaySound(inst.sounds.splat)
+                --inst.SoundEmitter:PlaySound(inst.sounds.splat)
                 inst.sg:GoToState("idle", "jump_pst")
             end
         end,
@@ -217,7 +219,7 @@ local states=
         tags = {"busy"},
 
         onenter = function(inst)
-            inst.SoundEmitter:PlaySound(inst.sounds.grunt)
+            inst.SoundEmitter:PlaySound(SoundPath(inst, "hit_response"))
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
 			CommonHandlers.UpdateHitRecoveryDelay(inst)
@@ -234,7 +236,7 @@ local states=
         tags = {"busy"},
 
         onenter = function(inst)
-            inst.SoundEmitter:PlaySound(inst.sounds.die)
+            inst.SoundEmitter:PlaySound(SoundPath(inst, "die"))
             inst.AnimState:PlayAnimation("death")
             inst.Physics:Stop()
             RemovePhysicsColliders(inst)
@@ -264,14 +266,14 @@ local states=
 
         onenter = function(inst)
             inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("eat_loop", true)
-			inst.SoundEmitter:PlaySound("dontstarve/frog/grunt")
-            inst.sg:SetTimeout(1+math.random()*1)
+            inst.AnimState:PlayAnimation("eat", true)
+			inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt"))
+            --inst.sg:SetTimeout(1+math.random()*1)
         end,
 
         timeline=
         {
-            TimeEvent(25*FRAMES, function(inst) inst:PerformBufferedAction() end),
+            TimeEvent(6*FRAMES, function(inst) inst:PerformBufferedAction() end),
         },
 		
         events =

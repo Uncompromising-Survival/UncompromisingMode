@@ -592,6 +592,7 @@ local prefabs = {
 	"um_pepperdragon_nest",
 	"um_pyrite_ceiling",
 	"um_ribopod",
+	"um_ribopodden",
 	"um_gemologygems",
 	
 }
