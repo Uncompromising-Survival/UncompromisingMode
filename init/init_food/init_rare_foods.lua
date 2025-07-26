@@ -343,7 +343,9 @@ if TUNING.DSTU.BEEBOX_NERF then
                 else
                     local damagetotake = ((isspring and 20 or 10) + (picker:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE or 0)) * (picker:HasTag("wearger") and TUNING.WEARGER_BEERESIST or 1)
                     picker.components.health:DoDelta(-damagetotake, nil, inst.prefab, nil, inst)
-                    picker:PushEvent("attacked", {damage = -damagetotake})
+                    if not picker:HasTag("wearger") then
+                        picker:PushEvent("attacked", {damage = -damagetotake})
+                    end
                 end
             end
 
