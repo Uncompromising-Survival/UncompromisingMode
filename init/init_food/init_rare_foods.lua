@@ -337,11 +337,11 @@ if TUNING.DSTU.BEEBOX_NERF then
                 end
             end
 
-            if picker.components.combat and picker.components.skilltreeupdater and not picker.components.skilltreeupdater:IsActivated("wormwood_bugs") then
+            if picker.components.combat and picker.components.skilltreeupdater and not picker.components.skilltreeupdater:IsActivated("wormwood_bugs") and not picker:HasAnyTag("beemaster", "beemutant", "bee") then
                 if protection then
                     protection.components.armor:TakeDamage(isspring and 40 or 20)
                 else
-                    local damagetotake = (isspring and 20 or 10) + (picker:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE or 0)
+                    local damagetotake = ((isspring and 20 or 10) + (picker:HasTag("allergictobees") and TUNING.BEE_ALLERGY_EXTRADAMAGE or 0)) * (picker:HasTag("wearger") and TUNING.WEARGER_BEERESIST or 1)
                     picker.components.health:DoDelta(-damagetotake, nil, inst.prefab, nil, inst)
                     picker:PushEvent("attacked", {damage = -damagetotake})
                 end
