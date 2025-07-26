@@ -149,36 +149,30 @@ if GetModConfigData("no_winter_growing_") then
 
     -- Extra check for Farm Crops, Banana Bushes, and Stone Fruit
     AddComponentPostInit("growable", function(self)
-        local _OldResume = self.Resume
-
+        local _Resume = self.Resume
         function self:Resume()
             if (self.inst:HasTag("farm_plant") or self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
-            else
-                return _OldResume(self)
             end
+            return _Resume(self)
         end
 
-        local _OldStartGrowing = self.StartGrowing
-
+        local _StartGrowing = self.StartGrowing
         function self:StartGrowing(time)
             if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
-            else
-                return _OldStartGrowing(self, time)
             end
+            return _StartGrowing(self, time)
         end
     end)
 
     AddComponentPostInit("pickable", function(self)
-        local _OldResume = self.Resume
-
+        local _Resume = self.Resume
         function self:Resume()
             if (self.inst:HasTag("bananabush") --[[or self.inst.prefab == "rock_avocado_bush"]]) and GLOBAL.TheWorld.state.iswinter then
                 return false
-            else
-                return _OldResume(self)
             end
+            return _Resume(self)
         end
     end)
 
@@ -297,27 +291,19 @@ end)]]
 -----------------------------------------------------------------
 -- Bees don't drop honey no more
 -----------------------------------------------------------------
-local stinger_only = { "stinger" }
-AddPrefabPostInit("bee", function(inst)
-    if inst.components.lootdropper ~= nil then
-        inst.components.lootdropper:SetLoot(stinger_only)
-    end
-end)
-
-AddPrefabPostInit("killerbee", function(inst)
-    if inst.components.lootdropper ~= nil then
-        inst.components.lootdropper:SetLoot(stinger_only)
-    end
-end)
+local beelist = {"bee", "killerbee"}
+for _, bee in pairs(beelist) do
+    AddPrefabPostInit(bee, function(inst)
+        if not GLOBAL.TheWorld.ismastersim then return end
+        if inst.components.lootdropper then
+            inst.components.lootdropper:SetLoot({"stinger"})
+        end
+    end)
+end
 
 if TUNING.DSTU.BEEBOX_NERF then
     --local HONEY_PER_STAGE = GLOBAL.TUNING.DSTU.FOOD_HONEY_PRODUCTION_PER_STAGE
-
-    local beebox_prefabs = {
-        "beebox",
-        "beebox_hermit",
-    }
-
+    local beebox_prefabs = {"beebox", "beebox_hermit"}
     local function ReleaseBees(inst, picker)
         if not inst:HasTag("burnt") and picker and picker:HasTag("player") and not GLOBAL.TheWorld.state.iswinter then
             local protection
@@ -337,7 +323,8 @@ if TUNING.DSTU.BEEBOX_NERF then
                 end
             end
 
-            if picker.components.combat and picker.components.skilltreeupdater and not picker.components.skilltreeupdater:IsActivated("wormwood_bugs") and not picker:HasAnyTag("beemaster", "beemutant", "bee") then
+            if picker.components.combat and picker.components.skilltreeupdater and not picker.components.skilltreeupdater:IsActivated("wormwood_bugs")
+                and not picker:HasAnyTag("beemaster", "beemutant", "bee") then
                 if protection then
                     protection.components.armor:TakeDamage(isspring and 40 or 20)
                 else
