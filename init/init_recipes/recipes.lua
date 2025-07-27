@@ -350,7 +350,7 @@ AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredien
 AddDeconstructRecipe("rain_horn", { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) })
 AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2) })
 AddDeconstructRecipe("staff_moonfall", { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
-AddDeconstructRecipe("rimeweed_whip", { Ingredient("um_rimeweed_itemvine", 4), Ingredient("um_rimeweed_itemflower", 1) })
+AddDeconstructRecipe("rimeweed_whip", { Ingredient("um_rimeweed_itemvine", 6) })
 AddDeconstructRecipe("snaildrakehat", { Ingredient("snapalm", 2), Ingredient("slurtle_shellpieces", 1) })
 AddDeconstructRecipe("snaildrakebucket", { Ingredient("snapalm", 2), Ingredient("slurtle_shellpieces", 1) })
 AddDeconstructRecipe("slurtlehat", { Ingredient("slurtleslime", 2), Ingredient("slurtle_shellpieces", 1) })
