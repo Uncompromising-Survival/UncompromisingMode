@@ -2,6 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 ------------------------------------------------------------------
+SetSharedLootTable( 'um_nurse_spider',
+{
+    {'spidergland',  1.00},
+})
 
 local function SpiderHealerFunctions(inst)
     -- Remove when Klei fixes this!
@@ -20,6 +24,14 @@ env.AddPrefabPostInit("spider_healer", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
+    inst:AddComponent("lootdropper")
+    inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
+    inst.components.lootdropper:AddRandomLoot("silk", 1)
+    inst.components.lootdropper:AddRandomLoot("spidergland", 1)
+    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
+    inst.components.lootdropper.numrandomloot = 1
+    inst.components.lootdropper:SetChanceLootTable('um_nurse_spider')
 
     SpiderHealerFunctions(inst)
 end)
