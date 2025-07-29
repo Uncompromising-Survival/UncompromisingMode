@@ -15,7 +15,6 @@ SetSharedLootTable( 'snowmong',
     {'ice',  			 	1.00},
 	{'ice',  			 	1.00},
 	{'ice',  			 	1.00},
-    {'um_ice_tail',      	0.25},
 	{'snowball_item',  1.00},
 	{'snowball_item',  2.00},
 	
@@ -27,7 +26,6 @@ SetSharedLootTable( 'snowmong_melting',
 	{'charcoal',            1.00},
     {'ice',  			 	1.00},
 	{'snowball_item',  1.00},
-	{'smallmeat',  0.25},
 	
 })
 

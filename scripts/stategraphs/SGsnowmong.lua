@@ -309,6 +309,13 @@ local states =
 			inst.AnimState:PlayAnimation("death")
 			inst.Physics:Stop()
 			inst.components.lootdropper:DropLoot(inst:GetPosition())
+			
+			if TheWorld.state.iswinter and math.random() > 0.75 then
+				inst.components.lootdropper:SpawnLootPrefab("um_ice_tail")
+			else
+				inst.components.lootdropper:SpawnLootPrefab("smallmeat")
+			end
+			
 			RemovePhysicsColliders(inst)
 		end,
 

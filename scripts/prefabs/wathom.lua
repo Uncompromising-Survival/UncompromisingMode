@@ -583,6 +583,7 @@ end
 
 local function SeeIfShouldBecomeShadow(inst)
 	if HasSkill(inst,"shadow_wathom_2") then
+		SpawnPrefab("wathom_corpse").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst.AnimState:SetBuild("wathom")
 		inst.AnimState:SetBank("wilson")
 		inst.AnimState:SetMultColour(0,0,0,0.6)

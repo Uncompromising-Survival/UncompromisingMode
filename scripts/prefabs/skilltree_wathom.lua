@@ -1,12 +1,14 @@
 
 local ORDERS =
 {
-    {"rampage",       { -214+18   , 176 + 30 }},
-    {"amp",           { -62       , 176 + 30 }},
-    {"bite",           { 66+18     , 176 + 30 }},
+    {"entropic_anatomy",       { -214+18   , 176 + 30 }},
+    {"amp_up",           { -62       , 176 + 30 }},
+    {"forgotten_knowledge",           { 66+18     , 176 + 30 }},
     {"allegiance",      { 204-50       , 176 + 30 }},
 }
-
+STRINGS.SKILLTREE.PANELS.ENTROPIC_ANATOMY = "Entropic Anatomy"
+STRINGS.SKILLTREE.PANELS.FORGOTTEN_KNOWLEDGE = "Forgotten Knowledge" 
+STRINGS.SKILLTREE.PANELS.AMP_UP = "Amp Up"
 --------------------------------------------------------------------------------------------------
 local function disable_despawn(inst)
 	inst._can_despawn = false
@@ -79,7 +81,7 @@ local function BuildSkillsData(SkillTreeFns)
     local skills = 
     {
 		rampage_1 = {
-            title = "Rampage I",
+            title = "Rampage",
 			icon = "wathom_rampage_1",
             desc = "Creatures you crash into at the end of your leaping strikes will be knocked back a little.",
             group = "rampage",
@@ -92,7 +94,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         rampage_2 = {
-            title = "Rampage II",
+            title = "Lethal Rampage",
 			icon = "wathom_rampage_2",
             desc = "Damage enemies you crash into. Scales with your adrenaline.",
             group = "rampage",
@@ -144,7 +146,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         }, 
         shadow_wathom_1 = {
-            title = "Shadow Wathom I",
+            title = "Shadow Form",
 			icon = "wathom_shadow_wathom_1",
             desc = "Perishing while Amped Up sheds your physical form, revealing your true nightmarish nature. In this state, incoming damage is redirected to Adrenaline. Falling to 0 Adrenaline puts you down for good.",
             --icon = "wilson_torch_brightness_1",
@@ -160,20 +162,27 @@ local function BuildSkillsData(SkillTreeFns)
             defaultfocus = true,
         },
         shadow_wathom_2 = {
-            title = "Shadow Wathom II",
+            title = "Undying",
 			icon = "wathom_shadow_wathom_2",
-            desc = "While dead, assume the form of a nightmare creature instead of a ghost.",
+            desc = "Become a Shadow Creature instead of a Ghost upon death. If you are not missing maximum health when you died, you may re-possess your body and rise again at the cost of double the usual revive penalties.",
             --icon = "wilson_torch_brightness_2",
             pos = {-214,58+38+38-38+38+38},
             --pos = {1,-1},
             onactivate = function(inst, fromload)
-                end,
+				inst._skeleton_prefab = inst.skeleton_prefab
+				inst.skeleton_prefab = nil
+            end,
+            ondeactivate = function(inst, fromload)
+				if inst._skeleton_prefab then
+					inst.skeleton_prefab = inst._skeleton_prefab
+				end
+            end,
             group = "shadow_wathom",
             tags = {"shadow_wathom"},
         },
 
         digitigrade_1 = {
-            title = "Digitigrade I",
+            title = "Digitigrade",
             desc = "Enter a four-legged sprint at 50 Adrenaline instead of 75.",
             icon = "wathom_digitigrade_1",
             pos = {-214+38+38+38,58-38},
@@ -186,7 +195,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         digitigrade_2 = {
-            title = "Digitigrade II",
+            title = "Digitigrade Cardio",
 			icon = "wathom_digitigrade_2",
             desc = "Running with a Walking Cane causes you to gain Adrenaline over time, up to 50.",
             group = "digitigrade",
@@ -196,19 +205,19 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         bite_1 = {
-            title = "Bite I",
+            title = "Bite",
             desc = "Bite enemies to finish them off by attacking while unarmed, killing them restores health.",
 			icon = "wathom_bite_1",
             pos = {-214+38+38,58-38},
             group = "bite",
             tags = {"bite"},
-            root = true,
+			root = true,
             connects = {
                 "bite_2",
             },
         },
         bite_2 = {
-            title = "Bite II",
+            title = "Feast",
             desc = "Biting a creature to death will automatically consume meat that would've dropped from the target, replenishing 10% more hunger than usual. Wathom will ignore poisoned or high-value foods, like monster meat and eyeballs.",
 			icon = "wathom_bite_2",
             pos = {-214+38+38,58-38+38},
@@ -240,7 +249,7 @@ local function BuildSkillsData(SkillTreeFns)
 		
 		
         echolocation_1 = {
-            title = "Echo I",
+            title = "Echo",
             desc = "Your echolocation ability is empowered when underground, pulsing more frequently while increasing your map reveal radius.",
             icon = "wathom_echolocation_1",
             pos = {-214+38,58-38},
@@ -271,7 +280,7 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         echolocation_2 = {
-            title = "Echo II",
+            title = "Revealing Echo",
             desc = "Wathom will say if hounds or giants are approaching in greater advance.",
             icon = "wathom_echolocation_2",
             pos = {-214+38,58-38+38},
@@ -289,7 +298,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_allegiance_lock_1a = {
-            desc = "Unlock Shadow Wathom II",
+            desc = "Unlock Undying",
             pos = {204-22+2-50,176},
             --pos = {0.5,0},
             group = "allegiance",
@@ -306,7 +315,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_allegiance_lock_1b = {
-            desc = "Unlock Amp III",
+            desc = "Unlock Amp Up III",
             pos = {204+22+2-50,176},
             --pos = {0.5,0},
             group = "allegiance",
@@ -342,7 +351,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_bite_lock = {
-            desc = "Unlock Bite II and Echo II",
+            desc = "Unlock Feast and Revealing Echo",
             pos = {-214+38+38/2,58-38+38+38},  
 			group = "bite",
             --pos = {0,-1},

@@ -115,6 +115,15 @@ local function SoundPath(inst, event)
     return "dontstarve/creatures/" .. creature .. "/" .. event
 end
 
+local function ShouldEscape(inst)
+	if not inst.myrock and (inst.components.combat and inst.components.combat.target) and inst:GetDistanceSqToInst(inst.components.combat.target) < 4^2 and inst.escape_stack > 20 then
+		inst.escape_stack = 0
+		inst.sg:GoToState("dig")
+	else
+		inst.escape_stack = inst.escape_stack + 1
+	end
+end
+
 local states=
 {
     
@@ -174,10 +183,22 @@ local states=
         timeline=
         {
         
-			TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
-			TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
-			TimeEvent(16*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
-			TimeEvent(24*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
+			TimeEvent(1*FRAMES, function(inst) 
+				ShouldEscape(inst)
+				inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") 
+			end),
+			TimeEvent(8*FRAMES, function(inst) 
+				ShouldEscape(inst)
+				inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") 
+			end),
+			TimeEvent(16*FRAMES, function(inst) 
+				ShouldEscape(inst)
+				inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") 
+			end),
+			TimeEvent(24*FRAMES, function(inst) 
+				ShouldEscape(inst)
+				inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") 
+			end),
         },
         
         events=
@@ -188,12 +209,6 @@ local states=
 						inst.uppercooldown = true
 						inst:DoTaskInTime(math.random(8,10),function(inst) inst.uppercooldown = nil end)
 						inst.sg:GoToState("uppercut")
-					else
-						inst.sg:GoToState("moving") 
-					end
-				else
-					if (inst.components.combat and inst.components.combat.target) and inst:GetDistanceSqToInst(inst.components.combat.target) < 3^2 then
-						inst.sg:GoToState("dig")
 					else
 						inst.sg:GoToState("moving") 
 					end

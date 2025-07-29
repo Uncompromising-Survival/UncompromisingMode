@@ -10,6 +10,9 @@ local assets =
     -- Asset("ANIM", "anim/giant_tree2_sick.zip"),
 	
 	Asset("ANIM", "anim/um_hoodedtree.zip"),
+    Asset("IMAGE", "images/map_icons/um_hoodedtree.tex"),
+    Asset("ATLAS", "images/map_icons/um_hoodedtree.xml"),
+	
 }
 
 local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")

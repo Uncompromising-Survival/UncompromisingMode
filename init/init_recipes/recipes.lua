@@ -94,7 +94,7 @@ AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_mea
 ChangeSortKey("um_hat_bee_moon", "roseglasseshat", "CLOTHING", true)
 ChangeSortKey("um_hat_bee_moon", "armor_glassmail", "WEAPONS", true)
 
-AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
+AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
 ChangeSortKey("um_eyebalm", "floral_bandage", "RESTORATION", true)
 
 AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })

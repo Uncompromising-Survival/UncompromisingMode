@@ -23,6 +23,7 @@ SetSharedLootTable('boulder_crab',
         { 'rocks', 1.0 },
         { 'rocks', 1.0 },
         { 'meat',  1.0 },
+		{ 'meat',  1.0 },
         { 'rocks', 0.5 },
     })
 
@@ -282,7 +283,7 @@ local function fn()
 		end
     end)
 
-
+	inst.escape_stack = 0
     return inst
 end
 

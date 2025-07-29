@@ -248,7 +248,17 @@ local function Check_Bowling(inst,target)
 end	
 
 
+local function AddEnemyDebuffFx(fx, target)
+	target:DoTaskInTime(math.random() * 0.25, function()
+		local x, y, z = target.Transform:GetWorldPosition()
+		local fx = SpawnPrefab(fx)
+		if fx then
+			fx.Transform:SetPosition(x, y, z)
+		end
 
+		return fx
+	end)
+end
 
 
 AddStategraphPostInit("wilsonghost", function(inst)
@@ -269,6 +279,33 @@ AddStategraphPostInit("wilsonghost", function(inst)
 		_haunt(inst)
 		if HasSkill(inst,"shadow_wathom_2") then
 			inst.AnimState:PlayAnimation("emote_angry", false)
+			inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/shadowbark")
+			local fx = SpawnPrefab("statue_transition_2")
+			if fx ~= nil then
+				fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				fx.Transform:SetScale(1.2, 1.2, 1.2)
+			end
+			fx = SpawnPrefab("statue_transition")
+			if fx ~= nil then
+				fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				fx.Transform:SetScale(1.2, 1.2, 1.2)
+			end
+			
+			if HasSkill(inst,"bark_mastery") then
+				SpreadGoo(inst,1)
+			end
+			local x,y,z = inst.Transform:GetWorldPosition()
+			local ents = GLOBAL.TheSim:FindEntities(x, y, z, 16) --added playertags because of the taunt.
+			for i, v in ipairs(ents) do
+				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
+					(
+						v.components.follower ~= nil and v.components.follower:GetLeader() and
+						v.components.follower:GetLeader():HasTag("player")) then
+					v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
+					v.components.hauntable:DoHaunt(inst)
+				end
+			end
 		end
 	end
 
@@ -1063,17 +1100,7 @@ end)
 
 STRINGS.ACTIONS.WATHOMBARK = "Bark"
 
-local function AddEnemyDebuffFx(fx, target)
-	target:DoTaskInTime(math.random() * 0.25, function()
-		local x, y, z = target.Transform:GetWorldPosition()
-		local fx = SpawnPrefab(fx)
-		if fx then
-			fx.Transform:SetPosition(x, y, z)
-		end
 
-		return fx
-	end)
-end
 
 local function SpreadGoo(inst,number)
 	local circle = number*2+3

@@ -5,7 +5,7 @@ local normal_assets =
 
 -----------------------------------------------------------------------------------------------------------------
 
-local brain = require "brains/frogbrain"
+local brain = require "brains/ribopodbrain"
 
 local NORMAL_SOUNDS = {
     attack_spit  = "dontstarve/frog/attack_spit",
@@ -23,9 +23,7 @@ local RETARGET_MUST_TAGS = { "_combat", "_health" }
 local RETARGET_CANT_TAGS = { "um_ribopod" }
 
 local function retargetfn(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local buddies = TheSim:FindEntities(x,y,z,12,{"um_ribopod"})
-	if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) and #buddies >= 3 then
+	if not inst.components.health:IsDead() and not (inst.components.sleeper ~= nil and inst.components.sleeper:IsAsleep()) and inst.friend_tracking >= 3 then
         local target_dist = 12
 
         return FindEntity(inst, target_dist, function(guy)
@@ -53,6 +51,14 @@ local function OnGoingHome(inst)
 end
 
 local function OnTrapped(inst, data)
+end
+
+local function FriendTracking(inst)
+	if inst.entity:IsAwake() then
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local ribopods = TheSim:FindEntities(x,y,z,16,{"um_ribopod"})
+		inst.friend_tracking = #ribopods
+	end
 end
 
 local function commonfn()
@@ -89,8 +95,8 @@ local function commonfn()
     end
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.walkspeed = 3
-    inst.components.locomotor.runspeed = 6
+    inst.components.locomotor.walkspeed = 4
+    inst.components.locomotor.runspeed = 4
 
     -- boat hopping enable.
     inst.components.locomotor:SetAllowPlatformHopping(true)
@@ -128,7 +134,9 @@ local function commonfn()
     --inst:ListenForEvent("goinghome", OnGoingHome)
 
     MakeHauntablePanic(inst)
-
+	
+	inst.friend_tracking = 0
+	inst:DoPeriodicTask(3,FriendTracking)
     return inst
 end -- No burnable, fireproof
 
@@ -155,8 +163,8 @@ local function normalfn()
     inst.components.health:SetMaxHealth(500)
 
     inst.components.combat:SetDefaultDamage(TUNING.FROG_DAMAGE)
-    inst.components.combat:SetAttackPeriod(TUNING.FROG_ATTACK_PERIOD)
-	
+    inst.components.combat:SetAttackPeriod(2.5)
+	inst.components.combat:SetRange(1, 1)
 	inst.Transform:SetScale(1.2,1.2,1.2)
 	
 	inst:ListenForEvent("ontrapped", OnTrapped)

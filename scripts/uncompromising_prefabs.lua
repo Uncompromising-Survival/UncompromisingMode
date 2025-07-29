@@ -403,7 +403,9 @@ local prefabs = {
 	"wathom_none",
 	"wathom_heartbeat_ringfx",
 	"wathom_puddle",
-
+	"wathom_corpse",
+	
+	
 	"um_shadowarena",
 
 	"um_halloween_ornaments",

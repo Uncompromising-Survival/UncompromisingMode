@@ -7,7 +7,7 @@ local function TemperatureChange(owner)
 	local hat = owner.components.inventory and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
 	if hat and owner.components.temperature then
 		local temp = owner.components.temperature.current
-		local defense = 0.75 - 0.01*(temp)
+		local defense = 0.85 - 0.01*(temp)
 		if defense < 0.4 then
 			defense = 0.4
 		elseif defense > 0.75 then
@@ -87,7 +87,7 @@ local function fn()
     inst.components.equippable:SetOnUnequip(onunequip)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime((2 * TUNING.PERISH_TWO_DAY))
+    inst.components.perishable:SetPerishTime((3.5 * TUNING.PERISH_TWO_DAY))
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "twigs"
 

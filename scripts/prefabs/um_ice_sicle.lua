@@ -159,7 +159,7 @@ local function onattack_blue(inst, attacker, target, skipsanity)
 
 	--V2C: valid check in case any of the previous callbacks or events removed the target
 	if target.components.freezable ~= nil and target:IsValid() then
-        target.components.freezable:AddColdness(0.5)
+        target.components.freezable:AddColdness(1)
         target.components.freezable:SpawnShatterFX()
     end
 end
