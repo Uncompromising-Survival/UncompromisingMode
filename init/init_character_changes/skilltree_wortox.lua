@@ -2,10 +2,10 @@
 local STRINGS = GLOBAL.STRINGS
 -- Skilltree Text Changes
 STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life." 
-STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Twintailed Heart releases its souls when it saves the bearer's life."
+STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Twintailed Heart releases its Souls when it saves the bearer's life."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also recover the health penalties of imps."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also apply the effects from Lifted Spirits I to healed targets."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE = "Reaching Souls"
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC = "Dropped Souls will move towards hurt players, and heal at an increased range."
@@ -17,22 +17,20 @@ STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC = "Requires the skill below and 4
 STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC = "Requires the skill below and 4 total Naughty and/or Neutral skills to unlock."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE = "Shadow Harvester"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The flattered shadow queen has shared the secrets of weaving shadows with you. Weaving will yield better results. Souls waiting to be freed during an echo timer are consumed by the shadow reaper to deal double damage, or share the pain in an area. Kills accomplished with the scythe nourish live shadow minions relative to the lifeforce of the mob."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen has shared the secrets of weaving shadows with you, yielding better results. Souls waiting to be freed in a Soul Echo are consumed by the Shadow Reaper to unleash a powerful attack. Kills accomplished by the reaper nourish your shadows' lifeforce."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Weaver"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the fuelweaver closely inspired you to weave your own creations to life. You can infuse nightmare fuel with souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the Fuelweaver closely inspired you to weave your own creations to life. You can infuse Nightmare Fuel with Souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The flattered shadow queen has shared the secrets of weaving shadows with you. Weaving will yield better results. Souls waiting to be freed during an echo timer are consumed by the shadow reaper to deal double damage, or share the pain in an area. Kills accomplished with the scythe nourish live shadow minions relative to the lifeforce of the mob."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 souls will periodically release a soul from your inventory to pierce."
+STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 Souls will periodically release a Soul from your inventory to pierce."
 STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC = "Held Souls and Souls inside of Soul Jars increases the damage of the Knabsack, up to 100 total Souls collected."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of soul pierce and decoy."
+STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of Soul Pierce and Soul Decoy."
 
 STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE = "Lunar Summoner"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC = "Use lune blossoms and souls to summon allied gestalts from Alter. They are eager to carry any burden."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC = "Use Lune Tree Blossoms and Souls to summon allied gestalts from Alter. They are eager to carry any burden."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a soul echo to do additional damage. In addition, this empowered attack will steal items off of enemies, you never know what they'll be carrying."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a Soul Echo to do additional damage. In addition, this empowered attack will steal items off of enemies."
 
 local SkillTreeDefs = GLOBAL.require("prefabs/skilltree_defs")
 local SkillTreeFns = SkillTreeDefs.FN
@@ -320,523 +318,523 @@ end
 
 
 local skills = {
-	------------------------------------------------------------------------------------------------------------------------
-	-- GENERIC - Not unlockable skills but information boxes the player will be able to hover over for more information.
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_inclination_meter = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_METER_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_METER_DESC,
-		icon = "wortox_scales",
-		pos = {ORIGIN_SCALES_X, ORIGIN_SCALES_Y},
-		group = "neutral",
-		infographic = true,
-		root = true,
-		defaultfocus = true,
-		forced_focus = {
-			left = "wortox_inclination_nice",
-			right = "wortox_inclination_naughty",
-		},
-		button_decorations = {
-			init = function(button, root, fromfrontend, prefabname, activatedskills)
-				local UIAnim = require("widgets/uianim")
-				local Widget = require("widgets/widget")
-				-- Adjust the xp icon to be symmetric for this tree.
-				local xppos = root.parent.tree.root.xp:GetPosition()
-				xppos.x = 0
-				root.parent.tree.root.xp:SetPosition(xppos:Get())
+    ------------------------------------------------------------------------------------------------------------------------
+    -- GENERIC - Not unlockable skills but information boxes the player will be able to hover over for more information.
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_inclination_meter = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_METER_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_METER_DESC,
+        icon = "wortox_scales",
+        pos = {ORIGIN_SCALES_X, ORIGIN_SCALES_Y},
+        group = "neutral",
+        infographic = true,
+        root = true,
+        defaultfocus = true,
+        forced_focus = {
+            left = "wortox_inclination_nice",
+            right = "wortox_inclination_naughty",
+        },
+        button_decorations = {
+            init = function(button, root, fromfrontend, prefabname, activatedskills)
+                local UIAnim = require("widgets/uianim")
+                local Widget = require("widgets/widget")
+                -- Adjust the xp icon to be symmetric for this tree.
+                local xppos = root.parent.tree.root.xp:GetPosition()
+                xppos.x = 0
+                root.parent.tree.root.xp:SetPosition(xppos:Get())
 
-				local tokenlayer = button:AddChild(Widget())
-				button.tokenlayer = tokenlayer
+                local tokenlayer = button:AddChild(Widget())
+                button.tokenlayer = tokenlayer
 
-				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
-				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
-				if affinitytype then
-					if diff < 0 then
-						diff = diff - 1
-					elseif diff > 0 then
-						diff = diff + 1
-					end
-				end
+                local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
+                local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
+                local diff = nice - naughty
+                local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+                if affinitytype then
+                    if diff < 0 then
+                        diff = diff - 1
+                    elseif diff > 0 then
+                        diff = diff + 1
+                    end
+                end
 
-				local MAX_TOKENS = TUNING.SKILLS.WORTOX.TIPPED_BALANCE_THRESHOLD
-				local tokens_nice, tokens_naughty = {}, {}
-				button.tokens_nice, button.tokens_naughty = tokens_nice, tokens_naughty
-				local function CreateToken(i, nice)
-					local token = tokenlayer:AddChild(UIAnim())
-					token.tokenindex = i
-					token:GetAnimState():SetBank("wortox_balance")
-					token:GetAnimState():SetBuild("wortox_balance")
-					local xoffset = ((i - 0.5) * HAND_BAR_LENGTH) / MAX_TOKENS + MIN_GAP
-					local yoffset = xoffset * HAND_BAR_ANGLE_Y
-					token:SetPosition(nice and -xoffset or xoffset, yoffset)
-					token:SetScale(0.6)
-					token:SetClickable(false)
-					local bar = button:AddChild(UIAnim())
-					token.bar = bar
-					bar:MoveToBack()
-					bar:GetAnimState():SetBank("wortox_balance")
-					bar:GetAnimState():SetBuild("wortox_balance")
-					bar:SetScale(0.2, 0.15)
-					local baroffsetx = xoffset - (0.5 * HAND_BAR_LENGTH) / MAX_TOKENS
-					local baroffsety = baroffsetx * HAND_BAR_ANGLE_Y
-					local barrotation = HAND_BAR_ANGLE_RAW * RADIANS
-					bar:SetPosition(nice and -baroffsetx or baroffsetx, baroffsety)
-					bar:SetRotation(nice and barrotation or -barrotation)
-					bar:SetClickable(false)
-					UpdateToken(token, diff, true, nice, MAX_TOKENS, affinitytype)
-					return token
-				end
-				for i = 1, MAX_TOKENS do
-					table.insert(tokens_nice, CreateToken(i, true))
-					table.insert(tokens_naughty, CreateToken(i, false))
-				end
-			end,
-			onskillschanged = function(button, skillname, fromfrontend, prefabname, activatedskills)
-				-- NOTES(JBK): skillname can be nil for respec case.
-				local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
-				local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-				local diff = nice - naughty
-				local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
-				if affinitytype then
-					if diff < 0 then
-						diff = diff - 1
-					elseif diff > 0 then
-						diff = diff + 1
-					end
-				end
+                local MAX_TOKENS = TUNING.SKILLS.WORTOX.TIPPED_BALANCE_THRESHOLD
+                local tokens_nice, tokens_naughty = {}, {}
+                button.tokens_nice, button.tokens_naughty = tokens_nice, tokens_naughty
+                local function CreateToken(i, nice)
+                    local token = tokenlayer:AddChild(UIAnim())
+                    token.tokenindex = i
+                    token:GetAnimState():SetBank("wortox_balance")
+                    token:GetAnimState():SetBuild("wortox_balance")
+                    local xoffset = ((i - 0.5) * HAND_BAR_LENGTH) / MAX_TOKENS + MIN_GAP
+                    local yoffset = xoffset * HAND_BAR_ANGLE_Y
+                    token:SetPosition(nice and -xoffset or xoffset, yoffset)
+                    token:SetScale(0.6)
+                    token:SetClickable(false)
+                    local bar = button:AddChild(UIAnim())
+                    token.bar = bar
+                    bar:MoveToBack()
+                    bar:GetAnimState():SetBank("wortox_balance")
+                    bar:GetAnimState():SetBuild("wortox_balance")
+                    bar:SetScale(0.2, 0.15)
+                    local baroffsetx = xoffset - (0.5 * HAND_BAR_LENGTH) / MAX_TOKENS
+                    local baroffsety = baroffsetx * HAND_BAR_ANGLE_Y
+                    local barrotation = HAND_BAR_ANGLE_RAW * RADIANS
+                    bar:SetPosition(nice and -baroffsetx or baroffsetx, baroffsety)
+                    bar:SetRotation(nice and barrotation or -barrotation)
+                    bar:SetClickable(false)
+                    UpdateToken(token, diff, true, nice, MAX_TOKENS, affinitytype)
+                    return token
+                end
+                for i = 1, MAX_TOKENS do
+                    table.insert(tokens_nice, CreateToken(i, true))
+                    table.insert(tokens_naughty, CreateToken(i, false))
+                end
+            end,
+            onskillschanged = function(button, skillname, fromfrontend, prefabname, activatedskills)
+                -- NOTES(JBK): skillname can be nil for respec case.
+                local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
+                local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
+                local diff = nice - naughty
+                local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+                if affinitytype then
+                    if diff < 0 then
+                        diff = diff - 1
+                    elseif diff > 0 then
+                        diff = diff + 1
+                    end
+                end
 
-				local MAX_TOKENS = TUNING.SKILLS.WORTOX.TIPPED_BALANCE_THRESHOLD
-				local instant = activatedskills == nil
-				for i = 1, MAX_TOKENS do
-					if instant then
-						button.tokens_nice[i].tokenstate = nil
-						button.tokens_naughty[i].tokenstate = nil
-					end
-					UpdateToken(button.tokens_nice[i], diff, instant, true, MAX_TOKENS, affinitytype)
-					UpdateToken(button.tokens_naughty[i], diff, instant, false, MAX_TOKENS, affinitytype)
-				end
-			end,
-		},
-	},
-	wortox_inclination_nice = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NICE_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NICE_DESC,
-		icon = "wortox_inclination_nice",
-		pos = {ORIGIN_SCALES_X - HAND_BAR_LENGTH - LOCK_SPACER, ORIGIN_SCALES_Y + HAND_BAR_HEIGHT + LOCK_SPACER * 0.25},
-		group = "neutral",
-		tags = {"lock"},
-		infographic = true,
-		root = true,
-		forced_focus = {
-			right = "wortox_inclination_meter",
-		},
-		lock_open = function(prefabname, activatedskills, readonly)
-			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
-			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
-			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "nice"
-		end,
-	},
-	wortox_inclination_naughty = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC,
-		icon = "wortox_inclination_naughty",
-		pos = {ORIGIN_SCALES_X + HAND_BAR_LENGTH + LOCK_SPACER, ORIGIN_SCALES_Y + HAND_BAR_HEIGHT + LOCK_SPACER * 0.25},
-		group = "neutral",
-		tags = {"lock"},
-		infographic = true,
-		root = true,
-		forced_focus = {
-			left = "wortox_inclination_meter",
-		},
-		lock_open = function(prefabname, activatedskills, readonly)
-			local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
-			local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
-			local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
-			return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "naughty"
-		end,
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- LOCKS
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_lifebringer_lock = {
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC,
-		pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + LOCK_SPACER + SPACER_SCALES_OUT},
-		group = "nice",
-		tags = {"lock"},
-		root = true,
-		lock_open = function(prefabname, activatedskills, readonly)
-			return activatedskills and activatedskills["wortox_lifebringer_2"] and SkillTreeFns.CountTags(prefabname, "nice1", activatedskills) > 3
-		end,
-	},
-	wortox_soulprotector_lock = {
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC,
-		pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER*1.1},
-		group = "nice",
-		tags = {"lock"},
-		root = true,
-		lock_open = function(prefabname, activatedskills, readonly)
-			return activatedskills and activatedskills["wortox_soulprotector_1"] and SkillTreeFns.CountTags(prefabname, "nice1", activatedskills) > 3
-		end,
-	},
-	wortox_souldecoy_lock = {
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC,
-		pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER + SPACER_SCALES_OUT},
-		group = "naughty",
-		tags = {"lock"},
-		root = true,
-		lock_open = function(prefabname, activatedskills, readonly)
-			return activatedskills and activatedskills["wortox_souldecoy_2"] and SkillTreeFns.CountTags(prefabname, "naughty1", activatedskills) > 3
-		end,
-	},
-	wortox_thief_lock = {
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC,
-		pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER*1.1},
-		group = "naughty",
-		tags = {"lock"},
-		root = true,
-		lock_open = function(prefabname, activatedskills, readonly)
-			return activatedskills and activatedskills["wortox_thief_1"] and SkillTreeFns.CountTags(prefabname, "naughty1", activatedskills) > 3
-		end,
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- NICE
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_lifebringer_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC,
-		icon = "wortox_lifebringer_1",
-		pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER_SCALES_OUT},
-		group = "nice",
-		tags = {"nice", "nice1"},
-		root = true,
-		connects = {
-			"wortox_lifebringer_2",
-		},
-		onactivate = function(inst)
-			inst.components.inventory:ForEachItem(LinkUnlinked_wortox_reviver, inst)
-		end,
-		ondeactivate = function(inst)
-			if TheWorld and TheWorld.components.linkeditemmanager then
-				TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, Unlink_wortox_reviver)
-			end
-		end,
-	},
-	wortox_lifebringer_2 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC,
-		icon = "wortox_lifebringer_2",
-		pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + SPACER_SCALES_OUT},
-		group = "nice",
-		tags = {"nice", "nice1"},
-	},
-	wortox_lifebringer_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_3_DESC,
-		icon = "wortox_lifebringer_3",
-		pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + LOCK_SPACER * 2 + SPACER_SCALES_OUT},
-		group = "nice",
-		tags = {"nice"},
-		locks = {
-			"wortox_lifebringer_lock",
-		},
-		onactivate = function(inst)
-			if TheWorld and TheWorld.components.linkeditemmanager then
-				TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, AllowConsumption_wortox_reviver)
-			end
-		end,
-		ondeactivate = function(inst)
-			if TheWorld.components.linkeditemmanager then
-				TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, DisallowConsumption_wortox_reviver)
-			end
-		end,
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_soulprotector_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC,
-		icon = "wortox_soulprotector_1",
-		pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y},
-		group = "nice",
-		tags = {"nice", "nice1"},
-		root = true,
-		connects = {
-			"wortox_soulprotector_3",
-		},
-	},
-	-- wortox_soulprotector_2 = {
-		-- title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_2_TITLE,
-		-- desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_2_DESC,
-		-- icon = "wortox_soulprotector_2",
-		-- pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER},
-		-- group = "nice",
-		-- tags = {"nice", "nice1"},
-	-- },
-	wortox_soulprotector_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC,
-		icon = "wortox_soulprotector_3",
-		pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER + LOCK_SPACER*1.5},
-		group = "nice",
-		tags = {"nice"},
-		locks = {
-			"wortox_soulprotector_lock",
-		},
-		connects = {
-			"wortox_soulprotector_4",
-		},
-	},
-	wortox_soulprotector_4 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC,
-		icon = "wortox_soulprotector_4",
-		pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER * 2 + LOCK_SPACER * 2},
-		group = "nice",
-		tags = {"nice"},
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_liftedspirits_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_1_DESC,
-		icon = "wortox_liftedspirits_1",
-		pos = {ORIGIN_NICE_X + SPACER * 1.5, ORIGIN_NICE_Y + SPACER_SCALES_IN},
-		group = "nice",
-		tags = {"nice", "nice1"},
-		root = true,
-		connects = {
-			"wortox_liftedspirits_2",
-		},
-	},
-	wortox_liftedspirits_2 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_2_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_2_DESC,
-		icon = "wortox_liftedspirits_2",
-		pos = {ORIGIN_NICE_X + SPACER * 1.5, ORIGIN_NICE_Y + SPACER + SPACER_SCALES_IN},
-		group = "nice",
-		tags = {"nice", "nice1"},
-		connects = {
-			"wortox_liftedspirits_3",
-			"wortox_liftedspirits_4",
-		},
-	},
-	wortox_liftedspirits_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_3_DESC,
-		icon = "wortox_liftedspirits_3",
-		pos = {ORIGIN_NICE_X + SPACER * 1.05, ORIGIN_NICE_Y + SPACER * 2 + SPACER_SCALES_IN},
-		group = "nice",
-		tags = {"nice", "nice1"},
-	},
-	wortox_liftedspirits_4 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_4_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_4_DESC,
-		icon = "wortox_liftedspirits_4",
-		pos = {ORIGIN_NICE_X + SPACER * 1.95, ORIGIN_NICE_Y + SPACER * 2 + SPACER_SCALES_IN},
-		group = "nice",
-		tags = {"nice", "nice1"},
-		forced_focus = {
-			right = "wortox_allegiance_lunar",
-		},
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- NEUTRAL
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_panflute_playing = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_PLAYING_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_PLAYING_DESC,
-		icon = "wortox_panflute_playing",
-		pos = {ORIGIN_NEUTRAL_X, ORIGIN_NEUTRAL_Y},
-		group = "neutral",
-		tags = {"neutral", "nice1", "naughty1"},
-		root = true,
-		connects = {
-			"wortox_panflute_soulcaller",
-			"wortox_panflute_forget",
-		},
-		onactivate = function(inst)
-			CUSTOM_FUNCTIONS.TryPanfluteTimerSetup(inst)
-		end,
-		ondeactivate = function(inst)
-			inst.components.timer:StopTimer("wortox_panflute_playing")
-			inst:RemoveDebuff("wortox_panflute_buff")
-			inst:RemoveEventCallback("timerdone", OnTimerDone)
-			inst:RemoveEventCallback("death", OnDeath)
-			inst:RemoveEventCallback("ms_respawnedfromghost", OnRespawnedFromGhost)
-		end,
-	},
-	wortox_panflute_soulcaller = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_SOULCALLER_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_SOULCALLER_DESC,
-		icon = "wortox_panflute_soulcaller",
-		pos = {ORIGIN_NEUTRAL_X - SPACER * 1.25, ORIGIN_NEUTRAL_Y},
-		group = "neutral",
-		tags = {"neutral", "nice1", "naughty1"},
-	},
-	wortox_panflute_forget = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_FORGET_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_FORGET_DESC,
-		icon = "wortox_panflute_forget",
-		pos = {ORIGIN_NEUTRAL_X + SPACER * 1.25, ORIGIN_NEUTRAL_Y},
-		group = "neutral",
-		tags = {"neutral", "nice1", "naughty1"},
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- NAUGHTY
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_nabbag = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_NABBAG_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NABBAG_DESC,
-		icon = "wortox_nabbag",
-		pos = {ORIGIN_NAUGHTY_X - SPACER * 1.5, ORIGIN_NAUGHTY_Y + SPACER_SCALES_IN},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		root = true,
-		connects = {
-			"wortox_souljar_1",
-		},
-		onactivate = function(inst)
-			inst:AddTag("nabbaguser")
-		end,
-		ondeactivate = function(inst)
-			inst:RemoveTag("nabbaguser")
-		end,
-	},
-	wortox_souljar_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_1_DESC,
-		icon = "wortox_souljar_1",
-		pos = {ORIGIN_NAUGHTY_X - SPACER * 1.5, ORIGIN_NAUGHTY_Y + SPACER + SPACER_SCALES_IN},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		connects = {
-			"wortox_souljar_2",
-			"wortox_souljar_3",
-		},
-		onactivate = function(inst)
-			inst.components.inventory:ForEachItem(UpdateSoulJars)
-		end,
-		ondeactivate = function(inst)
-			inst.components.inventory:ForEachItem(CloseAndUpdateSoulJars, inst)
-			for container, _ in pairs(inst.components.inventory.opencontainers) do
-				CloseAndUpdateSoulJars(container, inst)
-			end
-		end,
-	},
-	wortox_souljar_2 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_2_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_2_DESC,
-		icon = "wortox_souljar_2",
-		pos = {ORIGIN_NAUGHTY_X - SPACER * 1.95, ORIGIN_NAUGHTY_Y + SPACER * 2 + SPACER_SCALES_IN},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		forced_focus = {
-			left = "wortox_allegiance_shadow",
-		},
-		onactivate = function(inst)
-			inst:DoCheckSoulsAdded()
-		end,
-		ondeactivate = function(inst)
-			inst:DoCheckSoulsAdded()
-		end,
-	},
-	wortox_souljar_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC,
-		icon = "wortox_souljar_3",
-		pos = {ORIGIN_NAUGHTY_X - SPACER * 1.05, ORIGIN_NAUGHTY_Y + SPACER * 2 + SPACER_SCALES_IN},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		onactivate = UpdateNabBags,
-		ondeactivate = UpdateNabBags,
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_thief_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC,
-		icon = "wortox_thief_1",
-		pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		root = true,
-		connects = {
-			"wortox_thief_3",
-		},
-	},
-	-- wortox_thief_2 = {
-		-- title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_2_TITLE,
-		-- desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_2_DESC,
-		-- icon = "wortox_thief_2",
-		-- pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER},
-		-- group = "naughty",
-		-- tags = {"naughty", "naughty1"},
-	-- },
-	wortox_thief_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_3_DESC,
-		icon = "wortox_thief_3",
-		pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER * 1.5},
-		group = "naughty",
-		tags = {"naughty"},
-		locks = {
-			"wortox_thief_lock",
-		},
-		connects = {
-			"wortox_thief_4",
-		},
-	},
-	wortox_thief_4 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC,
-		icon = "wortox_thief_4",
-		pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER * 2 + LOCK_SPACER * 2},
-		group = "naughty",
-		tags = {"naughty"},
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_souldecoy_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_1_DESC,
-		icon = "wortox_souldecoy_1",
-		pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER_SCALES_OUT},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-		root = true,
-		connects = {
-			"wortox_souldecoy_2",
-		},
-	},
-	wortox_souldecoy_2 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_2_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_2_DESC,
-		icon = "wortox_souldecoy_2",
-		pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + SPACER_SCALES_OUT},
-		group = "naughty",
-		tags = {"naughty", "naughty1"},
-	},
-	wortox_souldecoy_3 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_3_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_3_DESC,
-		icon = "wortox_souldecoy_3",
-		pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER * 2 + SPACER_SCALES_OUT},
-		group = "naughty",
-		tags = {"naughty"},
-		locks = {
-			"wortox_souldecoy_lock",
-		},
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- ALLEGIANCE
-	------------------------------------------------------------------------------------------------------------------------
-	wortox_allegiance_lunar_lock_1 = {
-		desc = "Find and defeat the Celestial Champion and have no shadow affinity.",
-		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
+                local MAX_TOKENS = TUNING.SKILLS.WORTOX.TIPPED_BALANCE_THRESHOLD
+                local instant = activatedskills == nil
+                for i = 1, MAX_TOKENS do
+                    if instant then
+                        button.tokens_nice[i].tokenstate = nil
+                        button.tokens_naughty[i].tokenstate = nil
+                    end
+                    UpdateToken(button.tokens_nice[i], diff, instant, true, MAX_TOKENS, affinitytype)
+                    UpdateToken(button.tokens_naughty[i], diff, instant, false, MAX_TOKENS, affinitytype)
+                end
+            end,
+        },
+    },
+    wortox_inclination_nice = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NICE_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NICE_DESC,
+        icon = "wortox_inclination_nice",
+        pos = {ORIGIN_SCALES_X - HAND_BAR_LENGTH - LOCK_SPACER, ORIGIN_SCALES_Y + HAND_BAR_HEIGHT + LOCK_SPACER * 0.25},
+        group = "neutral",
+        tags = {"lock"},
+        infographic = true,
+        root = true,
+        forced_focus = {
+            right = "wortox_inclination_meter",
+        },
+        lock_open = function(prefabname, activatedskills, readonly)
+            local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
+            local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
+            local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+            return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "nice"
+        end,
+    },
+    wortox_inclination_naughty = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC,
+        icon = "wortox_inclination_naughty",
+        pos = {ORIGIN_SCALES_X + HAND_BAR_LENGTH + LOCK_SPACER, ORIGIN_SCALES_Y + HAND_BAR_HEIGHT + LOCK_SPACER * 0.25},
+        group = "neutral",
+        tags = {"lock"},
+        infographic = true,
+        root = true,
+        forced_focus = {
+            left = "wortox_inclination_meter",
+        },
+        lock_open = function(prefabname, activatedskills, readonly)
+            local nice = SkillTreeFns.CountTags(prefabname, "nice", activatedskills)
+            local naughty = SkillTreeFns.CountTags(prefabname, "naughty", activatedskills)
+            local affinitytype = activatedskills and (activatedskills["wortox_allegiance_lunar_1"] and "lunar" or activatedskills["wortox_allegiance_shadow_1"] and "shadow") or nil
+            return CUSTOM_FUNCTIONS.CalculateInclination(nice, naughty, affinitytype) == "naughty"
+        end,
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- LOCKS
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_lifebringer_lock = {
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC,
+        pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + LOCK_SPACER + SPACER_SCALES_OUT},
+        group = "nice",
+        tags = {"lock"},
+        root = true,
+        lock_open = function(prefabname, activatedskills, readonly)
+            return activatedskills and activatedskills["wortox_lifebringer_2"] and SkillTreeFns.CountTags(prefabname, "nice1", activatedskills) > 3
+        end,
+    },
+    wortox_soulprotector_lock = {
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC,
+        pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER*1.1},
+        group = "nice",
+        tags = {"lock"},
+        root = true,
+        lock_open = function(prefabname, activatedskills, readonly)
+            return activatedskills and activatedskills["wortox_soulprotector_1"] and SkillTreeFns.CountTags(prefabname, "nice1", activatedskills) > 3
+        end,
+    },
+    wortox_souldecoy_lock = {
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC,
+        pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER + SPACER_SCALES_OUT},
+        group = "naughty",
+        tags = {"lock"},
+        root = true,
+        lock_open = function(prefabname, activatedskills, readonly)
+            return activatedskills and activatedskills["wortox_souldecoy_2"] and SkillTreeFns.CountTags(prefabname, "naughty1", activatedskills) > 3
+        end,
+    },
+    wortox_thief_lock = {
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC,
+        pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER*1.1},
+        group = "naughty",
+        tags = {"lock"},
+        root = true,
+        lock_open = function(prefabname, activatedskills, readonly)
+            return activatedskills and activatedskills["wortox_thief_1"] and SkillTreeFns.CountTags(prefabname, "naughty1", activatedskills) > 3
+        end,
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- NICE
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_lifebringer_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC,
+        icon = "wortox_lifebringer_1",
+        pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER_SCALES_OUT},
+        group = "nice",
+        tags = {"nice", "nice1"},
+        root = true,
+        connects = {
+            "wortox_lifebringer_2",
+        },
+        onactivate = function(inst)
+            inst.components.inventory:ForEachItem(LinkUnlinked_wortox_reviver, inst)
+        end,
+        ondeactivate = function(inst)
+            if TheWorld and TheWorld.components.linkeditemmanager then
+                TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, Unlink_wortox_reviver)
+            end
+        end,
+    },
+    wortox_lifebringer_2 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC,
+        icon = "wortox_lifebringer_2",
+        pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + SPACER_SCALES_OUT},
+        group = "nice",
+        tags = {"nice", "nice1"},
+    },
+    wortox_lifebringer_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_3_DESC,
+        icon = "wortox_lifebringer_3",
+        pos = {ORIGIN_NICE_X - SPACER * 1.25, ORIGIN_NICE_Y + SPACER + LOCK_SPACER * 2 + SPACER_SCALES_OUT},
+        group = "nice",
+        tags = {"nice"},
+        locks = {
+            "wortox_lifebringer_lock",
+        },
+        onactivate = function(inst)
+            if TheWorld and TheWorld.components.linkeditemmanager then
+                TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, AllowConsumption_wortox_reviver)
+            end
+        end,
+        ondeactivate = function(inst)
+            if TheWorld.components.linkeditemmanager then
+                TheWorld.components.linkeditemmanager:ForEachLinkedItemForPlayer(inst, DisallowConsumption_wortox_reviver)
+            end
+        end,
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_soulprotector_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC,
+        icon = "wortox_soulprotector_1",
+        pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y},
+        group = "nice",
+        tags = {"nice", "nice1"},
+        root = true,
+        connects = {
+            "wortox_soulprotector_3",
+        },
+    },
+    -- wortox_soulprotector_2 = {
+        -- title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_2_TITLE,
+        -- desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_2_DESC,
+        -- icon = "wortox_soulprotector_2",
+        -- pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER},
+        -- group = "nice",
+        -- tags = {"nice", "nice1"},
+    -- },
+    wortox_soulprotector_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC,
+        icon = "wortox_soulprotector_3",
+        pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER + LOCK_SPACER*1.5},
+        group = "nice",
+        tags = {"nice"},
+        locks = {
+            "wortox_soulprotector_lock",
+        },
+        connects = {
+            "wortox_soulprotector_4",
+        },
+    },
+    wortox_soulprotector_4 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC,
+        icon = "wortox_soulprotector_4",
+        pos = {ORIGIN_NICE_X, ORIGIN_NICE_Y + SPACER * 2 + LOCK_SPACER * 2},
+        group = "nice",
+        tags = {"nice"},
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_liftedspirits_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_1_DESC,
+        icon = "wortox_liftedspirits_1",
+        pos = {ORIGIN_NICE_X + SPACER * 1.5, ORIGIN_NICE_Y + SPACER_SCALES_IN},
+        group = "nice",
+        tags = {"nice", "nice1"},
+        root = true,
+        connects = {
+            "wortox_liftedspirits_2",
+        },
+    },
+    wortox_liftedspirits_2 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_2_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_2_DESC,
+        icon = "wortox_liftedspirits_2",
+        pos = {ORIGIN_NICE_X + SPACER * 1.5, ORIGIN_NICE_Y + SPACER + SPACER_SCALES_IN},
+        group = "nice",
+        tags = {"nice", "nice1"},
+        connects = {
+            "wortox_liftedspirits_3",
+            "wortox_liftedspirits_4",
+        },
+    },
+    wortox_liftedspirits_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_3_DESC,
+        icon = "wortox_liftedspirits_3",
+        pos = {ORIGIN_NICE_X + SPACER * 1.05, ORIGIN_NICE_Y + SPACER * 2 + SPACER_SCALES_IN},
+        group = "nice",
+        tags = {"nice", "nice1"},
+    },
+    wortox_liftedspirits_4 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_4_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_LIFTEDSPIRITS_4_DESC,
+        icon = "wortox_liftedspirits_4",
+        pos = {ORIGIN_NICE_X + SPACER * 1.95, ORIGIN_NICE_Y + SPACER * 2 + SPACER_SCALES_IN},
+        group = "nice",
+        tags = {"nice", "nice1"},
+        forced_focus = {
+            right = "wortox_allegiance_lunar",
+        },
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- NEUTRAL
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_panflute_playing = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_PLAYING_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_PLAYING_DESC,
+        icon = "wortox_panflute_playing",
+        pos = {ORIGIN_NEUTRAL_X, ORIGIN_NEUTRAL_Y},
+        group = "neutral",
+        tags = {"neutral", "nice1", "naughty1"},
+        root = true,
+        connects = {
+            "wortox_panflute_soulcaller",
+            "wortox_panflute_forget",
+        },
+        onactivate = function(inst)
+            CUSTOM_FUNCTIONS.TryPanfluteTimerSetup(inst)
+        end,
+        ondeactivate = function(inst)
+            inst.components.timer:StopTimer("wortox_panflute_playing")
+            inst:RemoveDebuff("wortox_panflute_buff")
+            inst:RemoveEventCallback("timerdone", OnTimerDone)
+            inst:RemoveEventCallback("death", OnDeath)
+            inst:RemoveEventCallback("ms_respawnedfromghost", OnRespawnedFromGhost)
+        end,
+    },
+    wortox_panflute_soulcaller = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_SOULCALLER_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_SOULCALLER_DESC,
+        icon = "wortox_panflute_soulcaller",
+        pos = {ORIGIN_NEUTRAL_X - SPACER * 1.25, ORIGIN_NEUTRAL_Y},
+        group = "neutral",
+        tags = {"neutral", "nice1", "naughty1"},
+    },
+    wortox_panflute_forget = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_FORGET_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_PANFLUTE_FORGET_DESC,
+        icon = "wortox_panflute_forget",
+        pos = {ORIGIN_NEUTRAL_X + SPACER * 1.25, ORIGIN_NEUTRAL_Y},
+        group = "neutral",
+        tags = {"neutral", "nice1", "naughty1"},
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- NAUGHTY
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_nabbag = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_NABBAG_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_NABBAG_DESC,
+        icon = "wortox_nabbag",
+        pos = {ORIGIN_NAUGHTY_X - SPACER * 1.5, ORIGIN_NAUGHTY_Y + SPACER_SCALES_IN},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        root = true,
+        connects = {
+            "wortox_souljar_1",
+        },
+        onactivate = function(inst)
+            inst:AddTag("nabbaguser")
+        end,
+        ondeactivate = function(inst)
+            inst:RemoveTag("nabbaguser")
+        end,
+    },
+    wortox_souljar_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_1_DESC,
+        icon = "wortox_souljar_1",
+        pos = {ORIGIN_NAUGHTY_X - SPACER * 1.5, ORIGIN_NAUGHTY_Y + SPACER + SPACER_SCALES_IN},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        connects = {
+            "wortox_souljar_2",
+            "wortox_souljar_3",
+        },
+        onactivate = function(inst)
+            inst.components.inventory:ForEachItem(UpdateSoulJars)
+        end,
+        ondeactivate = function(inst)
+            inst.components.inventory:ForEachItem(CloseAndUpdateSoulJars, inst)
+            for container, _ in pairs(inst.components.inventory.opencontainers) do
+                CloseAndUpdateSoulJars(container, inst)
+            end
+        end,
+    },
+    wortox_souljar_2 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_2_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_2_DESC,
+        icon = "wortox_souljar_2",
+        pos = {ORIGIN_NAUGHTY_X - SPACER * 1.95, ORIGIN_NAUGHTY_Y + SPACER * 2 + SPACER_SCALES_IN},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        forced_focus = {
+            left = "wortox_allegiance_shadow",
+        },
+        onactivate = function(inst)
+            inst:DoCheckSoulsAdded()
+        end,
+        ondeactivate = function(inst)
+            inst:DoCheckSoulsAdded()
+        end,
+    },
+    wortox_souljar_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC,
+        icon = "wortox_souljar_3",
+        pos = {ORIGIN_NAUGHTY_X - SPACER * 1.05, ORIGIN_NAUGHTY_Y + SPACER * 2 + SPACER_SCALES_IN},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        onactivate = UpdateNabBags,
+        ondeactivate = UpdateNabBags,
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_thief_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC,
+        icon = "wortox_thief_1",
+        pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        root = true,
+        connects = {
+            "wortox_thief_3",
+        },
+    },
+    -- wortox_thief_2 = {
+        -- title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_2_TITLE,
+        -- desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_2_DESC,
+        -- icon = "wortox_thief_2",
+        -- pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER},
+        -- group = "naughty",
+        -- tags = {"naughty", "naughty1"},
+    -- },
+    wortox_thief_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_3_DESC,
+        icon = "wortox_thief_3",
+        pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER * 1.5},
+        group = "naughty",
+        tags = {"naughty"},
+        locks = {
+            "wortox_thief_lock",
+        },
+        connects = {
+            "wortox_thief_4",
+        },
+    },
+    wortox_thief_4 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC,
+        icon = "wortox_thief_4",
+        pos = {ORIGIN_NAUGHTY_X, ORIGIN_NAUGHTY_Y + SPACER * 2 + LOCK_SPACER * 2},
+        group = "naughty",
+        tags = {"naughty"},
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_souldecoy_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_1_DESC,
+        icon = "wortox_souldecoy_1",
+        pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER_SCALES_OUT},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+        root = true,
+        connects = {
+            "wortox_souldecoy_2",
+        },
+    },
+    wortox_souldecoy_2 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_2_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_2_DESC,
+        icon = "wortox_souldecoy_2",
+        pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + SPACER_SCALES_OUT},
+        group = "naughty",
+        tags = {"naughty", "naughty1"},
+    },
+    wortox_souldecoy_3 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_3_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_SOULDECOY_3_DESC,
+        icon = "wortox_souldecoy_3",
+        pos = {ORIGIN_NAUGHTY_X + SPACER * 1.25, ORIGIN_NAUGHTY_Y + SPACER + LOCK_SPACER * 2 + SPACER_SCALES_OUT},
+        group = "naughty",
+        tags = {"naughty"},
+        locks = {
+            "wortox_souldecoy_lock",
+        },
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- ALLEGIANCE
+    ------------------------------------------------------------------------------------------------------------------------
+    wortox_allegiance_lunar_lock_1 = {
+        desc = "Find and defeat the Celestial Champion and have no shadow affinity.",
+        pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
 
-		root = true,
+        root = true,
         group = "allegiance",
         tags = {"allegiance", "lock"},
-		lock_open = function(prefabname, activatedskills, readonly)
+        lock_open = function(prefabname, activatedskills, readonly)
             if readonly then
                 return "question"
             end
@@ -844,78 +842,78 @@ local skills = {
                 return TheGenericKV:GetKV("celestialchampion_killed") == "1"
             end
             return nil
-		end,
-	},
-	wortox_allegiance_lunar_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC,
-		icon = "wortox_lunar_summoner",
-		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
-		group = "allegiance",
-		tags = {"lunar_favor", "neutral", "allegiance"},
-		locks = {"wortox_allegiance_lunar_lock_1"},
-		onactivate = function(inst)
-			inst:AddTag("player_lunar_aligned")
-			inst:AddTag("SOUL_LUNAR_upgradeuser")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
-			end
-		end,
-		ondeactivate = function(inst)
-			inst:RemoveTag("player_lunar_aligned")
-			inst:RemoveTag("SOUL_LUNAR_upgradeuser")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
-			end
-		end,
-		connects = {"wortox_allegiance_lunar"},
-	},
-	wortox_allegiance_lunar = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC,
-		icon = "wortox_lunar_stealer",
-		pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER * 2},
-		group = "allegiance",
-		tags = {"lunar_favor", "neutral", "allegiance"},
-		onactivate = function(inst)
-			inst:AddTag("player_lunar_aligned")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
-			end
-		end,
-		ondeactivate = function(inst)
-			inst:RemoveTag("player_lunar_aligned")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
-			end
-		end,
-	},
-	------------------------------------------------------------------------------------------------------------------------
-	-- wortox_allegiance_shadow_lock_1 = SkillTreeFns.MakeFuelWeaverLock(
-		-- {
-			-- pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.35, ORIGIN_ALLEGIANCE_Y},
-		-- }
-	-- ),
-	wortox_allegiance_shadow_lock_1 = {
-		desc = "Find and defeat the Ancient Fuelweaver and have no lunar affinity.",
-		pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
+        end,
+    },
+    wortox_allegiance_lunar_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC,
+        icon = "wortox_lunar_summoner",
+        pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
+        group = "allegiance",
+        tags = {"lunar_favor", "neutral", "allegiance"},
+        locks = {"wortox_allegiance_lunar_lock_1"},
+        onactivate = function(inst)
+            inst:AddTag("player_lunar_aligned")
+            inst:AddTag("SOUL_LUNAR_upgradeuser")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
+            end
+        end,
+        ondeactivate = function(inst)
+            inst:RemoveTag("player_lunar_aligned")
+            inst:RemoveTag("SOUL_LUNAR_upgradeuser")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
+            end
+        end,
+        connects = {"wortox_allegiance_lunar"},
+    },
+    wortox_allegiance_lunar = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC,
+        icon = "wortox_lunar_stealer",
+        pos = {ORIGIN_ALLEGIANCE_X - SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER * 2},
+        group = "allegiance",
+        tags = {"lunar_favor", "neutral", "allegiance"},
+        onactivate = function(inst)
+            inst:AddTag("player_lunar_aligned")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
+            end
+        end,
+        ondeactivate = function(inst)
+            inst:RemoveTag("player_lunar_aligned")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
+            end
+        end,
+    },
+    ------------------------------------------------------------------------------------------------------------------------
+    -- wortox_allegiance_shadow_lock_1 = SkillTreeFns.MakeFuelWeaverLock(
+        -- {
+            -- pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.35, ORIGIN_ALLEGIANCE_Y},
+        -- }
+    -- ),
+    wortox_allegiance_shadow_lock_1 = {
+        desc = "Find and defeat the Ancient Fuelweaver and have no lunar affinity.",
+        pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y},
 
-		root = true,
+        root = true,
         group = "allegiance",
         tags = {"allegiance", "lock"},
-		lock_open = function(prefabname, activatedskills, readonly)
+        lock_open = function(prefabname, activatedskills, readonly)
             if readonly then
                 return "question"
             end
@@ -923,51 +921,51 @@ local skills = {
                 return TheGenericKV:GetKV("fuelweaver_killed") == "1"
             end
             return nil
-		end,
-	},
-	-- wortox_allegiance_shadow_lock_2 = SkillTreeFns.MakeNoLunarLock(
-		-- {
-			-- pos = {ORIGIN_ALLEGIANCE_X + SPACER, ORIGIN_ALLEGIANCE_Y},
-		-- }
-	-- ),
-	wortox_allegiance_shadow_1 = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC,
-		icon = "wortox_shadow_weaver",
-		pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
-		group = "allegiance",
-		tags = {"shadow_favor", "neutral", "allegiance"},
-		locks = {"wortox_allegiance_shadow_lock_1"},
-		onactivate = function(inst)
-			inst:AddTag("player_shadow_aligned")
-			inst:AddTag("SOUL_SHADOW_upgradeuser")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_SHADOW_RESIST, "allegiance_shadow")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_LUNAR_BONUS, "allegiance_shadow")
-			end
-		end,
-		ondeactivate = function(inst)
-			inst:RemoveTag("player_shadow_aligned")
-			inst:RemoveTag("SOUL_SHADOW_upgradeuser")
-			if inst.components.damagetyperesist ~= nil then
-				inst.components.damagetyperesist:RemoveResist("shadow_aligned", inst, "allegiance_shadow")
-			end
-			if inst.components.damagetypebonus ~= nil then
-				inst.components.damagetypebonus:RemoveBonus("lunar_aligned", inst, "allegiance_shadow")
-			end
-		end,
-		connects = {"wortox_allegiance_shadow"},
-	},
-	wortox_allegiance_shadow = {
-		title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE,
-		desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC,
-		icon = "wortox_favor_shadow",
-		pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER * 2},
-		group = "allegiance",
-		tags = {"shadow_favor", "neutral", "allegiance"},
-	},
+        end,
+    },
+    -- wortox_allegiance_shadow_lock_2 = SkillTreeFns.MakeNoLunarLock(
+        -- {
+            -- pos = {ORIGIN_ALLEGIANCE_X + SPACER, ORIGIN_ALLEGIANCE_Y},
+        -- }
+    -- ),
+    wortox_allegiance_shadow_1 = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC,
+        icon = "wortox_shadow_weaver",
+        pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER},
+        group = "allegiance",
+        tags = {"shadow_favor", "neutral", "allegiance"},
+        locks = {"wortox_allegiance_shadow_lock_1"},
+        onactivate = function(inst)
+            inst:AddTag("player_shadow_aligned")
+            inst:AddTag("SOUL_SHADOW_upgradeuser")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_SHADOW_RESIST, "allegiance_shadow")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.SKILLS.WORTOX.ALLEGIANCE_VS_LUNAR_BONUS, "allegiance_shadow")
+            end
+        end,
+        ondeactivate = function(inst)
+            inst:RemoveTag("player_shadow_aligned")
+            inst:RemoveTag("SOUL_SHADOW_upgradeuser")
+            if inst.components.damagetyperesist ~= nil then
+                inst.components.damagetyperesist:RemoveResist("shadow_aligned", inst, "allegiance_shadow")
+            end
+            if inst.components.damagetypebonus ~= nil then
+                inst.components.damagetypebonus:RemoveBonus("lunar_aligned", inst, "allegiance_shadow")
+            end
+        end,
+        connects = {"wortox_allegiance_shadow"},
+    },
+    wortox_allegiance_shadow = {
+        title = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE,
+        desc = STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC,
+        icon = "wortox_favor_shadow",
+        pos = {ORIGIN_ALLEGIANCE_X + SPACER * 0.5, ORIGIN_ALLEGIANCE_Y + LOCK_SPACER * 2},
+        group = "allegiance",
+        tags = {"shadow_favor", "neutral", "allegiance"},
+    },
 }
 
 if SkillTreeDefs.SKILLTREE_DEFS["wortox"] ~= nil then --in case another mod turns it nil beforehand (disabling skill tree)

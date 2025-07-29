@@ -10,12 +10,12 @@ local assets =
     Asset("ANIM", "anim/rock_lichen_nobottom.zip"),
     Asset("ANIM", "anim/springrock1_nobottom.zip"),
     Asset("ANIM", "anim/springrock2_nobottom.zip"),
-	Asset("ANIM", "anim/springrock3_nobottom.zip"),
+    Asset("ANIM", "anim/springrock3_nobottom.zip"),
 }
 
 local prefabs = 
 {
-	"boulder_crab_hole",
+    "boulder_crab_hole",
 }
 
 SetSharedLootTable('boulder_crab',
@@ -23,7 +23,6 @@ SetSharedLootTable('boulder_crab',
         { 'rocks', 1.0 },
         { 'rocks', 1.0 },
         { 'meat',  1.0 },
-		{ 'meat',  1.0 },
         { 'rocks', 0.5 },
     })
 
@@ -58,12 +57,8 @@ local function GetRock(inst, rock)
     inst.myrock._oldcallback = inst.myrock.components.workable.onwork
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
-    if inst.components.health ~= nil then                    -- Will leave this in incase it somehow bypasses
-        if rock ~= "rock_moon" and rock ~= "rock_lichen" then
-            inst.components.health:SetAbsorptionAmount(0.9)  -- Effective 5000 health (mine the rock off you hooligan)
-        else
-            inst.components.health:SetAbsorptionAmount(0.75) -- Effective 2000 health
-        end
+    if inst.components.health then -- Will leave this in incase it somehow bypasses.
+        inst.components.health:SetAbsorptionAmount(rock ~= "rock_moon" and rock ~= "rock_lichen" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
     end
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
@@ -89,7 +84,6 @@ local function GetStatus(inst, viewer)
     end
 end
 
-
 local function onsave(inst, data)
     if inst.myrock then
         data.myrock = inst.myrock.prefab
@@ -113,8 +107,7 @@ local SHARE_TARGET_DIST = 30
 
 local function NormalRetarget(inst)
     local targetDist = 6
-    return FindEntity(inst, targetDist,
-        function(guy)
+    return FindEntity(inst, targetDist, function(guy)
             if inst.components.combat:CanTarget(guy) and not guy:HasTag("bird") and not guy:HasTag("butterfly") and not guy:HasTag("bee") then
                 return guy:HasTag("smallcreature") or guy:HasTag("tallbird")
             else
@@ -124,9 +117,7 @@ local function NormalRetarget(inst)
 end
 
 local function keeptargetfn(inst, target)
-    return target
-        and target.components.combat
-        and target.components.health
+    return target and target.components.combat and target.components.health
         and not target.components.health:IsDead() and not target:HasTag("EPIC")
 end
 
@@ -134,8 +125,9 @@ local SHARE_TARGET_DIST = 30
 local function OnAttacked(inst, data)
     if data and data.attacker then
         inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-            function(dude) return dude:HasTag("rocky") and (dude.components.health and not dude.components.health:IsDead()) end, 1)
+        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST, function(dude)
+            return dude:HasTag("rocky") and (dude.components.health and not dude.components.health:IsDead())
+        end, 1)
     end
 end
 
@@ -157,12 +149,12 @@ local function Hide(inst)
 end
 
 local function SpawnHole(inst)
-	local hole = SpawnPrefab("boulder_crab_hole")
-	hole.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	hole.favoriterock = inst.favoriterock
-	local timetilgrow = (8*60)*8 -- 8 days standard
-	hole.components.timer:StartTimer("regenrock",timetilgrow)
-	inst:Remove()
+    local hole = SpawnPrefab("boulder_crab_hole")
+    hole.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    hole.favoriterock = inst.favoriterock
+    local timetilgrow = (8 * 60) * 8 -- 8 days standard
+    hole.components.timer:StartTimer("regenrock",timetilgrow)
+    inst:Remove()
 end
 
 local function RegenRockDone(inst, data)
@@ -177,6 +169,22 @@ local function RegenRockDone(inst, data)
     end
 end
 
+local function OnCrabRemoved(inst)
+    if inst.myrock and inst.myrock:IsValid() then inst.myrock:Remove() end
+    inst:RemoveEventCallback("onremove", OnCrabRemoved)
+end
+
+local function OnCrabKilled(inst)
+    if inst.myrock and inst.myrock:IsValid() then
+        if inst.myrock.components.workable then
+            inst.myrock.components.workable:Destroy(inst)
+        else
+            inst.myrock:Remove()
+        end
+    end
+    inst:RemoveEventCallback("death", OnCrabKilled)
+    inst:RemoveEventCallback("onremove", OnCrabRemoved)
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -189,12 +197,9 @@ local function fn()
     inst.Transform:SetFourFaced()
     MakeCharacterPhysics(inst, 400, .5)
 
-
-
     inst.AnimState:SetBank("boulder_crab")
     inst.AnimState:SetBuild("boulder_crab")
     inst.AnimState:PlayAnimation("idle")
-
 
     inst.entity:SetPristine()
 
@@ -211,7 +216,6 @@ local function fn()
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
-
 
     MakeMediumFreezableCharacter(inst, "body")
 
@@ -244,56 +248,49 @@ local function fn()
     inst:SetStateGraph("SGboulder_crab")
     inst:SetBrain(brain)
 
-
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", RegenRockDone)
 
     inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
     inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
     inst:ListenForEvent("attacked", OnAttacked)
-
+    inst:ListenForEvent("death", OnCrabKilled)
+    inst:ListenForEvent("onremove", OnCrabRemoved)
 
     inst.OnSave = onsave
     inst.OnLoad = onload
-	
-	inst.SpawnHole = SpawnHole
-	
 
-	
+    inst.SpawnHole = SpawnHole
+
     inst.GetRock = GetRock
     inst:DoTaskInTime(0, function(inst)
         if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
-			local rock = FindEntity(inst,60,nil,{"boulder"})
-			if rock then
-				GetRock(inst, rock.prefab)
-			else
-				if math.random() > 0.5 then
-					GetRock(inst, "springrock1")
-				else
-					if math.random() > 0.5 then
-						GetRock(inst, "springrock3")
-					else
-						GetRock(inst, "springrock2")
-					end
-				end			
-			end
-			if TheWorld.state.isday then
-				inst.sg:GoToState("hide_pre")
-			end			
-		end
+            local rock = FindEntity(inst, 60, nil, {"boulder"})
+            if rock then
+                GetRock(inst, rock.prefab)
+            else
+                if math.random() > .5 then
+                    GetRock(inst, "springrock1")
+                else
+                    GetRock(inst, math.random() > .5 and "springrock3" or "springrock2")
+                end            
+            end
+            if TheWorld.state.isday then
+                inst.sg:GoToState("hide_pre")
+            end            
+        end
     end)
 
-	inst.escape_stack = 0
     return inst
 end
 
 local function ReturnCrab(inst)
-	local crab = SpawnPrefab("boulder_crab")
-	crab.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	crab.favoriterock = inst.favoriterock
-	GetRock(crab,crab.favoriterock)
-	crab.sg:GoToState("emerge")
-	inst:Remove()
+    local crab = SpawnPrefab("boulder_crab")
+    crab.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    crab.favoriterock = inst.favoriterock
+    GetRock(crab, crab.favoriterock)
+    crab.sg:GoToState("emerge")
+    inst:Remove()
 end
 
 local function HoleTimerDone(inst, data)
@@ -330,7 +327,7 @@ local function fnhole()
 
     inst.Transform:SetNoFaced()
     MakeCharacterPhysics(inst, 400, .5)
-	RemovePhysicsColliders(inst)
+    RemovePhysicsColliders(inst)
     inst.AnimState:SetBank("boulder_crab")
     inst.AnimState:SetBuild("boulder_crab")
     inst.AnimState:PlayAnimation("im_dirt")
@@ -343,25 +340,22 @@ local function fnhole()
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
-	
-	
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", HoleTimerDone)
-	
+
     inst.OnSave = onsavehole
     inst.OnLoad = onloadhole
     inst.OnLoadPostPass = function(inst) 
-		if inst.components.timer:TimerExists("regenrock") then 
-			inst.AnimState:PlayAnimation("im_dirt") 
-		else
-			inst:Remove()
-		end 
-	end
+        if inst.components.timer:TimerExists("regenrock") then 
+            inst.AnimState:PlayAnimation("im_dirt") 
+        else
+            inst:Remove()
+        end 
+    end
 
     return inst
 end
 
-
 return Prefab("boulder_crab", fn, assets,prefabs),
-Prefab("boulder_crab_hole",fnhole)
+    Prefab("boulder_crab_hole",fnhole)

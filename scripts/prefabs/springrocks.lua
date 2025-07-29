@@ -1,22 +1,22 @@
 local rock1_assets =
 {
     Asset("ANIM", "anim/springrock1.zip"),
-	Asset("IMAGE", "images/map_icons/springrock1.tex"),
-	Asset("ATLAS", "images/map_icons/springrock1.xml"),
+    Asset("IMAGE", "images/map_icons/springrock1.tex"),
+    Asset("ATLAS", "images/map_icons/springrock1.xml"),
 }
 
 local rock2_assets =
 {
     Asset("ANIM", "anim/springrock2.zip"),
-	Asset("IMAGE", "images/map_icons/springrock2.tex"),
-	Asset("ATLAS", "images/map_icons/springrock2.xml"),
+    Asset("IMAGE", "images/map_icons/springrock2.tex"),
+    Asset("ATLAS", "images/map_icons/springrock2.xml"),
 }
 
 local rock3_assets =
 {
     Asset("ANIM", "anim/springrock3.zip"),
-	Asset("IMAGE", "images/map_icons/springrock3.tex"),
-	Asset("ATLAS", "images/map_icons/springrock3.xml"),
+    Asset("IMAGE", "images/map_icons/springrock3.tex"),
+    Asset("ATLAS", "images/map_icons/springrock3.xml"),
 }
 
 local function OnWork(inst, worker, workleft)
@@ -30,9 +30,9 @@ local function OnWork(inst, worker, workleft)
             fx.Transform:SetPosition(pt.x, pt.y, pt.z)
         end
 
-		if not inst.doNotRemoveOnWorkDone then
-	        inst:Remove()
-		end
+        if not inst.doNotRemoveOnWorkDone then
+            inst:Remove()
+        end
     else
         inst.AnimState:PlayAnimation(
             (workleft < TUNING.ROCKS_MINE / 3 and "low") or
@@ -111,15 +111,15 @@ local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour)
     workable:SetOnWorkCallback(OnWork)
 
 
-	local colour = math.random(75,100)*0.01
-	inst.AnimState:SetMultColour(colour, colour, colour, 1)
+    local colour = math.random(75,100)*0.01
+    inst.AnimState:SetMultColour(colour, colour, colour, 1)
 
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.nameoverride = "ROCK"
 
     MakeSnowCovered(inst)
-	
+
     MakeHauntableWork(inst)
 
     return inst
@@ -133,6 +133,7 @@ local function rock1_fn()
     end
 
     inst.components.lootdropper:SetChanceLootTable('rock_flintless')
+    inst.components.lootdropper:AddChanceLoot("nitre", 1)
 
     return inst
 end
@@ -145,6 +146,7 @@ local function rock2_fn()
     end
 
     inst.components.lootdropper:SetChanceLootTable('rock1')
+    inst.components.lootdropper:AddChanceLoot("nitre", 1)
 
     return inst
 end
@@ -157,10 +159,11 @@ local function rock3_fn()
     end
 
     inst.components.lootdropper:SetChanceLootTable('rock2')
+    inst.components.lootdropper:AddChanceLoot("nitre", 1)
 
     return inst
 end
 
 return Prefab("springrock1", rock1_fn, rock1_assets),
     Prefab("springrock2", rock2_fn, rock2_assets),
-	Prefab("springrock3", rock3_fn, rock3_assets)
+    Prefab("springrock3", rock3_fn, rock3_assets)

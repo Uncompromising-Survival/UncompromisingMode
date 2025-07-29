@@ -19,10 +19,10 @@ local function AddDurabilityLoot(inst, prefab, chance, amount)
     end
 end
 
-local function AddLootOnDropFn(inst, prefab, onDropFn)
-    -- When this loot prefab is dropped, onDropFn is called! -- Thanks Summerrr :) -Carlos
+local function AddLootOnDropFn(inst, prefab, ondropfn)
+    -- When this loot prefab is dropped, ondropfn is called! -- Thanks Summerrr :) -Carlos
     -- I love you, Summerrr! You're the best, and I wouldn't be here without you! -Max
-    if onDropFn then onDropFn(inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition()), inst) end
+    if ondropfn then ondropfn(inst.components.lootdropper:SpawnLootPrefab(prefab, inst:GetPosition()), inst) end
 end
 
 local char_cocoon_list = {
@@ -87,6 +87,12 @@ if KnownModIndex:IsModEnabled("workshop-1982562290") then
 end
 if KnownModIndex:IsModEnabled("workshop-2879092392") then
     table.insert(char_cocoon_list, "wonderwhy")
+end
+if KnownModIndex:IsModEnabled("workshop-1836542884") then
+    table.insert(char_cocoon_list, "zeta") --wuzzy the buzzy
+end
+if KnownModIndex:IsModEnabled("workshop-2618885209") then
+    table.insert(char_cocoon_list, "whimsy")
 end
 
 local function SurvivorCocoon(inst)
@@ -241,10 +247,12 @@ local function SurvivorCocoon(inst)
     elseif random_char_cocoon == "wormwood" then
         AddChanceLoot(inst, "yotc_seedpacket_rare", nil, 5)
         AddChanceLoot(inst, "livinglog", nil, 2)
-        AddChanceLoot(inst, "livinglog", .5, 5)
+        AddChanceLoot(inst, "livinglog", .5, 4)
         AddChanceLoot(inst, math.random() > .5 and "compostwrap" or "tillweedsalve", nil, 4)
+        AddChanceLoot(inst, math.random() > .5 and "gloomcap" or "moon_cap", .5, 6)
         AddDurabilityLoot(inst, TheWorld.state.issummer and "cactus_flower" or "dragonfruit", .5, 4)
-        AddDurabilityLoot(inst, "cactus_meat", .5, 6)
+        --AddDurabilityLoot(inst, "cactus_meat", nil, 2)
+        --AddDurabilityLoot(inst, "cactus_meat", .5, 4)
         AddChanceLoot(inst, "lightflier", .3, 6)
         AddDurabilityLoot(inst, math.random() > .75 and TheWorld.state.iswinter and "um_armor_bramble_rimeweed" or "armor_bramble")
         AddDurabilityLoot(inst, "trap_bramble", .5, 3)
@@ -308,7 +316,8 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "corncan", .2)
         AddChanceLoot(inst, "um_record_winky", .05)
     elseif random_char_cocoon == "wathom" then
-        AddChanceLoot(inst, "meat", nil, 4)
+        AddChanceLoot(inst, "purplegem")
+        AddChanceLoot(inst, "meat", nil, 2)
         AddChanceLoot(inst, "meat", .5, 2)
         AddChanceLoot(inst, "nightmarefuel", nil, 4)
         AddChanceLoot(inst, "nightmarefuel", .5, 4)
@@ -319,19 +328,22 @@ local function SurvivorCocoon(inst)
         AddChanceLoot(inst, "um_record_wathom", .05)
     elseif random_char_cocoon == "wixie" then
         AddChanceLoot(inst, "bagofmarbles")
-        AddChanceLoot(inst, "bagofmarbles", .5, 4)
-        AddChanceLoot(inst, "blowdart_pipe", nil, 2)
-        AddChanceLoot(inst, "blowdart_pipe", .5, 2)
-        AddChanceLoot(inst, math.random() > .5 and "blowdart_yellow" or "blowdart_fire", nil, 4)
+        AddChanceLoot(inst, "bagofmarbles", .5, 3)
         AddChanceLoot(inst, math.random() > .5 and "um_blowdart_pyre" or "um_blowdart_rime", .5, 3)
-        AddChanceLoot(inst, "slingshotammo_honey", .3, 60)
+        AddChanceLoot(inst, math.random() > .5 and "slingshotammo_honey" or "slingshotammo_goop", .75, 20)
         AddChanceLoot(inst, "nitre", nil, 3)
-        AddChanceLoot(inst, "nitre", .5, 6)
-        AddChanceLoot(inst,  math.random() > .75 and "sludge" or "moonglass", nil, 4)
+        AddChanceLoot(inst, "nitre", .5, 5)
+        AddChanceLoot(inst, "mosquitosack", nil, 2)
+        AddChanceLoot(inst, "mosquitosack", .5, 4)
+        AddChanceLoot(inst,  math.random() > .5 and "livinglog" or "driftwood_log", .5, 2)
+        AddChanceLoot(inst,  math.random() > .5 and "sludge" or "saltrock", .5, 4)
+        AddChanceLoot(inst,  math.random() > .5 and "moonrocknugget" or "moonglass", nil, 6)
+        AddChanceLoot(inst, "townportaltalisman", .1, 3)
         AddChanceLoot(inst, "um_record_wixie", .05)
     elseif random_char_cocoon == "wes" then
         AddChanceLoot(inst, "balloonparty_confetti_cloud", nil, 5)
         AddChanceLoot(inst, "balloonspeed", .1, 50)
+        AddChanceLoot(inst, "balloon", .01)
         AddChanceLoot(inst, "freshfruitcrepes")
         AddChanceLoot(inst, "balloonhat")
         AddChanceLoot(inst, "balloonvest")
@@ -342,7 +354,7 @@ local function SurvivorCocoon(inst)
             loot:SetMeatPct(.25) -- Not sure if 25% is the right amount to have the second-to-last decay stage, might need to fiddle to get it right!
         end)
         AddChanceLoot(inst, "glommerfuel", nil, 2)
-        AddChanceLoot(inst, "glommerfuel", .5)
+        AddChanceLoot(inst, "glommerfuel", .5, 2)
         AddChanceLoot(inst, "trinket_9")
         AddChanceLoot(inst, "snotroast")
         AddChanceLoot(inst, "halloweencandy_8")
@@ -367,12 +379,14 @@ local function SurvivorCocoon(inst)
     elseif random_char_cocoon == "weerclops" then
         AddChanceLoot(inst, "ice", nil, 12)
         AddChanceLoot(inst, "ice", .5, 12)
+        AddDurabilityLoot(inst, "snowball_item", nil, 4)
+        AddDurabilityLoot(inst, "snowball_item", .5, 8)
         AddChanceLoot(inst, "um_rimeweed_itemvine", nil, 3)
         AddChanceLoot(inst, "um_rimeweed_itemvine", .5, 3)
         AddChanceLoot(inst, "um_rimeweed_itemflower", .5)
         AddChanceLoot(inst, "um_rimeweed_icepack")
-        AddChanceLoot(inst, "um_rimeweed_icepack", .5, 3)
-        AddDurabilityLoot(inst, "rimeweed_whip", .5)
+        AddChanceLoot(inst, "um_rimeweed_icepack", .5, 2)
+        AddDurabilityLoot(inst, math.random() > .5 and "um_hat_rime" or "rimeweed_whip", .5)
         AddDurabilityLoot(inst, math.random() > .9 and "beakbasher" or "hammer")
     elseif random_char_cocoon == "woose" then
         AddChanceLoot(inst, "tallbirdegg")
@@ -393,10 +407,10 @@ local function SurvivorCocoon(inst)
         AddDurabilityLoot(inst, "honey", nil, 4)
         AddDurabilityLoot(inst, "honey", .5, 6)
         AddChanceLoot(inst, "honeycomb")
-        AddChanceLoot(inst, "honeycomb", .5, 3)
+        AddChanceLoot(inst, "honeycomb", .5, 2)
         AddDurabilityLoot(inst, "royal_jelly", .1, 2)
-        AddDurabilityLoot(inst, "honeyham", .75, 2)
-        AddDurabilityLoot(inst, "bedroll_furry")
+        AddDurabilityLoot(inst, "honeyham")
+        AddChanceLoot(inst, "bedroll_furry")
         AddChanceLoot(inst, "furtuft", nil, 12)
         AddChanceLoot(inst, "furtuft", .5, 30)
     elseif random_char_cocoon == "wragonfly" then
@@ -478,17 +492,38 @@ local function SurvivorCocoon(inst)
     elseif random_char_cocoon == "wonderwhy" then
         AddChanceLoot(inst, "thulecite_pieces", nil, 6)
         AddChanceLoot(inst, "thulecite_pieces", .5, 6)
-		AddChanceLoot(inst, "nitre", nil, 3)
+        AddChanceLoot(inst, "nitre", nil, 3)
         AddChanceLoot(inst, "nitre", .5, 3)
-		AddChanceLoot(inst, "boneshard", nil, 4)
+        AddChanceLoot(inst, "boneshard", nil, 4)
         AddChanceLoot(inst, "boneshard", .5, 2)
         AddChanceLoot(inst, "ancientdreams_gemshard", nil, 3)
         AddChanceLoot(inst, "ancientdreams_gemshard", .5, 3)
         AddChanceLoot(inst, math.random() > .75 and "moonglass" or math.random() > .5 and "moonrocknugget" or "goldnugget", nil, 4)
-		AddDurabilityLoot(inst, math.random() > .75 and "why_refined_butterfly_moon" or math.random() > .5 and "why_refined_butterfly" or "why_refined_lightbulb")
+        AddDurabilityLoot(inst, math.random() > .75 and "why_refined_butterfly_moon" or math.random() > .5 and "why_refined_butterfly" or "why_refined_lightbulb")
         AddChanceLoot(inst, math.random() > .5 and "redgem" or "bluegem")
         AddChanceLoot(inst, math.random() > .75 and "orangegem" or "purplegem")
         AddChanceLoot(inst, math.random() > .75 and "greengem" or "yellowgem", .5)
+    elseif random_char_cocoon == "zeta" then --wuzzy the buzzy
+        AddChanceLoot(inst, "honey_splash")
+        AddDurabilityLoot(inst, "honey", nil, 8)
+        AddDurabilityLoot(inst, "honey", .5, 6)
+        AddDurabilityLoot(inst, "royal_jelly")
+        AddDurabilityLoot(inst, math.random() > .75 and "royal_jelly" or "zetapollen", nil, 3)
+        AddDurabilityLoot(inst, "zetapollen", .5, 9)
+        AddChanceLoot(inst, "honeycomb", nil, 2)
+        AddChanceLoot(inst, "honeycomb", .5)
+        AddDurabilityLoot(inst, math.random() > .5 and "armor_honey" or "melissa")
+        AddChanceLoot(inst, math.random() > .9 and "um_beemine_moon_item" or "beemine", .5)
+    elseif random_char_cocoon == "whimsy" then
+        AddChanceLoot(inst, "purplegem")
+        AddChanceLoot(inst, math.random() > .5 and "redgem" or "bluegem", .75, 3)
+        AddChanceLoot(inst, math.random() > .5 and "yellowgem" or "orangegem", .15, 3)
+        AddChanceLoot(inst, "marble", nil, 4)
+        AddChanceLoot(inst, "marble", .5, 2)
+        AddChanceLoot(inst, "brainrock")
+        AddChanceLoot(inst, "brainrock", .5, 2)
+        AddDurabilityLoot(inst, "wobster_sheller_land")
+        AddDurabilityLoot(inst, "purpletool")
     else
         AddChanceLoot(inst, "skeleton")
         AddChanceLoot(inst, "boneshard", nil, 2)
@@ -944,18 +979,18 @@ end
 
 local function fn()
     local inst = CreateEntity()
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-    inst.entity:AddDynamicShadow()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    local network = inst.entity:AddNetwork()
+    local shadow = inst.entity:AddDynamicShadow()
+    local sound = inst.entity:AddSoundEmitter()
+    local minimap = inst.entity:AddMiniMapEntity()
 
-    --inst.MiniMapEntity:SetIcon("hoodedwidow_map.tex")
+    --minimap:SetIcon("hoodedwidow_map.tex")
 
-    inst.AnimState:SetBank("wackycocoons")
-    inst.AnimState:SetBuild("wackycocoons")
-    --inst.AnimState:PlayAnimation("idle_small", true)
+    anim:SetBank("wackycocoons")
+    anim:SetBuild("wackycocoons")
+    --anim:PlayAnimation("idle_small", true)
 
     inst:AddTag("noepicmusic")
     inst:AddTag("webbedcreature")
@@ -976,10 +1011,10 @@ local function fn()
     end
 
     -------------------
-    inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(1000000)
-    inst.components.health.absorb = 1
-    --inst.components.health.invincible = true
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(1000000)
+    health.absorb = 1
+    --health.invincible = true
 
     inst:AddComponent("combat")
     inst:ListenForEvent("attacked", Regen)

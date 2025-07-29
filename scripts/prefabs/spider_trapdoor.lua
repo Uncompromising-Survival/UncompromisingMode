@@ -4,6 +4,10 @@ SetSharedLootTable( 'spider_trapdoor',
 {
     {'monstermeat',  1.00},
 })
+SetSharedLootTable( 'spider_trapdoor_hooded',
+{
+    {'silk',  1.00},
+})
 local function ShouldAcceptItem(inst, item, giver)
 
     local in_inventory = inst.components.inventoryitem.owner ~= nil
@@ -374,7 +378,6 @@ local function create_common(build)
     inst.components.lootdropper:AddRandomLoot("spidergland", 1)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
-    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
 
     ---------------------        
     MakeMediumBurnableCharacter(inst, "body")
@@ -473,6 +476,8 @@ local function create_trapdoor()
         return inst
     end
     --inst:AddTag("tauntless")
+	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
+	
     inst.components.health:SetMaxHealth(200)
 
     inst.components.combat:SetDefaultDamage(34)
@@ -494,6 +499,8 @@ local function create_trapdoor_hooded()
         return inst
     end
     --inst:AddTag("tauntless")
+	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
+
     inst.components.health:SetMaxHealth(200)
 
     inst.components.combat:SetDefaultDamage(34)

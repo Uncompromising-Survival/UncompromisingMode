@@ -346,8 +346,33 @@ env.AddPrefabPostInit("spider_dropper", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+    
+    inst:RemoveComponent("lootdropper")
+    
+    inst:AddComponent("lootdropper")
+    inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
+    inst.components.lootdropper:AddRandomLoot("silk", 1)
+    inst.components.lootdropper:AddRandomLoot("spidergland", 1)
+    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
+    inst.components.lootdropper.numrandomloot = 1
+    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
+    
     if inst.components.combat ~= nil then
         inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
     end
+    
+end)
+
+SetSharedLootTable( 'um_spider_moon',
+{
+    {'moonglass',  1.00},
+})
+
+env.AddPrefabPostInit("spider_moon", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.components.lootdropper:SetChanceLootTable('um_spider_moon')
     
 end)

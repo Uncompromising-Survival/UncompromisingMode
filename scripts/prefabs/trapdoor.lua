@@ -1,6 +1,13 @@
 SetSharedLootTable('trapdoor',
                    {{'rocks', 1.00}, {'rocks', 1.00}, {'rocks', 1.00}})
 
+local function TrapdoorOrHooded(inst)
+    if inst.prefab == "hoodedtrapdoor" then
+        return "spider_trapdoor_hooded"
+    else
+        return "spider_trapdoor"
+    end
+end
 
 local function FruitBatNearby(inst)
 	return FindEntity(inst,20,nil,{"fruitbat"})
@@ -10,9 +17,9 @@ local function onnear(inst, target)
     if inst.components.childspawner then
         if not TheWorld.state.iswinter and not FruitBatNearby(inst) then
             if target:HasTag("spiderwhisperer") or target:HasTag("spiderdisguise") then
-                inst.components.childspawner:ReleaseAllChildren(nil, "spider_trapdoor")
+                inst.components.childspawner:ReleaseAllChildren(nil, TrapdoorOrHooded(inst))
             else
-                inst.components.childspawner:ReleaseAllChildren(target, "spider_trapdoor")
+                inst.components.childspawner:ReleaseAllChildren(target, TrapdoorOrHooded(inst))
             end
         end
     end
@@ -37,22 +44,10 @@ local function OnHaunt(inst)
     return false
 end
 
-local function ApplyHooded(inst,child)
-	if child then
-		child.hooded = true
-		child.AnimState:SetBuild("spider_trapdoor_hooded")
-        child.components.named:SetName("Hooded Widower")
-		child.components.lootdropper:AddChanceLoot("silk", 1.00)
-	end
-end
-
 local function OpenMound(inst,child)
     inst.AnimState:PlayAnimation("idle_flipped")
     inst.AnimState:PushAnimation("flip_close")
     inst.AnimState:PushAnimation("idle")
-	if inst.prefab == "hoodedtrapdoor" and child and not child.hooded then -- If a hooded trapdoor make it a hooded trapdoor spider
-		ApplyHooded(inst,child)
-	end
 end
 
 local function CloseMound(inst)
@@ -113,7 +108,7 @@ local function workcallback(inst, worker, workleft)
         local pos = inst:GetPosition()
         SpawnPrefab("rock_break_fx").Transform:SetPosition(pos:Get())
         inst.components.lootdropper:DropLoot(pos)
-        inst.components.childspawner:ReleaseAllChildren(nil, "spider_trapdoor")
+        inst.components.childspawner:ReleaseAllChildren(nil, TrapdoorOrHooded(inst))
         local grass = FindEntity(inst, 0.5, nil, "trapdoorgrass")
         if grass ~= nil and grass.components.workable ~= nil then
             grass.components.workable:WorkedBy(worker)
@@ -135,7 +130,7 @@ end
 local function SummonChildren(inst)
     if inst.components.childspawner ~= nil then
 
-        inst.components.childspawner:ReleaseAllChildren(nil, "spider_trapdoor")
+        inst.components.childspawner:ReleaseAllChildren(nil, TrapdoorOrHooded(inst))
 
         inst:AddTag("trapdooreviction")
 

@@ -140,12 +140,11 @@ RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
 
 --Other new stuff that I want to put at the bottom because yes (Atoba started this I swear!!)
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
-
 RECIPE_DESC.UM_HAT_LEAFWING = "Embody the fleeting fruit bat."
 RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."
 RECIPE_DESC.TURF_UM_HOTSPRING_GRASS = "A patch of steamy wet grass."
-RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Boiling Fields."
-RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Boiling Fields."
+RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Broiling Hills."
+RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Broiling Hills."
 RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
 RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
 RECIPE_DESC.UM_EYEBALM = "Eye debris no longer impacts your stride."

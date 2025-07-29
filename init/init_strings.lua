@@ -584,6 +584,10 @@ STRINGS.UM_LOADINGTIPS = {
     --HEAVYFISH = "\"That's a big one! We'll have seafood the entire season with that!\" - W",
     WILTFLY = "Hungry and weak during summer, the Dragonfly takes flight, searching for food. Ash and unprepared survivors are her favorite!",
     SURVIVORCOCOONS = "The Hooded Widow seems to have acquired a taste for survivors, even bundling them up together in bigger cocoons to finish devouring them later.",
+    MONSTERMEAT_DILUTION = "\"It's been very hard to use monster meat in my recipes, but today I discovered the solution! Just using the appropriate amount of healthy meat seems to completely dilute the poison.\" - W",
+    MONSTERMEAT_DRYING = "\"I have been told that drying monster meat makes them ever so slightly less poisonous when cooking. That little boy scout sure knows a lot for his age.\" - W",
+    MONSTERMEAT_WEREPIGS = "\"This amount of Monster Morsels in our Ice Box is just outrageous! It's risky, but we ought to send one of us to feed them to the Pigmen. Maybe Wigfrid. Wolfgang would definitely be too scared to do it.\" - W",
+    MONSTERMEAT_KABOBS = "\"Sounds like nonsense, but surprisingly, eating this monster flesh cooked on a stick is not that bad. Props to the good ol' Kabobs for letting us avoid wasting healthy meat on a dish.\" - W",
 
     --tooltips
     --i'd preffer if we got character quotes for some of these.
@@ -638,6 +642,7 @@ STRINGS.UM_LOADINGTIPS = {
     --WICKER_BOOKREPAIR = "\"Wickerbottom has grown quite attached to her books. She keeps them on herself and takes propper care of them.\" - W",
     WILLOW_CUDDLE = "\"The shadows seem to not want to touch Willow when she is cuddling Bernie. Not even the forces of darkness would dare disturb something THAT adorable.\" - W",
     --WANDA_SHADOWS = "\"Wanda's time spent messing with time has really made her body more vulnerable to those nightmare monstrosities.\" - W",
+    NOWINTERGROWTH_WURT = "\"Wurt, dear. Winter's been incredibly harsh to the crops as of late... I suggest you trade with your king for some kelp or venture down to the caves for more food.\" - W",
 }
 
 STRINGS.ACTIONS.USESPELLBOOK.UM_DETONATE = "Detonate"
