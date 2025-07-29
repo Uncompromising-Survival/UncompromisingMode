@@ -98,7 +98,7 @@ local function OnBathBombed(inst)
         inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
     end
     if not inst.components.timer:TimerExists("bubbly") then
-        inst.components.timer:StartTimer("bubbly", 8 * 60)
+        inst.components.timer:StartTimer("bubbly", 2 * 60)
     end
 end
 
