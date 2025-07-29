@@ -176,7 +176,7 @@ local function fyre_bomb_fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("stackable")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
+	inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
