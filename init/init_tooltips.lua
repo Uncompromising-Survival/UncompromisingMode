@@ -26,7 +26,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     PREMIUMWATERINGCAN = "- Can contain and preserve ocean fish.",
     RAINHAT = "- Slightly increased rain protection.",
     ARMORMARBLE = "- Prevents knockback effects.",
-    TURF_DRAGONFLY = "- Prevents snowpile build-up.\n- Speeds up player movement.",
+    TURF_DRAGONFLY = "- Speeds up player movement.",
     BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
     DRAGONFLYCHEST = "- Has even more item slots.",
     WARDROBE = "- Can store a lot of equipment.",
@@ -65,7 +65,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
     HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
-    SNOWGOGGLES = "- Grants protection against Snow Storms / Sand Storms when worn.",
+    SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
@@ -88,7 +88,10 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
-    PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."
+    PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it.",
+    BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
+    UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
+    UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -240,21 +243,22 @@ else
 end
 
 if TUNING.DSTU.SNOWSTORMS then
-    TOOLTIPS.CAMPFIRE = "- Provides protection from Snow Storms."
-    TOOLTIPS.TORCH = "- Provides protection from Snow Storms."
-    TOOLTIPS.FIREPIT = "- Provides protection from Snow Storms."
-    TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from Snow Storms when built."
-    TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from Snow Storms when built."
-    TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from Snow Storms when built."
-    TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from Snow Storms when built."
-    TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from Snow Storms when built."
-    TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from Snow Storms when built."
-    TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from Snow Storms."
-    TOOLTIPS.MOLEHAT = "- Grants protection against Snow Storms / Sand Storms and Moon Storms when worn."
-    TOOLTIPS.DESERTHAT = "- Also works as protection against Snow Storms."
-    TOOLTIPS.BEARGERVEST = "- Provides protection from Snow Storms' slowdown."
+    TOOLTIPS.CAMPFIRE = "- Provides protection from snowstorms."
+    TOOLTIPS.TORCH = "- Provides protection from snowstorms."
+    TOOLTIPS.FIREPIT = "- Provides protection from snowstorms."
+    TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from snowstorms when built."
+    TOOLTIPS.TURF_DRAGONFLY = TOOLTIPS.TURF_DRAGONFLY .. "\n- Prevents Snow Pile build-up."
+    TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from snowstorms."
+    TOOLTIPS.MOLEHAT = "- Grants protection against snowstorms/sandstorms when worn."
+    TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms."
+    TOOLTIPS.BEARGERVEST = "- Provides protection from snowstorms' slowdown."
 else
-    TOOLTIPS.MOLEHAT = "- Grants protection against Sand Storms and Moon Storms when worn."
+    TOOLTIPS.MOLEHAT = "- Grants protection against sandstorms and moonstorms when worn."
 end
 
 if TUNING.DSTU.HAYFEVER then

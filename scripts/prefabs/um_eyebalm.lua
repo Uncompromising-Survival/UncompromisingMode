@@ -35,7 +35,7 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("healer")
-    inst.components.healer:SetHealthAmount(0)
+    inst.components.healer:SetHealthAmount(8)
     inst.components.healer:SetOnHealFn(OnHealFn)
 	
     MakeHauntableLaunch(inst)
