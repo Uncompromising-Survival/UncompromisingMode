@@ -551,3 +551,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hyuhu, are you trying to play a game with m
     "You may have won this match, but next time I'll get the catch!",
     "Flying away? I only want to play.",
     "Once that bug lands, it's soul will be in my hands."}
+
+DESCRIBE.WATHOM_CORPSE = "Stay in the venue, he's damned to continue!"

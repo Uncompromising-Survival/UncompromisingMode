@@ -708,3 +708,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
     "I can't hit it while it's fluttering about.",
     "It'll be easier to hit when it rests.",
     "It might be easier to hit if it's landed."}
+	
+DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"

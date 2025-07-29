@@ -561,3 +561,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Quite the slippery catch, eh?",
     "Gotta wait for it to get tuckered out.",
     "You think I'm being too blunt aboot this, Luce?",
     "This'd be easier to smack if it's landed."}
+	
+DESCRIBE.WATHOM_CORPSE = "Come on, buddy! I'm rooting for you!"

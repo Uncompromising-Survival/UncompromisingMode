@@ -561,3 +561,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You won't be able to slip out of death's cl
     --"Maybe Abigail could give it a try.",
     "Flying will only get you so far.",
     "This would be better if I wait for it to land."}
+	
+DESCRIBE.WATHOM_CORPSE = "Rise again, so you may feel the tinge of death once more."

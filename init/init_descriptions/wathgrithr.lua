@@ -546,3 +546,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"All this chase, and for what?",
     "A true warrior does not spend their days fighting insects.",
     "Of all the monsters of this realm, why must I stoop to this?",
     "Nobody would ever tell the tale of the valkyrie who slayed a butterfly."}
+	
+DESCRIBE.WATHOM_CORPSE = "I suspect the finale is yet upon us!"

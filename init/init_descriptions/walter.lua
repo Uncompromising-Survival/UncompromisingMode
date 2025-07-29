@@ -585,3 +585,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a lot easier to catch these when they'
     "Look Woby, I got it this time! Whoops, maybe not.",
     "Come on, I'm usually so good at this! Next time I gotta sneak up on it.",
     "I'll get it when it lands. For sure this time!"}
+
+DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"

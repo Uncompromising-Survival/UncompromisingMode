@@ -93,18 +93,18 @@ local function UnAmp(inst)
         end
 
         if not (inst.components.health and inst.components.health:IsDead()) then
-			if HasSkill(inst,"ancient_terror_5") then
+			if HasSkill(inst,"ancient_terror_3") then
 				inst.components.health.currenthealth = 10
 			else
 				inst.components.health:DoDelta(-225, nil, "deathamp")
 			end
         end
     end
-	if HasSkill(inst,"ancient_terror_3") then
-        if not inst:HasTag("playerghost") then
-            inst.AnimState:SetBuild("wathom")
-        end
-	end
+	-- if HasSkill(inst,"ancient_terror_3") then
+        -- if not inst:HasTag("playerghost") then
+            -- inst.AnimState:SetBuild("wathom")
+        -- end
+	-- end
 end
 
 local function RegurgitateFuel(inst)
@@ -153,17 +153,17 @@ local function Amp(inst)
         inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
     end
 	
-	if HasSkill(inst,"ancient_terror_2") then
+	if HasSkill(inst,"ancient_terror_1") then
 		RegurgitateFuel(inst)
 		RegurgitateFuel(inst)
 		RegurgitateFuel(inst)
 		inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
 	end
-	if HasSkill(inst,"ancient_terror_3") then
-        if not inst:HasTag("playerghost") then
-            inst.AnimState:SetBuild("wathom_shadow")
-        end
-	end
+	-- if HasSkill(inst,"ancient_terror_3") then
+        -- if not inst:HasTag("playerghost") then
+            -- inst.AnimState:SetBuild("wathom_shadow")
+        -- end
+	-- end
 end
 
 -- When the character is revived from human
@@ -184,62 +184,112 @@ end
 
 -------------------------------------------
 
+local magic_hands = {"nightsword","batbat","firestaff","icestaff","telestaff"}
+local magic_armor = {"armor_sanity","armorslurper","amulet","blueamulet","purpleamulet"}
+--local magic_helmets = {} -- No T1-2 Magic helmets are in the game....
+
+local artifact_hands = {"ruins_bat","multitool_axe_pickaxe","orangestaff","yellowstaff"}
+local artifact_armor = {"armorruins","orangeamulet","yellowamulet"}
+local artifact_helmets = {"ruinshat"} 
+
 local function SapTask(inst)
 	local hands = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	local chest = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
 	local hat = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-	if HasSkill(inst,"wathom_allegiance_neutral") then
-		if chest and inst:HasTag("amped") and (chest.components.fueled and chest.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and chest.components.fueled:GetPercent() < 1 then
-			local maxfuel = chest.components.fueled.maxfuel
-			chest.components.fueled:DoDelta(0.005*maxfuel)
+	if HasSkill(inst,"wathom_magics") and inst:HasTag("amped") then
+		for i,v in ipairs(magic_armor) do
+			if chest and v == chest.prefab then
+				if chest.components.fueled and chest.components.fueled:GetPercent() < 1 then
+					local maxfuel = chest.components.fueled.maxfuel
+					chest.components.fueled:DoDelta(0.005*maxfuel)
+				end
+				if chest.components.finiteuses and chest.components.finiteuses:GetPercent() < 1  then
+					local maxuses = chest.components.finiteuses.total
+					chest.components.finiteuses:Use(-0.005*maxuses)
+				end
+				if chest.components.armor and chest.components.armor:GetPercent() < 1 then
+					local maxfuel = chest.components.armor.maxcondition
+					chest.components.armor:Repair(0.005*maxfuel)
+				end	
+			end
 		end
-		if hands and inst:HasTag("amped") and (hands.components.fueled and hands.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hands.components.fueled:GetPercent() < 1 then
-			local maxfuel = hands.components.fueled.maxfuel
-			hands.components.fueled:DoDelta(0.005*maxfuel)
+		for i,v in ipairs(magic_hands) do
+			if hands and v == hands.prefab then
+				if hands.components.fueled and hands.components.fueled:GetPercent() < 1 then
+					local maxfuel = hands.components.fueled.maxfuel
+					hands.components.fueled:DoDelta(0.005*maxfuel)
+				end
+				if hands.components.finiteuses and hands.components.finiteuses:GetPercent() < 1  then
+					local maxuses = hands.components.finiteuses.total
+					hands.components.finiteuses:Use(-0.005*maxuses)
+				end
+			end
+		end		
+		-- for i,v in ipairs(magic_helmets) do
+			-- if v == hat then
+				-- if hat.components.fueled and hat.components.fueled:GetPercent() < 1 then
+					-- local maxfuel = hat.components.fueled.maxfuel
+					-- hat.components.fueled:DoDelta(0.005*maxfuel)
+				-- end
+				-- if hat.components.finiteuses and hat.components.finiteuses:GetPercent() < 1  then
+					-- local maxuses = hat.components.finiteuses.total
+					-- hat.components.finiteuses:Use(-0.005*maxuses)
+				-- end
+				-- if hat.components.armor and hat.components.armor:GetPercent() < 1 then
+					-- local maxfuel = hat.components.armor.maxcondition
+					-- hat.components.armor:Repair(0.005*maxfuel)
+				-- end	
+			-- end
+		-- end			
+	end	
+	if HasSkill(inst,"wathom_artifacts") and inst:HasTag("amped") then
+		for i,v in ipairs(artifact_armor) do
+			if chest and v == chest.prefab then
+				if chest.components.fueled and chest.components.fueled:GetPercent() < 1 then
+					local maxfuel = chest.components.fueled.maxfuel
+					chest.components.fueled:DoDelta(0.005*maxfuel)
+				end
+				if chest.components.finiteuses and chest.components.finiteuses:GetPercent() < 1  then
+					local maxuses = chest.components.finiteuses.total
+					chest.components.finiteuses:Use(-0.005*maxuses)
+				end
+				if chest.components.armor and chest.components.armor:GetPercent() < 1 then
+					local maxfuel = chest.components.armor.maxcondition
+					chest.components.armor:Repair(0.005*maxfuel)
+				end	
+			end
 		end
-		if hat and inst:HasTag("amped") and (hat.components.fueled and hat.components.fueled.fueltype == FUELTYPE.NIGHTMARE) and hat.components.fueled:GetPercent() < 1 then
-			local maxfuel = hat.components.fueled.maxfuel
-			hat.components.fueled:DoDelta(0.005*maxfuel)
-		end	
-	end
-	if HasSkill(inst,"ancient_kinship_4") then
-		if chest and chest.prefab == "greenamulet" and chest.components.finiteuses:GetPercent() < 1 and inst:HasTag("amped")  then
-			local maxuses = chest.components.finiteuses.total
-			chest.components.finiteuses:Use(-0.005*maxuses)
-		end
-		if hands and inst:HasTag("amped") and (hands.prefab == "yellowstaff" or hands.prefab == "greenstaff" or hands.prefab == "orangestaff" or hands.prefab == "multitool_axe_pickaxe") and hands.components.finiteuses:GetPercent() < 1 then
-			local maxuses = hands.components.finiteuses.total
-			hands.components.finiteuses:Use(-0.005*maxuses)
-		end
-	end
+		for i,v in ipairs(artifact_hands) do
+			if hands and v == hands.prefab then
+				if hands.components.fueled and hands.components.fueled:GetPercent() < 1 then
+					local maxfuel = hands.components.fueled.maxfuel
+					hands.components.fueled:DoDelta(0.005*maxfuel)
+				end
+				if hands.components.finiteuses and hands.components.finiteuses:GetPercent() < 1  then
+					local maxuses = hands.components.finiteuses.total
+					hands.components.finiteuses:Use(-0.005*maxuses)
+				end
+			end
+		end		
+		for i,v in ipairs(artifact_helmets) do
+			if hat and v == hat.prefab then
+				if hat.components.fueled and hat.components.fueled:GetPercent() < 1 then
+					local maxfuel = hat.components.fueled.maxfuel
+					hat.components.fueled:DoDelta(0.005*maxfuel)
+				end
+				if hat.components.finiteuses and hat.components.finiteuses:GetPercent() < 1  then
+					local maxuses = hat.components.finiteuses.total
+					hat.components.finiteuses:Use(-0.005*maxuses)
+				end
+				if hat.components.armor and hat.components.armor:GetPercent() < 1 then
+					local maxfuel = hat.components.armor.maxcondition
+					hat.components.armor:Repair(0.005*maxfuel)
+				end	
+			end
+		end			
+	end	
 	
-	if HasSkill(inst,"ancient_kinship_5") then
-		if chest and chest.prefab == "armorruins" and chest.components.armor:GetPercent() < 1 and inst:HasTag("amped") then
-			local maxfuel = chest.components.armor.maxcondition
-			chest.components.armor:Repair(0.005*maxfuel)
-		end
-		if hands and hands.prefab == "ruins_bat" and hands.components.finiteuses:GetPercent() < 1 and inst:HasTag("amped") then
-			local maxuses = hands.components.finiteuses.total
-			hands.components.finiteuses:Use(-0.005*maxuses)
-		end
-		if hat and (hat.prefab == "ruinshat") and hat.components.armor:GetPercent() < 1 and inst:HasTag("amped") then
-			local maxfuel = hat.components.armor.maxcondition
-			hat.components.armor:Repair(0.005*maxfuel)
-		end	
-	end
-	if HasSkill(inst,"ancient_terror_4") and inst:HasTag("amped") then
-		if chest and chest.prefab == "armor_voidcloth" and chest.components.armor:GetPercent() < 1 then
-			
-			local maxfuel = chest.components.armor.maxcondition
-			chest.components.armor:Repair(0.005*maxfuel)
-		end
-		if hat and hat.prefab == "voidclothhat" and hat.components.armor:GetPercent() < 1 then
-			local maxfuel = hat.components.armor.maxcondition
-			hat.components.armor:Repair(0.005*maxfuel)
-		end	
-	end
-	
-	if HasSkill(inst,"ancient_terror_5") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() then
+	if HasSkill(inst,"ancient_terror_3") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() then
 		inst.components.health:DeltaPenalty(-0.001) -- VERY slow
 	end
 end
@@ -566,6 +616,7 @@ local function common_postinit(inst)
         if inst:HasTag("amped") then
             inst:RemoveTag("amped")
         end
+
         UpdateMusic(inst)
     end)
 end
@@ -583,11 +634,15 @@ end
 
 local function SeeIfShouldBecomeShadow(inst)
 	if HasSkill(inst,"shadow_wathom_2") then
-		SpawnPrefab("wathom_corpse").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst.AnimState:SetBuild("wathom")
 		inst.AnimState:SetBank("wilson")
 		inst.AnimState:SetMultColour(0,0,0,0.6)
 		inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
+		if inst.components.health:GetPenaltyPercent() <= 0.25 then
+			SpawnPrefab("wathom_corpse").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		else
+			SpawnPrefab("skeleton").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		end
 	end
 end
 

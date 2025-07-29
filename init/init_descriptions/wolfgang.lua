@@ -552,3 +552,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Wolfgang should wait for little bug to sit.
     "Wolfgang feels silly punching little bug.",
     "Wolfgang will take a break, maybe little flutterby will too.",
     "Mighty punches too obvious for little flutterby."}
+	
+DESCRIBE.WATHOM_CORPSE = "Dead, but no skeleton?"

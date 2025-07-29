@@ -608,3 +608,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"In just a moment, it should rest soon.",
     "It would be ill advised to catch one while it's still flying.",
     "I should catch this Lepidoptera once it is busy pollinating.",
     "Its oily properties make it a difficult catch by hand."}
+	
+DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is still beating."

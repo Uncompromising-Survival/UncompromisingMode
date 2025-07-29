@@ -78,7 +78,7 @@ end
 
 function Wathom_Sonar:UpdateAlpha(dt)
     if self.time > 0 then
-		if self.owner:HasTag("echolocation") and TheWorld:HasTag("cave") then
+		if self.owner:HasTag("echolocation") then
 			self.time = math.max(0, self.time - dt*1.5)
 		else
 			self.time = math.max(0, self.time - dt)

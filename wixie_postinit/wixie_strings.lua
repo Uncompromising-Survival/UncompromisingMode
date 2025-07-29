@@ -605,3 +605,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You gotta be kidding me!",
     "Just sit still! I won't hit you, promise!",
     "Come on, take a break. All the flowers told me they missed you.",
     "Maybe I'll pretend like I don't care, then WHAM!"}
+
+DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"

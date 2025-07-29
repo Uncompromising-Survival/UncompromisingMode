@@ -555,3 +555,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"We should try to catch it by surprise!",
     "We should wait for the right time to attack, like a real predator!",
     "I wish we had our web. Or maybe a net.",
     "We should try again when it's landed."}
+	
+DESCRIBE.WATHOM_CORPSE = "Uhh... Where's the skeleton?"

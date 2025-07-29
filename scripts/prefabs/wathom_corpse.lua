@@ -8,6 +8,13 @@ local function OnHaunt(inst, haunter)
 		haunter.Physics:Teleport(inst.Transform:GetWorldPosition())
 		haunter.components.health:DeltaPenalty(0.5)
 		haunter.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		haunter:DoTaskInTime(0.05,function(haunter)
+			haunter.AnimState:SetBuild("wathom")
+			haunter.AnimState:SetBank("wilson")
+			haunter.AnimState:PlayAnimation("corpse_revive")
+			haunter.AnimState:SetDeltaTimeMultiplier(0.25)
+			haunter:ListenForEvent("animover",function(haunter) haunter.AnimState:SetDeltaTimeMultiplier(1) end)
+		end)
 		inst:Remove()
 	end
 end
@@ -34,13 +41,15 @@ local function corpse()
 	inst.persists = false
 	
 	inst:DoTaskInTime(120,function(inst) 
-		SpawnPrefab("boneshards").Transform:SetPosition(inst.Transform:GetWorldPosition())
-		SpawnPrefab("boneshards").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		SpawnPrefab("skeleton").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst:Remove() 
 	end)
 	
 	inst:AddComponent("hauntable")
 	inst.components.hauntable:SetOnHauntFn(OnHaunt)
+	
+	inst:AddComponent("inspectable")
+	
     return inst
 end
 return Prefab("wathom_corpse",corpse)

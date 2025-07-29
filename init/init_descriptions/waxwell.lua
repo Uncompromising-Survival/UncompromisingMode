@@ -539,3 +539,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"This isn't exactly my forte.",
     "I'm making a fool of myself!",
     "How troublesome, why won't you sit still?",
     "How humiliating... I'll try again once it's landed."}
+	
+DESCRIBE.WATHOM_CORPSE = "You STILL have fight left in you?!"

@@ -18,8 +18,26 @@ local ActionHandler = GLOBAL.ActionHandler
 
 -- Setting up new actions
 
+
 local function HasSkill(inst,name)
 	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+end
+
+
+local function SurvivorBarkEffect(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local players = TheSim:FindEntities(x,y,z,16,{"player"})
+	for i,player in ipairs(players) do
+		if player.components.wereness then
+			player.components.wereness:DoDelta(25)
+		end
+		if player.components.mightiness then
+			player.components.mightiness:DoDelta(25)
+		end
+		if player.components.singinginspiration then
+			player.components.singinginspiration:DoDelta(25)
+		end
+	end
 end
 
 local function HoldingCane(inst)
@@ -278,6 +296,9 @@ AddStategraphPostInit("wilsonghost", function(inst)
 	local function NewOnEnter(inst)
 		_haunt(inst)
 		if HasSkill(inst,"shadow_wathom_2") then
+			if HasSkill(inst,"wathom_friends_2") then
+				SurvivorBarkEffect(inst)
+			end
 			inst.AnimState:PlayAnimation("emote_angry", false)
 			inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/shadowbark")
 			local fx = SpawnPrefab("statue_transition_2")
@@ -297,13 +318,13 @@ AddStategraphPostInit("wilsonghost", function(inst)
 			local x,y,z = inst.Transform:GetWorldPosition()
 			local ents = GLOBAL.TheSim:FindEntities(x, y, z, 16) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
-				if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
-					(
-						v.components.follower ~= nil and v.components.follower:GetLeader() and
-						v.components.follower:GetLeader():HasTag("player")) then
-					v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+				if v.components.hauntable ~= nil and v.prefab ~="wathom_corpse" then
 					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
 					v.components.hauntable:DoHaunt(inst)
+					if HasSkill(inst,"wathom_friends_1") then
+						v:AddTag("wathom_really_spooking_me")
+						v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+					end
 				end
 			end
 		end
@@ -1124,6 +1145,9 @@ local wathombark = AddAction(
 	STRINGS.ACTIONS.WATHOMBARK,
 	function(act)
 		local inst = act.doer
+		if HasSkill(inst,"wathom_friends_2") then
+			SurvivorBarkEffect(inst)
+		end
 		if HasSkill(inst,"bark_mastery") then
 			SpreadGoo(inst,1)
 		end
@@ -1146,6 +1170,10 @@ local wathombark = AddAction(
 						v.components.follower ~= nil and v.components.follower:GetLeader() and
 						v.components.follower:GetLeader():HasTag("player")) then
 					v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+					if HasSkill(inst,"wathom_friends_1") then
+						v:AddTag("wathom_really_spooking_me")
+						v:DoTaskInTime(10,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+					end
 					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
 				end
 				if v.components.hauntable == nil or
@@ -1168,6 +1196,10 @@ local wathombark = AddAction(
 						v.components.follower ~= nil and v.components.follower:GetLeader() and
 						v.components.follower:GetLeader():HasTag("player")) then
 					v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+					if HasSkill(inst,"wathom_friends_1") then
+						v:AddTag("wathom_really_spooking_me")
+						v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+					end
 				end
 				if v.components.hauntable == nil or
 					v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
@@ -1488,7 +1520,7 @@ AddPrefabPostInit("ruinshat", function(inst)
 			end
 			inst.procfn = function(owner, data) tryproc(inst, owner, data) end
 		end
-		if HasSkill(owner,"ancient_kinship_5") then
+		if HasSkill(owner,"ancient_kinship_3") then
 			inst:AddComponent("planardefense")
 			inst.components.planardefense:SetBaseDefense(10)
 		end
@@ -1516,7 +1548,7 @@ AddPrefabPostInit("armorruins", function(inst)
 	local _OnUnEquip = inst.components.equippable.onunequipfn
 	local _OnEquip = inst.components.equippable.onequipfn		
 	local function OnEquip(inst, owner)
-		if HasSkill(owner,"ancient_kinship_5") then
+		if HasSkill(owner,"ancient_kinship_3") then
 			inst:AddComponent("planardefense")
 			inst.components.planardefense:SetBaseDefense(10)
 		end
@@ -1541,7 +1573,7 @@ AddPrefabPostInit("ruins_bat", function(inst)
 	local _OnUnEquip = inst.components.equippable.onunequipfn
 	local _OnEquip = inst.components.equippable.onequipfn		
 	local function OnEquip(inst, owner)
-		if HasSkill(owner,"ancient_kinship_5") then
+		if HasSkill(owner,"ancient_kinship_3") then
 			inst:AddComponent("planardamage")
 			inst.components.planardamage:SetBaseDamage(20)
 		end
@@ -1570,7 +1602,7 @@ AddPrefabPostInit("ancient_altar", function(inst)
 		local x,y,z = inst.Transform:GetWorldPosition()
 		local players = TheSim:FindEntities(x,y,z,16,{"player"})
 		for i,player in ipairs(players) do
-			if HasSkill(player,"ancient_kinship_3") and not player.found_station then
+			if HasSkill(player,"wathom_allegiance_neutral") and not player.found_station then
 				player.found_station = true
 				player:AddComponent("prototyper")
 				player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH

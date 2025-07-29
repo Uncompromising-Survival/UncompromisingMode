@@ -35,7 +35,7 @@ local function NewOnAttack(inst, attacker, target)
     if target and target.components.combat and target.components.combat.defaultdamage > 0 then
         if target.components.combat.ruinsbatstack then
             target.components.combat.ruinsbatstack = target.components.combat.ruinsbatstack + 1
-            if target.components.combat.ruinsbatstack > 3.1 or HasSkill(attacker,"ancient_kinship_2") then
+            if target.components.combat.ruinsbatstack > 3.1 or (HasSkill(attacker,"ancient_kinship_2") and math.random() > 0.5) then
                 TentacleErupt(inst, attacker, target)
                 target.components.combat.ruinsbatstack = nil
             end

@@ -86,9 +86,9 @@ local function BuildSkillsData(SkillTreeFns)
             desc = "Creatures you crash into at the end of your leaping strikes will be knocked back a little.",
             group = "rampage",
             tags = {"rampage"},
-            pos = {-214+38+38+38+38,58-38},
+            pos = {-214+38+38+38+38,58},
             --pos = {1,-3},
-			root = true,
+			--root = true,
             connects = {
                 "rampage_2",
             },
@@ -99,7 +99,7 @@ local function BuildSkillsData(SkillTreeFns)
             desc = "Damage enemies you crash into. Scales with your adrenaline.",
             group = "rampage",
             tags = {"rampage"},
-            pos = {-214+38+38+38+38,58-38+38},
+            pos = {-214+38+38+38+38,58+38},
         },
 
         amp_1 = {
@@ -185,11 +185,11 @@ local function BuildSkillsData(SkillTreeFns)
             title = "Digitigrade",
             desc = "Enter a four-legged sprint at 50 Adrenaline instead of 75.",
             icon = "wathom_digitigrade_1",
-            pos = {-214+38+38+38,58-38},
+            pos = {-214+38+38+38,58},
             --pos = {0,-1},
             group = "digitigrade",
             tags = {"digitigrade"},
-            root = true,
+            --root = true,
             connects = {
                 "digitigrade_2",
             },
@@ -201,17 +201,17 @@ local function BuildSkillsData(SkillTreeFns)
             group = "digitigrade",
             tags = {"digitigrade"},
             --icon = "wilson_alchemy_1",
-            pos = {-214+38+38+38,58-38+38},
+            pos = {-214+38+38+38,58+38},
         },
 
         bite_1 = {
             title = "Bite",
             desc = "Bite enemies to finish them off by attacking while unarmed, killing them restores health.",
 			icon = "wathom_bite_1",
-            pos = {-214+38+38,58-38},
+            pos = {-214+38+38,58},
             group = "bite",
             tags = {"bite"},
-			root = true,
+			--root = true,
             connects = {
                 "bite_2",
             },
@@ -220,7 +220,7 @@ local function BuildSkillsData(SkillTreeFns)
             title = "Feast",
             desc = "Biting a creature to death will automatically consume meat that would've dropped from the target, replenishing 10% more hunger than usual. Wathom will ignore poisoned or high-value foods, like monster meat and eyeballs.",
 			icon = "wathom_bite_2",
-            pos = {-214+38+38,58-38+38},
+            pos = {-214+38+38,58+38},
             group = "bite",
             tags = {"bite"},
         },
@@ -233,7 +233,7 @@ local function BuildSkillsData(SkillTreeFns)
 				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
 				inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 			end,
-            pos = {-214+38+38/2,58-38+38+38+38},
+            pos = {-214+38+38/2,58+38+38+38},
             group = "bite",
             tags = {"bite"},
         },
@@ -242,7 +242,7 @@ local function BuildSkillsData(SkillTreeFns)
             title = "Overwhelming Presence",
             desc = "Barking will spread nightmare fuel puddles on the ground, slowing and panicking mobs that come into contact.",
 			icon = "wathom_bark_mastery",
-            pos = {-214+38+38+38+38/2,58-38+38+38+38},
+            pos = {-214+38+38+38+38/2,58+38+38+38},
             group = "bark",
             tags = {"bark"},
         },
@@ -250,26 +250,28 @@ local function BuildSkillsData(SkillTreeFns)
 		
         echolocation_1 = {
             title = "Echo",
-            desc = "Your echolocation ability is empowered when underground, pulsing more frequently while increasing your map reveal radius.",
+            desc = "Your map reveal radius and frequency of echolocation pulses are increased during the night or while underground.",
             icon = "wathom_echolocation_1",
-            pos = {-214+38,58-38},
+            pos = {-214+38,58},
             group = "echo",
             tags = {"echo"},
-            root = true,
+            --root = true,
             onactivate = function(inst, fromload)
 				inst:AddTag("echolocation")
-				if not inst.mapexplorerbonus then
+				if not inst.wathom_mapexplorerbonus then
 					-- Increases map exploration radius
 					local radius = 20
 					local intervals = 25
 					local theta = 0
-					inst.mapexplorerbonus = inst:DoPeriodicTask(FRAMES, function()
-						local pt = Vector3(inst.Transform:GetWorldPosition())
-						local offset = Vector3(radius * math.cos(theta), 0, -radius * math.sin(theta))
-						theta = theta + (2 * PI / intervals)
-						if inst.player_classified ~= nil then
-							inst.player_classified.MapExplorer:RevealArea((pt + offset):Get())
-							inst.player_classified.MapExplorer:RevealArea((pt - offset):Get())
+					inst.wathom_mapexplorerbonus = inst:DoPeriodicTask(FRAMES, function()
+						if TheWorld:HasTag("cave") or TheWorld.state.isnight then
+							local pt = Vector3(inst.Transform:GetWorldPosition())
+							local offset = Vector3(radius * math.cos(theta), 0, -radius * math.sin(theta))
+							theta = theta + (2 * PI / intervals)
+							if inst.player_classified ~= nil then
+								inst.player_classified.MapExplorer:RevealArea((pt + offset):Get())
+								inst.player_classified.MapExplorer:RevealArea((pt - offset):Get())
+							end
 						end
 					end)
 				end
@@ -283,7 +285,7 @@ local function BuildSkillsData(SkillTreeFns)
             title = "Revealing Echo",
             desc = "Wathom will say if hounds or giants are approaching in greater advance.",
             icon = "wathom_echolocation_2",
-            pos = {-214+38,58-38+38},
+            pos = {-214+38,58+38},
             group = "echo",
             tags = {"echo"},
             onactivate = function(inst, fromload)
@@ -322,7 +324,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"allegiance","lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)	> 0 then
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills) > 0 then
                     return true
                 end
             end,
@@ -333,7 +335,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_lock_2 = {
             desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_2_DESC,
-            pos = {204-22+2-50,176-50+2},  
+            pos = {204-22+2-50,176-38},  
             --pos = {0,-1},
             group = "allegiance",
             tags = {"allegiance","lock"},
@@ -349,16 +351,16 @@ local function BuildSkillsData(SkillTreeFns)
                 "wathom_allegiance_shadow",
             },
         },
-		
+	
         wathom_bite_lock = {
             desc = "Unlock Feast and Revealing Echo",
-            pos = {-214+38+38/2,58-38+38+38},  
+            pos = {-214+38+38/2,58-38+38+38+38},  
 			group = "bite",
             --pos = {0,-1},
             tags = {"lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >=2 then
+                if SkillTreeFns.CountTags(prefabname, "bite", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "echo", activatedskills) >= 2 then
                     return true
                 end
             end,
@@ -368,14 +370,14 @@ local function BuildSkillsData(SkillTreeFns)
         },
 	
         wathom_bark_lock = {
-            desc = "Unlock Rampage II and Digitigrade II",
-            pos = {-214+38+38+38+38/2,58-38+38+38},  
+            desc = "Unlock Lethal Rampage and Digitigrade Cardio",
+            pos = {-214+38+38+38+38/2,58-38+38+38+38},  
 			group = "bite",
             --pos = {0,-1},
             tags = {"lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "digitigrade", activatedskills) >=2 then
+                if SkillTreeFns.CountTags(prefabname, "rampage", activatedskills) >= 2 and SkillTreeFns.CountTags(prefabname, "digitigrade", activatedskills) >= 2 then
                     return true
                 end
             end,
@@ -383,10 +385,89 @@ local function BuildSkillsData(SkillTreeFns)
                 "bark_mastery",
             },
         },
+		
+        wathom_amp_lock = {
+            desc = "Unlock Amp Up III",
+            pos = {-214+38+38+38/2,58-38},
+            --pos = {0.5,0},
+			group = "amp",
+            tags = {"lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)	> 0 then
+                    return true
+                end
+            end,
+            connects = {
+                "echolocation_1","bite_1","rampage_1","digitigrade_1",
+            },
+        },
+		
+        wathom_undying_lock = {
+            desc = "Unlock Undying",
+            pos = {0,25+38/2},
+            --pos = {0.5,0},
+            group = "undying",
+            tags = {"undying","lock"},
+            root = true,
+            lock_open = function(prefabname, activatedskills, readonly) 
+                if SkillTreeFns.CountTags(prefabname, "shadow_wathom", activatedskills)	> 1 then
+                    return true
+                end
+            end,
+            connects = {
+                "wathom_magics","wathom_friends_1"
+            },
+        },
 
+        wathom_magics = {
+            title = "Magic Affinity",
+            desc = "Being Amped Up will slowly repair the durability of equipped Tier 1 and Tier 2 Magic items.",
+            icon = "wathom_magics",
+            pos = {38,25+38},
+            group = "ampfuel",
+            tags = {"ampfuel"},
+            --root = true,
+            connects = {
+                "wathom_artifacts",
+            },
+        },
+		
+        wathom_artifacts = {
+            title = "Artifact Affinity",
+            desc = "Being Amped Up will slowly repair the durability of equipped Ancient items and tools as well, aside from those with green gems.",
+            icon = "wathom_artifacts",
+            pos = {38+38,25+38},
+            group = "ampfuel",
+            tags = {"ampfuel"},
+            --root = true,
+        },
+		
+        wathom_friends_1 = {
+            title = "Rallying Cry",
+            desc = "Enemies panicked by barking receive a universal damage vulnerability for as long as they panic.",
+            icon = "wathom_friends_1",
+            pos = {38,25},
+            group = "rally",
+            tags = {"rally"},
+            --root = true,
+            connects = {
+                "wathom_friends_2",
+            },
+        },
+		
+        wathom_friends_2 = {
+            title = "Ancient Rally",
+            desc = "Barking will bolster nearby survivor's unique meters, such as Wolfgang's Mightiness or Wigfrid's Inspiration. Has no effect on other Wathoms nor survivors lacking a unique meter.",
+            icon = "wathom_friends_2",
+            pos = {38+38,25},
+            group = "rally",
+            tags = {"rally"},
+        },
+		
         wathom_allegiance_lock_4 = {
             desc = "Do not seek Ancient Knowledge.",
-            pos = {204-22+2-50,176-100+8},  
+            pos = {204-22+2-50,176-38-38},  
             --pos = {0,-1},
             group = "allegiance",
             tags = {"allegiance","lock"},
@@ -406,9 +487,9 @@ local function BuildSkillsData(SkillTreeFns)
         wathom_allegiance_shadow = {
             title = "Ancient Terror I",
 			icon = "wathom_terror_1",
-            desc = "Sanity is permanently replaced by Lunacy. At high Lunacy, gestalts will begin hunting you down. However, Shadow Creatures recognize your kinship and won't attack unless provoked.",
+            desc = "The Queen will reward you by unlocking your shadow form's true potential. Sanity is permanently replaced by Lunacy. At high Lunacy, lunar Gestalts will begin hunting you down. Occasionally regurgitate nightmare fuel while amped up.",
             --icon = "wilson_favor_shadow",
-            pos = {204-22+2-100 ,176-110-38+10},  --  -22
+            pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
@@ -465,44 +546,60 @@ local function BuildSkillsData(SkillTreeFns)
         ancient_terror_2 = {
             title = "Ancient Terror II",
 			icon = "wathom_terror_2",
-            desc = "Occasionally regurgitate nightmare fuel while Amped Up.",
-            pos = {204-22+2-100 ,176-110-38+38+10},  --  -22
+            desc = "Lesser Nightmare Creatures will recognize your kinship and not attack unless provoked. Deal +30% damage to Lunar creatures.",
+            pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
+            onactivate = function(inst, fromload)
+				inst:AddTag("inherentshadowdominance")
+				inst:AddTag("shadowdominance")		
+                local damagetypebonus = inst.components.damagetypebonus
+                if damagetypebonus then
+                    damagetypebonus:AddBonus("lunar_aligned", inst, 1.3, "ancient_terror_2")
+                end				
+            end,
+            ondeactivate = function(inst, fromload)
+				inst:RemoveTag("inherentshadowdominance")
+				inst:RemoveTag("shadowdominance")	
+                local damagetypebonus = inst.components.damagetypebonus
+                if damagetypebonus then
+                    damagetypebonus:RemoveBonus("lunar_aligned", inst, "ancient_terror_2")
+                end				
+            end,
             connects = {
                 "ancient_terror_3",
             },
         },  
 
+        -- ancient_terror_3 = {
+            -- title = "Ancient Terror III",
+			-- icon = "wathom_terror_3",
+            -- desc = "Assume your Shadow form when Amping Up. While Amped Up, half of incoming damage reduces your Adrenaline, the other half reduces your health. You do not activate Shadow Wathom I unless your Health drops to 0, as usual.",
+            -- pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
+            -- --pos = {0,-2},
+            -- group = "allegiance",
+            -- tags = {"allegiance","shadow","shadow_favor"},
+            -- connects = {
+                -- "ancient_terror_4",
+            -- },
+        -- },  
+
+        -- ancient_terror_4 = {
+            -- title = "Ancient Terror IV",
+            -- desc = "While Amped Up, equipped Void cowl or robes will slowly repair themselves over time. More efficiently satiate and upgrade the shadow maul.",
+			-- icon = "wathom_terror_4",
+            -- pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
+            -- --pos = {0,-2},
+            -- group = "allegiance",
+            -- tags = {"allegiance","shadow","shadow_favor"},
+            -- connects = {
+                -- "ancient_terror_5",
+            -- },
+        -- },  
+
         ancient_terror_3 = {
             title = "Ancient Terror III",
-			icon = "wathom_terror_3",
-            desc = "Assume your Shadow form when Amping Up. While Amped Up, half of incoming damage reduces your Adrenaline, the other half reduces your health. You do not activate Shadow Wathom I unless your Health drops to 0, as usual.",
-            pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
-            --pos = {0,-2},
-            group = "allegiance",
-            tags = {"allegiance","shadow","shadow_favor"},
-            connects = {
-                "ancient_terror_4",
-            },
-        },  
-
-        ancient_terror_4 = {
-            title = "Ancient Terror IV",
-            desc = "While Amped Up, equipped Void cowl or robes will slowly repair themselves over time. More efficiently satiate and upgrade the shadow maul.",
-			icon = "wathom_terror_4",
-            pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
-            --pos = {0,-2},
-            group = "allegiance",
-            tags = {"allegiance","shadow","shadow_favor"},
-            connects = {
-                "ancient_terror_5",
-            },
-        },  
-
-        ancient_terror_5 = {
-            title = "Ancient Terror V",
 			icon = "wathom_terror_5",
             desc = "Even death can't put you down. Heart Attacks are no longer fatal, instead leaving you in critical condition. Additionally, you slowly replenish lost maximum health when at low Lunacy.",
             pos = {204-22+2-100 ,176-110-38+10+38+38+38+38},  --  -22
@@ -513,7 +610,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_lock_3 = {
             desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_3_DESC,
-            pos = {204+22+2-50,176-50+2},
+            pos = {204+22+2-50,176-38},
             --pos = {0,-1},
             group = "allegiance",
             tags = {"allegiance","lock"},
@@ -532,7 +629,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_lock_5 = {
             desc = STRINGS.SKILLTREE.ALLEGIANCE_LOCK_5_DESC,
-            pos = {204+22+2-50,176-100+8},  
+            pos = {204+22+2-50,176-38-38},  
             --pos = {0,-1},
             group = "allegiance",
             tags = {"allegiance","lock"},
@@ -551,9 +648,9 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_neutral = {
             title = "Ancient Kinship I",
-            desc = "Being Amped Up will replenish the durability of magical items in your inventory over time, assuming they take Nightmare Fuel as a fuel source.",
+            desc = "Uncover more knowledge of the Ancient Civilization, establishing a bond to the once-proud race. Unlock ancient crafting after visiting a complete Ancient Psuedoscience Station.",
             icon = "wathom_ancient_kinship_1",
-            pos = {204+22+2 ,176-110-38+10},
+            pos = {204+22+2 ,176-110-38+10+38+38},
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance","neutrality"},--,"lunar","lunar_favor"},
@@ -567,9 +664,9 @@ local function BuildSkillsData(SkillTreeFns)
 		
         ancient_kinship_2 = {
             title = "Ancient Kinship II",
-            desc = "Thulecite Crowns will generate a force field twice as often when used by Wathom. Thulecite Clubs will always generate tentacles and accelerate Adrenaline growth when used in combat.",
+            desc = "Uncover more knowledge of the Ancient Civilization, establishing a bond to the once-proud race. Ancient Arms and Armor trigger their effects twice as often.",
             icon = "wathom_ancient_kinship_2",
-            pos = {204+22+2 ,176-110-38+10+38},
+            pos = {204+22+2 ,176-110-38+10+38+38+38},
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance"},--,"lunar","lunar_favor"},
@@ -578,36 +675,36 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
 
+        -- ancient_kinship_3 = {
+            -- title = "Ancient Kinship III",
+            -- desc = "Unlock the ability to prototype recipes from the Pseudoscience Station, allowing you to craft subsequent items regardless of location.",
+            -- icon = "wathom_ancient_kinship_3",
+            -- pos = {204+22+2 ,176-110-38+10+38+38},
+            -- --pos = {0,-2},
+            -- group = "allegiance",
+            -- tags = {"allegiance"},--,"lunar","lunar_favor"},
+            -- connects = {
+                -- "ancient_kinship_4",
+            -- },
+        -- },
+
+        -- ancient_kinship_4 = {
+            -- title = "Ancient Kinship IV",
+            -- desc = "Being Amped Up will now replenish the durability of ancient magical items in your inventory regardless of fuel source.", 
+            -- icon = "wathom_ancient_kinship_4",
+            -- pos = {204+22+2 ,176-110-38+10+38+38+38},
+            -- --pos = {0,-2},
+            -- group = "allegiance",
+            -- tags = {"allegiance"},--,"lunar","lunar_favor"},
+            -- connects = {
+                -- "ancient_kinship_5",
+            -- },
+        -- },
+
         ancient_kinship_3 = {
             title = "Ancient Kinship III",
-            desc = "Unlock the ability to prototype recipes from the Pseudoscience Station, allowing you to craft subsequent items regardless of location.",
+            desc = "Deal planar damage and have planar defense with thulecite armor and weapons. [TEMP]",
             icon = "wathom_ancient_kinship_3",
-            pos = {204+22+2 ,176-110-38+10+38+38},
-            --pos = {0,-2},
-            group = "allegiance",
-            tags = {"allegiance"},--,"lunar","lunar_favor"},
-            connects = {
-                "ancient_kinship_4",
-            },
-        },
-
-        ancient_kinship_4 = {
-            title = "Ancient Kinship IV",
-            desc = "Being Amped Up will now replenish the durability of ancient magical items in your inventory regardless of fuel source.", 
-            icon = "wathom_ancient_kinship_4",
-            pos = {204+22+2 ,176-110-38+10+38+38+38},
-            --pos = {0,-2},
-            group = "allegiance",
-            tags = {"allegiance"},--,"lunar","lunar_favor"},
-            connects = {
-                "ancient_kinship_5",
-            },
-        },
-
-        ancient_kinship_5 = {
-            title = "Ancient Kinship V",
-            desc = "Upgrade Thulecite armor and weapons repair themselves when you are amped up. They permanently have additional planar attack and defense when used by you.",
-            icon = "wathom_ancient_kinship_5",
             pos = {204+22+2 ,176-110-38+10+38+38+38+38},
             --pos = {0,-2},
             group = "allegiance",

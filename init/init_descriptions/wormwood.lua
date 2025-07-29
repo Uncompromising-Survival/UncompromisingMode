@@ -574,3 +574,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Why running, friend?",
     "Not right",
     "Whoops",
     "Friend is funny"}
+
+DESCRIBE.WATHOM_CORPSE = "Not done yet."

@@ -569,3 +569,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Now now, patience is key.",
     "I should wait for it to let its guard down.",
     "Gah! Now now, think of the butter. This'll all be worth it.",
     "It might be easier to hit if it's landed."}
+
+DESCRIBE.WATHOM_CORPSE = "He's... He's still breathing! Mon dieu, he may live!"

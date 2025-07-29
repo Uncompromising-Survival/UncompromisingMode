@@ -580,3 +580,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Prey's instincts, must interpret.",
     "Exhausting prey. Wait for its rest.",
     "Endless chasing grants no success.",
     "Current tactics, unsuccessful. Patience, needed."}
+
+DESCRIBE.WATHOM_CORPSE = "Rise! Rise again!"
