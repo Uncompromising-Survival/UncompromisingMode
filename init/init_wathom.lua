@@ -24,6 +24,23 @@ local function HasSkill(inst,name)
 end
 
 
+local function SpreadGoo(inst,number)
+	local circle = number*2+3
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local radius = number*2
+	for i = 1,circle do
+		local x1 = x+radius*math.cos(2*3.14*i/circle)
+		local z1 = z+radius*math.sin(2*3.14*i/circle)
+		local puddle = 	GLOBAL.SpawnPrefab("wathom_puddle")
+		puddle.Transform:SetPosition(x1,y,z1)
+		puddle.wathom = inst
+	end
+	
+	if number < 2 then
+		inst:DoTaskInTime(0.2,function(inst) SpreadGoo(inst,number+1) end)
+	end
+end
+
 local function SurvivorBarkEffect(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local players = TheSim:FindEntities(x,y,z,16,{"player"})
@@ -1123,22 +1140,6 @@ STRINGS.ACTIONS.WATHOMBARK = "Bark"
 
 
 
-local function SpreadGoo(inst,number)
-	local circle = number*2+3
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local radius = number*2
-	for i = 1,circle do
-		local x1 = x+radius*math.cos(2*3.14*i/circle)
-		local z1 = z+radius*math.sin(2*3.14*i/circle)
-		local puddle = 	GLOBAL.SpawnPrefab("wathom_puddle")
-		puddle.Transform:SetPosition(x1,y,z1)
-		puddle.wathom = inst
-	end
-	
-	if number < 2 then
-		inst:DoTaskInTime(0.2,function(inst) SpreadGoo(inst,number+1) end)
-	end
-end
 
 local wathombark = AddAction(
 	"WATHOMBARK",
