@@ -495,6 +495,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"allegiance","shadow","shadow_favor"},
             locks = {"wathom_allegiance_lock_1a", "wathom_allegiance_lock_2", "wathom_allegiance_lock_4"},
             onactivate = function(inst, fromload)
+                STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.LUNACY
 				inst.components.sanity.night_drain_mult=8
 				inst.components.sanity.dapperness = TUNING.DAPPERNESS_HUGE
 				inst.components.sanity.light_drain_immune = false
@@ -517,6 +518,7 @@ local function BuildSkillsData(SkillTreeFns)
 				inst.pissygestalts = inst:DoPeriodicTask(5,PissOfGestalts)
             end,
             ondeactivate = function(inst, fromload)
+                STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY
 				inst.components.sanity.night_drain_mult=1
 				inst.components.sanity.dapperness=0
 				inst.components.sanity.light_drain_immune = true
