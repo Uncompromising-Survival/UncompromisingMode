@@ -103,6 +103,8 @@ local records = {
     "um_record_wixie",
     "um_record_shadow_wixie",
     "um_record_hooded_widow",
+    "um_record_moonmaw",
+    "um_record_tot",
     "um_record_wathom",
     "um_record_stranger",
     "um_record_winky",

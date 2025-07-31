@@ -133,6 +133,8 @@ STRINGS.UM_RECORD_HOODED_WIDOW = "Arachnophobia"
 STRINGS.UM_RECORD_WATHOM = "Heart Attacked!"
 STRINGS.UM_RECORD_STRANGER = "A Mysterious Stranger"
 STRINGS.UM_RECORD_WINKY = "Funny Little Rat"
+STRINGS.UM_RECORD_MOONMAW = "Like A Moth to a Flame"
+STRINGS.UM_RECORD_TOT = "The Twins of Terror"
 
 STRINGS.RATSKIN = "Diseased Fur"
 

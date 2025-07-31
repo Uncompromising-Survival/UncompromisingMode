@@ -1,5 +1,21 @@
 local PlayerHud = GLOBAL.require("screens/playerhud")
 local TUNING = GLOBAL.TUNING
+--[[local _PlayerHudSetMainCharacter = PlayerHud.SetMainCharacter
+
+function PlayerHud:SetMainCharacter(maincharacter, ...)
+    local ret = _PlayerHudSetMainCharacter(self, maincharacter, ...)
+
+    self.inst:DoTaskInTime(1, function()
+        if self._StatusAnnouncer == nil then return end
+        print("works yknow")
+        self._StatusAnnouncer:RegisterInterceptor(modname, "STAT", function(announce_str, data)
+            print("heyy")
+            return string.gsub(announce_str, "sanity", "eyeball") --Lunacy
+        end)
+    end)
+
+    return ret
+end]]
 
 local function AddStatAnnouncements(statusAnnouncer, statName, badge, currentMaxFn)
     -- This shouldn't really ever be nil with status announcements installed.

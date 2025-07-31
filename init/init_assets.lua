@@ -1957,6 +1957,9 @@ Assets = {
     Asset("SOUNDPACKAGE", "sound/UMMusic.fev"),
     Asset("SOUND", "sound/UMMusic.fsb"),
 
+    Asset("SOUNDPACKAGE", "sound/UMMusic2.fev"),
+    Asset("SOUND", "sound/UMMusic2.fsb"),
+
     Asset("SOUNDPACKAGE", "sound/tiddle_stranger.fev"),
     Asset("SOUND", "sound/tiddle_stranger.fsb"),
 

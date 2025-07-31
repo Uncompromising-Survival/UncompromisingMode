@@ -110,13 +110,18 @@ AddComponentPostInit("dynamicmusic", function(self)
         -- Note: We only have references to the private variables
         -- In order to modify the actual variables, we have to use debug.setupvalue
         local x, y, z = player.Transform:GetWorldPosition()
-        if IsInHoodedForest(player) and TheSim ~= nil and #TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS) > 0 then
+        local uncomp_boss_check = TheSim ~= nil and 
+            (#TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS, "moonmaw") > 0 and "UMMusic2/music/um_epicfight_moonmaw" or
+            IsInHoodedForest(player) and #TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS) > 0 and "UMMusic/music/hoodedforest_efs") or
+            nil
+        
+        if uncomp_boss_check ~= nil then
             if get_dangertask() ~= nil then
                 set_extendtime(GLOBAL.GetTime() + 10)
             elseif _isenabled then
                 -- Note: This sucks :/ maybe theres a better way by using StartTriggeredDanger? -Half
                 _StopBusy()
-                _soundemitter:PlaySound("UMMusic/music/hoodedforest_efs", "danger")
+                _soundemitter:PlaySound(uncomp_boss_check, "danger")
                 set_dangertask(inst:DoTaskInTime(10, _StopDanger, true))
                 set_triggeredlevel(nil)
                 set_extendtime(0)

@@ -66,6 +66,13 @@ GLOBAL.STRINGS._STATUS_ANNOUNCEMENTS.WATHOM = {
         LOW = "Fuel entropy, near zero.",
         EMPTY = "Huff... Puff...",
     },
+    LUNACY = { --For Ancient Terror I skill.
+        FULL = "Alter, my guide. Before me, like those.",
+        HIGH = "The abyss above. My name, calling.",
+        MID = "Below. Above. Pull felt, both abysses.",
+        LOW = "My name called, far above?",
+        EMPTY = "Entropy zero.", -- reference to a goated hl2 mod. You should totally go play it.
+    },
 }
 GLOBAL.STRINGS._STATUS_ANNOUNCEMENTS.WIXIE = {
     HUNGER = {
