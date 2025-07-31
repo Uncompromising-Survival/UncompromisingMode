@@ -81,27 +81,6 @@ env.AddStategraphPostInit("minotaur", function(inst)
         end
     end
 
-    local minotaurattackedeventhandler = inst.events["attacked"] -- This needs to be patched on Klei's side. Also, electric hitstun stuff.
-    if minotaurattackedeventhandler then
-        local _hit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "hit_recovery_delay")
-        local option = 1
-        if not _hit_recovery_delay_minotaur then
-            _hit_recovery_delay_minotaur = UpvalueHacker.GetUpvalue(minotaurattackedeventhandler.fn, "_OldAttackedEvent", "hit_recovery_delay")
-            option = 2
-        end
-        if _hit_recovery_delay_minotaur then
-            local function hit_recovery_delay(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
-                if inst.um_forcestundebuff then return false end
-                return _hit_recovery_delay_minotaur(inst, delay, max_hitreacts, skip_cooldown_fn, ...)
-            end
-            if option == 1 then
-                UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "hit_recovery_delay")
-            else
-                UpvalueHacker.SetUpvalue(minotaurattackedeventhandler.fn, hit_recovery_delay, "_OldAttackedEvent", "hit_recovery_delay")
-            end
-        end
-    end
-
     local _OldAttackedEvent = inst.events["attacked"].fn
     inst.events["attacked"].fn = function(inst, data)
         if inst:HasTag("forcefield") then
