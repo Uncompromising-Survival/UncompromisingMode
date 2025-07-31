@@ -53,4 +53,6 @@ return MakeSoul("um_record_menu", "UMMusic/gramaphone_record/uncomp_main_menu" )
 	MakeSoul("um_record_hooded_widow", "UMMusic/gramaphone_record/hoodedforest_efs" ),
 	MakeSoul("um_record_wathom", "UMMusic/gramaphone_record/wathom_amped" ),
 	MakeSoul("um_record_stranger", "UMMusic/gramaphone_record/tiddlestranger" ),
-	MakeSoul("um_record_winky", "UMMusic/gramaphone_record/winky" )
+	MakeSoul("um_record_winky", "UMMusic/gramaphone_record/winky" ),
+	MakeSoul("um_record_moonmaw", "UMMusic2/gramaphone_record/um_epicfight_moonmaw" ),
+	MakeSoul("um_record_tot", "UMMusic2/gramaphone_record/um_epicfight_tot" )

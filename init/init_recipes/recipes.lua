@@ -478,6 +478,18 @@ AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal"
 AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
 AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
+AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
+AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { nounlock = true }, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR", "CRAFTING_STATION" })
+
+ChangeSortKey("um_record_menu", "record", "DECOR", true)
+ChangeSortKey("um_record_winky", "um_record_menu", "DECOR", true)
+ChangeSortKey("um_record_wathom", "um_record_winky", "DECOR", true)
+ChangeSortKey("um_record_wixie", "um_record_wathom", "DECOR", true)
+ChangeSortKey("um_record_walter", "um_record_wixie", "DECOR", true)
+ChangeSortKey("um_record_stranger", "um_record_walter", "DECOR", true)
+ChangeSortKey("um_record_hooded_widow", "um_record_stranger", "DECOR", true)
+ChangeSortKey("um_record_tot", "um_record_hooded_widow", "DECOR", true)
+ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 
 AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, GLOBAL.TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
 AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, GLOBAL.TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
@@ -490,7 +502,7 @@ AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, GLOBAL.TECH.MAG
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
-ChangeSortKey("beakbasher", "hammer", "TOOLS", true)
+ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
 
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("foliage", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
@@ -503,7 +515,7 @@ AddRecipe2(
 	nil,
 	{ "TOOLS" }
 )
-ChangeSortKey("jawed_scythe", "hammer", "TOOLS", true)
+ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
 GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 
 AddRecipe2(
@@ -513,7 +525,7 @@ AddRecipe2(
 	nil,
 	{ "TOOLS" }
 )
-ChangeSortKey("um_ice_sicle", "jawed_scythe", "TOOLS", true)
+ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
 
 AddRecipe2(

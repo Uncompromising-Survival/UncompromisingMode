@@ -93,6 +93,15 @@ GLOBAL.MATERIALS.SLUDGE = "sludge"
 GLOBAL.MATERIALS.COPPER = "copper"
 
 if GetModConfigData("um_music", true) then
+    AddPrefabPostInit("eyeofterror", function(inst)
+	    RemoveRemapSoundEvent("terraria1/common/music_epicfight_eot")
+    end)
+    AddPrefabPostInit("twinofterror1", function(inst)
+	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+    end)
+    AddPrefabPostInit("twinofterror2", function(inst)
+	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+    end)
     RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", "UMMusic/music/uncomp_char_select")
     RemapSoundEvent("dontstarve/music/music_FE", "UMMusic/music/uncomp_main_menu")
 end
@@ -432,5 +441,3 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
-
-

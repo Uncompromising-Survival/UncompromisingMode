@@ -280,7 +280,7 @@ local function ScytheFn()
 	--inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
 	
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED*4/10)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_MED) --10 days
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "twigs"
 	SetupComponents(inst)

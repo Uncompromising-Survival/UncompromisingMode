@@ -3,7 +3,7 @@ local brain = require "brains/moonmaw_dragonflybrain"
 local easing = require("easing")
 
 -- MUSIC------------------------------------------------------------------------
-local function PushMusic(inst)
+--[[local function PushMusic(inst)
     if ThePlayer == nil or inst:HasTag("nomusic") then
         inst._playingmusic = false
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
@@ -32,7 +32,7 @@ local function SetNoMusic(inst, val)
     end
     inst._musicdirty:push()
     OnMusicDirty(inst)
-end
+end]]
 
 -- MUSIC------------------------------------------------------------------------
 
@@ -568,22 +568,21 @@ local function fn(Sim)
     inst:AddTag("scarytoprey")
     inst:AddTag("largecreature")
     inst:AddTag("moonglasscreature")
-    inst:AddTag("noepicmusic")
+    --[[inst:AddTag("noepicmusic")
 
     inst._musicdirty = net_event(inst.GUID, "alterguardian_phase1._musicdirty", "musicdirty")
     inst._playingmusic = false
-    OnMusicDirty(inst)
+    OnMusicDirty(inst)]]
 
     inst:AddTag("lunar_aligned")
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-        inst:ListenForEvent("musicdirty", OnMusicDirty)
         return inst
     end
 
-    inst.SetNoMusic = SetNoMusic
+    --inst.SetNoMusic = SetNoMusic
 
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.aurafn = CalcSanityAura
