@@ -411,7 +411,7 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"undying","lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)	> 1 then
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills) > 0 then
                     return true
                 end
             end,
@@ -602,7 +602,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_terror_3 = {
             title = "Ancient Terror III",
-			icon = "wathom_terror_5",
+			icon = "wathom_terror_3",
             desc = "Even death can't put you down. Heart Attacks are no longer fatal, instead leaving you in critical condition. Additionally, you slowly replenish lost maximum health when at low Lunacy.",
             pos = {204-22+2-100 ,176-110-38+10+38+38+38+38},  --  -22
             --pos = {0,-2},
