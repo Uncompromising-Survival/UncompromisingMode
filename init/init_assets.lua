@@ -475,6 +475,10 @@ Assets = {
     Asset("ATLAS", "images/wixie_skilltree.xml"),
     Asset("IMAGE", "images/wixie_skilltree.tex"),
 
+    Asset("ATLAS", "images/wathom_background.xml"),
+    Asset("IMAGE", "images/wathom_background.tex"),
+
+
     ----TURF
     Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
     Asset("IMAGE", "levels/textures/ground_noise_hoodedfoliage.tex"),

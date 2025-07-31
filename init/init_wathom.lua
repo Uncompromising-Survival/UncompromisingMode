@@ -193,7 +193,7 @@ if BuildSkillsData then
 	skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
 	skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
 
-	-- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wathom")
+	--RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wathom_background.xml"), "wathom")
 	
 	for k, v in pairs(data.SKILLS) do
 		if v.icon then

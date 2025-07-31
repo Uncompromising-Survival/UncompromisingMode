@@ -404,14 +404,14 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_undying_lock = {
-            desc = "Unlock Undying",
+            desc = "Unlock Amp Up III",
             pos = {0,25+38/2},
             --pos = {0.5,0},
             group = "undying",
             tags = {"undying","lock"},
             root = true,
             lock_open = function(prefabname, activatedskills, readonly) 
-                if SkillTreeFns.CountTags(prefabname, "shadow_wathom", activatedskills)	> 1 then
+                if SkillTreeFns.CountTags(prefabname, "amp3", activatedskills)	> 1 then
                     return true
                 end
             end,

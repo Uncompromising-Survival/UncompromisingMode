@@ -597,6 +597,7 @@ local prefabs = {
 	"um_ribopodden",
 	"um_gemologygems",
 	
+	--"um_swiss_sponge",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
