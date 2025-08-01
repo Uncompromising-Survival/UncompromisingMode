@@ -60,6 +60,9 @@ AddComponentPostInit("dynamicmusic", function(self)
         return
     end
 
+    local TRIGGERED_DANGER_MUSIC = UpvalueHacker.GetUpvalue(_StartTriggeredDanger, "TRIGGERED_DANGER_MUSIC")
+    TRIGGERED_DANGER_MUSIC["moonmaw_dragonfly"] = { "UMMusic2/music/um_epicfight_moonmaw", }
+
     -- Optimization
     local _, i_busytask = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_busytask")
     local _, i_extendtime = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_extendtime")
@@ -111,8 +114,7 @@ AddComponentPostInit("dynamicmusic", function(self)
         -- In order to modify the actual variables, we have to use debug.setupvalue
         local x, y, z = player.Transform:GetWorldPosition()
         local uncomp_boss_check = TheSim ~= nil and 
-            (#TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS, "moonmaw") > 0 and "UMMusic2/music/um_epicfight_moonmaw" or
-            IsInHoodedForest(player) and #TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS) > 0 and "UMMusic/music/hoodedforest_efs") or
+            (IsInHoodedForest(player) and #TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS) > 0 and "UMMusic/music/hoodedforest_efs") or
             nil
         
         if uncomp_boss_check ~= nil then
