@@ -138,8 +138,8 @@ local function DoScythe(inst, target, doer)
             if ent:IsValid() and ent.components.pickable ~= nil then
                 if inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                     inst:HarvestPickable(ent, doer)
-                    if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
-					    doer.components.temperature:DoDelta(-3)
+                    if doer.components.temperature:GetCurrent() >= 3 and not TheWorld.state.iswinter then
+					    doer.components.temperature:DoDelta(-2)
                     end
                 end
             end
@@ -167,9 +167,16 @@ local function onattack_blue(inst, attacker, target, skipsanity)
 
 	--V2C: valid check in case any of the previous callbacks or events removed the target
 	if target.components.freezable ~= nil and target:IsValid() then
-        target.components.freezable:AddColdness(.5)
+        target.components.freezable:AddColdness(1)
         target.components.freezable:SpawnShatterFX()
     end
+
+    attacker.components.temperature:DoDelta(-2)
+    local icefx = SpawnPrefab("deer_ice_flakes")
+    local x, y, z = attacker.Transform:GetWorldPosition()
+	icefx:DoTaskInTime(0, icefx.KillFX)
+    icefx.Transform:SetPosition(x, y, z)
+    icefx.Transform:SetScale(0.6, 0.7, 0.7)
 end
 
 local function SetupComponents(inst)
