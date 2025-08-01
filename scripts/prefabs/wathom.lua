@@ -289,7 +289,7 @@ local function SapTask(inst)
 		end			
 	end	
 	
-	if HasSkill(inst,"ancient_terror_3") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() then
+	if HasSkill(inst,"ancient_terror_3") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() and not inst:HasTag("fuelfarming") then
 		inst.components.health:DeltaPenalty(-0.001) -- VERY slow
 	end
 end

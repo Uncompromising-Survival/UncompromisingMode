@@ -443,6 +443,9 @@ local function PurpleAmuletPostInit(inst)
         local function OnNewEquip(inst, owner)
             if not owner:HasTag("fuelfarming") then
                 owner:AddTag("fuelfarming")
+                if owner:HasTag("skill_wathom_allegiance_shadow") then
+                    owner.components.sanity:EnableLunacy(false, "ancientterror")
+                end
             end
             onequip_(inst, owner)
         end
@@ -450,6 +453,9 @@ local function PurpleAmuletPostInit(inst)
         local function OnNewUnEquip(inst, owner)
             if owner:HasTag("fuelfarming") then
                 owner:RemoveTag("fuelfarming")
+                if owner:HasTag("skill_wathom_allegiance_shadow") then
+                    owner.components.sanity:EnableLunacy(true, "ancientterror")
+                end
             end
             onunequip_(inst, owner)
         end

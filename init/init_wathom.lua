@@ -392,10 +392,15 @@ local function CheckIfDead(inst,target)
 			for i,v in ipairs(loot) do
 				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 then
 					local health_restore = v.components.edible.healthvalue*1.1
-					local hunger_restore = v.components.edible.hungervalue
+					local hunger_restore = v.components.edible.hungervalue*1.1
+					local sanity_restore = v.components.edible.sanityvalue*1.1
 					if (inst.components.hunger.current + hunger_restore) < inst.components.hunger.max then
 						inst.components.hunger:DoDelta(hunger_restore)
 						inst.components.health:DoDelta(health_restore)
+						if inst:HasTag("skill_wathom_allegiance_shadow") or sanity_restore > 0 then
+							inst.components.sanity:DoDelta(sanity_restore)
+						end
+
 						SpawnPrefab("collapse_small").Transform:SetPosition(v.Transform:GetWorldPosition())
 						v:Remove()
 					end

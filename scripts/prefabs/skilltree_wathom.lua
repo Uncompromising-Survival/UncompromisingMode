@@ -96,7 +96,7 @@ local function BuildSkillsData(SkillTreeFns)
         rampage_2 = {
             title = "Lethal Rampage",
 			icon = "wathom_rampage_2",
-            desc = "Damage enemies you crash into. Scales with your adrenaline.",
+            desc = "Damage enemies you crash into. Scales with your Adrenaline.",
             group = "rampage",
             tags = {"rampage"},
             pos = {-214+38+38+38+38,58+38},
@@ -105,7 +105,7 @@ local function BuildSkillsData(SkillTreeFns)
         amp_1 = {
             title = "Amp Up I",
 			icon = "wathom_amp_1",
-            desc = "The nightmare within you festers during combat. Your speed and power rises as you gain adrenaline, at the cost of sustaining more damage when hit.",
+            desc = "The nightmare within you festers during combat. Your speed and power rises as you gain Adrenaline, at the cost of sustaining more damage when hit.",
             --icon = "wilson_alchemy_1",
             pos = {-214,58-38},
             group = "amp",
@@ -120,7 +120,7 @@ local function BuildSkillsData(SkillTreeFns)
         amp_2 = {
             title = "Amp Up II",
 			icon = "wathom_amp_2",
-            desc = "Your combat abilities as well as well as damage vulnerability are increased at high Adrenaline levels.",
+            desc = "Your combat abilities as well as damage vulnerability are increased at high Adrenaline levels.",
             --icon = "wilson_alchemy_1",
             pos = {-214,58+38-38},
             group = "amp",
@@ -134,7 +134,7 @@ local function BuildSkillsData(SkillTreeFns)
         amp_3 = {
             title = "Amp Up III",
 			icon = "wathom_amp_3",
-            desc = "At Maximum Adrenaline, you become Amped Up! While Amped Up, you move at terrifying speeds and attack devastatingly hard. However, sustaining even a single attack could end it all.",
+            desc = "At maximum Adrenaline, you become Amped Up! While Amped Up, you move at terrifying speeds and attack devastatingly hard. However, sustaining even a single attack could end it all.",
             --icon = "wilson_alchemy_1",
             pos = {-214,58+38+38-38},
             group = "amp",
@@ -206,7 +206,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         bite_1 = {
             title = "Bite",
-            desc = "Bite enemies to finish them off by attacking while unarmed, killing them restores health.",
+            desc = "Your unarmed strikes are replaced with a viscious bite, replenishing a small amount of health when used as the killing blow.",
 			icon = "wathom_bite_1",
             pos = {-214+38+38,58},
             group = "bite",
@@ -218,7 +218,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
         bite_2 = {
             title = "Feast",
-            desc = "Biting a creature to death will automatically consume meat that would've dropped from the target, replenishing 10% more hunger than usual. Wathom will ignore poisoned or high-value foods, like monster meat and eyeballs.",
+            desc = "Slaying a creature with your bite will automatically consume any meat that it would've dropped to the ground, replenishing 10% more stats than usual. Wathom ignores poisoned or high-value foods.",
 			icon = "wathom_bite_2",
             pos = {-214+38+38,58+38},
             group = "bite",
@@ -227,11 +227,11 @@ local function BuildSkillsData(SkillTreeFns)
 
         bite_mastery = {
             title = "Abyssal Metabolism",
-            desc = "Replenished health from creatures slain by your bite will replenish lost Max health as well. Can eat lichen.",
+            desc = "Consuming creatures via your bite will recover a small amount of lost maximum health. Unlock the ability to eat Lichen.",
 			icon = "wathom_bite_mastery",
             onactivate = function(inst, fromload)
 				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
-				inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
+				--inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 			end,
             pos = {-214+38+38/2,58+38+38+38},
             group = "bite",
@@ -240,7 +240,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         bark_mastery = {
             title = "Overwhelming Presence",
-            desc = "Barking will spread nightmare fuel puddles on the ground, slowing and panicking mobs that come into contact.",
+            desc = "Barking will spread Nightmare Fuel Puddles on the ground, slowing and panicking mobs that come into contact.",
 			icon = "wathom_bark_mastery",
             pos = {-214+38+38+38+38/2,58+38+38+38},
             group = "bark",
@@ -283,7 +283,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
         echolocation_2 = {
             title = "Revealing Echo",
-            desc = "Wathom will say if hounds or giants are approaching in greater advance.",
+            desc = "Receive warnings of incoming Hound, Worm, and giant attacks far sooner than usual, up to a day in advance.",
             icon = "wathom_echolocation_2",
             pos = {-214+38,58+38},
             group = "echo",
@@ -435,7 +435,7 @@ local function BuildSkillsData(SkillTreeFns)
 		
         wathom_artifacts = {
             title = "Artifact Affinity",
-            desc = "Being Amped Up will slowly repair the durability of equipped Ancient items and tools as well, aside from those with green gems.",
+            desc = "Being Amped Up will slowly repair the durability of equipped Ancient items and tools as well, aside from those with Green Gems.",
             icon = "wathom_artifacts",
             pos = {38+38,25+38},
             group = "ampfuel",
@@ -487,7 +487,7 @@ local function BuildSkillsData(SkillTreeFns)
         wathom_allegiance_shadow = {
             title = "Ancient Terror I",
 			icon = "wathom_terror_1",
-            desc = "The Queen will reward you by unlocking your shadow form's true potential. Sanity is permanently replaced by Lunacy. At high Lunacy, lunar Gestalts will begin hunting you down. Occasionally regurgitate nightmare fuel while amped up.",
+            desc = "The Queen will reward you by unlocking your shadow form's true potential. Sanity is permanently replaced by Lunacy. At high Lunacy, lunar Gestalts will begin hunting you down. Occasionally regurgitate Nightmare Fuel while Amped Up.",
             --icon = "wilson_favor_shadow",
             pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
             --pos = {0,-2},
@@ -500,9 +500,14 @@ local function BuildSkillsData(SkillTreeFns)
 				inst.components.sanity.dapperness = TUNING.DAPPERNESS_HUGE
 				inst.components.sanity.light_drain_immune = false
 				
+                if inst.components.eater then
+                    inst.components.eater:SetCanEatRawMeat(false)
+                end
+
 				local pct = inst.components.sanity:GetPercent()
+                inst.components.sanity:EnableLunacy(true, "ancientterror")
 				inst.components.sanity:SetPercent(1-pct)
-				inst.components.sanity:EnableLunacy(true, "ancientterror")			
+				
                 inst:AddTag("skill_wathom_allegiance_shadow")
                 inst:AddTag("player_shadow_aligned")
                 local damagetyperesist = inst.components.damagetyperesist
@@ -522,6 +527,11 @@ local function BuildSkillsData(SkillTreeFns)
 				inst.components.sanity.night_drain_mult=1
 				inst.components.sanity.dapperness=0
 				inst.components.sanity.light_drain_immune = true
+
+                if inst.components.eater then
+                    inst.components.eater:SetCanEatRawMeat(true)
+                end
+
 				inst.components.sanity:EnableLunacy(false, "ancientterror")
                 inst:RemoveTag("skill_wathom_allegiance_shadow")
                 inst:RemoveTag("player_shadow_aligned")
@@ -650,7 +660,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         wathom_allegiance_neutral = {
             title = "Ancient Kinship I",
-            desc = "Uncover more knowledge of the Ancient Civilization, establishing a bond to the once-proud race. Unlock ancient crafting after visiting a complete Ancient Psuedoscience Station.",
+            desc = "Uncover knowledge of the Ancient Civilization, establishing a bond with the once-proud race. Unlock ancient crafting after visiting a complete Ancient Pseudoscience Station.",
             icon = "wathom_ancient_kinship_1",
             pos = {204+22+2 ,176-110-38+10+38+38},
             --pos = {0,-2},
@@ -666,7 +676,7 @@ local function BuildSkillsData(SkillTreeFns)
 		
         ancient_kinship_2 = {
             title = "Ancient Kinship II",
-            desc = "Uncover more knowledge of the Ancient Civilization, establishing a bond to the once-proud race. Ancient Arms and Armor trigger their effects twice as often.",
+            desc = "Uncover more knowledge of the Ancient Civilization, strengthening your bond with the once-proud race. Ancient Arms and Armor trigger their effects twice as often.",
             icon = "wathom_ancient_kinship_2",
             pos = {204+22+2 ,176-110-38+10+38+38+38},
             --pos = {0,-2},
@@ -705,7 +715,7 @@ local function BuildSkillsData(SkillTreeFns)
 
         ancient_kinship_3 = {
             title = "Ancient Kinship III",
-            desc = "Deal planar damage and have planar defense with thulecite armor and weapons. [TEMP]",
+            desc = "Uncover most knowledge of the Ancient Civilization, becoming one with your once-proud race. Deal planar damage and have planar defense with thulecite armor and weapons. [TEMP]",
             icon = "wathom_ancient_kinship_3",
             pos = {204+22+2 ,176-110-38+10+38+38+38+38},
             --pos = {0,-2},
