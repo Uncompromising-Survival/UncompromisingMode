@@ -230,7 +230,7 @@ ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)
 ChangeSortKey("skullchest_child", "magician_chest", "CONTAINERS", true)
 ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
 
-AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 4),Ingredient("rocks", 12)}, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES"})
+AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 6),Ingredient("rocks", 12)}, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES"})
 ChangeSortKey("um_ribopodden", "rabbithouse", "STRUCTURES", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
 

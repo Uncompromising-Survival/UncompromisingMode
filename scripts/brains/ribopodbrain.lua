@@ -68,16 +68,10 @@ function RibopodBrain:OnStart()
 			RunAway(self.inst, HunterParams, SEE_PLAYER_DIST, STOP_RUN_DIST, nil, true)),
         ChaseAndAttack(self.inst, MAX_CHASE_TIME),
 		DoAction(self.inst, EatFoodAction, "eat food", true),
-        WhileNode(function() return ShouldGoHome(self.inst) end, "ShouldGoHome",
-            DoAction(self.inst, function() return GoHomeAction(self.inst) end, "go home", true )),
-		WhileNode(function()
-                if self.inst.islunar then
-                    return true -- NOTES(JBK): Lunar frogs will always stay awake they do not have a sleeper component.
-                end
-                return TheWorld and not TheWorld.state.isnight
-            end, "ShouldWanderSleepTest",
-			Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)),
-		StandStill(self.inst, function() return self.inst.sg:HasStateTag("idle") end, nil),
+        -- WhileNode(function() return ShouldGoHome(self.inst) end, "ShouldGoHome",
+            -- DoAction(self.inst, function() return GoHomeAction(self.inst) end, "go home", true )),
+		Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST),
+
     }, .25)
 
     self.bt = BT(self.inst, root)

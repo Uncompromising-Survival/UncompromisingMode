@@ -137,13 +137,13 @@ local states=
 
         timeline=
         {
-            TimeEvent(5*FRAMES, function(inst)
+            TimeEvent(3*FRAMES, function(inst)
                 inst.components.locomotor:WalkForward()
             end ),
-            TimeEvent(19*FRAMES, function(inst)
+            TimeEvent(15*FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
             end ),
-            TimeEvent(20*FRAMES, function(inst)
+            TimeEvent(16*FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound(SoundPath(inst, "walk_spider"))
                 inst.Physics:Stop()
             end ),

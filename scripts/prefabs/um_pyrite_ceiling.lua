@@ -22,13 +22,15 @@ local function DamageSurroundings(inst)
 		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost","irreplaceable"})
 	if #ents > 0 then
 		for i, v in pairs(ents) do
-			if v.components.burnable ~= nil then
-				v.components.burnable:Ignite()
-			elseif v.components.inventoryitem then
-				v:Remove()
-			end
-			if v.components.combat then
-				v.components.combat:GetAttacked(inst,50)
+			if v ~= inst then
+				if v.components.burnable ~= nil then
+					v.components.burnable:Ignite()
+				elseif v.components.inventoryitem then
+					v:Remove()
+				end
+				if v.components.combat then
+					v.components.combat:GetAttacked(inst,50)
+				end
 			end
 		end
 	end
@@ -144,7 +146,7 @@ local function fn()
 	end
 	
 	inst:AddComponent("timer")
-	inst:ListenForEvent("timerover",Regrow)
+	inst:ListenForEvent("timerdone",Regrow)
 
     inst:ListenForEvent("startquake", function()
         inst:DoTaskInTime(math.random(4,10), DropLoot)
