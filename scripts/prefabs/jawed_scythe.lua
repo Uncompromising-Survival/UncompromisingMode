@@ -150,7 +150,7 @@ local function SetupComponents(inst)
 	inst.components.equippable:SetOnUnequip(OnUnequip)
 
 	inst:AddComponent("weapon")
-	inst.components.weapon:SetDamage(44)
+	inst.components.weapon:SetDamage(TUNING.SPEAR_DAMAGE*1.3)--44.2
 	inst.components.weapon:SetOnAttack(OnAttack)
 
 	inst:AddComponent("tool")
