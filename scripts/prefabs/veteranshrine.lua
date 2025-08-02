@@ -79,6 +79,9 @@ local function ToggleCurse(inst, doer)
                 if fx then
                     fx.Transform:SetPosition(x, y, z)
                     fx.Transform:SetScale(1.2, 1.2, 1.2)
+                    if TUNING.DSTU.DATES.APRIL_FOOLS then
+                        SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    end
                 end
             end
         end

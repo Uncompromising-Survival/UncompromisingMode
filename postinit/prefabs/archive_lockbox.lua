@@ -110,11 +110,11 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
         local pt = Vector3(inst.Transform:GetWorldPosition())
         local players = FindPlayersInRange( pt.x, pt.y, pt.z, 20, true )
         local recipe = CycleRecipes()
-  
+
         inst:DoTaskInTime(5.2 ,function()
-            --[[if not TUNING.DSTU.DATES.APRIL_FOOLS then
-                SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(pt)
-            end]]
+            if math.random > 0.25 and TUNING.DSTU.DATES.APRIL_FOOLS then
+                SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            end
             for i,player in ipairs(players) do
                 if recipe and player.components.builder then
                     if inst.product_orchestrina == "archive_resonator_item" then

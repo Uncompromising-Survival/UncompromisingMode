@@ -48,6 +48,9 @@ local function OpenMound(inst,child)
     inst.AnimState:PlayAnimation("idle_flipped")
     inst.AnimState:PushAnimation("flip_close")
     inst.AnimState:PushAnimation("idle")
+    if math.random() > 0.99 and TUNING.DSTU.DATES.APRIL_FOOLS then
+        SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+    end
 end
 
 local function CloseMound(inst)
