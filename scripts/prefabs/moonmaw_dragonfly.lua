@@ -3,18 +3,18 @@ local brain = require "brains/moonmaw_dragonflybrain"
 local easing = require("easing")
 
 -- MUSIC------------------------------------------------------------------------
---[[local function PushMusic(inst)
-    if ThePlayer == nil or inst:HasTag("nomusic") then
+local function PushMusic(inst)
+    if ThePlayer == nil then
         inst._playingmusic = false
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
         inst._playingmusic = true
-        ThePlayer:PushEvent("triggeredevent", {name = "alterguardian_phase1", duration = 2})
+        ThePlayer:PushEvent("triggeredevent", { name = "moonmaw_dragonfly" })
     elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
         inst._playingmusic = false
     end
 end
 
-local function OnMusicDirty(inst)
+--[[local function OnMusicDirty(inst)
     if not TheNet:IsDedicated() then
         if inst._musictask ~= nil then
             inst._musictask:Cancel()
@@ -568,12 +568,18 @@ local function fn(Sim)
     inst:AddTag("scarytoprey")
     inst:AddTag("largecreature")
     inst:AddTag("moonglasscreature")
-    --[[inst:AddTag("noepicmusic")
+    inst:AddTag("noepicmusic")
 
-    inst._musicdirty = net_event(inst.GUID, "alterguardian_phase1._musicdirty", "musicdirty")
+    --[[inst._musicdirty = net_event(inst.GUID, "alterguardian_phase1._musicdirty", "musicdirty")
     inst._playingmusic = false
     OnMusicDirty(inst)]]
 
+    --Dedicated server does not need to trigger music
+    if not TheNet:IsDedicated() then
+        inst._playingmusic = false
+        inst:DoPeriodicTask(1, PushMusic, 0)
+    end
+    
     inst:AddTag("lunar_aligned")
 
     inst.entity:SetPristine()
