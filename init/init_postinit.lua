@@ -231,7 +231,8 @@ local prefab_post = {
     "ruins_bat",
     "mushgnome_spawner",
     "spiderqueen",
-    "snowman"
+    "snowman",
+    "lighter"
 }
 
 local stategraph_post = {
