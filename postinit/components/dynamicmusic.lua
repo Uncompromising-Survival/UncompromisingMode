@@ -60,9 +60,29 @@ AddComponentPostInit("dynamicmusic", function(self)
         return
     end
 
-    local TRIGGERED_DANGER_MUSIC = UpvalueHacker.GetUpvalue(_StartTriggeredDanger, "TRIGGERED_DANGER_MUSIC")
-    TRIGGERED_DANGER_MUSIC["moonmaw_dragonfly"] = { "UMMusic2/music/um_epicfight_moonmaw", }
+local _SoundEmitterPlaySound = GLOBAL.SoundEmitter.PlaySound
+GLOBAL.SoundEmitter.PlaySound = function(soundEmitter, soundName, key, ...)
+    local inst = soundEmitter:GetEntity()
+    if inst == nil then
+        _SoundEmitterPlaySound(soundEmitter, soundName, key, ...)
+        return
+    end
 
+    -- Ruins epic fight is the default fallback for StartTriggeredDanger music, so we're going to use that to detect if we're trying to play special UM themed music.
+    if key == "danger" and soundName == "dontstarve/music/music_epicfight_ruins" and inst.um_triggeredEventMusic ~= nil then
+        for boss, musicName in pairs(inst.um_triggeredEventMusic) do
+            if boss:IsValid() then
+                soundName = musicName
+                break
+            else
+                inst.um_triggeredEventMusic[boss] = nil
+            end
+        end
+    end
+
+    return _SoundEmitterPlaySound(soundEmitter, soundName, key, ...)
+end
+    
     -- Optimization
     local _, i_busytask = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_busytask")
     local _, i_extendtime = UpvalueHacker.GetUpvalue(_StartBusyTheme, "_extendtime")

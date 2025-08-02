@@ -4,11 +4,17 @@ local easing = require("easing")
 
 -- MUSIC------------------------------------------------------------------------
 local function PushMusic(inst)
+    if TheFocalPoint == nil then return end
+    if TheFocalPoint.um_triggeredEventMusic == nil then TheFocalPoint.um_triggeredEventMusic = {} end
+
+    TheFocalPoint.um_triggeredEventMusic[inst] = nil
+
     if ThePlayer == nil then
         inst._playingmusic = false
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
+        TheFocalPoint.um_triggeredEventMusic[inst] = "UMMusic2/music/um_epicfight_moonmaw"
         inst._playingmusic = true
-        ThePlayer:PushEvent("triggeredevent", { name = "moonmaw_dragonfly" })
+        ThePlayer:PushEvent("triggeredevent", { um_source = inst, name = "default" })
     elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
         inst._playingmusic = false
     end

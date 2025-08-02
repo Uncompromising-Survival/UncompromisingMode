@@ -1,12 +1,30 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local GeneratorGroundCharging = require("generatorcharging")
+--local GeneratorGroundCharging = require("generatorcharging")
 
 
 env.AddPrefabPostInit("lantern", function(inst)
     if not TheWorld.ismastersim then
         return
+    end
+    
+    local function OnHaunt(inst)
+        local turnoff = inst.components.machine.turnofffn
+        local lanternfuel = inst.components.fueled
+        if inst._light then
+            turnoff(inst)
+        end
+        if math.random() < TUNING.HAUNT_CHANCE_OFTEN and not (lanternfuel:IsEmpty() or lanternfuel:IsFull()) then
+            lanternfuel:DoDelta(42.12, inst) --howlonguntilsomeonefindsoutIdidthis-C
+            local x, y, z = inst.Transform:GetWorldPosition() --maqs,youareprohibitedtomentionthis
+            local lightflakesfx = SpawnPrefab("deer_fire_flakes") --bcausefnny
+		    lightflakesfx:DoTaskInTime(0, lightflakesfx.KillFX)
+            lightflakesfx.Transform:SetPosition(x, y + 0.2, z)
+            lightflakesfx.Transform:SetScale(0.5, 0.5, 0.5)
+            lightflakesfx.AnimState:SetMultColour(0.5, 1, 0, 1)
+        end
+        return true
     end
 
     if inst.components.equippable ~= nil then
@@ -55,7 +73,7 @@ env.AddPrefabPostInit("lantern", function(inst)
             inst.components.fueled:DoDelta(0)--do a 0delta to update the %, maybe?
             inst:AddTag("electricaltool")
             inst.components.named:SetName(STRINGS.NAMES.LANTERN_ELECTRICAL)
-            GeneratorGroundCharging(inst)
+            --GeneratorGroundCharging(inst)
             local owner = inst.components.inventoryitem:GetGrandOwner()
 
             if owner ~= nil and owner.components.inventory ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) == inst then
@@ -98,6 +116,9 @@ env.AddPrefabPostInit("lantern", function(inst)
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
+
+    inst.components.hauntable:SetHauntValue(TUNING.HAUNT_SMALL)
+    inst.components.hauntable:SetOnHauntFn(OnHaunt)
 
     inst:AddComponent("upgradeable")
     inst.components.upgradeable.upgradetype = UPGRADETYPES.ELECTRICAL
