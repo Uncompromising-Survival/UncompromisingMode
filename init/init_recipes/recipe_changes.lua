@@ -71,7 +71,12 @@ AllRecipes["blue_mushroomhat"].ingredients = {
     Ingredient("slurper_pelt", 4),
 }
 
+AllRecipes["glasscutter"].ingredients = {
+    Ingredient("boards", 1),
+    Ingredient("moonglass", 6),
+}
 
+AllRecipes["glasscutter"].nounlock = true
 
 --woodie stuff
 
