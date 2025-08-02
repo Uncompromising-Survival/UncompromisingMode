@@ -75,8 +75,9 @@ AllRecipes["glasscutter"].ingredients = {
     Ingredient("boards", 1),
     Ingredient("moonglass", 6),
 }
-
 AllRecipes["glasscutter"].nounlock = true
+
+AllRecipes["moonglassaxe"].nounlock = true
 
 --woodie stuff
 
