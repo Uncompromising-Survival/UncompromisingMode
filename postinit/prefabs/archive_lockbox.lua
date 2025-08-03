@@ -112,7 +112,7 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
         local recipe = CycleRecipes()
 
         inst:DoTaskInTime(5.2 ,function()
-            if math.random > 0.25 and TUNING.DSTU.DATES.APRIL_FOOLS then
+            if math.random() > 0.25 and TUNING.DSTU.DATES.APRIL_FOOLS then
                 SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
             end
             for i,player in ipairs(players) do
