@@ -406,7 +406,7 @@ local function Sniffertime(owner)
     if ents then
         for i, v in ipairs(ents) do
             local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
-            local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post")) or false
+            local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner.prefab == "meatrack" or containerowner:HasAnyTag("lamp", "yots_post"))
             if not v.components.farmplantable then
                 FoodScoreCalculations(container, v, owner)
             end

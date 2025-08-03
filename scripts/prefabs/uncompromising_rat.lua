@@ -1565,7 +1565,7 @@ local function TimeForACheckUp(inst, dev)
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
                 local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
-                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post"))
+                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner.prefab == "meatrack" or containerowner:HasAnyTag("lamp", "yots_post"))
                 if container then
                     FoodScoreCalculations(inst, true, v)
                 else
