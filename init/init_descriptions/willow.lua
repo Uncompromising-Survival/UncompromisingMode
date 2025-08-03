@@ -64,7 +64,7 @@ DESCRIBE.WIXIE = {
     GENERIC = "I didn't have friends either, but it wasn't because I was a jerk!",
     ATTACKER = "Quit hitting people with rocks, you jerk!",
     MURDERER = "%s has gone mad!",
-    REVIVER = "Don't act like your my friend, %s!",
+    REVIVER = "Don't act like you're my friend, %s!",
     GHOST = "That's what you get for being a bully, %s!",
     FIRESTARTER = "You like burning stuff too? Maybe we can be friends!"
 }
