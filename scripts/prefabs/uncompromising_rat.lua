@@ -1535,7 +1535,7 @@ local function IsAVersionOfRot(v)
     end
 end
 
-local function FoodScoreCalculations(inst, container, v)
+local function SnifferFoodScoreCalculations(inst, container, v)
     inst.multiplier = v.components.stackable and v.components.stackable:StackSize() or 1
     inst.preparedmultiplier = v:HasTag("preparedfood") and 2 or 1
     local delta = not v.components.farmplantable and (not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
@@ -1565,11 +1565,11 @@ local function TimeForACheckUp(inst, dev)
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
                 local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
-                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner.prefab == "meatrack" or containerowner:HasAnyTag("lamp", "yots_post"))
+                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post"))
                 if container then
-                    FoodScoreCalculations(inst, true, v)
+                    SnifferFoodScoreCalculations(inst, true, v)
                 else
-                    FoodScoreCalculations(inst, false, v)
+                    SnifferFoodScoreCalculations(inst, false, v)
                     if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
                         inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
                     end
@@ -1733,5 +1733,332 @@ local function fn_warning()
     return inst
 end
 
-return Prefab("uncompromising_rat", fn, assets, prefabs), Prefab("uncompromising_junkrat", junkfn), Prefab("uncompromising_packrat", packfn, assets, prefabs), Prefab("uncompromising_ratherd", fn_herd, assets, prefabs), Prefab("uncompromising_ratburrow", fn_burrow, assets, prefabs), Prefab("uncompromising_winkyburrow", fn_winkyburrow, assets, prefabs), Prefab("uncompromising_winkyhomeburrow", fn_winkyhomeburrow, assets, prefabs),
-    Prefab("uncompromising_scoutburrow", fn_scoutburrow, assets, prefabs), Prefab("uncompromising_ratsniffer", fn_sniffer, assets, prefabs), Prefab("ratdroppings", fn_droppings, assets), Prefab("uncompromising_ratwarning", fn_warning)
+local iconassets =
+{
+    Asset("ANIM", "anim/ratmask_icon.zip")
+}
+
+local function Icon_Resize(inst, intensity)
+    inst.intensity = intensity + inst.intensity
+    if inst.intensity > 2 then
+        inst.intensity = inst.intensity / 1.2
+    end
+    if inst.intensity > 4 then
+        inst.intensity = inst.intensity / 1.5
+    end
+    inst.Transform:SetScale(inst.intensity, inst.intensity, inst.intensity)
+end
+
+local function Icon_Resize_Stink(inst, intensity)
+    inst.Transform:SetScale(intensity, intensity, intensity)
+end
+
+local function ratmask_iconfn()
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("ratmask_icon")
+    inst.AnimState:SetBuild("ratmask_icon")
+
+    inst:AddTag("INLIMBO")
+    inst:AddTag("ratmask_icon")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    inst.intensity = 1.5
+    inst.Resize = Icon_Resize
+    inst.AnimState:PlayAnimation("anim" .. math.random(0, 2))
+    inst:ListenForEvent("animover", function(inst) inst:Remove() end)
+    return inst
+end
+
+local function ratmask_stinkfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("fumes_fx")
+    inst.AnimState:SetBuild("fumes_fx")
+
+    inst:AddTag("INLIMBO")
+    inst:AddTag("ratmask_stinklines")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.Resize = Icon_Resize_Stink
+    inst.anim_loop = 1
+    inst.anim_loop_rand = math.random(2, 3)
+
+    inst:DoTaskInTime(math.random(0, .5), function()
+        inst.AnimState:PlayAnimation("fumes")
+    end)
+
+    inst:ListenForEvent("animover", function(inst)
+        if inst.anim_loop >= inst.anim_loop_rand then
+            inst:Remove()
+        else
+            inst.anim_loop = inst.anim_loop + 1
+            inst.AnimState:PlayAnimation("fumes")
+        end
+    end)
+
+    return inst
+end
+
+local function FindClosestPart(owner)
+    local ix, iy, iz = owner.Transform:GetWorldPosition()
+
+    local burrows = TheSim:FindEntities(ix, iy, iz, 2000, { "ratburrow" })
+    if burrows then
+        for i, v in ipairs(burrows) do
+            if owner.SoundEmitter then
+                owner:DoTaskInTime(i, function(owner)
+                    for i = 1, 5 do
+                        local delay = i / 10
+                        owner:DoTaskInTime(FRAMES * i * 1.5 + delay, function()
+                            if v then
+                                local x, y, z = owner.Transform:GetWorldPosition()
+                                local px, py, pz = v.Transform:GetWorldPosition()
+                                local rad = math.rad(owner:GetAngleToPoint(px, py, pz))
+                                local velx = math.cos(rad) * 4.5
+                                local velz = -math.sin(rad) * 4.5
+
+                                local dx, dy, dz = x + ((i / 2) * velx), 0, z + ((i / 2) * velz)
+
+                                local fx1 = SpawnPrefab("ratring_fx")
+                                fx1.Transform:SetPosition(dx, dy, dz)
+                                fx1.Transform:SetScale(0.6 - delay, 0.6 - delay, 0.6 - delay)
+                                fx1.SoundEmitter:PlaySound("UCSounds/ratsniffer/burrowping", nil, 1 - delay)
+                            end
+                        end)
+                    end
+                end)
+            end
+        end
+    elseif not burrows or burrows <= 0 then
+        inst.components.talker:Say(GetString(owner, "ANNOUNCE_NORATBURROWS"))
+    end
+end
+
+local function OnCooldown(inst)
+    inst.components.useableitem.inuse = false
+end
+
+local function TrySpawnIcon(v, owner, intensity)
+    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    if nearbyicon then
+        nearbyicon:Resize(intensity)
+    else
+        local icon = SpawnPrefab("ratmask_stinklines")
+        local x, y, z = v.Transform:GetWorldPosition()
+        icon.Network:SetClassifiedTarget(owner)
+        icon.Transform:SetPosition(x, y, z)
+        icon:Resize(intensity)
+    end
+end
+
+local function FoodScoreCalculations(container, v, owner)
+    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
+    if not intensity then return end
+    TrySpawnIcon(v, owner, intensity)
+end
+
+local function Sniffertime(owner)
+    local x, y, z = owner.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+    if ents then
+        for i, v in ipairs(ents) do
+            local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
+            local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post")) or false
+            if not v.components.farmplantable then
+                FoodScoreCalculations(container, v, owner)
+            end
+            if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
+                TrySpawnIcon(v, owner, .5)
+            end
+        end
+    end
+end
+
+local function CheckTargetPiece(inst)
+    local owner = inst.components.inventoryitem.owner
+    if owner then
+        FindClosestPart(owner)
+        inst.fx = SpawnPrefab("ratring_fx")
+        inst.fx.entity:AddFollower()
+        inst.fx.Follower:FollowSymbol(owner.GUID, "swap_hat", 0, 0, 0)
+        inst.fx.Transform:SetScale(0.5, 0.5, 0.5)
+
+        inst.SoundEmitter:KillSound("ratping")
+        inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
+        if FindEntity(owner, 40, nil, {"rat_sniffer"}) then
+            Sniffertime(owner)
+        end
+    end
+    inst.components.rechargeable:Discharge(8)
+end
+
+local function OnEquipRat(inst, owner)
+    owner.AnimState:OverrideSymbol("swap_hat", "hat_ratmask", "swap_hat")
+	owner.AnimState:Show("HAT")
+	owner.AnimState:Hide("HAIR_HAT")
+	owner.AnimState:Show("HAIR_NOHAT")
+	owner.AnimState:Show("HAIR")
+	owner.AnimState:Show("HAIRFRONT")
+
+    if owner and not owner:HasTag("equipmentmodel") then
+        inst.components.fueled:StartConsuming()
+		owner:AddTag("ratfriend")
+		owner.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/emerge")
+		owner.rat_task = owner:DoPeriodicTask(5, Sniffertime, 0)
+    end
+end
+
+local function OnUnequipRat(inst, owner)
+    --owner.AnimState:Show("HAIR_NOHAT")
+    owner.AnimState:Show("HAIR")
+    owner.AnimState:ClearOverrideSymbol("swap_hat")
+    owner.AnimState:ClearOverrideSymbol("face")
+    owner.AnimState:Hide("HAT")
+    owner.AnimState:Show("HEAD")
+
+    inst.components.fueled:StopConsuming()
+    if owner then
+        owner:RemoveTag("ratfriend")
+        if owner.rat_task then
+            owner.rat_task:Cancel()
+            owner.rat_task = nil
+        end
+    end
+end
+
+local function ratfn()
+    local inst = CreateEntity()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    local network = inst.entity:AddNetwork()
+    local sound = inst.entity:AddSoundEmitter()
+
+    MakeInventoryPhysics(inst)
+
+    anim:SetBank("hat_ratmask")
+    anim:SetBuild("hat_ratmask")
+    anim:PlayAnimation("anim")
+
+    inst:AddTag("hats")
+
+    MakeInventoryFloatable(inst, "small")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("equippable")
+    inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
+    inst.components.equippable:SetOnEquip(OnEquipRat)
+    inst.components.equippable:SetOnUnequip(OnUnequipRat)
+    inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
+
+    inst:AddComponent("useableitem")
+    inst.components.useableitem:SetOnUseFn(CheckTargetPiece)
+
+    inst:AddComponent("rechargeable")
+    inst.components.rechargeable:SetOnChargedFn(OnCooldown)
+    inst.components.rechargeable:SetCharge(1011111)
+
+    inst:AddComponent("fueled")
+    inst.components.fueled.fueltype = FUELTYPE.USAGE
+    inst.components.fueled:InitializeFuelLevel(TUNING.MOLEHAT_PERISHTIME)
+    inst.components.fueled:SetDepletedFn( --[[generic_perish]] inst.Remove)
+
+    MakeHauntableLaunch(inst)
+
+    return inst
+end
+
+local function PlayRingAnim(proxy)
+    local inst = CreateEntity()
+
+    inst:AddTag("FX")
+    --[[Non-networked entity]]
+    inst.entity:SetCanSleep(false)
+    inst.persists = false
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+
+    inst.Transform:SetFromProxy(proxy.GUID)
+
+    inst.AnimState:SetBank("bearger_ring_fx")
+    inst.AnimState:SetBuild("bearger_ring_fx")
+    inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetFinalOffset(3)
+
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+
+    inst:ListenForEvent("animover", inst.Remove)
+end
+
+local function ratringfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+
+    inst:AddTag("FX")
+
+    --Dedicated server does not need to spawn the local fx
+    if not TheNet:IsDedicated() then
+        --Delay one frame so that we are positioned properly before starting the effect
+        --or in case we are about to be removed
+        inst:DoTaskInTime(0, PlayRingAnim)
+    end
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+    inst:DoTaskInTime(3, inst.Remove)
+
+    return inst
+end
+
+return Prefab("uncompromising_rat", fn, assets, prefabs),
+    Prefab("uncompromising_junkrat", junkfn),
+    Prefab("uncompromising_packrat", packfn, assets, prefabs),
+    Prefab("uncompromising_ratherd", fn_herd, assets, prefabs),
+    Prefab("uncompromising_ratburrow", fn_burrow, assets, prefabs),
+    Prefab("uncompromising_winkyburrow", fn_winkyburrow, assets, prefabs),
+    Prefab("uncompromising_winkyhomeburrow", fn_winkyhomeburrow, assets, prefabs),
+    Prefab("uncompromising_scoutburrow", fn_scoutburrow, assets, prefabs),
+    Prefab("uncompromising_ratsniffer", fn_sniffer, assets, prefabs),
+    Prefab("ratdroppings", fn_droppings, assets),
+    Prefab("uncompromising_ratwarning", fn_warning),
+    Prefab("ratmask_icon", ratmask_iconfn, iconassets),
+    Prefab("ratmask_stinklines", ratmask_stinkfn),
+    Prefab("hat_ratmask", ratfn),
+    Prefab("ratring_fx", ratringfn)
