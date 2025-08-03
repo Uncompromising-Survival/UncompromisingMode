@@ -82,6 +82,10 @@ local function OnThrown(inst)
     end
 end
 
+local function boat_placer_postinit(inst)
+    ControllerPlacer_Boat_SpotFinder(inst, TUNING.BOAT.RADIUS)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -171,5 +175,5 @@ local function fn_follow_fx(inst)
 end
 
 return Prefab("um_boatbottle", fn, assets),
-    MakePlacer("um_boatbottle_placer", "boat_01", "boat_test", "idle_full", true, false, false, nil, nil, nil, ControllerPlacer_Boat_SpotFinder, 6),
+    MakePlacer("um_boatbottle_placer", "boat_01", "boat_test", "idle_full", true, false, false, nil, nil, nil, boat_placer_postinit, 6),
     Prefab("um_boatbottle_fx", fn_follow_fx, assets)
