@@ -25,13 +25,15 @@ env.AddPrefabPostInit("spider_healer", function(inst)
         return
     end
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
-    inst.components.lootdropper:AddRandomLoot("silk", 1)
-    inst.components.lootdropper:AddRandomLoot("spidergland", 1)
-    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
-    inst.components.lootdropper.numrandomloot = 1
-    inst.components.lootdropper:SetChanceLootTable('um_nurse_spider')
+    local lootdropper = inst.components.lootdropper
+    if lootdropper then
+        inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
+        inst.components.lootdropper:AddRandomLoot("silk", 1)
+        inst.components.lootdropper:AddRandomLoot("spidergland", 1)
+        inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
+        inst.components.lootdropper.numrandomloot = 1
+        inst.components.lootdropper:SetChanceLootTable("um_nurse_spider")
+    end
 
     SpiderHealerFunctions(inst)
 end)

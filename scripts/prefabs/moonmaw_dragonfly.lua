@@ -4,17 +4,17 @@ local easing = require("easing")
 
 -- MUSIC------------------------------------------------------------------------
 local function PushMusic(inst)
-    if TheFocalPoint == nil then return end
-    if TheFocalPoint.um_triggeredEventMusic == nil then TheFocalPoint.um_triggeredEventMusic = {} end
+    if not TheFocalPoint then return end
+    if not TheFocalPoint.um_triggeredEventMusic then TheFocalPoint.um_triggeredEventMusic = {} end
 
     TheFocalPoint.um_triggeredEventMusic[inst] = nil
 
-    if ThePlayer == nil then
+    if not ThePlayer then
         inst._playingmusic = false
     elseif ThePlayer:IsNear(inst, inst._playingmusic and 40 or 20) then
         TheFocalPoint.um_triggeredEventMusic[inst] = "UMMusic2/music/um_epicfight_moonmaw"
         inst._playingmusic = true
-        ThePlayer:PushEvent("triggeredevent", { um_source = inst, name = "default" })
+        ThePlayer:PushEvent("triggeredevent", {um_source = inst, name = "default"})
     elseif inst._playingmusic and not ThePlayer:IsNear(inst, 50) then
         inst._playingmusic = false
     end
@@ -75,22 +75,22 @@ local function UpdateLavaeDamageTick(inst)
         end
     end
 
-    local damagetime = 0.5
+    local damagetime = .5
 
     if count < 5 then
-        damagetime = 0.05
+        damagetime = .05
     end
 
     if count < 3 then
-        damagetime = 0.01
+        damagetime = .01
     end
 
     if count < 2 then
-        damagetime = 0.005
+        damagetime = .005
     end
 
     if count < 1 then
-        damagetime = 0.001
+        damagetime = .001
     end
 
     for i = 1, 8 do
@@ -358,10 +358,10 @@ local function SpawnLavae(inst)
             inst.lavae[i].WINDSTAFF_CASTER = inst
             inst.lavae[i].components.linearcircler:SetCircleTarget(inst)
             inst.lavae[i].components.linearcircler:Start()
-            inst.lavae[i].components.linearcircler.randAng = i * 0.125
+            inst.lavae[i].components.linearcircler.randAng = i * .125
             inst.lavae[i].components.linearcircler.clockwise = false
             inst.lavae[i].components.linearcircler.distance_limit = LIMIT
-            inst.lavae[i].components.linearcircler.setspeed = 0.2
+            inst.lavae[i].components.linearcircler.setspeed = .2
             inst.lavae[i].hidden = false
             inst.lavae[i].AnimState:PlayAnimation("hover")
             -- inst.lavae[i].AnimState:PushAnimation("hover",true)
@@ -379,13 +379,13 @@ local function SpawnShards(inst)
         inst.shards[i].WINDSTAFF_CASTER = inst
         inst.shards[i].components.linearcircler:SetCircleTarget(inst)
         inst.shards[i].components.linearcircler:Start()
-        inst.shards[i].components.linearcircler.randAng = i * 0.125
+        inst.shards[i].components.linearcircler.randAng = i * .125
         inst.shards[i].components.linearcircler.clockwise = false
         inst.shards[i].components.linearcircler.distance_limit = LIMIT
-        inst.shards[i].components.linearcircler.setspeed = 0.2
+        inst.shards[i].components.linearcircler.setspeed = .2
         inst.shards[i].hidden = false
         inst.shards[i].destroy = true
-        inst.shards[i].timetill = i * 0.125 + 2.5
+        inst.shards[i].timetill = i * .125 + 2.5
     end
 end
 
@@ -437,7 +437,7 @@ end
 
 local function TryEjectLavae(inst, severed)
     if inst.components.health ~= nil and not inst.components.health:IsDead() and NoLavae(inst) == false and inst.components.leader:CountFollowers() == 0 then
-        if inst.components.health:GetPercent() > 0.5 then
+        if inst.components.health:GetPercent() > .5 then
             local choice = math.random(1, 8)
             if inst.lavae[choice].hidden ~= true then
                 EjectLavae(inst, choice, severed)
@@ -607,7 +607,7 @@ local function fn(Sim)
     inst:AddComponent("drownable")
 
     inst:AddComponent("healthtrigger")
-    inst.components.healthtrigger:AddTrigger(0.5, RedoLavae)
+    inst.components.healthtrigger:AddTrigger(.5, RedoLavae)
 
     local function isnottree(ent)
         if ent ~= nil and not ent:HasTag("moonglasscreature") then -- fix to friendly AOE: refer for later AOE mobs -Axe
@@ -626,7 +626,7 @@ local function fn(Sim)
     inst.components.combat:SetDefaultDamage(100)
     inst.components.combat.playerdamagepercent = .5
     inst.components.combat:SetRange(4)
-    inst.components.combat:SetAreaDamage(6, 0.8, isnottree)
+    inst.components.combat:SetAreaDamage(6, .8, isnottree)
     inst.components.combat.hiteffectsymbol = "dragonfly_body"
     inst.components.combat:SetAttackPeriod(TUNING.DRAGONFLY_ATTACK_PERIOD)
     inst.components.combat:SetRetargetFunction(3, RetargetFn)
@@ -635,6 +635,8 @@ local function fn(Sim)
     inst.components.combat:SetHurtSound("UCSounds/moonmaw/hurt")
 
     inst:AddComponent("explosiveresist")
+    inst.components.explosiveresist:SetResistance(.8)
+    inst.components.explosiveresist.decay = true
 
     inst.KilledPlayer = false
     inst.fell = false
@@ -643,7 +645,7 @@ local function fn(Sim)
     local light = inst.entity:AddLight()
     inst.Light:Enable(true)
     inst.Light:SetRadius(2)
-    inst.Light:SetFalloff(0.9)
+    inst.Light:SetFalloff(.9)
     inst.Light:SetIntensity(2)
     inst.Light:SetColour(121 / 255, 235 / 255, 12 / 255)
 
@@ -655,6 +657,9 @@ local function fn(Sim)
     inst.shouldGoAway = false
 
     inst:AddComponent("timer")
+    inst:ListenForEvent("timerdone", CheckTimer)
+    inst.components.timer:StartTimer("summoncrystals", 25)
+    inst.components.timer:StartTimer("glassshards", 90)
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetLoot(loot)
@@ -664,6 +669,12 @@ local function fn(Sim)
 
     inst:AddComponent("knownlocations")
     inst:AddComponent("inventory")
+
+    inst:AddComponent("leader")
+
+    inst:AddComponent("locomotor")
+    inst.components.locomotor.walkspeed = 6
+    inst.components.locomotor.runspeed = 8
 
     inst:ListenForEvent("seasontick", function() OnSeasonChange(inst) end, TheWorld)
     inst:ListenForEvent("attacked", OnAttacked)
@@ -682,25 +693,13 @@ local function fn(Sim)
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
 
-    inst:AddComponent("locomotor")
-    inst.components.locomotor.walkspeed = 6
-    inst.components.locomotor.runspeed = 8
-
     inst:SetStateGraph("SGmoonmaw_dragonfly")
     inst:SetBrain(brain)
 
     inst:ListenForEvent("onremove", OnRemove)
     inst:ListenForEvent("death", OnDead)
+
     inst:AddComponent("leader")
-
-    inst:AddComponent("explosiveresist")
-    inst.components.explosiveresist:SetResistance(0.8)
-    inst.components.explosiveresist.decay = true
-
-    inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", CheckTimer)
-    inst.components.timer:StartTimer("summoncrystals", 25)
-    inst.components.timer:StartTimer("glassshards", 90)
 
     inst.SpawnLavae = SpawnLavae
     inst.SpawnShards = SpawnShards
