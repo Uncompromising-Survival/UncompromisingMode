@@ -228,7 +228,7 @@ local function fn()
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "body"
     inst.components.combat:SetKeepTargetFunction(keeptargetfn)
-    inst.components.combat:SetDefaultDamage(50)
+    inst.components.combat:SetDefaultDamage(34)
     inst.components.combat:SetAttackPeriod(2)
     inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     inst.components.combat:SetRange(3, 3)
