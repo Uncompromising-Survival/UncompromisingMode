@@ -16,13 +16,13 @@ AddClassPostConstruct("screens/consolescreen", function(self, inst)
 		"rne()",
 		"setadrenaline(",
 		"settile(",
+		"setwobyhunger(",
 		"snowstorm()",
 		"spawnsunkenchest(",
 		"umss(",
 		"vetcurse()",
 		"vetcurseitems()",
 		"wobygodmode()",
-		"setwobyhunger(",
 	}
 	
 	self.console_edit:AddWordPredictionDictionary({words = prediction_command, delim = "c_um_", num_chars = 0})

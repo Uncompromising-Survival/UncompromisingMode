@@ -119,6 +119,7 @@ end
 AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })
 AddIngredientValues({ "aphid" }, { insectoid = 0.5, meat = 0.5, monster = 0.5 })
 AddIngredientValues({ "rabbit" }, { meat = 0.5 })
+AddIngredientValues({ "plantmeat" }, { meat = 1, plantmeat = 1 }, true, false, false)
 
 AddIngredientValues({ "um_meat_cube" }, { meat = 0.5 })
 AddIngredientValues({ "um_monster_cube" }, { meat = 0.5, monster = GLOBAL.TUNING.DSTU.MONSTER_MEAT_COOKED_MONSTER_VALUE })
@@ -193,10 +194,25 @@ end
 -- Original:	test = function(cooker, names, tags) return (names.barnacle or names.barnacle_cooked) and tags.veggie and tags.veggie >= 0.5 end
 
 recipes.leafloaf.test = function(cooker, names, tags)
-    return ((names.plantmeat or 0) + (names.plantmeat_cooked or 0) >= 2) and
+    return tags.plantmeat and tags.plantmeat >= 2 and
         UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return ((names.plantmeat or 0) + (names.plantmeat_cooked or 0) >= 2 ) end
+
+--[[recipes.leafymeatburger.test = function(cooker, names, tags)
+    return (names.plantmeat or tags.plantmeat) and (names.onion or names.onion_cooked) and tags.veggie and tags.veggie >= 2
+end
+-- Original:	test = function(cooker, names, tags) return (names.plantmeat or names.plantmeat_cooked) and (names.onion or names.onion_cooked) and tags.veggie and tags.veggie >= 2 end
+
+recipes.leafymeatsouffle.test = function(cooker, names, tags)
+    return tags.plantmeat and tags.plantmeat >= 2 and tags.sweetener and tags.sweetener >= 2
+end
+-- Original:	test = function(cooker, names, tags) return ((names.plantmeat or 0) + (names.plantmeat_cooked or 0) >= 2 ) and tags.sweetener and tags.sweetener >= 2 end
+
+recipes.meatysalad.test = function(cooker, names, tags)
+    return tags.plantmeat and tags.veggie and tags.veggie >= 3
+end]]
+-- Original:	test = function(cooker, names, tags) return (names.plantmeat or names.plantmeat_cooked) and tags.veggie and tags.veggie >= 3 end
 
 recipes.barnaclestuffedfishhead.test = function(cooker, names, tags)
     return (names.barnacle or names.barnacle_cooked) and tags.fish and tags.fish >= 1.25 and
@@ -391,7 +407,7 @@ end
 -- Original:	test = function(cooker, names, tags) return tags.sweetener and tags.sweetener >= 3 and not tags.meat end,
 
 recipes.sweettea.test = function(cooker, names, tags)
-    return names.forgetmelots and tags.foliage and tags.foliage <= 1 and tags.sweetener and tags.frozen and tags.frozen <= 1 and
+    return names.forgetmelots and tags.foliage and tags.foliage <= 1 and tags.sweetener and tags.frozen and
         not tags.monster and not tags.veggie and not tags.meat and not tags.fish and not tags.egg and not tags.fat and not tags.dairy and not tags.inedible
 end
 -- Original:		test = function(cooker, names, tags) return names.forgetmelots and tags.sweetener and tags.frozen and not tags.monster and not tags.veggie and not tags.meat and not tags.fish and not tags.egg and not tags.fat and not tags.dairy and not tags.inedible end,
@@ -542,12 +558,13 @@ InsertIngredientValues({ "ocupus_tentacle_cooked" }, { fish = 1, meat = 0.5, mon
 --RegisterInventoryItemAtlas("images/inventoryimages/ocupus_tentacle_cooked.xml", "ocupus_tentacle_cooked.tex")
 
 -- [Rimeweed] --
-InsertIngredientValues({ "um_rimeweed_itemflower" }, { veggie = 1 }, true, false, false)
+InsertIngredientValues({ "um_rimeweed_itemflower" }, { frozen = 0.5, veggie = 1 })
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemflower.xml", "um_rimeweed_itemflower.tex")
-
-InsertIngredientValues({ "um_rimeweed_itemvine" }, { ice = 1, inedible = 1, }, true, false, false)
+InsertIngredientValues({ "um_rimeweed_itemvine" }, { frozen = 0.5, inedible = 0.5, })
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
-InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 0.5  })
+InsertIngredientValues({ "um_ice_tail" }, { frozen = 1, meat = 0.5, })
+
+InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 1  })
 InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1  })
 
 if TUNING.DSTU.NEWRECIPES then

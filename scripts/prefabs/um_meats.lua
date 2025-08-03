@@ -135,8 +135,10 @@ local function um_leafwing()
     end
 
     inst.components.edible.healthvalue = TUNING.HEALING_SMALL
-    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL
-    inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL
+    inst.components.edible.hungervalue = TUNING.CALORIES_TINY
+    inst.components.edible.sanityvalue = -TUNING.SANITY_TINY
+
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)
 	

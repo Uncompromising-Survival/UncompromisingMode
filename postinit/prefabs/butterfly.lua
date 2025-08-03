@@ -112,7 +112,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             inst:ListenForEvent("attacked", SlipAway)
 
             inst:AddComponent("playerprox")
-
+            inst:AddTag("prey") --Now wigfrid should leave you in peace. Buzzard hate you tho, I think.
             inst:DoPeriodicTask(2,CheckForNearbyBozos)
             
             

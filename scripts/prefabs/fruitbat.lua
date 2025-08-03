@@ -189,7 +189,7 @@ local function fn()
     MakeFlyingCharacterPhysics(inst, 1, .5)
 
 
-    inst:AddTag("animal")
+    --inst:AddTag("animal")
     inst:AddTag("fruitbat")
     inst:AddTag("animal")
     inst:AddTag("scarytoprey")
@@ -225,7 +225,7 @@ local function fn()
     inst:SetBrain(brain)
 
     inst:AddComponent("lootdropper")
-	inst.components.lootdropper:SetChanceLootTable('fruitbat')
+	--inst.components.lootdropper:SetChanceLootTable('fruitbat')
 	
     inst:AddComponent("inventory")
 

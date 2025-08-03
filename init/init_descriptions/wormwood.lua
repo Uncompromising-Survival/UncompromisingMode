@@ -53,7 +53,7 @@ DESCRIBE.WATHOM = {
     MURDERER = "Deadly toother!",
     REVIVER = "Toother is friend?",
     GHOST = "Oh, bad floaty",
-    FIRESTARTER = "%s red like fire."
+    FIRESTARTER = "%s red like fire"
 }
 DESCRIBE.WIXIE = {
     GENERIC = "Big meanie",
@@ -107,7 +107,7 @@ DESCRIBE.ICEBOOMERANG = "Make things stop"
 DESCRIBE.MINOTAUR_BOULDER = "Big rock"
 DESCRIBE.MINOTAUR_BOULDER_BIG = "Hm... Hit head on big rock?"
 DESCRIBE.VETERANSHRINE = "Sad head?"
-DESCRIBE.VET_SKULL = "Oh. Oh dear."
+DESCRIBE.VET_SKULL = "Oh. Oh dear"
 DESCRIBE.UM_BOSS_SOUL = "Lost?"
 DESCRIBE.UM_DARK_VESTIGES = "Bad stuff"
 DESCRIBE.UM_VOXOLOPHONE = "Talk box"
@@ -164,7 +164,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Friend grow in hairy stuff stealer"
 DESCRIBE.MARSH_GRASS = "Nice hair, friend!"
 DESCRIBE.CURSED_ANTLER = "Big bash stick"
-DESCRIBE.BERNIEBOX = "Trapped inside."
+DESCRIBE.BERNIEBOX = "Trapped inside"
 DESCRIBE.HOODED_FERN = "Big friend has good hair"
 DESCRIBE.HOODEDWIDOW = "Very big leggy bug mommy!"
 DESCRIBE.GIANT_TREE = "Big friend?"
@@ -172,8 +172,8 @@ DESCRIBE.ANCIENTHOODEDTURF = DESCRIBE.TURF_FOREST
 DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
 
 DESCRIBE.WIDOWSGRASP = "Leggy Leg"
-DESCRIBE.SILKSACK = "Leggy help carry."
-DESCRIBE.SILKEN_BUNDLE = "Sticky stuff inside."
+DESCRIBE.SILKSACK = "Leggy help carry"
+DESCRIBE.SILKEN_BUNDLE = "Sticky stuff inside"
 
 DESCRIBE.WEBBEDCREATURE = "Leggy bug goodies?"
 ANNOUNCE.WEBBEDCREATURE = "Need leggy stabby"
@@ -217,7 +217,7 @@ DESCRIBE.BLUEBERRYPLANT = {
 
 DESCRIBE.ANTIHISTAMINE = "Sniff food"
 ANNOUNCE.CURSED_ITEM_EQUIP = "No good!"
-DESCRIBE.VETSITEM = "Wants curses."
+DESCRIBE.VETSITEM = "Wants curses"
 DESCRIBE.SCREECHER_TRINKET = "Scary, not friend"
 ACTIONFAIL.GIVE.NOTNIGHT = "Needs moon"
 
@@ -277,14 +277,14 @@ DESCRIBE.GORE_HORN_HAT = "Pointy"
 DESCRIBE.BEARGERCLAW = "Big paw"
 DESCRIBE.FEATHER_FROCK = "Fluffy feathery"
 
-DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM .. "\nReshaped self."
-DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM .. "\nReshaped self."
-DESCRIBE.ORANGEGEM_CRACKED = DESCRIBE.ORANGEGEM .. "\nReshaped self."
-DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM .. "\nReshaped self."
-DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM .. "\nReshaped self."
-DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM .. "\nReshaped self."
+DESCRIBE.REDGEM_CRACKED = DESCRIBE.REDGEM .. "\nReshaped self"
+DESCRIBE.BLUEGEM_CRACKED = DESCRIBE.BLUEGEM .. "\nReshaped self"
+DESCRIBE.ORANGEGEM_CRACKED = DESCRIBE.ORANGEGEM .. "\nReshaped self"
+DESCRIBE.GREENGEM_CRACKED = DESCRIBE.GREENGEM .. "\nReshaped self"
+DESCRIBE.YELLOWGEM_CRACKED = DESCRIBE.YELLOWGEM .. "\nReshaped self"
+DESCRIBE.PURPLEGEM_CRACKED = DESCRIBE.PURPLEGEM .. "\nReshaped self"
 DESCRIBE.OPALPRECIOUSGEM_CRACKED = DESCRIBE.OPALPRECIOUSGEM ..
-    "\nReshaped self."
+    "\nReshaped self"
 
 DESCRIBE.RED_MUSHED_ROOM = "Mushed friend..."
 DESCRIBE.GREEN_MUSHED_ROOM = "Mushed friend..."
@@ -363,12 +363,12 @@ DESCRIBE.OCUPUS_BEAK = "Beaky nose"
 DESCRIBE.OCUPUS_TENTACLE = "Big suckers hand"
 DESCRIBE.OCUPUS_TENTACLE_EYE = "Dead looker"
 DESCRIBE.OCUPUS_TENTACLE_COOKED = "Sucker meat"
-DESCRIBE.UM_OCUPUS_EYE = "Looker field."
-DESCRIBE.UM_OCUPUS_EYETACLE = "Lookers keeping us here."
-DESCRIBE.UM_OCUPUS_TENTACLE = "Arms from the sea."
-DESCRIBE.UM_OCUPUS_BEAK = "Beaky hurts head."
-DESCRIBE.BEAKBASHER = "Beaky smasher."
-DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Merper watch for us."
+DESCRIBE.UM_OCUPUS_EYE = "Looker field"
+DESCRIBE.UM_OCUPUS_EYETACLE = "Lookers keeping us here"
+DESCRIBE.UM_OCUPUS_TENTACLE = "Arms from the sea"
+DESCRIBE.UM_OCUPUS_BEAK = "Beaky hurts head"
+DESCRIBE.BEAKBASHER = "Beaky smasher"
+DESCRIBE.HOUNDIOUS_OBSERVIOUS = "Merper watch for us"
 
 DESCRIBE.ARMOR_REED_UM = DESCRIBE.ARMORGRASS
 DESCRIBE.ARMOR_SHARKSUIT_UM = "Me chomper"
@@ -390,7 +390,7 @@ DESCRIBE.CANNONBALL_SLUDGE_ITEM = "BOOM! BOOM! Fire rock"
 DESCRIBE.BOAT_BUMPER_SLUDGE = "Boing!"
 DESCRIBE.BOAT_BUMBER_SLUDGE_KIT = "Bouncey big smelly blob"
 DESCRIBE.BOATPATCH_SLUDGE = "Rounder floaty fixer"
-DESCRIBE.UM_COPPER_PIPE = "Metal friend? No."
+DESCRIBE.UM_COPPER_PIPE = "Metal friend? No"
 DESCRIBE.BRINE_BALM = "Ow! Friends stingy!"
 DESCRIBE.UNCOMPROMISING_FISHINGNET = DESCRIBE.FISHINGNET
 DESCRIBE.UM_AMBER = "Sap?"
@@ -418,7 +418,7 @@ DESCRIBE.SLUDGESTACK = "Home for smelly blob"
 DESCRIBE.SPECTER_SHIPWRECK = "Oooh... friend crashed"
 
 DESCRIBE.UNCOMPROMISING_HARPOON = "Thrower stabber"
-DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Stonger Thrower stabber."
+DESCRIBE.UNCOMPROMISING_HARPOON_HEAVY = "Stonger Thrower stabber"
 DESCRIBE.UNCOMPROMISING_HARPOONREEL = "Puller box"
 DESCRIBE.UM_MAGNERANG = "Wouwouwouwouw"
 DESCRIBE.UM_MAGNERANGREEL = "Wouwouwouw box"
@@ -530,33 +530,33 @@ DESCRIBE.UM_HOTSPRING = "Hot puddle!"
 DESCRIBE.ROCK_LICHEN =
 {
     GENERIC = "Rock has belly stuff! How kind!",
-    PICKED = "No more to offer.",
+    PICKED = "No more to offer",
 }
 
 -- All things Snaildrake
 DESCRIBE.SNAILDRAKE_MAGMA = "Hot Shell! Stay away!"
-DESCRIBE.SNAILDRAKE_SLIME = "Hot Shell Friend."
+DESCRIBE.SNAILDRAKE_SLIME = "Hot Shell Friend"
 DESCRIBE.SNAPALM = "Machine food?"
-DESCRIBE.SNAILDRAKEHAT = "Spiky Head Shell."
+DESCRIBE.SNAILDRAKEHAT = "Spiky Head Shell"
 DESCRIBE.SNAILDRAKEBUCKET =
 {
-    GENERIC = "Carries puddles for us.",
-    WATER = "Sloshy Shell.",
-    LAVA = "Careful! Full of Earth Blood.",
+    GENERIC = "Carries puddles for us",
+    WATER = "Sloshy Shell",
+    LAVA = "Careful! Full of Earth Blood",
 }
-DESCRIBE.SNAILDRAKE_HOLE = "Hot Shell Home."
+DESCRIBE.SNAILDRAKE_HOLE = "Hot Shell Home"
 
 -- All things Rimeweed
 DESCRIBE.RIMEWEED_MAIN = "Pointy friend is very chilly!"
-DESCRIBE.RIMEWEED_BARRIER = "Friend gives cold hugs."
+DESCRIBE.RIMEWEED_BARRIER = "Friend gives cold hugs"
 
-DESCRIBE.UM_RIMEWEED_ITEMVINE = "Cold strings."
+DESCRIBE.UM_RIMEWEED_ITEMVINE = "Cold strings"
 DESCRIBE.UM_RIMEWEED_ITEMFLOWER = "Chilly friend! Hi!"
 
-DESCRIBE.RIMEWEED_WHIP = "Snap! Snap! Hehe."
+DESCRIBE.RIMEWEED_WHIP = "Snap! Snap! Hehe"
 
-DESCRIBE.UM_RIMEWEED_TEQUILA = "Brrr! Chilly friend juice."
-DESCRIBE.UM_RIMEWEED_SPAGETT = "Tasty cold strings."
+DESCRIBE.UM_RIMEWEED_TEQUILA = "Brrr! Chilly friend juice"
+DESCRIBE.UM_RIMEWEED_SPAGETT = "Tasty cold strings"
 
 -- Lava Caves
 DESCRIBE.MAGMAROCK1 = "Hot Rock!"
@@ -575,4 +575,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Why running, friend?",
     "Whoops",
     "Friend is funny"}
 
-DESCRIBE.WATHOM_CORPSE = "Not done yet."
+DESCRIBE.WATHOM_CORPSE = "Not done yet"

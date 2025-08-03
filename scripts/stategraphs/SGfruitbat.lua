@@ -18,6 +18,8 @@ end
 local function Explode(inst)
     inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
     FxAppear(inst)
+    inst.components.lootdropper:SetChanceLootTable('fruitbat')
+    inst.components.lootdropper:DropLoot()
 
     local x, y, z = inst.Transform:GetWorldPosition()
     local target_ents = TheSim:FindEntities(x, y, z, 1.1 * TUNING.STARFISH_TRAP_RADIUS, mine_must_tags, mine_no_tags,
