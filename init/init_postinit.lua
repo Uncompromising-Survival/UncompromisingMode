@@ -65,7 +65,8 @@ local component_post = {
 	"wateryprotection",
     "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
-	"moonstorms", -- Handles lunar bee respawns
+	"moonstorms", -- Handles lunar bee respawns,
+    "teacher", --Inf. blueprints.
 }
 
 local prefab_post = {
