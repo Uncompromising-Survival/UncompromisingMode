@@ -16,7 +16,7 @@ if _hit_recovery_delay then
     UpvalueHacker.SetUpvalue(CommonHandlers.OnAttacked, hit_recovery_delay, "onattacked", "hit_recovery_delay")
 end
 
-local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
+local removetaglist = { "busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit" }
 local function OhCrap(inst, target, attacker)
     if not (target.components.health and target.components.health:IsDead()) and not target:HasTag("playerghost") then
         SpawnPrefab("electricchargedfx"):SetTarget(target)
@@ -44,7 +44,7 @@ local function OhCrap(inst, target, attacker)
         if not target:HasTag("forcestunned") then
             target:AddTag("forcestunned")
         end
-        target:PushEvent("attacked", {attacker = attacker, damage = 0, stimuli = "soul"})
+        target:PushEvent("attacked", { attacker = attacker, damage = 0, stimuli = "soul" })
         if target.components.combat then
             if target.components.combat.laststartattacktime then
                 target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
@@ -58,13 +58,39 @@ local function OhCrap(inst, target, attacker)
     end
 end
 
+
+local _CalcEntityElectrocuteDuration = CalcEntityElectrocuteDuration
+function CalcEntityElectrocuteDuration(inst, override)
+    local val = _CalcEntityElectrocuteDuration(inst, override)
+    print("before", val)
+    if inst:HasTag("extended_shock_duration") then
+        val = val * 2
+    end
+    print("after", val)
+    return val
+end
+
 local function OnAttached(inst, target, followsymbol, followoffset, data)
-    if not target:HasTag("electricstunimmune") then
+    print("does it pass the if", not target:HasTag("electricstunimmune"))
+    if not target:HasTag("electricstunimmune") then --has tag == false
+        print("passed if", not target:HasTag("electricstunimmune"))
         target:AddDebuff("shockstundebuffimmunity", "shockstundebuffimmunity")
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
-        inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target, data and data.attacker)
+        --Only do normal shockstun bebuff if doesn't have a shock state, otherwise its handled by global CalcEntityElectrocuteDuration
+        if not (target.sg:HasState("electrocute") and not IsEntityElectricImmune(target)) then
+            inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target, data and data.attacker)
+        else
+            print(not target:HasTag("electricstunimmune"), "if this is somehow false, what the FUCK")
+            print("added extended shock duration")
+            target:AddTag("extended_shock_duration")
+            --force once again into elec. state because first hit runs it *before* this tag is added.
+            if target.sg then
+                target.sg:GoToState("electrocute")
+            end
+        end
         inst:ListenForEvent("death", function()
+            inst:RemoveTag("extended_shock_duration")
             inst.components.debuff:Stop()
         end, target)
         SpawnPrefab("electricchargedfx"):SetTarget(target)
@@ -74,6 +100,10 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
 end
 
 local function OnRemoved(inst, target)
+    if target:HasTag("extended_shock_duration") then
+        print("removed extended shock duration")
+        inst:RemoveTag("extended_shock_duration")
+    end
     if target.brain and not (target.components.health and target.components.health:IsDead()) then
         target.brain:Start()
     end
