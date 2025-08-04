@@ -16,7 +16,7 @@ if _hit_recovery_delay then
     UpvalueHacker.SetUpvalue(CommonHandlers.OnAttacked, hit_recovery_delay, "onattacked", "hit_recovery_delay")
 end
 
-local removetaglist = { "busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit" }
+local removetaglist = {"busy", "hit", "attack", "nointerrupt", "nohit", "jumping", "notiredhit"}
 local function OhCrap(inst, target, attacker)
     if not (target.components.health and target.components.health:IsDead()) and not target:HasTag("playerghost") then
         SpawnPrefab("electricchargedfx"):SetTarget(target)
@@ -44,7 +44,7 @@ local function OhCrap(inst, target, attacker)
         if not target:HasTag("forcestunned") then
             target:AddTag("forcestunned")
         end
-        target:PushEvent("attacked", { attacker = attacker, damage = 0, stimuli = "soul" })
+        target:PushEvent("attacked", {attacker = attacker, damage = 0, stimuli = "soul"})
         if target.components.combat then
             if target.components.combat.laststartattacktime then
                 target.components.combat.laststartattacktime = target.components.combat.laststartattacktime + 0.2 -- This apparently resets the targets attack timer making it a true "stun".
