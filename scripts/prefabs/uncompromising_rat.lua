@@ -1529,21 +1529,19 @@ end
 local function IsAVersionOfRot(v)
     local rotprefabs = {"spoiled_food", "rottenegg", "spoiled_fish", "spoiled_fish_small"}
     for _, rotprefab in pairs(rotprefabs) do
-        if v.prefab == rotprefab then
-            return true
-        end
+        if v.prefab == rotprefab then return true end
     end
 end
 
 local function SnifferFoodScoreCalculations(inst, container, v)
-    inst.multiplier = v.components.stackable and v.components.stackable:StackSize() or 1
-    inst.preparedmultiplier = v:HasTag("preparedfood") and 2 or 1
-    local delta = not v.components.farmplantable and (not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
-        or (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5)) or 0
-    inst.foodscore = inst.foodscore + (delta > 0 and ((delta * inst.preparedmultiplier) * inst.multiplier) or delta)
+    local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
+    local preparedmult = v:HasTag("preparedfood") and 2 or 1
+    local delta = not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
+        or (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5) or 0
+    inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
-local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen"}
+local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant"}
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -1882,9 +1880,7 @@ local function Sniffertime(owner)
         for i, v in ipairs(ents) do
             local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
             local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post")) or false
-            if not v.components.farmplantable then
-                FoodScoreCalculations(container, v, owner)
-            end
+            FoodScoreCalculations(container, v, owner)
             if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
                 TrySpawnIcon(v, owner, .5)
             end
