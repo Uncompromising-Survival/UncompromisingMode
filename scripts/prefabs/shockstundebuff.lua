@@ -62,18 +62,14 @@ end
 local _CalcEntityElectrocuteDuration = CalcEntityElectrocuteDuration
 function CalcEntityElectrocuteDuration(inst, override)
     local val = _CalcEntityElectrocuteDuration(inst, override)
-    print("before", val)
     if inst:HasTag("extended_shock_duration") then
-        val = val * 2
+        val = val * 2.5
     end
-    print("after", val)
     return val
 end
 
 local function OnAttached(inst, target, followsymbol, followoffset, data)
-    print("does it pass the if", not target:HasTag("electricstunimmune"))
     if not target:HasTag("electricstunimmune") then --has tag == false
-        print("passed if", not target:HasTag("electricstunimmune"))
         target:AddDebuff("shockstundebuffimmunity", "shockstundebuffimmunity")
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
@@ -81,8 +77,6 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
         if not (target.sg:HasState("electrocute") and not IsEntityElectricImmune(target)) then
             inst.task = inst:DoPeriodicTask(0.2, OhCrap, nil, target, data and data.attacker)
         else
-            print(not target:HasTag("electricstunimmune"), "if this is somehow false, what the FUCK")
-            print("added extended shock duration")
             target:AddTag("extended_shock_duration")
             --force once again into elec. state because first hit runs it *before* this tag is added.
             if target.sg then
@@ -101,8 +95,7 @@ end
 
 local function OnRemoved(inst, target)
     if target:HasTag("extended_shock_duration") then
-        print("removed extended shock duration")
-        inst:RemoveTag("extended_shock_duration")
+        target:RemoveTag("extended_shock_duration")
     end
     if target.brain and not (target.components.health and target.components.health:IsDead()) then
         target.brain:Start()
