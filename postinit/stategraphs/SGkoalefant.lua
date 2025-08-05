@@ -10,7 +10,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead()) and (inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed")) then
+            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and (inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed")) then
                 inst.sg:GoToState("chargeattack", data.target)
             else
                 doattackeventhandler_fn(inst, data, ...)
@@ -60,10 +60,14 @@ env.AddStategraphPostInit("koalefant", function(inst)
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasAnyStateTag("attack", "busy", "electrocute", "charging")
-                and math.random() > .66 and inst.components.combat.target and 4 > inst:GetDistanceSqToInst(inst.components.combat.target) and inst.counterattack then
-                inst.sg:GoToState("stomp") 
-                return
+            if not (inst.components.health and inst.components.health:IsDead()) then
+                if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                    return
+                elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute", "charging") and math.random() > .66
+                    and inst.components.combat.target and 4 > inst:GetDistanceSqToInst(inst.components.combat.target) and inst.counterattack then
+                    inst.sg:GoToState("stomp") 
+                    return
+                end
             end
             return attackedeventhandler_fn(inst, data, ...)
         end

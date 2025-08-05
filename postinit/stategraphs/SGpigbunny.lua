@@ -24,28 +24,31 @@ env.AddStategraphPostInit("pig", function(inst)
 
     local _OldAttackedEvent = inst.events["attacked"].fn
     inst.events["attacked"].fn = function(inst, data, ...)
-        if inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not (inst.components.health and inst.components.health:IsDead())
-            and not inst.sg:HasStateTag("counter") and not inst.sg:HasStateTag("caninterrupt") then
-            if inst.counter then
-                inst.counter = inst.counter + 1
-                if inst.countertask then
-                    inst.countertask:Cancel()
-                    inst.countertask = nil
-                end
-            else
-                inst.counter = 1
-            end
-
-            inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
-
-            if inst.counter and inst.counter >= math.random(3, 4) and (data.attacker and data.attacker:IsValid() and inst:GetDistanceSqToInst(data.attacker) < 5^2) then -- Added a range check
-                if inst.countertask then
-                    inst.countertask:Cancel()
-                    inst.countertask = nil
-                end
-                inst.counter = 0
-                inst.sg:GoToState("counterattack_pre")
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                 return
+            elseif inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute") then
+                if inst.counter then
+                    inst.counter = inst.counter + 1
+                    if inst.countertask then
+                        inst.countertask:Cancel()
+                        inst.countertask = nil
+                    end
+                else
+                    inst.counter = 1
+                end
+
+                inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
+
+                if inst.counter and inst.counter >= math.random(3, 4) and (data.attacker and data.attacker:IsValid() and inst:GetDistanceSqToInst(data.attacker) < 5^2) then -- Added a range check
+                    if inst.countertask then
+                        inst.countertask:Cancel()
+                        inst.countertask = nil
+                    end
+                    inst.counter = 0
+                    inst.sg:GoToState("counterattack_pre")
+                    return
+                end
             end
         end
         _OldAttackedEvent(inst, data, ...)
@@ -278,8 +281,6 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
     inst.components.combat.ignorehitrange = false
 end
 
-
-
 local werepigs = {"moonpig","werepig"}
 for i,werepig in ipairs(werepigs) do
     env.AddStategraphPostInit(werepig, function(inst)
@@ -323,8 +324,12 @@ for i,werepig in ipairs(werepigs) do
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
             EventHandler("attacked", function(inst) 
-                if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") and not inst.sg:HasStateTag("busy") and inst.components.combat:InCooldown() then
-                    inst.sg:GoToState("hit")
+                if not (inst.components.health and inst.components.health:IsDead()) then
+                    if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                        return
+                    elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") and inst.components.combat:InCooldown() then
+                        inst.sg:GoToState("hit")
+                    end
                 end
             end),
         }

@@ -54,27 +54,31 @@ env.AddStategraphPostInit("spider", function(inst)
 
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
-        inst.events["doattack"].fn = function(inst, data)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst:HasTag("trapdoorspider") then
+        inst.events["doattack"].fn = function(inst, data, ...)
+            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("busy")) and inst:HasTag("trapdoorspider") then
                 inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
                     or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack"
                     or "attack", data.target)
             end
-            _OldAttackEvent(inst, data)
+            _OldAttackEvent(inst, data, ...)
         end
     end
 
     local _OldAttackedEvent = inst.events["attacked"] and inst.events["attacked"].fn
     if _OldAttackedEvent then
-        inst.events["attacked"].fn = function(inst)
-            if not inst.components.health:IsDead() and TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
-                and not (inst.sg:HasStateTag("caninterrupt") or inst:HasTag("forcestunned")) then
-                if not inst.sg:HasAnyStateTag("attack", "evade") and inst.components.combat.target then -- don't interrupt attack or exit shield
-                    inst.sg:GoToState("evade_loop")
+        inst.events["attacked"].fn = function(inst, data, ...)
+            if not (inst.components.health and inst.components.health:IsDead()) then
+                if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                    return
+                elseif TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
+                    and not (inst.sg:HasAnyStateTag("caninterrupt", "electrocute") or inst:HasTag("forcestunned")) then
+                    if not inst.sg:HasAnyStateTag("attack", "evade") and inst.components.combat.target then -- don't interrupt attack or exit shield
+                        inst.sg:GoToState("evade_loop")
+                    end
+                    return
                 end
-                return
             end
-            _OldAttackedEvent(inst)
+            _OldAttackedEvent(inst, data, ...)
         end
     end
 
@@ -83,8 +87,9 @@ env.AddStategraphPostInit("spider", function(inst)
     if healstate then
         local healstate_onenter = inst.states["heal"].onenter
         healstate.onenter = function(inst, target, ...)
-            healstate_onenter(inst, target, ...)
+            local ret = healstate_onenter(inst, target, ...)
             inst.SoundEmitter:PlaySound("webber1/creatures/spider_cannonfodder/heal") -- Missing Content Fix!
+            return ret
         end
     end
     --
