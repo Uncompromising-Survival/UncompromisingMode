@@ -110,10 +110,10 @@ env.AddStategraphPostInit("beefalo", function(inst)
                 inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
             end,
 
-            events =
+            --[[events =
             {   
-                EventHandler("animover", function(inst) inst.sg:GoToState("charge") end),        
-            },
+                EventHandler("animover", function(inst) inst.sg:GoToState("charge") end),
+            },]]
         },
         State{
             name = "chargeattack",
