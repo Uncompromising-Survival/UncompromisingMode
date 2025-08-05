@@ -607,7 +607,7 @@ DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
 
 DESCRIBE.UM_HOTSPRING = "It's heated by lava."
 
-DESCRIBE.UM_PLANT_HOTSPRINGS = "Common vegetation for a high geothermal activity area."
+DESCRIBE.UM_PLANT_HOTSPRINGS = "Common vegetation for areas with high geothermal activity."
 
 DESCRIBE.ROCK_LICHEN =
 {
