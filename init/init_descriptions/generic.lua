@@ -423,7 +423,7 @@ DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
 DESCRIBE.WOODPECKER = "Science makes it not get headaches."
 DESCRIBE.SNOTROAST = "That isn't going anywhere near my mouth."
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LARGEHUNGERSLOW = "I've lost my appetite."
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_LARGEHUNGERSLOW = ""
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_LARGEHUNGERSLOW = "I'm starting to feel hungry again."
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_BOOMBERRYATTACKS = "Strange fruity taste."
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_BOOMBERRYATTACKS = "The taste's out of my mouth now."
 DESCRIBE.BOOK_RAIN_UM = "I already know about the water cycle, thanks."
@@ -636,24 +636,18 @@ DESCRIBE.UM_BOAT_ENGINE = {
 }
 DESCRIBE.GARBAGEPATCHFLOTSAM = "It must've been dragged here by that tornado!"
 
-
-
-
-
-
-
 -- Broiling Hills
-
 DESCRIBE.BOULDER_CRAB =
 {
-    GENERIC = "It’s not a rock!",
+    GENERIC = "It's not a rock!",
     NAKED = "I feel sorry for it.",
 }
 
 DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
 
-
 DESCRIBE.UM_HOTSPRING = "It's heated by lava."
+
+DESCRIBE.UM_PLANT_HOTSPRINGS = DESCRIBE.MARSH_PLANT --POND_ALGAE
 
 DESCRIBE.ROCK_LICHEN =
 {
@@ -664,7 +658,7 @@ DESCRIBE.ROCK_LICHEN =
 -- All things Snaildrake
 DESCRIBE.SNAILDRAKE_MAGMA = "They seem to have an explosive disposition."
 DESCRIBE.SNAILDRAKE_SLIME = DESCRIBE.SNAILDRAKE_MAGMA
-DESCRIBE.SNAPALM = "I’m not sure it’s safe to be holding this."
+DESCRIBE.SNAPALM = "I'm not sure it's safe to be holding this."
 DESCRIBE.SNAILDRAKEHAT = "It'll mess up my hair."
 DESCRIBE.SNAILDRAKEBUCKET =
 {

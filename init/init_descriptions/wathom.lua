@@ -1,10 +1,10 @@
 local require = GLOBAL.require
 
-GLOBAL.STRINGS.CHARACTERS.WATHOM = require "speech_wathom"
-
-ANNOUNCE = GLOBAL.STRINGS.CHARACTERS.WATHOM
-DESCRIBE = GLOBAL.STRINGS.CHARACTERS.WATHOM.DESCRIBE
-ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WATHOM.ACTIONFAIL
+STRINGS = GLOBAL.STRINGS
+STRINGS.CHARACTERS.WATHOM = require "speech_wathom"
+ANNOUNCE = STRINGS.CHARACTERS.WATHOM
+DESCRIBE = STRINGS.CHARACTERS.WATHOM.DESCRIBE
+ACTIONFAIL = STRINGS.CHARACTERS.WATHOM.ACTIONFAIL
 
 --	[ 		Wathom Descriptions		]   --
 
@@ -261,7 +261,7 @@ DESCRIBE.DURABILITY_LEVEL = {
 --ACTIONFAIL.READ.GENERIC = "Magic, inert."
 ACTIONFAIL.GIVE.NOTNIGHT = "Presence required, Alter's gaze."
 
-RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
+RECIPE_DESC = STRINGS.RECIPE_DESC
 
 RECIPE_DESC.RAT_BURROW = "Den, rodents."
 
@@ -566,6 +566,133 @@ DESCRIBE.UM_BOAT_ENGINE = {
     ON = "PLEASE WRITE QUOTES",
     LOWFUEL = "PLEASE WRITE QUOTES",
     OVERHEATING = "PLEASE WRITE QUOTES"
+}
+
+-- Broiling Hills
+DESCRIBE.BOULDER_CRAB =
+{
+    GENERIC = "It's not a rock!",
+    NAKED = "I feel sorry for it.",
+}
+
+DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
+
+DESCRIBE.UM_HOTSPRING = "It's heated by lava."
+
+DESCRIBE.UM_PLANT_HOTSPRINGS = DESCRIBE.MARSH_PLANT --POND_ALGAE
+
+DESCRIBE.ROCK_LICHEN =
+{
+    GENERIC = "They like the humidity.",
+    PICKED = "The colony will regrow in time.",
+}
+
+-- All things Snaildrake
+DESCRIBE.SNAILDRAKE_MAGMA = "They seem to have an explosive disposition."
+DESCRIBE.SNAILDRAKE_SLIME = DESCRIBE.SNAILDRAKE_MAGMA
+DESCRIBE.SNAPALM = "I'm not sure it's safe to be holding this."
+DESCRIBE.SNAILDRAKEHAT = "It'll mess up my hair."
+DESCRIBE.SNAILDRAKEBUCKET =
+{
+    GENERIC = "Looks like it could be filled.",
+    WATER = "I have fetched a snail of water.",
+    LAVA = "Hot Stuff.",
+}
+DESCRIBE.SNAILDRAKE_HOLE = "It's just a hole."
+
+-- All things Rimeweed
+DESCRIBE.RIMEWEED_MAIN = "That weed is creating this viney mess."
+DESCRIBE.RIMEWEED_BARRIER = "Looks like a prickly cold front."
+
+DESCRIBE.UM_RIMEWEED_ITEMVINE = "It's prickly and cold to the touch."
+DESCRIBE.UM_RIMEWEED_ITEMFLOWER = "It's surprisingly hearty."
+
+DESCRIBE.RIMEWEED_WHIP = "I'll stay on the dealing end of it."
+
+DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
+DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
+
+-- Lava Caves
+DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
+
+DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
+DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+
+local general_scripts = require("play_generalscripts")
+local fn = require("play_commonfn")
+
+STRINGS.STAGEACTOR.WATHOM1 = {
+    "Amp Up! Amp Up!",
+    "...",
+    "Well. This is definitely temporary.",
+    "Really? I personally couldn't tell with this creature!",
+    "HA HA HA HA HA!",
+    "Shoo! Shoo! Good riddance, stupid birds.",
+    "Well, this was a waste of time."
+}
+
+general_scripts.WATHOM1 = {
+    cast = { "wathom" },
+    lines = {
+        { actionfn = fn.callbirds, duration = 1.3, },
+        { roles = { "wathom" }, duration = 3, line = STRINGS.STAGEACTOR.WATHOM1[1] },
+        { roles = {"wathom"}, duration = 1.3, anim = "umrun", animtype = "hold"},
+        { actionfn = fn.findpositions,	duration = 1, line = ".", positions={["wathom"] = 3,} },
+        { actionfn = fn.findpositions,	duration = 0.7, anim = "umrun", animtype = "hold",  positions={["wathom"] = 2,} },
+        { actionfn = fn.findpositions,	duration = 0.7, anim = "umrun", animtype = "loop", positions={["wathom"] = 1,} },
+        { roles = {"wathom"}, duration = 2.069, anim = "umrun", animtype = "loop"},
+        {
+            roles = { "wathom" },
+            duration = 2.5,
+            anim = "emote_angry",
+            animtype = "loop",
+            castsound = {
+                wathom = "wathomcustomvoice/wathomvoiceevent/bark"
+            },
+        },
+        {roles = {"BIRD2"},				duration = 1.2,		line = STRINGS.STAGEACTOR.WATHOM1[2]},
+        { roles = {"wathom"}, duration = 1, anim = "umrun"},
+        {
+            roles = { "wathom" },
+            duration = 2,
+            anim = "emote_angry",
+            --animtype = "loop",
+            castsound = {
+                wathom = "wathomcustomvoice/wathomvoiceevent/shadowbark"
+            },
+        },
+        {
+            roles = { "wathom" },
+            duration = 2,
+            anim = "emote_angry",
+            --animtype = "loop",
+            castsound = {
+                wathom = "wathomcustomvoice/wathomvoiceevent/shadowbark"
+            },
+        },
+        {
+            roles = { "wathom" },
+            duration = 2.3,
+            anim = "emoteXL_angry",
+            --animtype = "loop",
+            castsound = {
+                wathom = "wathomcustomvoice/wathomvoiceevent/ampedbark"
+            },
+        },
+        {roles = {"wathom"},		duration = 2.0, anim="death2", animtype="hold", castsound = {wathom = "wathomcustomvoice/wathomvoiceevent/death_voice"},},
+        {roles = {"BIRD2"},				duration = 1.8,		line = STRINGS.STAGEACTOR.WATHOM1[3], sgparam="disappointed"},
+		{roles = {"BIRD1"},				duration = 2.6,		line = STRINGS.STAGEACTOR.WATHOM1[4], sgparam="excited"},
+        {roles = {"BIRD1","BIRD2"},		duration = 2.3,		line = STRINGS.STAGEACTOR.WATHOM1[5], sgparam="laugh"},
+        {actionfn = fn.exitbirds,		duration = 0.3, },
+        {actionfn = fn.crowdcomment,	duration = 3,		line = STRINGS.STAGEACTOR.WATHOM1[6], anim = "emote_fistshake", prefabs = {"winky"},},
+        {actionfn = fn.crowdcomment,	duration = 3,		line = STRINGS.STAGEACTOR.WATHOM1[7], anim = "emote_impatient", prefabs = {"wixie"},},
+        {roles = {"wathom"},		duration = 1.5,		anim="corpse_revive"},
+        {actionfn = fn.actorsbow,		duration = 1, },
+    }
 }
 
 DESCRIBE.UM_RICE_PUDDING = "And yet, no."

@@ -1,10 +1,10 @@
 local require = GLOBAL.require
 
-GLOBAL.STRINGS.CHARACTERS.WINKY = require "speech_winky"
-
-ANNOUNCE = GLOBAL.STRINGS.CHARACTERS.WINKY
-DESCRIBE = GLOBAL.STRINGS.CHARACTERS.WINKY.DESCRIBE
-ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
+STRINGS = GLOBAL.STRINGS
+STRINGS.CHARACTERS.WINKY = require "speech_winky"
+ANNOUNCE = STRINGS.CHARACTERS.WINKY
+DESCRIBE = STRINGS.CHARACTERS.WINKY.DESCRIBE
+ACTIONFAIL = STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 
 --	[ 		Winky Descriptions		]   --
 
@@ -267,7 +267,7 @@ DESCRIBE.DURABILITY_LEVEL = {
 ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
 ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 
-RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
+RECIPE_DESC = STRINGS.RECIPE_DESC
 
 RECIPE_DESC.RAT_BURROW = "Leads back to home."
 
@@ -570,6 +570,107 @@ DESCRIBE.UM_BOAT_ENGINE = {
     ON = "PLEASE WRITE QUOTES",
     LOWFUEL = "PLEASE WRITE QUOTES",
     OVERHEATING = "PLEASE WRITE QUOTES"
+}
+
+-- Broiling Hills
+DESCRIBE.BOULDER_CRAB =
+{
+    GENERIC = "It's not a rock!",
+    NAKED = "I feel sorry for it.",
+}
+
+DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
+
+DESCRIBE.UM_HOTSPRING = "It's heated by lava."
+
+DESCRIBE.UM_PLANT_HOTSPRINGS = DESCRIBE.MARSH_PLANT --POND_ALGAE
+
+DESCRIBE.ROCK_LICHEN =
+{
+    GENERIC = "They like the humidity.",
+    PICKED = "The colony will regrow in time.",
+}
+
+-- All things Snaildrake
+DESCRIBE.SNAILDRAKE_MAGMA = "They seem to have an explosive disposition."
+DESCRIBE.SNAILDRAKE_SLIME = DESCRIBE.SNAILDRAKE_MAGMA
+DESCRIBE.SNAPALM = "I'm not sure it's safe to be holding this."
+DESCRIBE.SNAILDRAKEHAT = "It'll mess up my hair."
+DESCRIBE.SNAILDRAKEBUCKET =
+{
+    GENERIC = "Looks like it could be filled.",
+    WATER = "I have fetched a snail of water.",
+    LAVA = "Hot Stuff.",
+}
+DESCRIBE.SNAILDRAKE_HOLE = "It's just a hole."
+
+-- All things Rimeweed
+DESCRIBE.RIMEWEED_MAIN = "That weed is creating this viney mess."
+DESCRIBE.RIMEWEED_BARRIER = "Looks like a prickly cold front."
+
+DESCRIBE.UM_RIMEWEED_ITEMVINE = "It's prickly and cold to the touch."
+DESCRIBE.UM_RIMEWEED_ITEMFLOWER = "It's surprisingly hearty."
+
+DESCRIBE.RIMEWEED_WHIP = "I'll stay on the dealing end of it."
+
+DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
+DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
+
+-- Lava Caves
+DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
+
+DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
+DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+
+local general_scripts = require("play_generalscripts")
+local fn = require("play_commonfn")
+
+STRINGS.STAGEACTOR.WINKY1 = {
+    " ",
+    ".",
+    " ",
+    "!",
+    "That's it? Is she not gonna say anything? At all?",
+    "As if that pea-brain could talk!",
+    "HA HA HA HA HA!",
+    "...",
+    "I hate those stupid birds.",
+    "I hate them too. What a bunch of jerks.",
+    "Birds, unpleasant sounding. Next time, will meet my claws."
+}
+
+general_scripts.WINKY1 = {
+    cast = { "winky" },
+    lines = {
+        { actionfn = fn.callbirds, duration = 1.3, },
+        { roles = { "winky" }, duration = 3, line = STRINGS.STAGEACTOR.WINKY1[1] },
+        { roles = { "winky" }, duration = 1.25, line = STRINGS.STAGEACTOR.WINKY1[2] },
+        { roles = { "winky" }, duration = 2.25, line = STRINGS.STAGEACTOR.WINKY1[3] },
+        { roles = { "winky" }, duration = 1, line = STRINGS.STAGEACTOR.WINKY1[4] },
+        { roles = { "winky" }, duration = 4.5 },
+        { roles = { "BIRD1" }, duration = 2.75, line = STRINGS.STAGEACTOR.WINKY1[5], sgparam = "disappointed" },
+		{ roles = {"BIRD2"},				duration = 2,		line = STRINGS.STAGEACTOR.WINKY1[6], sgparam="excited"},
+        { roles = {"BIRD1","BIRD2"},		duration = 2,		line = STRINGS.STAGEACTOR.WINKY1[7], sgparam="laugh"},
+        { actionfn = fn.exitbirds,		duration = 0.3, },
+        {
+            roles = { "winky" },
+            duration = 2.25,
+            line = STRINGS.STAGEACTOR.WINKY1[8],
+            anim = "emote_impatient"
+        },
+        {
+            roles = { "winky" },
+            duration = 2.75,
+            line = STRINGS.STAGEACTOR.WINKY1[9],
+            anim = "emote_fistshake"
+        },
+        {actionfn = fn.crowdcomment,	duration = 2.75,		line = STRINGS.STAGEACTOR.WINKY1[10], anim = "emoteXL_waving4", prefabs = {"wixie"},},
+        {actionfn = fn.crowdcomment,	duration = 3,		line = STRINGS.STAGEACTOR.WINKY1[11], anim = "emote_angry", prefabs = {"wathom"},},
+    }
 }
 
 DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."

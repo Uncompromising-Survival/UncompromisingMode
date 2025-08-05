@@ -359,7 +359,7 @@ DESCRIBE.MUTATOR_TRAPDOOR = DESCRIBE.MUTATOR_WARRIOR
 DESCRIBE.WOODPECKER = "A hard worker. I respect 'em."
 DESCRIBE.SNOTROAST = "Now THAT's a loogie!"
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_LARGEHUNGERSLOW = "Mighty fillin', that was!"
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_LARGEHUNGERSLOW = ""
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_LARGEHUNGERSLOW = "Starting to work up an appetite again."
 DESCRIBE.BOOK_RAIN_UM = "I ain't scared of no rain!"
 DESCRIBE.FLORAL_BANDAGE = "I like the sweet smell, covers up the factory must."
 DESCRIBE.DORMANT_RAIN_HORN = "Just a conch shell."
@@ -566,6 +566,60 @@ DESCRIBE.UM_BOAT_ENGINE = {
     LOWFUEL = "It's runnin' low on fuel!",
     OVERHEATING = "That's overheating! Shut it down!"
 }
+
+-- Broiling Hills
+DESCRIBE.BOULDER_CRAB =
+{
+    GENERIC = "It's not a rock!",
+    NAKED = "I feel sorry for it.",
+}
+
+DESCRIBE.BOULDER_CRAB_HOLE = "It's a hole."
+
+DESCRIBE.UM_HOTSPRING = "It's heated by lava."
+
+DESCRIBE.UM_PLANT_HOTSPRINGS = DESCRIBE.MARSH_PLANT --POND_ALGAE
+
+DESCRIBE.ROCK_LICHEN =
+{
+    GENERIC = "They like the humidity.",
+    PICKED = "The colony will regrow in time.",
+}
+
+-- All things Snaildrake
+DESCRIBE.SNAILDRAKE_MAGMA = "They seem to have an explosive disposition."
+DESCRIBE.SNAILDRAKE_SLIME = DESCRIBE.SNAILDRAKE_MAGMA
+DESCRIBE.SNAPALM = "I'm not sure it's safe to be holding this."
+DESCRIBE.SNAILDRAKEHAT = "It'll mess up my hair."
+DESCRIBE.SNAILDRAKEBUCKET =
+{
+    GENERIC = "Looks like it could be filled.",
+    WATER = "I have fetched a snail of water.",
+    LAVA = "Hot Stuff.",
+}
+DESCRIBE.SNAILDRAKE_HOLE = "It's just a hole."
+
+-- All things Rimeweed
+DESCRIBE.RIMEWEED_MAIN = "That weed is creating this viney mess."
+DESCRIBE.RIMEWEED_BARRIER = "Looks like a prickly cold front."
+
+DESCRIBE.UM_RIMEWEED_ITEMVINE = "It's prickly and cold to the touch."
+DESCRIBE.UM_RIMEWEED_ITEMFLOWER = "It's surprisingly hearty."
+
+DESCRIBE.RIMEWEED_WHIP = "I'll stay on the dealing end of it."
+
+DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
+DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
+
+-- Lava Caves
+DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
+
+DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
+DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
 
 DESCRIBE.UM_RICE_PUDDING = "I was expecting it to be more creamy?"
 
