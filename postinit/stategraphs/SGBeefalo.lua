@@ -50,8 +50,6 @@ env.AddStategraphPostInit("beefalo", function(inst)
                 inst.components.locomotor:StopMoving()
                 inst.AnimState:PlayAnimation("mating_taunt1")
                 inst.SoundEmitter:PlaySound(inst.sounds.yell)
-                --inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT * 2.29  --should be equal to rook
-                --inst:AddTag("chargespeed")
                 inst.sg:SetTimeout(1)
             end,
             
@@ -79,8 +77,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
             name = "charge",
             tags = {"moving", "running", "charging", "busy", "attack"},
 
-            onenter = function(inst, target)
-                inst.sg.statemem.target = target
+            onenter = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1.2)
                 inst.components.combat:ResetCooldown()
                 if not inst.AnimState:IsCurrentAnimation("run_loop") then
@@ -91,7 +88,7 @@ env.AddStategraphPostInit("beefalo", function(inst)
             end,
 
             onupdate = function(inst)
-                inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT * 2.29
+                inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT * 2.29 -- Should be equal to Rook.
                 inst.components.locomotor:RunForward()
             end,
 
@@ -115,12 +112,12 @@ env.AddStategraphPostInit("beefalo", function(inst)
 
             events =
             {   
-                EventHandler("animover", function(inst) inst.sg:GoToState("charge", inst.sg.statemem.target) end),        
+                EventHandler("animover", function(inst) inst.sg:GoToState("charge") end),        
             },
         },
         State{
             name = "chargeattack",
-            tags = {"busy", "charging", "nointerrupt", "attack"},
+            tags = {"busy", "charging", "attack"},
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target
