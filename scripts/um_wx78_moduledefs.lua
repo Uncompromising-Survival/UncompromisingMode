@@ -596,38 +596,39 @@ end
 local function onobjectfreeze(wx, data, inst)
     --print('pluh')
     local obj = data.target
-    if obj._objectthawtask ~= nil then 
-        obj._objectthawtask:Cancel()
-        obj._objectthawtask = nil
-    end
-    obj._modulecoldhits = (obj._modulecoldhits or 0) + 1
-    local percent = obj._modulecoldhits * 0.075
-    if not obj:HasTag("frozen") then
-        if obj.components.workable.workmultiplierfn == nil then obj.components.workable:SetWorkMultiplierFn(workmultiplierfn) end
+    if obj ~= nil then
+        if obj._objectthawtask ~= nil then 
+            obj._objectthawtask:Cancel()
+            obj._objectthawtask = nil
+        end
+        obj._modulecoldhits = (obj._modulecoldhits or 0) + 1
+        local percent = obj._modulecoldhits * 0.075
+        if not obj:HasTag("frozen") then
+            if obj.components.workable.workmultiplierfn == nil then obj.components.workable:SetWorkMultiplierFn(workmultiplierfn) end
         
-        PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
-        if percent > 0 then SpawnPrefab("mining_ice_fx").Transform:SetPosition(obj.Transform:GetWorldPosition()) end
+            PushColour(obj, FREEZE_COLOUR[1] * percent, FREEZE_COLOUR[2] * percent, FREEZE_COLOUR[3] * percent, FREEZE_COLOUR[4] * percent)
+            if percent > 0 then SpawnPrefab("mining_ice_fx").Transform:SetPosition(obj.Transform:GetWorldPosition()) end
         
-        if obj.components.workable.workleft <= 0 then
-            PopColour(obj)
-        else
-            obj._objectthawtask = obj:DoPeriodicTask(5, function(obj, wx)
+            if obj.components.workable.workleft <= 0 then
+                PopColour(obj)
+            else
+                obj._objectthawtask = obj:DoPeriodicTask(5, function(obj, wx)
                 thawtask(obj, wx)
-            end)
-        end
+                end)
+            end
         
-        local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
-        local x, y, z = obj.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 8, WORKCOOLINGTAGS_MUST)
-        for i, v in ipairs(ents) do
-        --wx.components.talker:Say('plug')
-        if v.components.temperature ~= nil then
-        local cur = wx.components.temperature.current
-            v.components.temperature:SetTemperature(cur - (0.5 + obj._modulecoldhits*0.1))
+            local WORKCOOLINGTAGS_MUST = {"player" or "heatrock"}
+            local x, y, z = obj.Transform:GetWorldPosition()
+            local ents = TheSim:FindEntities(x, y, z, 8, WORKCOOLINGTAGS_MUST)
+            for i, v in ipairs(ents) do
+                --wx.components.talker:Say('plug')
+                if v.components.temperature ~= nil then
+                    local cur = wx.components.temperature.current
+                    v.components.temperature:SetTemperature(cur - (0.5 + obj._modulecoldhits*0.1))
+                end
+            end
         end
     end
-    end
-    
 end
 
 local function onfreezehit(wx, data, inst)
@@ -765,14 +766,11 @@ local function taser_onblockedorattacked(wx, data, inst)
             SpawnPrefab("electrichitsparks"):AlignToTarget(data.attacker, wx, true)
 
             local damage_mult = 1
-            if not (data.attacker:HasTag("electricdamageimmune") or (data.attacker.components.inventory and data.attacker.components.inventory:IsInsulated())) then
-                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT
-
-                local wetness_mult = (data.attacker.components.moisture and data.attacker.components.moisture:GetMoisturePercent())
-                    or (data.attacker:GetIsWet() and 1) or 0
-                damage_mult = damage_mult + wetness_mult
+            if not IsEntityElectricImmune(data.attacker) then
+				damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
             end
 
+            data.attacker:PushEvent("electrocute", { attacker = wx, stimuli = "electric" })
             data.attacker.components.combat:GetAttacked(wx, damage_mult * (TUNING.WX78_TASERDAMAGE + (wx._cherriftchips and wx._cherriftchips > 0 and 10 * wx._cherriftchips or 0)), nil, "electric")
 
             if not data.attacker._chargeharvestable then
@@ -783,7 +781,7 @@ local function taser_onblockedorattacked(wx, data, inst)
 
             --end
 
-            local tased_duration = wx._taser_chips / 1.25
+            --[[local tased_duration = wx._taser_chips / 1.25
             if data.attacker.sg and not data.attacker.sg.statemem.devoured and not data.attacker:HasAnyTag("shadowthrall", "shadow", "shadowchesspiece", "trepidation", "shadowminion", "lunarthrall_plant", "brightmare")
                 and (data.attacker:HasTag("smallepic") or not data.attacker:HasTag("epic")) then
                 if not data.attacker.tased_stunlocktask then
@@ -840,7 +838,7 @@ local function taser_onblockedorattacked(wx, data, inst)
                         data.attacker.um_forcestundebuff = nil
                     end
                 end)
-            end
+            end]]
         end
     end
 end
