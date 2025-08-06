@@ -56,14 +56,14 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
         target:AddDebuff("shockstundebuffimmunity", "shockstundebuffimmunity")
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
-        --Only do normal shockstundebuff if doesn't have a shock state, otherwise its handled by global CalcEntityElectrocuteDuration
-        if not (target.sg and target.sg:HasState("electrocute") and not IsEntityElectricImmune(target) or target.sg) then
-            inst.task = inst:DoPeriodicTask(.2, OhCrap, nil, target, data and data.attacker)
-        else
+
+        if target.sg and target.sg:HasState("electrocute") and not IsEntityElectricImmune(target) then
             if not target:HasTag("extended_shock_duration") then target:AddTag("extended_shock_duration") end
-            --force once again into elec. state because first hit runs it *before* this tag is added.
-            if target.sg then target.sg:GoToState("electrocute") end
-        end
+            -- Force once again into elec. state because first hit runs it *before* this tag is added.
+            target.sg:GoToState("electrocute")
+        else -- Only do normal shockstundebuff if doesn't have a shock state, otherwise its handled by global CalcEntityElectrocuteDuration
+			inst.task = inst:DoPeriodicTask(.2, OhCrap, nil, target, data and data.attacker)
+		end
         inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
         SpawnPrefab("electricchargedfx"):SetTarget(target)
     else
