@@ -57,7 +57,7 @@ local function OnAttached(inst, target, followsymbol, followoffset, data)
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
         --Only do normal shockstundebuff if doesn't have a shock state, otherwise its handled by global CalcEntityElectrocuteDuration
-        if not (target.sg:HasState("electrocute") and not IsEntityElectricImmune(target)) then
+        if not (target.sg and target.sg:HasState("electrocute") and not IsEntityElectricImmune(target) or target.sg) then
             inst.task = inst:DoPeriodicTask(.2, OhCrap, nil, target, data and data.attacker)
         else
             if not target:HasTag("extended_shock_duration") then target:AddTag("extended_shock_duration") end
