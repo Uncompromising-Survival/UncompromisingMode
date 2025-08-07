@@ -202,12 +202,12 @@ ChangeSortKey("floral_bandage", "bandage", "RESTORATION", true)
 
 if GetModConfigData("winona_items") then
     AddRecipe2("winona_toolbox", { Ingredient("boards", 2), Ingredient("goldnugget", 4), Ingredient("sewing_tape", 2) }, TECH.NONE, { builder_tag = "handyperson" }, { "CONTAINERS", "CHARACTER" })
-    ChangeSortKey("winona_toolbox", "treasurechest", "CONTAINERS", true)
+    ChangeSortKey("winona_toolbox", "battlesong_container", "CONTAINERS", false)
     ChangeSortKey("winona_toolbox", "sewing_tape", "CHARACTER", true)
-    AddRecipe2("powercell", { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 1), Ingredient("nitre", 2) }, TECH.NONE, { builder_tag = "handyperson", numtogive = 3 }, { "CHARACTER" })
-    ChangeSortKey("powercell", "winona_battery_high", "CHARACTER", true)
     AddRecipe2("winona_upgradekit_electrical", { Ingredient("goldnugget", 6), Ingredient("sewing_tape", 2), Ingredient("wagpunk_bits", 4) }, TECH.SCIENCE_TWO, { builder_tag = "handyperson" }, { "CHARACTER", "LIGHT" })
     ChangeSortKey("winona_upgradekit_electrical", "winona_toolbox", "CHARACTER", true)
+    AddRecipe2("powercell", { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 1), Ingredient("nitre", 2) }, TECH.NONE, { builder_tag = "handyperson", numtogive = 3 }, { "CHARACTER" })
+    ChangeSortKey("powercell", "winona_upgradekit_electrical", "CHARACTER", true)
 end
 
 AddRecipe2("boatpatch_sludge", { Ingredient("sludge", 3), Ingredient("driftwood_log", 2) }, TECH.NONE, nil, { "SEAFARING" })
