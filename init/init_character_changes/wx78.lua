@@ -447,10 +447,12 @@ if TUNING.DSTU.WXLESS then --HI ATOBA :3 :3 <3 <3
         end
 
         inst:AddComponent("efficientuser") -- Both for the Heat Module
-        inst:AddComponent("workmultiplier")
+        if not inst.components.workmultiplier then
+            inst:AddComponent("workmultiplier")
+        end
 
         inst._old_chip_inuse = 0
-	inst._cherriftchips = 0 --For Cherry Forest module. I shouldn't *need* it here since I always check if it's nil when it gets used but it won't hurt to have. I think.
+        inst._cherriftchips = 0 --For Cherry Forest module. I shouldn't *need* it here since I always check if it's nil when it gets used but it won't hurt to have. I think.
 
         if inst._onpusheddegen == nil then
             inst._onpusheddegen = function(inst)
