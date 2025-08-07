@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 
 
 if TUNING.DSTU.PK_GUARDS then
@@ -77,5 +78,14 @@ if TUNING.DSTU.PK_GUARDS then
 
         inst.components.trader:SetAcceptTest(AcceptTest)
         inst.components.trader.onaccept = OnGetItemFromPlayer
+
+        
+    end)
+
+    
+    -- Make sure everything else has loaded
+    env.AddPrefabPostInit("world", function(inst) 
+        local NEW_BLOCKING_CANT_OBJECTS = {"INLIMBO", "pkpole"}
+        UpvalueHacker.SetUpvalue(Prefabs.pigking.fn, NEW_BLOCKING_CANT_OBJECTS, "AbleToAcceptTest", "CanStartMinigame","IsAreaClearForMinigame","BLOCKING_CANT_OBJECTS")
     end)
 end
