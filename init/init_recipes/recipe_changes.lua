@@ -353,7 +353,7 @@ AddRecipeToFilter("wardrobe", "CONTAINERS")
 ChangeSortKey("wardrobe", "icebox", "CONTAINERS", false)
 
 AddRecipeToFilter("tophat", "MAGIC")
-ChangeSortKey("tophat", "armorslurper", "MAGIC", true)
+ChangeSortKey("tophat", "tophat_magician", "MAGIC", false)
 if GetModConfigData("snowstorms") then
     AddRecipeToFilter("wall_hay_item", "WINTER")
     ChangeSortKey("wall_hay_item", "dragonflyfurnace", "WINTER", true)
