@@ -9,16 +9,28 @@ GLOBAL.TUNING.WX78_CHARGING_FOODS.powercell = 1
 
 local ModuleDefs = require("wx78_moduledefs")
 
---ModuleDefs.AddCreatureScanDataDefinition("dreadeye", "maxsanity", 3)
+ModuleDefs.AddCreatureScanDataDefinition("um_buttery_fly", "maxsanity1", 3)
+--ModuleDefs.AddCreatureScanDataDefinition("dreadeye", "maxsanity", 3) -- Would reveal the disguise, I think
 ModuleDefs.AddCreatureScanDataDefinition("creepingfear", "maxsanity", 6)
 ModuleDefs.AddCreatureScanDataDefinition("trepidation", "maxsanity", 6)
 ModuleDefs.AddCreatureScanDataDefinition("mock_dragonfly", "heat", 10)
-ModuleDefs.AddCreatureScanDataDefinition("viperworm", "light", 6)
-ModuleDefs.AddCreatureScanDataDefinition("shockworm", "light", 6)
-ModuleDefs.AddCreatureScanDataDefinition("magmahound", "heat", 4)
-ModuleDefs.AddCreatureScanDataDefinition("glacialhound", "cold", 4)
+ModuleDefs.AddCreatureScanDataDefinition("snaildrake_magma", "heat", 3)
+ModuleDefs.AddCreatureScanDataDefinition("snaildrake_slime", "heat", 3)
+ModuleDefs.AddCreatureScanDataDefinition("viperworm", "maxsanity", 6)
+ModuleDefs.AddCreatureScanDataDefinition("shockworm", "taser", 6)
+ModuleDefs.AddCreatureScanDataDefinition("magmahound", "heat", 6)
+ModuleDefs.AddCreatureScanDataDefinition("glacialhound", "cold", 6)
+--ModuleDefs.AddCreatureScanDataDefinition("rimeweed_main", "cold", 3) --Too easy
 ModuleDefs.AddCreatureScanDataDefinition("lightninghound", "taser", 5)
-ModuleDefs.AddCreatureScanDataDefinition("alpha_lightninggoat", "taser", 5)
+ModuleDefs.AddCreatureScanDataDefinition("alpha_lightninggoat", "taser", 6)
+ModuleDefs.AddCreatureScanDataDefinition("fruitbat", "movespeed", 2)
+--ModuleDefs.AddCreatureScanDataDefinition("wathom", "nightvision", 1) -- Funney
+ModuleDefs.AddCreatureScanDataDefinition("um_ribopod", "maxhunger", 2)
+ModuleDefs.AddCreatureScanDataDefinition("hoodedwidow", "maxhunger", 6)
+
+if KnownModIndex:IsModEnabled("workshop-1289779251") then
+    ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3)
+end
 
 --TODO, reimplement dorainsparks to do based on wetness from min to max damage
 --add rate too
