@@ -198,6 +198,7 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     return false
 end
 
+
 env.AddComponentPostInit("health", function(self)
     local _SetVal = self.SetVal
     function self:SetVal(val, cause, afflicter, ...)
@@ -206,4 +207,17 @@ env.AddComponentPostInit("health", function(self)
         end
         return  _SetVal(self, val, cause, afflicter, ...)
     end
+	
+	if TUNING.DSTU.ONEHP == true then-- All this code is here
+	    TUNING.WX78_MAXHEALTH_BOOST = 0
+		TUNING.WX78_MAXHEALTH2_MULT = 0
+		local _SetMaxHealth = self.SetMaxHealth
+		function self:SetMaxHealth(amount)
+			if self.inst:HasTag("player") then
+				return _SetMaxHealth(self, 1)
+			else
+				return _SetMaxHealth(self, amount)
+			end
+		end	
+	end
 end)

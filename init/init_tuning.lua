@@ -433,7 +433,9 @@ TUNING.DSTU = {
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
     MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
-
+	ONEHP = GetModConfigData("uncompromising_1hp"),
+	
+	
     --hooded forest canoppy setttings
 
     HOODEDFOREST_CANOPY_MAX_ROTATION = 20,
