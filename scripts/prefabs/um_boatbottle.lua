@@ -37,8 +37,10 @@ local function ondeploy(inst, pt, deployer)
     for k, v in pairs(ents) do
         local x, y, z = v.Transform:GetWorldPosition()
         v.Transform:SetPosition(x, 0, z) --set y explicity to 0, for some reason a couple of prefabs were having values different than that.
-        v.AnimState:SetHaunted(true)
-        v:DoTaskInTime(1, function() v.AnimState:SetHaunted(false) end)
+        if v.AnimState then
+            v.AnimState:SetHaunted(true)
+            v:DoTaskInTime(1, function() v.AnimState:SetHaunted(false) end)
+        end
         if v.prefab == "boat_ancient_container" then --not a good solution, but...
             boat._container = v
         end
