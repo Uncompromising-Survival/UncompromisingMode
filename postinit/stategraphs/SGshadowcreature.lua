@@ -19,26 +19,26 @@ env.AddStategraphPostInit("shadowcreature", function(inst)
 	end
 		
 	local _OldAttacked = inst.events["attacked"].fn -- crawling h/n have a special hit state
-	inst.events["attacked"].fn = function(inst, data)
+	inst.events["attacked"].fn = function(inst, data, ...)
         if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
 			if inst._cdtask == nil and inst:HasTag("crawlinghorror") then
 				inst._cdtask = inst:DoTaskInTime(1, OnCooldown)
 				inst.sg:GoToState("hit_goo")
 			else
-				_OldAttacked(inst, data)
+				_OldAttacked(inst, data, ...)
 			end
 		end
 	end
 	
 	local _OldAttack = inst.events["doattack"].fn -- t/n beaks have a special attack state
-	inst.events["doattack"].fn = function(inst, data)
+	inst.events["doattack"].fn = function(inst, data, ...)
         if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
 			if inst.prefab == "nightmarebeak" or inst.prefab == "terrorbeak" then
 				if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
 					inst.sg:GoToState("attack", data.target)
 				end				
 			else
-				_OldAttack(inst, data)
+				_OldAttack(inst, data, ...)
 			end
 		end
 	end	
