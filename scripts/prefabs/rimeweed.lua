@@ -66,8 +66,8 @@ local function Freeze(v)
 end
 
 local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probably be bothering something else, biting thorns hurts.
-    if v:HasTag("hound") or v:HasTag("EPIC") and v.components.combat then
-        local player = FindEntity(v,36,nil,{"player"},{"playerghost"})
+    if v.components.combat and v:HasAnyTag("hound", "epic") then
+        local player = FindEntity(v, 36, nil, {"player"}, {"playerghost"})
         if player then
             v.components.combat:SuggestTarget(player)
         end
