@@ -16,11 +16,10 @@ local actionhandlers =
 
 local events=
 {
-    EventHandler("fly_back", function(inst, data)
-        inst.sg:GoToState("flyback")
-    end),
+    EventHandler("fly_back", function(inst, data) inst.sg:GoToState("flyback") end),
     CommonHandlers.OnLocomote(false, true),
     CommonHandlers.OnFreeze(),
+    CommonHandlers.OnElectrocute(),
     CommonHandlers.OnAttack(),
     CommonHandlers.OnAttacked(),
     CommonHandlers.OnDeath(),
@@ -59,14 +58,14 @@ local states =
                 inst.AnimState:PlayAnimation("fly_loop", true)
             end
         end,
-        
-        timeline = 
-        {         
-            TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath")  end ),
-            TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+
+        timeline =
+        {
+            TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            --TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end ),
+            TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
         },
-        
+
         events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
@@ -90,7 +89,7 @@ local states =
 
     State{
         name = "flyaway",
-        tags = {"flight", "busy"},
+        tags = {"flight", "busy", "noelectrocute"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -108,20 +107,20 @@ local states =
             inst.Physics:SetMotorVel(0, 10 + math.random() * 2, 0)
         end,
 
-        timeline = {
-            TimeEvent(6*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(13*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(23*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(33*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(41*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(51*FRAMES, function(inst) inst:PerformBufferedAction() end),
+        timeline =
+        {
+            TimeEvent(6 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(13 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(23 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(33 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(41 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(51 * FRAMES, function(inst) inst:PerformBufferedAction() end),
         },
-
     },
 
     State{
         name = "flyback",
-        tags = {"flight", "busy"},
+        tags = {"flight", "busy", "noelectrocute"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -131,7 +130,7 @@ local states =
 
             inst.AnimState:PlayAnimation("fly_back_loop",true)
 
-            local x,y,z = inst.Transform:GetWorldPosition()
+            local x, y, z = inst.Transform:GetWorldPosition()
             inst.Transform:SetPosition(x, 15, z)
             inst.Physics:SetMotorVel(0, -10 + math.random() * 2 , 0)
         end,
@@ -150,36 +149,36 @@ local states =
             end
         end,
 
-        timeline = {
-            TimeEvent(3*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(14*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(24*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(34*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(41*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+        timeline =
+        {
+            TimeEvent(3 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(14 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(24 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(34 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(41 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
         },
-
     },
 
     State{
         name = "taunt",
         tags = {"busy"},
-        
+
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("taunt")
         end,
 
-        timeline = 
+        timeline =
         {
-            TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/taunt") end),
-            TimeEvent(6*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
-            TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(18*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(28*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
-            TimeEvent(43*FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(1 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/taunt") end),
+            TimeEvent(6 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+            TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(18 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(28 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
+            TimeEvent(43 * FRAMES, function(inst) inst:PushEvent("wingdown") end ),
         },
-        
-        events=
+
+        events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
@@ -194,15 +193,14 @@ local states =
             inst.AnimState:PlayAnimation("eat", false)
         end,
 
-        timeline = 
+        timeline =
         {
-            TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent(9*FRAMES, function(inst) inst:PerformBufferedAction()
-            inst.SoundEmitter:PlaySound("UCSounds/vampirebat/bite") end),
-            TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent(9 * FRAMES, function(inst) inst:PerformBufferedAction() inst.SoundEmitter:PlaySound("UCSounds/vampirebat/bite") end),
+            TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
         },
 
-        events = 
+        events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end)
         },
@@ -223,13 +221,13 @@ local states =
             inst.sg:GoToState("idle")
         end,
 
-        timeline = 
+        timeline =
         {
-            TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew") end ),
-            TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew") end ),
+            TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew") end ),
+            TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew") end ),
         },
 
-        events = 
+        events =
         {
             EventHandler("attacked", function(inst) inst.components.inventory:DropEverything() inst.sg:GoToState("idle") end) --drop food
         },
@@ -253,31 +251,27 @@ local states =
             inst.sg.statemem.chewsounds = chews
         end,
 
-        onexit = function(inst)
-
-        end,
-
         timeline =
         {
-            TimeEvent(6*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-            TimeEvent((12 + 9 * 0)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 1)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 2)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 3)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 4)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 5)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 6)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 7)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 8)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 9)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 10)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 11)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 12)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 13)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 14)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 15)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 16)*FRAMES, DoChewSound),
-            TimeEvent((12 + 9 * 17)*FRAMES, DoChewSound),
+            TimeEvent(6 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+            TimeEvent((12 + 9 * 0) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 1) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 2) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 3) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 4) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 5) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 6) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 7) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 8) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 9) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 10) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 11) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 12) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 13) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 14) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 15) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 16) * FRAMES, DoChewSound),
+            TimeEvent((12 + 9 * 17) * FRAMES, DoChewSound),
         },
 
         events =
@@ -298,22 +292,22 @@ local states =
         onenter = function(inst)
             inst.DynamicShadow:Enable(false)
             inst.AnimState:PlayAnimation("glide", true)
-            inst.Physics:SetMotorVelOverride(0, -25, 0)        
-        end,
-        
-        onupdate= function(inst)
             inst.Physics:SetMotorVelOverride(0, -25, 0)
-            local pt = Point(inst.Transform:GetWorldPosition())            
+        end,
+
+        onupdate = function(inst)
+            inst.Physics:SetMotorVelOverride(0, -25, 0)
+            local pt = Point(inst.Transform:GetWorldPosition())
             if pt.y <= .1 then
                 inst.Physics:ClearMotorVelOverride()
                 pt.y = 0
                 inst.Physics:Stop()
                 inst.Physics:Teleport(pt.x,pt.y,pt.z)
-            --    inst.AnimState:PlayAnimation("land")
+                --inst.AnimState:PlayAnimation("land")
                 inst.DynamicShadow:Enable(true)
-              
-             --   inst.sg:GoToState("idle")                
-                inst.sg:GoToState("land")   
+
+                --inst.sg:GoToState("idle")
+                inst.sg:GoToState("land")
             end
         end,
 
@@ -323,9 +317,9 @@ local states =
                 pos.y = 0
                 inst.Transform:SetPosition(pos:Get())
             end
-           -- inst.components.knownlocations:RememberLocation("landpoint", inst:GetPosition())
-        end, 
-    },     
+            --inst.components.knownlocations:RememberLocation("landpoint", inst:GetPosition())
+        end,
+    },
 
     State{
         name = "land",
@@ -336,7 +330,7 @@ local states =
             --inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/land")
         end,
 
-        events = 
+        events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end)
         },
@@ -344,7 +338,7 @@ local states =
 
 }
 
-local walkanims = 
+local walkanims =
 {
     startwalk = "fly_loop",
     walk = "fly_loop",
@@ -355,45 +349,45 @@ CommonStates.AddWalkStates(states,
 {
     starttimeline =
     {
-        TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath")  end ),
-        TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        --TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+        TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 
-    walktimeline = 
+    walktimeline =
     {
-        TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath")  end ),
-        TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        --TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+        TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 
     endtimeline =
     {
-        TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath")  end ),
-        TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(7* FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        --TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+        TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 
-},  walkanims, true)
+}, walkanims, true)
 
 
 CommonStates.AddSleepExStates(states,
 {
-    starttimeline = 
+    starttimeline =
     {
-        TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        --TimeEvent(5*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath")  end ),
-        TimeEvent(17*FRAMES, function(inst) inst:PushEvent("wingdown") end),    
+        TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        --TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+        TimeEvent(17 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 
-    sleeptimeline = 
+    sleeptimeline =
     {
-        TimeEvent(23*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
+        TimeEvent(23 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/breath") end),
     },
 
     endtimeline =
     {
-        TimeEvent(13*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(13 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 },
 {
@@ -403,31 +397,29 @@ CommonStates.AddSleepExStates(states,
 
 CommonStates.AddCombatStates(states,
 {
-    attacktimeline = 
+    attacktimeline =
     {
-        -- TimeEvent(7* FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/bite") end),
-        --TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        TimeEvent(8* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/bite") end),
-        TimeEvent(11*FRAMES, function(inst) 
-            inst.components.combat:DoAttack()
-            inst:PushEvent("wingdown")
-        end),
+        --TimeEvent(7 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC003/creatures/enemy/vampire_bat/bite") end),
+        --TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/bite") end),
+        TimeEvent(11 * FRAMES, function(inst) inst.components.combat:DoAttack() inst:PushEvent("wingdown") end),
     },
 
     hittimeline =
     {
-        TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/hurt") end),
-        TimeEvent(7*FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(1 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/hurt") end),
+        TimeEvent(7 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
     },
 
     deathtimeline =
     {
-        TimeEvent(1*FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/death") end),
-        TimeEvent(4*FRAMES, function(inst) inst:PushEvent("wingdown") end),
-        TimeEvent(15*FRAMES, LandFlyingCreature),
+        TimeEvent(1 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/vampirebat/death") end),
+        TimeEvent(4 * FRAMES, function(inst) inst:PushEvent("wingdown") end),
+        TimeEvent(15 * FRAMES, LandFlyingCreature),
     },
 })
 
 CommonStates.AddFrozenStates(states, LandFlyingCreature, RaiseFlyingCreature)
+CommonStates.AddElectrocuteStates(states)
 
 return StateGraph("vampirebat", states, events, "idle", actionhandlers)
