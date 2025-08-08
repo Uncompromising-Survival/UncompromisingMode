@@ -89,7 +89,7 @@ local function fn(pondtype)
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
+    --inst.entity:AddMiniMapEntity()
     inst.entity:AddLight()    
     inst.entity:AddNetwork()
 
@@ -110,7 +110,7 @@ local function fn(pondtype)
 
     --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
 
-    inst.MiniMapEntity:SetIcon("pond.png")
+    --inst.MiniMapEntity:SetIcon("pond.png")
 
     inst.entity:SetPristine()
 

@@ -3,6 +3,8 @@ local assets =
     Asset("ANIM", "anim/piggyback.zip"),
     Asset("ANIM", "anim/swap_sludge_sack.zip"),
     Asset("ANIM", "anim/ui_piggyback_2x6.zip"),
+    Asset("IMAGE", "images/map_icons/sludge_sack.tex"),
+    Asset("ATLAS", "images/map_icons/sludge_sack.xml"),
 }
 
 local function onequip(inst, owner)
@@ -53,7 +55,7 @@ local function fn()
     inst.AnimState:SetBuild("swap_sludge_sack")
     inst.AnimState:PlayAnimation("anim")
 
-    inst.MiniMapEntity:SetIcon("piggyback.png")
+    inst.MiniMapEntity:SetIcon("sludge_sack.tex")
 
     inst.foleysound = "dontstarve/movement/foley/backpack"
 

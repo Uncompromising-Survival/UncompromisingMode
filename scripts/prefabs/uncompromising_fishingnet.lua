@@ -34,7 +34,6 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     inst:AddTag("allow_action_on_impassable")
@@ -46,8 +45,6 @@ local function fn()
     inst.AnimState:SetBank("boat_net")
     inst.AnimState:SetBuild("boat_net")
     inst.AnimState:PlayAnimation("idle")
-
-    inst.MiniMapEntity:SetIcon("boat_net.png")
 
     MakeInventoryFloatable(inst, "large", nil, { 0.68, 0.5, 0.68 })
 
