@@ -62,7 +62,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         if mindist < 8 then
             local statename = inst.sg.currentstate.name
             if statename == "pollinate" or statename == "land_idle" and not inst.takeoff then
-                inst.takeoff = inst:DoTaskInTime(1, function(inst)
+                inst.takeoff = inst:DoTaskInTime(1.2, function(inst)
                     local statename = inst.sg.currentstate.name
                     if statename == "pollinate" or statename == "land_idle" and TheWorld.state.isday then
                         inst.sg:GoToState("takeoff")

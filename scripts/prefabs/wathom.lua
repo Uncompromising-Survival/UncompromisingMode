@@ -632,6 +632,15 @@ local function SetupKnockOutTest(inst)
     inst.components.grogginess:SetKnockOutTest(KnockOutTest)
 end
 
+local function RemoveCorpse(inst)
+	inst:DoTaskInTime(0,function(inst)
+		if inst.wathom_corpse and inst.wathom_corpse:IsValid() then
+			inst.wathom_corpse.ReplaceWithSkeleton(inst.wathom_corpse)
+		end
+		inst:RemoveEventCallback("ms_respawnedfromghost",RemoveCorpse)
+	end)
+end
+
 local function SeeIfShouldBecomeShadow(inst)
 	if HasSkill(inst,"shadow_wathom_2") then
 		inst.AnimState:SetBuild("wathom")
@@ -639,7 +648,9 @@ local function SeeIfShouldBecomeShadow(inst)
 		inst.AnimState:SetMultColour(0,0,0,0.6)
 		inst.components.locomotor.runspeed = TUNING.WILSON_RUN_SPEED + TUNING.WONKEY_SPEED_BONUS
 		if inst.components.health:GetPenaltyPercent() <= 0.25 then
-			SpawnPrefab("wathom_corpse").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			inst.wathom_corpse = SpawnPrefab("wathom_corpse")
+			inst.wathom_corpse.Transform:SetPosition(inst.Transform:GetWorldPosition())
+			inst:ListenForEvent("ms_respawnedfromghost", RemoveCorpse)
 		else
 			SpawnPrefab("skeleton").Transform:SetPosition(inst.Transform:GetWorldPosition())
 		end

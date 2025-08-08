@@ -43,7 +43,7 @@ end
 
 local function SurvivorBarkEffect(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local players = TheSim:FindEntities(x,y,z,16,{"player"})
+	local players = TheSim:FindEntities(x,y,z,8,{"player"})
 	for i,player in ipairs(players) do
 		if player.components.wereness then
 			player.components.wereness:DoDelta(25)
@@ -282,6 +282,19 @@ local function Check_Bowling(inst,target)
 	end
 end	
 
+------------------------If Wathom is Terror, he needs to not gain lunacy during the day-----------------------------------------
+AddComponentPostInit("sanity", function(self)
+    local _OldRecalc = self.Recalc
+
+    function self:Recalc(dt)
+		if HasSkill(self.inst,"wathom_allegiance_shadow") and TheWorld.state.isday then
+			local rate = TUNING.DAPPERNESS_LARGE*10/6.6		
+			self:DoDelta(rate * dt, true)
+		end
+		return _OldRecalc(self,dt)
+    end
+end)
+
 
 local function AddEnemyDebuffFx(fx, target)
 	target:DoTaskInTime(math.random() * 0.25, function()
@@ -333,9 +346,9 @@ AddStategraphPostInit("wilsonghost", function(inst)
 				SpreadGoo(inst,1)
 			end
 			local x,y,z = inst.Transform:GetWorldPosition()
-			local ents = GLOBAL.TheSim:FindEntities(x, y, z, 16) --added playertags because of the taunt.
+			local ents = GLOBAL.TheSim:FindEntities(x, y, z, 8) --added playertags because of the taunt.
 			for i, v in ipairs(ents) do
-				if v.components.hauntable ~= nil and v.prefab ~="wathom_corpse" then
+				if v.components.hauntable ~= nil and v.prefab ~= "wathom_corpse" and v.prefab ~= "lifeamulet" and v.prefab ~= "ancient_amulet_red" and v.prefab ~= "resurrectionstone" then
 					AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
 					v.components.hauntable:DoHaunt(inst)
 					if HasSkill(inst,"wathom_friends_1") then
@@ -390,7 +403,7 @@ local function CheckIfDead(inst,target)
 			local x,y,z = target.Transform:GetWorldPosition()
 			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
 			for i,v in ipairs(loot) do
-				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 then
+				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
 					local health_restore = v.components.edible.healthvalue*1.1
 					local hunger_restore = v.components.edible.hungervalue*1.1
 					local sanity_restore = v.components.edible.sanityvalue*1.1

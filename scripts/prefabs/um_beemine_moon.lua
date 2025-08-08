@@ -227,7 +227,7 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
         MakeInventoryPhysics(inst)
 		inst:SetDeploySmartRadius(DEPLOYSPACING_RADIUS[DEPLOYSPACING.LESS] / 2)
 
-        inst.MiniMapEntity:SetIcon("beemine.png")
+        inst.MiniMapEntity:SetIcon("um_beemine_moon.tex")
 
         inst.AnimState:SetBank(skin)
         inst.AnimState:SetBuild(skin)
@@ -294,6 +294,9 @@ end
 local bomb_assets =
 {
     Asset("ANIM", "anim/swap_um_beemine_moon.zip"),
+
+    Asset("IMAGE", "images/map_icons/um_beemine_moon.tex"),
+    Asset("ATLAS", "images/map_icons/um_beemine_moon.xml"),
 }
 
 local function OnMinePlant(inst, attacker, target)

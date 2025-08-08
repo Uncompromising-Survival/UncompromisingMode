@@ -496,18 +496,36 @@ local function BuildSkillsData(SkillTreeFns)
             locks = {"wathom_allegiance_lock_1a", "wathom_allegiance_lock_2", "wathom_allegiance_lock_4"},
             onactivate = function(inst, fromload)
                 STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.SANITY = STRINGS._STATUS_ANNOUNCEMENTS.WATHOM.LUNACY
-				inst.components.sanity.night_drain_mult=8
-				inst.components.sanity.dapperness = TUNING.DAPPERNESS_HUGE
-				inst.components.sanity.light_drain_immune = false
+				
+				if inst.components.sanity then
+					local _OldRate
+					if inst.components.sanity.custom_rate_fn then
+						_OldRate = inst.components.sanity.custom_rate_fn
+					end
+					inst.components.sanity.custom_rate_fn = function(inst,dt) -- Leave code here for Night Terrors
+						local rate = 0
+						if TheWorld.state.isday and not TheWorld:HasTag("cave") then
+							rate = TUNING.DAPPERNESS_LARGE*10/6.6	
+						end	
+						local rate1 = 0
+						if _OldRate then
+							rate1 = _OldRate(inst,dt)
+						end
+						return rate + rate1
+					end
+				end
 				
                 if inst.components.eater then
                     inst.components.eater:SetCanEatRawMeat(false)
                 end
-
-				local pct = inst.components.sanity:GetPercent()
-                inst.components.sanity:EnableLunacy(true, "ancientterror")
-				inst.components.sanity:SetPercent(1-pct)
 				
+				-- if not inst.wathom_freebee_sanity then
+					-- local pct = inst.components.sanity:GetPercent()
+					-- inst.components.sanity:SetPercent(1-pct)
+					-- inst.wathom_freebee_sanity = true
+				-- end
+				
+				inst.components.sanity:EnableLunacy(true, "ancientterror")
                 inst:AddTag("skill_wathom_allegiance_shadow")
                 inst:AddTag("player_shadow_aligned")
                 local damagetyperesist = inst.components.damagetyperesist
