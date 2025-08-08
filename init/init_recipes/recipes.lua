@@ -88,17 +88,17 @@ AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), I
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_fyre_bomb", "nightstick", "WEAPONS", true)
-
-AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3),Ingredient("silk", 1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "CLOTHING","WEAPONS" })
-ChangeSortKey("um_hat_bee_moon", "roseglasseshat", "CLOTHING", true)
-ChangeSortKey("um_hat_bee_moon", "armor_glassmail", "WEAPONS", true)
+ChangeSortKey("um_fyre_bomb", "gunpowder", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
 ChangeSortKey("um_eyebalm", "bandage_butterflywings", "RESTORATION", true)
 
 AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })
-ChangeSortKey("um_beemine_moon_item", "um_fyre_bomb", "WEAPONS", true)
+ChangeSortKey("um_beemine_moon_item", "beemine", "WEAPONS", true)
+
+AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_meathoney", 3),Ingredient("silk", 1)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "CLOTHING","WEAPONS" })
+ChangeSortKey("um_hat_bee_moon", "beehat", "CLOTHING", true)
+ChangeSortKey("um_hat_bee_moon", "um_beemine_moon_item", "WEAPONS", true)
 
 AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { nounlock = true }, { "CRAFTING_STATION" })
 ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
@@ -129,7 +129,7 @@ AddRecipe2(
     { nil },
     { "WEAPONS" }
 )
-ChangeSortKey("um_detonator", "um_bear_trap_equippable_gold", "WEAPONS", true)
+ChangeSortKey("um_detonator", "um_fyre_bomb", "WEAPONS", true)
 
 
 if GetModConfigData("wiltfly") then
@@ -152,8 +152,8 @@ ChangeSortKey("driftwoodfishingrod", "fishingrod", "TOOLS", true)
 ChangeSortKey("driftwoodfishingrod", "fishingrod", "FISHING", true)
 
 AddRecipe2("uncompromising_fishingnet", { Ingredient("rope", 1), Ingredient("rocks", 2), Ingredient("silk", 3) }, TECH.SCIENCE_ONE, nil, { "TOOLS", "FISHING" })
-ChangeSortKey("uncompromising_fishingnet", "driftwoodfishingrod", "TOOLS", true)
-ChangeSortKey("uncompromising_fishingnet", "driftwoodfishingrod", "FISHING", true)
+ChangeSortKey("uncompromising_fishingnet", "oceanfishingrod", "TOOLS", true)
+ChangeSortKey("uncompromising_fishingnet", "oceanfishingrod", "FISHING", true)
 
 AddRecipe2("um_magnerang", { Ingredient("boomerang", 1), Ingredient("transistor", 2), Ingredient("wagpunk_bits", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("um_magnerang", "boomerang", "WEAPONS", true)
@@ -218,8 +218,9 @@ ChangeSortKey("boatpatch_sludge", "oar", "SEAFARING", false)
 ----------Structures----------
 ------------------------------
 
-AddRecipe2("air_conditioner", { Ingredient("shroom_skin", 2), Ingredient("gears", 1), Ingredient("cutstone", 2) }, TECH.SCIENCE_TWO, { placer = "air_conditioner_placer" }, { "STRUCTURES" })
+AddRecipe2("air_conditioner", { Ingredient("shroom_skin", 2), Ingredient("gears", 1), Ingredient("cutstone", 2) }, TECH.SCIENCE_TWO, { placer = "air_conditioner_placer" }, { "STRUCTURES", "RESTORATION" })
 ChangeSortKey("air_conditioner", "firesuppressor", "STRUCTURES", true)
+ChangeSortKey("air_conditioner", "siestahut", "RESTORATION", true)
 
 AddRecipe2("houndious_observious", { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) }, TECH.MAGIC_TWO, { placer = "houndious_observious_placer" }, { "STRUCTURES", "MAGIC" })
 ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
@@ -286,8 +287,8 @@ ChangeSortKey("armor_sharksuit_um", "armor_reed_um", "RAIN", true)
 AddRecipe2("brine_balm", { Ingredient("saltrock", 2), Ingredient("kelp", 1) }, TECH.SCIENCE_ONE, nil, { "RESTORATION" })
 ChangeSortKey("brine_balm", "floral_bandage", "RESTORATION", true)
 
-AddRecipe2("sludge_cork", { Ingredient("driftwood_log", 2), Ingredient("rope", 2) }, TECH.SCIENCE_ONE, nil, { "TOOLS", "SEAFARING" })
-ChangeSortKey("sludge_cork", "oceanfishingrod", "TOOLS", true)
+AddRecipe2("sludge_cork", { Ingredient("driftwood_log", 2), Ingredient("rope", 2) }, TECH.NONE, nil, { "TOOLS", "SEAFARING" })
+ChangeSortKey("sludge_cork", "uncompromising_fishingnet", "TOOLS", true)
 ChangeSortKey("sludge_cork", "boat_magnet_beacon", "SEAFARING", true)
 
 --[[AddRecipe2(  "boat_bumper_copper_kit",  { Ingredient("um_copper_pipe", 14) },  TECH.SEAFARING_ONE,  { numtogive = 2 },  { "SEAFARING" })
@@ -541,9 +542,12 @@ AddRecipe2(
 	nil,
 	{ "ARMOUR" }
 )
-ChangeSortKey("um_hat_rime", "armor_sharksuit_um", "ARMOUR", true)
+ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", false)
 GLOBAL.STRINGS.RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
+ChangeSortKey("um_boatbottle", "sludge_cork", "TOOLS", true)
+ChangeSortKey("um_boatbottle", "chestupgrade_stacksize", "CONTAINERS", true)
+ChangeSortKey("um_boatbottle", "portableboat_item", "SEAFARING", true)

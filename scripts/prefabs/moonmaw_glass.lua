@@ -107,8 +107,6 @@ local function fn(pondtype)
 
     inst:AddTag("moonglass")
 
-    --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
-
 
     inst.entity:SetPristine()
 

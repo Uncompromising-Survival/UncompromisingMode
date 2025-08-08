@@ -323,7 +323,7 @@ for i,werepig in ipairs(werepigs) do
 
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
-            EventHandler("attacked", function(inst) 
+            EventHandler("attacked", function(inst, data)
                 if not (inst.components.health and inst.components.health:IsDead()) then
                     if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                         return

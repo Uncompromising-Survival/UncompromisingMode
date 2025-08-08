@@ -11,6 +11,7 @@ local prefabs =
 {
     "guano",
     "batwing",
+    "teamleader",
     "pigskin",
     "monstersmallmeat",
 }
@@ -87,7 +88,7 @@ local function OnAttacked(inst, data)
     if not inst.components.teamattacker.inteam and not inst.components.teamattacker:SearchForTeam() then
         MakeTeam(inst, data.attacker)
     elseif inst.components.teamattacker.teamleader then
-        inst.components.teamattacker.teamleader:BroadcastDistress() -- Ask for help!
+        inst.components.teamattacker.teamleader:BroadcastDistress(inst) -- Ask for help!
     end
 
     if inst.components.teamattacker.inteam and not inst.components.teamattacker.teamleader:CanAttack() then
@@ -223,14 +224,13 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
-    --inst.entity:AddLightWatcher()
 
     MakeGhostPhysics(inst, 1, .5)
 
     inst.DynamicShadow:SetSize(1.5, .75)
 
     inst.Transform:SetFourFaced()
-    inst.Transform:SetScale(0.9, 0.9, 0.9)
+    inst.Transform:SetScale(.9, .9, .9)
 
     inst.AnimState:SetBank("bat")
     inst.AnimState:SetBuild("bat_vamp_build")
@@ -435,5 +435,5 @@ local function circlingbatfn()
     return inst
 end]]
 
-return Prefab("vampirebat", fn, assets, prefabs) --,
---Prefab("badlands/objects/circlingbat", circlingbatfn, assets, prefabs)
+return Prefab("vampirebat", fn, assets, prefabs) --[[,
+    Prefab("badlands/objects/circlingbat", circlingbatfn, assets, prefabs)]]

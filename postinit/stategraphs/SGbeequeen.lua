@@ -170,11 +170,11 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
     end
 
     local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data)
+    inst.events["attacked"].fn = function(inst, data, ...)
         if inst.sg:HasStateTag("tired") then
             inst.sg:GoToState("tired_hit")
         else
-            _OldAttackedEvent(inst, data)
+            _OldAttackedEvent(inst, data, ...)
         end
     end
 

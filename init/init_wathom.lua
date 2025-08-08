@@ -385,7 +385,7 @@ local function MarkDontEatFoods(inst,target)
 	local x,y,z = target.Transform:GetWorldPosition()
 	local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
 	for i,v in ipairs(loot) do
-		if v:HasTag("meat") and v.components.edible then
+		if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not v:HasTag("badfood") then
 			v.wathom_dont_eat = true
 			v:DoTaskInTime(3,function(v) v.wathom_dont_eat = nil end)
 		end
@@ -403,7 +403,7 @@ local function CheckIfDead(inst,target)
 			local x,y,z = target.Transform:GetWorldPosition()
 			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
 			for i,v in ipairs(loot) do
-				if v:HasTag("meat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
+				if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
 					local health_restore = v.components.edible.healthvalue*1.1
 					local hunger_restore = v.components.edible.hungervalue*1.1
 					local sanity_restore = v.components.edible.sanityvalue*1.1

@@ -17,11 +17,11 @@ local function DoFootstep(inst)
 end
 
 local _OldAttackEvent = inst.events["doattack"].fn --Event handler to force the leap if we haven't done the leap for long enough (brainside leap still independent
-inst.events["doattack"].fn = function(inst, data)
+inst.events["doattack"].fn = function(inst, data, ...)
 	if inst.rockthrow and not inst.components.health:IsDead() then
 		inst.sg:GoToState("pre_shoot", data.target)
 	else
-		_OldAttackEvent(inst, data)
+		_OldAttackEvent(inst, data, ...)
 	end
 end
 
