@@ -11,7 +11,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
                     local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
                     local velx = math.cos(rad)
                     local velz = -math.sin(rad)
-
                     local distancemultiplier = distancemod ~= nil and 1 + (distancemod / 10) or 1
                     local dx, dy, dz = tx + ((((3 / (i + 2)) * velx))) / distancemultiplier, ty, tz + ((((3 / (i + 2)) * velz))) / distancemultiplier
                     target.Transform:SetPosition(dx, dy, dz)
@@ -24,9 +23,8 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         return statename and (statename == "pollinate" or statename == "land_idle" or statename == "thaw" or statename == "frozen")
     end
 
-    local function ByPassWeapon(weapon, attacker, inst) -- Firing a projectile that deals more or equal to 1 damage will kill the Butterfly.
-        return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart") or ((weapon.components.weapon and weapon.components.weapon:GetDamage(attacker, inst) >= 1
-            and weapon.components.weapon.projectile) or weapon.components.projectile))
+    local function ByPassWeapon(weapon, attacker, inst)
+        return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart") or ((weapon.components.weapon and weapon.components.weapon.projectile) or weapon.components.projectile))
     end
 
     local function ByStimuli(stimuli)
@@ -42,10 +40,10 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
                 if data.attacker.components.talker and data.attacker:HasTag("player") then
                     data.attacker.components.talker:Say(GetString(data.attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
                 end
-                return
+                return true
             end
         end
-        inst.components.health:Kill() --  any other condition needs to instantly kill the butterfly, feigning having 1 health
+        return false
     end
 
     local function BozoUpdate(inst)
@@ -108,12 +106,11 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             if not TheWorld.ismastersim then
                 return
             end
-            inst.components.health:SetAbsorptionAmount(1)
-            inst:ListenForEvent("attacked", SlipAway)
+
+			inst.SlipAway = SlipAway
 
             inst:AddComponent("playerprox")
-            inst:AddTag("prey") --Now wigfrid should leave you in peace. Buzzard hate you tho, I think.
-            inst:DoPeriodicTask(2,CheckForNearbyBozos)
+            inst:DoPeriodicTask(2, CheckForNearbyBozos)
             
             
             if v == "butterfly" then
@@ -129,7 +126,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
                     RollForButtery(inst)
                     return data
                 end
-                inst:DoTaskInTime(0,function(inst)
+                inst:DoTaskInTime(0, function(inst)
                     if not inst.buttery then
                         inst.buttery = math.random(1, 100)
                     end

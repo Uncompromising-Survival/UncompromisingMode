@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local SpDamageUtil = require("components/spdamageutil")
 
 local function HasSkill(inst,name)
-	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+    return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
 env.AddComponentPostInit("combat", function(self)
@@ -105,6 +105,28 @@ env.AddComponentPostInit("combat", function(self)
         end
     end
 
+    local _DoAttack = self.DoAttack
+    function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+        if not targ then targ = self.target end
+        if targ and targ:IsValid() and targ.SlipAway then
+            if instrangeoverride then self.temprange = instrangeoverride end
+            if instpos then self.temppos = instpos end
+            if not weapon then weapon = self:GetWeapon() end
+            if not stimuli then
+                if weapon and weapon.components.weapon then
+                    if weapon.components.weapon.overridestimulifn then stimuli = weapon.components.weapon.overridestimulifn(weapon, self.inst, targ) end
+                    if not stimuli and weapon.components.weapon.stimuli == "electric" then stimuli = "electric" end
+                end
+                if not stimuli and self.inst.components.electricattacks then stimuli = "electric" end
+            end
+            if self:CanHitTarget(targ, weapon) and targ:SlipAway({attacker = self.inst, weapon = weapon, stimuli = stimuli}) then
+                self:ClearAttackTemps()
+                return
+            end
+        end
+        return _DoAttack(self, targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+    end
+
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
         if self.inst:HasTag("take_extra_spdamage") and attacker and not attacker:HasTag("player") and attacker.components.health and attacker.components.combat then
@@ -125,11 +147,11 @@ env.AddComponentPostInit("combat", function(self)
                 damage = damage - feather_frock.frock_damage_reduction
             end
         end
-		
-		if self.inst:HasTag("wathom_really_spooking_me") then
-			damage = damage*1.5
-		end
-		
+        
+        if self.inst:HasTag("wathom_really_spooking_me") then
+            damage = damage*1.5
+        end
+        
         if stimuli and stimuli == "fire" and self.inst.components.health and self.inst.components.health:GetFireDamageScale() then
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
@@ -148,12 +170,12 @@ env.AddComponentPostInit("combat", function(self)
 
         if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
-			-- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
-				-- damage = damage * self.inst.AmpDamageTakenModifier*0.5
-				-- self.inst.components.adrenaline:DoDelta(-damage/3)
-			-- else
-				damage = damage * self.inst.AmpDamageTakenModifier
-			--end
+            -- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
+                -- damage = damage * self.inst.AmpDamageTakenModifier*0.5
+                -- self.inst.components.adrenaline:DoDelta(-damage/3)
+            -- else
+                damage = damage * self.inst.AmpDamageTakenModifier
+            --end
             
         elseif self.inst and self.inst.components.upgrademoduleowner and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WXLESS then
             -- Hardy circuit flat damage reduction
