@@ -370,6 +370,8 @@ local function RockThrowTimer(inst, data)
     end
 end
 
+local smogeated = 0
+
 local function LaunchProjectile(inst)
     local target = inst.components.combat.target
     if target ~= nil then
@@ -386,14 +388,23 @@ local function LaunchProjectile(inst)
         local maxrange = 20
         local bigNum = 15
         local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-        projectile:AddTag("canthit")
+        local smog = TheSim:FindEntities(x, y, z, 6 * 4, { "smog" }, { "INLIMBO" })
+        for k, v in pairs(smog) do
+            v:Remove()
+            inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/suckup")
+            --[[smogeated = smogeated + 1
+            print("yummy! " .. smogeated .. " smogs eaten up!")]]
+	    end
 
+        --for i = 1, smogeated do
+        projectile:AddTag("canthit")
         projectile.components.complexprojectile:SetLaunchOffset(Vector3(5, 4, 0))
         --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
         projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
         projectile.components.complexprojectile:SetGravity(-55)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)
         projectile.dragonflyspit = true
+        --smogeated = 0
     end
 end
 
