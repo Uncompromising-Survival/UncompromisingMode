@@ -8,12 +8,11 @@ local function DoubleSlap(owner, data)
     local target, weapon = data and data.target, data and data.weapon
     local buffaction = owner:GetBufferedAction()
     if buffaction and buffaction.mockattack and owner.sg:HasStateTag("busy") then owner.sg:RemoveStateTag("busy") end
-    if (not buffaction or buffaction and not buffaction.mockattack) and not owner.components.rider:IsRiding() and weapon and weapon.components.weapon
-        and not (weapon.components.projectile or weapon:HasTag("rangedweapon")) and target and target:IsValid() then
-        --print("this is the part where you go into the double slap")
-        owner:DoTaskInTime(0, function()
+    if (not buffaction or buffaction and not buffaction.mockattack) and not owner.components.rider:IsRiding()
+        and weapon and weapon.components.weapon and not (weapon.components.projectile or weapon:HasTag("rangedweapon")) then
+        owner:DoTaskInTime(0, function() -- Target can change during this task.
             local act = BufferedAction(owner, target, ACTIONS.ATTACK)
-            if act then
+            if target and target:IsValid() and not (target.components.health and target.components.health:IsDead()) and act then
                 act.mockattack = true
                 if owner.sg:HasStateTag("attack") then owner.sg:RemoveStateTag("attack") end
                 owner.components.combat:ResetCooldown()
