@@ -32,7 +32,7 @@ local function RerollCocoons(inst)
 	
     if widowweb ~= nil--[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-			if v.size == 13 or v.size == 14 or v.size == 12 then
+			if v.size == 13 or v.size == 14 or v.size == 12 or v.size == 23 then
 			else
 				local size = math.random(1,20)
 				v:Remove()

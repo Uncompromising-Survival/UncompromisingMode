@@ -39,6 +39,7 @@ local function SpawnCocoon(inst)
 	-- guaranteed mactusk and snapdragon
 	TrySpawnCocoon(x, z,14)
 	TrySpawnCocoon(x, z,13)
+	TrySpawnCocoon(x, z,23)
 end
 
 

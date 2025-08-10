@@ -21,7 +21,10 @@ env.AddStategraphPostInit("spider", function(inst)
             projectile.shadow = SpawnPrefab("warningshadow")
             projectile.shadow.scaleFactor = scaleFactor
             projectile.shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
-            projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)    
+            projectile.shadow = projectile.shadow:DoPeriodicTask(FRAMES, ShadowFade, nil, 5)  
+			if inst.components.follower and inst.components.follower.leader then
+				projectile.leader = inst.components.follower.leader
+			end
             local a, b, c = target.Transform:GetWorldPosition()
             local targetpos = target:GetPosition()
             if not angle then

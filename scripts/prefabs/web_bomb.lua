@@ -10,7 +10,12 @@ local function doprojectilehit(inst, attacker, other)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spider_egg_sack")
     local x, y, z = inst.Transform:GetWorldPosition()
     SpawnPrefab("web_net_splat_fx").Transform:SetPosition(x, 0, z)
-
+	
+	-- Will not web your own leader
+	local leader
+	if inst and inst.leader then
+		leader = inst.leader
+	end
     if attacker ~= nil and not attacker:IsValid() then
         attacker = nil
     end
@@ -24,7 +29,7 @@ local function doprojectilehit(inst, attacker, other)
         end
     end
 
-    if other ~= nil and other:IsValid() then
+    if other ~= nil and other:IsValid() and not (leader and leader == other) then
         if attacker ~= nil and attacker.components.weapon then
             attacker.components.combat:DoAttack(other, inst.components.complexprojectile.owningweapon, inst)
         end

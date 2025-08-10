@@ -810,7 +810,7 @@ local cocoontable = {
         cocoonsize = "large",
         cocoonname = "Leafy",
     },
-    [23] = {
+    [25] = {
         creature = "stalker_minion1", -- Do the funny stuff here
         lootfn = SurvivorCocoon,
         cocoonsize = "medium",

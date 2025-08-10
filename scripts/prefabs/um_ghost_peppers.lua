@@ -5,6 +5,9 @@ local assets=
 	Asset("ANIM", "anim/um_ghost_pepper_item.zip"),
 	Asset("ATLAS", "images/inventoryimages/um_ghost_pepper_item.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_ghost_pepper_item.tex"),
+	
+    Asset("IMAGE", "images/map_icons/um_ghost_pepper.tex"),
+    Asset("ATLAS", "images/map_icons/um_ghost_pepper.xml"),
 }
 
 local function placegoffgrids(inst, radiusMax, prefab,tags)
@@ -255,10 +258,10 @@ local function commonfn(Sim)
 	inst.entity:AddAnimState()
 	inst.entity:AddSoundEmitter()
 	inst.shadow = inst.entity:AddDynamicShadow()
-    --inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 	inst.entity:AddLight()
-    --inst.MiniMapEntity:SetIcon("oceanvine.png")
+    inst.MiniMapEntity:SetIcon("um_ghost_pepper.tex")
 
 	inst.shadow:SetSize( 1.5, .75 )
     
