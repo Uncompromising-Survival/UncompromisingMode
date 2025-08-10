@@ -24,6 +24,14 @@ local function DoubleSlap(owner, data)
     end
 end
 
+local function AddRemoveDebuff(owner)
+    if owner.sg.mem.mockattack then
+        owner.components.combat.externaldamagemultipliers:SetModifier(owner, .5, "um_mockattack")
+    elseif owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
+        owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
+    end
+end
+
 local function onequip_blue(inst, owner)
     if not owner:HasTag("vetcurse") then
         inst:DoTaskInTime(0, function(inst, owner)
@@ -41,12 +49,17 @@ local function onequip_blue(inst, owner)
     else
         owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
         owner:ListenForEvent("onattackother", DoubleSlap)
+        owner:ListenForEvent("newstate", AddRemoveDebuff)
     end
 end
 
 local function onunequip_blue(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner:RemoveEventCallback("onattackother", DoubleSlap)
+    owner:RemoveEventCallback("newstate", AddRemoveDebuff)
+    if owner.components.combat and owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
+        owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
+    end
 end
 
 local function fn()
