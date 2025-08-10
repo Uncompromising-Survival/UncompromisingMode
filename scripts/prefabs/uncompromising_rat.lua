@@ -285,13 +285,6 @@ local function fn()
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
-    inst.Physics:ClearCollisionMask()
-    inst.Physics:CollidesWith(COLLISION.GROUND)
-    --inst.Physics:CollidesWith(COLLISION.OBSTACLES)
-    --inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
-    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:CollidesWith(COLLISION.GIANTS)
-    --inst.Physics:Teleport(inst.Transform:GetWorldPosition())
     inst.sounds = carratsounds
 
     inst:AddComponent("locomotor")
@@ -681,13 +674,6 @@ local function packfn()
 
     if inst.gooserippletask == nil then inst.gooserippletask = inst:DoPeriodicTask(.25, DoRipple, FRAMES) end
 
-    inst.Physics:ClearCollisionMask()
-    inst.Physics:CollidesWith(COLLISION.GROUND)
-    --inst.Physics:CollidesWith(COLLISION.OBSTACLES)
-    --inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
-    inst.Physics:CollidesWith(COLLISION.CHARACTERS)
-    inst.Physics:CollidesWith(COLLISION.GIANTS)
-    --inst.Physics:Teleport(inst.Transform:GetWorldPosition())
     inst.sounds = carratsounds
 
     inst:AddComponent("locomotor")
