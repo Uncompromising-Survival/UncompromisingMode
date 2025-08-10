@@ -437,6 +437,10 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_RELEASE_TIME = day_time * 1.5
 end
 
+-- Glass Cutter
+TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
+TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
+
 --if GetModConfigData("woodie_skilltree") then
 --TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
