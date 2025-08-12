@@ -134,12 +134,10 @@ end
 env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
     inst.states["spawnguards"].tags["ability"] = true -- This is added such that the stomphandler can recognize the spawnguards move as an ability
     local _OldOnExit = inst.states["spawnguards"].onexit
-    inst.states["spawnguards"].onexit = function(inst)
+    inst.states["spawnguards"].onexit = function(inst, ...)
         inst.abilitybusy = nil
         inst.PstSummonHandler(inst)
-        if _OldOnExit then
-            _OldOnExit(inst)
-        end
+        if _OldOnExit then return _OldOnExit(inst, ...) end
     end
 
     --[[local _OldOnAtkEnter --Deprecated bq combo attack code.
@@ -161,12 +159,9 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
 
     local _OldOnHit = inst.states["hit"].onexit
     inst.states["hit"].onexit = function(inst)
-        if _OldOnHit then
-            _OldOnHit(inst)
-        end
-        if not inst.abilitybusy then
-            inst.ActivateHitAbility(inst)
-        end
+        local ret = _OldOnHit and _OldOnHit(inst, ...)
+        if not inst.abilitybusy then inst.ActivateHitAbility(inst) end
+        if ret then return ret end
     end
 
     local _OldAttackedEvent = inst.events["attacked"].fn
@@ -174,7 +169,7 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
         if inst.sg:HasStateTag("tired") then
             inst.sg:GoToState("tired_hit")
         else
-            _OldAttackedEvent(inst, data, ...)
+            return _OldAttackedEvent(inst, data, ...)
         end
     end
 

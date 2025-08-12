@@ -24,6 +24,7 @@ local function DoubleSlap(owner, data)
 end
 
 local function AddRemoveDebuff(owner)
+    if not owner.components.combat then return end
     if owner.sg.mem.mockattack then
         owner.components.combat.externaldamagemultipliers:SetModifier(owner, .5, "um_mockattack")
     elseif owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
@@ -40,7 +41,9 @@ local function onequip_blue(inst, owner)
                 owner.components.inventory:Unequip(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
                 owner.components.inventory:DropItem(tool)
                 owner.components.inventory:GiveItem(inst)
-                owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
+                if owner.components.talker and owner:HasTag("player") then
+                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
+                end
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
                 if owner.sg then owner.sg:GoToState("hit") end
             end
