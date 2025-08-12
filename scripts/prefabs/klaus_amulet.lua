@@ -33,7 +33,7 @@ local function AddRemoveDebuff(owner)
 end
 
 local function onequip_blue(inst, owner)
-    if not owner:HasTag("vetcurse") then
+    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
         inst:DoTaskInTime(0, function(inst, owner)
             local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
             local tool = owner and (owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) or owner.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK))
@@ -41,7 +41,7 @@ local function onequip_blue(inst, owner)
                 owner.components.inventory:Unequip(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
                 owner.components.inventory:DropItem(tool)
                 owner.components.inventory:GiveItem(inst)
-                if owner.components.talker and owner:HasTag("player") then
+                if owner.components.talker then
                     owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
                 end
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
