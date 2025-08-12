@@ -36,7 +36,7 @@ local function onequip_blue(inst, owner)
     if not owner:HasTag("vetcurse") and owner:HasTag("player") then
         inst:DoTaskInTime(0, function(inst, owner)
             local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and (owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) or owner.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK))
+            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
             if tool and owner then
                 owner.components.inventory:Unequip(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
                 owner.components.inventory:DropItem(tool)
