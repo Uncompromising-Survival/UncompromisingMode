@@ -349,9 +349,9 @@ local function FreezeEverything(inst)
 end
 
 local function StrongAttackBank(inst, data)
-    if inst.components.health ~= nil and not inst.components.health:IsDead()
+    if not (inst.components.health and inst.components.health:IsDead())
         and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
-        if inst.components.timer ~= nil and not inst.components.timer:TimerExists("uppercuttime") then
+        if inst.components.timer and not inst.components.timer:TimerExists("uppercuttime") then
             if inst.components.health:GetPercent() >= 0.5 then
                 inst.sg:GoToState("uppercut")
             else
@@ -364,7 +364,7 @@ local function StrongAttackBank(inst, data)
 end
 
 local function IceAttackBank(inst, data)
-    if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("aurafreeze") then
         if inst.components.timer and not inst.components.timer:TimerExists("auratime") then
             inst.sg:GoToState("aurafreeze_pre")
         else
@@ -376,14 +376,14 @@ end
 env.AddStategraphPostInit("deerclops", function(inst)
     local events = {
         EventHandler("start_aurafreeze", function(inst, data)
-            if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasAnyStateTag("busy", "aurafreeze") or inst.sg:HasStateTag("hit")) then
+            if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) and not inst.sg:HasStateTag("aurafreeze") then
                 inst.sg:GoToState("aurafreeze_pre")
             end
         end)
     }
 
     local _OldAttackEvent = inst.events["doattack"].fn
-    inst.events["doattack"].fn = function(inst, data)
+    inst.events["doattack"].fn = function(inst, data, ...)
         if inst.upgrade == "enrage_mutation" then
             EnrageAttackBank(inst, data)
         elseif inst.upgrade == "strength_mutation" then
@@ -391,19 +391,18 @@ env.AddStategraphPostInit("deerclops", function(inst)
         elseif inst.upgrade == "ice_mutation" then
             IceAttackBank(inst, data)
         else
-            _OldAttackEvent(inst, data)
+            _OldAttackEvent(inst, data, ...)
         end
     end
 
     local _OldAttacked = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data)
-        if not (inst.components.health and inst.components.health:IsDead()) and
-            ((not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("frozen")) or inst.sg:HasStateTag("aurafreeze")) and 
-            inst.sg:HasStateTag("aurafreeze") then
-            inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
-            inst.sg:GoToState("aurafreeze_hit")
+    inst.events["attacked"].fn = function(inst, data, ...)
+        if not (inst.components.health and inst.components.health:IsDead()) and inst.sg:HasStateTag("aurafreeze") then
+            if not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("caninterrupt") then
+                inst.sg:GoToState("aurafreeze_hit")
+            end
         else
-            _OldAttacked(inst, data)
+            _OldAttacked(inst, data, ...)
         end
     end
 
@@ -492,18 +491,13 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 TimeEvent(27 * FRAMES, function(inst) SetLightValueAndOverride(inst, 1.08, .45) end),
                 TimeEvent(28 * FRAMES, function(inst) SetLightValueAndOverride(inst, 1.05, .2) end),
                 TimeEvent(29 * FRAMES, function(inst) SetLightValueAndOverride(inst, 1.1, .3) end),
-                TimeEvent(30 * FRAMES, function(inst)
-                    inst.sg.statemem.lightval = 1.1
-                end),
+                TimeEvent(30 * FRAMES, function(inst) inst.sg.statemem.lightval = 1.1 end),
                 TimeEvent(32 * FRAMES, function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr", nil, .5)
                     inst.sg.statemem.lightval = 1.035
                 end),
-                TimeEvent(41 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/step",
-                        nil, .7) end),
-                TimeEvent(43 * FRAMES, function(inst)
-                    ShakeAllCameras(CAMERASHAKE.VERTICAL, .3, .02, .7, inst, SHAKE_DIST)
-                end),
+                TimeEvent(41 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/step", nil, .7) end),
+                TimeEvent(43 * FRAMES, function(inst) ShakeAllCameras(CAMERASHAKE.VERTICAL, .3, .02, .7, inst, SHAKE_DIST) end),
                 TimeEvent(47 * FRAMES, function(inst)
                     inst.sg.statemem.lightval = nil
                     SetLightValueAndOverride(inst, .9, 0)
@@ -680,7 +674,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
 
         State {
             name = "aurafreeze_pre",
-            tags = {"busy", "nosleep", "noshove"},
+            tags = {"busy", "nosleep", "noshove", "aurafreeze"},
 
             onenter = function(inst)
                 --inst.components.sleeper:SetResistance(400)
@@ -689,16 +683,20 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:PlayAnimation("fortresscast_pre")
                 SpawnBlocks(inst, inst:GetPosition(), 19)
                 FreezeEverything(inst)
+                if not inst.aurafreezetimertask then
+                    inst.aurafreezetimertask = inst:DoTaskInTime(7, function()
+                        if inst.aurafreezetimertask then
+                            inst.aurafreezetimertask:Cancel()
+                            inst.aurafreezetimertask = nil
+                        end
+                    end)
+                end
             end,
 
             timeline =
             {
-                TimeEvent(5 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
-                end),
-                TimeEvent(16 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
-                end),
+                TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr") end),
+                TimeEvent(16 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl") end),
             },
 
             events =
@@ -715,29 +713,17 @@ env.AddStategraphPostInit("deerclops", function(inst)
 
         State {
             name = "aurafreeze",
-            tags = {"busy", "aurafreeze", "nosleep", "noshove"},
+            tags = {"nosleep", "noshove", "aurafreeze"},
 
             onenter = function(inst)
                 inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
                 inst.AnimState:PushAnimation("fortresscast_loop", true)
-                if not inst.aurafreezetimertask then
-                    inst.aurafreezetimertask = inst:DoTaskInTime(7, function()
-                        if inst.aurafreezetimertask then
-                            inst.aurafreezetimertask:Cancel()
-                            inst.aurafreezetimertask = nil
-                        end
-                    end)
-                end
             end,
 
             events =
             {
-                EventHandler("animover", function(inst)
-                    if not inst.aurafreezetimertask then
-                        inst.sg:GoToState("aurafreeze_pst")
-                    end
-                end),
+                EventHandler("animover", function(inst) if not inst.aurafreezetimertask then inst.sg:GoToState("aurafreeze_pst") end end),
             },
 
             onexit = function(inst)
@@ -765,12 +751,8 @@ env.AddStategraphPostInit("deerclops", function(inst)
 
             timeline =
             {
-                TimeEvent(5 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
-                end),
-                TimeEvent(16 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
-                end),
+                TimeEvent(5 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr") end),
+                TimeEvent(16 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl") end),
             },
 
             events =
@@ -789,20 +771,19 @@ env.AddStategraphPostInit("deerclops", function(inst)
 
         State {
             name = "aurafreeze_hit",
-            tags = {"busy"},
+            tags = {"hit", "busy", "aurafreeze"},
 
             onenter = function(inst)
                 inst.AnimState:SetBuild("deerclops_build_old")
                 inst.Physics:Stop()
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_grrr")
                 inst.AnimState:PlayAnimation("fortresscast_hit")
                 inst.AnimState:PushAnimation("fortresscast_loop",true)
             end,
 
             events =
             {
-                EventHandler("animover", function(inst)
-                    inst.sg:GoToState(not inst.aurafreezetimertask and "aurafreeze_pst" or "aurafreeze")
-                end),
+                EventHandler("animover", function(inst) inst.sg:GoToState(not inst.aurafreezetimertask and "aurafreeze_pst" or "aurafreeze") end),
             },
 
             onexit = function(inst)
@@ -818,7 +799,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
             onenter = function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("taunt")
-
                 if inst.bufferedaction and inst.bufferedaction.action == ACTIONS.GOHOME then
                     inst:PerformBufferedAction()
                 end
@@ -842,15 +822,9 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end),
                 TimeEvent(6 * FRAMES, function(inst) SetLightColour(inst, .81) end),
                 TimeEvent(7 * FRAMES, function(inst) SetLightColour(inst, .8) end),
-                TimeEvent(13 * FRAMES, function(inst)
-                    inst.sg.statemem.lightval = 1
-                end),
-                TimeEvent(16 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl")
-                end),
-                TimeEvent(24 * FRAMES, function(inst)
-                    inst.sg.statemem.lightval = nil
-                end),
+                TimeEvent(13 * FRAMES, function(inst) inst.sg.statemem.lightval = 1 end),
+                TimeEvent(16 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl") end),
+                TimeEvent(24 * FRAMES, function(inst) inst.sg.statemem.lightval = nil end),
                 TimeEvent(41 * FRAMES, function(inst)
                     SetLightValue(inst, .98)
                     SetLightColour(inst, .95)
