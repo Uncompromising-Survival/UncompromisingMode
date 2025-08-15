@@ -203,9 +203,9 @@ local function fn()
     ------------------------------------------
 
     inst:AddComponent("locomotor")
-    inst.components.locomotor.walkspeed = TUNING.MOOSE_WALK_SPEED
+    inst.components.locomotor.walkspeed = TUNING.MOSSLING_WALK_SPEED
 
-    inst:SetStateGraph("SGmothermossling")
+    inst:SetStateGraph("SGmossling")
     inst:SetBrain(brain)
 
     MakeHauntablePanic(inst)
