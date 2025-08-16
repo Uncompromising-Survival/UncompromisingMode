@@ -83,7 +83,7 @@ env.AddPrefabPostInit("forest", function(inst)
         return
     end
 
-    inst:AddComponent("uncompromising_deerclopsspawner")
+    --inst:AddComponent("uncompromising_deerclopsspawner")
 
     --inst:AddComponent("toadrain")
     --inst:AddComponent("hayfever_tracker")

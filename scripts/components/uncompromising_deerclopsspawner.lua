@@ -257,18 +257,30 @@ local function OnDeerclopsTimerDone(src, data)
 end
 
 local function OnMegaFlare(src, data)
-    if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x,data.sourcept.y,data.sourcept.z) then
-        if not _activehassler and math.random() < 0.6 and AllowedToAttack({skipcycles = true}) then
-            self.inst:DoTaskInTime(5 + (math.random() * 20), function()
-                local players = FindPlayersInRange(data.sourcept.x, data.sourcept.y, data.sourcept.z, 35)
-                if #players > 0 then
-                    _targetplayer = players[1]
-                    _activehassler = ReleaseHassler(players[1])
-                    ResetAttacks()
-                end
-            end)
-        end
-    end
+	TheNet:Announce("megaflare")
+	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) then
+		TheNet:Announce("haspoint")
+		if not _activehassler then
+			TheNet:Announce("no live deerclops")
+			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480*2 then -- Cannot advance any more if it's within two days
+				TheNet:Announce("toldtoreduce")
+				local time = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
+				if time > 480*8 then
+					time = time - 480*2
+				elseif time > 480*4 then
+					time = time - 480
+				elseif time > 240 then
+					time = time - 240
+				end
+				TheNet:Announce(time)
+				_worldsettingstimer:SetTimeLeft(DEERCLOPS_TIMERNAME, time)
+				TheNet:Announce(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
+			elseif not _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+				TheNet:Announce("toldtoreset")
+				_worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, 480*math.random(6,8))
+			end
+		end
+	end
 end
 
 --------------------------------------------------------------------------
@@ -450,8 +462,8 @@ self:WatchWorldState("season", OnSeasonChange)
 self.inst:ListenForEvent("hasslerremoved", OnHasslerRemoved, TheWorld)
 self.inst:ListenForEvent("hasslerkilled", OnHasslerKilled, TheWorld)
 self.inst:ListenForEvent("storehassler", OnStoreHassler, TheWorld)
-if not TUNING.DSTU.DISABLE_MEGAFLARE then
-	self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
-end
+--if not TUNING.DSTU.DISABLE_MEGAFLARE then
+self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
+--end
 
 end)

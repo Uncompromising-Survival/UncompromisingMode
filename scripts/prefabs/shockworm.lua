@@ -80,7 +80,7 @@ local function OnUpdateLight(inst, dframes)
         inst._lightframe:set_local(done and 0 or frame)
     end
 
-    inst.Light:SetRadius(1.5 * inst._lightframe:value() / MAX_LIGHT_FRAME)
+    inst.Light:SetRadius((1.5 * inst._lightframe:value() / MAX_LIGHT_FRAME))
 
     if TheWorld.ismastersim then
         inst.Light:Enable(inst._lightframe:value() > 0)
@@ -289,9 +289,9 @@ local function fn()
     inst:AddTag("cavedweller")
     inst:AddTag("electricdamageimmune")
     inst.Light:SetRadius(0)
-    inst.Light:SetIntensity(.8)
+    inst.Light:SetIntensity(2)
     inst.Light:SetFalloff(.5)
-    inst.Light:SetColour(1, 1, 1)
+    inst.Light:SetColour(1, 1, 0)
     inst.Light:Enable(false)
     inst.Light:EnableClientModulation(true)
 

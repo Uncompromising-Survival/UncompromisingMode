@@ -1623,9 +1623,12 @@ AddPrefabPostInit("ancient_altar", function(inst)
 		for i,player in ipairs(players) do
 			if HasSkill(player,"wathom_allegiance_neutral") and not player.found_station then
 				player.found_station = true
-				player:AddComponent("prototyper")
-				player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
+
+				--player:AddComponent("prototyper")
+				--player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
 				player.components.talker:Say("Hmm... understand now.")
+				
+				player.components.builder:UnlockRecipesForTech({ANCIENT = 4})
 			end
 		end
 		_complete_onturnon(inst)
@@ -1633,36 +1636,36 @@ AddPrefabPostInit("ancient_altar", function(inst)
 	inst.components.prototyper.onturnon = TurnOn 
 end)
 
-AddPrefabPostInit("shadow_battleaxe", function(inst)
-	if not GLOBAL.TheWorld.ismastersim then
-		return
-	end
+-- AddPrefabPostInit("shadow_battleaxe", function(inst)
+	-- if not GLOBAL.TheWorld.ismastersim then
+		-- return
+	-- end
 	
-	local _attack = inst.components.weapon.onattack
+	-- local _attack = inst.components.weapon.onattack
 	
-	local function OnAttack(inst, owner, target) -- Basically trigger the restoration component twice
-		_attack(inst,owner,target)
+	-- local function OnAttack(inst, owner, target) -- Basically trigger the restoration component twice
+		-- _attack(inst,owner,target)
 
-		if target.components.health ~= nil and target.components.health:IsDead() then
-			inst.components.hunger:DoDelta(GLOBAL.TUNING.SHADOW_BATTLEAXE.HUNGER_GAIN_ONKILL, false)
+		-- if target.components.health ~= nil and target.components.health:IsDead() then
+			-- inst.components.hunger:DoDelta(GLOBAL.TUNING.SHADOW_BATTLEAXE.HUNGER_GAIN_ONKILL, false)
 
-			if inst._trackedentities[target] == nil then -- The tracking will give us the kill stack.
-				local is_epic = inst:CheckForEpicCreatureKilled(target)
+			-- if inst._trackedentities[target] == nil then -- The tracking will give us the kill stack.
+				-- local is_epic = inst:CheckForEpicCreatureKilled(target)
 
-				if owner ~= nil and not is_epic then
-					inst:SayRegularChatLine("creature_killed", owner)
-				end
-			end
+				-- if owner ~= nil and not is_epic then
+					-- inst:SayRegularChatLine("creature_killed", owner)
+				-- end
+			-- end
 
-		elseif inst:IsEpicCreature(target) and
-			inst.epic_kill_count < GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS[#GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS]
-		then
-			inst:TrackTarget(target)
-		end	
-	end
+		-- elseif inst:IsEpicCreature(target) and
+			-- inst.epic_kill_count < GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS[#GLOBAL.TUNING.SHADOW_BATTLEAXE.LEVEL_THRESHOLDS]
+		-- then
+			-- inst:TrackTarget(target)
+		-- end	
+	-- end
 	
-	inst.components.weapon:SetOnAttack(OnAttack)
-end)
+	-- inst.components.weapon:SetOnAttack(OnAttack)
+-- end)
 
 -------------------------------------------------------
 -- The character select screen lines

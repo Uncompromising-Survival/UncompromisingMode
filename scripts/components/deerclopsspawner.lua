@@ -53,7 +53,7 @@ return Class(function(self, inst)
 
     local function AllowedToAttack(data)
         return #_activeplayers > 0 and
-            ((data and data.skipcycles) or TheWorld.state.cycles > TUNING.NO_BOSS_TIME) and
+            ((data and data.skipcycles)) and
             (_attackoffseason or
                 TheWorld.state.season == "winter")
     end
@@ -168,16 +168,14 @@ return Class(function(self, inst)
         if hassler ~= nil then
             return hassler -- There's already a hassler in the world, we're done here.
         end
-
         local spawn_pt = GetSpawnPoint(targetPlayer:GetPosition())
         if spawn_pt ~= nil then
             if _storedhassler ~= nil then
                 hassler = SpawnSaveRecord(_storedhassler, {})
                 _storedhassler = nil
-            else
-                hassler = nil --SpawnPrefab("deerclops") No...
+			else
+				hassler = SpawnPrefab("deerclops")
             end
-
             if hassler ~= nil then
                 hassler.Physics:Teleport(spawn_pt:Get())
                 local target = GetClosestInstWithTag(STRUCTURE_TAGS, targetPlayer, 40)
@@ -254,20 +252,27 @@ return Class(function(self, inst)
         end
     end
 
-    local function OnMegaFlare(src, data)
-        if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) then
-            if not _activehassler and math.random() < 0.6 and AllowedToAttack({ skipcycles = true }) then
-                self.inst:DoTaskInTime(5 + (math.random() * 20), function()
-                    local players = FindPlayersInRange(data.sourcept.x, data.sourcept.y, data.sourcept.z, 35)
-                    if #players > 0 then
-                        _targetplayer = players[1]
-                        _activehassler = ReleaseHassler(players[1])
-                        ResetAttacks()
-                    end
-                end)
-            end
-        end
-    end
+	local function OnMegaFlare(src, data)
+		if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.iswinter then
+			if not _activehassler then
+				if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
+					local time = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
+					if time > 480*8 then
+						time = time - 480*math.random(2,3)
+					elseif time > 480*4 then
+						time = time - 480*math.random(1,2)
+					else
+						time = time - 480*math.random(1,1.5)
+					end
+					_worldsettingstimer:SetTimeLeft(DEERCLOPS_TIMERNAME, time)
+				elseif not _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+					_worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, 480*math.random(6,8))
+				else
+					--TheNet:Announce(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
+				end
+			end
+		end
+	end
 
     --------------------------------------------------------------------------
     --[[ Public member functions ]]

@@ -108,9 +108,9 @@ AddTask("Ratty_Maze3", {
 		colour={r=.1,g=.1,b=.1,a=1},
 })
 
---[[GLOBAL.require("map/tasks/ratacombs")
+--GLOBAL.require("map/tasks/ratacombs")
 	GLOBAL.require("map/rooms/caves/ratacombsrooms")
-	GLOBAL.require("map/rooms/forest/ratking")
+	--GLOBAL.require("map/rooms/forest/ratking")
 local Layouts = GLOBAL.require("map/layouts").Layouts
 local StaticLayout = GLOBAL.require("map/static_layout")
 local STRINGS = GLOBAL.STRINGS
@@ -128,10 +128,10 @@ local STRINGS = GLOBAL.STRINGS
 		AddTaskPreInit("Dig that rock",function(task)
 			task.room_choices["RattySinkhole"] = 1
 		end)
-	end]]
+	end
 
 
-	--[[AddTaskSetPreInitAny(function(tasksetdata)
+	AddTaskSetPreInitAny(function(tasksetdata)
 		if tasksetdata.location ~= "cave" then
 			return
 		end
@@ -141,14 +141,18 @@ local STRINGS = GLOBAL.STRINGS
 		table.insert(tasksetdata.tasks,"Ratty_Maze")
 		table.insert(tasksetdata.tasks,"Ratty_Maze2")
 		table.insert(tasksetdata.tasks,"Ratty_Maze3")
+		-- if tasksetdata.required_prefabs ~= nil then
+			-- table.insert(tasksetdata.required_prefabs,"ratking")
+			-- table.insert(tasksetdata.required_prefabs,"ratacombslock")
+		-- else
+			-- tasksetdata.required_prefabs = {"ratking","ratacombslock"}
+		-- end
+	end)
 
-		if tasksetdata.required_prefabs ~= nil then
-			table.insert(tasksetdata.required_prefabs,"ratking")
-			table.insert(tasksetdata.required_prefabs,"ratacombslock")
-		else
-			tasksetdata.required_prefabs = {"ratking","ratacombslock"}
-		end
-	end)]]
+AddLevelPreInitAny(function(level)
+	if level.location == "cave" then
+		level.overrides.keep_disconnected_tiles = true
+	end
+end)
 
-
---Layouts["RatLockBlocker1"] = { type = GLOBAL.LAYOUT.CIRCLE_EDGE, start_mask = GLOBAL.PLACE_MASK.NORMAL, fill_mask = GLOBAL.PLACE_MASK.IGNORE_IMPASSABLE_BARREN_RESERVED, layout_position = GLOBAL.LAYOUT_POSITION.CENTER, ground_types = { GLOBAL.WORLD_TILES.ROCKY }, defs = { rocks = { "ratacombslock_rock_spawner" } }, count = { rocks = 1 }, scale = 0.1 }
+Layouts["RatLockBlocker1"] = { type = GLOBAL.LAYOUT.CIRCLE_EDGE, start_mask = GLOBAL.PLACE_MASK.NORMAL, fill_mask = GLOBAL.PLACE_MASK.IGNORE_IMPASSABLE_BARREN_RESERVED, layout_position = GLOBAL.LAYOUT_POSITION.CENTER, ground_types = { GLOBAL.WORLD_TILES.ROCKY }, defs = { rocks = { "ratacombslock_rock_spawner" } }, count = { rocks = 1 }, scale = 0.1 }

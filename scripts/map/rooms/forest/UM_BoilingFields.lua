@@ -7,7 +7,7 @@ local StaticLayout = require("map/static_layout")
 Layouts["boilingfields_dragonfly_arena"] = StaticLayout.Get("map/static_layouts/boilingfields_dragonfly_arena")
 Layouts["cave_entrance_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_entrance_magmabiome")
 
-AddRoom("BoilingFields_BasaltHounds", {
+AddRoom("BoilingFields_Hounds", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     tags = { "RoadPoison","Mist" },
     value = WORLD_TILES.UM_HOTSPRING_YELLOWROCK,
@@ -22,7 +22,7 @@ AddRoom("BoilingFields_BasaltHounds", {
             marsh_bush = 0.1,
             springrock1 = 0.1,
             --basalt = 0.6,
-            rock_lichen = 0.1,
+            um_spongeplant = 0.1,
             um_hotspring = 0.1,
         },
     }
@@ -60,7 +60,7 @@ AddRoom("BoilingFields_Rocky", {
         {
             springrock2 = 0.1,
             springrock3 = 0.1,
-            rock_lichen = 0.05,
+            um_spongeplant = 0.05,
             um_hotspring = 0.05,
             shadow_puff = 3,
             evergreen_sparse = 10,
@@ -69,6 +69,28 @@ AddRoom("BoilingFields_Rocky", {
         },
         countprefabs = {
             snaildrake_hole = function() return math.random(2, 3) end,
+        }
+    }
+})
+AddRoom("BoilingFields_WAR", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    tags = {"RoadPoison","Mist"},
+    value = WORLD_TILES.UM_HOTSPRING,
+    contents =  {
+        distributepercent = 1,
+        distributeprefabs =
+        {
+            springrock3 = 0.1,
+            um_spongeplant = 0.05,
+            um_hotspring = 0.05,
+            shadow_puff = 3,
+            evergreen_sparse = 10,
+            rocks=.03,
+            flint=.03,
+        },
+        countprefabs = {
+            snaildrake_hole = function() return math.random(1, 2) end,
+			boulder_crab = function() return math.random(2, 3) end,
         }
     }
 })
@@ -81,8 +103,8 @@ AddRoom("BoilingFields_Crabby", {
         distributeprefabs =
         {
             springrock3 = 0.1,
-            springrock2 = 0.2,
-            rock_lichen = 0.05,
+            springrock2 = 0.1,
+            um_spongeplant = 0.05,
             molehill = 0.02,
             um_hotspring = 0.05,
             shadow_puff = 1.5,
@@ -131,9 +153,8 @@ AddRoom("BoilingFields_Hotsprings", {
             springrock1 = 0.08,
             springrock2 = 0.04,
             boulder_crab = .01,
-            rock_lichen = 0.025,
+            um_spongeplant = 0.025,
             um_hotspring = 0.09,
-            rabbithole = 0.01,
             molehill = 0.02,
             shadow_puff = 3,
             evergreen_sparse = 10,

@@ -685,7 +685,12 @@ local function BuildSkillsData(SkillTreeFns)
             group = "allegiance",
             tags = {"allegiance","neutrality"},--,"lunar","lunar_favor"},
             locks = {"wathom_allegiance_lock_1b", "wathom_allegiance_lock_3","wathom_allegiance_lock_5"},
-
+            -- onactivate = function(inst, fromload)
+				-- inst:AddTag("um_ancient_builder")
+            -- end,
+            -- ondeactivate = function(inst, fromload)
+				-- inst:RemoveTag("um_ancient_builder")		
+            -- end,
 
             connects = {
                 "ancient_kinship_2",

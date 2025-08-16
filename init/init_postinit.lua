@@ -11,7 +11,6 @@ local component_post = {
     "kramped",
     "explosiveresist",
     "crop",
-    --	"beargerspawner",
     "workable",
     "sleepingbaguser",
     "hounded",
@@ -67,6 +66,8 @@ local component_post = {
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
     "teacher", --Inf. blueprints.
+	"locomotor",
+	"beargerspawner",
 }
 
 local prefab_post = {

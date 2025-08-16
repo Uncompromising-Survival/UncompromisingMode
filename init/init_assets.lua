@@ -411,6 +411,9 @@ local inventoryitems =
 	"um_beemine_moon_item",
 	"um_ribopod",
 	"um_ribopodden",
+	"um_spongeplant_item",
+	"um_sponge_cake",
+	"um_moss",
 }
 
 for _, item in ipairs(inventoryitems) do

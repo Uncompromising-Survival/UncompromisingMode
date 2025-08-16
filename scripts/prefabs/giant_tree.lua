@@ -2,13 +2,7 @@ require "prefabutil"
 
 local assets =
 {
-    -- Asset("ANIM", "anim/giant_tree1.zip"),
-    -- Asset("ANIM", "anim/giant_tree1_damaged.zip"),
-    -- Asset("ANIM", "anim/giant_tree2_damaged.zip"),
-    -- Asset("ANIM", "anim/giant_tree2.zip"),
-    -- Asset("ANIM", "anim/giant_tree1_sick.zip"),
-    -- Asset("ANIM", "anim/giant_tree2_sick.zip"),
-	
+
 	Asset("ANIM", "anim/um_hoodedtree.zip"),
     Asset("IMAGE", "images/map_icons/um_hoodedtree.tex"),
     Asset("ATLAS", "images/map_icons/um_hoodedtree.xml"),
@@ -480,11 +474,11 @@ local function on_chopped_down(inst, chopper)
 		
         inst.AnimState:PlayAnimation("idle_damaged")
         inst.components.timer:StartTimer("regrow", 3840)
-        if inst.mossy then
-            inst.HideAllMoss(inst, true)
-        else
-            inst.HideAllMoss(inst)
-        end
+        -- if inst.mossy then
+            -- inst.HideAllMoss(inst, true)
+        -- else
+            -- inst.HideAllMoss(inst)
+        -- end
         if inst.components.timer:TimerExists("remoss") then
             inst.components.timer:StopTimer("remoss")
         end
@@ -680,12 +674,12 @@ local function onload(inst, data)
         -- if data.stretchy then
             -- inst.stretchy = data.stretchy
         -- end
-        if data.mossy then
-            inst.mossy = data.mossy
-            ShowAllMoss(inst)
-        else
-            HideAllMoss(inst)
-        end
+        -- if data.mossy then
+            -- inst.mossy = data.mossy
+            -- ShowAllMoss(inst)
+        -- else
+            -- HideAllMoss(inst)
+        -- end
     else
         inst.previouschops = 25
     end
@@ -762,7 +756,7 @@ local function giant_treefn()
     inst:DoTaskInTime(0, InfestedInit)
     inst.InfestMe = InfestMe
     inst.PickBuild = PickBuild
-    inst.HideAllMoss = HideAllMoss
+    --inst.HideAllMoss = HideAllMoss
     inst:DoTaskInTime(math.random(0, 0.1), function(inst) --Keep giant trees spaced out
         if FindEntity(inst, 3 ^ 2, nil, { "giant_tree" }) then
             inst:Remove()

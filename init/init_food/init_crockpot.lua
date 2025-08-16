@@ -566,6 +566,7 @@ InsertIngredientValues({ "um_ice_tail" }, { frozen = 1, meat = 0.5, })
 
 InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 1  })
 InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1  })
+InsertIngredientValues({ "um_spongeplant_item" }, { veggie = 0.5 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
     InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)

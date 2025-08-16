@@ -23,7 +23,7 @@ if GetModConfigData("worldgenmastertoggle") then
 		"mushroom_tasks", -- Toadstool Spawners and Depths Eels in Lunar Mushroom Forest
 		"magma_cave", -- Shrinks Big Bat Biome, links it to new Magma Caves Tasks
 		"ruins", -- Adds Pawn Spawners
-		"ratacombs", -- We're rats, we're rats, we're the rats.
+		--"ratacombs", -- We're rats, we're rats, we're the rats.
 	}
 	
 	-- Import Adjustments and Additions to Tasks	

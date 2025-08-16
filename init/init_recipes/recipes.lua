@@ -528,7 +528,7 @@ GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 AddRecipe2(
 	"um_ice_sicle",
 	{ Ingredient("icestaff", 1), Ingredient("livinglog", 1), Ingredient("um_rimeweed_itemflower", 1) },
-	TECH.MAGIC_TWO,
+	TECH.MAGIC_THREE,
 	nil,
 	{ "TOOLS" }
 )
@@ -538,11 +538,11 @@ GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
 AddRecipe2(
 	"um_hat_rime",
 	{ Ingredient("um_ice_tail", 1), Ingredient("um_rimeweed_itemflower", 1), Ingredient("rocks", 3) },
-	TECH.MAGIC_ONE,
+	TECH.MAGIC_TWO,
 	nil,
 	{ "ARMOUR" }
 )
-ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", false)
+ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 
 

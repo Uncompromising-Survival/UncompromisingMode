@@ -79,6 +79,11 @@ AllRecipes["glasscutter"].nounlock = true
 
 AllRecipes["moonglassaxe"].nounlock = true
 
+AllRecipes["moon_mushroomhat"].ingredients = {
+    Ingredient("moon_cap", 4),
+    Ingredient("livinglog", 2),
+}
+
 --woodie stuff
 
 --local config_skilltrees = GetModConfigData("woodie_skilltree")

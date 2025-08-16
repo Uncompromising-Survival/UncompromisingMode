@@ -56,10 +56,10 @@ local function fn()
     inst.AnimState:PlayAnimation("berry_idle", true)
     inst.scrapbook_anim = "berry_idle"
 
-    inst.Light:SetRadius(1.5)
-    inst.Light:SetIntensity(0.8)
+    inst.Light:SetRadius(4)
+    inst.Light:SetIntensity(0.5)
     inst.Light:SetFalloff(0.5)
-    inst.Light:SetColour(0,1,1)
+    inst.Light:SetColour(1,1,0)
     inst.Light:Enable(true)
 
     inst.entity:SetPristine()

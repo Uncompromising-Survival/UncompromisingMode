@@ -5,19 +5,6 @@ local assets =
     Asset("SOUND", "sound/common.fsb"),
 }
 
-local grasspart_assets =
-{
-    Asset("ANIM", "anim/grass.zip"),
-    Asset("ANIM", "anim/grass1.zip"),
-}
-
-local prefabs =
-{
-    "cutgrass",
-    "grasspartfx",
-}
-
-
 local function onregenfn(inst)
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
@@ -157,7 +144,7 @@ local function grass(name, stage)
         return inst
     end
 
-    return Prefab(name, fn, assets, prefabs)
+    return Prefab(name, fn, assets)
 end
 
 return grass("trapdoorgrass", 0),

@@ -323,7 +323,28 @@ local um_preparedfoods =
             end			
         end,
         floater = { "med", nil, 0.65 },
-		idlename = "idle_ground",
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 }} },
+    },
+	
+    um_sponge_cake =
+    {
+        test = function(cooker, names, tags)
+            return names.um_spongeplant_item and names.um_spongeplant_item == 2 and tags.sweetener and tags.fruit and tags.fruit >= 1
+        end,
+        hunger = 37.5,
+        health = -3,
+        sanity = 33,
+        priority = 10,
+        weight = 1,
+        cooktime = 0.9,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 4 * TUNING.PERISH_TWO_DAY,
+        oneatenfn = function(inst, eater)
+			if eater.components.moisture then
+				eater.components.moisture:DoDelta(-33)
+			end	
+        end,
+        floater = { "med", nil, 0.65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 }} },
     },
 

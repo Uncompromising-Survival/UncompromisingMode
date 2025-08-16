@@ -117,6 +117,29 @@ AddTile("UM_FLOODWATER",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
+	
+AddTile("UM_FLOODWATER_GROTTO",
+    "LAND",
+    {
+        ground_name = "um_floodwater",
+    }, {
+        name = "um_floodwater",
+        noise_texture = "Ground_noise_moon_fungus_flooded",
+        runsound = "dontstarve/movement/run_marsh",
+        walksound = "dontstarve/movement/walk_marsh",
+        snowsound = "dontstarve/movement/run_marsh",
+        mudsound = "dontstarve/movement/run_marsh",
+        colors = GROUND_OCEAN_COLOR,
+        cannotbedug = true
+    }, {
+        name = "map_edge",
+        noise_texture = "Ground_noise_moon_fungus_flooded_mini"
+    }, {
+        name = "ancienthoodedturf",
+        anim = "ancienthoodedturf",
+        bank_build = "hfturf"
+    })
+
 
 
 -- Boiling Fields tiles
@@ -371,12 +394,33 @@ local function GetTileForLushMagma(noise)
     return WORLD_TILES.UM_MAGMA
 end
 
+local function GetTileForGrottoFloodLight(noise)
+    if noise < 0.4 then
+        return WORLD_TILES.UM_FLOODWATER_GROTTO
+	elseif noise < 0.5 then
+		return WORLD_TILES.PEBBLEBEACH
+	end
+	
+    return WORLD_TILES.FUNGUSMOON
+end
+
+local function GetTileForGrottoFloodHeavy(noise)
+    if noise < 0.65 then
+        return WORLD_TILES.UM_FLOODWATER_GROTTO
+	end
+	
+    return WORLD_TILES.FUNGUSMOON
+end
+
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
 AddTile("UM_HOTSPRING_FORESTY", "NOISE")
 AddTile("UM_HOODED_FOREST", "NOISE")
 AddTile("UM_HOODED_ROCKY", "NOISE")
 AddTile("UM_MAGMA_JUNGLY", "NOISE")
+
+AddTile("UM_GROTTO_LIGHTFLOODED", "NOISE")
+AddTile("UM_GROTTO_HEAVYFLOODED", "NOISE")
 local NoiseTileFunctions = require("noisetilefunctions")
 
 NoiseTileFunctions[WORLD_TILES.UM_HOTSPRING] = GetTileForHotspring
@@ -389,6 +433,9 @@ NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
 
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
+
+NoiseTileFunctions[WORLD_TILES.UM_GROTTO_LIGHTFLOODED] = GetTileForGrottoFloodLight
+NoiseTileFunctions[WORLD_TILES.UM_GROTTO_HEAVYFLOODED] = GetTileForGrottoFloodHeavy
 
 require("map/terrain")
 --require("map/torreniv_terrain")
@@ -419,6 +466,16 @@ local filters = {
 	["magmarock1"] = { WORLD_TILES.UM_GRASSMAGMA },
 	["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
 	["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
+	
+	
+	-- Moon Grotto Stuff
+	["molebat"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO},
+	["molebathill"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO},
+	["mushtree_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO},
+	["lightflier_flower"] = {WORLD_TILES.UM_FLOODWATER_GROTTO},
+	
+	["shockworm"] = { WORLD_TILES.PEBBLEBEACH,WORLD_TILES.FUNGUSMOON},
+	["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH,WORLD_TILES.FUNGUSMOON},
 }
 
 for k, v in pairs(filters) do

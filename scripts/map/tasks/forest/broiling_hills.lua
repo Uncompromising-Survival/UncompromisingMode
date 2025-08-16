@@ -21,9 +21,10 @@ AddTaskPreInit("Badlands", function(task)
     task.room_choices["DragonflyArena"] = 0
 
     task.room_choices["BoilingFields_Crabby"] = 1         -- Crabs
+	task.room_choices["BoilingFields_Rocky"] = 1          -- Snaildrakes
+	task.room_choices["BoilingFields_WAR"] = 1          -- Snaildrakes
     task.room_choices["BoilingFields_Hotsprings"] = 1     -- Hotsprings
-    task.room_choices["BoilingFields_Rocky"] = 1          -- Snaildrakes
-    task.room_choices["BoilingFields_BasaltHounds"] = 2   -- Hounds
+    task.room_choices["BoilingFields_Hounds"] = 1   -- Hounds
     task.room_choices["BoilingFields_DragonflyArena"] = 1 -- Dfly
     task.room_choices["BoilingFields_Sinkhole"] = 1       -- Sinkhole
     task.background_room = "BoilingFields_Hotsprings"

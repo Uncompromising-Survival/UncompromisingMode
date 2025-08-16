@@ -554,6 +554,8 @@ local prefabs = {
 	"snaildrakebucket",
 	"cave_entrance_magmabiome",
 	"cave_exit_magmabiome",
+	"cave_entrance_moon",
+	"cave_exit_moon",
 	"mushtree_shadow",
 	"viperfruit_plant",
 	"zaspberry_plant",
@@ -597,6 +599,7 @@ local prefabs = {
 	"um_ribopodden",
 	"um_gemologygems",
 	
+	"um_spongeplant",
 	--"um_swiss_sponge",
 }
 
