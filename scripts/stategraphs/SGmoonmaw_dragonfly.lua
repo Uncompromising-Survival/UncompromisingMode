@@ -183,9 +183,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
 
         timeline =
@@ -289,15 +287,13 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
 
-        timeline =
+        --[[timeline =
         {
-            --TimeEvent(1*FRAMES, function(inst) --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end),
-        },
+            TimeEvent(1*FRAMES, function(inst) --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end),
+        },]]
     },
 
     State {
@@ -308,7 +304,6 @@ local states =
             if inst.components.locomotor then
                 inst.components.locomotor:StopMoving()
             end
-
             inst.AnimState:PlayAnimation("hit")
             --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink")
         end,
@@ -316,7 +311,7 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                if math.random() < 0.1 then
+                if math.random() < .1 then
                     inst.sg:GoToState("taunt_pre")
                 else
                     inst.sg:GoToState("idle")
@@ -334,7 +329,6 @@ local states =
             inst.components.combat:StartAttack()
             inst.AnimState:PlayAnimation("spin_pre")
             inst.SoundEmitter:PlaySound("UCSounds/moonmaw/anger")
-
             inst.SpawnShards(inst)
         end,
 
@@ -344,9 +338,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("shards")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("shards") end),
         },
     },
     State {
@@ -357,17 +349,13 @@ local states =
             inst.Physics:Stop()
             inst.components.combat:StartAttack()
             inst.AnimState:PlayAnimation("spin")
-
             inst.SoundEmitter:PlaySound("moonstorm/creatures/boss/alterguardian2/atk_spin_LP", "spin_loop")
             for i = 1, 8 do
                 if inst.shards[i] ~= nil then
                     inst.shards[i].components.linearcircler.setspeed = 3
                 end
             end
-
-
         end,
-
 
         --TimeEvent(15*FRAMES, function(inst) inst.ShardsSpawnAttack(inst) end),
 
@@ -378,9 +366,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
 
@@ -405,11 +391,19 @@ local states =
             inst.SoundEmitter:PlaySound("moonstorm/creatures/boss/alterguardian2/atk_spin_pre")
         end),
 
+        onexit = function(inst)
+            for i = 1, 8 do
+                if inst.lavae[i] ~= nil then
+                    inst.lavae[i].destroy = false
+                    inst.lavae[i].components.linearcircler.setspeed = .2
+                    inst.lavae[i].components.linearcircler.distance_limit = 4
+                end
+            end
+        end,
+
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("lavaeattack")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("lavaeattack") end),
         },
     },
 
@@ -421,18 +415,16 @@ local states =
             inst.Physics:Stop()
             inst.components.combat:StartAttack()
             inst.AnimState:PlayAnimation("spin")
-
             inst.SoundEmitter:PlaySound("moonstorm/creatures/boss/alterguardian2/atk_spin_LP", "spin_loop")
-
             --inst.TryEjectLavae(inst)
             for i = 1, 8 do
                 if inst.lavae[i] ~= nil then
                     inst.lavae[i].destroy = true
                     inst.lavae[i].components.linearcircler.setspeed = 3
+					inst.lavae[i].components.linearcircler.distance_limit = 3
                     inst.AnimState:SetFinalOffset(1)
                 end
             end
-
         end,
 
         onexit = function(inst)
@@ -440,7 +432,7 @@ local states =
             for i = 1, 8 do
                 if inst.lavae[i] ~= nil then
                     inst.lavae[i].destroy = false
-                    inst.lavae[i].components.linearcircler.setspeed = 0.2
+                    inst.lavae[i].components.linearcircler.setspeed = .2
                     inst.lavae[i].components.linearcircler.distance_limit = 4
                     inst.AnimState:SetFinalOffset(2)
                 end
@@ -449,9 +441,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
 
@@ -466,7 +456,6 @@ local states =
             inst.SoundEmitter:PlaySound("UCSounds/moonmaw/anger")
             --attackfx.AnimState:SetMultColour(0.5,1,0.5,1)
             --inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/swipe")
-
         end,
 
         timeline =
@@ -475,11 +464,9 @@ local states =
             TimeEvent(25 * FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound("UCSounds/moonmaw/punchimpact")
                 inst.components.combat:DoAttack()
-
                 SpawnMoonGlass(inst)
             end),
         },
-
 
         events =
         {
@@ -517,8 +504,7 @@ local states =
         timeline =
         {
             --TimeEvent(12*FRAMES, function(inst) --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end),
-            TimeEvent(26 * FRAMES, function(inst)
-            end),
+            --TimeEvent(26 * FRAMES, function(inst) end),
             TimeEvent(28 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/moonmaw/land") end),
             TimeEvent(29 * FRAMES, function(inst)
                 ShakeIfClose(inst)
@@ -546,11 +532,11 @@ local states =
             EventHandler("animover", function(inst) inst.sg:GoToState("walk") end),
         },
 
-        timeline =
+        --[[timeline =
         {
-            --TimeEvent(1*FRAMES, function(inst) if not inst.fire_build then --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end),
-            --TimeEvent(2*FRAMES, function(inst) if inst.fire_build then --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end)
-        },
+            TimeEvent(1*FRAMES, function(inst) if not inst.fire_build then inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end),
+            TimeEvent(2*FRAMES, function(inst) if inst.fire_build then inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end)
+        },]]
     },
 
     State {
@@ -560,15 +546,15 @@ local states =
 
         onenter = function(inst)
             inst.components.locomotor:WalkForward()
-
             inst.AnimState:PlayAnimation("walk")
-
         end,
+
         timeline =
         {
             TimeEvent(4 * FRAMES, NotDeerclopsFootstep),
             TimeEvent(10 * FRAMES, NotDeerclopsFootstep),
         },
+
         events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("walk") end),
@@ -584,7 +570,6 @@ local states =
             if inst.components.locomotor then
                 inst.components.locomotor:StopMoving()
             end
-
             local should_softstop = false
             if should_softstop then
                 if inst.fire_build then
@@ -606,11 +591,11 @@ local states =
             EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
         },
 
-        timeline =
+        --[[timeline =
         {
-            --TimeEvent(1*FRAMES, function(inst) if not inst.fire_build then --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end),
-            --TimeEvent(2*FRAMES, function(inst) if inst.fire_build then --inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end)
-        },
+            TimeEvent(1*FRAMES, function(inst) if not inst.fire_build then inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end),
+            TimeEvent(2*FRAMES, function(inst) if inst.fire_build then inst.SoundEmitter:PlaySound("UCSounds/moonmaw/blink") end end)
+        },]]
     },
 
     State {
@@ -618,7 +603,6 @@ local states =
         tags = { "busy", "sleeping" },
 
         onenter = function(inst)
-
             if inst.components.locomotor then
                 inst.components.locomotor:StopMoving()
             end
@@ -703,6 +687,7 @@ local states =
             inst.fell = true
             inst.AnimState:PlayAnimation("skyfall")
         end,
+
         timeline =
         {
             TimeEvent(6 * FRAMES, function(inst) inst.components.groundpounder:GroundPound()
@@ -712,9 +697,7 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("crashed")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("crashed") end),
         },
     },
     State {
@@ -749,11 +732,10 @@ local states =
             inst.AnimState:PlayAnimation("getup")
             inst.SpawnLavae(inst)
         end,
+
         events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
     State {
@@ -774,7 +756,6 @@ local states =
                 inst.components.groundpounder:GroundPound()
                 inst.components.groundpounder.numRings = 2
                 inst.SoundEmitter:PlaySound("UCSounds/moonmaw/land")
-				
                 if inst.redolavae then
                     inst.SpawnLavae(inst)
                     inst.redolavae = nil
@@ -791,6 +772,5 @@ local states =
         },
     },
 }
-
 
 return StateGraph("moonmaw_dragonfly", states, events, "idle", actionhandlers)

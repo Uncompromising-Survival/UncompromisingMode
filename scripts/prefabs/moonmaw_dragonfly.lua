@@ -699,8 +699,6 @@ local function fn(Sim)
     inst:ListenForEvent("onremove", OnRemove)
     inst:ListenForEvent("death", OnDead)
 
-    inst:AddComponent("leader")
-
     inst.SpawnLavae = SpawnLavae
     inst.SpawnShards = SpawnShards
     -- inst.ShardsSpawnAttack = ShardsSpawnAttack
