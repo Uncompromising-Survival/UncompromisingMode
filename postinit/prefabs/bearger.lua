@@ -53,8 +53,8 @@ local function RockThrowTimer(inst, data)
         inst.findnewfood = true
     end
 end
---[[
-local function LaunchProjectile(inst, targetpos)
+
+--[[local function LaunchProjectile(inst, targetpos)
     local x, y, z = inst.Transform:GetWorldPosition()
     inst.rockthrow = false
     local theta = inst.Transform:GetRotation()
@@ -76,21 +76,16 @@ end]]
 local function LaunchProjectile(inst, target)
     local x, y, z = inst.Transform:GetWorldPosition()
     for i = 1, 5 do
-        if target ~= nil then
+        if target then
             inst.rockthrow = false
-            local a, b, c = target.Transform:GetWorldPosition()
             local targetpos = target:GetPosition()
-            --local theta = inst.Transform:GetRotation()
-            local theta = (inst:GetAngleToPoint(a, 0, c) + (-30 + ((i-1)*15))) * DEGREES
-            --local theta = (inst:GetAngleToPoint(a, 0, c) + GetRandomWithVariance(0, 30)) * DEGREES
-            --theta = theta*DEGREES
-            --local variableanglex = math.random(0, 30)
-            --local variableanglez = math.random(0, 30)
-            local variableanglex = (i - 1) * 7.5
-            local variableanglez = (5 - i) * 7.5
-            targetpos.x = targetpos.x + 15*math.cos(theta)
-            targetpos.z = targetpos.z - 15*math.sin(theta)
-            local rangesq = ((a-x)^2) + ((c-z)^2)
+            local theta = inst.Transform:GetRotation() + (i - 3) * 15
+            --local theta = (inst:GetAngleToPoint(targetpos.x, 0, targetpos.z) + (-30 + ((i - 1) * 15))) * DEGREES
+            --local theta = (inst:GetAngleToPoint(targetpos.x, 0, targetpos.z) + GetRandomWithVariance(0, 30)) * DEGREES
+            theta = theta * DEGREES
+            targetpos.x = targetpos.x + 15 * math.cos(theta)
+            targetpos.z = targetpos.z - 15 * math.sin(theta)
+            local rangesq = ((targetpos.x - x)^2) + ((targetpos.z - z)^2)
             local maxrange = 15
             local bigNum = 10
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange)
@@ -98,7 +93,7 @@ local function LaunchProjectile(inst, target)
             projectile.Transform:SetPosition(x, y, z)
             projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 6))
             projectile.components.complexprojectile:Launch(targetpos, inst, inst)
-            projectile.Transform:SetScale(0.9 + math.random(0, 0.2), 0.9 + math.random(0, 0.2), 0.9 + math.random(0, 0.2))
+            projectile.Transform:SetScale(.9 + math.random(0, .2), .9 + math.random(0, .2), .9 + math.random(0, .2))
         end
     end
 end
@@ -136,9 +131,7 @@ local function BeargerFunctions(inst)
                     end)
                 end
             end
-            if _groundpoundFn then
-                _groundpoundFn(inst, ...)
-            end
+            if _groundpoundFn then _groundpoundFn(inst, ...) end
         end
         inst.components.groundpounder.groundpoundFn = OnGroundPound
     end

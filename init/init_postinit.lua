@@ -7,7 +7,7 @@ local component_post = {
     "propagator",
     "moisture",
     "weapon",
-    --	"hunter",
+    --    "hunter",
     "kramped",
     "explosiveresist",
     "crop",
@@ -17,7 +17,7 @@ local component_post = {
     "sleeper",
     "fueled",
     "perishable",
-    --	"carnivalevent",
+    --    "carnivalevent",
     "lootdropper",
     "ambientsound",
     "foodaffinity",
@@ -31,12 +31,12 @@ local component_post = {
     "boatphysics",
     "map",
     "playerspawner",
-    --	"drownable",
+    --    "drownable",
     "combat",
     "combat_replica",
     "hullhealth",
     "health",
-    --	"spellbook"
+    --    "spellbook"
     "finiteuses",
     "piratespawner",
     "repairable",
@@ -55,13 +55,13 @@ local component_post = {
     "builder",
 
     "raindome",
-	"fillable",
+    "fillable",
 
     --"raindome"
     "stewer",
     "boatmagnet",
-	"moosespawner",
-	"wateryprotection",
+    "moosespawner",
+    "wateryprotection",
     "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
@@ -71,19 +71,19 @@ local component_post = {
 }
 
 local prefab_post = {
-	"butterfly",
-	"ressurectionstone",
-	"sewing_mannequin",
-	"bathbomb",
+    "butterfly",
+    "ressurectionstone",
+    "sewing_mannequin",
+    "bathbomb",
     "atrium_gate",
     "dragonfly",
     "wardrobe",
     "shieldofcthulu",
     "clockworks",
     "flingobalance",
-    --	"chester",
+    --    "chester",
     "mushlight",
-    --	"toadstool_cap", Moved to init_uncompromising_mod.lua
+    --    "toadstool_cap", Moved to init_uncompromising_mod.lua
     "amulet",
     "cave_entrance_open",
     "catcoon",
@@ -104,17 +104,17 @@ local prefab_post = {
     "foodbuffs",
     "mutatedhound",
     "skeleton",
-    --	"shadowcreature",
+    --    "shadowcreature",
     "berrybush",
-    --	"papyrus",
+    --    "papyrus",
     "sporecloud",
     "featherhat",
-    --	"malbatross",
+    --    "malbatross",
     "mushrooms",
-	"mushroom_hats",
+    "mushroom_hats",
     "rock_ice",
     "oasislake",
-    --	"shadowcreature",
+    --    "shadowcreature",
     "lureplant",
     "spiderden",
     "stafflights",
@@ -122,7 +122,7 @@ local prefab_post = {
     "sweatervest",
     "fans",
     "rocks",
-    --	"rock_avocado_fruit_sprout_sapling",
+    --    "rock_avocado_fruit_sprout_sapling",
     "heatrock",
     "dragonfly_spawner",
     "rneghostfire",
@@ -132,7 +132,7 @@ local prefab_post = {
     "molehat",
     "mosquito",
     "armor_bramble",
-    --	"woby",
+    --    "woby",
     "cave_network",
     "glasscutter",
     "critterlab",
@@ -149,17 +149,17 @@ local prefab_post = {
     "tophatreduction",
     "ruinsstatues",
     "moondial",
-    --	"deciduoustrees",
+    --    "deciduoustrees",
     "pktrades",
     "pigking",
     "marblebean",
     "reviver",
-    --	"bundle",
+    --    "bundle",
     "eyebrella",
     "birds",
     "tonichandlers",
     "houndwarning",
-    --	"carnival_host",
+    --    "carnival_host",
     "spider_whistle",
     "spider_healer",
     "siestahut",
@@ -178,7 +178,7 @@ local prefab_post = {
     "krampus",
     "krampus_sack",
     "waterplant",
-    --	"grassgator",
+    --    "grassgator",
     "alterguardian",
     "seasonal_shoals",
     "petals",
@@ -201,7 +201,7 @@ local prefab_post = {
     "mermhat",
     "wptags",
     "inventoryitem_classified",
-    --	"renameable_items",
+    --    "renameable_items",
     "lightninggoatherd",
     "archive_centipede",
     "firenettles",
@@ -223,12 +223,12 @@ local prefab_post = {
     "toolbox_items",
     "scrap_monoclehat",
     "winona_telebrella",
-	"otter",
+    "otter",
     "stash_map",
     "monkeyhut",
-	"lava_pond",
-	"cookiecutter",
-	"junk_pile_big",
+    "lava_pond",
+    "cookiecutter",
+    "junk_pile_big",
     "seastack", --loot changes
     "ruins_bat",
     "mushgnome_spawner",
@@ -242,21 +242,22 @@ local stategraph_post = {
     "wilson_client",
     "spider",
     "frog",
-    --	"wobysmall",
-    --	"shadowcreature",
+    --    "wobysmall",
+    --    "shadowcreature",
     "stalker_minion",
-    --	"merm",
+    --    "merm",
     "carnival_host",
     "catcoon",
     "powdermonkey",
-	"brightmare_gestalt",
+    "brightmare_gestalt",
+    "mossling"
 }
 
 local class_post = {
     "components/inventoryitem_replica",
-    --	"screens/playerhud",
+    --    "screens/playerhud",
     "widgets/itemtile",
-    --	"widgets/hoverer",
+    --    "widgets/hoverer",
     "widgets/moisturemeter",
     "widgets/controls",
     "widgets/craftslot",
@@ -264,7 +265,7 @@ local class_post = {
 }
 
 local brain_post = {
-    --	"hound",
+    --    "hound",
     "frog",
     "krampus",
     "nofirepanic",
@@ -275,8 +276,6 @@ local brain_post = {
     "deer",
     "shadowwaxwell",
 }
-
-
 
 --package post system courtesy of IA team!
 local package_post = {
@@ -300,7 +299,7 @@ if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
         "extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
         "slingshot",                   -- stuff for new slingshot aiming and wixie exclusivity
-		"slingshotammo",			   -- no skill
+        "slingshotammo",               -- no skill
         "walter",                      -- all of walters things, including woby action
         "wobysmall",
         "wobybig",
@@ -457,7 +456,7 @@ if GetModConfigData("amalgams") then
 end
 --[[
 if GetModConfigData("moon_transformations") then
-	table.insert(prefab_post, "flower")
+    table.insert(prefab_post, "flower")
 end
 ]]
 if GetModConfigData("electricalmishap_") ~= 0 then
@@ -488,14 +487,14 @@ if GetModConfigData("harder_beequeen") then
 end
 
 -- if GetModConfigData("boatturning") then
---	table.insert(prefab_post, "boat")
+--    table.insert(prefab_post, "boat")
 -- end
 
 if GetModConfigData("changed_shadow_pieces") then
     --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
     --table.insert(stategraph_post, "shadow_knight")
-	table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)	
+    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)    
 end
 
 if GetModConfigData("hambatnerf") then

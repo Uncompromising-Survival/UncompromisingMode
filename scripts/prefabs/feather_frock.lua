@@ -239,23 +239,22 @@ local function OnUse(inst)
 end
 
 local function onequip(inst, owner)
-	if not owner:HasTag("vetcurse") then
-		inst:DoTaskInTime(0, function(inst, owner)
-			local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
-			local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-			if tool ~= nil and owner ~= nil then
-				owner.components.inventory:Unequip(EQUIPSLOTS.BODY)
-				owner.components.inventory:DropItem(tool)
-				owner.components.inventory:GiveItem(inst)
-				owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-				inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-
-				if owner.sg ~= nil then
-					owner.sg:GoToState("hit")
-				end
-			end
-		end)
-	else
+    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
+        inst:DoTaskInTime(0, function(inst, owner)
+            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
+            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+            if tool and owner then
+                owner.components.inventory:Unequip(EQUIPSLOTS.BODY)
+                owner.components.inventory:DropItem(tool)
+                owner.components.inventory:GiveItem(inst)
+                if owner.components.talker then
+                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
+                end
+                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
+                if owner.sg then owner.sg:GoToState("hit") end
+            end
+        end)
+    else
 		if inst.components.container ~= nil then
 			inst.components.container:Open(owner)
 		end

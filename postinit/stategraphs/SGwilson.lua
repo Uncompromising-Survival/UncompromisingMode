@@ -271,9 +271,9 @@ env.AddStategraphPostInit("wilson", function(inst)
 
     local _OldDeathEvent = inst.events["death"].fn
     inst.events["death"].fn = function(inst, data)
-		if TUNING.DSTU.MAXHPDEATH then
-			inst.components.health:DeltaPenalty(0.25) -- ALL deaths cause 25% penalty....
-		end
+        if TUNING.DSTU.MAXHPDEATH then
+            inst.components.health:DeltaPenalty(0.25) -- ALL deaths cause 25% penalty....
+        end
         if data ~= nil and data.cause == "shadowvortex" and not inst:HasTag("wereplayer") then
             inst.components.rider:ActualDismount()
             inst.sg:GoToState("blackpuddle_death")
@@ -608,13 +608,13 @@ env.AddStategraphPostInit("wilson", function(inst)
     -- CASTAOE
     local _CASTAOE  = inst.actionhandlers[ACTIONS.CASTAOE].deststate
     inst.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action, ...)
-		if action.invobject.prefab == "um_detonator" then
-			return "detonator_remotecast_pre"
-		else
-			return _CASTAOE(inst, action, ...)
-		end
-    end	
-	
+        if action.invobject.prefab == "um_detonator" then
+            return "detonator_remotecast_pre"
+        else
+            return _CASTAOE(inst, action, ...)
+        end
+    end    
+    
     --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     local actionhandlers =
     {
@@ -649,6 +649,15 @@ env.AddStategraphPostInit("wilson", function(inst)
             end),
         ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
     }
+
+    local attackactionhandler = inst.actionhandlers[ACTIONS.ATTACK]
+    if attackactionhandler then
+        local attackactionhandler_deststate = inst.actionhandlers[ACTIONS.ATTACK].deststate
+        attackactionhandler.deststate = function(inst, action, ...)
+            inst.sg.mem.mockattack = action.mockattack or nil
+            return attackactionhandler_deststate(inst, action, ...)
+        end
+    end
 
     local _OldIdleState = inst.states["idle"].onenter
     inst.states["idle"].onenter = function(inst, pushanim)
@@ -4945,185 +4954,185 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
 
 
-		State{
-			name = "detonator_remotecast_pre",
-			tags = { "doing", "busy" },
+        State{
+            name = "detonator_remotecast_pre",
+            tags = { "doing", "busy" },
 
-			onenter = function(inst)
-				inst.AnimState:PlayAnimation("useitem_dir_pre")
-				inst.AnimState:PushAnimation("remotecast_pre", false)
-				inst.components.locomotor:Stop()
+            onenter = function(inst)
+                inst.AnimState:PlayAnimation("useitem_dir_pre")
+                inst.AnimState:PushAnimation("remotecast_pre", false)
+                inst.components.locomotor:Stop()
 
-				local item = inst.bufferedaction and (inst.bufferedaction.target or inst.bufferedaction.invobject) or nil
-				if item then
-					inst.components.inventory:ReturnActiveActionItem(item)
+                local item = inst.bufferedaction and (inst.bufferedaction.target or inst.bufferedaction.invobject) or nil
+                if item then
+                    inst.components.inventory:ReturnActiveActionItem(item)
 
-					if item.components.aoetargeting and not (item.components.spellbook and item.components.spellbook:HasSpellFn()) then
-						inst.sg.statemem.targetfx = item.components.aoetargeting:SpawnTargetFXAt(inst.bufferedaction:GetDynamicActionPoint())
-						if inst.sg.statemem.targetfx then
-							inst.sg.statemem.targetfx:ListenForEvent("onremove", OnRemoveCleanupTargetFX, inst)
-						end
-					end
+                    if item.components.aoetargeting and not (item.components.spellbook and item.components.spellbook:HasSpellFn()) then
+                        inst.sg.statemem.targetfx = item.components.aoetargeting:SpawnTargetFXAt(inst.bufferedaction:GetDynamicActionPoint())
+                        if inst.sg.statemem.targetfx then
+                            inst.sg.statemem.targetfx:ListenForEvent("onremove", OnRemoveCleanupTargetFX, inst)
+                        end
+                    end
 
-					local swap_build = item.swap_build or item.AnimState:GetBuild() or "winona_remote"
-					local skin_build = item:GetSkinBuild()
-					if skin_build then
-						inst.AnimState:OverrideItemSkinSymbol("swap_remote", skin_build, "swap_remote", item.GUID, swap_build)
-					else
-						inst.AnimState:OverrideSymbol("swap_remote", swap_build, "swap_remote")
-					end
-				else
-					inst.AnimState:OverrideSymbol("swap_remote", "winona_remote", "swap_remote")
-				end
-				
-			end,
-			events =
-			{
-				EventHandler("animqueueover", function(inst)
-					if inst.AnimState:AnimDone() then
-						inst.sg.statemem.remotecasting = true
-						inst.sg:GoToState("detonator_remotecast_trigger", inst.sg.statemem.targetfx)
-					end
-				end),
-			},
+                    local swap_build = item.swap_build or item.AnimState:GetBuild() or "winona_remote"
+                    local skin_build = item:GetSkinBuild()
+                    if skin_build then
+                        inst.AnimState:OverrideItemSkinSymbol("swap_remote", skin_build, "swap_remote", item.GUID, swap_build)
+                    else
+                        inst.AnimState:OverrideSymbol("swap_remote", swap_build, "swap_remote")
+                    end
+                else
+                    inst.AnimState:OverrideSymbol("swap_remote", "winona_remote", "swap_remote")
+                end
+                
+            end,
+            events =
+            {
+                EventHandler("animqueueover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg.statemem.remotecasting = true
+                        inst.sg:GoToState("detonator_remotecast_trigger", inst.sg.statemem.targetfx)
+                    end
+                end),
+            },
 
-			onexit = function(inst)
-				if not inst.sg.statemem.remotecasting then
-					if inst.sg.statemem.targetfx and inst.sg.statemem.targetfx:IsValid() then
-						OnRemoveCleanupTargetFX(inst)
-					end
-					inst.AnimState:ClearOverrideSymbol("swap_remote")
-				end
-			end,
-		},
+            onexit = function(inst)
+                if not inst.sg.statemem.remotecasting then
+                    if inst.sg.statemem.targetfx and inst.sg.statemem.targetfx:IsValid() then
+                        OnRemoveCleanupTargetFX(inst)
+                    end
+                    inst.AnimState:ClearOverrideSymbol("swap_remote")
+                end
+            end,
+        },
 
-		State{
-			name = "detonator_remotecast_trigger",
-			tags = { "doing", "busy" },
+        State{
+            name = "detonator_remotecast_trigger",
+            tags = { "doing", "busy" },
 
-			onenter = function(inst, targetfx)
-				inst.components.locomotor:Stop()
-				inst.SoundEmitter:PlaySound("um_detonator/um_detonator/click")
-				inst.sg.statemem.targetfx = targetfx
+            onenter = function(inst, targetfx)
+                inst.components.locomotor:Stop()
+                inst.SoundEmitter:PlaySound("um_detonator/um_detonator/click")
+                inst.sg.statemem.targetfx = targetfx
 
-				local item = inst.bufferedaction and (inst.bufferedaction.target or inst.bufferedaction.invobject) or nil
-				if item then
-					inst.components.inventory:ReturnActiveActionItem(item)
+                local item = inst.bufferedaction and (inst.bufferedaction.target or inst.bufferedaction.invobject) or nil
+                if item then
+                    inst.components.inventory:ReturnActiveActionItem(item)
 
-					if item.components.aoetargeting and not (item.components.spellbook and item.components.spellbook:HasSpellFn()) then
-						inst.sg.statemem.canrepeatcast = item.components.aoetargeting:CanRepeatCast()
-						if targetfx == nil then
-							inst.sg.statemem.targetfx = item.components.aoetargeting:SpawnTargetFXAt(inst.bufferedaction:GetDynamicActionPoint())
-							if inst.sg.statemem.targetfx then
-								inst.sg.statemem.targetfx:ListenForEvent("onremove", OnRemoveCleanupTargetFX, inst)
-							end
-						end
-					end
+                    if item.components.aoetargeting and not (item.components.spellbook and item.components.spellbook:HasSpellFn()) then
+                        inst.sg.statemem.canrepeatcast = item.components.aoetargeting:CanRepeatCast()
+                        if targetfx == nil then
+                            inst.sg.statemem.targetfx = item.components.aoetargeting:SpawnTargetFXAt(inst.bufferedaction:GetDynamicActionPoint())
+                            if inst.sg.statemem.targetfx then
+                                inst.sg.statemem.targetfx:ListenForEvent("onremove", OnRemoveCleanupTargetFX, inst)
+                            end
+                        end
+                    end
 
-					local swap_build = item.swap_build or item.AnimState:GetBuild() or "winona_remote"
-					local skin_build = item:GetSkinBuild()
-					if skin_build then
-						inst.AnimState:OverrideItemSkinSymbol("swap_remote", skin_build, "swap_remote", item.GUID, swap_build)
-						inst.AnimState:OverrideItemSkinSymbol("remote_overlay", skin_build, "remote_overlay", item.GUID, swap_build)
-					else
-						inst.AnimState:OverrideSymbol("swap_remote", swap_build, "swap_remote")
-						inst.AnimState:OverrideSymbol("remote_overlay", swap_build, "remote_overlay")
-					end
+                    local swap_build = item.swap_build or item.AnimState:GetBuild() or "winona_remote"
+                    local skin_build = item:GetSkinBuild()
+                    if skin_build then
+                        inst.AnimState:OverrideItemSkinSymbol("swap_remote", skin_build, "swap_remote", item.GUID, swap_build)
+                        inst.AnimState:OverrideItemSkinSymbol("remote_overlay", skin_build, "remote_overlay", item.GUID, swap_build)
+                    else
+                        inst.AnimState:OverrideSymbol("swap_remote", swap_build, "swap_remote")
+                        inst.AnimState:OverrideSymbol("remote_overlay", swap_build, "remote_overlay")
+                    end
 
-					inst.AnimState:SetSymbolLightOverride("remote_overlay", 0.5)
-					inst.AnimState:SetSymbolBloom("remote_overlay")
-					inst.AnimState:PlayAnimation("remotecast_trigger") --12 frames
-					
-				else
-					--fail!!!
-					inst:ClearBufferedAction()
-					inst.sg.statemem.remotecasting = true
-					inst.sg:GoToState("detonator_remotecast_pst")
-				end
-			end,
+                    inst.AnimState:SetSymbolLightOverride("remote_overlay", 0.5)
+                    inst.AnimState:SetSymbolBloom("remote_overlay")
+                    inst.AnimState:PlayAnimation("remotecast_trigger") --12 frames
+                    
+                else
+                    --fail!!!
+                    inst:ClearBufferedAction()
+                    inst.sg.statemem.remotecasting = true
+                    inst.sg:GoToState("detonator_remotecast_pst")
+                end
+            end,
 
-			timeline =
-			{
-				FrameEvent(2, function(inst)
-					inst.AnimState:SetSymbolLightOverride("swap_remote", 0.15)
-					--V2C: NOTE! if we're teleporting ourself, we may be forced to exit state here!
-					if not inst:PerformBufferedAction() then
-						if inst.sg.statemem.targetfx then
-							if inst.sg.statemem.targetfx:IsValid() then
-								OnRemoveCleanupTargetFX(inst)
-							end
-							inst.sg.statemem.targetfx = nil
-						end
-					end
-					if inst.sg.statemem.canrepeatcast then
-						inst.AnimState:PushAnimation("remotecast_loop", false) --28 frames
-					end
-				end),
-				FrameEvent(4, function(inst)
-					inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
-				end),
-				FrameEvent(6, function(inst)
-					inst.AnimState:SetSymbolLightOverride("swap_remote", 0.15)
-				end),
-				FrameEvent(8, function(inst)
-					inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
-				end),
-				FrameEvent(10, function(inst)
-					inst.sg:RemoveStateTag("busy")
-					if inst.sg.statemem.canrepeatcast then
-						inst:AddTag("canrepeatcast")
-					end
-				end),
-			},
+            timeline =
+            {
+                FrameEvent(2, function(inst)
+                    inst.AnimState:SetSymbolLightOverride("swap_remote", 0.15)
+                    --V2C: NOTE! if we're teleporting ourself, we may be forced to exit state here!
+                    if not inst:PerformBufferedAction() then
+                        if inst.sg.statemem.targetfx then
+                            if inst.sg.statemem.targetfx:IsValid() then
+                                OnRemoveCleanupTargetFX(inst)
+                            end
+                            inst.sg.statemem.targetfx = nil
+                        end
+                    end
+                    if inst.sg.statemem.canrepeatcast then
+                        inst.AnimState:PushAnimation("remotecast_loop", false) --28 frames
+                    end
+                end),
+                FrameEvent(4, function(inst)
+                    inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
+                end),
+                FrameEvent(6, function(inst)
+                    inst.AnimState:SetSymbolLightOverride("swap_remote", 0.15)
+                end),
+                FrameEvent(8, function(inst)
+                    inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
+                end),
+                FrameEvent(10, function(inst)
+                    inst.sg:RemoveStateTag("busy")
+                    if inst.sg.statemem.canrepeatcast then
+                        inst:AddTag("canrepeatcast")
+                    end
+                end),
+            },
 
-			events =
-			{
-				EventHandler("animqueueover", function(inst)
-					if inst.AnimState:AnimDone() then
-						inst.sg.statemem.remotecasting = true
-						inst.sg:GoToState("detonator_remotecast_pst")
-					end
-				end),
-			},
+            events =
+            {
+                EventHandler("animqueueover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg.statemem.remotecasting = true
+                        inst.sg:GoToState("detonator_remotecast_pst")
+                    end
+                end),
+            },
 
-			onexit = function(inst)
-				inst:RemoveTag("canrepeatcast")
-				if inst.sg.statemem.targetfx and inst.sg.statemem.targetfx:IsValid() then
-					OnRemoveCleanupTargetFX(inst)
-				end
-				if not inst.sg.statemem.remotecasting then
-					inst.AnimState:ClearOverrideSymbol("swap_remote")
-				end
-				inst.AnimState:ClearOverrideSymbol("remote_overlay")
-				inst.AnimState:ClearSymbolBloom("remote_overlay")
-				inst.AnimState:SetSymbolLightOverride("remote_overlay", 0)
-				inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
-			end,
-		},
+            onexit = function(inst)
+                inst:RemoveTag("canrepeatcast")
+                if inst.sg.statemem.targetfx and inst.sg.statemem.targetfx:IsValid() then
+                    OnRemoveCleanupTargetFX(inst)
+                end
+                if not inst.sg.statemem.remotecasting then
+                    inst.AnimState:ClearOverrideSymbol("swap_remote")
+                end
+                inst.AnimState:ClearOverrideSymbol("remote_overlay")
+                inst.AnimState:ClearSymbolBloom("remote_overlay")
+                inst.AnimState:SetSymbolLightOverride("remote_overlay", 0)
+                inst.AnimState:SetSymbolLightOverride("swap_remote", 0)
+            end,
+        },
 
-		State{
-			name = "detonator_remotecast_pst",
-			tags = { "doing" },
+        State{
+            name = "detonator_remotecast_pst",
+            tags = { "doing" },
 
-			onenter = function(inst)
-				inst.AnimState:PlayAnimation("remotecast_pst") --7 frames
-				inst.AnimState:PushAnimation("useitem_dir_pst", false)
-			end,
+            onenter = function(inst)
+                inst.AnimState:PlayAnimation("remotecast_pst") --7 frames
+                inst.AnimState:PushAnimation("useitem_dir_pst", false)
+            end,
 
-			timeline =
-			{
-				FrameEvent(12, function(inst)
-					inst.sg:GoToState("idle", true)
-				end),
-			},
+            timeline =
+            {
+                FrameEvent(12, function(inst)
+                    inst.sg:GoToState("idle", true)
+                end),
+            },
 
-			onexit = function(inst)
-				inst.AnimState:ClearOverrideSymbol("swap_remote")
-			end,
-		},
+            onexit = function(inst)
+                inst.AnimState:ClearOverrideSymbol("swap_remote")
+            end,
+        },
     }
 
-	
+    
     for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v

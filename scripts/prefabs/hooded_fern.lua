@@ -102,7 +102,7 @@ local function onpickedfn(inst, picker)
 		inst.BrushingTest:Cancel()
 		inst.BrushingTest = nil
 	end
-	if picker and picker.components.combat and not (picker.components.inventory and (picker.components.inventory:EquipHasTag("bramble_resistant") or picker.components.inventory:EquipHasTag("lazy_forager"))) and not picker:HasTag("shadowminion") and not picker:HasTag("channelingpicker") then
+	if picker and picker.components.combat and not (picker.components.inventory and (picker.components.inventory:EquipHasTag("bramble_resistant") or picker.components.inventory:EquipHasTag("lazy_forager"))) and not picker:HasAnyTag("shadowminion", "aphid", "channelingpicker") then
 		picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
 		picker:PushEvent("thorns")
 	end
@@ -169,15 +169,16 @@ end
 
 
 local function onnear(inst, target)
-	if inst.components.pickable and inst.components.pickable:CanBePicked() and not WearingThicketResist(target) then
-		if math.random() > 0.8 then
-			SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
-		end
+	if inst.components.pickable and inst.components.pickable:CanBePicked() then
+		if not WearingThicketResist(target) then
+			if math.random() > 0.8 then
+				SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
+			end
 
-
-		target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
-		if not target.thicketcheck then
-			target.thicketcheck = target:DoPeriodicTask(0.1,OutOfTheWoodsYet)
+			target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
+			if not target.thicketcheck then
+				target.thicketcheck = target:DoPeriodicTask(0.1,OutOfTheWoodsYet)
+			end
 		end
 		table.insert(inst.playertracking,target)
 		
