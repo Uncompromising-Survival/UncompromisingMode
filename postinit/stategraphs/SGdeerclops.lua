@@ -229,8 +229,8 @@ local function DisableEightFaced(inst)
 end
 
 local function EnrageAttackBank(inst, data)
-    if inst.components.health ~= nil and not inst.components.health:IsDead() then
-        if (inst.components.timer ~= nil and not inst.components.timer:TimerExists("laserbeam_cd")) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
+        if (inst.components.timer and not inst.components.timer:TimerExists("laserbeam_cd")) then
             inst.sg:GoToState("laserbeam_blue", inst.components.combat.target)
         else
             inst.sg:GoToState("attack")
@@ -349,10 +349,9 @@ local function FreezeEverything(inst)
 end
 
 local function StrongAttackBank(inst, data)
-    if not (inst.components.health and inst.components.health:IsDead())
-        and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         if inst.components.timer and not inst.components.timer:TimerExists("uppercuttime") then
-            if inst.components.health:GetPercent() >= 0.5 then
+            if inst.components.health:GetPercent() >= .5 then
                 inst.sg:GoToState("uppercut")
             else
                 inst.sg:GoToState("uppercutcombo")
