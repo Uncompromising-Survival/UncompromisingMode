@@ -7,6 +7,7 @@ local assets = {
 local function FxAppear(inst)
 	SpawnPrefab("blueberryexplosion").Transform:SetPosition(inst.Transform:GetWorldPosition())
 	SpawnPrefab("blueberrypuddle").Transform:SetPosition(inst.Transform:GetWorldPosition())
+	inst:AddTag("plant")
 end
 
 local mine_test_tags = { "monster", "character", "animal" }
@@ -63,6 +64,7 @@ local function on_blueberry_dug_up(inst, digger)
 			inst.AnimState:PushAnimation("spawn")
 			inst.AnimState:PushAnimation("trap_idle")
 			inst.components.workable:SetWorkable(false)
+			inst:AddTag("plant")
 			inst:DoTaskInTime(5, function(inst)
 				inst.components.workable:SetWorkable(true)
 			end)
@@ -148,6 +150,7 @@ local function Regrow(inst)
 	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
     inst.components.mine:Reset()
 	inst.harvestable = "full"
+	inst:RemoveTag("plant")
 end
 
 local function CheckTimeRegrow(inst)
@@ -166,7 +169,7 @@ local function on_explode(inst, target)
     inst.AnimState:PlayAnimation("trap")
 	inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1) --Gotta Reset
     inst:RemoveEventCallback("animover", on_anim_over)
-    if target ~= nil and inst._snap_task == nil then
+    if --[[target ~= nil and]] inst._snap_task == nil then
         local frames_until_anim_snap = 40
         inst._snap_task = inst:DoTaskInTime(frames_until_anim_snap * FRAMES, do_snap)
     end
@@ -185,6 +188,7 @@ local function on_sprung(inst)
 	inst.AnimState:PushAnimation("trap_idle", true)
     inst.AnimState:SetTime(math.random() * inst.AnimState:GetCurrentAnimationLength())
     inst:RemoveEventCallback("animover", on_anim_over)
+	inst:AddTag("plant")
     start_reset_task(inst)
 end
 
@@ -240,6 +244,7 @@ local function MakeWinter(inst)
 		inst.components.workable:SetWorkLeft(1)
 		inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
 		inst.components.workable:SetWorkable(true)
+		inst:AddTag("plant")
 	end
 end
 
@@ -319,8 +324,10 @@ local function blueberryplant()
 	inst:AddTag("blueberrybomb")
     inst:AddTag("trapdamage")
     inst:AddTag("birdblocker")
-	inst:AddTag("plant")
-	
+	if inst.harvestable == "regrow" then
+		inst:AddTag("plant") --Wormwood will lose sanity collecting them otherwise...
+	end
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -397,7 +404,8 @@ local function on_deploy(inst, position, deployer)
 
         new_trap_starfish.Transform:SetPosition(position:Get())
         new_trap_starfish.SoundEmitter:PlaySound("dontstarve/common/plant")
-
+		
+		inst:AddTag("plant")
         inst:Remove()
     end
 end
