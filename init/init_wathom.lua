@@ -1624,11 +1624,11 @@ AddPrefabPostInit("ancient_altar", function(inst)
 			if HasSkill(player,"wathom_allegiance_neutral") and not player.found_station then
 				player.found_station = true
 
-				--player:AddComponent("prototyper")
-				--player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
+				player:AddComponent("prototyper")
+				player.components.prototyper.trees = TUNING.PROTOTYPER_TREES.ANCIENTALTAR_HIGH
 				player.components.talker:Say("Hmm... understand now.")
 				
-				player.components.builder:UnlockRecipesForTech({ANCIENT = 4})
+				-- player.components.builder:UnlockRecipesForTech({ANCIENT = 4})
 			end
 		end
 		_complete_onturnon(inst)
