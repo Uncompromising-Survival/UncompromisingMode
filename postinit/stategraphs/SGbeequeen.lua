@@ -158,8 +158,8 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
     end]]
 
     local _OldOnHit = inst.states["hit"].onexit
-    inst.states["hit"].onexit = function(inst)
-        local ret = _OldOnHit and _OldOnHit(inst)
+    inst.states["hit"].onexit = function(inst, ...)
+        local ret = _OldOnHit and _OldOnHit(inst, ...)
         if not inst.abilitybusy then inst.ActivateHitAbility(inst) end
         if ret then return ret end
     end
