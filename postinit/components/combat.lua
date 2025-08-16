@@ -2,14 +2,13 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local SpDamageUtil = require("components/spdamageutil")
+local AREA_EXCLUDE_TAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "um_butterflyslip"}
 
 local function HasSkill(inst,name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
 env.AddComponentPostInit("combat", function(self)
-    if not TheWorld.ismastersim then return end
-
     function self:DoNaughtAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
         if instrangeoverride then
             self.temprange = instrangeoverride
@@ -105,26 +104,43 @@ env.AddComponentPostInit("combat", function(self)
         end
     end
 
-    local _DoAttack = self.DoAttack
-    function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
-        if not targ then targ = self.target end
-        if targ and targ:IsValid() and targ.SlipAway then
-            if instrangeoverride then self.temprange = instrangeoverride end
-            if instpos then self.temppos = instpos end
-            if not weapon then weapon = self:GetWeapon() end
-            if not stimuli then
-                if weapon and weapon.components.weapon then
-                    if weapon.components.weapon.overridestimulifn then stimuli = weapon.components.weapon.overridestimulifn(weapon, self.inst, targ) end
-                    if not stimuli and weapon.components.weapon.stimuli == "electric" then stimuli = "electric" end
+    if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
+        local _DoAttack = self.DoAttack
+        function self:DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+            if not targ then targ = self.target end
+            if targ and targ:IsValid() and targ.SlipAway then
+                if instrangeoverride then self.temprange = instrangeoverride end
+                if instpos then self.temppos = instpos end
+                if not weapon then weapon = self:GetWeapon() end
+                if not stimuli then
+                    if weapon and weapon.components.weapon then
+                        if weapon.components.weapon.overridestimulifn then stimuli = weapon.components.weapon.overridestimulifn(weapon, self.inst, targ) end
+                        if not stimuli and weapon.components.weapon.stimuli == "electric" then stimuli = "electric" end
+                    end
+                    if not stimuli and self.inst.components.electricattacks then stimuli = "electric" end
                 end
-                if not stimuli and self.inst.components.electricattacks then stimuli = "electric" end
+                if self:CanHitTarget(targ, weapon) and targ:SlipAway({attacker = self.inst, weapon = weapon, stimuli = stimuli}) then
+                    if self.areahitrange and not self.areahitdisabled then
+                        if not targ:HasTag("um_butterflyslip") then targ:AddTag("um_butterflyslip") end
+                        self:DoAreaAttack(projectile or self.inst, self.areahitrange, weapon, self.areahitcheck, stimuli, AREA_EXCLUDE_TAGS)
+                        if targ:HasTag("um_butterflyslip") then targ:RemoveTag("um_butterflyslip") end
+                    end
+                    self:ClearAttackTemps()
+                    return
+                end
             end
-            if self:CanHitTarget(targ, weapon) and targ:SlipAway({attacker = self.inst, weapon = weapon, stimuli = stimuli}) then
-                self:ClearAttackTemps()
-                return
-            end
+            return _DoAttack(self, targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
         end
-        return _DoAttack(self, targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos, ...)
+
+        local _DoAreaAttack = self.DoAreaAttack
+        function self:DoAreaAttack(target, range, weapon, validfn, stimuli, excludetags, onlyontarget, ...)
+            local _validfn = validfn
+            local function validfn(ent, inst, ...)
+                if ent.SlipAway and ent:SlipAway({attacker = inst, weapon = weapon, stimuli = stimuli}) then return false end
+                return not _validfn or _validfn(ent, inst, ...)
+            end
+            return _DoAreaAttack(self, target, range, weapon, validfn, stimuli, excludetags, onlyontarget, ...)
+        end
     end
 
     local _GetAttacked = self.GetAttacked
