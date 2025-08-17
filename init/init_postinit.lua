@@ -261,7 +261,9 @@ local class_post = {
     "widgets/moisturemeter",
     "widgets/controls",
     "widgets/craftslot",
-    "widgets/bloodover"
+    "widgets/bloodover",
+    "widgets/inventorybar",
+    "widgets/containerwidget",
 }
 
 local brain_post = {
