@@ -555,6 +555,7 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
 
+    BinaryConfig("infinite_blueprints", "Infinite Blueprints", "Blueprints are no longer consumed when reading.", true),
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",

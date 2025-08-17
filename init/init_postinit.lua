@@ -65,7 +65,6 @@ local component_post = {
     "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
-    "teacher", --Inf. blueprints.
 	"locomotor",
 	"beargerspawner",
 }
@@ -531,6 +530,10 @@ end
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
+end
+
+if GetModConfigData("infinite_blueprints") then
+    table.insert(component_post, "teacher")
 end
 
 modimport("postinit/sim")
