@@ -249,7 +249,8 @@ local stategraph_post = {
     "catcoon",
     "powdermonkey",
     "brightmare_gestalt",
-    "mossling"
+    "mossling",
+    "hound"
 }
 
 local class_post = {
@@ -276,6 +277,7 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
+    "hound"
 }
 
 --package post system courtesy of IA team!

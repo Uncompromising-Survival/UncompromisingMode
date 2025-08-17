@@ -103,9 +103,9 @@ SetSharedLootTable('hound_glacial',
 SetSharedLootTable('hound_spore',
     {
         { 'spoiled_food',          1.0 },
-        { 'houndstooth',          1.0 },		
+        { 'houndstooth',          1.0 },        
         { 'sporecloud_toad',      1.0 },
-        { 'shroom_skin_fragment', 0.5 },		
+        { 'shroom_skin_fragment', 0.5 },        
 
     })
 
@@ -457,7 +457,7 @@ local function CanMutateFromCorpse(inst)
     return false
 end
 
-local function fncommon(bank, build, morphlist, custombrain, tag, data)
+local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, data)
     data = data or {}
 
     local inst = CreateEntity()
@@ -480,13 +480,14 @@ local function fncommon(bank, build, morphlist, custombrain, tag, data)
     inst:AddTag("hound")
     inst:AddTag("canbestartled")
 
-    if tag ~= nil then
-        inst:AddTag(tag)
-
-        if tag == "clay" then
-            inst:RemoveTag("canbestartled")
-            --inst._eyeflames = net_bool(inst.GUID, "magmahound._eyeflames", "eyeflamesdirty")   Eye flame no work :(
-            --inst:ListenForEvent("eyeflamesdirty", OnEyeFlamesDirty)
+    if tags then
+        for _, tag in pairs(tags) do
+            inst:AddTag(tag)
+            if tag == "clay" then
+                inst:RemoveTag("canbestartled")
+                --inst._eyeflames = net_bool(inst.GUID, "magmahound._eyeflames", "eyeflamesdirty")   Eye flame no work :(
+                --inst:ListenForEvent("eyeflamesdirty", OnEyeFlamesDirty)
+            end
         end
     end
 
@@ -507,7 +508,9 @@ local function fncommon(bank, build, morphlist, custombrain, tag, data)
     inst.sounds = sounds
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-    inst.components.locomotor.runspeed = tag == "clay" and TUNING.CLAYHOUND_SPEED or TUNING.HOUND_SPEED
+    inst.components.locomotor.runspeed = tags and table.contains(tags, "clay") and TUNING.CLAYHOUND_SPEED or TUNING.HOUND_SPEED
+
+    inst:SetStateGraph(stategraph or "SGhound")
 
     if data.amphibious then
         inst:AddComponent("embarker")
@@ -538,8 +541,6 @@ local function fncommon(bank, build, morphlist, custombrain, tag, data)
         inst.components.locomotor.pathcaps = { allowocean = true }
     end
 
-
-
     inst:SetBrain(custombrain or brain)
 
     inst:AddComponent("follower")
@@ -564,7 +565,8 @@ local function fncommon(bank, build, morphlist, custombrain, tag, data)
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
 
-    if tag == "clay" or tag == "unfathomable" then
+    if tags and (table.contains(tags, "clay") or table.contains(tags, "unfathomable")) then
+        inst.sg.mem.noelectrocute = true
         --inst.sg:GoToState("statue")
 
         inst:AddComponent("hauntable")
@@ -603,9 +605,7 @@ local function fncommon(bank, build, morphlist, custombrain, tag, data)
 end
 
 local function ontimerdone(inst, data)
-    if data.name == "lightningshot_cooldown" then
-        inst.lightningshot = true
-    end
+    if data.name == "lightningshot_cooldown" then inst.lightningshot = true end
 end
 
 local function DoLightningExplosion(inst)
@@ -613,17 +613,17 @@ local function DoLightningExplosion(inst)
 end
 
 local function fnlightning()
-    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, { amphibious = true })
+    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, {"lightninghound", "electricdamageimmune"}, { amphibious = true })
 
     if not TheWorld.ismastersim then
         return inst
     end
 
+    inst.sg.mem.noelectrocute = true
+
     MakeMediumFreezableCharacter(inst, "hound_body")
 
-    inst:SetStateGraph("SGlightninghound")
-
-    inst.components.lootdropper:SetChanceLootTable('hound_lightning')
+    inst.components.lootdropper:SetChanceLootTable("hound_lightning")
 
     inst.components.combat:SetRange(10, 3)
 
@@ -635,7 +635,6 @@ local function fnlightning()
     inst.LaunchProjectile = LaunchProjectile
     inst.CancelCharge = CancelCharge
     inst.Charge = Charge
-    inst:AddTag("electricdamageimmune")
 
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("onattackother", OnAttackOther)
@@ -681,7 +680,7 @@ local function GlacialCharging(inst)
 end
 
 local function GlacialCharge(inst)
-    inst.task = inst:DoPeriodicTask(0.25, function(inst) GlacialCharging(inst) end)
+    inst.task = inst:DoPeriodicTask(.25, function(inst) GlacialCharging(inst) end)
 end
 
 local function OnGlacialAttacked(inst, data)
@@ -755,13 +754,11 @@ local function OnHitOtherFreeze(inst, data)
 end
 
 local function fnglacial()
-    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, { amphibious = true })
+    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, {"glacialhound"}, { amphibious = true })
 
     if not TheWorld.ismastersim then
         return inst
     end
-
-    inst:SetStateGraph("SGglacialhound")
 
     MakeMediumBurnableCharacter(inst, "hound_body")
 
@@ -771,7 +768,7 @@ local function fnglacial()
     inst:ListenForEvent("timerdone", ontimerdone)
     inst.Transform:SetScale(1.3, 1.3, 1.3)
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE *2)
+    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
     inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH)
 
     inst.task = nil
@@ -840,16 +837,16 @@ local function fnglacial_proj()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-	inst.entity:AddDynamicShadow()
+    inst.entity:AddDynamicShadow()
 
-	inst.DynamicShadow:SetSize(2, 2)
-	
+    inst.DynamicShadow:SetSize(2, 2)
+    
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("glacial_hound_projectile")
     inst.AnimState:SetBuild("glacial_hound_projectile")
     inst.AnimState:PlayAnimation("shoot_side")
-	inst.Transform:SetEightFaced()
+    inst.Transform:SetEightFaced()
     inst:AddTag("NOCLICK")
     inst:AddTag("sharp")
     inst:AddTag("weapon")
@@ -876,7 +873,7 @@ local function fnglacial_proj()
     --inst.components.projectile:SetLaunchOffset(Vector3(0, 2, 0))
 
     inst:DoTaskInTime(5, inst.Remove)
-	inst:DoTaskInTime(0,function(inst) SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst.Transform:GetWorldPosition()) end)
+    inst:DoTaskInTime(0, function(inst) SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst.Transform:GetWorldPosition()) end)
     inst.persists = false
 
     return inst
@@ -921,14 +918,14 @@ local function MagmaCharging(inst)
 
     local x1 = x + math.random(-2, 2)
     local z1 = z + math.random(-2, 2)
-    local y1 = 0 + 0.25 * math.random()
+    local y1 = 0 + .25 * math.random()
 
     local chance = math.random()
 
-    if chance >= 0.66 then
+    if chance >= .66 then
         SpawnPrefab("halloween_firepuff_1").Transform:SetPosition(x1, y1, z1)
         SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
-    elseif chance >= 0.33 and chance < 0.66 then
+    elseif chance >= .33 and chance < .66 then
         SpawnPrefab("halloween_firepuff_2").Transform:SetPosition(x1, y1, z1)
         SpawnPrefab("magmafire").Transform:SetPosition(x1, 0, z1)
     else
@@ -945,7 +942,7 @@ local function CancelMagmaCharge(inst)
 end
 
 local function MagmaCharge(inst)
-    inst.task = inst:DoPeriodicTask(0.25, function(inst) MagmaCharging(inst) end)
+    inst.task = inst:DoPeriodicTask(.25, function(inst) MagmaCharging(inst) end)
 end
 
 local function OnMagmaAttacked(inst, data)
@@ -977,13 +974,12 @@ local function OnMagmaAttacked(inst, data)
 end
 
 local function fnmagma()
-    local inst = fncommon("clayhound", "magmahound", nil, nil, "clay", { amphibious = false })
+    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, {"magmahound", "clay", "electricdamageimmune"}, { amphibious = false })
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst:SetStateGraph("SGmagmahound")
     if inst.sg ~= nil then
         inst.sg:GoToState("taunt")
     end
@@ -1018,21 +1014,21 @@ local function fnmagma()
 end
 
 local function OnAttackOther_Spore(inst, data)
-    if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and not data.target:HasTag("automaton") and TUNING.DSTU.MAXHPHITTERS then
-        data.target.components.health:DeltaPenalty(0.05)
+    if data.target and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "automaton") and TUNING.DSTU.MAXHPHITTERS then
+        data.target.components.health:DeltaPenalty(.05)
     end
 end
 
 local function fnspore()
-    local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, { amphibious = true })
+    local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, { amphibious = true })
 
     if not TheWorld.ismastersim then
         return inst
     end
 
 
-    inst:SetStateGraph("SGsporehound")
-    inst:SetBrain(sporebrain)
+    inst:SetStateGraph("SGhound")
+    --inst:SetBrain(sporebrain)
 
     inst.lightningshot = true
 
@@ -1073,7 +1069,7 @@ local function AdjustVisibility(inst)
 end
 
 local function fnrne()
-    local inst = fncommon("hound", "rnehound", nil, nil, "unfathomable")
+    local inst = fncommon("hound", "rnehound", nil, nil, nil, {"unfathomable", "shadow"})
 
     inst.Physics:SetCollisionGroup(COLLISION.SANITY)
     inst.Physics:CollidesWith(COLLISION.SANITY)
@@ -1083,12 +1079,10 @@ local function fnrne()
     end
 
     inst.components.locomotor:SetTriggersCreep(false)
-    inst:SetStateGraph("SGhound")
     inst:SetBrain(rnebrain)
 
     inst:DoPeriodicTask(FRAMES, AdjustVisibility)
 
-    inst:AddTag("shadow")
     inst.components.lootdropper:SetChanceLootTable('hound_rne')
     inst.DynamicShadow:Enable(false)
 
