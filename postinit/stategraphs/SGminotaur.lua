@@ -69,13 +69,15 @@ env.AddStategraphPostInit("minotaur", function(inst)
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
-            if inst.forcebelch and inst.components.combat and inst.components.combat.target and not inst.sg:HasStateTag("running") then
-                inst.sg:GoToState("belch")
-            else
-                if inst.forceleap and inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and inst:GetDistanceSqToInst(inst.components.combat.target) < 15^2 then
-                    inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
+            if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
+                if inst.forcebelch and inst.components.combat and inst.components.combat.target and not inst.sg:HasStateTag("running") then
+                    inst.sg:GoToState("belch")
                 else
-                    doattackeventhandler_fn(inst, data, ...)
+                    if inst.forceleap and inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() and inst:GetDistanceSqToInst(inst.components.combat.target) < 15^2 then
+                        inst.sg:GoToState("leap_attack_pre", inst.components.combat.target)
+                    else
+                        doattackeventhandler_fn(inst, data, ...)
+                    end
                 end
             end
         end
