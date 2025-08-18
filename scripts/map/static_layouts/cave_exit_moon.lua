@@ -125,7 +125,7 @@ return {
         },
         {
           name = "",
-          type = "moon_tree_tall",
+          type = "driftwood_small1",
           shape = "rectangle",
           x = 94,
           y = 54,
@@ -136,7 +136,7 @@ return {
         },
         {
           name = "",
-          type = "moon_tree_tall",
+          type = "driftwood_small2",
           shape = "rectangle",
           x = 344,
           y = 25,
@@ -147,7 +147,7 @@ return {
         },
         {
           name = "",
-          type = "moon_tree_tall",
+          type = "driftwood_tall",
           shape = "rectangle",
           x = 360,
           y = 255,
@@ -158,7 +158,7 @@ return {
         },
         {
           name = "",
-          type = "moon_tree_tall",
+          type = "driftwood_small2",
           shape = "rectangle",
           x = 362,
           y = 339,
@@ -169,7 +169,7 @@ return {
         },
         {
           name = "",
-          type = "moon_tree_tall",
+          type = "driftwood_small1",
           shape = "rectangle",
           x = 30,
           y = 351,

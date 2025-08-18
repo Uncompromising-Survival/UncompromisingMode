@@ -28,18 +28,11 @@ AddLevelPreInitAny(function(level)
 	end
 end)
 
--- Insert Depths Eels in Lunar Grotto (if enabled)
-if GetModConfigData("depthseels") then
-	AddTaskPreInit("MoonCaveForest", function(task)
-		task.room_choices["WormyMoonMushForest"] = 1
-		
-	end)
-end
 
 --Sever from Mainland.... Consider that we'll have 5 different Tasks that make up the original grotto
 -- Task 1 Lunar beach turf cave entrance with grass and reeds
--- Task 2 Standard Grotto
--- Task 3 Flooded Grotto + Swampy
+-- Task 2 Flooded Grotto + Swampy
+-- Task 3 Standard Grotto, one part lightly flooded
 -- Task 4 Eel Zone, Heavy Flooding
 -- Task 5 Archives
 
@@ -51,7 +44,8 @@ AddTask("GrottoEntrance", {
 		room_tags = {"lunacyarea","RoadPoison", "nohunt", "nohasslers","not_mainland"},
 		room_choices={
 			["GrottoStairs"] = 1,
-			["GrottoGrass"] = 1,			
+			["GrottoGrassNoise"] = 1,
+						
 		},
 		background_room="BGGrottoReeds",
 		room_bg=WORLD_TILES.UM_MAGMA,
@@ -65,6 +59,7 @@ AddTask("PatchyFloodedGrotto", {
 		keys_given={KEYS.TIER2},
 		level_set_piece_blocker = true,
 		room_choices={
+			["GrottoGrass"] = 1,
 			["GrottoLightFlood"] = 3,
 			["GrottoLightFloodNoise"] = 2,			
 		},

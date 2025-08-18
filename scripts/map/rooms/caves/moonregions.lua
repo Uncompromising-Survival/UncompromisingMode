@@ -50,7 +50,7 @@ AddRoom("GrottoStairs",  {
 		},
 		countprefabs =
 		{
-			moonspiderden = math.random(3,4),
+
 			cavelight = 3,
 		},
 		distributepercent = 0.18,
@@ -63,6 +63,10 @@ AddRoom("GrottoStairs",  {
 			reeds = 0.75,
 			twigs = 0.25,
 			sapling_moon = 0.4,
+
+			driftwood_tall = 0.1,
+			driftwood_small2 = 0.2,
+			driftwood_small2 = 0.2,
 		},
 	},
 })
@@ -70,6 +74,36 @@ AddRoom("GrottoStairs",  {
 AddRoom("GrottoGrass",  {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.PEBBLEBEACH,
+	contents = {
+		countprefabs =
+		{
+			cavelight = 3,
+			moonspiderden = math.random(3,4),
+		},
+		distributepercent = 0.18,
+		distributeprefabs =
+		{
+
+			lunar_island_rocks = 0.5,
+			flint = 0.5,
+			lunar_island_rock1 = 0.5,
+			reeds = 0.25,
+			grass = 0.75,
+			twigs = 0.25,
+			sapling_moon = 0.4,
+			driftwood_tall = 0.1,
+			driftwood_small2 = 0.2,
+			driftwood_small2 = 0.2,
+		},
+	},
+})
+
+AddRoom("GrottoGrassNoise",  {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.PEBBLEBEACH,
+	type = NODE_TYPE.Room,
+	--random_node_entrance_weight = 0,
+	random_node_exit_weight = 0,
 	contents = {
 		countprefabs =
 		{
@@ -108,6 +142,9 @@ AddRoom("BGGrottoReeds",  {
 			grassgekko = 0.25,
 			twigs = 0.25,
 			sapling_moon = 0.4,
+			driftwood_tall = 0.07,
+			driftwood_small2 = 0.05,
+			driftwood_small2 = 0.05,
 			
 		},
 	},
@@ -158,8 +195,7 @@ AddRoom("GrottoLightFlood", {
     colour={r=0.1,g=0.1,b=0.8,a=0.9},
     value = WORLD_TILES.UM_GROTTO_LIGHTFLOODED,
     tags = {},
-	--random_node_entrance_weight = 0,
-	random_node_exit_weight = 0,
+	random_node_entrance_weight = 0,
     contents =  {
         countstaticlayouts =
         {
@@ -177,7 +213,6 @@ AddRoom("GrottoLightFlood", {
             mushtree_moon = 0.075,
 
             lightflier_flower = 0.02,
-			sapling_moon = 0.0004,
             cavelightmoon = 0.003,
             cavelightmoon_small = 0.003,
             cavelightmoon_tiny = 0.003,
@@ -204,8 +239,8 @@ AddRoom("GrottoHeavyFloodNoise", {
     contents =  {
         countstaticlayouts =
         {
-            ["GrottoPoolBig"] = 1,
-            ["GrottoPoolSmall"] = 4,
+            ["GrottoPoolBig"] = 2,
+            ["GrottoPoolSmall"] = 2,
         },
         countprefabs =
         {
@@ -222,8 +257,8 @@ AddRoom("GrottoHeavyFloodNoise", {
             cavelightmoon_small = 0.003,
             cavelightmoon_tiny = 0.003,
 
-            moonglass_stalactite1 = 0.02,
-            moonglass_stalactite2 = 0.014,
+            moonglass_stalactite1 = 0.01,
+            moonglass_stalactite2 = 0.007,
             moonglass_stalactite3 = 0.01,
 			zaspberry_plant = 0.004,
 			shockworm = 0.002,
@@ -240,8 +275,8 @@ AddRoom("GrottoHeavyFlood", {
     contents =  {
         countstaticlayouts =
         {
-            ["GrottoPoolBig"] = 1,
-            ["GrottoPoolSmall"] = 4,
+            ["GrottoPoolBig"] = 2,
+            ["GrottoPoolSmall"] = 2,
         },
         countprefabs =
         {
@@ -259,8 +294,8 @@ AddRoom("GrottoHeavyFlood", {
             cavelightmoon_tiny = 0.003,
 
             moonglass_stalactite1 = 0.007,
-            moonglass_stalactite2 = 0.014,
-            moonglass_stalactite3 = 0.02,
+            moonglass_stalactite2 = 0.007,
+            moonglass_stalactite3 = 0.01,
 			zaspberry_plant = 0.004,
 			shockworm = 0.002,
         },
@@ -275,6 +310,7 @@ AddRoom("ArchiveMazeEntrance_Flooded", {
         countstaticlayouts =
         {
             ["GrottoPoolSmall"] = 1,
+			["GrottoPoolBig"] = 1,
         },
         distributepercent = 0.6,
         distributeprefabs =

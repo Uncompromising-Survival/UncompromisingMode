@@ -17,15 +17,15 @@ local function CheckClothing(inst,table_check)
 end
 
 local function AdjustSpeed(inst)
-	local mod = 0.5
+	local mod = 0.5 -- Nothing
 	if CheckClothing(inst,flood_equipment_high) then
-		mod = 1.2
+		mod = 1.2 -- Shark Vest
 	elseif CheckClothing(inst,flood_equipment_med) then
-		mod = 1
+		mod = 1 -- Rain Coat
 	elseif CheckClothing(inst,flood_equipment_low) then
-		mod = 0.95
+		mod = 0.75 -- Reed Suit
 	elseif CheckClothing(inst,flood_equipment_verylow) then
-		mod = 0.75
+		mod = 0.6 -- Oddballs, like summer vest
 	end
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "um_floodedwater", mod)
 end
@@ -46,16 +46,16 @@ local function SplashEffect(inst)
 			end
 		end
 		if inst.components.moisture ~= nil then
-			local mod = 0
+			local mod = 0 -- nothing
 			if CheckClothing(inst,flood_equipment_high) or CheckClothing(inst,flood_equipment_med) then
-				mod = 1
+				mod = 1 -- Rain coat, shark suit (full immunity)
 			elseif CheckClothing(inst,flood_equipment_low) then
-				mod = 0.95
+				mod = 0.75 -- Reed Suit only gain 5% of 10
 			elseif CheckClothing(inst,flood_equipment_verylow) then
-				mod = 0.75
+				mod = 0.5 -- Summer Vest
 			end
 	
-			inst.components.moisture:DoDelta(10 * (1 - mod), true)
+			inst.components.moisture:DoDelta(10 * (1 - mod), true) -- 10 per second
 		end
 	end    
 	
