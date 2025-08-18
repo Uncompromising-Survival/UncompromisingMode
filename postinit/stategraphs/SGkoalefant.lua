@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function isplayer(ent)
     return ent and ent:HasTag("player") -- fix to friendly AOE: refer for later AOE mobs -Axe
 end
-    
+
 env.AddStategraphPostInit("koalefant", function(inst)
     local doattackeventhandler = inst.events["doattack"]
     if doattackeventhandler then

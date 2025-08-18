@@ -73,31 +73,36 @@ end
 
 local events =
 {
-    EventHandler("attacked", function(inst) 
-        if inst.components.sleeper and inst.components.sleeper:IsAsleep() then
-            inst.components.sleeper:WakeUp()
-        elseif not inst.components.health:IsDead() and inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
-            inst.sg:GoToState("chargeover")
-        elseif not inst.components.health:IsDead() then
-            if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then 
-                inst.sg:GoToState("hit") 
-            end
-            if inst.sg:HasStateTag("eating") then -- If we're eating we definately need to go to hit
-                RestartTimer(inst, "pounce", math.random(3, 5)) --Restart Pounce (Make her do it soon)
-                RestartTimer(inst, "mortar", math.random(20, 30)) --Restart Mortar
-                inst.sg:GoToState("hit") 
+    EventHandler("attacked", function(inst, data)
+        if not (inst.components.health and inst.components.health:IsDead()) then
+            if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                return
+            elseif inst.components.sleeper and inst.components.sleeper:IsAsleep() then
+                inst.components.sleeper:WakeUp()
+            elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
+                inst.sg:GoToState("chargeover")
+            elseif not inst.sg:HasStateTag("electrocute") then
+                if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then 
+                    inst.sg:GoToState("hit") 
+                end
+                if inst.sg:HasStateTag("eating") then -- If we're eating we definately need to go to hit
+                    RestartTimer(inst, "pounce", math.random(3, 5)) --Restart Pounce (Make her do it soon)
+                    RestartTimer(inst, "mortar", math.random(20, 30)) --Restart Mortar
+                    inst.sg:GoToState("hit") 
+                end
             end
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("doattack", function(inst, data)
-        if not inst.sg:HasStateTag("busy") and not inst.components.health:IsDead() then
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
             inst.sg:GoToState("attack", data.target)
         end
     end),
     CommonHandlers.OnSleep(),
     CommonHandlers.OnLocomote(false,true),
     CommonHandlers.OnFreeze(),
+    CommonHandlers.OnElectrocute(),
 }
 
 local function ShadowFade(inst)
@@ -726,6 +731,7 @@ local states =
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
+            inst.physicschanged = true
             local speed = 10
             inst.components.locomotor:Stop()
             if inst.components.combat and inst.components.combat.target then
@@ -766,6 +772,10 @@ local states =
             if inst.brain then
                 inst.brain:Start()
             end
+            if inst.physicschanged then
+                EndLeapFunction(inst)
+                inst.physicschanged = nil
+            end
         end,
     },
 
@@ -801,6 +811,7 @@ local states =
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
+            inst.physicschanged = true
             local speed = inst:GetDistanceSqToInst(inst.prey) ^ 0.5 / (FRAMES * 20)
             if speed > 15 then
                 speed = 15
@@ -862,6 +873,10 @@ local states =
             if inst.components.combat then
                 inst.components.combat:ResetCooldown()
             end
+            if inst.physicschanged then
+                EndLeapFunction(inst)
+                inst.physicschanged = nil
+            end
         end,
     },
 -- [Charge -> Treeleap]
@@ -872,8 +887,8 @@ local states =
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
+            inst.physicschanged = true
             local speed = inst:GetDistanceSqToInst(inst.treetarget)^ 0.5 / (FRAMES * 20)
-
             inst.components.locomotor:Stop()
             if inst.treetarget then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
@@ -919,6 +934,10 @@ local states =
             if inst.components.combat then
                 inst.components.combat:ResetCooldown()
             end
+            if inst.physicschanged then
+                EndLeapFunction(inst)
+                inst.physicschanged = nil
+            end
         end,
     },
 
@@ -954,6 +973,7 @@ local states =
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
+            inst.physicschanged = true
             local speed = inst:GetDistanceSqToInst(inst.treetarget) ^ 0.5 / (FRAMES * 20)
             inst.components.locomotor:Stop()
             if inst.treetarget then
@@ -1001,6 +1021,10 @@ local states =
             end
             if inst.components.combat then
                 inst.components.combat:ResetCooldown()
+            end
+            if inst.physicschanged then
+                EndLeapFunction(inst)
+                inst.physicschanged = nil
             end
         end,
     },
@@ -1120,6 +1144,7 @@ local states =
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
+            inst.physicschanged = true
             local speed = 15
             inst.components.locomotor:Stop()
             if inst.components.combat and inst.components.combat.target then
@@ -1166,6 +1191,10 @@ local states =
                 inst.brain:Start()
             end
             inst.Retarget(inst)
+            if inst.physicschanged then
+                EndLeapFunction(inst)
+                inst.physicschanged = nil
+            end
         end,
     },
 -- [Leap Home Related] (Like fleeing combat)
@@ -1481,4 +1510,6 @@ CommonStates.AddWalkStates(states,
 )
 
 CommonStates.AddFrozenStates(states)
+CommonStates.AddElectrocuteStates(states)
+
 return StateGraph("hoodedwidow", states, events, "fall", actionhandlers)

@@ -65,7 +65,6 @@ local component_post = {
     "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
-    "teacher", --Inf. blueprints.
 	"locomotor",
 	"beargerspawner",
 }
@@ -250,7 +249,8 @@ local stategraph_post = {
     "catcoon",
     "powdermonkey",
     "brightmare_gestalt",
-    "mossling"
+    "mossling",
+    "hound"
 }
 
 local class_post = {
@@ -261,7 +261,9 @@ local class_post = {
     "widgets/moisturemeter",
     "widgets/controls",
     "widgets/craftslot",
-    "widgets/bloodover"
+    "widgets/bloodover",
+    "widgets/inventorybar",
+    "widgets/containerwidget",
 }
 
 local brain_post = {
@@ -275,6 +277,7 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
+    "hound"
 }
 
 --package post system courtesy of IA team!
@@ -529,6 +532,10 @@ end
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
+end
+
+if GetModConfigData("infinite_blueprints") then
+    table.insert(component_post, "teacher")
 end
 
 modimport("postinit/sim")
