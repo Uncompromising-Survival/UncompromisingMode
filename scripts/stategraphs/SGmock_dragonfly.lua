@@ -88,7 +88,7 @@ local actionhandlers =
     ActionHandler(ACTIONS.PICKUP, "eat"),
 }
 
-local events=
+local events =
 {
     CommonHandlers.OnLocomote(false,true),
     CommonHandlers.OnSleep(),
@@ -117,7 +117,7 @@ local events=
     EventHandler("attacked", onattackedfn),
 }
 
-local states=
+local states =
 {
     State{
         name = "idle",
@@ -152,17 +152,17 @@ local states=
             inst:ClearBufferedAction()
         end,
 
-        events=
+        events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
 
-        timeline=
+        timeline =
         {
-            TimeEvent(16*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
-            TimeEvent(22*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
-            TimeEvent(31*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
-            TimeEvent(34*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
+            TimeEvent(16 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
+            TimeEvent(22 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
+            TimeEvent(31 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/chew") end),
+            TimeEvent(34 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
         },
     },
 
@@ -181,10 +181,10 @@ local states=
                 inst.vomitfx.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 inst.vomitfx.Transform:SetRotation(inst.Transform:GetRotation())
                 inst:DoTaskInTime(2.2, function(inst)
-                inst.spittle = SpawnPrefab("lavaspit")
-                inst.spittle.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                inst.spittle.Transform:SetRotation(inst.Transform:GetRotation())
-                inst.spittle.dragonflyspit = true
+                    inst.spittle = SpawnPrefab("lavaspit")
+                    inst.spittle.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    inst.spittle.Transform:SetRotation(inst.Transform:GetRotation())
+                    inst.spittle.dragonflyspit = true
                 end)
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomitrumble", "vomitrumble")
             else
@@ -206,25 +206,23 @@ local states=
             inst.SoundEmitter:KillSound("vomitrumble")
         end,
 
-        events=
+        events =
         {
-            EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
 
-        timeline=
+        timeline =
         {
-            TimeEvent(2*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
-            TimeEvent(55*FRAMES, function(inst)
+            TimeEvent(2 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
+            TimeEvent(55 * FRAMES, function(inst)
                 inst.SoundEmitter:KillSound("vomitrumble")
                 inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomit")
             end),
-            TimeEvent(59*FRAMES, function(inst)
+            TimeEvent(59 * FRAMES, function(inst)
                 inst:PerformBufferedAction()
                 inst.last_target = inst.target
                 inst.target = nil
-                inst.spit_interval = math.random(20,30)
+                inst.spit_interval = math.random(20, 30)
                 inst.last_spit_time = GetTime()
             end),
         },
@@ -514,7 +512,6 @@ local states=
                 if inst.components.locomotor then
                     inst.components.locomotor:StopMoving()
                 end
-
                 local should_softstop = false
                 if should_softstop then
                     if inst.fire_build then
@@ -538,8 +535,8 @@ local states=
 
             timeline =
             {
-                TimeEvent(1*FRAMES, function(inst) if not inst.fire_build then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end end),
-                TimeEvent(2*FRAMES, function(inst) if inst.fire_build then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end end)
+                TimeEvent(1 * FRAMES, function(inst) if not inst.fire_build then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end end),
+                TimeEvent(2 * FRAMES, function(inst) if inst.fire_build then inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end end)
             },
         },
 
@@ -567,8 +564,8 @@ local states=
 
             timeline =
             {
-                TimeEvent(14*FRAMES, function(inst) inst.SoundEmitter:KillSound("flying") end),
-                TimeEvent(16*FRAMES, function(inst) 
+                TimeEvent(14 * FRAMES, function(inst) inst.SoundEmitter:KillSound("flying") end),
+                TimeEvent(16 * FRAMES, function(inst) 
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") 
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/land")
                     if inst.fire_build then
@@ -583,15 +580,15 @@ local states=
                         inst.fire_build = false
                     end
                 end),
-                TimeEvent(74*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
-                TimeEvent(78*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/fly", "flying") end),
-                TimeEvent(91*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
-                TimeEvent(111*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/sleep_pre") end),
-                TimeEvent(202*FRAMES, function(inst) 
+                TimeEvent(74 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
+                TimeEvent(78 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/fly", "flying") end),
+                TimeEvent(91 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
+                TimeEvent(111 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/sleep_pre") end),
+                TimeEvent(202 * FRAMES, function(inst) 
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") 
                     inst.SoundEmitter:KillSound("flying")
                 end),
-                TimeEvent(203*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/land") end),
+                TimeEvent(203 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/land") end),
             },
         },
 
@@ -607,7 +604,7 @@ local states=
                 end
             end,
 
-            events=
+            events =
             {
                 EventHandler("animover", function(inst) inst.sg:GoToState("sleeping") end),
                 EventHandler("onwakeup", function(inst) inst.sg:GoToState("wake") end),
@@ -630,15 +627,15 @@ local states=
                 end
             end,
 
-            events=
+            events =
             {
                 EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
             },
 
-            timeline=
+            timeline =
             {
-                TimeEvent(16*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
-                TimeEvent(26*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/fly", "flying") end),
+                TimeEvent(16 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/blink") end),
+                TimeEvent(26 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/fly", "flying") end),
             },
         },
 
@@ -654,14 +651,14 @@ local states=
                 end
             end,
 
-            timeline=
+            timeline =
             {
-                TimeEvent(2*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomitrumble") end),
-                TimeEvent(9*FRAMES, function(inst) DoFootstep(inst) end),
-                TimeEvent(33*FRAMES, function(inst) DoFootstep(inst) end),
+                TimeEvent(2 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/vomitrumble") end),
+                TimeEvent(9 * FRAMES, function(inst) DoFootstep(inst) end),
+                TimeEvent(33 * FRAMES, function(inst) DoFootstep(inst) end),
             },
 
-            events=
+            events =
             {
                 EventHandler("animover", function(inst) inst:ClearBufferedAction() inst.sg:GoToState("shoot") end),
             },
@@ -695,7 +692,7 @@ local states=
 
             timeline =
             {   
-            TimeEvent(56*FRAMES, function(inst) 
+            TimeEvent(56 * FRAMES, function(inst) 
                 if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
                     --inst:FacePoint(inst.sg.statemem.target.Transform:GetWorldPosition())
                 end
@@ -705,7 +702,7 @@ local states=
                     
                 end
             end),
-            TimeEvent(58*FRAMES, function(inst)
+            TimeEvent(58 * FRAMES, function(inst)
                 if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
                     --inst:FacePoint(inst.sg.statemem.target.Transform:GetWorldPosition())
                 end
@@ -714,7 +711,7 @@ local states=
                     inst:LaunchProjectile(inst.sg.statemem.target)
                 end
             end),
-            TimeEvent(60*FRAMES, function(inst) 
+            TimeEvent(60 * FRAMES, function(inst) 
                 if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
                     --inst:FacePoint(inst.sg.statemem.target.Transform:GetWorldPosition())
                 end
@@ -723,7 +720,7 @@ local states=
                     inst:LaunchProjectile(inst.sg.statemem.target)
                 end
             end),
-            TimeEvent(62*FRAMES, function(inst) 
+            TimeEvent(62 * FRAMES, function(inst) 
                 if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
                     --inst:FacePoint(inst.sg.statemem.target.Transform:GetWorldPosition())
                 end
@@ -732,7 +729,7 @@ local states=
                     inst:LaunchProjectile(inst.sg.statemem.target)
                 end
             end),
-            TimeEvent(64*FRAMES, function(inst) 
+            TimeEvent(64 * FRAMES, function(inst) 
                 if inst.sg.statemem.target ~= nil and inst.sg.statemem.target:IsValid() then
                     --inst:FacePoint(inst.sg.statemem.target.Transform:GetWorldPosition())
                 end
@@ -746,7 +743,7 @@ local states=
             events =
             {
             EventHandler("animover", function(inst)
-                local randomness = math.random(0,1)
+                local randomness = math.random(0, 1)
                 if inst.foogley < randomness then
                     inst.sg:GoToState("flamethrower")
                 else
@@ -843,8 +840,8 @@ local states=
                 inst.components.locomotor.runspeed = 15
                 local fx = SpawnPrefab("mossling_spin_fx")
                 fx.entity:SetParent(inst.entity)
-                fx.Transform:SetPosition(0,0.1,0)
-                inst.TrailFire = inst:DoPeriodicTask(2.3*FRAMES,
+                fx.Transform:SetPosition(0, .1, 0)
+                inst.TrailFire = inst:DoPeriodicTask(2.3 * FRAMES,
                 function(inst)
                     LightningStrike(inst)
                 end)
@@ -866,15 +863,14 @@ local states=
 
             timeline=
             {
-                TimeEvent(5*FRAMES, function(inst) inst.components.combat:DoAttack() end),
-                TimeEvent(25*FRAMES, function(inst) inst.components.combat:DoAttack() end),
-                TimeEvent(45*FRAMES, function(inst) inst.components.combat:DoAttack() end),
+                TimeEvent(5 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
+                TimeEvent(25 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
+                TimeEvent(45 * FRAMES, function(inst) inst.components.combat:DoAttack() end),
             },
 
             events=
             {
-                EventHandler("animover",
-                function(inst)
+                EventHandler("animover", function(inst)
                     inst.numSpins = inst.numSpins + 1
                     if ShouldStopSpin(inst) then
                         inst.sg:GoToState("spin_pst")
@@ -891,9 +887,7 @@ local states=
 
             onenter = function(inst)
                 inst.AnimState:PlayAnimation("charge_pst")
-                
                 inst.rockthrow = false
-                
                 inst.components.timer:StopTimer("RockThrow")
                 inst.components.timer:StartTimer("RockThrow", TUNING.BEARGER_NORMAL_GROUNDPOUND_COOLDOWN * 2)
             end,
