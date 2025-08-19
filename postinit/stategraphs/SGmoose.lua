@@ -10,7 +10,6 @@ local function ArtificialLocomote(inst, destination, speed) --Locomotor is basic
         local speedmult = inst.components.locomotor ~= nil and inst.components.locomotor:GetSpeedMultiplier() or 1
         x_final = ((destination.x - x) / hypoten) * (speed * speedmult) + x
         z_final = ((destination.z - z) / hypoten) * (speed * speedmult) + z
-
         inst.Transform:SetPosition(x_final, y, z_final)
     end
 end
@@ -189,7 +188,6 @@ env.AddStategraphPostInit("moose", function(inst)
             timeline =
             {
                 TimeEvent(2 * FRAMES, function(inst)
-
                     inst.components.groundpounder:GroundPound()
                     inst.components.combat:DoAreaAttack(inst, TUNING.MOOSE_ATTACK_RANGE * 1.3, nil, nil, nil, { "moose", "mossling" }) --GroundPound Is purely visual
                     inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/dragonfly/land")
@@ -198,7 +196,7 @@ env.AddStategraphPostInit("moose", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("idle", { softstop = true }) end),
+                EventHandler("animover", function(inst) inst.sg:GoToState("idle", {softstop = true}) end),
             },
         },
         State{
