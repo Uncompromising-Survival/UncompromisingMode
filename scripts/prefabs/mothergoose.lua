@@ -322,7 +322,7 @@ local function fn()
 	inst:ListenForEvent("death", OnDead)
     inst:ListenForEvent("onremove", OnRemove)
 
-    inst:SetStateGraph("SGmothermoose")
+    inst:SetStateGraph("SGmoose")
     inst:SetBrain(brain)
 
     return inst

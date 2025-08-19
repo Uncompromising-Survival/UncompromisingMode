@@ -249,6 +249,7 @@ local stategraph_post = {
     "catcoon",
     "powdermonkey",
     "brightmare_gestalt",
+    "moose",
     "mossling",
     "hound"
 }
@@ -365,7 +366,6 @@ if GetModConfigData("harder_deerclops") then
 end
 
 if GetModConfigData("harder_moose") then
-    table.insert(stategraph_post, "moose")
     table.insert(prefab_post, "moose")
     table.insert(brain_post, "moose")
 end
