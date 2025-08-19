@@ -54,10 +54,11 @@ env.AddStategraphPostInit("pig", function(inst)
         _OldAttackedEvent(inst, data, ...)
     end
 
-    local states = {
+    local states =
+    {
         State {
             name = "counterattack_pre",
-            tags = { "attack", "busy", "counter" },
+            tags = {"attack", "busy", "counter"},
 
             onenter = function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/pig/attack")
@@ -78,10 +79,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 end),
             },
         },
-
-        State {
+        State{
             name = "counterattack",
-            tags = { "attack", "busy", "counter" },
+            tags = {"attack", "busy", "counter"},
 
             onenter = function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/pig/attack")
@@ -119,10 +119,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 end),
             },
         },
-
-        State {
+        State{
             name = "charge_antic_pre",
-            tags = { "attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate" },
+            tags = {"attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -134,10 +133,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 EventHandler("animover", function(inst) inst.sg:GoToState("charge_antic_loop") end),
             },
         },
-
-        State {
+        State{
             name = "charge_antic_loop",
-            tags = { "attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate" },
+            tags = {"attack", "busy", "moving", "charging", "busy", "atk_pre", "canrotate"},
 
             onenter = function(inst)
                 inst.Physics:Stop()
@@ -150,10 +148,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 inst:PushEvent("attackstart")
             end,
         },
-
-        State {
+        State{
             name = "charge_pre",
-            tags = { "busy", "charging", "moving", "running" },
+            tags = {"busy", "charging", "moving", "running"},
 
             onenter = function(inst)
                 inst.components.locomotor:RunForward()
@@ -165,10 +162,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 EventHandler("animover", function(inst) inst.sg:GoToState("charge_loop") end),
             },
         },
-
-        State {
+        State{
             name = "charge_loop",
-            tags = { "charging", "moving", "running" },
+            tags = {"charging", "moving", "running"},
 
             onenter = function(inst)
                 inst.components.locomotor.runspeed = TUNING.PIG_RUN_SPEED + 8
@@ -188,10 +184,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 EventHandler("animover", function(inst) inst.sg:GoToState("charge_attack") end),
             },
         },
-
-        State {
+        State{
             name = "charge_pst",
-            tags = { "canrotate", "idle" },
+            tags = {"canrotate", "idle"},
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
@@ -203,10 +198,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
             },
         },
-
-        State {
+        State{
             name = "charge_attack",
-            tags = { "chargingattack" },
+            tags = {"chargingattack"},
 
             onenter = function(inst)
                 inst.components.combat:StartAttack()

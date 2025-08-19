@@ -57,7 +57,8 @@ local function RestartTimer(inst, name, time)
 end
 
 env.AddStategraphPostInit("minotaur", function(inst)
-    local events = {
+    local events =
+    {
         EventHandler("arena_return", function(inst, data)
             if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasAnyStateTag("busy", "frozen") or inst.sg:HasStateTag("hit")) then
                 inst.sg:GoToState("arena_return_pre")
@@ -152,7 +153,8 @@ env.AddStategraphPostInit("minotaur", function(inst)
         end
     end
 
-    local states = {
+    local states =
+    {
         State{ --This state is almost a perfect copy of the leap_attack_pre state... it uses different time paramaters so that it passes quicker
             name = "leap_attack_pre_quick",
             tags = {"attack", "busy", "leapattack", "newbuild"},

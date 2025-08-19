@@ -92,7 +92,8 @@ env.AddStategraphPostInit("moose", function(inst)
         end),
     }
 
-    local states = {
+    local states =
+	{
         State{
             name = "hopatk",
             tags = {"attack", "moving", "hopping", --[["canrotate",]] "busy", "superhop"},

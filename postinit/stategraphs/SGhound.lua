@@ -31,7 +31,8 @@ env.AddStategraphPostInit("hound", function(inst)
         end
     end
 
-    local events = {
+    local events =
+    {
         EventHandler("doleapattack", function(inst, data) -- Spore Hound
             if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not inst.components.amphibiouscreature.in_water then
                 --inst.sg:GoToState("leap_attack_pre", data.target)
@@ -40,7 +41,8 @@ env.AddStategraphPostInit("hound", function(inst)
         end),
     }
 
-    local states = {
+    local states =
+    {
         State{
             name = "leap_attack_pre",
             tags = {"attack", "canrotate", "busy","leapattack"},
