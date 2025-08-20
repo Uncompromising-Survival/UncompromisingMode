@@ -211,7 +211,7 @@ local function fn()
 
     inst.AnimState:SetBank("bugzapper")
     inst.AnimState:SetBuild("bugzapper")
-    inst.AnimState:PlayAnimation("idle_off")
+    inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("light")
     inst:AddTag("electricaltool")

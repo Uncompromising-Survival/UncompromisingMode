@@ -68,6 +68,7 @@ local function plant(name, stage)
         inst.components.beard.canshavetest = function() return true end
         inst.components.beard.prize = "um_spongeplant_item"
         inst.components.beard:AddCallback(TUNING.BEEFALO_HAIR_GROWTH_DAYS, onregenfn)
+		inst.components.beard.direct_deposit = true
 
         --[[inst:AddComponent("witherable")
 

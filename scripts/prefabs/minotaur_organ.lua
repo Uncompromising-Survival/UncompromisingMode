@@ -82,7 +82,7 @@ local function organfn()
     inst.Light:Enable(true)
     inst.Light:EnableClientModulation(true)
 	
-
+	inst:AddTag("chess") -- so AG doesn't kill it
 	inst:AddTag("minotaur_organ")
 	inst:AddTag("monster") --We want it to be easy to hit this thing.
 	

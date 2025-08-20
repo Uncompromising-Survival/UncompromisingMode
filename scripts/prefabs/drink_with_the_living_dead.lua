@@ -71,8 +71,8 @@ local function fn_tonic_fancy()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("stanton_shadow_tonic_fancy")
-    inst.AnimState:SetBuild("stanton_shadow_tonic")
+    inst.AnimState:SetBank("stanton_shadow_tonic2")
+    inst.AnimState:SetBuild("stanton_shadow_tonic2")
     inst.AnimState:PlayAnimation("idle", true)
     inst:AddTag("stantondrink")
     MakeInventoryFloatable(inst)
@@ -508,5 +508,5 @@ end
 return Prefab("skullflask", fn_flask),
 	Prefab("skullflask_empty", fn_flask_empty),
 	Prefab("stanton_shadow_tonic", fn_tonic),
-	Prefab("stanton_shadow_tonic_fancy", fn_tonic_fancy),
+	Prefab("stanton_shadow_tonic2", fn_tonic_fancy),
 	Prefab("stanton", fn_stanton)

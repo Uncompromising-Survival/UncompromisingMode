@@ -106,6 +106,9 @@ AddTaskPreInit("ArchiveMaze", function(task)
     }
 end)
 
+AddTaskPreInit("TheLabyrinth", function(task)
+	task.make_loop = true
+end)
 
 AddTaskSetPreInitAny(function(tasksetdata)
 	if tasksetdata.location ~= "cave" then

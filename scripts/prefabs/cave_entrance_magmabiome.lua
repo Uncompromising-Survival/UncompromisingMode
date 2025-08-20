@@ -1,3 +1,9 @@
+local assets =
+{
+    Asset("ANIM", "anim/cave_entrance_magmabiome.zip"),
+}
+
+
 local function close(inst)
     inst.AnimState:PlayAnimation("no_access", true)
 end
@@ -114,7 +120,7 @@ local function fn(bank, build, anim, minimap, isbackground)
 end
 
 local function closed_fn()
-    local inst = fn("springrock1", "springrock1", "full", "springrock1.png", false)
+    local inst = fn("cave_entrance_magmabiome", "cave_entrance_magmabiome", "full", "springrock1.png", false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -171,5 +177,5 @@ local function open_fn()
     return inst
 end
 
-return Prefab("cave_entrance_magmabiome", closed_fn),
+return Prefab("cave_entrance_magmabiome", closed_fn,assets),
     Prefab("cave_entrance_open_magmabiome", open_fn)

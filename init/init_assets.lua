@@ -165,7 +165,7 @@ local inventoryitems =
 	"spider_trapdoor_hooded",
     "sporepack",
     "stanton_shadow_tonic",
-    "stanton_shadow_tonic_fancy",
+    "stanton_shadow_tonic2",
     "stuffed_peeper_poppers",
     "sunglasses",
     "theatercorn",
@@ -1588,7 +1588,6 @@ Assets = {
 
     Asset("ANIM", "anim/oculet_ground.zip"),
 
-    Asset("ANIM", "anim/stanton_shadow_tonic.zip"),
     Asset("ANIM", "anim/skullflask.zip"),
     Asset("ANIM", "anim/skullflask_empty.zip"),
 

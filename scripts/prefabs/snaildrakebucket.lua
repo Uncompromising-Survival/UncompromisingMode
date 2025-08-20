@@ -25,6 +25,12 @@ local assets =
     
 }
 
+SetSharedLootTable("snaildrakebucket",
+	{
+		{ 'slurtle_shellpieces', 1 },
+		{ 'slurtle_shellpieces', 0.5 },
+	})
+		
 local function UpdateInvAndAnim(inst,name)
     inst.components.inventoryitem.atlasname = resolvefilepath("images/inventoryimages/snaildrakebucket_"..name..".xml")
     inst.components.inventoryitem:ChangeImageName("snaildrakebucket_"..name)
@@ -252,7 +258,13 @@ local function fn()
     inst.components.inventoryitem:ChangeImageName("snaildrakebucket_empty")
     
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetChanceLootTable("singingshell")
+    inst.components.lootdropper:SetChanceLootTable("snaildrakebucket")
+	
+	inst:AddComponent("workable")
+	inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+	inst.components.workable:SetWorkLeft(1)
+	inst.components.workable:SetOnFinishCallback(ExplodeContents)
+	inst.components.workable.savestate = false
 
     
     inst:AddComponent("fillable")

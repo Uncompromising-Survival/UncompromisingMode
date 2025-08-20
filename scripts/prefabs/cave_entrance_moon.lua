@@ -1,3 +1,8 @@
+local assets =
+{
+    Asset("ANIM", "anim/cave_entrance_moon.zip"),
+}
+
 local function close(inst)
     inst.AnimState:PlayAnimation("no_access", true)
 end
@@ -49,7 +54,7 @@ local function OnWork(inst, worker, workleft)
         inst.AnimState:PlayAnimation(
             (workleft < TUNING.ROCKS_MINE / 3 and "low") or
             (workleft < TUNING.ROCKS_MINE * 2 / 3 and "med") or
-            "idle_closed"
+            "full"
         )
     end
 end
@@ -114,7 +119,7 @@ local function fn(bank, build, anim, minimap, isbackground)
 end
 
 local function closed_fn()
-    local inst = fn("cave_entrance", "cave_entrance", "idle_closed", "cave_closed.png", false)
+    local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_closed.png", false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -130,7 +135,7 @@ local function closed_fn()
     inst:ListenForEvent("migration_activate_other", activatebyother)
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint", "flint" })
+    inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint","moonrocknugget","moonrocknugget","moonrocknugget" })
 
     return inst
 end
@@ -167,5 +172,5 @@ local function open_fn()
     return inst
 end
 
-return Prefab("cave_entrance_moon", closed_fn),
+return Prefab("cave_entrance_moon", closed_fn,assets),
     Prefab("cave_entrance_open_moon", open_fn)

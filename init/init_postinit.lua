@@ -67,6 +67,7 @@ local component_post = {
     "moonstorms", -- Handles lunar bee respawns,
 	"locomotor",
 	"beargerspawner",
+	"beard", -- Allows shaveable entities to directly deposit their loot into the player's inventory if set that way
 }
 
 local prefab_post = {

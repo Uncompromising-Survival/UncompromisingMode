@@ -4,7 +4,7 @@ local assets =
 {
     Asset("ANIM", "anim/um_rimeweed.zip"),
     Asset("ANIM", "anim/um_rimelash.zip"),
-    Asset("ANIM", "anim/swap_um_rimeweed.zip"),
+    Asset("ANIM", "anim/swap_rimelash.zip"),
 
     -- Items
     Asset("ANIM", "anim/um_rimeweed_itemvine.zip"),
@@ -637,8 +637,8 @@ end
 --[ Rime Lash ] ------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_um_rimeweed", "swap_whip")
-    owner.AnimState:OverrideSymbol("whipline", "swap_um_rimeweed", "whipline")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_rimelash", "swap_whip")
+    owner.AnimState:OverrideSymbol("whipline", "swap_rimelash", "whipline")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -684,7 +684,7 @@ local function whip()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("um_rimelash")
+    inst.AnimState:SetBank("whip")
     inst.AnimState:SetBuild("um_rimelash")
     inst.AnimState:PlayAnimation("idle")
 
