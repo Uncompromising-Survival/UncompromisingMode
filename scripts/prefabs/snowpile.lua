@@ -216,15 +216,10 @@ local function workcallback(inst, worker, workleft)
         inst:Remove()
     end
     if inst.components.workable.workleft <= 0 then
-	inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-	if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) or worker:HasTag("weerclops") then --IT'S INSANE HOW JOLLY AND FESTIVE I AM BRAGHHGGH
-		local more_balls = math.floor(math.random(1.5,4))
-		for i = 1, more_balls do
-			local ball = inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-			local strength = math.random(1, 2.25)
-			Launch(ball, inst, strength)
+		inst.components.lootdropper:SpawnLootPrefab("snowball_item")
+		if math.random() > 0.5 then
+			inst.components.lootdropper:SpawnLootPrefab("snowball_item")
 		end
-	end
         inst:Remove()
     else
         startregen(inst)
@@ -469,7 +464,6 @@ local function snowpilefn(Sim)
 
 
     local balls_count = 1
-    if IsSpecialEventActive(SPECIAL_EVENTS.WINTERS_FEAST) then balls_count = math.floor(math.random(2, 4.5)) end --THIS IS SO JOLLY GRAAAH
     inst:AddComponent("pickable")
     inst.components.pickable.picksound = "dontstarve/wilson/harvest_berries"
 
