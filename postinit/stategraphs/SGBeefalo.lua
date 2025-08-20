@@ -38,7 +38,8 @@ env.AddStategraphPostInit("beefalo", function(inst)
         end
     end
 
-    local states = {
+    local states =
+    {
         State{
             name = "charge_start",
             tags = {"charging", "busy", "attack", "canrotate"},

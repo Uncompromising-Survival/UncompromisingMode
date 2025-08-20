@@ -129,7 +129,8 @@ env.AddStategraphPostInit("eyeofterror", function(inst)
         return GetRandomWithVariance(cooldown, cooldown/3)
     end
 
-    local states = {
+    local states =
+    {
         State{
             name = "shoot_pre",
             tags = {"busy", "canrotate", "charge"},

@@ -373,7 +373,8 @@ local function IceAttackBank(inst, data)
 end
 
 env.AddStategraphPostInit("deerclops", function(inst)
-    local events = {
+    local events =
+    {
         EventHandler("start_aurafreeze", function(inst, data)
             if not (inst.components.health and inst.components.health:IsDead()) and (not inst.sg:HasStateTag("busy") or inst.sg:HasStateTag("hit")) and not inst.sg:HasStateTag("aurafreeze") then
                 inst.sg:GoToState("aurafreeze_pre")
@@ -405,8 +406,9 @@ env.AddStategraphPostInit("deerclops", function(inst)
         end
     end
 
-    local states = {
-        State {
+    local states =
+    {
+        State{
             name = "laserbeam_blue",
             tags = {"busy"},
 
@@ -523,7 +525,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end
             end,
         },
-
         State {
             name = "spinbeam_pre",
             tags = {"busy", "nosleep"},
@@ -570,7 +571,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end),
             },
         },
-
         State {
             name = "spinbeam",
             tags = {"busy", "attack", "nosleep"},
@@ -670,8 +670,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end
             end,
         },
-
-        State {
+        State{
             name = "aurafreeze_pre",
             tags = {"busy", "nosleep", "noshove", "aurafreeze"},
 
@@ -709,8 +708,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:SetBuild("deerclops_build")
             end,
         },
-
-        State {
+        State{
             name = "aurafreeze",
             tags = {"nosleep", "noshove", "aurafreeze"},
 
@@ -735,8 +733,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end
             end,
         },
-
-        State {
+        State{
             name = "aurafreeze_pst",
             tags = {"busy", "nosleep", "noshove"},
 
@@ -767,8 +764,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:SetBuild("deerclops_build")
             end,
         },
-
-        State {
+        State{
             name = "aurafreeze_hit",
             tags = {"hit", "busy", "aurafreeze"},
 
@@ -790,8 +786,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
             end,
 
         },
-
-        State {
+        State{
             name = "taunt",
             tags = {"busy"},
 
@@ -844,8 +839,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 SetLightColour(inst, 1)
             end,
         },
-
-        State {
+        State{
             name = "uppercut",
             tags = {"attack", "busy", "heavyhit"},
 
@@ -894,7 +888,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
 
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/swipe")
 
-
                     if inst.bufferedaction ~= nil and inst.bufferedaction.action == ACTIONS.HAMMER then
                         local target = inst.bufferedaction.target
                         inst:ClearBufferedAction()
@@ -921,8 +914,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 inst.AnimState:SetBuild("deerclops_build")
             end,
         },
-
-        State {
+        State{
             name = "uppercutcombo",
             tags = {"attack", "busy", "heavyhit", "noice"},
 
@@ -978,7 +970,6 @@ env.AddStategraphPostInit("deerclops", function(inst)
                         end
                     end
 
-
                     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/swipe")
 
                     if inst.bufferedaction ~= nil and inst.bufferedaction.action == ACTIONS.HAMMER then
@@ -1030,8 +1021,7 @@ env.AddStategraphPostInit("deerclops", function(inst)
                 end),
             },
         },
-
-        State {
+        State{
             name = "aurattack",
             tags = {"attack", "busy"},
 

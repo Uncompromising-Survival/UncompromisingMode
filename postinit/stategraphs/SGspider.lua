@@ -149,7 +149,8 @@ env.AddStategraphPostInit("spider", function(inst)
     
 }]]
 
-    local states = {
+    local states =
+    {
         State{
             name = "trapdoor_attack",
             tags = {"attack", "canrotate", "busy", "jumping"},
@@ -202,9 +203,9 @@ env.AddStategraphPostInit("spider", function(inst)
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },]]
-        State {
+        State{
             name = "shield",
-            tags = { "busy", "shield" },
+            tags = {"busy", "shield"},
 
             onenter = function(inst)
                 --If taking fire damage, spawn fire effect.
@@ -226,10 +227,9 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst:RemoveTag("hiding")
             end,
         },
-
-        State {
+        State{
             name = "evade",
-            tags = { "busy", "evade", "no_stun" },
+            tags = {"busy", "evade", "no_stun"},
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
@@ -245,10 +245,9 @@ env.AddStategraphPostInit("spider", function(inst)
                 end),
             },
         },
-
-        State {
+        State{
             name = "evade_loop",
-            tags = { "busy", "evade", "no_stun" },
+            tags = {"busy", "evade", "no_stun"},
 
             onenter = function(inst)
                 if inst ~= nil then
@@ -286,10 +285,9 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
             end,
         },
-
-        State {
+        State{
             name = "evade_pst",
-            tags = { "busy", "evade", "no_stun" },
+            tags = {"busy", "evade", "no_stun"},
 
             onenter = function(inst)
                 if inst.components.combat.target and inst.components.combat.target:IsValid() then
@@ -323,7 +321,6 @@ env.AddStategraphPostInit("spider", function(inst)
                 inst.components.locomotor:Stop()
             end,
         },
-
         State{
             name = "spit_web",
             tags = {"attack", "busy", "spitting"},

@@ -173,7 +173,8 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
         end
     end
 
-    local events = {
+    local events =
+    {
         EventHandler("stomp", function(inst, data)
             if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("ability") and not inst:HasTag("doingability") then
                 inst.sg:GoToState("stomp", data.attacker)
@@ -181,7 +182,8 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
         end)
     }
 
-    local states = {
+    local states =
+    {
         State{
             name = "stomp",
             tags = {"busy", "nosleep", "nofreeze", "ability"},

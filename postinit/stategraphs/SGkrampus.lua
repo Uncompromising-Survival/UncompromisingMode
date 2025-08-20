@@ -43,7 +43,8 @@ local function LaunchItem(inst, target, item)
     end
 end
 
-local states = {
+local states =
+{
 	State{
         name = "feint_attack",
         tags = {"attack"},

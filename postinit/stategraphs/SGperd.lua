@@ -17,7 +17,8 @@ env.AddStategraphPostInit("perd", function(inst)
         end
     end
 
-    local states = {
+    local states =
+    {
         State{
             name = "hitshort",
             tags = {"busy"},

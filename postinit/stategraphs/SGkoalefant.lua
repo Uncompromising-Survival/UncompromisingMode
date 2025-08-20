@@ -93,7 +93,8 @@ env.AddStategraphPostInit("koalefant", function(inst)
         inst.CanDisarm = false
     end
 
-    local states = {
+    local states =
+    {
         State{
             name = "charge_start",
             tags = {"charging", "busy", "attack", "canrotate"},

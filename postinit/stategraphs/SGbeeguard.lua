@@ -121,8 +121,9 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
         end
     end
 
-    local events = {}
-    local states = {
+    --local events = {}
+    local states =
+    {
         State{
             name = "flyup",
             tags = {"busy", "nosleep", "nofreeze", "noattack", "noelectrocute", "flight", "mortar"},
@@ -551,10 +552,10 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
         }
     }
 
-    for k, v in pairs(events) do
+    --[[for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v
-    end
+    end]]
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
