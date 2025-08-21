@@ -1063,6 +1063,9 @@ local states =
             elseif inst.exitcondition then
                 inst.sg.statemem.exitcondition = nil
             end
+            if inst.brain then
+                inst.brain:Start()
+            end
         end,
 
         events =
@@ -1082,11 +1085,9 @@ local states =
         name = "leaptotree_shake_pst",
         tags = {"busy", "noweb", "ability"},
         onenter = function(inst)
-            
             if inst.treetarget then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
-            
             inst.AnimState:PlayAnimation("shaketree_pst",false)
             if inst.brain then
                 inst.brain:Stop()
@@ -1095,15 +1096,16 @@ local states =
         
         events =
         {
-            EventHandler("animover", function(inst) 
-                if inst.brain then
-                    inst.brain:Start()
-                end
-                inst.treetarget = nil
-                inst.Retarget(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
+        
+        onexit = function(inst)
+            if inst.brain then
+                inst.brain:Start()
+            end
+            inst.treetarget = nil
+            inst.Retarget(inst)
+        end,
     },
 
     State{
@@ -1130,11 +1132,15 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
-                inst.treetarget = nil
-                inst.sg:GoToState("tree_leapattack") 
-            end),
+            EventHandler("animqueueover", function(inst) inst.sg:GoToState("tree_leapattack") end),
         },
+
+        onexit = function(inst)
+            if inst.brain then
+                inst.brain:Start()
+            end
+            inst.treetarget = nil
+        end,
     },
 
     State{
