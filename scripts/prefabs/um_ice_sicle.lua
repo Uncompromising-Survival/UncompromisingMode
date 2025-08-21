@@ -101,11 +101,11 @@ local function HarvestPickable(inst, ent, doer)
     end
 
     if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(0.25)
+        inst.components.finiteuses:Use(0.125)
     end
 
    if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(0.2)
+        inst.components.finiteuses:Use(0.1)
     end
 	
 end
@@ -293,9 +293,10 @@ local function ScytheFn()
 	--inst.components.inventoryitem.atlasname = "images/inventoryimages/um_ice_sicle.xml"
 	
     local finiteuses = inst:AddComponent("finiteuses")
-    finiteuses:SetMaxUses(100*TUNING.GOLDENTOOLFACTOR)
-    finiteuses:SetUses(100*TUNING.GOLDENTOOLFACTOR)
-    --finiteuses:SetConsumption(ACTIONS.SCYTHE, 0)
+    finiteuses:SetMaxUses(50*TUNING.GOLDENTOOLFACTOR)
+    finiteuses:SetUses(50*TUNING.GOLDENTOOLFACTOR)
+    finiteuses:SetConsumption(ACTIONS.SCYTHE, 0.5)
+    finiteuses:SetConsumption(ACTIONS.ATTACK, 1)
 	finiteuses:SetOnFinished(inst.Remove)
 	SetupComponents(inst)
 
