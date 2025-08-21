@@ -5,30 +5,46 @@ local assets =
     Asset("SOUND", "sound/common.fsb"),
 }
 
-local function onregenfn(inst)
+local function OnRegen(inst)
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
-    inst.components.beard.bits = 1
+    inst.components.shaveable.prize_count = 1
 end
 
-local function makeemptyfn(inst)
-    inst.AnimState:PlayAnimation("picked")
-end
-
-local function onpickedfn(inst, picker)
+local function OnShaved(inst, shaver, shave_item)
     inst.SoundEmitter:PlaySound("dontstarve/wilson/pickup_lichen")
     inst.AnimState:PlayAnimation("picking")
     inst.AnimState:PushAnimation("picked", false)
+    inst.components.shaveable.prize_count = 0
+    if not inst.components.timer:TimerExists("regrow") then
+        inst.components.timer:StartTimer("regrow", TUNING.TOTAL_DAY_TIME * 4)
+    end
+end
+
+local function CanShave(inst, shaver, shave_item)
+    return inst.components.shaveable.prize_count > 0
 end
 
 local function mine_up(inst, worker)
     for i = 1, 3 do
         inst.components.lootdropper:SpawnLootPrefab("marble")
     end
-    if inst.components.beard and inst.components.beard.bits and inst.components.beard.bits > 0 then
-        inst.components.beard:Shave(worker)
+    if inst.components.shaveable.prize_prefab and inst.components.shaveable.prize_count > 0 then
+        inst.components.lootdropper:SpawnLootPrefab(inst.components.shaveable.prize_prefab)
     end
     inst:Remove()
+end
+
+local function OnTimerDone(inst, data)
+    if data.name == "regrow" then
+        OnRegen(inst)
+    end
+end
+
+local function OnLoad(inst, data)
+    if inst.components.timer:TimerExists("regrow") then
+        inst.AnimState:PlayAnimation("picked")
+    end
 end
 
 local function plant(name, stage)
@@ -45,6 +61,7 @@ local function plant(name, stage)
 
         inst.AnimState:SetBank("um_spongeplant")
         inst.AnimState:SetBuild("um_spongeplant")
+        inst.AnimState:PlayAnimation("idle")
 
         inst:AddTag("plant")
         inst:AddTag("lunarplant_target")
@@ -61,14 +78,10 @@ local function plant(name, stage)
         local color = .75 + math.random() * .25
         inst.AnimState:SetMultColour(color, color, color, 1)
 
-        inst:AddComponent("beard")
-        inst.components.beard.bits = 1
-        inst.components.beard.daysgrowth = TUNING.BEEFALO_HAIR_GROWTH_DAYS+1
-        inst.components.beard.onreset = onpickedfn
-        inst.components.beard.canshavetest = function() return true end
-        inst.components.beard.prize = "um_spongeplant_item"
-        inst.components.beard:AddCallback(TUNING.BEEFALO_HAIR_GROWTH_DAYS, onregenfn)
-		inst.components.beard.direct_deposit = true
+        local shaveable = inst:AddComponent("shaveable")
+        shaveable:SetPrize("um_spongeplant_item", 1)
+        shaveable.can_shave_test = CanShave
+        shaveable.on_shaved = OnShaved
 
         --[[inst:AddComponent("witherable")
 
@@ -86,6 +99,9 @@ local function plant(name, stage)
             inst.components.workable:SetOnFinishCallback(mine_up)
             inst.components.workable:SetWorkLeft(9)
         end
+
+        inst:AddComponent("timer")
+        inst:ListenForEvent("timerdone", OnTimerDone)
         ---------------------
 
         MakeMediumBurnable(inst)
@@ -93,10 +109,8 @@ local function plant(name, stage)
         MakeNoGrowInWinter(inst)
         MakeHauntableIgnite(inst)
 
-        inst:DoTaskInTime(0, function(inst)
-            inst.AnimState:PlayAnimation(inst.components.beard and inst.components.beard.bits and inst.components.beard.bits > 0 and "idle" or "picked")
-        end)
-        ---------------------
+        inst.OnLoad = OnLoad
+
         return inst
     end
 
@@ -151,6 +165,7 @@ local function item()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
     MakeHauntableLaunchAndPerish(inst)
+
     return inst
 end
 

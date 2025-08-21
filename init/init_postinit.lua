@@ -66,8 +66,7 @@ local component_post = {
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
 	"locomotor",
-	"beargerspawner",
-	"beard", -- Allows shaveable entities to directly deposit their loot into the player's inventory if set that way
+	"beargerspawner"
 }
 
 local prefab_post = {
