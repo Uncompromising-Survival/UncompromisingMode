@@ -74,27 +74,24 @@ local function removeretaliationdamageretaliationdamage(inst, target)
 end
 
 local function OnHitOtherBoomberry(inst, data)
-    local other = data.target
-    if other ~= nil and not other.um_boomberry_exploded then
-		local x,y,z = other.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x,y,z,2,{"_health"},{"player"})
-		local weapon = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil 
-		local damage = 34
-		if weapon and weapon.components.weapon then
-			damage = weapon.components.weapon.damage*0.75
-		end
-		if other.SoundEmitter then
-			other.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-		end
-		for i,v in ipairs(ents) do
-			if not v.components.health:IsDead() and v ~= inst and v ~= other then
-				v.um_boomberry_exploded = true
-				v.components.combat:GetAttacked(inst, damage)
-				v:DoTaskInTime(0.3,function(v) v.um_boomberry_exploded = nil end)
-			end
-		end
-		SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
-		SpawnPrefab("blueberrypuddle").Transform:SetPosition(other.Transform:GetWorldPosition())
+    local other, damage = data.target, data.damage
+    if other and damage and not other.um_boomberry_exploded then
+        local x, y, z = other.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 2, {"_health", "_combat"}, {"player", "companion", "INLIMBO", "flight", "invisible", "notarget", "noattack", "wall"})
+        local damage = damage * .75
+        if other.SoundEmitter then other.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap") end
+        for i,v in ipairs(ents) do
+            local leader = v.components.follower and v.components.follower.leader
+            local itemleader = leader and leader.components.inventoryitem and leader.components.inventoryitem:GetGrandOwner()
+            if not v.components.health:IsDead() and v.components.combat:CanBeAttacked() and (not leader or itemleader and not itemleader:HasTag("player") or not leader.components.inventoryitem and not leader:HasTag("player"))
+                and v ~= inst and v ~= other then
+                v.um_boomberry_exploded = true
+                v.components.combat:GetAttacked(inst, damage)
+                v:DoTaskInTime(.3, function(v) v.um_boomberry_exploded = nil end)
+            end
+        end
+        SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
+        SpawnPrefab("blueberrypuddle").Transform:SetPosition(other.Transform:GetWorldPosition())
     end
 end
 
