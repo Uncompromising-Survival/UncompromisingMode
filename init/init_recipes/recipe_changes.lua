@@ -328,6 +328,7 @@ AllRecipes["featherpencil"].numtogive = 4 -- 8
 
 AllRecipes["armorwagpunk"].ingredients = { Ingredient("armorwood", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2) }
 AllRecipes["wagpunkhat"].ingredients = { Ingredient("footballhat", 1), Ingredient("wagpunk_bits", 8), Ingredient("transistor", 2) }
+Allrecipes["fence_electric_item"].ingredients = { Ingredient("wagpunk_bits", 6), Ingredient("moonglass_charged", 6), Ingredient("moonstorm_spark", 6) }
 
 -- Wormwood Crafts
 if GetModConfigData("wormwood_trapbuffs") then

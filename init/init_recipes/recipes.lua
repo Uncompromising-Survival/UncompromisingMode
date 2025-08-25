@@ -530,7 +530,7 @@ AddRecipe2(
 	{ Ingredient("icestaff", 1), Ingredient("livinglog", 1), Ingredient("um_rimeweed_itemflower", 1) },
 	TECH.MAGIC_THREE,
 	nil,
-	{ "TOOLS" }
+	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
