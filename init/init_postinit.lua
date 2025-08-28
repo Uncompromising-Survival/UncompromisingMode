@@ -233,8 +233,7 @@ local prefab_post = {
     "mushgnome_spawner",
     "spiderqueen",
     "snowman",
-    "lighter",
-    "gelblob_storage"
+    "lighter"
 }
 
 local stategraph_post = {
