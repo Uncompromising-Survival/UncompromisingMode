@@ -1901,17 +1901,17 @@ end
 
 local function OnEquipRat(inst, owner)
     owner.AnimState:OverrideSymbol("swap_hat", "hat_ratmask", "swap_hat")
-	owner.AnimState:Show("HAT")
-	owner.AnimState:Hide("HAIR_HAT")
-	owner.AnimState:Show("HAIR_NOHAT")
-	owner.AnimState:Show("HAIR")
-	owner.AnimState:Show("HAIRFRONT")
+    owner.AnimState:Show("HAT")
+    owner.AnimState:Hide("HAIR_HAT")
+    owner.AnimState:Show("HAIR_NOHAT")
+    owner.AnimState:Show("HAIR")
+    owner.AnimState:Show("HAIRFRONT")
 
     if owner and not owner:HasTag("equipmentmodel") then
         inst.components.fueled:StartConsuming()
-		owner:AddTag("ratfriend")
-		owner.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/emerge")
-		owner.rat_task = owner:DoPeriodicTask(5, Sniffertime, 0)
+        owner:AddTag("ratfriend")
+        owner.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/emerge")
+        owner.rat_task = owner:DoPeriodicTask(5, Sniffertime, 0)
     end
 end
 
