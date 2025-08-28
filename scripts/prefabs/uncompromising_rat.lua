@@ -1527,7 +1527,12 @@ local function SnifferFoodScoreCalculations(inst, container, v)
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
-local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant"}
+local NO_CONTAINER_PREFABS = {"lureplant", "catcoon"}
+local function IsProperContainer(owner)
+    return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post"))
+end
+
+local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -1548,14 +1553,15 @@ local function TimeForACheckUp(inst, dev)
     if ents ~= nil then
         for i, v in ipairs(ents) do
             if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
-                local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
-                local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post"))
-                if container then
-                    SnifferFoodScoreCalculations(inst, true, v)
-                else
-                    SnifferFoodScoreCalculations(inst, false, v)
-                    if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
-                        inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+                local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
+                if IsProperContainer(container) then
+                    if container then
+                        SnifferFoodScoreCalculations(inst, true, v)
+                    else
+                        SnifferFoodScoreCalculations(inst, false, v)
+                        if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+                            inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+                        end
                     end
                 end
             end
@@ -1864,11 +1870,12 @@ local function Sniffertime(owner)
     local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
     if ents then
         for i, v in ipairs(ents) do
-            local containerowner = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
-            local container = containerowner and not (containerowner.prefab == "lureplant" or containerowner.prefab == "catcoon" or containerowner:HasAnyTag("lamp", "yots_post")) or false
-            FoodScoreCalculations(container, v, owner)
-            if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
-                TrySpawnIcon(v, owner, .5)
+            local container = v.components.inventoryitem:IsHeld() and v.components.inventoryitem:GetGrandOwner()
+            if IsProperContainer(container) then
+                FoodScoreCalculations(container, v, owner)
+                if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
+                    TrySpawnIcon(v, owner, .5)
+                end
             end
         end
     end
