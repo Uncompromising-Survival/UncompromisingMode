@@ -32,7 +32,7 @@ TUNING.DSTU = {
     -- Armor
     ----------------------------------------------------------------------------
     ARMORREED_UM = TUNING.WILSON_HEALTH * 2 * multiplayer_armor_durability_modifier,
-	BEE_ALLERGY_PROTECTION_EXTRADAMAGE = 5,	
+    BEE_ALLERGY_PROTECTION_EXTRADAMAGE = 5,    
     ----------------------------------------------------------------------------
     -- Acid colour
     ----------------------------------------------------------------------------
@@ -45,8 +45,8 @@ TUNING.DSTU = {
     GOODIESNERF = GetModConfigData("goodies_nerf"),
     -- Daywalker
     DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
-	DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
-	
+    DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
+    
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
     FOOD_BERRY_NORMAL_APPEARANCE_PERCENT = 0.6,
@@ -59,6 +59,9 @@ TUNING.DSTU = {
     TREE_GROWTH_TIME_INCREASE = 1.00,
     BERRYBUSH_JUICY_CYCLES = 2,
     -- Food stats
+    FOOD_BUTTERFLY_WING_HEALTH = 1,
+    FOOD_BUTTERFLY_WING_HUNGER = 2.5,
+    FOOD_BUTTERFLY_WING_PERISHTIME = total_day_time / 2,
     FOOD_SPOILED_FOOD_HEALTH = -5,
     FOOD_SPOILED_FOOD_SANITY = -5,
     FOOD_SEEDS_HUNGER = 1.5,
@@ -142,9 +145,9 @@ TUNING.DSTU = {
     -- Mob changes
     ----------------------------------------------------------------------------
     -- Armor Rework
-	ARMORREWORK = GetModConfigData("armorrework"),
-	
-	-- ratraid
+    ARMORREWORK = GetModConfigData("armorrework"),
+    
+    -- ratraid
     RATRAID_TIMERSTART = GetModConfigData("rattimer"),
     RATRAID_GRACE = GetModConfigData("ratgrace"),
     RATSNIFFER_TIMER = GetModConfigData("ratsnifftimer"),
@@ -246,10 +249,10 @@ TUNING.DSTU = {
     WINONA_WACKCATS = GetModConfigData("winonawackycats"),
     -- Wickerbottom
     WICKERCHANGES = GetModConfigData("wickerbottom_changes"),
-	--WICKERNERF = GetModConfigData("wickerbottom"),
+    --WICKERNERF = GetModConfigData("wickerbottom"),
     --WICKERNERF_TENTACLES = GetModConfigData("on tentacles"),
-	-- Wortox
-	WORTOXCHANGES = GetModConfigData("wortox"),
+    -- Wortox
+    WORTOXCHANGES = GetModConfigData("wortox"),
     -- Willow
     --WILLOW_INSULATION = GetModConfigData("willow insulation"),
 
@@ -285,24 +288,24 @@ TUNING.DSTU = {
     SHADOW_ITEMS = GetModConfigData("shadow_items"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
-	DREAD_EYE = GetModConfigData("dreadeye"),
+    DREAD_EYE = GetModConfigData("dreadeye"),
     MAX_DISTANCE_TO_SHADOWS = 1225, -- 35^2
     CREEPINGFEAR_SPEED = 4.8,
-    CREEPINGFEAR_HEALTH = 1600,
-    CREEPINGFEAR_DAMAGE = 60,
+    CREEPINGFEAR_HEALTH = 850,
+    CREEPINGFEAR_DAMAGE = 50,
     CREEPINGFEAR_ATTACK_PERIOD = 2.3,
-    CREEPINGFEAR_RANGE_1 = 3.0,
-    CREEPINGFEAR_RANGE_2 = 4.0,    -- 4.2,
+    CREEPINGFEAR_RANGE_1 = 3,
+    CREEPINGFEAR_RANGE_2 = 4,    -- 4.2,
     CREEPINGFEAR_SPAWN_THRESH = 0, -- 10%
     CREEPINGFEAR_WALK_SPEED = 5,
     CREEPINGFEAR_RUN_SPEED = 6,
     DREADEYE_SPEED = 7,
-    DREADEYE_HEALTH = 350,
+    DREADEYE_HEALTH = 250,
     DREADEYE_DAMAGE = 35,
     DREADEYE_ATTACK_PERIOD = 6,
     DREADEYE_RANGE_1 = 13,
     DREADEYE_RANGE_2 = 2.5,
-    DREADEYE_SPAWN_THRESH = 0.50,
+    DREADEYE_SPAWN_THRESH = .50,
     MINI_DREADEYE_HEALTH = 100,
     MOCK_DRAGONFLY_DAMAGE = 125,
     TOADLING_DAMAGE = 50,
@@ -313,7 +316,7 @@ TUNING.DSTU = {
     TOADLING_TARGET_DIST = 12,
     BAT_HEALTH = 75,
     TOAD_RAIN_DELAY = { min = 5, max = 10 },
-    SUMMER_CAVES_TEMP_MULT = 0.85,
+    SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
     -- SNAPDRAGON FERTILIZER VALUES
     PURPLE_VOMIT_NUTRIENTS = { 16, 16, 0 },
@@ -324,8 +327,8 @@ TUNING.DSTU = {
     PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
     PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
-	ALL_MUST_BE_GATHERED = GetModConfigData("all_must_be_gathered"),
-	WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
+    ALL_MUST_BE_GATHERED = GetModConfigData("all_must_be_gathered"),
+    WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -433,9 +436,9 @@ TUNING.DSTU = {
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
     MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
-	ONEHP = GetModConfigData("uncompromising_1hp"),
-	
-	
+    ONEHP = GetModConfigData("uncompromising_1hp"),
+    
+    
     --hooded forest canoppy setttings
 
     HOODEDFOREST_CANOPY_MAX_ROTATION = 20,
@@ -452,11 +455,11 @@ TUNING.DSTU = {
     DATES = {
         APRIL_FOOLS = Date(1, 4),
     },
-		
-	-- Shadow Damage tuning
-	RUINSNIGHTMARE_DAMAGE = 75
-	
-	
+        
+    -- Shadow Damage tuning
+    RUINSNIGHTMARE_DAMAGE = 75
+    
+    
 }
 
 -- [              DST Related Overrides                  ]
@@ -476,8 +479,8 @@ TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
 --end
 
 if GetModConfigData("armorrework") then
-	TUNING.WEREMOOSE_ABSORPTION = 0.8
-	TUNING.SHIELDOFTERROR_DAMAGE = 59.5
+    TUNING.WEREMOOSE_ABSORPTION = 0.8
+    TUNING.SHIELDOFTERROR_DAMAGE = 59.5
 end
 
 if GetModConfigData("wixie_walter") then

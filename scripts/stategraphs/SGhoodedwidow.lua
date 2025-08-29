@@ -1054,17 +1054,6 @@ local states =
             end),
         },
 
-        onexit = function(inst)
-            inst.ShakeTree(inst,inst.treetarget)
-            if inst.count < 5 and not inst.sg.statemem.exitcondition then
-                if not inst.searching_for_tree then
-                    inst.FindTreeToShake(inst) -- didn't get to finish ability, retry after done sleeping or being frozen
-                end
-            elseif inst.exitcondition then
-                inst.sg.statemem.exitcondition = nil
-            end
-        end,
-
         events =
         {
             EventHandler("animqueueover", function(inst) 
@@ -1076,17 +1065,29 @@ local states =
                 end
             end),
         },
+
+        onexit = function(inst)
+            inst.ShakeTree(inst,inst.treetarget)
+            if inst.count < 5 and not inst.sg.statemem.exitcondition then
+                if not inst.searching_for_tree then
+                    inst.FindTreeToShake(inst) -- didn't get to finish ability, retry after done sleeping or being frozen
+                end
+            elseif inst.exitcondition then
+                inst.sg.statemem.exitcondition = nil
+            end
+            if inst.brain then
+                inst.brain:Start()
+            end
+        end,
     },
 
     State{
         name = "leaptotree_shake_pst",
         tags = {"busy", "noweb", "ability"},
         onenter = function(inst)
-            
             if inst.treetarget then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
-            
             inst.AnimState:PlayAnimation("shaketree_pst",false)
             if inst.brain then
                 inst.brain:Stop()
@@ -1095,15 +1096,16 @@ local states =
         
         events =
         {
-            EventHandler("animover", function(inst) 
-                if inst.brain then
-                    inst.brain:Start()
-                end
-                inst.treetarget = nil
-                inst.Retarget(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
+        
+        onexit = function(inst)
+            if inst.brain then
+                inst.brain:Start()
+            end
+            inst.treetarget = nil
+            inst.Retarget(inst)
+        end,
     },
 
     State{
@@ -1130,11 +1132,15 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
-                inst.treetarget = nil
-                inst.sg:GoToState("tree_leapattack") 
-            end),
+            EventHandler("animqueueover", function(inst) inst.sg:GoToState("tree_leapattack") end),
         },
+
+        onexit = function(inst)
+            if inst.brain then
+                inst.brain:Start()
+            end
+            inst.treetarget = nil
+        end,
     },
 
     State{
@@ -1322,6 +1328,10 @@ local states =
         tags = {"busy", "noweb", "ability", "charge"},
 
         onenter = function(inst, data)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+            if inst.brain then
+                inst.brain:Stop()
+            end
             inst.AnimState:PlayAnimation("charge_loop", true)
             inst.treetarget = nil
         end,
@@ -1344,6 +1354,13 @@ local states =
         {
             EventHandler("animover", Charge_ReAssess),
         },
+
+        onexit = function(inst)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+            if inst.brain then
+                inst.brain:Start()
+            end
+        end,
     },
 
     State{
@@ -1351,6 +1368,10 @@ local states =
         tags = {"busy", "noweb", "ability", "charge"},
 
         onenter = function(inst, data)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+            if inst.brain then
+                inst.brain:Stop()
+            end
             inst.AnimState:PlayAnimation("charge_strike", true)
         end,
 
@@ -1378,6 +1399,13 @@ local states =
         {
             EventHandler("animover", Charge_ReAssess),
         },
+
+        onexit = function(inst)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+            if inst.brain then
+                inst.brain:Start()
+            end
+        end,
     },
 
     State{
@@ -1385,6 +1413,10 @@ local states =
         tags = {"busy", "noweb", "ability", "charge"},
 
         onenter = function(inst)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+            if inst.brain then
+                inst.brain:Stop()
+            end
             inst.turn_speed = 0
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("charge_turn")
@@ -1411,6 +1443,13 @@ local states =
                 inst.sg:GoToState(inst.treetarget and "leaptotree" or "charge") 
             end),
         },
+
+        onexit = function(inst)
+            inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+            if inst.brain then
+                inst.brain:Start()
+            end
+        end,
     },
 
     State{
@@ -1422,7 +1461,7 @@ local states =
             inst.Physics:ClearMotorVelOverride()
             local x,y,z = inst.Transform:GetWorldPosition()
             MakeCharacterPhysics(inst, 1000, 1)
-            inst.components.locomotor.pathcaps = { ignorecreep = true }
+            inst.components.locomotor.pathcaps = {ignorecreep = true}
             inst.components.locomotor:EnableGroundSpeedMultiplier(true)
             inst.components.locomotor:Stop()
             inst.Transform:SetPosition(x,y,z)

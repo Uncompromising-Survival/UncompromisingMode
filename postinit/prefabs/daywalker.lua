@@ -23,7 +23,6 @@ SetSharedLootTable("um_daywalker2",
         { "um_cookpot_wagstaff_lever2",       1 },
         { "armorwagpunk_blueprint",           1 },
         { "wagpunkhat_blueprint",             1 },
-        { "wagpunkbits_kit_blueprint",        1 },
         { "um_boatbottle_blueprint",          1 },
         { "chestupgrade_stacksize_blueprint", 1 }
     })
