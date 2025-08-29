@@ -3,22 +3,22 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 local function onkilledbyother(inst, attacker)
-    if attacker ~= nil and attacker.components.sanity ~= nil then
+    if attacker and attacker.components.sanity then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" })
+        local ents = TheSim:FindEntities(x, y, z, 15, {"player"}, {"playerghost"})
 
         inst.halfreward = TUNING.SANITY_SMALL / 2
 
-        if inst.sanityreward ~= nil then
+        if inst.sanityreward then
             inst.halfreward = inst.sanityreward / 2
         end
 
-        if inst.sanityreward ~= nil then
+        if inst.sanityreward then
             inst.quarterreward = inst.sanityreward / 4
         end
 
         for i, v in ipairs(ents) do
-            if v ~= attacker and v.components.sanity ~= nil and inst.sanityreward ~= nil then
+            if v ~= attacker and v.components.sanity and inst.sanityreward then
                 if v.components.sanity:IsInsane() then
                     v.components.sanity:DoDelta(inst.halfreward)
                 else
@@ -36,7 +36,7 @@ local function retargetfn(inst)
     local rangesq, rangesq1, rangesq2 = maxrangesq, math.huge, math.huge
     local target1, target2 = nil, nil
     for i, v in ipairs(AllPlayers) do
-        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") and not v:HasTag("notarget_shadow") then
+        if v.components.sanity:IsCrazy() and not v:HasTag("playerghost") then
             local distsq = v:GetDistanceSqToInst(inst)
             if distsq < rangesq then
                 if inst.components.shadowsubmissive:TargetHasDominance(v) then
@@ -54,24 +54,15 @@ local function retargetfn(inst)
         end
     end
 
-    if target1 ~= nil and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
+    local forcechange = inst.forceretarget
+    inst.forceretarget = nil
+
+    if target1 and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
         --Targets with shadow dominance have higher priority within half targeting range
         --Force target switch if current target does not have shadow dominance
         return target1, not inst.components.shadowsubmissive:TargetHasDominance(inst.components.combat.target)
     end
-    return target2
-end
-
-local function keeptargetfn(inst, target)
-    if target ~= nil then
-        local maxrangesq = TUNING.SHADOWCREATURE_TARGET_DIST * TUNING.SHADOWCREATURE_TARGET_DIST
-
-        local tarrangesq = inst:GetDistanceSqToInst(target)
-        if target.components.sanity ~= nil and target.components.combat ~= nil and inst.components.combat:CanTarget(target) and (target.components.sanity:IsCrazy() or target.components.combat:CanTarget(inst)) and maxrangesq > tarrangesq then
-            return true
-        end
-    end
-    return false
+    return target2, forcechange
 end
 
 env.AddPrefabPostInit("terrorbeak", function(inst)
@@ -83,13 +74,12 @@ env.AddPrefabPostInit("terrorbeak", function(inst)
 
     inst.sanityreward = TUNING.SANITY_MEDLARGE
 
-    if inst.components.combat ~= nil then
+    if inst.components.combat then
         inst.Oldonkilledbyother = inst.components.combat.onkilledbyother
         inst.components.combat.onkilledbyother = onkilledbyother
     end
 
     inst.components.combat:SetRetargetFunction(3, retargetfn) --yell at me if this causes problems later, I couldn't be bothered to function hook -Atobá
-    inst.components.combat:SetKeepTargetFunction(keeptargetfn)
 end)
 
 env.AddPrefabPostInit("nightmarebeak", function(inst)
@@ -118,24 +108,23 @@ local function LaunchProjectile(inst)
     Launch2(goo, inst, 1.5, 1, 3, .75)
 end
 
-
 local function onkilledbyother_crawlinghorror(inst, attacker)
-    if attacker ~= nil and attacker.components.sanity ~= nil then
+    if attacker and attacker.components.sanity then
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" })
+        local ents = TheSim:FindEntities(x, y, z, 15, {"player"}, {"playerghost"})
 
         inst.halfreward = TUNING.SANITY_SMALL / 2
 
-        if inst.sanityreward ~= nil then
+        if inst.sanityreward then
             inst.halfreward = inst.sanityreward / 2
         end
 
-        if inst.sanityreward ~= nil then
+        if inst.sanityreward then
             inst.quarterreward = inst.sanityreward / 4
         end
 
         for i, v in ipairs(ents) do
-            if v ~= attacker and v.components.sanity ~= nil then
+            if v ~= attacker and v.components.sanity then
                 if v.components.sanity:IsInsane() then
                     v.components.sanity:DoDelta(inst.halfreward)
                 else
@@ -159,7 +148,7 @@ env.AddPrefabPostInit("crawlinghorror", function(inst)
 
     inst.sanityreward = TUNING.SANITY_SMALL
 
-    if inst.components.combat ~= nil then
+    if inst.components.combat then
         inst.Oldonkilledbyother_crawlinghorror = inst.components.combat.onkilledbyother
         inst.components.combat.onkilledbyother = onkilledbyother_crawlinghorror
     end
@@ -169,7 +158,6 @@ end)
 
 env.AddPrefabPostInit("crawlingnightmare", function(inst)
     inst:AddTag("crawlinghorror")
-
 
     if not TheWorld.ismastersim then
         return
