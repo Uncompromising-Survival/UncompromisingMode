@@ -124,7 +124,7 @@ ChangeSortKey("um_bear_trap_equippable_gold", "um_bear_trap_equippable_tooth", "
 
 AddRecipe2(
     "um_detonator",
-    { Ingredient("moonstorm_spark", 6), Ingredient("wagpunk_bits", 2), Ingredient("lightninggoathorn", 1)},
+    { Ingredient("zaspberry", 1), Ingredient("wagpunk_bits", 2), Ingredient("lightninggoathorn", 1)},
     TECH.SCIENCE_TWO,
     { nil },
     { "WEAPONS" }

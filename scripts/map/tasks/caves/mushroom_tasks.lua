@@ -28,7 +28,7 @@ AddLevelPreInitAny(function(level)
 	end
 end)
 
-
+GLOBAL.require("map/rooms/caves/moonregions")
 --Sever from Mainland.... Consider that we'll have 5 different Tasks that make up the original grotto
 -- Task 1 Lunar beach turf cave entrance with grass and reeds
 -- Task 2 Flooded Grotto + Swampy
@@ -90,6 +90,7 @@ AddTask("VeryFloodedGrotto", {
 		room_choices={
 			["GrottoHeavyFlood"] = 3,		
 			["GrottoHeavyFloodNoise"] = 2,
+
 		},
 		background_room="GrottoHeavyFlood",
 		room_bg=WORLD_TILES.UM_GROTTO_HEAVYFLOODED,
@@ -106,9 +107,6 @@ AddTaskPreInit("ArchiveMaze", function(task)
     }
 end)
 
-AddTaskPreInit("TheLabyrinth", function(task)
-	task.make_loop = true
-end)
 
 AddTaskSetPreInitAny(function(tasksetdata)
 	if tasksetdata.location ~= "cave" then
@@ -122,29 +120,26 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	else
 		tasksetdata.required_prefabs = {"cave_exit_moon"}
 	end
+	tasksetdata.optionaltasks = {
+        "CaveSwamp",
+        "UndergroundForest",
+        "PleasantSinkhole",
+        "FungalNoiseForest",
+        "FungalNoiseMeadow",
+        "BatCloister",
+        "RabbitTown",
+        "RabbitCity",
+        "SpiderLand",
+        "RabbitSpiderWar",
+	} -- completely redefine optional tasks, no more ruins ones, they break worldgen.
 end)
+
+
 
 
 -- What's this doing here..... (we don't have any specific file to put it in (yet))
 -- These bits here force glommer to get away from pig king
--- AddRoomPreInit("PigKingdom", function(room) 
-	-- room.random_node_exit_weight = 0
-	-- room.random_node_entrance_weight = 1
--- end)
 
--- AddRoomPreInit("MagicalDeciduous", function(room) 
-	-- room.random_node_entrance_weight = 1
-	-- room.random_node_exit_weight = 0
--- end)
-
--- AddRoomPreInit("DeepDeciduous", function(room) 
-	-- room.random_node_entrance_weight = 0
-	-- room.random_node_exit_weight = 0
--- end)
--- AddRoomPreInit("BGDeciduous", function(room) 
-	-- room.random_node_entrance_weight = 0
-	-- room.random_node_exit_weight = 0
--- end)
 
 AddTaskPreInit("Speak to the king", function(task)
 	task.room_choices={

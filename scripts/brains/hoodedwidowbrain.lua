@@ -166,7 +166,7 @@ local function DefinePrey(inst)
         inst.investigated = true
         --return inst.sg:GoToState("taunt")
     else
-        if inst.components.knownlocations:GetLocation("home") then
+        if inst.components.knownlocations:GetLocation("home") and inst.components.health and not inst.components.health:IsDead() then
             local home = inst.components.knownlocations:GetLocation("home")
             local preys = TheSim:FindEntities(home.x, home.y, home.z, 16, {"webbedcreature"})
             local mindist = 9999

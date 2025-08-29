@@ -68,7 +68,7 @@ local function fn()
     inst:ListenForEvent("migration_activate", activate)
 	
 	inst.components.inspectable.nameoverride = "CAVE_EXIT"
-
+	inst.AnimState:SetMultColour(0.6,0.35,0.25,1)
     return inst
 end
 

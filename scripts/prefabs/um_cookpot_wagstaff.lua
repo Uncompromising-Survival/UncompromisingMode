@@ -188,7 +188,8 @@ local function MakeHologram(hologram,inst,scale)
 	hologram.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	hologram.Physics:Stop()
 	hologram:RemoveComponent("edible")
-	hologram:RemoveComponent("inventoryitem")
+	hologram:AddTag("INLIMBO")
+    hologram.components.inventoryitem.canbepickedup = false
 	hologram.persists = false	
 	hologram.AnimState:SetErosionParams(0, -0.2, -1.0)
 	hologram.Transform:SetScale(scale,scale,scale)

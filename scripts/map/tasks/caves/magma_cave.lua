@@ -2,26 +2,17 @@
 
 -- Load new rooms for the magma caves
 GLOBAL.require("map/rooms/caves/moltenregions")
-GLOBAL.require("map/rooms/caves/moonregions")
+
 
 -- Adjust the big bat cave to be smaller, and adjust keys so it connects to magma caves
-AddTaskPreInit("BigBatCave",
-	function(task)
-	task.room_choices={
-		["MoltenBatCave"] = 1,
-		["MoltenBattyCave"] = 1,
-		["MoltenFernyBatCave"] = 1,
-		["PitRoom"] = 1,
-	}
-	task.background_room="BGMoltenBatCaveRoom"
-	task.room_bg=WORLD_TILES.UM_MAGMA
+AddTaskPreInit("BigBatCave",function(task)
 	task.keys_given={KEYS.MAGMA_CAVES}
 end)
 
 -- Create New Magma Caves Tasks
 AddTask("MagmaCaves", {
-		locks={LOCKS.MAGMA_CAVES_ENTRANCE},
-		keys_given={KEYS.MAGMA_CAVES},
+		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER1},
+		keys_given={KEYS.MAGMA_CAVES_TIER1},
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
 		room_choices={
@@ -36,7 +27,7 @@ AddTask("MagmaCaves", {
 })
 AddTask("MagmaCavesEntrance", {
 		locks={LOCKS.MAGMA_CAVES},
-		keys_given={},
+		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER1},
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
 		room_choices={

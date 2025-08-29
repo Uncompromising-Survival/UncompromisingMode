@@ -1,4 +1,6 @@
 if GetModConfigData("worldgenmastertoggle") then
+	modimport("postinit/map/forest_map") -- Redo when islands are detected in caves
+	
 	local misc_tools = {"tiledefs","locks&keys","room_tags","umss_init"}
 	for i,tool in ipairs(misc_tools) do
 		modimport("scripts/map/misc_tools/"..tool)

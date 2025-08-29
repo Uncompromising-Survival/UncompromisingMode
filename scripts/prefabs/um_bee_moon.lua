@@ -116,7 +116,6 @@ end
 local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection","bee","beehive"}
 local function Explode(inst)
 	local spore = SpawnPrefab("spore_moon")
-	spore:AddTag("bee")
 	spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	
 	spore.AnimState:PlayAnimation("explode")
@@ -210,6 +209,7 @@ local function fn()
     inst:AddTag("ignorewalkableplatformdrowning")
 	inst:AddTag("killer")
 	inst:AddTag("scarytoprey")
+	inst:AddTag("mutant")
     inst.AnimState:SetBank("um_bee_moon")
     inst.AnimState:SetBuild("um_bee_moon")
     inst.AnimState:PlayAnimation("idle", true)

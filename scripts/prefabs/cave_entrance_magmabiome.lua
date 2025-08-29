@@ -173,7 +173,7 @@ local function open_fn()
     inst:WatchWorldState("isday", OnIsDay)
 	
 	inst.components.inspectable.nameoverride = "CAVE_ENTRANCE_OPEN"
-	
+	inst.AnimState:SetMultColour(0.8,0.35,0.25,1)
     return inst
 end
 

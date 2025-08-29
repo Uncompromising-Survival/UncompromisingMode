@@ -66,7 +66,8 @@ local function fn()
     inst:ListenForEvent("migration_unavailable", close)
     inst:ListenForEvent("migration_full", full)
     inst:ListenForEvent("migration_activate", activate)
-
+	
+	inst.AnimState:SetMultColour(0.6,1,0.8,1)
     return inst
 end
 

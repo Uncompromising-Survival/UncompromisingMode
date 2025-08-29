@@ -145,7 +145,7 @@ local function collectbees(inst, target, pos)
 
     if owner ~= nil then
         if pos ~= nil then
-            local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, { "bee" })
+            local findbees = TheSim:FindEntities(pos.x, 0, pos.z, 8, { "bee" },{"mutant"})
             if findbees ~= nil then
                 for i, v in pairs(findbees) do
                     if i + currentstacks > 20 then

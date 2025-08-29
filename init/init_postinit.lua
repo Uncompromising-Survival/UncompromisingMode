@@ -234,7 +234,8 @@ local prefab_post = {
     "mushgnome_spawner",
     "spiderqueen",
     "snowman",
-    "lighter"
+    "lighter",
+	"molebat"
 }
 
 local stategraph_post = {
@@ -374,7 +375,7 @@ end
 if GetModConfigData("harder_bearger") then
     table.insert(stategraph_post, "bearger")
     table.insert(prefab_post, "bearger")
-    table.insert(brain_post, "bearger")
+    --table.insert(brain_post, "bearger")
 end
 
 if GetModConfigData("harder_leifs") then

@@ -12,87 +12,11 @@ Layouts["um_pepperdragon_nest"].ground_types = PYRE_THICKET_GROUND_TYPES
 -- Bat Caves
 ---------------------------------------------
 
--- Classic bat cave
-AddRoom("MoltenBatCave", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.CAVE,
-    tags = {"Hutch_Fishbowl"},
-    type = NODE_TYPE.Room,
-    contents =  {
-        distributepercent = .15,
-        distributeprefabs=
-        {
-            batcave = 0.05,
-            guano = 0.27,
-            goldnugget=.05,
-            flint=0.05,
-            stalagmite_tall=0.4,
-            stalagmite_tall_med=0.4,
-            stalagmite_tall_low=0.4,
-            pillar_cave_rock = 0.08,
-            fissure = 0.05,
-			rock_magma = 0.2,
-			pool_magma = 0.2,
-        },
-    }
-})
-
--- Very batty bat cave
-AddRoom("MoltenBattyCave", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.CAVE,
-    tags = {"Hutch_Fishbowl"},
-    type = NODE_TYPE.Room,
-    contents =  {
-        distributepercent = .25,
-        distributeprefabs=
-        {
-            batcave = 0.15,
-            guano = 0.27,
-            goldnugget=.05,
-            flint=0.05,
-            stalagmite_tall=0.4,
-            stalagmite_tall_med=0.4,
-            stalagmite_tall_low=0.4,
-            pillar_cave_rock = 0.08,
-            fissure = 0.05,
-			rock_magma = 0.2,
-			pool_magma = 0.2,
-        },
-    }
-})
--- Ferny bat cave
-AddRoom("MoltenFernyBatCave", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.CAVE,
-    tags = {"Hutch_Fishbowl"},
-    type = NODE_TYPE.Room,
-    contents =  {
-        distributepercent = .25,
-        distributeprefabs=
-        {
-            cave_fern = 0.5,
-            batcave = 0.05,
-            guano = 0.27,
-            goldnugget=.05,
-            flint=0.05,
-            stalagmite_tall=0.1,
-            stalagmite_tall_med=0.1,
-            stalagmite_tall_low=0.1,
-            pillar_cave_rock = 0.08,
-            fissure = 0.05,
-			rock_magma = 0.2,
-			pool_magma = 0.2,
-        },
-    }
-})
-
-
 AddRoom("BGMagma", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.UM_MAGMA,
     contents =  {
-        distributepercent = .2,
+        distributepercent = .08,
         distributeprefabs=
         {
 			lava_pond_cave = 0.05,
@@ -214,7 +138,6 @@ local bgbatcave = {
 AddRoom("MagmaStairs", {
 	colour={r=0,g=.9,b=0,a=.50},
 	value = WORLD_TILES.UM_MAGMA,
-	type = NODE_TYPE.Room,
 	contents =  {
 					countstaticlayouts = {
 						["cave_exit_magmabiome"] = 1,

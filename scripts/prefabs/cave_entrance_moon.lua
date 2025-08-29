@@ -168,7 +168,7 @@ local function open_fn()
     --             -watch iscaveday world state
     OnIsDay(inst, TheWorld.state.isday)
     inst:WatchWorldState("isday", OnIsDay)
-
+	inst.AnimState:SetMultColour(0.6,0.8,1,1)
     return inst
 end
 
