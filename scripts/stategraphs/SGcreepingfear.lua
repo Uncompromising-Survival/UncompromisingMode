@@ -8,13 +8,14 @@ local actionhandlers =
 local events =
 {
     EventHandler("attacked", function(inst)
-        if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
+        if not (inst.sg:HasAnyStateTag("attack", "hit", "noattack") or inst.components.health and inst.components.health:IsDead())
+            and inst.hitcount and inst.hitcount <= 0 then
             inst.sg:GoToState("hit")
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
     EventHandler("doattack", function(inst, data)
-        if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
             inst.sg:GoToState("attack", data.target)
         end
     end),
@@ -24,13 +25,13 @@ local events =
 local function FinishExtendedSound(inst, soundid)
     inst.SoundEmitter:KillSound("sound_"..tostring(soundid))
     inst.sg.mem.soundcache[soundid] = nil
-    if inst.sg.statemem.readytoremove and next(inst.sg.mem.soundcache) == nil then
+    if inst.sg.statemem.readytoremove and not next(inst.sg.mem.soundcache) then
         inst:Remove()
     end
 end
 
 local function PlayExtendedSound(inst, soundname)
-    if inst.sg.mem.soundcache == nil then
+    if not inst.sg.mem.soundcache then
         inst.sg.mem.soundcache = {}
         inst.sg.mem.soundid = 0
     else
@@ -42,7 +43,7 @@ local function PlayExtendedSound(inst, soundname)
 end
 
 local function OnAnimOverRemoveAfterSounds(inst)
-    if inst.sg.mem.soundcache == nil or next(inst.sg.mem.soundcache) == nil then
+    if not inst.sg.mem.soundcache or not next(inst.sg.mem.soundcache) then
         inst:Remove()
     else
         inst:Hide()
@@ -50,8 +51,25 @@ local function OnAnimOverRemoveAfterSounds(inst)
     end
 end
 
+local function TryDropTarget(inst)
+    if inst.ShouldKeepTarget then
+        local target = inst.components.combat.target
+        if target and not inst:ShouldKeepTarget(target) then
+            inst.components.combat:DropTarget()
+            return true
+        end
+    end
+end
+
+local function TryDespawn(inst)
+    if inst.sg.mem.forcedespawn or (inst.wantstodespawn and not inst.components.combat:HasTarget()) then
+        inst.sg:GoToState("disappear")
+        return true
+    end
+end
+
 local function CancelSpikewaves(inst)
-    if inst.spiketask ~= nil then
+    if inst.spiketask then
         inst.spiketask:Cancel()
         inst.spiketask = nil
     end
@@ -61,23 +79,28 @@ local states =
 {
     State{
         name = "idle",
-        tags = { "idle", "canrotate" },
+        tags = {"idle", "canrotate"},
 
         onenter = function(inst)
-            if inst.wantstodespawn then
+            --[[if inst.wantstodespawn then
                 local t = GetTime()
                 if t > inst.components.combat:GetLastAttackedTime() + 5 then
                     local target = inst.components.combat.target
-                    if target == nil or
-                        target.components.combat == nil or					--Apparently this can be nil? got a crash once.
-                        not target.components.combat:IsRecentTarget(inst) or (target.components.combat.laststartattacktime~= nil and
-                        t > target.components.combat.laststartattacktime + 5) then
+                    if not target or not target.components.combat --Apparently this can be nil? got a crash once.
+                        or not target.components.combat:IsRecentTarget(inst)
+                        or (target.components.combat.laststartattacktime and t > target.components.combat.laststartattacktime + 5) then
                         inst.sg:GoToState("disappear")
                         return
                     end
                 end
+            end]]
+            local dropped = TryDropTarget(inst)
+            if TryDespawn(inst) then
+                return
+            elseif dropped then
+                inst.sg:GoToState("taunt")
+                return
             end
-
             inst.components.locomotor:StopMoving()
             if not inst.AnimState:IsCurrentAnimation("idle_loop") then
                 inst.AnimState:PlayAnimation("idle_loop", true)
@@ -87,7 +110,7 @@ local states =
 
     State{
         name = "attack",
-        tags = { "attack", "busy" },
+        tags = {"attack", "busy"},
 
         onenter = function(inst, target)
             inst.sg.statemem.target = target
@@ -100,15 +123,16 @@ local states =
 
         timeline =
         {
-            TimeEvent(14*FRAMES, function(inst) PlayExtendedSound(inst, "attack") end),
-            TimeEvent(16*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
+            TimeEvent(14 * FRAMES, function(inst) PlayExtendedSound(inst, "attack") end),
+            TimeEvent(16 * FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
         },
 
         events =
         {
             EventHandler("animqueueover", function(inst)
                 if math.random() < .333 then
-                    inst.components.combat:SetTarget(nil)
+                    TryDropTarget(inst)
+                    inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
                     inst.sg:GoToState("taunt")
                 else
                     inst.sg:GoToState("idle")
@@ -119,33 +143,26 @@ local states =
 
     State{
         name = "hit",
-        tags = { "busy", "hit" },
+        tags = {"busy", "hit"},
 
         onenter = function(inst)
             inst.Physics:Stop()
-            if inst.hitcount <= 0 then
-                CancelSpikewaves(inst)
-                inst.AnimState:PlayAnimation("disappear")
-            else
-                inst.sg:GoToState("idle")
-            end
+            CancelSpikewaves(inst)
+            inst.AnimState:PlayAnimation("disappear")
         end,
 
         events =
         {
             EventHandler("animover", function(inst)
-                local max_tries = 4
-                for k = 1, max_tries do
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local offset = 10
-                    x = x + math.random(2 * offset) - offset
-                    z = z + math.random(2 * offset) - offset
-                    if TheWorld.Map:IsPassableAtPoint(x, y, z) then
-                        inst.Physics:Teleport(x, y, z)
+                local x0, y0, z0 = inst.Transform:GetWorldPosition()
+                for k = 1, 4 --[[# of attempts]] do
+                    local x = x0 + math.random() * 20 - 10
+                    local z = z0 + math.random() * 20 - 10
+                    if TheWorld.Map:IsPassableAtPoint(x, 0, z) then
+                        inst.Physics:Teleport(x, 0, z)
                         break
                     end
                 end
-
                 inst.sg:GoToState("appear")
             end),
         },
@@ -153,7 +170,7 @@ local states =
 
     State{
         name = "taunt",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -169,9 +186,10 @@ local states =
 
     State{
         name = "appear",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
+            TryDropTarget(inst)
             inst.AnimState:PlayAnimation("appear")
             inst.Physics:Stop()
             inst.hitcount = 3
@@ -186,7 +204,7 @@ local states =
 
     State{
         name = "death",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
@@ -210,7 +228,7 @@ local states =
 
     State{
         name = "disappear",
-        tags = { "busy", "noattack" },
+        tags = {"busy", "noattack"},
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
@@ -232,7 +250,7 @@ local states =
 
     State{ 
         name = "teleport_disapper",
-        tags = { "busy", "noattack" },
+        tags = {"busy", "noattack"},
     
         onenter = function(inst)
             inst.Physics:Stop()
@@ -247,6 +265,7 @@ local states =
 
     State{
         name = "action",
+
         onenter = function(inst, playanim)
             inst.Physics:Stop()
             inst:PerformBufferedAction()
@@ -258,6 +277,20 @@ local states =
         },
     },
 }
-CommonStates.AddWalkStates(states)
+
+CommonStates.AddWalkStates(states,
+{
+    walktimeline =
+    {
+        TimeEvent(0 * FRAMES, function(inst)
+            local dropped = TryDropTarget(inst)
+            if TryDespawn(inst) then
+                return
+            elseif dropped then
+                inst.sg:GoToState("taunt")
+            end
+        end),
+    },
+})
 
 return StateGraph("creepingfear", states, events, "appear", actionhandlers)

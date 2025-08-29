@@ -40,9 +40,9 @@ local function SpawnTentacles(inst, target)
             fx2.Transform:SetPosition(pt.x + offset.x, 0, pt.z + offset.z)
             --fx2.Transform:SetScale(1, 1, 1)
             tentacle.Transform:SetPosition(pt.x + offset.x, 0, pt.z + offset.z)
-			if not target:HasTag("shadowdominance") then
-				tentacle.components.combat:SetTarget(target)
-			end
+            if not target:HasTag("shadowdominance") then
+                tentacle.components.combat:SetTarget(target)
+            end
             tentacle.components.combat:SetDefaultDamage(TUNING.DSTU.CREEPINGFEAR_DAMAGE * 0.50)
             tentacle.Transform:SetScale(1.2, 1.2, 1.2)
         end
@@ -92,21 +92,20 @@ local function CreepinFearTimer(inst)
             inst.sg:GoToState("taunt")
             local init_pos = inst:GetPosition()
             local target_pos = target:GetPosition()
-            if math.random() < 0.5 and distsq(target_pos, init_pos) < 900 then
+            if math.random() < .5 and distsq(target_pos, init_pos) < 900 then
                 CancelSpikewaves(inst)
-				
-				inst:DoTaskInTime(1, function()
-					SpikeWaves(inst, target)
-					inst.spiketask = inst:DoPeriodicTask(1, function() SpikeWaves(inst, target) end)
-					inst:DoTaskInTime(2.1, function() CancelSpikewaves(inst) inst.spiketask = nil end)
-				end)
+                inst:DoTaskInTime(1, function()
+                    SpikeWaves(inst, target)
+                    inst.spiketask = inst:DoPeriodicTask(1, function() SpikeWaves(inst, target) end)
+                    inst:DoTaskInTime(2.1, function() CancelSpikewaves(inst) inst.spiketask = nil end)
+                end)
             else
                 SpawnTentacles(inst, target)
                 inst:DoTaskInTime(1, function() SpawnTentacles(inst, target) end)
                 inst:DoTaskInTime(2, function() SpawnTentacles(inst, target) end)
             end
             inst.sp_atk_cd = 20
-		else
+        else
             inst.sp_atk_cd = 20
         end
     end
@@ -116,6 +115,12 @@ local function CreepinFearTimer(inst)
         inst.persists = false
     end
     inst.sp_atk_cd = inst.sp_atk_cd - 1
+end
+
+local function NotifyBrainOfTarget(inst, target)
+    if inst.brain and inst.brain.SetTarget then
+        inst.brain:SetTarget(target)
+    end
 end
 
 local function retargetfn(inst)
@@ -141,44 +146,79 @@ local function retargetfn(inst)
         end
     end
 
-    if target1 ~= nil and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
+    local forcechange = inst.forceretarget
+    inst.forceretarget = nil
+
+    if target1 and rangesq1 <= math.max(rangesq2, maxrangesq * .25) then
         --Targets with shadow dominance have higher priority within half targeting range
         --Force target switch if current target does not have shadow dominance
         return target1, not inst.components.shadowsubmissive:TargetHasDominance(inst.components.combat.target)
     end
-    return target2
+    return target2, forcechange
 end
 
-local function NotifyBrainOfTarget(inst, target)
-    if inst.brain ~= nil and inst.brain.SetTarget ~= nil then
-        inst.brain:SetTarget(target)
+--V2C: called from SG instead of combat component
+local function keeptargetfn(inst, target)
+    if inst.sg.mem.forcedespawn then
+        return true
+    elseif not target.components.sanity then
+        --not player; could be bernie or other creature
+        if inst.wantstodespawn then
+            --don't deaggro, so you can actually see the despawn
+            inst.sg.mem.forcedespawn = true
+        end
+        return true
+    elseif target.components.sanity:IsCrazy() then
+        inst._deaggrotime = nil
+        return true
     end
+
+    --start deaggro timer when target is becomes sane
+    local t = GetTime()
+    if not inst._deaggrotime then
+        inst._deaggrotime = t
+        return true
+    end
+
+    --V2C: NOTE: -combat cmp sets lastwasattackedbytargettime when retargeting also
+    --           -so it may use the longer delay sometimes even when not attacked
+    --           -this is fine XD
+    --
+    --Deaggro if target has been sane for 2.5s, hasn't hit us in 6s, and hasn't tried to attack us for 5s
+    if inst._deaggrotime + 2.5 >= t or
+        inst.components.combat.lastwasattackedbytargettime + 6 >= t or
+        (    target.components.combat and
+            target.components.combat:IsRecentTarget(inst) and
+            (target.components.combat.laststartattacktime or 0) + 5 >= t
+        )
+    then
+        return true
+    elseif inst.wantstodespawn then
+        --don't deaggro, so you can actually see the despawn
+        inst.sg.mem.forcedespawn = true
+        return true
+    end
+    return false
 end
 
 local function onkilledbyother(inst, attacker)
     if attacker ~= nil and attacker.components.sanity ~= nil then
-	
-		inst.sanityreward = (attacker.components.sanity.max * 0.25) + 10
-	
+        inst.sanityreward = (attacker.components.sanity.max * 0.25) + 10
         attacker.components.sanity:DoDelta(inst.sanityreward)
-		
-		local x, y, z = inst.Transform:GetWorldPosition()
-		local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" } )
-		
-		for i, v in ipairs(ents) do
-			if v ~= attacker and v.components.sanity ~= nil and v.components.sanity:IsInsane() then
-				inst.halfreward = ((v.components.sanity.max * 0.25) + 10) / 2
-				inst.quarterreward = ((v.components.sanity.max * 0.25) + 10) / 4
-				
-				v.components.sanity:DoDelta(inst.halfreward)
-				
-				if v.components.sanity:IsInsane() then
-					v.components.sanity:DoDelta(inst.halfreward)
-				else
-					v.components.sanity:DoDelta(inst.quarterreward)
-				end
-			end
-		end
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 15, { "player" }, { "playerghost" } )
+        for i, v in ipairs(ents) do
+            if v ~= attacker and v.components.sanity ~= nil and v.components.sanity:IsInsane() then
+                inst.halfreward = ((v.components.sanity.max * 0.25) + 10) / 2
+                inst.quarterreward = ((v.components.sanity.max * 0.25) + 10) / 4
+                v.components.sanity:DoDelta(inst.halfreward)
+                if v.components.sanity:IsInsane() then
+                    v.components.sanity:DoDelta(inst.halfreward)
+                else
+                    v.components.sanity:DoDelta(inst.quarterreward)
+                end
+            end
+        end
     end
 end
 
@@ -196,11 +236,14 @@ end
 local function OnAttacked(inst, data)
     inst.components.combat:SetTarget(data.attacker)
     inst.components.combat:ShareTarget(data.attacker, 30, ShareTargetFn, 1)
-    inst.hitcount = inst.hitcount - 1
+    inst.hitcount = math.max(inst.hitcount - 1, 0)
 end
 
 local function OnNewCombatTarget(inst, data)
     NotifyBrainOfTarget(inst, data.target)
+
+    --Reset deaggro delay when we change targets
+    inst._deaggrotime = nil
 end
 
 local function OnDeath(inst, data)
@@ -236,24 +279,21 @@ local function OnPreLoad(inst, data)
 end
 
 local function ConsumeShadow(inst, other, damage)
-	if other:HasTag("shadowcreature") then
-		local x, y, z = other.Transform:GetWorldPosition()
-		local shadowdespawnfx = SpawnPrefab("shadow_despawn")
-		shadowdespawnfx.Transform:SetPosition(x, y, z)
-		
-		other:Remove()
-		inst.components.health:DoDelta(inst.components.health.maxhealth * 0.2)
-		
-		inst.size = inst.size + 0.1
-		if inst.size < 1.8 then
-			inst.Transform:SetScale(inst.size, inst.size, inst.size)
-		end
-	end
+    if other:HasTag("shadowcreature") then
+        local x, y, z = other.Transform:GetWorldPosition()
+        local shadowdespawnfx = SpawnPrefab("shadow_despawn")
+        shadowdespawnfx.Transform:SetPosition(x, y, z)
+        other:Remove()
+        inst.components.health:DoDelta(inst.components.health.maxhealth * 0.2)
+        inst.size = inst.size + 0.1
+        if inst.size < 1.8 then
+            inst.Transform:SetScale(inst.size, inst.size, inst.size)
+        end
+    end
 end
 
 local function fn()
     local inst = CreateEntity()
-
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
@@ -271,7 +311,7 @@ local function fn()
     inst:AddTag("monster")
     inst:AddTag("hostile")
     inst:AddTag("shadow")
-	inst:AddTag("creepingfear")
+    inst:AddTag("creepingfear")
     inst:AddTag("shadow_aligned")
     --inst:AddTag("epic")
     inst:AddTag("notraptrigger")
@@ -282,7 +322,8 @@ local function fn()
     inst.AnimState:SetMultColour(1, 1, 1, .5)
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_WORLD)
-	inst.AnimState:SetSortOrder(5)
+    inst.AnimState:SetSortOrder(5)
+
     inst:AddComponent("transparentonsanity")
 
     inst.entity:SetPristine()
@@ -291,7 +332,7 @@ local function fn()
         return inst
     end
 
-	inst.size = 1.2
+    inst.size = 1.2
     inst.hitcount = 3
     inst.sp_atk_cd = 15
 
@@ -301,7 +342,7 @@ local function fn()
     inst.components.locomotor.walkspeed = TUNING.DSTU.CREEPINGFEAR_WALK_SPEED
     inst.components.locomotor.runspeed = TUNING.DSTU.CREEPINGFEAR_RUN_SPEED
     --inst.components.locomotor.pathcaps = { allowocean = true }
-	inst.components.locomotor:SetTriggersCreep(false)
+    inst.components.locomotor:SetTriggersCreep(false)
     inst.sounds = sounds
     inst:SetStateGraph("SGcreepingfear")
 
@@ -318,10 +359,11 @@ local function fn()
     inst.components.combat:SetRange(TUNING.DSTU.CREEPINGFEAR_RANGE_1, TUNING.DSTU.CREEPINGFEAR_RANGE_2)
     inst.components.combat.onkilledbyother = onkilledbyother
     inst.components.combat:SetRetargetFunction(3, retargetfn)
-	
-	inst:AddComponent("eater")
-	inst.components.eater:SetDiet({ FOODGROUP.SHADOWCREATURE }, { FOODGROUP.SHADOWCREATURE })
-	inst.components.eater:SetOnEatFn(ConsumeShadow)
+    inst.ShouldKeepTarget = keeptargetfn --V2C: call from SG instead!
+
+    inst:AddComponent("eater")
+    inst.components.eater:SetDiet({ FOODGROUP.SHADOWCREATURE }, { FOODGROUP.SHADOWCREATURE })
+    inst.components.eater:SetOnEatFn(ConsumeShadow)
 
     --if TheWorld.state.cycles then
     --    inst.components.health:SetMaxHealth(1200 + (math.min(TheWorld.state.cycles, 100) *  38))
@@ -349,6 +391,5 @@ local function fn()
 
     return inst
 end
-
 
 return Prefab("creepingfear", fn, assets)
