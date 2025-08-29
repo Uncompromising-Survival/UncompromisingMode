@@ -202,7 +202,6 @@ local prefab_post = {
     "inventoryitem_classified",
     --"renameable_items",
     "lightninggoatherd",
-    "archive_centipede",
     "firenettles",
     "staff_tornado",
     "rainometer",

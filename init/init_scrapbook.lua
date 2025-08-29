@@ -188,7 +188,6 @@ local um_specialinfo = {
     STINGER = "Self-stacks. Burnable as fuel.",
     SLURTLE = "Faster attack speed but less health.",
     SNURTLE = "Less health.",
-    ARCHIVE_CENTIPEDE = "Releases Moon Gleams on death.",
     ANTLION = "May harrass survivors at sea.\nIncreased resistance against explosives.",
     BEEQUEEN = "Reworked fight. Several new attacks and bees.",
     MONKEY_MEDIUMHAT = "Increases boat steering speed.",
