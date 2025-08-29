@@ -82,18 +82,6 @@ local states =
         tags = {"idle", "canrotate"},
 
         onenter = function(inst)
-            --[[if inst.wantstodespawn then
-                local t = GetTime()
-                if t > inst.components.combat:GetLastAttackedTime() + 5 then
-                    local target = inst.components.combat.target
-                    if not target or not target.components.combat --Apparently this can be nil? got a crash once.
-                        or not target.components.combat:IsRecentTarget(inst)
-                        or (target.components.combat.laststartattacktime and t > target.components.combat.laststartattacktime + 5) then
-                        inst.sg:GoToState("disappear")
-                        return
-                    end
-                end
-            end]]
             local dropped = TryDropTarget(inst)
             if TryDespawn(inst) then
                 return
