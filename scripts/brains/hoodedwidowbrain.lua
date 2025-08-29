@@ -23,9 +23,7 @@ local function GoHomeAction(inst)
 end
 
 local function WebSlingerAction(inst)
-    if not inst.sg:HasStateTag("busy") then
-        return inst.sg:GoToState("launchprojectile")
-    end
+    return not inst.sg:HasStateTag("busy") and inst.sg:GoToState("launchprojectile") or nil
 end
 
 local function JumpHomeAction(inst)
@@ -54,7 +52,6 @@ local function TargetLeavingArena(inst)
         if (target and home) then
             local dx, dy, dz = target.Transform:GetWorldPosition()
             local spx, spy, spz = home.Transform:GetWorldPosition()
-            
             return target and home and math.sqrt(distsq(spx, spz, dx, dz)) >= (24)
         end
     end
@@ -160,13 +157,11 @@ local function DefinePrey(inst)
     else]]
     if inst.components.health:GetPercent() >= 1 and inst.components.combat and inst.components.combat.target then --We're already healed, whoever is attacking us is just running away after starting the fight I guess
         inst.components.combat:DropTarget()
-        if inst.prey then
-            inst.prey = nil
-        end
+        if inst.prey then inst.prey = nil end
         inst.investigated = true
         --return inst.sg:GoToState("taunt")
     else
-        if inst.components.knownlocations:GetLocation("home") and inst.components.health and not inst.components.health:IsDead() then
+        if not (inst.components.health and inst.components.health:IsDead()) and inst.components.knownlocations:GetLocation("home") then
             local home = inst.components.knownlocations:GetLocation("home")
             local preys = TheSim:FindEntities(home.x, home.y, home.z, 16, {"webbedcreature"})
             local mindist = 9999
