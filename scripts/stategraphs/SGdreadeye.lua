@@ -8,7 +8,7 @@ local actionhandlers =
 local events =
 {
     EventHandler("attacked", function(inst)
-        if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit") or inst.sg:HasStateTag("noattack") or inst.components.health:IsDead()) then
+        if not (inst.sg:HasAnyStateTag("attack", "hit", "noattack") or inst.components.health and inst.components.health:IsDead()) then
             inst.sg:GoToState("hit")
         end
     end),
@@ -18,49 +18,64 @@ local events =
             inst.sg:GoToState("attack_teleport_pre", data.target)
         end
     end),
-
     EventHandler("locomote", function(inst)
         local target = inst.components.combat:HasTarget() and inst.components.combat.target or
             inst.mytarget ~= nil and inst.mytarget or
             inst.disguisetarget ~= nil and inst.disguisetarget or
             inst.spawnedforplayer ~= nil and inst.spawnedforplayer or
             nil
-        if target and target:IsValid() and inst:IsValid() and not inst:IsNear(target, inst.components.combat.attackrange - 1) then
+        if target and target:IsValid() and not inst:IsNear(target, inst.components.combat.attackrange - 1) then
             if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
                 inst.sg:GoToState("teleport_to", target)
             end
         end
     end),
-
     --CommonHandlers.OnLocomote(false, true),
 }
 
 local function FinishExtendedSound(inst, soundid)
-    inst.SoundEmitter:KillSound("sound_" .. tostring(soundid))
+    inst.SoundEmitter:KillSound("sound_"..tostring(soundid))
     inst.sg.mem.soundcache[soundid] = nil
-    if inst.sg.statemem.readytoremove and next(inst.sg.mem.soundcache) == nil then
+    if inst.sg.statemem.readytoremove and not next(inst.sg.mem.soundcache) then
         inst:Remove()
     end
 end
 
 local function PlayExtendedSound(inst, soundname)
-    if inst.sg.mem.soundcache == nil then
+    if not inst.sg.mem.soundcache then
         inst.sg.mem.soundcache = {}
         inst.sg.mem.soundid = 0
     else
         inst.sg.mem.soundid = inst.sg.mem.soundid + 1
     end
     inst.sg.mem.soundcache[inst.sg.mem.soundid] = true
-    inst.SoundEmitter:PlaySound(inst.sounds[soundname], "sound_" .. tostring(inst.sg.mem.soundid))
+    inst.SoundEmitter:PlaySound(inst.sounds[soundname], "sound_"..tostring(inst.sg.mem.soundid))
     inst:DoTaskInTime(5, FinishExtendedSound, inst.sg.mem.soundid)
 end
 
 local function OnAnimOverRemoveAfterSounds(inst)
-    if inst.sg.mem.soundcache == nil or next(inst.sg.mem.soundcache) == nil then
+    if not inst.sg.mem.soundcache or not next(inst.sg.mem.soundcache) then
         inst:Remove()
     else
         inst:Hide()
         inst.sg.statemem.readytoremove = true
+    end
+end
+
+local function TryDropTarget(inst)
+    if inst.ShouldKeepTarget then
+        local target = inst.components.combat.target
+        if target and not inst:ShouldKeepTarget(target) then
+            inst.components.combat:DropTarget()
+            return true
+        end
+    end
+end
+
+local function TryDespawn(inst)
+    if inst.sg.mem.forcedespawn or (inst.wantstodespawn and not inst.components.combat:HasTarget()) then
+        inst.sg:GoToState("disappear")
+        return true
     end
 end
 
@@ -115,25 +130,18 @@ end
 
 local states =
 {
-    State {
+    State{
         name = "idle_busy",
-        tags = { "idle" --[[, "canrotate"]] },
+        tags = {"idle" --[[, "canrotate"]]},
 
         onenter = function(inst)
-            if inst.wantstodespawn then
-                local t = GetTime()
-                if t > inst.components.combat:GetLastAttackedTime() + 5 then
-                    local target = inst.components.combat.target
-                    if target == nil or
-                        target.components.combat == nil or
-                        not target.components.combat:IsRecentTarget(inst) or
-                        target.components.combat.laststartattacktime ~= nil and t > target.components.combat.laststartattacktime + 5 then
-                        inst.sg:GoToState("disappear")
-                        return
-                    end
-                end
+            local dropped = TryDropTarget(inst)
+            if TryDespawn(inst) then
+                return
+            elseif dropped then
+                inst.sg:GoToState("taunt")
+                return
             end
-
             inst.components.locomotor:StopMoving()
             inst.AnimState:PlayAnimation("idle_loop")
         end,
@@ -146,42 +154,34 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "idle",
-        tags = { "idle" --[[, "canrotate"]] },
+        tags = {"idle" --[[, "canrotate"]]},
 
         onenter = function(inst)
-            if inst.wantstodespawn then
-                local t = GetTime()
-                if t > inst.components.combat:GetLastAttackedTime() + 5 then
-                    local target = inst.components.combat.target
-                    if target == nil or
-                        target.components.combat == nil or
-                        not target.components.combat:IsRecentTarget(inst) or
-                        target.components.combat.laststartattacktime ~= nil and t > target.components.combat.laststartattacktime + 5 then
-                        inst.sg:GoToState("disappear")
-                        return
-                    end
-                end
+            local dropped = TryDropTarget(inst)
+            if TryDespawn(inst) then
+                return
+            elseif dropped then
+                inst.sg:GoToState("taunt")
+                return
             end
-
             inst.components.locomotor:StopMoving()
             --if not inst.AnimState:IsCurrentAnimation("idle_loop") then
             inst.AnimState:PlayAnimation("idle_loop", true)
-            --  end
+            -- end
         end,
     },
 
-    State {
+    State{
         name = "disguise_pre",
-        tags = { "disguise", "busy", "disguised", "noattack" }, -- , "busy"
+        tags = {"disguise", "busy", "disguised", "noattack"}, -- , "busy"
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
             inst.AnimState:PlayAnimation("disappear")
             inst.Physics:Stop()
             inst.persists = false
-
             inst:AddTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = 0
         end,
@@ -192,20 +192,16 @@ local states =
                 local max_tries = 20
                 for k = 1, max_tries do
                     local x, y, z = inst.Transform:GetWorldPosition()
-
                     if x ~= nil then
                         local x1, y1, z1 = nil, nil, nil
-
                         if inst.disguisetarget ~= nil then
                             local x1, y1, z1 = inst.disguisetarget.Transform:GetWorldPosition()
-
                             if x1 ~= nil then
                                 x = x1
                                 y = y1
                                 z = z1
                             end
                         end
-
                         local offset = 25
                         x = x + math.random(2 * offset) - offset
                         z = z + math.random(2 * offset) - offset
@@ -216,30 +212,25 @@ local states =
                         end
                     end
                 end
-				
-				if inst.components.combat and inst.components.combat.target then
-					inst.components.combat.target = nil
-				end				
-				
+                if inst.components.combat and inst.components.combat.target then
+                    inst.components.combat.target = nil
+                end                
                 inst.sg:GoToState("disguise")
             end)
         },
     },
 
-    State {
+    State{
         name = "disguise",
-        tags = { "invisible", "disguise", "busy", "disguised", "noattack" }, -- , "busy"
+        tags = {"invisible", "disguise", "busy", "disguised", "noattack"},
 
         onenter = function(inst)
             inst.components.health:SetInvincible(true)
-
             inst.disguisetarget = nil
-
             inst.AnimState:PlayAnimation("idonotexist")
             inst.components.locomotor:StopMoving()
             inst.Physics:Stop()
             inst:Disguise()
-
             inst:AddTag("notarget")
         end,
 
@@ -255,9 +246,9 @@ local states =
         end,
     },
 
-    State {
+    State{
         name = "disguise_teleport",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -270,15 +261,14 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "disguise_attack",
-        tags = { "attack", "disguise", "busy" }, -- , "busy"
+        tags = {"attack", "disguise", "busy"},
 
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("taunt")
             PlayExtendedSound(inst, "taunt")
-
             inst:RemoveTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = nil
         end,
@@ -291,9 +281,9 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "attack_teleport_pre",
-        tags = { "attack", "busy" },
+        tags = {"attack", "busy"},
 
         onenter = function(inst, target)
             PlayExtendedSound(inst, "death")
@@ -332,20 +322,18 @@ local states =
         end,
     },
 
-    State {
+    State{
         name = "attack_teleport",
-        tags = { "attack", "busy", "noattack" },
+        tags = {"attack", "busy", "noattack"},
 
         onenter = function(inst, target)
             inst.components.health:SetInvincible(true)
-            if target ~= nil and target:IsValid() then
+            if target and target:IsValid() then
                 inst.sg.statemem.target = target
                 inst.Physics:Teleport(target.Transform:GetWorldPosition())
             end
-
             inst.AnimState:PlayAnimation("atk_pre")
             inst.AnimState:PushAnimation("atk", false)
-
             inst:RemoveTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = nil
         end,
@@ -356,15 +344,12 @@ local states =
             TimeEvent(16 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("noattack")
                 inst.components.health:SetInvincible(false)
-
                 local x, y, z = inst.Transform:GetWorldPosition()
                 local attackents = TheSim:FindEntities(x, y, z, 2.5, {"player"}, {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost"})
-
                 for i, v in pairs(attackents) do
-                    if v.components.health ~= nil and not v.components.health:IsDead()
-                        and v.components.combat ~= nil
-                        and (inst.components.sanity ~= nil and inst.components.sanity:IsInsane()
-                            or inst.components.combat.target ~= nil and inst.components.combat.target == v) then
+                    if v.components.health and not v.components.health:IsDead() and v.components.combat
+                        and (inst.components.sanity and inst.components.sanity:IsInsane()
+                        or inst.components.combat.target and inst.components.combat.target == v) then
                         v.components.combat:GetAttacked(inst, 40, nil)
                     end
                 end
@@ -374,9 +359,9 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-                if math.random() < 0.666 then
-                    --inst.components.combat:SetTarget(nil)
-                    inst.components.combat:DropTarget()
+                if math.random() < .666 then
+                    TryDropTarget(inst)
+                    inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
                     inst.sg:GoToState("taunt")
                 else
                     inst.sg:GoToState("idle_busy")
@@ -389,9 +374,9 @@ local states =
         end,
     },
 
-    State {
+    State{
         name = "attack",
-        tags = { "attack", "busy" },
+        tags = {"attack", "busy"},
 
         onenter = function(inst, target)
             inst.sg.statemem.target = target
@@ -419,8 +404,9 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-                if math.random() < 0.333 then
-                    inst.components.combat:SetTarget(nil)
+                if math.random() < .333 then
+                    TryDropTarget(inst)
+                    inst.forceretarget = true --V2C: try to keep legacy behaviour; it used SetTarget(nil) here, which would always result in a retarget
                     inst.sg:GoToState("taunt")
                 else
                     inst.sg:GoToState("idle_busy")
@@ -429,14 +415,13 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "hit",
-        tags = { "busy", "hit" }, -- , "fading"
+        tags = {"busy", "hit"}, --, "fading"
 
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("disappear")
-
             inst:AddTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = 0
         end,
@@ -484,9 +469,7 @@ local states =
                         end
                     end
                 end
-
                 --inst.Transform:SetRotation(math.random(360))
-
                 --if math.random() <= 0.33 then
                     --inst.sg:GoToState("disguise")
                 --else
@@ -496,9 +479,9 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "taunt",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -512,15 +495,15 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "appear",
-        tags = { "busy", "moving" },
+        tags = {"busy", "moving"},
 
         onenter = function(inst)
+            TryDropTarget(inst)
             inst.AnimState:PlayAnimation("appear")
             inst.Physics:Stop()
             PlayExtendedSound(inst, "appear")
-
             inst:RemoveTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = nil
         end,
@@ -531,9 +514,9 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "death",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             PlayExtendedSound(inst, "death")
@@ -543,7 +526,6 @@ local states =
             inst.components.lootdropper:DropLoot(inst:GetPosition())
             inst:AddTag("NOCLICK")
             inst.persists = false
-
             inst:AddTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = 0
         end,
@@ -558,7 +540,7 @@ local states =
         end
     },
 
-    State {
+    State{
         name = "disappear",
         tags = { "busy", "noattack" },
 
@@ -579,7 +561,7 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "teleport_disapper",
         tags = { "busy", "noattack" },
 
@@ -588,12 +570,9 @@ local states =
             inst.AnimState:PlayAnimation("disappear")
             inst.Physics:Stop()
             inst.persists = false
-
             inst:AddTag("dreadeyefading")
-
             if inst.disguiseprefab ~= nil then
                 local px, py, pz = inst.disguiseprefab.Transform:GetWorldPosition()
-
                 if px ~= nil then
                     SpawnPrefab("mini_dreadeye_fx").Transform:SetPosition(px, py, pz)
                 end
@@ -616,14 +595,13 @@ local states =
         },
     },
 
-    State {
+    State{
         name = "teleport_to",
         tags = { "busy", "moving" },
 
         onenter = function(inst)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("disappear")
-
             if inst.disguiseprefab ~= nil then
                 local px, py, pz = inst.disguiseprefab.Transform:GetWorldPosition()
 
@@ -634,7 +612,6 @@ local states =
                 inst.disguiseprefab:Remove()
                 inst.disguiseprefab = nil
             end
-
             inst:AddTag("dreadeyefading")
             --inst.components.transparentonsanity_dreadeye.forcedtarget_alpha = 0
         end,
@@ -684,15 +661,13 @@ local states =
                         end
                     end
                 end
-
                 inst.Transform:SetRotation(math.random(360))
-
                 inst.sg:GoToState("appear")
             end),
         },
     },
 
-    State {
+    State{
         name = "action",
         onenter = function(inst, playanim)
             inst.Physics:Stop()
@@ -705,6 +680,20 @@ local states =
         },
     },
 }
-CommonStates.AddWalkStates(states)
+
+CommonStates.AddWalkStates(states,
+{
+    walktimeline =
+    {
+        TimeEvent(0 * FRAMES, function(inst)
+            local dropped = TryDropTarget(inst)
+            if TryDespawn(inst) then
+                return
+            elseif dropped then
+                inst.sg:GoToState("taunt")
+            end
+        end),
+    },
+})
 
 return StateGraph("dreadeye", states, events, "appear", actionhandlers)
