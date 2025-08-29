@@ -175,7 +175,7 @@ env.AddComponentPostInit("combat", function(self)
         local damageredirecttarget = self.redirectdamagefn and self.redirectdamagefn(self.inst, attacker, damage, weapon, stimuli)
 
         local redirect_combat = damageredirecttarget and damageredirecttarget.components.combat
-        if TUNING.DSTU.BEEFALO_NERF and redirect_combat and redirect_combat.components.rideable then
+        if TUNING.DSTU.BEEFALO_NERF and damageredirecttarget and redirect_combat and and damageredirecttarget.components.rideable then
             if self.inst.components.health and not self.inst.components.health:IsDead() then
                 redirect_combat:GetAttacked(attacker, damage, weapon, stimuli)
                 return _GetAttacked(self, attacker, damage / 2, weapon, "beefalo_half_damage", ...) -- added new stimuli to prevent Stackoverflow
