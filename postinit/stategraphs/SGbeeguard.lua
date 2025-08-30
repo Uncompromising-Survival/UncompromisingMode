@@ -310,10 +310,7 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
 
             events =
             {
-                EventHandler("animover", function(inst)
-                    StopCollide(inst)
-                    inst.sg:GoToState("stuck")
-                end)
+                EventHandler("animover", function(inst) inst.sg:GoToState("stuck") end)
             },
 
             onexit = function(inst) inst.stuck = nil end
@@ -323,6 +320,7 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
             tags = {"busy", "stuck"},
     
             onenter = function(inst)
+                StopCollide(inst)
                 StartBuzz(inst)
                 inst.SoundEmitter:PlaySound(inst.sounds.hit)
                 inst.components.locomotor:StopMoving()
@@ -339,7 +337,7 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
             },
 
             events =
-			{
+            {
                 EventHandler("animqueueover", function(inst)
                     if inst.components.health and not inst.components.health:IsDead() then
                         if inst.stuckcount > 5 then
@@ -351,7 +349,13 @@ env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
                         end
                     end
                 end)
-            }
+            },
+
+            onexit = function(inst) 
+                if not (inst.components.health and inst.components.health:IsDead()) then
+                    StartCollide(inst)
+                end
+            end
         },
         State{ -- Need the shooter bees to stand still when they're going to shoot in a line
             name = "lineshoot",

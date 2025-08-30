@@ -239,8 +239,7 @@ local function SpawnShooterBeesCircle(inst, prioritytarget)
             inst.shooterbees[i].components.entitytracker:TrackEntity("queen", inst)
             if not inst.defensivecircle then
                 inst.shooterbees[i].circle = true
-                inst.shooterbees[i]:DoTaskInTime(2,
-                    function(bee) if bee.components.health and not bee.components.health:IsDead() then bee.sg:GoToState("flyup_shooter") end end)
+                inst.shooterbees[i]:DoTaskInTime(2, function(bee) if bee.components.health and not bee.components.health:IsDead() then bee.sg:GoToState("flyup_shooter") end end)
             end
             inst.shooterbees[i]:DoPeriodicTask(FRAMES, function(bee)
                 if bee.target and bee:IsValid() then
@@ -411,7 +410,7 @@ local PHASE3_HEALTH = .5
 local PHASE4_HEALTH = .25
 
 local function FinalFormation(inst)
-    if not (inst.components.health and inst.components.health:IsDead()) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.components.timer:PauseTimer("spawnguards_cd")
         inst.sg:GoToState("spawnguards_shooter_line")
         inst.ffcount = inst.ffcount - 1
@@ -444,7 +443,7 @@ local function MakeSeekerHitlist(inst)
 end
 
 local function SeekerBeesRage(inst)
-    if not (inst.components.health and inst.components.health:IsDead()) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.abilitybusy = true
         inst.previousability = "seeker"
         inst:AddTag("doingability")
@@ -455,7 +454,7 @@ local function SeekerBeesRage(inst)
 end
 
 local function ShooterBeesRage(inst)
-    if not (inst.components.health and inst.components.health:IsDead()) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.abilitybusy = true
         inst.previousability = "shooter"
         inst:AddTag("doingability")
@@ -467,7 +466,7 @@ local function ShooterBeesRage(inst)
 end
 
 local function DoFinalFormation(inst)
-    if not (inst.components.health and inst.components.health:IsDead()) then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.abilitybusy = true
         inst.should_final = false
         inst.previousability = "final"
@@ -525,21 +524,21 @@ local function ActivateHitAbility(inst)
 end
 
 local function SpawnGuardsSeeker(inst)
-    if inst.components.health and not inst.components.health:IsDead() then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.previousguardability = "seeker"
         inst:DoTaskInTime(0, function(inst) inst.sg:GoToState("spawnguards_seeker") end)
     end
 end
 
 local function SpawnWalls(inst)
-    if inst.components.health and not inst.components.health:IsDead() then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.previousguardability = "wall"
         inst:DoTaskInTime(0, function(inst) inst.sg:GoToState("spawnguards_wall") end)
     end
 end
 
 local function SpawnGuardsShooters(inst)
-    if inst.components.health and not inst.components.health:IsDead() then
+    if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) then
         inst.previousguardability = "shooter"
         inst:DoTaskInTime(0, function(inst) inst.sg:GoToState("spawnguards_wall_shooter") end)
     end
@@ -706,13 +705,13 @@ local function BeeQueenPost(inst)
         local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "beequeen", "cherrybeequeen", "lordfruitfly" } )
         
         for i, v in pairs(ents) do
-            if v ~= nil and v.components.combat ~= nil and v.components.combat.target ~= nil and v.components.combat.target == inst then
+            if v ~= nil and v.components.combat and v.components.combat.target and v.components.combat.target == inst then
                 inst:PushEvent("flee")
             end
         end
 
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and
-            inst.components.combat and inst.components.combat.target and not ShouldChase(inst) then
+        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy")
+            and inst.components.combat and inst.components.combat.target and not ShouldChase(inst) then
             inst.sg:GoToState("lob")
         end
     end)

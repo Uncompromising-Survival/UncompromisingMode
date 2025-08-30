@@ -108,27 +108,27 @@ local function SpillHoney(inst)
 end
 
 local function TiredStarter(inst)
-	if not inst.tiredcount then
-		inst.tiredcount = 12
-	end
-	if not inst.tiredtask then
-		inst.tiredtask = inst:DoPeriodicTask(1, function(inst)
-			inst.tiredcount = inst.tiredcount - 1
-			if inst.tiredcount < 0 or inst.sg and inst.sg.currentstate and inst.sg.currentstate.name ~= "tired" and inst.sg.currentstate.name ~= "tired_hit" then
-				if inst.tiredtask then
-					inst.tiredtask:Cancel()
-					inst.tiredtask = nil
-				end
-				inst:RemoveTag("doingability")
-				if inst.tiredcount then
-					inst.tiredcount = nil
-				end
-				if inst.components.timer and inst.components.timer:TimerExists("spawnguards_cd") then
-					inst.components.timer:ResumeTimer("spawnguards_cd")
-				end
-			end
-		end)
-	end
+    if not inst.tiredcount then
+        inst.tiredcount = 12
+    end
+    if not inst.tiredtask then
+        inst.tiredtask = inst:DoPeriodicTask(1, function(inst)
+            inst.tiredcount = inst.tiredcount - 1
+            if inst.tiredcount < 0 or inst.sg and inst.sg.currentstate and inst.sg.currentstate.name ~= "tired" and inst.sg.currentstate.name ~= "tired_hit" then
+                if inst.tiredtask then
+                    inst.tiredtask:Cancel()
+                    inst.tiredtask = nil
+                end
+                inst:RemoveTag("doingability")
+                if inst.tiredcount then
+                    inst.tiredcount = nil
+                end
+                if inst.components.timer and inst.components.timer:TimerExists("spawnguards_cd") then
+                    inst.components.timer:ResumeTimer("spawnguards_cd")
+                end
+            end
+        end)
+    end
 end
 
 env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
@@ -176,7 +176,8 @@ env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's ca
     local events =
     {
         EventHandler("stomp", function(inst, data)
-            if not (inst.components.health and inst.components.health:IsDead()) and not inst.sg:HasStateTag("ability") and not inst:HasTag("doingability") then
+            if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead())
+                and not inst.sg:HasStateTag("ability") and not inst:HasTag("doingability") then
                 inst.sg:GoToState("stomp", data.attacker)
             end
         end)
