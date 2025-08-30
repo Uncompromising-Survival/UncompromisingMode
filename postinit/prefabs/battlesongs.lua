@@ -6,15 +6,20 @@ GLOBAL.setfenv(1, GLOBAL)
 --------------------------------------------------------------------------
 
 local function AddDurabilityMult(inst, equip, target)
-    if equip ~= nil and equip.components.weapon ~= nil and equip.components.finiteuses ~= nil then
-        local lunarMult = 1
-        if target:HasTag("lunar_improved_songs") then lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER end
-        equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD * lunarMult)
+    if equip ~= nil and equip.components.weapon ~= nil then 
+        -- Check for armor component to account for the shields which do not have finiteuses 
+        if equip.components.finiteuses ~= nil or equip.components.armor ~= nil then 
+            local lunarMult = 1
+            if target:HasTag("lunar_improved_songs") then 
+                lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER 
+            end
+            equip.components.weapon.attackwearmultipliers:SetModifier(inst, TUNING.BATTLESONG_DURABILITY_MOD * lunarMult)
+        end
     end
 end
 
 local function RemoveDurabilityMult(inst, equip)
-   if equip ~= nil and equip.components.weapon ~= nil and equip.components.finiteuses ~= nil then
+   if equip ~= nil and equip.components.weapon ~= nil and (equip.components.finiteuses ~= nil or equip.components.armor ~= nil) then
         equip.components.weapon.attackwearmultipliers:RemoveModifier(inst)
     end 
 end
