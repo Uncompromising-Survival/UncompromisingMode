@@ -29,6 +29,7 @@ local wardrobe_tags = {
     "fan",
     "trap",
     "mine",
+    "broken",
 }
 
 local wardrobe_prefabs = {
@@ -38,6 +39,9 @@ local wardrobe_prefabs = {
     "pocketwatch_dismantler",
     "sewing_tape",
     "sewing_kit",
+    "lunarplant_kit",
+    "voidcloth_kit",
+    "wagpunkbits_kit",
 	"spiderden_bedazzler",
 	"spider_whistle",
 	"spider_repellent"
