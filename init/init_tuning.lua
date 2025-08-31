@@ -329,6 +329,8 @@ TUNING.DSTU = {
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = GetModConfigData("all_must_be_gathered"),
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
+    KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 1,
+    KLAUS_AMULET_ABSORPTION = 0.3,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance

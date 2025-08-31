@@ -26,7 +26,7 @@ end
 local function AddRemoveDebuff(owner)
     if not owner.components.combat then return end
     if owner.sg.mem.mockattack then
-        owner.components.combat.externaldamagemultipliers:SetModifier(owner, .5, "um_mockattack")
+        owner.components.combat.externaldamagemultipliers:SetModifier(owner, TUNING.DSTU.KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT, "um_mockattack")
     elseif owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
         owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
     end
@@ -84,6 +84,7 @@ local function fn()
 
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
+    inst:AddTag("hide_percentage")
     
     inst.entity:SetPristine()
 
@@ -98,6 +99,9 @@ local function fn()
     inst.components.equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
 
     inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("armor")
+    inst.components.armor:InitIndestructible(TUNING.DSTU.KLAUS_AMULET_ABSORPTION)
 
     inst:AddComponent("shadowlevel")
     inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
