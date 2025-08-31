@@ -59,7 +59,7 @@ local function OnAttackFn(inst, attacker, target)
     inst._lastparrytime = nil
     inst._bonusdamage = nil
 
-    inst.components.armor:TakeDamage(TUNING.WATHGRITHR_SHIELD_USEDAMAGE * TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT * inst.components.weapon.attackwearmultipliers:Get())
+    inst.components.armor:TakeDamage(TUNING.WATHGRITHR_SHIELD_USEDAMAGE * inst.components.weapon.attackwearmultipliers:Get() --* TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT)
 end
 
 env.AddPrefabPostInit("wathgrithr_shield", function(inst)
@@ -67,7 +67,7 @@ env.AddPrefabPostInit("wathgrithr_shield", function(inst)
 		return
 	end
 
-	inst.components.armor:InitCondition(TUNING.WATHGRITHR_SHIELD_ARMOR * TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT, TUNING.WATHGRITHR_SHIELD_ABSORPTION)
+	inst.components.armor:InitCondition(TUNING.WATHGRITHR_SHIELD_ARMOR, TUNING.WATHGRITHR_SHIELD_ABSORPTION) --* TUNING.DSTU.WATHGRITHR_SHIELD_DURABILITY_MULT
 
 	inst.components.parryweapon:SetOnParryFn(OnParry)
 
