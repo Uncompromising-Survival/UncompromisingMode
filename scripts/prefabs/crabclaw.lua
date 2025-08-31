@@ -552,8 +552,8 @@ local function buildgem_cracked(colour, precious, multiplier)
 		inst.components.edible.hungervalue = 2.5
 
 		inst:AddComponent("finiteuses")
-		inst.components.finiteuses:SetMaxUses(80 * multiplier)
-		inst.components.finiteuses:SetUses(80 * multiplier)
+		inst.components.finiteuses:SetMaxUses(200 * multiplier)
+		inst.components.finiteuses:SetUses(200 * multiplier)
 		inst.components.finiteuses:SetOnFinished(Shatter)
 
 		inst:AddComponent("bait")
