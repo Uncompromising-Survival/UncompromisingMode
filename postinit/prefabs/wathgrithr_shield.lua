@@ -23,7 +23,7 @@ local function OnParry(inst, doer, attacker, damage)
     end
 
 	-- Parries lose durability
-	
+	--[[
 	local parryMult = 1
 	local skill_level = 2 -- If the rework is disabled it will always use the max value, as it's otherwise unusable
 
@@ -41,6 +41,14 @@ local function OnParry(inst, doer, attacker, damage)
 	local damageFix = 0.5
 
 	inst.components.armor:TakeDamage(damage*parryMult*damageFix)
+	]]
+
+	--Temporary Fix
+	-- For some reason durability loss is being applied twice, so the 0.5 negates that
+	local damageFix = 0.5
+	inst.components.armor:TakeDamage(damage * TUNING.DSTU.WATHGRITHR_SHIELD_PARRY_DURABILITY_LOSS * 0.5)
+
+	
 end
 
 --------------------------------------------------------------------------

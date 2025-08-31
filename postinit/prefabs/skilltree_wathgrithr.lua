@@ -453,13 +453,13 @@ local skills =
     -- The duration of the Battle Rönd's ability to block attacks will be increased.
     wathgrithr_arsenal_shield_2 = {
         group = "arsenal",
-        tags = { "shield", "parryefficiency" },
+        tags = { "shield" --[[,"parryefficiency"]] },
     },
 
     -- After blocking an attack with the Battle Rönd, your next attack within 5 seconds will deal +10 damage.
     wathgrithr_arsenal_shield_3 = {
         group = "arsenal",
-        tags = { "shield", "parryefficiency" },
+        tags = { "shield" --[[,"parryefficiency" ]]},
     },
 
     --------------------------------------------------------------------------
@@ -734,9 +734,9 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
 
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC = "Learn to craft the Battle Rönd.\nBlocking attacks will consume durability by 60% of the damage taken."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_1.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Block duration increased.\nLose 20% less durability on block."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Block duration increased."--\nLose 20% less durability on block."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = "Blocking increases damage on the next attack.\nLose 20% less durability on block"
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = "Blocking adds the absorbed damage to the next attack, up to 100."--\nLose 20% less durability on block"
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC
 
     --------------------------------------------------------------------------
