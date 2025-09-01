@@ -23,15 +23,6 @@ local function DoubleSlap(owner, data)
     end
 end
 
-local function AddRemoveDebuff(owner)
-    if not owner.components.combat then return end
-    if owner.sg.mem.mockattack then
-        owner.components.combat.externaldamagemultipliers:SetModifier(owner, TUNING.DSTU.KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT, "um_mockattack")
-    elseif owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
-        owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
-    end
-end
-
 local function onequip_blue(inst, owner)
     if not owner:HasTag("vetcurse") and owner:HasTag("player") then
         inst:DoTaskInTime(0, function(inst, owner)
@@ -51,32 +42,26 @@ local function onequip_blue(inst, owner)
     else
         owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
         owner:ListenForEvent("onattackother", DoubleSlap)
-        owner:ListenForEvent("newstate", AddRemoveDebuff)
     end
 end
 
 local function onunequip_blue(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner:RemoveEventCallback("onattackother", DoubleSlap)
-    owner:RemoveEventCallback("newstate", AddRemoveDebuff)
-    if owner.components.combat and owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
-        owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
-    end
 end
 
 local function fn()
     local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    local sound = inst.entity:AddSoundEmitter()
+    local network = inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("amulet_klaus")
-    inst.AnimState:SetBuild("amulet_klaus")
-    inst.AnimState:PlayAnimation("klausamulet")
+    anim:SetBank("amulet_klaus")
+    anim:SetBuild("amulet_klaus")
+    anim:PlayAnimation("klausamulet")
 
     inst.foleysound = "dontstarve/movement/foley/jewlery"
 
@@ -93,21 +78,21 @@ local function fn()
     end
 
     inst:AddComponent("tradable")
-    inst:AddComponent("inspectable")
 
-    inst:AddComponent("equippable")
-    inst.components.equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
+    inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("armor")
-    inst.components.armor:InitIndestructible(TUNING.DSTU.KLAUS_AMULET_ABSORPTION)
+    local equippable = inst:AddComponent("equippable")
+    equippable.equipslot = EQUIPSLOTS.NECK or EQUIPSLOTS.BODY
+    equippable:SetOnEquip(onequip_blue)
+    equippable:SetOnUnequip(onunequip_blue)
 
-    inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
+    local armor = inst:AddComponent("armor")
+    armor:InitIndestructible(TUNING.DSTU.KLAUS_AMULET_ABSORPTION)
 
-    inst.components.equippable:SetOnEquip(onequip_blue)
-    inst.components.equippable:SetOnUnequip(onunequip_blue)
+    local shadowlevel = inst:AddComponent("shadowlevel")
+    shadowlevel:SetDefaultLevel(TUNING.AMULET_SHADOW_LEVEL)
 
     return inst
 end
