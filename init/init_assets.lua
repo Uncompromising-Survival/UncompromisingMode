@@ -239,6 +239,7 @@ local inventoryitems =
     "trinket_wathom1",
     "wooden_queen_piece",
     "wixie_piano_card",
+    "wathgrithr_shield_dreadstone",
 
     --Magma Caves icons
     "um_smolder_spore",
@@ -1934,7 +1935,8 @@ Assets = {
 
     Asset("ANIM", "anim/um_status_wx.zip"),
 
-
+    Asset("ANIM", "anim/wathgrithr_shield_dreadstone.zip"),
+    Asset("ANIM", "anim/swap_wathgrithr_shield_dreadstone.zip"),
 
     --ICONS
     Asset("IMAGE", "images/vetskull.tex"),

@@ -33,6 +33,13 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     ARMORREED_UM = TUNING.WILSON_HEALTH * 2 * multiplayer_armor_durability_modifier,
     BEE_ALLERGY_PROTECTION_EXTRADAMAGE = 5,    
+    WATHGRITHR_SHIELD_DREADSTONE_ARMOR = TUNING.WATHGRITHR_SHIELD_ARMOR * 2,
+    WATHGRITHR_SHIELD_DREADSTONE_ABSORPTION = TUNING.ARMORDREADSTONE_ABSORPTION, --90
+    WATHGRITHR_SHIELD_DREADSTONE_PLANAR_DEF = 5,
+    WATHGRITHR_SHIELD_DREADSTONE_PLANAR_DAMAGE = 20,
+    WATHGRITHR_SHIELD_DREADSTONE_DAMAGE =  41, -- 51
+    WATHGRITHR_SHIELD_DREADSTONE_USEDAMAGE = 3, --3
+    WATHGRITHR_SHIELD_DREADSTONE_PANIC_TIME = 5, --3
     ----------------------------------------------------------------------------
     -- Acid colour
     ----------------------------------------------------------------------------

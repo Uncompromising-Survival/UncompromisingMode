@@ -602,3 +602,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"All this chase, and for what?",
     "Nobody would ever tell the tale of the valkyrie who slayed a butterfly."}
 	
 DESCRIBE.WATHOM_CORPSE = "I suspect the finale is yet upon us!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Protects my bödy but nöt my mind."

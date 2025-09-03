@@ -545,6 +545,20 @@ AddRecipe2(
 ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", true)
 GLOBAL.STRINGS.RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 
+if TUNING.DSTU.WATHGRITHR_REWORK then
+        AddCharacterRecipe("wathgrithr_shield_dreadstone",
+    { Ingredient("dreadstone", 6), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 1) },
+    TECH.NONE,
+    {   builder_skill="wathgrithr_arsenal_shield_2",
+        atlas = "images/inventoryimages/wathgrithr_shield_dreadstone.xml",
+        nounlock=true, 
+        --station_tag = "shadow_forge"
+    }, {   "CHARACTER","WEAPONS","ARMOUR",
+            --"CRAFTING_STATION",
+            "MODS",
+            "EVRERYTHING"})
+end
+
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
