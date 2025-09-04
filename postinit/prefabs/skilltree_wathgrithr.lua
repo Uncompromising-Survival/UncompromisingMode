@@ -495,7 +495,7 @@ local skills =
     -- Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark.
     wathgrithr_beefalo_3 = {
         group = "beefalo",
-        tags = { "wathgrithr_beefalo_damage" },
+        tags = { "beefalodamage" },
     },
 
     --------------------------------------------------------------------------
@@ -711,7 +711,7 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
 
     -- ELDIN SPEAR
 
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_3_DESC = "Learn to craft the Elding Spear: an electrical weapon that does more damage to wet targets.\nIt can be recharged like other Uncomp. Electrical Weapons."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_3_DESC = "Learn to craft the Elding Spear: an electrical weapon that does more damage to wet targets.\nIt can be recharged like other UM Electrical Weapons."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_spear_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_3_DESC
 
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_4_DESC = "The Elding Spear can perform a special attack."
@@ -732,9 +732,11 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
 
     -- SHIELD
 
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC = "Learn to craft the Battle Rönd.\nBlocking attacks will consume durability by 60% of the damage taken."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC = "Learn to craft the Battle Rönd.\nBlocking attacks will consume durability by 10% of the damage taken."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_1.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_1_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Block duration increased."--\nLose 20% less durability on block."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_TITLE = "Dread Rönd"
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_2.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_TITLE
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC = "Learn to craft the Dread Rönd: a planar weapon that restores durability over time at the cost of your sanity."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_2_DESC
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = "Blocking adds the absorbed damage to the next attack, up to 100."--\nLose 20% less durability on block"
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_arsenal_shield_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC
@@ -749,6 +751,8 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC = "Wigfrid's damage multiplier applies to beefalos."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = "Learn to craft a new Beefalo Saddle that protects your Beefalo. \nHas higher damage."
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_saddle.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC
 
     --------------------------------------------------------------------------
     -- AFFINITY

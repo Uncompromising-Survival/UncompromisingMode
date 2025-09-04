@@ -317,11 +317,10 @@ configuration_options = {
         --"\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
 
     BinaryConfig("waxwell", "Maxwell", "Maxwell has mastered the summoning of shadowy gear. Shadow Prison is less effective against Bosses.", true),
-    BinaryConfig("wathgrithr_arsenal", "Wigfrid - Arsenal", "Changed wigfrid's new tools to not have infinite skills.", true),
     {
         name = "wathgrithr_rework_",
         label = "Wigfrid - Rework",
-        hover = "Reduced Wigfrids combat leeching, revamped skill tree, added more meaningful alingment choices.",
+        hover = "Reduced Wigfrids combat leeching, revamped skill tree, modified items, added more meaningful alignment choices.",
         options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },

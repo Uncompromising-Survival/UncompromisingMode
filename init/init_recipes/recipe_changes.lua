@@ -261,7 +261,7 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     }
 end
 
-if GetModConfigData("wathgrithr_rework_") == 1 then
+if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
     AllRecipes["battlesong_shadowaligned"] = nil
     AllRecipes["battlesong_lunaraligned"] = nil
 end

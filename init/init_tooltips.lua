@@ -390,7 +390,9 @@ end
 
 if TUNING.DSTU.WATHGRITHR_REWORK then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
-    TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 60% of the damage taken.\n - Each additional perk reduces it by 20%."
+    TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 10% of the damage taken.\n - The time penalty for a failed parry is reduced to half.\n -Parry duration has been incorportated into the item by default."
+    TOOLTIPS.SADDLE_WATHGRITHR = "- Increased damage."
+    TOOLTIPS.BATTLESONG_DURABILITY = "- Now works on shields."
 end
 
 if TUNING.DSTU.DISABLE_MEGAFLARE then

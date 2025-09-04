@@ -2,7 +2,7 @@
 
 local OldGetSkilltreeBG = GLOBAL.GetSkilltreeBG
 function GLOBAL.GetSkilltreeBG(imagename, ...)
-    if imagename == "wathgrithr_background.tex" and GetModConfigData("wathgrithr_rework_") == 1 then
+    if imagename == "wathgrithr_background.tex" and TUNING.DSTU.WATHGRITHR_REWORK == 1 then
         return "images/wathgrithr_rework_skilltree.xml"
 
     elseif imagename == "wolfgang_background.tex" and GetModConfigData("wolfgang") then

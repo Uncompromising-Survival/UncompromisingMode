@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function OnRiderChanged(inst, data)
 	local rider = inst.components.rideable ~= nil and inst.components.rideable:GetRider()
 
-	if rider ~= nil and rider.components.skilltreeupdater ~= nil and rider.components.skilltreeupdater:HasSkillTag("wathgrithr_beefalo_damage") then
+	if rider ~= nil and rider.components.skilltreeupdater ~= nil and rider.components.skilltreeupdater:IsActivated("wathgrithr_beefalo_3") then
 		inst.components.combat.damagemultiplier = TUNING.WATHGRITHR_DAMAGE_MULT
 	else
 		inst.components.combat.damagemultiplier = 1
@@ -16,7 +16,7 @@ env.AddPrefabPostInit("beefalo", function(inst)
 		return
 	end
 	
-	if env.GetModConfigData("wathgrithr_rework_") == 1 then
+	if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
 		inst:ListenForEvent("riderchanged", OnRiderChanged)
 	end
 end)

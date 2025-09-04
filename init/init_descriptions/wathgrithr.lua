@@ -603,4 +603,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"All this chase, and for what?",
 	
 DESCRIBE.WATHOM_CORPSE = "I suspect the finale is yet upon us!"
 
-DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Protects my bödy but nöt my mind."
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Protects my body but not my mind."
