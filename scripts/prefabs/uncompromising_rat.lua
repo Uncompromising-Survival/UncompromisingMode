@@ -1906,7 +1906,6 @@ local function OnEquipRat(inst, owner)
     owner.AnimState:Show("HAIR_NOHAT")
     owner.AnimState:Show("HAIR")
     owner.AnimState:Show("HAIRFRONT")
-    owner:AddTag("goggles")
 
     if owner and not owner:HasTag("equipmentmodel") then
         inst.components.fueled:StartConsuming()
@@ -1923,7 +1922,6 @@ local function OnUnequipRat(inst, owner)
     owner.AnimState:ClearOverrideSymbol("face")
     owner.AnimState:Hide("HAT")
     owner.AnimState:Show("HEAD")
-    owner:RemoveTag("goggles")
 
     inst.components.fueled:StopConsuming()
     if owner then
