@@ -997,10 +997,8 @@ local function fn()
     --inst:AddTag("structure")
     --inst:AddTag("noauradamage")
     --inst:AddTag("notarget")
-    inst:AddTag("houndfriend")
     inst:AddTag("antlion_sinkhole_blocker")
     inst:AddTag("queensstuff")
-    inst:AddTag("companion")
     inst:AddTag("ignorewalkableplatforms")
     inst:AddTag("ignorewalkableplatformdrowning")
 
@@ -1012,8 +1010,8 @@ local function fn()
 
     -------------------
     local health = inst:AddComponent("health")
-    health:SetMaxHealth(1000000)
-    health.absorb = 1
+    health:SetMaxHealth(300)
+    health:SetMinHealth(1)
     --health.invincible = true
 
     inst:AddComponent("combat")

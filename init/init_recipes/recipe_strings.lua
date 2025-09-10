@@ -139,6 +139,14 @@ RECIPE_DESC.SLINGSHOTAMMO_SLIME = "It's slime time!"
 RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
 
 --Other new stuff that I want to put at the bottom because yes (Atoba started this I swear!!)
+RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
+RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
+RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
+RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
+--[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
+RECIPE_DESC.OAR_MONKEY = "Now you can do the monkey paddle."
+--
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
 RECIPE_DESC.UM_HAT_LEAFWING = "Embody the fleeting fruit bat."
 RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."

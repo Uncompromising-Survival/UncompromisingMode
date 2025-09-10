@@ -233,7 +233,6 @@ ChangeSortKey("skullchest_child", "magician_chest", "MAGIC", true)
 
 AddRecipe2("um_ribopodden", { Ingredient("boneshard", 8), Ingredient("um_ribopod", 6),Ingredient("rocks", 12)}, TECH.SCIENCE_TWO, { placer = "um_ribopodden_placer" }, { "STRUCTURES"})
 ChangeSortKey("um_ribopodden", "rabbithouse", "STRUCTURES", true)
-GLOBAL.STRINGS.RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
 
 --[[
 AddRecipe2(
@@ -523,7 +522,6 @@ AddRecipe2(
 	{ "TOOLS" }
 )
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
-GLOBAL.STRINGS.RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 
 AddRecipe2(
 	"um_ice_sicle",
@@ -533,7 +531,6 @@ AddRecipe2(
 	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
-GLOBAL.STRINGS.RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
 
 AddRecipe2(
 	"um_hat_rime",
@@ -543,7 +540,6 @@ AddRecipe2(
 	{ "ARMOUR" }
 )
 ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", true)
-GLOBAL.STRINGS.RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 
 if TUNING.DSTU.WATHGRITHR_REWORK then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
@@ -559,9 +555,11 @@ if TUNING.DSTU.WATHGRITHR_REWORK then
             "EVRERYTHING"})
 end
 
-
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
 ChangeSortKey("um_boatbottle", "sludge_cork", "TOOLS", true)
 ChangeSortKey("um_boatbottle", "chestupgrade_stacksize", "CONTAINERS", true)
 ChangeSortKey("um_boatbottle", "portableboat_item", "SEAFARING", true)
+
+AddRecipe2("oar_monkey", {Ingredient("log", 1),  Ingredient("palmcone_scale", 2), Ingredient("rope", 1)}, TECH.LOST, nil, {"SEAFARING"})
+ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)

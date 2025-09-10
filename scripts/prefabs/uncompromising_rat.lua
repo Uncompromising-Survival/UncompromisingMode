@@ -1947,6 +1947,7 @@ local function ratfn()
     anim:PlayAnimation("anim")
 
     inst:AddTag("hats")
+    inst:AddTag("goggles")
 
     MakeInventoryFloatable(inst, "small")
 
