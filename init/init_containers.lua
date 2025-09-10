@@ -20,12 +20,53 @@ function CheckMush(container, item, slot)
     return item:HasTag("mushroom_fuel")
 end
 
+local wardrobe_tags = {
+    "_equippable",
+    "reloaditem_ammo",
+    "tool",
+    "weapon",
+    "heatrock",
+    "fan",
+    "pocketwatch",
+    "trap",
+    "mine",
+    "broken",
+}
+
+local wardrobe_prefabs = {
+    "razor",
+    "beef_bell",
+    "pocketwatch_parts",
+    "pocketwatch_dismantler",
+    "sewing_tape",
+    "sewing_kit",
+    "lunarplant_kit",
+    "voidcloth_kit",
+    "wagpunkbits_kit",
+	"spiderden_bedazzler",
+	"spider_whistle",
+	"spider_repellent",
+    "sludge_oil",
+    "saddle_basic",
+    "saddle_race",
+    "saddle_war",
+    "saddle_wathgrithr",
+    "saddle_shadow",
+}
+
 function CheckWardrobeItem(container, item, slot)
-    return item:HasTag("_equippable") or item:HasTag("reloaditem_ammo") or item:HasTag("tool") or item:HasTag("weapon")
-        or (item.prefab == "razor" or item.prefab == "beef_bell") or item:HasTag("heatrock") or
-        (item:HasTag("pocketwatch") or item.prefab == "pocketwatch_dismantler") or
-        item.prefab == "sewing_tape" or item.prefab == "sewing_kit" or item:HasTag("fan") or
-        string.match(item.prefab, "wx78module_") ~= nil or item:HasTag("mine") or item:HasTag("trap")
+    if item:HasOneOfTags(wardrobe_tags) then
+        return true
+    end
+
+
+    for _, prefab in pairs(wardrobe_prefabs) do
+        if item.prefab == prefab then
+            return true
+        end
+    end
+
+    return string.match(item.prefab, "wx78module_") ~= nil
 end
 
 function CheckToolboxItem(container, item, slot)
