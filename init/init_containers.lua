@@ -27,6 +27,7 @@ local wardrobe_tags = {
     "weapon",
     "heatrock",
     "fan",
+    "pocketwatch",
     "trap",
     "mine",
     "broken",
@@ -35,7 +36,7 @@ local wardrobe_tags = {
 local wardrobe_prefabs = {
     "razor",
     "beef_bell",
-    "pocketwatch",
+    "pocketwatch_parts",
     "pocketwatch_dismantler",
     "sewing_tape",
     "sewing_kit",
@@ -44,7 +45,13 @@ local wardrobe_prefabs = {
     "wagpunkbits_kit",
 	"spiderden_bedazzler",
 	"spider_whistle",
-	"spider_repellent"
+	"spider_repellent",
+    "sludge_oil",
+    "saddle_basic",
+    "saddle_race",
+    "saddle_war",
+    "saddle_wathgrithr",
+    "saddle_shadow",
 }
 
 function CheckWardrobeItem(container, item, slot)
