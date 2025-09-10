@@ -15,7 +15,6 @@ local function onequip(inst, owner)
     owner.AnimState:Show("HAIR_NOHAT")
     owner.AnimState:Show("HAIR")
     owner.AnimState:Show("HAIRFRONT")
-    owner:AddTag("goggles")
     --owner:AddTag("toadstool")
     if not owner:HasTag("scp049") then
         owner:AddTag("has_gasmask")
@@ -29,7 +28,6 @@ local function onunequip(inst, owner)
     owner.AnimState:ClearOverrideSymbol("face")
     owner.AnimState:Hide("HAT")
 
-    owner:RemoveTag("goggles")
     --owner:RemoveTag("toadstool")
     if not owner:HasTag("scp049") then
         owner:RemoveTag("has_gasmask")
