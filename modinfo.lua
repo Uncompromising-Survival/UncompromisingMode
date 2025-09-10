@@ -6,18 +6,19 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.7.3.36"
+local _version = "1.7.3.37"
 
 description = [[
-    󰀔 [ "Ghosts from the Past"  (Beta ver: v]] .. _version .. [[)]
-Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
+    󰀔 [ "Foxy, Mossy, and Shieldy Update"  (Beta ver: v]] .. _version .. [[)]
+Uncompromising Mode is like a potluck.
 
 Latest update features:
-- Night Terrors!
-- New Veterans Curse Effects!
-- New Veterans Curse Items!
-- New Biomes!
-- To be revealed...
+- New Biomes
+- New Old Biomes
+- New Faces
+- New Old Faces
+- Lots of bloat...
+- Lots of promises...
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
