@@ -1012,6 +1012,8 @@ local function fn()
     local health = inst:AddComponent("health")
     health:SetMaxHealth(300)
     health:SetMinHealth(1)
+    health:SetAbsorptionAmount(1)
+    health:StartRegen(300, .1)
     --health.invincible = true
 
     inst:AddComponent("combat")
