@@ -29,7 +29,7 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 				["HoodedTown"] = function() return math.random(0,1) end,
 				["HFHolidays"] = function() return math.random(0,1) end,
 				["RoseGarden"] = function() return math.random(0,1) end,
-				["SnapDragons"] = 1,
+				["FoxGathering"] = 1,
 				["GiantTrees"] = 1,
 
             --["QuestionableDecisions"] = 1 -- Goofy aaa lush caves

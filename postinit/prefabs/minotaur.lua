@@ -59,16 +59,21 @@ local function ShootProjectile(inst)
         local a, b, c = target.Transform:GetWorldPosition()
         if a ~= nil then
             local targetpos = target:GetPosition()
-            targetpos.x = targetpos.x + math.random(-4, 4)
-            targetpos.z = targetpos.z + math.random(-4, 4)
+			if not projectile.organ then
+				targetpos.x = targetpos.x + math.random(-4, 4)
+				targetpos.z = targetpos.z + math.random(-4, 4)
+			end
             local dx = a - x
             local dz = c - z
             local rangesq = dx * dx + dz * dz
             local maxrange = 20
             local bigNum = 15
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
+			if not projectile.organ then
+				speed = speed+math.random(4, 9)
+			end
             projectile:AddTag("canthit")
-            projectile.components.complexprojectile:SetHorizontalSpeed(speed+math.random(4, 9))
+            projectile.components.complexprojectile:SetHorizontalSpeed(speed)
             projectile.components.complexprojectile:Launch(targetpos, inst, inst)
         end
     end

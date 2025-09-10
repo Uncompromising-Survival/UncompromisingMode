@@ -16,10 +16,10 @@ local function Regrow(inst,data)
 	end
 end
 
+local dont_damage = { "FX", "notarget", "noattack", "playerghost","irreplaceable"}
 local function DamageSurroundings(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 2, nil,
-		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost","irreplaceable"})
+	local ents = TheSim:FindEntities(x, y, z, 2, nil,dont_damage)
 	if #ents > 0 then
 		for i, v in pairs(ents) do
 			if v ~= inst then

@@ -511,7 +511,7 @@ ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
 ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
 
-AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("foliage", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
+AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
 
 

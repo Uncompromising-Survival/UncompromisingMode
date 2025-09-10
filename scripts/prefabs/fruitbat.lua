@@ -4,7 +4,7 @@ require "stategraphs/SGfruitbat"
 SetSharedLootTable('fruitbat',
     {
         { 'giant_blueberry', 1 },
-        { 'um_leafwing', .33 },
+        { 'um_leafwing', 1 },
     })
 
 

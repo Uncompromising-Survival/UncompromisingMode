@@ -392,18 +392,23 @@ local function MarkDontEatFoods(inst,target)
 	end
 end
 	
+	
+local bite2MustTags = { "_inventoryitem" }
+local bite2MustOneOfTags = { "meat", "smallmeat", "rawmeat" }
+
 local function CheckIfDead(inst,target)
 	
-	if (target and target.components.health and target.components.health:IsDead()) and not (target:HasTag("shadow") or target:HasTag("chess")) then
+	if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasTag("shadow") or target:HasTag("chess")) then
 		if HasSkill(inst,"bite_mastery") and inst.components.health then
 			inst.components.health:DeltaPenalty(-0.01)
 		end
 		inst.components.health:DoDelta(4)
 		if HasSkill(inst,"bite_2") then
 			local x,y,z = target.Transform:GetWorldPosition()
-			local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
+			
+			local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, nil, bite2MustOneOfTags)
 			for i,v in ipairs(loot) do
-				if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
+				if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
 					local health_restore = v.components.edible.healthvalue*1.1
 					local hunger_restore = v.components.edible.hungervalue*1.1
 					local sanity_restore = v.components.edible.sanityvalue*1.1

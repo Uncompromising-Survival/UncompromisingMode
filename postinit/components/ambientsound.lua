@@ -8,22 +8,21 @@ local WORLD_TILES = GLOBAL.WORLD_TILES
 
 local HF_AMBIENT_SOUND =
 {
-    [WORLD_TILES.HOODEDFOREST] = { sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain" },       --springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    [WORLD_TILES.UM_HOTSPRING_GRASS] = { sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain" }, --springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    [WORLD_TILES.UM_HOTSPRING_WHITEROCK] = { sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain" }, --springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    [WORLD_TILES.UM_HOTSPRING_YELLOWROCK] = { sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain" }, --springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-	
-	
+    [WORLD_TILES.HOODEDFOREST] = {sound = "dontstarve/AMB/forest", wintersound = "dontstarve/AMB/forest_winter", springsound = "dontstarve/AMB/forest", summersound = "dontstarve_DLC001/AMB/forest_summer", rainsound = "dontstarve/AMB/forest_rain"},      
+    [WORLD_TILES.HOODEDFOREST_FOLIAGE] = {sound = "dontstarve/AMB/forest", wintersound = "dontstarve/AMB/forest_winter", springsound = "dontstarve/AMB/forest", summersound = "dontstarve_DLC001/AMB/forest_summer", rainsound = "dontstarve/AMB/forest_rain"},      
+    [WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK] = {sound = "dontstarve/AMB/forest", wintersound = "dontstarve/AMB/forest_winter", springsound = "dontstarve/AMB/forest", summersound = "dontstarve_DLC001/AMB/forest_summer", rainsound = "dontstarve/AMB/forest_rain"},      
+    
+	[WORLD_TILES.UM_HOTSPRING_GRASS] = { sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain" }, 
+    [WORLD_TILES.UM_HOTSPRING_WHITEROCK] = {sound = "dontstarve/AMB/rocky", wintersound = "dontstarve/AMB/rocky_winter", springsound = "dontstarve/AMB/rocky", summersound = "dontstarve_DLC001/AMB/rocky_summer", rainsound = "dontstarve/AMB/rocky_rain"}, 
+    [WORLD_TILES.UM_HOTSPRING_YELLOWROCK] = {sound = "dontstarve/AMB/rocky", wintersound = "dontstarve/AMB/rocky_winter", springsound = "dontstarve/AMB/rocky", summersound = "dontstarve_DLC001/AMB/rocky_summer", rainsound = "dontstarve/AMB/rocky_rain"}, 
+		
 	[WORLD_TILES.UM_FLOODWATER] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
-	[WORLD_TILES.UM_FLOODWATER_GROTTO] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
+	[WORLD_TILES.UM_FLOODWATER_GROTTO] = {sound = "grotto/amb/grotto"},
+
+    [WORLD_TILES.UM_MAGMA] = {sound = "dontstarve/AMB/caves/main"},
+    [WORLD_TILES.UM_GRASSMAGMA] = {sound = "dontstarve/AMB/caves/main"},
 	
-    --[WORLD_TILES.ANCIENTHOODEDFOREST] = {sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},--springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    --[WORLD_TILES.UM_FLOODWATER] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
-    --[WORLD_TILES.BOILINGFIELDS] = {sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},--springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    --[WORLD_TILES.CRACKEDBASALT] = {sound = "dontstarve/AMB/meadow", wintersound = "dontstarve/AMB/meadow_winter", springsound = "dontstarve/AMB/meadow", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},--springsound = "dontstarve_DLC001/spring/springmeadowAMB", summersound = "dontstarve_DLC001/AMB/meadow_summer", rainsound = "dontstarve/AMB/meadow_rain"},
-    --[WORLD_TILES.UM_MAGMA] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
-    --[WORLD_TILES.UM_GRASSMAGMA] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
-    --[WORLD_TILES.UM_FLOORTOX] = {sound = "dontstarve/AMB/caves/void", wintersound = "dontstarve/AMB/caves/void", springsound = "dontstarve/AMB/caves/void", summersound = "dontstarve/AMB/caves/void", rainsound = "dontstarve/AMB/caves/void"},
+
 }
 
 local function SoundUpvalue(fn, upvalue_name)

@@ -15,16 +15,33 @@ AddTask("MagmaCaves", {
 		keys_given={KEYS.MAGMA_CAVES_TIER1},
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
+		-- room_choices={
+			-- ["GrassMagma"] = 2,
+			-- ["GloomyMagma"] = 1,
+			-- ["FossilMagma"] = 1,		
+			-- ["ShroomyMagma"] = 1,
+		-- },
 		room_choices={
-			["GrassMagma"] = 2,
-			["GloomyMagma"] = 1,
-			["FossilMagma"] = 1,		
-			["ShroomyMagma"] = 1,
+			["GrassMagmaCliffs"] = 4,
 		},
 		background_room="GrassMagma",
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
 })
+
+AddTask("PyreCliffs", {
+		locks={LOCKS.MAGMA_CAVES,LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.TIER_1},
+		keys_given={KEYS.MAGMA_CAVES_TIER2},
+		level_set_piece_blocker = true,
+		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
+		room_choices={
+			["GrassMagmaCliffs"] = 4,
+		},
+		colour={r=.1,g=.1,b=.1,a=1},
+		background_room="BGMagma",
+		room_bg=WORLD_TILES.UM_GRASSMAGMA,
+})
+
 AddTask("MagmaCavesEntrance", {
 		locks={LOCKS.MAGMA_CAVES},
 		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER1},

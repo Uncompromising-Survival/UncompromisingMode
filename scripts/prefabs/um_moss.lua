@@ -2,7 +2,7 @@ local assets =
 {
     Asset("ANIM", "anim/um_moss.zip"),
 }
-
+local FERTILIZER_DEFS = require("prefabs/fertilizer_nutrient_defs").FERTILIZER_DEFS
 local function fn()
     local inst = CreateEntity()
 
@@ -31,18 +31,15 @@ local function fn()
 
     inst:AddComponent("inventoryitem")
 
-    inst:AddComponent("edible")
-    inst.components.edible.healthvalue = 3
-    inst.components.edible.hungervalue = 4.9
-    inst.components.edible.sanityvalue = -5
-    inst.components.edible.foodtype = FOODTYPE.VEGGIE
-	inst.components.edible:SetOnEatenFn(oneatenfn)
-    inst:AddComponent("perishable")
 	inst:AddComponent("tradable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST*2) -- 6 days
-    inst.components.perishable:StartPerishing()
-    inst.components.perishable.onperishreplacement = "spoiled_food"
-
+	
+	
+	local fertilizer = inst:AddComponent("fertilizer")
+	fertilizer.fertilizervalue = TUNING.SOILAMENDER_FERTILIZE_MED
+	fertilizer.soil_cycles = TUNING.SOILAMENDER_SOILCYCLES_MED
+	fertilizer.withered_cycles = TUNING.SOILAMENDER_WITHEREDCYCLES_MED
+	fertilizer:SetNutrients(FERTILIZER_DEFS.soil_amender_med.nutrients)
+			
     MakeHauntableLaunchAndPerish(inst)
     return inst
 end

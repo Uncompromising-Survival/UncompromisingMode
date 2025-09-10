@@ -54,6 +54,25 @@ AddRoom("GrassMagma", {
     }
 })
 
+AddRoom("GrassMagmaCliffs", {
+	type = NODE_TYPE.Room,
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_GRASSMAGMA,
+    contents =  {
+        distributepercent = .4,
+        distributeprefabs=
+        {
+			lava_pond_cave = 0.1,
+			magmarock1 = 0.025,
+			mushtree_shadow = 0.025,
+			pyrethicket_builder = 0.5,
+			fyriterock = 0.05,
+			um_pyrite_ceiling = 0.025,
+        },
+    }
+})
+
+
 AddRoom("ShroomyMagma", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
     value = WORLD_TILES.UM_MAGMA,

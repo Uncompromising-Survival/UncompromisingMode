@@ -100,7 +100,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         end
     end
 
-    local butterflies = {"butterfly","um_buttery_fly"}
+    local butterflies = {"butterfly","um_buttery_fly","moonbutterfly"}
     for i,v in ipairs(butterflies) do
         env.AddPrefabPostInit(v, function(inst)
             if not TheWorld.ismastersim then
@@ -109,7 +109,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
 
 			inst.SlipAway = SlipAway
 
-            inst:AddComponent("playerprox")
             inst:DoPeriodicTask(2, CheckForNearbyBozos)
             
             

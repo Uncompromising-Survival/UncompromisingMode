@@ -34,6 +34,7 @@ AddRoom("GiantTrees",
 				hoodedtrapdoor = 0.05,
 				lightrays_canopy = 0.05,
 				um_bear_trap_old = 0.1,
+				um_fern_fox_den = 0.015,
 			},
             countprefabs =
             {
@@ -134,6 +135,7 @@ AddRoom("HoodedEntrance",
 				lightrays_canopy = 0.01,
 				um_bear_trap_old = 0.1,
 				hoodedtrapdoor = 0.05,
+				um_fern_fox_den = 0.015,
 			},
             countprefabs =
             {
@@ -186,6 +188,7 @@ AddRoom("WalrusGiantTrees",
 				green_mushroom = 0.05,
 				hoodedtrapdoor = 0.2,
 				lightrays_canopy = 0.25,
+				um_fern_fox_den = 0.015,
 			},
             countprefabs =
             {
@@ -218,6 +221,7 @@ AddRoom("BGGiantTrees",
 				lightrays_canopy = 0.25,
 				um_bear_trap_old = 0.1,
 				hoodedtrapdoor = 0.05,
+				um_fern_fox_den = 0.015,
 			},
 			countprefabs =
 			{
@@ -231,7 +235,7 @@ AddRoom("BGGiantTrees",
         }
 
     })
-AddRoom("SnapDragons",
+AddRoom("FoxGathering",
     {
         colour = { r = 1, g = 1, b = 1, a = .50 },
         value = WORLD_TILES.UM_HOODED_FOREST,
@@ -242,7 +246,7 @@ AddRoom("SnapDragons",
             countprefabs =
             {
 				thicket_builder = function() return math.random(2,3) end,
-                snapdragon = function() return 1 + math.random(3, 4) end,
+                um_fern_fox_den = function() return 1 + math.random(2, 3) end,
                 extracanopyspawner = 4,
 				hoodedtrapdoor = function() return math.random (3,4) end,
             },

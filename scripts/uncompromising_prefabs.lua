@@ -602,6 +602,9 @@ local prefabs = {
 	"um_spongeplant",
 	--"um_swiss_sponge",
 	"wathgrithr_shield_dreadstone",
+	"um_gemologyforge",
+	"um_moss",
+	"um_fern_fox",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

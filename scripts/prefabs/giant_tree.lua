@@ -132,7 +132,7 @@ local felloots =
     feather = 0.5,
     spider = 0.01,
     frog = 0.05,
-    giant_tree_birdnest = 0.025,
+    --giant_tree_birdnest = 0.025,
 }
 local infestedloots =
 {
@@ -358,41 +358,6 @@ local function SpawnDebris(inst, chopper, loottable,loc_override,force_shatter)
         end)
     end
 end
------------------------------
-
-
------------------------------Infest Handlers
-local function InfestMe(inst)
-    inst:AddTag("infestedtree")
-    inst:AddComponent("childspawner")
-    inst.components.childspawner.childname = "aphid"
-    inst.components.childspawner:SetRegenPeriod(TUNING.SPIDERDEN_REGEN_TIME)
-    inst.components.childspawner:SetSpawnPeriod(TUNING.SPIDERDEN_RELEASE_TIME)
-    inst.components.childspawner.allowboats = true
-    inst.infested = true
-    inst:PickBuild(inst)
-end
-
-local function UnInfestMe(inst)
-    inst:RemoveTag("infestedtree")
-    inst:RemoveComponent("childspawner")
-    inst.infested = false
-    inst:PickBuild(inst)
-end
-
-local function InfestedInit(inst)
-    if inst.infested then
-        inst:AddTag("infestedtree")
-        inst:AddComponent("childspawner")
-        inst.components.childspawner.childname = "aphid"
-        inst.components.childspawner:SetRegenPeriod(TUNING.SPIDERDEN_REGEN_TIME)
-        inst.components.childspawner:SetSpawnPeriod(TUNING.SPIDERDEN_RELEASE_TIME)
-        inst.components.childspawner.allowboats = true
-    else
-        inst.infested = false
-    end
-end
------------------------------
 
 -----------------------------Workable handling
 local function on_chop(inst, chopper, remaining_chops)
@@ -447,6 +412,28 @@ local function BringTheForestDown(inst, chopper)
     end
 end
 
+local function OnShaved(inst, shaver, shave_item)
+    inst.SoundEmitter:PlaySound("dontstarve/wilson/pickup_lichen")
+    inst.components.shaveable.prize_count = 0
+    if not inst.components.timer:TimerExists("remoss") then
+        inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME * 3)
+    end
+	inst.AnimState:PlayAnimation("idle")
+end
+
+local function CanShave(inst, shaver, shave_item)
+    return inst.components.shaveable.prize_count > 0
+end
+
+local function TryAddShaveable(inst)
+	if not inst.components.shaveable then
+		inst:AddComponent("shaveable")
+		inst.components.shaveable:SetPrize("um_moss", 1)
+		inst.components.shaveable.can_shave_test = CanShave
+		inst.components.shaveable.on_shaved = OnShaved
+	end
+end
+
 local function on_chopped_down(inst, chopper)
     if chopper:HasTag("epic") or chopper:HasTag("antlion_sinkhole") then
         inst:AddComponent("workable")
@@ -458,6 +445,7 @@ local function on_chopped_down(inst, chopper)
 			inst.AnimState:PlayAnimation("idle")
 		else
 			inst.AnimState:PlayAnimation("idle_moss_full")
+			TryAddShaveable(inst)
 		end
     else
         inst.previouschops = 0
@@ -465,95 +453,18 @@ local function on_chopped_down(inst, chopper)
         inst.SoundEmitter:PlaySound("dontstarve/forest/appear_wood")
         inst.SoundEmitter:PlaySound("dontstarve/forest/treeCrumble", nil, .4)
         inst:RemoveComponent("workable")
-        BringTheForestDown(inst, chopper) --!
-        if inst:HasTag("infestedtree") then
-            UnInfestMe(inst)
-            inst:RemoveComponent("workable")
-        end
-        --inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
+        BringTheForestDown(inst, chopper)
+		
+        if inst.components.shaveable then -- remove shaveable
+			inst:RemoveComponent("shaveable")
+		end
 		
         inst.AnimState:PlayAnimation("idle_damaged")
-        inst.components.timer:StartTimer("regrow", 3840)
-        -- if inst.mossy then
-            -- inst.HideAllMoss(inst, true)
-        -- else
-            -- inst.HideAllMoss(inst)
-        -- end
+        inst.components.timer:StartTimer("regrow", TUNING.TOTAL_DAY_TIME*3)
         if inst.components.timer:TimerExists("remoss") then
             inst.components.timer:StopTimer("remoss")
         end
-        inst.components.timer:StartTimer("remoss", 4800) --10 days to regrow moss
-    end
-end
------------------------------
-
-
------------------------------Spawner Handling
-local function StartSpawning(inst)
-    if inst.components.childspawner then
-        inst.components.childspawner:StartSpawning()
-    end
-end
-
-local function StopSpawning(inst)
-    if inst.components.childspawner ~= nil then
-        inst.components.childspawner:StopSpawning()
-    end
-end
-
-local function OnIsNight(inst, isnight)
-    if isnight then
-        StopSpawning(inst)
-    else
-        StartSpawning(inst)
-    end
-end
-
-local function SpawnerInit(inst)
-    inst:WatchWorldState("isnight", OnIsNight)
-    OnIsNight(inst, TheWorld.state.isnight)
-end
------------------------------
-
-
------------------------------ Animation Handling
-
-
-local mosses = {
-    "mossa",
-    "mossb",
-    "mossc",
-    "mossd",
-    "mosse",
-    "mossf",
-    "mossg",
-    "mossh",
-    "mossi",
-}
-
-local function HideAllMoss(inst, poof) --Depricated
-    --TheNet:Announce("inst.mossy is false")
-    for i, moss in ipairs(mosses) do
-        if poof then
-            local pine = SpawnPrefab("pine_needles_chop")
-            pine.entity:AddFollower()
-            pine.Follower:FollowSymbol(inst.GUID, moss, 0, 0, 0)
-        end
-        inst.AnimState:HideSymbol(moss)
-    end
-end
-
-local function ShowAllMoss(inst, poof)
-    --TheNet:Announce("inst.mossy is true")
-    inst.mossy = true
-	inst.AnimState:PlayAnimation("idle_moss_full")
-    for i, moss in ipairs(mosses) do
-        if poof then
-            local pine = SpawnPrefab("pine_needles_chop")
-            pine.entity:AddFollower()
-            pine.Follower:FollowSymbol(inst.GUID, moss, 0, 0, 0)
-        end
-        inst.AnimState:ShowSymbol(moss)
+        inst.components.timer:StartTimer("remoss",  TUNING.TOTAL_DAY_TIME*5)
     end
 end
 
@@ -567,10 +478,12 @@ local function PickType(inst)
     if math.random() > 0.9 then
 		inst.mossy = true
 		inst.AnimState:PlayAnimation("idle_moss_full")
-        --ShowAllMoss(inst, false)
+		TryAddShaveable(inst)
     else
-        inst.components.timer:StartTimer("remoss", 3000 + math.random(1000, 4000))
-        --HideAllMoss(inst, false)
+        inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME*5)
+		if inst.components.shaveable then
+			inst:RemoveComponent("shaveable")
+		end
     end
 end
 
@@ -579,6 +492,7 @@ local function AnimNext(inst)
 		if inst.components.timer:TimerExists("remoss") then
 			inst.AnimState:PlayAnimation("idle")
 		else
+			TryAddShaveable(inst)
 			inst.AnimState:PlayAnimation("idle_moss_full")
 		end
     else
@@ -590,20 +504,12 @@ end
 local function PickBuild(inst)
     --local bank
    if inst.stretchx then
-        -- bank = "giant_tree" .. inst.bankType
-        -- if inst.components.workable then
-            -- bank = "giant_tree" .. inst.bankType
-        -- else
-            -- bank = "giant_tree" .. inst.bankType .. "_damaged"
-        -- end
-        -- if inst.infested then
-            -- bank = bank .. "_sick"
-        -- end
         inst.AnimState:SetBank("um_hoodedtree")
         inst.AnimState:SetBuild("um_hoodedtree")
 		if inst.components.timer:TimerExists("remoss") then
 			inst.AnimState:PlayAnimation("idle")
 		else
+			TryAddShaveable(inst)
 			inst.AnimState:PlayAnimation("idle_moss_full")
 		end
         local mult = 1
@@ -634,7 +540,12 @@ local function Regrow(inst, data)
         PickBuild(inst)
     end
     if data.name == "remoss" then
-        ShowAllMoss(inst, true)
+		if inst.components.workable then
+			inst.AnimState:PlayAnimation("idle_moss_full")
+			TryAddShaveable(inst)
+		else
+			inst.components.timer:StartTimer("remoss",TUNING.TOTAL_DAY_TIME*3) -- Tree isn't regrown yet, wait to regrow moss
+		end
     end
 end
 -----------------------------
@@ -650,7 +561,6 @@ local function onsave(inst, data)
     if inst.reverse then
         data.reverse = inst.reverse
     end
-    data.mossy = inst.mossy
 end
 
 local function onload(inst, data)
@@ -671,15 +581,6 @@ local function onload(inst, data)
         if data.stretchx then
             inst.stretchx = data.stretchx
         end
-        -- if data.stretchy then
-            -- inst.stretchy = data.stretchy
-        -- end
-        -- if data.mossy then
-            -- inst.mossy = data.mossy
-            -- ShowAllMoss(inst)
-        -- else
-            -- HideAllMoss(inst)
-        -- end
     else
         inst.previouschops = 25
     end
@@ -752,9 +653,6 @@ local function giant_treefn()
     inst.components.lightningblocker:SetBlockRange(TUNING.SHADE_CANOPY_RANGE_SMALL)
     inst.components.lightningblocker:SetOnLightningStrike(OnLightningStrike)
 
-    inst:DoTaskInTime(0, SpawnerInit)
-    inst:DoTaskInTime(0, InfestedInit)
-    inst.InfestMe = InfestMe
     inst.PickBuild = PickBuild
     --inst.HideAllMoss = HideAllMoss
     inst:DoTaskInTime(math.random(0, 0.1), function(inst) --Keep giant trees spaced out
