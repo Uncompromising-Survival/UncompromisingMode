@@ -632,3 +632,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I remember this being easier...",
     "It might be easier to hit if it's landed."}
 
 DESCRIBE.WATHOM_CORPSE = "Time, Wathom? Is it really that time again?"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It protects well for the time being."
