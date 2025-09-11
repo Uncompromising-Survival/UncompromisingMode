@@ -277,7 +277,7 @@ local um_preparedfoods =
     stuffed_peeper_poppers =
     {
         test = function(cooker, names, tags)
-            return (names.milkywhites) and (tags.monster and tags.monster >= 2) and
+            return (names.milkywhites) and (tags.monster and tags.monster >= 2) and tags.meat and
                 (names.durian or names.durian_cooked) and not tags.inedible
         end,
         hunger = 37.5,
@@ -287,8 +287,10 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 1.8,
         foodtype = FOODTYPE.MEAT,
+        secondaryfoodtype = FOODTYPE.MONSTER,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         floater = { "med", nil, 0.65 },
+        tags = { "monstermeat" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS,
         oneatenfn = function(inst, eater)
             local function SpawnEyes(inst, eater)
