@@ -5,30 +5,56 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 
 	env.AddPrefabPostInit("green_mushroom", function(inst)
 
+		inst._opentaskfn = inst.opentaskfn
+		inst.opentaskfn = function()
+			inst:AddTag("groundmushroom")
+			inst._opentaskfn()
+		end
+		inst._closetaskfn = inst.closetaskfn
+		inst.closetaskfn = function()
+			inst:RemoveTag("groundmushroom")
+			inst._closetaskfn()
+		end
+
 		inst:RemoveComponent("lootdropper")
 		inst:RemoveComponent("workable")
-	
+
 		inst:AddComponent("lootdropper")
-		inst:AddComponent("workable")	
+		inst:AddComponent("workable")
 		inst.components.workable:SetWorkAction(ACTIONS.DIG)
 		inst.components.workable:SetOnFinishCallback(function(inst, chopper)
 			if inst.components.pickable ~= nil and inst.components.pickable:CanBePicked() then
 				inst.components.lootdropper:SpawnLootPrefab("green_cap")
 			end
-		
+
 			local spore = SpawnPrefab("spore_small")
 			spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
-			spore.AnimState:PlayAnimation("flight_cycle")	
+			spore.AnimState:PlayAnimation("flight_cycle")
 			inst:Remove()
 		end)
-		inst.components.workable:SetWorkLeft(1)	
+		inst.components.workable:SetWorkLeft(1)
+		inst._open_time = inst.data.open_time
+		if inst._open_time == TheWorld.state.cavephase then
+        	inst:AddTag("groundmushroom")
+    	end
 	end)
 
 	env.AddPrefabPostInit("red_mushroom", function(inst)
 
+		inst._opentaskfn = inst.opentaskfn
+		inst.opentaskfn = function()
+			inst:AddTag("groundmushroom")
+			inst._opentaskfn()
+		end
+		inst._closetaskfn = inst.closetaskfn
+		inst.closetaskfn = function()
+			inst:RemoveTag("groundmushroom")
+			inst._closetaskfn()
+		end
+
 		inst:RemoveComponent("lootdropper")
 		inst:RemoveComponent("workable")
-	
+
 		inst:AddComponent("lootdropper")
 		inst:AddComponent("workable")	
 		inst.components.workable:SetWorkAction(ACTIONS.DIG)
@@ -42,10 +68,25 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			spore.AnimState:PlayAnimation("flight_cycle")
 			inst:Remove()
 		end)
-		inst.components.workable:SetWorkLeft(1)	
+		inst.components.workable:SetWorkLeft(1)
+		inst._open_time = inst.data.open_time
+		if inst._open_time == TheWorld.state.cavephase then
+        	inst:AddTag("groundmushroom")
+    	end
 	end)
 
 	env.AddPrefabPostInit("blue_mushroom", function(inst)
+
+		inst._opentaskfn = inst.opentaskfn
+		inst.opentaskfn = function()
+			inst:AddTag("groundmushroom")
+			inst._opentaskfn()
+		end
+		inst._closetaskfn = inst.closetaskfn
+		inst.closetaskfn = function()
+			inst:RemoveTag("groundmushroom")
+			inst._closetaskfn()
+		end
 
 		inst:RemoveComponent("lootdropper")
 		inst:RemoveComponent("workable")
@@ -63,7 +104,11 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			spore.AnimState:PlayAnimation("flight_cycle")
 			inst:Remove()
 		end)
-		inst.components.workable:SetWorkLeft(1)	
+		inst.components.workable:SetWorkLeft(1)
+		inst._open_time = inst.data.open_time
+		if inst._open_time == TheWorld.state.cavephase then
+        	inst:AddTag("groundmushroom")
+    	end
 	end)
 end
 
@@ -82,7 +127,7 @@ env.AddPrefabPostInit("red_cap", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("red_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -93,7 +138,7 @@ env.AddPrefabPostInit("blue_cap", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("blue_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -107,7 +152,7 @@ env.AddPrefabPostInit("green_chunk", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("green_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -118,7 +163,7 @@ env.AddPrefabPostInit("red_chunk", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("red_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -129,7 +174,7 @@ env.AddPrefabPostInit("blue_chunk", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("blue_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -140,7 +185,7 @@ env.AddPrefabPostInit("green_chunk_bloom", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("green_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -151,7 +196,7 @@ env.AddPrefabPostInit("red_chunk_bloom", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("red_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -162,7 +207,7 @@ env.AddPrefabPostInit("blue_chunk_bloom", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("blue_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -176,7 +221,7 @@ env.AddPrefabPostInit("spore_small", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("green_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -187,7 +232,7 @@ env.AddPrefabPostInit("spore_medium", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("red_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
@@ -198,7 +243,7 @@ env.AddPrefabPostInit("spore_tall", function(inst)
 
 	inst:AddTag("mushroom_fuel")
 	inst:AddTag("blue_mushroom_fuel")
-	
+
 	if not TheWorld.ismastersim then
 		return
 	end
