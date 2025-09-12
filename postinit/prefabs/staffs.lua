@@ -559,7 +559,7 @@ local function SpikeWaves(inst, target, attacker, angle)
                 local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
                     if  v ~= inst and v.components.combat ~= nil and attacker.components.combat ~= nil and attacker.components.combat:IsValidTarget(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 17.5 })
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 8.5 })
                     end
                 end
             end)
@@ -591,28 +591,31 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
     end
 
     local _OnAttack = weapon and weapon.onattack
-    local function OnAttack(inst, attacker, target, skipsanity, ...)
-        if attacker:HasTag("wathom") then
-            local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
+    local function addwathom_staff_lunarplant(inst)--code from "吃西瓜", developer of "uncompromising patch"!
+        local function OnAttack(inst, attacker, target, skipsanity, ...)
+            if attacker:HasTag("wathom") then
+                inst.components.weapon:SetProjectile(nil)
+                local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
 
-            for angle = -20, 20, 4 do
-                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 34})
-            end
-            inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
+                for angle = -20, 20, 4 do
+                    SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
+                    if target and target.components.combat then 
+                        target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
+                    end
+                end
+                inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
 
-            if ret then
-                return ret
+                if ret then
+                    return ret
+                end
+            else
+                inst.components.weapon:SetProjectile("brilliance_projectile_fx")
+                return _OnAttack(inst, attacker, target, skipsanity, ...)
             end
         end
-        if _OnAttack then
-            return _OnAttack(inst, attacker, target, skipsanity, ...)
-        end
+        if inst.components.weapon then inst.components.weapon:SetOnAttack(OnAttack) end
     end
-    if weapon then
-        weapon:SetOnAttack(OnAttack)
-    end
-
+    addwathom_staff_lunarplant(inst)
     if forgerepairable then
         local _OnRepaired = forgerepairable.onrepaired
         local function OnRepaired(inst, ...)
@@ -622,9 +625,7 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
             if inst.components.equippable then
                 inst.components.equippable:SetOnEquip(OnEquip)
             end
-            if inst.components.weapon then
-                inst.components.weapon:SetOnAttack(OnAttack)
-            end
+            addwathom_staff_lunarplant(inst)
         end
         forgerepairable:SetOnRepaired(OnRepaired)
     end

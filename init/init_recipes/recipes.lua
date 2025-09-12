@@ -370,6 +370,7 @@ AddDeconstructRecipe("gore_horn_hat", { Ingredient("nightmarefuel", 10) })
 AddDeconstructRecipe("crabclaw", { Ingredient("meat", 1), Ingredient("rocks", 6) })
 AddDeconstructRecipe("slobberlobber", { Ingredient("meat", 1), Ingredient("dragon_scales", 1) })
 AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("royal_jelly", 2) })
+AddDeconstructRecipe("um_beegun_cherry", { Ingredient("cherry_honeycomb", 6), Ingredient("royal_jelly", 4) })
 AddDeconstructRecipe("silksack", { Ingredient("silk", 6), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
 AddDeconstructRecipe("um_moonfly_lantern", { Ingredient("moonglass", 3), Ingredient("moonglass_charged", 3), Ingredient("moonrocknugget", 4) }) --temp moon rocks.
 AddDeconstructRecipe("um_wingsuit", { Ingredient("malbatross_feather", 6) })

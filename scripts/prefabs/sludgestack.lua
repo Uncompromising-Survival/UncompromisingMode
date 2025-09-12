@@ -153,6 +153,7 @@ local function OnEntityWake(inst)
     if inst.explode_when_loaded then
         DoLootExplosion(inst)
     end
+    inst.explode_when_loaded = false
 end
 
 local function OnSave(inst, data)
@@ -176,6 +177,9 @@ local function OnLoad(inst, data)
 
         if data.picked then
             OnPicked(inst)
+        end
+        if inst.components.pickable.canbepicked == false and inst.components.timer:TimerExists("pop_cork") then
+            inst.AnimState:PushAnimation("idle_corked", true)
         end
     end
     inst:AddTag("SLUDGE_CORK_upgradeable") -- GOD DAMNIT KEEP THE DAMN TAG!!!
