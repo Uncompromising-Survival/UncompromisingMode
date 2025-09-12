@@ -17,7 +17,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     TOPHAT = "- Reduces sanity loss from various magic items.",
     MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
-    GLASSCUTTER = "- Deals more damage to Shadow Aligned Creatures.",
+    GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
     ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
@@ -91,7 +91,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
-    UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit."
+    UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
+    RUINS_BAT = "- Spawns Shadow Tentacles every 4 hits.\n- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
+    UM_ICE_SICLE = "- Freezes enemies. \n-Lowers temperature on reaping and even more on attacking.",
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
