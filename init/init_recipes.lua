@@ -792,7 +792,7 @@ ChangeSortKey("brine_balm", "floral_bandage", "RESTORATION", true)
 AddRecipe2(
     "sludge_cork",
     { Ingredient("driftwood_log", 2), Ingredient("rope", 2) },
-    TECH.SCIENCE_ONE,
+    TECH.NONE,
     nil,
     { "TOOLS", "SEAFARING" }
 )
@@ -843,23 +843,35 @@ if GetModConfigData("monstersmallmeat") then
     ChangeSortKey("transmute_monstersmallmeat", "transmute_smallmeat", "CHARACTER", true)
 end
 
--- deconstruct recipes
-AddDeconstructRecipe("cursed_antler", { Ingredient("boneshard", 8), Ingredient("nightmarefuel", 2) })
-AddDeconstructRecipe("beargerclaw", { Ingredient("boneshard", 4), Ingredient("furtuft", 8) })
+--Deconstruct Recipes
+AddDeconstructRecipe("widowshead", { Ingredient("silk", 4), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
+AddDeconstructRecipe("widowsgrasp", { Ingredient("monstermeat", 2) })
+AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })
+AddDeconstructRecipe("rain_horn", { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) })
+AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2), Ingredient("barnacle", 1) })
+AddDeconstructRecipe("staff_moonfall", { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
+--AddDeconstructRecipe("rimeweed_whip", { Ingredient("um_rimeweed_itemvine", 6) })
+--AddDeconstructRecipe("snaildrakehat", { Ingredient("slurtle_shellpieces", 3) })
+--AddDeconstructRecipe("snaildrakebucket", { Ingredient("slurtle_shellpieces", 3) })
+AddDeconstructRecipe("slurtlehat", { Ingredient("slurtle_shellpieces", 3) })
+AddDeconstructRecipe("armorsnurtleshell", { Ingredient("slurtle_shellpieces", 3) })
+--AddDeconstructRecipe("snappy_jaw", { Ingredient("flint", 3), Ingredient("rope", 1), Ingredient("houndstooth", 3) })
+AddDeconstructRecipe("pied_piper_flute", { Ingredient("twigs", 3), Ingredient("goldnugget", 1) })
+AddDeconstructRecipe("skullflask", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 6), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("skullflask_empty", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 1), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("corvushat", { Ingredient("silk", 6), Ingredient("feather_robin", 2), Ingredient("seeds", 1) }) --:)
+
+--Vet Curse Deconstruct Recipes
+AddDeconstructRecipe("cursed_antler", { Ingredient("boneshard", 8) })
+AddDeconstructRecipe("beargerclaw", { Ingredient("boneshard", 4), Ingredient("furtuft", 10) })
 AddDeconstructRecipe("klaus_amulet", { Ingredient("goldnugget", 4), Ingredient("nightmarefuel", 6) })
 AddDeconstructRecipe("feather_frock", { Ingredient("goose_feather", 6) })
-AddDeconstructRecipe("gore_horn_hat", { Ingredient("meat", 2), Ingredient("nightmarefuel", 4) })
-AddDeconstructRecipe("crabclaw", { Ingredient("rocks", 4), Ingredient("cutstone", 1) })
-AddDeconstructRecipe("slobberlobber", { Ingredient("dragon_scales", 1), Ingredient("meat", 1) })
+AddDeconstructRecipe("gore_horn_hat", { Ingredient("nightmarefuel", 10) })
+AddDeconstructRecipe("crabclaw", { Ingredient("meat", 1), Ingredient("rocks", 6) })
+AddDeconstructRecipe("slobberlobber", { Ingredient("meat", 1), Ingredient("dragon_scales", 1) })
 AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("royal_jelly", 2) })
-
-AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })
-AddDeconstructRecipe(
-    "rain_horn",
-    { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) }
-)
-AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2) })
-AddDeconstructRecipe("staff_moonfall", { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
+AddDeconstructRecipe("um_beegun_cherry", { Ingredient("cherry_honeycomb", 6), Ingredient("royal_jelly", 4) })
+--AddDeconstructRecipe("silksack", { Ingredient("silk", 6), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
 
 ----deconstruct recipes for craftable items
 --AddDeconstructRecipe("steeringwheel_copper", { Ingredient("um_copper_pipe", 3), Ingredient("gears", 1) })
