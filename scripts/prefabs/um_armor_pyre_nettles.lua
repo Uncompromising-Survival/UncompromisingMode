@@ -7,6 +7,7 @@ local prefabs = {
 local DebuffDuration = 6 -- Length of Pyre Toxin on struck target; 6 is the debuff's default.
 local DebuffDurationBonus = 10
 local DebuffDurationWearer = 3
+--local task
 
 
 local function OnBlocked(owner, data, inst)
@@ -17,16 +18,11 @@ local function OnBlocked(owner, data, inst)
         and not data.attacker:HasTag("thorny")
         and not data.attacker:HasTag("HASHEATER") -- Prevents any damage to the armor from nearby fires and lava.
     then
-        if owner:IsValid()
-            and not owner:HasTag("INLIMBO")
-            and not owner:HasTag("noattack")
-        then
+        if owner:IsValid() and not owner:HasAnyTag("INLIMBO", "noattack") then
             owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer)
         end
 
-        if data.attacker:IsValid()
-            and not data.attacker:HasTag("INLIMBO")
-            and not data.attacker:HasTag("noattack")
+        if data.attacker:IsValid() and not data.attacker:HasAnyTag("INLIMBO", "noattack")
             and (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil))
         then
             data.attacker:AddDebuff("umdebuff_pyre_toxin_armor", "umdebuff_pyre_toxin", DebuffDuration)
@@ -56,12 +52,25 @@ local function OnAttackOther(owner, data, inst)
         inst._hitcount = inst._hitcount + 1
 
         if inst._hitcount >= TUNING.WORMWOOD_ARMOR_BRAMBLE_RELEASE_SPIKES_HITCOUNT then
-            if data ~= nil and data.target ~= nil
+            if inst._hitcount then
+		        inst._hitcount = 0
+	        end
+            if data and data.target
                 and data.target:IsValid()
                 and not data.target:HasTag("INLIMBO")
                 and not data.target:HasTag("noattack")
             then
                 data.target:AddDebuff("umdebuff_pyre_toxin_armor_bonus_" .. math.random(100), "umdebuff_pyre_toxin", DebuffDuration)
+            end
+            --inst._cdtask = inst:DoTaskInTime(.3, OnCooldown)
+            local x,y,z = owner.Transform:GetWorldPosition()
+            local fx = SpawnPrefab("deer_fire_burst")
+			fx.Transform:SetPosition(x,y,z)
+            --SpawnPrefab("bramblefx_armor"):SetFXOwner(owner) --All spike FXs deal damage, for some reason.
+
+            if owner.SoundEmitter then
+                owner.SoundEmitter:PlaySound("dontstarve/wilson/fireball_explo", nil, .5)
+                owner.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
             end
         end
     end
@@ -131,13 +140,16 @@ local function OnEquip(inst, owner)
     inst.bump_task = inst:DoPeriodicTask((FRAMES * 3), inst._bumpcheck, FRAMES * 1, owner)
 
     -- Debuff wearer when equipped.
-    if owner:IsValid()
-        and not owner:HasTag("INLIMBO")
-        and not owner:HasTag("noattack")
-    then
+    if owner:IsValid() and not owner:HasAnyTag("INLIMBO", "noattack") then
+        inst.components.perishable:ReducePercent(0.05) -- 20 equips to fully spoil, to stop winter cheese, I think. -C
         owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer)
-        inst.components.perishable:ReducePercent(0.05)
-    end
+       --[[ if not TheWorld.state.iswinter then
+            task = owner:DoPeriodicTask(12, function() --Code from "吃西瓜", developer of "uncompromising patch"!
+                owner:AddDebuff("umdebuff_pyre_toxin_armor_wearer", "umdebuff_pyre_toxin", DebuffDurationWearer) 
+            end, 12) -- I didn't do this because I haven't heard much talk about this item.
+        end]] -- Also, the Pyre Mantle is supposed to help deal with Pyre Nettles' Toxins and help deal with threats from a new biome UM is adding in the next update.
+    end -- I am okay with discussing on how to nerf the mantle if it's truly overpowered. But I am unsure if overheating the player is the right move.
+
 
     -- Wormwood's Bramble Husk skill also works on this armor.
     inst._hitcount = 0
@@ -173,6 +185,12 @@ local function OnUnequip(inst, owner)
     -- Remove the interraction with Wormwood's Bramble Husk skill.
     inst:RemoveEventCallback("onattackother", inst._onattackother, owner)
     inst._hitcount = nil
+
+    --[[if task then
+        task:Cancel()
+    else
+        return
+     end]]
 end
 
 
