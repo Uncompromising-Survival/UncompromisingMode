@@ -588,8 +588,8 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
         end
         if inst.components.equippable then inst.components.equippable:SetOnEquip(OnEquip) end
         local function OnAttack(inst, attacker, target, skipsanity, ...)
+            local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
             if attacker:HasTag("wathom") then
-                local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
                 for angle = -20, 20, 4 do
                     SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
                     if target and target.components.combat then 
@@ -597,9 +597,8 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
                     end
                 end
                 inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
-                return ret
             end
-            return _OnAttack(inst, attacker, target, skipsanity, ...)
+            return ret
         end
         if inst.components.weapon then inst.components.weapon:SetOnAttack(OnAttack) end
     end
