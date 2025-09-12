@@ -559,7 +559,7 @@ local function SpikeWaves(inst, target, attacker, angle)
                 local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
                     if  v ~= inst and v.components.combat ~= nil and attacker.components.combat ~= nil and attacker.components.combat:IsValidTarget(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = .5 })
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 8.5 })
                     end
                 end
             end)
