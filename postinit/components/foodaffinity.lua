@@ -138,6 +138,7 @@ AddPrefabPostInit("wurt", function(inst)
     inst.components.foodaffinity.favorite_foods = {
 		["durian"] = 15,
 		["durian_cooked"] = 15,
+        ["um_durian_cream_marshcake"] = 15,
     }
 end)
 

@@ -210,6 +210,7 @@ if TUNING.DSTU.WAXWELL then
     modimport("init/init_character_changes/waxwell")
 end
 modimport("init/init_character_changes/walter")
+modimport("init/init_character_changes/wurt")
 modimport("init/lagcomp_warning")
 
 if GetModConfigData("hardcore") then
