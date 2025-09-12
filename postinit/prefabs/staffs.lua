@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 -----------------------------------------------------------------
 
 env.AddPrefabPostInit("icestaff", function(inst)
@@ -277,16 +278,16 @@ if env.GetModConfigData("telestaff_rework") then
             spell.target_focus = v
 
             local skin = spell.target_focus.AnimState:GetBuild()
-            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or "images/tele_icon1.xml"
+            spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3.xml" or skin == "telebase_crystal" and "images/tele_icon2.xml" or skin == "telebase_mystical" and "images/tele_icon5.xml" or "images/tele_icon1.xml"
 
-            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or "tele_icon1.tex"
+            spell.normal = skin == "telebase_hallowpylon" and "tele_icon3.tex" or skin == "telebase_crystal" and "tele_icon2.tex" or skin == "telebase_mystical" and "tele_icon5.tex" or "tele_icon1.tex"
 
             if spell.target_focus == inst.target_focus then
                 -- spell.widget_scale = ICON_SCALE * 2
 
-                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or "images/tele_icon1b.xml"
+                spell.atlas = skin == "telebase_hallowpylon" and "images/tele_icon3b.xml" or skin == "telebase_crystal" and "images/tele_icon2b.xml" or skin == "telebase_mystical" and "images/tele_icon5b.xml" or "images/tele_icon1b.xml"
 
-                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or "tele_icon1b.tex"
+                spell.normal = skin == "telebase_hallowpylon" and "tele_icon3b.tex" or skin == "telebase_crystal" and "tele_icon2b.tex" or skin == "telebase_mystical" and "tele_icon5b.tex" or "tele_icon1b.tex"
             end
 
             if spell.target_focus.spell_location ~= nil then
@@ -533,8 +534,6 @@ if env.GetModConfigData("telestaff_rework") then
     end)
 end
 
-
-
 local function SpikeWaves(inst, target, attacker, angle)
     local target_index = {}
     local ix, iy, iz = inst.Transform:GetWorldPosition()
@@ -560,7 +559,7 @@ local function SpikeWaves(inst, target, attacker, angle)
                 local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
                     if  v ~= inst and v.components.combat ~= nil and attacker.components.combat ~= nil and attacker.components.combat:IsValidTarget(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 17.5 })
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = .5 })
                     end
                 end
             end)
@@ -572,25 +571,62 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    local _onattack = inst.components.weapon.onattack
 
-    local function OnAttack(inst, attacker, target, skipsanity)
-        if attacker:HasTag("wathom") then
-            inst.components.weapon:SetProjectile(nil)
-            local ret = _onattack(inst, attacker, target, skipsanity)
+    local equippable = inst.components.equippable
+    local weapon = inst.components.weapon
+    local forgerepairable = inst.components.forgerepairable
 
-            for angle = -20, 20, 4 do
-                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                target.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 34 })
-            end
-            inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
-
-            return ret
-        else
-            inst.components.weapon:SetProjectile("brilliance_projectile_fx")
-            return _onattack(inst, attacker, target, skipsanity)
+    local _OnEquip = equippable and equippable.onequipfn
+    local function OnEquip(inst, owner, ...)
+        if _OnEquip then
+            _OnEquip(inst, owner, ...)
+        end
+        local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
+        if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
+            inst.components.weapon:SetProjectile(projectile)
         end
     end
+    if equippable then
+        equippable:SetOnEquip(OnEquip)
+    end
 
-    inst.components.weapon:SetOnAttack(OnAttack)
+    local _OnAttack = weapon and weapon.onattack
+    local function addwathom_staff_lunarplant(inst)--code from "吃西瓜", developer of "uncompromising patch"!
+        local function OnAttack(inst, attacker, target, skipsanity, ...)
+            if attacker:HasTag("wathom") then
+                inst.components.weapon:SetProjectile(nil)
+                local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
+
+                for angle = -20, 20, 4 do
+                    SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
+                    if target and target.components.combat then 
+                        target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
+                    end
+                end
+                inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
+
+                if ret then
+                    return ret
+                end
+            else
+                inst.components.weapon:SetProjectile("brilliance_projectile_fx")
+                return _OnAttack(inst, attacker, target, skipsanity, ...)
+            end
+        end
+        if inst.components.weapon then inst.components.weapon:SetOnAttack(OnAttack) end
+    end
+    addwathom_staff_lunarplant(inst)
+    if forgerepairable then
+        local _OnRepaired = forgerepairable.onrepaired
+        local function OnRepaired(inst, ...)
+			if _OnRepaired then
+				_OnRepaired(inst, ...)
+			end
+            if inst.components.equippable then
+                inst.components.equippable:SetOnEquip(OnEquip)
+            end
+            addwathom_staff_lunarplant(inst)
+        end
+        forgerepairable:SetOnRepaired(OnRepaired)
+    end
 end)
