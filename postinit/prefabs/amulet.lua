@@ -162,7 +162,9 @@ local function OrangeAmuletPostInit(inst)
         "lureplant",
         "waterplant",
         "oceanvine",
-        "lichen"
+        "lichen",
+        "groundmushroom", --Idea from "吃西瓜", developer of "uncompromising patch"!
+        "sludgestack",
     }
     local ORANGE_PICKUP_CANT_TAGS = {
         "INLIMBO",
@@ -173,7 +175,8 @@ local function OrangeAmuletPostInit(inst)
         "minesprung",
         "mineactive",
         "irreplaceable",
-        "moonglass_geode"
+        "moonglass_geode",
+        "spider",
     }
 
     local function pickup_UM(inst, owner)
