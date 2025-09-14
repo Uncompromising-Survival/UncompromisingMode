@@ -167,8 +167,15 @@ local function OnParry(inst, doer, attacker, damage)
         inst._bonusdamage = math.clamp(damage * scale, tuning.min, tuning.max)
     end
 
+    local x, y, z = doer.Transform:GetWorldPosition()
+    local fx = SpawnPrefab("willow_shadow_fire_explode")
+    if fx then
+        fx.Transform:SetPosition(x, y, z)
+    end
+
     if attacker.components.hauntable ~= nil and attacker.components.hauntable.panicable then
         attacker.components.hauntable:Panic(TUNING.DSTU.WATHGRITHR_SHIELD_DREADSTONE_PANIC_TIME)
+
         AddEnemyDebuffFx("battlesong_instant_panic_fx", attacker)
     end
 
