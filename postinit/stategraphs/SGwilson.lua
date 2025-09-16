@@ -2449,11 +2449,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
-                    end
-                end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx}) end end),
             },
 
             onexit = function(inst)
