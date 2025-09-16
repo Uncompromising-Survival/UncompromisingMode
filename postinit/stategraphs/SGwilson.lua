@@ -2468,61 +2468,21 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
-
-                if data then
-                    inst.sg.statemem.book_fx = data.book_fx
-                end
-
+                if data then inst.sg.statemem.book_fx = data.book_fx end
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-
                 inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx"..suffix)
                 inst.sg.statemem.fx_shadow.entity:SetParent(inst.entity)
-
                 inst.AnimState:OverrideSymbol("book_open", "book_maxwell", "book_open")
                 inst.AnimState:OverrideSymbol("book_closed", "book_maxwell", "book_closed")
                 inst.sg.statemem.symbolsoverridden = true
-                inst.sg.statemem.earlycast = true
-
                 inst.sg.statemem.castsound = "maxwell_rework/shadow_magic/cast"
             end,
 
             timeline =
             {
-                FrameEvent(13, function(inst)
+                TimeEvent(13 * FRAMES, function(inst)
                     local function fn19()
                         inst.SoundEmitter:PlaySound("dontstarve/common/use_book_light")
-                        
-                        if inst.sg.statemem.earlycast then
-                            if inst.sg.statemem.fx_shadow then
-                                if inst.sg.statemem.fx_shadow:IsValid() then
-                                    local x, y, z = inst.sg.statemem.fx_shadow.Transform:GetWorldPosition()
-                                    inst.sg.statemem.fx_shadow.entity:SetParent(nil)
-                                    inst.sg.statemem.fx_shadow.Transform:SetPosition(x, y, z)
-                                    inst.sg.statemem.fx_shadow.Transform:SetRotation(inst.Transform:GetRotation())
-                                end
-                                inst.sg.statemem.fx_shadow = nil --Don't cancel anymore
-                            end
-                            inst.SoundEmitter:PlaySound(inst.sg.statemem.castsound)
-                            if not inst:PerformBufferedAction() then
-                                inst.sg.statemem.canrepeatcast = false
-                                inst:RemoveTag("canrepeatcast")
-                            end
-                        end
-                    end
-                    if inst.sg.statemem.repeatcast then
-                        fn19()
-                    else
-                        inst.sg.statemem.fn19 = fn19
-                    end
-                end),
-                FrameEvent(19, function(inst)
-                    if inst.sg.statemem.fn19 then
-                        inst.sg.statemem.fn19()
-                        inst.sg.statemem.fn19 = nil
-                    end
-                end),
-                FrameEvent(24, function(inst)
-                    local function fn30()
                         if inst.sg.statemem.fx_shadow then
                             if inst.sg.statemem.fx_shadow:IsValid() then
                                 local x, y, z = inst.sg.statemem.fx_shadow.Transform:GetWorldPosition()
@@ -2532,20 +2492,38 @@ env.AddStategraphPostInit("wilson", function(inst)
                             end
                             inst.sg.statemem.fx_shadow = nil --Don't cancel anymore
                         end
+                        inst.SoundEmitter:PlaySound(inst.sg.statemem.castsound)
+                        inst:PerformBufferedAction()
                     end
-                    if inst.sg.statemem.repeatcast then
-                        fn30()
-                    else
-                        inst.sg.statemem.fn30 = fn30
+                    inst.sg.statemem.fn19 = fn19
+                end),
+                TimeEvent(19 * FRAMES, function(inst)
+                    if inst.sg.statemem.fn19 then
+                        inst.sg.statemem.fn19()
+                        inst.sg.statemem.fn19 = nil
                     end
                 end),
-                FrameEvent(30, function(inst)
+                TimeEvent(24 * FRAMES, function(inst)
+                    local function fn30()
+                        if inst.sg.statemem.fx_shadow then
+                            if inst.sg.statemem.fx_shadow:IsValid() then
+                                local x, y, z = inst.sg.statemem.fx_shadow.Transform:GetWorldPosition()
+                                inst.sg.statemem.fx_shadow.entity:SetParent(nil)
+                                inst.sg.statemem.fx_shadow.Transform:SetPosition(x, y, z)
+                                inst.sg.statemem.fx_shadow.Transform:SetRotation(inst.Transform:GetRotation())
+                            end
+                            inst.sg.statemem.fx_shadow = nil -- Don't cancel anymore.
+                        end
+                    end
+                    inst.sg.statemem.fn30 = fn30
+                end),
+                TimeEvent(30 * FRAMES, function(inst)
                     if inst.sg.statemem.fn30 then
                         inst.sg.statemem.fn30()
                         inst.sg.statemem.fn30 = nil
                     end
                 end),
-                FrameEvent(44, function(inst)
+                TimeEvent(44 * FRAMES, function(inst)
                     local function fn50()
                         local book_fx = inst.sg.statemem.book_fx
                         if book_fx then
@@ -2557,33 +2535,25 @@ env.AddStategraphPostInit("wilson", function(inst)
                             else
                                 book_fx = nil
                             end
-                            inst.sg.statemem.book_fx = nil --Don't cancel anymore
+                            inst.sg.statemem.book_fx = nil -- Don't cancel anymore.
                         end
                     end
-                    if inst.sg.statemem.repeatcast then
-                        fn50()
-                    else
-                        inst.sg.statemem.fn50 = fn50
-                    end
+                    inst.sg.statemem.fn50 = fn50
                 end),
-                FrameEvent(50, function(inst)
+                TimeEvent(50 * FRAMES, function(inst)
                     if inst.sg.statemem.fn50 then
                         inst.sg.statemem.fn50()
                         inst.sg.statemem.fn50 = nil
                     end
                 end),
-                FrameEvent(51, function(inst)
+                TimeEvent(51 * FRAMES, function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/common/use_book_close")
                 end),
             },
 
             events =
             {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("idle")
-                    end
-                end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("idle") end end),
             },
 
             onexit = function(inst)
@@ -2608,7 +2578,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif inst.SoundEmitter:PlayingSound("book_layer_sound") then
                     inst.SoundEmitter:SetVolume("book_layer_sound", .5)
                 end
-                inst:RemoveTag("canrepeatcast")
             end,
         },
 
