@@ -697,3 +697,5 @@ end
 
 -- Faster Daywalker Regen
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
+
+TUNING.PIRATE_STASH_INV_SIZE = 2000 --Used to be just 30 maxslots.

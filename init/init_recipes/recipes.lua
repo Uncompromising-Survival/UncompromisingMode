@@ -388,35 +388,38 @@ ChangeSortKey("hermitshop_hermit_bundle_lures", "hermitshop_hermit_bundle_shells
 AddRecipe2("hermitshop_boat", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_item", sg_state = "give" })
 ChangeSortKey("hermitshop_boat", "hermitshop_hermit_bundle_shells", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_boat_rotator", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_rotator_kit", sg_state = "give" })
-
-AddRecipe2("hermitshop_mast", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "mast_item", sg_state = "give" })
-ChangeSortKey("hermitshop_mast", "hermitshop_boat", "CRAFTING_STATION", true)
+AddRecipe2("hermitshop_patch", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boatpatch", sg_state = "give", numtogive = 3 })
+ChangeSortKey("hermitshop_patch", "hermitshop_boat", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_anchor", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "anchor_item", sg_state = "give" })
-ChangeSortKey("hermitshop_anchor", "hermitshop_mast", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_anchor", "hermitshop_patch", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_steeringwheel", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "steeringwheel_item", sg_state = "give" })
 ChangeSortKey("hermitshop_steeringwheel", "hermitshop_anchor", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_patch", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boatpatch", sg_state = "give", numtogive = 3 })
-ChangeSortKey("hermitshop_patch", "hermitshop_steeringwheel", "CRAFTING_STATION", true)
+AddRecipe2("hermitshop_boat_rotator", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_rotator_kit", sg_state = "give" })
+ChangeSortKey("hermitshop_boat_rotator", "hermitshop_steeringwheel", "CRAFTING_STATION", false)
 
-AddRecipe2("hermitshop_blueprint", { Ingredient("messagebottleempty", 1) }, GLOBAL.TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "blueprint", sg_state = "give" })
+AddRecipe2("hermitshop_mast", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "mast_item", sg_state = "give" })
+ChangeSortKey("hermitshop_mast", "hermitshop_boat_rotator", "CRAFTING_STATION", true)
+
+AddRecipe2("hermitshop_blueprint", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "blueprint", sg_state = "give" })
 ChangeSortKey("hermitshop_blueprint", "hermitshop_turf_shellbeach_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_waterplant", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "waterplant_planter", sg_state = "give" })
-ChangeSortKey("hermitshop_waterplant", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_waterplant", "hermitshop_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_seedpacket", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "yotc_seedpacket", sg_state = "give", numtogive = 2 })
-ChangeSortKey("hermitshop_seedpacket", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_seedpacket", "hermitshop_waterplant", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_seedpacket_rare", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_FIVE, { nounlock = true, product = "yotc_seedpacket_rare", sg_state = "give", numtogive = 2 })
-ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_seedpacket", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_cookies", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "pumpkincookie", sg_state = "give" })
 ChangeSortKey("hermitshop_cookies", "hermitshop_supertacklecontainer", "CRAFTING_STATION", true)
 
+AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
+ChangeSortKey("hermitshop_bootleg", "hermitshop_cookies", "CRAFTING_STATION", true)
 --[[
 AddRecipe2(
 "hermitshop_oil",
@@ -554,9 +557,11 @@ if TUNING.DSTU.WATHGRITHR_REWORK then
             --"CRAFTING_STATION",
             "MODS",
             "EVRERYTHING"})
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "CHARACTER", true)
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "WEAPONS", true)
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "ARMOUR", true)
 end
 
-AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
 ChangeSortKey("um_boatbottle", "sludge_cork", "TOOLS", true)
 ChangeSortKey("um_boatbottle", "chestupgrade_stacksize", "CONTAINERS", true)
