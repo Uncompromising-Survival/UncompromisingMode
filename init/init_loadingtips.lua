@@ -4,7 +4,7 @@ function setup_custom_loading_tips()
     for id, tip in pairs(GLOBAL.STRINGS.UM_LOADINGTIPS) do
         AddLoadingTip(GLOBAL.STRINGS.UI.LOADING_SCREEN_OTHER_TIPS, "TIP_UM_" .. id, tip)
     end
-
+	
     local tipcategorystartweights =
     {
         CONTROLS = 0.2,
@@ -14,8 +14,6 @@ function setup_custom_loading_tips()
         OTHER = 0.2,
     }
 
-    SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START, tipcategorystartweights)
-
     local tipcategoryendweights =
     {
         CONTROLS = 0,
@@ -24,6 +22,13 @@ function setup_custom_loading_tips()
         LOADING_SCREEN = 0,
         OTHER = 1,
     }
+	
+	if TUNING.DSTU.UM_TIPS_ONLY then
+		SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START, tipcategoryendweights)
+	else
+		SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_START, tipcategorystartweights)
+	end
+	
     --UM tips are guaranteed on the second tip during the loading screen.
     SetLoadingTipCategoryWeights(GLOBAL.LOADING_SCREEN_TIP_CATEGORY_WEIGHTS_END, tipcategoryendweights)
 

@@ -416,6 +416,7 @@ TUNING.DSTU = {
     --CLIENT CONFIGS
 
     REDUCED_TORNADO_VFX = GetModConfigData("um_storms_over", true),
+    UM_TIPS_ONLY = GetModConfigData("um_tips_only", true),
 
     -- boss hp qol
 

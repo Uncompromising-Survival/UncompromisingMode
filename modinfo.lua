@@ -112,6 +112,7 @@ configuration_options = {
         default = "",
     },
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
+    BinaryConfig("um_tips_only", "Force UM Loading Tips", "Disables vanilla Loading Tips, so Uncompromising Mode's Loading Tips will always appear in the loading screen while joining a world!", false, true),
     BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
     {
         name = "wathom_nightvision",
