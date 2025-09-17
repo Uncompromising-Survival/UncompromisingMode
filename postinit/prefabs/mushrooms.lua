@@ -33,10 +33,12 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			inst:Remove()
 		end)
 		inst.components.workable:SetWorkLeft(1)
-		inst._open_time = inst.data.open_time
-		if inst._open_time == TheWorld.state.cavephase then
-        	inst:AddTag("groundmushroom")
-    	end
+		if inst and inst.data.open_time then
+			inst._open_time = inst.data.open_time
+			if inst._open_time == TheWorld.state.cavephase then
+        		inst:AddTag("groundmushroom")
+    		end
+		end
 	end)
 
 	env.AddPrefabPostInit("red_mushroom", function(inst)
@@ -69,10 +71,12 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			inst:Remove()
 		end)
 		inst.components.workable:SetWorkLeft(1)
-		inst._open_time = inst.data.open_time
-		if inst._open_time == TheWorld.state.cavephase then
-        	inst:AddTag("groundmushroom")
-    	end
+		if inst and inst.data.open_time then
+			inst._open_time = inst.data.open_time
+			if inst._open_time == TheWorld.state.cavephase then
+        		inst:AddTag("groundmushroom")
+    		end
+		end
 	end)
 
 	env.AddPrefabPostInit("blue_mushroom", function(inst)
@@ -90,25 +94,27 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 
 		inst:RemoveComponent("lootdropper")
 		inst:RemoveComponent("workable")
-	
+
 		inst:AddComponent("lootdropper")
-		inst:AddComponent("workable")	
+		inst:AddComponent("workable")
 		inst.components.workable:SetWorkAction(ACTIONS.DIG)
 		inst.components.workable:SetOnFinishCallback(function(inst, chopper)
 			if inst.components.pickable ~= nil and inst.components.pickable:CanBePicked() then
 				inst.components.lootdropper:SpawnLootPrefab("blue_cap")
 			end
-		
+
 			local spore = SpawnPrefab("spore_tall")
 			spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
 			spore.AnimState:PlayAnimation("flight_cycle")
 			inst:Remove()
 		end)
 		inst.components.workable:SetWorkLeft(1)
-		inst._open_time = inst.data.open_time
-		if inst._open_time == TheWorld.state.cavephase then
-        	inst:AddTag("groundmushroom")
-    	end
+		if inst and inst.data.open_time then
+			inst._open_time = inst.data.open_time
+			if inst._open_time == TheWorld.state.cavephase then
+        		inst:AddTag("groundmushroom")
+    		end
+		end
 	end)
 end
 
