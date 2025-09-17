@@ -54,7 +54,7 @@ local function fn()
     inst.components.edible.healthvalue = 0
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY --9.375, same as berries.
     inst.components.edible.sanityvalue = 0
-    inst.components.edible.foodtype = FOODTYPE.UM_GROSS_VEGGIE
+    inst.components.edible.foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE
 
     --inst:AddComponent("perishable")
     --inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST)

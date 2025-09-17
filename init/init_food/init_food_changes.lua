@@ -560,11 +560,11 @@ AddPrefabPostInit("wetgoop", function(inst)
     end
 end)
 
-GLOBAL.FOODTYPE.UM_GROSS_VEGGIE = "UM_GROSS_VEGGIE"
-table.insert(GLOBAL.FOODGROUP.BERRIES_AND_SEEDS.types,GLOBAL.FOODTYPE.UM_GROSS_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.MOOSE.types,GLOBAL.FOODTYPE.UM_GROSS_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.BEARGER.types,GLOBAL.FOODTYPE.UM_GROSS_VEGGIE)
-table.insert(GLOBAL.FOODGROUP.VEGETARIAN.types,GLOBAL.FOODTYPE.UM_GROSS_VEGGIE)
+GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE = "UM_HORRIBLE_VEGGIE"
+table.insert(GLOBAL.FOODGROUP.BERRIES_AND_SEEDS.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.MOOSE.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.BEARGER.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.VEGETARIAN.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
 
 AddPrefabPostInit("acorn", function(inst)
 	if not GLOBAL.TheWorld.ismastersim then
@@ -572,6 +572,6 @@ AddPrefabPostInit("acorn", function(inst)
 	end
 
     --inst.components.edible.hungervalue = TUNING.CALORIES_SMALL / 2
-    inst.components.edible.foodtype = FOODTYPE.UM_GROSS_VEGGIE
+    inst.components.edible.foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE
 	inst.components.edible.secondaryfoodtype = FOODTYPE.RAW
 end)

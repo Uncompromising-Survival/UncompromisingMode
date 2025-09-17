@@ -47,4 +47,10 @@ AddComponentPostInit("eater", function(self)
 			
 		return _Eat(self, food, feeder)
 	end
+
+	function self:SetCanEatVeggieHorrible()
+    	table.insert(self.preferseating, FOODTYPE.UM_HORRIBLE_VEGGIE)
+    	table.insert(self.caneat, FOODTYPE.UM_HORRIBLE_VEGGIE)
+    	self.inst:AddTag(FOODTYPE.UM_HORRIBLE_VEGGIE.."_eater")
+	end
 end)

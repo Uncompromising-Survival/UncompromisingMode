@@ -124,7 +124,7 @@ local function master_postinit(inst)
     inst.components.foodaffinity:AddPrefabAffinity("winter_food4", 20)
 
     if inst.components.eater then
-        inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.UM_GROSS_VEGGIE }, { FOODGROUP.OMNI, FOODTYPE.UM_GROSS_VEGGIE })
+        inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
         inst.components.eater:SetCanEatHorrible()
         inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
         inst.components.eater:SetCanEatRawMeat(true)

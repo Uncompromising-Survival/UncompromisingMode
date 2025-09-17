@@ -97,15 +97,12 @@ env.AddPrefabPostInit("pigman", function(inst)
 
     inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
 
-    inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.UM_GROSS_VEGGIE }, { FOODGROUP.OMNI, FOODTYPE.UM_GROSS_VEGGIE })
-    inst.components.eater:SetCanEatHorrible()
-    inst.components.eater:SetCanEatRaw()
-    inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
+    inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
     local _ShouldAcceptItem = inst.components.trader.test
     local function ShouldAcceptItem(inst, item, ...)
         if inst.components.eater:CanEat(item) then
             local foodtype = item.components.edible.foodtype
-            if foodtype == FOODTYPE.UM_GROSS_VEGGIE then
+            if foodtype == FOODTYPE.UM_HORRIBLE_VEGGIE then
                 local last_eat_time = inst.components.eater:TimeSinceLastEating()
                 return (last_eat_time == nil or
                         last_eat_time >= TUNING.PIG_MIN_POOP_PERIOD)
