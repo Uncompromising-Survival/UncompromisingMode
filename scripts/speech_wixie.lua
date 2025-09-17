@@ -387,7 +387,7 @@ return{
 			NOTALLOWED = "What? Why not?!",
 			INUSE = "Move over, block head!",
             NOTMASTERCHEF = "I think 'master chef' is a subjective title.",
-            NOTSOULJARHANDLER = "No soul food for me, I guess."
+            NOTSOULJARHANDLER = "No soul food for me, I guess.",
             RESTRICTED = "The stupid thing is stuck!",
 		},
         TEACH =
