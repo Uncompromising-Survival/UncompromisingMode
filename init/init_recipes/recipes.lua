@@ -415,7 +415,7 @@ ChangeSortKey("hermitshop_seedpacket", "hermitshop_waterplant", "CRAFTING_STATIO
 AddRecipe2("hermitshop_seedpacket_rare", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_FIVE, { nounlock = true, product = "yotc_seedpacket_rare", sg_state = "give", numtogive = 2 })
 ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_seedpacket", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_boat_ancient_blueprint", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "boat_ancient_item_blueprint", sg_state = "give" })
+AddRecipe2("hermitshop_boat_ancient_blueprint", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "boat_ancient_item_blueprint", sg_state = "give", image="blueprint_rare.tex" })
 ChangeSortKey("hermitshop_boat_ancient_blueprint", "hermitshop_chum_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
