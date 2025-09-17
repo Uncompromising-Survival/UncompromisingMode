@@ -83,10 +83,12 @@ local function OnHitInk(inst, attacker, target)
 end
 
 local function oncollide(inst, other)
-	local x, y, z = inst.Transform:GetWorldPosition()
-	if other ~= nil and other:IsValid() and other:HasTag("_combat") and not other:HasTag("bearger_boulder") or y <= inst:GetPhysicsRadius() + 0.001 then
-		inst.big = true
-		OnHitInk(inst, other)
+	if inst ~= nil then
+		local x, y, z = inst.Transform:GetWorldPosition()
+		if other ~= nil and other:IsValid() and other:HasTag("_combat") and not other:HasTag("bearger_boulder") or y <= inst:GetPhysicsRadius() + 0.001 then
+			inst.big = true
+			OnHitInk(inst, other)
+		end
 	end
 end
 

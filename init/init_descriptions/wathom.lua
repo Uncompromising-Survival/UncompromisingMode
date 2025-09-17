@@ -295,7 +295,7 @@ DESCRIBE.BIGHT = "Maker's meddling, consequences realized."
 DESCRIBE.KNOOK = "Maker's meddling, consequences realized."
 DESCRIBE.ROSHIP = "Maker's meddling, consequences realized."
 
-DESCRIBE.UM_PAWN = "Maker's work? Curious, unfamiliar."
+DESCRIBE.UM_PAWN = "Curious, unfamiliar."
 DESCRIBE.UM_PAWN_NIGHTMARE = "Territorial. Sluggish, reaction speed."
 
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE

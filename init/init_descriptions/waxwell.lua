@@ -261,8 +261,8 @@ DESCRIBE.BIGHT = "He finished himself!"
 DESCRIBE.KNOOK = "He's even more of a jerk in motion!"
 DESCRIBE.ROSHIP = "Your face looks even worse now!"
 
-DESCRIBE.UM_PAWN = "How are these walking? I thought I discarded them?"
-DESCRIBE.UM_PAWN_NIGHTMARE = "Those were the initial designs..."
+DESCRIBE.UM_PAWN = "Where did these come from? I don't recognize them."
+DESCRIBE.UM_PAWN_NIGHTMARE = "They aren't my designs, thats for sure."
 
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN

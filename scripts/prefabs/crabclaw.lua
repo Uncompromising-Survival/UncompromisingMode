@@ -98,7 +98,7 @@ local function AddGem(inst)
 			--inst:ListenForEvent("onremove", onremovebody1, inst.shinefx_slot1)
 			inst.shinefx_slot1.entity:SetParent(owner.entity)
 			inst.shinefx_slot1.entity:AddFollower()
-			inst.shinefx_slot1.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -203, 0.1)
+			inst.shinefx_slot1.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -203, 0.1, true, false)
 			inst.shinefx_slot1.Transform:SetScale(0.25, 0.25, 0.25)
 
 			inst.slot1_inserted = true
@@ -106,7 +106,7 @@ local function AddGem(inst)
 			inst.shinefx2 = SpawnPrefab("crab_king_shine")
 			inst.shinefx2.entity:SetParent(owner.entity)
 			inst.shinefx2.entity:AddFollower()
-			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -203, 0)
+			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -203, 0, true, false)
 			inst.shinefx2.Transform:SetScale(0.25, 0.25, 0.25)
 		end
 	end
@@ -124,7 +124,7 @@ local function AddGem(inst)
 			--inst:ListenForEvent("onremove", onremovebody2, inst.shinefx_slot2)
 			inst.shinefx_slot2.entity:SetParent(owner.entity)
 			inst.shinefx_slot2.entity:AddFollower()
-			inst.shinefx_slot2.Follower:FollowSymbol(owner.GUID, "swap_object", 63, -150, 0.1)
+			inst.shinefx_slot2.Follower:FollowSymbol(owner.GUID, "swap_object", 63, -150, 0.1, true, false)
 			inst.shinefx_slot2.Transform:SetScale(0.25, 0.25, 0.25)
 
 			inst.slot2_inserted = true
@@ -132,7 +132,7 @@ local function AddGem(inst)
 			inst.shinefx2 = SpawnPrefab("crab_king_shine")
 			inst.shinefx2.entity:SetParent(owner.entity)
 			inst.shinefx2.entity:AddFollower()
-			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 63, -150, 0)
+			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 63, -150, 0, true, false)
 			inst.shinefx2.Transform:SetScale(0.25, 0.25, 0.25)
 		end
 	end
@@ -150,7 +150,7 @@ local function AddGem(inst)
 			--inst:ListenForEvent("onremove", onremovebody3, inst.shinefx_slot3)
 			inst.shinefx_slot3.entity:SetParent(owner.entity)
 			inst.shinefx_slot3.entity:AddFollower()
-			inst.shinefx_slot3.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -102, 0.1)
+			inst.shinefx_slot3.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -102, 0.1, true, false)
 			inst.shinefx_slot3.Transform:SetScale(0.25, 0.25, 0.25)
 
 			inst.slot3_inserted = true
@@ -158,7 +158,7 @@ local function AddGem(inst)
 			inst.shinefx2 = SpawnPrefab("crab_king_shine")
 			inst.shinefx2.entity:SetParent(owner.entity)
 			inst.shinefx2.entity:AddFollower()
-			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -102, 0)
+			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 48, -102, 0, true, false)
 			inst.shinefx2.Transform:SetScale(0.25, 0.25, 0.25)
 		end
 	end
@@ -177,7 +177,7 @@ local function AddGem(inst)
 			--inst:ListenForEvent("onremove", onremovebody4, inst.shinefx_slot4)
 			inst.shinefx_slot4.entity:SetParent(owner.entity)
 			inst.shinefx_slot4.entity:AddFollower()
-			inst.shinefx_slot4.Follower:FollowSymbol(owner.GUID, "swap_object", 23, -61, 0.1)
+			inst.shinefx_slot4.Follower:FollowSymbol(owner.GUID, "swap_object", 23, -61, 0.1, true, false)
 			inst.shinefx_slot4.Transform:SetScale(0.25, 0.25, 0.25)
 
 			inst.slot4_inserted = true
@@ -185,7 +185,7 @@ local function AddGem(inst)
 			inst.shinefx2 = SpawnPrefab("crab_king_shine")
 			inst.shinefx2.entity:SetParent(owner.entity)
 			inst.shinefx2.entity:AddFollower()
-			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 23, -61, 0)
+			inst.shinefx2.Follower:FollowSymbol(owner.GUID, "swap_object", 23, -61, 0, true, false)
 			inst.shinefx2.Transform:SetScale(0.25, 0.25, 0.25)
 
 		end

@@ -119,7 +119,7 @@ DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
 DESCRIBE.MOTHERGOOSE = DESCRIBE.MOOSE
 DESCRIBE.SPIDERQUEENCORPSE = "Ah, she caught the rigor mortis."
 ANNOUNCE.ANNOUNCE_SNEEZE = "aaaAAAGLSCHOO!!"
-ANNOUNCE.ANNOUNCE_HAYFEVER = "Agh, my nose is getting claustrophobic..."
+ANNOUNCE.ANNOUNCE_HAYFEVER = "Ugh, I think my *nose* is getting claustrophobic..."
 ANNOUNCE.ANNOUNCE_HAYFEVER_OFF =
 "*sniff* *sniff* Aahhh, finally, my allergies are gone!"
 ANNOUNCE.ANNOUNCE_SNOWSTORM =
@@ -493,7 +493,7 @@ DESCRIBE.PORTABLEBOAT_ITEM = "It's like a bouncy castle from the fair, but borin
 DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "The wind does the work for me!"
 
 DESCRIBE.WIXIE_PIANO = "I miss my piano lessons..."
-DESCRIBE.WIXIE_CLOCK = "Atleast it's ticking won't keep me up at night."
+DESCRIBE.WIXIE_CLOCK = "Atleast its ticking won't keep me up at night."
 DESCRIBE.WIXIE_WARDROBE = "Well now I know what was making all that noise..."
 DESCRIBE.CHARLES_T_HORSE = "Charles...?"
 DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Charles!! I thought I'd never find you!"

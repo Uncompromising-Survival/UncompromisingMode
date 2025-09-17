@@ -16,14 +16,16 @@ Refer to init/init_actions for related changes to the Rummage and Store actions.
 if not GLOBAL.TheNet:GetIsServer() then return end
 
 AddComponentPostInit("stewer", function(self)
-    _StartCooking = self.StartCooking
-    self.StartCooking = function(self, doer)
+    local _StartCooking = self.StartCooking
+	
+    function self:StartCooking(doer)
         if self.inst.prefab == "portablecookpot" and not doer:HasTag("masterchef") then
             self.inst.prefab = "cookpot"
             ret = _StartCooking(self, doer)
             self.inst.prefab = "portablecookpot"
             return ret
         end
-        return _StartCooking(self, doer)
+		
+        _StartCooking(self, doer)
     end
 end)

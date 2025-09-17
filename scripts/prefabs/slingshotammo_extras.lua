@@ -184,7 +184,8 @@ local function DoPop(inst, remaining, total, level, hissvol)
 						
 						local weapon = inst.attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
 
-						v.components.combat:GetAttacked(weapon ~= nil and inst.attacker or inst, 10, weapon)
+						--v.components.combat:GetAttacked(weapon ~= nil and inst.attacker or inst, 10, weapon)
+                        v.components.health:DoDelta(-5, inst.attacker)
 
                         if v.components.combat ~= nil then
                             v.components.combat:RemoveShouldAvoidAggro(inst.attacker)

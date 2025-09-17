@@ -3,6 +3,7 @@ local function TransferLoot(inst)
 			
 	if klaus_sack ~= nil and klaus_sack.components.inventory ~= nil then
 		inst.components.inventory:TransferInventory(klaus_sack)
+		inst:DoTaskInTime(0, inst.Remove)
 	end
 end
 
@@ -23,6 +24,7 @@ local function fn()
 	end
 
 	inst:AddComponent("inventory")
+	inst.components.inventory.maxslots = 2000
 
 	inst:DoTaskInTime(1, TransferLoot)
 	

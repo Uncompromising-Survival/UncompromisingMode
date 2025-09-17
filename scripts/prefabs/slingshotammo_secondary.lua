@@ -1095,7 +1095,7 @@ local ammo = {
 		symbol = "stinger",
         onhit = OnHit_Stinger,
 		tags = { "wixieammo_basic" },
-        damage = TUNING.SLINGSHOT_AMMO_DAMAGE_STINGER,
+        damage = TUNING.SLINGSHOT_AMMO_DAMAGE_ROCKS,
 		--skill = "walter_slingshot_ammo_stinger",
     },
     { name = "trinket_1", no_inv_item = true, symbol = "trinket_1", onhit = OnHit_Melty, damage = TUNING.SLINGSHOT_AMMO_DAMAGE_TRINKET_1, hit_sound = "dontstarve/characters/walter/slingshot/trinket" }

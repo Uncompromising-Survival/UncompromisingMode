@@ -326,7 +326,7 @@ DESCRIBE.SNAKE_POISON = "Ooh, that one is yellow!"
 DESCRIBE.SNAKESKIN = "How does it move without legs!?"
 DESCRIBE.SNAKEOIL = "I could make a quick buck off of this stuff!"
 DESCRIBE.SNAKESKINHAT = "I made a hat out of whatever that was."
-DESCRIBE.ARMOR_SNAKESKIN = "This is what fashion is all about!"
+DESCRIBE.ARMOR_SNAKESKIN = "I wouldn't put much faith into snakes..."
 DESCRIBE.SNAKEDEN =
 		{
 			BURNING = "I can't be bothered to untangle them!",

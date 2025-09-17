@@ -56,7 +56,7 @@ local function KrampusStealing(self)
 
     local steal_2 = WhileNode(function() return self.inst.components.combat.target ~= nil and self.inst.components.inventory:NumItems() < self.greed and ItemsToSteal(self.inst) end, "StealNotFight",
 						PriorityNode({
-							MinPeriod(self.inst, 5, true,
+							MinPeriod(self.inst, 3, true,
 									DoAction(self.inst, function() return StealAction(self.inst) end, "steal", true )
 								)
 						}, 2)

@@ -2,7 +2,7 @@ local Ingredient = GLOBAL.Ingredient
 local AllRecipes = GLOBAL.AllRecipes
 
 --TODO: replace with actual mod check.
-if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
+if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     local RECIPE_GAMETYPE_DEFS = require("prefabs/recipe_gametype_defs")
     local RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
     local RECIPE_BOAT_TYPE = GLOBAL.RECIPE_BOAT_TYPE
@@ -83,5 +83,11 @@ if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
     SetRecipeIngredientsForGameTypes("um_record_stranger", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
 
     SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
+	
 end
 
+if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
+	AddRecipe2("slingshotammo_scrapfeather", { Ingredient("iron", 1), Ingredient("feather_thunder", 1) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
+
+    --SetRecipeIngredientsForGameTypes("slingshotammo_scrapfeather", RECIPE_GAME_TYPE.PORKLAND, { Ingredient("iron", 1), Ingredient("feather_thunder", 1) })
+end
