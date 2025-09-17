@@ -17,15 +17,13 @@ if not GLOBAL.TheNet:GetIsServer() then return end
 
 AddComponentPostInit("stewer", function(self)
     local _StartCooking = self.StartCooking
-	
-    function self:StartCooking(doer)
+    function self:StartCooking(doer, ...)
         if self.inst.prefab == "portablecookpot" and not doer:HasTag("masterchef") then
             self.inst.prefab = "cookpot"
-            ret = _StartCooking(self, doer)
+            local ret = _StartCooking(self, doer)
             self.inst.prefab = "portablecookpot"
             return ret
         end
-		
-        _StartCooking(self, doer)
+        return _StartCooking(self, doer, ...)
     end
 end)
