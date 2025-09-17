@@ -41,6 +41,11 @@ local prefabs =
     "slingshot",
 }
 
+local function customidleanimfn(inst)
+    local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    return item ~= nil and item.prefab == "the_real_charles_t_horse" and "idle_woodie" or "idle_wixie"
+end
+
 local function OnKilledOther(inst, data)
     if data ~= nil and data.victim ~= nil and data.victim.prefab ~= nil then
         local naughtiness = NAUGHTY_VALUE[data.victim.prefab]
@@ -350,7 +355,7 @@ local function common_postinit(inst)
     inst:AddTag("slingshot_sharpshooter")
     inst:AddTag("troublemaker")
 
-    inst.customidleanim = "idle_wixie"
+    --inst.customidleanim = "idle_wixie"
 	inst.claustrophobia = 0
 	inst.claustrophobiamodifier = 0
 	inst.wixiepanic = false
@@ -373,6 +378,8 @@ end
 
 local function master_postinit(inst)
     inst.starting_inventory = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
+	
+    inst.customidleanim = customidleanimfn
 	
     inst.MiniMapEntity:SetIcon("wixie.tex")
 	--inst:AddComponent("claustrophobia")

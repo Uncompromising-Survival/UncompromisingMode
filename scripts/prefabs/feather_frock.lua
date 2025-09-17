@@ -315,6 +315,7 @@ local function OnAmmoLoaded(inst, data)
 	end
 	
 	inst.feather = nil
+	inst.frock_damage_reduction = 0
 end
 
 local function OnAmmoUnloaded(inst, data)
@@ -332,6 +333,7 @@ local function OnAmmoUnloaded(inst, data)
 	end
 	
 	inst.feather = nil
+	inst.frock_damage_reduction = 0
 end
 
 local function frockfn()
@@ -372,7 +374,6 @@ local function frockfn()
     inst:AddComponent("tradable")
 	inst:AddComponent("inspectable")
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/feather_frock.xml"
 	inst:AddComponent("rechargeable")
 
 	inst:AddComponent("shadowlevel")
