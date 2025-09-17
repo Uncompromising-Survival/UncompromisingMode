@@ -15,7 +15,7 @@ env.AddComponentPostInit("schoolspawner", function(self)
         local map = TheWorld.Map
 
         local ret = _SpawnSchool(self, spawnpoint, target, override_spawn_offset)
-        if math.random() > 0.99 and TUNING.DSTU.DATES.APRIL_FOOLS then
+        if math.random() > 0.995 and (TUNING.DSTU.DATES.APRIL_FOOLS or IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS)) then
             local sea_players = {}
 
             for k, v in pairs(AllPlayers) do
