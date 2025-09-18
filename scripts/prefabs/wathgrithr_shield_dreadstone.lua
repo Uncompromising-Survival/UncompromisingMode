@@ -286,8 +286,6 @@ local function fn()
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "wathgrithr_shield_dreadstone"
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/wathgrithr_shield_dreadstone.xml"
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(DamageFn)
