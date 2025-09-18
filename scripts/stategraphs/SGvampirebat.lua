@@ -24,6 +24,7 @@ local events=
     CommonHandlers.OnAttacked(),
     CommonHandlers.OnDeath(),
     CommonHandlers.OnSleepEx(),
+    CommonHandlers.OnWakeEx(),
 }
 
 local function DoChewSound(inst)
@@ -132,11 +133,11 @@ local states =
 
             local x, y, z = inst.Transform:GetWorldPosition()
             inst.Transform:SetPosition(x, 15, z)
-            inst.Physics:SetMotorVel(0, -10 + math.random() * 2 , 0)
+            inst.Physics:SetMotorVel(0, -10 + math.random() * 2, 0)
         end,
 
         onupdate = function(inst)
-            inst.Physics:SetMotorVel(0, -10 + math.random() * 2 , 0)
+            inst.Physics:SetMotorVel(0, -10 + math.random() * 2, 0)
             local pt = Point(inst.Transform:GetWorldPosition())
 
             if pt.y <= .1 or inst:IsAsleep() then
