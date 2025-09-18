@@ -6,10 +6,11 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.7.3.37"
+local _version = "1.7.3.38"
 
 description = [[
-    󰀔 [ "Foxy, Mossy, and Shieldy Update"  (Beta ver: v]] .. _version .. [[)]
+    󰀔 [ "Wixie 2 Update"  (Beta ver: v]] .. _version .. [[)]
+What's better than one Wixie? Still one Wixie!
 Uncompromising Mode is like a potluck.
 
 Latest update features:
@@ -19,6 +20,7 @@ Latest update features:
 - New Old Faces
 - Lots of bloat...
 - Lots of promises...
+- Moss.
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
