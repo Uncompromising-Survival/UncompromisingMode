@@ -4,7 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 if TUNING.DSTU.MUSHROOM_CHANGES then
 
 	env.AddPrefabPostInit("green_mushroom", function(inst)
-
+		if not TheWorld.ismastersim then return end
 		inst._opentaskfn = inst.opentaskfn
 		inst.opentaskfn = function()
 			inst:AddTag("groundmushroom")
@@ -42,7 +42,7 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 	end)
 
 	env.AddPrefabPostInit("red_mushroom", function(inst)
-
+		if not TheWorld.ismastersim then return end
 		inst._opentaskfn = inst.opentaskfn
 		inst.opentaskfn = function()
 			inst:AddTag("groundmushroom")
@@ -80,7 +80,7 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 	end)
 
 	env.AddPrefabPostInit("blue_mushroom", function(inst)
-
+		if not TheWorld.ismastersim then return end
 		inst._opentaskfn = inst.opentaskfn
 		inst.opentaskfn = function()
 			inst:AddTag("groundmushroom")
