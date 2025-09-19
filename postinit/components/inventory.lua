@@ -18,4 +18,18 @@ env.AddComponentPostInit("inventory", function(self)
 			return _OldIsInsulated(self)
 		end
 	end
+
+	local _EquipHasTag = self.EquipHasTag
+    function self:EquipHasTag(tag, ...)
+        if self.inst.components.skilltreeupdater and self.inst.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        return _EquipHasTag(self, tag, ...)
+    end
+end)
+
+env.AddClassPostConstruct("components/inventory_replica", function(self)
+    local _EquipHasTag = self.EquipHasTag
+    function self:EquipHasTag(tag, ...)
+        if self.inst.components.skilltreeupdater and self.inst.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") and tag == "ancient_reader" then return true end
+        return _EquipHasTag(self, tag, ...)
+    end
 end)

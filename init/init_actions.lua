@@ -159,6 +159,17 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
 	end
 end
 
+--[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
+GLOBAL.ACTIONS.LOOKAT.strfn = function(act)
+	if act.target and act.target:HasTag("ancient_text") then
+		if act.doer and act.doer.components.skilltreeupdater and act.doer.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") then
+			return "READ"
+		end
+	else
+		return _lookatstrfn(act)
+	end
+end]]
+
 --if TUNING.DSTU.WICKERNERF then
     --local _ReadFn = GLOBAL.ACTIONS.READ.fn
 
