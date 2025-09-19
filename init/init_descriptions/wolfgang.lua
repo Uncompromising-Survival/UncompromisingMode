@@ -588,11 +588,16 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
-DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "Will machine cook for Wolfgang and friends? No?",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... it makes Wolfgang think of food."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Do not know what lever is for, but mighty Wolfgang will pull!"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "A hook! ...Why flickery science man need big hook? Big fish?"
 
 DESCRIBE.UM_RICE_PUDDING = "Is pudding with rice in it."
 
