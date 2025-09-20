@@ -691,3 +691,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"How is it so slippery!?",
     "I am getting bored."}
 
 DESCRIBE.WATHOM_CORPSE = "How. You died. You can't just... get back up?"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Thouching it makes me shiver."

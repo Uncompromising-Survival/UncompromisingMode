@@ -613,3 +613,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Wolfgang should wait for little bug to sit.
     "Mighty punches too obvious for little flutterby."}
 	
 DESCRIBE.WATHOM_CORPSE = "Dead, but no skeleton?"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Wolfgang has no need for scary rock shield!"

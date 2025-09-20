@@ -710,4 +710,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
 	
 DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
-DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Exceptionally resilient, enough to keep any danger at bay."
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"

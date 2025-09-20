@@ -665,3 +665,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You gotta be kidding me!",
     "Maybe I'll pretend like I don't care, then WHAM!"}
 
 DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "You didn't have anything better than a rock?"

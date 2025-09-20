@@ -630,3 +630,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Now now, patience is key.",
     "It might be easier to hit if it's landed."}
 
 DESCRIBE.WATHOM_CORPSE = "He's... He's still breathing! Mon dieu, he may live!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It's lighter than it looks."
