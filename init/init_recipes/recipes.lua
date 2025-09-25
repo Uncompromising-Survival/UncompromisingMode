@@ -433,7 +433,7 @@ TECH.HERMITCRABSHOP_FIVE,
 ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
 -- better moonstorm
 AddRecipe2("moonstorm_static_item", { Ingredient("transistor", 1), Ingredient("moonstorm_spark", 2), Ingredient("goldnugget", 3) }, TECH.LOST, nil, { "REFINE" })
-AddRecipe2("alterguardianhatshard", { Ingredient("moonglass_charged", 1), Ingredient("moonstorm_spark", 2), Ingredient("coolant", 1) }, TECH.LOST, { numtogive = 3 }, { "LIGHT", "REFINE" })
+AddRecipe2("alterguardianhatshard", { Ingredient("moonglass_charged", 3), Ingredient("moonstorm_spark", 3), Ingredient("coolant", 1) }, TECH.LOST, { numtogive = 3 }, { "LIGHT", "REFINE" })
 
 AddDeconstructRecipe("alterguardianhat", { Ingredient("alterguardianhatshard", 5), Ingredient("alterguardianhatshard_blueprint", 1) })
 
