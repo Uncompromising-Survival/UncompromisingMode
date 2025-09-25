@@ -47,6 +47,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
     SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables.",
+    RED_MUSHROOMHAT = "- Makes you crave red caps.\n- Each bite increases your damage.\n- Holds on tightly.",
+    GREEN_MUSHROOMHAT = "- Makes you crave green caps.\n- Each bite makes you speedier.\n- Holds on tightly.",
+    BLUE_MUSHROOMHAT = "- Makes you crave blue caps.\n- Each bite makes you work harder.\n- Holds on tightly.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
