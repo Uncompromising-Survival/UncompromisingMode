@@ -38,6 +38,7 @@ local function onchop(inst, chopper)
 	inst.AnimState:PlayAnimation("hit",false)
     if not (chopper ~= nil and chopper:HasTag("playerghost")) then
         inst.SoundEmitter:PlaySound("dontstarve/wilson/use_axe_tree")
+        -- TODO: Also add living log getting hit sound
     end
 end
 
