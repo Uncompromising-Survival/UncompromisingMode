@@ -157,7 +157,7 @@ local function Capture(inst)
 
     totaltable = totaltable .. "},\n	},\n"
 
-    local file_name = TUNING.DSTU.MODROOT .. "scripts/map/misc_tools/umss_tables.lua"
+    local file_name = "unsafedata/capture_output.json"
 
 
 	TheNet:Announce(totaltable)

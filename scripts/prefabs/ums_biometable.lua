@@ -1,7 +1,7 @@
 local DecidTable = {LazyBase = 1}
 local WixieTable = {wixie_puzzle = 2}
 local DesertTable = {sussyTable = 1}
-local MarshTable = {fooltrap1Table = 1}
+local MarshTable = {fooltrap1 = 1}
 local HoodedTable = {
 
     ancientwalrusTable = 1,
@@ -11,29 +11,30 @@ local HoodedTable = {
 }
 local DarkForestTable = {walterifgood = 1}
 local RockyTable = {singlefather = 1}
-local SavannaTable = {sos = 0.5, moxTable = 0.5, deadBodies = 2, grassTrap = 0.1}
+local SavannaTable = {sos = 0.5, moxTable = 0.5, grassTrap = 0.1}
 
 local MosaicTable = { -- need more mosaic setpieces
 
     impactfulDiscovery = 1,
-    dudu_DUN_DUN = 0.01, -- We need to check to see what this even is
+    dudu_DUN_DUN = 0.01, -- We need to check to see what this even is -- Sans
 	farmbutbad = 1,
 	en_passant = 0.5,
 	ratatoing = 1,
 	Snappyhoarders = 0.25,
 	middle_of_nowhere = 1,
 	sulfurhint = 1,
-	baseFrag_smellyKitchen = 1, 
+	--baseFrag_smellyKitchen = 1, 
 	baseFrag_rattyStorage = 1,
-		
-	megabaseruins_intersection = 0.25, 
-	megabaseruins_centerpiece = 0.25, 
+    wikimasters = 1,
+
+	megabaseruins_intersection = 0.25,
+	megabaseruins_centerpiece = 0.25,
 	megabaseruins_road = 0.25,
 	moonFrag = 0.25
 
 }
 
-local GeneralTable = {badfarmerTable = 0.5, baseFrag_smellyKitchen = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
+local GeneralTable = {badfarmerTable = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
 
 local OceanTable = {sunkenboat = 0.5, failedFisherman = 0.5}
 
