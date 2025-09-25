@@ -29,6 +29,11 @@ end
 
 TUNING.DSTU = {
     ----------------------------------------------------------------------------
+    -- User Interface changes
+    ----------------------------------------------------------------------------
+    UI_VETCURSE = GetModConfigData("ui_showvetcurse"),
+    UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts"),
+    ----------------------------------------------------------------------------
     -- Armor
     ----------------------------------------------------------------------------
     ARMORREED_UM = TUNING.WILSON_HEALTH * 2 * multiplayer_armor_durability_modifier,

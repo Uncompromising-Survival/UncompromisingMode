@@ -151,6 +151,11 @@ configuration_options = {
         true),
     SkipSpace(),
 
+    Header("User Interface"),
+    BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Show Multiple Products crafting amounts (from the client mod by ClumsyPenny)", true),
+    BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right veteran's curse icon, which provides helpful information on the curse.", true),
+    SkipSpace(),
+
     Header("Core Gameplay"),
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
