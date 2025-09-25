@@ -137,7 +137,7 @@ local function MinotaurFunctions(inst)
     inst.forcebelch = false
     inst.tentbelch = true
     inst.have_a_heart = false
-    
+
     inst.combo = 0
 
     if not inst.components.timer then
@@ -145,42 +145,41 @@ local function MinotaurFunctions(inst)
     end
     RestartTimer(inst, "forceleapattack", math.random(30, 45))
     RestartTimer(inst, "forcebelch", math.random(30, 45))
-    
+
     inst:ListenForEvent("timerdone", CheckForceJump)
-    
-    local _OnAttacked = UpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
-    local function OnAttacked(inst, data)
-        if not inst.sg:HasStateTag("newbuild") then
-            _OnAttacked(inst,data)
-        end
-    end
-    inst:RemoveEventCallback("attacked",_OnAttacked)
-    UpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
-    
-    inst:ListenForEvent("attacked", OnAttacked)
-    
+
     inst.LaunchProjectile = ShootProjectile
-    
+
     inst.ActivateShield = ActivateShield
     inst.DeactivateShield = DeactivateShield
-    
+
     inst.OrganUpdate = OrganUpdate
-    
+
     inst.components.health.redirect = nodmgshielded
-    
+
     inst:AddComponent("healthtrigger")
     inst.components.healthtrigger:AddTrigger(0.4, function(inst)
         inst.forcebelch = true
         --inst.have_a_heart = true
     end)
-    
+
     inst:DoPeriodicTask(5, HomeCheck)
 end
 
-env.AddPrefabPostInit("minotaur", function(inst)
-    if not TheWorld.ismastersim then
-        return
+env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
+    if not TheWorld.ismastersim then return inst end
+    local _OnAttacked = UpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
+    if _OnAttacked then
+        local function OnAttacked(inst, data, ...)
+            if not inst.sg:HasStateTag("newbuild") then
+                return _OnAttacked(inst, data, ...)
+            end
+        end
+        UpvalueHacker.SetUpvalue(Prefabs.minotaur.fn, OnAttacked, "OnAttacked")
     end
+end)
 
+env.AddPrefabPostInit("minotaur", function(inst)
+    if not TheWorld.ismastersim then return inst end
     MinotaurFunctions(inst)
 end)

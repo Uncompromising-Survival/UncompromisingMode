@@ -714,3 +714,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Prey's instincts, must interpret.",
     "Current tactics, unsuccessful. Patience, needed."}
 
 DESCRIBE.WATHOM_CORPSE = "Rise! Rise again!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Held prison. Restores integrity. Deadly and efficient."

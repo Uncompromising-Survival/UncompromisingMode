@@ -669,3 +669,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"In just a moment, it should rest soon.",
     "Its oily properties make it a difficult catch by hand."}
 	
 DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is still beating."
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."

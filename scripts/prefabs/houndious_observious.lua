@@ -34,8 +34,12 @@ local function ondestroyed(inst, worker)
     inst:Remove()
 end
 
-local function onhit(inst)
+local function onchop(inst, chopper)
 	inst.AnimState:PlayAnimation("hit",false)
+    if not (chopper ~= nil and chopper:HasTag("playerghost")) then
+        inst.SoundEmitter:PlaySound("dontstarve/wilson/use_axe_tree")
+        -- TODO: Also add living log getting hit sound
+    end
 end
 
 local function onload(inst, data)
@@ -123,7 +127,7 @@ local function fn()
     inst.components.workable:SetWorkAction(ACTIONS.CHOP)
     inst.components.workable:SetWorkLeft(25)
     inst.components.workable:SetOnFinishCallback(ondestroyed)
-    inst.components.workable:SetOnWorkCallback(onhit)       
+    inst.components.workable:SetOnWorkCallback(onchop)       
 	
 
 	

@@ -40,6 +40,8 @@ modimport("init/init_descriptions/wanda")
 modimport("init/init_descriptions/winky")
 modimport("init/init_descriptions/wathom")
 
+
+
 --	[ 		Number Tuning and PostInits		]	--
 
 modimport("init/init_tuning")
@@ -61,6 +63,12 @@ modimport("init/init_inkubator_ingredients")
 require("uncompromisingcommands")
 modimport("scripts/uncompromisingcommands_autocomplete")
 
+--	[ 			 User   Interface	    ]	--
+
+if TUNING.DSTU.UI_SHOWMULTIPRODUCTS then
+    modimport("init/init_showmultiproducts")
+end
+
 --	[ 				Gamemodes			]	--
 
 local GAMEMODE_UNCOMPROMISING = 0;
@@ -71,8 +79,6 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --end
 
 --	[ 				Features			]	--
-
-
 
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")

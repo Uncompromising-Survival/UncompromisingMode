@@ -588,3 +588,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Why running, friend?",
     "Friend is funny"}
 
 DESCRIBE.WATHOM_CORPSE = "Not done yet"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Pretty hard shell"

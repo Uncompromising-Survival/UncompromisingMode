@@ -640,3 +640,5 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I'll try again when it's on break.",
     "Might be easier to hit when it's landed."}
 
 DESCRIBE.WATHOM_CORPSE = "He's still got fight left in 'em! Up and at'em, lets go!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "An impenetrable shield!"

@@ -47,6 +47,9 @@ STRINGS.UNCOMP_TOOLTIP = {
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
     SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables.",
+    RED_MUSHROOMHAT = "- Makes you crave red caps.\n- Each bite increases your damage.\n- Holds on tightly.",
+    GREEN_MUSHROOMHAT = "- Makes you crave green caps.\n- Each bite makes you speedier.\n- Holds on tightly.",
+    BLUE_MUSHROOMHAT = "- Makes you crave blue caps.\n- Each bite makes you work harder.\n- Holds on tightly.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -93,7 +96,12 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
     RUINS_BAT = "- Spawns Shadow Tentacles every 4 hits.\n- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
-    UM_ICE_SICLE = "- Freezes enemies. \n-Lowers temperature on reaping and even more on attacking.",
+    UM_ICE_SICLE = "- Freezes enemies. \nReaps plants.\n-Lowers temperature on reaping and even more on attacking.",
+    JAWED_SCYTHE = "Reaps plants.",
+    HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
+    BEAKBASHER = "- Is a darn good hammer.",
+    UM_HAT_LEAFWING = "- Speedier when worn.\nCan breeze through thickets.",
+
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
