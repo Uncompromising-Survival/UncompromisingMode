@@ -156,6 +156,9 @@ configuration_options = {
     BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right veteran's curse icon, which provides helpful information on the curse.", true),
     SkipSpace(),
 
+    ------------------------------
+    -- Core Gameplay Reworks --
+    ------------------------------
     Header("Core Gameplay"),
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
@@ -174,10 +177,6 @@ configuration_options = {
             { description = "Explosion On", data = 3 } },
         default = 3
     },
-    BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
-        "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
-    BinaryConfig("dreadeye", "Dread Eye",
-        "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
     BinaryConfig("longpig", "Long Pig", "Telltale Hearts now require 'Long Pig' from skeletons to hinder amassing large numbers of them.", false),
 
     BinaryConfig("maxhpdeath", "Max Health Death", "Dying in any way will leave you with reduced Max HP, stacking with the penalties from some revival methods.", true),
@@ -218,6 +217,15 @@ configuration_options = {
         default =
         "default"
     },
+    SkipSpace(),
+
+    Header("Shadow Creatures"),
+    BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
+        "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
+    BinaryConfig("dreadeyes_allowed", "Dread Eye",
+        "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
+    BinaryConfig("creepingfear_allowed", "Creeping Fear",
+        "Once your insanity has reached its end, all the fear you've experienced will come rushing back to you.", true),
     SkipSpace(),
 
     ------------------------------

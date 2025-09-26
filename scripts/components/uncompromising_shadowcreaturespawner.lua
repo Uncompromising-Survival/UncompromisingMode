@@ -8,7 +8,8 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
     --[[ Constants ]]
     --------------------------------------------------------------------------
-	local dread_eyes_allowed = TUNING.DSTU.DREAD_EYE
+	local dreadeyes_allowed = TUNING.DSTU.DREADEYES_ALLOWED
+    local creepingfear_allowed = TUNING.DSTU.CREEPINGFEAR_ALLOWED
     local NON_INSANITY_MODE_DESPAWN_INTERVAL = 0.1
     local NON_INSANITY_MODE_DESPAWN_VARIANCE = 0.1
 
@@ -83,10 +84,10 @@ return Class(function(self, inst)
     local function SpawnLandShadowCreature(player, spawndrifter)
         local random_chance = math.random()
 
-        return SpawnPrefab(spawndrifter and "creepingfear" or
+        return SpawnPrefab(spawndrifter and creepingfear_allowed and "creepingfear" or
             player.components.sanity:GetPercent() < .5 and
             (random_chance < 0.2 and "terrorbeak" or
-                (random_chance < 0.8 and dread_eyes_allowed and "dreadeye")) or
+                (random_chance < 0.8 and dreadeyes_allowed and "dreadeye")) or
             "crawlinghorror"
         )
     end
@@ -94,9 +95,9 @@ return Class(function(self, inst)
     local function SpawnOceanShadowCreature(player, spawndrifter)
         local random_chance = math.random()
 
-        return SpawnPrefab(spawndrifter and "creepingfear" or
+        return SpawnPrefab(spawndrifter and creepingfear_allowed and "creepingfear" or
             player.components.sanity:GetPercent() < .5 and
-            (random_chance < 0.2 and dread_eyes_allowed and "dreadeye") or
+            (random_chance < 0.2 and dreadeyes_allowed and "dreadeye") or
             "oceanhorror"
         )
     end
