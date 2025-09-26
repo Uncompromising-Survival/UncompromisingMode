@@ -31,6 +31,8 @@ local function ondestroyed(inst, worker)
     local fx = SpawnPrefab("collapse_small")
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("wood")
+    inst.SoundEmitter:PlaySound("dontstarve/forest/treefall")
+    inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/livingtree_die")
     inst:Remove()
 end
 
@@ -38,7 +40,7 @@ local function onchop(inst, chopper)
 	inst.AnimState:PlayAnimation("hit",false)
     if not (chopper ~= nil and chopper:HasTag("playerghost")) then
         inst.SoundEmitter:PlaySound("dontstarve/wilson/use_axe_tree")
-        -- TODO: Also add living log getting hit sound
+        inst.SoundEmitter:PlaySound("dontstarve/creatures/leif/livingtree_hit")
     end
 end
 
