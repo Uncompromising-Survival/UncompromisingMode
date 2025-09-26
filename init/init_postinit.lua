@@ -233,7 +233,8 @@ local prefab_post = {
     "spiderqueen",
     "snowman",
     "lighter",
-	"molebat"
+	"molebat",
+    "lightning_rod",
 }
 
 local stategraph_post = {
