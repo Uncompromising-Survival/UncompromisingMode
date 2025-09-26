@@ -2,8 +2,8 @@ local foods = { --health/hunger/sanity
     coontail = { 9, 9, 7 },
     shroom_skin = { 10, 10, 0 },
     tentaclespots = { 10, 10, 0 },
-    glommerwings = { 10, 10, 0 },
-	hambat = { 10, 10, 0 },
+    glommerwings = { 50, 10, 0 },
+	hambat = { 6, 50, 0 },
 }
 
 for prefab, stats in pairs(foods) do
