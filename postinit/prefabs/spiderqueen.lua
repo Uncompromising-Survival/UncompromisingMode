@@ -154,9 +154,6 @@ local function SpiderQueenFunctions(inst)
 end
 
 env.AddPrefabPostInit("spiderqueen", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     SpiderQueenFunctions(inst)
 end)

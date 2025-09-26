@@ -107,6 +107,6 @@ local function LightningGoatHerdPostInit(inst)
 end
 
 env.AddPrefabPostInit("lightninggoatherd", function(inst)
-    if not TheWorld.ismastersim then return inst end
+    if not TheWorld.ismastersim then return end
     LightningGoatHerdPostInit(inst)
 end)

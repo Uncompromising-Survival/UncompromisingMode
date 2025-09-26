@@ -34,21 +34,14 @@ end
 
 for _, prefab in pairs(infestables) do
     env.AddPrefabPostInit(prefab, function(inst)
-        if not TheWorld.ismastersim then
-            return inst
-        end
-
+        if not TheWorld.ismastersim then return end
         MakeInfestable(inst)
     end)
 end
 
 env.AddPlayerPostInit(function(inst)
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
+    if not TheWorld.ismastersim then return end
     MakeInfestable(inst)
-
     inst:ListenForEvent("respawnfromghost", MakeInfestable)
     inst:ListenForEvent("respawnfromcorpse", MakeInfestable)
 end)

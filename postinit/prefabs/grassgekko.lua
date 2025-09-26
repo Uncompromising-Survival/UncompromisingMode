@@ -83,7 +83,7 @@ local function GrassGekkoFunctions(inst)
 end
 
 env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return inst end
+    if not TheWorld.ismastersim then return end
     local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
     if _ontimerdone then
         local function ontimerdone(inst, data, ...)
@@ -103,7 +103,7 @@ env.AddPrefabPostInit("grassgekko", function(inst)
     if not TheWorld.ismastersim then
         --delayed because we don't want any old events
         inst:DoTaskInTime(0, inst.ListenForEvent, "grassgekko.playgrowtailsound", CLIENT_PlayGrowTailSound)
-        return inst
+        return
     end
 
     GrassGekkoFunctions(inst)

@@ -167,7 +167,7 @@ local function MinotaurFunctions(inst)
 end
 
 env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
-    if not TheWorld.ismastersim then return inst end
+    if not TheWorld.ismastersim then return end
     local _OnAttacked = UpvalueHacker.GetUpvalue(Prefabs.minotaur.fn, "OnAttacked")
     if _OnAttacked then
         local function OnAttacked(inst, data, ...)
@@ -180,6 +180,6 @@ env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better sinc
 end)
 
 env.AddPrefabPostInit("minotaur", function(inst)
-    if not TheWorld.ismastersim then return inst end
+    if not TheWorld.ismastersim then return end
     MinotaurFunctions(inst)
 end)

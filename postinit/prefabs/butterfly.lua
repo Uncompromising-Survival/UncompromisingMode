@@ -103,9 +103,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local butterflies = {"butterfly","um_buttery_fly","moonbutterfly"}
     for i,v in ipairs(butterflies) do
         env.AddPrefabPostInit(v, function(inst)
-            if not TheWorld.ismastersim then
-                return
-            end
+            if not TheWorld.ismastersim then return end
 
 			inst.SlipAway = SlipAway
 
@@ -144,9 +142,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local flower_types = {"flower", "flower_evil"}
     for i,v in ipairs(flower_types) do
         env.AddPrefabPostInit(v, function(inst)
-            if not TheWorld.ismastersim then
-                return
-            end
+            if not TheWorld.ismastersim then return end
             inst:WatchWorldState("isday",ReEnableButterfly)
         end)
     end
@@ -179,7 +175,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     env.AddComponentPostInit("butterflyspawner", function(cmp)
         local _GetSpawnPoint, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(cmp.OnPostInit, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
 
-        debug.setupvalue(scope_fn, _fn_i,GetSpawnPoint)
+        debug.setupvalue(scope_fn, _fn_i, GetSpawnPoint)
     end)
 
     env.AddStategraphState("butterfly", State{

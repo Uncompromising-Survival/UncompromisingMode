@@ -2,7 +2,6 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-
 local function onblink(staff, pos, caster)
     if caster and staff.components.rechargeable:IsCharged() then
         if caster.components.staffsanity then
@@ -17,10 +16,11 @@ local function onblink(staff, pos, caster)
 end
 
 env.AddPrefabPostInit("orangestaff", function(inst)
+    inst:AddTag("rechargeable")
+    if not TheWorld.ismastersim then return end
     inst:AddComponent("rechargeable")
-
     inst:RemoveComponent("finiteuses")
-    if inst ~= nil and inst.components.blinkstaff ~= nil then
+    if inst.components.blinkstaff then
         inst.components.blinkstaff.onblinkfn = onblink
     end
 end)

@@ -567,9 +567,7 @@ local function SpikeWaves(inst, target, attacker, angle)
 end
 
 env.AddPrefabPostInit("staff_lunarplant", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     local equippable = inst.components.equippable
     local weapon = inst.components.weapon
