@@ -782,7 +782,7 @@ containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
         or string.find(ingame_name, "dried", 1, true)
         or string.find(ingame_name, "jerky", 1, true)
 
-    if isdried and item:HasTag("meat") then
+    if isdried then
 		return true
 	end
 
