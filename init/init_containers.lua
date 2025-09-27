@@ -758,6 +758,37 @@ for k, v in pairs(containers.params.spicepack.widget.slotbg) do
 end
 
 
+-- Polar Bearger Bin dried jerky change
+vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
+containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
+
+    -- Klei's containers.lua [[ beargerfur_sack ]]
+    if vanilla_beargerfur_sack_itemtestfn and vanilla_beargerfur_sack_itemtestfn(container, item, slot) then
+        return true
+    end
+
+    if not item or not item.name then
+        return false
+    end
+
+    -- Mod compatibility: If item is named in code or in-game "Jerky" or "Dried" then it is probably dried jerky
+    -- loopuleasa: Klei don't seem to implement a proper "isdried" generic tag
+    local code_name = item.prefab
+    local ingame_name = item.name:lower()
+    local isdried = false
+
+    isdried = string.find(code_name, "dried", 1, true)
+        or string.find(code_name, "jerky", 1, true)
+        or string.find(ingame_name, "dried", 1, true)
+        or string.find(ingame_name, "jerky", 1, true)
+
+    if isdried and item:HasTag("meat") then
+		return true
+	end
+
+end
+
+
 containers.params.silken_bundle = GLOBAL.deepcopy(containers.params.beargerfur_sack)
 
 
