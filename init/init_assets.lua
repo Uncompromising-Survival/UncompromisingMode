@@ -467,6 +467,9 @@ Assets = {
     
     Asset("IMAGE", "images/cookbook_um_kebab.tex"),
     Asset("ATLAS", "images/cookbook_um_kebab.xml"),
+
+    Asset("IMAGE", "images/cookbook_um_sponge_cake.tex"),
+    Asset("ATLAS", "images/cookbook_um_sponge_cake.xml"),
     
     --crafting menu avatars
     Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
