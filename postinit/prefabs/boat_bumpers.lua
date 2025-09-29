@@ -9,6 +9,9 @@ local bumpers = {
 }
 local BUMPER_DEPLOY_IGNORE_TAGS = { "NOBLOCK", "player", "FX", "INLIMBO", "DECOR", "walkableplatform", "structure" }
 
+-------------------------------------------------------------------------------------------
+--- Kits
+-------------------------------------------------------------------------------------------
 for k, v in ipairs(bumpers) do
     env.AddPrefabPostInit("boat_bumper_" .. v .. "_kit", function(inst)
         inst._custom_candeploy_fn = function(inst, pt, mouseover, deployer, rot)
@@ -37,15 +40,32 @@ for k, v in ipairs(bumpers) do
             return TheWorld.Map:IsDeployPointClear(snap_point, nil, inst.replica.inventoryitem:DeploySpacingRadius(), nil, nil, nil, BUMPER_DEPLOY_IGNORE_TAGS)
         end
 
+        if v == "kelp" then
+            inst:AddTag("show_spoilage")
+
+            if not TheWorld.ismastersim then
+                return inst
+            end
+
+            inst:AddComponent("perishable")
+            inst.components.perishable.onperishreplacement = "spoiled_food"
+            inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
+            inst.components.perishable:StartPerishing()
+        end
+
         if not TheWorld.ismastersim then return end
     end)
+
+    -------------------------------------------------------------------------------------------
+    --- Bumpers
+    -------------------------------------------------------------------------------------------
     if v == "kelp" then
         env.AddPrefabPostInit("boat_bumper_" .. v, function(inst)
             inst:DoPeriodicTask(30, function(inst)
                 if inst.components.health ~= nil then
                     inst.components.health:DoDelta(5)
                 end
-            end)
+            end)  
         end)
     end
 end
