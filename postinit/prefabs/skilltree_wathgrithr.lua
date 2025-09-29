@@ -77,9 +77,9 @@ local POSITIONS =
     wathgrithr_arsenal_shield_3 = { x = ARSENAL_POS_X_3, y = ARSENAL_SHIELD_Y_2 },
 
     wathgrithr_beefalo_1 = { x = BEEFALO_POS_X, y = POS_Y_1 },
-    wathgrithr_beefalo_2 = { x = BEEFALO_POS_X, y = POS_Y_2 },
-    wathgrithr_beefalo_3 = { x = BEEFALO_POS_X, y = POS_Y_4 },                      --{ x = BEEFALO_POS_X, y = POS_Y_3 },
-    wathgrithr_beefalo_saddle = { x = BEEFALO_POS_X, y = POS_Y_3 },                 --{ x = BEEFALO_POS_X, y = POS_Y_4 },
+    wathgrithr_beefalo_2 = { x = BEEFALO_POS_X, y = POS_Y_4 },
+    wathgrithr_beefalo_3 = { x = BEEFALO_POS_X, y = POS_Y_3 },                      --{ x = BEEFALO_POS_X, y = POS_Y_3 },
+    wathgrithr_beefalo_saddle = { x = BEEFALO_POS_X, y = POS_Y_2 },                 --{ x = BEEFALO_POS_X, y = POS_Y_4 },
 
     wathgrithr_songs_instantsong_cd_lock = { x = SONGS_POS_X_1, y = POS_Y_1 },
     wathgrithr_songs_instantsong_cd = { x = SONGS_POS_X_2, y = POS_Y_1 },
@@ -470,20 +470,11 @@ local skills =
         tags = { "beefalodomestication", "beefalobucktime" },
 
         root = true,
-        connects = { "wathgrithr_beefalo_2" },
+        connects = { "wathgrithr_beefalo_saddle" },
 
         onactivate = ONACTIVATE_FNS.Beefalo,
     },
 
-    -- Beefalos will allow you to ride them for 30% longer.
-    wathgrithr_beefalo_2 = {
-        group = "beefalo",
-        tags = { "beefaloinspiration" },
-
-        connects = { "wathgrithr_beefalo_saddle" },
-
-        onactivate = ONACTIVATE_FNS.BeefaloInspiration,
-    },
     -- Learn to craft a new Beefalo Saddle that protects your beefalo.
     wathgrithr_beefalo_saddle = {
         group        = "beefalo",
@@ -496,6 +487,15 @@ local skills =
     wathgrithr_beefalo_3 = {
         group = "beefalo",
         tags = { "beefalodamage" },
+        connects = { "wathgrithr_beefalo_2" },
+    },
+
+    -- Beefalos will allow you to ride them for 30% longer.
+    wathgrithr_beefalo_2 = {
+        group = "beefalo",
+        tags = { "beefaloinspiration" },
+
+        onactivate = ONACTIVATE_FNS.BeefaloInspiration,
     },
 
     --------------------------------------------------------------------------
@@ -747,10 +747,19 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
 
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = "Beefalos will be domesticated 15% faster and ridden 30% longer."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_1.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = "Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark."
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC
+
+
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_TITLE = "Noble Mount II"
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_3.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_TITLE
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC = "Wigfrid's damage multiplier applies to beefalos."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC
+
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE = "Noble Mount III"
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = "Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark."
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC
+
+
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = "Learn to craft a new Beefalo Saddle that protects your Beefalo. \nHas higher damage."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_saddle.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC
 
