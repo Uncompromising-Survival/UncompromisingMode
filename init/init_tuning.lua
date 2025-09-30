@@ -17,6 +17,8 @@ TUNING = GLOBAL.TUNING
 -- [              DSTU Related Overrides                  ]
 
 local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
+-- IsModEnabled is host only. This will work on clients connected to another player or a dedicated server
+local ia_check_client = GLOBAL.AllRecipes["obsidianmachete"] and GLOBAL.AllRecipes["boat_encrusted"]
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
 
 --day/month > month/day
@@ -366,6 +368,7 @@ TUNING.DSTU = {
     -- Experimental and DEV
     ----------------------------------------------------------------------------
 
+    WORLDGEN_MASTERTOGGLE = GetModConfigData("worldgenmastertoggle"),
     ELECTRICALMISHAP = GetModConfigData("electricalmishap"),
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
@@ -429,8 +432,9 @@ TUNING.DSTU = {
     AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
 
-    --mod chekcs
+    --mod checks
     ISLAND_ADVENTURES = ia_check,
+    ISLAND_ADVENTURES_CLIENT = ia_check_client,
     TREATS_FOR_WEBBER = tfw_check,
 
     --MEME CONFIG

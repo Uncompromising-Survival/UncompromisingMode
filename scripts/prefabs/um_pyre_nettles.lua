@@ -27,11 +27,16 @@ local spore_cooldown_max = 60
 
 -- These tiles are where Smolder Spores can survive, when it isn't Summer.
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
-local HOME_TILES =
-{
-    [WORLD_TILES.UM_MAGMA] = true,
-    [WORLD_TILES.UM_GRASSMAGMA] = true,
-}
+
+-- (Anomen) Quick hack to prevent UM crashing when master toggle is disabled
+-- PLEASE DO A PROPER FIX
+if TUNING.DSTU.WORLDGEN_MASTERTOGGLE then
+    local HOME_TILES =
+    {
+        [WORLD_TILES.UM_MAGMA] = true,
+        [WORLD_TILES.UM_GRASSMAGMA] = true,
+    }
+end
 
 if WORLD_TILES.MAGMA_ASH then
     HOME_TILES[WORLD_TILES.MAGMA_ASH] = true --IA compat teehee
