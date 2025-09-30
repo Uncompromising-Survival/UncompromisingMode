@@ -305,7 +305,7 @@ local um_preparedfoods =
     um_boom_tart =
     {
         test = function(cooker, names, tags)
-            return names.giant_blueberry and names.giant_blueberry == 2 and tags.sweetener and tags.sweetener == 2
+            return names.giant_blueberry and names.giant_blueberry >= 2 and tags.sweetener and tags.sweetener >= 2
         end,
         hunger = 37.5,
         health = 3,
@@ -329,7 +329,7 @@ local um_preparedfoods =
     um_sponge_cake =
     {
         test = function(cooker, names, tags)
-            return names.um_spongeplant_item and names.um_spongeplant_item == 2 and tags.sweetener and tags.fruit and tags.fruit >= 1
+            return names.um_spongeplant_item and names.um_spongeplant_item >= 2 and tags.sweetener and tags.fruit and tags.fruit >= 1
         end,
         hunger = 37.5,
         health = -3,
@@ -619,7 +619,7 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 1.8,
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
-        temperatureduration = TUNING.FOOD_TEMP_AVERAGE,
+        temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 3 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
@@ -653,7 +653,7 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 2,
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
-        temperatureduration = TUNING.FOOD_TEMP_AVERAGE,
+        temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
@@ -669,17 +669,17 @@ local um_preparedfoods =
     },
     um_durian_cream_marshcake =
     {
-        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and not tags.inedible end,
+        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and tags.egg and not tags.meat and not (tags.monster and tags.monster > 2.5) end,
         hunger = 75,
         health = 12,
         sanity = 15,
-        priority = 51,
+        priority = 53,
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 } } },
+        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, {"bird_egg", 1} } },
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
 				if TheWorld then
@@ -703,9 +703,11 @@ local um_preparedfoods =
         hunger = 37.5,
         health = 20,
         sanity = 50,
-        priority = 66,
+        priority = 51,
         weight = 1,
         cooktime = 3,
+        temperature = TUNING.HOT_FOOD_BONUS_TEMP,
+        temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.MEAT,
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },

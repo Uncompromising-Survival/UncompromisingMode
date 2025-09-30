@@ -154,8 +154,6 @@ local function fyre_bomb_fn()
 	inst.components.reticule.validfn = function(inst) return true end
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
 	inst:AddTag("allow_action_on_impassable")
-    -- From watersource component
-    inst:AddTag("watersource")
 
     if not TheWorld.ismastersim then
         return inst

@@ -87,7 +87,7 @@ ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
-AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
+AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2),Ingredient("rocks", 3)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
 ChangeSortKey("um_fyre_bomb", "gunpowder", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
