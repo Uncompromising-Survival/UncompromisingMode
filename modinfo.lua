@@ -811,7 +811,15 @@ configuration_options = {
     SkipSpace(),
 
     Header("Spiders"),
-    BinaryConfig("alljumperspiders", "Regular Spiders Jump", "Normal Spiders leap, just like Spider Warriors.", true),
+    {
+        name = "alljumperspiders",
+        label = "Regular Spiders Jump",
+        hover = "Normal Spiders leap just like Spider Warriors, but lesser.",
+        options = {
+            { description = "Default", data = "lesser" }, { description = "Warrior Range", data = "warrior" },
+            { description = "Disabled", data = false } },
+        default = "lesser"
+    },
     BinaryConfig("spiderwarriorcounter", "Warrior Counter",
         "Warrior Spiders (and Depth Dwellers) perform a counter-attack when attacked (also lowers health to 300).", true),
     SkipSpace(),

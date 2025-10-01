@@ -11,6 +11,27 @@ env.AddStategraphPostInit("spider", function(inst)
         end
     end
 
+    local _OldAttackEvent = inst.events["doattack"] ~= nil and inst.events["doattack"].fn or nil
+    if _OldAttackEvent then
+        inst.events["doattack"].fn = function(inst, data)
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst:HasTag("spider_regular") then
+                inst.sg:GoToState(
+                    data.target:IsValid()
+                    and
+                    not
+                    (
+                    inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) or
+                        (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular")))
+                    and "warrior_attack" --Do leap attack
+                    or "attack",
+                    data.target
+                )
+            else
+                _OldAttackEvent(inst, data)
+            end
+        end
+    end
+
     local function WebMortar(inst,angle) -- Same function as Hooded Widow, want to each new players about the attack w/out having to previously fight Hooded Widow
         if inst.components.combat.target ~= nil then
             local target = inst.components.combat.target

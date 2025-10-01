@@ -301,6 +301,14 @@ env.AddPrefabPostInit("spider", function(inst)
         return
     end
 
+    inst:AddTag("spider_regular")
+    local attackrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and 0.5 or 1
+    local hitrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and 0.8 or 1
+	if inst.components.combat and TUNING.DSTU.REGSPIDERJUMP then
+        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE*attackrangemod, TUNING.SPIDER_WARRIOR_HIT_RANGE*hitrangemod)
+		--inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
+	end
+
    --[[ inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(5, 13) --set specific values
     inst.components.playerprox:SetOnPlayerNear(onnear)
@@ -313,7 +321,7 @@ env.AddPrefabPostInit("spider", function(inst)
 
     inst.DoSpikeAttack = DoSpikeAttack
 
-    inst:AddComponent("tradable") 
+    inst:AddComponent("tradable")
 end)
 
 SetSharedLootTable( 'spider_warrior',
@@ -325,20 +333,20 @@ env.AddPrefabPostInit("spider_warrior", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    
+
     inst:RemoveComponent("lootdropper")
-    
+
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:AddRandomLoot("silk", 1)
     inst.components.lootdropper:AddRandomLoot("spidergland", 1)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
     inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
-    
+
     if inst.components.combat ~= nil then
         inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
     end
-        
+
     inst:AddComponent("tradable") -- For Moondial Mutation.
 end)
 
@@ -346,9 +354,9 @@ env.AddPrefabPostInit("spider_dropper", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    
+
     inst:RemoveComponent("lootdropper")
-    
+
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
     inst.components.lootdropper:AddRandomLoot("silk", 1)
@@ -356,11 +364,11 @@ env.AddPrefabPostInit("spider_dropper", function(inst)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
     inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
-    
+
     if inst.components.combat ~= nil then
         inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
     end
-    
+
 end)
 
 SetSharedLootTable( 'um_spider_moon',
@@ -374,5 +382,5 @@ env.AddPrefabPostInit("spider_moon", function(inst)
     end
 
     inst.components.lootdropper:SetChanceLootTable('um_spider_moon')
-    
+
 end)
