@@ -288,7 +288,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     
     local function FindBlueFuncap(inst)
         local helm = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-        if helm and helm.prefab == "blue_mushroomhat" then
+        if TUNING.DSTU.FUNCAP_REWORK and helm and helm.prefab == "blue_mushroomhat" then
             return helm
         end
     end

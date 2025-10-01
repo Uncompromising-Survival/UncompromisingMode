@@ -55,35 +55,37 @@ if GetModConfigData("compostoverrot") then
 end
 
 -- Funcap Change
+if GetModConfigData("funcap_fun") then
+    AllRecipes["red_mushroomhat"].ingredients = {
+        Ingredient("red_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
 
-AllRecipes["red_mushroomhat"].ingredients = {
-    Ingredient("red_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+    AllRecipes["green_mushroomhat"].ingredients = {
+        Ingredient("green_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
 
-AllRecipes["green_mushroomhat"].ingredients = {
-    Ingredient("green_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+    AllRecipes["blue_mushroomhat"].ingredients = {
+        Ingredient("blue_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
+end
 
-AllRecipes["blue_mushroomhat"].ingredients = {
-    Ingredient("blue_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+if GetModConfigData("celestialitems_revert") then
+    AllRecipes["glasscutter"].ingredients = {
+        Ingredient("boards", 1),
+        Ingredient("moonglass", 6),
+    }
+    AllRecipes["glasscutter"].nounlock = true
 
-AllRecipes["glasscutter"].ingredients = {
-    Ingredient("boards", 1),
-    Ingredient("moonglass", 6),
-}
-AllRecipes["glasscutter"].nounlock = true
+    AllRecipes["moonglassaxe"].nounlock = true
 
-AllRecipes["moonglassaxe"].nounlock = true
-
-AllRecipes["moon_mushroomhat"].ingredients = {
-    Ingredient("moon_cap", 4),
-    Ingredient("livinglog", 2),
-}
-
+    AllRecipes["moon_mushroomhat"].ingredients = {
+        Ingredient("moon_cap", 4),
+        Ingredient("livinglog", 2),
+    }
+end
 --woodie stuff
 
 --local config_skilltrees = GetModConfigData("woodie_skilltree")

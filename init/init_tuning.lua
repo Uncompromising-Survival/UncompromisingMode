@@ -431,6 +431,8 @@ TUNING.DSTU = {
     CANEDURABILITY = GetModConfigData("canedurability"),
     AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
+    GLASSCUTTER_REVERT = GetModConfigData("celestialitems_revert"),
+    FUNCAP_REWORK = GetModConfigData("funcap_fun"),
 
     --mod checks
     ISLAND_ADVENTURES = ia_check,
@@ -487,9 +489,10 @@ if GetModConfigData("beebox_nerf") then
 end
 
 -- Glass Cutter
-TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
-TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
-
+if GetModConfigData("celestialitems_revert") then
+    TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
+    TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
+end
 --if GetModConfigData("woodie_skilltree") then
 --TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3

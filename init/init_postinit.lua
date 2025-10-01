@@ -110,7 +110,6 @@ local prefab_post = {
     "featherhat",
     --"malbatross",
     "mushrooms",
-    "mushroom_hats",
     "rock_ice",
     "oasislake",
     --"shadowcreature",
@@ -133,7 +132,6 @@ local prefab_post = {
     "armor_bramble",
     --"woby",
     "cave_network",
-    "glasscutter",
     "critterlab",
     "wobster",
     "trinkets", -- This is for the grave mound cc trinkets
@@ -529,7 +527,6 @@ if GetModConfigData("heatwaves") then
     table.insert(component_post, "wildfires")
 end
 
-
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
@@ -537,6 +534,14 @@ end
 
 if GetModConfigData("infinite_blueprints") then
     table.insert(component_post, "teacher")
+end
+
+if GetModConfigData("celestialitems_revert") then
+    table.insert(prefab_post, "glasscutter")
+end
+
+if GetModConfigData("funcap_fun") then
+    table.insert(prefab_post, "mushroom_hats")
 end
 
 modimport("postinit/sim")

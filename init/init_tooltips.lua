@@ -17,7 +17,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     TOPHAT = "- Reduces sanity loss from various magic items.",
     MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
-    GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
     ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
@@ -47,9 +46,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
     SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables.",
-    RED_MUSHROOMHAT = "- Makes you crave red caps.\n- Each bite increases your damage.\n- Holds on tightly.",
-    GREEN_MUSHROOMHAT = "- Makes you crave green caps.\n- Each bite makes you speedier.\n- Holds on tightly.",
-    BLUE_MUSHROOMHAT = "- Makes you crave blue caps.\n- Each bite makes you work harder.\n- Holds on tightly.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -219,7 +215,14 @@ if TUNING.DSTU.BEEBOX_NERF then
     TOOLTIPS.BEEBOX = "- Reduced maximum amount of Bees.\n- Will deal damage to unprepared players."
     TOOLTIPS.BEEHAT = "- Will protect players from Bee Box damage."	
 end
-
+if TUNING.DSTU.GLASSCUTTER_REVERT then
+    TOOLTIPS.GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures."
+end
+if TUNING.DSTU.FUNCAP_REWORK then
+    TOOLTIPS.RED_MUSHROOMHAT = "- Makes you crave Red Caps.\n- Each bite increases your damage.\n- Holds on tightly."
+    TOOLTIPS.GREEN_MUSHROOMHAT = "- Makes you crave Green Caps.\n- Each bite makes you speedier.\n- Holds on tightly."
+    TOOLTIPS.BLUE_MUSHROOMHAT = "- Makes you crave Blue Caps.\n- Each bite makes you work harder.\n- Holds on tightly."
+end
 if not TUNING.DSTU.ELECTRICALMISHAP then
     TOOLTIPS.NIGHTSTICK =
     "- No longer breaks when empty.\n- Can be fueled by various electrical items, generators, and potatoes."
