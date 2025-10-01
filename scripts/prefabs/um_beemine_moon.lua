@@ -263,6 +263,14 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
             inst.components.inventoryitem:SetOnPutInInventoryFn(StopRattling)
             inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
             inst.components.inventoryitem:SetSinks(true)
+            inst.components.inventoryitem.onpickupfn = function(inst, pickupguy, src_pos)
+                if pickupguy.components.inventory then
+                    local invmine = SpawnPrefab("um_beemine_moon_item")
+                    pickupguy.components.inventory:GiveItem(invmine, nil, inst:GetPosition())
+                end
+                inst:Remove()
+                return true
+            end
 
             inst:AddComponent("deployable")
             inst.components.deployable.ondeploy = ondeploy
@@ -276,15 +284,7 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
 
         inst.OnEntitySleep = OnEntitySleep
         inst.OnEntityWake = OnEntityWake
-		
-		
-		inst.components.inventoryitem.onpickupfn = function(inst, pickupguy, src_pos)
-			if pickupguy.components.inventory then
-				local invmine = SpawnPrefab("um_beemine_moon_item")
-				pickupguy.components.inventory:GiveItem(invmine,nil,inst:GetPosition())
-			end
-			inst:Remove()
-		end
+
         return inst
     end
 
@@ -340,7 +340,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
         inst.Physics:SetDontRemoveOnSleep(true) -- so the object can land and put out the fire, also an optimization due to how this moves through the world
     end
 
-    if tag ~= nil then
+    if tag then
         inst:AddTag(tag)
     end
 
@@ -374,7 +374,6 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
     end
 
     inst:AddComponent("locomotor")
-
 
     inst:AddComponent("complexprojectile")
 
@@ -434,8 +433,6 @@ local function bomb_fn()
 
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
 
-
-
     if not TheWorld.ismastersim then
         return inst
     end
@@ -462,11 +459,10 @@ local function bomb_fn()
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable.equipstack = true
 
-
     MakeHauntableLaunch(inst)
 
     return inst
 end
 
 return BeeMine("um_beemine_moon", "player", "um_beemine_moon", "um_bee_moon", true),
-Prefab("um_beemine_moon_item", bomb_fn, bomb_assets)
+    Prefab("um_beemine_moon_item", bomb_fn, bomb_assets)
