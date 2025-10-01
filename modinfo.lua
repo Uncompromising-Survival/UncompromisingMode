@@ -117,6 +117,8 @@ configuration_options = {
         default = "",
     },
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
+    BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Shows how many products a crafting recipe will yield, if it's more than one.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)", true, true),
+    BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right Veteran's Curse icon, which provides helpful information on the curse.", true, true),
     BinaryConfig("um_tips_only", "UM Loading Tips Only", "Disables vanilla Loading Tips, so only Uncompromising Mode's Loading Tips will appear in the loading screen while joining a world!", false, true),
     BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
     {
@@ -149,11 +151,6 @@ configuration_options = {
     BinaryConfig("armorrework", "Armor Rework",
         "Armor provides significantly less protection, with higher absorption armor being weakened more than lower absorption armor.",
         true),
-    SkipSpace(),
-
-    Header("User Interface"),
-    BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Show Multiple Products crafting amounts (from the client mod by ClumsyPenny)", true),
-    BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right veteran's curse icon, which provides helpful information on the curse.", true),
     SkipSpace(),
 
     ------------------------------

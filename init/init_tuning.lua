@@ -31,11 +31,6 @@ end
 
 TUNING.DSTU = {
     ----------------------------------------------------------------------------
-    -- User Interface changes
-    ----------------------------------------------------------------------------
-    UI_VETCURSE = GetModConfigData("ui_showvetcurse"),
-    UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts"),
-    ----------------------------------------------------------------------------
     -- Armor
     ----------------------------------------------------------------------------
     ARMORREED_UM = TUNING.WILSON_HEALTH * 2 * multiplayer_armor_durability_modifier,
@@ -447,6 +442,8 @@ TUNING.DSTU = {
 
     REDUCED_TORNADO_VFX = GetModConfigData("um_storms_over", true),
     UM_TIPS_ONLY = GetModConfigData("um_tips_only", true),
+    UI_VETCURSE = GetModConfigData("ui_showvetcurse", true),
+    UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts", true),
 
     -- boss hp qol
 
