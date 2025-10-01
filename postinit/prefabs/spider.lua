@@ -21,8 +21,7 @@ local SPIDER_DIVINING_MAXDIST = 30000
 local SPIDER_DIVINING_DEFAULTPING = 3
 
 local function FindClosestPart(inst)
-
-    if inst.tracking_parts == nil then
+    if not inst.tracking_parts then
         inst.tracking_parts = {}
         for k,v in pairs(Ents) do
             if v:HasTag("player") then
@@ -43,10 +42,8 @@ local function FindClosestPart(inst)
                 end
             end
         end
-
         return closest
     end
-
 end
 
 local function CheckTargetPiece(inst)
@@ -83,8 +80,7 @@ local function CheckTargetPiece(inst)
             end
         end
 
-
-        if fxname ~= nil then
+        if fxname then
             --Don't care if there is still a reference to previous fx...
             --just let it finish on its own and remove itself
             inst.fx = SpawnPrefab(fxname)
@@ -285,10 +281,10 @@ local function FindTarget(inst, radius)
         function(guy)
             return (not guy:HasTag("monster") or guy:HasTag("player"))
                 and inst.components.combat:CanTarget(guy)
-                and not (inst.components.follower ~= nil and inst.components.follower.leader == guy)
+                and not (inst.components.follower and inst.components.follower.leader == guy)
         end,
-        { "_combat", "character" },
-        { "spiderwhisperer", "spiderdisguise", "INLIMBO" }
+        {"_combat", "character"},
+        {"spiderwhisperer", "spiderdisguise", "INLIMBO"}
     )
 end
 --[[
@@ -297,15 +293,14 @@ local function WarriorRetarget(inst)
 end--]]
 
 env.AddPrefabPostInit("spider", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
     inst:AddTag("spider_regular")
-    local attackrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and 0.5 or 1
-    local hitrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and 0.8 or 1
+
+    if not TheWorld.ismastersim then return end
+
+    local attackrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and .5 or 1
+    local hitrangemod = TUNING.DSTU.REGSPIDERJUMP == "lesser" and .8 or 1
 	if inst.components.combat and TUNING.DSTU.REGSPIDERJUMP then
-        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE*attackrangemod, TUNING.SPIDER_WARRIOR_HIT_RANGE*hitrangemod)
+        inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE * attackrangemod, TUNING.SPIDER_WARRIOR_HIT_RANGE * hitrangemod)
 		--inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
 	end
 
@@ -330,20 +325,18 @@ SetSharedLootTable( 'spider_warrior',
 })
 
 env.AddPrefabPostInit("spider_warrior", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     inst:RemoveComponent("lootdropper")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("silk", 1)
-    inst.components.lootdropper:AddRandomLoot("spidergland", 1)
-    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
-    inst.components.lootdropper.numrandomloot = 1
-    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:AddRandomLoot("silk", 1)
+    lootdropper:AddRandomLoot("spidergland", 1)
+    lootdropper:AddRandomHauntedLoot("spidergland", 1)
+    lootdropper.numrandomloot = 1
+    lootdropper:SetChanceLootTable('spider_trapdoor')
 
-    if inst.components.combat ~= nil then
+    if inst.components.combat then
         inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
     end
 
@@ -351,24 +344,21 @@ env.AddPrefabPostInit("spider_warrior", function(inst)
 end)
 
 env.AddPrefabPostInit("spider_dropper", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     inst:RemoveComponent("lootdropper")
 
-    inst:AddComponent("lootdropper")
-    inst.components.lootdropper:AddRandomLoot("monstermeat", 1)
-    inst.components.lootdropper:AddRandomLoot("silk", 1)
-    inst.components.lootdropper:AddRandomLoot("spidergland", 1)
-    inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
-    inst.components.lootdropper.numrandomloot = 1
-    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
+    local lootdropper = inst:AddComponent("lootdropper")
+    lootdropper:AddRandomLoot("monstermeat", 1)
+    lootdropper:AddRandomLoot("silk", 1)
+    lootdropper:AddRandomLoot("spidergland", 1)
+    lootdropper:AddRandomHauntedLoot("spidergland", 1)
+    lootdropper.numrandomloot = 1
+    lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
 
-    if inst.components.combat ~= nil then
+    if inst.components.combat then
         inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE * 1.05)
     end
-
 end)
 
 SetSharedLootTable( 'um_spider_moon',
@@ -377,10 +367,6 @@ SetSharedLootTable( 'um_spider_moon',
 })
 
 env.AddPrefabPostInit("spider_moon", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     inst.components.lootdropper:SetChanceLootTable('um_spider_moon')
-
 end)
