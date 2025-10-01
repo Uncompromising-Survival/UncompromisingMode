@@ -206,10 +206,25 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
     inst.OnLoad = OnLoad
 end)
 
-env.AddPrefabPostInit("armor_snakeskin", function(inst)
-    DoPockets(inst, "puffvest_big")
-end)
+-- A check doesn't seem to be needed. It will not run the postinit if it doesn't find the prefab
+--if TUNING.DSTU.ISLAND_ADVENTURES then
+    env.AddPrefabPostInit("armor_snakeskin", function(inst)
+        DoPockets(inst, "puffvest_big")
+    end)
 
-env.AddPrefabPostInit("armor_windbreaker", function(inst)
-    DoPockets(inst, "puffvest_big")
-end)
+    env.AddPrefabPostInit("armor_windbreaker", function(inst)
+        DoPockets(inst, "puffvest_big")
+    end)
+
+    env.AddPrefabPostInit("armor_lifejacket", function(inst)
+        DoPockets(inst, "puffvest_big")
+    end)
+
+    env.AddPrefabPostInit("blubbersuit", function(inst)
+        DoPockets(inst, "puffvest")
+    end)
+
+    env.AddPrefabPostInit("tarsuit", function(inst)
+        DoPockets(inst, "puffvest")
+    end)
+--end
