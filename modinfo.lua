@@ -280,8 +280,8 @@ configuration_options = {
     },
     BinaryConfig("wickerbottom", "Wicker's Sane Reading",
         "Wickerbottom/Maxwell can no longer read books while insane.", true),
-    BinaryConfig("apicultural notes", "Wickerbottom - Apicultural Notes",
-        "\"Apicultural Notes\" now adds 1 Honey to up to 10 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),
+    --[[BinaryConfig("apicultural notes", "Wickerbottom - Apicultural Notes",
+        "\"Apicultural Notes\" now adds 1 Honey to up to 10 Bee Boxes around. Doesn't work on Dusk, Night and/or Winter. Now takes a Honeycomb.", true),]]
     BinaryConfig("applied horticulture", "Wickerbottom - Horti., Abridged",
         "\"Horticulture, Abridged\" now takes 1 Leafy Meat, instead of 5 seeds.", true),
     BinaryConfig("horticulture, expanded", "Wickerbottom - Horti., Expanded",

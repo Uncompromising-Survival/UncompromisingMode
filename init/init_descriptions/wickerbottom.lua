@@ -5,6 +5,25 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 
 --	[ 		Wickerbottom Descriptions		]	--
 
+ANNOUNCE.TEACH_OTHERS_ONLEARN_LINES = {
+    "And that's all there is to it.",
+    "Elementary.",
+    "A simple application of first principles.",
+    "You're quite the fast learner.",
+    "Don't forget to practice what you learned.",
+    "Pay attention, dear.",
+    "I will leave the rest for homework.",
+    "Knowledge opens up a whole new world.",
+    "Very well. You got it.",
+    "The next generation is in safe hands.",
+    "Ready for more lessons?",
+    "See? It's not that difficult.",
+    "You can learn whatever you set your mind to.",
+    "Congratulations, you have passed.",
+    "You've made great progress.",
+    "Some exercise may be required later.",
+}
+
 ANNOUNCE.DREADEYE_SPOOKED = "Oh!! That wasn't what I was expecting..."
 ANNOUNCE.ANNOUNCE_HARDCORE_RES =
 "We'll need the body for a heart to be of much use."

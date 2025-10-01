@@ -370,7 +370,7 @@ local function OnRead_bees(inst, reader)
     end
 end
 
-if TUNING.DSTU.WICKERNERF_BEEBOOK then
+--[[if TUNING.DSTU.WICKERNERF_BEEBOOK then
     env.AddPrefabPostInit("book_bees", function(inst)
         if not TheWorld.ismastersim then
             return
@@ -387,7 +387,7 @@ if TUNING.DSTU.WICKERNERF_BEEBOOK then
             inst.components.finiteuses:SetUses(5)
         end
     end)
-end
+end]]
 
 local function WickerCaresForHerBooks(inst)
     for k, v in pairs(inst.components.inventory.itemslots) do
@@ -412,7 +412,12 @@ if TUNING.DSTU.WICKER_INV_REGEN == "inv" then
 end
 
 PROTOTYPER_DEFS.wickerbottom = { icon_atlas = "images/crafting_menu_avatars.xml", icon_image = "avatar_wickerbottom.tex", action_str = "WICKERBOTTOM", is_crafting_station = false }
-STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn with"
+STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn from"
+
+-- Some quirky teacher Wickerbottom comments
+local function onlearn(inst)
+    inst.components.talker:Say(GetString(inst, "TEACH_OTHERS_ONLEARN_LINES"))
+end
 
 env.AddPrefabPostInit("wickerbottom", function(inst)
     inst:AddTag("prototyper")
@@ -420,9 +425,12 @@ env.AddPrefabPostInit("wickerbottom", function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    inst:AddComponent("prototyper")
-    inst.components.prototyper.trees = TUNING.PROTOTYPER_TREES.SCIENCEMACHINE
-    inst.components.prototyper.restrictedtag = "notwickerbottom"
+
+    local prototyper = inst:AddComponent("prototyper")
+    prototyper.onactivate = onlearn
+    prototyper.trees = TUNING.PROTOTYPER_TREES.SCIENCEMACHINE
+    prototyper.restrictedtag = "notwickerbottom"
+
 end)
 
 if TUNING.DSTU.WICKER_INV_REGEN ~= "vanilla" then

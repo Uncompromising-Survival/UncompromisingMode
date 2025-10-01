@@ -242,13 +242,13 @@ if GetModConfigData("lunar grimoire") then
     }
 end
 
-if GetModConfigData("apicultural notes") then
+--[[if GetModConfigData("apicultural notes") then
     AllRecipes["book_bees"].ingredients = {
         Ingredient("papyrus", 2),
         Ingredient("honeycomb", 1),
         Ingredient("stinger", 8)
     }
-end
+end]]
 
 -- magnets and dock
 if GetModConfigData("no4crafts") then -- :desolate:

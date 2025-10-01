@@ -250,7 +250,7 @@ TUNING.DSTU = {
     --WILLOW_INSULATION = GetModConfigData("willow insulation"),
 
     -- WICKERNERF_HORTICULTURE = GetModConfigData("applied horticulture"),
-    WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
+    --WICKERNERF_BEEBOOK = GetModConfigData("apicultural notes"),
     WICKERNERF_MOONBOOK = GetModConfigData("lunar grimoire"),
     WICKERBUFF_HORTICULTURE = GetModConfigData("horticulture, expanded"),
     WICKERBUFF_LIGHT = GetModConfigData("lux aeterna"),

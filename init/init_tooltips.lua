@@ -326,9 +326,9 @@ if TUNING.DSTU.WICKERNERF_MOONBOOK then
     TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
 end
 
-if TUNING.DSTU.WICKERNERF_BEEBOOK then
+--[[if TUNING.DSTU.WICKERNERF_BEEBOOK then
     TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
-end
+end]]
 
 if TUNING.DSTU.WATHGRITHR_ARSENAL then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
