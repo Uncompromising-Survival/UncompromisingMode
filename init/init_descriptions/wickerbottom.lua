@@ -50,7 +50,7 @@ ANNOUNCE.TEACH_OTHERS_ONLEARN_LINES = {
     "The universe unfolds to the curious.",
     "Learning is its own reward, don't you think?",
     "My biggest blessing are students like you.",
-    "May you one day surpass me."
+    "May you one day surpass me.",
     "Your diligence is commendable.",
     "Even I learn something new every day.",
     "Respect the knowledge, and it will serve you well.",
@@ -80,7 +80,7 @@ ANNOUNCE.TEACH_OTHERS_ONLEARN_LINES = {
     "Remember, dear, never let formal education get in the way of your learning.",
     "Sometimes failure is the best teacher.",
     "Everything is a learning experience.",
-    "I'm proud of what we managed to learn together.",
+    "I'm proud of what we managed to learn together.",
 }
 
 ANNOUNCE.DREADEYE_SPOOKED = "Oh!! That wasn't what I was expecting..."
