@@ -13,30 +13,26 @@ local function OnPutInInv(inst, owner)
     end
     if inst.explodetask then
         inst.explodetask:Cancel()
+        inst.explodetask = nil
     end
-    inst.explodetask = nil
     if inst.sparktask then
         inst.sparktask:Cancel()
+        inst.sparktask = nil
     end
-    inst.sparktask = nil
 end
 
 local function spark(inst)
     local fx = SpawnPrefab("electrichitsparks_electricimmune")
-    local randomsize = math.random() + 0.33
+    local randomsize = (math.random() + .33) * .66
     fx.entity:SetParent(inst.entity)
-    fx.Transform:SetScale(randomsize * .66, randomsize * .66, randomsize * .66)
-    if math.random() <= 0.3 then
-        inst.sparktask = inst:DoTaskInTime(math.random() * 2, spark)
-    else
-        inst.sparktask = inst:DoTaskInTime(math.random() * 0.5, spark)
-    end
+    fx.Transform:SetScale(randomsize, randomsize, randomsize)
+    inst.sparktask = inst:DoTaskInTime(math.random() * (math.random() <= .3 and 2 or .5), spark)
 end
 
 local function OnQuakeBegin(inst)
     inst._quaking = true
     if not inst.components.inventoryitem.owner then
-        if inst.sparktask == nil then
+        if not inst.sparktask then
             inst.sparktask = inst:DoTaskInTime(math.random() + 1, spark)
         end
         inst.explodetask = inst:DoTaskInTime(math.random() + 8, function()
@@ -51,8 +47,8 @@ local function OnQuakeEnd(inst)
     inst._quaking = nil
     if inst.sparktask then
         inst.sparktask:Cancel()
+        inst.sparktask = nil
     end
-    inst.sparktask = nil
 end
 
 --[[local function OnDropped(inst)
@@ -63,44 +59,42 @@ end]]
 
 local function fn()
     local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
-    inst.entity:AddNetwork()
+    local trans = inst.entity:AddTransform()
+    local anim = inst.entity:AddAnimState()
+    local sound = inst.entity:AddSoundEmitter()
+    local network = inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("um_fyrite")
-    inst.AnimState:SetBuild("um_fyrite")
-    inst.AnimState:PlayAnimation("idle")
+    anim:SetBank("um_fyrite")
+    anim:SetBuild("um_fyrite")
+    anim:PlayAnimation("idle")
 
     inst:AddTag("molebait")
     inst:AddTag("quakedebris")
     inst:AddTag("explosive")
 
-	MakeInventoryFloatable(inst, "med", nil, 0.65)
+    MakeInventoryFloatable(inst, "med", nil, 0.65)
 
     inst.entity:SetPristine()
 
-    if not TheWorld.ismastersim then
-        return inst
-    end
+    if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("explosive")
-    inst.components.explosive:SetOnExplodeFn(OnExplodeFn)
-    inst.components.explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE / 4
+    local stackable = inst:AddComponent("stackable")
+    stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst:AddComponent("inspectable")
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem:SetOnPutInInventoryFn(OnPutInInv)
-    --inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-    inst.components.inventoryitem:SetSinks(true)
+
+    local explosive = inst:AddComponent("explosive")
+    explosive:SetOnExplodeFn(OnExplodeFn)
+    explosive.explosivedamage = TUNING.GUNPOWDER_DAMAGE / 4
+
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem:SetOnPutInInventoryFn(OnPutInInv)
+    --inventoryitem:SetOnDroppedFn(OnDropped)
+    inventoryitem:SetSinks(true)
 
     inst:AddComponent("bait")
-
-    inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     MakeHauntableLaunch(inst)
 
