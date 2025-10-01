@@ -17,7 +17,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     TOPHAT = "- Reduces sanity loss from various magic items.",
     MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
     ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
-    GLASSCUTTER = "- Deals more damage to Shadow Aligned Creatures.",
     FEATHERHAT = "- Provides safety from territorial Pengulls.",
     YELLOWAMULET = "- No longer breaks when empty.",
     ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
@@ -161,6 +160,10 @@ end
 if TUNING.DSTU.BEEBOX_NERF then
     TOOLTIPS.BEEBOX = "- Reduced maximum amount of Bees.\n- Reduced maximun amount of Honey.\n- Will deal damage to unprepared players."
     TOOLTIPS.BEEHAT = "- Will protect players from Bee Box damage."	
+end
+
+if TUNING.DSTU.GLASSCUTTER_REVERT then
+    TOOLTIPS.GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures."
 end
 
 if not TUNING.DSTU.ELECTRICALMISHAP then

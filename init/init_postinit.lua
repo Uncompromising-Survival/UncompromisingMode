@@ -115,7 +115,6 @@ local prefab_post = {
     "armor_bramble",
     --	"woby",
     "cave_network",
-    "glasscutter",
     "critterlab",
     "wobster",
     "trinkets", -- This is for the grave mound cc trinkets
@@ -483,6 +482,10 @@ end
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
+end
+
+if GetModConfigData("celestialitems_revert") then
+    table.insert(prefab_post, "glasscutter")
 end
 
 modimport("postinit/sim")

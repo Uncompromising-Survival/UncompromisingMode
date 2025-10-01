@@ -108,13 +108,15 @@ if GetModConfigData("compostoverrot") then
     AllRecipes["wurt_turf_marsh"].ingredients = { Ingredient("cutreeds", 1), Ingredient("compost", 1) }
 end
 
-AllRecipes["glasscutter"].ingredients = {
-    Ingredient("boards", 1),
-    Ingredient("moonglass", 6),
-}
-AllRecipes["glasscutter"].nounlock = true
+if GetModConfigData("celestialitems_revert") then
+    AllRecipes["glasscutter"].ingredients = {
+        Ingredient("boards", 1),
+        Ingredient("moonglass", 6),
+    }
+    AllRecipes["glasscutter"].nounlock = true
 
-AllRecipes["moonglassaxe"].nounlock = true
+    AllRecipes["moonglassaxe"].nounlock = true
+end
 
 --woodie stuff
 

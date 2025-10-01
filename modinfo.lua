@@ -534,6 +534,7 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
 
+    BinaryConfig("celestialitems_revert", "Celestial Altar Item changes", "Reverts the changes to Glass Cutter and Moon Glass Axe.", true),
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
     BinaryConfig("lifeinjector_rework", "Booster Shot Rework", "The Booster Shot regenerates 50% of your max health loss overtime.", true),
     BinaryConfig("canedurability", "Cane Durability",
