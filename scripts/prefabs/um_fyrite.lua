@@ -74,7 +74,7 @@ local function fn()
     inst:AddTag("quakedebris")
     inst:AddTag("explosive")
 
-    MakeInventoryFloatable(inst, "med", nil, 0.65)
+    MakeInventoryFloatable(inst, "med", nil, .65)
 
     inst.entity:SetPristine()
 
