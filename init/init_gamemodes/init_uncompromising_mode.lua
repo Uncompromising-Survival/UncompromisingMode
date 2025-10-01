@@ -46,7 +46,6 @@ modimport("init/init_tuning")
 modimport("init/init_postinit")
 modimport("init/init_strings")
 modimport("init/init_tooltips")
-modimport("init/init_showmultiproducts")
 modimport("init/init_actions")
 modimport("init/init_containers")
 modimport("init/init_batterypower")
@@ -60,6 +59,12 @@ modimport("init/init_generatorcharging2")
 
 require("uncompromisingcommands")
 modimport("scripts/uncompromisingcommands_autocomplete")
+
+--	[ 			 User   Interface	    ]	--
+
+if TUNING.DSTU.UI_SHOWMULTIPRODUCTS then
+    modimport("init/init_showmultiproducts")
+end
 
 --	[ 				Gamemodes			]	--
 

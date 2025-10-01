@@ -13,9 +13,11 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 	self.fogover = self:AddChild( FogOver(ownr) )
 	self.fogover:MoveToBack()
 
-	local Vetcursewidget = require "widgets/vetcursewidget"
-	self.vetcursewidget = self:AddChild( Vetcursewidget(ownr) )
-	self.vetcursewidget:MoveToBack()
+	if TUNING.DSTU.UI_VETCURSE then
+		local Vetcursewidget = require "widgets/vetcursewidget"
+		self.vetcursewidget = self:AddChild( Vetcursewidget(ownr) )
+		self.vetcursewidget:MoveToBack()
+	end
 
 	local californiakingoverlay = require "widgets/californiakingoverlay"
 	self.californiakingoverlay = self:AddChild( californiakingoverlay(ownr) )
