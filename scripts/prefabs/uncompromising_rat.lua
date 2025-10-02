@@ -1904,6 +1904,7 @@ local function OnEquipRat(inst, owner)
         owner:AddTag("ratfriend")
         owner.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/emerge")
         owner.rat_task = owner:DoPeriodicTask(5, Sniffertime, 0)
+        inst.rat_task2 = inst:DoPeriodicTask(8, CheckTargetPiece, 0)
     end
 end
 
@@ -1921,6 +1922,8 @@ local function OnUnequipRat(inst, owner)
         if owner.rat_task then
             owner.rat_task:Cancel()
             owner.rat_task = nil
+            inst.rat_task2:Cancel()
+            inst.rat_task2 = nil
         end
     end
 end
