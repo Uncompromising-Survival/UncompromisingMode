@@ -160,8 +160,8 @@ local function Capture(inst)
     local file_name = "unsafedata/capture_output.json"
 
 
-	TheNet:Announce(totaltable)
-	print(totaltable)
+	--TheNet:Announce(totaltable)
+	--print(totaltable)
 	
     local file = io.open(file_name, "r+")
     if file then
@@ -172,7 +172,7 @@ local function Capture(inst)
         file = io.open(file_name, "w")
         local data = file:write(totaltable)
         file:close()
-        TheNet:Announce("Successfully captured!") -- TODO: AUTO ADD UMSS PREFAB STUFF TOO!
+        --TheNet:Announce("Successfully captured!") -- TODO: AUTO ADD UMSS PREFAB STUFF TOO!
         inst:Remove()
         return data
     else
