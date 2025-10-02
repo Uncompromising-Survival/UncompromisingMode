@@ -81,7 +81,7 @@ local function onequip(inst, owner)
 end
 
 local function onattack(inst, attacker, target)
-    if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and attacker:HasTag("vetcurse") and
+    if target and target:IsValid() and attacker and attacker:IsValid() and attacker:HasTag("vetcurse") and
         inst.components.rechargeable:IsCharged() then
         local x1, y1, z1 = inst.Transform:GetWorldPosition()
 
@@ -90,7 +90,7 @@ local function onattack(inst, attacker, target)
         for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "cursedantler" })) do
             if v ~= inst then
                 local vowner = v.components.inventoryitem:GetGrandOwner()
-                if vowner ~= nil and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
+                if vowner and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
                     v.components.rechargeable:Discharge(5)
                     end
             end
@@ -104,12 +104,14 @@ local function onattack(inst, attacker, target)
             icefx.Transform:SetPosition(x + math.random(-1.5, 1.5), 0, z + math.random(-1.5, 1.5))
         end
 
-        if target.components.health ~= nil and not target.components.health:IsDead() and target.components.combat ~= nil then
+        local follower = target.components.follower and target.components.follower:GetLeader() and target.components.follower:GetLeader():HasTag("player")
+        if target.components.health and not target.components.health:IsDead() and target.components.combat and not (target:HasAnyTag("companion", "abigail") or follower) then
             --target.components.health:DoDelta(-66 * 200, false, attacker, false, attacker)
             target.components.combat:GetAttacked(attacker, 66, nil)
         end
 
-        if target.components.freezable ~= nil and not target.components.freezable:IsFrozen() and target.components.health ~= nil and not target.components.health:IsDead() then
+        if target.components.freezable and not target.components.freezable:IsFrozen() and target.components.health and not target.components.health:IsDead() and not
+         (target:HasAnyTag("companion", "abigail") or follower) then
             target.components.freezable:AddColdness(1)
             target.components.freezable:SpawnShatterFX()
         end
@@ -117,10 +119,11 @@ local function onattack(inst, attacker, target)
         local ents = TheSim:FindEntities(x, y, z, 2.5, nil, { "INLIMBO", "player", "companion", "abigail", "shadowcreature" })
         for i, v in ipairs(ents) do
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-                if v.components.combat ~= nil and not (v.components.health ~= nil and v.components.health:IsDead()) then
+                if v.components.combat and not (v.components.health and v.components.health:IsDead()) and not
+                 (v.components.follower and v.components.follower:GetLeader() and v.components.follower:GetLeader():HasTag("player")) then
                     v.components.combat:GetAttacked(attacker, 34, nil)
 
-                    if v.components.freezable ~= nil and not v.components.freezable:IsFrozen() and v.components.health ~= nil and not v.components.health:IsDead() then
+                    if v.components.freezable and not v.components.freezable:IsFrozen() and v.components.health and not v.components.health:IsDead() then
                         v.components.freezable:AddColdness(0.5)
                         v.components.freezable:SpawnShatterFX()
                     end
