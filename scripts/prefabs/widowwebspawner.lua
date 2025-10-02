@@ -36,9 +36,9 @@ local function SpawnCocoon(inst)
         TrySpawnCocoon(x, z)
     end
 	
-	-- guaranteed mactusk
+	-- guaranteed krampus, mactusk, and
+	TrySpawnCocoon(x, z,12)
 	TrySpawnCocoon(x, z,14)
-	TrySpawnCocoon(x, z,13)
 	TrySpawnCocoon(x, z,23)
 end
 
