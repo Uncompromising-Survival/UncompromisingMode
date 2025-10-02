@@ -32,9 +32,9 @@ local function RerollCocoons(inst)
 	
     if widowweb ~= nil--[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-			if v.size == 13 or v.size == 14 or v.size == 12 or v.size == 23 then
+			if v.size == 12 or v.size == 13 or v.size == 23 or v.size == 24 or v.size == 25 then --Krampus, McTusk, Grass Gator, and Survivor Cocoon med & large.
 			else
-				local size = math.random(1,20)
+				local size = math.random(1,25)
 				v:Remove()
 				TrySpawnCocoon(x, z,size)
 			end
