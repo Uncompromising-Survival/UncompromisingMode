@@ -32,7 +32,8 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         "slingshotammo_goop",
         "slingshotammo_slime",
         "slingshotammo_tremor",
-        "beakbasher"
+        "beakbasher",
+        "wathgrithr_shield_dreadstone",
     }
 
     local VALID_FOR_DST_BOATS_ONLY = {
@@ -83,7 +84,8 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     SetRecipeIngredientsForGameTypes("um_record_stranger", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
 
     SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
-	
+    SetRecipeIngredientsForGameTypes("winona_spotlight", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
+    SetRecipeIngredientsForGameTypes("winona_spotlight_item", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
 end
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
