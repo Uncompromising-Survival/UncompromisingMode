@@ -30,8 +30,9 @@ local spore_cooldown_max = 60
 
 -- (Anomen) Quick hack to prevent UM crashing when master toggle is disabled
 -- PLEASE DO A PROPER FIX
+local HOME_TILES = {}
 if TUNING.DSTU.WORLDGEN_MASTERTOGGLE then
-    local HOME_TILES =
+    HOME_TILES =
     {
         [WORLD_TILES.UM_MAGMA] = true,
         [WORLD_TILES.UM_GRASSMAGMA] = true,
