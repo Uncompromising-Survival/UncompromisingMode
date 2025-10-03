@@ -6,11 +6,10 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.7.3.39"
+local _version = "1.7.3.40"
 
 description = [[
-    󰀔 [ "Wixie 2 Update"  (Beta ver: v]] .. _version .. [[)]
-What's better than one Wixie? Still one Wixie!
+    󰀔 [ "Ghosts of the Past (for now)"  (Beta ver: v]] .. _version .. [[)]
 Uncompromising Mode is like a potluck.
 
 Latest update features:
