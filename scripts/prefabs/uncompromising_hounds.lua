@@ -769,7 +769,7 @@ local function fnglacial()
     inst.Transform:SetScale(1.3, 1.3, 1.3)
 
     inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH)
+    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
 
     inst.task = nil
 
@@ -990,8 +990,8 @@ local function fnmagma()
 
     inst.task = nil
 
-    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE *2)
-    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH)
+    inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
+    inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
 
     inst.components.combat:SetRange(10, 3)
 
