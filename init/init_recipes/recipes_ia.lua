@@ -8,32 +8,57 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     local RECIPE_BOAT_TYPE = GLOBAL.RECIPE_BOAT_TYPE
 
     local VALID_FOR_ROG_ONLY = {
+        -- Sludge
         "boat_bumper_sludge_kit",
         "boatpatch_sludge",
         "sludge_sack",
-        "armor_sharksuit_um",
         "sludge_oil",
         "sludge_cork",
         "cannonball_sludge_item",
-        --"um_armor_pyre_nettles", tteeeeechnically still craftable.
-        --"um_blowdart_pyre"
-        "driftwoodfishingrod",
-        "saltpack",
-        "um_magnerang",
-        --"winona_upgradekit_electrical", can be used with the miner hat, scrap can be obtained with lunar alignment
+        -- Toadstool
         "sporepack",
-        "scrap_monoclehat",
-        "floral_bandage",
+        "air_conditioner",
+        "shroom_skin",
+        -- Rime and winter stuff
         "um_rimeweed_icepack",
         "um_armor_bramble_rimeweed",
         "um_blowdart_rime",
-        "diseasecurebomb",
+        "um_ice_sicle",
+        "um_hat_rime",
+        "saltpack",
+        "snowgoggles",
+        -- Magma caves
+        "um_fyre_bomb",
+        "um_detonator",
+        -- Lunar bees
+        "um_beemine_moon_item",
+        "um_hat_bee_moon",
+        "um_eyebalm",
+        -- Sea stuff
+        "driftwoodfishingrod",
+        "armor_sharksuit_um",
         "houndious_observious",
+        "beakbasher",
+        -- Cactus flowers
+        "floral_bandage",
+        "diseasecurebomb",
+
         "slingshotammo_goop",
         "slingshotammo_slime",
         "slingshotammo_tremor",
-        "beakbasher",
+        
+        -- Shadow Rifts
         "wathgrithr_shield_dreadstone",
+
+        -- pyre stuff
+        --"um_armor_pyre_nettles", tteeeeechnically still craftable.
+        --"um_blowdart_pyre"
+
+        -- Scrap
+        -- winona can craft these, plus content expansion mod adds the scrapyard
+        --"um_magnerang",
+        --"winona_upgradekit_electrical", 
+        -- "scrap_monoclehat", 
     }
 
     local VALID_FOR_DST_BOATS_ONLY = {
@@ -86,6 +111,8 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     SetRecipeIngredientsForGameTypes("brine_balm", RECIPE_GAME_TYPE.SW, { Ingredient("saltrock", 2), Ingredient("seaweed", 1) })
     SetRecipeIngredientsForGameTypes("winona_spotlight", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
     SetRecipeIngredientsForGameTypes("winona_spotlight_item", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
+
+    SetRecipeIngredientsForGameTypes("bugzapper", RECIPE_GAME_TYPE.SW, { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("jellyfish", 1) })
 end
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then

@@ -370,6 +370,9 @@ if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
     TOOLTIPS.HAWAIIANSHIRT = "- Increased durability.\n- Now has pockets!"
     TOOLTIPS.ARMOR_SNAKESKIN = "- Now has pockets!"
     TOOLTIPS.ARMOR_WINDBREAKER = "- Now has pockets!"
+    TOOLTIPS.ARMOR_LIFEJACKET = "- Now has pockets!"
+    TOOLTIPS.BLUBBERSUIT = "- Now has pockets!"
+    TOOLTIPS.TARSUIT = "- Now has pockets!"
 end
 
 if TUNING.DSTU.CANEDURABILITY then
@@ -404,6 +407,7 @@ end
 if TUNING.DSTU.WATHGRITHR_REWORK then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
     TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 10% of the damage taken.\n - The time penalty for a failed parry is reduced to half.\n -Parry duration has been incorportated into the item by default."
+    TOOLTIPS.WATHGRITHR_SHIELD_DREADSTONE = "-Scares attackers.\n -Effects stack with dreadstone armor."
     TOOLTIPS.SADDLE_WATHGRITHR = "- Increased damage."
     TOOLTIPS.BATTLESONG_DURABILITY = "- Now works on shields."
 end
