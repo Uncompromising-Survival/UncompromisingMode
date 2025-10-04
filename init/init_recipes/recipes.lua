@@ -14,17 +14,17 @@ local Ingredient = GLOBAL.Ingredient
 -- "WINTER", "SUMMER", "RAIN", "EVERYTHING"
 
 --Turfs
-AddRecipe2("turf_um_hotspring_grass", { Ingredient("cutlichen", 2), Ingredient("pinecone", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_grass", "turf_um_hotspring_grass", "DECOR", true)
+AddRecipe2("turf_um_hotspring_grass", { Ingredient("twigs", 1), Ingredient("ice", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_grass", "turf_desertdirt", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 2), Ingredient("marble", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_whiterock", "DECOR", true)
+AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 1), Ingredient("marble", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_grass", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 2), Ingredient("nitre", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_yellowrock", "DECOR", true)
+AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 1), Ingredient("nitre", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_whiterock", "DECOR", true)
 
 if GetModConfigData("hoodedforest") then
-    AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("greenfoliage", 4) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("um_moss", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_hoodedmoss", "turf_deciduous", "DECOR", true)
     AddRecipe2("turf_ancienthoodedturf", { Ingredient("turf_hoodedmoss", 2), Ingredient("moonrocknugget", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_ancienthoodedturf", "turf_hoodedmoss", "DECOR", true)
