@@ -33,6 +33,10 @@ local wardrobe_tags = {
     "broken",
 }
 
+local wardrobe_notags = {
+
+}
+
 local wardrobe_prefabs = {
     "razor",
     "beef_bell",
@@ -54,11 +58,27 @@ local wardrobe_prefabs = {
     "saddle_shadow",
 }
 
+local wardrobe_noprefabs = {
+    "poop",
+    "snowball_item",
+}
+
 function CheckWardrobeItem(container, item, slot)
+    -- Discard these, do not let them in even if they match the tags
+    if item:HasOneOfTags(wardrobe_notags) then
+        return false
+    end
+
+    for _, prefab in pairs(wardrobe_noprefabs) do
+        if item.prefab == prefab then
+            return false
+        end
+    end
+
+    -- Allow these
     if item:HasOneOfTags(wardrobe_tags) then
         return true
     end
-
 
     for _, prefab in pairs(wardrobe_prefabs) do
         if item.prefab == prefab then
@@ -66,7 +86,11 @@ function CheckWardrobeItem(container, item, slot)
         end
     end
 
-    return string.match(item.prefab, "wx78module_") ~= nil
+    if string.match(item.prefab, "wx78module_") ~= nil then
+        return true
+    end
+
+    return false
 end
 
 function CheckToolboxItem(container, item, slot)
