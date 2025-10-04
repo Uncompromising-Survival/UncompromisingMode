@@ -196,12 +196,8 @@ env.AddPlayerPostInit(function(inst)
 
     inst:ListenForEvent("setowner", OnSetOwner)
 
-    -- (Anomen) Quick hack to prevent UM crashing when master toggle is disabled
-    -- PLEASE DO A PROPER FIX
-    if TUNING.DSTU.WORLDGEN_MASTERTOGGLE then
-        if inst.components.areaaware then
-            inst.components.areaaware:StartWatchingTile(WORLD_TILES.UM_FLOODWATER)
-        end
+    if inst.components.areaaware then
+        inst.components.areaaware:StartWatchingTile(WORLD_TILES.UM_FLOODWATER)
     end
 
     if not TheWorld.ismastersim then

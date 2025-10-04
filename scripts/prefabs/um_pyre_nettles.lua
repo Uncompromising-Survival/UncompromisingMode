@@ -28,16 +28,10 @@ local spore_cooldown_max = 60
 -- These tiles are where Smolder Spores can survive, when it isn't Summer.
 -- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
 
--- (Anomen) Quick hack to prevent UM crashing when master toggle is disabled
--- PLEASE DO A PROPER FIX
-local HOME_TILES = {}
-if TUNING.DSTU.WORLDGEN_MASTERTOGGLE then
-    HOME_TILES =
-    {
-        [WORLD_TILES.UM_MAGMA] = true,
-        [WORLD_TILES.UM_GRASSMAGMA] = true,
-    }
-end
+local HOME_TILES = {
+    [WORLD_TILES.UM_MAGMA] = true,
+    [WORLD_TILES.UM_GRASSMAGMA] = true,
+}
 
 if WORLD_TILES.MAGMA_ASH then
     HOME_TILES[WORLD_TILES.MAGMA_ASH] = true --IA compat teehee
@@ -47,7 +41,7 @@ end
 
 SetSharedLootTable('um_pyre_nettles_1',
     {
-        { 'firenettles', 1.0 },
+        { 'firenettles',             1.0 },
         { 'um_pyre_nettles_blocker', 1.0 }
     })
 SetSharedLootTable('um_pyre_nettles_2',
@@ -84,14 +78,14 @@ end
 local function pyrenettle_bumped(inst)
     local bumpradius = inst.stage > 3 and inst.stage * 0.75 or 1
     local nextvictim = FindClosestEntity(inst, bumpradius, true, nil,
-        {"PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall"}
+        { "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
     )
 
     if nextvictim and nextvictim.components.locomotor and math.random() > 0.5 then -- Chance to bump the plant.
         --    and not inst:GetIsWet() -- Disabled because it would completely remove the threat in summer.
         --print ("At the time of pyrenettle_bumped PlayAnimation, inst.stage == " .. inst.stage )
-        inst.AnimState:PlayAnimation("pn"..inst.stage.."_bump", false)
-        inst.AnimState:PushAnimation("pn"..inst.stage.."_idle", true)
+        inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
+        inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 
         -- If we're at a later stage, try to drop some spores.
         local spore_cooldown_running = inst.components.timer:GetTimeLeft("SporeCooldownTimer")
@@ -151,28 +145,28 @@ end
 local function SetStage(inst)
     -- Remove and then add a tag to identify current stage, for spawning checks.
     for i = 1, 5 do
-        inst:RemoveTag("PyreNettle"..i)
+        inst:RemoveTag("PyreNettle" .. i)
     end
-    inst:AddTag("PyreNettle"..inst.stage)
+    inst:AddTag("PyreNettle" .. inst.stage)
 
     -- Safety mechanisms, in case we're at an invalid stage (loading shenanigans probably).
     if inst.stage > 5 then
-        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
+        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: " .. inst.stage)
         inst.stage = 5
     elseif inst.stage < 1 then
-        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: "..inst.stage)
+        print("um_pyre_nettles.lua has auto-recovered from an invalid SetStage! Stage was: " .. inst.stage)
         inst:Remove()
     end
 
     -- Anim selector.
-    inst.AnimState:PushAnimation("pn"..inst.stage.."_idle", true)
+    inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 
     if not TheWorld.ismastersim then
         return
     end
 
     -- Loot selector.
-    inst.components.lootdropper:SetChanceLootTable("um_pyre_nettles_"..inst.stage)
+    inst.components.lootdropper:SetChanceLootTable("um_pyre_nettles_" .. inst.stage)
 
     inst.components.pickable.remove_when_picked = inst.stage == 1 or false
 
@@ -205,9 +199,9 @@ local function OnGrow(inst)
     local growsuccess = false
     local x, y, z = inst.Transform:GetWorldPosition()
     local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
-    local findnettles = TheSim:FindEntities(x, y, z, 50, {"PyreNettle"..targetstage})
+    local findnettles = TheSim:FindEntities(x, y, z, 50, { "PyreNettle" .. targetstage })
 
-    local nearextremeheat = FindClosestEntity(inst, 15, true, {"lava"}) or false
+    local nearextremeheat = FindClosestEntity(inst, 15, true, { "lava" }) or false
     -- Lava tag is on Dfly lava pond. Also add it to any lava deco in the Lava Caves.
     --or -- CHECK FOR LAVA TURF IN A RADIUS SIMILAR TO 50 ENTITY UNITS
 
@@ -234,8 +228,8 @@ local function OnGrow(inst)
     -- Outside Magma Caves, Pyre Nettles can't grow past stage 2.
     if growsuccess
         and not HOME_TILES[tile_at_position]
-        and not TheWorld:HasTag("heatwavestart") -- Unless a heatwave is happening.
-        and not nearextremeheat -- Or we're near lava.
+        and not TheWorld:HasTag("heatwavestart")                            -- Unless a heatwave is happening.
+        and not nearextremeheat                                             -- Or we're near lava.
         and (targetstage > 2 or (targetstage == 2 and math.random() > 0.5)) --They also have a chance to stop growth at stage 1.
     then
         growsuccess = false
@@ -253,7 +247,7 @@ local function OnGrow(inst)
             TrySpawnSpore(inst)
             inst.components.timer:StartTimer("SporeCooldownTimer", spore_cooldown_max)
         elseif targetstage < 6 then
-            inst.AnimState:PlayAnimation("pn"..inst.stage.."_grow", false)
+            inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
             inst.stage = targetstage
             inst:ListenForEvent("animover", SetStage)
         end
@@ -267,12 +261,15 @@ local function OnShrink(inst)
         inst.components.pickable.canbepicked = false
     end
 
-    inst.AnimState:PlayAnimation("pn"..inst.stage.."_shrink", false)
+    inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_shrink", false)
 
     inst.stage = targetstage
 
     inst:ListenForEvent("animover", function()
-        if inst.stage < 1 then inst:Remove() return end
+        if inst.stage < 1 then
+            inst:Remove()
+            return
+        end
         local x, y, z = inst.Transform:GetWorldPosition()
         local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
 
@@ -297,8 +294,8 @@ local function OnAttacked(inst, data)
                 inst.components.health:DoDelta(-TUNING.VOIDCLOTH_SCYTHE_DAMAGE * 2)
             end
         end
-        inst.AnimState:PlayAnimation("pn"..inst.stage.."_hit", false)
-        inst.AnimState:PushAnimation("pn"..inst.stage.."_idle", true)
+        inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_hit", false)
+        inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
         inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit", "um_pyre_nettles_attackedsound")
         inst.SoundEmitter:SetVolume("um_pyre_nettles_attackedsound", 0.5)
     else
@@ -313,7 +310,7 @@ end
 -- Make the plant destroyable instantly with explosives, dropping the current stage's loot and all below it.
 local function OnExplosion(inst)
     for i = 1, inst.stage do
-        inst.components.lootdropper:SetChanceLootTable("um_pyre_nettles_"..i)
+        inst.components.lootdropper:SetChanceLootTable("um_pyre_nettles_" .. i)
         inst.components.lootdropper:DropLoot(inst:GetPosition())
     end
 
@@ -417,7 +414,7 @@ local function StageSpawner(name, SpawnAtStage)
         else
             inst.AnimState:SetScale(multsize, multsize, multsize)
         end
-        inst.AnimState:PlayAnimation("pn"..growanimstage.."_grow", false)
+        inst.AnimState:PlayAnimation("pn" .. growanimstage .. "_grow", false)
         local multcolor = 0.85 + (math.random() * 0.15)
         inst.AnimState:SetMultColour(multcolor, multcolor, multcolor, 1)
 
@@ -443,7 +440,7 @@ local function StageSpawner(name, SpawnAtStage)
 
         inst:DoTaskInTime(0, function(inst)
             local x, y, z = inst.Transform:GetWorldPosition()
-            if #TheSim:FindEntities(x, y, z, 1, {"PyreNettle"}) > 1 then
+            if #TheSim:FindEntities(x, y, z, 1, { "PyreNettle" }) > 1 then
                 inst:Remove()
             end
         end)
@@ -459,7 +456,7 @@ local function StageSpawner(name, SpawnAtStage)
 
         inst:AddComponent("health")
         inst.components.health:SetMaxHealth(plant_maxhealth)
-        inst.components.health:SetMinHealth(1) -- We don't want it to die a 'normal' death.
+        inst.components.health:SetMinHealth(1)       -- We don't want it to die a 'normal' death.
         inst.components.health.fire_damage_scale = 0 -- Take no damage from fire.
 
         inst:AddComponent("combat")
@@ -541,7 +538,7 @@ end
 
 local pyre_nettle_prefabs = {}
 for i = 1, 5 do
-    table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles_stage_"..i, i))
+    table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles_stage_" .. i, i))
 end
 table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles", 1))
 table.insert(pyre_nettle_prefabs, Prefab("um_pyre_nettles_blocker", nettleblocker_fn))
