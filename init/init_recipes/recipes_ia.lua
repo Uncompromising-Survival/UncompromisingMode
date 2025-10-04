@@ -20,7 +20,7 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         "driftwoodfishingrod",
         "saltpack",
         "um_magnerang",
-        "winona_upgradekit_electrical",
+        --"winona_upgradekit_electrical", can be used with the miner hat, scrap can be obtained with lunar alignment
         "sporepack",
         "scrap_monoclehat",
         "floral_bandage",
