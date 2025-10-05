@@ -1888,7 +1888,7 @@ local function CheckTargetPiece(inst)
             Sniffertime(owner)
         end
     end
-    inst.components.rechargeable:Discharge(8)
+    --inst.components.rechargeable:Discharge(8)
 end
 
 local function OnEquipRat(inst, owner)
