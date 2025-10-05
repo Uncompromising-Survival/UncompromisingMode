@@ -1888,7 +1888,7 @@ local function CheckTargetPiece(inst)
             Sniffertime(owner)
         end
     end
-    inst.components.rechargeable:Discharge(8)
+    --inst.components.rechargeable:Discharge(8)
 end
 
 local function OnEquipRat(inst, owner)
@@ -1922,9 +1922,11 @@ local function OnUnequipRat(inst, owner)
         if owner.rat_task then
             owner.rat_task:Cancel()
             owner.rat_task = nil
-            inst.rat_task2:Cancel()
-            inst.rat_task2 = nil
         end
+    end
+    if inst and inst.rat_task2 then
+        inst.rat_task2:Cancel()
+        inst.rat_task2 = nil
     end
 end
 
@@ -1962,12 +1964,12 @@ local function ratfn()
     inst.components.equippable:SetOnUnequip(OnUnequipRat)
     inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
 
-    inst:AddComponent("useableitem")
+    --[[inst:AddComponent("useableitem")
     inst.components.useableitem:SetOnUseFn(CheckTargetPiece)
 
     inst:AddComponent("rechargeable")
     inst.components.rechargeable:SetOnChargedFn(OnCooldown)
-    inst.components.rechargeable:SetCharge(1011111)
+    inst.components.rechargeable:SetCharge(1011111)]]
 
     inst:AddComponent("fueled")
     inst.components.fueled.fueltype = FUELTYPE.USAGE
