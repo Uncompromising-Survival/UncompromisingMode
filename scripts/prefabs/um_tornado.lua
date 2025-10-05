@@ -430,7 +430,7 @@ local function TornadoTask(inst)
             end
         end
 
-        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) and not TestForIA() then
+        if inst.whirlpool == nil and TheWorld.Map:IsOceanAtPoint(inst.Transform:GetWorldPosition()) and not IsIslandOrVolcanoWorld() then
             inst.whirlpool = SpawnPrefab("um_whirlpool")
             inst.whirlpool.entity:SetParent(inst.entity)
             inst.whirlpool.Transform:SetPosition(0, 0, 0)
@@ -710,7 +710,7 @@ local function MoveDestination(inst)
     end
 
 
-    if not TheWorld.state.isspring then
+    if not (TheWorld.state.isspring or TheWorld.state.iswetseason or TheWorld.state.isgreenseason) then
         inst.persists = false
         inst:Remove()
     end

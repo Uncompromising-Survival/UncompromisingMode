@@ -42,13 +42,13 @@ return Class(function(self, inst)
             TheWorld.net:RemoveTag("heatwavestartnet")
         end
         -- TheWorld.state.temperature = self.old_temp
-        SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "ToggleCaveHeatWave"), nil, false)
-
+        if not IsIslandOrVolcanoWorld() then
+            SendModRPCToShard(GetShardModRPC("UncompromisingSurvival", "ToggleCaveHeatWave"), nil, false)
+        end
         if _worldsettingstimer:GetTimeLeft(UM_HEATWAVE_TIMERNAME) == nil then
             _worldsettingstimer:StartTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120))
         end
-		
-		
+
         _worldsettingstimer:ResumeTimer(UM_HEATWAVE_TIMERNAME)
     end
 
@@ -77,9 +77,9 @@ return Class(function(self, inst)
 
     local function StartHeatWaves()
         if _worldsettingstimer:GetTimeLeft(UM_HEATWAVE_TIMERNAME) == nil then
-			if not _storming then
-				_worldsettingstimer:StartTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120))
-			end
+            if not _storming then
+                _worldsettingstimer:StartTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120))
+            end
         end
 
         _worldsettingstimer:ResumeTimer(UM_HEATWAVE_TIMERNAME)
@@ -95,10 +95,10 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
 
     local function OnSeasonChange(self)
-        if TheWorld.state.season == "summer" then
+        if TheWorld.state.issummer or TheWorld.state.isdry then
             if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
                 --if not _storming then
-                    StartHeatWaves()
+                StartHeatWaves()
                 --end
             end
         else
@@ -149,7 +149,7 @@ return Class(function(self, inst)
         _worldsettingstimer:AddTimer(UM_HEATWAVE_TIMERNAME, _spawninterval + math.random(0, 120), true, StartHeatWaving)
         _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
             StopHeatwave)
-					
+
         OnSeasonChange()
     end
 
@@ -173,7 +173,6 @@ return Class(function(self, inst)
         end
     end)
 
-    -- self.inst:ListenForEvent("forcetornado", PickAttackTarget)
 
     self.inst:StartUpdatingComponent(self)
 end)

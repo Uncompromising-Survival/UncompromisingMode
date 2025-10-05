@@ -68,14 +68,6 @@ env.AddReplicableComponent("hayfever")
 env.AddReplicableComponent("adrenaline")
 env.AddReplicableComponent("boatbottle")
 
--- I don't know where else to put this
-env.AddPrefabPostInit("aphid", function(inst)
-    if TestForIA() then
-        inst:AddComponent("appeasement")
-        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
-    end
-end)
-
 -- for the super spawner tags
 env.AddPrefabPostInitAny(function(inst)
     local old_OnSave = inst.OnSave

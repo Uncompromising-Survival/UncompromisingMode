@@ -445,7 +445,7 @@ if GetModConfigData("scalemailbuff") then
     table.insert(prefab_post, "armor_dragonfly")
 end
 
-if (not GLOBAL:TestForIA() or GetModConfigData("um_music", true)) then
+if (not GLOBAL:IsIslandOrVolcanoWorld() or GetModConfigData("um_music", true)) then
     table.insert(component_post, "dynamicmusic")
 end
 

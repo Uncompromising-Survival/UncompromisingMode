@@ -113,6 +113,10 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     SetRecipeIngredientsForGameTypes("winona_spotlight_item", RECIPE_GAME_TYPE.SW, { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("bioluminescence", 1) })
 
     SetRecipeIngredientsForGameTypes("bugzapper", RECIPE_GAME_TYPE.SW, { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("jellyfish", 1) })
+
+        SetRecipeIngredientsForGameTypes("scrap_monoclehat", RECIPE_GAME_TYPE.SW, { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("ia_messagebottleempty", 1) })
+AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "TOOLS" })
+
 end
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then

@@ -4,15 +4,27 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
---improved check for IA, instead of just checking for the mod, it checks for the world tags *and* the mod.
---returns true if IA.
+--Checks if theworld is island or volcano.
+function IsIslandOrVolcanoWorld()
+    return TheWorld ~= nil and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))
+end
 
-function TestForIA()
-    if TheWorld ~= nil and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
-        return true
-    else
-        return false
-    end
+function IsIslandWorld()
+    return TheWorld ~= nil and TheWorld:HasTag("island")
+end
+
+function IsVolcanoWorld()
+    return TheWorld ~= nil and TheWorld:HasTag("volcano")
+end
+
+--Returns if IA:SW is enabled in the mod list.
+function IsSWEnabled()
+    return GLOBAL.IA_SW_ENABLD
+end
+
+--returns if IA:HAM is enabled in the mod list.
+function IsHAMEnabled()
+    return GLOBAL.IA_HAM_ENABLED
 end
 
 function Um_CustomLightCheck(inst, dark_val, light_val)
@@ -41,11 +53,3 @@ function Um_CustomLightCheck(inst, dark_val, light_val)
 		return inLight ~= false]]
     end
 end
-
-env.AddPrefabPostInit("wonderwhy", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddTag("ignores_healthregen")
-end)
