@@ -4,7 +4,7 @@
 local G = GLOBAL
 local Text = G.require("widgets/text")
 
-local FONT = G.UIFONT
+local FONT = TUNING.DSTU.UI_SHOWMULTIPRODUCTS_FONT == "UIFONT" and G.UIFONT or TUNING.DSTU.UI_SHOWMULTIPRODUCTS_FONT == "TALKINGFONT" and G.TALKINGFONT or G.NUMBERFONT  --Changed font for bettter looks. -C
 local FONTSIZE = 32
 local TEXTCOLOUR = G.UICOLOURS.GOLD_UNIMPORTANT
 
@@ -16,13 +16,13 @@ AddClassPostConstruct("widgets/redux/craftingmenu_widget", function(self, owner,
 		widget.numtogive:SetPosition(30,-24)
 		widget.numtogive:Hide()
 	end
-	
+
 	-- Show and hide the text accordingly
 	local _old_update_fn = self.recipe_grid.update_fn
-	
+
 	self.recipe_grid.update_fn = function(context, widget, data, index)
 		_old_update_fn(context, widget, data, index)
-		
+
 		if data ~= nil and data.recipe ~= nil and data.meta ~= nil then
 			if data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
 				widget.numtogive:SetString(""..data.recipe.numtogive)
@@ -40,15 +40,15 @@ AddClassPostConstruct("widgets/redux/craftingmenu_pinslot", function(self, owner
 	self.item_img.numtogive = self.item_img:AddChild(Text(FONT, FONTSIZE, "", TEXTCOLOUR))
 	self.item_img.numtogive:SetPosition(30,-24)
 	self.item_img.numtogive:Hide()
-	
+
 	local _old_refresh = self.Refresh
-	
+
 	-- Show and hide the text accordingly
 	function self:Refresh(...)
 		_old_refresh(self, ...)
-		
+
 		local data = self.craftingmenu:GetRecipeState(self.recipe_name) 
-		
+
 		if data ~= nil and data.recipe ~= nil and data.meta ~= nil then
 			if data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
 				self.item_img.numtogive:SetString(""..data.recipe.numtogive)

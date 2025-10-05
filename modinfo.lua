@@ -113,6 +113,20 @@ configuration_options = {
     },
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
     BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Shows how many products a crafting recipe will yield, if it's more than one.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)", true, true),
+    {
+        name = "ui_showmultiproducts_font",
+        label = "Show Craft Amounts Font",
+        hover = "Changes the font for the numbers.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)",
+        options =
+        {
+            { description = "NUMBERFONT",       data = "NUMBERFONT",  hover = "The same as the original mod." },
+            { description = "TALKINGFONT",      data = "TALKINGFONT", hover = "Similar to the original mod, but with thicker outlines." },
+            { description = "Classic (UIFONT)", data = "UIFONT",      hover = "The same as the original mod." }
+        },
+        default = "NUMBERFONT",
+        client = true
+    },
+
     BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right Veteran's Curse icon, which provides helpful information on the curse.", true, true),
     BinaryConfig("um_tips_only", "Force UM Loading Tips", "Disables vanilla Loading Tips, so Uncompromising Mode's Loading Tips will always appear in the loading screen while joining a world!", false, true),
     BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
