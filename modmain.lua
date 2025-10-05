@@ -441,3 +441,16 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
+
+--graciously borrowed from IA.
+GLOBAL.IA_SW_ENABLED, GLOBAL.IA_HAM_ENABLED = nil, nil
+
+for i,mod in ipairs(GLOBAL.ModManager.mods) do
+    local modinfo = GLOBAL.KnownModIndex:GetModInfo(mod.modname)
+    if modinfo.ia_shipwrecked then
+        GLOBAL.IA_SW_ENABLED = true
+    elseif modinfo.ia_hamlet then
+        GLOBAL.IA_HAM_ENABLED = true
+    end
+    if GLOBAL.IA_SW_ENABLED and GLOBAL.IA_HAM_ENABLED then break end
+end

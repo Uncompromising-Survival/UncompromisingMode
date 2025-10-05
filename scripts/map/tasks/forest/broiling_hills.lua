@@ -110,6 +110,7 @@ AddTaskSetPreInitAny(function(tasksetdata)
         -- IA Giant Trees
         table.insert(tasksetdata.tasks, "BrolingHills_IA")
         table.insert(tasksetdata.tasks, "BrolingHills_IA_2")
-
     end
 end)
+
+--dunno where else to put this.

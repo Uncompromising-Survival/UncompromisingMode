@@ -19,12 +19,12 @@ end
 
 --Returns if IA:SW is enabled in the mod list.
 function IsSWEnabled()
-    return GLOBAL.IA_SW_ENABLD
+    return IA_SW_ENABLED
 end
 
 --returns if IA:HAM is enabled in the mod list.
 function IsHAMEnabled()
-    return GLOBAL.IA_HAM_ENABLED
+    return IA_HAM_ENABLED
 end
 
 function Um_CustomLightCheck(inst, dark_val, light_val)

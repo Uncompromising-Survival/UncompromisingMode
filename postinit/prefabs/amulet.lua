@@ -194,7 +194,7 @@ local function OrangeAmuletPostInit(inst)
                 if owner.components.minigame_participator then
                     local minigame = owner.components.minigame_participator:GetMinigame()
                     if minigame then
-                        minigame:PushEvent("pickupcheat", {cheater = owner, item = v})
+                        minigame:PushEvent("pickupcheat", { cheater = owner, item = v })
                         inst.components.fueled:DoDelta(-2)
                     end
                 end
@@ -304,7 +304,7 @@ local function CactusPostInit(inst)
         end
 
         local function OnPickNew(inst, picker)
-            if picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
+            if picker and picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
                 local amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
                 if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
@@ -317,7 +317,7 @@ local function CactusPostInit(inst)
                     _OnPick(inst, picker)
                 end
             else
-                if picker:HasTag("channelingpicker") then
+                if picker and picker:HasTag("channelingpicker") then
                     onpickedchannel(inst, picker)
                 else
                     _OnPick(inst, picker)
@@ -350,7 +350,7 @@ local function OasisCactusPostInit(inst)
                     -- You get a cactus flower, yay.
                     local loot = SpawnPrefab("cactus_flower")
                     loot.components.inventoryitem:InheritMoisture(TheWorld.state.wetness, TheWorld.state.iswet)
-                    if picker.components.inventory then
+                    if picker and picker.components.inventory then
                         picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
                     else
                         local x, y, z = inst.Transform:GetWorldPosition()
@@ -362,7 +362,7 @@ local function OasisCactusPostInit(inst)
         end
 
         local function OnPickNew(inst, picker)
-            if picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
+            if picker and picker.components.inventory and picker.components.inventory:EquipHasTag("lazy_forager") then
                 local amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK)
                 if not amulet then
                     amulet = picker.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
@@ -375,7 +375,7 @@ local function OasisCactusPostInit(inst)
                     _OnPick(inst, picker)
                 end
             else
-                if picker:HasTag("channelingpicker") then
+                if picker and picker:HasTag("channelingpicker") then
                     onpickedchannel(inst, picker)
                 else
                     _OnPick(inst, picker)

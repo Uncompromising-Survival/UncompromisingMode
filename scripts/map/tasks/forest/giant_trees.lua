@@ -29,6 +29,7 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         }
         task.room_bg = GLOBAL.WORLD_TILES.HOODEDFOREST
         task.background_room = "BGGiantTrees"
+        table.insert(task.room_tags, "hooded")
     end)
 
     -- Setpiece adjustments
@@ -72,6 +73,7 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         },
         room_bg = WORLD_TILES.HOODEDFOREST,
         background_room = "BGGiantTrees",
+        room_tags = {"hooded"},
         colour = { r = .1, g = .1, b = .1, a = 1 }
     })
 

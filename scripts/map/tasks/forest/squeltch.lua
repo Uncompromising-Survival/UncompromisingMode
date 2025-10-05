@@ -4,13 +4,32 @@
 GLOBAL.require("map/rooms/forest/extraswamp")
 
 -- Add mist and marsh bushes
-AddRoomPreInit("BGMarsh", function(room) room.contents.countprefabs = { marsh_grass = function() return math.random(2, 6) end, marshmist = function() return math.random(4, 6) end } end)
+AddRoomPreInit("BGMarsh", function(room)
+    room.contents.countprefabs = {
+        marsh_grass = function() return math.random(2, 6) end,
+        marshmist = function() return math.random(4, 6) end
+    }
+end)
+AddRoomPreInit("Marsh", function(room)
+    room.contents.countprefabs = {
+        marsh_grass = function() return math.random(2, 6) end,
+        marshmist = function() return math.random(4, 6) end
+    }
+end)
 
-AddRoomPreInit("Marsh", function(room) room.contents.countprefabs = { marsh_grass = function() return math.random(2, 6) end, marshmist = function() return math.random(4, 6) end } end)
+AddRoomPreInit("SpiderMarsh", function(room)
+    room.contents.countprefabs = {
+        marsh_grass = function() return math.random(4, 8) end,
+        marshmist = function() return math.random(4, 6) end
+    }
+end)
 
-AddRoomPreInit("SpiderMarsh", function(room) room.contents.countprefabs = { marsh_grass = function() return math.random(4, 8) end, marshmist = function() return math.random(4, 6) end } end)
-
-AddRoomPreInit("SlightlyMermySwamp", function(room) room.contents.countprefabs = { marsh_grass = function() return math.random(4, 8) end, marshmist = function() return math.random(4, 6) end } end)
+AddRoomPreInit("SlightlyMermySwamp", function(room)
+    room.contents.countprefabs = {
+        marsh_grass = function() return math.random(4, 8) end,
+        marshmist = function() return math.random(4, 6) end
+    }
+end)
 
 
 -- Add Rice
@@ -69,5 +88,41 @@ if GetModConfigData("rice") then
             room.contents.countstaticlayouts = {}
         end
         room.contents.countstaticlayouts["ricepatchlarge1"] = 1
+    end)
+end
+
+--[[
+    No idea where to place this.
+    Jungle thicket
+]]
+local jungle_rooms = {
+    "Jungle",
+    --"JungleSparse"
+    "JungleDense",
+    "JungleDenseHome",
+    "JungleDenseMed",
+    "JungleDenseBerries",
+    "JungleDenseMedHome",
+    "JungleDenseVery",
+    "JungleFlower",
+    "JungleSpidersDense",
+    "JungleSpiderCity",
+    "JungleBamboozled",
+    "JungleMonkeyHell",
+    "JungleCritterCrunch",
+    "JungleDenseCritterCrunch",
+    "JungleShroomin",
+    "JungleRockyDrop",
+    "JungleEvilFlowers",
+    "JungleNoBerry",
+    "JungleNoRock",
+    "JungleNoMushroom",
+    "JungleNoFlowers",
+    "JungleSkeleton"
+}
+
+for k,v in pairs(jungle_rooms) do
+    AddRoomPreInit(v, function(room)
+        room.contents.distributeprefabs.iathicket_builder = 0.125
     end)
 end

@@ -44,15 +44,15 @@ AddTile("ANCIENTHOODEDFOREST",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
-	
+
 AddTile("HOODEDFOREST_FOLIAGE", -- tile_name 1
-    "LAND",             -- tile_range 2
+    "LAND",                     -- tile_range 2
     {
         -- tile_data 3
         ground_name = "hoodedfoliage",
     }, {
         -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
-        name = "grass",  -- From Grass
+        name = "grass", -- From Grass
         noise_texture = "ground_noise_hoodedfoliage",
         runsound = "dontstarve/movement/walk_grass",
         walksound = "dontstarve/movement/walk_grass",
@@ -62,23 +62,23 @@ AddTile("HOODEDFOREST_FOLIAGE", -- tile_name 1
         cannotbedug = true
     }, {
         -- minimap_tile_def 5
-        name="map_edge",
-        noise_texture="mini_grass_noise",
+        name = "map_edge",
+        noise_texture = "mini_grass_noise",
     }, {
         -- turf_def 6
         name = "hoodedmoss",
         anim = "hoodedmoss",
         bank_build = "hfturf"
     })
-	
+
 AddTile("HOODEDFOREST_FOLIAGE_DARK", -- tile_name 1
-    "LAND",             -- tile_range 2
+    "LAND",                          -- tile_range 2
     {
         -- tile_data 3
         ground_name = "hoodedfoliage",
     }, {
         -- ground_tile_def 4 -- Looking for the atlas here, which is hoodedmoss.xml
-        name = "forest",  -- From Forest
+        name = "forest", -- From Forest
         noise_texture = "ground_noise_hoodedfoliage",
         runsound = "dontstarve/movement/walk_grass",
         walksound = "dontstarve/movement/walk_grass",
@@ -87,8 +87,8 @@ AddTile("HOODEDFOREST_FOLIAGE_DARK", -- tile_name 1
         colors = GROUND_OCEAN_COLOR
     }, {
         -- minimap_tile_def 5
-        name="map_edge",
-        noise_texture="mini_forest_noise",
+        name = "map_edge",
+        noise_texture = "mini_forest_noise",
     }, {
         -- turf_def 6
         name = "hoodedmoss",
@@ -117,7 +117,7 @@ AddTile("UM_FLOODWATER",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
-	
+
 AddTile("UM_FLOODWATER_GROTTO",
     "LAND",
     {
@@ -389,26 +389,26 @@ end
 local function GetTileForLushMagma(noise)
     if noise < 0.5 then
         return WORLD_TILES.UM_GRASSMAGMA
-	end
-	
+    end
+
     return WORLD_TILES.UM_MAGMA
 end
 
 local function GetTileForGrottoFloodLight(noise)
     if noise < 0.4 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
-	elseif noise < 0.5 then
-		return WORLD_TILES.PEBBLEBEACH
-	end
-	
+    elseif noise < 0.5 then
+        return WORLD_TILES.PEBBLEBEACH
+    end
+
     return WORLD_TILES.FUNGUSMOON
 end
 
 local function GetTileForGrottoFloodHeavy(noise)
     if noise < 0.65 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
-	end
-	
+    end
+
     return WORLD_TILES.FUNGUSMOON
 end
 
@@ -444,55 +444,54 @@ local filters = {
     ["springrock1"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
     ["springrock2"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
     ["springrock3"] = { WORLD_TILES.UM_HOTSPRING_GRASS },
-	
 
-	
 
-    ["evergreen_sparse"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
-    ["evergreen_sparse_normal"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
-    ["evergreen_sparse_short"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
-    ["evergreen_sparse_tall"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK,WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
-	
-	["thicket_builder"] = {WORLD_TILES.HOODEDFOREST_FOLIAGE},
-	["hoodedtrapdoor"] = {WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK},
-	
+
+
+    ["evergreen_sparse"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_normal"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_short"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+    ["evergreen_sparse_tall"] = { WORLD_TILES.ROAD, WORLD_TILES.WOODFLOOR, WORLD_TILES.SCALE, WORLD_TILES.CARPET, WORLD_TILES.CHECKER, WORLD_TILES.ROCKY, WORLD_TILES.DIRT, WORLD_TILES.DESERT_DIRT, WORLD_TILES.MONKEY_DOCK, WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+
+    ["thicket_builder"] = { WORLD_TILES.HOODEDFOREST_FOLIAGE },
+    ["hoodedtrapdoor"] = { WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK },
+
     ["um_hotspring"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS },
-    ["magmarock"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
-    ["magmarock1"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
-    ["magmarock_gold"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
-    ["jungletree_burnt"] = {WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK},
-	
-	["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
-	["magmarock1"] = { WORLD_TILES.UM_GRASSMAGMA },
-	["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
-	["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
-	
-	
-	-- Moon Grotto Stuff
-	["molebat"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO},
-	["molebathill"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO},
-	["mushtree_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO},
-	["lightflier_flower"] = {WORLD_TILES.UM_FLOODWATER_GROTTO},
-	
-	["shockworm"] = { WORLD_TILES.PEBBLEBEACH,WORLD_TILES.FUNGUSMOON},
-	["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH,WORLD_TILES.FUNGUSMOON},
+    ["magmarock"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
+    ["magmarock1"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK, WORLD_TILES.UM_GRASSMAGMA },
+    ["magmarock_gold"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
+    ["jungletree_burnt"] = { WORLD_TILES.UM_HOTSPRING_WHITEROCK, WORLD_TILES.UM_HOTSPRING_GRASS, WORLD_TILES.UM_HOTSPRING_YELLOWROCK },
+
+    ["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
+    ["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
+    ["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
+
+
+    -- Moon Grotto Stuff
+    ["molebat"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO },
+    ["molebathill"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO },
+    ["mushtree_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO },
+    ["lightflier_flower"] = { WORLD_TILES.UM_FLOODWATER_GROTTO },
+
+    ["shockworm"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
+    ["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
 }
 
 for k, v in pairs(filters) do
     GLOBAL.terrain.filter[k] = v
 end
 
-table.insert(GLOBAL.terrain.filter["rock1"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
-table.insert(GLOBAL.terrain.filter["rock1"],WORLD_TILES.HOODEDFOREST_FOLIAGE)
-table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
-table.insert(GLOBAL.terrain.filter["rock2"],WORLD_TILES.HOODEDFOREST_FOLIAGE)
+table.insert(GLOBAL.terrain.filter["rock1"], WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
+table.insert(GLOBAL.terrain.filter["rock1"], WORLD_TILES.HOODEDFOREST_FOLIAGE)
+table.insert(GLOBAL.terrain.filter["rock2"], WORLD_TILES.HOODEDFOREST_FOLIAGE_DARK)
+table.insert(GLOBAL.terrain.filter["rock2"], WORLD_TILES.HOODEDFOREST_FOLIAGE)
 
 GLOBAL.HOODED_GROUND_TYPES = {
-	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3
+    WORLD_TILES.HOODEDFOREST, WORLD_TILES.ANCIENTHOODEDFOREST, WORLD_TILES.HOODEDFOREST_FOLIAGE, -- 1,2,3
 }
 GLOBAL.PYRE_THICKET_GROUND_TYPES = {
-	WORLD_TILES.UM_GRASSMAGMA, -- 1,2
+    WORLD_TILES.UM_GRASSMAGMA, -- 1,2
 }
 GLOBAL.HOODED_ARENA_GROUND_TYPES = {
-	WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2
+    WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2
 }

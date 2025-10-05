@@ -46,7 +46,7 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         "slingshotammo_goop",
         "slingshotammo_slime",
         "slingshotammo_tremor",
-        
+
         -- Shadow Rifts
         "wathgrithr_shield_dreadstone",
 
@@ -57,8 +57,8 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         -- Scrap
         -- winona can craft these, plus content expansion mod adds the scrapyard
         --"um_magnerang",
-        --"winona_upgradekit_electrical", 
-        -- "scrap_monoclehat", 
+        --"winona_upgradekit_electrical",
+        -- "scrap_monoclehat",
     }
 
     local VALID_FOR_DST_BOATS_ONLY = {
@@ -94,10 +94,10 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
 
     SetRecipeValidForGameTypes("slingshotammo_obsidian", { RECIPE_GAME_TYPE.SW })
 
-    SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) })--TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) })--TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) })--TODO: replace sacks with shark fins.
-    SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) }) --TODO: replace sacks with shark fins.
+    SetRecipeIngredientsForGameTypes("portableboat_item", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 2), Ingredient("rope", 2) })                                      --TODO: replace sacks with shark fins.
+    SetRecipeIngredientsForGameTypes("slingshot_gnasher", RECIPE_GAME_TYPE.SW, { Ingredient("livinglog", 1), Ingredient("nightmarefuel", 2), Ingredient("mosquitosack_yellow", 2) }) --TODO: replace sacks with shark fins.
+    SetRecipeIngredientsForGameTypes("slingshot_matilda", RECIPE_GAME_TYPE.SW, { Ingredient("ox_horn", 1), Ingredient("vine", 2), Ingredient("mosquitosack_yellow", 3) })            --TODO: replace sacks with shark fins.
+    SetRecipeIngredientsForGameTypes("slingshotammo_rubber", RECIPE_GAME_TYPE.SW, { Ingredient("mosquitosack_yellow", 1) })                                                          --TODO: replace sacks with shark fins.
     SetRecipeIngredientsForGameTypes("gasmask", RECIPE_GAME_TYPE.SW, { Ingredient("doydoyfeather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) })
 
     SetRecipeIngredientsForGameTypes("um_record_menu", RECIPE_GAME_TYPE.SW, { Ingredient("dorsalfin", 2) })
@@ -114,13 +114,12 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
 
     SetRecipeIngredientsForGameTypes("bugzapper", RECIPE_GAME_TYPE.SW, { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("jellyfish", 1) })
 
-        SetRecipeIngredientsForGameTypes("scrap_monoclehat", RECIPE_GAME_TYPE.SW, { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("ia_messagebottleempty", 1) })
-AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("messagebottleempty", 1) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "TOOLS" })
-
+    SetRecipeIngredientsForGameTypes("scrap_monoclehat", RECIPE_GAME_TYPE.SW, { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("ia_messagebottleempty", 1) })
+    SetRecipeIngredientsForGameTypes("jawed_scythe", RECIPE_GAME_TYPE.SW, { Ingredient("twigs", 4), Ingredient("vine", 1), Ingredient("snappy_jaw", 3) })
 end
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
-	AddRecipe2("slingshotammo_scrapfeather", { Ingredient("iron", 1), Ingredient("feather_thunder", 1) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
+    AddRecipe2("slingshotammo_scrapfeather", { Ingredient("iron", 1), Ingredient("feather_thunder", 1) }, TECH.SCIENCE_TWO, { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true }, { "CHARACTER", "WEAPONS" })
 
     --SetRecipeIngredientsForGameTypes("slingshotammo_scrapfeather", RECIPE_GAME_TYPE.PORKLAND, { Ingredient("iron", 1), Ingredient("feather_thunder", 1) })
 end

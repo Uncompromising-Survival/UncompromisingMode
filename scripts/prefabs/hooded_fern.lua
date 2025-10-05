@@ -18,7 +18,7 @@ end
 
 local function makebarrenfn(inst, wasempty)
     if not POPULATING and
-        (   inst.components.witherable ~= nil and
+        (inst.components.witherable ~= nil and
             inst.components.witherable:IsWithered()
         ) then
         inst.AnimState:PlayAnimation(wasempty and "empty" or "empty")
@@ -30,34 +30,34 @@ end
 
 local function ToggleBusyAnimation(inst)
     inst.busyanimation = false
-    inst:RemoveEventCallback("animover",ToggleBusyAnimation)
+    inst:RemoveEventCallback("animover", ToggleBusyAnimation)
 end
 
 local function GetCropSeeds()
-    local weighted_briar_loot = {} 
-    local all_seeds = {"carrot","corn","dragonfruit","durian","eggplant","pomegranate","pumpkin","asparagus","tomato","potato","onion","pepper","garlic","watermelon"}
-    for i,v in ipairs(all_seeds) do
+    local weighted_briar_loot = {}
+    local all_seeds = { "carrot", "corn", "dragonfruit", "durian", "eggplant", "pomegranate", "pumpkin", "asparagus", "tomato", "potato", "onion", "pepper", "garlic", "watermelon" }
+    for i, v in ipairs(all_seeds) do
         weighted_briar_loot[v] = 0.1
     end
     if TheWorld.state.isspring then
-        local spring_seeds = {"carrot","corn","dragonfruit","durian","eggplant","pomegranate","pumpkin","asparagus","tomato","potato","onion","garlic","watermelon"}
-        for i,v in ipairs(spring_seeds) do
+        local spring_seeds = { "carrot", "corn", "dragonfruit", "durian", "eggplant", "pomegranate", "pumpkin", "asparagus", "tomato", "potato", "onion", "garlic", "watermelon" }
+        for i, v in ipairs(spring_seeds) do
             weighted_briar_loot[v] = 0.4
         end
     elseif TheWorld.state.iswinter then
         --nothing
     elseif TheWorld.state.issummer then
-        local summer_seeds = {"corn","dragonfruit","pomegranate","tomato","onion","pepper","garlic","watermelon","carrot"}
-        for i,v in ipairs(summer_seeds) do
+        local summer_seeds = { "corn", "dragonfruit", "pomegranate", "tomato", "onion", "pepper", "garlic", "watermelon", "carrot" }
+        for i, v in ipairs(summer_seeds) do
             weighted_briar_loot[v] = 0.4
-        end    
+        end
     else
-        local fall_seeds = {"carrot","corn","eggplant","pumpkin","asparagus","tomato","potato","onion","pepper","garlic"}
-        for i,v in ipairs(fall_seeds) do
+        local fall_seeds = { "carrot", "corn", "eggplant", "pumpkin", "asparagus", "tomato", "potato", "onion", "pepper", "garlic" }
+        for i, v in ipairs(fall_seeds) do
             weighted_briar_loot[v] = 0.4
-        end    
+        end
     end
-    return weighted_random_choice(weighted_briar_loot).."_seeds"
+    return weighted_random_choice(weighted_briar_loot) .. "_seeds"
 end
 
 local function GenerateLoot(inst, picker)
@@ -66,10 +66,16 @@ local function GenerateLoot(inst, picker)
     weighted_briar_loot["crop_seed"] = 0.2
     weighted_briar_loot["cutgrass"] = 0.4
     weighted_briar_loot["twigs"] = 0.15
-    weighted_briar_loot["aphid"] = 0.025
+    if not IsIslandWorld() then
+        weighted_briar_loot["aphid"] = 0.025
+    else
+        weighted_briar_loot["snake"] = 0.025
+        weighted_briar_loot["snake_poison"] = 0.025
+        weighted_briar_loot["vine"] = 0.4
+    end
     weighted_briar_loot["spider"] = 0.0125
     weighted_briar_loot["mound"] = 0.0125
-    
+
     local loot = weighted_random_choice(weighted_briar_loot)
     if loot == "crop_seed" then
         loot = GetCropSeeds()
@@ -79,9 +85,9 @@ local function GenerateLoot(inst, picker)
             local mound = SpawnPrefab("mound")
             mound.Transform:SetPosition(inst.Transform:GetWorldPosition())
             mound.persists = false
-            mound:DoTaskInTime(60*8,function(mound) mound:Remove() end) -- disappear after a day
+            mound:DoTaskInTime(60 * 8, function(mound) mound:Remove() end) -- disappear after a day
         else
-            if picker and picker.components.inventory and loot ~= "spider" and loot ~= "aphid" then
+            if picker and picker.components.inventory and loot ~= "spider" and loot ~= "aphid" and loot ~= "snake" and loot ~= "snake_poison" then
                 picker.components.inventory:GiveItem(SpawnPrefab(loot), nil, inst:GetPosition())
             else
                 Launch(inst.components.lootdropper:SpawnLootPrefab(loot), inst, 1.5)
@@ -116,7 +122,7 @@ local function onpickedfn(inst, picker)
     inst:RemoveTag("briar_plants")
 end
 
-local thicket_equipment = {"um_hat_leafwing","armor_bramble","um_armor_bramble_rimeweed","armor_lunarplant_husk"}
+local thicket_equipment = { "um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk" }
 local function WearingThicketResist(inst)
     local head
     local body
@@ -130,7 +136,7 @@ local function WearingThicketResist(inst)
 end
 
 local function OutOfTheWoodsYet(target)
-    local the_bush = FindEntity(target,1.75,nil,{"briar_plants"})
+    local the_bush = FindEntity(target, 1.75, nil, { "briar_plants" })
     if not the_bush or WearingThicketResist(target) then
         target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
         target.thicketcheck:Cancel()
@@ -139,15 +145,15 @@ local function OutOfTheWoodsYet(target)
 end
 
 local function CheckToSeeIfTargetsMoving(inst)
-    for i,v in ipairs(inst.playertracking) do
-        if v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5^2 then    
+    for i, v in ipairs(inst.playertracking) do
+        if v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5 ^ 2 then
             if v.sg:HasStateTag("moving") and inst.busyanimation == false then
-                inst.AnimState:PlayAnimation("bounce",false)
+                inst.AnimState:PlayAnimation("bounce", false)
                 inst.busyanimation = true
-                inst:ListenForEvent("animover",ToggleBusyAnimation)
+                inst:ListenForEvent("animover", ToggleBusyAnimation)
             end
         else
-            table.remove(inst.playertracking,i)
+            table.remove(inst.playertracking, i)
         end
     end
     if #inst.playertracking == 0 then
@@ -162,22 +168,26 @@ local function onnear(inst, target)
     if inst.components.pickable and inst.components.pickable:CanBePicked() then
         if not WearingThicketResist(target) then
             if math.random() > 0.8 then
-                SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                if not IsIslandWorld() then
+                    SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                else
+                    SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                end
             end
 
             target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
             if not target.thicketcheck then
-                target.thicketcheck = target:DoPeriodicTask(0.1,OutOfTheWoodsYet)
+                target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)
             end
         end
-        table.insert(inst.playertracking,target)
-        
+        table.insert(inst.playertracking, target)
+
         if #inst.playertracking > 0 and not inst.BrushingTest then
-            inst.BrushingTest = inst:DoPeriodicTask(0.3,CheckToSeeIfTargetsMoving)
+            inst.BrushingTest = inst:DoPeriodicTask(0.3, CheckToSeeIfTargetsMoving)
             if #inst.playertracking == 1 then
-                inst.AnimState:PlayAnimation("depress",false)
+                inst.AnimState:PlayAnimation("depress", false)
                 inst.busyanimation = true
-                inst:ListenForEvent("animover",ToggleBusyAnimation)
+                inst:ListenForEvent("animover", ToggleBusyAnimation)
             end
         end
     end
@@ -202,26 +212,32 @@ local function grass(name, stage)
 
         -- local multcolour = 0.5
         -- if 0 <= multcolour and multcolour < 1 then
-            -- local colour = multcolour + math.random() * (1.0 - multcolour)
-            -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
+        -- local colour = multcolour + math.random() * (1.0 - multcolour)
+        -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
         -- end
 
         inst.entity:SetPristine()
         inst.AnimState:SetTime(math.random() * 2)
 
+        if IsIslandWorld() then
+            inst.AnimState:SetMultColour(1, .9, .75, 1)
+        end
+
         if not TheWorld.ismastersim then
             return inst
         end
 
+
+
         inst:AddComponent("pickable")
         inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
 
-        inst.components.pickable:SetUp(nil, TUNING.GRASS_REGROW_TIME,2)
+        inst.components.pickable:SetUp(nil, TUNING.GRASS_REGROW_TIME, 2)
         inst.components.pickable.onregenfn = onregenfn
         inst.components.pickable.onpickedfn = onpickedfn
         inst.components.pickable.makeemptyfn = makeemptyfn
         inst.components.pickable.makebarrenfn = makebarrenfn
-        inst.components.pickable.max_cycles = 2 -- Not transplantable, shouldn't matter.
+        inst.components.pickable.max_cycles = 2  -- Not transplantable, shouldn't matter.
         inst.components.pickable.cycles_left = 2 -- Not transplantable, shouldn't matter.
 
         inst:AddComponent("lootdropper")
@@ -239,31 +255,38 @@ local function grass(name, stage)
 
         inst.components.burnable:SetBurnTime(0.75)
         inst.components.burnable:SetOnBurntFn(function(inst)
+            local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+
+            if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hooded") then
+                inst:Remove()
+                return
+            end
             inst.hidden = true
             inst.components.pickable:Pick(TheWorld)
-            inst.hidden = true
             inst:Hide()
         end)
 
+
+
         inst.playertracking = {}
 
-        inst.OnSave = function(inst,data)
+        inst.OnSave = function(inst, data)
             if inst.hidden then
                 data = {}
                 data.hidden = true
             end
         end
 
-        inst.OnLoad = function(inst,data)
+        inst.OnLoad = function(inst, data)
             if data and data.hidden then
                 inst.hidden = true
                 inst:Hide()
             end
         end
 
-        inst:DoTaskInTime(0,function(inst)
+        inst:DoTaskInTime(0, function(inst)
             if math.random() > 0.5 then
-                inst.AnimState:SetScale(-1,1)
+                inst.AnimState:SetScale(-1, 1)
             end
         end)
 
