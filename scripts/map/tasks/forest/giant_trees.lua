@@ -49,46 +49,11 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
     end)
 
 
-
     -- [IA Compatibility] --
     -- [Create New Giant Trees IA Task] --
     AddTask("GiantTrees_IA", {
-        locks = { LOCKS.ISLAND2 },
-        keys_given = { KEYS.ISLAND3 },
-        --region_id = "hoodedforest",
-        level_set_piece_blocker = true,
-        room_choices = {
-            ["SpideryGiantTrees"] = 1,
-            --["WalrusGiantTrees"] = 1,
-            ["MoonBaseGiantTrees"] = 1,
-            ["HoodedTown"] = function() return math.random(0, 1) end,
-            ["HFHolidays"] = function() return math.random(0, 1) end,
-            ["RoseGarden"] = function() return math.random(0, 1) end,
-            ["FoxGathering"] = 1,
-            ["GiantTrees"] = 1,
-        },
-        room_bg = WORLD_TILES.HOODEDFOREST,
-        background_room = "BGGiantTrees",
-        colour = { r = .1, g = .1, b = .1, a = 1 }
-    })
-
-    AddTaskSetPreInitAny(function(tasksetdata)
-        if tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED then
-            -- IA Giant Trees
-            if GetModConfigData("hoodedforest") then
-                table.insert(tasksetdata.tasks, "GiantTrees_IA")
-            end
-        end
-    end)
-
-
-
-
-    -- [IA Compatibility] --
-    -- [Create New Giant Trees IA Task] --
-    AddTask("GiantTrees_IA", {
-        locks = { LOCKS.ISLAND2 },
-        keys_given = { KEYS.ISLAND3 },
+        locks = { LOCKS.ISLAND2, LOCKS.ISLAND3},
+        keys_given = { KEYS.ISLAND3, KEYS.ISLAND4 },
         --region_id = "hoodedforest",
         level_set_piece_blocker = true,
         room_choices = {

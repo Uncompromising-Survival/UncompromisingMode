@@ -231,6 +231,7 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
 
     local function OnSeasonChange(self)
+        print(IsIslandWorld())
         if (TheWorld.state.iswetseason or TheWorld.state.isspring or TheWorld.state.isgreenseason)
             and (TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SPRING or IsIslandWorld()) then
             StartStorms()
