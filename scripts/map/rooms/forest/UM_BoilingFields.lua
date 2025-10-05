@@ -9,7 +9,7 @@ Layouts["cave_entrance_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_
 
 AddRoom("BoilingFields_Hounds", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
-    tags = { "RoadPoison","Mist" },
+    tags = { "RoadPoison", "Mist" },
     value = WORLD_TILES.UM_HOTSPRING_YELLOWROCK,
     contents = {
         distributepercent = 0.3,
@@ -51,10 +51,10 @@ AddRoom("BoilingFields_Rocky_IA", {
 })
 
 AddRoom("BoilingFields_Rocky", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    tags = {"RoadPoison","Mist"},
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    tags = { "RoadPoison", "Mist" },
     value = WORLD_TILES.UM_HOTSPRING,
-    contents =  {
+    contents = {
         distributepercent = 1,
         distributeprefabs =
         {
@@ -64,8 +64,8 @@ AddRoom("BoilingFields_Rocky", {
             um_hotspring = 0.05,
             shadow_puff = 3,
             evergreen_sparse = 10,
-            rocks=.03,
-            flint=.03,
+            rocks = .03,
+            flint = .03,
         },
         countprefabs = {
             snaildrake_hole = function() return math.random(2, 3) end,
@@ -73,10 +73,10 @@ AddRoom("BoilingFields_Rocky", {
     }
 })
 AddRoom("BoilingFields_WAR", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    tags = {"RoadPoison","Mist"},
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    tags = { "RoadPoison", "Mist" },
     value = WORLD_TILES.UM_HOTSPRING,
-    contents =  {
+    contents = {
         distributepercent = 1,
         distributeprefabs =
         {
@@ -85,20 +85,20 @@ AddRoom("BoilingFields_WAR", {
             um_hotspring = 0.05,
             shadow_puff = 3,
             evergreen_sparse = 10,
-            rocks=.03,
-            flint=.03,
+            rocks = .03,
+            flint = .03,
         },
         countprefabs = {
             snaildrake_hole = function() return math.random(1, 2) end,
-			boulder_crab = function() return math.random(2, 3) end,
+            boulder_crab = function() return math.random(2, 3) end,
         }
     }
 })
 AddRoom("BoilingFields_Crabby", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    tags = {"RoadPoison","Mist"},
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    tags = { "RoadPoison", "Mist" },
     value = WORLD_TILES.UM_HOTSPRING,
-    contents =  {
+    contents = {
         distributepercent = 1,
         distributeprefabs =
         {
@@ -109,8 +109,8 @@ AddRoom("BoilingFields_Crabby", {
             um_hotspring = 0.05,
             shadow_puff = 1.5,
             evergreen_sparse = 10,
-            rocks=.03,
-            flint=.03,
+            rocks = .03,
+            flint = .03,
         },
         countprefabs = {
             boulder_crab = function() return math.random(4, 6) end,
@@ -143,10 +143,10 @@ AddRoom("BoilingFields_Crabby_IA", {
 
 
 AddRoom("BoilingFields_Hotsprings", {
-    colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    tags = {"RoadPoison","Mist"},
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    tags = { "RoadPoison", "Mist" },
     value = WORLD_TILES.UM_HOTSPRING,
-    contents =  {
+    contents = {
         distributepercent = 1,
         distributeprefabs =
         {
@@ -171,7 +171,7 @@ AddRoom("BoilingFields_Hotsprings_IA", {
         distributepercent = 1,
         distributeprefabs =
         {
-            springrock1 = 0.08, 
+            springrock1 = 0.08,
             springrock2 = 0.04,
             boulder_crab = .01,
             rock_limpet = 0.025,
@@ -205,7 +205,7 @@ AddRoom("BoilingFields_DragonflyArena", {
 AddRoom("BoilingFields_Sinkhole", {
     colour = { r = 0, g = .9, b = 0, a = .50 },
     value = WORLD_TILES.UM_HOTSPRING,
-    tags = { "RoadPoison","Mist" },
+    tags = { "RoadPoison", "Mist" },
     contents = {
         countstaticlayouts = {
             ["cave_entrance_magmabiome"] = 1,
@@ -226,7 +226,7 @@ if KnownModIndex:IsModEnabled("workshop-1467214795") then
     AddRoom("BoilingFields_Sinkhole_IA", {
         colour = { r = 0, g = .9, b = 0, a = .50 },
         value = WORLD_TILES.UM_HOTSPRING_IA,
-        tags = { "RoadPoison","Mist" },
+        tags = { "RoadPoison", "Mist" },
         contents = {
             countstaticlayouts = {
                 ["cave_entrance_magmabiome_IA"] = 1,
