@@ -4,11 +4,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueHacker = require("tools/upvaluehacker")
 
--- Fix to prevent UM from overriding crocodog waves in island adventures
--- This doesn't account for multiworld servers. It WILL turn UM hounds off in those, but it's better than nothing.
--- Do a proper TheWorld check to know which shard is active.
-if TUNING.DSTU.ISLAND_ADVENTURES then return nil end
-
 env.AddComponentPostInit("hounded", function(self)
     local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
     function self:GetSpawnData() return _spawndata end

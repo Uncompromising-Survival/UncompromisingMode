@@ -248,6 +248,10 @@ AllRecipes["boat_bumper_kelp_kit"].ingredients = {
     Ingredient("cutgrass", 6)
 }
 
+if TUNING.DSTU.ISLAND_ADVENTURES_CLIENT then
+    AllRecipes["boat_bumper_limestone_kit"].numtogive = 4
+end
+
 if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     AllRecipes["mighty_gym"].ingredients = { Ingredient("boards", 4), Ingredient("cutstone", 2), Ingredient("rope", 3) }
     AllRecipes["dumbbell"].ingredients = { Ingredient("rocks", 4), Ingredient("twigs", 1) }
