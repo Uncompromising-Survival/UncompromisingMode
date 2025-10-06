@@ -39,7 +39,7 @@ local function MakeGrowFast(plant)
 end
 
 local plant_tags_must = {"plant"} 
-local plant_tags_one = {"growable","pickable"}
+local plant_tags_one = {"growable","pickable","bush"}
 local function MakePlantsGrowFast(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
 
@@ -85,6 +85,7 @@ local function fn()
     ------------------------------------------
 
     inst:AddTag("animal")
+	inst:AddTag("plantkin")
 
     inst.entity:SetPristine()
 
@@ -171,6 +172,7 @@ local function fnden()
     inst.AnimState:SetBank("catcoon_den")
     inst.AnimState:SetBuild("catcoon_den")
     inst.AnimState:PlayAnimation("idle")
+	
 	
 
     MakeSnowCoveredPristine(inst)
