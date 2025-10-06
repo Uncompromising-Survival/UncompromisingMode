@@ -173,6 +173,7 @@ local skills =
         connects = {
             "wolfgang_dumbbell_throwing_1",
         },
+        defaultfocus = true,
     },
 
 

@@ -333,6 +333,8 @@ local skills =
 
         onactivate   = ONACTIVATE_FNS.ArsenalSpear,
         ondeactivate = ONDEACTIVATE_FNS.ArsenalSpear,
+
+        defaultfocus = true,
     },
 
     -- Inspiration gain rate will increase a fair amount when attacking using Battle Spears.
