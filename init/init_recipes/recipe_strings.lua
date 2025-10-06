@@ -76,7 +76,7 @@ RECIPE_DESC.BOOTLEG = "Doesn't beat the original, but will have to do."
 -- Pyre Nettle stuff
 RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
 RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
-RECIPE_DESC.UM_ARMOR_BRAMBLE_RIMEWEED = "What do you think, Wormiest?"
+RECIPE_DESC.UM_ARMOR_BRAMBLE_RIMEWEED = "Nature's way of saying \"chill out\"."
 RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
 
 RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
