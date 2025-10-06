@@ -135,7 +135,7 @@ end
 
 
 env.AddPrefabPostInit("hooded_fern", function(inst)
-    if not TheWorld.ismastersim or not (IsSWEnabled() or not IsHAMEnabled()) then return end
+    if not TheWorld.ismastersim or not (IsSWEnabled() or IsHAMEnabled()) then return end
 
     if not inst.components.lootdropper then
         inst:AddComponent("lootdropper")
