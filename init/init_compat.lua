@@ -173,6 +173,6 @@ env.AddPrefabPostInit("hooded_fern", function(inst)
     inst.components.pickable.onregenfn = onregenfn
 end)
 
-if IsSWEnabled() or not IsHAMEnabled() then
+if IsSWEnabled() or IsHAMEnabled() then
     ACTIONS.HACK.mindistance = 2
 end

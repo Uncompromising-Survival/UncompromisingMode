@@ -1,8 +1,20 @@
 --currently only used for IA, but if we ever need more advanced mod checks, put 'em here!
-
-
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+
+--graciously borrowed from IA.
+IA_SW_ENABLED, IA_HAM_ENABLED = nil, nil
+
+for i,mod in ipairs(ModManager.mods) do
+    local modinfo = KnownModIndex:GetModInfo(mod.modname)
+    if modinfo.ia_shipwrecked then
+        IA_SW_ENABLED = true
+    elseif modinfo.ia_hamlet then
+        IA_HAM_ENABLED = true
+    end
+    if IA_SW_ENABLED and IA_HAM_ENABLED then break end
+end
+
 
 --Checks if theworld is island or volcano.
 function IsIslandOrVolcanoWorld()

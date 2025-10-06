@@ -116,6 +116,10 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
 
     SetRecipeIngredientsForGameTypes("scrap_monoclehat", RECIPE_GAME_TYPE.SW, { Ingredient("wagpunk_bits", 4), Ingredient("transistor", 1), Ingredient("ia_messagebottleempty", 1) })
     SetRecipeIngredientsForGameTypes("jawed_scythe", RECIPE_GAME_TYPE.SW, { Ingredient("twigs", 4), Ingredient("vine", 1), Ingredient("snappy_jaw", 3) })
+
+
+    SetRecipeIngredientsForGameTypes("mast_item", RECIPE_GAME_TYPE.SW, { Ingredient("log", 3), Ingredient("rope", 2), Ingredient("fabric", 2) })
+    SetRecipeIngredientsForGameTypes("mast", RECIPE_GAME_TYPE.SW, { Ingredient("log", 2), Ingredient("rope", 2), Ingredient("fabric", 2) })
 end
 
 if GLOBAL.NAUGHTY_VALUE["glowfly"] ~= nil then
