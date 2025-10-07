@@ -393,7 +393,7 @@ local default = {
         size = COCOON_SIZE.SMALL,
         name = "Scaly",
         loot = {
-            Item("meat", 1, .5),
+            Item("fishmeat", 1, .5),
             Item("tentaclespots", 2),
         }
     },
@@ -413,7 +413,7 @@ local default = {
     },
     TALLBIRD = {
         size = COCOON_SIZE.MEDIUM,
-        name = "feathery",
+        name = "Feathery",
         loot = {
             Item("tallbirdegg"),
             Item("meat"),
@@ -581,7 +581,108 @@ local default = {
     }
 }
 
-local sw = {}
+
+--todo:
+--snake monster morsel
+
+--[[
+
+    palm treeguard
+    doydoy
+]]
+local sw = {
+    SHARKITTEN = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Leathery",
+        loot = {
+            Item("shark_gills"),
+            Item("shark_gills", 1, .5),
+            Item("mysterymeat", 1, 1, true),
+            Item("fishmeat", 4, .5, true)
+        }
+    },
+    MERMFISHER = {
+        size = COCOON_SIZE.SMALL,
+        name = "Scaly",
+        loot = {
+            Item(function() return RandomItem("pondpurple_grouper", "pondneon_quattro", "pondpierrot_fish") end),
+            Item("blowdart_flup")
+        }
+    },
+    PRIMEAPE = {
+        size = COCOON_SIZE.SMALL,
+        name = "Hairy",
+        loot = {
+            Item("poop", 2),
+            Item("poop", 4, .25),
+            Item("cave_banana", 2),
+            Item("cave_banana", 4, .25),
+            Item("purplegem", 1, .1),
+            Item("dubloon", 4, .5)
+        }
+    },
+    OX = {
+        size = COCOON_SIZE.LARGE,
+        name = "Hairy",
+        loot = {
+            Item("meat"),
+            Item("meat", 1, .5),
+            Item("ox_horn"),
+            Item("poop", 2),
+            Item("poop", 4, .25),
+        }
+    },
+    CROCODOG = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Scaly",
+        loot = {
+            Item("houndstooth"),
+            Item("venomgland", 1, .5)
+        }
+    },
+    WILDBORE = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Leathery",
+        loot = {
+            Item("meat"),
+            Item("pigskin"),
+            Item(function() return RandomItem("tophat", "gashat", "piratehat", "snakeskinhat", "shark_teethhat") end),
+        }
+    },
+    STUNGRAY = {
+        size = COCOON_SIZE.SMALL,
+        name = "Leathery",
+        loot = {
+            Item("monstermeat"),
+            Item("venomgland"),
+            Item("venongland", 1, .5)
+        }
+    },
+    DOYDOY = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Feathery",
+        loot = {
+            Item("doydoyegg")
+        }
+    },
+    LEIF_PALM = {
+        size = COCOON_SIZE.LARGE,
+        name = "Leafy",
+        loot = {
+            Item("plantmeat", 1),
+            Item("livinglog", 2, .5),
+            Item("log", 5, .75),
+            Item("log", 5),
+            Item("coconut", 3),
+            Item("coconut", 3, .5)
+        }
+    },
+    KRAMPUS = default.KRAMPUS,
+    BEEGUARD = default.BEEGUARD,
+    TALLBIRD = default.TALLBIRD,
+    SPIDERQUEEN = default.SPIDERQUEEN,
+
+}
 
 --poopulate globals.
 for k, v in pairs(characters) do
@@ -801,8 +902,8 @@ AddCompatCharacterCocoon("1836542884", "zeta", {
 --whimsy
 AddCompatCharacterCocoon("2618885209", "whimsy", {
     Item("purplegem"),
-    Item(function() return RandomItem("redgem", "bluegem") end, .75, 3),
-    Item(function() return RandomItem("yellowgem", "orangegem") end, .15, 3),
+    Item(function() return RandomItem("redgem", "bluegem") end, 3, .75),
+    Item(function() return RandomItem("yellowgem", "orangegem") end, 3, .15),
     Item("marble", 4),
     Item("marble", 4, .5),
     Item("brainrock"),

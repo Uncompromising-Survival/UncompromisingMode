@@ -1,6 +1,6 @@
 local function ClearTrees(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local tree = TheSim:FindEntities(x, y, z, 12, {"tree"}, {"canopy"})
+    local tree = TheSim:FindEntities(x, y, z, 12, { "tree" }, { "canopy" })
     for i, v in ipairs(tree) do
         v:Remove()
     end
@@ -13,19 +13,23 @@ local function SpawnWidowWeb(inst)
     web.Transform:SetPosition(x, y, z)
 end
 
-local function TrySpawnCocoon(x, z,size)
+local function TrySpawnCocoon(x, z, type)
+    if type ~= nil then
+        type = string.upper(type)
+    end
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
-       #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
-       #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature" }) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature" }) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 8, { "webbedcreature" }) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
-		if size then
-			cocoon.size = size
-		end
+        if type ~= nil then
+            cocoon.cocoon_creature = type
+            cocoon.cocoon_data = COCOON_DEFS.DEFAULT[type]
+        end
     else
-        TrySpawnCocoon(x, z,size)
+        TrySpawnCocoon(x, z, type)
     end
 end
 
@@ -35,21 +39,23 @@ local function SpawnCocoon(inst)
     for i = 1, cap do
         TrySpawnCocoon(x, z)
     end
-	
-	-- guaranteed krampus, mactusk, and grass gator
-	TrySpawnCocoon(x, z,12)
-	TrySpawnCocoon(x, z,14)
-	TrySpawnCocoon(x, z,23)
+
+    -- guaranteed krampus, mactusk, and grass gator
+    TrySpawnCocoon(x, z, "krampus")
+    if not IsIslandWorld() then
+        TrySpawnCocoon(x, z, "walrus")
+        TrySpawnCocoon(x, z, "grassgator")
+    end
 end
 
 
 local function TrySpawnDecor(x, z, type)
     local xi = x + math.random(-12, 12)
     local zi = z + math.random(-12, 12)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature", "webdecor"}) == 0 and
-       #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature", "webdecor"}) < 2 and
-       #TheSim:FindEntities(xi, 0, zi, 5, {"webbedcreature", "webdecor"}) < 6 and
-       math.abs(xi) > 6 and math.abs(zi) > 6 then
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature", "webdecor" }) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature", "webdecor" }) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 5, { "webbedcreature", "webdecor" }) < 6 and
+        math.abs(xi) > 6 and math.abs(zi) > 6 then
         local cocoon = SpawnPrefab("widowdecor")
         cocoon.Transform:SetPosition(xi, 9, zi)
         cocoon.category = type

@@ -126,7 +126,6 @@ local function OnKilled(inst)
     --spawn loot
     if inst.cocoon_data.loot ~= nil then
         for k, loot in ipairs(inst.cocoon_data.loot) do
-            print(loot, loot.use_durability, loot.lootfn, loot.prefab, loot.amount, loot.chance)
             if not loot.use_durability or not loot.lootfn then
                 AddChanceLoot(inst, loot.prefab, loot.chance, loot.amount)
             end
