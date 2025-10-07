@@ -912,5 +912,4 @@ AddCompatCharacterCocoon("2618885209", "whimsy", {
     Item("purpletool", 1, 1, true)
 })
 
-
 return COCOON_DEFS
