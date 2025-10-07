@@ -15,9 +15,9 @@ local loot =
     --"silksack",
 }
 
-local RETARGET_MUST_TAGS = { "_combat" }
-local RETARGET_CANT_TAGS = { "INLIMBO", "structure", "bird", "um_fern_fox" }
-local RETARGET_ONE_OF_TAGS = { "player" }
+local RETARGET_MUST_TAGS = {"_combat"}
+local RETARGET_CANT_TAGS = {"INLIMBO", "structure", "bird", "um_fern_fox"}
+local RETARGET_ONE_OF_TAGS = {"player"}
 local function Retarget(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() and not inst.sg:HasStateTag("attack") then
         local newtarget = FindEntity(inst, 20,
@@ -37,7 +37,7 @@ local function Retarget(inst)
 end
 
 local function CalcSanityAura(inst, observer)
-    --return (inst.components.health and inst.components.health:GetPercent() < 0.5) and -TUNING.SANITYAURA_HUGE*2 or -TUNING.SANITYAURA_HUGE
+    --return (inst.components.health and inst.components.health:GetPercent() < .5) and -TUNING.SANITYAURA_HUGE*2 or -TUNING.SANITYAURA_HUGE
     return -TUNING.SANITYAURA_HUGE
 end
 
@@ -75,10 +75,10 @@ local function ShouldDodge(inst)
     xnew = x --Fallback if somehow xnew and znew aren't redefined in the loop below (they should be)
     znew = z
     for i = 1, 8 do
-        xtest = x + 10 * math.cos(3.14 * i / 4 + 0.01 * math.random(-50, 50))
-        ztest = z + 10 * math.sin(3.14 * i / 4 + 0.01 * math.random(-50, 50))
+        xtest = x + 10 * math.cos(3.14 * i / 4 + .01 * math.random(-50, 50))
+        ztest = z + 10 * math.sin(3.14 * i / 4 + .01 * math.random(-50, 50))
         --SpawnPrefab("maxwell_smoke").Transform:SetPosition(xtest,y,ztest) --For testing which points widow will dodge to with visuals
-        if mindist > inst:GetDistanceSqToPoint(xtest, y, ztest) and TheWorld.Map:IsAboveGroundAtPoint(xtest, y, ztest) and #TheSim:FindEntities(xtest, y, ztest, 3, { "giant_tree" }) == 0 then --We're looking for the dodge position closest to widow
+        if mindist > inst:GetDistanceSqToPoint(xtest, y, ztest) and TheWorld.Map:IsAboveGroundAtPoint(xtest, y, ztest) and #TheSim:FindEntities(xtest, y, ztest, 3, {"giant_tree"}) == 0 then --We're looking for the dodge position closest to widow
             mindist = inst:GetDistanceSqToPoint(xtest, y, ztest)
             xnew = xtest
             znew = ztest
@@ -100,7 +100,7 @@ end
 
 local function EpicsCheck(inst) -- Widow will not tolerate being bullied by epics, you go fight them yourself!
     local x, y, z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "hoodedwidow", "leif" })
+    local ents = TheSim:FindEntities(x, y, z, 20, {"epic"}, {"hoodedwidow", "leif"})
 
     -- if inst.components.homeseeker and inst.components.homeseeker.home and inst:GetDistanceSqToInst(inst.components.homeseeker.home) > TUNING.DRAGONFLY_RESET_DIST * 20 then
     -- inst.bullier = true
@@ -123,18 +123,14 @@ end
 
 local function OnHitOther(inst, data)
     local other = data.target
-    if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < 0.5) then -- these guys get KO-ed
+    if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < .5) then -- these guys get KO-ed
         if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
             inst.components.health:DoDelta(100)
             --[[if other.prefab == "spider_trapdoor" then
                 inst.components.health:DoDelta(50)
             end]]
-            if not inst.sg:HasStateTag("eating") then
-                inst.sg:GoToState("eat_small")
-            end
-            if other.brain then
-                other.brain:Stop()
-            end
+            if not inst.sg:HasStateTag("eating") then inst.sg:GoToState("eat_small") end
+            if other.brain then other.brain:Stop() end
             OtherFollowSymbol(inst, other)
         end
     end
@@ -144,7 +140,7 @@ end
 local impact_loot =
 {
     twigs = 1,
-    log = 0.5,
+    log = .5,
 }
 
 local minion_loot =
@@ -171,9 +167,9 @@ local minion_loot3 =
 -- tree.SpawnDebris(inst, target, loottable,target) -> tree.SpawnDebris(tree, who_to_attack, what_loot,where_to_appear)
 
 local function ShadowFade(inst)
-    inst.scaleFactor = inst.scaleFactor - 0.01
+    inst.scaleFactor = inst.scaleFactor - .01
     inst.Transform:SetScale(inst.scaleFactor, inst.scaleFactor, inst.scaleFactor)
-    if inst.scaleFactor < 0.05 then
+    if inst.scaleFactor < .05 then
         inst:Remove()
     end
 end
@@ -248,9 +244,9 @@ local function ShakeTree(inst, tree)
     -- Enemies
     --tree.SpawnDebris(tree, inst, minion_loot)
     --tree.SpawnDebris(tree, inst, minion_loot)
-    tree.SpawnDebris(tree, nil, inst.components.health:GetPercent() >= 0.5 and minion_loot
-        or inst.components.health:GetPercent() < 0.5 and minion_loot2
-        or inst.components.health:GetPercent() < 0.25 and minion_loot3)
+    tree.SpawnDebris(tree, nil, inst.components.health:GetPercent() >= .5 and minion_loot
+        or inst.components.health:GetPercent() < .5 and minion_loot2
+        or inst.components.health:GetPercent() < .25 and minion_loot3)
 
     --WebMortarCanopy(inst,inst)
     -- Other players
@@ -279,7 +275,7 @@ end
 
 local function DecideWhatTreeToBe(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local trees = TheSim:FindEntities(x, y, z, 50, { "giant_tree" })
+    local trees = TheSim:FindEntities(x, y, z, 50, {"giant_tree"})
     local mindist = 15 ^ 2
     for i, tree in ipairs(trees) do
         local treedist = inst:GetDistanceSqToInst(tree)
@@ -373,9 +369,9 @@ local function fn()
         inst.lasttrigger = inst.components.health:GetPercent()
     end
 
-    inst.components.healthtrigger:AddTrigger(0.75, PrepareTreeToShake)
-    inst.components.healthtrigger:AddTrigger(0.5, PrepareTreeToShake)
-    inst.components.healthtrigger:AddTrigger(0.25, PrepareTreeToShake)
+    inst.components.healthtrigger:AddTrigger(.75, PrepareTreeToShake)
+    inst.components.healthtrigger:AddTrigger(.5, PrepareTreeToShake)
+    inst.components.healthtrigger:AddTrigger(.25, PrepareTreeToShake)
 
     ------------------
     inst:AddComponent("knownlocations")
@@ -384,7 +380,7 @@ local function fn()
     inst.components.combat:SetRange(TUNING.SPIDERQUEEN_ATTACKRANGE)
     inst.components.combat:SetDefaultDamage(150)
     inst.components.combat.customdamagemultfn = function(inst, target)
-        return target:HasTag("player") and 0.5 or 1
+        return target:HasTag("player") and .5 or 1
     end
     inst.components.combat:SetAttackPeriod(3)
     inst.Retarget = Retarget
@@ -403,14 +399,14 @@ local function fn()
     inst:AddComponent("locomotor")
     inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
-    inst.components.locomotor.pathcaps = { ignorecreep = true }
+    inst.components.locomotor.pathcaps = {ignorecreep = true}
     inst.components.locomotor.walkspeed = 3
     inst.components.locomotor.runspeed = 3
 
     ------------------
 
     inst:AddComponent("eater")
-    inst.components.eater:SetDiet({ FOODTYPE.MEAT }, { FOODTYPE.MEAT })
+    inst.components.eater:SetDiet({FOODTYPE.MEAT}, {FOODTYPE.MEAT})
     inst.components.eater:SetCanEatHorrible()
     inst.components.eater.strongstomach = true -- can eat monster meat!
 
