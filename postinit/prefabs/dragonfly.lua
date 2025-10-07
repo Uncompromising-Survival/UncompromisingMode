@@ -23,8 +23,8 @@ end
 local function BossCheck(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 20, { "epic" }, { "dragonfly" } )
-	
-	if #ents > 0 or TheWorld.state.issummer then
+
+	if --[[#ents > 0 or]] TheWorld.state.issummer then
 		Reset(inst)
 	end
 
