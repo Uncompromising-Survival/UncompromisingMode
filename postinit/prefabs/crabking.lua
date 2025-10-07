@@ -443,7 +443,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 				--count = count + 1
 			--end
 		--end
-	--end)
+	end)
 
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics

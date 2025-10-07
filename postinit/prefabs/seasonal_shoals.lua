@@ -21,10 +21,8 @@ end
 
 local function OnMegaFlare(inst, data)
     local nearest_shoal
-        nearest_shoal = TheSim:FindEntities(data.sourcept.x, data.sourcept.y, data.sourcept.z, 35, {"oceanshoalspawner"})
-   
-   
-   
+    nearest_shoal = TheSim:FindEntities(data.sourcept.x, data.sourcept.y, data.sourcept.z, 35, { "oceanshoalspawner" })
+
     if nearest_shoal ~= nil and #nearest_shoal > 0 then
         nearest_shoal = nearest_shoal[1]
         nearest_shoal:DoTaskInTime(5, function(inst)
