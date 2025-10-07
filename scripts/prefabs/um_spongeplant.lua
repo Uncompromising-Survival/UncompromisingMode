@@ -9,6 +9,11 @@ local function OnRegen(inst)
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
     inst.components.shaveable.prize_count = 1
+    if not inst.components.pickable then
+        inst:AddComponent("pickable")
+        inst.components.pickable:SetUp(nil)
+	    inst.components.pickable:SetStuck(true)
+    end
 end
 
 local function OnShaved(inst, shaver, shave_item)
@@ -19,6 +24,7 @@ local function OnShaved(inst, shaver, shave_item)
     if not inst.components.timer:TimerExists("regrow") then
         inst.components.timer:StartTimer("regrow", TUNING.TOTAL_DAY_TIME * 4)
     end
+    inst:RemoveComponent("pickable")
 end
 
 local function CanShave(inst, shaver, shave_item)
@@ -82,6 +88,10 @@ local function plant(name, stage)
         shaveable:SetPrize("um_spongeplant_item", 1)
         shaveable.can_shave_test = CanShave
         shaveable.on_shaved = OnShaved
+
+        inst:AddComponent("pickable")
+	    inst.components.pickable:SetUp(nil)
+	    inst.components.pickable:SetStuck(true)
 
         --[[inst:AddComponent("witherable")
 
