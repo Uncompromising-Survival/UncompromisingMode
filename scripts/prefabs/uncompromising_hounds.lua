@@ -1020,7 +1020,8 @@ local function OnAttackOther_Spore(inst, data)
 end
 
 local function fnspore()
-    local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, { amphibious = true })
+    --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, { amphibious = true })
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"}, { amphibious = false })
 
     if not TheWorld.ismastersim then
         return inst

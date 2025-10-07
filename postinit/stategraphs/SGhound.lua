@@ -34,7 +34,7 @@ env.AddStategraphPostInit("hound", function(inst)
     local events =
     {
         EventHandler("doleapattack", function(inst, data) -- Spore Hound
-            if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not inst.components.amphibiouscreature.in_water then
+            if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not (inst.components.amphibiouscreature and inst.components.amphibiouscreature.in_water) then
                 --inst.sg:GoToState("leap_attack_pre", data.target)
                 inst.sg:GoToState("leap_attack", data.target)
             end
@@ -78,7 +78,7 @@ env.AddStategraphPostInit("hound", function(inst)
             end,
 
             onupdate = function(inst)
-                if inst.components.amphibiouscreature.in_water then inst.sg:GoToState("idle") return end
+                if (inst.components.amphibiouscreature and inst.components.amphibiouscreature.in_water) then inst.sg:GoToState("idle") return end
                 local percent = inst.AnimState:GetCurrentAnimationTime () / inst.AnimState:GetCurrentAnimationLength()
                 local xdiff = inst.sg.statemem.targetpos.x - inst.sg.statemem.startpos.x
                 local zdiff = inst.sg.statemem.targetpos.z - inst.sg.statemem.startpos.z
