@@ -418,7 +418,7 @@ ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_seedpacket", "CRAFTING_S
 AddRecipe2("hermitshop_boat_ancient_blueprint", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "boat_ancient_item_blueprint", sg_state = "give", image="blueprint_rare.tex" })
 ChangeSortKey("hermitshop_boat_ancient_blueprint", "hermitshop_chum_blueprint", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
+AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 5) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, numtogive = 2, product = "bootleg", sg_state = "give" })
 ChangeSortKey("hermitshop_bootleg", "hermitshop_boat_ancient_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_cookies", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "pumpkincookie", sg_state = "give" })
