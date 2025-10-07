@@ -160,8 +160,7 @@ end
 local function onload(inst, data)
     if data then
         inst.cocoon_creature = data.cocoon_creature
-        inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature] ~= nil and COCOON_DEFS.DEFAULT[inst.cocoon_creature]
-            or COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature] ~= nil and COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
+        inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature] or COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
             or COCOON_DEFS.CHARACTER[inst.cocoon_creature]
     end
 end
