@@ -613,7 +613,7 @@ local function DoLightningExplosion(inst)
 end
 
 local function fnlightning()
-    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, {"lightninghound", "electricdamageimmune"}, { amphibious = true })
+    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, {"lightninghound", "electricdamageimmune"}, {amphibious = true})
 
     if not TheWorld.ismastersim then
         return inst
@@ -754,7 +754,7 @@ local function OnHitOtherFreeze(inst, data)
 end
 
 local function fnglacial()
-    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, {"glacialhound"}, { amphibious = true })
+    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, {"glacialhound"}, {amphibious = true})
 
     if not TheWorld.ismastersim then
         return inst
@@ -974,7 +974,7 @@ local function OnMagmaAttacked(inst, data)
 end
 
 local function fnmagma()
-    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, {"magmahound", "clay", "electricdamageimmune"}, { amphibious = false })
+    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, {"magmahound", "clay", "electricdamageimmune"})
 
     if not TheWorld.ismastersim then
         return inst
@@ -1020,8 +1020,8 @@ local function OnAttackOther_Spore(inst, data)
 end
 
 local function fnspore()
-    --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, { amphibious = true })
-    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"}, { amphibious = false })
+    --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, {amphibious = true})
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"})
 
     if not TheWorld.ismastersim then
         return inst

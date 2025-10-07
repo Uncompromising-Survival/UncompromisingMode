@@ -7,9 +7,9 @@
 local function Item(item, count, chance, use_durability, lootfn)
     return {
         prefab = item,
-        amount = count ~= nil and count or 1,
-        chance = chance ~= nil and chance or 1,
-        use_durability = use_durability ~= nil and use_durability or false,
+        amount = count or 1,
+        chance = chance or 1,
+        use_durability = use_durability or false,
         lootfn = lootfn
     }
 end
