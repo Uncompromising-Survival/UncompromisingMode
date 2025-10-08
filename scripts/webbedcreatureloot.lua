@@ -677,6 +677,15 @@ local sw = {
             Item("coconut", 3, .5)
         }
     },
+    DRAGOON = {
+        size = COCOON_SIZE.MEDIUM,
+        name = "Scaly",
+        loot = {
+            Item("obsidian"),
+            Item("obsidian", 3, .5),
+            Item("monstermeat")
+        }
+    },
     KRAMPUS = default.KRAMPUS,
     BEEGUARD = default.BEEGUARD,
     TALLBIRD = default.TALLBIRD,
