@@ -938,8 +938,8 @@ AddCompatCharacterCocoon("2997213431", "swire", {
     Item("goldnugget", 2, .15),
     Item("goldnugget", 2, .15),
     Item("swire_weapon", 1, 1, true),
-    Item("swire_lipstick", 1, 0.5, true),
-    Item("lgd_hat", 1, 0.5, true),
+    Item("swire_lipstick", 1, .5, true),
+    Item("lgd_hat", 1, .5, true),
 })
 
 return COCOON_DEFS
