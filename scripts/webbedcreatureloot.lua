@@ -912,4 +912,34 @@ AddCompatCharacterCocoon("2618885209", "whimsy", {
     Item("purpletool", 1, 1, true)
 })
 
+--whiskey
+local algae = TUNING.DSTU.ISLAND_ADVENTURES and "seaweed" or "kelp"
+local seamaterial = TUNING.DSTU.ISLAND_ADVENTURES and "bamboo" or "driftwood_log"
+local boatkit = TUNING.DSTU.ISLAND_ADVENTURES and "boatrepairkit" or "boatpatch_sludge"
+local sail = TUNING.DSTU.ISLAND_ADVENTURES and "ironwind" or "mast_malbatross_item"
+
+AddCompatCharacterCocoon("3118176896", "whiskey", {
+    Item("depthsword", 1, 1, true),
+    Item(function() return RandomItem("whiskeyhat", "whiskeysonar") end, 1, 1, true),
+    Item(function() return RandomItem(algae, seamaterial) end, 3),
+    Item(function() return RandomItem("greengem", "orangegem") end, 1, .25),
+    Item(boatkit, 1, .5, true),
+    Item(sail, 1, .5),
+})
+
+--swire
+-- will have better loot once the skilltree comes out. For now funny gold piñata
+AddCompatCharacterCocoon("2997213431", "swire", {
+    Item("goldnugget", 2, 1),
+    Item("goldnugget", 2, .5),
+    Item("goldnugget", 2, .5),
+    Item("goldnugget", 2, .5),
+    Item("goldnugget", 2, .15),
+    Item("goldnugget", 2, .15),
+    Item("goldnugget", 2, .15),
+    Item("swire_weapon", 1, 1, true),
+    Item("swire_lipstick", 1, 0.5, true),
+    Item("lgd_hat", 1, 0.5, true),
+})
+
 return COCOON_DEFS
