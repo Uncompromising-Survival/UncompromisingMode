@@ -1,6 +1,6 @@
 local function ClearTrees(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local tree = TheSim:FindEntities(x, y, z, 12, { "tree" }, { "canopy" })
+    local tree = TheSim:FindEntities(x, y, z, 12, {"tree"}, {"canopy"})
     for i, v in ipairs(tree) do
         v:Remove()
     end
@@ -19,9 +19,9 @@ local function TrySpawnCocoon(x, z, type)
     end
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature" }) == 0 and
-        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature" }) < 2 and
-        #TheSim:FindEntities(xi, 0, zi, 8, { "webbedcreature" }) < 6 then
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
         if type ~= nil then
@@ -52,9 +52,9 @@ end
 local function TrySpawnDecor(x, z, type)
     local xi = x + math.random(-12, 12)
     local zi = z + math.random(-12, 12)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature", "webdecor" }) == 0 and
-        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature", "webdecor" }) < 2 and
-        #TheSim:FindEntities(xi, 0, zi, 5, { "webbedcreature", "webdecor" }) < 6 and
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature", "webdecor"}) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature", "webdecor"}) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 5, {"webbedcreature", "webdecor"}) < 6 and
         math.abs(xi) > 6 and math.abs(zi) > 6 then
         local cocoon = SpawnPrefab("widowdecor")
         cocoon.Transform:SetPosition(xi, 9, zi)

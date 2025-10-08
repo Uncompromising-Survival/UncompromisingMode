@@ -66,7 +66,8 @@ local component_post = {
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
 	"locomotor",
-	"beargerspawner"
+	"beargerspawner",
+    "playercontroller"
 }
 
 local prefab_post = {

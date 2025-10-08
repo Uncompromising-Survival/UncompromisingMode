@@ -23,15 +23,15 @@ local function TrySpawnCocoon(x, z)
     end
 end
 
-
+local blacklisted_coocoons = {"krampus", "walrus", "grassgator"}
 local function RerollCocoons(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, { "webbedcreature" })
+    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, {"webbedcreature"})
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
 
-    if widowweb ~= nil --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
+    if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-            if v.cocoon_creature == "krampus" or v.cocoon_creature == "walrus" or v.cocoon_creature == "grassgator" or table.contains(COCOON_CHARACTERS, v.cocoon_creature) then --Krampus, McTusk, Grass Gator, and Survivor Cocoon med & large.
+            if table.contains(blacklisted_coocoons, v.cocoon_creature) or table.contains(COCOON_CHARACTERS, v.cocoon_creature) then --Krampus, McTusk, Grass Gator, and Survivor Cocoon med & large.
             else
                 v:Remove()
                 TrySpawnCocoon(x, z)
@@ -81,7 +81,7 @@ local function SpawnInvestigators(inst, target)
             local x, y, z = inst.Transform:GetWorldPosition()
             spider.sg:GoToState("fall")
             spider.suggesttarget = target
-            spider:DoTaskInTime(0.5, function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
+            spider:DoTaskInTime(.5, function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
             SpawnFX(inst, 4)
         end
     end
@@ -92,6 +92,8 @@ local function fn()
 
     inst.entity:AddTransform()
     inst.entity:AddNetwork()
+
+    inst:AddTag("widowweb")
 
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
@@ -105,13 +107,13 @@ local function fn()
     end
 
     inst.SpawnInvestigators = SpawnInvestigators
-    inst:AddTag("widowweb")
-    inst:AddComponent("childspawner")
-    inst.components.childspawner.childname = "hoodedwidow"
-    inst.components.childspawner:SetMaxChildren(1)
-    inst.components.childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
-    inst.components.childspawner.onchildkilledfn = OnKilled
-    inst.components.childspawner:StopRegen()
+
+    local childspawner = inst:AddComponent("childspawner")
+    childspawner.childname = "hoodedwidow"
+    childspawner:SetMaxChildren(1)
+    childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
+    childspawner.onchildkilledfn = OnKilled
+    childspawner:StopRegen()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", ontimerdone)

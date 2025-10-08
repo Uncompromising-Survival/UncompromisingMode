@@ -85,7 +85,7 @@ end
 ---sets the data of the cocoonn.
 ---@param inst any The instance of the cocooon
 local function SetUpCocoon(inst)
-    if inst.cocoon_creature == nil then
+    if not inst.cocoon_creature then
         local is_character = math.random() > .95 --roughly same chance as before.
         if is_character then
             inst.cocoon_creature = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
@@ -124,7 +124,7 @@ local function OnKilled(inst)
     end
 
     --spawn loot
-    if inst.cocoon_data.loot ~= nil then
+    if inst.cocoon_data.loot then
         for k, loot in ipairs(inst.cocoon_data.loot) do
             if not loot.use_durability or not loot.lootfn then
                 AddChanceLoot(inst, loot.prefab, loot.chance, loot.amount)
