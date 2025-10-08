@@ -11,7 +11,7 @@ function SpawnDurabilityLoot(inst, loot, amount, chance)
         if chance >= 1 or math.random() < chance then
             local item = inst.components.lootdropper:SpawnLootPrefab(type(loot) == "function" and loot() or loot, inst:GetPosition())
             if item == nil then
-                print("Item "..(type(loot) == "function" and loot() or loot).." is NOT a valid prefab!")
+                print("Item " .. (type(loot) == "function" and loot() or loot) .. " is NOT a valid prefab!")
                 return
             end
 
@@ -65,18 +65,18 @@ local function SetCocoonSize(inst, size)
         inst:RemoveTag("largecocoon")
     end
     local shadowx, shadowy, silk, stage = GetCocoonFeatures(size)
-    inst:AddTag(GetSizeName(size).."cocoon")
+    inst:AddTag(GetSizeName(size) .. "cocoon")
 
-    inst.MiniMapEntity:SetIcon("webbedcreature_"..GetSizeName(size).."_minimap.tex")
+    inst.MiniMapEntity:SetIcon("webbedcreature_" .. GetSizeName(size) .. "_minimap.tex")
     inst.DynamicShadow:SetSize(shadowx, shadowy)
     for i = 1, silk do
         inst.components.lootdropper:AddChanceLoot("silk", 1)
     end
     inst.anims = {
-        hit = "hit_"..GetSizeName(size),
-        idle = "idle_"..GetSizeName(size),
-        kill = "break_"..GetSizeName(size),
-        init = "appear_"..GetSizeName(size),
+        hit = "hit_" .. GetSizeName(size),
+        idle = "idle_" .. GetSizeName(size),
+        kill = "break_" .. GetSizeName(size),
+        init = "appear_" .. GetSizeName(size),
     }
     SetStage(inst, stage)
 end
@@ -90,8 +90,6 @@ local function SetUpCocoon(inst)
         if is_character then
             inst.cocoon_creature = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
             inst.cocoon_data = COCOON_DEFS.CHARACTER[inst.cocoon_creature]
-            inst.cocoon_data.size = 1
-            inst.cocoon_data.name = "Shrouded"
         elseif IsIslandWorld() then
             inst.cocoon_creature = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
             inst.cocoon_data = COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
@@ -101,7 +99,7 @@ local function SetUpCocoon(inst)
         end
     end
 
-    inst.components.named:SetName(inst.cocoon_data.name.." Cocoon")
+    inst.components.named:SetName(inst.cocoon_data.name .. " Cocoon")
     SetCocoonSize(inst, inst.cocoon_data.size)
 end
 
@@ -159,6 +157,9 @@ end
 local function onload(inst, data)
     if data then
         inst.cocoon_creature = data.cocoon_creature
+        --This here could be better
+        --ideally we should be saving which type of cocoon as well instead of searching across the different defs.
+        --in case there's the same creature with different loot; but it works for now so, too bad! - Atobá.
         inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature] or COCOON_DEFS.SHIPWRECKED[inst.cocoon_creature]
             or COCOON_DEFS.CHARACTER[inst.cocoon_creature]
     end
@@ -257,7 +258,7 @@ local function fn()
 end
 
 local function on_anim_over(inst)
-    inst.AnimState:PlayAnimation(inst.category..(math.random() > .95 and "_twitch" or ""))
+    inst.AnimState:PlayAnimation(inst.category .. (math.random() > .95 and "_twitch" or ""))
 end
 
 local function decorsave(inst, data)

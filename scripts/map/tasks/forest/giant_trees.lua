@@ -29,9 +29,6 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         }
         task.room_bg = GLOBAL.WORLD_TILES.HOODEDFOREST
         task.background_room = "BGGiantTrees"
-        if task.room_tags ~= nil then
-            table.insert(task.room_tags, "hooded")
-        end
     end)
 
     -- Setpiece adjustments
@@ -58,8 +55,10 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
         locks = { LOCKS.ISLAND2, LOCKS.ISLAND3 },
         keys_given = { KEYS.ISLAND3, KEYS.ISLAND4 },
         --region_id = "hoodedforest",
-        level_set_piece_blocker = true,
+        entrance_room = "HoodedEntrance",
+        --level_set_piece_blocker = true,
         room_choices = {
+            ["SpideryGiantTrees"] = 1,
             ["GiantTrees"] = 1,
             ["RoseGarden"] = 1,
             --["RoadGiantTrees"] = 1,
@@ -68,23 +67,21 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             --["ShroomInfestedGiantTrees"] = 1,
             --["SnapDragons"] = 1,
             ["FoxGathering"] = 1,
-            ["SpideryGiantTrees"] = 1,
             ["HoodedTown"] = 1,
             ["HFHolidays"] = 1,
             --["QuestionableDecisions"] = 1,
         },
         room_bg = WORLD_TILES.HOODEDFOREST,
         background_room = "BGGiantTrees",
-        room_tags = { "hooded" },
+        room_tags = { "hoodedcanopy" },
         colour = { r = .1, g = .1, b = .1, a = 1 }
     })
 
-    AddTaskSetPreInitAny(function(tasksetdata)
-        if tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED then
-            -- IA Giant Trees
-            if GetModConfigData("hoodedforest") then
-                table.insert(tasksetdata.tasks, "GiantTrees_IA")
-            end
+    AddTaskSetPreInit("shipwrecked", function(tasksetdata)
+        -- IA Giant Trees
+        if GetModConfigData("hoodedforest") then
+            table.insert(tasksetdata.tasks, "GiantTrees_IA")
+            table.insert(tasksetdata.required_prefabs, "widowwebspawner")
         end
     end)
 end

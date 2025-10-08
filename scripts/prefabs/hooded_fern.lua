@@ -257,7 +257,7 @@ local function grass(name, stage)
         inst.components.burnable:SetOnBurntFn(function(inst)
             local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
 
-            if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hooded") then
+            if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hoodedcanopy") then
                 inst:Remove()
                 return
             end

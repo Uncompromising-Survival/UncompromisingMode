@@ -39,7 +39,14 @@ COCOON_DEFS.SHIPWRECKED = {}
 
 setmetatable(COCOON_DEFS.CHARACTER, {
     __newindex = function(t, k, v)
+        printwrap("t", t)
+        print(k)
+        printwrap("v", v)
         table.insert(COCOON_CHARACTERS, k)
+
+        v.size = 1 --automatically set size
+        v.name = "Shrouded" --and name for character cocoons.
+
         rawset(t, k, v)
     end
 })
