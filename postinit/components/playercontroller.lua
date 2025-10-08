@@ -10,7 +10,7 @@ env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I did
         local action = actbuttonaction and actbuttonaction.action
         local inventory = self.inst.components.inventory
         local tool = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS) --You spotted some silly stuff down there too, Max!! TY!!! -C
-        if actbuttonaction and action and action.id == ACTIONS.PICK.id and tool and tool:HasTag(ACTIONS.SCYTHE.id.."_tool") then 
+        if actbuttonaction and action == ACTIONS.PICK and tool and tool:HasTag(ACTIONS.SCYTHE.id.."_tool") then 
             return BufferedAction(self.inst, actbuttonaction.target, ACTIONS.SCYTHE, action ~= ACTIONS.SMOTHER and tool or nil)
         end
         return actbuttonaction
