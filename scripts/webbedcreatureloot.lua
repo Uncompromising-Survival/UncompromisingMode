@@ -44,7 +44,7 @@ setmetatable(COCOON_DEFS.CHARACTER, {
         printwrap("v", v)
         table.insert(COCOON_CHARACTERS, k)
 
-        v.size = 1 --automatically set size
+        v.size = 1          --automatically set size
         v.name = "Shrouded" --and name for character cocoons.
 
         rawset(t, k, v)
