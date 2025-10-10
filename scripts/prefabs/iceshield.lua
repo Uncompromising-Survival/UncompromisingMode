@@ -6,9 +6,8 @@ local function OnHealthDelta(inst, oldpercent, newpercent)
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
-    if weapon ~= nil and weapon:HasTag("pierces_ice_shield") 
-        or attacker ~= nil and attacker:HasTag("pierces_ice_shield") 
-        or weapon.components.obsidiantool ~= nil then --IA compat
+    if weapon ~= nil and (weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool ~= nil) --IA compat
+        or attacker ~= nil and attacker:HasTag("pierces_ice_shield") then
         return true
     end
 
