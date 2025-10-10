@@ -791,83 +791,16 @@ local function OnHitOtherFreeze(inst, data)
 end
 
 local function AddIceShield(inst, tier)
-    print("adding ice shield")
-    inst:AddTag("ice_shielded")
-
-    if inst.ice_shield ~= nil then
-        print("pre-existing ice shield, removing...")
-        inst.ice_shield:Remove()
-    end
-
-    print("spawning ice shield")
-    inst.ice_shield = SpawnPrefab("um_ice_shield")
-    inst.ice_shield.entity:SetParent(inst.entity)
-    inst.ice_shield.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    inst.ice_shield._parent = inst
-    inst.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-        --cause apparently is different from stimuli...
-        print(cause == "fire" and amount * 5 or amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-        if inst.ice_shield.components.health ~= nil then
-            if cause == "fire" then
-                amount = amount * 5
-
-                SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
-            end
-            return inst.ice_shield.components.health:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-        end
-    end
-
-    if inst.shield_fx ~= nil then
-        inst.shield_fx:Remove()
-    end
-
-    print("spawning shield FX")
-    inst.shield_fx = SpawnPrefab("deer_ice_flakes")
-    inst.shield_fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-    inst.shield_fx.entity:AddFollower()
-    inst.shield_fx.Follower:FollowSymbol(inst.GUID, "hound_body", 0, 0, 0)
+    local iceShield = SpawnPrefab("um_ice_shield")
+    iceShield:Init(inst, "hound_body", tier)
 end
 
 local function RemoveIceShield(inst)
-    print("removing ice shield")
-    inst:RemoveTag("ice_shielded")
-
-    if inst.ice_shield ~= nil then
-        inst.ice_shield:Remove()
-    end
-
-    if inst.shield_fx ~= nil then
-        inst.shield_fx:Remove()
-    end
-
-    inst.components.health.redirect = nil
-
     inst:DoTaskInTime(10, function(inst)
         inst:PushEvent("regen_iceshield")
     end)
 end
 
-local function ShouldWeaponPierce(inst, weapon, attacker)
-    if weapon ~= nil and weapon:HasTag("pierces_ice_shield") then
-        return true
-    end
-
-    if weapon ~= nil then
-        if weapon.components.weapon ~= nil then
-            return weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0
-        end
-    end
-
-    return false
-end
-local function ShouldRecoilGlacial(inst, attacker, weapon, damage)
-    if inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker) then
-        if attacker ~= nil and attacker.components.talker ~= nil then
-            attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
-        end
-    end
-    return inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker), (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage ~= nil and damage / 2 or nil
-end
 local function fnglacial()
     local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, { "glacialhound" }, { amphibious = true })
 
@@ -894,7 +827,6 @@ local function fnglacial()
     inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
     inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
 
-    inst.components.combat:SetShouldRecoilFn(ShouldRecoilGlacial)
 
     inst.task = nil
 

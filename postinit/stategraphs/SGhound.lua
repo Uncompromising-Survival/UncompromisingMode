@@ -200,7 +200,7 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("howl")
                 inst.SoundEmitter:PlaySound(inst.sounds.howl)
-                inst:RegenIceShield()
+                inst:RegenIceShield(1) --TODO:SCALING TIERS
                 local fx = SpawnPrefab("fx_ice_crackle")
                 fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
                 fx.entity:AddFollower()

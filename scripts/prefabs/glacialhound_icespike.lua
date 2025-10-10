@@ -372,9 +372,9 @@ local function spikefn()
     inst.components.health.ondelta = OnHealthDelta
     inst.components.health:SetMaxHealth(TUNING.CRABKING_ICEWALL_HEALTH)
 
-    inst:DoTaskInTime(2.5, function(inst)
+    inst:DoPeriodicTask(1.25, function(inst)
         if inst.components.health and not inst.components.health:IsDead() then
-            inst.components.health:DoDelta(-100)
+            inst.components.health:DoDelta(-50)
         end
     end)
 
