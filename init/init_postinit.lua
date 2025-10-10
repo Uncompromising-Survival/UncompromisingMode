@@ -280,7 +280,8 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
-    "hound"
+    "hound",
+    "iceshield"
 }
 
 --package post system courtesy of IA team!
