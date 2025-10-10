@@ -2,9 +2,9 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local SpDamageUtil = require("components/spdamageutil")
-local AREA_EXCLUDE_TAGS = {"INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "um_butterflyslip"}
+local AREA_EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "um_butterflyslip" }
 
-local function HasSkill(inst,name)
+local function HasSkill(inst, name)
     return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
@@ -40,7 +40,7 @@ env.AddComponentPostInit("combat", function(self)
             return
         end
 
-        self.inst:PushEvent("onattackother", {target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli, mockattack = true})
+        self.inst:PushEvent("onattackother", { target = targ, weapon = weapon, projectile = projectile, stimuli = stimuli, mockattack = true })
 
         if weapon and not projectile then
             if weapon.components.projectile then
@@ -71,7 +71,7 @@ env.AddComponentPostInit("combat", function(self)
             local mult = (stimuli == "electric" or (weapon and weapon.components.weapon and weapon.components.weapon.stimuli == "electric"))
                 and not (targ:HasTag("electricdamageimmune") or (targ.components.inventory and targ.components.inventory:IsInsulated()))
                 and TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * (targ.components.moisture and targ.components.moisture:GetMoisturePercent()
-                or (targ:GetIsWet() and 1 or 0)) or 1
+                    or (targ:GetIsWet() and 1 or 0)) or 1
             local dmg, spdmg = self:CalcDamage(targ, weapon, mult)
             dmg = (dmg * (instancemult or 1)) / 2
             --Calculate reflect first, before GetAttacked destroys armor etc.
@@ -119,7 +119,7 @@ env.AddComponentPostInit("combat", function(self)
                     end
                     if not stimuli and self.inst.components.electricattacks then stimuli = "electric" end
                 end
-                if self:CanHitTarget(targ, weapon) and targ:SlipAway({attacker = self.inst, weapon = weapon, stimuli = stimuli}) then
+                if self:CanHitTarget(targ, weapon) and targ:SlipAway({ attacker = self.inst, weapon = weapon, stimuli = stimuli }) then
                     if self.areahitrange and not self.areahitdisabled then
                         if not targ:HasTag("um_butterflyslip") then targ:AddTag("um_butterflyslip") end
                         self:DoAreaAttack(projectile or self.inst, self.areahitrange, weapon, self.areahitcheck, stimuli, AREA_EXCLUDE_TAGS)
@@ -136,7 +136,7 @@ env.AddComponentPostInit("combat", function(self)
         function self:DoAreaAttack(target, range, weapon, validfn, stimuli, excludetags, onlyontarget, ...)
             local _validfn = validfn
             local function validfn(ent, inst, ...)
-                if ent.SlipAway and ent:SlipAway({attacker = inst, weapon = weapon, stimuli = stimuli}) then return false end
+                if ent.SlipAway and ent:SlipAway({ attacker = inst, weapon = weapon, stimuli = stimuli }) then return false end
                 return not _validfn or _validfn(ent, inst, ...)
             end
             return _DoAreaAttack(self, target, range, weapon, validfn, stimuli, excludetags, onlyontarget, ...)
@@ -150,10 +150,10 @@ env.AddComponentPostInit("combat", function(self)
             if spdamage and type(spdamage) == "table" and spdamage.planar then
                 spdamage.planar = spdamage.planar + 10
             else
-                spdamage = {planar = 10}
+                spdamage = { planar = 10 }
             end
         end
-        
+
         local feather_frock = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
 
         if feather_frock and feather_frock:HasTag("um_feather_frock") then
@@ -163,11 +163,11 @@ env.AddComponentPostInit("combat", function(self)
                 damage = damage - feather_frock.frock_damage_reduction
             end
         end
-        
+
         if self.inst:HasTag("wathom_really_spooking_me") then
-            damage = damage*1.5
+            damage = damage * 1.5
         end
-        
+
         if stimuli and stimuli == "fire" and self.inst.components.health and self.inst.components.health:GetFireDamageScale() then
             damage = damage * self.inst.components.health:GetFireDamageScale()
         end
@@ -186,22 +186,21 @@ env.AddComponentPostInit("combat", function(self)
         if self.inst and self.inst:HasTag("wathom") and self.inst.AmpDamageTakenModifier and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WATHOM_ARMOR_DAMAGE then
             -- Take extra damage
             -- if HasSkill(self.inst,"ancient_terror_3") and self.inst:HasTag("amped") and not self.inst:HasTag("deathamp") then
-                -- damage = damage * self.inst.AmpDamageTakenModifier*0.5
-                -- self.inst.components.adrenaline:DoDelta(-damage/3)
+            -- damage = damage * self.inst.AmpDamageTakenModifier*0.5
+            -- self.inst.components.adrenaline:DoDelta(-damage/3)
             -- else
-                damage = damage * self.inst.AmpDamageTakenModifier
+            damage = damage * self.inst.AmpDamageTakenModifier
             --end
-            
         elseif self.inst and self.inst.components.upgrademoduleowner and damage and (not self.inst.components.rider or not self.inst.components.rider:IsRiding()) and TUNING.DSTU.WXLESS then
             -- Hardy circuit flat damage reduction
-            local small_absorb_table = {0, 2, 4, 5.5, 7, 8, 9, 9.5, 10}
-            local big_absorb_table = {0, 5, 9, 12, 15}
+            local small_absorb_table = { 0, 2, 4, 5.5, 7, 8, 9, 9.5, 10 }
+            local big_absorb_table = { 0, 5, 9, 12, 15 }
             local small_modules = self.inst.components.upgrademoduleowner:GetModuleTypeCount('maxhealth') or 0
             local big_modules = self.inst.components.upgrademoduleowner:GetModuleTypeCount('maxhealth2') or 0
             if small_modules > 8 then small_modules = 8 end
             if big_modules > 4 then big_modules = 4 end
-            local hpmodulereduct = small_absorb_table[small_modules+1] + big_absorb_table[big_modules+1]
-                if self.inst._cherriftchips and self.inst._cherriftchips > 0 then 
+            local hpmodulereduct = small_absorb_table[small_modules + 1] + big_absorb_table[big_modules + 1]
+            if self.inst._cherriftchips and self.inst._cherriftchips > 0 then
                 hpmodulereduct = hpmodulereduct + self.inst._cherriftchips * 1.5
             end
             if damage > 5 then

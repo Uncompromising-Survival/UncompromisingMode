@@ -284,8 +284,8 @@ env.AddStategraphPostInit("wilson", function(inst)
             _OldDeathEvent(inst, data)
         end
     end
-    
-    
+
+
     local function FindBlueFuncap(inst)
         local helm = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         if TUNING.DSTU.FUNCAP_REWORK and helm and helm.prefab == "blue_mushroomhat" then
@@ -295,8 +295,8 @@ env.AddStategraphPostInit("wilson", function(inst)
     --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     -- Blue Funcap Changes!
     -- Upgrade
-    local _OldUpgrade = inst.actionhandlers[ACTIONS.UPGRADE].deststate
-    inst.actionhandlers[ACTIONS.UPGRADE].deststate = function(inst, action, ...)
+    local _OldUpgrade                                        = inst.actionhandlers[ACTIONS.UPGRADE].deststate
+    inst.actionhandlers[ACTIONS.UPGRADE].deststate           = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 or (action and action.target and action.target.prefab == "nightmarefuel") then
             inst.temp_speed_mod = (inst:HasTag("hungrybuilder") and 0.5)
@@ -311,8 +311,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldUpgrade(inst, action, ...)
     end
     -- Build
-    local _OldBuild = inst.actionhandlers[ACTIONS.BUILD].deststate
-    inst.actionhandlers[ACTIONS.BUILD].deststate = function(inst, action, ...)
+    local _OldBuild                                          = inst.actionhandlers[ACTIONS.BUILD].deststate
+    inst.actionhandlers[ACTIONS.BUILD].deststate             = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             inst.temp_speed_mod = (inst:HasTag("hungrybuilder") and 0.5)
@@ -324,37 +324,36 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldBuild(inst, action, ...)
     end
     -- Pick
-    local _OldPick = inst.actionhandlers[ACTIONS.PICK].deststate
-    inst.actionhandlers[ACTIONS.PICK].deststate = function(inst, action, ...)
+    local _OldPick                                           = inst.actionhandlers[ACTIONS.PICK].deststate
+    inst.actionhandlers[ACTIONS.PICK].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             inst.temp_speed_mod = (action.target and action.target:HasTag("noquickpick") and 1) or -- Get Speed Mod
-            (inst:HasTag("farmplantfastpicker") and action.target ~= nil and action.target:HasTag("farm_plant") and 0.7) or
-            (inst.components.rider ~= nil and inst.components.rider:IsRiding() and (
-                (inst:HasTag("woodiequickpicker") and "dowoodiefastpick") or
-                1
-            )) or
-            (
-                action.target ~= nil and
-                (action.target.components.pickable ~= nil and
-                (
-                    (action.target.components.pickable.jostlepick and 1) or
-                    (action.target.components.pickable.quickpick and 1) or
-                    (inst:HasTag("fastpicker") and 0.7) or
-                    (inst:HasTag("woodiequickpicker") and 0.7) or
-                    (inst:HasTag("quagmire_fasthands") and 0.7) or
+                (inst:HasTag("farmplantfastpicker") and action.target ~= nil and action.target:HasTag("farm_plant") and 0.7) or
+                (inst.components.rider ~= nil and inst.components.rider:IsRiding() and (
+                    (inst:HasTag("woodiequickpicker") and "dowoodiefastpick") or
                     1
                 )) or
-                (action.target.components.searchable ~= nil and
                 (
-                    (action.target.components.searchable.jostlesearch and 1) or
-                    (action.target.components.searchable.quicksearch and 1) or
-                    1
-                ))
-            )
+                    action.target ~= nil and
+                    (action.target.components.pickable ~= nil and
+                        (
+                            (action.target.components.pickable.jostlepick and 1) or
+                            (action.target.components.pickable.quickpick and 1) or
+                            (inst:HasTag("fastpicker") and 0.7) or
+                            (inst:HasTag("woodiequickpicker") and 0.7) or
+                            (inst:HasTag("quagmire_fasthands") and 0.7) or
+                            1
+                        )) or
+                    (action.target.components.searchable ~= nil and
+                        (
+                            (action.target.components.searchable.jostlesearch and 1) or
+                            (action.target.components.searchable.quicksearch and 1) or
+                            1
+                        ))
+                )
             if (action.target.components.pickable ~= nil and ((action.target.components.pickable.jostlepick) or (action.target.components.pickable.quickpick))) or
                 (action.target.components.searchable ~= nil and ((action.target.components.searchable.jostlesearch) or (action.target.components.searchable.quicksearch))) then
-                
                 return "bluecap_fast_action"
             else
                 return "bluecap_general_action"
@@ -363,22 +362,22 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldPick(inst, action, ...)
     end
     -- Pick up
-    local _OldPickup = inst.actionhandlers[ACTIONS.PICKUP].deststate
-    inst.actionhandlers[ACTIONS.PICKUP].deststate = function(inst, action, ...)
+    local _OldPickup                                         = inst.actionhandlers[ACTIONS.PICKUP].deststate
+    inst.actionhandlers[ACTIONS.PICKUP].deststate            = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return (inst.components.rider ~= nil and inst.components.rider:IsRiding()
                     and (action.target ~= nil and action.target:HasTag("heavy") and "dodismountaction"
                         or "bluecap_general_action")
-                    )
+                )
                 or (action.target ~= nil and action.target:HasTag("minigameitem") and "dosilentshortaction")
                 or "bluecap_fast_action"
         end
         return _OldPickup(inst, action, ...)
     end
     -- Chop
-    local _OldChop = inst.actionhandlers[ACTIONS.CHOP].deststate
-    inst.actionhandlers[ACTIONS.CHOP].deststate = function(inst, action, ...)
+    local _OldChop                                           = inst.actionhandlers[ACTIONS.CHOP].deststate
+    inst.actionhandlers[ACTIONS.CHOP].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             if inst:HasTag("beaver") then
@@ -393,8 +392,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldChop(inst, action, ...)
     end
     -- Mine
-    local _OldMine = inst.actionhandlers[ACTIONS.MINE].deststate
-    inst.actionhandlers[ACTIONS.MINE].deststate = function(inst, action, ...)
+    local _OldMine                                           = inst.actionhandlers[ACTIONS.MINE].deststate
+    inst.actionhandlers[ACTIONS.MINE].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             if inst:HasTag("beaver") then
@@ -409,8 +408,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldMine(inst, action, ...)
     end
     -- Hammer
-    local _OldHammer = inst.actionhandlers[ACTIONS.HAMMER].deststate
-    inst.actionhandlers[ACTIONS.HAMMER].deststate = function(inst, action, ...)
+    local _OldHammer                                         = inst.actionhandlers[ACTIONS.HAMMER].deststate
+    inst.actionhandlers[ACTIONS.HAMMER].deststate            = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             if inst:HasTag("beaver") then
@@ -425,24 +424,24 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldHammer(inst, action, ...)
     end
     -- Dig
-    local _OldDig = inst.actionhandlers[ACTIONS.DIG].deststate
-    inst.actionhandlers[ACTIONS.DIG].deststate = function(inst, action, ...)
+    local _OldDig                                            = inst.actionhandlers[ACTIONS.DIG].deststate
+    inst.actionhandlers[ACTIONS.DIG].deststate               = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             if inst:HasTag("beaver") then
                 return "bluecap_gnaw"
             end
             return not inst.sg:HasStateTag("predig")
-            and (inst.sg:HasStateTag("digging") and
-                "bluecap_dig" or
-                "bluecap_dig_start")
+                and (inst.sg:HasStateTag("digging") and
+                    "bluecap_dig" or
+                    "bluecap_dig_start")
                 or nil
         end
         return _OldDig(inst, action, ...)
     end
     -- Till
-    local _OldTill = inst.actionhandlers[ACTIONS.TILL].deststate
-    inst.actionhandlers[ACTIONS.TILL].deststate = function(inst, action, ...)
+    local _OldTill                                           = inst.actionhandlers[ACTIONS.TILL].deststate
+    inst.actionhandlers[ACTIONS.TILL].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_till_start"
@@ -450,8 +449,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldTill(inst, action, ...)
     end
     -- Terraform
-    local _OldTerraform = inst.actionhandlers[ACTIONS.TERRAFORM].deststate
-    inst.actionhandlers[ACTIONS.TERRAFORM].deststate = function(inst, action, ...)
+    local _OldTerraform                                      = inst.actionhandlers[ACTIONS.TERRAFORM].deststate
+    inst.actionhandlers[ACTIONS.TERRAFORM].deststate         = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_terraform"
@@ -459,8 +458,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldTerraform(inst, action, ...)
     end
     -- Bugnet
-    local _OldBugnet = inst.actionhandlers[ACTIONS.NET].deststate
-    inst.actionhandlers[ACTIONS.NET].deststate = function(inst, action, ...)
+    local _OldBugnet                                         = inst.actionhandlers[ACTIONS.NET].deststate
+    inst.actionhandlers[ACTIONS.NET].deststate               = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return not inst.sg:HasStateTag("prenet") and (inst.sg:HasStateTag("netting") and "bluecap_bugnet" or "bluecap_bugnet_start") or nil
@@ -468,8 +467,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldBugnet(inst, action, ...)
     end
     -- Deploy
-    local _OldDeploy = inst.actionhandlers[ACTIONS.DEPLOY].deststate
-    inst.actionhandlers[ACTIONS.DEPLOY].deststate = function(inst, action, ...)
+    local _OldDeploy                                         = inst.actionhandlers[ACTIONS.DEPLOY].deststate
+    inst.actionhandlers[ACTIONS.DEPLOY].deststate            = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_fast_action"
@@ -477,7 +476,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldDeploy(inst, action, ...)
     end
     -- Deploy Tile Arrive
-    local _OldDeploy_TileArrive = inst.actionhandlers[ACTIONS.DEPLOY_TILEARRIVE].deststate
+    local _OldDeploy_TileArrive                              = inst.actionhandlers[ACTIONS.DEPLOY_TILEARRIVE].deststate
     inst.actionhandlers[ACTIONS.DEPLOY_TILEARRIVE].deststate = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
@@ -486,8 +485,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldDeploy_TileArrive(inst, action, ...)
     end
     -- Store
-    local _OldStore  = inst.actionhandlers[ACTIONS.STORE].deststate
-    inst.actionhandlers[ACTIONS.STORE].deststate = function(inst, action, ...)
+    local _OldStore                                          = inst.actionhandlers[ACTIONS.STORE].deststate
+    inst.actionhandlers[ACTIONS.STORE].deststate             = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_fast_action"
@@ -495,8 +494,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldStore(inst, action, ...)
     end
     -- Drop
-    local _OldDrop  = inst.actionhandlers[ACTIONS.DROP].deststate
-    inst.actionhandlers[ACTIONS.DROP].deststate = function(inst, action, ...)
+    local _OldDrop                                           = inst.actionhandlers[ACTIONS.DROP].deststate
+    inst.actionhandlers[ACTIONS.DROP].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return inst.components.inventory:IsHeavyLifting()
@@ -507,8 +506,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldDrop(inst, action, ...)
     end
     -- Row
-    local _OldRow  = inst.actionhandlers[ACTIONS.ROW].deststate
-    inst.actionhandlers[ACTIONS.ROW].deststate = function(inst, action, ...)
+    local _OldRow                                            = inst.actionhandlers[ACTIONS.ROW].deststate
+    inst.actionhandlers[ACTIONS.ROW].deststate               = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_row"
@@ -516,8 +515,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         return _OldRow(inst, action, ...)
     end
     -- Heal
-    local _OldHeal  = inst.actionhandlers[ACTIONS.HEAL].deststate
-    inst.actionhandlers[ACTIONS.HEAL].deststate = function(inst, action, ...)
+    local _OldHeal                                           = inst.actionhandlers[ACTIONS.HEAL].deststate
+    inst.actionhandlers[ACTIONS.HEAL].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             return "bluecap_general_action"
@@ -576,8 +575,8 @@ env.AddStategraphPostInit("wilson", function(inst)
     end
 
     -- Eat
-    local _OldEat  = inst.actionhandlers[ACTIONS.EAT].deststate
-    inst.actionhandlers[ACTIONS.EAT].deststate = function(inst, action, ...)
+    local _OldEat                                  = inst.actionhandlers[ACTIONS.EAT].deststate
+    inst.actionhandlers[ACTIONS.EAT].deststate     = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
         if funcap and funcap.charge > 0 then
             if inst.sg:HasStateTag("busy") then
@@ -588,12 +587,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 return
             elseif obj.components.edible then
                 if not inst.components.eater:PrefersToEat(obj) then
-                    inst:PushEvent("wonteatfood", {food = obj})
+                    inst:PushEvent("wonteatfood", { food = obj })
                     return
                 end
             elseif obj.components.soul then
                 if not inst.components.souleater then
-                    inst:PushEvent("wonteatfood", {food = obj})
+                    inst:PushEvent("wonteatfood", { food = obj })
                     return
                 end
             else
@@ -606,17 +605,17 @@ env.AddStategraphPostInit("wilson", function(inst)
     end
 
     -- CASTAOE
-    local _CASTAOE  = inst.actionhandlers[ACTIONS.CASTAOE].deststate
+    local _CASTAOE                                 = inst.actionhandlers[ACTIONS.CASTAOE].deststate
     inst.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action, ...)
         if action.invobject.prefab == "um_detonator" then
             return "detonator_remotecast_pre"
         else
             return _CASTAOE(inst, action, ...)
         end
-    end    
-    
+    end
+
     --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    local actionhandlers =
+    local actionhandlers                           =
     {
         --[[ActionHandler(ACTIONS.CASTSPELL,
         function(inst, action)
@@ -632,8 +631,8 @@ env.AddStategraphPostInit("wilson", function(inst)
         ActionHandler(ACTIONS.WINGSUIT,
             function(inst, action)
                 return (inst.sg.currentstate.name == "wingsuit_loop" or inst.sg.currentstate.name == "wingsuit_pst" or inst.sg.currentstate.name == "wingsuit_pre")
-                and "wingsuit_pre_quick" 
-                or "wingsuit_pre"
+                    and "wingsuit_pre_quick"
+                    or "wingsuit_pre"
             end),
         ActionHandler(ACTIONS.CREATE_BURROW,
             function(inst, action)
@@ -650,7 +649,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
     }
 
-    local attackactionhandler = inst.actionhandlers[ACTIONS.ATTACK]
+    local attackactionhandler                      = inst.actionhandlers[ACTIONS.ATTACK]
     if attackactionhandler then
         local attackactionhandler_deststate = inst.actionhandlers[ACTIONS.ATTACK].deststate
         attackactionhandler.deststate = function(inst, action, ...)
@@ -1472,9 +1471,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                 --V2C: some of the woodie's were-transforms have shorter hit anims
                 local stun_frames = 160
                 --if inst.components.playercontroller ~= nil then
-                    --Specify min frames of pause since "busy" tag may be
-                    --removed too fast for our network update interval.
-                    --inst.components.playercontroller:RemotePausePrediction(stun_frames)
+                --Specify min frames of pause since "busy" tag may be
+                --removed too fast for our network update interval.
+                --inst.components.playercontroller:RemotePausePrediction(stun_frames)
                 --end
                 inst.sg:SetTimeout(stun_frames * FRAMES)
             end,
@@ -2062,25 +2061,25 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     inst.AnimState:PlayAnimation("enter")
                 end
-                
+
                 if inst.components.drownable ~= nil then
                     --inst.components.drownable:TakeDrowningDamage()
-                    
+
                     local tunings = inst.components.drownable and inst.components.drownable.customtuningsfn ~= nil and inst.components.drownable.customtuningsfn(inst) or
-                                        inst.prefab == "wx78" and TUNING.DROWNING_DAMAGE[string.upper(inst.prefab)] or
-                                        TUNING.DROWNING_DAMAGE["DEFAULT"]
-                    
+                        inst.prefab == "wx78" and TUNING.DROWNING_DAMAGE[string.upper(inst.prefab)] or
+                        TUNING.DROWNING_DAMAGE["DEFAULT"]
+
                     if inst.components.moisture ~= nil and tunings.WETNESS ~= nil then
                         inst.components.moisture:DoDelta(tunings.WETNESS, true)
                     end
-                    
+
                     if inst.components.hunger ~= nil and tunings.HUNGER ~= nil then
                         local delta = -math.min(tunings.HUNGER, inst.components.hunger.current - 30)
                         if delta < 0 then
                             inst.components.hunger:DoDelta(delta)
                         end
                     end
-                    
+
                     if inst.components.health ~= nil then
                         if tunings.HEALTH_PENALTY ~= nil then
                             inst.components.health:DeltaPenalty(tunings.HEALTH_PENALTY)
@@ -2100,7 +2099,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                             inst.components.sanity:DoDelta(delta)
                         end
                     end
-                    
                 end
             end,
 
@@ -2128,13 +2126,12 @@ env.AddStategraphPostInit("wilson", function(inst)
             tags = { "doing", "nointerrupt", --[["busy",]] "boathopping", "jumping", "autopredict", "nomorph", "nosleep" },
 
             onenter = function(inst)
-                
                 inst.um_wingsuit_flapcount = 0
-            
+
                 inst.Physics:SetMotorVelOverride(10, 0, 0)
                 inst:PerformBufferedAction()
                 inst.AnimState:PlayAnimation("boat_jump_pre")
-                
+
                 inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
                 inst.Physics:SetCollisionMask(COLLISION.GROUND)
                 if not TheWorld.ismastersim then
@@ -2175,7 +2172,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.Physics:SetMotorVelOverride(10, 0, 0)
                 inst:PerformBufferedAction()
                 inst.AnimState:PlayAnimation("boat_jump_loop")
-                
+
                 inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
                 inst.Physics:SetCollisionMask(COLLISION.GROUND)
                 if not TheWorld.ismastersim then
@@ -2183,7 +2180,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 inst:AddTag("ignorewalkableplatforms")
             end,
-            
+
             timeline =
             {
                 TimeEvent(1 * FRAMES, function(inst)
@@ -2219,23 +2216,23 @@ env.AddStategraphPostInit("wilson", function(inst)
                 if inst.um_wingsuit_flapcount >= 10 then
                     inst.sg:AddStateTag("busy")
                 end
-            
+
                 SpawnPrefab("spikes_malbatross").entity:SetParent(inst.entity)
                 inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/flap")
                 inst.Physics:SetMotorVelOverride(10 - inst.um_wingsuit_flapcount, 0, 0)
-                
+
                 inst.um_wingsuit_flapcount = inst.um_wingsuit_flapcount + 1.25
                 inst:PerformBufferedAction()
-                    
+
                 inst.AnimState:PlayAnimation("boat_jump_loop", true)
-                
+
                 inst.sg.statemem.collisionmask = inst.Physics:GetCollisionMask()
                 inst.Physics:SetCollisionMask(COLLISION.GROUND)
                 if not TheWorld.ismastersim then
                     inst.Physics:SetLocalCollisionMask(COLLISION.GROUND)
                 end
                 inst:AddTag("ignorewalkableplatforms")
-                
+
                 inst.sg:SetTimeout(1.1)
             end,
 
@@ -2294,9 +2291,9 @@ env.AddStategraphPostInit("wilson", function(inst)
             {
                 EventHandler("animover", function(inst)
                     inst.um_wingsuit_flapcount = 0
-                    
+
                     local x, y, z = inst.Transform:GetWorldPosition()
-                    
+
                     if TheWorld.Map:IsOceanAtPoint(x, y, z) then
                         inst.sg:GoToState("sink_fast")
                     else
@@ -2306,7 +2303,6 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
 
             onexit = function(inst)
-                
                 inst.Physics:ClearLocalCollisionMask()
                 if inst.sg.statemem.collisionmask ~= nil then
                     inst.Physics:SetCollisionMask(inst.sg.statemem.collisionmask)
@@ -2318,7 +2314,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
             end,
         },
-        
+
         --[[State{
             name = "pact_armor_craft",
             tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
@@ -2327,7 +2323,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("wendy_recall")
                 inst.AnimState:PushAnimation("wendy_recall_pst", false)
-                
+
                 inst.sg.statemem.action = inst.bufferedaction
             end,
 
@@ -2335,13 +2331,13 @@ env.AddStategraphPostInit("wilson", function(inst)
             {
                 FrameEvent(20, function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/sanity/creature2/attack")
-                    
+
                     local body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-                    
+
                     if body ~= nil then
                         inst.components.inventory:GiveItem(inst.components.inventory:Unequip(EQUIPSLOTS.BODY))
                     end
-                    
+
                     inst:PerformBufferedAction()
                     SpawnPrefab("um_shadow_attune_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end),
@@ -2367,7 +2363,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
             end,
         },
-        
+
         State{
             name = "pact_sword_craft",
             tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
@@ -2375,11 +2371,11 @@ env.AddStategraphPostInit("wilson", function(inst)
             onenter = function(inst, product)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("tornado")
-                
+
                 inst.sg.statemem.action = inst.bufferedaction
-                
+
                 local hands = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                    
+
                 if hands == nil then
                     inst.AnimState:OverrideSymbol("swap_object", "nothing_lmao", "nothing_lmao")
                     inst.AnimState:Show("ARM_carry")
@@ -2390,13 +2386,13 @@ env.AddStategraphPostInit("wilson", function(inst)
             {
                 FrameEvent(15, function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/sanity/creature2/attack")
-                    
+
                     local hands = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                    
+
                     if hands ~= nil then
                         inst.components.inventory:GiveItem(inst.components.inventory:Unequip(EQUIPSLOTS.HANDS))
                     end
-                    
+
                     inst:PerformBufferedAction()
                     SpawnPrefab("um_shadow_attune_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end),
@@ -2418,21 +2414,21 @@ env.AddStategraphPostInit("wilson", function(inst)
                 if inst.bufferedaction == inst.sg.statemem.action and
                         (not inst.components.playercontroller or
                         inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
-                        
+
                     local hands = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                    
+
                     if hands == nil then
                         inst.AnimState:Hide("ARM_carry")
                     end
-                    
+
                     inst:ClearBufferedAction()
                 end
             end,
         },]]
 
-        State{
+        State {
             name = "usewaxwelljournal_pre",
-            tags = {"doing", "busy", "nocraftinginterrupt", "nomorph"},
+            tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, repeatcast)
                 inst.components.locomotor:Stop()
@@ -2440,7 +2436,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:PlayAnimation("action_uniqueitem_pre")
                 local fxname = "waxwell_book_fx"
                 if inst.components.rider:IsRiding() then
-                    fxname = fxname.."_mount"
+                    fxname = fxname .. "_mount"
                 end
                 inst.sg.statemem.book_fx = SpawnPrefab(fxname)
                 inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(2)
@@ -2449,7 +2445,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx}) end end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx }) end end),
             },
 
             onexit = function(inst)
@@ -2458,15 +2454,15 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "usewaxwelljournal",
-            tags = {"doing", "nocraftinginterrupt", "nomorph"},
+            tags = { "doing", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
                 if data then inst.sg.statemem.book_fx = data.book_fx end
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx"..suffix)
+                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx" .. suffix)
                 inst.sg.statemem.fx_shadow.entity:SetParent(inst.entity)
                 inst.AnimState:OverrideSymbol("book_open", "book_maxwell", "book_open")
                 inst.AnimState:OverrideSymbol("book_closed", "book_maxwell", "book_closed")
@@ -2577,7 +2573,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "enterastralportal",
             tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
 
@@ -2594,14 +2590,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 local astpool = SpawnPrefab("um_astral_pool")
                 astpool.Transform:SetScale(1, 1, 1)
                 astpool.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                astpool.components.colourtweener:StartTween({1,1,1,1}, .5)
+                astpool.components.colourtweener:StartTween({ 1, 1, 1, 1 }, .5)
                 astpool.components.timer:StartTimer("kill_whirlpool", 5)
             end,
 
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
                     puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
                     inst.sg.statemem.isteleporting = true
                     inst.components.health:SetInvincible(true)
@@ -2640,7 +2636,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "enterastralportal_nofx",
             tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
 
@@ -2658,9 +2654,9 @@ env.AddStategraphPostInit("wilson", function(inst)
             timeline =
             {
                 TimeEvent(8 * FRAMES, function(inst)
-                    local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+                    local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
                     puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                
+
                     inst.sg.statemem.isteleporting = true
                     inst.components.health:SetInvincible(true)
                     if inst.components.playercontroller ~= nil then
@@ -2698,7 +2694,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "exitastralportal_pre",
             tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
 
@@ -2734,14 +2730,14 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "exitastralportal",
             tags = { "doing", "busy", "nopredict", "nomorph", "nodangle" },
 
             onenter = function(inst)
-                local puff = SpawnPrefab("halloween_firepuff_cold_"..math.random(3))
+                local puff = SpawnPrefab("halloween_firepuff_cold_" .. math.random(3))
                 puff.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                
+
                 ToggleOffPhysics(inst)
                 inst.components.locomotor:Stop()
 
@@ -2776,10 +2772,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
             end,
         },
-        
-        
+
+
         -- Bluecap
-        State{
+        State {
             name = "bluecap_general_action",
 
             onenter = function(inst)
@@ -2796,12 +2792,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                     mod = inst.temp_speed_mod * mod
                     inst.temp_speed_mod = nil
                 end
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 inst.sg:GoToState("dolongaction", mod)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_fast_action",
             tags = { "doing", "busy", "keepchannelcasting" },
 
@@ -2814,7 +2810,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.AnimState:PlayAnimation("pickup")
                     inst.AnimState:PushAnimation("pickup_pst", false)
                 end
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 1
                 if funcap.charge == 12 then
@@ -2828,10 +2824,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                     mod = inst.temp_speed_mod * mod
                     inst.temp_speed_mod = nil
                 end
-                    
+
                 inst.sg.statemem.action = inst.bufferedaction
                 inst.sg.statemem.silent = silent
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 inst.sg:SetTimeout(10 * mod * FRAMES)
             end,
 
@@ -2849,14 +2845,14 @@ env.AddStategraphPostInit("wilson", function(inst)
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
                 if inst.bufferedaction == inst.sg.statemem.action and
-                (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
+                    (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
                     inst:ClearBufferedAction()
                 end
             end,
         },
 
         -- Bluecap chopping states
-        State{
+        State {
             name = "bluecap_chop_start",
             tags = { "prechop", "working" },
 
@@ -2864,7 +2860,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation(inst:HasTag("woodcutter") and "woodie_chop_pre" or "chop_pre")
                 inst:AddTag("prechop")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 1
                 if funcap.charge == 12 then
@@ -2874,7 +2870,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     mod = 0.7
                 end
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             events =
@@ -2896,7 +2892,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_chop",
             tags = { "prechop", "chopping", "working" },
 
@@ -2908,25 +2904,23 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 inst.sg.statemem.action = inst:GetBufferedAction()
                 inst.sg.statemem.iswoodcutter = inst:HasTag("woodcutter")
                 inst.AnimState:PlayAnimation(inst.sg.statemem.iswoodcutter and "woodie_chop_loop" or "chop_loop")
                 inst:AddTag("prechop")
-                
-                
             end,
 
             timeline =
             {
                 ----------------------------------------------
                 --Woodcutter chop
-                
-                
+
+
                 -- 0.1
                 TimeEvent(2 * FRAMES * 0.1, function(inst)
                     if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
@@ -2967,7 +2961,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("chopping")
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(2 * FRAMES * 0.4, function(inst)
                     if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
@@ -2983,7 +2977,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 TimeEvent(10 * FRAMES * 0.4, function(inst)
-                    if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 and 
+                    if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 and
                         inst.components.playercontroller ~= nil and
                         inst.components.playercontroller:IsAnyOfControlsPressed(
                             CONTROL_PRIMARY,
@@ -3008,7 +3002,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("chopping")
                     end
                 end),
-                
+
                 -- 0.7
                 TimeEvent(2 * FRAMES * 0.7, function(inst)
                     if inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
@@ -3049,10 +3043,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("chopping")
                     end
                 end),
-                
+
                 ----------------------------------------------
                 --Normal chop
-                
+
                 -- 0.1
                 TimeEvent(2 * FRAMES * 0.1, function(inst)
                     if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.1 then
@@ -3093,7 +3087,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("chopping")
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(2 * FRAMES * 0.4, function(inst)
                     if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.4 then
@@ -3134,7 +3128,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("chopping")
                     end
                 end),
-                
+
                 -- 0.7
                 TimeEvent(2 * FRAMES * 0.7, function(inst)
                     if not inst.sg.statemem.iswoodcutter and inst.dyn_anim_mod == 0.7 then
@@ -3189,15 +3183,15 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
 
             onexit = function(inst)
-                inst.AnimState:SetDeltaTimeMultiplier(1)    
+                inst.AnimState:SetDeltaTimeMultiplier(1)
                 inst:RemoveTag("prechop")
                 inst.dyn_anim_mod = nil
             end,
         },
 
         -- Bluecap mining states
-        
-        State{
+
+        State {
             name = "bluecap_mine_start",
             tags = { "premine", "working" },
 
@@ -3205,7 +3199,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("pickaxe_pre")
                 inst:AddTag("premine")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 1
                 if funcap.charge == 12 then
@@ -3215,8 +3209,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     mod = 0.7
                 end
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)
-                
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             events =
@@ -3236,10 +3229,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
-        },    
-        
+        },
 
-        State{
+
+        State {
             name = "bluecap_mine",
             tags = { "premine", "mining", "working" },
 
@@ -3247,7 +3240,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg.statemem.action = inst:GetBufferedAction()
                 inst.AnimState:PlayAnimation("pickaxe_loop")
                 inst:AddTag("premine")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3255,17 +3248,16 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
             {
-            
+
                 -- 0.7
                 TimeEvent(7 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
@@ -3305,7 +3297,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(7 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
@@ -3344,9 +3336,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                             inst:PushBufferedAction(inst.sg.statemem.action)
                         end
                     end
-                end),            
-                
-                
+                end),
+
+
                 -- 0.1
                 TimeEvent(7 * FRAMES * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
@@ -3405,9 +3397,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.dyn_anim_mod = nil
             end,
         },
-        
 
-        State{
+
+        State {
             name = "bluecap_hammer_start",
             tags = { "prehammer", "working" },
 
@@ -3415,7 +3407,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("pickaxe_pre")
                 inst:AddTag("prehammer")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 1
                 if funcap.charge == 12 then
@@ -3425,8 +3417,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     mod = 0.7
                 end
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)
-                
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             events =
@@ -3448,15 +3439,15 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_hammer",
             tags = { "prehammer", "hammering", "working" },
 
-            onenter = function(inst)    
+            onenter = function(inst)
                 inst.sg.statemem.action = inst:GetBufferedAction()
                 inst.AnimState:PlayAnimation("pickaxe_loop")
                 inst:AddTag("prehammer")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3464,19 +3455,18 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
             {
                 -- 0.7
                 TimeEvent(7 * FRAMES * 0.7, function(inst)
-                    if inst.dyn_anim_mod ==  0.7 then
+                    if inst.dyn_anim_mod == 0.7 then
                         inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
                         inst.sg.statemem.recoilstate = "mine_recoil"
                         inst:PerformBufferedAction()
@@ -3484,14 +3474,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 TimeEvent(9 * FRAMES * 0.7, function(inst)
-                    if inst.dyn_anim_mod ==  0.7 then
+                    if inst.dyn_anim_mod == 0.7 then
                         inst.sg:RemoveStateTag("prehammer")
                         inst:RemoveTag("prehammer")
                     end
                 end),
 
                 TimeEvent(14 * FRAMES * 0.7, function(inst)
-                    if inst.dyn_anim_mod ==  0.7 then
+                    if inst.dyn_anim_mod == 0.7 then
                         if inst.components.playercontroller ~= nil and
                             inst.components.playercontroller:IsAnyOfControlsPressed(
                                 CONTROL_SECONDARY,
@@ -3511,10 +3501,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(7 * FRAMES * 0.4, function(inst)
-                    if inst.dyn_anim_mod ==  0.4 then
+                    if inst.dyn_anim_mod == 0.4 then
                         inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
                         inst.sg.statemem.recoilstate = "mine_recoil"
                         inst:PerformBufferedAction()
@@ -3522,14 +3512,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 TimeEvent(9 * FRAMES * 0.4, function(inst)
-                    if inst.dyn_anim_mod ==  0.4 then
+                    if inst.dyn_anim_mod == 0.4 then
                         inst.sg:RemoveStateTag("prehammer")
                         inst:RemoveTag("prehammer")
                     end
                 end),
 
                 TimeEvent(14 * FRAMES * 0.4, function(inst)
-                    if inst.dyn_anim_mod ==  0.4 then
+                    if inst.dyn_anim_mod == 0.4 then
                         if inst.components.playercontroller ~= nil and
                             inst.components.playercontroller:IsAnyOfControlsPressed(
                                 CONTROL_SECONDARY,
@@ -3548,11 +3538,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                             inst:PushBufferedAction(inst.sg.statemem.action)
                         end
                     end
-                end),            
-                
+                end),
+
                 -- 0.1
                 TimeEvent(7 * FRAMES * 0.1, function(inst)
-                    if inst.dyn_anim_mod ==  0.1 then
+                    if inst.dyn_anim_mod == 0.1 then
                         inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
                         inst.sg.statemem.recoilstate = "mine_recoil"
                         inst:PerformBufferedAction()
@@ -3560,14 +3550,14 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 TimeEvent(9 * FRAMES * 0.1, function(inst)
-                    if inst.dyn_anim_mod ==  0.1 then
+                    if inst.dyn_anim_mod == 0.1 then
                         inst.sg:RemoveStateTag("prehammer")
                         inst:RemoveTag("prehammer")
                     end
                 end),
 
                 TimeEvent(14 * FRAMES * 0.1, function(inst)
-                    if inst.dyn_anim_mod ==  0.1 then
+                    if inst.dyn_anim_mod == 0.1 then
                         if inst.components.playercontroller ~= nil and
                             inst.components.playercontroller:IsAnyOfControlsPressed(
                                 CONTROL_SECONDARY,
@@ -3586,7 +3576,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                             inst:PushBufferedAction(inst.sg.statemem.action)
                         end
                     end
-                end),                
+                end),
             },
 
             events =
@@ -3606,8 +3596,8 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.dyn_anim_mod = nil
             end,
         },
-        
-        State{
+
+        State {
             name = "bluecap_dig_start",
             tags = { "predig", "working" },
 
@@ -3615,7 +3605,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("shovel_pre")
                 inst:AddTag("predig")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 1
                 if funcap.charge == 12 then
@@ -3625,7 +3615,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     mod = 0.7
                 end
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             events =
@@ -3647,7 +3637,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_dig",
             tags = { "predig", "digging", "working" },
 
@@ -3655,7 +3645,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:PlayAnimation("shovel_loop")
                 inst.sg.statemem.action = inst:GetBufferedAction()
                 inst:AddTag("predig")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3663,17 +3653,17 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
-            {    
-            
-            
+            {
+
+
                 -- 0.7
                 TimeEvent(15 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
@@ -3684,7 +3674,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end),
 
-                TimeEvent(35 * FRAMES*0.7, function(inst)
+                TimeEvent(35 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
                         if inst.components.playercontroller ~= nil and
                             inst.components.playercontroller:IsAnyOfControlsPressed(
@@ -3705,7 +3695,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(15 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
@@ -3737,7 +3727,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.1
                 TimeEvent(15 * FRAMES * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
@@ -3787,13 +3777,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst:RemoveTag("predig")
             end,
         },
-        
-        State{
+
+        State {
             name = "bluecap_till_start",
             tags = { "doing", "busy" },
 
             onenter = function(inst)
-        
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3801,11 +3790,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
+
                 inst.components.locomotor:Stop()
                 local equippedTool = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
                 if equippedTool ~= nil and equippedTool.components.tool ~= nil and equippedTool.components.tool:CanDoAction(ACTIONS.DIG) then
@@ -3815,12 +3804,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.AnimState:PlayAnimation("till_pre")
                 end
             end,
-            
-            
+
+
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
-            
+
             events =
             {
                 EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
@@ -3832,12 +3821,11 @@ env.AddStategraphPostInit("wilson", function(inst)
             },
         },
 
-        State{
+        State {
             name = "bluecap_till",
             tags = { "doing", "busy", "tilling" },
 
             onenter = function(inst)
-            
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3845,12 +3833,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
+
                 local equippedTool = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
                 if equippedTool ~= nil and equippedTool.components.tool ~= nil and equippedTool.components.tool:CanDoAction(ACTIONS.DIG) then
                     --upside down tool build
@@ -3862,68 +3850,68 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
 
             timeline =
-            {    
+            {
                 -- 0.7
                 TimeEvent(4 * FRAMES * 0.7, function(inst) if inst.dyn_anim_mod == 0.7 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
                 TimeEvent(11 * FRAMES * 0.7, function(inst)
-                    if inst.dyn_anim_mod == 0.7 then 
+                    if inst.dyn_anim_mod == 0.7 then
                         inst:PerformBufferedAction()
                     end
                 end),
-                TimeEvent(12 * FRAMES * 0.7, function(inst) 
-                    if inst.dyn_anim_mod == 0.7 then 
+                TimeEvent(12 * FRAMES * 0.7, function(inst)
+                    if inst.dyn_anim_mod == 0.7 then
                         inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
                     end
                 end),
                 TimeEvent(22 * FRAMES * 0.7, function(inst)
-                    if inst.dyn_anim_mod == 0.7 then 
+                    if inst.dyn_anim_mod == 0.7 then
                         inst.sg:RemoveStateTag("busy")
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(4 * FRAMES * 0.4, function(inst) if inst.dyn_anim_mod == 0.4 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
                 TimeEvent(11 * FRAMES * 0.4, function(inst)
-                    if inst.dyn_anim_mod == 0.4 then 
+                    if inst.dyn_anim_mod == 0.4 then
                         inst:PerformBufferedAction()
                     end
                 end),
-                TimeEvent(12 * FRAMES * 0.4, function(inst) 
-                    if inst.dyn_anim_mod == 0.4 then 
+                TimeEvent(12 * FRAMES * 0.4, function(inst)
+                    if inst.dyn_anim_mod == 0.4 then
                         inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
                     end
                 end),
                 TimeEvent(22 * FRAMES * 0.4, function(inst)
-                    if inst.dyn_anim_mod == 0.4 then 
+                    if inst.dyn_anim_mod == 0.4 then
                         inst.sg:RemoveStateTag("busy")
                     end
                 end),
-                
+
                 -- 0.1
                 TimeEvent(4 * FRAMES * 0.1, function(inst) if inst.dyn_anim_mod == 0.1 then inst.SoundEmitter:PlaySound("dontstarve/wilson/dig") end end),
                 TimeEvent(11 * FRAMES * 0.1, function(inst)
-                    if inst.dyn_anim_mod == 0.1 then 
+                    if inst.dyn_anim_mod == 0.1 then
                         inst:PerformBufferedAction()
                     end
                 end),
-                TimeEvent(12 * FRAMES * 0.1, function(inst) 
-                    if inst.dyn_anim_mod == 0.1 then 
+                TimeEvent(12 * FRAMES * 0.1, function(inst)
+                    if inst.dyn_anim_mod == 0.1 then
                         inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/emerge")
                     end
                 end),
                 TimeEvent(22 * FRAMES * 0.1, function(inst)
-                    if inst.dyn_anim_mod == 0.1 then 
+                    if inst.dyn_anim_mod == 0.1 then
                         inst.sg:RemoveStateTag("busy")
                     end
                 end),
-                
-                
+
+
             },
-            
+
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
-            
+
             events =
             {
                 EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
@@ -3935,8 +3923,8 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
             },
         },
-        
-        State{
+
+        State {
             name = "bluecap_gnaw",
             tags = { "gnawing", "working" },
 
@@ -3947,7 +3935,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:PushAnimation("atk", false)
                 inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
                 inst:AddTag("gnawing")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -3955,11 +3943,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
@@ -4007,9 +3995,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                                 return
                             end
                         elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
-                                    CONTROL_PRIMARY,
-                                    CONTROL_ACTION,
-                                    CONTROL_CONTROLLER_ACTION) then
+                                CONTROL_PRIMARY,
+                                CONTROL_ACTION,
+                                CONTROL_CONTROLLER_ACTION) then
                             return
                         end
                         if inst.sg.statemem.action:IsValid() and
@@ -4068,9 +4056,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                                 return
                             end
                         elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
-                                    CONTROL_PRIMARY,
-                                    CONTROL_ACTION,
-                                    CONTROL_CONTROLLER_ACTION) then
+                                CONTROL_PRIMARY,
+                                CONTROL_ACTION,
+                                CONTROL_CONTROLLER_ACTION) then
                             return
                         end
                         if inst.sg.statemem.action:IsValid() and
@@ -4129,9 +4117,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                                 return
                             end
                         elseif not inst.components.playercontroller:IsAnyOfControlsPressed(
-                                    CONTROL_PRIMARY,
-                                    CONTROL_ACTION,
-                                    CONTROL_CONTROLLER_ACTION) then
+                                CONTROL_PRIMARY,
+                                CONTROL_ACTION,
+                                CONTROL_CONTROLLER_ACTION) then
                             return
                         end
                         if inst.sg.statemem.action:IsValid() and
@@ -4146,7 +4134,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                             inst:PushBufferedAction(inst.sg.statemem.action)
                         end
                     end
-                end),            
+                end),
             },
 
             events =
@@ -4164,7 +4152,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_terraform",
             tags = { "busy" },
 
@@ -4172,7 +4160,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("shovel_pre")
                 inst.AnimState:PushAnimation("shovel_loop", false)
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4180,12 +4168,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-            
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
@@ -4227,18 +4214,18 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
             },
             onexit = function(inst)
-                inst.AnimState:SetDeltaTimeMultiplier(1)    
+                inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_bugnet_start",
             tags = { "prenet", "working", "autopredict" },
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:PlayAnimation("bugnet_pre")
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4246,9 +4233,8 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             events =
@@ -4264,14 +4250,14 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "bluecap_bugnet",
             tags = { "prenet", "netting", "working", "autopredict" },
 
             onenter = function(inst)
                 inst.AnimState:PlayAnimation("bugnet")
                 inst.SoundEmitter:PlaySound("dontstarve/wilson/use_bugnet", nil, nil, true)
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4279,17 +4265,17 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
             end,
 
             timeline =
             {
                 -- 0.1
-                TimeEvent(10*FRAMES*0.1, function(inst)
+                TimeEvent(10 * FRAMES * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
                         local buffaction = inst:GetBufferedAction()
                         local tool = buffaction ~= nil and buffaction.invobject or nil
@@ -4298,9 +4284,9 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.SoundEmitter:PlaySound(tool ~= nil and tool.overridebugnetsound or "dontstarve/wilson/dig")
                     end
                 end),
-                
+
                 -- 0.4
-                TimeEvent(10*FRAMES*0.4, function(inst)
+                TimeEvent(10 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
                         local buffaction = inst:GetBufferedAction()
                         local tool = buffaction ~= nil and buffaction.invobject or nil
@@ -4311,7 +4297,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 -- 0.7
-                TimeEvent(10*FRAMES*0.7, function(inst)
+                TimeEvent(10 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
                         local buffaction = inst:GetBufferedAction()
                         local tool = buffaction ~= nil and buffaction.invobject or nil
@@ -4319,7 +4305,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("prenet")
                         inst.SoundEmitter:PlaySound(tool ~= nil and tool.overridebugnetsound or "dontstarve/wilson/dig")
                     end
-                end),            
+                end),
             },
 
             events =
@@ -4330,15 +4316,15 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end),
             },
-            
+
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
-            
+
         },
 
 
-        State{
+        State {
             name = "bluecap_row",
             tags = { "rowing", "doing" },
 
@@ -4354,7 +4340,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     target_pos = Vector3(inst.Transform:GetWorldPosition())
                 end
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4362,12 +4348,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
+
                 inst:AddTag("is_rowing")
                 inst.AnimState:PlayAnimation("row_pre")
                 locomotor:Stop()
@@ -4380,10 +4366,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
 
                 -- if is_client then
-                    -- inst:PerformPreviewBufferedAction()
+                -- inst:PerformPreviewBufferedAction()
                 -- end
 
-                local target_x, target_z = nil,nil
+                local target_x, target_z = nil, nil
 
                 if inst.components.playercontroller.isclientcontrollerattached then
                     local dir_x, dir_z = VecUtil_Normalize(my_x - boat_x, my_z - boat_z)
@@ -4392,7 +4378,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                     target_x, target_z = target_pos.x, target_pos.z
                 end
 
-                local delta_target_x, delta_target_z = target_x- my_x, target_z - my_z
+                local delta_target_x, delta_target_z = target_x - my_x, target_z - my_z
                 local delta_boat_x, delta_boat_z = my_x - boat_x, my_z - boat_z
 
                 local camera_down_vec = TheCamera:GetDownVec()
@@ -4466,7 +4452,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 TimeEvent(5 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
                         --if not is_client then
-                            inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+                        inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
                         --end
                     end
                 end),
@@ -4474,7 +4460,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 TimeEvent(8 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
                         --if not is_client then
-                            inst:PerformBufferedAction()
+                        inst:PerformBufferedAction()
                         --end
                     end
                 end),
@@ -4484,12 +4470,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("rowing")
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(5 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
                         --if not is_client then
-                            inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+                        inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
                         --end
                     end
                 end),
@@ -4497,7 +4483,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 TimeEvent(8 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
                         --if not is_client then
-                            inst:PerformBufferedAction()
+                        inst:PerformBufferedAction()
                         --end
                     end
                 end),
@@ -4507,12 +4493,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                         inst.sg:RemoveStateTag("rowing")
                     end
                 end),
-                
+
                 -- 0.1
                 TimeEvent(5 * FRAMES * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
                         --if not is_client then
-                            inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
+                        inst.SoundEmitter:PlaySound("turnoftides/common/together/water/splash/small")
                         --end
                     end
                 end),
@@ -4520,7 +4506,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 TimeEvent(8 * FRAMES * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
                         --if not is_client then
-                            inst:PerformBufferedAction()
+                        inst:PerformBufferedAction()
                         --end
                     end
                 end),
@@ -4542,18 +4528,18 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             ontimeout = function(inst)
                 --if is_client then
-                    inst:ClearBufferedAction()
-                    inst.sg:GoToState("idle")
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle")
                 --end
             end,
         },
-        State{
+        State {
             name = "bluecap_quickeat",
             tags = { "busy", "keep_pocket_rummage" },
 
             onenter = function(inst, foodinfo)
                 inst.components.locomotor:Stop()
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4561,11 +4547,11 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
                 local feed = foodinfo and foodinfo.feed
                 if feed ~= nil then
                     inst.components.locomotor:Clear()
@@ -4614,7 +4600,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                FrameEvent(21 * 0.1, function(inst)            
+                FrameEvent(21 * 0.1, function(inst)
                     if inst.dyn_anim_mod == 0.1 then
                         if inst.sg.statemem.queued_post_eat_state ~= nil then
                             inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
@@ -4623,7 +4609,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(12 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
@@ -4639,7 +4625,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                FrameEvent(21 * 0.4, function(inst)            
+                FrameEvent(21 * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
                         if inst.sg.statemem.queued_post_eat_state ~= nil then
                             inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
@@ -4648,7 +4634,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                
+
                 -- 0.7
                 TimeEvent(12 * FRAMES * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
@@ -4664,7 +4650,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         end
                     end
                 end),
-                FrameEvent(21 * 0.7, function(inst)            
+                FrameEvent(21 * 0.7, function(inst)
                     if inst.dyn_anim_mod == 0.7 then
                         if inst.sg.statemem.queued_post_eat_state ~= nil then
                             inst.sg:GoToState(inst.sg.statemem.queued_post_eat_state)
@@ -4704,15 +4690,15 @@ env.AddStategraphPostInit("wilson", function(inst)
                 CheckPocketRummageMem(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
             end,
-        },    
-        
-        State{
+        },
+
+        State {
             name = "bluecap_eat",
             tags = { "busy", "nodangle", "keep_pocket_rummage" },
 
             onenter = function(inst, foodinfo)
                 inst.components.locomotor:Stop()
-                
+
                 local funcap = FindBlueFuncap(inst)
                 local mod = 0.7
                 if funcap.charge == 12 then
@@ -4720,12 +4706,12 @@ env.AddStategraphPostInit("wilson", function(inst)
                 elseif funcap.charge > 6 then
                     mod = 0.4
                 end
-                
+
                 inst.dyn_anim_mod = mod
-                
-                
-                inst.AnimState:SetDeltaTimeMultiplier(1/mod)    
-                
+
+
+                inst.AnimState:SetDeltaTimeMultiplier(1 / mod)
+
                 local feed = foodinfo and foodinfo.feed
                 if feed ~= nil then
                     inst.components.locomotor:Clear()
@@ -4805,7 +4791,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                         TryResumePocketRummage(inst)
                     end
                 end),
-                
+
                 -- 0.4
                 TimeEvent(28 * FRAMES * 0.4, function(inst)
                     if inst.dyn_anim_mod == 0.4 then
@@ -4919,7 +4905,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
 
 
-        State{
+        State {
             name = "detonator_remotecast_pre",
             tags = { "doing", "busy" },
 
@@ -4949,7 +4935,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 else
                     inst.AnimState:OverrideSymbol("swap_remote", "winona_remote", "swap_remote")
                 end
-                
             end,
             events =
             {
@@ -4971,7 +4956,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "detonator_remotecast_trigger",
             tags = { "doing", "busy" },
 
@@ -5007,7 +4992,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.AnimState:SetSymbolLightOverride("remote_overlay", 0.5)
                     inst.AnimState:SetSymbolBloom("remote_overlay")
                     inst.AnimState:PlayAnimation("remotecast_trigger") --12 frames
-                    
                 else
                     --fail!!!
                     inst:ClearBufferedAction()
@@ -5075,7 +5059,7 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State{
+        State {
             name = "detonator_remotecast_pst",
             tags = { "doing" },
 
@@ -5097,7 +5081,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
     }
 
-    
+
     for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v

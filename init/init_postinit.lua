@@ -235,6 +235,7 @@ local prefab_post = {
 	"molebat",
     "lightning_rod",
     "antlionhat",
+    "ice_shield_piercing"
 }
 
 local stategraph_post = {

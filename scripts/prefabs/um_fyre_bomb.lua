@@ -155,6 +155,8 @@ local function fyre_bomb_fn()
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
 	inst:AddTag("allow_action_on_impassable")
 
+    inst:AddTag("pierces_ice_shield")
+
     if not TheWorld.ismastersim then
         return inst
     end

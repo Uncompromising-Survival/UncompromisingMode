@@ -76,11 +76,17 @@ SetSharedLootTable('hound_lightning',
 
 SetSharedLootTable('hound_magma',
     {
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 0.50 },
+        { 'houndstooth', 1.00 },
+        { 'houndstooth', 0.33 },
         { 'monstermeat', 1.0 },
         { 'flint',       1.0 },
         { 'rocks',       1.0 },
         { 'rocks',       0.5 },
-        { 'redgem',      0.3 },
+        { 'redgem',      1.0 },
     })
 
 SetSharedLootTable('hound_rne',
@@ -93,19 +99,23 @@ SetSharedLootTable('hound_rne',
 
 SetSharedLootTable('hound_glacial',
     {
-        { 'monstermeat', 1.0 },
-        { 'houndstooth', 1.0 },
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 1.00 },
+        { 'monstermeat', 0.50 },
+        { 'houndstooth', 1.00 },
+        { 'houndstooth', 0.33 },
         { 'ice',         1.0 },
         { 'ice',         0.5 },
-        { 'bluegem',     0.3 },
+        { 'bluegem',     1.0 },
     })
 
 SetSharedLootTable('hound_spore',
     {
-        { 'spoiled_food',          1.0 },
-        { 'houndstooth',          1.0 },        
+        { 'spoiled_food',         1.0 },
+        { 'houndstooth',          1.0 },
         { 'sporecloud_toad',      1.0 },
-        { 'shroom_skin_fragment', 0.5 },        
+        { 'shroom_skin_fragment', 0.5 },
 
     })
 
@@ -202,7 +212,7 @@ local function OnNewTarget(inst, data)
     end
 end
 
-local RETARGET_CANT_TAGS = { "wall", "houndmound", "hound", "houndfriend" }
+local RETARGET_CANT_TAGS = { "wall", "houndmound", "hound", "houndfriend", "groundspike" }
 local function retargetfn(inst)
     if inst.sg ~= nil and inst.sg:HasStateTag("statue") then
         return
@@ -613,7 +623,7 @@ local function DoLightningExplosion(inst)
 end
 
 local function fnlightning()
-    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, {"lightninghound", "electricdamageimmune"}, {amphibious = true})
+    local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, { "lightninghound", "electricdamageimmune" }, { amphibious = true })
 
     if not TheWorld.ismastersim then
         return inst
@@ -654,10 +664,37 @@ local function DoGlacialExplosion(inst)
 end
 
 local function GlacialProjectile(inst, target)
-    local proj = SpawnPrefab("glacialhound_projectile")
     local x, y, z = inst.Transform:GetWorldPosition()
-    proj.Transform:SetPosition(x, y, z)
-    proj.components.projectile:Throw(inst, target, inst)
+    local numspikes = inst:HasTag("ice_shielded") and 25 or 15
+
+    local target_pos = target:GetPosition()
+    local angle = inst:GetAngleToPoint(target_pos)
+    local rad = math.rad(angle)
+    local speed = inst:HasTag("ice_shielded") and 25 or 30
+
+    for i = 0, numspikes, 2 do
+        inst:DoTaskInTime(i / speed, function(inst)
+            if target == nil then
+                return
+            end
+
+            local x1 = x + i * math.cos(rad) + math.random(-1, 1) / 5
+            local z1 = z + i * -math.sin(rad) + math.random(-1, 1) / 5
+
+            if #TheSim:FindEntities(x1, y, z1, 1, nil, nil, { "groundspike", "hound" }) >= 1 or not TheWorld.Map:IsVisualGroundAtPoint(x1, y, z1) then
+                return
+            end
+
+            local spike = SpawnPrefab("glacialhound_icespike")
+
+            spike.owner = inst
+            spike.Transform:SetRotation(rad)
+            spike.Transform:SetPosition(x1, y, z1)
+
+            local size = Lerp(1.0, 0.75, i / numspikes)
+            spike.Transform:SetScale(size, size, size)
+        end)
+    end
 end
 
 local function CancelGlacialCharge(inst)
@@ -722,7 +759,7 @@ end
 
 local function OnHitOtherFreeze(inst, data)
     local other = data.target
-   
+
     if other ~= nil and data.weapon == nil then
         if not (other.components.health ~= nil and other.components.health:IsDead()) then
             if not other:HasTag("um_freezeprotection") and other.components.freezable ~= nil and other:HasTag("player") and not other.components.freezable:IsFrozen() and not other.sg:HasStateTag("frozen") then
@@ -730,7 +767,7 @@ local function OnHitOtherFreeze(inst, data)
 
                 if other.components.freezable:IsFrozen() then
                     other:AddTag("um_freezeprotection")
-                    
+
                     if other.freeze_protection_task ~= nil then
                         other.freeze_protection_task:Cancel()
                         other.freeze_protection_task = nil
@@ -753,14 +790,100 @@ local function OnHitOtherFreeze(inst, data)
     end
 end
 
+local function AddIceShield(inst, tier)
+    print("adding ice shield")
+    inst:AddTag("ice_shielded")
+
+    if inst.ice_shield ~= nil then
+        print("pre-existing ice shield, removing...")
+        inst.ice_shield:Remove()
+    end
+
+    print("spawning ice shield")
+    inst.ice_shield = SpawnPrefab("um_ice_shield")
+    inst.ice_shield.entity:SetParent(inst.entity)
+    inst.ice_shield.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst.ice_shield._parent = inst
+    inst.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+        --cause apparently is different from stimuli...
+        print(cause == "fire" and amount * 5 or amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+        if inst.ice_shield.components.health ~= nil then
+            if cause == "fire" then
+                amount = amount * 5
+
+                SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            end
+            return inst.ice_shield.components.health:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+        end
+    end
+
+    if inst.shield_fx ~= nil then
+        inst.shield_fx:Remove()
+    end
+
+    print("spawning shield FX")
+    inst.shield_fx = SpawnPrefab("deer_ice_flakes")
+    inst.shield_fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    inst.shield_fx.entity:AddFollower()
+    inst.shield_fx.Follower:FollowSymbol(inst.GUID, "hound_body", 0, 0, 0)
+end
+
+local function RemoveIceShield(inst)
+    print("removing ice shield")
+    inst:RemoveTag("ice_shielded")
+
+    if inst.ice_shield ~= nil then
+        inst.ice_shield:Remove()
+    end
+
+    if inst.shield_fx ~= nil then
+        inst.shield_fx:Remove()
+    end
+
+    inst.components.health.redirect = nil
+
+    inst:DoTaskInTime(10, function(inst)
+        inst:PushEvent("regen_iceshield")
+    end)
+end
+
+local function ShouldWeaponPierce(inst, weapon, attacker)
+    if weapon ~= nil and weapon:HasTag("pierces_ice_shield") then
+        return true
+    end
+
+    if weapon ~= nil then
+        if weapon.components.weapon ~= nil then
+            return weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0
+        end
+    end
+
+    return false
+end
+local function ShouldRecoilGlacial(inst, attacker, weapon, damage)
+    if inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker) then
+        if attacker ~= nil and attacker.components.talker ~= nil then
+            attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
+        end
+    end
+    return inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker), (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage ~= nil and damage / 2 or nil
+end
 local function fnglacial()
-    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, {"glacialhound"}, {amphibious = true})
+    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, { "glacialhound" }, { amphibious = true })
 
     if not TheWorld.ismastersim then
         return inst
     end
 
+    inst:ListenForEvent("ice_shield_death", RemoveIceShield)
+
     MakeMediumBurnableCharacter(inst, "hound_body")
+
+    inst.RegenIceShield = AddIceShield
+
+    inst:DoTaskInTime(0, function(inst)
+        inst:PushEvent("regen_iceshield")
+    end)
 
     inst.components.lootdropper:SetChanceLootTable('hound_glacial')
 
@@ -770,6 +893,8 @@ local function fnglacial()
 
     inst.components.combat:SetDefaultDamage(TUNING.HOUND_DAMAGE * 2)
     inst.components.health:SetMaxHealth(TUNING.WARGLET_HEALTH * 1.25)
+
+    inst.components.combat:SetShouldRecoilFn(ShouldRecoilGlacial)
 
     inst.task = nil
 
@@ -840,7 +965,7 @@ local function fnglacial_proj()
     inst.entity:AddDynamicShadow()
 
     inst.DynamicShadow:SetSize(2, 2)
-    
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("glacial_hound_projectile")
@@ -956,7 +1081,7 @@ local function OnMagmaAttacked(inst, data)
                 not data.attacker.components.health:IsDead() and
                 (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and
                     data.weapon.components.projectile == nil)) and data.attacker.components.health.redirect == nil then
-                data.attacker.components.health:DoFireDamage(5, inst, true)     --redirect calls "afllicter"
+                data.attacker.components.health:DoFireDamage(5, inst, true) --redirect calls "afllicter"
                 if data.attacker:HasTag("player") and not data.attacker.components.burnable ~= nil then
                     data.attacker.components.burnable:Ignite()
                 end
@@ -974,7 +1099,7 @@ local function OnMagmaAttacked(inst, data)
 end
 
 local function fnmagma()
-    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, {"magmahound", "clay", "electricdamageimmune"})
+    local inst = fncommon("clayhound", "magmahound", nil, nil, nil, { "magmahound", "clay", "electricdamageimmune" })
 
     if not TheWorld.ismastersim then
         return inst
@@ -1021,7 +1146,7 @@ end
 
 local function fnspore()
     --local inst = fncommon("hound", "hound_spore_ocean", nil, nil, nil, {"sporehound"}, {amphibious = true})
-    local inst = fncommon("hound", "hound_spore", nil, nil, nil, {"sporehound"})
+    local inst = fncommon("hound", "hound_spore", nil, nil, nil, { "sporehound" })
 
     if not TheWorld.ismastersim then
         return inst
@@ -1070,7 +1195,7 @@ local function AdjustVisibility(inst)
 end
 
 local function fnrne()
-    local inst = fncommon("hound", "rnehound", nil, nil, nil, {"unfathomable", "shadow"})
+    local inst = fncommon("hound", "rnehound", nil, nil, nil, { "unfathomable", "shadow" })
 
     inst.Physics:SetCollisionGroup(COLLISION.SANITY)
     inst.Physics:CollidesWith(COLLISION.SANITY)

@@ -49,6 +49,7 @@ local function PopulateIAThicket(inst, tile, plant, thickness)
         else
             break
         end
+
         angle = angle + angle_change
     end
     --spread in both directions.
