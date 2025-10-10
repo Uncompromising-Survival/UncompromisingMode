@@ -6,7 +6,9 @@ local function OnHealthDelta(inst, oldpercent, newpercent)
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
-    if weapon ~= nil and weapon:HasTag("pierces_ice_shield") then
+    if weapon ~= nil and weapon:HasTag("pierces_ice_shield") 
+        or attacker ~= nil and attacker:HasTag("pierces_ice_shield") 
+        or weapon.components.obsidiantool ~= nil then --IA compat
         return true
     end
 
@@ -19,6 +21,7 @@ local function ShouldWeaponPierce(inst, weapon, attacker)
     return false
 end
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
+    print("should recoil", inst, attacker, weapon, damage)
     if inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker) then
         if attacker ~= nil and attacker.components.talker ~= nil then
             attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
@@ -45,7 +48,7 @@ local function Init(inst, parent, fx_symbol, tier)
 
     if parent.components.health ~= nil then
         parent.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-            print(cause == "fire" and amount * 10 or amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+            print("redirect", target, cause == "fire" and amount * 10 or amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
             if inst.components.health ~= nil and inst:IsValid() then
                 if cause == "fire" then
                     amount = amount * 10
@@ -118,9 +121,6 @@ local function fn()
                 inst._parent.components.burnable:Extinguish()
             end
         end
-
-
-
 
         inst:Remove()
     end)
