@@ -702,12 +702,12 @@ DESCRIBE.UM_BOATBOTTLE = {
     EMPTY = "If I rearrange every particle in my boat, is it still the same boat?"
 }
 
-ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = { "It's a bit too slippery to hit.",
     "Maybe I should wait till it sits still.",
     "I can't hit it while it's fluttering about.",
     "It'll be easier to hit when it rests.",
-    "It might be easier to hit if it's landed."}
-	
+    "It might be easier to hit if it's landed." }
+
 DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"

@@ -624,3 +624,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You won't be able to slip out of death's cl
 DESCRIBE.WATHOM_CORPSE = "Rise again, so you may feel the tinge of death once more."
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Rigid and cold, like this world."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"

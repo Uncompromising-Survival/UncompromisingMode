@@ -642,3 +642,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I'll try again when it's on break.",
 DESCRIBE.WATHOM_CORPSE = "He's still got fight left in 'em! Up and at'em, lets go!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "An impenetrable shield!"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"

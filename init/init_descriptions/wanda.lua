@@ -639,3 +639,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"I remember this being easier...",
 DESCRIBE.WATHOM_CORPSE = "Time, Wathom? Is it really that time again?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It protects well for the time being."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Oh botheration, someone ought to warm you up!"

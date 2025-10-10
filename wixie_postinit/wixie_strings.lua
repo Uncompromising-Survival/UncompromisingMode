@@ -667,3 +667,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You gotta be kidding me!",
 DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "You didn't have anything better than a rock?"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Hey! Using ice as a shield's not fair!"

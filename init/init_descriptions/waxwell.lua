@@ -603,3 +603,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"This isn't exactly my forte.",
 DESCRIBE.WATHOM_CORPSE = "Still clinging to life are we?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "She has clouded her mind with protection by any means necessary."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"

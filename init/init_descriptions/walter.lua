@@ -648,3 +648,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a lot easier to catch these when they'
 DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Nothing dreadful about a shield!"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
