@@ -204,10 +204,10 @@ env.AddPrefabPostInit("forest", function(inst)
 
         if (TUNING.DSTU.GLACIALHOUNDS or TUNING.DSTU.MAGMAHOUNDS) then
             spawndata.ShouldUpgrade = function(amount, wave_pre_upgraded)
-                local seasonBonus = (TheWorld.state.iswinter or TheWorld.state.issummer) and 0.25 or 0
-                
+                local seasonBonus = (TheWorld.state.iswinter or TheWorld.state.issummer) and 0.3 or 0
+
                 if amount >= 8 then
-                    return math.random() - seasonBonus < 0.7 --these values.
+                    return math.random() - seasonBonus <= 0.7
                 elseif amount == 7 then
                     return math.random() - seasonBonus < 0.3
                 elseif amount == 6 then
