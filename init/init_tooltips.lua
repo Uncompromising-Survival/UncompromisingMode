@@ -92,8 +92,8 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
     RUINS_BAT = "- Spawns Shadow Tentacles every 4 hits.\n- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
-    UM_ICE_SICLE = "- Freezes enemies. \nReaps plants.\n-Lowers temperature on reaping and even more on attacking.\n-Clothing helps resist the cold.",
-    JAWED_SCYTHE = "Reaps plants.",
+    UM_ICE_SICLE = "- Freezes enemies. \n- Reaps plants.\n- Lowers temperature on reaping and even more on attacking.\n- Clothing helps resist the cold.",
+    JAWED_SCYTHE = "- Reaps plants.",
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
     BEAKBASHER = "- Is a darn good hammer.",
     UM_HAT_LEAFWING = "- Speedier when worn.\nCan breeze through thickets.",
@@ -167,11 +167,11 @@ STRINGS.WIXIE_TOOLTIP = {
     SLINGSHOTAMMO_TREMOR = "- Creates multiple tremors, damaging and knocking back\nenemies in an area.",
     SLINGSHOTAMMO_MOONROCK = "- Able to hit shadows.",
     SLINGSHOTAMMO_MOONGLASS = "- Passes through enemies, dealing rapid damage.\n- Able to hit shadows.",
-    SLINGSHOTAMMO_SALT = "- Deals up to triple damage based on enemies missing health.\n-Deals double damage to salt susceptible enemies.",
+    SLINGSHOTAMMO_SALT = "- Deals up to triple damage based on enemies missing health.\n- Deals double damage to salt susceptible enemies.",
     SLINGSHOTAMMO_TAR = "- Makes enemies leave a slowing, flamable tar trail.",
     SLINGSHOTAMMO_OBSIDIAN = "- Rapidly deals bursts of fire damage in an area.",
     SLINGSHOTAMMO_GOOP = "- Bounces between allies, healing them.",
-    SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n-Explodes when ignited.",
+    SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n- Explodes when ignited.",
     SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
     SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
     SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
@@ -407,7 +407,7 @@ end
 if TUNING.DSTU.WATHGRITHR_REWORK then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
     TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 10% of the damage taken.\n - The time penalty for a failed parry is reduced to half.\n -Parry duration has been incorportated into the item by default."
-    TOOLTIPS.WATHGRITHR_SHIELD_DREADSTONE = "-Scares attackers.\n -Effects stack with dreadstone armor."
+    TOOLTIPS.WATHGRITHR_SHIELD_DREADSTONE = "- Scares attackers.\n - Effects stack with dreadstone armor."
     TOOLTIPS.SADDLE_WATHGRITHR = "- Increased damage."
     TOOLTIPS.BATTLESONG_DURABILITY = "- Now works on shields."
 end
@@ -416,8 +416,6 @@ if TUNING.DSTU.DISABLE_MEGAFLARE then
     TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
 end
 
-modimport("init/init_scrapbook") 
---modimport("init/init_scrapbook_um") 
 
 if TUNING.DSTU.STORMS then
     TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
@@ -449,3 +447,6 @@ end
 if GetModConfigData("toolbox_tools") then
     TOOLTIPS.WINONA_TOOLBOX = "- Portable storage for dismantled structures, tools and all things engineering."
 end
+
+modimport("init/init_scrapbook")
+--modimport("init/init_scrapbook_um") 

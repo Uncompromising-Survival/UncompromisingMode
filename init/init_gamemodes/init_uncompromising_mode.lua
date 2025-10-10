@@ -46,9 +46,9 @@ modimport("init/init_descriptions/wathom")
 --	[ 		Number Tuning and PostInits		]	--
 
 modimport("init/init_tuning")
+modimport("init/init_tooltips")--load before postinit please!
 modimport("init/init_postinit")
 modimport("init/init_strings")
-modimport("init/init_tooltips")
 modimport("init/init_actions")
 modimport("init/init_containers")
 modimport("init/init_batterypower")
