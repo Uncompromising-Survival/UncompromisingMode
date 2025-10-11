@@ -131,7 +131,7 @@ local function OnStartChanneling(inst, channeler)
 end
 
 local function OnStopChanneling(inst, aborted)
-    TheWorld:PushEvent("townportaldeactivated")
+    TheWorld:PushEvent("townportaldeactivated", inst)
 
     inst.MiniMapEntity:SetIcon("townportal.png")
     inst.MiniMapEntity:SetPriority(0)
