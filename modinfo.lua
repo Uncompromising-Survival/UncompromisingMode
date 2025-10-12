@@ -119,7 +119,7 @@ configuration_options = {
         hover = "Changes the font for the numbers.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)",
         options =
         {
-            { description = "NUMBERFONT",       data = "NUMBERFONT",  hover = "The same as the original mod." },
+            { description = "NUMBERFONT",       data = "NUMBERFONT",  hover = "More rounded letters." },
             { description = "TALKINGFONT",      data = "TALKINGFONT", hover = "Similar to the original mod, but with thicker outlines." },
             { description = "Classic (UIFONT)", data = "UIFONT",      hover = "The same as the original mod." }
         },
