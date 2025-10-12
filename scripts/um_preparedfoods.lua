@@ -62,11 +62,11 @@ local function Ghost(eater)
     eater.Physics:ClearCollidesWith(COLLISION.CHARACTERS)
     eater.Physics:ClearCollidesWith(COLLISION.FLYERS)
     eater.AnimState:SetHaunted(true)
-	if eater.unghosttask then
-		eater.unghosttask:Cancel()
-		eater.unghosttask = nil
-	end
-	eater.unghosttask = eater:DoTaskInTime(60,UnGhost)
+    if eater.unghosttask then
+        eater.unghosttask:Cancel()
+        eater.unghosttask = nil
+    end
+    eater.unghosttask = eater:DoTaskInTime(60, UnGhost)
 end
 
 local um_preparedfoods =
@@ -103,8 +103,7 @@ local um_preparedfoods =
     blueberrypancakes =
     {
         test = function(cooker, names, tags)
-            return names.giant_blueberry and names.giant_blueberry >= 2 and tags.egg and tags.egg >=2
-			
+            return names.giant_blueberry and names.giant_blueberry >= 2 and tags.egg and tags.egg >= 2
         end,
         hunger = 75,
         health = 5,
@@ -274,7 +273,7 @@ local um_preparedfoods =
                 eater.components.debuffable:AddDebuff("buff_largehungerslow", "buff_largehungerslow")
             end
         end,
-		idlename = "idle_ground",
+        idlename = "idle_ground",
         card_def = { ingredients = { { "onion", 1 }, { "potato", 1 }, { "carrot", 1 }, { "trunk_summer", 1 } } },
     },
 
@@ -292,16 +291,16 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-			if not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-				not eater:HasTag("playerghost") then
-				Ghost(eater)
-			end
+            if not (eater.components.health ~= nil and eater.components.health:IsDead()) and
+                not eater:HasTag("playerghost") then
+                Ghost(eater)
+            end
         end,
         floater = { "med", nil, 0.65 },
-		idlename = "idle_ground",
-        card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 }} },
+        idlename = "idle_ground",
+        card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 } } },
     },
-	
+
     um_boom_tart =
     {
         test = function(cooker, names, tags)
@@ -320,12 +319,12 @@ local um_preparedfoods =
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
                 eater.components.debuffable:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
-            end			
+            end
         end,
         floater = { "med", nil, 0.65 },
-        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 }} },
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
     },
-	
+
     um_sponge_cake =
     {
         test = function(cooker, names, tags)
@@ -340,12 +339,12 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-			if eater.components.moisture then
-				eater.components.moisture:DoDelta(-33)
-			end	
+            if eater.components.moisture then
+                eater.components.moisture:DoDelta(-33)
+            end
         end,
         floater = { "med", nil, 0.65 },
-        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 }} },
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
     },
 
     snowcone =
@@ -478,7 +477,7 @@ local um_preparedfoods =
                 end)
             end
         end,
-		idlename = "ground",
+        idlename = "ground",
         card_def = { ingredients = { { "corn", 2 }, { "butter", 1 } } },
     },
 
@@ -499,7 +498,7 @@ local um_preparedfoods =
         floater = { nil, 0.1, 0.6 },
         tags = { "monstermeat" },
     },
-	
+
     viperjam =
     {
         test = function(cooker, names, tags)
@@ -517,27 +516,26 @@ local um_preparedfoods =
         floater = { nil, 0.1, 0.6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_VIPERJAM,
         oneatenfn = function(inst, eater)
-		
-			local function GetWorms(inst)
-				local x,y,z = inst.Transform:GetWorldPosition()
-				local worms = TheSim:FindEntities(x,y,z,40,{"viperlingfriend"})
-				local worm_friends = {}
-				for i,v in ipairs(worms) do
-					if inst.components.leader and inst.components.leader:IsFollower(v) then
-						table.insert(worm_friends,v)
-					end
-				end
-				for i,v in ipairs(worm_friends) do -- need specifically *that players* worms
-					SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
-					local more_time = v.components.timer:GetTimeLeft("despawn") or 0
-					v.components.timer:SetTimeLeft("despawn", 60 + more_time)
-				end
-				local nworms = #worm_friends
-				if #worm_friends > 6 then
-					nworms = 6
-				end
-				return 6-nworms
-			end
+            local function GetWorms(inst)
+                local x, y, z = inst.Transform:GetWorldPosition()
+                local worms = TheSim:FindEntities(x, y, z, 40, { "viperlingfriend" })
+                local worm_friends = {}
+                for i, v in ipairs(worms) do
+                    if inst.components.leader and inst.components.leader:IsFollower(v) then
+                        table.insert(worm_friends, v)
+                    end
+                end
+                for i, v in ipairs(worm_friends) do -- need specifically *that players* worms
+                    SpawnPrefab("shadow_despawn").Transform:SetPosition(v.Transform:GetWorldPosition())
+                    local more_time = v.components.timer:GetTimeLeft("despawn") or 0
+                    v.components.timer:SetTimeLeft("despawn", 60 + more_time)
+                end
+                local nworms = #worm_friends
+                if #worm_friends > 6 then
+                    nworms = 6
+                end
+                return 6 - nworms
+            end
 
 
             local function SpawnVipers(inst)
@@ -552,8 +550,8 @@ local um_preparedfoods =
                 projectile:AddTag("friendly")
                 --projectile.components.wateryprotection.addwetness = TUNING.WATERBALLOON_ADD_WETNESS/2
                 projectile.components.complexprojectile:SetHorizontalSpeed(speed + math.random(4, 9))
-				projectile.eater = inst
-				projectile.max_worms = 6
+                projectile.eater = inst
+                projectile.max_worms = 6
                 if TheWorld.Map:IsAboveGroundAtPoint(pt.x, 0, pt.z) or TheWorld.Map:GetPlatformAtPoint(pt.x, pt.z) ~= nil then
                     inst.count = 0
                     projectile.components.complexprojectile:Launch(pt, inst, inst)
@@ -570,7 +568,7 @@ local um_preparedfoods =
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
-				local i = GetWorms(eater)
+                local i = GetWorms(eater)
                 for k = 1, i do
                     eater:DoTaskInTime(0, SpawnVipers(eater))
                 end
@@ -604,11 +602,11 @@ local um_preparedfoods =
         end,
         card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "goatmilk", 1 } } },
     },
-	
-	
-	
-	
-	-- [Rimeweed] -----
+
+
+
+
+    -- [Rimeweed] -----
     um_rimeweed_spagett =
     {
         test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.um_rimeweed_itemvine and names.um_rimeweed_itemvine > 2 end,
@@ -629,20 +627,23 @@ local um_preparedfoods =
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
-				local x,y,z = eater.Transform:GetWorldPosition()
+                local x, y, z = eater.Transform:GetWorldPosition()
+                local iceShield = SpawnPrefab("um_ice_shield")
+                iceShield:Init(eater, "swap_body", .125)
+
                 local fx = SpawnPrefab("deer_ice_burst")
-				fx.Transform:SetPosition(x,y,z)
-				fx.Transform:SetScale(3,3,3)
-				local ents = TheSim:FindEntities(x,y,z,6,{"_health"})
-				for i,ent in ipairs(ents) do
-					if ent ~= eater and ent.components.freezable then
-						ent.components.freezable:AddColdness(5)
-					end
-				end
+                fx.Transform:SetPosition(x, y, z)
+                fx.Transform:SetScale(3, 3, 3)
+                local ents = TheSim:FindEntities(x, y, z, 6, { "_health" })
+                for i, ent in ipairs(ents) do
+                    if ent ~= eater and ent.components.freezable then
+                        ent.components.freezable:AddColdness(5)
+                    end
+                end
             end
         end,
     },
-	
+
     um_rimeweed_tequila =
     {
         test = function(cooker, names, tags) return names.um_rimeweed_itemflower and names.ice end,
@@ -663,6 +664,9 @@ local um_preparedfoods =
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
                 not (eater.components.health ~= nil and eater.components.health:IsDead()) and
                 not eater:HasTag("playerghost") then
+                local iceShield = SpawnPrefab("um_ice_shield")
+                iceShield:Init(eater, "swap_body", .125)
+
                 eater.components.debuffable:AddDebuff("um_rimeweed_tequila_buff", "um_rimeweed_tequila_buff")
             end
         end,
@@ -679,22 +683,22 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, {"bird_egg", 1} } },
+        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
-				if TheWorld then
-					if TheWorld.state.isssummer then
-						eater.components.health:DoDelta(6,true)
-						eater.components.sanity:DoDelta(20,true)
-					elseif TheWorld.state.isautumn then
-						eater.components.health:DoDelta(12,true)
-						eater.components.sanity:DoDelta(40,true)
-					elseif TheWorld.state.iswinter then
-						eater.components.health:DoDelta(18,true)
-						eater.components.sanity:DoDelta(60,true)
-					end
-				end
-			end
+                if TheWorld then
+                    if TheWorld.state.isssummer then
+                        eater.components.health:DoDelta(6, true)
+                        eater.components.sanity:DoDelta(20, true)
+                    elseif TheWorld.state.isautumn then
+                        eater.components.health:DoDelta(12, true)
+                        eater.components.sanity:DoDelta(40, true)
+                    elseif TheWorld.state.iswinter then
+                        eater.components.health:DoDelta(18, true)
+                        eater.components.sanity:DoDelta(60, true)
+                    end
+                end
+            end
         end,
     },
     um_chiles_en_nogada =
@@ -725,8 +729,8 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 6 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 }}},
-    },	
+        card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
+    },
     um_kebab =
     {
         test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) and not names.boneshard end,
@@ -739,8 +743,8 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
-        card_def = { ingredients = { { "meat", 3 }}},
-    },	
+        card_def = { ingredients = { { "meat", 3 } } },
+    },
 }
 
 for k, v in pairs(um_preparedfoods) do
@@ -752,8 +756,8 @@ for k, v in pairs(um_preparedfoods) do
     v.atlasname = "images/inventoryimages/" .. k .. ".xml"
     v.cooktime = k.cooktime
     v.overridebuild = k
-	v.cookbook_atlas = "images/cookbook_"..k..".xml"
-    v.cookbook_tex = "cookbook_"..k..".tex"
+    v.cookbook_atlas = "images/cookbook_" .. k .. ".xml"
+    v.cookbook_tex = "cookbook_" .. k .. ".tex"
     --v.cookbook_category = "cookpot"
 end
 
