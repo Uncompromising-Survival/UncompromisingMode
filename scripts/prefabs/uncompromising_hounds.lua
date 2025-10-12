@@ -802,7 +802,7 @@ local function RemoveIceShield(inst)
 end
 
 local function fnglacial()
-    local inst = fncommon("hound", "glacial_hound_ocean", nil, nil, nil, { "glacialhound" }, { amphibious = true })
+    local inst = fncommon("um_ice_warg", "um_ice_warg", nil, nil, nil, { "glacialhound" }--[[, { amphibious = true }]])
 
     if not TheWorld.ismastersim then
         return inst

@@ -1247,6 +1247,8 @@ Assets = {
     Asset("ANIM", "anim/hound_spore_ocean.zip"),
     Asset("ANIM", "anim/glacial_hound.zip"),
     Asset("ANIM", "anim/glacial_hound_ocean.zip"),
+    Asset("ANIM", "anim/um_ice_warg.zip"),
+
 
     Asset("ANIM", "anim/hippo_water_attacks.zip"),
     Asset("ANIM", "anim/hippo_water.zip"),

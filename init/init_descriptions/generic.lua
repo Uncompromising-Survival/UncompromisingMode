@@ -711,4 +711,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = { "It's a bit too slippery to hit.",
 DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
-ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
