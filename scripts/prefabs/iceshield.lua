@@ -37,6 +37,12 @@ local function Init(inst, parent, fx_symbol, tier)
 
     parent:AddTag("ice_shielded")
 
+    local fx = SpawnPrefab("fx_ice_crackle")
+    fx.Transform:SetPosition(parent.Transform:GetWorldPosition())
+    fx.entity:AddFollower()
+    fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
+
+
     if parent.ice_shield ~= nil then
         parent.ice_shield:Remove()
     end
