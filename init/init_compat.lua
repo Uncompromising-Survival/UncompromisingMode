@@ -10,6 +10,28 @@ env.AddPrefabPostInit("wonderwhy", function(inst)
     inst:AddTag("ignores_healthregen")
 end)
 
+env.AddPrefabPostInit("kris_m", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.components.eater:SetCanEatMoss()
+
+    if inst.components.foodaffinity then
+        inst.components.foodaffinity.favorite_foods = {
+	        ["um_moss"] = 4,
+        }
+    end
+end)
+
+env.AddPrefabPostInit("susie_m", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst.components.eater:SetCanEatVeggieHorrible()
+end)
+
 -- I don't know where else to put this
 env.AddPrefabPostInit("aphid", function(inst)
     if IsIslandOrVolcanoWorld() then
