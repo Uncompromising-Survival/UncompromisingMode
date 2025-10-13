@@ -958,4 +958,45 @@ AddCompatCharacterCocoon("2997213431", "swire", {
     Item("lgd_hat", 1, .5, true),
 })
 
+AddCompatCharacterCocoon("3583633595", "kris_m", {
+    Item("um_moss", 4, 1),
+    Item("um_moss", 3, .5),
+    Item("nightsword", 1, 1, true),
+    Item("dragonpie", 1, 1, true),
+    Item("reviver", 1, 1),
+    Item("featherpencil", 4, 1),
+    Item("firepen", 1, 1, true),
+    Item("nightcaphat", 1, .5, true),
+    Item("bedroll_furry", 1, 1, true),
+    Item("um_armor_pyre_nettles", 1, .5, true),
+})
+
+AddCompatCharacterCocoon("3583633595", "susie_m", {
+    Item(function() return RandomItem("playing_card", "papyrus") end, 1, 1, true),
+    Item(function() return RandomItem("beefalofeed", "beefalotreat", "um_moss") end, 2, 1, true),
+    Item(function() return RandomItem("goldenaxe", "moonglassaxe", "jawed_scythe", "um_ice_sicle") end, 1, 1, true),
+    Item("brush", 1, .3, true),
+    Item("monstermeat", 3, 1, true),
+    Item("ash", 1, 1),
+    Item("blueberrypancakes", 1, 1, true),
+    Item("tillweedsalve", 1, .5),
+    Item("mosquitosack", 5, 1),
+    Item("houndstooth", 2, 1),
+    Item("houndstooth", 4, .75),
+})
+
+AddCompatCharacterCocoon("3583633595", "ralsei_m", {
+    Item("carnival_vest_a", 1, 1, true),
+    Item(function() return RandomItem("ralsei_cake", "ralsei_butterscotch_cake") end, 1, 1, true),
+    Item("nightmarefuel", 4, 1),
+    Item("nightmarefuel", 2, .5),
+    Item("silk", 5, 1),
+    Item("sunglasses", 1, .5, true),
+    Item("healingsalve", 3, 1),
+    Item(function() return RandomItem("bandage", "um_rimeweed_icepack") end, 3, 1),
+    Item(function() return RandomItem("floral_bandage", "brine_balm") end, 1, 1),
+    Item("floral_bandage", 1, .3),
+    Item("lightninggoathorn", 1, .05),
+})
+
 return COCOON_DEFS

@@ -18,6 +18,10 @@ if GetModConfigData("longpig") then
         Ingredient("skeletonmeat", 1),
         Ingredient("spidergland", 1)
     }
+    AllRecipes["ghostlyelixir_fastregen"].ingredients = {
+        Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50),
+        Ingredient("ghostflower", 4)
+    }
 end
 
 if GetModConfigData("compostoverrot") then
@@ -297,17 +301,6 @@ if GetModConfigData("telestaff_rework") then
         Ingredient("purplegem", 1)
     }
 end
-
-if GetModConfigData("longpig") then
-    AddRecipe2(
-        "ghostlyelixir_fastregen",
-        { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Ingredient("ghostflower", 4) },
-        TECH.NONE,
-        { builder_tag = "elixirbrewer" },
-        { "CHARACTER" }
-    )
-end
-
 
 --I HATE FRAZZLED WIRES!!!!!!!!
 AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }

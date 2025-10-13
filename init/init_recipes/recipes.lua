@@ -515,8 +515,9 @@ AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 1), Ingredien
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
-AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
+AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "WEAPONS" })
 ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
+ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
@@ -527,9 +528,10 @@ AddRecipe2(
 	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
 	TECH.SCIENCE_ONE,
 	nil,
-	{ "TOOLS" }
+	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
+ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
 AddRecipe2(
 	"um_ice_sicle",
@@ -539,6 +541,7 @@ AddRecipe2(
 	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
+ChangeSortKey("um_ice_sicle", "jawed_scythe", "WEAPONS", true)
 
 AddRecipe2(
 	"um_hat_rime",

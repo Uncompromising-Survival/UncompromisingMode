@@ -96,7 +96,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     JAWED_SCYTHE = "- Reaps plants.",
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
     BEAKBASHER = "- Is a darn good hammer.",
-    UM_HAT_LEAFWING = "- Speedier when worn.\nCan breeze through thickets.",
+    UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
 
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
