@@ -10,17 +10,22 @@ local Vetcursewidget = Class(Widget, function(self, owner)
     Widget._ctor(self, "Vetcursewidget")
     --self:SetClickable(false)
 
-    self.bg2 = self:AddChild(Image("images/vetskull.xml", "vetskull.tex"))
-    self.bg2:SetVRegPoint(ANCHOR_MIDDLE)
-    self.bg2:SetHRegPoint(ANCHOR_MIDDLE)
+    self.bg2 = self:AddChild(ImageButton("images/vetskull.xml", "vetskull.tex"))
+    --[[self.bg2:SetVRegPoint(ANCHOR_MIDDLE)
+    self.bg2:SetHRegPoint(ANCHOR_MIDDLE)]]
     self.bg2:SetVAnchor(ANCHOR_MIDDLE)
     self.bg2:SetHAnchor(ANCHOR_MIDDLE)
     self.bg2:SetPosition(880, -380, 0)
     self.bg2:SetScaleMode(0.01)
     self.bg2:SetScale(.33, .33, .33)
+    self.bg2:SetTooltip(STRINGS.VETS_WIDGET)
     self:StartUpdating()
     self:Show()
-    self:RefreshTooltips()
+    --self:RefreshTooltips()
+    self.bg2:SetOnClick(function()
+		self:Disable()
+	    self:Hide()
+	end)
 end)
 
 local skulls =
@@ -88,16 +93,10 @@ local skulls =
     },
 }
 
-function Vetcursewidget:RefreshTooltips()
+--[[function Vetcursewidget:RefreshTooltips()
     local vet_text = ""
 
-    if self.owner:HasTag("clockmaker") then
-        vet_text = STRINGS.VETS_WIDGET_WANDA
-	elseif self.owner:HasTag("mime") then	
-		vet_text = STRINGS.VETS_WIDGET_WES
-    else
-        vet_text = STRINGS.VETS_WIDGET
-    end
+    vet_text = STRINGS.VETS_WIDGET
 
     if self.owner:HasTag("um_3_deaths") and self.owner:HasTag("wilson_vetcurse") then
         vet_text = vet_text .. "\n - The curse is thriving! 50% increased stat drain."
@@ -118,11 +117,11 @@ function Vetcursewidget:RefreshTooltips()
     end
 
     self.bg2:SetTooltip(vet_text)
-end
+end]]
 
 function Vetcursewidget:OnUpdate(dt)
     if self.owner:HasTag("vetcurse") then
-        self:RefreshTooltips()
+        --self:RefreshTooltips()
         self:Show()
     else
         self:Hide()
