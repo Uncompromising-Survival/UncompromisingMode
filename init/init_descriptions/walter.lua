@@ -34,7 +34,7 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_FROZENFURY =
 
 -- CaliforniaKing
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_CALIFORNIAKING = "I can handle this."
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Wo.. Woby? Is that you?"
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Wo... Woby? Is that you?"
 DESCRIBE.CALIFORNIAKING = "I'd dare Wortox to finish the whole thing!"
 -- CaliforniaKing
 DESCRIBE.FLORAL_BANDAGE = "This stuff's potent!"

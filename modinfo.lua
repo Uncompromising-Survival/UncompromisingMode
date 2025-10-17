@@ -697,7 +697,18 @@ configuration_options = {
     BinaryConfig("goodies_nerf", "Goodies Food Type Changes", "The food type of more avaliable Goodies were changed into either Veggie or Generic.", true),
     BinaryConfig("icecream_buff", "Ice Cream Buff", "Ice Cream now restores 100 sanity.", true),
     BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
-    BinaryConfig("bonestew_nerf", "Meaty Stew Nerf", "Makes meaty stew require 3.5 meat value to be cooked.", true),
+    --BinaryConfig("bonestew_nerf", "Meaty Stew Rework", "Makes meaty stew require 3.5 meat value to be cooked.", true),
+    {
+        name = "bonestew_nerf",
+        label = "Meaty Stew Changes",
+        hover = "Pierogis require more veggies to cook.",
+        options = {
+            { description = "Bone Requirement", data = "bone_appetit",  hover = "Makes Meaty Stew require 1 Bone Shard.\nA new dish will be cooked with 3 Meat instead." },
+            { description = "3.5 Meat Value",   data = "meatier_stew",  hover = "Makes Meaty Stew require 3.5 meat value to be cooked." },
+            { description = "Disabled", data = false, hover = "Disabled." },
+        },
+        default = "bone_appetit"
+    },
     {
         name = "perogi",
         label = "Pierogi Recipe Nerf",
