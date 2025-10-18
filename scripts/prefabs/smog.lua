@@ -158,7 +158,7 @@ local function SetupParticles(inst)
     effect:SetUVFrameSize(0, 1, 1)
     effect:SetBlendMode(0, BLENDMODE.Premultiplied)
     effect:SetSortOrder(0, 3)
-    effect:SetSortOffset(5, 1)
+    effect:SetSortOffset(0, 1)
     effect:SetRadius(0, SMOKE_RADIUS) --only needed on a single emitter
     effect:SetDragCoefficient(0, 0)
 
