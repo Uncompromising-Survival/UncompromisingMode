@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.0.7"
+local _version = "1.5.1.0"
 description = [[
 󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
 
@@ -113,6 +113,20 @@ configuration_options = {
     },
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
     BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Shows how many products a crafting recipe will yield, if it's more than one.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)", true, true),
+    {
+        name = "ui_showmultiproducts_font",
+        label = "Show Craft Amounts Font",
+        hover = "Changes the font for the numbers.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)",
+        options =
+        {
+            { description = "NUMBERFONT",       data = "NUMBERFONT",  hover = "More rounded letters." },
+            { description = "TALKINGFONT",      data = "TALKINGFONT", hover = "Similar to the original mod, but with thicker outlines." },
+            { description = "Classic (UIFONT)", data = "UIFONT",      hover = "The same as the original mod." }
+        },
+        default = "NUMBERFONT",
+        client = true
+    },
+
     BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right Veteran's Curse icon, which provides helpful information on the curse.", true, true),
     BinaryConfig("um_tips_only", "Force UM Loading Tips", "Disables vanilla Loading Tips, so Uncompromising Mode's Loading Tips will always appear in the loading screen while joining a world!", false, true),
     BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
@@ -536,7 +550,8 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
 
-    BinaryConfig("celestialitems_revert", "Celestial Altar Item changes", "Reverts the changes to Glass Cutter and Moon Glass Axe.", true),
+    BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
+    BinaryConfig("infinite_blueprints", "Infinite Blueprints", "Blueprints are no longer consumed when reading.", true),
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
     BinaryConfig("lifeinjector_rework", "Booster Shot Rework", "The Booster Shot regenerates 50% of your max health loss overtime.", true),
     BinaryConfig("canedurability", "Cane Durability",

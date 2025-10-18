@@ -138,8 +138,8 @@ end
 function HoodedWidowBrain:OnStart()
     local root = PriorityNode(
     {	
-		WhileNode(function() return self.inst.bullier end,"Being Bullied",
-		DoAction(self.inst, JumpHomeAction)),
+		--[[WhileNode(function() return self.inst.bullier end,"Being Bullied",
+		DoAction(self.inst, JumpHomeAction)),]]
         WhileNode(function() return CanMeleeNow(self.inst) or not TargetLeavingArena(self.inst) end, "Hit Stuck Target or Creature",
             SequenceNode({
                 ActionNode(function() EquipMeleeAndResetCooldown(self.inst) end, "Equip melee"),

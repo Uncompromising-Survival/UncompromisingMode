@@ -196,16 +196,17 @@ local prefab_post = {
     "compass",
     "seedpouch",
     "voidcloth_umbrella",
-	"mushroom_farm",
+    "mushroom_farm",
     "toolbox_items",
-	"otter",
+    "otter",
     "winona_telebrella",
     "stash_map",
     "mushtrees",
     --"monkeyhut",
-	--"lava_pond",
-	"cookiecutter",
-    "seastack" --loot changes
+    --"lava_pond",
+    "cookiecutter",
+    "seastack", --loot changes
+    "antlionhat",
 }
 
 local stategraph_post = {
@@ -251,13 +252,13 @@ if GetModConfigData("wixie_walter") then
     local wixie_prefabs = {
         "extra_claustrophobia_checks", -- extra tag that wixie checks when registering claustrophobia, for stuff like jackolanterns and ruins relics
         "slingshot",                   -- stuff for new slingshot aiming and wixie exclusivity
-		"slingshotammo",                   -- no skill
+        "slingshotammo",               -- no skill
         "walter",                      -- all of walters things, including woby action
         "wobysmall",
         "wobybig",
-        "wormhole",      -- wixie loses more sanity from wormholes
-        "coconut",       -- shoot a coconut
-		"sculptingtable" -- Sculpting table crashes if picker inventory is nil
+        "wormhole", -- wixie loses more sanity from wormholes
+        "coconut",  -- shoot a coconut
+        "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
         "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
@@ -444,7 +445,7 @@ if GetModConfigData("changed_shadow_pieces") then
     --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
     --table.insert(stategraph_post, "shadow_knight")
-	table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)	
+    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)	
 end
 
 if GetModConfigData("hambatnerf") then
@@ -486,6 +487,10 @@ end
 
 if GetModConfigData("celestialitems_revert") then
     table.insert(prefab_post, "glasscutter")
+end
+
+if GetModConfigData("infinite_blueprints") then
+    table.insert(component_post, "teacher")
 end
 
 modimport("postinit/sim")
