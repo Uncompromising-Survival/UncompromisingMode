@@ -1483,7 +1483,7 @@ configuration_options = {
     -- Mara =)
 
     --	Header("General"),
-    BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
+    --  BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),
