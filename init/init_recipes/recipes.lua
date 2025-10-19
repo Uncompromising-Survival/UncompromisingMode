@@ -576,3 +576,6 @@ ChangeSortKey("um_boatbottle", "portableboat_item", "SEAFARING", true)
 
 AddRecipe2("oar_monkey", {Ingredient("log", 1),  Ingredient("palmcone_scale", 2), Ingredient("rope", 1)}, TECH.LOST, nil, {"SEAFARING"})
 ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)
+
+AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true}, { "CHARACTER" })
+ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)

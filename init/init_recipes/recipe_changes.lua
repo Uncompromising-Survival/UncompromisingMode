@@ -380,3 +380,5 @@ if GetModConfigData("snowstorms") then
 end
 
 AllRecipes["seafaring_prototyper"].ingredients = { Ingredient("transistor", 1), Ingredient("boards", 1) }
+
+AllRecipes["woby_treat"].numtogive = 1

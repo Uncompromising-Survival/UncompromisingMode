@@ -333,12 +333,22 @@ local characters = {
     },
     WES = {
         loot = { Item("balloonparty_confetti_cloud", 5),
-            Item("balloonspeed", 10, .1),
+            Item("balloonspeed", 10, .5),
             Item("balloon", 1, .01),
             Item("freshfruitcrepes", 1),
             Item("balloonhat", 1),
             Item("balloonvest", 1),
             Item("waterballoon", 10, .3), }
+    },
+    WAGSTAFF = {
+        loot = { Item("wagpunk_bits", 4),
+            Item("wagpunk_bits", 4, .5),
+            Item("cutstone", 2),
+            Item("cutstone", 1, .5),
+            Item("transistor", 1),
+            Item("moonglass", 6),
+            Item("moonglass", 6, .5),
+            Item("goggleshat", 1, 1, true), }
     },
 }
 
