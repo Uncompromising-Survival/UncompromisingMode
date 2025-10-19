@@ -112,12 +112,12 @@ local function WalterFunctions(inst)
         end
     end
 
-    if inst.components.builder then
+    --[[if inst.components.builder then
         local unlockrecipes = {"trap", "birdtrap", "fishingrod", "healingsalve", "bandage", "floral_bandage", "um_rimeweed_icepack", "tillweedsalve", "rope", "papyrus"}
         for _, recipe in pairs(unlockrecipes) do
             inst.components.builder:UnlockRecipe(recipe)
         end
-    end
+    end]]
 
     if inst.components.sanity.custom_rate_fn then
         local _OldRate = inst.components.sanity.custom_rate_fn

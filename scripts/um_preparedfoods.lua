@@ -68,7 +68,7 @@ local function Ghost(eater)
     end
     eater.unghosttask = eater:DoTaskInTime(60, UnGhost)
 end
-
+local kebabpriority = TUNING.DSTU.BONESTEW ~= "bone_appetit" and -99 or 29
 local um_preparedfoods =
 {
     beefalowings =
@@ -737,7 +737,7 @@ local um_preparedfoods =
         hunger = 87.5,
         health = 8,
         sanity = 20,
-        priority = 29,
+        priority = kebabpriority,
         weight = 1,
         cooktime = 1,
         foodtype = FOODTYPE.MEAT,
@@ -746,6 +746,25 @@ local um_preparedfoods =
         card_def = { ingredients = { { "meat", 3 } } },
     },
 }
+--[[
+local um_kebab =
+    {
+        test = function(cooker, names, tags) return (tags.meat and tags.meat > 2.5) and not (tags.monster and tags.monster > 2.5) and not names.boneshard end,
+        hunger = 87.5,
+        health = 8,
+        sanity = 20,
+        priority = 29,
+        weight = 1,
+        cooktime = 1,
+        foodtype = FOODTYPE.MEAT,
+        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "meat", 3 } } },
+    }
+if TUNING.DSTU.BONESTEW == "bone_appetit" then
+    table.insert(um_preparedfoods, um_kebab)
+end
+]]
 
 for k, v in pairs(um_preparedfoods) do
     v.name = k

@@ -698,9 +698,11 @@ local function master_postinit(inst)
         inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES})
         inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
     end
-
-    inst.components.foodaffinity:AddPrefabAffinity("um_kebab", 20)
-
+    if TUNING.DSTU.BONESTEW == "bone_appetit" then
+        inst.components.foodaffinity:AddPrefabAffinity("um_kebab", 20)
+    else
+        inst.components.foodaffinity:AddPrefabAffinity("bonestew", 20)
+    end
     -- Stats
     inst.components.health:SetMaxHealth(TUNING.WATHOM_HEALTH)
     inst.components.hunger:SetMax(TUNING.WATHOM_HUNGER)

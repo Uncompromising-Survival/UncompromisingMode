@@ -150,6 +150,7 @@ TUNING.DSTU = {
     PIEROGI = GetModConfigData("perogi"),
     FARMFOODREDUX = GetModConfigData("farmfoodredux"),
     ICECREAMBUFF = GetModConfigData("icecream_buff"),
+    BONESTEW = GetModConfigData("bonestew_nerf"),
     ----------------------------------------------------------------------------
     -- Mob changes
     ----------------------------------------------------------------------------

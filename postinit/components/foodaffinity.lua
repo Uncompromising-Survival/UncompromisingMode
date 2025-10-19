@@ -160,9 +160,15 @@ AddPrefabPostInit("wanda", function(inst)
 end)
 
 AddPrefabPostInit("wathom", function(inst)
-    inst.components.foodaffinity.favorite_foods = {
-		["um_kebab"] = 15,
-    }
+    if TUNING.DSTU.BONESTEW == "bone_appetit" then
+        inst.components.foodaffinity.favorite_foods = {
+		    ["um_kebab"] = 15,
+        }
+    else
+        inst.components.foodaffinity.favorite_foods = {
+		    ["bonestew"] = 15,
+        }
+    end
 end)
 
 AddPrefabPostInit("winky", function(inst)
