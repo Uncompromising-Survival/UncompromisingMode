@@ -152,7 +152,7 @@ local function UpdateBloomStageUM(inst, stage) --Checks the bloom stage in a fri
     --The setters will all check for dirty values, since refreshing bloom
     --stage can potentially get triggered quite often with state changes.
     inst:DoTaskInTime(0, function(inst) --Checking for blooming is hard, so we'll just check for pollentask instead XD
-        if inst.pollentask then
+        if inst.pollentask --[[and inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_bugs")]] then
             inst.traptask = inst:DoPeriodicTask(.5, TrapsAOE)
         elseif inst.traptask then
             inst.traptask:Cancel()
@@ -174,12 +174,12 @@ if TUNING.DSTU.WORMWOOD_CONFIG_TRAPS then
         if not TheWorld.ismastersim then
             return
         end
-        local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
+        --[[local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
         local function NewUpdateBloomStage(inst, stage)
             _UpdateBloomStage(inst, stage)
             UpdateBloomStageUM(inst, stage)
         end
-        inst.components.bloomness.onlevelchangedfn = NewUpdateBloomStage
+        inst.components.bloomness.onlevelchangedfn = NewUpdateBloomStage]]
     end)
 end
 
