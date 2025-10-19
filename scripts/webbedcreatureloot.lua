@@ -534,15 +534,16 @@ local default = {
             Item("redgem"),
         }
     },
-    SPAT = {
+    ROOK = {
         size = COCOON_SIZE.LARGE,
         name = "Hardened",
         loot = {
-            Item("meat"),
-            Item("meat", 1, .5),
-            Item("steelwool", 2),
-            Item("steelwool", 1, .5),
-            Item("phlegm", 2),
+            Item("gears", 2),
+            Item("gears", 1, .5),
+            Item("transistor", 2),
+            Item("trinket_6", 2),
+            Item("trinket_6", 1, .5),
+            Item("trinket_1", 1),
         }
     },
     KOALEFANT_SUMMER = {
