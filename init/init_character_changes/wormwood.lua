@@ -231,6 +231,21 @@ if env.GetModConfigData("wormwood_photosynthesis") then
             end
         end
 
+        local function OnHealthDeltaCurse (inst)
+            local debuffable = inst.components.debuffable
+            if inst:HasTag("vetcurse_wormwood") and debuffable then
+                local healingitems = {
+                    "healingsalve",
+                    "bandage",
+                }
+                for i, v in pairs(healingitems) do
+                    if debuffable:HasDebuff("healthregenbuff_vetcurse_"..v) then
+                        debuffable:RemoveDebuff("healthregenbuff_vetcurse_"..v)
+                    end
+                end
+            end
+        end
+
         local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
 
         inst.components.bloomness.onlevelchangedfn = function(inst, stage) --in case you enter the 3rd stage with enough hp required or you go back to 2nd
