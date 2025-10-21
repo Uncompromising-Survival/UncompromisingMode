@@ -36,7 +36,7 @@ env.AddPrefabPostInit("walter", function(inst)
 		return
 	end
 	inst:ListenForEvent("healthdelta", VetCurseMaxSanityLoss)
-    --inst:RemoveEventCallback("healthdelta",_OnHealthDelta)
+    --inst:ListenForEvent("attacked", VetCurseMaxSanityLoss)
     --UpvalueHacker.SetUpvalue(Prefabs.walter.master_postinit, OnHealthDelta, "OnHealthDelta")
 	inst:ListenForEvent("timerdone", OnPenaltyTimerDone)
 end)

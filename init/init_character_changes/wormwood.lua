@@ -231,9 +231,9 @@ if env.GetModConfigData("wormwood_photosynthesis") then
             end
         end
 
-        local function OnHealthDeltaCurse(data)
+        local function VetCurseCancelHealing(data)
             local debuffable = inst.components.debuffable
-            if inst:HasTag("vetcurse_wormwood") and debuffable and data.amount < 0 then
+            if inst:HasTag("vetcurse_wormwood") and debuffable then
                 local debuffs = debuffable.debuffs
                 for i, v in pairs(debuffs) do
                     if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
@@ -253,12 +253,12 @@ if env.GetModConfigData("wormwood_photosynthesis") then
 
         inst.UpdateBloomStage = inst.components.bloomness.onlevelchangedfn --not sure if this is needed but Wormwood also uses UpdateBloomStage for this too so might as well update this
 
-        inst:ListenForEvent("healthdelta", function(inst, data)
+        inst:ListenForEvent("healthdelta", function(inst)
             skilltreemovespeed(inst)
-            OnHealthDeltaCurse(data)
         end)
-		
-		
+
+		inst:ListenForEvent("attacked", VetCurseCancelHealing)
+        inst:ListenForEvent("firedamage", VetCurseCancelHealing)
 
 		local function OnFertilizedWithCompost(inst, value)
 			if value > 0 and inst.components.health and not inst.components.health:IsDead() then

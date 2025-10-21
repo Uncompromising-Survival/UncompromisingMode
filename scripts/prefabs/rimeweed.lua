@@ -968,8 +968,7 @@ end
 
 local function OnUseBandage(inst, target)
     if target and target.components.temperature then
-        local freeze = target:HasTag("vetcurse_wormwood") and 0 or 1
-        target.components.temperature:DoDelta(-target.components.temperature.current-freeze)
+        target.components.temperature:DoDelta(-target.components.temperature.current-1)
     end
 end
 
