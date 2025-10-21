@@ -566,40 +566,41 @@ local function SpikeWaves(inst, target, attacker, angle)
     end
 end
 
+local function WathomBSStaffStuff(inst)
+    local weapon = inst.components.weapon
+    local equippable = inst.components.equippable
+    local _OnEquip = equippable and equippable.onequipfn
+    local _OnAttack = weapon and weapon.onattack
+    local function OnEquip(inst, owner, ...)
+        local ret = _OnEquip(inst, owner, ...)
+        local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
+        if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
+            inst.components.weapon:SetProjectile(projectile)
+        end
+        return ret
+    end
+    if equippable then equippable:SetOnEquip(OnEquip) end
+    local function OnAttack(inst, attacker, target, skipsanity, ...)
+        local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
+        if attacker:HasTag("wathom") then
+            for angle = -20, 20, 4 do
+                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
+                if target and target.components.combat then 
+                    target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
+                end
+            end
+            inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
+        end
+        return ret
+    end
+    if weapon then weapon:SetOnAttack(OnAttack) end
+end
+
 env.AddPrefabPostInit("staff_lunarplant", function(inst)
     if not TheWorld.ismastersim then return end
 
-    local equippable = inst.components.equippable
-    local weapon = inst.components.weapon
     local forgerepairable = inst.components.forgerepairable
 
-    local _OnEquip = equippable and equippable.onequipfn
-    local _OnAttack = weapon and weapon.onattack
-    local function WathomBSStaffStuff(inst)
-        local function OnEquip(inst, owner, ...)
-            local ret = _OnEquip(inst, owner, ...)
-            local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
-            if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
-                inst.components.weapon:SetProjectile(projectile)
-            end
-            return ret
-        end
-        if inst.components.equippable then inst.components.equippable:SetOnEquip(OnEquip) end
-        local function OnAttack(inst, attacker, target, skipsanity, ...)
-            local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
-            if attacker:HasTag("wathom") then
-                for angle = -20, 20, 4 do
-                    SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                    if target and target.components.combat then 
-                        target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
-                    end
-                end
-                inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
-            end
-            return ret
-        end
-        if inst.components.weapon then inst.components.weapon:SetOnAttack(OnAttack) end
-    end
     WathomBSStaffStuff(inst)
 
     if forgerepairable then
