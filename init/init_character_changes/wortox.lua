@@ -1227,7 +1227,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
     
-    local function GenericSteal(inst,target)
+    local function GenericSteal(inst, target)
         for i = 1, 100 do --Just do it a bunch, no way to steal "all" the inventory from thief component
             inst.components.thief:StealItem(target)
         end
@@ -1258,17 +1258,19 @@ if TUNING.DSTU.WORTOXCHANGES then
 
     local function WortoxLunarStuff(inst)
 		local weapon = inst.components.weapon
-        local _OnAttack = weapon and weapon.onattack
-        local function OnAttack(inst, attacker, target, ...)
-            local ret = _OnAttack(inst, attacker, target, ...)
-            if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
-                if attacker.finishportalhoptask and attacker:TryToPortalHop(1, false) then
-                    DoLunarAttack(inst, attacker, target)
+        if weapon then
+            local _OnAttack = weapon.onattack
+            local function OnAttack(inst, attacker, target, ...)
+                local ret = _OnAttack(inst, attacker, target, ...)
+                if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
+                    if attacker.finishportalhoptask and attacker:TryToPortalHop(1, false) then
+                        DoLunarAttack(inst, attacker, target)
+                    end
                 end
+                return ret
             end
-            return ret
+            weapon:SetOnAttack(OnAttack)
         end
-        if weapon then weapon:SetOnAttack(OnAttack) end
     end
 
     local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
@@ -1279,6 +1281,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             end
 
             WortoxLunarStuff(inst)
+
             local forgerepairable = inst.components.forgerepairable
             if forgerepairable then
                 local _OnRepaired = forgerepairable.onrepaired
