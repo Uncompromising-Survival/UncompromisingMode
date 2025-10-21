@@ -1,12 +1,223 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.3) ~  Much Love, Ferib 
+local Screen = require "widgets/screen"
+local Button = require "widgets/button"
+local AnimButton = require "widgets/animbutton"
+local Menu = require "widgets/menu"
+local Text = require "widgets/text"
+local Image = require "widgets/image"
+local ImageButton = require "widgets/imagebutton"
+local UIAnim = require "widgets/uianim"
+local Widget = require "widgets/widget"
+local TEMPLATES = require "widgets/templates"
 
-]]--
+local function acceptance()
+	TheFrontEnd:PopScreen()
+end
+			
+local WixiePiano = Class(Screen, function(self, title, text, buttons, scale_bg, spacing_override, style)
+	Screen._ctor(self, "WixiePiano")
+	
+    self.proot = self:AddChild(Widget("ROOT"))
+    self.proot:SetVAnchor(ANCHOR_MIDDLE)
+    self.proot:SetHAnchor(ANCHOR_MIDDLE)
+    self.proot:SetPosition(0,300,0)
+	
+    local buttons = {{text = "Hm...", cb = acceptance}}
+	
+	self.code = 0
+	self.code2 = 0
+	self.code3 = 0
+	
+    self.menu = self.proot:AddChild(Menu(buttons, 225, true))
+    self.menu:SetPosition(-25, -200, 0) 
+	
+    self.F = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.F.note = "F"
+    self.F:SetOnClick(function()
+		--print(self.code2, "F")
+		self.code = 0
+		self.code2 = 0
+		self.code3 = 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F")
+	end)
+    self.F:SetPosition(-200,0,0)
+    self.F.scale_on_focus = false
+	
+    self.G = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.G.note = "G"
+    self.G:SetOnClick(function()
+		--print(self.code2, "G")
+		self.code = 0
+		self.code2 = self.code2 == 0 and 1 or 0
+		self.code3 = 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/G")
+	end)
+    self.G:SetPosition(-150,0,0)
+    self.G.scale_on_focus = false
+	
+    self.A = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.A.note = "A"
+    self.A:SetOnClick(function()
+		--print(self.code2, "A")
+		self.code = self.code == 1 and 2 or 0
+		self.code2 = 0
+		if self.code3 == 7 then
+			SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete2"), nil)
+		end
+		self.code3 = self.code3 == 1 and 2 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/A")
+	end)
+    self.A:SetPosition(-100,0,0)
+    self.A.scale_on_focus = false
+	
+    self.B = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.B.note = "B"
+    self.B:SetOnClick(function()
+		--print(self.code2, "B")
+		self.code = 0
+		self.code3 = 0
+		if self.code2 == 7 then
+			SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete3"), nil)
+		end
+		self.code2 = self.code2 == 1 and 2 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/B")
+	end)
+    self.B:SetPosition(-50,0,0)
+    self.B.scale_on_focus = false
+	
+    self.C = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.C.note = "C"
+    self.C:SetOnClick(function()
+		--print(self.code2)print("C")
+		self.code = 0
+		self.code2 = 0
+		self.code3 = 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/C")
+	end)
+    self.C:SetPosition(0,0,0)
+    self.C.scale_on_focus = false
+	
+    self.D = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.D.note = "D"
+    self.D:SetOnClick(function()
+		--print(self.code2, "D")
+		self.code = 0
+		self.code2 = self.code2 == 2 and 3 or self.code2 == 4 and 5 or self.code2 == 6 and 7 or 0
+		self.code3 = self.code3 == 2 and 3 or self.code3 == 6 and 7 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/D")
+	end)
+    self.D:SetPosition(50,0,0)
+    self.D.scale_on_focus = false
+	
+    self.E = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.E.note = "E"
+    self.E:SetOnClick(function()
+		--print(self.code2, "E")
+		self.code3 = 0
+		self.code = self.code == 6 and 7 or 0
+		self.code2 = self.code2 == 3 and 4 or self.code2 == 5 and 6 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/E")
+	end)
+    self.E:SetPosition(100,0,0)
+    self.E.scale_on_focus = false
+	
+    self.F2 = self.proot:AddChild(ImageButton("images/wixiepiano_whitekey.xml", "wixiepiano_whitekey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.F2.note = "F2"
+    self.F2:SetOnClick(function()
+		--print(self.code2, "F2")
+		self.code2 = 0
+		self.code = self.code == 5 and 6 or 0
+		self.code3 = self.code3 == 4 and 5 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F2")
+	end)
+    self.F2:SetPosition(150,0,0)
+    self.F2.scale_on_focus = false
+	
+    self.FSHARP = self.proot:AddChild(ImageButton("images/wixiepiano_blackkey.xml", "wixiepiano_blackkey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.FSHARP.note = "F#"
+    self.FSHARP:SetOnClick(function()
+		--print(self.code2, "F#")
+		self.code = 0
+		self.code2 = 0
+		self.code3 = 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F#")
+	end)
+    self.FSHARP:SetPosition(-175,42,0)
+    self.FSHARP.scale_on_focus = false
+	
+    self.GSHARP = self.proot:AddChild(ImageButton("images/wixiepiano_blackkey.xml", "wixiepiano_blackkey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.GSHARP.note = "G#"
+    self.GSHARP:SetOnClick(function()
+		--print(self.code2, "G#")
+		self.code2 = 0
+		self.code3 = 0
+		self.code = self.code == 2 and 3 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/G#")
+	end)
+    self.GSHARP:SetPosition(-125,42,0)
+    self.GSHARP.scale_on_focus = false
+	
+    self.ASHARP = self.proot:AddChild(ImageButton("images/wixiepiano_blackkey.xml", "wixiepiano_blackkey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.ASHARP.note = "A#"
+    self.ASHARP:SetOnClick(function()
+		--print(self.code2, "A#")
+		self.code2 = 0
+		self.code = self.code == 0 and 1 or self.code == 3 and 4 or 0
+		self.code3 = self.code3 == 0 and 1 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/A#")
+	end)
+    self.ASHARP:SetPosition(-75,42,0)
+    self.ASHARP.scale_on_focus = false
+	
+    self.CSHARP = self.proot:AddChild(ImageButton("images/wixiepiano_blackkey.xml", "wixiepiano_blackkey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.CSHARP.note = "C#"
+    self.CSHARP:SetOnClick(function()
+		--print(self.code2, "C#")
+		self.code2 = 0
+		self.code3 = 0
+		if self.code == 7 then
+			SendModRPCToServer(GetModRPC("UncompromisingSurvival", "PianoPuzzleComplete1"), nil)
+		end
+		self.code = self.code == 4 and 5 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/C#")
+	end)
+    self.CSHARP:SetPosition(25,42,0)
+    self.CSHARP.scale_on_focus = false
 
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3= bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v25,v26) local v27={};for v89=1, #v25 do v6(v27,v0(v4(v1(v2(v25,v89,v89 + 1 )),v1(v2(v26,1 + (v89% #v26) ,1 + (v89% #v26) + 1 )))%256 ));end return v5(v27);end local v8=require("widgets/screen");local v9=require("widgets/button");local v10=require("widgets/animbutton");local v11=require("widgets/menu");local v12=require("widgets/text");local v13=require("widgets/image");local v14=require("widgets/imagebutton");local v15=require("widgets/uianim");local v16=require("widgets/widget");local v17=require("widgets/templates");local function v18(v28) end local function v19() TheFrontEnd:PopScreen();end local v20=Class(v8,function(v29,v30,v31,v32,v33,v34,v35) v8._ctor(v29,v7("\230\202\195\44\227\139\206\31\223\204","\126\177\163\187\69\134\219\167"));v29.proot=v29:AddChild(v16(v7("\17\226\5\241","\156\67\173\74\165")));v29.proot:SetVAnchor(ANCHOR_MIDDLE);v29.proot:SetHAnchor(ANCHOR_MIDDLE);v29.proot:SetPosition(1767 -(308 + 1459) ,300,0 + 0 );local v32={{[v7("\32\178\81\2","\38\84\215\41\118\220\70")]=v7("\120\27\108\92\176","\158\48\118\66\114"),[v7("\168\38","\155\203\68\112\86\19\197")]=v19}};v29.code=236 -(141 + 95) ;v29.code2=0 -0 ;v29.code3=0;v29.menu=v29.proot:AddChild(v11(v32,825 -600 ,true));v29.menu:SetPosition( -(892 -(550 + 317)), -(480 -280),0 -0 );v29.F=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\81\212\46\245\69\104\236\249\72\210\9\235\72\113\241\253\77\216\47\178\84\125\253","\152\38\189\86\156\32\24\133"),nil,nil,nil,nil,{1,2 -1 },{1665 -(970 + 695) ,1990 -(582 + 1408) }));v29.F.note="F";v29.F:SetOnClick(function() local v90=0 -0 ;local v91;while true do if (v90==0) then v91=163 -(92 + 71) ;while true do if (v91==(2 -0)) then v29.code3=0 -0 ;TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F");break;end if (v91==(1825 -(1195 + 629))) then v29.code=0;v29.code2=0 -0 ;v91=243 -(187 + 54) ;end if (v91==(0 + 0)) then local v149=780 -(162 + 618) ;while true do if (v149==(0 + 0)) then print(v29.code2);print("F");v149=127 -(55 + 71) ;end if (v149==(1 + 0)) then v91=1 -0 ;break;end end end end break;end end end);v29.F:SetPosition( -(336 -136),0 + 0 ,1636 -(1373 + 263) );v29.F.scale_on_focus=false;v29.G=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\235\94\191\79\249\71\174\71\242\88\152\81\244\94\179\67\247\82\190\8\232\82\191","\38\156\55\199"),nil,nil,nil,nil,{1001 -(451 + 549) ,1 -0 },{0 -0 ,806 -(118 + 688) }));v29.G.note="G";v29.G:SetOnClick(function() local v92=48 -(25 + 23) ;local v93;while true do if ((1384 -(746 + 638))==v92) then v93=0 + 0 ;while true do if (v93==(2 -0)) then v29.code3=341 -(218 + 123) ;TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/G");break;end if (v93==(0 -0)) then print(v29.code2);print("G");v93=1582 -(1535 + 46) ;end if ((1 + 0)==v93) then v29.code=285 -(175 + 110) ;if (v29.code2==0) then v29.code2=2 -1 ;else v29.code2=0 + 0 ;end v93=562 -(306 + 254) ;end end break;end end end);v29.G:SetPosition( -150,0,0 + 0 );v29.G.scale_on_focus=false;v29.A=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\191\116\100\33\22\100\243\66\166\114\67\63\27\125\238\70\163\120\101\102\7\113\226","\35\200\29\28\72\115\20\154"),nil,nil,nil,nil,{1 -0 ,1 + 0 },{603 -(268 + 335) ,572 -(426 + 146) }));v29.A.note="A";v29.A:SetOnClick(function() print(v29.code2);print("A");if (v29.code==(1 + 0)) then v29.code=1458 -(282 + 1174) ;else v29.code=811 -(569 + 242) ;end v29.code2=0 -0 ;if (v29.code3==(2 -1)) then v29.code3=1 + 1 ;elseif (v29.code3==(1 + 6)) then local v128=1024 -(706 + 318) ;while true do if (v128==(1251 -(721 + 530))) then SendModRPCToServer(GetModRPC(v7("\44\177\210\208\128\60\38\22\178\216\204\132\34\51\42\170\195\201\132\58\53\21","\84\121\223\177\191\237\76"),v7("\139\95\200\174\53\96\37\219\161\90\204\131\53\93\32\205\190\66\204\242","\161\219\54\169\192\90\48\80")),nil);v29.code3=1271 -(945 + 326) ;break;end end else v29.code3=405 -(255 + 150) ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/A");end);v29.A:SetPosition( -(249 -149),0 + 0 ,700 -(271 + 429) );v29.A.scale_on_focus=false;v29.B=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\94\75\24\44\76\82\9\36\71\77\63\50\65\75\20\32\66\71\25\107\93\71\24","\69\41\34\96"),nil,nil,nil,nil,{1 + 0 ,407 -(183 + 223) },{0 + 0 ,0}));v29.B.note="B";v29.B:SetOnClick(function() local v95=337 -(10 + 327) ;local v96;while true do if (v95==(1086 -(461 + 625))) then v96=338 -(118 + 220) ;while true do if ((1288 -(993 + 295))==v96) then local v152=0 + 0 ;while true do if (v152==(449 -(108 + 341))) then print(v29.code2);print("B");v152=1 + 0 ;end if ((1172 -(418 + 753))==v152) then v96=1 + 0 ;break;end end end if (v96==(1 + 0)) then v29.code=0 + 0 ;v29.code3=0 + 0 ;v96=531 -(406 + 123) ;end if (v96==(1771 -(1749 + 20))) then if (v29.code2==(1 + 0)) then v29.code2=1 + 1 ;elseif (v29.code2==(1329 -(1249 + 73))) then local v172=0 + 0 ;local v173;while true do if (v172==(1145 -(466 + 679))) then v173=0 -0 ;while true do if (v173==0) then SendModRPCToServer(GetModRPC(v7("\137\205\212\5\15\59\174\204\218\3\17\34\178\196\228\31\16\61\181\213\214\6","\75\220\163\183\106\98"),v7("\50\179\138\57\214\50\175\145\45\213\7\153\132\58\201\14\191\159\50\138","\185\98\218\235\87")),nil);v29.code2=0 -0 ;break;end end break;end end else v29.code2=1900 -(106 + 1794) ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/B");break;end end break;end end end);v29.B:SetPosition( -(16 + 34),0 + 0 ,0 -0 );v29.B.scale_on_focus=false;v29.C=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\220\53\63\239\219\186\194\61\41\233\225\189\195\53\51\227\213\175\210\114\51\227\198","\202\171\92\71\134\190"),nil,nil,nil,nil,{2 -1 ,115 -(4 + 110) },{584 -(57 + 527) ,0 + 0 }));v29.C.note="C";v29.C:SetOnClick(function() local v97=0;while true do if (v97==(1428 -(41 + 1386))) then v29.code=103 -(17 + 86) ;v29.code2=0 + 0 ;v97=2 + 0 ;end if (v97==(3 -1)) then v29.code3=0 -0 ;TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/C");break;end if (v97==(166 -(122 + 44))) then print(v29.code2);print("C");v97=1;end end end);v29.C:SetPosition(0 -0 ,1836 -(1045 + 791) ,0 -0 );v29.C.scale_on_focus=false;v29.D=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\62\200\52\129\44\209\37\137\39\206\19\159\33\200\56\141\34\196\53\198\61\196\52","\232\73\161\76"),nil,nil,nil,nil,{1 + 0 ,66 -(30 + 35) },{1257 -(1043 + 214) ,0 + 0 }));v29.D.note="D";v29.D:SetOnClick(function() print(v29.code2);print("D");v29.code=0 + 0 ;if (v29.code2==(7 -5)) then v29.code2=1215 -(323 + 889) ;elseif (v29.code2==(10 -6)) then v29.code2=585 -(361 + 219) ;elseif (v29.code2==(326 -(53 + 267))) then v29.code2=2 + 5 ;else v29.code2=0;end if (v29.code3==(415 -(15 + 398))) then v29.code3=985 -(18 + 964) ;elseif (v29.code3==6) then v29.code3=7;else v29.code3=0 -0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/D");end);v29.D:SetPosition(29 + 21 ,0 + 0 ,0 + 0 );v29.D.scale_on_focus=false;v29.E=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\172\208\90\84\27\171\208\67\83\17\132\206\74\84\10\190\210\71\68\80\175\220\90","\126\219\185\34\61"),nil,nil,nil,nil,{1 + 0 ,1},{0,0 + 0 }));v29.E.note="E";v29.E:SetOnClick(function() print(v29.code2);print("E");v29.code3=738 -(542 + 196) ;if (v29.code==(23 -17)) then v29.code=1733 -(1668 + 58) ;else v29.code=0;end if (v29.code2==(6 -3)) then v29.code2=4;elseif (v29.code2==(2 + 3)) then v29.code2=4 + 2 ;else v29.code2=0 + 0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/E");end);v29.E:SetPosition(263 -163 ,0 -0 ,0);v29.E.scale_on_focus=false;v29.F2=v29.proot:AddChild(v14("images/wixiepiano_whitekey.xml",v7("\27\199\70\123\123\103\250\230\2\193\97\101\118\126\231\226\7\203\71\60\106\114\235","\135\108\174\62\18\30\23\147"),nil,nil,nil,nil,{406 -(118 + 287) ,1122 -(118 + 1003) },{0 -0 ,377 -(142 + 235) }));v29.F2.note=v7("\144\187","\167\214\137\74\171\120\206\83");v29.F2:SetOnClick(function() local v100=815 -(98 + 717) ;while true do if (v100==(4 -3)) then v29.code2=0 + 0 ;if (v29.code==(982 -(553 + 424))) then v29.code=10 -4 ;else v29.code=0 + 0 ;end v100=2 + 0 ;end if (v100==(0 + 0)) then print(v29.code2);print(v7("\173\162","\199\235\144\82\61\152"));v100=1 + 0 ;end if (v100==(5 -3)) then if (v29.code3==(2 + 2)) then v29.code3=16 -11 ;else v29.code3=0 + 0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F2");break;end end end);v29.F2:SetPosition(325 -175 ,0 + 0 ,0 -0 );v29.F2.scale_on_focus=false;v29.FSHARP=v29.proot:AddChild(v14("images/wixiepiano_blackkey.xml",v7("\16\31\161\34\2\6\176\42\9\25\134\41\11\23\186\32\12\19\160\101\19\19\161","\75\103\118\217"),nil,nil,nil,nil,{2 -1 ,4 -3 },{0 + 0 ,0 + 0 }));v29.FSHARP.note=v7("\225\23","\126\167\52\16\116\217");v29.FSHARP:SetOnClick(function() local v101=1329 -(797 + 532) ;while true do if (v101==(1 + 0)) then v29.code=0 + 0 ;v29.code2=0 -0 ;v101=1204 -(373 + 829) ;end if (v101==(733 -(476 + 255))) then v29.code3=1130 -(369 + 761) ;TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/F#");break;end if (v101==(1276 -(316 + 960))) then print(v29.code2);print(v7("\238\109","\156\168\78\64\224\212\121"));v101=1 + 0 ;end end end);v29.FSHARP:SetPosition( -(317 -142),79 -37 ,238 -(64 + 174) );v29.FSHARP.scale_on_focus=false;v29.GSHARP=v29.proot:AddChild(v14("images/wixiepiano_blackkey.xml",v7("\16\231\189\199\2\254\172\207\9\225\154\204\11\239\166\197\12\235\188\128\19\235\189","\174\103\142\197"),nil,nil,nil,nil,{1 -0 ,217 -(42 + 174) },{0 + 0 ,551 -(83 + 468) }));v29.GSHARP.note=v7("\113\107","\152\54\72\63\88\69\62");v29.GSHARP:SetOnClick(function() local v102=1504 -(363 + 1141) ;local v103;while true do if (v102==(0 -0)) then v103=1580 -(1183 + 397) ;while true do if (v103==(0 -0)) then print(v29.code2);print(v7("\243\135","\60\180\164\142"));v103=1 + 0 ;end if (v103==(2 + 0)) then if (v29.code==(1977 -(1913 + 62))) then v29.code=2 + 1 ;else v29.code=0 -0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/G#");break;end if (v103==(1934 -(565 + 1368))) then local v157=0 -0 ;while true do if ((1 + 0)==v157) then v103=3 -1 ;break;end if (v157==(1661 -(1477 + 184))) then v29.code2=0 -0 ;v29.code3=0 + 0 ;v157=1 + 0 ;end end end end break;end end end);v29.GSHARP:SetPosition( -(343 -218),898 -(564 + 292) ,1034 -(125 + 909) );v29.GSHARP.scale_on_focus=false;v29.ASHARP=v29.proot:AddChild(v14("images/wixiepiano_blackkey.xml",v7("\79\87\29\32\34\253\27\89\80\10\22\37\225\19\91\85\14\44\62\163\6\93\70","\114\56\62\101\73\71\141"),nil,nil,nil,nil,{1 -0 ,2 -1 },{0 + 0 ,512 -(409 + 103) }));v29.ASHARP.note=v7("\153\170","\164\216\137\187");v29.ASHARP:SetOnClick(function() local v104=0 + 0 ;while true do if (v104==(478 -(41 + 435))) then if (v29.code3==(1001 -(938 + 63))) then v29.code3=1;else v29.code3=0 + 0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/A#");break;end if (0==v104) then local v125=726 -(228 + 498) ;while true do if (v125==(1125 -(936 + 189))) then print(v29.code2);print(v7("\243\165","\107\178\134\81\210\198\158"));v125=1;end if (v125==(1 + 0)) then v104=1 + 0 ;break;end end end if ((1 + 0)==v104) then v29.code2=1613 -(1565 + 48) ;if (v29.code==(0 + 0)) then v29.code=1139 -(782 + 356) ;elseif (v29.code==(270 -(176 + 91))) then v29.code=1273 -(231 + 1038) ;else v29.code=0 -0 ;end v104=2 + 0 ;end end end);v29.ASHARP:SetPosition( -(110 -35),1204 -(171 + 991) ,0 -0 );v29.ASHARP.scale_on_focus=false;v29.CSHARP=v29.proot:AddChild(v14("images/wixiepiano_blackkey.xml",v7("\47\7\154\207\175\40\7\131\200\165\7\12\142\199\169\51\5\135\223\228\44\11\154","\202\88\110\226\166"),nil,nil,nil,nil,{1093 -(975 + 117) ,1876 -(157 + 1718) },{0 -0 ,0}));v29.CSHARP.note=v7("\224\76","\170\163\111\226\151");v29.CSHARP:SetOnClick(function() print(v29.code2);print(v7("\50\115","\73\113\80\210\88\46\87"));v29.code2=0 -0 ;v29.code3=0;if (v29.code==(1022 -(697 + 321))) then v29.code=13 -8 ;elseif (v29.code==(14 -7)) then SendModRPCToServer(GetModRPC(v7("\180\34\206\29\234\145\62\194\31\238\146\37\195\21\212\148\62\219\27\241\128\32","\135\225\76\173\114"),v7("\42\228\185\190\163\141\178\0\247\180\181\143\178\170\10\225\189\164\169\236","\199\122\141\216\208\204\221")),nil);v29.code=0;else v29.code=0 -0 ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/C#");end);v29.CSHARP:SetPosition(57 -32 ,17 + 25 ,0 -0 );v29.CSHARP.scale_on_focus=false;v29.DSHARP=v29.proot:AddChild(v14("images/wixiepiano_blackkey.xml",v7("\186\212\8\249\125\230\164\220\30\255\71\244\161\220\19\251\115\243\180\147\4\245\96","\150\205\189\112\144\24"),nil,nil,nil,nil,{2 -1 ,1},{1189 -(449 + 740) ,947 -(245 + 702) }));v29.DSHARP.note=v7("\1\199","\112\69\228\223\44\100\232\113");v29.DSHARP:SetOnClick(function() local v107=0;while true do if (v107==(773 -(326 + 445))) then if (v29.code3==(9 -6)) then v29.code3=2 + 2 ;elseif (v29.code3==5) then v29.code3=1904 -(260 + 1638) ;else v29.code3=440 -(382 + 58) ;end TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/D#");break;end if (v107==(3 -2)) then local v127=0;while true do if ((0 + 0)==v127) then v29.code=0 -0 ;v29.code2=0 -0 ;v127=1206 -(902 + 303) ;end if (v127==(1 -0)) then v107=2;break;end end end if (v107==(0 -0)) then print(v29.code2);print(v7("\240\92","\230\180\127\103\179\214\28"));v107=2 -1 ;end end end);v29.DSHARP:SetPosition(180 -105 ,4 + 38 ,0 -0 );v29.DSHARP.scale_on_focus=false;end);v20.SetTitleTextSize=function(v80,v81) v80.title:SetSize(v81);end;v20.SetButtonTextSize=function(v82,v83) v82.menu:SetTextSize(v83);end;v20.OnControl=function(v84,v85,v86) local v87=0 -0 ;while true do local v108=1690 -(1121 + 569) ;while true do if ((214 -(22 + 192))==v108) then if (v87==(1813 -(1293 + 519))) then return false;end if ((0 -0)==v87) then local v145=683 -(483 + 200) ;while true do if (v145==(1464 -(1404 + 59))) then v87=1;break;end if (v145==(0 -0)) then if v20._base.OnControl(v84,v85,v86) then return true;end if ( not v86 and ((v85==CONTROL_MENU_BACK) or (v85==CONTROL_CANCEL))) then local v175=0 -0 ;while true do if (0==v175) then local v176=0 -0 ;while true do if (v176==(766 -(468 + 297))) then v175=563 -(334 + 228) ;break;end if (v176==(0 + 0)) then TheFrontEnd:GetSound():PlaySound("dontstarve/HUD/click_move");TheFrontEnd:PopScreen();v176=3 -2 ;end end end if ((1 + 0)==v175) then return true;end end end v145=2 -1 ;end end end break;end end end end;v20.Close=function(v88) TheFrontEnd:PopScreen(v88);end;return v20;
+    self.DSHARP = self.proot:AddChild(ImageButton("images/wixiepiano_blackkey.xml", "wixiepiano_blackkey.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.DSHARP.note = "D#"
+    self.DSHARP:SetOnClick(function()
+		--print(self.code2, "D#")
+		self.code = 0
+		self.code2 = 0
+		self.code3 = self.code3 == 3 and 4 or self.code3 == 5 and 6 or 0
+		TheFocalPoint.SoundEmitter:PlaySound("UCSounds/piano/D#")
+	end)
+    self.DSHARP:SetPosition(75, 42, 0)
+    self.DSHARP.scale_on_focus = false
+end)
+
+function WixiePiano:SetTitleTextSize(size)
+	self.title:SetSize(size)
+end
+
+function WixiePiano:SetButtonTextSize(size)
+	self.menu:SetTextSize(size)
+end
+
+function WixiePiano:OnControl(control, down)
+    if WixiePiano._base.OnControl(self, control, down) then return true end
+
+    if not down and (control == CONTROL_MENU_BACK or control == CONTROL_CANCEL) then
+		TheFrontEnd:GetSound():PlaySound("dontstarve/HUD/click_move")
+        TheFrontEnd:PopScreen()
+        return true
+    end
+
+	return false
+end
+
+function WixiePiano:Close()
+	TheFrontEnd:PopScreen(self)
+end
+
+return WixiePiano

@@ -40,13 +40,13 @@ local dirs = {
 
 local function CheckAngle(inst)
     local owner = inst.components.inventoryitem.owner
-    if owner ~= nil and owner:IsValid() then
+    if owner and owner:IsValid() then
         local heading = owner.Transform:GetRotation()
         local dir, closest_diff = nil, nil
 
         for k, v in pairs(dirs) do
             local diff = math.abs(anglediff(heading, v))
-			
+            
             if not dir or diff < closest_diff then
                 dir, closest_diff = k, diff
             end
@@ -58,7 +58,7 @@ end
 
 local function CheckKeyObjectAngle(inst, target)
     local owner = inst.components.inventoryitem.owner
-    if owner ~= nil and owner:IsValid() and target ~= nil then
+    if owner and owner:IsValid() and target then
         local x, y, z = target.Transform:GetWorldPosition()
         local heading = owner:GetAngleToPoint(x, y, z)
         local dir, closest_diff = nil, nil
@@ -71,18 +71,16 @@ local function CheckKeyObjectAngle(inst, target)
         end
 
         return dir
-    else
-        return nil
     end
+    return nil
 end
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_charles_nightmare",
-                                   "swap_charles_nightmare")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_charles_nightmare", "swap_charles_nightmare")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 
-    if inst._owner ~= nil then
+    if inst._owner then
         inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
     end
     inst._owner = owner
@@ -91,12 +89,12 @@ local function onequip(inst, owner)
 end
 
 local function onunequip(inst, owner)
-    if inst._owner ~= nil then
+    if inst._owner then
         inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
         inst._owner = nil
     end
 
-    if inst.ringalingtask ~= nil then
+    if inst.ringalingtask then
         inst.ringalingtask:Cancel()
         inst.ringalingtask = nil
     end
@@ -135,8 +133,7 @@ local function fn()
         sym_build = "swap_charles_nightmare",
         bank = "nightmare_charles_t_horse"
     }
-    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1,
-                           swap_data)
+    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
 
     inst.entity:SetPristine()
 
@@ -153,8 +150,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname =
-        "images/inventoryimages/charles_t_horse.xml"
 
     inst:AddComponent("equippable")
 
@@ -164,9 +159,9 @@ local function fn()
     MakeHauntableLaunch(inst)
 
     inst._onlocomote = function(owner)
-        if owner.components.locomotor ~= nil and
+        if owner.components.locomotor and
             owner.components.locomotor.wantstomoveforward then
-            if inst.ringalingtask == nil then
+            if not inst.ringalingtask then
                 inst.ringalingtask = inst:DoPeriodicTask(.8, function(inst)
                     local point = CheckAngle(inst)
                     local wardrobe = TheSim:FindFirstEntityWithTag("wixie_wardrobe")
@@ -182,34 +177,24 @@ local function fn()
                     local owner = inst.components.inventoryitem.owner
                     local distsq = 4000
 
-                    if owner ~= nil and owner:IsValid() and wardrobe ~= nil and
-                        wardrobe:IsValid() then
+                    if owner and owner:IsValid() and wardrobe and wardrobe:IsValid() then
                         distsq = owner:GetDistanceSqToInst(wardrobe)
                     end
 
-                    if distsq ~= nil and
-                        (inst.code == 0 and distsq < 80 or inst.code > 0 and
-                            distsq < 4000) then
-
-                        if inst.beequeen ~= nil and point == inst.beequeen and
+                    if distsq and (inst.code == 0 and distsq < 80 or inst.code > 0 and distsq < 4000) then
+                        if inst.beequeen and point == inst.beequeen and
                             inst.code <= 4 then
                             inst.code = inst.code + 1
-                        elseif inst.widowspawner ~= nil and point ==
-                            inst.widowspawner and inst.code == 13 then
+                        elseif inst.widowspawner and point == inst.widowspawner and inst.code == 13 then
                             inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/voice")
                             inst.code = 0
-
                             local papyrus = SpawnPrefab("wixie_piano_card")
-                            papyrus.Transform:SetPosition(
-                                owner.Transform:GetWorldPosition())
+                            papyrus.Transform:SetPosition(owner.Transform:GetWorldPosition())
                             papyrus.name = "Milites et Equi"
                             Launch2(papyrus, owner, 2, 0, 1, .5)
-                        elseif inst.widowspawner ~= nil and point ==
-                            inst.widowspawner and inst.code > 6 and inst.code <=
-                            12 then
+                        elseif inst.widowspawner and point == inst.widowspawner and inst.code > 6 and inst.code <= 12 then
                             inst.code = inst.code + 1
-                        elseif inst.oasis ~= nil and point == inst.oasis and
-                            inst.code > 4 and inst.code <= 6 then
+                        elseif inst.oasis and point == inst.oasis and inst.code > 4 and inst.code <= 6 then
                             inst.code = inst.code + 1
                         else
                             inst.code = 0
@@ -219,34 +204,24 @@ local function fn()
                     end
 
                     local wixie_clock = TheSim:FindFirstEntityWithTag("wixie_clock")
-
-                    if wixie_clock ~= nil and inst.final_code_ready and distsq ~=
-                        nil and
-                        (inst.code2 == 0 and distsq < 80 or inst.code2 > 0 and
-                            distsq < 4000) then
+                    if wixie_clock and inst.final_code_ready and distsq and (inst.code2 == 0 and distsq < 80 or inst.code2 > 0 and distsq < 4000) then
                         if point == "N" and
-                            (inst.code2 == 0 or inst.code2 == 4 or inst.code2 ==
-                                8) then
+                            (inst.code2 == 0 or inst.code2 == 4 or inst.code2 == 8) then
                             inst.code2 = inst.code2 + 1
                         elseif point == "E" and
                             (inst.code2 == 1 or inst.code2 == 7) then
                             inst.code2 = inst.code2 + 1
                         elseif point == "S" and
-                            (inst.code2 == 2 or inst.code2 == 3 or inst.code2 ==
-                                6) then
+                            (inst.code2 == 2 or inst.code2 == 3 or inst.code2 == 6) then
                             inst.code2 = inst.code2 + 1
                         elseif point == "W" and inst.code2 == 5 then
                             inst.code2 = inst.code2 + 1
                         elseif point == "W" and inst.code2 == 9 then
                             wixie_clock.final_code_ready = true
-                            inst.SoundEmitter:PlaySound(
-                                "dontstarve/creatures/knight_nightmare/death")
-                            SpawnPrefab("statue_transition").Transform:SetPosition(
-                                owner:GetPosition():Get())
-                            SpawnPrefab("statue_transition_2").Transform:SetPosition(
-                                owner:GetPosition():Get())
+                            inst.SoundEmitter:PlaySound("dontstarve/creatures/knight_nightmare/death")
+                            SpawnPrefab("statue_transition").Transform:SetPosition(owner:GetPosition():Get())
+                            SpawnPrefab("statue_transition_2").Transform:SetPosition(owner:GetPosition():Get())
                             inst.code2 = 0
-
                             TheNet:SystemMessage("The path is set...")
                         else
                             inst.code2 = 0
@@ -257,19 +232,17 @@ local function fn()
 
                     if distsq < 80 or inst.code > 0 or inst.code2 > 0 then
                         inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell")
-                    elseif distsq >= 4000 then
-                        if wardrobe ~= nil and owner ~= nil then
-                            local tool = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                            owner.components.inventory:Unequip(EQUIPSLOTS.HANDS, true)
-                            owner.components.inventory:DropItem(tool)
+                    elseif distsq >= 4000 and wardrobe and owner then
+                        local tool = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+                        owner.components.inventory:Unequip(EQUIPSLOTS.HANDS, true)
+                        owner.components.inventory:DropItem(tool)
 
-                            Launch2(inst, wardrobe, 2, 0, 1, .5)
-                        end
+                        Launch2(inst, wardrobe, 2, 0, 1, .5)
                     end
                 end)
             end
         else
-            if inst.ringalingtask ~= nil then
+            if inst.ringalingtask then
                 inst.ringalingtask:Cancel()
                 inst.ringalingtask = nil
             end
@@ -285,13 +258,13 @@ local function fuelme(inst)
     if inst.components.fueled:GetPercent() < 1 then
         if inst.pausedfuel then inst.components.fueled:DoDelta(5) end
         if inst.components.fueled:GetPercent() >= 1 then
-            if inst.fuelmetask ~= nil then
+            if inst.fuelmetask then
                 inst.fuelmetask:Cancel()
                 inst.fuelmetask = nil
             end
         end
     else
-        if inst.fuelmetask ~= nil then
+        if inst.fuelmetask then
             inst.fuelmetask:Cancel()
             inst.fuelmetask = nil
         end
@@ -300,7 +273,7 @@ end
 
 local function unpausefueled(inst)
     inst.pausedfuel = true
-    if inst.fuelmetask == nil then
+    if not inst.fuelmetask then
         inst.fuelmetask = inst:DoPeriodicTask(0.5, fuelme)
     end
 end
@@ -316,7 +289,7 @@ local function onequip_real(inst, owner)
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 
-    if inst._owner ~= nil then
+    if inst._owner then
         inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
     end
 
@@ -329,12 +302,12 @@ local function onequip_real(inst, owner)
 end
 
 local function onunequip_real(inst, owner)
-    if inst._owner ~= nil then
+    if inst._owner then
         inst:RemoveEventCallback("locomote", inst._onlocomote, inst._owner)
         inst._owner = nil
     end
 
-    if inst.ringalingtask ~= nil then
+    if inst.ringalingtask then
         inst.ringalingtask:Cancel()
         inst.ringalingtask = nil
     end
@@ -348,7 +321,7 @@ local function ReticuleTargetFn(inst)
 end
 
 local function ReticuleMouseTargetFn(inst, mousepos)
-    if mousepos ~= nil then
+    if mousepos then
         local x, y, z = inst.Transform:GetWorldPosition()
         local dx = mousepos.x - x
         local dz = mousepos.z - z
@@ -363,27 +336,25 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
     local x, y, z = inst.Transform:GetWorldPosition()
     reticule.Transform:SetPosition(x, 0, z)
     local rot = -math.atan2(pos.z - z, pos.x - x) / DEGREES
-    if ease and dt ~= nil then
+    if ease and dt then
         local rot0 = reticule.Transform:GetRotation()
         local drot = rot - rot0
-        rot = Lerp(
-                  (drot > 180 and rot0 + 360) or (drot < -180 and rot0 - 360) or
-                      rot0, rot, dt * smoothing)
+        rot = Lerp((drot > 180 and rot0 + 360) or drot < -180 and rot0 - 360 or rot0, rot, dt * smoothing)
     end
     reticule.Transform:SetRotation(rot)
 end
 
 local function castspell(inst, target, pos)
     for i, v in pairs(inst._owner.components.inventory.itemslots) do
-        if v ~= nil and v:HasTag("charles_t_horse") then
+        if v and v:HasTag("charles_t_horse") then
             v.components.fueled:DoDelta(-20)
 
-            if v.fuelmetask ~= nil then
+            if v.fuelmetask then
                 v.fuelmetask:Cancel()
                 v.fuelmetask = nil
             end
 
-            if v.unpausefuel_task ~= nil then
+            if v.unpausefuel_task then
                 v.unpausefuel_task:Cancel()
                 v.unpausefuel_task = nil
             end
@@ -394,12 +365,12 @@ local function castspell(inst, target, pos)
 
     inst.components.fueled:DoDelta(-20)
 
-    if inst.fuelmetask ~= nil then
+    if inst.fuelmetask then
         inst.fuelmetask:Cancel()
         inst.fuelmetask = nil
     end
 
-    if inst.unpausefuel_task ~= nil then
+    if inst.unpausefuel_task then
         inst.unpausefuel_task:Cancel()
         inst.unpausefuel_task = nil
     end
@@ -433,8 +404,7 @@ local function realfn()
     -- inst.foleysound = "dontstarve/creatures/together/deer/bell"
 
     local swap_data = {sym_build = "swap_charles", bank = "charles_t_horse"}
-    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1,
-                           swap_data)
+    MakeInventoryFloatable(inst, "med", 0.05, {0.85, 0.45, 0.85}, true, 1, swap_data)
 
     inst.spelltype = "CHARLES_CHARGE"
 
@@ -465,8 +435,6 @@ local function realfn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.atlasname =
-        "images/inventoryimages/the_real_charles_t_horse.xml"
 
     inst:AddComponent("equippable")
 
@@ -495,15 +463,13 @@ local function realfn()
 
     inst._onlocomote = function(owner)
         if owner.components.locomotor.wantstomoveforward then
-            if inst.ringalingtask == nil then
+            if not inst.ringalingtask then
                 inst.ringalingtask = inst:DoPeriodicTask(.5, function(inst)
-
-                    inst.SoundEmitter:PlaySound(
-                        "dontstarve/creatures/together/deer/bell")
+                    inst.SoundEmitter:PlaySound("dontstarve/creatures/together/deer/bell")
                 end)
             end
         else
-            if inst.ringalingtask ~= nil then
+            if inst.ringalingtask then
                 inst.ringalingtask:Cancel()
                 inst.ringalingtask = nil
             end
@@ -514,4 +480,4 @@ local function realfn()
 end
 
 return Prefab("charles_t_horse", fn, assets_nightmare),
-       Prefab("the_real_charles_t_horse", realfn, assets)
+    Prefab("the_real_charles_t_horse", realfn, assets)
