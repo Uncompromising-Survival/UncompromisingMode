@@ -145,6 +145,7 @@ env.AddComponentPostInit("combat", function(self)
 
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
+        if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and attacker and attacker.components.inventory and self.inst.SlipAway and self.inst:SlipAway({ attacker = attacker, weapon = weapon, stimuli = stimuli }) then return true end
         if self.inst:HasTag("take_extra_spdamage") and attacker and not attacker:HasTag("player") and attacker.components.health and attacker.components.combat then
             --type check to not crash mods that pass spdamage as something other than actual spdamage.
             if spdamage and type(spdamage) == "table" and spdamage.planar then
