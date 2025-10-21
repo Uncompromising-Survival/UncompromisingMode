@@ -3,14 +3,14 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 local brain = require("brains/bigwobybrain")
 
-local function checkfav(inst, food)
-	if food ~= nil and (food.prefab == "monstermeat_dried" or food.prefab == "monstersmallmeat_dried") then
-		inst.components.hunger:DoDelta(15)
-	end
-end
+--[[local function checkfav(inst, food)
+    if food ~= nil and (food.prefab == "monstermeat_dried" or food.prefab == "monstersmallmeat_dried") then
+        inst.components.hunger:DoDelta(15)
+    end
+end]]--
 
 local function OnAttacked(inst, food)
-	inst.AnimState:PlayAnimation("hit")
+    inst.AnimState:PlayAnimation("hit")
 end
 
 local function TriggerTransformation(inst)
@@ -33,180 +33,185 @@ local function TriggerTransformation(inst)
             inst:PushEvent("transform")
         end
     end
-	
-	inst:DoPeriodicTask(1, function(inst)
+    
+    inst:DoPeriodicTask(1, function(inst)
         inst.transforming = false
-		TriggerTransformation(inst)
-	end)
+        TriggerTransformation(inst)
+    end)
 end
 
 local function OnHungerDelta2(inst, data)
     if data.newpercent <= 0.3 then
-		TriggerTransformation(inst)
+        TriggerTransformation(inst)
     end
-	
-	if data.newpercent <= 0.4 and not inst.wobyhungry then
-		inst.wobyhungry = true
-			
-		if inst._playerlink ~= nil and data.newpercent < data.oldpercent then
-			inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_BIGWOBYHUNGRY"))
-		end
-	elseif data.newpercent > 0.4 then
-		inst.wobyhungry = false
-	end
-	
-	if inst._playerlink ~= nil then
-		inst._playerlink:PushEvent("updatewobyhunger", {wobyhunger = inst.components.hunger:GetPercent()})
-	end
+    
+    if data.newpercent <= 0.4 and not inst.wobyhungry then
+        inst.wobyhungry = true
+            
+        if inst._playerlink ~= nil and data.newpercent < data.oldpercent then
+            inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_BIGWOBYHUNGRY"))
+        end
+    elseif data.newpercent > 0.4 then
+        inst.wobyhungry = false
+    end
+    
+    if inst._playerlink ~= nil then
+        inst._playerlink:PushEvent("updatewobyhunger", {wobyhunger = inst.components.hunger:GetPercent()})
+    end
 end
 
 local function ResetSanityHit(inst)
-	inst.sanityhittask = nil
+    inst.sanityhittask = nil
 end
 
 local function ResetWalterWorry(inst)
-	inst.walterworrytask = nil
+    inst.walterworrytask = nil
 end
 
-local function redirect_to_hunger(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-	if inst.sanityhittask == nil and inst._playerlink ~= nil and inst._playerlink.components.sanity ~= nil then
-		inst.sanityhittask = inst:DoTaskInTime(.3, ResetSanityHit)
-		
-		if inst.walterworrytask == nil and inst._playerlink ~= nil and inst._playerlink.components.talker then
-			inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_WOBY_HURT"))
-			inst.walterworrytask = inst:DoTaskInTime(10, ResetWalterWorry)
-		end
-		
-		inst._playerlink.components.sanity:DoDelta(amount / 20)
-	end
-	
-	--[[if amount ~= nil and amount < 0 then
-		inst.components.hunger:DoDelta(amount)
-		
-		if inst.components.hunger:GetPercent() <= 0.2 then
-			TriggerTransformation(inst)
-		end
-	end]]
+local function redirect_to_ownersanity(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+    if amount and amount >= 0 then return false end
+    if inst.sanityhittask == nil and inst._playerlink ~= nil and inst._playerlink.components.sanity ~= nil then
+        inst.sanityhittask = inst:DoTaskInTime(.3, ResetSanityHit)
+        if inst.walterworrytask == nil and inst._playerlink ~= nil and inst._playerlink.components.talker then
+            inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_WOBY_HURT"))
+            inst.walterworrytask = inst:DoTaskInTime(10, ResetWalterWorry)
+        end
+        inst._playerlink.components.sanity:DoDelta(amount / 20)
+    end
+    
+    --[[if amount ~= nil and amount < 0 then
+        inst.components.hunger:DoDelta(amount)
+        
+        if inst.components.hunger:GetPercent() <= 0.2 then
+            TriggerTransformation(inst)
+        end
+    end]]
 end
 
 local function inspect_woby(inst, viewer)
-	local wobyhunger = inst.components.hunger:GetPercent()
+    local wobyhunger = inst.components.hunger:GetPercent()
 
     return (viewer ~= nil and viewer:HasTag("pinetreepioneer") and
-		(wobyhunger >= 0.8 and "FULL" or
-		wobyhunger < 0.8 and wobyhunger >= 0.6 and "GENERIC" or
-		wobyhunger < 0.6 and wobyhunger >= 0.4 and "HUNGRY" or
-		wobyhunger < 0.4 and "STARVING")
-		) or "GENERIC"
+        (wobyhunger >= 0.8 and "FULL" or
+        wobyhunger < 0.8 and wobyhunger >= 0.6 and "GENERIC" or
+        wobyhunger < 0.6 and wobyhunger >= 0.4 and "HUNGRY" or
+        wobyhunger < 0.4 and "STARVING")
+        ) or "GENERIC"
 end
 
 local function CheckForMoreTargets(inst)
-	inst.components.combat:DropTarget()
-	
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 17, nil, { "INLIMBO", "NOCLICK", "knockbackdelayinteraction", "catchable", "fire", "minesprung", "mineactive" })
-				
-	for i, v in ipairs(ents) do
-		if inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst.wobytarget:HasTag("outofreach") and not inst.wobytarget:HasTag("INLIMBO") or inst.components.hunger:GetPercent() == 0 then
-			if inst._playerlink ~= nil and inst._playerlink:IsValid() and inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst._playerlink:IsNear(inst.wobytarget, 35) then
-				inst.oldwobytarget = inst.wobytarget
-				inst.wobytarget = nil
-			end
-			
-			break
-		end
+    inst.components.combat:DropTarget()
+    
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 17, nil, { "INLIMBO", "NOCLICK", "knockbackdelayinteraction", "catchable", "fire", "minesprung", "mineactive" })
+                
+    for i, v in ipairs(ents) do
+        if inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst.wobytarget:HasTag("outofreach") and not inst.wobytarget:HasTag("INLIMBO") or inst.components.hunger:GetPercent() == 0 then
+            if inst._playerlink ~= nil and inst._playerlink:IsValid() and inst.wobytarget ~= nil and inst.wobytarget:IsValid() and not inst._playerlink:IsNear(inst.wobytarget, 35) then
+                inst.oldwobytarget = inst.wobytarget
+                inst.wobytarget = nil
+            end
+            
+            break
+        end
 
-		if v ~= nil and not v:HasTag("INLIMBO") and inst.oldwobytarget ~= nil and v ~= inst.oldwobytarget and v.prefab == inst.oldwobytarget.prefab and v:IsValid() then
-			if v.components.pickable == nil and v.components.harvestable == nil or v.components.pickable ~= nil and v.components.pickable.canbepicked and v.components.pickable.caninteractwith or v.components.harvestable ~= nil and v.components.harvestable:CanBeHarvested() and v.components.combat == nil then
-				if v.components.inventoryitem then
-					for k = 1, inst.components.container.numslots do
-						if inst.components.container:GetItemInSlot(k) ~= nil and inst.components.container:GetItemInSlot(k).prefab == v.prefab and inst.components.container:GetItemInSlot(k).components.stackable ~= nil and not inst.components.container:GetItemInSlot(k).components.stackable:IsFull() then
-							inst.wobytarget = v
+        if v ~= nil and not v:HasTag("INLIMBO") and inst.oldwobytarget ~= nil and v ~= inst.oldwobytarget and v.prefab == inst.oldwobytarget.prefab and v:IsValid() then
+            if v.components.pickable == nil and v.components.harvestable == nil or v.components.pickable ~= nil and v.components.pickable.canbepicked and v.components.pickable.caninteractwith or v.components.harvestable ~= nil and v.components.harvestable:CanBeHarvested() and v.components.combat == nil then
+                if v.components.inventoryitem then
+                    for k = 1, inst.components.container.numslots do
+                        if inst.components.container:GetItemInSlot(k) ~= nil and inst.components.container:GetItemInSlot(k).prefab == v.prefab and inst.components.container:GetItemInSlot(k).components.stackable ~= nil and not inst.components.container:GetItemInSlot(k).components.stackable:IsFull() then
+                            inst.wobytarget = v
 
-							break
-						elseif not inst.components.container:IsFull() then
-							inst.wobytarget = v
+                            break
+                        elseif not inst.components.container:IsFull() then
+                            inst.wobytarget = v
 
-							break
-						end
-					end
-				else
-					inst.wobytarget = v
-					
-					break
-				end
-			end
-		end
-	end
+                            break
+                        end
+                    end
+                else
+                    inst.wobytarget = v
+                    
+                    break
+                end
+            end
+        end
+    end
 end
 
 local function RemoveTarget(inst)
-	inst.oldwobytarget = nil
-	inst.wobytarget = nil
+    inst.oldwobytarget = nil
+    inst.wobytarget = nil
+end
+
+local function CustomFoodStatsMod(inst, health_delta, hunger_delta, sanity_delta, food, feeder)
+    if food and (food.prefab == "woby_treat" or food.prefab == "monstersmallmeat_dried") and hunger_delta and hunger_delta > 0 then
+        hunger_delta = hunger_delta + 16.85 --26.25 x 4 = 105 (Tranformation threshold)
+    elseif food and food.prefab == "monstermeat_dried" and hunger_delta and hunger_delta > 0 then
+        hunger_delta = hunger_delta + 16.2 --35 x 3 = 105 (Tranformation threshold)
+    end
+    return health_delta, hunger_delta, sanity_delta
 end
 
 env.AddPrefabPostInit("wobybig", function(inst)
-	inst.scrapbook_hidehealth = true 
+    inst.scrapbook_hidehealth = true 
 
-	inst:AddTag("customwobytag")
-	inst:AddTag("noauradamage")
-	inst:AddTag("tiddlevirusimmune")
+    inst:AddTag("customwobytag")
+    inst:AddTag("noauradamage")
+    inst:AddTag("tiddlevirusimmune")
     inst:AddTag("notraptrigger")
     --inst:RemoveTag("peacefulmount")
-	
-	if not TheWorld.ismastersim then
-		return
-	end
-	
+    
+    if not TheWorld.ismastersim then
+        return
+    end
+    
     inst:SetBrain(brain)
-	
-	inst.wobyhungry = false
-	
-	if inst.components.eater ~= nil then
-		inst.components.eater:SetOnEatFn(checkfav)
-	end
-	
-	if inst.components.hunger ~= nil then
+    
+    inst.wobyhungry = false
+    
+    if inst.components.eater ~= nil then
+        inst.components.eater.custom_stats_mod_fn = CustomFoodStatsMod
         inst.components.eater:SetStrongStomach(true)
-		inst:ListenForEvent("hungerdelta", OnHungerDelta2)
-	end
-		
-	inst:AddComponent("health")
-    inst.components.health:SetMaxHealth(500)
-	inst.components.health:SetAbsorptionAmount(1)
-	inst.components.health.redirect = redirect_to_hunger
+    end
+    
+    if inst.components.hunger ~= nil then
+        inst:ListenForEvent("hungerdelta", OnHungerDelta2)
+    end
+        
+    local health = inst:AddComponent("health")
+    health:SetMaxHealth(10009)
+    health:SetAbsorptionAmount(1)
+    health:StartRegen(10009, 0.1)
+    health.redirect = redirect_to_ownersanity
+    health.canheal = false
 
-	inst:RemoveComponent("freezable")
-	inst:RemoveComponent("burnable")
+    inst:RemoveComponent("freezable")
+    inst:RemoveComponent("burnable")
     inst:RemoveComponent("propagator")
-	
-	inst:AddComponent("combat")
-	
-	if inst.components.follower ~= nil then
-		inst.components.follower:KeepLeaderOnAttacked()
-	end
-	
-	if inst.components.inspectable ~= nil then
-		inst.components.inspectable.getstatus = inspect_woby
-	end
-	
-	if inst.components.health ~= nil then
-		inst.components.health.canheal = false
-	end
-	
-	inst:ListenForEvent("woby_dropped_item", function(inst, data)
-		if inst._playerlink ~= nil and inst._playerlink.components.health ~= nil and not inst._playerlink.components.health:IsDead() then
-			if data.dropped_item == nil or data.dropped_item ~= nil and not data.dropped_item:HasTag("heavy") then
-				inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_WOBY_TOOFULL"))
-			end
-			
-			inst.wobytarget = nil
-			inst.oldwobytarget = nil
-		end
-	end)
-	
+    
+    inst:AddComponent("combat")
+    
+    if inst.components.follower ~= nil then
+        inst.components.follower:KeepLeaderOnAttacked()
+    end
+    
+    if inst.components.inspectable ~= nil then
+        inst.components.inspectable.getstatus = inspect_woby
+    end
+    
+    inst:ListenForEvent("woby_dropped_item", function(inst, data)
+        if inst._playerlink ~= nil and inst._playerlink.components.health ~= nil and not inst._playerlink.components.health:IsDead() then
+            if data.dropped_item == nil or data.dropped_item ~= nil and not data.dropped_item:HasTag("heavy") then
+                inst._playerlink.components.talker:Say(GetString(inst._playerlink, "ANNOUNCE_WOBY_TOOFULL"))
+            end
+            
+            inst.wobytarget = nil
+            inst.oldwobytarget = nil
+        end
+    end)
+    
     inst:ListenForEvent("riderchanged", RemoveTarget)
-	
-	inst:DoPeriodicTask(2, CheckForMoreTargets)
+    
+    inst:DoPeriodicTask(2, CheckForMoreTargets)
 end)
-

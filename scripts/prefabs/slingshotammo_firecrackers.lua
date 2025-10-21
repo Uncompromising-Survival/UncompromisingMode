@@ -164,7 +164,6 @@ local function inv_fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/slingshotammo_firecrackers.xml"
     inst.components.inventoryitem:SetSinks(true)
 
     inst:AddComponent("bait")

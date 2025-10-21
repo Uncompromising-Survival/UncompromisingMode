@@ -320,6 +320,9 @@ Assets = {
 	Asset("IMAGE", "images/crafting_menu_avatars/avatar_wathom.tex"),
 	Asset("ATLAS", "images/crafting_menu_avatars/avatar_wathom.xml"),
 
+	Asset("ATLAS", "images/wixie_skilltree.xml"),
+    Asset("IMAGE", "images/wixie_skilltree.tex"),
+
 	----TURF
 	Asset("IMAGE", "levels/textures/noise_hoodedmoss.tex"),
 	Asset("IMAGE", "levels/textures/mini_noise_jungle.tex"),
@@ -2083,6 +2086,9 @@ Assets = {
 	Asset("IMAGE", "images/PP_TT.tex"),
 	Asset("ATLAS", "images/PP_TT.xml"),
 
+    Asset("IMAGE", "images/WIX_TT.tex"),
+    Asset("ATLAS", "images/WIX_TT.xml"),
+
 	Asset("IMAGE", "images/engineering_tip.tex"),
 	Asset("ATLAS", "images/engineering_tip.xml"),
 
@@ -2190,3 +2196,15 @@ Assets = {
     Asset( "ATLAS", "images/wolfgang_rework_skilltree.xml" ),
 
 }
+local skilltree_defs = require("prefabs/skilltree_defs")
+local BuildSkillsData = require("prefabs/skilltree_wixie")
+
+if BuildSkillsData then
+    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    local data = BuildSkillsData(skilltree_defs.FN)
+    for k, v in pairs(data.SKILLS) do
+        if v.icon then
+            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        end
+    end
+end

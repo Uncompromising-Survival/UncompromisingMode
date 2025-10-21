@@ -99,7 +99,7 @@ GLOBAL.STRINGS._STATUS_ANNOUNCEMENTS.WIXIE = {
 }
 GLOBAL.STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
     HUNGER = {
-        FULL = "A pinetree pioneer always runs on a full stomach!",
+        FULL = "A Pinetree Pioneer always runs on a full stomach!",
         HIGH = "I should prepare a snack for our next hike.",
         MID = "I hope I packed a few snacks in Woby...",
         LOW = "I wish we could eat s'mores!",

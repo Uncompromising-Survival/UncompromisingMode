@@ -61,9 +61,12 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
 -- Recipe changes
 
 --I HATE FRAZZLED WIRES!!!!!!!!
-AllRecipes["boat_magnet_kit"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
-AllRecipes["boat_magnet"].ingredients = {Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}
-AllRecipes["boat_magnet_beacon"].ingredients = {Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1)}	
+AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient(
+"transistor", 1), Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1),
+    Ingredient("wagpunk_bits", 1) }
+AllRecipes["boat_magnet_beacon"].ingredients = { Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient(
+"wagpunk_bits", 1) }
 
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
 
@@ -122,7 +125,7 @@ end
 
 --local config_skilltrees = GetModConfigData("woodie_skilltree")
 --if config_skilltrees then
-    --AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
+--AllRecipes["walking_stick"].ingredients = { Ingredient("lucy", 0), Ingredient("log", 3), Ingredient("wereitem_goose", 1) }
 --end
 
 if GetModConfigData("wanda_nerf") then
@@ -320,7 +323,8 @@ if GetModConfigData("telestaff_rework") then
 end
 
 if GetModConfigData("longpig") then
-    AllRecipes["ghostlyelixir_fastregen"].ingredients = { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Ingredient("ghostflower", 4) }
+    AllRecipes["ghostlyelixir_fastregen"].ingredients = { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Ingredient(
+    "ghostflower", 4) }
 end
 
 
@@ -338,7 +342,8 @@ AllRecipes["mast_malbatross"].ingredients = {
     Ingredient("malbatross_feathered_weave", 3)
 }
 
-AllRecipes["winona_spotlight"].ingredients = { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient("lightbulb", 1) }
+AllRecipes["winona_spotlight"].ingredients = { Ingredient("sewing_tape", 1), Ingredient("goldnugget", 2), Ingredient(
+"lightbulb", 1) }
 
 AllRecipes["featherpencil"].numtogive = 4 -- 8
 
@@ -362,7 +367,7 @@ if GetModConfigData("rat_raids") then
         "ratpoisonbottle",
         { Ingredient("red_cap", 2), Ingredient("jammypreserves", 1), Ingredient("rocks", 1) },
         TECH.SCIENCE_ONE,
-        {numtogive=4},
+        { numtogive = 4 },
         { "TOOLS" }
     )
     ChangeSortKey("ratpoisonbottle", "trap", "TOOLS", true)
@@ -818,7 +823,7 @@ if GetModConfigData("monstersmallmeat") then
         "transmute_monstermeat",
         { Ingredient("monstersmallmeat", 3) },
         TECH.NONE,
-        { product = "monstermeat", builder_skill="wilson_alchemy_4", description = "transmute_monstermeat" },
+        { product = "monstermeat", builder_skill = "wilson_alchemy_4", description = "transmute_monstermeat" },
         { "CHARACTER" }
     )
 
@@ -828,7 +833,7 @@ if GetModConfigData("monstersmallmeat") then
         TECH.NONE,
         {
             product = "monstersmallmeat",
-            builder_skill="wilson_alchemy_4",
+            builder_skill = "wilson_alchemy_4",
             description = "transmute_monstersmallmeat",
             numtogive = 2
         },
@@ -843,9 +848,12 @@ end
 AddDeconstructRecipe("widowshead", { Ingredient("silk", 4), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
 AddDeconstructRecipe("widowsgrasp", { Ingredient("monstermeat", 2) })
 AddDeconstructRecipe("shadow_crown", { Ingredient("nightmarefuel", 5), Ingredient("beardhair", 3) })
-AddDeconstructRecipe("rain_horn", { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) })
-AddDeconstructRecipe("dormant_rain_horn", { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2), Ingredient("barnacle", 1) })
-AddDeconstructRecipe("staff_moonfall", { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
+AddDeconstructRecipe("rain_horn",
+    { Ingredient("slurtle_shellpieces", 4), Ingredient("rocks", 2), Ingredient("oceanfish_small_9_inv", 3) })
+AddDeconstructRecipe("dormant_rain_horn",
+    { Ingredient("cookiecuttershell", 4), Ingredient("rocks", 2), Ingredient("barnacle", 1) })
+AddDeconstructRecipe("staff_moonfall",
+    { Ingredient("opalpreciousgem", 3), Ingredient("slurtle_shellpieces", 5), Ingredient("livinglog", 3) })
 --AddDeconstructRecipe("rimeweed_whip", { Ingredient("um_rimeweed_itemvine", 6) })
 --AddDeconstructRecipe("snaildrakehat", { Ingredient("slurtle_shellpieces", 3) })
 --AddDeconstructRecipe("snaildrakebucket", { Ingredient("slurtle_shellpieces", 3) })
@@ -853,8 +861,10 @@ AddDeconstructRecipe("slurtlehat", { Ingredient("slurtle_shellpieces", 3) })
 AddDeconstructRecipe("armorsnurtleshell", { Ingredient("slurtle_shellpieces", 3) })
 --AddDeconstructRecipe("snappy_jaw", { Ingredient("flint", 3), Ingredient("rope", 1), Ingredient("houndstooth", 3) })
 AddDeconstructRecipe("pied_piper_flute", { Ingredient("twigs", 3), Ingredient("goldnugget", 1) })
-AddDeconstructRecipe("skullflask", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 6), Ingredient("livinglog", 1) })
-AddDeconstructRecipe("skullflask_empty", { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 1), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("skullflask",
+    { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 6), Ingredient("livinglog", 1) })
+AddDeconstructRecipe("skullflask_empty",
+    { Ingredient("boneshard", 2), Ingredient("nightmarefuel", 1), Ingredient("livinglog", 1) })
 AddDeconstructRecipe("corvushat", { Ingredient("silk", 6), Ingredient("feather_robin", 2), Ingredient("seeds", 1) }) --:)
 
 --Vet Curse Deconstruct Recipes
@@ -1074,7 +1084,8 @@ if GetModConfigData("ck_loot") then
     )
     AddRecipe2(
         "kaleidoscope",
-        { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1), Ingredient("bluegem", 1) },
+        { Ingredient("moonglass", 3), Ingredient("moonbutterfly", 5), Ingredient("redgem", 1), Ingredient("greengem", 1),
+            Ingredient("bluegem", 1) },
         TECH.LOST,
         nil,
         { "WEAPONS" }
@@ -1161,6 +1172,30 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.GetValidRecipe("slingshotammo_slow").ingredients = { Ingredient("purplegem", 1) }
     GLOBAL.STRINGS.NAMES.SLINGSHOTAMMO_SLOW = "Vortex Rounds"
 
+    AddRecipe2(
+        "slingshot_jessie",
+        { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
+        GLOBAL.TECH.SHADOWFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_shadow", nounlock = true, station_tag = "shadow_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
+    ChangeSortKey("slingshot_jessie", "slingshot_matilda", "WEAPONS", true)
+    ChangeSortKey("slingshot_jessie", "slingshot_matilda", "CHARACTER", true)
+    ChangeSortKey("slingshot_jessie", "slingshotammo_gelblob", "CRAFTING_STATION", false)
+
+    AddRecipe2(
+        "slingshot_claire",
+        { Ingredient("purebrilliance", 2), Ingredient("lunarplant_husk", 2) },
+        GLOBAL.TECH.LUNARFORGING_TWO,
+        { builder_tag = "skill_wixie_allegiance_lunar", nounlock = true, station_tag = "lunar_forge" },
+        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
+    )
+    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
+    ChangeSortKey("slingshot_claire", "slingshot_jessie", "WEAPONS", true)
+    ChangeSortKey("slingshot_claire", "slingshot_jessie", "CHARACTER", true)
+    ChangeSortKey("slingshot_claire", "slingshotammo_lunarplanthusk", "CRAFTING_STATION", false)
+
     AddRecipeToFilter("slingshotammo_rock", "WEAPONS")
     AddRecipeToFilter("slingshotammo_gold", "WEAPONS")
     AddRecipeToFilter("slingshotammo_marble", "WEAPONS")
@@ -1171,8 +1206,8 @@ if GetModConfigData("wixie_walter") then
     AddRecipeToFilter("slingshotammo_thulecite", "CRAFTING_STATION")
     AddRecipeToFilter("slingshotammo_shadow", "WEAPONS")
 
-    ChangeSortKey("slingshotammo_rock", "slingshot_matilda", "WEAPONS", true)
-    ChangeSortKey("slingshotammo_rock", "slingshot_matilda", "CHARACTER", true)
+    ChangeSortKey("slingshotammo_rock", "slingshot_claire", "WEAPONS", true)
+    ChangeSortKey("slingshotammo_rock", "slingshot_claire", "CHARACTER", true)
 
     ChangeSortKey("slingshotammo_gold", "slingshotammo_rock", "WEAPONS", true)
     ChangeSortKey("slingshotammo_gold", "slingshotammo_rock", "CHARACTER", true)
@@ -1190,7 +1225,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_flare",
         { Ingredient("redgem", 1) },
         GLOBAL.TECH.MAGIC_TWO,
-        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true, },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_FLARE = "A scorching shot!"
@@ -1208,7 +1243,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_lazy",
         { Ingredient("orangegem", 1), Ingredient("nightmarefuel", 1) },
         GLOBAL.TECH.ANCIENT_TWO,
-        { builder_tag = "pebblemaker", numtogive = 20, no_deconstruction = true, nounlock = true },
+        { builder_tag = "pebblemaker", numtogive = 20, no_deconstruction = true },
         { "CHARACTER", "WEAPONS", "CRAFTING_STATION" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_LAZY = "Now you see me..."
@@ -1286,7 +1321,7 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_moonglass",
         { Ingredient("moonglass", 1) },
         GLOBAL.TECH.CELESTIAL_THREE,
-        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true, nounlock = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CHARACTER", "WEAPONS" }
     )
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_MOONGLASS = "Watch your hands!"
@@ -1343,50 +1378,107 @@ if GetModConfigData("wixie_walter") then
         "slingshotammo_obsidian",
         { Ingredient("placeholder_ingredient_ia", 0) },
         GLOBAL.TECH.OBSIDIAN_TWO,
-        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true, nounlock = true },
+        { builder_tag = "pebblemaker", numtogive = 10, no_deconstruction = true },
         { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
     )
-	
+
     GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOTAMMO_OBSIDIAN = "A playful bit of arson."
     ChangeSortKey("slingshotammo_obsidian", "armorobsidian", "CRAFTING_STATION", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "CHARACTER", true)
     ChangeSortKey("slingshotammo_obsidian", "slingshotammo_tar", "WEAPONS", true)
-	
-	AllRecipes["slingshotammo_stinger"].builder_skill = "wixie_slingshot_ammo_stinger"
-	AllRecipes["slingshotammo_dreadstone"].builder_skill = "wixie_slingshot_ammo_dreadstone"
-	AllRecipes["slingshotammo_scrapfeather"].builder_skill = "wixie_slingshot_ammo_scrapfeather"
-	AllRecipes["slingshotammo_gunpowder"].builder_skill = "wixie_slingshot_ammo_gunpowder"
-	AllRecipes["slingshotammo_lunarplanthusk"].builder_skill = "wixie_allegiance_lunar"
-	AllRecipes["slingshotammo_purebrilliance"].builder_skill = "wixie_allegiance_lunar"
-	AllRecipes["slingshotammo_gelblob"].builder_skill = "wixie_allegiance_shadow"
-	AllRecipes["slingshotammo_horrorfuel"].builder_skill = "wixie_allegiance_shadow"
-	AllRecipes["slingshotammo_container"].builder_skill = "wixie_ammo_bag"
-	AllRecipes["slingshotammo_stinger"].numtogive = 10
-	AllRecipes["slingshotammo_dreadstone"].numtogive = 10
-	AllRecipes["slingshotammo_scrapfeather"].numtogive = 10
-	AllRecipes["slingshotammo_gunpowder"].numtogive = 10
-	AllRecipes["slingshotammo_lunarplanthusk"].numtogive = 10
-	AllRecipes["slingshotammo_purebrilliance"].numtogive = 10
-	AllRecipes["slingshotammo_gelblob"].numtogive = 10
-	AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
-	
-	AddRecipe2(
-        "slingshot_jessie",
-        { Ingredient("horrorfuel", 2), Ingredient("voidcloth", 2) },
-        GLOBAL.TECH.SHADOWFORGING_TWO,
-        { builder_tag = "skill_wixie_allegiance_shadow", nounlock = true, station_tag = "shadow_forge" },
-        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
-    )
-    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
 
-    AddRecipe2(
-        "slingshot_claire",
-        { Ingredient("purebrilliance", 2), Ingredient("lunarplant_husk", 2) },
-        GLOBAL.TECH.LUNARFORGING_TWO,
-        { builder_tag = "skill_wixie_allegiance_lunar", nounlock = true, station_tag = "lunar_forge" },
-        { "CRAFTING_STATION", "CHARACTER", "WEAPONS" }
-    )
-    GLOBAL.STRINGS.RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
+    AllRecipes["slingshotammo_stinger"].builder_skill = "wixie_slingshot_ammo_stinger"
+    AllRecipes["slingshotammo_dreadstone"].builder_skill = "wixie_slingshot_ammo_dreadstone"
+    AllRecipes["slingshotammo_scrapfeather"].builder_skill = "wixie_slingshot_ammo_scrapfeather"
+    AllRecipes["slingshotammo_gunpowder"].builder_skill = "wixie_slingshot_ammo_gunpowder"
+    AllRecipes["slingshotammo_lunarplanthusk"].builder_skill = "wixie_allegiance_lunar"
+    AllRecipes["slingshotammo_purebrilliance"].builder_skill = "wixie_allegiance_lunar"
+    AllRecipes["slingshotammo_gelblob"].builder_skill = "wixie_allegiance_shadow"
+    AllRecipes["slingshotammo_horrorfuel"].builder_skill = "wixie_allegiance_shadow"
+    AllRecipes["slingshotammo_container"].builder_skill = "wixie_ammo_bag"
+    
+    AllRecipes["slingshot_jessie"].builder_tag = "pebblemaker"
+    AllRecipes["slingshot_claire"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_stinger"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_dreadstone"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_scrapfeather"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_gunpowder"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_lunarplanthusk"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_purebrilliance"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_gelblob"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_horrorfuel"].builder_tag = "pebblemaker"
+    AllRecipes["slingshotammo_container"].builder_tag = "pebblemaker"
+
+    AllRecipes["slingshotammo_stinger"].numtogive = 10
+    AllRecipes["slingshotammo_dreadstone"].numtogive = 10
+    AllRecipes["slingshotammo_scrapfeather"].numtogive = 10
+    AllRecipes["slingshotammo_gunpowder"].numtogive = 10
+    AllRecipes["slingshotammo_lunarplanthusk"].numtogive = 10
+    AllRecipes["slingshotammo_purebrilliance"].numtogive = 15
+    AllRecipes["slingshotammo_gelblob"].numtogive = 10
+    AllRecipes["slingshotammo_horrorfuel"].numtogive = 10
+
+    --(In reverse order to what shows up in-game)
+    AddRecipeToFilter("slingshotammo_purebrilliance", "WEAPONS")
+    ChangeSortKey("slingshotammo_purebrilliance", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_lunarplanthusk", "WEAPONS")
+    ChangeSortKey("slingshotammo_lunarplanthusk", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_gelblob", "WEAPONS")
+    ChangeSortKey("slingshotammo_gelblob", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_horrorfuel", "WEAPONS")
+    ChangeSortKey("slingshotammo_horrorfuel", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_dreadstone", "WEAPONS")
+    ChangeSortKey("slingshotammo_dreadstone", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_gunpowder", "WEAPONS")
+    ChangeSortKey("slingshotammo_gunpowder", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_scrapfeather", "WEAPONS")
+    ChangeSortKey("slingshotammo_scrapfeather", "slingshotammo_shadow", "WEAPONS", true)
+    AddRecipeToFilter("slingshotammo_stinger", "WEAPONS")
+    ChangeSortKey("slingshotammo_stinger", "slingshotammo_shadow", "WEAPONS", true)
+
+    local function calc_slingshotammo_numtogive_basic(recipe, doer)
+        return doer.components.skilltreeupdater
+            and doer.components.skilltreeupdater:IsActivated("wixie_ammocraft_2")
+            and recipe.numtogive + 5
+            or nil
+    end
+    AllRecipes["slingshotammo_rock"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_gold"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_marble"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_poop"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_stinger"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_gunpowder"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_firecrackers"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_honey"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_rubber"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_moonrock"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+    AllRecipes["slingshotammo_slime"].override_numtogive_fn = calc_slingshotammo_numtogive_basic
+
+    local function calc_slingshotammo_numtogive_special(recipe, doer)
+        return doer.components.skilltreeupdater
+            and doer.components.skilltreeupdater:IsActivated("wixie_ammocraft_3")
+            and recipe.numtogive + 5
+            or nil
+    end
+
+    AllRecipes["slingshotammo_freeze"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_slow"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_thulecite"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_dreadstone"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_scrapfeather"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_lunarplanthusk"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_purebrilliance"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_gelblob"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_horrorfuel"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_tremor"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_moonglass"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_salt"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_goop"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_flare"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_lazy"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_tar"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_obsidian"].override_numtogive_fn = calc_slingshotammo_numtogive_special
+    AllRecipes["slingshotammo_shadow"].override_numtogive_fn = calc_slingshotammo_numtogive_special
 
     AddRecipe2(
         "bagofmarbles",
@@ -1410,7 +1502,7 @@ if GetModConfigData("wixie_walter") then
     ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
     ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
 
-	AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1) }
+    AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1) }
 
     STRINGS.CHARACTERS.GENERIC.DESCRIBE.WIXIEGUN = "Shhh, don't spoil it! ;)"
 
@@ -1426,32 +1518,41 @@ if GetModConfigData("wixie_walter") then
     end)
 end
 
-AddRecipe2("codex_mantra", { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) }, TECH.NONE, { builder_tag = "codexmantrareader" },
-	{ "CHARACTER" })
+AddRecipe2("codex_mantra",
+    { Ingredient("papyrus", 2), Ingredient("nightmarefuel", 2), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50) },
+    TECH.NONE, { builder_tag = "codexmantrareader" },
+    { "CHARACTER" })
 ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 AddRecipe2(
-	"pact_armor_sanity",
-	{ Ingredient("nightmarefuel", 2) },
-	GLOBAL.TECH.NONE,
-	{ builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" },
-	{ "CHARACTER", "ARMOUR" }
+    "pact_armor_sanity",
+    { Ingredient("nightmarefuel", 2) },
+    GLOBAL.TECH.NONE,
+    { builder_tag = "codexmantrareader", sg_state = "pact_armor_craft", image = "armor_sanity.tex" },
+    { "CHARACTER", "ARMOUR" }
 )
 AddRecipe2(
-	"pact_sword_sanity",
-	{ Ingredient("nightmarefuel", 2) },
-	GLOBAL.TECH.NONE,
-	{ builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" },
-	{ "CHARACTER", "WEAPONS" }
+    "pact_sword_sanity",
+    { Ingredient("nightmarefuel", 2) },
+    GLOBAL.TECH.NONE,
+    { builder_tag = "codexmantrareader", sg_state = "pact_sword_craft", image = "nightsword.tex" },
+    { "CHARACTER", "WEAPONS" }
 )
 
-AddRecipe2("um_record_menu", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_menu.xml"}, {"DECOR"})
-AddRecipe2("um_record_wixie", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wixie.xml"}, {"DECOR"})
-AddRecipe2("um_record_walter", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_walter.xml"}, {"DECOR"})
-AddRecipe2("um_record_wathom", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_wathom.xml"}, {"DECOR"})
-AddRecipe2("um_record_winky", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_winky.xml"}, {"DECOR"})
-AddRecipe2("um_record_hooded_widow", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_hooded_widow.xml"}, {"DECOR"})
-AddRecipe2("um_record_stranger", {Ingredient("batwing", 1), Ingredient("charcoal", 1)}, TECH.SCIENCE_TWO, {atlas = "images/inventoryimages/um_record_stranger.xml"}, {"DECOR"})
+AddRecipe2("um_record_menu", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_menu.xml" }, { "DECOR" })
+AddRecipe2("um_record_wixie", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_wixie.xml" }, { "DECOR" })
+AddRecipe2("um_record_walter", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_walter.xml" }, { "DECOR" })
+AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_wathom.xml" }, { "DECOR" })
+AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
+AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
+AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
+    { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
 
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
@@ -1631,3 +1732,13 @@ AddPrototyperDef(
         filter_text = STRINGS.UI.CRAFTING_STATION_FILTERS.MADSCIENCE
     }
 )
+
+AllRecipes["woby_treat"].numtogive = 1
+
+AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true}, { "CHARACTER" })
+if GetModConfigData("wixie_walter") then
+    ChangeSortKey("woby_treat", "portabletent_item", "CHARACTER", false) --Get it farther away from unused slingshot upgrades
+    ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
+else
+    ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
+end

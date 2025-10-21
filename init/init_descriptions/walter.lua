@@ -43,9 +43,9 @@ ANNOUNCE.ANNOUNCE_RNEFOG = "ooOOOOoo, it's getting VERY spooky now!"
 DESCRIBE.UNCOMPROMISING_RAT =
     "I'd share, but they seem more interested in just TAKING our stuff."
 DESCRIBE.UNCOMPROMISING_RATHERD =
-    "A Pine Tree Pioneer never enters a rat den head first!"
+    "A Pinetree Pioneer never enters a rat den head first!"
 DESCRIBE.UNCOMPROMISING_RATBURROW =
-    "A Pine Tree Pioneer never enters a rat den head first!"
+    "A Pinetree Pioneer never enters a rat den head first!"
 DESCRIBE.UNCOMPROMISING_WINKYBURROW =
     "Wow! She can dig holes just as good as Woby!"
 DESCRIBE.UNCOMPROMISING_WINKYHOMEBURROW =
@@ -147,7 +147,7 @@ DESCRIBE.TRAPDOOR = "Careful, some spiders use these as hiding places!"
 DESCRIBE.HOODEDTRAPDOOR = "Remember the spiders!"
 DESCRIBE.WICKER_TENTACLE = "I think it's poisoned, wish I could help..."
 DESCRIBE.HONEY_LOG =
-    "A Pine Tree Pioneer knows better than to try and eat yourself."
+    "A Pinetree Pioneer knows better than to try and eat yourself."
 
 DESCRIBE.BUSHCRAB = "A perfect disguise! You sure fooled me!"
 DESCRIBE.LAVAE2 = DESCRIBE.LAVAE

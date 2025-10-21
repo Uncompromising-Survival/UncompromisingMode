@@ -240,7 +240,6 @@ local function ListingOrConsolePlayer(input)
 end
 
 function c_um_wobygodmode(player)
-
     if TheWorld ~= nil and not TheWorld.ismastersim then
         c_remote("c_um_wobygodmode()")
         return
@@ -249,10 +248,17 @@ function c_um_wobygodmode(player)
     player = ListingOrConsolePlayer(player)
     if player ~= nil and player.woby ~= nil then
         SuUsed("c_um_wobygodmode", true)
-		if  player.woby.components.health ~= nil then
+        if player.woby.components.health ~= nil then
             local godmode = player.woby.components.health.invincible
             player.woby.components.health:SetInvincible(not godmode)
-            print("God mode: "..tostring(not godmode))
+            print("God mode: " .. tostring(not godmode))
         end
+    end
+end
+
+function c_um_setwobyhunger(p)
+    local player = ConsoleCommandPlayer()
+    if player ~= nil and player.woby ~= nil then
+        player.woby.components.hunger:SetPercent(p)
     end
 end
