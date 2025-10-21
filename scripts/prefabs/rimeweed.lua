@@ -968,7 +968,7 @@ end
 
 local function OnUseBandage(inst, target)
     if target and target.components.temperature then
-        target.components.temperature:DoDelta(-80)
+        target.components.temperature:DoDelta(-target.components.temperature.current)
     end
 end
 
