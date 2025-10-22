@@ -135,7 +135,7 @@ env.AddComponentPostInit("combat", function(self)
 			inst:AddDebuff("buff_furious"..tool.tier, "buff_furious"..tool.tier)
 		end
 		
-		local tool = attacker.components.inventory and attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		local tool = attacker and attacker.components.inventory and attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and attacker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		-- Hoarding
 		if tool and tool.components.minerologyable and tool.components.minerologyable.hoarding and tool.tier ~= 1 then
 			if not self.inst.um_marked_for_hoarding then
