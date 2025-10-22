@@ -46,7 +46,7 @@ function EntityScript:GetAdjectivedName(...)
 	local minerologyable = self.replica.minerologyable
 	if equippable ~= nil then
 		local eslot = equippable:EquipSlot()
-		if eslot == EQUIPSLOTS.HANDS and minerologyable._enchantnum and minerologyable._enchantnum:value() and minerologyable._enchantnum:value() ~= 0 then
+		if eslot == EQUIPSLOTS.HANDS and minerologyable and minerologyable._enchantnum and minerologyable._enchantnum:value() and minerologyable._enchantnum:value() ~= 0 then
 			if not self.no_wet_prefix and (self.always_wet_prefix or self:GetIsWet()) then
 				return ConstructAdjectivedName(self, name, STRINGS.WET_PREFIX.TOOL.." "..modifiers[minerologyable._enchantnum:value()])
 			else
