@@ -44,7 +44,19 @@ AddComponentPostInit("eater", function(self)
 		if self:PrefersToEat(food) then
 			self.inst:PushEvent("onpreeat", { food = food, feeder = feeder })
 		end
-			
+		
 		return _Eat(self, food, feeder)
+	end
+
+	function self:SetCanEatVeggieHorrible()
+    	table.insert(self.preferseating, FOODTYPE.UM_HORRIBLE_VEGGIE)
+    	table.insert(self.caneat, FOODTYPE.UM_HORRIBLE_VEGGIE)
+    	self.inst:AddTag(FOODTYPE.UM_HORRIBLE_VEGGIE.."_eater")
+	end
+
+	function self:SetCanEatMoss()
+    	table.insert(self.preferseating, FOODTYPE.UM_MOSS)
+    	table.insert(self.caneat, FOODTYPE.UM_MOSS)
+    	self.inst:AddTag(FOODTYPE.UM_MOSS.."_eater")
 	end
 end)

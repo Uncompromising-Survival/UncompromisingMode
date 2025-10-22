@@ -545,21 +545,20 @@ local function SpikeWaves(inst, target, attacker, angle)
             local dx, dy, dz = ix + (i * velx), 0, iz + (i * velz)
             local fx = SpawnPrefab("warg_mutated_ember_fx")
             fx.Transform:SetPosition(dx + math.random(), dy, dz + math.random())
-            fx:RestartFX(0.25 + math.random())
-            fx:DoTaskInTime(math.random() + 0.5 , fx.KillFX)
-
-            if math.random() > 0.5 then
+            fx:RestartFX(.25 + math.random())
+            fx:DoTaskInTime(math.random() + .5 , fx.KillFX)
+            if math.random() > .5 then
                 local fx2 = SpawnPrefab("warg_mutated_breath_fx")
                 fx2.Transform:SetPosition(dx + math.random(), dy, dz + math.random())
                 fx2:RestartFX(.25 + math.random())
-                fx2:DoTaskInTime(math.random() + 0.5, fx2.KillFX)
-                fx2.Transform:SetScale(0.5, 0.5, 0.5)
+                fx2:DoTaskInTime(math.random() + .5, fx2.KillFX)
+                fx2.Transform:SetScale(.5, .5, .5)
             end
             inst:DoTaskInTime(.6, function()
-                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, { "_health", "_combat" }, { "FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
+                local ents = TheSim:FindEntities(dx, dy, dz, 1.5, {"_health", "_combat" }, {"FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
-                    if  v ~= inst and v.components.combat ~= nil and attacker.components.combat ~= nil and attacker.components.combat:IsValidTarget(v) then
-                        v.components.combat:GetAttacked(attacker, 0, nil, nil, { planar = 17.5 })
+                    if  v ~= inst and v.components.combat and attacker.components.combat and attacker.components.combat:IsValidTarget(v) then
+                        v.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 8.75})
                     end
                 end
             end)
@@ -567,64 +566,52 @@ local function SpikeWaves(inst, target, attacker, angle)
     end
 end
 
-env.AddPrefabPostInit("staff_lunarplant", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+local function WathomBSStaffStuff(inst)
     local equippable = inst.components.equippable
-    local weapon = inst.components.weapon
-    local forgerepairable = inst.components.forgerepairable
-
-    local _OnEquip = equippable and equippable.onequipfn
-    local function OnEquip(inst, owner, ...)
-        if _OnEquip then
-            _OnEquip(inst, owner, ...)
-        end
-        local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
-        if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
-            inst.components.weapon:SetProjectile(projectile)
-        end
-    end
     if equippable then
+        local _OnEquip = equippable.onequipfn
+        local function OnEquip(inst, owner, ...)
+            local ret = _OnEquip(inst, owner, ...)
+            local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
+            if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
+                inst.components.weapon:SetProjectile(projectile)
+            end
+            return ret
+        end
         equippable:SetOnEquip(OnEquip)
     end
-
-    local _OnAttack = weapon and weapon.onattack
-    local function OnAttack(inst, attacker, target, skipsanity, ...)
-        if attacker:HasTag("wathom") then
-            local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
-
-            for angle = -20, 20, 4 do
-                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 34})
-            end
-            inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
-
-            if ret then
-                return ret
-            end
-        end
-        if _OnAttack then
-            return _OnAttack(inst, attacker, target, skipsanity, ...)
-        end
-    end
+    local weapon = inst.components.weapon
     if weapon then
+        local _OnAttack = weapon.onattack
+        local function OnAttack(inst, attacker, target, skipsanity, ...)
+            local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
+            if attacker:HasTag("wathom") then
+                for angle = -20, 20, 4 do
+                    SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
+                    if target and target.components.combat then 
+                        target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
+                    end
+                end
+                inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
+            end
+            return ret
+        end
         weapon:SetOnAttack(OnAttack)
     end
+end
 
+env.AddPrefabPostInit("staff_lunarplant", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    WathomBSStaffStuff(inst)
+
+    local forgerepairable = inst.components.forgerepairable
     if forgerepairable then
         local _OnRepaired = forgerepairable.onrepaired
         local function OnRepaired(inst, ...)
-			if _OnRepaired then
-				_OnRepaired(inst, ...)
-			end
-            if inst.components.equippable then
-                inst.components.equippable:SetOnEquip(OnEquip)
-            end
-            if inst.components.weapon then
-                inst.components.weapon:SetOnAttack(OnAttack)
-            end
+            local ret = _OnRepaired(inst, ...)
+            WathomBSStaffStuff(inst)
+            return ret
         end
         forgerepairable:SetOnRepaired(OnRepaired)
     end

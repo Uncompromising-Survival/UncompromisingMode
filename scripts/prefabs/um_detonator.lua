@@ -169,10 +169,10 @@ local SPELLS =
 			inst.components.spellbook:SetSpellName("Detonate Explosives")
 			inst.components.spellbook:SetSpellAction(nil)
 			inst.components.aoetargeting:SetDeployRadius(0)
-			inst.components.aoetargeting:SetShouldRepeatCastFn(ShouldRepeatCast)			
+			--inst.components.aoetargeting:SetShouldRepeatCastFn(ShouldRepeatCast)			
 			inst.components.aoetargeting.reticule.reticuleprefab = "reticuleaoe"
 			inst.components.aoetargeting.reticule.pingprefab = "reticuleaoeping"
-			inst.components.aoetargeting.reticule.updatepositionfn =ExplodeSpellUpdatePositionFn
+			inst.components.aoetargeting.reticule.updatepositionfn = ExplodeSpellUpdatePositionFn 
 			if TheWorld.ismastersim then
 				inst.components.aoetargeting:SetTargetFX(nil)
 				inst.components.aoespell:SetSpellFn(ExplodeSpellFn)
@@ -202,21 +202,47 @@ local SPELLBOOK_BG =
 	widget_scale = ICON_SCALE,
 }
 
---[[local function OnOpenSpellBook(inst)
-	local inventoryitem = inst.replica.inventoryitem
-	if inventoryitem ~= nil then
-		inventoryitem:OverrideImage("waxwelljournal_open")
+-- Detonator is a spellbook with only 1 spell, cast instantly
+local function OnOpenSpellBook(inst)
+
+	local doer
+    if TheWorld.ismastersim then
+        doer = inst.components.inventoryitem and inst.components.inventoryitem.owner
+    else
+        doer = ThePlayer
+    end
+
+	--Instantly select first spell
+	inst.components.spellbook:SelectSpell(1)
+
+	-- Make sure AOE targeting is allowed/enabled
+	if inst.components.aoetargeting and not inst.components.aoetargeting:IsEnabled() then
+		if inst.components.aoetargeting.Enable then
+			inst.components.aoetargeting:Enable(true)
+		end
+	end
+
+	-- Show the reticule immediately (client)
+	if doer.components.playercontroller.StartAOETargeting then
+		doer.components.playercontroller:StartAOETargeting(inst)
+	elseif inst.components.aoetargeting and inst.components.aoetargeting.StartTargeting then
+		inst.components.aoetargeting:StartTargeting(doer) -- fallback
+	end
+
+	if doer and doer.HUD and doer.HUD.CloseSpellWheel then
+    	doer.HUD:CloseSpellWheel(true)
 	end
 end
 
 local function OnCloseSpellBook(inst)
-	local inventoryitem = inst.replica.inventoryitem
-	if inventoryitem ~= nil then
-		inventoryitem:OverrideImage(nil)
-	end
-end]]
+	--nothing
+end
 
 --------------------------------------------------------------------------
+-- COPIED CODE FROM WINONA REMOTE CONTROL (DISABLED)
+--------------------------------------------------------------------------
+--[[
+
 
 local function SetLedEnabled(inst, enabled)
 	if enabled then
@@ -424,13 +450,15 @@ local function OnDisconnectCircuit(inst)--, node)
 		SetCharging(inst, false)
 	end
 end
+]]
 
+-- Disabled many parts of Winona remote control we don't need
 local function fn()
 	local inst = CreateEntity()
 
 	inst.entity:AddTransform()
 	inst.entity:AddAnimState()
-	inst.entity:AddSoundEmitter()
+	--inst.entity:AddSoundEmitter()
 	inst.entity:AddNetwork()
 
 	MakeInventoryPhysics(inst)
@@ -438,11 +466,11 @@ local function fn()
 	inst.AnimState:SetBank("winona_remote")
 	inst.AnimState:SetBuild("um_detonator")
 	inst.AnimState:PlayAnimation("idle")
-	inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
+	--inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
 
 	inst:AddTag("remotecontrol")
-	inst:AddTag("engineering")
-	inst:AddTag("engineeringbatterypowered")
+	--inst:AddTag("engineering")
+	--inst:AddTag("engineeringbatterypowered")
 
 	MakeInventoryFloatable(inst, "small", 0.14, { 1.1, 1.15, 1 })
 
@@ -451,13 +479,13 @@ local function fn()
 	inst.components.spellbook:SetRadius(SPELLBOOK_RADIUS)
 	inst.components.spellbook:SetFocusRadius(SPELLBOOK_FOCUS_RADIUS)
 	inst.components.spellbook:SetItems(SPELLS)
-	inst.components.spellbook:SetBgData(SPELLBOOK_BG)
-	--inst.components.spellbook:SetOnOpenFn(OnOpenSpellBook)
-	--inst.components.spellbook:SetOnCloseFn(OnCloseSpellBook)
+	--inst.components.spellbook:SetBgData(SPELLBOOK_BG)
+	inst.components.spellbook:SetOnOpenFn(OnOpenSpellBook)
+	inst.components.spellbook:SetOnCloseFn(OnCloseSpellBook)
 	inst.components.spellbook.opensound = "meta4/winona_UI/open"
-	inst.components.spellbook.closesound = "meta4/winona_UI/close"
-	--inst.components.spellbook.executesound = "meta4/winona_UI/select"	--use .clicksound for item buttons instead
-	inst.components.spellbook.focussound = "meta4/winona_UI/hover"		--item UIAnimButton don't have hover sound
+	--inst.components.spellbook.closesound = "meta4/winona_UI/close"
+	inst.components.spellbook.executesound = "meta4/winona_UI/select"	--use .clicksound for item buttons instead
+	--inst.components.spellbook.focussound = "meta4/winona_UI/hover"		--item UIAnimButton don't have hover sound
 
 	inst:AddComponent("aoetargeting")
 	inst.components.aoetargeting:SetAllowWater(true)
@@ -478,8 +506,8 @@ local function fn()
 
 	inst.swap_build = "um_detonator"
 
-	inst:AddComponent("updatelooper")
-	inst:AddComponent("colouradder")
+	--inst:AddComponent("updatelooper")
+	--inst:AddComponent("colouradder")
 
 	inst:AddComponent("inspectable")
 	--inst.components.inspectable.getstatus = GetStatus

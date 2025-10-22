@@ -119,18 +119,21 @@ local function master_postinit(inst)
 
 	-- choose which sounds this character will play
 	inst.soundsname = "winky"
-	
+
     inst.components.foodaffinity:AddPrefabAffinity("powcake", 20)
     inst.components.foodaffinity:AddPrefabAffinity("winter_food4", 20)
 
-	inst.components.eater:SetCanEatHorrible()
-	inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
-	inst.components.eater:SetCanEatRawMeat(true)
-	inst.components.eater:SetOnEatFn(checkfav)
-	
+    if inst.components.eater then
+        inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
+        inst.components.eater:SetCanEatHorrible()
+        inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
+        inst.components.eater:SetCanEatRawMeat(true)
+        inst.components.eater:SetOnEatFn(checkfav)
+    end
+    
     inst.components.sanity.night_drain_mult = TUNING.WENDY_SANITY_MULT
     inst.components.sanity.neg_aura_mult = TUNING.WENDY_SANITY_MULT
-	
+
 	inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
 
 	-- todo: Add an example special power here.
@@ -138,7 +141,7 @@ local function master_postinit(inst)
 	inst.components.hunger:SetMax(150)
 	inst.components.sanity:SetMax(125)
     --inst.components.sanity.custom_rate_fn = sanityfn
-	
+
 	inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
 	if TheWorld.state.isnight then
 		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 

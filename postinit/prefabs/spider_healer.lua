@@ -21,9 +21,7 @@ local function SpiderHealerFunctions(inst)
 end
 
 env.AddPrefabPostInit("spider_healer", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     local lootdropper = inst.components.lootdropper
     if lootdropper then

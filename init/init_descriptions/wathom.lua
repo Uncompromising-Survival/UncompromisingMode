@@ -295,7 +295,7 @@ DESCRIBE.BIGHT = "Maker's meddling, consequences realized."
 DESCRIBE.KNOOK = "Maker's meddling, consequences realized."
 DESCRIBE.ROSHIP = "Maker's meddling, consequences realized."
 
-DESCRIBE.UM_PAWN = "Maker's work? Curious, unfamiliar."
+DESCRIBE.UM_PAWN = "Curious, unfamiliar."
 DESCRIBE.UM_PAWN_NIGHTMARE = "Territorial. Sluggish, reaction speed."
 
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
@@ -616,8 +616,13 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "yo waggy what you cookin'",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
 DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
@@ -709,3 +714,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Prey's instincts, must interpret.",
     "Current tactics, unsuccessful. Patience, needed."}
 
 DESCRIBE.WATHOM_CORPSE = "Rise! Rise again!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Held prison. Restores integrity. Deadly and efficient."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Elemental counter, required."

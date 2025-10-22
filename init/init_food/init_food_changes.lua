@@ -559,3 +559,20 @@ AddPrefabPostInit("wetgoop", function(inst)
         inst.components.perishable:SetOnPerishFn(inst.Remove)
     end
 end)
+
+GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE = "UM_HORRIBLE_VEGGIE"
+table.insert(GLOBAL.FOODGROUP.BERRIES_AND_SEEDS.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.MOOSE.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.BEARGER.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+table.insert(GLOBAL.FOODGROUP.VEGETARIAN.types,GLOBAL.FOODTYPE.UM_HORRIBLE_VEGGIE)
+GLOBAL.FOODTYPE.UM_MOSS = "UM_MOSS"
+
+AddPrefabPostInit("acorn", function(inst)
+	if not GLOBAL.TheWorld.ismastersim then
+		return
+	end
+
+    --inst.components.edible.hungervalue = TUNING.CALORIES_SMALL / 2
+    inst.components.edible.foodtype = FOODTYPE.UM_HORRIBLE_VEGGIE
+	inst.components.edible.secondaryfoodtype = FOODTYPE.RAW
+end)

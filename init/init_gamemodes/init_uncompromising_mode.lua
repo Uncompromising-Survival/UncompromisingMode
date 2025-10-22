@@ -5,6 +5,7 @@ modimport("init/init_util")
 modimport("init/init_assets")
 modimport("init/init_widgets")
 modimport("init/minimap_icons")
+modimport("init/init_compat")
 
 --  [   Import customized shard RPC module ]    --
 
@@ -40,12 +41,14 @@ modimport("init/init_descriptions/wanda")
 modimport("init/init_descriptions/winky")
 modimport("init/init_descriptions/wathom")
 
+
+
 --	[ 		Number Tuning and PostInits		]	--
 
 modimport("init/init_tuning")
+modimport("init/init_tooltips")--load before postinit please!
 modimport("init/init_postinit")
 modimport("init/init_strings")
-modimport("init/init_tooltips")
 modimport("init/init_actions")
 modimport("init/init_containers")
 modimport("init/init_batterypower")
@@ -59,6 +62,12 @@ modimport("init/init_inkubator_ingredients")
 
 require("uncompromisingcommands")
 modimport("scripts/uncompromisingcommands_autocomplete")
+
+--	[ 			 User   Interface	    ]	--
+
+if TUNING.DSTU.UI_SHOWMULTIPRODUCTS then
+    modimport("init/init_showmultiproducts")
+end
 
 --	[ 				Gamemodes			]	--
 
@@ -209,6 +218,7 @@ if TUNING.DSTU.WAXWELL then
     modimport("init/init_character_changes/waxwell")
 end
 modimport("init/init_character_changes/walter")
+modimport("init/init_character_changes/wurt")
 modimport("init/lagcomp_warning")
 
 if GetModConfigData("hardcore") then

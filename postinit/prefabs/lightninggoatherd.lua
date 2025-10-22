@@ -84,19 +84,13 @@ local function LightningGoatHerdPostInit(inst)
     if herd then
         local _OldOnFull = herd.onfull or nil
         herd:SetOnFullFn(function(inst)
-            if _OldOnFull ~= nil then
-                _OldOnFull(inst)
-            end
-
+            if _OldOnFull then _OldOnFull(inst) end
             NotHasAlphaStartTimer(inst)
         end)
 
         local _OldRemoveMember = herd.removemember or nil
         herd:SetRemoveMemberFn(function(inst)
-            if _OldRemoveMember ~= nil then
-                _OldRemoveMember(inst)
-            end
-
+            if _OldRemoveMember then _OldRemoveMember(inst) end
             if inst.components.herd:IsFull() then
                 NotHasAlphaStartTimer(inst)
             end
@@ -104,10 +98,7 @@ local function LightningGoatHerdPostInit(inst)
 
         local _OldAddMember = herd.addmember or nil
         herd:SetAddMemberFn(function(inst)
-            if _OldAddMember ~= nil then
-                _OldAddMember(inst)
-            end
-
+            if _OldAddMember then _OldAddMember(inst) end
             if inst.components.herd:IsFull() then
                 NotHasAlphaStartTimer(inst)
             end
@@ -116,9 +107,6 @@ local function LightningGoatHerdPostInit(inst)
 end
 
 env.AddPrefabPostInit("lightninggoatherd", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     LightningGoatHerdPostInit(inst)
 end)

@@ -27,15 +27,20 @@ local wardrobe_tags = {
     "weapon",
     "heatrock",
     "fan",
+    "pocketwatch",
     "trap",
     "mine",
     "broken",
 }
 
+local wardrobe_notags = {
+
+}
+
 local wardrobe_prefabs = {
     "razor",
     "beef_bell",
-    "pocketwatch",
+    "pocketwatch_parts",
     "pocketwatch_dismantler",
     "sewing_tape",
     "sewing_kit",
@@ -44,14 +49,36 @@ local wardrobe_prefabs = {
     "wagpunkbits_kit",
 	"spiderden_bedazzler",
 	"spider_whistle",
-	"spider_repellent"
+	"spider_repellent",
+    "sludge_oil",
+    "saddle_basic",
+    "saddle_race",
+    "saddle_war",
+    "saddle_wathgrithr",
+    "saddle_shadow",
+}
+
+local wardrobe_noprefabs = {
+    "poop",
+    "snowball_item",
 }
 
 function CheckWardrobeItem(container, item, slot)
+    -- Discard these, do not let them in even if they match the tags
+    if item:HasOneOfTags(wardrobe_notags) then
+        return false
+    end
+
+    for _, prefab in pairs(wardrobe_noprefabs) do
+        if item.prefab == prefab then
+            return false
+        end
+    end
+
+    -- Allow these
     if item:HasOneOfTags(wardrobe_tags) then
         return true
     end
-
 
     for _, prefab in pairs(wardrobe_prefabs) do
         if item.prefab == prefab then
@@ -59,7 +86,11 @@ function CheckWardrobeItem(container, item, slot)
         end
     end
 
-    return string.match(item.prefab, "wx78module_") ~= nil
+    if string.match(item.prefab, "wx78module_") ~= nil then
+        return true
+    end
+
+    return false
 end
 
 function CheckToolboxItem(container, item, slot)
@@ -775,6 +806,37 @@ end
 
 for k, v in pairs(containers.params.spicepack.widget.slotbg) do
     containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
+end
+
+
+-- Polar Bearger Bin dried jerky change
+vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
+containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
+
+    -- Klei's containers.lua [[ beargerfur_sack ]]
+    if vanilla_beargerfur_sack_itemtestfn and vanilla_beargerfur_sack_itemtestfn(container, item, slot) then
+        return true
+    end
+
+    if not item or not item.name then
+        return false
+    end
+
+    -- Mod compatibility: If item is named in code or in-game "Jerky" or "Dried" then it is probably dried jerky
+    -- loopuleasa: Klei don't seem to implement a proper "isdried" generic tag
+    local code_name = item.prefab
+    local ingame_name = item.name:lower()
+    local isdried = false
+
+    isdried = string.find(code_name, "dried", 1, true)
+        or string.find(code_name, "jerky", 1, true)
+        or string.find(ingame_name, "dried", 1, true)
+        or string.find(ingame_name, "jerky", 1, true)
+
+    if isdried then
+		return true
+	end
+
 end
 
 

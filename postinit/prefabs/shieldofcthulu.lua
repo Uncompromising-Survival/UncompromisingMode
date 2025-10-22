@@ -100,9 +100,7 @@ end
 env.AddPrefabPostInit("shieldofterror", function(inst)
     CommonClientFunctions(inst)
 
-    if not TheWorld.ismastersim then
-        return
-    end
+    if not TheWorld.ismastersim then return end
 
     if TUNING.DSTU.ARMORREWORK and inst.components.armor then
         inst.components.armor:InitCondition(TUNING.SHIELDOFTERROR_ARMOR * 2.333, TUNING.SHIELDOFTERROR_ABSORPTION)
@@ -118,10 +116,6 @@ end)
 
 env.AddPrefabPostInit("eyemaskhat", function(inst)
     CommonClientFunctions(inst)
-
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     CommonFunctions(inst, "eyemask", "anim")
 end)

@@ -34,7 +34,7 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_FROZENFURY =
 
 -- CaliforniaKing
 ANNOUNCE.ANNOUNCE_ATTACH_BUFF_CALIFORNIAKING = "I can handle this."
-ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Wo.. Woby? Is that you?"
+ANNOUNCE.ANNOUNCE_DETACH_BUFF_CALIFORNIAKING = "Wo... Woby? Is that you?"
 DESCRIBE.CALIFORNIAKING = "I'd dare Wortox to finish the whole thing!"
 -- CaliforniaKing
 DESCRIBE.FLORAL_BANDAGE = "This stuff's potent!"
@@ -621,8 +621,13 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "Yo waggy you cookin that crystal?",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
 DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
@@ -641,3 +646,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a lot easier to catch these when they'
     "I'll get it when it lands. For sure this time!"}
 
 DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Nothing dreadful about a shield!"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"

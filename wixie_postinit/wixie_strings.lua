@@ -119,7 +119,7 @@ DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
 DESCRIBE.MOTHERGOOSE = DESCRIBE.MOOSE
 DESCRIBE.SPIDERQUEENCORPSE = "Ah, she caught the rigor mortis."
 ANNOUNCE.ANNOUNCE_SNEEZE = "aaaAAAGLSCHOO!!"
-ANNOUNCE.ANNOUNCE_HAYFEVER = "Agh, my nose is getting claustrophobic..."
+ANNOUNCE.ANNOUNCE_HAYFEVER = "Ugh, I think my *nose* is getting claustrophobic..."
 ANNOUNCE.ANNOUNCE_HAYFEVER_OFF =
 "*sniff* *sniff* Aahhh, finally, my allergies are gone!"
 ANNOUNCE.ANNOUNCE_SNOWSTORM =
@@ -493,7 +493,7 @@ DESCRIBE.PORTABLEBOAT_ITEM = "It's like a bouncy castle from the fair, but borin
 DESCRIBE.MASTUPGRADE_WINDTURBINE_ITEM = "The wind does the work for me!"
 
 DESCRIBE.WIXIE_PIANO = "I miss my piano lessons..."
-DESCRIBE.WIXIE_CLOCK = "Atleast it's ticking won't keep me up at night."
+DESCRIBE.WIXIE_CLOCK = "Atleast its ticking won't keep me up at night."
 DESCRIBE.WIXIE_WARDROBE = "Well now I know what was making all that noise..."
 DESCRIBE.CHARLES_T_HORSE = "Charles...?"
 DESCRIBE.THE_REAL_CHARLES_T_HORSE = "Charles!! I thought I'd never find you!"
@@ -570,8 +570,13 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "hi scrimbles", --Carlos: Hiiiii
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
 DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
 DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
@@ -660,3 +665,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You gotta be kidding me!",
     "Maybe I'll pretend like I don't care, then WHAM!"}
 
 DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "You didn't have anything better than a rock?"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Hey! Using ice as a shield's not fair!"

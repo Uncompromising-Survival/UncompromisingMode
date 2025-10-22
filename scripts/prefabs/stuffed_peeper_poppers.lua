@@ -55,7 +55,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst)
-	
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -73,6 +73,7 @@ local function fn()
     inst.components.edible.hungervalue = 37.5
     inst.components.edible.sanityvalue = -15
     inst.components.edible.foodtype = FOODTYPE.MEAT
+    inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(4*TUNING.PERISH_TWO_DAY)

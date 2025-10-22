@@ -29,19 +29,31 @@ local function Zap(inst)
 		SpawnPrefab("sparks").Transform:SetPosition(x, y + .25 + math.random() * 2, z)
 	end
 	
-    local ents = TheSim:FindEntities(x, y, z, 3.5, { "_health" }, inst.NoTags)
-    local chargeables = TheSim:FindEntities(x, y, z, 3.5, { "_inventoryitem", }, inst.NoTags)
+    local radius = 3.5
+    local ents = TheSim:FindEntities(x, y, z, radius, { "_health" }, inst.NoTags)
+    local chargeables = TheSim:FindEntities(x, y, z, radius, { "_inventoryitem", }, inst.NoTags)
+    local lightningrods = TheSim:FindEntities(x, y, z, radius, { "structure", "lightningrod"}, {"INLIMBO"})
 
     for k, item in pairs(chargeables) do
         print(k, item)
-        if item ~= nil and item.components.fueled ~= nil and item.components.fueled.fueltype == FUELTYPE.BATTERYPOWER then
-            item.components.fueled:DoDelta(TUNING.SMALL_FUEL)
-            if item.components.fueled.ontakefuelfn then
-                item.components.fueled.ontakefuelfn(item, TUNING.SMALL_FUEL)
+        if item ~= nil then
+            if item.components.fueled ~= nil and item.components.fueled.fueltype == FUELTYPE.BATTERYPOWER then
+                item.components.fueled:DoDelta(TUNING.SMALL_FUEL)
+                if item.components.fueled.ontakefuelfn then
+                    item.components.fueled.ontakefuelfn(item, TUNING.SMALL_FUEL)
+                end
+                if item.components.fueled:GetPercent() > 1 then
+                    item.components.fueled:SetPercent(1)
+                end
+            elseif item:HasTag("electricaltool") and item.components.finiteuses ~= nil then
+                item.components.finiteuses:Repair(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR)
             end
-            if item.components.fueled:GetPercent() > 1 then
-                item.components.fueled:SetPercent(1)
-            end
+        end
+    end
+
+    for k, rod in pairs(lightningrods) do
+        if rod.onlightningfn ~= nil then 
+            rod.onlightningfn(rod)   
         end
     end
 

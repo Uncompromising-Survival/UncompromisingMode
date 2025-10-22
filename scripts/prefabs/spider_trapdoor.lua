@@ -1,30 +1,28 @@
 local brain = require "brains/spiderbrain_trapdoor"
 
-SetSharedLootTable( 'spider_trapdoor',
-{
-    {'monstermeat',  1.00},
-})
-SetSharedLootTable( 'spider_trapdoor_hooded',
-{
-    {'silk',  1.00},
-})
+SetSharedLootTable('spider_trapdoor',
+    {
+        { 'monstermeat', 1.00 },
+    })
+SetSharedLootTable('spider_trapdoor_hooded',
+    {
+        { 'silk', 1.00 },
+    })
 local function ShouldAcceptItem(inst, item, giver)
-
     local in_inventory = inst.components.inventoryitem.owner ~= nil
     if in_inventory and not inst.components.eater:CanEat(item) then
         return false, "SPIDERNOHAT"
     end
 
     return (giver:HasTag("spiderwhisperer") and inst.components.eater:CanEat(item)) or
-           (item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD)
+        (item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD)
 end
 
 local function HasFriendlyLeader(inst, target)
     local leader = inst.components.follower.leader
     local target_leader = (target.components.follower ~= nil) and target.components.follower.leader or nil
-    
-    if leader ~= nil and target_leader ~= nil then
 
+    if leader ~= nil and target_leader ~= nil then
         if target_leader.components.inventoryitem then
             target_leader = target_leader.components.inventoryitem:GetGrandOwner()
             -- Don't attack followers if their follow object has no owner
@@ -34,14 +32,13 @@ local function HasFriendlyLeader(inst, target)
         end
 
         local PVP_enabled = TheNet:GetPVPEnabled()
-        return leader == target or (target_leader ~= nil 
-                and (target_leader == leader or (target_leader:HasTag("player") 
-                and not PVP_enabled))) or
-                (target.components.domesticatable and target.components.domesticatable:IsDomesticated() 
+        return leader == target or (target_leader ~= nil
+                and (target_leader == leader or (target_leader:HasTag("player")
+                    and not PVP_enabled))) or
+            (target.components.domesticatable and target.components.domesticatable:IsDomesticated()
                 and not PVP_enabled) or
-                (target.components.saltlicker and target.components.saltlicker.salted
+            (target.components.saltlicker and target.components.saltlicker.salted
                 and not PVP_enabled)
-    
     elseif target_leader ~= nil and target_leader.components.inventoryitem then
         -- Don't attack webber's chester
         target_leader = target_leader.components.inventoryitem:GetGrandOwner()
@@ -54,11 +51,10 @@ end
 
 function GetOtherSpiders(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    return TheSim:FindEntities(x, y, z, 15,  { "spider" }, { "FX", "NOCLICK", "DECOR", "INLIMBO" })
+    return TheSim:FindEntities(x, y, z, 15, { "spider" }, { "FX", "NOCLICK", "DECOR", "INLIMBO" })
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)
-
     if inst.components.eater:CanEat(item) then
         inst.components.eater:Eat(item)
 
@@ -73,7 +69,6 @@ local function OnGetItemFromPlayer(inst, giver, item)
             inst.components.combat:SetTarget(nil)
         elseif giver.components.leader ~= nil and
             inst.components.follower ~= nil then
-            
             if giver.components.minigame_participator == nil then
                 giver:PushEvent("makefriend")
                 giver.components.leader:AddFollower(inst)
@@ -117,7 +112,7 @@ local function OnGetItemFromPlayer(inst, giver, item)
                 end
             end
         end
-    -- I also wear hats
+        -- I also wear hats
     elseif item.components.equippable ~= nil and item.components.equippable.equipslot == EQUIPSLOTS.HEAD then
         local current = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         if current ~= nil then
@@ -147,7 +142,7 @@ local function FindTarget(inst, radius)
                     and inst.components.combat:CanTarget(guy)
                     and not (inst.components.follower ~= nil and inst.components.follower.leader == guy)
                     and not HasFriendlyLeader(inst, guy)
-                    and not (inst.components.follower.leader ~= nil and inst.components.follower.leader:HasTag("player") 
+                    and not (inst.components.follower.leader ~= nil and inst.components.follower.leader:HasTag("player")
                         and guy:HasTag("player") and not TheNet:GetPVPEnabled())
             end,
             TARGET_MUST_TAGS,
@@ -165,12 +160,12 @@ local function WarriorRetarget(inst)
 end
 
 local function keeptargetfn(inst, target)
-   return target ~= nil
+    return target ~= nil
         and target.components.combat ~= nil
         and target.components.health ~= nil
         and not target.components.health:IsDead()
         and not (inst.components.follower ~= nil and
-                (inst.components.follower.leader == target or inst.components.follower:IsLeaderSame(target)))
+            (inst.components.follower.leader == target or inst.components.follower:IsLeaderSame(target)))
 end
 
 local function BasicWakeCheck(inst)
@@ -245,11 +240,11 @@ local function OnIsCaveDay(inst, iscaveday)
 end
 
 local function CalcSanityAura(inst, observer)
-    if observer:HasTag("spiderwhisperer") or inst.bedazzled or 
-    (inst.components.follower.leader ~= nil and inst.components.follower.leader:HasTag("spiderwhisperer")) then
+    if observer:HasTag("spiderwhisperer") or inst.bedazzled or
+        (inst.components.follower.leader ~= nil and inst.components.follower.leader:HasTag("spiderwhisperer")) then
         return 0
     end
-    
+
     return inst.components.sanityaura.aura
 end
 
@@ -280,7 +275,7 @@ end
 
 local function SetHappyFace(cond) --Trapdoor spiders don't *actually* smile.
     if is_happy then
-        inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")    
+        inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")
     else
         inst.AnimState:ClearOverrideSymbol("face")
     end
@@ -309,7 +304,7 @@ end
 
 local function SetHappyFace(inst, is_happy)
     if is_happy then
-        inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")    
+        inst.AnimState:OverrideSymbol("face", "spider_trapdoor", "happy_face")
     else
         inst.AnimState:ClearOverrideSymbol("face")
     end
@@ -321,7 +316,7 @@ end
 
 local function create_common(build)
     local inst = CreateEntity()
-    
+
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
@@ -357,19 +352,19 @@ local function create_common(build)
     if not TheWorld.ismastersim then
         return inst
     end
-    inst.Transform:SetScale(1.1,1.1,1.1)
+    inst.Transform:SetScale(1.1, 1.1, 1.1)
     ----------
     inst.OnEntitySleep = OnEntitySleep
 
     -- locomotor must be constructed before the stategraph!
     inst:AddComponent("locomotor")
-    inst.components.locomotor:SetSlowMultiplier( 1 )
+    inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
     inst.components.locomotor.pathcaps = { ignorecreep = true }
     inst.components.locomotor:SetAllowPlatformHopping(true)
-    
+
     inst.SoundPath = SoundPath
-    
+
     inst:SetStateGraph("SGspider")
 
     inst:AddComponent("lootdropper")
@@ -379,11 +374,11 @@ local function create_common(build)
     inst.components.lootdropper:AddRandomHauntedLoot("spidergland", 1)
     inst.components.lootdropper.numrandomloot = 1
 
-    ---------------------        
+    ---------------------
     MakeMediumBurnableCharacter(inst, "body")
     MakeMediumFreezableCharacter(inst, "body")
     inst.components.burnable.flammability = TUNING.SPIDER_FLAMMABILITY
-    ---------------------       
+    ---------------------
 
     inst:AddComponent("health")
     inst:AddComponent("combat")
@@ -422,8 +417,8 @@ local function create_common(build)
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.canbepickedup = false
-    inst.components.inventoryitem.canbepickedupalive = true    
-    
+    inst.components.inventoryitem.canbepickedupalive = true
+
     inst:ListenForEvent("gotosleep", OnGoToSleep)
     inst:ListenForEvent("onwakeup", OnWakeUp)
     ------------------
@@ -445,10 +440,10 @@ local function create_common(build)
     inst:AddComponent("halloweenmoonmutable")
     inst.components.halloweenmoonmutable:SetPrefabMutated("spider_moon")
     inst.components.halloweenmoonmutable:SetOnMutateFn(HalloweenMoonMutate)
-    
+
     MakeFeedableSmallLivestock(inst, TUNING.SPIDER_PERISH_TIME)
     MakeHauntablePanic(inst)
-    
+
     inst:AddComponent("embarker")
     inst:AddComponent("drownable")
     inst:SetBrain(brain)
@@ -458,14 +453,14 @@ local function create_common(build)
     inst:WatchWorldState("iscaveday", OnIsCaveDay)
     OnIsCaveDay(inst, TheWorld.state.iscaveday)
     inst:ListenForEvent("ontrapped", OnTrapped)
-    
+
     inst.recipe = "mutator_trapdoor"
-    
+
     inst.SetHappyFace = SetHappyFace
-    
+
     inst:ListenForEvent("startleashing", OnStartLeashing)
     inst:ListenForEvent("stopleashing", OnStopLeashing)
- 
+
     return inst
 end
 
@@ -476,8 +471,8 @@ local function create_trapdoor()
         return inst
     end
     --inst:AddTag("tauntless")
-	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
-	
+    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor')
+
     inst.components.health:SetMaxHealth(200)
 
     inst.components.combat:SetDefaultDamage(34)
@@ -485,7 +480,7 @@ local function create_trapdoor()
     inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
     inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
     inst.components.locomotor.walkspeed = TUNING.SPIDER_WARRIOR_WALK_SPEED
-    inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED*1.1
+    inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED * 1.1
 
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
     inst:AddTag("trapdoorspider")
@@ -499,7 +494,7 @@ local function create_trapdoor_hooded()
         return inst
     end
     --inst:AddTag("tauntless")
-	inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
+    inst.components.lootdropper:SetChanceLootTable('spider_trapdoor_hooded')
 
     inst.components.health:SetMaxHealth(200)
 
@@ -508,16 +503,24 @@ local function create_trapdoor_hooded()
     inst.components.combat:SetRange(TUNING.SPIDER_WARRIOR_ATTACK_RANGE, TUNING.SPIDER_WARRIOR_HIT_RANGE)
     inst.components.combat:SetRetargetFunction(2, WarriorRetarget)
     inst.components.locomotor.walkspeed = TUNING.SPIDER_WARRIOR_WALK_SPEED
-    inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED*1.1
+    inst.components.locomotor.runspeed = TUNING.SPIDER_WARRIOR_RUN_SPEED * 1.1
 
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_MED
     inst:AddTag("trapdoorspider")
-	inst.hooded = true
-	
-	--inst.components.inspectable.nameoverride = "SPIDER_TRAPDOOR"
-	
+    inst.hooded = true
+
+    inst:ListenForEvent("onattackother", function(inst, data)
+        if TheWorld:HasTag("island") or TheWorld:HasTag("volcano") then
+            if data.target.components.poisonable then
+                data.target.components.poisonable:Poison(true)
+            end
+        end
+    end)
+
+    --inst.components.inspectable.nameoverride = "SPIDER_TRAPDOOR"
+
     return inst
 end
 
 return Prefab("spider_trapdoor", create_trapdoor),
-Prefab("spider_trapdoor_hooded", create_trapdoor_hooded)
+    Prefab("spider_trapdoor_hooded", create_trapdoor_hooded)

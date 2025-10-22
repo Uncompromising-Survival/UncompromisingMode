@@ -40,6 +40,13 @@ ARMOR_ABSORPTION_OVERRIDES = {
 	["armor_lunarplant_husk"] = .7,
 	["slurtlehat"] = .7,
 	["um_armor_bramble_rimeweed"] = .7,
+
+    -- Island Adventures
+    ["armorlimestone"] = .75,
+    ["armorobsidian"] = .7,
+    ["armorseashell"] = .7,
+    ["armorcactus"] = .7,
+    ["oxhat"] = .75,
 }
 
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a

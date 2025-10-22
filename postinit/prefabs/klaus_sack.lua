@@ -8,6 +8,7 @@ env.AddPrefabPostInit("klaus_sack", function(inst)
 	end
 	
 	inst:AddComponent("inventory")
+	inst.components.inventory.maxslots = 2000
 	
 	local _OldOnUseKlausKey = inst.components.klaussacklock.onusekeyfn
 	

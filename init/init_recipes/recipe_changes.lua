@@ -18,6 +18,10 @@ if GetModConfigData("longpig") then
         Ingredient("skeletonmeat", 1),
         Ingredient("spidergland", 1)
     }
+    AllRecipes["ghostlyelixir_fastregen"].ingredients = {
+        Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50),
+        Ingredient("ghostflower", 4)
+    }
 end
 
 if GetModConfigData("compostoverrot") then
@@ -55,35 +59,37 @@ if GetModConfigData("compostoverrot") then
 end
 
 -- Funcap Change
+if GetModConfigData("funcap_fun") then
+    AllRecipes["red_mushroomhat"].ingredients = {
+        Ingredient("red_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
 
-AllRecipes["red_mushroomhat"].ingredients = {
-    Ingredient("red_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+    AllRecipes["green_mushroomhat"].ingredients = {
+        Ingredient("green_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
 
-AllRecipes["green_mushroomhat"].ingredients = {
-    Ingredient("green_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+    AllRecipes["blue_mushroomhat"].ingredients = {
+        Ingredient("blue_cap", 6),
+        Ingredient("slurper_pelt", 4),
+    }
+end
 
-AllRecipes["blue_mushroomhat"].ingredients = {
-    Ingredient("blue_cap", 6),
-    Ingredient("slurper_pelt", 4),
-}
+if GetModConfigData("celestialitems_revert") then
+    AllRecipes["glasscutter"].ingredients = {
+        Ingredient("boards", 1),
+        Ingredient("moonglass", 6),
+    }
+    AllRecipes["glasscutter"].nounlock = true
 
-AllRecipes["glasscutter"].ingredients = {
-    Ingredient("boards", 1),
-    Ingredient("moonglass", 6),
-}
-AllRecipes["glasscutter"].nounlock = true
+    AllRecipes["moonglassaxe"].nounlock = true
 
-AllRecipes["moonglassaxe"].nounlock = true
-
-AllRecipes["moon_mushroomhat"].ingredients = {
-    Ingredient("moon_cap", 4),
-    Ingredient("livinglog", 2),
-}
-
+    AllRecipes["moon_mushroomhat"].ingredients = {
+        Ingredient("moon_cap", 4),
+        Ingredient("livinglog", 2),
+    }
+end
 --woodie stuff
 
 --local config_skilltrees = GetModConfigData("woodie_skilltree")
@@ -118,6 +124,11 @@ end
 AllRecipes["moonrockidol"].ingredients = {
     Ingredient("moonrocknugget", GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST),
     Ingredient("purplegem", 1)
+}
+
+AllRecipes["icehat"].ingredients = {
+    Ingredient("rope", 2),
+    Ingredient("ice", 15)
 }
 
 AllRecipes["minifan"].ingredients = {
@@ -246,6 +257,10 @@ AllRecipes["boat_bumper_kelp_kit"].ingredients = {
     Ingredient("cutgrass", 6)
 }
 
+if TUNING.DSTU.ISLAND_ADVENTURES_CLIENT then
+    AllRecipes["boat_bumper_limestone_kit"].numtogive = 4
+end
+
 if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     AllRecipes["mighty_gym"].ingredients = { Ingredient("boards", 4), Ingredient("cutstone", 2), Ingredient("rope", 3) }
     AllRecipes["dumbbell"].ingredients = { Ingredient("rocks", 4), Ingredient("twigs", 1) }
@@ -262,8 +277,10 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
-    AllRecipes["battlesong_shadowaligned"] = nil
-    AllRecipes["battlesong_lunaraligned"] = nil
+    --AllRecipes["battlesong_shadowaligned"] = nil
+    --AllRecipes["battlesong_lunaraligned"] = nil
+    AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
 end
 
 if GetModConfigData("telestaff_rework") then
@@ -284,17 +301,6 @@ if GetModConfigData("telestaff_rework") then
         Ingredient("purplegem", 1)
     }
 end
-
-if GetModConfigData("longpig") then
-    AddRecipe2(
-        "ghostlyelixir_fastregen",
-        { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Ingredient("ghostflower", 4) },
-        TECH.NONE,
-        { builder_tag = "elixirbrewer" },
-        { "CHARACTER" }
-    )
-end
-
 
 --I HATE FRAZZLED WIRES!!!!!!!!
 AllRecipes["boat_magnet_kit"].ingredients = { Ingredient("boards", 2), Ingredient("cutstone", 2), Ingredient("transistor", 1), Ingredient("wagpunk_bits", 1) }
@@ -374,3 +380,5 @@ if GetModConfigData("snowstorms") then
 end
 
 AllRecipes["seafaring_prototyper"].ingredients = { Ingredient("transistor", 1), Ingredient("boards", 1) }
+
+AllRecipes["woby_treat"].numtogive = 1

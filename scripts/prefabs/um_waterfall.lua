@@ -460,7 +460,6 @@ local function fn()
     inst.entity:AddAnimState()
     inst.entity:AddLight()
 	inst.entity:AddSoundEmitter()
-    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     if not TheNet:IsDedicated() then
@@ -472,8 +471,6 @@ local function fn()
     inst.AnimState:SetBuild("um_waterfall")
     inst.AnimState:SetBank("um_waterfall")
     inst.AnimState:PlayAnimation("waterfall_loop", true)
-	
-    inst.MiniMapEntity:SetIcon("um_waterfall_pool.png")
 
     inst.Light:SetColour(COLOUR_R, COLOUR_G, COLOUR_B)
     inst.Light:SetIntensity(0.5)

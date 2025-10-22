@@ -46,14 +46,17 @@ local _storedhassler = nil
 local _timetoattack
 
 local _activeplayers = {}
-
+local um_overridespawn = false
 --------------------------------------------------------------------------
 --[[ Private member functions ]]
 --------------------------------------------------------------------------
 
 local function AllowedToAttack(data)
 	--print("Deerclopsspawner allowed to attack?", #_activeplayers, TheWorld.state.cycles, _attackoffseason, TheWorld.state.season)
-    return  #_activeplayers > 0 and (_attackoffseason or TheWorld.state.season == "winter")
+    return  #_activeplayers > 0 and
+            ((data and data.skipcycles) or TheWorld.state.cycles > TUNING.NO_BOSS_TIME or um_overridespawn) and
+                (_attackoffseason or
+                TheWorld.state.season == "winter")
 end
 
 local function IsEligible(player)
@@ -257,6 +260,7 @@ end
 
 local function OnMegaFlare(src, data)
 	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.iswinter then
+		um_overridespawn = true
 		if not _activehassler then
 			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
 				local time = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)

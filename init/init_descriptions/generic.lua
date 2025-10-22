@@ -684,11 +684,16 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
-DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "Hello Do not Crash",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "It displays some kind of recipe."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Perhaps I can make some new experiments with this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "Doing the same thing over and over again is very scientific."
 
 DESCRIBE.UM_RICE_PUDDING = "Some plain old rice pudding."
 
@@ -697,12 +702,13 @@ DESCRIBE.UM_BOATBOTTLE = {
     EMPTY = "If I rearrange every particle in my boat, is it still the same boat?"
 }
 
-ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"It's a bit too slippery to hit.",
+ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = { "It's a bit too slippery to hit.",
     "Maybe I should wait till it sits still.",
     "I can't hit it while it's fluttering about.",
     "It'll be easier to hit when it rests.",
-    "It might be easier to hit if it's landed."}
-	
+    "It might be easier to hit if it's landed." }
+
 DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
-DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Exceptionally resilient, enough to keep any danger at bay."
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"

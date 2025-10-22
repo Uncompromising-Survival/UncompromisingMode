@@ -588,11 +588,16 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
-DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "No machine will ever nourish an imp! ...If only.",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "What an intriguing display! I wonder what it's trying to say?"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "A lever! What an endeavor! Its creator must think he's very clever."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "A lever! How... whatever? ...There's only so many words."
 
 DESCRIBE.UM_RICE_PUDDING = "What's my name? Pudding Taine, ask me again and I'll tell you the same!"
 
@@ -608,3 +613,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hyuhu, are you trying to play a game with m
     "Once that bug lands, it's soul will be in my hands."}
 
 DESCRIBE.WATHOM_CORPSE = "Stay in the venue, he's damned to continue!"
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "With my mind, I'll shield my hide!"
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "We need to remove its chill before I can get the kill!"

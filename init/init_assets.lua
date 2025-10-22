@@ -496,6 +496,9 @@ Assets = {
     
     Asset("IMAGE", "images/cookbook_um_kebab.tex"),
     Asset("ATLAS", "images/cookbook_um_kebab.xml"),
+
+    Asset("IMAGE", "images/cookbook_um_sponge_cake.tex"),
+    Asset("ATLAS", "images/cookbook_um_sponge_cake.xml"),
     
     --crafting menu avatars
     Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
@@ -1049,6 +1052,8 @@ Assets = {
     Asset("ANIM", "anim/hound_spore_ocean.zip"),
     Asset("ANIM", "anim/glacial_hound.zip"),
     Asset("ANIM", "anim/glacial_hound_ocean.zip"),
+    Asset("ANIM", "anim/um_ice_warg.zip"),
+
 
     Asset("ANIM", "anim/hippo_water_attacks.zip"),
     Asset("ANIM", "anim/hippo_water.zip"),

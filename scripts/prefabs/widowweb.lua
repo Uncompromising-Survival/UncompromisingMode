@@ -1,6 +1,8 @@
+require "webbedcreatureloot"
+
 local assets =
 {
-	Asset("MINIMAP_IMAGE", "whitespider_den"),
+    Asset("MINIMAP_IMAGE", "whitespider_den"),
 }
 
 local prefabs =
@@ -8,37 +10,33 @@ local prefabs =
     "spider_dropper",
 }
 
-local function TrySpawnCocoon(x, z,size)
+local function TrySpawnCocoon(x, z)
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
-    if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
-       #TheSim:FindEntities(xi, 0, zi, 3, {"webbedcreature"}) < 2 and
-       #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
+    if #TheSim:FindEntities(xi, 0, zi, 1.5, { "webbedcreature" }) == 0 and
+        #TheSim:FindEntities(xi, 0, zi, 3, { "webbedcreature" }) < 2 and
+        #TheSim:FindEntities(xi, 0, zi, 8, { "webbedcreature" }) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
-		if size then
-			cocoon.size = size
-		end
     else
         TrySpawnCocoon(x, z)
     end
 end
 
-
+local blacklisted_coocoons = {"krampus", "walrus", "grassgator"}
 local function RerollCocoons(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    local existing_cocoons = TheSim:FindEntities(x,y,z, 30, {"webbedcreature"})
+    local existing_cocoons = TheSim:FindEntities(x, y, z, 30, {"webbedcreature"})
     local widowweb = TheSim:FindFirstEntityWithTag("widowweb")
-	
-    if widowweb ~= nil--[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
+
+    if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-			if v.size == 13 or v.size == 14 or v.size == 12 or v.size == 23 then
-			else
-				local size = math.random(1,20)
-				v:Remove()
-				TrySpawnCocoon(x, z,size)
-			end
-        end      
+            if table.contains(blacklisted_coocoons, v.cocoon_creature) or table.contains(COCOON_CHARACTERS, v.cocoon_creature) then --Krampus, McTusk, Grass Gator, and Survivor Cocoon med & large.
+            else
+                v:Remove()
+                TrySpawnCocoon(x, z)
+            end
+        end
     end
 end
 
@@ -53,7 +51,7 @@ local function GenerateNewWidow(inst)
     inst.components.childspawner:AddChildrenInside(1)
     --inst.components.childspawner:StartSpawning()
     if not inst.components.timer:TimerExists("reroll_cocoons") then
-        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME*5)
+        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
     end
 end
 
@@ -64,27 +62,27 @@ local function ontimerdone(inst, data)
     if data.name == "reroll_cocoons" then
         RerollCocoons(inst)
         if not inst.components.timer:TimerExists("reroll_cocoons") then
-            inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME*5)
+            inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
         end
     end
 end
 
-local function SpawnFX(inst,num)
-	for i = 1,num do
-		SpawnPrefab("oceantree_leaf_fx_fall").Transform:SetPosition(math.random(-8,8),0,math.random(-8,8))
-	end
+local function SpawnFX(inst, num)
+    for i = 1, num do
+        SpawnPrefab("oceantree_leaf_fx_fall").Transform:SetPosition(math.random(-8, 8), 0, math.random(-8, 8))
+    end
 end
 
 local function SpawnInvestigators(inst, target)
-	local x, y, z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     if inst.components.childspawner and target then
         local spider = inst.components.childspawner:SpawnChild()
         if spider then
-			local x,y,z = inst.Transform:GetWorldPosition()
+            local x, y, z = inst.Transform:GetWorldPosition()
             spider.sg:GoToState("fall")
-			spider.suggesttarget = target
-			spider:DoTaskInTime(0.5,function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
-			SpawnFX(inst,4)
+            spider.suggesttarget = target
+            spider:DoTaskInTime(.5, function(spider) spider.components.combat:SuggestTarget(spider.suggesttarget) end)
+            SpawnFX(inst, 4)
         end
     end
 end
@@ -95,31 +93,33 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddNetwork()
 
+    inst:AddTag("widowweb")
+
     if not TheNet:IsDedicated() then
         inst:AddComponent("pointofinterest")
         inst.components.pointofinterest:SetHeight(0)
     end
 
     inst.entity:SetPristine()
-		
+
     if not TheWorld.ismastersim then
         return inst
     end
 
     inst.SpawnInvestigators = SpawnInvestigators
-	inst:AddTag("widowweb")
-    inst:AddComponent("childspawner")
-    inst.components.childspawner.childname = "hoodedwidow"
-    inst.components.childspawner:SetMaxChildren(1)
-    inst.components.childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
-    inst.components.childspawner.onchildkilledfn = OnKilled
-    inst.components.childspawner:StopRegen()
+
+    local childspawner = inst:AddComponent("childspawner")
+    childspawner.childname = "hoodedwidow"
+    childspawner:SetMaxChildren(1)
+    childspawner:SetSpawnPeriod(TUNING.DRAGONFLY_SPAWN_TIME, 0)
+    childspawner.onchildkilledfn = OnKilled
+    childspawner:StopRegen()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", ontimerdone)
 
     if not inst.components.timer:TimerExists("reroll_cocoons") then
-        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME*5)
+        inst.components.timer:StartTimer("reroll_cocoons", TUNING.TOTAL_DAY_TIME * 5)
     end
 
 

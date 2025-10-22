@@ -11,9 +11,6 @@ end
 
 
 env.AddPrefabPostInit("stash_map", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     inst.components.mapspotrevealer:SetPreRevealFn(PreReveal)
 end)

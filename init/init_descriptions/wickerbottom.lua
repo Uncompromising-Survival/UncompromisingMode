@@ -5,6 +5,84 @@ ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WICKERBOTTOM.ACTIONFAIL
 
 --	[ 		Wickerbottom Descriptions		]	--
 
+ANNOUNCE.TEACH_OTHERS_ONLEARN_LINES = {
+    "And that's all there is to it.",
+    "Elementary.",
+    "A simple application of first principles.",
+    "You're quite the fast learner.",
+    "Don't forget to practice what you learned.",
+    "Pay attention, dear.",
+    "I will leave the rest for homework.",
+    "Knowledge opens up a whole new world.",
+    "Very well. You got it.",
+    "The next generation is in safe hands.",
+    "Ready for more lessons?",
+    "See? It's not that difficult.",
+    "You can learn whatever you set your mind to.",
+    "Congratulations, you have passed.",
+    "You've made great progress.",
+    "Some exercise may be required later.",
+    "A fundamental concept, truly.",
+    "Now, commit it to memory.",
+    "Education is a lifelong pursuit.",
+    "An admirable display of focus.",
+    "Every student needs patience.",
+    "The pursuit of knowledge never ends.",
+    "Remember, theory without practice is folly.",
+    "A modest beginning, but a beginning nonetheless.",
+    "Ah, to mold young minds again.",
+    "I expect you to apply this wisely.",
+    "Nothing delights me more than a willing pupil.",
+    "Your curiosity does you credit.",
+    "You'll find this quite indispensable in the field.",
+    "Knowledge shared is knowledge preserved.",
+    "Even the brightest must start with basics.",
+    "There is elegance in simplicity, is there not?",
+    "Discipline is the root of mastery.",
+    "Every fact, a stepping stone.",
+    "Ignorance is curable, with effort.",
+    "All discoveries build upon the old.",
+    "On the shoulder of giants.",
+    "Doubt is healthy, but test it with reason.",
+    "The mind is a muscle to be exercised daily.",
+    "A tidy notebook is a tidy mind.",
+    "Patience, dear. Rushing breeds mistakes.",
+    "The universe unfolds to the curious.",
+    "Learning is its own reward, don't you think?",
+    "My biggest blessing are students like you.",
+    "May you one day surpass me.",
+    "Your diligence is commendable.",
+    "Even I learn something new every day.",
+    "Respect the knowledge, and it will serve you well.",
+    "Remember, wisdom is applied knowledge.",
+    "I expect a full report on your progress.",
+    "The greatest minds give merit to the simplest questions.",
+    "Never let curiosity go hungry.",
+    "May you teach it further, someday.",
+    "You'll remember this lesson when you're older and wiser.",
+    "You wish to learn that? I won't judge curiosity. But really, dear?",
+    "Aren't there more useful pursuits than that? No matter.",
+    "That wasn't part of the curriculum, but I'll never refuse a pupil.",
+    "Learn as if you were to live forever, as they say.",
+    "Remember, dear, actualy learning requires doing.",
+    "Your passion for learning shows. I'm proud, dear.",
+    "Remember, dear, you don't understand until you learn it more than one way.",
+    "If you can teach it, you understand it.",
+    "Spoon feeding in the long run only teaches the shape of the spoon.",
+    "Remember, dear, we only act on learnings that we practically apply.",
+    "That is what learning is.",
+    "Remember dear, what we learned today can never be taken away from us.",
+    "It is what one's know that prevents learning, sometimes.",
+    "Remember, dear, to question your assumptions.",
+    "A mirror, now a window.",
+    "Curiosity is the wick in the candle of learning.",
+    "As one candle to another.",
+    "Remember, dear, never let formal education get in the way of your learning.",
+    "Sometimes failure is the best teacher.",
+    "Everything is a learning experience.",
+    "I'm proud of what we managed to learn together.",
+}
+
 ANNOUNCE.DREADEYE_SPOOKED = "Oh!! That wasn't what I was expecting..."
 ANNOUNCE.ANNOUNCE_HARDCORE_RES =
 "We'll need the body for a heart to be of much use."
@@ -644,11 +722,16 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
-DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "A culinary prototype.",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "These recipes are in none of my books!"
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "It must affect the recipes somehow."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "If only he had left behind an instruction manual."
 
 DESCRIBE.UM_RICE_PUDDING = "Different from regular pudding, mind you."
 
@@ -664,3 +747,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"In just a moment, it should rest soon.",
     "Its oily properties make it a difficult catch by hand."}
 	
 DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is still beating."
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Curious, it appears its frozen exterior keeps it protected."

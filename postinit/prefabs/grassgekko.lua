@@ -55,17 +55,20 @@ local function GrassGekkoFunctions(inst)
         end
     end
 
-    if inst.components.lootdropper then
-        inst.components.lootdropper:AddChanceLoot("dug_grass", 1.00)
+    local lootdropper = inst.components.lootdropper
+    if lootdropper then
+        lootdropper:AddChanceLoot("dug_grass", 1.00)
     end
 
-    if inst.components.health then
-        inst.components.health.murdersound = "dontstarve/creatures/together/grass_gekko/hit"
+    local health = inst.components.health
+    if health then
+        health.murdersound = "dontstarve/creatures/together/grass_gekko/hit"
     end
     inst.incineratesound = "dontstarve/creatures/together/grass_gekko/death"
     
-    if not inst.components.inventoryitem then
-        local inventoryitem = inst:AddComponent("inventoryitem")
+
+    local inventoryitem = inst.components.inventoryitem or inst:AddComponent("inventoryitem")
+    if inventoryitem then
         --inventoryitem.atlasname = "images/inventoryimages/grassgekko.xml"
         inventoryitem.nobounce = true
         inventoryitem.canbepickedup = false
@@ -74,21 +77,24 @@ local function GrassGekkoFunctions(inst)
     end
 
     MakeFeedableSmallLivestock(inst, TUNING.RABBIT_PERISH_TIME, OnInventory, OnDropped)
-    
-    local Oldontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone") or function() end
-    local function ontimerdone(inst, data, ...)
-        if data.name == "growTail" and inst:IsInLimbo() then
-           PlayGrowTailSound(inst)
-        end
-        Oldontimerdone(inst, data, ...)
-    end
-    inst:RemoveEventCallback("timerdone", Oldontimerdone)
-    UpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
-    inst:ListenForEvent("timerdone", ontimerdone)
 
     inst.settrapdata = SetGekkoTrapData
     inst.restoredatafromtrap = RestoreGekkoFromTrap
 end
+
+env.AddPrefabPostInit("world", function(inst) -- Supposedly, this is better since it's called once for each "world" prefab, which usually only spawns once per shard.
+    if not TheWorld.ismastersim then return end
+    local _ontimerdone = UpvalueHacker.GetUpvalue(Prefabs.grassgekko.fn, "ontimerdone")
+    if _ontimerdone then
+        local function ontimerdone(inst, data, ...)
+            if data.name == "growTail" and inst:IsInLimbo() then
+               PlayGrowTailSound(inst)
+            end
+            return _ontimerdone(inst, data, ...)
+        end
+        UpvalueHacker.SetUpvalue(Prefabs.grassgekko.fn, ontimerdone, "ontimerdone")
+    end
+end)
 
 env.AddPrefabPostInit("grassgekko", function(inst)
     inst:AddTag("canbetrapped")
@@ -97,7 +103,7 @@ env.AddPrefabPostInit("grassgekko", function(inst)
     if not TheWorld.ismastersim then
         --delayed because we don't want any old events
         inst:DoTaskInTime(0, inst.ListenForEvent, "grassgekko.playgrowtailsound", CLIENT_PlayGrowTailSound)
-        return inst
+        return
     end
 
     GrassGekkoFunctions(inst)

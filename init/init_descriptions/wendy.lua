@@ -597,11 +597,16 @@ DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
-DESCRIBE.UM_COOKPOT_WAGSTAFF = DESCRIBE.COOKPOT
-DESCRIBE.UM_COOKPOT_WAGSTAFF.EMPTY = "Yo waggy you cookin that crystal?"
-DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "Hmmm... what an Intriguing Display."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "Gives me another shot at a new recipe."
-DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "This recipe will stay like this."
+DESCRIBE.UM_COOKPOT_WAGSTAFF = {
+    EMPTY = "Everything comes out changed.",
+    COOKING_LONG = DESCRIBE.COOKPOT.COOKING_LONG,
+    COOKING_SHORT = DESCRIBE.COOKPOT.COOKING_SHORT,
+    DONE = DESCRIBE.COOKPOT.DONE,
+    BURNT = DESCRIBE.COOKPOT.BURNT,
+}
+DESCRIBE.UM_COOKPOT_WAGSTAFF_DISPLAY = "A grim list of ingredients."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER = "To leave it all behind."
+DESCRIBE.UM_COOKPOT_WAGSTAFF_LEVER2 = "Nothing remains the same forever."
 
 DESCRIBE.UM_RICE_PUDDING = "This at least has taste to it."
 
@@ -617,3 +622,6 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"You won't be able to slip out of death's cl
     "This would be better if I wait for it to land."}
 	
 DESCRIBE.WATHOM_CORPSE = "Rise again, so you may feel the tinge of death once more."
+
+DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Rigid and cold, like this world."
+ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"

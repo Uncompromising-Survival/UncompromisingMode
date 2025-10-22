@@ -152,7 +152,7 @@ local function UpdateBloomStageUM(inst, stage) --Checks the bloom stage in a fri
     --The setters will all check for dirty values, since refreshing bloom
     --stage can potentially get triggered quite often with state changes.
     inst:DoTaskInTime(0, function(inst) --Checking for blooming is hard, so we'll just check for pollentask instead XD
-        if inst.pollentask then
+        if inst.pollentask --[[and inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated("wormwood_bugs")]] then
             inst.traptask = inst:DoPeriodicTask(.5, TrapsAOE)
         elseif inst.traptask then
             inst.traptask:Cancel()
@@ -174,12 +174,12 @@ if TUNING.DSTU.WORMWOOD_CONFIG_TRAPS then
         if not TheWorld.ismastersim then
             return
         end
-        local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
+        --[[local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
         local function NewUpdateBloomStage(inst, stage)
             _UpdateBloomStage(inst, stage)
             UpdateBloomStageUM(inst, stage)
         end
-        inst.components.bloomness.onlevelchangedfn = NewUpdateBloomStage
+        inst.components.bloomness.onlevelchangedfn = NewUpdateBloomStage]]
     end)
 end
 
@@ -231,6 +231,18 @@ if env.GetModConfigData("wormwood_photosynthesis") then
             end
         end
 
+        local function VetCurseCancelHealing(data)
+            local debuffable = inst.components.debuffable
+            if inst:HasTag("vetcurse_wormwood") and debuffable then
+                local debuffs = debuffable.debuffs
+                for i, v in pairs(debuffs) do
+                    if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
+                        debuffable:RemoveDebuff(i)
+                    end
+                end
+            end
+        end
+
         local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
 
         inst.components.bloomness.onlevelchangedfn = function(inst, stage) --in case you enter the 3rd stage with enough hp required or you go back to 2nd
@@ -244,8 +256,9 @@ if env.GetModConfigData("wormwood_photosynthesis") then
         inst:ListenForEvent("healthdelta", function(inst)
             skilltreemovespeed(inst)
         end)
-		
-		
+
+		inst:ListenForEvent("attacked", VetCurseCancelHealing)
+        inst:ListenForEvent("firedamage", VetCurseCancelHealing)
 
 		local function OnFertilizedWithCompost(inst, value)
 			if value > 0 and inst.components.health and not inst.components.health:IsDead() then

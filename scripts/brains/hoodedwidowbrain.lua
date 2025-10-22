@@ -182,7 +182,7 @@ end
 function HoodedWidowBrain:OnStart()
     local root = PriorityNode(
     {
-        WhileNode(function() return self.inst.bullier end,"BeingBullied", DoAction(self.inst, JumpHomeAction)), -- Under any circumstances where an epic is nearby, leave the fight.
+        --WhileNode(function() return self.inst.bullier end,"BeingBullied", DoAction(self.inst, JumpHomeAction)), -- Escaping the arena results in frustration. Activate a rage mode instead? eat the spoils?
         --WhileNode(function() return TargetLeavingArena(self.inst) end, "PullThemBack", DoAction(self.inst, WebSlingerAction)), -- Swap for eating...
         --Prey but it's Widow vs Wilson
         --WhileNode(function() return NearPrey(self.inst) end, "EatPrey", DoAction(self.inst, Eat)),

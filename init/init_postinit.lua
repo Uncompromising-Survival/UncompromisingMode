@@ -68,7 +68,8 @@ local component_post = {
 	"locomotor",
 	"beargerspawner",
 	"floater",
-	"temperature"
+	"temperature",
+    "playercontroller"
 }
 
 local prefab_post = {
@@ -112,7 +113,6 @@ local prefab_post = {
     "featherhat",
     --"malbatross",
     "mushrooms",
-    "mushroom_hats",
     "rock_ice",
     "oasislake",
     --"shadowcreature",
@@ -135,7 +135,6 @@ local prefab_post = {
     "armor_bramble",
     --"woby",
     "cave_network",
-    "glasscutter",
     "critterlab",
     "wobster",
     "trinkets", -- This is for the grave mound cc trinkets
@@ -235,7 +234,10 @@ local prefab_post = {
     "spiderqueen",
     "snowman",
     "lighter",
-	"molebat"
+	"molebat",
+    "lightning_rod",
+    "antlionhat",
+    "ice_shield_piercing"
 }
 
 local stategraph_post = {
@@ -280,7 +282,8 @@ local brain_post = {
     "catcoon",
     "deer",
     "shadowwaxwell",
-    "hound"
+    "hound",
+    "iceshield"
 }
 
 --package post system courtesy of IA team!
@@ -448,7 +451,7 @@ if GetModConfigData("scalemailbuff") then
     table.insert(prefab_post, "armor_dragonfly")
 end
 
-if (not GLOBAL:TestForIA() or GetModConfigData("um_music", true)) then
+if (not GLOBAL:IsIslandOrVolcanoWorld() or GetModConfigData("um_music", true)) then
     table.insert(component_post, "dynamicmusic")
 end
 
@@ -530,7 +533,6 @@ if GetModConfigData("heatwaves") then
     table.insert(component_post, "wildfires")
 end
 
-
 if GetModConfigData("smog") then
     table.insert(prefab_post, "dragoonegg")
     table.insert(component_post, "geyserfx")
@@ -538,6 +540,14 @@ end
 
 if GetModConfigData("infinite_blueprints") then
     table.insert(component_post, "teacher")
+end
+
+if GetModConfigData("celestialitems_revert") then
+    table.insert(prefab_post, "glasscutter")
+end
+
+if GetModConfigData("funcap_fun") then
+    table.insert(prefab_post, "mushroom_hats")
 end
 
 modimport("postinit/sim")

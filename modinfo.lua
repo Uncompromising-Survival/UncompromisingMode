@@ -6,10 +6,10 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.7.3.37"
+local _version = "1.7.5.0"
 
 description = [[
-    󰀔 [ "Foxy, Mossy, and Shieldy Update"  (Beta ver: v]] .. _version .. [[)]
+    󰀔 [ "Ghosts of the Past (for now)"  (Beta ver: v]] .. _version .. [[)]
 Uncompromising Mode is like a potluck.
 
 Latest update features:
@@ -19,6 +19,7 @@ Latest update features:
 - New Old Faces
 - Lots of bloat...
 - Lots of promises...
+- Moss.
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
@@ -115,6 +116,21 @@ configuration_options = {
         default = "",
     },
     BinaryConfig("um_music", "Official Soundtrack", "Disable this if you are crashing when using client music mods or some other incompatibility.", true, true),
+    BinaryConfig("ui_showmultiproducts", "Show Craft Amounts", "Shows how many products a crafting recipe will yield, if it's more than one.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)", true, true),
+    {
+        name = "ui_showmultiproducts_font",
+        label = "Show Craft Amounts Font",
+        hover = "Changes the font for the numbers.\n(from the client mod \"Show Multiple Products\" by ClumsyPenny)",
+        options =
+        {
+            { description = "NUMBERFONT",       data = "NUMBERFONT",  hover = "More rounded letters." },
+            { description = "TALKINGFONT",      data = "TALKINGFONT", hover = "Similar to the original mod, but with thicker outlines." },
+            { description = "Classic (UIFONT)", data = "UIFONT",      hover = "The same as the original mod." }
+        },
+        default = "NUMBERFONT",
+        client = true
+    },
+    BinaryConfig("ui_showvetcurse", "Show Curse Icon", "Show the bottom right Veteran's Curse icon, which provides helpful information on the curse.", true, true),
     BinaryConfig("um_tips_only", "UM Loading Tips Only", "Disables vanilla Loading Tips, so only Uncompromising Mode's Loading Tips will appear in the loading screen while joining a world!", false, true),
     BinaryConfig("um_storms_over", "Tornadoes - Reduced VFX", "Reduces the overall intensity of the visual effects on both the overlay and rain near tornadoes.", false, true),
     {
@@ -149,6 +165,9 @@ configuration_options = {
         true),
     SkipSpace(),
 
+    ------------------------------
+    -- Core Gameplay Reworks --
+    ------------------------------
     Header("Core Gameplay"),
     --BinaryConfig("caved", "[IMPORTANT] Cave Config",
     --"Switches some things around so players who can't run Caves can still enjoy the game. ENABLE IF CAVES ARE ENABLED!",
@@ -167,10 +186,6 @@ configuration_options = {
             { description = "Explosion On", data = 3 } },
         default = 3
     },
-    BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
-        "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
-    BinaryConfig("dreadeye", "Dread Eye",
-        "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
     BinaryConfig("longpig", "Long Pig", "Telltale Hearts now require 'Long Pig' from skeletons to hinder amassing large numbers of them.", false),
 
     BinaryConfig("maxhpdeath", "Max Health Death", "Dying in any way will leave you with reduced Max HP, stacking with the penalties from some revival methods.", true),
@@ -211,6 +226,15 @@ configuration_options = {
         default =
         "default"
     },
+    SkipSpace(),
+
+    Header("Shadow Creatures"),
+    BinaryConfig("harder_shadows", "Harder Nightmare Creatures",
+        "Insanity is a bigger threat now. Those who pass the brink may never return.", true),
+    BinaryConfig("dreadeyes_allowed", "Dread Eye",
+        "Looming threat which disguises as structures nearby, be careful getting close and keep on the move.", true),
+    BinaryConfig("creepingfear_allowed", "Creeping Fear",
+        "Once your insanity has reached its end, all the fear you've experienced will come rushing back to you.", true),
     SkipSpace(),
 
     ------------------------------
@@ -556,6 +580,8 @@ configuration_options = {
     -----------------------------
 
     BinaryConfig("infinite_blueprints", "Infinite Blueprints", "Blueprints are no longer consumed when reading.", true),
+    BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
+    BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
@@ -671,7 +697,18 @@ configuration_options = {
     BinaryConfig("goodies_nerf", "Goodies Food Type Changes", "The food type of more avaliable Goodies were changed into either Veggie or Generic.", true),
     BinaryConfig("icecream_buff", "Ice Cream Buff", "Ice Cream now restores 100 sanity.", true),
     BinaryConfig("meatball_", "Meatball Nerf", "Meatballs restore 50 hunger instead of 62.5.", false),
-    BinaryConfig("bonestew_nerf", "Meaty Stew Nerf", "Makes meaty stew require 3.5 meat value to be cooked.", true),
+    --BinaryConfig("bonestew_nerf", "Meaty Stew Rework", "Makes meaty stew require 3.5 meat value to be cooked.", true),
+    {
+        name = "bonestew_nerf",
+        label = "Meaty Stew Changes",
+        hover = "Pierogis require more veggies to cook.",
+        options = {
+            { description = "Bone Requirement", data = "bone_appetit",  hover = "Makes Meaty Stew require 1 Bone Shard.\nA new dish will be cooked with 3 Meat instead." },
+            { description = "3.5 Meat Value",   data = "meatier_stew",  hover = "Makes Meaty Stew require 3.5 meat value to be cooked." },
+            { description = "Disabled", data = false, hover = "Disabled." },
+        },
+        default = "bone_appetit"
+    },
     {
         name = "perogi",
         label = "Pierogi Recipe Nerf",
@@ -796,7 +833,15 @@ configuration_options = {
     SkipSpace(),
 
     Header("Spiders"),
-    BinaryConfig("alljumperspiders", "Regular Spiders Jump", "Normal Spiders leap, just like Spider Warriors.", true),
+    {
+        name = "alljumperspiders",
+        label = "Regular Spiders Jump",
+        hover = "Normal Spiders leap just like Spider Warriors, but lesser.",
+        options = {
+            { description = "Default", data = "lesser" }, { description = "Warrior Range", data = "warrior" },
+            { description = "Disabled", data = false } },
+        default = "lesser"
+    },
     BinaryConfig("spiderwarriorcounter", "Warrior Counter",
         "Warrior Spiders (and Depth Dwellers) perform a counter-attack when attacked (also lowers health to 300).", true),
     SkipSpace(),
@@ -1449,7 +1494,7 @@ configuration_options = {
     -- Mara =)
 
     --	Header("General"),
-    BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
+    --  BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),

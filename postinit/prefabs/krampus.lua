@@ -36,8 +36,6 @@ local function CheckLeaving(inst, data)
 				
 				if klaus_sack ~= nil and klaus_sack.components.inventory ~= nil then
 					inst.components.inventory:TransferInventory(klaus_sack)
-				elseif current_middleman ~= nil then
-					inst.components.inventory:TransferInventory(current_middleman)
 				else
 					local middleman = SpawnPrefab("krampus_middleman_inventory")
 					middleman.Transform:SetPosition(inst.Transform:GetWorldPosition())

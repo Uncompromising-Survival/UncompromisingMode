@@ -27,3 +27,6 @@ env.AddPrefabPostInit("klaus", function(inst) VetCurseItem(inst, "klaus_amulet")
 env.AddPrefabPostInit("mothergoose", function(inst) VetCurseItem(inst, "feather_frock") end)
 env.AddPrefabPostInit("moose", function(inst) VetCurseItem(inst, "feather_frock") end)
 env.AddPrefabPostInit("hoodedwidow", function(inst) VetCurseItem(inst, "silksack") end)
+
+-- Not a vetcurse drop, but adding dormant conch back to crabking here since it was missing since ck rework disabled entire crabking.lua
+env.AddPrefabPostInit("crabking", function(inst) if not TheWorld.ismastersim then return end inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1) end)	

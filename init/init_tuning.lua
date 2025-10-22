@@ -17,6 +17,8 @@ TUNING = GLOBAL.TUNING
 -- [              DSTU Related Overrides                  ]
 
 local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
+-- IsModEnabled is host only. This will work on clients connected to another player or a dedicated server
+local ia_check_client = GLOBAL.AllRecipes["obsidianmachete"] and GLOBAL.AllRecipes["boat_encrusted"]
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
 
 --day/month > month/day
@@ -148,6 +150,7 @@ TUNING.DSTU = {
     PIEROGI = GetModConfigData("perogi"),
     FARMFOODREDUX = GetModConfigData("farmfoodredux"),
     ICECREAMBUFF = GetModConfigData("icecream_buff"),
+    BONESTEW = GetModConfigData("bonestew_nerf"),
     ----------------------------------------------------------------------------
     -- Mob changes
     ----------------------------------------------------------------------------
@@ -334,7 +337,7 @@ TUNING.DSTU = {
     PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
     PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
-    ALL_MUST_BE_GATHERED = GetModConfigData("all_must_be_gathered"),
+    ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
     KLAUS_AMULET_ABSORPTION = 0.3,
 
@@ -361,6 +364,7 @@ TUNING.DSTU = {
     -- Experimental and DEV
     ----------------------------------------------------------------------------
 
+    WORLDGEN_MASTERTOGGLE = GetModConfigData("worldgenmastertoggle"),
     ELECTRICALMISHAP = GetModConfigData("electricalmishap"),
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
@@ -423,9 +427,12 @@ TUNING.DSTU = {
     CANEDURABILITY = GetModConfigData("canedurability"),
     AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
+    GLASSCUTTER_REVERT = GetModConfigData("celestialitems_revert"),
+    FUNCAP_REWORK = GetModConfigData("funcap_fun"),
 
-    --mod chekcs
+    --mod checks
     ISLAND_ADVENTURES = ia_check,
+    ISLAND_ADVENTURES_CLIENT = ia_check_client,
     TREATS_FOR_WEBBER = tfw_check,
 
     --MEME CONFIG
@@ -436,6 +443,9 @@ TUNING.DSTU = {
 
     REDUCED_TORNADO_VFX = GetModConfigData("um_storms_over", true),
     UM_TIPS_ONLY = GetModConfigData("um_tips_only", true),
+    UI_VETCURSE = GetModConfigData("ui_showvetcurse", true),
+    UI_SHOWMULTIPRODUCTS = GetModConfigData("ui_showmultiproducts", true),
+    UI_SHOWMULTIPRODUCTS_FONT = GetModConfigData("ui_showmultiproducts_font", true),
 
     -- boss hp qol
 
@@ -478,9 +488,10 @@ if GetModConfigData("beebox_nerf") then
 end
 
 -- Glass Cutter
-TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
-TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
-
+if GetModConfigData("celestialitems_revert") then
+    TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
+    TUNING.GLASSCUTTER.DAMAGE_VS_SHADOW_BONUS = 1
+end
 --if GetModConfigData("woodie_skilltree") then
 --TUNING.WEREMOOSE_DAMAGE = wilson_attack * 1.5
 --TUNING.SKILLS.WOODIE.MOOSE_SMASH_DAMAGE = wilson_attack * 3
@@ -697,3 +708,5 @@ end
 
 -- Faster Daywalker Regen
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
+
+TUNING.PIRATE_STASH_INV_SIZE = 2000 --Used to be just 30 maxslots.

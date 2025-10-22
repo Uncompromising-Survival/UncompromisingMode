@@ -1,18 +1,42 @@
 --currently only used for IA, but if we ever need more advanced mod checks, put 'em here!
-
-
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
---improved check for IA, instead of just checking for the mod, it checks for the world tags *and* the mod.
---returns true if IA.
+--graciously borrowed from IA.
+IA_SW_ENABLED, IA_HAM_ENABLED = nil, nil
 
-function TestForIA()
-    if TheWorld ~= nil and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
-        return true
-    else
-        return false
+for i,mod in ipairs(ModManager.mods) do
+    local modinfo = KnownModIndex:GetModInfo(mod.modname)
+    if modinfo.ia_shipwrecked then
+        IA_SW_ENABLED = true
+    elseif modinfo.ia_hamlet then
+        IA_HAM_ENABLED = true
     end
+    if IA_SW_ENABLED and IA_HAM_ENABLED then break end
+end
+
+
+--Checks if theworld is island or volcano.
+function IsIslandOrVolcanoWorld()
+    return TheWorld ~= nil and (TheWorld:HasTag("island") or TheWorld:HasTag("volcano"))
+end
+
+function IsIslandWorld()
+    return TheWorld ~= nil and TheWorld:HasTag("island")
+end
+
+function IsVolcanoWorld()
+    return TheWorld ~= nil and TheWorld:HasTag("volcano")
+end
+
+--Returns if IA:SW is enabled in the mod list.
+function IsSWEnabled()
+    return IA_SW_ENABLED
+end
+
+--returns if IA:HAM is enabled in the mod list.
+function IsHAMEnabled()
+    return IA_HAM_ENABLED
 end
 
 function Um_CustomLightCheck(inst, dark_val, light_val)
@@ -41,11 +65,3 @@ function Um_CustomLightCheck(inst, dark_val, light_val)
 		return inLight ~= false]]
     end
 end
-
-env.AddPrefabPostInit("wonderwhy", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    inst:AddTag("ignores_healthregen")
-end)

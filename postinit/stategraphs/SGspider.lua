@@ -58,12 +58,19 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data, ...)
-            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("busy")) and inst:HasTag("trapdoorspider") then
-                inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
-                    or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack"
-                    or "attack", data.target)
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
+                if inst:HasTag("spider_regular") then
+                    inst.sg:GoToState(data.target:IsValid() and not (inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
+                        or (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular"))) and "warrior_attack" or "attack", data.target) -- Do leap attack
+                    return
+                end
+                if inst:HasTag("trapdoorspider") then
+                    inst.sg:GoToState(not inst.web_cd and inst.hooded and "spit_web" -- *Hooded* Trapdoor spider web attack
+                        or data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack" or "attack", data.target)
+                    return
+                end
             end
-            _OldAttackEvent(inst, data, ...)
+            return _OldAttackEvent(inst, data, ...)
         end
     end
 
@@ -81,7 +88,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     return
                 end
             end
-            _OldAttackedEvent(inst, data, ...)
+            return _OldAttackedEvent(inst, data, ...)
         end
     end
 

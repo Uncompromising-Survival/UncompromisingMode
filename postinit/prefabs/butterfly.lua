@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
-    local function Slippy(inst, target, speed, distancemod) -- Reduced from wixie_shove to something only applicable to the butterfly
+    local function Slippy(inst, target, distancemod) -- Reduced from wixie_shove to something only applicable to the butterfly
         local x, y, z = inst.Transform:GetWorldPosition()
         for i = 1, 50 do
             inst:DoTaskInTime((i - 1) / 50, function(inst)
@@ -11,7 +11,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
                     local rad = math.rad(inst:GetAngleToPoint(tx, ty, tz))
                     local velx = math.cos(rad)
                     local velz = -math.sin(rad)
-                    local distancemultiplier = distancemod ~= nil and 1 + (distancemod / 10) or 1
+                    local distancemultiplier = distancemod and 1 + (distancemod / 10) or 1
                     local dx, dy, dz = tx + ((((3 / (i + 2)) * velx))) / distancemultiplier, ty, tz + ((((3 / (i + 2)) * velz))) / distancemultiplier
                     target.Transform:SetPosition(dx, dy, dz)
                 end
@@ -19,26 +19,30 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         end
     end
 
+    local sittingstates = {"pollinate", "land_idle", "thraw", "frozen"}
+	local allowedstimuli = {"soul"}
+	local disallowedattackertags = {"sporecloud", "FX"}
     local function SittingStill(statename)
-        return statename and (statename == "pollinate" or statename == "land_idle" or statename == "thaw" or statename == "frozen")
+        return statename and table.contains(sittingstates, statename)
     end
 
-    local function ByPassWeapon(weapon, attacker, inst)
+    local function ByPassWeapon(weapon)
         return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart") or ((weapon.components.weapon and weapon.components.weapon.projectile) or weapon.components.projectile))
     end
 
     local function ByStimuli(stimuli)
-        return stimuli and stimuli == "soul"
+        return stimuli and table.contains(allowedstimuli, stimuli)
     end
 
     local function SlipAway(inst, data)
-        if data.attacker then
+		local attacker = data.attacker
+        if attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) then
             local statename = inst.sg.currentstate.name
-            if not SittingStill(statename) and not ByPassWeapon(data.weapon, data.attacker, inst) and not ByStimuli(data.stimuli) then -- Can only attack when idle
+            if not SittingStill(statename) and not ByPassWeapon(data.weapon) and not ByStimuli(data.stimuli) then -- Can only attack when idle.
                 inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-                Slippy(data.attacker, inst)
-                if data.attacker.components.talker and data.attacker:HasTag("player") then
-                    data.attacker.components.talker:Say(GetString(data.attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
+                Slippy(attacker, inst)
+                if attacker.components.talker and attacker:HasTag("player") then
+                    attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
                 end
                 return true
             end
@@ -103,11 +107,9 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local butterflies = {"butterfly","um_buttery_fly","moonbutterfly"}
     for i,v in ipairs(butterflies) do
         env.AddPrefabPostInit(v, function(inst)
-            if not TheWorld.ismastersim then
-                return
-            end
+            if not TheWorld.ismastersim then return end
 
-			inst.SlipAway = SlipAway
+            inst.SlipAway = SlipAway
 
             inst:DoPeriodicTask(2, CheckForNearbyBozos)
             
@@ -144,9 +146,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     local flower_types = {"flower", "flower_evil"}
     for i,v in ipairs(flower_types) do
         env.AddPrefabPostInit(v, function(inst)
-            if not TheWorld.ismastersim then
-                return
-            end
+            if not TheWorld.ismastersim then return end
             inst:WatchWorldState("isday",ReEnableButterfly)
         end)
     end
@@ -189,27 +189,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     env.AddComponentPostInit("butterflyspawner", function(cmp)
         local _GetSpawnPoint, _fn_i, scope_fn = UpvalueHacker.GetUpvalue(cmp.OnPostInit, "ToggleUpdate", "ScheduleSpawn", "SpawnButterflyForPlayer", "GetSpawnPoint")
 
-        debug.setupvalue(scope_fn, _fn_i,GetSpawnPoint)
+        debug.setupvalue(scope_fn, _fn_i, GetSpawnPoint)
     end)
-
-    env.AddStategraphState("butterfly", State{
-        name = "idle_flutter",
-        tags = {"idle"},
-
-        onenter = function(inst)
-            inst.Physics:Stop()
-            if not inst.AnimState:IsCurrentAnimation("flight_cycle") then
-                inst.AnimState:PlayAnimation("flight_cycle", true)
-            end
-            inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
-        end,
-
-        ontimeout = function(inst)
-            if inst.sg.statemem.wantstomove then
-                inst.sg:GoToState("moving")
-            else
-                inst.sg:GoToState("idle")
-            end
-        end,
-    })
 end

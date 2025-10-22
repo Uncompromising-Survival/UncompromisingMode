@@ -1,3 +1,5 @@
+require "webbedcreatureloot"
+
 -- toggle snowstorm
 function c_um_snowstorm()
     if TheWorld.components.um_snow_stormspawner ~= nil and TheWorld.state.iswinter then
@@ -135,8 +137,8 @@ end
 
 -- forces an RNE.
 -- function c_um_rne()
-    -- local rne = TheWorld.components.randomnightevents
-    -- rne:ForceRNE(true)
+-- local rne = TheWorld.components.randomnightevents
+-- rne:ForceRNE(true)
 -- end
 
 -- spawns a sunken chest at mouse pos
@@ -340,5 +342,29 @@ function c_um_listumprefabs()
     for k, v in pairs(TUNING.DSTU.PREFABS) do
         print(k)
         TheNet:Announce(k)
+    end
+end
+
+function c_um_spawncocoon(type)
+    type = string.upper(type)
+
+    if table.contains(COCOON_CREATURES_DEFAULT, type) or table.contains(COCOON_CREATURES_SHIPWRECKED, type) or table.contains(COCOON_CHARACTERS, type) then
+        local pos = ConsoleWorldPosition()
+        print("Spawning cocoon at position X:" .. pos.x .. " Z:" .. pos.z .. " with type " .. type)
+
+        local cocoon = SpawnPrefab("webbedcreature")
+        cocoon.Transform:SetPosition(pos.x, 0, pos.z)
+
+        cocoon.cocoon_creature = type
+        cocoon.cocoon_data = COCOON_DEFS.DEFAULT[cocoon.cocoon_creature] ~= nil and COCOON_DEFS.DEFAULT[cocoon.cocoon_creature]
+            or COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature] ~= nil and COCOON_DEFS.SHIPWRECKED[cocoon.cocoon_creature]
+            or COCOON_DEFS.CHARACTER[cocoon.cocoon_creature]
+
+        if COCOON_DEFS.CHARACTER[cocoon.cocoon_creature] ~= nil then
+            cocoon.cocoon_data.size = 1
+            cocoon.cocoon_data.name = "Shrouded"
+        end
+    else
+        print("Unable to spawn cocoon with type " .. type)
     end
 end

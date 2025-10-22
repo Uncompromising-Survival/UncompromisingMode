@@ -413,7 +413,12 @@ end
 
 if TUNING.DSTU.WICKERCHANGES ~= 0 then
 	PROTOTYPER_DEFS.wickerbottom = { icon_atlas = "images/crafting_menu_avatars.xml", icon_image = "avatar_wickerbottom.tex", action_str = "WICKERBOTTOM", is_crafting_station = false }
-	STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn with"
+	STRINGS.ACTIONS.OPEN_CRAFTING.WICKERBOTTOM = "Learn from"
+
+    -- Some quirky teacher Wickerbottom comments
+    local function onlearn(inst)
+        inst.components.talker:Say(GetString(inst, "TEACH_OTHERS_ONLEARN_LINES"))
+    end
 
 	env.AddPrefabPostInit("wickerbottom", function(inst)
 		inst:AddTag("prototyper")
@@ -423,6 +428,7 @@ if TUNING.DSTU.WICKERCHANGES ~= 0 then
 		end
 
 		local prototyper = inst:AddComponent("prototyper")
+        prototyper.onactivate = onlearn
 		prototyper.trees = TUNING.PROTOTYPER_TREES.SCIENCEMACHINE
 		prototyper.restrictedtag = "notwickerbottom"
 	end)

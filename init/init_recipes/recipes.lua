@@ -14,17 +14,17 @@ local Ingredient = GLOBAL.Ingredient
 -- "WINTER", "SUMMER", "RAIN", "EVERYTHING"
 
 --Turfs
-AddRecipe2("turf_um_hotspring_grass", { Ingredient("cutlichen", 2), Ingredient("pinecone", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_grass", "turf_um_hotspring_grass", "DECOR", true)
+AddRecipe2("turf_um_hotspring_grass", { Ingredient("twigs", 1), Ingredient("ice", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_grass", "turf_desertdirt", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 2), Ingredient("marble", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_whiterock", "DECOR", true)
+AddRecipe2("turf_um_hotspring_whiterock", { Ingredient("rocks", 1), Ingredient("marble", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_whiterock", "turf_um_hotspring_grass", "DECOR", true)
 
-AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 2), Ingredient("nitre", 2) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
-ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_yellowrock", "DECOR", true)
+AddRecipe2("turf_um_hotspring_yellowrock", { Ingredient("rocks", 1), Ingredient("nitre", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+ChangeSortKey("turf_um_hotspring_yellowrock", "turf_um_hotspring_whiterock", "DECOR", true)
 
 if GetModConfigData("hoodedforest") then
-    AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("greenfoliage", 4) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
+    AddRecipe2("turf_hoodedmoss", { Ingredient("twigs", 1), Ingredient("um_moss", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_hoodedmoss", "turf_deciduous", "DECOR", true)
     AddRecipe2("turf_ancienthoodedturf", { Ingredient("turf_hoodedmoss", 2), Ingredient("moonrocknugget", 1) }, TECH.TURFCRAFTING_TWO, { numtogive = 4 }, { "DECOR" })
     ChangeSortKey("turf_ancienthoodedturf", "turf_hoodedmoss", "DECOR", true)
@@ -90,8 +90,8 @@ ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 1),Ingredient("um_grass", 1)}, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS" })
 ChangeSortKey("um_boomberry_bomb", "nightstick", "WEAPONS", true)
 
-AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
+AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2),Ingredient("rocks", 3)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
+ChangeSortKey("um_fyre_bomb", "gunpowder", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
 ChangeSortKey("um_eyebalm", "lifeinjector", "RESTORATION", true)
@@ -393,6 +393,7 @@ AddDeconstructRecipe("gore_horn_hat", { Ingredient("nightmarefuel", 10) })
 AddDeconstructRecipe("crabclaw", { Ingredient("meat", 1), Ingredient("rocks", 6) })
 AddDeconstructRecipe("slobberlobber", { Ingredient("meat", 1), Ingredient("dragon_scales", 1) })
 AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("royal_jelly", 2) })
+AddDeconstructRecipe("um_beegun_cherry", { Ingredient("cherry_honeycomb", 6), Ingredient("royal_jelly", 4) })
 AddDeconstructRecipe("silksack", { Ingredient("silk", 6), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
 AddDeconstructRecipe("um_moonfly_lantern", { Ingredient("moonglass", 3), Ingredient("moonglass_charged", 3), Ingredient("moonrocknugget", 4) }) --temp moon rocks.
 AddDeconstructRecipe("um_wingsuit", { Ingredient("malbatross_feather", 6) })
@@ -410,34 +411,41 @@ ChangeSortKey("hermitshop_hermit_bundle_lures", "hermitshop_hermit_bundle_shells
 AddRecipe2("hermitshop_boat", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_item", sg_state = "give" })
 ChangeSortKey("hermitshop_boat", "hermitshop_hermit_bundle_shells", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_boat_rotator", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_rotator_kit", sg_state = "give" })
-
-AddRecipe2("hermitshop_mast", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "mast_item", sg_state = "give" })
-ChangeSortKey("hermitshop_mast", "hermitshop_boat", "CRAFTING_STATION", true)
+AddRecipe2("hermitshop_patch", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boatpatch", sg_state = "give", numtogive = 3 })
+ChangeSortKey("hermitshop_patch", "hermitshop_boat", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_anchor", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "anchor_item", sg_state = "give" })
-ChangeSortKey("hermitshop_anchor", "hermitshop_mast", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_anchor", "hermitshop_patch", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_steeringwheel", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "steeringwheel_item", sg_state = "give" })
 ChangeSortKey("hermitshop_steeringwheel", "hermitshop_anchor", "CRAFTING_STATION", true)
 
-AddRecipe2("hermitshop_patch", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boatpatch", sg_state = "give", numtogive = 3 })
-ChangeSortKey("hermitshop_patch", "hermitshop_steeringwheel", "CRAFTING_STATION", true)
+AddRecipe2("hermitshop_boat_rotator", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "boat_rotator_kit", sg_state = "give" })
+ChangeSortKey("hermitshop_boat_rotator", "hermitshop_steeringwheel", "CRAFTING_STATION", false)
 
-AddRecipe2("hermitshop_blueprint", { Ingredient("messagebottleempty", 1) }, GLOBAL.TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "blueprint", sg_state = "give" })
+AddRecipe2("hermitshop_mast", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_ONE, { nounlock = true, product = "mast_item", sg_state = "give" })
+ChangeSortKey("hermitshop_mast", "hermitshop_boat_rotator", "CRAFTING_STATION", true)
+
+AddRecipe2("hermitshop_blueprint", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "blueprint", sg_state = "give" })
 ChangeSortKey("hermitshop_blueprint", "hermitshop_turf_shellbeach_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_waterplant", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "waterplant_planter", sg_state = "give" })
-ChangeSortKey("hermitshop_waterplant", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_waterplant", "hermitshop_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_seedpacket", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_THREE, { nounlock = true, product = "yotc_seedpacket", sg_state = "give", numtogive = 2 })
-ChangeSortKey("hermitshop_seedpacket", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_seedpacket", "hermitshop_waterplant", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_seedpacket_rare", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_FIVE, { nounlock = true, product = "yotc_seedpacket_rare", sg_state = "give", numtogive = 2 })
-ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_chum", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_seedpacket_rare", "hermitshop_seedpacket", "CRAFTING_STATION", true)
+
+AddRecipe2("hermitshop_boat_ancient_blueprint", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "boat_ancient_item_blueprint", sg_state = "give", image="blueprint_rare.tex" })
+ChangeSortKey("hermitshop_boat_ancient_blueprint", "hermitshop_chum_blueprint", "CRAFTING_STATION", true)
+
+AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 5) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, numtogive = 2, product = "bootleg", sg_state = "give" })
+ChangeSortKey("hermitshop_bootleg", "hermitshop_boat_ancient_blueprint", "CRAFTING_STATION", true)
 
 AddRecipe2("hermitshop_cookies", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "pumpkincookie", sg_state = "give" })
-ChangeSortKey("hermitshop_cookies", "hermitshop_supertacklecontainer", "CRAFTING_STATION", true)
+ChangeSortKey("hermitshop_cookies", "hermitshop_bootleg", "CRAFTING_STATION", true)
 
 --[[
 AddRecipe2(
@@ -448,7 +456,7 @@ TECH.HERMITCRABSHOP_FIVE,
 ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
 -- better moonstorm
 AddRecipe2("moonstorm_static_item", { Ingredient("transistor", 1), Ingredient("moonstorm_spark", 2), Ingredient("goldnugget", 3) }, TECH.LOST, nil, { "REFINE" })
-AddRecipe2("alterguardianhatshard", { Ingredient("moonglass_charged", 1), Ingredient("moonstorm_spark", 2), Ingredient("lightbulb", 1) }, TECH.LOST, nil, { "LIGHT", "REFINE" })
+AddRecipe2("alterguardianhatshard", { Ingredient("moonglass_charged", 3), Ingredient("moonstorm_spark", 3), Ingredient("coolant", 1) }, TECH.LOST, { numtogive = 3 }, { "LIGHT", "REFINE" })
 
 AddDeconstructRecipe("alterguardianhat", { Ingredient("alterguardianhatshard", 5), Ingredient("alterguardianhatshard_blueprint", 1) })
 
@@ -520,18 +528,19 @@ ChangeSortKey("um_record_hooded_widow", "um_record_stranger", "DECOR", true)
 ChangeSortKey("um_record_tot", "um_record_hooded_widow", "DECOR", true)
 ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 
-AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, GLOBAL.TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
-AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, GLOBAL.TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
+AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
+AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector", { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) }, GLOBAL.TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector", { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) }, GLOBAL.TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
 
-AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, GLOBAL.TECH.MAGIC_TWO, nil, { "SEAFARING" })
+AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
 
-AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS" })
+AddRecipe2("beakbasher", { Ingredient("driftwood_log", 2), Ingredient("kelp", 8), Ingredient("ocupus_beak", 1) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "WEAPONS" })
 ChangeSortKey("beakbasher", "goldenshovel", "TOOLS", true)
+ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
@@ -542,9 +551,10 @@ AddRecipe2(
 	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
 	TECH.SCIENCE_ONE,
 	nil,
-	{ "TOOLS" }
+	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
+ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
 AddRecipe2(
 	"um_ice_sicle",
@@ -554,6 +564,7 @@ AddRecipe2(
 	{ "TOOLS", "WEAPONS" }
 )
 ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
+ChangeSortKey("um_ice_sicle", "jawed_scythe", "WEAPONS", true)
 
 AddRecipe2(
 	"um_hat_rime",
@@ -576,9 +587,11 @@ if TUNING.DSTU.WATHGRITHR_REWORK then
             --"CRAFTING_STATION",
             "MODS",
             "EVRERYTHING"})
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "CHARACTER", true)
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "WEAPONS", true)
+    ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "ARMOUR", true)
 end
 
-AddRecipe2("hermitshop_bootleg", { Ingredient("messagebottleempty", 8) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "bootleg", sg_state = "give" })
 AddRecipe2("um_boatbottle", {Ingredient("chestupgrade_stacksize", 1),  Ingredient("wagpunk_bits", 2), Ingredient("moonglass", 8)}, TECH.LOST, nil, {"TOOLS", "CONTAINERS", "SEAFARING"})
 ChangeSortKey("um_boatbottle", "sludge_cork", "TOOLS", true)
 ChangeSortKey("um_boatbottle", "chestupgrade_stacksize", "CONTAINERS", true)
@@ -586,3 +599,6 @@ ChangeSortKey("um_boatbottle", "portableboat_item", "SEAFARING", true)
 
 AddRecipe2("oar_monkey", {Ingredient("log", 1),  Ingredient("palmcone_scale", 2), Ingredient("rope", 1)}, TECH.LOST, nil, {"SEAFARING"})
 ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)
+
+AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true}, { "CHARACTER" })
+ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)

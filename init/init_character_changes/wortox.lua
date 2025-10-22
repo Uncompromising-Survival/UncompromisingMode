@@ -12,7 +12,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     if TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         AddPrefabPostInitAny(function(inst)
             if not GLOBAL.TheWorld.ismastersim then
-                return inst
+                return
             end
             if inst:HasTag("butterfly") then
                 inst:AddTag("soulless")
@@ -102,7 +102,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
     AddPrefabPostInit("wortox_soul", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         local function CheckAllegiance(inst,owner)
@@ -156,10 +156,11 @@ if TUNING.DSTU.WORTOXCHANGES then
     --------------------------------------------------------------------------------------------------------------------------------        
 
     AddPrefabPostInit("wortox_reviver", function(inst)
-        if not GLOBAL.TheWorld.ismastersim then
-            return inst
-        end
         inst:RemoveTag("reviver")
+
+        if not GLOBAL.TheWorld.ismastersim then
+            return
+        end
         
         local function OnConsume(inst, owner)
             if inst.components.perishable and inst.components.perishable:GetPercent() > 0.5 then
@@ -180,7 +181,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
     AddPrefabPostInit("wortox_decoy", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
         local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
@@ -330,7 +331,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
     AddPrefabPostInit("wortox_soul_spawn", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         local _OnThrownFn = inst.components.projectile.onthrown
         
@@ -444,11 +445,10 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("wortox", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         inst:ListenForEvent("onhitother", GenerateSouls)
-        
     end)     -- This is the cause of tint crash, if it happens again.
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Shadow Weaving ] ----------------------------------------------------------------------------------------------------------
@@ -624,8 +624,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("nightmarefuel", function(inst)
         inst:AddTag("SOUL_SHADOW_upgradeable")
+
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         inst:AddComponent("upgradeable")
@@ -635,8 +636,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("horrorfuel", function(inst)
         inst:AddTag("SOUL_SHADOW_upgradeable")
+
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         inst:AddComponent("upgradeable")
@@ -650,7 +652,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("voidcloth_scythe", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         local _OnAttack = inst.components.weapon.onattack
@@ -703,7 +705,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     for i,v in ipairs(shadow_weapons) do
         AddPrefabPostInit(v, function(inst)
             if not GLOBAL.TheWorld.ismastersim then
-                return inst
+                return
             end
 
             local _OnAttack = inst.components.weapon.onattack or function() end -- Dummy function here as the Fix if the weapon doesn't have an onattack.
@@ -747,7 +749,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("wortox_nabbag", function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         local BUCKET_NAMES = {
@@ -897,7 +899,6 @@ if TUNING.DSTU.WORTOXCHANGES then
             inst:Remove()
         end
         
-
         local crechure = "lunarthrall_plant_gestalt"
         local skilltreeupdater = upgrade_performer.components.skilltreeupdater
         local gestalt = GLOBAL.SpawnPrefab(crechure) 
@@ -905,7 +906,6 @@ if TUNING.DSTU.WORTOXCHANGES then
 
         GLOBAL.MakeFlyingCharacterPhysics(gestalt, 1, .5)
         gestalt:AddTag("flying")
-
         
         local x,y,z = upgrade_performer.Transform:GetWorldPosition()
         local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
@@ -972,8 +972,9 @@ if TUNING.DSTU.WORTOXCHANGES then
         
     AddPrefabPostInit("moon_tree_blossom", function(inst)
         inst:AddTag("SOUL_LUNAR_upgradeable")
+
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         inst:AddComponent("upgradeable")
@@ -983,8 +984,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInit("purebrilliance", function(inst)
         inst:AddTag("SOUL_LUNAR_upgradeable")
+
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         
         inst:AddComponent("upgradeable")
@@ -1070,7 +1072,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     AddPrefabPostInitAny(function(inst)
         if not GLOBAL.TheWorld.ismastersim then
-            return inst
+            return
         end
         if inst.components.tradable == nil and inst.components.inventoryitem and not inst:HasTag("irreplaceable") then
             inst:AddComponent("tradable")
@@ -1225,12 +1227,12 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
     
-    local function GenericSteal(inst,target)
+    local function GenericSteal(inst, target)
         for i = 1, 100 do --Just do it a bunch, no way to steal "all" the inventory from thief component
             inst.components.thief:StealItem(target)
         end
     end
-    
+
     local hitsparks_fx_colouroverride = {0, 1, 1} -- Try to get lunar colored
     local function TryToSparkOn(target, attacker)
         if target ~= nil and target:IsValid() then
@@ -1239,40 +1241,57 @@ if TUNING.DSTU.WORTOXCHANGES then
             --spark.black:set(true)
         end
     end
-    
+
+	local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
     local function DoLunarAttack(inst, owner, target)
         if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
-            if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasTag("structure") and not target:HasTag("wall")) then
+            if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasAnyTag(NOT_LUNARTARGET_TAGS)) then
                 owner:AddComponent("thief")
                 GenericSteal(owner,target)
                 TryToSparkOn(target, owner)
                 SpecialSteal(owner,target)
-                target.components.combat:GetAttacked(owner,42.5,inst)
+                target.components.combat:GetAttacked(owner, 42.5, inst)
                 owner:RemoveComponent("thief") -- just need thief for a second
             end
         end
     end
-    
-    local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
-    
-    for i,v in ipairs(moon_weapons) do
-        AddPrefabPostInit(v, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then
-                return inst
-            end
-            
-            local _OnAttack = inst.components.weapon.onattack
-        
-            local function OnAttack(inst, attacker, target) 
+
+    local function WortoxLunarStuff(inst)
+		local weapon = inst.components.weapon
+        if weapon then
+            local _OnAttack = weapon.onattack
+            local function OnAttack(inst, attacker, target, ...)
+                local ret = _OnAttack(inst, attacker, target, ...)
                 if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
-                    if attacker.finishportalhoptask ~= nil and attacker:TryToPortalHop(1, false) then
+                    if attacker.finishportalhoptask and attacker:TryToPortalHop(1, false) then
                         DoLunarAttack(inst, attacker, target)
                     end
-                end                
-                _OnAttack(inst,attacker,target)
+                end
+                return ret
             end
-                    
-            inst.components.weapon:SetOnAttack(OnAttack)
+            weapon:SetOnAttack(OnAttack)
+        end
+    end
+
+    local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
+    for i, v in ipairs(moon_weapons) do
+        AddPrefabPostInit(v, function(inst)
+            if not GLOBAL.TheWorld.ismastersim then
+                return
+            end
+
+            WortoxLunarStuff(inst)
+
+            local forgerepairable = inst.components.forgerepairable
+            if forgerepairable then
+                local _OnRepaired = forgerepairable.onrepaired
+                local function OnRepaired(inst, ...)
+                    local ret = _OnRepaired(inst, ...)
+                    WortoxLunarStuff(inst)
+                    return ret
+                end
+                forgerepairable:SetOnRepaired(OnRepaired)
+            end
         end)
     end
     --------------------------------------------------------------------------------------------------------------------------------
@@ -1398,30 +1417,23 @@ if TUNING.DSTU.WORTOXCHANGES then
         -- end
     -- end    
 
-    
-    
 
     AddPrefabPostInit("wortox_souljar", function(inst)
-        if not GLOBAL.TheWorld.ismastersim then
-            return inst
-        end
-        inst:AddTag("nosteal")    
+        inst:AddTag("nosteal")
     end)
 end
 
 
 AddPrefabPostInit("wortox", function(inst)
     if not GLOBAL.TheWorld.ismastersim then
-        return inst
+        return
     end
     
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Give Wortox devil food cake affinity ] ------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------
-
             
     if inst.components.foodaffinity ~= nil then
         inst.components.foodaffinity:AddPrefabAffinity("devilsfruitcake", 1.24)
     end
-    
 end)

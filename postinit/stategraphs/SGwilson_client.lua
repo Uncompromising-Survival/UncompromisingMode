@@ -192,7 +192,6 @@ local _OldEatState = inst.states["eat"].onenter
 	]]
 
     local states = {
-
         State{
             name = "usewaxwelljournal_pre",
             tags = {"doing", "busy"},
@@ -201,10 +200,8 @@ local _OldEatState = inst.states["eat"].onenter
             onenter = function(inst)
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetDeltaTimeMultiplier(2)
-
                 inst.AnimState:PlayAnimation("action_uniqueitem_pre")
                 inst.AnimState:PushAnimation("action_uniqueitem_lag", false)
-
                 inst:PerformPreviewBufferedAction()
                 inst.sg:SetTimeout(2)
             end,

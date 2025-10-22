@@ -134,5 +134,4 @@ AddPrefabPostInit("lighter", function(inst)
             turnon(inst)
         end
     end)
-
 end)

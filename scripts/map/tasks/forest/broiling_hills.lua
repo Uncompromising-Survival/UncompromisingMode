@@ -21,10 +21,10 @@ AddTaskPreInit("Badlands", function(task)
     task.room_choices["DragonflyArena"] = 0
 
     task.room_choices["BoilingFields_Crabby"] = 1         -- Crabs
-	task.room_choices["BoilingFields_Rocky"] = 1          -- Snaildrakes
-	task.room_choices["BoilingFields_WAR"] = 1          -- Snaildrakes
+    task.room_choices["BoilingFields_Rocky"] = 1          -- Snaildrakes
+    task.room_choices["BoilingFields_WAR"] = 1            -- Snaildrakes
     task.room_choices["BoilingFields_Hotsprings"] = 1     -- Hotsprings
-    task.room_choices["BoilingFields_Hounds"] = 1   -- Hounds
+    task.room_choices["BoilingFields_Hounds"] = 1         -- Hounds
     task.room_choices["BoilingFields_DragonflyArena"] = 1 -- Dfly
     task.room_choices["BoilingFields_Sinkhole"] = 1       -- Sinkhole
     task.background_room = "BoilingFields_Hotsprings"
@@ -66,26 +66,22 @@ AddTask("BrolingHills_IA", {
         --["BoilingFields_Sinkhole_IA"] = 1,
     },
     room_bg = WORLD_TILES.MAGMAFIELD,
-    background_room = {"BoilingFields_Hotsprings_IA"},
+    background_room = { "BoilingFields_Hotsprings_IA" },
     colour = { r = .1, g = .1, b = .1, a = 1 }
 })
 
 -- Chance to Swap Mosaic and Broiling Hills
 if math.random() > 0.5 then
-	AddTaskPreInit("Dig that rock", function(task)
-		task.locks={LOCKS.ADVANCED_COMBAT,LOCKS.MONSTERS_DEFEATED,LOCKS.TIER4}
-		task.keys_given={KEYS.HOUNDS,KEYS.TIER5, KEYS.ROCKS}
-	end)
+    AddTaskPreInit("Dig that rock", function(task)
+        task.locks = { LOCKS.ADVANCED_COMBAT, LOCKS.MONSTERS_DEFEATED, LOCKS.TIER4 }
+        task.keys_given = { KEYS.HOUNDS, KEYS.TIER5, KEYS.ROCKS }
+    end)
 
-	AddTaskPreInit("Badlands", function(task)
-		task.locks={LOCKS.ROCKS}
-		task.keys_given={KEYS.TRINKETS,KEYS.STONE,KEYS.WOOD,KEYS.TIER1}	
-	end)
+    AddTaskPreInit("Badlands", function(task)
+        task.locks = { LOCKS.ROCKS }
+        task.keys_given = { KEYS.TRINKETS, KEYS.STONE, KEYS.WOOD, KEYS.TIER1 }
+    end)
 end
-
-
-
-
 
 AddTask("BrolingHills_IA_2", {
     locks = { LOCKS.ISLAND4 },
@@ -100,16 +96,15 @@ AddTask("BrolingHills_IA_2", {
         --["BoilingFields_Sinkhole_IA"] = 1,
     },
     room_bg = WORLD_TILES.MAGMAFIELD,
-    background_room = {"BoilingFields_Hotsprings_IA"},
+    background_room = { "BoilingFields_Hotsprings_IA" },
     colour = { r = .1, g = .1, b = .1, a = 1 }
 })
 
 
-AddTaskSetPreInitAny(function(tasksetdata)
-    if tasksetdata.name == GLOBAL.STRINGS.UI.CUSTOMIZATIONSCREEN.TASKSETNAMES.SHIPWRECKED then
-        -- IA Giant Trees
-        table.insert(tasksetdata.tasks, "BrolingHills_IA")
-        table.insert(tasksetdata.tasks, "BrolingHills_IA_2")
-
-    end
+AddTaskSetPreInit("shipwrecked", function(tasksetdata)
+    -- IA broiling hills
+    table.insert(tasksetdata.tasks, "BrolingHills_IA")
+    table.insert(tasksetdata.tasks, "BrolingHills_IA_2")
 end)
+
+--dunno where else to put this.

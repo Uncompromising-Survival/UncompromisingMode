@@ -110,31 +110,48 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
         local pt = Vector3(inst.Transform:GetWorldPosition())
         local players = FindPlayersInRange( pt.x, pt.y, pt.z, 20, true )
         local recipe = CycleRecipes()
-
+        local archivemanager = TheWorld.components.archivemanager
+		local powered = archivemanager == nil or archivemanager:GetPowerSetting()
         inst:DoTaskInTime(5.2 ,function()
             if math.random() > 0.25 and TUNING.DSTU.DATES.APRIL_FOOLS then
                 SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
             end
             for i,player in ipairs(players) do
-                if recipe and player.components.builder then
-                    if inst.product_orchestrina == "archive_resonator_item" then
+                local talker = player.components.talker
+                local papyrus = SpawnPrefab("wixie_piano_card")
+                local fx = SpawnPrefab("archive_lockbox_player_fx")
+                if recipe and player.components.builder and powered then
+                    if inst.product_orchestrina == "turf_vault" then
                         if not player.components.builder:KnowsRecipe("um_astral_projector") or player.components.builder:KnowsRecipe("um_astral_projector_target") then
-                            player.components.inventory:GiveItem(SpawnPrefab("um_astral_projector_blueprint"))
-                            player.components.inventory:GiveItem(SpawnPrefab("um_astral_projector_target_blueprint"))
-                        elseif player.components.talker then
-                            player.components.talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true)
+                            player.components.builder:UnlockRecipe("um_astral_projector")
+                            player.components.builder:UnlockRecipe("um_astral_projector_target")
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
+                            if fx then player:AddChild(fx) end
+                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                            papyrus.name = "You got: Astral Projectinator!"
+                            Launch2(papyrus, inst, 2, 0, 1, .5)
+                        else
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
                         end
-                    elseif inst.product_orchestrina == "refined_dust" then
-                        if not player.components.builder:KnowsRecipe("um_inkubator") then
-                            player.components.inventory:GiveItem(SpawnPrefab("um_inkubator_blueprint"))
-                        elseif player.components.talker then
-                            player.components.talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true)
+                    elseif inst.product_orchestrina == "vaultrelic" then
+                        if not player.components.builder:KnowsRecipe("um_scrapper") then
+                            player.components.builder:UnlockRecipe("um_scrapper")
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
+                            if fx then player:AddChild(fx) end
+                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                            papyrus.name = "You got: Ancient Scrapper!"
+                            Launch2(papyrus, inst, 2, 0, 1, .5)
+                        else
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
                         end
                     else
-                        if not player.components.builder:KnowsRecipe("um_scrapper") then
-                            player.components.inventory:GiveItem(SpawnPrefab("um_scrapper_blueprint"))
-                        elseif player.components.talker then
-                            player.components.talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true)
+                        if not player.components.builder:KnowsRecipe("um_inkubator") then
+                            player.components.builder:UnlockRecipe("um_inkubator")
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
+                            if fx then player:AddChild(fx) end
+                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                            papyrus.name = "You got: Ancient Inkubator!"
+                            Launch2(papyrus, inst, 2, 0, 1, .5)
                         end
                     end
                 end

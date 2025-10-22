@@ -1,3 +1,6 @@
+-- THIS ENTIRE FILE IS NOT LOADED DUE TO KLEI CRABKING REWORK
+-- ALL CODE HERE IS NOT RUN IN UNCOMP ANYMORE
+
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -352,8 +355,6 @@ env.AddPrefabPostInit("crabking", function(inst)
 		end
 	end
 
-	inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1.00)
-
 	local types =
 	{
 		"red",
@@ -442,7 +443,7 @@ env.AddPrefabPostInit("crabking", function(inst)
 				--count = count + 1
 			--end
 		--end
-	--end)
+	end)
 
 	local function OnCollide(inst, data)
 		local boat_physics = data.other.components.boatphysics

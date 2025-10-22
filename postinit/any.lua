@@ -69,8 +69,6 @@ env.AddReplicableComponent("adrenaline")
 env.AddReplicableComponent("boatbottle")
 
 
-
-
 -- for the super spawner tags
 env.AddPrefabPostInitAny(function(inst)
     local old_OnSave = inst.OnSave

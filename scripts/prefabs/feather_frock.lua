@@ -314,6 +314,7 @@ local function OnAmmoLoaded(inst, data)
 	end
 	
 	inst.feather = nil
+	inst.frock_damage_reduction = 0
 end
 
 local function OnAmmoUnloaded(inst, data)
@@ -331,6 +332,7 @@ local function OnAmmoUnloaded(inst, data)
 	end
 	
 	inst.feather = nil
+	inst.frock_damage_reduction = 0
 end
 
 local function frockfn()

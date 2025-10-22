@@ -2,9 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 
-
 local UpvalueHacker = require("tools/upvaluehacker")
-
 
 env.AddComponentPostInit("hounded", function(self)
     local _spawndata = UpvalueHacker.GetUpvalue(self.SetSpawnData, "_spawndata")
@@ -19,7 +17,7 @@ env.AddComponentPostInit("hounded", function(self)
     local GetSpawnPoint = UpvalueHacker.GetUpvalue(self.SummonSpawn, "SummonSpawn", "GetSpawnPoint")
     local _OldGetSpawnPrefab = UpvalueHacker.GetUpvalue(_GetSpawnPrefab, "OldGetSpawnPrefab")
 
-    --Winterlands compat. 
+    --Winterlands compat.
     if _OldGetSpawnPrefab or not GetSpawnPoint then
         GetSpecialSpawnChance = UpvalueHacker.GetUpvalue(_OldGetSpawnPrefab, "GetSpecialSpawnChance")
         GetSpawnPoint = UpvalueHacker.GetUpvalue(SummonSpawn, "OldSummonSpawn", "GetSpawnPoint")
@@ -90,7 +88,10 @@ env.AddComponentPostInit("hounded", function(self)
         end
     end
 
-    UpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
+
+    if not (TheWorld:HasTag("island") or TheWorld:HasTag("volcano")) then
+        UpvalueHacker.SetUpvalue(self.SummonSpawn, SummonSpawn, "SummonSpawn")
+    end
 end)
 
 local wormspawn =
@@ -198,6 +199,24 @@ env.AddPrefabPostInit("forest", function(inst)
         end
         if TUNING.DSTU.MAGMAHOUNDS then
             spawndata.upgrade_spawn_summer = "magmahound"
+        end
+
+
+        if (TUNING.DSTU.GLACIALHOUNDS or TUNING.DSTU.MAGMAHOUNDS) then
+            spawndata.ShouldUpgrade = function(amount, wave_pre_upgraded)
+                local seasonBonus = (TheWorld.state.iswinter or TheWorld.state.issummer) and 0.3 or 0
+
+                if amount >= 8 then
+                    return math.random() - seasonBonus <= 0.7
+                elseif amount == 7 then
+                    return math.random() - seasonBonus < 0.3
+                elseif amount == 6 then
+                    return math.random() - seasonBonus < 0.15
+                elseif amount == 5 then
+                    return math.random() - seasonBonus < 0.05
+                end
+                return false
+            end
         end
     end
 end)

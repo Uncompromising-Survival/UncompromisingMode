@@ -130,7 +130,7 @@ function Um_StormOver:OnUpdate(dt)
 end
 
 function Um_StormOver:ToggleUpdating()
-    if TheWorld.state.isspring then
+    if (TheWorld.state.isspring or TheWorld.state.iswetseason or TheWorld.state.isgreenseason) then
         self:StartUpdating()
     else
         self:Hide()

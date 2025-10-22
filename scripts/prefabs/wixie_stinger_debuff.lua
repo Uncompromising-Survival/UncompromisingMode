@@ -4,15 +4,9 @@ local function AddFx(inst, followsymbol, followoffset, data)
 		fx.entity:SetParent(inst.initialtarget.entity)
 
 		if inst.initialtarget.components.combat ~= nil and inst.initialtarget.components.combat.hiteffectsymbol ~= nil and inst.initialtarget.components.combat.hiteffectsymbol ~= "marker" then
-			--[[fx.entity:AddFollower():FollowSymbol(inst.initialtarget.GUID, inst.initialtarget.components.combat.hiteffectsymbol, 0, 0, 0)
-		else]]
-			if inst.initialtarget:HasTag("smallcreature") then
-				fx.Transform:SetPosition((math.random() - math.random()), .5 + (math.random() - math.random()), (math.random() - math.random()))
-			elseif inst.initialtarget:HasTag("epic") then
-				fx.Transform:SetPosition((math.random() - math.random()), 2.5 + (math.random() - math.random()), (math.random() - math.random()))
-			else
-				fx.Transform:SetPosition((math.random() - math.random()), 1.5 + (math.random() - math.random()), (math.random() - math.random()))
-			end
+			local mob_modifier = inst.initialtarget:HasTag("smallcreature") and .5 or inst.initialtarget:HasTag("epic") and 2.5 or 1.5
+			fx.Transform:SetPosition((math.random() - math.random()), mob_modifier + (math.random() - math.random()), (math.random() - math.random()))
+		
 		end
 		
 		table.insert(inst.stingercounter, fx)

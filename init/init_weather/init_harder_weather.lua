@@ -24,7 +24,7 @@ if TUNING.DSTU.WINTER_BURNING then
     GLOBAL.ACTIONS.LIGHT.fn = function(act)
         if act.invobject ~= nil and act.invobject.components.lighter ~= nil then
             if GLOBAL.TheWorld.state.season == "winter" and not act.doer:HasTag("pyromaniac") and act.target.components.burnable
-                and not GLOBAL:TestForIA() then
+                and not GLOBAL:IsIslandOrVolcanoWorld() then
                 if act.invobject.components.fueled then
                     act.invobject.components.fueled:DoDelta(-5, act.doer) --Hornet: Made it take fuel away because.... The snow and cold takes some of the fire? probably will change
                 end
@@ -127,22 +127,5 @@ env.AddPrefabPostInit("forest", function(inst)
     if TUNING.DSTU.STORMS then
         inst:AddComponent("um_stormspawner")
     end
-
-    inst:DoTaskInTime(0, function(inst) --doesn't work for some components, but works for others.
-        print("HERE TestForIA:", TestForIA())
-        if TestForIA() then             --remove components if the world is IA island/volcano, instead of checking for the mod or delaying adding components.
-            inst:RemoveComponent("uncompromising_deerclopsspawner")
-            inst:RemoveComponent("toadrain")
-            --inst:RemoveComponent("hayfever_tracker")
-            inst:RemoveComponent("firefallwarning")
-            inst:RemoveComponent("pollenmitedenspawner")
-            --inst:RemoveComponent("randomnightevents")
-            inst:RemoveComponent("um_areahandler")
-            inst:RemoveComponent("gmoosespawner")
-            inst:RemoveComponent("mock_dragonflyspawner")
-            inst:RemoveComponent("um_snow_stormspawner")
-            --inst:RemoveComponent("um_stormspawner")
-            --inst:AddComponent("um_pestilencecontroller")
-        end
-    end)
 end)
+

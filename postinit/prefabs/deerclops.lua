@@ -225,10 +225,6 @@ end
 
 env.AddPrefabPostInit("deerclops", function(inst)
     DeerclopsClientFunctions(inst)
-
-    if not TheWorld.ismastersim then
-        return
-    end
-
+    if not TheWorld.ismastersim then return end
     DeerclopsFunctions(inst)
 end)
