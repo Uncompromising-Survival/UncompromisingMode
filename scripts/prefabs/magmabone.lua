@@ -10,7 +10,7 @@ local prefabs =
     "collapse_small",
 }
 
-local names = { "piece1", "piece2", "piece3" }
+local names = { "piece1", "piece2", "piece3","piece2","piece3","piece2","piece3" }
 
 SetSharedLootTable('magmabone',
 {
@@ -74,7 +74,9 @@ local function fn()
     if bonetype == 1 then
         inst.components.lootdropper:AddChanceLoot("houndstooth", .5)
     end
-
+	if math.random() > 0.5 then
+		inst.AnimState:SetScale(-1,1,1)
+	end
     MakeHauntableLaunch(inst)
 
     -------------------

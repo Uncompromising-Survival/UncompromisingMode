@@ -519,6 +519,13 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldHeal  = inst.actionhandlers[ACTIONS.HEAL].deststate
     inst.actionhandlers[ACTIONS.HEAL].deststate = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
+		
+		-- Drinking/Rubbing new healing items (Not yet...)
+		
+		-- local new_item = action.invobject and action.inveobject.prefab
+		-- if new_item == "um_firecream" then
+			
+		-- end
         if funcap and funcap.charge > 0 then
             return "bluecap_general_action"
         end
@@ -647,7 +654,10 @@ env.AddStategraphPostInit("wilson", function(inst)
             function(inst, action)
                 return action.invobject ~= nil and action.invobject:HasTag("powercell") and "doshortaction"
             end),
-        ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
+        ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"), -- set_custom_name....?
+        ActionHandler(ACTIONS.UM_GUNSHOOTY, function(inst, action)
+            return "um_gunshooty"
+        end)
     }
 
     local attackactionhandler = inst.actionhandlers[ACTIONS.ATTACK]
@@ -5006,6 +5016,38 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
+        State {
+            name = "um_gunshooty", -- Stolen from wixie while she was lethargic
+            tags = {"doing", "canrotate", "busy", "keepchannelcasting"},
+
+            onenter = function(inst)
+                inst.components.locomotor:Stop()
+                inst.AnimState:PlayAnimation("hand_shoot")
+            end,
+
+            timeline =
+            {
+                TimeEvent(17 * FRAMES, function(inst)
+                    inst:PerformBufferedAction()
+                    inst.sg:RemoveStateTag("busy")
+                end),
+            },
+
+            events =
+            {
+                EventHandler("animover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg:GoToState("idle")
+                    end
+                end),
+            },
+			onupdate = function(inst)
+				if inst.tornadopointx then
+					inst:ForceFacePoint(Vector3(inst.tornadopointx,inst.tornadopointy,inst.tornadopointz)) -- allow mouse control while aiming
+				end
+			end,
+        },
+		
         State{
             name = "detonator_remotecast_trigger",
             tags = { "doing", "busy" },
@@ -5130,6 +5172,61 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:ClearOverrideSymbol("swap_remote")
             end,
         },
+		State{
+			name = "um_drinkpotion", -- inspired by wendy drinking state... make it not be forced into a single swap bank, we can't use that without rebuilding it, let it be generalized.
+			tags = { "doing", "busy" },
+
+			onenter = function(inst)
+				inst.components.locomotor:Stop()
+
+				inst.AnimState:PlayAnimation("drink_pre")
+				inst.AnimState:PushAnimation("drink_lag",false)
+				inst.AnimState:PushAnimation("drink",false)
+				
+				inst.SoundEmitter:PlaySound("meta5/wendy/player_drink", "drink")
+
+				inst.sg.statemem.action = inst:GetBufferedAction()
+
+				if inst.sg.statemem.action ~= nil then
+					local invobject = inst.sg.statemem.action.invobject
+					local elixir_type = invobject.elixir_buff_type
+
+					inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_".. elixir_type .."_swap")              
+				end
+
+				inst.sg:SetTimeout(33 * FRAMES)
+			end,
+
+			timeline =
+			{
+				FrameEvent(4, function(inst)
+					inst.sg:RemoveStateTag("busy")
+				end),
+				FrameEvent(18, function(inst)
+					inst:PerformBufferedAction()
+				end),
+			},
+
+			events =
+			{
+				EventHandler("actionfailed", function(inst, data)
+					inst.SoundEmitter:KillSound("drink")
+					inst.sg:GoToState("idle", false)
+				end),
+			},
+
+			ontimeout = function(inst)
+				inst.sg:GoToState("idle", true)
+			end,
+
+			onexit = function(inst)
+				if inst.bufferedaction == inst.sg.statemem.action and
+				(inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
+					inst:ClearBufferedAction()
+				end
+			end,
+		},		
+
     }
 
     

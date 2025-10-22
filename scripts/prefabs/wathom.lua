@@ -100,11 +100,6 @@ local function UnAmp(inst)
 			end
         end
     end
-	-- if HasSkill(inst,"ancient_terror_3") then
-        -- if not inst:HasTag("playerghost") then
-            -- inst.AnimState:SetBuild("wathom")
-        -- end
-	-- end
 end
 
 local function RegurgitateFuel(inst)
@@ -153,17 +148,12 @@ local function Amp(inst)
         inst:DoTaskInTime(1, function() inst.components.health.invincible = false end)
     end
 	
-	if HasSkill(inst,"ancient_terror_1") then
+	if HasSkill(inst,"wathom_allegiance_shadow") then
 		RegurgitateFuel(inst)
 		RegurgitateFuel(inst)
 		RegurgitateFuel(inst)
 		inst.um_wathom_regurgitatetask = inst:DoPeriodicTask(30,ShouldRegurgitate)
 	end
-	-- if HasSkill(inst,"ancient_terror_3") then
-        -- if not inst:HasTag("playerghost") then
-            -- inst.AnimState:SetBuild("wathom_shadow")
-        -- end
-	-- end
 end
 
 -- When the character is revived from human
@@ -289,9 +279,6 @@ local function SapTask(inst)
 		end			
 	end	
 	
-	if HasSkill(inst,"ancient_terror_3") and inst.components.sanity and inst.components.sanity:GetPercent() < 0.05 and inst.components.health and not inst.components.health:IsDead() and not inst:HasTag("fuelfarming") then
-		inst.components.health:DeltaPenalty(-0.001) -- VERY slow
-	end
 end
 
 local function AmpTimer(inst)

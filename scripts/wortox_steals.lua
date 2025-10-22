@@ -77,25 +77,20 @@ stealtable= {
 	},    bishop = {
 		name = "bishop",
 		weight = {
-			purplegem = 5,
-			nightmarefuel = 1,
-			thulecite_pieces = 1,
-			thulecite = 1,
+			purplegem = 1,
+			gears = 9,
 		},
 		instakill = {
 			purplegem = true
 		},
-		bonus = {
-			purplegem = {"gears","gears"},
-		},
 	},    bishop_nightmare = {
 		name = "bishop_nightmare",
 		weight = {
-			purplegem = 5,
+			purplegem = 1,
 			greengem = 2,
-			yellowgem = 1,
-			orangegem = 1,
-			thulecite = 1,
+			yellowgem = 2,
+			orangegem = 2,
+			thulecite = 3,
 		},
 		instakill = {
 			purplegem = true

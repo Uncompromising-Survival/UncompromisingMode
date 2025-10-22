@@ -66,7 +66,9 @@ local component_post = {
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
 	"locomotor",
-	"beargerspawner"
+	"beargerspawner",
+	"floater",
+	"temperature"
 }
 
 local prefab_post = {
@@ -189,7 +191,7 @@ local prefab_post = {
     "boat_pirate",
     "trident", -- for giving the leak a cause.
     "boat_bumpers",
-    --"nightsword",
+    "weapons",
     "bigshadowtentacle",
     "mast",
     "multitool_axe_pickaxe",

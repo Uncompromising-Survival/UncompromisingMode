@@ -274,9 +274,7 @@ local function common_fn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(8)
-    inst.components.finiteuses:SetUses(8)
+
 
     inst.latchedtarget = nil
     inst.Snapped = false
@@ -372,17 +370,19 @@ local function old_fn(build)
     return inst
 end
 
-local function OnHitInk(inst, target)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    inst.trap = SpawnPrefab("um_bear_trap")
-    inst.trap.Transform:SetPosition(x, 0, z)
-
-    if inst.components.finiteuses and inst.trap.components.finiteuses then
-        inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
-    end
-
-    inst:Remove()
+local function OnTrapLand(inst, target)
+	if FindEntity(inst,DEPLOYSPACING.LESS,nil,{"bear_trap"}) then
+		if inst.traptype then
+			inst.trap = SpawnPrefab("um_bear_trap_equippable_"..inst.traptype) 
+		end	
+	else
+		inst.trap = SpawnPrefab("um_bear_trap")
+	end
+	inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	if inst.components.finiteuses and inst.trap.components.finiteuses then
+		inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+	end
+	inst:Remove()	
 end
 
 local function OnHitTarget(inst, target)
@@ -405,7 +405,7 @@ local function oncollide(inst, other)
         other:IsValid() and other:HasTag("_combat") then
         OnHitTarget(inst, other)
     elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnHitInk(inst, other)
+        OnTrapLand(inst, other)
     end
 end
 
@@ -449,7 +449,7 @@ local function projectilefn()
     if not TheWorld.ismastersim then return inst end
 
     inst:AddComponent("complexprojectile")
-    inst.components.complexprojectile:SetOnHit(OnHitInk)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand)
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
     inst.components.complexprojectile:SetHorizontalSpeed(30)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
@@ -564,7 +564,7 @@ local function ghost_walrusfn() -- ghost walrus
     return inst
 end
 
-local function OnHitInk(inst, target)
+local function OnTrapLand(inst, target)
     inst:RemoveTag("NOCLICK")
     inst:RemoveTag("projectile")
 
@@ -616,7 +616,7 @@ local function oncollide_player(inst, other)
         other:IsValid() and other:HasTag("_combat") then
         OnHitTarget_player(inst, other)
     elseif y <= inst:GetPhysicsRadius() + 0.001 then
-        OnHitInk(inst, other)
+        OnTrapLand(inst, other)
     end
 end
 
@@ -709,10 +709,6 @@ local function equiptoothfn()
 
     if not TheWorld.ismastersim then return inst end
 
-    inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(6)
-    inst.components.finiteuses:SetUses(6)
-
     inst.latchedtarget = nil
     inst.Snapped = false
 
@@ -723,7 +719,7 @@ local function equiptoothfn()
     inst.components.complexprojectile:SetGravity(-35)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnHitInk)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
@@ -731,7 +727,7 @@ local function equiptoothfn()
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-
+	inst:AddComponent("stackable")
     inst:AddComponent("inspectable")
 
     inst.traptype = "tooth"
@@ -739,7 +735,7 @@ local function equiptoothfn()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-
+	inst.components.equippable.equipstack = true
     inst:AddComponent("health")
     inst.components.health.canmurder = false
     inst.components.health:SetMaxHealth(TUNING.WALRUS_HEALTH / 2)
@@ -810,7 +806,7 @@ local function equipgoldfn()
     inst.components.complexprojectile:SetGravity(-35)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetOnHit(OnHitInk)
+    inst.components.complexprojectile:SetOnHit(OnTrapLand)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)

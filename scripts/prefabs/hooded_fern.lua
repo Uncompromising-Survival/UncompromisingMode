@@ -243,6 +243,7 @@ local function grass(name, stage)
             inst.components.pickable:Pick(TheWorld)
             inst.hidden = true
             inst:Hide()
+			inst:DoTaskInTime(0,function(inst) inst.components.propagator:StopSpreading(true) end)
         end)
 
         inst.playertracking = {}
@@ -266,10 +267,10 @@ local function grass(name, stage)
                 inst.AnimState:SetScale(-1,1)
             end
         end)
-
+		MakeMediumPropagator(inst)
         return inst
     end
-
+	
     return Prefab(name, fn, assets)
 end
 

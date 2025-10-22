@@ -87,11 +87,17 @@ ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
+AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 1),Ingredient("um_grass", 1)}, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS" })
+ChangeSortKey("um_boomberry_bomb", "nightstick", "WEAPONS", true)
+
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 1), Ingredient("twigs", 1),Ingredient("rocks", 2)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_fyre_bomb", "gunpowder", "WEAPONS", true)
+ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
-ChangeSortKey("um_eyebalm", "bandage_butterflywings", "RESTORATION", true)
+ChangeSortKey("um_eyebalm", "lifeinjector", "RESTORATION", true)
+
+AddRecipe2("um_firecream", { Ingredient("papyrus", 1), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
+ChangeSortKey("um_firecream", "lifeinjector", "RESTORATION", true)
 
 AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })
 ChangeSortKey("um_beemine_moon_item", "beemine", "WEAPONS", true)
@@ -106,7 +112,7 @@ ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
 
 AddRecipe2(
     "um_bear_trap_equippable_tooth",
-    { Ingredient("twigs", 4), Ingredient("houndstooth", 2), Ingredient("snappy_jaw", 1) },
+    { Ingredient("rocks", 1), Ingredient("snappy_jaw", 1) },
     TECH.SCIENCE_ONE,
     { nil },
     { "WEAPONS" }
@@ -131,6 +137,23 @@ AddRecipe2(
 )
 ChangeSortKey("um_detonator", "um_fyre_bomb", "WEAPONS", true)
 
+AddRecipe2(
+    "um_flamethrower",
+    { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("rocks", 5)}, -- I don't like how similar these two recipes are -Axe
+    TECH.SCIENCE_TWO,
+    { nil },
+    { "WEAPONS" }
+)
+ChangeSortKey("um_flamethrower", "um_fyre_bomb", "WEAPONS", true)
+
+AddRecipe2(
+    "um_hat_pepperdragon",
+    { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("redgem", 2)}, -- I don't like how similar these two recipes are, I know we're trying to get uses for pyrite, but this one actually makes more sense to use silk -Axe
+    TECH.MAGIC_TWO,
+    { nil },
+    { "CLOTHING" }
+)
+ChangeSortKey("um_hat_pepperdragon", "plaguemask", "CLOTHING", true)
 
 if GetModConfigData("wiltfly") then
     AddRecipe2("armor_glassmail", { Ingredient("glass_scales", 1), Ingredient("moonglass_charged", 10) }, TECH.CELESTIAL_THREE, { nounlock = true }, { "CRAFTING_STATION" })
@@ -222,9 +245,9 @@ AddRecipe2("air_conditioner", { Ingredient("shroom_skin", 2), Ingredient("gears"
 ChangeSortKey("air_conditioner", "firesuppressor", "STRUCTURES", true)
 ChangeSortKey("air_conditioner", "siestahut", "RESTORATION", true)
 
-AddRecipe2("houndious_observious", { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) }, TECH.MAGIC_TWO, { placer = "houndious_observious_placer" }, { "STRUCTURES", "MAGIC" })
-ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
-ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
+-- AddRecipe2("houndious_observious", { Ingredient("livinglog", 12), Ingredient("mandrake", 1), Ingredient("ocupus_tentacle_eye", 5) }, TECH.MAGIC_TWO, { placer = "houndious_observious_placer" }, { "STRUCTURES", "MAGIC" })
+-- ChangeSortKey("houndious_observious", "firesuppressor", "STRUCTURES", true)
+-- ChangeSortKey("houndious_observious", "magician_chest", "MAGIC", true)
 
 AddRecipe2("skullchest_child", { Ingredient("fossil_piece", 2), Ingredient("nightmarefuel", 4), Ingredient("boards", 3) }, TECH.LOST, { placer = "skullchest_child_placer" }, { "STRUCTURES", "CONTAINERS", "MAGIC" })
 ChangeSortKey("skullchest_child", "magician_chest", "STRUCTURES", true)

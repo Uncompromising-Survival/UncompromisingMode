@@ -143,7 +143,7 @@ end
 local RETARGET_CANT_TAGS = { "friendlyfruitfly", "fruitfly", "lordfruitfly", "bat", "EPIC", "player", "fruitbat_eating" }
 local RETARGET_ONEOF_TAGS = { "insect", "spider" }
 local function Retarget(inst)
-    local newtarget = FindEntity(inst, 4 * TUNING.BAT_TARGET_DIST, function(guy)
+    local newtarget = FindEntity(inst, TUNING.BAT_TARGET_DIST, function(guy)
             return inst.components.combat:CanTarget(guy)
         end,
         nil,

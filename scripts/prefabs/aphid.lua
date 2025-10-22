@@ -7,20 +7,17 @@ local assets =
 
 local prefabs =
 {
-    --"weevole_carapace",
     "monstersmallmeat",
 }
 if TUNING.DSTU.MONSTERSMALLMEAT then
     SetSharedLootTable("aphid_loot",
         {
-            --{'weevole_carapace', 1},
             { 'monstersmallmeat', 0.25 },
             { 'steelwool', 0.33 },
         })
 else
     SetSharedLootTable("aphid_loot",
         {
-            --{'weevole_carapace', 1},
             { 'monstermeat', 0.25 },
             { 'steelwool', 0.33 },
         })
@@ -47,7 +44,7 @@ local function OnDropped(inst)
 end
 
 local function retargetfn(inst)
-    local dist = 8
+    local dist = 3
     local notags = { "FX", "NOCLICK", "INLIMBO", "wall", "aphid", "structure", "aquatic", "smallcreature" }
     return FindEntity(inst, dist, function(guy)
         return inst.components.combat:CanTarget(guy)
@@ -85,57 +82,6 @@ local function OnWorked(inst, worker)
     end
 end
 
-
-
-local function TryToInfestTree(inst)
-    if inst.components.combat ~= nil then
-        if not inst.components.combat.target then
-            if math.random() > 0.95 or inst:HasTag("fromthebush") then
-                local tree = FindEntity(inst, 30,
-                function(tree) return not tree:HasTag("infestedtree") and tree:HasTag("giant_tree") end)
-                if tree ~= nil then
-                    if inst.brain ~= nil then
-                        inst.brain:Stop()
-                    end
-                    inst.sg:GoToState("flyintree")
-                    if tree.components.timer ~= nil then
-                        tree.components.timer:StartTimer("infest", 1600)
-                    end
-                end
-            end
-        end
-    end
-end
-
-local function FindNymph(inst)
-	if not inst.nymph then
-		local nymph = FindEntity(inst,20^2,nil,{"nymph"})
-		if nymph then
-			inst.components.follower:SetLeader(nymph)
-			inst.Transform:SetPosition(inst.Transform:GetWorldPosition())
-			if not nymph.posse then
-				nymph.posse = {}
-			end
-			table.insert(nymph.posse,inst)
-		else
-			inst:Remove()
-		end
-	end
-end
-
-local function HomeCheck(inst) -- Backup, though would not advice using it, since if you spawn via console, they'll get removed, ones spawned from giant trees will also be removed.
-	local excuse_to_live = false -- Why should I let you live, aphid?
-	if inst.components.homeseeker and inst.components.homeseeker.home then
-		excuse_to_live = true
-	end
-	if inst.components.follower and inst.components.follower.leader then
-		excuse_to_live = true
-	end
-	if excuse_to_live == false then
-		inst:Remove()
-	end
-end
-
 local function fn()
     local inst = CreateEntity()
 
@@ -153,7 +99,6 @@ local function fn()
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("scarytoprey")
-    inst:AddTag("monster")
     inst:AddTag("insect")
     inst:AddTag("hostile")
     inst:AddTag("canbetrapped")
@@ -189,48 +134,6 @@ local function fn()
     inst.components.inventoryitem.nobounce = true
     inst.components.inventoryitem.pushlandedevents = false
 
-	inst.NymphGroundCheck = function(inst)	
-		--TheNet:Announce("checking")
-		if inst.nymph and inst.nymph:IsValid() and inst.nymph.components.health and not inst.nymph.components.health:IsDead() then
-			local x,y,z = inst.nymph.Transform:GetWorldPosition()
-			if not TheWorld.Map:IsAboveGroundAtPoint(x,y,z) then
-				inst.nymph.aphidpossedigging = true
-				inst.sg:GoToState("flyintree")
-			end
-		else
-			--TheNet:Announce("trying")
-			if not (inst.components.combat and inst.components.combat.target) then
-				inst.sg:GoToState("burrow")
-			end
-		end
-	end,
-
---[[ --If we seek out making aphids fly over water, do this route.
-    if TheWorld ~= nil then
-        inst:AddComponent("embarker")
-        inst.components.embarker.embark_speed = inst.components.locomotor.walkspeed
-        inst.components.embarker.antic = true
-
-        inst.components.locomotor:SetAllowPlatformHopping(true)
-        inst:AddComponent("amphibiouscreature")
-        inst.components.amphibiouscreature:SetBanks("carrat", "uncompromising_rat_water")
-        inst.components.amphibiouscreature:SetEnterWaterFn(function(inst)
-            inst.AnimState:SetBuild("uncompromising_rat_water")
-            inst.landspeed = inst.components.locomotor.runspeed
-            inst.components.locomotor.runspeed = TUNING.HOUND_SWIM_SPEED
-            inst.hop_distance = inst.components.locomotor.hop_distance
-            inst.components.locomotor.hop_distance = 4
-        end)
-        inst.components.amphibiouscreature:SetExitWaterFn(function(inst)
-            inst.AnimState:SetBuild("uncompromising_rat")
-            if inst.landspeed then inst.components.locomotor.runspeed = inst.landspeed end
-            if inst.hop_distance then inst.components.locomotor.hop_distance = inst.hop_distance end
-        end)
-        -------------------------
-
-        inst.components.locomotor.pathcaps = {allowocean = true}
-    end
-]]
 
     inst:AddComponent("tradable")
 
@@ -259,14 +162,9 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
 
     inst:AddComponent("eater")
-    --inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
     inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE },
     { FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE })
-    --inst:DoPeriodicTask(4 + 4 * math.random(), TryToInfestTree) --Deprecated, poor performance
-    --inst.OnEntitySleep = OnEntitySleep
-    --inst.OnEntityWake = OnEntityWake
 
-    --inst.FindNewHomeFn = FindNewHome
 
     inst:SetStateGraph("SGaphid")
     inst:SetBrain(brain)
@@ -277,8 +175,7 @@ local function fn()
     MakeSmallFreezableCharacter(inst, "body")
 
     inst:ListenForEvent("fly_in", OnFlyIn) -- matches enter_loop logic so it does not happen a frame late
-	--inst:DoTaskInTime(0,HomeCheck) --Backup Aphid Extermination....
-
+	
     return inst
 end
 

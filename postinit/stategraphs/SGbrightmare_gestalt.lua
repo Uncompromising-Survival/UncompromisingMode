@@ -37,8 +37,11 @@ local function HasSkill(inst,name)
 end
 
 local function DoSpecialAttack(inst, target)
-	if target.components.sanity ~= nil then
+	if target.components.sanity then
 		target.components.sanity:DoDelta(TUNING.GESTALT_ATTACK_DAMAGE_SANITY)
+	end
+	if target.components.hunger then -- additional hunger lost per hit
+		target.components.hunger:DoDelta(-12.5)
 	end
 	if HasSkill(target,"wathom_allegiance_shadow") and target.components.health then
 		target.components.health:DeltaPenalty(1/6)

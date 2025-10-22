@@ -10,36 +10,35 @@ AddTaskPreInit("BigBatCave",function(task)
 end)
 
 -- Create New Magma Caves Tasks
-AddTask("MagmaCaves", {
+AddTask("MagmaCaves", { -- Branches in several ways, fumarole, atrium pillar, first gemology forge
 		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER1},
-		keys_given={KEYS.MAGMA_CAVES_TIER1},
+		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER2},
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
-		-- room_choices={
-			-- ["GrassMagma"] = 2,
-			-- ["GloomyMagma"] = 1,
-			-- ["FossilMagma"] = 1,		
-			-- ["ShroomyMagma"] = 1,
-		-- },
 		room_choices={
-			["GrassMagmaCliffs"] = 4,
+			["GloomyMagma"] = 2, -- WORMS and Fissures
+			["FossilMagma"] = 3, -- Bones and Isopods		
+			["ShroomyMagma"] = 2, -- Fissure and Shrooms
+			["GrassMagma"] = 3, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
 		},
-		background_room="GrassMagma",
+		entrance_room = "GrassMagmaCliffs", -- Pyre Nettle Thicket
+		background_room="BGMagma",
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
 })
 
-AddTask("PyreCliffs", {
-		locks={LOCKS.MAGMA_CAVES,LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.TIER_1},
-		keys_given={KEYS.MAGMA_CAVES_TIER2},
+AddTask("MagmaSacred", { -- Dead End
+		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER2},
+		keys_given={},
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
 		room_choices={
-			["GrassMagmaCliffs"] = 4,
+			["GemForge1"] = 1, -- Gemology Forge
 		},
+		entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket
+		background_room="FossilMagma",
+		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
-		background_room="BGMagma",
-		room_bg=WORLD_TILES.UM_GRASSMAGMA,
 })
 
 AddTask("MagmaCavesEntrance", {
@@ -48,6 +47,7 @@ AddTask("MagmaCavesEntrance", {
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
 		room_choices={
+			["BGMagma"] = 2,	
 			["MagmaStairs"] = 1,
 			["ShroomyMagma"] = 1,			
 		},
@@ -55,6 +55,11 @@ AddTask("MagmaCavesEntrance", {
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
 })
+
+AddTaskPreInit("CentipedeCaveTask", function(task)
+	task.locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER2}
+	task.entrance_room = "MagmaRole"
+end)
 
 local Layouts = GLOBAL.require("map/layouts").Layouts
 local StaticLayout = GLOBAL.require("map/static_layout")
@@ -66,11 +71,15 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	end	
 	if tasksetdata.required_prefabs then
 		table.insert(tasksetdata.required_prefabs, "cave_exit_magmabiome")
+		table.insert(tasksetdata.required_prefabs, "um_gemologyforge_umss")
 	else
-		tasksetdata.required_prefabs = {"cave_exit_magmabiome"}
+		tasksetdata.required_prefabs = {"cave_exit_magmabiome","um_gemologyforge_umss"}
 	end
 	
 	-- Introduce new magma caves tasks
+	table.insert(tasksetdata.tasks, "MagmaSacred")
 	table.insert(tasksetdata.tasks, "MagmaCaves")
 	table.insert(tasksetdata.tasks, "MagmaCavesEntrance")
+	tasksetdata.set_pieces["TentaclePillarToAtrium"] = { count = 1, tasks={"CentipedeCaveTask" } } -- Force atrium to always be in fumarole, which is always part of the magma caves cluster
+	
 end)

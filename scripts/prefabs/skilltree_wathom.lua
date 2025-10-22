@@ -514,7 +514,8 @@ local function BuildSkillsData(SkillTreeFns)
 						return rate + rate1
 					end
 				end
-				
+				inst:AddTag("inherentshadowdominance")
+				inst:AddTag("shadowdominance")					
                 if inst.components.eater then
                     inst.components.eater:SetCanEatRawMeat(false)
                 end
@@ -567,6 +568,8 @@ local function BuildSkillsData(SkillTreeFns)
 					inst.pissygestalts:Cancel()
 					inst.pissygestalts = nil
 				end
+				inst:RemoveTag("inherentshadowdominance")
+				inst:RemoveTag("shadowdominance")	
             end,
             connects = {
                 "ancient_terror_2",
@@ -576,66 +579,40 @@ local function BuildSkillsData(SkillTreeFns)
         ancient_terror_2 = {
             title = "Ancient Terror II",
 			icon = "wathom_terror_2",
-            desc = "Lesser Nightmare Creatures will recognize your kinship and not attack unless provoked. Deal +30% damage to Lunar creatures.",
+            desc = " Deal +30% damage to Lunar creatures.",
             pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
             onactivate = function(inst, fromload)
-				inst:AddTag("inherentshadowdominance")
-				inst:AddTag("shadowdominance")		
-                local damagetypebonus = inst.components.damagetypebonus
-                if damagetypebonus then
-                    damagetypebonus:AddBonus("lunar_aligned", inst, 1.3, "ancient_terror_2")
-                end				
+		
             end,
             ondeactivate = function(inst, fromload)
-				inst:RemoveTag("inherentshadowdominance")
-				inst:RemoveTag("shadowdominance")	
-                local damagetypebonus = inst.components.damagetypebonus
-                if damagetypebonus then
-                    damagetypebonus:RemoveBonus("lunar_aligned", inst, "ancient_terror_2")
-                end				
+
+		
             end,
             connects = {
                 "ancient_terror_3",
             },
         },  
 
-        -- ancient_terror_3 = {
-            -- title = "Ancient Terror III",
-			-- icon = "wathom_terror_3",
-            -- desc = "Assume your Shadow form when Amping Up. While Amped Up, half of incoming damage reduces your Adrenaline, the other half reduces your health. You do not activate Shadow Wathom I unless your Health drops to 0, as usual.",
-            -- pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
-            -- --pos = {0,-2},
-            -- group = "allegiance",
-            -- tags = {"allegiance","shadow","shadow_favor"},
-            -- connects = {
-                -- "ancient_terror_4",
-            -- },
-        -- },  
 
-        -- ancient_terror_4 = {
-            -- title = "Ancient Terror IV",
-            -- desc = "While Amped Up, equipped Void cowl or robes will slowly repair themselves over time. More efficiently satiate and upgrade the shadow maul.",
-			-- icon = "wathom_terror_4",
-            -- pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
-            -- --pos = {0,-2},
-            -- group = "allegiance",
-            -- tags = {"allegiance","shadow","shadow_favor"},
-            -- connects = {
-                -- "ancient_terror_5",
-            -- },
-        -- },  
 
         ancient_terror_3 = {
             title = "Ancient Terror III",
 			icon = "wathom_terror_3",
-            desc = "Even death can't put you down. Heart Attacks are no longer fatal, instead leaving you in critical condition. Additionally, you slowly replenish lost maximum health when at low Lunacy.",
+            desc = "Can devour pure horror to push Amp even further, adding more planar damage and further amplifying bark.",
             pos = {204-22+2-100 ,176-110-38+10+38+38+38+38},  --  -22
             --pos = {0,-2},
             group = "allegiance",
             tags = {"allegiance","shadow","shadow_favor"},
+            onactivate = function(inst, fromload)
+		
+            end,
+            ondeactivate = function(inst, fromload)
+
+		
+            end,
         },  		
 
         wathom_allegiance_lock_3 = {

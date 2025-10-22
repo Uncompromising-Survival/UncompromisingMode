@@ -63,7 +63,7 @@ AddRoom("GrottoStairs",  {
 			reeds = 0.75,
 			twigs = 0.25,
 			sapling_moon = 0.4,
-
+			lightflier_flower = 0.2,
 			driftwood_tall = 0.1,
 			driftwood_small2 = 0.2,
 			driftwood_small2 = 0.2,
@@ -83,7 +83,7 @@ AddRoom("GrottoGrass",  {
 		distributepercent = 0.18,
 		distributeprefabs =
 		{
-
+			lightflier_flower = 0.1,
 			lunar_island_rocks = 0.5,
 			flint = 0.5,
 			lunar_island_rock1 = 0.5,
@@ -262,6 +262,7 @@ AddRoom("GrottoHeavyFloodNoise", {
             moonglass_stalactite3 = 0.01,
 			zaspberry_plant = 0.004,
 			shockworm = 0.002,
+			um_moonglass_ceiling = 0.001,
         },
     }
 })
@@ -298,6 +299,7 @@ AddRoom("GrottoHeavyFlood", {
             moonglass_stalactite3 = 0.01,
 			zaspberry_plant = 0.004,
 			shockworm = 0.002,
+			um_moonglass_ceiling = 0.001,
         },
     }
 })

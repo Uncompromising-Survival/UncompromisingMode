@@ -66,7 +66,7 @@ local function Ghost(eater)
 		eater.unghosttask:Cancel()
 		eater.unghosttask = nil
 	end
-	eater.unghosttask = eater:DoTaskInTime(60,UnGhost)
+	eater.unghosttask = eater:DoTaskInTime(60*4,UnGhost)
 end
 
 local um_preparedfoods =
@@ -292,9 +292,11 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-			if not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-				not eater:HasTag("playerghost") then
+			if not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
 				Ghost(eater)
+				if eater.components.temperature then
+					eater.components.temperature:DoDelta(-40)
+				end
 			end
         end,
         floater = { "med", nil, 0.65 },
@@ -373,7 +375,7 @@ local um_preparedfoods =
         hunger = 37.5,
         health = -3,
         sanity = -15,
-        priority = 52,
+        priority = 54,
         weight = 1,
         cooktime = 1.8,
         foodtype = FOODTYPE.MEAT,
@@ -667,11 +669,11 @@ local um_preparedfoods =
     },
     um_durian_cream_marshcake =
     {
-        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and not tags.inedible end,
+        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and tags.egg and not tags.inedible end,
         hunger = 75,
         health = 12,
         sanity = 15,
-        priority = 51,
+        priority = 53,
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,

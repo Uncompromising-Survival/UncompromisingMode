@@ -54,7 +54,6 @@ modimport("init/init_creatures/init_ediblebugs")
 modimport("init/init_creatures/init_bear_trap_immune")
 modimport("init/init_generatorcharging")
 modimport("init/init_generatorcharging2")
-
 modimport("init/init_inkubator_ingredients")
 --	[ 	Console Commands for tests !	]	--
 
@@ -73,7 +72,7 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --	[ 				Features			]	--
 
 
-
+modimport("init/init_gemology")
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")

@@ -65,4 +65,8 @@ env.AddPrefabPostInit("ruins_bat", function(inst)
 
     inst:AddComponent("damagetypebonus")
     inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, 1+17 / 59)
+	
+	local uses = 300
+	inst.components.finiteuses:SetMaxUses(uses)
+	inst.components.finiteuses:SetUses(uses)
 end)

@@ -74,6 +74,10 @@ function CheckBee(container, item, slot)
     return item:HasTag("bee")
 end
 
+function CheckNettle(container,item,slot)
+	return item.prefab == "firenettles" or item.prefab == "pepper" or item.prefab == "spice_chili"
+end
+
 function CheckGem(container, item, slot)
     return not item:HasTag("irreplaceable") and item:HasTag("gem")
 end
@@ -398,6 +402,29 @@ modparams.um_beegun =
     acceptsstacks = true,
     type = "hand_inv",
 }
+
+modparams.um_flamethrower =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 32 + 4, 0),
+        },
+        slotbg =
+        {
+            { image = "um_nettleslot.tex", atlas = "images/um_nettleslot.xml" },
+        },
+        animbank = "ui_cookpot_1x2",
+        animbuild = "ui_cookpot_1x2",
+        pos = Vector3(0, 15, 0),
+    },
+    itemtestfn = CheckNettle,
+    usespecificslotsforitems = true,
+    acceptsstacks = true,
+    type = "hand_inv",
+}
+
 
 modparams.frigginbirdpail =
 {

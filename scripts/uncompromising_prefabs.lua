@@ -593,7 +593,6 @@ local prefabs = {
 	"um_beemine_moon",
 	"um_plants_decor",
 	
-	"um_pepperdragon_nest",
 	"um_pyrite_ceiling",
 	"um_ribopod",
 	"um_ribopodden",
@@ -605,6 +604,20 @@ local prefabs = {
 	"um_gemologyforge",
 	"um_moss",
 	"um_fern_fox",
+	
+	"um_pepperdragon",
+	"um_pepperdragon_nest",
+	"um_firecream",
+	"um_hat_pepperdragon",
+	"um_gemology_geodes",
+	"um_guns",
+	"um_boomberry_bomb",
+	"um_mushtrees_petri",
+	"um_moonglass_ceiling",
+	"um_guano_rock",
+	"um_rocklobster_rock",
+	
+	"um_magmacave_umss",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

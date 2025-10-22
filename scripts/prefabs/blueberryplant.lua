@@ -12,7 +12,7 @@ end
 
 local mine_test_tags = { "monster", "character", "animal" }
 local mine_must_tags = { "_combat" }
-local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "snapdragon" }
+local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "plantkin" }
 
 local function on_deactivate(inst)
     -- if inst.components.lootdropper ~= nil then

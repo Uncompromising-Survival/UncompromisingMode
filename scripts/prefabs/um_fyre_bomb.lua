@@ -4,21 +4,22 @@ local fyre_bomb_assets =
     Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
 }
 
+local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
+
 local function OnHitFyre(inst, attacker, target)
+	local x,y,z = inst.Transform:GetWorldPosition()
 	local fx = SpawnPrefab("explosivehit")
-	fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+	fx.Transform:SetPosition(x,y,z)
 	fx.Transform:SetScale(1.25,1.25,1.25)
 	fx:DoTaskInTime(2,function(fx) fx:Remove() end)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x, y, z, 3, nil,
-		{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
 	if #ents > 0 then
 		for i, v in pairs(ents) do
 			if v.components.burnable ~= nil then
 				v.components.burnable:Ignite()
 			end
 			if v.components.combat then
-				v.components.combat:GetAttacked(attacker,100)
+				v.components.combat:GetAttacked(attacker,68)
 			end
 		end
 	end
@@ -154,8 +155,6 @@ local function fyre_bomb_fn()
 	inst.components.reticule.validfn = function(inst) return true end
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
 	inst:AddTag("allow_action_on_impassable")
-    -- From watersource component
-    inst:AddTag("watersource")
 
     if not TheWorld.ismastersim then
         return inst

@@ -276,16 +276,17 @@ local function InfestHost(inst, owner, color)
 	end
 end
 
+
 local function TryKillHost(inst,owner)
 	-- Death is the only way out.
-	owner.components.health:DoDelta(-20)
+	owner.components.combat:GetAttacked(-20,inst)
 	inst:DoTaskInTime(0,function(inst) 
 		if inst.owner and inst.owner.components.health and not inst.owner.components.health:IsDead() then
 			local owner = inst.owner
 			inst.owner = nil
 			owner.components.inventory:Equip(inst)
 			owner.sg:GoToState("soundstun")
-			owner.components.talker:Say("OW! I can't take it off!")
+			owner.components.talker:Say("OW! I can't take it off!") -- Need real quotes.
 			inst.bonded = true
 		end
 	end)

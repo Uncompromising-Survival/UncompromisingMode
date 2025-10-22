@@ -53,7 +53,7 @@ local function FrogFindFood(self)
     end
     local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
 	if TUNING.DSTU.HUNGRYFROGS then
-        table.insert(self.bt.root.children, 4, findfood)
+        table.insert(self.bt.root.children, 5, findfood)
     end
 end
 

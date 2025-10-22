@@ -92,7 +92,7 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
 		for j = -1,0,1 do
 			local x,y,z = inst.Transform:GetWorldPosition()
 			local current_tile = TheWorld.Map:GetTileAtPoint(x+i,y,z+i)
-			if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO then
+			if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO or current_tile == WORLD_TILES.UM_FLOODWATER_BROILING then
 				return true
 			end
 		end
@@ -109,7 +109,7 @@ env.AddComponentPostInit("locomotor", function(self)
 			if inst:HasTag("player") then
 				if RobustFloodCheck(inst) then
 					SplashEffect(inst)
-					inst.um_just_splashed = inst:DoTaskInTime(0.66,function(inst) -- Give a rest between splashes
+					inst.um_just_splashed = inst:DoTaskInTime(0.33,function(inst) -- Give a rest between splashes
 						inst.um_just_splashed:Cancel()
 						inst.um_just_splashed = nil
 					end)
@@ -122,7 +122,7 @@ env.AddComponentPostInit("locomotor", function(self)
 				local current_tile = TheWorld.Map:GetTileAtPoint(inst.Transform:GetWorldPosition())
 				if current_tile == WORLD_TILES.UM_FLOODWATER or current_tile == WORLD_TILES.UM_FLOODWATER_GROTTO then
 					SplashEffect(inst)
-					inst.um_just_splashed = inst:DoTaskInTime(0.66,function(inst) -- Give a rest between splashes
+					inst.um_just_splashed = inst:DoTaskInTime(0.33,function(inst) -- Give a rest between splashes
 						inst.um_just_splashed:Cancel()
 						inst.um_just_splashed = nil
 					end)
@@ -137,3 +137,21 @@ env.AddComponentPostInit("locomotor", function(self)
 	end
 		
 end)
+
+
+
+local function MakeLeafyHatAmazing(self)
+	if self.ismastersim then
+		local _GetSpeedMultiplier = self.GetSpeedMultiplier
+		function self:GetSpeedMultiplier()
+			local mult = _GetSpeedMultiplier(self)
+			local hat = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab 
+			if hat and hat == "um_hat_leafwing" and mult < 1.15 then
+				mult = 1.15
+			end
+			return mult
+		end
+	end
+end
+
+env.AddComponentPostInit("locomotor", MakeLeafyHatAmazing)

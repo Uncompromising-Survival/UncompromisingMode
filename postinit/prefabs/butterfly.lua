@@ -150,6 +150,16 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             inst:WatchWorldState("isday",ReEnableButterfly)
         end)
     end
+	
+	-- Burnable Butterfly Wings.
+    local wing_types = {"butterflywings", "moonbutterflywings"}
+    for i,v in ipairs(wing_types) do
+        env.AddPrefabPostInit(v, function(inst)
+			MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+			MakeSmallPropagator(inst)
+			MakeHauntableLaunchAndIgnite(inst)
+        end)
+    end
 
     local FLOWER_TAGS = {"flower"}
     local BUTTERFLY_TAGS = {"butterfly"}

@@ -150,7 +150,25 @@ local _OldDeathEvent = inst.events["death"].fn
                 return action.invobject ~= nil
                     and action.invobject:HasTag("powercell") and "doshortaction"
             end),
-        ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"),
+        ActionHandler(ACTIONS.SET_CUSTOM_NAME, "doshortaction"), -- set_custom_name...?
+        ActionHandler(ACTIONS.UM_GUNSHOOTY, function(inst, action)
+            if Profile:GetMovementPredictionEnabled() then
+                ThePlayer:EnableMovementPrediction(false)
+                Profile:SetMovementPredictionEnabled(false)
+
+                --ThePlayer.HUD.controls.networkchatqueue:DisplaySystemMessage("The shadows have turned lag compensation off, it will be restored on nights end.")
+                --TheNet:Announce("The shadows have turned lag compensation off, it will be restored on nights end.")
+
+                if ThePlayer.components.playercontroller:CanLocomote() then
+                    ThePlayer.components.playercontroller.locomotor:Stop()
+                else
+                    ThePlayer.components.playercontroller:RemoteStopWalking()
+                end
+                return
+            end
+            return "idle"
+        end)
+		
     }
 
     --[[

@@ -2,7 +2,11 @@
 --also so my IDE doesn`t have a stoke when I open uncompromising_superspawner.lua whenever I need to work on it.
 local UMSS_TABLES =
 {
-    --tests
+	um_gemologyforge1 = { 
+		name = "um_gemologyforge1", rotate = true, tile_centered = true, 
+		content = {	{x = 0, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 18},	{x = 0.285400390625, z = 2.5201416015625, prefab = "chessjunk1", ocean = false},	{x = 0.13214111328125, z = -2.6007690429688, prefab = "um_gemology_geode_guano", ocean = false},	{x = 0.965087890625, z = -2.9578857421875, prefab = "pickaxe", ocean = false, uses = 33},	{x = -1.0610961914063, z = -3.2664794921875, prefab = "skeleton", ocean = false},	{x = -3.666259765625, z = -0.3997802734375, prefab = "bishop_nightmare", ocean = false, health = 1},	{x = 0, z = -4, prefab = "umdc_tileflag", ocean = false, tile = 18},	{x = -4, z = 0, prefab = "umdc_tileflag", ocean = false, tile = 18},	{x = 4.0696411132813, z = 0.0069580078125, prefab = "bishop_nightmare", ocean = false, health = 1},	{x = 0.04937744140625, z = -4.1580810546875, prefab = "um_gemologyforge", ocean = false},	{x = -2.7855224609375, z = 3.2372436523438, prefab = "chessjunk2", ocean = false},	{x = -4.7467041015625, z = 0.9124755859375, prefab = "chessjunk3", ocean = false},	{x = 4.068603515625, z = 3.8425903320313, prefab = "ruins_statue_head_nogem", ocean = false},	{x = 4, z = 4, prefab = "umdc_tileflag", ocean = false, tile = 18},	{x = 5.5, z = -1.5, prefab = "wall_ruins", ocean = false},	{x = 2.5, z = -5.5, prefab = "wall_ruins", ocean = false, health = 0.83333333333333},	{x = 6.4313354492188, z = 0.8253173828125, prefab = "chessjunk2", ocean = false},	{x = -4.9034423828125, z = -4.2927856445313, prefab = "chessjunk3", ocean = false},	{x = 3.5, z = -5.5, prefab = "wall_ruins", ocean = false, health = 1},	{x = 5.5, z = -3.5, prefab = "wall_ruins", ocean = false, health = 0.39375},	{x = 4.5, z = -5.5, prefab = "wall_ruins", ocean = false, health = 1},	{x = 5.5, z = -4.5, prefab = "wall_ruins", ocean = false, health = 0.5},	{x = 5.5, z = -5.5, prefab = "wall_ruins", ocean = false, health = 0.83333333333333},	{x = 11.068603515625, z = 9.8425903320313, prefab = "ancient_trepidation_anchor", ocean = false},},
+	},
+ --tests
     testTable =
 	{	name = "testTable",
 	content={

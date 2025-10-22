@@ -1,10 +1,5 @@
 if GetModConfigData("hoodedforest") then               -- Lock Everything Behind the Mod Config
     GLOBAL.require("map/rooms/forest/gianttreesrooms") -- just in case
-
-	
-	
-	
-
 	
 	AddTaskSetPreInitAny(function(tasksetdata)
 		if tasksetdata.location ~= "forest" then -- HF only spawns on Surface
@@ -70,7 +65,8 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
 			--["RoadGiantTrees"] = 1,
 			--["WalrusGiantTrees"] = 1,
 			--["MoonBaseGiantTrees"] = 1,
-			["SnapDragons"] = 1,
+			--["SnapDragons"] = 1,
+			["FoxGathering"] = 1,
 			["SpideryGiantTrees"] = 1,
 			["HoodedTown"] = 1,
 			["HFHolidays"] = 1,
@@ -107,7 +103,8 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             --["WalrusGiantTrees"] = 1,
             --["MoonBaseGiantTrees"] = 1,
             --["ShroomInfestedGiantTrees"] = 1,
-            ["SnapDragons"] = 1,
+            --["SnapDragons"] = 1,
+			["FoxGathering"] = 1,
             ["SpideryGiantTrees"] = 1,
             ["HoodedTown"] = 1,
             ["HFHolidays"] = 1,

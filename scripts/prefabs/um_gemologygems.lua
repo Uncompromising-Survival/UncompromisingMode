@@ -5,6 +5,23 @@ local assets =
 local gems = {"bluegem","redgem","purplegem","orangegem","yellowgem","palegem"}
 
 
+local function OnSave(inst,data)
+	if inst.tier then
+		data.tier = inst.tier
+	end
+	return data
+end
+
+local function OnLoad(inst,data)
+	if data and data.tier then
+		inst.tier = data.tier
+	end
+end
+
+local function GetDisplayName(inst) -- Will be expanded upon to allow the player to see the name, similar to seeds.
+    return "Strange Gem"
+end
+
 local function fncommon(gem)
     local inst = CreateEntity()
 
@@ -26,7 +43,7 @@ local function fncommon(gem)
         return inst
     end
 
-
+	inst:AddTag("gemologygem")
 
     MakeHauntableLaunch(inst)
 	
@@ -35,6 +52,11 @@ local function fncommon(gem)
     MakeHauntableLaunchAndIgnite(inst)
 
     inst:AddComponent("inventoryitem")
+	
+	inst.displaynamefn = GetDisplayName
+	
+	inst.OnSave = OnSave
+	inst.OnLoad = OnLoad
 	
     return inst
 end

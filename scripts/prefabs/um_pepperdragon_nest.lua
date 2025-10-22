@@ -47,10 +47,6 @@ local function InitializeDragon(inst, dragon)
     AddChildListeners(inst, dragon)
 end
 
--- Spawn the dragon and link them together if both are alive.
-local function SpawnDragon(inst)
-
-end
 
 local function OnSave(inst, data)
 
@@ -110,23 +106,19 @@ local function fn()
 
     inst:AddComponent("inspectable")
 
-    inst:WatchWorldState("startday", SpawnDragon) -- This is a fallback now incase it somehow doesn't spawn a snaildrake as soon as it's ready
-	inst:DoTaskInTime(0,SpawnDragon)
+    inst:AddComponent("childspawner")
+    inst.components.childspawner.childname = "um_pepperdragon"
+    inst.components.childspawner.spawnoffscreen = true
+    inst.components.childspawner:SetRegenPeriod(5*16*TUNING.SEG_TIME)
+    inst.components.childspawner:SetSpawnPeriod(0)
+    inst.components.childspawner:SetMaxChildren(1)
+    inst.components.childspawner:StartSpawning()
 	
 	
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
     inst.OnLoadPostPass = OnLoadPostPass
 
-    inst.has_magma = true
-    inst.has_slime = true
-    inst.snaildrake_magma = nil
-    inst.snaildrake_slime = nil
-    inst.onchildkilled = function(child) 
-        OnChildKilled(inst, child)
-    end
-
-    inst.SpawnDragon = SpawnDragon
 	inst:ListenForEvent("timerdone",OnTimerDone)
 	
 	inst:AddComponent("lootdropper")
@@ -134,7 +126,7 @@ local function fn()
 	
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-    inst.components.workable:SetWorkLeft(4)
+    inst.components.workable:SetWorkLeft(12)
     inst.components.workable:SetOnFinishCallback(onhammered)
     inst.components.workable:SetOnWorkCallback(onhit)
 	

@@ -110,7 +110,7 @@ RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful not
 RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
 RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
-RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
+--RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
 
 
 --Wixie
@@ -140,7 +140,7 @@ RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
 
 --Other new stuff that I want to put at the bottom because yes (Atoba started this I swear!!)
 RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
-RECIPE_DESC.UM_ICE_SICLE = "Cut down flora in the heat."
+RECIPE_DESC.UM_ICE_SICLE = "Cut down flora and keep yourself cool."
 RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
 --[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
@@ -155,7 +155,7 @@ RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Bro
 RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Broiling Hills."
 RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
 RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
-RECIPE_DESC.UM_EYEBALM = "Eye debris no longer impacts your stride."
+RECIPE_DESC.UM_EYEBALM = "Tread with ease through storms."
 RECIPE_DESC.UM_BEEMINE_MOON_ITEM = "Weaponized mutant bees. This can only go horribly."
 RECIPE_DESC.UM_DETONATOR = "Trigger just about anything explosive. Or anyone."
 RECIPE_DESC.UM_RECORD_MOONMAW = RECIPE_DESC.RECORD
@@ -170,3 +170,10 @@ RECIPE_DESC.UM_RECORD_HOODED_WIDOW = RECIPE_DESC.RECORD
 RECIPE_DESC.UM_RECORD_WALTER = RECIPE_DESC.RECORD
 
 RECIPE_DESC.WATHGRITHR_SHIELD_DREADSTONE = "Forge the darkness into a shield."
+
+RECIPE_DESC.UM_FLAMETHROWER = "Excellent deterrant for anything remotely flammable."
+RECIPE_DESC.UM_FIRECREAM = "Keep the flames off."
+RECIPE_DESC.UM_HAT_PEPPERDRAGON = "Invert temperature rules."
+RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
+
+

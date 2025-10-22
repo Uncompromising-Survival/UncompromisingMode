@@ -9,6 +9,28 @@ Keeps old copy of loot for mod compat, does not use SetLoot because that clears 
 Uses lootsetupfn to dynamically give it loot based on the season, instead of changing it onseasontick.
 ]]
 
+--[[Documentation Addendum: Axe
+Make some mushtress petrify after they finish their sporing cycle. Checks whenever season ticks.
+]]
+
+local function PetrificationDisaster(inst,replacement)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local mushtrees = TheSim:FindEntities(x,y,z,24,{"mushtree"})
+	for i,tree in ipairs(mushtrees) do
+		if tree.prefab == inst.prefab and inst ~= tree then
+			if math.random() < 0.05 then
+				SpawnPrefab(replacement).Transform:SetPosition(tree.Transform:GetWorldPosition())
+			else
+				SpawnPrefab(replacement.."less").Transform:SetPosition(tree.Transform:GetWorldPosition())
+			end
+			tree:Remove()
+		end
+	end
+	SpawnPrefab(replacement).Transform:SetPosition(inst.Transform:GetWorldPosition())
+	inst:Remove()
+end
+
+
 if TUNING.DSTU.MUSHROOM_CHANGES then
 	local tree_data =
 	{
@@ -17,18 +39,24 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 			season = SEASONS.SPRING,
 			spore = "spore_small",
 			loot = { "log" },
+			uhohseason = SEASONS.SUMMER,
+			replacement = "um_greenmushtree_gem",
 		},
 		medium =
 		{ --Red
 			season = SEASONS.SUMMER,
 			spore = "spore_medium",
 			loot = { "log" },
+			uhohseason = SEASONS.AUTUMN,
+			replacement = "um_redmushtree_gem",
 		},
 		tall =
 		{ --Blue
 			season = SEASONS.WINTER,
 			spore = "spore_tall",
 			loot = { "log", "log", },
+			uhohseason = SEASONS.SPRING,
+			replacement = "um_bluemushtree_gem",
 		},
 	}
 
@@ -47,6 +75,13 @@ if TUNING.DSTU.MUSHROOM_CHANGES then
 					lootdropper.loot = old_loot
 				end
 			end
+			
+			inst:WatchWorldState("season", function(inst)
+				if data.uhohseason == TheWorld.state.season and math.random() < 0.02 and not inst.entity:IsAwake() then
+					PetrificationDisaster(inst,data.replacement)
+				end			
+			end)
+			
 		end)
 	end
 end

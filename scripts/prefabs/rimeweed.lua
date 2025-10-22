@@ -662,7 +662,7 @@ local function onattackwhip(inst, attacker, target, naughtlock)
         bonusdamage = bonusdamage * coldness / resistance
 
         if target.sg and target.sg:HasStateTag("frozen") then
-            SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
+            --SpawnPrefab("bramblefx_rime"):SetFXOwner(target)
         end
 
         -- Lavae Vanilla bug fix

@@ -68,13 +68,8 @@ env.AddReplicableComponent("hayfever")
 env.AddReplicableComponent("adrenaline")
 env.AddReplicableComponent("boatbottle")
 
--- I don't know where else to put this
-env.AddPrefabPostInit("aphid", function(inst)
-    if TestForIA() then
-        inst:AddComponent("appeasement")
-        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
-    end
-end)
+
+
 
 -- for the super spawner tags
 env.AddPrefabPostInitAny(function(inst)
@@ -234,6 +229,15 @@ function EntityScript:SpawnChild(name, ...)
     if self:HasTag("no_epichealth_proxy") and name == "epichealth_proxy" then return end
     return _SpawnChild(self, name, ...)
 end
+
+-- I don't know where else to put this
+env.AddPrefabPostInit("aphid", function(inst)
+    if TestForIA() then
+        inst:AddComponent("appeasement")
+        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
+    end
+end)
+
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)

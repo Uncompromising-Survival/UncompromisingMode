@@ -35,16 +35,21 @@ local function SpawnHecklerGooTrail(inst,despawn_on_day)
     fx.Transform:SetPosition(x + 2 * math.cos(angle) + variation * math.cos(angle + 3.14 / 2), 0,
         z + 2 * math.sin(angle) + variation * math.sin(angle + 3.14 / 2))
     if despawn_on_day then
-        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 480)
+        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), TUNING.TOTAL_DAY_TIME*10)
         fx:WatchWorldState("cycles", function()     
             fx:Remove()
         end)    
     elseif TheWorld.state.israining then
-        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 3)
+        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 3) -- If raining, almost immediately remove
     else
-        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), 45)
+        fx:SetVariation(math.random(1, 7), GetRandomMinMax(1, 1.3), TUNING.TOTAL_DAY_TIME*10)
     end
     fx.angle = angle
+end
+
+
+local function GooNear(inst)
+	return FindEntity(inst,4,function(ent) return ent.prefab == "shadow_goo_trail" end)
 end
 
 
@@ -53,13 +58,13 @@ local function DoSplatFx(inst)
     local goo
     if inst.prefab == "shadow_goo" then -- A special different ground anim for our fancy goo
         goo = SpawnPrefab("shadow_puff")
-    elseif inst.prefab == "heckler_goo" then
+    elseif inst.prefab == "heckler_goo" and not GooNear(inst) then
         
         --SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(tx, 0, ty)
         SpawnHecklerGooTrail(inst,true)
     elseif inst.organ then
         goo = SpawnPrefab("minotaur_organ")
-    else
+    elseif not GooNear(inst) then
         SpawnHecklerGooTrail(inst)
     end
     

@@ -31,7 +31,6 @@ AddRoom("GiantTrees",
 				ghost_walrus = 0.005,
 				blueberryplantbuncher = 0.1,
 				red_mushroom = 0.05,
-				hoodedtrapdoor = 0.05,
 				lightrays_canopy = 0.05,
 				um_bear_trap_old = 0.1,
 				um_fern_fox_den = 0.015,
@@ -131,10 +130,8 @@ AddRoom("HoodedEntrance",
 				ghost_walrus = 0.005,
 				blueberryplantbuncher = 0.1,
 				red_mushroom = 0.05,
-				hoodedtrapdoor = 0.05,
 				lightrays_canopy = 0.01,
 				um_bear_trap_old = 0.1,
-				hoodedtrapdoor = 0.05,
 				um_fern_fox_den = 0.015,
 			},
             countprefabs =
@@ -163,7 +160,8 @@ AddRoom("SpideryGiantTrees",
                 thicket_builder = 1,
                 lightrays_canopy = 0.1,
 				ghost_walrus = 0.005,
-				hoodedtrapdoor = 0.05,
+				
+				hoodedtrapdoor = 0.2,
             },
             countprefabs =
             {
@@ -174,7 +172,7 @@ AddRoom("SpideryGiantTrees",
 AddRoom("WalrusGiantTrees",
 	{
 		colour = { r = .6, g = .2, b = .8, a = .50 },
-		value = WORLD_TILES.UM_HOODED_FOREST,
+		value = WORLD_TILES.UM_HOODED_FOREST_SPARSE,
 		tags = { "hoodedcanopy" }, --"ForceDisconnected"
 		contents =
 		{
@@ -186,9 +184,9 @@ AddRoom("WalrusGiantTrees",
 				ghost_walrus = 0.5,
 				blueberryplantbuncher = 0.1,
 				green_mushroom = 0.05,
-				hoodedtrapdoor = 0.2,
 				lightrays_canopy = 0.25,
 				um_fern_fox_den = 0.015,
+				hoodedtrapdoor = 0.1,
 			},
             countprefabs =
             {
@@ -220,7 +218,6 @@ AddRoom("BGGiantTrees",
 				blue_mushroom = 0.05,
 				lightrays_canopy = 0.25,
 				um_bear_trap_old = 0.1,
-				hoodedtrapdoor = 0.05,
 				um_fern_fox_den = 0.015,
 			},
 			countprefabs =
@@ -248,7 +245,6 @@ AddRoom("FoxGathering",
 				thicket_builder = function() return math.random(2,3) end,
                 um_fern_fox_den = function() return 1 + math.random(2, 3) end,
                 extracanopyspawner = 4,
-				hoodedtrapdoor = function() return math.random (3,4) end,
             },
 			countstaticlayouts = {
 				["giant_tree_generic"] = function() return math.random(7,10) end,
@@ -272,7 +268,6 @@ AddRoom("MoonBaseGiantTrees", {
             blueberryplantbuncher = 0.1,
             pitcherplant = 0.001,
 			um_bear_trap_old = 0.05,
-			hoodedtrapdoor = 0.05,
 			
         },
 		countprefabs =
@@ -318,7 +313,6 @@ AddRoom("HoodedTown", {
             pitcherplant = 0.001,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
-			hoodedtrapdoor = 0.05,
         },
 		countstaticlayouts = {
 			["giant_tree_generic"] = function() return math.random(1,2) end,
@@ -343,7 +337,6 @@ AddRoom("RoseGarden", {
             blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
-			hoodedtrapdoor = 0.05,
         },
 		countstaticlayouts = {
 			["hf_holidays"] = 1,
@@ -370,7 +363,6 @@ AddRoom("HFHolidays", {
             blueberryplantbuncher = 0.01,
             lightrays_canopy = 0.25,
 			um_bear_trap_old = 0.1,
-			hoodedtrapdoor = 0.05,
         },
     }
 })

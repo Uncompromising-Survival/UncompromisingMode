@@ -132,7 +132,7 @@ local felloots =
     feather = 0.5,
     spider = 0.01,
     frog = 0.05,
-    --giant_tree_birdnest = 0.025,
+    giant_tree_birdnest = 0.025,
 }
 local infestedloots =
 {

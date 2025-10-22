@@ -5,7 +5,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function UpdateDamage(inst)
 	if inst.components.perishable and inst.components.weapon then
 		local dmg = TUNING.HAMBAT_DAMAGE * inst.components.perishable:GetPercent()
-		dmg = Remap(dmg, 0, TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
+		dmg = Remap(dmg, 0, inst.new_max_damage and inst.new_max_damage or TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
 			TUNING.HAMBAT_DAMAGE)
 		inst.components.weapon:SetDamage(dmg)
 	end
@@ -19,7 +19,7 @@ env.AddPrefabPostInit("hambat", function(inst)
 	if inst.components.perishable ~= nil then
 		inst.components.perishable:SetPerishTime(TUNING.PERISH_FASTISH)
 	end
-
+	inst.UpdateDamage = UpdateDamage
 	if inst.components.weapon ~= nil then
 		local _OldOnAttack = inst.components.weapon.onattack
 
@@ -28,7 +28,7 @@ env.AddPrefabPostInit("hambat", function(inst)
 				_OldOnAttack(inst)
 			end
 
-			UpdateDamage(inst)
+			inst.UpdateDamage(inst)
 		end
 	end
 
@@ -40,7 +40,7 @@ env.AddPrefabPostInit("hambat", function(inst)
 				_OldOnEquip(inst, owner)
 			end
 
-			UpdateDamage(inst)
+			inst.UpdateDamage(inst)
 		end
 
 		local _OldOnUnequip = inst.components.equippable.onunequipfn
@@ -50,7 +50,7 @@ env.AddPrefabPostInit("hambat", function(inst)
 				_OldOnUnequip(inst, owner)
 			end
 
-			UpdateDamage(inst)
+			inst.UpdateDamage(inst)
 		end
 	end
 end)

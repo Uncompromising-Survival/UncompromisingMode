@@ -100,16 +100,7 @@ local function HarvestPickable(inst, ent, doer)
         for i, item in ipairs(loot) do
             Launch(item, doer, 1.5)
         end
-    end
-
-    if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(0.25)
-    end
-
-   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(0.2)
-    end
-	
+    end	
 end
 
 local function IsEntityInFront(inst, entity, doer_rotation, doer_pos)
@@ -134,6 +125,15 @@ local function DoScythe(inst, target, doer)
             if ent:IsValid() and ent.components.pickable ~= nil then
                 if inst:IsEntityInFront(ent, doer_rotation, doer_pos) then
                     inst:HarvestPickable(ent, doer)
+					
+					-- These finiteuses calls need to be here, and not within HarvestPickable, it has to be referenced whenever we make the scythe hoarding through gemology
+					if ent.prefab ~= "hooded_fern" and inst.components.finiteuses ~= nil then
+						inst.components.finiteuses:Use(0.25)
+					end
+
+				   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
+						inst.components.finiteuses:Use(0.2)
+				   end
                 end
             end
         end

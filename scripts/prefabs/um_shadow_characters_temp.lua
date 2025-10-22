@@ -54,7 +54,7 @@ local function OnAttacked(inst, data)
 end
 
 local function EquipItems(inst)
-	if inst.prefab == "swilson" or inst.prefab == "swilson_labotomized" then
+	if (inst.prefab == "swilson" or inst.prefab == "swilson_labotomized") and not inst.components.inventory then
 		inst.AnimState:OverrideSymbol("swap_object", "swap_axe", "swap_axe")
 		inst.AnimState:Show("ARM_carry")
 		inst.AnimState:Hide("ARM_normal")
@@ -157,10 +157,15 @@ end
 
 local function FadeOut(inst)
 	inst.opacity = inst.opacity - 0.02
-	inst.AnimState:SetMultColour(0, 0, 0, inst.opacity)
+	local green = inst.green or 0
+	inst.AnimState:SetMultColour(0, green, 0, inst.opacity)
 	if inst.opacity > 0 then
 		inst:DoTaskInTime(FRAMES,FadeOut)
 	else
+		if inst.dupe_toolweapon then
+			inst.dupe_toolweapon:Remove()
+			inst.dupe_toolweapon = nil
+		end
 		inst:Remove()
 	end
 end
@@ -211,10 +216,26 @@ local function LabotomizedWork(inst,axeholder,target)
 	inst.axeholder = axeholder
 	if target then
 		inst:ForceFacePoint(target:GetPosition())
-		inst.AnimState:PlayAnimation("chop_pre",false)
-		inst.AnimState:PushAnimation("chop_loop",false)
-		inst:DoTaskInTime(FRAMES*20,function(inst)
-			if inst.target and inst.target:IsValid() and inst.axeholder and inst:GetDistanceSqToInst(inst.target) < 9 and inst.target.components.workable and not target:HasTag("stump") then
+		local time
+		if target:HasTag("CHOP_workable") then
+			inst.AnimState:PlayAnimation("chop_pre",false)
+			inst.AnimState:PushAnimation("chop_loop",false)
+			time = 20
+		end
+		if target:HasTag("MINE_workable") or target:HasTag("HAMMER_workable") then
+			if target:HasTag("MINE_workable") then
+				PlayMiningFX(inst, target)
+			end
+			inst.AnimState:PlayAnimation("pickaxe_pre",false)
+			inst.AnimState:PushAnimation("pickaxe_loop",false)
+			time = 20		
+		end
+		if target:HasTag("DIG_workable") then
+			inst.AnimState:PlayAnimation("shovel_loop",false)
+			time = 20		
+		end		
+		inst:DoTaskInTime(FRAMES*time,function(inst)
+			if inst.target and inst.target:IsValid() and inst.axeholder and inst:GetDistanceSqToInst(inst.target) < 9 and inst.target.components.workable then
 				inst.target.components.workable:WorkedBy(inst.axeholder,inst.work)
 			end
 			FadeOut(inst)
@@ -224,7 +245,8 @@ end
 
 local function FadeIn(inst)
 	inst.opacity = inst.opacity + 0.1
-	inst.AnimState:SetMultColour(0, 0, 0, inst.opacity)
+	local green = inst.green or 0
+	inst.AnimState:SetMultColour(0, green, 0, inst.opacity)
 	if inst.opacity ~= 0.6 then
 		inst:DoTaskInTime(FRAMES,FadeIn)
 	end
@@ -275,6 +297,8 @@ local function fnlabotomizedswilson(Sim)
 	inst.work = 2
 	inst.attack = 34
 	inst:DoTaskInTime(3,function(inst) inst:Remove() end) --Fallback
+	
+	inst:AddComponent("inventory")
     return inst
 end
 

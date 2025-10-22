@@ -281,7 +281,9 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
 		inst.components.inventoryitem.onpickupfn = function(inst, pickupguy, src_pos)
 			if pickupguy.components.inventory then
 				local invmine = SpawnPrefab("um_beemine_moon_item")
-				pickupguy.components.inventory:GiveItem(invmine,nil,inst:GetPosition())
+				invmine:DoTaskInTime(0,function(invmine)
+					pickupguy.components.inventory:GiveItem(invmine,nil,pickupguy:GetPosition())
+				end)
 			end
 			inst:Remove()
 		end

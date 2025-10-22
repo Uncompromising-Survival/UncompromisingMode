@@ -3,6 +3,108 @@ local assets =
     Asset("ANIM", "anim/um_gemforge.zip"),
 }
 
+local function ShouldAcceptItem(inst, item)
+    if (item.components.equippable and item.components.equippable.equipslot == EQUIPSLOTS.HANDS and not (item.components.minerologyable and item.components.minerologyable.enchant) and (item.components.tool or item.components.weapon)) or item:HasTag("gemologygem") then -- only allow tools and weapons for now
+		return true
+	end
+end
+
+local function TrueForge(inst)
+	inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
+	inst.SoundEmitter:PlaySound("dontstarve/HUD/collect_newitem")
+	inst.forge_tool.components.minerologyable:SetEnchant(inst.gem.prefab,inst.gem.tier ~= nil and inst.gem.tier or 1)
+	
+	inst.gem:Remove()
+	inst.gem = nil
+	inst.forge_tool = nil
+	
+	inst.components.inventory:DropEverything()
+	
+	inst._gem:Remove()
+	inst._gem = nil
+	
+	inst._forge_tool:Remove()
+	inst._forge_tool = nil
+end
+
+local function Forge(inst)
+	inst._forge_tool.components.pickable.canbepicked = true
+	inst._gem.components.pickable.canbepicked = true
+	
+	inst.AnimState:PlayAnimation("smith",false)
+	inst.AnimState:PushAnimation("idle",false)
+	inst:DoTaskInTime(0.8,TrueForge)
+end
+
+local function ShowGem(inst)
+	inst._gem = SpawnPrefab(inst.gem.prefab)
+	if inst._gem ~= nil then
+		inst._gem.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst._gem.components.inventoryitem.canbepickedup = false
+        inst._gem.entity:SetParent(inst.entity)
+        inst._gem.entity:AddFollower()
+        inst._gem.entity:AddFollower():FollowSymbol(inst.GUID, "gem",0,20,0)
+        inst._gem:AddComponent("pickable")
+        inst._gem.components.pickable.canbepicked = true
+        inst._gem.components.pickable.onpickedfn = function()
+            inst._gem:Remove()
+            inst._gem = nil
+            inst.components.inventory:DropEverything()
+        end
+	end
+	
+end
+
+local function ShowTool(inst)
+	inst._forge_tool = SpawnPrefab(inst.forge_tool.prefab)
+	if inst._forge_tool ~= nil then
+		inst._forge_tool.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst._forge_tool.components.inventoryitem.canbepickedup = false
+        inst._forge_tool.entity:SetParent(inst.entity)
+        inst._forge_tool.entity:AddFollower()
+        inst._forge_tool.entity:AddFollower():FollowSymbol(inst.GUID, "smithed_tool",0,40,0)
+        inst._forge_tool:AddComponent("pickable")
+        inst._forge_tool.components.pickable.canbepicked = true
+        inst._forge_tool.components.pickable.onpickedfn = function()
+            inst._forge_tool:Remove()
+            inst._forge_tool = nil
+            inst.components.inventory:DropEverything()
+        end
+	end
+end
+
+local function OnGetItemFromPlayer(inst, giver, item)
+	if item:HasTag("gemologygem") then
+		if inst.gem and inst._gem then
+            inst._gem:Remove()
+            inst._gem = nil
+			inst.components.inventory:DropItem(inst.gem, true, true)
+			inst.gem = nil
+		end
+		inst.gem = item	
+		ShowGem(inst)
+		if inst.forge_tool then
+			Forge(inst)
+		end
+	end
+	if item.components.equippable then
+		if inst.forge_tool and inst._forge_tool then
+            inst._forge_tool:Remove()
+            inst._forge_tool = nil
+			inst.components.inventory:DropItem(inst.forge_tool, true, true)
+			inst.forge_tool = nil		
+		end
+		inst.forge_tool = item
+		ShowTool(inst)
+		if inst.gem then
+			Forge(inst)
+		end
+	end
+end
+
+local function OnSave(inst,data)
+	inst.components.inventory:DropEverything()
+end
 
 local function fn()
     local inst = CreateEntity()
@@ -14,7 +116,7 @@ local function fn()
     inst.entity:AddNetwork()
 
     MakeObstaclePhysics(inst, .4)
-	-- local minimap = inst.entity:AddMiniMapEntity()
+	-- local minimap = inst.entity:AddMiniMapEntity() -- Add back later...
     -- inst.MiniMapEntity:SetIcon("houndious_observious_map.tex")
 
     inst.AnimState:SetBank("um_gemforge")
@@ -32,8 +134,14 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
-   
-		
+	inst:AddComponent("trader")
+	inst:AddComponent("inventory")
+	
+	inst.components.trader:SetAcceptTest(ShouldAcceptItem)
+	inst.components.trader.onaccept = OnGetItemFromPlayer
+	inst.components.trader.deleteitemonaccept = false	
+
+	inst.OnSave = OnSave
     return inst
 end
 

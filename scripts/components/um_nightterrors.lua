@@ -18,7 +18,6 @@ return Class(function(self, inst)
     local HASSLER_SPAWN_DIST = 40
     local HASSLER_KILLED_DELAY_MULT = 6
     local STRUCTURES_PER_SPAWN = 4
-    local DEERCLOPS_TIMERNAME = "deerclops_timetoattack"
 
     --------------------------------------------------------------------------
     --[[ Public Member Variables ]]
@@ -226,7 +225,82 @@ return Class(function(self, inst)
             end
         end
     end
+	
 
+    --------------------------------------------------------------------------
+    --[[ Atmosphere ]]
+    --------------------------------------------------------------------------	
+	
+	
+	local function SpawnSkitts(player)
+		local skitttime = 10 * math.random() * 2
+		if TheWorld.state.isnight then
+			player:DoTaskInTime(skitttime, function()
+				local x, y, z = player.Transform:GetWorldPosition()
+				local num_skitts = 150
+				for i = 1, num_skitts do
+					player:DoTaskInTime(0.2 * i + math.random() * 0.3, function()
+						local skitts = SpawnPrefab("rneshadowskittish")
+						skitts.Transform:SetPosition(x + math.random(-12,12), y, z + math.random(-12,12))
+					end)
+				end
+			end)
+		end
+	end
+	
+	--THUNDER----------------------------
+
+	local function SpawnLightning(player)
+		player:DoTaskInTime(10 * math.random() * 2, function()
+				local x, y, z = player.Transform:GetWorldPosition()
+				local lightnings = 1
+				for i = 1, lightnings do
+					player:DoTaskInTime(0.2 * i + math.random(4) * 0.3, function()
+						if math.random() > 0.33 then
+							local pos = Vector3(x + math.random(-10,10), y, z + math.random(-10,10))
+							TheWorld:PushEvent("ms_sendlightningstrike", pos)
+						else
+							local lightningstrike = SpawnPrefab("hound_lightning")
+							lightningstrike.Transform:SetPosition(x + math.random(-10,10), y, z + math.random(-10,10))
+						end
+					end)
+				end
+		end)
+	end
+
+	local function SpawnThunderClose(player)
+		player:DoTaskInTime(10 * math.random() * 2, function()
+				local x, y, z = player.Transform:GetWorldPosition()
+				local thunders = 1
+				for i = 1, thunders do
+					player:DoTaskInTime(0.2 * i + math.random(4) * 0.3, function()
+						--local thunder = SpawnPrefab("thunder_close")
+						--thunder.Transform:SetPosition(x + math.random(-10,10), y, z + math.random(-10,10))
+						SpawnPrefab("thunder_close")
+						player:DoTaskInTime(10 * math.random(), SpawnLightning)
+					end)
+				end
+		end)
+	end
+
+	local function SpawnThunderFar(player)
+		if not TheWorld.state.israining then
+			TheWorld:PushEvent("ms_forceprecipitation")
+		end
+
+		player:DoTaskInTime(10 * math.random() * 2, function()
+				local x, y, z = player.Transform:GetWorldPosition()
+				local thunders = math.random(15,20)
+				for i = 1, thunders do
+					player:DoTaskInTime(0.6 * i + math.random(6) * 0.3, function()
+						--local thunder = SpawnPrefab("thunder_far")
+						--thunder.Transform:SetPosition(x + math.random(-10,10), y, z + math.random(-10,10))
+						SpawnPrefab("thunder_far")
+						player:DoTaskInTime(10 * math.random(), SpawnThunderClose)
+					end)
+				end
+		end)
+	end
     --------------------------------------------------------------------------
     --[[ NIGHT TERRORS ]]
     --------------------------------------------------------------------------
@@ -249,8 +323,7 @@ return Class(function(self, inst)
 	end
 	
 	local function DayScaling()
-		local scale = TheWorld.state.cycles / 20 --This uhhhh should be equal to the full moon date, right?
-		print("um_nightterrors DayScaling : "..scale)
+		local scale = TheWorld.state.cycles / 20 
 		return scale
 	end
 	
@@ -259,7 +332,7 @@ return Class(function(self, inst)
 	local _fueltags = {}
 	local _map = TheWorld.Map
 
-	local function SpawnHand(player)
+	local function SpawnHand(player) -- Standard fire hands, not grabby hands... should make them able to reach for dwarf star lights
         -- this is for land and fire.
         local fire = FindEntity(player, 60, nil, NEARFIRE_MUST_TAGS, NEARFIRE_CANT_TAGS, _fueltags)
 		
@@ -285,11 +358,9 @@ return Class(function(self, inst)
 	            ent:SetTargetFire(fire)
 	        end
 	    end
-		
-		TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HANDS })
 	end
 
-	local function SpawnShadowGrabby(player)
+	local function SpawnShadowGrabby(player) -- Grabby hands, these teleport the player into the darkness
 		if TheWorld.state.isnight then
 			for i = 1, 2 + math.random(2) do
 				local radius = 15 + math.random() * 15
@@ -310,8 +381,6 @@ return Class(function(self, inst)
 						local ent = SpawnPrefab("rne_grabbyshadows")
 						ent.Transform:SetPosition(x1, 0, z1)
 						DespawnOnDay(ent)
-
-						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.GRABBY })
 						
 						break
 					end
@@ -320,21 +389,19 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnShadowVortex(player)
+	local function SpawnShadowVortex(player) -- Shadow Vortoex, kills the player...
 		if TheWorld.state.isnight then
-			for i = 1, 8 do
-				local radius = 15 + math.random() * 15
+			for i = 1, 100 do
+				local radius = 25 + math.random() * 15
 				local theta = math.random() * 2 * PI
 				local x, y, z = player.Transform:GetWorldPosition()
 				local x1 = x + radius * math.cos(theta)
 				local z1 = z - radius * math.sin(theta)
 				local light = TheSim:GetLightAtPoint(x1, 0, z1)
-				if (light <= 0.3 or i == 8) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then
+				if (light <= 0.1 or i == 100) and TheWorld.Map:IsPassableAtPoint(x1, 0, z1) then -- Push the vortex further in the night
 					local ent = SpawnPrefab("shadowvortex")
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
-
-					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.VORTEX }) 
 			
 					break
 				end
@@ -342,7 +409,7 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnMindWeavers(player)
+	local function SpawnMindWeavers(player) -- Mind Weavers, try to kill the player
 		if TheWorld.state.isnight then
 			TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.MINDWEAVER }) 
 			
@@ -354,7 +421,7 @@ return Class(function(self, inst)
 		end
 	end
 	
-	local function SpawnNightCrawlers(player)
+	local function SpawnNightCrawlers(player) -- Night Crawlers, try to kill the player
 		if TheWorld.state.isnight then
 			for i = 1, 3 do
 				for i = 1, 8 do
@@ -380,7 +447,7 @@ return Class(function(self, inst)
 		end
 	end
 	
-	local function SpawnLeeches(player)
+	local function SpawnLeeches(player) -- Leeches, Try to kill the player, slowly
 		if TheWorld.state.isnight then
 			for i = 1, 5 do
 				for i = 1, 8 do
@@ -405,7 +472,7 @@ return Class(function(self, inst)
 		end
 	end
 	
-	local function SpawnFuelSeekers(player)
+	local function SpawnFuelSeekers(player) -- Fuel seekers, try to remove the bases's fire
 		if TheWorld.state.isnight then
 			local has_spawned_threat = false
 			local dayscale = DayScaling() / 2
@@ -452,7 +519,7 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnHaunt(player)
+	local function SpawnHaunt(player) -- Haunt, move the player's stuff around
 		if TheWorld.state.isnight then
 			local x, y, z = player.Transform:GetWorldPosition()
 			local structures = TheSim:FindEntities(x, y, z, 30, { "structure" })
@@ -485,7 +552,7 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnHeckler(player)
+	local function SpawnHeckler(player) -- Spitter, try to spread goo
 		if TheWorld.state.isnight then
 			for i = 1, 8 do
 				local radius = 15 + math.random() * 15
@@ -508,7 +575,7 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnNightmareCreature(player)
+	local function SpawnNightmareCreature(player) -- generic-ass nightmares
 		if TheWorld.state.isnight then
 			for i = 1, 8 do
 				local count = 1 
@@ -538,7 +605,7 @@ return Class(function(self, inst)
 		end
 	end
 
-	local function SpawnShadowCharacter(player, character)
+	local function SpawnShadowCharacter(player, character) -- shadow characters
 		if TheWorld.state.isnight and character ~= nil then
 			for i = 1, 8 do
 				local radius = 15 + math.random() * 15
@@ -807,42 +874,30 @@ return Class(function(self, inst)
 	end
 
 	local function StartNightTerrors()
-		-- if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
-			-- local voxo_check = TheSim:FindFirstEntityWithTag("um_voxolophone")
-			-- --TheNet:Announce("starting night terrors")
-			-- DelayHoundsAndGiantsIfNecessary()
-			-- if voxo_check == nil then
-				-- if #_activeplayers > 0 then
-					-- local spawn_vox_for = _activeplayers[math.random(#_activeplayers)]
-					
-					-- if spawn_vox_for ~= nil then
-						-- SpawnPrefab("um_voxolophone").Transform:SetPosition(spawn_vox_for.Transform:GetWorldPosition())
-					-- end
-				-- end
-			-- end
-			-- local voxo = TheSim:FindFirstEntityWithTag("um_voxolophone")
-			-- local cycles = (TheWorld.state.cycles / 20)
-			-- self.terror_count = 0
+		if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
+			DelayHoundsAndGiantsIfNecessary()
+
+			local cycles = (TheWorld.state.cycles / 20)
+			self.terror_count = 0
 			
-			-- self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
-				-- --TheNet:Announce("tried Terror")
-				-- if #_activeplayers > 0 then
-					-- local player = _activeplayers[math.random(#_activeplayers)]
+			self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
+				if #_activeplayers > 0 then
+					local player = _activeplayers[math.random(#_activeplayers)]
 					
-					-- if player ~= nil and not ShadowPieceNearby(player) then
-						-- if self.terror_count == 8 then
-							-- print("Night Terrors Pick Character")
-							-- PickCharacter(voxo)
-						-- else
-							-- print("Night Terrors Pick Terror")
-							-- self:PickTerror(voxo)
-						-- end
+					if player ~= nil and not ShadowPieceNearby(player) then
+						if self.terror_count == 8 then
+							print("Night Terrors Pick Character")
+							PickCharacter(player)
+						else
+							print("Night Terrors Pick Terror")
+							self:PickTerror(player)
+						end
 						
-						-- self.terror_count = self.terror_count + 1					
-					-- end
-				-- end
-			-- end)
-		-- end
+						self.terror_count = self.terror_count + 1					
+					end
+				end
+			end)
+		end
 	end
 
     --------------------------------------------------------------------------
@@ -878,7 +933,7 @@ return Class(function(self, inst)
     self.inst:ListenForEvent("ms_playerjoined", OnPlayerJoined, TheWorld)
     self.inst:ListenForEvent("ms_playerleft", OnPlayerLeft, TheWorld)
     self:WatchWorldState("isfullmoon", CheckPlayersVoxolophone)
-	self:WatchWorldState("isnewmoon", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
+	--self:WatchWorldState("isnewmoon", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
 	--self:WatchWorldState("isnight", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
 	--self.inst:ListenForEvent("cycles", ForceTerrors)
 	self.inst:ListenForEvent("moonphasechanged2", CheckPhase)
