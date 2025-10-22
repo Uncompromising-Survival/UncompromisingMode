@@ -12,8 +12,8 @@ local function pipethrown(inst)
     inst.persists = false
 end
 
-local function TargetHasTheseIgnoreTags(target, tags)
-    return target:HasAnyTag(tags) or target.sg and (type(tags) == "table" and target.sg:HasAnyStateTag(unpack(tags)) or target.sg:HasAnyStateTag(tags))
+local function TargetHasTheseIgnoreTags(target, ...)
+    return target:HasAnyTag(...) or target.sg and (type(...) == "table" and target.sg:HasAnyStateTag(unpack(...)) or target.sg:HasAnyStateTag(...))
 end
 
 local function onhit(inst, attacker, target)

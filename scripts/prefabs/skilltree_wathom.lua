@@ -29,7 +29,6 @@ local function CheckForGreater(inst)
 			guard.Transform:SetPosition(x+offset.x,0,z+offset.z)
 			guard.tracking_target = inst
 			--guard.components.combat:SetTarget(inst)
-			
 		end
 	end
 end
@@ -73,9 +72,6 @@ local function PissOfGestalts(inst)
 	--CheckForGreater(inst)
 	CheckForMORE(inst)
 end
-
-
-
 
 local function BuildSkillsData(SkillTreeFns)
     local skills = 
