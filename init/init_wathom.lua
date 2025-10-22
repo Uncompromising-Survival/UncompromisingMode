@@ -265,7 +265,7 @@ local function Check_Bowling(inst, target)
 							end
 						end)
 					end
-				--end
+				end
 			end
 		end
 	end

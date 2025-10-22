@@ -37,14 +37,14 @@ env.AddPrefabPostInit("batcave", function(inst)
 		inst.components.childspawner.childname = "bat"
 	end
 	
-	inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.MINE)
-    inst.components.workable:SetWorkLeft(12)
-    inst.components.workable:SetOnWorkCallback(spawner_onworked)
-    inst.components.workable:SetOnFinishCallback(rock_onworked)
+	-- inst:AddComponent("workable")
+    -- inst.components.workable:SetWorkAction(ACTIONS.MINE)
+    -- inst.components.workable:SetWorkLeft(12)
+    -- inst.components.workable:SetOnWorkCallback(spawner_onworked)
+    -- inst.components.workable:SetOnFinishCallback(rock_onworked)
 	
-	inst:AddComponent("lootdropper")
-	inst.components.lootdropper:SetChanceLootTable('um_batcave')
+	-- inst:AddComponent("lootdropper")
+	-- inst.components.lootdropper:SetChanceLootTable('um_batcave')
 end)
 
 

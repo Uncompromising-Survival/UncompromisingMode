@@ -627,12 +627,14 @@ end
 -- [[ Blue 1, Arctic Aquamarine
 ------------------
 local function Freezy(inst,attacker,target)
-	target.components.freezable:AddColdness(0.15*inst.tier)
-	target.components.freezable:SpawnShatterFX()
-	if target.sg and target.sg:HasStateTag("frozen") and math.random() < (inst.tier-1)*0.25 and inst.tier ~= 1 then
-		target:DoTaskInTime(0,function(inst) -- immediate refreeze
-			target.components.freezable:AddColdness(999)
-		end)
+	if target.components.freezable then
+		target.components.freezable:AddColdness(0.15*inst.tier)
+		target.components.freezable:SpawnShatterFX()
+		if target.sg and target.sg:HasStateTag("frozen") and math.random() < (inst.tier-1)*0.25 and inst.tier ~= 1 then
+			target:DoTaskInTime(0,function(inst) -- immediate refreeze
+				target.components.freezable:AddColdness(999)
+			end)
+		end
 	end
 end
 

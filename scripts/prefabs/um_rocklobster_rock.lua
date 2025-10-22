@@ -5,6 +5,16 @@ local assets =
 	Asset("ATLAS", "images/map_icons/um_lobster_rock_icon.xml"),		
 }
 
+local function PissOffLobsters(inst,worker)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local lobsters = TheSim:FindEntities(x,y,z,24,{"rocky"})
+	for i,ent in ipairs(lobsters) do
+		if ent.components.health and not ent.components.health:IsDead() and ent.components.combat then
+			ent.components.combat:SetTarget(worker)
+		end
+	end
+
+end
 
 local function OnWork(inst, worker, workleft)
     if workleft <= 0 then
@@ -20,6 +30,7 @@ local function OnWork(inst, worker, workleft)
 						"full"
 					)
     end
+	PissOffLobsters(inst,worker)
 end
 
 

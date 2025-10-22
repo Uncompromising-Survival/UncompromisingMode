@@ -17,6 +17,7 @@ local function OnHitBoomBerry(inst, attacker, target)
 			end
 		end
 	end
+	inst:Hide()
 	inst.components.wateryprotection:SpreadProtection(inst)
     inst:DoTaskInTime(3,function(inst) inst:Remove() end) -- leave time for sounds
 end
