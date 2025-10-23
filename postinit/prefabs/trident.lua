@@ -94,8 +94,11 @@ local function DoLineAttack(inst, target, position)
             v.components.farmplanttendable:TendTo(owner)
         end
     end
-
-    inst.components.finiteuses:Use(COST_PER_EXPLOSION)
+	if inst.components.finiteuses then -- for gemology, if it's chilled, @atoba, should it use some of the perishability if its chilled?
+		inst.components.finiteuses:Use(COST_PER_EXPLOSION)
+	elseif inst.components.perishable then
+		inst.components.perishable:ReducePercent(0.01)
+	end
 end
 
 local function OnAttack(inst, attacker, target)

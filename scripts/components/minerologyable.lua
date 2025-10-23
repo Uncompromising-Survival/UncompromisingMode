@@ -140,11 +140,9 @@ local function MakeGreen1(self,tier)  -- Run this on the tool to make them have 
 			end
 		end
 	end
-	
-	if inst.components.tool then
-		inst.NeuroticWorkEffect = SendWilson
-		inst.NeuroticWorkEffectChance = (tier - 1)*0.3
-	end
+	inst.NeuroticWorkEffectChance = (tier - 1)*0.3
+	inst.NeuroticWorkEffect = SendWilson
+
 end
 ------------------
 -- [[ Green 2
@@ -679,7 +677,9 @@ local function ConvertToPerishable(inst)
 	inst.components.perishable:StartPerishing()
 	inst.components.perishable.onperishreplacement = "spoiled_food"
 	inst.components.perishable:SetPercent(pct)
-
+	
+	-- inst.components.finiteuses = {}
+	-- inst.components.finiteuses.Use = function() end
 end
 
 local function MakeBlue2(self,tier)

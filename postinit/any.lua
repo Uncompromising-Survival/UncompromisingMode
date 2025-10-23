@@ -228,14 +228,6 @@ function EntityScript:SpawnChild(name, ...)
     return _SpawnChild(self, name, ...)
 end
 
--- I don't know where else to put this
-env.AddPrefabPostInit("aphid", function(inst)
-    if TestForIA() then
-        inst:AddComponent("appeasement")
-        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
-    end
-end)
-
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)
