@@ -251,7 +251,10 @@ local function FlameFn(inst)
     inst.components.finiteuses:SetMaxUses(uses)
     inst.components.finiteuses:SetUses(uses)
 	inst.components.finiteuses:SetOnFinished(inst.Remove)
-	
+
+	inst:AddComponent("preserver")
+	inst.components.preserver:SetPerishRateMultiplier(TUNING.PERISH_MUSHROOM_LIGHT_MULT)
+		
 	return inst
 end
 
