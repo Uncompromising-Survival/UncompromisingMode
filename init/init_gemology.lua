@@ -199,7 +199,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
 		inst.states[state].onenter = function(inst, pushanim)
 			_onenter(inst, pushanim)
 			local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			local comfy_bonus = tool.components.minerologyable.structurebonus
+			local comfy_bonus = tool and tool.components.minerologyable and tool.components.minerologyable.structurebonus
 			if comfy_bonus then
 				comfy_bonus = comfy_bonus + 1
 				inst.AnimState:SetDeltaTimeMultiplier(comfy_bonus)
