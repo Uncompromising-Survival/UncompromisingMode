@@ -176,11 +176,11 @@ local function fn()
 
     inst:ListenForEvent("fly_in", OnFlyIn) -- matches enter_loop logic so it does not happen a frame late
 	
-	if TUNING.DSTU.ISLAND_ADVENTURES then
-		inst:AddComponent("appeasement")
-		inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
-	end
-		
+    if IsSWEnabled() then
+        inst:AddComponent("appeasement")
+        inst.components.appeasement.appeasementvalue = TUNING.TOTAL_DAY_TIME
+    end
+	
     return inst
 end
 
