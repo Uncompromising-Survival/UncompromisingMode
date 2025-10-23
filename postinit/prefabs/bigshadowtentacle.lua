@@ -12,10 +12,8 @@ local function retargetfn(inst)
                 and guy.entity:IsVisible()
                 and not guy.components.health:IsDead()
                 and (guy.components.combat.target == inst or
-                    guy:HasTag("character") or
-                    guy:HasTag("monster") or
-                    guy:HasTag("animal"))
-                and (guy:HasTag("player") or (guy.sg and not guy.sg:HasStateTag("hiding")))
+                    guy:HasAnyTag("character", "monster", "animal"))
+                and (guy:HasTag("player") or not (guy.sg and guy.sg:HasStateTag("hiding")))
         end,
         RETARGET_MUST_TAGS,
         RETARGET_CANT_TAGS)
@@ -26,5 +24,8 @@ env.AddPrefabPostInit("bigshadowtentacle", function(inst)
 		return
 	end
 
-	inst.components.combat:SetRetargetFunction(0.5, retargetfn)
+    local combat = inst.components.combat
+    if combat then
+        combat:SetRetargetFunction(.5, retargetfn)
+    end
 end)
