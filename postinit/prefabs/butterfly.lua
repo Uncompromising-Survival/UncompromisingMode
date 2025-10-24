@@ -20,35 +20,53 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     end
 
     local sittingstates = {"pollinate", "land_idle", "thraw", "frozen"}
-	local allowedstimuli = {"soul"}
-	local disallowedattackertags = {"sporecloud", "FX"}
+    local allowedstimuli = {"soul"}
+    local disallowedattackertags = {"sporecloud", "FX"}
     local function SittingStill(statename)
         return statename and table.contains(sittingstates, statename)
     end
 
     local function ByPassWeapon(weapon)
-        return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart") or ((weapon.components.weapon and weapon.components.weapon.projectile) or weapon.components.projectile))
+        return weapon and (weapon.prefab == "bugzapper" or weapon:HasTag("blowdart")
+			or (weapon.components.weapon and weapon.components.weapon.projectile
+			or weapon.components.projectile or weapon.components.complexprojectile and not weapon.components.complexprojectile.ismeleeweapon))
     end
 
     local function ByStimuli(stimuli)
         return stimuli and table.contains(allowedstimuli, stimuli)
     end
 
-    local function SlipAway(inst, data)
-		local attacker = data.attacker
+    local function UMSlipAway(inst, data, doslip)
+        local attacker = data.attacker
+        local shouldslip = false
         if attacker and attacker:IsValid() and not attacker:HasAnyTag(disallowedattackertags) then
             local statename = inst.sg.currentstate.name
-            if not SittingStill(statename) and not ByPassWeapon(data.weapon) and not ByStimuli(data.stimuli) then -- Can only attack when idle.
-                inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
-                Slippy(attacker, inst)
-                if attacker.components.talker and attacker:HasTag("player") then
-                    attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
-                end
-                return true
+            shouldslip = not SittingStill(statename) and not ByPassWeapon(data.weapon or attacker) and not ByStimuli(data.stimuli) -- Can only attack when criteria is met.
+        end
+        if doslip and shouldslip then
+            inst.SoundEmitter:PlaySound("dontstarve/movement/slip_fall_whoop")
+            Slippy(attacker, inst)
+            if attacker.components.talker and attacker:HasTag("player") then
+                attacker.components.talker:Say(GetString(attacker, "ANNOUNCE_BUTTERFLY_SLIP"))
             end
         end
-        return false
+        return shouldslip
     end
+
+    local _PushEvent = EntityScript.PushEvent
+    function EntityScript:PushEvent(event, data, ...)
+        if event == "onattackother" and data and data.target and data.target.UMSlipAway
+            and data.target:UMSlipAway({attacker = self, weapon = data.weapon, stimuli = data.stimuli}) then return end
+        return _PushEvent(self, event, data, ...)
+    end
+
+    env.AddComponentPostInit("weapon", function(self)
+        local _OnAttack = self.OnAttack
+        function self:OnAttack(attacker, target, projectile, ...)
+            if target and target.UMSlipAway and target:UMSlipAway({attacker = attacker, weapon = self.inst}) then return end
+            return _OnAttack(self, attacker, target, projectile, ...)
+        end
+    end)
 
     local function BozoUpdate(inst)
         local x,y,z = inst.Transform:GetWorldPosition()
@@ -109,28 +127,22 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         env.AddPrefabPostInit(v, function(inst)
             if not TheWorld.ismastersim then return end
 
-            inst.SlipAway = SlipAway
+            inst.UMSlipAway = UMSlipAway
 
             inst:DoPeriodicTask(2, CheckForNearbyBozos)
             
             
             if v == "butterfly" then
                 inst.OnSave = function(inst,data)
-                    if inst.buttery then
-                        data.buttery = inst.buttery
-                    end
+                    if inst.buttery then data.buttery = inst.buttery end
                 end
                 inst.OnLoad = function(inst,data)
-                    if data.buttery then
-                        inst.buttery = data.buttery
-                    end
+                    if data.buttery then inst.buttery = data.buttery end
                     RollForButtery(inst)
                     return data
                 end
                 inst:DoTaskInTime(0, function(inst)
-                    if not inst.buttery then
-                        inst.buttery = math.random(1, 100)
-                    end
+                    if not inst.buttery then inst.buttery = math.random(1, 100) end
                     RollForButtery(inst)
                 end)
             end
@@ -138,9 +150,7 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
     end
 
     local function ReEnableButterfly(inst)
-        if inst.spawned_butterfly then
-            inst.spawned_butterfly = nil
-        end
+        if inst.spawned_butterfly then inst.spawned_butterfly = nil end
     end
     
     local flower_types = {"flower", "flower_evil"}
@@ -150,14 +160,14 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
             inst:WatchWorldState("isday",ReEnableButterfly)
         end)
     end
-	
-	-- Burnable Butterfly Wings.
+    
+    -- Burnable Butterfly Wings.
     local wing_types = {"butterflywings", "moonbutterflywings"}
     for i,v in ipairs(wing_types) do
         env.AddPrefabPostInit(v, function(inst)
-			MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
-			MakeSmallPropagator(inst)
-			MakeHauntableLaunchAndIgnite(inst)
+            MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+            MakeSmallPropagator(inst)
+            MakeHauntableLaunchAndIgnite(inst)
         end)
     end
 
