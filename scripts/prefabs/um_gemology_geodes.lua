@@ -124,11 +124,11 @@ local function GenerateLoot(inst,miner)
 		LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0,360))
 		if prefab:HasTag("gemologygem") then
 			local rand = math.random() 
-			if rand >= 0.25 then -- I'm sleepy right now I'm doing it this way AAAAA
+			if rand >= 0.35 then -- I'm sleepy right now I'm doing it this way AAAAA
 				prefab.tier = 1
-			elseif rand < 0.25 then
+			else
 				prefab.tier = 2
-				if rand < 0.01 then
+				if rand < 0.1 then
 					prefab.tier = 3
 				end
 			end
