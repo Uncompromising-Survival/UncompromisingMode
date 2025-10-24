@@ -255,7 +255,8 @@ local stategraph_post = {
     "brightmare_gestalt",
     "moose",
     "mossling",
-    "hound"
+    "hound",
+    "bigshadowtentacle"
 }
 
 local class_post = {

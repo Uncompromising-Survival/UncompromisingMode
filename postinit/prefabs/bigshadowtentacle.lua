@@ -1,8 +1,9 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local RETARGET_MUST_TAGS = { "_combat", "_health" }
-local RETARGET_CANT_TAGS = { "minotaur" }
+local CAN_CHOOSE_TARGET_TAGS = {"animal", "character", "monster"}
+local RETARGET_MUST_TAGS = {"_combat", "_health"}
+local RETARGET_CANT_TAGS = {"minotaur", "minotaur_organ"}
 local function retargetfn(inst)
     return FindEntity(
         inst,
@@ -12,7 +13,7 @@ local function retargetfn(inst)
                 and guy.entity:IsVisible()
                 and not guy.components.health:IsDead()
                 and (guy.components.combat.target == inst or
-                    guy:HasAnyTag("character", "monster", "animal"))
+                    guy:HasAnyTag(CAN_CHOOSE_TARGET_TAGS))
                 and (guy:HasTag("player") or not (guy.sg and guy.sg:HasStateTag("hiding")))
         end,
         RETARGET_MUST_TAGS,
@@ -25,7 +26,5 @@ env.AddPrefabPostInit("bigshadowtentacle", function(inst)
 	end
 
     local combat = inst.components.combat
-    if combat then
-        combat:SetRetargetFunction(.5, retargetfn)
-    end
+    if combat then combat:SetRetargetFunction(.5, retargetfn) end
 end)
