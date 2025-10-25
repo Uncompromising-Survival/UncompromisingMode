@@ -1,10 +1,10 @@
 local DecidTable = {LazyBase = 1}
 local WixieTable = {wixie_puzzle = 2}
-local DesertTable = {sussyTable = 1, rat_fate = 0.5, burnable_traps = 0.5, thermalmeasurer_hint = 0.5}
+local DesertTable = {sussy = 1, rat_fate = 0.5, burnable_traps = 0.5, thermalmeasurer_hint = 0.5}
 local MarshTable = {fooltrap1 = 1, fishing_hint = 0.5}
 local HoodedTable = {
 
-    ancientwalrusTable = 1,
+    ancientwalrus = 1,
     -- Guardian_Of_Nothing = 0.5, -- Lacking the skins used to make it, looks kinda bad as a result. Might remake it?
 	Aphidpit = 1,
 	MadTeaParty = 1,
@@ -52,14 +52,14 @@ local MosaicTable = { -- need more mosaic setpieces
 	megabaseruins_centerpiece = 0.1,
 	megabaseruins_road = 0.1,
 	moonFrag = 0.25,
-    Lagopodon = 0.25,
+    Werelope = 0.25,
     ymca_burnt = 0.01,
 
 }
 
 local GeneralTable = {
 
-    badfarmerTable = 0.5,
+    badfarmer = 0.5,
     baseFrag_rattyStorage = 0.5,
     moonOil = 0.75,
     sulfurhint = 0.5,
