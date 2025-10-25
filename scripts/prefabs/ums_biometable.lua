@@ -1,17 +1,18 @@
 local DecidTable = {LazyBase = 1}
 local WixieTable = {wixie_puzzle = 2}
-local DesertTable = {sussyTable = 1}
-local MarshTable = {fooltrap1 = 1}
+local DesertTable = {sussyTable = 1, rat_fate = 0.5, burnable_traps = 0.5, thermalmeasurer_hint = 0.5}
+local MarshTable = {fooltrap1 = 1, fishing_hint = 0.5}
 local HoodedTable = {
 
     ancientwalrusTable = 1,
     -- Guardian_Of_Nothing = 0.5, -- Lacking the skins used to make it, looks kinda bad as a result. Might remake it?
 	Aphidpit = 1,
 	MadTeaParty = 1,
+    sacredmoss = 2,
 }
-local DarkForestTable = {walterifgood = 1}
-local RockyTable = {singlefather = 1}
-local SavannaTable = {sos = 0.5, moxTable = 0.5, grassTrap = 0.1}
+local DarkForestTable = {walterifgood = 1, health_addict = 0.25}
+local RockyTable = {singlefather = 0.5, rodent_destroyer = 0.5, rat_fate = 0.5, pyrite_hint = 0.25, rainometer_hint = 0.5}
+local SavannaTable = {sos = 0.5, moxTable = 0.5, grassTrap = 0.1, trapdoor_trap_hint = 1, walls_hint = 0.5}
 
 local MosaicTable = { -- need more mosaic setpieces
 
@@ -26,17 +27,56 @@ local MosaicTable = { -- need more mosaic setpieces
 	--baseFrag_smellyKitchen = 1, 
 	baseFrag_rattyStorage = 1,
     wikimasters = 1,
+    fishing_hint = 0.5,
+    mosaic_deciduous = 0.5,
+    mosaic_oasis = 0.5,
+    mosaic_broilling = 0.5,
+    mosaic_hooded = 0.5,
+    mosaic_swamp = 0.5,
+    mosaic_wagbase = 0.5,
+    mosaic_monkeybeach = 0.01,
+    mosaic_fumarole = 0.01,
+    rodent_destroyer = 0.5,
+    washing_jam_hint = 0.5,
+    burnable_traps = 0.5,
+    walls_hint = 1,
+    Boardgame = 0.25,
+    sculpture_camp = 1,
+    ruined_armory = 1,
+    nightlight_sanitydrain = 0.25,
+    thermalmeasurer_hint = 1,
+    rainometer_hint = 1,
+    constantsurvival_skeleton = 0.5,
 
-	megabaseruins_intersection = 0.25,
-	megabaseruins_centerpiece = 0.25,
-	megabaseruins_road = 0.25,
-	moonFrag = 0.25
+	megabaseruins_intersection = 0.1,
+	megabaseruins_centerpiece = 0.1,
+	megabaseruins_road = 0.1,
+	moonFrag = 0.25,
+    Lagopodon = 0.25,
+    ymca_burnt = 0.01,
 
 }
 
-local GeneralTable = {badfarmerTable = 0.5, baseFrag_rattyStorage = 0.5, moonOil = 0.75, megabaseruins_intersection = 0.25, megabaseruins_centerpiece = 0.25, megabaseruins_road = 0.25}
+local GeneralTable = {
 
-local OceanTable = {sunkenboat = 0.5, failedFisherman = 0.5}
+    badfarmerTable = 0.5,
+    baseFrag_rattyStorage = 0.5,
+    moonOil = 0.75,
+    sulfurhint = 0.5,
+    fishing_hint = 0.5,
+    killer_skeleton_boom = 0.25,
+    rodent_destroyer = 0.5,
+    washing_jam_hint = 0.5,
+    weed_dart_hint = 0.25,
+    nightlight_sanitydrain = 0.1,
+    pyrite_hint = 0.5,
+    constantsurvival_skeleton = 0.5,
+    rainometer_hint = 0.5,
+    balancedsetpiece = 0.01,
+
+}
+
+local OceanTable = {sunkenboat = 0.5, failedFisherman = 0.5, sludge_hint = 0.5}
 
 local function AddToTheWorld(inst, umss) table.insert(TheWorld.umsetpieces, umss) end
 
