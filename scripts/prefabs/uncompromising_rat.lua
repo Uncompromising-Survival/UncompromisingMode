@@ -1769,7 +1769,8 @@ local function ratmask_stinkfn()
     inst.AnimState:SetBank("fumes_fx")
     inst.AnimState:SetBuild("fumes_fx")
 
-    inst:AddTag("INLIMBO")
+    inst:AddTag("FX")
+    inst:AddTag("NOCLICK")
     inst:AddTag("ratmask_stinklines")
 
     inst.entity:SetPristine()
