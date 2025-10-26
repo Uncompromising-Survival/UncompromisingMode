@@ -197,16 +197,14 @@ local function OnLoseItem(inst, data)
     end
 end
 
+local shadowgearlist = {["armor_sanity"] = "um_maxwell_armor_sanity", ["nightsword"] = "um_maxwell_nightsword"}
 local function UnlockShadowGear(inst, data)
-    if not data or not data.item or data.item.prefab ~= "armor_sanity" and data.item.prefab ~= "nightsword" then
-        return
-    end
-
+    local shadowgear = data and data.item and shadowgearlist[data.item.prefab]
+    if not shadowgear then return end
     local builder = inst.components.builder
-    local shadowgeartolearn = data.item.prefab == "armor_sanity" and "um_maxwell_armor_sanity" or "um_maxwell_nightsword"
-    if builder and not builder:KnowsRecipe(shadowgeartolearn, true) then
-        builder:UnlockRecipe(shadowgeartolearn)
-        inst:PushEvent("learnrecipe", {teacher = inst, recipe = shadowgeartolearn})
+    if builder and not builder:KnowsRecipe(shadowgear, true) then
+        builder:UnlockRecipe(shadowgear)
+        inst:PushEvent("learnrecipe", {teacher = inst, recipe = shadowgear})
     end
 end
 
