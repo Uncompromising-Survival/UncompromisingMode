@@ -41,7 +41,7 @@ local function fn()
     inst.AnimState:SetBuild("hat_sunglasses")
     inst.AnimState:PlayAnimation("anim")
 
-    inst:AddTag("hats")
+    inst:AddTag("hat")
     inst:AddTag("goggles")
     inst:AddTag("donotautopick")
 

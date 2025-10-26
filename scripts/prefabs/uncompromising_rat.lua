@@ -1944,7 +1944,7 @@ local function ratfn()
     anim:SetBuild("hat_ratmask")
     anim:PlayAnimation("anim")
 
-    inst:AddTag("hats")
+    inst:AddTag("hat")
     inst:AddTag("goggles")
 
     MakeInventoryFloatable(inst, "small")

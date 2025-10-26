@@ -435,7 +435,7 @@ local function fncommon(bank, build)
     inst.AnimState:SetBuild(bank)
     inst.AnimState:PlayAnimation("anim")
 
-    inst:AddTag("hats")
+    inst:AddTag("hat")
 
     MakeInventoryFloatable(inst, "small")
 
