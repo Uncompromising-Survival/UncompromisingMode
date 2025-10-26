@@ -82,8 +82,15 @@ env.AddPrefabPostInitAny(function(inst)
 end)
 
 local function RemapAbsorption(self, absorb)
-    if absorb >= 1 or not self.umabsorbremap then return absorb end
     if self.umabsorbremap then return self.umabsorbremap end
+	--[[if absorb < 1 then
+		for _, mapping in ipairs(armor_mappings) do
+			if absorb > mapping.min_val and absorb <= mapping.max_val then
+				return mapping.new_absorb
+			end
+		end
+	end]]
+	return absorb
 end
 
 env.AddComponentPostInit("armor", function(self)
