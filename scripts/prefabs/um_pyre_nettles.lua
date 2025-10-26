@@ -14,7 +14,7 @@ end
 
 SetSharedLootTable('um_pyre_nettles_1',
     {
-        { 'firenettles',             1.0 }
+        { 'firenettles', 1.0 }
     })
 SetSharedLootTable('um_pyre_nettles_2',
     {
@@ -102,7 +102,6 @@ local function SmallPyreNettleGrowthTimerReset(inst,cancel)
 		inst.components.timer:StartTimer("SmallPyreNettleGrowthTimer", timer_duration)
     end
 end
-
 -- This sets up the plant's stage-unique traits.
 local function SetStage(inst)
     -- Remove and then add a tag to identify current stage, for spawning checks.
@@ -123,9 +122,9 @@ local function SetStage(inst)
     -- Anim selector.
     inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 
-    if not TheWorld.ismastersim then
+    --[[if not TheWorld.ismastersim then
         return
-    end
+    end]] -- uncomment if this actually does something.
 
     -- Loot selector.
     inst.components.lootdropper:SetChanceLootTable("um_pyre_nettles_" .. inst.stage)
@@ -134,30 +133,18 @@ local function SetStage(inst)
 
     -- Flammability stage properties.
     inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
-	if inst.stage ~= 1 then
-		inst.components.pickable.canbepicked = true
-        local multsize = 0.75 + (math.random() * 0.2)
-        if math.random() < 0.5 then
-            inst.AnimState:SetScale(-multsize, multsize, multsize)
-        else
-            inst.AnimState:SetScale(multsize, multsize, multsize)
-        end
-	else
-        local multsize = 0.5 + (math.random() * 0.2)
-        if math.random() < 0.5 then
-            inst.AnimState:SetScale(-multsize, multsize, multsize)
-        else
-            inst.AnimState:SetScale(multsize, multsize, multsize)
-        end	
-	end
-    
+    local multsize = 0.5 + (math.random() * 0.2)
+    if inst.stage ~= 1 then
+        multsize = 0.75 + (math.random() * 0.2)
+        inst.components.pickable.canbepicked = true
+    end
+    inst.AnimState:SetScale(math.random() < .5 and -multsize or multsize, multsize, multsize)
 end
 
 local function QueueSetStage(inst)
 	SetStage(inst)
 	inst:RemoveEventCallback("animover",QueueSetStage)
 end
-
 
 local function OnGrow(inst)
     local targetstage = inst.stage and math.clamp(inst.stage + 1, 1, 6) or 1
@@ -180,7 +167,6 @@ local function OnPicked(inst)
 	inst:ListenForEvent("animover", QueueSetStage)
 	StopSpores(inst)	
 end
-
 
 -- Make the plant destroyable instantly with explosives, dropping the current stage's loot and all below it.
 local function OnExplosion(inst)
@@ -235,7 +221,6 @@ local function StageSpawner(name, SpawnAtStage)
 
         inst.prefab = "um_pyre_nettles" -- In case we're a spawned-in stage-specifying prefab.
 
-
         -- Stage setting
         if not inst.stage then
             inst.stage = SpawnAtStage
@@ -268,7 +253,6 @@ local function StageSpawner(name, SpawnAtStage)
 
         --inst:DoPeriodicTask(1 --[[(30 * math.random()) + 30]], OnGrow, 2)
 
-
         inst:AddComponent("inspectable")
 
         inst:AddComponent("lootdropper")
@@ -297,13 +281,12 @@ local function StageSpawner(name, SpawnAtStage)
         inst:AddComponent("timer")
         inst:ListenForEvent("timerdone", OnTimerDone)
 
-        --    inst:DoTaskInTime(0, WorldCheck)
+        --inst:DoTaskInTime(0, WorldCheck)
         inst:DoTaskInTime(0, SetStage)
 		
 		inst.pyrenettle_bumped = pyrenettle_bumped
         inst.OnSave = OnSave
         inst.OnLoad = OnLoad
-
 
 		inst:ListenForEvent("entitywake", StartSpores)
 		inst:ListenForEvent("entitysleep", StopSpores)

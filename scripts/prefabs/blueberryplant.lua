@@ -44,7 +44,6 @@ local function OnPickedFn(inst,picker)
 	if not inst.components.mine.issprung then
 		inst.components.mine:Explode()
 	end
-	
 	on_deactivate(inst)
 	inst.AnimState:PlayAnimation("dig")
 	inst.AnimState:PushAnimation("spawn")
@@ -58,7 +57,6 @@ local function on_blueberry_dug_up(inst, digger)
 			if not inst.components.mine.issprung then
 				inst.components.mine:Explode()
 			end
-			
 			on_deactivate(inst)
 			inst.AnimState:PlayAnimation("dig")
 			inst.AnimState:PushAnimation("spawn")
@@ -273,8 +271,6 @@ local function on_load(inst, data)
 	end
 end
 
-
-
 local function OnSpring(inst)
 	if inst.pendingregrow or (inst.harvestable == "regrow" and not inst.components.timer:TimerExists("regrow"))then
 		Regrow(inst)
@@ -315,7 +311,6 @@ local function blueberryplant()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-
     inst.AnimState:SetBank("blueberryplant")
     inst.AnimState:SetBuild("blueberryplant")
     inst.AnimState:PlayAnimation("idle"..math.random(1,4), true)
@@ -350,7 +345,6 @@ local function blueberryplant()
 
     inst:AddComponent("lootdropper")
 
-
     -- inst:AddComponent("pickable")
     -- inst.components.pickable:SetUp(nil, 0)
     -- inst.components.pickable.onpickedfn = OnPickedFn
@@ -377,8 +371,10 @@ local function blueberryplant()
     inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
     inst.components.mine:SetReusable(false)
     Regrow(inst)
+
     -- Stop the blueberries from idling in unison.
     inst.AnimState:SetTime(math.random(0.1,0.3) * inst.AnimState:GetCurrentAnimationLength())
+
 	inst:AddComponent("timer")
 	inst:ListenForEvent("timerdone", CheckTimeRegrow)
     -- Start the task for the characterizing additional idles.
@@ -431,7 +427,7 @@ local function blueberryflower()
         return inst
     end
 
-    -- Stop the starfish from idling in unison.
+    -- Stop the blueberries from idling in unison.
     inst.AnimState:SetTime(math.random() * inst.AnimState:GetCurrentAnimationLength())
 
     inst:AddComponent("inspectable")
@@ -458,18 +454,19 @@ local function blueberryexplosion()
 
     MakeInventoryPhysics(inst)
 
+    inst.Transform:SetScale(1.5,1.5,1.5)
     inst.AnimState:SetBank("treegrowthsolution")
     inst.AnimState:SetBuild("um_goo_blue")
-
+	inst.AnimState:PlayAnimation("use", false)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.Transform:SetScale(1.5,1.5,1.5)
-	inst.AnimState:PlayAnimation("use", false)
-	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
+
+	inst:ListenForEvent("animover", function(inst) inst:Remove() end)
+
 	inst.persists = false
 
     return inst
@@ -480,12 +477,7 @@ local no_slow_players = {"INLIMBO", "notarget", "playerghost", "wall",  "shadow"
 local function ApplySlows(inst)
 	--also scare enemies near wathom, at a smaller radius
 	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents
-	if inst.playermade then
-		ents = TheSim:FindEntities(x, y, z, 3, { "_combat" },no_slow_players)
-	else
-		ents = TheSim:FindEntities(x, y, z, 3, { "_combat" },no_slow)
-	end
+	local ents = TheSim:FindEntities(x, y, z, 3, {"_combat"}, inst.playermade and no_slow_players or no_slow)
 	
 	for i, v in ipairs(ents) do
 		local debuffkey = inst.prefab
@@ -511,31 +503,35 @@ local function blueberrypuddle()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 	inst.entity:AddSoundEmitter()
+
     MakeInventoryPhysics(inst)
 
+    inst.Transform:SetScale(1.5, 1.5, 1.5)
     inst.AnimState:SetBank("treegrowthsolution")
     inst.AnimState:SetBuild("um_goo_blue")
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:PlayAnimation("pre_idle", false)
+    inst.AnimState:PushAnimation("idle", false)
 	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.Transform:SetScale(1.5,1.5,1.5)
-    inst.AnimState:PlayAnimation("pre_idle", false)
-	inst.AnimState:PushAnimation("idle", false)
-	inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(0.2) end)
+
+	inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(.2) end)
 	inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
+
 	inst.persists = false
-	inst:DoPeriodicTask(0.5,ApplySlows)
+
+	inst:DoPeriodicTask(.5, ApplySlows)
 	
     return inst
 end
 
 return Prefab("blueberryplant", blueberryplant,assets),
-Prefab("blueberryflower", blueberryflower),
-MakePlacer("blueberryflower_placer", "star_trap", "star_trap", "trap_idle"),
-Prefab("blueberryexplosion",blueberryexplosion),
-Prefab("blueberrypuddle",blueberrypuddle)
+    Prefab("blueberryflower", blueberryflower),
+    MakePlacer("blueberryflower_placer", "star_trap", "star_trap", "trap_idle"),
+    Prefab("blueberryexplosion", blueberryexplosion),
+    Prefab("blueberrypuddle", blueberrypuddle)
