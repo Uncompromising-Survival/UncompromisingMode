@@ -216,7 +216,7 @@ local function LabotomizedWork(inst,axeholder,target)
 	inst.axeholder = axeholder
 	if target then
 		inst:ForceFacePoint(target:GetPosition())
-		local time
+		local time = 20 ---... I originally set up this system to have different times for each action, but that seems like it may be unnecessary
 		if target:HasTag("CHOP_workable") then
 			inst.AnimState:PlayAnimation("chop_pre",false)
 			inst.AnimState:PushAnimation("chop_loop",false)

@@ -99,7 +99,7 @@ local function OnExplode(inst, target)
             inst:ListenForEvent("death", function(player) onfinished_normal(inst) end, target)
             inst:ListenForEvent("onremoved", function(player) onfinished_normal(inst) end, target)
             if target.components.locomotor then
-                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.5 + 0.15 or 0.7)
+                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.5 or 0.3)
                 target._bear_trap_speedmulttask = target:DoTaskInTime(10, function(i)
                     i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
                     i._bear_trap_speedmulttask = nil

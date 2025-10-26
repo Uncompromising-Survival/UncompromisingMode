@@ -46,8 +46,9 @@ local function SpawnRocks(inst)
     inst.task = nil
     if inst.rocks == nil then
         inst.rocks = {}
-        for i = 1, math.random(2, 4) do
-            local theta = math.random() * 2 * PI
+		local maxplant = math.random(2, 4)
+        for i = 1, maxplant do
+            local theta = (math.random(20+360/maxplant*(i-1),360*i/maxplant-20)+90)*DEGREES
             local rocktype = math.random(NUM_ROCK_TYPES)
             table.insert(inst.rocks,
             {
@@ -63,7 +64,7 @@ local function SpawnRocks(inst)
     end
     for i, v in ipairs(inst.rocks) do
         if type(v.rocktype) == "string" and type(v.offset) == "table" and #v.offset == 3 then
-            local rock = SpawnPrefab("um_pyre_nettles")
+            local rock = SpawnPrefab("um_pyre_nettles_stage_"..math.random(2,5))
             if rock ~= nil then
                 rock.entity:SetParent(inst.entity)
                 rock.Transform:SetPosition(unpack(v.offset))

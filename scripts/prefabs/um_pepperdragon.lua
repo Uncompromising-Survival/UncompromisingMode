@@ -125,7 +125,6 @@ local function fn()
     inst.Transform:SetSixFaced()
 
     ----------
-    inst:AddTag("tallbird")
     inst:AddTag("animal")
     inst:AddTag("largecreature")
 	inst:AddTag("PyreToxinImmune")

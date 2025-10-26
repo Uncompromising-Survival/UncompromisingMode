@@ -100,12 +100,16 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
 	end
 end
 
+local no_water = {"flying","shadow","worm","playerghost","brightmare","brightmare_gestalt"}
+local no_nettle = { "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
+
+
 env.AddComponentPostInit("locomotor", function(self)
    
 	local _OnUpdate = self.OnUpdate
 	function self:OnUpdate(dt, arrive_check_only)
 		local inst = self.inst
-		if not inst.um_just_splashed and not inst:HasAnyTag("flying","shadow","worm","playerghost","brightmare","brightmare_gestalt") then -- do not do the lookup if you just splashed
+		if not inst.um_just_splashed and not inst:HasAnyTag(no_water) then -- do not do the lookup if you just splashed
 			if inst:HasTag("player") then
 				if RobustFloodCheck(inst) then
 					SplashEffect(inst)
@@ -131,6 +135,19 @@ env.AddComponentPostInit("locomotor", function(self)
 					self.inst:RemoveEventCallback("unequip",AdjustSpeed)
 					self:RemoveExternalSpeedMultiplier(inst, "um_floodedwater")
 				end				
+			end
+		end
+		
+		
+		-- Fire Nettles effect moving
+		if not inst:HasAnyTag(no_nettle) and inst.sg and inst.sg:HasStateTag("moving") and not inst.nettlebump_cd then
+			local nettle = FindEntity(inst,2,nil,{"PyreNettle"})
+			if nettle and nettle.pyrenettle_bumped then
+				nettle.pyrenettle_bumped(nettle,inst)
+				inst.nettlebump_cd = inst:DoTaskInTime(1,function(inst) -- short CD
+					inst.nettlebump_cd:Cancel()
+					inst.nettlebump_cd = nil
+				end)
 			end
 		end
 		return _OnUpdate(self,dt,arrive_check_only)

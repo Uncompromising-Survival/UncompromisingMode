@@ -70,6 +70,58 @@ local function Ghost(eater)
 	eater.unghosttask = eater:DoTaskInTime(60*4,UnGhost)
 
 end
+
+local pie_shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost","player"}
+local function BoomPieGo(inst, eater)
+	if eater and eater.components.health and not eater.components.health:IsDead() then
+		eater.Physics:SetCollisionMask(
+							COLLISION.GROUND,
+							COLLISION.OBSTACLES,
+							COLLISION.SMALLOBSTACLES,
+							COLLISION.CHARACTERS,
+							COLLISION.GIANTS
+						) -- Can Launch yourself over gaps
+		eater.Physics:Teleport(eater.Transform:GetWorldPosition())
+	
+		local x,y,z = eater.Transform:GetWorldPosition()
+		local dummy = SpawnPrefab("lavaspit_target")
+		dummy:DoTaskInTime(0.1,function(dummy) dummy:Remove() end)
+		local rot = eater.Transform:GetRotation()
+		local dx = 1.5*math.sin((rot+ 90+180) * DEGREES) -- Spawn this dummy behind the player so that the normal knockback state will work
+		local dz = 1.5*math.cos((rot+ 90+180) * DEGREES)
+		dummy.Transform:SetPosition(x+dx,y,z+dz)
+		SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
+		local puddle = SpawnPrefab("blueberrypuddle")
+		puddle.Transform:SetPosition(x,y,z)		
+		puddle.playermade = true
+		puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+		eater:PushEvent("knockback", { knocker = dummy, radius = 6, strengthmult = 4 })
+		local casualties = TheSim:FindEntities(x,y,z,2,nil,pie_shouldnt_hit)
+		eater.components.health:SetInvincible(true)
+		eater:DoTaskInTime(2,function(eater) 
+			eater.Physics:SetCollisionMask(
+								COLLISION.WORLD,
+								COLLISION.OBSTACLES,
+								COLLISION.SMALLOBSTACLES,
+								COLLISION.CHARACTERS,
+								COLLISION.GIANTS
+							)		
+			eater.components.health:SetInvincible(false) 
+			if eater.components.drownable and eater.components.drownable:IsOverWater() then
+				eater.sg:GoToState("sink_fast")
+			end
+		end)
+		if #casualties > 0 then
+			for i, v in pairs(casualties) do
+				if v.components.combat then
+					v.components.combat:GetAttacked(eater,68)
+				end
+			end
+		end
+
+	end
+end
+
 local um_preparedfoods =
 {
     beefalowings =
@@ -734,7 +786,21 @@ local um_preparedfoods =
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
     },
-
+    um_boomberrypie =
+    {
+        test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
+        hunger = 37.5,
+        health = -3,
+        sanity = 0,
+        priority = 30,
+        weight = 1,
+        cooktime = 2,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", 0.05, 0.65 },
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
+        oneatenfn = BoomPieGo,
+    },
 }
 
 

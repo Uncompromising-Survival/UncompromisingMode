@@ -15,11 +15,13 @@ local function OnHitFyre(inst, attacker, target)
 	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
 	if #ents > 0 then
 		for i, v in pairs(ents) do
-			if v.components.burnable ~= nil then
-				v.components.burnable:Ignite()
-			end
-			if v.components.combat then
-				v.components.combat:GetAttacked(attacker,68)
+			if (not v:HasTag("player") or v == attacker) then
+				if v.components.burnable ~= nil then
+					v.components.burnable:Ignite()
+				end
+				if v.components.combat then
+					v.components.combat:GetAttacked(attacker,100)
+				end
 			end
 		end
 	end

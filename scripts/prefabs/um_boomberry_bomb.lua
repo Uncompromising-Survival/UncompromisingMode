@@ -7,19 +7,24 @@ local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noa
 local function OnHitBoomBerry(inst, attacker, target)
 	local x,y,z = inst.Transform:GetWorldPosition()
 	SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
-	SpawnPrefab("blueberrypuddle").Transform:SetPosition(x,y,z)
-	inst.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+	local puddle = SpawnPrefab("blueberrypuddle")
+	puddle.Transform:SetPosition(x,y,z)
+	puddle.playermade = true
+
+	puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
 	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
 	if #ents > 0 then
 		for i, v in pairs(ents) do
-			if v.components.combat then
-				v.components.combat:GetAttacked(attacker,68)
+			if (not v:HasTag("player") or v == attacker) then
+				if v.components.combat then
+					v.components.combat:GetAttacked(attacker,68)
+				end
 			end
 		end
 	end
 	inst:Hide()
 	inst.components.wateryprotection:SpreadProtection(inst)
-    inst:DoTaskInTime(3,function(inst) inst:Remove() end) -- leave time for sounds
+	inst:Remove()
 end
 
 local function common_fn(bank, build, anim, tag, isinventoryitem)

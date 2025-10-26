@@ -119,7 +119,7 @@ local function DoScythe(inst, target, doer)
         local x, y, z = doer_pos:Get()
 
         local doer_rotation = doer.Transform:GetRotation()
-
+		inst.components.finiteuses:Use(1)
         local ents = TheSim:FindEntities(x, y, z, TUNING.VOIDCLOTH_SCYTHE_HARVEST_RADIUS*1.2, HARVEST_MUSTTAGS, HARVEST_CANTTAGS, HARVEST_ONEOFTAGS)
         for _, ent in pairs(ents) do
             if ent:IsValid() and ent.components.pickable ~= nil then
@@ -134,6 +134,7 @@ local function DoScythe(inst, target, doer)
 				   if ent.prefab == "hooded_fern" and inst.components.finiteuses ~= nil then
 						inst.components.finiteuses:Use(0.2)
 				   end
+				   
                 end
             end
         end

@@ -95,14 +95,13 @@ local function ShootFire(inst,total_flame)
 			local degrand = 5
 			local dx = 4*math.sin((rot+ 90+degrand) * DEGREES)
 			local dz = 4*math.cos((rot+ 90+degrand) * DEGREES)
-			rot = rot + math.random(-10,10)
+			rot = rot + math.random(-20,20)
 			projectile.Transform:SetPosition(x + dx,2,z+dz)
 			projectile.Transform:SetRotation(rot)
 			projectile.speed = 15
 			projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
 			projectile.damage = 3
 			PoofNearby(inst)
-			
 		end)
 	end
 end

@@ -1,7 +1,7 @@
 require "prefabutil" -- for the MakePlacer function
 
 local assets = {
-	Asset("ANIM", "anim/um_goo_blue.zip"),
+	Asset("ANIM", "anim/um_poofshrooms.zip"),
 }
 
 local function FxAppear(inst)
@@ -307,21 +307,16 @@ local function OnWinter(inst)
 	end
 end
 
-local function blueberryplant()
+local function master()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
-    inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
 
-    inst.AnimState:SetBank("blueberryplant")
-    inst.AnimState:SetBuild("blueberryplant")
-    inst.AnimState:PlayAnimation("idle"..math.random(1,4), true)
 
     inst:AddTag("trap")
-	inst:AddTag("blueberrybomb")
     inst:AddTag("trapdamage")
     inst:AddTag("birdblocker")
 	if inst.harvestable == "regrow" then
@@ -333,39 +328,12 @@ local function blueberryplant()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-	inst:DoTaskInTime(math.random() * (10 * math.random()), function(inst)
-		local x, y, z = inst.Transform:GetWorldPosition()
-		
-		local pitchers = TheSim:FindEntities(x, y, z, 50, { "pitcherplant" })
-		
-		if pitchers == nil or #pitchers < 1 then
-			SpawnPrefab("pitcherplant").Transform:SetPosition(x, y, z)
-		end
-	end)
 
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.nameoverride = "BLUEBERRYPLANT"
-    inst.components.inspectable.getstatus = get_status
+
 
     inst:AddComponent("lootdropper")
 
-
-    -- inst:AddComponent("pickable")
-    -- inst.components.pickable:SetUp(nil, 0)
-    -- inst.components.pickable.onpickedfn = OnPickedFn
-    -- inst.components.pickable.max_cycles  = TUNING.JUNK_PILE_STAGES
-    -- inst.components.pickable.cycles_left = TUNING.JUNK_PILE_STAGES
-    -- inst.components.pickable.picksound = "dontstarve/wilson/pickup_reeds"
 	
-    inst:AddComponent("workable")
-    inst.components.workable:SetWorkAction(ACTIONS.DIG)
-    inst.components.workable:SetWorkLeft(1)
-    inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)
-    inst.components.workable:SetWorkable(true)
-
-    inst:AddComponent("hauntable")
-    inst.components.hauntable.hauntvalue = TUNING.HAUNT_TINY
 
     inst:AddComponent("mine")
     inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
@@ -376,166 +344,12 @@ local function blueberryplant()
     inst.components.mine:SetOnDeactivateFn(on_deactivate)
     inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
     inst.components.mine:SetReusable(false)
-    Regrow(inst)
-    -- Stop the blueberries from idling in unison.
-    inst.AnimState:SetTime(math.random(0.1,0.3) * inst.AnimState:GetCurrentAnimationLength())
-	inst:AddComponent("timer")
-	inst:ListenForEvent("timerdone", CheckTimeRegrow)
-    -- Start the task for the characterizing additional idles.
-    inst:ListenForEvent("animover", on_anim_over)
-	
-	inst:DoTaskInTime(0,function(inst) if not inst.harvestable then inst.harvestable = "full" end end)
-    inst.OnSave = on_save
-    inst.OnLoad = on_load
-	inst.pendingregrow = false
-	inst:WatchWorldState("isspring", OnSpring)
-	inst:WatchWorldState("isautumn", OnSpring) --Include other seasons incase someone is weird and disables spring for reasons unknown?
-	inst:WatchWorldState("issummer", OnSpring)
-	inst:WatchWorldState("iswinter", OnWinter)
-    return inst
-end
-
-local function on_deploy(inst, position, deployer)
-    local new_trap_starfish = SpawnPrefab("blueberryplant")
-    if new_trap_starfish ~= nil then
-        -- Dropped and deployed starfish traps shouldn't spawn in a reset state (or they'll bite the deployer).
-        new_trap_starfish.AnimState:PlayAnimation("trap_idle")
-        new_trap_starfish.components.mine:Spring()
-
-        new_trap_starfish.Transform:SetPosition(position:Get())
-        new_trap_starfish.SoundEmitter:PlaySound("dontstarve/common/plant")
-		
-		inst:AddTag("plant")
-        inst:Remove()
-    end
-end
-
-local function blueberryflower()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("blueberryplant")
-    inst.AnimState:SetBuild("blueberryplant")
-    inst.AnimState:PlayAnimation("inactive", true)
-
-    MakeInventoryFloatable(inst, "med")
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
-    -- Stop the starfish from idling in unison.
-    inst.AnimState:SetTime(math.random() * inst.AnimState:GetCurrentAnimationLength())
-
-    inst:AddComponent("inspectable")
-    inst.components.inspectable.nameoverride = "blueberryflower"
-
-    inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem:InheritMoisture(100, true)
-
-    inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
-
-    inst:AddComponent("deployable")
-    inst.components.deployable.ondeploy = on_deploy
-
-    return inst
-end
-
-local function blueberryexplosion()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("treegrowthsolution")
-    inst.AnimState:SetBuild("um_goo_blue")
-
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-	inst.Transform:SetScale(1.5,1.5,1.5)
-	inst.AnimState:PlayAnimation("use", false)
-	inst:ListenForEvent("animover",function(inst) inst:Remove() end)
-	inst.persists = false
-
-    return inst
-end
-
-local no_slow = {  "INLIMBO", "notarget", "playerghost", "wall",  "shadow", "trap" }
-local no_slow_players = {"INLIMBO", "notarget", "playerghost", "wall",  "shadow", "trap","companion","abigail","player"}
-local function ApplySlows(inst)
-	--also scare enemies near wathom, at a smaller radius
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local ents
-	if inst.playermade then
-		ents = TheSim:FindEntities(x, y, z, 3, { "_combat" },no_slow_players)
-	else
-		ents = TheSim:FindEntities(x, y, z, 3, { "_combat" },no_slow)
-	end
-	
-	for i, v in ipairs(ents) do
-		local debuffkey = inst.prefab
-		if v.components.locomotor then
-			v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
-			v.um_boomslowtask = v:DoPeriodicTask(1, function(guy)
-				if not FindEntity(guy,3,function(ent) return ent.prefab == "blueberrypuddle" end) then
-					guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
-					if guy.um_boomslowtask then
-						guy.um_boomslowtask:Cancel()
-						guy.um_boomslowtask = nil
-					end
-				end
-			end)
-		end
-	end
-end
-
-local function blueberrypuddle()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-	inst.entity:AddSoundEmitter()
-    MakeInventoryPhysics(inst)
-
-    inst.AnimState:SetBank("treegrowthsolution")
-    inst.AnimState:SetBuild("um_goo_blue")
-    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
-    inst.AnimState:SetLayer(LAYER_BACKGROUND)
-	
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-	inst.Transform:SetScale(1.5,1.5,1.5)
-    inst.AnimState:PlayAnimation("pre_idle", false)
-	inst.AnimState:PushAnimation("idle", false)
-	inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(0.2) end)
-	inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
-	inst.persists = false
-	inst:DoPeriodicTask(0.5,ApplySlows)
 	
     return inst
 end
 
-return Prefab("blueberryplant", blueberryplant,assets),
-Prefab("blueberryflower", blueberryflower),
-MakePlacer("blueberryflower_placer", "star_trap", "star_trap", "trap_idle"),
-Prefab("blueberryexplosion",blueberryexplosion),
-Prefab("blueberrypuddle",blueberrypuddle)
+local function poofredmaster()
+	
+end
+
+return Prefab("um_poofshroom_red_master", poofredmaster,assets)

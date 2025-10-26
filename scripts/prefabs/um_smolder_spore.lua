@@ -1,89 +1,35 @@
-local prefabs = {
-	"um_pyre_nettles",
-	"houndfire",
-	"smog"
-}
-
-
---local onsurface = false
---local oncave = false
---local function WorldCheck(inst)
---	if TheWorld:HasTag("forest") then
---		onsurface = true
---	end
---	if TheWorld:HasTag("cave") then
---		oncave = true
---	end
---end
-
-
--- These tiles are where Smolder Spores can survive, when it isn't Summer.
--- ALL NON-MAGMA MAGMA CAVES TURFS SHOULD GO HERE.
-local HOME_TILES =
-{
-	[WORLD_TILES.OCEAN_WATERLOG] = true, -- PLACEHOLDER
-	--	[WORLD_TILES.MAGMA_ASH] = true,
-	--	[WORLD_TILES.MAGMA_ROCK] = true,
-	--	[WORLD_TILES.MAGMAFIELD] = true,
-}
-
-
--- Use lootdropper to drop hound fires in a natural-looking way.
-SetSharedLootTable('um_smolder_spore',
-	{
-		{ 'houndfire', 1.0 },
-		{ 'houndfire', 1.0 },
-		{ 'houndfire', 0.5 },
-		{ 'houndfire', 0.25 },
-		--{ 'smog',      1.0 }
-	})
-
+local function FieryAftermath(inst)
+	local maxnum = math.random(6,7)
+	for i = 1,maxnum do
+		local x,y,z = inst.Transform:GetWorldPosition()
+		local projectile = SpawnPrefab("um_fire_projectile")
+		local rot = (math.random(20+360/maxnum*(i-1),360*i/maxnum-20)+90)
+		projectile.Transform:SetPosition(x,1,z)
+		projectile.Transform:SetRotation(rot)
+		projectile.speed = 8
+		projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
+		projectile.damage = 3
+	end
+end
 
 -- This prefab just isn't complicated enough to need seperate files for movement. One block of code suffices.
 local function SimpleWander(inst)
 	if not inst:HasTag("BUSYSMOLDERSPORE") then
-		if math.random() > 0.5 then
-			inst.components.locomotor:RunInDirection(math.random(1, 359))
-			inst.components.locomotor:RunForward()
-			inst:DoTaskInTime(math.random(4, 7), function()
-				inst.components.locomotor:Stop()
-			end)
-		end
-	end
-end
-
-
-local function PlantSelf(inst)
-	local blockers = FindClosestEntity(inst, 1, true, { "blocker" },
-		{ "invisible", "notarget", "noattack", "playerghost" })
-	local nettlescrowding = FindClosestEntity(inst, 2, true, { "PyreNettle" })
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local findnettles = TheSim:FindEntities(x, y, z, 50, { "PyreNettle" })
-
-	if not inst:HasTag("BUSYSMOLDERSPORE")
-		and blockers == nil
-		and nettlescrowding == nil
-		and #findnettles < 16 
-		and TheWorld.Map:IsPassableAtPoint(x, y, z) 
-		and TheWorld.Map:CanPlantAtPoint(x, y, z)
-	then
-		inst:AddTag("BUSYSMOLDERSPORE")
-
-		inst.components.locomotor:Stop()
-		inst.AnimState:PlayAnimation("divebomb", false)
-		inst:ListenForEvent("animover", function()
-			inst:Hide()
-			SpawnPrefab("um_pyre_nettles").Transform:SetPosition(x, y, z)
-			inst:DoTaskInTime(0, function()
-				inst:Remove()
-			end)
+		inst.randdir = math.random(1, 359)
+		inst:DoPeriodicTask(10*FRAMES,function(inst)
+			local ent = FindEntity(inst,16,nil,{"_health"},{"PyreToxinImmune"})
+			if ent then
+				inst:ForceFacePoint(ent:GetPosition())
+			else
+				inst.components.locomotor:RunInDirection(inst.randdir)
+			end		
+		end)
+		inst.components.locomotor:RunForward()
+		inst:DoTaskInTime(math.random(6, 7), function()
+			inst.components.locomotor:Stop()
 		end)
 	end
-
-	-- If the planting failed, wait a bit and try again.
-	inst:DoTaskInTime(10, PlantSelf)
 end
-
 
 -- Spread some fire around!
 local function FireSpread(inst)
@@ -113,7 +59,6 @@ local function FireSpread(inst)
 	inst.components.combat:DoAreaAttack(inst, 3, nil, nil, "fire",
 		{ "SmolderSporeAvoid", "BUSYSMOLDERSPORE", "INLIMBO", "invisible", "noattack" })
 
-	inst.components.lootdropper:DropLoot(inst:GetPosition())
 end
 
 
@@ -134,9 +79,6 @@ local function PopSpore(inst)
 			inst:Hide()
 		end)
 
-		inst:DoTaskInTime(2, function()
-			inst:Remove()
-		end)
 	end
 end
 
@@ -152,12 +94,9 @@ local function Divebomb(inst)
 		inst.AnimState:PlayAnimation("divebomb", false)
 		inst:ListenForEvent("animover", function()
 			SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
-
+			FieryAftermath(inst)
 			FireSpread(inst)
-			inst:Hide()
-			inst:DoTaskInTime(1, function()
-				inst:Remove()
-			end)
+			inst:Remove()
 		end)
 	end
 end
@@ -179,15 +118,6 @@ local function TargetCheck(inst)
 	end
 end
 
--- Check if we're allowed to be where we are.
-local function TurfCheck(inst)
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local tile_at_position = TheWorld.Map:GetTileAtPoint(x, y, z)
-
-	if not HOME_TILES[tile_at_position] then
-		Divebomb(inst)
-	end
-end
 
 -- What happens when caught via bug net.
 local function OnWorked(inst, worker)
@@ -247,12 +177,6 @@ local function TaskStartup(inst)
 	if inst.TargetCheckTask == nil then
 		inst.TargetCheckTask = inst:DoPeriodicTask((FRAMES * 3), TargetCheck, 5)
 	end
-	if inst.PlantSelfTask == nil then
-		inst.PlantSelfTask = inst:DoTaskInTime((math.random(1, 60) * math.random(1, 5)) + 30, PlantSelf)
-	end
-	if TheWorld.state.season ~= "summer" and inst.TurfCheckTask == nil then
-		inst:DoPeriodicTask(10, TurfCheck, 10)
-	end
 end
 
 local function TaskCancel(inst)
@@ -264,14 +188,6 @@ local function TaskCancel(inst)
 		inst.TargetCheckTask:Cancel()
 		inst.TargetCheckTask = nil
 	end
-	if inst.PlantSelfTask ~= nil then
-		inst.PlantSelfTask:Cancel()
-		inst.PlantSelfTask = nil
-	end
-	if inst.TurfCheckTask ~= nil then
-		inst.TurfCheckTask:Cancel()
-		inst.TurfCheckTask = nil
-	end
 end
 
 
@@ -279,10 +195,6 @@ local function OnDropped(inst)
 	inst.Light:Enable(true)
 	inst.persists = false
 	inst.OnEntitySleep = inst.Remove
-
-	if inst:GetIsWet() then
-		PlantSelf(inst)
-	end
 
 	if inst.components.stackable ~= nil then
 		local x, y, z = inst.Transform:GetWorldPosition()
@@ -319,19 +231,6 @@ local function OnPickup(inst)
 		end
 	end
 end
-
-
-local function OnSeasonChange(inst)
-	if TheWorld.state.season == "summer" then
-		if inst.TurfCheckTask ~= nil then
-			inst.TurfCheckTask:Cancel()
-			inst.TurfCheckTask = nil
-		end
-	elseif inst.TurfCheckTask == nil then
-		inst:DoPeriodicTask(10, TurfCheck, 10)
-	end
-end
-
 
 local function fn()
 	local inst = CreateEntity()
@@ -380,8 +279,8 @@ local function fn()
 	end
 
 	inst:AddComponent("locomotor")
-	inst.components.locomotor.walkspeed = 1
-	inst.components.locomotor.runspeed = 1
+	inst.components.locomotor.walkspeed = 2
+	inst.components.locomotor.runspeed = 2
 	inst.components.locomotor:EnableGroundSpeedMultiplier(false)
 	inst.components.locomotor.pathcaps = { ignorecreep = true }
 
@@ -406,13 +305,6 @@ local function fn()
 	inst:AddComponent("hauntable")
 	inst.components.hauntable:SetOnHauntFn(Divebomb)
 
-	inst:AddComponent("moisture")
-	inst.components.moisture.maxmoisture = 2
-	inst:ListenForEvent("moisturedelta", function()
-		if inst:GetIsWet() then
-			PlantSelf(inst)
-		end
-	end)
 
 	inst:AddComponent("perishable")
 	inst.components.perishable:SetPerishTime(TUNING.TOTAL_DAY_TIME)
@@ -454,8 +346,7 @@ local function fn()
 	
 	--	inst:DoTaskInTime(0, WorldCheck) -- Only check for world tags after server startup is complete.
 	
-	OnSeasonChange(inst)
-	inst:WatchWorldState("season", OnSeasonChange)
+
 	
 	
 	inst:DoTaskInTime(0, function() -- Wait a frame, because if we start too early, the item doesn't know if it's in an inventory.

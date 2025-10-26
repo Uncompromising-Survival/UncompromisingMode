@@ -6,7 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.7.6.5"
+local _version = "1.7.6.6"
 
 description = [[
     󰀔 [ "Ghosts of the Past (for now)"  (Beta ver: v]] .. _version .. [[)]
@@ -585,15 +585,16 @@ configuration_options = {
     BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
     BinaryConfig("canedurability", "Cane Durability",
         "Cane loses durability similarly to a Whirly Fan. Note that MacTusks will drop Tusks 100% of the time with this on.",
-        false),
-
+    true),--false),
+    BinaryConfig("cooldown_orangestaff_", "Cooldown Based Lazy Explorer",
+        "Lazy Explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.",
+	true),--false),
+		
     BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
-    BinaryConfig("cooldown_orangestaff_", "Cooldown Based Lazy Explorer",
-        "Lazy Explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.",
-        false),
+
     {
         name = "electricalmishap",
         label = "Electrical Weapon Retune",

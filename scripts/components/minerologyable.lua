@@ -237,7 +237,7 @@ local function MakeYellow2(self,tier) -- um_static_mod is referenced in a postin
 end
 
 ------------------
--- [[ 
+-- [[ Clear 1
 ------------------
 
 local cant_be_crafted = {
@@ -337,7 +337,7 @@ local function MakeClear2(self,tier) -- Scale up the durability, items that cann
 					local _Use = inst.components.finiteuses.Use
 					inst.components.finiteuses.Use = function(self,num) -- Modify only this item's version of finiteuses
 						local chance = math.random()
-						if (chance < 0.7 and tier == 2) or (chance < 0.3 and tier == 3) then
+						if (chance > 0.7 and tier == 2) or (chance > 0.4 and tier == 3) then
 							_Use(self,num)
 						end	
 					end
@@ -395,9 +395,8 @@ end
 local burn_damage = {8,16,34}
 local burn_portion = {0.05,0.2}
 local function Burny(inst,attacker,target)
-	target.components.health:DoFireDamage(burn_damage[inst.tier],attacker,true)
-	if target.components.burnable then -- There's a lot of extra fire damage, make sure to ignite the target whenever fire damage is done, so there's a tradeoff, also plays into the obscure effect
-		target.components.burnable:Ignite()
+	if target.components.health then
+		target.components.health:DoFireDamage(burn_damage[inst.tier],attacker,true)
 	end
 	SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
 	if inst.tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then 
@@ -546,7 +545,7 @@ local function UpdateSanityStat(inst,count)
 	if inst.components.minerologyable._dapperness then
 		inst.components.equippable.dapperness = inst.components.minerologyable._dapperness + count*inst.tier*TUNING.DAPPERNESS_SMALL/5
 	else
-		inst.components.equippable.dapperness = count*inst.tier*TUNING.DAPPERNESS_SMALL/5
+		inst.components.equippable.dapperness = count*inst.tier*TUNING.DAPPERNESS_SMALL/10
 	end
 end
 
@@ -652,6 +651,18 @@ end
 -- [[ Blue 2, Chilled Sapphire
 ------------------
 
+local function PerishFill(inst, from_object)
+    if from_object ~= nil
+        and from_object.components.watersource ~= nil
+        and from_object.components.watersource.override_fill_uses ~= nil then
+
+        inst.components.perishable.perishremainingtime = (math.min(inst.components.perishable.perishtime, inst.components.perishable.perishremainingtime + from_object.components.watersource.override_fill_uses))
+    else
+        inst.components.perishable:SetPercent(1)
+    end
+    inst.SoundEmitter:PlaySound("turnoftides/common/together/water/emerge/small")
+    return true
+end
 
 local function ConvertToPerishable(inst)
 	local pct = 1
@@ -673,13 +684,17 @@ local function ConvertToPerishable(inst)
 	elseif not inst.components.perishable then
 		inst:AddComponent("perishable")
 	end
-	inst.components.perishable:SetPerishTime(maxval*inst.tier*10)
+	inst.components.perishable:SetPerishTime(maxval*inst.tier*5)
 	inst.components.perishable:StartPerishing()
 	inst.components.perishable.onperishreplacement = "spoiled_food"
 	inst.components.perishable:SetPercent(pct)
 	
 	-- inst.components.finiteuses = {}
 	-- inst.components.finiteuses.Use = function() end
+	inst:AddTag("frozen")
+	if inst.components.fillable then -- Good ending for watering cans, I could have just made them remove the fillable component
+		inst.components.fillable.overrideonfillfn = PerishFill
+	end
 end
 
 local function MakeBlue2(self,tier)
@@ -863,18 +878,10 @@ function Minerologyable:OnSave()
 	data.enchant = self.enchant
 	data.tier = self.tier
 	
-	if self._nongemology_onhit then
-		data._nongemology_onhit = self._nongemology_onhit
-	end
-	
     return data
 end
 
 function Minerologyable:OnLoad(data)
-	if data._nongemology_onhit then
-		self._nongemology_onhit = data._nongemology_onhit
-	end
-
     self:SetEnchant(data.enchant,data.tier)
 end
 
