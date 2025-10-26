@@ -19,27 +19,25 @@ add their own armors and protection values.
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if not TheNet:GetIsServer() then
-    return
-end
+--if not TheNet:GetIsServer() then return end
 
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
 -- using the armor_mappings table.
-ARMOR_ABSORPTION_OVERRIDES = {
+local ARMOR_ABSORPTION_OVERRIDES = {
     ["beehat"] = .7,
     ["armorruins"] = .8,
-	["shieldofterror"] = .75,
-	["cookiecutterhat"] = .7,
-	["wathgrithrhat"] = .7,
-	["wathgrithr_improvedhat"] = .7,
-	["armor_bramble"] = .7,
-	["voidclothhat"] = .7,
-	["armor_voidcloth"] = .7,
-	["lunarplanthat"] = .7,
-	["armor_lunarplant"] = .7,
-	["armor_lunarplant_husk"] = .7,
-	["slurtlehat"] = .7,
-	["um_armor_bramble_rimeweed"] = .7,
+    ["shieldofterror"] = .75,
+    ["cookiecutterhat"] = .7,
+    ["wathgrithrhat"] = .7,
+    ["wathgrithr_improvedhat"] = .7,
+    ["armor_bramble"] = .7,
+    ["voidclothhat"] = .7,
+    ["armor_voidcloth"] = .7,
+    ["lunarplanthat"] = .7,
+    ["armor_lunarplant"] = .7,
+    ["armor_lunarplant_husk"] = .7,
+    ["slurtlehat"] = .7,
+    ["um_armor_bramble_rimeweed"] = .7,
 
     -- Island Adventures
     ["armorlimestone"] = .75,
@@ -61,20 +59,46 @@ local armor_mappings = {
 
 -- Adjust armor protection values based on the above tables.
 env.AddPrefabPostInitAny(function(inst)
-    if inst.components.armor then
+    local armor = inst.components.armor
+    if armor then
         -- If the armor is in the overrides table, prioritize using that protection value.
-        if ARMOR_ABSORPTION_OVERRIDES[inst.prefab] then
-            inst.components.armor:SetAbsorption(ARMOR_ABSORPTION_OVERRIDES[inst.prefab])
+        local absorb_override = ARMOR_ABSORPTION_OVERRIDES[inst.prefab]
+        if absorb_override then
+            armor:SetAbsorption(absorb_override)
+            armor.umabsorbremap = absorb_override
             return
         end
         -- If the armor is not in the overrides table, automatically adjust the protection value
         -- using the mapping table.
-        local absorb_percent = inst.components.armor.absorb_percent
+        local absorb_percent = armor.absorb_percent
         for _, mapping in ipairs(armor_mappings) do
             if absorb_percent > mapping.min_val and absorb_percent <= mapping.max_val then
-                inst.components.armor:SetAbsorption(mapping.new_absorb)
+                armor:SetAbsorption(mapping.new_absorb)
+                armor.umabsorbremap = mapping.new_absorb
                 return
             end
         end
+    end
+end)
+
+local function RemapAbsorption(self, absorb)
+    if absorb >= 1 or not self.umabsorbremap then return absorb end
+    if self.umabsorbremap then return self.umabsorbremap end
+end
+
+env.AddComponentPostInit("armor", function(self)
+    local _SetAbsorption = self.SetAbsorption
+    function self:SetAbsorption(absorb_percent, ...)
+        return _SetAbsorption(self, RemapAbsorption(self, absorb_percent), ...)
+    end
+
+    local _InitCondition = self.InitCondition
+    function self:InitCondition(amount, absorb_percent, ...)
+        return _InitCondition(self, amount, RemapAbsorption(self, absorb_percent), ...)
+    end
+
+    local _InitIndestructible = self.InitIndestructible
+    function self:InitIndestructible(absorb_percent, ...)
+        return _InitIndestructible(self, RemapAbsorption(self, absorb_percent), ...)
     end
 end)
