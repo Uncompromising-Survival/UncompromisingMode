@@ -150,7 +150,7 @@ local function fn(Sim)
 
     inst:DoTaskInTime(0, RegisterNetListeners)
     
-    MakeObstaclePhysics(inst, 1.8)
+    MakeObstaclePhysics(inst, 1)
 
     inst.entity:SetPristine()
 

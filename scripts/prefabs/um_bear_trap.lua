@@ -378,9 +378,11 @@ local function OnTrapLand(inst, target)
 	else
 		inst.trap = SpawnPrefab("um_bear_trap")
 	end
-	inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	if inst.components.finiteuses and inst.trap.components.finiteuses then
-		inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+	if inst.trap then
+		inst.trap.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		if inst.components.finiteuses and inst.trap.components.finiteuses then
+			inst.components.finiteuses:SetUses(inst.components.finiteuses:GetUses())
+		end
 	end
 	inst:Remove()	
 end

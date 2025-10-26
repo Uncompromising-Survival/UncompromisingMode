@@ -352,7 +352,6 @@ local um_preparedfoods =
 			end
         end,
         floater = { "med", nil, 0.65 },
-        idlename = "idle_ground",
         card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 } } },
     },
 

@@ -19,6 +19,10 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 		self.vetcursewidget:MoveToBack()
 	end
 
+	-- local NightTerrorsWidget = require "widgets/nightterrorwidget"
+	-- self.nightterrorswidget = self:AddChild( NightTerrorsWidget(ownr) )
+	-- self.nightterrorswidget:MoveToBack()
+		
 	local californiakingoverlay = require "widgets/californiakingoverlay"
 	self.californiakingoverlay = self:AddChild( californiakingoverlay(ownr) )
 	self.californiakingoverlay:MoveToBack() 

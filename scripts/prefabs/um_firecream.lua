@@ -16,8 +16,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("um_eyebalm")
-    inst.AnimState:SetBuild("um_eyebalm")
+    inst.AnimState:SetBank("um_firecream")
+    inst.AnimState:SetBuild("um_firecream")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "small", 0.05, 0.95)
