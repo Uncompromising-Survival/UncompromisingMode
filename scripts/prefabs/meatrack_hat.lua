@@ -165,7 +165,7 @@ local function fn()
     inst.AnimState:SetBuild("meatrack_hat_swap")
     inst.AnimState:PlayAnimation("BUILD_PLAYER")
 
-    inst:AddTag("hats")
+    inst:AddTag("hat")
     inst:AddTag("donotautopick")
 
     inst.entity:SetPristine()

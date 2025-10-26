@@ -6,6 +6,11 @@ local function OnHealthDelta(inst, oldpercent, newpercent)
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
+    --minerology
+    if weapon ~= nil and weapon.components.minerologyable ~= nil and weapon.components.minerologyable.passionate then
+        return true
+    end
+
     if weapon ~= nil and (weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool ~= nil) --IA compat
         or attacker ~= nil and attacker:HasTag("pierces_ice_shield") then
         return true

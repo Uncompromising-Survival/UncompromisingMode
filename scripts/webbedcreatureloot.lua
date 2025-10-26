@@ -1010,4 +1010,19 @@ AddCompatCharacterCocoon("3583633595", "ralsei_m", {
     Item("lightninggoathorn", 1, .05),
 })
 
+AddCompatCharacterCocoon("2978133982", "whispy", {
+    Item(function() return RandomItem("vegiepick", "vegieaxe", "vegiebat", "vegie_sword") end, 1, 1, true),
+    Item(function() return RandomItem("potato_hat", "vegie_amu", "vegie_amu2", "wateringcan") end, 1, 1, true),
+    Item(function() return RandomItem("seed_forget", "seed_fire", "seed_till") end, 8, .75, true),
+    Item(function() return RandomItem("yotc_seedpacket", "yotc_seedpacket_rare") end, 4, 1),
+    Item(function() return RandomItem("yotc_seedpacket", "yotc_seedpacket_rare") end, 1, .5),
+    Item("vegie_bomb", 3, 1),
+    Item("vegie_bomb", 3, .5),
+    Item("vegiespray", 1, 1, true),
+    Item(function() return RandomItem("carrot", "carrot_soup", "carrot_honey", "carrot_puree", "carrot_cake", "carrot_fry") end, 1, 1, true),
+    Item("manrabbit_tail", 1, 1),
+    Item("hareball", 1, 1, true),
+    Item("slipper", 1, .25),
+})
+
 return COCOON_DEFS

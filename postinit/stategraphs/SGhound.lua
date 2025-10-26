@@ -201,8 +201,6 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.AnimState:PlayAnimation("howl")
                 inst.SoundEmitter:PlaySound(inst.sounds.howl)
                 inst:RegenIceShield(1) --TODO:SCALING TIERS
-                fx.entity:AddFollower()
-                fx.Follower:FollowSymbol(inst.GUID, "hound_body", 0, 0, 0)
             end,
             events =
             {

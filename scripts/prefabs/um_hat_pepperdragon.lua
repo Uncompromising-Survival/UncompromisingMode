@@ -47,6 +47,7 @@ local function fn()
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("hat")
+    inst:AddTag("goggles")
     inst:AddTag("donotautopick")
 	
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
@@ -71,7 +72,9 @@ local function fn()
 	inst.components.fueled:InitializeFuelLevel(TUNING.STRAWHAT_PERISHTIME)
 	inst.components.fueled:SetDepletedFn(--[[generic_perish]]inst.Remove)
 
-	
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
+
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------
 

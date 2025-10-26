@@ -70,7 +70,7 @@ local function fn()
     inst.AnimState:SetBuild("hat_gasmask")
     inst.AnimState:PlayAnimation("anim")
 
-    inst:AddTag("hats")
+    inst:AddTag("hat")
     inst:AddTag("has_gasmask")
     inst:AddTag("goggles")
     inst:AddTag("donotautopick")

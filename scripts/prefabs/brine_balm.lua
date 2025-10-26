@@ -15,7 +15,7 @@ local function OnUse(inst, target)
             health:SetMinHealth(_minhealth)
         end
         health:DeltaPenalty(-.125)
-        target:AddDebuff("confighealbuff", "confighealbuff", {time = 70})
+        target:AddDebuff("confighealbuff_"..inst.prefab, "confighealbuff", {time = 70})
     end
 end
 

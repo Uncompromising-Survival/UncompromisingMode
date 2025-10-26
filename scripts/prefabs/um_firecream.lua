@@ -4,6 +4,7 @@ local assets = {
 
 local function OnHealFn(inst, target)
     target:AddDebuff("um_firecream_buff", "um_firecream_buff")
+    target:AddDebuff("confighealbuff_"..inst.prefab, "confighealbuff", {time = 15})
 end
 
 local function fn()
@@ -35,7 +36,7 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("healer")
-    inst.components.healer:SetHealthAmount(20)
+    inst.components.healer:SetHealthAmount(15)
     inst.components.healer:SetOnHealFn(OnHealFn)
 	
     MakeHauntableLaunch(inst)

@@ -382,3 +382,7 @@ end
 AllRecipes["seafaring_prototyper"].ingredients = { Ingredient("transistor", 1), Ingredient("boards", 1) }
 
 AllRecipes["woby_treat"].numtogive = 1
+
+if not TUNING.DSTU.EYEBRELLAREWORK then
+    ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
+end

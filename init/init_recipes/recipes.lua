@@ -87,17 +87,18 @@ ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
 
-AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 1),Ingredient("cutgrass", 1)}, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_boomberry_bomb", "nightstick", "WEAPONS", true)
+AddRecipe2("um_boomberry_bomb", { Ingredient("giant_blueberry", 2), Ingredient("twigs", 2),Ingredient("cutgrass", 1)}, TECH.SCIENCE_ONE, { numtogive = 4 }, { "WEAPONS", "SUMMER" })
+ChangeSortKey("um_boomberry_bomb", "gunpowder", "WEAPONS", true)
+ChangeSortKey("um_boomberry_bomb", "waterballoon", "SUMMER", false)
 
 AddRecipe2("um_fyre_bomb", { Ingredient("um_fyrite", 2), Ingredient("twigs", 2),Ingredient("rocks", 3)}, TECH.SCIENCE_TWO, { numtogive = 4 }, { "WEAPONS" })
-ChangeSortKey("um_fyre_bomb", "gunpowder", "WEAPONS", true)
+ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
 
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
-ChangeSortKey("um_eyebalm", "lifeinjector", "RESTORATION", true)
+ChangeSortKey("um_eyebalm", "compostwrap", "RESTORATION", true)
 
 AddRecipe2("um_firecream", { Ingredient("papyrus", 1), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
-ChangeSortKey("um_firecream", "lifeinjector", "RESTORATION", true)
+ChangeSortKey("um_firecream", "um_eyebalm", "RESTORATION", true)
 
 AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })
 ChangeSortKey("um_beemine_moon_item", "beemine", "WEAPONS", true)
@@ -117,7 +118,7 @@ AddRecipe2(
     { nil },
     { "WEAPONS" }
 )
-ChangeSortKey("um_bear_trap_equippable_tooth", "trap_teeth", "WEAPONS", true)
+ChangeSortKey("um_bear_trap_equippable_tooth", "trap_bramble", "WEAPONS", true)
 
 AddRecipe2(
     "um_bear_trap_equippable_gold",
@@ -135,7 +136,7 @@ AddRecipe2(
     { nil },
     { "WEAPONS" }
 )
-ChangeSortKey("um_detonator", "um_fyre_bomb", "WEAPONS", true)
+ChangeSortKey("um_detonator", "gunpowder", "WEAPONS", false)
 
 AddRecipe2(
     "um_flamethrower",
@@ -151,9 +152,11 @@ AddRecipe2(
     { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("redgem", 2)}, -- I don't like how similar these two recipes are, I know we're trying to get uses for pyrite, but this one actually makes more sense to use silk -Axe
     TECH.MAGIC_TWO,
     { nil },
-    { "CLOTHING" }
+    { "CLOTHING", "SUMMER", "WINTER" }
 )
 ChangeSortKey("um_hat_pepperdragon", "plaguemask", "CLOTHING", true)
+ChangeSortKey("um_hat_pepperdragon", "firesuppressor", "SUMMER", false)
+ChangeSortKey("um_hat_pepperdragon", "tent", "WINTER", false)
 
 if GetModConfigData("wiltfly") then
     AddRecipe2("armor_glassmail", { Ingredient("glass_scales", 1), Ingredient("moonglass_charged", 10) }, TECH.CELESTIAL_THREE, { nounlock = true }, { "CRAFTING_STATION" })

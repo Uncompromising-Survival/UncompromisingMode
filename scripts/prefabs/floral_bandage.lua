@@ -6,9 +6,8 @@ local assets =
 }
 
 local function OnUse(inst, target)
-	if target.components.debuffable ~= nil and target.components.health ~= nil and not target.components.health:IsDead() then
-		target.configheal = 15
-		target.components.debuffable:AddDebuff("confighealbuff", "confighealbuff")
+	if target.components.debuffable and target.components.health and not target.components.health:IsDead() then
+		target:AddDebuff("confighealbuff_"..inst.prefab, "confighealbuff", {time = 15})
 	end
 end
 local function fn()                     --Y Add This Item?       --Cactus flower's "bonus" is supposedly flower salad, which has a super quick spoil time with a baseline

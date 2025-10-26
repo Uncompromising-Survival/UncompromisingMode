@@ -148,7 +148,7 @@ local function Capture(inst)
             totaltable = totaltable .. ", scenario = " .. tostring(v.components.scenariorunner.scriptname)
         end
 
-        if v:HasTag("fence") or v.prefab == "fast_farmplot" or v.prefab == "slow_farmplot" then
+        if v:HasTag("rotatableobject") or v.prefab == "fast_farmplot" or v.prefab == "slow_farmplot" then
             totaltable = totaltable .. ", rotation = " .. tostring(v.Transform:GetRotation())
         end
 
