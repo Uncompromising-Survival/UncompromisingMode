@@ -713,7 +713,6 @@ local function GemologyCompatibleOnHit(inst, attacker, target)
 	local self = inst.components.minerologyable
 
 	if self._nongemology_onhit then
-		print("calling nongemology")
 		self._nongemology_onhit(inst, attacker, target)
 	end
 	
@@ -801,13 +800,10 @@ local function MakeChaos(self,tier)
 	self.making_chaos = true -- to prevent repeated definitions of the old onhit
 	local inst = self.inst
 	inst.tier = tier
-	local enchants = {"um_gemologygreengem1","um_gemologyyellowgem1","um_gemologyyellowgem2","um_gemologypalegem1","um_gemologypalegem2","um_gemologyredgem1","um_gemologyredgem2","um_gemologypurplegem1","um_gemologypurplegem2","um_gemologyorangegem1","um_gemologybluegem1","um_gemologybluegem2"}
-	print("Today's CHAOS roll!")
+	local enchants = {"um_gemologygreengem1","um_gemologyyellowgem1","um_gemologyyellowgem2","um_gemologypalegem1","um_gemologypalegem2","um_gemologyredgem1","um_gemologyredgem2","um_gemologypurplegem1","um_gemologypurplegem2","um_gemologyorangegem1","um_gemologybluegem1"}
 	for i = 1,3 do
 		local indx = math.random(1,#enchants)
 		self:SetEnchant(enchants[indx],tier)
-		print(enchants[indx])
-		print(#enchants)
 		table.remove(enchants,indx)
 	end
 	self.chaotic = true

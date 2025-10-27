@@ -156,28 +156,6 @@ return {
           visible = true,
           properties = {}
         },
-        {
-          name = "",
-          type = "lava_pond_cave",
-          shape = "rectangle",
-          x = 50,
-          y = 50,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-		{
-          name = "",
-          type = "lava_pond_cave",
-          shape = "rectangle",
-          x = 300,
-          y = 300,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
       }
     }
   }

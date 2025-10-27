@@ -149,6 +149,8 @@ local function guanorock()
 	inst:DoTaskInTime(0,RandomDetermineTier)
     MakeHauntableWork(inst)
 
+	inst.Transform:SetScale(1.25,1.25,1.25)
+
     return inst
 end
 

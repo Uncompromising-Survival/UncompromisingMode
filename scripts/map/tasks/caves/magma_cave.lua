@@ -49,7 +49,7 @@ AddTask("MagmaCavesEntrance", {
 		room_choices={
 			["BGMagma"] = 2,	
 			["MagmaStairs"] = 1,
-			["ShroomyMagma"] = 1,			
+			["Shroomy"] = 1,			
 		},
 		background_room="BGMagma",
 		room_bg=WORLD_TILES.UM_MAGMA,

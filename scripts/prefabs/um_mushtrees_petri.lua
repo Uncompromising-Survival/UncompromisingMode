@@ -39,17 +39,35 @@ local function OnWork(inst, worker, workleft)
 end
 
 local function onsave(inst, data)
-    data.treeSize = inst.treeSize
+	data.transformSize = inst.transformSize
 end
 
 local function onload(inst, data)
-    if data ~= nil and data.treeSize ~= nil then
-        inst.treeSize = data.treeSize
-        --V2C: Note that this will reset workleft as well
-        --     Gotta change this if you set workable to savestate
-        setPetrifiedTreeSize(inst)
+    if data then
+		inst.transformSize = data.transformSize
     end
 end
+
+
+local function DetermineSize(inst)
+	local scale
+	if inst.transformSize then
+		scale = inst.transformSize
+	else
+		if inst.prefab == "um_redmushtree_gem" or inst.prefab == "um_redmushtree_gemless" then
+			scale = math.random(1.1,1.4)
+		end
+		if inst.prefab == "um_greenmushtree_gemless" or inst.prefab == "um_greenmushtree_gem" then
+			scale = math.random(0.9,1.1)
+		end
+		if inst.prefab == "um_bluemushtree_gemless" or inst.prefab == "um_bluemushtree_gem" then
+			scale = math.random(0.9,1.2)
+		end
+		inst.scale = scale
+	end
+	inst.Transform:SetScale(scale,scale,scale)
+end
+
 
 local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour,color)
     local inst = CreateEntity()
@@ -118,6 +136,9 @@ local function baserock_fn(bank, build, anim, minimapicon, tag, multcolour,color
 
     MakeHauntableWork(inst)
 
+	inst.OnSave = onsave
+	inst.OnLoad = onload
+	inst:DoTaskInTime(0,DetermineSize)
     return inst
 end
 
@@ -131,7 +152,6 @@ SetSharedLootTable( 'um_petmushtree',
 	{'log',   0.6},
 })
 
-
 local function redgemless()
     local inst = baserock_fn("um_redmushtree_gemless", "um_redmushtree", "empty_tall", "um_redmushtree_mapicon.tex")
 
@@ -143,7 +163,7 @@ local function redgemless()
     inst.components.lootdropper:SetChanceLootTable('um_petmushtree')
  	inst.components.lootdropper:AddChanceLoot("red_cap", 1)
 	inst.components.lootdropper:AddChanceLoot("red_cap", 0.1)   
-
+	
     return inst
 end
 

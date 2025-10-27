@@ -8,16 +8,17 @@ local function FieryAftermath(inst)
 		projectile.Transform:SetRotation(rot)
 		projectile.speed = 8
 		projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
-		projectile.damage = 3
+		projectile.damage = 1
 	end
 end
 
 -- This prefab just isn't complicated enough to need seperate files for movement. One block of code suffices.
+local dont_target = {"PyreToxinImmune","wall","chess"}
 local function SimpleWander(inst)
 	if not inst:HasTag("BUSYSMOLDERSPORE") then
 		inst.randdir = math.random(1, 359)
 		inst:DoPeriodicTask(10*FRAMES,function(inst)
-			local ent = FindEntity(inst,16,nil,{"_health"},{"PyreToxinImmune"})
+			local ent = FindEntity(inst,16,nil,{"_health"},dont_target)
 			if ent then
 				inst:ForceFacePoint(ent:GetPosition())
 			else
@@ -25,7 +26,7 @@ local function SimpleWander(inst)
 			end		
 		end)
 		inst.components.locomotor:RunForward()
-		inst:DoTaskInTime(math.random(6, 7), function()
+		inst:DoTaskInTime(math.random(4, 5), function()
 			inst.components.locomotor:Stop()
 		end)
 	end

@@ -87,7 +87,7 @@ local function rockyrock()
 
 
     inst:AddComponent("inspectable")
-	
+	inst.Transform:SetScale(1.2,1.2,1.2)
 	
     MakeHauntableWork(inst)
 

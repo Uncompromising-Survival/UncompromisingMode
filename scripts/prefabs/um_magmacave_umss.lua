@@ -1,3 +1,11 @@
+local function RemoveProblems(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local pyre = TheSim:FindEntities(x,y,z,24,nil,nil,{"lava","PyreNettle"})
+	for i,v in ipairs(pyre) do
+		v:Remove()
+	end
+end
+
 local function Spawn(inst)
     local spawner = SpawnPrefab("umss_general")
     spawner.DefineTable(spawner, "um_gemologyforge1")
@@ -7,6 +15,7 @@ local function Spawn(inst)
     spawner:AddTag("NOCLICK")
     spawner:AddTag("NOBLOCK")
     spawner:DoPeriodicTask(3, function(spawner) spawner:Remove() end) -- just in case it fails.
+	RemoveProblems(inst)
     inst:Remove()
 end
 
