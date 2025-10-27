@@ -294,9 +294,7 @@ local function WaxwellUMStuff(inst)
 end
 
 env.AddPrefabPostInit("waxwell", function(inst)
-    if not TheWorld.ismastersim then
-        return inst
-    end
+    if not TheWorld.ismastersim then return end
 
     WaxwellUMStuff(inst)
 end)
@@ -371,9 +369,7 @@ for _, prefab in pairs(shadowgear) do
 	env.AddPrefabPostInit(prefab, function(inst)
 		ShadowGearClientFunctions(inst, name)
 
-		if not TheWorld.ismastersim then
-			return inst
-		end
+		if not TheWorld.ismastersim then return end
 
 		ShadowGearFunctions(inst, name)
 	end)
