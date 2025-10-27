@@ -579,3 +579,5 @@ for _, v in pairs(class_post) do
     -- These contain a path already, e.g. v= "widgets/inventorybar"
     modimport("postinit/" .. v)
 end
+
+modimport("scripts/um_fxlist")
