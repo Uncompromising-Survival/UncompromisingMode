@@ -63,63 +63,63 @@ local function Ghost(eater)
     eater.Physics:ClearCollidesWith(COLLISION.FLYERS)
     eater.AnimState:SetHaunted(true)
 
-	if eater.unghosttask then
-		eater.unghosttask:Cancel()
-		eater.unghosttask = nil
-	end
-	eater.unghosttask = eater:DoTaskInTime(60*4,UnGhost)
-
+    if eater.unghosttask then eater.unghosttask:Cancel() end
+    eater.unghosttask = eater:DoTaskInTime(60 * 4, UnGhost)
 end
 
-local pie_shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost","player"}
-local function BoomPieGo(inst, eater)
-	if eater and eater.components.health and not eater.components.health:IsDead() then
-		eater.Physics:SetCollisionMask(
-							COLLISION.GROUND,
-							COLLISION.OBSTACLES,
-							COLLISION.SMALLOBSTACLES,
-							COLLISION.CHARACTERS,
-							COLLISION.GIANTS
-						) -- Can Launch yourself over gaps
-		eater.Physics:Teleport(eater.Transform:GetWorldPosition())
-	
-		local x,y,z = eater.Transform:GetWorldPosition()
-		local dummy = SpawnPrefab("lavaspit_target")
-		dummy:DoTaskInTime(0.1,function(dummy) dummy:Remove() end)
-		local rot = eater.Transform:GetRotation()
-		local dx = 1.5*math.sin((rot+ 90+180) * DEGREES) -- Spawn this dummy behind the player so that the normal knockback state will work
-		local dz = 1.5*math.cos((rot+ 90+180) * DEGREES)
-		dummy.Transform:SetPosition(x+dx,y,z+dz)
-		SpawnPrefab("blueberryexplosion").Transform:SetPosition(x,y,z)
-		local puddle = SpawnPrefab("blueberrypuddle")
-		puddle.Transform:SetPosition(x,y,z)		
-		puddle.playermade = true
-		puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
-		eater:PushEvent("knockback", { knocker = dummy, radius = 6, strengthmult = 4 })
-		local casualties = TheSim:FindEntities(x,y,z,2,nil,pie_shouldnt_hit)
-		eater.components.health:SetInvincible(true)
-		eater:DoTaskInTime(2,function(eater) 
-			eater.Physics:SetCollisionMask(
-								COLLISION.WORLD,
-								COLLISION.OBSTACLES,
-								COLLISION.SMALLOBSTACLES,
-								COLLISION.CHARACTERS,
-								COLLISION.GIANTS
-							)		
-			eater.components.health:SetInvincible(false) 
-			if eater.components.drownable and eater.components.drownable:IsOverWater() then
-				eater.sg:GoToState("sink_fast")
-			end
-		end)
-		if #casualties > 0 then
-			for i, v in pairs(casualties) do
-				if v.components.combat then
-					v.components.combat:GetAttacked(eater,68)
-				end
-			end
-		end
+local function BoomPieStopKnockback(inst, data)
+    if data and data.statename ~= "knockback" and inst.um_boomberrypietask then
+        inst.um_boomberrypietask:Cancel()
+        inst.um_boomberrypietask = nil
+    end
+    inst:RemoveEventCallback("newstate", BoomPieStopKnockback)
+end
 
-	end
+local pie_shouldnt_hit = {"FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "player"}
+local function BoomPieGo(inst, eater)
+    if eater and not (eater.components.health and eater.components.health:IsDead()) then
+        local x, y, z = eater.Transform:GetWorldPosition()
+        eater.Physics:SetCollisionMask(COLLISION.GROUND, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS) -- Can Launch yourself over gaps
+        eater.Physics:Teleport(x, y, z)
+        eater:PushEvent("knockback", {knocker = eater, radius = 6, strengthmult = 6})
+        eater:ListenForEvent("newstate", BoomPieStopKnockback)
+		eater.components.combat:GetAttacked(inst, 3)
+        eater.components.health:SetInvincible(true)
+
+        if eater.um_boomberrypietask then eater.um_boomberrypietask:Cancel() end
+        eater.um_boomberrypietask = eater:DoTaskInTime(10 * FRAMES, function(eater)
+            eater.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)        
+            eater.components.health:SetInvincible(false)
+            if eater.sg then
+                eater.sg.statemem.speed = -10
+                eater:DoTaskInTime(0, function()
+                    if eater.sg:HasState("sink_fast") and eater.components.drownable and eater.components.drownable:IsOverWater() then
+                        eater.sg:GoToState("sink_fast")
+                        eater.AnimState:SetFrame(70)
+                        SpawnPrefab("um_ocean_splash").Transform:SetPosition(eater.Transform:GetWorldPosition())
+                    end
+                end)
+            end
+            eater.um_boomberrypietask = nil
+            eater:RemoveEventCallback("newstate", BoomPieStopKnockback)
+        end)
+
+        SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
+        SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
+        local puddle = SpawnPrefab("blueberrypuddle")
+        puddle.Transform:SetPosition(x, y, z)        
+        puddle.playermade = true
+        puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+
+        local casualties = TheSim:FindEntities(x, y, z, 2, nil, pie_shouldnt_hit)
+        if #casualties > 0 then
+            for i, v in pairs(casualties) do
+                if v.components.combat and eater.components.combat:CanTarget(v) then
+                    v.components.combat:GetAttacked(eater, 68)
+                end
+            end
+        end
+    end
 end
 
 local um_preparedfoods =
@@ -188,7 +188,7 @@ local um_preparedfoods =
         oneat_desc = STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING,
         oneatenfn = function(inst, eater)
             if eater.components.hayfever and eater.components.hayfever.enabled then
-                eater.components.hayfever:SetNextSneezeTime(1920) --Should be four days			
+                eater.components.hayfever:SetNextSneezeTime(1920) --Should be four days            
             end
 
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -201,22 +201,22 @@ local um_preparedfoods =
     },
 
     --[[carapacecooler =
-	{
-		test = function(cooker, names, tags)
-			return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-				and names.iceboomerang and tags.sweetener
-		end,
-		hunger = 37.5,
-		health = 40,
-		sanity = 15,
-		priority = 30,
-		weight = 1,
-		cooktime = 0.5,
-		foodtype = FOODTYPE.VEGGIE,
-		perishtime = 2*TUNING.PERISH_TWO_DAY,
-		floater = {"small", nil, 0.6},
-		card_def = {ingredients = {{"iceboomerang", 1}, {"honey", 1}}},
-	},]]
+    {
+        test = function(cooker, names, tags)
+            return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
+                and names.iceboomerang and tags.sweetener
+        end,
+        hunger = 37.5,
+        health = 40,
+        sanity = 15,
+        priority = 30,
+        weight = 1,
+        cooktime = 0.5,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 2*TUNING.PERISH_TWO_DAY,
+        floater = {"small", nil, 0.6},
+        card_def = {ingredients = {{"iceboomerang", 1}, {"honey", 1}}},
+    },]]
 
     devilsfruitcake =
     {
@@ -344,12 +344,12 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-			if not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
-				Ghost(eater)
-				if eater.components.temperature then
-					eater.components.temperature:DoDelta(-40)
-				end
-			end
+            if not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
+                Ghost(eater)
+                if eater.components.temperature then
+                    eater.components.temperature:DoDelta(-40)
+                end
+            end
         end,
         floater = { "med", nil, 0.65 },
         card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 } } },
@@ -789,8 +789,6 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
         hunger = 37.5,
-        health = -3,
-        sanity = 0,
         priority = 30,
         weight = 1,
         cooktime = 2,

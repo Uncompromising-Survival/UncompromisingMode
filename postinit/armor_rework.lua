@@ -58,7 +58,7 @@ local armor_mappings = {
 }
 
 local function RemapAbsorption(self, absorb)
-    if not self.inst.prefab then return absorb end
+    if not self.inst.prefab or absorb == self.umabsorbremap then return absorb end
     local absorb_override = ARMOR_ABSORPTION_OVERRIDES[self.inst.prefab]
     if absorb_override then return absorb_override end
     for _, mapping in ipairs(armor_mappings) do
@@ -71,7 +71,10 @@ end
 
 env.AddPrefabPostInitAny(function(inst)
     local armor = inst.components.armor
-    if armor then armor:SetAbsorption(armor.absorb_percent) end
+    if armor then
+		armor:SetAbsorption(armor.absorb_percent)
+		armor.umabsorbremap = armor.absorb_percent
+	end
 end)
 
 env.AddComponentPostInit("armor", function(self)
@@ -88,5 +91,9 @@ env.AddComponentPostInit("armor", function(self)
     local _InitIndestructible = self.InitIndestructible
     function self:InitIndestructible(absorb_percent, ...)
         return _InitIndestructible(self, RemapAbsorption(self, absorb_percent), ...)
+    end
+
+    function self:UMOverrideAbsorption(absorb_percent)
+        return _SetAbsorption(self, absorb_percent)
     end
 end)
