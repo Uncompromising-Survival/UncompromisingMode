@@ -8,10 +8,10 @@ local firelevels =
 }
 
 local function Shrink(inst)
-	inst.scale = inst.scale - 0.015
-	inst.components.propagator.heatoutput = 12-(6-6*inst.scale)
-	inst.components.propagator.propagaterange = inst.proprange-(1-0.5*inst.scale)
-	inst.Transform:SetScale(inst.scale,inst.scale,inst.scale)
+	inst.scale = inst.scale - .015
+	inst.components.propagator.heatoutput = 12 - (6 - 6 * inst.scale)
+	inst.components.propagator.propagaterange = inst.proprange - (1 - .5 * inst.scale)
+	inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
 	if inst.scale < 0 then
 		inst:Remove()
 	end
@@ -19,14 +19,14 @@ end
 
 local function BurnSurroundings(inst)
 	local x,y,z = inst.Transform:GetWorldPosition()
-	local burnables = TheSim:FindEntities(x,0,z,inst.scale*2,nil,inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
+	local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
 	local damage = inst.damage or 1
 	for i,v in ipairs(burnables) do
 		if v.components.burnable then
 			v.components.burnable:Ignite()
 		end
 		if v.components.health then
-			v.components.health:DoFireDamage(inst.damage,inst.damager and inst.damager or nil,true)
+			v.components.health:DoFireDamage(inst.damage, inst.damager, true)
 		end
 		if v.components.combat and inst.damager then
 			v.components.combat:SuggestTarget(inst.damager)
@@ -41,16 +41,16 @@ end
 
 local function BeginScaleDown(inst)
 	inst:DoTaskInTime(inst.time,function(inst)
-		inst.Physics:SetMotorVel(0,0,0)
-		inst:DoPeriodicTask(FRAMES,Shrink)
+		inst.Physics:SetMotorVel(0, 0, 0)
+		inst:DoPeriodicTask(FRAMES, Shrink)
 	end)	
 end
 
 local function Grow(inst)
-	inst.scale = inst.scale + 0.03
-	inst.components.propagator.heatoutput = 12-(6-6*inst.scale)
-	inst.components.propagator.propagaterange = inst.proprange-(1-0.5*inst.scale)
-	inst.Transform:SetScale(inst.scale,inst.scale,inst.scale)
+	inst.scale = inst.scale + .03
+	inst.components.propagator.heatoutput = 12 - (6 - 6 * inst.scale)
+	inst.components.propagator.propagaterange = inst.proprange - (1 - .5 * inst.scale)
+	inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
 	if inst.scale > inst.scalemax then
 		inst.growing:Cancel()
 		inst.growing = nil
@@ -61,17 +61,16 @@ end
 
 local function BeginScaleUp(inst,time)
 	inst.scale = inst.scale/6
-	inst.Transform:SetScale(inst.scale,inst.scale,inst.scale)
+	inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
 	inst.growing = inst:DoPeriodicTask(FRAMES,Grow)
-	
 end
 
 local function Shoot(inst)
-	local speed = inst.speed ~= nil and inst.speed or 10
-	if inst.time == nil then
-		inst.time = 0.01
+	local speed = inst.speed or 10
+	if not inst.time then
+		inst.time = .01
 	end
-	local time_to_extinguish = inst.totaltime ~= nil and inst.totaltime or 6
+	local time_to_extinguish = inst.totaltime or 6
 	inst.Physics:SetMotorVel(speed, 0, 0)
 	MakeLargePropagator(inst)
 	inst.components.propagator.heatoutput = 12
@@ -81,13 +80,12 @@ local function Shoot(inst)
     inst.components.burnable:SetOnExtinguishFn(inst.Remove)
 	inst.components.burnable.fxdata[1].prefab = "character_fire"
     inst.components.burnable:Ignite()
-
 	if not inst.scale then
 		inst.scale = 1
 	end
 	inst.scalemax = inst.scale
 	BeginScaleUp(inst)
-	inst:DoPeriodicTask(FRAMES,BurnSurroundings)
+	inst:DoPeriodicTask(FRAMES, BurnSurroundings)
 end
 
 local function fn()
@@ -118,9 +116,9 @@ local function fn()
     end
 
     inst.Physics:SetMass(1)
-    inst.Physics:SetDamping(0.1)	
-	inst.Physics:SetFriction(0.3)
-	inst.Physics:SetRestitution(0.5)
+    inst.Physics:SetDamping(.1)	
+	inst.Physics:SetFriction(.3)
+	inst.Physics:SetRestitution(.5)
 	inst.Physics:SetCollisionGroup(COLLISION.ITEMS)
 	inst.Physics:SetCollisionMask(
 		COLLISION.WORLD,
@@ -128,8 +126,8 @@ local function fn()
 		COLLISION.SMALLOBSTACLES
 	)
 	
-	inst:DoTaskInTime(0,Shoot)
-	inst.dont_hit_tags = {}
+	inst:DoTaskInTime(0, Shoot)
+	inst.dont_hit_tags = {"INLIMBO"} -- When adding more tags elsewhere do this when creating this prefab, please. inst.dont_hit_tags = JoinArrays(inst.dont_hit_tags, yourtablehere)
 
     return inst
 end

@@ -18,27 +18,27 @@ SetSharedLootTable('um_pyre_nettles_1',
     })
 SetSharedLootTable('um_pyre_nettles_2',
     {
-        { 'firenettles', 0.75 }
+        { 'firenettles', .75 }
     })
 SetSharedLootTable('um_pyre_nettles_3',
     {
-        { 'firenettles', 0.75 },
-        { 'firenettles', 0.25 }
+        { 'firenettles', .75 },
+        { 'firenettles', .25 }
     })
 SetSharedLootTable('um_pyre_nettles_4',
     {
         { 'firenettles', 1.0 },
         { 'firenettles', 1.0 },
-        { 'firenettles', 0.75 },
-        { 'firenettles', 0.25 }
+        { 'firenettles', .75 },
+        { 'firenettles', .25 }
     })
 SetSharedLootTable('um_pyre_nettles_5',
     {
         { 'firenettles', 1.0 },
         { 'firenettles', 1.0 },
-        { 'firenettles', 0.75 },
-        { 'firenettles', 0.5 },
-        { 'firenettles', 0.25 }
+        { 'firenettles', .75 },
+        { 'firenettles', .5 },
+        { 'firenettles', .25 }
     })
 
 local function TrySpawnSpore(inst)
@@ -80,7 +80,6 @@ local function pyrenettle_bumped(inst,nextvictim)
 		if inst.stage ~= 1 then
 			inst.SoundEmitter:PlaySound("dontstarve/creatures/spider/spiderLair_hit")
 		end
-
         -- Apply debuff if it's a valid target.
         if not (nextvictim.components.health and nextvictim.components.health:IsDead()) and inst.stage > 1 then
             local DebuffDuration = inst.stage > 3 and 10 or 6
@@ -133,9 +132,9 @@ local function SetStage(inst)
 
     -- Flammability stage properties.
     inst.components.burnable:SetFXLevel(inst.stage > 3 and 3 or 2)
-    local multsize = 0.5 + (math.random() * 0.2)
+    local multsize = .5 + (math.random() * .2)
     if inst.stage ~= 1 then
-        multsize = 0.75 + (math.random() * 0.2)
+        multsize = .75 + (math.random() * .2)
         inst.components.pickable.canbepicked = true
     end
     inst.AnimState:SetScale(math.random() < .5 and -multsize or multsize, multsize, multsize)
@@ -147,7 +146,7 @@ local function QueueSetStage(inst)
 end
 
 local function OnGrow(inst)
-    local targetstage = inst.stage and math.clamp(inst.stage + 1, 1, 6) or 1
+    local targetstage = math.clamp(inst.stage + 1, 1, 6)
 	inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_grow", false)
 	inst.stage = targetstage
 	inst:ListenForEvent("animover", QueueSetStage)
@@ -155,7 +154,7 @@ local function OnGrow(inst)
 		SmallPyreNettleGrowthTimerReset(inst)
 	end
 	if inst.stage > 3 and not inst:IsAsleep() and not inst.sporetask then
-		inst.sporetask = inst:DoTaskInTime(math.random(10,20),ScheduledSpore) -- Cough sooner if we just grew
+		inst.sporetask = inst:DoTaskInTime(math.random(10, 20),ScheduledSpore) -- Cough sooner if we just grew
 	end
 end
 
@@ -203,7 +202,6 @@ local function OnLoad(inst, data)
         inst.stage = data.stage
 		inst.target_stage = data.target_stage
     end
-
     SetStage(inst)
 end
 
@@ -224,13 +222,15 @@ local function StageSpawner(name, SpawnAtStage)
         -- Stage setting
         if not inst.stage then
             inst.stage = SpawnAtStage
-			inst.target_stage = math.random(3,5)
+        end
+        if not inst.target_stage then
+            inst.target_stage = math.random(3, 5)
         end
 
         inst.AnimState:SetBank("um_pyre_nettles")
         inst.AnimState:SetBuild("um_pyre_nettles")
 
-        local multcolor = 0.85 + (math.random() * 0.15)
+        local multcolor = .85 + (math.random() * .15)
         inst.AnimState:SetMultColour(multcolor, multcolor, multcolor, 1)
 
         -- UM tags
@@ -300,6 +300,6 @@ local pyre_nettle_prefabs = {}
 for i = 1, 5 do
     table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles_stage_" .. i, i))
 end
-table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles", math.random(2,5)))
+table.insert(pyre_nettle_prefabs, StageSpawner("um_pyre_nettles", math.random(2, 5)))
 
 return unpack(pyre_nettle_prefabs)
