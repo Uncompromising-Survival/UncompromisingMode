@@ -23,7 +23,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 -- Exceptions can be made for specific armors to change their absorption values directly instead of
 -- using the armor_mappings table.
-local ARMOR_ABSORPTION_OVERRIDES = {
+ARMOR_ABSORPTION_OVERRIDES = {
     ["beehat"] = .7,
     ["armorruins"] = .8,
     ["shieldofterror"] = .75,
@@ -50,48 +50,29 @@ local ARMOR_ABSORPTION_OVERRIDES = {
 -- Lower bounds are exclusive while upper bounds are inclusive. For example, a Log Suit with a
 -- protection value of .8 will be lowered to .65, not .75.
 local armor_mappings = {
-    {min_val = .9, max_val = .95, new_absorb = .8},
-    {min_val = .85, max_val = .9, new_absorb = .75},
-    {min_val = .8, max_val = .85, new_absorb = .7},
-    {min_val = .7, max_val = .8, new_absorb = .65},
-    {min_val = .6, max_val = .7, new_absorb = .6},
+    { min_val = .9,  max_val = .95, new_absorb = .8 },
+    { min_val = .85, max_val = .9,  new_absorb = .75 },
+    { min_val = .8,  max_val = .85, new_absorb = .7 },
+    { min_val = .7,  max_val = .8,  new_absorb = .65 },
+    { min_val = .6,  max_val = .7,  new_absorb = .6 },
 }
 
--- Adjust armor protection values based on the above tables.
-env.AddPrefabPostInitAny(function(inst)
-    local armor = inst.components.armor
-    if armor then
-        -- If the armor is in the overrides table, prioritize using that protection value.
-        local absorb_override = ARMOR_ABSORPTION_OVERRIDES[inst.prefab]
-        if absorb_override then
-            armor:SetAbsorption(absorb_override)
-            armor.umabsorbremap = absorb_override
-            return
-        end
-        -- If the armor is not in the overrides table, automatically adjust the protection value
-        -- using the mapping table.
-        local absorb_percent = armor.absorb_percent
-        for _, mapping in ipairs(armor_mappings) do
-            if absorb_percent > mapping.min_val and absorb_percent <= mapping.max_val then
-                armor:SetAbsorption(mapping.new_absorb)
-                armor.umabsorbremap = mapping.new_absorb
-                return
-            end
+local function RemapAbsorption(self, absorb)
+    if not self.inst.prefab then return absorb end
+    local absorb_override = ARMOR_ABSORPTION_OVERRIDES[self.inst.prefab]
+    if absorb_override then return absorb_override end
+    for _, mapping in ipairs(armor_mappings) do
+        if absorb > mapping.min_val and absorb <= mapping.max_val then
+            return mapping.new_absorb
         end
     end
-end)
-
-local function RemapAbsorption(self, absorb)
-    if absorb < 1 and self.umabsorbremap then return self.umabsorbremap end
-	--[[if absorb < 1 then
-		for _, mapping in ipairs(armor_mappings) do
-			if absorb > mapping.min_val and absorb <= mapping.max_val then
-				return mapping.new_absorb
-			end
-		end
-	end]]
-	return absorb
+    return absorb
 end
+
+env.AddPrefabPostInitAny(function(inst)
+    local armor = inst.components.armor
+    if armor then armor:SetAbsorption(armor.absorb_percent) end
+end)
 
 env.AddComponentPostInit("armor", function(self)
     local _SetAbsorption = self.SetAbsorption
