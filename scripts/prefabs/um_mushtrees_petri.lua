@@ -55,13 +55,13 @@ local function DetermineSize(inst)
 		scale = inst.transformSize
 	else
 		if inst.prefab == "um_redmushtree_gem" or inst.prefab == "um_redmushtree_gemless" then
-			scale = math.random(1.1,1.4)
+			scale = math.random(11,14)/10
 		end
 		if inst.prefab == "um_greenmushtree_gemless" or inst.prefab == "um_greenmushtree_gem" then
-			scale = math.random(0.9,1.1)
+			scale = math.random(9,11)/10
 		end
 		if inst.prefab == "um_bluemushtree_gemless" or inst.prefab == "um_bluemushtree_gem" then
-			scale = math.random(0.9,1.2)
+			scale = math.random(9,12)/10
 		end
 		inst.scale = scale
 	end

@@ -322,15 +322,34 @@ local cant_be_proto = {
 }
 
 local function MakeClear2(self,tier) -- Scale up the durability, items that cannot be prototyped or learned have additional chances to not break
-	self.enchantnum = 6
+	
+	
+	
+	local inst = self.inst
+	if not self.adamant then
+		if inst.components.finiteuses then
+			local pct = inst.components.finiteuses:GetPercent()
+			local total = inst.components.finiteuses.total
+			inst.components.finiteuses:SetMaxUses(total*(1+tier))
+			inst.components.finiteuses:SetPercent(pct)
+		end
+		if inst.components.fueled then -- Future, there are other items that fall into this category that cannot be learned or prototyped
+			local pct = inst.components.fueled:GetPercent()
+			local total = inst.components.fueled.maxfuel
+			inst.components.fueled:SetPercent(pct*total*(1+tier))
+		end
+		if inst.components.perishable then -- it *might* work on the hambat, doesn't seem certain though
+			local pct = inst.components.perishable:GetPercent()
+			inst.components.perishable.perishtime = inst.components.perishable.perishtime*(1+tier)
+			inst.components.perishable:SetPercent(pct)
+		end
+	end
+	
 	self.adamant = true
+	self.enchantnum = 6
 	
 	local inst = self.inst
 	if inst.components.finiteuses then
-		local pct = inst.components.finiteuses:GetPercent()
-		local total = inst.components.finiteuses.total
-		inst.components.finiteuses:SetMaxUses(total*(1+tier))
-		inst.components.finiteuses:SetPercent(pct)
 		if tier ~= 1 then
 			for i,v in ipairs(cant_be_proto) do
 				if v == inst.prefab then
@@ -345,16 +364,7 @@ local function MakeClear2(self,tier) -- Scale up the durability, items that cann
 			end
 		end
 	end
-	if inst.components.fueled then -- Future, there are other items that fall into this category that cannot be learned or prototyped
-		local pct = inst.components.fueled:GetPercent()
-		local total = inst.components.fueled.maxfuel
-		inst.components.fueled:SetPercent(pct*total*(1+tier))
-	end
-	if inst.components.perishable then -- it *might* work on the hambat, doesn't seem certain though
-		local pct = inst.components.perishable:GetPercent()
-		inst.components.perishable.perishtime = inst.components.perishable.perishtime*(1+tier)
-		inst.components.perishable:SetPercent(pct)
-	end
+	
 end -- Todo, make these scale back if we go for chaotic emerald swapping daily, the way you would do it is by grabbing the old maximum values and saving them, for when chaotic emerald to switch, it goes back to the old version, this would require saving/loading the variables as well
 
 ------------------
@@ -641,7 +651,9 @@ local function MakeBlue1(self,tier)
 	
 	local inst = self.inst
 	inst.tier = tier	
-	inst:AddComponent("insulator")
+	if not inst.components.insulator then
+		inst:AddComponent("insulator")
+	end
 	inst.components.insulator:SetSummer()
 	inst.components.insulator:SetInsulation(TUNING.INSULATION_SMALL*tier) -- A bit too easy...
 end
@@ -667,6 +679,8 @@ end
 local function ConvertToPerishable(inst)
 	local pct = 1
 	local maxval = 10
+	
+	local was_perishable 
 	if inst.components.finiteuses then
 		pct = inst.components.finiteuses:GetPercent()
 		maxval = inst.components.finiteuses.total
@@ -677,14 +691,17 @@ local function ConvertToPerishable(inst)
 		maxval = inst.components.fueled.maxfuel
 		inst:RemoveComponent("fueled")	
 	end
-	if inst.components.perishable and inst.tier ~= 1 then
+	if inst.components.perishable then
+		was_perishable = true
 		pct = inst.components.perishable:GetPercent()
-		maxval = inst.components.perishtime
-		maxval = maxval*((1+inst.tier)*0.5)
+		maxval = inst.components.perishable.perishremainingtime
+		if inst.tier ~= 1 then
+			maxval = maxval*((1+inst.tier)*0.5)
+		end
 	elseif not inst.components.perishable then
 		inst:AddComponent("perishable")
 	end
-	inst.components.perishable:SetPerishTime(maxval*inst.tier*5)
+	inst.components.perishable:SetPerishTime(maxval*inst.tier*(was_perishable and 1 or 5))
 	inst.components.perishable:StartPerishing()
 	inst.components.perishable.onperishreplacement = "spoiled_food"
 	inst.components.perishable:SetPercent(pct)
@@ -699,11 +716,15 @@ end
 
 local function MakeBlue2(self,tier)
 	self.enchantnum = 14
-	self.chilling = true
+
 	
 	local inst = self.inst
 	inst.tier = tier
-	ConvertToPerishable(inst)
+	
+	if not self.chilling then
+		ConvertToPerishable(inst)
+	end
+	self.chilling = true
 end
 
 
@@ -800,7 +821,7 @@ local function MakeChaos(self,tier)
 	self.making_chaos = true -- to prevent repeated definitions of the old onhit
 	local inst = self.inst
 	inst.tier = tier
-	local enchants = {"um_gemologygreengem1","um_gemologyyellowgem1","um_gemologyyellowgem2","um_gemologypalegem1","um_gemologypalegem2","um_gemologyredgem1","um_gemologyredgem2","um_gemologypurplegem1","um_gemologypurplegem2","um_gemologyorangegem1","um_gemologybluegem1"}
+	local enchants = {"um_gemologygreengem1","um_gemologyyellowgem1","um_gemologyyellowgem2","um_gemologypalegem1","um_gemologyredgem1","um_gemologyredgem2","um_gemologypurplegem1","um_gemologypurplegem2","um_gemologyorangegem1","um_gemologybluegem1"}
 	for i = 1,3 do
 		local indx = math.random(1,#enchants)
 		self:SetEnchant(enchants[indx],tier)

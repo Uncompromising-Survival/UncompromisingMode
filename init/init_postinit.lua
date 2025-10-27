@@ -69,7 +69,8 @@ local component_post = {
 	"beargerspawner",
 	"floater",
 	"temperature",
-    "playercontroller"
+    "playercontroller",
+	"possessedaxe"
 }
 
 local prefab_post = {
@@ -238,9 +239,8 @@ local prefab_post = {
     "lightning_rod",
     "antlionhat",
     "ice_shield_piercing",
-	"bullkelp_root",
+	"bullkelp_root"
 	--"balatro_machine", -- Keeping this here for Later.
-	"lucy"
 
 }
 
