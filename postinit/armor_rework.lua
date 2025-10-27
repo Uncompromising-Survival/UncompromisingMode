@@ -82,7 +82,7 @@ env.AddPrefabPostInitAny(function(inst)
 end)
 
 local function RemapAbsorption(self, absorb)
-    if self.umabsorbremap then return self.umabsorbremap end
+    if absorb < 1 and self.umabsorbremap then return self.umabsorbremap end
 	--[[if absorb < 1 then
 		for _, mapping in ipairs(armor_mappings) do
 			if absorb > mapping.min_val and absorb <= mapping.max_val then
