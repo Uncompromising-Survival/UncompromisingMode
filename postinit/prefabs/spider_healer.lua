@@ -23,6 +23,5 @@ end
 
 env.AddPrefabPostInit("spider_healer", function(inst)
     if not TheWorld.ismastersim then return end
-
     SpiderHealerFunctions(inst)
 end)
