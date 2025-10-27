@@ -92,7 +92,7 @@ env.AddStategraphPostInit("spider", function(inst)
         end
     end
 
-    -- Remove when Klei fixes this!
+    --[[ Max, go fix the frame data thing.
     local healstate = inst.states["heal"]
     if healstate then
         local healstate_onenter = inst.states["heal"].onenter
@@ -101,7 +101,7 @@ env.AddStategraphPostInit("spider", function(inst)
             inst.SoundEmitter:PlaySound("webber1/creatures/spider_cannonfodder/heal") -- Missing Content Fix!
             return ret
         end
-    end
+    end]]
     --
 
     --[[local events =
