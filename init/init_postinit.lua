@@ -207,6 +207,7 @@ local prefab_post = {
     "cookiecutter",
     "seastack", --loot changes
     "antlionhat",
+    "spiderqueen"
 }
 
 local stategraph_post = {
@@ -374,8 +375,8 @@ if GetModConfigData("harder_beefalo") then
     table.insert(stategraph_post, "Beefalo")
 end
 
-if GetModConfigData("harder_spider_queen") then
-    table.insert(prefab_post, "spiderqueen")
+if TUNING.DSTU.HARDER_SPIDERQUEEN then
+    --table.insert(prefab_post, "spiderqueen")
     table.insert(stategraph_post, "spiderqueen")
 end
 

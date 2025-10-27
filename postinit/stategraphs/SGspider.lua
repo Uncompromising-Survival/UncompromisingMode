@@ -18,24 +18,21 @@ env.AddStategraphPostInit("spider", function(inst)
         return "dontstarve/creatures/" .. creature .. "/" .. event
     end
 
-    local _OldAttackEvent = inst.events["doattack"] ~= nil and inst.events["doattack"].fn or nil
+    local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
-        inst.events["doattack"].fn = function(inst, data)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) and inst:HasTag("spider_regular") then
-                inst.sg:GoToState(
-                    data.target:IsValid()
-                    and
-                    not
-                    (
-                    inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) or
-                        (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular")))
-                    and "warrior_attack" --Do leap attack
-                    or "attack",
-                    data.target
-                )
-            else
-                _OldAttackEvent(inst, data)
+        inst.events["doattack"].fn = function(inst, data, ...)
+            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
+                if inst:HasTag("spider_regular") then
+                    inst.sg:GoToState(data.target:IsValid() and not (inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
+                        or (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular"))) and "warrior_attack" or "attack", data.target) -- Do leap attack
+                    return
+                end
+                if inst:HasTag("trapdoorspider") then
+                    inst.sg:GoToState(data.target:IsValid() and not inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE) and "trapdoor_attack" or "attack", data.target)
+                    return
+                end
             end
+            return _OldAttackEvent(inst, data, ...)
         end
     end
 
@@ -54,6 +51,17 @@ env.AddStategraphPostInit("spider", function(inst)
             _OldAttackedEvent(inst)
         end
     end
+
+    --[[ Come back to this to fix the frame data of the sound.
+    local healstate = inst.states["heal"]
+    if healstate then
+        local healstate_onenter = inst.states["heal"].onenter
+        healstate.onenter = function(inst, target, ...)
+            local ret = healstate_onenter(inst, target, ...)
+            inst.SoundEmitter:PlaySound("webber1/creatures/spider_cannonfodder/heal") -- Missing Content Fix!
+            return ret
+        end
+    end]]
 
     --[[local events =
 {	
@@ -107,50 +115,45 @@ env.AddStategraphPostInit("spider", function(inst)
     
 }]]
 
-    local states = {
-
-        --[[State{
-        name = "warrior_attack",
-        tags = {"attack", "canrotate", "busy", "jumping"},
-
-        onenter = function(inst, target)
-            inst.components.locomotor:Stop()
-            inst.components.locomotor:EnableGroundSpeedMultiplier(false)
-
-            inst.components.combat:StartAttack()
-            inst.AnimState:PlayAnimation("warrior_atk")
-            inst.sg.statemem.target = target
-        end,
-
-        onexit = function(inst)
-            inst.components.locomotor:Stop()
-            inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-            inst.Physics:ClearMotorVelOverride()
-        end,
-
-        timeline =
-        {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt")) end),
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Jump")) end),
-            TimeEvent(8*FRAMES, function(inst) inst.Physics:SetMotorVelOverride(20,0,0) end),
-            TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Attack")) end),
-            --TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
-            TimeEvent(20*FRAMES,
-                function(inst)
-					inst.components.combat:DoAttack(inst.sg.statemem.target)
+    local states =
+    {
+        State{
+            name = "trapdoor_attack",
+            tags = {"attack", "canrotate", "busy", "jumping"},
+    
+            onenter = function(inst, target)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(false)
+    
+                inst.components.combat:StartAttack()
+                inst.AnimState:PlayAnimation("trapdoor_atk")
+                inst.sg.statemem.target = target
+            end,
+    
+            onexit = function(inst)
+                inst.components.locomotor:Stop()
+                inst.components.locomotor:EnableGroundSpeedMultiplier(true)
+                inst.Physics:ClearMotorVelOverride()
+            end,
+    
+            timeline =
+            {
+                TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "attack_grunt")) end),
+                TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Jump")) end),
+                TimeEvent(8*FRAMES, function(inst) inst.Physics:SetMotorVelOverride(20,0,0) end),
+                TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound(SoundPath(inst, "Attack")) end),
+                TimeEvent(19*FRAMES, function(inst) inst.components.combat:DoAttack(inst.sg.statemem.target) end),
+                TimeEvent(20*FRAMES, function(inst)
                     inst.Physics:ClearMotorVelOverride()
                     inst.components.locomotor:Stop()
                 end),
-        },
-
-        events=
-        {
-            EventHandler("animover", 
-			function(inst) 
-			inst.sg:GoToState("taunt")
-			end),
-        },
-    },
+            },
+    
+            events =
+            {
+                EventHandler("animover", function(inst) inst.sg:GoToState("taunt") end),
+            },
+    },--[[
 	State{
         name = "taunt",
         tags = {"busy","taunting"},
