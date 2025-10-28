@@ -96,9 +96,9 @@ local COLLAPSIBLE_TAGS = { "frozen" --[[ for "ice" ]], "player", "pickable", "NP
 for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
     table.insert(COLLAPSIBLE_TAGS, k .. "_workable")
 end
-local NON_COLLAPSIBLE_TAGS = { "hound", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "groundspike" }
+local NON_COLLAPSIBLE_TAGS = { "hound", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "groundspike", "trap" }
 local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
-local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO" }
+local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO", "trap" }
 
 local function DoDamage(inst)
     inst.dmgtask = nil

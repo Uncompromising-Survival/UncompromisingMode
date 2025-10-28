@@ -13,6 +13,8 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
 
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
 
+AllRecipes["spicepack"].ingredients = { Ingredient("pigskin", 2), Ingredient("silk", 4), Ingredient("nitre", 4) }
+
 if GetModConfigData("longpig") then
     AllRecipes["reviver"].ingredients = {
         Ingredient("skeletonmeat", 1),
