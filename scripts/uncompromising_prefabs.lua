@@ -25,7 +25,7 @@ local prefabs = {
     "firemeteorwarning",
     "antlionwarning",
     "gasmask",
-    "spiderqueencorpse",
+    "um_spiderqueencorpse",
     "lavae2",
     "mock_monsterwarningsounds",
     "mock_dragonfly",
