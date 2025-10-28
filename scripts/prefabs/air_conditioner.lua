@@ -166,26 +166,26 @@ local function SmokePuff(inst, channeler)
 				air_conditioner_cloud.green = numgreencaps
 			end
 			for i, v in ipairs(bluecaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 
 			for i, v in ipairs(redcaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 
 			for i, v in ipairs(greencaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 		end
