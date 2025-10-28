@@ -335,7 +335,7 @@ for i,color in ipairs(colors) do
 						
 		inst.components.equippable:SetOnEquip(OnEquip)
 		inst.components.equippable:SetOnUnequip(OnUnequip)
-		
+		inst.components.insulator:SetInsulation(TUNING.INSULATION_LARGE)			
 		
 		
 		-- Robust Save/Load inclusion.
