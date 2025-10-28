@@ -9,7 +9,7 @@ end
 local _version = "1.7.6.9.1"
 
 description = [[
-    󰀔 [ "Ghosts of the Past (for now)"  (Beta ver: v]] .. _version .. [[)]
+    󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
 Uncompromising Mode is like a potluck.
 
 Latest update features:
