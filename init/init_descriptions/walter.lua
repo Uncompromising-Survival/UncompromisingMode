@@ -95,8 +95,8 @@ DESCRIBE.TOADLING =
 DESCRIBE.GASMASK = "Smelly safety first!"
 DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
 DESCRIBE.MOTHERGOOSE = DESCRIBE.MOOSE
-DESCRIBE.SPIDERQUEENCORPSE =
-    "I think the spiders will manage fine without a queen."
+DESCRIBE.UM_SPIDERQUEENCORPSE =
+"I think the spiders will manage fine without a queen."
 ANNOUNCE.ANNOUNCE_SNEEZE = "ooAaaAGH-CHU!"
 ANNOUNCE.ANNOUNCE_HAYFEVER = "My allergies are acting up again!"
 ANNOUNCE.ANNOUNCE_HAYFEVER_OFF = "Back to my regular level of allergies."

@@ -132,4 +132,4 @@ local function fn()
     return inst
 end
 
-return Prefab("spiderqueencorpse", fn, assets, prefabs)
+return Prefab("um_spiderqueencorpse", fn, assets, prefabs)

@@ -89,7 +89,7 @@ DESCRIBE.GASMASK =
 "Ah, this will be a refreshing new look!"
 DESCRIBE.MOCK_DRAGONFLY = DESCRIBE.DRAGONFLY
 DESCRIBE.MOTHERGOOSE = DESCRIBE.MOOSE
-DESCRIBE.SPIDERQUEENCORPSE =
+DESCRIBE.UM_SPIDERQUEENCORPSE =
 "It's only a matter of time before something worse happens..."
 ANNOUNCE.ANNOUNCE_SNEEZE = "Auuchoo! My goodness!"
 ANNOUNCE.ANNOUNCE_HAYFEVER = "Allergies... I dread this time of year."
