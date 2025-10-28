@@ -6,23 +6,25 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.1.0"
+local _version = "1.5.2.0"
 description = [[
 󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- Implemented work in progress skilltrees for Wixie.
-- Added updated functionality and options for Walter (mostly Woby).
-- Reworked the Feather Frock to block flat amounts of damage using feathers.
+- Implemented icons for Wixie's Skill Tree.
+- Firecracker Rounds no longer hitstuns enemies, but deal normal damage to bosses.
+- New Tooltips for all new Wixie craftables, with a new bow icon.
+- New recipe for crafting Woby Snacks with Small Monster Jerky.
+- Tons of fixes for Wixie, UM Walter & Woby, and other general fixes.
+- Buffed the loot dropped from a few special spiders.
 
-󰀏 NEXT UPDATE: ?????? ?? ??? ????]]
+󰀏 NEXT UPDATE: ?? ??? ?o??s]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
 version = "Under the Weather Pt.1 v" .. _version
-
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
 
