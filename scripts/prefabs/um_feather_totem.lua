@@ -148,6 +148,7 @@ local function fn()
     inventoryitem.keepondeath = true
     inventoryitem.cangoincontainer = true
     inventoryitem.canonlygoinpocket = true
+    inst.replica.inventoryitem:OverrideImage("screecher_trinket")
 
     inst:AddComponent("container")
     inst.components.container:WidgetSetup("um_feather_totem")
