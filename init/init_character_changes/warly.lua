@@ -48,7 +48,7 @@ if TUNING.DSTU.WARLY_BUTCHER then
 	end
 end]]
 
-    if TUNING.DSTU.WARLY_FOOD_TASTE then
+    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
         local function oneat(inst, data)
             local food = data.food
             if food and food.components.edible then
@@ -99,18 +99,20 @@ end)]]
 
 
 env.AddPrefabPostInit("spicepack", function(inst)
-    inst:RemoveTag("backpack")
-    inst:AddTag("portablestorage")
+    if TUNING.DSTU.WARLY_CHANGES == 1 then
+        inst:RemoveTag("backpack")
+        inst:AddTag("portablestorage")
 
-    if not TheWorld.ismastersim then return end
+        if not TheWorld.ismastersim then return end
 
-    inst:RemoveComponent("equippable")
+        inst:RemoveComponent("equippable")
 
-    inst.components.inventoryitem.cangoincontainer = true
-    inst.components.inventoryitem.canonlygoinpocket = true
+        inst.components.inventoryitem.cangoincontainer = true
+        inst.components.inventoryitem.canonlygoinpocket = true
 
-    --inst.components.container.restrictedtag = "masterchef"
-    inst.components.container.skipclosesnd = true
-    inst.components.container.skipopensnd = true
-    inst.components.container.droponopen = true
+        --inst.components.container.restrictedtag = "masterchef"
+        inst.components.container.skipclosesnd = true
+        inst.components.container.skipopensnd = true
+        inst.components.container.droponopen = true
+    end
 end)

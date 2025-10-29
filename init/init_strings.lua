@@ -146,13 +146,9 @@ end
 if GetModConfigData("wolfgang") then
     STRINGS.CHARACTER_DESCRIPTIONS.wolfgang = "󰀕Stronger on a full belly\n󰀕Grows mightier when fed and calm\n󰀕Is quite the showboat\n*Is afraid of monsters and the dark"
 end
-if GetModConfigData("warly_food_taste_") then
+if GetModConfigData("warly_changes") ~= 0 then
     STRINGS.CHARACTER_DESCRIPTIONS.warly = STRINGS.CHARACTER_DESCRIPTIONS.warly ..
-        "\n󰀕Absorbs nutrients better...\n󰀕But prefers more variety"
-end
-if GetModConfigData("warly_butcher_") then
-    STRINGS.CHARACTER_DESCRIPTIONS.warly = STRINGS.CHARACTER_DESCRIPTIONS.warly ..
-        "\n󰀕Is a certified butcher"
+        "\n󰀕Absorbs nutrients better...\n󰀕But prefers more variety\n󰀕Is a certified butcher"
 end
 if GetModConfigData("winonaworker") then
     STRINGS.CHARACTER_DESCRIPTIONS.winona = STRINGS.CHARACTER_DESCRIPTIONS.winona .. "\n󰀕Works hard until lunch"

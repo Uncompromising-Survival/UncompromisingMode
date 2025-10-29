@@ -117,7 +117,7 @@ local function DoDamage(inst)
             else
                 --TODO: Make not destroy for glacial hound?
                 local isworkable = false
-                if v.components.workable then
+                if v.components.workable and not v:HasTag("wall") then
                     local work_action = v.components.workable:GetWorkAction()
                     --V2C: nil action for NPC_workable (e.g. campfires)
                     --     allow digging spawners (e.g. rabbithole)

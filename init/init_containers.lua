@@ -797,17 +797,18 @@ containers.params.um_inkubator =
     itemtestfn = CheckInkubator,
 }
 
-containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
-containers.params.spicepack.itemtestfn = function(container, item, slot)
-    for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
-        if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
+if TUNING.DSTU.WARLY_CHANGES == 1 then
+    containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
+    containers.params.spicepack.itemtestfn = function(container, item, slot)
+        for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
+            if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
+        end
+    end
+
+    for k, v in pairs(containers.params.spicepack.widget.slotbg) do
+        containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
     end
 end
-
-for k, v in pairs(containers.params.spicepack.widget.slotbg) do
-    containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
-end
-
 
 -- Polar Bearger Bin dried jerky change
 vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
