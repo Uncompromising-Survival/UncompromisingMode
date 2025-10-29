@@ -96,7 +96,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
     BEAKBASHER = "- Is a darn good hammer.",
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
-
+    UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 

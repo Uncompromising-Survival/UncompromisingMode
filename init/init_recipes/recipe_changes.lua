@@ -10,7 +10,6 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
     Ingredient("moonglass", 5)
 }
 
-
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
 
 if TUNING.DSTU.WARLY_CHANGES == 1 then

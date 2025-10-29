@@ -502,6 +502,60 @@ modparams.wingsuit =
     type = "hand_inv",
 }
 
+modparams.um_feather_totem =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(-(64 + 12), 0, 0),
+            Vector3(0, 0, 0),
+            Vector3(64 + 12, 0, 0),
+        },
+        slotbg =
+        {
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+        },
+        animbank = "ui_beard_3x1",
+        animbuild = "ui_beard_3x1",
+        pos = Vector3(0, 220, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+    --usespecificslotsforitems = true,
+    acceptsstacks = false,
+    --lowpriorityselection = true,
+   -- excludefromcrafting = false,
+}
+
+--[[{
+    widget =
+    {
+        slotpos = {},
+        slotbg  = {},
+        animbank  = "ui_icepack_2x3",
+        animbuild = "ui_icepack_2x3",
+        pos = Vector3(75, 195, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+}
+
+for y = 0, 2 do
+    for x = 0, 1 do
+        table.insert(params.beargerfur_sack.widget.slotpos, Vector3(-163 + (75 * x),   -75 * y + 73,   0))
+        table.insert(params.beargerfur_sack.widget.slotbg, { image = "preparedfood_slot.tex", atlas = "images/hud2.xml" })
+    end
+end]]
+
+modparams.um_feather_totem.itemtestfn = CheckFeather
+
+--[[for k, v in pairs(modparams.um_feather_totem.widget.slotbg) do
+    modparams.um_feather_totem.widget.slotbg[k] = { image = "feather_slot.tex", atlas = "images/feather_slot.xml" }
+end]]
+
 modparams.corvushat =
 {
     widget =
