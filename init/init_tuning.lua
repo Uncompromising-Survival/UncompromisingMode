@@ -428,6 +428,7 @@ TUNING.DSTU = {
     CANEDURABILITY = GetModConfigData("canedurability"),
     --AC_COOLING = GetModConfigData("ac_does_ac"),
     HARDER_SPIDERQUEEN = GetModConfigData("harder_spider_queen"),
+    HARDER_MOOSE = GetModConfigData("harder_moose"),
     GLASSCUTTER_REVERT = GetModConfigData("celestialitems_revert"),
     FUNCAP_REWORK = GetModConfigData("funcap_fun"),
 
