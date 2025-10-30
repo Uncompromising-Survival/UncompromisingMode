@@ -36,7 +36,6 @@ ARMOR_ABSORPTION_OVERRIDES = {
     ["lunarplanthat"] = .7,
     ["armor_lunarplant"] = .7,
     ["armor_lunarplant_husk"] = .7,
-    ["slurtlehat"] = .7,
     ["um_armor_bramble_rimeweed"] = .7,
 
     -- Island Adventures
