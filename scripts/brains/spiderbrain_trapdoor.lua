@@ -113,6 +113,10 @@ local function CheckForWebber(itsame)
 	return false
 end
 
+local function HasTarget(inst)
+    return inst.components.combat.target
+end
+
 function SpiderBrain_TrapDoor:OnStart()
     local root =
         PriorityNode(
@@ -131,7 +135,7 @@ function SpiderBrain_TrapDoor:OnStart()
 			
 			WhileNode(function() return CanAttackNow(self.inst) end, "AttackMomentarily", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
 			WhileNode(function() return CheckForWebber(self.inst) and not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, "scarytoprey", 4, 8)),
-			WhileNode(function() return not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, RUN_AWAY_PARAMS, 8, 12)),
+			WhileNode(function() return HasTarget(self.inst) and not Attacking(self.inst) and not Taunting(self.inst) end, "AmIBusyAttacking", RunAway(self.inst, RUN_AWAY_PARAMS, 8, 12)),
 			--WhileNode(function() return CanAttackNow(self.inst) end, "ReadyToAttack", ChaseAndAttack(self.inst, MAX_CHASE_TIME)),
 			
             DoAction(self.inst, function() return EatFoodAction(self.inst) end ),
