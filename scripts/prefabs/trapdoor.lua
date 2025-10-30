@@ -49,7 +49,14 @@ local function OpenMound(inst,child)
     inst.AnimState:PushAnimation("flip_close")
     inst.AnimState:PushAnimation("idle")
     if math.random() > 0.99 and TUNING.DSTU.DATES.APRIL_FOOLS then
-        SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+        if math.random() > 0.5 then
+            SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+        elseif math.random() > 0.5 then
+            child.SoundEmitter:PlaySound("UMMusic2/sounds/sus")
+        else
+            SpawnPrefab("balloonparty_confetti_cloud").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            child.SoundEmitter:PlaySound("UMMusic2/sounds/sus")
+        end
     end
 end
 

@@ -102,7 +102,8 @@ if GetModConfigData("um_music", true) then
     AddPrefabPostInit("twinofterror2", function(inst)
 	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
     end)
-    RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", "UMMusic/music/uncomp_char_select")
+    local track = math.random() > .01 and "UMMusic2/music/uncomp_char_select2" or "UMMusic/music/uncomp_char_select" -- Change chances to 50/50 later.
+    RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", track)
     RemapSoundEvent("dontstarve/music/music_FE", "UMMusic/music/uncomp_main_menu")
 end
 AddShardModRPCHandler("UncompromisingSurvival", "Hayfever_Stop", function() GLOBAL.TheWorld:PushEvent("beequeenkilled") end)
