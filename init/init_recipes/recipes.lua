@@ -605,3 +605,7 @@ ChangeSortKey("oar_monkey", "oar_driftwood", "SEAFARING", true)
 
 AddRecipe2("woby_treat_small", { Ingredient("monstersmallmeat_dried", 2) }, TECH.NONE, { product = "woby_treat", builder_skill = "walter_camp_wobytreat", no_deconstruction = true}, { "CHARACTER" })
 ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
+
+AddRecipe2("um_feather_totem", {Ingredient("boards", 1),  Ingredient("um_moss", 3), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15)}, TECH.MAGIC_TWO, {image="screecher_trinket.tex"}, {"RESTORATION", "MAGIC"})
+ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
+ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)

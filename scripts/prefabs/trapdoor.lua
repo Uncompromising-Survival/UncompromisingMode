@@ -292,8 +292,6 @@ local function fn2()
 
     inst.SummonChildren = SummonChildren
 
-	
-	
     MakeMediumPropagator(inst)
     inst:DoTaskInTime(0, Init)
 

@@ -289,7 +289,7 @@ configuration_options = {
         "Holding Bernie prevents shadows from aggroing.", true),
     BinaryConfig("wendy", "Wendy", "Petals inside Sisturn decay into Mourning Glory.", true),
     BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),
-    BinaryConfig("wxless", "WX Rework",
+    BinaryConfig("wxless", "WX-78 - Rework",
         "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
     BinaryConfig("wxlessspeedbump", "WX Speed circuit collision",
         "Enable to make reworked WX not bump into mobs with speed circuits", false),
@@ -353,7 +353,7 @@ configuration_options = {
 
         default = 1
     },
-    BinaryConfig("wolfgang", "Wolfgang Rework", "Wolfgang has a new skill tree, and mightiness is now a resource you spend to use special abilities.", true),
+    BinaryConfig("wolfgang", "Wolfgang - Rework", "Wolfgang has a new skill tree, and mightiness is now a resource you spend to use special abilities.", true),
     BinaryConfig("winonaworker", "Winona - Faster Working",
         "Winona now scales her work/picking efficiency, and tool/weapon durability, off of her hunger level. Drains hunger when taking actions.",
         true),
@@ -363,12 +363,23 @@ configuration_options = {
         "Gives Winona a toolbox, Electrical Upgrade Kit and Powercells.", true),
     BinaryConfig("toolbox_tools", "Winona - Toolbox", "Allows tools to go in the Contraption Container.", false),
     BinaryConfig("winona_overcharging", "Winona - Overcharging", "Winona can overcharge several different items to further enhance their effects.", true),
-    BinaryConfig("warly_butcher_", "Warly - Butchering",
+    {
+        name = "warly_changes",
+        label = "Warly",
+        hover = "Extra stats from food, longer memory, harsher repeat penatlies, extra loot from inventory kills, and a rework to the Chef Pouch.",
+        options = {
+            { description = "Enabled",  data = 1, hover = "All changes enabled." },
+            { description = "- Chef Pouch",   data = 2, hover = "Reverts Chef Pouch to be a backpack again, instead of an inventory container.\nAll other Warly changes still apply." },
+            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
+
+        default = 1
+    },
+    --[[BinaryConfig("warly_butcher_", "Warly - Butchering",
         "Warly is a certified butcher, he will get more resources from kills in his inventory.",
         true),
     BinaryConfig("warly_food_taste_", "Warly - Food Taste",
         "Warly gets increased stats from food, like Singleplayer. However, he remembers foods for 3 days instead of 2.",
-        true),
+        true),]]
     BinaryConfig("wortox", "Wortox",
         "A laundry list of Wortox changes, new skills.",
         true),

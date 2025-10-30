@@ -54,17 +54,15 @@ env.AddStategraphPostInit("moose", function(inst)
     end
     
     local attackstate = inst.states["attack"]
-    if attackstate then
-        local attackstate_timeline4 = inst.states["attack"].timeline[4]
-        if attackstate_timeline4 then
-            local attackstate_timeline4_fn = inst.states["attack"].timeline[4].fn
-            inst.states["attack"].timeline[4].fn = function(inst, ...)
-                local ret = attackstate_timeline4_fn(inst, ...)
-                if inst:HasTag("mothergoose") and inst.components.health:GetPercent() <= .66 and not inst.components.timer:TimerExists("TornadoAttack") then
-                    inst.components.timer:StartTimer("TornadoAttack", 20)
-                end
-                return ret
+    local attackstate_timeline4 = attackstate and attackstate.timeline[4]
+    if attackstate_timeline4 then
+        local attackstate_timeline4_fn = attackstate_timeline4.fn
+        attackstate_timeline4.fn = function(inst, ...)
+            local ret = attackstate_timeline4_fn(inst, ...)
+            if inst:HasTag("mothergoose") and inst.components.health:GetPercent() <= .66 and not inst.components.timer:TimerExists("TornadoAttack") then
+                inst.components.timer:StartTimer("TornadoAttack", 20)
             end
+            return ret
         end
     end
 
@@ -93,7 +91,7 @@ env.AddStategraphPostInit("moose", function(inst)
     }
 
     local states =
-	{
+    {
         State{
             name = "hopatk",
             tags = {"attack", "moving", "hopping", --[["canrotate",]] "busy", "superhop"},

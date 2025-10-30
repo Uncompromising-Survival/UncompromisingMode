@@ -45,7 +45,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
-    SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -97,7 +96,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
     BEAKBASHER = "- Is a darn good hammer.",
     UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
-
+    UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects."
 }
 local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
 
@@ -420,6 +419,10 @@ end
 if TUNING.DSTU.STORMS then
     TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
+end
+
+if TUNING.DSTU.WARLY_CHANGES == 1 then
+    TOOLTIPS.SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables."
 end
 
 if TUNING.DSTU.WXLESS then
