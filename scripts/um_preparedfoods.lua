@@ -83,7 +83,7 @@ local function BoomPieGo(inst, eater)
         eater.Physics:Teleport(x, y, z)
         eater:PushEvent("knockback", {knocker = eater, radius = 6, strengthmult = 6})
         eater:ListenForEvent("newstate", BoomPieStopKnockback)
-		eater.components.combat:GetAttacked(inst, 3)
+		eater:PushEvent("attacked", {damage = 3})
         eater.components.health:SetInvincible(true)
 
         if eater.um_boomberrypietask then eater.um_boomberrypietask:Cancel() end
@@ -789,6 +789,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
         hunger = 37.5,
+		health = -3,
         priority = 30,
         weight = 1,
         cooktime = 2,

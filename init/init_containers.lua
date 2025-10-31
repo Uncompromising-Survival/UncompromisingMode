@@ -502,6 +502,60 @@ modparams.wingsuit =
     type = "hand_inv",
 }
 
+modparams.um_feather_totem =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(-(64 + 12), 0, 0),
+            Vector3(0, 0, 0),
+            Vector3(64 + 12, 0, 0),
+        },
+        slotbg =
+        {
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+            { image = "feather_slot.tex", atlas = "images/feather_slot.xml" },
+        },
+        animbank = "ui_beard_3x1",
+        animbuild = "ui_beard_3x1",
+        pos = Vector3(0, 220, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+    --usespecificslotsforitems = true,
+    acceptsstacks = false,
+    --lowpriorityselection = true,
+   -- excludefromcrafting = false,
+}
+
+--[[{
+    widget =
+    {
+        slotpos = {},
+        slotbg  = {},
+        animbank  = "ui_icepack_2x3",
+        animbuild = "ui_icepack_2x3",
+        pos = Vector3(75, 195, 0),
+        side_align_tip = 160,
+    },
+    type = "chest",
+}
+
+for y = 0, 2 do
+    for x = 0, 1 do
+        table.insert(params.beargerfur_sack.widget.slotpos, Vector3(-163 + (75 * x),   -75 * y + 73,   0))
+        table.insert(params.beargerfur_sack.widget.slotbg, { image = "preparedfood_slot.tex", atlas = "images/hud2.xml" })
+    end
+end]]
+
+modparams.um_feather_totem.itemtestfn = CheckFeather
+
+--[[for k, v in pairs(modparams.um_feather_totem.widget.slotbg) do
+    modparams.um_feather_totem.widget.slotbg[k] = { image = "feather_slot.tex", atlas = "images/feather_slot.xml" }
+end]]
+
 modparams.corvushat =
 {
     widget =
@@ -797,17 +851,18 @@ containers.params.um_inkubator =
     itemtestfn = CheckInkubator,
 }
 
-containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
-containers.params.spicepack.itemtestfn = function(container, item, slot)
-    for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
-        if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
+if TUNING.DSTU.WARLY_CHANGES == 1 then
+    containers.params.spicepack = GLOBAL.deepcopy(containers.params.beargerfur_sack)
+    containers.params.spicepack.itemtestfn = function(container, item, slot)
+        for i, v in ipairs(GLOBAL.FOODGROUP.OMNI.types) do
+            if item:HasAnyTag("fresh", "stale", "spoiled", "spice", "edible_" .. v) or cooking.IsCookingIngredient(item.prefab) then return true end
+        end
+    end
+
+    for k, v in pairs(containers.params.spicepack.widget.slotbg) do
+        containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
     end
 end
-
-for k, v in pairs(containers.params.spicepack.widget.slotbg) do
-    containers.params.spicepack.widget.slotbg[k] = { image = "inv_slot_morsel.tex" }
-end
-
 
 -- Polar Bearger Bin dried jerky change
 vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn

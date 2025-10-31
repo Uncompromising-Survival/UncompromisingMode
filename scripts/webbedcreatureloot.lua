@@ -947,8 +947,9 @@ local sail = TUNING.DSTU.ISLAND_ADVENTURES and "ironwind" or "mast_malbatross_it
 
 AddCompatCharacterCocoon("3118176896", "whiskey", {
     Item("depthsword", 1, 1, true),
-    Item(function() return RandomItem("whiskeyhat", "whiskeysonar") end, 1, 1, true),
-    Item(function() return RandomItem(algae, seamaterial) end, 3),
+    Item("whiskeyhat", 1, 1, true),
+    Item("whiskeysonar", 1, 1, true),
+    Item(function() return RandomItem(algae, seamaterial) end, 6),
     Item(function() return RandomItem("greengem", "orangegem") end, 1, .25),
     Item(boatkit, 1, .5, true),
     Item(sail, 1, .5),

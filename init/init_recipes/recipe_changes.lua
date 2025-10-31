@@ -10,8 +10,11 @@ CONSTRUCTION_PLANS["multiplayer_portal_moonrock_constr"] = {
     Ingredient("moonglass", 5)
 }
 
-
 AllRecipes["compass"].ingredients = { Ingredient("goldnugget", 2), Ingredient("flint", 2) }
+
+if TUNING.DSTU.WARLY_CHANGES == 1 then
+    AllRecipes["spicepack"].ingredients = { Ingredient("pigskin", 2), Ingredient("silk", 4), Ingredient("nitre", 4) }
+end
 
 if GetModConfigData("longpig") then
     AllRecipes["reviver"].ingredients = {

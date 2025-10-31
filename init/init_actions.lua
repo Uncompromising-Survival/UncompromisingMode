@@ -369,7 +369,7 @@ AddStategraphActionHandler("wilson", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_B
 AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.STORE_BOAT, "dolongaction"))
 
 
-if TUNING.DSTU.WARLY_BUTCHER then
+if TUNING.DSTU.WARLY_CHANGES ~= 0 then
     local _murderfn = GLOBAL.ACTIONS.MURDER.fn
     GLOBAL.ACTIONS.MURDER.fn = function(act)
         local murdered = act.invobject or act.target

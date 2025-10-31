@@ -581,4 +581,4 @@ for _, v in pairs(class_post) do
     modimport("postinit/" .. v)
 end
 
-modimport("init/um_fxlist")
+modimport("scripts/um_fxlist")

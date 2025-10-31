@@ -25,7 +25,7 @@ local prefabs = {
     "firemeteorwarning",
     "antlionwarning",
     "gasmask",
-    "spiderqueencorpse",
+    "um_spiderqueencorpse",
     "lavae2",
     "mock_monsterwarningsounds",
     "mock_dragonfly",
@@ -603,7 +603,7 @@ local prefabs = {
 	"um_gemologyforge",
 	"um_moss",
 	"um_fern_fox",
-	
+
 	"um_pepperdragon",
 	"um_pepperdragon_nest",
 	"um_firecream",
@@ -615,10 +615,11 @@ local prefabs = {
 	"um_moonglass_ceiling",
 	"um_guano_rock",
 	"um_rocklobster_rock",
-	
+
 	"um_magmacave_umss",
     "glacialhound_icespike",
     "iceshield",
+    "um_feather_totem",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

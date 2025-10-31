@@ -166,26 +166,26 @@ local function SmokePuff(inst, channeler)
 				air_conditioner_cloud.green = numgreencaps
 			end
 			for i, v in ipairs(bluecaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 
 			for i, v in ipairs(redcaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 
 			for i, v in ipairs(greencaps) do
-				if v.components.perishable:GetPercent() <= 0.2 then
+				if v.components.perishable:GetPercent() <= 0.1 then
 					v.components.perishable:Perish()
 				else
-					v.components.perishable:ReducePercent(0.2)
+					v.components.perishable:ReducePercent(0.1)
 				end
 			end
 		end
@@ -334,10 +334,10 @@ local function fn()
     inst.components.container.onopenfn = onopen
     inst.components.container.onclosefn = onclose
 
-    if TUNING.DSTU.AC_COOLING then
-        inst:AddComponent("heater")
-        inst.components.heater.heat = -115
-        inst.components.heater:SetThermics(false, true)
+    --if TUNING.DSTU.AC_COOLING then
+        --inst:AddComponent("heater")
+        --inst.components.heater.heat = -115
+        --inst.components.heater:SetThermics(false, true)
 
         inst:DoPeriodicTask(1, function(inst)
             local x, y, z = inst.Transform:GetWorldPosition()
@@ -346,7 +346,7 @@ local function fn()
                 v:Remove()
             end
         end)
-    end
+    --end
     inst:AddComponent("channelable")
     inst.components.channelable:SetChannelingFn(DoPuff, OnStopChanneling)
     inst.components.channelable.use_channel_longaction_noloop = true

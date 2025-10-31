@@ -94,13 +94,9 @@ env.AddStategraphPostInit("spider", function(inst)
 
     -- Remove when Klei fixes this!
     local healstate = inst.states["heal"]
-    if healstate then
-        local healstate_onenter = inst.states["heal"].onenter
-        healstate.onenter = function(inst, target, ...)
-            local ret = healstate_onenter(inst, target, ...)
-            inst.SoundEmitter:PlaySound("webber1/creatures/spider_cannonfodder/heal") -- Missing Content Fix!
-            return ret
-        end
+    local healstate_timeline1 = healstate and healstate.timeline[1]
+    if healstate_timeline1 and healstate_timeline1.time == 6 * FRAMES then
+        healstate_timeline1.time = 0
     end
     --
 

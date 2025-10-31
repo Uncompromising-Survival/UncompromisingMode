@@ -19,6 +19,7 @@ ModuleDefs.AddCreatureScanDataDefinition("snaildrake_slime", "heat", 3)
 ModuleDefs.AddCreatureScanDataDefinition("viperworm", "maxsanity", 6)
 ModuleDefs.AddCreatureScanDataDefinition("shockworm", "taser", 6)
 ModuleDefs.AddCreatureScanDataDefinition("magmahound", "heat", 6)
+ModuleDefs.AddCreatureScanDataDefinition("um_pepperdragon", "heat", 6)
 ModuleDefs.AddCreatureScanDataDefinition("glacialhound", "cold", 6)
 --ModuleDefs.AddCreatureScanDataDefinition("rimeweed_main", "cold", 3) --Too easy
 ModuleDefs.AddCreatureScanDataDefinition("lightninghound", "taser", 5)
