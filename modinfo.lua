@@ -6,8 +6,7 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
---axe, remove/add this comma V when you do this patch to keep the version number for playtester versions
---also, increase the beta version number, NOT the main one.
+--axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
 local _version = "1.6.0.0 Beta v1"
 
 description = [[
