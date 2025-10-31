@@ -54,8 +54,8 @@ local gemMap = {
     },
     um_gemologyorangegem1 = {
         "Gives the item increased movement speed if the player is slowed down.",
-        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions.", --I aint writing allat.
-        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions.",
+        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions while at base.",
+        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions while at base.",
     },
     um_gemologyorangegem2 = {
         "Gives the item sanity regeneration based on occupied inventory slots.",

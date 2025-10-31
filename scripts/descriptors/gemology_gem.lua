@@ -1,5 +1,4 @@
 local gemMap = {
-    --gem name, effect description
     um_gemologybluegem1 = {
         "Gives summer insulation when held and freezes enemies on hit.",
         "Gives summer insulation when held and freezes enemies on hit.\nHas a chance to not break free fully frozen enemies.",
@@ -54,8 +53,8 @@ local gemMap = {
     },
     um_gemologyorangegem1 = {
         "Gives the item increased movement speed if the player is slowed down.",
-        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions.", --I aint writing allat.
-        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions.",
+        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions while at base.",
+        "Gives the item increased movement speed if the player is slowed down.\nIncreases the speed of various actions while at base.",
     },
     um_gemologyorangegem2 = {
         "Gives the item sanity regeneration based on occupied inventory slots.",
@@ -67,7 +66,6 @@ local gemMap = {
         "Further increases damage buffs.\nIf the item is not craftable, increases damage.",
         "Further increases damage buffs.\nIf the item is not craftable, greatly increases damage.",
     },
-
     um_gemologypalegem2 = {
         "Doubles item durability.",
         "Tripes item durability.\nIf the item is not prototypeable, adds a chance to not consume durability on use.",
