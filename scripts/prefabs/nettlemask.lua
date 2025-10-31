@@ -22,7 +22,7 @@ local function onequip(inst, owner)
     end
     inst.components.fueled:StartConsuming()
 	
-	if owner:IsValid() and owner.components.health and not owner.componens.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
+	if owner:IsValid() and owner.components.health and not owner.components.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
 		owner.components.health:DoDelta(-10)
 	end	
 	
