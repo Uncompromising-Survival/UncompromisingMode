@@ -88,28 +88,10 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
 
     local _OnActivate = inst.components.activatable.OnActivate
 
-    local num = 0
-    local function CycleRecipes()
-        if num == 0 then
-            num = num + 1
-            return "um_inkubator"
-        elseif num == 1 then
-            num = num + 1
-            return "um_scrapper"
-        elseif num == 2 then
-            num = num + 1
-            return "um_astral_projector" and "um_astral_projector_target" or nil
-        elseif num >= 3 then
-            num = 0
-            return "um_astral_projector_target"
-        end
-    end
-
     local function OnActivate(inst, doer)
         --local loot = SpawnPrefab("archive_lockbox")
         local pt = Vector3(inst.Transform:GetWorldPosition())
         local players = FindPlayersInRange( pt.x, pt.y, pt.z, 20, true )
-        local recipe = CycleRecipes()
         local archivemanager = TheWorld.components.archivemanager
 		local powered = archivemanager == nil or archivemanager:GetPowerSetting()
         inst:DoTaskInTime(5.2 ,function()
@@ -120,7 +102,7 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                 local talker = player.components.talker
                 local papyrus = SpawnPrefab("wixie_piano_card")
                 local fx = SpawnPrefab("archive_lockbox_player_fx")
-                if recipe and player.components.builder and powered then
+                if player.components.builder and powered then
                     if inst.product_orchestrina == "turf_vault" then
                         if not player.components.builder:KnowsRecipe("um_astral_projector") or player.components.builder:KnowsRecipe("um_astral_projector_target") then
                             player.components.builder:UnlockRecipe("um_astral_projector")
@@ -144,7 +126,7 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                         else
                             if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
                         end
-                    else
+                    --[[else
                         if not player.components.builder:KnowsRecipe("um_inkubator") then
                             player.components.builder:UnlockRecipe("um_inkubator")
                             if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
@@ -152,7 +134,7 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                             papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
                             papyrus.name = "You got: Ancient Inkubator!"
                             Launch2(papyrus, inst, 2, 0, 1, .5)
-                        end
+                        end]]
                     end
                 end
             end
