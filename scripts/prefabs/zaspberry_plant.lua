@@ -62,6 +62,9 @@ local function fn()
     inst.Light:SetColour(1,1,0)
     inst.Light:Enable(true)
 
+	MakeInventoryFloatable(inst, "med", nil, 0.68)
+	inst.components.floater.bob_percent = 0
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -82,6 +85,8 @@ local function fn()
 
     inst:AddComponent("inspectable")
 	
+
+	
 	inst.OnSave = onsave
 	inst.OnLoad = onload	
     ---------------------
@@ -92,7 +97,6 @@ local function fn()
 	end)
     MakeSmallPropagator(inst)
     MakeHauntableIgnite(inst)
-
     ---------------------
 
     return inst

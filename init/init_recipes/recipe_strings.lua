@@ -111,7 +111,7 @@ RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful not
 RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
 RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
 RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
---RECIPE_DESC.HOUNDIOUS_OBSERVIOUS = "Tree with eyes."
+RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
 
 --Wixie

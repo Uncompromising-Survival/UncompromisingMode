@@ -83,6 +83,9 @@ local function pyrenettle_bumped(inst,nextvictim)
         -- Apply debuff if it's a valid target.
         if not (nextvictim.components.health and nextvictim.components.health:IsDead()) and inst.stage > 1 then
             local DebuffDuration = inst.stage > 3 and 10 or 6
+			if nextvictim.components.health and not nextvictim.components.health:IsDead() then
+				nextvictim.components.health:DoDelta(-10)
+			end
             nextvictim:AddDebuff("umdebuff_pyre_toxin", "umdebuff_pyre_toxin", DebuffDuration)
         end
     end

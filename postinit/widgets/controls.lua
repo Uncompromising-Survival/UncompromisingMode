@@ -19,9 +19,8 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 		self.vetcursewidget:MoveToBack()
 	end
 
-	-- local NightTerrorsWidget = require "widgets/nightterrorwidget"
-	-- self.nightterrorswidget = self:AddChild( NightTerrorsWidget(ownr) )
-	-- self.nightterrorswidget:MoveToBack()
+	local NightTerrorsWidget = require "widgets/nightterrorwidget"
+	self.nightterrorswidget = self:AddChild( NightTerrorsWidget(ownr) )
 		
 	local californiakingoverlay = require "widgets/californiakingoverlay"
 	self.californiakingoverlay = self:AddChild( californiakingoverlay(ownr) )
@@ -37,6 +36,7 @@ AddClassPostConstruct( "widgets/controls", function(self, inst)
 		self.wathom_sonar:MoveToBack()
 	end
 end)
+
 --[[
 AddClassPostConstruct("screens/playerhud",function(inst)
 	local SnowOver = require("widgets/snowover")

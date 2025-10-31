@@ -305,7 +305,7 @@ env.AddComponentPostInit("locomotor", function(self)
 				mult = mult + (0.1*tool.tier)
 			end		
 			if tool and tool.components.minerologyable and tool.components.minerologyable.comfy and mult < 1 then
-				mult = (1-mult)*boost_resistance[inst.stage]+mult -- I was a bit sleepy when doing this one.			
+				mult = (1-mult)*boost_resistance[tool.tier]+mult -- I was a bit sleepy when doing this one.			
 			end
 			return mult
 		end

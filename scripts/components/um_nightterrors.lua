@@ -42,7 +42,8 @@ return Class(function(self, inst)
     self._retry_spawning_voxolophone = false
 	
     self.prep_for_nightterrors = false
-
+	
+	self.ongoing = false
     --------------------------------------------------------------------------
     --[[ Private member functions ]]
     --------------------------------------------------------------------------
@@ -62,37 +63,7 @@ return Class(function(self, inst)
 			end	
 		end
 	end
-	
-	local function DropVoxolophone(inst, data)
-		local other = data.target
-		if other and other.components.inventory then
-			
-			local inv = other.components.inventory
-			local voxolophone
-			local pack = inv:GetEquippedItem(EQUIPSLOTS.BODY)
-			local validfood = {}
-			if pack and pack.components.container then
-				for k = 1, pack.components.container.numslots do
-					local item = pack.components.container.slots[k]
-					if item and item.prefab == "um_voxolophone" then
-						voxolophone = item
-					end
-				end
-			end
-
-			for k = 1, inv.maxslots do
-				local item = inv.itemslots[k]
-				if item and item.prefab == "um_voxolophone" then
-					voxolophone = item
-				end
-			end
-			if voxolophone then
-				other.components.inventory:DropItem(voxolophone)
-			end
-		end
-	end
-	
-	
+		
     local function AllowedToAttack(data)
         return #_activeplayers > 0 and
             ((data and data.skipcycles) or TheWorld.state.cycles > TUNING.NO_BOSS_TIME) and
@@ -381,7 +352,7 @@ return Class(function(self, inst)
 						local ent = SpawnPrefab("rne_grabbyshadows")
 						ent.Transform:SetPosition(x1, 0, z1)
 						DespawnOnDay(ent)
-						
+						ent:AddTag("nightterror")
 						break
 					end
 				end
@@ -402,7 +373,7 @@ return Class(function(self, inst)
 					local ent = SpawnPrefab("shadowvortex")
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
-			
+					ent:AddTag("nightterror")
 					break
 				end
 			end
@@ -417,6 +388,7 @@ return Class(function(self, inst)
 				local x, y, z = player.Transform:GetWorldPosition()
 				local ent = SpawnPrefab("mindweaver")
 				ent.Transform:SetPosition(x + math.random(-5, 5), y, z + math.random(-5, 5))
+				ent:AddTag("nightterror")
 			end
 		end
 	end
@@ -439,7 +411,7 @@ return Class(function(self, inst)
 						DespawnOnDay(ent)
 
 						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTCRAWLER })
-						
+						ent:AddTag("nightterror")
 						break
 					end
 				end
@@ -462,7 +434,7 @@ return Class(function(self, inst)
 						local ent = SpawnPrefab("um_shadow_leech")
 						ent.Transform:SetPosition(x1, 0, z1)
 						DespawnOnDay(ent)
-
+						ent:AddTag("nightterror")
 						TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.UM_LEECH })
 						
 						break
@@ -504,7 +476,7 @@ return Class(function(self, inst)
 							local ent = SpawnPrefab("fuelseeker")
 							ent.Transform:SetPosition(x1, 0, z1)
 							DespawnOnDay(ent)
-
+							ent:AddTag("nightterror")
 							TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.FUELSEEKER }) 
 					
 							break
@@ -566,7 +538,7 @@ return Class(function(self, inst)
 					local ent = SpawnPrefab("um_heckler")
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
-					
+					ent:AddTag("nightterror")
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.HECKLER })
 					
 					break
@@ -590,10 +562,9 @@ return Class(function(self, inst)
 					local ent = math.random() > 0.66 and SpawnPrefab("nightmarebeak") or SpawnPrefab("crawlingnightmare")
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
-					
+					ent:AddTag("nightterror")
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.NIGHTMARECREATURE })
 					count = count + 1
-					ent:ListenForEvent("onhitother", DropVoxolophone)
 					if count >= 2 then
 						break
 					end
@@ -620,7 +591,7 @@ return Class(function(self, inst)
 					local ent = SpawnPrefab(character)
 					ent.Transform:SetPosition(x1, 0, z1)
 					DespawnOnDay(ent)
-
+					ent:AddTag("nightterror")
 					TheWorld:PushEvent("um_voxolophone_warning", { threat = STRINGS.UM_VOXOLOPHONE.SHADOW_WARNING.SHADOWCHARACTER })
 					
 					break
@@ -693,6 +664,77 @@ return Class(function(self, inst)
 			self.totalrandomshadowcharactersweight = self.totalrandomshadowcharactersweight + weight
 		end
 	end
+	
+	
+	local ENVIRONMENTAL = 
+	{
+		ThunderStorm = { name = SpawnThunderFar, weight = .3, },
+	
+	
+	
+	
+	
+	
+	}
+	
+	local HIGHSANITY =
+	{
+	
+	
+	
+	
+	}
+	local HIGHMEDSANITY = 
+	{
+	
+		SpawnHand = { name = SpawnHand, weight = .3, },
+		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
+		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
+	
+	
+	
+	
+	}
+	local MEDSANITY = 
+	{
+	
+		SpawnHand = { name = SpawnHand, weight = .3, },
+		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
+		SpawnShadowGrabby = { name = SpawnShadowGrabby, weight = .5, },
+	
+	
+	
+	
+	}
+	local LOWMEDSANITY = 
+	{
+	
+		SpawnHand = { name = SpawnHand, weight = .3, },
+		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
+		SpawnHeckler = { name = SpawnHeckler, weight = .5, },
+		SpawnShadowWilson = { weight = .5, character = "swilson", level = 2 },
+	
+	}
+	local LOWSANITY = 
+	{
+		SpawnHand = { name = SpawnHand, weight = .3, },
+		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnShadowVortex = { name = SpawnShadowVortex, weight = .4, },	
+		SpawnNightCrawlers = { name = SpawnNightCrawlers, weight = .5, },
+		SpawnMindWeavers = { name = SpawnMindWeavers, weight = .5, },
+		SpawnHeckler = { name = SpawnHeckler, weight = .5, },
+		SpawnNightmareCreature = { name = SpawnNightmareCreature, weight = .3, },
+		SpawnShadowWilson = { weight = .5, character = "swilson", level = 2 },
+	
+	
+	
+	
+
+	}
+	
+	
 	
 	local HARASSMENT =
 	{
@@ -813,40 +855,6 @@ return Class(function(self, inst)
 			TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 		end
 	end
-	
-	local function SpawnVoxolophoneFunction(player)
-	end
-
-	local function CheckPlayersVoxolophone()
-		if TheWorld.state.isnight and not self._hasspawnedvoxolophone or self._retry_spawning_voxolophone then
-			self._retry_spawning_voxolophone = true
-
-			if #_activeplayers > 0 then
-				local player = _activeplayers[math.random(#_activeplayers)]
-
-				if player ~= nil then
-					local radius = 15 + math.random() * 15
-					local theta = math.random() * 2 * PI
-					local x, y, z = player.Transform:GetWorldPosition()
-					local x1 = x + radius * math.cos(theta)
-					local z1 = z - radius * math.sin(theta)
-					local playercheck = TheSim:FindEntities(x1, y, z1, 30, {"player"})
-					
-					if TheWorld.Map:IsPassableAtPoint(x1, 0, z1) and (playercheck == nil or #playercheck == 0) then
-						self._hasspawnedvoxolophone = true
-						self._retry_spawning_voxolophone = false
-							
-						local voxolophone = SpawnPrefab("um_voxolophone")
-						voxolophone.Transform:SetPosition(x1, y, z1)
-						voxolophone:StartMusic()
-					else
-						self.inst:DoTaskInTime(1, CheckPlayersVoxolophone)
-					end
-				end
-			end
-		end
-	end
-
 					
 	function self:LightStealTarget(inst)
 		local lighttargets = {}
@@ -876,9 +884,15 @@ return Class(function(self, inst)
 	local function StartNightTerrors()
 		if TheWorld.state.cycles > 1 and TheWorld.state.isnight then
 			DelayHoundsAndGiantsIfNecessary()
-
+			self.ongoing = true
 			local cycles = (TheWorld.state.cycles / 20)
 			self.terror_count = 0
+			
+			if #_activeplayers > 0 then
+				for i,v in ipairs(_activeplayers) do
+					v.components.terrorized.nightterror = 0
+				end
+			end
 			
 			self.terror_task = self.inst:DoPeriodicTask(15 - (cycles <= 5 and cycles or 5), function()
 				if #_activeplayers > 0 then
@@ -923,6 +937,15 @@ return Class(function(self, inst)
 			local daytime = CalcDayTime()
 			TheWorld:PushEvent("ms_setclocksegs", {day = daytime, dusk = 8-daytime, night = 8})
 		end
+		
+		if self.ongoing then
+			self.ongoing = false
+			if #_activeplayers > 0 then
+				for i,v in ipairs(_activeplayers) do
+					v.components.terrorized.nightterror = 1
+				end
+			end
+		end
 	end
 	
 	local function ForceTerrors(inst, data)
@@ -932,8 +955,7 @@ return Class(function(self, inst)
 	
     self.inst:ListenForEvent("ms_playerjoined", OnPlayerJoined, TheWorld)
     self.inst:ListenForEvent("ms_playerleft", OnPlayerLeft, TheWorld)
-    self:WatchWorldState("isfullmoon", CheckPlayersVoxolophone)
-	--self:WatchWorldState("isnewmoon", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
+	self:WatchWorldState("isnewmoon", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
 	--self:WatchWorldState("isnight", function() self.inst:DoTaskInTime(6, StartNightTerrors) end)
 	--self.inst:ListenForEvent("cycles", ForceTerrors)
 	self.inst:ListenForEvent("moonphasechanged2", CheckPhase)

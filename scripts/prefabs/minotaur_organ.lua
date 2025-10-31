@@ -55,13 +55,6 @@ local function ActivateShield(inst)
 	end
 end
 
-local function oncollide(inst, other)
-	if other:HasTag("minotaur") and (Vector3(other.Physics:GetVelocity()):LengthSq() > 42) then
-		other:DoTaskInTime(2*FRAMES,function(other) other.sg:GoToState("stun") end) --We want AG to stun here, so you can attack the organ without being harrased.
-		inst:DoTaskInTime(2 * FRAMES, DeactivateShield)
-	end
-end
-
 local function organfn()
 	local inst = CreateEntity()
 
@@ -101,7 +94,6 @@ local function organfn()
 	inst:DoTaskInTime(1,ActivateShield)
 	inst.DeactivateShield = DeactivateShield
 	
-	inst.Physics:SetCollisionCallback(oncollide) -- Easier to do collision from this end
 	return inst
 end
 

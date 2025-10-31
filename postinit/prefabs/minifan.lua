@@ -20,6 +20,24 @@ local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
     owner:RemoveTag("minifansuppressor")
+	local terrorized = owner.components.terrorized
+	if terrorized then
+		terrorized.terror_immunity_minifan = 0
+	end
+end
+
+local function AddTerrorizeImmunity(inst)	
+	local terrorized = inst.components.terrorized
+	if terrorized then
+		terrorized.terror_immunity_minifan = 0.8
+	end
+end
+
+local function RemoveTerrorizeImmunity(inst)
+	local terrorized = inst.components.terrorized
+	if terrorized then
+		terrorized.terror_immunity_minifan = 0
+	end
 end
 
 env.AddPrefabPostInit("minifan", function(inst)
@@ -39,6 +57,7 @@ env.AddPrefabPostInit("minifan", function(inst)
                 inst.components.heater:SetThermics(false, true)
                 inst._wheel:SetSpinning(true)
                 owner:AddTag("minifansuppressor")
+				AddTerrorizeImmunity(owner)			
             end
         elseif inst.components.fueled.consuming then
             inst.components.fueled:StopConsuming()
@@ -46,6 +65,7 @@ env.AddPrefabPostInit("minifan", function(inst)
             inst.components.heater:SetThermics(false, false)
             inst._wheel:SetSpinning(false)
             owner:RemoveTag("minifansuppressor")
+			RemoveTerrorizeImmunity(owner)
         end
     end
 end)

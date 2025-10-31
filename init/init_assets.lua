@@ -227,7 +227,7 @@ local inventoryitems =
     "ocupus_tentacle_cooked",
     "ocupus_beak",
     "beakbasher",
-    "houndious_observious",
+    "plaunt_manny",
     "um_brineishmoss",
     "brine_balm",
     "sludge_oil",
@@ -438,6 +438,8 @@ local inventoryitems =
 	"um_gemology_geode_guano",
 	"um_gemology_geode_lobster",
 	"um_gemology_geode_glass",
+	"um_gemology_geode_slime",
+	"um_gemology_geode_ruins",
 	
 	"um_flamethrower",
 	"um_firecream",
