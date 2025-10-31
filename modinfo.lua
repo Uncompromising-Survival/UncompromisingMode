@@ -174,7 +174,7 @@ configuration_options = {
     --true),
     BinaryConfig("no_winter_growing_", "No Winter Growing",
         "Makes a few food sources such as Kelp and Stone Fruit not grow in Winter.", true),
-    BinaryConfig("nightterrors", "Night Terrors", "TODO TODO TODO TODO", true),
+    BinaryConfig("nightterrors", "Night Terrors [EXTREMELY UNFINISHED]", "The Fog is coming.", false),
     BinaryConfig("beefalo_nerf", "Beefalo Nerf", "Players will take half of the damage that the Beefalo takes.", true),
     {
         name = "fireloot",
@@ -910,7 +910,7 @@ configuration_options = {
             { description = "DST Goose", data = "DST" },    
             { description = "Both Meese", data = "BOTH" } 
         },
-        default = "ROG"
+        default = "BOTH"
     },
     {
         name = "mother_goose_spawn",

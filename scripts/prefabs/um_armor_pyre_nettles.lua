@@ -149,7 +149,9 @@ local function OnEquip(inst, owner)
             end, 12) -- I didn't do this because I haven't heard much talk about this item.
         end]] -- Also, the Pyre Mantle is supposed to help deal with Pyre Nettles' Toxins and help deal with threats from a new biome UM is adding in the next update.
     end -- I am okay with discussing on how to nerf the mantle if it's truly overpowered. But I am unsure if overheating the player is the right move.
-
+	if owner:IsValid() and owner.components.health and not owner.componens.health:IsDead() and owner.prefab ~= "wormwood" and owner.prefab ~= "willow" then
+		owner.components.health:DoDelta(-10)
+	end
 
     -- Wormwood's Bramble Husk skill also works on this armor.
     inst._hitcount = 0

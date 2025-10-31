@@ -1,5 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+
 local function SpawnBight(inst,worker)
     local pos = inst:GetPosition()
     TheWorld:PushEvent("ms_sendlightningstrike", pos)
@@ -81,6 +82,7 @@ env.AddPrefabPostInit("chessjunk1", function(inst)
 	
 	inst.SpawnClockwork = SpawnBight
     inst.components.workable:SetOnFinishCallback(OnHammeredBight)
+	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_ruins", 0.3)
 end)
 
 env.AddPrefabPostInit("chessjunk2", function(inst)
@@ -90,6 +92,7 @@ env.AddPrefabPostInit("chessjunk2", function(inst)
 	
 	inst.SpawnClockwork = SpawnKnook
     inst.components.workable:SetOnFinishCallback(OnHammeredKnook)
+	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_ruins", 0.3)
 end)
 
 env.AddPrefabPostInit("chessjunk3", function(inst)
@@ -99,4 +102,5 @@ env.AddPrefabPostInit("chessjunk3", function(inst)
 	
 	inst.SpawnClockwork = SpawnRoship
     inst.components.workable:SetOnFinishCallback(OnHammeredRoship)
+	inst.components.lootdropper:AddChanceLoot("um_gemology_geode_ruins", 0.3)
 end)

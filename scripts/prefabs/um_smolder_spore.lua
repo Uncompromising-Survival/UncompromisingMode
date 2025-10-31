@@ -292,11 +292,6 @@ local function fn()
 	inst:AddComponent("lootdropper")
 	inst.components.lootdropper:SetChanceLootTable("um_smolder_spore")
 
-	inst:AddComponent("health")
-	inst.components.health:SetMaxHealth(5)    -- To make it poppable via ranged attacks or earthquake drops.
-	inst.components.health:SetMinHealth(1)    -- We don't want it to die a 'normal' death.
-	inst.components.health.fire_damage_scale = 0 -- Take no damage from fire.
-	inst.components.health.canmurder = false
 	inst:ListenForEvent("attacked", PopSpore)
 	inst:ListenForEvent("explosion", PopSpore)
 

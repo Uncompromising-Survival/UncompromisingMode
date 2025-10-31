@@ -6,6 +6,8 @@ local mushblueassets ={Asset("ANIM", "anim/um_geode_blue.zip")}
 local guanoassets ={Asset("ANIM", "anim/um_geode_guano.zip")}
 local lobsterassets ={Asset("ANIM", "anim/um_geode_lobster.zip")}
 local glassassets ={Asset("ANIM", "anim/um_geode_glass.zip")}
+local slimeassets ={Asset("ANIM", "anim/um_geode_slime.zip")}
+local ruinsassets ={Asset("ANIM", "anim/um_geode_ruins.zip")}
 
 local loot_table = {
 
@@ -105,6 +107,45 @@ local loot_table = {
 			bluegem = 0.5,
 		},		
 	},	
+	["um_gemology_geode_slime"] = 
+	{
+		notgemloot = {
+			poop = 1,
+			rocks = 1,
+			poop = 0.5,
+			rocks = 0.5,
+			cave_banana = 0.5,
+		},
+		gemloot = {
+			um_gemologybluegem2 = 1,
+			um_gemologyredgem1 = 1,
+			um_gemologypalegem1 = 1,
+			um_gemologypalegem2 = 1,
+			bluegem = 0.5,
+			redgem = 0.5,
+		},		
+	},	
+	["um_gemology_geode_ruins"] = 
+	{
+		notgemloot = {
+			gears = 1,
+			trinket_6 = 1,
+			trinket_1 = 1,
+			thulecite = 0.25,
+		},
+		gemloot = {
+			um_gemologygreengem1 = 1,
+			um_gemologyyellowgem1 = 1,
+			um_gemologypurplegem2 = 1,
+			um_gemologypurplegem1 = 1,
+			bluegem = 0.5,
+			redgem = 0.5,
+			purplegem = 0.5,
+			orangegem = 0.25,
+			yellowgem = 0.25,
+			greengem = 0.25,
+		},		
+	},	
 }
 
 
@@ -173,8 +214,8 @@ local function geodemain(bankbuild)
     inst.pickupsound = "rock"
 
     inst:AddTag("molebait")
-
-    MakeInventoryPhysics(inst)
+	MakeInventoryPhysics(inst)
+    MakeInventoryFloatable(inst, "med", nil, 0.68)
 
     inst.entity:SetPristine()
 
@@ -185,7 +226,7 @@ local function geodemain(bankbuild)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem:SetSinks(true)
+    --inst.components.inventoryitem:SetSinks(true)
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
@@ -237,9 +278,19 @@ local function glass()
 	return geodemain("um_geode_glass")
 end
 
+local function slime()
+	return geodemain("um_geode_slime")
+end
+
+local function ruins()
+	return geodemain("um_geode_ruins")
+end
+
 return Prefab("um_gemology_geode_red", mushred, mushredassets),
 Prefab("um_gemology_geode_green", mushgreen, mushgreenassets),
 Prefab("um_gemology_geode_blue", mushblue, mushblueassets),
 Prefab("um_gemology_geode_guano", guano, guanoassets),
 Prefab("um_gemology_geode_lobster", lobster, lobsterassets),
-Prefab("um_gemology_geode_glass", glass, glassassets)
+Prefab("um_gemology_geode_glass", glass, glassassets),
+Prefab("um_gemology_geode_slime", slime, slimeassets),
+Prefab("um_gemology_geode_ruins", ruins, ruinsassets)

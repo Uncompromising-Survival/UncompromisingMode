@@ -254,7 +254,7 @@ CommonStates.AddCombatStates(states,
 {
     attacktimeline =
     {
-       TimeEvent(10*FRAMES, function(inst) inst.components.combat:DoAttack()
+       TimeEvent(16*FRAMES, function(inst) inst.components.combat:DoAttack()
         inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/bite")
         end),
     },

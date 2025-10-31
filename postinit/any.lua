@@ -67,7 +67,7 @@ end)
 env.AddReplicableComponent("hayfever")
 env.AddReplicableComponent("adrenaline")
 env.AddReplicableComponent("boatbottle")
-
+env.AddReplicableComponent("terrorized")
 
 -- for the super spawner tags
 env.AddPrefabPostInitAny(function(inst)

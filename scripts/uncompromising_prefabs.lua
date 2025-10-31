@@ -386,7 +386,7 @@ local prefabs = {
     "um_walls",
     "um_ocupus_eyetacle",
     "ocupus_items",
-    "houndious_observious",
+    "manny",
     "ums_biometable",
     "umss_general",
 
@@ -584,7 +584,6 @@ local prefabs = {
 	"um_bee_moon",
 	"um_fyre_bomb",
 	"um_beehive_moon",
-	"um_manny",
 	"um_steamcloud",
 	"um_meathoney",
 	"um_meatcomb",
