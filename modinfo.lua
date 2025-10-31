@@ -6,6 +6,8 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
+--axe, remove this comma V when you do this patch to keep the version number.
+--also, increase the beta version number, NOT the main one.
 local _version = "1.6.0.0, Beta v1"
 
 description = [[
