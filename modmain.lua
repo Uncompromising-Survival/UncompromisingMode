@@ -69,6 +69,7 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_descriptions/announcestrings.lua")
+modimport("init/init_descriptions/descriptorstrings.lua")
 modimport("init/init_wathom")
 
 if GetModConfigData("funny rat") then
