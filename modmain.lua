@@ -2,6 +2,9 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.TheMineralLogbook = require("mineral_logbook")()
+GLOBAL.TheMineralLogbook:Load()
+
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
     Asset("IMAGE", "images/UM_tip_icon.tex"),
@@ -285,6 +288,16 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
         GLOBAL.TheWorld:PushEvent("heatwaveend")
     end
 end)
+
+local function LearnGemologyGem(data)
+    print("RPC learn new gem")
+    data = GLOBAL.json.decode(data)
+    GLOBAL.TheMineralLogbook:AddNewGem(data.gem, data.tier)
+end
+
+AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
+
+
 
 -- WIXIE RELATED RPC'S
 

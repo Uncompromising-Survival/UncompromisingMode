@@ -54,6 +54,7 @@ function EntityScript:GetAdjectivedName(...)
 			end
 		end
 	end
+
 	return _GetAdjectivedName(self, ...)
 end
 

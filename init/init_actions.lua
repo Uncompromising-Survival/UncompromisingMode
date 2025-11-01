@@ -617,3 +617,24 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
         table.insert(actions, ACTIONS.UM_ACTIVATABLE_ITEM)
     end
 end)
+
+local SCAN_GEMOLOGY_GEM = Action({mount_valid = false, priority = 10, rmb = false})
+SCAN_GEMOLOGY_GEM.id = "SCAN_GEMOLOGY_GEM"
+SCAN_GEMOLOGY_GEM.str = "Scan"
+ENV.AddAction(SCAN_GEMOLOGY_GEM)
+SCAN_GEMOLOGY_GEM.fn = function(act)
+    local gem = act.target
+    if gem ~= nil and gem:HasTag("gemologygem") and act.invobject ~= nil and act.invobject.components.gemologyscanner ~= nil then
+        act.invobject.components.gemologyscanner:Scan(gem, act.doer)
+        return true
+    end
+    return false
+end
+
+ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target, actions, right)
+    if inst ~= nil and inst:HasTag("gemologyscanner") and target ~= nil and target:HasTag("gemologygem") then
+        table.insert(actions, ACTIONS.SCAN_GEMOLOGY_GEM)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))

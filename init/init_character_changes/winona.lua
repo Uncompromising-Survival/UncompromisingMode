@@ -469,3 +469,13 @@ if env.GetModConfigData("winonafishing") then
         UpvalueHacker.SetUpvalue(inst.components.complexprojectile.onhitfn, DoOceanFishing, "DoOceanFishing")
     end)
 end
+
+
+env.AddPrefabPostInit("winona_recipescanner", function(inst)
+    inst:AddTag("gemologyscanner")
+
+    if not TheWorld.ismastersim then return end
+
+    inst:AddComponent("recipescanner")
+	inst.components.recipescanner:SetOnScannedFn(inst.Remove)
+end)
