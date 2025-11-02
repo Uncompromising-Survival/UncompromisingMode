@@ -796,7 +796,7 @@ local function AddIceShield(inst, tier)
 end
 
 local function RemoveIceShield(inst)
-    inst:DoTaskInTime(10, function(inst)
+    inst:DoTaskInTime(50, function(inst)
         inst:PushEvent("regen_iceshield")
     end)
 end

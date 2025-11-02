@@ -200,7 +200,7 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("howl")
                 inst.SoundEmitter:PlaySound(inst.sounds.howl)
-                inst:RegenIceShield(1) --TODO:SCALING TIERS
+                inst:RegenIceShield(2) --TODO:SCALING TIERS
             end,
             events =
             {
