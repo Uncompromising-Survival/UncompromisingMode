@@ -14,18 +14,18 @@ local MineralLogbook = Class(function(self)
 end)
 
 function MineralLogbook:Save()
-    print("saving gemology data")
     if TheNet:IsDedicated() then
-        print("is dedi, returning")
         return
     end
 
     print("saving to persistent string...")
     local data = self:ValidateData(self.known_gems)
     local str = json.encode(data)
-    print(str)
     TheSim:SetPersistentString("gemology_data", str, false)
 end
+
+local MAX_GEM_TIER = 3
+local MIN_GEM_TIER = 0
 
 function MineralLogbook:ValidateData(data)
     local old_data = data
@@ -45,7 +45,7 @@ function MineralLogbook:ValidateData(data)
             print("WARNING: Found gem with non-number tier, correcting to default...")
             data[k] = 0
             corrected = true
-        elseif (v >= 0 and v <= 3) then
+        elseif (v < MIN_GEM_TIER or v > MAX_GEM_TIER) then
             print("WARNING: Found gem with invalid tier, correcting to default...")
             print("Tiers should be 0-3, was " .. v)
             data[k] = 0
@@ -55,31 +55,21 @@ function MineralLogbook:ValidateData(data)
 
     if corrected then
         print("INFO: Broken Mineral Logbook Data was corrected!")
-        print("Old data: ", old_data)
-        print("New data: ", data)
     end
 
     return data
 end
 
 function MineralLogbook:Load()
-    print("loading gemology data")
     if TheNet:IsDedicated() then
-        print("is dedi, returning")
         return
     end
 
     self.known_gems = {}
 
-    print("getting persistent string")
     TheSim:GetPersistentString("gemology_data", function(load_success, data)
-        print("got persistent string")
-        print("load success? ", load_success)
-        print("data?", data)
         if load_success and data ~= nil then
             local status, known_gems = pcall(function() return json.decode(data) end)
-            print("status", status)
-            print("load")
 
             known_gems = self:ValidateData(known_gems)
 
@@ -98,6 +88,16 @@ function MineralLogbook:AddNewGem(gem, tier)
     assert(type(tier) == "number", "Attempted to add a non-string value as mineral logbook data key.")
     assert(type(gem) == "string", "Attempted to add non-number value as mineral logbook data tier value.")
 
+    if tier > MAX_GEM_TIER then
+        print("WARNING: Attempted to add gem with higher tier than allowed, correcting to highest allowed.")
+        print("Tier: " .. tier.." Max Tier: "..MAX_GEM_TIER)
+        tier = MAX_GEM_TIER
+    elseif tier < MIN_GEM_TIER then
+        print("WARNING: Attempted to add gem with lower tier than allowed, correcting to lowest allowed.")
+        print("Tier: " .. tier.." Min Tier: "..MIN_GEM_TIER)
+        tier = MIN_GEM_TIER
+    end
+
     --skip if new tier is less than the current known tier
     if (self.known_gems[gem] ~= nil and self.known_gems[gem] >= tier) then
         return
@@ -110,13 +110,22 @@ function MineralLogbook:AddNewGem(gem, tier)
     self.known_gems[gem] = tier
 
     self:Save()
-
-    return
 end
 
 function MineralLogbook:SetGem(gem, tier)
     assert(type(tier) == "number", "Attempted to add a non-string value as mineral logbook data key.")
     assert(type(gem) == "string", "Attempted to add non-number value as mineral logbook data tier value.")
+
+    if tier > MAX_GEM_TIER then
+        print("WARNING: Attempted to add gem with higher tier than allowed, correcting to highest allowed.")
+        print("Tier: " .. tier.." Max Tier: "..MAX_GEM_TIER)
+        tier = MAX_GEM_TIER
+    elseif tier < MIN_GEM_TIER then
+        print("WARNING: Attempted to add gem with lower tier than allowed, correcting to lowest allowed.")
+        print("Tier: " .. tier.." Min Tier: "..MIN_GEM_TIER)
+        tier = MIN_GEM_TIER
+    end
+
 
     self.known_gems[gem] = tier
 
