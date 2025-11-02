@@ -255,6 +255,13 @@ local function grass(name, stage)
 
         inst.components.burnable:SetBurnTime(0.75)
         inst.components.burnable:SetOnBurntFn(function(inst)
+            local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+
+            if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hoodedcanopy") then
+                inst:Remove()
+                return
+            end
+
             inst.components.pickable:Pick(nil) --nil doesn't give any loot.
         end)
 
