@@ -626,7 +626,7 @@ end
 
 local function AddIceShield(inst, tier)
     local iceShield = SpawnPrefab("um_ice_shield")
-    iceShield:Init(inst, "hound_body", tier)
+    iceShield:Init(inst, "core2", tier)
 end
 
 local function RemoveIceShield(inst)
