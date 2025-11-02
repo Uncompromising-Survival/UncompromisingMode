@@ -479,8 +479,8 @@ local function SetStage(inst)
     ChangeMiniMapIcon(inst)
     if inst.stage >= 3 then
         inst:AddTag("miniblizzard")
+        inst:RegenIceShield(3)
     end
-    inst:RegenIceShield(3)
 end
 
 local function FindPlant(inst)
