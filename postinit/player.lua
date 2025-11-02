@@ -164,28 +164,44 @@ local function OnSetOwner(inst)
         inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
     end
 end
+local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
+local function UpdateMineralLog(inst)
+	--assert(inst = ThePlayer)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, TUNING.SCRAPBOOK_UPDATERADIUS, {"gemology_gem"}, SCRAPBOOK_CANT_TAGS) 
+    for _, ent in ipairs(ents) do
+        local learnt, tier = TheMineralLogbook:IsGemKnown(ent.prefab)
+        if not learnt or tier == nil then
+            --0 tier in the logbok means the player has seen the gem, but doesn't know any effects.
+            TheMineralLogbook:AddNewGem(ent.prefab, 0)
+        end
+    end
+end
+
 
 env.AddPlayerPostInit(function(inst)
 
+    if not TheWorld.ismastersim then
+        inst:DoPeriodicTask(TUNING.SCRAPBOOK_UPDATERATE, UpdateMineralLog)
+    end
 
 
+    ---------------------------------------------------------------------------------------
+    -- [ Code that makes the player play the hands-up animation in Thickets or Similar ] --
+    ---------------------------------------------------------------------------------------
 
-	---------------------------------------------------------------------------------------
-	-- [ Code that makes the player play the hands-up animation in Thickets or Similar ] --
-	---------------------------------------------------------------------------------------
-	
 
-	local _IsInAnyStormOrCloud = inst.IsInAnyStormOrCloud
-		
-	local function IsInAnyStormOrCloud(inst)
-		if inst.thicketcheck then
-			return true
-		else
-			return _IsInAnyStormOrCloud(inst)
-		end	
-	end
-	
-	inst.IsInAnyStormOrCloud = IsInAnyStormOrCloud
+    local _IsInAnyStormOrCloud = inst.IsInAnyStormOrCloud
+
+    local function IsInAnyStormOrCloud(inst)
+        if inst.thicketcheck then
+            return true
+        else
+            return _IsInAnyStormOrCloud(inst)
+        end
+    end
+
+    inst.IsInAnyStormOrCloud = IsInAnyStormOrCloud
 
 
 
@@ -201,17 +217,17 @@ env.AddPlayerPostInit(function(inst)
     end
 
     if not TheWorld.ismastersim then
-		inst:DoPeriodicTask(0.5,function(inst)
-			local tornadoposition 
-			if TheInput:GetWorldEntityUnderMouse() then
-				tornadoposition = TheInput:GetWorldEntityUnderMouse():GetPosition()
-			else
-				tornadoposition = TheInput:GetWorldPosition()
-			end
-			if tornadoposition ~= nil then
-				SendModRPCToServer(GetModRPC("AllMouseGags", "GetTheInput"), tornadoposition.x, tornadoposition.y, tornadoposition.z)
-			end
-		end)
+        inst:DoPeriodicTask(0.5, function(inst)
+            local tornadoposition
+            if TheInput:GetWorldEntityUnderMouse() then
+                tornadoposition = TheInput:GetWorldEntityUnderMouse():GetPosition()
+            else
+                tornadoposition = TheInput:GetWorldPosition()
+            end
+            if tornadoposition ~= nil then
+                SendModRPCToServer(GetModRPC("AllMouseGags", "GetTheInput"), tornadoposition.x, tornadoposition.y, tornadoposition.z)
+            end
+        end)
         return inst
     end
 

@@ -44,7 +44,9 @@ local function GetTierPrefix(inst)
 end
 
 local function GetMainName(inst)
-    return IsGemKnown(inst) and STRINGS.NAMES[string.upper(inst.prefab)] or "Strange Gem"
+    local known, tier = IsGemKnown(inst)
+    --only reveal anme
+    return (tier ~= nil and tier > 0 or not known) and STRINGS.NAMES[string.upper(inst.prefab)] or "Strange Gem"
 end
 
 local function Shine(inst)

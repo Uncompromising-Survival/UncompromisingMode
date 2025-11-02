@@ -6,6 +6,11 @@ TODO:
 
 local MineralLogbook = Class(function(self)
     self.learned_gems = {}
+
+    --structure:
+    --learned_gems[gem_name] = tier - the gem tier. 0 means the player has seen the gem but doesn't know the effects. Reveals the gem exists in the logbook
+    --                                              1 means they have scanned a tier 1 gem or used any tier gem. Reveals the gem name and effects
+    --                                              2-3 means they have scanned a higher-tier gem. Reveals the higher-tier gem effects per tier.
 end)
 
 function MineralLogbook:Save()
