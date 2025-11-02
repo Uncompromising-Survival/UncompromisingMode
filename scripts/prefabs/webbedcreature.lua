@@ -194,6 +194,19 @@ local function Regen(inst, data)
     end
 end
 
+local function ShouldRecoil(inst, attacker, weapon, damage)
+    local has_claw = attacker ~= nil and attacker:HasTag("widowsgrasp")
+
+    if not has_claw then
+        if attacker ~= nil and attacker.components.talker ~= nil then
+            attacker.components.talker:Say(GetString(inst, "WEBBEDCREATURE"))
+            Regen(inst, { attacker = attacker })
+        end
+    end
+
+    return not has_claw, has_claw and damage or damage ~= nil and 0 or nil
+end
+
 local function fn()
     local inst = CreateEntity()
     local trans = inst.entity:AddTransform()
@@ -234,6 +247,8 @@ local function fn()
     --health.invincible = true
 
     inst:AddComponent("combat")
+    inst.components.combat:SetShouldRecoilFn(ShouldRecoil)
+
     inst:ListenForEvent("attacked", Regen)
     inst:ListenForEvent("death", OnKilled)
 
