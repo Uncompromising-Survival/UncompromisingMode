@@ -574,7 +574,7 @@ if GetModConfigData("sleepingbuff") then
     -- TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / TUNING.DSTU.SLEEPINGBUFF
 end
 
-TUNING.DSTU.SPAWN_PROTECTION = GetModConfigData("uncompromising_spawnprotection")
+TUNING.DSTU.SPAWN_PROTECTION = GetModConfigData("_uncompromising_spawnprotection")
 
 TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 
