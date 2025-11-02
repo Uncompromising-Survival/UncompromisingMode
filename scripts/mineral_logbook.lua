@@ -90,11 +90,11 @@ function MineralLogbook:AddNewGem(gem, tier)
 
     if tier > MAX_GEM_TIER then
         print("WARNING: Attempted to add gem with higher tier than allowed, correcting to highest allowed.")
-        print("Tier: " .. tier.." Max Tier: "..MAX_GEM_TIER)
+        print("Tier: " .. tier .. " Max Tier: " .. MAX_GEM_TIER)
         tier = MAX_GEM_TIER
     elseif tier < MIN_GEM_TIER then
         print("WARNING: Attempted to add gem with lower tier than allowed, correcting to lowest allowed.")
-        print("Tier: " .. tier.." Min Tier: "..MIN_GEM_TIER)
+        print("Tier: " .. tier .. " Min Tier: " .. MIN_GEM_TIER)
         tier = MIN_GEM_TIER
     end
 
@@ -118,11 +118,11 @@ function MineralLogbook:SetGem(gem, tier)
 
     if tier > MAX_GEM_TIER then
         print("WARNING: Attempted to add gem with higher tier than allowed, correcting to highest allowed.")
-        print("Tier: " .. tier.." Max Tier: "..MAX_GEM_TIER)
+        print("Tier: " .. tier .. " Max Tier: " .. MAX_GEM_TIER)
         tier = MAX_GEM_TIER
     elseif tier < MIN_GEM_TIER then
         print("WARNING: Attempted to add gem with lower tier than allowed, correcting to lowest allowed.")
-        print("Tier: " .. tier.." Min Tier: "..MIN_GEM_TIER)
+        print("Tier: " .. tier .. " Min Tier: " .. MIN_GEM_TIER)
         tier = MIN_GEM_TIER
     end
 
@@ -144,6 +144,29 @@ end
 --returns a boolean of if the gem is known, and the current known tier.
 function MineralLogbook:IsGemKnown(gem)
     return self.known_gems[gem] ~= nil, self.known_gems[gem]
+end
+
+local all_default_gems = {
+    "um_gemologybluegem1",
+    "um_gemologybluegem2",
+    "um_gemologyredgem1",
+    "um_gemologyredgem2",
+    "um_gemologypurplegem1",
+    "um_gemologypurplegem2",
+    "um_gemologyyellowgem1",
+    "um_gemologyyellowgem2",
+    "um_gemologygreengem1",
+    "um_gemologygreengem2",
+    "um_gemologyorangegem1",
+    "um_gemologyorangegem2",
+    "um_gemologypalegem1",
+    "um_gemologypalegem2",
+}
+
+function MineralLogbook:DebugUnlockAllGems()
+    for _, gem in ipairs(all_default_gems) do
+        self:AddNewGem(gem, MAX_GEM_TIER)
+    end
 end
 
 return MineralLogbook
