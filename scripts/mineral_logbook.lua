@@ -95,6 +95,9 @@ end
 
 --learns a gem at a certain tier
 function MineralLogbook:AddNewGem(gem, tier)
+    assert(type(tier) == "number", "Attempted to add a non-string value as mineral logbook data key.")
+    assert(type(gem) == "string", "Attempted to add non-number value as mineral logbook data tier value.")
+
     --skip if new tier is less than the current known tier
     if (self.known_gems[gem] ~= nil and self.known_gems[gem] >= tier) then
         return
@@ -112,6 +115,9 @@ function MineralLogbook:AddNewGem(gem, tier)
 end
 
 function MineralLogbook:SetGem(gem, tier)
+    assert(type(tier) == "number", "Attempted to add a non-string value as mineral logbook data key.")
+    assert(type(gem) == "string", "Attempted to add non-number value as mineral logbook data tier value.")
+
     self.known_gems[gem] = tier
 
     self:Save()
