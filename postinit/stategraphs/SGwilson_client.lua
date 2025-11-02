@@ -193,9 +193,9 @@ local _OldEatState = inst.states["eat"].onenter
 
     local states = {
         State{
-            name = "usewaxwelljournal_pre",
+            name = "um_usewaxwelljournal_pre",
             tags = {"doing", "busy"},
-            server_states = {"usewaxwelljournal_pre", "usewaxwelljournal"},
+            server_states = {"um_usewaxwelljournal_pre", "um_usewaxwelljournal"},
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
