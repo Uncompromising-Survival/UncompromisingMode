@@ -2437,7 +2437,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         },]]
 
         State {
-            name = "usewaxwelljournal_pre",
+            name = "um_usewaxwelljournal_pre",
             tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, repeatcast)
@@ -2455,7 +2455,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx }) end end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("um_usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx }) end end),
             },
 
             onexit = function(inst)
@@ -2465,7 +2465,7 @@ env.AddStategraphPostInit("wilson", function(inst)
         },
 
         State {
-            name = "usewaxwelljournal",
+            name = "um_usewaxwelljournal",
             tags = { "doing", "nocraftinginterrupt", "nomorph" },
 
             onenter = function(inst, data)

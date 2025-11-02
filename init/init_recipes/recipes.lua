@@ -499,11 +499,11 @@ ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 --ChangeSortKey("codex_mantra", "waxwelljournal", "CHARACTER", true)
 
 if TUNING.DSTU.WAXWELL then
-    AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"MAGIC", "ARMOUR"})
+    AddCharacterRecipe("um_maxwell_armor_sanity", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "armor_sanity", image = "armor_sanity.tex", description = "pact_armor_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "ARMOUR"})
     ChangeSortKey("um_maxwell_armor_sanity", "waxwelljournal", "CHARACTER", true)
     ChangeSortKey("um_maxwell_armor_sanity", "armor_sanity", "ARMOUR", true)
     ChangeSortKey("um_maxwell_armor_sanity", "nightsword", "MAGIC", true)
-    AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "usewaxwelljournal_pre"}, {"MAGIC", "WEAPONS"})
+    AddCharacterRecipe("um_maxwell_nightsword", {Ingredient("nightmarefuel", 3), Ingredient("waxwelljournal", 0)}, TECH.LOST, {builder_tag = "shadowmagic", product = "nightsword", image = "nightsword.tex", description = "pact_sword_sanity", actionstr = "UM_WAXWELL_SUMMON", sg_state = "um_usewaxwelljournal_pre"}, {"MAGIC", "WEAPONS"})
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "CHARACTER", true)
     ChangeSortKey("um_maxwell_nightsword", "nightsword", "WEAPONS", true)
     ChangeSortKey("um_maxwell_nightsword", "um_maxwell_armor_sanity", "MAGIC", true)
