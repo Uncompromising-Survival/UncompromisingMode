@@ -480,6 +480,7 @@ local function SetStage(inst)
     if inst.stage >= 3 then
         inst:AddTag("miniblizzard")
     end
+    inst:RegenIceShield(3)
 end
 
 local function FindPlant(inst)
@@ -593,6 +594,7 @@ local function Coof(inst)
         inst.AnimState:PlayAnimation("flower_2_cough")
         if not inst.fx then
             inst.fx = SpawnPrefab("deer_ice_flakes")
+            inst.fx.AnimState:PlayAnimation("idle")
             inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
         end
         PlayStagedAnim(inst)
@@ -602,6 +604,7 @@ end
 local function OnEntityWake(inst)
     if not inst.fx and inst.stage and inst.stage >= 3 then
         inst.fx = SpawnPrefab("deer_ice_flakes")
+        inst.fx.AnimState:PlayAnimation("idle")
         inst.fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
     if not inst.cooftask then
@@ -618,6 +621,15 @@ local function OnEntitySleep(inst)
     if inst.fx then
         inst.fx:Remove()
     end
+end
+
+
+local function AddIceShield(inst, tier)
+    local iceShield = SpawnPrefab("um_ice_shield")
+    iceShield:Init(inst, "hound_body", tier)
+end
+
+local function RemoveIceShield(inst)
 end
 
 local function mainweed()
@@ -670,6 +682,8 @@ local function mainweed()
             inst.AnimState:PushAnimation("flower_" .. (inst.stage - 1) .. "_idle")
         end
     end)
+
+    inst.RegenIceShield = AddIceShield
 
     ---------------------
 
@@ -968,7 +982,7 @@ end
 
 local function OnUseBandage(inst, target)
     if target and target.components.temperature then
-        target.components.temperature:DoDelta(-target.components.temperature.current-1)
+        target.components.temperature:DoDelta(-target.components.temperature.current - 1)
     end
 end
 
@@ -1011,6 +1025,7 @@ local function bandage_fn()
     inst.components.healer.onhealfn = OnUseBandage
 
     MakeHauntableLaunch(inst)
+
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(10 * TUNING.PERISH_TWO_DAY)

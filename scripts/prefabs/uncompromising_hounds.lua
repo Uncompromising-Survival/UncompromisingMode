@@ -712,6 +712,7 @@ local function GlacialCharging(inst)
     local y1 = 0 + 0.25 * math.random()
 
     local flakes = SpawnPrefab("deer_ice_flakes")
+    flakes.AnimState:PlayAnimation("idle")
     flakes.Transform:SetPosition(x1, y1, z1)
     flakes:DoTaskInTime(1, flakes.Remove)
 end

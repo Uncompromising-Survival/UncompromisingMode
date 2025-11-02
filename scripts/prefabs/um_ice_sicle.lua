@@ -126,7 +126,8 @@ local function DoScythe(inst, target, doer)
         local x, y, z = doer_pos:Get()
         if doer.components.temperature:GetCurrent() >= 4 and not TheWorld.state.iswinter then
             local icefx = SpawnPrefab("deer_ice_flakes")
-		    icefx:DoTaskInTime(0, icefx.KillFX)
+            icefx.AnimState:PlayAnimation("idle")
+		    icefx:DoTaskInTime(0, icefx.KillFX) --is this supposed to be 0??
             icefx.Transform:SetPosition(x, y, z)
             icefx.Transform:SetScale(0.6, 0.7, 0.7)
         end
@@ -173,6 +174,7 @@ local function onattack_blue(inst, attacker, target, skipsanity)
 
     attacker.components.temperature:DoDelta(-10)
     local icefx = SpawnPrefab("deer_ice_flakes")
+    icefx.AnimState:PlayAnimation("idle")
     local x, y, z = attacker.Transform:GetWorldPosition()
 	icefx:DoTaskInTime(0, icefx.KillFX)
     icefx.Transform:SetPosition(x, y, z)
