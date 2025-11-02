@@ -63,7 +63,7 @@ env.AddComponentPostInit("hounded", function(self)
 
     local function SummonSpawn(pt, upgrade, radius_override)
         local prefab = GetSpawnPrefab(upgrade)
-        local spawn_pt = prefab == "magmahound" and GetMagmaSpawnPoint(pt) or GetSpawnPoint(pt, radius_override)
+        local spawn_pt = (prefab == "magmahound" or prefab == "glacialhound") and GetMagmaSpawnPoint(pt) or GetSpawnPoint(pt, radius_override)
         if spawn_pt ~= nil then
             local spawn = SpawnPrefab(prefab)
             if spawn ~= nil then

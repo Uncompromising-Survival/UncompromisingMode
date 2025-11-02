@@ -81,5 +81,4 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	table.insert(tasksetdata.tasks, "MagmaCaves")
 	table.insert(tasksetdata.tasks, "MagmaCavesEntrance")
 	tasksetdata.set_pieces["TentaclePillarToAtrium"] = { count = 1, tasks={"CentipedeCaveTask" } } -- Force atrium to always be in fumarole, which is always part of the magma caves cluster
-	
 end)
