@@ -261,10 +261,8 @@ local function grass(name, stage)
                 inst:Remove()
                 return
             end
-            inst.hidden = true
-            inst.components.pickable:Pick(TheWorld)
-            inst:Hide()
-			inst:DoTaskInTime(0,function(inst) inst.components.propagator:StopSpreading(true) end)
+
+            inst.components.pickable:Pick(nil) --nil doesn't give any loot.
         end)
 
 
@@ -290,10 +288,10 @@ local function grass(name, stage)
                 inst.AnimState:SetScale(-1, 1)
             end
         end)
-		MakeMediumPropagator(inst)
+        MakeMediumPropagator(inst)
         return inst
     end
-	
+
     return Prefab(name, fn, assets)
 end
 

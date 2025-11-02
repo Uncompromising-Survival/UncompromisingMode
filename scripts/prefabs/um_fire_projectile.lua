@@ -23,7 +23,7 @@ local function BurnSurroundings(inst)
 	local damage = inst.damage or 1
 	for i,v in ipairs(burnables) do
 		if v.components.burnable then
-			v.components.burnable:Ignite()
+			v.components.burnable:Ignite(true, inst, inst.damager)
 		end
 		if v.components.health then
 			v.components.health:DoFireDamage(inst.damage, inst.damager, true)
@@ -114,6 +114,8 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst.doer = nil
 
     inst.Physics:SetMass(1)
     inst.Physics:SetDamping(.1)	

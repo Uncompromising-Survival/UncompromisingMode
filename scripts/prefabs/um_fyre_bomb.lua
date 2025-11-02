@@ -17,7 +17,7 @@ local function OnHitFyre(inst, attacker, target)
 		for i, v in pairs(ents) do
 			if (not v:HasTag("player") or v == attacker) then
 				if v.components.burnable ~= nil then
-					v.components.burnable:Ignite()
+					v.components.burnable:Ignite(true, inst, attacker)
 				end
 				if v.components.combat then
 					v.components.combat:GetAttacked(attacker,100)

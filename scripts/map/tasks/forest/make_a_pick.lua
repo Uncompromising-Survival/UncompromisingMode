@@ -1,9 +1,10 @@
 -- Make a Pick changes....
 
+        GLOBAL.require("map/rooms/forest/challengespawner")
+
 -- Veteran's Curse skull man
 if GetModConfigData("vetcurse") == "default" then
     AddTaskPreInit("Make a pick", function(task)
-        GLOBAL.require("map/rooms/forest/challengespawner")
         task.room_choices["veteranshrine"] = 1
     end)
 end
@@ -35,7 +36,7 @@ AddTaskSetPreInit("shipwrecked", function(tasksetdata)
             if GetModConfigData("wixie_walter") then
                 task.room_choices["wixie_puzzlearea_ia"] = 1
             end
-            if GetModConfigData("vetcurse") then
+            if GetModConfigData("vetcurse") == "default" then
                 task.room_choices["veteranshrine_ia"] = 1
             end
         end)

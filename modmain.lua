@@ -290,7 +290,6 @@ AddShardModRPCHandler("UncompromisingSurvival", "ToggleCaveHeatWave", function(s
 end)
 
 local function LearnGemologyGem(data)
-    print("RPC learn new gem")
     data = GLOBAL.json.decode(data)
     GLOBAL.TheMineralLogbook:AddNewGem(data.gem, data.tier)
 end

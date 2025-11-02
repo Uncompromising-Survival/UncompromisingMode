@@ -766,6 +766,14 @@ STRINGS.UM_BOOM_TART = "Boomberry Tart"
 STRINGS.UM_RIBOPOD = "Ribopod"
 STRINGS.UM_RIBOPODDEN = "Bone Mound"
 
+STRINGS.UM_GEMOLOGYGEM_UNKNOWN = "Strange Gem"
+
+STRINGS.UM_GEMOLOGYGEM_PREFIX = {
+    "Cracked",
+    "Chipped",
+    "Flawless"
+}
+
 STRINGS.UM_GEMOLOGYBLUEGEM1 = "Arctic Aquamarine"
 STRINGS.UM_GEMOLOGYBLUEGEM2 = "Chilled Sapphire"
 STRINGS.UM_GEMOLOGYREDGEM1 = "Voracious Ruby"
@@ -823,3 +831,4 @@ STRINGS.UM_GUANO_ROCK = "Guano-covered Rock"
 STRINGS.UM_ROCKLOBSTER_ROCK = "Gestating Rock"
 STRINGS.GLACIALHOUND_ICESPIKE = "Ice Spike"
 STRINGS.UM_FEATHER_TOTEM = "Feather Totem"
+STRINGS.UM_MAGNIFIER = "Gem Magnifier"

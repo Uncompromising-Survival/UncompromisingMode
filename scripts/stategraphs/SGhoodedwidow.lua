@@ -29,8 +29,8 @@ end
 
 local function PlayPreyAnimations(inst) --Our Prey plays these animations
     local anim = inst:HasTag("smallcocoon") and "_small" or inst:HasTag("mediumcocoon") and "_medium" or "_large"
-    inst.AnimState:PlayAnimation("hit"..anim, false)
-    inst.AnimState:PushAnimation("idle"..anim, true)
+    inst.AnimState:PlayAnimation("hit" .. anim, false)
+    inst.AnimState:PushAnimation("idle" .. anim, true)
 end
 
 local function ReadyToLeapOrStick(inst)
@@ -40,7 +40,7 @@ local function ReadyToLeapOrStick(inst)
 end
 
 local function Eat(inst)
-    local webbedcreature = FindEntity(inst, 2, nil, {"webbedcreature"})
+    local webbedcreature = FindEntity(inst, 2, nil, { "webbedcreature" })
     if webbedcreature then -- Food's here! Time to dine
         inst.prey = webbedcreature
         inst.sg:GoToState("eat_pre")
@@ -55,12 +55,12 @@ local function EndLeapFunction(inst, attack)
         inst.components.combat:DoAreaAttack(inst, 1.2 * TUNING.SPIDERQUEEN_ATTACKRANGE) --GroundPound Is purely visual --Had to reduce the AOE range a little bit, since Widow now tries to line up her jumps
         inst.components.groundpounder:GroundPound()
     end
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     MakeCharacterPhysics(inst, 1000, 1)
-    inst.components.locomotor.pathcaps = {ignorecreep = true}
-    inst.Transform:SetPosition(x, y, z) --I know this seems strange, but if I don't the widow actually teleports 
-                                      --back to where it started its jump from right as MakeCharacterPhysics is called
-                                      --this code makes it to where it moves the queen right back to where the end of the jump left it off.
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
+    inst.Transform:SetPosition(x, y, z) --I know this seems strange, but if I don't the widow actually teleports
+    --back to where it started its jump from right as MakeCharacterPhysics is called
+    --this code makes it to where it moves the queen right back to where the end of the jump left it off.
 end
 
 local function RestartTimer(inst, name, time)
@@ -82,13 +82,13 @@ local events =
             elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
                 inst.sg:GoToState("chargeover")
             elseif not inst.sg:HasStateTag("electrocute") then
-                if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then 
-                    inst.sg:GoToState("hit") 
+                if not inst.sg:HasStateTag("ability") and not inst.sg:HasStateTag("attack") and not RunningForAbility(inst) then
+                    inst.sg:GoToState("hit")
                 end
-                if inst.sg:HasStateTag("eating") then -- If we're eating we definately need to go to hit
-                    RestartTimer(inst, "pounce", math.random(3, 5)) --Restart Pounce (Make her do it soon)
+                if inst.sg:HasStateTag("eating") then                 -- If we're eating we definately need to go to hit
+                    RestartTimer(inst, "pounce", math.random(3, 5))   --Restart Pounce (Make her do it soon)
                     RestartTimer(inst, "mortar", math.random(20, 30)) --Restart Mortar
-                    inst.sg:GoToState("hit") 
+                    inst.sg:GoToState("hit")
                 end
             end
         end
@@ -100,7 +100,7 @@ local events =
         end
     end),
     CommonHandlers.OnSleep(),
-    CommonHandlers.OnLocomote(false,true),
+    CommonHandlers.OnLocomote(false, true),
     CommonHandlers.OnFreeze(),
     CommonHandlers.OnElectrocute(),
 }
@@ -126,7 +126,7 @@ local function WebMortar(inst, angle)
         local target = inst.components.combat.target
         local x, y, z = inst.Transform:GetWorldPosition()
         local projectile = SpawnPrefab("web_mortar")
-        projectile.Transform:SetPosition(x,y,z)
+        projectile.Transform:SetPosition(x, y, z)
         local scaleFactor = Lerp(.5, 1.5, 1)
         projectile.shadow = SpawnPrefab("warningshadow")
         projectile.shadow.scaleFactor = scaleFactor
@@ -138,7 +138,7 @@ local function WebMortar(inst, angle)
             angle = 0
         end
         local theta = inst.Transform:GetRotation() + angle
-        theta = theta*DEGREES
+        theta = theta * DEGREES
         targetpos.x = targetpos.x + 15 * math.cos(theta)
         targetpos.z = targetpos.z - 15 * math.sin(theta)
 
@@ -149,24 +149,24 @@ end
 
 local function Watercheck(inst)
     local angle = inst.Transform:GetRotation()
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     x = x + 4 * math.cos(angle)
     z = z + 4 * math.sin(angle)
-    return not TheWorld.Map:IsVisualGroundAtPoint(x,y,z)
+    return not TheWorld.Map:IsVisualGroundAtPoint(x, y, z)
 end
 
 
 local function Charge_ReAssess(inst)
-    local x,y,z = inst.Transform:GetWorldPosition()
-    local targets = TheSim:FindEntities(x, y, z, 6, {"_combat"}, {"webbedcreature"})
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local targets = TheSim:FindEntities(x, y, z, 6, { "_combat" }, { "webbedcreature" })
     local should_attack = false
     local should_exit = false
     local should_turnaround = false
     local should_climb = false
-    for i,target in ipairs(targets) do
+    for i, target in ipairs(targets) do
         local angle = inst:GetAngleToPoint(target:GetPosition())
         local my_angle = inst.Transform:GetRotation()
-        if target and ((math.abs(angle-my_angle) < 60 and inst:GetDistanceSqToInst(target) < 12 ^ 2)) then
+        if target and ((math.abs(angle - my_angle) < 60 and inst:GetDistanceSqToInst(target) < 12 ^ 2)) then
             --TheNet:Announce("Told To Attack")
             should_attack = true
         end
@@ -177,7 +177,7 @@ local function Charge_ReAssess(inst)
     else
         local angle = inst:GetAngleToPoint(inst.components.combat.target:GetPosition())
         local my_angle = inst.Transform:GetRotation()
-        if math.abs(angle-my_angle) > 90 and math.abs(angle-my_angle) < 270 and inst:GetDistanceSqToInst(inst.components.combat.target) > 14 ^ 2  then
+        if math.abs(angle - my_angle) > 90 and math.abs(angle - my_angle) < 270 and inst:GetDistanceSqToInst(inst.components.combat.target) > 14 ^ 2 then
             --TheNet:Announce("Told To Turn Around (Not Facing Target)")
             should_turnaround = true
         end
@@ -203,7 +203,7 @@ local function Charge_ReAssess(inst)
 end
 
 local function ChargeTurn(inst)
-    inst.Physics:SetMotorVelOverride(inst.chargespeed*inst.components.locomotor.walkspeed*inst.components.locomotor:GetSpeedMultiplier(),0,0) -- Bear traps work...
+    inst.Physics:SetMotorVelOverride(inst.chargespeed * inst.components.locomotor.walkspeed * inst.components.locomotor:GetSpeedMultiplier(), 0, 0) -- Bear traps work...
     if inst.treetarget then
         inst:ForceFacePoint(inst.treetarget:GetPosition())
     else
@@ -212,14 +212,14 @@ local function ChargeTurn(inst)
             local my_angle = inst.Transform:GetRotation()
 
             local max_turning = 2 -- Only allow a certain maximum turning speed
-            if angle > my_angle and math.abs(angle-my_angle) > 3 and inst.turn_speed < max_turning then
+            if angle > my_angle and math.abs(angle - my_angle) > 3 and inst.turn_speed < max_turning then
                 inst.turn_speed = inst.turn_speed + 0.1
-            elseif angle < my_angle and math.abs(angle-my_angle) > 3 and inst.turn_speed > -max_turning then
+            elseif angle < my_angle and math.abs(angle - my_angle) > 3 and inst.turn_speed > -max_turning then
                 inst.turn_speed = inst.turn_speed - 0.1
             end
 
             inst.go_up_fucking_tree = true
-            if math.abs(angle-my_angle) > 90 and math.abs(angle-my_angle) < 270 and inst:GetDistanceSqToInst(inst.components.combat.target) > 12^2 then
+            if math.abs(angle - my_angle) > 90 and math.abs(angle - my_angle) < 270 and inst:GetDistanceSqToInst(inst.components.combat.target) > 12 ^ 2 then
                 if inst.turns > 0 then
                     inst.turns = inst.turns - 1
                     inst.sg:GoToState("chargeturnaround")
@@ -235,7 +235,7 @@ local function ChargeTurn(inst)
                 end
             end
             --TheNet:Announce("turning")
-            inst.Transform:SetRotation(my_angle+inst.turn_speed)
+            inst.Transform:SetRotation(my_angle + inst.turn_speed)
         else
             inst.sg:GoToState("chargeover")
         end
@@ -251,11 +251,11 @@ local COLLAPSIBLE_WORK_ACTIONS =
 }
 local COLLAPSIBLE_TAGS = { "NPC_workable" }
 for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
-    table.insert(COLLAPSIBLE_TAGS, k.."_workable")
+    table.insert(COLLAPSIBLE_TAGS, k .. "_workable")
 end
 local NON_COLLAPSIBLE_TAGS = { "FX", --[["NOCLICK",]] "DECOR", "INLIMBO" }
 
-local function DestroyStuff(inst,x,y,z,rot, dist, radius, arc, nofx)
+local function DestroyStuff(inst, x, y, z, rot, dist, radius, arc, nofx)
     if dist ~= 0 then
         x = x + dist * math.cos(rot)
         z = z - dist * math.sin(rot)
@@ -281,15 +281,15 @@ end
 -- From Bearger
 
 local function ChargeAttacked(inst) -- Charge uses a slightly different attack, could probably be unified before going to live
-    local x,y,z = inst.Transform:GetWorldPosition()
+    local x, y, z = inst.Transform:GetWorldPosition()
     local rot = inst.Transform:GetRotation()
-    DestroyStuff(inst,x,y,z,rot, 3, 3, 90, false)
-    local targets = TheSim:FindEntities(x,y,z,inst.components.combat:GetHitRange(),{"_combat"},{"webbedcreature","ghost","bear_trap"})
-    for i,target in ipairs(targets) do
+    DestroyStuff(inst, x, y, z, rot, 3, 3, 90, false)
+    local targets = TheSim:FindEntities(x, y, z, inst.components.combat:GetHitRange(), { "_combat" }, { "webbedcreature", "ghost", "bear_trap" })
+    for i, target in ipairs(targets) do
         local angle = inst:GetAngleToPoint(target:GetPosition())
-        if target and (math.abs(angle-rot) < 90 or inst:GetDistanceSqToInst(target) < 3^2) and target ~= inst then -- Relatively wide, but not completely to her side. (FUCKING SHE WAS KILLING HERSELF GODDAMN IT)
+        if target and (math.abs(angle - rot) < 90 or inst:GetDistanceSqToInst(target) < 3 ^ 2) and target ~= inst then -- Relatively wide, but not completely to her side. (FUCKING SHE WAS KILLING HERSELF GODDAMN IT)
             local dmg = inst.components.combat:CalcDamage(target)
-            target.components.combat:GetAttacked(inst,dmg)
+            target.components.combat:GetAttacked(inst, dmg)
         end
     end
 end
@@ -299,7 +299,7 @@ end
 local ARC = 90 * DEGREES --degrees to each side
 local AOE_RANGE_PADDING = 0
 local AOE_TARGET_MUSTHAVE_TAGS = { "_combat" }
-local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack"}
+local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack" }
 local MAX_SIDE_TOSS_STR = 0.8
 
 local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, targets, web)
@@ -331,13 +331,15 @@ local function DoArcAttack(inst, dist, radius, heavymult, mult, forcelanded, tar
                 inst.components.combat:CanTarget(v)
             then
                 if v:HasTag("webbedcreature") then
-                    v.PlayHitAnimations(v)
+                    if v.PlayHitAnimations ~= nil then
+                        v:PlayHitAnimations()
+                    end
                     local xv, yv, zv = v.Transform:GetWorldPosition()
                     SpawnPrefab("widow_web_combat").Transform:SetPosition(math.random(-1, 1) + xv, 0, math.random(-1, 1) + zv)
                 else
                     if web then
                         if v.components.pinnable ~= nil then
-                            v.components.pinnable:Stick("web_net_trap",splashprefabs)
+                            v.components.pinnable:Stick("web_net_trap", splashprefabs)
                             v:DoTaskInTime(1, function(v) v.components.pinnable:Unstick() end)
                         end
                         web_other = true
@@ -360,19 +362,19 @@ end
 local states =
 {
 
-    State{
+    State {
         name = "idle",
-        tags = {"idle", "canrotate"},
+        tags = { "idle", "canrotate" },
         onenter = function(inst, playanim)
             --if inst.should_go_tired then
-                --inst.should_go_tired = false
-                --inst.sg:GoToState("tired")
+            --inst.should_go_tired = false
+            --inst.sg:GoToState("tired")
             --else
-                inst.Physics:Stop()
-                inst.AnimState:PlayAnimation("idle", true)
-                if math.random() < .2 then
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
-                end
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("idle", true)
+            if math.random() < .2 then
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
+            end
             --end
         end,
 
@@ -382,9 +384,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "attack",
-        tags = {"attack", "busy"},
+        tags = { "attack", "busy" },
 
         onenter = function(inst, target)
             inst.Physics:Stop()
@@ -399,22 +401,22 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) 
+            TimeEvent(0 * FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack")
             end),
-            TimeEvent(10*FRAMES, function(inst) 
+            TimeEvent(10 * FRAMES, function(inst)
                 inst.sg.statemem.tracking = false
             end),
-            TimeEvent(25*FRAMES, function(inst) 
+            TimeEvent(25 * FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt")
             end),
-            TimeEvent(29*FRAMES, function(inst) 
+            TimeEvent(29 * FRAMES, function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/swipe")
             end),
-            TimeEvent(30*FRAMES, function(inst)
+            TimeEvent(30 * FRAMES, function(inst)
                 DoArcAttack(inst, 0, TUNING.SPIDERQUEEN_ATTACKRANGE, nil, nil, nil, inst.sg.statemem.targets)
                 if not inst.hit_other then
-                    inst:PushEvent("onmissother", {target = inst.sg.statemem.original_target})
+                    inst:PushEvent("onmissother", { target = inst.sg.statemem.original_target })
                 end
             end),
         },
@@ -422,14 +424,14 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                inst.sg:GoToState("idle") 
+                inst.sg:GoToState("idle")
             end),
         },
     },
 
-    State{
+    State {
         name = "hit",
-        tags = {"hit"},
+        tags = { "hit" },
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
@@ -443,18 +445,18 @@ local states =
                 if inst.prey then --If we were hit out of snacking, then reposition
                     inst.prey = nil
                 end
-                inst.sg:GoToState("idle") 
+                inst.sg:GoToState("idle")
             end),
         },
     },
 
-    State{
+    State {
         name = "tired",
-        tags = {"busy", "ability"},
+        tags = { "busy", "ability" },
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
-            inst.AnimState:PlayAnimation("tired",false)
+            inst.AnimState:PlayAnimation("tired", false)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream")
         end,
 
@@ -463,10 +465,10 @@ local states =
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
-    
-    State{
+
+    State {
         name = "taunt",
-        tags = {"busy"},
+        tags = { "busy" },
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
@@ -480,9 +482,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "eat_pre",
-        tags = {"busy", "eating"},
+        tags = { "busy", "eating" },
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
@@ -499,9 +501,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "eat_loop",
-        tags = {"eating"}, --not busy! we want the player to hit widow out of this
+        tags = { "eating" }, --not busy! we want the player to hit widow out of this
 
         onenter = function(inst, cb)
             inst.AnimState:SetDeltaTimeMultiplier(1.5)
@@ -512,7 +514,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(25*FRAMES/1.5, function(inst)
+            TimeEvent(25 * FRAMES / 1.5, function(inst)
                 inst.components.health:DoDelta(200)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt")
                 if inst.prey then
@@ -541,9 +543,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "eat_small",
-        tags = {"busy", "ability", "eating"}, -- don't get taken out of the animation 
+        tags = { "busy", "ability", "eating" }, -- don't get taken out of the animation
 
         onenter = function(inst, cb)
             inst.AnimState:HideSymbol("c1")
@@ -559,16 +561,16 @@ local states =
 
         events =
         {
-        EventHandler("animover", 
-            function(inst)
-                inst.sg:GoToState("idle")
-            end),
+            EventHandler("animover",
+                function(inst)
+                    inst.sg:GoToState("idle")
+                end),
         },
     },
 
-    State{
+    State {
         name = "death",
-        tags = {"busy"},
+        tags = { "busy" },
 
         onenter = function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/die")
@@ -579,10 +581,10 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "launchprojectile",
-        tags = {"attack", "busy", "ability"},
-        
+        tags = { "attack", "busy", "ability" },
+
         onenter = function(inst, target)
             inst.sg.statemem.target = target
             inst.components.combat:StartAttack()
@@ -594,7 +596,7 @@ local states =
 
         timeline =
         {
-            TimeEvent(47*FRAMES, function(inst)
+            TimeEvent(47 * FRAMES, function(inst)
                 ShootWebBomb(inst)
             end),
         },
@@ -605,9 +607,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "lobprojectile",
-        tags = {"attack", "busy", "ability"},
+        tags = { "attack", "busy", "ability" },
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -624,10 +626,10 @@ local states =
 
         timeline =
         {
-            TimeEvent(47*FRAMES/1.5, function(inst)
+            TimeEvent(47 * FRAMES / 1.5, function(inst)
                 DoArcAttack(inst, 0, TUNING.SPIDERQUEEN_ATTACKRANGE, nil, nil, nil, inst.sg.statemem.targets, true)
                 if not inst.hit_other then
-                    inst:PushEvent("onmissother", {target = inst.sg.statemem.original_target})
+                    inst:PushEvent("onmissother", { target = inst.sg.statemem.original_target })
                 end
                 WebMortar(inst, -15)
                 WebMortar(inst, 15)
@@ -645,17 +647,17 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-
-            if not inst.components.timer:TimerExists("pounce") then --If Widow is planning on leaping get a new dodge destination
-                inst.ShouldDodge(inst)
-            end
-            inst.sg:GoToState("idle") end),
+                if not inst.components.timer:TimerExists("pounce") then --If Widow is planning on leaping get a new dodge destination
+                    inst.ShouldDodge(inst)
+                end
+                inst.sg:GoToState("idle")
+            end),
         },
     },
 
-    State{
+    State {
         name = "tossplayer", --Not Finished
-        tags = {"attack", "busy", "ability"},
+        tags = { "attack", "busy", "ability" },
 
         onenter = function(inst, target)
             inst.sg.statemem.target = target
@@ -667,15 +669,15 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
-        
-            inst.sg:GoToState("attack") end),
+            EventHandler("animqueueover", function(inst)
+                inst.sg:GoToState("attack")
+            end),
         },
     },
 
-    State{
+    State {
         name = "fall",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             if inst:HasTag("notarget") then
@@ -686,22 +688,23 @@ local states =
 
         timeline =
         {
-            TimeEvent(10*FRAMES, function(inst) 
-                inst.components.combat:DoAreaAttack(inst, TUNING.SPIDERQUEEN_ATTACKRANGE*0.8) --GroundPound Is purely visual
-                inst.components.groundpounder:GroundPound() 
+            TimeEvent(10 * FRAMES, function(inst)
+                inst.components.combat:DoAreaAttack(inst, TUNING.SPIDERQUEEN_ATTACKRANGE * 0.8) --GroundPound Is purely visual
+                inst.components.groundpounder:GroundPound()
             end),
         },
 
         events =
         {
             EventHandler("animqueueover", function(inst)
-            inst.sg:GoToState("taunt") end),
+                inst.sg:GoToState("taunt")
+            end),
         },
     },
 
-    State{
+    State {
         name = "preleapattack",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -714,8 +717,8 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
@@ -724,9 +727,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "leapattack",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -748,9 +751,9 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(20*FRAMES, function(inst) EndLeapFunction(inst, true) end),
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
+            TimeEvent(20 * FRAMES, function(inst) EndLeapFunction(inst, true) end),
         },
 
         events =
@@ -779,9 +782,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "leaptoprey_pre",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -794,8 +797,8 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
@@ -804,9 +807,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "leaptoprey",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -833,9 +836,9 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(20*FRAMES, function(inst) EndLeapFunction(inst) end),
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
+            TimeEvent(20 * FRAMES, function(inst) EndLeapFunction(inst) end),
         },
 
         events =
@@ -845,7 +848,7 @@ local states =
                 if inst._dodgedest then -- If telling me to dodge to a point, move it closer to where I am
                     inst.ShouldDodge(inst)
                 end
-                if FindEntity(inst, 2, nil, {"webbedcreature"}) then
+                if FindEntity(inst, 2, nil, { "webbedcreature" }) then
                     Eat(inst)
                 else
                     inst.sg:GoToState(inst.prey and "leaptoprey_pre" or "idle")
@@ -879,16 +882,16 @@ local states =
             end
         end,
     },
--- [Charge -> Treeleap]
-    State{
+    -- [Charge -> Treeleap]
+    State {
         name = "leaptotree",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
             inst.physicschanged = true
-            local speed = inst:GetDistanceSqToInst(inst.treetarget)^ 0.5 / (FRAMES * 20)
+            local speed = inst:GetDistanceSqToInst(inst.treetarget) ^ 0.5 / (FRAMES * 20)
             inst.components.locomotor:Stop()
             if inst.treetarget then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
@@ -904,16 +907,16 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(20*FRAMES, function(inst) EndLeapFunction(inst) end),
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
+            TimeEvent(20 * FRAMES, function(inst) EndLeapFunction(inst) end),
         },
 
         events =
         {
             EventHandler("animover", function(inst)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
-                inst.sg:GoToState("tree_rebound") 
+                inst.sg:GoToState("tree_rebound")
             end),
         },
 
@@ -941,9 +944,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "leaptotree_shake_pre",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             inst.AnimState:SetBank("widow")
@@ -957,8 +960,8 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
         events =
         {
@@ -966,9 +969,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "leaptotree_shake_jump",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -984,14 +987,14 @@ local states =
             end
             --inst.components.inventory:Equip(inst.weaponitems.meleeweapon)
             inst.AnimState:PushAnimation("leap", false)
-            inst.Physics:SetMotorVelOverride(speed,0,0)
+            inst.Physics:SetMotorVelOverride(speed, 0, 0)
         end,
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(20*FRAMES, function(inst) EndLeapFunction(inst) end),
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
+            TimeEvent(20 * FRAMES, function(inst) EndLeapFunction(inst) end),
         },
 
         events =
@@ -1001,17 +1004,17 @@ local states =
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short")
                 inst.AnimState:PlayAnimation("shaketree_pre")
                 inst.count = 0
-                inst.sg:GoToState("leaptotree_shake_loop") 
+                inst.sg:GoToState("leaptotree_shake_loop")
             end),
         },
 
         onupdate = function(inst)
-            if inst:IsValid() and inst.treetarget and inst.treetarget:IsValid() and inst:GetDistanceSqToInst(inst.treetarget) < 2^2 then
-                inst.Physics:SetMotorVelOverride(0,0,0)
+            if inst:IsValid() and inst.treetarget and inst.treetarget:IsValid() and inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
+                inst.Physics:SetMotorVelOverride(0, 0, 0)
             elseif inst.treetarget and not inst.treetarget:IsValid() then
-                local x,y,z = inst.treetarget.Transform:GetWorldPosition()
-                inst.Transform:SetPosition(x,y,z)
-                inst.Physics:SetMotorVelOverride(0,0,0)
+                local x, y, z = inst.treetarget.Transform:GetWorldPosition()
+                inst.Transform:SetPosition(x, y, z)
+                inst.Physics:SetMotorVelOverride(0, 0, 0)
             end
         end,
 
@@ -1029,9 +1032,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "leaptotree_shake_loop",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             if inst.treetarget then
@@ -1047,27 +1050,27 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) 
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst)
                 ShakeAllCameras(CAMERASHAKE.VERTICAL, .5, .03, 1, inst, 40)
-                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") 
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley")
             end),
         },
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
+            EventHandler("animqueueover", function(inst)
                 if inst.count < 5 then
                     inst.sg.statemem.exitcondition = true
-                    inst.sg:GoToState("leaptotree_shake_loop") 
+                    inst.sg:GoToState("leaptotree_shake_loop")
                 else
-                    inst.sg:GoToState("leaptotree_shake_pst") 
+                    inst.sg:GoToState("leaptotree_shake_pst")
                 end
             end),
         },
 
         onexit = function(inst)
-            inst.ShakeTree(inst,inst.treetarget)
+            inst.ShakeTree(inst, inst.treetarget)
             if inst.count < 5 and not inst.sg.statemem.exitcondition then
                 if not inst.searching_for_tree then
                     inst.FindTreeToShake(inst) -- didn't get to finish ability, retry after done sleeping or being frozen
@@ -1081,24 +1084,24 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "leaptotree_shake_pst",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
         onenter = function(inst)
             if inst.treetarget then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
-            inst.AnimState:PlayAnimation("shaketree_pst",false)
+            inst.AnimState:PlayAnimation("shaketree_pst", false)
             if inst.brain then
                 inst.brain:Stop()
             end
         end,
-        
+
         events =
         {
             EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
-        
+
         onexit = function(inst)
             if inst.brain then
                 inst.brain:Start()
@@ -1108,9 +1111,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "tree_rebound",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -1126,8 +1129,8 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
@@ -1143,9 +1146,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "tree_leapattack",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -1168,9 +1171,9 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(20*FRAMES, function(inst)
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream_short") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
+            TimeEvent(20 * FRAMES, function(inst)
                 --SpawnPrefab("antlion_sinkhole").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 EndLeapFunction(inst, true)
                 TryResetTargetCD(inst)
@@ -1189,7 +1192,7 @@ local states =
         },
 
         onexit = function(inst)
-            RestartTimer(inst, "pounce", math.random(40, 60)) -- Charging has a long cooldown
+            RestartTimer(inst, "pounce", math.random(40, 60))       -- Charging has a long cooldown
             if not inst.components.timer:TimerExists("mortar") then --If Widow is still planning on Mortaring, we need to get a new dodge position
                 inst.ShouldDodge(inst)
             end
@@ -1203,31 +1206,31 @@ local states =
             end
         end,
     },
--- [Leap Home Related] (Like fleeing combat)
-    State{
+    -- [Leap Home Related] (Like fleeing combat)
+    State {
         name = "jumphome",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst:AddTag("notarget")
             inst.AnimState:PlayAnimation("precanopy")
             inst.AnimState:PushAnimation("canopy", false)
-            if inst.components.locomotor then -- Check to make sure 
+            if inst.components.locomotor then -- Check to make sure
                 inst.components.locomotor:Stop()
             end
         end,
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
+            EventHandler("animqueueover", function(inst)
                 inst:DoDespawn()
             end),
-        },   
+        },
     },
 
-    State{
+    State {
         name = "precanopy",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.components.locomotor:Stop()
@@ -1236,8 +1239,8 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
@@ -1246,9 +1249,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "canopyjump", --depricated
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst, data)
             inst.components.locomotor:Stop()
@@ -1261,14 +1264,15 @@ local states =
 
         events =
         {
-            EventHandler("animover", function(inst) 
-            inst:DoTaskInTime(1.5 + math.random(-1, 1), function(inst) inst.sg:GoToState("canopyland") end) end),
+            EventHandler("animover", function(inst)
+                inst:DoTaskInTime(1.5 + math.random(-1, 1), function(inst) inst.sg:GoToState("canopyland") end)
+            end),
         },
     },
 
-    State{
+    State {
         name = "canopyland",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
         onenter = function(inst, data)
             if inst:HasTag("notarget") then
                 inst:RemoveTag("notarget")
@@ -1279,15 +1283,16 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-            inst.components.groundpounder:GroundPound()
-            inst.components.combat:DoAreaAttack(inst, TUNING.SPIDERQUEEN_ATTACKRANGE * 1.2) --GroundPound Is purely visual
-            inst.sg:GoToState("taunt") end),
+                inst.components.groundpounder:GroundPound()
+                inst.components.combat:DoAreaAttack(inst, TUNING.SPIDERQUEEN_ATTACKRANGE * 1.2) --GroundPound Is purely visual
+                inst.sg:GoToState("taunt")
+            end),
         },
     },
--- [Charge Attack Related]
-    State{
+    -- [Charge Attack Related]
+    State {
         name = "prechargeattack",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -1304,13 +1309,13 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
+            EventHandler("animqueueover", function(inst)
                 -- inst.Physics:ClearCollisionMask()
                 -- inst.Physics:CollidesWith(COLLISION.WORLD)
                 inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1323,9 +1328,9 @@ local states =
         },
     },
 
-    State{
+    State {
         name = "charge",
-        tags = {"busy", "noweb", "ability", "charge"},
+        tags = { "busy", "noweb", "ability", "charge" },
 
         onenter = function(inst, data)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1340,14 +1345,14 @@ local states =
 
         timeline =
         {
-            TimeEvent(0*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(7*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(10*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(13*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(17*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(25*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(32*0.48*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(38*0.48*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(0 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(7 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(10 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(13 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(17 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(25 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(32 * 0.48 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(38 * 0.48 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
         },
 
         events =
@@ -1363,9 +1368,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "chargeattack",
-        tags = {"busy", "noweb", "ability", "charge"},
+        tags = { "busy", "noweb", "ability", "charge" },
 
         onenter = function(inst, data)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1380,19 +1385,28 @@ local states =
         timeline =
         {
             --Attack
-            TimeEvent(0*FRAMES, function(inst) inst:PerformBufferedAction() inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack") end),
-            TimeEvent(0.4*25*FRAMES, function(inst) inst:PerformBufferedAction() inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt") end),
-            TimeEvent(0.4*30*FRAMES, function(inst) inst:PerformBufferedAction() inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/swipe") end),
-            TimeEvent(0.4*30*FRAMES, ChargeAttacked),
+            TimeEvent(0 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack")
+            end),
+            TimeEvent(0.4 * 25 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/attack_grunt")
+            end),
+            TimeEvent(0.4 * 30 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/swipe")
+            end),
+            TimeEvent(0.4 * 30 * FRAMES, ChargeAttacked),
             --Walk
-            TimeEvent(0*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(7*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(10*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(13*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(17*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(25*0.4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(32*0.48*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(38*0.48*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(0 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(7 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(10 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(13 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(17 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(25 * 0.4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(32 * 0.48 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(38 * 0.48 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
         },
 
         events =
@@ -1408,9 +1422,9 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "chargeturnaround",
-        tags = {"busy", "noweb", "ability", "charge"},
+        tags = { "busy", "noweb", "ability", "charge" },
 
         onenter = function(inst)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1433,14 +1447,14 @@ local states =
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         events =
         {
-            EventHandler("animqueueover", function(inst) 
-                inst.sg:GoToState(inst.treetarget and "leaptotree" or "charge") 
+            EventHandler("animqueueover", function(inst)
+                inst.sg:GoToState(inst.treetarget and "leaptotree" or "charge")
             end),
         },
 
@@ -1452,29 +1466,29 @@ local states =
         end,
     },
 
-    State{
+    State {
         name = "chargeover",
-        tags = {"busy", "noweb", "ability"},
+        tags = { "busy", "noweb", "ability" },
 
         onenter = function(inst)
             --TheNet:Announce("ToldToStop")
             inst.Physics:ClearMotorVelOverride()
-            local x,y,z = inst.Transform:GetWorldPosition()
+            local x, y, z = inst.Transform:GetWorldPosition()
             MakeCharacterPhysics(inst, 1000, 1)
-            inst.components.locomotor.pathcaps = {ignorecreep = true}
+            inst.components.locomotor.pathcaps = { ignorecreep = true }
             inst.components.locomotor:EnableGroundSpeedMultiplier(true)
             inst.components.locomotor:Stop()
-            inst.Transform:SetPosition(x,y,z)
+            inst.Transform:SetPosition(x, y, z)
             inst.AnimState:SetBank("widow")
             inst.AnimState:PlayAnimation("charge_pst", false)
             RestartTimer(inst, "pounce", math.random(40, 60)) -- Charging has a long cooldown
-            inst.sg:SetTimeout(0.8) --Won't leave?
+            inst.sg:SetTimeout(0.8)                           --Won't leave?
         end,
 
         timeline =
         {
-            TimeEvent(4*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
-            TimeEvent(8*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
+            TimeEvent(4 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_voice") end),
+            TimeEvent(8 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/givebirth_foley") end),
         },
 
         onexit = function(inst)
@@ -1501,7 +1515,7 @@ local states =
 CommonStates.AddSleepStates(states,
     {
         sleeptimeline = {
-            TimeEvent(30*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/sleeping") end),
+            TimeEvent(30 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/sleeping") end),
         },
     },
     {
@@ -1523,14 +1537,14 @@ local backupanim =
 CommonStates.AddWalkStates(states,
     {
         walktimeline = {
-            TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(7*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(10*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(13*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(17*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(25*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(32*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
-            TimeEvent(38*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(7 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(10 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(13 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(17 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(25 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(32 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
+            TimeEvent(38 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/walk_spiderqueen") end),
         },
     }, nil, nil, nil,
     {
