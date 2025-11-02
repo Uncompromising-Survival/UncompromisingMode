@@ -5,7 +5,7 @@ local function Describe(self, context)
     local tier = self.inst:GetTier()
 
     local gem_name = string.gsub(string.gsub(self.inst.prefab, "um_gemology", ""), "gem", "")
-    description = "When applied to an item:\n " .. STRINGS.UM_DESCRIPTORS.GEMOLOGY_GEM[gem_name][tier] .. "\nQuality: " .. tier
+    description = "When applied to an item:\n " .. STRINGS.UM_DESCRIPTOR.GEMOLOGY_GEM[gem_name][tier] .. "\nQuality: " .. tier
 
     return {
         priority = 0,

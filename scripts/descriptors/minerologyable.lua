@@ -5,7 +5,7 @@ local function Describe(self, context)
     local tier = self.tier ~= nil and self.tier + 1 or 1
     if self.enchant ~= nil then
         local gem_name = string.gsub(string.gsub(self.enchant, "um_gemology", ""), "gem", "")
-        description = "Gemology Effects:\n " .. STRINGS.UM_DESCRIPTORS.MINEROLOGYABLE[gem_name][tier] .. "\nQuality: " .. tier
+        description = "Gemology Effects:\n " .. STRINGS.UM_DESCRIPTOR.MINEROLOGYABLE[gem_name][tier] .. "\nQuality: " .. tier
     end
 
     return {

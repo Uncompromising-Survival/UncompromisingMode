@@ -3,12 +3,27 @@ local assets =
     Asset("ANIM", "anim/um_thicket.zip"),
 }
 
+local function OnBurnt(inst)
+    local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
+
+    if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hoodedcanopy") then
+        inst:Remove()
+        return
+    end
+
+    inst.components.pickable:Pick(nil) --nil doesn't give any loot.
+end
+
 local function onregenfn(inst)
     inst:Show()
     inst.hidden = nil
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
     inst:AddTag("briar_plants")
+
+    MakeMediumBurnable(inst)
+    inst.components.burnable:SetBurnTime(0.75)
+    inst.components.burnable:SetOnBurntFn(OnBurnt)
 end
 
 local function makeemptyfn(inst)
@@ -112,7 +127,7 @@ local function onpickedfn(inst, picker)
     inst.AnimState:PlayAnimation("pick")
     SpawnPrefab("oceantree_leaf_fx_chop").Transform:SetPosition(inst.Transform:GetWorldPosition())
     if math.random() < 0.2 then
-        if inst.hidden then
+        if picker == nil then --picker being nil assuming its fire.
             Launch(inst.components.lootdropper:SpawnLootPrefab("ash"), inst, 1.5)
         else
             GenerateLoot(inst, picker)
@@ -120,6 +135,7 @@ local function onpickedfn(inst, picker)
     end
     inst.AnimState:PushAnimation("empty", false)
     inst:RemoveTag("briar_plants")
+    inst:RemoveComponent("burnable")
 end
 
 local thicket_equipment = { "um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk" }
@@ -249,21 +265,11 @@ local function grass(name, stage)
         inst.components.playerprox:SetDist(1.75, 3) --set specific values
         inst.components.playerprox:SetOnPlayerNear(onnear)
         inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
-        MakeMediumBurnable(inst)
         MakeNoGrowInWinter(inst)
         MakeHauntableIgnite(inst)
-
+        MakeMediumBurnable(inst)
         inst.components.burnable:SetBurnTime(0.75)
-        inst.components.burnable:SetOnBurntFn(function(inst)
-            local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
-
-            if node ~= nil and node.tags ~= nil and not table.contains(node.tags, "hoodedcanopy") then
-                inst:Remove()
-                return
-            end
-
-            inst.components.pickable:Pick(nil) --nil doesn't give any loot.
-        end)
+        inst.components.burnable:SetOnBurntFn(OnBurnt)
 
 
 
