@@ -26,7 +26,7 @@ local function fn()
 
     inst.entity:SetPristine()
 
-    if not TheWorld.ismastersim then return end
+    if not TheWorld.ismastersim then return inst end
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
