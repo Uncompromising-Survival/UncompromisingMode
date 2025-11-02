@@ -240,8 +240,9 @@ local prefab_post = {
     "lightning_rod",
     "antlionhat",
     "ice_shield_piercing",
-	"bullkelp_root"
+	"bullkelp_root",
 	--"balatro_machine", -- Keeping this here for Later.
+	"walrus_camp"
 
 }
 
