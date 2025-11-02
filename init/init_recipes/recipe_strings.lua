@@ -178,3 +178,4 @@ RECIPE_DESC.UM_HAT_PEPPERDRAGON = "Invert temperature rules."
 RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
+RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."

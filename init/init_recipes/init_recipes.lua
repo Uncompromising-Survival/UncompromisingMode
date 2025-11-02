@@ -88,3 +88,4 @@ if GetModConfigData("wixie_walter") then
     modimport("init/init_recipes/recipes_wixie")
 end
 modimport("init/init_recipes/recipes_ia")
+modimport("init/init_recipes/ingredient_ui")

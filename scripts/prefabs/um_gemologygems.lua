@@ -40,13 +40,13 @@ end
 local function GetTierPrefix(inst)
     if not IsRevealed(inst) then return "" end
 
-    return inst:GetTier() == 2 and "Chipped " or inst:GetTier() == 3 and "Flawless " or "Cracked "
+    return STRINGS.NAMES.UM_GEMOLOGYGEM_PREFIX[inst:GetTier()].." "
 end
 
 local function GetMainName(inst)
     local known, tier = IsGemKnown(inst)
-    --only reveal anme
-    return (tier ~= nil and tier > 0 or not known) and STRINGS.NAMES[string.upper(inst.prefab)] or "Strange Gem"
+    --only reveal name
+    return (tier ~= nil and tier > 0 or not known) and STRINGS.NAMES[string.upper(inst.prefab)] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN
 end
 
 local function Shine(inst)

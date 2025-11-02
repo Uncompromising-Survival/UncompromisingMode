@@ -609,3 +609,6 @@ ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
 AddRecipe2("um_feather_totem", {Ingredient("boards", 2),  Ingredient("um_moss", 4), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15)}, TECH.MAGIC_TWO, {image="screecher_trinket.tex"}, {"RESTORATION", "MAGIC"})
 ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
+
+AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
+ChangeSortKey("um_magnifier", "nutrientgoggleshat", "CRAFTING_STATION", false)
