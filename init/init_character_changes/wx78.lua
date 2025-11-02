@@ -27,7 +27,7 @@ ModuleDefs.AddCreatureScanDataDefinition("alpha_lightninggoat", "taser", 6)
 ModuleDefs.AddCreatureScanDataDefinition("fruitbat", "movespeed", 2)
 --ModuleDefs.AddCreatureScanDataDefinition("wathom", "nightvision", 1) -- Funney
 ModuleDefs.AddCreatureScanDataDefinition("um_ribopod", "maxhunger", 2)
-ModuleDefs.AddCreatureScanDataDefinition("hoodedwidow", "maxhunger", 6)
+ModuleDefs.AddCreatureScanDataDefinition("hoodedwidow", "maxhealth2", 6)
 
 if KnownModIndex:IsModEnabled("workshop-1289779251") then
     ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3)
