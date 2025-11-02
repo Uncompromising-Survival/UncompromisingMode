@@ -15,7 +15,10 @@ end)
 
 function MineralLogbook:Save()
     print("saving gemology data")
-    if TheNet:IsDedicated() then print("is dedi, returning") return end
+    if TheNet:IsDedicated() then
+        print("is dedi, returning")
+        return
+    end
 
     print("saving to persistent string...")
     local str = json.encode(self.learned_gems)
@@ -25,7 +28,10 @@ end
 
 function MineralLogbook:Load()
     print("loading gemology data")
-    if TheNet:IsDedicated() then print("is dedi, returning") return end
+    if TheNet:IsDedicated() then
+        print("is dedi, returning")
+        return
+    end
 
     self.learned_gems = {}
 
@@ -54,9 +60,15 @@ function MineralLogbook:AddNewGem(gem, tier)
         return
     end
 
+    if tier > 0 then
+        TheFocalPoint.SoundEmitter:PlaySound("dontstarve/HUD/get_gold")
+    end
+
     self.learned_gems[gem] = tier
 
     self:Save()
+
+    return
 end
 
 function MineralLogbook:SetGem(gem, tier)
@@ -68,6 +80,10 @@ end
 function MineralLogbook:ClearKnownGems()
     self.learned_gems = {}
     self:Save()
+end
+
+function MineralLogbook:DumpKnownGems()
+    printwrap("Known gems data", self.learned_gems)
 end
 
 --returns a boolean of if the gem is known, and the current known tier.

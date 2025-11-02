@@ -476,6 +476,6 @@ env.AddPrefabPostInit("winona_recipescanner", function(inst)
 
     if not TheWorld.ismastersim then return end
 
-    inst:AddComponent("recipescanner")
-	inst.components.recipescanner:SetOnScannedFn(inst.Remove)
+    inst:AddComponent("gemologyscanner")
+	inst.components.gemologyscanner:SetOnScannedFn(inst.Remove)
 end)

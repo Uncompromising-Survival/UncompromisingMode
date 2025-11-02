@@ -4,7 +4,7 @@ local assets =
 }
 
 local function ShouldAcceptItem(inst, item)
-    if (item.components.equippable and item.components.equippable.equipslot == EQUIPSLOTS.HANDS and not (item.components.minerologyable and item.components.minerologyable.enchant) and (item.components.tool or item.components.weapon)) or item:HasTag("gemologygem") then -- only allow tools and weapons for now
+    if (item.components.equippable and item.components.equippable.equipslot == EQUIPSLOTS.HANDS and not (item.components.minerologyable and item.components.minerologyable.enchant) and (item.components.tool or item.components.weapon)) or item:HasTag("gemology_gem") then -- only allow tools and weapons for now
         return true
     end
 end
@@ -86,7 +86,7 @@ local function ShowTool(inst)
 end
 
 local function OnGetItemFromPlayer(inst, giver, item)
-    if item:HasTag("gemologygem") then
+    if item:HasTag("gemology_gem") then
         if inst.gem and inst._gem then
             inst._gem:Remove()
             inst._gem = nil

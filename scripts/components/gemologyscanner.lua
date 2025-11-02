@@ -18,7 +18,7 @@ function GemologyScanner:Scan(target, doer)
     target:PushEvent("reveal_gem", {doer = doer})
 
     if self.onscanned ~= nil then
-        self.onscanned(target, doer)
+        self.onscanned(self.inst, target, doer)
     end
 end
 

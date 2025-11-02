@@ -163,7 +163,7 @@ local function GenerateLoot(inst, miner)
         local loot = weighted_random_choice(loot_table[inst.prefab].gemloot)
         local prefab = SpawnPrefab(loot)
         LaunchAt(prefab, inst, miner, -1.8, 1.5, nil, math.random(0, 360))
-        if prefab:HasTag("gemologygem") then
+        if prefab:HasTag("gemology_gem") then
             local rand = math.random()
             if not (rand >= 0.35) then
                 prefab:SetTier(2)

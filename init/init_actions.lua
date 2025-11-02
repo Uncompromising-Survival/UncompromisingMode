@@ -152,11 +152,11 @@ end
 
 local _spellbookstrfn = GLOBAL.ACTIONS.USESPELLBOOK.strfn
 GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
-	if act and act.invobject and act.invobject.prefab == "um_detonator" then
-		return "UM_DETONATE"
-	else
-		return _spellbookstrfn(act)
-	end
+    if act and act.invobject and act.invobject.prefab == "um_detonator" then
+        return "UM_DETONATE"
+    else
+        return _spellbookstrfn(act)
+    end
 end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
@@ -171,14 +171,14 @@ GLOBAL.ACTIONS.LOOKAT.strfn = function(act)
 end]]
 
 --if TUNING.DSTU.WICKERNERF then
-    --local _ReadFn = GLOBAL.ACTIONS.READ.fn
+--local _ReadFn = GLOBAL.ACTIONS.READ.fn
 
-    --GLOBAL.ACTIONS.READ.fn = function(act)
-        --local targ = act.target or act.invobject
-        --if targ ~= nil and act.doer ~= nil and not act.doer:HasTag("aspiring_bookworm") then if targ.components.book ~= nil and act.doer.components.reader ~= nil and act.doer.components.sanity ~= nil and act.doer.components.sanity:IsInsane() then return false end end
+--GLOBAL.ACTIONS.READ.fn = function(act)
+--local targ = act.target or act.invobject
+--if targ ~= nil and act.doer ~= nil and not act.doer:HasTag("aspiring_bookworm") then if targ.components.book ~= nil and act.doer.components.reader ~= nil and act.doer.components.sanity ~= nil and act.doer.components.sanity:IsInsane() then return false end end
 
-        --return _ReadFn(act)
-    --end
+--return _ReadFn(act)
+--end
 --end
 
 -- Storing is drag-clicking an item into a container.
@@ -215,7 +215,7 @@ GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
     if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
     if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
     if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
-	if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
+    if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 
@@ -301,7 +301,7 @@ STORE_BOAT.fn = function(act)
             if k:HasTag("player") then
                 return false, "PLAYER_ON_PLATFORM"
             end
-            
+
             if k.components.container ~= nil then
                 k.components.container:DropEverything()
             end
@@ -309,15 +309,12 @@ STORE_BOAT.fn = function(act)
             if k.components.inventory ~= nil then
                 k.components.inventory:DropEverything()
             end
-
         end
 
         bottle.components.boatbottle:DoFullRecord(act.target)
         local collected_entities = {}
 
         for k in pairs(boat.components.walkableplatform:GetEntitiesOnPlatform()) do
-
-
             if k.components.drownable ~= nil then
                 if shore_pt == nil then
                     shore_pt = GLOBAL.Vector3(GLOBAL.FindRandomPointOnShoreFromOcean(k.Transform:GetWorldPosition()))
@@ -471,17 +468,17 @@ AddComponentAction("SCENE", "stewer_wagstaff", function(inst, doer, actions, rig
 end)
 
 -- AddComponentAction("SCENE", "pickable", function(inst, doer, actions)
-	-- if (inst:HasTag("pickable") and not (inst:HasTag("fire") or inst:HasTag("intense"))) or actions == GLOBAL.ACTIONS.SCYTHE then
-		-- table.insert(actions, GLOBAL.ACTIONS.PICK)
-	-- end
+-- if (inst:HasTag("pickable") and not (inst:HasTag("fire") or inst:HasTag("intense"))) or actions == GLOBAL.ACTIONS.SCYTHE then
+-- table.insert(actions, GLOBAL.ACTIONS.PICK)
+-- end
 -- end)
-		
--- AddComponentAction("VALID", "pickable", function(inst, action, right)
-	-- local valid = right and action == GLOBAL.ACTIONS.SCYTHE -- Can scythe the air
 
-	-- if valid then return true end
+-- AddComponentAction("VALID", "pickable", function(inst, action, right)
+-- local valid = right and action == GLOBAL.ACTIONS.SCYTHE -- Can scythe the air
+
+-- if valid then return true end
 -- end)
-	
+
 -- Wagstaff crockpot actions...
 local _OldCook = GLOBAL.ACTIONS.COOK.fn
 GLOBAL.ACTIONS.COOK.fn = function(act)
@@ -504,7 +501,7 @@ GLOBAL.ACTIONS.COOK.fn = function(act)
 end
 
 GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
-local um_gunshooty = GLOBAL.Action({priority = -1, rmb = true, distance = 40, mount_valid = true})
+local um_gunshooty = GLOBAL.Action({ priority = -1, rmb = true, distance = 40, mount_valid = true })
 um_gunshooty.id = "UM_GUNSHOOTY"
 um_gunshooty.str = GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY
 um_gunshooty.fn = function(act)
@@ -562,8 +559,8 @@ AddSimPostInit(function()
                 EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
                     if inst:HasTag("um_gun") then
                         if right and (inst:HasTag("castontargets") or (target:HasTag("locomotor") and (inst:HasTag("castonlocomotors")
-                            or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
-                            or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
+                                    or (inst:HasTag("castonlocomotorspvp") and (target == doer or GLOBAL.TheNet:GetPVPEnabled() or not (target:HasTag("player") and doer:HasTag("player"))))))
+                                or (inst:HasTag("castoncombat") and doer.replica.combat and doer.replica.combat:CanTarget(target))) then
                             table.insert(actions, GLOBAL.ACTIONS.UM_GUNSHOOTY)
                         end
                         return
@@ -618,22 +615,25 @@ ENV.AddComponentAction("INVENTORY", "um_activatable_item", function(inst, doer, 
     end
 end)
 
-local SCAN_GEMOLOGY_GEM = Action({mount_valid = false, priority = 10, rmb = false})
+local SCAN_GEMOLOGY_GEM = Action({ mount_valid = false, priority = 10, rmb = false })
 SCAN_GEMOLOGY_GEM.id = "SCAN_GEMOLOGY_GEM"
 SCAN_GEMOLOGY_GEM.str = "Scan"
 ENV.AddAction(SCAN_GEMOLOGY_GEM)
 SCAN_GEMOLOGY_GEM.fn = function(act)
     local gem = act.target
-    if gem ~= nil and gem:HasTag("gemologygem") and act.invobject ~= nil and act.invobject.components.gemologyscanner ~= nil then
+    if gem ~= nil and gem:HasTag("gemology_gem") and act.invobject ~= nil and act.invobject.components.gemologyscanner ~= nil then
         act.invobject.components.gemologyscanner:Scan(gem, act.doer)
         return true
     end
-    return false
+    return false, "GEM_ALREADY_KNOWN"
 end
 
 ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target, actions, right)
-    if inst ~= nil and inst:HasTag("gemologyscanner") and target ~= nil and target:HasTag("gemologygem") then
-        table.insert(actions, ACTIONS.SCAN_GEMOLOGY_GEM)
+    local known, tier = TheMineralLogbook:IsGemKnown(target.prefab)
+    if inst ~= nil and inst:HasTag("gemologyscanner") and target ~= nil and target:HasTag("gemology_gem") then
+        if not target:IsRevealed() or not known or tier < target:GetTier() then
+            table.insert(actions, ACTIONS.SCAN_GEMOLOGY_GEM)
+        end
     end
 end)
 

@@ -123,7 +123,7 @@ local function fncommon(gem)
     inst.SetRevealed = SetRevealed
     inst.IsRevealed = IsRevealed
     
-    inst:AddTag("gemologygem")
+    inst:AddTag("gemology_gem")
 
     inst.entity:SetPristine()
 
