@@ -18,7 +18,6 @@ function MineralLogbook:Save()
         return
     end
 
-    print("saving to persistent string...")
     local data = self:ValidateData(self.known_gems)
     local str = json.encode(data)
     TheSim:SetPersistentString("gemology_data", str, false)

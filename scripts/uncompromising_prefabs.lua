@@ -620,6 +620,7 @@ local prefabs = {
     "glacialhound_icespike",
     "iceshield",
     "um_feather_totem",
+    "um_magnifier",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

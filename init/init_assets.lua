@@ -157,12 +157,12 @@ local inventoryitems =
     "smallfishmeat_dried",
     "snapplant",
     "snotroast",
-	"um_ghost_fajita",
-	"um_boom_tart",
+    "um_ghost_fajita",
+    "um_boom_tart",
     "snowcone",
     "snowgoggles",
     "spider_trapdoor",
-	"spider_trapdoor_hooded",
+    "spider_trapdoor_hooded",
     "sporepack",
     "stanton_shadow_tonic",
     "stanton_shadow_tonic2",
@@ -176,8 +176,8 @@ local inventoryitems =
     "turf_um_hotspring_grass",
     "turf_um_hotspring_yellowrock",
     "turf_um_hotspring_whiterock",
-	"turf_um_magma",
-	
+    "turf_um_magma",
+
     "um_bear_trap_equippable",
     "um_bear_trap_equippable_gold",
     "um_bear_trap_equippable_tooth",
@@ -245,8 +245,8 @@ local inventoryitems =
     "um_smolder_spore",
     "um_armor_pyre_nettles",
     "um_blowdart_pyre",
-	"um_fyrite",
-	"um_fyre_bomb",
+    "um_fyrite",
+    "um_fyre_bomb",
     -- Mutation Extrapolation
     "um_staff_meteor",
 
@@ -368,9 +368,9 @@ local inventoryitems =
     "um_blowdart_rime",
     "um_armor_bramble_rimeweed",
     "rimeweed_whip",
-	"um_hat_rime",
-	"um_ice_tail",
-	
+    "um_hat_rime",
+    "um_ice_tail",
+
     -- Snaildrake related
     "snaildrakehat",
     "snaildrakebucket_empty",
@@ -398,59 +398,61 @@ local inventoryitems =
     --Boat bottle
     "um_boatbottle",
     "jawed_scythe",
-	"um_ice_sicle",
+    "um_ice_sicle",
     "snappy_jaw",
-	"um_hat_leafwing",
-	"um_leafwing",
-	"um_detonator",
-	"um_bee_moon",
-	"um_fyre_bomb",
-	"um_meatcomb",
-	"um_meathoney",
-	"um_hat_bee_moon",
-	"um_eyebalm",
-	"um_beemine_moon_item",
-	"um_ribopod",
-	"um_ribopodden",
-	"um_spongeplant_item",
-	"um_sponge_cake",
-	"um_moss",
-	
-	
-	"um_gemologybluegem1",
-	"um_gemologybluegem2", 
-	"um_gemologyredgem1",
-	"um_gemologyredgem2",
-	"um_gemologypurplegem1",
-	"um_gemologypurplegem2", 
-	"um_gemologyyellowgem1", 
-	"um_gemologyyellowgem2",
-	"um_gemologygreengem1", 
-	"um_gemologygreengem2", 
-	"um_gemologyorangegem1", 
-	"um_gemologyorangegem2", 
-	"um_gemologypalegem1",
-	"um_gemologypalegem2", 
-	
-	"um_gemology_geode_red",
-	"um_gemology_geode_blue",
-	"um_gemology_geode_green",
-	"um_gemology_geode_guano",
-	"um_gemology_geode_lobster",
-	"um_gemology_geode_glass",
-	"um_gemology_geode_slime",
-	"um_gemology_geode_ruins",
-	
-	"um_flamethrower",
-	"um_firecream",
-	"um_pepperdragon_bladder",
-	"um_hat_pepperdragon",
-	"um_boomberry_bomb",
-	"um_boomberrypie",
+    "um_hat_leafwing",
+    "um_leafwing",
+    "um_detonator",
+    "um_bee_moon",
+    "um_fyre_bomb",
+    "um_meatcomb",
+    "um_meathoney",
+    "um_hat_bee_moon",
+    "um_eyebalm",
+    "um_beemine_moon_item",
+    "um_ribopod",
+    "um_ribopodden",
+    "um_spongeplant_item",
+    "um_sponge_cake",
+    "um_moss",
+
+
+    "um_gemologybluegem1",
+    "um_gemologybluegem2",
+    "um_gemologyredgem1",
+    "um_gemologyredgem2",
+    "um_gemologypurplegem1",
+    "um_gemologypurplegem2",
+    "um_gemologyyellowgem1",
+    "um_gemologyyellowgem2",
+    "um_gemologygreengem1",
+    "um_gemologygreengem2",
+    "um_gemologyorangegem1",
+    "um_gemologyorangegem2",
+    "um_gemologypalegem1",
+    "um_gemologypalegem2",
+
+    "um_gemology_geode_red",
+    "um_gemology_geode_blue",
+    "um_gemology_geode_green",
+    "um_gemology_geode_guano",
+    "um_gemology_geode_lobster",
+    "um_gemology_geode_glass",
+    "um_gemology_geode_slime",
+    "um_gemology_geode_ruins",
+
+    "um_flamethrower",
+    "um_firecream",
+    "um_pepperdragon_bladder",
+    "um_hat_pepperdragon",
+    "um_boomberry_bomb",
+    "um_boomberrypie",
+
+    "um_magnifier"
 }
 
 for _, item in ipairs(inventoryitems) do
-    RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/"..item..".xml"), item..".tex")
+    RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
 end
 
 Assets = {
@@ -490,22 +492,22 @@ Assets = {
 
     Asset("IMAGE", "images/cookbook_um_durian_cream_marshcake.tex"),
     Asset("ATLAS", "images/cookbook_um_durian_cream_marshcake.xml"),
-    
+
     Asset("IMAGE", "images/cookbook_um_chiles_en_nogada.tex"),
     Asset("ATLAS", "images/cookbook_um_chiles_en_nogada.xml"),
-    
+
     Asset("IMAGE", "images/cookbook_um_rice_pudding.tex"),
     Asset("ATLAS", "images/cookbook_um_rice_pudding.xml"),
-    
+
     Asset("IMAGE", "images/cookbook_um_kebab.tex"),
     Asset("ATLAS", "images/cookbook_um_kebab.xml"),
 
     Asset("IMAGE", "images/cookbook_um_sponge_cake.tex"),
     Asset("ATLAS", "images/cookbook_um_sponge_cake.xml"),
-	
+
     Asset("IMAGE", "images/cookbook_um_boomberrypie.tex"),
     Asset("ATLAS", "images/cookbook_um_boomberrypie.xml"),
-    
+
     --crafting menu avatars
     Asset("IMAGE", "images/crafting_menu_avatars/avatar_wixie.tex"),
     Asset("ATLAS", "images/crafting_menu_avatars/avatar_wixie.xml"),
@@ -619,7 +621,7 @@ Assets = {
     Asset("ANIM", "anim/ghost_wixie_build.zip"),
     Asset("ANIM", "anim/wixie_idle.zip"),
     Asset("ANIM", "anim/player_pistol.zip"),
-    
+
     Asset("ANIM", "anim/swap_jessie_1.zip"),
     Asset("ANIM", "anim/swap_jessie_2.zip"),
     Asset("ANIM", "anim/swap_jessie_3.zip"),
@@ -637,7 +639,7 @@ Assets = {
     Asset("ANIM", "anim/marblebag.zip"),
     Asset("ANIM", "anim/swap_marblebag.zip"),
     Asset("ANIM", "anim/baggedmarbles.zip"),
-    
+
     Asset("ANIM", "anim/wixie_reticuleline.zip"),
 
     Asset("ANIM", "anim/swap_wixiegun.zip"),
@@ -736,7 +738,7 @@ Assets = {
     Asset("ANIM", "anim/deerclops_barrier.zip"),
     Asset("ANIM", "anim/laserclops_anims.zip"),
     Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE)
-    
+
     Asset("ANIM", "anim/nymph.zip"),
 
     Asset("ANIM", "anim/carnival_host_death.zip"),
@@ -945,11 +947,11 @@ Assets = {
     Asset("ANIM", "anim/ds_pig_uppercut.zip"),
 
     Asset("ANIM", "anim/lazy_chester.zip"),
-    
+
     Asset("ANIM", "anim/um_buttery_fly.zip"),
 
     Asset("ANIM", "anim/um_ghost_pepper_item.zip"),
-     
+
     Asset("ANIM", "anim/hound_jump_attack.zip"),
 
     Asset("ANIM", "anim/krampus_bag_smack.zip"),
@@ -1021,8 +1023,8 @@ Assets = {
 
     Asset("ANIM", "anim/spider_trapdoor.zip"),
     Asset("ANIM", "anim/spider_trapdoor_hooded.zip"),
-	Asset("ANIM", "anim/spider_trapdoor_action.zip"),
-	
+    Asset("ANIM", "anim/spider_trapdoor_action.zip"),
+
     Asset("ANIM", "anim/pied_piper.zip"),
 
     Asset("ANIM", "anim/uncompromising_packrat_water.zip"),
@@ -1430,8 +1432,8 @@ Assets = {
     Asset("ANIM", "anim/viperjam.zip"),
 
     Asset("ANIM", "anim/snotroast.zip"),
-	Asset("ANIM", "anim/um_ghost_fajita.zip"),
-	Asset("ANIM", "anim/um_boom_tart.zip"),
+    Asset("ANIM", "anim/um_ghost_fajita.zip"),
+    Asset("ANIM", "anim/um_boom_tart.zip"),
     Asset("ANIM", "anim/rne_goodiebag.zip"),
 
     Asset("ANIM", "anim/hat_spectremask.zip"),
@@ -1632,16 +1634,16 @@ Assets = {
 
     Asset("ATLAS", "images/wortox_lunar_stealer.xml"),
     Asset("IMAGE", "images/wortox_lunar_stealer.tex"),
-    
+
     Asset("ATLAS", "images/wortox_lunar_summoner.xml"),
     Asset("IMAGE", "images/wortox_lunar_summoner.tex"),
-    
+
     Asset("ATLAS", "images/wortox_shadow_weaver.xml"),
     Asset("IMAGE", "images/wortox_shadow_weaver.tex"),
-    
-	
 
-	
+
+
+
     --SWAPS
     Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
     Asset("ANIM", "anim/torso_amulets_klaus.zip"), --Not quite sure...
@@ -1704,8 +1706,8 @@ Assets = {
     Asset("ANIM", "anim/um_goo_honey.zip"),
 
     Asset("ANIM", "anim/um_alpha_lightninggoat.zip"),
-	Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
-	
+    Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
+
     --UI
     Asset("IMAGE", "images/dragonflycontainerborder.tex"),
     Asset("ATLAS", "images/dragonflycontainerborder.xml"),
@@ -1788,10 +1790,10 @@ Assets = {
     Asset("SOUNDPACKAGE", "sound/stmpwyfs.fev"),
     Asset("SOUND", "sound/stmpwyfs.fsb"),
 
-	Asset("SOUNDPACKAGE", "sound/um_detonator.fev"),
-	--Asset("SOUND", "sound/um_detonator_bank00.fsb"),
-	Asset("SOUND", "sound/um_detonator_bank01.fsb"),
-	
+    Asset("SOUNDPACKAGE", "sound/um_detonator.fev"),
+    --Asset("SOUND", "sound/um_detonator_bank00.fsb"),
+    Asset("SOUND", "sound/um_detonator_bank01.fsb"),
+
     --MAP ICONS
     Asset("IMAGE", "images/map_icons/rock_lichen.tex"),
     Asset("ATLAS", "images/map_icons/rock_lichen.xml"),
@@ -1883,9 +1885,9 @@ Assets = {
 }
 
 for _, asset in pairs(inventoryitems) do
-    table.insert(Assets, Asset("IMAGE", "images/inventoryimages/"..asset..".tex"))
-    table.insert(Assets, Asset("ATLAS", "images/inventoryimages/"..asset..".xml"))
-    table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/"..asset..".xml", 256))
+    table.insert(Assets, Asset("IMAGE", "images/inventoryimages/" .. asset .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/inventoryimages/" .. asset .. ".xml"))
+    table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
 end
 
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")
