@@ -617,7 +617,7 @@ end)
 
 local SCAN_GEMOLOGY_GEM = Action({ mount_valid = false, priority = 10, rmb = false })
 SCAN_GEMOLOGY_GEM.id = "SCAN_GEMOLOGY_GEM"
-SCAN_GEMOLOGY_GEM.str = "Scan"
+SCAN_GEMOLOGY_GEM.str = "Analyze"
 ENV.AddAction(SCAN_GEMOLOGY_GEM)
 SCAN_GEMOLOGY_GEM.fn = function(act)
     local gem = act.target
