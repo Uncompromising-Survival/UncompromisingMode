@@ -12,9 +12,6 @@ function IngredientUI._ctor(self, atlas, image, quantity, on_hand, has_enough, n
 
     if string.match(recipe_type, "um_gemology") ~= nil then
         local learned, tier = TheMineralLogbook:IsGemKnown(recipe_type)
-        TheMineralLogbook:DumpKnownGems()
-
-
 
         if not learned or tier <= 0 then
             self:SetTooltip(STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN)
