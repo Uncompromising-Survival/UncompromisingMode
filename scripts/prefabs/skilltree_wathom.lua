@@ -77,9 +77,9 @@ local function BuildSkillsData(SkillTreeFns)
     local skills = 
     {
 		rampage_1 = {
-            title = "Rampage",
+            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_TITLE,
 			icon = "wathom_rampage_1",
-            desc = "Creatures you crash into at the end of your leaping strikes will be knocked back a little.",
+            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_1_DESC,
             group = "rampage",
             tags = {"rampage"},
             pos = {-214+38+38+38+38,58},
@@ -90,18 +90,18 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         rampage_2 = {
-            title = "Lethal Rampage",
+            title = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_TITLE,
 			icon = "wathom_rampage_2",
-            desc = "Damage enemies you crash into. Scales with your Adrenaline.",
+            desc = STRINGS.SKILLTREE.WATHOM.RAMPAGE_2_DESC,
             group = "rampage",
             tags = {"rampage"},
             pos = {-214+38+38+38+38,58+38},
         },
 
         amp_1 = {
-            title = "Amp Up I",
+            title = STRINGS.SKILLTREE.WATHOM.AMP_1_TITLE,
 			icon = "wathom_amp_1",
-            desc = "The nightmare within you festers during combat. Your speed and power rises as you gain Adrenaline, at the cost of sustaining more damage when hit.",
+            desc = STRINGS.SKILLTREE.WATHOM.AMP_1_DESC,
             --icon = "wilson_alchemy_1",
             pos = {-214,58-38},
             group = "amp",
@@ -114,9 +114,9 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         amp_2 = {
-            title = "Amp Up II",
+            title = STRINGS.SKILLTREE.WATHOM.AMP_2_TITLE,
 			icon = "wathom_amp_2",
-            desc = "Your combat abilities as well as damage vulnerability are increased at high Adrenaline levels.",
+            desc = STRINGS.SKILLTREE.WATHOM.AMP_2_DESC,
             --icon = "wilson_alchemy_1",
             pos = {-214,58+38-38},
             group = "amp",
@@ -128,9 +128,9 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         amp_3 = {
-            title = "Amp Up III",
+            title = STRINGS.SKILLTREE.WATHOM.AMP_3_TITLE,
 			icon = "wathom_amp_3",
-            desc = "At maximum Adrenaline, you become Amped Up! While Amped Up, you move at terrifying speeds and attack devastatingly hard. However, sustaining even a single attack could end it all.",
+            desc = STRINGS.SKILLTREE.WATHOM.AMP_3_DESC,
             --icon = "wilson_alchemy_1",
             pos = {-214,58+38+38-38},
             group = "amp",
@@ -142,9 +142,9 @@ local function BuildSkillsData(SkillTreeFns)
             },
         }, 
         shadow_wathom_1 = {
-            title = "Shadow Form",
+            title = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_1_TITLE,
 			icon = "wathom_shadow_wathom_1",
-            desc = "Perishing while Amped Up sheds your physical form, revealing your true nightmarish nature. In this state, incoming damage is redirected to Adrenaline. Falling to 0 Adrenaline puts you down for good.",
+            desc = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_1_DESC,
             --icon = "wilson_torch_brightness_1",
             pos = {-214,58+38+38-38+38},    
             --pos = {1,0},
@@ -158,9 +158,9 @@ local function BuildSkillsData(SkillTreeFns)
             defaultfocus = true,
         },
         shadow_wathom_2 = {
-            title = "Undying",
+            title = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_2_TITLE,
 			icon = "wathom_shadow_wathom_2",
-            desc = "Become a Shadow Creature instead of a Ghost upon death. If you are not missing maximum health when you died, you may re-possess your body and rise again at the cost of double the usual revive penalties.",
+            desc = STRINGS.SKILLTREE.WATHOM.SHADOW_WATHOM_2_DESC,
             --icon = "wilson_torch_brightness_2",
             pos = {-214,58+38+38-38+38+38},
             --pos = {1,-1},
@@ -178,8 +178,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         digitigrade_1 = {
-            title = "Digitigrade",
-            desc = "Enter a four-legged sprint at 50 Adrenaline instead of 75.",
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_1_DESC,
             icon = "wathom_digitigrade_1",
             pos = {-214+38+38+38,58},
             --pos = {0,-1},
@@ -191,9 +191,9 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         digitigrade_2 = {
-            title = "Digitigrade Cardio",
+            title = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_TITLE,
 			icon = "wathom_digitigrade_2",
-            desc = "Running with a Walking Cane causes you to gain Adrenaline over time, up to 50.",
+            desc = STRINGS.SKILLTREE.WATHOM.DIGITIGRADE_2_DESC,
             group = "digitigrade",
             tags = {"digitigrade"},
             --icon = "wilson_alchemy_1",
@@ -201,8 +201,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         bite_1 = {
-            title = "Bite",
-            desc = "Your unarmed strikes are replaced with a viscious bite, replenishing a small amount of health when used as the killing blow.",
+            title = STRINGS.SKILLTREE.WATHOM.BITE_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
 			icon = "wathom_bite_1",
             pos = {-214+38+38,58},
             group = "bite",
@@ -213,8 +213,8 @@ local function BuildSkillsData(SkillTreeFns)
             },
         },
         bite_2 = {
-            title = "Feast",
-            desc = "Slaying a creature with your bite will automatically consume any meat that it would've dropped to the ground, replenishing 10% more stats than usual. Wathom ignores poisoned or high-value foods.",
+            title = STRINGS.SKILLTREE.WATHOM.BITE_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_2_DESC,
 			icon = "wathom_bite_2",
             pos = {-214+38+38,58+38},
             group = "bite",
@@ -222,8 +222,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         bite_mastery = {
-            title = "Abyssal Metabolism",
-            desc = "Consuming creatures via your bite will recover a small amount of lost maximum health. Unlock the ability to eat Lichen.",
+            title = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_DESC,
 			icon = "wathom_bite_mastery",
             onactivate = function(inst, fromload)
 				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
@@ -235,18 +235,17 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         bark_mastery = {
-            title = "Overwhelming Presence",
-            desc = "Barking will spread Nightmare Fuel Puddles on the ground, slowing and panicking mobs that come into contact.",
+            title = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.BARK_MASTERY_DESC,
 			icon = "wathom_bark_mastery",
             pos = {-214+38+38+38+38/2,58+38+38+38},
             group = "bark",
             tags = {"bark"},
         },
-		
-		
+
         echolocation_1 = {
-            title = "Echo",
-            desc = "Your map reveal radius and frequency of echolocation pulses are increased during the night or while underground.",
+            title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_1_DESC,
             icon = "wathom_echolocation_1",
             pos = {-214+38,58},
             group = "echo",
@@ -271,15 +270,15 @@ local function BuildSkillsData(SkillTreeFns)
 						end
 					end)
 				end
-		
+
 			end,
             connects = {
                 "echolocation_2",
             },
         },
         echolocation_2 = {
-            title = "Revealing Echo",
-            desc = "Receive warnings of incoming Hound, Worm, and giant attacks far sooner than usual, up to a day in advance.",
+            title = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.ECHOLOCATION_2_DESC,
             icon = "wathom_echolocation_2",
             pos = {-214+38,58+38},
             group = "echo",
@@ -296,7 +295,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_allegiance_lock_1a = {
-            desc = "Unlock Undying",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1A,
             pos = {204-22+2-50,176},
             --pos = {0.5,0},
             group = "allegiance",
@@ -313,7 +312,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_allegiance_lock_1b = {
-            desc = "Unlock Amp Up III",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_1B,
             pos = {204+22+2-50,176},
             --pos = {0.5,0},
             group = "allegiance",
@@ -349,7 +348,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 	
         wathom_bite_lock = {
-            desc = "Unlock Feast and Revealing Echo",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BITE_LOCK,
             pos = {-214+38+38/2,58-38+38+38+38},  
 			group = "bite",
             --pos = {0,-1},
@@ -366,7 +365,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 	
         wathom_bark_lock = {
-            desc = "Unlock Lethal Rampage and Digitigrade Cardio",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_BARK_LOCK,
             pos = {-214+38+38+38+38/2,58-38+38+38+38},  
 			group = "bite",
             --pos = {0,-1},
@@ -383,7 +382,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_amp_lock = {
-            desc = "Unlock Amp Up III",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_AMP_LOCK,
             pos = {-214+38+38+38/2,58-38},
             --pos = {0.5,0},
 			group = "amp",
@@ -400,7 +399,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_undying_lock = {
-            desc = "Unlock Amp Up III",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_UNDYING_LOCK,
             pos = {0,25+38/2},
             --pos = {0.5,0},
             group = "undying",
@@ -417,8 +416,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_magics = {
-            title = "Magic Affinity",
-            desc = "Being Amped Up will slowly repair the durability of equipped Tier 1 and Tier 2 Magic items.",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_MAGICS_DESC,
             icon = "wathom_magics",
             pos = {38,25+38},
             group = "ampfuel",
@@ -430,8 +429,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_artifacts = {
-            title = "Artifact Affinity",
-            desc = "Being Amped Up will slowly repair the durability of equipped Ancient items and tools as well, aside from those with Green Gems.",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ARTIFACTS_DESC,
             icon = "wathom_artifacts",
             pos = {38+38,25+38},
             group = "ampfuel",
@@ -440,8 +439,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_friends_1 = {
-            title = "Rallying Cry",
-            desc = "Enemies panicked by barking receive a universal damage vulnerability for as long as they panic.",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_1_DESC,
             icon = "wathom_friends_1",
             pos = {38,25},
             group = "rally",
@@ -453,8 +452,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_friends_2 = {
-            title = "Ancient Rally",
-            desc = "Barking will bolster nearby survivor's unique meters, such as Wolfgang's Mightiness or Wigfrid's Inspiration. Has no effect on other Wathoms nor survivors lacking a unique meter.",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_FRIENDS_2_DESC,
             icon = "wathom_friends_2",
             pos = {38+38,25},
             group = "rally",
@@ -462,7 +461,7 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         wathom_allegiance_lock_4 = {
-            desc = "Do not seek Ancient Knowledge.",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_LOCK_4,
             pos = {204-22+2-50,176-38-38},  
             --pos = {0,-1},
             group = "allegiance",
@@ -481,9 +480,9 @@ local function BuildSkillsData(SkillTreeFns)
         },    
 
         wathom_allegiance_shadow = {
-            title = "Ancient Terror I",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_SHADOW_TITLE,
 			icon = "wathom_terror_1",
-            desc = "The Queen will reward you by unlocking your shadow form's true potential. Sanity is permanently replaced by Lunacy. At high Lunacy, lunar Gestalts will begin hunting you down. Occasionally regurgitate Nightmare Fuel while Amped Up.",
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_SHADOW_DESC,
             --icon = "wilson_favor_shadow",
             pos = {204-22+2-100 ,176-110-38+38+38+10},  --  -22
             --pos = {0,-2},
@@ -573,9 +572,9 @@ local function BuildSkillsData(SkillTreeFns)
         }, 
 
         ancient_terror_2 = {
-            title = "Ancient Terror II",
+            title = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_2_TITLE,
 			icon = "wathom_terror_2",
-            desc = " Deal +30% damage to Lunar creatures.",
+            desc = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_2_DESC,
             pos = {204-22+2-100 ,176-110-38+10+38+38+38},  --  -22
             --pos = {0,-2},
             group = "allegiance",
@@ -595,9 +594,9 @@ local function BuildSkillsData(SkillTreeFns)
 
 
         ancient_terror_3 = {
-            title = "Ancient Terror III",
+            title = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_3_TITLE,
 			icon = "wathom_terror_3",
-            desc = "Can devour pure horror to push Amp even further, adding more planar damage and further amplifying bark.",
+            desc = STRINGS.SKILLTREE.WATHOM.ANCIENT_TERROR_3_DESC,
             pos = {204-22+2-100 ,176-110-38+10+38+38+38+38},  --  -22
             --pos = {0,-2},
             group = "allegiance",
@@ -650,8 +649,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 
         wathom_allegiance_neutral = {
-            title = "Ancient Kinship I",
-            desc = "Uncover knowledge of the Ancient Civilization, establishing a bond with the once-proud race. Unlock ancient crafting after visiting a complete Ancient Pseudoscience Station.",
+            title = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_NEUTRAL_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.WATHOM_ALLEGIANCE_NEUTRAL_DESC,
             icon = "wathom_ancient_kinship_1",
             pos = {204+22+2 ,176-110-38+10+38+38},
             --pos = {0,-2},
@@ -671,8 +670,8 @@ local function BuildSkillsData(SkillTreeFns)
         },
 		
         ancient_kinship_2 = {
-            title = "Ancient Kinship II",
-            desc = "Uncover more knowledge of the Ancient Civilization, strengthening your bond with the once-proud race. Ancient Arms and Armor trigger their effects twice as often.",
+            title = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_2_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_2_DESC,
             icon = "wathom_ancient_kinship_2",
             pos = {204+22+2 ,176-110-38+10+38+38+38},
             --pos = {0,-2},
@@ -710,8 +709,8 @@ local function BuildSkillsData(SkillTreeFns)
         -- },
 
         ancient_kinship_3 = {
-            title = "Ancient Kinship III",
-            desc = "Uncover most knowledge of the Ancient Civilization, becoming one with your once-proud race. Deal planar damage and have planar defense with thulecite armor and weapons. [TEMP]",
+            title = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_3_TITLE,
+            desc = STRINGS.SKILLTREE.WATHOM.ANCIENT_KINSHIP_3_DESC,
             icon = "wathom_ancient_kinship_3",
             pos = {204+22+2 ,176-110-38+10+38+38+38+38},
             --pos = {0,-2},

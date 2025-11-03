@@ -43,8 +43,8 @@ GLOBAL.STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Increases attack and working speed.",
-            "Increases attack and working speed.\nA shadow clone may appear to assits you when attakcing or working.",
-            "Increases attack and working speed.\nA shadow clone may appear to assits you when attakcing or working.",
+            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
@@ -117,8 +117,8 @@ GLOBAL.STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Attacks and works faster.",
-            "Attacks and works faster.\nA shadow clone may appear to assits you when attakcing or working.",
-            "Attacks and works faster.\nA shadow clone may appear to assits you when attakcing or working.",
+            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
