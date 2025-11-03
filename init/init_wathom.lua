@@ -1502,13 +1502,13 @@ AddPrefabPostInit("ruins_bat", function(inst)
 
     local function OnUnEquip(inst, owner, ...)
         if inst.components.planardefense then
-            inst:RemoveComponent("planardefense")
+            inst:RemoveComponent("planardamage")
         end
         return _OnUnequip(inst, owner, ...)
     end
 
     inst.components.equippable:SetOnEquip(OnEquip)
-    inst.components.equippable:SetOnUnequip(OnUnequip)
+    inst.components.equippable:SetOnUnequip(OnUnEquip)
 end)
 
 AddPrefabPostInit("ancient_altar", function(inst)

@@ -27,15 +27,15 @@ local function TentacleErupt(inst, owner, target)
     end
 end
 
-local function HasSkill(inst,name)
-	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+local function HasSkill(inst, name)
+    return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
 local function NewOnAttack(inst, attacker, target)
     if target and target.components.combat and target.components.combat.defaultdamage > 0 then
         if target.components.combat.ruinsbatstack then
             target.components.combat.ruinsbatstack = target.components.combat.ruinsbatstack + 1
-            if target.components.combat.ruinsbatstack > 3.1 or (HasSkill(attacker,"ancient_kinship_2") and math.random() > 0.5) then
+            if target.components.combat.ruinsbatstack > 3.1 or (HasSkill(attacker, "ancient_kinship_2") and math.random() > 0.5) then
                 TentacleErupt(inst, attacker, target)
                 target.components.combat.ruinsbatstack = nil
             end
@@ -43,9 +43,9 @@ local function NewOnAttack(inst, attacker, target)
             target.components.combat.ruinsbatstack = 1
         end
     end
-	if attacker:HasTag("wathom") and attacker.components.adrenaline and HasSkill(attacker,"ancient_kinship_2") then
-		attacker.components.adrenaline:DoDelta(3)
-	end
+    if attacker:HasTag("wathom") and attacker.components.adrenaline and HasSkill(attacker, "ancient_kinship_2") then
+        attacker.components.adrenaline:DoDelta(3)
+    end
 
     inst.components.weapon.attackwear = target ~= nil and target:IsValid()
         and target:HasTag("lunar_aligned")
@@ -64,9 +64,9 @@ env.AddPrefabPostInit("ruins_bat", function(inst)
     end
 
     inst:AddComponent("damagetypebonus")
-    inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, 1+17 / 59)
-	
-	local uses = 300
-	inst.components.finiteuses:SetMaxUses(uses)
-	inst.components.finiteuses:SetUses(uses)
+    inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, 1 + 17 / 59)
+
+    local uses = 300
+    inst.components.finiteuses:SetMaxUses(uses)
+    inst.components.finiteuses:SetUses(uses)
 end)
