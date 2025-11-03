@@ -619,6 +619,7 @@ local function OnEntitySleep(inst)
         inst.fx:Remove()
     end
 end
+
 local function mainweed()
     local inst = CreateEntity()
 
