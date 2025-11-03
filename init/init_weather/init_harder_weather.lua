@@ -98,7 +98,7 @@ env.AddPrefabPostInit("forest", function(inst)
 
     inst:AddComponent("um_areahandler")
     --inst:AddComponent("horriblenightmanager")
-    inst:AddComponent("um_oceantilelogger")
+    inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
     --inst:AddComponent("um_pestilencecontroller")
     if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
