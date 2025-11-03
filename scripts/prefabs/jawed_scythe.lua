@@ -406,8 +406,6 @@ local function fnjaw()
 
     inst:AddComponent("inspectable")
 	
-    MakeSmallBurnable(inst)
-    MakeSmallPropagator(inst)
     MakeHauntableLaunchAndIgnite(inst)
 
     inst:AddComponent("inventoryitem")
