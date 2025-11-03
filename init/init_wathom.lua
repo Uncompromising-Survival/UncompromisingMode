@@ -1501,7 +1501,7 @@ AddPrefabPostInit("ruins_bat", function(inst)
     end
 
     local function OnUnEquip(inst, owner, ...)
-        if inst.components.planardefense then
+        if inst.components.planardamage then
             inst:RemoveComponent("planardamage")
         end
         return _OnUnequip(inst, owner, ...)
