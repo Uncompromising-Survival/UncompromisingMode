@@ -288,6 +288,8 @@ local function fn()
     inst:AddTag("worm")
     inst:AddTag("cavedweller")
     inst:AddTag("electricdamageimmune")
+    inst:AddTag("lunar_aligned")
+    
     inst.Light:SetRadius(0)
     inst.Light:SetIntensity(2)
     inst.Light:SetFalloff(.5)
