@@ -33,7 +33,8 @@ AddTask("MagmaOcean", {
     level_set_piece_blocker = true,
     room_tags = { "RoadPoison", "nohunt", "nohasslers" },
     room_choices = {
-        ["MagmaOcean"] = math.random(2, 4),   -- Lava ocean.
+        ["MagmaOcean"] = 4,                  -- Lava ocean.
+        ["MagmaOceanExit"] = 1
     },
     entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket
     background_room = "BGMagmaOcean",
@@ -49,6 +50,7 @@ AddTask("MagmaSacred", { -- Dead End
     room_choices = {
         ["GemForge1"] = 1, -- Gemology Forge
     },
+    entrance_room = "MagmaOceanExit",
     background_room = "FossilMagma",
     room_bg = WORLD_TILES.UM_MAGMA,
     colour = { r = .1, g = .1, b = .1, a = 1 },

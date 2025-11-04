@@ -11,7 +11,7 @@ local rock1_assets =
 	
 }
 	
-SetSharedLootTable( 'magmarock1',
+SetSharedLootTable( 'um_magmarock1',
 {
     {'rocks',       1.00},
     {'rocks',       1.00},
@@ -173,7 +173,7 @@ local function rock1_fn()
         return inst
     end
 
-    inst.components.lootdropper:SetChanceLootTable('magmarock1')
+    inst.components.lootdropper:SetChanceLootTable('um_magmarock1')
 
     return inst
 end
@@ -190,5 +190,5 @@ local function rock2_fn()
     return inst
 end
 
-return Prefab("magmarock1", rock1_fn, rock1_assets),
+return Prefab("um_magmarock1", rock1_fn, rock1_assets),
 Prefab("fyriterock", rock2_fn, rock1_assets)

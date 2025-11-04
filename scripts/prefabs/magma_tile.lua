@@ -33,6 +33,7 @@ local function DoFX(inst)
         local fx = SpawnPrefab("deer_fire_burst")
         fx.Transform:SetPosition(x, y, z)
     end
+
     inst.shinetask = inst:DoTaskInTime(8 + math.random() * 10, DoFX)
 end
 
@@ -46,7 +47,7 @@ local function fn()
     inst.Light:SetIntensity(0.07)
     inst.Light:SetRadius(2)
     inst.Light:SetFalloff(.7)
-    inst.Light:SetColour(235 / 255, 0,0)
+    inst.Light:SetColour(235 / 255, 0, 0)
     inst.Light:Enable(true)
     inst.is_lit = true
 

@@ -13,11 +13,15 @@ function MagmaManager:Init(tiles)
     end
 
     for _, pos in pairs(tiles) do
+        --set to real tile
+        local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
+        TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.UM_MAGMA_LAVAMOLTEN)
+
         --spawn temperature/light/etc
-        for px = -2, 2, 2 do
-            for pz = -2, 2, 2 do
-                local prefab = SpawnPrefab("magma_tile")
+        for px = -2, 2, 4 do
+            for pz = -2, 2, 4 do
                 if #TheSim:FindEntities(pos.x + px, 0, pos.z + pz, 1, { "magma_tile" }, {}) == 0 then
+                    local prefab = SpawnPrefab("magma_tile")
                     prefab.Transform:SetPosition(pos.x + px, 0, pos.z + pz)
                 end
             end
@@ -29,9 +33,8 @@ function MagmaManager:Init(tiles)
             for pz = -16, 16, 4 do
                 if TheWorld.Map:IsPassableAtPoint(pos.x + px, 0, pos.z + pz) then
                     local chance = math.abs(((math.abs(px) / 16 + math.abs(pz) / 16) / 2) - 1)
-                    print(chance)
                     if (math.random() <= chance) then
-                        local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x + px, 0, pos.z + pz)
+                        tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x + px, 0, pos.z + pz)
 
                         TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.UM_MAGMA_LAVABORDER)
                     end
@@ -85,7 +88,7 @@ function MagmaManager:OnUpdate(dt)
         if v.duration <= 100 and math.random() > 0.5 then
             local fx1 = SpawnPrefab("fossilizing_fx_" .. math.random(1, 2))
             fx1.Transform:SetPosition(v.x + (math.random(-4, 4) * math.random()), 0, v.z + (math.random(-4, 4) * math.random()))
-            
+
             local fx2 = SpawnPrefab("deer_fire_burst")
             fx2.Transform:SetPosition(v.x + (math.random(-4, 4) * math.random()), 0, v.z + (math.random(-4, 4) * math.random()))
         end

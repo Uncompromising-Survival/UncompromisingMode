@@ -41,33 +41,3 @@ env.AddComponentPostInit("temperature", function(self)
         return _OnUpdate(self, dt, ...)
     end
 end)
-
---[[
-env.AddPrefabPostInitAny(function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    if inst.components.burnable then
-        inst:DoPeriodicTask(4, function(inst)
-            if inst:HasTag("INLIMBO") or not inst:IsValid() then
-                return
-            end
-
-            local x, y, z = inst.Transform:GetWorldPosition()
-            local lava_dist = TheWorld.Map:GetClosestTileDist(x, y, z, WORLD_TILES.UM_MAGMA_LAVAMOLTEN, 4)
-
-            --somehow, stuff can have their burnable removed.
-            if inst.components.burnable then
-                if lava_dist <= 4 then
-                    if lava_dist >= 1.5 then
-                        inst.components.burnable:StartWildfire()
-                    else
-                        inst.components.burnable:Ignite()
-                    end
-                end
-            end
-        end)
-    end
-end)
-]]

@@ -613,7 +613,7 @@ DESCRIBE.UM_RIMEWEED_TEQUILA = "It's far too cold to enjoy."
 DESCRIBE.UM_RIMEWEED_SPAGETT = "Crunchy spagetti, not my first choice."
 
 -- Lava Caves
-DESCRIBE.MAGMAROCK1 = DESCRIBE.ROCKS
+DESCRIBE.UM_MAGMAROCK1 = DESCRIBE.ROCKS
 DESCRIBE.MAGMABONE = "I wonder if the worms got to it."
 
 DESCRIBE.UM_COOKPOT_WAGSTAFF = {
