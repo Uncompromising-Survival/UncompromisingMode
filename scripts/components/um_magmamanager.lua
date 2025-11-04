@@ -60,9 +60,23 @@ function MagmaManager:OnLoad(data)
     self.cooled_down_tiles = data.cooled_down_tiles
 end
 
+
 function MagmaManager:CoolDownMagmaTile(x, z, duration)
+    for k,v in pairs(self.cooled_down_tiles) do
+        if v.x == x and v.z == z then
+            v.duration = duration --refresh duration
+            return
+        end
+    end
+
+
+
     local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x, 0, z)
-    TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.UM_MAGMA_LAVABORDER)
+    if not TheWorld.Map:GetTile(tile_x, tile_z) == WORLD_TILES.UM_MAGMA_LAVAMOLTEN then
+        return
+    end
+
+    TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.UM_MAGMA_LAVABORDER) --TODO? Custom tile
 
     for _, v in ipairs(TheSim:FindEntities(x, 0, z, 6)) do
         v:PushEvent("check_magma_cooled")
