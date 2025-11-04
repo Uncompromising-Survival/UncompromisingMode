@@ -7,7 +7,7 @@ local TARGET_MELT_MUST_TAGS = { "frozen", "firemelt" }
 env.AddComponentPostInit("propagator", function(self)
     local _OldOnUpdate = self.OnUpdate
 
-    function self:OnUpdate(dt)
+    function self:OnUpdate(dt, ...)
         if TheWorld.state.season == "winter" and not self.inst.sg then
             self:CalculateHeatCap()
 
@@ -86,7 +86,7 @@ env.AddComponentPostInit("propagator", function(self)
                 end
             end
         else
-            _OldOnUpdate(self, dt)
+            _OldOnUpdate(self, dt, ...)
         end
     end
 end)
