@@ -242,7 +242,8 @@ local prefab_post = {
     "ice_shield_piercing",
 	"bullkelp_root",
 	--"balatro_machine", -- Keeping this here for Later.
-	"walrus_camp"
+	"walrus_camp",
+	"backpacks"
 
 }
 

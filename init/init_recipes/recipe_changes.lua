@@ -157,6 +157,7 @@ AllRecipes["goggleshat"].ingredients = {
 }
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
+AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
 AllRecipes["saddle_race"].ingredients = {
     Ingredient("livinglog", 2),
