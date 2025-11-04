@@ -180,6 +180,7 @@ AllRecipes["goggleshat"].ingredients = {
 }
 
 AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
+AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
 AllRecipes["saddle_race"].ingredients = {
     Ingredient("livinglog", 2),
@@ -1100,7 +1101,7 @@ end
 AddRecipe2(
     "um_armor_pyre_nettles",
     { Ingredient("firenettles", 5), Ingredient("silk", 1) },
-    TECH.SCIENCE_TWO,
+    TECH.NONE,
     nil,
     { "ARMOUR", "WINTER" }
 )
