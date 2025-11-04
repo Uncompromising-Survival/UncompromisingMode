@@ -207,7 +207,8 @@ local prefab_post = {
     "cookiecutter",
     "seastack", --loot changes
     "antlionhat",
-    "spiderqueen"
+    "spiderqueen",
+	"backpacks"
 }
 
 local stategraph_post = {
