@@ -253,7 +253,7 @@ AddRoom("GemForge1", {
     }
 })
 
-AddRoom("TestMagma", {
+AddRoom("MagmaOcean", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA_LAVAMOLTEN,
     contents = {
@@ -265,6 +265,20 @@ AddRoom("TestMagma", {
         countprefabs = {},
     }
 })
+
+AddRoom("BGMagmaOcean", {
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    value = WORLD_TILES.UM_MAGMA_LAVAMOLTEN,
+    contents = {
+        distributepercent = .08,
+        distributeprefabs =
+        {
+
+        },
+        countprefabs = {},
+    }
+})
+
 
 
 AddRoom("BGMagmaNoLava", {

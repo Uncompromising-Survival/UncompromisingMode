@@ -191,6 +191,7 @@ local TASKS = {
     ["MagmaCaves"]                  = "UM_MAGMA_AREA",
     ["MagmaCavesEntrance"]          = "UM_MAGMA_AREA",
     ["MagmaSacred"]                 = "UM_MAGMA_AREA",
+    ["MagmaOcean"]                 = "UM_MAGMA_AREA",
 
     --grotto
     ["GrottoEntrance"]              = "MOON_GROTTO_AREA",

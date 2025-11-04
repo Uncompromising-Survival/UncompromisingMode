@@ -491,6 +491,13 @@ local function GetTileForGrottoFloodHeavy(noise)
     return WORLD_TILES.FUNGUSMOON
 end
 
+local function GetTileForMoltenMagma(noise)
+    if noise > 0.25 and noise < 0.5 then
+        return WORLD_TILES.UM_MAGMA_LAVAMOLTEN
+    end
+    return WORLD_TILES.UM_MAGMA_LAVABORDER
+end
+
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
 AddTile("UM_HOTSPRING_FORESTY", "NOISE")
@@ -514,9 +521,11 @@ NoiseTileFunctions[WORLD_TILES.UM_HOODED_FOREST_SPARSE] = GetTileForHoodedForest
 
 NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
 
-
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_FUMAROLE] = GetTileForMagmaRole
+
+NoiseTileFunctions[WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = GetTileForMoltenMagma
+NoiseTileFunctions[WORLD_TILES.UM_MAGMA_LAVABORDER] = GetTileForMoltenMagma
 
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_LIGHTFLOODED] = GetTileForGrottoFloodLight
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_HEAVYFLOODED] = GetTileForGrottoFloodHeavy
