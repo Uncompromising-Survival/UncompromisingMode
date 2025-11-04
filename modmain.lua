@@ -76,6 +76,7 @@ modimport("init/init_descriptions/descriptorstrings.lua")
 modimport("init/init_descriptions/skilltreestrings.lua")
 modimport("init/init_wathom")
 modimport("init/um_tree_rock_data")
+modimport("init/init_magmatiles")
 
 if GetModConfigData("funny rat") then
     AddModCharacter("winky", "FEMALE")

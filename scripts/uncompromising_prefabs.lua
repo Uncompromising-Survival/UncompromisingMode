@@ -621,6 +621,7 @@ local prefabs = {
     "iceshield",
     "um_feather_totem",
     "um_magnifier",
+    "magma_tile"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

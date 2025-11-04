@@ -296,6 +296,34 @@ AddTile(
     }
 )
 
+
+AddTile(
+    "UM_MAGMA_LAVAMOLTEN", --tile_name 1
+    "IMPASSABLE",                --tile_range 2 --can't be immpassible so we can do actions on it.
+    {              --tile_data 3
+        ground_name = "floortox",
+    },
+    {
+        name = "rocky",
+        noise_texture = "ground_floortox.tex",
+        runsound = "dontstarve/movement/run_marsh",
+        walksound = "dontstarve/movement/walk_marsh",
+        snowsound = "dontstarve/movement/run_ice",
+        mudsound = "dontstarve/movement/run_mud",
+        colors = GROUND_OCEAN_COLOR
+    },
+    { --minimap_tile_def 5
+        name = "hoodedmoss.tex",
+        atlas = "ancienthoodedturf.xml",
+        noise_texture = "mini_ground_xenobasalt.tex"
+    },
+    { --turf_def 6
+        name = "magma_rock",
+        anim = "magma_rock",
+        bank_build = "turf_archives"
+    }
+)
+
 AddTile(
     "UM_MAGMA_LAVABORDER", --tile_name 1
     "LAND",                --tile_range 2

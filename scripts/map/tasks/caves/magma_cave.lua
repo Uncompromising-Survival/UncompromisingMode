@@ -34,6 +34,7 @@ AddTask("MagmaSacred", { -- Dead End
 		room_tags = {"RoadPoison", "nohunt", "nohasslers"},
 		room_choices={
 			["GemForge1"] = 1, -- Gemology Forge
+            ["TestMagma"] = 2,
 		},
 		entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket
 		background_room="FossilMagma",
