@@ -25,7 +25,6 @@ local function ShouldWeaponPierce(inst, weapon, attacker)
     return false
 end
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-    print("should recoil", inst, attacker, weapon, damage)
     if inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker) then
         if attacker ~= nil and attacker.components.talker ~= nil then
             attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
@@ -58,7 +57,6 @@ local function Init(inst, parent, fx_symbol, tier)
 
     if parent.components.health ~= nil then
         parent.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-            print("redirect", target, cause == "fire" and amount * 10 or amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
             if inst.components.health ~= nil and inst:IsValid() then
                 if cause == "fire" then
                     amount = amount * 10
@@ -78,7 +76,6 @@ local function Init(inst, parent, fx_symbol, tier)
         parent.shield_fx:Remove()
     end
 
-    print("spawning shield FX")
     parent.shield_fx = SpawnPrefab("deer_ice_flakes")
     parent.shield_fx.Transform:SetPosition(parent.Transform:GetWorldPosition())
     parent.shield_fx.entity:AddFollower()

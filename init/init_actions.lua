@@ -1,3 +1,4 @@
+local UpvalueHacker = require("tools/upvaluehacker")
 -- Update for PAWN
 AddAction("LAVASPIT", "LAVASPIT", function(act)
     if act.doer and act.target and act.doer.prefab == "dragonfly" then

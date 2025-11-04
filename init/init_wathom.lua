@@ -1475,7 +1475,7 @@ AddPrefabPostInit("armorruins", function(inst)
         return _OnEquip(inst, owner, ...)
     end
 
-    local function OnUnEquip(inst, owner, ...)
+    local function OnUnequip(inst, owner, ...)
         if inst.components.planardefense then
             inst:RemoveComponent("planardefense")
         end
@@ -1500,9 +1500,9 @@ AddPrefabPostInit("ruins_bat", function(inst)
         return _OnEquip(inst, owner, ...)
     end
 
-    local function OnUnEquip(inst, owner, ...)
-        if inst.components.planardefense then
-            inst:RemoveComponent("planardefense")
+    local function OnUnequip(inst, owner, ...)
+        if inst.components.planardamage then
+            inst:RemoveComponent("planardamage")
         end
         return _OnUnequip(inst, owner, ...)
     end

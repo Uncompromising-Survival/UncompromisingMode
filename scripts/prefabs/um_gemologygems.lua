@@ -15,8 +15,12 @@ local function OnLoad(inst, data)
     if data and data.tier then
         --wait for netvar to init, just in case
         inst:DoTaskInTime(0, function(inst)
-            inst:SetTier(data.tier)
-            inst:SetRevealed(data.revealed)
+            if data.tier ~= nil then
+                inst:SetTier(data.tier)
+            end
+            if data.revealed ~= nil then
+                inst:SetRevealed(data.revealed)
+            end
         end)
     end
 end
@@ -34,13 +38,15 @@ local function IsRevealed(inst)
 end
 
 local function SetRevealed(inst, reveal)
-    inst._is_revealed:set(reveal)
+    if reveal ~= nil then
+        inst._is_revealed:set(reveal)
+    end
 end
 
 local function GetTierPrefix(inst)
     if not IsRevealed(inst) then return "" end
 
-    return STRINGS.NAMES.UM_GEMOLOGYGEM_PREFIX[inst:GetTier()].." "
+    return STRINGS.NAMES.UM_GEMOLOGYGEM_PREFIX[inst:GetTier()] .. " "
 end
 
 local function GetMainName(inst)
@@ -122,7 +128,7 @@ local function fncommon(gem)
     inst.SetTier = SetTier
     inst.SetRevealed = SetRevealed
     inst.IsRevealed = IsRevealed
-    
+
     inst:AddTag("gemology_gem")
 
     inst.entity:SetPristine()

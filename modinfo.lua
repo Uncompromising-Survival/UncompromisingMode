@@ -7,7 +7,7 @@ end
 
 --RELEASE.MAJOR.MINOR.FIX
 --axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "1.6.0.0 Beta v1"
+local _version = "1.6.0.0 Beta v2.0.2"
 
 description = [[
     󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
@@ -1489,8 +1489,8 @@ configuration_options = {
     -----------------------------
     BinaryConfig("announce_basestatus", "[DEV] Announce Ratsniffer",
         "[Developer Tool] Prints the exact rat sniff values to chat to be viewed in real time.", false),
-    BinaryConfig("uncompromising_spawnprotection", "[DEV] Improved Spawnprotection",
-        "Spawnprotection triggers more often and for longer, more likely to save laggy players in transition.", false),
+    BinaryConfig("_uncompromising_spawnprotection", "Improved Spawnprotection",
+        "Spawnprotection triggers more often and for longer, more likely to save laggy players in transition.", true),
     --	BinaryConfig("chartest_tools", "[DEV] Character Tools","[Developer Tool] Certain characters spawn with items that help test their mechanics.",false),
     SkipSpace(),
 

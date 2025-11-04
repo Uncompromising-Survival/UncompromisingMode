@@ -67,7 +67,8 @@ setmetatable(COCOON_DEFS.SHIPWRECKED, {
 
 local characters = {
     GENERIC = {
-        loot = { Item("skeleton"),
+        loot = {
+            Item("skeleton"),
             Item("boneshard", 2),
             Item("boneshard", 2, .5),
             Item("cutgrass", 6),
@@ -80,20 +81,23 @@ local characters = {
         }
     },
     WILSON = {
-        loot = { Item("blueprint", 3),
+        loot = {
+            Item("blueprint", 3),
             Item("blueprint", 2, .5),
             Item("beardhair", 4),
             Item("beardhair", 2, .5),
             Item(function() return RandomItem("bluegem", "redgem", "purplegem") end, 2) }
     },
     WILLOW = {
-        loot = { Item("firestaff"),
+        loot = {
+            Item("firestaff"),
             Item("sludge_oil"),
             Item("lighter", 1, 1, true),
             Item(function() return RandomItem("snapalm", "slurtleslime") end, 4, .5), }
     },
     WOLFGANG = {
-        loot = { Item("armormarble", 1, 1, true),
+        loot = {
+            Item("armormarble", 1, 1, true),
             Item("marble", 6),
             Item("pigskin"),
             Item("potato_cooked", 3, 1, true),
@@ -102,7 +106,8 @@ local characters = {
             Item("bonestew", 1, .3, true) }
     },
     WENDY = {
-        loot = { Item("ghostflowerhat", 1, 1, true),
+        loot = {
+            Item("ghostflowerhat", 1, 1, true),
             Item("moon_tree_blosson", 6, .5, true),
             Item("petals_evil", 4, 1, true),
             Item(function() return RandomItem("ghostlyelixir_fastregen", "ghostlyelixir_slowregen") end, 2),
@@ -114,7 +119,8 @@ local characters = {
             Item("butterfly", 4, .5), }
     },
     WX78 = {
-        loot = { Item("gears", 2),
+        loot = {
+            Item("gears", 2),
             Item("gears", 1, .5),
             Item("transistor", 2),
             Item("goatmilk", 2, 1, true),
@@ -125,7 +131,8 @@ local characters = {
             Item(function() return TheWorld.state.isspring and RandomItem("raincoat", "rainhat") or nil end, 1, .1, true), }
     },
     WICKERBOTTOM = {
-        loot = { Item("papyrus", 4),
+        loot = {
+            Item("papyrus", 4),
             Item("papyrus", 2, .5),
             Item("featherpencil", 3),
             Item("featherpencil", 1, .5),
@@ -157,14 +164,16 @@ local characters = {
             end) }
     },
     WOODIE = {
-        loot = { Item("walking_stick", 1, 1, true),
+        loot = {
+            Item("walking_stick", 1, 1, true),
             Item("boards", 10, .5),
             Item("log", 10),
             Item("log", 20, .75),
             Item(function() return RandomItem("wereitem_beaver", "wereitem_moose", "wereitem_goose") end, 1, 1, true), }
     },
     WAXWELL = {
-        loot = { Item("nightmarefuel", 4),
+        loot = {
+            Item("nightmarefuel", 4),
             Item("nightmarefuel", 6, .5),
             Item("tophat", 1, 1, true),
             Item("rabbit"),
@@ -172,9 +181,10 @@ local characters = {
             Item(function() return RandomItem("nightsword", "armor_sanity") end, 1, 1, true), }
     },
     WATHGRITHR = {
-        loot = { Item(function()
-            return TheWorld.state.iswinter and "trunk_winter" or "trunk_summer"
-        end, 1, 1, true),
+        loot = {
+            Item(function()
+                return TheWorld.state.iswinter and "trunk_winter" or "trunk_summer"
+            end, 1, 1, true),
             Item("meat", 6, 1, true),
             Item("meat", 2, .5, true),
             Item("wathgrithrhat"),
@@ -183,7 +193,8 @@ local characters = {
             Item("spear_wathgrithr", 1, .5, true), }
     },
     WEBBER = {
-        loot = { Item("silk", 6),
+        loot = {
+            Item("silk", 6),
             Item("silk", 2, .5),
             Item("spidereggsack"),
             Item("healingsalve", 3),
@@ -192,7 +203,8 @@ local characters = {
             Item("sewing_kit") }
     },
     WINONA = {
-        loot = { Item("sewing_tape", 2),
+        loot = {
+            Item("sewing_tape", 2),
             Item("sewing_tape", 2, .5),
             Item("nitre", 4),
             Item("niter", 4, .5),
@@ -203,7 +215,8 @@ local characters = {
             Item(function() return RandomItem("nightstick", "bugzapper") end, 1, .1, true), }
     },
     WARLY = {
-        loot = { Item("yotc_seedpacket_rare", 3),
+        loot = {
+            Item("yotc_seedpacket_rare", 3),
             Item("saltrock"),
             Item("saltrock", 5, .5),
             Item(function() return RandomItem("pepper", "garlic") end, 3, 1, true),
@@ -217,7 +230,8 @@ local characters = {
 
     },
     WORTOX = {
-        loot = { Item("wortox_soul", 4),
+        loot = {
+            Item("wortox_soul", 4),
             Item("wortox_soul", 16, .3),
             Item("redgem"),
             Item("redgem", 2, .5),
@@ -230,7 +244,8 @@ local characters = {
             Item("krampus_sack", 1, .01), }
     },
     WORMWOOD = {
-        loot = { Item("yotc_seedpacket_rare", 5),
+        loot = {
+            Item("yotc_seedpacket_rare", 5),
             Item("livinglog", 2),
             Item("livinglog", 4, .5),
             Item(function() return RandomItem("compostwrap", "tillweedsalve") end, 4, 1, true),
@@ -244,7 +259,8 @@ local characters = {
             Item("lureplantbulb", 1, .2), }
     },
     WURT = {
-        loot = { Item("cutreeds", 4),
+        loot = {
+            Item("cutreeds", 4),
             Item("cutreeds", 8, .5),
             Item("tentaclespots", 2, .5),
             Item("mosquito", 4, .1),
@@ -257,7 +273,8 @@ local characters = {
             Item("mermhat", 1, .2, true), }
     },
     WALTER = {
-        loot = { Item(function() return RandomItem("smallfishmeat_dried", "smallmeat_dried") end, 4, 1, true),
+        loot = {
+            Item(function() return RandomItem("smallfishmeat_dried", "smallmeat_dried") end, 4, 1, true),
             Item(function() return RandomItem("monstermeat_dried", "monstersmallmeat_dried") end, 5, .5, true),
             Item("kelp_dried", 4),
             Item("kelp_dried", 2, .5),
@@ -269,7 +286,8 @@ local characters = {
             Item("um_record_walter", 1, .05), }
     },
     WANDA = {
-        loot = { Item("thulecite_pieces", 4),
+        loot = {
+            Item("thulecite_pieces", 4),
             Item("thulecite_pieces", 8, .5),
             Item("nightmarefuel", 2),
             Item("nightmarefuel", 6, .5),
@@ -280,7 +298,8 @@ local characters = {
             Item("oldager_become_younger_front_fx", 1, .5), }
     },
     WINKY = {
-        loot = { Item("trinket_20", 1),
+        loot = {
+            Item("trinket_20", 1),
             Item("spoiled_food", 6),
             Item("spoiled_food", 12, .5),
             Item("rat_tail", 2),
@@ -304,7 +323,8 @@ local characters = {
             Item("um_record_winky", 1, .05), }
     },
     WATHOM = {
-        loot = { Item("purplegem", 1),
+        loot = {
+            Item("purplegem", 1),
             Item("meat", 2, 1, true),
             Item("meat", 4, .5, true),
             Item("nightmarefuel", 4),
@@ -316,7 +336,8 @@ local characters = {
             Item("um_record_wathom", 1, .05), }
     },
     WIXIE = {
-        loot = { Item("bagofmarbles", 1),
+        loot = {
+            Item("bagofmarbles", 1),
             Item("bagofmarbles", 3, .5),
             Item(function() return RandomItem("um_blowdart_pyre", "um_blowdart_rime") end, 3, .5),
             Item(function() return RandomItem("slingshotammo_honey", "slingshotammo_goop") end, 20, .75),
@@ -332,7 +353,8 @@ local characters = {
 
     },
     WES = {
-        loot = { Item("balloonparty_confetti_cloud", 5),
+        loot = {
+            Item("balloonparty_confetti_cloud", 5),
             Item("balloonspeed", 10, .5),
             Item("balloon", 1, .01),
             Item("freshfruitcrepes", 1),
@@ -341,7 +363,8 @@ local characters = {
             Item("waterballoon", 10, .3), }
     },
     WAGSTAFF = {
-        loot = { Item("wagpunk_bits", 4),
+        loot = {
+            Item("wagpunk_bits", 4),
             Item("wagpunk_bits", 4, .5),
             Item("cutstone", 2),
             Item("cutstone", 1, .5),

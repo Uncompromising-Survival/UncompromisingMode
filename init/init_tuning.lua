@@ -299,7 +299,8 @@ TUNING.DSTU = {
     SHADOW_ITEMS = GetModConfigData("shadow_items"),
     SNOWSTORMS = GetModConfigData("snowstorms"),
     HARDER_SHADOWS = GetModConfigData("harder_shadows"),
-    DREAD_EYE = GetModConfigData("dreadeye"),
+    DREADEYES_ALLOWED = GetModConfigData("dreadeyes_allowed"),
+    CREEPINGFEAR_ALLOWED = GetModConfigData("creepingfear_allowed"),
     MAX_DISTANCE_TO_SHADOWS = 1225, -- 35^2
     CREEPINGFEAR_SPEED = 4.8,
     CREEPINGFEAR_HEALTH = 1600,
@@ -574,7 +575,7 @@ if GetModConfigData("sleepingbuff") then
     -- TUNING.SLEEP_TICK_PERIOD = TUNING.SLEEP_TICK_PERIOD / TUNING.DSTU.SLEEPINGBUFF
 end
 
-TUNING.DSTU.SPAWN_PROTECTION = GetModConfigData("uncompromising_spawnprotection")
+TUNING.DSTU.SPAWN_PROTECTION = GetModConfigData("_uncompromising_spawnprotection")
 
 TUNING.BATTLESONG_FIRE_RESIST_MOD = 0
 

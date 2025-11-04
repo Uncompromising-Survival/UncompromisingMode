@@ -712,6 +712,7 @@ local function GlacialCharging(inst)
     local y1 = 0 + 0.25 * math.random()
 
     local flakes = SpawnPrefab("deer_ice_flakes")
+    flakes.AnimState:PlayAnimation("idle")
     flakes.Transform:SetPosition(x1, y1, z1)
     flakes:DoTaskInTime(1, flakes.Remove)
 end
@@ -796,7 +797,7 @@ local function AddIceShield(inst, tier)
 end
 
 local function RemoveIceShield(inst)
-    inst:DoTaskInTime(10, function(inst)
+    inst:DoTaskInTime(50, function(inst)
         inst:PushEvent("regen_iceshield")
     end)
 end

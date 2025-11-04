@@ -12,8 +12,8 @@ SetSharedLootTable( 'um_pepperdragon_nest',
     {'firenettles',			1.00},
     {'firenettles',			1.00},
     {'firenettles',		1.00},
-    {'boneshards',		1.00},
-	{'boneshards',		1.00},
+    {'boneshard',		1.00},
+	{'boneshard',		1.00},
     --{'trinket_22',	1.00},
 })
 

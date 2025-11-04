@@ -27,7 +27,6 @@ local function SetOrientation(inst, rotation)
     inst.Transform:SetRotation(rotation)
 
     if inst.anims.narrow then
-
         if IsNarrow(inst) then
             if not inst.bank_narrow_set then
                 inst.bank_narrow_set = true
@@ -85,6 +84,12 @@ local function UncompromisingSpawnGOOOOO(inst, data)
             end
             if prefab then
                 -- for area handlers, so they can find all things created by a especific SS.
+
+                if inst.bg_tile then
+                    local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(x + v.x * rotx, (v.y and v.y + y) or 0, z + v.z * rotz)
+                    TheWorld.Map:SetTile(tile_x, tile_z, inst.bg_tile)
+                end
+
                 if inst.umss_tags then
                     for k, v in ipairs(inst.umss_tags) do
                         prefab:AddTag("umss_" .. v)
@@ -207,6 +212,7 @@ local function DefineTable(inst, data)
         inst.spawninwater_prefabs = funtable.spawninwater_prefabs == nil and false or funtable.spawninwater_prefabs
         inst.SpawnFn = funtable.spawnfn
         inst.umss_tags = funtable.tags
+        inst.bg_tile = funtable.bg_tile
     end
 end
 

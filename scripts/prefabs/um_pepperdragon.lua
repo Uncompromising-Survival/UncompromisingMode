@@ -10,7 +10,7 @@ local assetsbladder =
     Asset("ANIM", "anim/um_pepperdragon_bladder.zip"),
 }
 
-local loot = { "meat", "meat","meat","meat","um_pepperdragon_bladder" }
+local loot = { "meat", "meat", "meat", "meat", "um_pepperdragon_bladder" }
 local MAX_CHASEAWAY_DIST = 32
 local MAX_CHASE_DIST = 256
 
@@ -30,9 +30,8 @@ local function Retarget(inst)
             and inst.components.combat:CanTarget(guy) and guy.components.temperature and guy.components.temperature.current < 20
     end
     return FindEntity(inst, 12, IsValidTarget1, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS, RETARGET_ONEOF_TAGS)
-	or
-	FindEntity(inst, 24, IsValidTarget2, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS, RETARGET_ONEOF_TAGS)
-	
+        or
+        FindEntity(inst, 24, IsValidTarget2, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS, RETARGET_ONEOF_TAGS)
 end
 
 local function KeepTarget(inst, target)
@@ -82,7 +81,6 @@ local function OnAttacked(inst, data)
         inst.components.combat:SetTarget(data.attacker)
         inst._last_attacker = data.attacker
         inst._last_attacked_time = time
-
     elseif inst.components.combat:SuggestTarget(data.attacker) then
         inst._last_attacker = data.attacker
         inst._last_attacked_time = GetTime()
@@ -97,16 +95,16 @@ local function OnEntityWake(inst, data)
 end
 
 local function oneat(inst, food)
-	-- Don't want to mangle the hunger component to do this. just use a simple counter instead.
-	if food.prefab ~= "ice" then
-		inst.bellyfullness = inst.bellyfullness + 2
-	else -- ice less effective
-		inst.bellyfullness =  inst.bellyfullness + 0.5
-	end
-	if inst.bellyfullness > 5 and not inst.components.timer:TimerExists("bellyfull") then
-		inst.components.timer:StartTimer("bellyfull",60*inst.bellyfullness)
-		inst.bellyfullness = 0 -- reset belly.
-	end
+    -- Don't want to mangle the hunger component to do this. just use a simple counter instead.
+    if food.prefab ~= "ice" then
+        inst.bellyfullness = inst.bellyfullness + 2
+    else -- ice less effective
+        inst.bellyfullness = inst.bellyfullness + 0.5
+    end
+    if inst.bellyfullness > 5 and not inst.components.timer:TimerExists("bellyfull") then
+        inst.components.timer:StartTimer("bellyfull", 60 * inst.bellyfullness)
+        inst.bellyfullness = 0 -- reset belly.
+    end
 end
 
 local function fn()
@@ -127,7 +125,7 @@ local function fn()
     ----------
     inst:AddTag("animal")
     inst:AddTag("largecreature")
-	inst:AddTag("PyreToxinImmune")
+    inst:AddTag("PyreToxinImmune")
 
     inst.AnimState:SetBank("um_pepperdragon")
     inst.AnimState:SetBuild("um_pepperdragon")
@@ -139,7 +137,7 @@ local function fn()
         return inst
     end
 
-	inst.override_combat_fx_height = "high"
+    inst.override_combat_fx_height = "high"
     inst._last_attacker = nil
     inst._last_attacked_time = nil
 
@@ -154,7 +152,7 @@ local function fn()
     ------------------
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(2000)
-	inst.components.health.fire_damage_scale = 0 
+    inst.components.health.fire_damage_scale = 0
     ------------------
 
     inst:AddComponent("combat")
@@ -172,10 +170,10 @@ local function fn()
 
     -- inst:AddComponent("eater")
     -- inst.components.eater:SetDiet({ FOODTYPE.COLDFOOD }, { FOODTYPE.COLDFOOD })
-	-- inst.components.eater:SetOnEatFn(oneat)
-	
-	-- I don't want to make an entire foodtype just for cold foods, we're doing a hacky workaround. Why? Because the items may already have a primary or secondary foodtype
-	inst.OnEatHack = oneat
+    -- inst.components.eater:SetOnEatFn(oneat)
+
+    -- I don't want to make an entire foodtype just for cold foods, we're doing a hacky workaround. Why? Because the items may already have a primary or secondary foodtype
+    inst.OnEatHack = oneat
     ------------------
     inst:AddComponent("sleeper")
     inst.components.sleeper.watchlight = true
@@ -186,8 +184,8 @@ local function fn()
     ------------------
 
     inst:AddComponent("inspectable")
-	
-	inst:AddComponent("knownlocations")
+
+    inst:AddComponent("knownlocations")
     ------------------
 
 
@@ -197,14 +195,14 @@ local function fn()
 
     inst:ListenForEvent("entitysleep", OnEntitySleep)
     inst:ListenForEvent("entitywake", OnEntityWake)
-	
-	inst:AddComponent("timer")
-	inst.tolerance = 0 -- for the pounce counterattack
-	inst.flamecount = 0 -- how many times he barfs fire in the loop
-	inst.bellyfullness = 0 -- how many times he has to eat before he's ready for a nap
-	
-	
-	inst.Transform:SetScale(1.5,1.5,1.5)
+
+    inst:AddComponent("timer")
+    inst.tolerance = 0  -- for the pounce counterattack
+    inst.flamecount = 0 -- how many times he barfs fire in the loop
+    inst.bellyfullness = 0 -- how many times he has to eat before he's ready for a nap
+
+
+    inst.Transform:SetScale(1.5, 1.5, 1.5)
     return inst
 end
 
@@ -227,9 +225,9 @@ local function fnbladder()
     if not TheWorld.ismastersim then
         return inst
     end
-	
-    inst:AddComponent("inspectable")
 
+    inst:AddComponent("inspectable")
+    inst:AddComponent("stackable")
     inst:AddComponent("inventoryitem")
 
     return inst
@@ -237,4 +235,4 @@ end
 
 
 return Prefab("um_pepperdragon", fn, assets, prefabs),
-Prefab("um_pepperdragon_bladder",fnbladder,assetsbladder)
+    Prefab("um_pepperdragon_bladder", fnbladder, assetsbladder)

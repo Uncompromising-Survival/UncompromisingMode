@@ -38,6 +38,10 @@ if GetModConfigData("hoodedforest") then               -- Lock Everything Behind
             return
         end
 
+        if not table.contains(tasksetdata.tasks, "Forest hunters") then
+            return
+        end
+
         local target_task = "Forest hunters"
         local remove_setpiece_list = { "ResurrectionStone", "WormholeGrass", "CaveEntrance", "MooseNest" } -- Ensure these setpieces cannot spawn in hooded forest, they aren't prevented by level_set_piece_blocker
         for j, setpiece in ipairs(remove_setpiece_list) do

@@ -118,7 +118,7 @@ local function commonfn()
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:AddRandomLoot("fishmeat_small", 1)
-    inst.components.lootdropper:AddRandomLoot("boneshards", .25)
+    inst.components.lootdropper:AddRandomLoot("boneshard", .25)
     inst.components.lootdropper.numrandomloot = 1
 
     inst:AddComponent("knownlocations")
