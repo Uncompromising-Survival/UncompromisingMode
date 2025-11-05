@@ -36,8 +36,8 @@ local function fn()
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetOnFinished(inst.Remove)
-    inst.components.finiteuses:SetMaxUses(20)
-    inst.components.finiteuses:SetUses(20)
+    inst.components.finiteuses:SetMaxUses(50)
+    inst.components.finiteuses:SetUses(50)
 
     MakeHauntableLaunch(inst)
 
