@@ -137,7 +137,7 @@ local function DoDamage(inst)
             end
 
             if v:HasTag("_combat") and v.components.combat ~= nil then
-                v.components.combat:GetAttacked(inst.owner, 30, inst)
+                v.components.combat:GetAttacked(inst.owner or inst, 30)
                 inst.components.health:Kill() --to prevent trapping targets in the ice
             end
 
