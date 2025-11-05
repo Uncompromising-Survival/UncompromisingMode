@@ -94,4 +94,4 @@ local function fn()
     return inst
 end
 
-return Prefab(" ", fn, assets)
+return Prefab("waterfall_lavamolten", fn, assets)
