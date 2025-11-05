@@ -603,6 +603,8 @@ configuration_options = {
 	true),--false),
 		
     BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
+	BinaryConfig("inventory_backpacks", "Inventory Backpacks", "When empty, backpacks can be stored in chests and inventories.", true),
+	
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
