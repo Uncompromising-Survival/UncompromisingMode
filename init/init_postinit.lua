@@ -207,8 +207,7 @@ local prefab_post = {
     "cookiecutter",
     "seastack", --loot changes
     "antlionhat",
-    "spiderqueen",
-	"backpacks"
+    "spiderqueen"
 }
 
 local stategraph_post = {
@@ -383,6 +382,10 @@ end
 
 if GetModConfigData("pocket_powertrip_") then
     table.insert(prefab_post, "pocket_powertrip")
+end
+
+if GetModConfigData("inventory_backpacks") then
+    table.insert(prefab_post, "inventory_backpacks")
 end
 
 if GetModConfigData("harder_koalefants") then
