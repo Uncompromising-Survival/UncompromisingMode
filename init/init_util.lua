@@ -65,3 +65,12 @@ function Um_CustomLightCheck(inst, dark_val, light_val)
 		return inLight ~= false]]
     end
 end
+
+local THE_LUA_REGISTRY = debug.getregistry()
+function UpdateLuaRegistry(old, new)
+    for k, v in pairs(THE_LUA_REGISTRY) do
+        if old == v then
+            THE_LUA_REGISTRY[k] = new
+        end
+    end
+end

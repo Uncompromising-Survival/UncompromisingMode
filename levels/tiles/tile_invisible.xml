@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Atlas>
+	<Texture filename="tile_invisible.tex" />
+	<Elements>
+		<Element name="01" u1="0.001" u2="0.124" v2="0.999" v1="0.876" variant="" />
+		<Element name="01" u1="0.126" u2="0.249" v2="0.999" v1="0.876" variant="a" />
+		<Element name="02" u1="0.001" u2="0.124" v2="0.874" v1="0.751" variant="" />
+		<Element name="02" u1="0.126" u2="0.249" v2="0.874" v1="0.751" variant="a" />
+		<Element name="03" u1="0.251" u2="0.374" v2="0.999" v1="0.876" variant="" />
+		<Element name="03" u1="0.251" u2="0.374" v2="0.874" v1="0.751" variant="a" />
+		<Element name="04" u1="0.376" u2="0.499" v2="0.999" v1="0.876" variant="" />
+		<Element name="04" u1="0.376" u2="0.499" v2="0.874" v1="0.751" variant="a" />
+		<Element name="05" u1="0.001" u2="0.124" v2="0.749" v1="0.626" variant="" />
+		<Element name="05" u1="0.001" u2="0.124" v2="0.624" v1="0.501" variant="a" />
+		<Element name="06" u1="0.126" u2="0.249" v2="0.749" v1="0.626" variant="" />
+		<Element name="06" u1="0.251" u2="0.374" v2="0.749" v1="0.626" variant="a" />
+		<Element name="07" u1="0.126" u2="0.249" v2="0.624" v1="0.501" variant="" />
+		<Element name="07" u1="0.251" u2="0.374" v2="0.624" v1="0.501" variant="a" />
+		<Element name="08" u1="0.376" u2="0.499" v2="0.749" v1="0.626" variant="" />
+		<Element name="08" u1="0.376" u2="0.499" v2="0.624" v1="0.501" variant="a" />
+		<Element name="09" u1="0.501" u2="0.624" v2="0.999" v1="0.876" variant="" />
+		<Element name="09" u1="0.626" u2="0.749" v2="0.999" v1="0.876" variant="a" />
+		<Element name="10" u1="0.501" u2="0.624" v2="0.874" v1="0.751" variant="" />
+		<Element name="10" u1="0.751" u2="0.874" v2="0.999" v1="0.876" variant="a" />
+		<Element name="11" u1="0.626" u2="0.749" v2="0.874" v1="0.751" variant="" />
+		<Element name="11" u1="0.501" u2="0.624" v2="0.749" v1="0.626" variant="a" />
+		<Element name="12" u1="0.626" u2="0.749" v2="0.749" v1="0.626" variant="" />
+		<Element name="12" u1="0.501" u2="0.624" v2="0.624" v1="0.501" variant="a" />
+		<Element name="13" u1="0.751" u2="0.874" v2="0.874" v1="0.751" variant="" />
+		<Element name="13" u1="0.876" u2="0.999" v2="0.999" v1="0.876" variant="a" />
+		<Element name="14" u1="0.876" u2="0.999" v2="0.874" v1="0.751" variant="" />
+		<Element name="14" u1="0.751" u2="0.874" v2="0.749" v1="0.626" variant="a" />
+		<Element name="15" u1="0.626" u2="0.749" v2="0.624" v1="0.501" variant="" />
+		<Element name="15" u1="0.751" u2="0.874" v2="0.624" v1="0.501" variant="a" />
+		<Element name="16" u1="0.876" u2="0.999" v2="0.749" v1="0.626" variant="" />
+		<Element name="16" u1="0.876" u2="0.999" v2="0.624" v1="0.501" variant="a" />
+		<Element name="17" u1="0.001" u2="0.124" v2="0.499" v1="0.376" variant="" />
+		<Element name="18" u1="0.126" u2="0.249" v2="0.499" v1="0.376" variant="" />
+		<Element name="19" u1="0.001" u2="0.124" v2="0.374" v1="0.251" variant="" />
+		<Element name="20" u1="0.126" u2="0.249" v2="0.374" v1="0.251" variant="" />
+		<Element name="21" u1="0.001" u2="0.124" v2="0.249" v1="0.126" variant="" />
+		<Element name="22" u1="0.251" u2="0.374" v2="0.499" v1="0.376" variant="" />
+		<Element name="23" u1="0.126" u2="0.249" v2="0.249" v1="0.126" variant="" />
+		<Element name="24" u1="0.001" u2="0.124" v2="0.124" v1="0.001" variant="" />
+		<Element name="25" u1="0.251" u2="0.374" v2="0.374" v1="0.251" variant="" />
+		<Element name="26" u1="0.376" u2="0.499" v2="0.499" v1="0.376" variant="" />
+		<Element name="27" u1="0.501" u2="0.624" v2="0.499" v1="0.376" variant="" />
+		<Element name="28" u1="0.251" u2="0.374" v2="0.249" v1="0.126" variant="" />
+		<Element name="29" u1="0.126" u2="0.249" v2="0.124" v1="0.001" variant="" />
+		<Element name="30" u1="0.376" u2="0.499" v2="0.374" v1="0.251" variant="" />
+		<Element name="31" u1="0.251" u2="0.374" v2="0.124" v1="0.001" variant="" />
+		<Element name="32" u1="0.501" u2="0.624" v2="0.374" v1="0.251" variant="" />
+		<Element name="33" u1="0.376" u2="0.499" v2="0.249" v1="0.126" variant="" />
+		<Element name="34" u1="0.626" u2="0.749" v2="0.499" v1="0.376" variant="" />
+		<Element name="35" u1="0.501" u2="0.624" v2="0.249" v1="0.126" variant="" />
+		<Element name="36" u1="0.376" u2="0.499" v2="0.124" v1="0.001" variant="" />
+		<Element name="37" u1="0.751" u2="0.874" v2="0.499" v1="0.376" variant="" />
+		<Element name="38" u1="0.626" u2="0.749" v2="0.374" v1="0.251" variant="" />
+		<Element name="39" u1="0.751" u2="0.874" v2="0.374" v1="0.251" variant="" />
+		<Element name="40" u1="0.626" u2="0.749" v2="0.249" v1="0.126" variant="" />
+		<Element name="41" u1="0.501" u2="0.624" v2="0.124" v1="0.001" variant="" />
+		<Element name="42" u1="0.876" u2="0.999" v2="0.499" v1="0.376" variant="" />
+		<Element name="43" u1="0.626" u2="0.749" v2="0.124" v1="0.001" variant="" />
+		<Element name="44" u1="0.876" u2="0.999" v2="0.374" v1="0.251" variant="" />
+		<Element name="45" u1="0.751" u2="0.874" v2="0.249" v1="0.126" variant="" />
+		<Element name="46" u1="0.876" u2="0.999" v2="0.249" v1="0.126" variant="" />
+		<Element name="47" u1="0.751" u2="0.874" v2="0.124" v1="0.001" variant="" />
+		<Element name="48" u1="0.876" u2="0.999" v2="0.124" v1="0.001" variant="" />
+	</Elements>
+</Atlas>

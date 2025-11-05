@@ -1,0 +1,176 @@
+#define PIXEL_SHADER
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform sampler2D SAMPLER[4];
+
+varying vec3 PS_TEXCOORD_LIFE;
+varying vec4 PS_COLOUR;
+
+const float LIFETIME_OFFSET = 10.0;
+const float MAX_LIFETIME = 2000000000.0;
+const float LIFETIME_RANGE = MAX_LIFETIME-(2.0*LIFETIME_OFFSET);
+
+const float LIFETIME_OFFSET_PERC = LIFETIME_OFFSET/MAX_LIFETIME;
+const float LIFETIME_RANGE_PERC = LIFETIME_RANGE/MAX_LIFETIME;
+
+// Already defined by lighting.glh
+// varying vec3 PS_POS
+
+const float TEXTURE_WIDTH = 2048.0;
+const float TEXTURE_HEIGHT = 2048.0;
+
+const float NOISE_REPEAT_SIZE = 1.0/29.0;
+
+const float NOISE_X_OFFSET = 16.0;
+const float NOISE_Y_OFFSET = 16.0;
+const float F_NOISE_SIZE = 512.0;
+
+const vec2 NOISE_START = vec2(NOISE_X_OFFSET/TEXTURE_WIDTH, NOISE_Y_OFFSET/TEXTURE_HEIGHT);
+const vec2 NOISE_SIZE = vec2(F_NOISE_SIZE/TEXTURE_WIDTH, F_NOISE_SIZE/TEXTURE_HEIGHT);
+
+const float SHIMMER_NOISE_X_OFFSET =  1776.0;
+const float SHIMMER_NOISE_Y_OFFSET = 16.0;
+const float SHIMMER_F_NOISE_SIZE = 256.0;
+
+const vec2 SHIMMER_NOISE_START = vec2(SHIMMER_NOISE_X_OFFSET/TEXTURE_WIDTH, SHIMMER_NOISE_Y_OFFSET/TEXTURE_HEIGHT);
+const vec2 SHIMMER_NOISE_SIZE = vec2(SHIMMER_F_NOISE_SIZE/TEXTURE_WIDTH, SHIMMER_F_NOISE_SIZE/TEXTURE_HEIGHT);
+
+// Ocean effects
+
+const float WAVE_TIME_MULT = 1000000000.0;
+const float WAVE_SIZE = 1.0;
+const float WAVE_STRENGTH = 0.5;
+
+const float SHIMMER_TIME_MULT = 1000000000.0;
+const float SHIMMER_NOISE_REPEAT_SIZE = 1.0;
+const float SHIMMER_STRENGTH = 0.025;
+
+// Lighting
+varying vec3 PS_POS;
+
+// xy = min, zw = max
+uniform vec4 LIGHTMAP_WORLD_EXTENTS;
+
+#define LIGHTMAP_TEXTURE SAMPLER[3]
+
+#ifndef LIGHTMAP_TEXTURE
+	#error If you use lighting, you must #define the sampler that the lightmap belongs to
+#endif
+
+vec3 CalculateLightingContribution()
+{
+	vec2 uv = ( PS_POS.xz - LIGHTMAP_WORLD_EXTENTS.xy ) * LIGHTMAP_WORLD_EXTENTS.zw;
+
+	return texture2D( LIGHTMAP_TEXTURE, uv.xy ).rgb;
+}
+
+vec3 CalculateLightingContribution( vec3 normal )
+{
+	return vec3( 1, 1, 1 );
+}
+
+float rand(vec2 co) {
+    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float get_wave_noise(vec2 p) {
+    vec2 base = floor(p);
+    vec2 frac = fract(p);
+    
+    // Random values ​​at the four corner points
+    float c1 = rand(base);
+    float c2 = rand(base + vec2(1.0, 0.0));
+    float c3 = rand(base + vec2(0.0, 1.0));
+    float c4 = rand(base + vec2(1.0, 1.0));
+    
+    // Smooth interpolation
+    vec2 inter = frac * frac * (3.0 - 2.0 * frac);
+    
+    // Bilinear interpolation
+    return mix(c1, c2, inter.x) + 
+           (c3 - c1) * inter.y * (1.0 - inter.x) + 
+           (c4 - c2) * inter.x * inter.y;
+}
+
+vec2 apply_waves(vec2 uv) {
+    float value = -0.5;
+    float amplitude = 0.5;
+    
+    for (int i = 0; i < 4; i++) {
+        value += amplitude * get_wave_noise(uv);
+
+        uv *= 2.5;
+        amplitude *= 0.5;
+    }
+    
+    return vec2(value * WAVE_STRENGTH, 0.0);
+}
+
+float get_shimmer_noise(vec2 uv)
+{
+	vec2 noise_texcoord = fract(uv * SHIMMER_NOISE_REPEAT_SIZE);
+	vec4 noise = texture2D(SAMPLER[0], (SHIMMER_NOISE_START + SHIMMER_NOISE_SIZE * noise_texcoord), -100.0);
+    return noise.r;
+}
+
+vec2 apply_shimmer(vec2 uv, vec2 dir) {
+    float distortion = get_shimmer_noise(uv + dir * 0.05) * get_shimmer_noise(uv - dir * 0.05);
+    return dir * distortion * SHIMMER_STRENGTH;
+}
+
+vec2 get_texture_uv(float time)
+{
+    vec2 uv = PS_POS.xz;
+    float wave_time = time * WAVE_TIME_MULT;
+    float shimmer_time = time * SHIMMER_TIME_MULT;
+
+    // Apply Shimmer
+    uv += apply_shimmer(uv + shimmer_time, vec2(1.0, 1.0));
+    uv += apply_shimmer(uv + shimmer_time, vec2(-0.5, 1.0));
+
+    // Apply Waves
+    mat2 rot_matrix = mat2(
+        cos(wave_time), -sin(wave_time),
+        sin(wave_time), cos(wave_time)
+    );
+    uv += rot_matrix * apply_waves(uv * WAVE_SIZE + wave_time * 0.5);
+    uv += rot_matrix * apply_waves((uv * WAVE_SIZE + - wave_time * 0.5) + 10.0);
+
+    return uv;
+}
+
+float get_time()
+{
+    return ((PS_TEXCOORD_LIFE.z-LIFETIME_OFFSET_PERC)/LIFETIME_RANGE_PERC);
+}
+
+vec4 get_noise()
+{
+    float time = get_time();
+    vec2 UV = get_texture_uv(time);
+	vec2 TEXCOORD_NOISE = fract(UV * NOISE_REPEAT_SIZE);
+	vec4 noise = texture2D(SAMPLER[0], (NOISE_START + NOISE_SIZE * TEXCOORD_NOISE), -100.0);
+		
+	return noise;
+}
+void main()
+{
+	vec4 colour = texture2D(SAMPLER[0], PS_TEXCOORD_LIFE.xy);
+
+	if (colour.a > 0.00)
+	{
+		vec4 noise = get_noise();
+
+		colour.rgb *= noise.rgb * colour.a;
+		colour = vec4( colour.rgb * PS_COLOUR.rgb, colour.a * PS_COLOUR.a * noise.a );
+		colour.rgb *= CalculateLightingContribution();
+
+		gl_FragColor = vec4(colour.rgb, colour.a);
+	}
+	else
+	{
+		discard;
+	}
+}

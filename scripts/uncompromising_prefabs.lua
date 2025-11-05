@@ -241,6 +241,7 @@ local prefabs = {
     "drink_with_the_living_dead",
     "hoodedturfchanger",
     "wargwarning",
+    "waterfall_lavamolten",
     "deerclops_easyspawners",
     "armorlavae",
     "marshmist",
@@ -373,6 +374,7 @@ local prefabs = {
     "giant_tree_birdnest",
     "uncompromising_bumpers",
     "um_copper_pipe",
+    "um_debug_label",
     "steeringwheel_copper",
     "hermit_bundle_lures",
     "um_cannonballs",
@@ -621,7 +623,8 @@ local prefabs = {
     "iceshield",
     "um_feather_totem",
     "um_magnifier",
-    "magma_tile"
+    "magma_tile",
+    "boat_magma"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

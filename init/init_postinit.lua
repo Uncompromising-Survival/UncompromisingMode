@@ -29,7 +29,6 @@ local component_post = {
     "boatleak", -- for custom boat patches.
     "wisecracker",
     "boatphysics",
-    "map",
     "playerspawner",
     --"drownable",
     "combat",
@@ -296,7 +295,8 @@ local brain_post = {
 
 --package post system courtesy of IA team!
 local package_post = {
-    ["shadeeffects"] = "shadeeffects"
+    ["components/map"] = "map",
+    ["shadeeffects"] = "shadeeffects",
 }
 
 

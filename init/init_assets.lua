@@ -1641,7 +1641,7 @@ Assets = {
     Asset("ATLAS", "images/wortox_shadow_weaver.xml"),
     Asset("IMAGE", "images/wortox_shadow_weaver.tex"),
 
-
+    Asset("IMAGE", "images/um_lava_wave.tex"),
 
 
     --SWAPS
@@ -1906,3 +1906,5 @@ if BuildSkillsData then
         end
     end
 end
+
+GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)

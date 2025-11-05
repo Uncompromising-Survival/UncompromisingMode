@@ -304,8 +304,8 @@ AddTile(
         ground_name = "floortox",
     },
     {
-        name = "rocky",
-        noise_texture = "ground_floortox.tex",
+        name = "tile_invisible",
+        noise_texture = "ground_invisible",
         runsound = "dontstarve/movement/run_marsh",
         walksound = "dontstarve/movement/walk_marsh",
         snowsound = "dontstarve/movement/run_ice",
@@ -614,3 +614,53 @@ GLOBAL.PYRE_THICKET_GROUND_TYPES = {
 GLOBAL.HOODED_ARENA_GROUND_TYPES = {
     WORLD_TILES.HOODEDFOREST, WORLD_TILES.ROCKY, -- 1,2
 }
+
+-- Setup lava tiles
+if not GLOBAL.WORLDGEN_MAIN and not GLOBAL.TileGroups.UMLavaTiles then
+    GLOBAL.TileGroups.UMLavaTiles = GLOBAL.TileGroupManager:AddTileGroup()
+    GLOBAL.TileGroups.ImpassableTilesNotUMLava = GLOBAL.TileGroupManager:AddTileGroup(GLOBAL.TileGroups.ImpassableTiles)
+
+    GLOBAL.TileGroupManager:AddValidTile(GLOBAL.TileGroups.ImpassableTiles, GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN)
+    GLOBAL.TileGroupManager:AddValidTile(GLOBAL.TileGroups.UMLavaTiles, GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN)
+    GLOBAL.TileGroupManager:AddInvalidTile(GLOBAL.TileGroups.ImpassableTilesNotUMLava, GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN)
+end
+
+GLOBAL.UM_LAVA_TILES = {}
+GLOBAL.UM_LAVA_TILES[GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = true
+GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "levels/particle_tiles/lavamolten.tex", "shaders/tilelavamoltenstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
+
+--
+
+local GroundTiles = require("worldtiledefs")
+
+local ground_table = GroundTiles.ground
+
+-- Make sure lava tiles always sort below all land tiles
+local _Initialize = GroundTiles.Initialize
+local function Initialize(...)
+	--Ground
+	local ground_land_first
+	for i, ground in ipairs(ground_table) do
+		if ground[1] ~= nil and GLOBAL.IsLandTile(ground[1]) then
+			ground_land_first = ground[1]
+			break
+		end
+	end
+
+	local um_lava_tile_order = {}
+	for i, v in ipairs(ground_table) do
+		if GLOBAL.UM_LAVA_TILES[v[1]] then
+			table.insert(um_lava_tile_order, {v[1], i})
+		end
+	end
+	table.sort(um_lava_tile_order, function(a,b) return a[2] < b[2] end)
+	for i, data in ipairs(um_lava_tile_order) do
+		local tile = data[1]
+		if tile ~= ground_land_first then
+			ChangeTileRenderOrder(tile, ground_land_first, false)
+		end
+	end
+	return _Initialize(...)
+end
+
+GroundTiles.Initialize = Initialize
