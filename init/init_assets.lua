@@ -519,8 +519,8 @@ Assets = {
     Asset("ATLAS", "images/wixie_skilltree.xml"),
     Asset("IMAGE", "images/wixie_skilltree.tex"),
 
-    Asset("ATLAS", "images/wathom_background.xml"),
-    Asset("IMAGE", "images/wathom_background.tex"),
+    Asset("ATLAS", "images/wathom_skilltree.xml"),
+    Asset("IMAGE", "images/wathom_skilltree.tex"),
 
 
     ----TURF
