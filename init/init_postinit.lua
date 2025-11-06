@@ -242,8 +242,6 @@ local prefab_post = {
 	"bullkelp_root",
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
-	"backpacks"
-
 }
 
 local stategraph_post = {
@@ -444,6 +442,10 @@ end
 
 if GetModConfigData("pocket_powertrip_") then
     table.insert(prefab_post, "pocket_powertrip")
+end
+
+if GetModConfigData("inventory_backpacks") then
+    table.insert(prefab_post, "inventory_backpacks")
 end
 
 if GetModConfigData("harder_koalefants") then

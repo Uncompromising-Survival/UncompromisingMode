@@ -76,12 +76,22 @@ AddPrefabPostInit("world", function(inst)
 end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
-modimport("init/init_descriptions/announcestrings.lua")
-modimport("init/init_descriptions/descriptorstrings.lua")
-modimport("init/init_descriptions/skilltreestrings.lua")
 modimport("init/init_wathom")
 modimport("init/um_tree_rock_data")
 modimport("init/init_magmatiles")
+
+local skilltree_defs = require("prefabs/skilltree_defs")
+local BuildSkillsData = require("prefabs/skilltree_wixie")
+
+if BuildSkillsData then
+    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    local data = BuildSkillsData(skilltree_defs.FN)
+    for k, v in pairs(data.SKILLS) do
+        if v.icon then
+            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        end
+    end
+end
 
 if GetModConfigData("funny rat") then
     AddModCharacter("winky", "FEMALE")

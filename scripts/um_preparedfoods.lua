@@ -77,7 +77,7 @@ end
 
 local pie_shouldnt_hit = {"FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "player"}
 local function BoomPieGo(inst, eater)
-    if eater and not (eater.components.health and eater.components.health:IsDead()) then
+    if eater.components.health and not eater.components.health:IsDead() then
         local x, y, z = eater.Transform:GetWorldPosition()
         eater.Physics:SetCollisionMask(COLLISION.GROUND, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS) -- Can Launch yourself over gaps
         eater.Physics:Teleport(x, y, z)

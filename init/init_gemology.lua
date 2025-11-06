@@ -102,8 +102,7 @@ local furious_absorptions = {0.05,0.1,0.25}
 -- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
 env.AddComponentPostInit("combat", function(self)
 	local _CalcDamage = self.CalcDamage
-	
-	function self:CalcDamage(target, weapon, multiplier)
+	function self:CalcDamage(target, weapon, multiplier, ...)
 		local basemultiplier = self.damagemultiplier
 		local externaldamagemultipliers = self.externaldamagemultipliers
 		local damagetypemult = 1
@@ -121,14 +120,11 @@ env.AddComponentPostInit("combat", function(self)
 		if weapon and weapon.um_peerless_mod and mult and mult > 1 then -- There must be an existing multiplier... not just 0.1, wendy's negative multiplier is not helped.
 			multiplier = multiplier * (1+0.1*weapon.um_peerless_mod)
 		end
-		return _CalcDamage(self,target,weapon,multiplier)
+		return _CalcDamage(self, target, weapon, multiplier, ...)
 	end
 
-
-
-
 	local _GetAttacked = self.GetAttacked
-	function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage)
+	function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
 		local inst = self.inst
 		local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		-- FURIOUS
@@ -146,7 +142,7 @@ env.AddComponentPostInit("combat", function(self)
 			self.inst.um_marked_for_hoarding = nil
 		end
 		
-		_GetAttacked(self, attacker, damage, weapon, stimuli, spdamage)
+		return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
 	end
 end)
 
@@ -191,9 +187,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
 		end
 		_onexit(inst)
 	end	
-	
-	
-	
+
 	local work_states = {"chop_start","chop","mine_start","mine","hammer_start","hammer","scythe","till_start","till","pour","dig_start","dig","row"}
 	for i,state in ipairs(work_states) do
 	local _onenter = inst.states[state].onenter
@@ -298,9 +292,8 @@ local boost_resistance = {0.25,0.5,1}
 env.AddComponentPostInit("locomotor", function(self)
 	if self.ismastersim then
 		local _GetSpeedMultiplier = self.GetSpeedMultiplier
-		
-		function self:GetSpeedMultiplier()
-			local mult = _GetSpeedMultiplier(self)
+		function self:GetSpeedMultiplier(...)
+			local mult = _GetSpeedMultiplier(self, ...)
 			local tool = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 			if tool and tool.components.minerologyable and tool.components.minerologyable.hasty and mult > 1 and tool.tier ~= 1 then 
 				mult = mult + (0.1*tool.tier)
@@ -315,23 +308,19 @@ end)
 
 
 env.AddComponentPostInit("sanity", function(self)
-
 	local _DoDelta = self.DoDelta
-	
-	function self:DoDelta(delta, overtime)
+	function self:DoDelta(delta, overtime, ...)
 		local tool = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if tool and tool.components.minerologyable and tool.components.minerologyable.arcane and tool.tier ~= 1 and delta < 0 then -- There's no way to efficienctly track if sanity loss comes from a magic item, just lessen the effect and generalize, this works on things like eating bad food too.
 			delta = delta * (1-0.25 * (tool.tier-1))
 		end		
-		return _DoDelta(self,delta,overtime)
+		return _DoDelta(self, delta, overtime, ...)
 	end
 end)
 
 env.AddComponentPostInit("workable", function(self)
-
-	local _WorkedBy_Internal= self.WorkedBy_Internal
-	
-	function self:WorkedBy_Internal(worker, numworks)
+	local _WorkedBy_Internal = self.WorkedBy_Internal
+	function self:WorkedBy_Internal(worker, numworks, ...)
 		local tool = worker.components.inventory and worker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and worker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if tool and tool.components.minerologyable and tool.components.minerologyable.hoarding and tool.tier ~= 1 then
 			if not self.inst.um_marked_for_hoarding then
@@ -340,17 +329,14 @@ env.AddComponentPostInit("workable", function(self)
 		elseif self.inst.um_marked_for_hoarding then
 			self.inst.um_marked_for_hoarding = nil
 		end
-		return _WorkedBy_Internal(self,worker, numworks)
+		return _WorkedBy_Internal(self, worker, numworks, ...)
 	end
 end)
 
 env.AddComponentPostInit("lootdropper", function(self)
-
 	local _SpawnLootPrefab = self.SpawnLootPrefab
-	
-	function self:SpawnLootPrefab( lootprefab, pt, linked_skinname, skin_id, userid )
-		local loot = _SpawnLootPrefab(self, lootprefab, pt, linked_skinname, skin_id, userid )
-		
+	function self:SpawnLootPrefab(lootprefab, pt, linked_skinname, skin_id, userid, ...)
+		local loot = _SpawnLootPrefab(self, lootprefab, pt, linked_skinname, skin_id, userid, ...)
 		local hoarder = self.inst.um_marked_for_hoarding
 		if hoarder and hoarder:IsValid() and hoarder.components.inventory then
 			local inst = self.inst
@@ -360,7 +346,3 @@ env.AddComponentPostInit("lootdropper", function(self)
 		return loot
 	end
 end)
-
-
-
-

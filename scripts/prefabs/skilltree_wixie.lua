@@ -1,5 +1,3 @@
-require("wixie_skilltree_strings")
-
 local ORDERS =
 {
     {"ammocraft",       { -214+18   , 176 + 30 }},

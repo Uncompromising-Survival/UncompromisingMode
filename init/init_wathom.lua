@@ -187,16 +187,15 @@ if BuildSkillsData then
     skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
     skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
 
-    --RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wathom_background.xml"), "wathom")
+    --RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wathom_skilltree.xml"), "wathom")
     
     for k, v in pairs(data.SKILLS) do
         if v.icon then
-            table.insert(Assets, Asset("IMAGE", "images/"..v.icon..".tex"))
-            table.insert(Assets, Asset("ATLAS", "images/"..v.icon..".xml"))
-            RegisterSkilltreeIconsAtlas("images/".. v.icon ..".xml", v.icon .. ".tex")
+            RegisterSkilltreeIconsAtlas("images/wathom_skilltree.xml", v.icon .. ".tex")
         end
     end
 end
+
     
 local function GetAdrenalShove(inst)
     if inst.components.adrenaline then

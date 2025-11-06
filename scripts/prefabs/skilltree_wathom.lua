@@ -6,9 +6,7 @@ local ORDERS =
     {"forgotten_knowledge",           { 66+18     , 176 + 30 }},
     {"allegiance",      { 204-50       , 176 + 30 }},
 }
-STRINGS.SKILLTREE.PANELS.ENTROPIC_ANATOMY = "Entropic Anatomy"
-STRINGS.SKILLTREE.PANELS.FORGOTTEN_KNOWLEDGE = "Forgotten Knowledge" 
-STRINGS.SKILLTREE.PANELS.AMP_UP = "Amp Up"
+
 --------------------------------------------------------------------------------------------------
 local function disable_despawn(inst)
 	inst._can_despawn = false

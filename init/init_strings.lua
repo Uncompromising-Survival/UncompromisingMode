@@ -526,7 +526,7 @@ if SkillTreeDefs.SKILLTREE_DEFS["wilson"] ~= nil then
 end
 
 if SkillTreeDefs.SKILLTREE_DEFS["willow"] ~= nil then
-    SkillTreeDefs.SKILLTREE_DEFS["willow"].willow_attuned_lighter.desc = STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC .. " Can also absorb Smog."
+    SkillTreeDefs.SKILLTREE_DEFS["willow"].willow_attuned_lighter.desc = STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC
 end
 STRINGS.UM_HOUSETAUNTS = {
     PIGMAN = {

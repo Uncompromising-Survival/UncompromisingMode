@@ -103,10 +103,10 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                 local papyrus = SpawnPrefab("wixie_piano_card")
                 local fx = SpawnPrefab("archive_lockbox_player_fx")
                 if player.components.builder and powered then
-                    if inst.product_orchestrina == "turf_vault" then
-                        if not player.components.builder:KnowsRecipe("um_astral_projector") or player.components.builder:KnowsRecipe("um_astral_projector_target") then
+                    if inst.product_orchestrina == "archive_resonator_item" then -- Blue
+                        if not player.components.builder:KnowsRecipe("um_astral_projector") then
                             player.components.builder:UnlockRecipe("um_astral_projector")
-                            player.components.builder:UnlockRecipe("um_astral_projector_target")
+                            --player.components.builder:UnlockRecipe("um_astral_projector_target")
                             if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
                             if fx then player:AddChild(fx) end
                             papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -115,7 +115,18 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                         else
                             if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
                         end
-                    elseif inst.product_orchestrina == "vaultrelic" then
+                    elseif inst.product_orchestrina == "refined_dust" then -- Red
+                        if not player.components.builder:KnowsRecipe("um_astral_projector_target") then
+                            player.components.builder:UnlockRecipe("um_astral_projector_target")
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
+                            if fx then player:AddChild(fx) end
+                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
+                            papyrus.name = "You got: Astral Receptionator!"
+                            Launch2(papyrus, inst, 2, 0, 1, .5)
+                        else
+                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
+                        end
+                    else -- turf_vault = Green, vaultrelic = Orange
                         if not player.components.builder:KnowsRecipe("um_scrapper") then
                             player.components.builder:UnlockRecipe("um_scrapper")
                             if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
@@ -123,18 +134,7 @@ env.AddPrefabPostInit("archive_lockbox_dispencer", function(inst)
                             papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
                             papyrus.name = "You got: Ancient Scrapper!"
                             Launch2(papyrus, inst, 2, 0, 1, .5)
-                        else
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_OLD_KNOWLEDGE"), nil, true) end
                         end
-                    --[[else
-                        if not player.components.builder:KnowsRecipe("um_inkubator") then
-                            player.components.builder:UnlockRecipe("um_inkubator")
-                            if talker then talker:Say(GetString(player, "ANNOUNCE_ARCHIVE_NEW_KNOWLEDGE"), nil, true) end
-                            if fx then player:AddChild(fx) end
-                            papyrus.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                            papyrus.name = "You got: Ancient Inkubator!"
-                            Launch2(papyrus, inst, 2, 0, 1, .5)
-                        end]]
                     end
                 end
             end

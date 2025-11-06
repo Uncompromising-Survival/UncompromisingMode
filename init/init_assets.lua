@@ -519,8 +519,8 @@ Assets = {
     Asset("ATLAS", "images/wixie_skilltree.xml"),
     Asset("IMAGE", "images/wixie_skilltree.tex"),
 
-    Asset("ATLAS", "images/wathom_background.xml"),
-    Asset("IMAGE", "images/wathom_background.tex"),
+    Asset("ATLAS", "images/wathom_skilltree.xml"),
+    Asset("IMAGE", "images/wathom_skilltree.tex"),
 
 
     ----TURF
@@ -1893,18 +1893,5 @@ end
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_summoner.xml", "wortox_lunar_summoner.tex")
 RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_weaver.tex")
-
-local skilltree_defs = require("prefabs/skilltree_defs")
-local BuildSkillsData = require("prefabs/skilltree_wixie")
-
-if BuildSkillsData then
-    RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
-    local data = BuildSkillsData(skilltree_defs.FN)
-    for k, v in pairs(data.SKILLS) do
-        if v.icon then
-            RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
-        end
-    end
-end
 
 GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)

@@ -98,8 +98,9 @@ local function OnBathBombed(inst)
         inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
     end
     if not inst.components.timer:TimerExists("bubbly") then
-        inst.components.timer:StartTimer("bubbly", 2 * 60)
+        inst.components.timer:StartTimer("bubbly", 60)
     end
+    inst.components.heater.heat = 165
 end
 
 local function OnTimerDone(inst)
@@ -109,6 +110,7 @@ local function OnTimerDone(inst)
         inst.fxtask2 = nil
     end
     inst.components.bathbombable:Reset()
+    inst.components.heater.heat = 300
 end
 
 local function FadeToNormal(inst)
