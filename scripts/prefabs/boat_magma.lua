@@ -14,7 +14,7 @@ local ice_prefabs =
 
 --
 
-local sounds_ice =
+local sounds_magma =
 {
     place = "dontstarve_DLC001/common/iceboulder_hit",
     creak = "dontstarve_DLC001/common/iceboulder_hit",
@@ -443,8 +443,6 @@ local function create_master_pst(inst, data)
     inst.GetSafePhysicsRadius = GetSafePhysicsRadius
     inst.IsBoatEdgeOverLand = IsBoatEdgeOverLand
 
-    inst.OnLoadPostPass = OnLoadPostPass
-
     return inst
 end
 
@@ -566,7 +564,7 @@ local function boat_item_collision_template(radius)
 end
 
 -- ICE FLOE
-local function ice_floe_deploy_blocker_fn()
+local function boat_magma_deploy_blocker_fn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -585,7 +583,7 @@ local function ice_floe_deploy_blocker_fn()
     return inst
 end
 
-local function ice_ondeath(inst)
+local function magma_ondeath(inst)
     if inst:IsAsleep() then
         if not inst.sg:HasStateTag("dead") then
             for ent in pairs(inst.components.walkableplatform:GetEntitiesOnPlatform()) do
@@ -597,28 +595,29 @@ local function ice_ondeath(inst)
     end
 end
 
-local function ice_fn()
+local function magma_fn()
     local inst = CreateEntity()
 
     local bank = "boat_ice"
     local build = "boat_ice"
-    local OCEANICE_BOAT_DATA = {
+    local MAGMA_BOAT_DATA = {
         radius = TUNING.OCEAN_ICE_RADIUS,
-        max_health = TUNING.OCEAN_ICE_HEALTH,
-        item_collision_prefab = "boat_ice_item_collision",
-        boatlip_prefab = "boatlip_ice",
+        max_health = TUNING.OCEAN_ICE_HEALTH * 3,
+        item_collision_prefab = "boat_magma_item_collision",
         stategraph = "SGboat_ice",
         fireproof = true,
     }
 
-    inst = create_common_pre(inst, bank, build, OCEANICE_BOAT_DATA)
+    inst = create_common_pre(inst, bank, build, MAGMA_BOAT_DATA)
 
     inst:RemoveTag("wood") -- Cookie Cutters should not eat it.
+
+    inst.AnimState:SetMultColour(0.8, .5, .25, 1)
 
     inst.material = "ice"
     inst.walksound = "ice"
 
-    inst.components.walkableplatform.player_collision_prefab = "boat_ice_player_collision"
+    inst.components.walkableplatform.player_collision_prefab = "boat_magma_player_collision"
 
     local boattrail = inst.components.boattrail
     if boattrail then
@@ -634,6 +633,8 @@ local function ice_fn()
         return inst
     end
 
+    inst:AddTag("magma_boat")
+
     inst.GetIdleLevel = function()
         local health_percent = inst.components.health:GetPercent()
         return (health_percent > 0.66 and "1")
@@ -641,22 +642,22 @@ local function ice_fn()
             or "3"
     end
 
-    inst = create_master_pst(inst, OCEANICE_BOAT_DATA)
+    inst = create_master_pst(inst, MAGMA_BOAT_DATA)
 
     inst:ListenForEvent("spawnnewboatleak", OnSpawnNewBoatLeak)
-    inst:ListenForEvent("death", ice_ondeath)
+    inst:ListenForEvent("death", magma_ondeath)
 
-    inst.components.hullhealth:SetSelfDegrading(1)
+    inst.components.hullhealth:SetSelfDegrading(1 + math.random())
     inst.components.hullhealth.leakproof = true
 
     inst.components.repairable.repairmaterial = nil
 
-    inst.sounds = sounds_ice
-    inst.boat_crackle = "mining_ice_fx"
+    inst.sounds = sounds_magma
+    inst.boat_crackle = "deer_fire_burst"
 
     inst:DoTaskInTime(FRAMES, function(i)
         local ix, iy, iz = i.Transform:GetWorldPosition()
-        local deploy_blocker = SpawnPrefab("boat_ice_deploy_blocker")
+        local deploy_blocker = SpawnPrefab("boat_magma_deploy_blocker")
         deploy_blocker.Transform:SetPosition(ix, iy, iz)
     end)
 
@@ -665,15 +666,11 @@ local function ice_fn()
         local locus_point = inst:GetPosition()
         local num_loot = 3
         local loot_angle = PI2 / num_loot
-        local loot_radius = (OCEANICE_BOAT_DATA.radius / 2)
+        local loot_radius = (MAGMA_BOAT_DATA.radius / 2)
         for i = 1, num_loot do
             local r = (1 + math.sqrt(math.random())) * loot_radius
             local t = (i + 2 * math.random()) * loot_angle
-            SpawnFragment(locus_point, "ice", math.cos(t) * r, 0, math.sin(t) * r, ignitefragments)
-
-            r = (1 + math.sqrt(math.random())) * loot_radius
-            t = t + loot_angle * (0.3 + 0.6 * math.random())
-            SpawnFragment(locus_point, "degrade_fx_ice", math.cos(t) * r, 0, math.sin(t) * r)
+            SpawnFragment(locus_point, "rocks", math.cos(t) * r, 0, math.sin(t) * r, ignitefragments)
         end
     end
     inst.sinkloot_asleep = function()
@@ -681,49 +678,20 @@ local function ice_fn()
         if num_loot > 0 then
             local locus_point = inst:GetPosition()
             local loot_angle = PI2 / num_loot
-            local loot_radius = (OCEANICE_BOAT_DATA.radius / 2)
+            local loot_radius = (MAGMA_BOAT_DATA.radius / 2)
             for i = 1, num_loot do
                 local r = (1 + math.sqrt(math.random())) * loot_radius
                 local t = (i + 2 * math.random()) * loot_angle
-                SpawnFragment(locus_point, "ice", math.cos(t) * r, 0, math.sin(t) * r, false)
+                SpawnFragment(locus_point, "rocks", math.cos(t) * r, 0, math.sin(t) * r, false)
             end
         end
     end
     inst.postsinkfn = function(inst)
-        local break_fx = SpawnPrefab("mining_ice_fx")
+        local break_fx = SpawnPrefab("deer_fire_burst")
         break_fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 
     inst.SpawnFragment = SpawnFragment
-
-    return inst
-end
-
-local function ice_crabking_fn()
-    local inst = ice_fn()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
-    local function sinkloot()
-        local ignitefragments = false --(inst.activefires > 0)
-        local locus_point = inst:GetPosition()
-        local num_loot = 3
-        local loot_angle = TWOPI / num_loot
-        local loot_radius = (inst.components.hull:GetRadius() / 2)
-        for i = 1, num_loot do
-            local r = (1 + math.sqrt(math.random())) * loot_radius
-            local t = (i + 2 * math.random()) * loot_angle
-
-            r = (1 + math.sqrt(math.random())) * loot_radius
-            t = t + loot_angle * (0.3 + 0.6 * math.random())
-            inst.SpawnFragment(locus_point, "degrade_fx_ice", math.cos(t) * r, 0, math.sin(t) * r)
-        end
-    end
-
-    inst.sinkloot = sinkloot
-    inst.components.health:SetVal(10)
 
     return inst
 end
@@ -750,16 +718,15 @@ function CLIENT_CanDeployBoat(inst, pt, mouseover, deployer, rotation)
 end
 
 -- COLLISIONS
-local function boat_ice_player_collision_fn()
+local function boat_magma_player_collision_fn()
     return boat_player_collision_template(TUNING.OCEAN_ICE_RADIUS)
 end
 
-local function boat_ice_item_collision_fn()
+local function boat_magma_item_collision_fn()
     return boat_item_collision_template(TUNING.OCEAN_ICE_RADIUS)
 end
 
-return Prefab("boat_ice", ice_fn, ice_assets, ice_prefabs),
-    Prefab("boat_ice_crabking", ice_crabking_fn, ice_assets, ice_prefabs),
-    Prefab("boat_ice_player_collision", boat_ice_player_collision_fn),
-    Prefab("boat_ice_item_collision", boat_ice_item_collision_fn),
-    Prefab("boat_ice_deploy_blocker", ice_floe_deploy_blocker_fn)
+return Prefab("boat_magma", magma_fn, ice_assets, ice_prefabs),
+    Prefab("boat_magma_player_collision", boat_magma_player_collision_fn),
+    Prefab("boat_magma_item_collision", boat_magma_item_collision_fn),
+    Prefab("boat_magma_deploy_blocker", boat_magma_deploy_blocker_fn)

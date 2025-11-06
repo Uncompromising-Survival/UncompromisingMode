@@ -4,6 +4,8 @@ local MagmaManager = Class(function(self, inst)
 
     self.cooled_down_tiles = {}
 
+    self.magma_tiles= {}
+
     self.inst:StartUpdatingComponent(self)
 end)
 
@@ -12,19 +14,17 @@ function MagmaManager:Init(tiles)
         return
     end
 
+    self.magma_tiles = tiles
+
     for _, pos in pairs(tiles) do
         --set to real tile
         local tile_x, tile_z = TheWorld.Map:GetTileCoordsAtPoint(pos.x, 0, pos.z)
         TheWorld.Map:SetTile(tile_x, tile_z, WORLD_TILES.UM_MAGMA_LAVAMOLTEN)
 
         --spawn temperature/light/etc
-        for px = -2, 2, 4 do
-            for pz = -2, 2, 4 do
-                if #TheSim:FindEntities(pos.x + px, 0, pos.z + pz, 1, { "magma_tile" }, {}) == 0 then
-                    local prefab = SpawnPrefab("magma_tile")
-                    prefab.Transform:SetPosition(pos.x + px, 0, pos.z + pz)
-                end
-            end
+        if #TheSim:FindEntities(pos.x, 0, pos.z, 1, { "magma_tile" }, {}) == 0 then
+            local prefab = SpawnPrefab("magma_tile")
+            prefab.Transform:SetPosition(pos.x, 0, pos.z)
         end
 
         --spawn magmatile borders
@@ -49,7 +49,8 @@ end
 function MagmaManager:OnSave()
     local data = {
         init_complete = self.init_complete,
-        cooled_down_tiles = self.cooled_down_tiles
+        cooled_down_tiles = self.cooled_down_tiles,
+        magma_tiles = self.magma_tiles
     }
 
     return data
@@ -58,11 +59,11 @@ end
 function MagmaManager:OnLoad(data)
     self.init_complete = data.init_complete
     self.cooled_down_tiles = data.cooled_down_tiles
+    self.magma_tiles = data.magma_tiles
 end
 
-
 function MagmaManager:CoolDownMagmaTile(x, z, duration)
-    for k,v in pairs(self.cooled_down_tiles) do
+    for k, v in pairs(self.cooled_down_tiles) do
         if v.x == x and v.z == z then
             v.duration = duration --refresh duration
             return

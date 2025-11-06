@@ -14,7 +14,7 @@ AddTask("MagmaCaves", { -- Branches in several ways, fumarole, atrium pillar, fi
     locks = { LOCKS.MAGMA_CAVES_ENTRANCE, LOCKS.MAGMA_CAVES, LOCKS.TIER1 },
     keys_given = { KEYS.MAGMA_CAVES_ENTRANCE, KEYS.MAGMA_CAVES, KEYS.TIER2 },
     level_set_piece_blocker = true,
-    room_tags = { "RoadPoison", "nohunt", "nohasslers" },
+    room_tags = { "RoadPoison", "nohunt", "nohasslers", "MagmaCold"},
     room_choices = {
         ["GloomyMagma"] = 2,            -- WORMS and Fissures
         ["FossilMagma"] = 3,            -- Bones and Isopods		
@@ -31,7 +31,7 @@ AddTask("MagmaOcean", {
     locks = { LOCKS.MAGMA_CAVES_ENTRANCE, LOCKS.MAGMA_CAVES, LOCKS.TIER2 },
     keys_given = { KEYS.MAGMA_CAVES_SACRED },
     level_set_piece_blocker = true,
-    room_tags = { "RoadPoison", "nohunt", "nohasslers" },
+    room_tags = { "RoadPoison", "nohunt", "nohasslers", "MagmaWarm"},
     room_choices = {
         ["MagmaOcean"] = 4,                  -- Lava ocean.
         ["MagmaOceanExit"] = 1
@@ -46,7 +46,7 @@ AddTask("MagmaSacred", { -- Dead End
     locks = { LOCKS.MAGMA_CAVES_SACRED },
     keys_given = {},
     level_set_piece_blocker = true,
-    room_tags = { "RoadPoison", "nohunt", "nohasslers" },
+    room_tags = { "RoadPoison", "nohunt", "nohasslers", "MagmaWarm"},
     room_choices = {
         ["GemForge1"] = 1, -- Gemology Forge
     },
@@ -60,7 +60,7 @@ AddTask("MagmaCavesEntrance", {
     locks = { LOCKS.MAGMA_CAVES },
     keys_given = { KEYS.MAGMA_CAVES_ENTRANCE, KEYS.MAGMA_CAVES, KEYS.TIER1 },
     level_set_piece_blocker = true,
-    room_tags = { "RoadPoison", "nohunt", "nohasslers" },
+    room_tags = { "RoadPoison", "nohunt", "nohasslers", "MagmaCold" },
     room_choices = {
         ["BGMagma"] = 2,
         ["MagmaStairs"] = 1,

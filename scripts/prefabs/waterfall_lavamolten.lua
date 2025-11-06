@@ -79,7 +79,7 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddAnimState()
 
-    --inst.AnimState:SetLightOverride(1)
+    inst.AnimState:SetLightOverride(1)
 
     inst:AddTag("NOCLICK")
     inst:AddTag("FX")

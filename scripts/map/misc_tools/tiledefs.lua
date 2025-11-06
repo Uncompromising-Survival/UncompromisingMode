@@ -278,10 +278,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock.tex", --Gearless's art
-        runsound = "dontstarve/movement/run_rock",
-        walksound = "dontstarve/movement/walk_rock",
-        snowsound = "dontstarve/movement/run_ice",
-        mudsound = "dontstarve/movement/run_mud",
+        runsound="dontstarve/movement/run_dirt",
+        walksound="dontstarve/movement/walk_dirt",
+        snowsound="dontstarve/movement/run_ice",
+        mudsound="dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
@@ -306,10 +306,10 @@ AddTile(
     {
         name = "tile_invisible",
         noise_texture = "ground_invisible",
-        runsound = "dontstarve/movement/run_marsh",
-        walksound = "dontstarve/movement/walk_marsh",
-        snowsound = "dontstarve/movement/run_ice",
-        mudsound = "dontstarve/movement/run_mud",
+        runsound="dontstarve/movement/run_dirt",
+        walksound="dontstarve/movement/walk_dirt",
+        snowsound="dontstarve/movement/run_ice",
+        mudsound="dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --minimap_tile_def 5
@@ -333,10 +333,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
-        runsound = "dontstarve/movement/run_rock",
-        walksound = "dontstarve/movement/walk_rock",
-        snowsound = "dontstarve/movement/run_ice",
-        mudsound = "dontstarve/movement/run_mud",
+        runsound="dontstarve/movement/run_dirt",
+        walksound="dontstarve/movement/walk_dirt",
+        snowsound="dontstarve/movement/run_ice",
+        mudsound="dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
@@ -361,10 +361,10 @@ AddTile(
     {
         name = "rocky_clear",
         noise_texture = "ground_magma_rock_lavaborder.tex", --Gearless's art
-        runsound = "dontstarve/movement/run_rock",
-        walksound = "dontstarve/movement/walk_rock",
-        snowsound = "dontstarve/movement/run_ice",
-        mudsound = "dontstarve/movement/run_mud",
+        runsound="dontstarve/movement/run_dirt",
+        walksound="dontstarve/movement/walk_dirt",
+        snowsound="dontstarve/movement/run_ice",
+        mudsound="dontstarve/movement/run_mud",
         colors = GROUND_OCEAN_COLOR
     },
     { --Placeholder minimap
