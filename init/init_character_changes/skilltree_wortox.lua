@@ -1,36 +1,5 @@
 ----------------------------------
 local STRINGS = GLOBAL.STRINGS
--- Skilltree Text Changes
-STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life." 
-STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Twintailed Heart releases its Souls when it saves the bearer's life."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also apply the effects from Lifted Spirits I to healed targets."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE = "Reaching Souls"
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC = "Dropped Souls will move towards hurt players, and heal at an increased range."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_TITLE = "Soul Thief"
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC = "Souls are created and attracted to you from further away and will last longer."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC = "Requires the skill below and 4 total Nice and/or Neutral skills to unlock."
-STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC = "Requires the skill below and 4 total Naughty and/or Neutral skills to unlock."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE = "Shadow Harvester"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen has shared the secrets of weaving shadows with you, yielding better results. Souls waiting to be freed in a Soul Echo are consumed by the Shadow Reaper to unleash a powerful attack. Kills accomplished by the reaper nourish your shadows' lifeforce."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Weaver"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the Fuelweaver closely inspired you to weave your own creations to life. You can infuse Nightmare Fuel with Souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 Souls will periodically release a Soul from your inventory to pierce."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC = "Held Souls and Souls inside of Soul Jars increases the damage of the Knabsack, up to 100 total Souls collected."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of Soul Pierce and Soul Decoy."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE = "Lunar Summoner"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC = "Use Lune Tree Blossoms and Souls to summon allied gestalts from Alter. They are eager to carry any burden."
-
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a Soul Echo to do additional damage. In addition, this empowered attack will steal items off of enemies."
 
 local SkillTreeDefs = GLOBAL.require("prefabs/skilltree_defs")
 local SkillTreeFns = SkillTreeDefs.FN
