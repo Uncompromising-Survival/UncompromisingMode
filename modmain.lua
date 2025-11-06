@@ -70,10 +70,10 @@ AddPrefabPostInit("world", function(inst)
     end
 end)
 
+modimport("init/init_descriptions/skilltreestrings.lua")
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_descriptions/announcestrings.lua")
 modimport("init/init_descriptions/descriptorstrings.lua")
-modimport("init/init_descriptions/skilltreestrings.lua")
 modimport("init/init_wathom")
 modimport("init/um_tree_rock_data")
 
