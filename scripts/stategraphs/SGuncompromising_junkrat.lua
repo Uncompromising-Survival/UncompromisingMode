@@ -13,6 +13,7 @@ local events =
 	CommonHandlers.OnSleep(),
 	CommonHandlers.OnFreeze(),
 	CommonHandlers.OnAttack(),
+	CommonHandlers.OnElectrocute(),
 	CommonHandlers.OnAttacked(),
 	CommonHandlers.OnDeath(),
 	CommonHandlers.OnLocomote(true, true),
@@ -166,6 +167,7 @@ CommonStates.AddSleepStates(states,
 	},
 })
 CommonStates.AddFrozenStates(states)
+CommonStates.AddElectrocuteStates(states)
 CommonStates.AddHitState(states)
 CommonStates.AddDeathState(states,
 {

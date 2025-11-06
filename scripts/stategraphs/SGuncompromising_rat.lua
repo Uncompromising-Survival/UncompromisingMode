@@ -16,6 +16,7 @@ local events =
 	CommonHandlers.OnSleep(),
 	CommonHandlers.OnFreeze(),
 	CommonHandlers.OnAttack(),
+	CommonHandlers.OnElectrocute(),
     EventHandler("attacked", function(inst) 
 		if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") then 
 			inst.sg:GoToState("hit") 
@@ -226,7 +227,7 @@ local states =
 	
 	State {
 		name = "submerge",
-		tags = { "busy", "noattack" },
+		tags = { "busy", "noattack", "noelectrocute" },
 
 		onenter = function(inst)
 			if not inst:IsOnValidGround() then
@@ -281,7 +282,7 @@ local states =
 
 	State {
 		name = "submerged",
-		tags = { "busy", "noattack" },
+		tags = { "busy", "noattack", "noelectrocute" },
 
 		onenter = function(inst, playanim)
 			inst.Physics:SetActive(false)
@@ -338,7 +339,7 @@ local states =
 
 	State {
 		name = "emerge_fast",
-		tags = { "busy", "noattack" },
+		tags = { "busy", "noattack", "noelectrocute" },
 
 		onenter = function(inst)
 			inst.Physics:SetActive(false)
@@ -486,7 +487,7 @@ local states =
 
 	State {
 		name = "trapped",
-		tags = { "busy", "trapped" },
+		tags = { "busy", "trapped", "noelectrocute" },
 		
 		onenter = function(inst)
 			inst.Physics:Stop()
@@ -534,6 +535,7 @@ CommonStates.AddSleepStates(states,
 	},
 })
 CommonStates.AddFrozenStates(states)
+CommonStates.AddElectrocuteStates(states)
 CommonStates.AddHitState(states)
 CommonStates.AddDeathState(states,
 {
