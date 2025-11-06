@@ -77,7 +77,10 @@ function UM_Ripplespawner:spawnripple(inst)
 				end
 				local waterproofness = inst.components.inventory and math.min(inst.components.inventory:GetWaterproofness(),1) or 0
 				if self.inst.components.timer:TimerExists("bubbly") and waterproofness < 1 then
-					inst.components.health:DeltaPenalty(-0.0075)
+					inst.components.health:DeltaPenalty(-0.009)
+					if inst.components.moisture then
+						inst.components.moisture:DoDelta(4 * (1 - waterproofness), true)
+					end
 				end
 			end
 			
