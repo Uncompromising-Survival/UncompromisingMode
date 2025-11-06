@@ -4,11 +4,9 @@ local assets =
 }
 local gems = { "bluegem", "redgem", "purplegem", "orangegem", "yellowgem", "palegem" }
 
-
 local function OnSave(inst, data)
     data.tier = inst:GetTier()
     data.revealed = inst:IsRevealed()
-    return data
 end
 
 local function OnLoad(inst, data)
