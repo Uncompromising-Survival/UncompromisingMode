@@ -17,11 +17,15 @@ local events =
 	CommonHandlers.OnFreeze(),
 	CommonHandlers.OnAttack(),
 	CommonHandlers.OnElectrocute(),
-    EventHandler("attacked", function(inst) 
-		if not inst.components.health:IsDead() and not inst.sg:HasStateTag("attack") then 
-			inst.sg:GoToState("hit") 
-		end 
-	end),
+	EventHandler("attacked", function(inst, data)
+		if not inst.components.health:IsDead() then
+			if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+				return
+			elseif not inst.sg:HasAnyStateTag("attack", "electrocute") then
+				inst.sg:GoToState("hit")
+			end
+        end
+    end),
 	CommonHandlers.OnDeath(),
 	CommonHandlers.OnLocomote(true, true),
 	EventHandler("trapped", function(inst) inst.sg:GoToState("trapped") end),
