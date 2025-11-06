@@ -251,7 +251,6 @@ local um_preparedfoods =
         cooktime = 1.2,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 15 * TUNING.PERISH_TWO_DAY,
-        priority = 20,
         floater = { "med", 0.05, 0.65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_LICELOAF,
         oneatenfn = function(inst, eater)
