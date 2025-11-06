@@ -14,8 +14,8 @@ return Class(function(self, inst)
     end
 
     local function CheckForOtherOcupi(pos)
-        print(pos.x, pos.z)
-        print(#TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }))
+        --print(pos.x, pos.z)
+        --print(#TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }))
         if #TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }) == 0 then
             return true
         end
