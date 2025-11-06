@@ -76,9 +76,11 @@ local POSITIONS =
     wathgrithr_arsenal_shield_2 = { x = ARSENAL_POS_X_2, y = ARSENAL_SHIELD_Y_2 },
     wathgrithr_arsenal_shield_3 = { x = ARSENAL_POS_X_3, y = ARSENAL_SHIELD_Y_2 },
 
-    wathgrithr_beefalo_1 = { x = BEEFALO_POS_X, y = POS_Y_1 },
-    wathgrithr_beefalo_2 = { x = BEEFALO_POS_X, y = POS_Y_4 },
-    wathgrithr_beefalo_3 = { x = BEEFALO_POS_X, y = POS_Y_3 },                      --{ x = BEEFALO_POS_X, y = POS_Y_3 },
+    wathgrithr_beefalo_lock =   { x = BEEFALO_POS_X, y = POS_Y_4 },
+
+    wathgrithr_beefalo_1 =      { x = BEEFALO_POS_X, y = POS_Y_1 },
+    wathgrithr_beefalo_2 =      { x = BEEFALO_POS_X, y = POS_Y_5 },
+    wathgrithr_beefalo_3 =      { x = BEEFALO_POS_X, y = POS_Y_3 },                      --{ x = BEEFALO_POS_X, y = POS_Y_3 },
     wathgrithr_beefalo_saddle = { x = BEEFALO_POS_X, y = POS_Y_2 },                 --{ x = BEEFALO_POS_X, y = POS_Y_4 },
 
     wathgrithr_songs_instantsong_cd_lock = { x = SONGS_POS_X_1, y = POS_Y_1 },
@@ -147,6 +149,7 @@ local ONACTIVATE_FNS = {
 
     AllegianceShadow = function(inst)
         inst:AddTag("player_shadow_aligned")
+        inst:RemoveTag("battlesinger")
 
         --[[
         if inst.components.damagetyperesist ~= nil then
@@ -241,6 +244,7 @@ local ONDEACTIVATE_FNS = {
 
     AllegianceShadow = function(inst)
         inst:RemoveTag("player_shadow_aligned")
+        inst:AddTag("battlesinger")
 
         --[[
         if inst.components.damagetyperesist ~= nil then
@@ -466,7 +470,8 @@ local skills =
 
     --------------------------------------------------------------------------
 
-    -- Beefalos will be domesticated 15% faster.
+    -- Vanilla: Beefalos will be domesticated 15% faster.
+    -- New: Faster domestication and ride time
     wathgrithr_beefalo_1 = {
         group = "beefalo",
         tags = { "beefalodomestication", "beefalobucktime" },
@@ -485,14 +490,26 @@ local skills =
         connects     = { "wathgrithr_beefalo_3" },
     },
 
-    -- Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark.
+    -- Vanilla: Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark.
+    -- New: Beefalo damage
     wathgrithr_beefalo_3 = {
         group = "beefalo",
         tags = { "beefalodamage" },
-        connects = { "wathgrithr_beefalo_2" },
+        --connects = { "wathgrithr_beefalo_lock" },
     },
 
-    -- Beefalos will allow you to ride them for 30% longer.
+    wathgrithr_beefalo_lock = {
+        group = "beefalo",
+
+        connects = { "wathgrithr_beefalo_2" },
+
+        lock_open = function(prefabname, activatedskills, readonly)
+            return SkillTreeDefs.FN.CountTags(prefabname, "shadow_favor", activatedskills) == 0 and SkillTreeDefs.FN.CountTags(prefabname, "beefalodamage", activatedskills) == 1
+        end,
+    },
+
+    -- Vanilla: Beefalos will allow you to ride them for 30% longer.
+    -- New: Beefalo Inspiration 
     wathgrithr_beefalo_2 = {
         group = "beefalo",
         tags = { "beefaloinspiration" },
@@ -687,13 +704,16 @@ end
 
 
 if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_LOCK_DESC = "Have no shadow affinity."
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_revivewarrior_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_LOCK_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_LOCK_DESC = "Have no shadow affinity."
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_container_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_LOCK_DESC
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_LOCK_DESC = "Have no shadow affinity."
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_instantsong_cd_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_LOCK_DESC
 
+    local noshadowstring = "Have no Shadow Allegiance."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_LOCK_DESC = noshadowstring
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_revivewarrior_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_LOCK_DESC
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_LOCK_DESC = noshadowstring
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_container_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_LOCK_DESC
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_LOCK_DESC = noshadowstring
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_songs_instantsong_cd_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_LOCK_DESC
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_LOCK_DESC = noshadowstring
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_lock.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_LOCK_DESC
 
     --------------------------------------------------------------------------
     -- ARSENAL
@@ -750,20 +770,20 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = "Beefalos will be domesticated 15% faster and ridden 30% longer."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_1.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC
 
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE = "Noble Mount III"
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = "Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark."
+    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC
 
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_TITLE = "Noble Mount II"
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_3.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_TITLE
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC = "Wigfrid's damage multiplier applies to beefalos."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_3.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC
 
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE = "Noble Mount III"
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_TITLE
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = "Riding a beefalo will make your inspiration slowly rise until it reaches the halfway mark."
-    SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_2.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC
-
-
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = "Learn to craft a new Beefalo Saddle that protects your Beefalo. \nHas higher damage."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_beefalo_saddle.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC
+
+    
 
     --------------------------------------------------------------------------
     -- AFFINITY
@@ -775,7 +795,7 @@ if SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"] ~= nil then
     STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_TITLE = "Shadow Huntress"
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_allegiance_shadow.title = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_TITLE
 
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC = "Life and sanity steal are greatly increased.\nInspiration is no longer gained through normal means."
+    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC = "Life and sanity steal are greatly increased.\n Battle Calls are no longer available."
     SkillTreeDefs.SKILLTREE_DEFS["wathgrithr"].wathgrithr_allegiance_shadow.desc = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC
 
     --STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCELUNAR_TITLE = "Lunar Melodist"
