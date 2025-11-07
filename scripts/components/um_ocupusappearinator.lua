@@ -14,8 +14,8 @@ return Class(function(self, inst)
     end
 
     local function CheckForOtherOcupi(pos)
-        print(pos.x, pos.z)
-        print(#TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }))
+        --print(pos.x, pos.z)
+        --print(#TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }))
         if #TheSim:FindEntities(pos.x, 0, pos.z, 40, { "um_ocupus_core" }) == 0 then
             return true
         end
@@ -24,16 +24,16 @@ return Class(function(self, inst)
 
 
     local function IterateThroughTiles(tiles)
-        print("iterating through tiles...")
+        --print("iterating through tiles...")
         for k, v in ipairs(tiles) do
-            print("k,v", k,v)
+            --print("k,v", k,v)
             local offset = math.random() * 4
             local target_location = {}
             target_location.x = v.x
             target_location.z = v.z
-            print("target_location = ", target_location.x, target_location.z)
+            --print("target_location = ", target_location.x, target_location.z)
             if CheckForOtherOcupi(target_location) then
-                print("found valid location")
+                --print("found valid location")
                 target_location.x = v.x + offset
                 target_location.z = v.z + offset
 

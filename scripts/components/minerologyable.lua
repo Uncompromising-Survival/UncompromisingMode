@@ -213,16 +213,13 @@ local function ElectricAttack(inst, attacker, target)
 		target:AddTag("arcgrounded")
 		target:DoTaskInTime(3,function(target) target:RemoveTag("arcgrounded") end)
 	end
-	
+
 	target.components.combat:GetAttacked(attacker, static_mods[inst.tier], nil, "electric")
-	
 
-	if not inst.components.weapon.stimuli == "electric" then
-		inst.components.weapon:SetElectric(1,2.5)
+	if inst.components.weapon.stimuli ~= "electric" then
+		inst.components.weapon:SetElectric(1, 2.5)
 	end
-
 end
-
 
 local function MakeYellow2(self,tier) -- um_static_mod is referenced in a postinit to the combat component in init_gemology, setting the value here will talk to the function there, and make it increase damage if the player has a modifier already
 	self.enchantnum = 4
@@ -901,6 +898,5 @@ end
 function Minerologyable:OnLoad(data)
     self:SetEnchant(data.enchant,data.tier)
 end
-
 
 return Minerologyable
