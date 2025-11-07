@@ -2,7 +2,7 @@
 $ROOT = "C:\Program Files (x86)\Steam\steamapps\common\Don't Starve Mod Tools\mod_tools\tools\bin"
 $COMPILER_PATH = $ROOT + "\ShaderCompiler.exe"
 
-$shader_name = Read-Host Prompt "Shader Name:"c:\Users\marth\OneDrive\Área de Trabalho\lavamolten(4)\lavamolten.textil
+$shader_name = Read-Host Prompt "Shader Name:"
 $vs_shader_path = $ROOT + "\shader_input\" + $shader_name + ".vs"
 
 $ps_shader_path = $ROOT + "\shader_input\" + $shader_name + ".ps"
