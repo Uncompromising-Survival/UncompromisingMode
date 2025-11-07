@@ -609,8 +609,9 @@ env.AddPrefabPostInit("staff_lunarplant", function(inst)
     if forgerepairable then
         local _OnRepaired = forgerepairable.onrepaired
         local function OnRepaired(inst, ...)
+            local isbroken = inst.isbroken and inst.isbroken:value()
             local ret = _OnRepaired(inst, ...)
-            WathomBSStaffStuff(inst)
+            if isbroken then WathomBSStaffStuff(inst) end
             return ret
         end
         forgerepairable:SetOnRepaired(OnRepaired)

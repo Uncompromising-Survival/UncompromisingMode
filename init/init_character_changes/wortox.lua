@@ -1286,8 +1286,9 @@ if TUNING.DSTU.WORTOXCHANGES then
             if forgerepairable then
                 local _OnRepaired = forgerepairable.onrepaired
                 local function OnRepaired(inst, ...)
+                    local isbroken = inst.isbroken and inst.isbroken:value()
                     local ret = _OnRepaired(inst, ...)
-                    WortoxLunarStuff(inst)
+                    if isbroken then WortoxLunarStuff(inst) end
                     return ret
                 end
                 forgerepairable:SetOnRepaired(OnRepaired)
