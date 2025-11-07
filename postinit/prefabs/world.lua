@@ -2,10 +2,48 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
+local UM_InitializeParticleWorldTileState = UM_InitializeParticleWorldTileState
+local UM_OnAnyTerraformParticleWorldTileState = UM_OnAnyTerraformParticleWorldTileState
+
+local function OnTerraForm(inst, data)
+    if data ~= nil and data.original_tile ~= data.tile then
+        SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "OnTerraform"), nil, ZipAndEncodeString(data))
+        if inst.components.um_localtilewatcher ~= nil then
+            inst.components.um_localtilewatcher:OnTerraform(data)
+        end 
+    end
+end
+
+local function tile_physics_init(inst, ...)
+    inst.Map:AddTileCollisionSet(
+        inst:CanFlyingCrossBarriers() and COLLISION.GROUND or COLLISION.LAND_OCEAN_LIMITS,
+        TileGroups.ImpassableTilesNotUMLava, true,
+        TileGroups.UMLavaTiles, true,
+        0.25, 128
+    )
+    if inst.UM_tile_physics_init then
+        inst.UM_tile_physics_init(inst, ...)
+    end
+end
+
 env.AddPrefabPostInit("world", function(inst)
+    if not TheNet:IsDedicated() then
+        inst:AddComponent("um_localtilewatcher")
+        inst:ListenForEvent("worldmapsetsize", function() UM_InitializeParticleWorldTileState() end)
+        inst:ListenForEvent("um_local_onanyterraform", function(_, data) UM_OnAnyTerraformParticleWorldTileState(data) end)
+
+        inst:AddComponent("um_waterfallmanager")
+        inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "waterfall_lavamolten")
+    end
+
+    inst.UM_tile_physics_init = inst.tile_physics_init
+    inst.tile_physics_init = tile_physics_init
+
     if not inst.ismastersim then
         return
     end
+
+    inst:ListenForEvent("onterraform", OnTerraForm)
 
     inst:AddComponent("garbagepatch_manager")
 

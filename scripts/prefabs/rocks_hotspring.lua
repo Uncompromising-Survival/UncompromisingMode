@@ -65,7 +65,7 @@ local function fnmagma1()
     inst:DoTaskInTime(1, function(inst)
 		if not HotSpringCheck(inst) then
 			local x,y,z = inst.Transform:GetWorldPosition()
-			SpawnPrefab("magmarock1").Transform:SetPosition(x,y,z)
+			SpawnPrefab("um_magmarock1").Transform:SetPosition(x,y,z)
 			local tx, tz = TheWorld.Map:GetTileCoordsAtPoint(x, y, z)
 			-- Square
 			-- for i = -1,1 do

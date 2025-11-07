@@ -5,6 +5,11 @@ require "um_pocketdimensioncontainers"
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
 GLOBAL.TheMineralLogbook:Load()
 
+GLOBAL.UM_DEV = GetModConfigData("devmode")
+if GLOBAL.UM_DEV then
+    GLOBAL.CHEATS_ENABLED = true
+end
+
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
     Asset("IMAGE", "images/UM_tip_icon.tex"),
@@ -73,6 +78,7 @@ end)
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
 modimport("init/um_tree_rock_data")
+modimport("init/init_magmatiles")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
@@ -308,7 +314,12 @@ end
 
 AddClientModRPCHandler("UncompromisingSurvival", "LearnGemologyGem", LearnGemologyGem)
 
-
+AddClientModRPCHandler("UncompromisingSurvival", "OnTerraform", function(data)
+    local data = DecodeAndUnzipString(data)
+    if TheWorld.components.um_localtilewatcher ~= nil then
+        TheWorld.components.um_localtilewatcher:OnTerraform(data)
+    end
+end)
 
 -- WIXIE RELATED RPC'S
 

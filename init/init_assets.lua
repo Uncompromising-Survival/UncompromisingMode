@@ -1641,7 +1641,7 @@ Assets = {
     Asset("ATLAS", "images/wortox_shadow_weaver.xml"),
     Asset("IMAGE", "images/wortox_shadow_weaver.tex"),
 
-
+    Asset("IMAGE", "images/um_lava_wave.tex"),
 
 
     --SWAPS
@@ -1893,3 +1893,5 @@ end
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")
 RegisterSkilltreeIconsAtlas("images/wortox_lunar_summoner.xml", "wortox_lunar_summoner.tex")
 RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_weaver.tex")
+
+GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)

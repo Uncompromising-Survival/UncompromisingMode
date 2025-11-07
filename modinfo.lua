@@ -1517,6 +1517,7 @@ configuration_options = {
     --	BinaryConfig("boat_go_vroom", "Boat Tweak", "Allows greater player agency in directing boats.", false),
     --	BinaryConfig("self_combusting_traps", "Burningable Traps", "Back by unpopular demand! Conceptually expanded.", false),
     --	BinaryConfig("rat_arson", "Illegalize Rats", "Rats are now illegal. Please inform them of this.", false),
+    BinaryConfig("devmode", "Dev Mode", "Enables Don't Starves Dev Tools", false),
     SkipSpace()
 
     --	Header("Character Additions"),

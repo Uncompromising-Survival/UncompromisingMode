@@ -56,6 +56,8 @@ env.AddComponentPostInit("boatphysics", function(self)
     local _GetBoatDrag = self.GetBoatDrag
 
     function self:GetBoatDrag(velocity, total_anchor_drag, ...)
+        if self.inst.prefab == "boat_magma" then return 0 end
+
         return _GetBoatDrag(self, velocity, total_anchor_drag, ...) * self:GetBoatRotatorDrag()
     end
 

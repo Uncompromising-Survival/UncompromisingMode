@@ -239,3 +239,52 @@ env.AddPrefabPostInitAny(function(inst)
         inst:AddComponent("um_spiritbuff")
     end
 end)]]
+
+local LABEL_SPACING = 40
+function EntityScript:SetUMDebugLabel(name, txt, colour)
+    if self.um_debug_labels == nil then
+        self.um_debug_labels = {}
+    end
+    local targ_label
+    for i,label in ipairs(self.um_debug_labels) do
+        if label.name == name and label ~= nil and label:IsValid() then
+            targ_label = label
+            break
+        end
+    end
+    if targ_label == nil then
+        targ_label = SpawnPrefab("um_debug_label")
+        targ_label.name = name
+        table.insert(self.um_debug_labels, targ_label)
+        self:AddChild(targ_label)
+        targ_label:SetUIOffset(0, (#self.um_debug_labels-1) * LABEL_SPACING, 0)
+    end
+
+    targ_label:SetText(txt)
+    if colour ~= nil then
+        targ_label:SetColour(unpack(colour))
+    end
+end
+
+function EntityScript:ClearUMDebugLabel(name)
+    local targ_label
+    for i,label in ipairs(self.um_debug_labels) do
+        if label.name == name and label ~= nil and label:IsValid() then
+            targ_label = table.remove(self.um_debug_labels, i)
+            break
+        end
+    end
+    if targ_label ~= nil then
+        targ_label:Remove()
+
+        for i,label in ipairs(self.um_debug_labels) do
+            if label ~= nil and label:IsValid() then
+                label:SetUIOffset(0, (i-1) * LABEL_SPACING, 0)
+            end
+        end
+
+        if IsTableEmpty(self.um_debug_labels) then
+            self.um_debug_labels = nil
+        end
+    end
+end

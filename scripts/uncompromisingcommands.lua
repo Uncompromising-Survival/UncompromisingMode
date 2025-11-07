@@ -368,3 +368,39 @@ function c_um_spawncocoon(type)
         print("Unable to spawn cocoon with type " .. type)
     end
 end
+
+-- NOTE (HALF): Congrats asgerrr your comment is now in UM and DF, HAHAHAHAHAHAHAHHA
+
+--asgerrr: this one has been sitting in a txt file on my desktop for a long ass time lol
+function c_changetile(tile, radius) 
+    local center_dist = radius - 1 
+    local center_x, center_y = TheWorld.Map:GetTileCoordsAtPoint(ConsoleWorldPosition():Get()) 
+    for x = center_x-center_dist, center_x+center_dist, 1 do 
+        for y = center_y-center_dist, center_y+center_dist, 1 do
+            if GROUND_INVISIBLETILES[tile] then
+                TheWorld.components.undertile:SetTileUnderneath(x, y, TheWorld.Map:GetTile(x, y))
+            end
+            TheWorld.Map:SetTile(x,y,WORLD_TILES[tile])
+        end 
+    end 
+end
+
+function c_gettile()
+    local center_x, center_y = TheWorld.Map:GetTileCoordsAtPoint(ConsoleWorldPosition():Get()) 
+    return INVERTED_WORLD_TILES[TheWorld.Map:GetTile(center_x, center_y)]
+end
+
+--This is for all players. If you don't care for entities, consider using
+-- TheWorld.minimap.MiniMap:EnableFogOfWar(false)
+function c_revealmap()
+	local size = 2 * TheWorld.Map:GetSize()
+	for _, player in pairs(AllPlayers) do
+		for x = -size, size, 32 do
+			for z = -size, size, 32 do
+				player.player_classified.MapExplorer:RevealArea(x, 0, z)
+			end
+		end
+	end
+
+	print(TheWorld.Map:GetSize())
+end
