@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 -----------------------------------------------------------------
 
-env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I didn't do anything lool -C
+--[[env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I didn't do anything lool -C
     local _GetActionButtonAction = self.GetActionButtonAction
     function self:GetActionButtonAction(...)
         local actbuttonaction = _GetActionButtonAction(self, ...)
@@ -15,4 +15,4 @@ env.AddComponentPostInit("playercontroller", function(self) --By Summerrr, I did
         end
         return actbuttonaction
     end
-end)
+end)]]
