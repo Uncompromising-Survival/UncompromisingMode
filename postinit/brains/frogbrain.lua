@@ -11,48 +11,40 @@ local AVOID_DIST = 10
 local AVOID_STOP = 12
 
 local FINDFOOD_CANT_TAGS = { "outofreach", "INLIMBO" }
+local DONTEAT_TAGS = {"bee", "mosquito"}
+local function IsFoodValid(item, inst)
+    return item.prefab ~= "mandrake"
+        and not (item.components.burnable and item.components.burnable:IsBurning())
+        --and item:IsOnPassablePoint()
+        and item:IsOnValidGround()
+        and not item:HasAnyTag(DONTEAT_TAGS)
+        and inst.components.eater and inst.components.eater:CanEat(item)
+end
+
 local function EatFoodAction(inst)
-	if inst.sg.currentstate.name == "fall" then
-		return nil
-	end
+    if inst.sg:HasStateTag("busy") then return nil end
     --[[local target = FindEntity(inst, SEE_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnPassablePoint(true) end)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
-	]]
-	 local target = FindEntity(inst,
-        SEE_DIST,
-        function(item)
-            return item.prefab ~= "mandrake"
-                and item.components.edible ~= nil
-				and not (item.components.burnable ~= nil and item.components.burnable:IsBurning())
-                and item:IsOnPassablePoint()
-				and item:IsOnValidGround()
-				and not (item:HasTag("bee") or item:HasTag("mosquito"))
-                and (inst.components.eater ~= nil and inst.components.eater:CanEat(item))
-        end,
-        nil,
-        FINDFOOD_CANT_TAGS
-    )
-    if target ~= nil then
-        return BufferedAction(inst, target, ACTIONS.PICKUP) or nil
-    end
+    ]]
+    local target = FindEntity(inst, SEE_DIST, IsFoodValid, nil, FINDFOOD_CANT_TAGS, inst.components.eater and inst.components.eater:GetEdibleTags() or nil)
+    return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
 
 local function FrogFindFood(self)
-
     local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP , function(inst) 
-	local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
-	
-	if target ~= nil and target:HasTag("epic") and TUNING.DSTU.COWARDFROGS then
-		inst.components.combat:DropTarget()
-	end
-	
-	return true 
-	end)
-	if TUNING.DSTU.COWARDFROGS then
+    local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
+    
+    if target ~= nil and target:HasTag("epic") and TUNING.DSTU.COWARDFROGS then
+        inst.components.combat:DropTarget()
+    end
+    
+    return true 
+    end)
+    if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
     local findfood = DoAction(self.inst, EatFoodAction, "eat food", true)
-	if TUNING.DSTU.HUNGRYFROGS then
+    if TUNING.DSTU.HUNGRYFROGS then
         table.insert(self.bt.root.children, 5, findfood)
     end
 end
@@ -62,14 +54,14 @@ env.AddBrainPostInit("frogbrain", FrogFindFood)
 local function ToadFindFood(self)
 
     local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP , function(inst) 
-	local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
-	
-	if target ~= nil and target:HasTag("epic") then
-		inst.components.combat:DropTarget()
-	end
-	
-	return true 
-	end)
+    local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
+    
+    if target ~= nil and target:HasTag("epic") then
+        inst.components.combat:DropTarget()
+    end
+    
+    return true 
+    end)
     if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
