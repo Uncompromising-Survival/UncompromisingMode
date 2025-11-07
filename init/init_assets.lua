@@ -1889,7 +1889,3 @@ for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("ATLAS", "images/inventoryimages/" .. asset .. ".xml"))
     table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
 end
-
-RegisterSkilltreeIconsAtlas("images/wortox_lunar_stealer.xml", "wortox_lunar_stealer.tex")
-RegisterSkilltreeIconsAtlas("images/wortox_lunar_summoner.xml", "wortox_lunar_summoner.tex")
-RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_weaver.tex")
