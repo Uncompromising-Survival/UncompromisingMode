@@ -74,11 +74,11 @@ env.AddPrefabPostInit("frog", function (inst)
         inst:AddComponent("inventory")
     end
 
-	local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
     if um_dynamic_digester then
         um_dynamic_digester.digesttime = 5
         um_dynamic_digester.digest_per = 20
-    end
+    end]]
 end)
 
 env.AddPrefabPostInit("uncompromising_toad", function (inst)
@@ -89,23 +89,23 @@ env.AddPrefabPostInit("uncompromising_toad", function (inst)
         return
     end
 
-    if not inst.components.eater then
-        inst:AddComponent("eater")
-        inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-        inst.components.eater:SetCanEatHorrible()
-        inst.components.eater:SetCanEatRaw()
-        inst.components.eater.strongstomach = true -- can eat monster meat!
+    local eater = inst.components.eater or inst:AddComponent("eater")
+    if eater then
+        eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
+        eater:SetCanEatHorrible()
+        eater:SetCanEatRaw()
+        eater.strongstomach = true -- can eat monster meat!
     end
     
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
     
-    if not inst.components.um_dynamic_digester then
-        inst:AddComponent("um_dynamic_digester")
-        inst.components.um_dynamic_digester.digesttime = 5
-        inst.components.um_dynamic_digester.digest_per = 20
-    end
+	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+    if um_dynamic_digester then
+        um_dynamic_digester.digesttime = 5
+        um_dynamic_digester.digest_per = 20
+    end]]
 end)
 
 env.AddPrefabPostInit("lunarfrog", function (inst)
@@ -116,14 +116,6 @@ env.AddPrefabPostInit("lunarfrog", function (inst)
         return
     end
 
-    if not inst.components.eater then
-        inst:AddComponent("eater")
-        inst.components.eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
-        inst.components.eater:SetCanEatHorrible()
-        inst.components.eater:SetCanEatRaw()
-        inst.components.eater.strongstomach = true -- can eat monster meat!
-    end
-
     if inst.components.combat ~= nil then
         if inst.components.combat.targetfn ~= nil then
             inst._um_oldretarget = inst.components.combat.targetfn
@@ -131,14 +123,22 @@ env.AddPrefabPostInit("lunarfrog", function (inst)
             inst.components.combat:SetRetargetFunction(2, NewRetargetfn)
         end
     end
+
+    local eater = inst.components.eater or inst:AddComponent("eater")
+    if eater then
+        eater:SetDiet({ FOODGROUP.OMNI }, { FOODGROUP.OMNI })
+        eater:SetCanEatHorrible()
+        eater:SetCanEatRaw()
+        eater.strongstomach = true -- can eat monster meat!
+    end
     
     if not inst.components.inventory then
         inst:AddComponent("inventory")
     end
     
-    if not inst.components.um_dynamic_digester then
-        inst:AddComponent("um_dynamic_digester")
-        inst.components.um_dynamic_digester.digesttime = 5
-        inst.components.um_dynamic_digester.digest_per = 20
-    end
+	--[[local um_dynamic_digester = inst.components.um_dynamic_digester or inst:AddComponent("um_dynamic_digester")
+    if um_dynamic_digester then
+        um_dynamic_digester.digesttime = 5
+        um_dynamic_digester.digest_per = 20
+    end]]
 end)

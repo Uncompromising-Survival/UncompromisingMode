@@ -66,34 +66,37 @@ local function fn()
     inst.AnimState:PlayAnimation("true_idle")
     inst.entity:SetPristine()
 
+    inst:AddTag("NOBLOCK")
     inst:AddTag("NORATCHECK")
+    inst:AddTag("nosteal")
     inst:AddTag("_named")
     inst:AddTag("um_washable_goo")
     inst:AddTag("noflingowash")
 
-    if not TheWorld.ismastersim then 
-        return inst
-    end
+    inst.um_no_pickup = true
+
+    if not TheWorld.ismastersim then return inst end
     
-    inst:AddComponent("edible")
-    inst.components.edible.foodtype = FOODTYPE.VEGGIE --Horrible is generally unedible
-    inst.components.edible.healthvalue = -60
-    inst.components.edible:SetOnEatenFn(oneaten)
+    local edible = inst:AddComponent("edible")
+    edible.foodtype = FOODTYPE.VEGGIE --Horrible is generally unedible
+    edible.healthvalue = -60
+    edible:SetOnEatenFn(oneaten)
     
     inst:AddComponent("bait")
     inst:AddComponent("named")
     inst.components.named:SetName("Poisonous Jam")
     inst:AddComponent("inspectable")
     
-    -- inst:AddComponent("inventoryitem")
-    -- inst.components.inventoryitem:SetOnPutInInventoryFn(OnPicked)
-    -- inst.components.inventoryitem:SetOnPickupFn(OnPicked)
-    -- inst.components.inventoryitem.cangoincontainer = false
+    local inventoryitem = inst:AddComponent("inventoryitem")
+    --[[inventoryitem:SetOnPutInInventoryFn(OnPicked)
+    inventoryitem:SetOnPickupFn(OnPicked)]]
+    inventoryitem.canonlygoinpocket = true
+    inventoryitem.nobounce = true
     
-    inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)
+    local perishable = inst:AddComponent("perishable")
+    perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)
 
-    inst.AnimState:SetMultColour(0.6,1,1,1)
+    inst.AnimState:SetMultColour(.6, 1, 1, 1)
 
     inst.Transform:SetRotation(math.random() * 360)
 
@@ -126,9 +129,7 @@ local function itemfn()
 
     inst.entity:SetPristine()
     
-    if not TheWorld.ismastersim then 
-        return inst
-    end
+    if not TheWorld.ismastersim then return inst end
     
     inst:AddComponent("inspectable")
 

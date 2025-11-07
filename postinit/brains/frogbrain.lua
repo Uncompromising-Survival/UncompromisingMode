@@ -22,7 +22,14 @@ local function IsFoodValid(item, inst)
 end
 
 local function EatFoodAction(inst)
-    if inst.sg:HasStateTag("busy") then return nil end
+    if inst.sg:HasStateTag("busy") then
+        return nil
+    elseif inst.components.inventory and inst.components.eater then
+        local target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end)
+        if target then
+            return BufferedAction(inst, target, ACTIONS.EAT)
+        end
+    end
     --[[local target = FindEntity(inst, SEE_DIST, function(item) return inst.components.eater:CanEat(item) and item:IsOnPassablePoint(true) end)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
     ]]
@@ -30,16 +37,16 @@ local function EatFoodAction(inst)
     return target and BufferedAction(inst, target, ACTIONS.PICKUP) or nil
 end
 
-local function FrogFindFood(self)
-    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP , function(inst) 
-    local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
-    
-    if target ~= nil and target:HasTag("epic") and TUNING.DSTU.COWARDFROGS then
+local function FearfulOfEpics(inst)
+    local target = inst.components.combat and inst.components.combat.target or nil
+    if target and target:HasTag("epic") then
         inst.components.combat:DropTarget()
     end
-    
-    return true 
-    end)
+    return true
+end
+
+local function FrogFindFood(self)
+    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
     if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
@@ -52,15 +59,7 @@ end
 env.AddBrainPostInit("frogbrain", FrogFindFood)
 
 local function ToadFindFood(self)
-    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP , function(inst) 
-    local target = inst.components.combat ~= nil and inst.components.combat.target ~= nil and inst.components.combat.target or nil
-    
-    if target ~= nil and target:HasTag("epic") then
-        inst.components.combat:DropTarget()
-    end
-    
-    return true 
-    end)
+    local avoidthenoid = RunAway(self.inst, "epic", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP, FearfulOfEpics)
     if TUNING.DSTU.COWARDFROGS then
         table.insert(self.bt.root.children, 2, avoidthenoid)
     end
