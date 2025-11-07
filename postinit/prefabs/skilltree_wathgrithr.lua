@@ -151,7 +151,7 @@ local ONACTIVATE_FNS = {
         inst:AddTag("player_shadow_aligned")
         inst:RemoveTag("battlesinger")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_SHADOW_RESIST, "allegiance_shadow")
         end
@@ -159,7 +159,7 @@ local ONACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_VS_LUNAR_BONUS, "allegiance_shadow")
         end
-        ]]
+        
 
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_GAIN_MULT, "allegiance_shadow")
@@ -182,7 +182,7 @@ local ONACTIVATE_FNS = {
         --end
 		
 		if inst.components.health ~= nil then
-			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION * TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
+			inst.components.health:SetAbsorptionAmount(TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
 		end
 
         UpdateInspirationBadge(inst)
@@ -192,7 +192,7 @@ local ONACTIVATE_FNS = {
         inst:AddTag("player_lunar_aligned")
         inst:AddTag("lunarmelodist")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
         end
@@ -200,13 +200,14 @@ local ONACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
         end
-        ]]
+        
 
+        --[[
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT, "allegiance_lunar")
             inst.components.singinginspiration.buffertimemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT, "allegiance_lunar")
             inst.components.singinginspiration.drainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT, "allegiance_lunar")
-        end
+        end]]
 
         if inst.components.battleborn ~= nil then
             --inst.components.battleborn:SetClampMin(0.33 * TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
@@ -246,7 +247,7 @@ local ONDEACTIVATE_FNS = {
         inst:RemoveTag("player_shadow_aligned")
         inst:AddTag("battlesinger")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:RemoveResist("shadow_aligned", inst, "allegiance_shadow")
         end
@@ -254,7 +255,7 @@ local ONDEACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:RemoveBonus("lunar_aligned", inst, "allegiance_shadow")
         end
-        ]]
+        
 
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:RemoveModifier(inst, "allegiance_shadow")
@@ -267,6 +268,10 @@ local ONDEACTIVATE_FNS = {
             inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
             inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
         end
+
+        if inst.components.health ~= nil then
+			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION)
+		end
 
         --if inst.components.hunger ~= nil then
             --inst.components.hunger:SetRate(TUNING.WILSON_HUNGER_RATE)
@@ -283,7 +288,7 @@ local ONDEACTIVATE_FNS = {
         inst:RemoveTag("player_lunar_aligned")
         inst:RemoveTag("lunarmelodist")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
         end
@@ -291,13 +296,14 @@ local ONDEACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
         end
-        ]]
+        
 
+        --[[
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:RemoveModifier(inst, "allegiance_lunar")
             inst.components.singinginspiration.buffertimemultipliers:RemoveModifier(inst, "allegiance_lunar")
             inst.components.singinginspiration.drainratemultipliers:RemoveModifier(inst, "allegiance_lunar")
-        end
+        end]]
 
         if inst.components.battleborn ~= nil then
             --inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
