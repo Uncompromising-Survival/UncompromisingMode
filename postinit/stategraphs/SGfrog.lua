@@ -17,7 +17,6 @@ env.AddStategraphPostInit("frog", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("eat_pre")
                 inst.SoundEmitter:PlaySound("dontstarve/frog/attack_voice")
-                inst.sg.statemem.forced = forced
             end,
 
             events =
