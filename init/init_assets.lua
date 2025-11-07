@@ -1395,6 +1395,8 @@ Assets = {
     Asset("ANIM", "anim/um_pathfinderpulse.zip"),
 
     --INVENTORY ITEMS [ANIMS & INV_IMAGE]
+    Asset("ANIM", "anim/gem_meter.zip"),
+
     Asset("ANIM", "anim/um_boatbottle.zip"),
     Asset("ANIM", "anim/hat_crab.zip"),
     Asset("ANIM", "anim/staff_starfall.zip"),

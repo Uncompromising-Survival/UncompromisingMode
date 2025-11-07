@@ -67,7 +67,7 @@ local UIAnim = require "widgets/uianim"
 local Text = require "widgets/text"
 require("constants")
 
-local pretty_colors = 
+local pretty_colors =
 
 {
     RGB(175, 245, 172), -- 1 Neurotic Peridot
@@ -98,7 +98,7 @@ env.AddClassPostConstruct("widgets/itemtile", function(self)
     end
 end)
 
-local furious_absorptions = {0.05,0.1,0.25}
+local furious_absorptions = { 0.05, 0.1, 0.25 }
 -- Peerless jade effect, if there is an existing damage multiplier, increase it by some amount more
 env.AddComponentPostInit("combat", function(self)
     local _CalcDamage = self.CalcDamage
@@ -276,7 +276,7 @@ end
 
 -- Hasty Topaz effect, speed up if you already have speed boosts
 
-local boost_resistance = {0.25,0.5,1}
+local boost_resistance = { 0.25, 0.5, 1 }
 env.AddComponentPostInit("locomotor", function(self)
     if self.ismastersim then
         local _GetSpeedMultiplier = self.GetSpeedMultiplier
@@ -333,3 +333,66 @@ env.AddComponentPostInit("lootdropper", function(self)
         return loot
     end
 end)
+
+
+--gem durability
+env.AddComponentPostInit("finiteuses", function(self)
+    local _SetUses = self.SetUses
+
+    function self:SetUses(val, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = val / self.total
+        local delta = new_percent - curr_percent
+
+        print("FINITE: curr_percent", curr_percent)
+        print("FINITE: new_percent", new_percent)
+        print("FINITE: delta", delta)
+
+        if delta < 0 and self.inst.components.minerologyable ~= nil then
+            self.inst.components.minerologyable:DoDelta(delta, true)
+        end
+
+        _SetUses(self, val, ...)
+    end
+end)
+
+env.AddComponentPostInit("fueled", function(self)
+    local _DoDelta = self.DoDelta
+
+    function self:DoDelta(amount, doer, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = amount / self.maxfuel
+        local delta = new_percent - curr_percent
+        print("FUELED: curr_percent", curr_percent)
+        print("FUELED: new_percent", new_percent)
+        print("FUELED: delta", delta)
+
+        if delta < 0 and self.inst.components.minerologyable ~= nil then
+            self.inst.components.minerologyable:DoDelta(delta, true)
+        end
+
+        _DoDelta(self, amount, doer, ...)
+    end
+end)
+
+env.AddComponentPostInit("armor", function(self)
+    local _SetCondition = self.SetCondition
+
+    function self:SetCondition(amount, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = amount / self.maxcondition
+        local delta = new_percent - curr_percent
+
+        print("ARMOR: curr_percent", curr_percent)
+        print("ARMOR: new_percent", new_percent)
+        print("ARMOR: delta", delta)
+
+        if delta < 0 and self.inst.components.minerologyable ~= nil then
+            self.inst.components.minerologyable:DoDelta(delta, true)
+        end
+
+        _SetCondition(self, amount, ...)
+    end
+end)
+
+--i was gonna do perishable but i got not clue how.
