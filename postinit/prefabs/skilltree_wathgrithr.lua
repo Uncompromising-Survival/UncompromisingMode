@@ -190,7 +190,7 @@ local ONACTIVATE_FNS = {
 
     AllegianceLunar = function(inst)
         inst:AddTag("player_lunar_aligned")
-        inst:AddTag("lunar_improved_songs")
+        inst:AddTag("lunarmelodist")
 
         --[[
         if inst.components.damagetyperesist ~= nil then
@@ -281,7 +281,7 @@ local ONDEACTIVATE_FNS = {
 
     AllegianceLunar = function(inst)
         inst:RemoveTag("player_lunar_aligned")
-        inst:RemoveTag("lunar_improved_songs")
+        inst:RemoveTag("lunarmelodist")
 
         --[[
         if inst.components.damagetyperesist ~= nil then
