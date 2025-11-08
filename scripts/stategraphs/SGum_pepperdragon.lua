@@ -106,28 +106,6 @@ local function ShootFire(inst,total_flame)
 	end
 end
 
-local function GetPissy(inst)
-	if not inst.components.timer:TimerExists("pissedoff") then
-		inst.components.timer:StopTimer("pissedoff")
-	end
-	inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
-	inst.check_ready_flame = inst:DoPeriodicTask(5,function(inst) -- see if we happen to be in a good position for lots of fire.
-		if not inst.components.timer:TimerExists("pissedoff") then
-			if inst.check_ready_flame then
-				inst.check_ready_flame:Cancel()
-				inst.check_ready_flame = nil
-			end
-		else
-			if not inst.components.timer:TimerExists("flame_cd") then
-				local target = inst.components.combat and inst.components.combat.target or nil
-				if not inst.sg:HasStateTag("busy") and (target and inst:GetDistanceSqToInst(target) < 30) then
-					inst.sg:GoToState("flame_pre")
-				end
-			end
-		end
-	end)
-end
-
 local actionhandlers =
 {
     ActionHandler(ACTIONS.GOHOME, "gohome"),
@@ -360,7 +338,10 @@ local states=
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
 			CommonHandlers.UpdateHitRecoveryDelay(inst)
-			GetPissy(inst)
+            if not inst.components.timer:TimerExists("pissedoff") then
+                inst.components.timer:StopTimer("pissedoff")
+            end
+            inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
         end,
 
         events=
