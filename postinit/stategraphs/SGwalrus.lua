@@ -7,31 +7,52 @@ env.AddStategraphPostInit("walrus", function(inst)
         inst.SoundEmitter:PlaySound("dontstarve/creatures/"..creature .."/"..sound)
     end
 
-    local _OldAttackedEvent = inst.events["attacked"].fn
-    inst.events["attacked"].fn = function(inst, data, ...)
-        if not (inst.components.health and inst.components.health:IsDead()) then
-            if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
-                return
-            elseif not inst.sg:HasAnyStateTag("attack", "electrocute") then
-                if inst.counter and inst.counter >= 3 then
-                    inst.counter = 0
-                    inst.sg:GoToState("counterattack")
-                    return 
-                else
-                    if inst.counter then
-                        inst.counter = inst.counter + 1
-                        if inst.countertask then
-                            inst.countertask:Cancel()
-                            inst.countertask = nil
-                        end
-                        inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
-                    else
+    local doattackeventhandler = inst.events["doattack"]
+    if doattackeventhandler then
+        local doattackeventhandler_fn = doattackeventhandler.fn
+        doattackeventhandler.fn = function(inst, data, ...)
+            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and inst.sg.mem.wantstocounter then
+                inst.sg.mem.wantstocounter = nil
+                inst.sg:GoToState("counterattack")
+				return
+            end
+			return doattackeventhandler_fn(inst, data, ...)
+        end
+    end
+
+    local attackedeventhandler = inst.events["attacked"]
+    if attackedeventhandler then
+        local attackedeventhandler_fn = attackedeventhandler.fn
+        attackedeventhandler.fn = function(inst, data, ...)
+            if not (inst.components.health and inst.components.health:IsDead()) then
+                if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
+                    return
+                elseif not inst.sg:HasAnyStateTag("attack", "electrocute") then
+                    if inst.sg.mem.wantstocounter then
+                        inst.components.combat:ResetCooldown()
+                        return
+                    end
+                    if inst.counter and inst.counter >= 3 then
                         inst.counter = 0
+                        inst.sg.mem.wantstocounter = true
+                        inst.components.combat:ResetCooldown()
+                        return
+                    else
+                        if inst.counter then
+                            inst.counter = inst.counter + 1
+                            if inst.countertask then
+                                inst.countertask:Cancel()
+                                inst.countertask = nil
+                            end
+                            inst.countertask = inst:DoTaskInTime(10, function(inst) inst.counter = 0 end)
+                        else
+                            inst.counter = 0
+                        end
                     end
                 end
             end
+            return attackedeventhandler_fn(inst, data, ...)
         end
-        _OldAttackedEvent(inst, data, ...)
     end
 
     local states = {
