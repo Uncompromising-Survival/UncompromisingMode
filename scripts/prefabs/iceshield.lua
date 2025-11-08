@@ -1,5 +1,6 @@
-local function OnHealthDelta(inst, oldpercent, newpercent)
-    if oldpercent > newpercent then
+local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, afflicter, amount)
+    if amount < 0 and ((not overtime) or (cause == "fire")) and (GetTime() - inst.lasthitfxtime) > 0.1 then
+        inst.lasthitfxtime = GetTime()
         inst._parent.SoundEmitter:PlaySound("meta4/mortars/cannonball_hit_ice")
         SpawnPrefab("mining_ice_fx").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
     end
@@ -56,14 +57,22 @@ local function Init(inst, parent, fx_symbol, tier)
     inst.Transform:SetPosition(parent.Transform:GetWorldPosition())
 
     if parent.components.health ~= nil then
-        parent.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+        if parent.components.health.redirect then
+            inst.redirect_old = parent.components.health.redirect
+        end
+        parent.components.health.redirect = function(self, amount, overtime, cause, ...)
+            if amount >= 0 then
+                return inst.redirect_old and inst.redirect_old(self, amount, overtime, cause, ...) or false
+            end
             if inst.components.health ~= nil and inst:IsValid() then
                 if cause == "fire" then
                     amount = amount * 10
                     SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(parent.Transform:GetWorldPosition())
                 end
 
-                return inst.components.health:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+                inst.components.health:DoDelta(amount, overtime, cause, ...)
+
+                return true
             end
         end
     end
@@ -132,10 +141,10 @@ local function fn()
         inst:Remove()
     end)
 
-    inst:ListenForEvent("removed", function(inst)
+    inst:ListenForEvent("onremove", function(inst)
         if inst._parent ~= nil then
             inst._parent:RemoveTag("ice_shielded")
-            inst._parent.components.health.redirect = nil
+            inst._parent.components.health.redirect = inst.redirect_old and inst.redirect_old or nil
         end
     end)
 

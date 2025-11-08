@@ -106,28 +106,6 @@ local function ShootFire(inst,total_flame)
 	end
 end
 
-local function GetPissy(inst)
-	if not inst.components.timer:TimerExists("pissedoff") then
-		inst.components.timer:StopTimer("pissedoff")
-	end
-	inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
-	inst.check_ready_flame = inst:DoPeriodicTask(5,function(inst) -- see if we happen to be in a good position for lots of fire.
-		if not inst.components.timer:TimerExists("pissedoff") then
-			if inst.check_ready_flame then
-				inst.check_ready_flame:Cancel()
-				inst.check_ready_flame = nil
-			end
-		else
-			if not inst.components.timer:TimerExists("flame_cd") then
-				local target = inst.components.combat and inst.components.combat.target or nil
-				if not inst.sg:HasStateTag("busy") and (target and inst:GetDistanceSqToInst(target) < 30) then
-					inst.sg:GoToState("flame_pre")
-				end
-			end
-		end
-	end)
-end
-
 local actionhandlers =
 {
     ActionHandler(ACTIONS.GOHOME, "gohome"),
@@ -140,7 +118,10 @@ local events=
     CommonHandlers.OnAttacked(),
     EventHandler("doattack", function(inst)
 		if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute") or inst.sg:HasStateTag("busy")) then
-			if (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
+            if inst.sg.mem.wantstostomp then
+                inst.sg.mem.wantstostomp = nil
+                inst.sg:GoToState("stomp")
+			elseif (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
 				inst.sg:GoToState("flame_pre")
 			else
 				inst.sg:GoToState("attack")
@@ -193,10 +174,6 @@ local states=
                 inst.AnimState:PushAnimation("idle1", true)
             else
                 inst.AnimState:PlayAnimation("idle1", true)
-            end
-
-            if inst:HasTag("teenbird") then
-                inst.sg:SetTimeout(4 + 4*math.random())
             end
         end,
 
@@ -354,23 +331,28 @@ local states=
         tags = {"hit"},
 
         onenter = function(inst)
-			inst.tolerance = inst.tolerance + 0.1+math.random(1,20)*0.1
+            if not inst.sg.mem.wantstostomp then
+			    inst.tolerance = inst.tolerance + 0.1 + (math.random() * 0.2)
+            end
             inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/hit")
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
 			CommonHandlers.UpdateHitRecoveryDelay(inst)
-			GetPissy(inst)
+            if not inst.components.timer:TimerExists("pissedoff") then
+                inst.components.timer:StopTimer("pissedoff")
+            end
+            inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
         end,
 
         events=
         {
-            EventHandler("animover", function(inst) 
-				if inst.tolerance > 1 then
-					inst.tolerance = 0
-					inst.sg:GoToState("stomp")				
-				else
-					inst.sg:GoToState("idle") 
-				end 
+            EventHandler("animover", function(inst)
+                if inst.tolerance > 1 then
+                    inst.tolerance = 0
+                    inst.sg.mem.wantstostomp = true
+                    inst.components.combat:ResetCooldown()
+                end
+				inst.sg:GoToState("idle")
 			end),
         },
     },

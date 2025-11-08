@@ -12,6 +12,9 @@ env.AddStategraphPostInit("pig", function(inst)
                 local nstate = "attack"
                 if inst.sg:HasStateTag("charging") then
                     nstate = "charge_attack"
+                elseif inst.sg.mem.wantstocounter then
+                    inst.sg.mem.wantstocounter = nil
+                    nstate = "counterattack_pre"
                 end
                 if not (inst.components.health and inst.components.health:IsDead())
                     and not inst.sg:HasStateTag("busy") then
@@ -28,6 +31,10 @@ env.AddStategraphPostInit("pig", function(inst)
             if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                 return
             elseif inst:HasTag("pigattacker") and not inst:HasTag("werepig") and not inst.sg:HasAnyStateTag("counter", "caninterrupt", "electrocute") then
+                if inst.sg.mem.wantstocounter then
+                    inst.components.combat:ResetCooldown()
+                    return
+                end
                 if inst.counter then
                     inst.counter = inst.counter + 1
                     if inst.countertask then
@@ -46,7 +53,8 @@ env.AddStategraphPostInit("pig", function(inst)
                         inst.countertask = nil
                     end
                     inst.counter = 0
-                    inst.sg:GoToState("counterattack_pre")
+                    inst.sg.mem.wantstocounter = true
+                    inst.components.combat:ResetCooldown()
                     return
                 end
             end
