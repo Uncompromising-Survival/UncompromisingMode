@@ -58,7 +58,12 @@ env.AddStategraphPostInit("spider", function(inst)
     local _OldAttackEvent = inst.events["doattack"] and inst.events["doattack"].fn
     if _OldAttackEvent then
         inst.events["doattack"].fn = function(inst, data, ...)
-            if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
+            if (not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead())) and data.target and data.target:IsValid() then
+                if inst.sg.mem.wantstoevade then
+                    inst.sg.mem.wantstoevade = nil
+                    inst.sg:GoToState("evade_loop")
+                    return
+                end
                 if inst:HasTag("spider_regular") then
                     inst.sg:GoToState(data.target:IsValid() and not (inst:IsNear(data.target, TUNING.SPIDER_WARRIOR_MELEE_RANGE)
                         or (TUNING.DSTU.REGSPIDERJUMP == false and inst:HasTag("spider_regular"))) and "warrior_attack" or "attack", data.target) -- Do leap attack
@@ -83,7 +88,9 @@ env.AddStategraphPostInit("spider", function(inst)
                 elseif TUNING.DSTU.SPIDERWARRIORCOUNTER and inst:HasTag("spider_warrior") and not inst:HasTag("trapdoorspider")
                     and not (inst.sg:HasAnyStateTag("caninterrupt", "electrocute") or inst:HasTag("forcestunned")) then
                     if not inst.sg:HasAnyStateTag("attack", "evade") and inst.components.combat.target then -- don't interrupt attack or exit shield
-                        inst.sg:GoToState("evade_loop")
+                        inst.sg.mem.wantstoevade = true
+                        inst.components.combat:ResetCooldown()
+                        inst.sg:GoToState("idle")
                     end
                     return
                 end
@@ -266,12 +273,7 @@ env.AddStategraphPostInit("spider", function(inst)
                     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
                 end
             end,
-            --[[events =
-            {
-                EventHandler("animover", function(inst) 
-                    inst.sg:GoToState("evade_pst") 
-                end ),
-            },]]
+
             timeline =
             {
                 TimeEvent(3 * FRAMES, function(inst) inst.Physics:SetMotorVel(-20, 0, 0) end),
@@ -279,44 +281,11 @@ env.AddStategraphPostInit("spider", function(inst)
             },
 
             ontimeout = function(inst)
-                inst.sg:GoToState("evade_pst")
-            end,
-
-            onexit = function(inst)
-                inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-                inst.Physics:ClearMotorVelOverride()
-                inst.components.locomotor:Stop()
-            end,
-        },
-        State{
-            name = "evade_pst",
-            tags = {"busy", "evade", "no_stun"},
-
-            onenter = function(inst)
                 if inst.components.combat.target and inst.components.combat.target:IsValid() then
-                    inst:ForceFacePoint(inst.components.combat.target:GetPosition())
+                    inst.components.combat:ResetCooldown()
                 end
-                inst.components.locomotor:Stop()
-                --inst.AnimState:PlayAnimation("evade_pst")
+                inst.sg:GoToState("idle")
             end,
-
-            events =
-            {
-                EventHandler("animover", function(inst)
-                    if inst.components.combat.target and inst.components.combat.target:IsValid() then
-                        local JUMP_DISTANCE = 3
-                        local distance = inst:GetDistanceSqToInst(inst.components.combat.target)
-
-                        if distance > JUMP_DISTANCE * JUMP_DISTANCE then
-                            inst.sg:GoToState("warrior_attack", inst.components.combat.target)
-                        else
-                            inst.sg:GoToState("attack", inst.components.combat.target)
-                        end
-                    else
-                        inst.sg:GoToState("idle")
-                    end
-                end),
-            },
 
             onexit = function(inst)
                 inst.components.locomotor:EnableGroundSpeedMultiplier(true)

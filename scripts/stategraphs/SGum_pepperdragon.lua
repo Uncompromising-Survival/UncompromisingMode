@@ -140,7 +140,10 @@ local events=
     CommonHandlers.OnAttacked(),
     EventHandler("doattack", function(inst)
 		if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute") or inst.sg:HasStateTag("busy")) then
-			if (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
+            if inst.sg.mem.wantstostomp then
+                inst.sg.mem.wantstostomp = nil
+                inst.sg:GoToState("stomp")
+			elseif (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
 				inst.sg:GoToState("flame_pre")
 			else
 				inst.sg:GoToState("attack")
@@ -193,10 +196,6 @@ local states=
                 inst.AnimState:PushAnimation("idle1", true)
             else
                 inst.AnimState:PlayAnimation("idle1", true)
-            end
-
-            if inst:HasTag("teenbird") then
-                inst.sg:SetTimeout(4 + 4*math.random())
             end
         end,
 
@@ -354,7 +353,9 @@ local states=
         tags = {"hit"},
 
         onenter = function(inst)
-			inst.tolerance = inst.tolerance + 0.1+math.random(1,20)*0.1
+            if not inst.sg.mem.wantstostomp then
+			    inst.tolerance = inst.tolerance + 0.1 + (math.random() * 0.2)
+            end
             inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/hit")
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
@@ -364,13 +365,13 @@ local states=
 
         events=
         {
-            EventHandler("animover", function(inst) 
-				if inst.tolerance > 1 then
-					inst.tolerance = 0
-					inst.sg:GoToState("stomp")				
-				else
-					inst.sg:GoToState("idle") 
-				end 
+            EventHandler("animover", function(inst)
+                if inst.tolerance > 1 then
+                    inst.tolerance = 0
+                    inst.sg.mem.wantstostomp = true
+                    inst.components.combat:ResetCooldown()
+                end
+				inst.sg:GoToState("idle")
 			end),
         },
     },
