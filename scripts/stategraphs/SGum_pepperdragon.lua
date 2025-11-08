@@ -338,7 +338,7 @@ local states=
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
 			CommonHandlers.UpdateHitRecoveryDelay(inst)
-            if not inst.components.timer:TimerExists("pissedoff") then
+            if inst.components.timer:TimerExists("pissedoff") then
                 inst.components.timer:StopTimer("pissedoff")
             end
             inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
