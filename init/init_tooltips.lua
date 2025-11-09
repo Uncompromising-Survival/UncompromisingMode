@@ -57,7 +57,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     SPOREPACK = "- Items inside spoil twice as fast.",
     SLUDGE_SACK = "- It's always wet.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
-    "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
+    "- Slows down anything it's attached to.\n- Deployable and throwable.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
@@ -86,7 +86,6 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
-    PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
@@ -425,6 +424,11 @@ end
 
 if TUNING.DSTU.WARLY_CHANGES == 1 then
     TOOLTIPS.SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables."
+end
+
+if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+	TOOLTIPS.SPICE_SALT = "- Makes dishes restore lost maximum health."
+	TOOLTIPS.PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."	
 end
 
 if TUNING.DSTU.WXLESS then

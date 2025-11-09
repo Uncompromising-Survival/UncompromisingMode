@@ -75,7 +75,7 @@ if GetModConfigData("snowstorms") then
 	ChangeSortKey("um_rimeweed_icepack", "healingsalve_acid", "RESTORATION", true)
 	ChangeSortKey("um_rimeweed_icepack", "blueamulet", "SUMMER", false)
 
-	AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
+	AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, { numtogive = TUNING.DSTU.DART_YIELD }, { "WEAPONS" })
 	ChangeSortKey("um_blowdart_rime", "blowdart_pipe", "WEAPONS", true)
 end
 
@@ -489,7 +489,7 @@ AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 5), Ingredient("
 ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
 ChangeSortKey("um_armor_pyre_nettles", "sweatervest", "WINTER", false)
 -- Pyre Dart
-AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
+AddRecipe2("um_blowdart_pyre", { Ingredient("cutreeds", 2), Ingredient("um_smolder_spore", 1), Ingredient("firenettles", 1) }, TECH.SCIENCE_TWO, { numtogive = TUNING.DSTU.DART_YIELD }, { "WEAPONS" })
 ChangeSortKey("um_blowdart_pyre", "blowdart_fire", "WEAPONS", true)
 
 --AddRecipe2("um_boat_engine", { Ingredient("wagpunk_bits", 4), Ingredient("cutstone", 2), Ingredient("palmcone_scale", 6)}, TECH.SCIENCE_TWO, { placer = "um_boat_engine_placer",min_spacing=1.5 }, { "SEAFARING" })

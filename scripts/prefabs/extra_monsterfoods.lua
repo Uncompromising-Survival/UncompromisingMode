@@ -113,10 +113,10 @@ local function monstersmallmeat_fn()
     
     inst.components.tradable.goldvalue = 0
 
-    inst.components.floater:SetVerticalOffset(0.05)
+    inst.components.floater:SetVerticalOffset(.05)
 
     inst:AddComponent("selfstacker")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     return inst
 end
@@ -139,7 +139,7 @@ local function cookedmonstersmallmeat_fn()
 
     inst.components.tradable.goldvalue = 0
     
-    inst.components.floater:SetVerticalOffset(0.05)
+    inst.components.floater:SetVerticalOffset(.05)
 
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
 
@@ -160,7 +160,7 @@ local function monstersmallmeat_dried_fn()
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
     inst.components.edible.sanityvalue = -TUNING.SANITY_TINY -- -5 sanity
 
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_FASTISH)
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_PRESERVED)
 
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
     
@@ -240,8 +240,8 @@ local function defaultfn()
 
 	inst.components.tradable.rocktribute = 1
 
-    inst.components.floater:SetScale({0.55, 0.5, 0.55})
-    inst.components.floater:SetVerticalOffset(0.05)
+    inst.components.floater:SetScale({.55, .5, .55})
+    inst.components.floater:SetVerticalOffset(.05)
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
 
     return inst
@@ -260,7 +260,7 @@ local function cookedfn()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
     inst.components.floater:SetSize("med")
-    inst.components.floater:SetScale(0.65)
+    inst.components.floater:SetScale(.65)
 	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
 
     return inst

@@ -38,11 +38,19 @@ local function oneat(inst, data)
         health_delta = health_delta + 20
     end
 
-    if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = string.find(data.food.prefab, "spice_salt") ~= nil})
-    else
-        inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
-    end
+	if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+		if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
+			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = string.find(data.food.prefab, "spice_salt") ~= nil})
+		else
+			inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
+		end
+	else
+		if health_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_healthregen") then
+			inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_"..data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
+		else
+			inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
+		end
+	end
 
     if sanity_delta > 3 and not inst:HasAnyTag("ignores_foodregen", "ignores_sanityregen") then
         inst.components.debuffable:AddDebuff("sanityregenbuff_vetcurse_"..data.food.prefab, "sanityregenbuff_vetcurse", {duration = (sanity_delta * 0.1)})

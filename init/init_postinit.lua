@@ -243,6 +243,7 @@ local prefab_post = {
 	"bullkelp_root",
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
+    "firestaff",
 }
 
 local stategraph_post = {

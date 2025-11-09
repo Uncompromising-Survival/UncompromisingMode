@@ -7,7 +7,7 @@ end
 
 --RELEASE.MAJOR.MINOR.FIX
 --axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "1.6.0.0 Beta v2.0.5"
+local _version = "1.6.0.0 Beta v2.0.6"
 
 description = [[
     󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
@@ -367,7 +367,7 @@ configuration_options = {
     {
         name = "warly_changes",
         label = "Warly",
-        hover = "Extra stats from food, longer memory, harsher repeat penatlies, extra loot from inventory kills, and a rework to the Chef Pouch.",
+        hover = "Extra stats from food, longer memory, harsher repeat penatlies, extra loot from inventory kills, and changes to Warly's items.",
         options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "- Chef Pouch",   data = 2, hover = "Reverts Chef Pouch to be a backpack again, instead of an inventory container.\nAll other Warly changes still apply." },
