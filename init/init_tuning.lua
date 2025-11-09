@@ -136,6 +136,8 @@ TUNING.DSTU = {
     -- Celestial portal costs
     RECIPE_MOONROCK_IDOL_MOONSTONE_COST = 5,
     RECIPE_CELESTIAL_UPGRADE_GLASS_COST = 20,
+
+    DART_YIELD = 4,
     ----------------------------------------------------------------------------
     -- Food Changes Config
     ----------------------------------------------------------------------------
