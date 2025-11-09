@@ -367,7 +367,7 @@ configuration_options = {
     {
         name = "warly_changes",
         label = "Warly",
-        hover = "Extra stats from food, longer memory, harsher repeat penatlies, extra loot from inventory kills, and a rework to the Chef Pouch.",
+        hover = "Extra stats from food, longer memory, harsher repeat penatlies, extra loot from inventory kills, and changes to Warly's items.",
         options = {
             { description = "Enabled",  data = 1, hover = "All changes enabled." },
             { description = "- Chef Pouch",   data = 2, hover = "Reverts Chef Pouch to be a backpack again, instead of an inventory container.\nAll other Warly changes still apply." },
