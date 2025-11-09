@@ -114,15 +114,19 @@ local function CreateRemoveTagFn(tag)
     return function(inst) inst:RemoveTag(tag) end
 end
 
+--[[
 local function UpdateInspirationBadge(inst)
-    local userid = TheNet:GetUserID()
 
-    --[[if inst:HasTag("player_shadow_aligned") == true and inst:HasTag("beefaloinspiration") == false then
-        SendModRPCToClient(GetClientModRPC("InspirationBadgeRPC", "HideBadge"),userid)
+    --SendModRPCToClient(inst.userid, MOD_RPC["UncompromisingSurvival"]["HideBadge"], inst:HasTag("player_shadow_aligned"))
+    local displayBadge = inst:HasTag("player_shadow_aligned") ~= true and true or false
+    SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), inst.userid, inst, displayBadge)
+    --print("badgeRPC sent")
+    if displayBadge then 
+        --SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), { inst.userid, }, displayBadge)
     else
-        SendModRPCToClient(GetClientModRPC("InspirationBadgeRPC", "ShowBadge"),userid)
-    end]]
-end
+        --SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), { inst.userid, }, displayBadge)
+    end
+end]]
 
 local SkillTreeDefs = require("prefabs/skilltree_defs")
 
@@ -144,7 +148,7 @@ local ONACTIVATE_FNS = {
 
     BeefaloInspiration = function(inst)
         inst:AddTag("beefaloinspiration")
-        UpdateInspirationBadge(inst)
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceShadow = function(inst)
@@ -165,6 +169,8 @@ local ONACTIVATE_FNS = {
             inst.components.singinginspiration.gainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_GAIN_MULT, "allegiance_shadow")
             inst.components.singinginspiration.buffertimemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_BUFFER_MULT, "allegiance_shadow")
             inst.components.singinginspiration.drainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_DRAIN_MULT, "allegiance_shadow")
+            local displayBadge = false
+            SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "HideInspirationBadge"), inst.userid, inst, false)
         end
 
         if inst.components.battleborn ~= nil then
@@ -185,7 +191,7 @@ local ONACTIVATE_FNS = {
 			inst.components.health:SetAbsorptionAmount(TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
 		end
 
-        UpdateInspirationBadge(inst)
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceLunar = function(inst)
@@ -261,6 +267,8 @@ local ONDEACTIVATE_FNS = {
             inst.components.singinginspiration.gainratemultipliers:RemoveModifier(inst, "allegiance_shadow")
             inst.components.singinginspiration.buffertimemultipliers:RemoveModifier(inst, "allegiance_shadow")
             inst.components.singinginspiration.drainratemultipliers:RemoveModifier(inst, "allegiance_shadow")
+            local displayBadge = true
+            SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ShowInspirationBadge"), inst.userid, inst, true)
         end
 
         if inst.components.battleborn ~= nil then
@@ -281,7 +289,7 @@ local ONDEACTIVATE_FNS = {
             --inst.components.health:SetMaxHealth(TUNING.WATHGRITHR_HEALTH)
         --end
 
-        UpdateInspirationBadge()
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceLunar = function(inst)
@@ -506,6 +514,7 @@ local skills =
 
     wathgrithr_beefalo_lock = {
         group = "beefalo",
+        root         = true,
 
         connects = { "wathgrithr_beefalo_2" },
 
