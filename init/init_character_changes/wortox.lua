@@ -1261,7 +1261,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         if weapon then
             local _OnAttack = weapon.onattack
             local function OnAttack(inst, attacker, target, ...)
-                local ret = _OnAttack(inst, attacker, target, ...)
+                local ret = _OnAttack and _OnAttack(inst, attacker, target, ...) or nil
                 if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
                     if attacker.finishportalhoptask and attacker:TryToPortalHop(1, false) then
                         DoLunarAttack(inst, attacker, target)
@@ -1273,7 +1273,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
 
-    local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
+    local moon_weapons = {"glasscutter", "moonglassaxe", "sword_lunarplant", "pickaxe_lunarplant"}
     for i, v in ipairs(moon_weapons) do
         AddPrefabPostInit(v, function(inst)
             if not GLOBAL.TheWorld.ismastersim then
