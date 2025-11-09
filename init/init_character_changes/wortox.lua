@@ -1276,9 +1276,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     local moon_weapons = {"glasscutter", "moonglassaxe", "sword_lunarplant", "pickaxe_lunarplant"}
     for i, v in ipairs(moon_weapons) do
         AddPrefabPostInit(v, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then
-                return
-            end
+            if not GLOBAL.TheWorld.ismastersim then return end
 
             WortoxLunarStuff(inst)
 
