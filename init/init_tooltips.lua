@@ -57,7 +57,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     SPOREPACK = "- Items inside spoil twice as fast.",
     SLUDGE_SACK = "- It's always wet.",
     UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
-    "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
+    "- Slows down anything it's attached to.\n- Deployable and throwable.",
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
