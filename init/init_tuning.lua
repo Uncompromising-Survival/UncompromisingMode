@@ -344,6 +344,11 @@ TUNING.DSTU = {
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
     KLAUS_AMULET_ABSORPTION = 0.3,
+	ORANGESTAFF_COOLDOWN_1 = 5,
+	ORANGESTAFF_COOLDOWN_2 = 10,
+	ORANGESTAFF_COOLDOWN_3 = 15,
+	ORANGESTAFF_DISTANCE_1 = 8,
+	ORANGESTAFF_DISTANCE_2 = 16,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance

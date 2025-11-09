@@ -58,32 +58,62 @@ env.AddPrefabPostInit("firestaff", function(inst)
 end)
 
 if env.GetModConfigData("cooldown_orangestaff_") then
-    local function onblink(staff, pos, caster)
-        if caster and staff.components.rechargeable:IsCharged() then
-            if caster.components.staffsanity then
-                caster.components.staffsanity:DoCastingDelta(-TUNING.SANITY_MED)
-            elseif caster.components.sanity ~= nil then
-                caster.components.sanity:DoDelta(-TUNING.SANITY_MED)
-            end
-            staff.components.rechargeable:Discharge(5)
-        else
-            staff.components.blinkstaff.blinktask:Cancel()
-        end
-        staff:RemoveComponent("blinkstaff")
-        staff:DoTaskInTime(5, function(inst)
-            staff:AddComponent("blinkstaff")
-            staff.components.blinkstaff:SetFX("sand_puff_large_front", "sand_puff_large_back")
-            staff.components.blinkstaff.onblinkfn = onblink
-        end)
-    end
+	local function onblink(staff, pos, caster)
+		if not (caster and staff and staff.components.rechargeable) then
+			return
+		end
 
-    env.AddPrefabPostInit("orangestaff", function(inst)
-        if not TheWorld.ismastersim then return end
-        inst:AddComponent("rechargeable")
+		local caster_pos = caster:GetPosition()
+		local distance = caster_pos:Dist(pos)
 
-        inst:RemoveComponent("finiteuses")
-        if inst ~= nil and inst.components.blinkstaff ~= nil then inst.components.blinkstaff.onblinkfn = onblink end
-    end)
+		local sanity_cost
+		local cooldown
+
+		if distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_1 then
+			sanity_cost = TUNING.SANITY_MED
+			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_1
+		elseif distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_2 then
+			sanity_cost = TUNING.SANITY_MEDLARGE
+			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_2
+		else
+			sanity_cost = TUNING.SANITY_LARGE
+			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_3
+		end
+
+		if staff.components.rechargeable:IsCharged() then
+			if caster.components.staffsanity then
+				caster.components.staffsanity:DoCastingDelta(-sanity_cost)
+			elseif caster.components.sanity ~= nil then
+				caster.components.sanity:DoDelta(-sanity_cost)
+			end
+
+			staff.components.rechargeable:Discharge(cooldown)
+		else
+			if staff.components.blinkstaff and staff.components.blinkstaff.blinktask then
+				staff.components.blinkstaff.blinktask:Cancel()
+			end
+		end
+
+		staff:RemoveComponent("blinkstaff")
+		staff:DoTaskInTime(cooldown, function(inst)
+			staff:AddComponent("blinkstaff")
+			staff.components.blinkstaff:SetFX("sand_puff_large_front", "sand_puff_large_back")
+			staff.components.blinkstaff.onblinkfn = onblink
+		end)
+	end
+
+	env.AddPrefabPostInit("orangestaff", function(inst)
+		if not TheWorld.ismastersim then
+			return
+		end
+
+		inst:AddComponent("rechargeable")
+		inst:RemoveComponent("finiteuses")
+
+		if inst.components.blinkstaff then
+			inst.components.blinkstaff.onblinkfn = onblink
+		end
+	end)
 end
 
 -- TELELOCATOR STAFF STUFF

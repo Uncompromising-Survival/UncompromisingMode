@@ -11,7 +11,7 @@ SetSharedLootTable( 'um_walrus',
 {
     {'meat',            1.00},
     {'blowdart_pipe',   1.00},
-    {'walrushat',       0.50},
+    {'walrushat',       0.25},
     {'walrus_tusk',     1.00},
 })
 
@@ -32,7 +32,7 @@ for i,v in ipairs(canes) do
 		
 
 		inst:AddComponent("fueled")
-		inst.components.fueled:InitializeFuelLevel(TUNING.TOPHAT_PERISHTIME*1.5)
+		inst.components.fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
 		inst.components.fueled:SetDepletedFn(--[[generic_perish]]inst.Remove)
 		inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
 		inst.components.fueled.no_sewing = true
