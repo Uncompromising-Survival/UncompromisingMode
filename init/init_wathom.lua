@@ -700,11 +700,6 @@ AddStategraphPostInit("wilson", function(inst)
                 inst.Transform:SetFourFaced()
                 inst.components.locomotor:Stop()
                 inst.Physics:ClearMotorVelOverride()
-                inst:DoTaskInTime(0, function(inst)
-                    if inst.components.playercontroller then
-                        inst.components.playercontroller:Enable(true)
-                    end
-                end)
                 inst.components.locomotor:EnableGroundSpeedMultiplier(true)
                 inst.AnimState:AddOverrideBuild("player_lunge")
                 inst.AnimState:AddOverrideBuild("player_attack_leap")
@@ -722,16 +717,14 @@ AddStategraphPostInit("wilson", function(inst)
                     if target ~= nil then
                         inst.sg.statemem.startingpos = inst:GetPosition()
                         inst.sg.statemem.targetpos = target:GetPosition()
-                        if target ~= nil then
-                            if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
-                                inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
-                                inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
-                                    inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
-                            end
-                            if HasSkill(inst,"rampage_1") then
-                                target:AddTag("wixieshoved")
-                                target:DoTaskInTime(1,function(target) target:RemoveTag("wixieshoved") end)
-                            end
+                        if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
+                            inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
+                            inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
+                                inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
+                        end
+                        if HasSkill(inst,"rampage_1") then
+                            target:AddTag("wixieshoved")
+                            target:DoTaskInTime(1,function(target) target:RemoveTag("wixieshoved") end)
                         end
                     end
                     inst.SoundEmitter:PlaySound("turnoftides/common/together/boat/jump")
@@ -743,25 +736,24 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.components.locomotor:Stop()
                     inst.Physics:ClearMotorVelOverride()
                     inst:PerformBufferedAction()
-                    inst.components.playercontroller:Enable(false)
                     inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-                    inst.sg:RemoveStateTag("busy")
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
                 end),
 
                 TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
+					local adrenaline_percent = inst.components.adrenaline:GetPercent()
                     if inst:HasTag("amped") and not inst:HasTag("wearingheavyarmor") then
                         inst.leapvelocity = 15
-                    elseif inst.components.adrenaline:GetPercent() > .24 and inst.components.adrenaline:GetPercent() < .51 and not inst:HasTag("wearingheavyarmor") then
+                    elseif adrenaline_percent > .24 and adrenaline_percent < .51 and not inst:HasTag("wearingheavyarmor") then
                         inst.leapvelocity = 7.5 -- originally 10, lets see how this goes.
-                    elseif inst.components.adrenaline:GetPercent() > .50 and inst.components.adrenaline:GetPercent() < .75 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
-                        inst.leapvelocity = 10 -- * (inst.components.adrenaline:GetPercent() + .5)
-                    elseif inst.components.adrenaline:GetPercent() > .74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_2") then
+                    elseif adrenaline_percent > .50 and adrenaline_percent < .75 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
+                        inst.leapvelocity = 10 -- * (adrenaline_percent + .5)
+                    elseif adrenaline_percent > .74 and adrenaline_percent < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_2") then
                         inst.leapvelocity = 12.5 -- this is used in between 75 and 100 (Amped).
-                    elseif inst.components.adrenaline:GetPercent() > .74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
+                    elseif adrenaline_percent > .74 and adrenaline_percent < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
                         inst.leapvelocity = 10
-                    elseif inst.components.adrenaline:GetPercent() > .24 then
+                    elseif adrenaline_percent > .24 then
                         inst.leapvelocity = 7.5
                     else
                         inst.leapvelocity = 0 --Either Wathom has the "wearingheavyarmor" tag, is under 25 adrenaline (ie fatigued) or the game is somehow not reading the Adrenaline meter.
@@ -794,7 +786,6 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.leapvelocity = 0                   -- Stops Wathom's sliding.
                     inst.Physics:Stop()
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.CHARACTERS) -- Re-enabling Wathom's normal collision.
-                    inst.components.playercontroller:Enable(true)
                     if HasSkill(inst,"rampage_1") then
                         local buffaction = inst:GetBufferedAction()
                         local target = buffaction ~= nil and buffaction.target or nil
