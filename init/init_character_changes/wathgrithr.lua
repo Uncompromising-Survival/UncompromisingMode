@@ -47,6 +47,8 @@ TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_BONUS_MULT = 1.15 -- This affects mainl
 --TUNING.DSTU.WATHGRITHR_SHADOW_HUNGER_MULT = 1.2
 --TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT = 1.25 -- 200 * value
 TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION = 0.35 -- Vanilla 0.25
+TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT = 0.5 --How much sanity shadow items drain. 0-1
+TUNING.DSTU.DREADSTONE_PREFABS = {"armordreadstone", "dreadstonehat"}
 
 --------------------------------------------------------------------------
 -- LUNAR MELODIST

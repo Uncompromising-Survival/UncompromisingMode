@@ -114,6 +114,21 @@ local function CreateRemoveTagFn(tag)
     return function(inst) inst:RemoveTag(tag) end
 end
 
+local function GetShadowEquippableDapperness(owner, equippable)
+    local dapperness = equippable:GetDapperness(owner, owner.components.sanity.no_moisture_penalty)
+    if equippable.inst:HasTag("shadow_item") then
+        return dapperness * TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT
+    end
+
+    for k, v in pairs(TUNING.DSTU.DREADSTONE_PREFABS) do
+        if equippable.prefab == v then
+            return dapperness * TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT
+        end
+    end 
+
+    return dapperness
+end
+
 --[[
 local function UpdateInspirationBadge(inst)
 
@@ -189,6 +204,10 @@ local ONACTIVATE_FNS = {
 		
 		if inst.components.health ~= nil then
 			inst.components.health:SetAbsorptionAmount(TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
+		end
+
+        if inst.components.sanity ~= nil then
+			inst.components.sanity.get_equippable_dappernessfn = GetShadowEquippableDapperness
 		end
 
         --UpdateInspirationBadge(inst)
@@ -279,6 +298,10 @@ local ONDEACTIVATE_FNS = {
 
         if inst.components.health ~= nil then
 			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION)
+		end
+
+        if inst.components.sanity ~= nil then
+			inst.components.sanity.get_equippable_dappernessfn = GetShadowEquippableDapperness
 		end
 
         --if inst.components.hunger ~= nil then

@@ -251,6 +251,7 @@ local function fn()
     inst:AddTag("toolpunch")
     inst:AddTag("battleshield")
     inst:AddTag("shield")
+    inst:AddTag("shadow_item")
 
     --parryweapon (from parryweapon component) added to pristine state for optimization
     inst:AddTag("parryweapon")
