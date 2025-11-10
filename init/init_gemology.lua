@@ -126,21 +126,17 @@ env.AddComponentPostInit("combat", function(self)
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
         local inst = self.inst
-        local minerologyable = weapon and weapon.components.minerologyable
-        -- FURIOUS
-        if minerologyable then
-            if minerologyable.furious then -- Trigger Furious        
-                inst:AddDebuff("buff_furious"..tool.tier, "buff_furious"..tool.tier)
-            end
-            -- Hoarding
-            if minerologyable.hoarding and tool.tier ~= 1 then
-                if not self.inst.um_marked_for_hoarding then
-                    self.inst.um_marked_for_hoarding = attacker
-                end
-            end
-        elseif self.inst.um_marked_for_hoarding then
+		local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if tool and tool.components.minerologyable and tool.components.minerologyable.furious then
+			inst:AddDebuff("buff_furious"..tool.tier, "buff_furious"..tool.tier)
+		end
+		if weapon and weapon.components.minerologyable and weapon.components.minerologyable.hoarding and weapon.tier ~= 1 then
+			if not self.inst.um_marked_for_hoarding then
+				self.inst.um_marked_for_hoarding = attacker
+			end
+		elseif self.inst.um_marked_for_hoarding then
             self.inst.um_marked_for_hoarding = nil
-        end
+		end
         
         return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
