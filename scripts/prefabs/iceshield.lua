@@ -1,6 +1,7 @@
 local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, afflicter, amount)
-    if amount < 0 and ((not overtime) or (cause == "fire")) and (GetTime() - inst.lasthitfxtime) > 0.1 then
-        inst.lasthitfxtime = GetTime()
+	local t = GetTime()
+    if amount < 0 and (not overtime or cause == "fire") and (t - inst.lasthitfxtime) >= .1 then
+        inst.lasthitfxtime = t
         inst._parent.SoundEmitter:PlaySound("meta4/mortars/cannonball_hit_ice")
         SpawnPrefab("mining_ice_fx").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
     end
@@ -104,6 +105,7 @@ local function fn()
     end
 
     inst.tier = 1
+    inst.lasthitfxtime = 0
 
     inst:AddComponent("health")
     inst.components.health.nofadeout = true
