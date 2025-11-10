@@ -526,7 +526,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathombark",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()
@@ -579,7 +579,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathombark_shadow",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()
@@ -632,7 +632,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "cantbark",
-            tags = { busy },
+            --tags = { "busy" },
 
             onenter = function(inst)
                 inst:ClearBufferedAction()
@@ -663,7 +663,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathomleap",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst, data)
                 Effect(inst)
@@ -814,41 +814,10 @@ AddStategraphPostInit("wilson", function(inst)
                 end),
             },
         },
-        
-        GLOBAL.State {
-            name = "cantbark",
-            tags = { busy },
-
-            onenter = function(inst)
-                inst:ClearBufferedAction()
-
-                --                inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
-
-                inst.AnimState:PlayAnimation("sing_fail", false)
-
-                inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
-            end,
-            timeline =
-            {
-                TimeEvent(12 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
-                end),                                                       --bark twice.
-            },
-            events =
-            {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("idle")
-                        inst.sg:RemoveStateTag("busy")
-                        inst:ClearBufferedAction()
-                    end
-                end),
-            }
-        },
 
         GLOBAL.State {
             name = "wathombite",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()

@@ -828,7 +828,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "curse_controlled",
-            tags = { "busy", "pausepredict", "nomorph", "nodangle" },
+            tags = { "busy", "pausepredict", "nomorph", "nodangle", "um_blockcrafting" },
 
             onenter = function(inst)
                 if not inst.AnimState:IsCurrentAnimation("mindcontrol_loop") then
@@ -861,7 +861,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "sneeze",
-            tags = { "busy", "sneeze", "pausepredict" },
+            tags = { "busy", "sneeze", "pausepredict", "um_blockcrafting" },
 
             onenter = function(inst)
                 local usehit = inst.components.rider:IsRiding() or inst:HasTag("wereplayer")
@@ -1337,7 +1337,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "grabby_teleport",
-            tags = { "busy", "pausepredict", "nomorph", "nodangle", "gotgrabbed" },
+            tags = { "busy", "pausepredict", "nomorph", "nodangle", "gotgrabbed", "um_blockcrafting" },
 
             onenter = function(inst, cb)
                 inst.sg.statemem.cb = cb
@@ -1850,7 +1850,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "dreadeye_spooked",
-            tags = { "busy", "pausepredict" },
+            tags = { "busy", "pausepredict", "um_blockcrafting" },
 
             onenter = function(inst)
                 ForceStopHeavyLifting(inst)
@@ -1994,7 +1994,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "um_tornado_teleport",
-            tags = { "busy", "nopredict", "nomorph", "nointerrupt" },
+            tags = { "busy", "nopredict", "nomorph", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst, shore_pt)
                 ForceStopHeavyLifting(inst)
@@ -2057,7 +2057,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "um_tornado_wakeup",
-            tags = { "busy", "canrotate", "nopredict", "nomorph", "nointerrupt" },
+            tags = { "busy", "canrotate", "nopredict", "nomorph", "nointerrupt", "um_blockcrafting" },
 
             onenter = function(inst)
                 inst.components.locomotor:Stop()
