@@ -311,6 +311,9 @@ local function fn()
     inst:AddComponent("damagetyperesist")
 	inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
+    inst:AddComponent("damagetypebonus")
+    inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.WEAPONS_VOIDCLOTH_VS_LUNAR_BONUS)
+
     inst:AddComponent("shadowlevel")
 	inst.components.shadowlevel:SetDefaultLevel(TUNING.ARMORDREADSTONE_SHADOW_LEVEL)
 
