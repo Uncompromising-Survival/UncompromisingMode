@@ -99,8 +99,7 @@ env.AddPrefabPostInit("pigman", function(inst)
 
     inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
 
-    local oldshouldacceptitem = inst.components.trader.test
-
+    local _ShouldAcceptItem = inst.components.trader.test
     local function ShouldAcceptItem(inst, item, ...)
         if inst.components.eater:CanEat(item) then
             local foodtype = item.components.edible.foodtype
@@ -113,7 +112,7 @@ env.AddPrefabPostInit("pigman", function(inst)
             end
             return true
         end
-        return oldshouldacceptitem(inst, item, ...)
+        return _ShouldAcceptItem(inst, item, ...)
     end
     inst.components.trader:SetAcceptTest(ShouldAcceptItem)
 
