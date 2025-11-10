@@ -673,7 +673,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "claustrophobic",
-            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic", "nointerrupt", "um_blockcrafting" },
+            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic", "nointerrupt" },
 
             onenter = function(inst)
                 --[[if inst.components.playercontroller ~= nil then
@@ -734,7 +734,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "claustrophobic_loop",
-            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic", "nointerrupt", "um_blockcrafting" },
+            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic", "nointerrupt" },
 
             onenter = function(inst)
                 if not inst.AnimState:IsCurrentAnimation("mindcontrol_loop") then
@@ -768,7 +768,7 @@ env.AddStategraphPostInit("wilson", function(inst)
 
         State {
             name = "claustrophobic_pst",
-            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic", "um_blockcrafting" },
+            tags = { "busy", "pausepredict", "nomorph", "nodangle", "wixiepanic" },
 
             onenter = function(inst)
                 inst.AnimState:PlayAnimation("mindcontrol_pst")

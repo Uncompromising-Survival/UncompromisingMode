@@ -54,10 +54,11 @@ local function SurvivorBarkEffect(inst)
     end
 end
 
+
+local caneprefabs = {"cane", "orangestaff", "walking_stick"}
 local function HoldingCane(inst)
-    return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and 
-    (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" or inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "orangestaff" or
-    inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "walking_stick") and true
+    local cane = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    return inst:HasTag("wathom") and cane and table.contains(caneprefabs, cane.prefab) or false
 end
 
 local function OnCooldownBark(inst)
@@ -526,7 +527,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathombark",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()
@@ -579,7 +580,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathombark_shadow",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()
@@ -663,7 +664,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathomleap",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
             onenter = function(inst, data)
                 Effect(inst)
@@ -817,7 +818,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "wathombite",
-            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt", "um_blockcrafting" },
+            tags = { "attack", "backstab", "busy", "notalking", "abouttoattack", "pausepredict", "nointerrupt" },
 
             onenter = function(inst, data)
                 local buffaction = inst:GetBufferedAction()

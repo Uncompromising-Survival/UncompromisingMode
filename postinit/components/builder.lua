@@ -10,7 +10,7 @@ local BLOCKCRAFTING_FNNAMES = {"MakeRecipeFromMenu", "MakeRecipeAtPoint", "Buffe
 local function CraftCancellingBlockout(self, fnname)
     local _OldFunction = self[fnname]
     self[fnname] = function(self, ...)
-        if self.inst.sg and self.inst.sg:HasStateTag("um_blockcrafting") then return end
+        if self.inst.sg and self.inst.sg:HasStateTag("busy") then return end
         return _OldFunction(self, ...)
     end
 end
