@@ -713,18 +713,22 @@ AddStategraphPostInit("wilson", function(inst)
                     --                     inst.components.hunger:DoDelta(-1, 2)
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.WORLD)
                     local buffaction = inst:GetBufferedAction()
-                    local target = buffaction ~= nil and buffaction.target or nil
-                    if target ~= nil then
-                        inst.sg.statemem.startingpos = inst:GetPosition()
-                        inst.sg.statemem.targetpos = target:GetPosition()
-                        if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
-                            inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
-                            inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
-                                inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
-                        end
-                        if HasSkill(inst,"rampage_1") then
-                            target:AddTag("wixieshoved")
-                            target:DoTaskInTime(1,function(target) target:RemoveTag("wixieshoved") end)
+                    local target = buffaction and buffaction.target or nil
+                    if target then
+                        local pos = inst:GetPosition()
+                        local targetpos = target:GetPosition()
+                        if distsq(targetpos, pos) <= inst.components.combat:CalcAttackRangeSq(target) then
+                            inst.sg.statemem.startingpos = pos
+                            inst.sg.statemem.targetpos = targetpos
+                            if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
+                                inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
+                                inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
+                                    inst.sg.statemem.targetpos.x, inst.sg.statemem.targetpos.z)) / (12 * FRAMES)
+                            end
+                            if HasSkill(inst,"rampage_1") then
+                                target:AddTag("wixieshoved")
+                                target:DoTaskInTime(1,function(target) target:RemoveTag("wixieshoved") end)
+                            end
                         end
                     end
                     inst.SoundEmitter:PlaySound("turnoftides/common/together/boat/jump")
@@ -742,7 +746,7 @@ AddStategraphPostInit("wilson", function(inst)
                 end),
 
                 TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
-					local adrenaline_percent = inst.components.adrenaline:GetPercent()
+                    local adrenaline_percent = inst.components.adrenaline:GetPercent()
                     if inst:HasTag("amped") and not inst:HasTag("wearingheavyarmor") then
                         inst.leapvelocity = 15
                     elseif adrenaline_percent > .24 and adrenaline_percent < .51 and not inst:HasTag("wearingheavyarmor") then
