@@ -323,50 +323,17 @@ end
 local function onothercollide(inst, other, owner)
 	if not other:IsValid() or inst.recentlycharged[other] then
 		return
-	elseif other:HasTag("smashable") and other.components.health ~= nil then
-		other.components.health:Kill()
+	end
 
-		ShakeAllCameras(CAMERASHAKE.SIDE, .5, .05, .1, inst, 40)
-
-		inst.AnimState:PlayAnimation("close")
-		inst:DoTaskInTime(0.3, inst.Remove)
-
-		if inst.owner ~= nil then
-			inst.owner:PushEvent("gore_horn_collision")
+	if other.components.health ~= nil and not other.components.health:IsDead() and other.components.combat ~= nil and owner.components.combat ~= nil and owner.components.combat:CanAttack(other) then
+		if other:HasTag("shadowcreature") and other.components.combat.target == nil then
+			return
 		end
-	elseif other.components.workable ~= nil
-		and other.components.workable:CanBeWorked()
-		and other.components.workable.action ~= ACTIONS.NET then
-		
-		other.components.workable:WorkedBy(owner, other:HasTag("tree") and 1 or 0)
-		
-		if other:IsValid() and other.components.workable ~= nil and other.components.workable:CanBeWorked() then
-			inst.recentlycharged[other] = true
-			SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(other.Transform:GetWorldPosition())
-			inst:DoTaskInTime(3, ClearRecentlyCharged, other)
-		end
-
-		ShakeAllCameras(CAMERASHAKE.SIDE, .5, .05, .1, inst, 40)
-
-		inst.AnimState:PlayAnimation("close")
-		inst:DoTaskInTime(0.3, inst.Remove)
-
-		if inst.owner ~= nil then
-			inst.owner:PushEvent("gore_horn_collision")
-		end
-	elseif other.components.health ~= nil and not other.components.health:IsDead() and not (other:HasTag("prey") and not other:HasTag("frog")) then
 		inst.recentlycharged[other] = true
 		inst:DoTaskInTime(3, ClearRecentlyCharged, other)
 		inst.SoundEmitter:PlaySound("dontstarve/creatures/rook/explo")
-
-		if other.components.combat ~= nil then
-			other.components.combat:GetAttacked(owner, 150, nil)
-		elseif other.components.health ~= nil and not other:HasTag("boat") then
-			other.components.health:DoDelta(-150)
-		end
-
+		other.components.combat:GetAttacked(owner, 200, nil)
 		ShakeAllCameras(CAMERASHAKE.SIDE, .5, .05, .1, inst, 40)
-
 		inst.AnimState:PlayAnimation("close")
 		inst:DoTaskInTime(0.3, inst.Remove)
 
@@ -376,7 +343,7 @@ local function onothercollide(inst, other, owner)
 	end
 end
 
-local NOTAGS = { "fx", "INLIMBO", "shadow", "player", "DIG_workable", "prey", "bird", "um_beequeenhive" }
+local NOTAGS = { "fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall" }
 local function oncollide(inst)
 	if inst.owner ~= nil then
 		local x, y, z = inst.owner.Transform:GetWorldPosition()

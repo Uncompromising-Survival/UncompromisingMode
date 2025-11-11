@@ -172,3 +172,25 @@ local function MakeLeafyHatAmazing(self)
 end
 
 env.AddComponentPostInit("locomotor", MakeLeafyHatAmazing)
+
+local function RYNOTWO(self)
+	if self.ismastersim then
+		local _GetSpeedMultiplier = self.GetSpeedMultiplier
+		function self:GetSpeedMultiplier(...)
+			local mult = _GetSpeedMultiplier(self, ...)
+			local inst = self.inst
+			local inv = inst.components.inventory
+			if inv then
+				local hat = inv:GetEquippedItem(EQUIPSLOTS.HEAD)
+				if hat and hat.prefab == "gore_horn_hat" and inst.runspeed ~= nil then
+					if mult < inst.runspeed then
+						mult = inst.runspeed
+					end
+				end
+			end
+		return mult
+		end
+	end
+end
+
+env.AddComponentPostInit("locomotor", RYNOTWO)
