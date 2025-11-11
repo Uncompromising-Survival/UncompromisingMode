@@ -203,7 +203,7 @@ TUNING.DSTU = {
     SPIDERWARRIORCOUNTER = GetModConfigData("spiderwarriorcounter"),
     TRAPDOORSPIDERS = GetModConfigData("trapdoorspiders"),
     -- Perishable Increase
-    PERISHABLETIME = GetModConfigData("more perishing"),
+    --PERISHABLETIME = GetModConfigData("more perishing"),
     -- Fire Loot Rework
     FIRELOOT = GetModConfigData("fireloot"),
     POLLENMITES = false,

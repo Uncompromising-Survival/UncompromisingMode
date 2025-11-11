@@ -16,7 +16,7 @@ local component_post = {
     "hounded",
     "sleeper",
     "fueled",
-    "perishable",
+    --"perishable",
     --"carnivalevent",
     "lootdropper",
     "ambientsound",

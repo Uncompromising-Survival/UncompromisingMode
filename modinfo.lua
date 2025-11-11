@@ -736,16 +736,16 @@ configuration_options = {
     SkipSpace(),
 
     Header("General Food Tweaks"),
-    {
-        name = "more perishing",
-        label = "Increased Food Spoilage",
-        hover = "Food spoils faster. It's as simple as that.",
-        options = {
-            { description = "Disabled(1x)", data = 1 }, { description = "1.5x", data = 1.5 },
-            { description = "2x",           data = 2 }, { description = "2.5x", data = 2.5 },
-            { description = "3x", data = 3 } },
-        default = 1.5
-    },
+    --{
+        --name = "more perishing",
+        --label = "Increased Food Spoilage",
+        --hover = "Food spoils faster. It's as simple as that.",
+        --options = {
+            --{ description = "Disabled(1x)", data = 1 }, { description = "1.5x", data = 1.5 },
+            --{ description = "2x",           data = 2 }, { description = "2.5x", data = 2.5 },
+            --{ description = "3x", data = 3 } },
+        --default = 1.5
+    --},
     BinaryConfig("um_icebox_tweaks", "Ice Box Tweaks", "The Ice Box now accepts any item that can be used in a Crock Pot.\n Ice/Salt Box have lower priority than Crock Pots when shift-clicking items.", true),
     BinaryConfig("beebox_nerf", "Honey Nerf", "Bee Boxes can only hold 2 Bees and deal damage to unprepared players. Honey stats reduced to one-third.", true),
     BinaryConfig("seeds", "Lowered Seeds Hunger", "Seeds have had their hunger lowered.", true),
