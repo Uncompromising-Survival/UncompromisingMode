@@ -86,15 +86,15 @@ local function speedcheck(inst)
 			and not inst.components.rider:IsRiding() then
 			if inst.runspeed == nil then
 				inst.runspeed = 1
-			elseif inst.runspeed ~= nil and inst.runspeed < 1.8 then
+			elseif inst.runspeed ~= nil and inst.runspeed < 1.5 then
 				if inst.facing_angle ~= nil and inst.facing_angle_old ~= nil and (inst.facing_angle >= inst.facing_angle_old + inst.angleadjustment2 - 3 and inst.facing_angle <= inst.facing_angle_old + inst.angleadjustment1 + 3) then
-					inst.runspeed = inst.runspeed + 0.04
+					inst.runspeed = inst.runspeed + 0.02
 				elseif inst.runspeed > 1 then
-					inst.runspeed = inst.runspeed - 0.04
+					inst.runspeed = inst.runspeed - 0.02
 				end
 			end
 
-			if inst.runspeed >= 1.8 and inst.physbox == nil then
+			if inst.runspeed >= 1.5 and inst.physbox == nil then
 				inst.physbox = SpawnPrefab("gore_horn_physbox")
 				inst.physbox.owner = inst
 				inst.physbox.entity:AddFollower()
@@ -111,16 +111,16 @@ local function speedcheck(inst)
 			end
 
 			if inst.task == nil then
-				inst.task = inst:DoPeriodicTask(0.27, function(inst)
-					inst.SoundEmitter:PlaySound("dontstarve/creatures/rook/steam", nil, inst.runspeed / 1.8)
-					if inst.runspeed > 1.6 then
+				inst.task = inst:DoPeriodicTask(0.25, function(inst)
+					inst.SoundEmitter:PlaySound("dontstarve/creatures/rook/steam", nil, inst.runspeed / 1.5)
+					if inst.runspeed > 1.3 then
 						SpawnPrefab("ground_chunks_breaking").Transform:SetPosition(inst.Transform:GetWorldPosition())
 					end
 				end)
 			end
 
 			inst.components.locomotor:SetExternalSpeedMultiplier(inst, "gore_horn", inst.runspeed)
-			if inst.runspeed >= 1.8 then
+			if inst.runspeed >= 1.5 then
 				inst.gorehorn.components.fueled:DoDelta(-1)
 				inst.gorehorn.pausedfuel = false
 				if inst.gorehorn.unpausefueledtask ~= nil then
