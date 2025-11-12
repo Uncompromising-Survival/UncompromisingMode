@@ -589,7 +589,7 @@ if TUNING.DSTU.WATHGRITHR_REWORK then
     }, {   "CHARACTER","WEAPONS","ARMOUR",
             --"CRAFTING_STATION",
             "MODS",
-            "EVERYTHING"})
+            "EVRERYTHING"})
     ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "CHARACTER", true)
     ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "WEAPONS", true)
     ChangeSortKey("wathgrithr_shield_dreadstone", "wathgrithr_shield", "ARMOUR", true)
