@@ -343,13 +343,23 @@ local function onothercollide(inst, other, owner)
 	end
 end
 
-local NOTAGS = { "fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall" }
+local NOTAGS = { "fx", "INLIMBO", "player", "bird", "butterfly", "boat", "wall", "companion", "shadowminion", "abigail" }
 local function oncollide(inst)
 	if inst.owner ~= nil then
 		local x, y, z = inst.owner.Transform:GetWorldPosition()
 		local ents = TheSim:FindEntities(x, y, z, 3, nil, NOTAGS)
 		for i, v in ipairs(ents) do
-			onothercollide(inst, v, inst.owner)
+			local v_is_a_follower = false
+			local leader = nil		
+			if v.components.follower then
+				leader = v.components.follower.leader
+			end		
+			if leader and leader:HasAnyTag("player", "bell") then
+				v_is_a_follower = true
+			end		
+            if not v_is_a_follower then
+				onothercollide(inst, v, inst.owner)
+            end		
 		end
 	end
 end
