@@ -24,7 +24,7 @@ Additional note:
 Every gemolyable item has a field called gemology_data, with holds any relevant data for gems. For example:
 item.gemology_data[gem_name].foo = true
 
-This is so we can save some gem-specific data so it can probably revert when removed.
+This is so we can save some gem-specific data so it can properly revert when removed.
 ]]
 local GEMOLOGY_DEFS = {
     -------------
