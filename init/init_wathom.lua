@@ -211,14 +211,14 @@ local SLEEPREPEL_MUST_TAGS = { "_combat" }
 local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
     "hiding", "notarget", "noattack", "flight", "wall" }
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
-local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "irreplaceable"}
+local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "bell", "irreplaceable"}
 local function Check_Bowling(inst, target)
     if inst ~= nil then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
         for i, v in ipairs(ents) do
-            if inst.components.combat:CanTarget(v) and not (v.components.follower and v.components.follower:GetLeader()
-                and v.components.follower:GetLeader():HasAnyTag(NO_SHOVE_ATTACK_LEADER_TAGS)) then --(not target) or (target and v ~= target)
+            local leader = v.components.follower and v.components.follower:GetLeader()
+            if inst.components.combat:CanTarget(v) and not (leader and leader:HasAnyTag(NO_SHOVE_ATTACK_LEADER_TAGS)) then --(not target) or (target and v ~= target)
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
