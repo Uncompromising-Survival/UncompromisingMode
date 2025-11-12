@@ -47,10 +47,10 @@ local function NewOnAttack(inst, attacker, target)
         attacker.components.adrenaline:DoDelta(3)
     end
 
-    inst.components.weapon.attackwear = target ~= nil and target:IsValid()
-        and target:HasTag("lunar_aligned")
-        and TUNING.GLASSCUTTER.SHADOW_WEAR
-        or 1
+    --inst.components.weapon.attackwear = target ~= nil and target:IsValid()
+        --and target:HasTag("lunar_aligned")
+        --and TUNING.GLASSCUTTER.SHADOW_WEAR
+        --or 1
 end
 
 
@@ -66,7 +66,7 @@ env.AddPrefabPostInit("ruins_bat", function(inst)
     inst:AddComponent("damagetypebonus")
     inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, 1 + 17 / 59)
 
-    local uses = 300
-    inst.components.finiteuses:SetMaxUses(uses)
-    inst.components.finiteuses:SetUses(uses)
+    --local uses = 300
+    --inst.components.finiteuses:SetMaxUses(uses)
+    --inst.components.finiteuses:SetUses(uses)
 end)
