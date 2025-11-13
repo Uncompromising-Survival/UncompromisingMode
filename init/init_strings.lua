@@ -643,4 +643,11 @@ STRINGS.UM_LOADINGTIPS = {
 }
 
 STRINGS.ACTIONS.USESPELLBOOK.UM_DETONATE = "Detonate"
---SCRAPBOOK
+
+--Mineral logbook
+STRINGS.MINERAL_LOGBOOK = {
+    UNKNOWN_GEM = "Unknown Gem",
+    SOURCES = "Sources",
+    EFFECTS = "Effects",
+    GEMS = "Gems",
+}

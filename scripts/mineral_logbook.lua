@@ -1,12 +1,10 @@
---[[
-TODO:
--- automatically fix broken saved data, prevent broken data from being loaded.
--- try to prevent brokens save data from being saved to begin with
-]]
+local geode_loot = require("gemology_loot_defs")
 
 local MineralLogbook = Class(function(self)
     self.known_gems = {}
 
+
+    self.gem_sources = {}
     --structure:
     --known_gems[gem_name] = tier - the gem tier. 0 means the player has seen the gem but doesn't know the effects. Reveals the gem exists in the logbook
     --                                              1 means they have scanned a tier 1 gem or used any tier gem. Reveals the gem name and effects
@@ -60,6 +58,8 @@ function MineralLogbook:ValidateData(data)
 end
 
 function MineralLogbook:Load()
+    self:PopulateDefaultGemSources()
+
     if TheNet:IsDedicated() then
         return
     end
@@ -131,6 +131,10 @@ function MineralLogbook:SetGem(gem, tier)
     self:Save()
 end
 
+function MineralLogbook:GetKnownGems()
+    return self.known_gems
+end
+
 function MineralLogbook:ClearKnownGems()
     self.known_gems = {}
     self:Save()
@@ -165,6 +169,29 @@ local all_default_gems = {
 function MineralLogbook:DebugUnlockAllGems()
     for _, gem in ipairs(all_default_gems) do
         self:AddNewGem(gem, MAX_GEM_TIER)
+    end
+end
+
+function MineralLogbook:PopulateDefaultGemSources()
+    for geode, loot in pairs(geode_loot) do
+        for _, gem in pairs(all_default_gems) do
+            if loot.gemloot[gem] ~= nil then
+                if self.gem_sources[gem] == nil then
+                    self.gem_sources[gem] = {}
+                end
+                table.insert(self.gem_sources[gem], geode)
+            end
+        end
+    end
+end
+
+function MineralLogbook:GetGemSources(gem)
+    self:PopulateDefaultGemSources() --just in case.
+
+    if gem == nil then
+        return self.gem_sources
+    elseif type(gem) == "string" and self.gem_sources[gem] ~= nil then
+        return self.gem_sources[gem]
     end
 end
 
