@@ -98,6 +98,7 @@ env.AddPrefabPostInit("pigman", function(inst)
     inst:ListenForEvent("newcombattarget", OnNewTarget_Remember)
 
     inst.components.eater:SetCanEatVeggieHorrible() -- Can eat UM_HORRIBLE_VEGGIE
+
     local _ShouldAcceptItem = inst.components.trader.test
     local function ShouldAcceptItem(inst, item, ...)
         if inst.components.eater:CanEat(item) then
@@ -111,7 +112,7 @@ env.AddPrefabPostInit("pigman", function(inst)
             end
             return true
         end
-        _ShouldAcceptItem(inst, item, ...)
+        return _ShouldAcceptItem(inst, item, ...)
     end
     inst.components.trader:SetAcceptTest(ShouldAcceptItem)
 

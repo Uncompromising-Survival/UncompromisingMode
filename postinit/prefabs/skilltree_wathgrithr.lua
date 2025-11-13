@@ -537,7 +537,7 @@ local skills =
 
     wathgrithr_beefalo_lock = {
         group = "beefalo",
-        root         = true,
+        root = true,
 
         connects = { "wathgrithr_beefalo_2" },
 

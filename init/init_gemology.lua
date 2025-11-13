@@ -11,32 +11,32 @@ end)
 
 local modifiers = {
     -- Greens
-    "Neurotic",
-    "Chaotic",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYGREENGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYGREENGEM2,
+
     -- Yellows
-    "Hasty",
-    "Static",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYYELLOWGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYYELLOWGEM2,
+
     -- Clears
-    "Peerless",
-    "Adamant",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYPALEGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYPALEGEM2,
+
     -- Reds
-    "Voracious",
-    "Passionate",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYREDGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYREDGEM2,
+
     -- Purples
-    "Furious",
-    "Arcane",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYPURPLEGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYPURPLEGEM2, 
+
     -- Oranges
-    "Comfy",
-    "Hoarding",
-    
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYORANGEGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYORANGEGEM2,
+
     -- Blues
-    "Arctic",
-    "Chilled",
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYBLUEGEM1,
+    STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYBLUEGEM2,
 }
 
 local _GetAdjectivedName = EntityScript.GetAdjectivedName
@@ -126,21 +126,17 @@ env.AddComponentPostInit("combat", function(self)
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
         local inst = self.inst
-        local minerologyable = weapon and weapon.components.minerologyable
-        -- FURIOUS
-        if minerologyable then
-            if minerologyable.furious then -- Trigger Furious        
-                inst:AddDebuff("buff_furious"..tool.tier, "buff_furious"..tool.tier)
-            end
-            -- Hoarding
-            if minerologyable.hoarding and tool.tier ~= 1 then
-                if not self.inst.um_marked_for_hoarding then
-                    self.inst.um_marked_for_hoarding = attacker
-                end
-            end
-        elseif self.inst.um_marked_for_hoarding then
+		local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if tool and tool.components.minerologyable and tool.components.minerologyable.furious then
+			inst:AddDebuff("buff_furious"..tool.tier, "buff_furious"..tool.tier)
+		end
+		if weapon and weapon.components.minerologyable and weapon.components.minerologyable.hoarding and weapon.tier ~= 1 then
+			if not self.inst.um_marked_for_hoarding then
+				self.inst.um_marked_for_hoarding = attacker
+			end
+		elseif self.inst.um_marked_for_hoarding then
             self.inst.um_marked_for_hoarding = nil
-        end
+		end
         
         return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end

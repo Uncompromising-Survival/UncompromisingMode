@@ -16,7 +16,7 @@ local component_post = {
     "hounded",
     "sleeper",
     "fueled",
-    "perishable",
+    --"perishable",
     --"carnivalevent",
     "lootdropper",
     "ambientsound",
@@ -243,6 +243,7 @@ local prefab_post = {
 	"bullkelp_root",
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
+    "firestaff",
 }
 
 local stategraph_post = {

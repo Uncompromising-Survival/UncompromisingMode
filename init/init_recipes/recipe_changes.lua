@@ -390,3 +390,8 @@ AllRecipes["woby_treat"].numtogive = 1
 if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
+
+AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD

@@ -279,7 +279,7 @@ end
 
 local function TryKillHost(inst,owner)
 	-- Death is the only way out.
-	owner.components.combat:GetAttacked(-20,inst)
+	owner.components.combat:GetAttacked(inst, 20)
 	inst:DoTaskInTime(0,function(inst) 
 		if inst.owner and inst.owner.components.health and not inst.owner.components.health:IsDead() then
 			local owner = inst.owner

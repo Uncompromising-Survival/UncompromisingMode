@@ -521,6 +521,7 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
     inst.components.locomotor.runspeed = tags and table.contains(tags, "clay") and TUNING.CLAYHOUND_SPEED or TUNING.HOUND_SPEED
 
     inst:SetStateGraph(stategraph or "SGhound")
+    inst.sg.mem.nocorpse = true
 
     if data.amphibious then
         inst:AddComponent("embarker")
@@ -1085,8 +1086,6 @@ local function fnspore()
         return inst
     end
 
-
-    inst:SetStateGraph("SGhound")
     --inst:SetBrain(sporebrain)
 
     inst.lightningshot = true

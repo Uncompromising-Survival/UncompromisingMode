@@ -735,9 +735,6 @@ local function master_postinit(inst)
         end
         UpdateMusic(inst)
     end)
-    -- Wathom's immunity to night drain during the night and sanity (lunacy) gain during the day.
-    --    inst.components.sanity.night_drain_mult = 0
-    inst.components.sanity.light_drain_immune = true
 
     --    inst:WatchWorldState("isday", function()
     --        inst:DoTaskInTime(TheWorld.state.isday and 0 or 1, function(inst)
@@ -750,7 +747,20 @@ local function master_postinit(inst)
     --            end
     --        end)
     --    end)
+	
+	inst.components.sanity.custom_rate_fn = function(inst)
+		local rate = 0
 
+		if TheWorld.state.isday then
+			rate = TUNING.SANITY_NIGHT_LIGHT
+		else
+			rate = 0
+		end
+
+		return rate
+	end	
+
+	inst.components.sanity.night_drain_mult = 0
 
     -- Night Vision enabler
     --    inst.components.playervision:ForceNightVision(true) -- Should only force this if it's night or in caves.

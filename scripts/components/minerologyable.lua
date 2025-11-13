@@ -369,18 +369,18 @@ end -- Todo, make these scale back if we go for chaotic emerald swapping daily, 
 ------------------
 
 local devour_tags = {"animal","pig","monster","smallcreature"}
-local devour_mults = {1/6,1/5} -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
+local devour_mults = {1/10,1/5} -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
 local function Devour(inst, owner, target)
 	if inst.tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
 		local mult = devour_mults[inst.tier-1]
-		owner.components.combat:DoAttack(target, inst, nil, nil, mult, 999) -- gotta use a bit more durability... 
+		owner.components.combat:DoAttack(target, inst, nil, nil, mult, 0) -- gotta use a bit more durability... 
 		mult = inst.components.weapon.damage*mult
-		owner.components.sanity:DoDelta(-mult)
-		owner.components.hunger:DoDelta(mult)
+		--owner.components.sanity:DoDelta(-mult)
+		owner.components.hunger:DoDelta(mult/2)
 	end
 	
     if target.components.health ~= nil and target.components.health:IsDead() then -- Devour
-		local recover = target.components.health.maxhealth*0.05*inst.tier
+		local recover = target.components.health.maxhealth*0.01*inst.tier
 		owner.components.health:DoDelta(recover)
 		owner.components.sanity:DoDelta(recover)
     end
