@@ -21,6 +21,7 @@ local function fn()
 
     inst:AddTag("gemologyscanner")
     inst:AddTag("tradeable")
+    inst:AddTag("wardrobe_item")
 
     MakeInventoryFloatable(inst, "med", nil, 0.6)
 

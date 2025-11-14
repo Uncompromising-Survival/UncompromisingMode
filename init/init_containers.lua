@@ -22,6 +22,7 @@ end
 
 local wardrobe_tags = {
     "_equippable",
+    "wardrobe_item", -- Allow other mods to add their own items
     "reloaditem_ammo",
     "tool",
     "weapon",
@@ -56,6 +57,8 @@ local wardrobe_prefabs = {
     "saddle_war",
     "saddle_wathgrithr",
     "saddle_shadow",
+    "bedroll_straw",
+    "bedroll_furry",
 }
 
 local wardrobe_noprefabs = {
