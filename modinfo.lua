@@ -716,7 +716,7 @@ configuration_options = {
     {
         name = "bonestew_nerf",
         label = "Meaty Stew Changes",
-        hover = "Pierogis require more veggies to cook.",
+        hover = "Meaty Stew has harsher requirements.",
         options = {
             { description = "Bone Requirement", data = "bone_appetit",  hover = "Makes Meaty Stew require 1 Bone Shard.\nA new dish will be cooked with 3 Meat instead." },
             { description = "3.5 Meat Value",   data = "meatier_stew",  hover = "Makes Meaty Stew require 3.5 meat value to be cooked." },
