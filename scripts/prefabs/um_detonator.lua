@@ -469,6 +469,7 @@ local function fn()
 	--inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
 
 	inst:AddTag("remotecontrol")
+	inst:AddTag("wardrobe_item")
 	--inst:AddTag("engineering")
 	--inst:AddTag("engineeringbatterypowered")
 
