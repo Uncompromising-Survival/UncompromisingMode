@@ -25,7 +25,11 @@ local function onattack(inst, attacker, target)
 		target.components.health:Kill()
 	end
 
+    local efficientuser = attacker.components.efficientuser and attacker.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
+    local useMult = efficientuser * inst.components.weapon.attackwearmultipliers:Get()
+
 	if inst.components.finiteuses and inst.components.finiteuses:GetUses() > 0 then
+
 		if target:HasTag("smallcocoon") then
 			inst.components.finiteuses:Use(20)
 		elseif target:HasTag("mediumcocoon") then
@@ -33,7 +37,7 @@ local function onattack(inst, attacker, target)
 		elseif target:HasTag("largecocoon") then
 			inst.components.finiteuses:Use(60)
 		else
-			inst.components.finiteuses:Use(1)
+			inst.components.finiteuses:Use(1 * useMult)
 		end
 	end
 end
@@ -67,13 +71,13 @@ local function fn()
     inst:AddComponent("weapon")
     inst:AddTag("weapon")
     inst.components.weapon:SetOnAttack(onattack)
-    inst.components.weapon:SetDamage(TUNING.HAMBAT_DAMAGE)
+    inst.components.weapon:SetDamage(TUNING.DSTU.WIDOWSGRASP_DAMAGE)
 
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(TUNING.RUINS_BAT_USES)
-    inst.components.finiteuses:SetUses(TUNING.RUINS_BAT_USES)
+    inst.components.finiteuses:SetMaxUses(TUNING.DSTU.WIDOWSGRASP_USES)
+    inst.components.finiteuses:SetUses(TUNING.DSTU.WIDOWSGRASP_USES)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
     inst.components.finiteuses:SetIgnoreCombatDurabilityLoss(true)
     
