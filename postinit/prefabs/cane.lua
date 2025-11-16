@@ -68,6 +68,7 @@ for i,v in ipairs(canes) do
 		inst.components.equippable:SetOnUnequip(onunequip)
 		
 		inst._onlocomote = function(owner)
+			if owner.components.rider and owner.components.rider:IsRiding() then return end
 			if owner.components.locomotor.wantstomoveforward then
 				if not inst.components.fueled.consuming then
 					inst.components.fueled:StartConsuming()
