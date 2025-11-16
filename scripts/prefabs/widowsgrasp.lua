@@ -31,11 +31,11 @@ local function onattack(inst, attacker, target)
 	if inst.components.finiteuses and inst.components.finiteuses:GetUses() > 0 then
 
 		if target:HasTag("smallcocoon") then
-			inst.components.finiteuses:Use(20)
+			inst.components.finiteuses:Use(20 * useMult)
 		elseif target:HasTag("mediumcocoon") then
-			inst.components.finiteuses:Use(40)
+			inst.components.finiteuses:Use(40 * useMult)
 		elseif target:HasTag("largecocoon") then
-			inst.components.finiteuses:Use(60)
+			inst.components.finiteuses:Use(60 * useMult)
 		else
 			inst.components.finiteuses:Use(1 * useMult)
 		end
