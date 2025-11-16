@@ -94,7 +94,10 @@ local function CommonFunctions(inst, sound, anim)
 end
 
 local function OnAttack(inst, attacker, target)
-    inst.components.armor:TakeDamage(TUNING.SHIELDOFTERROR_USEDAMAGE * inst.components.weapon.attackwearmultipliers:Get())
+    local efficientuser = attacker.components.efficientuser and attacker.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
+    local useMult = efficientuser * inst.components.weapon.attackwearmultipliers:Get()
+
+    inst.components.armor:TakeDamage(TUNING.SHIELDOFTERROR_USEDAMAGE * useMult)
 end
 
 env.AddPrefabPostInit("shieldofterror", function(inst)
