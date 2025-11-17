@@ -8,6 +8,8 @@ local assets =
 }
 
 local insulationmod = 0
+local insulate_summer = false
+local insulate_winter = false
 
 local function OnTimerDone(owner, data)
     if data.name == "um_totem_canary_speed" then
@@ -16,9 +18,14 @@ local function OnTimerDone(owner, data)
             owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
 	    end
     elseif data.name == "um_totem_azure_insulation" then
-        print(insulationmod.." result of timer done azure")
+        --print(insulationmod.." result of timer done azure")
+        if insulate_winter then
         owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
-        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
+        end
+
+        if insulate_summer then 
+            owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
+        end
     elseif data.name == "um_totem_malbatross_nowet" then
         if owner.components.moistureimmunity then
 		    owner.components.moistureimmunity:RemoveSource(owner)
@@ -65,8 +72,18 @@ local function FeatherEffects(owner, totem)
 
     if feather_robin_winter > 0 then
         insulationmod = 80 * feather_robin_winter
-        owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
+
+        insulate_summer = TheWorld.state.season ~= "winter" -- Regular insulation will not allow the player to cool down in summer
+        insulate_winter = TheWorld.state.season ~= "summer" -- Summer insultation will not allow the player to heat up in winter
+         
+        if insulate_winter then
+            owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
+        end
+
+        if insulate_summer then
         owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
+        end
+
         owner.components.timer:StartTimer("um_totem_azure_insulation", 15)
         didsomething = true
     end
