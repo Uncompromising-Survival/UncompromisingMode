@@ -18,7 +18,7 @@ local function OnTimerDone(owner, data)
     elseif data.name == "um_totem_azure_insulation" then
         print(insulationmod.." result of timer done azure")
         owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
-        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentinsulation - insulationmod
+        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
     elseif data.name == "um_totem_malbatross_nowet" then
         if owner.components.moistureimmunity then
 		    owner.components.moistureimmunity:RemoveSource(owner)
