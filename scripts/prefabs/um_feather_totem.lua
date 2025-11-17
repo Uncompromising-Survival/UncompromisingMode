@@ -44,19 +44,23 @@ local function FeatherEffects(inst, totem)
     --local cherryforest_feather2 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
     --local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
     local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
+    local didsomething = false
 
     if feather_robin > 0 then
         inst.components.health:DoDelta(inst.components.health.maxhealth * 0.1 * feather_robin)
+        didsomething = true
     end
 
     if feather_crow > 0 then
         inst.components.sanity:DoDelta(inst.components.sanity.max * 0.15 * feather_crow)
+        didsomething = true
     end
 
     if feather_canary > 0 then
         inst.components.locomotor:SetExternalSpeedMultiplier(inst, inst.prefab, 1.15)
         inst.components.timer:StartTimer("um_totem_canary_speed", 90 * feather_canary)
         inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
+        didsomething = true
     end
 
     if feather_robin_winter > 0 then
@@ -64,12 +68,14 @@ local function FeatherEffects(inst, totem)
         inst.components.temperature.inherentinsulation = inst.components.temperature.inherentinsulation + insulationmod
         inst.components.temperature.inherentsummerinsulation = inst.components.temperature.inherentsummerinsulation + insulationmod
         inst.components.timer:StartTimer("um_totem_azure_insulation", 15)
+        didsomething = true
     end
 
     if goose_feather > 0 then
         inst.components.locomotor:SetExternalSpeedMultiplier(inst, inst.prefab, 1.25)
         inst.components.timer:StartTimer("um_totem_goose_speed", 45 * goose_feather)
         inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+        didsomething = true
     end
 
     if malbatross_feather > 0 then
@@ -79,13 +85,20 @@ local function FeatherEffects(inst, totem)
 	    inst.components.moistureimmunity:AddSource(inst)
         inst.components.timer:StartTimer("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
         inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+        didsomething = true
     end
 
     if feathertotal > 0 then
         inst.components.health:DeltaPenalty(-0.125 * feathertotal)
+        didsomething = true
     end
-    inst:ListenForEvent("timerdone", OnTimerDone)
-    totem.components.container:RemoveAllItems()
+
+    if didsomething then
+        inst:ListenForEvent("timerdone", OnTimerDone)
+        totem.components.container:RemoveAllItems()
+    end
+
+    return didsomething
 end
 
 local function IsTotem(item)
@@ -100,8 +113,9 @@ local function OnRespawn(inst, totem)
     totem = HasTotem(inst)
     if totem then
         inst:DoTaskInTime(5, function()
-            FeatherEffects(inst, totem)
-            totem.components.finiteuses:Use(1)
+            if FeatherEffects(inst, totem) then
+                totem.components.finiteuses:Use(1)
+            end
         end)
     end
 end
