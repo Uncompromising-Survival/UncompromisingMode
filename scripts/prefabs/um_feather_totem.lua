@@ -9,31 +9,31 @@ local assets =
 
 local insulationmod = 0
 
-local function OnTimerDone(inst, data)
+local function OnTimerDone(owner, data)
     if data.name == "um_totem_canary_speed" then
-        if inst.components.locomotor then
-		    inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, inst.prefab)
-            inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
+        if owner.components.locomotor then
+		    owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, owner.prefab)
+            owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
 	    end
     elseif data.name == "um_totem_azure_insulation" then
         print(insulationmod.." result of timer done azure")
-        inst.components.temperature.inherentinsulation = inst.components.temperature.inherentinsulation - insulationmod
-        inst.components.temperature.inherentsummerinsulation = inst.components.temperature.inherentinsulation - insulationmod
+        owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
+        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentinsulation - insulationmod
     elseif data.name == "um_totem_malbatross_nowet" then
-        if inst.components.moistureimmunity then
-		    inst.components.moistureimmunity:RemoveSource(inst)
-            inst.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
+        if owner.components.moistureimmunity then
+		    owner.components.moistureimmunity:RemoveSource(owner)
+            owner.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
 	    end
     elseif data.name == "um_totem_goose_speed" then
-        if inst.components.locomotor then
-		    inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, inst.prefab)
-            inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+        if owner.components.locomotor then
+		    owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, owner.prefab)
+            owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
 	    end
     end
-    inst:RemoveEventCallback("timerdone", OnTimerDone)
+    owner:RemoveEventCallback("timerdone", OnTimerDone)
 end
 
-local function FeatherEffects(inst, totem)
+local function FeatherEffects(owner, totem)
     local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
     local feather_crow = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow" end)
     local feather_robin_winter = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end)
@@ -47,54 +47,54 @@ local function FeatherEffects(inst, totem)
     local didsomething = false
 
     if feather_robin > 0 then
-        inst.components.health:DoDelta(inst.components.health.maxhealth * 0.1 * feather_robin)
+        owner.components.health:DoDelta(owner.components.health.maxhealth * 0.1 * feather_robin)
         didsomething = true
     end
 
     if feather_crow > 0 then
-        inst.components.sanity:DoDelta(inst.components.sanity.max * 0.15 * feather_crow)
+        owner.components.sanity:DoDelta(owner.components.sanity.max * 0.15 * feather_crow)
         didsomething = true
     end
 
     if feather_canary > 0 then
-        inst.components.locomotor:SetExternalSpeedMultiplier(inst, inst.prefab, 1.15)
-        inst.components.timer:StartTimer("um_totem_canary_speed", 90 * feather_canary)
-        inst.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
+        owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.15)
+        owner.components.timer:StartTimer("um_totem_canary_speed", 90 * feather_canary)
+        owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
         didsomething = true
     end
 
     if feather_robin_winter > 0 then
         insulationmod = 80 * feather_robin_winter
-        inst.components.temperature.inherentinsulation = inst.components.temperature.inherentinsulation + insulationmod
-        inst.components.temperature.inherentsummerinsulation = inst.components.temperature.inherentsummerinsulation + insulationmod
-        inst.components.timer:StartTimer("um_totem_azure_insulation", 15)
+        owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
+        owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
+        owner.components.timer:StartTimer("um_totem_azure_insulation", 15)
         didsomething = true
     end
 
     if goose_feather > 0 then
-        inst.components.locomotor:SetExternalSpeedMultiplier(inst, inst.prefab, 1.25)
-        inst.components.timer:StartTimer("um_totem_goose_speed", 45 * goose_feather)
-        inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+        owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.25)
+        owner.components.timer:StartTimer("um_totem_goose_speed", 45 * goose_feather)
+        owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
         didsomething = true
     end
 
     if malbatross_feather > 0 then
-	    if not inst.components.moistureimmunity then
-		    inst:AddComponent("moistureimmunity")
+	    if not owner.components.moistureimmunity then
+		    owner:AddComponent("moistureimmunity")
 	    end
-	    inst.components.moistureimmunity:AddSource(inst)
-        inst.components.timer:StartTimer("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
-        inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+	    owner.components.moistureimmunity:AddSource(owner)
+        owner.components.timer:StartTimer("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
+        owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
         didsomething = true
     end
 
     if feathertotal > 0 then
-        inst.components.health:DeltaPenalty(-0.125 * feathertotal)
+        owner.components.health:DeltaPenalty(-0.125 * feathertotal)
         didsomething = true
     end
 
     if didsomething then
-        inst:ListenForEvent("timerdone", OnTimerDone)
+        owner:ListenForEvent("timerdone", OnTimerDone)
         totem.components.container:RemoveAllItems()
     end
 
@@ -105,15 +105,15 @@ local function IsTotem(item)
     return item.prefab == "um_feather_totem"
 end
 
-local function HasTotem(inst)
-    return inst.components.inventory and inst.components.inventory:FindItem(IsTotem)
+local function HasTotem(owner)
+    return owner.components.inventory and owner.components.inventory:FindItem(IsTotem)
 end
 
-local function OnRespawn(inst, totem)
-    totem = HasTotem(inst)
+local function OnRespawn(owner, totem)
+    totem = HasTotem(owner)
     if totem then
-        inst:DoTaskInTime(5, function()
-            if FeatherEffects(inst, totem) then
+        owner:DoTaskInTime(5, function()
+            if FeatherEffects(owner, totem) then
                 totem.components.finiteuses:Use(1)
             end
         end)
