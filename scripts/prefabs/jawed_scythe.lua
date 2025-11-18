@@ -65,8 +65,6 @@ local function OnStopFloating(inst)
     inst:DoTaskInTime(0, PushIdleLoop) --#V2C: #HACK restore the looping anim, timing issues
 end
 
-
-
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()
 
