@@ -422,13 +422,13 @@ local default = {
             Item("lightninggoathorn")
         }
     },
-    BISHOP = {
-        size = COCOON_SIZE.SMALL,
-        name = "Hardened",
-        loot = {
-            Item("trinket_6", 2),
-        }
-    },
+    -- BISHOP = {
+        -- size = COCOON_SIZE.SMALL,
+        -- name = "Hardened",
+        -- loot = {
+            -- Item("trinket_6", 2),
+        -- }
+    -- },
     MERM = {
         size = COCOON_SIZE.SMALL,
         name = "Scaly",
