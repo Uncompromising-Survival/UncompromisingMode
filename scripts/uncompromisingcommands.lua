@@ -159,7 +159,7 @@ function c_um_giverecords()
 end
 
 -- lists current rat score shenenigans.
-function c_um_ratcheck()
+function c_um_debug_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
