@@ -16,7 +16,7 @@ local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
 local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
 local BEARGER_TIMERNAME = "bearger_timetospawn"
 
-function c_um_debug_bosstimers()
+function d_um_bosstimers()
 	if TheWorld.ismastersim then
 		TheNet:Announce("Checking Spawners...")
 		local _worldsettingstimer = TheWorld.components.worldsettingstimer
@@ -159,7 +159,7 @@ function c_um_giverecords()
 end
 
 -- lists current rat score shenenigans.
-function c_um_debug_ratcheck()
+function d_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
