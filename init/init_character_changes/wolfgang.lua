@@ -566,8 +566,8 @@ end
 local function OnDoingHackHelper(inst, data)
 	if data ~= nil and data.hack_target ~= nil then
 		local target = data.hack_target
-		local tool = inst.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
-		local result = SpecialWorkMultiplierFn(inst, GLOBAL.ACTIONS.HACK, target, tool, 1, false)
+		local tool = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		local result = SpecialWorkMultiplierFn(inst, ACTIONS.HACK, target, tool, 1, false)
 		if (result == 99999) then
 			target.components.hackable.hacksleft = 0
 		end
