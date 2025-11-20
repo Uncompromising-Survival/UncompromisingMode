@@ -178,7 +178,7 @@ TUNING.DSTU = {
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
     -- Spawn New Bosses
-    GOOSE_SETTING = GetModConfigData("goose_setting"),
+    --GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
     -- Hound inclusion
     SPOREHOUNDS = GetModConfigData("sporehounds"),
