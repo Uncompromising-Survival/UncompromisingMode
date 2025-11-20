@@ -100,14 +100,19 @@ local function unempty(inst)
 end
 
 local function FindNewHole(inst)
-    local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
+	inst.components.childspawner:StopRegen()
+	inst.components.childspawner:SetMaxChildren(0)
+	inst:DoTaskInTime(480 + math.random() * 3, unempty)
+	inst:AddTag("obvious")
+	inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
+    --[[local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
     if target and inst.components.childspawner then
         target:DoTaskInTime(480 + math.random() * 3, unempty) -- <-- This is where the regen time is actually located, since it swaps nests
         inst.components.childspawner:StopRegen()
         inst.components.childspawner:SetMaxChildren(0)
         inst:AddTag("obvious")
         inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
-    end
+    end]]
 end
 
 local function workcallback(inst, worker, workleft)
@@ -176,8 +181,7 @@ local function fn1()
     inst:AddComponent("childspawner")
     inst.components.childspawner.childspawner = "spider_trapdoor"
     inst.components.childspawner:SetMaxChildren(0)
-    inst.components.childspawner:SetEmergencyRadius(
-        TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
+    inst.components.childspawner:SetEmergencyRadius(TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
     inst.components.childspawner:SetSpawnedFn(OpenMound)
     inst.components.childspawner:SetGoHomeFn(CloseMound)
     inst.components.childspawner:SetRegenPeriod(20, 2)
@@ -193,8 +197,7 @@ local function fn1()
     inst:AddComponent("playerprox")
     inst.components.playerprox:SetDist(6, 8) -- set specific values
     inst.components.playerprox:SetOnPlayerNear(onnear)
-    inst.components.playerprox:SetPlayerAliveMode(
-        inst.components.playerprox.AliveModes.AliveOnly)
+    inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
     -------------------------
     MakeSnowCovered(inst)
     -------------------------
@@ -220,9 +223,6 @@ local function fn1()
     inst:DoTaskInTime(0, Init)
     return inst
 end
-
-
-
 
 local function fn2()
     local inst = CreateEntity()
@@ -256,8 +256,7 @@ local function fn2()
         -- Set spawner to wasp. Change tuning values to wasp values.
         inst.components.childspawner.childspawner = "spider_trapdoor_hooded"
         inst.components.childspawner:SetMaxChildren(0)
-        inst.components.childspawner:SetEmergencyRadius(
-            TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
+        inst.components.childspawner:SetEmergencyRadius(TUNING.WASPHIVE_EMERGENCY_RADIUS / 2)
         inst.components.childspawner:SetSpawnedFn(OpenMound)
         inst.components.childspawner:SetGoHomeFn(CloseMound)
         inst.components.childspawner:SetRegenPeriod(20, 2)
@@ -273,8 +272,7 @@ local function fn2()
         inst:AddComponent("playerprox")
         inst.components.playerprox:SetDist(6, 8) -- set specific values
         inst.components.playerprox:SetOnPlayerNear(onnear)
-        inst.components.playerprox:SetPlayerAliveMode(
-            inst.components.playerprox.AliveModes.AliveOnly)
+        inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
     end
 
     inst:AddComponent("inspectable")
