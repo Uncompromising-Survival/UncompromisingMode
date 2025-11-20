@@ -100,11 +100,11 @@ local function unempty(inst)
 end
 
 local function FindNewHole(inst)
-	inst.components.childspawner:StopRegen()
-	inst.components.childspawner:SetMaxChildren(0)
-	inst:DoTaskInTime(480 + math.random() * 3, unempty)
-	inst:AddTag("obvious")
-	inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
+    inst.components.childspawner:StopRegen()
+    inst.components.childspawner:SetMaxChildren(0)
+    inst:DoTaskInTime(480 + math.random() * 3, unempty)
+    inst:AddTag("obvious")
+    inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
     --[[local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
     if target and inst.components.childspawner then
         target:DoTaskInTime(480 + math.random() * 3, unempty) -- <-- This is where the regen time is actually located, since it swaps nests
