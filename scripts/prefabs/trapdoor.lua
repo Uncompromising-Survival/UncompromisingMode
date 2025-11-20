@@ -10,7 +10,7 @@ local function TrapdoorOrHooded(inst)
 end
 
 local function FruitBatNearby(inst)
-	return FindEntity(inst,20,nil,{"fruitbat"})
+    return FindEntity(inst,20,nil,{"fruitbat"})
 end
 
 local function onnear(inst, target)
@@ -100,16 +100,13 @@ local function unempty(inst)
 end
 
 local function FindNewHole(inst)
-    local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty,
-                              {"trapdoor"})
-    if target ~= nil then
-        if inst.components.childspawner ~= nil then
-            target:DoTaskInTime(480 + math.random() * 3, unempty) -- <-- This is where the regen time is actually located, since it swaps nests
-            inst.components.childspawner:StopRegen()
-            inst.components.childspawner:SetMaxChildren(0)
-            inst:AddTag("obvious")
-            inst:DoTaskInTime(90000, inst:RemoveTag("obvious"))
-        end
+    local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
+    if target and inst.components.childspawner then
+        target:DoTaskInTime(480 + math.random() * 3, unempty) -- <-- This is where the regen time is actually located, since it swaps nests
+        inst.components.childspawner:StopRegen()
+        inst.components.childspawner:SetMaxChildren(0)
+        inst:AddTag("obvious")
+        inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
     end
 end
 
