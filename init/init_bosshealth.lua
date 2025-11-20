@@ -26,6 +26,11 @@ local bosses = {
 	"MUTATEDBEARGER",
 	"MUTATEDDEERCLOPS",
 	"MUTATEDWARG",
+	"WORM_BOSS",
+	"WAGBOSS_ROBOT",
+	"ALTERGUARDIAN_PHASE1_LUNARRIFT",
+	"ALTERGUARDIAN_PHASE4_LUNARRIFT",
+	"STALKER",	
 }
 
 for _, v in pairs(bosses) do
@@ -54,8 +59,17 @@ for _, v in pairs(bosses) do
 		TUNING.MUTATED_DEERCLOPS_HEALTH = TUNING.MUTATED_DEERCLOPS_HEALTH * GetModConfigData("mutated_deerclops_health_")		
 
 	elseif v == "MUTATEDWARG" then
-		TUNING.MUTATED_WARG_HEALTH = TUNING.MUTATED_WARG_HEALTH * GetModConfigData("mutated_warg_health_")		
+		TUNING.MUTATED_WARG_HEALTH = TUNING.MUTATED_WARG_HEALTH * GetModConfigData("mutated_warg_health_")
 
+	elseif v == "ALTERGUARDIAN_PHASE1_LUNARRIFT" then
+		TUNING.ALTERGUARDIAN_PHASE1_LUNARRIFT_HEALTH = TUNING.ALTERGUARDIAN_PHASE1_LUNARRIFT_HEALTH * GetModConfigData("wagboss_robot_health_")
+
+	elseif v == "ALTERGUARDIAN_PHASE4_LUNARRIFT" then		
+		TUNING.ALTERGUARDIAN_PHASE4_LUNARRIFT_HEALTH = TUNING.ALTERGUARDIAN_PHASE4_LUNARRIFT_HEALTH * GetModConfigData("wagboss_robot_health_")
+		
+	elseif v == "STALKER" then		
+		TUNING.STALKER_HEALTH = TUNING.STALKER_HEALTH * GetModConfigData("stalker_atrium_health_")
+	
     else
         TUNING[v .. "_HEALTH"] = TUNING[v .. "_HEALTH"] * GetModConfigData(string.lower(v) .. "_health_")
     end
@@ -74,6 +88,10 @@ local function BossMultiplier(inst)
 	if m == nil then
 		if name == "ALTERGUARDIAN_PHASE1" or name == "ALTERGUARDIAN_PHASE2" or name == "ALTERGUARDIAN_PHASE3" then
 			m = GetModConfigData("alterguardian_health_")
+		elseif name == "ALTERGUARDIAN_PHASE1_LUNARRIFT" or name == "ALTERGUARDIAN_PHASE4_LUNARRIFT" then
+			m = GetModConfigData("wagboss_robot_health_")
+		elseif name == "STALKER" then
+			m = GetModConfigData("stalker_atrium_health_")		
 		elseif name == "TWINOFTERROR1" or name == "TWINOFTERROR2" then
 			m = GetModConfigData("twinofterror_health_")
 		elseif name == "MUTATEDBEARGER" then
@@ -88,9 +106,18 @@ local function BossMultiplier(inst)
 	return m or 1
 end
 
-local UNIQUE_LOOT = {
-	--example = true,
+local spookyskeletons_bosses = {
+	stalker = true,
+	stalker_atrium = true,
+	stalker_forest = true,
 }
+
+local spookyskeletons_items = {
+	fossil_piece = true,
+	shadowheart = true,
+}
+
+local unique_loot = {}
 
 local function MultiplyLoot(inst, mult)
 	local lootdropper = inst.components.lootdropper
@@ -104,15 +131,27 @@ local function MultiplyLoot(inst, mult)
 		for _, prefab in ipairs(base) do
 			table.insert(final, prefab)
 
-			local whole = math.floor(mult - 1)
-			local frac = (mult - 1) % 1
+            local multiply = true
 
-			for i = 1, whole do
-				table.insert(final, prefab)
-			end
+            if spookyskeletons_bosses[inst.prefab] and spookyskeletons_items[prefab] then
+                multiply = false
+            end
 
-			if frac > 0 and math.random() < frac then
-				table.insert(final, prefab)
+            if unique_loot[prefab] then
+                multiply = false
+            end
+				
+            if multiply then
+				local whole = math.floor(mult - 1)
+				local frac = (mult - 1) % 1
+
+				for i = 1, whole do
+					table.insert(final, prefab)
+				end
+
+				if frac > 0 and math.random() < frac then
+					table.insert(final, prefab)
+				end
 			end
 		end
 
@@ -198,6 +237,17 @@ AddPrefabPostInit("daywalker2", function(inst)
 
 	inst:DoTaskInTime(0, function()
 		local n = GetModConfigData("daywalker_health_")
+		local m = 1 + (n - 1) / 2
+		if m <= 1 then return end		
+		MultiplyLoot(inst, m)
+	end)
+end)
+
+AddPrefabPostInit("stalker_forest", function(inst)
+	if not TheWorld.ismastersim then return end
+
+	inst:DoTaskInTime(0, function()
+		local n = GetModConfigData("stalker_atrium_health_")
 		local m = 1 + (n - 1) / 2
 		if m <= 1 then return end		
 		MultiplyLoot(inst, m)

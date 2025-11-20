@@ -994,11 +994,12 @@ configuration_options = {
     -- },
     SkipSpace(),
 
-    Header("Giants Health and Reward"),
+    Header("Health and Rewards"),
+    Header("Giants' Adjustments"),
     {
         name = "stalker_atrium_health_",
         label = "Ancient Fuelweaver's Health",
-        hover = "Tweak Ancient Fuelweaver's Health to your liking!",
+        hover = "Tweak Ancient Fuelweaver's Health and Reanimated Skeleton's Health to your liking!",
         options = {
             { description = "Lowest (/4)",    data = 0.25, hover = "No extra drops." },
             { description = "Lowered (/2)",   data = 0.5, hover = "No extra drops." },
@@ -1178,6 +1179,20 @@ configuration_options = {
         default = 1
     },
     {
+        name = "worm_boss_health_",
+        label = "Great Depths Worm's Health",
+        hover = "Tweak Great Depths Worm's Health to your liking!",
+        options = {
+            { description = "Lowest (/4)",    data = 0.25, hover = "No extra drops." },
+            { description = "Lowered (/2)",   data = 0.5, hover = "No extra drops." },
+            { description = "Default",        data = 1, hover = "No extra drops." },
+            { description = "Higher (x1.5)",  data = 1.5, hover = "25% chance for each drop to be doubled." },
+            { description = "Highest (x2)",   data = 2, hover = "50% chance for each drop to be doubled." },
+            { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
+            { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
+        default = 1
+    },	
+    {
         name = "hoodedwidow_health_",
         label = "Hooded Widow's Health",
         hover = "Tweak Hooded Widow's Health to your liking!",
@@ -1264,7 +1279,7 @@ configuration_options = {
     {
         name = "daywalker_health_",
         label = "Nightmare Werepig's Health",
-        hover = "Tweak Nightmare Werepig's Health to your liking!",
+        hover = "Tweak Nightmare Werepig's and Scrappy Werepig's Health to your liking!",
         options = {
             { description = "Lowest (/4)",    data = 0.25, hover = "No extra drops." },
             { description = "Lowered (/2)",   data = 0.5, hover = "No extra drops." },
@@ -1332,6 +1347,20 @@ configuration_options = {
         default = 1
     },
     {
+        name = "wagboss_robot_health_",
+        label = "W.A.R.B.O.T.'s Health",
+        hover = "Tweak W.A.R.B.O.T.'s Health to your liking!",
+        options = {
+            { description = "Lowest (/4)",    data = 0.25, hover = "No extra drops." },
+            { description = "Lowered (/2)",   data = 0.5, hover = "No extra drops." },
+            { description = "Default",        data = 1, hover = "No extra drops." },
+            { description = "Higher (x1.5)",  data = 1.5, hover = "25% chance for each drop to be doubled." },
+            { description = "Highest (x2)",   data = 2, hover = "50% chance for each drop to be doubled." },
+            { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
+            { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
+        default = 1
+    },	
+    {
         name = "mock_dragonfly_health_",
         label = "Wilting Dragonfly's Health",
         hover = "Tweak Wilting Dragonfly's Health to your liking!",
@@ -1345,19 +1374,6 @@ configuration_options = {
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
     },	
-    --{
-		--name = "stalker_atrium_health_",
-		--label = "Reanimated Skeleton's Health",
-		--hover = "Tweak Reanimated Skeleton's Health to your liking!",
-		--options = {
-			--{ description = "Lowest (/4)",   data = 0.25 },
-			--{ description = "Lowered (/2)",  data = 0.5 },
-			--{ description = "Default",       data = 1 },
-			--{ description = "Higher (x1.5)", data = 1.5 },
-			--{ description = "Highest (x2)",  data = 2 },
-			--{ description = "Uncomp (x3)",   data = 3 } },
-		--default = 1
-    --},		
     --{
         --name = "mothergoose_health_",
         --label = "ROG Goose's Health",
@@ -1375,7 +1391,7 @@ configuration_options = {
 
     --	BinaryConfig("crabking_claws", "Crabking Fight Adjustment", "The Crabkings imposing claws now deal 500 damage to the king when killed.", false),
     SkipSpace(),
-    Header("S.Giants Health and Reward"),
+    Header("Small Giants' Adjustments"),
     {
         name = "lordfruitfly_health_",
         label = "Lord of the Fruit Flies's Health",
@@ -1417,7 +1433,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },		
+    },
 	
     SkipSpace(),
     SkipSpace(),
