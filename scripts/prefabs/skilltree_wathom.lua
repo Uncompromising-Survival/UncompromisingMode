@@ -224,7 +224,8 @@ local function BuildSkillsData(SkillTreeFns)
             desc = STRINGS.SKILLTREE.WATHOM.BITE_MASTERY_DESC,
 			icon = "wathom_bite_mastery",
             onactivate = function(inst, fromload)
-				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES,FOODTYPE.LICHEN})
+				inst.components.eater:SetDiet({FOODGROUP.OMNI}, {FOODTYPE.MEAT, FOODTYPE.GOODIES, FOODTYPE.LICHEN})
+                inst.components.eater:SetStrongStomach(true) -- Monster Meat, now edible.
 				--inst.components.eater:SetCanEatRawMeat(true) -- Comment out when we want to invert insanity.
 			end,
             pos = {-214+38+38/2,58+38+38+38},

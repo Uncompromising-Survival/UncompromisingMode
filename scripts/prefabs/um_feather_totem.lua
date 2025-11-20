@@ -12,7 +12,7 @@ local insulate_summer = false
 local insulate_winter = false
 
 local function OnTimerDone(owner, data)
-    if data.name == "um_totem_canary_speed" then
+    if data.name == "um_totem_feather_speed" then
         if owner.components.locomotor then
 		    owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, owner.prefab)
             owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
@@ -23,18 +23,13 @@ local function OnTimerDone(owner, data)
         owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation - insulationmod
         end
 
-        if insulate_summer then 
+        if insulate_summer then
             owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation - insulationmod
         end
     elseif data.name == "um_totem_malbatross_nowet" then
         if owner.components.moistureimmunity then
 		    owner.components.moistureimmunity:RemoveSource(owner)
             owner.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
-	    end
-    elseif data.name == "um_totem_goose_speed" then
-        if owner.components.locomotor then
-		    owner.components.locomotor:RemoveExternalSpeedMultiplier(owner, owner.prefab)
-            owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
 	    end
     end
     owner:RemoveEventCallback("timerdone", OnTimerDone)
@@ -63,9 +58,14 @@ local function FeatherEffects(owner, totem)
         didsomething = true
     end
 
-    if feather_canary > 0 then
-        owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.15)
-        owner.components.timer:StartTimer("um_totem_canary_speed", 90 * feather_canary)
+    if feather_canary > 0 or goose_feather > 0 then
+        local speedmult = ((feather_canary * 1.15) + (goose_feather * 1.25)) / (feather_canary + goose_feather)
+        owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, speedmult)
+        if not owner.components.timer:TimerExists("um_totem_feather_speed") then
+            owner.components.timer:StartTimer("um_totem_feather_speed", 90 * feather_canary + 45 * goose_feather)
+        else
+            owner.components.timer:SetTimeLeft("um_totem_feather_speed", 90 * feather_canary + 45 * goose_feather)
+        end
         owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
         didsomething = true
     end
@@ -75,7 +75,7 @@ local function FeatherEffects(owner, totem)
 
         insulate_summer = TheWorld.state.season ~= "winter" -- Regular insulation will not allow the player to cool down in summer
         insulate_winter = TheWorld.state.season ~= "summer" -- Summer insultation will not allow the player to heat up in winter
-         
+
         if insulate_winter then
             owner.components.temperature.inherentinsulation = owner.components.temperature.inherentinsulation + insulationmod
         end
@@ -84,23 +84,31 @@ local function FeatherEffects(owner, totem)
         owner.components.temperature.inherentsummerinsulation = owner.components.temperature.inherentsummerinsulation + insulationmod
         end
 
-        owner.components.timer:StartTimer("um_totem_azure_insulation", 15)
+        if not owner.components.timer:TimerExists("um_totem_azure_insulation") then
+            owner.components.timer:StartTimer("um_totem_azure_insulation", 15)
+        else
+            owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 15)
+        end
         didsomething = true
     end
 
-    if goose_feather > 0 then
+    --[[if goose_feather > 0 then
         owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.25)
         owner.components.timer:StartTimer("um_totem_goose_speed", 45 * goose_feather)
         owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
         didsomething = true
-    end
+    end]]
 
     if malbatross_feather > 0 then
 	    if not owner.components.moistureimmunity then
 		    owner:AddComponent("moistureimmunity")
 	    end
 	    owner.components.moistureimmunity:AddSource(owner)
-        owner.components.timer:StartTimer("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
+        if not owner.components.timer:TimerExists("um_totem_malbatross_nowet") then
+            owner.components.timer:StartTimer("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
+        else
+            owner.components.timer:SetTimeLeft("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
+        end
         owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
         didsomething = true
     end
@@ -112,7 +120,7 @@ local function FeatherEffects(owner, totem)
 
     if didsomething then
         owner:ListenForEvent("timerdone", OnTimerDone)
-        totem.components.container:RemoveAllItems()
+        totem.components.container:RemoveAllItems() -- Remove this and make Malba and MGoose feathers have a chance to not be consumed.
     end
 
     return didsomething
@@ -158,7 +166,7 @@ local function fn()
     inst.entity:AddNetwork()
 
     inst.AnimState:SetBank("twigs")
-    inst.AnimState:SetBuild("screecher_trinket") --Hello Axe or Max or someone else! init/init_recipes/recipes.lua is forcing the recipe icon for this. bye!! -C
+    inst.AnimState:SetBuild("screecher_trinket") --init/init_recipes/recipes.lua is forcing the recipe icon for this. bye!! -C
     inst.AnimState:PlayAnimation("idle")
 
     inst:AddTag("portablestorage")

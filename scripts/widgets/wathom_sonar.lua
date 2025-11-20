@@ -93,12 +93,20 @@ function Wathom_Sonar:UpdateAlpha(dt)
 				ring.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
 				
 				self.owner:DoTaskInTime(0.1, function()
-						if self.active then
-							local ring2 = SpawnPrefab("wathom_heartbeat_ringfx")
-							ring2.Transform:SetScale(2,2,2)
-							ring2.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
-						end
-					end)
+					if self.active then
+						local ring2 = SpawnPrefab("wathom_heartbeat_ringfx")
+						ring2.Transform:SetScale(2,2,2)
+						ring2.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
+					end
+				end)
+
+                self.owner:DoTaskInTime(0.2, function()
+					if self.active and self.owner:HasTag("echolocation") then
+						local ring3 = SpawnPrefab("wathom_heartbeat_ringfx")
+						ring3.Transform:SetScale(2,2,2)
+						ring3.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
+					end
+				end)
 			end
 
             self.currentstate = "in"
