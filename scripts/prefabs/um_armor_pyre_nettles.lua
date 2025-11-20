@@ -51,7 +51,7 @@ local function OnAttackOther(owner, data, inst)
     if checknumber(inst._hitcount) then
         inst._hitcount = inst._hitcount + 1
 
-        if inst._hitcount >= TUNING.WORMWOOD_ARMOR_BRAMBLE_RELEASE_SPIKES_HITCOUNT then
+        if inst._hitcount >= TUNING.WORMWOOD_ARMOR_BRAMBLE_RELEASE_SPIKES_HITCOUNT * 2 then
             if inst._hitcount then
 		        inst._hitcount = 0
 	        end

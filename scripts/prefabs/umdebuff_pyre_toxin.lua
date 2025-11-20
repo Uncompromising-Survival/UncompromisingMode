@@ -26,8 +26,8 @@ end
 
 
 local function DamageTarget(inst, target)
-	if target.components.health.currenthealth > 15 then
-		target.components.health:DoDelta(-15, false, "umdebuff_pyre_toxin")
+	if target.components.health.currenthealth > 8.5 then
+		target.components.health:DoDelta(-8.5, false, "umdebuff_pyre_toxin")
 	end
 end
 
