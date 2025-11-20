@@ -364,28 +364,35 @@ AddStategraphPostInit("wilsonghost", function(inst)
         end 
     end
 end)
-    
+
+local function IsImportantLoot(v)
+    local bossmeats = {"deerclops_eyeball", "minotaurhorn"}
+    for _, bossmeat in pairs(bossmeats) do
+        if v.prefab == bossmeat then return true end
+    end
+end
+
 local function MarkDontEatFoods(inst,target)
     local x,y,z = target.Transform:GetWorldPosition()
     local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
     for i,v in ipairs(loot) do
-        if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not v:HasTag("badfood") then
+        if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not IsImportantLoot(v) then
             v.wathom_dont_eat = true
             v:DoTaskInTime(3,function(v) v.wathom_dont_eat = nil end)
         end
     end
 end
-    
-    
+
 local bite2MustTags = { "_inventoryitem" }
 local bite2MustOneOfTags = { "meat", "smallmeat", "rawmeat" }
 
 local function CheckIfDead(inst, target)
-    if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasTag("shadow") or target:HasTag("chess")) then
+    if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasAnyTag("soulless", "wall")) then
+        local bite_heal_mod = target:HasTag("epic") and 10 or 1
         if HasSkill(inst,"bite_mastery") and inst.components.health then
-            inst.components.health:DeltaPenalty(-.01)
+            inst.components.health:DeltaPenalty(-.01 * bite_heal_mod)
         end
-        inst.components.health:DoDelta(4)
+        inst.components.health:DoDelta(4 * bite_heal_mod)
         if HasSkill(inst,"bite_2") then
             local x,y,z = target.Transform:GetWorldPosition()
             local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, nil, bite2MustOneOfTags)

@@ -77,8 +77,8 @@ function c_um_vetcurseitems()
         "klaus_amulet",
         "crabclaw",
         "um_beegun",
-        "um_wingsuit",
-        "um_exhumer",
+        --"um_wingsuit",
+        --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
     }

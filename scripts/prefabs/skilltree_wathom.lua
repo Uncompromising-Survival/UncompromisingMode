@@ -71,6 +71,21 @@ local function PissOfGestalts(inst)
 	CheckForMORE(inst)
 end
 
+local function ShowLowHealth(inst)
+    local WARNING_MUST_TAGS = {"_health", "_combat"}
+    local WARNING_MUST_NOT_TAGS = {"player", "wall", "soulless"}
+    local x,y,z = inst.Transform:GetWorldPosition()
+	local creatures = TheSim:FindEntities(x, y, z, 24, WARNING_MUST_TAGS, WARNING_MUST_NOT_TAGS)
+	for i,creature in ipairs(creatures) do
+		if creature.components.combat and creature.components.health then
+            if (creature.components.health:GetPercent() <= 0.3 and not creature:HasTag("epic")) or (creature.components.health:GetPercent() <= 0.1 and creature:HasTag("epic")) then
+			    local fx = SpawnPrefab("reticuleaoewinonaengineeringping") --reticuleaoewinonaengineeringping or some Forge thing or wurt_tentacle_warning
+			    fx.entity:SetParent(creature.entity)
+            end
+		end
+	end
+end
+
 local function BuildSkillsData(SkillTreeFns)
     local skills = 
     {
@@ -202,6 +217,17 @@ local function BuildSkillsData(SkillTreeFns)
             title = STRINGS.SKILLTREE.WATHOM.BITE_1_TITLE,
             desc = STRINGS.SKILLTREE.WATHOM.BITE_1_DESC,
 			icon = "wathom_bite_1",
+            onactivate = function(inst, fromload)
+                --inst.watch_healthtask = inst:DoPeriodicTask(3,ShowLowHealth)
+                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE+2.5)
+			end,
+            ondeactivate = function(inst, fromload)
+                --[[if inst.watch_healthtask then
+					inst.watch_healthtask:Cancel()
+					inst.watch_healthtask = nil
+				end]]
+                inst.components.combat:SetDefaultDamage(TUNING.UNARMED_DAMAGE)
+            end,
             pos = {-214+38+38,58},
             group = "bite",
             tags = {"bite"},
