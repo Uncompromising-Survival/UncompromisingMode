@@ -748,7 +748,7 @@ local function ConvertToPerishable(inst)
 		maxval = inst.components.fueled.maxfuel
 		local old_fueltype = inst.components.fueled.fueltype
 		inst:RemoveComponent("fueled")	
-		inst.components.fueled = DummyFueledClass	
+		inst.components.fueled = DummyFueledClass -- This should be repeated with finiteuses in the future.
 		inst.components.fueled.inst = inst
 		inst.components.fueled.rate_modifiers = SourceModifierList(inst) -- Still going to reference the original rate modifier list to prevent any crashes related to functions that may search through it from this class
 		inst.components.fueled.fueltype = old_fueltype

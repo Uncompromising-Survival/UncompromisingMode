@@ -57,7 +57,7 @@ env.AddStategraphPostInit("pig", function(inst)
                     inst.components.combat:ResetCooldown()
                     return
                 end
-            end
+			end
         end
         _OldAttackedEvent(inst, data, ...)
     end
@@ -285,6 +285,8 @@ end
 
 local werepigs = {"moonpig","werepig"}
 for i,werepig in ipairs(werepigs) do
+
+				
     env.AddStategraphPostInit(werepig, function(inst)
         local states = {
             State{
@@ -320,16 +322,39 @@ for i,werepig in ipairs(werepigs) do
                             "idle")
                     end),
                 },
+				onexit = function(inst)
+					inst.Physics:Stop()
+					inst.attacked_run_cd = inst:DoTaskInTime(0.5,function(inst)
+						inst.attacked_run_cd:Cancel()
+						inst.attacked_run_cd = nil
+					end)
+				end,
             },
         }
-
+		
+		--If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
+		local idlestate = inst.states["idle"]
+		if idlestate then
+			local idlestate_onenter = idlestate.onenter
+			idlestate.onenter = function(inst, target, ...)
+				if inst.attacked_run_cd and inst.components.combat.target and inst.components.combat:CanHitTarget(inst.components.combat.target) then
+					inst.attacked_run_cd:Cancel()
+					inst.attacked_run_cd = nil
+				end
+				return idlestate_onenter(inst, ...)
+			end
+		end
+		
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
             EventHandler("attacked", function(inst, data)
                 if not (inst.components.health and inst.components.health:IsDead()) then
                     if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                         return
-                    elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") and inst.components.combat:InCooldown() then
+					elseif inst.components.combat.target and not inst.components.combat:InCooldown() and inst.components.combat:CanHitTarget(inst.components.combat.target) and not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") then
+					-- Werepigs will immediately try to attack if they can
+						inst.sg:GoToState("attack")
+                    elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") and inst.attacked_run_cd then -- only play the animation if he can't run away
                         inst.sg:GoToState("hit")
                     end
                 end
