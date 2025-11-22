@@ -1,6 +1,25 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local function DespawnTwins(inst)
+	inst:PushEvent("leave")
+	inst:PushEvent("turnoffterrarium")
+
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local twins = TheSim:FindEntities(x, y, z, 9999, {"twinofterror"})
+	for _, twin in ipairs(twins) do
+		if twin ~= inst then
+			twin:PushEvent("leave")
+			twin:PushEvent("turnoffterrarium")
+		end
+	end
+
+	local terrarium = TheSim:FindFirstEntityWithTag("terrarium")
+	if terrarium then
+		terrarium:PushEvent("turnoffterrarium")
+	end
+end
+
 local function UpdateCooldown1(inst)
 	local x, y, z = inst.Transform:GetWorldPosition()
 
@@ -23,16 +42,7 @@ local function UpdateCooldown1(inst)
 	local bosscount = TheSim:FindEntities(x, y, z, 20, {"epic"}, {"twinofterror"})
 
 	if bosscount ~= nil and #bosscount > 0 then
-		inst:PushEvent("leave")
-		inst:PushEvent("turnoff_terrarium")
-
-		local terrarium = TheSim:FindFirstEntityWithTag("terrarium")
-
-		if terrarium ~= nil then
-			terrarium.components.activatable.inactive = TUNING.SPAWN_EYEOFTERROR
-			terrarium.AnimState:Show("terrarium_tree")
-			terrarium.components.inventoryitem:ChangeImageName(nil) -- back to default
-		end
+		DespawnTwins(inst)
 	end
 end
 
@@ -102,16 +112,7 @@ local function UpdateCooldown2(inst)
 	local bosscount = TheSim:FindEntities(x, y, z, 20, {"epic"}, {"twinofterror"})
 
 	if bosscount ~= nil and #bosscount > 0 then
-		inst:PushEvent("leave")
-		inst:PushEvent("turnoff_terrarium")
-
-		local terrarium = TheSim:FindFirstEntityWithTag("terrarium")
-
-		if terrarium ~= nil then
-			terrarium.components.activatable.inactive = TUNING.SPAWN_EYEOFTERROR
-			terrarium.AnimState:Show("terrarium_tree")
-			terrarium.components.inventoryitem:ChangeImageName(nil) -- back to default
-		end
+		DespawnTwins(inst)
 	end
 end
 
