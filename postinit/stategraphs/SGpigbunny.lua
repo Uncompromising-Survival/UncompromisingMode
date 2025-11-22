@@ -333,17 +333,17 @@ for i,werepig in ipairs(werepigs) do
         }
 		
 		--If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
-		local idlestate = inst.states["idle"]
-		if idlestate then
-			local idlestate_onenter = idlestate.onenter
-			idlestate.onenter = function(inst, target, ...)
-				if inst.attacked_run_cd and inst.components.combat.target and inst.components.combat:CanHitTarget(inst.components.combat.target) then
-					inst.attacked_run_cd:Cancel()
-					inst.attacked_run_cd = nil
-				end
-				return idlestate_onenter(inst, ...)
-			end
-		end
+		--local idlestate = inst.states["idle"]
+		--if idlestate then
+			--local idlestate_onenter = idlestate.onenter
+			--idlestate.onenter = function(inst, target, ...)
+				--if inst.attacked_run_cd and inst.components.combat.target and inst.components.combat:CanHitTarget(inst.components.combat.target) then
+					--inst.attacked_run_cd:Cancel()
+					--inst.attacked_run_cd = nil
+				--end
+				--return idlestate_onenter(inst, ...)
+			--end
+		--end
 		
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
