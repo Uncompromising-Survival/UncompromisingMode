@@ -47,13 +47,13 @@ local function ShootProjectile(inst)
             inst.tentbelch = false
             projectile.tentacle = true
         end
-        if inst.have_a_heart then -- This one's an organ!
-            projectile.AnimState:SetBank("minotaur_organ")
-            projectile.AnimState:SetBuild("minotaur_organ")
-            projectile.AnimState:PlayAnimation("spin_loop",true)    
-            inst.have_a_heart = false
-            projectile.organ = true
-        end
+        --if inst.have_a_heart then -- This one's an organ!
+            --projectile.AnimState:SetBank("minotaur_organ")
+            --projectile.AnimState:SetBuild("minotaur_organ")
+            --projectile.AnimState:PlayAnimation("spin_loop",true)    
+            --inst.have_a_heart = false
+            --projectile.organ = true
+        --end
         local targetpos = target:GetPosition()
         projectile.Transform:SetPosition(x, y, z)
         local a, b, c = target.Transform:GetWorldPosition()
@@ -69,9 +69,9 @@ local function ShootProjectile(inst)
             local maxrange = 20
             local bigNum = 15
             local speed = easing.linear(rangesq, bigNum, 3, maxrange * maxrange * 2)
-			if not projectile.organ then
-				speed = speed+math.random(4, 9)
-			end
+			--if not projectile.organ then
+			speed = speed+math.random(4, 9)
+			--end
             projectile:AddTag("canthit")
             projectile.components.complexprojectile:SetHorizontalSpeed(speed)
             projectile.components.complexprojectile:Launch(targetpos, inst, inst)
@@ -110,18 +110,18 @@ local function nodmgshielded(inst, amount, overtime, cause, ignore_invincible, a
     return inst:HasTag("forcefield") and amount <= 0 and not ignore_absorb or afflicter ~= nil and afflicter:HasTag("quakedebris")
 end
 
-local function OrganUpdate(inst)
-    local organ = TheSim:FindFirstEntityWithTag("minotaur_organ")
-    if organ and organ.components.health and not organ.components.health:IsDead() then
-        if not inst:HasTag("forcefield") then
-            ActivateShield(inst)
-        end
-    else
-        if inst:HasTag("forcefield") then
-            DeactivateShield(inst)
-        end
-    end
-end
+--local function OrganUpdate(inst)
+    --local organ = TheSim:FindFirstEntityWithTag("minotaur_organ")
+    --if organ and organ.components.health and not organ.components.health:IsDead() then
+        --if not inst:HasTag("forcefield") then
+            --ActivateShield(inst)
+        --end
+    --else
+        --if inst:HasTag("forcefield") then
+            --DeactivateShield(inst)
+        --end
+    --end
+--end
 
 local function HomeCheck(inst)
     if inst.spawnlocation then
@@ -153,7 +153,7 @@ local function MinotaurFunctions(inst)
     inst.ActivateShield = ActivateShield
     inst.DeactivateShield = DeactivateShield
 
-    inst.OrganUpdate = OrganUpdate
+    --inst.OrganUpdate = OrganUpdate
 
     inst.components.health.redirect = nodmgshielded
 
