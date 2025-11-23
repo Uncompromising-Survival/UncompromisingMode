@@ -90,25 +90,25 @@ end
     --end
 --end
 
-local function ActivateShield(inst)
-    if inst.components.health and not inst.components.health:IsDead() then
-        inst:AddTag("forcefield")
-        if inst._fx ~= nil then
-            inst._fx:kill_fx()
-        end
-        inst._fx = SpawnPrefab("forcefieldfx")
-        inst._fx.entity:SetParent(inst.entity)
-        inst._fx.Transform:SetPosition(0, -0.2, 0)
-        inst._fx.Transform:SetScale(2.5, 2.5, 2.5)
-        inst._fx.AnimState:SetMultColour(0, 0, 0, 1)
-        inst._fx.entity:AddFollower()
-        inst._fx.Follower:FollowSymbol(inst.GUID, "innerds", 0, 250, 0)
-    end
-end
+--local function ActivateShield(inst)
+    --if inst.components.health and not inst.components.health:IsDead() then
+        --inst:AddTag("forcefield")
+        --if inst._fx ~= nil then
+            --inst._fx:kill_fx()
+        --end
+        --inst._fx = SpawnPrefab("forcefieldfx")
+        --inst._fx.entity:SetParent(inst.entity)
+        --inst._fx.Transform:SetPosition(0, -0.2, 0)
+        --inst._fx.Transform:SetScale(2.5, 2.5, 2.5)
+        --inst._fx.AnimState:SetMultColour(0, 0, 0, 1)
+        --inst._fx.entity:AddFollower()
+        --inst._fx.Follower:FollowSymbol(inst.GUID, "innerds", 0, 250, 0)
+    --end
+--end
 
-local function nodmgshielded(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
-    return inst:HasTag("forcefield") and amount <= 0 and not ignore_absorb or afflicter ~= nil and afflicter:HasTag("quakedebris")
-end
+--local function nodmgshielded(inst, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
+    --return inst:HasTag("forcefield") and amount <= 0 and not ignore_absorb or afflicter ~= nil and afflicter:HasTag("quakedebris")
+--end
 
 --local function OrganUpdate(inst)
     --local organ = TheSim:FindFirstEntityWithTag("minotaur_organ")
@@ -150,12 +150,12 @@ local function MinotaurFunctions(inst)
 
     inst.LaunchProjectile = ShootProjectile
 
-    inst.ActivateShield = ActivateShield
-    inst.DeactivateShield = DeactivateShield
+    --inst.ActivateShield = ActivateShield
+    --inst.DeactivateShield = DeactivateShield
 
     --inst.OrganUpdate = OrganUpdate
 
-    inst.components.health.redirect = nodmgshielded
+    --inst.components.health.redirect = nodmgshielded
 
     inst:AddComponent("healthtrigger")
     inst.components.healthtrigger:AddTrigger(0.4, function(inst)
