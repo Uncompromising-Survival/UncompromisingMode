@@ -59,10 +59,10 @@ local function ShootProjectile(inst)
         local a, b, c = target.Transform:GetWorldPosition()
         if a ~= nil then
             local targetpos = target:GetPosition()
-			if not projectile.organ then
-				targetpos.x = targetpos.x + math.random(-4, 4)
-				targetpos.z = targetpos.z + math.random(-4, 4)
-			end
+			--if not projectile.organ then
+			targetpos.x = targetpos.x + math.random(-4, 4)
+			targetpos.z = targetpos.z + math.random(-4, 4)
+			--end
             local dx = a - x
             local dz = c - z
             local rangesq = dx * dx + dz * dz
