@@ -36,6 +36,9 @@ local function OnTimerDone(owner, data)
 end
 
 local function FeatherEffects(owner, totem)
+    local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
+    if feathertotal == 0 then return 0 end
+
     local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
     local feather_crow = #totem.components.container:FindItems(function(item) return item.prefab == "feather_crow" end)
     local feather_robin_winter = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin_winter" end)
@@ -45,17 +48,13 @@ local function FeatherEffects(owner, totem)
     --local cherryforest_feather1 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
     --local cherryforest_feather2 = #totem.components.container:FindItems(function(item) return item.prefab == "???" end)
     --local feather_robin = #totem.components.container:FindItems(function(item) return item.prefab == "feather_robin" end)
-    local feathertotal = #totem.components.container:FindItems(function(item) return item:HasTag("wingsuit_feather") end)
-    local didsomething = false
 
     if feather_robin > 0 then
         owner.components.health:DoDelta(owner.components.health.maxhealth * 0.1 * feather_robin)
-        didsomething = true
     end
 
     if feather_crow > 0 then
         owner.components.sanity:DoDelta(owner.components.sanity.max * 0.15 * feather_crow)
-        didsomething = true
     end
 
     if feather_canary > 0 or goose_feather > 0 then
@@ -67,7 +66,6 @@ local function FeatherEffects(owner, totem)
             owner.components.timer:SetTimeLeft("um_totem_feather_speed", 90 * feather_canary + 45 * goose_feather)
         end
         owner.SoundEmitter:PlaySound("dontstarve/birds/takeoff_canary")
-        didsomething = true
     end
 
     if feather_robin_winter > 0 then
@@ -89,14 +87,12 @@ local function FeatherEffects(owner, totem)
         else
             owner.components.timer:SetTimeLeft("um_totem_azure_insulation", 15)
         end
-        didsomething = true
     end
 
     --[[if goose_feather > 0 then
         owner.components.locomotor:SetExternalSpeedMultiplier(owner, owner.prefab, 1.25)
         owner.components.timer:StartTimer("um_totem_goose_speed", 45 * goose_feather)
         owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
-        didsomething = true
     end]]
 
     if malbatross_feather > 0 then
@@ -110,20 +106,13 @@ local function FeatherEffects(owner, totem)
             owner.components.timer:SetTimeLeft("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
         end
         owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
-        didsomething = true
     end
 
-    if feathertotal > 0 then
-        owner.components.health:DeltaPenalty(-0.125 * feathertotal)
-        didsomething = true
-    end
+    owner.components.health:DeltaPenalty(-0.125 * feathertotal)
+    owner:ListenForEvent("timerdone", OnTimerDone)
+    totem.components.container:RemoveAllItems() -- Remove this and make Malba and MGoose feathers have a chance to not be consumed.
 
-    if didsomething then
-        owner:ListenForEvent("timerdone", OnTimerDone)
-        totem.components.container:RemoveAllItems() -- Remove this and make Malba and MGoose feathers have a chance to not be consumed.
-    end
-
-    return didsomething
+    return feathertotal
 end
 
 local function IsTotem(item)
@@ -138,8 +127,9 @@ local function OnRespawn(owner, totem)
     totem = HasTotem(owner)
     if totem then
         owner:DoTaskInTime(5, function()
-            if FeatherEffects(owner, totem) then
-                totem.components.finiteuses:Use(1)
+            local effectCount = FeatherEffects(owner, totem)
+            if effectCount > 0 then
+                totem.components.finiteuses:Use(effectCount)
             end
         end)
     end
@@ -199,8 +189,8 @@ local function fn()
     inst.components.container.droponopen = true
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(3)
-    inst.components.finiteuses:SetUses(3)
+    inst.components.finiteuses:SetMaxUses(9)
+    inst.components.finiteuses:SetUses(9)
     inst.components.finiteuses:SetOnFinished(inst.Remove)--onfinished
 
     inst:AddComponent("lootdropper")
