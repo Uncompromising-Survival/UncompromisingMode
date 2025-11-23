@@ -51,7 +51,7 @@ if TUNING.DSTU.PK_GUARDS then
             local is_event_item = IsSpecialEventActive(SPECIAL_EVENTS.HALLOWED_NIGHTS) and
                 item.components.tradable.halloweencandyvalue and item.components.tradable.halloweencandyvalue > 0
             return item.components.tradable.goldvalue > 0 or is_event_item or item.prefab == "pig_token" or
-                (item.components.edible ~= nil and item.components.edible.hungervalue > 70 and FindRecruit(inst))
+                (item.components.edible ~= nil and item.components.edible.foodtype ~= FOODTYPE.ROUGHAGE and item.components.edible.hungervalue > 70 and FindRecruit(inst))
         end
 
         local function SendRecruit(inst, hunger, guard, giver)
@@ -67,7 +67,7 @@ if TUNING.DSTU.PK_GUARDS then
 
         local _OnAcceptOld = inst.components.trader.onaccept
         local function OnGetItemFromPlayer(inst, giver, item)
-            if item.components.edible ~= nil and item.components.edible.hungervalue > 70 and FindRecruit(inst) then
+            if item.components.edible ~= nil and item.components.edible.foodtype ~= FOODTYPE.ROUGHAGE and item.components.edible.hungervalue > 70 and FindRecruit(inst) then
                 SendRecruit(inst, item.components.edible.hungervalue, FindRecruit(inst), giver)
                 inst.sg:GoToState("cointoss")
                 --inst.sg:GoToState("recruit")
