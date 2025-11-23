@@ -29,9 +29,9 @@ local function CheckForceJump(inst,data) -- Secondary means to force the leap if
 
     -- This is actually the only way the belch happens.
     if data.name == "forcebelch" and Health_And_Combat_Check(inst, 0.6) then
-        if Health_And_Combat_Check(inst, 0.4) and not inst:HasTag("forcefield") then
-            inst.have_a_heart = true --AG Must give some love
-        end
+        --if Health_And_Combat_Check(inst, 0.4) and not inst:HasTag("forcefield") then
+            --inst.have_a_heart = true --AG Must give some love
+        --end
         inst.forcebelch = true
     elseif data.name == "forcebelch" or not inst.components.timer:TimerExists("forcebelch") then
         RestartTimer(inst, "forcebelch", math.random(30, 45))
@@ -79,16 +79,16 @@ local function ShootProjectile(inst)
     end
 end
     
-local function DeactivateShield(inst)
-    inst.have_a_heart = true
-    if inst:HasTag("forcefield") then
-        inst:RemoveTag("forcefield")
-        if inst._fx ~= nil then
-            inst._fx:kill_fx()
-            inst._fx = nil
-        end
-    end
-end
+--local function DeactivateShield(inst)
+    --inst.have_a_heart = true
+    --if inst:HasTag("forcefield") then
+        --inst:RemoveTag("forcefield")
+        --if inst._fx ~= nil then
+            --inst._fx:kill_fx()
+            --inst._fx = nil
+        --end
+    --end
+--end
 
 local function ActivateShield(inst)
     if inst.components.health and not inst.components.health:IsDead() then
@@ -136,7 +136,7 @@ local function MinotaurFunctions(inst)
     inst.forceleap = false
     inst.forcebelch = false
     inst.tentbelch = true
-    inst.have_a_heart = false
+    --inst.have_a_heart = false
 
     inst.combo = 0
 
