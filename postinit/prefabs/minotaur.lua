@@ -181,5 +181,16 @@ end)
 
 env.AddPrefabPostInit("minotaur", function(inst)
     if not TheWorld.ismastersim then return end
-    MinotaurFunctions(inst)
+    
+	MinotaurFunctions(inst)
+
+	inst:ListenForEvent("death", function(inst)
+		local x, y, z = inst.Transform:GetWorldPosition()
+
+		for _, v in ipairs(TheSim:FindEntities(x, y, z, 8, { "um_washable_goo" })) do
+			if v.OnStartFade then
+				v:OnStartFade()
+			end
+		end
+	end)
 end)
