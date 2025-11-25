@@ -78,14 +78,15 @@ local function CommonFunctions(inst, sound, anim)
             if hunger < 0 then
                 hunger = food.components.edible:GetHunger(inst)
             end
-
-            inst.components.armor:Repair(math.max(health + hunger, 0.05)) -- Don't go below the set value.
+            
+            local totaltorepair = health + hunger
+            if totaltorepair > 0 then inst.components.armor:Repair(totaltorepair) end
 
             if not inst:IsInLimbo() then
                 inst.AnimState:PlayAnimation("eat")
                 inst.AnimState:PushAnimation(anim, true)
             end
-            inst.SoundEmitter:PlaySound(health + hunger <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/"..sound.."/eat")
+            inst.SoundEmitter:PlaySound(totaltorepair <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/"..sound.."/eat")
             --if _oneatfn then
                 --_oneatfn(inst, food)
             --end
