@@ -78,7 +78,7 @@ local function CommonFunctions(inst, sound, anim)
             if hunger < 0 then
                 hunger = food.components.edible:GetHunger(inst)
             end
-            
+
             local totaltorepair = health + hunger
             if totaltorepair > 0 then inst.components.armor:Repair(totaltorepair) end
 
