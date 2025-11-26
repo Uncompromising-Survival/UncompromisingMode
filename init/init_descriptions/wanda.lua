@@ -106,8 +106,8 @@ ANNOUNCE.SHADOWTALKER = {
     "THEY ARE ALL AROUND ME"
 }
 ANNOUNCE.ANNOUNCE_OVER_EAT = {
-    STUFFED = "wacky's inflation fantasy has taken over",
-    OVERSTUFFED = "BRAPPING"
+    STUFFED = "Got time for a 5 minute after dinner nap?",
+    OVERSTUFFED = "It'll take days to digest all this food..."
 }
 -- DESCRIBE.UM_SAND = "Lots of tiny, tiny stones."
 -- DESCRIBE.UM_SANDHILL = "The sand has formed a small pile."

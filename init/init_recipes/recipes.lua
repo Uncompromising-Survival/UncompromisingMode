@@ -38,12 +38,6 @@ AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("tran
 ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
 ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
-if GetModConfigData("snowstorms") then
-    AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
-    ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
-    ChangeSortKey("snowgoggles", "catcoonhat", "CLOTHING", true)
-end
-
 AddRecipe2("diseasecurebomb", { Ingredient("cactus_flower", 2), Ingredient("moonrocknugget", 2), Ingredient("spidergland", 3) }, TECH.SCIENCE_TWO, nil, { "GARDENING", "TOOLS", "RESTORATION" })
 ChangeSortKey("diseasecurebomb", "compostwrap", "GARDENING", true)
 ChangeSortKey("diseasecurebomb", "premiumwateringcan", "TOOLS", true)
@@ -63,6 +57,10 @@ ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
 if GetModConfigData("snowstorms") then
+    AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
+    ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
+    ChangeSortKey("snowgoggles", "catcoonhat", "CLOTHING", true)
+
     AddRecipe2("saltpack", { Ingredient("gears", 1), Ingredient("boards", 2), Ingredient("saltrock", 4) }, TECH.SCIENCE_TWO, nil, { "TOOLS", "WINTER" })
     ChangeSortKey("saltpack", "brush", "TOOLS", true)
     ChangeSortKey("saltpack", "beargervest", "WINTER", true)
@@ -77,12 +75,30 @@ if GetModConfigData("snowstorms") then
 
 	AddRecipe2("um_blowdart_rime", { Ingredient("cutreeds", 2), Ingredient("um_rimeweed_itemvine", 1), Ingredient("feather_robin_winter", 1) }, TECH.SCIENCE_TWO, { numtogive = TUNING.DSTU.DART_YIELD }, { "WEAPONS" })
 	ChangeSortKey("um_blowdart_rime", "blowdart_pipe", "WEAPONS", true)
+
+    AddRecipe2(
+	"um_hat_rime",
+	{ Ingredient("um_ice_tail", 1), Ingredient("um_rimeweed_itemvine", 2), Ingredient("rocks", 6) },
+	TECH.SCIENCE_TWO,
+	nil,
+	{ "ARMOUR" }
+    )
+    ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", true)
+
+    AddRecipe2(
+	"um_ice_sicle",
+	{ Ingredient("icestaff", 1), Ingredient("livinglog", 1), Ingredient("um_rimeweed_itemflower", 1) },
+	TECH.MAGIC_THREE,
+	nil,
+	{ "TOOLS", "WEAPONS", "MAGIC" }
+    )
+    ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
+    ChangeSortKey("um_ice_sicle", "jawed_scythe", "WEAPONS", true)
+    ChangeSortKey("um_ice_sicle", "batbat", "MAGIC", true)
+
+    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil, { "REFINE", "COOKING" })
+    ChangeSortKey("ice", "beeswax", "REFINE", true)
 end
-
-
-AddRecipe2("um_armor_bramble_rimeweed", { Ingredient("armor_bramble", 1), Ingredient("um_rimeweed_itemvine", 8), Ingredient("um_rimeweed_itemflower", 1) }, TECH.NONE, { builder_tag = "plantkin" }, { "CHARACTER" })
-ChangeSortKey("um_armor_bramble_rimeweed", "armor_bramble", "CHARACTER", true)
-
 
 AddRecipe2("bugzapper", { Ingredient("spear", 1), Ingredient("transistor", 2), Ingredient("feather_canary", 2) }, TECH.SCIENCE_TWO, nil, { "WEAPONS" })
 ChangeSortKey("bugzapper", "nightstick", "WEAPONS", true)
@@ -152,11 +168,12 @@ AddRecipe2(
     { Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_fyrite", 8), Ingredient("redgem", 2)}, -- I don't like how similar these two recipes are, I know we're trying to get uses for pyrite, but this one actually makes more sense to use silk -Axe
     TECH.MAGIC_TWO,
     { nil },
-    { "CLOTHING", "SUMMER", "WINTER" }
+    { "CLOTHING", "SUMMER", "WINTER", "MAGIC" }
 )
 ChangeSortKey("um_hat_pepperdragon", "plaguemask", "CLOTHING", true)
 ChangeSortKey("um_hat_pepperdragon", "firesuppressor", "SUMMER", false)
 ChangeSortKey("um_hat_pepperdragon", "tent", "WINTER", false)
+ChangeSortKey("um_hat_pepperdragon", "armorslurper", "MAGIC", true)
 
 if GetModConfigData("wiltfly") then
     AddRecipe2("armor_glassmail", { Ingredient("glass_scales", 1), Ingredient("moonglass_charged", 10) }, TECH.CELESTIAL_THREE, { nounlock = true }, { "CRAFTING_STATION" })
@@ -198,11 +215,6 @@ ChangeSortKey("sludge_sack", "piggyback", "CLOTHING", true)
 if GetModConfigData("rat_raids") then
     AddRecipe2("ratpoisonbottle", { Ingredient("red_cap", 2), Ingredient("jammypreserves", 1), Ingredient("rocks", 1) }, TECH.SCIENCE_ONE, { numtogive = 4 }, { "TOOLS" })
     ChangeSortKey("ratpoisonbottle", "trap", "TOOLS", true)
-end
-
-if GetModConfigData("snowstorms") then
-    AddRecipe2("ice", { Ingredient("snowball_item", 4) }, TECH.SCIENCE_ONE, nil, { "REFINE", "COOKING" })
-    ChangeSortKey("ice", "beeswax", "REFINE", true)
 end
 
 if GetModConfigData("sporehounds") then
@@ -559,25 +571,6 @@ AddRecipe2(
 ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
 ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
-AddRecipe2(
-	"um_ice_sicle",
-	{ Ingredient("icestaff", 1), Ingredient("livinglog", 1), Ingredient("um_rimeweed_itemflower", 1) },
-	TECH.MAGIC_THREE,
-	nil,
-	{ "TOOLS", "WEAPONS" }
-)
-ChangeSortKey("um_ice_sicle", "goldenpitchfork", "TOOLS", true)
-ChangeSortKey("um_ice_sicle", "jawed_scythe", "WEAPONS", true)
-
-AddRecipe2(
-	"um_hat_rime",
-	{ Ingredient("um_ice_tail", 1), Ingredient("um_rimeweed_itemflower", 1), Ingredient("rocks", 3) },
-	TECH.MAGIC_TWO,
-	nil,
-	{ "ARMOUR" }
-)
-ChangeSortKey("um_hat_rime", "beehat", "ARMOUR", true)
-
 if TUNING.DSTU.WATHGRITHR_REWORK then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
     { Ingredient("dreadstone", 6), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 1) },
@@ -612,3 +605,4 @@ ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 
 AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
 ChangeSortKey("um_magnifier", "nutrientgoggleshat", "CRAFTING_STATION", false)
+ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
