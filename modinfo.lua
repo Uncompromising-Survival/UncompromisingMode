@@ -648,7 +648,7 @@ configuration_options = {
         true),
     BinaryConfig("no4crafts", "No 4-Ingredient Recipes", "Changes all 4-ingredient recipes to use 3 instead.", false),
     BinaryConfig("passibleimpassibles", "Remove Collisions",
-        "Removes collision from certain objects to remove easy acessible cheeses and QoL.", true),
+        "Removes collision from certain objects for QoL and remove cheeses.", true),
     BinaryConfig("telestaff_rework", "Purple Gem Items",
         "Many changes to items that are made with Purple Gems, including: Telelocator Staf, Telelocator Focus and Nightmare Amulet.", true),
     BinaryConfig("scalemailbuff", "Scalemail Buff", "Scalemail now spawns 3 Dimvaes to help you in combat.", true),
