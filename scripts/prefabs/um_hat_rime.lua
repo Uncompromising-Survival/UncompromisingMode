@@ -3,6 +3,24 @@ local assets =
     Asset("ANIM", "anim/um_hat_rime.zip"),
 }
 
+local function onperish(inst)
+    local owner = inst.components.inventoryitem.owner
+    if owner then
+        if owner.components.moisture then
+            owner.components.moisture:DoDelta(2 * 4)
+        elseif owner.components.inventoryitem then
+            owner.components.inventoryitem:AddMoisture(4 * 4)
+        end
+    else
+        local x, y, z = inst.Transform:GetWorldPosition()
+        TheWorld.components.farming_manager:AddSoilMoistureAtPoint(x, y, z, 4 * TUNING.ICE_MELT_GROUND_MOISTURE_AMOUNT)
+
+        inst.persists = false
+        inst.components.inventoryitem.canbepickedup = false
+    end
+    inst:Remove()
+end
+
 local function TemperatureChange(owner)
 	local hat = owner.components.inventory and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
 	if hat and owner.components.temperature then
@@ -15,7 +33,6 @@ local function TemperatureChange(owner)
 		end
 		hat.components.armor:InitIndestructible(defense)
 	end
-
 end
 
 local function onequip(inst, owner)
@@ -89,7 +106,7 @@ local function fn()
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime((3.5 * TUNING.PERISH_TWO_DAY))
     inst.components.perishable:StartPerishing()
-    inst.components.perishable.onperishreplacement = "twigs"
+    inst.components.perishable:SetOnPerishFn(onperish)
 
 	inst:AddComponent("waterproofer")
 	inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
