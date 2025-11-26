@@ -100,19 +100,22 @@ local function unempty(inst)
 end
 
 local function FindNewHole(inst)
-    inst.components.childspawner:StopRegen()
-    inst.components.childspawner:SetMaxChildren(0)
-    inst:DoTaskInTime(480 + math.random() * 3, unempty)
-    inst:AddTag("obvious")
-    inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
-    --[[local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
+    local target = FindEntity(inst, 3 * TUNING.LEIF_MAXSPAWNDIST, amempty, {"trapdoor"})
     if target and inst.components.childspawner then
         target:DoTaskInTime(480 + math.random() * 3, unempty) -- <-- This is where the regen time is actually located, since it swaps nests
         inst.components.childspawner:StopRegen()
         inst.components.childspawner:SetMaxChildren(0)
         inst:AddTag("obvious")
         inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
-    end]]
+    end
+end
+
+local function FindNewHoleHooded(inst)
+    inst.components.childspawner:StopRegen()
+    inst.components.childspawner:SetMaxChildren(0)
+    inst:DoTaskInTime(480 + math.random() * 3, unempty)
+    inst:AddTag("obvious")
+    inst:DoTaskInTime(90000, function(inst) inst:RemoveTag("obvious") end)
 end
 
 local function workcallback(inst, worker, workleft)
@@ -260,7 +263,7 @@ local function fn2()
         inst.components.childspawner:SetSpawnedFn(OpenMound)
         inst.components.childspawner:SetGoHomeFn(CloseMound)
         inst.components.childspawner:SetRegenPeriod(20, 2)
-        inst.components.childspawner:SetOnChildKilledFn(FindNewHole)
+        inst.components.childspawner:SetOnChildKilledFn(FindNewHoleHooded)
         local startrandomtest = math.random()
         inst.components.childspawner:StopRegen()
         if startrandomtest >= 0 then -- Guaranteed
