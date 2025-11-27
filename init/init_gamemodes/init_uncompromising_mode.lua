@@ -85,6 +85,9 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 
 
 modimport("init/init_gemology")
+modimport("init/init_gemology/common")
+modimport("init/init_gemology/special")
+
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")
