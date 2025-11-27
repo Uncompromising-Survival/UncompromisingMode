@@ -129,3 +129,36 @@ for k, action in pairs(valid_work_actions) do
         end
     end
 end
+
+
+env.AddComponentPostInit("equippable", function(self)
+    local _Equip = self.Equip
+    function self:Equip(owner, ...)
+        if owner:HasTag("equipmentmodel") then
+            if self.inst.components.gem_enchantable then
+                for enchant, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                    if GEM_DEFS[enchant].fns.onequip then
+                        GEM_DEFS[enchant].fns.onequip(self.inst, owner, tier)
+                    end
+                end
+            end
+        end
+
+        return _Equip(self, owner)
+    end
+
+    local _UnEquip = self.Unequip
+    function self:Unequip(owner, ...)
+        if not owner:HasTag("equipmentmodel") then
+            if self.inst.components.gem_enchantable then
+                for enchant, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                    if GEM_DEFS[enchant].fns.onunequip then
+                        GEM_DEFS[enchant].fns.onunequip(self.inst, owner, tier)
+                    end
+                end
+            end
+        end
+
+        return _UnEquip(self, owner)
+    end
+end)
