@@ -67,6 +67,84 @@ target: weapon/tool
 ]]
 
 ------------------
+-- [[ Green 1
+------------------
+local function GetRandomTargetOfSameType(attacker,target)
+	local x,y,z = target.Transform:GetWorldPosition()
+	local tag_to_search = {}
+
+	local ents = TheSim:FindEntities(x,y,z,24)
+	local ent_same_prefab = {target}
+	for i,v in ipairs(ents) do
+		if v.prefab == target.prefab and ((not v:HasTag("stump") and not v:HasTag("stump")) or (target:HasTag("stump") and v:HasTag("stump"))) then
+			table.insert(ent_same_prefab,v)
+		end
+	end
+	return ent_same_prefab[math.random(1,#ent_same_prefab)]
+end
+
+local function SendWilson(inst, attacker, target)
+    if target:IsValid() then
+        if attacker:GetDistanceSqToInst(target) > 50 ^ 2 and attacker.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
+            if target.components.combat then
+                attacker.components.sanity:DoDelta(-5)                               --If using for combat, be significantly more expensive
+            end
+        end
+        local swilson = SpawnPrefab("swilson_labotomized")
+        
+		
+		local newtarget = GetRandomTargetOfSameType(attacker,target)
+		local angle = math.random(0, 614) / 200
+		local x, y, z = newtarget.Transform:GetWorldPosition()
+		swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))	
+		--swilson.green = 1 -- Tried making him green, it just looks goofy
+		swilson.dupe_toolweapon = SpawnPrefab(inst.prefab)
+		swilson.components.inventory:Equip(swilson.dupe_toolweapon)
+		swilson.dupe_toolweapon.components.inventoryitem:SetOnDroppedFn(inst.Remove)
+		
+		if target.components.workable and not (target.prefab == "punchingbag" or target.prefab == "punchingbag_lunar" or target.prefab == "punchingbag_shadow") then
+			swilson.work = 1 
+            swilson.LabWork(swilson, attacker, newtarget)
+        elseif target.components.health then
+			swilson.attack = inst.components.weapon.damage
+            swilson.LabAttack(swilson, attacker, newtarget)
+        end
+    end
+end
+
+local function SendTheWilson(inst, attacker, target)
+	if inst.tier ~= 1 then
+		local chance = math.random()
+		if inst.NeuroticWorkEffectChance > chance then
+			SendWilson(inst, attacker, target)
+		end
+	end
+end
+
+
+local action_list = {ACTIONS.CHOP,ACTIONS.MINE,ACTIONS.DIG,ACTIONS.HAMMER}
+local melee_speeds = {1.1,1.2,1.4} -- Related to the tiering system
+local function MakeGreen1(self,tier)  -- Run this on the tool to make them have the Green 2 Effects
+	self.enchantnum = 1
+	self.neurotic = true
+	
+	local inst = self.inst
+	inst.tier = tier
+	
+	inst.um_neurotic_mod = melee_speeds[tier]
+	local tool = inst.components.tool
+	if tool and tool.actions then
+		for i,v in ipairs(action_list) do
+			if tool.actions[v] then
+				tool.actions[v] = tool.actions[v] * (1+tier/4)
+			end
+		end
+	end
+	inst.NeuroticWorkEffectChance = (tier - 1)*0.3
+	inst.NeuroticWorkEffect = SendWilson
+
+end
+------------------
 -- [[ Green 2
 ------------------
 
