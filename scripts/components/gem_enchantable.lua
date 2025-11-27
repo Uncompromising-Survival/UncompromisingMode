@@ -1,18 +1,33 @@
-local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = require("gemology_defs")
+local DEFS = require("gemology_defs")
+local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
 
-local function on_enchants(self, enchants)
-    local names = {}
+local function on_enchants(self)
+    if self.update_flag then
+        local enchants = self.enchants
 
-    for k, v in pairs(enchants) do
-        table.insert(names, k)
+        print("on_enchants_changed", enchants)
+        printwrap("enchants list", enchants)
+        local names = {}
+
+        for k, v in pairs(enchants) do
+            table.insert(names, k)
+        end
+
+        self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
+
+        self.update_flag = false
     end
-
-    self.inst.replica.minerologyable:SetEnchantmentsFromNames(names)
 end
 
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self.enchants = {}
+
+    self.update_flag = false
+
+    if self.inst.gemology_data == nil then
+        self.inst.gemology_data = {}
+    end
 
     self.gem_update_task = inst:DoPeriodicTask(1, function(item)
         if item ~= nil and item:IsValid() and item.components.gem_enchantable then
@@ -24,18 +39,20 @@ local GemEnchantable = Class(function(self, inst)
         end
     end)
 end, nil, {
-    enchants = on_enchants
+    update_flag = on_enchants
 })
 
 function GemEnchantable:AddEnchantment(enchant, tier)
-    assert(GEM_DEFS[enchant], "Unknown enchantment: " .. enchant)
-    assert(tier > 3 or tier < 1, "Invalid tier: " .. tier)
+    assert(GEM_DEFS[enchant] ~= nil, "Unknown enchantment: " .. enchant)
+    assert(tier <= 3 and tier >= 1, "Invalid tier: " .. tier)
 
     self.enchants[enchant] = tier
 
     if GEM_DEFS[enchant].fns.onapply then
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
+
+    self.update_flag = true
 end
 
 function GemEnchantable:RemoveEnchantment(enchant)
@@ -49,6 +66,8 @@ function GemEnchantable:RemoveEnchantment(enchant)
     end
 
     self.enchants[enchant] = nil
+
+    self.update_flag = true
 end
 
 function GemEnchantable:OnSave()

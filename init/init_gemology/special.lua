@@ -88,10 +88,10 @@ env.AddComponentPostInit("locomotor", function(self)
 
             local tool = self.inst.components.inventory and self.inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
-            if tool.components.gem_enchantable then
+            if tool and tool.components.gem_enchantable then
                 local hasty = tool.components.gem_enchantable.enchants["um_gemologyyellowgem1"]
                 local comfy = tool.components.gem_enchantable.enchants["um_gemologyorangegem1"]
-                if hasty > 1 and mult > 1 then
+                if hasty ~= nil and hasty > 1 and mult > 1 then
                     mult = mult + (0.1 * hasty)
                 end
 

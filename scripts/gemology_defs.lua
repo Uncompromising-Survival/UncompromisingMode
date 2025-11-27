@@ -60,19 +60,15 @@ local GEM_DEFS = {}
 local INVERTED_GEM_LOOKUP = {}
 local GEM_LOOKUP = {}
 
-setmetatable(GEM_LOOKUP, {
-    __newindex = function(t, k, v)
-        rawset(t, k, v)
-        INVERTED_GEM_LOOKUP[v] = k
-    end
-})
 
 local counter = 0
 setmetatable(GEM_DEFS, {
     __newindex = function(t, k, v)
-        print(#GEM_LOOKUP)
+        print("HERE", t,k,v)
         assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")
+        
         GEM_LOOKUP[k] = counter
+        INVERTED_GEM_LOOKUP[counter] = k
         counter = counter + 1
 
         rawset(t, k, v)
@@ -227,4 +223,5 @@ AddUMGemDef("greengem2", {
     }
 })
 
-return GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP
+
+return {GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_MGE_LOOKUP = INVERTED_GEM_LOOKUP}

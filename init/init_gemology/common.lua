@@ -1,7 +1,8 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = require("gemology_defs")
+local DEFS = require("gemology_defs")
+local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
 --------------------------------------------------------------------------
 --Common stuff for every gem.
 
@@ -46,9 +47,11 @@ end)
 --sets the adjective of the gem enchantments (priotizes chaos emerald, gets the first one if otherwise)
 local function GetEnchantmentAdjective(enchants)
     if table.contains(enchants, "um_gemologygreengem2") then
-        return STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYGREENGEM2       --prio chaos emerald so it doesn't just tell you every effect.
+        return STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYGREENGEM2 --prio chaos emerald so it doesn't just tell you every effect.
     else
-        return STRINGS.NAMES.GEMTOOL_PREFIX[string.upper(enchants[1])] --get the first gem enchant
+        for k, v in pairs(enchants) do
+            return STRINGS.NAMES.GEMTOOL_PREFIX[string.upper(v)] --get the first gem enchant
+        end
     end
 end
 
@@ -60,10 +63,12 @@ function EntityScript:GetAdjectivedName(...)
     if enchantable ~= nil then
         local enchants = self.replica.gem_enchantable:GetEnchantmentNames()
 
-        if not self.no_wet_prefix and (self.always_wet_prefix or self:GetIsWet()) then
-            return ConstructAdjectivedName(self, name, STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
-        else
-            return ConstructAdjectivedName(self, name, GetEnchantmentAdjective(enchants))
+        if #enchants > 0 then
+            if not self.no_wet_prefix and (self.always_wet_prefix or self:GetIsWet()) then
+                return ConstructAdjectivedName(self, name, STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
+            else
+                return ConstructAdjectivedName(self, name, GetEnchantmentAdjective(enchants))
+            end
         end
     end
 
@@ -75,7 +80,9 @@ local function GetFirstGemColor(enchants)
     if table.contains(enchants, "um_gemologygreengem2") then
         return GEM_DEFS["um_gemologygreengem2"] --prio chaos emerald so it doesn't just tell you every effect.
     else
-        return GEM_DEFS[enchants[1]].color or RGB(1, 1, 1)
+        for k, v in pairs(enchants) do
+            return GEM_DEFS[v].color
+        end
     end
 end
 
@@ -85,7 +92,9 @@ env.AddClassPostConstruct("widgets/itemtile", function(self)
         local ret = _UpdateTooltip(self, ...)
         if self.item ~= nil and self.item:IsValid() and self.item.replica.gem_enchantable then
             local enchants = self.item.replica.gem_enchantable:GetEnchantmentNames()
-            self:SetTooltipColour(unpack(GetFirstGemColor(enchants)))
+            if #enchants > 0 then
+                self:SetTooltipColour(unpack(GetFirstGemColor(enchants)))
+            end
         end
 
         return ret
@@ -119,14 +128,19 @@ local valid_work_actions = {
 
 for k, action in pairs(valid_work_actions) do
     ACTIONS[action].fn = function(act, ...)
-        local tool = act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if tool and tool.components.gem_enchantable then
-            for enchant, tier in ipairs(tool.components.gem_enchantable.enchants) do
-                if GEM_DEFS[enchant].fns.onwork then
-                    GEM_DEFS[enchant].fns.onwork(tool, act.doer, act.target, tier)
+        local ret = ACTIONS[action].fn(act, ...)
+
+        if ret then
+            local tool = act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            if tool and tool.components.gem_enchantable then
+                for enchant, tier in ipairs(tool.components.gem_enchantable.enchants) do
+                    if GEM_DEFS[enchant].fns.onwork then
+                        GEM_DEFS[enchant].fns.onwork(tool, act.doer, act.target, tier)
+                    end
                 end
             end
         end
+        return ret
     end
 end
 
