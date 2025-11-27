@@ -70,7 +70,8 @@ setmetatable(GEM_LOOKUP, {
 local counter = 0
 setmetatable(GEM_DEFS, {
     __newindex = function(t, k, v)
-        assert(#GEM_LOOKUP > 31, "Too many gems! Max is 31 gems")
+        print(#GEM_LOOKUP)
+        assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")
         GEM_LOOKUP[k] = counter
         counter = counter + 1
 
