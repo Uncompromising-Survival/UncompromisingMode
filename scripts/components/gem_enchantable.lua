@@ -13,6 +13,16 @@ end
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self.enchants = {}
+
+    self.gem_update_task = inst:DoPeriodicTask(1, function(item)
+        if item ~= nil and item:IsValid() and item.components.gem_enchantable then
+            for enchant, tier in pairs(item.components.gem_enchantable.enchants) do
+                if GEM_DEFS[enchant].fns.onupdate then
+                    GEM_DEFS[enchant].fns.onupdate(item, tier)
+                end
+            end
+        end
+    end)
 end, nil, {
     enchants = on_enchants
 })
@@ -59,6 +69,13 @@ function GemEnchantable:OnLoad(data)
     for enchant, tier in pairs(_enchants) do
         self:AddEnchantment(enchant, tier)
     end
+end
+
+function GemEnchantable:OnRemoveFromEntity()
+    if self.gem_update_task ~= nil then
+        self.gem_update_task:Cancel()
+    end
+    self.gem_update_task = nil
 end
 
 return GemEnchantable
