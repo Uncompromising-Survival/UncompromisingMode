@@ -21,8 +21,8 @@ for _, dfly in pairs({"dragonfly", "mock_dragonfly"}) do
     env.AddPrefabPostInit(dfly, function(inst) VetCurseItem(inst, "slobberlobber") end)
 end
 env.AddPrefabPostInit("moonmaw_dragonfly", function(inst) VetCurseItem(inst, "um_moonfly_lantern") end)
-env.AddPrefabPostInit("malbatross", function(inst) VetCurseItem(inst, "um_wingsuit") end)
-env.AddPrefabPostInit("stalker_atrium", function(inst) VetCurseItem(inst, "um_exhumer") end)
+--env.AddPrefabPostInit("malbatross", function(inst) VetCurseItem(inst, "um_wingsuit") end)
+--env.AddPrefabPostInit("stalker_atrium", function(inst) VetCurseItem(inst, "um_exhumer") end)
 env.AddPrefabPostInit("klaus", function(inst) VetCurseItem(inst, "klaus_amulet") end)
 env.AddPrefabPostInit("mothergoose", function(inst) VetCurseItem(inst, "feather_frock") end)
 env.AddPrefabPostInit("moose", function(inst) VetCurseItem(inst, "feather_frock") end)
