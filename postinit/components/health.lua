@@ -85,7 +85,7 @@ local function TriggerPocketResurrection(self, item)
         local linkeditem = item.components.linkeditem
         local owner = linkeditem and linkeditem:GetOwnerInst() or nil
         if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_lifebringer_2") then
-            item.components.spellcaster.spell(item, nil, nil, owner)
+            item.components.spellcaster.spell(item, nil, nil, self.inst)
         end
         self.inst.components.health:DeltaPenalty(.25)
     end
