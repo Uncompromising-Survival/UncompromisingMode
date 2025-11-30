@@ -132,7 +132,7 @@ env.AddComponentPostInit("workable", function(self)
         if tool and tool.components.gem_enchantable then
             local citrine = tool.components.gem_enchantable.enchants["um_gemologyorangegem2"]
 
-            if citrine > 1 then
+            if citrine and citrine > 1 then
                 if not self.inst.um_marked_for_hoarding then
                     self.inst.um_marked_for_hoarding = worker
                 end
