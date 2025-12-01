@@ -78,10 +78,10 @@ end
 --sets the text color. (priotizes chaos emerald, gets the first one if otherwise)
 local function GetFirstGemColor(enchants)
     if table.contains(enchants, "um_gemologygreengem2") then
-        return GEM_DEFS["um_gemologygreengem2"] --prio chaos emerald so it doesn't just tell you every effect.
+        return GEM_DEFS["um_gemologygreengem2"].color --prio chaos emerald so it doesn't just tell you every effect.
     else
         for k, v in pairs(enchants) do
-            return GEM_DEFS[v].color
+            return GEM_DEFS[v].color --TODO: Make colors shift. 
         end
     end
 end
@@ -127,8 +127,9 @@ local valid_work_actions = {
 }
 
 for k, action in pairs(valid_work_actions) do
+    local old_fn = ACTIONS[action].fn
     ACTIONS[action].fn = function(act, ...)
-        local ret = ACTIONS[action].fn(act, ...)
+        local ret = old_fn(act, ...)
 
         if ret then
             local tool = act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
