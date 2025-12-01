@@ -1,12 +1,10 @@
 local DEFS = require("gemology_defs")
 local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
 
-local function on_enchants(self)
+local function on_enchants(self, flag)
     if self.update_flag then
         local enchants = self.enchants
 
-        print("on_enchants_changed", enchants)
-        printwrap("enchants list", enchants)
         local names = {}
 
         for k, v in pairs(enchants) do
@@ -22,6 +20,7 @@ end
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self.enchants = {}
+    self.slots = 1
 
     self.update_flag = false
 
@@ -43,6 +42,7 @@ end, nil, {
 })
 
 function GemEnchantable:AddEnchantment(enchant, tier)
+    assert(self.enchants[enchant] == nil, "Enchantment \"" .. enchant .. "\" is already applied.")
     assert(GEM_DEFS[enchant] ~= nil, "Unknown enchantment: " .. enchant)
     assert(tier <= 3 and tier >= 1, "Invalid tier: " .. tier)
 
@@ -95,6 +95,18 @@ function GemEnchantable:OnRemoveFromEntity()
         self.gem_update_task:Cancel()
     end
     self.gem_update_task = nil
+end
+
+function GemEnchantable:HasSlots()
+    return self.slots > 0
+end
+
+function GemEnchantable:GetSlots()
+    return self.slots
+end
+
+function GemEnchantable:AddSlot(num)
+    self.slots = self.slots + num
 end
 
 return GemEnchantable
