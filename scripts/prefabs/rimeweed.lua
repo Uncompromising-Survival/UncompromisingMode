@@ -317,6 +317,7 @@ local function barrierweed()
 
     inst:AddTag("plant")
     inst:AddTag("rimeweed")
+    inst:AddTag("soulless")
     inst:AddTag("no_epichealth_proxy")
     MakeObstaclePhysics(inst, .5)
 
@@ -636,6 +637,7 @@ local function mainweed()
     inst:AddTag("plant")
     --inst:AddTag("lunarplant_target")
     inst:AddTag("rimeweed")
+    inst:AddTag("soulless")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
