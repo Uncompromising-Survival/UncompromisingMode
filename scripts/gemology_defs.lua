@@ -61,22 +61,18 @@ local INVERTED_GEM_LOOKUP = {}
 local GEM_LOOKUP = {}
 
 
-local counter = 0
 setmetatable(GEM_DEFS, {
     __newindex = function(t, k, v)
-        print("HERE", t,k,v)
         assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")
-        
-        GEM_LOOKUP[k] = counter
-        INVERTED_GEM_LOOKUP[counter] = k
-        counter = counter + 1
-
         rawset(t, k, v)
     end
 })
 
 
 function AddGemDef(name, def)
+    GEM_LOOKUP[#GEM_LOOKUP + 1] = name
+    INVERTED_GEM_LOOKUP[name] = #GEM_LOOKUP
+
     GEM_DEFS[name] = def
 end
 
@@ -87,6 +83,25 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
 
     AddGemDef("um_gemology" .. name, def)
 end
+
+
+------------------------------------------------------------------
+--REDGEM1
+
+AddUMGemDef("redgem1", {
+    color = RGB(233, 153, 153),
+    sources = {}, --TODO,
+    fns = {},
+})
+
+-------------------------------------------------------------------
+--REDGEM2
+AddUMGemDef("redgem2", {
+    color = RGB(233, 153, 153),
+    sources = {}, --TODO,
+    fns = {},
+})
+
 
 ------------------------------------------------------------------
 ---GREENGEM1
@@ -145,9 +160,8 @@ AddUMGemDef("greengem1", {
 
             local tool = item.components.tool
 
-            item.gemology_data.um_gemologygreengem1 = {
-                tool_actions = deepcopy(tool.actions)
-            }
+            item.gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
+
             if tool and tool.actions then
                 for i, v in ipairs(action_list) do
                     if tool.actions[v] then
@@ -165,8 +179,6 @@ AddUMGemDef("greengem1", {
             if tool and tool.actions then
                 tool.actions = item.gemology_data.um_gemologygreengem1.tool_actions
             end
-
-            item.gemology_data.um_gemologygreengem1 = nil
         end
     }
 })
@@ -181,9 +193,7 @@ AddUMGemDef("greengem2", {
     sources = {}, --TODO
     fns = {
         onapply = function(item, tier)
-            item.gemology_data.um_gemologygreengem2 = {
-                gem_effects = {}
-            }
+            item.gemology_data.um_gemologygreengem2.gem_effects = {}
 
             item:WatchWorldState("startday", function(inst)
                 if inst.gemology_data.um_gemologygreengem2.gem_effects then
@@ -217,11 +227,8 @@ AddUMGemDef("greengem2", {
                     end
                 end
             end
-
-            item.gemology_data.um_gemologygreengem2 = nil
         end
     }
 })
 
-
-return {GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_MGE_LOOKUP = INVERTED_GEM_LOOKUP}
+return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }

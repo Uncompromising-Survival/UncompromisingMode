@@ -52,6 +52,10 @@ function GemEnchantable:AddEnchantment(enchant, tier)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
+    if self.inst.gemology_data[enchant] == nil then
+        self.inst.gemology_data[enchant] = {}
+    end
+
     self.update_flag = true
 end
 
@@ -66,6 +70,8 @@ function GemEnchantable:RemoveEnchantment(enchant)
     end
 
     self.enchants[enchant] = nil
+
+    self.inst.gemology_data[enchant] = {}
 
     self.update_flag = true
 end
