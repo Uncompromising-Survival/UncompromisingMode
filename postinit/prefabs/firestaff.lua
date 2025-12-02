@@ -2,23 +2,32 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 ------------------------------------------------------------------------------------------
 
+
+local function isValid(owner)
+    if owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("willow_controlled_burn_1") then
+        return false
+    end
+
+    return true
+end
+
 env.AddPrefabPostInit("firestaff", function(inst)
     if not TheWorld.ismastersim then
 		return
 	end
 
-    local oldonequipfn = inst.components.equippable.onequipfn
+    local _onequipfn = inst.components.equippable.onequipfn
     inst.components.equippable:SetOnEquip(function(inst, owner)
-        oldonequipfn(inst, owner)
-        if not owner.components.skilltreeupdater:IsActivated("willow_controlled_burn_1") then
+        _onequipfn(inst, owner)
+        if isValid(owner) then
             owner:AddTag("controlled_burner")
         end
     end)
 
-    local oldonunequipfn = inst.components.equippable.onunequipfn
+    local _onunequipfn = inst.components.equippable.onunequipfn
     inst.components.equippable:SetOnUnequip(function(inst, owner)
-        oldonunequipfn(inst, owner)
-        if not owner.components.skilltreeupdater:IsActivated("willow_controlled_burn_1") then
+        _onunequipfn(inst, owner)
+        if isValid(owner) then
             owner:RemoveTag("controlled_burner")
         end
     end)
