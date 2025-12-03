@@ -146,7 +146,6 @@ function AphidBrain:OnStart()
             WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "AttackAndWander",
                 PriorityNode(
                     {
-                        BrainCommon.PanicWhenScared(self.inst, .3),
                         BrainCommon.PanicTrigger(self.inst),
                         BrainCommon.ElectricFencePanicTrigger(self.inst),
                         Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),						

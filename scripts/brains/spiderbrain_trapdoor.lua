@@ -122,8 +122,8 @@ function SpiderBrain_TrapDoor:OnStart()
         PriorityNode(
         {
             BrainCommon.PanicWhenScared(self.inst, .3),
-            WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
-            WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
+            BrainCommon.PanicTrigger(self.inst),
+		    BrainCommon.ElectricFencePanicTrigger(self.inst),
 			
 			
 			-- If being mauled by fruit bats, retreat! 

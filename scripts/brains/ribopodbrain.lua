@@ -64,6 +64,7 @@ function RibopodBrain:OnStart()
     local root = PriorityNode(
     {
 		BrainCommon.PanicTrigger(self.inst),
+        BrainCommon.ElectricFencePanicTrigger(self.inst),
 		WhileNode(function() return not HasFriends(self.inst) end, "ShouldGoHome",
 			RunAway(self.inst, HunterParams, SEE_PLAYER_DIST, STOP_RUN_DIST, nil, true)),
         ChaseAndAttack(self.inst, MAX_CHASE_TIME),
