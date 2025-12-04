@@ -3,6 +3,8 @@ require "behaviours/wander"
 require "behaviours/chaseandattack"
 require "behaviours/leash"
 
+local BrainCommon = require("brains/braincommon")
+
 local ViperWormBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
@@ -96,7 +98,8 @@ function ViperWormBrain:OnStart()
         WhileNode(function() return self.inst.components.knownlocations:GetLocation("home") ~= nil end, "Has Home",
             PriorityNode{
 
-                WhileNode( function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
+                BrainCommon.PanicTrigger(self.inst),
+                BrainCommon.ElectricFencePanicTrigger(self.inst),
                 Leash(self.inst, self.inst.components.knownlocations:GetLocation("home"), TUNING.WORM_CHASE_DIST, TUNING.WORM_CHASE_DIST - 15), -- Don't go too far from your hunting grounds.
                 ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
                 DoAction(self.inst, GoHomeAction), --Go home and set up your lure if conditions are met.

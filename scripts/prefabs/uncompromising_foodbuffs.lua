@@ -125,7 +125,12 @@ local function OnHitOtherBoomberry(inst, data)
             local itemleader = leader and leader.components.inventoryitem and leader.components.inventoryitem:GetGrandOwner()
             if not v.components.health:IsDead() and v.components.combat:CanBeAttacked() and (not leader or itemleader and not itemleader:HasTag("player") or not leader.components.inventoryitem and not leader:HasTag("player"))
                 and v ~= inst and v ~= other then
+                local damageredirecttarget = v.components.combat.redirectdamagefn ~= nil and v.components.combat.redirectdamagefn(v, inst, damage) or nil
                 v.um_boomberry_exploded = true
+                if damageredirecttarget then --Fix by Discord user mlz2023_34253
+                    damageredirecttarget.um_boomberry_exploded = true
+                    damageredirecttarget:DoTaskInTime(.3, function(v) damageredirecttarget.um_boomberry_exploded = nil end)
+                end
                 v.components.combat:GetAttacked(inst, damage)
                 v:DoTaskInTime(.3, function(v) v.um_boomberry_exploded = nil end)
             end
