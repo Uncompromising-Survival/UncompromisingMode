@@ -14,7 +14,6 @@ The values are:
         onunequip = function(item, owner, tier) -- function that runs when you unequip the item with the gem
     }
     color = RGB(r,g,b) --color for the text/durability border in the UI
-    sources = {} --idk how tbh. prefab list? how do we get the image?
     -- for mineral logbook UIAnim
     build = "string" --build name
     bank = "string" --bank name
@@ -90,7 +89,6 @@ end
 
 AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
-    sources = {}, --TODO,
     fns = {},
 })
 
@@ -98,7 +96,6 @@ AddUMGemDef("redgem1", {
 --REDGEM2
 AddUMGemDef("redgem2", {
     color = RGB(233, 153, 153),
-    sources = {}, --TODO,
     fns = {},
 })
 
@@ -153,7 +150,6 @@ end
 
 AddUMGemDef("greengem1", {
     color = RGB(175, 245, 172),
-    sources = {}, --TODO
     fns = {
         onapply = function(item, tier)
             item.um_neurotic_mod = melee_speeds[tier]
@@ -190,7 +186,6 @@ local valid_enchants = { "um_gemologygreengem1", "um_gemologyyellowgem1", "um_ge
 
 AddUMGemDef("greengem2", {
     color = RGB(175, 245, 172),
-    sources = {}, --TODO
     fns = {
         onapply = function(item, tier)
             item.gemology_data.um_gemologygreengem2.gem_effects = {}
