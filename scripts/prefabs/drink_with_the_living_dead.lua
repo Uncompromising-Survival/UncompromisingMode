@@ -2,7 +2,7 @@ local function oneatenfn(inst, eater)
     if eater:HasTag("player") then
         if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
             eater.components.debuffable:AddDebuff("buff_stantonslumber", "buff_stantonslumber")
-            local stanton = FindEntity(eater, 10, nil, {"stanton"})
+            local stanton = FindEntity(eater, 10, nil, { "stanton" })
 
             if stanton ~= nil then
                 stanton.DrinkUp(stanton)
@@ -26,6 +26,7 @@ local function fn_tonic()
     inst.AnimState:SetBuild("stanton_shadow_tonic")
     inst.AnimState:PlayAnimation("idle", true)
     inst:AddTag("stantondrink")
+    inst:AddTag("fooddrink")
     MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
@@ -76,6 +77,7 @@ local function fn_tonic_fancy()
     inst.AnimState:SetBuild("stanton_shadow_tonic")
     inst.AnimState:PlayAnimation("idle", true)
     inst:AddTag("stantondrink")
+    inst:AddTag("fooddrink")
     MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
@@ -292,11 +294,11 @@ end
 
 local function Wrath(inst, super)
     if super then
-		for i = 1, 3 do
-			TrySpawnSkeleton(inst)
-		end
+        for i = 1, 3 do
+            TrySpawnSkeleton(inst)
+        end
     end
-	
+
     TrySpawnSkeleton(inst)
 end
 
@@ -434,6 +436,8 @@ local function fn_flask()
     inst.AnimState:SetBuild("skullflask")
     inst.AnimState:PlayAnimation("idle")
 
+    inst:AddTag("fooddrink")
+
     MakeInventoryFloatable(inst)
 
     inst.entity:SetPristine()
@@ -508,7 +512,7 @@ local function fn_flask_empty()
 end
 
 return Prefab("skullflask", fn_flask),
-	Prefab("skullflask_empty", fn_flask_empty),
-	Prefab("stanton_shadow_tonic", fn_tonic),
-	Prefab("stanton_shadow_tonic_fancy", fn_tonic_fancy),
-	Prefab("stanton", fn_stanton)
+    Prefab("skullflask_empty", fn_flask_empty),
+    Prefab("stanton_shadow_tonic", fn_tonic),
+    Prefab("stanton_shadow_tonic_fancy", fn_tonic_fancy),
+    Prefab("stanton", fn_stanton)

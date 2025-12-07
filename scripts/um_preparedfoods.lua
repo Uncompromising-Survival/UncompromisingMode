@@ -99,6 +99,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", nil, 0.8 },
+        tags = { "fooddrink" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING,
         oneatenfn = function(inst, eater)
             if eater.components.hayfever and eater.components.hayfever.enabled then

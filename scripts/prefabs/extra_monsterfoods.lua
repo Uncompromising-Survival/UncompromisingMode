@@ -24,7 +24,7 @@ local function common_meat(anim, tags, dryable, cookable)
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
-    
+
     MakeInventoryPhysics(inst)
 
     inst.AnimState:SetBank("extra_monsterfoods")
@@ -64,7 +64,7 @@ local function common_meat(anim, tags, dryable, cookable)
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    
+
     inst:AddComponent("stackable")
 
     inst:AddComponent("tradable")
@@ -92,7 +92,7 @@ end
 
 local function monstersmallmeat_fn()
     local inst = common_meat("idle", { "monstermeat" }, { product = "monstersmallmeat_dried", time = TUNING.DRY_VERYFAST }, { product = "cookedmonstersmallmeat" })
-        
+
     if not TheWorld.ismastersim then
         return inst
     end
@@ -100,24 +100,24 @@ local function monstersmallmeat_fn()
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
     inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
-    inst.components.edible.healthvalue = -15 -- -15 health
+    inst.components.edible.healthvalue = -15                  -- -15 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
-    inst.components.edible.sanityvalue = -10 -- -15 sanity
-    
+    inst.components.edible.sanityvalue = -10                  -- -15 sanity
+
     inst.components.inventoryitem.atlasname = "images/inventoryimages/monstersmallmeat.xml"
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FAST) -- 2 days
-    
+
     if inst.components.dryable then
         inst.components.dryable:SetBuildFile("extra_monsterfoods_dried")
         inst.components.dryable:SetDriedBuildFile("extra_monsterfoods_dried")
     end
-    
+
     inst.components.tradable.goldvalue = 0
 
     inst.components.floater:SetVerticalOffset(0.05)
 
     inst:AddComponent("selfstacker")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     return inst
 end
@@ -132,24 +132,24 @@ local function cookedmonstersmallmeat_fn()
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
     inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
-    inst.components.edible.healthvalue = -5 -- -10 health
-    inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
-    inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL -- -10 sanity
-    
+    inst.components.edible.healthvalue = -5                      -- -10 health
+    inst.components.edible.hungervalue = TUNING.CALORIES_TINY    -- 9.375 hunger
+    inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL    -- -10 sanity
+
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW) -- 3 days
 
     inst.components.tradable.goldvalue = 0
-    
+
     inst.components.floater:SetVerticalOffset(0.05)
 
     inst.components.inventoryitem.atlasname = "images/inventoryimages/cookedmonstersmallmeat.xml"
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     return inst
 end
 
 local function monstersmallmeat_dried_fn()
-	local inst = common_meat("dried", { "monstermeat" }, { isdried = true })
+    local inst = common_meat("dried", { "monstermeat" }, { isdried = true })
 
     if not TheWorld.ismastersim then
         return inst
@@ -158,16 +158,16 @@ local function monstersmallmeat_dried_fn()
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
     inst.components.edible.secondaryfoodtype = FOODTYPE.MONSTER
-    inst.components.edible.healthvalue = -5 -- -5 health
+    inst.components.edible.healthvalue = -5                   -- -5 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
-    inst.components.edible.sanityvalue = -TUNING.SANITY_TINY -- -5 sanity
+    inst.components.edible.sanityvalue = -TUNING.SANITY_TINY  -- -5 sanity
 
     inst.components.perishable:SetPerishTime(TUNING.PERISH_FASTISH)
 
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     inst.components.inventoryitem.atlasname = "images/inventoryimages/monstersmallmeat_dried.xml"
-    
+
     return inst
 end
 
@@ -239,16 +239,16 @@ local function defaultfn()
 
     inst.components.inventoryitem.atlasname = "images/inventoryimages/um_monsteregg.xml"
 
-    inst.components.edible.healthvalue = -15 -- -15 health
+    inst.components.edible.healthvalue = -15                  -- -15 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
-    inst.components.edible.sanityvalue = -10 -- -15 sanity
+    inst.components.edible.sanityvalue = -10                  -- -15 sanity
     inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
 
-	inst.components.tradable.rocktribute = 1
+    inst.components.tradable.rocktribute = 1
 
-    inst.components.floater:SetScale({0.55, 0.5, 0.55})
+    inst.components.floater:SetScale({ 0.55, 0.5, 0.55 })
     inst.components.floater:SetVerticalOffset(0.05)
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     return inst
 end
@@ -262,20 +262,20 @@ local function cookedfn()
 
     inst.components.inventoryitem.atlasname = "images/inventoryimages/um_monsteregg_cooked.xml"
 
-    inst.components.edible.healthvalue = -5 -- -5 health
+    inst.components.edible.healthvalue = -5                   -- -5 health
     inst.components.edible.hungervalue = TUNING.CALORIES_TINY -- 9.375 hunger
-    inst.components.edible.sanityvalue = -TUNING.SANITY_TINY -- -5 sanity
+    inst.components.edible.sanityvalue = -TUNING.SANITY_TINY  -- -5 sanity
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
     inst.components.floater:SetSize("med")
     inst.components.floater:SetScale(0.65)
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM 
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     return inst
 end
 
 return Prefab("monstersmallmeat", monstersmallmeat_fn, assets, monster_prefabs),
-        Prefab("cookedmonstersmallmeat", cookedmonstersmallmeat_fn, assets),
-        Prefab("monstersmallmeat_dried", monstersmallmeat_dried_fn, assets),
-        Prefab("um_monsteregg", defaultfn, assets),
-        Prefab("um_monsteregg_cooked", cookedfn, assets)
+    Prefab("cookedmonstersmallmeat", cookedmonstersmallmeat_fn, assets),
+    Prefab("monstersmallmeat_dried", monstersmallmeat_dried_fn, assets),
+    Prefab("um_monsteregg", defaultfn, assets),
+    Prefab("um_monsteregg_cooked", cookedfn, assets)
