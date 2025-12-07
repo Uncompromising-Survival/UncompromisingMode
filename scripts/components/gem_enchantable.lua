@@ -28,6 +28,10 @@ local GemEnchantable = Class(function(self, inst)
         self.inst.gemology_data = {}
     end
 
+    for k,v in pairs(GEM_LOOKUP) do
+        self.inst.gemology_data[v] = {}
+    end
+
     self.gem_update_task = inst:DoPeriodicTask(1, function(item)
         if item ~= nil and item:IsValid() and item.components.gem_enchantable then
             for enchant, tier in pairs(item.components.gem_enchantable.enchants) do
@@ -52,10 +56,6 @@ function GemEnchantable:AddEnchantment(enchant, tier)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
-    if self.inst.gemology_data[enchant] == nil then
-        self.inst.gemology_data[enchant] = {}
-    end
-
     self.update_flag = true
 end
 
@@ -71,7 +71,7 @@ function GemEnchantable:RemoveEnchantment(enchant)
 
     self.enchants[enchant] = nil
 
-    self.inst.gemology_data[enchant] = {}
+    self.inst.gemology_data[enchant] = {} --clear data for this effect.
 
     self.update_flag = true
 end
