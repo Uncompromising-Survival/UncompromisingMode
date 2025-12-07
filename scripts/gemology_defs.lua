@@ -86,17 +86,49 @@ end
 
 ------------------------------------------------------------------
 --REDGEM1
+local burn_damage = { 8, 16, 34 }
+local burn_portion = { 0.05, 0.2 }
 
 AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
-    fns = {},
+    fns = {
+        onattack = function(inst, attacker, target, tier)
+            if target.components.health then
+                target.components.health:DoFireDamage(burn_damage[tier], attacker, true)
+            end
+            SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
+            if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
+                target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
+                target.components.burnable:ExtendBurning()
+            end
+        end
+    },
 })
 
 -------------------------------------------------------------------
 --REDGEM2
+local devour_tags = { "animal", "pig", "monster", "smallcreature" }
+local devour_mults = { 1 / 10, 1 / 5 } -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
+
 AddUMGemDef("redgem2", {
     color = RGB(233, 153, 153),
-    fns = {},
+    fns = {
+        onattack = function(inst, attacker, target, tier)
+            if tier ~= 1 and target:HasOneOfTags(devour_tags) and math.random() > 0.75 then -- arbitrarily said "a chance", I have no idea how common this should be
+                local mult = devour_mults[tier - 1]
+                attacker.components.combat:DoAttack(target, inst, nil, nil, mult, 0)        -- gotta use a bit more durability...
+                mult = inst.components.weapon.damage * mult
+                --owner.components.sanity:DoDelta(-mult)
+                attacker.components.hunger:DoDelta(mult / 2)
+            end
+
+            if target.components.health ~= nil and target.components.health:IsDead() then -- Devour
+                local recover = target.components.health.maxhealth * 0.01 * tier
+                attacker.components.health:DoDelta(recover)
+                attacker.components.sanity:DoDelta(recover)
+            end
+        end,
+    },
 })
 
 
@@ -119,7 +151,7 @@ local function GetRandomTargetOfSameType(attacker, target)
     return ent_same_prefab[math.random(1, #ent_same_prefab)]
 end
 
-local function SendWilson(item, owner, target, tier)
+local function SendShadowClone(item, owner, target, tier)
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
         if owner:GetDistanceSqToInst(target) > 50 ^ 2 and owner.components.sanity then --Long ways away, it's taking from your mind to send swilsons there
             if target.components.combat then
@@ -156,9 +188,9 @@ AddUMGemDef("greengem1", {
 
             local tool = item.components.tool
 
-            item.gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
-
             if tool and tool.actions then
+                item.gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
+
                 for i, v in ipairs(action_list) do
                     if tool.actions[v] then
                         tool.actions[v] = tool.actions[v] * (1 + tier / 4)
@@ -166,8 +198,8 @@ AddUMGemDef("greengem1", {
                 end
             end
         end,
-        onwork = SendWilson,
-        onattack = SendWilson,
+        onwork = SendShadowClone,
+        onattack = SendShadowClone,
         onremove = function(item, tier)
             item.um_neurotic_mod = nil
 
