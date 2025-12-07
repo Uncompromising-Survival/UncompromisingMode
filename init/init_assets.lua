@@ -63,7 +63,6 @@ local inventoryitems =
     "dormant_rain_horn",
     "driftwoodfishingrod",
     "feather_frock",
-    "fishmeat_dried",
     "floral_bandage",
     "um_rimeweed_icepack",
     "gasmask",
@@ -154,7 +153,6 @@ local inventoryitems =
     "skullflask",
     "skullflask_empty",
     "slobberlobber",
-    "smallfishmeat_dried",
     "snapplant",
     "snotroast",
     "um_ghost_fajita",
@@ -451,6 +449,11 @@ local inventoryitems =
     "um_magnifier"
 }
 
+if not TUNING.DSTU.UPDATE_CHECK then
+    table.insert(inventoryitems, "fishmeat_dried")
+    table.insert(inventoryitems, "smallfishmeat_dried")
+end
+
 for _, item in ipairs(inventoryitems) do
     RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
 end
@@ -651,8 +654,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -811,8 +812,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -1883,6 +1882,12 @@ Assets = {
     Asset("IMAGE", "images/wolfgang_rework_skilltree.tex"),
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
 }
+if not TUNING.DSTU.UPDATE_CHECK then
+    table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
+    table.insert(Assets, Asset("ANIM", "anim/driedfishmeat.zip"))
+    table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
+    table.insert(Assets, Asset("ANIM", "anim/driedfishmeat.zip"))
+end
 
 for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("IMAGE", "images/inventoryimages/" .. asset .. ".tex"))

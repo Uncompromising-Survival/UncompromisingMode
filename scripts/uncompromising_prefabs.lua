@@ -456,7 +456,6 @@ local prefabs = {
     "slingshot_planar_fx_lunar",
     "slingshot_planar_fx_shadow",
     "shadow_wixie",
-    "dried_fishmeats",
     "bigwoby_debuff",
     "woby_target",
     "wixie_stinkcloud",
@@ -625,6 +624,10 @@ local prefabs = {
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
+end
+
+if not TUNING.DSTU.UPDATE_CHECK then
+    table.insert(prefabs, "dried_fishmeats")
 end
 
 return prefabs

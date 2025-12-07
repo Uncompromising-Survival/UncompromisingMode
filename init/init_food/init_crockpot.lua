@@ -103,7 +103,6 @@ if TUNING.DSTU.CROCKPOTMONSTMEAT then
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
-
 else
     AddIngredientValues({ "monstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true)       --2 monster total, Will be calculated with -1 meat
     AddIngredientValues({ "cookedmonstersmallmeat" }, { meat = 0.5, monster = 1 }, true, true) --2.5 monster total, Will be calculated with -1 meat
@@ -113,7 +112,6 @@ else
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg.xml", "um_monsteregg.tex")
     AddIngredientValues({ "um_monsteregg_cooked" }, { egg = 1, monster = GLOBAL.TUNING.DSTU.MONSTER_EGGS }, true)
     --RegisterInventoryItemAtlas("images/inventoryimages/um_monsteregg_cooked.xml", "um_monsteregg_cooked.tex")
-
 end
 
 AddIngredientValues({ "forgetmelots" }, { decoration = 1, foliage = 1 })
@@ -265,7 +263,7 @@ end
 -- Original:	test = function(cooker, names, tags) return tags.egg and tags.meat and tags.veggie and not tags.inedible end,
 
 recipes.kabobs.test = function(cooker, names, tags)
-    return tags.meat and names.twigs and (not tags.monster or tags.monster <= 3.5) and UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)	
+    return tags.meat and names.twigs and (not tags.monster or tags.monster <= 3.5) and UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return tags.meat and names.twigs and (not tags.monster or tags.monster <= 1) and (tags.inedible and tags.inedible <= 1) end,
 
@@ -297,7 +295,7 @@ recipes.bunnystew.test = function(cooker, names, tags)
     return (names.rabbit) and (tags.frozen and tags.frozen == 2) and
         (not tags.inedible) and (not tags.foliage)
 end
-recipes.bunnystew.card_def = { ingredients = { { "rabbit", 1 }, { "ice", 2 }}}
+recipes.bunnystew.card_def = { ingredients = { { "rabbit", 1 }, { "ice", 2 } } }
 -- Original: test = function(cooker, names, tags) return (tags.meat and tags.meat < 1) and (tags.frozen and tags.frozen >= 2) and (not tags.inedible) end
 if TUNING.DSTU.BONESTEW == "bone_appetit" then
     recipes.bonestew.test = function(cooker, names, tags)
@@ -550,9 +548,9 @@ InsertIngredientValues({ "rice" }, { veggie = 1, rice = 1 }, true, false, false)
 InsertIngredientValues({ "rice_cooked" }, { veggie = 1 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/rice_cooked.xml", "rice_cooked.tex")
 
-InsertIngredientValues({ "gloomcap" }, { veggie = 0.5}, true, false, false)
+InsertIngredientValues({ "gloomcap" }, { veggie = 0.5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap.xml", "gloomcap.tex")
-InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5}, true, false, false)
+InsertIngredientValues({ "gloomcap_cooked" }, { veggie = 0.5 }, true, false, false)
 --RegisterInventoryItemAtlas("images/inventoryimages/gloomcap_cooked.xml", "gloomcap_cooked.tex")
 
 
@@ -568,8 +566,8 @@ InsertIngredientValues({ "um_rimeweed_itemvine" }, { frozen = 0.5, inedible = 0.
 --RegisterInventoryItemAtlas("images/inventoryimages/um_rimeweed_itemvine.xml", "um_rimeweed_itemvine.tex")
 InsertIngredientValues({ "um_ice_tail" }, { frozen = 1, meat = 0.5, })
 
-InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 1  })
-InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1  })
+InsertIngredientValues({ "um_leafwing" }, { meat = 0.5, plantmeat = 1 })
+InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1 })
 InsertIngredientValues({ "um_spongeplant_item" }, { veggie = 0.5 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
@@ -583,10 +581,12 @@ InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, true, false, false)
 
-InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
---RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
-InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
---RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+if not TUNING.DSTU.UPDATE_CHECK then
+    InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
+    --RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
+    InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
+    --RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+end
 
 InsertIngredientValues({ "um_meathoney" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
 InsertIngredientValues({ "um_meatcomb" }, { sweetener = 1, meat = .5, monster = 2 }, true, false, false)
@@ -672,7 +672,7 @@ if TUNING.DSTU.GOODIESNERF then
                 inst.components.edible.foodtype = GLOBAL.FOODTYPE[type]
             end)
             for k, v in pairs(spices) do
-                print(k,v)
+                print(k, v)
                 AddPrefabPostInit(dish .. "_spice_" .. v, function(inst)
                     if not GLOBAL.TheWorld.ismastersim then
                         return
