@@ -70,7 +70,6 @@ local prefab_post = {
     "catcoon",
     "icehound",
     "firehound",
-    "fishmeats", -- fish meat now dries into fish jerky
     "forest",
     "cave",
     "world",
@@ -302,6 +301,10 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/eye_rub_vo", "wixie/characters/wixie/eye_rub_vo")
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
+end
+
+if TUNING.DSTU.UPDATE_CHECK then
+    table.insert(prefab_post, "fishmeats")
 end
 
 if GetModConfigData("hangyperds") then

@@ -453,8 +453,6 @@ Assets = {
 	Asset("ANIM", "anim/slingshot_gnasher.zip"),
 	Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-	Asset("ANIM", "anim/fishmeats.zip"),
-	Asset("ANIM", "anim/driedfishmeat.zip"),
 
 	Asset("ANIM", "anim/meatrack_hat_swap.zip"),
 	Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -596,10 +594,6 @@ Assets = {
     Asset("ATLAS", "images/inventoryimages/slingshot_claire.xml"),
 	Asset("IMAGE", "images/inventoryimages/bagofmarbles.tex"),
 	Asset("ATLAS", "images/inventoryimages/bagofmarbles.xml"),
-	Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"),
-	Asset("ATLAS", "images/inventoryimages/fishmeat_dried.xml"),
-	Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"),
-	Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"),
 	Asset("IMAGE", "images/inventoryimages/wixiegun.tex"),
 	Asset("ATLAS", "images/inventoryimages/wixiegun.xml"),
 
@@ -2197,6 +2191,16 @@ Assets = {
     Asset( "ATLAS", "images/wolfgang_rework_skilltree.xml" ),
 
 }
+
+if not TUNING.DSTU.UPDATE_CHECK then
+	table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
+	table.insert(Assets, Asset("ANIM", "anim/driedfishmeat.zip"))
+	table.insert(Assets, Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"))
+	table.insert(Assets, Asset("ATLAS", "images/inventoryimages/fishmeat_dried.xml"))
+	table.insert(Assets, Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"))
+	table.insert(Assets, Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"))
+end
+
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
 

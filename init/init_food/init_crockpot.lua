@@ -248,7 +248,7 @@ end
 -- Original:	test = function(cooker, names, tags) return tags.egg and tags.meat and tags.veggie and not tags.inedible end,
 
 recipes.kabobs.test = function(cooker, names, tags)
-    return tags.meat and names.twigs and (not tags.monster or tags.monster <= 3.5) and UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)	
+    return tags.meat and names.twigs and (not tags.monster or tags.monster <= 3.5) and UncompromisingFillers(tags) and not (tags.insectoid and tags.insectoid >= 1)
 end
 -- Original:	test = function(cooker, names, tags) return tags.meat and names.twigs and (not tags.monster or tags.monster <= 1) and (tags.inedible and tags.inedible <= 1) end,
 
@@ -529,10 +529,12 @@ InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, true, false, false)
 
-InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
-RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
-InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
-RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+if TUNING.DSTU.UPDATE_CHECK then
+    InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
+    RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
+    InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
+    RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
+end
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {
@@ -620,7 +622,7 @@ if TUNING.DSTU.GOODIESNERF then
                 inst.components.edible.foodtype = GLOBAL.FOODTYPE[type]
             end)
             for k, v in pairs(spices) do
-                print(k,v)
+                print(k, v)
                 AddPrefabPostInit(dish .. "_spice_" .. v, function(inst)
                     if not GLOBAL.TheWorld.ismastersim then
                         return
