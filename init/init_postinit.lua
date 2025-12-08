@@ -366,7 +366,7 @@ if GetModConfigData("wixie_walter") then
 end
 
 if not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "fishmeat_small_cooked")
+    table.insert(prefab_post, "fishmeats")
 end
 
 if GetModConfigData("hangyperds") then

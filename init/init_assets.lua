@@ -449,7 +449,7 @@ local inventoryitems =
     "um_magnifier"
 }
 
-if not TUNING.DSTU.UPDATE_CHECK then
+if TUNING.DSTU and not TUNING.DSTU.UPDATE_CHECK then
     table.insert(inventoryitems, "fishmeat_dried")
     table.insert(inventoryitems, "smallfishmeat_dried")
 end
@@ -1882,7 +1882,7 @@ Assets = {
     Asset("IMAGE", "images/wolfgang_rework_skilltree.tex"),
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
 }
-if not TUNING.DSTU.UPDATE_CHECK then
+if TUNING.DSTU and not TUNING.DSTU.UPDATE_CHECK then
     table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
     table.insert(Assets, Asset("ANIM", "anim/driedfishmeat.zip"))
     table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
