@@ -129,11 +129,6 @@ AllRecipes["moonrockidol"].ingredients = {
     Ingredient("purplegem", 1)
 }
 
-AllRecipes["icehat"].ingredients = {
-    Ingredient("rope", 2),
-    Ingredient("ice", 15)
-}
-
 AllRecipes["minifan"].ingredients = {
     Ingredient("twigs", 3),
     Ingredient("petals", 4)
