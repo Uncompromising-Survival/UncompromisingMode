@@ -22,7 +22,8 @@ if GetModConfigData("longpig") then
         Ingredient("spidergland", 1)
     }
     AllRecipes["ghostlyelixir_fastregen"].ingredients = {
-        Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50),
+        Ingredient("spidergland", 5),
+        --Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Find why this doesn't work 
         Ingredient("ghostflower", 4)
     }
 end
