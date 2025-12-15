@@ -21,11 +21,10 @@ if GetModConfigData("longpig") then
         Ingredient("skeletonmeat", 1),
         Ingredient("spidergland", 1)
     }
-    AllRecipes["ghostlyelixir_fastregen"].ingredients = {
-        Ingredient("spidergland", 5),
-        --Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50), Find why this doesn't work 
-        Ingredient("ghostflower", 4)
-    }
+
+    local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
+    ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
+    ghostlyelixir_fastregen.character_ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40)}
 end
 
 if GetModConfigData("compostoverrot") then
