@@ -324,9 +324,9 @@ if GetModConfigData("telestaff_rework") then
 end
 
 if GetModConfigData("longpig") then
-    AllRecipes["ghostlyelixir_fastregen"].ingredients = { 
-        Ingredient("spidergland", 5), 
-        Ingredient("ghostflower", 4) }
+    local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
+    ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
+    ghostlyelixir_fastregen.character_ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40)}
 end
 
 
