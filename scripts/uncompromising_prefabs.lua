@@ -466,9 +466,5 @@ if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
 end
 
-if not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefabs, "dried_fishmeats")
-end
-
 
 return prefabs

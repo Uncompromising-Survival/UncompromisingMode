@@ -529,12 +529,6 @@ InsertIngredientValues({ "trunk_summer" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_winter" }, { meat = 2 }, true, false, false)
 InsertIngredientValues({ "trunk_cooked" }, { meat = 2 }, true, false, false)
 
-if TUNING.DSTU.UPDATE_CHECK then
-    InsertIngredientValues({ "fishmeat_dried" }, { meat = 1, fish = 1 }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/fishmeat_dried.xml", "fishmeat_dried.tex")
-    InsertIngredientValues({ "smallfishmeat_dried" }, { meat = .5, fish = .5 }, true)
-    RegisterInventoryItemAtlas("images/inventoryimages/smallfishmeat_dried.xml", "smallfishmeat_dried.tex")
-end
 
 if TUNING.DSTU.NEWRECIPES then
     local cookpots = {

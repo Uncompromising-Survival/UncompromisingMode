@@ -2192,15 +2192,6 @@ Assets = {
 
 }
 
-if not TUNING.DSTU.UPDATE_CHECK then
-	table.insert(Assets, Asset("ANIM", "anim/fishmeats.zip"))
-	table.insert(Assets, Asset("ANIM", "anim/driedfishmeat.zip"))
-	table.insert(Assets, Asset("IMAGE", "images/inventoryimages/fishmeat_dried.tex"))
-	table.insert(Assets, Asset("ATLAS", "images/inventoryimages/fishmeat_dried.xml"))
-	table.insert(Assets, Asset("IMAGE", "images/inventoryimages/smallfishmeat_dried.tex"))
-	table.insert(Assets, Asset("ATLAS", "images/inventoryimages/smallfishmeat_dried.xml"))
-end
-
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
 
