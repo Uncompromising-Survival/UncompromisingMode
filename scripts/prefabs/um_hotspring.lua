@@ -37,10 +37,9 @@ local sizes =
 
 local function SetSize2(inst, size)
     inst.AnimState:PlayAnimation(sizes[size].anim, true)
-    MakePondPhysics(inst, sizes[size].rad)
     inst.components.bathingpool:SetRadius(sizes[size].rad)
+	inst.Physics:SetCapsule(sizes[size].rad, 2)
 
-    --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
     SpawnPlants(inst, "um_plant_hotsprings", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
 end
 
@@ -288,6 +287,7 @@ local function fn()
     local sound = inst.entity:AddSoundEmitter()
     local trans = inst.entity:AddTransform()
     local minimap = inst.entity:AddMiniMapEntity()
+    MakePondPhysics(inst, 1)
 
     --MakeObstaclePhysics( inst, 3.5)
 
