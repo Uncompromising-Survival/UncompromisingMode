@@ -7,25 +7,25 @@ local assets =
     Asset("ANIM", "anim/cook_pot.zip"),
     Asset("ANIM", "anim/cook_pot_food.zip"),
     Asset("ANIM", "anim/ui_cookpot_1x4.zip"),
-	Asset("ANIM", "anim/um_cookpot_wagstaff.zip"),
-	Asset("ANIM", "anim/um_cookpot_wagstaff_display.zip"),
-	Asset("ANIM", "anim/um_cookpot_wagstaff_lever.zip"),
-	Asset("ANIM", "anim/um_cookpot_wagstaff_lever2.zip"),
+    Asset("ANIM", "anim/um_cookpot_wagstaff.zip"),
+    Asset("ANIM", "anim/um_cookpot_wagstaff_display.zip"),
+    Asset("ANIM", "anim/um_cookpot_wagstaff_lever.zip"),
+    Asset("ANIM", "anim/um_cookpot_wagstaff_lever2.zip"),
 }
 
 local prefabs =
 {
     "collapse_small",
-	"um_cookpot_wagstaff_display",
+    "um_cookpot_wagstaff_display",
 }
 
 
 for k, v in pairs(cooking.recipes.cookpot) do
     table.insert(prefabs, v.name)
 
-	if v.overridebuild then
-        table.insert(assets, Asset("ANIM", "anim/"..v.overridebuild..".zip"))
-	end
+    if v.overridebuild then
+        table.insert(assets, Asset("ANIM", "anim/" .. v.overridebuild .. ".zip"))
+    end
 end
 
 
@@ -105,11 +105,11 @@ local function SetProductSymbol(inst, product, overridebuild)
     local build = (recipe ~= nil and recipe.overridebuild ~= nil and recipe.overridebuild) or "cook_pot_food"
 
     local overridesymbol = (recipe ~= nil and recipe.overridesymbolname) or product
-	
-	if not recipe then
-		overridesymbol = product
-		build = product
-	end
+
+    if not recipe then
+        overridesymbol = product
+        build = product
+    end
     if potlevel == "high" then
         inst.AnimState:Show("swap_high")
         inst.AnimState:Hide("swap_mid")
@@ -182,113 +182,120 @@ local function getstatus(inst)
         or "COOKING_SHORT"
 end
 
-local function MakeHologram(hologram,inst,scale)
-	hologram:AddTag("FX")
-	hologram:AddTag("NOCLICK")
-	hologram.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	hologram.Physics:Stop()
-	hologram:RemoveComponent("edible")
-	hologram:AddTag("INLIMBO")
+local function MakeHologram(hologram, inst, scale)
+    hologram:AddTag("FX")
+    hologram:AddTag("NOCLICK")
+    hologram.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    hologram.Physics:Stop()
+    hologram:RemoveComponent("edible")
+    hologram:AddTag("INLIMBO")
     hologram.components.inventoryitem.canbepickedup = false
-	hologram.persists = false	
-	hologram.AnimState:SetErosionParams(0, -0.2, -1.0)
-	hologram.Transform:SetScale(scale,scale,scale)
-	hologram:RemoveComponent("inspectable")
-	hologram.pot = inst
-	hologram:DoTaskInTime(1,
-		function(hologram) hologram:WatchWorldState("startday", 
-			function(hologram) 
-				if not hologram.pot.keep_next then
-					hologram:Remove() 
-				end
-			end) 
-		end) -- need a delay
-	hologram:RemoveComponent("burnable")
-	hologram:RemoveComponent("perishable")
+    hologram.persists = false
+    hologram.AnimState:SetErosionParams(0, -0.2, -1.0)
+    hologram.Transform:SetScale(scale, scale, scale)
+    hologram:RemoveComponent("inspectable")
+    hologram.pot = inst
+    hologram:DoTaskInTime(1,
+        function(hologram)
+            hologram:WatchWorldState("startday",
+                function(hologram)
+                    if not hologram.pot.keep_next then
+                        hologram:Remove()
+                    end
+                end)
+        end) -- need a delay
+    hologram:RemoveComponent("burnable")
+    hologram:RemoveComponent("perishable")
+    hologram:RemoveComponent("bait")
+    hologram:RemoveTagTag("molebait")
+
+    --for ice. Should we just remove all events?
+    hologram.event_listeners["firemelt"] = {}
+    hologram.event_listeners["stopfiremelt"] = {}
 end
 
-	-- Spawn Dish Hologram
-local function DishHologram(inst,dish)
-	local hologram = SpawnPrefab(dish)
-	hologram.entity:AddFollower()
-	hologram.Follower:FollowSymbol(inst.display.GUID, "swap_maindish", 0, 45, 0)
-	MakeHologram(hologram,inst,0.35)
-	table.insert(inst.display.holograms,hologram)
-	-- inst.display.AnimState:ClearOverrideSymbol("swap_maindish")
-	-- inst.display.AnimState:OverrideSymbol("swap_maindish", GetInventoryItemAtlas(dish..".tex"), dish..".tex")
+-- Spawn Dish Hologram
+local function DishHologram(inst, dish)
+    local hologram = SpawnPrefab(dish)
+    hologram.entity:AddFollower()
+    hologram.Follower:FollowSymbol(inst.display.GUID, "swap_maindish", 0, 45, 0)
+    MakeHologram(hologram, inst, 0.35)
+    table.insert(inst.display.holograms, hologram)
+    -- inst.display.AnimState:ClearOverrideSymbol("swap_maindish")
+    -- inst.display.AnimState:OverrideSymbol("swap_maindish", GetInventoryItemAtlas(dish..".tex"), dish..".tex")
 end
 
 
 
-	-- Spawn Hologram
-local function Hologram(inst,ingredient,i)
-	local hologram = SpawnPrefab(ingredient)
-	hologram.entity:AddFollower()
-	hologram.Follower:FollowSymbol(inst.display.GUID, "swap_bulb"..i, 0, 80, 0)
-	local scale = 0.45
-	if ingredient == "giant_blueberry" then
-		scale = 0.3
-	end
-	
-	MakeHologram(hologram,inst,scale)
-	table.insert(inst.display.holograms,hologram)
-	
-	-- Couldn't get minisign approach to work for items with a nonstandard inventory atlas
-	-- local ingredient_atlas = GetInventoryItemAtlas(ingredient..".tex") 
-	-- if ingredient == "giant_blueberry" then
-		-- local temp = SpawnPrefab("giant_blueberry")
-		-- ingredient_atlas = temp.replica.inventoryitem:GetAtlas()
-		-- temp:Remove()
-	-- end
+-- Spawn Hologram
+local function Hologram(inst, ingredient, i)
+    local hologram = SpawnPrefab(ingredient)
+    hologram.entity:AddFollower()
+    hologram.Follower:FollowSymbol(inst.display.GUID, "swap_bulb" .. i, 0, 80, 0)
+    local scale = 0.45
+    if ingredient == "giant_blueberry" then
+        scale = 0.3
+    end
 
-	-- -- for i,v in ipairs(um_foods) do
-		-- -- if ingredient == v then
-			-- -- ingredient_name = nil
-		-- -- end
-	-- -- end
-	-- inst.display.AnimState:ClearOverrideSymbol("swap_bulb"..i)
-	-- inst.display.AnimState:OverrideSymbol("swap_bulb"..i, ingredient_atlas, ingredient..".tex")
+    MakeHologram(hologram, inst, scale)
+    table.insert(inst.display.holograms, hologram)
+
+    -- Couldn't get minisign approach to work for items with a nonstandard inventory atlas
+    -- local ingredient_atlas = GetInventoryItemAtlas(ingredient..".tex")
+    -- if ingredient == "giant_blueberry" then
+    -- local temp = SpawnPrefab("giant_blueberry")
+    -- ingredient_atlas = temp.replica.inventoryitem:GetAtlas()
+    -- temp:Remove()
+    -- end
+
+    -- -- for i,v in ipairs(um_foods) do
+    -- -- if ingredient == v then
+    -- -- ingredient_name = nil
+    -- -- end
+    -- -- end
+    -- inst.display.AnimState:ClearOverrideSymbol("swap_bulb"..i)
+    -- inst.display.AnimState:OverrideSymbol("swap_bulb"..i, ingredient_atlas, ingredient..".tex")
 end
 
 local function MakeDisplay(inst)
-	if not inst.displayx then
-		local minim = 1
-		local maxim = 2
-		inst.displayx = math.random() > 0.5 and math.random(minim,maxim) or math.random(-maxim,-minim)
-		inst.displayz = math.random() > 0.5 and math.random(minim,maxim) or math.random(-maxim,-minim)
-	end
-	local x,y,z = inst.Transform:GetWorldPosition()
-	inst.display = SpawnPrefab("um_cookpot_wagstaff_display")
-	inst.display.pot = inst
-	inst.display.Transform:SetPosition(x+inst.displayx,0,z+inst.displayz)
-	inst.display.AnimState:HideSymbol("lever")
-	inst.display.AnimState:HideSymbol("lever2")
+    if not inst.displayx then
+        local minim = 1
+        local maxim = 2
+        inst.displayx = math.random() > 0.5 and math.random(minim, maxim) or math.random(-maxim, -minim)
+        inst.displayz = math.random() > 0.5 and math.random(minim, maxim) or math.random(-maxim, -minim)
+    end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    inst.display = SpawnPrefab("um_cookpot_wagstaff_display")
+    inst.display.pot = inst
+    inst.display.Transform:SetPosition(x + inst.displayx, 0, z + inst.displayz)
+    inst.display.AnimState:HideSymbol("lever")
+    inst.display.AnimState:HideSymbol("lever2")
 end
 
 local function onsave(inst, data)
     if inst:HasTag("burnt") or (inst.components.burnable ~= nil and inst.components.burnable:IsBurning()) then
         data.burnt = true
     end
-	if data and inst.todays_dish then
-		data.todays_dish = inst.todays_dish
-		data.todays_ingredients = inst.todays_ingredients
-	end
-	if data and inst.displayx then
-		data.displayx = inst.displayx
-		data.displayz = inst.displayz
-	end
-	if inst.lever_ready then
-		data.lever_ready = true
-	end	
-	if inst.display.lever then
-		data.lever = true
-	end
-	if inst.display.lever2 then
-		data.lever2 = true
-	end
-	if inst.keep_next then
-		data.keep_next = inst.keep_next
-	end
+    if data and inst.todays_dish then
+        data.todays_dish = inst.todays_dish
+        data.todays_ingredients = inst.todays_ingredients
+    end
+    if data and inst.displayx then
+        data.displayx = inst.displayx
+        data.displayz = inst.displayz
+    end
+    if inst.lever_ready then
+        data.lever_ready = true
+    end
+    if inst.display.lever then
+        data.lever = true
+    end
+    if inst.display.lever2 then
+        data.lever2 = true
+    end
+    if inst.keep_next then
+        data.keep_next = inst.keep_next
+    end
 end
 
 local function onload(inst, data)
@@ -297,49 +304,47 @@ local function onload(inst, data)
         inst.Light:Enable(false)
     end
 
-	if data and data.displayx and data.todays_dish then
-		inst.displayx = data.displayx
-		inst.displayz = data.displayz
-		inst.todays_dish = data.todays_dish
-		inst.todays_ingredients = data.todays_ingredients
-		MakeDisplay(inst)
-		inst.display.holograms = {}
-		DishHologram(inst,inst.todays_dish)
-		
-		for i = 1,4 do
-			Hologram(inst,inst.todays_ingredients[i],i)
-		end
-		if data.lever_ready then
-			inst.lever_ready = true
-			inst.display.ReadyTheLever(inst.display)
-			
-		end	
-		if data.lever or data.lever2 then
-			inst.display.EnableWorkable(inst.display)
-			if data.lever then
-				inst.display.lever = true
-				inst.display.AnimState:ShowSymbol("lever")
-			else
-				inst.display.lever2 = true
-				inst.display.AnimState:ShowSymbol("lever2")
-			end
-			inst.display.components.trader.enabled = false
-			if not data.lever_ready then
-				inst.display.AnimState:PlayAnimation("pull",false)
-			end
-		end
-		if data.keep_next then
-			inst.keep_next = data.keep_next
-		end
-	end
+    if data and data.displayx and data.todays_dish then
+        inst.displayx = data.displayx
+        inst.displayz = data.displayz
+        inst.todays_dish = data.todays_dish
+        inst.todays_ingredients = data.todays_ingredients
+        MakeDisplay(inst)
+        inst.display.holograms = {}
+        DishHologram(inst, inst.todays_dish)
 
+        for i = 1, 4 do
+            Hologram(inst, inst.todays_ingredients[i], i)
+        end
+        if data.lever_ready then
+            inst.lever_ready = true
+            inst.display.ReadyTheLever(inst.display)
+        end
+        if data.lever or data.lever2 then
+            inst.display.EnableWorkable(inst.display)
+            if data.lever then
+                inst.display.lever = true
+                inst.display.AnimState:ShowSymbol("lever")
+            else
+                inst.display.lever2 = true
+                inst.display.AnimState:ShowSymbol("lever2")
+            end
+            inst.display.components.trader.enabled = false
+            if not data.lever_ready then
+                inst.display.AnimState:PlayAnimation("pull", false)
+            end
+        end
+        if data.keep_next then
+            inst.keep_next = data.keep_next
+        end
+    end
 end
 
 local function onloadpostpass(inst, newents, data)
     if data and data.additems and inst.components.container then
-        for i, itemname in ipairs(data.additems)do
+        for i, itemname in ipairs(data.additems) do
             local ent = SpawnPrefab(itemname)
-            inst.components.container:GiveItem( ent )
+            inst.components.container:GiveItem(ent)
         end
     end
 end
@@ -357,139 +362,138 @@ local function cookpot_common_master(inst)
 end
 
 local dishes = {
-	"barnaclinguine",
-	"barnaclesushi",
-	"californiaroll",
-	"dragonpie",
-	"figatoni",
-	"koalefig_trunk",
-	"fishtacos",
-	"waffles",
-	"pumpkincookie",
-	"pepperpopper",
-	"lobsterdinner",
-	
-	-- UM Specific
-	"theatercorn",
-	"viperjam",
-	"zaspberryparfait",
-	"devilsfruitcake",
-	"snotroast",
-	"stuffed_peeper_poppers",
+    "barnaclinguine",
+    "barnaclesushi",
+    "californiaroll",
+    "dragonpie",
+    "figatoni",
+    "koalefig_trunk",
+    "fishtacos",
+    "waffles",
+    "pumpkincookie",
+    "pepperpopper",
+    "lobsterdinner",
+
+    -- UM Specific
+    "theatercorn",
+    "viperjam",
+    "zaspberryparfait",
+    "devilsfruitcake",
+    "snotroast",
+    "stuffed_peeper_poppers",
 }
 
 local effect_dishes = {
-	"dragonpie",
-	"waffles",
-	"pepperpopper",
-	"lobsterdinner",
-	"devilsfruitcake",
-	-- Buffer dishes, still decent, only if not wortox though
-	
-	-- Effect Dishes
-	"theatercorn",
-	"viperjam",
-	"zaspberryparfait",
-	"snotroast",
-	"stuffed_peeper_poppers",
+    "dragonpie",
+    "waffles",
+    "pepperpopper",
+    "lobsterdinner",
+    "devilsfruitcake",
+    -- Buffer dishes, still decent, only if not wortox though
+
+    -- Effect Dishes
+    "theatercorn",
+    "viperjam",
+    "zaspberryparfait",
+    "snotroast",
+    "stuffed_peeper_poppers",
 }
 
-local function RedoTodays(inst,bias_to_effects)
-	inst.todays_ingredients = {}
-	inst.display.holograms = {}
-	for i = 1,4 do
-		local chnce = math.random(1,186)
-		local ingredient = "berries" -- failsafe
-		if chnce < 25 then -- smallmeat
-			chnce = math.random()
-			if chnce < 0.2 then
-				ingredient = "monstersmallmeat"
-			elseif chnce < 0.3 then
-				ingredient = "froglegs"
-			elseif chnce < 0.4 then
-				ingredient = "drumstick"
-			elseif chnce < 0.5 then
-				ingredient = "batwing"
-			else
-				ingredient = "smallmeat"
-			end
-		elseif chnce < 75 then -- bigmeat
-			chnce = math.random()
-			if chnce < 0.2 then
-				ingredient = "monstermeat"
-			else
-				ingredient = "meat"
-			end		
-		elseif chnce < 90 then -- small veggies
-			chnce = math.random()
-			if chnce < 0.33 then
-				ingredient = "red_cap"
-			elseif chnce < 0.66 then
-				ingredient = "green_cap"
-			else
-				ingredient = "blue_cap"
-			end			
-		elseif chnce < 115 then -- large veggies
-			chnce = math.random()
-			if chnce < 0.33 then
-				ingredient = "cactus_meat"
-			else
-				ingredient = "carrot"
-			end				
-		elseif chnce < 150 then -- ice and small fruits
-			if TheWorld.state.iswinter or TheWorld.state.isspring then
-				ingredient = "ice"
-			else
-				chnce = math.random()
-				if chnce < 0.33 then
-					ingredient = "berries"
-				elseif chnce < 0.66 then
-					ingredient = "acorn"
-				else 
-					ingredient = "honey"
-				end				
-			end
-		elseif chnce < 175 then -- eggs
-			chnce = math.random()
-			if chnce < 0.33 then
-				ingredient = "um_monsteregg"
-			else
-				ingredient = "bird_egg"
-			end		
-		else -- only viable large fruit
-			ingredient = "giant_blueberry"	
-		end
-		table.insert(inst.todays_ingredients,ingredient)
-		inst:DoTaskInTime(0,function(inst) Hologram(inst,ingredient,i) end)
-	end
-	local dish = dishes[math.random(#dishes)]
-	if bias_to_effects then
-		dish = effect_dishes[math.random(#effect_dishes)]
-	end
-	
-	inst.todays_dish = dish
-	inst:DoTaskInTime(0,function(inst) DishHologram(inst,dish) end)
+local function RedoTodays(inst, bias_to_effects)
+    inst.todays_ingredients = {}
+    inst.display.holograms = {}
+    for i = 1, 4 do
+        local chnce = math.random(1, 186)
+        local ingredient = "berries" -- failsafe
+        if chnce < 25 then     -- smallmeat
+            chnce = math.random()
+            if chnce < 0.2 then
+                ingredient = "monstersmallmeat"
+            elseif chnce < 0.3 then
+                ingredient = "froglegs"
+            elseif chnce < 0.4 then
+                ingredient = "drumstick"
+            elseif chnce < 0.5 then
+                ingredient = "batwing"
+            else
+                ingredient = "smallmeat"
+            end
+        elseif chnce < 75 then -- bigmeat
+            chnce = math.random()
+            if chnce < 0.2 then
+                ingredient = "monstermeat"
+            else
+                ingredient = "meat"
+            end
+        elseif chnce < 90 then -- small veggies
+            chnce = math.random()
+            if chnce < 0.33 then
+                ingredient = "red_cap"
+            elseif chnce < 0.66 then
+                ingredient = "green_cap"
+            else
+                ingredient = "blue_cap"
+            end
+        elseif chnce < 115 then -- large veggies
+            chnce = math.random()
+            if chnce < 0.33 then
+                ingredient = "cactus_meat"
+            else
+                ingredient = "carrot"
+            end
+        elseif chnce < 150 then -- ice and small fruits
+            if TheWorld.state.iswinter or TheWorld.state.isspring then
+                ingredient = "ice"
+            else
+                chnce = math.random()
+                if chnce < 0.33 then
+                    ingredient = "berries"
+                elseif chnce < 0.66 then
+                    ingredient = "acorn"
+                else
+                    ingredient = "honey"
+                end
+            end
+        elseif chnce < 175 then -- eggs
+            chnce = math.random()
+            if chnce < 0.33 then
+                ingredient = "um_monsteregg"
+            else
+                ingredient = "bird_egg"
+            end
+        else -- only viable large fruit
+            ingredient = "giant_blueberry"
+        end
+        table.insert(inst.todays_ingredients, ingredient)
+        inst:DoTaskInTime(0, function(inst) Hologram(inst, ingredient, i) end)
+    end
+    local dish = dishes[math.random(#dishes)]
+    if bias_to_effects then
+        dish = effect_dishes[math.random(#effect_dishes)]
+    end
+
+    inst.todays_dish = dish
+    inst:DoTaskInTime(0, function(inst) DishHologram(inst, dish) end)
 end
 
 local function LeverReady(inst)
-	inst:AddComponent("activatable")
+    inst:AddComponent("activatable")
     inst.components.activatable.OnActivate = function(inst)
-		if inst.lever then
-			for i,v in ipairs(inst.holograms) do
-				v:Remove()
-			end
-			RedoTodays(inst.pot,true)
+        if inst.lever then
+            for i, v in ipairs(inst.holograms) do
+                v:Remove()
+            end
+            RedoTodays(inst.pot, true)
+        elseif inst.lever2 then
+            inst.pot.keep_next = true
+        end
 
-		elseif inst.lever2 then
-			inst.pot.keep_next = true
-		end
-		
-		inst:RemoveComponent("activatable")
-		inst.AnimState:PlayAnimation("pull",false)		
-		inst.pot.lever_ready = nil
-	end
+        inst:RemoveComponent("activatable")
+        inst.AnimState:PlayAnimation("pull", false)
+        inst.pot.lever_ready = nil
+    end
     inst.components.activatable.inactive = true
-	inst.components.activatable.quickaction = false
+    inst.components.activatable.quickaction = false
 end
 
 local function MakeCookPot(name, common_postinit, master_postinit, assets, prefabs)
@@ -503,14 +507,14 @@ local function MakeCookPot(name, common_postinit, master_postinit, assets, prefa
         inst.entity:AddLight()
         inst.entity:AddNetwork()
 
-		inst:SetDeploySmartRadius(1) --recipe min_spacing/2
+        inst:SetDeploySmartRadius(1) --recipe min_spacing/2
         MakeObstaclePhysics(inst, .5)
 
         inst.Light:Enable(false)
         inst.Light:SetRadius(.6)
         inst.Light:SetFalloff(1)
         inst.Light:SetIntensity(.5)
-        inst.Light:SetColour(60/255,200/255,200/255)
+        inst.Light:SetColour(60 / 255, 200 / 255, 200 / 255)
         --inst.Light:SetColour(1,0,0)
 
         inst:AddTag("structure")
@@ -563,35 +567,35 @@ local function MakeCookPot(name, common_postinit, master_postinit, assets, prefa
         inst.OnSave = onsave
         inst.OnLoad = onload
         inst.OnLoadPostPass = onloadpostpass
-		
+
         if master_postinit ~= nil then
             master_postinit(inst)
         end
 
-		RemovePhysicsColliders(inst)
-	
-		inst:DoTaskInTime(0,function(inst)
-			if not inst.displayx then
-				MakeDisplay(inst)
-			end
-			if not inst.todays_dish then
-				inst:DoTaskInTime(0,RedoTodays)
-			end
-		end)
-		
-		inst:WatchWorldState("startday",function(inst)
-			if not inst.keep_next then
-				if inst.display and (inst.display.lever or inst.display.lever2) and not inst.lever_ready then
-					inst.display.AnimState:PlayAnimation("ready",false)
-					inst.display.AnimState:PushAnimation("idle",true)
-					inst.display:ReadyTheLever(inst.display)
-				end
-				RedoTodays(inst)
-			else
-				inst:DoTaskInTime(2,function(inst) inst.keep_next = nil end)
-			end
-		end)
-		
+        RemovePhysicsColliders(inst)
+
+        inst:DoTaskInTime(0, function(inst)
+            if not inst.displayx then
+                MakeDisplay(inst)
+            end
+            if not inst.todays_dish then
+                inst:DoTaskInTime(0, RedoTodays)
+            end
+        end)
+
+        inst:WatchWorldState("startday", function(inst)
+            if not inst.keep_next then
+                if inst.display and (inst.display.lever or inst.display.lever2) and not inst.lever_ready then
+                    inst.display.AnimState:PlayAnimation("ready", false)
+                    inst.display.AnimState:PushAnimation("idle", true)
+                    inst.display:ReadyTheLever(inst.display)
+                end
+                RedoTodays(inst)
+            else
+                inst:DoTaskInTime(2, function(inst) inst.keep_next = nil end)
+            end
+        end)
+
         return inst
     end
 
@@ -602,158 +606,158 @@ local function onhammered_display(inst, worker)
     local fx = SpawnPrefab("collapse_small")
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("wood")
-	
-	if inst.lever then
-		inst.lever = nil
-		inst.AnimState:HideSymbol("lever")
-		inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever" })
-	elseif inst.lever2 then
-		inst.lever2 = nil
-		inst.AnimState:HideSymbol("lever2")
-		inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever2" })
-	end
-	inst.pot.keep_next = nil
-	inst.pot.lever_ready = nil
-		
+
+    if inst.lever then
+        inst.lever = nil
+        inst.AnimState:HideSymbol("lever")
+        inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever" })
+    elseif inst.lever2 then
+        inst.lever2 = nil
+        inst.AnimState:HideSymbol("lever2")
+        inst.components.lootdropper:SetLoot({ "um_cookpot_wagstaff_lever2" })
+    end
+    inst.pot.keep_next = nil
+    inst.pot.lever_ready = nil
+
     inst.components.lootdropper:DropLoot()
-	inst.components.trader.enabled = true
-	inst:RemoveComponent("lootdropper")
-	inst:RemoveComponent("workable")
-	inst:RemoveComponent("activatable")
+    inst.components.trader.enabled = true
+    inst:RemoveComponent("lootdropper")
+    inst:RemoveComponent("workable")
+    inst:RemoveComponent("activatable")
 end
 
 local function EnableWorkable(inst)
-	inst:AddComponent("lootdropper")
-	inst:AddComponent("workable")
-	inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
-	inst.components.workable:SetWorkLeft(1)
-	inst.components.workable:SetOnFinishCallback(onhammered_display)
+    inst:AddComponent("lootdropper")
+    inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+    inst.components.workable:SetWorkLeft(1)
+    inst.components.workable:SetOnFinishCallback(onhammered_display)
 end
 
 
 
 local function fndisplay()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddSoundEmitter()
-	inst.entity:AddMiniMapEntity()
-	inst.entity:AddLight()
-	inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddMiniMapEntity()
+    inst.entity:AddLight()
+    inst.entity:AddNetwork()
 
-	inst:SetDeploySmartRadius(1) --recipe min_spacing/2
-	--MakeObstaclePhysics(inst, .5)
+    inst:SetDeploySmartRadius(1) --recipe min_spacing/2
+    --MakeObstaclePhysics(inst, .5)
 
-	inst.Light:Enable(true)
-	inst.Light:SetRadius(.6)
-	inst.Light:SetFalloff(1)
-	inst.Light:SetIntensity(.5)
-	inst.Light:SetColour(60/255,200/255,200/255)
+    inst.Light:Enable(true)
+    inst.Light:SetRadius(.6)
+    inst.Light:SetFalloff(1)
+    inst.Light:SetIntensity(.5)
+    inst.Light:SetColour(60 / 255, 200 / 255, 200 / 255)
 
-	inst:AddTag("structure")
+    inst:AddTag("structure")
 
     inst.AnimState:SetBank("um_cookpot_wagstaff_display")
     inst.AnimState:SetBuild("um_cookpot_wagstaff_display")
-   
-	
-	inst.entity:SetPristine()
 
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	
-	inst.AnimState:PlayAnimation("idle",true)
-	inst:AddComponent("inspectable")
 
-	inst.persists = false
-	inst.ReadyTheLever = LeverReady
-	
-	--RemovePhysicsColliders(inst)
-	MakeSmallPropagator(inst)
-	
-	inst:AddComponent("trader")
-	inst.components.trader.test = function(inst, item)
-		return item.prefab == "um_cookpot_wagstaff_lever" or item.prefab == "um_cookpot_wagstaff_lever2"
-	end
-	inst.components.trader.enabled = true
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.AnimState:PlayAnimation("idle", true)
+    inst:AddComponent("inspectable")
+
+    inst.persists = false
+    inst.ReadyTheLever = LeverReady
+
+    --RemovePhysicsColliders(inst)
+    MakeSmallPropagator(inst)
+
+    inst:AddComponent("trader")
+    inst.components.trader.test = function(inst, item)
+        return item.prefab == "um_cookpot_wagstaff_lever" or item.prefab == "um_cookpot_wagstaff_lever2"
+    end
+    inst.components.trader.enabled = true
     inst.components.trader.onaccept =
         function(inst, giver, item)
-			EnableWorkable(inst)
-			if item.prefab == "um_cookpot_wagstaff_lever" then
-				inst.lever = true
-				inst.AnimState:ShowSymbol("lever")
-			else
-				inst.lever2 = true
-				inst.AnimState:ShowSymbol("lever2")
-			end
-            inst.AnimState:PlayAnimation("pull",false)
-			--LeverReady(inst)
-			
-			inst.components.trader.enabled = false
-        end	
-	inst.EnableWorkable = EnableWorkable
-	return inst
-end
-	
-local function fnlever()
-	local inst = CreateEntity()
+            EnableWorkable(inst)
+            if item.prefab == "um_cookpot_wagstaff_lever" then
+                inst.lever = true
+                inst.AnimState:ShowSymbol("lever")
+            else
+                inst.lever2 = true
+                inst.AnimState:ShowSymbol("lever2")
+            end
+            inst.AnimState:PlayAnimation("pull", false)
+            --LeverReady(inst)
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddNetwork()
+            inst.components.trader.enabled = false
+        end
+    inst.EnableWorkable = EnableWorkable
+    return inst
+end
+
+local function fnlever()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
 
 
 
     inst.AnimState:SetBank("um_cookpot_wagstaff_lever")
     inst.AnimState:SetBuild("um_cookpot_wagstaff_lever")
-   
-	
-	inst.entity:SetPristine()
 
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	inst.AnimState:PlayAnimation("idle",true)
-	inst:AddComponent("inspectable")
 
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever.xml"
+    inst.entity:SetPristine()
 
-	inst:AddComponent("tradable")
-	return inst
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    inst.AnimState:PlayAnimation("idle", true)
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever.xml"
+
+    inst:AddComponent("tradable")
+    return inst
 end
 
 local function fnlever2()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
-	inst.entity:AddAnimState()
-	inst.entity:AddNetwork()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
 
 
 
     inst.AnimState:SetBank("um_cookpot_wagstaff_lever2")
     inst.AnimState:SetBuild("um_cookpot_wagstaff_lever2")
-   
-	
-	inst.entity:SetPristine()
 
-	if not TheWorld.ismastersim then
-		return inst
-	end
-	inst.AnimState:PlayAnimation("idle",true)
-	inst:AddComponent("inspectable")
 
-	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"
+    inst.entity:SetPristine()
 
-	inst:AddComponent("tradable")
-	return inst
+    if not TheWorld.ismastersim then
+        return inst
+    end
+    inst.AnimState:PlayAnimation("idle", true)
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_cookpot_wagstaff_lever2.xml"
+
+    inst:AddComponent("tradable")
+    return inst
 end
 
 
-return MakeCookPot("um_cookpot_wagstaff", cookpot_common, cookpot_common_master,assets),
-Prefab("um_cookpot_wagstaff_display",fndisplay),
-Prefab("um_cookpot_wagstaff_lever",fnlever),
-Prefab("um_cookpot_wagstaff_lever2",fnlever2)
+return MakeCookPot("um_cookpot_wagstaff", cookpot_common, cookpot_common_master, assets),
+    Prefab("um_cookpot_wagstaff_display", fndisplay),
+    Prefab("um_cookpot_wagstaff_lever", fnlever),
+    Prefab("um_cookpot_wagstaff_lever2", fnlever2)
