@@ -365,9 +365,6 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
 
-if not TUNING.DSTU.UPDATE_CHECK then
-    table.insert(prefab_post, "fishmeats")
-end
 
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")
