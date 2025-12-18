@@ -223,6 +223,12 @@ function EntityScript:SpawnChild(name, ...)
     return _SpawnChild(self, name, ...)
 end
 
+local UM_BLOCKED_STATES = {"wortox_teleport_reviver_selfuse"}
+local _GoToState = StateGraphInstance.GoToState
+function StateGraphInstance:GoToState(statename, ...)
+    if self.inst.um_blockgotostate and table.contains(UM_BLOCKED_STATES, statename) then return end
+    return _GoToState(self, statename, ...)
+end
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)
