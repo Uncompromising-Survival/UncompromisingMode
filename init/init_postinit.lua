@@ -78,7 +78,6 @@ local prefab_post = {
     "butterfly",
     "ressurectionstone",
     "sewing_mannequin",
-    "bathbomb",
     "atrium_gate",
     "dragonfly",
     "wardrobe",
