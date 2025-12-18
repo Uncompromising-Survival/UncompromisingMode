@@ -207,7 +207,7 @@ local function MakeHologram(hologram, inst, scale)
     hologram:RemoveComponent("burnable")
     hologram:RemoveComponent("perishable")
     hologram:RemoveComponent("bait")
-    hologram:RemoveTagTag("molebait")
+    hologram:RemoveTag("molebait")
 
     --for ice. Should we just remove all events?
     hologram.event_listeners["firemelt"] = {}
