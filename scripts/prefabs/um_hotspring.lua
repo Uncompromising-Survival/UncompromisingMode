@@ -5,7 +5,7 @@ local assets =
 
 local function SpawnPlants(inst, plantname, count, maxradius)
     if inst.decor then
-        for i,item in ipairs(inst.decor) do
+        for i, item in ipairs(inst.decor) do
             item:Remove()
         end
     end
@@ -13,11 +13,11 @@ local function SpawnPlants(inst, plantname, count, maxradius)
 
     local plant_offsets = {}
 
-    for i=1,math.random(math.ceil(count / 2), count) do
+    for i = 1, math.random(math.ceil(count / 2), count) do
         local a = math.random() * math.pi * 2
         local x = math.sin(a) * maxradius + math.random() * 0.2
         local z = math.cos(a) * maxradius + math.random() * 0.2
-        table.insert(plant_offsets, {x, 0, z})
+        table.insert(plant_offsets, { x, 0, z })
     end
 
     for k, offset in pairs(plant_offsets) do
@@ -30,16 +30,17 @@ end
 
 local sizes =
 {
-    {anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 2.0},
-    {anim = "med_idle", rad = 2.6, plantcount = 3, plantrad = 2.9},
-    {anim = "big_idle", rad = 3.6, plantcount = 4, plantrad = 3.8},
+    { anim = "small_idle", rad = 2.0, plantcount = 2, plantrad = 2.0 },
+    { anim = "med_idle",   rad = 2.6, plantcount = 3, plantrad = 2.9 },
+    { anim = "big_idle",   rad = 3.6, plantcount = 4, plantrad = 3.8 },
 }
 
 local function SetSize2(inst, size)
     inst.AnimState:PlayAnimation(sizes[size].anim, true)
+    MakePondPhysics(inst, sizes[size].rad)
+    inst.components.bathingpool:SetRadius(sizes[size].rad)
+
     --inst.Physics:SetCylinder(sizes[inst.size].rad, 1.0)
-    inst.components.unevenground.radius = sizes[size].plantrad
-    inst.components.um_ripplespawner:SetRange(sizes[inst.size].rad)
     SpawnPlants(inst, "um_plant_hotsprings", sizes[inst.size].plantcount, sizes[inst.size].plantrad)
 end
 
@@ -47,15 +48,15 @@ local function DetermineSize(inst, fitting, removepond)
     if not inst.size or fitting then
         inst.size = math.random(1, fitting or #sizes)
         local x, y, z = inst.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, sizes[inst.size].rad, nil, nil, {"plant", "pond", "boulder", "rock", "tree"})
+        local ents = TheSim:FindEntities(x, y, z, sizes[inst.size].rad, nil, nil, { "plant", "pond", "boulder", "rock", "tree" })
         for i, v in ipairs(ents) do
             if v ~= inst and inst.size ~= 1 then
                 DetermineSize(inst, 2)
-                break 
+                break
             end
         end
         if removepond then
-            local ents = TheSim:FindEntities(x, y, z, sizes[3].rad * 2, {"watersource"})
+            local ents = TheSim:FindEntities(x, y, z, sizes[3].rad * 2, { "watersource" })
             for i, v in ipairs(ents) do
                 if v ~= inst and v.prefab == "um_hotspring" then
                     inst:Remove()
@@ -78,9 +79,9 @@ local function DoFx(inst) -- This is the hotspring's passive FX
     if offset then
         local fx
         if not inst:HasTag("pond_inducedinsanity") then
-            fx = SpawnPrefab(math.random() > .75 and "crab_king_bubble"..tostring(math.random(1, 3))
-                or (math.random() > .5 and "crater_steam_fx"..tostring(math.random(1, 4))
-                or "slow_steam_fx"..tostring(math.random(1, 4))))
+            fx = SpawnPrefab(math.random() > .75 and "crab_king_bubble" .. tostring(math.random(1, 3))
+                or (math.random() > .5 and "crater_steam_fx" .. tostring(math.random(1, 4))
+                    or "slow_steam_fx" .. tostring(math.random(1, 4))))
         else
             fx = SpawnPrefab("tophat_shadow_fx")
             fx:DoTaskInTime(1.5, function(fx) fx:Remove() end)
@@ -102,6 +103,73 @@ local function OnBathBombed(inst)
     end
     inst.components.heater.heat = 165
 end
+
+local function OnBathingPoolTick_PerOccupant(inst, occupant, dt)
+    if inst.components.bathbombable.is_bathbombed then
+        if occupant.components.health then
+            occupant.components.health:DeltaPenalty(-0.009)
+        end
+
+        if occupant.components.inventory then
+            local waterproofness = occupant.components.inventory and math.min(occupant.components.inventory:GetWaterproofness(), 1) or 0
+            if occupant.components.moisture then
+                occupant.components.moisture:DoDelta(4 * (1 - waterproofness), true)
+            end
+        end
+    end
+
+    if occupant.components.temperature then
+        occupant.components.temperature:DoDelta(0.3)
+    end
+
+    if occupant.components.sanity and inst:HasTag("pond_inducedinsanity") then
+        occupant.components.sanity:SetInducedInsanity(inst, true)
+        if not occupant:HasTag("fuelfarming") then
+            occupant:AddTag("fuelfarming")
+        end
+    end
+end
+
+local function OnBathingPoolTick(inst)
+    local bathingpool = inst.components.bathingpool
+    if bathingpool then
+        bathingpool:ForEachOccupant(OnBathingPoolTick_PerOccupant, TUNING.HERMITHOTSPRING_TICK_PERIOD)
+    end
+end
+
+local function OnStartBeingOccupiedBy(inst, ent)
+    if not inst.bathingpoolents then
+        inst.bathingpoolents = {
+            [ent] = true,
+        }
+        inst.bathingpooltask = inst:DoPeriodicTask(TUNING.HERMITHOTSPRING_TICK_PERIOD, OnBathingPoolTick)
+    else
+        inst.bathingpoolents[ent] = true
+    end
+end
+
+local function OnStopBeingOccupiedBy(inst, ent)
+    if inst.bathingpoolents then
+        inst.bathingpoolents[ent] = nil
+        if ent.components.sanity then
+            ent.components.sanity:SetInducedInsanity(inst, false)
+        end
+
+        if ent:HasTag("fuelfarming") then
+            ent:RemoveTag("fuelfarming")
+        end
+
+
+        if next(inst.bathingpoolents) == nil then
+            if inst.bathingpooltask then
+                inst.bathingpooltask:Cancel()
+                inst.bathingpooltask = nil
+            end
+            inst.bathingpoolents = nil
+        end
+    end
+end
+
 
 local function OnTimerDone(inst)
     inst.Light:Enable(false)
@@ -139,18 +207,18 @@ local function FadeToDark(inst)
     else
         inst:DoTaskInTime(2 * FRAMES, FadeToDark)
     end
-    inst.AnimState:SetMultColour(inst.color, inst.color, inst.color,1)
+    inst.AnimState:SetMultColour(inst.color, inst.color, inst.color, 1)
     inst.components.bathbombable:DisableBathBombing()
 end
 
 local function EmitSteam(inst)
     if not TheWorld.state.isnewmoon then
-        local x,y,z = inst.Transform:GetWorldPosition()
+        local x, y, z = inst.Transform:GetWorldPosition()
         if inst.size == 1 then
             SpawnPrefab("um_steamcloud").Transform:SetPosition(x, y, z)
         else
-            for i = 1,(inst.size*2-1) do
-                inst:DoTaskInTime(i * .66,function(inst)
+            for i = 1, (inst.size * 2 - 1) do
+                inst:DoTaskInTime(i * .66, function(inst)
                     local steam = SpawnPrefab("um_steamcloud")
                     local offset = FindWalkableOffset(inst:GetPosition(), math.random(PI * 2 * ((i - 1) / 3), PI * 2 * (i / 3)), inst.size * math.random(1, 2))
                     steam.Transform:SetPosition(x + offset.x, y, z + offset.z)
@@ -206,7 +274,7 @@ local function OnEntityWake(inst)
         inst.fxtask2 = inst:DoPeriodicTask(.1 * math.random(10, 30), DoFx)
     end
     -- if math.random() > .5 then
-        -- EmitSteam(inst)
+    -- EmitSteam(inst)
     -- end
     -- inst.steamy = inst:DoPeriodicTask(math.random(30, 60),EmitSteam)
 end
@@ -258,11 +326,6 @@ local function fn()
     inst:AddComponent("hauntable")
     inst.components.hauntable:SetHauntValue(TUNING.HAUNT_TINY)
 
-    inst:AddComponent("unevenground")
-    inst.components.unevenground.radius = TUNING.ANTLION_SINKHOLE.UNEVENGROUND_RADIUS
-
-    inst:AddComponent("um_ripplespawner")
-
     inst:AddComponent("timer")
 
     inst:AddComponent("bathbombable")
@@ -278,17 +341,22 @@ local function fn()
 
     inst:DoTaskInTime(0, DetermineSize, nil, true)
 
-    inst:WatchWorldState("isnewmoon", function(inst) 
+    inst:WatchWorldState("isnewmoon", function(inst)
         if not inst.components.bathbombable.is_bathbombed then
             inst.shadowfx = {}
             FadeToDark(inst)
         end
     end)
-    inst:WatchWorldState("isday", function(inst)         
+    inst:WatchWorldState("isday", function(inst)
         if not inst.components.bathbombable.is_bathbombed and inst.color and inst.color < 1 then
             FadeToNormal(inst)
         end
     end)
+
+    inst:AddComponent("bathingpool")
+    inst.components.bathingpool:SetOnStartBeingOccupiedBy(OnStartBeingOccupiedBy)
+    inst.components.bathingpool:SetOnStopBeingOccupiedBy(OnStopBeingOccupiedBy)
+
 
     return inst
 end
