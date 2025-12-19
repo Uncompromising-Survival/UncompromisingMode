@@ -374,7 +374,7 @@ local function barrierweed()
             inst.AnimState:PlayAnimation("bramble_"..inst.type.."_idle", true)
         end
     end)
-    inst:WatchWorldState("isspring", KillOffRimeweed)
+    inst:WatchWorldState("season", KillOffRimeweed)
     inst:WatchWorldState("startrain", KillOffRimeweed)
     return inst
 end
@@ -679,7 +679,7 @@ local function mainweed()
     inst.OnLoad = OnLoadMain
     inst.OnLoadPostPass = OnLoadPostPassMain
     inst:DoTaskInTime(0, SetStage)
-    inst:WatchWorldState("isspring", KillOffRimeweed)
+    inst:WatchWorldState("season", KillOffRimeweed)
     inst:WatchWorldState("startrain", KillOffRimeweed)
     if not inst.bramble then
         inst.bramble = {}
