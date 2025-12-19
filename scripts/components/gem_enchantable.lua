@@ -1,5 +1,7 @@
 local DEFS = require("gemology_defs")
 local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local GEM_UPDATE_RATE = 1
+local DEFAULT_SLOTS = 1
 
 local function on_enchants(self, flag)
     if self.update_flag then
@@ -20,7 +22,7 @@ end
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self.enchants = {}
-    self.slots = 1
+    self.slots = DEFAULT_SLOTS
 
     self.update_flag = false
 
@@ -32,10 +34,11 @@ local GemEnchantable = Class(function(self, inst)
         self.inst.gemology_data[v] = {}
     end
 
-    self.gem_update_task = inst:DoPeriodicTask(1, function(item)
+    self.gem_update_task = inst:DoPeriodicTask(GEM_UPDATE_RATE, function(item)
         if item ~= nil and item:IsValid() and item.components.gem_enchantable then
             for enchant, tier in pairs(item.components.gem_enchantable.enchants) do
                 if GEM_DEFS[enchant].fns.onupdate then
+                    print("running onupdate for "..enchant)
                     GEM_DEFS[enchant].fns.onupdate(item, tier)
                 end
             end
@@ -46,13 +49,14 @@ end, nil, {
 })
 
 function GemEnchantable:AddEnchantment(enchant, tier)
-    assert(self.enchants[enchant] == nil, "Enchantment \"" .. enchant .. "\" is already applied.")
-    assert(GEM_DEFS[enchant] ~= nil, "Unknown enchantment: " .. enchant)
-    assert(tier <= 3 and tier >= 1, "Invalid tier: " .. tier)
+    assert(self.enchants[enchant] == nil, "Attempted to add enchantment \"" .. enchant .. "\", was already applied.")
+    assert(GEM_DEFS[enchant] ~= nil, "Attempted to add unknown enchantment: " .. enchant)
+    assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier.."\" Gem tiers are "..MIN_GEM_TIER.." to "..MAX_GEM_TIER..".")
 
     self.enchants[enchant] = tier
 
     if GEM_DEFS[enchant].fns.onapply then
+        print("running onapply for "..enchant)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
@@ -60,12 +64,13 @@ function GemEnchantable:AddEnchantment(enchant, tier)
 end
 
 function GemEnchantable:RemoveEnchantment(enchant)
-    assert(GEM_DEFS[enchant], "Unknown enchantment: " .. enchant)
+    assert(GEM_DEFS[enchant] ~= nil, "Attempted to remove unknown enchantment: " .. enchant)
     assert(self.enchants[enchant], "Could not remove enchantment \"" .. enchant .. "\". Enchantment is not applied.")
 
     local tier = self.enchants[enchant]
 
     if GEM_DEFS[enchant].fns.onremove then
+        print("running onremove for "..enchant)
         GEM_DEFS[enchant].fns.onremove(self.inst, tier)
     end
 

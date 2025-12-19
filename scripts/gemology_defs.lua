@@ -14,9 +14,11 @@ The values are:
         onunequip = function(item, owner, tier) -- function that runs when you unequip the item with the gem
     }
     color = RGB(r,g,b) --color for the text/durability border in the UI
-    -- for mineral logbook UIAnim
+    -- for mineral logbook
+    sources = {
+    prefab_name = {build = "string", bank = "string", anim = "string" }} --anim defaults to idle. Should these actually be the inv image instead, though?
     build = "string" --build name
-    bank = "string" --bank name
+    bank = "string" --bank name  --should these be the inv img instead??? probably.
     anim = "string" --anim name   -- defaults to "idle"
 }
 
@@ -84,24 +86,29 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
 end
 
 
+function IsEnchantValid(gem)
+    return GEM_DEFS[gem] ~= nil
+end
+
 ------------------------------------------------------------------
 --REDGEM1
 local burn_damage = { 8, 16, 34 }
 local burn_portion = { 0.05, 0.2 }
 
-AddUMGemDef("redgem1", {
+AddUMGemDef("redgem2", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
             if target.components.health then
                 target.components.health:DoFireDamage(burn_damage[tier], attacker, true)
-            end
-            SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
-            if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
-                target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
-                target.components.burnable:ExtendBurning()
+                SpawnPrefab("deer_fire_burst").Transform:SetPosition(target.Transform:GetWorldPosition())
+                if tier ~= 1 and target.components.burnable and target.components.burnable:IsBurning() then
+                    target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
+                    target.components.burnable:ExtendBurning()
+                end
             end
         end
+
     },
 })
 
@@ -110,7 +117,7 @@ AddUMGemDef("redgem1", {
 local devour_tags = { "animal", "pig", "monster", "smallcreature" }
 local devour_mults = { 1 / 10, 1 / 5 } -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
 
-AddUMGemDef("redgem2", {
+AddUMGemDef("redgem1", {
     color = RGB(233, 153, 153),
     fns = {
         onattack = function(inst, attacker, target, tier)
@@ -236,7 +243,7 @@ AddUMGemDef("greengem2", {
 
                 while enchant_nums < 3 and tries > 0 do
                     local enchant = valid_enchants[math.random(#valid_enchants)]
-                    if not inst.components.gem_enchantable.enchants[enchant] then --don't add already existing other enchants.
+                    if IsEnchantValid(enchant) and not inst.components.gem_enchantable.enchants[enchant] then --don't add already existing other enchants.
                         inst.components.gem_enchantable:AddEnchantment(enchant, tier)
                         inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
                         enchant_nums = enchant_nums + 1

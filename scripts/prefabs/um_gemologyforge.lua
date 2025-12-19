@@ -3,29 +3,40 @@ local assets =
     Asset("ANIM", "anim/um_gemforge.zip"),
 }
 
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
+
 local function ShouldAcceptItem(inst, item)
-    if (item.components.equippable and item.components.equippable.equipslot == EQUIPSLOTS.HANDS and not (item.components.minerologyable and item.components.minerologyable.enchant) and (item.components.tool or item.components.weapon)) or item:HasTag("gemology_gem") then -- only allow tools and weapons for now
+    if (item.components.gem_enchantable and item.components.gem_enchantable:HasSlots() or GEM_DEFS[item.prefab] ~= nil) then
         return true
     end
 end
 
 local ALLPLAYERS_CHECK_RADIUS_SQ = 16 * 16
 
-local function TrueForge(inst)
-    inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
-    inst.SoundEmitter:PlaySound("dontstarve/HUD/collect_newitem")
-    inst.forge_tool.components.minerologyable:SetEnchant(inst.gem.prefab, inst.gem:GetTier())
+local function LearnGem(inst)
 
     local x, y, z = inst.Transform:GetWorldPosition()
 
     local sender_list = {}
-    for k,v in pairs(AllPlayers) do
+    for k, v in pairs(AllPlayers) do
         if v:GetDistanceSqToPoint(x, y, z) <= ALLPLAYERS_CHECK_RADIUS_SQ then
             table.insert(sender_list, v.userid)
         end
     end
 
-    SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "LearnGemologyGem"), sender_list, json.encode({gem = inst.gem.prefab, tier = 1}))
+    SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "LearnGemologyGem"), sender_list, json.encode({ gem = inst.gem.prefab, tier = 1 }))
+end
+
+local function TrueForge(inst)
+    inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
+    inst.SoundEmitter:PlaySound("dontstarve/HUD/collect_newitem")
+    --TODO: GEM DURABILITY
+    --local should_use_durability = false
+    if inst.forge_tool.components.gem_enchantable ~= nil and inst.forge_tool.components.gem_enchantable:HasSlots() then
+        inst.forge_tool.components.gem_enchantable:AddEnchantment(inst.gem.prefab, inst.gem:GetTier())
+    end
+
+    LearnGem(inst)
 
     inst.gem:Remove()
     inst.gem = nil

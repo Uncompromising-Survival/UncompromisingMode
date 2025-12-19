@@ -4,6 +4,8 @@ require "um_pocketdimensioncontainers"
 
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
 GLOBAL.TheMineralLogbook:Load()
+GLOBAL.MAX_GEM_TIER = 3
+GLOBAL.MIN_GEM_TIER = 0
 
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
