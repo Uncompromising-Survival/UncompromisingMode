@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function HasSkill(inst,name)
-	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+    return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
 local function DoSleep(inst, revived)
@@ -85,7 +85,16 @@ local function TriggerPocketResurrection(self, item)
         local linkeditem = item.components.linkeditem
         local owner = linkeditem and linkeditem:GetOwnerInst() or nil
         if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_lifebringer_2") then
+            linkeditem.owner_inst = self.inst
+            self.inst.um_blockgotostate = true -- Blocking the heart's GoToState here to avoid state cancelling issues.
             item.components.spellcaster.spell(item, nil, nil, self.inst)
+            if item:IsValid() then -- Blocking it also means we have to break the heart here.
+                if item.components.perishable then item.components.perishable:StartPerishing() end
+                if item.OnStopBody then item:OnStopBody(self.inst) end
+                if item.OnConsume then item:OnConsume(self.inst) end
+            end
+            self.inst.um_blockgotostate = nil
+            linkeditem.owner_inst = owner
         end
         self.inst.components.health:DeltaPenalty(.25)
     end
@@ -207,17 +216,17 @@ env.AddComponentPostInit("health", function(self)
         end
         return  _SetVal(self, val, cause, afflicter, ...)
     end
-	
-	if TUNING.DSTU.ONEHP == true then-- All this code is here
-	    TUNING.WX78_MAXHEALTH_BOOST = 0
-		TUNING.WX78_MAXHEALTH2_MULT = 0
-		local _SetMaxHealth = self.SetMaxHealth
-		function self:SetMaxHealth(amount)
-			if self.inst:HasTag("player") then
-				return _SetMaxHealth(self, 1)
-			else
-				return _SetMaxHealth(self, amount)
-			end
-		end	
-	end
+    
+    if TUNING.DSTU.ONEHP == true then-- All this code is here
+        TUNING.WX78_MAXHEALTH_BOOST = 0
+        TUNING.WX78_MAXHEALTH2_MULT = 0
+        local _SetMaxHealth = self.SetMaxHealth
+        function self:SetMaxHealth(amount)
+            if self.inst:HasTag("player") then
+                return _SetMaxHealth(self, 1)
+            else
+                return _SetMaxHealth(self, amount)
+            end
+        end    
+    end
 end)

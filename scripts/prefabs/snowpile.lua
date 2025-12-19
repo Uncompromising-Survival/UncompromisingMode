@@ -210,10 +210,10 @@ local function workcallback(inst, worker, workleft)
         inst:Remove()
     end
     if inst.components.workable.workleft <= 0 then
-		inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-		if math.random() > 0.5 then
-			inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-		end
+        inst.components.lootdropper:SpawnLootPrefab("snowball_item")
+        if math.random() > 0.5 then
+            inst.components.lootdropper:SpawnLootPrefab("snowball_item")
+        end
         inst:Remove()
     else
         startregen(inst)
@@ -383,10 +383,20 @@ local function Init(inst)
 end
 
 local function OnSeasonChange(inst)
-    if not TheWorld.state.iswinter then
-        inst.persists = false
-        inst:Remove()
-    end
+    if TheWorld.state.iswinter then return end
+    inst.persists = false
+    if inst.removesnowpile then return end
+    inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+        if not TheWorld.state.iswinter then inst:Remove() end
+    end)
+end
+
+local function SlowlyPickAway(inst)
+    if TheWorld.state.iswinter or not TheWorld.state.israining or inst.slowlypicksnowpile then return end
+    inst.slowlypicksnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+        if TheWorld.state.israining and not TheWorld.state.iswinter then inst.components.pickable:Pick() end
+        inst.slowlypicksnowpile = nil
+    end)
 end
 
 local function onwake(inst)
@@ -456,7 +466,6 @@ local function snowpilefn(Sim)
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnWorkCallback(workcallback)
 
-
     local balls_count = 1
     inst:AddComponent("pickable")
     inst.components.pickable.picksound = "dontstarve/wilson/harvest_berries"
@@ -495,11 +504,7 @@ local function snowpilefn(Sim)
     inst.OnEntityWake = onwake
     inst.OnEntitySleep = onsleep
 
-    inst:DoPeriodicTask(10, function(inst)
-        if TheWorld.state.israining and not TheWorld.state.iswinter then
-            inst.components.pickable:Pick()
-        end
-    end)
+    inst:DoPeriodicTask(10, SlowlyPickAway, 0)
 
     return inst
 end

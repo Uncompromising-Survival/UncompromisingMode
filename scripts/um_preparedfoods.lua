@@ -67,31 +67,31 @@ local function Ghost(eater)
     eater.unghosttask = eater:DoTaskInTime(60 * 4, UnGhost)
 end
 
-local um_boomberrypieknockbackstates = {"knockback", "knockbacklanded"}
+local um_boomberrypieknockbackstates = { "knockback", "knockbacklanded" }
 local function BoomPieStopKnockback(inst, data)
     if data and not table.contains(um_boomberrypieknockbackstates, data.statename) and inst.um_boomberrypietask then
         inst.um_boomberrypietask:Cancel()
         inst.um_boomberrypietask = nil
-        inst.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)        
+        inst.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)
         inst.components.health:SetInvincible(false)
     end
     inst:RemoveEventCallback("newstate", BoomPieStopKnockback)
 end
 
-local pie_shouldnt_hit = {"FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "player"}
+local pie_shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "player" }
 local function BoomPieGo(inst, eater)
     if eater.components.health and not eater.components.health:IsDead() then
         local x, y, z = eater.Transform:GetWorldPosition()
         if eater:HasTag("player") then
             eater.Physics:SetCollisionMask(COLLISION.GROUND, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS) -- Can launch yourself over gaps.
             eater.Physics:Teleport(x, y, z)
-            eater:PushEvent("knockback", {knocker = eater, radius = 6, strengthmult = 6})
+            eater:PushEvent("knockback", { knocker = eater, radius = 6, strengthmult = 6 })
             eater:ListenForEvent("newstate", BoomPieStopKnockback)
             eater.components.health:SetInvincible(true)
 
             if eater.um_boomberrypietask then eater.um_boomberrypietask:Cancel() end
             eater.um_boomberrypietask = eater:DoTaskInTime(10 * FRAMES, function(eater)
-                eater.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)        
+                eater.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)
                 eater.components.health:SetInvincible(false)
                 if eater.sg then
                     eater.sg.statemem.speed = -10
@@ -107,12 +107,12 @@ local function BoomPieGo(inst, eater)
                 eater:RemoveEventCallback("newstate", BoomPieStopKnockback)
             end)
         end
-        eater:PushEvent("attacked", {damage = 3})
+        eater:PushEvent("attacked", { damage = 3 })
 
         SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
         local puddle = SpawnPrefab("blueberrypuddle")
-        puddle.Transform:SetPosition(x, y, z)        
+        puddle.Transform:SetPosition(x, y, z)
         puddle.playermade = true
         puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
 
@@ -191,9 +191,10 @@ local um_preparedfoods =
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", nil, 0.8 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING,
+        tags = { "fooddrink" },
         oneatenfn = function(inst, eater)
             if eater.components.hayfever and eater.components.hayfever.enabled then
-                eater.components.hayfever:SetNextSneezeTime(1920) --Should be four days            
+                eater.components.hayfever:SetNextSneezeTime(1920) --Should be four days
             end
 
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -715,6 +716,7 @@ local um_preparedfoods =
         temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        tags = { "fooddrink" },
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "um_rimeweed_itemflower", 1 }, { "ice", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,

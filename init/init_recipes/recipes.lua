@@ -113,7 +113,7 @@ ChangeSortKey("um_fyre_bomb", "um_boomberry_bomb", "WEAPONS", true)
 AddRecipe2("um_eyebalm", { Ingredient("um_meatcomb", 1), Ingredient("um_meathoney", 3), Ingredient("mosquitosack",3)}, TECH.SCIENCE_TWO, { numtogive = 3 }, { "RESTORATION" })
 ChangeSortKey("um_eyebalm", "compostwrap", "RESTORATION", true)
 
-AddRecipe2("um_firecream", { Ingredient("papyrus", 1), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
+AddRecipe2("um_firecream", { Ingredient("firenettles_dried", 3), Ingredient("um_pepperdragon_bladder", 1), Ingredient("um_ghost_pepper_item",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "RESTORATION" })
 ChangeSortKey("um_firecream", "um_eyebalm", "RESTORATION", true)
 
 AddRecipe2("um_beemine_moon_item", { Ingredient("log", 2), Ingredient("um_bee_moon", 1), Ingredient("um_meathoney",2)}, TECH.SCIENCE_TWO, { numtogive = 1 }, { "WEAPONS" })

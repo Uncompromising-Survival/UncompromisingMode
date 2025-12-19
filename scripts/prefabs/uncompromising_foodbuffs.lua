@@ -104,7 +104,7 @@ local function Retaliate(target, data)
     end
 end
 
-local function attachretaliationdamage(inst, target) 
+local function attachretaliationdamage(inst, target)
     target:ListenForEvent("attacked", Retaliate, target)
     SpawnPrefab("electricchargedfx"):SetTarget(target)
 end
@@ -117,10 +117,10 @@ local function OnHitOtherBoomberry(inst, data)
     local other, damage = data.target, data.damage
     if other and damage and not other.um_boomberry_exploded then
         local x, y, z = other.Transform:GetWorldPosition()
-        local ents = TheSim:FindEntities(x, y, z, 2, {"_health", "_combat"}, {"player", "companion", "INLIMBO", "flight", "invisible", "notarget", "noattack", "wall"})
+        local ents = TheSim:FindEntities(x, y, z, 2, { "_health", "_combat" }, { "player", "companion", "INLIMBO", "flight", "invisible", "notarget", "noattack", "wall" })
         local damage = damage * .75
         if other.SoundEmitter then other.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap") end
-        for i,v in ipairs(ents) do
+        for i, v in ipairs(ents) do
             local leader = v.components.follower and v.components.follower.leader
             local itemleader = leader and leader.components.inventoryitem and leader.components.inventoryitem:GetGrandOwner()
             if not v.components.health:IsDead() and v.components.combat:CanBeAttacked() and (not leader or itemleader and not itemleader:HasTag("player") or not leader.components.inventoryitem and not leader:HasTag("player"))
@@ -129,7 +129,7 @@ local function OnHitOtherBoomberry(inst, data)
                 v.um_boomberry_exploded = true
                 if damageredirecttarget then --Fix by Discord user mlz2023_34253
                     damageredirecttarget.um_boomberry_exploded = true
-                    damageredirecttarget:DoTaskInTime(.3, function(v) damageredirecttarget.um_boomberry_exploded = nil end)
+                    damageredirecttarget:DoTaskInTime(.3, function() damageredirecttarget.um_boomberry_exploded = nil end)
                 end
                 v.components.combat:GetAttacked(inst, damage)
                 v:DoTaskInTime(.3, function(v) v.um_boomberry_exploded = nil end)
@@ -220,7 +220,7 @@ local function largehungerslow_detach(inst, target)
 end
 
 local function stantonslumber_attach(inst, target)
-    local stanton = FindEntity(target,20,nil,{"stanton"})
+    local stanton = FindEntity(target, 20, nil, { "stanton" })
     if stanton ~= nil then
         if stanton.contestent == target then
             if target.stantonslumberstack == nil then
@@ -235,14 +235,14 @@ local function stantonslumber_attach(inst, target)
             if math.random() < target.stantonslumberstack then
                 if target.components.grogginess ~= nil then
                     target.components.grogginess:AddGrogginess(34, 5)
-                    local stanton = FindEntity(target,10,nil,{"stanton"})
+                    local stanton = FindEntity(target, 10, nil, { "stanton" })
                     if stanton ~= nil then
                         stanton:AddTag("won")
                     end
-                target:DoTaskInTime(4,function(target) 
-                    target.components.grogginess:SubtractGrogginess(-30)
-                    target.components.grogginess:ComeTo()    
-                end)
+                    target:DoTaskInTime(4, function(target)
+                        target.components.grogginess:SubtractGrogginess(-30)
+                        target.components.grogginess:ComeTo()
+                    end)
                 end
             else
                 if target.components.grogginess ~= nil and target.components.grogginess.grog_amount == 0 then
@@ -268,15 +268,15 @@ local function stantonslumber_detach(inst, target)
     target.stantonslumberstack = nil
 end
 
-local function hypercourage_attach(inst,target)
+local function hypercourage_attach(inst, target)
     target.components.sanity.neg_aura_modifiers:SetModifier(inst, 0)
 end
 
-local function hypercourage_extend(inst,target)
+local function hypercourage_extend(inst, target)
 
 end
 
-local function hypercourage_detach(inst,target)
+local function hypercourage_detach(inst, target)
     target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
 end
 
@@ -284,15 +284,15 @@ local function stantonslumber_detach(inst, target)
     target.stantonslumberstack = nil
 end
 
-local function smallcourage_attach(inst,target)
+local function smallcourage_attach(inst, target)
     target.components.sanity.neg_aura_modifiers:SetModifier(inst, 0.5)
 end
 
-local function smallcourage_extend(inst,target)
+local function smallcourage_extend(inst, target)
 
 end
 
-local function smallcourage_detach(inst,target)
+local function smallcourage_detach(inst, target)
     target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
 end
 
@@ -308,7 +308,7 @@ end
 
 local function OnAmuseAttach(inst, target)
     if target.tempamusetier ~= nil then
-        inst.tier = target.tempamusetier+1
+        inst.tier = target.tempamusetier + 1
     end
     inst.task = inst:DoPeriodicTask(1, OnTickAmuse, nil, target)
 end
@@ -326,7 +326,7 @@ local function OnAmuseExtended(inst, target)
     end
     inst.task:Cancel()
     if target.tempamusetier ~= nil then
-        inst.tier = target.tempamusetier+1
+        inst.tier = target.tempamusetier + 1
     end
     inst.task = inst:DoPeriodicTask(1, OnTickAmuse, nil, target)
 end
@@ -348,7 +348,7 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
             inst.components.debuff:Stop()
         end, target)
         if not nospeech then
-            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_"..string.upper(name), priority = priority })
+            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(name), priority = priority })
         end
         if onattachedfn ~= nil then
             onattachedfn(inst, target)
@@ -359,7 +359,7 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
         inst.components.timer:StopTimer("buffover")
         inst.components.timer:StartTimer("buffover", duration)
         if not nospeech then
-            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_"..string.upper(name), priority = priority })
+            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(name), priority = priority })
         end
         if onextendedfn ~= nil then
             onextendedfn(inst, target)
@@ -371,7 +371,7 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
             ondetachedfn(inst, target)
         end
         if not nospeech then
-            target:PushEvent("foodbuffdetached", { buff = "ANNOUNCE_DETACH_BUFF_"..string.upper(name), priority = priority })
+            target:PushEvent("foodbuffdetached", { buff = "ANNOUNCE_DETACH_BUFF_" .. string.upper(name), priority = priority })
         end
         inst:Remove()
     end
@@ -407,20 +407,20 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
         return inst
     end
 
-    return Prefab("buff_"..name, fn, nil)
+    return Prefab("buff_" .. name, fn, nil)
 end
 
 return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, TUNING.BUFF_ELECTRICATTACK_DURATION, 2, { "electrichitsparks", "electricchargedfx" }),
-MakeBuff("boomberryattacks", attachboomberry, nil, removeboomberry, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
-MakeBuff("frozenfury", attachfrozenness, nil, removefrozenness, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
-MakeBuff("lesserelectricattack", electric_attach, electric_extend, electric_detach, 30, 2, { "electrichitsparks", "electricchargedfx" }),
-MakeBuff("knockbackimmune", kbimmune_attach, kbimmune_extend, kbimmune_detach, TUNING.BUFF_ATTACK_DURATION, 2),
-MakeBuff("californiaking", californiaking_attach, californiaking_extend, californiaking_detach, TUNING.BUFF_ATTACK_DURATION*8, 2),
-MakeBuff("largehungerslow", largehungerslow_attach, largehungerslow_extend, largehungerslow_detach, TUNING.BUFF_ATTACK_DURATION*8, 2),
-MakeBuff("stantonslumber", stantonslumber_attach, stantonslumber_attach, stantonslumber_detach, TUNING.BUFF_ATTACK_DURATION, 2,true),
-MakeBuff("hypercourage", hypercourage_attach, hypercourage_extend, hypercourage_detach, 30, 2,true),
-MakeBuff("amusementcorn", OnAmuseAttach, OnAmuseExtended, OnAmuseDone, 15, 2,true),
-MakeBuff("smallcourage", smallcourage_attach, smallcourage_extend, smallcourage_detach, 8*60, 2,true),
-MakeBuff("furious1",smallfury_attach,nil,smallfury_detatch,5,true,true),
-MakeBuff("furious2",medfury_attach,nil,medfury_detatch,5,true,true),
-MakeBuff("furious3",largefury_attach,nil,largefury_detatch,5,true,true)
+    MakeBuff("boomberryattacks", attachboomberry, nil, removeboomberry, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
+    MakeBuff("frozenfury", attachfrozenness, nil, removefrozenness, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
+    MakeBuff("lesserelectricattack", electric_attach, electric_extend, electric_detach, 30, 2, { "electrichitsparks", "electricchargedfx" }),
+    MakeBuff("knockbackimmune", kbimmune_attach, kbimmune_extend, kbimmune_detach, TUNING.BUFF_ATTACK_DURATION, 2),
+    MakeBuff("californiaking", californiaking_attach, californiaking_extend, californiaking_detach, TUNING.BUFF_ATTACK_DURATION * 8, 2),
+    MakeBuff("largehungerslow", largehungerslow_attach, largehungerslow_extend, largehungerslow_detach, TUNING.BUFF_ATTACK_DURATION * 8, 2),
+    MakeBuff("stantonslumber", stantonslumber_attach, stantonslumber_attach, stantonslumber_detach, TUNING.BUFF_ATTACK_DURATION, 2, true),
+    MakeBuff("hypercourage", hypercourage_attach, hypercourage_extend, hypercourage_detach, 30, 2, true),
+    MakeBuff("amusementcorn", OnAmuseAttach, OnAmuseExtended, OnAmuseDone, 15, 2, true),
+    MakeBuff("smallcourage", smallcourage_attach, smallcourage_extend, smallcourage_detach, 8 * 60, 2, true),
+    MakeBuff("furious1", smallfury_attach, nil, smallfury_detatch, 5, true, true),
+    MakeBuff("furious2", medfury_attach, nil, medfury_detatch, 5, true, true),
+    MakeBuff("furious3", largefury_attach, nil, largefury_detatch, 5, true, true)
