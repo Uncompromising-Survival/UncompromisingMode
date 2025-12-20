@@ -73,19 +73,19 @@ local function SpawnBees(inst, target)
                 if bee.components.combat ~= nil then
                     bee.components.combat:SetTarget(target)
                 end
-				bee.components.combat:SetRetargetFunction(3, nil)
-				bee.components.combat:SetKeepTargetFunction(function(bee) return true end)
-				bee:RemoveComponent("lootdropper")
-				bee:AddComponent("lootdropper") -- wipe the lootdropper component
-				bee.persists = false -- temp minion, no save/load
-				bee:RemoveComponent("workable")
-				bee:AddTag("soulless")
-				
-				bee:DoPeriodicTask(3,function(bee) -- Should I finish myself?
-					if bee.components.combat and not bee.components.combat.target then
-						bee.components.health:Kill()
-					end
-				end)
+                bee.components.combat:SetRetargetFunction(3, nil)
+                bee.components.combat:SetKeepTargetFunction(function(bee) return true end)
+                bee:RemoveComponent("lootdropper")
+                bee:AddComponent("lootdropper") -- wipe the lootdropper component
+                bee.persists = false -- temp minion, no save/load
+                bee:RemoveComponent("workable")
+                bee:AddTag("soulless")
+                
+                bee:DoPeriodicTask(3,function(bee) -- Should I finish myself?
+                    if bee.components.combat and not bee.components.combat.target then
+                        bee.components.health:Kill()
+                    end
+                end)
             end
         end
         target:PushEvent("coveredinbees")
@@ -93,15 +93,15 @@ local function SpawnBees(inst, target)
 end
 
 local function DoDamage(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x,y,z,2,{"_combat","_health"},{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
-	for i,v in ipairs(ents) do
-		local damage = 75
-		if v:HasTag("bee") then
-			damage = damage * 0.25
-		end
-		v.components.combat:GetAttacked(inst,damage)
-	end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x,y,z,2,{"_combat","_health"},{ "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" })
+    for i,v in ipairs(ents) do
+        local damage = 75
+        if v:HasTag("bee") then
+            damage = damage * 0.25
+        end
+        v.components.combat:GetAttacked(inst,damage)
+    end
 end
 
 
@@ -115,14 +115,14 @@ local function OnExplode(inst)
     inst.SoundEmitter:PlaySound("dontstarve/bee/beemine_launch")
     SpawnBees(inst,inst.components.mine:GetTarget())
     SpawnPrefab("bomb_lunarplant_explode_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
-	DoDamage(inst)
+    DoDamage(inst)
     inst:RemoveComponent("inventoryitem")
     inst:RemoveComponent("mine")
     inst.persists = false
     inst.Physics:SetActive(false)
     --V2C: mine is lost if save happens during these 9 frames
     --     but better than loading back into an invalid state
-	inst:Remove()
+    inst:Remove()
 end
 
 local function onhammered(inst, worker)
@@ -180,6 +180,15 @@ local function OnDropped(inst)
     inst.components.mine:Deactivate()
 end
 
+local function OnPickup(inst, pickupguy, src_pos)
+    if pickupguy.components.inventory then
+        local invmine = SpawnPrefab("um_beemine_moon_item")
+        pickupguy.components.inventory:GiveItem(invmine, nil, inst:GetPosition())
+    end
+    inst:Remove()
+    return true
+end
+
 local function OnHaunt(inst, haunter)
     if inst.components.mine == nil or inst.components.mine.inactive then
         inst.components.hauntable.hauntvalue = TUNING.HAUNT_TINY
@@ -225,7 +234,7 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
         inst.entity:AddNetwork()
 
         MakeInventoryPhysics(inst)
-		inst:SetDeploySmartRadius(DEPLOYSPACING_RADIUS[DEPLOYSPACING.LESS] / 2)
+        inst:SetDeploySmartRadius(DEPLOYSPACING_RADIUS[DEPLOYSPACING.LESS] / 2)
 
         inst.MiniMapEntity:SetIcon("um_beemine_moon.tex")
 
@@ -259,18 +268,11 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
         inst.components.workable:SetOnFinishCallback(onhammered)
 
         if isinventory then
-            inst:AddComponent("inventoryitem")
-            inst.components.inventoryitem:SetOnPutInInventoryFn(StopRattling)
-            inst.components.inventoryitem:SetOnDroppedFn(OnDropped)
-            inst.components.inventoryitem:SetSinks(true)
-            inst.components.inventoryitem.onpickupfn = function(inst, pickupguy, src_pos)
-                if pickupguy.components.inventory then
-                    local invmine = SpawnPrefab("um_beemine_moon_item")
-                    pickupguy.components.inventory:GiveItem(invmine, nil, inst:GetPosition())
-                end
-                inst:Remove()
-                return true
-            end
+            local inventoryitem = inst:AddComponent("inventoryitem")
+            inventoryitem:SetOnPutInInventoryFn(StopRattling)
+            inventoryitem:SetOnDroppedFn(OnDropped)
+            inventoryitem:SetOnPickupFn(OnPickup)
+            inventoryitem:SetSinks(true)
 
             inst:AddComponent("deployable")
             inst.components.deployable.ondeploy = ondeploy
@@ -284,17 +286,6 @@ local function BeeMine(name, alignment, skin, spawnprefab, isinventory)
 
         inst.OnEntitySleep = OnEntitySleep
         inst.OnEntityWake = OnEntityWake
-
-		
-		inst.components.inventoryitem.onpickupfn = function(inst, pickupguy, src_pos)
-			if pickupguy.components.inventory then
-				local invmine = SpawnPrefab("um_beemine_moon_item")
-				invmine:DoTaskInTime(0,function(invmine)
-					pickupguy.components.inventory:GiveItem(invmine,nil,pickupguy:GetPosition())
-				end)
-			end
-			inst:Remove()
-		end
 
         return inst
     end
@@ -311,21 +302,21 @@ local bomb_assets =
 }
 
 local function OnMinePlant(inst, attacker, target)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local mines = TheSim:FindEntities(x,y,z,2,{"mine"})
-	local mine
-	if #mines == 0 then
-		mine = SpawnPrefab("um_beemine_moon")
-		mine.components.mine:Reset()
-		mine.Physics:Stop()
-		mine.AnimState:PlayAnimation("plant")
-		mine.AnimState:PushAnimation("idle",true)
-		
-	else
-		mine = SpawnPrefab("um_beemine_moon_item")
-		mine.AnimState:PlayAnimation("plant_pop",false)
-	end
-	mine.Transform:SetPosition(x,y,z)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local mines = TheSim:FindEntities(x,y,z,2,{"mine"})
+    local mine
+    if #mines == 0 then
+        mine = SpawnPrefab("um_beemine_moon")
+        mine.components.mine:Reset()
+        mine.Physics:Stop()
+        mine.AnimState:PlayAnimation("plant")
+        mine.AnimState:PushAnimation("idle",true)
+        
+    else
+        mine = SpawnPrefab("um_beemine_moon_item")
+        mine.AnimState:PlayAnimation("plant_pop",false)
+    end
+    mine.Transform:SetPosition(x,y,z)
     inst:Remove()
 end
 
@@ -357,7 +348,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 
     --projectile (from complexprojectile component) added to pristine state for optimization
     inst:AddTag("projectile")
-	inst:AddTag("complexprojectile")
+    inst:AddTag("complexprojectile")
 
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild(build)
@@ -464,7 +455,7 @@ local function bomb_fn()
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
-	
+    
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
