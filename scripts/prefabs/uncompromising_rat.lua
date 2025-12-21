@@ -55,48 +55,45 @@ local function OnDeath(inst) if inst._item and inst._item:IsValid() then inst._i
 
 local function OnPickup(inst, data)
     if inst._item and inst._item:IsValid() then inst._item:Remove() end
-    if data.item.components.explosive == nil then
-        inst:AddTag("carrying")
-        data.item:AddTag("raided")
-        local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
-        local skin_build = data.item:GetSkinBuild()
-        inst._item = SpawnPrefab(item)
+    if data.item.components.explosive then data.item.components.explosive:OnBurnt() return end
+    inst:AddTag("carrying")
+    data.item:AddTag("raided")
+    local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
+    local skin_build = data.item:GetSkinBuild()
+    inst._item = SpawnPrefab(item)
 
-        if inst._item ~= nil then
-            inst._item.components.inventoryitem.canbepickedup = false
-            inst._item.entity:SetParent(inst.entity)
-            inst._item.entity:AddFollower()
-            inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
-            inst._item.Transform:SetScale(.8, .8, .8)
-            if skin_build ~= nil then
-                -- TODO : Need to match the item skin here
-            end
-            inst._item:AddComponent("pickable")
-            inst._item.components.pickable.quickpick = true
-            inst._item.components.pickable.canbepicked = true
-            inst._item.components.pickable.onpickedfn = function()
-                inst.components.inventory:DropEverything()
-                inst:RemoveTag("carrying")
-                inst._item:Remove()
-                inst._item = nil
-            end
+    if inst._item ~= nil then
+        inst._item.components.inventoryitem.canbepickedup = false
+        inst._item.entity:SetParent(inst.entity)
+        inst._item.entity:AddFollower()
+        inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
+        inst._item.Transform:SetScale(.8, .8, .8)
+        if skin_build ~= nil then
+            -- TODO : Need to match the item skin here
+        end
+        inst._item:AddComponent("pickable")
+        inst._item.components.pickable.quickpick = true
+        inst._item.components.pickable.canbepicked = true
+        inst._item.components.pickable.onpickedfn = function()
+            inst.components.inventory:DropEverything()
+            inst:RemoveTag("carrying")
+            inst._item:Remove()
+            inst._item = nil
+        end
 
-            local function DeleteBackItem(inst)
-                if inst._item then
-                    for i = 1, inst.components.inventory.maxslots do
-                        local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
-                        if v ~= nil then
-                            inst.components.inventory:DropItem(v, true, true)
-                            v:Remove()
-                        end
+        --[[local function DeleteBackItem(inst)
+            if inst._item then
+                for i = 1, inst.components.inventory.maxslots do
+                    local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
+                    if v ~= nil then
+                        inst.components.inventory:DropItem(v, true, true)
+                        v:Remove()
                     end
                 end
             end
-
-            inst:ListenForEvent("onremove", DeleteBackItem, inst._item)
         end
-    else
-        data.item.components.explosive:OnBurnt()
+
+        inst:ListenForEvent("onremove", DeleteBackItem, inst._item)]]
     end
 end
 
@@ -195,7 +192,7 @@ local function ShouldAcceptItem_Winky(inst, item, giver) return giver:HasTag("ra
 
 local function OnGetItemFromPlayer_Winky(inst, giver, item)
     if inst.components.eater:CanEat(item) then
-        if inst._item ~= nil then inst._item:Remove() end
+        if inst._item and inst._item:IsValid() then inst._item:Remove() end
 
         for k, v in pairs(inst.components.inventory.itemslots) do giver.components.inventory:GiveItem(inst.components.inventory:RemoveItemBySlot(k)) end
 
