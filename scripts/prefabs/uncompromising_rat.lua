@@ -51,11 +51,10 @@ local function OnAttacked(inst, data)
     inst.components.combat:ShareTarget(data.attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
 end
 
-local function OnDeath(inst) if inst._item ~= nil then inst._item:Remove() end end
+local function OnDeath(inst) if inst._item and inst._item:IsValid() then inst._item:Remove() end end
 
 local function OnPickup(inst, data)
-    if inst._item ~= nil then inst._item:Remove() end
-
+    if inst._item and inst._item:IsValid() then inst._item:Remove() end
     if data.item.components.explosive == nil then
         inst:AddTag("carrying")
         data.item:AddTag("raided")
@@ -79,10 +78,11 @@ local function OnPickup(inst, data)
                 inst.components.inventory:DropEverything()
                 inst:RemoveTag("carrying")
                 inst._item:Remove()
+                inst._item = nil
             end
 
             local function DeleteBackItem(inst)
-                if inst._item ~= nil then
+                if inst._item then
                     for i = 1, inst.components.inventory.maxslots do
                         local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
                         if v ~= nil then
