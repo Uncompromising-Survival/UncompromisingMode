@@ -104,7 +104,7 @@ local function Pop(inst)
     inst:Remove()
 end
 
-env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
+env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
     if inst.states["death"] then
         local _OldOnEnter = inst.states["death"].onenter
         inst.states["death"].onenter = function(inst) -- This specifically is for the seeker bee, just to make them not play the death animation and instead stay stuck in the ground when they die.
