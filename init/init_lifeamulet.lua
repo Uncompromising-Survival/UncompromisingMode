@@ -1,6 +1,4 @@
 STRINGS = GLOBAL.STRINGS
-STRINGS.NAMES.AMULET = "Lesser Life Amulet"
-STRINGS.RECIPE_DESC.AMULET = "Protects you from death, while worn."
 
 local env = env
 GLOBAL.setfenv(1, GLOBAL)

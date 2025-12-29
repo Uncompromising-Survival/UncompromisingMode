@@ -2,10 +2,6 @@
 -- The strings here are also used when other characters are missing a line.
 -- If you've added an object to the mod, this is where to add placeholder strings.
 -- Keep things organized.
-RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
--- Could this be moved to init_recipes without issue?
-RECIPE_DESC.RAT_BURROW = "A den of annoying little hairballs."
-
 ANNOUNCE = GLOBAL.STRINGS.CHARACTERS.GENERIC
 DESCRIBE = GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE
 ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.GENERIC.ACTIONFAIL

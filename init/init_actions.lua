@@ -422,7 +422,7 @@ if TUNING.DSTU.WXLESS then
     AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
 end
 
-GLOBAL.STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
+
 
 local _Start_ChannelCastStrFn = GLOBAL.ACTIONS.START_CHANNELCAST.strfn
 GLOBAL.ACTIONS.START_CHANNELCAST.strfn = function(act)
@@ -504,7 +504,6 @@ GLOBAL.ACTIONS.COOK.fn = function(act)
     end
 end
 
-GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
 local um_gunshooty = GLOBAL.Action({ priority = -1, rmb = true, distance = 40, mount_valid = true })
 um_gunshooty.id = "UM_GUNSHOOTY"
 um_gunshooty.str = GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY

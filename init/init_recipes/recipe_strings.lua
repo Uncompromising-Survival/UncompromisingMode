@@ -23,6 +23,7 @@ RECIPE_DESC.AIR_CONDITIONER = "Condition the air."
 if GetModConfigData("longpig") then
     RECIPE_DESC.REVIVER = "Dead flesh revived to revive a dead friend."
 end
+RECIPE_DESC.AMULET = "Protects you from death, while worn."
 RECIPE_DESC.HONEY_LOG = "A log a day keeps the sickness at bay."
 RECIPE_DESC.BUGZAPPER = "Bite back with electricity!"
 RECIPE_DESC.ANCIENT_AMULET_RED = "Recalls your lost soul."
@@ -146,6 +147,8 @@ RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
 --[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
 RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
+RECIPE_DESC.RAT_BURROW = "A den of annoying little hairballs."
+RECIPE_DESC.RAT_BURROW = "Leads back to home."
 RECIPE_DESC.OAR_MONKEY = "Now you can do the monkey paddle."
 --
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
