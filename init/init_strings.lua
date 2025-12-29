@@ -684,7 +684,7 @@ STRINGS.SKILLTREE.WATHOM = {
     BITE_2_TITLE = "Feast",
     BITE_2_DESC = "Slaying a creature with your bite will automatically consume any meat that it would've dropped to the ground, replenishing 10% more stats than usual. Wathom ignores poisoned or high-value foods.",
     BITE_MASTERY_TITLE = "Abyssal Metabolism",
-    BITE_MASTERY_DESC = "Consuming creatures via your bite will recover a small amount of lost maximum health. Unlock the ability to eat Lichen.",
+    BITE_MASTERY_DESC = "Consuming creatures via your bite will recover a small amount of lost maximum health. Unlock the ability to eat Lichen and Monster Meat.",
     BARK_MASTERY_TITLE = "Overwhelming Presence",
     BARK_MASTERY_DESC = "Barking will spread Nightmare Fuel Puddles on the ground, slowing and panicking mobs that come into contact.",
     ECHOLOCATION_1_TITLE = "Echo",
@@ -931,6 +931,15 @@ STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC = STRINGS.SKILLTREE.WILLOW.
 -- WALTER
 --------------------------------------------------------------------------
 -- For now go to init_descriptions/walter_strings
+
+--------------------------------------------------------------------------
+-- WORMWOOD
+--------------------------------------------------------------------------
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_PHOTOSYNTHESIS_DESC                                = "Continue naturally blooming into Summer."
+
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED1_DESC                                        = "During full bloom move 5% faster while above 90% health."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED2_DESC                                        = "During full bloom move 5% faster while above 80% health."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                                   = "Fertilization of Wormwood is boosted 30%.\nReach full bloom much quicker."
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1242,4 +1251,3 @@ STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
         EMPTY = "Woby sounds like she's starving!",
     },
 }
--- FOR THIS TO WORK THIS NEEDS TO BE IN MODMAIN.LUA: modimport("init/init_descriptions/announcestrings.lua")

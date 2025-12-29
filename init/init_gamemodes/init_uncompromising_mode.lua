@@ -40,9 +40,9 @@ modimport("init/init_descriptions/walter")
 modimport("init/init_descriptions/wanda")
 modimport("init/init_descriptions/winky")
 modimport("init/init_descriptions/wathom")
-modimport("init/init_descriptions/skilltreestrings.lua")
-modimport("init/init_descriptions/announcestrings.lua")
-modimport("init/init_descriptions/descriptorstrings.lua")
+--modimport("init/init_descriptions/skilltreestrings.lua")
+--modimport("init/init_descriptions/announcestrings.lua")
+--modimport("init/init_descriptions/descriptorstrings.lua")
 
 
 

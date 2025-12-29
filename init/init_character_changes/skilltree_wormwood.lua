@@ -27,12 +27,6 @@ end
 
 local STRINGS = GLOBAL.STRINGS
 local SKILLTREESTRINGS = STRINGS.SKILLTREE.WORMWOOD
-SKILLTREESTRINGS.BLOOMING_PHOTOSYNTHESIS_DESC                                = "Continue naturally blooming into Summer."
-
-
-SKILLTREESTRINGS.BLOOMING_SPEED1_DESC                                        = "During full bloom move 5% faster while above 90% health."
-SKILLTREESTRINGS.BLOOMING_SPEED2_DESC                                        = "During full bloom move 5% faster while above 80% health."
-SKILLTREESTRINGS.BLOOMING_MAX_UPGRADE_DESC                                   = "Fertilization of Wormwood is boosted 30%.\nReach full bloom much quicker."
 
 
 		
