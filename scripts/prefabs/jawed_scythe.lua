@@ -35,6 +35,8 @@ end
 --------------------------------------------------------------------------
 
 local function SetFxOwner(inst, owner)
+    if inst.fx == nil then return end
+
 	if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
 		inst._fxowner.components.colouradder:DetachChild(inst.fx)
 	end
@@ -61,11 +63,9 @@ local function PushIdleLoop(inst)
 end
 
 local function OnStopFloating(inst)
-    inst.fx.AnimState:SetFrame(0)
+    if inst.fx then inst.fx.AnimState:SetFrame(0) end
     inst:DoTaskInTime(0, PushIdleLoop) --#V2C: #HACK restore the looping anim, timing issues
 end
-
-
 
 local function OnEquip(inst, owner)
     local skin_build = inst:GetSkinBuild()

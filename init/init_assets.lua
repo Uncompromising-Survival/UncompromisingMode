@@ -63,7 +63,6 @@ local inventoryitems =
     "dormant_rain_horn",
     "driftwoodfishingrod",
     "feather_frock",
-    "fishmeat_dried",
     "floral_bandage",
     "um_rimeweed_icepack",
     "gasmask",
@@ -154,7 +153,6 @@ local inventoryitems =
     "skullflask",
     "skullflask_empty",
     "slobberlobber",
-    "smallfishmeat_dried",
     "snapplant",
     "snotroast",
     "um_ghost_fajita",
@@ -451,6 +449,7 @@ local inventoryitems =
     "um_magnifier"
 }
 
+
 for _, item in ipairs(inventoryitems) do
     RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
 end
@@ -651,8 +650,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -811,8 +808,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),

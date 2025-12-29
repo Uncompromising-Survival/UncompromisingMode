@@ -338,10 +338,47 @@ local function fngoo()
         return inst
     end
 
-    inst.SetVariation = SetVariation
-    inst.persists = false
-    inst.task = inst:DoTaskInTime(0, inst.Remove)
+    inst.SetVariation = SetVariation	
+	inst.persists = true
     inst.OnStartFade = OnStartFade
+	
+	inst.task = inst:DoTaskInTime(0, function(inst)
+		if inst.trailname ~= nil then
+			OnInit(inst)
+		end
+	end)
+
+	inst.OnSave = function(inst, data)
+		data.trailname = inst.trailname
+		data.duration = inst.duration
+		data.scale = inst.Transform:GetScale()
+	end
+		
+	inst.OnLoad = function(inst, data)
+		if data ~= nil then
+			if data.scale ~= nil then
+				inst.Transform:SetScale(data.scale, data.scale, data.scale)
+			end
+
+			inst.trailname = data.trailname
+			inst.duration = data.duration or TUNING.TOTAL_DAY_TIME
+
+			if inst.trailname ~= nil then
+				inst.AnimState:PlayAnimation(inst.trailname)
+				inst:ListenForEvent("animover", OnAnimOver)
+				inst.task = inst:DoPeriodicTask(0.25, OnUpdate, nil,
+				inst.Transform:GetWorldPosition(), data.scale or 1)
+			else
+				inst:Remove()
+			end
+		end
+	end
+
+	inst:DoTaskInTime(0, function(inst)
+		if inst:IsValid() then
+			inst.AnimState:SetMultColour(0,0,0,0.8)
+		end
+	end)	
 
     return inst
 end

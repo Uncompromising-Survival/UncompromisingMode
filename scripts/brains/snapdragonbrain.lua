@@ -7,6 +7,8 @@ require "behaviours/attackwall"
 --require "behaviours/runaway"
 require "behaviours/doaction"
 
+local BrainCommon = require("brains/braincommon")
+
 local SEE_FOOD_DIST = 15
 local STOP_RUN_DIST = 10
 local SEE_PLAYER_DIST = 5
@@ -80,7 +82,8 @@ end)
 function SnapdragonBrain:OnStart()
     local root = PriorityNode(
     {
-        WhileNode( function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
+        BrainCommon.PanicTrigger(self.inst),
+        BrainCommon.ElectricFencePanicTrigger(self.inst),
 		IfNode( function() return self.inst.components.combat.target ~= nil end, "hastarget", AttackWall(self.inst)),
         ChaseAndAttack(self.inst, MAX_CHASE_TIME),
         DoAction(self.inst, EatFoodAction),

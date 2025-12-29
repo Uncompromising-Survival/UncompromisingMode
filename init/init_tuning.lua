@@ -47,6 +47,8 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     WIDOWSGRASP_DAMAGE = 59.5,
     WIDOWSGRASP_USES = 200,
+	BOOMBERRYBOMB_DAMAGE = 50,
+	PYREBOMB_DAMAGE = 100,
     ----------------------------------------------------------------------------
     -- Acid colour
     ----------------------------------------------------------------------------
@@ -178,7 +180,7 @@ TUNING.DSTU = {
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
     -- Spawn New Bosses
-    GOOSE_SETTING = GetModConfigData("goose_setting"),
+    --GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
     -- Hound inclusion
     SPOREHOUNDS = GetModConfigData("sporehounds"),
@@ -383,7 +385,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R38_ELECTROCUTE"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R40_PEARLMAS"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
@@ -467,7 +469,7 @@ TUNING.DSTU = {
     WIDOW_HEALTH = 12000 * GetModConfigData("hoodedwidow_health_"),
     MOONFLY_HEALTH = 8000 * GetModConfigData("moonmaw_dragonfly_health_"),
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
-    MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
+    --MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
     ONEHP = GetModConfigData("uncompromising_1hp"),
     

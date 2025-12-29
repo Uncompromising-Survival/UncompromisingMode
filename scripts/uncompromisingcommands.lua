@@ -11,6 +11,46 @@ function c_um_snowstorm()
     end
 end
 
+local DEERCLOPS_TIMERNAME = "deerclops_timetoattack"
+local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
+local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
+local BEARGER_TIMERNAME = "bearger_timetospawn"
+
+function d_um_bosstimers()
+	if TheWorld.ismastersim then
+		TheNet:Announce("Checking Spawners...")
+		local _worldsettingstimer = TheWorld.components.worldsettingstimer
+		if TheWorld.state.iswinter then
+			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+				TheNet:Announce("Found Deerclops timer, it has ".._worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Deerclops spawning timer doesn't exist.")
+			end
+		elseif TheWorld.state.isspring then
+			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
+				TheNet:Announce("Found Mother Goose timer, it has ".._worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Mother Goose spawning timer doesn't exist.")
+			end		
+		elseif TheWorld.state.issummer then
+			if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+				TheNet:Announce("Found Wilting Dragonfly timer, it has ".._worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Wilting Dragonfly spawning timer doesn't exist.")
+			end			
+		else
+			if _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) then
+				TheNet:Announce("Found Bearger timer, it has ".._worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Bearger spawning timer doesn't exist.")
+			end				
+		end
+	else
+		print("c_um_debug_bosstimers only works as the host")
+	end
+end
+
+
 -- toggles vetcurse
 function c_um_vetcurse()
     local player = ConsoleCommandPlayer()
@@ -37,8 +77,8 @@ function c_um_vetcurseitems()
         "klaus_amulet",
         "crabclaw",
         "um_beegun",
-        "um_wingsuit",
-        "um_exhumer",
+        --"um_wingsuit",
+        --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
     }
@@ -119,7 +159,7 @@ function c_um_giverecords()
 end
 
 -- lists current rat score shenenigans.
-function c_um_ratcheck()
+function d_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")

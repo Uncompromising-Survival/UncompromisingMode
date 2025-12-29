@@ -298,19 +298,19 @@ env.AddPrefabPostInit("waxwell", function(inst)
     WaxwellUMStuff(inst)
 end)
 
-local function ShadowGearClientFunctions(inst, maxwell_recipe)
+do
     local function ShadowGearDisplayNameFn(inst)
-        return inst:HasTag("maxwellsummon") and STRINGS.NAMES[string.upper(maxwell_recipe)] or nil
+        return inst:HasTag("maxwellsummon") and STRINGS.NAMES[string.upper("um_maxwell_"..inst.prefab)] or nil
     end
 
-    inst.displaynamefn = ShadowGearDisplayNameFn
-end
+    local function ShadowGearClientFunctions(inst)
+        inst.displaynamefn = ShadowGearDisplayNameFn
+    end
 
-local function ShadowGearFunctions(inst, maxwell_recipe)
     local function ConvertToMaxwellSummon(inst)
         inst:AddTag("nosteal")
         inst:AddTag("maxwellsummon")
-		local inventoryitem = inst.components.inventoryitem
+        local inventoryitem = inst.components.inventoryitem
         if inventoryitem then
             inventoryitem.keepondeath = true
             inventoryitem.keepondrown = true
@@ -326,7 +326,7 @@ local function ShadowGearFunctions(inst, maxwell_recipe)
         end
     end
 
-    local _OnSave = inst.OnSave
+    local _OnSave
     local function ShadowGearOnSave(inst, data, ...)
         if inst:HasTag("maxwellsummon") then
             data.maxwellsummon = true
@@ -334,7 +334,7 @@ local function ShadowGearFunctions(inst, maxwell_recipe)
         if _OnSave then return _OnSave(inst, data, ...) end
     end
 
-    local _OnLoad = inst.OnLoad
+    local _OnLoad
     local function ShadowGearOnLoad(inst, data, ...)
         if data and data.maxwellsummon then
             inst:ConvertToMaxwellSummon()
@@ -342,26 +342,30 @@ local function ShadowGearFunctions(inst, maxwell_recipe)
         if _OnLoad then return _OldLoad(inst, data, ...) end
     end
 
-    local _onPreBuilt = inst.onPreBuilt
+    local _onPreBuilt
     local function ShadowGearOnPreBuilt(inst, builder, materials, recipe, ...)
-        if recipe.name == maxwell_recipe then
+        if recipe.name == "um_maxwell_"..inst.prefab then
             inst:ConvertToMaxwellSummon()
         end
         if _onPreBuilt then return _onPreBuilt(inst, builder, materials, recipe, ...) end
     end
 
-    inst.ConvertToMaxwellSummon = ConvertToMaxwellSummon
-    inst.OnSave = ShadowGearOnSave
-    inst.OnLoad = ShadowGearOnLoad
-    inst.onPreBuilt = ShadowGearOnPreBuilt
-end
+    local function ShadowGearFunctions(inst)
+        inst.ConvertToMaxwellSummon = ConvertToMaxwellSummon
+        _OnSave = inst.OnSave
+        inst.OnSave = ShadowGearOnSave
+        _OnLoad = inst.OnLoad
+        inst.OnLoad = ShadowGearOnLoad
+        _onPreBuilt = inst.onPreBuilt
+        inst.onPreBuilt = ShadowGearOnPreBuilt
+    end
 
-local shadowgear = {"nightsword", "armor_sanity"}
-for _, prefab in pairs(shadowgear) do
-    local name = "um_maxwell_"..prefab
-	env.AddPrefabPostInit(prefab, function(inst)
-		ShadowGearClientFunctions(inst, name)
-		if not TheWorld.ismastersim then return end
-		ShadowGearFunctions(inst, name)
-	end)
+    local shadowgear = {"nightsword", "armor_sanity"}
+    for _, prefab in pairs(shadowgear) do
+        env.AddPrefabPostInit(prefab, function(inst)
+            ShadowGearClientFunctions(inst)
+            if not TheWorld.ismastersim then return end
+            ShadowGearFunctions(inst)
+        end)
+    end
 end

@@ -123,12 +123,12 @@ local function TryStartAttacks(killed)
         _worldsettingstimer:ResumeTimer(DEERCLOPS_TIMERNAME)
         self.inst:StartUpdatingComponent(self)
         self:StopWatchingWorldState("cycles", TryStartAttacks)
-        self.inst.watchingcycles = nil
+        self.watchingcycles = nil
     else
-        PauseAttacks()
-        if not self.inst.watchingcycles then
+        PauseAttacks() 
+        if not self.watchingcycles then -- This is the problem.
             self:WatchWorldState("cycles", TryStartAttacks)  -- keep checking every day until NO_BOSS_TIME is up
-            self.inst.watchingcycles = true
+            self.watchingcycles = true
         end
     end
 end
@@ -384,6 +384,7 @@ function self:OnSave()
 	{
 		warning = _warning,
 		storedhassler = _storedhassler,
+		watchingcycles = self.watchingcycles
 	}
 
 	local ents = {}
@@ -403,6 +404,9 @@ function self:OnLoad(data)
     if data.timetoattack then
         _timetoattack = data.timetoattack
     end
+	if data.watchingcycles then
+		self.watchingcycles = true
+	end
 end
 
 function self:LoadPostPass(newents, savedata)

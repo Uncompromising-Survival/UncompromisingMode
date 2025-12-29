@@ -78,7 +78,6 @@ local prefab_post = {
     "butterfly",
     "ressurectionstone",
     "sewing_mannequin",
-    "bathbomb",
     "atrium_gate",
     "dragonfly",
     "wardrobe",
@@ -93,7 +92,6 @@ local prefab_post = {
     "catcoon",
     "icehound",
     "firehound",
-    "fishmeats", -- fish meat now dries into fish jerky
     "forest",
     "cave",
     "world",
@@ -365,6 +363,7 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
+
 
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")

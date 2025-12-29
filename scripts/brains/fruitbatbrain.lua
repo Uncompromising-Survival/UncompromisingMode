@@ -5,6 +5,8 @@ require "behaviours/panic"
 require "behaviours/wander"
 require "behaviours/chaseandattack"
 
+local BrainCommon = require("brains/braincommon")
+
 local MAX_CHASE_TIME = 120
 local MAX_CHASE_DIST = 80
 local SEE_FOOD_DIST = 20
@@ -42,9 +44,8 @@ end
 
 function FruitBatBrain:OnStart()
     local root = PriorityNode({
-        WhileNode(
-        function() return self.inst.components.health.takingfiredamage or self.inst.components.hauntable.panic end,
-            "Panic", Panic(self.inst)),
+        BrainCommon.PanicTrigger(self.inst),
+        BrainCommon.ElectricFencePanicTrigger(self.inst),
         --WhileNode(function() return TheWorld.state.isnight end, "IsNight",
         --DoAction(self.inst, GoHomeAction)),
         ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST),

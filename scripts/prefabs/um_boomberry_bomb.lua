@@ -17,7 +17,7 @@ local function OnHitBoomBerry(inst, attacker, target)
 		for i, v in pairs(ents) do
 			if (not v:HasTag("player") or v == attacker) then
 				if v.components.combat then
-					v.components.combat:GetAttacked(attacker,68)
+					v.components.combat:GetAttacked(attacker,TUNING.DSTU.BOOMBERRYBOMB_DAMAGE)
 				end
 			end
 		end

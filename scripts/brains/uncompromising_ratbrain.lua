@@ -3,6 +3,8 @@ require "behaviours/runaway"
 require "behaviours/doaction"
 require "behaviours/panic"
 
+local BrainCommon = require("brains/braincommon")
+
 local SEE_PLAYER_DIST = 8
 local SEE_FOOD_DIST = 20
 
@@ -349,8 +351,9 @@ function Uncompromising_RatBrain:OnStart()
     local root = PriorityNode({
         WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
             PriorityNode({
-                WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
-                WhileNode(function() return self.inst.components.health.takingfiredamage or self.inst.components.burnable:IsBurning() end, "OnFire", Panic(self.inst)),
+                BrainCommon.PanicWhenScared(self.inst, .3),
+		        BrainCommon.PanicTrigger(self.inst),
+                BrainCommon.ElectricFencePanicTrigger(self.inst),
                 WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
                     ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
                 RunAway(self.inst, "ghost", 8, 12),

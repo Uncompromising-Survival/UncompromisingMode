@@ -558,14 +558,20 @@ local function OnAttacked(inst, data)
 end
 
 local function Exclamationfy(string)
-    if not ThePlayer or not ThePlayer:HasTag("amped") then
+    if not ThePlayer or not ThePlayer:HasAnyTag("amped", "groggy") then
         return string
     end
 
     local ret = ""
     for i = 1, #string do
         local c = string:sub(i,i)
-        ret = ret..((c == "." or c == "!") and ((c == "." and "!") or (c == "!" and "!!")) or c)
+        if ThePlayer:HasTag("amped") then
+            ret = ret..((c == "." or c == "!") and ((c == "." and "!") or (c == "!" and "!!")) or c)
+        elseif ThePlayer:HasTag("groggy") then
+            ret = ret..((c == "." or c == "!") and ((c == "." and "...") or (c == "!" and "...")) or c)
+        else
+            return string
+        end
     end
     return ret
 end

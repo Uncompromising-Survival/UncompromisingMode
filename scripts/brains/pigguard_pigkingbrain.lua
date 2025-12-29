@@ -160,6 +160,9 @@ end
 function PigGuard_pigkingBrain:OnStart()
     local root = PriorityNode(
     {
+        WhileNode(function() return BrainCommon.ShouldAvoidElectricFence(self.inst) end, "Shocked",
+            ChattyNode(self.inst, "PIG_TALK_PANICELECTRICITY",
+                AvoidElectricFence(self.inst))),
 		--Fearless Guards, not afraid of anything
         ChattyNode(self.inst, "PIG_GUARD_TALK_FIGHT",
             WhileNode(function() return self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown() end, "AttackMomentarily",

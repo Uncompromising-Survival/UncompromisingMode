@@ -20,7 +20,7 @@ local function OnHitFyre(inst, attacker, target)
 					v.components.burnable:Ignite(true, inst, attacker)
 				end
 				if v.components.combat then
-					v.components.combat:GetAttacked(attacker,100)
+					v.components.combat:GetAttacked(attacker,TUNING.DSTU.PYREBOMB_DAMAGE)
 				end
 			end
 		end

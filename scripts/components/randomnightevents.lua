@@ -1851,8 +1851,8 @@ local function IsEligible(player)
 		dragonflied = false
 	end
 
-	if TheWorld.components.uncompromising_deerclopsspawner ~= nil then
-		deerclopsed = TheWorld.components.uncompromising_deerclopsspawner:GetWarning()
+	if TheWorld.components.deerclopsspawner ~= nil then
+		deerclopsed = TheWorld.components.deerclopsspawner:GetWarning()
 	else
 		deerclopsed = false
 	end

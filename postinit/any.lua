@@ -5,37 +5,32 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
-local IMPASSABLES = {
-    ["sunkenchest"] = true,
-    ["oceantreenut"] = true,
-    ["shell_cluster"] = true,
-    ["cavein_boulder"] = true,
-    ["glassspike_short"] = true,
-    ["glassspike_med"] = true,
-    ["glassspike_tall"] = true,
-    ["potatosack"] = true,
+local IMPASSABLES = {	
+    ["fossil_stalker"] = true,	
     ["endtable"] = true,
-    ["fossil_stalker"] = true, -- Hornet: Why are we making the stalkers passable nocliped?
-    ["homesign"] = true,
-    ["statueharp"] = true,
-    ["statue_marble"] = true,
-    ["gravestone"] = true,
-    ["arrowsign_post"] = true,
     ["lureplant"] = true,
+    ["klaus_sack"] = true,
     ["spiderden"] = true,
     ["spiderden_2"] = true,
-    ["spiderden_3"] = true,
-    ["klaus_sack"] = true,
+    ["spiderden_3"] = true,	
     ["skeleton"] = true,
     ["skeleton_player"] = true,
+    ["wood_table_round"] = true,
+    ["wood_table_square"] = true,
+    ["stone_table_round"] = true,
+    ["stone_table_square"] = true,
 }
 
 if TUNING.DSTU.IMPASSBLES then
     env.AddPrefabPostInitAny(function(inst)
-        if (IMPASSABLES[inst.prefab] or string.find(inst.prefab, "chesspiece_") or string.find(inst.prefab, "oversized")) and inst.Physics ~= nil then
+        if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
+		or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized"))
+		and inst.Physics ~= nil then
             RemovePhysicsColliders(inst)
         end
-        if (IMPASSABLES[inst.prefab] or string.find(inst.prefab, "chesspiece_") or string.find(inst.prefab, "oversized")) and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
+        if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
+		or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized")) 
+		and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
             RemovePhysicsColliders(inst)
             inst.components.heavyobstaclephysics:SetRadius(0)
         end
@@ -228,6 +223,12 @@ function EntityScript:SpawnChild(name, ...)
     return _SpawnChild(self, name, ...)
 end
 
+local UM_BLOCKED_STATES = {"wortox_teleport_reviver_selfuse"}
+local _GoToState = StateGraphInstance.GoToState
+function StateGraphInstance:GoToState(statename, ...)
+    if self.inst.um_blockgotostate and table.contains(UM_BLOCKED_STATES, statename) then return end
+    return _GoToState(self, statename, ...)
+end
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)

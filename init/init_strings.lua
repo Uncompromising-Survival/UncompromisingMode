@@ -181,7 +181,7 @@ STRINGS.STANTON_GLOAT = { "Ha! I knew you were soft.", "Ha! You lose!" }
 STRINGS.STANTON_POET1 = { "When it's six to midnight and the boney hand of death is nigh." }
 STRINGS.STANTON_POET2 = { "You better drink your drink and shut your mouth." }
 STRINGS.STANTON_POET3 = { "If you draw against his hand, you can never win." }
-STRINGS.STANTON_POET4 = { "Go ahead… drink with the living dead." }
+STRINGS.STANTON_POET4 = { "Go ahead... drink with the living dead." }
 STRINGS.STANTON_POET5 = { "Drink with the living dead." }
 
 

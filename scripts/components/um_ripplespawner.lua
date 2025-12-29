@@ -71,7 +71,8 @@ function UM_Ripplespawner:spawnripple(inst)
 				--ripple.AnimState:SetMultColour(0,0,0,1)
 			end
 			
-			if self.inst.prefab == "um_hotspring" then
+			--[[ using bathingpool now
+            if self.inst.prefab == "um_hotspring" then
 				if inst.components.temperature then
 					inst.components.temperature:DoDelta(0.3)
 				end
@@ -82,10 +83,10 @@ function UM_Ripplespawner:spawnripple(inst)
 						inst.components.moisture:DoDelta(4 * (1 - waterproofness), true)
 					end
 				end
-			end
+			end]]
 			
-			
-			if math.random () < 0.5 and  self.inst.prefab == "um_hotspring" then
+			--using bathingpool now
+			--[[if math.random () < 0.5 and  self.inst.prefab == "um_hotspring" then
 				local bubble = SpawnPrefab("crab_king_bubble"..tostring(math.random(1,3)))
 				bubble.Transform:SetPosition(x,y,z)
 			
@@ -96,7 +97,7 @@ function UM_Ripplespawner:spawnripple(inst)
 				else
 					bubble.Transform:SetScale(1.2,1.2,1.2)
 				end
-			end
+			end]]
 			
 			if inst.components.moisture ~= nil then
 				inst:AddTag("um_waterfall_moisture_override")
@@ -156,13 +157,13 @@ function UM_Ripplespawner:OnUpdate(dt)
 					end 
 				end)
 		end
-		if self.inst:HasTag("pond_inducedinsanity") and not ent.um_pond_induced_insanity and ent.components.sanity then
+		--[[if self.inst:HasTag("pond_inducedinsanity") and not ent.um_pond_induced_insanity and ent.components.sanity then
 			ent.components.sanity:SetInducedInsanity(ent, true)
 			if not ent:HasTag("fuelfarming") then
                 ent:AddTag("fuelfarming")
             end			
 			ent.um_pond_induced_insanity = ent:DoPeriodicTask(FRAMES, CheckLeftPond, nil, self)
-		end
+		end]]
 		-- if not ent.water_goo and not ent:HasTag("flying") or ent:HasTag("playerghost") then -- They didn't like the water goo, so commented out
 			-- ent.water_goo = SpawnPrefab("um_waterfollow")
 			-- ent.water_goo:SetupBlob(ent, ent)	
