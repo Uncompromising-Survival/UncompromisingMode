@@ -93,7 +93,6 @@ if GetModConfigData("funny rat") then
     GLOBAL.TUNING.WINKY_HEALTH = 175
     GLOBAL.TUNING.WINKY_HUNGER = 150
     GLOBAL.TUNING.WINKY_SANITY = 125
-    GLOBAL.STRINGS.CHARACTER_SURVIVABILITY.winky = "Stinky"
 end
 
 GLOBAL.FUELTYPE.BATTERYPOWER = "BATTERYPOWER"
@@ -390,7 +389,6 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.TUNING.WIXIE_HEALTH = 130
     GLOBAL.TUNING.WIXIE_HUNGER = 150
     GLOBAL.TUNING.WIXIE_SANITY = 200
-    GLOBAL.STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
     for k, v in pairs(GLOBAL.CLOTHING) do
         if v and v.symbol_overrides_by_character and v.symbol_overrides_by_character.walter then

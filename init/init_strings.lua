@@ -19,11 +19,14 @@ STRINGS.DSTU = {
 }
 STRINGS.SPELLS.SHADOW_MIMIC = "Shadow Mimic"
 
+
+-- Winky
 STRINGS.NAMES.WINKY = "Winky"
 STRINGS.CHARACTER_TITLES.winky = "The Vile Vermin"
 STRINGS.CHARACTER_NAMES.winky = "Winky"
 STRINGS.CHARACTER_DESCRIPTIONS.winky = "*Is a Rat\n*Can dig interconnected burrows\n*'Is weak, but fast'\n*Can eat horrible foods\n*Hates to lose hold of things"
 STRINGS.CHARACTER_QUOTES.winky = "\"Squeak!\""
+STRINGS.CHARACTER_SURVIVABILITY.winky = "Stinky"
 
 STRINGS.SKIN_NAMES.winky_none = "Winky"
 
@@ -38,6 +41,10 @@ STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
             PONDER = "Ponder",
             MORPH = "Morph",
         }
+
+
+-- Wixie
+STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
 
 STRINGS.ACTIONS.TURNOFF.HARPOON = "Break Reel"
