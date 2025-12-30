@@ -603,6 +603,9 @@ AddRecipe2("um_feather_totem", {Ingredient("boards", 2),  Ingredient("um_moss", 
 ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 
+--AddRecipe2("um_gemology_pouch", {Ingredient("goldnugget", 1),}, TECH.SCIENCE_TWO, {}, {"CONTAINERS"})
+--ChangeSortKey("um_gemology_pouch", "candybag", "CONTAINERS", false)
+
 AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
 ChangeSortKey("um_magnifier", "nutrientgoggleshat", "CRAFTING_STATION", false)
 ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
