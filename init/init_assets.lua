@@ -448,6 +448,7 @@ local inventoryitems =
 
     "um_magnifier",
     "um_gemology_pouch",
+    --"um_gemology_pouch_open",
 }
 
 
