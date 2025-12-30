@@ -1,4 +1,188 @@
 STRINGS = GLOBAL.STRINGS
+RECIPE_DESC = STRINGS.RECIPE_DESC
+
+STRINGS.UI.CRAFTING.NEEDSTECH.BOMBMIXER = "Put an explosive on the Bomb Mixer to start mixing!"
+STRINGS.ACTIONS.OPEN_CRAFTING.BOMBMIXER = "Mix at"
+RECIPE_DESC.TRANSMUTE_MONSTERMEAT = "Transmute Monster Morsels into Monster Meat"
+RECIPE_DESC.TRANSMUTE_MONSTERSMALLMEAT = "Transmute Monster Morsels into Monster Meat"
+
+RECIPE_DESC.WATERMELON_LANTERN = "Juicy illumination."
+RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
+RECIPE_DESC.UM_SAND = "Turn a big rock into smaller rocks."
+RECIPE_DESC.SNOWGOGGLES = "Keep your eyes clear and ears extra warm."
+RECIPE_DESC.RATPOISONBOTTLE = "Highly addictive to pestilence pests."
+RECIPE_DESC.DISEASECUREBOMB = "Effective disease prevention."
+RECIPE_DESC.ICE = "Water of the solid kind."
+RECIPE_DESC.GASMASK = "Makes everything smell like bird."
+RECIPE_DESC.PLAGUEMASK = "You are the cure!"
+RECIPE_DESC.SALTPACK = "Spice up the world."
+RECIPE_DESC.RATPOISON = "A most deadly feast."
+RECIPE_DESC.SHROOM_SKIN = "Stitched skins."
+RECIPE_DESC.SPOREPACK = "Unhygenic storage."
+RECIPE_DESC.AIR_CONDITIONER = "Condition the air."
+if GetModConfigData("longpig") then
+    RECIPE_DESC.REVIVER = "Dead flesh revived to revive a dead friend."
+end
+RECIPE_DESC.AMULET = "Protects you from death, while worn."
+RECIPE_DESC.HONEY_LOG = "A log a day keeps the sickness at bay."
+RECIPE_DESC.BUGZAPPER = "Bite back with electricity!"
+RECIPE_DESC.ANCIENT_AMULET_RED = "Recalls your lost soul."
+RECIPE_DESC.RAT_WHIP = "Hunger strike!"
+RECIPE_DESC.TURF_HOODEDMOSS = "Mossy ground with a hint of lunar magic."
+RECIPE_DESC.TURF_ANCIENTHOODEDTURF = "The hooded forest's younger years."
+RECIPE_DESC.SKULLCHEST_CHILD = "Interdimensional item storage."
+RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_TOOTH = "These jaws need to get a grip!"
+RECIPE_DESC.UM_BEAR_TRAP_EQUIPPABLE_GOLD = "My shiny teeth and me!"
+RECIPE_DESC.ARMOR_GLASSMAIL = "Surround yourself with broken glass."
+RECIPE_DESC.MUTATOR_TRAPDOOR = "They're smart, allegedly."
+RECIPE_DESC.DRIFTWOODFISHINGROD = "Go Fancy Fishing. For Fancy Fish."
+RECIPE_DESC.UNCOMPROMISING_FISHINGNET = "Nothing but net!"
+RECIPE_DESC.UNCOMPROMISING_HARPOON = "Keel Haul 'Em!"
+RECIPE_DESC.UNCOMPROMISING_HARPOON_HEAVY = "Up for a Chain'ge?"
+RECIPE_DESC.UM_MAGNERANG = "Mutual Attraction!"
+RECIPE_DESC.BOOK_RAIN_UM = "A catalogue of weather effects."
+RECIPE_DESC.RAIN_HORN = "Drown the world."
+RECIPE_DESC.HAT_RATMASK = "Sniff out some vermin!"
+RECIPE_DESC.FLORAL_BANDAGE = "Sweetened healing!"
+RECIPE_DESC.UM_RIMEWEED_ICEPACK = "Chilled healing!"
+RECIPE_DESC.WINONA_TOOLBOX = "An engineer is always prepared."
+RECIPE_DESC.POWERCELL = "Portable electricity!"
+RECIPE_DESC.WINONA_UPGRADEKIT_ELECTRICAL = "Any old light source can be electric now."
+RECIPE_DESC.BOATPATCH_SLUDGE = "For when your boat has a hole that shouldn't be there."
+RECIPE_DESC.ARMOR_REED_UM = "Waterproof protection."
+RECIPE_DESC.ARMOR_SHARKSUIT_UM = "Become the shark."
+RECIPE_DESC.SLUDGE_SACK = "Thieves turn up with nothing but sticky fingers."
+RECIPE_DESC.BOAT_BUMPER_SLUDGE_KIT = "Cushion the blow."
+RECIPE_DESC.SLUDGE_OIL = "Only the purest sludge."
+RECIPE_DESC.SLUDGE_CORK = "Impractically large for a boat."
+RECIPE_DESC.CANNONBALL_SLUDGE_ITEM = "Fire in the hole!"
+RECIPE_DESC.BRINE_BALM = "Rub salt in the wounds."
+RECIPE_DESC.CRITTER_FIGGY_BUILDER = "They like to put holes in things."
+-- RECIPE_DESC.STEERINGWHEEL_COPPER_ITEM = "Steer more than your masts."
+RECIPE_DESC.TRINKET_6 = "A key ingredient for modern marvels."
+RECIPE_DESC.PORTABLEBOAT_ITEM = "Pack up and go!"
+RECIPE_DESC.MASTUPGRADE_WINDTURBINE_ITEM = "Full speed ahead!"
+RECIPE_DESC.CODEX_MANTRA = "Repeat after me."
+if GetModConfigData("telestaff_rework") then
+    RECIPE_DESC.TELEBASE = "Now with 100% less gold!"
+end
+-- sailing rebalance strings
+RECIPE_DESC.MOONSTORM_STATIC_ITEM = "The power of the moon, contained!"
+RECIPE_DESC.ALTERGUARDIANHATSHARD = "Harness the moonlight."
+RECIPE_DESC.WATERPLANT_PLANTER = "Grow your very own Sea Weed."
+RECIPE_DESC.BLUEPRINT = "Learn new things."
+RECIPE_DESC.PUMPKINCOOKIE = "Grandma's cookies."
+RECIPE_DESC.HERMIT_BUNDLE_LURES = "Get to fishing, today!"
+RECIPE_DESC.BOOTLEG = "Doesn't beat the original, but will have to do."
+-- Pyre Nettle stuff
+RECIPE_DESC.UM_ARMOR_PYRE_NETTLES = "Hurts you a little, hurts them a lot."
+RECIPE_DESC.UM_BLOWDART_PYRE = "Warm and fuzzy, inside AND out!"
+RECIPE_DESC.UM_ARMOR_BRAMBLE_RIMEWEED = "Nature's way of saying \"chill out\"."
+RECIPE_DESC.UM_BLOWDART_RIME = "Chilly ranged assault."
+
+RECIPE_DESC.BOAT_ANCIENT_ITEM = "They don't build them like they used to."
+RECIPE_DESC.BOAT_ANCIENT_ITEM_BLUEPRINT = "There is always something to learn from the past."
+
+-- Veteran Shrine Crafts
+
+RECIPE_DESC.CURSED_ANTLER = "Freeze, crush, kill."
+RECIPE_DESC.BEARGERCLAW = "Fling some rocks!"
+RECIPE_DESC.KLAUS_AMULET = "Double slap!"
+RECIPE_DESC.SILKSACK = "Wrap up your valuables."
+RECIPE_DESC.FEATHER_FROCK = "Birds, feathers, etcetera."
+RECIPE_DESC.GORE_HORN_HAT = "Charge!!"
+RECIPE_DESC.CRABCLAW = "Socket gems, wield their power."
+RECIPE_DESC.SLOBBERLOBBER = "Molten loogies, everywhere!"
+RECIPE_DESC.UM_BEEGUN = "Bullet Bees!"
+RECIPE_DESC.UM_WINGSUIT = "Take flight!"
+RECIPE_DESC.UM_EXHUMER = "Judge, jury, resurrector."
+RECIPE_DESC.UM_BEEGUN_CHERRY = "Poisonous bullet bees!"
+RECIPE_DESC.UM_MOONFLY_LANTERN = "Light the path, lead the way!"
+
+RECIPE_DESC.WINONA_CATAPULT_ITEM_UM = RECIPE_DESC.WINONA_CATAPULT
+RECIPE_DESC.WINONA_SPOTLIGHT_ITEM_UM = RECIPE_DESC.WINONA_SPOTLIGHT
+RECIPE_DESC.WINONA_BATTERY_LOW_ITEM_UM = RECIPE_DESC.WINONA_BATTERY_LOW
+RECIPE_DESC.WINONA_BATTERY_HIGH_ITEM_UM = RECIPE_DESC.WINONA_BATTERY_HIGH
+RECIPE_DESC.UM_BOAT_ENGINE = "Go full steam ahead on the high seas."
+
+RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
+RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
+
+RECIPE_DESC.UM_ASTRAL_PROJECTOR = "The soul seperates from the body. Careful nothing slips inside."
+RECIPE_DESC.UM_ASTRAL_PROJECTOR_TARGET = "Are you the real you?"
+RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
+RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
+RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
+
+
+--Wixie
+RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
+RECIPE_DESC.BEAKBASHER = "Smash things with a beak on a stick."
+RECIPE_DESC.BAGOFMARBLES = "Watch your step!"
+RECIPE_DESC.SLINGSHOT_CLAIRE = "Freedom. Of movement, atleast."
+RECIPE_DESC.SLINGSHOT_JESSIE = "Morphic mind gun."
+RECIPE_DESC.SLINGSHOTAMMO_OBSIDIAN = "A playful bit of arson."
+RECIPE_DESC.SLINGSHOTAMMO_TAR = "Sticky trails!"
+RECIPE_DESC.THE_REAL_CHARLES_T_HORSE = "Giddy-up, Charles!"
+RECIPE_DESC.SLINGSHOT_GNASHER = "More bark, more bite!"
+RECIPE_DESC.SLINGSHOT_MATILDA = "A whole heap of trouble!"
+RECIPE_DESC.SLINGSHOT = "Cause all kinds of mischief!"
+RECIPE_DESC.SLINGSHOTAMMO_FLARE = "A scorching shot!"
+RECIPE_DESC.SLINGSHOTAMMO_LAZY = "Now you see me..."
+RECIPE_DESC.SLINGSHOTAMMO_SHADOW = "Spread the terror."
+RECIPE_DESC.SLINGSHOTAMMO_FIRECRACKERS = "For the aspiring young menace."
+RECIPE_DESC.SLINGSHOTAMMO_HONEY = "Oh bother!"
+RECIPE_DESC.SLINGSHOTAMMO_RUBBER = "Rebounding Rounds."
+RECIPE_DESC.SLINGSHOTAMMO_TREMOR = "See what shakes loose."
+RECIPE_DESC.SLINGSHOTAMMO_MOONROCK = "Take the fight to the next dimension."
+RECIPE_DESC.SLINGSHOTAMMO_MOONGLASS = "Watch your hands!"
+RECIPE_DESC.SLINGSHOTAMMO_SALT = "Salt in the wounds!"
+RECIPE_DESC.SLINGSHOTAMMO_SLIME = "It's slime time!"
+RECIPE_DESC.SLINGSHOTAMMO_GOOP = "Goop for you, goop for me!"
+
+--Other new stuff that I want to put at the bottom because yes (Atoba started this I swear!!)
+RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
+RECIPE_DESC.UM_ICE_SICLE = "Cut down flora and keep yourself cool."
+RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
+RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
+--[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
+RECIPE_DESC.RAT_BURROW = "A den of annoying little hairballs."
+RECIPE_DESC.RAT_BURROW = "Leads back to home."
+RECIPE_DESC.OAR_MONKEY = "Now you can do the monkey paddle."
+--
+RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
+RECIPE_DESC.UM_HAT_LEAFWING = "Embody the fleeting fruit bat."
+RECIPE_DESC.SCRAP_MONOCLEHAT = "Explore the horizon."
+RECIPE_DESC.TURF_UM_HOTSPRING_GRASS = "A patch of steamy wet grass."
+RECIPE_DESC.TURF_UM_HOTSPRING_WHITEROCK = "The warm white rocky floor of the Broiling Hills."
+RECIPE_DESC.TURF_UM_HOTSPRING_YELLOWROCK = "The yielding yellow rocky floor of the Broiling Hills."
+RECIPE_DESC.UM_FYRE_BOMB = "A bomb, plain and simple."
+RECIPE_DESC.UM_HAT_BEE_MOON = "A hat filled with mutant angry bees."
+RECIPE_DESC.UM_EYEBALM = "Tread with ease through storms."
+RECIPE_DESC.UM_BEEMINE_MOON_ITEM = "Weaponized mutant bees. This can only go horribly."
+RECIPE_DESC.UM_DETONATOR = "Trigger just about anything explosive. Or anyone."
+RECIPE_DESC.UM_RECORD_MOONMAW = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_TOT = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_STRANGER = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_SHADOW_WIXIE = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_WIXIE = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_WATHOM = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_WINKY = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_MENU = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_HOODED_WIDOW = RECIPE_DESC.RECORD
+RECIPE_DESC.UM_RECORD_WALTER = RECIPE_DESC.RECORD
+
+RECIPE_DESC.WATHGRITHR_SHIELD_DREADSTONE = "Forge the darkness into a shield."
+
+RECIPE_DESC.UM_FLAMETHROWER = "Excellent deterrant for anything remotely flammable."
+RECIPE_DESC.UM_FIRECREAM = "Keep the flames off."
+RECIPE_DESC.UM_HAT_PEPPERDRAGON = "Invert temperature rules."
+RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
+
+RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
+RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
+RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems."
 
 -- [              DSTU Related Overrides                  ]
 
