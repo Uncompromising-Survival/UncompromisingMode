@@ -136,6 +136,10 @@ function CheckFeather(container, item, slot)
     return item:HasTag("wingsuit_feather")
 end
 
+function CheckGemologyGem(container, item, slot)
+    return item:HasTag("gemology_gem")
+end
+
 function CheckNOTHING(container, item, slot)
     return false
 end
@@ -602,6 +606,32 @@ modparams.skullchest_child =
     itemtestfn = CheckNOTHING,
     type = "special for shared inventory",
 }
+
+-- AMMO BAG
+modparams.um_gemology_pouch =
+{
+    widget =
+    {
+        slotpos = {},
+        slotbg  = {},
+        --animbank  = "ui_slingshotammo_container_3x2",
+        --animbuild = "ui_slingshotammo_container_3x2",
+        pos = Vector3(0, 200, 0),
+        --side_align_tip = 160,
+    },
+    type = "chest",
+    itemtestfn = CheckGemologyGem,
+}
+
+--local slingshotammo_container_bg = { image = "slingshot_ammo_slot.tex" }
+
+for y = 4, 0, -1 do
+    for x = 0, 4 do
+        --table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(90 * x - 90, 80 * y - 42.5, 0))
+        table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2, 0))
+        --table.insert(containers.params.swire_purse.widget.slotbg, slingshotammo_container_bg)
+    end
+end
 
 for y = 0, 3 do
     table.insert(modparams.puffvest.widget.slotpos, Vector3(-1, -75 * y + 110, 0))

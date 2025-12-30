@@ -446,7 +446,8 @@ local inventoryitems =
     "um_boomberry_bomb",
     "um_boomberrypie",
 
-    "um_magnifier"
+    "um_magnifier",
+    "um_gemology_pouch",
 }
 
 
