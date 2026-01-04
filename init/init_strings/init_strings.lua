@@ -972,6 +972,7 @@ STRINGS.SKILLTREE.WIXIE = {
 	WIXIE_ALLEGIANCE_LUNAR_DESC = "Unlock the ability to craft 'Claire', Brightshade Husk Rounds, and Pure Brilliance Rounds.\nART FOR CLAIRE IS UNFINISHED!!",
 }
 
+
 --------------------------------------------------------------------------
 -- WIGFRID
 --------------------------------------------------------------------------
@@ -1004,9 +1005,8 @@ STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = "Learn to craft a 
 
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_LOCK_1_DESC = "Have no skills learned to unlock.\nAffinity can only be chosen as the first pick."
 STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_TITLE = "Shadow Huntress"
-STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC = "Life and sanity steal are greatly increased.\n Battle Calls are no longer available."
-STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_LUNAR_DESC = "Gain stronger buffs from your own songs.\nInspiration raises faster and depletes slower\nLife and sanity steal are removed."
-
+STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC = "Life and sanity steal are greatly increased.\n Damage resistance increased to 35%.\n Shadow item sanity drain is halved.\n Battle Calls are no longer available."
+STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_LUNAR_DESC = "Battle songs have additional effects.\n Life and sanity steal are removed."
 --------------------------------------------------------------------------
 -- WOLFGANG
 --------------------------------------------------------------------------
