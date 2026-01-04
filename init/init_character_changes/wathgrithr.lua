@@ -1,9 +1,9 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if TUNING.DSTU.WATHGIRHTR_REWORK ~= 0 then
+if TUNING.DSTU.WATHGRITHR_REWORK ~= 0 then
 	env.AddPrefabPostInit("wathgrithr", function(inst)
-		
+
 		if not TheWorld.ismastersim then
 			return
 		end
@@ -14,9 +14,19 @@ if TUNING.DSTU.WATHGIRHTR_REWORK ~= 0 then
 			inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
 		end
 
-		if TUNING.DSTU.WATHGIRHTR_REWORK == 1 then inst:AddComponent("efficientuser") end
+		if TUNING.DSTU.WATHGRITHR_REWORK == 1 then inst:AddComponent("efficientuser") end
 	end)
 end
+
+env.AddPrefabPostInit("battlesong_container", function(inst)
+
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	inst:RemoveComponent("burnable")
+	inst:RemoveComponent("propagator")
+end)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --

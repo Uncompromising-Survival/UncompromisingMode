@@ -267,10 +267,6 @@ DESCRIBE.DURABILITY_LEVEL = {
 ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
 ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 
-RECIPE_DESC = STRINGS.RECIPE_DESC
-
-RECIPE_DESC.RAT_BURROW = "Leads back to home."
-
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Bumpy rocky thing."
 DESCRIBE.LIGHTNINGHOUND = "Yellow like corn I suppose."

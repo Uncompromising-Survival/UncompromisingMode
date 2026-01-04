@@ -21,10 +21,10 @@ if GetModConfigData("longpig") then
         Ingredient("skeletonmeat", 1),
         Ingredient("spidergland", 1)
     }
-    AllRecipes["ghostlyelixir_fastregen"].ingredients = {
-        Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50),
-        Ingredient("ghostflower", 4)
-    }
+
+    local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
+    ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
+    ghostlyelixir_fastregen.character_ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40)}
 end
 
 if GetModConfigData("compostoverrot") then
@@ -127,11 +127,6 @@ end
 AllRecipes["moonrockidol"].ingredients = {
     Ingredient("moonrocknugget", GLOBAL.TUNING.DSTU.RECIPE_MOONROCK_IDOL_MOONSTONE_COST),
     Ingredient("purplegem", 1)
-}
-
-AllRecipes["icehat"].ingredients = {
-    Ingredient("rope", 2),
-    Ingredient("ice", 15)
 }
 
 AllRecipes["minifan"].ingredients = {
@@ -285,6 +280,7 @@ if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
     --AllRecipes["battlesong_lunaraligned"] = nil
     --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
     AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_container"].ingredients = { Ingredient("boards", 2), Ingredient("goldnugget", 4), Ingredient("beeswax", 2) }
 end
 
 if GetModConfigData("telestaff_rework") then

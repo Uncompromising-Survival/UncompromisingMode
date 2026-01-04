@@ -659,15 +659,6 @@ env.AddStategraphPostInit("wilson", function(inst)
         end)
     }
 
-    local attackactionhandler                      = inst.actionhandlers[ACTIONS.ATTACK]
-    if attackactionhandler then
-        local attackactionhandler_deststate = inst.actionhandlers[ACTIONS.ATTACK].deststate
-        attackactionhandler.deststate = function(inst, action, ...)
-            inst.sg.mem.mockattack = action.mockattack or nil
-            return attackactionhandler_deststate(inst, action, ...)
-        end
-    end
-
     local _OldIdleState = inst.states["idle"].onenter
     inst.states["idle"].onenter = function(inst, pushanim)
         if inst.wantstosneeze then

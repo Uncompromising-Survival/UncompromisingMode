@@ -93,8 +93,11 @@ local function Lightning_OnLunged(inst, doer, startingpos, targetpos)
 
     inst._lunge_hit_count = nil
 
+    local efficientuser = doer.components.efficientuser and doer.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
+    local durabilitymult = inst.components.weapon.attackwearmultipliers:Get() * efficientuser
+
     if inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES)
+        inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES * durabilitymult)
     end
 end
 

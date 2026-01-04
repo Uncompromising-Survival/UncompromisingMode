@@ -125,10 +125,7 @@ local function OnHitOther(inst, data)
     local other = data.target
     if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < .5) then -- these guys get KO-ed
         if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
-            inst.components.health:DoDelta(100)
-            --[[if other.prefab == "spider_trapdoor" then
-                inst.components.health:DoDelta(50)
-            end]]
+            inst.components.health:DoDelta(300)
             if not inst.sg:HasStateTag("eating") then inst.sg:GoToState("eat_small") end
             if other.brain then other.brain:Stop() end
             OtherFollowSymbol(inst, other)

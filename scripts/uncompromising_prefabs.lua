@@ -77,8 +77,8 @@ local prefabs = {
     "lavaeslime",
     "air_conditioner",
     "air_conditioner_smoke",
-    "mothergoose",
-    "mothergooseegg",
+    --"mothergoose",
+    --"mothergooseegg",
     "shadow_goo",
     "mini_dreadeye",
 
@@ -228,14 +228,14 @@ local prefabs = {
     "pigking_pigtorch",
     "armor_dragonfly_light",
 
-    "mothermossling",
+    --"mothermossling",
     "dragonfly_egg",
     "um_trap_snare",
     "um_bear_trap",
     "uncompromising_birds",
     "um_shambler",
     "um_shadowfire",
-    "mothergoose_tornado",
+    --"mothergoose_tornado",
     "corncan",
     "skullchest",
     "drink_with_the_living_dead",
@@ -456,7 +456,6 @@ local prefabs = {
     "slingshot_planar_fx_lunar",
     "slingshot_planar_fx_shadow",
     "shadow_wixie",
-    "dried_fishmeats",
     "bigwoby_debuff",
     "woby_target",
     "wixie_stinkcloud",
@@ -621,10 +620,12 @@ local prefabs = {
     "iceshield",
     "um_feather_totem",
     "um_magnifier",
+    "um_gemology_pouch",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then
     table.insert(prefabs, "placeholder_recipe_item")
 end
+
 
 return prefabs

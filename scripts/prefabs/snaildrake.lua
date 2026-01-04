@@ -158,7 +158,7 @@ end
 -- When Snaildrakes are set on fire, they will spawn an explosion.
 -- Snaildrakes should not be harmed by their own explosions.
 local function CanDodgeFn(inst, attacker)
-    return attacker.snaildrake and attacker.snaildrake == inst
+    return attacker and attacker.snaildrake and attacker.snaildrake == inst
 end
 
 -- Snaildrakes will eat minerals off the ground.

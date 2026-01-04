@@ -24,7 +24,8 @@ SetSharedLootTable("um_daywalker2",
         { "armorwagpunk_blueprint",           1 },
         { "wagpunkhat_blueprint",             1 },
         { "um_boatbottle_blueprint",          1 },
-        { "chestupgrade_stacksize_blueprint", 1 }
+        { "chestupgrade_stacksize_blueprint", 1 },
+		{ "wagpunkbits_kit_blueprint", 1 }		
     })
 
 
@@ -53,6 +54,16 @@ env.AddPrefabPostInit("junk_pile_big", function(inst)
     end
 
     inst.OnEntityWake = OnEntityWake
+end)
+
+env.AddPrefabPostInit("wagstaff_machinery", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+	
+	if inst.components.lootdropper then
+		inst.components.lootdropper:SetLootSetupFn(nil)
+	end
 end)
 
 -- env.AddShardModRPCHandler("UncompromisingSurvival", "DayWalkerDeathPenalty", function(shardid, segs)

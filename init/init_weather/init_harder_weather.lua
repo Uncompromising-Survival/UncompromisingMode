@@ -66,7 +66,7 @@ env.AddPrefabPostInit("cave", function(inst)
     -- inst:AddComponent("um_stormspawner")
 
     if TUNING.DSTU.PYRENETTLES then
-        inst:AddComponent("um_pyre_nettles_summer_spawner")
+        --inst:AddComponent("um_pyre_nettles_summer_spawner")
     end
 
     -- inst:DoTaskInTime(0, function(inst)
@@ -101,9 +101,9 @@ env.AddPrefabPostInit("forest", function(inst)
     inst:AddComponent("um_tilelogger")
     inst:AddComponent("um_ocupusappearinator")
     --inst:AddComponent("um_pestilencecontroller")
-    if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
-        inst:AddComponent("gmoosespawner")
-    end
+    --if TUNING.DSTU.GOOSE_SETTING == "ROG" or TUNING.DSTU.GOOSE_SETTING == "BOTH" then
+        --inst:AddComponent("gmoosespawner")
+    --end
 
     if TUNING.DSTU.SPAWNWILTINGFLY then
         inst:AddComponent("mock_dragonflyspawner")

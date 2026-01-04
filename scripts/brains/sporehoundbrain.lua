@@ -8,6 +8,8 @@ require "behaviours/faceentity"
 require "behaviours/doaction"
 require "behaviours/standstill"
 
+local BrainCommon = require "brains/braincommon"
+
 local SporeHoundBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
     --self.reanimatetime = nil
@@ -188,8 +190,8 @@ function SporeHoundBrain:OnStart()
         {
             WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
                 PriorityNode({
-                    WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
-                    WhileNode(function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
+                    BrainCommon.PanicTrigger(self.inst),
+		            BrainCommon.ElectricFencePanicTrigger(self.inst),
                     
 					WhileNode( function() return shouldjumpattack(self.inst) end, "jumpattack",  
 						DoAction(self.inst, function() return dojumpAttack(self.inst) end, "jump", true)

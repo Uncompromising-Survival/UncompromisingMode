@@ -31,7 +31,7 @@ local function RerollCocoons(inst)
 
     if widowweb --[[Just to prevent a crash if it was deleted.]] and widowweb.components.childspawner:IsFull() then
         for k, v in ipairs(existing_cocoons) do
-            if table.contains(blacklisted_coocoons, v.cocoon_creature) or table.contains(COCOON_CHARACTERS, v.cocoon_creature) then --Krampus, McTusk, Grass Gator, and Survivor Cocoon med & large.
+            if table.contains(blacklisted_coocoons, v.cocoon_creature) --[[or table.contains(COCOON_CHARACTERS, v.cocoon_creature)]] then
             else
                 v:Remove()
                 TrySpawnCocoon(x, z)

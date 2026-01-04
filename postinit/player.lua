@@ -180,16 +180,13 @@ end
 
 
 env.AddPlayerPostInit(function(inst)
-
     if not TheWorld.ismastersim then
         inst:DoPeriodicTask(TUNING.SCRAPBOOK_UPDATERATE, UpdateMineralLog)
     end
 
-
     ---------------------------------------------------------------------------------------
     -- [ Code that makes the player play the hands-up animation in Thickets or Similar ] --
     ---------------------------------------------------------------------------------------
-
 
     local _IsInAnyStormOrCloud = inst.IsInAnyStormOrCloud
 
@@ -202,9 +199,6 @@ env.AddPlayerPostInit(function(inst)
     end
 
     inst.IsInAnyStormOrCloud = IsInAnyStormOrCloud
-
-
-
 
     inst.Advertisee = net_entity(inst.GUID, "SetAdvertisee.plyr", "SetAdvertiseedirty")
 
@@ -228,7 +222,7 @@ env.AddPlayerPostInit(function(inst)
                 SendModRPCToServer(GetModRPC("AllMouseGags", "GetTheInput"), tornadoposition.x, tornadoposition.y, tornadoposition.z)
             end
         end)
-        return inst
+        return
     end
 
     inst.components.locomotor:SetFasterOnGroundTile(WORLD_TILES.SCALE, true)
@@ -237,7 +231,6 @@ env.AddPlayerPostInit(function(inst)
     inst.IsNearDanger = function(inst, hounded_ok, ...)
         return _IsNearDanger(inst, hounded_ok, ...) or inst:HasTag("under_the_weather")
     end
-
 
     if TUNING.DSTU.ADVERTISEMENTS then
         inst:DoPeriodicTask(10, function()
@@ -361,7 +354,6 @@ env.AddPlayerPostInit(function(inst)
                 end
             end
         end
-
 
         if _OnLoad ~= nil then
             return _OnLoad(inst, data, ...)

@@ -240,6 +240,7 @@ local function fn()
 
     inst:AddTag("usedeploystring")
     inst:AddTag("um_bucket")
+    inst:AddTag("wardrobe_item")
     
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 

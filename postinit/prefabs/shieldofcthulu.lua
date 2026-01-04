@@ -79,13 +79,14 @@ local function CommonFunctions(inst, sound, anim)
                 hunger = food.components.edible:GetHunger(inst)
             end
 
-            inst.components.armor:Repair(math.max(health + hunger, 0.05)) -- Don't go below the set value.
+            local totaltorepair = health + hunger
+            if totaltorepair > 0 then inst.components.armor:Repair(totaltorepair) end
 
             if not inst:IsInLimbo() then
                 inst.AnimState:PlayAnimation("eat")
                 inst.AnimState:PushAnimation(anim, true)
             end
-            inst.SoundEmitter:PlaySound(health + hunger <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/"..sound.."/eat")
+            inst.SoundEmitter:PlaySound(totaltorepair <= 0 and "dontstarve/common/teleportworm/sick_cough" or "terraria1/"..sound.."/eat")
             --if _oneatfn then
                 --_oneatfn(inst, food)
             --end
@@ -94,7 +95,10 @@ local function CommonFunctions(inst, sound, anim)
 end
 
 local function OnAttack(inst, attacker, target)
-    inst.components.armor:TakeDamage(TUNING.SHIELDOFTERROR_USEDAMAGE * inst.components.weapon.attackwearmultipliers:Get())
+    local efficientuser = attacker.components.efficientuser and attacker.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
+    local useMult = efficientuser * inst.components.weapon.attackwearmultipliers:Get()
+
+    inst.components.armor:TakeDamage(TUNING.SHIELDOFTERROR_USEDAMAGE * useMult)
 end
 
 env.AddPrefabPostInit("shieldofterror", function(inst)

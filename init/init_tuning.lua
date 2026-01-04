@@ -43,6 +43,13 @@ TUNING.DSTU = {
     WATHGRITHR_SHIELD_DREADSTONE_USEDAMAGE = 3, --3
     WATHGRITHR_SHIELD_DREADSTONE_PANIC_TIME = 5, --3
     ----------------------------------------------------------------------------
+    -- Weapons
+    ----------------------------------------------------------------------------
+    WIDOWSGRASP_DAMAGE = 59.5,
+    WIDOWSGRASP_USES = 200,
+	BOOMBERRYBOMB_DAMAGE = 50,
+	PYREBOMB_DAMAGE = 100,
+    ----------------------------------------------------------------------------
     -- Acid colour
     ----------------------------------------------------------------------------
     ACID_TEXT_COLOUR = RGB(180, 200, 0),
@@ -173,7 +180,7 @@ TUNING.DSTU = {
     -- Hounds
     MONSTER_HOUNDS_PER_WAVE_INCREASE = 1.5, -- Controlled by player settings
     -- Spawn New Bosses
-    GOOSE_SETTING = GetModConfigData("goose_setting"),
+    --GOOSE_SETTING = GetModConfigData("goose_setting"),
     SPAWNWILTINGFLY = GetModConfigData("wiltfly"),
     -- Hound inclusion
     SPOREHOUNDS = GetModConfigData("sporehounds"),
@@ -378,7 +385,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R38_ELECTROCUTE"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R40_PEARLMAS"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
@@ -462,7 +469,7 @@ TUNING.DSTU = {
     WIDOW_HEALTH = 12000 * GetModConfigData("hoodedwidow_health_"),
     MOONFLY_HEALTH = 8000 * GetModConfigData("moonmaw_dragonfly_health_"),
     WILTFLY_HEALTH = 4000 * GetModConfigData("mock_dragonfly_health_"),
-    MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
+    --MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
     ONEHP = GetModConfigData("uncompromising_1hp"),
     
@@ -720,3 +727,7 @@ end
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
 
 TUNING.PIRATE_STASH_INV_SIZE = 2000 --Used to be just 30 maxslots.
+
+if GetModConfigData("warly_changes") then
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY =  {"portablecookpot_item", "spicepack", "potato", "potato", "garlic"}
+end
