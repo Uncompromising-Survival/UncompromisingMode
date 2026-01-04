@@ -56,20 +56,19 @@ if TUNING.DSTU.WORTOXCHANGES then
                 loss_per_player = loss_per_player * TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_4_LOSS_PER_PLAYER_MULT
             end
             local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, (TUNING.HEALING_MED * (inst.soul_heal_premult or 1) - loss_per_player * (healtargetscount - 1)) * (inst.soul_heal_mult or 1))
-            local amt_naughty = amt * 0.5
+            local amt_naughty = amt * .5
             local cooldowntime = inst.um_soul_echo_cooldown_time
 
             for i = 1, healtargetscount do
                 local v = healtargets[i]
                 local adjusted_amt = v.wortox_inclination == "naughty" and amt_naughty or amt
                 
-                adjusted_amt = adjusted_amt/2
+                adjusted_amt = adjusted_amt / 2
                 
                 if inst.soul_doburst then -- Soul bastion 1 allows you to bypass SHOT
                     v.components.health:DoDelta(adjusted_amt, nil, inst.prefab)
                 else
-                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse",
-                            { duration = (adjusted_amt * 0.1) })
+                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse_soul", {duration = (adjusted_amt * .1)})
                 end        
                 if cooldowntime and not v:HasDebuff("wortox_soulecho_buff") then -- Soul Bastion 2 applies Lifted Spirits I buff for others.
                     v:AddDebuff("wortox_soulecho_buff", "wortox_soulecho_buff", {duration = cooldowntime})
