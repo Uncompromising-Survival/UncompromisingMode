@@ -39,8 +39,6 @@ local function largefury_detatch(inst, target)
     end
 end
 
-
-
 local function electric_attach(inst, target)
     if target.components.electricattacks == nil then
         target:AddComponent("electricattacks")
@@ -136,7 +134,9 @@ local function OnHitOtherBoomberry(inst, data)
             end
         end
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
-        SpawnPrefab("blueberrypuddle").Transform:SetPosition(other.Transform:GetWorldPosition())
+        local puddle = SpawnPrefab("blueberrypuddle")
+        puddle.Transform:SetPosition(other.Transform:GetWorldPosition())
+        if inst:HasTag("player") then puddle.playermade = true end
     end
 end
 

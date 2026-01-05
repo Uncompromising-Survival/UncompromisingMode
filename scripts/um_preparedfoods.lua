@@ -374,11 +374,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
-            end
+            eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
         floater = { "med", nil, 0.65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
