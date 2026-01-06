@@ -56,6 +56,16 @@ AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), I
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
+AddRecipe2(
+	"jawed_scythe",
+	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
+	TECH.SCIENCE_ONE,
+	nil,
+	{ "TOOLS", "WEAPONS" }
+)
+ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
+ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
+
 if GetModConfigData("snowstorms") then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
     ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
@@ -559,17 +569,6 @@ ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
-
-
-AddRecipe2(
-	"jawed_scythe",
-	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
-	TECH.SCIENCE_ONE,
-	nil,
-	{ "TOOLS", "WEAPONS" }
-)
-ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
-ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
 
 if TUNING.DSTU.WATHGRITHR_REWORK then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
