@@ -557,7 +557,7 @@ local um_preparedfoods =
     viperjam =
     {
         test = function(cooker, names, tags)
-            return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
+            return UncompromisingFillers(tags) and not tags.meat and not tags.veggie and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1)
                 and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser >= 2)) and names.giant_blueberry
         end,
         hunger = 37.5,
