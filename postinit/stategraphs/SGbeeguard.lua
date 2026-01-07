@@ -104,7 +104,7 @@ local function Pop(inst)
 	inst:Remove()
 end
 
-env.AddStategraphPostInit("SGbeeguard", function(inst) -- beeguard time
+env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
 
 	local _OldOnEnter
 	if inst.states["death"].onenter then _OldOnEnter = inst.states["death"].onenter end

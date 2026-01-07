@@ -106,8 +106,7 @@ local function SpillHoney(inst)
     Honey(inst, angle, 10, 0)
 end
 
-env.AddStategraphPostInit("SGbeequeen",
-    function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
+env.AddStategraphPostInit("beequeen", function(inst)
         local _OldOnExit
         if inst.states["spawnguards"].onexit then
             _OldOnExit = inst.states["spawnguards"].onexit
