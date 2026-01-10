@@ -38,7 +38,8 @@ if TUNING.DSTU.WORTOXCHANGES then
                 v.entity:IsVisible() and
                 v:GetDistanceSqToPoint(x, y, z) < rangesq then
                 -- NOTES(JBK): If the target is hurt put them on the list to do heals.
-                if v.components.health:IsHurt() and not v:HasTag("health_as_oldage") or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) then -- Wanda tag.
+                if not v.um_should_ignore_soul_heal_fn and (v.components.health:IsHurt() and not v:HasTag("health_as_oldage")
+                    or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) or v:um_should_ignore_soul_heal_fn(inst) then -- Wanda tag.
                     table.insert(healtargets, v)
                     healtargetscount = healtargetscount + 1
                 end
@@ -1241,7 +1242,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
 
-	local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
+    local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
     local function DoLunarAttack(inst, owner, target)
         if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
             if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasAnyTag(NOT_LUNARTARGET_TAGS)) then
@@ -1256,7 +1257,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     end
 
     local function WortoxLunarStuff(inst)
-		local weapon = inst.components.weapon
+        local weapon = inst.components.weapon
         if weapon then
             local _OnAttack = weapon.onattack
             local function OnAttack(inst, attacker, target, ...)
