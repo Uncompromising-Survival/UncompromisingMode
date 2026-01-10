@@ -38,8 +38,8 @@ if TUNING.DSTU.WORTOXCHANGES then
                 v.entity:IsVisible() and
                 v:GetDistanceSqToPoint(x, y, z) < rangesq then
                 -- NOTES(JBK): If the target is hurt put them on the list to do heals.
-                if not v.um_should_ignore_soul_heal_fn and (v.components.health:IsHurt() and not v:HasTag("health_as_oldage")
-                    or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) or v:um_should_ignore_soul_heal_fn(inst) then -- Wanda tag.
+                if not v.um_should_soul_heal_fn and (v.components.health:IsHurt() and not v:HasTag("health_as_oldage")
+                    or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) or v:um_should_soul_heal_fn(inst) then -- Wanda tag.
                     table.insert(healtargets, v)
                     healtargetscount = healtargetscount + 1
                 end
