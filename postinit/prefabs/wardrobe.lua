@@ -2,23 +2,28 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function onopen(inst)
-    inst.AnimState:PlayAnimation("open")
-    inst.SoundEmitter:PlaySound("dontstarve/common/wardrobe_open")
+    if not inst:HasTag("burnt") then
+        inst.AnimState:PlayAnimation("open")
+        inst.SoundEmitter:PlaySound("dontstarve/common/wardrobe_open")
+    end
 end
 
 local function onclose(inst)
-    inst.AnimState:PlayAnimation("close")
-    inst.SoundEmitter:PlaySound("dontstarve/common/wardrobe_close")
+    if not inst:HasTag("burnt") then
+        inst.AnimState:PlayAnimation("cancel")
+        inst.AnimState:PushAnimation("closed", false)
+        inst.SoundEmitter:PlaySound("dontstarve/common/wardrobe_close")
+    end
 end
 
-local function ChangeIn(inst, doer)
+--[[local function ChangeIn(inst, doer)
     if inst.components.wardrobe then
         inst.components.wardrobe:BeginChanging(doer)
     end
 end
 
 local function OnStopChanneling(inst)
-    if inst.channeler ~= nil then
+    if inst.channeler then
         --inst.channeler.sg:GoToState("idle")
     end
     inst.channeler = nil
@@ -26,7 +31,7 @@ end
 
 local function GetActivateVerb(inst)
     return "OPEN"
-end
+end]]
 
 env.AddPrefabPostInit("wardrobe", function(inst)
     inst:AddTag("dressable")--tag needed for m2 dress action.
@@ -55,7 +60,7 @@ env.AddPrefabPostInit("wardrobe", function(inst)
     local _OnHit = inst.components.workable.onwork
     local _OnFinish = inst.components.workable.onfinish
     local function onhit(inst, worker)
-        if inst.components.container ~= nil then
+        if inst.components.container then
             inst.components.container:DropEverything()
             inst.components.container:Close()
         end
@@ -63,7 +68,7 @@ env.AddPrefabPostInit("wardrobe", function(inst)
     end
 
     local function onhammered(inst, worker)
-        if inst.components.container ~= nil then
+        if inst.components.container then
             inst.components.container:DropEverything()
         end
         _OnFinish(inst, worker)
@@ -71,17 +76,17 @@ env.AddPrefabPostInit("wardrobe", function(inst)
 
     inst.components.workable:SetOnWorkCallback(onhit)
     inst.components.workable:SetOnFinishCallback(onhammered)
-    inst:ListenForEvent("onburnt", function()
-        if inst.components.channelable ~= nil then
+    --[[inst:ListenForEvent("onburnt", function()
+        if inst.components.channelable then
             inst.components.channelable.enabled = false
         end
-    end)
+    end)]]
 
     inst:SetPhysicsRadiusOverride(0)
     MakeObstaclePhysics(inst, 0)
 end)
 
-STRINGS.ACTIONS.STARTCHANNELING.WARDROBE = "Use"
+--[[STRINGS.ACTIONS.STARTCHANNELING.WARDROBE = "Use"
 
 ACTIONS.STARTCHANNELING.strfn = function(act)
     if act.target and act.target:HasTag("pump") then
@@ -91,4 +96,4 @@ ACTIONS.STARTCHANNELING.strfn = function(act)
     else
         return nil
     end
-end
+end]]
