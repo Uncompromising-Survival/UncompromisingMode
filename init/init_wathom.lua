@@ -374,7 +374,7 @@ end
 
 local function MarkDontEatFoods(inst,target)
     local x,y,z = target.Transform:GetWorldPosition()
-    local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
+    local loot = TheSim:FindEntities(x, y, z, 4, {"_inventoryitem"}, {"INLIMBO"})
     for i,v in ipairs(loot) do
         if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not IsImportantLoot(v) then
             v.wathom_dont_eat = true
@@ -383,8 +383,9 @@ local function MarkDontEatFoods(inst,target)
     end
 end
 
-local bite2MustTags = { "_inventoryitem" }
-local bite2MustOneOfTags = { "meat", "smallmeat", "rawmeat" }
+local bite2MustTags = {"_inventoryitem"}
+local bite2CantTags = {"INLIMBO"}
+local bite2MustOneOfTags = {"meat", "smallmeat", "rawmeat"}
 
 local function CheckIfDead(inst, target)
     if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasAnyTag("soulless", "wall")) then
@@ -395,7 +396,7 @@ local function CheckIfDead(inst, target)
         inst.components.health:DoDelta(4 * bite_heal_mod)
         if HasSkill(inst,"bite_2") then
             local x,y,z = target.Transform:GetWorldPosition()
-            local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, nil, bite2MustOneOfTags)
+            local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, bite2CantTags, bite2MustOneOfTags)
             for i,v in ipairs(loot) do
                 if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
                     local health_restore = v.components.edible.healthvalue*1.1
