@@ -864,9 +864,9 @@ local states =
                     --[[print("found prey")
                     print(inst.prey)
                     print(inst.prey.prefab)]]
-                    local x, y, z = inst.prey.Transform:GetWorldPosition()
+                    --[[local x, y, z = inst.prey.Transform:GetWorldPosition()
                     inst.Transform:SetPosition(x, y, z)
-                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)]]
                 end
             end
         end,
@@ -928,9 +928,9 @@ local states =
                 if inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
                     inst.Physics:SetMotorVelOverride(0, 0, 0)
                 else
-                    local x, y, z = inst.treetarget.Transform:GetWorldPosition()
+                    --[[local x, y, z = inst.treetarget.Transform:GetWorldPosition()
                     inst.Transform:SetPosition(x, y, z)
-                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)]]
                 end
             end
         end,
@@ -1019,9 +1019,9 @@ local states =
                 if inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
                     inst.Physics:SetMotorVelOverride(0, 0, 0)
                 else
-                    local x, y, z = inst.treetarget.Transform:GetWorldPosition()
+                    --[[local x, y, z = inst.treetarget.Transform:GetWorldPosition()
                     inst.Transform:SetPosition(x, y, z)
-                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)]]
                 end
             end
         end,
