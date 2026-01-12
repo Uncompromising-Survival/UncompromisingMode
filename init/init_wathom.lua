@@ -386,7 +386,6 @@ end
 local bite2MustTags = {"_inventoryitem"}
 local bite2CantTags = {"INLIMBO"}
 local bite2MustOneOfTags = {"meat", "smallmeat", "rawmeat"}
-
 local function CheckIfDead(inst, target)
     if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasAnyTag("soulless", "wall")) then
         local bite_heal_mod = target:HasTag("epic") and 10 or 1
