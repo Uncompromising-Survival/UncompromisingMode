@@ -313,7 +313,7 @@ local function BuildSkillsData(SkillTreeFns)
             end,
             ondeactivate = function(inst, fromload)
                 if inst.wathom_houndtask then
-                    inst.wathom_houndtask:Canel()
+                    inst.wathom_houndtask:Cancel()
                     inst.wathom_houndtask = nil
                 end
             end,
