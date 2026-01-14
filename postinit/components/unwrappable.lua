@@ -6,7 +6,7 @@ env.AddComponentPostInit("unwrappable", function(self)
     local _UnWrap = self.Unwrap
     function self:Unwrap(doer, ...)
         if self.inst.timebundled then
-            local time_since_bundled = (GLOBAL.TheWorld.state.time+GLOBAL.TheWorld.state.cycles)*8*60 - self.inst.timebundled
+            local time_since_bundled = (TheWorld.state.time + TheWorld.state.cycles)*8*60 - self.inst.timebundled
             if self.itemdata then
                 for i, v in ipairs(self.itemdata) do
                     if v.data and v.data.perishable then
