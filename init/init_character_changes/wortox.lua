@@ -22,9 +22,13 @@ if TUNING.DSTU.WORTOXCHANGES then
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------    
+
+    local function ShouldHeal(inst, target)
+        if target.um_should_soul_heal_fn then return target:um_should_soul_heal_fn(inst) end
+        return target.components.health:IsHurt() and not target:HasTag("health_as_oldage") -- Wanda tag. --or (inst.soul_heal_player_efficient and target.components.health.penalty and target.components.health.penalty > 0)
+    end
     
     local SOULPROTECTOR_TICK_TIME = 0.1
-        
     local function UncompromisingSoulHeal(inst)
         local healtargets = {}
         local healtargetscount = 0
@@ -34,12 +38,10 @@ if TUNING.DSTU.WORTOXCHANGES then
         local rangesq = TUNING.WORTOX_SOULHEAL_RANGE + (inst.soul_heal_range_modifier or 0)
         rangesq = rangesq * rangesq
         for i, v in ipairs(GLOBAL.AllPlayers) do
-            if not (v.components.health:IsDead() or v:HasTag("playerghost")) and
-                v.entity:IsVisible() and
-                v:GetDistanceSqToPoint(x, y, z) < rangesq then
+            if not (v.components.health:IsDead() or v:HasTag("playerghost"))
+                and v.entity:IsVisible() and v:GetDistanceSqToPoint(x, y, z) < rangesq then
                 -- NOTES(JBK): If the target is hurt put them on the list to do heals.
-                if not v.um_should_soul_heal_fn and (v.components.health:IsHurt() and not v:HasTag("health_as_oldage")
-                    or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0)) or v:um_should_soul_heal_fn(inst) then -- Wanda tag.
+                if ShouldHeal(inst, v) then
                     table.insert(healtargets, v)
                     healtargetscount = healtargetscount + 1
                 end
