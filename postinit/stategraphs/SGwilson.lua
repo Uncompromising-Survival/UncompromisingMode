@@ -1359,23 +1359,23 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/common/together/skin_change")
                 end),
                 TimeEvent(41 * FRAMES, function(inst)
-                    if inst.components.inventory ~= nil then
+                    if inst.components.inventory then
                         local hand = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                        if hand ~= nil then
+                        if hand and not hand:HasTag("nosteal") then
                             inst.components.inventory:DropItem(hand)
                         end
 
                         local body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-                        if body ~= nil and body._light ~= nil then
+                        if body and body._light and not body:HasTag("nosteal") then
                             inst.components.inventory:DropItem(body)
                         end
 
                         local hat = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-                        if hat ~= nil and (hat:HasTag("nightvision") or hat._light) then
+                        if hat and (hat:HasTag("nightvision") or hat._light) and not hat:HasTag("nosteal") then
                             inst.components.inventory:DropItem(hat)
                         end
 
-                        if inst.components.sanity ~= nil then
+                        if inst.components.sanity then
                             inst.components.sanity:DoDelta(-15)
                         end
                     end

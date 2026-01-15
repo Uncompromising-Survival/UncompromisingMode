@@ -104,7 +104,7 @@ local function DamageNearbyEnemies(inst)
     for i, v in ipairs(TheSim:FindEntities(x, y, z, 4, { "_combat", "player"}, {"playerghost"})) do
         if v:IsValid() and v.components.combat ~= nil and v.components.health ~= nil then
             if not (v.components.health:IsDead() or v:HasTag("playerghost")) then
-                v.components.combat:GetAttacked(inst, 50, inst)
+                v.components.combat:GetAttacked(inst, 50)
             end
         end
     end

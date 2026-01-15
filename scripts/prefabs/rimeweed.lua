@@ -213,11 +213,9 @@ local function BarrierDie(inst)
     if math.random() < .01 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("dug_marsh_bush")
     end
-    local x, y, z = inst.Transform:GetWorldPosition()
-    local weeds = TheSim:FindEntities(x, y, z, 5, { "rimeweed" })
-
     if not inst.nospread then
-        for i, v in ipairs(weeds) do
+        local x, y, z = inst.Transform:GetWorldPosition()
+        for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, {"rimeweed"})) do
             if v.prefab == "rimeweed_barrier" then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
@@ -422,11 +420,13 @@ local function MainDie(inst)
     if inst.fx then inst.fx:Remove() end
     if #inst.bramble > 0 and not inst.nospread then
         for i, v in ipairs(inst.bramble) do
-            if v.components.health and not v.components.health:IsDead() then
-                v.noloot = true
-                v.components.health:Kill()
-            else
-                v:Remove()
+            if v:IsValid() then
+                if v.components.health and not v.components.health:IsDead() then
+                    v.noloot = true
+                    v.components.health:Kill()
+                else
+                    v:Remove()
+                end
             end
         end
     end

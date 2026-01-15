@@ -251,6 +251,7 @@ local function fn()
     inst:AddTag("toolpunch")
     inst:AddTag("battleshield")
     inst:AddTag("shield")
+    inst:AddTag("shadow_item")
 
     --parryweapon (from parryweapon component) added to pristine state for optimization
     inst:AddTag("parryweapon")
@@ -309,6 +310,9 @@ local function fn()
 
     inst:AddComponent("damagetyperesist")
 	inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
+
+    inst:AddComponent("damagetypebonus")
+    inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.WEAPONS_VOIDCLOTH_VS_LUNAR_BONUS)
 
     inst:AddComponent("shadowlevel")
 	inst.components.shadowlevel:SetDefaultLevel(TUNING.ARMORDREADSTONE_SHADOW_LEVEL)

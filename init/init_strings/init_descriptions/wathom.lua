@@ -261,10 +261,6 @@ DESCRIBE.DURABILITY_LEVEL = {
 --ACTIONFAIL.READ.GENERIC = "Magic, inert."
 ACTIONFAIL.GIVE.NOTNIGHT = "Presence required, Alter's gaze."
 
-RECIPE_DESC = STRINGS.RECIPE_DESC
-
-RECIPE_DESC.RAT_BURROW = "Den, rodents."
-
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Magma, vitalized!"
 DESCRIBE.LIGHTNINGHOUND = "Surroundings ionized!"

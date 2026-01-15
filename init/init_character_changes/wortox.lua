@@ -22,9 +22,13 @@ if TUNING.DSTU.WORTOXCHANGES then
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------    
+
+    local function ShouldHeal(inst, target)
+        if target.um_should_soul_heal_fn then return target:um_should_soul_heal_fn(inst) end
+        return target.components.health:IsHurt() and not target:HasTag("health_as_oldage") -- Wanda tag. --or (inst.soul_heal_player_efficient and target.components.health.penalty and target.components.health.penalty > 0)
+    end
     
     local SOULPROTECTOR_TICK_TIME = 0.1
-        
     local function UncompromisingSoulHeal(inst)
         local healtargets = {}
         local healtargetscount = 0
@@ -34,11 +38,10 @@ if TUNING.DSTU.WORTOXCHANGES then
         local rangesq = TUNING.WORTOX_SOULHEAL_RANGE + (inst.soul_heal_range_modifier or 0)
         rangesq = rangesq * rangesq
         for i, v in ipairs(GLOBAL.AllPlayers) do
-            if not (v.components.health:IsDead() or v:HasTag("playerghost")) and
-                v.entity:IsVisible() and
-                v:GetDistanceSqToPoint(x, y, z) < rangesq then
+            if not (v.components.health:IsDead() or v:HasTag("playerghost"))
+                and v.entity:IsVisible() and v:GetDistanceSqToPoint(x, y, z) < rangesq then
                 -- NOTES(JBK): If the target is hurt put them on the list to do heals.
-                if v.components.health:IsHurt() and not v:HasTag("health_as_oldage") or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) then -- Wanda tag.
+                if ShouldHeal(inst, v) then
                     table.insert(healtargets, v)
                     healtargetscount = healtargetscount + 1
                 end
@@ -56,20 +59,19 @@ if TUNING.DSTU.WORTOXCHANGES then
                 loss_per_player = loss_per_player * TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_4_LOSS_PER_PLAYER_MULT
             end
             local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, (TUNING.HEALING_MED * (inst.soul_heal_premult or 1) - loss_per_player * (healtargetscount - 1)) * (inst.soul_heal_mult or 1))
-            local amt_naughty = amt * 0.5
+            local amt_naughty = amt * .5
             local cooldowntime = inst.um_soul_echo_cooldown_time
 
             for i = 1, healtargetscount do
                 local v = healtargets[i]
                 local adjusted_amt = v.wortox_inclination == "naughty" and amt_naughty or amt
                 
-                adjusted_amt = adjusted_amt/2
+                adjusted_amt = adjusted_amt / 2
                 
                 if inst.soul_doburst then -- Soul bastion 1 allows you to bypass SHOT
                     v.components.health:DoDelta(adjusted_amt, nil, inst.prefab)
                 else
-                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse",
-                            { duration = (adjusted_amt * 0.1) })
+                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse_soul", {duration = (adjusted_amt * .1)})
                 end        
                 if cooldowntime and not v:HasDebuff("wortox_soulecho_buff") then -- Soul Bastion 2 applies Lifted Spirits I buff for others.
                     v:AddDebuff("wortox_soulecho_buff", "wortox_soulecho_buff", {duration = cooldowntime})
@@ -1242,7 +1244,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
 
-	local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
+    local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
     local function DoLunarAttack(inst, owner, target)
         if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
             if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasAnyTag(NOT_LUNARTARGET_TAGS)) then
@@ -1257,7 +1259,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     end
 
     local function WortoxLunarStuff(inst)
-		local weapon = inst.components.weapon
+        local weapon = inst.components.weapon
         if weapon then
             local _OnAttack = weapon.onattack
             local function OnAttack(inst, attacker, target, ...)

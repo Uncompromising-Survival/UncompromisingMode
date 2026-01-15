@@ -374,11 +374,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
-            if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
-                not (eater.components.health ~= nil and eater.components.health:IsDead()) and
-                not eater:HasTag("playerghost") then
-                eater.components.debuffable:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
-            end
+            eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
         floater = { "med", nil, 0.65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
@@ -561,8 +557,8 @@ local um_preparedfoods =
     viperjam =
     {
         test = function(cooker, names, tags)
-            return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser == 3)) and names.giant_blueberry
+            return UncompromisingFillers(tags) and not tags.meat and not tags.veggie and not tags.inedible and not (tags.insectoid and tags.insectoid >= 1)
+                and (names.viperfruit or (names.viperfruit_lesser and names.viperfruit_lesser >= 2)) and names.giant_blueberry
         end,
         hunger = 37.5,
         health = 40,
@@ -640,7 +636,7 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags)
             return not tags.monster and not tags.inedible and UncompromisingFillers(tags)
-                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser == 2)) and tags.sweetener and tags.dairy
+                and (names.zaspberry or (names.zaspberry_lesser and names.zaspberry_lesser >= 2)) and tags.sweetener and tags.dairy
         end,
         hunger = 37.5,
         health = 40,

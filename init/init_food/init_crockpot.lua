@@ -408,10 +408,10 @@ recipes.taffy.test = function(cooker, names, tags)
 end
 -- Original:	test = function(cooker, names, tags) return tags.sweetener and tags.sweetener >= 3 and not tags.meat end,
 
-recipes.sweettea.test = function(cooker, names, tags)
+--[[recipes.sweettea.test = function(cooker, names, tags)
     return names.forgetmelots and tags.foliage and tags.foliage <= 1 and tags.sweetener and tags.frozen and
         not tags.monster and not tags.veggie and not tags.meat and not tags.fish and not tags.egg and not tags.fat and not tags.dairy and not tags.inedible
-end
+end]]
 -- Original:		test = function(cooker, names, tags) return names.forgetmelots and tags.sweetener and tags.frozen and not tags.monster and not tags.veggie and not tags.meat and not tags.fish and not tags.egg and not tags.fat and not tags.dairy and not tags.inedible end,
 
 recipes.justeggs.test = function(cooker, names, tags)
@@ -571,9 +571,17 @@ InsertIngredientValues({ "um_ghost_pepper_item" }, { veggie = 1 })
 InsertIngredientValues({ "um_spongeplant_item" }, { veggie = 0.5 }, true, false, false)
 
 if TUNING.DSTU.NEWRECIPES then
-    InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
-    InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
+    --InsertIngredientValues({ "firenettles" }, { foliage = 1 }, true, false, false)
+    --InsertIngredientValues({ "foliage" }, { foliage = 1 }, true, false, false)
     InsertIngredientValues({ "greenfoliage" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "foliage_dried" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "petals_dried" }, { foliage = 1.5 }, true, false, false)
+    InsertIngredientValues({ "petals_evil_dried" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "succulent_picked_dried" }, { foliage = 0.5 }, true, false, false)
+    InsertIngredientValues({ "moon_tree_blossom_dried" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "firenettles_dried" }, { foliage = 1 }, true, false, false)
+    InsertIngredientValues({ "tillweed_dried" }, { foliage = 0.5 }, true, false, false)
+    InsertIngredientValues({ "forgetmelots_dried" }, { foliage = 1 }, true, false, false)
 end
 --RegisterInventoryItemAtlas("images/inventoryimages/greenfoliage.xml", "greenfoliage.tex")
 InsertIngredientValues({ "horn" }, { meat = 1 }, true, false, false)

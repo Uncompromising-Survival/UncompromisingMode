@@ -276,10 +276,10 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
 end
 
 if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
-    --AllRecipes["battlesong_shadowaligned"] = nil
+    AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
-    AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"
-    AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"
+    --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
     AllRecipes["battlesong_container"].ingredients = { Ingredient("boards", 2), Ingredient("goldnugget", 4), Ingredient("beeswax", 2) }
 end
 

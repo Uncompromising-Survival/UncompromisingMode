@@ -56,6 +56,16 @@ AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), I
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
 ChangeSortKey("sporepack", "icepack", "CONTAINERS", true)
 
+AddRecipe2(
+	"jawed_scythe",
+	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
+	TECH.SCIENCE_ONE,
+	nil,
+	{ "TOOLS", "WEAPONS" }
+)
+ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
+ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
+
 if GetModConfigData("snowstorms") then
     AddRecipe2("snowgoggles", { Ingredient("catcoonhat", 1), Ingredient("goggleshat", 1), Ingredient("beefalowool", 2) }, TECH.SCIENCE_TWO, nil, { "WINTER", "CLOTHING" })
     ChangeSortKey("snowgoggles", "catcoonhat", "WINTER", true)
@@ -560,17 +570,6 @@ ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
 
-
-AddRecipe2(
-	"jawed_scythe",
-	{ Ingredient("twigs", 4), Ingredient("steelwool", 1), Ingredient("snappy_jaw", 3) },
-	TECH.SCIENCE_ONE,
-	nil,
-	{ "TOOLS", "WEAPONS" }
-)
-ChangeSortKey("jawed_scythe", "pitchfork", "TOOLS", true)
-ChangeSortKey("jawed_scythe", "spear_wathgrithr_lightning", "WEAPONS", true)
-
 if TUNING.DSTU.WATHGRITHR_REWORK then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
     { Ingredient("dreadstone", 6), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 1) },
@@ -602,6 +601,9 @@ ChangeSortKey("woby_treat_small", "woby_treat", "CHARACTER", true)
 AddRecipe2("um_feather_totem", {Ingredient("boards", 2),  Ingredient("um_moss", 4), Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15)}, TECH.MAGIC_TWO, {image="screecher_trinket.tex"}, {"RESTORATION", "MAGIC"})
 ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
+
+--AddRecipe2("um_gemology_pouch", {Ingredient("goldnugget", 1),}, TECH.SCIENCE_TWO, {}, {"CONTAINERS"})
+--ChangeSortKey("um_gemology_pouch", "candybag", "CONTAINERS", false)
 
 AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
 ChangeSortKey("um_magnifier", "nutrientgoggleshat", "CRAFTING_STATION", false)

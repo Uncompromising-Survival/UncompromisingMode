@@ -342,7 +342,7 @@ configuration_options = {
     --BinaryConfig("the angler", "Wickerbottom - The Angler's",
         --"\"The Angler's Survival Guide\" now takes 2 Hardened Slip Bobbers, instead of 2 Wooden Ball Bobbers.", true),
 
-    BinaryConfig("waxwell", "Maxwell", "Maxwell has mastered the summoning of shadowy gear. Shadow Prison is less effective against Bosses.", true),
+    BinaryConfig("waxwell", "Maxwell", "Maxwell has mastered the summoning of shadowy gear.", true),
     {
         name = "wathgrithr_rework_",
         label = "Wigfrid - Rework",

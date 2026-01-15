@@ -298,60 +298,124 @@ env.AddPrefabPostInit("waxwell", function(inst)
     WaxwellUMStuff(inst)
 end)
 
+-- This is used to stop deconstruction on targets you really don't want deconstructed without stopping other magic (e.g., reskin_tool). Move this to a different file if this becomes used elsewhere.
+local function CantCastOnTarget(inst, target, client)
+    local cancastonrecipes
+    if not client then
+        local spellcaster = inst.components.spellcaster
+        cancastonrecipes = spellcaster and spellcaster.canuseontargets and spellcaster.canonlyuseonrecipes
+    end
+    return (client and inst:HasTag("castonrecipes") or cancastonrecipes) and target:HasTag("um_nodeconstruct")
+end
+
+env.AddComponentPostInit("spellcaster", function(self)
+    local _CanCast = self.CanCast
+    function self:CanCast(doer, target, ...)
+        if CantCastOnTarget(self.inst, target) then return false end
+        return _CanCast(self, doer, target, ...)
+    end
+end)
+
+local UpvalueHacker = require("tools/upvaluehacker")
+env.AddSimPostInit(function()
+    local COMPONENT_ACTIONS = UpvalueHacker.GetUpvalue(EntityScript.CollectActions, "COMPONENT_ACTIONS")
+    if COMPONENT_ACTIONS then
+        local EQUIPPED = COMPONENT_ACTIONS.EQUIPPED
+        if EQUIPPED then
+            local _EQUIPPED_spellcaster_fn = EQUIPPED["spellcaster"]
+            if _EQUIPPED_spellcaster_fn then
+                EQUIPPED["spellcaster"] = function(inst, doer, target, actions, right, ...)
+                    if CantCastOnTarget(inst, target, true) then return end
+                    return _EQUIPPED_spellcaster_fn(inst, doer, target, actions, right, ...)
+                end
+            end
+        end
+    end
+end)
+
 do
-    local function ShadowGearDisplayNameFn(inst)
-        return inst:HasTag("maxwellsummon") and STRINGS.NAMES[string.upper("um_maxwell_"..inst.prefab)] or nil
+    local _displaynamefn
+    local function ShadowGearDisplayNameFn(inst, ...)
+        return inst:HasTag("um_maxwellsummon") and STRINGS.NAMES[string.upper("um_maxwell_"..inst.prefab)] or _displaynamefn and _displaynamefn(inst, ...) or nil
     end
 
     local function ShadowGearClientFunctions(inst)
+        _displaynamefn = inst.displaynamefn
         inst.displaynamefn = ShadowGearDisplayNameFn
     end
 
+    local function ShadowGearOnTimerDone(inst, data)
+        if data and data.name == "um_shadowgeardestroy" then
+            local fx = SpawnPrefab("um_shadow_attune_fx")
+            fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            fx.AnimState:PlayAnimation("attune_out")
+            fx.SoundEmitter:PlaySound("dontstarve/sanity/creature2/die")
+            inst:Remove()
+        end
+    end
+
+    local um_shadowgeardestroy_key = "um_shadowgeardestroy"
     local function ConvertToMaxwellSummon(inst)
         inst:AddTag("nosteal")
-        inst:AddTag("maxwellsummon")
+        inst:AddTag("um_maxwellsummon")
+        inst:AddTag("um_nodeconstruct")
+        local timer = inst.components.timer or inst:AddComponent("timer")
+        if timer then
+            local _OnSave = timer.OnSave
+            timer.OnSave = function(self, ...)
+                local data = _OnSave(self, ...) or {}
+                if not data["add_component_if_missing"] then data["add_component_if_missing"] = true end
+                return data
+            end
+            inst:ListenForEvent("timerdone", ShadowGearOnTimerDone)
+        end
         local inventoryitem = inst.components.inventoryitem
         if inventoryitem then
             inventoryitem.keepondeath = true
             inventoryitem.keepondrown = true
             inventoryitem.canonlygoinpocket = true
+            inventoryitem.canbepickedup = false
+            inventoryitem.grabbableoverridetag = "shadowmagic"
             local function ShadowGearOnDropped(inst)
-                local fx = SpawnPrefab("um_shadow_attune_fx")
-                fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                fx.AnimState:PlayAnimation("attune_out")
-                fx.SoundEmitter:PlaySound("dontstarve/sanity/creature2/die")
-                inst:DoTaskInTime(0, inst.Remove)
+                local timer = inst.components.timer
+                if not timer then return end
+                local despawntime = 5
+                if timer:TimerExists(um_shadowgeardestroy_key) then
+                    timer:SetTimeLeft(um_shadowgeardestroy_key, despawntime)
+                else
+                    timer:StartTimer(um_shadowgeardestroy_key, despawntime)
+                end
+            end
+            local function ShadowGearOnPickup(inst)
+                local timer = inst.components.timer
+                if not timer then return end
+                if timer:TimerExists(um_shadowgeardestroy_key) then timer:StopTimer(um_shadowgeardestroy_key) end
             end
             inst:ListenForEvent("ondropped", ShadowGearOnDropped)
+            inst:ListenForEvent("onputininventory", ShadowGearOnPickup)
         end
     end
 
     local _OnSave
     local function ShadowGearOnSave(inst, data, ...)
-        if inst:HasTag("maxwellsummon") then
-            data.maxwellsummon = true
-        end
+        if inst:HasTag("um_maxwellsummon") then data.um_maxwellsummon = true end
         if _OnSave then return _OnSave(inst, data, ...) end
     end
 
     local _OnLoad
     local function ShadowGearOnLoad(inst, data, ...)
-        if data and data.maxwellsummon then
-            inst:ConvertToMaxwellSummon()
-        end
+        if data and data.um_maxwellsummon then inst:UMConvertToMaxwellSummon() end
         if _OnLoad then return _OldLoad(inst, data, ...) end
     end
 
     local _onPreBuilt
     local function ShadowGearOnPreBuilt(inst, builder, materials, recipe, ...)
-        if recipe.name == "um_maxwell_"..inst.prefab then
-            inst:ConvertToMaxwellSummon()
-        end
+        if recipe.name == "um_maxwell_"..inst.prefab then inst:UMConvertToMaxwellSummon() end
         if _onPreBuilt then return _onPreBuilt(inst, builder, materials, recipe, ...) end
     end
 
     local function ShadowGearFunctions(inst)
-        inst.ConvertToMaxwellSummon = ConvertToMaxwellSummon
+        inst.UMConvertToMaxwellSummon = ConvertToMaxwellSummon
         _OnSave = inst.OnSave
         inst.OnSave = ShadowGearOnSave
         _OnLoad = inst.OnLoad

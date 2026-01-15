@@ -131,7 +131,7 @@ local function TiredStarter(inst)
     end
 end
 
-env.AddStategraphPostInit("SGbeequeen", function(inst) --For some reason it's called "SGbeequeen" instead of just... beequeen, funky
+env.AddStategraphPostInit("beequeen", function(inst)
     inst.states["spawnguards"].tags["ability"] = true -- This is added such that the stomphandler can recognize the spawnguards move as an ability
     local _OldOnExit = inst.states["spawnguards"].onexit
     inst.states["spawnguards"].onexit = function(inst, ...)

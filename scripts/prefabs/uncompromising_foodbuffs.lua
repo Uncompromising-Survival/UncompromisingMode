@@ -39,8 +39,6 @@ local function largefury_detatch(inst, target)
     end
 end
 
-
-
 local function electric_attach(inst, target)
     if target.components.electricattacks == nil then
         target:AddComponent("electricattacks")
@@ -123,8 +121,8 @@ local function OnHitOtherBoomberry(inst, data)
         for i, v in ipairs(ents) do
             local leader = v.components.follower and v.components.follower.leader
             local itemleader = leader and leader.components.inventoryitem and leader.components.inventoryitem:GetGrandOwner()
-            if not v.components.health:IsDead() and v.components.combat:CanBeAttacked() and (not leader or itemleader and not itemleader:HasTag("player") or not leader.components.inventoryitem and not leader:HasTag("player"))
-                and v ~= inst and v ~= other then
+            if not v.components.health:IsDead() and v.components.combat:CanBeAttacked(inst) and (not leader or itemleader and not itemleader:HasTag("player")
+                or not leader.components.inventoryitem and not leader:HasTag("player")) and v ~= inst and v ~= other then
                 local damageredirecttarget = v.components.combat.redirectdamagefn ~= nil and v.components.combat.redirectdamagefn(v, inst, damage) or nil
                 v.um_boomberry_exploded = true
                 if damageredirecttarget then --Fix by Discord user mlz2023_34253
@@ -136,7 +134,9 @@ local function OnHitOtherBoomberry(inst, data)
             end
         end
         SpawnPrefab("blueberryexplosion").Transform:SetPosition(other.Transform:GetWorldPosition())
-        SpawnPrefab("blueberrypuddle").Transform:SetPosition(other.Transform:GetWorldPosition())
+        local puddle = SpawnPrefab("blueberrypuddle")
+        puddle.Transform:SetPosition(other.Transform:GetWorldPosition())
+        if inst:HasTag("player") then puddle.playermade = true end
     end
 end
 
