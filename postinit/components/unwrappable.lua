@@ -3,10 +3,10 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 env.AddComponentPostInit("unwrappable", function(self)
-    local _UnWrap = self.Unwrap
+    local _Unwrap = self.Unwrap
     function self:Unwrap(doer, ...)
         if self.inst.timebundled then
-            local time_since_bundled = (TheWorld.state.time + TheWorld.state.cycles)*8*60 - self.inst.timebundled
+            local time_since_bundled = (TheWorld.state.time + TheWorld.state.cycles) * 8 * 60 - self.inst.timebundled
             if self.itemdata then
                 for i, v in ipairs(self.itemdata) do
                     if v.data and v.data.perishable then
@@ -17,6 +17,6 @@ env.AddComponentPostInit("unwrappable", function(self)
                 end
             end
         end
-        return _UnWrap(self, doer, ...)
+        return _Unwrap(self, doer, ...)
     end
 end)

@@ -399,19 +399,19 @@ do
     local _OnSave
     local function ShadowGearOnSave(inst, data, ...)
         if inst:HasTag("um_maxwellsummon") then data.um_maxwellsummon = true end
-        if _OnSave then return _OnSave(inst, data, ...) end
+        return _OnSave and _OnSave(inst, data, ...)
     end
 
     local _OnLoad
     local function ShadowGearOnLoad(inst, data, ...)
         if data and data.um_maxwellsummon then inst:UMConvertToMaxwellSummon() end
-        if _OnLoad then return _OldLoad(inst, data, ...) end
+        return _OnLoad and _OnLoad(inst, data, ...)
     end
 
     local _onPreBuilt
     local function ShadowGearOnPreBuilt(inst, builder, materials, recipe, ...)
         if recipe.name == "um_maxwell_"..inst.prefab then inst:UMConvertToMaxwellSummon() end
-        if _onPreBuilt then return _onPreBuilt(inst, builder, materials, recipe, ...) end
+        return _onPreBuilt and _onPreBuilt(inst, builder, materials, recipe, ...)
     end
 
     local function ShadowGearFunctions(inst)
