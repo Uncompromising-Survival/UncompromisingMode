@@ -46,7 +46,7 @@ local function OnAttacked(inst, data)
     clockwork_common.OnAttacked(inst, data)
 end
 local function Zapp(inst, target)
-    if target ~= nil then
+    if target and target:IsValid() then
         local x, y, z = inst.Transform:GetWorldPosition()
         local projectile = SpawnPrefab("roship_projectile")
         projectile.Transform:SetPosition(x, y, z)
@@ -68,7 +68,7 @@ end
 local function ShootBolt(inst)
     local maxsnow = 1
     for k = 1, maxsnow do
-        if inst.components.combat.target ~= nil then
+        if inst.components.combat.target then
             local target = inst.components.combat.target
             inst:DoTaskInTime(FRAMES + math.random() * 0.1, Zapp, target)
         end
