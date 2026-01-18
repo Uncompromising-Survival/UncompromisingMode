@@ -29,42 +29,27 @@ local prefabs =
     "sparks",
 }
 
-local brain = require("brains/shockwormbrain")
+local brain = require("brains/wormbrain")
 
 local MAX_LIGHT_FRAME = 20
 ---Added Stuff
 local function OnAttacked(inst, data)
-    if data ~= nil and data.attacker ~= nil and not data.redirected then
+    if data ~= nil and data.attacker ~= nil then
         if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            data.attacker.components.combat ~= nil and not data.attacker.components.combat.ignoredamagereflect and
+            data.stimuli ~= "soul" and
             (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and not (data.stimuli and data.stimuli == "soul") then
-
-            data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
-            
-            if data.attacker:HasTag("player") and not data.attacker.sg:HasStateTag("dead") then
-                data.attacker.sg:GoToState("electrocute")
+            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
+            not data.attacker:HasTag("catapult")
+        then
+            local damage_mult = 1
+            if not IsEntityElectricImmune(data.attacker) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
             end
+            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE, nil, "electric")
         end
+
+        inst.components.combat:SetTarget(data.attacker)
     end
-        
-    inst.components.combat:SetTarget(data.attacker)
-end
-
-
-local function OnAttackOther(inst, data)
-    if data ~= nil and data.target ~= nil then
-            if data.target.components.health ~= nil and not data.target.components.health:IsDead() and
-                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-                not (data.target.components.inventory ~= nil and data.target.components.inventory:IsInsulated()) then
-
-                if data.target:HasTag("player") then
-                    local shockvictim = data.target.sg:GoToState("electrocute")
-                    inst:DoTaskInTime(2, shockvictim)
-                end
-            end
-        end
-inst.components.combat:SetTarget(data.target)
 end
 
 -- Depth worm stuff
@@ -286,6 +271,7 @@ local function fn()
     inst:AddTag("hostile")
     inst:AddTag("wet")
     inst:AddTag("worm")
+    inst:AddTag("shockworm")
     inst:AddTag("cavedweller")
     inst:AddTag("electricdamageimmune")
     inst:AddTag("lunar_aligned")
@@ -320,6 +306,9 @@ local function fn()
     inst.components.combat:SetAttackPeriod(TUNING.WORM_ATTACK_PERIOD)
     inst.components.combat:SetRetargetFunction(GetRandomWithVariance(2, 0.5), retargetfn)
     inst.components.combat:SetKeepTargetFunction(shouldKeepTarget)
+
+    inst:AddComponent("electricattacks")
+    inst.components.electricattacks:AddSource(inst)
 
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
@@ -365,11 +354,11 @@ local function fn()
     inst.turnonlight = turnonlight
     inst.turnofflight = turnofflight
 
-    inst:SetStateGraph("SGshockworm")
+    inst:SetStateGraph("SGworm")
+    inst.sg.mem.noelectrocute = true
     inst:SetBrain(brain)
     
     inst:ListenForEvent("attacked", OnAttacked)
-    inst:ListenForEvent("onattackother", OnAttackOther)
     
     inst:ListenForEvent("freeze", function()
         inst:turnonlight()
