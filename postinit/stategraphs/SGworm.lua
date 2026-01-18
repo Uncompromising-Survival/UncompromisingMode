@@ -36,9 +36,5 @@ env.AddStategraphPostInit("worm", function(inst)
             end
         end))
         table.sort(attackstate.timeline, function(a, b) return a.time < b.time end)
-        --[[local attackstate_animover_fn = attackstate.events["animover"].fn
-        attackstate.events["animover"].fn = function(inst, ...)
-            return attackstate_animover_fn(inst, ...)
-        end]]
     end
 end)
