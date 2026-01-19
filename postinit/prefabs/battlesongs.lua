@@ -161,8 +161,13 @@ local function battlesong_healthgain_onapply(inst, target)
                     target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA_SINGER * lunarMult)
                 else
                     target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA )
-                end]]
-                target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA )
+                end
+                target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA )]]
+                if target:HasTag("battlesinger") then
+                    target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA_SINGER)
+                else
+                    target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA)
+                end
             end
         end, target)
 
