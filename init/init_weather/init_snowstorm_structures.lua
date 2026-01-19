@@ -128,7 +128,8 @@ local SNOWPILE_BLOCKERS =
     "dragonflyfurnace",
 	"dragonflychest",	
     "um_hotspring",
-	"hotspring",	
+	"hotspring",
+	"hermithotspring",	
     "stafflight",
 	"emberlight"
 }
