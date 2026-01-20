@@ -119,7 +119,7 @@ end
 
 local function ShouldRecoil(inst, attacker, weapon, damage)
     local rock = inst.myrock
-    return rock and rock:IsValid() and attacker:HasTag("player") and not attacker.testing, damage
+    return rock and rock:IsValid() and attacker:HasTag("player"), damage
 end
 
 local function OnAttacked(inst, data)
