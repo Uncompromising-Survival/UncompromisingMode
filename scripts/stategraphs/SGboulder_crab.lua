@@ -65,16 +65,27 @@ local events=
         if inst.hiding and not inst.components.timer:TimerExists("regenrock") then -- This shouldn't happen, but if it does!
             inst.sg:GoToState("hide_pst")
         else
-            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("attack") and not inst.components.timer:TimerExists("regenrock") then 
+            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") and not inst.components.timer:TimerExists("regenrock") then 
                 inst.sg:GoToState("hit")  -- can't attack during hit reaction
             end
         end
     end),
     EventHandler("doattack", function(inst, data) 
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") and not inst.sg:HasStateTag("evade")  and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
+        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
             inst.sg:GoToState("attack", data.target) 
         elseif not inst.components.health and not inst.components.timer:TimerExists("regenrock") then
             inst.sg:GoToState("dig")
+        end
+    end),
+    EventHandler("hideunderrock", function(inst)
+        local rock = inst.myrock
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and rock and rock:IsValid() and rock.AnimState:IsCurrentAnimation("full") then
+            inst.sg:GoToState("hide_pre")
+        end
+    end),
+    EventHandler("comeoutfromunderrock", function(inst)
+        if not (inst.components.health and inst.components.health:IsDead()) and inst.hiding then
+            inst.sg:GoToState("hide_pst")
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
@@ -186,11 +197,12 @@ local states =
         name = "uppercut",
         tags = {"moving", "canrotate", "attack"},
 
-        onenter = function(inst)
+        onenter = function(inst, target)
             inst.components.combat:StartAttack()
             inst.components.locomotor:RunForward()
             inst.AnimState:PushAnimation("uppercut")
-            inst:ListenForEvent("onhitother",KnockOutWeapon)
+            inst:ListenForEvent("onhitother", KnockOutWeapon)
+			inst.sg.statemem.target = target
         end,
 
         onupdate = function(inst)
@@ -217,7 +229,7 @@ local states =
 
         onexit = function(inst)
             inst.Physics:Stop()
-            inst:RemoveEventCallback("onhitother",KnockOutWeapon)
+            inst:RemoveEventCallback("onhitother", KnockOutWeapon)
         end,
 
         events =
@@ -253,7 +265,6 @@ local states =
         onenter = function(inst, start_anim)
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("fuck", true)
-            inst.components.timer:StartTimer("startregenrock",2 * 8 * 60)
         end,
 
         events =
@@ -328,6 +339,7 @@ local states =
         onexit = function(inst)
             inst.Transform:SetFourFaced()
             inst.hiding = false
+            inst.lasthidetime = GetTime()
             local x,y,z = inst.Transform:GetWorldPosition()
             MakeCharacterPhysics(inst, 400, .5)
             inst.Transform:SetPosition(x,y,z)
@@ -403,7 +415,7 @@ local states =
     },
     State{
         name = "attack",
-        tags = {"attack", "busy", "no_stun"},
+        tags = {"attack", "busy"},
 
         onenter = function(inst, target)
             inst.Physics:Stop()
@@ -428,7 +440,7 @@ local states =
                 if not inst.uppercooldown and inst.components.combat and inst.components.combat.target and inst:GetDistanceSqToInst(inst.components.combat.target) < 6^2 then
                     inst.uppercooldown = true
                     inst:DoTaskInTime(math.random(8,10),function(inst) inst.uppercooldown = nil end)
-                    inst.sg:GoToState("uppercut")
+                    inst.sg:GoToState("uppercut", inst.sg.statemem.target)
                 else
                     inst.sg:GoToState("idle")
                 end
@@ -451,7 +463,7 @@ local states =
     },
     State{
         name = "dig",
-        tags = {"busy","noattack","INLIMBO"},--You can only mine the boulder, they can't be attacked in this phase
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.Transform:SetNoFaced()
@@ -463,7 +475,7 @@ local states =
         timeline =
         {
             TimeEvent(9*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
-            TimeEvent(21*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
+            --TimeEvent(21*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
             TimeEvent(37*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
             TimeEvent(40*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
             TimeEvent(47*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
@@ -472,13 +484,18 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
+                inst.sg:AddStateTag("noattack")
                 inst.SpawnHole(inst)
             end),
         },
+
+        onexit = function(inst)
+            if inst.SoundEmitter:PlayingSound("move") then inst.SoundEmitter:KillSound("move") end
+        end,
     },
 --[[State{
         name = "dirt",
-        tags = {"busy", "noattack", "INLIMBO"},-- You can only mine the boulder, they can't be attacked in this phase.
+        tags = {"busy", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
 
         onenter = function(inst)
             inst.Transform:SetNoFaced()
@@ -493,7 +510,7 @@ local states =
     },]]
     State{
         name = "emerge",
-        tags = {"busy", "noattack", "INLIMBO"},-- You can only mine the boulder, they can't be attacked in this phase.
+        tags = {"busy", "noattack"},-- You can only mine the boulder, they can't be attacked in this phase.
 
         onenter = function(inst)
             --inst.Transform:SetNoFaced()
