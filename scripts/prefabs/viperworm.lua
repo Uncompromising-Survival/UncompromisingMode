@@ -548,13 +548,7 @@ local function fn()
     inst:SetStateGraph("SGworm")
     inst:SetBrain(brain)
     inst.ViperlingBelch = ViperlingBelch
-    inst:ListenForEvent("freeze", function()
-        inst:turnonlight()
-    end)
 
-    inst:ListenForEvent("unfreeze", function()
-        inst:turnofflight()
-    end)
     return inst
 end
 
