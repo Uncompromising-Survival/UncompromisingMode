@@ -55,7 +55,7 @@ local function GetRock(inst, rock)
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
     if inst.components.health then -- Will leave this in incase it somehow bypasses.
-        inst.components.health:SetAbsorptionAmount(rock ~= "rock_moon" and rock ~= "rock_lichen" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
+        inst.components.health:SetAbsorptionAmount(rock == "rock_moon" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
     end
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
