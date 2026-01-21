@@ -702,6 +702,12 @@ local disguises =
 		build = "carrot",
 		anim = "planted",
 	},
+	{
+		name = "dirtpile",
+		bank = "track",
+		build = "koalefant_tracks",
+		anim = "idle_pile",
+	},	
 }
 
 local situational_disguises =
@@ -765,6 +771,12 @@ local situational_disguises =
 		bank = "grass",
 		build = "grass1",
 		anim = "idle",
+	},
+	{
+		name = "dirtpile",
+		bank = "track",
+		build = "koalefant_tracks",
+		anim = "idle_pile",
 	},
 }
 
