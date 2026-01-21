@@ -32,27 +32,7 @@ local prefabs =
 local brain = require("brains/wormbrain")
 
 local MAX_LIGHT_FRAME = 20
----Added Stuff
-local function OnAttacked(inst, data)
-    if data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            data.stimuli ~= "soul" and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
-            not data.attacker:HasTag("catapult")
-        then
-            local damage_mult = 1
-            if not IsEntityElectricImmune(data.attacker) then
-                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
-            end
-            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.LIGHTNING_GOAT_DAMAGE, nil, "electric")
-        end
 
-        inst.components.combat:SetTarget(data.attacker)
-    end
-end
-
--- Depth worm stuff
 local function OnUpdateLight(inst, dframes)
     local done
     if inst._islighton:value() then
@@ -127,6 +107,11 @@ local function shouldKeepTarget(inst, target)
     return home ~= nil
         and target:GetDistanceSqToPoint(home) < TUNING.WORM_CHASE_DIST * TUNING.WORM_CHASE_DIST
         or target:IsNear(inst, TUNING.WORM_CHASE_DIST)
+end
+
+local function IsAlly(inst, guy)
+    -- Prevents lightning from forking from a Depth Eel's target to other Depth Worms.
+    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("shockworm") and guy:HasTag("worm")
 end
 
 local function onpickedfn(inst, target)
@@ -210,8 +195,21 @@ local function IsWorm(dude)
     return dude:HasTag("worm") and not dude.components.health:IsDead()
 end
 
-local function onattacked(inst, data)
-    if data.attacker ~= nil then
+local function ShockWormOnAttacked(inst, data)
+    if data ~= nil and data.attacker ~= nil then
+        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+            data.stimuli ~= "soul" and
+            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
+            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
+            not data.attacker:HasTag("catapult")
+        then
+            local damage_mult = 1
+            if not IsEntityElectricImmune(data.attacker) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
+            end
+            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
+        end
+
         inst.components.combat:SetTarget(data.attacker)
         inst.components.combat:ShareTarget(data.attacker, 40, IsWorm, 3)
     end
@@ -309,6 +307,7 @@ local function fn()
 
     inst:AddComponent("electricattacks")
     inst.components.electricattacks:AddSource(inst)
+    inst.UMIsAlly = IsAlly
 
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_SMALL
@@ -343,11 +342,12 @@ local function fn()
     inst.components.inspectable.getstatus = getstatus
 
     inst:AddComponent("lootdropper")
-    inst.components.lootdropper:SetLoot({ "monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry","moonglass","moonglass","moonglass" })
+    inst.components.lootdropper:SetLoot({"monstermeat", "monstermeat", "monstermeat", "monstermeat", "zaspberry", "moonglass", "moonglass", "moonglass"})
 
     --Disable this task for worm attacks
     inst.HomeTask = inst:DoPeriodicTask(3, LookForHome)
     inst.lastluretime = 0
+    inst:ListenForEvent("attacked", ShockWormOnAttacked)
 
     AddHauntableCustomReaction(inst, CustomOnHaunt)
 
@@ -357,24 +357,16 @@ local function fn()
     inst:SetStateGraph("SGworm")
     inst.sg.mem.noelectrocute = true
     inst:SetBrain(brain)
-    
-    inst:ListenForEvent("attacked", OnAttacked)
-    
-    inst:ListenForEvent("freeze", function()
-        inst:turnonlight()
-    end)    
 
-    inst:ListenForEvent("unfreeze", function() 
-        inst:turnofflight()
-    end)
     inst.OnSave = onsave
     inst.OnLoad = onload
 
-    inst:WatchWorldState("iswinter",function(inst,iswinter) 
-        if iswinter and inst.from_waterhole then 
-            inst:Remove() 
-        end 
-    end)    
+    inst:WatchWorldState("iswinter",function(inst, iswinter)
+        if iswinter and inst.from_waterhole then
+            inst:Remove()
+        end
+    end)
+
     return inst
 end
 

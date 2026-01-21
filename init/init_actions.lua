@@ -584,12 +584,6 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
     end
 end
 
-local _PICKUP = _G.ACTIONS.PICKUP.fn
-_G.ACTIONS.PICKUP.fn = function(act, ...)
-    if act.doer:HasTag("player") and act.doer.components.inventory and act.target and act.target.components.inventoryitem and act.target.um_no_pickup then return false end
-    return _PICKUP(act, ...)
-end
-
 -- Scythes can reach into the thicket without needing to be on top of them
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 

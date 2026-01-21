@@ -13,8 +13,7 @@ env.AddClassPostConstruct("components/combat_replica", function(self)
         --elseif guy.prefab == "ancient_trepidation" and not guy:HasTag("hostile") then
         --    return true
         end
-        -- Prevents lightning from forking from a Depth Eel's target to other Depth Worms.
-        if self:GetTarget() ~= guy and self.inst:HasTag("shockworm") and guy:HasTag("worm") then return true end
+        if self.inst.UMIsAlly and self.inst:UMIsAlly(guy) then return true end
         return _IsAlly(self, guy, ...)
     end
 end)

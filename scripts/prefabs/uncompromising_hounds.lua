@@ -280,42 +280,16 @@ local function moon_keeptargetfn(inst, target)
 end
 
 local function OnAttacked(inst, data)
-    if not inst.components.health:IsDead() then
-        if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-            if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil and data.weapon.components.complexprojectile == nil and data.weapon.components.linearprojectile == nil)) then
-                if data.attacker.sg ~= nil and data.attacker:HasTag("player") and not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) then
-                    data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
-                    data.attacker.sg:GoToState("electrocute")
-                elseif not data.attacker:HasTag("player") then
-                    data.attacker.components.health:DoDelta(-TUNING.LIGHTNING_GOAT_DAMAGE, nil, inst.prefab, nil, inst)
-                end
-            end
-        end
-
-        inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-            function(dude)
-                return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-            end, 5)
-    end
+    inst.components.combat:SetTarget(data.attacker)
+    inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
+        function(dude)
+            return not (dude.components.health ~= nil and dude.components.health:IsDead())
+                and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
+                and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
+        end, 5)
 end
 
 local function OnAttackOther(inst, data)
-    if data ~= nil and data.target ~= nil then
-        if data.target.components.health ~= nil and not data.target.components.health:IsDead() and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-            not (data.target.components.inventory ~= nil and data.target.components.inventory:IsInsulated()) then
-            --data.target.components.health:DoDelta(-5, nil, inst.prefab, nil, inst)
-            if data.target:HasTag("player") and not data.target.components.health:IsDead() then
-                local shockvictim = data.target.sg ~= nil and data.target.sg:GoToState("electrocute")
-                inst:DoTaskInTime(2, shockvictim)
-            end
-        end
-    end
-
     inst.components.combat:ShareTarget(data.target, SHARE_TARGET_DIST,
         function(dude)
             return not (dude.components.health ~= nil and dude.components.health:IsDead())
@@ -597,6 +571,7 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
 
         if morphlist ~= nil then
             MakeHauntableChangePrefab(inst, morphlist)
+            inst.components.hauntable.panicable = true
             inst:ListenForEvent("spawnedfromhaunt", OnSpawnedFromHaunt)
         else
             MakeHauntablePanic(inst)
@@ -609,6 +584,8 @@ local function fncommon(bank, build, morphlist, custombrain, stategraph, tags, d
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
 
+    inst:ListenForEvent("attacked", OnAttacked)
+    inst:ListenForEvent("onattackother", OnAttackOther)
     inst:ListenForEvent("startfollowing", OnStartFollowing)
     inst:ListenForEvent("stopfollowing", OnStopFollowing)
 
@@ -623,6 +600,28 @@ local function DoLightningExplosion(inst)
     SpawnPrefab("hound_lightning").Transform:SetPosition(inst.Transform:GetWorldPosition())
 end
 
+local function OnLightningAttacked(inst, data)
+    if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
+        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
+            data.stimuli ~= "soul" and
+            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
+            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
+            not data.attacker:HasTag("catapult")
+        then
+            local damage_mult = 1
+            if not IsEntityElectricImmune(data.attacker) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
+            end
+            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.HOUND_DAMAGE, nil, "electric")
+        end
+    end
+end
+
+local function IsAlly(inst, guy)
+    -- Prevents lightning from forking from a Lightning Hound's target to other Hounds and friends.
+    return inst.replica.combat:GetTarget() ~= guy and guy.replica.combat:GetTarget() ~= inst and inst:HasTag("lightninghound") and guy:HasAnyTag("hound", "houndfriend")
+end
+
 local function fnlightning()
     local inst = fncommon("hound", "hound_lightning_ocean", { "firehound", "icehound" }, nil, nil, { "lightninghound", "electricdamageimmune" }, { amphibious = true })
 
@@ -631,6 +630,10 @@ local function fnlightning()
     end
 
     inst.sg.mem.noelectrocute = true
+
+    inst:AddComponent("electricattacks")
+    inst.components.electricattacks:AddSource(inst)
+    inst.UMIsAlly = IsAlly
 
     MakeMediumFreezableCharacter(inst, "hound_body")
 
@@ -647,8 +650,7 @@ local function fnlightning()
     inst.CancelCharge = CancelCharge
     inst.Charge = Charge
 
-    inst:ListenForEvent("attacked", OnAttacked)
-    inst:ListenForEvent("onattackother", OnAttackOther)
+    inst:ListenForEvent("attacked", OnLightningAttacked)
     inst:ListenForEvent("death", DoLightningExplosion)
 
     inst.lightningshot = true
@@ -744,14 +746,6 @@ local function OnGlacialAttacked(inst, data)
                 end
             end
         end
-
-        inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-            function(dude)
-                return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-            end, 5)
     end
 end
 

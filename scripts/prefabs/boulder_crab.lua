@@ -27,12 +27,13 @@ SetSharedLootTable('boulder_crab',
     })
 
 
-local function NewCallBack(inst, worker, workleft)
-    inst._oldcallback(inst, worker, workleft)
+local function NewCallBack(inst, worker, workleft, ...)
+    local ret = inst._oldcallback(inst, worker, workleft, ...)
     if workleft <= 0 then
         --TheNet:Announce("rock broke")
         inst.crab.myrock = nil -- Tell the crab his rock broke
     end
+    return ret
 end
 
 local function GetRock(inst, rock)
@@ -45,11 +46,7 @@ local function GetRock(inst, rock)
     inst.favoriterock = rock
     inst.myrock = SpawnPrefab(rock)
     inst.myrock:Hide()
-    if rock ~= "rock_moon" then
-        inst.myrock.AnimState:SetBuild(rock .. "_nobottom")
-    else
-        inst.myrock.AnimState:SetBuild("rock7_nobottom")
-    end
+    inst.myrock.AnimState:SetBuild(rock ~= "rock_moon" and rock.."_nobottom" or "rock7_nobottom")
     RemovePhysicsColliders(inst.myrock)
     --inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst.myrock.crab = inst
@@ -58,7 +55,7 @@ local function GetRock(inst, rock)
     inst.myrock.components.workable:SetOnWorkCallback(NewCallBack)
 
     if inst.components.health then -- Will leave this in incase it somehow bypasses.
-        inst.components.health:SetAbsorptionAmount(rock ~= "rock_moon" and rock ~= "rock_lichen" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
+        inst.components.health:SetAbsorptionAmount(rock == "rock_moon" and .9 or .75) -- .9 is Effective 5000 health (mine the rock off you hooligan). .75 is Effective 2000 health.
     end
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
@@ -104,7 +101,6 @@ end
 
 -- Combat
 local SHARE_TARGET_DIST = 30
-
 local function NormalRetarget(inst)
     local targetDist = 6
     return FindEntity(inst, targetDist, function(guy)
@@ -121,11 +117,22 @@ local function keeptargetfn(inst, target)
         and not target.components.health:IsDead() and not target:HasTag("EPIC")
 end
 
-local SHARE_TARGET_DIST = 30
+local function ShouldRecoil(inst, attacker, weapon, damage)
+    local rock = inst.myrock
+    return rock and rock:IsValid() and attacker:HasTag("player"), damage
+end
+
 local function OnAttacked(inst, data)
-    if data and data.attacker then
-        inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST, function(dude)
+    local attacker, damage = data and data.attacker, data and data.damage
+    if attacker then
+        local rock = inst.myrock
+        if rock and rock:IsValid() and damage and math.abs(damage) > 0 then
+            local workable = rock.components.workable
+            if workable then workable:WorkedBy(attacker, 6 / 22) end
+            PlayMiningFX(attacker, rock)
+        end
+        inst.components.combat:SetTarget(attacker)
+        inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude)
             return dude:HasTag("rocky") and (dude.components.health and not dude.components.health:IsDead())
         end, 1)
     end
@@ -140,20 +147,37 @@ local function ShouldWake(inst)
     return DefaultWakeTest(inst)
 end
 
-local function Hide(inst)
-    if not (inst.components.combat and inst.components.combat.target) and inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
-        inst.sg:GoToState("hide_pre")
-    elseif inst.myrock and (inst.myrock.components.workable.workleft == 5 or inst.myrock.components.workable.workleft == 6) then
+--[[local function Hide(inst)
+    if inst._brainstopped then return end
+    local rock = inst.myrock
+    if not (inst.components.combat and inst.components.combat.target) and rock and rock:IsValid() and rock.AnimState:IsCurrentAnimation("full") then
+        inst:PushEvent("hideunderrock")
+    elseif rock and rock:IsValid() and rock.AnimState:IsCurrentAnimation("full") then
         inst:DoTaskInTime(5, Hide)
     end
 end
+
+local function Reveal(inst)
+    if inst._brainstopped then return end
+    inst:PushEvent("comeoutfromunderrock")
+end
+
+local function OnStartDay(inst)
+    if inst._brainstopped then return end
+    inst:DoTaskInTime(math.random(6, 10), Hide)
+end
+
+local function OnStartDusk(inst)
+    if inst._brainstopped then return end
+    if inst.hiding then inst:DoTaskInTime(math.random(6, 10), Reveal) end
+end]]
 
 local function SpawnHole(inst)
     local hole = SpawnPrefab("boulder_crab_hole")
     hole.Transform:SetPosition(inst.Transform:GetWorldPosition())
     hole.favoriterock = inst.favoriterock
     local timetilgrow = (8 * 60) * 8 -- 8 days standard
-    hole.components.timer:StartTimer("regenrock",timetilgrow)
+    hole.components.timer:StartTimer("regenrock", timetilgrow)
     inst:Remove()
 end
 
@@ -227,10 +251,11 @@ local function fn()
 
     inst:AddComponent("combat")
     inst.components.combat.hiteffectsymbol = "body"
+    inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     inst.components.combat:SetKeepTargetFunction(keeptargetfn)
+    inst.components.combat:SetShouldRecoilFn(ShouldRecoil)
     inst.components.combat:SetDefaultDamage(34)
     inst.components.combat:SetAttackPeriod(2)
-    inst.components.combat:SetRetargetFunction(1, NormalRetarget)
     inst.components.combat:SetRange(3, 3)
 
     inst:AddComponent("sleeper")
@@ -250,9 +275,10 @@ local function fn()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", RegenRockDone)
+    inst.lasthidetime = 0
 
-    inst:WatchWorldState("startday", function(inst) inst:DoTaskInTime(math.random(6, 10), Hide) end)
-    inst:WatchWorldState("startdusk", function(inst) if inst.hiding then inst:DoTaskInTime(math.random(6, 10), function(inst) inst.sg:GoToState("hide_pst") end) end end)
+    --[[inst:WatchWorldState("startday", OnStartDay)
+    inst:WatchWorldState("startdusk", OnStartDusk)]]
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("death", OnCrabKilled)
     inst:ListenForEvent("onremove", OnCrabRemoved)
@@ -276,7 +302,7 @@ local function fn()
                 end            
             end
             if TheWorld.state.isday then
-                inst.sg:GoToState("hide_pre")
+                inst:PushEvent("hideunderrock")
             end            
         end
     end)

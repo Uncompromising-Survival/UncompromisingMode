@@ -51,7 +51,7 @@ local function Zap(inst)
 
     -- Items on the ground
     for k, item in pairs(chargeables) do
-        print(k, item)
+        --print(k, item)
         if item ~= nil then
             ChargeItem(inst, item)
         end
