@@ -65,16 +65,14 @@ local events=
         if inst.hiding and not inst.components.timer:TimerExists("regenrock") then -- This shouldn't happen, but if it does!
             inst.sg:GoToState("hide_pst")
         else
-            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") and not inst.components.timer:TimerExists("regenrock") then 
-                inst.sg:GoToState("hit")  -- can't attack during hit reaction
+            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") and not inst.components.timer:TimerExists("regenrock") then
+                inst.sg:GoToState("hit") -- can't attack during hit reaction
             end
         end
     end),
-    EventHandler("doattack", function(inst, data) 
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target and not inst.components.timer:TimerExists("regenrock") then 
-            inst.sg:GoToState("attack", data.target) 
-        elseif not inst.components.health and not inst.components.timer:TimerExists("regenrock") then
-            inst.sg:GoToState("dig")
+    EventHandler("doattack", function(inst, data)
+        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target and not inst.components.timer:TimerExists("regenrock") then
+            inst.sg:GoToState("attack", data.target)
         end
     end),
     EventHandler("hideunderrock", function(inst)
@@ -86,6 +84,12 @@ local events=
     EventHandler("comeoutfromunderrock", function(inst)
         if not (inst.components.health and inst.components.health:IsDead()) and inst.hiding then
             inst.sg:GoToState("hide_pst")
+        end
+    end),
+    EventHandler("digintoground", function(inst)
+        local rock = inst.myrock
+        if not (inst.sg:HasStateTag("busy") or inst.components.health and inst.components.health:IsDead()) and not (rock and rock:IsValid()) then
+            inst.sg:GoToState("dig")
         end
     end),
     EventHandler("death", function(inst) inst.sg:GoToState("death") end),
@@ -183,11 +187,7 @@ local states =
                         inst.sg:GoToState("moving") 
                     end
                 else
-                    if (inst.components.combat and inst.components.combat.target) and inst:GetDistanceSqToInst(inst.components.combat.target) < 3^2 then
-                        inst.sg:GoToState("dig")
-                    else
-                        inst.sg:GoToState("moving") 
-                    end
+                    inst.sg:GoToState("moving") 
                 end
             end),
         },
@@ -242,6 +242,7 @@ local states =
         tags = {"idle", "canrotate"},
 
         onenter = function(inst, start_anim)
+            inst.Physics:Stop()
             inst.AnimState:PlayAnimation("walk_pst", false)
         end,
 
@@ -255,6 +256,7 @@ local states =
         tags = {"idle", "canrotate"},
 
         onenter = function(inst, start_anim)
+            inst.Physics:Stop()
             inst.AnimState:PlayAnimation("idle", true)
         end,
     },
@@ -317,7 +319,7 @@ local states =
     },
     State{
         name = "hide",
-        tags = {"busy", "noattack"},--You can only mine the boulder, they can't be attacked in this phase
+        tags = {"busy", "noattack"}, --You can only mine the boulder, they can't be attacked in this phase
 
         onenter = function(inst)
             inst.Transform:SetNoFaced()
@@ -452,8 +454,8 @@ local states =
         tags = {"hit"},
 
         onenter = function(inst)
-            inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("hit")
         end,
 
         events =

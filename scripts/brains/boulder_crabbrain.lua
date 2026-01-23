@@ -49,7 +49,8 @@ end]]
 
 local function ShouldHideUnderRock(inst)
     local rock = inst.myrock
-    return GetTime() - inst.lasthidetime > 10 and TheWorld.state.isday and not inst.hiding and not (inst.components.combat and inst.components.combat:HasTarget())
+    local combat = inst.components.combat
+    return (inst.lasthidetime == 0 or GetTime() - inst.lasthidetime > 10) and TheWorld.state.isday and not inst.hiding and not (combat and combat:HasTarget())
         and rock and rock:IsValid() and rock.AnimState:IsCurrentAnimation("full")
 end
 
@@ -65,26 +66,42 @@ local function ComeOutFromUnderRock(inst)
     inst:PushEvent("comeoutfromunderrock")
 end
 
+local function ShouldDigIntoGround(inst)
+    local rock = inst.myrock
+    local combat = inst.components.combat
+    return GetTime() - inst.rockdestroyedtime > 10 and not (rock and rock:IsValid()) and combat and combat:HasTarget() and inst:GetDistanceSqToInst(combat.target) > 3^2
+end
+
+local function DigIntoGround(inst)
+    inst:PushEvent("digintoground")
+end
+
+local function ShouldRunAway(inst)
+    local rock = inst.myrock
+    return not (rock and rock:IsValid()) and not ShouldDigIntoGround(inst)
+end
+
 function Boulder_crabBrain:OnStart()
     local pre_nodes = PriorityNode({
         BrainCommon.PanicWhenScared(self.inst, .3),
-        WhileNode(function() return not (self.inst.myrock and self.inst.myrock.components.workable) end, "Rockless", RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP)),
+        WhileNode(function() return ShouldRunAway(self.inst) end, "Rockless", RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP)),
         WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
         WhileNode(function() return ShouldHideUnderRock(self.inst) end, "ShouldHideUnderRock", ActionNode(function() HideUnderRock(self.inst) end)),
         WhileNode(function() return ShouldComeOutFromUnderRock(self.inst) end, "ShouldComeOutFromUnderRock", ActionNode(function() ComeOutFromUnderRock(self.inst) end)),
+        WhileNode(function() return ShouldDigIntoGround(self.inst) end, "ShouldDigIntoGround", ActionNode(function() DigIntoGround(self.inst) end)),
         WhileNode(function() return self.inst.hiding end, "Hiding", StandStill(self.inst)),
     })
 
     local post_nodes = PriorityNode({
-		DoAction(self.inst, function() return EatFoodAction(self.inst) end),
-		FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn, 0.25),
+        DoAction(self.inst, function() return EatFoodAction(self.inst) end),
+        FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn, 0.25),
         --DoAction(self.inst, function() return InvestigateAction(self.inst) end ),
         Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
     })
 
 
     local attack_nodes = PriorityNode({
-        WhileNode(function() return (self.inst.myrock and self.inst.myrock.components.workable) end, "Rockhard", ChaseAndAttack(self.inst, SpringCombatMod(TUNING.SPIDER_AGGRESSIVE_MAX_CHASE_TIME))),
+        WhileNode(function() return (self.inst.myrock and self.inst.myrock:IsValid() and self.inst.myrock.components.workable) end, "Rockhard", ChaseAndAttack(self.inst, SpringCombatMod(TUNING.SPIDER_AGGRESSIVE_MAX_CHASE_TIME))),
     })
 
     local root =

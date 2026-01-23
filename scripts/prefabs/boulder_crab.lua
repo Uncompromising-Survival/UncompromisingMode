@@ -32,6 +32,7 @@ local function NewCallBack(inst, worker, workleft, ...)
     if workleft <= 0 then
         --TheNet:Announce("rock broke")
         inst.crab.myrock = nil -- Tell the crab his rock broke
+        inst.crab.rockdestroyedtime = GetTime()
     end
     return ret
 end
@@ -82,20 +83,17 @@ local function GetStatus(inst, viewer)
 end
 
 local function onsave(inst, data)
-    if inst.myrock then
-        data.myrock = inst.myrock.prefab
-    end
-    if inst.favoriterock then
-        data.favoriterock = inst.favoriterock
-    end
+    local rock = inst.myrock
+    if rock then data.myrock = rock.prefab end
+    if inst.rockdestroyedtime ~= 0 then data.rockdestroyedtime = true end
+    if inst.favoriterock then data.favoriterock = inst.favoriterock end
 end
 
 local function onload(inst, data)
-    if data and data.myrock and inst.components.health then
-        GetRock(inst, data.myrock)
-    end
-    if data and data.favoriterock then
-        inst.favoriterock = data.favoriterock
+    if data then
+        if data.myrock and inst.components.health then GetRock(inst, data.myrock) end
+        if data.rockdestroyedtime then inst.rockdestroyedtime = GetTime() end
+        if data.favoriterock then inst.favoriterock = data.favoriterock end
     end
 end
 
@@ -276,6 +274,7 @@ local function fn()
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", RegenRockDone)
     inst.lasthidetime = 0
+    inst.rockdestroyedtime = 0
 
     --[[inst:WatchWorldState("startday", OnStartDay)
     inst:WatchWorldState("startdusk", OnStartDusk)]]
@@ -301,9 +300,6 @@ local function fn()
                     GetRock(inst, math.random() > .5 and "springrock3" or "springrock2")
                 end            
             end
-            if TheWorld.state.isday then
-                inst:PushEvent("hideunderrock")
-            end            
         end
     end)
 
