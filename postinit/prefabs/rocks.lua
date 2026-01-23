@@ -70,7 +70,7 @@ local function NewCallBack(inst, worker, workleft, ...)
         for i,crab in ipairs(crabs) do
             if crab.prefab == "boulder_crab" and crab.components.combat and (crab.components.sleeper and not crab.components.sleeper:IsAsleep()) then
                 crab.components.combat:SuggestTarget(worker)
-                if crab.hiding and not crab.components.timer:TimerExists("regenrock") then
+                if crab.hiding and not crab.components.timer:TimerExists("startregenrock") then
                     crab.sg:GoToState("hide_pst")
                 end
             end

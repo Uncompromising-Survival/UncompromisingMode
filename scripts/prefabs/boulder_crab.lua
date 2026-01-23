@@ -73,18 +73,12 @@ local function GetRock(inst, rock)
 end
 
 local function GetStatus(inst, viewer)
-    if inst.components.timer:TimerExists("regenrock") then
-        return "HOLE"
-    elseif inst.components.timer:TimerExists("startregenrock") then
-        return "NAKED"
-    else
-        return "GENERIC"
-    end
+    return inst.components.timer:TimerExists("startregenrock") and "NAKED" or "GENERIC"
 end
 
 local function onsave(inst, data)
     local rock = inst.myrock
-    if rock then data.myrock = rock.prefab end
+    if rock and rock:IsValid() then data.myrock = rock.prefab end
     if inst.rockdestroyedtime ~= 0 then data.rockdestroyedtime = true end
     if inst.favoriterock then data.favoriterock = inst.favoriterock end
 end
@@ -112,7 +106,7 @@ end
 
 local function keeptargetfn(inst, target)
     return target and target.components.combat and target.components.health
-        and not target.components.health:IsDead() and not target:HasTag("EPIC")
+        and not target.components.health:IsDead() and not target:HasTag("epic")
 end
 
 local function ShouldRecoil(inst, attacker, weapon, damage)
@@ -126,7 +120,12 @@ local function OnAttacked(inst, data)
         local rock = inst.myrock
         if rock and rock:IsValid() and damage and math.abs(damage) > 0 then
             local workable = rock.components.workable
-            if workable then workable:WorkedBy(attacker, 6 / 22) end
+            if workable then
+                local totalworkhits = 20
+                local workamt = TUNING.ROCKS_MINE / totalworkhits
+                local workamtpadding = .75 / workamt
+                workable:WorkedBy(attacker, TUNING.ROCKS_MINE / (totalworkhits + workamtpadding))
+            end -- 6 / 22
             PlayMiningFX(attacker, rock)
         end
         inst.components.combat:SetTarget(attacker)
@@ -289,7 +288,7 @@ local function fn()
 
     inst.GetRock = GetRock
     inst:DoTaskInTime(0, function(inst)
-        if not inst.myrock and not inst.components.timer:TimerExists("regenrock") then
+        if not inst.myrock and not inst.components.timer:TimerExists("startregenrock") then
             local rock = FindEntity(inst, 60, nil, {"boulder"})
             if rock then
                 GetRock(inst, rock.prefab)

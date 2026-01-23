@@ -62,16 +62,16 @@ local actionhandlers =
 local events=
 {
     EventHandler("attacked", function(inst)
-        if inst.hiding and not inst.components.timer:TimerExists("regenrock") then -- This shouldn't happen, but if it does!
+        if inst.hiding and not inst.components.timer:TimerExists("startregenrock") then -- This shouldn't happen, but if it does!
             inst.sg:GoToState("hide_pst")
         else
-            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") and not inst.components.timer:TimerExists("regenrock") then
+            if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "attack") then
                 inst.sg:GoToState("hit") -- can't attack during hit reaction
             end
         end
     end),
     EventHandler("doattack", function(inst, data)
-        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target and not inst.components.timer:TimerExists("regenrock") then
+        if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasAnyStateTag("busy", "evade") and data and data.target then
             inst.sg:GoToState("attack", data.target)
         end
     end),
@@ -96,7 +96,7 @@ local events=
     CommonHandlers.OnSleep(),
     CommonHandlers.OnFreeze(),
     EventHandler("locomote", function(inst) 
-        if not inst.sg:HasStateTag("busy") and not inst.components.timer:TimerExists("regenrock") then
+        if not inst.sg:HasStateTag("busy") then
             local is_moving = inst.sg:HasStateTag("moving")
             local wants_to_move = inst.components.locomotor:WantsToMoveForward()
             if not (inst.sg:HasStateTag("attack") or inst.sg:HasStateTag("hit")) and is_moving ~= wants_to_move then
@@ -202,7 +202,7 @@ local states =
             inst.components.locomotor:RunForward()
             inst.AnimState:PushAnimation("uppercut")
             inst:ListenForEvent("onhitother", KnockOutWeapon)
-			inst.sg.statemem.target = target
+            inst.sg.statemem.target = target
         end,
 
         onupdate = function(inst)
@@ -518,7 +518,6 @@ local states =
             --inst.Transform:SetNoFaced()
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("emerge_pop")
-            inst.hiding = true
         end,
 
         timeline =
@@ -540,16 +539,16 @@ local states =
             TimeEvent(119*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
             TimeEvent(126*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/rocklobster/footstep") end),
             TimeEvent(155*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
-            TimeEvent(166*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
-            TimeEvent(170*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
+            --[[TimeEvent(166*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),
+            TimeEvent(170*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mole/move", "move") end),]]
         },
 
         onexit = function(inst)
+            if inst.SoundEmitter:PlayingSound("move") then inst.SoundEmitter:KillSound("move") end
             inst.Transform:SetFourFaced()
-            inst.hiding = false
             local x,y,z = inst.Transform:GetWorldPosition()
             MakeCharacterPhysics(inst, 400, .5)
-            inst.Transform:SetPosition(x,y,z)
+            inst.Transform:SetPosition(x, y, z)
         end,
 
         events =

@@ -48,6 +48,7 @@ end
 end]]
 
 local function ShouldHideUnderRock(inst)
+    if inst.sg:HasStateTag("busy") then return false end
     local rock = inst.myrock
     local combat = inst.components.combat
     return (inst.lasthidetime == 0 or GetTime() - inst.lasthidetime > 10) and TheWorld.state.isday and not inst.hiding and not (combat and combat:HasTarget())
@@ -67,6 +68,7 @@ local function ComeOutFromUnderRock(inst)
 end
 
 local function ShouldDigIntoGround(inst)
+    if inst.sg:HasStateTag("busy") then return false end
     local rock = inst.myrock
     local combat = inst.components.combat
     return GetTime() - inst.rockdestroyedtime > 10 and not (rock and rock:IsValid()) and combat and combat:HasTarget() and inst:GetDistanceSqToInst(combat.target) > 3^2
