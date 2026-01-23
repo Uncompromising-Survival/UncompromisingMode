@@ -11,44 +11,19 @@ local prefabs =
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-    if not (owner:HasTag("vetcurse") or owner:HasTag("royaljellymaker")) then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem ~= nil and inst.components.inventoryitem.owner
-            local tool = owner ~= nil and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if tool ~= nil and owner ~= nil then
-                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    owner.AnimState:OverrideSymbol("swap_object", inst.swap, inst.swap)
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
 
-                if owner.sg ~= nil then
-                    owner.sg:GoToState("hit")
-                end
-            end
-        end)
-    else
-        owner.AnimState:OverrideSymbol("swap_object", inst.swap, inst.swap)
-        owner.AnimState:Show("ARM_carry")
-        owner.AnimState:Hide("ARM_normal")
-
-        if inst.components.container ~= nil then
-            inst.components.container:Open(owner)
-        end
-    end
+    if inst.components.container then inst.components.container:Open(owner) end
 end
 
 local function OnUnequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
-    local skin_build = inst:GetSkinBuild()
-    if skin_build ~= nil then
-        owner:PushEvent("unequipskinneditem", inst:GetSkinName())
-    end
 
-    if inst.components.container ~= nil then
-        inst.components.container:Close()
-    end
+    if inst.components.container then inst.components.container:Close() end
 end
 
 local function OnProjectileLaunched(inst, attacker, target)

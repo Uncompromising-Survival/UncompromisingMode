@@ -2,6 +2,8 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.UMCommonFns = require("tools/um_commonfns")
+
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {Asset("IMAGE", "images/UM_tip_icon.tex"), Asset("ATLAS", "images/UM_tip_icon.xml")}
 ReloadPreloadAssets()
