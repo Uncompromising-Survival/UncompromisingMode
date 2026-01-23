@@ -112,47 +112,31 @@ local function CheckForLight(owner)
 end
 
 local function onequip(inst, owner)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if tool and owner then
-                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                if owner.components.talker then
-                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                end
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-                if owner.sg then owner.sg:GoToState("hit") end
-            end
-        end)
-    else
-        owner.AnimState:Show("ARM_carry")
-        owner.AnimState:Hide("ARM_normal")
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
 
-        if inst._body ~= nil then
-            inst._body:Remove()
-        end
-        inst._body = SpawnPrefab("um_moonfly_lantern_body")
-        inst._body._thurible = inst
-        inst:ListenForEvent("onremove", onremovebody, inst._body)
-
-        inst._body.entity:SetParent(owner.entity)
-        inst._body.entity:AddFollower()
-        inst._body.Follower:FollowSymbol(owner.GUID, "swap_object", 68, -130, 0)
-        inst._body:ListenForEvent("newstate", function(owner, data)
-            ToggleOverrideSymbols(inst, owner)
-        end, owner)
-
-        owner:AddTag("um_moonfly_lantern_user")
-
-        owner.moonfly_lantern_trail_task = owner:DoPeriodicTask(.15, CheckForLight)
-
-        ToggleOverrideSymbols(inst, owner)
-
-        turnon(inst)
+    if inst._body ~= nil then
+        inst._body:Remove()
     end
+    inst._body = SpawnPrefab("um_moonfly_lantern_body")
+    inst._body._thurible = inst
+    inst:ListenForEvent("onremove", onremovebody, inst._body)
+
+    inst._body.entity:SetParent(owner.entity)
+    inst._body.entity:AddFollower()
+    inst._body.Follower:FollowSymbol(owner.GUID, "swap_object", 68, -130, 0)
+    inst._body:ListenForEvent("newstate", function(owner, data)
+        ToggleOverrideSymbols(inst, owner)
+    end, owner)
+
+    owner:AddTag("um_moonfly_lantern_user")
+
+    owner.moonfly_lantern_trail_task = owner:DoPeriodicTask(.15, CheckForLight)
+
+    ToggleOverrideSymbols(inst, owner)
+
+    turnon(inst)
 end
 
 local function onunequip(inst, owner)

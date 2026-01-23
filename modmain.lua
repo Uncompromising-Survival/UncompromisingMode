@@ -2,6 +2,7 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
 GLOBAL.TheMineralLogbook:Load()
 

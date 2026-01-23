@@ -24,25 +24,9 @@ local function DoubleSlap(owner, data)
 end
 
 local function onequip_blue(inst, owner)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
-            if tool and owner then
-                owner.components.inventory:Unequip(EQUIPSLOTS.NECK or EQUIPSLOTS.BODY)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                if owner.components.talker then
-                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                end
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-                if owner.sg then owner.sg:GoToState("hit") end
-            end
-        end)
-    else
-        owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
-        owner:ListenForEvent("onattackother", DoubleSlap)
-    end
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.NECK or EQUIPSLOTS.BODY) then return end
+    owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
+    owner:ListenForEvent("onattackother", DoubleSlap)
 end
 
 local function onunequip_blue(inst, owner)
