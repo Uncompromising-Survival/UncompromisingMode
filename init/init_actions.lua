@@ -126,19 +126,19 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     if target == nil then
         return
     end
-	if TUNING.DSTU.WARLY_CHANGES ~= 0 then
-		if target.prefab == "portablecookpot" and target ~= nil and target.components.container ~= nil
-			and target.components.container.canbeopened and GLOBAL.CanEntitySeeTarget(act.doer, target) then
-			if target.components.container:IsOpenedBy(act.doer) then
-				target.components.container:Close(act.doer)
-				act.doer:PushEvent("closecontainer", { container = target })
-				return true
-			end
-			act.doer:PushEvent("opencontainer", { container = target })
-			target.components.container:Open(act.doer)
-			return true
-		end
-	end
+    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+        if target.prefab == "portablecookpot" and target ~= nil and target.components.container ~= nil
+            and target.components.container.canbeopened and GLOBAL.CanEntitySeeTarget(act.doer, target) then
+            if target.components.container:IsOpenedBy(act.doer) then
+                target.components.container:Close(act.doer)
+                act.doer:PushEvent("closecontainer", { container = target })
+                return true
+            end
+            act.doer:PushEvent("opencontainer", { container = target })
+            target.components.container:Open(act.doer)
+            return true
+        end
+    end
     return _RummageFn(act)
 end
 
@@ -164,13 +164,13 @@ end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
 GLOBAL.ACTIONS.LOOKAT.strfn = function(act)
-	if act.target and act.target:HasTag("ancient_text") then
-		if act.doer and act.doer.components.skilltreeupdater and act.doer.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") then
-			return "READ"
-		end
-	else
-		return _lookatstrfn(act)
-	end
+    if act.target and act.target:HasTag("ancient_text") then
+        if act.doer and act.doer.components.skilltreeupdater and act.doer.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") then
+            return "READ"
+        end
+    else
+        return _lookatstrfn(act)
+    end
 end]]
 
 --if TUNING.DSTU.WICKERNERF then
@@ -589,8 +589,11 @@ GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 
 -- Card actions are instant for now.
 GLOBAL.ACTIONS.DRAW_FROM_DECK.instant = true
+GLOBAL.ACTIONS.DRAW_FROM_DECK.distance = nil
 GLOBAL.ACTIONS.FLIP_DECK.instant = true
 GLOBAL.ACTIONS.ADD_CARD_TO_DECK.instant = true
+GLOBAL.ACTIONS.ADD_CARD_TO_DECK._oldrangecheckfn = GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn -- Storing this here just in case someone wants it.
+GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn = nil
 
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)

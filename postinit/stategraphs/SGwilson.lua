@@ -272,7 +272,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldDeathEvent = inst.events["death"].fn
     inst.events["death"].fn = function(inst, data)
         if TUNING.DSTU.MAXHPDEATH then
-            inst.components.health:DeltaPenalty(0.25) -- ALL deaths cause 25% penalty....
+            inst.components.health:DeltaPenalty(.25) -- ALL deaths cause 25% penalty....
         end
         if data ~= nil and data.cause == "shadowvortex" and not inst:HasTag("wereplayer") then
             inst.components.rider:ActualDismount()
@@ -2433,9 +2433,9 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },]]
 
-        State {
+        State{
             name = "um_usewaxwelljournal_pre",
-            tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "busy", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, repeatcast)
                 inst.components.locomotor:Stop()
@@ -2469,9 +2469,9 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },
 
-        State {
+        State{
             name = "um_usewaxwelljournal",
-            tags = { "doing", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
