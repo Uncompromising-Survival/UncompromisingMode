@@ -213,7 +213,6 @@ local function fn()
     --inst.OnLoad = OnLoad
 
     inst._light = nil
-    inst._light = nil
     turnon(inst)
 
     return inst
