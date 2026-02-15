@@ -9,5 +9,3 @@ env.AddPrefabPostInit("lightning_rod", function(inst)
     local onlightning = UpvalueHacker.GetUpvalue(Prefabs.lightning_rod.fn, "onlightning")
     inst.onlightningfn = onlightning
 end)
-
-
