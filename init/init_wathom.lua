@@ -1482,7 +1482,7 @@ AddPrefabPostInit("ruins_bat", function(inst)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 end)
 
-AddPrefabPostInit("ancient_altar", function(inst)
+--[[AddPrefabPostInit("ancient_altar", function(inst)
     if not _G.TheWorld.ismastersim then return end
     
     local _complete_onturnon = inst.components.prototyper.onturnon
@@ -1503,7 +1503,7 @@ AddPrefabPostInit("ancient_altar", function(inst)
     end
 
     inst.components.prototyper.onturnon = TurnOn 
-end)
+end)]]
 
 -- AddPrefabPostInit("shadow_battleaxe", function(inst)
     -- if not _G.TheWorld.ismastersim then return end
