@@ -910,7 +910,7 @@ STRINGS.SKILLTREE.WATHOM = {
     ANCIENT_TERROR_3_DESC = "Even death can't put you down. Heart Attacks are no longer fatal, instead leaving you in critical condition. [TEMP, BROKEN]", --Additionally, you slowly replenish lost maximum health when at low Lunacy.
     --Can devour Pure Horror to push Amp even further, adding more Planar Damage and further amplifying Bark.
     WATHOM_ALLEGIANCE_NEUTRAL_TITLE = "Ancient Kinship I",
-    WATHOM_ALLEGIANCE_NEUTRAL_DESC = "Uncover knowledge of the Ancient Civilization, establishing a bond with the once-proud race. Unlock ancient crafting after visiting a complete Ancient Pseudoscience Station.",
+    WATHOM_ALLEGIANCE_NEUTRAL_DESC = "Uncover knowledge of the Ancient Civilization, establishing a bond with the once-proud race. Unlock the ability to prototype items on the Ancient Pseudoscience Station.",
     ANCIENT_KINSHIP_2_TITLE = "Ancient Kinship II",
     ANCIENT_KINSHIP_2_DESC = "Uncover more knowledge of the Ancient Civilization, strengthening your bond with the once-proud race. Ancient Arms and Armor trigger their effects twice as often.",
     ANCIENT_KINSHIP_3_TITLE = "Ancient Kinship III",
