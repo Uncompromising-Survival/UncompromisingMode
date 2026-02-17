@@ -174,7 +174,8 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    MakeInventoryFloatable(inst, "med", 0.3)
+    MakeInventoryPhysics(inst)
+
     inst.AnimState:SetBank("um_moonfly_lantern")
     inst.AnimState:SetBuild("um_moonfly_lantern")
     inst.AnimState:PlayAnimation("idle_loop", true)
@@ -184,6 +185,8 @@ local function fn()
     inst:AddTag("nopunch")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
+
+    MakeInventoryFloatable(inst, "med", 0.3)
 
     inst.entity:SetPristine()
 
