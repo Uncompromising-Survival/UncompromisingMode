@@ -186,7 +186,7 @@ local function fn()
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
 
-    MakeInventoryFloatable(inst, "med", 0.3)
+    MakeInventoryFloatable(inst, "med", .3)
 
     inst.entity:SetPristine()
 
@@ -208,7 +208,7 @@ local function fn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable:SetOnEquipToModel(onequiptomodel)
-    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - 0.1
+    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .1
 
     MakeHauntableLaunch(inst)
 
@@ -293,7 +293,7 @@ local function TrySpeedUp(inst, target)
         target._moonfly_lantern_speedmulttask:Cancel()
     end
 
-    target._moonfly_lantern_speedmulttask = target:DoTaskInTime(0.25, function(i)
+    target._moonfly_lantern_speedmulttask = target:DoTaskInTime(.25, function(i)
         if i.components.locomotor ~= nil then
             i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
         end
@@ -324,7 +324,7 @@ local function DoAreaChecks(inst)
         inst.strength = inst.strength - .02
     end
 
-    inst.AnimState:SetMultColour(0.6, 0.6, 1, inst.strength / 2)
+    inst.AnimState:SetMultColour(.6, .6, 1, inst.strength / 2)
     inst.Light:SetIntensity(inst.strength / 3)
 
     if inst.strength <= 0 then
@@ -367,7 +367,7 @@ local function trailfn()
 
     inst.strength = 1.5
 
-    inst:DoPeriodicTask(0.1, DoAreaChecks, 0)
+    inst:DoPeriodicTask(.1, DoAreaChecks, 0)
 
     return inst
 end
