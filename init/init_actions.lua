@@ -29,14 +29,6 @@ AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
     return act.target:WrapStuff(act.target)
 end)
 
-AddAction("UNCOMPROMISING_PAWN_HIDE", "UNCOMPROMISING_PAWN_HIDE", function(act)
-    -- Dummy action for pawn.
-end)
-
-AddAction("UNCOMPROMISING_PAWN_SHAKE", "UNCOMPROMISING_PAWN_SHAKE", function(act)
-    -- Dummy action for pawn.
-end)
-
 AddAction("RAT_STEAL_EQUIPPABLE", "RAT_STEAL_EQUIPPABLE", function(act)
     if act.target.components.container then
         act.target.components.container:DropOneItemWithTag("_equippable")

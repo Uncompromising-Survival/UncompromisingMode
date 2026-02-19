@@ -3,17 +3,9 @@ local RUN_SPEED = 7
 -- update pawn
 require("stategraphs/commonstates")
 
-local actionhandlers = 
+--[[local actionhandlers = 
 {
-    ActionHandler(ACTIONS.UNCOMPROMISING_PAWN_HIDE, function(inst)
-		if inst.pawntype == "_nightmare" then
-			inst.sg:GoToState("hide_pre_nightmare")
-		else
-			inst.sg:GoToState("hide_pre")
-		end
-	end),
-    ActionHandler(ACTIONS.UNCOMPROMISING_PAWN_SHAKE, "rattle_and_shake"),
-}
+}]]
 
 local events=
 {
@@ -45,6 +37,14 @@ local events=
             end
         end),
     EventHandler("stunned", function(inst) inst.sg:GoToState("stunned") end),
+    EventHandler("um_hide_away", function(inst)
+        if inst.sg:HasStateTag("busy") then return end
+        if inst.pawntype == "_nightmare" then
+            inst.sg:GoToState("hide_pre_nightmare")
+        else
+            inst.sg:GoToState("hide_pre")
+        end
+    end),
 }
 
 local states=
@@ -276,7 +276,7 @@ local states=
 
         onenter = function(inst) 
             inst.Physics:Stop()
-			inst:ClearBufferedAction()
+            inst:ClearBufferedAction()
             inst.AnimState:PlayAnimation("frozen", true)
             inst.sg:SetTimeout(1)
         end,
@@ -312,18 +312,18 @@ local states=
             --inst:PerformBufferedAction()
             ChangeToInventoryPhysics(inst)
             inst.components.health:SetInvincible(true)
-			
-			local x, y, z = inst.Transform:GetWorldPosition()
-			local ents = TheSim:FindEntities(x, y, z, 20, { "uncompromising_pawn" }, { "uncompromising_nightmarepawn" })
-			
-			if ents ~= nil then
-				for k,v in pairs(ents) do
-					if not v.sg:HasStateTag("busy") and v ~= inst then
-						v:AddTag("removingpawn")
-						v.sg:GoToState("hide_disarm")
-					end
-				end
-			end
+            
+            local x, y, z = inst.Transform:GetWorldPosition()
+            local ents = TheSim:FindEntities(x, y, z, 20, { "uncompromising_pawn" }, { "uncompromising_nightmarepawn" })
+            
+            if ents ~= nil then
+                for k,v in pairs(ents) do
+                    if not v.sg:HasStateTag("busy") and v ~= inst then
+                        v:AddTag("removingpawn")
+                        v.sg:GoToState("hide_disarm")
+                    end
+                end
+            end
         end,
 
         onexit = function(inst)
@@ -331,11 +331,9 @@ local states=
             inst.components.health:SetInvincible(false)
         end,
 
-        events=
+        events =
         {
-            EventHandler("animover", function(inst) 
-				inst:Remove() 
-			end ),
+            EventHandler("animover", function(inst) inst:Remove() end),
         },
     },
 
@@ -357,27 +355,27 @@ local states=
             inst.components.health:SetInvincible(false)
         end,
 
-        events=
+        events =
         {
-            EventHandler("animover", function(inst) inst:Remove() end ),
+            EventHandler("animover", function(inst) inst:Remove() end),
         },
     },
-	
+    
     State{
         name = "hide_pre_nightmare",
         tags = {"busy"},
 
         onenter = function(inst)
             inst.AnimState:PlayAnimation("frozen_loop_pst", true)
-			inst.SoundEmitter:PlaySound("dontstarve/common/blackpowder_fuse_LP", "pawn_hiss")
+            inst.SoundEmitter:PlaySound("dontstarve/common/blackpowder_fuse_LP", "pawn_hiss")
             inst.Physics:Stop()
-			inst.sg:SetTimeout(0.25)
+            inst.sg:SetTimeout(.25)
         end,
-		
-		ontimeout = function(inst)
-			if not inst.components.health:IsDead() then
-				inst.components.explosive:OnBurnt()
-			end
+        
+        ontimeout = function(inst)
+            if not inst.components.health:IsDead() then
+                inst.components.explosive:OnBurnt()
+            end
         end,
     },
 
@@ -460,9 +458,9 @@ local states=
             inst.Physics:Stop()
         end,
 
-        events=
+        events =
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end ),
+            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
         },
     },
 
@@ -497,5 +495,4 @@ local states=
 CommonStates.AddSleepStates(states)
 CommonStates.AddFrozenStates(states)
 
-return StateGraph("uncompromising_pawn", states, events, "idle", actionhandlers)
-
+return StateGraph("uncompromising_pawn", states, events, "idle") --actionhandlers
