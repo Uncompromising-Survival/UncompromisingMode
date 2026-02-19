@@ -45,7 +45,7 @@ end
 local function TryHide(inst)
     inst.keeptryingtohide = true
 
-    inst:PushEvent("um_hide_away")
+    inst:PushEvent("umhideaway")
 end
 
 function Uncompromising_PawnBrain:OnStart()

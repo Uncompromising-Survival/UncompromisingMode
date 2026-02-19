@@ -37,7 +37,7 @@ local events=
             end
         end),
     EventHandler("stunned", function(inst) inst.sg:GoToState("stunned") end),
-    EventHandler("um_hide_away", function(inst)
+    EventHandler("umhideaway", function(inst)
         if inst.sg:HasStateTag("busy") then return end
         if inst.pawntype == "_nightmare" then
             inst.sg:GoToState("hide_pre_nightmare")
