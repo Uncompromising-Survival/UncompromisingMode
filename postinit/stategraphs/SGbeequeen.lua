@@ -620,7 +620,9 @@ env.AddStategraphPostInit("beequeen", function(inst)
                 else
                     inst.tiredcount = 15
                     inst:DoTaskInTime(0, function(inst)
-                        inst.sg:GoToState(not (inst.components.health and inst.components.health:IsDead()) and "tired_pre" or "death")
+                        if inst.components.health and not inst.components.health:IsDead() then
+                            inst.sg:GoToState("tired_pre")
+                        end
                     end)
                 end
             end,
