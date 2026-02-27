@@ -465,7 +465,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
             end,
 
             onupdate = function(inst)
-                if not (inst.components.health and not inst.components.health:IsDead()) and (not inst.tiredcount or inst.tiredcount < 0) then
+                if not (inst.components.health and inst.components.health:IsDead()) and (not inst.tiredcount or inst.tiredcount < 0) then
 					inst.sg:GoToState("tired_pst")
                 end
             end,
@@ -485,7 +485,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) if not (inst.components.health and not inst.components.health:IsDead()) then inst.sg:GoToState("idle") end end),
+                EventHandler("animover", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("idle") end end),
             },
 
             onexit = function(inst)
@@ -613,14 +613,14 @@ env.AddStategraphPostInit("beequeen", function(inst)
             onexit = function(inst) --Unfinished business, need to shoot more ppl.
                 if inst.shoottargets and inst.shoottargets[1] then
                     inst:DoTaskInTime(1, function(inst)
-                        if inst.components.health and not inst.components.health:IsDead() then
+                        if not (inst.components.health and inst.components.health:IsDead()) then
                             inst.sg:GoToState("spawnguards_shooter_circle")
                         end
                     end)
                 else
                     inst.tiredcount = 15
                     inst:DoTaskInTime(0, function(inst)
-                        if not (inst.components.health and not inst.components.health:IsDead()) then
+                        if not (inst.components.health and inst.components.health:IsDead()) then
                             inst.sg:GoToState("tired_pre")
                         end
                     end)
@@ -807,7 +807,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
                         local players = TheSim:FindEntities(x, y, z, 30, { "player" }, { "playerghost" }) --more bees for more players
                         inst.seekercount = math.random(4, 5) + 2 * #players
                         inst.tiredcount = 12
-                        if not (inst.components.health and not inst.components.health:IsDead()) then inst.sg:GoToState("tired_pre") end
+                        if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("tired_pre") end
                     end
                 end)
             end,
