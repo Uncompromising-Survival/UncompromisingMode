@@ -355,6 +355,26 @@ do
     end
 
     local um_shadowgeardestroy_key = "um_shadowgeardestroy"
+    local function ShadowGearOnDropped(inst)
+        local timer = inst.components.timer
+        if not timer then return end
+        local despawntime = 5
+        if timer:TimerExists(um_shadowgeardestroy_key) then
+            timer:SetTimeLeft(um_shadowgeardestroy_key, despawntime)
+        else
+            timer:StartTimer(um_shadowgeardestroy_key, despawntime)
+        end
+    end
+
+    local function ShadowGearOnPickup(inst, owner)
+        local timer = inst.components.timer
+        if not timer then return end
+        if timer:TimerExists(um_shadowgeardestroy_key) then timer:StopTimer(um_shadowgeardestroy_key) end
+        local inventoryitem = inst.components.inventoryitem
+        local inventory = owner and owner:IsValid() and inventoryitem.grabbableoverridetag and not owner:HasTag(inventoryitem.grabbableoverridetag) and owner.components.inventory
+        if inventory then inst:DoTaskInTime(0, function() if inventory then inventory:DropItem(inst, true, true) end end) end
+    end
+
     local function ConvertToMaxwellSummon(inst)
         inst:AddTag("nosteal")
         inst:AddTag("um_maxwellsummon")
@@ -376,21 +396,6 @@ do
             inventoryitem.canonlygoinpocket = true
             inventoryitem.canbepickedup = false
             inventoryitem.grabbableoverridetag = "shadowmagic"
-            local function ShadowGearOnDropped(inst)
-                local timer = inst.components.timer
-                if not timer then return end
-                local despawntime = 5
-                if timer:TimerExists(um_shadowgeardestroy_key) then
-                    timer:SetTimeLeft(um_shadowgeardestroy_key, despawntime)
-                else
-                    timer:StartTimer(um_shadowgeardestroy_key, despawntime)
-                end
-            end
-            local function ShadowGearOnPickup(inst)
-                local timer = inst.components.timer
-                if not timer then return end
-                if timer:TimerExists(um_shadowgeardestroy_key) then timer:StopTimer(um_shadowgeardestroy_key) end
-            end
             inst:ListenForEvent("ondropped", ShadowGearOnDropped)
             inst:ListenForEvent("onputininventory", ShadowGearOnPickup)
         end
