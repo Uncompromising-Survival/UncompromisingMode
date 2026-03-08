@@ -2452,7 +2452,7 @@ env.AddStategraphPostInit("wilson", function(inst)
                 EventHandler("animover", function(inst)
                     if inst.AnimState:AnimDone() then
                         inst.sg.statemem.not_interrupted = true
-                        inst.sg:GoToState("asp_usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
+                        inst.sg:GoToState("um_usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
                     end
                 end),
             },
