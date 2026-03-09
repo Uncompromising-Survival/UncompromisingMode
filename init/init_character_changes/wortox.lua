@@ -499,8 +499,6 @@ if TUNING.DSTU.WORTOXCHANGES then
     end
     
     local function SpawnWovenShadow(inst, upgrade_performer, obj)
-        
-        
         if inst.components.stackable then
             inst.components.stackable:Get(1):Remove()
             inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
@@ -510,13 +508,13 @@ if TUNING.DSTU.WORTOXCHANGES then
         else
             inst:Remove()
         end
-        
+
         local rnd = math.random()
-        
+
         local crechure = "stalker_minion"
         local skilltreeupdater = upgrade_performer.components.skilltreeupdater
         local mod = CheckToRemoveFollower(upgrade_performer)
-        
+
         rnd = rnd - mod
         if (inst.prefab == "horrorfuel") then
             if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
@@ -572,8 +570,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             
         local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
         despawn.Transform:SetPosition(x, y, z)
-    
-        
+
         shadow:AddComponent("follower")
         upgrade_performer.components.leader:AddFollower(shadow)
         
@@ -819,8 +816,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     -- [ Lunar I Stuff ] --=--------------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------
     local function DeleteBackItem(inst)
-        if inst._item ~= nil then
+        if inst._item and inst._item:IsValid() then
             inst._item:Remove()
+            inst._item = nil
         end
         inst.components.inventory:DropEverything()
     end
@@ -861,9 +859,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     local function GestaltGotItem(inst, giver, item, count, name)
         inst.components.trader.enabled = false
         local item = string.lower(item.prefab) ~= nil and string.lower(item.prefab) or name ~= nil and name
-        
+
         inst._item = GLOBAL.SpawnPrefab(item)
-        if inst._item ~= nil then
+        if inst._item then
             inst._item.Transform:SetPosition(inst.Transform:GetWorldPosition())
             inst._item.components.inventoryitem.canbepickedup = false
             inst.components.locomotor:Stop()
@@ -884,12 +882,14 @@ if TUNING.DSTU.WORTOXCHANGES then
             inst:DoTaskInTime(0,function(inst)
                 inst.AnimState:PlayAnimation("infest")
                 inst:ListenForEvent("animover",StartBrain)
-                
             end)
-                
         end        
     end
-    
+
+    local function GestaltAcceptTest(inst, item, giver)
+        return not item:HasTag("irreplaceable") and giver == inst.wortox
+    end
+
     local function SpawnGestalt(inst, upgrade_performer, obj,time_left,inventory)
         if inst and inst.components.stackable then
             inst.components.stackable:Get(1):Remove()
@@ -908,39 +908,36 @@ if TUNING.DSTU.WORTOXCHANGES then
 
         GLOBAL.MakeFlyingCharacterPhysics(gestalt, 1, .5)
         gestalt:AddTag("flying")
-        
+
         local x,y,z = upgrade_performer.Transform:GetWorldPosition()
         local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
         if offset then -- So it doesn't crash if the player is godmode on the ocean and tries to weave a gestalt
             x = x + offset.x
             z = z + offset.z
         end
-        gestalt.Transform:SetPosition(x,y,z)
-        gestalt.Transform:SetScale(0.75,0.75,0.75)
-        --local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
-        --despawn.Transform:SetPosition(x, y, z)
     
-        
+        gestalt.Transform:SetPosition(x,y,z)
+        gestalt.Transform:SetScale(.75, .75, .75)
+
         gestalt:AddComponent("follower")
         upgrade_performer.components.leader:AddFollower(gestalt)
-        
-        gestalt:AddComponent("timer")
-        
+
+        local timer = gestalt.components.timer or gestalt:AddComponent("timer")
+
         if (inst.prefab == "purebrilliance") then
-            time_left = 60*8*8
+            time_left = 60 * 8 * 8
         end
-        gestalt.components.timer:StartTimer("despawn",time_left ~= nil and time_left or 60*8*2)
+
+        timer:StartTimer("despawn",time_left ~= nil and time_left or 60 * 8 * 2)
         gestalt:ListenForEvent("timerdone",function(gestalt)
             DeleteBackItem(gestalt)
             gestalt:Remove()    
-        
         end)
 
-        --shadow.persists = false
         local fx = GLOBAL.SpawnPrefab("wortox_soulecho_buff_fx")
         gestalt.bufffx = fx
         fx.entity:SetParent(gestalt.entity)
-        fx.Transform:SetScale(2,2,2)
+        fx.Transform:SetScale(2, 2, 2)
         gestalt:ListenForEvent("onremoved",function(gestalt)
             if gestalt.bufffx and gestalt.bufffx:IsValid() then
                 gestalt.bufffx:Remove()
@@ -959,7 +956,8 @@ if TUNING.DSTU.WORTOXCHANGES then
             end
         end
         gestalt.components.trader.enabled = true
-        gestalt.components.trader.test = function(inst, item, giver, count) return giver == gestalt.wortox end
+        gestalt.components.trader:SetAcceptTest(GestaltAcceptTest)
+        gestalt.components.trader.acceptnontradable = true
         gestalt.components.trader.onaccept = GestaltGotItem
         gestalt.components.trader:SetAcceptStacks()
         gestalt.components.trader.deleteitemonaccept = false
@@ -1067,20 +1065,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         --inst.states["idle"].onexit = function(inst) inst:ClearBufferedAction() end -- can sometimes get stuck in the idle animation (no way to clear the buffered action for picking)
     end)
     AddStategraphActionHandler("lunarthrall_plant_gestalt", GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICKUP, "steal"))
-    
-    --------------------------------------------------------------------------------------------------------------------------------
-    -- [ Make all inventoryitems tradeable, what could possibly go wrong? ] --=-----------------------------------------------------
-    --------------------------------------------------------------------------------------------------------------------------------
-    
-    AddPrefabPostInitAny(function(inst)
-        if not GLOBAL.TheWorld.ismastersim then
-            return
-        end
-        if inst.components.tradable == nil and inst.components.inventoryitem and not inst:HasTag("irreplaceable") then
-            inst:AddComponent("tradable")
-        end
-    end)    
-    
+
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Lunar II Stuff ] --=-------------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------

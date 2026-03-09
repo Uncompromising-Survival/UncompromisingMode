@@ -91,8 +91,6 @@ local function GetTier(inst)
     return inst.tier
 end
 
-
-
 local function OnEntityWake(inst)
     if inst.shinetask == nil and inst.tier == 3 then
         inst.shinetask = inst:DoTaskInTime(4 + math.random() * 5, Shine)
@@ -150,15 +148,13 @@ local function fncommon(gem)
     --dummy comp for insight.
     inst:AddComponent("gemology_gem")
 
-
-    MakeHauntableLaunch(inst)
-
     inst:AddComponent("inspectable")
-
-    MakeHauntableLaunchAndIgnite(inst)
 
     inst:AddComponent("inventoryitem")
 
+    inst:AddComponent("tradable")
+
+    MakeHauntableLaunch(inst)
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad
@@ -179,54 +175,67 @@ local function fnblue1()
     local inst = fncommon("bluegem1")
     return FullReturn(inst)
 end
+
 local function fnblue2()
     local inst = fncommon("bluegem2")
     return FullReturn(inst)
 end
+
 local function fnred1()
     local inst = fncommon("redgem1")
     return FullReturn(inst)
 end
+
 local function fnred2()
     local inst = fncommon("redgem2")
     return FullReturn(inst)
 end
+
 local function fnpurple1()
     local inst = fncommon("purplegem1")
     return FullReturn(inst)
 end
+
 local function fnpurple2()
     local inst = fncommon("purplegem2")
     return FullReturn(inst)
 end
+
 local function fnyellow1()
     local inst = fncommon("yellowgem1")
     return FullReturn(inst)
 end
+
 local function fnyellow2()
     local inst = fncommon("yellowgem2")
     return FullReturn(inst)
 end
+
 local function fngreen1()
     local inst = fncommon("greengem1")
     return FullReturn(inst)
 end
+
 local function fngreen2()
     local inst = fncommon("greengem2")
     return FullReturn(inst)
 end
+
 local function fnorange1()
     local inst = fncommon("orangegem1")
     return FullReturn(inst)
 end
+
 local function fnorange2()
     local inst = fncommon("orangegem2")
     return FullReturn(inst)
 end
+
 local function fnpale1()
     local inst = fncommon("palegem1")
     return FullReturn(inst)
 end
+
 local function fnpale2()
     local inst = fncommon("palegem2")
     return FullReturn(inst)
