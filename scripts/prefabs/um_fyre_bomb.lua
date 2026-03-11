@@ -4,7 +4,7 @@ local fyre_bomb_assets =
     Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
 }
 
-local should_hit = {"_combat", "CHOP_workable", "MINE_workable","HAMMER_workable","DIG_workable"}
+local should_hit = {"_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable"}
 local shouldnt_hit = {"INLIMBO", "notarget", "noattack", "playerghost"}
 local ACTIONS_TO_WORK = {
     [ACTIONS.CHOP] = 15,
