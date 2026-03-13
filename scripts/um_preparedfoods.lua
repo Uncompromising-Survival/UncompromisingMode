@@ -791,12 +791,12 @@ local um_preparedfoods =
     {
         test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
         hunger = 37.5,
-        health = -3,
+        health = 0,
         priority = 30,
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", 0.05, 0.65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
         oneatenfn = BoomPieGo,

@@ -324,10 +324,23 @@ local uncompfoods = {
     "snowcone",
     "stuffed_peeper_poppers",
     "theatercorn",
+    "um_boomberrypie",
+    "um_boom_tart",
+    "um_chiles_en_nogada",
     "um_deviled_eggs",
+    "um_durian_cream_marshcake",
+    "um_ghost_fajita",
+    "um_rice_pudding",
+    "um_rimeweed_spagett",
+    "um_rimeweed_tequila",
+    "um_sponge_cake",
     "viperjam",
     "zaspberryparfait",
 }
+
+if TUNING.DSTU.BONESTEW == "bone_appetit" then
+    table.insert(uncompfoods, "um_kebab")
+end
 
 function c_um_givefoods()
     if ThePlayer ~= nil then
