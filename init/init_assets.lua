@@ -281,6 +281,8 @@ local inventoryitems =
     "um_record_wathom",
     "um_record_stranger",
     "um_record_winky",
+    "um_record_moonmaw",
+    "um_record_tot",
 
     --Wixie related inventory icons
 

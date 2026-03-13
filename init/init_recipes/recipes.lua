@@ -540,8 +540,8 @@ AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal"
 AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
 AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
-AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
-AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { nounlock = true }, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR", "CRAFTING_STATION" })
+AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_tot.xml" }, { "DECOR" })
+AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { atlas = "images/inventoryimages/um_record_moonmaw.xml" }, { "DECOR", "CRAFTING_STATION" })
 
 ChangeSortKey("um_record_menu", "record", "DECOR", true)
 ChangeSortKey("um_record_winky", "um_record_menu", "DECOR", true)
