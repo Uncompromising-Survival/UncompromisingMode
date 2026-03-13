@@ -492,12 +492,13 @@ TUNING.DSTU = {
     },
         
     -- Shadow Damage tuning
-    RUINSNIGHTMARE_DAMAGE = 75
-    
-    
+    RUINSNIGHTMARE_DAMAGE = 75,
+    HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75
 }
 
 -- [              DST Related Overrides                  ]
+
+TUNING.SANITY_GHOST_PLAYER_DRAIN = -.5 -- Should make reviving players a bigger priority.
 
 if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 1.5

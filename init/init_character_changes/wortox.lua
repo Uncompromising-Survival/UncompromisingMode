@@ -28,7 +28,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         return target.components.health:IsHurt() and not target:HasTag("health_as_oldage") -- Wanda tag. --or (inst.soul_heal_player_efficient and target.components.health.penalty and target.components.health.penalty > 0)
     end
     
-    local SOULPROTECTOR_TICK_TIME = 0.1
+    local SOULPROTECTOR_TICK_TIME = .1
     local function UncompromisingSoulHeal(inst)
         local healtargets = {}
         local healtargetscount = 0
@@ -86,7 +86,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
         if sanitytargetscount > 0 then
             -- Sanity adjustments are relative to who sees it.
-            local amt = TUNING.SANITY_TINY * 0.5
+            local amt = TUNING.SANITY_TINY * .5
             local amt_nice = amt * TUNING.SKILLS.WORTOX.NICE_SANITY_MULT
             local amt_naughty = amt * TUNING.SKILLS.WORTOX.NAUGHTY_SANITY_MULT
             for i = 1, sanitytargetscount do
@@ -128,7 +128,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                 if skilltreeupdater:IsActivated("wortox_soulprotector_1") then
                     inst.soul_heal_range_modifier = (inst.soul_heal_range_modifier or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_RANGE
                     inst.soul_follow_speed = (inst.soul_follow_speed or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_SPEED
-                    inst.soulprotector_task = inst:DoPeriodicTask(SOULPROTECTOR_TICK_TIME, inst.SoulProtectorTick, 0.3)
+                    inst.soulprotector_task = inst:DoPeriodicTask(SOULPROTECTOR_TICK_TIME, inst.SoulProtectorTick, .3)
                 end
                 if skilltreeupdater:IsActivated("wortox_soulprotector_3") then
                     inst.soul_doburst = true
@@ -165,8 +165,8 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
         
         local function OnConsume(inst, owner)
-            if inst.components.perishable and inst.components.perishable:GetPercent() > 0.5 then
-                inst.components.perishable:SetPercent(inst.components.perishable:GetPercent()-0.5) -- take 1/2 freshhness
+            if inst.components.perishable and inst.components.perishable:GetPercent() > .5 then
+                inst.components.perishable:SetPercent(inst.components.perishable:GetPercent()-.5) -- take 1/2 freshhness
             else    
                 inst:Remove()
             end
@@ -276,7 +276,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     -- [ Soul Pierce Changes ] -----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------        
 
-    local SOUL_SPEAR_TICK_TIME = 0.1
+    local SOUL_SPEAR_TICK_TIME = .1
     local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
     local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
     local function SoulSpearTick(inst, owner)
@@ -302,7 +302,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 
         local hitsomething = false
-        local r = inst:GetPhysicsRadius(0) + 0.5 -- Extra padding for visual ambiguity.
+        local r = inst:GetPhysicsRadius(0) + .5 -- Extra padding for visual ambiguity.
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, GLOBAL.MAX_PHYSICS_RADIUS, COMBAT_MUSTHAVE_TAGS, COMBAT_CANTHAVE_TAGS)
         for _, ent in ipairs(ents) do
@@ -409,7 +409,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
         soul.Transform:SetPosition(x,0,z)
         
-        soul.soul_spear_task = soul:DoPeriodicTask(0.1, soul.SoulSpearTick, 0, inst)
+        soul.soul_spear_task = soul:DoPeriodicTask(.1, soul.SoulSpearTick, 0, inst)
         soul:Setup(inst)
         local speed = TUNING.WORTOX_SOUL_PROJECTILE_SPEED
         soul.components.projectile:SetSpeed(-speed)
@@ -490,7 +490,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                         shadow:Remove()
                     end
                 end
-                return 0.05
+                return .05
             else
                 return 0
             end
@@ -518,21 +518,21 @@ if TUNING.DSTU.WORTOXCHANGES then
         rnd = rnd - mod
         if (inst.prefab == "horrorfuel") then
             if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-                if rnd < 0.05 then -- If Pure Horro then crawlingnightmare, nightmarebeak, ruinsnightmare, shadowthrall_mouth (rictus)
+                if rnd < .05 then -- If Pure Horror then crawlingnightmare, nightmarebeak, ruinsnightmare, shadowthrall_mouth (rictus)
                     crechure = "shadowthrall_mouth"
-                elseif rnd < 0.2 then
+                elseif rnd < .2 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.6 then
+                elseif rnd < .6 then
                     crechure = "nightmarebeak"
                 else
                     crechure = "crawlingnightmare"
                 end
             else
-                if rnd < 0.025 then
+                if rnd < .025 then
                     crechure = "shadowthrall_mouth"
-                elseif rnd < 0.15 then
+                elseif rnd < .15 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.4 then
+                elseif rnd < .4 then
                     crechure = "nightmarebeak"
                 else
                     crechure = "crawlingnightmare"
@@ -540,19 +540,19 @@ if TUNING.DSTU.WORTOXCHANGES then
             end        
         else
             if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-                if rnd < 0.02 then -- If Nightmarefuel then woven shadow, crawling nightmare, nightmarebeak, lurking nightmare
+                if rnd < .02 then -- If Nightmarefuel then woven shadow, crawling nightmare, nightmarebeak, lurking nightmare
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.12 then
+                elseif rnd < .12 then
                     crechure = "nightmarebeak"
-                elseif rnd < 0.4 then
+                elseif rnd < .4 then
                     crechure = "crawlingnightmare"
                 end
             else
-                if rnd < 0.01 then
+                if rnd < .01 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.06 then
+                elseif rnd < .06 then
                     crechure = "nightmarebeak"
-                elseif rnd < 0.2 then
+                elseif rnd < .2 then
                     crechure = "crawlingnightmare"
                 end
             end
@@ -780,9 +780,9 @@ if TUNING.DSTU.WORTOXCHANGES then
                     local souls_clamped = math.min(souls, souls_max)
                     if souls_clamped == souls_max then -- NOTES(JBK): This is done like this to keep floating point precision out of the equation.
                         vfx_level = 3
-                    elseif souls_clamped >= souls_max * 0.50 then
+                    elseif souls_clamped >= souls_max * .50 then
                         vfx_level = 2
-                    elseif souls_clamped >= souls_max * 0.25 then
+                    elseif souls_clamped >= souls_max * .25 then
                         vfx_level = 1
                     end
                     local damage_percent = souls_clamped / souls_max
@@ -840,7 +840,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             inst._item = nil
             inst.components.inventory:DropEverything()
             inst.components.trader.enabled = true
-            inst.AnimState:SetMultColour(1,1,1,0.6)
+            inst.AnimState:SetMultColour(1,1,1,.6)
         end
         inst._item.AnimState:SetHaunted(true)        
     end
@@ -853,7 +853,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     local function Floattask(inst)
         local x,y,z = inst.Transform:GetWorldPosition()
-        inst.Transform:SetPosition(x,y+0.5/FRAMES,z)    
+        inst.Transform:SetPosition(x,y+.5/FRAMES,z)    
     end
     
     local function GestaltGotItem(inst, giver, item, count, name)
@@ -1045,7 +1045,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                 onenter = function(inst)
                     inst.Physics:Stop()
                     inst.AnimState:PlayAnimation("idle", true)
-                    inst:DoTaskInTime(0.25,function(inst) 
+                    inst:DoTaskInTime(.25,function(inst) 
                         inst:PerformBufferedAction()
                         inst:DoTaskInTime(0,function(inst) 
                             if inst:GetBufferedAction() then
@@ -1122,7 +1122,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             -- FX
             local fx = GLOBAL.SpawnPrefab("abigail_gestalt_hit_fx")
             fx.Transform:SetPosition(target.Transform:GetWorldPosition())
-            fx.Transform:SetScale(0.75,0.75,0.75)        
+            fx.Transform:SetScale(.75,.75,.75)        
             
             local item
             local count
@@ -1330,7 +1330,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                     -- if k.components.health then
                         -- k.components.health:SetInvincible(true)
                     -- end
-                    -- k:DoTaskInTime(math.random()*0.2, function(k)
+                    -- k:DoTaskInTime(math.random()*.2, function(k)
                         -- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
                         -- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
                         -- if not k.components.colourtweener then
@@ -1357,7 +1357,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                         -- if k.components.health then
                             -- k.components.health:SetInvincible(true)
                         -- end
-                        -- k:DoTaskInTime(math.random()*0.2, function(k)
+                        -- k:DoTaskInTime(math.random()*.2, function(k)
                             -- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
                             -- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
                             -- if not k.components.colourtweener then
@@ -1381,7 +1381,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             -- if data and data.follower_table then
                 -- for k, v in pairs(data.follower_table) do
                     -- print("loading shadow")
-                    -- inst:DoTaskInTime(0.1, function(inst)
+                    -- inst:DoTaskInTime(.1, function(inst)
                         -- local follower = GLOBAL.SpawnSaveRecord(v)
                         -- inst.components.leader:AddFollower(follower)
                         -- follower:DoTaskInTime(0, function(follower)

@@ -1,18 +1,19 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
-local IMPASSABLES = {	
-    ["fossil_stalker"] = true,	
+local IMPASSABLES = {    
+    ["fossil_stalker"] = true,    
     ["endtable"] = true,
     ["lureplant"] = true,
     ["klaus_sack"] = true,
     ["spiderden"] = true,
     ["spiderden_2"] = true,
-    ["spiderden_3"] = true,	
+    ["spiderden_3"] = true,    
     ["skeleton"] = true,
     ["skeleton_player"] = true,
     ["wood_table_round"] = true,
@@ -24,13 +25,13 @@ local IMPASSABLES = {
 if TUNING.DSTU.IMPASSBLES then
     env.AddPrefabPostInitAny(function(inst)
         if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
-		or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized"))
-		and inst.Physics ~= nil then
+        or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized"))
+        and inst.Physics ~= nil then
             RemovePhysicsColliders(inst)
         end
         if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
-		or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized")) 
-		and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
+        or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized")) 
+        and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
             RemovePhysicsColliders(inst)
             inst.components.heavyobstaclephysics:SetRadius(0)
         end
@@ -228,6 +229,36 @@ local _GoToState = StateGraphInstance.GoToState
 function StateGraphInstance:GoToState(statename, ...)
     if self.inst.um_blockgotostate and table.contains(UM_BLOCKED_STATES, statename) then return end
     return _GoToState(self, statename, ...)
+end
+
+local hermitcrabtea_defs = require("prefabs/hermitcrabtea_defs")
+for _, data in ipairs(hermitcrabtea_defs.buffs) do
+    if data.name == "moon_tree_blossom" then
+        local _MoonBlossom_OnAttacked = UpvalueHacker.GetUpvalue(data.onattachedfn, "MoonBlossom_OnAttacked")
+        if _MoonBlossom_OnAttacked then
+            local hitsparks_fx_colouroverride = { 0, 0, 1 }
+            local function SparkLunarOnShadow(inst, attacker)
+                local spark = SpawnPrefab("hitsparks_fx")
+                spark:Setup(attacker, inst, nil, hitsparks_fx_colouroverride)
+            end
+            local function AttackShadow(inst, attacker)
+                if inst.components.combat:CanTarget(attacker) then
+                    if not (attacker.components.health and attacker.components.health:IsDead()) and attacker.sg:HasStateTag("attack") and attacker.sg:HasState("hit") then
+                        attacker.sg:GoToState("hit")
+                    end
+                    attacker.components.combat:GetAttacked(inst, TUNING.DSTU.HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE)
+                end
+            end
+            local function MoonBlossom_OnAttacked(inst, data)
+                local attacker, damage = data and data.attacker, data and data.original_damage
+                if attacker and attacker:IsValid() and attacker:HasTag("shadowsubmissive") then
+                    SparkLunarOnShadow(inst, attacker)
+                    AttackShadow(inst, attacker)
+                end
+            end
+            UpvalueHacker.SetUpvalue(data.onattachedfn, MoonBlossom_OnAttacked, "MoonBlossom_OnAttacked")
+        end
+    end
 end
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
