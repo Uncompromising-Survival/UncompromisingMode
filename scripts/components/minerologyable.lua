@@ -550,9 +550,9 @@ end
 
 local function UpdateSanityStat(inst,count)
 	if inst.components.minerologyable._dapperness then
-		inst.components.equippable.dapperness = inst.components.minerologyable._dapperness + count*inst.tier*TUNING.DAPPERNESS_SMALL/5
+		inst.components.equippable.dapperness = inst.components.minerologyable._dapperness + count * inst.tier * TUNING.DAPPERNESS_SMALL / 5
 	else
-		inst.components.equippable.dapperness = count*inst.tier*TUNING.DAPPERNESS_SMALL/10
+		inst.components.equippable.dapperness = count * inst.tier*TUNING.DAPPERNESS_SMALL / 10
 	end
 end
 
@@ -565,18 +565,18 @@ local function OnInventoryStateChanged_Internal(inst, owner)
 end
 
 local function HoardingHarvest(inst, ent, doer)  -- they don't return the "loot" in this function, so we'll go with this solution instead of referencing the original (Scythe hoarding compatibility)
-    if ent.components.pickable.picksound ~= nil then
+    if ent.components.pickable.picksound then
         doer.SoundEmitter:PlaySound(ent.components.pickable.picksound)
     end
 
     local success, loot = ent.components.pickable:Pick(TheWorld)
-	if doer and doer:IsValid() and doer.components.inventory then
+	if doer and doer:IsValid() and doer.components.inventory and loot then
 		for i, item in ipairs(loot) do
 			doer.components.inventory:GiveItem(item)
 		end
 		SpawnPrefab("sand_puff").Transform:SetPosition(ent.Transform:GetWorldPosition())
 	else
-		if loot ~= nil then
+		if loot then
 			for i, item in ipairs(loot) do
 				Launch(item, doer, 1.5)
 			end
