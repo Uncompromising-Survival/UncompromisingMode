@@ -214,7 +214,9 @@ local function ElectricAttack(inst, attacker, target)
         target:DoTaskInTime(3,function(target) target:RemoveTag("arcgrounded") end)
     end
 
-    target.components.combat:GetAttacked(attacker, static_mods[inst.tier], nil, "electric")
+    if target.components.combat then
+        target.components.combat:GetAttacked(attacker, static_mods[inst.tier], nil, "electric")
+    end
 
     if inst.components.weapon.stimuli ~= "electric" then
         inst.components.weapon:SetElectric(1, 2.5)
@@ -319,9 +321,6 @@ local cant_be_proto = {
 }
 
 local function MakeClear2(self,tier) -- Scale up the durability, items that cannot be prototyped or learned have additional chances to not break
-    
-    
-    
     local inst = self.inst
     if not self.adamant then
         if inst.components.finiteuses then
@@ -341,10 +340,10 @@ local function MakeClear2(self,tier) -- Scale up the durability, items that cann
             inst.components.perishable:SetPercent(pct)
         end
     end
-    
+
     self.adamant = true
     self.enchantnum = 6
-    
+
     local inst = self.inst
     if inst.components.finiteuses then
         if tier ~= 1 then
@@ -361,7 +360,6 @@ local function MakeClear2(self,tier) -- Scale up the durability, items that cann
             end
         end
     end
-    
 end -- Todo, make these scale back if we go for chaotic emerald swapping daily, the way you would do it is by grabbing the old maximum values and saving them, for when chaotic emerald to switch, it goes back to the old version, this would require saving/loading the variables as well
 
 ------------------
@@ -378,7 +376,7 @@ local function Devour(inst, owner, target)
         --owner.components.sanity:DoDelta(-mult)
         owner.components.hunger:DoDelta(mult/2)
     end
-    
+
     if target.components.health ~= nil and target.components.health:IsDead() then -- Devour
         local recover = target.components.health.maxhealth*0.01*inst.tier
         owner.components.health:DoDelta(recover)
@@ -483,8 +481,7 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
         end
         owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
     end
-    
-    
+
     local gemology = inst.components.minerologyable
     if gemology and gemology._nongemologyondropfn then
         gemology._nongemologyondropfn(inst)
@@ -501,7 +498,6 @@ local function MakePurple2(self,tier)
         inst.components.minerologyable._nongemologyondropfn = inst.components.inventoryitem.ondropfn
     end
     inst.components.inventoryitem:SetOnDroppedFn(OnDropedIfDeadGiveBack) -- This is the only one that has a special drop condition
-    
 end
 
 ------------------
@@ -589,18 +585,18 @@ end
 local function MakeOrange2(self,tier) 
     self.enchantnum = 12
     self.hoarding = true
-    
+
     local inst = self.inst
     inst.tier = tier
-    
+
     inst.OnInventoryStateChangedGemology = function(owner)
         OnInventoryStateChanged_Internal(inst, owner)
     end    
-    
+
     if inst.components.equippable.dapperness and not inst.components.minerologyable._dapperness then
         inst.components.minerologyable._dapperness = inst.components.equippable.dapperness
     end
-    
+
     if inst.tier ~= 1 and not inst.components.minerologyable.telling_inventory then
         local _onequip = inst.components.equippable.onequipfn
         local _onunequip = inst.components.equippable.onunequipfn
@@ -627,7 +623,6 @@ local function MakeOrange2(self,tier)
         inst._HarvestPickable = inst.HarvestPickable -- For chaotic reversion
         inst.HarvestPickable = HoardingHarvest
     end
-    
 end
 ------------------
 -- [[ Blue 1, Arctic Aquamarine
@@ -719,9 +714,6 @@ DummyFueledClass.OnUpdate = DummyFn
 DummyFueledClass.StopConsuming = DummyFn
 DummyFueledClass.LongUpdate = DummyFn
 
-
-    
-
 local function PerishFill(inst, from_object)
     if from_object ~= nil
         and from_object.components.watersource ~= nil
@@ -791,16 +783,12 @@ local function MakeBlue2(self,tier)
     self.chilling = true
 end
 
-
-
 -- Perform the onhit definition in this way to have compatibility with others as well as ourself with chaotic emerald
 local function GemologyCompatibleOnHit(inst, attacker, target)
     local self = inst.components.minerologyable
-
     if self._nongemology_onhit then
         self._nongemology_onhit(inst, attacker, target)
     end
-    
     if self.neurotic then -- 1
         --TheNet:Announce("neurotic")
         SendTheWilson(inst, attacker, target)
@@ -837,7 +825,6 @@ local function GemologyCompatibleOnHit(inst, attacker, target)
         --TheNet:Announce("arctic")
         Freezy(inst,attacker,target)
     end
-
 end
 
 local function MakeNewOnHits(self,tier)
