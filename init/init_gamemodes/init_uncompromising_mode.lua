@@ -208,7 +208,9 @@ end
 --if GetModConfigData("character_changes") then <-- This isn't even a config option.
 modimport("init/init_character_changes/generic")
 modimport("init/init_character_changes/wendy")
-modimport("init/init_character_changes/wx78")
+if not TUNING.DSTU.UPDATE_CHECK then
+    modimport("init/init_character_changes/wx78")
+end
 modimport("init/init_character_changes/wickerbottom")
 modimport("init/init_character_changes/woodie")
 modimport("init/init_character_changes/wes")
