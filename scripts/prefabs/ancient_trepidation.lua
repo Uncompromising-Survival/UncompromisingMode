@@ -319,7 +319,8 @@ local function fn(Sim)
 	inst:AddTag("shadowchesspiece")
 	inst:AddTag("trepidation")
 	inst:AddTag("fossil")
-	inst:AddTag("shadow_aligned")	
+	inst:AddTag("shadow_aligned")
+	inst:AddTag("shadow")
 
 	inst.menaces = {} --putting this here so clients can access it!
 

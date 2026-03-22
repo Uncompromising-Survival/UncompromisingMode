@@ -34,16 +34,11 @@ end
 local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
-	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasTag("PyreToxinImmune"))
-	and not target:HasTag("plantkin")
-	and not target:HasTag("shadowcreature")
-	and not target:HasTag("dragonfly")
-	and not target:HasTag("lavae")
-	and not target:HasTag("butterfly")
+	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasAnyTag("PyreToxinImmune", "plantkin", "shadowcreature", "shadow", "dragonfly",
+	 "lavae", "butterfly","wall", "structure"))
 	and not (target:HasTag("bee") and not target:HasTag("monster"))
-	and not target:HasTag("wall")
-	and not target:HasTag("structure")
 	and target.prefab ~= "firehound"
+	and target.prefab ~= "lavae_pet"
 	then
 		-- Basic debuff stuff.
 		inst.entity:SetParent(target.entity)
