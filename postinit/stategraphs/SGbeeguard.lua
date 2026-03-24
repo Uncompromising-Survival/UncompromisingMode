@@ -310,7 +310,7 @@ env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("stuck") end)
+                EventHandler("animover", function(inst) if inst.prefab ~= "um_beeguard_seeker" then inst.sg:GoToState("stuck") end end)
             },
 
             onexit = function(inst) inst.stuck = nil end
