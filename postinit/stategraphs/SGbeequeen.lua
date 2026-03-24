@@ -187,7 +187,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
     {
         State{
             name = "stomp",
-            tags = {"busy", "nosleep", "nofreeze", "ability"},
+            tags = {"busy", "nosleep", "nofreeze", "noelectrocute", "ability"},
 
             onenter = function(inst, attacker)
                 --inst.brain:Stop()
