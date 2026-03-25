@@ -123,6 +123,8 @@ local function fn()
     inst.Transform:SetSixFaced()
 
     ----------
+    inst:AddTag("epic")
+    inst:AddTag("smallepic")
     inst:AddTag("animal")
     inst:AddTag("largecreature")
     inst:AddTag("PyreToxinImmune")

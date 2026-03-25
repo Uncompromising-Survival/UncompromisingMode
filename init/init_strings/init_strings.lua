@@ -605,13 +605,13 @@ STRINGS.UM_VETERANSHRINE = {
         "PACT... MADE...",
         "BRING... SKULLS..."
     },
-    NOT_VETERANCURSED = {
+    NOT_VETERANCURSED = { --Unused
         "NOT... AFFLICTED..."
     },
-    NOT_VETERANSKULL = {
+    NOT_VETERANSKULL = { --Unused
         "NOT... DESIRED..."
     },
-    VETSKULL_COMMENT = {
+    VETSKULL_COMMENT = { --Unused
         WILSON = "A CURIOUS MIND... DESTINED FOR DANGER",
         WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE",
         WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING",
@@ -633,7 +633,7 @@ STRINGS.UM_VETERANSHRINE = {
     },
 }
 
-STRINGS.UM_VOXOLOPHONE = {
+STRINGS.UM_VOXOLOPHONE = { --All Unused Night Terrors stuff
     SHADOW_WARNING = {
         HECKLER = {
             "AN AUDIENCE... DISAPPROVING... VENEMOUS TONGUE... (Heckler has appeared)",
@@ -854,7 +854,7 @@ STRINGS.ACTIONS.USESPELLBOOK.UM_DETONATE = "Detonate"
 -- WATHOM
 --------------------------------------------------------------------------
 STRINGS.SKILLTREE.PANELS.ENTROPIC_ANATOMY = "Entropic Anatomy"
-STRINGS.SKILLTREE.PANELS.FORGOTTEN_KNOWLEDGE = "Forgotten Knowledge" 
+STRINGS.SKILLTREE.PANELS.FORGOTTEN_KNOWLEDGE = "Forgotten Knowledge"
 STRINGS.SKILLTREE.PANELS.AMP_UP = "Amp Up"
 
 STRINGS.SKILLTREE.WATHOM = {
