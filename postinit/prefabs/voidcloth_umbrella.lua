@@ -11,5 +11,5 @@ env.AddPrefabPostInit("voidcloth_umbrella", function(inst)
 
     -- Don't do anything when it's acid raining.
     -- This is much less intrusive than removing all the acid rain checks from every function 
-    inst.OnIsAcidRaining = function (inst, isacidraining) end
+    inst.OnIsAcidRaining = function(inst, isacidraining) end
 end)
