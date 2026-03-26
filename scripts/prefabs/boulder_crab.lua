@@ -60,14 +60,15 @@ local function GetRock(inst, rock)
     end
 
     inst:DoTaskInTime(0, function(inst) -- Needs a delay.
-        inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
-        inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 110, 0, true)
-
+        if inst.myrock and inst.myrock:IsValid() then
+            inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            inst.myrock.entity:AddFollower():FollowSymbol(inst.GUID, "swap_shell", 0, 110, 0, true)
+            inst.myrock:Show()
+        end
         if inst.temprock then
             inst.temprock:Remove()
             inst:Show()
         end
-        inst.myrock:Show()
     end)
     inst.myrock.persists = false
 end
@@ -290,15 +291,7 @@ local function fn()
     inst:DoTaskInTime(0, function(inst)
         if not inst.myrock and not inst.components.timer:TimerExists("startregenrock") then
             local rock = FindEntity(inst, 60, nil, {"boulder"})
-            if rock then
-                GetRock(inst, rock.prefab)
-            else
-                if math.random() > .5 then
-                    GetRock(inst, "springrock1")
-                else
-                    GetRock(inst, math.random() > .5 and "springrock3" or "springrock2")
-                end            
-            end
+            GetRock(inst, rock and rock.prefab or math.random() > .5 and "springrock1" or (math.random() > .5 and "springrock3" or "springrock2"))           
         end
     end)
 
