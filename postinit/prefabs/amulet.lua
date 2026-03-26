@@ -117,14 +117,12 @@ local function YellowAmuletPostInit(inst)
 
     local fueled = inst.components.fueled
     if fueled then
-        local OldOnTakeFuelFn = fueled.ontakefuelfn
-        local function ontakefuel(inst)
+        local _OnTakeFuelFn = fueled.ontakefuelfn
+        local function ontakefuel(inst, ...)
             if inst.components.equippable:IsEquipped() then
                 turnon(inst, inst._owner)
             end
-            if OldOnTakeFuelFn then
-                return OldOnTakeFuelFn(inst)
-            end
+            if _OnTakeFuelFn then return _OnTakeFuelFn(inst, ...) end
         end
 
         fueled:SetDepletedFn(nofuel)
