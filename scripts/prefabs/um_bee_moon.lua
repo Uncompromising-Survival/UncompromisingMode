@@ -124,7 +124,7 @@ local function Explode(inst)
     for i,v in ipairs(ents) do
         local beeret = v.components.inventory and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         if not v.components.health:IsDead() and not (beeret and beeret.prefab == "um_hat_bee_moon") then
-            v.components.combat:GetAttacked(inst, 50 / (v:HasTag("player") and 2 or 1))
+            v.components.combat:GetAttacked(inst, 50 / (v.isplayer and 2 or 1))
         end
     end
     spore:ListenForEvent("animover",function(spore) spore:Remove() end)
