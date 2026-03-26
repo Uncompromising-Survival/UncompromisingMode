@@ -322,7 +322,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             events =
             {
-                CommonHandlers.OnNoSleepAnimOver("tired_loop"),
+                CommonHandlers.OnNoSleepAnimOver("tired"),
             },
 
             onexit = function(inst)
