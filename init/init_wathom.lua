@@ -206,10 +206,10 @@ local function GetAdrenalShove(inst)
     end
 end
     
--- This is Scrimble's Shove Code, it's used for both Charles T Horse and Wixie, be appreciative, swine.
-local SLEEPREPEL_MUST_TAGS = { "_combat" }
-local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "notarget", "noattack", "flight", "wall" }
+-- This is Scrimble's Shove Code, it's used for both Charles T. Horse and Wixie, be appreciative, swine.
+local SLEEPREPEL_MUST_TAGS = {"_combat"}
+local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+    "hiding", "notarget", "noattack", "flight", "wall"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
 local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "bell", "irreplaceable"}
 local function Check_Bowling(inst, target)

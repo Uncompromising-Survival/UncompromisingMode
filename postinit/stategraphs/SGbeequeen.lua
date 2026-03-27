@@ -1,6 +1,20 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local STOMP_MUST_TAGS = {"_combat", "_health"}
+local STOMP_CANT_TAGS = {"INLIMBO", "notarget", "invisible", "noattack", "flight", "playerghost", "shadow", "shadowchesspiece", "shadowcreature", "bee", "beehive"}
+
+local function DoStomp(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 6, STOMP_MUST_TAGS, STOMP_CANT_TAGS)
+    for i, ent in ipairs(ents) do
+        if not ent.components.health:IsDead() then
+            ent.components.combat:GetAttacked(inst, 200)
+        end
+    end
+    inst.components.groundpounder:GroundPound()
+end
+
 local function DoScreech(inst)
     ShakeAllCameras(CAMERASHAKE.FULL, 1, .015, .3, inst, 30)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/taunt")
@@ -114,7 +128,7 @@ local function TiredStarter(inst)
     if not inst.tiredtask then
         inst.tiredtask = inst:DoPeriodicTask(1, function(inst)
             inst.tiredcount = inst.tiredcount - 1
-            if inst.tiredcount < 0 or inst.sg and inst.sg.currentstate and inst.sg.currentstate.name ~= "tired" and inst.sg.currentstate.name ~= "tired_hit" then
+            if inst.tiredcount < 0 or inst.sg and not inst.sg:HasStateTag("tired") then
                 if inst.tiredtask then
                     inst.tiredtask:Cancel()
                     inst.tiredtask = nil
@@ -157,19 +171,23 @@ env.AddStategraphPostInit("beequeen", function(inst)
         end
     end]]
 
-    local _OldOnHit = inst.states["hit"].onexit
+    local hitstate_onexit = inst.states["hit"].onexit
     inst.states["hit"].onexit = function(inst, ...)
-        local ret = _OldOnHit and _OldOnHit(inst, ...)
+        local ret = hitstate_onexit and hitstate_onexit(inst, ...)
         if not inst.abilitybusy then inst.ActivateHitAbility(inst) end
         if ret then return ret end
     end
 
-    local _OldAttackedEvent = inst.events["attacked"].fn
+    local attackedeventhandler_fn = inst.events["attacked"].fn
     inst.events["attacked"].fn = function(inst, data, ...)
-        if inst.sg:HasStateTag("tired") then
-            inst.sg:GoToState("tired_hit")
+        if not (inst.components.health and inst.components.health:IsDead()) and inst.sg:HasStateTag("tired") then
+            --if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then -- TODO: Add shock anims.
+                --return
+            if not inst.sg:HasStateTag("notiredhit") then
+                inst.sg:GoToState("tired_hit")
+            end
         else
-            return _OldAttackedEvent(inst, data, ...)
+            return attackedeventhandler_fn(inst, data, ...)
         end
     end
 
@@ -202,40 +220,19 @@ env.AddStategraphPostInit("beequeen", function(inst)
                 inst.stomprage = 0
                 inst.stompready = false
                 inst:DoTaskInTime(math.random(3, 5), function(inst) inst.stompready = true end)
-                if attacker then
+                if attacker and attacker:IsValid() then
                     inst:ForceFacePoint(attacker.Transform:GetWorldPosition())
                 end
             end,
 
             timeline =
             {
-                CommonHandlers.OnNoSleepTimeEvent(38 * FRAMES, function(inst)
-                    local function isvalid(ent)
-                        local tags = {"INLIMBO", "epic", "notarget", "invisible", "noattack", "flight",
-                            "playerghost", "shadow", "shadowchesspiece", "shadowcreature", "bee", "beehive"}
-                        for i, v in ipairs(tags) do
-                            if ent:HasTag(v) then
-                                return false
-                            end
-                        end
-                        return true
-                    end
-
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local ents = TheSim:FindEntities(x, y, z, 6, "_combat")
-                    for i, ent in ipairs(ents) do
-                        if (isvalid(ent)) and not (ent.components.health and ent.components.health:IsDead()) and
-                            ent.components.combat then --Support for the other sort of bees
-                            ent.components.combat:GetAttacked(inst, 200)
-                        end
-                    end
-                    inst.components.groundpounder:GroundPound()
-                end),
+                CommonHandlers.OnNoSleepTimeEvent(47 * FRAMES, DoStomp),
             },
 
             events =
             {
-                CommonHandlers.OnNoSleepAnimOver("screech"),
+                CommonHandlers.OnNoSleepAnimQueueOver("screech"),
             },
 
             onexit = function(inst)
@@ -287,7 +284,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
                 inst.Transform:SetNoFaced()
                 inst.components.locomotor:StopMoving()
                 inst.components.health:SetInvincible(true)
-                inst.AnimState:PushAnimation("stomp", false)
+                inst.AnimState:PlayAnimation("stomp", false)
                 inst.SoundEmitter:PlaySound("dontstarve/creatures/together/bee_queen/enter")
                 if not inst.tiredcount then
                     inst.tiredcount = 12
@@ -296,28 +293,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             timeline =
             {
-                CommonHandlers.OnNoSleepTimeEvent(38 * FRAMES, function(inst)
-                    local function isvalid(ent)
-                        local tags = {"INLIMBO", "epic", "notarget", "invisible", "noattack", "flight",
-                            "playerghost", "shadow", "shadowchesspiece", "shadowcreature", "bee", "beehive"}
-                        for i, v in ipairs(tags) do
-                            if ent:HasTag(v) then
-                                return false
-                            end
-                        end
-                        return true
-                    end
-
-                    local x, y, z = inst.Transform:GetWorldPosition()
-                    local ents = TheSim:FindEntities(x, y, z, 6, "_combat")
-                    for i, ent in ipairs(ents) do
-                        if (isvalid(ent)) and not (ent.components.health and ent.components.health:IsDead()) and
-                            ent.components.combat then --Support for the other sort of bees
-                            ent.components.combat:GetAttacked(inst, 200)
-                        end
-                    end
-                    inst.components.groundpounder:GroundPound()
-                end),
+                CommonHandlers.OnNoSleepTimeEvent(31 * FRAMES, DoStomp),
             },
 
             events =
@@ -428,7 +404,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
         State{
             name = "tired_pre", -- Bee Queen is Tired after rapidly commanding the army.
-            tags = {"busy", "ability", "tired"},
+            tags = {"busy", "ability", "tired", "notiredhit"},
 
             onenter = function(inst)
                 inst.components.timer:PauseTimer("spawnguards_cd")
@@ -443,7 +419,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("tired") end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("tired") end end),
             },
             
             onexit = function(inst)
@@ -466,7 +442,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             onupdate = function(inst)
                 if not (inst.components.health and inst.components.health:IsDead()) and (not inst.tiredcount or inst.tiredcount < 0) then
-					inst.sg:GoToState("tired_pst")
+                    inst.sg:GoToState("tired_pst")
                 end
             end,
 
@@ -485,7 +461,7 @@ env.AddStategraphPostInit("beequeen", function(inst)
 
             events =
             {
-                EventHandler("animover", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("idle") end end),
+                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("idle") end end),
             },
 
             onexit = function(inst)
@@ -494,8 +470,8 @@ env.AddStategraphPostInit("beequeen", function(inst)
         },
 
         State{
-            name = "tired_hit", -- Bee Queen is Tired after rapidly commanding the army.
-            tags = {"busy", "hit", "ability", "tired"},
+            name = "tired_hit", -- Bee Queen is tired after rapidly commanding the army.
+            tags = {"busy", "hit", "ability", "tired", "notiredhit"},
 
             onenter = function(inst)
                 StopFlapping(inst)
@@ -505,10 +481,23 @@ env.AddStategraphPostInit("beequeen", function(inst)
                 TiredStarter(inst)
             end,
 
+            timeline =
+            {
+                TimeEvent(10 * FRAMES, function(inst)
+                    if (not inst.tiredcount or inst.tiredcount < 0) then
+                        inst.sg:GoToState("tired_pst")
+                    else
+                        inst.sg:RemoveStateTag("notiredhit")
+                    end
+                end),
+            },
+
             events =
             {
                 EventHandler("animover", function(inst)
-                    inst.sg:GoToState((not inst.tiredcount or inst.tiredcount < 0) and "tired_pst" or "tired")
+                    if inst.AnimState:AnimDone() then
+                        inst.sg:GoToState((not inst.tiredcount or inst.tiredcount < 0) and "tired_pst" or "tired")
+                    end
                 end),
             },
 
