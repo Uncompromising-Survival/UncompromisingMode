@@ -556,9 +556,9 @@ ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
 AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector", { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
 
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)

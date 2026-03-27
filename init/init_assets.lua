@@ -1216,6 +1216,11 @@ Assets = {
     Asset("ANIM", "anim/airconditioner.zip"),
     Asset("ANIM", "anim/air_conditioner_cloud.zip"),
 
+    --Archives UM stuff
+    Asset("ANIM", "anim/um_archives_projectinator.zip"),
+    Asset("ANIM", "anim/um_archives_receptionator.zip"),
+    Asset("ANIM", "anim/um_lunar_spark.zip"),
+    
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
     Asset("ANIM", "anim/um_soul_ball.zip"),
