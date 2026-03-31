@@ -601,19 +601,16 @@ local function DoLightningExplosion(inst)
 end
 
 local function OnLightningAttacked(inst, data)
-    if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            data.stimuli ~= "soul" and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
-            not data.attacker:HasTag("catapult")
-        then
-            local damage_mult = 1
-            if not IsEntityElectricImmune(data.attacker) then
-                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
-            end
-            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.HOUND_DAMAGE, nil, "electric")
+    if not data then return end
+    local attacker, weapon = data.attacker, data.weapon
+    if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
+        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile))
+        and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") then
+        local damage_mult = 1
+        if not IsEntityElectricImmune(attacker) then
+            damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
         end
+        attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.HOUND_DAMAGE, nil, "electric")
     end
 end
 
@@ -725,25 +722,20 @@ local function GlacialCharge(inst)
 end
 
 local function OnGlacialAttacked(inst, data)
-    if not inst.components.health:IsDead() then
-        if inst.sg ~= nil and inst.sg:HasStateTag("charging") and data ~= nil and data.attacker ~= nil then
-            if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) then
-                if data.attacker.components.freezable ~= nil then
-                    data.attacker.components.freezable:AddColdness(2)
-                end
+    if not data then return end
+    local attacker, weapon = data.attacker, data.weapon
+    if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
+        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
+        if attacker.components.freezable then
+            attacker.components.freezable:AddColdness(2)
+            attacker.components.freezable:SpawnShatterFX()
+        end
 
-                if data.attacker.components.temperature ~= nil then
-                    local mintemp = math.max(data.attacker.components.temperature.mintemp, 0)
-                    local curtemp = data.attacker.components.temperature:GetCurrent()
-                    if mintemp < curtemp then
-                        data.attacker.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
-                    end
-                end
-
-                if data.attacker.components.freezable ~= nil then
-                    data.attacker.components.freezable:SpawnShatterFX()
-                end
+        if attacker.components.temperature then
+            local mintemp = math.max(attacker.components.temperature.mintemp, 0)
+            local curtemp = attacker.components.temperature:GetCurrent()
+            if mintemp < curtemp then
+                attacker.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
             end
         end
     end
@@ -756,15 +748,16 @@ end
 local function OnHitOtherFreeze(inst, data)
     local other = data.target
 
-    if other ~= nil and data.weapon == nil then
-        if not (other.components.health ~= nil and other.components.health:IsDead()) then
-            if not other:HasTag("um_freezeprotection") and other.components.freezable ~= nil and other:HasTag("player") and not other.components.freezable:IsFrozen() and not other.sg:HasStateTag("frozen") then
+    if other and not data.weapon then
+        if not (other.components.health and other.components.health:IsDead()) then
+            if not other:HasTag("um_freezeprotection") and other.components.freezable and not other.components.freezable:IsFrozen() then
                 other.components.freezable:AddColdness(2)
+                other.components.freezable:SpawnShatterFX()
 
-                if other.components.freezable:IsFrozen() then
+                if other:HasTag("player") and other.components.freezable:IsFrozen() then
                     other:AddTag("um_freezeprotection")
 
-                    if other.freeze_protection_task ~= nil then
+                    if other.freeze_protection_task then
                         other.freeze_protection_task:Cancel()
                         other.freeze_protection_task = nil
                     end
@@ -772,16 +765,14 @@ local function OnHitOtherFreeze(inst, data)
                     other.freeze_protection_task = other:DoTaskInTime(3, RemoveFreezeProtection)
                 end
             end
-            if other.components.temperature ~= nil then
+
+            if other.components.temperature then
                 local mintemp = math.max(other.components.temperature.mintemp, 0)
                 local curtemp = other.components.temperature:GetCurrent()
                 if mintemp < curtemp then
                     other.components.temperature:DoDelta(math.max(-5, mintemp - curtemp))
                 end
             end
-        end
-        if other.components.freezable ~= nil then
-            other.components.freezable:SpawnShatterFX()
         end
     end
 end
@@ -999,30 +990,12 @@ local function MagmaCharge(inst)
 end
 
 local function OnMagmaAttacked(inst, data)
-    if inst.components.health ~= nil and not inst.components.health:IsDead() then
-        if inst.sg ~= nil and
-            inst.sg:HasStateTag("charging") and
-            data ~= nil and
-            data.attacker ~= nil then
-            if data.attacker:IsValid() and
-                data.attacker.components.health ~= nil and
-                not data.attacker.components.health:IsDead() and
-                (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and
-                    data.weapon.components.projectile == nil)) and data.attacker.components.health.redirect == nil then
-                data.attacker.components.health:DoFireDamage(5, inst, true) --redirect calls "afllicter"
-                if data.attacker:HasTag("player") and not data.attacker.components.burnable ~= nil then
-                    data.attacker.components.burnable:Ignite()
-                end
-            end
-        end
-
-        inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, SHARE_TARGET_DIST,
-            function(dude)
-                return not (dude.components.health ~= nil and dude.components.health:IsDead())
-                    and (dude:HasTag("hound") or dude:HasTag("houndfriend"))
-                    and data.attacker ~= (dude.components.follower ~= nil and dude.components.follower.leader or nil)
-            end, 5)
+    if not data then return end
+    local attacker, weapon = data.attacker, data.weapon
+    if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
+        and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
+        attacker.components.health:DoFireDamage(5, inst, true)
+        if attacker.components.burnable then attacker.components.burnable:Ignite(true, inst, inst) end
     end
 end
 

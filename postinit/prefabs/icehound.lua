@@ -5,12 +5,12 @@ GLOBAL.setfenv(1, GLOBAL)
 local function OnHitOtherFreeze(inst, data)
     local other = data.target
     if other ~= nil and not (other.components.health ~= nil and other.components.health:IsDead()) then
-        if other.components.freezable ~= nil and other.sg ~= nil and not other.sg:HasStateTag("frozen") then
+        if other.components.freezable and not other.components.freezable:IsFrozen() then
             other.components.freezable:AddColdness(1.5, 1, true)
             other.components.freezable:SpawnShatterFX()
         end
 
-        if other.components.temperature ~= nil then
+        if other.components.temperature then
             local mintemp = math.max(other.components.temperature.mintemp, 0)
             local curtemp = other.components.temperature:GetCurrent()
             if mintemp < curtemp then
@@ -26,7 +26,7 @@ env.AddPrefabPostInit("icehound", function(inst)
     end
 
     if TUNING.DSTU.FROSTBITEHOUNDS then
-        if inst.components.combat ~= nil then
+        if inst.components.combat then
             inst:ListenForEvent("onhitother", OnHitOtherFreeze)
         end
     end

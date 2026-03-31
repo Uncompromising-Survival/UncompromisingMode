@@ -196,22 +196,21 @@ local function IsWorm(dude)
 end
 
 local function ShockWormOnAttacked(inst, data)
-    if data ~= nil and data.attacker ~= nil then
-        if data.attacker.components.health ~= nil and not data.attacker.components.health:IsDead() and
-            data.stimuli ~= "soul" and
-            (data.weapon == nil or ((data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil) and data.weapon.components.projectile == nil)) and
-            not (data.attacker.components.inventory ~= nil and data.attacker.components.inventory:IsInsulated()) and
-            not data.attacker:HasTag("catapult")
-        then
+    if not data then return end
+    local attacker, weapon = data.attacker, data.weapon
+    if attacker then
+        if attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
+            and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile))
+            and not (attacker.components.inventory and attacker.components.inventory:IsInsulated()) and not attacker:HasTag("catapult") then
             local damage_mult = 1
-            if not IsEntityElectricImmune(data.attacker) then
-                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * data.attacker:GetWetMultiplier()
+            if not IsEntityElectricImmune(attacker) then
+                damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
             end
-            data.attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
+            attacker.components.combat:GetAttacked(inst, damage_mult * TUNING.WORM_DAMAGE, nil, "electric")
         end
 
-        inst.components.combat:SetTarget(data.attacker)
-        inst.components.combat:ShareTarget(data.attacker, 40, IsWorm, 3)
+        inst.components.combat:SetTarget(attacker)
+        inst.components.combat:ShareTarget(attacker, 40, IsWorm, 3)
     end
 end
 
