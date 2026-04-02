@@ -21,6 +21,7 @@ local start_inv = {}
 for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
     start_inv[string.lower(k)] = v.WATHOM
 end
+
 local prefabs = FlattenTree(start_inv, true)
 
 local function TurnOffShadowForm(inst)
@@ -775,7 +776,6 @@ local function master_postinit(inst)
     -- inst.components.combat.attackrange = 4
 
     local _onsave = inst.OnSave
-
     local function onsave(inst, data)
         if inst:HasTag("amped") then
             data.amped = true
@@ -797,14 +797,12 @@ local function master_postinit(inst)
 
     inst.OnNewSpawn = onload
     inst.ToggleUndeathState = ToggleUndeathState
-	
+
 	inst:ListenForEvent("equip",CheckForCaneRun)
 	inst:ListenForEvent("unequip",CheckForCaneRun)
-	
-	
-	inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
-	inst:ListenForEvent("ms_respawnedfromghost",StopBeingShadow)
 
+	inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
+	inst:ListenForEvent("ms_respawnedfromghost", StopBeingShadow)
 end
 
-return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, start_inv)
+return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit)

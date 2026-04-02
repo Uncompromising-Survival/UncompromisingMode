@@ -521,6 +521,9 @@ if GetModConfigData("armorrework") then
     TUNING.SHIELDOFTERROR_DAMAGE = 59.5
 end
 
+TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WATHOM = {}
+TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WINKY = {}
+
 if GetModConfigData("wixie_walter") then
     TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2.5
@@ -535,10 +538,8 @@ if GetModConfigData("wixie_walter") then
         SLOW = 10
     }
 
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = { "walterhat", "meatrack_hat", "meat", "monstermeat" }
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = { "slingshot", "slingshotammo_rock", "slingshotammo_rock",
-        "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock",
-        "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock" }
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = {"walterhat", "meatrack_hat", "meat", "monstermeat"}
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
 end
 
 -- Wilson Torch Buff

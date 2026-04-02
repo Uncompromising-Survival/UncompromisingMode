@@ -1,41 +1,44 @@
-
-local MakePlayerCharacter = require "prefabs/player_common"
-
+local MakePlayerCharacter = require("prefabs/player_common")
 
 local assets = {
+    Asset( "ANIM", "anim/player_basic.zip" ),
+    Asset( "ANIM", "anim/player_idles_shiver.zip" ),
+    Asset( "ANIM", "anim/player_actions.zip" ),
+    Asset( "ANIM", "anim/player_actions_axe.zip" ),
+    Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
+    Asset( "ANIM", "anim/player_actions_shovel.zip" ),
+    Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
+    Asset( "ANIM", "anim/player_actions_eat.zip" ),
+    Asset( "ANIM", "anim/player_actions_item.zip" ),
+    Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
+    Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
+    Asset( "ANIM", "anim/player_actions_fishing.zip" ),
+    Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
+    Asset( "ANIM", "anim/player_bush_hat.zip" ),
+    Asset( "ANIM", "anim/player_attacks.zip" ),
+    Asset( "ANIM", "anim/player_idles.zip" ),
+    Asset( "ANIM", "anim/player_rebirth.zip" ),
+    Asset( "ANIM", "anim/player_jump.zip" ),
+    Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
+    Asset( "ANIM", "anim/player_teleport.zip" ),
+    Asset( "ANIM", "anim/wilson_fx.zip" ),
+    Asset( "ANIM", "anim/player_one_man_band.zip" ),
+    Asset( "ANIM", "anim/shadow_hands.zip" ),
+    Asset( "SOUND", "sound/sfx.fsb" ),
+    Asset( "SOUND", "sound/wilson.fsb" ),
+    Asset( "ANIM", "anim/beard.zip" ),
 
-        Asset( "ANIM", "anim/player_basic.zip" ),
-        Asset( "ANIM", "anim/player_idles_shiver.zip" ),
-        Asset( "ANIM", "anim/player_actions.zip" ),
-        Asset( "ANIM", "anim/player_actions_axe.zip" ),
-        Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
-        Asset( "ANIM", "anim/player_actions_shovel.zip" ),
-        Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
-        Asset( "ANIM", "anim/player_actions_eat.zip" ),
-        Asset( "ANIM", "anim/player_actions_item.zip" ),
-        Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
-        Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
-        Asset( "ANIM", "anim/player_actions_fishing.zip" ),
-        Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
-        Asset( "ANIM", "anim/player_bush_hat.zip" ),
-        Asset( "ANIM", "anim/player_attacks.zip" ),
-        Asset( "ANIM", "anim/player_idles.zip" ),
-        Asset( "ANIM", "anim/player_rebirth.zip" ),
-        Asset( "ANIM", "anim/player_jump.zip" ),
-        Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
-        Asset( "ANIM", "anim/player_teleport.zip" ),
-        Asset( "ANIM", "anim/wilson_fx.zip" ),
-        Asset( "ANIM", "anim/player_one_man_band.zip" ),
-        Asset( "ANIM", "anim/shadow_hands.zip" ),
-        Asset( "SOUND", "sound/sfx.fsb" ),
-        Asset( "SOUND", "sound/wilson.fsb" ),
-        Asset( "ANIM", "anim/beard.zip" ),
-
-		-- Don't forget to include your character's custom assets!
-        Asset( "ANIM", "anim/winky.zip" ),
-		Asset( "ANIM", "anim/ghost_winky_build.zip" ),
+    -- Don't forget to include your character's custom assets!
+    Asset( "ANIM", "anim/winky.zip" ),
+    Asset( "ANIM", "anim/ghost_winky_build.zip" ),
 }
-local prefabs = {}
+
+local start_inv = {}
+for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
+    start_inv[string.lower(k)] = v.WINKY
+end
+
+local prefabs = FlattenTree(start_inv, true)
 
 local function GetPointSpecialActions(inst, pos, useitem, right)
     if right and useitem == nil then
@@ -59,16 +62,12 @@ local function common_postinit(inst)
 
     inst.avatar_ghost_tex   = "avatar_ghost_winky.tex"
     inst.avatar_ghost_atlas = "images/avatars/avatar_ghost_winky.xml"
-	
+    
     inst:AddTag("playermonster")
     inst:AddTag("monster")
-	
+    
     inst:ListenForEvent("setowner", OnSetOwner)
 end
-
-local start_inv =
-{
-}
 
 local function checkfav(inst, food)
     if food ~= nil then
@@ -87,38 +86,39 @@ local function OnPickSomething(inst, data)
 end
 
 local function OnDropItem(inst)
-	inst:DoTaskInTime(0, function()
-		if not inst.no_sanity_drop then
-			inst.components.sanity:DoDelta(-5)
-		end
-	end)
+    inst:DoTaskInTime(0, function()
+        if not inst.no_sanity_drop then
+            inst.components.sanity:DoDelta(-5)
+        end
+    end)
 end
 
 local function sanityfn(inst)
-	local sanityvalue = -5
+    local sanityvalue = -5
 
-	for i = 1, inst.components.inventory.maxslots do
-		if inst.components.inventory:GetItemInSlot(i) ~= nil then
-			sanityvalue = sanityvalue + 0.1
-		end
-	end
+    for i = 1, inst.components.inventory.maxslots do
+        if inst.components.inventory:GetItemInSlot(i) ~= nil then
+            sanityvalue = sanityvalue + 0.1
+        end
+    end
 
     return sanityvalue
 end
 
 local function WinkyDespawn(inst)
-	inst.no_sanity_drop = true
+    inst.no_sanity_drop = true
 end
 
 local function master_postinit(inst)
+    inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
-	 -- Minimap icon
+     -- Minimap icon
     inst.MiniMapEntity:SetIcon("winky.tex")
     inst:AddTag("winky")
     inst:AddTag("ratwhisperer")
 
-	-- choose which sounds this character will play
-	inst.soundsname = "winky"
+    -- choose which sounds this character will play
+    inst.soundsname = "winky"
 
     inst.components.foodaffinity:AddPrefabAffinity("powcake", 20)
     inst.components.foodaffinity:AddPrefabAffinity("winter_food4", 20)
@@ -134,37 +134,35 @@ local function master_postinit(inst)
     inst.components.sanity.night_drain_mult = TUNING.WENDY_SANITY_MULT
     inst.components.sanity.neg_aura_mult = TUNING.WENDY_SANITY_MULT
 
-	inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
+    inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
 
-	-- todo: Add an example special power here.
-	inst.components.health:SetMaxHealth(175)
-	inst.components.hunger:SetMax(150)
-	inst.components.sanity:SetMax(125)
+    -- todo: Add an example special power here.
+    inst.components.health:SetMaxHealth(175)
+    inst.components.hunger:SetMax(150)
+    inst.components.sanity:SetMax(125)
     --inst.components.sanity.custom_rate_fn = sanityfn
 
-	inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
-	if TheWorld.state.isnight then
-		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
-	else
-		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
-	end
+    inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
+    if TheWorld.state.isnight then
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
+    else
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
+    end
 
-	inst:WatchWorldState("isnight", function() 
-		if TheWorld.state.isnight then
-			inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
-		else
-			inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
-		end
-	end)
-	
+    inst:WatchWorldState("isnight", function() 
+        if TheWorld.state.isnight then
+            inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.25) 
+        else
+            inst.components.locomotor:SetExternalSpeedMultiplier(inst, "im_winky_mother_frikker", 1.15)
+        end
+    end)
+    
     --inst:ListenForEvent("picksomething", OnPickSomething)
-	
-	inst.no_sanity_drop = false
+    
+    inst.no_sanity_drop = false
     inst:ListenForEvent("dropitem", OnDropItem)
     inst:ListenForEvent("player_despawn", WinkyDespawn)
     --inst:ListenForEvent("itemlose", OnDropItem)
 end
 
-STRINGS.CHARACTERS.WINKY = require "speech_winky"
-
-return MakePlayerCharacter("winky", prefabs, assets, common_postinit, master_postinit, start_inv)
+return MakePlayerCharacter("winky", prefabs, assets, common_postinit, master_postinit)

@@ -2,41 +2,48 @@ local MakePlayerCharacter = require("prefabs/player_common")
 local SourceModifierList = require("util/sourcemodifierlist")
 
 local assets = {
-        Asset( "ANIM", "anim/player_basic.zip" ),
-        Asset( "ANIM", "anim/player_idles_shiver.zip" ),
-        Asset( "ANIM", "anim/player_actions.zip" ),
-        Asset( "ANIM", "anim/player_actions_axe.zip" ),
-        Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
-        Asset( "ANIM", "anim/player_actions_shovel.zip" ),
-        Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
-        Asset( "ANIM", "anim/player_actions_eat.zip" ),
-        Asset( "ANIM", "anim/player_actions_item.zip" ),
-        Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
-        Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
-        Asset( "ANIM", "anim/player_actions_fishing.zip" ),
-        Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
-        Asset( "ANIM", "anim/player_bush_hat.zip" ),
-        Asset( "ANIM", "anim/player_attacks.zip" ),
-        Asset( "ANIM", "anim/player_idles.zip" ),
-        Asset( "ANIM", "anim/player_rebirth.zip" ),
-        Asset( "ANIM", "anim/player_jump.zip" ),
-        Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
-        Asset( "ANIM", "anim/player_teleport.zip" ),
-        Asset( "ANIM", "anim/wilson_fx.zip" ),
-        Asset( "ANIM", "anim/player_one_man_band.zip" ),
-        Asset( "ANIM", "anim/shadow_hands.zip" ),
-        Asset( "SOUND", "sound/sfx.fsb" ),
-        Asset( "SOUND", "sound/wixie.fsb" ),
-        Asset( "ANIM", "anim/beard.zip" ),
+    Asset( "ANIM", "anim/player_basic.zip" ),
+    Asset( "ANIM", "anim/player_idles_shiver.zip" ),
+    Asset( "ANIM", "anim/player_actions.zip" ),
+    Asset( "ANIM", "anim/player_actions_axe.zip" ),
+    Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
+    Asset( "ANIM", "anim/player_actions_shovel.zip" ),
+    Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
+    Asset( "ANIM", "anim/player_actions_eat.zip" ),
+    Asset( "ANIM", "anim/player_actions_item.zip" ),
+    Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
+    Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
+    Asset( "ANIM", "anim/player_actions_fishing.zip" ),
+    Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
+    Asset( "ANIM", "anim/player_bush_hat.zip" ),
+    Asset( "ANIM", "anim/player_attacks.zip" ),
+    Asset( "ANIM", "anim/player_idles.zip" ),
+    Asset( "ANIM", "anim/player_rebirth.zip" ),
+    Asset( "ANIM", "anim/player_jump.zip" ),
+    Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
+    Asset( "ANIM", "anim/player_teleport.zip" ),
+    Asset( "ANIM", "anim/wilson_fx.zip" ),
+    Asset( "ANIM", "anim/player_one_man_band.zip" ),
+    Asset( "ANIM", "anim/shadow_hands.zip" ),
+    Asset( "SOUND", "sound/sfx.fsb" ),
+    Asset( "SOUND", "sound/wixie.fsb" ),
+    Asset( "ANIM", "anim/beard.zip" ),
 
-        -- Don't forget to include your character's custom assets!
-        Asset( "ANIM", "anim/wixie.zip" ),
-        Asset( "ANIM", "anim/ghost_wixie_build.zip" ),
+    -- Don't forget to include your character's custom assets!
+    Asset( "ANIM", "anim/wixie.zip" ),
+    Asset( "ANIM", "anim/ghost_wixie_build.zip" ),
 }
 
 local prefabs = {
     "slingshot",
 }
+
+local start_inv = {}
+for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
+    start_inv[string.lower(k)] = v.WIXIE
+end
+
+prefabs = FlattenTree({prefabs, start_inv}, true)
 
 local function customidleanimfn(inst)
     local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -307,11 +314,11 @@ local function common_postinit(inst)
 end
 
 local function master_postinit(inst)
-    inst.starting_inventory = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
+    inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
     inst.MiniMapEntity:SetIcon("wixie.tex")
     --inst:AddComponent("claustrophobia")
-	
+    
     inst.customidleanim = customidleanimfn
 
     inst.components.health:SetMaxHealth(TUNING.WALTER_HEALTH)
@@ -329,7 +336,5 @@ local function master_postinit(inst)
 
     inst.OnNewSpawn = OnNewSpawn
 end
-
-STRINGS.CHARACTERS.WIXIE = require"speech_wixie"
 
 return MakePlayerCharacter("wixie", prefabs, assets, common_postinit, master_postinit)
