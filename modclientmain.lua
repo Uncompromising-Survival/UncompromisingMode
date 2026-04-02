@@ -69,7 +69,7 @@ STRINGS.CHARACTER_BIOS.winky = {
  { title = "Her Past...", desc = "Is yet to be revealed."},
 }
 
-STRINGS.CHARACTER_SURVIVABILITY.winky= "Stinky"
+STRINGS.CHARACTER_SURVIVABILITY.winky = "Stinky"
 
 TUNING.WINKY_HEALTH = 175
 TUNING.WINKY_HUNGER = 175
