@@ -122,7 +122,7 @@ local function OldAge(inst)
             inst.components.inventory:DropEverything() 
         end
         if not TheWorld:HasTag('cave') then
-            inst:PushEvent('ms_instreroll')
+            inst:PushEvent('ms_playerreroll')
             TheWorld.admin_save = TheWorld.admin_save or {} TheWorld.admin_save[inst.userid] = inst.SaveForReroll and inst:SaveForReroll()
             if TheWorld.admin_listen == nil then
                 TheWorld.admin_listen = TheWorld:ListenForEvent('ms_newplayerspawned', function(world, p)
