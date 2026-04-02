@@ -112,7 +112,7 @@ STRINGS.CHARACTER_BIOS.wixie = {
  { title = "All Good Things...", desc = "Growing up can hurt, and few know it better than Wixie. As long as she could remember she would see shadows in the corner of her eye, and hear whispers in the dark when she felt surrounded. After tragedy struck her family, her fears, and her abrasive attitude grew, as she further pushed people away. This cycle continued, gaining the attention of a dark force from beyond. Now, she finds herself in the Constant, free from the confines of her old life, but more trapped than ever before."},
 }
 
-STRINGS.CHARACTER_SURVIVABILITY.wixie= "Grim"
+STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
 TUNING.WIXIE_HEALTH = 130
 TUNING.WIXIE_HUNGER = 150
