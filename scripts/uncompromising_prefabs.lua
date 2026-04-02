@@ -354,7 +354,6 @@ local prefabs = {
     "armor_sharksuit_um",
     "rockjawleather",
     "ocupus_beak",
-    "ocupus_tentacles",
     "beakbasher",
     "winona_upgradekit",
     "powercell",
