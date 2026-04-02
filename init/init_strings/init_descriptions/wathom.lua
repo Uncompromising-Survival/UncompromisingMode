@@ -713,3 +713,4 @@ DESCRIBE.WATHOM_CORPSE = "Rise! Rise again!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Held prison. Restores integrity. Deadly and efficient."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Elemental counter, required."
+DESCRIBE.UM_THULECITE_RAZOR= "Cuts deep. Double harvest."

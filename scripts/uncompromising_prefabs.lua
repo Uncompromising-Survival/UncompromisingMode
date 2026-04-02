@@ -621,6 +621,7 @@ local prefabs = {
     "um_feather_totem",
     "um_magnifier",
     "um_gemology_pouch",
+    "um_thulecite_razor",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

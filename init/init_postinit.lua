@@ -71,7 +71,8 @@ local component_post = {
 	"temperature",
     "playercontroller",
 	"possessedaxe",
-	"inventoryitem"
+	"inventoryitem",
+    "pickable",
 }
 
 local prefab_post = {

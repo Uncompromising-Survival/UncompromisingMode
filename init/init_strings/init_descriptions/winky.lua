@@ -690,3 +690,4 @@ DESCRIBE.WATHOM_CORPSE = "How. You died. You can't just... get back up?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Thouching it makes me shiver."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
+DESCRIBE.UM_THULECITE_RAZOR= "What kind of razor is this."

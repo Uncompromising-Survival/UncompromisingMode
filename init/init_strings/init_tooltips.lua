@@ -422,6 +422,10 @@ if TUNING.DSTU.STORMS then
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
 end
 
+if TUNING.DSTU.SHAVE_MODE then
+    TOOLTIPS.UM_THULECITE_RAZOR = "- Can occasionally give an extra resouce."
+end
+
 if TUNING.DSTU.WARLY_CHANGES == 1 then
     TOOLTIPS.SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables."
 end

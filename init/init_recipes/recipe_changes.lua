@@ -387,6 +387,10 @@ if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
 
+if TUNING.DSTU.SHAVE_MODE then
+    AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
+end
+
 AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
 AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
 AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD

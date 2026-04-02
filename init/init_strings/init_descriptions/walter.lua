@@ -649,3 +649,4 @@ DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Nothing dreadful about a shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
+DESCRIBE.UM_THULECITE_RAZOR= "It's an ancient razor. It's what old people use!"

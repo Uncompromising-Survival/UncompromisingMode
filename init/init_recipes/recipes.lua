@@ -609,6 +609,17 @@ AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("
 ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
 
+if TUNING.DSTU.SHAVE_MODE then
+    AddRecipe2("um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_thulecite_razor"}}, {"CRAFTING_STATION", "TOOLS"})
+    ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("um_thulecite_razor", "razor", "TOOLS", true)
+
+    AddRecipe2("wathom_um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_thulecite_razor", description = "um_thulecite_razor", no_deconstruction = true}, {"CRAFTING_STATION", "CHARACTER", "TOOLS"})
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CHARACTER", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "um_thulecite_razor", "TOOLS", true)
+end
+
 --WATHOM ANCIENT KINSHIP I STUFF--
 AddRecipe2("wathom_thulecite", { Ingredient("thulecite_pieces", 6) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "thulecite", description = "thulecite", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
 AddRecipe2("wathom_wall_ruins_item", { Ingredient("thulecite", 1) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "wall_ruins_item", numtogive = 6, description = "wall_ruins_item", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })

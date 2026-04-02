@@ -184,6 +184,7 @@ RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to tho
 RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
 RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems."
 
+RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
 
 STRINGS.DSTU = {

@@ -807,4 +807,4 @@ local function master_postinit(inst)
 
 end
 
-return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, prefabs)
+return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit, start_inv)

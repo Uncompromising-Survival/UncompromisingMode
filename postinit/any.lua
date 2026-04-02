@@ -38,6 +38,86 @@ if TUNING.DSTU.IMPASSBLES then
     end)
 end
 
+if TUNING.DSTU.SHAVE_MODE then
+    env.AddPrefabPostInitAny(function(inst)
+        if not TheWorld.ismastersim then return end
+        
+        if inst.components.shaveable and inst.components.shaveable.prize_prefab then
+            local _OnShaved = inst.components.shaveable.on_shaved
+            local function OnShaved(inst, shaver, shave_item, ...)
+                if shave_item:HasTag("extra_shaver") and shaver and shaver.components.inventory and math.random() > .5 then
+                    local prize = SpawnPrefab(inst.components.shaveable.prize_prefab)
+                    local position = inst:GetPosition()
+                    local x, y, z = shaver.Transform:GetWorldPosition()
+                    if prize.components.inventoryitem then
+                        prize.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                    end
+                    if shaver and shaver.components.inventory then
+                        shaver.components.inventory:GiveItem(prize, nil, position)
+                        SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                    else
+                        LaunchAt(prize, inst, nil, 1, 1)
+                        SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                    end
+                end
+                _OnShaved(inst, shaver, shave_item, ...)
+            end
+            inst.components.shaveable.on_shaved = OnShaved
+        end
+
+        if inst.components.pickable and not inst.components.shaveable then
+            local function CanShave(inst, shaver, shave_item)
+                return inst.components.pickable and inst.components.pickable:CanBePicked()
+            end
+
+            local _onpickedfn = inst.components.pickable.onpickedfn
+
+            local function OnShaved(inst, picker, shaver, shave_item, ...)
+                if inst.prefab ~= "mandrake_planted" then
+                    if shaver:HasTag("extra_shaver") and picker and picker.components.inventory and math.random() > .5 then
+                        local product = inst.components.pickable and inst.components.pickable.product or nil
+                        local prize = SpawnPrefab(product)
+                        local position = inst:GetPosition()
+                        local x, y, z = picker.Transform:GetWorldPosition()
+                        if prize.components.inventoryitem then
+				            prize.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                        end
+                        picker.components.inventory:GiveItem(prize, nil, position)
+                        if product then
+                            SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                        end
+                    end
+                    inst.components.pickable:UMForcePick(picker)
+                end
+                if inst.components.pickable.remove_when_picked == true then
+                    inst:Remove()
+                end
+                if inst.components.pickable.onpickedfn then
+                    _onpickedfn(inst, picker, ...)
+                end
+            end
+
+
+            --local prize = inst.components.pickable and inst.components.pickable.product
+            local shaveable = inst:AddComponent("shaveable")
+            shaveable:SetPrize(nil, 1)
+            shaveable.can_shave_test = CanShave
+            shaveable.on_shaved = OnShaved
+            inst.components.pickable:SetStuck(true)
+        end
+    end)
+
+    env.AddPrefabPostInit("razor", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        local finiteuses = inst:AddComponent("finiteuses")
+        finiteuses:SetMaxUses(25)
+        finiteuses:SetUses(25)
+        finiteuses:SetConsumption(ACTIONS.SHAVE, 1)
+	    finiteuses:SetOnFinished(inst.Remove)
+    end)
+end
+
 local function TeleportOverrideFn(inst)
     local pt = inst:GetPosition()
     local offset = FindWalkableOffset(pt, math.random() * 2 * PI, 4, 8, true, false) or

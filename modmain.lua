@@ -92,7 +92,7 @@ if GetModConfigData("funny rat") then
     AddModCharacter("winky", "FEMALE")
 
     GLOBAL.TUNING.WINKY_HEALTH = 175
-    GLOBAL.TUNING.WINKY_HUNGER = 150
+    GLOBAL.TUNING.WINKY_HUNGER = 175
     GLOBAL.TUNING.WINKY_SANITY = 125
 end
 
@@ -440,6 +440,8 @@ AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", f
     GLOBAL.TheWorld:PushEvent("master_acidmushroomsfinished", data)
 end)]]
 -- since ChangeImageName just does that, we need to assign the new atlas as well. I don't want to pack 2 images in the same atlas (mostly because idk how)
+
+table.removearrayvalue(MODCHARACTERLIST, "winky") --She's not doing so good right now.
 
 GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "hat_plaguemask") end
 

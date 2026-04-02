@@ -633,3 +633,4 @@ DESCRIBE.WATHOM_CORPSE = "He's... He's still breathing! Mon dieu, he may live!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It's lighter than it looks."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Our friend here could use a nice hot meal."
+DESCRIBE.UM_THULECITE_RAZOR= "If this was food I would eat it."
