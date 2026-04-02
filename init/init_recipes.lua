@@ -1556,6 +1556,13 @@ AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("cha
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO,
     { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
 
+if TUNING.DSTU.SHAVE_MODE then
+    AddRecipe2("um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
+    ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("um_thulecite_razor", "razor", "TOOLS", true)
+    AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
+end
+
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
@@ -1720,6 +1727,8 @@ STRINGS.RECIPE_DESC.WINONA_BATTERY_HIGH_ITEM_UM = STRINGS.RECIPE_DESC.WINONA_BAT
 
 GLOBAL.STRINGS.RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
 GLOBAL.STRINGS.RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
+
+STRINGS.RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 
 -- [ PROTOTYPERS ] --
 GLOBAL.PROTOTYPER_DEFS.critterlab_real = GLOBAL.PROTOTYPER_DEFS.critterlab

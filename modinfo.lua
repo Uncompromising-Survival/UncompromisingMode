@@ -6,21 +6,17 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.2.6"
+local _version = "1.5.2.7"
 description = [[
 󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- Implemented icons for Wixie's Skill Tree.
-- Firecracker Rounds no longer hitstuns enemies, but deal normal damage to bosses.
-- New Tooltips for all new Wixie craftables, with a new bow icon.
-- New recipe for crafting Woby Snacks with Small Monster Jerky.
-- Tons of fixes for Wixie, UM Walter & Woby, and other general fixes.
-- Buffed the loot dropped from a few special spiders.
+- Winky is not doing well :(
+- New "Shave Together Mode" Super Sekrit Setting! :) (April Fools!) 
 
-󰀏 NEXT UPDATE: ?? ??? ?o??s]]
+󰀏 NEXT UPDATE: On the Rocks! (Accessible as a Beta in our Discord server!)]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
@@ -1422,6 +1418,7 @@ configuration_options = {
 
     --	Header("General"),
     BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
+    BinaryConfig("um_shave_mode", "Shave Together Mode", "Tired of the normal gameplay loop? Enable for a more razorful experience!", false),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),

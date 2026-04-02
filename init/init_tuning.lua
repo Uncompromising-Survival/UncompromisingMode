@@ -415,6 +415,7 @@ TUNING.DSTU = {
     --MEME CONFIG
     ADVERTISEMENTS = GetModConfigData("um_advertisements"),
     SHRINK = GetModConfigData("um_shrink"),
+    SHAVE_MODE = GetModConfigData("um_shave_mode"),
 
     --CLIENT CONFIGS
 

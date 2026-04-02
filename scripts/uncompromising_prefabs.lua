@@ -460,6 +460,7 @@ local prefabs = {
     "kaleidoscope",
     "garbagepatchflotsam",
     "garbagepatch_inventory",
+    "um_thulecite_razor",
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

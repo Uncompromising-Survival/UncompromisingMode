@@ -382,6 +382,10 @@ if TUNING.DSTU.STORMS then
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
 end
 
+if TUNING.DSTU.SHAVE_MODE then
+    TOOLTIPS.UM_THULECITE_RAZOR = "- Can occasionally give an extra resouce."
+end
+
 if TUNING.DSTU.WXLESS then
     local CircuitDefs = {
         HEAT = "- Now provides heat when working or attacking.\n- No longer changes max and min temperature.\n- Provides insulation.\n- Increases work and row efficiency the hotter you are.",

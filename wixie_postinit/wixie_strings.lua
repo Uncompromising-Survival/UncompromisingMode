@@ -600,3 +600,4 @@ DESCRIBE.UM_BOATBOTTLE = {
     FULL = "This is one of those toys for old people.",
     EMPTY = "How am I supposed to play with the boat if it's stuck in this stupid bottle?"
 }
+DESCRIBE.UM_THULECITE_RAZOR= "I don't care about this!!"

@@ -305,6 +305,7 @@ local inventoryitems =
 	--crab king items
 	"hat_crab",
 	"staff_starfall",
+	"um_thulecite_razor",
 }
 
 for k, v in ipairs(inventoryitems) do

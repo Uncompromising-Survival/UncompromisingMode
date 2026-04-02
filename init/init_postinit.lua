@@ -53,6 +53,7 @@ local component_post = {
     --"raindome"
     "stewer",
     "boatmagnet",
+    "pickable",
 }
 
 local prefab_post = {

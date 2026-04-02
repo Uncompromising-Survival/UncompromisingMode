@@ -110,6 +110,32 @@ local function WinkyDespawn(inst)
 	inst.no_sanity_drop = true
 end
 
+local function OldAge(inst)
+	local task
+	task = inst:DoPeriodicTask(0.65,function(inst) --Code from "Disable Characters" mod by star.
+	    if not inst:IsValid() then
+		    task:Cancel()
+			return
+		end
+		--_G.c_despawn(inst) --Bye bye
+        if inst.components.inventory then --This code is from "Admin Scoreboard+" mod by T Shaw Killer.
+            inst.components.inventory:DropEverything() 
+        end
+        if not TheWorld:HasTag('cave') then
+            inst:PushEvent('ms_instreroll')
+            TheWorld.admin_save = TheWorld.admin_save or {} TheWorld.admin_save[inst.userid] = inst.SaveForReroll and inst:SaveForReroll()
+            if TheWorld.admin_listen == nil then
+                TheWorld.admin_listen = TheWorld:ListenForEvent('ms_newplayerspawned', function(world, p)
+                    if world.admin_save[p.userid] and p.LoadForReroll then
+                        p:LoadForReroll(world.admin_save[p.userid]) world.admin_save[p.userid] = nil
+                    end
+                end)
+            end
+        end
+        TheWorld:PushEvent('ms_playerdespawnanddelete', inst)
+	end)
+end
+
 local function master_postinit(inst)
 
 	 -- Minimap icon
@@ -160,6 +186,8 @@ local function master_postinit(inst)
     inst:ListenForEvent("dropitem", OnDropItem)
     inst:ListenForEvent("player_despawn", WinkyDespawn)
     --inst:ListenForEvent("itemlose", OnDropItem)
+
+    OldAge(inst)
 end
 
 STRINGS.CHARACTERS.WINKY = require "speech_winky"

@@ -301,4 +301,18 @@ env.AddPlayerPostInit(function(inst)
     --Client after this
     --inst:AddTag("um_darkwood")
     --CreateMousePositioning(inst)
+    if TUNING.DSTU.SHAVE_MODE then
+        if inst.starting_inventory then
+            table.insert(inst.starting_inventory, "razor")
+        else
+            local razor = SpawnPrefab("razor")
+            local position = inst:GetPosition()
+            inst:DoTaskInTime(0.45,function(inst)
+                if razor.components.inventoryitem then
+                    razor.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                end
+                inst.components.inventory:GiveItem(razor, nil, position)
+            end)
+        end
+    end
 end)
