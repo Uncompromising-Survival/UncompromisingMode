@@ -46,9 +46,10 @@ AddClassPostConstruct("widgets/redux/craftingmenu_pinslot", function(self, owner
 	-- Show and hide the text accordingly
 	function self:Refresh(...)
 		_old_refresh(self, ...)
+		
+		if not self.item_img.numtogive or not self.item_img.numtogive.inst:IsValid() then return end
 
 		local data = self.craftingmenu:GetRecipeState(self.recipe_name) 
-
 		if data ~= nil and data.recipe ~= nil and data.meta ~= nil then
 			if data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
 				self.item_img.numtogive:SetString(""..data.recipe.numtogive)
