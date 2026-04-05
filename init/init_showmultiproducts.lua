@@ -40,24 +40,19 @@ AddClassPostConstruct("widgets/redux/craftingmenu_pinslot", function(self, owner
 	self.item_img.numtogive = self.item_img:AddChild(Text(FONT, FONTSIZE, "", TEXTCOLOUR))
 	self.item_img.numtogive:SetPosition(30,-24)
 	self.item_img.numtogive:Hide()
-	
+
 	local _old_refresh = self.Refresh
-	
+
 	-- Show and hide the text accordingly
 	function self:Refresh(...)
 		_old_refresh(self, ...)
-		
+
 		if not self.item_img.numtogive or not self.item_img.numtogive.inst:IsValid() then return end
 
 		local data = self.craftingmenu:GetRecipeState(self.recipe_name) 
-		if data ~= nil and data.recipe ~= nil and data.meta ~= nil then
-			if data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
-				self.item_img.numtogive:SetString(""..data.recipe.numtogive)
-				self.item_img.numtogive:Show()
-			else
-				self.item_img.numtogive:SetString("")
-				self.item_img.numtogive:Hide()
-			end
+		if data ~= nil and data.recipe ~= nil and data.meta ~= nil and data.recipe.numtogive ~= nil and data.recipe.numtogive > 1 then
+			self.item_img.numtogive:SetString(data.recipe.numtogive)
+			self.item_img.numtogive:Show()
 		else
 			self.item_img.numtogive:SetString("")
 			self.item_img.numtogive:Hide()
