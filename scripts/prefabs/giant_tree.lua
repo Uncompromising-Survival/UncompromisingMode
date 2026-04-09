@@ -3,10 +3,10 @@ require "prefabutil"
 local assets =
 {
 
-	Asset("ANIM", "anim/um_hoodedtree.zip"),
+    Asset("ANIM", "anim/um_hoodedtree.zip"),
     Asset("IMAGE", "images/map_icons/um_hoodedtree.tex"),
     Asset("ATLAS", "images/map_icons/um_hoodedtree.xml"),
-	
+    
 }
 
 local CANOPY_SHADOW_DATA = require("prefabs/giant_tree_canopy")
@@ -218,9 +218,9 @@ local function _GroundDetectionUpdate(debris, override_density,force_shatter)
             elseif debris.components.inventoryitem then
                 debris.components.inventoryitem.canbepickedup = true
             end
-			if force_shatter then
-				debris:Remove()
-			end
+            if force_shatter then
+                debris:Remove()
+            end
         end
     elseif debris:GetTimeAlive() < 3 then
         if y < 2 then
@@ -278,9 +278,9 @@ end
 
 local function SpawnDebris(inst, chopper, loottable,loc_override,force_shatter)
     local x, y, z = inst.Transform:GetWorldPosition()
-	if loc_override then
-		x,y,z = loc_override.Transform:GetWorldPosition()
-	end
+    if loc_override then
+        x,y,z = loc_override.Transform:GetWorldPosition()
+    end
     local radius = math.random(3, 5)
     local angle = math.random(0, 2 * PI)
     x = x + radius * math.sin(angle)
@@ -315,25 +315,25 @@ local function SpawnDebris(inst, chopper, loottable,loc_override,force_shatter)
             else
                 if TheWorld.Map:IsVisualGroundAtPoint(x, y, z) then
                     if debris:HasTag("spider") then
-						if debris.prefab == "spider_trapdoor" then
-							debris.AnimState:SetBuild("spider_trapdoor_hooded")
-							debris.hooded = true
-						end
+                        if debris.prefab == "spider_trapdoor" then
+                            debris.AnimState:SetBuild("spider_trapdoor_hooded")
+                            debris.hooded = true
+                        end
                         debris.Physics:Teleport(x, y, z)
                         debris.sg:GoToState("dropper_enter")
-						if chopper then
-							if debris.components.combat ~= nil and not chopper:HasTag("spiderwhisperer") then
-								debris.components.combat:SuggestTarget(chopper)
-							end
-						end
+                        if chopper then
+                            if debris.components.combat ~= nil and not chopper:HasTag("spiderwhisperer") then
+                                debris.components.combat:SuggestTarget(chopper)
+                            end
+                        end
                     end
                     if debris:HasTag("aphid") then
                         debris.Physics:Teleport(x, y, z)
-						if chopper then
-							if debris.components.combat then
-								debris.components.combat:SuggestTarget(chopper)
-							end
-						end
+                        if chopper then
+                            if debris.components.combat then
+                                debris.components.combat:SuggestTarget(chopper)
+                            end
+                        end
                         debris.sg:GoToState("enter_loop")
                     end
                 else
@@ -418,20 +418,16 @@ local function OnShaved(inst, shaver, shave_item)
     if not inst.components.timer:TimerExists("remoss") then
         inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME * 3)
     end
-	inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:PlayAnimation("idle")
 end
 
 local function CanShave(inst, shaver, shave_item)
-    return inst.components.shaveable.prize_count > 0
+    local workable = inst.components.workable
+    return inst.components.shaveable.prize_count > 0 and workable and workable:CanBeWorked()
 end
 
 local function TryAddShaveable(inst)
-	if not inst.components.shaveable then
-		inst:AddComponent("shaveable")
-		inst.components.shaveable:SetPrize("um_moss", 1)
-		inst.components.shaveable.can_shave_test = CanShave
-		inst.components.shaveable.on_shaved = OnShaved
-	end
+    inst.components.shaveable.prize_count = 1
 end
 
 local function on_chopped_down(inst, chopper)
@@ -441,12 +437,12 @@ local function on_chopped_down(inst, chopper)
         inst.components.workable:SetWorkLeft(inst.previouschops)
         inst.components.workable:SetOnWorkCallback(on_chop)
         inst.components.workable:SetOnFinishCallback(on_chopped_down)
-		if inst.components.timer:TimerExists("remoss") then
-			inst.AnimState:PlayAnimation("idle")
-		else
-			inst.AnimState:PlayAnimation("idle_moss_full")
-			TryAddShaveable(inst)
-		end
+        if inst.components.timer:TimerExists("remoss") then
+            inst.AnimState:PlayAnimation("idle")
+        else
+            inst.AnimState:PlayAnimation("idle_moss_full")
+            TryAddShaveable(inst)
+        end
     else
         inst.previouschops = 0
         inst.chopped = true
@@ -454,11 +450,11 @@ local function on_chopped_down(inst, chopper)
         inst.SoundEmitter:PlaySound("dontstarve/forest/treeCrumble", nil, .4)
         inst:RemoveComponent("workable")
         BringTheForestDown(inst, chopper)
-		
+        
         if inst.components.shaveable then -- remove shaveable
-			inst:RemoveComponent("shaveable")
-		end
-		
+            inst:RemoveComponent("shaveable")
+        end
+        
         inst.AnimState:PlayAnimation("idle_damaged")
         inst.components.timer:StartTimer("regrow", TUNING.TOTAL_DAY_TIME*3)
         if inst.components.timer:TimerExists("remoss") then
@@ -476,25 +472,25 @@ local function PickType(inst)
     inst.stretchx = math.random(-0.1, 0.1)
     --inst.stretchy = math.random(-0.1, 0.1)
     if math.random() > 0.9 then
-		inst.mossy = true
-		inst.AnimState:PlayAnimation("idle_moss_full")
-		TryAddShaveable(inst)
+        inst.mossy = true
+        inst.AnimState:PlayAnimation("idle_moss_full")
+        TryAddShaveable(inst)
     else
         inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME*5)
-		if inst.components.shaveable then
-			inst:RemoveComponent("shaveable")
-		end
+        if inst.components.shaveable then
+            inst:RemoveComponent("shaveable")
+        end
     end
 end
 
 local function AnimNext(inst)
     if inst.components.workable and inst.components.workable:CanBeWorked() then
-		if inst.components.timer:TimerExists("remoss") then
-			inst.AnimState:PlayAnimation("idle")
-		else
-			TryAddShaveable(inst)
-			inst.AnimState:PlayAnimation("idle_moss_full")
-		end
+        if inst.components.timer:TimerExists("remoss") then
+            inst.AnimState:PlayAnimation("idle")
+        else
+            --TryAddShaveable(inst)
+            inst.AnimState:PlayAnimation("idle_moss_full")
+        end
     else
         --inst.AnimState:SetBuild("giant_tree" .. inst.bankType .. "_damaged")
         inst.AnimState:PlayAnimation("idle_damaged")
@@ -506,12 +502,12 @@ local function PickBuild(inst)
    if inst.stretchx then
         inst.AnimState:SetBank("um_hoodedtree")
         inst.AnimState:SetBuild("um_hoodedtree")
-		if inst.components.timer:TimerExists("remoss") then
-			inst.AnimState:PlayAnimation("idle")
-		else
-			TryAddShaveable(inst)
-			inst.AnimState:PlayAnimation("idle_moss_full")
-		end
+        if inst.components.timer:TimerExists("remoss") then
+            inst.AnimState:PlayAnimation("idle")
+        else
+            TryAddShaveable(inst)
+            inst.AnimState:PlayAnimation("idle_moss_full")
+        end
         local mult = 1
         if inst.reverse then
             mult = -1
@@ -540,12 +536,12 @@ local function Regrow(inst, data)
         PickBuild(inst)
     end
     if data.name == "remoss" then
-		if inst.components.workable then
-			inst.AnimState:PlayAnimation("idle_moss_full")
-			TryAddShaveable(inst)
-		else
-			inst.components.timer:StartTimer("remoss",TUNING.TOTAL_DAY_TIME*3) -- Tree isn't regrown yet, wait to regrow moss
-		end
+        if inst.components.workable then
+            inst.AnimState:PlayAnimation("idle_moss_full")
+            TryAddShaveable(inst)
+        else
+            inst.components.timer:StartTimer("remoss",TUNING.TOTAL_DAY_TIME*3) -- Tree isn't regrown yet, wait to regrow moss
+        end
     end
 end
 -----------------------------
@@ -558,9 +554,7 @@ local function onsave(inst, data)
     data.infested = inst.infested
     data.stretchx = inst.stretchx
     --data.stretchy = inst.stretchy
-    if inst.reverse then
-        data.reverse = inst.reverse
-    end
+    data.reverse = inst.reverse
 end
 
 local function onload(inst, data)
@@ -640,6 +634,11 @@ local function giant_treefn()
     inst.components.workable:SetOnWorkCallback(on_chop)
     inst.components.workable:SetOnFinishCallback(on_chopped_down)
     ----------------------------------
+    local shaveable = inst:AddComponent("shaveable")
+    shaveable:SetPrize("um_moss", 0)
+    shaveable.can_shave_test = CanShave
+    shaveable.on_shaved = OnShaved
+    ----------------------------------
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", Regrow)
     ----------------------------------
@@ -662,24 +661,24 @@ local function giant_treefn()
     end)
 
     --[[inst:DoTaskInTime(1,function(inst)
-		if inst.mossy then
-			if inst.mossy then
-				TheNet:Announce("inst.mossy is true")
-			else
-				TheNet:Announce("inst.mossy is false")
-			end
-		else
-			TheNet:Announce("inst.mossy is nil")
-		end
-	end)]]
+        if inst.mossy then
+            if inst.mossy then
+                TheNet:Announce("inst.mossy is true")
+            else
+                TheNet:Announce("inst.mossy is false")
+            end
+        else
+            TheNet:Announce("inst.mossy is nil")
+        end
+    end)]]
     inst:ListenForEvent("animover", AnimNext)
 
     inst.OnRemoveEntity = function(inst)
         removecanopyshadow(inst)
     end
-	
-	inst.SpawnDebris = SpawnDebris
-	
+    
+    inst.SpawnDebris = SpawnDebris
+    
     return inst
 end
 
