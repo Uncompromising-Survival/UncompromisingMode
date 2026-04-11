@@ -9,6 +9,10 @@ local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
 --Add the gem enchantable components
 env.AddReplicableComponent("gem_enchantable")
 env.AddPrefabPostInitAny(function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
     if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) then
         inst:AddComponent("gem_enchantable")
     end

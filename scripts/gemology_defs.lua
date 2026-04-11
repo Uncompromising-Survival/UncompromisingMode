@@ -224,6 +224,7 @@ AddUMGemDef("greengem1", {
 local valid_enchants = { "um_gemologygreengem1", --[["um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1",]] "um_gemologyredgem1", "um_gemologyredgem2", --[["um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1"]] }
 
 local function addRandomGemEffects(inst, item, tier)
+    print("randomizing gem effect")
     if inst.gemology_data.um_gemologygreengem2.gem_effects then
         for k, v in pairs(inst.gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
@@ -234,20 +235,14 @@ local function addRandomGemEffects(inst, item, tier)
 
     local tries = 10
     local enchant_nums = 0
-    local max_enchants = 1
+    local max_enchants = 1 --TODO: RESET BACK TO 3
 
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
-        if IsEnchantValid(enchant) then --don't add already existing other enchants.
-            print("is valid")
-            print("Has Enchant?", inst.components.gem_enchantable:HasEnchant(enchant), enchant)
-
-            if not inst.components.gem_enchantable:HasEnchant(enchant) then
-                print("adding echant "..enchant.." at tier "..tier)
-                inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-                inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
-                enchant_nums = enchant_nums + 1
-            end
+        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) then --don't add already existing other enchants.
+            inst.components.gem_enchantable:AddEnchantment(enchant, tier)
+            inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
+            enchant_nums = enchant_nums + 1
         end
 
         tries = tries - 1

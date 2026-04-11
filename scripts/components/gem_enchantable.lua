@@ -34,6 +34,9 @@ local GemEnchantable = Class(function(self, inst)
         self.inst.gemology_data[v] = {}
     end
 
+    --probably should add this
+    self.inst:AddTag("gem_enchantable")
+
     self.gem_update_task = inst:DoPeriodicTask(GEM_UPDATE_RATE, function(item)
         if item ~= nil and item:IsValid() and item.components.gem_enchantable then
             for enchant, tier in pairs(item.components.gem_enchantable.enchants) do
@@ -117,16 +120,11 @@ end
 
 function GemEnchantable:OnLoad(data)
     local _enchants = data.enchants
+    self.inst.gemology_data = data.gem_data
+
     for enchant, tier in pairs(_enchants) do
         self:AddEnchantment(enchant, tier)
     end
-
-    self.inst.gemology_data = data.gem_data
-end
-
-function GemEnchantable:LoadPostPass(newents, savedata)
-    --maybe???? idfk how this works
-    self.inst.gemology_data = savedata.gem_data
 end
 
 function GemEnchantable:OnRemoveFromEntity()
