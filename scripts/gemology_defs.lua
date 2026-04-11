@@ -410,5 +410,95 @@ AddUMGemDef("yellowgem2", {
     }
 })
 
+-----------------------------------------------------------------------------------
+---Pale1
+
+AddUMGemDef("palegem1", {
+    color = RGB(220, 220, 220),
+    fns = {
+        onapply = function(item, tier)
+            -- stuff is handled elsewhere
+            -- see init/init_gemology/special.lua
+        end,
+        onattack = function(item, attacker, target, tier)
+            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil) then
+                local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
+                target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
+            end
+        end,
+        onremove = function(item, tier)
+        end
+    }
+})
+
+AddUMGemDef("palegem2", {
+    color = RGB(220, 220, 220),
+    fns = {
+        onapply = function(item, tier)
+            if item.components.finiteuses then
+                local pct = item.components.finiteuses:GetPercent()
+                local total = item.components.finiteuses.total
+                item.volatile_gemology_data.um_gemologypalegem2.old_finite = total
+                item.components.finiteuses:SetMaxUses(total * (1 + tier))
+                item.components.finiteuses:SetPercent(pct)
+            end
+            if item.components.fueled then -- Future, there are other items that fall into this category that cannot be learned or prototyped
+                local pct = item.components.fueled:GetPercent()
+                local total = item.components.fueled.maxfuel
+                item.volatile_gemology_data.um_gemologypalegem2.old_fueled = total
+
+                item.components.fueled:SetPercent(pct * total * (1 + tier))
+            end
+            if item.components.perishable then -- it *might* work on the hambat, doesn't seem certain though
+                local pct = item.components.perishable:GetPercent()
+                item.volatile_gemology_data.um_gemologypalegem2.old_perish = item.components.perishable.perishtime
+
+                item.components.perishable.perishtime = item.components.perishable.perishtime * (1 + tier)
+
+                item.components.perishable:SetPercent(pct)
+            end
+
+            if item.components.finiteuses and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab].nounlock == true) then
+                if tier ~= 1 then
+                    local _Use = item.components.finiteuses.Use
+                    item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
+                    item.components.finiteuses.Use = function(self, num) -- Modify only this item's version of finiteuses
+                        local chance = math.random()
+                        if (chance > 0.7 and tier == 2) or (chance > 0.4 and tier == 3) then
+                            _Use(self, num)
+                        end
+                    end
+                end
+            end
+        end,
+        onattack = function(item, attacker, target, tier)
+        end,
+        onremove = function(item, tier)
+            if item.components.finiteuses then
+                local pct = item.components.finiteuses:GetPercent()
+                item.components.finiteuses:SetMaxUses(item.volatile_gemology_data.um_gemologypalegem2.old_finite)
+                item.components.finiteuses:SetPercent(pct)
+
+                if item.volatile_gemology_data.um_gemologypalegem2.old_use ~= nil then
+                    item.components.finiteuses.Use = item.volatile_gemology_data.um_gemologypalegem2.old_use
+                end
+            end
+
+            if item.components.fueled then
+                local pct = item.components.fueled:GetPercent()
+                item.components.fueled.maxfuel = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
+                item.components.fueled:SetPercent(pct)
+            end
+
+            if item.components.perishable then
+                local pct = item.components.perishable:GetPercent()
+                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologypalegem2.old_perish
+                item.components.perishable:SetPercent(pct)
+            end
+        end
+    }
+})
+
+
 
 return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }

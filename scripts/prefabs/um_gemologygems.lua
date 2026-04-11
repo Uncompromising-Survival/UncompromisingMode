@@ -62,7 +62,7 @@ local function Shine(inst)
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 
-    if inst.tier == 3 then
+    if inst.tier == 3 and inst:IsRevealed()  then
         inst.shinetask = inst:DoTaskInTime(4 + math.random() * 5, Shine)
     end
 end
@@ -77,7 +77,7 @@ local function SetTier(inst, tier)
     if inst.tier ~= nil then
         inst.tier = tier
 
-        if inst.tier == 3 then
+        if inst.tier == 3 and inst:IsRevealed() then
             inst.shinetask = inst:DoTaskInTime(0, Shine)
         end
     end

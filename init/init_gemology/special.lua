@@ -168,7 +168,7 @@ env.AddComponentPostInit("combat", function(self)
     local _CalcDamage = self.CalcDamage
     function self:CalcDamage(target, weapon, multiplier, ...)
         if weapon and weapon.components.gem_enchantable then
-            local peerless = weapon.components.gem_enchantable.enchants["um_gemologypalegem2"]
+            local peerless = weapon.components.gem_enchantable.enchants["um_gemologypalegem1"]
 
             local basemultiplier = self.damagemultiplier
             local externaldamagemultipliers = self.externaldamagemultipliers
