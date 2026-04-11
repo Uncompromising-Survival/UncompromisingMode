@@ -14,6 +14,7 @@ local function on_enchants(self, flag)
         end
 
         self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
+        self.inst.replica.gem_enchantable._slots:set(self.slots)
 
         self.update_flag = false
     end
@@ -55,8 +56,11 @@ local GemEnchantable = Class(function(self, inst)
             end
         end
     end)
+
+    self.update_flag = true
 end, nil, {
-    update_flag = on_enchants
+    update_flag = on_enchants,
+    slots = on_enchants,
 })
 
 function GemEnchantable:HasEnchant(enchant, tier)
@@ -96,6 +100,8 @@ function GemEnchantable:AddEnchantment(enchant, tier)
         print("running onapply for "..enchant)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
+
+    self.slots = self.slots - 1
 
     self.update_flag = true
 end

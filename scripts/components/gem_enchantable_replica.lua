@@ -5,6 +5,7 @@ local GEM_LOOKUP, INVERTED_GEM_LOOKUP =  DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOK
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self._enchants = net_smallbytearray(inst.GUID, "gemology.enchants", "gemology.onenchantsdirty")
+    self._slots = net_int(inst.GUID, "gemology.slots","gemology.onslotsdirty")
 end)
 
 function GemEnchantable:SetEnchantments(enchants)
