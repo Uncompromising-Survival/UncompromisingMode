@@ -25,7 +25,7 @@ The values are:
 Additional note:
 
 Every gemolyable item has a field called gemology_data, with holds any relevant data for gems. For example:
-item.gemology_data[gem_name].foo = true
+item.persistent_gemology_data[gem_name].foo = true
 
 This is so we can save some gem-specific data so it can probably revert when removed.
 ]]
@@ -149,14 +149,46 @@ local function GetRandomTargetOfSameType(attacker, target)
     local tag_to_search = {}
 
     local ents = TheSim:FindEntities(x, y, z, 24)
-    local ent_same_prefab = { target }
+    local ent_same_prefab = {}
     for i, v in ipairs(ents) do
-        if v.prefab == target.prefab and ((not v:HasTag("stump") and not v:HasTag("stump")) or (target:HasTag("stump") and v:HasTag("stump"))) then
+        if v.prefab == target.prefab and ((not v:HasTag("stump") and not v:HasTag("stump")) or (target:HasTag("stump") and v:HasTag("stump"))) and target ~= v then
             table.insert(ent_same_prefab, v)
         end
     end
-    return ent_same_prefab[math.random(1, #ent_same_prefab)]
+
+    return #ent_same_prefab > 0 and ent_same_prefab[math.random(1, #ent_same_prefab)] or nil
 end
+
+local swilson_symbols_to_hide = {
+    "arm_lower",
+    "arm_lower_cuff",
+    "arm_upper",
+    "arm_upper_skin",
+    "cheeks",
+    "face",
+    "foot",
+    "hairpigtails",
+    "hairfront",
+    "hair_hat",
+    "hand",
+    "headbase",
+    "headbase_hat",
+    "leg",
+    "skirt",
+    "torso",
+    "torso_pelvis",
+    "hair",
+    "swap_icon",
+    "swap_face",
+    "swap_face_eye_glow",
+    "swap_face_eye_glow_glasses",
+    "swap_body_tall",
+    "swap_body",
+    --"swap_object",
+    "swap_hat",
+    "beard",
+    "tail",
+}
 
 local function SendShadowClone(item, owner, target, tier)
     if target:IsValid() and (tier - 1) * 0.3 > math.random() and tier > 1 then
@@ -167,22 +199,26 @@ local function SendShadowClone(item, owner, target, tier)
         end
 
         local swilson = SpawnPrefab("swilson_labotomized")
-
+        for i, v in ipairs(swilson_symbols_to_hide) do
+            swilson.AnimState:HideSymbol(v)
+        end
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
-        local x, y, z = newtarget.Transform:GetWorldPosition()
-        swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
-        --swilson.green = 1 -- Tried making him green, it just looks goofy
-        swilson.dupe_toolweapon = SpawnPrefab(item.prefab)
-        swilson.components.inventory:Equip(swilson.dupe_toolweapon)
-        swilson.dupe_toolweapon.components.inventoryitem:SetOnDroppedFn(swilson.dupe_toolweapon.Remove)
+        if newtarget ~= nil then
+            local x, y, z = newtarget.Transform:GetWorldPosition()
+            swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
+            --swilson.green = 1 -- Tried making him green, it just looks goofy
+            swilson.dupe_toolweapon = SpawnPrefab(item.prefab)
+            swilson.components.inventory:Equip(swilson.dupe_toolweapon)
+            swilson.dupe_toolweapon.components.inventoryitem:SetOnDroppedFn(swilson.dupe_toolweapon.Remove)
 
-        if target.components.workable and not (target.prefab == "punchingbag" or target.prefab == "punchingbag_lunar" or target.prefab == "punchingbag_shadow") then
-            swilson.work = 1
-            swilson.LabWork(swilson, owner, newtarget)
-        elseif target.components.health then
-            swilson.attack = item.components.weapon.damage
-            swilson.LabAttack(swilson, owner, newtarget)
+            if target.components.workable and not (target.prefab == "punchingbag" or target.prefab == "punchingbag_lunar" or target.prefab == "punchingbag_shadow" or (target.components.workable and target.components.workable.action == ACTIONS.NET)) then
+                swilson.work = 1
+                swilson.LabWork(swilson, owner, newtarget)
+            elseif target.components.health then
+                swilson.attack = item.components.weapon.damage
+                swilson.LabAttack(swilson, owner, newtarget)
+            end
         end
     end
 end
@@ -196,7 +232,7 @@ AddUMGemDef("greengem1", {
             local tool = item.components.tool
 
             if tool and tool.actions then
-                item.gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
+                item.volatile_gemology_data.um_gemologygreengem1.tool_actions = deepcopy(tool.actions)
 
                 for i, v in ipairs(action_list) do
                     if tool.actions[v] then
@@ -212,7 +248,7 @@ AddUMGemDef("greengem1", {
 
             local tool = item.components.tool
             if tool and tool.actions then
-                tool.actions = item.gemology_data.um_gemologygreengem1.tool_actions
+                tool.actions = item.volatile_gemology_data.um_gemologygreengem1.tool_actions
             end
         end
     }
@@ -225,8 +261,8 @@ local valid_enchants = { "um_gemologygreengem1", --[["um_gemologyyellowgem1", "u
 
 local function addRandomGemEffects(inst, item, tier)
     print("randomizing gem effect")
-    if inst.gemology_data.um_gemologygreengem2.gem_effects then
-        for k, v in pairs(inst.gemology_data.um_gemologygreengem2.gem_effects) do
+    if inst.persistent_gemology_data.um_gemologygreengem2.gem_effects then
+        for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
                 inst.components.gem_enchantable:RemoveEnchantment(k)
             end
@@ -235,13 +271,13 @@ local function addRandomGemEffects(inst, item, tier)
 
     local tries = 10
     local enchant_nums = 0
-    local max_enchants = 1 --TODO: RESET BACK TO 3
+    local max_enchants = 3
 
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
         if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
+            inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
 
@@ -253,8 +289,8 @@ AddUMGemDef("greengem2", {
     color = RGB(175, 245, 172),
     fns = {
         onapply = function(item, tier)
-            if item.gemology_data.um_gemologygreengem2.gem_effects == nil then
-                item.gemology_data.um_gemologygreengem2.gem_effects = {}
+            if item.persistent_gemology_data.um_gemologygreengem2.gem_effects == nil then
+                item.persistent_gemology_data.um_gemologygreengem2.gem_effects = {}
 
                 addRandomGemEffects(item, item, tier)
             end
@@ -263,8 +299,8 @@ AddUMGemDef("greengem2", {
             end)
         end,
         onremove = function(item, tier)
-            if item.gemology_data.um_gemologygreengem2.gem_effects then
-                for k, v in pairs(item.gemology_data.um_gemologygreengem2.gem_effects) do
+            if item.persistent_gemology_data.um_gemologygreengem2.gem_effects then
+                for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
                     if item.components.gem_enchantable.enchants[k] then
                         item.components.gem_enchantable:RemoveEnchantment(k)
                     end
@@ -273,5 +309,6 @@ AddUMGemDef("greengem2", {
         end
     }
 })
+
 
 return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }

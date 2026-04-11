@@ -26,12 +26,20 @@ local GemEnchantable = Class(function(self, inst)
 
     self.update_flag = false
 
-    if self.inst.gemology_data == nil then
-        self.inst.gemology_data = {}
+    --this data saves
+    if self.inst.persistent_gemology_data == nil then
+        self.inst.persistent_gemology_data = {}
     end
 
+    --this data does NOT save
+    if self.inst.volatile_gemology_data == nil then
+        self.inst.volatile_gemology_data = {}
+    end
+
+
     for k,v in pairs(GEM_LOOKUP) do
-        self.inst.gemology_data[v] = {}
+        self.inst.persistent_gemology_data[v] = {}
+        self.inst.volatile_gemology_data[v] = {}
     end
 
     --probably should add this
@@ -99,7 +107,8 @@ function GemEnchantable:RemoveEnchantment(enchant)
 
     self.enchants[enchant] = nil
 
-    self.inst.gemology_data[enchant] = {} --clear data for this effect.
+    self.inst.persistent_gemology_data[enchant] = {} --clear data for this effect.
+    self.inst.volatile_gemology_data[enchant] = {} --clear data for this effect.
 
     self.update_flag = true
 end
@@ -114,13 +123,13 @@ function GemEnchantable:OnSave()
 
     return {
         enchants = _enchants,
-        gem_data = self.inst.gemology_data
+        gem_data = self.inst.persistent_gemology_data
     }
 end
 
 function GemEnchantable:OnLoad(data)
     local _enchants = data.enchants
-    self.inst.gemology_data = data.gem_data
+    self.inst.persistent_gemology_data = data.gem_data
 
     for enchant, tier in pairs(_enchants) do
         self:AddEnchantment(enchant, tier)
