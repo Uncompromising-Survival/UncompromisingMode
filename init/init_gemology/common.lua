@@ -6,36 +6,6 @@ local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP
 --------------------------------------------------------------------------
 --Common stuff for every gem.
 
---extra gemology data
-env.AddPrefabPostInitAny(function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
-
-    local _OnSave = inst.OnSave
-    local _OnLoad = inst.OnLoad
-
-    inst.OnSave = function(inst, data, ...)
-        data.gemology_data = inst.gemology_data
-
-        if _OnSave ~= nil then
-            return _OnSave(inst, data, ...)
-        else
-            return data
-        end
-    end
-
-    inst.OnLoad = function(inst, data, ...)
-        if data ~= nil and data.gemology_data ~= nil then
-            inst.gemology_data = data.gemology_data
-        end
-
-        if _OnLoad ~= nil then
-            _OnLoad(inst, data, ...)
-        end
-    end
-end)
-
 --Add the gem enchantable components
 env.AddReplicableComponent("gem_enchantable")
 env.AddPrefabPostInitAny(function(inst)
@@ -81,7 +51,7 @@ local function GetFirstGemColor(enchants)
         return GEM_DEFS["um_gemologygreengem2"].color --prio chaos emerald so it doesn't just tell you every effect.
     else
         for k, v in pairs(enchants) do
-            return GEM_DEFS[v].color --TODO: Make colors shift. 
+            return GEM_DEFS[v].color --TODO: Make colors shift.
         end
     end
 end
@@ -110,7 +80,9 @@ env.AddComponentPostInit("weapon", function(self)
         if self.inst.components.gem_enchantable then
             for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 print("running onattack fn for " .. enchant)
-                GEM_DEFS[enchant].fns.onattack(self.inst, attacker, target, tier)
+                if GEM_DEFS[enchant].fns.onattack ~= nil then
+                    GEM_DEFS[enchant].fns.onattack(self.inst, attacker, target, tier)
+                end
             end
         end
 
@@ -135,10 +107,9 @@ for k, action in pairs(valid_work_actions) do
         print("action stuff")
         print("ret", ret)
         if ret then
-            
             local tool = act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
             print("tool", tool)
-            print("is enchantable?", tool and tool.components.gem_enchantable~=nil)
+            print("is enchantable?", tool and tool.components.gem_enchantable ~= nil)
             if tool and tool.components.gem_enchantable ~= nil then
                 for enchant, tier in pairs(tool.components.gem_enchantable.enchants) do
                     print("enchants", enchant, tier)

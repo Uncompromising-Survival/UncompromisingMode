@@ -234,7 +234,7 @@ if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
 end
 
-modimport("init/init_loadingtips")
+--modimport("init/init_loadingtips")
 
 --food stats!
 if GetModConfigData("food_stats") then

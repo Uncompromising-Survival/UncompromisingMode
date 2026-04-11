@@ -221,36 +221,50 @@ AddUMGemDef("greengem1", {
 -----------------------------------------------------------------------------------
 ---Green2
 
-local valid_enchants = { "um_gemologygreengem1", "um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1", "um_gemologyredgem1", "um_gemologyredgem2", "um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1" }
+local valid_enchants = { "um_gemologygreengem1", --[["um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1",]] "um_gemologyredgem1", "um_gemologyredgem2", --[["um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1"]] }
+
+local function addRandomGemEffects(inst, item, tier)
+    if inst.gemology_data.um_gemologygreengem2.gem_effects then
+        for k, v in pairs(inst.gemology_data.um_gemologygreengem2.gem_effects) do
+            if inst.components.gem_enchantable.enchants[k] then
+                inst.components.gem_enchantable:RemoveEnchantment(k)
+            end
+        end
+    end
+
+    local tries = 10
+    local enchant_nums = 0
+    local max_enchants = 1
+
+    while enchant_nums < max_enchants and tries > 0 do
+        local enchant = valid_enchants[math.random(#valid_enchants)]
+        if IsEnchantValid(enchant) then --don't add already existing other enchants.
+            print("is valid")
+            print("Has Enchant?", inst.components.gem_enchantable:HasEnchant(enchant), enchant)
+
+            if not inst.components.gem_enchantable:HasEnchant(enchant) then
+                print("adding echant "..enchant.." at tier "..tier)
+                inst.components.gem_enchantable:AddEnchantment(enchant, tier)
+                inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
+                enchant_nums = enchant_nums + 1
+            end
+        end
+
+        tries = tries - 1
+    end
+end
 
 AddUMGemDef("greengem2", {
     color = RGB(175, 245, 172),
     fns = {
         onapply = function(item, tier)
-            item.gemology_data.um_gemologygreengem2.gem_effects = {}
+            if item.gemology_data.um_gemologygreengem2.gem_effects == nil then
+                item.gemology_data.um_gemologygreengem2.gem_effects = {}
 
+                addRandomGemEffects(item, item, tier)
+            end
             item:WatchWorldState("startday", function(inst)
-                if inst.gemology_data.um_gemologygreengem2.gem_effects then
-                    for k, v in pairs(inst.gemology_data.um_gemologygreengem2.gem_effects) do
-                        if inst.components.gem_enchantable.enchants[k] then
-                            inst.components.gem_enchantable:RemoveEnchantment(k)
-                        end
-                    end
-                end
-
-                local tries = 10
-                local enchant_nums = 0
-
-                while enchant_nums < 3 and tries > 0 do
-                    local enchant = valid_enchants[math.random(#valid_enchants)]
-                    if IsEnchantValid(enchant) and not inst.components.gem_enchantable.enchants[enchant] then --don't add already existing other enchants.
-                        inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-                        inst.gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
-                        enchant_nums = enchant_nums + 1
-                    end
-
-                    tries = tries - 1
-                end
+                addRandomGemEffects(inst, item, tier)
             end)
         end,
         onremove = function(item, tier)

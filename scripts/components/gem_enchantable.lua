@@ -48,8 +48,28 @@ end, nil, {
     update_flag = on_enchants
 })
 
+function GemEnchantable:HasEnchant(enchant, tier)
+    print(enchant, tier)
+    assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
+    if tier ~= nil then
+        assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier.."\" Gem tiers are "..MIN_GEM_TIER.." to "..MAX_GEM_TIER..".")
+        assert(type(tier) == 'number', "Invalid argument #2 for HasEnchant, required type: number - provided type: "..type(tier))
+    end
+
+    print(self.enchants[enchant])
+
+    if tier == nil then
+        return self.enchants[enchant] ~= nil
+    else
+        return self.enchants[enchant] == tier
+    end
+end
+
 function GemEnchantable:AddEnchantment(enchant, tier)
-    assert(self.enchants[enchant] == nil, "Attempted to add enchantment \"" .. enchant .. "\", was already applied.")
+    if self.enchants[enchant] ~= nil then
+        print("[WARN] Added enchantment \"" .. enchant .. "\", was already applied.")
+    end
+
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to add unknown enchantment: " .. enchant)
     assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier.."\" Gem tiers are "..MIN_GEM_TIER.." to "..MAX_GEM_TIER..".")
 
@@ -90,7 +110,8 @@ function GemEnchantable:OnSave()
     end
 
     return {
-        enchants = _enchants
+        enchants = _enchants,
+        gem_data = self.inst.gemology_data
     }
 end
 
@@ -99,6 +120,13 @@ function GemEnchantable:OnLoad(data)
     for enchant, tier in pairs(_enchants) do
         self:AddEnchantment(enchant, tier)
     end
+
+    self.inst.gemology_data = data.gem_data
+end
+
+function GemEnchantable:LoadPostPass(newents, savedata)
+    --maybe???? idfk how this works
+    self.inst.gemology_data = savedata.gem_data
 end
 
 function GemEnchantable:OnRemoveFromEntity()
@@ -119,5 +147,7 @@ end
 function GemEnchantable:AddSlot(num)
     self.slots = self.slots + num
 end
+
+
 
 return GemEnchantable
