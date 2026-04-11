@@ -750,3 +750,4 @@ DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is s
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Curious, it appears its frozen exterior keeps it protected."
+DESCRIBE.UM_THULECITE_RAZOR= "I'm going to pretend I didn't spend valuable resources for that."

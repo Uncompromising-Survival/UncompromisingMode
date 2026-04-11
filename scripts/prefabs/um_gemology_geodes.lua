@@ -55,7 +55,7 @@ local loot_table = {
             um_gemologybluegem1 = 1,
             um_gemologybluegem2 = 1,
             um_gemologypurplegem2 = 0.5,
-            greengem = 0.05,
+            bluegem = 0.5,
         },
     },
     ["um_gemology_geode_guano"] =

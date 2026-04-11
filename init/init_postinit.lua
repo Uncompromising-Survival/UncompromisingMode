@@ -71,7 +71,8 @@ local component_post = {
 	"temperature",
     "playercontroller",
 	"possessedaxe",
-	"inventoryitem"
+	"inventoryitem",
+    "pickable",
 }
 
 local prefab_post = {
@@ -260,7 +261,8 @@ local stategraph_post = {
     "moose",
     "mossling",
     "hound",
-    "bigshadowtentacle"
+    "bigshadowtentacle",
+    "worm"
 }
 
 local class_post = {

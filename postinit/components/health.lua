@@ -207,14 +207,13 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     return false
 end
 
-
 env.AddComponentPostInit("health", function(self)
     local _SetVal = self.SetVal
     function self:SetVal(val, cause, afflicter, ...)
         if StopDeathStuffHere(self, val, cause, afflicter, ...) then
             return
         end
-        return  _SetVal(self, val, cause, afflicter, ...)
+        return _SetVal(self, val, cause, afflicter, ...)
     end
     
     if TUNING.DSTU.ONEHP == true then-- All this code is here

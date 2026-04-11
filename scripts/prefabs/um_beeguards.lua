@@ -342,7 +342,6 @@ local function fnmain(bee, build)
     if bee == "blocker" then
         inst.components.health:SetMaxHealth(15 * TUNING.BEEGUARD_HEALTH)
         inst.Transform:SetScale(1.6, 1.6, 1.6)
-
         inst:ListenForEvent("timerdone", SlowDeath)
         inst.components.combat:SetRange(TUNING.BEEGUARD_ATTACK_RANGE)
     end
@@ -352,15 +351,15 @@ local function fnmain(bee, build)
         inst.MortarAttack = MortarAttack
         inst:DoTaskInTime(math.random(1, 3), MortarAttack)
         inst.dohoney = Honey
+        inst.sg.mem.noelectrocute = true
     end
     if bee == "shooter" then
         inst.components.health:SetMaxHealth(0.5 * TUNING.BEEGUARD_HEALTH)
         inst.Transform:SetScale(1.2, 1.2, 1.2)
         inst.Shoot = Shoot
         inst.CircleFormation = CircleFormation
-        inst:ListenForEvent("timerdone", function(inst)
-            inst.sg:GoToState("shoot_pre")
-        end)
+        inst:ListenForEvent("timerdone", function(inst) inst.sg:GoToState("shoot_pre") end)
+        inst.sg.mem.noelectrocute = true
     end
     inst:AddComponent("linearcircler")
     inst.persists = false

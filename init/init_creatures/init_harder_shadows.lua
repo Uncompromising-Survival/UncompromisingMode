@@ -17,13 +17,13 @@ end
 
 AddPlayerPostInit(function(inst)
 
-	if not GLOBAL.TheWorld.ismastersim then
+    if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
 
-	if GLOBAL.TheWorld.ismastersim then
-		inst:AddComponent("moreshadows")
-	end
+    if GLOBAL.TheWorld.ismastersim then
+        inst:AddComponent("moreshadows")
+    end
 
 end)--]]
 -------------------------------------------------- Prefabs
@@ -66,9 +66,7 @@ TUNING.SANITY_BECOME_SANE_THRESH  = 45/200 -- 22.5%--]]
 -------------------------------------------------- Components
 
 local function replace_shadowcreaturespawner(inst)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
+    if not GLOBAL.TheWorld.ismastersim then return end
     --inst:RemoveComponent("shadowcreaturespawner") -- It won't work, I disbled the original component with an if-else instead
     inst:AddComponent("uncompromising_shadowcreaturespawner")
 end
@@ -86,9 +84,7 @@ local function crawlinghorror_postinit(inst)
     inst:AddComponent("uncompromising_shadowfollower")
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(GLOBAL.COLLISION.GROUND)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
+    if not GLOBAL.TheWorld.ismastersim then return end
     inst.components.lootdropper:SetLoot({ "nightmarefuel" })
     inst.components.lootdropper:SetChanceLootTable(nil)
     inst.sanityreward = TUNING.SANITY_SMALL
@@ -98,9 +94,7 @@ local function terrorbeak_postinit(inst)
     inst:AddComponent("uncompromising_shadowfollower")
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(GLOBAL.COLLISION.GROUND)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
+    if not GLOBAL.TheWorld.ismastersim then return end
     inst.components.lootdropper:SetLoot({ "nightmarefuel" })
     inst.components.lootdropper:SetChanceLootTable(nil)
     inst.sanityreward = SANITY_MEDLARGE
@@ -117,9 +111,7 @@ local function daytime(inst)
 end
 
 local function crawlingnightmare_postinit(inst)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
+    if not GLOBAL.TheWorld.ismastersim then return end
     inst.components.lootdropper:SetLoot({ "nightmarefuel" })
     inst.components.lootdropper:SetChanceLootTable(nil)
 
@@ -127,9 +119,7 @@ local function crawlingnightmare_postinit(inst)
 end
 
 local function nightmarebeak_postinit(inst)
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
+    if not GLOBAL.TheWorld.ismastersim then return end
     inst.components.lootdropper:SetLoot({ "nightmarefuel" })
     inst.components.lootdropper:SetChanceLootTable(nil)
 
@@ -156,11 +146,8 @@ end
 
 local function purplepostinit(inst)
     inst:AddTag("NOBLOCK")
-
-    if not GLOBAL.TheWorld.ismastersim then
-        return
-    end
-    inst:DoTaskInTime(0.1, inducedcheck) --0.1... sometimes it seems certain nm creatures don't actualy see the fuel farmer upon spawn if we use 0 instead.
+    if not GLOBAL.TheWorld.ismastersim then return end
+    inst:DoTaskInTime(0.1, inducedcheck) --0.1... sometimes it seems certain nm creatures don't actually see the fuel farmer upon spawn if we use 0 instead.
 end
 
 AddPrefabPostInit("crawlinghorror", purplepostinit)
@@ -169,13 +156,11 @@ AddPrefabPostInit("terrorbeak", purplepostinit)
 AddPrefabPostInit("creepingfear", purplepostinit)
 AddPrefabPostInit("dreadeye", purplepostinit)
 
-AddPrefabPostInit("ruinsnightmare", function(inst) -- Increase the damage of the ruins nightmare to 75, why? because it's going to make it more effective as wortox's minion when he gets really lucky and rolls it
-	if not GLOBAL.TheWorld.ismastersim then
-		return
-	end
-	inst.components.combat:SetDefaultDamage(GLOBAL.TUNING.DSTU.RUINSNIGHTMARE_DAMAGE)	
-end)
-	
+--[[AddPrefabPostInit("ruinsnightmare", function(inst) -- Increase the damage of the ruins nightmare to 75, why? because it's going to make it more effective as wortox's minion when he gets really lucky and rolls it
+    if not GLOBAL.TheWorld.ismastersim then return end
+    inst.components.combat:SetDefaultDamage(GLOBAL.TUNING.DSTU.RUINSNIGHTMARE_DAMAGE) -- Removing this for now, there's no reason for the default damage on this thing should be higher than 50 in all appearances.
+end)]]
+    
 -------------------------------------------------- StategraphState
 
 local state_teleport_disapper = GLOBAL.State { name = "teleport_disapper",

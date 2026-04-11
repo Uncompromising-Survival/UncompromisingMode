@@ -58,62 +58,62 @@ env.AddPrefabPostInit("firestaff", function(inst)
 end)
 
 if env.GetModConfigData("cooldown_orangestaff_") then
-	local function onblink(staff, pos, caster)
-		if not (caster and staff and staff.components.rechargeable) then
-			return
-		end
+    local function onblink(staff, pos, caster)
+        if not (caster and staff and staff.components.rechargeable) then
+            return
+        end
 
-		local caster_pos = caster:GetPosition()
-		local distance = caster_pos:Dist(pos)
+        local caster_pos = caster:GetPosition()
+        local distance = caster_pos:Dist(pos)
 
-		local sanity_cost
-		local cooldown
+        local sanity_cost
+        local cooldown
 
-		if distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_1 then
-			sanity_cost = TUNING.SANITY_MED
-			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_1
-		elseif distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_2 then
-			sanity_cost = TUNING.SANITY_MEDLARGE
-			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_2
-		else
-			sanity_cost = TUNING.SANITY_LARGE
-			cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_3
-		end
+        if distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_1 then
+            sanity_cost = TUNING.SANITY_MED
+            cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_1
+        elseif distance <= TUNING.DSTU.ORANGESTAFF_DISTANCE_2 then
+            sanity_cost = TUNING.SANITY_MEDLARGE
+            cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_2
+        else
+            sanity_cost = TUNING.SANITY_LARGE
+            cooldown = TUNING.DSTU.ORANGESTAFF_COOLDOWN_3
+        end
 
-		if staff.components.rechargeable:IsCharged() then
-			if caster.components.staffsanity then
-				caster.components.staffsanity:DoCastingDelta(-sanity_cost)
-			elseif caster.components.sanity ~= nil then
-				caster.components.sanity:DoDelta(-sanity_cost)
-			end
+        if staff.components.rechargeable:IsCharged() then
+            if caster.components.staffsanity then
+                caster.components.staffsanity:DoCastingDelta(-sanity_cost)
+            elseif caster.components.sanity ~= nil then
+                caster.components.sanity:DoDelta(-sanity_cost)
+            end
 
-			staff.components.rechargeable:Discharge(cooldown)
-		else
-			if staff.components.blinkstaff and staff.components.blinkstaff.blinktask then
-				staff.components.blinkstaff.blinktask:Cancel()
-			end
-		end
+            staff.components.rechargeable:Discharge(cooldown)
+        else
+            if staff.components.blinkstaff and staff.components.blinkstaff.blinktask then
+                staff.components.blinkstaff.blinktask:Cancel()
+            end
+        end
 
-		staff:RemoveComponent("blinkstaff")
-		staff:DoTaskInTime(cooldown, function(inst)
-			staff:AddComponent("blinkstaff")
-			staff.components.blinkstaff:SetFX("sand_puff_large_front", "sand_puff_large_back")
-			staff.components.blinkstaff.onblinkfn = onblink
-		end)
-	end
+        staff:RemoveComponent("blinkstaff")
+        staff:DoTaskInTime(cooldown, function(inst)
+            staff:AddComponent("blinkstaff")
+            staff.components.blinkstaff:SetFX("sand_puff_large_front", "sand_puff_large_back")
+            staff.components.blinkstaff.onblinkfn = onblink
+        end)
+    end
 
-	env.AddPrefabPostInit("orangestaff", function(inst)
-		if not TheWorld.ismastersim then
-			return
-		end
+    env.AddPrefabPostInit("orangestaff", function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
 
-		inst:AddComponent("rechargeable")
-		inst:RemoveComponent("finiteuses")
+        inst:AddComponent("rechargeable")
+        inst:RemoveComponent("finiteuses")
 
-		if inst.components.blinkstaff then
-			inst.components.blinkstaff.onblinkfn = onblink
-		end
-	end)
+        if inst.components.blinkstaff then
+            inst.components.blinkstaff.onblinkfn = onblink
+        end
+    end)
 end
 
 -- TELELOCATOR STAFF STUFF
@@ -587,7 +587,7 @@ local function SpikeWaves(inst, target, attacker, angle)
             inst:DoTaskInTime(.6, function()
                 local ents = TheSim:FindEntities(dx, dy, dz, 1.5, {"_health", "_combat" }, {"FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
-                    if  v ~= inst and v.components.combat and attacker.components.combat and attacker.components.combat:IsValidTarget(v) then
+                    if  v ~= inst and attacker.components.combat and attacker.components.combat:CanAttack(v) then
                         v.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 8.75})
                     end
                 end
@@ -596,54 +596,101 @@ local function SpikeWaves(inst, target, attacker, angle)
     end
 end
 
-local function WathomBSStaffStuff(inst)
-    local equippable = inst.components.equippable
-    if equippable then
-        local _OnEquip = equippable.onequipfn
-        local function OnEquip(inst, owner, ...)
-            local ret = _OnEquip(inst, owner, ...)
-            local projectile = owner and not owner:HasTag("wathom") and "brilliance_projectile_fx" or nil
-            if inst.components.weapon and inst.components.weapon.projectile ~= projectile then
-                inst.components.weapon:SetProjectile(projectile)
-            end
-            return ret
-        end
-        equippable:SetOnEquip(OnEquip)
+do
+    local function OnMounted(inst, data)
+        local target = data.target
+        if not target then return end
+        local inventory = inst.components.inventory
+        local item = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if item and item.UMSetProjectile then item:UMSetProjectile(inst) end
     end
-    local weapon = inst.components.weapon
-    if weapon then
-        local _OnAttack = weapon.onattack
-        local function OnAttack(inst, attacker, target, skipsanity, ...)
-            local ret = _OnAttack(inst, attacker, target, skipsanity, ...)
-            if attacker:HasTag("wathom") then
-                for angle = -20, 20, 4 do
-                    SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
-                    if target and target.components.combat then 
-                        target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
-                    end
+
+    local function OnDismounted(inst, data)
+        local target = data.target
+        if not target then return end
+        local inventory = inst.components.inventory
+        local item = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        if item and item.UMSetProjectile then item:UMSetProjectile(inst) end
+    end
+
+    local function UMSetProjectile(inst, owner)
+        if not owner or not owner:IsValid() then return end
+        local projectile = owner and (not owner:HasTag("wathom") or owner.components.rider and owner.components.rider:IsRiding()) and "brilliance_projectile_fx" or nil
+        if inst.components.weapon and inst.components.weapon.projectile ~= projectile then inst.components.weapon:SetProjectile(projectile) end
+    end
+
+    local _OnEquip
+    local function OnEquip(inst, owner, ...)
+        local ret = _OnEquip and _OnEquip(inst, owner, ...)
+        if inst.UMSetProjectile then inst:UMSetProjectile(owner) end
+        if owner:HasTag("wathom") then
+            inst:ListenForEvent("mounted", OnMounted, owner)
+            inst:ListenForEvent("dismounted", OnDismounted, owner)
+        end
+        return ret
+    end
+
+    local _OnUnequip
+    local function OnUnequip(inst, owner, ...)
+        local ret = _OnUnequip and _OnUnequip(inst, owner, ...)
+        if owner:HasTag("wathom") then
+            inst:RemoveEventCallback("mounted", OnMounted, owner)
+            inst:RemoveEventCallback("dismounted", OnDismounted, owner)
+        end
+        return ret
+    end
+
+    local _OnAttack
+    local function OnAttack(inst, attacker, target, skipsanity, ...)
+        local ret = _OnAttack and _OnAttack(inst, attacker, target, skipsanity, ...)
+        if attacker:HasTag("wathom") and not (attacker.components.rider and attacker.components.rider:IsRiding()) then
+            for angle = -20, 20, 4 do
+                SpikeWaves(inst, target, attacker, angle + attacker.Transform:GetRotation())
+                if target and target.components.combat then 
+                    target.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 17})
                 end
-                inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
             end
-            return ret
+            inst.SoundEmitter:PlaySound("rifts/lunarthrall_bomb/explode")
         end
-        weapon:SetOnAttack(OnAttack)
+        return ret
     end
+
+    local WathomBSStaffStuff
+
+    local _OnRepaired
+    local function OnRepaired(inst, ...)
+        local isbroken = inst.isbroken and inst.isbroken:value()
+        local ret = _OnRepaired and _OnRepaired(inst, ...)
+        if isbroken then WathomBSStaffStuff(inst) end
+        return ret
+    end
+
+    WathomBSStaffStuff = function(inst) -- Upvalue into OnRepaired.
+        local equippable = inst.components.equippable
+        if equippable then
+            _OnEquip = equippable.onequipfn
+            equippable:SetOnEquip(OnEquip)
+            _OnUnequip = equippable.onunequipfn
+            equippable:SetOnUnequip(OnUnequip)
+        end
+        local weapon = inst.components.weapon
+        if weapon then
+            _OnAttack = weapon.onattack
+            weapon:SetOnAttack(OnAttack)
+        end
+    end
+
+    env.AddPrefabPostInit("staff_lunarplant", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        WathomBSStaffStuff(inst)
+
+        local forgerepairable = inst.components.forgerepairable
+        if forgerepairable then
+            _OnRepaired = forgerepairable.onrepaired
+            forgerepairable:SetOnRepaired(OnRepaired)
+        end
+        
+        inst.UMSetProjectile = UMSetProjectile
+    end)
 end
-
-env.AddPrefabPostInit("staff_lunarplant", function(inst)
-    if not TheWorld.ismastersim then return end
-
-    WathomBSStaffStuff(inst)
-
-    local forgerepairable = inst.components.forgerepairable
-    if forgerepairable then
-        local _OnRepaired = forgerepairable.onrepaired
-        local function OnRepaired(inst, ...)
-            local isbroken = inst.isbroken and inst.isbroken:value()
-            local ret = _OnRepaired(inst, ...)
-            if isbroken then WathomBSStaffStuff(inst) end
-            return ret
-        end
-        forgerepairable:SetOnRepaired(OnRepaired)
-    end
-end)

@@ -1,42 +1,38 @@
 local fyre_bomb_assets =
 {
-	Asset("ANIM", "anim/um_fyre_bomb.zip"),
+    Asset("ANIM", "anim/um_fyre_bomb.zip"),
     Asset("ANIM", "anim/swap_um_fyre_bomb.zip"),
 }
 
-local shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost" }
-
+local should_hit = {"_combat", "CHOP_workable", "MINE_workable", "HAMMER_workable", "DIG_workable"}
+local shouldnt_hit = {"INLIMBO", "notarget", "noattack", "playerghost"}
+local ACTIONS_TO_WORK = {
+    [ACTIONS.CHOP] = 15,
+    [ACTIONS.HAMMER] = 4,
+    [ACTIONS.DIG] = 1
+}
 local function OnHitFyre(inst, attacker, target)
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local fx = SpawnPrefab("explosivehit")
-	fx.Transform:SetPosition(x,y,z)
-	fx.Transform:SetScale(1.25,1.25,1.25)
-	fx:DoTaskInTime(2,function(fx) fx:Remove() end)
-	local ents = TheSim:FindEntities(x, y, z, 3, nil,shouldnt_hit)
-	if #ents > 0 then
-		for i, v in pairs(ents) do
-			if (not v:HasTag("player") or v == attacker) then
-				if v.components.burnable ~= nil then
-					v.components.burnable:Ignite(true, inst, attacker)
-				end
-				if v.components.combat then
-					v.components.combat:GetAttacked(attacker,TUNING.DSTU.PYREBOMB_DAMAGE)
-				end
-			end
-		end
-	end
-	local ents = TheSim:FindEntities(x,y,z,3,nil,{ "INLIMBO"}, { "CHOP_workable", "MINE_workable","HAMMER_workable","DIG_workable" })
-	for i,v in ipairs(ents) do
-		if v:HasTag("CHOP_workable") then
-			v.components.workable:WorkedBy(attacker, 15)
-		elseif v:HasTag("HAMMER_workable") then
-			v.components.workable:WorkedBy(attacker,4)
-		elseif v:HasTag("DIG_workable") then
-			v.components.workable:WorkedBy(attacker,1)
-		else
-			v.components.workable:WorkedBy(attacker, 3)
-		end
-	end
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local fx = SpawnPrefab("explosivehit")
+    fx.Transform:SetPosition(x,y,z)
+    fx.Transform:SetScale(1.25, 1.25, 1.25)
+    fx.persists = false
+    fx:DoTaskInTime(1, fx.Remove)
+    local ents = TheSim:FindEntities(x, y, z, 3, nil, shouldnt_hit, should_hit)
+    if #ents > 0 then
+        for i, v in pairs(ents) do
+            if (not v:HasTag("player") or v == attacker) then
+                if v.components.burnable then
+                    v.components.burnable:Ignite(true, inst, attacker)
+                end
+                if v.components.combat then
+                    v.components.combat:GetAttacked(attacker, TUNING.DSTU.PYREBOMB_DAMAGE)
+                end
+            end
+            local workable = v.components.workable
+            if workable then workable:WorkedBy(attacker, ACTIONS_TO_WORK[workable.action] or 3) end
+        end
+    end
     inst:Remove()
 end
 
@@ -68,7 +64,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 
     --projectile (from complexprojectile component) added to pristine state for optimization
     inst:AddTag("projectile")
-	inst:AddTag("complexprojectile")
+    inst:AddTag("complexprojectile")
 
     inst.AnimState:SetBank(bank)
     inst.AnimState:SetBuild(build)
@@ -153,10 +149,10 @@ local function fyre_bomb_fn()
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
     inst.components.reticule.ease = true
-	inst.components.reticule.ispassableatallpoints = true
-	inst.components.reticule.validfn = function(inst) return true end
+    inst.components.reticule.ispassableatallpoints = true
+    inst.components.reticule.validfn = function(inst) return true end
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
-	inst:AddTag("allow_action_on_impassable")
+    inst:AddTag("allow_action_on_impassable")
 
     if not TheWorld.ismastersim then
         return inst
@@ -177,7 +173,7 @@ local function fyre_bomb_fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("stackable")
-	inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)

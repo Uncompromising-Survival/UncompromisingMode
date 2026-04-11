@@ -202,11 +202,7 @@ env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
                 if inst.stabtarget then
                     local shadow = SpawnPrefab("warningshadow")
                     shadow.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                    if inst.prefab == "um_beeguard_seeker" then
-                        FindSpotForShadow(inst, inst.stabtarget, shadow)
-                    else
-                        FindSpotForShadow(inst, inst.stabtarget, shadow) -- Aim the shadow first, the bee aims at the shadow after that, simple!
-                    end
+                    FindSpotForShadow(inst, inst.stabtarget, shadow) -- Aim the shadow first, the bee aims at the shadow after that, simple!
                     local scaleFactor = Lerp(.5, 1.5, 1)
                     shadow.Transform:SetScale(scaleFactor, scaleFactor, scaleFactor)
                     shadow.bee = inst
@@ -310,7 +306,7 @@ env.AddStategraphPostInit("beeguard", function(inst) -- beeguard time
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("stuck") end)
+                EventHandler("animover", function(inst) if inst.prefab ~= "um_beeguard_seeker" then inst.sg:GoToState("stuck") end end)
             },
 
             onexit = function(inst) inst.stuck = nil end

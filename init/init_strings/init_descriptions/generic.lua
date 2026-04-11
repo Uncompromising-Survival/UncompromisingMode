@@ -708,3 +708,4 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
+DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"

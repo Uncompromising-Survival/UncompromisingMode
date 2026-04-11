@@ -72,9 +72,9 @@ local function fishmeat_dried_fn()
 
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
-    inst.components.edible.healthvalue = 25
-    inst.components.edible.hungervalue = TUNING.CALORIES_MED
-    inst.components.edible.sanityvalue = 20
+    inst.components.edible.healthvalue = 25 -- 30 Vanilla
+    inst.components.edible.hungervalue = TUNING.CALORIES_MED -- 25 Vanilla
+    inst.components.edible.sanityvalue = 20 -- 15 Vanilla
 
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
 
@@ -92,9 +92,9 @@ local function smallfishmeat_dried_fn()
 
     inst.components.edible.ismeat = true
     inst.components.edible.foodtype = FOODTYPE.MEAT
-    inst.components.edible.healthvalue = 10
-    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL
-    inst.components.edible.sanityvalue = 12
+    inst.components.edible.healthvalue = 10 -- 15 Vanilla
+    inst.components.edible.hungervalue = TUNING.CALORIES_SMALL -- 12.5 Vanilla
+    inst.components.edible.sanityvalue = 12 --20 Vanilla
 
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
 

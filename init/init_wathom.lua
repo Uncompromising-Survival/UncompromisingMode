@@ -97,7 +97,7 @@ local function Attack_New(inst, action, ...)
     inst.sg.mem.localchainattack = not action.forced or nil
     local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
     if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown") or (weapon:HasTag("rangedweapon") and not table.contains(special_staff, weapon.prefab)))) and inst:HasTag("wathom") and
-        not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) then
+        not inst.sg:HasStateTag("attack") and not (inst.components.rider and inst.components.rider:IsRiding()) then
         return ("wathomleap")
     elseif not weapon and HasSkill(inst,"bite_1") then
         return ("wathombite")
@@ -206,10 +206,10 @@ local function GetAdrenalShove(inst)
     end
 end
     
--- This is Scrimble's Shove Code, it's used for both Charles T Horse and Wixie, be appreciative, swine.
-local SLEEPREPEL_MUST_TAGS = { "_combat" }
-local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "notarget", "noattack", "flight", "wall" }
+-- This is Scrimble's Shove Code, it's used for both Charles T. Horse and Wixie, be appreciative, swine.
+local SLEEPREPEL_MUST_TAGS = {"_combat"}
+local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+    "hiding", "notarget", "noattack", "flight", "wall"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
 local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "bell", "irreplaceable"}
 local function Check_Bowling(inst, target)
@@ -1482,7 +1482,7 @@ AddPrefabPostInit("ruins_bat", function(inst)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 end)
 
-AddPrefabPostInit("ancient_altar", function(inst)
+--[[AddPrefabPostInit("ancient_altar", function(inst)
     if not _G.TheWorld.ismastersim then return end
     
     local _complete_onturnon = inst.components.prototyper.onturnon
@@ -1503,7 +1503,7 @@ AddPrefabPostInit("ancient_altar", function(inst)
     end
 
     inst.components.prototyper.onturnon = TurnOn 
-end)
+end)]]
 
 -- AddPrefabPostInit("shadow_battleaxe", function(inst)
     -- if not _G.TheWorld.ismastersim then return end

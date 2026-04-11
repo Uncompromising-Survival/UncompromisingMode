@@ -274,7 +274,7 @@ local characters = {
     },
     WALTER = {
         loot = {
-            Item(function() return RandomItem("smallfishmeat_dried", "smallmeat_dried") end, 4, 1, true),
+            Item(function() return RandomItem("fishmeat_small_dried", "smallmeat_dried") end, 4, 1, true),
             Item(function() return RandomItem("monstermeat_dried", "monstersmallmeat_dried") end, 5, .5, true),
             Item("kelp_dried", 4),
             Item("kelp_dried", 2, .5),

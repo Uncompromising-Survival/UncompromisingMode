@@ -21,9 +21,11 @@ local function onregenfn(inst)
     inst.AnimState:PushAnimation("idle", true)
     inst:AddTag("briar_plants")
 
-    MakeMediumBurnable(inst)
-    inst.components.burnable:SetBurnTime(0.75)
-    inst.components.burnable:SetOnBurntFn(OnBurnt)
+    if not inst.components.burnable then
+        MakeMediumBurnable(inst)
+        inst.components.burnable:SetBurnTime(0.75)
+        inst.components.burnable:SetOnBurntFn(OnBurnt)
+    end
 end
 
 local function makeemptyfn(inst)

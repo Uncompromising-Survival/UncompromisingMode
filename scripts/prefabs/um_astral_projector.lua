@@ -2,12 +2,14 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/townportal.zip"),
+    Asset("ANIM", "anim/um_archives_projectinator.zip"),
+    Asset("ANIM", "anim/um_archives_receptionator.zip"),
     Asset("MINIMAP_IMAGE", "townportalactive"),
 }
 
 local fx_assets =
 {
+    Asset("ANIM", "anim/um_lunar_spark.zip"),
     Asset("ANIM", "anim/teleport_sand_fx.zip"),
     Asset("ANIM", "anim/sand_splash_fx.zip"),
 }
@@ -19,13 +21,13 @@ local prefabs =
 }
 
 local function OnEntityWake(inst)
-    if inst.playingsound and not (inst:IsAsleep() or inst.SoundEmitter:PlayingSound("active")) then
-        inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/talisman_active", "active")
+    if inst.playingsound and not (inst:IsAsleep() or inst.SoundEmitter:PlayingSound("loop")) then
+        inst.SoundEmitter:PlaySound("rifts6/vault_portal/turn_on_powered_LP", "loop")
     end
 end
 
 local function OnEntitySleep(inst)
-    inst.SoundEmitter:KillSound("active")
+    inst.SoundEmitter:KillSound("loop")
 end
 
 local function StartSoundLoop(inst)
@@ -38,22 +40,36 @@ end
 local function StopSoundLoop(inst)
     if inst.playingsound then
         inst.playingsound = nil
-        inst.SoundEmitter:KillSound("active")
+        inst.SoundEmitter:KillSound("loop")
     end
 end
 
 local function OnStartChanneling(inst, channeler)
+    
+    local inst_pos = inst:GetPosition()
+    local x, y, z = inst_pos:Get()
+
+    --[[TODOlocal sparkfx = SpawnPrefab("um_lunar_spark")
+    sparkfx.AnimState:PlayAnimation("spark_pre")
+    sparkfx.AnimState:PlayAnimation("spark_loop", true)
+    sparkfx.Transform:SetPosition(x, y+3.2, z)
+    sparkfx.Transform:SetScale(1, 1, 1)]]
+        
     local target = TheSim:FindFirstEntityWithTag("um_astral_projector_target")
-
-    inst.AnimState:PlayAnimation("turn_on")
-    inst.AnimState:PushAnimation("idle_on_loop")
+    inst.AnimState:PlayAnimation("active_pre")  
+    inst.AnimState:PushAnimation("active_loop",true)
     StartSoundLoop(inst)
-
+    
     if target ~= nil and not channeler.um_astral_projected then
+        
+        target.AnimState:PlayAnimation("active_pre")  
+        target.AnimState:PushAnimation("active_loop",true)
+        StartSoundLoop(target)
+        
         channeler:AddTag("um_astral_projected")
         channeler.um_astral_projected = true
         inst.components.teleporter:Target(target)
-
+        
         if channeler ~= nil then
             channeler.components.sanity.externalmodifiers:SetModifier("um_astral_projector", -TUNING.DAPPERNESS_SUPERHUGE)
         end
@@ -63,13 +79,22 @@ local function OnStartChanneling(inst, channeler)
 end
 
 local function OnStopChanneling(inst, aborted)
+
+    inst.SoundEmitter:PlaySound("rifts6/vault_portal/turn_off")
+    --inst.AnimState:PlayAnimation("active_pst")
+    --StopSoundLoop(inst)
     if inst.channeler ~= nil and inst.channeler:IsValid() and inst.channeler.components.sanity ~= nil then
         --inst.channeler.components.sanity.externalmodifiers:RemoveModifier(inst)
     end
 end
 
 local function OnStartTeleporting(inst, doer)
+
+    inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_fx")
+    
     if doer:HasTag("player") then
+
+        doer.AnimState:SetErosionParams(-0.5, -0.2, -1.0)
         doer:AddTag("um_astral_projected")
         doer.um_astral_projected = true
 
@@ -97,20 +122,22 @@ local function OnStartTeleporting(inst, doer)
                         target.OnStartChanneling_Target(target, doer)
                     end
                 else
-                    if doer.components.health ~= nil then
+                    --[[if doer.components.health ~= nil then
                         doer.components.health:Kill()
-                    end
+                    end]]
                 end
             else
-                if doer.components.health ~= nil then
+                --[[if doer.components.health ~= nil then
                     doer.components.health:Kill()
-                end
+                end]]
             end
         end)
     end
 end
 
 local function OnExitingTeleporter(inst, obj)
+
+    inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
     if obj ~= nil and obj:HasTag("player") then
         obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport") -- for wisecracker
     end
@@ -118,6 +145,7 @@ end
 
 local function onhammered(inst)
     local fx = SpawnPrefab("collapse_small")
+    inst.components.lootdropper:DropLoot()
     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     fx:SetMaterial("metal")
     inst:Remove()
@@ -126,26 +154,25 @@ end
 local function onhit(inst)
     if inst.components.channelable:IsChanneling() then
         inst.components.channelable:StopChanneling(true)
-        inst.AnimState:PlayAnimation("hit_on")
-    else
+        inst.AnimState:PlayAnimation("hammer")
+    --[[else
         if inst.components.teleporter.targetTeleporter ~= nil then
             TheWorld:PushEvent("townportaldeactivated")
-            inst.AnimState:PlayAnimation("hit_on")
-        else
-            inst.AnimState:PlayAnimation("hit_off")
+            inst.AnimState:PlayAnimation("hammer")
         end
+    ]]
     end
-    inst.AnimState:PushAnimation("idle_off")
+    inst.AnimState:PlayAnimation("hammer")
 end
 
 local function onbuilt(inst)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/craft")
     inst.AnimState:PlayAnimation("place")
-    inst.AnimState:PushAnimation("idle_off")
+    inst.AnimState:PushAnimation("idle")
 
     if inst.components.teleporter.targetTeleporter ~= nil then
-        inst.AnimState:PushAnimation("turn_on", false)
-        inst.AnimState:PushAnimation("idle_on_loop")
+        --inst.AnimState:PushAnimation("turn_on", false)
+        --inst.AnimState:PushAnimation("idle_on_loop")
         StartSoundLoop(inst)
     end
 end
@@ -172,10 +199,10 @@ local function fn()
 
     MakeObstaclePhysics(inst, .1)
 
-    inst.AnimState:SetBank("townportal")
-    inst.AnimState:SetBuild("townportal")
-    inst.AnimState:PlayAnimation("idle_off", true)
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.AnimState:SetBank("um_archives_projectinator")
+    inst.AnimState:SetBuild("um_archives_projectinator")
+    inst.AnimState:PlayAnimation("idle", true)
+    inst.Transform:SetScale(1.35, 1.35, 1.35)
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector")
@@ -207,8 +234,8 @@ local function fn()
     inst.components.teleporter.onActivate = OnStartTeleporting
     inst.components.teleporter.offset = 2
     inst.components.teleporter.saveenabled = false
-    inst.components.teleporter.travelcameratime = 2.9
-    inst.components.teleporter.travelarrivetime = 2.8
+    inst.components.teleporter.travelcameratime = 1.5
+    inst.components.teleporter.travelarrivetime = 1.5
 
     --inst:ListenForEvent("starttravelsound", StartTravelSound) -- triggered by player stategraph
     inst:ListenForEvent("doneteleporting", OnExitingTeleporter)
@@ -229,9 +256,7 @@ local function KillFX(inst)
     if inst.killtask ~= nil then
         inst.killtask:Cancel()
         inst.killtask = nil
-        inst.Physics:SetActive(false)
-        inst.SoundEmitter:PlaySound("dontstarve/common/together/teleport_sand/out")
-        inst.AnimState:PlayAnimation("portal_out")
+        inst.AnimState:PlayAnimation("spark_pst")
         inst:DoTaskInTime(inst.AnimState:GetCurrentAnimationLength() + .5, inst.Remove)
     end
 end
@@ -241,15 +266,15 @@ local function fx_fn()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
-    inst.entity:AddSoundEmitter()
+
     inst.entity:AddNetwork()
 
-    MakeObstaclePhysics(inst, .5)
-
-    inst.AnimState:SetBank("teleport_sand_fx")
-    inst.AnimState:SetBuild("teleport_sand_fx")
-    inst.AnimState:OverrideSymbol("sand_splash", "sand_splash_fx", "sand_splash")
-    inst.AnimState:PlayAnimation("portal_in")
+    inst.AnimState:SetBank("um_lunar_spark")
+    inst.AnimState:SetBuild("um_lunar_spark")
+    --inst.AnimState:OverrideSymbol("sand_splash", "sand_splash_fx", "sand_splash")
+    --inst.AnimState:OverrideSymbol("um_lunar_spark_idle")
+    
+    inst.AnimState:PlayAnimation("spark_loop", true)
     inst.AnimState:SetFinalOffset(7)
 
     inst:AddTag("NOCLICK")
@@ -261,11 +286,9 @@ local function fx_fn()
         return inst
     end
 
-    inst.SoundEmitter:PlaySound("dontstarve/common/together/teleport_sand/in")
-
     inst.persists = false
     inst.KillFX = KillFX
-    inst.killtask = inst:DoTaskInTime(35 * FRAMES, KillFX)
+    --inst.killtask = inst:DoTaskInTime(35 * FRAMES, KillFX)
 
     return inst
 end
@@ -273,8 +296,8 @@ end
 local function OnStartChanneling_Target(inst, channeler)
     local target = TheSim:FindFirstEntityWithTag("um_astral_projector")
 
-    inst.AnimState:PlayAnimation("turn_on")
-    inst.AnimState:PushAnimation("idle_on_loop")
+    inst.AnimState:PlayAnimation("active_pre")
+    inst.AnimState:PushAnimation("active_loop",true)
     StartSoundLoop(inst)
 
     if target ~= nil and channeler.um_astral_projected then
@@ -291,6 +314,10 @@ local function OnStartChanneling_Target(inst, channeler)
 end
 
 local function OnStopChanneling_Target(inst, aborted)
+
+    inst.SoundEmitter:PlaySound("rifts6/vault_portal/turn_off")
+    inst.AnimState:PlayAnimation("active_pst")
+    StopSoundLoop(inst)
     if inst.channeler ~= nil and inst.channeler:IsValid() and inst.channeler.components.sanity ~= nil then
         --inst.channeler.components.sanity.externalmodifiers:RemoveModifier(inst)
     end
@@ -312,7 +339,17 @@ local function SpawnPool(inst)
 end
 
 local function OnStartTeleporting_Target(inst, doer)
+    
+    inst.AnimState:PlayAnimation("active_pst")
+    StopSoundLoop(inst)
+    
+    local target = TheSim:FindFirstEntityWithTag("um_astral_projector")
+    target.AnimState:PlayAnimation("active_pst")  
+    StopSoundLoop(target)
+    
     if doer:HasTag("player") then
+
+        doer.AnimState:SetErosionParams(0,0,0)
         doer:RemoveTag("um_astral_projected")
         doer.um_astral_projected = false
 
@@ -343,12 +380,12 @@ local function targetfn()
 
     MakeObstaclePhysics(inst, .1)
 
-    inst.AnimState:SetBank("townportal")
-    inst.AnimState:SetBuild("townportal")
-    inst.AnimState:PlayAnimation("idle_off", true)
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+    inst.AnimState:SetBank("um_archives_receptionator")
+    inst.AnimState:SetBuild("um_archives_receptionator")
+    inst.AnimState:PlayAnimation("idle", true)
+    --inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
 
-    inst.AnimState:SetMultColour(0, 0, 1, 1)
+    --inst.AnimState:SetMultColour(1, 1, 1, 1)
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector_target")
@@ -360,7 +397,7 @@ local function targetfn()
     if not TheWorld.ismastersim then
         return inst
     end
-
+    inst:AddComponent("lootdropper")
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
@@ -369,7 +406,7 @@ local function targetfn()
 
     inst:AddComponent("channelable")
     inst.components.channelable:SetChannelingFn(OnStartChanneling_Target, OnStopChanneling_Target)
-
+    
     inst:AddComponent("teleporter")
     inst.components.teleporter.onActivate = OnStartTeleporting_Target
     inst.components.teleporter.offset = 2
@@ -384,6 +421,8 @@ local function targetfn()
 
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
+
+    inst:ListenForEvent("onbuilt", onbuilt)
 
     return inst
 end
@@ -458,8 +497,10 @@ local function poolfn()
     return inst
 end
 
-return Prefab("um_astral_projector", fn, assets, prefabs),
-    MakePlacer("um_astral_projector_placer", "townportal", "townportal", "idle"),
+return
+    Prefab("um_lunar_spark", fx_fn, fx_assets, prefabs),
+    Prefab("um_astral_projector", fn, assets, prefabs),
+    MakePlacer("um_astral_projector_placer", "um_archives_projectinator", "um_archives_projectinator", "idle"),
     Prefab("um_astral_projector_target", targetfn, assets, prefabs),
-    MakePlacer("um_astral_projector_target_placer", "townportal", "townportal", "idle"),
+    MakePlacer("um_astral_projector_target_placer", "um_archives_receptionator", "um_archives_receptionator", "idle"),
     Prefab("um_astral_pool", poolfn, assets, prefabs)

@@ -619,3 +619,4 @@ DESCRIBE.WATHOM_CORPSE = "Uhh... Where's the skeleton?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Doesnt shield me from getting shivers."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
+DESCRIBE.UM_THULECITE_RAZOR= "I watched my grand-grand-grand-grand-grand-grandfather use one of these."

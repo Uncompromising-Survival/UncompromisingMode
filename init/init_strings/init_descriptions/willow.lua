@@ -642,3 +642,4 @@ DESCRIBE.WATHOM_CORPSE = "You're done, already?! Come ON, get back up!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "That looks more menacing than most weapons."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Just wait until you get a taste of my lighter!"
+DESCRIBE.UM_THULECITE_RAZOR= "This is stupid!"

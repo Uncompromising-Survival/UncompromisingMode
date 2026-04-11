@@ -616,3 +616,4 @@ DESCRIBE.WATHOM_CORPSE = "Dead, but no skeleton?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Wolfgang has no need for scary rock shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Mighty punches are not hot enough!"
+DESCRIBE.UM_THULECITE_RAZOR= "Is for shaving orange rock beard."

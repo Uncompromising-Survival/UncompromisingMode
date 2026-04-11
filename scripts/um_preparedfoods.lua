@@ -145,7 +145,7 @@ local um_preparedfoods =
         priority = 20,
         weight = 30,
         cooktime = 2.4,
-        floater = { "med", nil, 0.6 },
+        floater = { "med", nil, .6 },
         tags = { "honeyed" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS,
         oneatenfn = function(inst, eater)
@@ -171,7 +171,7 @@ local um_preparedfoods =
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = TUNING.PERISH_SLOW,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "giant_blueberry", 2 }, { "bird_egg", 2 } } },
     },
 
@@ -189,7 +189,7 @@ local um_preparedfoods =
         cooktime = 2,
         foodtype = FOODTYPE.MEAT,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", nil, 0.8 },
+        floater = { "med", nil, .8 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING,
         tags = { "fooddrink" },
         oneatenfn = function(inst, eater)
@@ -217,10 +217,10 @@ local um_preparedfoods =
         sanity = 15,
         priority = 30,
         weight = 1,
-        cooktime = 0.5,
+        cooktime = .5,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2*TUNING.PERISH_TWO_DAY,
-        floater = {"small", nil, 0.6},
+        floater = {"small", nil, .6},
         card_def = {ingredients = {{"iceboomerang", 1}, {"honey", 1}}},
     },]]
 
@@ -239,7 +239,7 @@ local um_preparedfoods =
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = TUNING.PERISH_SLOW,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "pomegranate", 1 }, { "bird_egg", 2 } } },
     },
 
@@ -250,14 +250,12 @@ local um_preparedfoods =
                 not (tags.insectoid and tags.insectoid >= 1) and not tags.inedible
         end,
         hunger = 62.5,
-        health = 0,
-        sanity = 0,
         priority = 30,
         weight = 1,
         cooktime = 1.2,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 15 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_LICELOAF,
         oneatenfn = function(inst, eater)
             if eater.components.hayfever and eater.components.hayfever.enabled then
@@ -280,7 +278,7 @@ local um_preparedfoods =
         cooktime = 1,
         foodtype = FOODTYPE.MEAT,
         perishtime = TUNING.PERISH_FAST,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA,
         oneatenfn = function(inst, eater)
             if eater.components.hayfever and eater.components.hayfever.enabled then
@@ -301,10 +299,10 @@ local um_preparedfoods =
         sanity = 1,
         priority = 53,
         weight = 20,
-        cooktime = 0.4,
+        cooktime = .4,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
     },
 
     snotroast =
@@ -322,7 +320,7 @@ local um_preparedfoods =
         cooktime = 1.8,
         foodtype = FOODTYPE.MEAT,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_SNOTROAST,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -356,7 +354,7 @@ local um_preparedfoods =
                 end
             end
         end,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         card_def = { ingredients = { { "meat", 1 }, { "carrot", 1 }, { "um_ghost_pepper_item", 1 } } },
     },
 
@@ -370,13 +368,13 @@ local um_preparedfoods =
         sanity = 33,
         priority = 10,
         weight = 1,
-        cooktime = 0.9,
+        cooktime = .9,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
             eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
     },
 
@@ -390,7 +388,7 @@ local um_preparedfoods =
         sanity = 33,
         priority = 10,
         weight = 1,
-        cooktime = 0.9,
+        cooktime = .9,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
         oneatenfn = function(inst, eater)
@@ -398,7 +396,7 @@ local um_preparedfoods =
                 eater.components.moisture:DoDelta(-33)
             end
         end,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
     },
 
@@ -408,14 +406,14 @@ local um_preparedfoods =
         hunger = 9.375,
         health = 3,
         sanity = 5,
-        priority = 0.5,
-        weight = 0.5,
-        cooktime = 0.5,
+        priority = .5,
+        weight = .5,
+        cooktime = .5,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2 * TUNING.PERISH_TWO_DAY,
         temperature = TUNING.COLD_FOOD_BONUS_TEMP,
         temperatureduration = TUNING.FOOD_TEMP_BRIEF,
-        floater = { nil, 0.1, 0.6 },
+        floater = { nil, .1, .6 },
     },
 
     stuffed_peeper_poppers =
@@ -433,7 +431,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         secondaryfoodtype = FOODTYPE.MONSTER,
         perishtime = 4 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         tags = { "monstermeat" },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS,
         oneatenfn = function(inst, eater)
@@ -490,7 +488,7 @@ local um_preparedfoods =
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", nil, 0.65 },
+        floater = { "med", nil, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_THEATERCORN,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -550,7 +548,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.MEAT,
         secondaryfoodtype = FOODTYPE.MONSTER,
         perishtime = TUNING.PERISH_FAST,
-        floater = { nil, 0.1, 0.6 },
+        floater = { nil, .1, .6 },
         tags = { "monstermeat" },
     },
 
@@ -568,7 +566,7 @@ local um_preparedfoods =
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
-        floater = { nil, 0.1, 0.6 },
+        floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_VIPERJAM,
         oneatenfn = function(inst, eater)
             local function GetWorms(inst)
@@ -646,7 +644,7 @@ local um_preparedfoods =
         cooktime = 1.8,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 2 * TUNING.PERISH_TWO_DAY,
-        floater = { nil, 0.1, 0.6 },
+        floater = { nil, .1, .6 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT,
         oneatenfn = function(inst, eater)
             if eater.components.debuffable ~= nil and eater.components.debuffable:IsEnabled() and
@@ -675,7 +673,7 @@ local um_preparedfoods =
         temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 3 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "um_rimeweed_itemvine", 3 }, { "um_rimeweed_itemflower", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT,
         oneatenfn = function(inst, eater)
@@ -713,7 +711,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         tags = { "fooddrink" },
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "um_rimeweed_itemflower", 1 }, { "ice", 1 } } },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA,
         oneatenfn = function(inst, eater)
@@ -738,7 +736,7 @@ local um_preparedfoods =
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
@@ -759,7 +757,7 @@ local um_preparedfoods =
     },
     um_chiles_en_nogada =
     {
-        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and (names.acorn or names.acorn_cooked) and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > 0.5 end,
+        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and (names.acorn or names.acorn_cooked) and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > .5 end,
         hunger = 37.5,
         health = 20,
         sanity = 50,
@@ -770,7 +768,7 @@ local um_preparedfoods =
         temperatureduration = TUNING.FOOD_TEMP_LONG,
         foodtype = FOODTYPE.MEAT,
         perishtime = 10 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "pomegranate", 1 }, { "pepper", 1 }, { "acorn", 1 }, { "meat", 1 } } },
     },
     um_rice_pudding =
@@ -784,20 +782,19 @@ local um_preparedfoods =
         cooktime = 1,
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 6 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
     },
     um_boomberrypie =
     {
         test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
         hunger = 37.5,
-        health = -3,
         priority = 30,
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
         oneatenfn = BoomPieGo,
     },
@@ -816,7 +813,7 @@ if TUNING.DSTU.BONESTEW == "bone_appetit" then
         cooktime = 1,
         foodtype = FOODTYPE.MEAT,
         perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
-        floater = { "med", 0.05, 0.65 },
+        floater = { "med", .05, .65 },
         card_def = { ingredients = { { "meat", 3 } } },
     }
 end

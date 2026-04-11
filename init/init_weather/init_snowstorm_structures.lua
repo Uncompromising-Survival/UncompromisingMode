@@ -122,12 +122,18 @@ for k, v in pairs(CONTAINERS) do
 	AddContainers(v)
 end
 repourposing this file, but am gonna comment that ^ out since this file wasn't loading before.]]
+
 local SNOWPILE_BLOCKERS =
 {
     "dragonflyfurnace",
+	"dragonflychest",	
     "um_hotspring",
-    "stafflight"
+	"hotspring",
+	"hermithotspring",	
+    "stafflight",
+	"emberlight"
 }
+
 for k, v in pairs(SNOWPILE_BLOCKERS) do
     AddPrefabPostInit(v, function(inst)
         if not GLOBAL.TheWorld.ismastersim then

@@ -11,10 +11,27 @@ local function ShouldAcceptItem(inst, item)
     end
 end
 
+local function DropContents(inst, usegem)
+    if usegem then inst.gem:Remove() end
+    inst.gem = nil
+    inst.forge_tool = nil
+
+    if inst._gem and inst._gem:IsValid() then
+        inst._gem:Remove()
+        inst._gem = nil
+    end
+
+    if inst._forge_tool and inst._forge_tool:IsValid() then
+        inst._forge_tool:Remove()
+        inst._forge_tool = nil
+    end
+
+    inst.components.inventory:DropEverything()
+end
+
 local ALLPLAYERS_CHECK_RADIUS_SQ = 16 * 16
 
 local function LearnGem(inst)
-
     local x, y, z = inst.Transform:GetWorldPosition()
 
     local sender_list = {}
@@ -38,26 +55,16 @@ local function TrueForge(inst)
 
     LearnGem(inst)
 
-    inst.gem:Remove()
-    inst.gem = nil
-    inst.forge_tool = nil
-
-    inst.components.inventory:DropEverything()
-
-    inst._gem:Remove()
-    inst._gem = nil
-
-    inst._forge_tool:Remove()
-    inst._forge_tool = nil
+    DropContents(inst, true)
 end
 
 local function Forge(inst)
-    inst._forge_tool.components.pickable.canbepicked = true
-    inst._gem.components.pickable.canbepicked = true
+    if inst._forge_tool and inst._forge_tool:IsValid() then inst._forge_tool.components.pickable.canbepicked = true end
+    if inst._gem and inst._gem:IsValid() then inst._gem.components.pickable.canbepicked = true end
 
     inst.AnimState:PlayAnimation("smith", false)
     inst.AnimState:PushAnimation("idle", false)
-    inst:DoTaskInTime(0.8, TrueForge)
+    inst:DoTaskInTime(.8, TrueForge)
 end
 
 local function ShowGem(inst)
@@ -73,6 +80,7 @@ local function ShowGem(inst)
         inst._gem.components.pickable.onpickedfn = function()
             inst._gem:Remove()
             inst._gem = nil
+            inst.gem = nil
             inst.components.inventory:DropEverything()
         end
     end
@@ -91,12 +99,13 @@ local function ShowTool(inst)
         inst._forge_tool.components.pickable.onpickedfn = function()
             inst._forge_tool:Remove()
             inst._forge_tool = nil
+            inst.forge_tool = nil
             inst.components.inventory:DropEverything()
         end
     end
 end
 
-local function OnGetItemFromPlayer(inst, giver, item)
+local function OnAcceptItemFromPlayer(inst, giver, item)
     if item:HasTag("gemology_gem") then
         if inst.gem and inst._gem then
             inst._gem:Remove()
@@ -126,7 +135,7 @@ local function OnGetItemFromPlayer(inst, giver, item)
 end
 
 local function OnSave(inst, data)
-    inst.components.inventory:DropEverything()
+    DropContents(inst)
 end
 
 local function fn()
@@ -147,6 +156,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle", false)
 
     inst:AddTag("structure")
+    inst:AddTag("trader")
 
     MakeSnowCoveredPristine(inst)
 
@@ -161,12 +171,12 @@ local function fn()
     inst:AddComponent("inventory")
 
     inst.components.trader:SetAcceptTest(ShouldAcceptItem)
-    inst.components.trader.onaccept = OnGetItemFromPlayer
+    inst.components.trader.onaccept = OnAcceptItemFromPlayer
     inst.components.trader.deleteitemonaccept = false
 
     inst.OnSave = OnSave
+
     return inst
 end
-
 
 return Prefab("um_gemologyforge", fn, assets)

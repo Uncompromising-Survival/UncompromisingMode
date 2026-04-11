@@ -12,7 +12,7 @@ local HoodedTable = {
 }
 local DarkForestTable = {walterifgood = 1, health_addict = 0.25}
 local RockyTable = {singlefather = 0.5, rodent_destroyer = 0.5, rat_fate = 0.5, pyrite_hint = 0.25, rainometer_hint = 0.5}
-local SavannaTable = {sos = 0.5, moxTable = 0.5, grassTrap = 0.1, trapdoor_trap_hint = 1, walls_hint = 0.5}
+local SavannaTable = {sos = 0.5, moxTable = 0.5, grassTrap = 0.1, trapdoor_trap_hint = 1, walls_hint = 0.5, HappyCouple = 0.25}
 
 local MosaicTable = { -- need more mosaic setpieces
 
@@ -47,6 +47,7 @@ local MosaicTable = { -- need more mosaic setpieces
     thermalmeasurer_hint = 1,
     rainometer_hint = 1,
     constantsurvival_skeleton = 0.5,
+    HappyCouple = 0.5,
 
 	megabaseruins_intersection = 0.1,
 	megabaseruins_centerpiece = 0.1,

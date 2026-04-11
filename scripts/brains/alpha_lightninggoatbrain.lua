@@ -48,8 +48,7 @@ local function GetChaseTargetFn(inst)
 end
 
 local function KeepFaceTargetFn(inst, target)
-    return not target:HasTag("notarget")
-        and inst:IsNear(target, KEEP_FACE_DIST)
+    return not target:HasTag("notarget") and inst:IsNear(target, KEEP_FACE_DIST)
 end
 
 local function ShouldRunAwayEpic(guy)
@@ -57,7 +56,7 @@ local function ShouldRunAwayEpic(guy)
 end
 
 local function ShouldRunAwayCombat(guy)
-    return guy:HasTag("combat") and not guy:HasTag("notarget")
+    return guy:HasTag("_combat") and not guy:HasTag("notarget")
 end
 
 local function GetWanderDistFn(inst)

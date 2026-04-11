@@ -2,6 +2,7 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
+GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
 GLOBAL.TheMineralLogbook:Load()
 GLOBAL.MAX_GEM_TIER = 3
@@ -93,7 +94,7 @@ if GetModConfigData("funny rat") then
     AddModCharacter("winky", "FEMALE")
 
     GLOBAL.TUNING.WINKY_HEALTH = 175
-    GLOBAL.TUNING.WINKY_HUNGER = 150
+    GLOBAL.TUNING.WINKY_HUNGER = 175
     GLOBAL.TUNING.WINKY_SANITY = 125
 end
 

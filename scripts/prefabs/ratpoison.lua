@@ -73,8 +73,6 @@ local function fn()
     inst:AddTag("um_washable_goo")
     inst:AddTag("noflingowash")
 
-    inst.um_no_pickup = true
-
     if not TheWorld.ismastersim then return inst end
     
     local edible = inst:AddComponent("edible")
@@ -88,10 +86,12 @@ local function fn()
     inst:AddComponent("inspectable")
     
     local inventoryitem = inst:AddComponent("inventoryitem")
+    inventoryitem.nobounce = true
+    inventoryitem.canbepickedup = false
+    inventoryitem.canbepickedupalive = true
+    inventoryitem.canonlygoinpocket = true
     --[[inventoryitem:SetOnPutInInventoryFn(OnPicked)
     inventoryitem:SetOnPickupFn(OnPicked)]]
-    inventoryitem.canonlygoinpocket = true
-    inventoryitem.nobounce = true
     
     local perishable = inst:AddComponent("perishable")
     perishable:SetPerishTime(TUNING.PERISH_SUPERSLOW)

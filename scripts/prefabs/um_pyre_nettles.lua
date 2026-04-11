@@ -74,7 +74,7 @@ local function StopSpores(inst)
 end
 
 local function pyrenettle_bumped(inst,nextvictim)
-    if nextvictim:IsValid() then 
+    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") then
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
         inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 		if inst.stage ~= 1 then

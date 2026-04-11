@@ -40,6 +40,20 @@ local function OnCharged(inst)
     inst.SoundEmitter:PlaySound("dontstarve/creatures/deerclops/taunt_howl", nil, .4)
 end
 
+local function onequip(inst, owner)
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    local skin_build = inst:GetSkinBuild()
+    if skin_build ~= nil then
+        owner:PushEvent("equipskinneditem", inst:GetSkinName())
+        owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
+    else
+        owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
+    end
+
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
 local function onunequip(inst, owner)
     local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
@@ -48,36 +62,6 @@ local function onunequip(inst, owner)
 
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
-end
-
-local function onequip(inst, owner)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if tool and owner then
-                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                if owner.components.talker then
-                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                end
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-                if owner.sg then owner.sg:GoToState("hit") end
-            end
-        end)
-    else
-        local skin_build = inst:GetSkinBuild()
-        if skin_build ~= nil then
-            owner:PushEvent("equipskinneditem", inst:GetSkinName())
-            owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")
-        else
-            owner.AnimState:OverrideSymbol("swap_object", "swap_cursed_antler", "swap_cursed_antler")
-        end
-
-        owner.AnimState:Show("ARM_carry")
-        owner.AnimState:Hide("ARM_normal")
-    end
 end
 
 local function onattack(inst, attacker, target)

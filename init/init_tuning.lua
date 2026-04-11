@@ -385,7 +385,7 @@ TUNING.DSTU = {
     ANNOUNCE_BASESTATUS = GetModConfigData("announce_basestatus"),
     EYEBRELLAREWORK = GetModConfigData("eyebrellarework"),
     -- More Config
-    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R40_PEARLMAS"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
+    UPDATE_CHECK = CurrentRelease.GreaterOrEqualTo("R41_ST_WX78"), -- REMEMBER TO ALWAYS UPDATE THIS WITH NEW BETAS.
     POCKET_POWERTRIP = GetModConfigData("pocket_powertrip_"),
     WINTER_BURNING = GetModConfigData("winter_burning"),
     BUTTERFLYWINGS_NERF = GetModConfigData("butterfly_tweaks"),
@@ -455,6 +455,7 @@ TUNING.DSTU = {
     --MEME CONFIG
     ADVERTISEMENTS = GetModConfigData("um_advertisements"),
     SHRINK = GetModConfigData("um_shrink"),
+    SHAVE_MODE = GetModConfigData("um_shave_mode"),
 
     --CLIENT CONFIGS
 
@@ -492,12 +493,11 @@ TUNING.DSTU = {
     },
         
     -- Shadow Damage tuning
-    RUINSNIGHTMARE_DAMAGE = 75
-    
-    
+    RUINSNIGHTMARE_DAMAGE = 75,
+    HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75
 }
 
--- [              DST Related Overrides                  ]
+-- [              DST Related Overrides              ]
 
 if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 1.5
@@ -519,6 +519,9 @@ if GetModConfigData("armorrework") then
     TUNING.SHIELDOFTERROR_DAMAGE = 59.5
 end
 
+TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WATHOM = {}
+TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WINKY = {}
+
 if GetModConfigData("wixie_walter") then
     TUNING.WOBY_BIG_HUNGER = GLOBAL.TUNING.WALTER_HUNGER
     TUNING.WOBY_BIG_HUNGER_RATE = GLOBAL.TUNING.WILSON_HUNGER_RATE / 2.5
@@ -533,10 +536,8 @@ if GetModConfigData("wixie_walter") then
         SLOW = 10
     }
 
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = { "walterhat", "meatrack_hat", "meat", "monstermeat" }
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = { "slingshot", "slingshotammo_rock", "slingshotammo_rock",
-        "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock",
-        "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock" }
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = {"walterhat", "meatrack_hat", "meat", "monstermeat"}
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
 end
 
 -- Wilson Torch Buff

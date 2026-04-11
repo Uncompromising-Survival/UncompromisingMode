@@ -133,8 +133,8 @@ AddRecipe2("um_hat_bee_moon", { Ingredient("um_bee_moon", 2), Ingredient("um_mea
 ChangeSortKey("um_hat_bee_moon", "beehat", "CLOTHING", true)
 ChangeSortKey("um_hat_bee_moon", "um_beemine_moon_item", "WEAPONS", true)
 
-AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { nounlock = true }, { "CRAFTING_STATION" })
-ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", true)
+AddRecipe2("ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, { nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_ancient_amulet_red"} }, { "CRAFTING_STATION" })
+ChangeSortKey("ancient_amulet_red", "orangeamulet", "CRAFTING_STATION", false)
 
 
 AddRecipe2(
@@ -540,8 +540,8 @@ AddRecipe2("um_record_wathom", { Ingredient("batwing", 1), Ingredient("charcoal"
 AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_winky.xml" }, { "DECOR" })
 AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
-AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
-AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { nounlock = true }, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR", "CRAFTING_STATION" })
+AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_tot.xml" }, { "DECOR" })
+AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { atlas = "images/inventoryimages/um_record_moonmaw.xml" }, { "DECOR", "CRAFTING_STATION" })
 
 ChangeSortKey("um_record_menu", "record", "DECOR", true)
 ChangeSortKey("um_record_winky", "um_record_menu", "DECOR", true)
@@ -556,9 +556,9 @@ ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
 AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector", { Ingredient("moonglass", 3), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 3) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 1), Ingredient("purplegem", 1), Ingredient("moonrocknugget", 1) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
 
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
@@ -605,6 +605,44 @@ ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 --AddRecipe2("um_gemology_pouch", {Ingredient("goldnugget", 1),}, TECH.SCIENCE_TWO, {}, {"CONTAINERS"})
 --ChangeSortKey("um_gemology_pouch", "candybag", "CONTAINERS", false)
 
-AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true}, {"CRAFTING_STATION", "TOOLS"})
-ChangeSortKey("um_magnifier", "nutrientgoggleshat", "CRAFTING_STATION", false)
+AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_magnifier"}}, {"CRAFTING_STATION", "TOOLS"})
+ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
+
+if TUNING.DSTU.SHAVE_MODE then
+    AddRecipe2("um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_thulecite_razor"}}, {"CRAFTING_STATION", "TOOLS"})
+    ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("um_thulecite_razor", "razor", "TOOLS", true)
+
+    AddRecipe2("wathom_um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_thulecite_razor", description = "um_thulecite_razor", no_deconstruction = true}, {"CRAFTING_STATION", "CHARACTER", "TOOLS"})
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CHARACTER", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "um_thulecite_razor", "TOOLS", true)
+end
+
+--WATHOM ANCIENT KINSHIP I STUFF--
+AddRecipe2("wathom_thulecite", { Ingredient("thulecite_pieces", 6) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "thulecite", description = "thulecite", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_wall_ruins_item", { Ingredient("thulecite", 1) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "wall_ruins_item", numtogive = 6, description = "wall_ruins_item", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_nightmare_timepiece", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "nightmare_timepiece", description = "nightmare_timepiece", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_orangeamulet", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("orangegem", 1) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "orangeamulet", description = "orangeamulet", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_yellowamulet", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("yellowgem", 1) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "yellowamulet", description = "yellowamulet", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_greenamulet", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("greengem", 1) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "greenamulet", description = "greenamulet", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_orangestaff", { Ingredient("nightmarefuel", 2), Ingredient("cane", 1), Ingredient("orangegem", 2) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "orangestaff", description = "orangestaff", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_yellowstaff", { Ingredient("nightmarefuel", 4), Ingredient("livinglog", 2), Ingredient("yellowgem", 2) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "yellowstaff", description = "yellowstaff", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_greenstaff", { Ingredient("nightmarefuel", 4), Ingredient("livinglog", 2), Ingredient("greengem", 2) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "greenstaff", description = "greenstaff", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_multitool_axe_pickaxe", { Ingredient("goldenaxe", 1), Ingredient("goldenpickaxe", 1), Ingredient("thulecite", 2) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "multitool_axe_pickaxe", description = "multitool_axe_pickaxe", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_nutrientsgoggleshat", { Ingredient("plantregistryhat", 1), Ingredient("thulecite_pieces", 4), Ingredient("purplegem", 1) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "nutrientsgoggleshat", description = "nutrientsgoggleshat", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_ruinshat", { Ingredient("thulecite", 4), Ingredient("nightmarefuel", 4) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "ruinshat", description = "ruinshat", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_armorruins", { Ingredient("thulecite", 6), Ingredient("nightmarefuel", 4) }, TECH.ANCIENT_FOUR, { builder_skill = "wathom_allegiance_neutral", product = "armorruins", description = "armorruins", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_ruins_bat", { Ingredient("livinglog", 3), Ingredient("thulecite", 4), Ingredient("nightmarefuel", 4) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "ruins_bat", description = "ruins_bat", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_eyeturret_item", { Ingredient("deerclops_eyeball", 1), Ingredient("minotaurhorn", 1), Ingredient("thulecite", 5) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "eyeturret_item", description = "eyeturret_item", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_shadow_forge_kit", { Ingredient("nightmarefuel", 5), Ingredient("dreadstone", 2), Ingredient("horrorfuel", 1) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "shadow_forge_kit", description = "shadow_forge_kit", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_blueprint_craftingset_ruins_builder", { Ingredient("papyrus", 3) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "blueprint_craftingset_ruins_builder", description = "blueprint_craftingset_ruins_builder", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_blueprint_craftingset_ruinsglow_builder", { Ingredient("papyrus", 3) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "blueprint_craftingset_ruinsglow_builder", description = "blueprint_craftingset_ruinsglow_builder", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+AddRecipe2("wathom_ancient_amulet_red", { Ingredient("thulecite", 2), Ingredient("nightmarefuel", 3), Ingredient("redgem", 2) }, TECH.ANCIENT_FOUR, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "ancient_amulet_red", description = "ancient_amulet_red", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
+ChangeSortKey("wathom_ancient_amulet_red", "wathom_orangeamulet", "CRAFTING_STATION", false)
+ChangeSortKey("wathom_ancient_amulet_red", "wathom_orangeamulet", "CHARACTER", false)
+AddRecipe2("wathom_um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_magnifier", description = "um_magnifier", no_deconstruction = true}, {"CRAFTING_STATION", "CHARACTER", "TOOLS"})
+ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", false)
+ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CHARACTER", false)
+ChangeSortKey("wathom_um_magnifier", "sentryward", "TOOLS", false)

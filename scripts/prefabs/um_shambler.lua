@@ -59,6 +59,21 @@ local function ChangePhysics(inst, is_standing)
     end
 end
 
+--[[local function NormalRetarget(inst)
+	return FindEntity(
+		inst,
+		40,
+		function(guy)
+			inst.followtarget = guy
+			
+			return TheWorld.state.nightmarephase == "wild" and
+					inst.components.combat:CanTarget(guy)
+		end,
+		TARGET_MUST_TAGS,
+		TARGET_CANT_TAGS
+	)
+end]]
+
 local function fn()
     local inst = CreateEntity()
 
@@ -94,6 +109,22 @@ local function fn()
     MakeSmallPropagator(inst)
     MakeHauntableWork(inst)
     MakeSnowCovered(inst)
+
+    inst:AddComponent("follower")
+
+    inst:AddComponent("combat")
+	--inst.components.combat:SetKeepTargetFunction(keeptargetfn)
+	inst.components.combat:SetDefaultDamage(75)
+	inst.components.combat:SetAttackPeriod(3)
+	--inst.components.combat:SetRetargetFunction(1, NormalRetarget)
+	inst.components.combat:SetHurtSound("dontstarve/sanity/creature" .. math.random(1, 2) .. "/attack_grunt")
+	inst.components.combat:SetRange(3, 3)
+
+    inst:AddComponent("aura")
+
+    inst:AddComponent("health")
+    inst.components.health:SetMaxHealth(1)
+	inst.components.health:SetMinHealth(0.99)
 
     inst:AddComponent("burnable")
     inst.components.burnable:SetFXLevel(2)

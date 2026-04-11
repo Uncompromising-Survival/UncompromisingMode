@@ -106,20 +106,12 @@ local function onsave(inst, data)
     if inst:HasTag("batfrenzy") then
         data.batfrenzy = true
     end
-    if inst.sg:HasStateTag("sleeping") then
-        data.forcesleep = true
-    end
 end
 
 local function onload(inst, data)
     if data then
         if data.batfrenzy then
             inst:AddTag("batfrenzy")
-        end
-        if data.forcesleep then
-            inst.sg:GoToState("forcesleep")
-            inst.components.sleeper.hibernate = true
-            inst.components.sleeper:GoToSleep()
         end
     end
 end

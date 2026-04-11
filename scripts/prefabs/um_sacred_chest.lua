@@ -45,6 +45,7 @@ local offering_recipe =
 	-- They must also have 6 ingredients; if you want less, the related functions must be rewritten in a way compatible with vanilla recipes.
 	
 	trinket_wathom1					= { "plaguemask", "nightmarefuel", "rat_tail", "red_cap", "red_cap", "red_cap" },
+	um_thulecite_razor					= { "thulecite", "razor", "thulecite", "nightmarefuel", "nightmarefuel", "nightmarefuel" },
 }
 
 for k, _ in pairs(offering_recipe) do

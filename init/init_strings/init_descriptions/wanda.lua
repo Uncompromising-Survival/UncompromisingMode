@@ -640,3 +640,4 @@ DESCRIBE.WATHOM_CORPSE = "Time, Wathom? Is it really that time again?"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It protects well for the time being."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Oh botheration, someone ought to warm you up!"
+DESCRIBE.UM_THULECITE_RAZOR= "I don't need to shave off any more time."

@@ -112,47 +112,31 @@ local function CheckForLight(owner)
 end
 
 local function onequip(inst, owner)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            if tool and owner then
-                owner.components.inventory:Unequip(EQUIPSLOTS.HANDS)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                if owner.components.talker then
-                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                end
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-                if owner.sg then owner.sg:GoToState("hit") end
-            end
-        end)
-    else
-        owner.AnimState:Show("ARM_carry")
-        owner.AnimState:Hide("ARM_normal")
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
 
-        if inst._body ~= nil then
-            inst._body:Remove()
-        end
-        inst._body = SpawnPrefab("um_moonfly_lantern_body")
-        inst._body._thurible = inst
-        inst:ListenForEvent("onremove", onremovebody, inst._body)
-
-        inst._body.entity:SetParent(owner.entity)
-        inst._body.entity:AddFollower()
-        inst._body.Follower:FollowSymbol(owner.GUID, "swap_object", 68, -130, 0)
-        inst._body:ListenForEvent("newstate", function(owner, data)
-            ToggleOverrideSymbols(inst, owner)
-        end, owner)
-
-        owner:AddTag("um_moonfly_lantern_user")
-
-        owner.moonfly_lantern_trail_task = owner:DoPeriodicTask(.15, CheckForLight)
-
-        ToggleOverrideSymbols(inst, owner)
-
-        turnon(inst)
+    if inst._body ~= nil then
+        inst._body:Remove()
     end
+    inst._body = SpawnPrefab("um_moonfly_lantern_body")
+    inst._body._thurible = inst
+    inst:ListenForEvent("onremove", onremovebody, inst._body)
+
+    inst._body.entity:SetParent(owner.entity)
+    inst._body.entity:AddFollower()
+    inst._body.Follower:FollowSymbol(owner.GUID, "swap_object", 68, -130, 0)
+    inst._body:ListenForEvent("newstate", function(owner, data)
+        ToggleOverrideSymbols(inst, owner)
+    end, owner)
+
+    owner:AddTag("um_moonfly_lantern_user")
+
+    owner.moonfly_lantern_trail_task = owner:DoPeriodicTask(.15, CheckForLight)
+
+    ToggleOverrideSymbols(inst, owner)
+
+    turnon(inst)
 end
 
 local function onunequip(inst, owner)
@@ -190,7 +174,8 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 
-    MakeInventoryFloatable(inst, "med", 0.3)
+    MakeInventoryPhysics(inst)
+
     inst.AnimState:SetBank("um_moonfly_lantern")
     inst.AnimState:SetBuild("um_moonfly_lantern")
     inst.AnimState:PlayAnimation("idle_loop", true)
@@ -200,6 +185,8 @@ local function fn()
     inst:AddTag("nopunch")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
+
+    MakeInventoryFloatable(inst, "med", .3)
 
     inst.entity:SetPristine()
 
@@ -221,14 +208,13 @@ local function fn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable:SetOnEquipToModel(onequiptomodel)
-    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - 0.1
+    inst.components.equippable.walkspeedmult = TUNING.CANE_SPEED_MULT - .1
 
     MakeHauntableLaunch(inst)
 
     inst.OnRemoveEntity = OnRemove
     --inst.OnLoad = OnLoad
 
-    inst._light = nil
     inst._light = nil
     turnon(inst)
 
@@ -307,7 +293,7 @@ local function TrySpeedUp(inst, target)
         target._moonfly_lantern_speedmulttask:Cancel()
     end
 
-    target._moonfly_lantern_speedmulttask = target:DoTaskInTime(0.25, function(i)
+    target._moonfly_lantern_speedmulttask = target:DoTaskInTime(.25, function(i)
         if i.components.locomotor ~= nil then
             i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
         end
@@ -338,7 +324,7 @@ local function DoAreaChecks(inst)
         inst.strength = inst.strength - .02
     end
 
-    inst.AnimState:SetMultColour(0.6, 0.6, 1, inst.strength / 2)
+    inst.AnimState:SetMultColour(.6, .6, 1, inst.strength / 2)
     inst.Light:SetIntensity(inst.strength / 3)
 
     if inst.strength <= 0 then
@@ -381,7 +367,7 @@ local function trailfn()
 
     inst.strength = 1.5
 
-    inst:DoPeriodicTask(0.1, DoAreaChecks, 0)
+    inst:DoPeriodicTask(.1, DoAreaChecks, 0)
 
     return inst
 end

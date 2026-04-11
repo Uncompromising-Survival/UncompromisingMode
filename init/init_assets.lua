@@ -281,6 +281,8 @@ local inventoryitems =
     "um_record_wathom",
     "um_record_stranger",
     "um_record_winky",
+    "um_record_moonmaw",
+    "um_record_tot",
 
     --Wixie related inventory icons
 
@@ -449,6 +451,8 @@ local inventoryitems =
     "um_magnifier",
     "um_gemology_pouch",
     --"um_gemology_pouch_open",
+
+    "um_thulecite_razor",
 }
 
 
@@ -1214,6 +1218,11 @@ Assets = {
     Asset("ANIM", "anim/airconditioner.zip"),
     Asset("ANIM", "anim/air_conditioner_cloud.zip"),
 
+    --Archives UM stuff
+    Asset("ANIM", "anim/um_archives_projectinator.zip"),
+    Asset("ANIM", "anim/um_archives_receptionator.zip"),
+    Asset("ANIM", "anim/um_lunar_spark.zip"),
+    
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
     Asset("ANIM", "anim/um_soul_ball.zip"),

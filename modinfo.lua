@@ -20,13 +20,14 @@ Latest update features:
 - New Old Faces
 - Lots of bloat...
 - Lots of promises...
+- No Winky.
 - Moss.
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Ghosts from the Past Testing v" .. _version
+version = "On The Rocks! Testing v" .. _version
 
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
@@ -1528,6 +1529,7 @@ configuration_options = {
 
     --	Header("General"),
     --  BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
+    BinaryConfig("um_shave_mode", "Shave Together Mode", "Tired of the normal gameplay loop? Enable for a more razorful experience!", false),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),

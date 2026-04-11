@@ -272,7 +272,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldDeathEvent = inst.events["death"].fn
     inst.events["death"].fn = function(inst, data)
         if TUNING.DSTU.MAXHPDEATH then
-            inst.components.health:DeltaPenalty(0.25) -- ALL deaths cause 25% penalty....
+            inst.components.health:DeltaPenalty(.25) -- ALL deaths cause 25% penalty....
         end
         if data ~= nil and data.cause == "shadowvortex" and not inst:HasTag("wereplayer") then
             inst.components.rider:ActualDismount()
@@ -2433,43 +2433,51 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },]]
 
-        State {
+        State{
             name = "um_usewaxwelljournal_pre",
-            tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "busy", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, repeatcast)
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetDeltaTimeMultiplier(2)
                 inst.AnimState:PlayAnimation("action_uniqueitem_pre")
-                local fxname = "waxwell_book_fx"
-                if inst.components.rider:IsRiding() then
-                    fxname = fxname .. "_mount"
-                end
-                inst.sg.statemem.book_fx = SpawnPrefab(fxname)
+                local suffix = inst.components.rider:IsRiding() and "_mount" or ""
+                inst.sg.statemem.book_fx = SpawnPrefab("waxwell_book_fx"..suffix)
                 inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(2)
                 inst.sg.statemem.book_fx.entity:SetParent(inst.entity)
             end,
 
             events =
             {
-                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("um_usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx }) end end),
+                EventHandler("animover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg.statemem.not_interrupted = true
+                        inst.sg:GoToState("um_usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
+                    end
+                end),
             },
 
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
-                inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(1)
+                if inst.sg.statemem.book_fx and inst.sg.statemem.book_fx:IsValid() then
+                    if not inst.sg.statemem.not_interrupted then
+                        inst.sg.statemem.book_fx:Remove()
+                    else
+                        inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(1)
+                    end
+                end
             end,
         },
 
-        State {
+        State{
             name = "um_usewaxwelljournal",
-            tags = { "doing", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
                 if data then inst.sg.statemem.book_fx = data.book_fx end
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx" .. suffix)
+                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx"..suffix)
                 inst.sg.statemem.fx_shadow.entity:SetParent(inst.entity)
                 inst.AnimState:OverrideSymbol("book_open", "book_maxwell", "book_open")
                 inst.AnimState:OverrideSymbol("book_closed", "book_maxwell", "book_closed")
@@ -2565,17 +2573,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 if inst.sg.statemem.fx_shadow and inst.sg.statemem.fx_shadow:IsValid() then
                     inst.sg.statemem.fx_shadow:Remove()
-                end
-                if inst.sg.statemem.fx_over and inst.sg.statemem.fx_over:IsValid() then
-                    inst.sg.statemem.fx_over:Remove()
-                end
-                if inst.sg.statemem.fx_under and inst.sg.statemem.fx_under:IsValid() then
-                    inst.sg.statemem.fx_under:Remove()
-                end
-                if inst.sg.statemem.soundtask then
-                    inst.sg.statemem.soundtask:Cancel()
-                elseif inst.SoundEmitter:PlayingSound("book_layer_sound") then
-                    inst.SoundEmitter:SetVolume("book_layer_sound", .5)
                 end
             end,
         },

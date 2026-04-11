@@ -625,3 +625,4 @@ DESCRIBE.WATHOM_CORPSE = "Come on, buddy! I'm rooting for you!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I dont think I'd feel safe holding that."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Colder than Lucy's silent treatment."
+DESCRIBE.UM_THULECITE_RAZOR= "Maybe if you got a Lucy razor I'd shave."
