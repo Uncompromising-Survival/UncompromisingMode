@@ -260,7 +260,7 @@ AddUMGemDef("greengem1", {
 -----------------------------------------------------------------------------------
 ---Green2
 
-local valid_enchants = { "um_gemologygreengem1", --[["um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1",]] "um_gemologyredgem1", "um_gemologyredgem2", --[["um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1"]] }
+local valid_enchants = { "um_gemologygreengem1", "um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1", "um_gemologyredgem1", "um_gemologyredgem2", "um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1" }
 
 local function addRandomGemEffects(inst, item, tier)
     print("randomizing gem effect")
@@ -431,6 +431,9 @@ AddUMGemDef("palegem1", {
     }
 })
 
+-----------------------------------------------------------------------------------
+---Pale2
+
 AddUMGemDef("palegem2", {
     color = RGB(220, 220, 220),
     fns = {
@@ -498,7 +501,204 @@ AddUMGemDef("palegem2", {
         end
     }
 })
+-----------------------------------------------------------------------------------
+---Purple1
+
+local function HambatUpdateDamage(inst)
+    if inst.components.perishable and inst.components.weapon then
+        local dmg = TUNING.HAMBAT_DAMAGE * inst.components.perishable:GetPercent()
+        dmg = Remap(dmg, 0, inst.new_max_damage and inst.new_max_damage or TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
+            TUNING.HAMBAT_DAMAGE)
+        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchant("um_gemologypurplegem1") then
+            dmg = dmg + dmg * inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem1") * 0.25
+        end
+        inst.components.weapon:SetDamage(dmg)
+    end
+end
 
 
+AddUMGemDef("purplegem1", {
+    color = RGB(180, 166, 213),
+    fns = {
+        onapply = function(item, tier)
+            if item.prefab == "hambat" and tier ~= 1 then -- hambat needs an exception
+                item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage = item.UpdateDamage
+                item.UpdateDamage = HambatUpdateDamage
+            end
+        end,
+        onattack = function(item, attacker, target, tier)
+            if item.tier ~= 1 then
+                local damage = item.components.weapon.damage
+                if damage < 50 and item.prefab ~= "hambat" then
+                    damage = damage * tier * 0.25
+                    local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
+                    target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
+                end
+            end
+        end,
+        onremove = function(item, tier)
+            if item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage then
+                item.UpdateDamage = item.volatile_gemology_data.um_gemologypurplegem1.old_update_damage
+            end
+        end
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Purple2
+---
+local function GrabNearItem(inst, owner)
+    local item = FindEntity(owner, 8, function(ent) return ent.components.inventoryitem and ent ~= inst end)
+    if item then
+        owner.components.inventory:GiveItem(item)
+    end
+end
+
+local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an "ondropped" effects
+    local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem2")
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") and ent.components.health and ent.components.health:IsDead() end)
+    if owner and owner.components.health:IsDead() then -- If this happens, the owner has just died.
+        if tier ~= 1 then
+            for i = 1, tier do
+                GrabNearItem(inst, owner)
+            end
+        end
+        owner.components.inventory:GiveItem(inst) -- Give the ghost back the item
+    end
+
+    if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
+        inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
+    end
+end
+
+
+
+AddUMGemDef("purplegem2", {
+    color = RGB(180, 166, 213),
+    fns = {
+        onapply = function(item, tier)
+            item.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn = item.components.inventoryitem.ondropfn
+            item.components.inventoryitem:SetOnDroppedFn(OnDropedIfDeadGiveBack)
+        end,
+        onremove = function(item, tier)
+            item.components.inventoryitem:SetOnDroppedFn(item.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn)
+        end
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Orange1
+
+local function FindUniqueBaseStructures(inst, tier)
+    if inst.entity:IsAwake() then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 48, { "structure" })
+        local uniquestructures = {}
+        for i, v in ipairs(ents) do
+            if not table.contains(uniquestructures, v.prefab) then
+                table.insert(uniquestructures, v.prefab)
+            end
+        end
+        inst.structurebonus = math.clamp(#uniquestructures, 0, 30) * tier / 150
+    end
+end
+
+local function BaseSitterAttack(item, attacker, target, tier)
+    if tier ~= 1 then
+        local damage = item.components.weapon.damage
+        local fx = SpawnPrefab("sand_puff")
+        fx.Transform:SetPosition(target.Transform:GetWorldPosition())
+        fx.Transform:SetScale(0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus, 0.05 + 2 * item.structurebonus)
+        target.components.combat:GetAttacked(attacker, damage * item.structurebonus)
+    end
+end
+
+
+AddUMGemDef("orangegem1", {
+    color = RGB(249, 203, 156),
+    fns = {
+        onattack = BaseSitterAttack,
+        onremove = function(item, tier)
+            item.structure_bonus = nil
+        end,
+
+        onupdate = FindUniqueBaseStructures
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Orange2
+
+local function UpdateSanityStat(inst, count, tier)
+    if inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness then
+        inst.components.equippable.dapperness = inst.volatile_gemology_data.um_gemologyorangegem2.old_dapperness + count * tier * TUNING.DAPPERNESS_SMALL / 5
+    else
+        inst.components.equippable.dapperness = count * tier * TUNING.DAPPERNESS_SMALL / 10
+    end
+end
+
+local function OnInventoryStateChanged(inst, owner, tier)
+    local count = 0
+    owner.components.inventory:ForEachItemSlot(function(item)
+        count = count + 1
+    end)
+    UpdateSanityStat(inst, count, tier)
+end
+
+local function HoardingHarvest(inst, ent, doer) -- they don't return the "loot" in this function, so we'll go with this solution instead of referencing the original (Scythe hoarding compatibility)
+    if ent.components.pickable.picksound then
+        doer.SoundEmitter:PlaySound(ent.components.pickable.picksound)
+    end
+
+    local success, loot = ent.components.pickable:Pick(TheWorld)
+    if doer and doer:IsValid() and doer.components.inventory then
+        if loot then
+            for i, item in ipairs(loot) do
+                doer.components.inventory:GiveItem(item)
+            end
+        end
+        SpawnPrefab("sand_puff").Transform:SetPosition(ent.Transform:GetWorldPosition())
+    else
+        if loot then
+            for i, item in ipairs(loot) do
+                Launch(item, doer, 1.5)
+            end
+        end
+    end
+end
+
+
+AddUMGemDef("orangegem2", {
+    color = RGB(249, 203, 156),
+    fns = {
+        onapply = function(item, tier)
+            item.volatile_gemology_data.um_gemologyorangegem2.old_dapperness = item.components.equippable.dapperness
+
+            if item.HarvestPickable and tier ~= 1 then
+                item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn = item.HarvestPickable
+
+                item.HarvestPickable = function(inst, ent, doer)
+                    HoardingHarvest(inst, ent, doer)
+                    if item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn then
+                        item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn(inst, ent, doer)
+                    end
+                end
+            end
+        end,
+        onremove = function(item,    tier)
+            if item.HarvestPickable then
+                item.HarvestPickable = item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn
+            end
+        end,
+        onupdate = function(item, tier)
+            local owner = item.components.inventoryitem:GetGrandOwner()
+
+            if owner ~= nil then
+                OnInventoryStateChanged(item, owner, tier)
+            end
+        end
+    }
+})
 
 return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }

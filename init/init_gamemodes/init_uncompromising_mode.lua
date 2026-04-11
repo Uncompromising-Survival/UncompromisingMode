@@ -85,7 +85,7 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --	[ 				Features			]	--
 
 
-modimport("init/init_gemology")
+--modimport("init/init_gemology")
 modimport("init/init_gemology/common")
 modimport("init/init_gemology/special")
 

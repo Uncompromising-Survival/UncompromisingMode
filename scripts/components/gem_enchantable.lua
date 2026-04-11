@@ -76,6 +76,12 @@ function GemEnchantable:HasEnchant(enchant, tier)
     end
 end
 
+function GemEnchantable:GetEnchantmentTier(enchant)
+    assert(GEM_DEFS[enchant] ~= nil, "Attempted to get unknown enchantment: " .. enchant)
+
+    return self.enchants[enchant]
+end
+
 function GemEnchantable:AddEnchantment(enchant, tier)
     if self.enchants[enchant] ~= nil then
         print("[WARN] Added enchantment \"" .. enchant .. "\", was already applied.")
