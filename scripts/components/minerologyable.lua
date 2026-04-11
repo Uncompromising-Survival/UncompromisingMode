@@ -754,6 +754,9 @@ local function ConvertToPerishable(inst)
         inst:AddComponent("perishable")
     end
     inst.components.perishable:SetPerishTime(maxval * inst.tier * (was_perishable and 1 or 3))
+
+    
+
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
     inst.components.perishable:SetPercent(pct)

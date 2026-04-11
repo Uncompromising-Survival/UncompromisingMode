@@ -405,8 +405,6 @@ AddUMGemDef("yellowgem2", {
             end
         end,
         onattack = ElectricAttack,
-        onremove = function(item, tier)
-        end
     }
 })
 
@@ -425,8 +423,6 @@ AddUMGemDef("palegem1", {
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
-        end,
-        onremove = function(item, tier)
         end
     }
 })
@@ -686,7 +682,7 @@ AddUMGemDef("orangegem2", {
                 end
             end
         end,
-        onremove = function(item,    tier)
+        onremove = function(item, tier)
             if item.HarvestPickable then
                 item.HarvestPickable = item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn
             end
@@ -697,6 +693,153 @@ AddUMGemDef("orangegem2", {
             if owner ~= nil then
                 OnInventoryStateChanged(item, owner, tier)
             end
+        end
+    }
+})
+
+--Note (Atobá): Fixing up greengem2 and doing all the ones after that were done in 1 sitting over 6 and my sanity will never recover.
+
+-----------------------------------------------------------------------------------
+---Blue1
+
+AddUMGemDef("bluegem1", {
+    color = RGB(163, 194, 244),
+    fns = {
+        onapply = function(item, tier)
+            if not item.components.insulator then
+                item:AddComponent("insulator")
+            else
+                item.volatile_gemology_data.um_gemologybluegem1.old_type = item.components.insulator.type
+                item.volatile_gemology_data.um_gemologybluegem1.old_insulation = item.components.insulator.insulation
+            end
+            item.components.insulator:SetSummer()
+            item.components.insulator:SetInsulation(TUNING.INSULATION_SMALL * tier) -- A bit too easy...
+        end,
+        onremove = function(item, tier)
+            if item.volatile_gemology_data.um_gemologybluegem1.old_type and item.volatile_gemology_data.um_gemologybluegem1.old_insulation then
+                item.components.insulator.type = item.volatile_gemology_data.um_gemologybluegem1.old_type
+                item.components.insulator.insulation = item.volatile_gemology_data.um_gemologybluegem1.old_insulation
+            end
+        end,
+        onattack = function(item, attacker, target, tier)
+            if target.components.freezable then
+                target.components.freezable:AddColdness(0.15 * tier)
+                target.components.freezable:SpawnShatterFX()
+                if target.sg and target.sg:HasStateTag("frozen") and math.random() < (tier - 1) * 0.25 and tier ~= 1 then
+                    local iceShield = SpawnPrefab("um_ice_shield")
+                    iceShield:Init(attacker, "swap_body", .5 + (tier * 0.25))
+                end
+            end
+        end
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Blue2
+
+local SourceModifierList = require("util/sourcemodifierlist")
+local DummyFueledClass = require("dummy_fueled")
+
+local function PerishFill(inst, from_object)
+    if from_object ~= nil
+        and from_object.components.watersource ~= nil
+        and from_object.components.watersource.override_fill_uses ~= nil then
+        inst.components.perishable.perishremainingtime = (math.min(inst.components.perishable.perishtime, inst.components.perishable.perishremainingtime + from_object.components.watersource.override_fill_uses))
+    else
+        inst.components.perishable:SetPercent(1)
+    end
+    inst.SoundEmitter:PlaySound("turnoftides/common/together/water/emerge/small")
+    return true
+end
+
+
+AddUMGemDef("bluegem2", {
+    color = RGB(163, 194, 244),
+    fns = {
+        onapply = function(item, tier)
+            local pct = 1
+            local maxval = 10
+
+            local was_perishable
+            if item.components.finiteuses then
+                item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses = item.components.finiteuses
+
+                pct = item.components.finiteuses:GetPercent()
+                maxval = item.components.finiteuses.total
+                item:RemoveComponent("finiteuses")
+            end
+            if item.components.fueled then
+                item.volatile_gemology_data.um_gemologybluegem2.old_fueled = item.components.fueled
+
+                pct = item.components.fueled:GetPercent()
+                maxval = item.components.fueled.maxfuel
+                local old_fueltype = item.components.fueled.fueltype
+                item:RemoveComponent("fueled")
+                item.components.fueled = DummyFueledClass                        -- This should be repeated with finiteuses in the future.
+                item.components.fueled.inst = item
+                item.components.fueled.rate_modifiers = SourceModifierList(item) -- Still going to reference the original rate modifier list to prevent any crashes related to functions that may search through it from this class
+                item.components.fueled.fueltype = old_fueltype
+            end
+
+            if item.components.perishable then
+                was_perishable = true
+                pct = item.components.perishable:GetPercent()
+                item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = item.components.perishable.perishtime
+                maxval = item.components.perishable.perishremainingtime
+                if tier ~= 1 then
+                    maxval = maxval * ((1 + tier) * 0.5)
+                end
+            elseif not item.components.perishable then
+                item:AddComponent("perishable")
+            end
+            item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 1 or 3))
+            item.components.perishable:StartPerishing()
+            item.components.perishable.onperishreplacement = "spoiled_food"
+            item.components.perishable:SetPercent(pct)
+
+            if item.persistent_gemology_data.um_gemologybluegem2.perish_time_left then
+                item.components.perishable.perishremainingtime = item.persistent_gemology_data.um_gemologybluegem2.perish_time_left
+            end
+
+
+            -- inst.components.finiteuses = {}
+            -- inst.components.finiteuses.Use = function() end
+            item:AddTag("frozen")
+            if item.components.fillable then -- Good ending for watering cans, I could have just made them remove the fillable component
+                item.components.fillable.overrideonfillfn = PerishFill
+            end
+        end,
+        onremove = function(item, tier)
+            local pct = item.components.perishable:GetPercent()
+
+            if item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses then
+                item.components.finiteuses = item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses
+                item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses = nil
+                item.components.finiteuses:SetPercent(pct)
+            end
+            if item.volatile_gemology_data.um_gemologybluegem2.old_fueled then
+                item.components.fueled = item.volatile_gemology_data.um_gemologybluegem2.old_fueled
+                item.volatile_gemology_data.um_gemologybluegem2.old_fueled = nil
+                item.components.fueled:SetPercent(pct)
+            end
+            if item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
+                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
+                item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = nil
+                item.components.perishable:SetPercent(pct)
+            end
+
+            if not item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
+                item:RemoveComponent("perishable")
+            else
+                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
+                item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = nil
+            end
+        end,
+        onupdate = function(item, tier)
+            item.persistent_gemology_data.um_gemologybluegem2.perish_time_left = item.components.perishable.perishremainingtime
+        end,
+        can_apply_fn = function(item, tier)
+            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.component.perishable ~= nil
         end
     }
 })
