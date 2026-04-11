@@ -24,8 +24,11 @@ The values are:
 
 Additional note:
 
-Every gemolyable item has a field called gemology_data, with holds any relevant data for gems. For example:
+Every gemologyable item has two fields called volatile_gemology_data and persistent_gemology_data, with holds any relevant data for gems. For example:
 item.persistent_gemology_data[gem_name].foo = true
+item.volatile_gemology_data[gem_name].bar = {thing = 1}
+
+persistent is actually saved and loaded, volatile is not.
 
 This is so we can save some gem-specific data so it can probably revert when removed.
 ]]
@@ -306,6 +309,103 @@ AddUMGemDef("greengem2", {
                     end
                 end
             end
+        end
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Yellow1
+
+local sanities = { TUNING.DAPPERNESS_SMALL / 2, TUNING.DAPPERNESS_SMALL, TUNING.DAPPERNESS_SMALL * 2 }
+
+
+AddUMGemDef("yellowgem1", {
+    color = RGB(255, 228, 153),
+    fns = {
+        onapply = function(item, tier)
+            if item.components.equippable then
+                item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness = item.components.equippable.dapperness
+
+                if item.components.equippable.dapperness then
+                    item.components.equippable.dapperness = item.components.equippable.dapperness + sanities[tier]
+                else
+                    item.components.equippable.dapperness = sanities[tier]
+                end
+            end
+        end,
+        onremove = function(item, tier)
+            if item.components.equippable then
+                item.components.equippable.dapperness = item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness
+            end
+        end
+    }
+})
+
+-----------------------------------------------------------------------------------
+---Yellow2
+
+local static_mods = { 10, 15, 20 }
+
+local combat_health = { "_health", "_combat" }
+local arc_player = { "player", "arcgrounded" }
+local function FindEnemiesNearbyAndShockThem(inst, attacker, target, Shock_again, tier)
+    local x, y, z = target.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 4, combat_health, arc_player)
+    for i, v in ipairs(ents) do
+        if not v.components.health:IsDead() then
+            local dist = math.sqrt(target:GetDistanceSqToInst(v))
+            v:DoTaskInTime(dist / 5, function(v)
+                if v.components.health and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then -- we check these again because they could have already died or been shocked once
+                    local mult = 2 - dist
+                    if tier == 2 then
+                        mult = math.clamp(mult, 0.1, 1.25)
+                    elseif tier == 3 then
+                        mult = math.clamp(mult, 0.25, 1.5)
+                    end
+                    local damage = inst.components.weapon.damage * mult
+                    v.components.combat:GetAttacked(attacker, damage, nil, "electric")
+                    v:AddTag("arcgrounded")
+                    Shock_again(inst, attacker, v)
+                    SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
+                    v:DoTaskInTime(3, function(v) v:RemoveTag("arcgrounded") end)
+                end
+            end)
+        end
+    end
+end
+
+local function ElectricAttack(inst, attacker, target, tier)
+    SpawnElectricHitSparks(attacker, target, true)
+    if tier ~= 1 then
+        if target:IsValid() then
+            FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
+        end
+        -- Dont allow arcing back upon oneself
+        target:AddTag("arcgrounded")
+        target:DoTaskInTime(3, function(target) target:RemoveTag("arcgrounded") end)
+    end
+
+    if target.components.combat then
+        target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
+    end
+
+    if inst.components.weapon.stimuli ~= "electric" then
+        inst.components.weapon:SetElectric(1, 1.75)
+    end
+end
+
+
+
+AddUMGemDef("yellowgem2", {
+    color = RGB(255, 228, 153),
+    fns = {
+        onapply = function(item, tier)
+            if item.prefab == "hambat" then
+                item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
+            end
+        end,
+        onattack = ElectricAttack,
+        onremove = function(item, tier)
         end
     }
 })
