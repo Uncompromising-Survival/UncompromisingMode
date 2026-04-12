@@ -43,6 +43,59 @@ local function ForgeGem(inst)
     return false
 end
 
+--{ slot = in_slot, item = item, src_pos = src_pos, }
+function ShowItems(inst, data)
+    --delay a frame.
+    inst:DoTaskInTime(0, function(inst)
+        if inst.tool_fx ~= nil then
+            inst.tool_fx:Remove()
+            inst.tool_fx = nil
+        end
+
+        if inst.gem_fx ~= nil then
+            inst.gem_fx:Remove()
+            inst.gem_fx = nil
+        end
+
+
+        local tool = inst.components.container:GetItemInSlot(1)
+        local gem = inst.components.container:GetItemInSlot(2)
+
+        if tool ~= nil then
+            inst.tool_fx = SpawnPrefab(tool.prefab, tool.skinname, tool.skin_id)
+            inst.tool_fx:RemoveAllEventCallbacks()
+            inst.tool_fx.components.inventoryitem.canbepickedup = false
+
+            inst.tool_fx.persists = false
+            inst.tool_fx.AnimState:SetBank(tool.AnimState:GetCurrentBankName())
+            inst.tool_fx.AnimState:SetBuild(tool.AnimState:GetBuild())
+            inst.tool_fx:AddTag("FX")
+            inst.tool_fx.entity:SetParent(inst.entity)
+            inst.tool_fx:AddComponent("highlightchild")
+
+
+            local follower = inst.tool_fx.entity:AddFollower()
+            follower:FollowSymbol(inst.GUID, "smithed_tool", 0, 40, 0)
+        end
+
+        if gem ~= nil then
+            inst.gem_fx = SpawnPrefab(gem.prefab)
+            inst.gem_fx:RemoveAllEventCallbacks()
+            inst.gem_fx.components.inventoryitem.canbepickedup = false
+
+            inst.gem_fx.persists = false
+            inst.gem_fx.AnimState:SetBank(gem.AnimState:GetCurrentBankName())
+            inst.gem_fx.AnimState:SetBuild(gem.AnimState:GetBuild())
+            inst.gem_fx:AddTag("FX")
+            inst.gem_fx:AddComponent("highlightchild")
+
+            inst.gem_fx.entity:SetParent(inst.entity)
+            local follower = inst.gem_fx.entity:AddFollower()
+            follower:FollowSymbol(inst.GUID, "gem", 0, 20, 0)
+        end
+    end)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -79,6 +132,10 @@ local function fn()
     inst.components.container.skipclosesnd = true
     inst.components.container.skipopensnd = true
     inst.components.container.acceptsstacks = false
+    inst:ListenForEvent("itemget", ShowItems)
+    inst:ListenForEvent("itemlose", ShowItems)
+
+    ShowItems(inst)
 
     return inst
 end

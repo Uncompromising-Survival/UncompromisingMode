@@ -1224,7 +1224,7 @@ Assets = {
     Asset("ANIM", "anim/um_archives_projectinator.zip"),
     Asset("ANIM", "anim/um_archives_receptionator.zip"),
     Asset("ANIM", "anim/um_lunar_spark.zip"),
-    
+
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
     Asset("ANIM", "anim/um_soul_ball.zip"),
@@ -1893,6 +1893,8 @@ Assets = {
     Asset("ANIM", "anim/um_mite_cave.zip"),
 
     Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
+    Asset("ANIM", "anim/ui_forge_1x2.zip"),
+
 }
 
 for _, asset in pairs(inventoryitems) do

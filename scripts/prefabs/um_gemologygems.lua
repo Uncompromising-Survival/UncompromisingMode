@@ -54,7 +54,7 @@ local function GetMainName(inst)
 end
 
 local function Shine(inst)
-    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() then
+    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() and inst:IsRevealed() then
         local fx = SpawnPrefab("crab_king_shine")
         fx.Transform:SetScale(0.25, 0.25, 0.25)
         fx.entity:AddFollower()
@@ -62,7 +62,7 @@ local function Shine(inst)
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
     end
 
-    if inst.tier == 3 and inst:IsRevealed()  then
+    if inst.tier == 3 then
         inst.shinetask = inst:DoTaskInTime(4 + math.random() * 5, Shine)
     end
 end

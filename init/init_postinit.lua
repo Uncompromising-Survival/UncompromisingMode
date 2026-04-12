@@ -73,6 +73,7 @@ local component_post = {
 	"possessedaxe",
 	"inventoryitem",
     "pickable",
+    "actionqueuer"
 }
 
 local prefab_post = {

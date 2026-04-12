@@ -944,8 +944,8 @@ containers.params.um_gemologyforge =
             { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "gem_slot.tex",           atlas = "images/gem_slot.xml" },
         },
-        animbank = "ui_cookpot_1x2",
-        animbuild = "ui_cookpot_1x2",
+        animbank = "ui_forge_1x2",
+        animbuild = "ui_forge_1x2",
         pos = Vector3(200, 0, 0),
         side_align_tip = 100,
         buttoninfo =
