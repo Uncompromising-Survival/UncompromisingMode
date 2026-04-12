@@ -1,11 +1,11 @@
 local DEFS = require("gemology_defs")
-local GEM_LOOKUP, INVERTED_GEM_LOOKUP =  DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
 
 
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self._enchants = net_smallbytearray(inst.GUID, "gemology.enchants", "gemology.onenchantsdirty")
-    self._slots = net_int(inst.GUID, "gemology.slots","gemology.onslotsdirty")
+    self._slots = net_int(inst.GUID, "gemology.slots", "gemology.onslotsdirty")
 end)
 
 function GemEnchantable:SetEnchantments(enchants)
@@ -14,7 +14,7 @@ end
 
 function GemEnchantable:SetEnchantmentsFromNames(enchant_names)
     local _enchants = {}
-    for _,enchant in ipairs(enchant_names) do
+    for _, enchant in ipairs(enchant_names) do
         table.insert(_enchants, INVERTED_GEM_LOOKUP[enchant])
     end
     self:SetEnchantments(_enchants)

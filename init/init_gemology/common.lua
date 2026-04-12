@@ -83,7 +83,6 @@ env.AddComponentPostInit("weapon", function(self)
     function self:OnAttack(attacker, target, projectile, ...)
         if self.inst.components.gem_enchantable then
             for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                print("running onattack fn for " .. enchant)
                 if GEM_DEFS[enchant].fns.onattack ~= nil then
                     GEM_DEFS[enchant].fns.onattack(self.inst, attacker, target, tier)
                 end
@@ -108,18 +107,11 @@ for k, action in pairs(valid_work_actions) do
     ACTIONS[action].fn = function(act, ...)
         local ret = old_fn(act, ...)
 
-        print("action stuff")
-        print("ret", ret)
         if ret then
             local tool = act.doer.components.inventory and act.doer.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            print("tool", tool)
-            print("is enchantable?", tool and tool.components.gem_enchantable ~= nil)
             if tool and tool.components.gem_enchantable ~= nil then
                 for enchant, tier in pairs(tool.components.gem_enchantable.enchants) do
-                    print("enchants", enchant, tier)
-                    printwrap("gem def fns", GEM_DEFS[enchant].fns)
                     if GEM_DEFS[enchant].fns.onwork then
-                        print("running onwork fn for " .. enchant)
                         GEM_DEFS[enchant].fns.onwork(tool, act.doer, act.target, tier)
                     end
                 end
@@ -137,7 +129,6 @@ env.AddComponentPostInit("equippable", function(self)
             if self.inst.components.gem_enchantable then
                 for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                     if GEM_DEFS[enchant].fns.onequip then
-                        print("running onequip fn for " .. enchant)
                         GEM_DEFS[enchant].fns.onequip(self.inst, owner, tier)
                     end
                 end
@@ -153,7 +144,6 @@ env.AddComponentPostInit("equippable", function(self)
             if self.inst.components.gem_enchantable then
                 for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                     if GEM_DEFS[enchant].fns.onunequip then
-                        print("running onunequip fn for " .. enchant)
                         GEM_DEFS[enchant].fns.onunequip(self.inst, owner, tier)
                     end
                 end

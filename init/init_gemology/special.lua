@@ -128,18 +128,12 @@ end)
 env.AddComponentPostInit("workable", function(self)
     local _WorkedBy_Internal = self.WorkedBy_Internal
     function self:WorkedBy_Internal(worker, numworks, ...)
-        print("worked by")
         local tool = worker.components.inventory and worker.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         if tool and tool.components.gem_enchantable then
             local citrine = tool.components.gem_enchantable.enchants["um_gemologyorangegem2"]
-            print("citrine ", citrine)
             if citrine and citrine > 1 then
-                print("marking for hoarding")
-                print(self.inst.um_marked_for_hoarding)
-                print(not self.inst.um_marked_for_hoarding)
                 if not self.inst.um_marked_for_hoarding then
                     self.inst.um_marked_for_hoarding = worker
-                    print(self.inst.um_marked_for_hoarding)
                 end
             end
         else
@@ -155,11 +149,8 @@ end)
 env.AddComponentPostInit("lootdropper", function(self)
     local _SpawnLootPrefab = self.SpawnLootPrefab
     function self:SpawnLootPrefab(lootprefab, pt, linked_skinname, skin_id, userid, ...)
-        print("spawning loot prefab")
         local loot = _SpawnLootPrefab(self, lootprefab, pt, linked_skinname, skin_id, userid, ...)
         local hoarder = self.inst.um_marked_for_hoarding
-        print("hoarder", hoarder)
-        print("loot", loot)
         if hoarder and hoarder:IsValid() and hoarder.components.inventory and loot ~= nil then
             local inst = self.inst
             SpawnPrefab("sand_puff").Transform:SetPosition(inst.Transform:GetWorldPosition())

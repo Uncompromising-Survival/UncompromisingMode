@@ -65,14 +65,11 @@ end, nil, {
 })
 
 function GemEnchantable:HasEnchant(enchant, tier)
-    print(enchant, tier)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
     if tier ~= nil then
         assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
         assert(type(tier) == 'number', "Invalid argument #2 for HasEnchant, required type: number - provided type: " .. type(tier))
     end
-
-    print(self.enchants[enchant])
 
     if tier == nil then
         return self.enchants[enchant] ~= nil
@@ -98,7 +95,6 @@ function GemEnchantable:AddEnchantment(enchant, tier)
     self.enchants[enchant] = tier
 
     if GEM_DEFS[enchant].fns.onapply then
-        print("running onapply for " .. enchant)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
