@@ -2,11 +2,30 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
+local UpvalueHacker = require("tools/upvaluehacker")
 
 env.AddPrefabPostInit("cave_vent_mite", function(inst)
     if not TheWorld.ismastersim then
         return
     end
+
+    local function SetUpChanceLoot(inst)
+        inst.components.lootdropper.chanceloot = nil
+        inst.components.lootdropper:AddChanceLoot("rocks", inst.shielded and 1.0 or 0.5)
+
+        print("is geode?", inst.isGeode)
+        if inst.isGeode then
+            print("add gem vent")
+            inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
+        end
+
+        if inst.components.planarentity ~= nil then
+            inst.components.lootdropper:AddChanceLoot("horrorfuel", 0.5)
+        end
+    end
+
+    UpvalueHacker.SetUpvalue(inst.SetShield, SetUpChanceLoot, "SetUpChanceLoot")
+
     inst:DoTaskInTime(0, function(inst)
         if math.random() > 0.5 and not inst.isGeode then
             inst.isGeode = true
@@ -14,7 +33,6 @@ env.AddPrefabPostInit("cave_vent_mite", function(inst)
             inst.components.lootdropper:AddChanceLoot("um_gemology_geode_vent", 1)
         end
     end)
-
 
     local _OnSave = inst.OnSave
     inst.OnSave = function(inst, data)
