@@ -23,6 +23,7 @@ end
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
     self.enchants = {}
+    self.enchant_timeleft = {}
     self.slots = DEFAULT_SLOTS
 
     self.update_flag = false
@@ -38,7 +39,7 @@ local GemEnchantable = Class(function(self, inst)
     end
 
 
-    for k,v in pairs(GEM_LOOKUP) do
+    for k, v in pairs(GEM_LOOKUP) do
         self.inst.persistent_gemology_data[v] = {}
         self.inst.volatile_gemology_data[v] = {}
     end
@@ -50,12 +51,12 @@ local GemEnchantable = Class(function(self, inst)
         if item ~= nil and item:IsValid() and item.components.gem_enchantable then
             for enchant, tier in pairs(item.components.gem_enchantable.enchants) do
                 if GEM_DEFS[enchant].fns.onupdate then
-                    print("running onupdate for "..enchant)
                     GEM_DEFS[enchant].fns.onupdate(item, tier)
                 end
             end
         end
     end)
+
 
     self.update_flag = true
 end, nil, {
@@ -67,8 +68,8 @@ function GemEnchantable:HasEnchant(enchant, tier)
     print(enchant, tier)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
     if tier ~= nil then
-        assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier.."\" Gem tiers are "..MIN_GEM_TIER.." to "..MAX_GEM_TIER..".")
-        assert(type(tier) == 'number', "Invalid argument #2 for HasEnchant, required type: number - provided type: "..type(tier))
+        assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
+        assert(type(tier) == 'number', "Invalid argument #2 for HasEnchant, required type: number - provided type: " .. type(tier))
     end
 
     print(self.enchants[enchant])
@@ -92,18 +93,24 @@ function GemEnchantable:AddEnchantment(enchant, tier)
     end
 
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to add unknown enchantment: " .. enchant)
-    assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier.."\" Gem tiers are "..MIN_GEM_TIER.." to "..MAX_GEM_TIER..".")
+    assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to add gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
 
     self.enchants[enchant] = tier
 
     if GEM_DEFS[enchant].fns.onapply then
-        print("running onapply for "..enchant)
+        print("running onapply for " .. enchant)
         GEM_DEFS[enchant].fns.onapply(self.inst, tier)
     end
 
     self.slots = self.slots - 1
 
     self.update_flag = true
+
+    self.inst:PushEvent("onaddenchant", { enchant = enchant, tier = tier })
+
+    if not (self.inst.components.fueled or self.inst.components.finiteuses or self.inst.components.perishable) then
+        self.enchant_timeleft[enchant] = TUNING.TOTAL_DAY_TIME * 10
+    end
 end
 
 function GemEnchantable:RemoveEnchantment(enchant)
@@ -113,16 +120,22 @@ function GemEnchantable:RemoveEnchantment(enchant)
     local tier = self.enchants[enchant]
 
     if GEM_DEFS[enchant].fns.onremove then
-        print("running onremove for "..enchant)
         GEM_DEFS[enchant].fns.onremove(self.inst, tier)
     end
+
+    self.inst:PushEvent("onremoveenchant", { enchant = enchant, tier = tier })
+
 
     self.enchants[enchant] = nil
 
     self.inst.persistent_gemology_data[enchant] = {} --clear data for this effect.
-    self.inst.volatile_gemology_data[enchant] = {} --clear data for this effect.
+    self.inst.volatile_gemology_data[enchant] = {}   --clear data for this effect.
 
     self.update_flag = true
+end
+
+function GemEnchantable:IsEnchanted()
+    return next(self.enchants) ~= nil
 end
 
 function GemEnchantable:OnSave()
@@ -166,7 +179,5 @@ end
 function GemEnchantable:AddSlot(num)
     self.slots = self.slots + num
 end
-
-
 
 return GemEnchantable

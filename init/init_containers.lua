@@ -114,7 +114,7 @@ function CheckNettle(container, item, slot)
 end
 
 function CheckGem(container, item, slot)
-    return not item:HasTag("irreplaceable") and item:HasTag("gem")
+    return not item:HasTag("irreplaceable") and item:HasTag("gem") or GEM_DEFS[item.prefab] ~= nil
 end
 
 function CheckSlingshotAmmo(container, item, slot)
