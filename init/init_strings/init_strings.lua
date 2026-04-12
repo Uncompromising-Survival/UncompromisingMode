@@ -182,7 +182,7 @@ RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
 RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
-RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems."
+RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems and geodes. Bigger on the inside."
 
 RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]

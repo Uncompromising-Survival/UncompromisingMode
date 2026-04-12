@@ -440,6 +440,8 @@ local inventoryitems =
     "um_gemology_geode_glass",
     "um_gemology_geode_slime",
     "um_gemology_geode_ruins",
+    "um_gemology_geode_sink",
+    "um_gemology_geode_vent",
 
     "um_flamethrower",
     "um_firecream",
@@ -1888,6 +1890,9 @@ Assets = {
 
     Asset("IMAGE", "images/wolfgang_rework_skilltree.tex"),
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
+    Asset("ANIM", "anim/um_mite_cave.zip"),
+
+    Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

@@ -169,9 +169,10 @@ local LOOT_DATA = {
     ["um_gemology_geode_lobster"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_lobster" } },
     ["um_gemology_geode_guano"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_guano" } },
     ["um_gemology_geode_ruins"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_ruins" } },
-    --["um_gemology_geode_vent"] = {build = "um_tree_rock_swaps", symbols = {"swap_geode_vent"}},
+    ["um_gemology_geode_vent"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_vent" } },
+    ["um_gemology_geode_sink"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_sink" } },
     ["snappy_jaw"] = { build = "um_tree_rock_swaps", symbols = { "swap_snappy_jaw" } },
-    ["um_fyrite"] = { build = "um_tree_rock_swaps", symbols = { "swap_fyrite" } },
+    ["um_fyrite"] = { build = "um_tree_rock_swaps", symbols = { "swap_pyrite" } },
 }
 
 local TASKS = {

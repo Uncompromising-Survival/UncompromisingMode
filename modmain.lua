@@ -75,7 +75,6 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("init/um_tree_rock_data")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
@@ -468,3 +467,5 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
+
+modimport("init/um_tree_rock_data")

@@ -4,6 +4,7 @@ local ACTIONS = GLOBAL.ACTIONS
 local Inv = require "widgets/inventorybar"
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 local SpawnPrefab = GLOBAL.SpawnPrefab
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
 
 local containers = require("containers")
 --[[
@@ -137,7 +138,7 @@ function CheckFeather(container, item, slot)
 end
 
 function CheckGemologyGem(container, item, slot)
-    return item:HasTag("gemology_gem")
+    return GEM_DEFS[item.prefab] ~= nil or item:HasTag("gemology_gem") or item:HasTag("gemology_geode") --checking defs in case someone adds some random thing as well.
 end
 
 function CheckNOTHING(container, item, slot)
@@ -614,10 +615,10 @@ modparams.um_gemology_pouch =
     {
         slotpos = {},
         slotbg  = {},
-        --animbank  = "ui_slingshotammo_container_3x2",
-        --animbuild = "ui_slingshotammo_container_3x2",
+        bgatlas = "images/dragonflycontainerborder.xml",
+        bgimage = "dragonflycontainerborder.tex",
+
         pos     = Vector3(0, 200, 0),
-        --side_align_tip = 160,
     },
     type = "chest",
     itemtestfn = CheckGemologyGem,
@@ -625,11 +626,10 @@ modparams.um_gemology_pouch =
 
 --local slingshotammo_container_bg = { image = "slingshot_ammo_slot.tex" }
 
-for y = 4, 0, -1 do
+for y = 2.5, -1.5, -1 do
     for x = 0, 4 do
-        --table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(90 * x - 90, 80 * y - 42.5, 0))
-        table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2, 0))
-        --table.insert(containers.params.swire_purse.widget.slotbg, slingshotammo_container_bg)
+        table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2 + 120
+        , 0))
     end
 end
 
@@ -941,7 +941,7 @@ containers.params.um_gemologyforge =
         },
         slotbg =
         {
-                        { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
             { image = "gem_slot.tex",           atlas = "images/gem_slot.xml" },
         },
         animbank = "ui_cookpot_1x2",
@@ -959,13 +959,12 @@ containers.params.um_gemologyforge =
     type = "cooker",
 }
 
-local GEM_DEFS = require("gemology_defs").GEM_DEFS
 
 function containers.params.um_gemologyforge.itemtestfn(container, item, slot)
     return ((slot == 1 and (item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil)) or
-            (slot == 2 and GEM_DEFS[item.prefab] ~= nil) or
-            (slot == nil and ((item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil) or GEM_DEFS[item.prefab] ~= nil))
-        )
+        (slot == 2 and GEM_DEFS[item.prefab] ~= nil) or
+        (slot == nil and ((item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil) or GEM_DEFS[item.prefab] ~= nil))
+    )
 end
 
 function containers.params.um_gemologyforge.widget.buttoninfo.fn(inst, doer)
