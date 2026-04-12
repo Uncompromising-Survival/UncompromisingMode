@@ -140,8 +140,7 @@ local WEIGHTED_LOOT = {
         ["yellowgem"]  = 0.02,
         ["orangegem"]  = 0.02,
         ["greengem"]   = 0.02,
-        --["um_gemology_geode_vent"] = 0.02,
-
+        ["um_gemology_geode_vent"] = 0.02,
     },
 
     ["VENT_AREA_SHADOW_RIFT"] = {
@@ -155,7 +154,7 @@ local WEIGHTED_LOOT = {
         ["yellowgem"]  = 7,
         ["orangegem"]  = 7,
         ["greengem"]   = 7,
-        --["um_gemology_geode_vent"] = 7,
+        ["um_gemology_geode_vent"] = 7,
     },
 }
 
