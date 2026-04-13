@@ -122,12 +122,12 @@ function ItemTile._ctor(self, invitem, ...)
         end
 
         local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
+        if durability ~= nil and enchant ~= nil then
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
 
-        self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
-
-        local color = GEM_DEFS[enchant].color
-        self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
-
+            local color = GEM_DEFS[enchant].color
+            self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
+        end
         self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
             if invitem.replica.gem_enchantable:IsEnchanted() then
                 self.gem_border:Show()
@@ -136,6 +136,9 @@ function ItemTile._ctor(self, invitem, ...)
             end
 
             local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
+            if durability == nil or enchant == nil then
+                return
+            end
 
             self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
 
@@ -236,12 +239,9 @@ env.AddComponentPostInit("finiteuses", function(self)
         local new_percent = val / self.total
         local delta = new_percent - curr_percent
 
-        print("FINITE: curr_percent", curr_percent)
-        print("FINITE: new_percent", new_percent)
-        print("FINITE: delta", delta)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
-            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+            for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
@@ -259,12 +259,9 @@ env.AddComponentPostInit("fueled", function(self)
         local curr_percent = self:GetPercent()
         local new_percent = amount / self.maxfuel
         local delta = new_percent - curr_percent
-        print("FUELED: curr_percent", curr_percent)
-        print("FUELED: new_percent", new_percent)
-        print("FUELED: delta", delta)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
-            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+            for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
@@ -283,12 +280,8 @@ env.AddComponentPostInit("armor", function(self)
         local new_percent = amount / self.maxcondition
         local delta = new_percent - curr_percent
 
-        print("ARMOR: curr_percent", curr_percent)
-        print("ARMOR: new_percent", new_percent)
-        print("ARMOR: delta", delta)
-
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
-            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+            for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
@@ -315,7 +308,7 @@ env.AddComponentPostInit("perishable", function(self)
 
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
-            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+            for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end

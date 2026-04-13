@@ -99,11 +99,13 @@ function GemEnchantable:SetDurability(enchantment, durability)
     if durability <= 0 then
         self:RemoveEnchantment(enchantment)
         return
-    elseif durability > 1 then
+    end
+
+    if durability > 1 then
         durability = 1
     end
 
-    self.enchant_durabilty[enchantment] = math.floor(durability * 1000 + 0.5) / 1000 -- round it to limit string size when passing this to the client net var.
+    self.enchant_durabilty[enchantment] = durability
 
 
     self.update_flag = true
