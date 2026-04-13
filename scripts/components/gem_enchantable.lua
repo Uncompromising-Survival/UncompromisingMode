@@ -10,11 +10,14 @@ local function on_enchants(self, flag)
         local names = {}
 
         for k, v in pairs(enchants) do
-            table.insert(names, k)
+            if not table.contains(self.hidden_enchants, k) then --only sync non-hidden names.
+                table.insert(names, k)
+            end
         end
 
         self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
         self.inst.replica.gem_enchantable._slots:set(self.slots)
+
 
         self.update_flag = false
     end
@@ -25,7 +28,7 @@ local GemEnchantable = Class(function(self, inst)
     self.enchants = {}
     self.enchant_timeleft = {}
     self.slots = DEFAULT_SLOTS
-
+    self.hidden_enchants = {} --WARNING: NOT SAVED
     self.update_flag = false
 
     --this data saves
@@ -55,6 +58,8 @@ local GemEnchantable = Class(function(self, inst)
                 end
             end
         end
+
+        self.update_flag = true
     end)
 
 

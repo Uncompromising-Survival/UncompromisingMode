@@ -32,7 +32,6 @@ function GemEnchantable:GetEnchantmentNames()
         table.insert(names, GEM_LOOKUP[v])
     end
 
-
     return names
 end
 

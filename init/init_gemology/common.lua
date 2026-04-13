@@ -20,13 +20,14 @@ end)
 
 --sets the adjective of the gem enchantments (priotizes chaos emerald, gets the first one if otherwise)
 local function GetEnchantmentAdjective(enchants)
-    if table.contains(enchants, "um_gemologygreengem2") then
-        return STRINGS.NAMES.GEMTOOL_PREFIX.UM_GEMOLOGYGREENGEM2 --prio chaos emerald so it doesn't just tell you every effect.
-    else
-        for k, v in pairs(enchants) do
-            return STRINGS.NAMES.GEMTOOL_PREFIX[string.upper(v)] --get the first gem enchant
+    local prefix = ""
+    for k, v in pairs(enchants) do
+        prefix = prefix .. STRINGS.NAMES.GEMTOOL_PREFIX[string.upper(v)]
+        if k ~= #enchants then
+            prefix = prefix .. " "
         end
     end
+    return prefix
 end
 
 local _GetAdjectivedName = EntityScript.GetAdjectivedName
@@ -50,30 +51,33 @@ function EntityScript:GetAdjectivedName(...)
 end
 
 --sets the text color. (priotizes chaos emerald, gets the first one if otherwise)
-local function GetFirstGemColor(enchants)
-    if table.contains(enchants, "um_gemologygreengem2") then
-        return GEM_DEFS["um_gemologygreengem2"].color --prio chaos emerald so it doesn't just tell you every effect.
-    else
-        for k, v in pairs(enchants) do
-            return GEM_DEFS[v].color --TODO: Make colors shift.
+local function GetAllGemColor(enchants)
+    local colors = {}
+    for k, v in pairs(enchants) do
+        if v ~= nil then
+            table.insert(colors, GEM_DEFS[v].color)
         end
     end
+    return colors
 end
 
-env.AddClassPostConstruct("widgets/itemtile", function(self)
-    local _UpdateTooltip = self.UpdateTooltip
-    function self:UpdateTooltip(...)
-        local ret = _UpdateTooltip(self, ...)
-        if self.item ~= nil and self.item:IsValid() and self.item.replica.gem_enchantable then
-            local enchants = self.item.replica.gem_enchantable:GetEnchantmentNames()
-            if #enchants > 0 then
-                self:SetTooltipColour(unpack(GetFirstGemColor(enchants)))
-            end
-        end
 
-        return ret
+
+--postconstruct was giving a LOT of stale reference warnings, so i'll just hook like this
+local ItemTile = require("widgets/itemtile")
+local _UpdateTooltip = ItemTile.UpdateTooltip
+
+function ItemTile:UpdateTooltip(...)
+    local ret = _UpdateTooltip(self, ...)
+    if self.item ~= nil and self.item:IsValid() and self.item.replica.gem_enchantable then
+        local enchants = self.item.replica.gem_enchantable:GetEnchantmentNames()
+        if #enchants > 0 then
+            self:SetTooltipColour(unpack(GetAllGemColor(enchants)[math.random(#enchants)]))
+        end
     end
-end)
+
+    return ret
+end
 
 --------------------------------------------------------------------------
 --Common Gem Effect Handling
@@ -125,7 +129,7 @@ end
 env.AddComponentPostInit("equippable", function(self)
     local _Equip = self.Equip
     function self:Equip(owner, ...)
-        if owner:HasTag("equipmentmodel") then
+        if not owner:HasTag("equipmentmodel") then
             if self.inst.components.gem_enchantable then
                 for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                     if GEM_DEFS[enchant].fns.onequip then

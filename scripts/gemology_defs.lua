@@ -279,12 +279,16 @@ local function addRandomGemEffects(inst, item, tier)
         local enchant = valid_enchants[math.random(#valid_enchants)]
         if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1) --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddSlot(1)                                              --don't consume a slot when adding extra enchant.
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
 
         tries = tries - 1
+    end
+
+    for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
+        table.insert(inst.components.gem_enchantable.hidden_enchants, k)
     end
 end
 
@@ -296,7 +300,12 @@ AddUMGemDef("greengem2", {
                 item.persistent_gemology_data.um_gemologygreengem2.gem_effects = {}
 
                 addRandomGemEffects(item, item, tier)
+            else
+                for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
+                    table.insert(item.components.gem_enchantable.hidden_enchants, k)
+                end
             end
+
             item:WatchWorldState("startday", function(inst)
                 addRandomGemEffects(inst, item, tier)
             end)
@@ -306,6 +315,12 @@ AddUMGemDef("greengem2", {
                 for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
                     if item.components.gem_enchantable.enchants[k] then
                         item.components.gem_enchantable:RemoveEnchantment(k)
+                    end
+                end
+
+                for k, v in pairs(item.components.gem_enchantable.hidden_enchants) do
+                    if item.persistent_gemology_data.um_gemologygreengem2.gem_effects[v] then
+                        table.remove(item.components.gem_enchantable.hidden_enchants, k)
                     end
                 end
             end
@@ -348,7 +363,7 @@ local static_mods = { 10, 15, 20 }
 
 local combat_health = { "_health", "_combat" }
 local arc_player = { "player", "arcgrounded" }
-local function FindEnemiesNearbyAndShockThem(inst, attacker, target, Shock_again, tier)
+local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain, tier)
     local x, y, z = target.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 4, combat_health, arc_player)
     for i, v in ipairs(ents) do
@@ -365,7 +380,7 @@ local function FindEnemiesNearbyAndShockThem(inst, attacker, target, Shock_again
                     local damage = inst.components.weapon.damage * mult
                     v.components.combat:GetAttacked(attacker, damage, nil, "electric")
                     v:AddTag("arcgrounded")
-                    Shock_again(inst, attacker, v)
+                    ShockAgain(inst, attacker, v)
                     SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
                     v:DoTaskInTime(3, function(v) v:RemoveTag("arcgrounded") end)
                 end
