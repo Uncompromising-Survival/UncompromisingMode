@@ -936,8 +936,8 @@ containers.params.um_gemologyforge =
     {
         slotpos =
         {
-            Vector3(0, 32 + 4, 0),
-            Vector3(0, -(32 + 4), 0),
+            Vector3(0, 36 + 4, 0),
+            Vector3(0, -30, 0),
         },
         slotbg =
         {
@@ -951,7 +951,7 @@ containers.params.um_gemologyforge =
         buttoninfo =
         {
             text = "Forge!", --TODO STRING GLOBAL
-            position = Vector3(0, -93, 0),
+            position = Vector3(3, -90, 0),
         },
     },
     acceptsstacks = false,
