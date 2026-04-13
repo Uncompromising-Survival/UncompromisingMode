@@ -15,9 +15,13 @@ local function on_enchants(self, flag)
             end
         end
 
+
         self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
         self.inst.replica.gem_enchantable._slots:set(self.slots)
 
+
+
+        self.inst.replica.gem_enchantable._enchant_durabilty:set(json.encode(self.enchant_durabilty))
 
         self.update_flag = false
     end
@@ -25,10 +29,10 @@ end
 
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
-    self.enchants = {}
-    self.enchant_timeleft = {}
+    self.enchants = {}          --[enchantment name] = tier
+    self.enchant_durabilty = {} --[enchantment name] = durability (0-1)%
     self.slots = DEFAULT_SLOTS
-    self.hidden_enchants = {} --WARNING: NOT SAVED
+    self.hidden_enchants = {}   --WARNING: NOT SAVED
     self.update_flag = false
 
     --this data saves
@@ -64,6 +68,8 @@ local GemEnchantable = Class(function(self, inst)
 
 
     self.update_flag = true
+
+    --for methods updating durability from perishable, fueled, armor and finiteuses, see init/init_gemology/common
 end, nil, {
     update_flag = on_enchants,
     slots = on_enchants,
@@ -89,6 +95,28 @@ function GemEnchantable:GetEnchantmentTier(enchant)
     return self.enchants[enchant]
 end
 
+function GemEnchantable:SetDurability(enchantment, durability)
+    if durability <= 0 then
+        self:RemoveEnchantment(enchantment)
+        return
+    elseif durability > 1 then
+        durability = 1
+    end
+
+    self.enchant_durabilty[enchantment] = math.floor(durability * 1000 + 0.5) / 1000 -- round it to limit string size when passing this to the client net var.
+
+
+    self.update_flag = true
+end
+
+function GemEnchantable:DoDurabilityDelta(enchantment, value)
+    self:SetDurability(enchantment, self.enchant_durabilty[enchantment] + value)
+end
+
+function GemEnchantable:HasDurabilityEnabled(enchant)
+    return self.enchant_durabilty[enchant] ~= nil
+end
+
 function GemEnchantable:AddEnchantment(enchant, tier)
     if self.enchants[enchant] ~= nil then
         print("[WARN] Added enchantment \"" .. enchant .. "\", was already applied.")
@@ -108,10 +136,6 @@ function GemEnchantable:AddEnchantment(enchant, tier)
     self.update_flag = true
 
     self.inst:PushEvent("onaddenchant", { enchant = enchant, tier = tier })
-
-    if not (self.inst.components.fueled or self.inst.components.finiteuses or self.inst.components.perishable) then
-        self.enchant_timeleft[enchant] = TUNING.TOTAL_DAY_TIME * 10
-    end
 end
 
 function GemEnchantable:RemoveEnchantment(enchant)
@@ -124,8 +148,9 @@ function GemEnchantable:RemoveEnchantment(enchant)
         GEM_DEFS[enchant].fns.onremove(self.inst, tier)
     end
 
-    self.inst:PushEvent("onremoveenchant", { enchant = enchant, tier = tier })
+    self.enchant_durabilty[enchant] = nil
 
+    self.inst:PushEvent("onremoveenchant", { enchant = enchant, tier = tier })
 
     self.enchants[enchant] = nil
 
@@ -147,19 +172,36 @@ function GemEnchantable:OnSave()
         end
     end
 
+    local _durability = {}
+
+    for k, v in pairs(self.enchant_durabilty) do
+        if v ~= nil then
+            _durability[k] = v
+        end
+    end
+
     return {
         enchants = _enchants,
-        gem_data = self.inst.persistent_gemology_data
+        gem_data = self.inst.persistent_gemology_data,
+        durability = _durability
     }
 end
 
 function GemEnchantable:OnLoad(data)
     local _enchants = data.enchants
+
     self.inst.persistent_gemology_data = data.gem_data
 
     for enchant, tier in pairs(_enchants) do
-        self:AddEnchantment(enchant, tier)
+        self:AddEnchantment(enchant, tier) --running add enchant to re-apply onapply effects.
     end
+
+    local _durability = data.durability
+    if _durability ~= nil then
+        self.enchant_durabilty = _durability --this doesn't need to do that, though.
+    end
+
+    self.update_flag = true
 end
 
 function GemEnchantable:OnRemoveFromEntity()

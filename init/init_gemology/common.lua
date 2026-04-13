@@ -3,6 +3,9 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local DEFS = require("gemology_defs")
 local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local UpvalueHacker = require("tools/upvaluehacker")
+local UIAnim = require "widgets/uianim"
+
 --------------------------------------------------------------------------
 --Common stuff for every gem.
 
@@ -40,9 +43,9 @@ function EntityScript:GetAdjectivedName(...)
 
         if #enchants > 0 then
             if not self.no_wet_prefix and (self.always_wet_prefix or self:GetIsWet()) then
-                return ConstructAdjectivedName(self, name, STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
+                return ConstructAdjectivedName(self, name .. "\nTEST", STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
             else
-                return ConstructAdjectivedName(self, name, GetEnchantmentAdjective(enchants))
+                return ConstructAdjectivedName(self, name .. "\nTEST", GetEnchantmentAdjective(enchants))
             end
         end
     end
@@ -77,6 +80,69 @@ function ItemTile:UpdateTooltip(...)
     end
 
     return ret
+end
+
+local function getframesymbol(durability)
+    if durability > .75 then
+        return "frame"
+    elseif durability <= .75 and durability > .5 then
+        return "frame-0"
+    elseif durability <= .5 and durability > .25 then
+        return "frame-1"
+    else
+        return "frame-2"
+    end
+end
+
+local function HasEnchant(_table)
+    for k, v in pairs(_table) do
+        if v ~= nil then
+            return true
+        end
+    end
+    return false
+end
+
+local __ctor = ItemTile._ctor
+
+function ItemTile._ctor(self, invitem, ...)
+    __ctor(self, invitem, ...)
+    if invitem.replica.gem_enchantable ~= nil and HasEnchant(invitem.replica.gem_enchantable.enchant_durabilty) then
+        self.gem_border = self:AddChild(UIAnim())
+        self.gem_border:GetAnimState():SetBank("gem_meter")
+        self.gem_border:GetAnimState():SetBuild("gem_meter")
+        self.gem_border:GetAnimState():PlayAnimation("idle")
+        self.gem_border:GetAnimState():AnimateWhilePaused(false)
+        self.gem_border:SetClickable(false)
+
+        if invitem.replica.gem_enchantable:IsEnchanted() then
+            self.gem_border:Show()
+        else
+            self.gem_border:Hide()
+        end
+
+        local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
+
+        self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+
+        local color = GEM_DEFS[enchant].color
+        self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
+
+        self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
+            if invitem.replica.gem_enchantable:IsEnchanted() then
+                self.gem_border:Show()
+            else
+                self.gem_border:Hide()
+            end
+
+            local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
+
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+
+            local color = GEM_DEFS[enchant].color
+            self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
+        end, invitem)
+    end
 end
 
 --------------------------------------------------------------------------
@@ -156,4 +222,106 @@ env.AddComponentPostInit("equippable", function(self)
 
         return _UnEquip(self, owner)
     end
+end)
+
+
+--gem durability
+
+--gem durability
+env.AddComponentPostInit("finiteuses", function(self)
+    local _SetUses = self.SetUses
+
+    function self:SetUses(val, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = val / self.total
+        local delta = new_percent - curr_percent
+
+        print("FINITE: curr_percent", curr_percent)
+        print("FINITE: new_percent", new_percent)
+        print("FINITE: delta", delta)
+
+        if delta < 0 and self.inst.components.gem_enchantable ~= nil then
+            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                    self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+                end
+            end
+        end
+
+        _SetUses(self, val, ...)
+    end
+end)
+
+env.AddComponentPostInit("fueled", function(self)
+    local _DoDelta = self.DoDelta
+
+    function self:DoDelta(amount, doer, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = amount / self.maxfuel
+        local delta = new_percent - curr_percent
+        print("FUELED: curr_percent", curr_percent)
+        print("FUELED: new_percent", new_percent)
+        print("FUELED: delta", delta)
+
+        if delta < 0 and self.inst.components.gem_enchantable ~= nil then
+            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                    self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+                end
+            end
+        end
+
+        _DoDelta(self, amount, doer, ...)
+    end
+end)
+
+env.AddComponentPostInit("armor", function(self)
+    local _SetCondition = self.SetCondition
+
+    function self:SetCondition(amount, ...)
+        local curr_percent = self:GetPercent()
+        local new_percent = amount / self.maxcondition
+        local delta = new_percent - curr_percent
+
+        print("ARMOR: curr_percent", curr_percent)
+        print("ARMOR: new_percent", new_percent)
+        print("ARMOR: delta", delta)
+
+        if delta < 0 and self.inst.components.gem_enchantable ~= nil then
+            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                    self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+                end
+            end
+        end
+
+        _SetCondition(self, amount, ...)
+    end
+end)
+
+
+
+env.AddComponentPostInit("perishable", function(self)
+    local _Update = UpvalueHacker.GetUpvalue(self.StartPerishing, "Update")
+
+    local function Update(inst, dt)
+        local self = inst.components.perishable
+        local old_pct = self:GetPercent()
+
+        _Update(inst, dt)
+
+        local new_ptc = self:GetPercent()
+        local delta = new_ptc - old_pct
+
+
+        if delta < 0 and self.inst.components.gem_enchantable ~= nil then
+            for gem, tier in ipairs(self.inst.components.gem_enchantable.enchants) do
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                    self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+                end
+            end
+        end
+    end
+
+    UpvalueHacker.SetUpvalue(self.StartPerishing, Update, "Update")
 end)

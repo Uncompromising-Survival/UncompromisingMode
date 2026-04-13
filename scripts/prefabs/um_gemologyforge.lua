@@ -20,18 +20,23 @@ local function LearnGem(inst, gem_name)
     SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "LearnGemologyGem"), sender_list, json.encode({ gem = gem_name, tier = 1 }))
 end
 
+local function CanApplyGem(gem, tool)
+    local fn = GEM_DEFS[gem].fns.canapply
+    return fn ~= nil and fn(tool) or true
+end
 
 local function ForgeGem(inst)
     local tool = inst.components.container:GetItemInSlot(1)
     local gem = inst.components.container:GetItemInSlot(2)
 
-    if tool.components.gem_enchantable ~= nil and tool.components.gem_enchantable:HasSlots() and tool.components.gem_enchantable.enchants[gem.prefab] == nil and GEM_DEFS[gem.prefab] ~= nil then
+    if tool.components.gem_enchantable ~= nil and tool.components.gem_enchantable:HasSlots() and tool.components.gem_enchantable.enchants[gem.prefab] == nil and GEM_DEFS[gem.prefab] ~= nil and CanApplyGem(gem.prefab, tool) then
         inst.components.container:Close()
         inst.AnimState:PlayAnimation("smith", false)
         inst.AnimState:PushAnimation("idle", false)
         inst.components.container.canbeopened = false
         inst:DoTaskInTime(.8, function(inst)
             tool.components.gem_enchantable:AddEnchantment(gem.prefab, gem:GetTier())
+            tool.components.gem_enchantable:SetDurability(gem.prefab, 1) --forge defaults to enabling durability.
             LearnGem(inst, gem.prefab)
             gem:Remove()
             inst.components.container.canbeopened = true

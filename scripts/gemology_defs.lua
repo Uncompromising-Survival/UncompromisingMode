@@ -93,6 +93,16 @@ function IsEnchantValid(gem)
     return GEM_DEFS[gem] ~= nil
 end
 
+function DamageInfiniteItemGem(enchant, item, value)
+    if not item.components.finiteuses
+        and not item.components.fueled
+        and not item.components.armor
+        and not item.components.perishable
+        and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
+    end
+end
+
 ------------------------------------------------------------------
 --REDGEM1
 local burn_damage = { 8, 16, 34 }
@@ -109,6 +119,7 @@ AddUMGemDef("redgem2", {
                     target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
+                DamageInfiniteItemGem("redgem2", inst, 0.01)
             end
         end
 
@@ -137,6 +148,8 @@ AddUMGemDef("redgem1", {
                 attacker.components.health:DoDelta(recover)
                 attacker.components.sanity:DoDelta(recover)
             end
+
+            DamageInfiniteItemGem("redgem1", inst, 0.01)
         end,
     },
 })
@@ -208,6 +221,8 @@ local function SendShadowClone(item, owner, target, tier)
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
         if newtarget ~= nil then
+            DamageInfiniteItemGem("greengem1", item, 0.01)
+
             local x, y, z = newtarget.Transform:GetWorldPosition()
             swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
             --swilson.green = 1 -- Tried making him green, it just looks goofy
@@ -324,7 +339,14 @@ AddUMGemDef("greengem2", {
                     end
                 end
             end
+        end,
+        onattack = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("greengem2", item, 0.01)
+        end,
+        onwork = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("greengem2", item, 0.01)
         end
+
     }
 })
 
@@ -348,6 +370,11 @@ AddUMGemDef("yellowgem1", {
                 end
             end
         end,
+        onupdate = function(item, tier)
+            if item.components.equippable:IsEquipped() then
+                DamageInfiniteItemGem("yellowgem1", item, 1 / (TUNING.TOTAL_DAY_TIME * 8))
+            end
+        end,
         onremove = function(item, tier)
             if item.components.equippable then
                 item.components.equippable.dapperness = item.volatile_gemology_data.um_gemologyyellowgem1.old_dapperness
@@ -366,6 +393,7 @@ local arc_player = { "player", "arcgrounded" }
 local function FindEnemiesNearbyAndShockThem(inst, attacker, target, ShockAgain, tier)
     local x, y, z = target.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 4, combat_health, arc_player)
+
     for i, v in ipairs(ents) do
         if not v.components.health:IsDead() then
             local dist = math.sqrt(target:GetDistanceSqToInst(v))
@@ -391,8 +419,11 @@ end
 
 local function ElectricAttack(inst, attacker, target, tier)
     SpawnElectricHitSparks(attacker, target, true)
+
     if tier ~= 1 then
         if target:IsValid() then
+            DamageInfiniteItemGem("yellowgem2", inst, 0.01)
+
             FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
         end
         -- Dont allow arcing back upon oneself
@@ -401,6 +432,8 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
+        DamageInfiniteItemGem("yellowgem2", inst, 0.01)
+
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
 
@@ -438,6 +471,8 @@ AddUMGemDef("palegem1", {
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
+
+            DamageInfiniteItemGem("palegem1", item, 0.01)
         end
     }
 })
@@ -486,6 +521,7 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("palegem2", item, 0.01)
         end,
         onremove = function(item, tier)
             if item.components.finiteuses then
@@ -544,6 +580,7 @@ AddUMGemDef("purplegem1", {
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
+                    DamageInfiniteItemGem("purplegem1", inst, 0.01)
                 end
             end
         end,
@@ -566,6 +603,8 @@ local function GrabNearItem(inst, owner)
 end
 
 local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an "ondropped" effects
+    DamageInfiniteItemGem("purplegem2", inst, 0.25)
+
     local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem2")
     local x, y, z = inst.Transform:GetWorldPosition()
     local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") and ent.components.health and ent.components.health:IsDead() end)
@@ -616,6 +655,8 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
+    DamageInfiniteItemGem("orangegem1", item, 0.01)
+
     if tier ~= 1 then
         local damage = item.components.weapon.damage
         local fx = SpawnPrefab("sand_puff")
@@ -633,7 +674,9 @@ AddUMGemDef("orangegem1", {
         onremove = function(item, tier)
             item.structure_bonus = nil
         end,
-
+        onwork = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("orangegem1", item, 0.01)
+        end,
         onupdate = FindUniqueBaseStructures
     }
 })
@@ -699,6 +742,12 @@ AddUMGemDef("orangegem2", {
                 end
             end
         end,
+        onattack = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("orangegem2", item, 0.01)
+        end,
+        onwork = function(item, attacker, target, tier)
+            DamageInfiniteItemGem("orangegem2", item, 0.01)
+        end,
         onremove = function(item, tier)
             if item.HarvestPickable then
                 item.HarvestPickable = item.volatile_gemology_data.um_gemologyorangegem2.old_harvest_pickable_fn
@@ -746,6 +795,7 @@ AddUMGemDef("bluegem1", {
                     local iceShield = SpawnPrefab("um_ice_shield")
                     iceShield:Init(attacker, "swap_body", .5 + (tier * 0.25))
                 end
+                DamageInfiniteItemGem("bluegem1", item, 0.01)
             end
         end
     }
@@ -769,14 +819,13 @@ local function PerishFill(inst, from_object)
     return true
 end
 
-
+--special little gem.
 AddUMGemDef("bluegem2", {
     color = RGB(163, 194, 244),
     fns = {
         onapply = function(item, tier)
             local pct = 1
             local maxval = 10
-
             local was_perishable
             if item.components.finiteuses then
                 item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses = item.components.finiteuses
@@ -807,6 +856,7 @@ AddUMGemDef("bluegem2", {
                     maxval = maxval * ((1 + tier) * 0.5)
                 end
             elseif not item.components.perishable then
+                
                 item:AddComponent("perishable")
             end
             item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 1 or 3))
@@ -855,7 +905,7 @@ AddUMGemDef("bluegem2", {
         onupdate = function(item, tier)
             item.persistent_gemology_data.um_gemologybluegem2.perish_time_left = item.components.perishable.perishremainingtime
         end,
-        can_apply_fn = function(item, tier)
+        canapply = function(item, tier)
             return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.component.perishable ~= nil
         end
     }
