@@ -69,7 +69,21 @@ local GemEnchantable = Class(function(self, inst)
 
     self.update_flag = true
 
-    --for methods updating durability from perishable, fueled, armor and finiteuses, see init/init_gemology/common
+    self.inst:ListenForEvent("perishchange", function(inst, data)
+        local new_durability = data.percent
+
+        for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
+            if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                for _gem, durability in pairs(self.inst.components.gem_enchantable.enchant_durabilty) do
+                    if durability > new_durability and gem == _gem then
+                        self.inst.components.gem_enchantable:SetDurability(gem, new_durability)
+                    end
+                end
+            end
+        end
+    end)
+
+    --for methods updating durability from fueled, armor and finiteuses, see init/init_gemology/common
 end, nil, {
     update_flag = on_enchants,
     slots = on_enchants,

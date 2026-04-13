@@ -856,7 +856,6 @@ AddUMGemDef("bluegem2", {
                     maxval = maxval * ((1 + tier) * 0.5)
                 end
             elseif not item.components.perishable then
-                
                 item:AddComponent("perishable")
             end
             item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 1 or 3))
