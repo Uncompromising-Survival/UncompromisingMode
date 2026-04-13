@@ -299,18 +299,17 @@ env.AddComponentPostInit("perishable", function(self)
 
     local function Update(inst, dt)
         local self = inst.components.perishable
-        local old_pct = self:GetPercent()
+        if self ~= nil then
+            local old_pct = self:GetPercent()
+            _Update(inst, dt)
+            local new_ptc = self:GetPercent()
+            local delta = new_ptc - old_pct
 
-        _Update(inst, dt)
-
-        local new_ptc = self:GetPercent()
-        local delta = new_ptc - old_pct
-
-
-        if delta < 0 and self.inst.components.gem_enchantable ~= nil then
-            for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
-                    self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+            if delta < 0 and self.inst.components.gem_enchantable ~= nil then
+                for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
+                    if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                        self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
+                    end
                 end
             end
         end
