@@ -134,6 +134,25 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     return _RummageFn(act)
 end
 
+local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
+GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
+    local str = _RummageStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ ~= nil then
+        local container = targ.replica.container
+
+        if targ:HasTag("gem_forge") then
+            if container and container:IsOpenedBy(act.doer) then
+                return "CLOSE_GEM_FORGE"
+            else
+                return "GEM_FORGE"
+            end
+        end
+    end
+
+    return str
+end
+
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
 GLOBAL.ACTIONS.CHOP.fn = function(act)
@@ -255,7 +274,7 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
 end
 
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
-local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1})
+local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
 SET_CUSTOM_NAME.str = STRINGS.ACTIONS.SET_CUSTOM_NAME
 AddAction(SET_CUSTOM_NAME)
@@ -637,7 +656,7 @@ end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
 
-local um_forge_gem = Action({priority = 1,  mount_valid = true })
+local um_forge_gem = Action({ priority = 1, mount_valid = true })
 um_forge_gem.id = "UM_FORGE_GEM"
 um_forge_gem.str = "Forge"
 um_forge_gem.fn = function(act)

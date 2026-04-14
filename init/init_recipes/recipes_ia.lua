@@ -7,6 +7,11 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
     local RECIPE_GAME_TYPE = GLOBAL.RECIPE_GAME_TYPE
     local RECIPE_BOAT_TYPE = GLOBAL.RECIPE_BOAT_TYPE
 
+    AddRecipe2("um_magnifier_obsidian", { Ingredient("um_gemologyredgem2", 1), Ingredient("um_fyrite", 1), Ingredient("obsidian", 1) }, TECH.OBSIDIAN_TWO, { nounlock = true }, { "CRAFTING_STATION", "TOOLS" })
+    ChangeSortKey("um_magnifier_obsidian", "nutrientsgoggles_obsidianhat", "CRAFTING_STATION", false)
+    ChangeSortKey("um_magnifier_obsidian", "sentryward", "TOOLS", false)
+
+
     local VALID_FOR_ROG_ONLY = {
         -- Sludge
         "boat_bumper_sludge_kit",

@@ -451,6 +451,7 @@ local inventoryitems =
     "um_boomberrypie",
 
     "um_magnifier",
+    "um_magnifier_obsidian",
     "um_gemology_pouch",
     --"um_gemology_pouch_open",
 

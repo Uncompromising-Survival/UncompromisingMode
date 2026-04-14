@@ -116,10 +116,11 @@ local function fn()
     -- inst.MiniMapEntity:SetIcon("houndious_observious_map.tex")
 
     inst.AnimState:SetBank("um_gemforge")
-    inst.AnimState:SetBuild("um_gemforge")
+    inst.AnimState:SetBuild("um_gemforge") --TODO: IA VISUAL VARIANT
     inst.AnimState:PlayAnimation("idle", false)
 
     inst:AddTag("structure")
+    inst:AddTag("gem_forge")
 
     MakeSnowCoveredPristine(inst)
 

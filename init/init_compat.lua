@@ -199,9 +199,123 @@ end)
 if IsSWEnabled() or IsHAMEnabled() then
     ACTIONS.HACK.mindistance = 2
 end
+
 env.AddPrefabPostInit("dragoon", function(inst)
     inst:AddTag("pyre_toxin_immune")
 end)
 
 
---IA gemology loot
+--VERY WIP NO GOOD.
+--WE HAVE PLANS FOR PROPER INTEGRATION, BUT THIS'LL DO FOR NOW
+--These would run before its set on the prefabs, so we'll just do it on the respective prefabs
+
+env.AddPrefabPostInit("rock_obsidian", function(inst)
+    SetSharedLootTable("rock_obsidian", {
+        { "obsidian",              1.0 },
+        { "obsidian",              1.0 },
+        { "obsidian",              0.5 },
+        { "obsidian",              0.25 },
+        { "obsidian",              0.25 },
+        { "um_gemologyredgem1",    0.005 },
+        { "um_gemologyredgem2",    0.005 },
+        { "um_gemologybluegem1",   0.005 },
+        { "um_gemologybluegem2",   0.005 },
+        { "um_gemologygreengem1",  0.005 },
+        { "um_gemologygreengem2",  0.005 },
+        { "um_gemologyorangegem1", 0.005 },
+        { "um_gemologyorangegem2", 0.005 },
+        { "um_gemologypalegem1",   0.005 },
+        { "um_gemologypalegem2",   0.005 },
+    })
+end)
+
+env.AddPrefabPostInit("rock_charcoal", function(inst)
+    SetSharedLootTable("rock_charcoal", {
+        { "charcoal",              1.0 },
+        { "charcoal",              1.0 },
+        { "charcoal",              0.5 },
+        { "charcoal",              0.25 },
+        { "charcoal",              0.25 },
+        { "flint",                 0.5 },
+        { "um_gemologyredgem1",    0.005 },
+        { "um_gemologyredgem2",    0.005 },
+        { "um_gemologybluegem1",   0.005 },
+        { "um_gemologybluegem2",   0.005 },
+        { "um_gemologypurplegem1", 0.005 },
+        { "um_gemologypurplegem2", 0.005 },
+        { "um_gemologygreengem1",  0.005 },
+        { "um_gemologygreengem2",  0.005 },
+        { "um_gemologyorangegem1", 0.005 },
+        { "um_gemologyorangegem2", 0.005 },
+        { "um_gemologyyellowgem1", 0.005 },
+        { "um_gemologyyellowgem2", 0.005 },
+        { "um_gemologypalegem1",   0.005 },
+        { "um_gemologypalegem2",   0.005 },
+    })
+end)
+
+
+env.AddPrefabPostInit("dragoonegg", function(inst)
+    SetSharedLootTable('dragoonegg',
+        {
+            { 'flint',                 1.0 },
+            { 'flint',                 0.5 },
+            { 'rocks',                 1.0 },
+            { 'rocks',                 0.5 },
+            { 'rocks',                 0.3 },
+            { 'obsidian',              0.5 },
+            { 'obsidian',              0.5 },
+            { "um_gemologyredgem1",    0.005 },
+            { "um_gemologyredgem2",    0.005 },
+            { "um_gemologybluegem1",   0.005 },
+            { "um_gemologybluegem2",   0.005 },
+            { "um_gemologygreengem1",  0.005 },
+            { "um_gemologygreengem2",  0.005 },
+            { "um_gemologyorangegem1", 0.005 },
+            { "um_gemologyorangegem2", 0.005 },
+            { "um_gemologypurplegem1", 0.005 },
+            { "um_gemologypurplegem2", 0.005 },
+            { "um_gemologyyellowgem1", 0.005 },
+            { "um_gemologyyellowgem2", 0.005 },
+            { "um_gemologypalegem1",   0.005 },
+            { "um_gemologypalegem2",   0.005 },
+        })
+end)
+
+local magma_gem_loot = {
+    ["um_gemologyredgem1"] = 0.005,
+    ["um_gemologyredgem2"] = 0.005,
+
+    ["um_gemologybluegem1"] = 0.005,
+    ["um_gemologybluegem2"] = 0.005,
+
+    ["um_gemologypurplegem1"] = 0.005,
+    ["um_gemologypurplegem2"] = 0.005,
+
+    ["um_gemologyorangegem1"] = 0.005,
+    ["um_gemologyorangegem2"] = 0.005,
+
+    ["um_gemologygreengem1"] = 0.005,
+    ["um_gemologygreengem2"] = 0.005,
+
+    ["um_gemologyyellowgem1"] = 0.005,
+    ["um_gemologyyellowgem2"] = 0.005,
+
+    ["um_gemologypalegem1"] = 0.005,
+    ["um_gemologypalegem2"] = 0.005,
+}
+
+local magma_rocks = {
+    "magmarock_gold",
+    "magmarock"
+}
+
+for k, v in pairs(magma_rocks) do
+    env.AddPrefabPostInit(v, function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
+        inst.loot = MergeMaps(inst.loot, magma_gem_loot)
+    end)
+end

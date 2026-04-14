@@ -950,7 +950,7 @@ containers.params.um_gemologyforge =
         side_align_tip = 100,
         buttoninfo =
         {
-            text = "Forge!", --TODO STRING GLOBAL
+            text = STRINGS.UI.APPLY_GEM,
             position = Vector3(3, -90, 0),
         },
     },
