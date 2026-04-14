@@ -43,9 +43,9 @@ function EntityScript:GetAdjectivedName(...)
 
         if #enchants > 0 then
             if not self.no_wet_prefix and (self.always_wet_prefix or self:GetIsWet()) then
-                return ConstructAdjectivedName(self, name .. "\nTEST", STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
+                return ConstructAdjectivedName(self, name, STRINGS.WET_PREFIX.TOOL .. " " .. GetEnchantmentAdjective(enchants))
             else
-                return ConstructAdjectivedName(self, name .. "\nTEST", GetEnchantmentAdjective(enchants))
+                return ConstructAdjectivedName(self, name, GetEnchantmentAdjective(enchants))
             end
         end
     end
