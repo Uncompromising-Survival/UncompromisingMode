@@ -213,8 +213,8 @@ TUNING.DSTU = {
     -- WX78
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
     WX78_CONFIG = GetModConfigData("wx78"),
-    WXLESS = GetModConfigData("wxless"),
-    WXLESSSPEEDBUMP = GetModConfigData("wxlessspeedbump"),
+    WXLESS = false, --GetModConfigData("wxless"),
+    WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
     -- Wormwood
     WORMWOOD_BURN_TIME = 6.66,   -- orig 4.3
