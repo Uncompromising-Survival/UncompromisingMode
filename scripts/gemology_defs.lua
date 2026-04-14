@@ -580,7 +580,7 @@ AddUMGemDef("purplegem1", {
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageInfiniteItemGem("purplegem1", inst, 0.01)
+                    DamageInfiniteItemGem("purplegem1", item, 0.01)
                 end
             end
         end,
