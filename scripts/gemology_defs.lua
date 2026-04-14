@@ -774,6 +774,7 @@ AddUMGemDef("bluegem1", {
         onapply = function(item, tier)
             if not item.components.insulator then
                 item:AddComponent("insulator")
+                item.volatile_gemology_data.um_gemologybluegem1.added_insulator = true
             else
                 item.volatile_gemology_data.um_gemologybluegem1.old_type = item.components.insulator.type
                 item.volatile_gemology_data.um_gemologybluegem1.old_insulation = item.components.insulator.insulation
@@ -782,7 +783,9 @@ AddUMGemDef("bluegem1", {
             item.components.insulator:SetInsulation(TUNING.INSULATION_SMALL * tier) -- A bit too easy...
         end,
         onremove = function(item, tier)
-            if item.volatile_gemology_data.um_gemologybluegem1.old_type and item.volatile_gemology_data.um_gemologybluegem1.old_insulation then
+            if item.volatile_gemology_data.um_gemologybluegem1.added_insulator then
+                item:RemoveComponent("insulator")
+            else
                 item.components.insulator.type = item.volatile_gemology_data.um_gemologybluegem1.old_type
                 item.components.insulator.insulation = item.volatile_gemology_data.um_gemologybluegem1.old_insulation
             end
