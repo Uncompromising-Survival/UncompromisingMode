@@ -35,6 +35,7 @@ local function ForgeGem(inst)
         inst.AnimState:PushAnimation("idle", false)
         inst.components.container.canbeopened = false
         inst:DoTaskInTime(.8, function(inst)
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
             tool.components.gem_enchantable:AddEnchantment(gem.prefab, gem:GetTier())
             tool.components.gem_enchantable:SetDurability(gem.prefab, 1) --forge defaults to enabling durability.
             LearnGem(inst, gem.prefab)
