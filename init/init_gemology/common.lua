@@ -122,7 +122,7 @@ function ItemTile._ctor(self, invitem, ...)
         end
 
         local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-        if durability ~= nil and enchant ~= nil then
+        if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil then
             self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
 
             local color = GEM_DEFS[enchant].color
