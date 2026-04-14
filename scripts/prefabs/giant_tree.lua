@@ -453,8 +453,8 @@ local function on_chopped_down(inst, chopper)
         inst:RemoveComponent("workable")
         BringTheForestDown(inst, chopper)
 
-        if inst.components.shaveable then -- remove shaveable
-            inst:RemoveComponent("shaveable")
+        if inst.components.shaveable then
+            inst.components.shaveable.prize_count = 0
         end
 
         inst.AnimState:PlayAnimation("idle_damaged")
@@ -478,10 +478,10 @@ local function PickType(inst)
         inst.AnimState:PlayAnimation("idle_moss_full")
         TryAddShaveable(inst)
     else
-        inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME * 5)
         if inst.components.shaveable then
-            inst:RemoveComponent("shaveable")
+            inst.components.shaveable.prize_count = 0
         end
+        inst.components.timer:StartTimer("remoss", TUNING.TOTAL_DAY_TIME * 5)
     end
 end
 
