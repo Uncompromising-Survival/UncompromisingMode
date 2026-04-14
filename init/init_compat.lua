@@ -19,7 +19,7 @@ env.AddPrefabPostInit("kris_m", function(inst)
 
     if inst.components.foodaffinity then
         inst.components.foodaffinity.favorite_foods = {
-	        ["um_moss"] = 4,
+            ["um_moss"] = 4,
         }
     end
 end)
@@ -198,3 +198,6 @@ end)
 if IsSWEnabled() or IsHAMEnabled() then
     ACTIONS.HACK.mindistance = 2
 end
+env.AddPrefabPostInit("dragoon", function(inst)
+    inst:AddTag("PyreToxinImmune")
+end)

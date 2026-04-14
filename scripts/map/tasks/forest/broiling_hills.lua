@@ -100,7 +100,6 @@ AddTask("BrolingHills_IA_2", {
     colour = { r = .1, g = .1, b = .1, a = 1 }
 })
 
-
 AddTaskSetPreInit("shipwrecked", function(tasksetdata)
     -- IA broiling hills
     table.insert(tasksetdata.tasks, "BrolingHills_IA")

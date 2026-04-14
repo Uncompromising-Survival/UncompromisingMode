@@ -139,7 +139,7 @@ AddTile("UM_FLOODWATER_GROTTO",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
-	
+
 AddTile("UM_FLOODWATER_BROILING",
     "LAND",
     {
@@ -371,10 +371,10 @@ local function GetTileForHotspringFlooded(noise) -- Keep flooded hotspring area 
     elseif noise < 0.4 then
         return WORLD_TILES.UM_HOTSPRING_WHITEROCK
     elseif noise < 0.6 then
-		return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
-	else
-		return WORLD_TILES.UM_FLOODWATER_BROILING
-	end
+        return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
+    else
+        return WORLD_TILES.UM_FLOODWATER_BROILING
+    end
 end
 
 local function GetTileForHotspring(noise)
@@ -383,8 +383,8 @@ local function GetTileForHotspring(noise)
     elseif noise < 0.5 then
         return WORLD_TILES.UM_HOTSPRING_WHITEROCK
     else
-		return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
-	end
+        return WORLD_TILES.UM_HOTSPRING_YELLOWROCK
+    end
 end
 
 local function GetTileForHoodedForest(noise)
@@ -437,11 +437,21 @@ local function GetTileForLushMagma(noise)
     return WORLD_TILES.UM_MAGMA
 end
 
+local function GetTileForVolcanoMagma(noise)
+    if noise < 0.5 then
+        return WORLD_TILES.UM_GRASSMAGMA
+    elseif noise < 0.25 then
+        return math.random() > 0.5 and WORLD_TILES.VOLCANO or WORLD_TILES.VOLCANO_ROCK
+    end
+
+    return WORLD_TILES.UM_MAGMA
+end
+
 local function GetTileForMagmaRole(noise)
     if noise < 0.5 then
         return WORLD_TILES.VENT
-	end
-	
+    end
+
     return WORLD_TILES.UM_MAGMA
 end
 
@@ -471,6 +481,7 @@ AddTile("UM_HOODED_FOREST_SPARSE", "NOISE")
 AddTile("UM_HOODED_ROCKY", "NOISE")
 AddTile("UM_MAGMA_JUNGLY", "NOISE")
 AddTile("UM_MAGMA_FUMAROLE", "NOISE")
+AddTile("UM_MAGMAVOLCANO_IA", "NOISE")
 
 AddTile("UM_GROTTO_LIGHTFLOODED", "NOISE")
 AddTile("UM_GROTTO_HEAVYFLOODED", "NOISE")
@@ -489,6 +500,7 @@ NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_FUMAROLE] = GetTileForMagmaRole
+NoiseTileFunctions[WORLD_TILES.UM_MAGMAVOLCANO_IA] = GetTileForVolcanoMagma
 
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_LIGHTFLOODED] = GetTileForGrottoFloodLight
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_HEAVYFLOODED] = GetTileForGrottoFloodHeavy
@@ -515,7 +527,6 @@ local filters = {
     ["lava_pond_cave"] = { WORLD_TILES.UM_GRASSMAGMA },
     ["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
     ["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
-
 
     -- Moon Grotto Stuff
     ["molebat"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO },

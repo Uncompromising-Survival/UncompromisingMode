@@ -28,7 +28,7 @@ if GLOBAL.NAUGHTY_VALUE["ballphin"] ~= nil then
         "saltpack",
         "snowgoggles",
         -- Magma caves
-        "um_fyre_bomb",
+        --"um_fyre_bomb",
         "um_detonator",
         -- Lunar bees
         "um_beemine_moon_item",
