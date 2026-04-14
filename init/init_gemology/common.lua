@@ -115,7 +115,7 @@ function ItemTile._ctor(self, invitem, ...)
         self.gem_border:GetAnimState():AnimateWhilePaused(false)
         self.gem_border:SetClickable(false)
 
-        if invitem.replica.gem_enchantable:IsEnchanted() then
+        if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
             self.gem_border:Show()
         else
             self.gem_border:Hide()
@@ -129,7 +129,7 @@ function ItemTile._ctor(self, invitem, ...)
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
         end
         self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
-            if invitem.replica.gem_enchantable:IsEnchanted() then
+            if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
                 self.gem_border:Show()
             else
                 self.gem_border:Hide()
@@ -145,6 +145,14 @@ function ItemTile._ctor(self, invitem, ...)
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
         end, invitem)
+    end
+end
+
+local _StartDrag = ItemTile.StartDrag
+function ItemTile:StartDrag()
+    _StartDrag(self)
+    if self.gem_border ~= nil then
+        self.gem_border:Hide()
     end
 end
 
