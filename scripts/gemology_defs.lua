@@ -469,7 +469,7 @@ AddUMGemDef("palegem1", {
             -- see init/init_gemology/special.lua
         end,
         onattack = function(item, attacker, target, tier)
-            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil) then
+            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) then
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
@@ -489,8 +489,11 @@ AddUMGemDef("palegem2", {
             if item.components.finiteuses then
                 local pct = item.components.finiteuses:GetPercent()
                 local total = item.components.finiteuses.total
+                print("total", total)
                 item.volatile_gemology_data.um_gemologypalegem2.old_finite = total
+                print("total saved", item.volatile_gemology_data.um_gemologypalegem2.old_finite)
                 item.components.finiteuses:SetMaxUses(total * (1 + tier))
+                print("new total", item.components.finiteuses.total)
                 item.components.finiteuses:SetPercent(pct)
             end
             if item.components.fueled then -- Future, there are other items that fall into this category that cannot be learned or prototyped
@@ -509,7 +512,7 @@ AddUMGemDef("palegem2", {
                 item.components.perishable:SetPercent(pct)
             end
 
-            if item.components.finiteuses and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab].nounlock == true) then
+            if item.components.finiteuses and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and (AllRecipes[item.prefab].nounlock or AllRecipes[item.prefab].is_deconstruction_recipe)) then
                 if tier ~= 1 then
                     local _Use = item.components.finiteuses.Use
                     item.volatile_gemology_data.um_gemologypalegem2.old_use = _Use
@@ -526,10 +529,15 @@ AddUMGemDef("palegem2", {
             DamageInfiniteItemGem("palegem2", item, 0.01)
         end,
         onremove = function(item, tier)
+            print("on remove")
             if item.components.finiteuses then
+                print("has finite")
                 local pct = item.components.finiteuses:GetPercent()
+                print("percent", pct)
+                print("old max uses", item.volatile_gemology_data.um_gemologypalegem2.old_finite)
                 item.components.finiteuses:SetMaxUses(item.volatile_gemology_data.um_gemologypalegem2.old_finite)
                 item.components.finiteuses:SetPercent(pct)
+                print("new max uses", item.components.finiteuses.total)
 
                 if item.volatile_gemology_data.um_gemologypalegem2.old_use ~= nil then
                     item.components.finiteuses.Use = item.volatile_gemology_data.um_gemologypalegem2.old_use
@@ -605,8 +613,6 @@ local function GrabNearItem(inst, owner)
 end
 
 local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an "ondropped" effects
-    DamageInfiniteItemGem("purplegem2", inst, 0.25)
-
     local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem2")
     local x, y, z = inst.Transform:GetWorldPosition()
     local owner = FindEntity(inst, 10, function(ent) return ent:HasTag("player") and ent.components.health and ent.components.health:IsDead() end)
@@ -622,6 +628,8 @@ local function OnDropedIfDeadGiveBack(inst) -- This is the only one that has an 
     if inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn then
         inst.volatile_gemology_data.um_gemologypurplegem2.old_ondropfn(inst)
     end
+
+    DamageInfiniteItemGem("purplegem2", inst, 0.25)
 end
 
 
