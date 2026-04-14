@@ -1451,3 +1451,11 @@ STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
         EMPTY = "Woby sounds like she's starving!",
     },
 }
+
+--Mineral logbook
+STRINGS.MINERAL_LOGBOOK = {
+    UNKNOWN_GEM = "Unknown Gem",
+    SOURCES = "Sources",
+    EFFECTS = "Effects",
+    GEMS = "Gems",
+}
