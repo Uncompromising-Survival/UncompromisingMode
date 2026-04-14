@@ -16,7 +16,7 @@ env.AddPrefabPostInitAny(function(inst)
         return
     end
 
-    if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) then
+    if inst.components.equippable and inst.components.equippable.equipslot == EQUIPSLOTS.HANDS and (inst.components.tool or inst.components.weapon) and not inst.components.stackable then
         inst:AddComponent("gem_enchantable")
     end
 end)
