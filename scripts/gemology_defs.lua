@@ -34,37 +34,17 @@ This is so we can save some gem-specific data so it can probably revert when rem
 ]]
 
 
---[[
-TEMP TEMP TEMP TEMP TEMP TEMP TEMP
-local pretty_colors =
-
-{
-    RGB(175, 245, 172), -- 1 Neurotic Peridot
-    RGB(175, 245, 172), -- 2 Chaotic Emerald
-    RGB(255,228,153), -- 3 Hasty Topaz
-    RGB(255,228,153), -- 4 Static Amber
-    RGB(220, 220, 220), -- 5 Peerless Jade
-    RGB(207, 207, 207), -- 6 Adamant Diamond
-    RGB(233, 153, 153), -- 7 Voracious Ruby
-    RGB(233, 153, 153), -- 8 Passionate Garnet
-    RGB(180, 166, 213), -- 9 Furious Fluorite
-    RGB(180, 166, 213), -- 10 Arcane Amethyst
-    RGB(249, 203, 156), -- 11 Comfy Zircon
-    RGB(249, 203, 156), -- 12 Hoarding Citrine
-    RGB(163, 194, 244), -- 13 Arctic Aquamarine
-    RGB(163, 194, 244), -- 14 Chilled Sapphire
-}
-TEMP TEMP TEMP TEMP TEMP TEMP TEMP
-]]
 local GEM_DEFS = {}
 
---for clients.
---gem enchants from gem_enchantable component are saved as a net_smallbytearray (8-bit unsigned ints, 31 max size)
+--For clients.
+--Gem enchants from gem_enchantable component are saved as a net_smallbytearray (8-bit unsigned ints, 31 max size)
 --each gem gets assigned an int value here to be able to get a gem's name from the number on the client
 local INVERTED_GEM_LOOKUP = {}
 local GEM_LOOKUP = {}
 
 
+--This means, in order to prevent some possibly not good consequences with clients, we limit gems to 31.
+--UM uses 14/31 gems, so there`s probably enough room for IA + HAM compat + whatever else addons feel like adding.
 setmetatable(GEM_DEFS, {
     __newindex = function(t, k, v)
         assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")

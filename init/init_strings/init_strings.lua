@@ -1225,7 +1225,7 @@ STRINGS.UM_DESCRIPTOR = {
         },
     },
     --this is for the items with a minerology effect, with the prefix "gemology effects:"
-    MINEROLOGYABLE = {
+    GEM_ENCHANTABLE = {
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
             "Has summer insulation when held and freezes enemies on hit.\nHas a chance to not break free fully frozen enemies.",
