@@ -170,6 +170,8 @@ function GemEnchantable:RemoveEnchantment(enchant)
 
     self.enchants[enchant] = nil
 
+    self.slots = self.slots + 1
+
     self.inst.persistent_gemology_data[enchant] = {} --clear data for this effect.
     self.inst.volatile_gemology_data[enchant] = {}   --clear data for this effect.
 
