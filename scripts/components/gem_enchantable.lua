@@ -109,18 +109,19 @@ function GemEnchantable:GetEnchantmentTier(enchant)
     return self.enchants[enchant]
 end
 
+-- -4.1633363423443e-017	
 function GemEnchantable:SetDurability(enchantment, durability)
+    durability = math.clamp(durability, 0, 1)
+
     if durability <= 0 then
         if self.inst.SoundEmitter then
             self.inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
         end
         self:RemoveEnchantment(enchantment)
-        return
+
+        durability = 0
     end
 
-    if durability > 1 then
-        durability = 1
-    end
 
     self.enchant_durabilty[enchantment] = durability
 
@@ -162,6 +163,7 @@ function GemEnchantable:RemoveEnchantment(enchant)
     assert(self.enchants[enchant], "Could not remove enchantment \"" .. enchant .. "\". Enchantment is not applied.")
 
     local tier = self.enchants[enchant]
+
 
     if GEM_DEFS[enchant].fns.onremove then
         GEM_DEFS[enchant].fns.onremove(self.inst, tier)

@@ -247,7 +247,6 @@ env.AddComponentPostInit("finiteuses", function(self)
         local new_percent = val / self.total
         local delta = new_percent - curr_percent
 
-
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
                 if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
@@ -265,7 +264,7 @@ env.AddComponentPostInit("fueled", function(self)
 
     function self:DoDelta(amount, doer, ...)
         local curr_percent = self:GetPercent()
-        local new_percent = (self.currentfuel+amount)  / self.maxfuel
+        local new_percent = (self.currentfuel + amount) / self.maxfuel
         local delta = new_percent - curr_percent
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then

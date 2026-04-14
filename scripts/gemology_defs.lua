@@ -469,11 +469,8 @@ AddUMGemDef("palegem2", {
             if item.components.finiteuses then
                 local pct = item.components.finiteuses:GetPercent()
                 local total = item.components.finiteuses.total
-                print("total", total)
                 item.volatile_gemology_data.um_gemologypalegem2.old_finite = total
-                print("total saved", item.volatile_gemology_data.um_gemologypalegem2.old_finite)
                 item.components.finiteuses:SetMaxUses(total * (1 + tier))
-                print("new total", item.components.finiteuses.total)
                 item.components.finiteuses:SetPercent(pct)
             end
             if item.components.fueled then -- Future, there are other items that fall into this category that cannot be learned or prototyped
@@ -509,32 +506,38 @@ AddUMGemDef("palegem2", {
             DamageInfiniteItemGem("palegem2", item, 0.01)
         end,
         onremove = function(item, tier)
-            print("on remove")
-            if item.components.finiteuses then
-                print("has finite")
-                local pct = item.components.finiteuses:GetPercent()
-                print("percent", pct)
-                print("old max uses", item.volatile_gemology_data.um_gemologypalegem2.old_finite)
-                item.components.finiteuses:SetMaxUses(item.volatile_gemology_data.um_gemologypalegem2.old_finite)
-                item.components.finiteuses:SetPercent(pct)
-                print("new max uses", item.components.finiteuses.total)
+            local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
+            local old_fueled = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
+            local old_perish = item.volatile_gemology_data.um_gemologypalegem2.old_perish
+            local old_use = item.volatile_gemology_data.um_gemologypalegem2.old_use
 
-                if item.volatile_gemology_data.um_gemologypalegem2.old_use ~= nil then
-                    item.components.finiteuses.Use = item.volatile_gemology_data.um_gemologypalegem2.old_use
+            --Re-setting the durability needs to be delayed 1 frame so it does so AFTER the enchament is properly removed
+            --otherwise, it doesn't properly revert durability
+            --the volatile data are stored as variables above because they also get wiped when the enchantment is removed, so we save them here.
+            item:DoTaskInTime(0, function()
+                if item.components.finiteuses then
+                    local pct = item.components.finiteuses:GetPercent()
+
+                    item.components.finiteuses:SetMaxUses(old_finite)
+                    item.components.finiteuses:SetPercent(pct)
+
+                    if old_use ~= nil then
+                        item.components.finiteuses.Use = old_use
+                    end
                 end
-            end
 
-            if item.components.fueled then
-                local pct = item.components.fueled:GetPercent()
-                item.components.fueled.maxfuel = item.volatile_gemology_data.um_gemologypalegem2.old_fueled
-                item.components.fueled:SetPercent(pct)
-            end
+                if item.components.fueled then
+                    local pct = item.components.fueled:GetPercent()
+                    item.components.fueled.maxfuel = old_fueled
+                    item.components.fueled:SetPercent(pct)
+                end
 
-            if item.components.perishable then
-                local pct = item.components.perishable:GetPercent()
-                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologypalegem2.old_perish
-                item.components.perishable:SetPercent(pct)
-            end
+                if item.components.perishable then
+                    local pct = item.components.perishable:GetPercent()
+                    item.components.perishable.perishtime = old_perish
+                    item.components.perishable:SetPercent(pct)
+                end
+            end)
         end
     }
 })
