@@ -238,7 +238,7 @@ local function StageSpawner(name, SpawnAtStage)
 
         -- UM tags
         inst:AddTag("PyreNettle")
-        inst:AddTag("PyreToxinImmune")
+        inst:AddTag("pyre_toxin_immune")
         inst:AddTag("SmolderSporeAvoid")
         inst:AddTag("snowpileblocker") -- SNOOOOOWWWW BLOCKERRRRRR
         -- Vanilla tags

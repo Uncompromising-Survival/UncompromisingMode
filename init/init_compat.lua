@@ -199,5 +199,5 @@ if IsSWEnabled() or IsHAMEnabled() then
     ACTIONS.HACK.mindistance = 2
 end
 env.AddPrefabPostInit("dragoon", function(inst)
-    inst:AddTag("PyreToxinImmune")
+    inst:AddTag("pyre_toxin_immune")
 end)
