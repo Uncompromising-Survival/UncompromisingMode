@@ -32,7 +32,6 @@ env.AddPrefabPostInit("susie_m", function(inst)
     inst.components.eater:SetCanEatVeggieHorrible()
 end)
 
--- I don't know where else to put this
 env.AddPrefabPostInit("aphid", function(inst)
     if IsIslandOrVolcanoWorld() then
         inst:AddComponent("appeasement")
@@ -105,14 +104,16 @@ local function DoScythe(inst, target, doer, ...)
     return DoScythe_old(inst, target, doer, ...)
 end
 
-env.AddPrefabPostInit("jawed_scythe", function(inst)
+env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    if not DoScythe_old then
-        DoScythe_old = inst.DoScythe
+    if inst.DoScythe then
+        if not DoScythe_old then
+            DoScythe_old = inst.DoScythe
+        end
+        inst.DoScythe = DoScythe
     end
-    inst.DoScythe = DoScythe
 end)
 
 
@@ -201,3 +202,6 @@ end
 env.AddPrefabPostInit("dragoon", function(inst)
     inst:AddTag("pyre_toxin_immune")
 end)
+
+
+--IA gemology loot

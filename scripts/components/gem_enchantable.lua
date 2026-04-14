@@ -111,6 +111,9 @@ end
 
 function GemEnchantable:SetDurability(enchantment, durability)
     if durability <= 0 then
+        if self.inst.SoundEmitter then
+            self.inst.SoundEmitter:PlaySound("dontstarve/common/gem_shatter")
+        end
         self:RemoveEnchantment(enchantment)
         return
     end

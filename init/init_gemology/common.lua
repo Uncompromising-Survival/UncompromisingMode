@@ -265,7 +265,7 @@ env.AddComponentPostInit("fueled", function(self)
 
     function self:DoDelta(amount, doer, ...)
         local curr_percent = self:GetPercent()
-        local new_percent = amount / self.maxfuel
+        local new_percent = (self.currentfuel+amount)  / self.maxfuel
         local delta = new_percent - curr_percent
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
