@@ -197,21 +197,24 @@ env.AddComponentPostInit("combat", function(self)
             local furious = tool.components.gem_enchantable.enchants["um_gemologypurplegem1"]
 
             if furious then
-                inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
-            end
-
-            if weapon and weapon.components.gem_enchantable then
-                local citrine = weapon.components.gem_enchantable.enchants["um_gemologyorangegem2"]
-
-                if citrine ~= nil and citrine > 1 then
-                    if not self.inst.um_marked_for_hoarding then
-                        self.inst.um_marked_for_hoarding = attacker
-                    end
-                end
-            elseif self.inst.um_marked_for_hoarding then
-                self.inst.um_marked_for_hoarding = nil
+                inst:DoTaskInTime(0, function(inst)
+                    inst:AddDebuff("buff_furious" .. furious, "buff_furious" .. furious)
+                end)
             end
         end
+
+        if weapon and weapon.components.gem_enchantable then
+            local citrine = weapon.components.gem_enchantable.enchants["um_gemologyorangegem2"]
+
+            if citrine ~= nil and citrine > 1 then
+                if not self.inst.um_marked_for_hoarding then
+                    self.inst.um_marked_for_hoarding = attacker
+                end
+            end
+        elseif self.inst.um_marked_for_hoarding then
+            self.inst.um_marked_for_hoarding = nil
+        end
+
         return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
     end
 end)
