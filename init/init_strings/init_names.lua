@@ -770,7 +770,7 @@ NAMES.UM_GEMOLOGYGEM_UNKNOWN = "Strange Gem"
 
 NAMES.UM_GEMOLOGYGEM_PREFIX = {
     "Cracked",
-    "Chipped",
+    "Rough",
     "Flawless"
 }
 
