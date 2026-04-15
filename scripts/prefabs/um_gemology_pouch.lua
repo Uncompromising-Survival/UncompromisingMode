@@ -56,7 +56,6 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    --yes, I know this is the missing texture rn, that's intentional.
     inst.MiniMapEntity:SetIcon("um_gemology_pouch.tex")
 
     inst.AnimState:SetBank("um_gemology_pouch")

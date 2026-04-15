@@ -32,7 +32,7 @@ local function DamageCalculation(inst, isattack)
 
     local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
 
-    local dmg = 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots-4))))
+    local dmg = 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
 
     inst.components.weapon:SetDamage(dmg)
 
@@ -111,16 +111,18 @@ local function OnEnchantmentChanged(inst)
         if owner ~= nil and inst.components.equippable.isequipped then
             local slot = 1
             for enchant, tier in pairs(inst.components.gem_enchantable.enchants) do
-                if slot <= 4 and enchant ~= nil then
-                    local x, y, z = unpack(pos_map[slot])
-                    inst["shinefx_slot" .. slot] = SpawnPrefab(GetGemFromGemologyGem(enchant) .. "_cracked_crabclaw")
-                    inst["shinefx_slot" .. slot].gem = inst
-                    inst["shinefx_slot" .. slot].entity:SetParent(owner.entity)
-                    inst["shinefx_slot" .. slot].entity:AddFollower()
-                    inst["shinefx_slot" .. slot].Follower:FollowSymbol(owner.GUID, "swap_object", x, y, z)
-                    inst["shinefx_slot" .. slot].Transform:SetScale(0.25, 0.25, 0.25)
+                if not table.contains(inst.components.gem_enchantable.hidden_enchants, enchant) then
+                    if slot <= 4 and enchant ~= nil then
+                        local x, y, z = unpack(pos_map[slot])
+                        inst["shinefx_slot" .. slot] = SpawnPrefab(GetGemFromGemologyGem(enchant) .. "_cracked_crabclaw")
+                        inst["shinefx_slot" .. slot].gem = inst
+                        inst["shinefx_slot" .. slot].entity:SetParent(owner.entity)
+                        inst["shinefx_slot" .. slot].entity:AddFollower()
+                        inst["shinefx_slot" .. slot].Follower:FollowSymbol(owner.GUID, "swap_object", x, y, z)
+                        inst["shinefx_slot" .. slot].Transform:SetScale(0.25, 0.25, 0.25)
 
-                    slot = slot + 1
+                        slot = slot + 1
+                    end
                 end
             end
         end

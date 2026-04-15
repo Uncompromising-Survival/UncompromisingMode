@@ -1,6 +1,8 @@
 local assets =
 {
     Asset("ANIM", "anim/um_gemforge.zip"),
+    Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
 }
 
 local GEM_DEFS = require("gemology_defs").GEM_DEFS
@@ -112,8 +114,7 @@ local function fn()
     inst.entity:AddNetwork()
 
     MakeObstaclePhysics(inst, .4)
-    -- local minimap = inst.entity:AddMiniMapEntity() -- Add back later...
-    -- inst.MiniMapEntity:SetIcon("houndious_observious_map.tex")
+    inst.MiniMapEntity:SetIcon("um_gemologyforge.tex")
 
     inst.AnimState:SetBank("um_gemforge")
     inst.AnimState:SetBuild("um_gemforge") --TODO: IA VISUAL VARIANT

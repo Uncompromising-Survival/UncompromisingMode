@@ -1869,6 +1869,9 @@ Assets = {
     Asset("IMAGE", "images/map_icons/um_gemology_pouch.tex"),
     Asset("ATLAS", "images/map_icons/um_gemology_pouch.xml"),
 
+    Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
+
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),
     Asset("ATLAS", "bigportraits/willow.xml"),
