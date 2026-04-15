@@ -1866,6 +1866,9 @@ Assets = {
     Asset("IMAGE", "images/map_icons/um_tornado_map.tex"),
     Asset("ATLAS", "images/map_icons/um_tornado_map.xml"),
 
+    Asset("IMAGE", "images/map_icons/um_gemology_pouch.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemology_pouch.xml"),
+
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),
     Asset("ATLAS", "bigportraits/willow.xml"),
