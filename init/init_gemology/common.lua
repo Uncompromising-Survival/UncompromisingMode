@@ -136,7 +136,7 @@ function ItemTile._ctor(self, invitem, ...)
             end
 
             local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-            if durability == nil or enchant == nil then
+            if durability == nil or enchant == nil or GEM_DEFS[enchant] == nil then
                 return
             end
 
