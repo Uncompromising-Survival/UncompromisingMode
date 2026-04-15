@@ -1,4 +1,6 @@
-local DummyFn = function() end
+local DummyFn = Class(function(self, inst) --make it an actual class
+    self.inst = inst
+end)
 -- May move these dummy functions outside of the component and somewherer else to improve readability, if anyone wants to do that they can, but it's not necessary.
 
 -- Set up the dummy fueled class
@@ -43,7 +45,7 @@ DummyFueledClass.SetUpdateFn = DummyFn
 DummyFueledClass.GetDebugString = function() return "This entity's fueled component is now a dummy class to prevent nil crashes from referencing. It does not provide any function anymore. Trying to adjust durability of perishable through this class will not work." end
 DummyFueledClass.AddThreshold = DummyFn
 DummyFueledClass.GetSectionPercent = function() return 1 end
-DummyFueledClass.GetPercent = DummyFn -- Do not return a percentage for the indicator
+DummyFueledClass.GetPercent = function(self) return self.inst.components.perishable:GetPercent() end
 DummyFueledClass.SetPercent = DummyFn
 DummyFueledClass.SetFirstPeriod = DummyFn
 DummyFueledClass.StartConsuming = DummyFn
