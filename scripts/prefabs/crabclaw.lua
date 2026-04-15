@@ -590,6 +590,7 @@ local function buildgem_cracked(colour, precious, multiplier)
         inst:AddTag("quakedebris")
         inst:AddTag("gem")
         inst.colour = colour
+        inst.pickupsound = "gem"
 
         local fp = FLOATER_PROPERTIES[colour]
         MakeInventoryFloatable(inst, "small", fp[1], fp[2])

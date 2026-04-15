@@ -126,6 +126,8 @@ local function fncommon(gem)
     inst.IsRevealed = IsRevealed
 
     inst:AddTag("gemology_gem")
+    
+    inst.pickupsound = "gem"
 
     inst.entity:SetPristine()
 
