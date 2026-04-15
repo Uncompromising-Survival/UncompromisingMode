@@ -63,7 +63,6 @@ env.AddPrefabPostInit("volcanoworld", function(inst)
     end
 end)
 
-
 --Scythe hacking. CBA to actually do this on the prefab, I'm just copying this from IA.
 local HARVEST_AFTERFINDINGONEOFTAGS = { "pickable", "HACK_workable" }
 local HARVEST_CANTTAGS              = { "INLIMBO", "FX" }
@@ -318,4 +317,87 @@ for k, v in pairs(magma_rocks) do
 
         inst.loot = MergeMaps(inst.loot, magma_gem_loot)
     end)
+end
+
+if IsSWEnabled() or IsHAMEnabled() then
+    local TreasureLootList = GetTreasureLootDefinitionTable()
+    --respect IA's config
+    if IA_CONFIG ~= nil and IA_CONFIG.slotmachineloot and SLOTMACHINE_LOOT ~= nil and TreasureLootList ~= nil then
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_mushroom"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_mushroom"] = { treasure = "slot_gemology_mushroom", }
+        TreasureLootList["slot_gemology_mushroom"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                um_gemology_geode_red = 1,
+                um_gemology_geode_green = 1,
+                um_gemology_geode_blue = 1,
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                blue_cap = 1,
+                red_cap = 1,
+                green_cap = 1,
+                spore_small = 1,
+                spore_medium = 1,
+                spore_tall = 1,
+            },
+        }
+
+        TreasureLootList["slot_mooncaps"].loot.um_gemology_geode_glass = 2
+
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_lobster"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_lobster"] = { treasure = "slot_gemology_lobster", }
+        TreasureLootList["slot_gemology_lobster"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                um_gemology_geode_lobster = 2,
+                rocks = 5,
+                goldnugget = 3,
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                rocks = 1,
+                flint = 1,
+                goldnugget = 1,
+                guano = 1,
+                slurtle_shellpieces = 1,
+                um_gemology_geode_lobster = 0.5,
+            },
+        }
+
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_guano"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_guano"] = { treasure = "slot_gemology_guano", }
+        TreasureLootList["slot_gemology_guano"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                rocks = 2,
+                flint = 2,
+                goldnugget = 1,
+                guano = 3,
+                um_gemology_geode_guano = 2
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                rocks = 1,
+                flint = 1,
+                goldnugget = 1,
+                guano = 1,
+                um_gemology_geode_guano = 0.5,
+            },
+        }
+
+        TreasureLootList["gears"].loot.um_gemology_geode_ruins = 2
+
+        TreasureLootList["slot_obsidian"].loot.um_gemology_geode_vent = 1
+        TreasureLootList["slot_obsidian"].loot.um_fyrite = 3
+    end
 end
