@@ -262,7 +262,7 @@ local function addRandomGemEffects(inst, item, tier)
         for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
                 inst.components.gem_enchantable:RemoveEnchantment(k)
-                inst.components.gem_enchantable.slot = inst.components.gem_enchantable.slot - 1
+                inst.components.gem_enchantable.slots = inst.components.gem_enchantable.slots - 1
             end
         end
     end
@@ -311,7 +311,7 @@ AddUMGemDef("greengem2", {
                 for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
                     if item.components.gem_enchantable.enchants[k] then
                         item.components.gem_enchantable:RemoveEnchantment(k)
-                        item.components.gem_enchantable.slot = item.components.gem_enchantable.slot - 1
+                        item.components.gem_enchantable.slots = item.components.gem_enchantable.slots - 1
                     end
                 end
 
