@@ -56,14 +56,14 @@ local function buff_OnAttached(inst, target)
     if target.components.health then
 		inst.prior_immunity = target.components.health.fire_damage_scale
 		target.components.health.fire_damage_scale = 0
-		target:AddTag("PyreToxinImmune")
+		target:AddTag("pyre_toxin_immune")
 	end
 end
 
 local function buff_OnDetached(inst, target)
     if target.components.health then -- return to normal fire immunity
 		target.components.health.fire_damage_scale = inst.prior_immunity
-		target:RemoveTag("PyreToxinImmune")
+		target:RemoveTag("pyre_toxin_immune")
 	end
     inst:Remove()
 end

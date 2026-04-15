@@ -602,12 +602,14 @@ AddRecipe2("um_feather_totem", {Ingredient("boards", 2),  Ingredient("um_moss", 
 ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 
---AddRecipe2("um_gemology_pouch", {Ingredient("goldnugget", 1),}, TECH.SCIENCE_TWO, {}, {"CONTAINERS"})
---ChangeSortKey("um_gemology_pouch", "candybag", "CONTAINERS", false)
 
 AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_magnifier"}}, {"CRAFTING_STATION", "TOOLS"})
 ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
+
+AddRecipe2("um_gemology_pouch", {Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2)}, TECH.MAGIC_TWO, {}, {"MAGIC", "CONTAINERS" })
+ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
+ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
 
 if TUNING.DSTU.SHAVE_MODE then
     AddRecipe2("um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_thulecite_razor"}}, {"CRAFTING_STATION", "TOOLS"})

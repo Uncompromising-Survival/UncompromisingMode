@@ -45,4 +45,44 @@ local function fn()
     return inst
 end
 
-return Prefab("um_magnifier", fn, assets)
+local function obsidian_fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBuild("um_magnifier") 
+    inst.AnimState:SetBank("um_magnifier") --TODO: OBSIDIAN VARIANT
+    inst.AnimState:PlayAnimation("idle")
+
+    inst:AddTag("gemologyscanner")
+    inst:AddTag("tradeable")
+    inst:AddTag("wardrobe_item")
+
+    MakeInventoryFloatable(inst, "med", nil, 0.6)
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then return inst end
+
+    inst:AddComponent("inspectable")
+    inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("gemologyscanner")
+    inst.components.gemologyscanner:SetOnScannedFn(OnScanned)
+
+    inst:AddComponent("finiteuses")
+    inst.components.finiteuses:SetOnFinished(inst.Remove)
+    inst.components.finiteuses:SetMaxUses(50)
+    inst.components.finiteuses:SetUses(50)
+
+    MakeHauntableLaunch(inst)
+
+    return inst
+end
+
+return Prefab("um_magnifier", fn, assets),
+    Prefab("um_magnifier_obsidian", obsidian_fn, assets)

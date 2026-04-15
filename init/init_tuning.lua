@@ -34,21 +34,21 @@ TUNING.DSTU = {
     -- Armor
     ----------------------------------------------------------------------------
     ARMORREED_UM = TUNING.WILSON_HEALTH * 2 * multiplayer_armor_durability_modifier,
-    BEE_ALLERGY_PROTECTION_EXTRADAMAGE = 5,    
+    BEE_ALLERGY_PROTECTION_EXTRADAMAGE = 5,
     WATHGRITHR_SHIELD_DREADSTONE_ARMOR = TUNING.WATHGRITHR_SHIELD_ARMOR * 2,
     WATHGRITHR_SHIELD_DREADSTONE_ABSORPTION = TUNING.ARMORDREADSTONE_ABSORPTION, --90
     WATHGRITHR_SHIELD_DREADSTONE_PLANAR_DEF = 5,
     WATHGRITHR_SHIELD_DREADSTONE_PLANAR_DAMAGE = 20,
-    WATHGRITHR_SHIELD_DREADSTONE_DAMAGE =  41, -- 51
-    WATHGRITHR_SHIELD_DREADSTONE_USEDAMAGE = 3, --3
+    WATHGRITHR_SHIELD_DREADSTONE_DAMAGE = 41,    -- 51
+    WATHGRITHR_SHIELD_DREADSTONE_USEDAMAGE = 3,  --3
     WATHGRITHR_SHIELD_DREADSTONE_PANIC_TIME = 5, --3
     ----------------------------------------------------------------------------
     -- Weapons
     ----------------------------------------------------------------------------
     WIDOWSGRASP_DAMAGE = 59.5,
     WIDOWSGRASP_USES = 200,
-	BOOMBERRYBOMB_DAMAGE = 50,
-	PYREBOMB_DAMAGE = 100,
+    BOOMBERRYBOMB_DAMAGE = 50,
+    PYREBOMB_DAMAGE = 100,
     ----------------------------------------------------------------------------
     -- Acid colour
     ----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ TUNING.DSTU = {
     -- Daywalker
     DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
     DAYWALKERSPAWN = GetModConfigData("daywalker_spawn"),
-    
+
     -- Global appearance rate of foods
     FOOD_CARROT_PLANTED_APPEARANCE_PERCENT = 0.75,
     FOOD_BERRY_NORMAL_APPEARANCE_PERCENT = 0.6,
@@ -165,7 +165,7 @@ TUNING.DSTU = {
     ----------------------------------------------------------------------------
     -- Armor Rework
     ARMORREWORK = GetModConfigData("armorrework"),
-    
+
     -- ratraid
     RATRAID_TIMERSTART = GetModConfigData("rattimer"),
     RATRAID_GRACE = GetModConfigData("ratgrace"),
@@ -316,7 +316,7 @@ TUNING.DSTU = {
     CREEPINGFEAR_DAMAGE = 60,
     CREEPINGFEAR_ATTACK_PERIOD = 2.3,
     CREEPINGFEAR_RANGE_1 = 3,
-    CREEPINGFEAR_RANGE_2 = 4,    -- 4.2,
+    CREEPINGFEAR_RANGE_2 = 4,      -- 4.2,
     CREEPINGFEAR_SPAWN_THRESH = 0, -- 10%
     CREEPINGFEAR_WALK_SPEED = 5,
     CREEPINGFEAR_RUN_SPEED = 6,
@@ -351,11 +351,11 @@ TUNING.DSTU = {
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
     KLAUS_AMULET_ABSORPTION = 0.3,
-	ORANGESTAFF_COOLDOWN_1 = 5,
-	ORANGESTAFF_COOLDOWN_2 = 10,
-	ORANGESTAFF_COOLDOWN_3 = 15,
-	ORANGESTAFF_DISTANCE_1 = 8,
-	ORANGESTAFF_DISTANCE_2 = 16,
+    ORANGESTAFF_COOLDOWN_1 = 5,
+    ORANGESTAFF_COOLDOWN_2 = 10,
+    ORANGESTAFF_COOLDOWN_3 = 15,
+    ORANGESTAFF_DISTANCE_1 = 8,
+    ORANGESTAFF_DISTANCE_2 = 16,
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -473,8 +473,8 @@ TUNING.DSTU = {
     --MOTHER_GOOSE_HEALTH = 6000 * GetModConfigData("mothergoose_health_"),
 
     ONEHP = GetModConfigData("uncompromising_1hp"),
-    
-    
+
+
     --hooded forest canoppy setttings
 
     HOODEDFOREST_CANOPY_MAX_ROTATION = 20,
@@ -491,7 +491,7 @@ TUNING.DSTU = {
     DATES = {
         APRIL_FOOLS = Date(1, 4),
     },
-        
+
     -- Shadow Damage tuning
     RUINSNIGHTMARE_DAMAGE = 75,
     HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE = 75
@@ -536,8 +536,8 @@ if GetModConfigData("wixie_walter") then
         SLOW = 10
     }
 
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = {"walterhat", "meatrack_hat", "meat", "monstermeat"}
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WALTER = { "walterhat", "meatrack_hat", "meat", "monstermeat" }
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WIXIE = { "slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock" }
 end
 
 -- Wilson Torch Buff
@@ -642,8 +642,8 @@ TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE = TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE * 2
 
 -- Wortox
 --if GetModConfigData("wortox") then
-    --TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL = 5
-    --TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
+--TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL = 5
+--TUNING.WORTOX_MAPHOP_DISTANCE_SCALER = TUNING.WORTOX_MAPHOP_DISTANCE_SCALER * 1.5 -- 50%
 --end
 
 if GetModConfigData("heatwaves") then
@@ -694,10 +694,10 @@ end
 
 -- Kramped buff
 --if GetModConfigData("kramped_buff") then
-    --GLOBAL.NAUGHTY_VALUE["glommer"] = 100
-    --TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
-    --TUNING.KRAMPUS_THRESHOLD = 60
-    --TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
+--GLOBAL.NAUGHTY_VALUE["glommer"] = 100
+--TUNING.KRAMPUS_NAUGHTINESS_DECAY_PERIOD = math.huge
+--TUNING.KRAMPUS_THRESHOLD = 60
+--TUNING.KRAMPUS_THRESHOLD_VARIANCE = 40
 --end
 
 TUNING.COMPASS_FUEL = total_day_time * 5
@@ -716,8 +716,8 @@ end
 -- Faster Daywalker Regen
 TUNING.DAYWALKER_RESPAWN_DAYS_COUNT = 5 -- Days after the last defeat.
 
-TUNING.PIRATE_STASH_INV_SIZE = 2000 --Used to be just 30 maxslots.
+TUNING.PIRATE_STASH_INV_SIZE = 2000     --Used to be just 30 maxslots.
 
 if GetModConfigData("warly_changes") then
-    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY =  {"portablecookpot_item", "spicepack", "potato", "potato", "garlic"}
+    TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY = { "portablecookpot_item", "spicepack", "potato", "potato", "garlic" }
 end

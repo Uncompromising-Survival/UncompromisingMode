@@ -85,7 +85,9 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --	[ 				Features			]	--
 
 
-modimport("init/init_gemology")
+modimport("init/init_gemology/common")
+modimport("init/init_gemology/special")
+
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")
@@ -231,7 +233,7 @@ if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
 end
 
-modimport("init/init_loadingtips")
+--modimport("init/init_loadingtips")
 
 --food stats!
 if GetModConfigData("food_stats") then
@@ -241,3 +243,9 @@ end
 if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
+
+modimport("init/init_insightcompat")
+
+--need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
+GLOBAL.TheMineralLogbook = require("mineral_logbook")()
+GLOBAL.TheMineralLogbook:Load()

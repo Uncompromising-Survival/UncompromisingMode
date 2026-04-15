@@ -440,6 +440,8 @@ local inventoryitems =
     "um_gemology_geode_glass",
     "um_gemology_geode_slime",
     "um_gemology_geode_ruins",
+    "um_gemology_geode_sink",
+    "um_gemology_geode_vent",
 
     "um_flamethrower",
     "um_firecream",
@@ -449,6 +451,7 @@ local inventoryitems =
     "um_boomberrypie",
 
     "um_magnifier",
+    "um_magnifier_obsidian",
     "um_gemology_pouch",
     --"um_gemology_pouch_open",
 
@@ -1222,7 +1225,7 @@ Assets = {
     Asset("ANIM", "anim/um_archives_projectinator.zip"),
     Asset("ANIM", "anim/um_archives_receptionator.zip"),
     Asset("ANIM", "anim/um_lunar_spark.zip"),
-    
+
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
     Asset("ANIM", "anim/um_soul_ball.zip"),
@@ -1863,6 +1866,12 @@ Assets = {
     Asset("IMAGE", "images/map_icons/um_tornado_map.tex"),
     Asset("ATLAS", "images/map_icons/um_tornado_map.xml"),
 
+    Asset("IMAGE", "images/map_icons/um_gemology_pouch.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemology_pouch.xml"),
+
+    Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
+
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),
     Asset("ATLAS", "bigportraits/willow.xml"),
@@ -1888,6 +1897,11 @@ Assets = {
 
     Asset("IMAGE", "images/wolfgang_rework_skilltree.tex"),
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
+    Asset("ANIM", "anim/um_mite_cave.zip"),
+
+    Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
+    Asset("ANIM", "anim/ui_forge_1x2.zip"),
+    Asset("ANIM", "anim/gem_meter.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do

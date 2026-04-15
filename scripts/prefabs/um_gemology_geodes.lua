@@ -8,6 +8,8 @@ local lobsterassets = { Asset("ANIM", "anim/um_geode_lobster.zip") }
 local glassassets = { Asset("ANIM", "anim/um_geode_glass.zip") }
 local slimeassets = { Asset("ANIM", "anim/um_geode_slime.zip") }
 local ruinsassets = { Asset("ANIM", "anim/um_geode_ruins.zip") }
+local sinksassets = { Asset("ANIM", "anim/um_geode_sink.zip") }
+local ventassets = { Asset("ANIM", "anim/um_geode_vent.zip") } --sussy
 
 local loot_table = {
 
@@ -146,6 +148,38 @@ local loot_table = {
             greengem = 0.25,
         },
     },
+    ["um_gemology_geode_sink"] =
+    {
+        notgemloot = {
+            rocks = 1,
+            cutgrass = 1,
+            twigs = 1,
+            foliage = 1,
+        },
+        gemloot = {
+            um_gemologygreengem1 = 1,
+            um_gemologyyellowgem2 = 1,
+            um_gemologyorangegem2 = 1,
+            um_gemologyorangegem1 = 1,
+            orangegem = 0.1,
+            greengem = 0.05,
+            yellowgemgem = 0.05,
+        },
+    },
+    ["um_gemology_geode_vent"] =
+    {
+        notgemloot = {
+            rocks = 2,
+            nitre = 1,
+        },
+        gemloot = {
+            um_gemologypurplegem2 = 1,
+            um_gemologypurplegem1 = 1,
+            um_gemologyorangegem2 = 1,
+            purplegem = 0.1,
+            orangegem = 0.05,
+        },
+    },
 }
 
 
@@ -211,6 +245,7 @@ local function geodemain(bankbuild)
     inst.pickupsound = "rock"
 
     inst:AddTag("molebait")
+    inst:AddTag("gemology_geode")
     MakeInventoryPhysics(inst)
     MakeInventoryFloatable(inst, "med", nil, 0.68)
 
@@ -283,6 +318,15 @@ local function ruins()
     return geodemain("um_geode_ruins")
 end
 
+local function sink()
+    return geodemain("um_geode_sink")
+end
+
+local function vent()
+    return geodemain("um_geode_vent")
+end
+
+
 return Prefab("um_gemology_geode_red", mushred, mushredassets),
     Prefab("um_gemology_geode_green", mushgreen, mushgreenassets),
     Prefab("um_gemology_geode_blue", mushblue, mushblueassets),
@@ -290,4 +334,6 @@ return Prefab("um_gemology_geode_red", mushred, mushredassets),
     Prefab("um_gemology_geode_lobster", lobster, lobsterassets),
     Prefab("um_gemology_geode_glass", glass, glassassets),
     Prefab("um_gemology_geode_slime", slime, slimeassets),
-    Prefab("um_gemology_geode_ruins", ruins, ruinsassets)
+    Prefab("um_gemology_geode_ruins", ruins, ruinsassets),
+    Prefab("um_gemology_geode_sink", sink, sinksassets),
+    Prefab("um_gemology_geode_vent", vent, ventassets)

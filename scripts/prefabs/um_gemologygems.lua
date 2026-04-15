@@ -54,7 +54,7 @@ local function GetMainName(inst)
 end
 
 local function Shine(inst)
-    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() then
+    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() and inst:IsRevealed() then
         local fx = SpawnPrefab("crab_king_shine")
         fx.Transform:SetScale(0.25, 0.25, 0.25)
         fx.entity:AddFollower()
@@ -77,7 +77,7 @@ local function SetTier(inst, tier)
     if inst.tier ~= nil then
         inst.tier = tier
 
-        if inst.tier == 3 then
+        if inst.tier == 3 and inst:IsRevealed() then
             inst.shinetask = inst:DoTaskInTime(0, Shine)
         end
     end
@@ -126,6 +126,8 @@ local function fncommon(gem)
     inst.IsRevealed = IsRevealed
 
     inst:AddTag("gemology_gem")
+    
+    inst.pickupsound = "gem"
 
     inst.entity:SetPristine()
 

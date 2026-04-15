@@ -101,7 +101,7 @@ local function RobustFloodCheck(inst) -- For players, check to see if they're on
 end
 
 local no_water = {"flying","shadow","worm","playerghost","brightmare","brightmare_gestalt"}
-local no_nettle = { "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
+local no_nettle = { "pyre_toxin_immune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
 
 
 env.AddComponentPostInit("locomotor", function(self)

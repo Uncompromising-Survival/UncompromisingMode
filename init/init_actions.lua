@@ -134,6 +134,25 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     return _RummageFn(act)
 end
 
+local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
+GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
+    local str = _RummageStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ ~= nil then
+        local container = targ.replica.container
+
+        if targ:HasTag("gem_forge") then
+            if container and container:IsOpenedBy(act.doer) then
+                return "CLOSE_GEM_FORGE"
+            else
+                return "GEM_FORGE"
+            end
+        end
+    end
+
+    return str
+end
+
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
 GLOBAL.ACTIONS.CHOP.fn = function(act)
@@ -203,14 +222,22 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
     return _StoreFn(act)
 end
 
+local _StoreStrFn = GLOBAL.ACTIONS.STORE.strfn
+GLOBAL.ACTIONS.STORE.strfn = function(act)
+    local target = act.target
+    if target ~= nil and target.prefab == "um_gemologyforge" then return "GEM_FORGE" end
+    return _StoreStrFn(act)
+end
+
 local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
-    if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
-    if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
-    if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
+    local target = act.target
+    if target ~= nil and target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
+    if target ~= nil and target.prefab == "nightmarefuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "horrorfuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+    if target ~= nil and target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 
@@ -255,7 +282,7 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
 end
 
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
-local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1})
+local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
 SET_CUSTOM_NAME.str = STRINGS.ACTIONS.SET_CUSTOM_NAME
 AddAction(SET_CUSTOM_NAME)
@@ -636,3 +663,14 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
 end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
+
+local um_forge_gem = Action({ priority = 1, mount_valid = true })
+um_forge_gem.id = "UM_FORGE_GEM"
+um_forge_gem.str = STRINGS.UI.APPLY_GEM
+um_forge_gem.fn = function(act)
+    if act.target.ForgeGem ~= nil then
+        return act.target:ForgeGem()
+    end
+end
+
+ENV.AddAction(um_forge_gem)

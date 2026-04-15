@@ -17,7 +17,6 @@ local prefabs =
 
 
 local function DamageCalculation(inst, isattack)
-
     local opalgem = #
         inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
 
@@ -33,7 +32,7 @@ local function DamageCalculation(inst, isattack)
 
     local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
 
-    local dmg = 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem))
+    local dmg = 40 + (5 * opalgem) + (5 * (redgem + bluegem + yellowgem + greengem + orangegem + purplegem + (math.abs(inst.components.gem_enchantable.slots - 4))))
 
     inst.components.weapon:SetDamage(dmg)
 
@@ -59,7 +58,6 @@ local function DamageCalculation(inst, isattack)
             item4.components.finiteuses:Use(1)
         end
     end
-
 end
 
 local function onremovebody1(body)
@@ -78,7 +76,64 @@ local function onremovebody4(body)
     body.gem._body = nil
 end
 
+local pos_map = {
+    { 48, -203, 0 },
+    { 63, -150, 0.1 },
+    { 48, -102, 0.1 },
+    { 23, -61,  0 }
+}
+
+local function GetGemFromGemologyGem(gem)
+    return string.match(gem, "redgem") and "redgem" or
+        string.match(gem, "yellowgem") and "yellowgem" or
+        string.match(gem, "bluegem") and "bluegem" or
+        string.match(gem, "greengem") and "greengem" or
+        string.match(gem, "orangegem") and "orangegem" or
+        string.match(gem, "purplegem") and "purplegem" or
+        string.match(gem, "palegem") and "opalpreciousgem" or "redgem" --red gem fallback
+end
+
+local function OnEnchantmentChanged(inst)
+    local owner = inst.components.inventoryitem.owner
+
+    if inst.components.gem_enchantable:IsEnchanted() then
+        for slot = 1, 4 do
+            if inst["shinefx_slot" .. slot] ~= nil then
+                inst["shinefx_slot" .. slot]:Remove()
+                inst["shinefx_slot" .. slot] = nil
+            end
+        end
+
+        inst.components.container:DropEverything()
+        inst.components.container.canbeopened = false
+        inst.components.container:Close()
+
+        if owner ~= nil and inst.components.equippable.isequipped then
+            local slot = 1
+            for enchant, tier in pairs(inst.components.gem_enchantable.enchants) do
+                if not table.contains(inst.components.gem_enchantable.hidden_enchants, enchant) then
+                    if slot <= 4 and enchant ~= nil then
+                        local x, y, z = unpack(pos_map[slot])
+                        inst["shinefx_slot" .. slot] = SpawnPrefab(GetGemFromGemologyGem(enchant) .. "_cracked_crabclaw")
+                        inst["shinefx_slot" .. slot].gem = inst
+                        inst["shinefx_slot" .. slot].entity:SetParent(owner.entity)
+                        inst["shinefx_slot" .. slot].entity:AddFollower()
+                        inst["shinefx_slot" .. slot].Follower:FollowSymbol(owner.GUID, "swap_object", x, y, z)
+                        inst["shinefx_slot" .. slot].Transform:SetScale(0.25, 0.25, 0.25)
+
+                        slot = slot + 1
+                    end
+                end
+            end
+        end
+    else
+        inst.components.container.canbeopened = true
+    end
+end
+
+
 local function AddGem(inst)
+    OnEnchantmentChanged(inst)
     local owner = inst.components.inventoryitem.owner
     local item1 = inst.components.container.slots[1]
     local item2 = inst.components.container.slots[2]
@@ -172,7 +227,6 @@ local function AddGem(inst)
     end
 
     if item4 ~= nil and owner ~= nil and not inst.slot4_inserted then
-
         if not item4.components.finiteuses then
             item4:AddComponent("perishable")
             item4.components.perishable.onperishreplacement = item4.prefab .. "_cracked"
@@ -204,6 +258,8 @@ local function AddGem(inst)
 end
 
 local function RemoveGem(inst)
+    OnEnchantmentChanged(inst)
+
     local owner = inst.components.inventoryitem.owner
     local item1 = inst.components.container.slots[1]
     local item2 = inst.components.container.slots[2]
@@ -234,6 +290,8 @@ local function RemoveGem(inst)
 end
 
 local function UnequipRemoveGem(inst)
+    OnEnchantmentChanged(inst)
+
     if inst.shinefx_slot1 ~= nil and inst.slot1_inserted then
         inst.shinefx_slot1:Remove()
         inst.slot1_inserted = false
@@ -264,7 +322,7 @@ local function onequip(inst, owner)
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 
-    if inst.components.container ~= nil then
+    if inst.components.container ~= nil and not inst.components.gem_enchantable:IsEnchanted() then
         inst.components.container:Open(owner)
     end
 end
@@ -289,7 +347,6 @@ local function NoHoles(pt)
 end
 
 local function onattack(inst, owner, target)
-
     local opalgem = #
         inst.components.container:FindItems(function(item) return item.prefab == "opalpreciousgem_cracked" end)
 
@@ -339,14 +396,16 @@ local function onattack(inst, owner, target)
     local orangegem = #inst.components.container:FindItems(function(item) return item.prefab == "orangegem_cracked" end)
 
     if orangegem > 0 and target ~= nil and target:IsValid() and target.components.locomotor ~= nil then
-
         local debuffkey = inst.prefab
 
         if target._crabclaw_speedmulttask ~= nil then
             target._crabclaw_speedmulttask:Cancel()
         end
         target._crabclaw_speedmulttask = target:DoTaskInTime(5,
-            function(i) i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey) i._crabclaw_speedmulttask = nil end)
+            function(i)
+                i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
+                i._crabclaw_speedmulttask = nil
+            end)
 
         local slowamount = 0.9 - ((orangegem + opalgem) / 10)
 
@@ -384,6 +443,7 @@ local function GetShadowLevel(inst)
     return inst.components.container ~= nil and #inst.components.container:FindItems(function(item) return item.prefab == "purplegem_cracked" end) + 1
 end
 
+
 local function fn()
     local inst = CreateEntity()
 
@@ -400,7 +460,8 @@ local function fn()
     inst:AddTag("weapon")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
-    
+    inst:AddTag("gem_enchantable")
+
     inst.AnimState:SetBank("cursedcrabclaw")
     inst.AnimState:SetBuild("cursedcrabclaw")
     inst.AnimState:PlayAnimation("idle")
@@ -421,6 +482,12 @@ local function fn()
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(30)
     inst.components.weapon:SetOnAttack(onattack)
+
+    inst:AddComponent("gem_enchantable")
+    inst.components.gem_enchantable.slots = 4
+
+    inst:ListenForEvent("onaddenchant", OnEnchantmentChanged)
+    inst:ListenForEvent("onremoveenchant", OnEnchantmentChanged)
 
     -------
 
@@ -498,7 +565,6 @@ local FLOATER_PROPERTIES =
 }
 
 local function buildgem_cracked(colour, precious, multiplier)
-
     local function Shatter(inst)
         local fx = SpawnPrefab("winona_battery_high_shatterfx")
         fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -524,6 +590,7 @@ local function buildgem_cracked(colour, precious, multiplier)
         inst:AddTag("quakedebris")
         inst:AddTag("gem")
         inst.colour = colour
+        inst.pickupsound = "gem"
 
         local fp = FLOATER_PROPERTIES[colour]
         MakeInventoryFloatable(inst, "small", fp[1], fp[2])
@@ -533,6 +600,7 @@ local function buildgem_cracked(colour, precious, multiplier)
         if not TheWorld.ismastersim then
             return inst
         end
+
 
         inst:AddComponent("edible")
         inst.components.edible.foodtype = FOODTYPE.ELEMENTAL

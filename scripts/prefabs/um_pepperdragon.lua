@@ -127,7 +127,7 @@ local function fn()
     inst:AddTag("smallepic")
     inst:AddTag("animal")
     inst:AddTag("largecreature")
-    inst:AddTag("PyreToxinImmune")
+    inst:AddTag("pyre_toxin_immune")
 
     inst.AnimState:SetBank("um_pepperdragon")
     inst.AnimState:SetBuild("um_pepperdragon")

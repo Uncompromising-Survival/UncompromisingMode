@@ -73,6 +73,7 @@ local component_post = {
 	"possessedaxe",
 	"inventoryitem",
     "pickable",
+    "actionqueuer"
 }
 
 local prefab_post = {
@@ -243,6 +244,7 @@ local prefab_post = {
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
     "firestaff",
+    "cave_vent_mite"
 }
 
 local stategraph_post = {

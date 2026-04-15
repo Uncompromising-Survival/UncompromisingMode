@@ -3,8 +3,8 @@ local require = GLOBAL.require
 require "um_pocketdimensioncontainers"
 
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
-GLOBAL.TheMineralLogbook = require("mineral_logbook")()
-GLOBAL.TheMineralLogbook:Load()
+GLOBAL.MAX_GEM_TIER = 3
+GLOBAL.MIN_GEM_TIER = 0
 
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
@@ -73,7 +73,6 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("init/um_tree_rock_data")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
 local BuildSkillsData = require("prefabs/skilltree_wixie")
@@ -458,7 +457,7 @@ GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init
 GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "amulet_red_ground") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
-modimport("init/init_insightcompat")
+
 modimport("init/init_statusannouncements")
 
 AddSimPostInit(function()
@@ -466,3 +465,5 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
+
+modimport("init/um_tree_rock_data")
