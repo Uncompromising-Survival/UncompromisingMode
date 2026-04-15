@@ -658,7 +658,7 @@ ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM
 
 local um_forge_gem = Action({ priority = 1, mount_valid = true })
 um_forge_gem.id = "UM_FORGE_GEM"
-um_forge_gem.str = "Forge"
+um_forge_gem.str = STRINGS.UI.APPLY_GEM
 um_forge_gem.fn = function(act)
     if act.target.ForgeGem ~= nil then
         return act.target:ForgeGem()
