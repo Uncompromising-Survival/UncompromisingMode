@@ -304,7 +304,9 @@ DESCRIBE.DURABILITY_LEVEL = {
 
 ACTIONFAIL.READ.GENERIC = "It seems the magic is inert in this state."
 ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
-
+ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
+    GEM_ALREADY_KNOWN = "I already know that one.",
+}
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"

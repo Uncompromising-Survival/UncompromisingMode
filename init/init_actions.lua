@@ -222,14 +222,22 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
     return _StoreFn(act)
 end
 
+local _StoreStrFn = GLOBAL.ACTIONS.STORE.strfn
+GLOBAL.ACTIONS.STORE.strfn = function(act)
+    local target = act.target
+    if target ~= nil and target.prefab == "um_gemologyforge" then return "GEM_FORGE" end
+    return _StoreStrFn(act)
+end
+
 local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
-    if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
-    if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
-    if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
+    local target = act.target
+    if target ~= nil and target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
+    if target ~= nil and target.prefab == "nightmarefuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "horrorfuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+    if target ~= nil and target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 

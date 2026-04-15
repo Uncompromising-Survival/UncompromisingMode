@@ -986,9 +986,10 @@ if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.icebox.lowpriorityselection = true
     local oldicebox = containers.params.icebox.itemtestfn
     function containers.params.icebox.itemtestfn(container, item, slot, ...)
-        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") then
+        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and table.contains(item.replica.gem_enchantable:GetEnchantmentNames(), "um_gemologybluegem2") then
             return true
         end
+
         return oldicebox(container, item, slot, ...)
     end
 end
