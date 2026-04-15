@@ -243,3 +243,9 @@ end
 if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
+
+modimport("init/init_insightcompat")
+
+--need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
+GLOBAL.TheMineralLogbook = require("mineral_logbook")()
+GLOBAL.TheMineralLogbook:Load()

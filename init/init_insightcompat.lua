@@ -12,8 +12,7 @@ local function AddDescriptors()
     _G.Insight.descriptors.mock_dragonflyspawner = _G.require("descriptors/mock_dragonflyspawner")
     _G.Insight.descriptors.gmoosespawner = _G.require("descriptors/gmoosespawner")
 
-    --TODO TODO
-    --_G.Insight.descriptors.gem_enchantable = _G.require("descriptors/gem_enchantable") 
+    _G.Insight.descriptors.gem_enchantable = _G.require("descriptors/gem_enchantable") 
     _G.Insight.descriptors.gemology_gem = _G.require("descriptors/gemology_gem")
 end
 

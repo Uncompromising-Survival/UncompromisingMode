@@ -17,6 +17,11 @@ The values are:
     -- for mineral logbook
     sources = {
     prefab_name = {build = "string", bank = "string", anim = "string" }} --anim defaults to idle. Should these actually be the inv image instead, though?
+    desc = { --For insight. NOTE: YOUR GEM ITEM NEEDS THE GEMOLOGY_GEM COMPONENT
+        [1] = "Description for tier 1 gem"
+        [2] = "Description for tier 2 gem"
+        ...and so forth
+    }
     build = "string" --build name
     bank = "string" --bank name  --should these be the inv img instead??? probably.
     anim = "string" --anim name   -- defaults to "idle"
@@ -65,6 +70,8 @@ local function AddUMGemDef(name, def) --helper function to just skip some re-use
     def.bank = "um_gemologygems"
     def.anim = name
 
+    def.desc = STRINGS.UM_DESCRIPTOR.GEM_ENCHANTABLE[string.upper(string.gsub(name, "gem", ""))]
+
     AddGemDef("um_gemology" .. name, def)
 end
 
@@ -84,7 +91,7 @@ function DamageInfiniteItemGem(enchant, item, value)
 end
 
 ------------------------------------------------------------------
---REDGEM1
+--REDGEM2
 local burn_damage = { 8, 16, 34 }
 local burn_portion = { 0.05, 0.2 }
 
@@ -102,12 +109,11 @@ AddUMGemDef("redgem2", {
                 DamageInfiniteItemGem("redgem2", inst, 0.01)
             end
         end
-
     },
 })
 
 -------------------------------------------------------------------
---REDGEM2
+--REDGEM1
 local devour_tags = { "animal", "pig", "monster", "smallcreature" }
 local devour_mults = { 1 / 10, 1 / 5 } -- it's what the document said.... I guess the damage isn't what we're really looking for, it's being able to eat part of the mob
 
@@ -257,7 +263,9 @@ AddUMGemDef("greengem1", {
 
 local valid_enchants = { "um_gemologygreengem1", "um_gemologyyellowgem1", "um_gemologyyellowgem2", "um_gemologypalegem1", "um_gemologyredgem1", "um_gemologyredgem2", "um_gemologypurplegem1", "um_gemologypurplegem2", "um_gemologyorangegem1", "um_gemologybluegem1" }
 
-local function addRandomGemEffects(inst, item, tier)
+local function addRandomGemEffects(inst)
+    local tier = inst.components.gem_enchantable:GetEnchantmentTier("um_gemologygreengem2")
+
     if inst.persistent_gemology_data.um_gemologygreengem2.gem_effects then
         for k, v in pairs(inst.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
             if inst.components.gem_enchantable.enchants[k] then
@@ -295,16 +303,14 @@ AddUMGemDef("greengem2", {
             if item.persistent_gemology_data.um_gemologygreengem2.gem_effects == nil then
                 item.persistent_gemology_data.um_gemologygreengem2.gem_effects = {}
 
-                addRandomGemEffects(item, item, tier)
+                addRandomGemEffects(item)
             else
                 for k, v in pairs(item.persistent_gemology_data.um_gemologygreengem2.gem_effects) do
                     table.insert(item.components.gem_enchantable.hidden_enchants, k)
                 end
             end
 
-            item:WatchWorldState("startday", function(inst)
-                addRandomGemEffects(inst, item, tier)
-            end)
+            item:WatchWorldState("startday", addRandomGemEffects)
         end,
         onremove = function(item, tier)
             if item.persistent_gemology_data.um_gemologygreengem2.gem_effects then
@@ -321,6 +327,8 @@ AddUMGemDef("greengem2", {
                     end
                 end
             end
+
+            item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
             DamageInfiniteItemGem("greengem2", item, 0.01)
@@ -433,8 +441,17 @@ AddUMGemDef("yellowgem2", {
             if item.prefab == "hambat" then
                 item.new_max_damage = TUNING.HAMBAT_DAMAGE + static_mods[tier]
             end
+
+            item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli = item.components.weapon.stimuli
         end,
         onattack = ElectricAttack,
+        onremove = function(item, tier)
+            item.new_max_damage = nil
+
+            if item.components.weapon then
+                item.components.weapon.stimuli = item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
+            end
+        end
     }
 })
 

@@ -5,8 +5,6 @@ require "um_pocketdimensioncontainers"
 GLOBAL.UMCommonFns = require("tools/um_commonfns")
 GLOBAL.MAX_GEM_TIER = 3
 GLOBAL.MIN_GEM_TIER = 0
-GLOBAL.TheMineralLogbook = require("mineral_logbook")()
-GLOBAL.TheMineralLogbook:Load()
 
 PrefabFiles = require("uncompromising_prefabs")
 PreloadAssets = {
@@ -459,7 +457,7 @@ GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init
 GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "amulet_red_ground") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
-modimport("init/init_insightcompat")
+
 modimport("init/init_statusannouncements")
 
 AddSimPostInit(function()
