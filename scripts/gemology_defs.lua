@@ -840,10 +840,14 @@ AddUMGemDef("bluegem2", {
             local pct = 1
             local maxval = 10
             local was_perishable
+
+            local fillable = item.components.fillable
+
             if item.components.finiteuses then
                 item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses = item.components.finiteuses
-
-                pct = item.components.finiteuses:GetPercent()
+                if not fillable then --just defualt to 100% for fillable. Don't perish instnatly when applying to a non-fillable item
+                    pct = item.components.finiteuses:GetPercent()
+                end
                 maxval = item.components.finiteuses.total
                 item:RemoveComponent("finiteuses")
             end
@@ -871,6 +875,7 @@ AddUMGemDef("bluegem2", {
             elseif not item.components.perishable then
                 item:AddComponent("perishable")
             end
+
             item.components.perishable:SetPerishTime(maxval * tier * (was_perishable and 1 or 3))
             item.components.perishable:StartPerishing()
             item.components.perishable.onperishreplacement = "spoiled_food"
@@ -884,7 +889,8 @@ AddUMGemDef("bluegem2", {
             -- inst.components.finiteuses = {}
             -- inst.components.finiteuses.Use = function() end
             item:AddTag("frozen")
-            if item.components.fillable then -- Good ending for watering cans, I could have just made them remove the fillable component
+            if fillable then -- Good ending for watering cans, I could have just made them remove the fillable component
+                item.persistent_gemology_data.um_gemologybluegem2.old_onfill = item.components.fillable.overrideonfillfn
                 item.components.fillable.overrideonfillfn = PerishFill
             end
         end,
@@ -893,32 +899,31 @@ AddUMGemDef("bluegem2", {
 
             if item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses then
                 item.components.finiteuses = item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses
-                item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses = nil
                 item.components.finiteuses:SetPercent(pct)
             end
             if item.volatile_gemology_data.um_gemologybluegem2.old_fueled then
                 item.components.fueled = item.volatile_gemology_data.um_gemologybluegem2.old_fueled
-                item.volatile_gemology_data.um_gemologybluegem2.old_fueled = nil
                 item.components.fueled:SetPercent(pct)
             end
             if item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
                 item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
-                item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = nil
                 item.components.perishable:SetPercent(pct)
             end
-
             if not item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
                 item:RemoveComponent("perishable")
             else
                 item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
-                item.volatile_gemology_data.um_gemologybluegem2.old_perishtime = nil
+            end
+
+            if item.persistent_gemology_data.um_gemologybluegem2.old_onfill then
+                item.components.fillable.overrideonfillfn = item.persistent_gemology_data.um_gemologybluegem2.old_onfill
             end
         end,
         onupdate = function(item, tier)
             item.persistent_gemology_data.um_gemologybluegem2.perish_time_left = item.components.perishable.perishremainingtime
         end,
         canapply = function(item, tier)
-            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.component.perishable ~= nil
+            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.components.perishable ~= nil
         end
     }
 })
