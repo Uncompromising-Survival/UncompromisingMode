@@ -1,5 +1,7 @@
 if not GLOBAL.TheNet:GetIsServer() then return end
 
+local FOODTYPE = GLOBAL.FOODTYPE
+
 AddComponentPostInit("eater", function(self)
 	local _custom_stats_mod_fn = self.custom_stats_mod_fn
 	if self.inst:HasTag("player") then
