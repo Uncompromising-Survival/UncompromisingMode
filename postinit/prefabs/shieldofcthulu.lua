@@ -110,7 +110,7 @@ env.AddPrefabPostInit("shieldofterror", function(inst)
         inst.components.armor:InitCondition(TUNING.SHIELDOFTERROR_ARMOR * 2.333, TUNING.SHIELDOFTERROR_ABSORPTION)
     end
 
-    if TUNING.DSTU.WATHGRITHR_REWORK == 1 and inst.components.weapon then
+    if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED and inst.components.weapon then
         inst._weaponused_callback = function(_, data) end --Leave empty function. Will crash if set to nil
         inst.components.weapon:SetOnAttack(OnAttack) -- Use the normal attack function instead
     end

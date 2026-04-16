@@ -179,7 +179,7 @@ modimport("init/init_character_changes/wormwood")
 --end
 
 -- All of these are wathgrightr changes
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 	modimport("postinit/prefabs/skilltree_wathgrithr")
 	modimport("postinit/prefabs/beefalo") -- Yes, even this one
 	modimport("postinit/prefabs/battlesongs")

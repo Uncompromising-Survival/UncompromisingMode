@@ -255,9 +255,6 @@ TUNING.DSTU = {
     WARLY_SAME_OLD_MULTIPLIERS = { .6, .5, .35, .2, .1 },
     --WARLY_BUTCHER = GetModConfigData("warly_butcher_"),
     --WARLY_FOOD = GetModConfigData("warly_food"),
-    -- Wigfrid
-    BATTLESONG_FIRE_RESIST_MOD = 0, -- orig 33% fire resist
-    WATHGRITHR_REWORK = GetModConfigData("wathgrithr_rework_"),
     -- Maxwell
     SHADOWWAXWELL_FUEL_COST = 2,
     SHADOWWAXWELL_HEALTH_COST = 15,
@@ -721,3 +718,10 @@ TUNING.PIRATE_STASH_INV_SIZE = 2000     --Used to be just 30 maxslots.
 if GetModConfigData("warly_changes") then
     TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WARLY = { "portablecookpot_item", "spicepack", "potato", "potato", "garlic" }
 end
+
+
+local wathgrithr_rework_enum = GetModConfigData("wathgrithr_rework_")
+TUNING.DSTU.WATHGRITHR_REWORK = {}
+TUNING.DSTU.WATHGRITHR_REWORK.ENABLED = (wathgrithr_rework_enum == 1 or wathgrithr_rework_enum == 3)
+TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR = (wathgrithr_rework_enum == 3)
+TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF = (wathgrithr_rework_enum ~= 0)

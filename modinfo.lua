@@ -349,10 +349,10 @@ configuration_options = {
         label = "Wigfrid - Rework",
         hover = "Reduced Wigfrids combat leeching, revamped skill tree, modified items, added more meaningful alignment choices.",
         options = {
-            { description = "Enabled",  data = 1, hover = "All changes enabled." },
-            { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
-            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
-
+            { description = "Enabled",              data = 1, hover = "All changes enabled." },
+            { description = "Enabled, dash repair", data = 3, hover = "All changes enabled. Dashing repairs spear." },
+            { description = "Legacy",               data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
+            { description = "Disabled",             data = 0, hover = "All changes disabled. Same as vanilla." } },
         default = 1
     },
     BinaryConfig("wolfgang", "Wolfgang - Rework", "Wolfgang has a new skill tree, and mightiness is now a resource you spend to use special abilities.", true),

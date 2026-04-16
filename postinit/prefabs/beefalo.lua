@@ -16,7 +16,7 @@ env.AddPrefabPostInit("beefalo", function(inst)
 		return
 	end
 	
-	if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+	if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 		inst:ListenForEvent("riderchanged", OnRiderChanged)
 	end
 end)

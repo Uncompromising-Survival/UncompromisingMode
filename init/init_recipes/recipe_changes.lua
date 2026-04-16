@@ -160,11 +160,7 @@ AllRecipes["saddle_race"].ingredients = {
     Ingredient("glommerwings", 1)
 }
 
-AllRecipes["battlesong_fireresistance"].ingredients = {
-    Ingredient("papyrus", 1),
-    Ingredient("featherpencil", 1),
-    Ingredient("dragon_scales", 1)
-}
+
 
 AllRecipes["walterhat"].ingredients = {
     Ingredient("silk", 4),
@@ -275,12 +271,21 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     }
 end
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
     AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
     --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
     AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
-    AllRecipes["battlesong_container"].ingredients = { Ingredient("boards", 2), Ingredient("goldnugget", 4), Ingredient("beeswax", 2) }
+    AllRecipes["battlesong_container"].ingredients = { 
+        Ingredient("boards", 2), 
+        Ingredient("goldnugget", 4), 
+        Ingredient("beeswax", 2) 
+    }
+    AllRecipes["battlesong_fireresistance"].ingredients = {
+        Ingredient("papyrus", 1),
+        Ingredient("featherpencil", 1),
+        Ingredient("dragon_scales", 1)
+    }
 end
 
 if GetModConfigData("telestaff_rework") then

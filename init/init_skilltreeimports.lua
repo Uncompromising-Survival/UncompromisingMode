@@ -2,7 +2,7 @@
 
 local OldGetSkilltreeBG = GLOBAL.GetSkilltreeBG
 function GLOBAL.GetSkilltreeBG(imagename, ...)
-    if imagename == "wathgrithr_background.tex" and TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+    if imagename == "wathgrithr_background.tex" and TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
         return "images/wathgrithr_rework_skilltree.xml"
 
     elseif imagename == "wolfgang_background.tex" and GetModConfigData("wolfgang") then
@@ -24,7 +24,9 @@ RegisterSkilltreeIconsAtlas("images/wortox_lunar_summoner.xml", "wortox_lunar_su
 RegisterSkilltreeIconsAtlas("images/wortox_shadow_weaver.xml", "wortox_shadow_weaver.tex")
 
 -- Wigfrid
-RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_shield_2.tex")
-RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_allegiance_shadow.tex")
-RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_1.tex")
-RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_2.tex")
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_shield_2.tex")
+    RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_allegiance_shadow.tex")
+    RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_1.tex")
+    RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_2.tex")
+end

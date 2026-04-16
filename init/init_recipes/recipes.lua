@@ -570,7 +570,7 @@ ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
 
-if TUNING.DSTU.WATHGRITHR_REWORK then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
     { Ingredient("dreadstone", 6), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 1) },
     TECH.NONE,
