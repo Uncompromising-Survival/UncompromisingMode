@@ -896,28 +896,33 @@ AddUMGemDef("bluegem2", {
         end,
         onremove = function(item, tier)
             local pct = item.components.perishable:GetPercent()
+            local old_finite = item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses
+            local old_fueled = item.volatile_gemology_data.um_gemologybluegem2.old_fueled
+            local old_perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
+            local old_onfill = item.persistent_gemology_data.um_gemologybluegem2.old_onfill
 
-            if item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses then
-                item.components.finiteuses = item.volatile_gemology_data.um_gemologybluegem2.old_finiteuses
-                item.components.finiteuses:SetPercent(pct)
-            end
-            if item.volatile_gemology_data.um_gemologybluegem2.old_fueled then
-                item.components.fueled = item.volatile_gemology_data.um_gemologybluegem2.old_fueled
-                item.components.fueled:SetPercent(pct)
-            end
-            if item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
-                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
-                item.components.perishable:SetPercent(pct)
-            end
-            if not item.volatile_gemology_data.um_gemologybluegem2.old_perishtime then
-                item:RemoveComponent("perishable")
-            else
-                item.components.perishable.perishtime = item.volatile_gemology_data.um_gemologybluegem2.old_perishtime
-            end
-
-            if item.persistent_gemology_data.um_gemologybluegem2.old_onfill then
-                item.components.fillable.overrideonfillfn = item.persistent_gemology_data.um_gemologybluegem2.old_onfill
-            end
+            item:DoTaskInTime(0, function(item)
+                if old_finite then
+                    item.components.finiteuses = old_finite
+                    item.components.finiteuses:SetPercent(pct)
+                end
+                if old_fueled then
+                    item.components.fueled = old_fueled
+                    item.components.fueled:SetPercent(pct)
+                end
+                if old_perishtime then
+                    item.components.perishable.perishtime = old_perishtime
+                    item.components.perishable:SetPercent(pct)
+                end
+                if not old_perishtime then
+                    item:RemoveComponent("perishable")
+                else
+                    item.components.perishable.perishtime = old_perishtime
+                end
+                if old_onfill then
+                    item.components.fillable.overrideonfillfn = old_onfill
+                end
+            end)
         end,
         onupdate = function(item, tier)
             item.persistent_gemology_data.um_gemologybluegem2.perish_time_left = item.components.perishable.perishremainingtime
