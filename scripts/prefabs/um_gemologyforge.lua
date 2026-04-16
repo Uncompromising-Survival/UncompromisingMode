@@ -24,7 +24,7 @@ end
 
 local function CanApplyGem(gem, tool)
     local fn = GEM_DEFS[gem].fns.canapply
-    return fn ~= nil and fn(tool)
+    return fn ~= nil and fn(tool) or fn == nil
 end
 
 local function ForgeGem(inst)
