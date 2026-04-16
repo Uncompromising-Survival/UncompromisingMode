@@ -1,7 +1,6 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-
 local _ShouldSummonAllies
 local function ShouldSummonAllies(inst, ...)
     if inst.um_cantsummonallies then return false end
