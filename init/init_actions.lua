@@ -53,20 +53,6 @@ AddAction("CASTLIGHTER", "CASTLIGHTER", function(act)
     end
 end)
 
-AddAction("WINGSUIT", "WINGSUIT", function(act)
-    local staff = act.invobject or act.doer.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.BODY)
-    local act_pos = act:GetActionPoint()
-    if staff and staff.components.spellcaster and staff.components.spellcaster:CanCast(act.doer, act.target, act_pos) then
-        staff.components.spellcaster:CastSpell(act.target, act_pos)
-        return true
-    end
-end)
-
-wingsuit.priority = HIGH_ACTION_PRIORITY
-wingsuit.rmb = true
-wingsuit.distance = 20
-wingsuit.mount_valid = false
-
 local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
     if act.doer --[[and act.target]] and act.doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
     local MUST_TAGS = {"raidrat"}

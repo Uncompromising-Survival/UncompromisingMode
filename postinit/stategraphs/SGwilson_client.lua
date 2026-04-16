@@ -131,11 +131,6 @@ local _OldDeathEvent = inst.events["death"].fn
                 return action.invobject ~= nil
                     and action.invobject:HasTag("lighter") and "castspelllighter"
             end),
-        ActionHandler(ACTIONS.WINGSUIT,
-            function(inst, action)
-                return action.invobject ~= nil
-                    and action.invobject:HasTag("wingsuit") and "castspell"
-            end),
         ActionHandler(ACTIONS.RAT_ORDER,
             function(inst, action)
                 return "fingerwhistle"
