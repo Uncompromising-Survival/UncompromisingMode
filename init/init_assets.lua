@@ -456,6 +456,7 @@ local inventoryitems =
     --"um_gemology_pouch_open",
 
     "um_thulecite_razor",
+    "uncompromising_winkyhomeburrow",
 }
 
 

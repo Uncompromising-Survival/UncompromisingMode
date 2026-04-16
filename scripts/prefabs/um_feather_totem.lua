@@ -105,12 +105,14 @@ local function FeatherEffects(owner, totem)
         else
             owner.components.timer:SetTimeLeft("um_totem_malbatross_nowet", TUNING.TOTAL_DAY_TIME * malbatross_feather)
         end
-        owner.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/mossling/honk")
+        owner.SoundEmitter:PlaySound("saltydog/creatures/boss/malbatross/attack_call")
     end
 
-    owner.components.health:DeltaPenalty(-0.125 * feathertotal)
+    local boss_feathers = malbatross_feather + goose_feather
+    local basic_feathers = feathertotal - boss_feathers
+    owner.components.health:DeltaPenalty((-0.25 / 3) * basic_feathers + (-0.50 / 3) * boss_feathers)
     owner:ListenForEvent("timerdone", OnTimerDone)
-    totem.components.container:RemoveAllItems() -- Remove this and make Malba and MGoose feathers have a chance to not be consumed.
+    totem.components.container:RemoveAllItems()
 
     return feathertotal
 end
@@ -135,14 +137,29 @@ local function OnRespawn(owner, totem)
     end
 end
 
+local function OnAvoidDeath(owner, totem)
+    totem = HasTotem(owner)
+    if totem then
+        local effectCount = FeatherEffects(owner, totem)
+        if effectCount > 0 then
+            totem.components.finiteuses:Use(effectCount)
+        end
+    end
+end
+
 local function topocket(inst, owner)
-    owner = owner.components.inventoryitem and owner.components.inventoryitem:GetGrandOwner() or owner
-    --owner.components.health:DoDelta(10) test if it's working
-    if owner ~= inst._owner then
+    owner = inst.components.inventoryitem and inst.components.inventoryitem:GetGrandOwner() or owner
+    local HasOtherTotem = owner.components.inventory:FindItem(function(item) return item:HasTag("um_feather_totem") and item ~= inst end)
+    if owner and owner.components.inventory and HasOtherTotem then
+        owner.components.inventory:DropItem(inst, true, true)
+        inst.SoundEmitter:PlaySound("UCSounds/screecher/screecher", nil, 0.3)
+    elseif owner ~= inst._owner then
         --toground(inst)
         --owner:AddTag("nightmaretracker")
         --owner:ListenForEvent("onremove", toground, inst)
+        
         owner:ListenForEvent("ms_respawnedfromghost", OnRespawn)
+        owner:ListenForEvent("PocketResurrection", OnAvoidDeath)
         inst._owner = owner
     end
 end
@@ -159,6 +176,7 @@ local function fn()
     inst.AnimState:SetBuild("screecher_trinket") --init/init_recipes/recipes.lua is forcing the recipe icon for this. bye!! -C
     inst.AnimState:PlayAnimation("idle")
 
+    inst:AddTag("um_feather_totem")
     inst:AddTag("portablestorage")
 
     MakeInventoryPhysics(inst)

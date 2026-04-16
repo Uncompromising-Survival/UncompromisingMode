@@ -9,6 +9,9 @@ local actionhandlers =
     ActionHandler(ACTIONS.CHECKTRAP, "destroy"),
     ActionHandler(ACTIONS.DIG, "plant_attack"),
     ActionHandler(ACTIONS.STORE, "deposit"),
+    ActionHandler(ACTIONS.GIVE, "give"),
+    ActionHandler(ACTIONS.GIVEALLTOPLAYER, "give"),
+    ActionHandler(ACTIONS.DROP, "give"),
 }
 
 local events =
@@ -301,6 +304,44 @@ local states =
         end,
     },
     
+    State{
+        name = "give",
+        tags = {"busy"},
+
+        onenter = function(inst)
+            inst.Physics:Stop()
+            inst.AnimState:PlayAnimation("eat_pre", false)
+            
+            if inst.components.inventory:NumItems() ~= 0 then
+                
+                local leader = inst.components.follower and inst.components.follower:GetLeader()
+                if leader then
+                    if inst._item and inst._item:IsValid() then
+                        inst._item:Remove()
+                        inst._item = nil
+                    end
+                end
+            end
+        end,
+        
+        timeline=
+        {
+            
+            TimeEvent(4 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+            end),
+            TimeEvent(3*FRAMES, function(inst)
+                inst.SoundEmitter:PlaySound(inst.sounds.eat)
+            end)
+        },
+        
+        
+        events=
+        {
+            EventHandler("animqueueover", function(inst) inst.sg:GoToState("idle") end),
+        },         
+    }, 
+
     State{
         name = "deposit",
         tags = {"busy"},

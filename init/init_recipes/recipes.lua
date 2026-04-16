@@ -648,3 +648,11 @@ AddRecipe2("wathom_um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingre
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CHARACTER", false)
 ChangeSortKey("wathom_um_magnifier", "sentryward", "TOOLS", false)
+
+AddRecipe2("uncompromising_winkyhomeburrow", { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HUNGER, 20) }, TECH.NONE, { placer = "uncompromising_winkyhomeburrow_placer", builder_tag = "ratwhisperer", no_deconstruction = true, canbuild = function(inst, builder) return not GLOBAL.TheWorld.winkyburrowhome end }, { "CHARACTER", "CONTAINERS" })
+ChangeSortKey("uncompromising_winkyhomeburrow", "wx78_scanner_item", "CHARACTER", true)
+ChangeSortKey("uncompromising_winkyhomeburrow", "magician_chest", "CONTAINERS", false)
+
+--[[AddRecipe2("uncompromising_winkyburrow", { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15) }, TECH.NONE, { placer = "uncompromising_winkyburrow_placer", builder_tag = "ratwhisperer", no_deconstruction = true, image ="uncompromising_ratburrow.tex"}, { "CHARACTER", "CONTAINERS" })
+ChangeSortKey("uncompromising_winkyburrow", "uncompromising_winkyhomeburrow", "CHARACTER", true)
+ChangeSortKey("uncompromising_winkyburrow", "uncompromising_winkyhomeburrow", "CONTAINERS", false)]]

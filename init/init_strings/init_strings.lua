@@ -114,6 +114,11 @@ RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
 RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
 RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
+--Winky
+RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A den of annoying little hairballs."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Leads back to home."
+--[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
 
 --Wixie
 RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
@@ -145,10 +150,6 @@ RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 RECIPE_DESC.UM_ICE_SICLE = "Cut down flora and keep yourself cool."
 RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
---[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
-RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
-RECIPE_DESC.RAT_BURROW = "A den of annoying little hairballs."
-RECIPE_DESC.RAT_BURROW = "Leads back to home."
 RECIPE_DESC.OAR_MONKEY = "Now you can do the monkey paddle."
 --
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
@@ -220,6 +221,7 @@ STRINGS.SKIN_QUOTES.winky_none = "\"Squeak!\""
 STRINGS.SKIN_DESCRIPTIONS.winky_none = "She's a fan of shiny things."
 
 STRINGS.ACTIONS.CREATE_BURROW = "Make Burrow"
+STRINGS.ACTIONS.RAT_ORDER = "Gather Order!"
 STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
 STRINGS.ACTIONS.RUMMAGE.GEM_FORGE = "Use"
 STRINGS.ACTIONS.RUMMAGE.CLOSE_GEM_FORGE = "Stop using"

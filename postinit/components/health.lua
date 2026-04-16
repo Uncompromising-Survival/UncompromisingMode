@@ -111,6 +111,7 @@ local function TriggerPocketResurrection(self, item)
         self.inst.AnimState:SetBuild("wathom")
     end
 
+    self.inst:PushEvent("PocketResurrection")
     self:SetInvincible(true)
     self.inst:DoTaskInTime(.2, function(inst) 
         if inst.components.health then 
@@ -161,6 +162,7 @@ local function TriggerRose(self)
     self.inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
     self:DeltaPenalty(.25)
     self:SetPercent(.5)
+    self.inst:PushEvent("PocketResurrection")
 
     for i = 0, 3 do
         self.inst:DoTaskInTime(math.random(), function(inst)

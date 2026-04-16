@@ -20,7 +20,7 @@ Latest update features:
 - New Old Faces
 - Lots of bloat...
 - Lots of promises...
-- No Winky.
+- Yes Winky.
 - Moss.
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]

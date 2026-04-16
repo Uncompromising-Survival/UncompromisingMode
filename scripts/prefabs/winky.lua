@@ -40,6 +40,24 @@ end
 
 local prefabs = FlattenTree(start_inv, true)
 
+local function RightClickPicker(inst, target, pos)
+    local validtargetaction
+    local useitem = inst.replica.inventory:GetActiveItem()
+    local equipitem = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    if equipitem and equipitem:IsValid() then
+        if target then
+            local equipactions = inst.components.playeractionpicker:GetEquippedItemActions(target, equipitem, true)
+            for i, v in pairs(equipactions) do
+                validtargetaction = v
+            end
+        end
+    end
+
+    return target and target == inst --and target.components.follower and target.components.follower:GetLeader() == inst --target:HasTag("winky_rat")
+        and not validtargetaction and not useitem
+        and inst.components.playeractionpicker:SortActionList({ACTIONS.RAT_ORDER}, target, nil) or nil, true
+end
+
 local function GetPointSpecialActions(inst, pos, useitem, right)
     if right and useitem == nil then
         local rider = inst.replica.rider
@@ -51,12 +69,15 @@ local function GetPointSpecialActions(inst, pos, useitem, right)
 end
 
 local function OnSetOwner(inst)
-    if inst.components.playeractionpicker ~= nil then
+    if inst.components.playeractionpicker then
+        inst.components.playeractionpicker.rightclickoverride = RightClickPicker
         inst.components.playeractionpicker.pointspecialactionsfn = GetPointSpecialActions
     end
 end
 
 local function common_postinit(inst)
+    inst.readytogather = net_bool(inst.GUID, "winky.readytogather")
+
     inst.avatar_tex   = "avatar_winky.tex"
     inst.avatar_atlas = "images/avatars/avatar_winky.xml"
 
@@ -82,15 +103,48 @@ local function checkfav(inst, food)
     end
 end
 
+local function CustomFoodStatsMod(inst, health_delta, hunger_delta, sanity_delta, food, feeder)
+    local gross_food_list = {
+        "wormlight",
+        "zaspberry",
+        "potato",
+        "onion",
+        "garlic",
+        "kelp",
+        "boatpatch_kelp",
+        "humanmeat",
+        "humanmeat_dried",
+        "deerclops_eyeball",
+        "minotaurhorn",
+        "ancientfruit_nightvision",
+        "barnacle",
+        "um_spongeplant_item",
+        "phlegm",
+        "milkywhites",
+        "frogfishbowl",
+        "devilsfruitcake",
+    }
+    for _, prefab in pairs(gross_food_list) do
+        if food and (food.prefab == prefab or food.prefab == prefab .. "_cooked" or food.prefab == prefab .. "_lesser") and sanity_delta and sanity_delta < 0 then
+            sanity_delta = 0
+        end
+        --[[if food and (food.prefab == prefab or food.prefab == prefab .. "_cooked" or food.prefab == prefab .. "_lesser") and health_delta and health_delta < 0 then
+            health_delta = 0
+        end]]
+    end
+    return health_delta, hunger_delta, sanity_delta
+end
+
 local function OnPickSomething(inst, data)
 end
 
-local function OnDropItem(inst)
-    inst:DoTaskInTime(0, function()
-        if not inst.no_sanity_drop then
-            inst.components.sanity:DoDelta(-5)
-        end
-    end)
+local function OnDropItem(inst, data)
+    local item = data.item
+	inst:DoTaskInTime(0, function()
+		if not inst.no_sanity_drop and not item:HasTag("heavy") then
+			inst.components.sanity:DoDelta(-5)
+		end
+	end)
 end
 
 local function sanityfn(inst)
@@ -107,32 +161,6 @@ end
 
 local function WinkyDespawn(inst)
     inst.no_sanity_drop = true
-end
-
-local function OldAge(inst)
-	local task
-	task = inst:DoPeriodicTask(0.65,function(inst) --Code from "Disable Characters" mod by star.
-	    if not inst:IsValid() then
-		    task:Cancel()
-			return
-		end
-		--_G.c_despawn(inst) --Bye bye
-        if inst.components.inventory then --Code from "Admin Scoreboard+" mod by T Shaw Killer.
-            inst.components.inventory:DropEverything() 
-        end
-        if not TheWorld:HasTag('cave') then
-            inst:PushEvent('ms_playerreroll')
-            TheWorld.admin_save = TheWorld.admin_save or {} TheWorld.admin_save[inst.userid] = inst.SaveForReroll and inst:SaveForReroll()
-            if TheWorld.admin_listen == nil then
-                TheWorld.admin_listen = TheWorld:ListenForEvent('ms_newplayerspawned', function(world, p)
-                    if world.admin_save[p.userid] and p.LoadForReroll then
-                        p:LoadForReroll(world.admin_save[p.userid]) world.admin_save[p.userid] = nil
-                    end
-                end)
-            end
-        end
-        TheWorld:PushEvent('ms_playerdespawnanddelete', inst)
-	end)
 end
 
 local function master_postinit(inst)
@@ -155,6 +183,7 @@ local function master_postinit(inst)
         inst.components.eater:SetStrongStomach(true) -- can eat monster meat!
         inst.components.eater:SetCanEatRawMeat(true)
         inst.components.eater:SetOnEatFn(checkfav)
+        inst.components.eater.custom_stats_mod_fn = CustomFoodStatsMod
     end
     
     inst.components.sanity.night_drain_mult = TUNING.WENDY_SANITY_MULT
@@ -162,10 +191,10 @@ local function master_postinit(inst)
 
     inst.components.eater.spoiled_sanity = TUNING.WINKY_SPOILED_FOOD_SANITY --edible get sanity
 
-    -- todo: Add an example special power here.
-    inst.components.health:SetMaxHealth(175)
-    inst.components.hunger:SetMax(150)
-    inst.components.sanity:SetMax(125)
+	-- todo: Add an example special power here.
+	inst.components.health:SetMaxHealth(175)
+	inst.components.hunger:SetMax(175)
+	inst.components.sanity:SetMax(125)
     --inst.components.sanity.custom_rate_fn = sanityfn
 
     inst.components.combat.damagemultiplier = TUNING.WENDY_DAMAGE_MULT
@@ -187,10 +216,9 @@ local function master_postinit(inst)
     
     inst.no_sanity_drop = false
     inst:ListenForEvent("dropitem", OnDropItem)
+    inst:ListenForEvent("um_combinestack", OnDropItem)
     inst:ListenForEvent("player_despawn", WinkyDespawn)
     --inst:ListenForEvent("itemlose", OnDropItem)
-
-    OldAge(inst) --She's not doing so good right now.
 end
 
 return MakePlayerCharacter("winky", prefabs, assets, common_postinit, master_postinit)

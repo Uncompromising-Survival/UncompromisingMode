@@ -66,25 +66,45 @@ wingsuit.rmb = true
 wingsuit.distance = 20
 wingsuit.mount_valid = false
 
+local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
+    if act.doer --[[and act.target]] and act.doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
+    local MUST_TAGS = {"raidrat"}
+    local CANT_TAGS = {}
+    local x, y, z = act.doer.Transform:GetWorldPosition()
+    --local ratlings = TheSim:FindEntities(x,y,z,10,MUST_TAGS)
+    local ratminions = act.doer.components.leader and act.doer.components.leader:GetFollowersByTag("raidrat")
+        if act.doer.readytogather and ratminions and #ratminions > 0 then
+            if act.doer.readytogather:value() then
+                act.doer.readytogather:set(false)
+                act.doer.components.talker:Say(GetString(act.doer, "STOP_RAT_ORDER"))
+                for i, v in ipairs(ratminions) do
+                    v.AnimState:PlayAnimation("idle2")
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                end
+            else
+                act.doer.readytogather:set(true)
+                act.doer.components.talker:Say(GetString(act.doer, "START_RAT_ORDER"))
+                for i, v in ipairs(ratminions) do
+                    v.AnimState:PlayAnimation("idle2")
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
+                end
+            end
+        else
+            act.doer.components.talker:Say(GetString(act.doer, "FAIL_RAT_ORDER"))
+        end
+        --act.target:PushEvent("onstolen", { thief = act.doer })
+        return true
+    end
+end)
+
+ratorder.distance = 10
+
 local createburrow = AddAction("CREATE_BURROW", GLOBAL.STRINGS.ACTIONS.CREATE_BURROW, function(act)
     local act_pos = act:GetActionPoint()
     if act.doer.components.hunger.current > 15 and not GLOBAL.TheWorld.Map:GetPlatformAtPoint(act_pos.x, act_pos.z) then
-        local burrows = GLOBAL.TheSim:FindEntities(act_pos.x, 0, act_pos.z, 10000, { "winkyburrow" })
-        local home = false
-
-        for i, v in pairs(burrows) do if v.myowner == act.doer.userid then home = true end end
-
-        if home then
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            act.doer.components.hunger:DoDelta(-15)
-        else
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyhomeburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            burrow.myowner = act.doer.userid
-
-            act.doer.components.hunger:DoDelta(-20)
-        end
+        local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
+        burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
+        act.doer.components.hunger:DoDelta(-15)
 
         return true
     end
@@ -152,6 +172,15 @@ GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
 
     return str
 end
+
+local _combinestackfn = GLOBAL.ACTIONS.COMBINESTACK.fn
+GLOBAL.ACTIONS.COMBINESTACK.fn = function(act)
+    --local target = act.target
+    local invobj = act.invobject
+    act.doer:PushEvent("um_combinestack", { item = invobj })
+    return _combinestackfn(act)
+end
+
 
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
