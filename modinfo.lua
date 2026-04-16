@@ -8,7 +8,7 @@ end
 --RELEASE.MAJOR.MINOR.FIX
 local _version = "1.5.3.0"
 description = [[
-󰀔 [ Version: ]] .. _version .. [[ - "Winky!" ]
+󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby and Winky!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
