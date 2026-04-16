@@ -2192,6 +2192,8 @@ Assets = {
 	Asset( "IMAGE", "images/wolfgang_rework_skilltree.tex" ),
     Asset( "ATLAS", "images/wolfgang_rework_skilltree.xml" ),
 
+    Asset("IMAGE", "images/inventoryimages/uncompromising_winkyhomeburrow.tex"),
+	Asset("ATLAS", "images/inventoryimages/uncompromising_winkyhomeburrow.xml"),
 }
 
 local skilltree_defs = require("prefabs/skilltree_defs")
