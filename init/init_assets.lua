@@ -306,6 +306,7 @@ local inventoryitems =
 	"hat_crab",
 	"staff_starfall",
 	"um_thulecite_razor",
+    "uncompromising_winkyhomeburrow",
 }
 
 for k, v in ipairs(inventoryitems) do

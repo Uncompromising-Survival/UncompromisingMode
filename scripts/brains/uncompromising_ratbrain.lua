@@ -3,31 +3,33 @@ require "behaviours/runaway"
 require "behaviours/doaction"
 require "behaviours/panic"
 
-local SEE_PLAYER_DIST             = 8
-local SEE_FOOD_DIST               = 20
+local BrainCommon = require("brains/braincommon")
 
-local AVOID_PLAYER_DIST           = 3
-local AVOID_PLAYER_DIST_SQ        = AVOID_PLAYER_DIST * AVOID_PLAYER_DIST
-local AVOID_PLAYER_STOP           = 8
+local SEE_PLAYER_DIST = 8
+local SEE_FOOD_DIST = 20
 
-local AVOID_PLAYER_DIST_COMBAT    = 6
+local AVOID_PLAYER_DIST = 3
+local AVOID_PLAYER_DIST_SQ = AVOID_PLAYER_DIST * AVOID_PLAYER_DIST
+local AVOID_PLAYER_STOP = 8
+
+local AVOID_PLAYER_DIST_COMBAT = 6
 local AVOID_PLAYER_DIST_SQ_COMBAT = AVOID_PLAYER_DIST_COMBAT * AVOID_PLAYER_DIST_COMBAT
-local AVOID_PLAYER_STOP_COMBAT    = 10
+local AVOID_PLAYER_STOP_COMBAT = 10
 
-local MIN_FOLLOW_LEADER           = 2
-local MAX_FOLLOW_LEADER           = 8
-local TARGET_FOLLOW_LEADER        = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
+local MIN_FOLLOW_LEADER = 2
+local MAX_FOLLOW_LEADER = 8
+local TARGET_FOLLOW_LEADER = (MAX_FOLLOW_LEADER + MIN_FOLLOW_LEADER) / 2
 
-local MAX_CHASE_TIME              = 10
-local MAX_CHASE_DIST              = 30
+local MAX_CHASE_TIME = 10
+local MAX_CHASE_DIST = 30
 
-local SEE_DIST                    = 25
-local TOOCLOSE                    = 3
+local SEE_DIST = 25
+local TOOCLOSE = 3
 
-local SEE_BAIT_DIST               = 15
-local MAX_WANDER_DIST             = 5
+local SEE_BAIT_DIST = 15
+local MAX_WANDER_DIST = 5
 
-local Uncompromising_RatBrain     = Class(Brain, function(self, inst)
+local Uncompromising_RatBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
 end)
 
@@ -187,9 +189,9 @@ local function EmptyChest(inst)
     end
 
     --[[elseif not inst.components.inventory:IsFull() then
-		return target ~= nil
-			and BufferedAction(inst, target, ACTIONS.RAT_STEAL)
-			or nil]]
+        return target ~= nil
+            and BufferedAction(inst, target, ACTIONS.RAT_STEAL)
+            or nil]]
 
     return nil
 end
@@ -209,61 +211,61 @@ local function GetFollowPos(inst)
 end
 --[[
 local function eat_food_action(inst)
-	if inst == nil or not inst:IsValid() then
-		return nil
-	end
+    if inst == nil or not inst:IsValid() then
+        return nil
+    end
 
-	local px, py, pz = inst.Transform:GetWorldPosition()
+    local px, py, pz = inst.Transform:GetWorldPosition()
 
-	local ents_nearby = TheSim:FindEntities(px, py, pz, SEE_BAIT_DIST + AVOID_PLAYER_DIST)
+    local ents_nearby = TheSim:FindEntities(px, py, pz, SEE_BAIT_DIST + AVOID_PLAYER_DIST)
 
-	local foods = {}
-	local scaries = {}
-	for _, ent in ipairs(ents_nearby) do
-		if ent ~= inst and ent.entity:IsVisible() then
-			if ent:HasTag("scarytoprey") then
-				table.insert(scaries, ent)
-			elseif edible(inst, ent) then
-				table.insert(foods, ent)
-			end
-		end
-	end
+    local foods = {}
+    local scaries = {}
+    for _, ent in ipairs(ents_nearby) do
+        if ent ~= inst and ent.entity:IsVisible() then
+            if ent:HasTag("scarytoprey") then
+                table.insert(scaries, ent)
+            elseif edible(inst, ent) then
+                table.insert(foods, ent)
+            end
+        end
+    end
 
-	if #foods == 0 then
-		return nil
-	end
+    if #foods == 0 then
+        return nil
+    end
 
-	local target = nil
-	if #scaries == 0 then
-		target = foods[1]
-	else
-		for fi = 1, #foods do
-			local food = foods[fi]
-			local scary_thing_nearby = false
+    local target = nil
+    if #scaries == 0 then
+        target = foods[1]
+    else
+        for fi = 1, #foods do
+            local food = foods[fi]
+            local scary_thing_nearby = false
 
-			for si = 1, #scaries do
-				local scary_thing = scaries[si]
-				if scary_thing ~= nil and scary_thing.Transform ~= nil then
-					local sq_distance = food:GetDistanceSqToPoint(scary_thing.Transform:GetWorldPosition())
-					if sq_distance < AVOID_PLAYER_DIST_SQ then
-						scary_thing_nearby = true
-						break
-					end
-				end
-			end
+            for si = 1, #scaries do
+                local scary_thing = scaries[si]
+                if scary_thing ~= nil and scary_thing.Transform ~= nil then
+                    local sq_distance = food:GetDistanceSqToPoint(scary_thing.Transform:GetWorldPosition())
+                    if sq_distance < AVOID_PLAYER_DIST_SQ then
+                        scary_thing_nearby = true
+                        break
+                    end
+                end
+            end
 
-			if not scary_thing_nearby then
-				target = food
-				break
-			end
-		end
-	end
+            if not scary_thing_nearby then
+                target = food
+                break
+            end
+        end
+    end
 
-	if target then
-		local act = BufferedAction(inst, target, ACTIONS.EAT)
-		act.validfn = function() return not (target.components.inventoryitem and target.components.inventoryitem:IsHeld()) end
-		return act
-	end
+    if target then
+        local act = BufferedAction(inst, target, ACTIONS.EAT)
+        act.validfn = function() return not (target.components.inventoryitem and target.components.inventoryitem:IsHeld()) end
+        return act
+    end
 end]]
 
 local function eat_poison_action(inst)
@@ -314,12 +316,12 @@ local function eat_food_action(inst)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.EAT) or nil
 end
 
-local FARMPLANT_MUSTTAGS = { "farmplantstress" }
-local FARMPLANT_NOTAGS = { "farm_plant_killjoy" }
+local FARMPLANT_MUSTTAGS = {"farmplantstress"}
+local FARMPLANT_NOTAGS = {"farm_plant_killjoy"}
 
 local function ShouldTargetPlant(inst, plant)
     local target = FindEntity(inst, SEE_DIST, function(plant)
-        if (plant.components.growable == nil or plant.components.growable:GetCurrentStageData().tendable) and plant.components.workable then
+        if (plant.components.growable == nil or plant.components.growable:GetCurrentStageData().tendable) and plant.components.workable and not inst:HasTag("winky_rat") then
             return plant.components.farmplantstress
                 and not GetClosestInstWithTag("scarytoprey", plant, TOOCLOSE) -- ~= nil
         end
@@ -328,63 +330,91 @@ local function ShouldTargetPlant(inst, plant)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.DIG) or nil
 end
 
+local function closetoleader(inst)
+    if inst.sg:HasStateTag("busy") then
+        return nil
+    end
+    local leader = inst.components.follower and inst.components.follower.leader or nil
+    if leader and leader:GetDistanceSqToInst(inst) < TUNING.POLLY_ROGERS_RANGE * TUNING.POLLY_ROGERS_RANGE then
+        return true
+    end
+end
+
+local function IsItemNono(inst, item)
+    return not item:HasAnyTag("animal", "small_livestock", "trap")
+end
+
+local function PickUpFilter(inst, target, leader)
+    return IsItemNono(leader, target)
+end
+
+local function LeaderHasWorkToggleOn(inst)
+    local leader = GetLeader(inst)
+    if not leader then return false end
+    local toggle = leader.readytogather
+    return toggle and toggle:value()
+end
+
 function Uncompromising_RatBrain:OnStart()
-    local neutralbehaviour = PriorityNode(
-        {
-            WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",
-                PriorityNode({
-                    DoAction(self.inst, eat_poison_action, "Eat Poison", true),
-                    DoAction(self.inst, function() return CanDeposit(self.inst) end, "depositloot", true),
-                    DoAction(self.inst, function() return SpringTrap(self.inst) end, "checktrap", true),
-                }, .25))
-        }, 0.25)
-    local stealnode = PriorityNode(
-        {
-            WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",
-                PriorityNode({
-                    DoAction(self.inst, function() return StealAction(self.inst) end, "steal", true),
-                    DoAction(self.inst, function() return EmptyChest(self.inst) end, "emptychest", true),
-                    DoAction(self.inst, eat_food_action, "Eat Food", true),
-                    DoAction(self.inst, function() return ShouldTargetPlant(self.inst) end, "attackplant", true)
-                }, .25))
-        }, 0.25)
-    local root = PriorityNode(
-        {
-            WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
-                PriorityNode({
-                    WhileNode(function()
-                        return self.inst.components.hauntable and self.inst.components.hauntable.panic
-                    end, "PanicHaunted", Panic(self.inst)),
-                    WhileNode(function()
-                        return self.inst.components.health.takingfiredamage or self.inst.components.burnable:IsBurning()
-                    end, "OnFire", Panic(self.inst)),
-
-                    WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
-                        ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
-
-                    RunAway(self.inst, "ghost", 8, 12),
-                    RunAway(self.inst, { tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
-                    --RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
-
-                    Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
-                    FaceEntity(self.inst, GetLeader, GetLeader),
-
-                    MinPeriod(self.inst, 2, true,
-                        neutralbehaviour),
-
-                    --Leash(self.inst, self.inst.components.knownlocations:GetLocation("herd"), 40, 3),
-
-                    MinPeriod(self.inst, 2, true,
-                        stealnode),
-
-                    WhileNode(function() return self.inst.components.combat.target and self.inst.components.combat:InCooldown() end, "Dodge",
-                        RunAway(self.inst, function() return self.inst.components.combat.target end, AVOID_PLAYER_DIST_COMBAT, AVOID_PLAYER_STOP_COMBAT)),
-
-                    DoAction(self.inst, eat_food_action),
-
-                    Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("herd") end, MAX_WANDER_DIST),
-                }, 0.25))
-        }, .25)
+    --[[local leader = GetLeader(self.inst)
+    local ignorethese = nil
+    if leader then
+        ignorethese = leader._brain_pickup_ignorethese or {}
+        leader._brain_pickup_ignorethese = ignorethese
+    end]]
+    local function ShouldPickup() return LeaderHasWorkToggleOn(self.inst) end
+    local function ShouldDeliver()
+        local leader = GetLeader(self.inst)
+        return leader and leader.components.inventory and not leader.components.inventory:IsFull()
+    end
+    local pickupparams = {
+        cond = ShouldPickup,
+        range = TUNING.POLLY_ROGERS_RANGE,
+        furthestfirst = false,
+        custom_pickup_filter = PickUpFilter,
+        --ignorethese = ignorethese,
+        --give_cond = ShouldDeliver,
+    }
+    local neutralbehaviour = PriorityNode({
+        WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",
+            PriorityNode({
+                DoAction(self.inst, eat_poison_action, "Eat Poison", true),
+                DoAction(self.inst, function() return CanDeposit(self.inst) end, "depositloot", true),
+                DoAction(self.inst, function() return SpringTrap(self.inst) end, "checktrap", true),
+            }, .25))
+    }, .25)
+    local stealnode = PriorityNode({
+        WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",
+            PriorityNode({
+                DoAction(self.inst, function() return StealAction(self.inst) end, "steal", true),
+                DoAction(self.inst, function() return EmptyChest(self.inst) end, "emptychest", true),
+                DoAction(self.inst, eat_food_action, "Eat Food", true),
+                DoAction(self.inst, function() return ShouldTargetPlant(self.inst) end, "attackplant", true)
+            }, .25))
+    }, .25)
+    local root = PriorityNode({
+        WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
+            PriorityNode({
+                BrainCommon.PanicWhenScared(self.inst, .3),
+                BrainCommon.PanicTrigger(self.inst),
+                BrainCommon.ElectricFencePanicTrigger(self.inst),
+                WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
+                    ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
+                RunAway(self.inst, "ghost", 8, 12),
+                RunAway(self.inst, { tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
+                --RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
+                WhileNode(function() return closetoleader(self.inst) end, "Stayclose", BrainCommon.NodeAssistLeaderPickUps(self, pickupparams)),
+                Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
+                FaceEntity(self.inst, GetLeader, GetLeader),
+                MinPeriod(self.inst, 2, true, neutralbehaviour),
+                --Leash(self.inst, self.inst.components.knownlocations:GetLocation("herd"), 40, 3),
+                MinPeriod(self.inst, 2, true, stealnode),
+                WhileNode(function() return self.inst.components.combat.target and self.inst.components.combat:InCooldown() end, "Dodge",
+                    RunAway(self.inst, function() return self.inst.components.combat.target end, AVOID_PLAYER_DIST_COMBAT, AVOID_PLAYER_STOP_COMBAT)),
+                DoAction(self.inst, eat_food_action),
+                Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("herd") end, MAX_WANDER_DIST),
+            }, .25))
+    }, .25)
     self.bt = BT(self.inst, root)
 end
 

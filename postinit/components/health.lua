@@ -71,6 +71,7 @@ local function TriggerAmulet(self)
     SpawnPrefab("slingshotammo_hitfx_gold").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
     SpawnPrefab("shadow_despawn").Transform:SetPosition(self.inst.Transform:GetWorldPosition())
 
+    self.inst:PushEvent("PocketResurrection")
     self:SetInvincible(true)
 
     if self.inst.components.sanity then
@@ -116,8 +117,9 @@ local function TriggerRose(self)
     self.inst.components.sanity:SetPercent(.5, true)
     self.inst.components.hunger:SetPercent(2 / 3, true)
     self.inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
-    self:DeltaPenalty(0.25)
-    self:SetPercent(0.5)
+    self:DeltaPenalty(.25)
+    self:SetPercent(.5)
+    self.inst:PushEvent("PocketResurrection")
 
     for i = 0, 3 do
         self.inst:DoTaskInTime(math.random(), function(inst)

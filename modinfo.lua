@@ -6,15 +6,14 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.2.7"
+local _version = "1.5.3.0"
 description = [[
-󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby!" ]
+󰀔 [ Version: ]] .. _version .. [[ - "Winky!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
 Latest update features:
-- Winky is not doing well :(
-- New "Shave Together Mode" Super Sekrit Setting! :) (April Fools!) 
+- "Winky" is back!
 
 󰀏 NEXT UPDATE: On the Rocks! (Accessible as a Beta in our Discord server!)]]
 

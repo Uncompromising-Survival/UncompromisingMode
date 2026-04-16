@@ -7,7 +7,9 @@ DESCRIBE = GLOBAL.STRINGS.CHARACTERS.WINKY.DESCRIBE
 ACTIONFAIL = GLOBAL.STRINGS.CHARACTERS.WINKY.ACTIONFAIL
 
 --	[ 		Winky Descriptions		]   --
-
+ANNOUNCE.START_RAT_ORDER = "Go get me more stuff!"
+ANNOUNCE.STOP_RAT_ORDER = "You can stop for now."
+ANNOUNCE.FAIL_RAT_ORDER = "Where is everyone?"
 ANNOUNCE.DREADEYE_SPOOKED = "Wah! What is that?!"
 ANNOUNCE.ANNOUNCE_HARDCORE_RES = "Grah! This heart is mine, not yours."
 ANNOUNCE.ANNOUNCE_WINONAGEN = "Useless machine"
@@ -33,6 +35,10 @@ ANNOUNCE.ANNOUNCE_DETACH_BUFF_ELECTRICRETALIATION =
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_FROZENFURY = "f-feeling my fingers again."
 ANNOUNCE.ANNOUNCE_DETACH_BUFF_VETCURSE = "The evil presence is gone..."
 ANNOUNCE.ANNOUNCE_RNEFOG = "Who is out there!"
+
+ANNOUNCE.START_RAT_ORDER = "Go get me more stuff!"
+ANNOUNCE.STOP_RAT_ORDER = "You can stop for now."
+ANNOUNCE.FAIL_RAT_ORDER = "Where is everyone?"
 -- FoodBuffs
 
 -- CaliforniaKing
@@ -286,9 +292,11 @@ DESCRIBE.DURABILITY_LEVEL = {
 ACTIONFAIL.READ = { GENERIC = "Of course I know what I'm doing." }
 ACTIONFAIL.GIVE = { NOTNIGHT = "Maybe if I hit it hard, it will work?" }
 
-RECIPE_DESC = GLOBAL.STRINGS.RECIPE_DESC
 
-RECIPE_DESC.RAT_BURROW = "Leads back to home."
+ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
+ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
+ACTIONFAIL.TOUCH_BURROW_RAT_LIMIT = "There are too many of them."
+ACTIONFAIL.TOUCH_BURROW_NO_HUNGER = "Where is all my food."
 
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Bumpy rocky thing."

@@ -1563,6 +1563,10 @@ if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end
 
+AddRecipe2("uncompromising_winkyhomeburrow", { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HUNGER, 20) }, TECH.NONE, { placer = "uncompromising_winkyhomeburrow_placer", builder_tag = "ratwhisperer", no_deconstruction = true, canbuild = function(inst, builder) return not GLOBAL.TheWorld.winkyburrowhome end }, { "CHARACTER", "CONTAINERS" })
+ChangeSortKey("uncompromising_winkyhomeburrow", "wx78_scanner_item", "CHARACTER", true)
+ChangeSortKey("uncompromising_winkyhomeburrow", "magician_chest", "CONTAINERS", false)
+
 --recipe postinits
 AddPrefabPostInit("forest", function(inst)
     AddRecipePostInitAny(function(recipe)
@@ -1729,6 +1733,9 @@ GLOBAL.STRINGS.RECIPE_DESC.PACT_ARMOR_SANITY = "Wrapped in your sins."
 GLOBAL.STRINGS.RECIPE_DESC.PACT_SWORD_SANITY = "Hefty, like the weight on your shoulders."
 
 STRINGS.RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
+--Winky
+RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A den of annoying little hairballs."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Leads back to home."
 
 -- [ PROTOTYPERS ] --
 GLOBAL.PROTOTYPER_DEFS.critterlab_real = GLOBAL.PROTOTYPER_DEFS.critterlab
