@@ -63,21 +63,21 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
         if act.doer.readytogather and ratminions and #ratminions > 0 then
             if act.doer.readytogather:value() then
                 act.doer.readytogather:set(false)
-                act.doer.components.talker:Say(GetString(act.doer, "STOP_RAT_ORDER"))
+                act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "STOP_RAT_ORDER"))
                 for i, v in ipairs(ratminions) do
                     v.AnimState:PlayAnimation("idle2")
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
                 end
             else
                 act.doer.readytogather:set(true)
-                act.doer.components.talker:Say(GetString(act.doer, "START_RAT_ORDER"))
+                act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "START_RAT_ORDER"))
                 for i, v in ipairs(ratminions) do
                     v.AnimState:PlayAnimation("idle2")
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
                 end
             end
         else
-            act.doer.components.talker:Say(GetString(act.doer, "FAIL_RAT_ORDER"))
+            act.doer.components.talker:Say(GLOBAL.GetString(act.doer, "FAIL_RAT_ORDER"))
         end
         --act.target:PushEvent("onstolen", { thief = act.doer })
         return true
