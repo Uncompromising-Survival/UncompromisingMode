@@ -9,7 +9,7 @@ end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
     --minerology
-    if weapon ~= nil and weapon.components.gem_enchantable ~= nil and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2") then
+    if weapon ~= nil and weapon.components.gem_enchantable ~= nil and weapon.components.gem_enchantable:HasEnchant("um_gemologyredgem2") then
         return true
     end
 
