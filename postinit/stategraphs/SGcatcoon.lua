@@ -2,8 +2,10 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
+local COUNTERATTACK_CANT_STATES = {"pounceattack", "pounce_pre"}
+
 env.AddStategraphPostInit("catcoon", function(inst)
-    --[[local events =
+    local events =
     {
         EventHandler("doattack", function(inst, data)
             if inst.components.health and not inst.components.health:IsDead() and not inst.sg:HasStateTag("busy") then
@@ -13,14 +15,20 @@ env.AddStategraphPostInit("catcoon", function(inst)
                     else
                         inst.sg:GoToState("pounceplay", data.target)
                     end
-                elseif data.target and data.target:IsValid() and inst:GetDistanceSqToInst(data.target) > TUNING.CATCOON_MELEE_RANGE*TUNING.CATCOON_MELEE_RANGE/(1.5*1.5) or math.random() > 0.5) then
+                elseif data.target and data.target:IsValid() and (inst:GetDistanceSqToInst(data.target) > TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5) or math.random() > .5) then
                     inst.sg:GoToState("pounce_pre", data.target)
                 else
                     inst.sg:GoToState("attack", data.target)
                 end
             end
         end),
-    }]]
+        EventHandler("um_counterattack", function(inst, data)
+            if inst.components.health and not inst.components.health:IsDead() and not table.contains(COUNTERATTACK_CANT_STATES, inst.sg.currentstate.name) and data.target and data.target:IsValid()
+                and inst:IsNear(data.target, TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5)) then
+                inst.sg:GoToState("pounce_pre", data.target)
+            end
+        end)
+    }
 
     local attackedeventhandler = inst.events["attacked"]
     if attackedeventhandler then
@@ -49,7 +57,7 @@ env.AddStategraphPostInit("catcoon", function(inst)
         end
     end
 
-    --[[local states =
+    local states =
     {
         State{
             name = "pounce_pre",
@@ -57,7 +65,6 @@ env.AddStategraphPostInit("catcoon", function(inst)
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target ~= nil and target:IsValid() and target or inst.components.combat and inst.components.combat.target
-                inst.countercounter = 1
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("taunt_pre")
                 inst.AnimState:PushAnimation("taunt", false)
@@ -76,8 +83,8 @@ env.AddStategraphPostInit("catcoon", function(inst)
 
             timeline =
             {
-                TimeEvent(0*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss_pre") end),
-                TimeEvent(19*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss") end)
+                TimeEvent(0 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss_pre") end),
+                TimeEvent(19 * FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve_DLC001/creatures/catcoon/hiss") end)
             },
             
         },
@@ -91,5 +98,5 @@ env.AddStategraphPostInit("catcoon", function(inst)
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")
         inst.states[v.name] = v
-    end]]
+    end
 end)

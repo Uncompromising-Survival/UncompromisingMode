@@ -19,7 +19,13 @@ do
         if attacker and attacker.userid and not table.contains(inst.hitlist, attacker.userid) then
             table.insert(inst.hitlist, attacker.userid)
         end
-        --inst.sg:GoToState("pounce_pre", attacker)
+        if inst.um_counterattack then
+            inst.um_counterattack = math.max(inst.um_counterattack - 1, 0)
+            if inst.um_counterattack == 0 then
+                inst.um_counterattack = 3
+                inst:PushEvent("um_counterattack", {target = attacker})
+            end
+        end
     end
 
     local _RetargetFn
@@ -53,6 +59,7 @@ do
     env.AddPrefabPostInit("catcoon", function(inst)
         if not TheWorld.ismastersim then return end
 
+        inst.um_counterattack = 3
         inst.hitlist = {}
 
         if inst.components.health then
