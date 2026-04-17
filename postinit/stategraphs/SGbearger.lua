@@ -25,7 +25,6 @@ env.AddStategraphPostInit("bearger", function(inst)
     end
 
     local states = {
-
         State{
             name = "pre_shoot",
             tags = {"busy", "canrotate"},
@@ -59,7 +58,6 @@ env.AddStategraphPostInit("bearger", function(inst)
                 inst.AnimState:SetBuild("bearger_build")
             end,]]
         },
-        
         State{
             name = "shoot",
             tags = {"attack", "canrotate", "busy"},

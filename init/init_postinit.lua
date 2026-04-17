@@ -288,7 +288,7 @@ local brain_post = {
     "chester",
     "mossling",
     "perd",
-    "catcoon",
+    --"catcoon",
     "deer",
     "shadowwaxwell",
     "hound",
