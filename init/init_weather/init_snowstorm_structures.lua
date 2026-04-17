@@ -125,8 +125,15 @@ repourposing this file, but am gonna comment that ^ out since this file wasn't l
 local SNOWPILE_BLOCKERS =
 {
     "dragonflyfurnace",
-    "stafflight"
+	"dragonflychest",	
+    "um_hotspring",
+	"hotspring",
+	"hermithotspring",	
+    "stafflight",
+	"emberlight",
+	"lava_pond"
 }
+
 for k, v in pairs(SNOWPILE_BLOCKERS) do
     AddPrefabPostInit(v, function(inst)
         if not GLOBAL.TheWorld.ismastersim then
