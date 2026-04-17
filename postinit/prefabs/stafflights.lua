@@ -21,3 +21,13 @@ env.AddPrefabPostInit("staffcoldlight", function(inst)
 	end
 
 end)
+
+env.AddPrefabPostInit("emberlight", function(inst)
+
+	inst:AddTag("snowstorm_protection_high")
+	
+	if not TheWorld.ismastersim then
+		return
+	end
+
+end)
