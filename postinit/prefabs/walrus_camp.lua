@@ -143,8 +143,18 @@ local function Replacement(inst)
 	end
 
 	if inst._flare_glacial and inst._flare_glacial:IsValid() then
+		if inst._flare_glacial.ice_shield ~= nil and inst._flare_glacial.ice_shield:IsValid() then
+			inst._flare_glacial.ice_shield._silent_remove = true
+			inst._flare_glacial.ice_shield:Remove()
+		end
+
+		if inst._flare_glacial.shield_fx ~= nil and inst._flare_glacial.shield_fx:IsValid() then
+			inst._flare_glacial.shield_fx:Remove()
+		end
+
 		inst._flare_glacial:Remove()
 	end
+	
 	inst._flare_glacial = nil
 
 	if inst._hidden_hounds then

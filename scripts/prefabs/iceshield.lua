@@ -124,24 +124,26 @@ local function fn()
 
     inst.Init = Init
 
-    inst:ListenForEvent("death", function(inst)
-        SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
+	inst:ListenForEvent("death", function(inst)
+		if not inst._silent_remove and inst._parent ~= nil and inst._parent:IsValid() then
+			SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
+		end
 
-        if inst._parent ~= nil then
-            inst._parent:RemoveTag("ice_shielded") --damn you!! GET RID OF IT!
-            inst._parent:PushEvent("ice_shield_death")
+		if inst._parent ~= nil then
+			inst._parent:RemoveTag("ice_shielded")
+			inst._parent:PushEvent("ice_shield_death")
 
-            if inst._parent.shield_fx ~= nil then
-                inst._parent.shield_fx:Remove()
-            end
+			if inst._parent.shield_fx ~= nil then
+				inst._parent.shield_fx:Remove()
+			end
 
-            if inst._parent.components.burnable ~= nil then
-                inst._parent.components.burnable:Extinguish()
-            end
-        end
+			if inst._parent.components.burnable ~= nil then
+				inst._parent.components.burnable:Extinguish()
+			end
+		end
 
-        inst:Remove()
-    end)
+		inst:Remove()
+	end)
 
     inst:ListenForEvent("onremove", function(inst)
         if inst._parent ~= nil then
