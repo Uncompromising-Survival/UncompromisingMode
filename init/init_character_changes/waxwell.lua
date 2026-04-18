@@ -340,7 +340,9 @@ do
     end
 
     local function ShadowGearClientFunctions(inst)
-        _displaynamefn = inst.displaynamefn
+        if not _displaynamefn then
+            _displaynamefn = inst.displaynamefn
+        end
         inst.displaynamefn = ShadowGearDisplayNameFn
     end
 
@@ -421,11 +423,17 @@ do
 
     local function ShadowGearFunctions(inst)
         inst.UMConvertToMaxwellSummon = ConvertToMaxwellSummon
-        _OnSave = inst.OnSave
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
         inst.OnSave = ShadowGearOnSave
-        _OnLoad = inst.OnLoad
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
         inst.OnLoad = ShadowGearOnLoad
-        _onPreBuilt = inst.onPreBuilt
+        if not _onPreBuilt then
+            _onPreBuilt = inst.onPreBuilt
+        end
         inst.onPreBuilt = ShadowGearOnPreBuilt
     end
 

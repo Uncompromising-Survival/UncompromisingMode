@@ -8,7 +8,12 @@ SetSharedLootTable( 'um_nurse_spider',
 })
 
 local function SpiderHealerFunctions(inst)
-    local lootdropper = inst.components.lootdropper
+    local health, lootdropper = inst.components.lootdropper, inst.components.lootdropper
+    
+    if health then
+        health:SetMaxHealth(225)
+    end
+
     if lootdropper then
         lootdropper:AddRandomLoot("monstermeat", 1)
         lootdropper:AddRandomLoot("silk", 1)
@@ -17,8 +22,6 @@ local function SpiderHealerFunctions(inst)
         lootdropper.numrandomloot = 1
         lootdropper:SetChanceLootTable("um_nurse_spider")
     end
-
-    inst.components.health:SetMaxHealth(225)
 end
 
 env.AddPrefabPostInit("spider_healer", function(inst)

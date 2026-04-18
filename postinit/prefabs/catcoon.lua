@@ -58,29 +58,38 @@ do
 
     env.AddPrefabPostInit("catcoon", function(inst)
         if not TheWorld.ismastersim then return end
+        local health, lootdropper, combat = inst.components.health, inst.components.lootdropper, inst.components.combat
 
         inst.um_counterattack = 3
         inst.hitlist = {}
 
-        if inst.components.health then
-            inst.components.health:SetMaxHealth(TUNING.DSTU.MONSTER_CATCOON_HEALTH_CHANGE)
+        if health then
+            health:SetMaxHealth(TUNING.DSTU.MONSTER_CATCOON_HEALTH_CHANGE)
         end
 
-        if inst.components.lootdropper then
-            inst.components.lootdropper:SetChanceLootTable('catty')
+        if lootdropper then
+            lootdropper:SetChanceLootTable('catty')
         end
 
-        inst.components.combat:SetRange(TUNING.CATCOON_ATTACK_RANGE / 1.5) --Lower the range
-        inst.components.combat:SetAttackPeriod(TUNING.CATCOON_ATTACK_PERIOD / 1.5) --Make it attack faster to compensate
-        _RetargetFn = inst.components.combat.targetfn
-        inst.components.combat:SetRetargetFunction(3, RetargetFn)
+        if combat then
+            combat:SetRange(TUNING.CATCOON_ATTACK_RANGE / 1.5) --Lower the range
+            combat:SetAttackPeriod(TUNING.CATCOON_ATTACK_PERIOD / 1.5) --Make it attack faster to compensate
+            if not _RetargetFn then
+                _RetargetFn = combat.targetfn
+            end
+            combat:SetRetargetFunction(3, RetargetFn)
+        end
 
         inst:ListenForEvent("onattackother", OnAttackOther)
         inst:ListenForEvent("attacked", OnAttacked)
 
-        _OnSave = inst.OnSave
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
         inst.OnSave = OnSave
-        _OnLoad = inst.OnLoad
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
         inst.OnLoad = OnLoad
     end)
 end
@@ -127,14 +136,22 @@ do
         end
 
         inst.components.childspawner:SetRegenPeriod(2.5 * TUNING.CATCOONDEN_REGEN_TIME) -- Catcoons are now reasonably common, they don't need a super fast regen time
-        _OnSpawned = inst.components.childspawner.onspawned
+        if not _OnSpawned then
+            _OnSpawned = inst.components.childspawner.onspawned
+        end
         inst.components.childspawner:SetSpawnedFn(OnSpawned)
-        _OnChildKilled = inst.components.childspawner.onchildkilledfn
+        if not _OnChildKilled then
+            _OnChildKilled = inst.components.childspawner.onchildkilledfn
+        end
         inst.components.childspawner:SetOnChildKilledFn(OnChildKilled)
 
-        _OnSave = inst.OnSave
+        if not _OnSave then
+            _OnSave = inst.OnSave
+        end
         inst.OnSave = OnSave
-        _OnLoad = inst.OnLoad
+        if not _OnLoad then
+            _OnLoad = inst.OnLoad
+        end
         inst.OnLoad = OnLoad
     end)
 end
