@@ -587,7 +587,7 @@ local function SpikeWaves(inst, target, attacker, angle)
             inst:DoTaskInTime(.6, function()
                 local ents = TheSim:FindEntities(dx, dy, dz, 1.5, {"_health", "_combat" }, {"FX", "NOCLICK", "INLIMBO", "notarget", "player", "playerghost", "companion"})
                 for k, v in ipairs(ents) do
-                    if  v ~= inst and attacker.components.combat and attacker.components.combat:CanAttack(v) then
+                    if v ~= inst and attacker.components.combat and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
                         v.components.combat:GetAttacked(attacker, 0, nil, nil, {planar = 8.75})
                     end
                 end
@@ -668,26 +668,34 @@ do
     WathomBSStaffStuff = function(inst) -- Upvalue into OnRepaired.
         local equippable = inst.components.equippable
         if equippable then
-            _OnEquip = equippable.onequipfn
+            if not _OnEquip then
+                _OnEquip = equippable.onequipfn
+            end
             equippable:SetOnEquip(OnEquip)
-            _OnUnequip = equippable.onunequipfn
+            if not _OnUnequip then
+                _OnUnequip = equippable.onunequipfn
+            end
             equippable:SetOnUnequip(OnUnequip)
         end
         local weapon = inst.components.weapon
         if weapon then
-            _OnAttack = weapon.onattack
+            if not _OnAttack then
+                _OnAttack = weapon.onattack
+            end
             weapon:SetOnAttack(OnAttack)
         end
     end
 
     env.AddPrefabPostInit("staff_lunarplant", function(inst)
         if not TheWorld.ismastersim then return end
+        local forgerepairable = inst.components.forgerepairable
 
         WathomBSStaffStuff(inst)
 
-        local forgerepairable = inst.components.forgerepairable
         if forgerepairable then
-            _OnRepaired = forgerepairable.onrepaired
+            if not _OnRepaired then
+                _OnRepaired = forgerepairable.onrepaired
+            end
             forgerepairable:SetOnRepaired(OnRepaired)
         end
         

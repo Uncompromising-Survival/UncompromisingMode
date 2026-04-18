@@ -3,7 +3,6 @@ GLOBAL.setfenv(1, GLOBAL)
 
 env.AddComponentPostInit("placer", function(self)
     local _OnUpdate = self.OnUpdate
-
     function self:OnUpdate(dt, ...)
         local ret = _OnUpdate(self, dt, ...)
 
