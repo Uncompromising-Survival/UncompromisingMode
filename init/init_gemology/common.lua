@@ -159,23 +159,6 @@ end
 --------------------------------------------------------------------------
 --Common Gem Effect Handling
 
-env.AddComponentPostInit("weapon", function(self)
-    local _OnAttack = self.OnAttack
-    function self:OnAttack(attacker, target, projectile, ...)
-        if self.inst.components.gem_enchantable then
-            for enchant, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if GEM_DEFS[enchant].fns.onattack ~= nil then
-                    GEM_DEFS[enchant].fns.onattack(self.inst, attacker, target, tier)
-                end
-            end
-        end
-
-        return _OnAttack(self, attacker, target, projectile, ...)
-    end
-end)
-
-
-
 local valid_work_actions = {
     "CHOP",
     "MINE",
