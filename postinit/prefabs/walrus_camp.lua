@@ -320,6 +320,13 @@ local function OnMegaFlare(inst, data)
 							local danger = SpawnPrefab("glacialhound")
 							if danger then
 								danger.Transform:SetPosition(x, y, z)
+								
+								if danger.components.named == nil then
+									danger:AddComponent("named")
+								end
+
+								danger.components.named:SetName("Cupcake")
+								
 								CupcakeTheHound(danger, inst)
 								danger:AddTag("flare_summoned")
 								flare_guard = danger
