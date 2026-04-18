@@ -34,6 +34,39 @@ local function oneatenfn(inst, eater)
     create_light(eater, "wormlight_light")
 end
 
+local function OnSpawnedFromHaunt(inst, data)
+    Launch(inst, data.haunter, TUNING.LAUNCH_SPEED_SMALL)
+end
+
+local function OnHauntWormlight(inst, haunter)
+    if math.random() <= TUNING.HAUNT_CHANCE_HALF then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        SpawnPrefab("small_puff").Transform:SetPosition(x, y, z)
+        local prefab = inst.prefab == "zaspberry_lesser" and "wormlight_lesser" or "wormlight"
+        local new = prefab ~= nil and SpawnPrefab(prefab) or nil
+        if new ~= nil then
+            new.Transform:SetPosition(x, y, z)
+            if new.components.stackable ~= nil and inst.components.stackable ~= nil and inst.components.stackable:IsStack() then
+                new.components.stackable:SetStackSize(inst.components.stackable:StackSize())
+            end
+            if new.components.inventoryitem ~= nil and inst.components.inventoryitem ~= nil then
+                new.components.inventoryitem:InheritMoisture(inst.components.inventoryitem:GetMoisture(), inst.components.inventoryitem:IsWet())
+            end
+            if new.components.perishable ~= nil and inst.components.perishable ~= nil then
+                new.components.perishable:SetPercent(inst.components.perishable:GetPercent())
+            end
+            new:PushEvent("spawnedfromhaunt", { haunter = haunter, oldPrefab = inst })
+            inst:PushEvent("despawnedfromhaunt", { haunter = haunter, newPrefab = new })
+            inst.persists = false
+            inst.entity:Hide()
+            inst:DoTaskInTime(0, inst.Remove)
+        end
+        inst.components.hauntable.hauntvalue = TUNING.HAUNT_MEDIUM
+        return true
+    end
+    return false
+end
+
 local function fn_common()
     local inst = CreateEntity()
 
@@ -47,6 +80,10 @@ local function fn_common()
     inst.Light:SetRadius(0.5)
     inst.Light:SetColour(237 / 255, 237 / 255, 209 / 255)
     inst.Light:Enable(true)
+
+    inst:AddTag("lightbattery")
+    --inst:AddTag("vasedecoration")
+    inst:AddTag("light")
 
     MakeInventoryPhysics(inst)
     MakeInventoryFloatable(inst)
@@ -69,16 +106,21 @@ local function fn_common()
 
     inst:AddComponent("inventoryitem")
     inst:AddComponent("edible")
-
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
+    inst.components.edible:SetOnEatenFn(oneatenfn)
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(3 * TUNING.PERISH_TWO_DAY)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
+    inst:AddComponent("fuel")
+    inst.components.fuel.fueltype = FUELTYPE.WORMLIGHT
+
     MakeHauntableLaunchAndPerish(inst)
-    inst.components.edible:SetOnEatenFn(oneatenfn)
+    AddHauntableCustomReaction(inst, OnHauntWormlight, true, false, true)
+    inst:ListenForEvent("spawnedfromhaunt", OnSpawnedFromHaunt)
+
     inst:AddComponent("tradable")
 
     return inst
@@ -94,7 +136,9 @@ local function fn_normal()
     inst.AnimState:PlayAnimation("idle")
     inst.components.edible.healthvalue = 20
     inst.components.edible.hungervalue = 25
-    inst.components.edible.sanityvalue = -25    
+    inst.components.edible.sanityvalue = -25
+    
+    inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL * 1.33
 
     return inst
 end
@@ -110,6 +154,8 @@ local function fn_lesser()
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 12.5
     inst.components.edible.sanityvalue = -15
+
+    inst.components.fuel.fuelvalue = TUNING.MED_FUEL
 
     return inst
 end
