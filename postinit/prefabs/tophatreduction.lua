@@ -87,7 +87,7 @@ env.AddPrefabPostInit("batbat", function(inst)
 	local function OnAttackBatBat(inst, owner, target)
 		_onattack(inst, owner, target)
 		if owner.components.sanity ~= nil and owner:HasTag("Funny_Words_Magic_Man") and owner.components.health:GetPercent() < 1 then
-			owner.components.sanity:DoDelta(TUNING.BATBAT_DRAIN * .8)
+			owner.components.sanity:DoDelta(TUNING.BATBAT_DRAIN * .5 * .8)
 		end
 	end
 
