@@ -4,16 +4,26 @@ local assets =
 }
 
 local function TryAddFollower(leader, follower)
-    if leader.components.leader ~= nil and
-        follower.components.follower ~= nil and
-        follower:HasTag("raidrat") and follower:HasTag("hostile") and 
-        leader.components.leader:CountFollowers("raidrat") < 8 then
+    local buffduration = leader:HasTag("ratwhisperer") and 120 or 30
+    if leader.components.leader and
+        follower.components.follower and
+        --[[(follower.components.follower.leader and
+        follower.components.follower.leader.prefab == "pied_rat" or nil) and]]
+        follower:HasTag("raidrat") and
+        (leader:HasTag("ratwhisperer") or leader.components.leader:CountFollowers("raidrat") < 12) then
 		follower.components.follower:SetLeader(leader)
-		follower:PiedPiperBuff(20)
+		follower:PiedPiperBuff(buffduration)
+        follower:RemoveTag("hostile")
         --[[leader.components.leader:AddFollower(follower)
         follower.components.follower:AddLoyaltyTime(60 + math.random())]]
         if follower.components.combat ~= nil and follower.components.combat:TargetIs(leader) then
             follower.components.combat:SetTarget(nil)
+        end
+        if not leader:HasTag("ratwhisperer") and follower.components.inventory and follower:HasTag("carrying") and follower._item then
+            follower.components.inventory:DropEverything()
+            follower:RemoveTag("carrying")
+            follower._item:Remove()
+            follower._item = nil
         end
     end
 end
