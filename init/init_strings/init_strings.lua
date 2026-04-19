@@ -400,7 +400,7 @@ STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
 
-STRINGS.UM_VARGLET_PET_NAMES = {
+STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy
 "Diesel B. Destroyer", --Max
 "Daisy", --Deimos
