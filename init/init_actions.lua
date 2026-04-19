@@ -80,7 +80,7 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                 doer.readytogather:set(false)
                 str = "STOP_RAT_ORDER"
                 for i, v in ipairs(ratminions) do
-                    if not v.sg:HasStateTag("busy") and v.sg:HasStateTag("idle") then
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
                         v.AnimState:PlayAnimation("idle2")
                     end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
@@ -101,7 +101,7 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                 doer.readytogather:set(true)
                 str = "START_RAT_ORDER"
                 for i, v in ipairs(ratminions) do
-                    if not v.sg:HasStateTag("busy") and v.sg:HasStateTag("idle") then
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
                         v.AnimState:PlayAnimation("idle2")
                     end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
