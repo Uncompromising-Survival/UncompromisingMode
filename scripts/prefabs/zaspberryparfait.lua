@@ -50,6 +50,7 @@ local function fn()
     inst.components.edible.hungervalue = 37.5
     inst.components.edible.sanityvalue = 15
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
+    inst.components.edible.chargevalue = TUNING.WX78_CHARGE_LARGE
 
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime((2 * TUNING.PERISH_TWO_DAY))

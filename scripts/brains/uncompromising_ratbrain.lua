@@ -365,7 +365,7 @@ function Uncompromising_RatBrain:OnStart()
     local function ShouldPickup() return LeaderHasWorkToggleOn(self.inst) end
     local function ShouldDeliver()
         local leader = GetLeader(self.inst)
-        return leader and leader.components.inventory and not leader.components.inventory:IsFull()
+        return leader and leader:HasTag("ratwhisperer")
     end
     local pickupparams = {
         cond = ShouldPickup,
@@ -373,7 +373,7 @@ function Uncompromising_RatBrain:OnStart()
         furthestfirst = false,
         custom_pickup_filter = PickUpFilter,
         --ignorethese = ignorethese,
-        --give_cond = ShouldDeliver,
+        give_cond = ShouldDeliver,
     }
     local neutralbehaviour = PriorityNode({
         WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",

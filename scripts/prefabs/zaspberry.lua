@@ -137,6 +137,7 @@ local function fn_normal()
     inst.components.edible.healthvalue = 20
     inst.components.edible.hungervalue = 25
     inst.components.edible.sanityvalue = -25
+    inst.components.edible.chargevalue = TUNING.WX78_CHARGE_MED
     
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL * 1.33
 
@@ -154,6 +155,7 @@ local function fn_lesser()
     inst.components.edible.healthvalue = 3
     inst.components.edible.hungervalue = 12.5
     inst.components.edible.sanityvalue = -15
+    inst.components.edible.chargevalue = TUNING.WX78_CHARGE_SMALL
 
     inst.components.fuel.fuelvalue = TUNING.MED_FUEL
 
