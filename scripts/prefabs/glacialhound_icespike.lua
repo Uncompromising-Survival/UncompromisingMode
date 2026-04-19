@@ -100,17 +100,26 @@ local NON_COLLAPSIBLE_TAGS = { "hound", "flying", "shadow", "ghost", "playerghos
 local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
 local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO", "trap" }
 
+local function IsNotFriendly(attacker, target) -- Is the target an ally or my leader's ally?
+    local attackercombat = attacker and attacker.components.combat
+    local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
+    local leadercombat = leader and leader.components.combat
+    return attackercombat and attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
+        and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target))
+end
+
 local function DoDamage(inst)
     inst.dmgtask = nil
-
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or inst
     local radius = inst.islarge:value() and RADIUS_LARGE or RADIUS
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, radius + DAMAGE_RADIUS_PADDING, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
     for i, v in ipairs(ents) do
         if v ~= inst and not (inst.targets and inst.targets[v]) and v:IsValid() then
+            local attackable = IsNotFriendly(attacker, v)
             if v.prefab == "ice" then
                 v:Remove()
-            elseif v:HasTag("player") then
+            elseif v:HasTag("player") and attackable then
                 --NOTE: inst.targets will prevent multiple knockbacks, but
                 --      CreatePhysicsPush should still keep them in bounds
                 v:PushEvent("knockback", { knocker = inst, radius = radius, strengthmult = 0.3, forcelanded = not inst.islarge:value() })
@@ -136,12 +145,12 @@ local function DoDamage(inst)
                 end
             end
 
-            if v:HasTag("_combat") and v.components.combat ~= nil then
-                v.components.combat:GetAttacked(inst.owner or inst, 30)
+            if attackable then
+                v.components.combat:GetAttacked(attacker, 30)
                 inst.components.health:Kill() --to prevent trapping targets in the ice
             end
 
-            if v.components.freezable ~= nil then
+            if attackable and v.components.freezable then
                 v.components.freezable:AddColdness(2)
             end
 
