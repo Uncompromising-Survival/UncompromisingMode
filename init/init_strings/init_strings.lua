@@ -402,7 +402,7 @@ STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
 
 STRINGS.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy
-"Destroyer", --Max
+"Diesel B. Destroyer", --Max
 "Daisy", --Deimos
 "Nibbles", --Anomen
 "Sprinkles", --Axe
