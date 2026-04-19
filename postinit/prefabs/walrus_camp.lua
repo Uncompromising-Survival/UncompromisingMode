@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
-local function CupcakeTheHound(guard, camp)
+local function TheVarglet(guard, camp)
     if not guard or not camp then
         return
     end
@@ -30,7 +30,13 @@ local function CupcakeTheHound(guard, camp)
     guard:AddTag("flare_summoned")
 
 	local named = guard.components.named or guard:AddComponent("named")
-	named:SetName(STRINGS.NAMES.CUPCAKE_GLACIALHOUND)
+
+	if not guard._varglet_name then
+		local pet_names = STRINGS.UM_VARGLET_PET_NAMES
+		guard._varglet_name = pet_names[math.random(#pet_names)]
+	end
+
+	named:SetName(guard._varglet_name)
 
     if guard.components.combat then
         guard.components.combat:SetKeepTargetFunction(function(inst, target)
@@ -163,7 +169,7 @@ local function Replacement(inst)
     inst._hidden_hounds = nil
 end
 
-local function CupcakeOffscreen(guard)
+local function Offscreen(guard)
     if not guard then
         return false
     end
@@ -215,7 +221,7 @@ local function AllHoundsGoToHeaven(inst)
             return
         end
 
-        if CupcakeOffscreen(inst._flare_glacial) then
+        if Offscreen(inst._flare_glacial) then
             Replacement(inst)
         end
     end)
@@ -319,7 +325,7 @@ local function OnMegaFlare(inst, data)
                             if danger then
                                 danger.Transform:SetPosition(x, y, z)
 
-                                CupcakeTheHound(danger, inst)
+                                TheVarglet(danger, inst)
                                 flare_guard = danger
                                 spawned_replacement = true
                             end
@@ -348,9 +354,9 @@ end
 
 local function Remember(inst)
 	if inst._flare_glacial and inst._flare_glacial:IsValid() then
-		CupcakeTheHound(inst._flare_glacial, inst)
+		TheVarglet(inst._flare_glacial, inst)
 	end
-
+	
 	if inst._hidden_hounds then
 		for _, hound in ipairs(inst._hidden_hounds) do
 			if hound and hound:IsValid() then
@@ -393,11 +399,13 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
 			data.um_flare_state = {
 				returning = inst._flare_return_task ~= nil,
 				flare_glacial = nil,
+				flare_name = nil,				
 				hidden_hounds = {},
 			}
 
 			if inst._flare_glacial and inst._flare_glacial:IsValid() then
 				data.um_flare_state.flare_glacial = inst._flare_glacial.GUID
+				data.um_flare_state.flare_name = inst._flare_glacial._varglet_name				
 				table.insert(refs, inst._flare_glacial.GUID)
 			end
 
@@ -440,6 +448,7 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
 
 		if flare.flare_glacial and newents[flare.flare_glacial] and newents[flare.flare_glacial].entity then
 			inst._flare_glacial = newents[flare.flare_glacial].entity
+			inst._flare_glacial._varglet_name = flare.flare_name
 		end
 
 		if flare.hidden_hounds then
