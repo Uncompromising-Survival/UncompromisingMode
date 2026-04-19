@@ -64,3 +64,50 @@ for i, v in ipairs(clockworks) do
 		inst:ListenForEvent("death", LookNearby)
 	end)
 end
+
+
+---------------------------------------------------------------------------------------------------------
+--- Clockwork follower regen removal and repair
+---------------------------------------------------------------------------------------------------------
+
+TUNING.CLOCKWORK_HEALTH_REGEN_PERIOD = 60
+TUNING.CLOCKWORK_HEALTH_REGEN = 0
+
+local function ShouldAcceptGears(inst, item, giver)
+	if not inst.components.follower:GetLeader() then
+		return false
+	end
+
+	return item.prefab == "gears"
+end
+
+local function OnAcceptGears(inst, giver, item)
+	-- Heal the knight
+	if inst.components.health then
+		inst.components.health:DoDelta(1000) -- adjust healing amount
+	end
+
+	-- Optional: play a sound or effect
+	inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+end
+
+local function MakeRepairable(inst)
+
+	--trader (from trader component) added to pristine state for optimization
+	inst:AddComponent("trader")
+
+	if not TheWorld.ismastersim then
+        return inst
+    end
+
+	inst.components.trader:SetAcceptTest(ShouldAcceptGears)
+	inst.components.trader.onaccept = OnAcceptGears
+	inst.components.trader.acceptnontradable = true
+end
+
+for i, v in ipairs(clockworks) do
+	env.AddPrefabPostInit(v, function(inst)
+		MakeRepairable(inst)
+	end)
+end
+
