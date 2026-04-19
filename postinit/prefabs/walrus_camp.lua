@@ -29,14 +29,12 @@ local function TheVarglet(guard, camp)
 
     guard:AddTag("flare_summoned")
 
-	local named = guard.components.named or guard:AddComponent("named")
-
-	if not guard._varglet_name then
-		local pet_names = STRINGS.UM_VARGLET_PET_NAMES
-		guard._varglet_name = pet_names[math.random(#pet_names)]
-	end
-
-	named:SetName(guard._varglet_name)
+    local named = guard.components.named or guard:AddComponent("named")
+    if not guard._varglet_name then
+        local pet_names = STRINGS.NAMES.UM_VARGLET_PET_NAMES
+        guard._varglet_name = pet_names[math.random(#pet_names)]
+    end
+    named:SetName(guard._varglet_name)
 
     if guard.components.combat then
         guard.components.combat:SetKeepTargetFunction(function(inst, target)
@@ -96,7 +94,7 @@ local function Stay(hound)
 
     hound._flare_hidden = true
     hound:AddTag("NOCLICK")
-	hound.persists = true
+    hound.persists = true
 
     if hound.components.combat then
         hound.components.combat:SetTarget(nil)
@@ -141,8 +139,8 @@ local function Replacement(inst)
         inst._flare_state_task:Cancel()
         inst._flare_state_task = nil
     end
-	
-	inst._flare_returning = nil	
+    
+    inst._flare_returning = nil    
 
     if inst._flare_glacial and inst._flare_glacial:IsValid() then
         if inst._flare_glacial.ice_shield and inst._flare_glacial.ice_shield:IsValid() then
@@ -213,8 +211,8 @@ local function AllHoundsGoToHeaven(inst)
     if inst._flare_return_task then
         return
     end
-	
-	inst._flare_returning = true	
+    
+    inst._flare_returning = true    
 
     inst._flare_return_task = inst:DoPeriodicTask(.5, function()
         if not inst:IsValid() then
@@ -353,120 +351,120 @@ local function OnMegaFlare(inst, data)
 end
 
 local function Remember(inst)
-	if inst._flare_glacial and inst._flare_glacial:IsValid() then
-		TheVarglet(inst._flare_glacial, inst)
-	end
-	
-	if inst._hidden_hounds then
-		for _, hound in ipairs(inst._hidden_hounds) do
-			if hound and hound:IsValid() then
-				Stay(hound)
-			end
-		end
-	end
+    if inst._flare_glacial and inst._flare_glacial:IsValid() then
+        TheVarglet(inst._flare_glacial, inst)
+    end
+    
+    if inst._hidden_hounds then
+        for _, hound in ipairs(inst._hidden_hounds) do
+            if hound and hound:IsValid() then
+                Stay(hound)
+            end
+        end
+    end
 
-	if inst._flare_returning then
-		AllHoundsGoToHeaven(inst)
-	elseif inst._flare_glacial ~= nil then
-		HowIsTheHuntGoing(inst)
-	end
+    if inst._flare_returning then
+        AllHoundsGoToHeaven(inst)
+    elseif inst._flare_glacial ~= nil then
+        HowIsTheHuntGoing(inst)
+    end
 end
 
 env.AddPrefabPostInit("walrus_camp", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
+    if not TheWorld.ismastersim then
+        return
+    end
 
-	local _OnSave = inst.OnSave
-	local _OnLoad = inst.OnLoad
-	local _OnLoadPostPass = inst.OnLoadPostPass
+    local _OnSave = inst.OnSave
+    local _OnLoad = inst.OnLoad
+    local _OnLoadPostPass = inst.OnLoadPostPass
 
-	inst.OnSave = function(inst, data)
-		local refs = {}
+    inst.OnSave = function(inst, data)
+        local refs = {}
 
-		if _OnSave then
-			local oldrefs = _OnSave(inst, data)
-			if oldrefs then
-				for _, v in ipairs(oldrefs) do
-					table.insert(refs, v)
-				end
-			end
-		end
+        if _OnSave then
+            local oldrefs = _OnSave(inst, data)
+            if oldrefs then
+                for _, v in ipairs(oldrefs) do
+                    table.insert(refs, v)
+                end
+            end
+        end
 
-		data.um_flare_state = nil
+        data.um_flare_state = nil
 
-		if (inst._flare_glacial and inst._flare_glacial:IsValid()) or (inst._hidden_hounds and #inst._hidden_hounds > 0) then
-			data.um_flare_state = {
-				returning = inst._flare_return_task ~= nil,
-				flare_glacial = nil,
-				flare_name = nil,				
-				hidden_hounds = {},
-			}
+        if (inst._flare_glacial and inst._flare_glacial:IsValid()) or (inst._hidden_hounds and #inst._hidden_hounds > 0) then
+            data.um_flare_state = {
+                returning = inst._flare_return_task ~= nil,
+                flare_glacial = nil,
+                flare_name = nil,                
+                hidden_hounds = {},
+            }
 
-			if inst._flare_glacial and inst._flare_glacial:IsValid() then
-				data.um_flare_state.flare_glacial = inst._flare_glacial.GUID
-				data.um_flare_state.flare_name = inst._flare_glacial._varglet_name				
-				table.insert(refs, inst._flare_glacial.GUID)
-			end
+            if inst._flare_glacial and inst._flare_glacial:IsValid() then
+                data.um_flare_state.flare_glacial = inst._flare_glacial.GUID
+                data.um_flare_state.flare_name = inst._flare_glacial._varglet_name                
+                table.insert(refs, inst._flare_glacial.GUID)
+            end
 
-			if inst._hidden_hounds then
-				for _, hound in ipairs(inst._hidden_hounds) do
-					if hound and hound:IsValid() then
-						table.insert(data.um_flare_state.hidden_hounds, hound.GUID)
-						table.insert(refs, hound.GUID)
-					end
-				end
-			end
-		end
+            if inst._hidden_hounds then
+                for _, hound in ipairs(inst._hidden_hounds) do
+                    if hound and hound:IsValid() then
+                        table.insert(data.um_flare_state.hidden_hounds, hound.GUID)
+                        table.insert(refs, hound.GUID)
+                    end
+                end
+            end
+        end
 
-		return #refs > 0 and refs or nil
-	end
+        return #refs > 0 and refs or nil
+    end
 
-	inst.OnLoad = function(inst, data)
-		if _OnLoad then
-			_OnLoad(inst, data)
-		end
+    inst.OnLoad = function(inst, data)
+        if _OnLoad then
+            _OnLoad(inst, data)
+        end
 
-		inst._saved_um_flare_state = data and data.um_flare_state or nil
-	end
+        inst._saved_um_flare_state = data and data.um_flare_state or nil
+    end
 
-	inst.OnLoadPostPass = function(inst, newents, data)
-		if _OnLoadPostPass then
-			_OnLoadPostPass(inst, newents, data)
-		end
+    inst.OnLoadPostPass = function(inst, newents, data)
+        if _OnLoadPostPass then
+            _OnLoadPostPass(inst, newents, data)
+        end
 
-		local flare = inst._saved_um_flare_state
-		inst._saved_um_flare_state = nil
+        local flare = inst._saved_um_flare_state
+        inst._saved_um_flare_state = nil
 
-		if flare == nil then
-			return
-		end
+        if flare == nil then
+            return
+        end
 
-		inst._flare_glacial = nil
-		inst._hidden_hounds = {}
-		inst._flare_returning = flare.returning or false
+        inst._flare_glacial = nil
+        inst._hidden_hounds = {}
+        inst._flare_returning = flare.returning or false
 
-		if flare.flare_glacial and newents[flare.flare_glacial] and newents[flare.flare_glacial].entity then
-			inst._flare_glacial = newents[flare.flare_glacial].entity
-			inst._flare_glacial._varglet_name = flare.flare_name
-		end
+        if flare.flare_glacial and newents[flare.flare_glacial] and newents[flare.flare_glacial].entity then
+            inst._flare_glacial = newents[flare.flare_glacial].entity
+            inst._flare_glacial._varglet_name = flare.flare_name
+        end
 
-		if flare.hidden_hounds then
-			for _, guid in ipairs(flare.hidden_hounds) do
-				if newents[guid] and newents[guid].entity then
-					table.insert(inst._hidden_hounds, newents[guid].entity)
-				end
-			end
-		end
+        if flare.hidden_hounds then
+            for _, guid in ipairs(flare.hidden_hounds) do
+                if newents[guid] and newents[guid].entity then
+                    table.insert(inst._hidden_hounds, newents[guid].entity)
+                end
+            end
+        end
 
-		Remember(inst)
-	end
+        Remember(inst)
+    end
 
-	inst:ListenForEvent("megaflare_detonated", function(src, data)
-		OnMegaFlare(inst, data)
-	end, TheWorld)
+    inst:ListenForEvent("megaflare_detonated", function(src, data)
+        OnMegaFlare(inst, data)
+    end, TheWorld)
 
-	inst:ListenForEvent("onwenthome", function()
-		AllHoundsGoToHeaven(inst)
-	end)
+    inst:ListenForEvent("onwenthome", function()
+        AllHoundsGoToHeaven(inst)
+    end)
 end)
