@@ -1,6 +1,7 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local LEADER_MUST_TAGS = {"walrus", "houndfriend"}
 
 local function TheVarglet(guard, camp)
     if not guard or not camp then
@@ -9,7 +10,7 @@ local function TheVarglet(guard, camp)
 
     local function GetLeader()
         if camp and camp.data and camp.data.children then
-            local walrus = nil
+            local walrus
 
             for ent in pairs(camp.data.children) do
                 if ent:IsValid() then
@@ -65,11 +66,17 @@ local function TheVarglet(guard, camp)
             return
         end
 
-        if guard.components.follower.leader ~= leader then
-            guard.components.follower:SetLeader(leader)
+        local follower = guard.components.follower
+        local currentleader = follower:GetLeader()
+        if currentleader and not currentleader:HasAllTags(LEADER_MUST_TAGS) then -- TODO: Turn some of this stuff into brain behaviors.
+            return
         end
-        guard.components.follower.leashmaxdist = 10
-        guard.components.follower.leashmindist = 5
+
+        if currentleader ~= leader then
+            follower:SetLeader(leader)
+        end
+        follower.leashmaxdist = 10
+        follower.leashmindist = 5
 
         if guard:GetDistanceSqToInst(leader) > 40 * 40 then
             guard.components.combat:SetTarget(nil)
@@ -94,7 +101,7 @@ local function Stay(hound)
 
     hound._flare_hidden = true
     hound:AddTag("NOCLICK")
-    hound.persists = true
+    --hound.persists = true
 
     if hound.components.combat then
         hound.components.combat:SetTarget(nil)
@@ -119,7 +126,7 @@ local function GoodHounds(hound, x, y, z)
 
     hound._flare_hidden = nil
     hound:RemoveTag("NOCLICK")
-    hound.persists = true
+    --hound.persists = true
 
     hound.entity:SetInLimbo(false)
     hound:Show()
@@ -376,18 +383,13 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
     end
 
     local _OnSave = inst.OnSave
-    local _OnLoad = inst.OnLoad
-    local _OnLoadPostPass = inst.OnLoadPostPass
-
-    inst.OnSave = function(inst, data)
+    inst.OnSave = function(inst, data, ...)
         local refs = {}
 
-        if _OnSave then
-            local oldrefs = _OnSave(inst, data)
-            if oldrefs then
-                for _, v in ipairs(oldrefs) do
-                    table.insert(refs, v)
-                end
+        local oldrefs = _OnSave and _OnSave(inst, data, ...)
+        if oldrefs then
+            for _, v in ipairs(oldrefs) do
+                table.insert(refs, v)
             end
         end
 
@@ -420,18 +422,18 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
         return #refs > 0 and refs or nil
     end
 
-    inst.OnLoad = function(inst, data)
-        if _OnLoad then
-            _OnLoad(inst, data)
-        end
+    local _OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data, ...)
+        local ret = _OnLoad and _OnLoad(inst, data, ...)
 
         inst._saved_um_flare_state = data and data.um_flare_state or nil
+
+        return ret
     end
 
-    inst.OnLoadPostPass = function(inst, newents, data)
-        if _OnLoadPostPass then
-            _OnLoadPostPass(inst, newents, data)
-        end
+    local _OnLoadPostPass = inst.OnLoadPostPass
+    inst.OnLoadPostPass = function(inst, newents, data, ...)
+        local ret = _OnLoadPostPass and _OnLoadPostPass(inst, newents, data, ...)
 
         local flare = inst._saved_um_flare_state
         inst._saved_um_flare_state = nil
@@ -458,13 +460,9 @@ env.AddPrefabPostInit("walrus_camp", function(inst)
         end
 
         Remember(inst)
+        return ret
     end
 
-    inst:ListenForEvent("megaflare_detonated", function(src, data)
-        OnMegaFlare(inst, data)
-    end, TheWorld)
-
-    inst:ListenForEvent("onwenthome", function()
-        AllHoundsGoToHeaven(inst)
-    end)
+    inst:ListenForEvent("megaflare_detonated", function(src, data) OnMegaFlare(inst, data) end, TheWorld)
+    inst:ListenForEvent("onwenthome", function() AllHoundsGoToHeaven(inst) end)
 end)
