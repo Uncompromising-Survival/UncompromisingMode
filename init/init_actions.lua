@@ -78,15 +78,34 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                 act.doer.readytogather:set(false)
                 act.doer.components.talker:Say(GetString(act.doer, "STOP_RAT_ORDER"))
                 for i, v in ipairs(ratminions) do
-                    v.AnimState:PlayAnimation("idle2")
+                    if not v:HasTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
+                    if v.components.inventory and v:HasTag("carrying") and
+                    v._item --[[and not (v._item.components.edible and
+                    act.doer and act.doer.components.eater and act.doer.components.eater:CanEat(v._item))]] then
+                        --print("I DROP FOR YOU MY QUEEN")
+                        v.components.inventory:DropEverything()
+                        v:RemoveTag("carrying")
+                        v._item:Remove()
+                        v._item = nil
+                    end
                 end
             else
                 act.doer.readytogather:set(true)
                 act.doer.components.talker:Say(GetString(act.doer, "START_RAT_ORDER"))
                 for i, v in ipairs(ratminions) do
-                    v.AnimState:PlayAnimation("idle2")
+                    if not v:HasTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
                 end
             end
         else

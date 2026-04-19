@@ -45,6 +45,7 @@ local function OnAttacked(inst, data)
         inst:RemoveTag("companion")
         inst:RemoveTag("notraptrigger")
         inst:AddTag("canbetrapped")
+        inst:AddTag("hostile")
         inst.components.follower.leader = nil
     end
 
@@ -107,6 +108,7 @@ local function onsave_rat(inst, data)
     if inst:HasTag("carrying") then data.carrying = true end
     if inst:HasTag("ratscout") then data.scouting = true end
     if inst:HasTag("winky_rat") then data.iswinkyfollower = true end
+    --or inst.components.follower and inst.components.follower.leader and inst.components.follower.leader.prefab == "winky"
 end
 
 local function onload_rat(inst, data)
@@ -116,6 +118,7 @@ local function onload_rat(inst, data)
         if data.iswinkyfollower then
             inst:AddTag("notraptrigger")
             inst:RemoveTag("canbetrapped")
+            inst:RemoveTag("hostile")
             inst:AddTag("companion")
             inst:AddTag("winky_rat")
         end
@@ -227,6 +230,7 @@ local function OnGetItemFromPlayer_Winky(inst, giver, item)
                 giver:PushEvent("makefriend")
                 giver.components.leader:AddFollower(inst)
                 playedfriendsfx = true
+                inst:RemoveTag("hostile")
             end
         end
 
@@ -1328,6 +1332,7 @@ local function WinkyInteract(inst, doer)
 				newrat:RemoveTag("canbetrapped")
 				newrat:AddTag("companion")
 				newrat:AddTag("winky_rat")
+                newrat:RemoveTag("hostile")
 
 				inst.AnimState:PlayAnimation("dig")
 				inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
@@ -1356,6 +1361,7 @@ local function WinkyHomeInteract(inst, doer)
             newrat:RemoveTag("canbetrapped")
             newrat:AddTag("companion")
             newrat:AddTag("winky_rat")
+            newrat:RemoveTag("hostile")
 
             inst.AnimState:PlayAnimation("dig")
             inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
@@ -1766,7 +1772,7 @@ local function fn_droppings()
     MakeInventoryPhysics(inst)
 
     -- inst:AddTag("fx")
-    inst:AddTag("raidrat")
+    --inst:AddTag("raidrat") -- Why would THIS be a raidrat?? What???
 
     MakeInventoryFloatable(inst)
 
