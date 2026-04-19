@@ -61,7 +61,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
-    HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
+    HAT_RATMASK = "- Finds Rat Burrows\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",

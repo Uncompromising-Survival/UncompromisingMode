@@ -112,6 +112,7 @@ local function fn()
     inst.components.edible.healthvalue = 0
     inst.components.edible.hungervalue = 0
     inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL
+    inst.components.edible.chargevalue = TUNING.WX78_CHARGE_LARGE
     inst.components.edible.oneaten = OnEaten
 
     inst:AddComponent("fuel")
