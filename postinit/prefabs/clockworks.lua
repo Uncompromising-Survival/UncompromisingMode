@@ -149,7 +149,7 @@ env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, 
 	
     if target ~= nil
         and inst.prefab == "gears"
-		and target:HasTag("chess")
+		and target:HasTag("chessfriend")
 		--and target._hasleader ~= nil
         --and target._hasleader:value()  then
 		and target.replica.health ~= nil then
@@ -164,4 +164,21 @@ env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.GIVEGEAR, 
 
 env.AddComponentAction("SCENE", "inspectable", function() end)
 
+for i, v in ipairs(clockworks) do
+	env.AddPrefabPostInit(v, function(inst)
+		if inst.TryBefriendChess ~= nil then
+			local oldTryBefriendChess = inst.TryBefriendChess
 
+			local newTryBefriendChess = function(inst, doer)
+				local success = oldTryBefriendChess(inst, doer)
+				if success then inst:AddTag("chessfriend") end
+
+				return success
+			end
+
+			inst.TryBefriendChess = newTryBefriendChess
+			inst.components.followermemory:SetOnReuniteLeaderFn(newTryBefriendChess)
+		end	
+
+	end)
+end
