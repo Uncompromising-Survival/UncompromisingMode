@@ -69,60 +69,34 @@ end
 ---------------------------------------------------------------------------------------------------------
 --- Clockwork follower regen removal and repair
 ---------------------------------------------------------------------------------------------------------
+if not TUNING.DSTU.ADM_CLOCKWORK_REWORK then
 
 TUNING.CLOCKWORK_HEALTH_REGEN_PERIOD = 60
 TUNING.CLOCKWORK_HEALTH_REGEN = 0
+TUNING.DSTU.CHESS_HEAL_PREFABS = {
+"gears",
+"wagpunk_bits",
+"trinket_6"
+}
 
---[[
-local function ShouldAcceptGears(inst, item, giver)
-	if not inst.components.follower:GetLeader() then
-		return false
-	end
-
-	return 	item.prefab == "gears" --and 
-			--inst.components.follower ~= nil and 
-			--inst.components.follower.leader == giver
-end
-
-local function OnAcceptGears(inst, giver, item)
-	-- Heal the knight
-	if inst.components.health then
-		inst.components.health:DoDelta(1000) -- adjust healing amount
-	end
-
-	-- Optional: play a sound or effect
-	inst.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
-end
-
-local function MakeRepairable(inst)
-
-	--trader (from trader component) added to pristine state for optimization
-	inst:AddComponent("trader")
-
-	if not TheWorld.ismastersim then
-        return inst
+local function IsRepairItemValid(item)
+	for _, prefab in pairs(TUNING.DSTU.CHESS_HEAL_PREFABS) do
+        if item.prefab == prefab then
+            return true
+        end
     end
 
-	inst.components.trader:SetAcceptTest(ShouldAcceptGears)
-	inst.components.trader.onaccept = OnAcceptGears
-	--inst.components.trader.acceptnontradable = true
+	return false
 end
 
-for i, v in ipairs(clockworks) do
-	env.AddPrefabPostInit(v, function(inst)
-		MakeRepairable(inst)
-
-	end)
-end]]
-
-local GIVEGEAR = Action({ priority = 1 })
-GIVEGEAR.id = "GIVEGEAR"
-GIVEGEAR.str = "Repair"
-GIVEGEAR.fn = function(act)
+local HEALCHESS = Action({ priority = 1 })
+HEALCHESS.id = "HEALCHESS"
+HEALCHESS.str = STRINGS.ACTIONS.HEALCHESS
+HEALCHESS.fn = function(act)
     local target = act.target
     local item = act.invobject
 
-    if target ~= nil and item ~= nil and item.prefab == "gears" then
+    if target ~= nil and item ~= nil and IsRepairItemValid(item) then
 
 		target.components.health:DoDelta(1000)
 
@@ -143,24 +117,23 @@ GIVEGEAR.fn = function(act)
     return false
 end
 
-env.AddAction(GIVEGEAR)
+env.AddAction(HEALCHESS)
 
-env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)
-	
+env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)	
     if target ~= nil
-        and inst.prefab == "gears"
-		and target:HasTag("chessfriend")
+        and IsRepairItemValid(inst)
+		and target:HasTag("chessfriend") then
 		--and target._hasleader ~= nil
         --and target._hasleader:value()  then
-		and target.replica.health ~= nil then
+		--and target.replica.health ~= nil then
 		--and target.replica.health:IsHurt() then
 
-        table.insert(actions, ACTIONS.GIVEGEAR)
+        table.insert(actions, ACTIONS.HEALCHESS)
     end
 end)
 
-env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.GIVEGEAR, "doshortaction"))
-env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.GIVEGEAR, "doshortaction"))
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
 
 env.AddComponentAction("SCENE", "inspectable", function() end)
 
@@ -182,3 +155,9 @@ for i, v in ipairs(clockworks) do
 
 	end)
 end
+
+end
+
+---------------------------------------------------------------------------------------------------------
+--- Clockwork follower regen removal and repair / End
+---------------------------------------------------------------------------------------------------------
