@@ -400,7 +400,7 @@ function Uncompromising_RatBrain:OnStart()
                 BrainCommon.ElectricFencePanicTrigger(self.inst),
                 WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
                     ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
-                RunAway(self.inst, "ghost", 8, 12),
+                --RunAway(self.inst, "ghost", 8, 12),
                 RunAway(self.inst, { tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
                 --RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
                 WhileNode(function() return closetoleader(self.inst) end, "Stayclose", BrainCommon.NodeAssistLeaderPickUps(self, pickupparams)),

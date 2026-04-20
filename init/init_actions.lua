@@ -67,18 +67,20 @@ wingsuit.distance = 20
 wingsuit.mount_valid = false
 
 local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
-    if act.doer --[[and act.target]] and act.doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
-    local MUST_TAGS = {"raidrat"}
-    local CANT_TAGS = {}
-    local x, y, z = act.doer.Transform:GetWorldPosition()
-    --local ratlings = TheSim:FindEntities(x,y,z,10,MUST_TAGS)
-    local ratminions = act.doer.components.leader and act.doer.components.leader:GetFollowersByTag("raidrat")
-        if act.doer.readytogather and ratminions and #ratminions > 0 then
-            if act.doer.readytogather:value() then
-                act.doer.readytogather:set(false)
-                act.doer.components.talker:Say(GetString(act.doer, "STOP_RAT_ORDER"))
+    local doer = act.doer
+    if doer --[[and act.target]] and doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
+        --[[local MUST_TAGS = {"raidrat"}
+        local CANT_TAGS = {}
+        local x, y, z = doer.Transform:GetWorldPosition()
+        local ratlings = TheSim:FindEntities(x,y,z,10,MUST_TAGS)]]
+        local ratminions = doer.components.leader and doer.components.leader:GetFollowersByTag("raidrat")
+        local str
+        if doer.readytogather and ratminions and #ratminions > 0 then
+            if doer.readytogather:value() then
+                doer.readytogather:set(false)
+                str = "STOP_RAT_ORDER"
                 for i, v in ipairs(ratminions) do
-                    if not v:HasTag("busy") then
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
                         v.AnimState:PlayAnimation("idle2")
                     end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
@@ -87,7 +89,7 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                     end
                     if v.components.inventory and v:HasTag("carrying") and
                     v._item --[[and not (v._item.components.edible and
-                    act.doer and act.doer.components.eater and act.doer.components.eater:CanEat(v._item))]] then
+                    doer and doer.components.eater and doer.components.eater:CanEat(v._item))]] then
                         --print("I DROP FOR YOU MY QUEEN")
                         v.components.inventory:DropEverything()
                         v:RemoveTag("carrying")
@@ -96,10 +98,10 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                     end
                 end
             else
-                act.doer.readytogather:set(true)
-                act.doer.components.talker:Say(GetString(act.doer, "START_RAT_ORDER"))
+                doer.readytogather:set(true)
+                str = "START_RAT_ORDER"
                 for i, v in ipairs(ratminions) do
-                    if not v:HasTag("busy") then
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
                         v.AnimState:PlayAnimation("idle2")
                     end
                     v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
@@ -108,10 +110,16 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                     end
                 end
             end
-        else
-            act.doer.components.talker:Say(GetString(act.doer, "FAIL_RAT_ORDER"))
         end
-        --act.target:PushEvent("onstolen", { thief = act.doer })
+        if doer.um_winkyordertask then doer.um_winkyordertask:Cancel() end
+        doer.um_winkyordertask = doer:DoTaskInTime(.7, function(inst)
+            if inst.components.talker and not inst.sg:HasStateTag("talking") then
+                local response = str or "FAIL_RAT_ORDER"
+                inst.components.talker:Say(GetString(inst, response))
+            end
+            inst.um_winkyordertask = nil
+        end)
+        --act.target:PushEvent("onstolen", { thief = doer })
         return true
     end
 end)

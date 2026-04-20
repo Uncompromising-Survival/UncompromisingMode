@@ -400,7 +400,25 @@ STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
 
-STRINGS.NAMES.CUPCAKE_GLACIALHOUND = "Cupcake"
+STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
+"Cupcake", --Shy
+"Cindy B. Destroyer", --Max
+"Daisy", --Deimos
+"Nibbles", --Anomen
+"Sprinkles", --Axe
+"Rimey", --Ato
+"Mel", --CarlosBraw
+"Lucky", -- INeedANames
+"Demon", --Summerrr
+"Princess", --Sweebr/Canis
+"Frosting", --Thatonebasilisk
+"Archibald", --Bombobbit
+"Pops", --WormiestWood
+"Freeza", --Feything
+"Maurice", --FourthLess
+"Courage", --Thaumoking
+"Tipsy Laird", --Theukondos
+}
 
 --TIDDLER FRIENDLY MAN STRINGS BELOW--
 
