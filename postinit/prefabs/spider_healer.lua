@@ -8,7 +8,7 @@ SetSharedLootTable( 'um_nurse_spider',
 })
 
 local function SpiderHealerFunctions(inst)
-    local health, lootdropper = inst.components.lootdropper, inst.components.lootdropper
+    local health, lootdropper = inst.components.health, inst.components.lootdropper
     
     if health then
         health:SetMaxHealth(225)
