@@ -116,7 +116,6 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_beargerclaw", "swap_shovel")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-    --inst:ListenForEvent("working", Working, owner)
 end
 
 local function onunequip(inst, owner)
