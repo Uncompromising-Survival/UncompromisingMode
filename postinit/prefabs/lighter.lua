@@ -108,14 +108,14 @@ AddPrefabPostInit("lighter", function(inst)
 		return
 	end
 
-    oldonattack = inst.components.weapon.onattack
+    local oldonattack = inst.components.weapon.onattack
     inst.components.weapon:SetOnAttack(function(weapon, attacker, target)
         if not inst.components.fueled:IsEmpty() then
             oldonattack(weapon, attacker, target)
         end
     end)
 
-    oldonequip = inst.components.equippable.onequipfn
+    local oldonequip = inst.components.equippable.onequipfn
     inst.components.equippable:SetOnEquip(function(inst, owner)
         oldonequip(inst, owner)
         if inst.components.fueled:IsEmpty() then
