@@ -20,6 +20,7 @@ local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
 -- IsModEnabled is host only. This will work on clients connected to another player or a dedicated server
 local ia_check_client = GLOBAL.AllRecipes["obsidianmachete"] and GLOBAL.AllRecipes["boat_encrusted"]
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
+local bcr_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-3667524475")
 
 --day/month > month/day
 local function Date(day, month)
@@ -448,6 +449,7 @@ TUNING.DSTU = {
     ISLAND_ADVENTURES = ia_check,
     ISLAND_ADVENTURES_CLIENT = ia_check_client,
     TREATS_FOR_WEBBER = tfw_check,
+    ADM_CLOCKWORK_REWORK = bcr_check,
 
     --MEME CONFIG
     ADVERTISEMENTS = GetModConfigData("um_advertisements"),
