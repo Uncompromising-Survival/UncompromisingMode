@@ -440,7 +440,7 @@ AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", f
 end)]]
 -- since ChangeImageName just does that, we need to assign the new atlas as well. I don't want to pack 2 images in the same atlas (mostly because idk how)
 
---checks for projectinator/receptionator, basically blocking both the lazy deserter and desert stones if the chaneller has the projection tag
+--checks for projectinator/receptionator, basically blocking both the lazy deserter, desert stones and jupm in action if the chaneller has the projection tag
 
 local _OldStartChannelingFn = GLOBAL.ACTIONS.STARTCHANNELING.fn
 GLOBAL.ACTIONS.STARTCHANNELING.fn = function(act)
@@ -468,6 +468,15 @@ GLOBAL.ACTIONS.TELEPORT.fn = function(act)
     return _OldTeleportFn(act)
 end
 
+--[[
+local _OldJumpInFn = GLOBAL.ACTIONS.JUMPIN.fn
+GLOBAL.ACTIONS.JUMPIN.fn = function(act)
+    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
+        return false
+    end
+    return _OldJumpInFn(act)
+end
+]]--
 GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "hat_plaguemask") end
 
 GLOBAL.plaguemask_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "hat_plaguemask") end

@@ -148,6 +148,7 @@ local function CleanupPlayerProjection(player)
     if player.um_astral_deactivated_fn ~= nil then
         player:RemoveEventCallback("playerdeactivated", player.um_astral_deactivated_fn)
         player:RemoveEventCallback("onremove", player.um_astral_deactivated_fn)
+        player:RemoveEventCallback("death", player.um_astral_deactivated_fn)
         player.um_astral_deactivated_fn = nil
     end
 
@@ -312,6 +313,7 @@ local function OnStartTeleporting(inst, doer)
     doer.um_astral_deactivated_fn = on_player_deactivated
     doer:ListenForEvent("playerdeactivated", on_player_deactivated)
     doer:ListenForEvent("onremove", on_player_deactivated)
+    doer:ListenForEvent("death", on_player_deactivated)
 
     local home = inst
     -- periodic task that watches whether the player is too far from the exit or the projector got destroyed
@@ -420,6 +422,7 @@ local function fn()
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector")
+    inst:AddTag("vault_teleporter")
 
     MakeSnowCoveredPristine(inst)
 
@@ -537,6 +540,7 @@ local function OnStartChanneling_Target(inst, channeler)
     if channeler.um_astral_deactivated_fn ~= nil then
         channeler:RemoveEventCallback("playerdeactivated", channeler.um_astral_deactivated_fn)
         channeler:RemoveEventCallback("onremove", channeler.um_astral_deactivated_fn)
+        channeler:RemoveEventCallback("death", channeler.um_astral_deactivated_fn)
         channeler.um_astral_deactivated_fn = nil
     end
 
@@ -649,6 +653,7 @@ local function targetfn()
 
     inst:AddTag("structure")
     inst:AddTag("um_astral_projector_target")
+    inst:AddTag("vault_teleporter")
 
     MakeSnowCoveredPristine(inst)
 

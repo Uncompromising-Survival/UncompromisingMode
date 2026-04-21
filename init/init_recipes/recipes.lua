@@ -559,15 +559,15 @@ AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel",
 AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, { placer = "um_astral_projector_placer", testfn = function(pt, rot, builder)
     local x, y, z = pt:Get()
     return (builder == nil or not builder:HasTag("um_astral_projected"))
-        and #TheSim:FindEntities(x, y, z, 25, {"um_astral_projector"}) == 0
-        and #TheSim:FindEntities(x, y, z, 25, {"um_astral_projector_target"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector_target"}) == 0
 end }, { "STRUCTURES" })
 
 AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, { placer = "um_astral_projector_target_placer", testfn = function(pt, rot, builder)
     local x, y, z = pt:Get()
     return (builder == nil or not builder:HasTag("um_astral_projected"))
-        and #TheSim:FindEntities(x, y, z, 25, {"um_astral_projector"}) == 0
-        and #TheSim:FindEntities(x, y, z, 25, {"um_astral_projector_target"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector_target"}) == 0
 end }, { "STRUCTURES" })
 
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
