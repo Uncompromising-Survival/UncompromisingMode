@@ -87,14 +87,8 @@ local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, functi
                     if v.components.combat then
                         v.components.combat:SetTarget(nil)
                     end
-                    if v.components.inventory and v:HasTag("carrying") and
-                    v._item --[[and not (v._item.components.edible and
-                    doer and doer.components.eater and doer.components.eater:CanEat(v._item))]] then
-                        --print("I DROP FOR YOU MY QUEEN")
-                        v.components.inventory:DropEverything()
-                        v:RemoveTag("carrying")
-                        v._item:Remove()
-                        v._item = nil
+                    if v.components.inventory and v._item and v._item:IsValid() and v._item.components.pickable then
+                        v._item.components.pickable:Pick(TheWorld)
                     end
                 end
             else
