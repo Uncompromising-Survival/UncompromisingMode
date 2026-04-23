@@ -8,11 +8,10 @@ local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, affl
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
-    --minerology
     return attacker and attacker:HasTag("pierces_ice_shield")
         or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchant("um_gemologyredgem2")
-        or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
-        or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
+            or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
 
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
@@ -71,14 +70,25 @@ local function Init(inst, parent, fx_symbol, tier)
         parent.components.combat:SetShouldRecoilFn(ShouldRecoilIceShield)
     end
 
+    if parent.shield_fx2 then
+        parent.shield_fx2:Remove()
+    end
+
     if parent.shield_fx then
         parent.shield_fx:Remove()
     end
+
 
     parent.shield_fx = SpawnPrefab("deer_ice_flakes")
     parent.shield_fx.Transform:SetPosition(parent.Transform:GetWorldPosition())
     parent.shield_fx.entity:AddFollower()
     parent.shield_fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
+
+
+    parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
+    parent.shield_fx2.Transform:SetPosition(parent.Transform:GetWorldPosition())
+    parent.shield_fx2.entity:AddFollower()
+    parent.shield_fx2.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, -150, 0)
 end
 
 local function fn()
@@ -124,6 +134,10 @@ local function fn()
                 inst._parent.shield_fx:Remove()
             end
 
+            if inst._parent.shield_fx2 then
+                inst._parent.shield_fx2:Remove()
+            end
+
             if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
             end
@@ -142,4 +156,26 @@ local function fn()
     return inst
 end
 
-return Prefab("um_ice_shield", fn)
+local function fx_fn()
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddNetwork()
+    inst.entity:AddAnimState()
+
+    inst:AddTag("FX")
+
+    inst.entity:SetPristine()
+
+    inst.Transform:SetScale(2, 2, 2)
+    inst.AnimState:SetBank("deer_ice_charge")
+    inst.AnimState:SetBuild("deer_ice_charge")
+    inst.AnimState:PlayAnimation("pre")
+    inst.AnimState:HideSymbol("line")
+    inst.AnimState:SetSortOrder(0)
+    inst.AnimState:PushAnimation("loop", true)
+
+    return inst
+end
+
+return Prefab("um_ice_shield", fn),
+    Prefab("um_ice_shield_fx", fx_fn)
