@@ -7,13 +7,6 @@ local assets =
     Asset("MINIMAP_IMAGE", "townportalactive"),
 }
 
-local fx_assets =
-{
-    Asset("ANIM", "anim/um_lunar_spark.zip"),
-    Asset("ANIM", "anim/teleport_sand_fx.zip"),
-    Asset("ANIM", "anim/sand_splash_fx.zip"),
-}
-
 local prefabs =
 {
     "collapse_small",
@@ -22,6 +15,8 @@ local prefabs =
 
 -- how long the screen stays dark when a player is force-returned (hammering, disconnect, etc.)
 local FORCE_RETURN_FADE = 1
+local ASTRAL_GROGGINESS_NORMAL = 0.6   -- grogginess on normal return (60% of resistance)
+local ASTRAL_GROGGINESS_FORCED = 0.99  -- grogginess on forced return (nearly max, like moose tackle)
 
 -- finds the closest receptionator to a given projector
 local function FindNearestTarget(inst)
@@ -148,8 +143,12 @@ local function CleanupPlayerProjection(player)
     if player.um_astral_deactivated_fn ~= nil then
         player:RemoveEventCallback("playerdeactivated", player.um_astral_deactivated_fn)
         player:RemoveEventCallback("onremove", player.um_astral_deactivated_fn)
-        player:RemoveEventCallback("death", player.um_astral_deactivated_fn)
         player.um_astral_deactivated_fn = nil
+    end
+
+    if player.um_astral_death_fn ~= nil then
+        player:RemoveEventCallback("death", player.um_astral_death_fn)
+        player.um_astral_death_fn = nil
     end
 
     -- defer one frame so CountProjectedPlayers reflects the updated state
@@ -204,7 +203,15 @@ local function ForceReturnPlayer(player, dest_x, dest_y, dest_z)
         pl.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
         pl:ScreenFade(true, 1)
 
-        if pl.sg ~= nil then
+        -- never touch the stategraph of a dead player, death state has assert(false) in its onexit
+        local is_dead = pl.components.health ~= nil and pl.components.health:IsDead()
+
+        -- apply grogginess on forced return, only if alive
+        if not is_dead and pl.components.grogginess ~= nil then
+            pl.components.grogginess:SetPercent(ASTRAL_GROGGINESS_FORCED)
+        end
+
+        if pl.sg ~= nil and not is_dead then
             pl.sg:GoToState("exitastralportal_pre")
         else
             pl.components.health:SetInvincible(false)
@@ -313,7 +320,21 @@ local function OnStartTeleporting(inst, doer)
     doer.um_astral_deactivated_fn = on_player_deactivated
     doer:ListenForEvent("playerdeactivated", on_player_deactivated)
     doer:ListenForEvent("onremove", on_player_deactivated)
-    doer:ListenForEvent("death", on_player_deactivated)
+
+    -- on death, force return the ghost to the projector instead of just cleaning up
+    if doer.um_astral_death_fn ~= nil then
+        doer:RemoveEventCallback("death", doer.um_astral_death_fn)
+    end
+    local home_inst = inst
+    local function on_player_death(doer_inst)
+        local hx, hy, hz
+        if home_inst ~= nil and home_inst:IsValid() then
+            hx, hy, hz = home_inst.Transform:GetWorldPosition()
+        end
+        ForceReturnPlayer(doer_inst, hx, hy, hz)
+    end
+    doer.um_astral_death_fn = on_player_death
+    doer:ListenForEvent("death", on_player_death)
 
     local home = inst
     -- periodic task that watches whether the player is too far from the exit or the projector got destroyed
@@ -321,6 +342,11 @@ local function OnStartTeleporting(inst, doer)
         -- shard travel - clean up silently, sneak 100
         if doer:HasTag("INLIMBO") then
             CleanupPlayerProjection(doer)
+            return
+        end
+
+        -- player is dead: death handler already called ForceReturnPlayer, don't pile on
+        if doer.components.health ~= nil and doer.components.health:IsDead() then
             return
         end
 
@@ -366,16 +392,23 @@ local function OnExitingTeleporter(inst, obj)
     inst.SoundEmitter:PlaySound("rifts6/vault_portal/teleport_arrive_FX")
     if obj ~= nil and obj:HasTag("player") then
         obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport")
+        -- grogginess on arrival at receptionator, only if alive
+        if obj.components.grogginess ~= nil
+            and obj.components.health ~= nil
+            and not obj.components.health:IsDead() then
+            obj.components.grogginess:SetPercent(ASTRAL_GROGGINESS_NORMAL)
+        end
     end
+    -- save the receptionator reference before clearing the teleporter (FindNearestTarget after clear is unreliable in multi-pair setups)
+    local tgt = (obj ~= nil and obj.um_astral_target ~= nil and obj.um_astral_target:IsValid()) and obj.um_astral_target or FindNearestTarget(inst)
     inst.components.teleporter:Target(nil)
-    local tgt = FindNearestTarget(inst)
     if tgt ~= nil and tgt:IsValid() then
         tgt.components.teleporter:Target(nil)
     end
 end
 
 -- projector is hammered: force return all linked players then destroy
-local function onhammered(inst)
+local function OnHammered(inst)
     local target = FindNearestTarget(inst)
     StopPairPortals(inst, target)
     ReturnAllProjectedPlayers(inst)
@@ -386,20 +419,22 @@ local function onhammered(inst)
     inst:Remove()
 end
 
-local function onhit(inst)
+local function OnHit(inst)
     inst.AnimState:PlayAnimation("hammer")
 end
 
-local function onbuilt(inst)
+local function OnBuilt(inst)
     inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/craft")
     inst.AnimState:PlayAnimation("place")
     inst.AnimState:PushAnimation("idle")
 end
 
+--returns ACTIVE to the inspect string when the teleporter is active, otherwise nil so it doesn't show up at all
 local function GetStatus(inst)
     return inst.components.teleporter:IsActive() and "ACTIVE" or nil
 end
 
+--projectinator constructor
 local function fn()
     local inst = CreateEntity()
 
@@ -440,8 +475,8 @@ local function fn()
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
-    inst.components.workable:SetOnFinishCallback(onhammered)
-    inst.components.workable:SetOnWorkCallback(onhit)
+    inst.components.workable:SetOnFinishCallback(OnHammered)
+    inst.components.workable:SetOnWorkCallback(OnHit)
 
     inst:AddComponent("channelable")
     inst.components.channelable:SetChannelingFn(OnStartChanneling, OnStopChanneling)
@@ -458,46 +493,10 @@ local function fn()
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
 
-    inst:ListenForEvent("onbuilt", onbuilt)
+    inst:ListenForEvent("onbuilt", OnBuilt)
 
     inst.OnEntityWake  = OnEntityWake
     inst.OnEntitySleep = OnEntitySleep
-
-    return inst
-end
-
-local function KillFX(inst)
-    if inst.killtask ~= nil then
-        inst.killtask:Cancel()
-        inst.killtask = nil
-        inst.AnimState:PlayAnimation("spark_pst")
-        inst:DoTaskInTime(inst.AnimState:GetCurrentAnimationLength() + .5, inst.Remove)
-    end
-end
-
-local function fx_fn()
-    local inst = CreateEntity()
-
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
-
-    inst.AnimState:SetBank("um_lunar_spark")
-    inst.AnimState:SetBuild("um_lunar_spark")
-    inst.AnimState:PlayAnimation("spark_loop", true)
-    inst.AnimState:SetFinalOffset(7)
-
-    inst:AddTag("NOCLICK")
-    inst:AddTag("FX")
-
-    inst.entity:SetPristine()
-
-    if not TheWorld.ismastersim then
-        return inst
-    end
-
-    inst.persists = false
-    inst.KillFX   = KillFX
 
     return inst
 end
@@ -540,8 +539,12 @@ local function OnStartChanneling_Target(inst, channeler)
     if channeler.um_astral_deactivated_fn ~= nil then
         channeler:RemoveEventCallback("playerdeactivated", channeler.um_astral_deactivated_fn)
         channeler:RemoveEventCallback("onremove", channeler.um_astral_deactivated_fn)
-        channeler:RemoveEventCallback("death", channeler.um_astral_deactivated_fn)
         channeler.um_astral_deactivated_fn = nil
+    end
+
+    if channeler.um_astral_death_fn ~= nil then
+        channeler:RemoveEventCallback("death", channeler.um_astral_death_fn)
+        channeler.um_astral_death_fn = nil
     end
 
     channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
@@ -560,6 +563,12 @@ end
 local function OnExitingTeleporter_Target(inst, obj)
     if obj ~= nil and obj:HasTag("player") then
         obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport")
+        -- apply grogginess on normal return, only if alive
+        if obj.components.grogginess ~= nil
+            and obj.components.health ~= nil
+            and not obj.components.health:IsDead() then
+            obj.components.grogginess:SetPercent(ASTRAL_GROGGINESS_NORMAL)
+        end
     end
     inst.components.teleporter:Target(nil)
     local home = inst.active_home
@@ -617,7 +626,7 @@ local function OnStartTeleporting_Target(inst, doer)
 end
 
 -- receptionator is hammered ----> find its linked projector, force-return players, then destroy
-local function onhammered_target(inst)
+local function OnHammeredTarget(inst)
     local home = FindNearestProjector(inst)
     StopPairPortals(home, inst)
     ReturnAllProjectedPlayers(home)
@@ -628,11 +637,13 @@ local function onhammered_target(inst)
     inst:Remove()
 end
 
-local function onhit_target(inst)
+-- hammer hit callback
+local function OnHitTarget(inst)
     inst.AnimState:PlayAnimation("hammer")
 end
 
-local function targetfn()
+--recepctionator constructor
+local function TargetFn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -667,8 +678,8 @@ local function targetfn()
     inst:AddComponent("workable")
     inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
     inst.components.workable:SetWorkLeft(4)
-    inst.components.workable:SetOnFinishCallback(onhammered_target)
-    inst.components.workable:SetOnWorkCallback(onhit_target)
+    inst.components.workable:SetOnFinishCallback(OnHammeredTarget)
+    inst.components.workable:SetOnWorkCallback(OnHitTarget)
 
     inst:AddComponent("channelable")
     inst.components.channelable:SetChannelingFn(OnStartChanneling_Target, OnStopChanneling_Target)
@@ -688,13 +699,13 @@ local function targetfn()
     inst:AddComponent("inspectable")
     inst.components.inspectable.getstatus = GetStatus
 
-    inst:ListenForEvent("onbuilt", onbuilt)
+    inst:ListenForEvent("onbuilt", OnBuilt)
 
     return inst
 end
 
 -- checks if there are any projected players nearby, kills the pool if not
-local function Vac(inst)
+local function CheckPoolExpiry(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local projectors = TheSim:FindEntities(x, y, z, 23, { "um_astral_projected" })
     if projectors ~= nil and #projectors == 0 then
@@ -704,16 +715,19 @@ local function Vac(inst)
     end
 end
 
+--starts the periodic check for nearby projected players, which will eventually kill the pool fx if nobody's around to see it
 local function StartChecks(inst)
-    if inst.vactask == nil then
-        inst.vactask = inst:DoPeriodicTask(.5, Vac)
+    if inst.pool_expiry_task == nil then
+        inst.pool_expiry_task = inst:DoPeriodicTask(.5, CheckPoolExpiry)
     end
 end
 
+--checks if the entity is completely valid before starting the sound loop
 local function Init(inst)
     inst.SoundEmitter:PlaySound("UCSounds/um_whirlpool/um_whirlpool_loop", "whirlpool")
 end
 
+--pool fadeout
 local function RemoveWhirlpool(inst)
     inst.components.colourtweener:StartTween({ 1, 1, 1, 0 }, 5, inst.Remove)
     inst.SoundEmitter:KillSound("whirlpool")
@@ -723,7 +737,8 @@ local function RemoveWhirlpool(inst)
     inst:Remove()
 end
 
-local function poolfn()
+--fx for the visual pool
+local function PoolFn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -767,9 +782,8 @@ end
 
 
 return
-    Prefab("um_lunar_spark", fx_fn, fx_assets, prefabs),
     Prefab("um_astral_projector", fn, assets, prefabs),
     MakePlacer("um_astral_projector_placer", "um_archives_projectinator", "um_archives_projectinator", "idle"),
-    Prefab("um_astral_projector_target", targetfn, assets, prefabs),
+    Prefab("um_astral_projector_target", TargetFn, assets, prefabs),
     MakePlacer("um_astral_projector_target_placer", "um_archives_receptionator", "um_archives_receptionator", "idle"),
-    Prefab("um_astral_pool", poolfn, assets, prefabs)
+    Prefab("um_astral_pool", PoolFn, assets, prefabs)
