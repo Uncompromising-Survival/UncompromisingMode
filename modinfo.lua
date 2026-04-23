@@ -665,7 +665,7 @@ configuration_options = {
         hover =
         "Sleeping can heal max health loss. Siesta Lean-to cost to craft and cost to use nerfed.",
         options = {
-            { description = "Default",  data = "default", hover = "Only heal max health loss if BELOW 25%." },
+            { description = "Default",  data = "default", hover = "Only heal max health loss if below or at 25%." },
             { description = "Legacy",   data = "legacy",  hover = "Heal max health lost regardless of %." },
             { description = "Disabled", data = false } },
         default =
