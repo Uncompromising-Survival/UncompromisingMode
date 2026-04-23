@@ -111,16 +111,12 @@ local function IsNotFriendly(attacker, target) -- Is the target an ally or my le
         and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target))
 end
 
-local function DamageOrWork(target)
-    return target ~= nil
-        and target:IsValid()
-        and target.components.health ~= nil
+local function TargetHasHealth(target)
+    return target and target:IsValid() and target.components.health
 end
 
-local function DealSpikeDamage(attacker, target, damage)
-    if not (target and target:IsValid() and target.components.health) then
-        return false
-    end
+local function DealSpikeDamage(attacker, target, spike, damage)
+    if not TargetHasHealth(target) then return end
 
     if target.components.combat then
         target.components.combat:GetAttacked(attacker, damage)
@@ -128,42 +124,34 @@ local function DealSpikeDamage(attacker, target, damage)
         target.components.health:DoDelta(-damage, nil, attacker and attacker.prefab or "glacialhound_icespike")
     end
 
-    return true
+    spike.components.health:Kill()
 end
 
 local function DoWork(worker, target)
-    if not (target and target:IsValid() and target.components.workable) then
-        return false
-    end
+    if not (target and target:IsValid() and target.components.workable) then return false end
 
     local workable = target.components.workable
-    if not workable:CanBeWorked() then
-        return false
-    end
+    if not workable:CanBeWorked() then return false end
 
     local work_action = workable:GetWorkAction()
+    if not work_action then -- nil action for NPC_workable (e.g. campfires)
+        if target:HasTag("NPC_workable") then
+            workable:Destroy(worker)
 
-	-- nil action for NPC_workable (e.g. campfires)
-	if work_action == nil then
-		if target:HasTag("NPC_workable") then
-			workable:Destroy(worker)
+            if target:IsValid() and target:HasTag("stump") then
+                target:Remove()
+            end
 
-			if target:IsValid() and target:HasTag("stump") then
-				target:Remove()
-			end
-
-			return true
-		end
-		return false
-	end
-
-    -- Things with health should take damage instead of work.
-    if DamageOrWork(target) then
+            return true
+        end
         return false
     end
 
+    -- Things with health should take damage instead of work.
+    if TargetHasHealth(target) then return false end
+
     local work_amount = WORK_AMOUNTS[work_action.id]
-    if work_amount ~= nil then
+    if work_amount then
         workable:WorkedBy(worker, work_amount)
 
         if target:IsValid() and target:HasTag("stump") and workable:GetWorkLeft() <= 0 then
@@ -186,44 +174,31 @@ local function DoDamage(inst)
             local attackable = IsNotFriendly(attacker, v)
             if v.prefab == "ice" then
                 v:Remove()
-			elseif v:HasTag("player") and attackable then
-				--NOTE: inst.targets will prevent multiple knockbacks, but
-				--      CreatePhysicsPush should still keep them in bounds
-				v:PushEvent("knockback", { knocker = inst, radius = radius, strengthmult = 0.3, forcelanded = not inst.islarge:value() })
+            elseif v:HasTag("player") and attackable then
+                --NOTE: inst.targets will prevent multiple knockbacks, but
+                --      CreatePhysicsPush should still keep them in bounds
+                v:PushEvent("knockback", { knocker = inst, radius = radius, strengthmult = .3, forcelanded = not inst.islarge:value() })
+            end
 
-				DealSpikeDamage(attacker, v, 30)
-				inst.components.health:Kill() --to prevent trapping targets in the ice
+            --TODO: Make not destroy for glacial hound?
+            if attackable then
+                DealSpikeDamage(attacker, v, inst, 30)
 
-				if v.components.freezable then
-					v.components.freezable:AddColdness(2)
-				end
-			else
-                --TODO: Make not destroy for glacial hound?
-				local damaged = false
+                if v.components.freezable then
+                    v.components.freezable:AddColdness(2)
+                end
+            else
+                local worked = DoWork(inst, v)
 
-				if v.components.health and attackable then
-					damaged = DealSpikeDamage(attacker, v, 30)
-
-					if damaged then
-						inst.components.health:Kill() --to prevent trapping targets in the ice
-					end
-
-					if attackable and v.components.freezable then
-						v.components.freezable:AddColdness(2)
-					end
-				else
-					local worked = DoWork(inst, v)
-
-					if not worked and v.components.pickable and v.components.pickable:CanBePicked() and not v:HasTag("intense") then
-						v.components.pickable:Pick(inst)
-					end
-				end
-			end
+                if not worked and v.components.pickable and v.components.pickable:CanBePicked() and not v:HasTag("intense") then
+                    v.components.pickable:Pick(inst)
+                end
+            end
 
             if inst.targets then
                 inst.targets[v] = true
             end
-		end
+        end
     end
 
     --Tossing we don't care about repeat targets

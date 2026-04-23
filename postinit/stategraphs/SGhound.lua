@@ -162,7 +162,7 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("scared_loop", true)
                 inst:Charge()
-                local timeouttime = inst:HasTag("lightninghound") and 4 + math.random() or 1
+                local timeouttime = inst:HasTag("lightninghound") and 4 + math.random() or 2 + math.random()
                 inst.sg:SetTimeout(timeouttime)
             end,
 
