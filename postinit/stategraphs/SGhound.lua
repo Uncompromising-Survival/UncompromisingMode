@@ -162,14 +162,14 @@ env.AddStategraphPostInit("hound", function(inst)
                 inst.Physics:Stop()
                 inst.AnimState:PlayAnimation("scared_loop", true)
                 inst:Charge()
-                local timeouttime = inst:HasTag("lightninghound") and 4 + math.random() or 2 + math.random()
+                local timeouttime = inst:HasTag("lightninghound") and 4 + math.random() or 1
                 inst.sg:SetTimeout(timeouttime)
             end,
 
             onexit = function(inst)
                 inst.lightningshot = false
                 inst.components.timer:StopTimer("lightningshot_cooldown")
-                inst.components.timer:StartTimer("lightningshot_cooldown", 6 + math.random())
+                inst.components.timer:StartTimer("lightningshot_cooldown", 8 + math.random())
                 inst:CancelCharge()
             end,
 
