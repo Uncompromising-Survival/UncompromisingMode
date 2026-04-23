@@ -165,7 +165,7 @@ local states =
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("scared_loop", true)
 			inst:Charge()
-			local timeouttime = inst.prefab == "lightninghound" and 4+math.random() or 1
+			local timeouttime = inst.prefab == "lightninghound" and 8 + math.random() or 1
             inst.sg:SetTimeout(timeouttime)
         end,
 		
