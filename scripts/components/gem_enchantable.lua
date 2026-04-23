@@ -109,7 +109,6 @@ function GemEnchantable:GetEnchantmentTier(enchant)
     return self.enchants[enchant]
 end
 
--- -4.1633363423443e-017	
 function GemEnchantable:SetDurability(enchantment, durability)
     durability = math.clamp(durability, 0, 1)
 
@@ -195,18 +194,11 @@ function GemEnchantable:OnSave()
         end
     end
 
-    local _durability = {}
-
-    for k, v in pairs(self.enchant_durabilty) do
-        if v ~= nil then
-            _durability[k] = v
-        end
-    end
 
     return {
         enchants = _enchants,
         gem_data = self.inst.persistent_gemology_data,
-        durability = _durability
+        durability = self.enchant_durabilty
     }
 end
 
@@ -220,9 +212,10 @@ function GemEnchantable:OnLoad(data)
     end
 
     local _durability = data.durability
-    if _durability ~= nil then
-        self.enchant_durabilty = _durability --this doesn't need to do that, though.
-    end
+    self.inst:DoTaskInTime(0, function(inst)
+        self.enchant_durabilty = _durability
+        self.update_flag = true
+    end)
 
     self.update_flag = true
 end
