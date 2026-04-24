@@ -245,8 +245,8 @@ end
 -- plays the activation animation, then sets up the projection state and sends the player through
 local function OnStartChanneling(inst, channeler)
     if (channeler.components.rider and channeler.components.rider:IsRiding()) then
-        channeler.components.rider:Dismount()
-    end
+        channeler.components.talker:Say(GetActionFailString(channeler, "GENERIC")) --"Broke."
+    else
         local target = FindNearestTarget(inst)
 
         -- always play animation regardless of whether projection proceeds
@@ -280,6 +280,7 @@ local function OnStartChanneling(inst, channeler)
         end
 
         channeler.sg:GoToState("enterastralportal", { teleporter = inst })
+    end
 end
 
 -- triggers when the player stops channeling before the teleport completes (they walk away or sum)
@@ -516,8 +517,8 @@ end
 -- animation plays unconditionally, teleport only proceeds if this is the correct receptionator
 local function OnStartChanneling_Target(inst, channeler)
     if (channeler.components.rider and channeler.components.rider:IsRiding()) then
-        channeler.components.rider:Dismount()
-    end
+        channeler.components.talker:Say(GetActionFailString(channeler, "GENERIC")) --"Broke."
+    else
         local home = channeler.um_astral_home
 
         -- always animate, the modmain STARTCHANNELING override handles blocking wrong receptionators
@@ -562,6 +563,7 @@ local function OnStartChanneling_Target(inst, channeler)
         end
 
         channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
+    end
 end
 
 -- when the player stops channeling the receptionator before completing the return
