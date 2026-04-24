@@ -10,7 +10,7 @@ local function ForceToTakeMoreDamage(inst)
     end
     self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
         if attacker and damage then
-            if not inst:HasAnyTag("mime", "pinetreepioneer", "plantkin") then
+            if not inst:HasAnyTag("mime", "pinetreepioneer", "plantkin", "wathom") then
                 -- Take extra damage
                 damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
             end

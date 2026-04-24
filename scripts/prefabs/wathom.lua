@@ -13,6 +13,22 @@ TUNING.WATHOM_HEALTH = 225
 TUNING.WATHOM_HUNGER = 120
 TUNING.WATHOM_SANITY = 120
 
+local function VetCurseCheck(inst)
+    if inst.components.sanity == nil then return end
+
+    if inst:HasTag("vetcurse") then
+        local percent = inst.components.sanity:GetPercent()
+
+        if percent > 0.5 then
+            inst.components.sanity:EnableLunacy(true, "vetcurse")
+        else
+            inst.components.sanity:EnableLunacy(false, "vetcurse")
+        end
+    else
+        inst.components.sanity:EnableLunacy(false, "vetcurse")
+    end
+end
+
 local function HasSkill(inst,name)
 	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
@@ -756,16 +772,17 @@ local function master_postinit(inst)
     --    end)
 	
 	inst.components.sanity.custom_rate_fn = function(inst)
-		local rate = 0
-
-		if TheWorld.state.isday then
-			rate = TUNING.SANITY_NIGHT_LIGHT
-		else
-			rate = 0
+		if inst.components.sanity:IsLunacyMode() then
+			return 0
 		end
 
-		return rate
-	end	
+
+		if TheWorld.state.isday then
+			return TUNING.SANITY_NIGHT_LIGHT
+		end
+
+		return 0
+	end
 
 	inst.components.sanity.night_drain_mult = 0
 
@@ -803,6 +820,8 @@ local function master_postinit(inst)
 
 	inst:ListenForEvent("makeplayerghost",function(inst) inst:DoTaskInTime(0,SeeIfShouldBecomeShadow) end)
 	inst:ListenForEvent("ms_respawnedfromghost", StopBeingShadow)
+	
+	inst:DoPeriodicTask(0, VetCurseCheck)
 end
 
 return MakePlayerCharacter("wathom", prefabs, assets, common_postinit, master_postinit)
