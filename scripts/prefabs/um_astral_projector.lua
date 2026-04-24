@@ -121,6 +121,7 @@ local function CleanupPlayerProjection(player)
     -- save references before clearing them
     local home   = player.um_astral_home
     local target = player.um_astral_target
+    local minions = player.components.leader and player.components.leader:GetFollowersByTag("_health")
 
     player:RemoveTag("um_astral_projected")
     player.um_astral_projected = false
@@ -138,6 +139,9 @@ local function CleanupPlayerProjection(player)
 
     if player.AnimState ~= nil then
         player.AnimState:SetErosionParams(0, 0, 0)
+        for i, v in ipairs(minions) do
+            v.AnimState:SetErosionParams(0, 0, 0)
+        end
     end
 
     if player.um_astral_deactivated_fn ~= nil then
@@ -291,7 +295,11 @@ local function OnStartTeleporting(inst, doer)
     if not doer:HasTag("player") then return end
 
     local target = FindNearestTarget(inst)
+    local minions = doer.components.leader and doer.components.leader:GetFollowersByTag("_health")
 
+    for i, v in ipairs(minions) do
+        v.AnimState:SetErosionParams(-0.5, -0.2, -1.0)
+    end
     doer.AnimState:SetErosionParams(-0.5, -0.2, -1.0)
     doer:AddTag("um_astral_projected")
     doer.um_astral_projected = true
@@ -605,7 +613,11 @@ local function OnStartTeleporting_Target(inst, doer)
     end
 
     if not doer:HasTag("player") then return end
+    local minions = doer.components.leader and doer.components.leader:GetFollowersByTag("_health")
 
+    for i, v in ipairs(minions) do
+        v.AnimState:SetErosionParams(0, 0, 0)
+    end
     doer.AnimState:SetErosionParams(0, 0, 0)
     doer:RemoveTag("um_astral_projected")
     doer.um_astral_projected = false
