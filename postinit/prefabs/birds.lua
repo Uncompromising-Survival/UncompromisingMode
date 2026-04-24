@@ -36,3 +36,80 @@ for k, v in pairs(prefabs) do
         inst:DoTaskInTime(0, UMBirdSwap)
     end)
 end
+
+local function FeatherCheck(prefab)
+    return type(prefab) == "string" and string.find(prefab, "feather") ~= nil
+end
+
+local function AddFeather(candidates, prefab)
+    if FeatherCheck(prefab) then
+        candidates[prefab] = true
+    end
+end
+
+local function BirdLoot(lootdropper)
+    local candidates = {}
+
+    if lootdropper.loot ~= nil then
+        for _, prefab in ipairs(lootdropper.loot) do
+            AddFeather(candidates, prefab)
+        end
+    end
+
+    if lootdropper.chanceloot ~= nil then
+        for _, data in ipairs(lootdropper.chanceloot) do
+            AddFeather(candidates, data.prefab or data[1])
+        end
+    end
+
+    if lootdropper.randomloot ~= nil then
+        for _, data in ipairs(lootdropper.randomloot) do
+            AddFeather(candidates, data.prefab or data[1])
+        end
+    end
+
+    local result = {}
+
+    for prefab in pairs(candidates) do
+        table.insert(result, prefab)
+    end
+
+    if #result > 0 then
+        return result[math.random(#result)]
+    end
+end
+
+local function RemoveMorsel(inst)
+    if not inst:HasTag("bird") then
+        return
+    end
+
+    if inst.components.lootdropper == nil then
+        return
+    end
+
+    local old_GenerateLoot = inst.components.lootdropper.GenerateLoot
+
+    inst.components.lootdropper.GenerateLoot = function(self, ...)
+        local loot = old_GenerateLoot(self, ...)
+        local feather = BirdLoot(self)
+
+        if loot ~= nil then
+            for i = #loot, 1, -1 do
+                if loot[i] == "smallmeat" then
+                    if feather ~= nil then
+                        loot[i] = feather
+                    else
+                        table.remove(loot, i)
+                    end
+                end
+            end
+        end
+
+        return loot
+    end
+end
+
+AddPrefabPostInitAny(function(inst)
+    inst:DoTaskInTime(0, RemoveMorsel)
+end)

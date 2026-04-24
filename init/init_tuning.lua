@@ -145,7 +145,7 @@ TUNING.DSTU = {
     RECIPE_MOONROCK_IDOL_MOONSTONE_COST = 5,
     RECIPE_CELESTIAL_UPGRADE_GLASS_COST = 20,
 
-    DART_YIELD = 4,
+    DART_YIELD = 1,
     ----------------------------------------------------------------------------
     -- Food Changes Config
     ----------------------------------------------------------------------------
