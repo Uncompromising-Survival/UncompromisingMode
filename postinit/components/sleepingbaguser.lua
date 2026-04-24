@@ -10,7 +10,7 @@ AddComponentPostInit("sleepingbaguser", function(self)
                 self.healthtask = self.inst:DoPeriodicTask(self.bed.components.sleepingbag.tick_period, function()
                     local health_tick = self.bed.components.sleepingbag.health_tick * self.health_bonus_mult
                     if self.inst.components.health and not self.inst:HasTag("TiddleVirus")
-                        and self.inst.components.health:GetPenaltyPercent() <= .25 then
+                        and self.inst.components.health:GetPenaltyPercent() < .25 then
                         --The max health repair is equal to half the health tick value of the bed/tent
                         --e.g. tents restore 2 health per tick so they will restore 1% max health per tick --KoreanWaffles
                         self.inst.components.health:DeltaPenalty(-health_tick / 200)
