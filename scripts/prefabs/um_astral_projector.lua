@@ -121,7 +121,7 @@ local function CleanupPlayerProjection(player)
     -- save references before clearing them
     local home   = player.um_astral_home
     local target = player.um_astral_target
-    local minions = player.components.leader and player.components.leader.followers
+    local minions = player.components.leader and player.components.leader:GetFollowersByTag("_health")
 
     player:RemoveTag("um_astral_projected")
     player.um_astral_projected = false
@@ -244,43 +244,39 @@ end
 -- starts when a player starts channeling the projector.
 -- plays the activation animation, then sets up the projection state and sends the player through
 local function OnStartChanneling(inst, channeler)
-    if (channeler.components.rider and channeler.components.rider:IsRiding()) then
-        channeler.components.talker:Say(GetActionFailString(channeler, "GENERIC")) --"Broke."
-    else
-        local target = FindNearestTarget(inst)
+    local target = FindNearestTarget(inst)
 
-        -- always play animation regardless of whether projection proceeds
-        if not inst.AnimState:IsCurrentAnimation("active_loop") then
-            inst.AnimState:PlayAnimation("active_pre")
-            inst.AnimState:PushAnimation("active_loop", true)
-        end
-        StartSoundLoop(inst)
-
-        if target == nil then return end
-        if channeler.um_astral_projected then return end
-
-        if not target.AnimState:IsCurrentAnimation("active_loop") then
-            target.AnimState:PlayAnimation("active_pre")
-            target.AnimState:PushAnimation("active_loop", true)
-        end
-        StartSoundLoop(target)
-
-        channeler:AddTag("um_astral_projected")
-        channeler.um_astral_projected = true
-        channeler.um_astral_home      = inst    -- which projector sent this player
-        channeler.um_astral_target    = target  -- which receptionator they're linked to, smart right?
-
-        inst.components.teleporter:Target(target)
-
-        if channeler.components.sanity ~= nil then
-            channeler.components.sanity.externalmodifiers:SetModifier(
-                "um_astral_projector",
-                -TUNING.DAPPERNESS_SUPERHUGE
-            )
-        end
-
-        channeler.sg:GoToState("enterastralportal", { teleporter = inst })
+    -- always play animation regardless of whether projection proceeds
+    if not inst.AnimState:IsCurrentAnimation("active_loop") then
+        inst.AnimState:PlayAnimation("active_pre")
+        inst.AnimState:PushAnimation("active_loop", true)
     end
+    StartSoundLoop(inst)
+
+    if target == nil then return end
+    if channeler.um_astral_projected then return end
+
+    if not target.AnimState:IsCurrentAnimation("active_loop") then
+        target.AnimState:PlayAnimation("active_pre")
+        target.AnimState:PushAnimation("active_loop", true)
+    end
+    StartSoundLoop(target)
+
+    channeler:AddTag("um_astral_projected")
+    channeler.um_astral_projected = true
+    channeler.um_astral_home      = inst    -- which projector sent this player
+    channeler.um_astral_target    = target  -- which receptionator they're linked to, smart right?
+
+    inst.components.teleporter:Target(target)
+
+    if channeler.components.sanity ~= nil then
+        channeler.components.sanity.externalmodifiers:SetModifier(
+            "um_astral_projector",
+            -TUNING.DAPPERNESS_SUPERHUGE
+        )
+    end
+
+    channeler.sg:GoToState("enterastralportal", { teleporter = inst })
 end
 
 -- triggers when the player stops channeling before the teleport completes (they walk away or sum)
@@ -299,7 +295,7 @@ local function OnStartTeleporting(inst, doer)
     if not doer:HasTag("player") then return end
 
     local target = FindNearestTarget(inst)
-    local minions = doer.components.leader and doer.components.leader.followers
+    local minions = doer.components.leader and doer.components.leader:GetFollowersByTag("_health")
 
     for i, v in ipairs(minions) do
         v.AnimState:SetErosionParams(-0.5, -0.2, -1.0)
@@ -516,54 +512,50 @@ end
 -- func for when a projected player channels the receptionator to return.
 -- animation plays unconditionally, teleport only proceeds if this is the correct receptionator
 local function OnStartChanneling_Target(inst, channeler)
-    if (channeler.components.rider and channeler.components.rider:IsRiding()) then
-        channeler.components.talker:Say(GetActionFailString(channeler, "GENERIC")) --"Broke."
-    else
-        local home = channeler.um_astral_home
+    local home = channeler.um_astral_home
 
-        -- always animate, the modmain STARTCHANNELING override handles blocking wrong receptionators
-        if not inst.AnimState:IsCurrentAnimation("active_loop") then
-            inst.AnimState:PlayAnimation("active_pre")
-            inst.AnimState:PushAnimation("active_loop", true)
-        end
-        StartSoundLoop(inst)
-
-        if home == nil or not home:IsValid() then return end
-        if not channeler.um_astral_projected then return end
-        if channeler.um_astral_target ~= inst then return end
-
-        -- store home on the receptionator for use during the return trip, since we're about to clear it from the player, fooshizzle
-        inst.active_home = home
-
-        channeler:RemoveTag("um_astral_projected")
-        channeler.um_astral_projected = false
-        channeler.um_astral_home      = nil
-        channeler.um_astral_target    = nil
-
-        inst.components.teleporter:Target(home)
-
-        if channeler.components.sanity ~= nil then
-            channeler.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
-        end
-
-        if channeler.um_astral_projected_returntask ~= nil then
-            channeler.um_astral_projected_returntask:Cancel()
-            channeler.um_astral_projected_returntask = nil
-        end
-
-        if channeler.um_astral_deactivated_fn ~= nil then
-            channeler:RemoveEventCallback("playerdeactivated", channeler.um_astral_deactivated_fn)
-            channeler:RemoveEventCallback("onremove", channeler.um_astral_deactivated_fn)
-            channeler.um_astral_deactivated_fn = nil
-        end
-
-        if channeler.um_astral_death_fn ~= nil then
-            channeler:RemoveEventCallback("death", channeler.um_astral_death_fn)
-            channeler.um_astral_death_fn = nil
-        end
-
-        channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
+    -- always animate, the modmain STARTCHANNELING override handles blocking wrong receptionators
+    if not inst.AnimState:IsCurrentAnimation("active_loop") then
+        inst.AnimState:PlayAnimation("active_pre")
+        inst.AnimState:PushAnimation("active_loop", true)
     end
+    StartSoundLoop(inst)
+
+    if home == nil or not home:IsValid() then return end
+    if not channeler.um_astral_projected then return end
+    if channeler.um_astral_target ~= inst then return end
+
+    -- store home on the receptionator for use during the return trip, since we're about to clear it from the player, fooshizzle
+    inst.active_home = home
+
+    channeler:RemoveTag("um_astral_projected")
+    channeler.um_astral_projected = false
+    channeler.um_astral_home      = nil
+    channeler.um_astral_target    = nil
+
+    inst.components.teleporter:Target(home)
+
+    if channeler.components.sanity ~= nil then
+        channeler.components.sanity.externalmodifiers:RemoveModifier("um_astral_projector")
+    end
+
+    if channeler.um_astral_projected_returntask ~= nil then
+        channeler.um_astral_projected_returntask:Cancel()
+        channeler.um_astral_projected_returntask = nil
+    end
+
+    if channeler.um_astral_deactivated_fn ~= nil then
+        channeler:RemoveEventCallback("playerdeactivated", channeler.um_astral_deactivated_fn)
+        channeler:RemoveEventCallback("onremove", channeler.um_astral_deactivated_fn)
+        channeler.um_astral_deactivated_fn = nil
+    end
+
+    if channeler.um_astral_death_fn ~= nil then
+        channeler:RemoveEventCallback("death", channeler.um_astral_death_fn)
+        channeler.um_astral_death_fn = nil
+    end
+
+    channeler.sg:GoToState("enterastralportal_nofx", { teleporter = inst })
 end
 
 -- when the player stops channeling the receptionator before completing the return
@@ -621,7 +613,7 @@ local function OnStartTeleporting_Target(inst, doer)
     end
 
     if not doer:HasTag("player") then return end
-    local minions = doer.components.leader and doer.components.leader.followers
+    local minions = doer.components.leader and doer.components.leader:GetFollowersByTag("_health")
 
     for i, v in ipairs(minions) do
         v.AnimState:SetErosionParams(0, 0, 0)
