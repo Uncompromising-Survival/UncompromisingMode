@@ -1225,7 +1225,6 @@ Assets = {
     --Archives UM stuff
     Asset("ANIM", "anim/um_archives_projectinator.zip"),
     Asset("ANIM", "anim/um_archives_receptionator.zip"),
-    Asset("ANIM", "anim/um_lunar_spark.zip"),
 
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
