@@ -14,12 +14,12 @@ AddTask("MagmaCaves", { -- Branches in several ways, fumarole, atrium pillar, fi
 		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER1},
 		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER2},
 		level_set_piece_blocker = true,
-		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves"},
+		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves","vipers_only"},
 		room_choices={
-			["GloomyMagma"] = 2, -- WORMS and Fissures
+			["GloomyMagma"] = 1, -- WORMS and Fissures
 			["FossilMagma"] = 3, -- Bones and Isopods		
 			["ShroomyMagma"] = 2, -- Fissure and Shrooms
-			["GrassMagma"] = 3, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
+			["GrassMagma"] = 2, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
 		},
 		entrance_room = "GrassMagmaCliffs", -- Pyre Nettle Thicket
 		background_room="BGMagma",
@@ -29,13 +29,17 @@ AddTask("MagmaCaves", { -- Branches in several ways, fumarole, atrium pillar, fi
 
 AddTask("MagmaSacred", { -- Dead End
 		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER2},
-		keys_given={},
+		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER3},
 		level_set_piece_blocker = true,
-		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves"},
+		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves","vipers_only"},
 		room_choices={
+			["ShroomyMagma"] = 2, -- Fissure and Shrooms
 			["GemForge1"] = 1, -- Gemology Forge
+			["GrassMagma"] = 1, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
+			["GloomyMagma"] = 1, -- WORMS and Fissures
+			
 		},
-		entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket
+		--entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket
 		background_room="FossilMagma",
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
@@ -45,7 +49,7 @@ AddTask("MagmaCavesEntrance", {
 		locks={LOCKS.MAGMA_CAVES},
 		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER1},
 		level_set_piece_blocker = true,
-		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves"},
+		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves","vipers_only"},
 		room_choices={
 			["BGMagma"] = 2,	
 			["MagmaStairs"] = 1,
@@ -57,8 +61,13 @@ AddTask("MagmaCavesEntrance", {
 })
 
 AddTaskPreInit("CentipedeCaveTask", function(task)
-	task.locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER2}
+	task.locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER3}
 	task.entrance_room = "MagmaRole"
+	if task.room_tags then
+		table.insert(task.room_tags,"vipers_only")
+	else
+		task.room_tags = {"vipers_only"}
+	end
 end)
 
 local Layouts = GLOBAL.require("map/layouts").Layouts
@@ -71,9 +80,9 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	end	
 	if tasksetdata.required_prefabs then
 		table.insert(tasksetdata.required_prefabs, "cave_exit_magmabiome")
-		table.insert(tasksetdata.required_prefabs, "um_gemologyforge_umss")
+		table.insert(tasksetdata.required_prefabs, "um_gemologyforge")
 	else
-		tasksetdata.required_prefabs = {"cave_exit_magmabiome","um_gemologyforge_umss"}
+		tasksetdata.required_prefabs = {"cave_exit_magmabiome","um_gemologyforge"}
 	end
 	
 	-- Introduce new magma caves tasks

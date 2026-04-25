@@ -228,28 +228,34 @@ AddRoom("Shroomy", {
     value = WORLD_TILES.UM_MAGMA,
 	random_node_entrance_weight = 0,
     contents =  {
-        distributepercent = .5,
+        distributepercent = .3,
         distributeprefabs=
         {
 			magmarock1 = 0.1,
 			mushtree_shadow = 0.9,
 			cave_fern_withered = 0.05,
         },
+		countprefabs = 
+		{
+			viperfruit_plant = 1,
+		}
     }
 })
 
 AddRoom("GemForge1", {
     colour={r=0.3,g=0.2,b=0.1,a=0.3},
-    value = WORLD_TILES.UM_MAGMA,
+    value = WORLD_TILES.UM_MAGMA_MIX,
     contents =  {
-        distributepercent = .08,
+        distributepercent = .4,
         distributeprefabs=
         {
-			lava_pond_cave = 0.05,
 			magmarock1 = 0.1,
+			mushtree_shadow = 0.40,
+            pyrethicket_builder = 0.45,
+            viperfruit_plant = 0.05,
 			
         },
-		countprefabs = {um_gemologyforge_umss = 1},
+		countstaticlayouts={["gemforge1"]=1},
     }
 })
 

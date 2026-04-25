@@ -34,3 +34,11 @@ AddTaskPreInit("For a nice walk", function(task)
 	task.room_choices["LivingDeepForest"] = 1
 	task.room_choices["DeepForest"] = function() return math.random(GLOBAL.SIZE_VARIATION) end
 end)
+
+AddTaskSetPreInitAny(function(tasksetdata) -- Require the LivingTree
+    if tasksetdata.location ~= "forest" then
+        return
+    end
+	
+    table.insert(tasksetdata.required_prefabs, "livingtree")
+end)
