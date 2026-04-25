@@ -83,14 +83,23 @@ end
 local function retargetfn(inst)
     --Don't search for targets when you're luring. Targets will come to you.
     return not inst.sg:HasStateTag("lure")
-        and FindEntity(
+        and (FindEntity(
                 inst,
                 TUNING.WORM_TARGET_DIST,
                 IsAlive,
                 { "_combat", "_health" }, -- see entityscript.lua
-                { "prey", "worm", "INLIMBO" },
+                { "prey", "worm", "INLIMBO","tentacle" },
+                { "character", "monster", "animal" }
+            ) or
+            FindEntity(
+                inst,
+                TUNING.WORM_TARGET_DIST/4,
+                IsAlive,
+                { "_combat", "_health" }, -- see entityscript.lua
+                { "prey", "worm", "INLIMBO"},
                 { "character", "monster", "animal" }
             )
+        )
         or nil
 end
 
