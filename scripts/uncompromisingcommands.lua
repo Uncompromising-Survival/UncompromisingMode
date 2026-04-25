@@ -46,7 +46,7 @@ function d_um_bosstimers()
 			end				
 		end
 	else
-		print("c_um_debug_bosstimers only works as the host")
+		print("d_um_debug_bosstimers only works as the host")
 	end
 end
 
