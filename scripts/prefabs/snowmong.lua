@@ -134,7 +134,7 @@ local function fn(Sim)
 	inst.components.locomotor.walkspeed = 2
 
 	inst:AddComponent("health")
-	inst.components.health:SetMaxHealth(350)
+	inst.components.health:SetMaxHealth(250) -- From 350
 	inst.components.health.murdersound = "dontstarve/rabbit/scream_short"
 	inst.components.health.fire_damage_scale = 0
 

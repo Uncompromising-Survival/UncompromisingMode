@@ -24,9 +24,11 @@ local function TrySpawnCocoon(x, z, type)
         #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
-        if type ~= nil then
+        if type ~= nil and COCOON_DEFS.DEFAULT[type] then -- if cocoon nil, remove
             cocoon.cocoon_creature = type
             cocoon.cocoon_data = COCOON_DEFS.DEFAULT[type]
+		else
+			cocoon:Remove()
         end
     else
         TrySpawnCocoon(x, z, type)
@@ -44,7 +46,8 @@ local function SpawnCocoon(inst)
     TrySpawnCocoon(x, z, "krampus")
     if not IsIslandWorld() then
         TrySpawnCocoon(x, z, "walrus")
-        TrySpawnCocoon(x, z, "grassgator")
+        TrySpawnCocoon(x, z, "leif_sparse")
+		TrySpawnCocoon(x, z, "otter")
     end
 end
 

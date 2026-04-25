@@ -220,14 +220,14 @@ env.AddStategraphPostInit("pig", function(inst)
             timeline =
             {
                 TimeEvent(12 * FRAMES, function(inst)
-                    inst.components.combat:DoAttack()
+					inst.components.combat:DoAttack(nil, nil, nil, nil, 2) -- 2x instance mult
                     inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
                 end),
             },
 
             events =
             {
-                EventHandler("animover", function(inst) inst.sg:GoToState("attack") end),
+                EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
             },
         }
     }

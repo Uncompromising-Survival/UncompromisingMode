@@ -13,7 +13,7 @@ local function Populate(inst, tile, plant, thickness)
         for j = -15, 15, 0.5 do
             local to_spawn
             if plant == "um_pyre_nettles_stage_" then -- There is variance for pyre nettles
-                to_spawn = plant .. math.random(1, 5)
+                to_spawn = plant .. math.random(2, 5)
             else
                 to_spawn = plant
             end

@@ -30,7 +30,7 @@ local function OnHitFyre(inst, attacker, target)
                 end
             end
             local workable = v.components.workable
-            if workable then workable:WorkedBy(attacker, ACTIONS_TO_WORK[workable.action] or 3) end
+            if workable and not v.components.health then workable:WorkedBy(attacker, ACTIONS_TO_WORK[workable.action] or 3) end
         end
     end
     inst:Remove()

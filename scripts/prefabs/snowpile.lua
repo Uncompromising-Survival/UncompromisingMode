@@ -338,23 +338,7 @@ local function makebarrenfn(inst) inst:Remove() end
 
 local function on_anim_over(inst)
     if inst.components.workable ~= nil then
-        if inst.components.workable.workleft ~= 3 then
-            inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
-        else
-            if math.random() < 0.95 or inst.mongproof then
-                inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
-            else
-                if math.random() > 0.33 then
-                    inst.AnimState:PushAnimation('teeth')
-                else
-                    if math.random() > 0.5 then
-                        inst.AnimState:PushAnimation('eyes')
-                    else
-                        inst.AnimState:PushAnimation('teyes')
-                    end
-                end
-            end
-        end
+        inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
     end
 end
 

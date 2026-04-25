@@ -32,13 +32,13 @@ SetSharedLootTable('snaildrake_slime',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakebucket', 0.75},
+    {'snaildrakebucket', 0.5},
 })
 SetSharedLootTable('snaildrake_magma',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakehat', 0.75},
+    {'snaildrakehat', 0.50},
 })
 
 local snaildrake_brain = require("brains/snaildrakebrain")

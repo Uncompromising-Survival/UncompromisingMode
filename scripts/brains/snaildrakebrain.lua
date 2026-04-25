@@ -90,7 +90,7 @@ function SnaildrakeBrain:OnStart()
     local root = PriorityNode(
     {
         UseShield(self.inst, DAMAGE_UNTIL_SHIELD, SHIELD_TIME, AVOID_PROJECTILE_ATTACKS, HIDE_WHEN_SCARED, {dontshieldforfire = true}),
-        BrainCommon.PanicTrigger(self.inst),
+        --BrainCommon.PanicTrigger(self.inst),
         BrainCommon.ElectricFencePanicTrigger(self.inst),
         WhileNode(function()
             return ShouldUseRangedAttack(self)

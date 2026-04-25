@@ -47,7 +47,9 @@ local function GetRock(inst, rock)
     inst.favoriterock = rock
     inst.myrock = SpawnPrefab(rock)
     inst.myrock:Hide()
-    inst.myrock.AnimState:SetBuild(rock ~= "rock_moon" and rock.."_nobottom" or "rock7_nobottom")
+    if inst.myrock:HasTag("boulder") then
+        inst.myrock.AnimState:SetBuild(rock ~= "rock_moon" and rock.."_nobottom" or "rock7_nobottom")
+    end
     RemovePhysicsColliders(inst.myrock)
     --inst.myrock.Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst.myrock.crab = inst
@@ -174,7 +176,7 @@ local function SpawnHole(inst)
     local hole = SpawnPrefab("boulder_crab_hole")
     hole.Transform:SetPosition(inst.Transform:GetWorldPosition())
     hole.favoriterock = inst.favoriterock
-    local timetilgrow = (8 * 60) * 8 -- 8 days standard
+    local timetilgrow = (8 * 60) * 6 -- 8 days standard
     hole.components.timer:StartTimer("regenrock", timetilgrow)
     inst:Remove()
 end

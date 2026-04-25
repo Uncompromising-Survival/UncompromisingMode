@@ -44,7 +44,7 @@ local function OnDropped(inst)
 end
 
 local function retargetfn(inst)
-    local dist = 3
+    local dist = 12
     local notags = { "FX", "NOCLICK", "INLIMBO", "wall", "aphid", "structure", "aquatic", "smallcreature" }
     return FindEntity(inst, dist, function(guy)
         return inst.components.combat:CanTarget(guy)
@@ -80,6 +80,13 @@ local function OnWorked(inst, worker)
 
         worker.components.inventory:GiveItem(inst, nil, inst:GetPosition())
     end
+end
+
+local function OnEat(inst)
+    inst.full_belly = true
+    inst:DoTaskInTime(30,function(inst)
+        inst.full_belly = nil
+    end)
 end
 
 local function fn()
@@ -122,7 +129,7 @@ local function fn()
     inst.components.locomotor:SetSlowMultiplier(1)
     inst.components.locomotor:SetTriggersCreep(false)
     inst.components.locomotor.pathcaps = { ignorecreep = true }
-    inst.components.locomotor.walkspeed = 3
+    inst.components.locomotor.walkspeed = 6
 
     inst:AddComponent("inventory")
 
@@ -165,6 +172,7 @@ local function fn()
     inst.components.eater:SetDiet({ FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE },
     { FOODGROUP.OMNI, FOODTYPE.WOOD, FOODTYPE.SEEDS, FOODTYPE.ROUGHAGE })
 
+    inst.components.eater.oneatfn = OnEat
 
     inst:SetStateGraph("SGaphid")
     inst:SetBrain(brain)

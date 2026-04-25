@@ -18,7 +18,7 @@ local function SimpleWander(inst)
 	if not inst:HasTag("BUSYSMOLDERSPORE") then
 		inst.randdir = math.random(1, 359)
 		inst:DoPeriodicTask(10*FRAMES,function(inst)
-			local ent = FindEntity(inst,16,nil,{"_health"},dont_target)
+			local ent = FindEntity(inst,8,nil,{"_health"},dont_target)
 			if ent then
 				inst:ForceFacePoint(ent:GetPosition())
 			else
