@@ -203,7 +203,9 @@ env.AddComponentPostInit("combat", function(self)
                 end)
             end
         end
-
+		if self.inst:HasTag("agony_gas") then
+			damage = damage * (self.inst:HasTag("EPIC") and 1.25 or 1.5)
+		end
         if weapon and weapon.components.gem_enchantable then
             local citrine = weapon.components.gem_enchantable.enchants["um_gemologyorangegem2"]
 
