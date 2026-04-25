@@ -47,7 +47,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         inst.states[state].onenter = function(inst, pushanim, ...)
             _onenter(inst, pushanim, ...)
             local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            local comfy_bonus = tool.structurebonus --TODO: port this change to the onupdatefn of the new gem defs
+            local comfy_bonus = tool and tool.structurebonus --TODO: port this change to the onupdatefn of the new gem defs
             if not (inst.components.rider and inst.components.rider:IsRiding()) and comfy_bonus then
                 comfy_bonus = comfy_bonus + 1
                 inst.AnimState:SetDeltaTimeMultiplier(comfy_bonus)
