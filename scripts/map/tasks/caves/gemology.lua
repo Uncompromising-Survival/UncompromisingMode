@@ -40,8 +40,52 @@ AddTaskPreInit("BlueForest", function(task)
     }
 end)
 
+--AXE Makeover the ruins entrance, firstly get rid of sparse optional tasks
+AddTaskSetPreInitAny(function(tasksetdata)
+	if tasksetdata.location ~= "caves" then
+		return
+	end
 
--- Fungal Noise Forest [[ They are optional tasks, and need to be adjusted a different way, AddTaskPreInit will not work.
+    --AXE Guarantee that the ruins will be as branched as possible...
+	for i,task in ipairs(tasksetdata.optionaltasks) do
+		if task == "Residential2" then
+			table.remove(tasksetdata.optionaltasks,i)
+		end
+	end	
+	for i,task in ipairs(tasksetdata.optionaltasks) do
+		if task == "Residential3" then
+			table.remove(tasksetdata.optionaltasks,i)
+		end
+	end
+    table.insert(tasks,"Residential2")
+end)
+
+
+
+AddTaskPreInit("LichenLand", function(task)
+    task.room_choices = {
+        ["LichenLandMONKEY"] = 8,
+        ["LichenLandHub"] = 1,
+    }
+    --task.hub_room = "LichenLandHub"
+    task.entrance_room = "LichenLand"
+end)
+
+local residentials = {"","2","3"} --AXE Note that the first Residential biome isn't called Residential1.
+for i,v in ipairs(residentials) do
+	AddTaskPreInit("Residential"..v, function(task)
+		task.room_choices["Vacant"] = 5 -- AXE Constistently a lot of monkeys...
+	end)
+end
+
+local add_rocks_rooms = {"LichenLand","Vacant"}
+for i,v in ipairs(add_rocks_rooms) do
+    AddRoomPreInit(v, function(room) -- red\
+        room.contents.distributeprefabs["um_slimestone_rock_gemless"] = 0.08
+    end)
+end
+
+-- Fungal Noise Forest 
 AddTask("FungalNoiseForest_Petrified",{
     locks={ LOCKS.CAVE, LOCKS.TIER3, LOCKS.ROCKY },
     keys_given={ KEYS.CAVE, KEYS.TIER4, KEYS.ENTRANCE_OUTER },
@@ -82,7 +126,11 @@ local batrooms = {"BatCave","BattyCave","FernyBatCave","BGBatCaveRoom"}
 
 for i,v in ipairs(batrooms) do
 	AddRoomPreInit(v, function(room) -- red
-		room.contents.countprefabs = {um_guano_rock = math.random(1,4)} -- normally doesn't have countprefabs in this room
+		room.contents.countprefabs = {
+			um_guano_rock_gemless = function() return math.random(3,6) end,
+			um_guano_rock = function() return math.random(1,2) end,
+			um_guano_rain_node = 1,
+		} -- normally doesn't have countprefabs in this room
 	end)
 end
 
@@ -96,16 +144,48 @@ for i,v in ipairs(rockyrooms) do
 end
 
 
-AddTaskSetPreInitAny(function(tasksetdata)
-	if tasksetdata.location == "forest" then
-		return
+
+local function shuffle(arr)
+	for i = 1, #arr - 1 do
+		local j = math.random(i, #arr)
+		arr[i], arr[j] = arr[j], arr[i]
 	end
-	for i,task in ipairs(tasksetdata.optionaltasks) do
-		if task == "FungalNoiseForest" then
-			tasksetdata.optionaltasks[i] = "FungalNoiseForest_Petrified"
-		end
-		if task == "FungalNoiseMeadow" then
-			tasksetdata.optionaltasks[i] = "FungalNoiseMeadow_Petrified"
-		end
-	end
-end)
+	return arr
+end
+
+local entrance_tasks = {}
+
+for i = 1,10 do
+	table.insert(entrance_tasks,i)
+end
+
+entrance_tasks = shuffle(entrance_tasks)
+
+for i = 1,math.random(3,5) do
+	AddTaskPreInit("CaveExitTask"..entrance_tasks[i], function(task)
+		task.room_choices={
+            ["CaveExitRoom"] = 1,
+            ["AnimalHoles"] = 1,
+        } --AXE redefining room_choices removes the old room combination in favor of the one that we add here to keep from adding a ton of new rooms.
+	end)
+end
+
+local startrooms = {
+    "RabbitArea",
+    "RabbitTown",
+    "RabbitSinkhole",
+    "SpiderIncursion",
+    "SinkholeForest",
+    "SinkholeCopses",
+    "SinkholeOasis",
+    "GrasslandSinkhole",
+    "GreenMushSinkhole",
+    "GreenMushRabbits",
+}
+
+for i,v in ipairs(startrooms) do
+	AddRoomPreInit(v, function(room)
+		room.contents.distributeprefabs.um_sinkmound_rock = 0.01
+		room.contents.distributeprefabs.um_sinkmound_rock_gemless = 0.25
+	end)
+end

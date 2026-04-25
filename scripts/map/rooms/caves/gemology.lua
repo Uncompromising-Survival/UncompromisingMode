@@ -42,7 +42,7 @@ AddRoom("RedSpiderForest_Petrified", {
             stalagmite_med = 0.4,
             stalagmite_low = 0.1,
             pillar_cave = 0.2,
-            spiderhole = 3,
+            spiderhole = 2,
 
             slurper = 0.001,
         },
@@ -211,6 +211,69 @@ AddRoom("FungusNoiseMeadow_Petrified", {
     }
 })
 
+AddRoom("AnimalHoles", {
+    colour={r=0.1,g=0.8,b=0.2,a=0.9},
+    value = WORLD_TILES.SINKHOLE,
+    tags = {"Hutch_Fishbowl"},
+    contents =  {
+		countprefabs = {
+			um_sinkmound_rock_gemless = function() return math.random(3,5) end,
+			um_sinkmound_rock = function() return math.random(0,2) end,
+		},
+        distributepercent = .1,
+        distributeprefabs=
+        {
+            grass = 2,
+            cavelight = 0.6,
+        },
+    }
+})
 
+AddRoom("LichenLandMONKEY", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.MUD,
+    tags = {"Hutch_Fishbowl"},
+    random_node_entrance_weight = 0,
+    contents =  {
+        distributepercent = 0.35,
+        distributeprefabs=
+        {
+            lichen = 1.0,
+            monkeybarrel_spawner = 0.2,
+            cave_fern = 0.5,
+            pillar_algae = 0.05,
+            slurper_spawner = 0.05,
+            fissure_lower = 0.05,
+            um_slimestone_rock_gemless = 0.2,
+            um_slimestone_rock = 0.05,
+        },
+		countprefabs = {
+			um_slimestone_respawner = function() return math.random(2,3) end,
+		},
+    }
+})
 
+AddRoom("LichenLandHub", {
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.MUD,
+    tags = {"Hutch_Fishbowl"},
+    random_node_entrance_weight = 0,
+    contents =  {
+        distributepercent = 0.35,
+        distributeprefabs=
+        {
+            lichen = 1.0,
+            monkeybarrel_spawner = 0.2,
+            cave_fern = 0.5,
+            pillar_algae = 0.05,
+            slurper_spawner = 0.05,
+            fissure_lower = 0.05,
+            um_slimestone_rock_gemless = 0.2,
+            um_slimestone_rock = 0.05,
+        },
+		countprefabs = {
+			um_slimestone_respawner = function() return math.random(2,3) end,
+		},
+    }
+})
 
