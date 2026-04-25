@@ -1,6 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/fern_fox.zip"),
+    Asset("ANIM", "anim/um_fox_den.zip"),	
 }
 
 
@@ -86,7 +87,7 @@ local function fn()
 
     inst:AddTag("animal")
 	inst:AddTag("plantkin")
-
+    inst:AddTag("smallcreature")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -152,9 +153,16 @@ local function fn()
     return inst
 end
 
--- local function canspawn(inst)
-    -- return inst:IsAsleep() -- no art, only spawn when players aren't near
--- end
+local function dig_up(inst)
+	inst.components.lootdropper:SpawnLootPrefab("rocks")
+	inst.components.lootdropper:SpawnLootPrefab("um_moss")
+	for i = 1,2 do
+		inst.components.lootdropper:SpawnLootPrefab("rocks")
+		inst.components.lootdropper:SpawnLootPrefab("twigs")
+	end
+	inst:Remove()
+end
+
 
 local function fnden()
     local inst = CreateEntity()
@@ -165,12 +173,12 @@ local function fnden()
     --inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    --MakeSmallObstaclePhysics(inst, .5)
+    MakeSmallObstaclePhysics(inst, .5)
 
     --inst.MiniMapEntity:SetIcon("catcoonden.png")
 
-    inst.AnimState:SetBank("catcoon_den")
-    inst.AnimState:SetBuild("catcoon_den")
+    inst.AnimState:SetBank("um_fox_den")
+    inst.AnimState:SetBuild("um_fox_den")
     inst.AnimState:PlayAnimation("idle")
 	
 	
@@ -190,10 +198,14 @@ local function fnden()
     inst.components.childspawner:SetRegenPeriod(480*3) -- 3 days
     inst.components.childspawner:SetSpawnPeriod(TUNING.CATCOONDEN_RELEASE_TIME)
     inst.components.childspawner:SetMaxChildren(TUNING.CATCOONDEN_MAXCHILDREN)
-    --inst.components.childspawner.canspawnfn = canspawn
     inst.components.childspawner:StartSpawning()
 
     ---------------------
+    inst:AddComponent("lootdropper")
+    inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.DIG)
+    inst.components.workable:SetOnFinishCallback(dig_up)
+    inst.components.workable:SetWorkLeft(1)
 	
 
     MakeMediumBurnable(inst)
@@ -209,7 +221,7 @@ local function fnden()
 
     MakeHauntableIgnite(inst)
 
-	inst:Hide()
+	
     return inst
 end
 
