@@ -195,7 +195,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey! what is going on with you?"
 DESCRIBE.MARSH_GRASS = "Shushhshhh, be quiet..."
 DESCRIBE.CURSED_ANTLER = "Bash heads ahahaha."
-DESCRIBE.BERNIEBOX = "Box I can open with my teeth."
 DESCRIBE.HOODED_FERN = "It is green."
 DESCRIBE.HOODEDWIDOW = "Ah! Who invited you!"
 DESCRIBE.GIANT_TREE = "I should climb up it, and eat the baby birds."
@@ -208,14 +207,7 @@ DESCRIBE.SILKEN_BUNDLE = "I bet I would say something about liking to hoard, but
 
 DESCRIBE.WEBBEDCREATURE = ""
 ANNOUNCE.WEBBEDCREATURE = "I keep getting stuck when I try to rip it up!"
-DESCRIBE.SNAPDRAGON_BUDDY = "It looks hungry, I am hungry too."
-DESCRIBE.SNAPDRAGON = "Some wild root beast."
-DESCRIBE.SNAPPLANT = "The connection they have is very snappy."
-DESCRIBE.WHISPERPOD = "Huh? I do not hear any whispering coming from this lump."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Huh, do something.",
-    GROWING = "The root is coming!"
-}
+
 DESCRIBE.FRUITBAT = "I hope you do not explode like the ground ones."
 DESCRIBE.PITCHERPLANT = "Must climb to it I can smell the sweetness."
 DESCRIBE.APHID = "Get out of here, this is Rat-land now."
@@ -278,14 +270,6 @@ DESCRIBE.KLAUS_AMULET = "Like the gem necklace, and less pretty."
 DESCRIBE.CRABCLAW = "Big whacker club."
 DESCRIBE.HAT_RATMASK = "It is how Humans say, flattering."
 
-DESCRIBE.ORANGE_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.GREEN_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.RED_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.PINK_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.YELLOW_VOMIT = "Slime paste. Very bitter tasting."
-DESCRIBE.PURPLE_VOMIT = "Slime paste. Very sour tasting."
-DESCRIBE.PALE_VOMIT = "Slime paste. Very bland tasting."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -303,13 +287,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "At least this one can SHUT UP!"
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = ""
 DESCRIBE.UM_BEAR_TRAP = "Maybe I should throw a rock at it."

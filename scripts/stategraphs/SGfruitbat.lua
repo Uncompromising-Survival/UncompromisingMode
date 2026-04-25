@@ -8,7 +8,7 @@ end
 
 local mine_test_tags = { "monster", "character", "animal" }
 local mine_must_tags = { "_combat" }
-local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "snapdragon" }
+local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost"}
 
 local function FxAppear(inst)
     SpawnPrefab("blueberryexplosion").Transform:SetPosition(inst.Transform:GetWorldPosition())

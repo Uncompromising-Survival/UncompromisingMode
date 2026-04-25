@@ -339,14 +339,7 @@ TUNING.DSTU = {
     TOAD_RAIN_DELAY = { min = 5, max = 10 },
     SUMMER_CAVES_TEMP_MULT = .85,
     WINTER_CAVES_TEMP_MULT = 1.25,
-    -- SNAPDRAGON FERTILIZER VALUES
-    PURPLE_VOMIT_NUTRIENTS = { 16, 16, 0 },
-    ORANGE_VOMIT_NUTRIENTS = { 0, 16, 16 },
-    YELLOW_VOMIT_NUTRIENTS = { 16, 0, 16 },
-    RED_VOMIT_NUTRIENTS = { 0, 24, 0 },
-    GREEN_VOMIT_NUTRIENTS = { 0, 0, 24 },
-    PINK_VOMIT_NUTRIENTS = { 24, 0, 0 },
-    PALE_VOMIT_NUTRIENTS = { 8, 8, 8 },
+    
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
@@ -685,8 +678,6 @@ end
 local um_naughtiness = {
     fruitbat = 4,
     woodpecker = 2,
-    snapdragon = 4,
-    snapdragon_buddy = 8, --wtf!!! doin't do that!!
 }
 for k, v in pairs(um_naughtiness) do
     GLOBAL.NAUGHTY_VALUE[k] = v

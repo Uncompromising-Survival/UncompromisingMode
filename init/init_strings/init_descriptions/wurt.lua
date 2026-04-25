@@ -177,7 +177,6 @@ DESCRIBE.TRAPDOORGRASS = "Big grass."
 DESCRIBE.LUREPLAGUE_RAT = "Glorp! Something wrong with this squeaker!"
 DESCRIBE.MARSH_GRASS = "Cute fishies inside?"
 DESCRIBE.CURSED_ANTLER = "Glurph, is heavy..."
-DESCRIBE.BERNIEBOX = "Fun box... what inside?"
 DESCRIBE.HOODED_FERN = "Taste okay."
 DESCRIBE.HOODEDWIDOW = "Glorp!! Biggest spider ever!"
 DESCRIBE.GIANT_TREE = "It a really big tree!"
@@ -190,14 +189,7 @@ DESCRIBE.SILKEN_BUNDLE = "Sticky stuff keep for later."
 
 DESCRIBE.WEBBEDCREATURE = "Belongs to Spiderfolk, florp."
 ANNOUNCE.WEBBEDCREATURE = "Can't break! Flurgh! How Spiderfolk break?"
-DESCRIBE.SNAPDRAGON_BUDDY = "Plant want to eat more plant?"
-DESCRIBE.SNAPDRAGON = "Seems friendly, florp."
-DESCRIBE.SNAPPLANT = "Big plant likes that ugly flower."
-DESCRIBE.WHISPERPOD = "Maybe put in dirt."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need some seeds?",
-    GROWING = "Ready soon, flort?"
-}
+
 DESCRIBE.FRUITBAT = "Glorp! Fruit alive?!"
 DESCRIBE.PITCHERPLANT = "Gluuurgh... can't reach."
 DESCRIBE.APHID = "It a bug, florp."
@@ -247,14 +239,6 @@ DESCRIBE.KLAUS_AMULET = "Brr... It cold!"
 DESCRIBE.CRABCLAW = "Big clampy claw!"
 DESCRIBE.HAT_RATMASK = "So many smells!"
 
-DESCRIBE.ORANGE_VOMIT = "Flurgh..."
-DESCRIBE.GREEN_VOMIT = "Flurgh..."
-DESCRIBE.RED_VOMIT = "Flurgh..."
-DESCRIBE.PINK_VOMIT = "Flurgh..."
-DESCRIBE.YELLOW_VOMIT = "Flurgh..."
-DESCRIBE.PURPLE_VOMIT = "Flurgh..."
-DESCRIBE.PALE_VOMIT = "Flurgh..."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = "Pigfolk stole royal guard idea! Not fair!!",
@@ -274,12 +258,6 @@ DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH =
 "Flurmph, gonna make better fire sticks around better king!"
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "Impy say it help my soul..?"
 DESCRIBE.UM_BEAR_TRAP = "\"Keep looking down\"? ...Glorp! Almost stepped on it!"

@@ -183,7 +183,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Oh botheration, what happened to you?"
 DESCRIBE.MARSH_GRASS = "I thought these things were lost to time."
 DESCRIBE.CURSED_ANTLER = "Quite the crude tool for my tastes."
-DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow." -- unused, unedited
 DESCRIBE.HOODED_FERN = "A new take on ferns."
 DESCRIBE.HOODEDWIDOW = "Botheration, she's huge!"
 DESCRIBE.GIANT_TREE =
@@ -198,14 +197,7 @@ DESCRIBE.SILKEN_BUNDLE = "Stickily kept for efficient transport."
 
 DESCRIBE.WEBBEDCREATURE = "Preserved for later, I presume."
 ANNOUNCE.WEBBEDCREATURE = "I'll need something more fitting or else I'd just be wasting my time."
-DESCRIBE.SNAPDRAGON_BUDDY = "My very own time-saver!"
-DESCRIBE.SNAPDRAGON = "I feel like you aren't from around here."
-DESCRIBE.SNAPPLANT = "How beautiful, no wonder the snapdragons are so attracted to it!"
-DESCRIBE.WHISPERPOD = "More gardening? What a bother..."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Need anything else? Some seeds, maybe?",
-    GROWING = "That's okay, take your time."
-}
+
 DESCRIBE.FRUITBAT = "A berry that had enough of being grounded."
 DESCRIBE.PITCHERPLANT = "It's out of my grasp."
 DESCRIBE.APHID =
@@ -255,14 +247,6 @@ DESCRIBE.KLAUS_AMULET = "Double time!"
 DESCRIBE.CRABCLAW = "Turns gems into power, just like it's predecessor."
 DESCRIBE.HAT_RATMASK = "Ha! A rat mask? How could I resist NOT wearing it?"
 
-DESCRIBE.ORANGE_VOMIT = "Gross!"
-DESCRIBE.GREEN_VOMIT = "Gross!"
-DESCRIBE.RED_VOMIT = "Gross!"
-DESCRIBE.PINK_VOMIT = "Gross!"
-DESCRIBE.YELLOW_VOMIT = "Gross!"
-DESCRIBE.PURPLE_VOMIT = "Gross!"
-DESCRIBE.PALE_VOMIT = "Gross!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -280,13 +264,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "Careful, it's a ticking time bomb."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It won't help me while I'm alive."
 DESCRIBE.UM_BEAR_TRAP = "I don't like being stuck in one place."

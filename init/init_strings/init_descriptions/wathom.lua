@@ -189,7 +189,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Infestation, unknown?"
 DESCRIBE.MARSH_GRASS = "Grass. Too thin, too brittle."
 DESCRIBE.CURSED_ANTLER = "Winter's King, wrath weaponized."
-DESCRIBE.BERNIEBOX = "Box."
 DESCRIBE.HOODED_FERN = "Vegetation."
 DESCRIBE.HOODEDWIDOW = "Apex Arachnid!"
 DESCRIBE.GIANT_TREE = "Curious. Tree species, not indigenous."
@@ -202,14 +201,7 @@ DESCRIBE.SILKEN_BUNDLE = "Sticky supplies, won't keep food fresh."
 
 DESCRIBE.WEBBEDCREATURE = "It wouldn't hurt to see what's inside, right?"
 ANNOUNCE.WEBBEDCREATURE = "Abnormally thick. Weaver, abnormally large?"
-DESCRIBE.SNAPDRAGON_BUDDY = "Seeking food."
-DESCRIBE.SNAPDRAGON = "Species, invasive."
-DESCRIBE.SNAPPLANT = "Plant, mammal?"
-DESCRIBE.WHISPERPOD = "Curious, self-incubating?"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Seeds required.",
-    GROWING = "Nothing needed, not now."
-}
+
 DESCRIBE.FRUITBAT = "Temperament, calm. Assumption, hunter, small game."
 DESCRIBE.PITCHERPLANT = "Functionality, uncertain."
 DESCRIBE.APHID = "Fauna, unfamiliar."
@@ -272,14 +264,6 @@ DESCRIBE.KLAUS_AMULET = "Curse of Klaus."
 DESCRIBE.CRABCLAW = "Gem magic, rudimentary."
 DESCRIBE.HAT_RATMASK = "Hiding, irrelevant."
 
-DESCRIBE.ORANGE_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.GREEN_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.RED_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.PINK_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.YELLOW_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.PURPLE_VOMIT = "Regurgitation, intentional. Why?"
-DESCRIBE.PALE_VOMIT = "Regurgitation, intentional. Why?"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -297,13 +281,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "Territorial. Sluggish, reaction speed."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "Lifeforce, connected."
 DESCRIBE.UM_BEAR_TRAP = "Alert!"

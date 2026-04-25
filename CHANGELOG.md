@@ -937,27 +937,11 @@ Opal's will increase the effects of all other gems slotted
 
 * [x] [Fight or Flight] Art redux by variant
 
---[Snapdragons, snapbuddies, and whisper pods]--
-
-* [x] [HOODED FOREST] Snapdragons can be found in a muddy area of the hooded forest. (They're actually unimplemented creatures from hamlet, at least they get a time to shine here, huh?)
-
-* [x] [HOODED FOREST] They are friendly aside from the time in summer when they become heavily carnivorous. (They're still friendly to wormwood then though)
-
-* [x] [HOODED FOREST] Snapdragons eat insects WHOLE. They are phenomenal in countering hoards of pollen mites or aphids.
-
-* [x] [HOODED FOREST] Snapdragons can be fed vegetables and will give seeds in return, if given enough they'll give you a whisper pod.
-
-* [x] [HOODED FOREST] Whisper pods are mechanisms to grow snap buddies which can give you a desired farmplot fruit or gourd. Just plant their corresponding seed in the whisper pod.
-
-* [x] [HOODED FOREST] After the whipser pod grows, it will become a snap buddy.
-
-* [x] [STALKING STUFFERS] Snapdragons can spit up unique fertilize, the values of which are determined by the crop seed planted.
-
 --[Pitcher plants and Fruit bats]--
 
 * [x] [HOODED FOREST] Pitcher plants are the homes of fruit bats, they are suspended up in the canopy.
 
-* [x] [HOODED FOREST] Fruit bats, like snapdragons, are friendly aside from summertime and are excellent at eating bugs.
+* [x] [HOODED FOREST] Fruit bats are friendly aside from summertime and are excellent at eating bugs.
 
 * [x] [HOODED FOREST] Fruit bats will produce honey at their pitcher plants at night if they eat enough bugs.
 

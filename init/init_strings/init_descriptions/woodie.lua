@@ -176,7 +176,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Not comin' for kit this time, eh?"
 DESCRIBE.MARSH_GRASS = "That's an awfully tall bush, eh?"
 DESCRIBE.CURSED_ANTLER = "This'll last us forever!"
-DESCRIBE.BERNIEBOX = "I'm not one for stuffed things."
 DESCRIBE.HOODED_FERN = "I love the outdoors."
 DESCRIBE.HOODEDWIDOW = "That ain't no normal spider."
 DESCRIBE.GIANT_TREE = "That's a real beaut."
@@ -190,14 +189,7 @@ DESCRIBE.SILKEN_BUNDLE = "There better be logs in there."
 DESCRIBE.WEBBEDCREATURE =
 "Should I really put my neck out to find out what it has?"
 ANNOUNCE.WEBBEDCREATURE = "This ain't a cocoon Luce'll be choppin'. Best to leave 'em to the spiders."
-DESCRIBE.SNAPDRAGON_BUDDY = "This one seems friendly enough."
-DESCRIBE.SNAPDRAGON = "Seems like a well endowed bunch."
-DESCRIBE.SNAPPLANT = "Ah, the beauty of nature!"
-DESCRIBE.WHISPERPOD = "It belongs in the ground, I think?"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Needs something else to grow.",
-    GROWING = "A watched plant never grows."
-}
+
 DESCRIBE.FRUITBAT = "Who taught that fruit to fly?"
 DESCRIBE.PITCHERPLANT = "It's a plant, but not the choppin' kind."
 DESCRIBE.APHID = "They like the trees too, eh?"
@@ -246,14 +238,6 @@ DESCRIBE.KLAUS_AMULET = "The chains are comin' off now!"
 DESCRIBE.CRABCLAW = "Use every part of the animal, I suppose."
 DESCRIBE.HAT_RATMASK = "Did a real fine job, eh Lucy?"
 
-DESCRIBE.ORANGE_VOMIT = "Hoo-wee..."
-DESCRIBE.GREEN_VOMIT = "Hoo-wee..."
-DESCRIBE.RED_VOMIT = "Hoo-wee..."
-DESCRIBE.PINK_VOMIT = "Hoo-wee..."
-DESCRIBE.YELLOW_VOMIT = "Hoo-wee..."
-DESCRIBE.PURPLE_VOMIT = "Hoo-wee..."
-DESCRIBE.PALE_VOMIT = "Hoo-wee..."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -272,12 +256,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED =
 "I can keep myself together if I get chopped to bits."

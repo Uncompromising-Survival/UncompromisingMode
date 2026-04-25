@@ -174,7 +174,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Look at that! It's a rat."
 DESCRIBE.MARSH_GRASS = "It's just a bush."
 DESCRIBE.CURSED_ANTLER = "I wonder where that beast got its chilling curse."
-DESCRIBE.BERNIEBOX = "Whatever could possibly be inside?"
 DESCRIBE.HOODED_FERN = "A green bush, ripe and lush."
 DESCRIBE.HOODEDWIDOW = "Methinks we'd best be on our way!"
 DESCRIBE.GIANT_TREE = "A tree of great height, that blocks out the light."
@@ -186,14 +185,6 @@ ANNOUNCE.WEBBEDCREATURE = "I can't make a tear!"
 DESCRIBE.WIDOWSGRASP = "It costed it an arm and a leg! Hyuyu!"
 DESCRIBE.SILKSACK = "A grotesque burden to be carried."
 DESCRIBE.SILKEN_BUNDLE = "A sticky surprise awaits."
-DESCRIBE.SNAPDRAGON_BUDDY = "It seems we've made a new plant friend!"
-DESCRIBE.SNAPDRAGON = "Goodness me, you're huge as can be!" -- rewrite this later. -- done
-DESCRIBE.SNAPPLANT = "They have a captive audience!"        -- rewrite this later. -- nevermind
-DESCRIBE.WHISPERPOD = "It's a tiny little baby plant!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "It has a need to feed on seeds!",
-    GROWING = "Grow big, grow tall, or not at all!"
-}
 
 DESCRIBE.PITCHERPLANT = "A bat's nest, this seems to be."
 DESCRIBE.APHID = "It hungers for the trees."
@@ -241,14 +232,6 @@ DESCRIBE.KLAUS_AMULET = "It's dark, cold. Full of despair."
 DESCRIBE.CRABCLAW = "Magic can be as intuitive as cramming gems into things."
 DESCRIBE.HAT_RATMASK = "A snout to place over your snout."
 
-DESCRIBE.ORANGE_VOMIT = "Hyuyu, gross!"
-DESCRIBE.GREEN_VOMIT = "Hyuyu, gross!"
-DESCRIBE.RED_VOMIT = "Hyuyu, gross!"
-DESCRIBE.PINK_VOMIT = "Hyuyu, gross!"
-DESCRIBE.YELLOW_VOMIT = "Hyuyu, gross!"
-DESCRIBE.PURPLE_VOMIT = "Hyuyu, gross!"
-DESCRIBE.PALE_VOMIT = "Hyuyu, gross!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -267,12 +250,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "The 'souls' in this are manmade. They're not souls at all!"
 DESCRIBE.UM_BEAR_TRAP = "A trap, left out in the open."

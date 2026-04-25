@@ -176,7 +176,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey there buddy, nice eyes!"
 DESCRIBE.MARSH_GRASS = "A bush."
 DESCRIBE.CURSED_ANTLER = "Woah, look at how big it is!"
-DESCRIBE.BERNIEBOX = "I want to open it, but it doesn't belong to us."
 DESCRIBE.HOODED_FERN = "Mossy and Leafy."
 DESCRIBE.HOODEDWIDOW = "We're a spider too!! Why are you attacking us?!"
 DESCRIBE.GIANT_TREE = "It's probably super old."
@@ -189,14 +188,7 @@ DESCRIBE.SILKEN_BUNDLE = "We wish we could do it by ourselves."
 
 DESCRIBE.WEBBEDCREATURE = "Ooh! Are our friends storing gifts for us?"
 ANNOUNCE.WEBBEDCREATURE = "We need bigger hands, from a bigger spider!"
-DESCRIBE.SNAPDRAGON_BUDDY = "Golly! We're glad they don't eat meat!"
-DESCRIBE.SNAPDRAGON = "It looks pretty!"
-DESCRIBE.SNAPPLANT = "Best buds! Get it?"
-DESCRIBE.WHISPERPOD = "Lets get you planted!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Let's try growing something in it!",
-    GROWING = "Is it done yet?"
-}
+
 DESCRIBE.FRUITBAT = "It's our favorite color!"
 DESCRIBE.PITCHERPLANT =
 "If we could climb like the other spiders we could reach it."
@@ -245,14 +237,6 @@ DESCRIBE.KLAUS_AMULET = "We've been naughty..."
 DESCRIBE.CRABCLAW = "It's so fun to swing around! Wooosh! Fwooosh!"
 DESCRIBE.HAT_RATMASK = "We love treasure hunting!"
 
-DESCRIBE.ORANGE_VOMIT = "Haha, ew."
-DESCRIBE.GREEN_VOMIT = "Haha, ew."
-DESCRIBE.RED_VOMIT = "Haha, ew."
-DESCRIBE.PINK_VOMIT = "Haha, ew."
-DESCRIBE.YELLOW_VOMIT = "Haha, ew."
-DESCRIBE.PURPLE_VOMIT = "Haha, ew."
-DESCRIBE.PALE_VOMIT = "Haha, ew."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -271,12 +255,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "Does it have room for both of us?"
 DESCRIBE.UM_BEAR_TRAP = "Eep!"

@@ -275,7 +275,6 @@ DESCRIBE.LUREPLAGUE_RAT =
 "It appears the lureplant is acting as a parasite to the rodentia kleptomanis, is it still alive?"
 DESCRIBE.MARSH_GRASS = "A nondescript bush."
 DESCRIBE.CURSED_ANTLER = "It seems to be extraordinarily durable as a weapon."
-DESCRIBE.BERNIEBOX = "Toys never came in packaging like this when I was a kid."
 DESCRIBE.HOODED_FERN = "Shade is its prefect environment for ferns to prosper."
 DESCRIBE.HOODEDWIDOW =
 "A solidary predator. It appears to be near the top of the food chain."
@@ -291,14 +290,7 @@ DESCRIBE.WEBBEDCREATURE =
 "It doesnt appear to be a nest. I assume it contains something."
 ANNOUNCE.WEBBEDCREATURE =
 "Only the spider itself can match this tensile strength."
-DESCRIBE.SNAPDRAGON_BUDDY = "Reminds me of a dionaea muscipula."
-DESCRIBE.SNAPDRAGON = "Truly a Lusus Naturae!"
-DESCRIBE.SNAPPLANT = "I believe it has formed a symbiotic relationship."
-DESCRIBE.WHISPERPOD = "Some gardening may be required."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "A host for plant growth, perhaps?",
-    GROWING = "It is not yet ready for harvest."
-}
+
 DESCRIBE.FRUITBAT = "It seems to be connected to the pitcher plant somehow."
 DESCRIBE.PITCHERPLANT = "The fruit bats can be seen going in and out of it."
 DESCRIBE.APHID = "They're infesting the Sequoioideae."
@@ -350,14 +342,6 @@ DESCRIBE.CRABCLAW =
 "The appendage has distinct engravings. For gemstones, I presume."
 DESCRIBE.HAT_RATMASK = "Amplifies the abilities of our noses."
 
-DESCRIBE.ORANGE_VOMIT = "Delightful."
-DESCRIBE.GREEN_VOMIT = "Delightful."
-DESCRIBE.RED_VOMIT = "Delightful."
-DESCRIBE.PINK_VOMIT = "Delightful."
-DESCRIBE.YELLOW_VOMIT = "Delightful."
-DESCRIBE.PURPLE_VOMIT = "Delightful."
-DESCRIBE.PALE_VOMIT = "Delightful."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -376,12 +360,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.UM_BEAR_TRAP = "A mundane trap, I best stay clear of it."
 DESCRIBE.UM_BEAR_TRAP_OLD = "A mundane trap, I best stay clear of it."

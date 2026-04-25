@@ -191,8 +191,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're kinda cute when you get over the extra eyes."
 DESCRIBE.MARSH_GRASS = "We could hide behind it, I guess?"
 DESCRIBE.CURSED_ANTLER = "A memento of a story-worthy fight!"
-DESCRIBE.BERNIEBOX =
-"That belongs to Willow, I fear what would happen if I touch it..."
 DESCRIBE.HOODED_FERN = "Leaves so big, we could use it to collect rainwater."
 DESCRIBE.HOODEDWIDOW = "Wow! That could eat anything!"
 DESCRIBE.GIANT_TREE = "A redwood tree! You can see it from miles away!"
@@ -206,14 +204,7 @@ DESCRIBE.SILKEN_BUNDLE = "Our provisions are stuck inside."
 
 DESCRIBE.WEBBEDCREATURE = "Ooh, I wonder what's in it!"
 ANNOUNCE.WEBBEDCREATURE = "How am I going to get her to unwrap this for me?"
-DESCRIBE.SNAPDRAGON_BUDDY = "Careful Woby! Those plants look hungry!"
-DESCRIBE.SNAPDRAGON = "I've never seen anything like this before!"
-DESCRIBE.SNAPPLANT = "They are really captivating!"
-DESCRIBE.WHISPERPOD = "I think it needs some soil!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "I think it needs some seeds! Got any, Woby?",
-    GROWING = "I wish plants could grow as fast as you do Woby."
-}
+
 DESCRIBE.FRUITBAT = "Maybe if we're lucky it'll turn me into a fruit!"
 DESCRIBE.PITCHERPLANT = "Is something moving in there?"
 DESCRIBE.APHID = "It's fuzzy!"
@@ -264,14 +255,6 @@ DESCRIBE.KLAUS_AMULET = "Goat power!"
 DESCRIBE.CRABCLAW = "He left his claw behind!"
 DESCRIBE.HAT_RATMASK = "Look out, here comes the Rat Man!"
 
-DESCRIBE.ORANGE_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.GREEN_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.RED_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PINK_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.YELLOW_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PURPLE_VOMIT = "Thanks for sharing your digestive juices?"
-DESCRIBE.PALE_VOMIT = "Thanks for sharing your digestive juices?"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -289,13 +272,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "Don't get too close now, Woby."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "I would still like to avoid being hurt."
 DESCRIBE.UM_BEAR_TRAP = "Normally these are meant for, uh, bears."

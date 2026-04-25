@@ -179,7 +179,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I'm not on the menu!"
 DESCRIBE.MARSH_GRASS = "It provides scenery."
 DESCRIBE.CURSED_ANTLER = "I know a thing or two about bones."
-DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow."
 DESCRIBE.HOODED_FERN = "Well, it's there."
 DESCRIBE.HOODEDWIDOW = "I don't think I'm getting any monster meat from it."
 DESCRIBE.GIANT_TREE = "What a marvel."
@@ -193,14 +192,7 @@ DESCRIBE.SILKEN_BUNDLE = "I doubt spider silk is going to keep our food for long
 DESCRIBE.WEBBEDCREATURE = "Do I really want to get my ingredients from that?"
 ANNOUNCE.WEBBEDCREATURE =
 "I can't pierce it. My hands are different than a spider's."
-DESCRIBE.SNAPDRAGON_BUDDY = "Its hunger calls for me!"
-DESCRIBE.SNAPDRAGON = "Goodness, you're large."
-DESCRIBE.SNAPPLANT = "A lively plant!"
-DESCRIBE.WHISPERPOD = "Lets get you some soil!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "Crop seeds could be handy.",
-    GROWING = "That is it, just a little more..."
-}
+
 DESCRIBE.FRUITBAT = "I actually don't mind this one."
 DESCRIBE.PITCHERPLANT = "I wonder if it has any dew inside?"
 DESCRIBE.APHID = "A horrible pest."
@@ -249,14 +241,6 @@ DESCRIBE.KLAUS_AMULET = "The steel is chilling."
 DESCRIBE.CRABCLAW = "Theres not a whole lot of meat on this claw."
 DESCRIBE.HAT_RATMASK = "Goodness gracious, what an awful smell!"
 
-DESCRIBE.ORANGE_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.GREEN_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.RED_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PINK_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.YELLOW_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PURPLE_VOMIT = "The last thing a chef wishes to see!"
-DESCRIBE.PALE_VOMIT = "The last thing a chef wishes to see!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -274,13 +258,6 @@ DESCRIBE.UM_PAWN_NIGHTMARE = "I'll watch my step."
 DESCRIBE.CAVE_ENTRANCE_SUNKDECID = DESCRIBE.CAVE_ENTRANCE
 DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
-
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It stirs my very soul. Like a stew."
 DESCRIBE.UM_BEAR_TRAP = "I'll keep my distance."

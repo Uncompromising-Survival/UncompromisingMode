@@ -183,7 +183,6 @@ DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.MARSH_GRASS = "Will it burn?"
 DESCRIBE.CURSED_ANTLER = "It will never leave me, unless I leave it behind."
-DESCRIBE.BERNIEBOX = "I like to keep the packaging."
 DESCRIBE.HOODED_FERN = "I don't really see why I shouldn't burn it?"
 DESCRIBE.HOODEDWIDOW = "I am NOT getting near that!"
 DESCRIBE.GIANT_TREE = "That's a big ol' tree."
@@ -196,15 +195,7 @@ DESCRIBE.SILKEN_BUNDLE = "I don't care what's inside, it should be burned."
 
 DESCRIBE.WEBBEDCREATURE = "Why SHOULDN'T I burn them?"
 ANNOUNCE.WEBBEDCREATURE = "I can't get through! I need that thing's claw!"
-DESCRIBE.SNAPDRAGON_BUDDY = "This food's mine, you can't have it!"
-DESCRIBE.SNAPDRAGON = "I wonder if you'd burn brighter than most."
-DESCRIBE.SNAPPLANT = "The big guy likes that dumb plant alot."
-DESCRIBE.WHISPERPOD =
-"Yuck, lets just stick it in the ground and be done with it."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "I think it wants something.",
-    GROWING = "Hurry up, you stupid plant!"
-}
+
 DESCRIBE.FRUITBAT = "If it'd sit still I would burn it."
 DESCRIBE.PITCHERPLANT = "If it were lower down I'd burn it."
 DESCRIBE.APHID = "Your fuzzyness would make good tinder."
@@ -257,14 +248,6 @@ DESCRIBE.KLAUS_AMULET = "Guh, it's so heavy! I'm supposed to wear this?!"
 DESCRIBE.CRABCLAW = "Haha. Whack."
 DESCRIBE.HAT_RATMASK = "Ewww, I can smell all of them!"
 
-DESCRIBE.ORANGE_VOMIT = "Ewwwww!"
-DESCRIBE.GREEN_VOMIT = "Ewwwww!"
-DESCRIBE.RED_VOMIT = "Ewwwww!"
-DESCRIBE.PINK_VOMIT = "Ewwwww!"
-DESCRIBE.YELLOW_VOMIT = "Ewwwww!"
-DESCRIBE.PURPLE_VOMIT = "Ewwwww!"
-DESCRIBE.PALE_VOMIT = "Ewwwww!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -283,12 +266,7 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
+
 DESCRIBE.CORNCAN = "Probably one of the most boring objects I've ever seen."
 DESCRIBE.SKULLCHEST_CHILD = "Too bad burning one doesn't burn the others."
 

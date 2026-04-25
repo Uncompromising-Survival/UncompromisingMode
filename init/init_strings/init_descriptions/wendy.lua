@@ -181,7 +181,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Actual demons wrought to topple me!"
 DESCRIBE.MARSH_GRASS = "I have nothing to say about this."
 DESCRIBE.CURSED_ANTLER = "Life doesn't wear it down. I envy it."
-DESCRIBE.BERNIEBOX = "Toys are for kids."
 DESCRIBE.HOODED_FERN = "Green and boring, like most plants."
 DESCRIBE.HOODEDWIDOW = "She could eat me in a single bite."
 DESCRIBE.GIANT_TREE = "Ancient, and full of life."
@@ -194,14 +193,7 @@ DESCRIBE.SILKEN_BUNDLE = "Whatever's in there is sticky now."
 
 DESCRIBE.WEBBEDCREATURE = "If I make a mistake, it could be me in one of those."
 ANNOUNCE.WEBBEDCREATURE = "Unraveling this would require a spiders touch..."
-DESCRIBE.SNAPDRAGON_BUDDY = "Lives for food, like everything else."
-DESCRIBE.SNAPDRAGON = "Ive seen prettier flowers."
-DESCRIBE.SNAPPLANT = "These two have a near inseperable bond."
-DESCRIBE.WHISPERPOD = "It won't grow on its own."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "It needs something else to grow.",
-    GROWING = "Keep growing. I'll wait."
-}
+
 DESCRIBE.FRUITBAT = "What?!"
 DESCRIBE.PITCHERPLANT = "Out of reach..."
 DESCRIBE.APHID = "They plague the trees."
@@ -248,14 +240,6 @@ DESCRIBE.KLAUS_AMULET = "Another lock to be behind."
 DESCRIBE.CRABCLAW = "One small snip will sever a limb."
 DESCRIBE.HAT_RATMASK = "I can smell the vermin from miles away."
 
-DESCRIBE.ORANGE_VOMIT = "Such as life."
-DESCRIBE.GREEN_VOMIT = "Such as life."
-DESCRIBE.RED_VOMIT = "Such as life."
-DESCRIBE.PINK_VOMIT = "Such as life."
-DESCRIBE.YELLOW_VOMIT = "Such as life."
-DESCRIBE.PURPLE_VOMIT = "Such as life."
-DESCRIBE.PALE_VOMIT = "Such as life."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -274,12 +258,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "It will keep whatevers left of my soul together."
 DESCRIBE.UM_BEAR_TRAP = "The jaws of a beast wait to strike at every corner."

@@ -180,7 +180,6 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I preferred you when you had fewer eyes!"
 DESCRIBE.MARSH_GRASS = "Look, a bush!"
 DESCRIBE.CURSED_ANTLER = "It'll never punch out on 'ya."
-DESCRIBE.BERNIEBOX = "If it ain't tools, I ain't interested."
 DESCRIBE.HOODED_FERN = "Did something rustle in that roughage? "
 DESCRIBE.HOODEDWIDOW = "I'll, uh, stay over here."
 DESCRIBE.GIANT_TREE = "We're not chopping that one down any time soon."
@@ -194,14 +193,7 @@ DESCRIBE.SILKEN_BUNDLE = "It'll keep it in there, certainly not fresh though."
 DESCRIBE.WEBBEDCREATURE = "Hm, I'd like to crack it open!"
 ANNOUNCE.WEBBEDCREATURE =
 "Yeah, no, we're not breaking through that on our own."
-DESCRIBE.SNAPDRAGON_BUDDY = "They work up quite an appetite!"
-DESCRIBE.SNAPDRAGON = "Why's everything gotta be huge around here?"
-DESCRIBE.SNAPPLANT = "Home base, huh?"
-DESCRIBE.WHISPERPOD = "Lets get our hands dirty."
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "It's missing a piece, something to grow, maybe?",
-    GROWING = "It's hard at work."
-}
+
 DESCRIBE.FRUITBAT = "I actually don't mind this one."
 DESCRIBE.FRUITBAT = "Flyin'... fruit?"
 DESCRIBE.PITCHERPLANT = "It's just a plant."
@@ -252,14 +244,6 @@ DESCRIBE.KLAUS_AMULET = "Time to overclock!"
 DESCRIBE.CRABCLAW = "I have a knack for stickin' gems into things, don't I?"
 DESCRIBE.HAT_RATMASK = "Let's go find their base of operations."
 
-DESCRIBE.ORANGE_VOMIT = "Thanks."
-DESCRIBE.GREEN_VOMIT = "Thanks."
-DESCRIBE.RED_VOMIT = "Thanks."
-DESCRIBE.PINK_VOMIT = "Thanks."
-DESCRIBE.YELLOW_VOMIT = "Thanks."
-DESCRIBE.PURPLE_VOMIT = "Thanks."
-DESCRIBE.PALE_VOMIT = "Thanks."
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -278,12 +262,6 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
 
 DESCRIBE.ANCIENT_AMULET_RED = "I hope there's a practical purpose here."
 DESCRIBE.UM_BEAR_TRAP =
