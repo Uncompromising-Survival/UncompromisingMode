@@ -10,6 +10,9 @@ GLOBAL.TUNING.WX78_CHARGING_FOODS.powercell = 1
 local ModuleDefs = require("wx78_moduledefs")
 
 local function GetIsBirdFn(cage_or_trap)
+    if ModuleDefs.scandata_definitions == nil then
+        return
+    end
     local birdprefab
     if cage_or_trap.components.occupiable ~= nil then
         local bird = cage_or_trap.components.occupiable:GetOccupant()
@@ -50,7 +53,7 @@ ModuleDefs.AddCreatureScanDataDefinition("um_pawn_nightmare", "screech", 10)
 ModuleDefs.AddSpecialCreatureScanDataDefinition("woodpecker", GetIsBirdFn, "radar", 3)
 
 --[[if KnownModIndex:IsModEnabled("workshop-1289779251") then
-    ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3)
+    ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3) -- CF compatibility before shielding circuit came to existance.
 end]]
 
 --TODO, reimplement dorainsparks to do based on wetness from min to max damage
