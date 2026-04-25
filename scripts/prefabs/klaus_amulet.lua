@@ -23,15 +23,30 @@ local function DoubleSlap(owner, data)
     end
 end
 
+local function AddRemoveDebuff(owner)
+	if not owner.components.combat then return end
+	local buffaction = owner:GetBufferedAction()
+	if buffaction and buffaction.mockattack then
+		owner.components.combat.externaldamagemultipliers:SetModifier(owner, TUNING.DSTU.KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT, "um_mockattack")
+	else
+		owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
+	end
+end
+
 local function onequip_blue(inst, owner)
     if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.NECK or EQUIPSLOTS.BODY) then return end
     owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
     owner:ListenForEvent("onattackother", DoubleSlap)
+	owner:ListenForEvent("newstate", AddRemoveDebuff)
 end
 
 local function onunequip_blue(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
     owner:RemoveEventCallback("onattackother", DoubleSlap)
+	owner:RemoveEventCallback("newstate", AddRemoveDebuff)
+	if owner.components.combat and owner.components.combat.externaldamagemultipliers:CalculateModifierFromSource(owner, "um_mockattack") < 1 then
+		owner.components.combat.externaldamagemultipliers:RemoveModifier(owner, "um_mockattack")
+	end
 end
 
 local function fn()
