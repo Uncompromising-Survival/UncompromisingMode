@@ -28,3 +28,15 @@ RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrith
 RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_allegiance_shadow.tex")
 RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_1.tex")
 RegisterSkilltreeIconsAtlas("images/wathgrithr_rework_skilltree.xml", "wathgrithr_arsenal_spear_2.tex")
+
+-- Wormwood
+RegisterSkilltreeIconsAtlas("images/wormwood_flytrap.xml", "wormwood_flytrap.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_originator.xml", "wormwood_originator.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_sympathetic_blooming.xml", "wormwood_sympathetic_blooming.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_resilient_crops1.xml", "wormwood_resilient_crops1.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_resilient_crops2.xml", "wormwood_resilient_crops2.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_resilient_crops3.xml", "wormwood_resilient_crops3.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_prick_adept.xml", "wormwood_prick_adept.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_armor_bramble2.xml", "wormwood_armor_bramble2.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_eqex.xml", "wormwood_eqex.tex")
+RegisterSkilltreeIconsAtlas("images/wormwood_mutations.xml", "wormwood_mutations.tex")

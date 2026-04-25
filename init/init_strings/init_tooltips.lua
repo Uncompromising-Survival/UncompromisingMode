@@ -65,6 +65,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
+	UM_HAT_NETTLEMASK = "- Provides protection against spore clouds.\n- Stings user when worn.\n-Protects against blizzards.\n-Spoils.",
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
 	UM_RIMEWEED_ICEPACK = "- Cools the player.",

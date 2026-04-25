@@ -53,7 +53,7 @@ local function Freeze(v)
     --TheNet:Announce("freeze code ran")
     if v.components.freezable then -- Freeze
         --TheNet:Announce("Add Coldness")
-        v.components.freezable:AddColdness(3)
+        v.components.freezable:AddColdness(1)
     end
     if v.components.temperature then -- Chill
         --TheNet:Announce("Got a lil chilly")
