@@ -174,7 +174,7 @@ local function DefinePrey(inst)
                 end
             end
             --TheNet:Announce("we did a prey")
-            return inst.sg:GoToState("leaptoprey_pre")
+            return inst.sg:GoToState("leaptoprey_pre") and inst.prey or inst.sg:GoToState("jumphome")
         end
     end
 end
