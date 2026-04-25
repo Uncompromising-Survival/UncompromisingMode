@@ -219,7 +219,6 @@ DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.MARSH_GRASS = "You're useless!"
 DESCRIBE.CURSED_ANTLER = "A trophy of my conquest!"
-DESCRIBE.BERNIEBOX = "The writing is all gibberish!"
 DESCRIBE.HOODED_FERN = "That's horse food, not people food!"
 DESCRIBE.HOODEDWIDOW = "Nope! Nope! Definetly not!"
 DESCRIBE.GIANT_TREE =

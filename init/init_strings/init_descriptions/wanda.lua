@@ -512,9 +512,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED =
-"Time has taken away the smell, but will it improve the taste?"
-DESCRIBE.SMALLFISHMEAT_DRIED = "I'm surprised it didn't wither away."
 
 DESCRIBE.WIXIEGUN = "This is NOT the right timeline!"
 

@@ -140,7 +140,6 @@ DESCRIBE.HONEY_LOG = "Not quite an Ube Roll, but good effort."
 
 DESCRIBE.BUSHCRAB = "Berries and crab cake, anyone? No?"
 DESCRIBE.LAVAE2 = DESCRIBE.LAVAE
-DESCRIBE.DISEASECUREBOMB = "I doubt this would make for a good cooking oil."
 DESCRIBE.SHROOM_SKIN_FRAGMENT = "I'm... not cooking that."
 DESCRIBE.AIR_CONDITIONER = "Aah, my lungs are clear!"
 DESCRIBE.SPOREPACK = "Absolutely not."
@@ -507,8 +506,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Where's a slice of lemon when you need it?"
-DESCRIBE.SMALLFISHMEAT_DRIED = "A low grade appetizer."
 
 DESCRIBE.WIXIEGUN = "Protect my casserole!"
 DESCRIBE.MARA_BOSS1 = "Ah."

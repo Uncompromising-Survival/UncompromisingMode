@@ -624,8 +624,6 @@ DESCRIBE.MEATRACK_HAT = {
     DRYING_NOTMEAT = DESCRIBE.MEATRACK.DRYING_NOTMEAT,
     DRYINGINRAIN_NOTMEAT = DESCRIBE.MEATRACK.DRYINGINRAIN_NOTMEAT
 }
-DESCRIBE.FISHMEAT_DRIED = "Rich in sodium and oils."
-DESCRIBE.SMALLFISHMEAT_DRIED = "Just make sure to wash your hands after eating."
 
 DESCRIBE.WIXIEGUN = "This doesn't belong in the hands of a child."
 

@@ -2,7 +2,7 @@ require "prefabutil"
 
 local assets =
 {
-    Asset("ANIM", "anim/Bigspin.zip"),
+    Asset("ANIM", "anim/um_giant_tornado.zip"),
 }
 
 local prefabs = { "collapse_small", "nightlight_flame" }
