@@ -628,17 +628,6 @@ configuration_options = {
             { description = "Off", data = 0 } },
         default = 1
     },
-    {
-        name = "flingo_setting",
-        label = "Flingomatic Nerf",
-        hover =
-        "Pick the Flingomatic nerf you would like to play around.",
-        options = {
-            { description = "Fuel loss in use",  data = "Fuelmuncher" },
-            { description = "No longer freezes", data = "Waterballs" }, { description = "None", data = "Newb" } },
-        default =
-        "Waterballs"
-    },
     BinaryConfig("hambatnerf", "Ham Bat Nerf", "Spoils faster and minimum damage is lower.", true),
 
     BinaryConfig("townportal_rework", "Lazy Deserter Rework",
@@ -1463,6 +1452,19 @@ configuration_options = {
     -----------------------------
     Header("> Legacy Options <"),
     -----------------------------	
+    {
+        name = "flingo_setting",
+        label = "Flingomatic Nerf",
+        hover =
+        "Pick the Flingomatic nerf you would like to play around.",
+        options = {
+            { description = "Fuel loss in use",  data = "Fuelmuncher" },
+            { description = "No longer freezes", data = "Waterballs" }, { description = "None", data = "Newb" } },
+        default =
+        "Newb"
+    },
+    BinaryConfig("livingtree_legacy", "Angry Living Trees",
+        "Living trees retaliate with a root whip when chopped.", false),
     BinaryConfig("durability", "Clothing Degradation",
         "Winter and Rain protection clothing items become less effective when their durability drops.", false),
     BinaryConfig("pinelings", "Pinelings",

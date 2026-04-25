@@ -86,13 +86,16 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 
 
 modimport("init/init_gemology")
---if GetModConfigData("harder_monsters") then
-modimport("init/init_creatures/init_treebuffs")
+--if GetModConfigData("harder_monsters") then4
+if GetModConfigData("horriblefood") then
+    modimport("init/init_horriblefood")
+end
+
 modimport("init/init_creatures/init_harder_monsters")
 --end
 
-if GetModConfigData("horriblefood") then
-    modimport("init/init_horriblefood")
+if GetModConfigData("livingtree_legacy") then
+    modimport("init/init_creatures/init_treebuffs")
 end
 
 modimport("init/init_food/init_food_changes")
@@ -241,3 +244,7 @@ end
 if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
+
+
+modimport("init/init_weather/init_ripples")
+modimport("init/init_weather/init_thicket")

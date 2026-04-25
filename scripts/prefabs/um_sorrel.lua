@@ -7,18 +7,18 @@ local assets =
 }
 SetSharedLootTable( 'sorrel_blooming',
 {
-    {'greenfoliage',    1.0},
-    {'greenfoliage',    1.0},
-    {'greenfoliage',    0.5},
+    {'foliage',    1.0},
+    {'foliage',    1.0},
+    {'foliage',    0.5},
     {'petals',          1.0},
     {'petals',          0.5}
 })
 
 SetSharedLootTable( 'sorrel',
 {
-    {'greenfoliage',    1},
-    {'greenfoliage',    1},
-    {'greenfoliage',    0.50},
+    {'foliage',    1},
+    {'foliage',    1},
+    {'foliage',    0.50},
 })
 
 local function bloom(inst)
