@@ -15,7 +15,7 @@ return Class(function(self, inst)
 
         local STRUCTURE_DIST = 20
         local HASSLER_SPAWN_DIST = 40
-        local HASSLER_KILLED_DELAY_MULT = 6
+        local HASSLER_KILLED_DELAY_MULT = 2
         local STRUCTURES_PER_SPAWN = 4
         local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
         local _moonmaw_available = "mockfly_timetoattack"
@@ -48,14 +48,14 @@ return Class(function(self, inst)
         local _timetoattack
 		
         local _activeplayers = {}
-
+		local um_overridespawn = false
         --------------------------------------------------------------------------
         --[[ Private member functions ]]
         --------------------------------------------------------------------------
 
         local function AllowedToAttack()
             return (#_activeplayers > 0 and
-                TheWorld.state.cycles > TUNING.DSTU.NO_MOCK_DRAGONFLY_BOSS_TIME and
+                ((TheWorld.state.cycles > TUNING.DSTU.NO_MOCK_DRAGONFLY_BOSS_TIME) or um_overridespawn) and
                 (_attackduringoffseason or
                 TheWorld.state.season == "summer"))
         end
@@ -216,7 +216,29 @@ return Class(function(self, inst)
         --------------------------------------------------------------------------
         --[[ Private event handlers ]]
         --------------------------------------------------------------------------
-
+		local function OnMegaFlare(src, data)
+			if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.issummer then
+				um_overridespawn = true
+				if not _activehassler then
+					if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) and _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
+						local time = _worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME)
+						if time > 480*8 then
+							time = time - 480*math.random(2,3)
+						elseif time > 480*4 then
+							time = time - 480*math.random(1,2)
+						elseif time > 480*2 then
+							time = time - 240*math.random(1,3) 
+						else
+							time = time - 480*math.random(1,1.5)
+						end
+						_worldsettingstimer:SetTimeLeft(MOCKFLY_TIMERNAME, time)
+					elseif not _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+						_worldsettingstimer:StartTimer(MOCKFLY_TIMERNAME, 480*math.random(6,8))
+					end
+				end
+			end
+		end
+		
         local function OnSeasonChange(self, season)
             if TheWorld.state.season ~= SEASONS.SUMMER then
                 _spawmmoonmaw = true
@@ -491,4 +513,7 @@ return Class(function(self, inst)
         self.inst:ListenForEvent("mockflyremoved", OnHasslerRemoved, TheWorld)
         self.inst:ListenForEvent("mockflykilled", OnHasslerKilled, TheWorld)
         self.inst:ListenForEvent("storehasslermockdragonfly", OnStoreHassler, TheWorld)
+		
+		self.inst:ListenForEvent("megaflare_detonated", OnMegaFlare, TheWorld)
+
     end)
