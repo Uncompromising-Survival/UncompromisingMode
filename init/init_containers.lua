@@ -109,7 +109,7 @@ function CheckBee(container, item, slot)
 end
 
 function CheckNettle(container,item,slot)
-	return item.prefab == "firenettles" or item.prefab == "pepper" or item.prefab == "spice_chili"
+	return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
 end
 
 function CheckGem(container, item, slot)
@@ -399,23 +399,6 @@ modparams.jessie =
     itemtestfn = CheckSlingshotAmmoJessie, -- HEY SCRIMBLES! FOR SOME REASON IT SEEMS LIKE
     -- JESSIE WONT ACCEPT AMMO DESPITE can_take_ammo BEING TRUE?
     -- FIND WHAT 'container' REFERS TO
-    type = "hand_inv",
-}
-
-modparams.um_blowgun =
-{
-    widget =
-    {
-        slotpos =
-        {
-            Vector3(0, 32 + 4, 0),
-        },
-        animbank = "ui_cookpot_1x2",
-        animbuild = "ui_cookpot_1x2",
-        pos = Vector3(0, 15, 0),
-    },
-    itemtestfn = CheckDart,
-    acceptsstacks = true,
     type = "hand_inv",
 }
 
