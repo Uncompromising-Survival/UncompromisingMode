@@ -5,7 +5,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local function OnHitOtherFreeze(inst, data)
     local other = data.target
     if other and not (other.components.health and other.components.health:IsDead()) then
-        if other.components.freezable and not other.components.freezable:IsFrozen() and not other.sg:HasStateTag("frozen") then
+        if other.components.freezable and not other.components.freezable:IsFrozen() then
             other.components.freezable:AddColdness(2)
             other.components.freezable:SpawnShatterFX()
         end
@@ -21,7 +21,6 @@ end
 
 env.AddPrefabPostInit("icehound", function(inst)
     if not TheWorld.ismastersim then return end
-
     if TUNING.DSTU.FROSTBITEHOUNDS then
         inst:ListenForEvent("onhitother", OnHitOtherFreeze)
     end
