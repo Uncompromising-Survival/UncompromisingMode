@@ -20,10 +20,9 @@ local RETARGET_CANT_TAGS = {"INLIMBO", "structure", "bird", "um_fern_fox"}
 local RETARGET_ONE_OF_TAGS = {"player"}
 local function Retarget(inst)
     if not inst.components.health:IsDead() and not inst.components.sleeper:IsAsleep() and not inst.sg:HasStateTag("attack") then
-        local newtarget = FindEntity(inst, 20,
+        local newtarget = FindEntity(inst, 64,
             function(guy)
                 return inst.components.combat:CanTarget(guy)
-                --distsq(spx, spz, dx, dz) >= (TUNING.DRAGONFLY_RESET_DIST * 12)
             end,
             RETARGET_MUST_TAGS,
             RETARGET_CANT_TAGS,
@@ -121,11 +120,21 @@ local function OtherFollowSymbol(inst, other)
     other:DoTaskInTime(1, function(other) other:Remove() end) -- Give it a second before removal.
 end
 
+local edible_creatures = {"spider","aphid","hound","spider_trapdoor","spider_trapdoor_hooded"}
+
+local function ThisIsEdible(other)
+	for i,v in ipairs(edible_creatures) do
+		if v == other.prefab then
+			return true
+		end
+	end
+end
+
 local function OnHitOther(inst, data)
     local other = data.target
-    if other.prefab == "spider" or other.prefab == "aphid" or other.prefab == "hound" or (other.prefab == "spider_trapdoor" and other.components.health:GetPercent() < .5) then -- these guys get KO-ed
+    if ThisIsEdible(other) then 
         if not inst.components.health:IsDead() and (not inst.sg:HasStateTag("ability") or inst.sg:HasStateTag("eating")) then
-            inst.components.health:DoDelta(300)
+            inst.components.health:DoDelta(250)
             if not inst.sg:HasStateTag("eating") then inst.sg:GoToState("eat_small") end
             if other.brain then other.brain:Stop() end
             OtherFollowSymbol(inst, other)
@@ -197,10 +206,10 @@ local function ShakeTree(inst, tree)
     -- Spawn some near the player that will target the player
     if target then
         --WebMortarCanopy(inst, target)
-        for i = 1, 4 do
-            tree.SpawnDebris(tree, target, fx_loot, target)           -- FX
-            tree.SpawnDebris(tree, target, impact_loot, target, true) -- Watch your head
-        end
+        -- for i = 1, 4 do
+            -- tree.SpawnDebris(tree, target, fx_loot, target)           -- FX
+            -- tree.SpawnDebris(tree, target, impact_loot, target, true) -- Watch your head
+        -- end
 
         -- Enemies
         --tree.SpawnDebris(tree, target, minion_loot, target)
@@ -217,9 +226,9 @@ local function ShakeTree(inst, tree)
         end
 
         -- Watch your head
-        for i = 1, 2 do
-            tree.SpawnDebris(tree, nil, impact_loot, home, true)
-        end
+        -- for i = 1, 2 do
+            -- tree.SpawnDebris(tree, nil, impact_loot, home, true)
+        -- end
 
         -- Enemies
         --tree.SpawnDebris(tree, nil, minion_loot, home)
@@ -234,9 +243,9 @@ local function ShakeTree(inst, tree)
     end
 
     -- Watch your head
-    for i = 1, 2 do
-        tree.SpawnDebris(tree, inst, impact_loot, nil, true)
-    end
+    -- for i = 1, 2 do
+        -- tree.SpawnDebris(tree, inst, impact_loot, nil, true)
+    -- end
 
     -- Enemies
     --tree.SpawnDebris(tree, inst, minion_loot)
@@ -354,13 +363,14 @@ local function fn()
     inst:AddComponent("healthtrigger")
 
     local function PrepareTreeToShake(inst) -- Give a small delay
+		inst.should_taunt_health_thresh = true
         if not inst.searching_for_tree then
             if inst.lasttrigger then
                 if inst.components.health:GetPercent() < inst.lasttrigger then
-                    inst.searching_for_tree = inst:DoTaskInTime(5, FindTreeToShake)
+                    inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
                 end
             else
-                inst.searching_for_tree = inst:DoTaskInTime(5, FindTreeToShake)
+                inst.searching_for_tree = inst:DoTaskInTime(8, FindTreeToShake)
             end
         end
         inst.lasttrigger = inst.components.health:GetPercent()
@@ -413,7 +423,6 @@ local function fn()
 
     inst:AddComponent("leader")
 
-    MakeHauntableGoToState(inst, "poop", TUNING.HAUNT_CHANCE_OCCASIONAL, TUNING.HAUNT_COOLDOWN_MEDIUM, TUNING.HAUNT_CHANCE_LARGE)
     inst:AddComponent("groundpounder")
     inst.components.groundpounder.destroyer = true
     inst.components.groundpounder.damageRings = 0
