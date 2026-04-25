@@ -2,8 +2,8 @@
 modimport("scripts/map/misc_tools/tiledefs")
 
 if GetModConfigData("worldgenmastertoggle") then
-    modimport("postinit/map/forest_map") -- Redo when islands are detected in caves
-
+	modimport("postinit/map/static_layouts")
+	
     local misc_tools = { "locks&keys", "room_tags", "umss_init" }
     for i, tool in ipairs(misc_tools) do
         modimport("scripts/map/misc_tools/" .. tool)
@@ -12,6 +12,7 @@ if GetModConfigData("worldgenmastertoggle") then
     ---- XX[[ Forest Task Adjustments ]]XX ----
     local tasks_forest = {
         "make_a_pick", -- Make a Pick changes (Starter Biome), Wixie, Veteran's Curse
+		"speak_to_the_king", -- Change to force Glommer to more consistently spawn away from Pig King, to make it easier to escape with him without drawing buffed werepig aggro
         "dig_that_rock", -- UMSS compatibility changes, Ratacombs entrance
         "squeltch",  -- Rice, Marsh bushes and mist
         "merged_desert", -- Oasis Overhaul to include rooms lost from Badlands -> Broiling Hills

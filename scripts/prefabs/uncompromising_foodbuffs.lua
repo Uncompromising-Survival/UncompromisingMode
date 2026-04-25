@@ -39,76 +39,94 @@ local function largefury_detatch(inst, target)
     end
 end
 
-local function electric_attach(inst, target)
-    if target.components.electricattacks == nil then
-        target:AddComponent("electricattacks")
-    end
-    target.components.electricattacks:AddSource(inst)
-    if inst._onattackother == nil then
-        inst._onattackother = function(attacker, data)
-            if data.weapon ~= nil then
-                if data.projectile == nil then
-                    --in combat, this is when we're just launching a projectile, so don't do FX yet
-                    if data.weapon.components.projectile ~= nil then
-                        return
-                    elseif data.weapon.components.complexprojectile ~= nil then
-                        return
-                    elseif data.weapon.components.weapon:CanRangedAttack() then
-                        return
-                    end
-                end
-                if data.weapon.components.weapon ~= nil and data.weapon.components.weapon.stimuli == "electric" then
-                    --weapon already has electric stimuli, so probably does its own FX
-                    return
-                end
+local function OffCoolDown(target)
+    target._cdtask = nil
+end
+
+local combat_health = {"_health","_combat"}
+local arc_player = {"player","arcgrounded"}
+
+local function FindEnemiesNearbyAndShockThem(attacker,target,ShockAGAIN)
+	local x,y,z = target.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x,y,z,4,combat_health,arc_player)
+	for i,v in ipairs(ents) do
+		if not v.components.health:IsDead() then
+			local dist = math.sqrt(target:GetDistanceSqToInst(v))
+			v:DoTaskInTime(dist/5,function(v)
+				if v.components.health and not v.components.health:IsDead() and not v:HasTag("arcgrounded") then -- we check these again because they could have already died or been shocked once
+					local mult = 2-dist
+					mult = math.clamp(mult,0.1,1.25)
+
+					local damage = 51*mult
+					v.components.combat:GetAttacked(attacker, damage, nil, "electric")
+					v:AddTag("arcgrounded")
+					ShockAGAIN(attacker,v,ShockAGAIN)
+					SpawnPrefab("electricchargedfx").Transform:SetPosition(v.Transform:GetWorldPosition())
+					v:DoTaskInTime(3,function(v) v:RemoveTag("arcgrounded") end)
+				end
+			end)
+		end
+	end
+end
+
+local function taser_onblockedorattacked(owner, data) -- Modified WX78 function
+	local attacker = data.attacker
+    if (data ~= nil and attacker ~= nil and not data.redirected) and owner._cdtask == nil then
+		if owner.um_electric_retaliate_damage == 10 then
+			owner._cdtask = owner:DoTaskInTime(0.3, OffCoolDown)
+		end
+        if attacker.components.combat ~= nil
+                and (attacker.components.health ~= nil and not attacker.components.health:IsDead())
+                and (attacker.components.inventory == nil or not attacker.components.inventory:IsInsulated())
+                and (data.weapon == nil or 
+                        (data.weapon.components.projectile == nil
+                        and (data.weapon.components.weapon == nil or data.weapon.components.weapon.projectile == nil))
+                ) then
+
+            SpawnPrefab("electrichitsparks"):AlignToTarget(attacker, owner, true)
+
+            local damage_mult = 1
+            if not IsEntityElectricImmune(attacker) then
+				damage_mult = TUNING.ELECTRIC_DAMAGE_MULT + TUNING.ELECTRIC_WET_DAMAGE_MULT * attacker:GetWetMultiplier()
             end
-            if data.target ~= nil and data.target:IsValid() and attacker:IsValid() then
-                SpawnPrefab("electrichitsparks"):AlignToTarget(data.target, data.projectile ~= nil and data.projectile:IsValid() and data.projectile or attacker, true)
-            end
+
+			attacker:PushEvent("electrocute", { attacker = owner, stimuli = "electric" })
+            attacker.components.combat:GetAttacked(owner, damage_mult * owner.um_electric_retaliate_damage, nil, "electric")
+			
+			
+			if owner.um_electric_retaliate_damage == 51 then -- only zaspberry parfait number
+				if attacker:IsValid() then
+					FindEnemiesNearbyAndShockThem(owner,attacker,FindEnemiesNearbyAndShockThem)
+				end
+				-- Dont allow arcing back upon oneself
+				attacker:AddTag("arcgrounded")
+				attacker:DoTaskInTime(3,function(attacker) attacker:RemoveTag("arcgrounded") end)
+			end
         end
-        inst:ListenForEvent("onattackother", inst._onattackother, target)
     end
-    SpawnPrefab("electricchargedfx"):SetTarget(target)
+end
+
+local function attachretaliationdamage(inst, owner)
+	if inst.prefab == "buff_electricretaliation" then
+		owner.um_electric_retaliate_damage = 51
+	elseif inst.prefab == "buff_electricretaliationmedium" then
+		owner.um_electric_retaliate_damage = 34
+	else
+		owner.um_electric_retaliate_damage = 10 -- would like to pass this to the function above if possible
+	end
+
+	
+    owner:ListenForEvent("attacked", taser_onblockedorattacked, owner)
+	
+    SpawnPrefab("electricchargedfx"):SetTarget(owner)
 end
 
 local function electric_extend(inst, target)
     SpawnPrefab("electricchargedfx"):SetTarget(target)
 end
 
-local function electric_detach(inst, target)
-    if target.components.electricattacks ~= nil then
-        target.components.electricattacks:RemoveSource(inst)
-    end
-    if inst._onattackother ~= nil then
-        inst:RemoveEventCallback("onattackother", inst._onattackother, target)
-        inst._onattackother = nil
-    end
-end
-
-local function OnCooldown(target)
-    target._cdtask = nil
-end
-
-local function Retaliate(target, data)
-    if target._cdtask == nil and data ~= nil and not data.redirected then
-        --V2C: tiny CD to limit chain reactions
-        target._cdtask = target:DoTaskInTime(.3, OnCooldown)
-
-        SpawnPrefab("shockotherfx"):SetFXOwner(target)
-
-        if target.SoundEmitter ~= nil then
-            target.SoundEmitter:PlaySound("dontstarve/common/together/armor/cactus")
-        end
-    end
-end
-
-local function attachretaliationdamage(inst, target)
-    target:ListenForEvent("attacked", Retaliate, target)
-    SpawnPrefab("electricchargedfx"):SetTarget(target)
-end
-
 local function removeretaliationdamageretaliationdamage(inst, target)
-    target:RemoveEventCallback("attacked", Retaliate, target)
+    target:RemoveEventCallback("attacked", taser_onblockedorattacked, target)
 end
 
 local function OnHitOtherBoomberry(inst, data)
@@ -121,8 +139,8 @@ local function OnHitOtherBoomberry(inst, data)
         for i, v in ipairs(ents) do
             local leader = v.components.follower and v.components.follower.leader
             local itemleader = leader and leader.components.inventoryitem and leader.components.inventoryitem:GetGrandOwner()
-            if not v.components.health:IsDead() and v.components.combat:CanBeAttacked(inst) and (not leader or itemleader and not itemleader:HasTag("player")
-                or not leader.components.inventoryitem and not leader:HasTag("player")) and v ~= inst and v ~= other then
+            if not v.components.health:IsDead() and v.components.combat:CanBeAttacked() and (not leader or itemleader and not itemleader:HasTag("player") or not leader.components.inventoryitem and not leader:HasTag("player"))
+                and v ~= inst and v ~= other then
                 local damageredirecttarget = v.components.combat.redirectdamagefn ~= nil and v.components.combat.redirectdamagefn(v, inst, damage) or nil
                 v.um_boomberry_exploded = true
                 if damageredirecttarget then --Fix by Discord user mlz2023_34253
@@ -340,6 +358,7 @@ local function OnTimerDone(inst, data)
     end
 end
 
+local electricnames = {"electricretaliation","electricretaliationlesser","electricretaliationmedium"}
 local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration, priority, nospeech)
     local function OnAttached(inst, target)
         inst.entity:SetParent(target.entity)
@@ -348,7 +367,11 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
             inst.components.debuff:Stop()
         end, target)
         if not nospeech then
-            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(name), priority = priority })
+			local announcename = name
+			if table.contains(electricnames,name) then
+				announcename = "electricretaliation"
+			end
+            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(announcename), priority = priority })
         end
         if onattachedfn ~= nil then
             onattachedfn(inst, target)
@@ -359,7 +382,11 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
         inst.components.timer:StopTimer("buffover")
         inst.components.timer:StartTimer("buffover", duration)
         if not nospeech then
-            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(name), priority = priority })
+			local announcename = name
+			if table.contains(electricnames,name) then
+				announcename = "electricretaliation"
+			end
+            target:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_" .. string.upper(announcename), priority = priority })
         end
         if onextendedfn ~= nil then
             onextendedfn(inst, target)
@@ -371,7 +398,11 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
             ondetachedfn(inst, target)
         end
         if not nospeech then
-            target:PushEvent("foodbuffdetached", { buff = "ANNOUNCE_DETACH_BUFF_" .. string.upper(name), priority = priority })
+			local announcename = name
+			if table.contains(electricnames,name) then
+				announcename = "electricretaliation"
+			end
+            target:PushEvent("foodbuffdetached", { buff = "ANNOUNCE_DETACH_BUFF_" .. string.upper(announcename), priority = priority })
         end
         inst:Remove()
     end
@@ -410,10 +441,11 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
     return Prefab("buff_" .. name, fn, nil)
 end
 
-return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, TUNING.BUFF_ELECTRICATTACK_DURATION, 2, { "electrichitsparks", "electricchargedfx" }),
+return MakeBuff("electricretaliation", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, 12*60, 2, { "electrichitsparks", "electricchargedfx" }),
+	MakeBuff("electricretaliationmedium", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, 4*60, 2, { "electrichitsparks", "electricchargedfx" }),
+	MakeBuff("electricretaliationlesser", attachretaliationdamage, electric_extend, removeretaliationdamageretaliationdamage, 60, 2, { "electrichitsparks", "electricchargedfx" }),
     MakeBuff("boomberryattacks", attachboomberry, nil, removeboomberry, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
     MakeBuff("frozenfury", attachfrozenness, nil, removefrozenness, TUNING.BUFF_ELECTRICATTACK_DURATION, 2),
-    MakeBuff("lesserelectricattack", electric_attach, electric_extend, electric_detach, 30, 2, { "electrichitsparks", "electricchargedfx" }),
     MakeBuff("knockbackimmune", kbimmune_attach, kbimmune_extend, kbimmune_detach, TUNING.BUFF_ATTACK_DURATION, 2),
     MakeBuff("californiaking", californiaking_attach, californiaking_extend, californiaking_detach, TUNING.BUFF_ATTACK_DURATION * 8, 2),
     MakeBuff("largehungerslow", largehungerslow_attach, largehungerslow_extend, largehungerslow_detach, TUNING.BUFF_ATTACK_DURATION * 8, 2),
