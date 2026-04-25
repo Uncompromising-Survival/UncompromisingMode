@@ -185,6 +185,7 @@ local function fn()
     inst:AddTag("nopunch")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
+    inst:AddTag("gestaltprotection")
 
     MakeInventoryFloatable(inst, "med", .3)
 

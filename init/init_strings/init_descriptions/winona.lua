@@ -619,3 +619,4 @@ DESCRIBE.WATHOM_CORPSE = "He's still got fight left in 'em! Up and at'em, lets g
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "An impenetrable shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
+DESCRIBE.UM_THULECITE_RAZOR= "It's more durable, I'll give it that."

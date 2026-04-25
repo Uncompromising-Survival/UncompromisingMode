@@ -85,12 +85,19 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --	[ 				Features			]	--
 
 
-modimport("init/init_gemology")
+
 --if GetModConfigData("harder_monsters") then4
 if GetModConfigData("horriblefood") then
     modimport("init/init_horriblefood")
 end
 
+
+modimport("init/init_gemology/common")
+modimport("init/init_gemology/special")
+modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slimestone with geodes, lab and AG loot
+
+--if GetModConfigData("harder_monsters") then
+modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")
 --end
 
@@ -103,6 +110,7 @@ modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
 modimport("init/init_vetcurse")
 modimport("init/init_bosshealth")
+modimport("init/init_freeze")
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
 --modimport("init/init_recipes") -- Deprecated, keeping the file just to prevent any merge conflicts.
@@ -180,7 +188,7 @@ modimport("init/init_character_changes/wormwood")
 --end
 
 -- All of these are wathgrightr changes
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 	modimport("postinit/prefabs/skilltree_wathgrithr")
 	modimport("postinit/prefabs/beefalo") -- Yes, even this one
 	modimport("postinit/prefabs/battlesongs")
@@ -211,9 +219,9 @@ end
 --if GetModConfigData("character_changes") then <-- This isn't even a config option.
 modimport("init/init_character_changes/generic")
 modimport("init/init_character_changes/wendy")
-if not TUNING.DSTU.UPDATE_CHECK then
-    modimport("init/init_character_changes/wx78")
-end
+--if not TUNING.DSTU.UPDATE_CHECK then
+modimport("init/init_character_changes/wx78")
+--end
 modimport("init/init_character_changes/wickerbottom")
 modimport("init/init_character_changes/woodie")
 modimport("init/init_character_changes/wes")
@@ -234,7 +242,7 @@ if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
 end
 
-modimport("init/init_loadingtips")
+--modimport("init/init_loadingtips")
 
 --food stats!
 if GetModConfigData("food_stats") then
@@ -246,5 +254,12 @@ if GetModConfigData("armorrework") then
 end
 
 
+
 modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
+modimport("init/init_insightcompat")
+
+--need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
+GLOBAL.TheMineralLogbook = require("mineral_logbook")()
+GLOBAL.TheMineralLogbook:Load()
+

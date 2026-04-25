@@ -85,64 +85,114 @@ local function SpikeLaunch(inst, launcher, basespeed, startheight, startradius)
     inst.Physics:SetVel(cosa * speed, speed * 5 + math.random() * 2, sina * speed)
 end
 
-local COLLAPSIBLE_WORK_ACTIONS =
+local WORK_AMOUNTS =
 {
-    CHOP = true,
-    DIG = true,
-    HAMMER = true,
-    MINE = true,
+    CHOP = 3,
+    DIG = 1,
+    HAMMER = 1,
+    MINE = 3,
 }
+
 local COLLAPSIBLE_TAGS = { "frozen" --[[ for "ice" ]], "player", "pickable", "NPC_workable", "_combat" }
-for k, v in pairs(COLLAPSIBLE_WORK_ACTIONS) do
-    table.insert(COLLAPSIBLE_TAGS, k .. "_workable")
+
+for action, _ in pairs(WORK_AMOUNTS) do
+    table.insert(COLLAPSIBLE_TAGS, action .. "_workable")
 end
+
 local NON_COLLAPSIBLE_TAGS = { "hound", "flying", "shadow", "ghost", "playerghost", "FX", "NOCLICK", "DECOR", "INLIMBO", "groundspike", "trap" }
 local TOSSITEM_MUST_TAGS = { "_inventoryitem" }
 local TOSSITEM_CANT_TAGS = { "locomotor", "INLIMBO", "trap" }
 
+local function IsNotFriendly(attacker, target) -- Is the target an ally or my leader's ally?
+    local attackercombat = attacker and attacker.components.combat
+    local leader = attacker and attacker.components.follower and attacker.components.follower:GetLeader()
+    local leadercombat = leader and leader.components.combat
+    return attackercombat and attackercombat:CanTarget(target) and not attackercombat:IsAlly(target)
+        and (not leader or leadercombat and leadercombat:CanTarget(target) and not leadercombat:IsAlly(target))
+end
+
+local function TargetHasHealth(target)
+    return target and target:IsValid() and target.components.health
+end
+
+local function DealSpikeDamage(attacker, target, spike, damage)
+    if not TargetHasHealth(target) then return end
+
+    if target.components.combat then
+        target.components.combat:GetAttacked(attacker, damage)
+    else
+        target.components.health:DoDelta(-damage, nil, attacker and attacker.prefab or "glacialhound_icespike")
+    end
+
+    spike.components.health:Kill()
+end
+
+local function DoWork(worker, target)
+    if not (target and target:IsValid() and target.components.workable) then return false end
+
+    local workable = target.components.workable
+    if not workable:CanBeWorked() then return false end
+
+    local work_action = workable:GetWorkAction()
+    if not work_action then -- nil action for NPC_workable (e.g. campfires)
+        if target:HasTag("NPC_workable") then
+            workable:Destroy(worker)
+
+            if target:IsValid() and target:HasTag("stump") then
+                target:Remove()
+            end
+
+            return true
+        end
+        return false
+    end
+
+    -- Things with health should take damage instead of work.
+    if TargetHasHealth(target) then return false end
+
+    local work_amount = WORK_AMOUNTS[work_action.id]
+    if work_amount then
+        workable:WorkedBy(worker, work_amount)
+
+        if target:IsValid() and target:HasTag("stump") and workable:GetWorkLeft() <= 0 then
+            target:Remove()
+        end
+
+        return true
+    end
+
+    return false
+end
 local function DoDamage(inst)
     inst.dmgtask = nil
-
+    local attacker = inst.owner and inst.owner:IsValid() and inst.owner or inst
     local radius = inst.islarge:value() and RADIUS_LARGE or RADIUS
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, radius + DAMAGE_RADIUS_PADDING, nil, NON_COLLAPSIBLE_TAGS, COLLAPSIBLE_TAGS)
     for i, v in ipairs(ents) do
         if v ~= inst and not (inst.targets and inst.targets[v]) and v:IsValid() then
+            local attackable = IsNotFriendly(attacker, v)
             if v.prefab == "ice" then
                 v:Remove()
-            elseif v:HasTag("player") then
+            elseif v:HasTag("player") and attackable then
                 --NOTE: inst.targets will prevent multiple knockbacks, but
                 --      CreatePhysicsPush should still keep them in bounds
-                v:PushEvent("knockback", { knocker = inst, radius = radius, strengthmult = 0.3, forcelanded = not inst.islarge:value() })
-            else
-                --TODO: Make not destroy for glacial hound?
-                local isworkable = false
-                if v.components.workable and not v:HasTag("wall") then
-                    local work_action = v.components.workable:GetWorkAction()
-                    --V2C: nil action for NPC_workable (e.g. campfires)
-                    --     allow digging spawners (e.g. rabbithole)
-                    isworkable = (
-                        (work_action == nil and v:HasTag("NPC_workable")) or
-                        (v.components.workable:CanBeWorked() and work_action and COLLAPSIBLE_WORK_ACTIONS[work_action.id])
-                    )
+                v:PushEvent("knockback", { knocker = inst, radius = radius, strengthmult = .3, forcelanded = not inst.islarge:value() })
+            end
+
+            --TODO: Make not destroy for glacial hound?
+            if attackable then
+                DealSpikeDamage(attacker, v, inst, 30)
+
+                if v.components.freezable then
+                    v.components.freezable:AddColdness(2)
                 end
-                if isworkable then
-                    v.components.workable:Destroy(inst)
-                    if v:IsValid() and v:HasTag("stump") then
-                        v:Remove()
-                    end
-                elseif v.components.pickable and v.components.pickable:CanBePicked() and not v:HasTag("intense") then
+            else
+                local worked = DoWork(inst, v)
+
+                if not worked and v.components.pickable and v.components.pickable:CanBePicked() and not v:HasTag("intense") then
                     v.components.pickable:Pick(inst)
                 end
-            end
-
-            if v:HasTag("_combat") and v.components.combat ~= nil then
-                v.components.combat:GetAttacked(inst.owner or inst, 30)
-                inst.components.health:Kill() --to prevent trapping targets in the ice
-            end
-
-            if v.components.freezable ~= nil then
-                v.components.freezable:AddColdness(2)
             end
 
             if inst.targets then
@@ -202,7 +252,7 @@ local function CreatePhysicsPush(parent)
     )
     inst.Physics:SetCapsule(parent.islarge:value() and RADIUS_LARGE or RADIUS, 2)
 
-    inst:DoTaskInTime(0, inst.Remove)
+    --inst:DoTaskInTime(0, inst.Remove)
 
     inst.Transform:SetPosition(parent.Transform:GetWorldPosition())
 
@@ -302,8 +352,6 @@ local function OnHealthDelta(inst, oldpercent, newpercent)
         return
     end
 
-
-
     inst.SoundEmitter:PlaySound("meta3/sharkboi/ice_spike_break")
 
     local animname = "spike" .. tostring(inst.variation) .. "_low"
@@ -329,7 +377,7 @@ local function spikefn()
     inst.AnimState:PlayAnimation("spike1_pre")
 
     MakeObstaclePhysics(inst, RADIUS, 2)
-    inst:DoTaskInTime(0, CreatePhysicsPush)
+    --inst:DoTaskInTime(0, CreatePhysicsPush)
 
     inst:AddTag("groundspike")
     inst:AddTag("frozen")

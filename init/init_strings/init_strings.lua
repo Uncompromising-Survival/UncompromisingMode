@@ -114,6 +114,11 @@ RECIPE_DESC.UM_INKUBATOR = "A new life is born. But at what cost?"
 RECIPE_DESC.UM_SCRAPPER = "Reduce anything, or anyone, to their base components."
 RECIPE_DESC.PLAUNT_MANNY = "She rubs her knees when she knows something bad's going to happen."
 
+--Winky
+RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A den of annoying little hairballs."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Leads back to home."
+--[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
+RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
 
 --Wixie
 RECIPE_DESC.MEATRACK_HAT = "The jerkiest of hats."
@@ -145,10 +150,6 @@ RECIPE_DESC.UM_HAT_RIME = "A chilly helmet for a chilly wearer."
 RECIPE_DESC.UM_ICE_SICLE = "Cut down flora and keep yourself cool."
 RECIPE_DESC.JAWED_SCYTHE = "Cut down dense flora."
 RECIPE_DESC.UM_RIBOPODDEN = "A home for opportunistic scavengers."
---[[RECIPE_DESC.UNCOMPROMISING_WINKYBURROW = "A network of interconnected burrows."
-RECIPE_DESC.UNCOMPROMISING_WINKYHOMEBURROW = "Hole, sweet hole." --Don't let Canis read this]]
-RECIPE_DESC.RAT_BURROW = "A den of annoying little hairballs."
-RECIPE_DESC.RAT_BURROW = "Leads back to home."
 RECIPE_DESC.OAR_MONKEY = "Now you can do the monkey paddle."
 --
 RECIPE_DESC.UM_BOATBOTTLE = "Put away an entire boat for later use."
@@ -182,10 +183,13 @@ RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
 RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
-RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems."
+RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = RECIPE_DESC.UM_MAGNIFIER
+RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems and geodes. Bigger on the inside."
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 
+
+RECIPE_DESC.UM_THULECITE_RAZOR = "Essential for the ancient technique of \"shaving\" "
 -- [              DSTU Related Overrides                  ]
 
 STRINGS.DSTU = {
@@ -220,13 +224,18 @@ STRINGS.SKIN_QUOTES.winky_none = "\"Squeak!\""
 STRINGS.SKIN_DESCRIPTIONS.winky_none = "She's a fan of shiny things."
 
 STRINGS.ACTIONS.CREATE_BURROW = "Make Burrow"
+STRINGS.ACTIONS.RAT_ORDER = "Gather Order!"
 STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
+STRINGS.ACTIONS.RUMMAGE.GEM_FORGE = "Use"
+STRINGS.ACTIONS.RUMMAGE.CLOSE_GEM_FORGE = "Stop using"
+STRINGS.ACTIONS.STORE.GEM_FORGE = "Forge"
+STRINGS.ACTIONS.HEALCHESS = "Heal"
 
 STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
-            GENERIC = "Use",
-            PONDER = "Ponder",
-            MORPH = "Morph",
-        }
+    GENERIC = "Use",
+    PONDER = "Ponder",
+    MORPH = "Morph",
+}
 
 
 -- Wixie
@@ -251,32 +260,32 @@ STRINGS.ACTIONS.CASTAOE.WATHGRITHR_SHIELD_DREADSTONE = STRINGS.ACTIONS.CASTAOE.W
 STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
 STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
 
-
+STRINGS.UI.APPLY_GEM = "Forge!"
 STRINGS.UI.HUD.UM_VETSKULL_GENERIC = "Veteran's Curse:\n - Receive more damage when attacked.\n - Hunger drains faster.\n - Health and Sanity from foods is applied *slowly* over time."
 STRINGS.UI.HUD.UM_VETSKULL = {
-    DEFAULT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WILLOW = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WilloWIP
-    WOLFGANG = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WENDY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WX78 = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    DEFAULT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
+    WILLOW = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WilloWIP
+    WOLFGANG = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,     --WIP
+    WENDY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,        --WIP
+    WX78 = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --WIP
     WICKERBOTTOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WOODIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WOODIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WES = "Veteran's Curse:\n - Wes Must Die.",
-    WAXWELL = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WATHGRITHR = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WEBBER = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WINONA = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WARLY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WORTOX = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WAXWELL = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,      --WIP
+    WATHGRITHR = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,   --WIP
+    WEBBER = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
+    WINONA = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
+    WARLY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,        --WIP
+    WORTOX = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,       --WIP
     WORMWOOD = "Veteran's Curse:\n - Health from healing items is applied *slowly* over time.\n - Getting attacked and fire damage interrupt the healing.",
-	WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --Wurt to Womp transition, real. Soon.
-	WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
-	WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
-	WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-	WATHOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-	WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WURT = STRINGS.UI.HUD.UM_VETSKULL_GENERIC,         --Wurt to Womp transition, real. Soon.
+    WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
+    WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
+    WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
+    WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }
-STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - Be able to wield cursed items, dropped by certain bosses."
+STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - You're able to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET_WES = "Veteran's Curse:\n - Wes Must Die."
 STRINGS.VETS_WIDGET_WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET = "You've been afflicted by the Veteran's Curse.\nPress \"I\" or the icon next to your equipment slots\nto see the effects in your \"Inspect Self\" menu.\nClick this to hide this icon."
@@ -394,6 +403,26 @@ STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns Friendly Vipers"
 STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
 STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
+
+STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
+"Cupcake", --Shy
+"Cindy B. Destroyer", --Max
+"Daisy", --Deimos
+"Nibbles", --Anomen
+"Sprinkles", --Axe
+"Rimey", --Ato
+"Mel", --CarlosBraw
+"Lucky", -- INeedANames
+"Demon", --Summerrr
+"Princess", --Sweebr/Canis
+"Frosting", --Thatonebasilisk
+"Archibald", --Bombobbit
+"Pops", --WormiestWood
+"Freeza", --Feything
+"Maurice", --FourthLess
+"Courage", --Thaumoking
+"Tipsy Laird", --Theukondos
+}
 
 --TIDDLER FRIENDLY MAN STRINGS BELOW--
 
@@ -931,55 +960,55 @@ STRINGS.SKILLTREE.WATHOM = {
 -- WIXIE
 --------------------------------------------------------------------------
 STRINGS.SKILLTREE.WIXIE = {
-	WIXIE_TAUNT_1_TITLE = "Taunt Level I",
-	WIXIE_TAUNT_1_DESC = "Taunt enemies to raise damage taken by 10%, but increase their speed 15%!",
-	WIXIE_TAUNT_2_TITLE = "Taunt Bonus I",
-	WIXIE_TAUNT_2_DESC = "Reduce speed increase by 5%.",
-	WIXIE_TAUNT_3_TITLE = "Taunt Bonus II",
-	WIXIE_TAUNT_3_DESC = "Reduce speed increase by 10%.",
-	WIXIE_TAUNT_4_TITLE = "Taunt Bonus III",
-	WIXIE_TAUNT_4_DESC = "Reduce speed increase by 15%.",
-	WIXIE_TAUNT_5_TITLE = "Taunt Level II",
-	WIXIE_TAUNT_5_DESC = "Taunt enemies longer to raise damage taken by 15%, but increase their speed 20%!",
-	WIXIE_TAUNT_6_TITLE = "Taunt Level III",
-	WIXIE_TAUNT_6_DESC = "Taunt enemies even longer to raise damage taken by 20%, but increase their speed 25%!",
-	
-	WIXIE_AMMOCRAFT_1_TITLE = "Ammo Crafter I",
-	WIXIE_AMMOCRAFT_1_DESC = "Increase ammo crafting speed.",
-	WIXIE_AMMOCRAFT_2_TITLE = "Ammo Crafter II",
-	WIXIE_AMMOCRAFT_2_DESC = "Increase basic ammo crafting amount by 5.",
-	WIXIE_AMMOCRAFT_3_TITLE = "Ammo Crafter III",
-	WIXIE_AMMOCRAFT_3_DESC = "Increase special ammo crafting amount by 5.",
-	
-	WIXIE_SLINGSHOT_AMMO_STINGER_TITLE = "Stinger Zingers",
-	WIXIE_SLINGSHOT_AMMO_STINGER_DESC = "Learn to craft Stinger Zingers: an ammo made of Stingers that sticks into enemies and deals increasing damage for each subsequent hit.",
+    WIXIE_TAUNT_1_TITLE = "Taunt Level I",
+    WIXIE_TAUNT_1_DESC = "Taunt enemies to raise damage taken by 10%, but increase their speed 15%!",
+    WIXIE_TAUNT_2_TITLE = "Taunt Bonus I",
+    WIXIE_TAUNT_2_DESC = "Reduce speed increase by 5%.",
+    WIXIE_TAUNT_3_TITLE = "Taunt Bonus II",
+    WIXIE_TAUNT_3_DESC = "Reduce speed increase by 10%.",
+    WIXIE_TAUNT_4_TITLE = "Taunt Bonus III",
+    WIXIE_TAUNT_4_DESC = "Reduce speed increase by 15%.",
+    WIXIE_TAUNT_5_TITLE = "Taunt Level II",
+    WIXIE_TAUNT_5_DESC = "Taunt enemies longer to raise damage taken by 15%, but increase their speed 20%!",
+    WIXIE_TAUNT_6_TITLE = "Taunt Level III",
+    WIXIE_TAUNT_6_DESC = "Taunt enemies even longer to raise damage taken by 20%, but increase their speed 25%!",
 
-	WIXIE_SLINGSHOT_AMMO_DREADSTONE_TITLE = "Dreadstone Pebbles",
-	WIXIE_SLINGSHOT_AMMO_DREADSTONE_DESC = "Learn to craft Dread Pebbles: an ammo made of Dreadstone that knocks enemies back and has a chance of not being destroyed on impact.",
+    WIXIE_AMMOCRAFT_1_TITLE = "Ammo Crafter I",
+    WIXIE_AMMOCRAFT_1_DESC = "Increase ammo crafting speed.",
+    WIXIE_AMMOCRAFT_2_TITLE = "Ammo Crafter II",
+    WIXIE_AMMOCRAFT_2_DESC = "Increase basic ammo crafting amount by 5.",
+    WIXIE_AMMOCRAFT_3_TITLE = "Ammo Crafter III",
+    WIXIE_AMMOCRAFT_3_DESC = "Increase special ammo crafting amount by 5.",
 
-	WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_TITLE = "Shockscrap Shots",
-	WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_DESC = "Learn to craft Shockscrap Shots: an ammo made of Scrap and a Saffron Feather that periodically shocks the target and nearby enemies.",
+    WIXIE_SLINGSHOT_AMMO_STINGER_TITLE = "Stinger Zingers",
+    WIXIE_SLINGSHOT_AMMO_STINGER_DESC = "Learn to craft Stinger Zingers: an ammo made of Stingers that sticks into enemies and deals increasing damage for each subsequent hit.",
 
-	WIXIE_SLINGSHOT_AMMO_GUNPOWDER_TITLE = "Kablooies",
-	WIXIE_SLINGSHOT_AMMO_GUNPOWDER_DESC = "Learn to craft Kablooies: an ammo mostly made of Gunpowder that explodes on impact, damaging and knocking back enemies.",
-	
-	WIXIE_SHOVE_1_TITLE = "Shover I",
-	WIXIE_SHOVE_1_DESC = "Increase shove distance by 10%.",
-	WIXIE_SHOVE_2_TITLE = "Shover II",
-	WIXIE_SHOVE_2_DESC = "Increase shove distance by 20%.",
-	WIXIE_SHOVE_3_TITLE = "Shover III",
-	WIXIE_SHOVE_3_DESC = "Increase shove distance by 30%.",
-	
-	WIXIE_AMMO_BAG_TITLE = "Ammo Hoarder",
-	WIXIE_AMMO_BAG_DESC = "Learn how to craft an Ammo Pouch for carrying your excess ammo.",
-	
-	WIXIE_ALLEGIANCE_LOCK_1_DESC = "Learn 12 skills to unlock.",
-	
-	WIXIE_ALLEGIANCE_SHADOW_TITLE = "Nightmare Maker",
-	WIXIE_ALLEGIANCE_SHADOW_DESC = "Unlock the ability to craft 'Jessie', Ickies, and Pure Horror Rounds.\nART FOR JESSIE IS UNFINISHED!!",
-	
-	WIXIE_ALLEGIANCE_LUNAR_TITLE = "Dream Invader",
-	WIXIE_ALLEGIANCE_LUNAR_DESC = "Unlock the ability to craft 'Claire', Brightshade Husk Rounds, and Pure Brilliance Rounds.\nART FOR CLAIRE IS UNFINISHED!!",
+    WIXIE_SLINGSHOT_AMMO_DREADSTONE_TITLE = "Dreadstone Pebbles",
+    WIXIE_SLINGSHOT_AMMO_DREADSTONE_DESC = "Learn to craft Dread Pebbles: an ammo made of Dreadstone that knocks enemies back and has a chance of not being destroyed on impact.",
+
+    WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_TITLE = "Shockscrap Shots",
+    WIXIE_SLINGSHOT_AMMO_SCRAPFEATHER_DESC = "Learn to craft Shockscrap Shots: an ammo made of Scrap and a Saffron Feather that periodically shocks the target and nearby enemies.",
+
+    WIXIE_SLINGSHOT_AMMO_GUNPOWDER_TITLE = "Kablooies",
+    WIXIE_SLINGSHOT_AMMO_GUNPOWDER_DESC = "Learn to craft Kablooies: an ammo mostly made of Gunpowder that explodes on impact, damaging and knocking back enemies.",
+
+    WIXIE_SHOVE_1_TITLE = "Shover I",
+    WIXIE_SHOVE_1_DESC = "Increase shove distance by 10%.",
+    WIXIE_SHOVE_2_TITLE = "Shover II",
+    WIXIE_SHOVE_2_DESC = "Increase shove distance by 20%.",
+    WIXIE_SHOVE_3_TITLE = "Shover III",
+    WIXIE_SHOVE_3_DESC = "Increase shove distance by 30%.",
+
+    WIXIE_AMMO_BAG_TITLE = "Ammo Hoarder",
+    WIXIE_AMMO_BAG_DESC = "Learn how to craft an Ammo Pouch for carrying your excess ammo.",
+
+    WIXIE_ALLEGIANCE_LOCK_1_DESC = "Learn 12 skills to unlock.",
+
+    WIXIE_ALLEGIANCE_SHADOW_TITLE = "Nightmare Maker",
+    WIXIE_ALLEGIANCE_SHADOW_DESC = "Unlock the ability to craft 'Jessie', Ickies, and Pure Horror Rounds.\nART FOR JESSIE IS UNFINISHED!!",
+
+    WIXIE_ALLEGIANCE_LUNAR_TITLE = "Dream Invader",
+    WIXIE_ALLEGIANCE_LUNAR_DESC = "Unlock the ability to craft 'Claire', Brightshade Husk Rounds, and Pure Brilliance Rounds.\nART FOR CLAIRE IS UNFINISHED!!",
 }
 
 
@@ -1050,88 +1079,88 @@ STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_LEGS_4_DESC = "Cost to leap is reduce
 STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_LEGS_EXPERT_DESC = "Cost to leap is reduced by 50%, the cooldown is halved, and you can leap carrying heavy objects for more damage and a larger area."
 
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_1_DESC = "You can now gain mightiness up to 110."
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_2_DESC = "You can now gain mightiness up to 120."
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_3_DESC = "You can now gain mightiness up to 130."
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_4_DESC = "You can now gain mightiness up to 140."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_1_DESC             = "You can now gain mightiness up to 110."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_2_DESC             = "You can now gain mightiness up to 120."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_3_DESC             = "You can now gain mightiness up to 130."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_4_DESC             = "You can now gain mightiness up to 140."
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_5_TITLE = "Push the Limits Expert"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_5_DESC = "You can now gain mightiness up to 150, and you gain twice as much mightiness from using the gym."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_5_TITLE            = "Push the Limits Expert"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_GYM_OVERBUFF_5_DESC             = "You can now gain mightiness up to 150, and you gain twice as much mightiness from using the gym."
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_1_TITLE = "Mighty Strikes I"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_2_TITLE = "Mighty Strikes II"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_3_TITLE = "Mighty Strikes III"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_4_TITLE = "Mighty Strikes IV"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_5_TITLE = "Mighty Strikes V"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_1_TITLE          = "Mighty Strikes I"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_2_TITLE          = "Mighty Strikes II"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_3_TITLE          = "Mighty Strikes III"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_4_TITLE          = "Mighty Strikes IV"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_5_TITLE          = "Mighty Strikes V"
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_1_DESC = "Cost of Mighty Strikes decreases by 10%"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_2_DESC = "Cost of Mighty Strikes decreases by 20%"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_3_DESC = "Cost of Mighty Strikes decreases by 30%"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_4_DESC = "Cost of Mighty Strikes decreases by 40%"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_5_DESC = "Cost of Mighty Strikes decreases by 50%"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_1_DESC           = "Cost of Mighty Strikes decreases by 10%"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_2_DESC           = "Cost of Mighty Strikes decreases by 20%"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_3_DESC           = "Cost of Mighty Strikes decreases by 30%"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_4_DESC           = "Cost of Mighty Strikes decreases by 40%"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_MIGHTY_STRIKES_5_DESC           = "Cost of Mighty Strikes decreases by 50%"
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_TITLE = "Faustian Bargain"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_DESC = "The Queen will reward your loyalty with devastating strength.\nYou will now always be mighty and with only 1.5x hunger rate, but your body becomes more fragile."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_TITLE         = "Faustian Bargain"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_DESC          = "The Queen will reward your loyalty with devastating strength.\nYou will now always be mighty and with only 1.5x hunger rate, but your body becomes more fragile."
 
-STRINGS.SKILLTREE.ALLEGIANCE_LOCK_SHADOW_DESC = "Master your shadow-fueled strength, but locks other masteries if chosen."
+STRINGS.SKILLTREE.ALLEGIANCE_LOCK_SHADOW_DESC                       = "Master your shadow-fueled strength, but locks other masteries if chosen."
 
 STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_MASTERY_TITLE = "Shadow Mastery"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_MASTERY_DESC = "Your base damage is lower, but increases as you land hits, leap, and do mighty work without being hit yourself."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_SHADOW_MASTERY_DESC  = "Your base damage is lower, but increases as you land hits, leap, and do mighty work without being hit yourself."
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_TITLE = "Monstrous Growth"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_DESC = "The Cryptic Founder will reward your curiosity with lunar energy causing monstrous growth.\nYou gain an alternative mighty form with a dusting of fish scales and improved sailing and fishing capabilities."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_TITLE          = "Monstrous Growth"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_DESC           = "The Cryptic Founder will reward your curiosity with lunar energy causing monstrous growth.\nYou gain an alternative mighty form with a dusting of fish scales and improved sailing and fishing capabilities."
 
-STRINGS.SKILLTREE.ALLEGIANCE_LOCK_LUNAR_DESC = "Master your overgrown hunger, but locks other masteries if chosen."
+STRINGS.SKILLTREE.ALLEGIANCE_LOCK_LUNAR_DESC                        = "Master your overgrown hunger, but locks other masteries if chosen."
 
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_MASTERY_TITLE = "Lunar Mastery"
-STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_MASTERY_DESC = "Having insufficient mightiness will drain hunger instead.\nLeaping will create ice platforms on water.\nYou are immune to accursed trinkets."
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_MASTERY_TITLE  = "Lunar Mastery"
+STRINGS.SKILLTREE.WOLFGANG.WOLFGANG_ALLEGIANCE_LUNAR_MASTERY_DESC   = "Having insufficient mightiness will drain hunger instead.\nLeaping will create ice platforms on water.\nYou are immune to accursed trinkets."
 
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_MONSTERTONORMAL = "Wolfgang feel tiny now."
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_NORMALTOMONSTER = "The sea calls to Wolfgang!"
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_IGNOREDTRINKETCURSE = "Puny bracelet no match for mighty scales!"
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_MONSTERTONORMAL                = "Wolfgang feel tiny now."
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_NORMALTOMONSTER                = "The sea calls to Wolfgang!"
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_IGNOREDTRINKETCURSE            = "Puny bracelet no match for mighty scales!"
 
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_WASHED_ASHORE = "Wolfgang glad to be back on land."
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_FELLINTOVOID = "Wolfgang barely managed to grab ledge!"
-STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_BOAT_SINK = "Water is cold!"
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_WASHED_ASHORE                  = "Wolfgang glad to be back on land."
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_FELLINTOVOID                   = "Wolfgang barely managed to grab ledge!"
+STRINGS.CHARACTERS.WOLFGANG.ANNOUNCE_BOAT_SINK                      = "Water is cold!"
 
 --------------------------------------------------------------------------
 -- WORTOX
 --------------------------------------------------------------------------
-STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life." 
-STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC = "Twintailed Heart releases its Souls when it saves the bearer's life."
+STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_1_DESC                  = "Learn how to channel Souls into a Twintailed Heart. This creation, when held, will save the bearer's life."
+STRINGS.SKILLTREE.WORTOX.WORTOX_LIFEBRINGER_2_DESC                  = "Twintailed Heart releases its Souls when it saves the bearer's life."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also apply the effects from Lifted Spirits I to healed targets."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_3_DESC                = "Dropped Souls will instantly heal players and do a second healing wave for a lower amount after a delay."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_4_DESC                = "Dropped Souls will move faster towards hurt players, the second healing wave will happen quicker, and Souls are more efficient at healing multiple players. Souls will also apply the effects from Lifted Spirits I to healed targets."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE = "Reaching Souls"
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC = "Dropped Souls will move towards hurt players, and heal at an increased range."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_TITLE               = "Reaching Souls"
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULPROTECTOR_1_DESC                = "Dropped Souls will move towards hurt players, and heal at an increased range."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_TITLE = "Soul Thief"
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC = "Souls are created and attracted to you from further away and will last longer."
+STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_TITLE                       = "Soul Thief"
+STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_1_DESC                        = "Souls are created and attracted to you from further away and will last longer."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC = "Requires the skill below and 4 total Nice and/or Neutral skills to unlock."
-STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC = "Requires the skill below and 4 total Naughty and/or Neutral skills to unlock."
+STRINGS.SKILLTREE.WORTOX.WORTOX_NICE_LOCK_DESC                      = "Requires the skill below and 4 total Nice and/or Neutral skills to unlock."
+STRINGS.SKILLTREE.WORTOX.WORTOX_NAUGHTY_LOCK_DESC                   = "Requires the skill below and 4 total Naughty and/or Neutral skills to unlock."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE = "Shadow Harvester"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC = "The Queen has shared the secrets of weaving shadows with you, yielding better results. Souls waiting to be freed in a Soul Echo are consumed by the Shadow Reaper to unleash a powerful attack. Kills accomplished by the reaper nourish your shadows' lifeforce."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_TITLE           = "Shadow Harvester"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_2_DESC            = "The Queen has shared the secrets of weaving shadows with you, yielding better results. Souls waiting to be freed in a Soul Echo are consumed by the Shadow Reaper to unleash a powerful attack. Kills accomplished by the reaper nourish your shadows' lifeforce."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE = "Shadow Weaver"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC = "Observing the Fuelweaver closely inspired you to weave your own creations to life. You can infuse Nightmare Fuel with Souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_TITLE           = "Shadow Weaver"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_SHADOW_1_DESC            = "Observing the Fuelweaver closely inspired you to weave your own creations to life. You can infuse Nightmare Fuel with Souls to try your hand at weaving shadows, but the results are inconsistent and unstable."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 Souls will periodically release a Soul from your inventory to pierce."
-STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC = "Held Souls and Souls inside of Soul Jars increases the damage of the Knabsack, up to 100 total Souls collected."
+STRINGS.SKILLTREE.WORTOX.WORTOX_THIEF_4_DESC                        = "Souls attracted to you will repel away initially before coming towards you. Attacking while holding at least 10 Souls will periodically release a Soul from your inventory to pierce."
+STRINGS.SKILLTREE.WORTOX.WORTOX_SOULJAR_3_DESC                      = "Held Souls and Souls inside of Soul Jars increases the damage of the Knabsack, up to 100 total Souls collected."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of Soul Pierce and Soul Decoy."
+STRINGS.SKILLTREE.WORTOX.WORTOX_INCLINATION_NAUGHTY_DESC            = "Your greed stops you from overloading of Soul power, for a moment.\nEating or releasing Souls will no longer change sanity. Souls heal you for less. Increases the damage of Soul Pierce and Soul Decoy."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE = "Lunar Summoner"
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC = "Use Lune Tree Blossoms and Souls to summon allied gestalts from Alter. They are eager to carry any burden."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_TITLE            = "Lunar Summoner"
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_1_DESC             = "Use Lune Tree Blossoms and Souls to summon allied gestalts from Alter. They are eager to carry any burden."
 
-STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a Soul Echo to do additional damage. In addition, this empowered attack will steal items off of enemies."
+STRINGS.SKILLTREE.WORTOX.WORTOX_ALLEGIANCE_LUNAR_DESC               = "Your time spent tricking Alter's minions to do your bidding has increased your cunning. Lunar weaponry can be improved with a Soul Echo to do additional damage. In addition, this empowered attack will steal items off of enemies."
 
 --------------------------------------------------------------------------
 -- WILLOW
 --------------------------------------------------------------------------
-STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC = STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC .. " Can also absorb Smog."
+STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC                = STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC .. " Can also absorb Smog."
 
 --------------------------------------------------------------------------
 -- WALTER
@@ -1141,11 +1170,11 @@ STRINGS.SKILLTREE.WILLOW.WILLOW_ATTUNED_LIGHTER_DESC = STRINGS.SKILLTREE.WILLOW.
 --------------------------------------------------------------------------
 -- WORMWOOD
 --------------------------------------------------------------------------
-STRINGS.SKILLTREE.WORMWOOD.BLOOMING_PHOTOSYNTHESIS_DESC                                = "Continue naturally blooming into Summer."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_PHOTOSYNTHESIS_DESC             = "Continue naturally blooming into Summer."
 
-STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED1_DESC                                        = "During full bloom move 5% faster while above 90% health."
-STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED2_DESC                                        = "During full bloom move 5% faster while above 80% health."
-STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                                   = "Fertilization of Wormwood is boosted 30%.\nReach full bloom much quicker."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED1_DESC                     = "During full bloom move 5% faster while above 90% health."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_SPEED2_DESC                     = "During full bloom move 5% faster while above 80% health."
+STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                = "Fertilization of Wormwood is boosted 30%.\nReach full bloom much quicker."
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1161,8 +1190,8 @@ STRINGS.UM_DESCRIPTOR = {
     GEMOLOGY_GEM = {
         BLUE1 = {
             "Gives summer insulation when held and freezes enemies on hit.",
-            "Gives summer insulation when held and freezes enemies on hit.\nHas a chance to not break free fully frozen enemies.",
-            "Gives summer insulation when held and freezes enemies on hit.\nHas a high chance to not break free fully frozen enemies.",
+            "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
+            "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
         },
         BLUE2 = {
             "Converts durability into freshness. Can be fully preserved in an ice box.",
@@ -1231,11 +1260,11 @@ STRINGS.UM_DESCRIPTOR = {
         },
     },
     --this is for the items with a minerology effect, with the prefix "gemology effects:"
-    MINEROLOGYABLE = {
+    GEM_ENCHANTABLE = {
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
-            "Has summer insulation when held and freezes enemies on hit.\nHas a chance to not break free fully frozen enemies.",
-            "Has summer insulation when held and freezes enemies on hit.\nHas a high chance to not break free fully frozen enemies.",
+            "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
+            "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
         }, --
         BLUE2 = {
             "Has freshness instead of durability. Can be fully preserved in an ice box.",
@@ -1458,3 +1487,9 @@ STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
     },
 }
 
+STRINGS.MINERAL_LOGBOOK = {
+    UNKNOWN_GEM = "Unknown Gem",
+    SOURCES = "Sources",
+    EFFECTS = "Effects",
+    GEMS = "Gems",
+}

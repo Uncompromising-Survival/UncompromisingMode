@@ -549,9 +549,19 @@ ChangeSortKey("um_record_moonmaw", "um_record_tot", "DECOR", true)
 AddRecipe2("um_scrapper", { Ingredient("gears", 1), Ingredient("houndstooth", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_scrapper_placer" }, { "STRUCTURES", "TOOLS" })
 AddRecipe2("um_inkubator", { Ingredient("gears", 1), Ingredient("nightmarefuel", 4), Ingredient("thulecite", 2) }, TECH.LOST, { placer = "um_inkubator_placer" }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, { placer = "um_astral_projector_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector", { Ingredient("purplemooneye", 1), Ingredient("moonrocknugget", 4), Ingredient("thulecite", 4) }, TECH.LOST, { placer = "um_astral_projector_placer", testfn = function(pt, rot, builder)
+    local x, y, z = pt:Get()
+    return (builder == nil or not builder:HasTag("um_astral_projected"))
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector_target"}) == 0
+end }, { "STRUCTURES" })
 
-AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, { placer = "um_astral_projector_target_placer" }, { "STRUCTURES" })
+AddRecipe2("um_astral_projector_target", { Ingredient("moonglass", 3), Ingredient("thulecite", 4), Ingredient("moonrocknugget", 2) }, TECH.LOST, { placer = "um_astral_projector_target_placer", testfn = function(pt, rot, builder)
+    local x, y, z = pt:Get()
+    return (builder == nil or not builder:HasTag("um_astral_projected"))
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector"}) == 0
+        and #TheSim:FindEntities(x, y, z, 27, {"um_astral_projector_target"}) == 0
+end }, { "STRUCTURES" })
 
 AddRecipe2("boat_ancient_item", { Ingredient("livinglog", 16) }, TECH.LOST, nil, { "SEAFARING" })
 ChangeSortKey("boat_ancient_item", "boat_item", "SEAFARING", true)
@@ -563,7 +573,7 @@ ChangeSortKey("beakbasher", "hambat", "WEAPONS")
 AddRecipe2("um_hat_leafwing", { Ingredient("um_leafwing", 2), Ingredient("um_moss", 4), Ingredient("log", 3) }, TECH.SCIENCE_TWO, nil, { "CLOTHING" })
 ChangeSortKey("um_hat_leafwing", "beehat", "CLOTHING", true)
 
-if TUNING.DSTU.WATHGRITHR_REWORK then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
         AddCharacterRecipe("wathgrithr_shield_dreadstone",
     { Ingredient("dreadstone", 6), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 1) },
     TECH.NONE,
@@ -595,12 +605,25 @@ AddRecipe2("um_feather_totem", {Ingredient("boards", 2),  Ingredient("um_moss", 
 ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 
---AddRecipe2("um_gemology_pouch", {Ingredient("goldnugget", 1),}, TECH.SCIENCE_TWO, {}, {"CONTAINERS"})
---ChangeSortKey("um_gemology_pouch", "candybag", "CONTAINERS", false)
 
 AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_magnifier"}}, {"CRAFTING_STATION", "TOOLS"})
 ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
+
+AddRecipe2("um_gemology_pouch", {Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2)}, TECH.MAGIC_TWO, {}, {"MAGIC", "CONTAINERS" })
+ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)
+ChangeSortKey("um_gemology_pouch", "winona_toolbox", "CONTAINERS", false)
+
+if TUNING.DSTU.SHAVE_MODE then
+    AddRecipe2("um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_thulecite_razor"}}, {"CRAFTING_STATION", "TOOLS"})
+    ChangeSortKey("um_thulecite_razor", "multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("um_thulecite_razor", "razor", "TOOLS", true)
+
+    AddRecipe2("wathom_um_thulecite_razor", {Ingredient("razor", 1), Ingredient("thulecite", 2), Ingredient("nightmarefuel", 2)}, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "um_thulecite_razor", description = "um_thulecite_razor", no_deconstruction = true}, {"CRAFTING_STATION", "CHARACTER", "TOOLS"})
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "wathom_multitool_axe_pickaxe", "CHARACTER", true)
+    ChangeSortKey("wathom_um_thulecite_razor", "um_thulecite_razor", "TOOLS", true)
+end
 
 --WATHOM ANCIENT KINSHIP I STUFF--
 AddRecipe2("wathom_thulecite", { Ingredient("thulecite_pieces", 6) }, TECH.ANCIENT_TWO, {builder_tag = "wathom", builder_skill = "wathom_allegiance_neutral", product = "thulecite", description = "thulecite", no_deconstruction = true }, { "CRAFTING_STATION", "CHARACTER" })
@@ -628,3 +651,11 @@ AddRecipe2("wathom_um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingre
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CRAFTING_STATION", false)
 ChangeSortKey("wathom_um_magnifier", "wathom_multitool_axe_pickaxe", "CHARACTER", false)
 ChangeSortKey("wathom_um_magnifier", "sentryward", "TOOLS", false)
+
+AddRecipe2("uncompromising_winkyhomeburrow", { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HUNGER, 20) }, TECH.NONE, { placer = "uncompromising_winkyhomeburrow_placer", builder_tag = "ratwhisperer", no_deconstruction = true, canbuild = function(inst, builder) return not GLOBAL.TheWorld.winkyburrowhome end }, { "CHARACTER", "CONTAINERS" })
+ChangeSortKey("uncompromising_winkyhomeburrow", "wx78_scanner_item", "CHARACTER", true)
+ChangeSortKey("uncompromising_winkyhomeburrow", "magician_chest", "CONTAINERS", false)
+
+--[[AddRecipe2("uncompromising_winkyburrow", { Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 15) }, TECH.NONE, { placer = "uncompromising_winkyburrow_placer", builder_tag = "ratwhisperer", no_deconstruction = true, image ="uncompromising_ratburrow.tex"}, { "CHARACTER", "CONTAINERS" })
+ChangeSortKey("uncompromising_winkyburrow", "uncompromising_winkyhomeburrow", "CHARACTER", true)
+ChangeSortKey("uncompromising_winkyburrow", "uncompromising_winkyhomeburrow", "CONTAINERS", false)]]

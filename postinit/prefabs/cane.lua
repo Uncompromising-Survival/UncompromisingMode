@@ -11,7 +11,7 @@ SetSharedLootTable( 'um_walrus',
 {
     {'meat',            1.00},
     {'blowdart_pipe',   1.00},
-    {'walrushat',       0.25},
+    {'walrushat',       0.50},
     {'walrus_tusk',     1.00},
 })
 

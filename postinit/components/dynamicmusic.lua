@@ -109,7 +109,12 @@ end
 
     local function IsInMagmaCaves(player)
         return player.components.areaaware ~= nil
-            and player.components.areaaware:CurrentlyInTag("magmacaves")
+            and (player.components.areaaware:CurrentlyInTag("magmacaves") or player.components.areaaware:CurrentlyInTag("fumarolearea"))
+    end
+
+    local function IsOnLunarIsland(player)
+    return player.components.areaaware ~= nil
+        and player.components.areaaware:CurrentlyInTag("lunacyarea")
     end
 
     local function StartBusy(player, ...)

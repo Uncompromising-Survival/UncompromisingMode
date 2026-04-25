@@ -1,32 +1,37 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if TUNING.DSTU.WATHGRITHR_REWORK ~= 0 then
-	env.AddPrefabPostInit("wathgrithr", function(inst)
 
-		if not TheWorld.ismastersim then
-			return
-		end
-
-		if inst.components.battleborn ~= nil then
-			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
-			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
-			inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
-		end
-
-		if TUNING.DSTU.WATHGRITHR_REWORK == 1 then inst:AddComponent("efficientuser") end
-	end)
-end
-
-env.AddPrefabPostInit("battlesong_container", function(inst)
+env.AddPrefabPostInit("wathgrithr", function(inst)
 
 	if not TheWorld.ismastersim then
 		return
 	end
 
-	inst:RemoveComponent("burnable")
-	inst:RemoveComponent("propagator")
+	if TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF then
+		if inst.components.battleborn ~= nil then
+			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
+			inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
+		end
+	end
+
+	if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+		if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then inst:AddComponent("efficientuser") end
+	end
 end)
+
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+	env.AddPrefabPostInit("battlesong_container", function(inst)
+
+		if not TheWorld.ismastersim then
+			return
+		end
+
+		inst:RemoveComponent("burnable")
+		inst:RemoveComponent("propagator")
+	end)
+end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --
@@ -41,7 +46,7 @@ end)
 TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT = 0.33 -- This has an effect on small creatures only
 TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT = 0.66 -- This affects mainly big creatures
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then -- Enabled only
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Enabled only
 TUNING.WATHGRITHR_BASE_INSPIRATION_GAIN_MULT = 1 
 
 --------------------------------------------------------------------------
@@ -93,14 +98,16 @@ end
 -- EQUIPMENT PERKS
 --------------------------------------------------------------------------
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then -- Only with rework enabled
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Only with rework enabled
 	-- Spear
 	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES = 2 -- Base cost of lunge
 	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES = 0.5 -- Durability lost per mob hit
 	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_MAX_HITS = 8 -- After this number of hits it will no longer drain durability
 
-	TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
-	TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
+	if not TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR then
+		TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
+		TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
+	end
 	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR = 25 -- Uses
 
 	-- Shield

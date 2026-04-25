@@ -284,6 +284,7 @@ local function fnlabotomizedswilson(Sim)
     inst.AnimState:SetBuild("wilson")
     inst.AnimState:PlayAnimation("idle",true)
 	inst.AnimState:SetMultColour(0, 0, 0, 0)
+    inst.AnimState:UsePointFiltering(true)
 
 
     inst:AddComponent("sanityaura")

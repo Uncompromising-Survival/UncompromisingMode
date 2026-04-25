@@ -16,8 +16,8 @@ local events=
     CommonHandlers.OnAttack(),
     CommonHandlers.OnAttacked(),
     CommonHandlers.OnDeath(),
-    EventHandler("entershield", function(inst) inst.sg:GoToState("shield") end),
-    EventHandler("exitshield", function(inst) inst.sg:GoToState("shield_end") end),
+    EventHandler("entershield", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("shield") end end),
+    EventHandler("exitshield", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("shield_end") end end),
     --EventHandler("onignite", function(inst) inst:PushEvent("entershield") end), -- Will not hide when ignited
     EventHandler("rangedattack", function(inst, data)
         if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then

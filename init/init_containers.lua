@@ -4,6 +4,7 @@ local ACTIONS = GLOBAL.ACTIONS
 local Inv = require "widgets/inventorybar"
 local EQUIPSLOTS = GLOBAL.EQUIPSLOTS
 local SpawnPrefab = GLOBAL.SpawnPrefab
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
 
 local containers = require("containers")
 --[[
@@ -48,9 +49,9 @@ local wardrobe_prefabs = {
     "lunarplant_kit",
     "voidcloth_kit",
     "wagpunkbits_kit",
-	"spiderden_bedazzler",
-	"spider_whistle",
-	"spider_repellent",
+    "spiderden_bedazzler",
+    "spider_whistle",
+    "spider_repellent",
     "sludge_oil",
     "saddle_basic",
     "saddle_race",
@@ -108,12 +109,13 @@ function CheckBee(container, item, slot)
     return item:HasTag("bee")
 end
 
+
 function CheckNettle(container,item,slot)
 	return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
 end
 
 function CheckGem(container, item, slot)
-    return not item:HasTag("irreplaceable") and item:HasTag("gem")
+    return not item:HasTag("irreplaceable") and item:HasTag("gem") or GEM_DEFS[item.prefab] ~= nil
 end
 
 function CheckSlingshotAmmo(container, item, slot)
@@ -137,7 +139,7 @@ function CheckFeather(container, item, slot)
 end
 
 function CheckGemologyGem(container, item, slot)
-    return item:HasTag("gemology_gem")
+    return GEM_DEFS[item.prefab] ~= nil or item:HasTag("gemology_gem") or item:HasTag("gemology_geode") --checking defs in case someone adds some random thing as well.
 end
 
 function CheckNOTHING(container, item, slot)
@@ -287,7 +289,7 @@ table.insert(modparams.silksack.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 +
 
 
 --function modparams.silksack.itemtestfn(container, item, slot)
-    --return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
+--return (item.prefab == "silk" and (slot == 9) or (slot ~= 9) and item.prefab ~= "silk")
 --end
 
 function modparams.silksack.widget.buttoninfo.fn(inst, doer)
@@ -316,9 +318,9 @@ function modparams.silksack.widget.buttoninfo.validfn(inst)
         end
 
         local silk = container:GetItemInSlot(9)
-		if silk ~= nil and silk.prefab == "silk" then
-			return has_items and silk and (silk.replica ~= nil and silk.replica.stackable ~= nil and silk.replica.stackable:StackSize() >= 6 or silk.components.stackable ~= nil and silk.components.stackable.stacksize >= 6) and not bundle
-		end
+        if silk ~= nil and silk.prefab == "silk" then
+            return has_items and silk and (silk.replica ~= nil and silk.replica.stackable ~= nil and silk.replica.stackable:StackSize() >= 6 or silk.components.stackable ~= nil and silk.components.stackable.stacksize >= 6) and not bundle
+        end
     end
 end
 
@@ -517,7 +519,7 @@ modparams.um_feather_totem =
     --usespecificslotsforitems = true,
     acceptsstacks = false,
     --lowpriorityselection = true,
-   -- excludefromcrafting = false,
+    -- excludefromcrafting = false,
 }
 
 --[[{
@@ -597,10 +599,10 @@ modparams.um_gemology_pouch =
     {
         slotpos = {},
         slotbg  = {},
-        --animbank  = "ui_slingshotammo_container_3x2",
-        --animbuild = "ui_slingshotammo_container_3x2",
-        pos = Vector3(0, 200, 0),
-        --side_align_tip = 160,
+        bgatlas = "images/dragonflycontainerborder.xml",
+        bgimage = "dragonflycontainerborder.tex",
+
+        pos     = Vector3(0, 200, 0),
     },
     type = "chest",
     itemtestfn = CheckGemologyGem,
@@ -608,11 +610,10 @@ modparams.um_gemology_pouch =
 
 --local slingshotammo_container_bg = { image = "slingshot_ammo_slot.tex" }
 
-for y = 4, 0, -1 do
+for y = 2.5, -1.5, -1 do
     for x = 0, 4 do
-        --table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(90 * x - 90, 80 * y - 42.5, 0))
-        table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2, 0))
-        --table.insert(containers.params.swire_purse.widget.slotbg, slingshotammo_container_bg)
+        table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2 + 120
+        , 0))
     end
 end
 
@@ -883,7 +884,6 @@ end
 -- Polar Bearger Bin dried jerky change
 vanilla_beargerfur_sack_itemtestfn = containers.params.beargerfur_sack.itemtestfn
 containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
-
     -- Klei's containers.lua [[ beargerfur_sack ]]
     if vanilla_beargerfur_sack_itemtestfn and vanilla_beargerfur_sack_itemtestfn(container, item, slot) then
         return true
@@ -905,25 +905,77 @@ containers.params.beargerfur_sack.itemtestfn = function(container, item, slot)
         or string.find(ingame_name, "jerky", 1, true)
 
     if isdried then
-		return true
-	end
-
+        return true
+    end
 end
 
 
 containers.params.silken_bundle = GLOBAL.deepcopy(containers.params.beargerfur_sack)
 
 
+
+containers.params.um_gemologyforge =
+{
+    widget =
+    {
+        slotpos =
+        {
+            Vector3(0, 36 + 4, 0),
+            Vector3(0, -30, 0),
+        },
+        slotbg =
+        {
+            { image = "wardrobe_tool_slot.tex", atlas = "images/wardrobe_tool_slot.xml" },
+            { image = "gem_slot.tex",           atlas = "images/gem_slot.xml" },
+        },
+        animbank = "ui_forge_1x2",
+        animbuild = "ui_forge_1x2",
+        pos = Vector3(200, 0, 0),
+        side_align_tip = 100,
+        buttoninfo =
+        {
+            text = STRINGS.UI.APPLY_GEM,
+            position = Vector3(3, -90, 0),
+        },
+    },
+    acceptsstacks = false,
+    usespecificslotsforitems = true,
+    type = "cooker",
+}
+
+
+function containers.params.um_gemologyforge.itemtestfn(container, item, slot)
+    return ((slot == 1 and (item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil)) or
+        (slot == 2 and GEM_DEFS[item.prefab] ~= nil) or
+        (slot == nil and ((item.components.gem_enchantable ~= nil or item.replica.gem_enchantable ~= nil) or GEM_DEFS[item.prefab] ~= nil))
+    )
+end
+
+function containers.params.um_gemologyforge.widget.buttoninfo.fn(inst, doer)
+    if inst.components.container ~= nil then
+        BufferedAction(doer, inst, ACTIONS.UM_FORGE_GEM):Do()
+    elseif inst.replica.container ~= nil then
+        SendRPCToServer(RPC.DoWidgetButtonAction, ACTIONS.UM_FORGE_GEM.code, inst, ACTIONS.UM_FORGE_GEM.mod_name)
+    end
+end
+
+function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
+    local tool = inst.replica.container:GetItemInSlot(1)
+    local gem = inst.replica.container:GetItemInSlot(2)
+    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and tool.replica.gem_enchantable._slots:value() > 0 and gem ~= nil and not table.contains(tool.replica.gem_enchantable:GetEnchantmentNames(), gem.prefab)
+end
+
 if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.saltbox.lowpriorityselection = true
-	containers.params.icebox.lowpriorityselection = true
-	local oldicebox = containers.params.icebox.itemtestfn
-	function containers.params.icebox.itemtestfn(container, item, slot, ...)
-		if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") then
-			return true
-		end
-		return oldicebox(container, item, slot, ...)
-	end
+    containers.params.icebox.lowpriorityselection = true
+    local oldicebox = containers.params.icebox.itemtestfn
+    function containers.params.icebox.itemtestfn(container, item, slot, ...)
+        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and table.contains(item.replica.gem_enchantable:GetEnchantmentNames(), "um_gemologybluegem2") then
+            return true
+        end
+
+        return oldicebox(container, item, slot, ...)
+    end
 end
 
 local function addItemSlotNetvarsInContainer(inst)

@@ -35,11 +35,9 @@ local function SpawnHecklerGooTrail(inst,despawn_on_day)
     fx.angle = 0
 end
 
-
 local function GooNear(inst)
-	return FindEntity(inst,4,function(ent) return ent.prefab == "shadow_goo_trail" end)
+    return FindEntity(inst,4,function(ent) return ent.prefab == "shadow_goo_trail" end)
 end
-
 
 local function DoSplatFx(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -63,20 +61,22 @@ end
 
 local function doprojectilehit(inst, other)
     DoSplatFx(inst)
-    local caster = (inst._caster ~= nil and inst._caster:IsValid()) and inst._caster or nil
+    local caster = inst._caster ~= nil and inst._caster:IsValid() and inst._caster or nil
     local x,y,z = inst.Transform:GetWorldPosition()
-    local others = TheSim:FindEntities(x,y,z,1.5,{ "_combat", "player" }, { "INLIMBO", "shadow","minotaur" }) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
+    local others = TheSim:FindEntities(x, y, z, 1.5, {"_combat", "_health", "player"}, {"INLIMBO", "shadow", "minotaur"}) --I messed around with the funni goo, its range is actually a bit small, so I bumped it up a tad.
     for i,other in ipairs(others) do
-        if other ~= nil and other ~= caster and other.components.combat ~= nil  then
-            if inst.prefab == "shadow_goo" then
-                if other.components.sanity ~= nil and other.components.health ~= nil and not other.components.health:IsDead() and other.components.sanity:IsInsane() and other.components.inkable and not other:HasTag("shadowdominance") then
-                    other.components.inkable:Ink()
-                    other.components.combat:GetAttacked(caster, TUNING.WARG_GOO_DAMAGE/2)
-                elseif other.components.sanity ~= nil and not other:HasTag("shadowdominance") then
+        if other and other ~= caster and not other.components.health:IsDead() then
+            if inst.prefab == "shadow_goo" and not other:HasTag("shadowdominance") then
+                if other.components.sanity and other.components.sanity:IsInsane() then
+                    if other.components.inkable then
+                        other.components.inkable:Ink()
+                    end
+                    other.components.combat:GetAttacked(caster, TUNING.WARG_GOO_DAMAGE / 2)
+                elseif other.components.sanity and not other:HasTag("shadowdominance") then
                     other.components.sanity:DoDelta(-5)
                 end
             end
-            if inst.prefab == "guardian_goo" and other.components.combat then --Guardian goo does the effect even if the player isn't insane, and does meaningful damage.
+            if inst.prefab == "guardian_goo" then --Guardian goo does the effect even if the player isn't insane, and does meaningful damage.
                 if other.components.inkable then
                     other.components.inkable:Ink()
                 end
@@ -99,7 +99,7 @@ local function TestProjectileLand(inst)
 end
 
 local function oncollide(inst, other)
-    if other ~= nil and other:IsValid() and other:HasTag("_combat") and not other:HasTag("shadow") and not other:HasTag("minotaur") then
+    if other ~= nil and other:IsValid() and other:HasTag("_combat") and not other:HasAnyTag("shadow", "minotaur") then
         doprojectilehit(inst, other)
     end
 end
@@ -155,7 +155,6 @@ local function shadow_goofn(inst)
     return mainprojectilefn("warg_gingerbread_bomb")
 end
 
-
 local function guardian_goo()
     local inst = CreateEntity()
 
@@ -166,23 +165,23 @@ local function guardian_goo()
 
     inst:AddTag("projectile")
     inst:AddTag("weapon")
-    
+
     inst.AnimState:SetBank("squid_watershoot")
     inst.AnimState:SetBuild("squid_watershoot")
     inst.AnimState:PlayAnimation("spin_loop",true)
     inst:AddComponent("locomotor")
     inst.AnimState:SetMultColour(0,0,0,0.8)
     inst.AnimState:UsePointFiltering(true)
-    
+
     MakeInventoryPhysics(inst)
     RemovePhysicsColliders(inst)
-    
+
     inst.entity:SetPristine()
-    
+
     if not TheWorld.ismastersim then
         return inst
     end
-    
+
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetHorizontalSpeed(40)
     inst.components.complexprojectile:SetGravity(-35)
@@ -192,8 +191,7 @@ local function guardian_goo()
     inst.tentacle = false
     inst.organ = false
     inst:Hide()
-    inst:DoTaskInTime(0.2,function(inst) inst:Show() end)    
-    
+    inst:DoTaskInTime(.2, function(inst) inst:Show() end)    
     
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
@@ -224,19 +222,20 @@ local function guardiansplat()
     inst.AnimState:SetBank("guardian_splat")
     inst.AnimState:SetBuild("guardian_splat")
     inst.AnimState:PlayAnimation("land")
-    inst.AnimState:PushAnimation("go away",false) --crap, forgot the "_" will fix later :sleep:
+    inst.AnimState:PushAnimation("go away", false) --crap, forgot the "_" will fix later :sleep:
     inst.AnimState:UsePointFiltering(true)
-    
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-    
+
     inst:AddComponent("sanityaura")
     inst.components.sanityaura.aura = -TUNING.SANITYAURA_LARGE
-    
+
     inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
+
     return inst
 end
 
@@ -266,18 +265,22 @@ local function RainedOnParade(inst)
 end
 
 
-local function OnUpdate(inst)
-	local rad = inst.Transform:GetScale()
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local should_tentacle
-	for i, v in ipairs(TheSim:FindEntities(x, y, z, rad, { "locomotor","_health","_combat" }, { "flying", "playerghost", "INLIMBO","shadow"})) do
-		should_tentacle = true
-	end
-	if should_tentacle and not FindEntity(inst, 3, function(ent) return ent.prefab == "bigshadowtentacle" end) and not inst.fading then
-		local tent = SpawnPrefab("bigshadowtentacle")
-		tent.Transform:SetPosition(inst.Transform:GetWorldPosition())
-		tent:PushEvent("arrive")
-	end
+local function OnUpdate(inst, x, y, z, rad)
+    local should_tentacle
+    for i, v in ipairs(TheSim:FindEntities(x, y, z, rad, { "locomotor" }, { "flying", "playerghost", "INLIMBO","shadow"})) do
+        should_tentacle = true
+    end
+    if should_tentacle and not FindEntity(inst, 3, function(ent) return ent.prefab == "bigshadowtentacle" end) then
+        local tent = SpawnPrefab("bigshadowtentacle")
+        tent.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        tent:PushEvent("arrive")
+    end
+end
+
+local function OnIsFadingDirty(inst)
+    if inst._isfading:value() then
+        inst.task:Cancel()
+    end
 end
 
 local function StopTentacleChecking(inst)
@@ -373,6 +376,47 @@ local function fngoo()
 	
 	inst.FadeAway = FadeAway
 	inst:WatchWorldState("startrain", RainedOnParade) -- Make it go away quicker...
+    inst.SetVariation = SetVariation    
+    inst.persists = true
+    inst.OnStartFade = OnStartFade
+    
+    inst.task = inst:DoTaskInTime(0, function(inst)
+        if inst.trailname ~= nil then
+            OnInit(inst)
+        end
+    end)
+
+    inst.OnSave = function(inst, data)
+        data.trailname = inst.trailname
+        data.duration = inst.duration
+        data.scale = inst.Transform:GetScale()
+    end
+        
+    inst.OnLoad = function(inst, data)
+        if data ~= nil then
+            if data.scale ~= nil then
+                inst.Transform:SetScale(data.scale, data.scale, data.scale)
+            end
+
+            inst.trailname = data.trailname
+            inst.duration = data.duration or TUNING.TOTAL_DAY_TIME
+
+            if inst.trailname ~= nil then
+                inst.AnimState:PlayAnimation(inst.trailname)
+                inst:ListenForEvent("animover", OnAnimOver)
+                inst.task = inst:DoPeriodicTask(0.25, OnUpdate, nil,
+                inst.Transform:GetWorldPosition(), data.scale or 1)
+            else
+                inst:Remove()
+            end
+        end
+    end
+
+    inst:DoTaskInTime(0, function(inst)
+        if inst:IsValid() then
+            inst.AnimState:SetMultColour(0,0,0,0.8)
+        end
+    end)    
 	return inst
 end
 

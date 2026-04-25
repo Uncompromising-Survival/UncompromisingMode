@@ -53,21 +53,6 @@ if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" then
         return shouldslip
     end
 
-    local _PushEvent = EntityScript.PushEvent
-    function EntityScript:PushEvent(event, data, ...)
-        if event == "onattackother" and data and data.target and data.target.UMSlipAway
-            and data.target:UMSlipAway({attacker = self, weapon = data.weapon, stimuli = data.stimuli}) then return end
-        return _PushEvent(self, event, data, ...)
-    end
-
-    env.AddComponentPostInit("weapon", function(self)
-        local _OnAttack = self.OnAttack
-        function self:OnAttack(attacker, target, projectile, ...)
-            if target and target.UMSlipAway and target:UMSlipAway({attacker = attacker, weapon = self.inst}) then return end
-            return _OnAttack(self, attacker, target, projectile, ...)
-        end
-    end)
-
     local function BozoUpdate(inst)
         local x,y,z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 8, {"_health"}, {"structure", "smallcreature"})

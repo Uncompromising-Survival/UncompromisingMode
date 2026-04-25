@@ -295,7 +295,9 @@ DESCRIBE.DURABILITY_LEVEL = {
 
 ACTIONFAIL.READ.GENERIC = "It seems the magic is inert in this state."
 ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
-
+ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
+    GEM_ALREADY_KNOWN = "I already know that one.",
+}
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"
@@ -682,3 +684,4 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
+DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"

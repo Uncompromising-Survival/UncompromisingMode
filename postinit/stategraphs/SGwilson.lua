@@ -641,6 +641,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                     and "wingsuit_pre_quick"
                     or "wingsuit_pre"
             end),
+        ActionHandler(ACTIONS.RAT_ORDER,
+            function(inst, action)
+                return "fingerwhistle"
+            end),
         ActionHandler(ACTIONS.CREATE_BURROW,
             function(inst, action)
                 return "dolongaction"

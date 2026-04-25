@@ -727,7 +727,7 @@ local function OnGlacialAttacked(inst, data)
     if inst.sg and inst.sg:HasStateTag("charging") and attacker and attacker.components.health and not attacker.components.health:IsDead() and data.stimuli ~= "soul"
         and (not weapon or ((not weapon.components.weapon or not weapon.components.weapon.projectile) and not weapon.components.projectile)) and not attacker:HasTag("catapult") then
         if attacker.components.freezable then
-            attacker.components.freezable:AddColdness(2)
+            attacker.components.freezable:AddColdness(4)
             attacker.components.freezable:SpawnShatterFX()
         end
 

@@ -66,25 +66,66 @@ wingsuit.rmb = true
 wingsuit.distance = 20
 wingsuit.mount_valid = false
 
+local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
+    local doer = act.doer
+    if doer --[[and act.target]] and doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
+        --[[local MUST_TAGS = {"raidrat"}
+        local CANT_TAGS = {}
+        local x, y, z = doer.Transform:GetWorldPosition()
+        local ratlings = TheSim:FindEntities(x,y,z,10,MUST_TAGS)]]
+        local ratminions = doer.components.leader and doer.components.leader:GetFollowersByTag("raidrat")
+        local str
+        if doer.readytogather and ratminions and #ratminions > 0 then
+            if doer.readytogather:value() then
+                doer.readytogather:set(false)
+                str = "STOP_RAT_ORDER"
+                for i, v in ipairs(ratminions) do
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
+                    if v.components.inventory and v._item and v._item:IsValid() and v._item.components.pickable then
+                        v._item.components.pickable:Pick(TheWorld)
+                    end
+                end
+            else
+                doer.readytogather:set(true)
+                str = "START_RAT_ORDER"
+                for i, v in ipairs(ratminions) do
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
+                end
+            end
+        end
+        if doer.um_winkyordertask then doer.um_winkyordertask:Cancel() end
+        doer.um_winkyordertask = doer:DoTaskInTime(.7, function(inst)
+            if inst.components.talker and not inst.sg:HasStateTag("talking") then
+                local response = str or "FAIL_RAT_ORDER"
+                inst.components.talker:Say(GetString(inst, response))
+            end
+            inst.um_winkyordertask = nil
+        end)
+        --act.target:PushEvent("onstolen", { thief = doer })
+        return true
+    end
+end)
+
+ratorder.distance = 10
+
 local createburrow = AddAction("CREATE_BURROW", GLOBAL.STRINGS.ACTIONS.CREATE_BURROW, function(act)
     local act_pos = act:GetActionPoint()
     if act.doer.components.hunger.current > 15 and not GLOBAL.TheWorld.Map:GetPlatformAtPoint(act_pos.x, act_pos.z) then
-        local burrows = GLOBAL.TheSim:FindEntities(act_pos.x, 0, act_pos.z, 10000, { "winkyburrow" })
-        local home = false
-
-        for i, v in pairs(burrows) do if v.myowner == act.doer.userid then home = true end end
-
-        if home then
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            act.doer.components.hunger:DoDelta(-15)
-        else
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyhomeburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            burrow.myowner = act.doer.userid
-
-            act.doer.components.hunger:DoDelta(-20)
-        end
+        local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
+        burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
+        act.doer.components.hunger:DoDelta(-15)
 
         return true
     end
@@ -133,6 +174,34 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     end
     return _RummageFn(act)
 end
+
+local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
+GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
+    local str = _RummageStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ ~= nil then
+        local container = targ.replica.container
+
+        if targ:HasTag("gem_forge") then
+            if container and container:IsOpenedBy(act.doer) then
+                return "CLOSE_GEM_FORGE"
+            else
+                return "GEM_FORGE"
+            end
+        end
+    end
+
+    return str
+end
+
+local _combinestackfn = GLOBAL.ACTIONS.COMBINESTACK.fn
+GLOBAL.ACTIONS.COMBINESTACK.fn = function(act)
+    --local target = act.target
+    local invobj = act.invobject
+    act.doer:PushEvent("um_combinestack", { item = invobj })
+    return _combinestackfn(act)
+end
+
 
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
@@ -203,14 +272,22 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
     return _StoreFn(act)
 end
 
+local _StoreStrFn = GLOBAL.ACTIONS.STORE.strfn
+GLOBAL.ACTIONS.STORE.strfn = function(act)
+    local target = act.target
+    if target ~= nil and target.prefab == "um_gemologyforge" then return "GEM_FORGE" end
+    return _StoreStrFn(act)
+end
+
 local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
-    if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
-    if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
-    if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
+    local target = act.target
+    if target ~= nil and target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
+    if target ~= nil and target.prefab == "nightmarefuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "horrorfuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+    if target ~= nil and target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 
@@ -255,7 +332,7 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
 end
 
 --give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
-local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1})
+local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
 SET_CUSTOM_NAME.str = STRINGS.ACTIONS.SET_CUSTOM_NAME
 AddAction(SET_CUSTOM_NAME)
@@ -636,3 +713,14 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
 end)
 
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
+
+local um_forge_gem = Action({ priority = 1, mount_valid = true })
+um_forge_gem.id = "UM_FORGE_GEM"
+um_forge_gem.str = STRINGS.UI.APPLY_GEM
+um_forge_gem.fn = function(act)
+    if act.target.ForgeGem ~= nil then
+        return act.target:ForgeGem()
+    end
+end
+
+ENV.AddAction(um_forge_gem)

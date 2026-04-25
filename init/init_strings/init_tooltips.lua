@@ -61,7 +61,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
-    HAT_RATMASK = "- Finds rat burrows\n- Shows sources of unwanted attention.",
+    HAT_RATMASK = "- Finds Rat Burrows\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
@@ -405,7 +405,7 @@ end
     --TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
 --end
 
-if TUNING.DSTU.WATHGRITHR_REWORK then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
     TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
     TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 10% of the damage taken.\n - The time penalty for a failed parry is reduced to half.\n -Parry duration has been incorportated into the item by default."
     TOOLTIPS.WATHGRITHR_SHIELD_DREADSTONE = "- Scares attackers.\n - Effects stack with dreadstone armor."
@@ -421,6 +421,10 @@ end
 if TUNING.DSTU.STORMS then
     TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
     TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
+end
+
+if TUNING.DSTU.SHAVE_MODE then
+    TOOLTIPS.UM_THULECITE_RAZOR = "- Can occasionally give an extra resouce."
 end
 
 if TUNING.DSTU.WARLY_CHANGES == 1 then

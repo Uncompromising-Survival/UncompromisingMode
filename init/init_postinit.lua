@@ -72,7 +72,9 @@ local component_post = {
 	"possessedaxe",
 	"inventoryitem",
 	"retrofitcavemap_anr",
-    "fumarolelocaltemperature"
+    "fumarolelocaltemperature",
+    "pickable",
+    "actionqueuer"
 }
 
 local prefab_post = {
@@ -245,7 +247,9 @@ local prefab_post = {
     "firestaff",
 	"worms",
 	"rabbitking",
-    "cave_vents"
+    "cave_vents",
+    "cave_vent_mite",
+	"bananabush"
 }
 
 local stategraph_post = {
@@ -290,7 +294,7 @@ local brain_post = {
     "chester",
     "mossling",
     "perd",
-    "catcoon",
+    --"catcoon",
     "deer",
     "shadowwaxwell",
     "hound",

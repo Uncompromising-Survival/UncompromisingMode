@@ -3,7 +3,7 @@ local assets =
     Asset("ANIM", "anim/um_gemologygems.zip"),
 }
 local gems = { "bluegem", "redgem", "purplegem", "orangegem", "yellowgem", "palegem" }
-
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
 local function OnSave(inst, data)
     data.tier = inst:GetTier()
     data.revealed = inst:IsRevealed()
@@ -54,7 +54,7 @@ local function GetMainName(inst)
 end
 
 local function Shine(inst)
-    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() then
+    if not inst:HasTag("INLIMBO") and not inst:IsAsleep() and inst:IsRevealed() then
         local fx = SpawnPrefab("crab_king_shine")
         fx.Transform:SetScale(0.25, 0.25, 0.25)
         fx.entity:AddFollower()
@@ -77,7 +77,7 @@ local function SetTier(inst, tier)
     if inst.tier ~= nil then
         inst.tier = tier
 
-        if inst.tier == 3 then
+        if inst.tier == 3 and inst:IsRevealed() then
             inst.shinetask = inst:DoTaskInTime(0, Shine)
         end
     end
@@ -97,162 +97,100 @@ local function OnEntityWake(inst)
     end
 end
 
-local function fncommon(gem)
-    local inst = CreateEntity()
+local function OnWorked(inst)
+    local fx = SpawnPrefab("winona_battery_high_shatterfx")
+    fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    fx.AnimState:PlayAnimation("opalgem_shatter")
 
-    inst.entity:AddTransform()
-    inst.entity:AddAnimState()
-    inst.entity:AddNetwork()
+    --local dust = SpawnPrefab("um_gemologygemdust")
+    --dust.Transform:SetPosition(inst.Transform:GetWorldPosition())
 
-    MakeInventoryPhysics(inst)
-    RemovePhysicsColliders(inst)
+    inst:Remove()
+end
+local function MakeGem(gem, bank, build, anim)
+    local function fncommon()
+        local inst = CreateEntity()
 
-    inst.AnimState:SetBank("um_gemologygems")
-    inst.AnimState:SetBuild("um_gemologygems")
-    inst.AnimState:PlayAnimation(gem)
+        inst.entity:AddTransform()
+        inst.entity:AddAnimState()
+        inst.entity:AddNetwork()
+        inst.entity:AddSoundEmitter()
 
-    --client-side netvar for tier
-    inst._tier = net_shortint(inst.GUID, "gemologygem.tier")
-    --tiers go from 1-3
-    inst._tier:set(1)
+        MakeInventoryPhysics(inst)
+        RemovePhysicsColliders(inst)
 
-    inst._is_revealed = net_bool(inst.GUID, "gemologygem.is_revealed") --no real need for a dirt event
-    inst._is_revealed:set(false)                                       --TODO: TEMP VALUE
+        inst.AnimState:SetBank(bank)
+        inst.AnimState:SetBuild(build)
+        inst.AnimState:PlayAnimation(anim)
 
-    inst.displaynamefn = GetDisplayName
-    inst.GetTier = GetTier
-    inst.SetTier = SetTier
-    inst.SetRevealed = SetRevealed
-    inst.IsRevealed = IsRevealed
+        --client-side netvar for tier
+        inst._tier = net_shortint(inst.GUID, "gemologygem.tier")
+        --tiers go from 1-3
+        inst._tier:set(1)
 
-    inst:AddTag("gemology_gem")
+        inst._is_revealed = net_bool(inst.GUID, "gemologygem.is_revealed") --no real need for a dirty event
+        inst._is_revealed:set(false)
 
-    inst.entity:SetPristine()
+        inst.displaynamefn = GetDisplayName
+        inst.GetTier = GetTier
+        inst.SetTier = SetTier
+        inst.SetRevealed = SetRevealed
+        inst.IsRevealed = IsRevealed
 
-    if not TheWorld.ismastersim then
-        return inst
-    end
+        inst:AddTag("gemology_gem")
 
-    inst:ListenForEvent("reveal_gem", function(inst, data)
-        inst._is_revealed:set(true)
-        SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "LearnGemologyGem"), { data.doer.userid }, json.encode({ gem = inst.prefab, tier = inst:GetTier() }))
-    end)
+        inst.pickupsound = "gem"
 
-    inst.tier = 1
-    inst:DoTaskInTime(0, function(inst)
-        if inst.tier == 3 then
-            inst.shinetask = inst:DoTaskInTime(0, Shine)
+        inst.entity:SetPristine()
+
+        if not TheWorld.ismastersim then
+            return inst
         end
-    end)
 
-    --dummy comp for insight.
-    inst:AddComponent("gemology_gem")
+        inst:ListenForEvent("reveal_gem", function(inst, data)
+            inst._is_revealed:set(true)
+            SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "LearnGemologyGem"), { data.doer.userid }, json.encode({ gem = inst.prefab, tier = inst:GetTier() }))
+        end)
 
-    inst:AddComponent("inspectable")
+        inst.tier = 1
 
-    inst:AddComponent("inventoryitem")
+        inst:DoTaskInTime(0, function(inst)
+            if inst.tier == 3 then
+                inst.shinetask = inst:DoTaskInTime(0, Shine)
+            end
+        end)
 
-    inst:AddComponent("tradable")
+        --dummy comp for insight.
+        inst:AddComponent("gemology_gem")
 
-    MakeHauntableLaunch(inst)
+        inst:AddComponent("inspectable")
 
-    inst.OnSave = OnSave
-    inst.OnLoad = OnLoad
-    inst.OnEntityWake = OnEntityWake
+        inst:AddComponent("workable")
+        inst.components.workable:SetWorkAction(ACTIONS.HAMMER)
+        inst.components.workable:SetWorkLeft(1)
+        inst.components.workable:SetOnFinishCallback(OnWorked)
 
-    return inst
-end
+        inst:AddComponent("inventoryitem")
 
-local function FullReturn(inst)
-    if not TheWorld.ismastersim then
+        inst:AddComponent("tradable")
+
+        MakeHauntableLaunch(inst)
+
+        inst.OnSave = OnSave
+        inst.OnLoad = OnLoad
+        inst.OnEntityWake = OnEntityWake
+
         return inst
     end
 
-    return inst
+    return Prefab(gem, fncommon, assets)
 end
 
-local function fnblue1()
-    local inst = fncommon("bluegem1")
-    return FullReturn(inst)
+local prefabs = {}
+
+for gem, defs in pairs(GEM_DEFS) do
+    table.insert(prefabs, MakeGem(gem, defs.bank, defs.build, defs.anim)) --hmm, should I move this asset to the defs file so any mod can import their assets?
 end
 
-local function fnblue2()
-    local inst = fncommon("bluegem2")
-    return FullReturn(inst)
-end
 
-local function fnred1()
-    local inst = fncommon("redgem1")
-    return FullReturn(inst)
-end
-
-local function fnred2()
-    local inst = fncommon("redgem2")
-    return FullReturn(inst)
-end
-
-local function fnpurple1()
-    local inst = fncommon("purplegem1")
-    return FullReturn(inst)
-end
-
-local function fnpurple2()
-    local inst = fncommon("purplegem2")
-    return FullReturn(inst)
-end
-
-local function fnyellow1()
-    local inst = fncommon("yellowgem1")
-    return FullReturn(inst)
-end
-
-local function fnyellow2()
-    local inst = fncommon("yellowgem2")
-    return FullReturn(inst)
-end
-
-local function fngreen1()
-    local inst = fncommon("greengem1")
-    return FullReturn(inst)
-end
-
-local function fngreen2()
-    local inst = fncommon("greengem2")
-    return FullReturn(inst)
-end
-
-local function fnorange1()
-    local inst = fncommon("orangegem1")
-    return FullReturn(inst)
-end
-
-local function fnorange2()
-    local inst = fncommon("orangegem2")
-    return FullReturn(inst)
-end
-
-local function fnpale1()
-    local inst = fncommon("palegem1")
-    return FullReturn(inst)
-end
-
-local function fnpale2()
-    local inst = fncommon("palegem2")
-    return FullReturn(inst)
-end
-
--- If any kind soul could convert this into a "for" loop, I'd appreciate it, I couldn't get it to work around the return, would cause a crash.
-return Prefab("um_gemologybluegem1", fnblue1, assets),
-    Prefab("um_gemologybluegem2", fnblue2),
-    Prefab("um_gemologyredgem1", fnred1),
-    Prefab("um_gemologyredgem2", fnred2),
-    Prefab("um_gemologypurplegem1", fnpurple1),
-    Prefab("um_gemologypurplegem2", fnpurple2),
-    Prefab("um_gemologyyellowgem1", fnyellow1),
-    Prefab("um_gemologyyellowgem2", fnyellow2),
-    Prefab("um_gemologygreengem1", fngreen1),
-    Prefab("um_gemologygreengem2", fngreen2),
-    Prefab("um_gemologyorangegem1", fnorange1),
-    Prefab("um_gemologyorangegem2", fnorange2),
-    Prefab("um_gemologypalegem1", fnpale1),
-    Prefab("um_gemologypalegem2", fnpale2)
+return unpack(prefabs)

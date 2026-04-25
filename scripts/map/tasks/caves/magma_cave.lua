@@ -5,8 +5,8 @@ GLOBAL.require("map/rooms/caves/moltenregions")
 
 
 -- Adjust the big bat cave to be smaller, and adjust keys so it connects to magma caves
-AddTaskPreInit("BigBatCave",function(task)
-	task.keys_given={KEYS.MAGMA_CAVES}
+AddTaskPreInit("BigBatCave", function(task)
+    task.keys_given = { KEYS.MAGMA_CAVES }
 end)
 
 -- Create New Magma Caves Tasks
@@ -59,6 +59,17 @@ AddTask("MagmaCavesEntrance", {
 		room_bg=WORLD_TILES.UM_MAGMA,
 		colour={r=.1,g=.1,b=.1,a=1},
 })
+
+
+
+AddTaskPreInit("Volcano", function(task)
+    task.room_choices[3] = {
+        ["VolcanoNoise"] = 6 + math.random(0, 1),             -- in sw it 13, but we have start task in dst, so Subtract 1 to make the volcano more like a garden
+        ["MagmaVolcano_IA"] = 5 + math.random(0, 1),
+        ["MagmaVolcanoNest_IA"] = 1
+    }
+end)
+
 
 AddTaskPreInit("CentipedeCaveTask", function(task)
 	task.locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER3}

@@ -586,3 +586,4 @@ DESCRIBE.WATHOM_CORPSE = "I suspect the finale is yet upon us!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Protects my body but not my mind."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Your weakness will show in the heat of battle!"
+DESCRIBE.UM_THULECITE_RAZOR= "A blade to shave the beard off my foes!"

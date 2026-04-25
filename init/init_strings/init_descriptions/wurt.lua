@@ -590,3 +590,4 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hee-hee, chasing is fun.",
 
 DESCRIBE.WATHOM_CORPSE = "Florp! He bubbling!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Ghrr! Why it so hard!?"
+DESCRIBE.UM_THULECITE_RAZOR= "Yucky mucky gooey ooey razor... florp."

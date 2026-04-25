@@ -371,4 +371,11 @@ env.AddPlayerPostInit(function(inst)
     --Client after this
     --inst:AddTag("um_darkwood")
     --CreateMousePositioning(inst)
+    if TUNING.DSTU.SHAVE_MODE then
+        if inst.starting_inventory then
+            table.insert(inst.starting_inventory, "razor")
+        else
+            inst.starting_inventory = {"razor"}
+        end
+    end
 end)

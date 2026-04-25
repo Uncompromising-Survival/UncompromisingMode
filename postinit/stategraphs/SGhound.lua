@@ -174,7 +174,7 @@ env.AddStategraphPostInit("hound", function(inst)
             onexit = function(inst)
                 inst.lightningshot = false
                 inst.components.timer:StopTimer("lightningshot_cooldown")
-                inst.components.timer:StartTimer("lightningshot_cooldown", 6 + math.random())
+                inst.components.timer:StartTimer("lightningshot_cooldown", 8 + math.random())
                 inst:CancelCharge()
             end,
 

@@ -1,8 +1,8 @@
 local assets =
 {
-    Asset("ANIM", "anim/ui_slingshotammo_container_3x2.zip"),
-    Asset("ANIM", "anim/slingshotammo_container.zip"),
-    --Asset("INV_IMAGE", "um_gemology_pouch_open"),
+    Asset("ANIM", "anim/um_gemology_pouch.zip"),
+    Asset("IMAGE", "images/map_icons/um_gemology_pouch.tex"),
+    Asset("ATLAS", "images/map_icons/um_gemology_pouch.xml"),
 }
 
 local prefabs =
@@ -21,34 +21,31 @@ local SOUNDS =
 -----------------------------------------------------------------------------------------------
 
 local function OnOpen(inst)
-    inst.AnimState:PlayAnimation("open")
+    inst.AnimState:PlayAnimation("idle_opened")
 
-    --inst.components.inventoryitem.atlasname = "images/inventoryimages/um_gemology_pouch_open.xml"
     inst.components.inventoryitem:ChangeImageName("um_gemology_pouch_open")
     inst.SoundEmitter:PlaySound(inst._sounds.open)
 end
 
 local function OnClose(inst)
     if inst.components.inventoryitem.owner == nil then
-        inst.AnimState:PlayAnimation("close")
-        inst.AnimState:PushAnimation("closed", false)
+        inst.AnimState:PushAnimation("idle_closed", false)
     else
-        inst.AnimState:PlayAnimation("closed", false)
+        inst.AnimState:PlayAnimation("idle_closed", false)
     end
 
-    --inst.components.inventoryitem.atlasname = "images/inventoryimages/um_gemology_pouch.xml"
     inst.components.inventoryitem:ChangeImageName("um_gemology_pouch")
     inst.SoundEmitter:PlaySound(inst._sounds.close)
 end
 
 local function OnPutInInventory(inst)
     inst.components.container:Close()
-    inst.AnimState:PlayAnimation("closed", false)
+    inst.AnimState:PlayAnimation("idle_closed", false)
 end
 
 -----------------------------------------------------------------------------------------------
 
-local FLOATABLE_SWAP_DATA = { anim = "closed" }
+local FLOATABLE_SWAP_DATA = { anim = "idle_closed" }
 
 local function fn()
     local inst = CreateEntity()
@@ -59,11 +56,11 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    inst.MiniMapEntity:SetIcon("slingshotammo_container.png")
+    inst.MiniMapEntity:SetIcon("um_gemology_pouch.tex")
 
-    inst.AnimState:SetBank("slingshotammo_container")
-    inst.AnimState:SetBuild("slingshotammo_container")
-    inst.AnimState:PlayAnimation("closed")
+    inst.AnimState:SetBank("um_gemology_pouch")
+    inst.AnimState:SetBuild("um_gemology_pouch")
+    inst.AnimState:PlayAnimation("idle_closed")
 
     MakeInventoryPhysics(inst)
 

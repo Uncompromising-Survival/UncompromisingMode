@@ -131,31 +131,40 @@ local WEIGHTED_LOOT = {
     },
 
     ["VENT_AREA"] = { --Aka the default, kinda
-        ["rocks"]      = 15,
-        ["flint"]      = 6,
-        ["goldnugget"] = 2,
-        ["redgem"]     = 0.25,
-        ["bluegem"]    = 0.25,
-        ["purplegem"]  = 0.1,
-        ["yellowgem"]  = 0.02,
-        ["orangegem"]  = 0.02,
-        ["greengem"]   = 0.02,
-        --["um_gemology_geode_vent"] = 0.02,
-
+        ["rocks"]                  = 15,
+        ["flint"]                  = 6,
+        ["goldnugget"]             = 2,
+        ["redgem"]                 = 0.25,
+        ["bluegem"]                = 0.25,
+        ["purplegem"]              = 0.1,
+        ["yellowgem"]              = 0.02,
+        ["orangegem"]              = 0.02,
+        ["greengem"]               = 0.02,
+        ["um_gemology_geode_vent"] = 0.02,
     },
 
     ["VENT_AREA_SHADOW_RIFT"] = {
-        ["rocks"]      = 10,
-        ["flint"]      = 10,
-        ["goldnugget"] = 40,
+        ["rocks"]                  = 10,
+        ["flint"]                  = 10,
+        ["goldnugget"]             = 40,
         --["dreadstone"]        = 5, --bruh really klei
-        ["redgem"]     = 10,
-        ["bluegem"]    = 10,
-        ["purplegem"]  = 8,
-        ["yellowgem"]  = 7,
-        ["orangegem"]  = 7,
-        ["greengem"]   = 7,
-        --["um_gemology_geode_vent"] = 7,
+        ["redgem"]                 = 10,
+        ["bluegem"]                = 10,
+        ["purplegem"]              = 8,
+        ["yellowgem"]              = 7,
+        ["orangegem"]              = 7,
+        ["greengem"]               = 7,
+        ["um_gemology_geode_vent"] = 7,
+    },
+
+    ["SINKHOLE_AREA"] = {
+        ["rocks"]                  = 12,
+        ["flint"]                  = 5,
+        ["goldnugget"]             = 3,
+        ["nitre"]                  = 5,
+        ["guano"]                  = 5,
+        ["lightbulb"]              = 5,
+        ["um_gemology_geode_sink"] = 2,
     },
 }
 
@@ -169,9 +178,10 @@ local LOOT_DATA = {
     ["um_gemology_geode_lobster"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_lobster" } },
     ["um_gemology_geode_guano"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_guano" } },
     ["um_gemology_geode_ruins"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_ruins" } },
-    --["um_gemology_geode_vent"] = {build = "um_tree_rock_swaps", symbols = {"swap_geode_vent"}},
+    ["um_gemology_geode_vent"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_vent" } },
+    ["um_gemology_geode_sink"] = { build = "um_tree_rock_swaps", symbols = { "swap_geode_sink" } },
     ["snappy_jaw"] = { build = "um_tree_rock_swaps", symbols = { "swap_snappy_jaw" } },
-    ["um_fyrite"] = { build = "um_tree_rock_swaps", symbols = { "swap_fyrite" } },
+    ["um_fyrite"] = { build = "um_tree_rock_swaps", symbols = { "swap_pyrite" } },
 }
 
 local TASKS = {

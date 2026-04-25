@@ -552,40 +552,10 @@ local prefabs = {
     "um_ghost_peppers",
 
     "um_boatbottle",
-	"jawed_scythe",
-	"um_ice_sicle",
-	"um_fire_projectile",
-	"um_buttery_fly",
-	
-	"um_thicket_builders",
-	"um_hat_leafwing",
-	"um_meats",
-	
-	"um_detonator",
-	"um_fyrite",
-	
-	"um_bee_moon",
-	"um_fyre_bomb",
-	"um_beehive_moon",
-	"um_steamcloud",
-	"um_meathoney",
-	"um_meatcomb",
-	"um_hat_bee_moon",
-	"um_eyebalm",
-	"um_beemine_moon",
-	"um_plants_decor",
-	
-	"um_pyrite_ceiling",
-	"um_ribopod",
-	"um_ribopodden",
-	"um_gemologygems",
-	
-	"um_spongeplant",
-	--"um_swiss_sponge",
-	"wathgrithr_shield_dreadstone",
-	"um_gemologyforge",
-	"um_moss",
-	"um_fern_fox",
+    "jawed_scythe",
+    "um_ice_sicle",
+    "um_fire_projectile",
+    "um_buttery_fly",
 
 	"um_pepperdragon",
 	"um_pepperdragon_nest",
@@ -601,8 +571,49 @@ local prefabs = {
 	"um_guano_rain",
 	"um_rocklobster_rock",
 	"um_sinkmound_rock",
+    "um_hat_leafwing",
+    "um_thicket_builders",
+    "um_meats",
 
-	"um_magmacave_umss",
+    "um_detonator",
+    "um_fyrite",
+
+    "um_bee_moon",
+    "um_fyre_bomb",
+    "um_beehive_moon",
+    "um_steamcloud",
+    "um_meathoney",
+    "um_meatcomb",
+    "um_hat_bee_moon",
+    "um_eyebalm",
+    "um_beemine_moon",
+    "um_plants_decor",
+
+    "um_pyrite_ceiling",
+    "um_ribopod",
+    "um_ribopodden",
+    "um_gemologygems",
+
+    "um_spongeplant",
+    --"um_swiss_sponge",
+    "wathgrithr_shield_dreadstone",
+    "um_gemologyforge",
+    "um_moss",
+    "um_fern_fox",
+
+    "um_pepperdragon",
+    "um_pepperdragon_nest",
+    "um_firecream",
+    "um_hat_pepperdragon",
+    "um_gemology_geodes",
+    "um_guns",
+    "um_boomberry_bomb",
+    "um_mushtrees_petri",
+    "um_moonglass_ceiling",
+    "um_guano_rock",
+    "um_rocklobster_rock",
+
+    "um_magmacave_umss",
     "glacialhound_icespike",
     "iceshield",
     "um_feather_totem",
@@ -615,7 +626,8 @@ local prefabs = {
 	"um_agonycloud",
 	"um_hat_nettlemask",
     "wormwood_mushtrees", -- AXE This is needed to make several placers for wormwood's skill.
-
+    "um_thulecite_razor",
+    "gemology_book"
 }
 
 if TUNING.DSTU ~= nil and TUNING.DSTU.WIXIE ~= nil and TUNING.DSTU.WIXIE then

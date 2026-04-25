@@ -131,7 +131,8 @@ local SNOWPILE_BLOCKERS =
 	"hotspring",
 	"hermithotspring",	
     "stafflight",
-	"emberlight"
+	"emberlight",
+	"lava_pond"
 }
 
 for k, v in pairs(SNOWPILE_BLOCKERS) do

@@ -1,6 +1,22 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
+local KNOCKBACK_CANT_TAGS = {"fat_gang", "foodknockbackimmune", "heavybody"}
+local KNOCKBACK_ARMOR_CANT_TAGS = {"heavyarmor", "knockback_protection"}
+local function DoCounterAttack(inst)
+    local target = inst.components.combat.target
+    if target and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) then
+        target.components.combat:GetAttacked(inst, 33)
+
+        local inventory = target.components.inventory
+        local bodyslot = inventory and inventory:GetEquippedItem(EQUIPSLOTS.BODY)
+        if not target:HasAnyTag(KNOCKBACK_CANT_TAGS) and not target.sg:HasStateTag("shell") and not (target.components.rider and target.components.rider:IsRiding())
+            and (not bodyslot or not bodyslot:HasAnyTag(KNOCKBACK_ARMOR_CANT_TAGS)) then
+            target:PushEvent("knockback", { knocker = inst, radius = 150, strengthmult = 1 })
+        end
+    end
+end
+
 env.AddStategraphPostInit("pig", function(inst)
     local events =
     {
@@ -57,7 +73,7 @@ env.AddStategraphPostInit("pig", function(inst)
                     inst.components.combat:ResetCooldown()
                     return
                 end
-			end
+            end
         end
         _OldAttackedEvent(inst, data, ...)
     end
@@ -102,17 +118,7 @@ env.AddStategraphPostInit("pig", function(inst)
             timeline =
             {
                 TimeEvent(9 * FRAMES, function(inst)
-                    local target = inst.components.combat.target
-
-                    if target ~= nil and distsq(target:GetPosition(), inst:GetPosition()) <= inst.components.combat:CalcAttackRangeSq(target) then
-                        target.components.combat:GetAttacked(inst, 33)
-
-                        if target ~= nil and target.components.inventory ~= nil and not target:HasTag("fat_gang") and not target:HasTag("foodknockbackimmune") and not (target.components.rider ~= nil and target.components.rider:IsRiding()) and
-                            --Don't knockback if you wear marble
-                            (target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) == nil or not target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("marble") and not target.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY):HasTag("knockback_protection")) then
-                            target:PushEvent("knockback", { knocker = inst, radius = 150, strengthmult = 1 })
-                        end
-                    end
+                    DoCounterAttack(inst)
 
                     inst.sg:RemoveStateTag("attack")
                     inst.sg:RemoveStateTag("busy")
@@ -286,7 +292,7 @@ end
 local werepigs = {"moonpig","werepig"}
 for i,werepig in ipairs(werepigs) do
 
-				
+                
     env.AddStategraphPostInit(werepig, function(inst)
         local states = {
             State{
@@ -322,38 +328,38 @@ for i,werepig in ipairs(werepigs) do
                             "idle")
                     end),
                 },
-				onexit = function(inst)
-					inst.Physics:Stop()
-					inst.attacked_run_cd = inst:DoTaskInTime(0.5,function(inst)
-						inst.attacked_run_cd:Cancel()
-						inst.attacked_run_cd = nil
-					end)
-				end,
+                onexit = function(inst)
+                    inst.Physics:Stop()
+                    inst.attacked_run_cd = inst:DoTaskInTime(0.5,function(inst)
+                        inst.attacked_run_cd:Cancel()
+                        inst.attacked_run_cd = nil
+                    end)
+                end,
             },
         }
-		
-		--If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
-		--local idlestate = inst.states["idle"]
-		--if idlestate then
-			--local idlestate_onenter = idlestate.onenter
-			--idlestate.onenter = function(inst, target, ...)
-				--if inst.attacked_run_cd and inst.components.combat.target and inst.components.combat:CanHitTarget(inst.components.combat.target) then
-					--inst.attacked_run_cd:Cancel()
-					--inst.attacked_run_cd = nil
-				--end
-				--return idlestate_onenter(inst, ...)
-			--end
-		--end
-		
+        
+        --If the werepig is waiting to run away, then manages to reach you, causing him to stand still, stop the dotaskintime that tells the werepig to not run away
+        --local idlestate = inst.states["idle"]
+        --if idlestate then
+            --local idlestate_onenter = idlestate.onenter
+            --idlestate.onenter = function(inst, target, ...)
+                --if inst.attacked_run_cd and inst.components.combat.target and inst.components.combat:CanHitTarget(inst.components.combat.target) then
+                    --inst.attacked_run_cd:Cancel()
+                    --inst.attacked_run_cd = nil
+                --end
+                --return idlestate_onenter(inst, ...)
+            --end
+        --end
+        
         local events = -- Klei's implementation (CommonHandlers.OnAttacked(nil, TUNING.PIG_MAX_STUN_LOCKS),) is not working after the werepig finishes his transformation, this implements it in a different way to fix that.
         {
             EventHandler("attacked", function(inst, data)
                 if not (inst.components.health and inst.components.health:IsDead()) then
                     if CommonHandlers.TryElectrocuteOnAttacked(inst, data) then
                         return
-					elseif inst.components.combat.target and not inst.components.combat:InCooldown() and inst.components.combat:CanHitTarget(inst.components.combat.target) and not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") then
-					-- Werepigs will immediately try to attack if they can
-						inst.sg:GoToState("attack")
+                    elseif inst.components.combat.target and not inst.components.combat:InCooldown() and inst.components.combat:CanHitTarget(inst.components.combat.target) and not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") then
+                    -- Werepigs will immediately try to attack if they can
+                        inst.sg:GoToState("attack")
                     elseif not inst.sg:HasAnyStateTag("attack", "busy", "electrocute") and inst.attacked_run_cd then -- only play the animation if he can't run away
                         inst.sg:GoToState("hit")
                     end

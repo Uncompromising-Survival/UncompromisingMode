@@ -7,7 +7,7 @@ end
 
 --RELEASE.MAJOR.MINOR.FIX
 --axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "1.6.0.0 Beta v2.3.0"
+local _version = "3.0.4"
 
 description = [[
     󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
@@ -20,13 +20,14 @@ Latest update features:
 - New Old Faces
 - Lots of bloat...
 - Lots of promises...
+- Yes Winky.
 - Moss.
 
 󰀏 NEXT UPDATE: Under the Weather, Part 2 "Singing in the Rain". But maybe not. ]]
 
 author = "󰀈 The Uncomp Dev Team 󰀈"
 
-version = "Ghosts from the Past Testing v" .. _version
+version = "On The Rocks! Testing v" .. _version
 
 
 forumthread = "/topic/111892-announcement-uncompromising-mode/"
@@ -290,10 +291,10 @@ configuration_options = {
         "Holding Bernie prevents shadows from aggroing.", true),
     BinaryConfig("wendy", "Wendy", "Petals inside Sisturn decay into Mourning Glory.", true),
     BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),
-    BinaryConfig("wxless", "WX-78 - Rework",
-        "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
-    BinaryConfig("wxlessspeedbump", "WX Speed circuit collision",
-        "Enable to make reworked WX not bump into mobs with speed circuits", false),
+    --BinaryConfig("wxless", "WX-78 - Rework",
+    --    "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
+    --BinaryConfig("wxlessspeedbump", "WX Speed circuit collision",
+    --    "Enable to make reworked WX not bump into mobs with speed circuits", false),
     --{
         --name = "wicker_inv_regen",
         --label = "Wicker's Regeneration",
@@ -348,10 +349,10 @@ configuration_options = {
         label = "Wigfrid - Rework",
         hover = "Reduced Wigfrids combat leeching, revamped skill tree, modified items, added more meaningful alignment choices.",
         options = {
-            { description = "Enabled",  data = 1, hover = "All changes enabled." },
-            { description = "Legacy",   data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
-            { description = "Disabled", data = 0, hover = "All changes disabled. Same as vanilla." } },
-
+            { description = "Enabled",                   data = 1, hover = "All changes enabled." },
+            { description = "Enabled, Elding Restored",  data = 3, hover = "All changes enabled. Cheat: Charged Elding Spear dash is free and repairs it." },
+            { description = "Legacy",                    data = 2, hover = "Only the leeching nerf. Use with other rework mods." },
+            { description = "Disabled",                  data = 0, hover = "All changes disabled. Same as vanilla." } },
         default = 1
     },
     BinaryConfig("wolfgang", "Wolfgang - Rework", "Wolfgang has a new skill tree, and mightiness is now a resource you spend to use special abilities.", true),
@@ -1530,6 +1531,7 @@ configuration_options = {
 
     --	Header("General"),
     --  BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
+    BinaryConfig("um_shave_mode", "Shave Together Mode", "Tired of the normal gameplay loop? Enable for a more razorful experience!", false),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),

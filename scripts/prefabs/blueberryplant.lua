@@ -15,40 +15,40 @@ local mine_must_tags = { "_combat" }
 local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "plantkin" }
 
 local function BurnToTheGround(inst)
-	if inst.components.burnable == nil then
-		MakeSmallBurnable(inst)
-	end
+    if inst.components.burnable == nil then
+        MakeSmallBurnable(inst)
+    end
 
-	inst.components.burnable:SetBurnTime(0.5)
-	inst.components.burnable.canlight = true
-	inst.components.burnable:SetOnBurntFn(function(inst)
-		inst:Remove()
-	end)
+    inst.components.burnable:SetBurnTime(0.5)
+    inst.components.burnable.canlight = true
+    inst.components.burnable:SetOnBurntFn(function(inst)
+        inst:Remove()
+    end)
 
-	if inst.components.propagator ~= nil then
-		inst.components.propagator:StopSpreading()
-	end
+    if inst.components.propagator ~= nil then
+        inst.components.propagator:StopSpreading()
+    end
 end
 
 local function DisableBurn(inst)
-	if inst.components.burnable ~= nil then
-		if inst.components.burnable:IsBurning() then
-			inst.components.burnable:Extinguish()
-		end
-		inst:RemoveComponent("burnable")
-	end
-	if inst.components.propagator ~= nil then
-		inst:RemoveComponent("propagator")
-	end
+    if inst.components.burnable ~= nil then
+        if inst.components.burnable:IsBurning() then
+            inst.components.burnable:Extinguish()
+        end
+        inst:RemoveComponent("burnable")
+    end
+    if inst.components.propagator ~= nil then
+        inst:RemoveComponent("propagator")
+    end
 end
 
 local on_blueberry_mine
 local on_blueberry_dug_up
 
 local function ToDigOrNotToDig(inst)
-	if inst.components.workable == nil then
-		return
-	end
+    if inst.components.workable == nil then
+        return
+    end
 
     if TheWorld.state.iswinter then
         if inst.harvestable == "full" then
@@ -56,26 +56,26 @@ local function ToDigOrNotToDig(inst)
             inst.components.workable:SetWorkLeft(1)
             inst.components.workable:SetOnFinishCallback(on_blueberry_mine)
             inst.components.workable:SetWorkable(true)
-			DisableBurn(inst)			
+            DisableBurn(inst)            
         else
             inst.components.workable:SetWorkable(false)
-			inst:AddTag("plant")	
-			BurnToTheGround(inst)				
+            inst:AddTag("plant")    
+            BurnToTheGround(inst)                
         end
-		return
-	end
-	
-	if inst.harvestable == "full" then
-		inst.components.workable:SetWorkAction(ACTIONS.DIG)
-		inst.components.workable:SetWorkLeft(1)
-		inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)		
-		inst.components.workable:SetWorkable(true)
-		DisableBurn(inst)		
-	else
-		inst.components.workable:SetWorkable(false)
-		inst:AddTag("plant")
-		BurnToTheGround(inst)		
-	end
+        return
+    end
+    
+    if inst.harvestable == "full" then
+        inst.components.workable:SetWorkAction(ACTIONS.DIG)
+        inst.components.workable:SetWorkLeft(1)
+        inst.components.workable:SetOnFinishCallback(on_blueberry_dug_up)        
+        inst.components.workable:SetWorkable(true)
+        DisableBurn(inst)        
+    else
+        inst.components.workable:SetWorkable(false)
+        inst:AddTag("plant")
+        BurnToTheGround(inst)        
+    end
 end
 
 local function on_deactivate(inst)
@@ -101,7 +101,7 @@ local function on_deactivate(inst)
     else
         inst.components.workable:SetWorkLeft(1)
         inst.harvestable = "regrow"
-		ToDigOrNotToDig(inst)
+        ToDigOrNotToDig(inst)
     end
 end
 
@@ -117,31 +117,27 @@ local function OnPickedFn(inst,picker)
 end
 
 on_blueberry_dug_up = function(inst, digger)
-    if digger:HasTag("player") then
-        if inst.harvestable == "full" then
-            if not inst.components.mine.issprung then
-                inst.components.mine:Explode()
-            end
-            on_deactivate(inst)
-            inst.AnimState:PlayAnimation("dig")
-            inst.AnimState:PushAnimation("spawn")
-            inst.AnimState:PushAnimation("trap_idle")
-            --inst.components.workable:SetWorkable(false)
-            inst:AddTag("plant")
-            --inst:DoTaskInTime(5, function(inst)
-                --inst.components.workable:SetWorkable(true)
-            --end)
-        else
-            inst:Remove()
+    if inst.harvestable == "full" then
+        if not inst.components.mine.issprung then
+            inst.components.mine:Explode()
         end
+        on_deactivate(inst)
+        inst.AnimState:PlayAnimation("dig")
+        inst.AnimState:PushAnimation("spawn")
+        inst.AnimState:PushAnimation("trap_idle")
+        --inst.components.workable:SetWorkable(false)
+        inst:AddTag("plant")
+        --inst:DoTaskInTime(5, function(inst)
+            --inst.components.workable:SetWorkable(true)
+        --end)
     else
-        inst.components.workable:SetWorkLeft(1)
+        --inst:Remove()
     end
 end
 
 local function MakeNotWinter(inst)
     inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
-	ToDigOrNotToDig(inst)
+    ToDigOrNotToDig(inst)
 end
 
 local function Melt(inst)
@@ -161,7 +157,7 @@ local function on_anim_over(inst)
             inst.froze = false
             Melt(inst)
         else
-			inst.AnimState:PushAnimation("trap_idle", true)
+            inst.AnimState:PushAnimation("trap_idle", true)
         end
     elseif not TheWorld.state.iswinter then
         inst.AnimState:PushAnimation("idle"..math.random(1,4))
@@ -197,7 +193,7 @@ local function do_snap(inst)
             end
         end
         inst.harvestable = "regrow"
-		ToDigOrNotToDig(inst)
+        ToDigOrNotToDig(inst)
     end
     if inst._snap_task ~= nil then
         inst._snap_task:Cancel()
@@ -209,7 +205,7 @@ local function Regrow(inst)
     inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*1.1)
     inst.components.mine:Reset()
     inst.harvestable = "full"
-	ToDigOrNotToDig(inst)		
+    ToDigOrNotToDig(inst)        
     inst:RemoveTag("plant")
 end
 
@@ -287,12 +283,12 @@ on_blueberry_mine = function(inst)
     inst.AnimState:PushAnimation("spawn")
     inst.AnimState:PushAnimation("trap_idle")
     inst.harvestable = "regrow"
-	ToDigOrNotToDig(inst)		
+    ToDigOrNotToDig(inst)        
 end
 
 local function MakeWinter(inst)
     inst.components.mine:SetRadius(TUNING.STARFISH_TRAP_RADIUS*0)
-	ToDigOrNotToDig(inst)
+    ToDigOrNotToDig(inst)
 end
 
 local function on_load(inst, data)
@@ -304,7 +300,7 @@ local function on_load(inst, data)
             if inst._reset_task then
                 inst._reset_task:Cancel()
             end
-			inst._reset_task = inst:DoTaskInTime(data.reset_task_time_remaining, on_reset)
+            inst._reset_task = inst:DoTaskInTime(data.reset_task_time_remaining, on_reset)
             inst._reset_task_end_time = GetTime() + data.reset_task_time_remaining
         end
         if data.pendingregrow then
@@ -318,7 +314,7 @@ local function on_load(inst, data)
         inst.froze = false
         MakeNotWinter(inst)
     end
-	ToDigOrNotToDig(inst)	
+    ToDigOrNotToDig(inst)    
 end
 
 local function OnSpring(inst)
@@ -421,7 +417,7 @@ local function blueberryplant()
     inst.components.mine:SetTestTimeFn(calculate_mine_test_time)
     inst.components.mine:SetReusable(false)
     Regrow(inst)
-	ToDigOrNotToDig(inst)	
+    ToDigOrNotToDig(inst)    
 
     -- Stop the blueberries from idling in unison.
     inst.AnimState:SetTime(math.random(0.1,0.3) * inst.AnimState:GetCurrentAnimationLength())

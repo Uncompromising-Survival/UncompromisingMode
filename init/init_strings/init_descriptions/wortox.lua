@@ -591,3 +591,4 @@ DESCRIBE.WATHOM_CORPSE = "Stay in the venue, he's damned to continue!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "With my mind, I'll shield my hide!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "We need to remove its chill before I can get the kill!"
+DESCRIBE.UM_THULECITE_RAZOR= "I saw this on Steam Workshop once!"

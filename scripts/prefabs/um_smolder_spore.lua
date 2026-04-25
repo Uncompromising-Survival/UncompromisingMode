@@ -13,7 +13,7 @@ local function FieryAftermath(inst)
 end
 
 -- This prefab just isn't complicated enough to need seperate files for movement. One block of code suffices.
-local dont_target = {"PyreToxinImmune","wall","chess"}
+local dont_target = {"pyre_toxin_immune","wall","chess"}
 local function SimpleWander(inst)
 	if not inst:HasTag("BUSYSMOLDERSPORE") then
 		inst.randdir = math.random(1, 359)
@@ -251,7 +251,7 @@ local function fn()
 	inst.AnimState:PlayAnimation("spawn", false)
 	inst.AnimState:PushAnimation("idle", true)
 
-	inst:AddTag("PyreToxinImmune")
+	inst:AddTag("pyre_toxin_immune")
 	inst:AddTag("soulless") -- Prefab shouldn't die via health loss, but...just in case.
     inst:AddTag("noember")
 	inst:AddTag("scarytoprey")
@@ -372,7 +372,7 @@ local function pop_fn()
 	inst.Transform:SetScale(1.25, 1.25, 1.25)
 	inst.AnimState:PlayAnimation("explode", false)
 
-	inst:AddTag("PyreToxinImmune")
+	inst:AddTag("pyre_toxin_immune")
 	inst:AddTag("flying")
 	inst:AddTag("thorny")
 

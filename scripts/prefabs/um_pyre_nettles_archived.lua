@@ -81,7 +81,7 @@ end
 local function pyrenettle_bumped(inst)
     local bumpradius = inst.stage > 3 and inst.stage * 0.75 or 1
     local nextvictim = FindClosestEntity(inst, bumpradius, true, nil,
-        { "PyreToxinImmune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
+        { "pyre_toxin_immune", "plantkin", "shadowcreature", "flying", "FX", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "smog", "wall" }
     )
 
     if nextvictim and nextvictim.components.locomotor and math.random() > 0.5 then -- Chance to bump the plant.
@@ -423,7 +423,7 @@ local function StageSpawner(name, SpawnAtStage)
 
         -- UM tags
         inst:AddTag("PyreNettle")
-        inst:AddTag("PyreToxinImmune")
+        inst:AddTag("pyre_toxin_immune")
         inst:AddTag("SmolderSporeAvoid")
         inst:AddTag("snowpileblocker") -- SNOOOOOWWWW BLOCKERRRRRR
         -- Vanilla tags

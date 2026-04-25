@@ -9,6 +9,21 @@ GLOBAL.TUNING.WX78_CHARGING_FOODS.powercell = 1
 
 local ModuleDefs = require("wx78_moduledefs")
 
+local function GetIsBirdFn(cage_or_trap)
+    if ModuleDefs.scandata_definitions == nil then
+        return
+    end
+    local birdprefab
+    if cage_or_trap.components.occupiable ~= nil then
+        local bird = cage_or_trap.components.occupiable:GetOccupant()
+        birdprefab = bird ~= nil and bird.prefab or nil
+    elseif cage_or_trap.components.trap ~= nil then
+        birdprefab = cage_or_trap.trappedbuild ~= nil and string.sub(cage_or_trap.trappedbuild, 0, -7) or nil
+    end
+
+    return birdprefab and ModuleDefs.scandata_definitions[birdprefab] ~= nil or nil
+end
+--New circuits: spin, shielding, digestion, stacksize, screech, light2, radar
 ModuleDefs.AddCreatureScanDataDefinition("um_buttery_fly", "maxsanity1", 3)
 --ModuleDefs.AddCreatureScanDataDefinition("dreadeye", "maxsanity", 3) -- Would reveal the disguise, I think
 ModuleDefs.AddCreatureScanDataDefinition("creepingfear", "maxsanity", 6)
@@ -20,18 +35,32 @@ ModuleDefs.AddCreatureScanDataDefinition("viperworm", "maxsanity", 6)
 ModuleDefs.AddCreatureScanDataDefinition("shockworm", "taser", 6)
 ModuleDefs.AddCreatureScanDataDefinition("magmahound", "heat", 6)
 ModuleDefs.AddCreatureScanDataDefinition("um_pepperdragon", "heat", 6)
+--ModuleDefs.AddCreatureScanDataDefinition("snaildrake_magma", "heat", 3) -- shielding?
+--ModuleDefs.AddCreatureScanDataDefinition("snaildrake_slime", "heat", 3) -- shielding?
 ModuleDefs.AddCreatureScanDataDefinition("glacialhound", "cold", 6)
+--ModuleDefs.AddCreatureScanDataDefinition("snowmong", "cold", 4) -- You have to put it to sleep otherwise it's impossible
 --ModuleDefs.AddCreatureScanDataDefinition("rimeweed_main", "cold", 3) --Too easy
 ModuleDefs.AddCreatureScanDataDefinition("lightninghound", "taser", 5)
 ModuleDefs.AddCreatureScanDataDefinition("alpha_lightninggoat", "taser", 6)
+ModuleDefs.AddCreatureScanDataDefinition("bight", "taser", 6)
 ModuleDefs.AddCreatureScanDataDefinition("fruitbat", "movespeed", 2)
---ModuleDefs.AddCreatureScanDataDefinition("wathom", "nightvision", 1) -- Funney
-ModuleDefs.AddCreatureScanDataDefinition("um_ribopod", "maxhunger", 2)
+--ModuleDefs.AddCreatureScanDataDefinition("wathom", "nightvision", 1) -- Funney, but beeps too much
+--ModuleDefs.AddCreatureScanDataDefinition("wathom", "screech", 99) -- One day man, one day... (not)
+ModuleDefs.AddCreatureScanDataDefinition("um_ribopod", "digestion", 2)
 ModuleDefs.AddCreatureScanDataDefinition("hoodedwidow", "maxhealth2", 6)
+ModuleDefs.AddCreatureScanDataDefinition("pied_rat", "music", 6)
+ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "shielding", 3)
+ModuleDefs.AddCreatureScanDataDefinition("aphid", "maxhunger1", 2)
+--ModuleDefs.AddCreatureScanDataDefinition("uncompromising_rat", "maxhunger1", 2) -- With how skittish they are, it'll annoy you and the Winky player
+ModuleDefs.AddCreatureScanDataDefinition("uncompromising_packrat", "stacksize", 4)
+ModuleDefs.AddCreatureScanDataDefinition("um_pawn", "screech", 6)
+ModuleDefs.AddCreatureScanDataDefinition("um_pawn_nightmare", "screech", 10)
 
-if KnownModIndex:IsModEnabled("workshop-1289779251") then
-    ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3)
-end
+ModuleDefs.AddSpecialCreatureScanDataDefinition("woodpecker", GetIsBirdFn, "radar", 3)
+
+--[[if KnownModIndex:IsModEnabled("workshop-1289779251") then
+    ModuleDefs.AddCreatureScanDataDefinition("boulder_crab", "squittlearmor", 3) -- CF compatibility before shielding circuit came to existance.
+end]]
 
 --TODO, reimplement dorainsparks to do based on wetness from min to max damage
 --add rate too
