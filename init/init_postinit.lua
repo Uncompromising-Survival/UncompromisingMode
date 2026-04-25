@@ -10,7 +10,6 @@ local component_post = {
     --"hunter",
     "kramped",
     "explosiveresist",
-    "crop",
     "workable",
     "sleepingbaguser",
     "hounded",
@@ -71,7 +70,9 @@ local component_post = {
 	"temperature",
     "playercontroller",
 	"possessedaxe",
-	"inventoryitem"
+	"inventoryitem",
+	"retrofitcavemap_anr",
+    "fumarolelocaltemperature"
 }
 
 local prefab_post = {
@@ -131,7 +132,6 @@ local prefab_post = {
     "batcave",
     "rain",
     "molehat",
-    "mosquito",
     "armor_bramble",
     --"woby",
     "cave_network",
@@ -175,6 +175,7 @@ local prefab_post = {
     "minotaur_drops",
     "frog",
     "klaus_sack",
+	"klaus",
     "krampus",
     "krampus_sack",
     "waterplant",
@@ -242,6 +243,9 @@ local prefab_post = {
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
     "firestaff",
+	"worms",
+	"rabbitking",
+    "cave_vents"
 }
 
 local stategraph_post = {
@@ -275,6 +279,7 @@ local class_post = {
     "widgets/bloodover",
     --"widgets/inventorybar",
     --"widgets/containerwidget"
+    "widgets/statusdisplays"
 }
 
 local brain_post = {

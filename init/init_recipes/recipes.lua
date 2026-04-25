@@ -38,11 +38,6 @@ AddRecipe2("scrap_monoclehat", { Ingredient("wagpunk_bits", 4), Ingredient("tran
 ChangeSortKey("scrap_monoclehat", "moonstorm_goggleshat", "CLOTHING", true)
 ChangeSortKey("scrap_monoclehat", "antlionhat", "TOOLS", false)
 
-AddRecipe2("diseasecurebomb", { Ingredient("cactus_flower", 2), Ingredient("moonrocknugget", 2), Ingredient("spidergland", 3) }, TECH.SCIENCE_TWO, nil, { "GARDENING", "TOOLS", "RESTORATION" })
-ChangeSortKey("diseasecurebomb", "compostwrap", "GARDENING", true)
-ChangeSortKey("diseasecurebomb", "premiumwateringcan", "TOOLS", true)
-ChangeSortKey("diseasecurebomb", "lifeinjector", "RESTORATION", true)
-
 AddRecipe2("gasmask", { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
 ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
 ChangeSortKey("gasmask", "beehat", "RAIN", true)
@@ -51,6 +46,10 @@ AddRecipe2("plaguemask", { Ingredient("gasmask", 1), Ingredient("red_cap", 2), I
 ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
 ChangeSortKey("plaguemask", "gasmask", "SUMMER", true)
+
+AddRecipe2("um_hat_nettlemask", { Ingredient("firenettles", 20), Ingredient("slurper_pelt", 1), Ingredient("goldnugget", 1)}, TECH.SCIENCE_TWO, nil, {"CLOTHING","WINTER"})
+ChangeSortKey("um_hat_nettlemask", "gasmask", "CLOTHING", true)
+ChangeSortKey("um_hat_nettlemask", "gasmask", "WINTER", true)
 
 AddRecipe2("sporepack", { Ingredient("shroom_skin", 1), Ingredient("rope", 2), Ingredient("spoiled_food", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "CONTAINERS" })
 ChangeSortKey("sporepack", "icepack", "CLOTHING", true)
@@ -232,7 +231,7 @@ if GetModConfigData("sporehounds") then
     ChangeSortKey("shroom_skin", "bearger_fur", "REFINE", true)
 end
 
-AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.SCIENCE_TWO, nil, { "LIGHT" })
+AddRecipe2("watermelon_lantern", { Ingredient("watermelon", 1), Ingredient("fireflies", 1) }, TECH.LOST, nil, { "LIGHT" })
 ChangeSortKey("watermelon_lantern", "pumpkin_lantern", "LIGHT", true)
 
 if GetModConfigData("hayfever_disable") then -- not in dev build since the config is commented off, but live does have it.
@@ -472,13 +471,7 @@ ChangeSortKey("hermitshop_bootleg", "hermitshop_boat_ancient_blueprint", "CRAFTI
 AddRecipe2("hermitshop_cookies", { Ingredient("messagebottleempty", 1) }, TECH.HERMITCRABSHOP_SEVEN, { nounlock = true, product = "pumpkincookie", sg_state = "give" })
 ChangeSortKey("hermitshop_cookies", "hermitshop_bootleg", "CRAFTING_STATION", true)
 
---[[
-AddRecipe2(
-"hermitshop_oil",
-{Ingredient("messagebottleempty", 3)},
-TECH.HERMITCRABSHOP_FIVE,
-{nounlock = true, product = "diseasecurebomb", sg_state = "give"})
-ChangeSortKey("hermitshop_oil", "hermitshop_cookies", "CRAFTING_STATION", true)]]
+
 -- better moonstorm
 AddRecipe2("moonstorm_static_item", { Ingredient("transistor", 1), Ingredient("moonstorm_spark", 2), Ingredient("goldnugget", 3) }, TECH.LOST, nil, { "REFINE" })
 AddRecipe2("alterguardianhatshard", { Ingredient("moonglass_charged", 3), Ingredient("moonstorm_spark", 3), Ingredient("coolant", 1) }, TECH.LOST, { numtogive = 3 }, { "LIGHT", "REFINE" })
@@ -507,7 +500,7 @@ ChangeSortKey("mastupgrade_windturbine_item", "mastupgrade_lightningrod_item", "
 
 -- Pyre Nettles stuff
 -- Pyre Mantle
-AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 5), Ingredient("silk", 1) }, TECH.NONE, nil, { "ARMOUR", "WINTER" })
+AddRecipe2("um_armor_pyre_nettles", { Ingredient("firenettles", 20), Ingredient("silk", 1) }, TECH.NONE, nil, { "ARMOUR", "WINTER" })
 ChangeSortKey("um_armor_pyre_nettles", "armordragonfly", "ARMOUR", false)
 ChangeSortKey("um_armor_pyre_nettles", "sweatervest", "WINTER", false)
 -- Pyre Dart

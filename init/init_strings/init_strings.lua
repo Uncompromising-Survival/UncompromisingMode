@@ -11,10 +11,10 @@ RECIPE_DESC.CRITTERLAB_REAL = "Cute pals to ruin the mood."
 RECIPE_DESC.UM_SAND = "Turn a big rock into smaller rocks."
 RECIPE_DESC.SNOWGOGGLES = "Keep your eyes clear and ears extra warm."
 RECIPE_DESC.RATPOISONBOTTLE = "Highly addictive to pestilence pests."
-RECIPE_DESC.DISEASECUREBOMB = "Effective disease prevention."
 RECIPE_DESC.ICE = "Water of the solid kind."
 RECIPE_DESC.GASMASK = "Makes everything smell like bird."
 RECIPE_DESC.PLAGUEMASK = "You are the cure!"
+RECIPE_DESC.UM_HAT_NETTLEMASK = "Displace dangerous gasses with an equally horrible irritant."
 RECIPE_DESC.SALTPACK = "Spice up the world."
 RECIPE_DESC.RATPOISON = "A most deadly feast."
 RECIPE_DESC.SHROOM_SKIN = "Stitched skins."
@@ -183,6 +183,8 @@ RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
 RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
 RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems."
+RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
+RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 
 -- [              DSTU Related Overrides                  ]
 
@@ -596,14 +598,17 @@ STRINGS.STALKER_ATRIUM_WATHOM_BATTLECRY = {
 
 STRINGS.UM_VETERANSHRINE = {
     VETERANCURSETAUNT = {
-        "COME... CLOSER...",
-        "THE... CHALLENGE...",
-        "CURSE... WAY OUT..."
+        "COME... CLOSER... CONSIDER...",
+        "THE... CHALLENGE.. REWARD...",
+        "CURSE... N.. OUT...",
+        "POWER.. GLORY..."
     },
     VETERANCURSED = {
-        "NO... GOING... BACK...",
-        "PACT... MADE...",
-        "BRING... SKULLS..."
+        "GO... PACT... MADE...",
+        "FIND... DESTROY...",
+        "GOOD... LUCK...",
+        "FIND... EAT... NIGHT",
+        "MOON.. GONE.. PREPARE..."
     },
     NOT_VETERANCURSED = { --Unused
         "NOT... AFFLICTED..."
@@ -611,27 +616,32 @@ STRINGS.UM_VETERANSHRINE = {
     NOT_VETERANSKULL = { --Unused
         "NOT... DESIRED..."
     },
-    VETSKULL_COMMENT = { --Unused
-        WILSON = "A CURIOUS MIND... DESTINED FOR DANGER",
-        WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE",
-        WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING",
-        MAXWELL = "THINKS HIMSELF A KING... HE WAS ONLY EVER A PAWN",
-        WILLOW = "CAREFREE... CARELESS... MAY SHE FIND PEACE",
-        WARLY = "ALWAYS HUNGRY FOR MORE... NEVER SATED",
-        WINKY = "THE RESULT... OF THEIR MEDDLING...",
-        WICKERBOTTOM = "TOO EAGER... TO TAMPER... WITH DARK FORCES",
-        WIXIE = "DARKNESS INSIDE HER... THEIR FAVORITE FUEL SOURCE",
-        WOODIE = "TAMPERED ONCE... WITH OUR INFLUENCES",
-        WOLFGANG = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
-        WANDA = "ALWAYS RUNNING... HER TIME RUNS SHORT",
-        WATHGRITHR = "THEY FUEL HER DELUSIONS... SHE FUELS THEIR DESITRES",
-        WES = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON",
-        WENDY = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
+    VETSKULL_COMMENT = { -- Unused...
+        WILSON = "A CURIOUS MIND... DESTINED FOR DANGER.. HIS CHALLENGE IS THEIR HUNGER AND VULNERABILITY...",
+        WALTER = "A KIND SOUL... BUT TOO CURIOUS... LIKE 'THEY' WERE.. HIS CHALLENGE IS THEIR MAIMED MIND..",
+        WORTOX = "TOO BREAK FREE... OF ONES NATURE... A RARE THING.. HIS CHALLENGE IS THEIR REGRET..",
+        MAXWELL = "THINKS HIMSELF A KING... HE WAS ONLY EVER A PAWN... HIS CHALLENGE IS THEIR REQUIREMENT..",
+        WILLOW = "CAREFREE... CARELESS... MAY SHE FIND PEACE... HER CHALLENGE IS THEIR COLD HEART..",
+        WARLY = "ALWAYS HUNGRY FOR MORE... NEVER SATED... HIS CHALLENGE IS THEIR DISSATISFACTION..",
+        WINKY = "THE RESULT... OF THEIR MEDDLING... HER CHALLENGE IS UNKNOWN...",
+        WICKERBOTTOM = "TOO EAGER... TO TAMPER... WITH DARK FORCES.. HER CHALLENGE IS UNKNOWN...",
+        WIXIE = "DARKNESS INSIDE HER... THEIR FAVORITE FUEL SOURCE.. HER CHALLENGE IS UNKNOWN...",
+        WOODIE = "TAMPERED ONCE... WITH OUR INFLUENCES.. HIS CHALLENGE IS THEIR BROKEN BODY AND MIND...",
+        WOLFGANG = "SEEKS STRENGTH... WHERE WEAKNESS IS FED UPON... HIS CHALLENGE IS UNKNOWN...",
+        WANDA = "ALWAYS RUNNING... HER TIME RUNS SHORT.. HER CHALLENGE IS IN THE FUTURE...",
+        WATHGRITHR = "THEY FUEL HER DELUSIONS... SHE FUELS THEIR DESIRES.. HER CHALLENGE IS THEIR UNENDING OPPOSITION...",
+        WES = "CURSED BY THE YESTERYEAR KING.. HIS CHALLENGE IS THEIR UNENDING HATRED..",
+        WENDY = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT... HER CHALLENGE IS UNKNOWN...",
 
-        WORMWOOD = "TO BRING BACK THE DEAD... A DANGEROUS PROSPECT",
-        WX78 = "A NEW SHELL... WITH NO SOUL TRANSFERRED",
+        WORMWOOD = "DOES NOT... BELONG... HERE... HIS CHALLENGE IS THEIR MAIMED BODY...",
+        WX78 = "A NEW SHELL... WITH NO SOUL.. IS IT REALLY HIM.. ITS CHALLENGE IS UNKNOWN...",
     },
 }
+
+--AXE The veteranshrine will eventually make comments about night terrors happening if the characters choose to be near him when it happens.
+-- It is advantagous to the player to be somewhat near the veteranshrine. The ancient inside will tell them what's coming, if anything.
+-- It will be possible to attach a radio device onto the veteranshrine itself and carry your own radio elsewhere, he will always inform you of what's happening near you, somehow, he knows.
+-- He will functionally be the event's cheat sheet. Secret ooooh Secret.
 
 STRINGS.UM_VOXOLOPHONE = { --All Unused Night Terrors stuff
     SHADOW_WARNING = {
@@ -1447,3 +1457,4 @@ STRINGS._STATUS_ANNOUNCEMENTS.WALTER = {
         EMPTY = "Woby sounds like she's starving!",
     },
 }
+
