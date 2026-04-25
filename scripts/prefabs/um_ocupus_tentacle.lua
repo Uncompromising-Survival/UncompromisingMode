@@ -122,6 +122,7 @@ local function fn()
     inst.entity:AddNetwork()
 
     MakeCharacterPhysics(inst, 1000, 0.1)
+	MakeInventoryFloatable(inst, "med", nil, 0.68)
     inst.Transform:SetFourFaced()
 
     inst:AddTag("ignorewalkableplatforms")
@@ -140,7 +141,10 @@ local function fn()
     inst.AnimState:SetBuild("ocupus")
 	
     inst.AnimState:PlayAnimation("idle", true)
-
+    local land_time = (POPULATING and math.random()*5*FRAMES) or 0
+    inst:DoTaskInTime(land_time, function(inst)
+        inst.components.floater:OnLandedServer()
+    end)	
     inst.entity:SetPristine()
     if not TheWorld.ismastersim then
         return inst

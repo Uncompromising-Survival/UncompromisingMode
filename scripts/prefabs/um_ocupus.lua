@@ -31,32 +31,63 @@ local function RemoveAllTentacles(inst) --This is mainly meant to catch any stra
 	inst.boatvictim = nil
 end
 
-local function GetRand()
-	local num = math.random(5,8)
-	if math.random() > 0.5 then
-		num = - num
+local function SpawnLoot(inst,x,y,z,item,spoiled)
+
+	local loot = SpawnPrefab(item)
+	local offset = FindSwimmableOffset(inst:GetPosition(), math.random() * PI * 2, math.random(1,12))
+	if offset then
+		x = offset.x + x
+		z = offset.z + z
 	end
-	return num
+	if spoiled and loot.components.perishable then
+		loot.components.perishable:SetPercent(0.33)
+	end
+	loot.Transform:SetPosition(x,y,z)
+	SpawnPrefab("splash_ocean").Transform:GetWorldPosition(x,0,z)
+
 end
 
-local function SpawnLoot(inst,x,y,z,item)
-	local loot = SpawnPrefab(item)
-	loot.Transform:SetPosition(x+GetRand(),y-8-4/10*math.random(0,20),z+GetRand())
-	loot.AnimState:SetMultColour(0.1,0.7,0.8,0.7)
-	loot.Rise = loot:DoPeriodicTask(FRAMES, function(loot)
-		local x,y,z = loot.Transform:GetWorldPosition()
-		if y < -0.12 then
-			loot.Transform:SetPosition(x,y+0.0001,z)
-		else
-			loot.Transform:SetPosition(x,0,z)
-			SpawnPrefab("splash_ocean").Transform:GetWorldPosition(x,0,z)
-			loot.AnimState:SetMultColour(1,1,1,1)
-			if loot.Rise then
-				loot.Rise:Cancel()
-				loot.Rise = nil
+
+local random_loot = {
+	blank_map = {num = 1, items = {"messagebottleempty","papyrus"}, counts = {1,1}},
+	fresh_barnacles = {num = 2, items = {"barnacle"}, counts = {5}},
+	salty_barnacles = {num = 3, items = {"barnacle","saltrock"}, counts = {3,2}},
+	sludge = {num = 4, items = {"sludge"}, counts = {4}},
+	sludge_gem = {num = 5, items = {"sludge","redgem"}, counts = {2,1}}, 
+	spoiled_lure = {num = 6, items = {"fishmeat_small","spoiled_fish","oceanfishinglure_hermit_drowsy"}, counts = {2,1,1},spoiled = true},
+	morning_fish = {num = 7, items = {"fishmeat","oceanfishingbobber_oval","oceanfishinglure_spoon_red"}, counts = {1,1,1}},
+	heavy_fish = {num = 8, items = {"fishmeat","oceanfishinglure_hermit_heavy"}, counts = {3,1}},
+	shark1 = {num = 9, items = {"fishmeat","rockjawleather"}, counts = {4,1}},
+	shark2 = {num = 10, items = {"fishmeat","rockjawleather"}, counts = {4,1}}, --AXE Duplicate for the very slight chance increase
+	cookiecutters = {num = 11, items = {"monstersmallmeat","cookiecuttershell"}, counts = {4,5}},
+	cookiecutters_salty = {num = 12, items = {"monstersmallmeat","cookiecuttershell","saltrock"}, counts = {2,1,5}},
+	bumper_boat = {num = 13, items = {"boatpatch","boat_bumper_shell_kit"}, counts = {4,3}},
+	not_so_floaty = {num = 14, items = {"flotationcushion","boneshard","spoiledfood"}, counts = {1,2,4}},
+	monkey_captain = {num = 15, items = {"meat","monkey_mediumhat","stash_map","oar_monkey"}, counts = {1,1,1,1}},
+	monkey_crew = {num = 16, items = {"boards","monkey_smallhat","banana"}, counts = {4,2,3}},
+	sail_boat = {num = 17, items = {"boards","rope","silk"}, counts = {8,3,4}},
+	turbine_boat = {num = 18, items = {"boards","transistor","mastupgrade_windturbine_item"}, counts = {6,2,1}},
+}
+
+local function grab_random_loot()
+	local loot_num = math.random(1,18) --AXE need to manually update this number if you add to the table, doing #random_loot doesn't return the length.
+	for i,v in pairs(random_loot) do
+		if loot_num == v.num then
+			return v
+		end
+	end
+end
+
+
+local function UnpackRandomLoot(inst,x,y,z)
+	local loot_table = grab_random_loot()
+	if loot_table then
+		for i,v in ipairs(loot_table.items) do
+			for j = 1,loot_table.counts[i] do
+				SpawnLoot(inst,x,y,z,v,loot_table.perishable and true or nil)
 			end
 		end
-	end)
+	end
 end
 
 local function OcupusKilled(inst) --The ocupus sustained enough damage to be killed, likely due to the beak being beaten up
@@ -67,14 +98,17 @@ local function OcupusKilled(inst) --The ocupus sustained enough damage to be kil
 	inst:DoTaskInTime(math.random(3,5),function(inst) --Loot Time
 		local boat = inst.boatvictim
 		local x,y,z = inst.Transform:GetWorldPosition()
-		if inst.beakkilled then -- If you broke the beak, you'll get it as a drop
+		if inst.beakkilled then --AXE If you broke the beak, you'll get it as a drop
 			SpawnLoot(inst,x,y,z,"ocupus_beak")
 		end
-		for i = 1,8 do
+		for i = 1,4 do
 			SpawnLoot(inst,x,y,z,"fishmeat")
 		end
-		for i = 1,4 do
+		for i = 1,math.random(6,8) do
 			SpawnLoot(inst,x,y,z,"boneshard")
+		end
+		for i = 1,3 do
+			UnpackRandomLoot(inst,x,y,z)
 		end
 		inst:Remove()
 	end)
@@ -296,6 +330,18 @@ local function BoatCheck(inst)
 	end
 end
 
+local function WarnThePassengers(inst)
+	local x,y,z = inst.boatvictim.Transform:GetWorldPosition()
+	local players = TheSim:FindEntities(x,y,z,4,{"player"})
+	for i,v in ipairs(players) do
+		if v.components.talker and v:HasTag("player") then
+			v:DoTaskInTime(math.random(1,2),function(v)
+				v.components.talker:Say(GetString(v, "ANNOUNCE_OCEAN_SILHOUETTE_INCOMING"))
+			end)
+		end
+	end
+end
+
 local function EngageBoat(inst)
 	inst.components.boatdrag.drag = TUNING.BOAT.ANCHOR.BASIC.ANCHOR_DRAG
 	inst.boatvictim.components.boatphysics:AddBoatDrag(inst)
@@ -306,6 +352,7 @@ local function EngageBoat(inst)
 	end
 	inst:DoTaskInTime(15,Evaluate)
 	inst.boatcheck = inst:DoPeriodicTask(1,BoatCheck)
+	WarnThePassengers(inst)
 end
 
 

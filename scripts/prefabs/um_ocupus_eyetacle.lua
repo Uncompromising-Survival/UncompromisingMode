@@ -100,20 +100,22 @@ local function Investigate(inst)
 end
 
 local function EvaluateDistanceToBoat(inst)
-	if inst.boatvictim and inst.boatvictim:IsValid() and inst:GetDistanceSqToInst(inst.boatvictim)^0.5 > 10 then
-		inst.AnimState:PlayAnimation("eyetacle_leave")
-		inst:ListenForEvent("animover",function(inst)
-			local splash = SpawnPrefab("splash_ocean")
-			splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
-			splash.Transform:SetScale(1.5,1.5,1.5)
-			inst.core:DoTaskInTime(math.random(3,5),function(inst) if inst.boatvictim then inst.AddEyeTentacle2(inst) end end)
-			inst:Remove() --Replace with submerging
-		end)
-	elseif not inst.boatvictim then	
-		inst.AnimState:PlayAnimation("eyetacle_leave")
-		inst:ListenForEvent("animover",function(inst)
-			inst:Remove() --Replace with submerging
-		end)
+	if inst.components.health and not inst.components.health:IsDead() then
+		if inst.boatvictim and inst.boatvictim:IsValid() and inst:GetDistanceSqToInst(inst.boatvictim)^0.5 > 10 then
+			inst.AnimState:PlayAnimation("eyetacle_leave")
+			inst:ListenForEvent("animover",function(inst)
+				local splash = SpawnPrefab("splash_ocean")
+				splash.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				splash.Transform:SetScale(1.5,1.5,1.5)
+				inst.core:DoTaskInTime(math.random(3,5),function(inst) if inst.boatvictim then inst.AddEyeTentacle2(inst) end end)
+				inst:Remove() --Replace with submerging
+			end)
+		elseif not inst.boatvictim then	
+			inst.AnimState:PlayAnimation("eyetacle_leave")
+			inst:ListenForEvent("animover",function(inst)
+				inst:Remove() --Replace with submerging
+			end)
+		end
 	end
 end
 
@@ -136,9 +138,10 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddLight()
     inst.entity:AddNetwork()
-
-    MakeInventoryPhysics(inst, nil, 0.7)
-
+	
+	MakeInventoryPhysics(inst)
+    
+	
 	inst.Transform:SetFourFaced()
     inst.AnimState:SetBank("um_ocupus")
     inst.AnimState:SetBuild("ocupus")
@@ -154,12 +157,12 @@ local function fn()
     inst.Light:SetFalloff(.6)
     inst.Light:Enable(false)
     inst.Light:SetColour(180/255, 195/255, 225/255)
-    MakeInventoryFloatable(inst, "med", 0.1, {0.7, 0.7, 0.7})
-    --[[inst.components.floater.bob_percent = 0.1
+    MakeInventoryFloatable(inst, "med", nil, 0.68)
+
     local land_time = (POPULATING and math.random()*5*FRAMES) or 0
     inst:DoTaskInTime(land_time, function(inst)
         inst.components.floater:OnLandedServer()
-    end)	]]
+    end)	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
