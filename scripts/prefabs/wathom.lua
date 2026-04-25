@@ -14,8 +14,8 @@ TUNING.WATHOM_HUNGER = 120
 TUNING.WATHOM_SANITY = 120
 
 local function VetCurseCheck(inst)
-	local sanity = inst.components.sanity
-	if not sanity then return end
+    local sanity = inst.components.sanity
+    if not sanity then return end
     if inst:HasTag("vetcurse") then
         sanity:EnableLunacy(sanity:GetPercent() > .5 or false, "vetcurse")
     elseif sanity._lunacy_sources._modifiers[inst] and sanity._lunacy_sources._modifiers[inst].modifiers["vetcurse"] then
