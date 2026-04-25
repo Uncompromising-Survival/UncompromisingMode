@@ -348,7 +348,7 @@ TUNING.DSTU = {
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
-	KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,	
+    KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,
     KLAUS_AMULET_ABSORPTION = 0.3,
     ORANGESTAFF_COOLDOWN_1 = 5,
     ORANGESTAFF_COOLDOWN_2 = 10,
@@ -505,8 +505,8 @@ if GetModConfigData("beebox_nerf") then
 end
 
 -- Boulderbough
-	TUNING.TREE_ROCK.BURN_TIME = 30
-	TUNING.TREE_ROCK.SAPLING_GROW_TIME = {base=6.5*day_time, random=1*day_time}
+    TUNING.TREE_ROCK.BURN_TIME = 30
+    TUNING.TREE_ROCK.SAPLING_GROW_TIME = {base=6.5*day_time, random=1*day_time}
 
 -- Glass Cutter
 if GetModConfigData("celestialitems_revert") then
