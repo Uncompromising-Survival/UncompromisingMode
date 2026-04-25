@@ -503,6 +503,10 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_RELEASE_TIME = day_time * 1.5
 end
 
+-- Boulderbough
+	TUNING.TREE_ROCK.BURN_TIME = 30
+	TUNING.TREE_ROCK.SAPLING_GROW_TIME = {base=6.5*day_time, random=1*day_time}
+
 -- Glass Cutter
 if GetModConfigData("celestialitems_revert") then
     TUNING.MOONGLASSAXE.DAMAGE_VS_SHADOW_BONUS = 1
