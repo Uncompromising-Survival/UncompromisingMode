@@ -446,30 +446,58 @@ local function blueberryexplosion()
     return inst
 end
 
+local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap"}
+local no_slow_players = ConcatArrays({"companion", "abigail", "shadowminion", "player"}, no_slow)
+local function ApplySlows(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 3, {"_combat"}, inst.playermade and no_slow_players or no_slow)
+    for i, v in ipairs(ents) do
+        local debuffkey = inst.prefab
+        if v.components.locomotor then
+            v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
+            v.um_boomslowtask = v:DoPeriodicTask(1, function(guy)
+                if not FindEntity(guy,3,function(ent) return ent.prefab == "blueberrypuddle" end) then
+                    guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                    if guy.um_boomslowtask then
+                        guy.um_boomslowtask:Cancel()
+                        guy.um_boomslowtask = nil
+                    end
+                end
+            end)
+        end
+    end
+end
+
 local function blueberrypuddle()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
+    inst.entity:AddSoundEmitter()
 
     MakeInventoryPhysics(inst)
 
+    inst.Transform:SetScale(1.5, 1.5, 1.5)
     inst.AnimState:SetBank("treegrowthsolution")
     inst.AnimState:SetBuild("um_goo_blue")
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
     inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:PlayAnimation("pre_idle", false)
+    inst.AnimState:PushAnimation("idle", false)
 
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.Transform:SetScale(1.5,1.5,1.5)
-    inst.AnimState:PlayAnimation("pre_idle", false)
-	inst.AnimState:PushAnimation("idle", false)
-	inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
-	inst.persists = false
+
+    inst:ListenForEvent("animover",function(inst) inst.AnimState:SetDeltaTimeMultiplier(.2) end)
+    inst:ListenForEvent("animqueueover",function(inst) inst:Remove() end)
+
+    inst.persists = false
+
+    inst:DoPeriodicTask(.5, ApplySlows)
 
     return inst
 end

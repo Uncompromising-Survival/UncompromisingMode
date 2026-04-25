@@ -35,6 +35,66 @@ local function UncompromisingFillers(tags)
         TUNING.DSTU.GENERALCROCKBLOCKER) or TUNING.DSTU.GENERALCROCKBLOCKER == false
 end
 
+local um_boomberrypieknockbackstates = { "knockback", "knockbacklanded" }
+local function BoomPieStopKnockback(inst, data)
+    if data and not table.contains(um_boomberrypieknockbackstates, data.statename) and inst.um_boomberrypietask then
+        inst.um_boomberrypietask:Cancel()
+        inst.um_boomberrypietask = nil
+        inst.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)
+        inst.components.health:SetInvincible(false)
+    end
+    inst:RemoveEventCallback("newstate", BoomPieStopKnockback)
+end
+
+local pie_shouldnt_hit = { "FX", "NOCLICK", "INLIMBO", "invisible", "notarget", "noattack", "playerghost", "player" }
+local function BoomPieGo(inst, eater)
+    if eater.components.health and not eater.components.health:IsDead() then
+        local x, y, z = eater.Transform:GetWorldPosition()
+        if eater:HasTag("player") then
+            eater.Physics:SetCollisionMask(COLLISION.GROUND, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS) -- Can launch yourself over gaps.
+            eater.Physics:Teleport(x, y, z)
+            eater:PushEvent("knockback", { knocker = eater, radius = 6, strengthmult = 6 })
+            eater:ListenForEvent("newstate", BoomPieStopKnockback)
+            eater.components.health:SetInvincible(true)
+
+            if eater.um_boomberrypietask then eater.um_boomberrypietask:Cancel() end
+            eater.um_boomberrypietask = eater:DoTaskInTime(10 * FRAMES, function(eater)
+                eater.Physics:SetCollisionMask(COLLISION.WORLD, COLLISION.OBSTACLES, COLLISION.SMALLOBSTACLES, COLLISION.CHARACTERS, COLLISION.GIANTS)
+                eater.components.health:SetInvincible(false)
+                if eater.sg then
+                    eater.sg.statemem.speed = -10
+                    eater:DoTaskInTime(0, function()
+                        if eater.components.drownable and eater.components.drownable:ShouldDrown() then
+                            eater.sg:GoToState("sink_fast")
+                            eater.AnimState:SetFrame(70)
+                            SpawnPrefab("um_ocean_splash").Transform:SetPosition(eater.Transform:GetWorldPosition())
+                        end
+                    end)
+                end
+                eater.um_boomberrypietask = nil
+                eater:RemoveEventCallback("newstate", BoomPieStopKnockback)
+            end)
+        end
+        eater:PushEvent("attacked", { damage = 3 })
+
+        SpawnPrefab("explode_small").Transform:SetPosition(x, y, z)
+        SpawnPrefab("blueberryexplosion").Transform:SetPosition(x, y, z)
+        local puddle = SpawnPrefab("blueberrypuddle")
+        puddle.Transform:SetPosition(x, y, z)
+        puddle.playermade = true
+        puddle.SoundEmitter:PlaySound("turnoftides/creatures/together/starfishtrap/trap")
+
+        local casualties = TheSim:FindEntities(x, y, z, 2, nil, pie_shouldnt_hit)
+        if #casualties > 0 then
+            for i, v in pairs(casualties) do
+                if v.components.combat and eater.components.combat:CanTarget(v) then
+                    v.components.combat:GetAttacked(eater, 68)
+                end
+            end
+        end
+    end
+end
+
 local um_preparedfoods =
 {
     beefalowings =
@@ -524,6 +584,83 @@ local um_preparedfoods =
             end
         end,
         card_def = { ingredients = { { "zaspberry", 1 }, { "honey", 1 }, { "goatmilk", 1 } } },
+    },
+
+    um_durian_cream_marshcake =
+    {
+        test = function(cooker, names, tags) return (names.durian or names.durian_cooked) and tags.dairy and tags.egg and not tags.inedible end,
+        hunger = 75,
+        health = 12,
+        sanity = 15,
+        priority = 53,
+        weight = 1,
+        cooktime = 2,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", .05, .65 },
+        card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
+        oneatenfn = function(inst, eater)
+            if eater and eater.components.health and eater.components.sanity then
+                if TheWorld then
+                    if TheWorld.state.isssummer then
+                        eater.components.health:DoDelta(6, true)
+                        eater.components.sanity:DoDelta(20, true)
+                    elseif TheWorld.state.isautumn then
+                        eater.components.health:DoDelta(12, true)
+                        eater.components.sanity:DoDelta(40, true)
+                    elseif TheWorld.state.iswinter then
+                        eater.components.health:DoDelta(18, true)
+                        eater.components.sanity:DoDelta(60, true)
+                    end
+                end
+            end
+        end,
+    },
+
+    um_chiles_en_nogada =
+    {
+        test = function(cooker, names, tags) return (names.pepper or names.pepper_cooked) and (names.acorn or names.acorn_cooked) and (names.pomegranate or names.pomegranate_cooked) and tags.meat and tags.meat > .5 end,
+        hunger = 37.5,
+        health = 20,
+        sanity = 50,
+        priority = 51,
+        weight = 1,
+        cooktime = 3,
+        temperature = TUNING.HOT_FOOD_BONUS_TEMP,
+        temperatureduration = TUNING.FOOD_TEMP_LONG,
+        foodtype = FOODTYPE.MEAT,
+        perishtime = 10 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", .05, .65 },
+        card_def = { ingredients = { { "pomegranate", 1 }, { "pepper", 1 }, { "acorn", 1 }, { "meat", 1 } } },
+    },
+
+    um_rice_pudding =
+    {
+        test = function(cooker, names, tags) return (tags.rice and tags.rice >= 2) and tags.sweetener and not tags.meat and not tags.inedible end,
+        hunger = 37.5,
+        health = 20,
+        sanity = 15,
+        priority = 66,
+        weight = 1,
+        cooktime = 1,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 6 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", .05, .65 },
+        card_def = { ingredients = { { "rice1", 2 }, { "honey", 1 } } },
+    },
+
+    um_boomberrypie =
+    {
+        test = function(cooker, names, tags) return (names.giant_blueberry and names.giant_blueberry > 2) end, -- At least 3 giant blueberries
+        hunger = 37.5,
+        priority = 30,
+        weight = 1,
+        cooktime = 2,
+        foodtype = FOODTYPE.VEGGIE,
+        perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
+        floater = { "med", .05, .65 },
+        card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
+        oneatenfn = BoomPieGo,
     },
 }
 

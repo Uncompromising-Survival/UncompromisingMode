@@ -307,6 +307,11 @@ local inventoryitems =
 	"staff_starfall",
 	"um_thulecite_razor",
     "uncompromising_winkyhomeburrow",
+
+	"um_durian_cream_marshcake",
+    "um_chiles_en_nogada",
+    "um_rice_pudding",
+	"um_boomberrypie",
 }
 
 for k, v in ipairs(inventoryitems) do
@@ -1234,6 +1239,10 @@ Assets = {
 	Asset("ANIM", "anim/purplesteamedhams.zip"),
 	Asset("ANIM", "anim/greensteamedhams.zip"),
 	Asset("ANIM", "anim/hardshelltacos.zip"),
+	Asset("ANIM", "anim/um_durian_cream_marshcake.zip"),
+	Asset("ANIM", "anim/um_chiles_en_nogada.zip"),
+	Asset("ANIM", "anim/um_rice_pudding.zip"),
+	Asset("ANIM", "anim/um_boomberrypie.zip"),
 
 	Asset("ANIM", "anim/berniebox.zip"),
 
@@ -1975,6 +1984,18 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/um_staff_meteor.xml"),
 	--ASSET("ATLAS_BUILD", "images/inventoryimages/um_staff_meteor.xml"),
 	Asset("IMAGE", "images/inventoryimages/um_staff_meteor.tex"),
+
+	Asset("IMAGE", "images/inventoryimages/um_durian_cream_marshcake.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_durian_cream_marshcake.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/um_chiles_en_nogada.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_chiles_en_nogada.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/um_rice_pudding.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_rice_pudding.xml"),
+
+	Asset("IMAGE", "images/inventoryimages/um_boomberrypie.tex"),
+	Asset("ATLAS", "images/inventoryimages/um_boomberrypie.xml"),
 
 	--SWAPS
 	Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
