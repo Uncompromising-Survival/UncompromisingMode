@@ -244,7 +244,8 @@ local prefab_post = {
 	--"balatro_machine", -- Keeping this here for Later.
 	"walrus_camp",
     "firestaff",
-    "cave_vent_mite"
+    "cave_vent_mite",
+	"bananabush"
 }
 
 local stategraph_post = {
