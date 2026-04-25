@@ -16,6 +16,21 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
+local function HungerScalingCheck(attacker)
+	if attacker ~= nil and attacker.components.hunger ~= nil then
+		local value = math.max(attacker.components.hunger:GetPercent(), 0.25)
+		return 3 * value, value
+	end
+
+	return 0, 0
+end
+
+local function WhipDamageCheck(inst, attacker, target)
+	local HungerScaling = HungerScalingCheck(attacker)
+	local BonusDamage = (34 / 3) * HungerScaling
+	return 34 + BonusDamage
+end
+
 local function onattack(inst, attacker, target, naughtlock)
     if target ~= nil and target:IsValid() then
 		local naughtlockmult = 1
@@ -48,16 +63,10 @@ local function onattack(inst, attacker, target, naughtlock)
 			local scalingvalue = hunger * value
 			
 			snap.Transform:SetScale(scalingvalue / 1.25, scalingvalue / 1.25, scalingvalue / 1.25)
-			local damage = ((34 / 3) * scalingvalue) / naughtlockmult
 			
             if target.SoundEmitter ~= nil then
 				target.SoundEmitter:PlaySound("dontstarve/common/whip_small")
             end
-			
-			if target ~= nil and target.components.combat ~= nil then
-				target.components.combat:GetAttacked(attacker, damage, nil)
-				--target.components.health:DoDelta(damage * 200, false, inst, false, attacker)
-			end
 			
 			if attacker.components.hunger ~= nil and attacker.components.hunger:GetPercent() > 0 then
 				local burnrate = attacker.components.hunger.burnratemodifiers:Get()
@@ -116,7 +125,7 @@ local function fn()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(34)
+	inst.components.weapon:SetDamage(WhipDamageCheck)
     inst.components.weapon:SetRange(TUNING.WHIP_RANGE)
     inst.components.weapon:SetOnAttack(onattack)
 	
