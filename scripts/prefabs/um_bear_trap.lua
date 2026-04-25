@@ -99,8 +99,8 @@ local function OnExplode(inst, target)
             inst:ListenForEvent("death", function(player) onfinished_normal(inst) end, target)
             inst:ListenForEvent("onremoved", function(player) onfinished_normal(inst) end, target)
             if target.components.locomotor then
-                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.5 or 0.3)
-                target._bear_trap_speedmulttask = target:DoTaskInTime(10, function(i)
+                target.components.locomotor:SetExternalSpeedMultiplier(target, debuffkey, inst.traptype and 0.35 or 0.2)
+                target._bear_trap_speedmulttask = target:DoTaskInTime(inst.traptype and 30 or 10, function(i)
                     i.components.locomotor:RemoveExternalSpeedMultiplier(i, debuffkey)
                     i._bear_trap_speedmulttask = nil
                 end)
@@ -453,7 +453,7 @@ local function projectilefn()
     inst:AddComponent("complexprojectile")
     inst.components.complexprojectile:SetOnHit(OnTrapLand)
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
-    inst.components.complexprojectile:SetHorizontalSpeed(30)
+    inst.components.complexprojectile:SetHorizontalSpeed(60)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
     inst.components.complexprojectile.usehigharc = false
 
@@ -717,15 +717,15 @@ local function equiptoothfn()
     CommonMine(inst, "player")
 
     inst:AddComponent("complexprojectile")
-    inst.components.complexprojectile:SetHorizontalSpeed(15)
+    inst.components.complexprojectile:SetHorizontalSpeed(12)
     inst.components.complexprojectile:SetGravity(-35)
-    inst.components.complexprojectile:SetLaunchOffset(Vector3(2, 2, 0))
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown_player)
     inst.components.complexprojectile:SetOnHit(OnTrapLand)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
-    inst.components.weapon:SetRange(20, 0.5)
+    inst.components.weapon:SetRange(8, 10)
 
     inst:AddComponent("inventoryitem")
     inst.components.inventoryitem:SetOnDroppedFn(OnDropped)

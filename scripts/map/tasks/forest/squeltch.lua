@@ -46,8 +46,9 @@ if GetModConfigData("rice") then
         if tasksetdata.location ~= "forest" then
             return
         end
-        table.insert(tasksetdata.required_prefabs, "riceplantspawnerlarge")
-        table.insert(tasksetdata.required_prefabs, "riceplantspawner")
+		-- Rice patches are no longer required till they are reworked. They still can spawn.
+        -- table.insert(tasksetdata.required_prefabs, "riceplantspawnerlarge")
+        -- table.insert(tasksetdata.required_prefabs, "riceplantspawner")
     end)
 
     -- Allow disconnected tiles for the HOLES made by the rice
