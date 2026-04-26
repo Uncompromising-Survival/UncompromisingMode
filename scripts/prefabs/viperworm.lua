@@ -24,19 +24,9 @@ local prefabs =
     "viperling",
 }
 
-local brain = require("brains/wormbrain")
+local brain = require("brains/viperwormbrain")
 local viperlingbrain = require("brains/viperlingbrain")
 local MAX_LIGHT_FRAME = 20
----Added Stuff
-
-
-
-
-
-
-
-
-
 
 -- Depth worm stuff
 local function OnUpdateLight(inst, dframes)

@@ -87,7 +87,7 @@ local function pyrenettle_bumped(inst,nextvictim)
 				nextvictim.components.combat:GetAttacked(inst,1)
 			end]] --AXE I added damage to the thicket too at one point to ensure it wasn't possible to just tank the heating... but it may not be needed now.
             nextvictim:AddDebuff("umdebuff_pyre_toxin", "umdebuff_pyre_toxin", DebuffDuration)
-            if nextvictim.components.temperature and nextvictim.components.temperature.current < 100 then
+            if nextvictim.components.temperature and nextvictim.components.temperature.current < 80 then
                 nextvictim.components.temperature:DoDelta(15)
             end
         end

@@ -350,7 +350,7 @@ local states=
 
         onenter = function(inst)
             if not inst.sg.mem.wantstostomp then
-			    inst.tolerance = inst.tolerance + 0.1 + (math.random() * 0.2)
+			    inst.tolerance = inst.tolerance + 0.3 + (math.random() * 0.2)
             end
             inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/hit")
             inst.AnimState:PlayAnimation("hit")
@@ -433,6 +433,7 @@ local states=
 			inst.components.locomotor:StopMoving()
 			inst.AnimState:PlayAnimation("pound", false)
 			inst.components.combat:SetAreaDamage(4, 1)
+            inst.components.combat:SetDefaultDamage(225) -- AXE He's being killed by worms AAAA
 		end,
 
 		timeline=
@@ -457,6 +458,7 @@ local states=
 		{
 			EventHandler("animqueueover", function(inst)
 				inst.components.combat:SetAreaDamage()
+                inst.components.combat:SetDefaultDamage(75)
 				inst.sg:GoToState("idle")
 			end),
 		},

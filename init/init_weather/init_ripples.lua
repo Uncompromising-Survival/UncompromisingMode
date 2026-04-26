@@ -459,7 +459,7 @@ env.AddComponentPostInit("locomotor", function(self)
    	local _OnUpdate = self.OnUpdate
 	function self:OnUpdate(dt, arrive_check_only)
 		local inst = self.inst
-		if not inst:HasAnyTag("merm","flying","ghost","playerghost","shadowcreature","brightmare_gestalt","shadowminion","shadowchesspiece","turfrunner_279","turfrunner_280","turfrunner_281") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
+		if not inst:HasAnyTag("merm","flying","ghost","playerghost","shadowcreature","nightmarecreature","brightmare_gestalt","shadowminion","shadowchesspiece","turfrunner_279","turfrunner_280","turfrunner_281") and not (inst.components.umripples and inst.components.umripples.speed_immune) then
 			if RobustFloodCheck(self.inst) and not inst.um_floodcontinualcheck then
                 if inst.prefab ~= "wurt" then	
                     inst:PushEvent("carefulwalking", { careful = true })

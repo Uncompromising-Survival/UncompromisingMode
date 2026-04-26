@@ -235,17 +235,18 @@ AddRoom("LichenLandMONKEY", {
     tags = {"Hutch_Fishbowl"},
     random_node_entrance_weight = 0,
     contents =  {
-        distributepercent = 0.35,
+        distributepercent = 0.3,
         distributeprefabs=
         {
             lichen = 1.0,
-            monkeybarrel_spawner = 0.2,
+            monkeybarrel_spawner = 0.1,
             cave_fern = 0.5,
             pillar_algae = 0.05,
             slurper_spawner = 0.05,
             fissure_lower = 0.05,
             um_slimestone_rock_gemless = 0.2,
             um_slimestone_rock = 0.05,
+            worm_spawner = 0.1,
         },
 		countprefabs = {
 			um_slimestone_respawner = function() return math.random(2,3) end,
@@ -263,7 +264,7 @@ AddRoom("LichenLandHub", {
         distributeprefabs=
         {
             lichen = 1.0,
-            monkeybarrel_spawner = 0.2,
+            monkeybarrel_spawner = 0.1,
             cave_fern = 0.5,
             pillar_algae = 0.05,
             slurper_spawner = 0.05,

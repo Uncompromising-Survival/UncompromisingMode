@@ -16,9 +16,8 @@ AddTask("MagmaCaves", { -- Branches in several ways, fumarole, atrium pillar, fi
 		level_set_piece_blocker = true,
 		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves","vipers_only"},
 		room_choices={
-			["GloomyMagma"] = 1, -- WORMS and Fissures
-			["FossilMagma"] = 3, -- Bones and Isopods		
-			["ShroomyMagma"] = 2, -- Fissure and Shrooms
+			["FossilMagma"] = 5, -- Bones and Isopods		
+			["ShroomyMagma"] = 1, -- Fissure and Shrooms
 			["GrassMagma"] = 2, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
 		},
 		entrance_room = "GrassMagmaCliffs", -- Pyre Nettle Thicket
@@ -31,12 +30,13 @@ AddTask("MagmaSacred", { -- Dead End
 		locks={LOCKS.MAGMA_CAVES_ENTRANCE,LOCKS.MAGMA_CAVES,LOCKS.TIER2},
 		keys_given={KEYS.MAGMA_CAVES_ENTRANCE,KEYS.MAGMA_CAVES,KEYS.TIER3},
 		level_set_piece_blocker = true,
+		entrance_room = "ShroomyMagma", -- gloomcaps
 		room_tags = {"RoadPoison", "nohunt", "nohasslers", "magmacaves","vipers_only"},
 		room_choices={
-			["ShroomyMagma"] = 2, -- Fissure and Shrooms
+			["ShroomyMagma"] = 1, -- Fissure and Shrooms
 			["GemForge1"] = 1, -- Gemology Forge
 			["GrassMagma"] = 1, -- Pyre Nettle Thickets, Pyrite, and Capsidragon
-			["GloomyMagma"] = 1, -- WORMS and Fissures
+			["GloomyMagma"] = 2, -- WORMS and Fissures
 			
 		},
 		--entrance_room = "GrassMagmaCliffsDragon", -- Pyre Nettle Thicket

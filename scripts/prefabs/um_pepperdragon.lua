@@ -167,6 +167,8 @@ local function fn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(2000)
     inst.components.health.fire_damage_scale = 0
+    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+
     ------------------
 
     inst:AddComponent("combat")

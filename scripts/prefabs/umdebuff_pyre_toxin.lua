@@ -57,7 +57,7 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 		and target.components.temperature ~= nil
 		then
 			-- Heat.
-			if target.components.temperature:GetCurrent() < 100 then
+			if target.components.temperature:GetCurrent() < 80 then
 				target.components.temperature:DoDelta(20)
 			end
 			

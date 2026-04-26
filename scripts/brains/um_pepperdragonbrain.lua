@@ -106,6 +106,13 @@ function UM_PepperdragonBrain:OnStart()
         {
 			BrainCommon.PanicTrigger(self.inst),
             BrainCommon.ElectricFencePanicTrigger(self.inst),
+
+			-- WEAK GO HOME
+			WhileNode(function() return self.inst.components.health and self.inst.components.health:GetPercent() < 0.33 end, "Weak", -- if you're angry, don't care about eating.
+				DoAction(self.inst, function() return GoHomeAction(self.inst) end, "GoHome", true)
+			),
+
+			-- IM PISSED
 			WhileNode(function() return self.inst.components.timer:TimerExists("pissedoff") end, "Angry", -- if you're angry, don't care about eating.
 				ChaseAndAttack(self.inst, SpringCombatMod(MAX_CHASE_TIME))
 			),

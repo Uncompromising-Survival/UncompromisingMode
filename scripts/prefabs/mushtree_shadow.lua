@@ -56,6 +56,19 @@ local function workcallback(inst, worker, workleft)
     --V2C: different anims are played in workfinishcallback if workleft <= 0
 end
 
+local function GooNearby(inst)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local others = TheSim:FindEntities(x,y,z,3,{"_sanity","_health"})
+    for i,other in ipairs(others) do
+        if not other.components.health:IsDead() then
+            if other.components.inkable then
+                other.components.inkable:Ink()
+            end
+            other.components.sanity:DoDelta(-5)
+        end
+    end
+end
+
 local function maketree(name, data, state)
 
 	local function onspawnfn(inst, spawn)
@@ -125,12 +138,7 @@ local function maketree(name, data, state)
 	local function workfinishcallback(inst,other)
 		inst.SoundEmitter:PlaySound("dontstarve/forest/treefall")
 		makestump(inst)
-		if other.components.sanity ~= nil and other.components.health ~= nil and not other.components.health:IsDead() and other.components.inkable then
-			other.components.inkable:Ink()
-			other.components.sanity:DoDelta(-5)
-		elseif other.components.sanity ~= nil then
-			other.components.sanity:DoDelta(-5)
-		end
+        GooNearby(inst)
 		inst.AnimState:PlayAnimation("fall")
 		inst.AnimState:PushAnimation("idle_stump")
 
