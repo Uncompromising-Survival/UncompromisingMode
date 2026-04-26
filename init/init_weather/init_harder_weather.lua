@@ -81,18 +81,6 @@ env.AddPrefabPostInit("cave", function(inst)
     -- end)
 end)
 
-env.AddPrefabPostInit("world", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	if inst:HasTag("forest") then
-		inst:DoTaskInTime(0,function(inst)
-			inst:AddComponent("uncompromising_deerclopsspawner")
-			inst:RemoveComponent("deerclopsspawner")
-		end)
-	end
-end)
-
 env.AddPrefabPostInit("forest", function(inst)
 	if not TheWorld.ismastersim then
 		return
