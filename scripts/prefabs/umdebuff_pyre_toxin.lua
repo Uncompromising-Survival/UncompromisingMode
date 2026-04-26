@@ -58,7 +58,7 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 		then
 			-- Heat.
 			if target.components.temperature:GetCurrent() < 100 then
-				target.components.temperature:DoDelta(30)
+				target.components.temperature:DoDelta(20)
 			end
 			
 			target.components.temperature:SetModifier("umdebuff_pyre_toxin", TUNING.FIRE_NETTLE_TOXIN_TEMP_MODIFIER)
