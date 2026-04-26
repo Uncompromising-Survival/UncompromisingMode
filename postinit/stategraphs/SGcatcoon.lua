@@ -22,12 +22,12 @@ env.AddStategraphPostInit("catcoon", function(inst)
                 end
             end
         end),
-        EventHandler("um_counterattack", function(inst, data)
+        --[[EventHandler("um_counterattack", function(inst, data)
             if inst.components.health and not inst.components.health:IsDead() and not table.contains(COUNTERATTACK_CANT_STATES, inst.sg.currentstate.name) and data.target and data.target:IsValid()
                 and inst:IsNear(data.target, TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5)) then
                 inst.sg:GoToState("pounce_pre", data.target)
             end
-        end)
+        end)]]
     }
 
     local attackedeventhandler = inst.events["attacked"]
