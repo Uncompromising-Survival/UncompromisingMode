@@ -19,13 +19,13 @@ do
         if attacker and attacker.userid and not table.contains(inst.hitlist, attacker.userid) then
             table.insert(inst.hitlist, attacker.userid)
         end
-        if inst.um_counterattack then
+        --[[if inst.um_counterattack then
             inst.um_counterattack = math.max(inst.um_counterattack - 1, 0)
             if inst.um_counterattack == 0 then
                 inst.um_counterattack = 3
                 inst:PushEvent("um_counterattack", {target = attacker})
             end
-        end
+        end]]
     end
 
     local _RetargetFn
@@ -60,7 +60,7 @@ do
         if not TheWorld.ismastersim then return end
         local health, lootdropper, combat = inst.components.health, inst.components.lootdropper, inst.components.combat
 
-        inst.um_counterattack = 3
+        --inst.um_counterattack = 3
         inst.hitlist = {}
 
         if health then
