@@ -1,6 +1,8 @@
 local assets =
 {
     Asset("ANIM", "anim/um_lunartentacledart.zip"),
+    Asset("ANIM", "anim/swap_um_tentaclespike_moon.zip"),
+    Asset("ANIM", "anim/um_tentaclespike_moon.zip"),
 }
 
 local should_hit = { "_health","_combat"}
@@ -22,13 +24,13 @@ local function OnLand(inst)
     local ents = TheSim:FindEntities(x, y, z, 1.5, should_hit, shouldnt_hit)
     for i, v in ipairs(ents) do
         if not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,20)
+            v.components.combat:GetAttacked(inst.attacker and inst.attacker or nil,34)
         end
     end
     inst:Remove()
 end
 
-local function onthrown(inst)
+local function onthrown(inst, attacker, targetPos)
     inst:AddTag("NOCLICK")
     --inst.persists = false
     inst.AnimState:SetBank("lunartentacledart")
@@ -44,6 +46,11 @@ local function onthrown(inst)
     inst.Physics:CollidesWith(COLLISION.GROUND)
     inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     inst.Physics:CollidesWith(COLLISION.ITEMS)
+    
+
+    if attacker then
+        inst.attacker = attacker
+    end
 end
 
 local function lobbedprojectilefn()
@@ -85,10 +92,10 @@ end
 local function OnExplode(inst, target)
     inst.DynamicShadow:Enable(false)
     local x,y,z = inst.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, 1.5)
+    local ents = TheSim:FindEntities(x, y, z, 3)
     for i, v in ipairs(ents) do
         if v:HasAllTags(should_hit) and not v:HasAnyTag(shouldnt_hit) and not (inst.attacker_faction and v:HasTag(inst.attacker_faction)) then
-            v.components.combat:GetAttacked(v.attacker,10)
+            v.components.combat:GetAttacked(inst.attacker,68)
         end
         if v.components.perishable then
             v.components.perishable:SetPercent(v.components.perishable:GetPercent()-0.2)
@@ -100,7 +107,7 @@ local function OnExplode(inst, target)
     local poof = SpawnPrefab("air_conditioner_smoke")
     poof.AnimState:SetMultColour(1,1,0.2,1)
     poof.Transform:SetPosition(x,y,z)
-    poof.Transform:SetScale(0.5,0.5,0.5)
+    poof.Transform:SetScale(0.75,0.75,0.75)
     inst:ListenForEvent("animover",function(inst) inst:Remove() end)
 end
 
@@ -219,7 +226,7 @@ local function common_fn(bank, build, anim, tag, isinventoryitem)
 end
 
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_um_fyre_bomb", "swap_um_fyre_bomb")
+    owner.AnimState:OverrideSymbol("swap_object", "swap_um_tentaclespike_moon", "swap_um_tentaclespike_moon")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -227,23 +234,6 @@ end
 local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
-end
-
-local function onthrown(inst)
-    inst:AddTag("NOCLICK")
-    inst.persists = false
-
-    inst.AnimState:PlayAnimation("spin_loop", true)
-
-    inst.Physics:SetMass(1)
-    inst.Physics:SetCapsule(0.2, 0.2)
-    inst.Physics:SetFriction(0)
-    inst.Physics:SetDamping(0)
-    inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
-    inst.Physics:ClearCollisionMask()
-    inst.Physics:CollidesWith(COLLISION.GROUND)
-    inst.Physics:CollidesWith(COLLISION.OBSTACLES)
-    inst.Physics:CollidesWith(COLLISION.ITEMS)
 end
 
 local function ReticuleTargetFn()
@@ -263,7 +253,17 @@ end
 
 local function thrownfn()
     --weapon (from weapon component) added to pristine state for optimization
-    local inst = common_fn("um_fyre_bomb", "um_fyre_bomb", "idle", "weapon", true)
+
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("um_tentaclespike_moon")
+    inst.AnimState:SetBuild("um_tentaclespike_moon")
+    inst.AnimState:PushAnimation("idle",true)
 
     inst:AddComponent("reticule")
     inst.components.reticule.targetfn = ReticuleTargetFn
@@ -272,34 +272,47 @@ local function thrownfn()
     inst.components.reticule.validfn = function(inst) return true end
     MakeInventoryFloatable(inst, "med", 0.05, 0.65)
     inst:AddTag("allow_action_on_impassable")
+    inst:AddTag("weapon")
+
+    inst:AddTag("projectile")
+    inst:AddTag("complexprojectile")
+
+    inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
         return inst
     end
 
-    inst.components.complexprojectile:SetHorizontalSpeed(15)
-    inst.components.complexprojectile:SetGravity(-35)
+    inst:AddComponent("locomotor")
+
+
+    inst:AddComponent("complexprojectile")
+
+    inst.components.complexprojectile:SetHorizontalSpeed(20)
+    inst.components.complexprojectile:SetGravity(-30)
     inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
     inst.components.complexprojectile:SetOnLaunch(onthrown)
-    inst.components.complexprojectile:SetOnHit(OnHitFyre)
+    inst.components.complexprojectile:SetOnHit(OnLand)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(0)
-    inst.components.weapon:SetRange(8, 10)
+    inst.components.weapon:SetRange(18, 18)
+    inst.components.weapon.toss_range_override = 16 --AXE override the usual toss range, additional code in init_actions passes this value
 
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
     inst.components.equippable.equipstack = true
+
     return inst
 end
 
 return Prefab("um_tentacle_moon_projectile", lobbedprojectilefn,assets),
-Prefab("um_tentacle_moon_mine", lobbedminefn,assets)--,
---Prefab("um_tentaclespike_moon", thrownfn, assets)
+Prefab("um_tentacle_moon_mine", lobbedminefn,assets),
+Prefab("um_tentaclespike_moon", thrownfn, assets)

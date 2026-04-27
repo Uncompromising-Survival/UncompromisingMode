@@ -400,12 +400,16 @@ local inventoryitems =
     "um_hat_bee_moon",
     "um_eyebalm",
     "um_beemine_moon_item",
+    "um_tentaclespike_moon",
+    "um_tentaclespot_moon",
+    "um_bomb_moon",
+    
     "um_ribopod",
     "um_ribopodden",
     "um_spongeplant_item",
     "um_sponge_cake",
     "um_moss",
-
+    
 
     "um_gemologybluegem1",
     "um_gemologybluegem2",

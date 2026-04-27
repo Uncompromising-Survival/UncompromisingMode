@@ -66,6 +66,23 @@ wingsuit.rmb = true
 wingsuit.distance = 20
 wingsuit.mount_valid = false
 
+
+-- AXE Allow weapons with complexprojectile to override their toss range - the distance in which wilson will begin the toss action
+local _extra_toss_dist = GLOBAL.ACTIONS.TOSS.extra_arrive_dist
+local function ExtraTossDist(doer, dest, bufferedaction)
+    local invobject = bufferedaction and bufferedaction.invobject or nil
+    if invobject and invobject.components.weapon and invobject.components.weapon.toss_range_override then
+        return invobject.components.weapon.toss_range_override
+    end
+
+    if _extra_toss_dist then
+        return _extra_toss_dist
+    end
+    return 0
+end
+
+GLOBAL.ACTIONS.TOSS.extra_arrive_dist = ExtraTossDist
+
 local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
     local doer = act.doer
     if doer --[[and act.target]] and doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then

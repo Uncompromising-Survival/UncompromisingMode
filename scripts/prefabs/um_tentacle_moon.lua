@@ -1,14 +1,22 @@
 local assets =
 {
     Asset("ANIM", "anim/um_lunartentacle.zip"),
+    Asset("ANIM", "anim/um_tentaclespot_moon.zip"),
 }
 
 SetSharedLootTable( 'um_lunartentacle',
 {
     {'monstermeat',   1.0},
     {'monstermeat',   1.0},
-    {'tentaclespike', 0.5},
-    {'tentaclespots', 0.2},
+    {'um_tentaclespike_moon', 1},
+    {'um_tentaclespike_moon', 1},
+    {'um_tentaclespike_moon', 1},
+    {'um_tentaclespike_moon', 1},
+    {'um_tentaclespike_moon', 1},
+    {'um_tentaclespike_moon', 0.5},
+    {'um_tentaclespike_moon', 0.5},
+    {'um_tentaclespike_moon', 0.5},
+    {'um_tentaclespot_moon', 0.33},
 })
 
 local RETARGET_MUST_TAGS = { "_combat", "_health" }
@@ -140,4 +148,42 @@ local function fn()
     return inst
 end
 
-return Prefab("um_tentacle_moon", fn, assets)
+local function fnitem()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+	inst.entity:AddLight()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("um_tentaclespot_moon")
+    inst.AnimState:SetBuild("um_tentaclespot_moon")
+    inst.AnimState:PlayAnimation("idle")
+    MakeInventoryFloatable(inst)
+    
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
+
+    inst:AddComponent("stackable")
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_MEDITEM
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+			
+    MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+
+    MakeHauntableLaunch(inst)
+    return inst
+end
+
+return Prefab("um_tentacle_moon", fn, assets),
+Prefab("um_tentaclespot_moon",fnitem,assets)

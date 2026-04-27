@@ -90,7 +90,9 @@ AddRipples("frog",1.1,1.1,1.1)
 AddRipples("worm",1.4,1.4,1.4)
 AddRipples("viperworm",1.4,1.4,1.4)
 AddRipples("shockworm",1.4,1.4,1.4)
-
+AddRipples("pigman",1.2,1.2,1.2,0.2)
+AddRipples("bunnyman",1.2,1.2,1.2,0.2)
+AddRipples("merm",1.2,1.2,1.2,0.2)
 --
 
 

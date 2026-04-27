@@ -579,7 +579,7 @@ local prefabs = {
     "um_fyrite",
 
     "um_bee_moon",
-    "um_fyre_bomb",
+    "um_bombs",
     "um_beehive_moon",
     "um_steamcloud",
     "um_meathoney",
