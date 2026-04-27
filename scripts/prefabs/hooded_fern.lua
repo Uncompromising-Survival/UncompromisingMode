@@ -144,7 +144,7 @@ local function onpickedfn(inst, picker)
     inst.AnimState:PushAnimation("empty", false)
     inst:RemoveTag("briar_plants")
     inst:RemoveComponent("burnable")
-    if picker.prefab == "aphid" then
+    if picker and picker.prefab == "aphid" then
         picker.full_belly = true
         picker:DoTaskInTime(60,function(picker)
             picker.full_belly = nil

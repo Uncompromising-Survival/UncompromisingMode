@@ -286,7 +286,7 @@ local function slime_sludge_fn()
     end
 	
     inst:AddComponent("aura")
-    inst.components.aura.radius = 3
+    inst.components.aura.radius = 2
     inst.components.aura.tickperiod = 0.6
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
