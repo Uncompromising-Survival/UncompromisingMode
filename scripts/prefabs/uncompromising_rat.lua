@@ -56,7 +56,7 @@ local function OnDeath(inst) if inst._item and inst._item:IsValid() then inst._i
 
 local function OnPickup(inst, data)
     if inst._item and inst._item:IsValid() then inst._item:Remove() end
-    if data.item.components.explosive then data.item.components.explosive:OnBurnt() return end
+    if data.item.components.explosive and inst:HasTag("hostile") then data.item.components.explosive:OnBurnt() return end
     inst:AddTag("carrying")
     data.item:AddTag("raided")
     local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
@@ -108,6 +108,7 @@ local function onsave_rat(inst, data)
     if inst:HasTag("carrying") then data.carrying = true end
     if inst:HasTag("ratscout") then data.scouting = true end
     if inst:HasTag("winky_rat") then data.iswinkyfollower = true end
+    if not inst:HasTag("hostile") then data.isfollower = true end
     --or inst.components.follower and inst.components.follower.leader and inst.components.follower.leader.prefab == "winky"
 end
 
@@ -115,10 +116,12 @@ local function onload_rat(inst, data)
     if data ~= nil then
         if data.carrying ~= nil then inst.components.inventory:DropEverything() end
         if data.scouting ~= nil and data.scouting then inst:AddTag("ratscout") end
-        if data.iswinkyfollower then
+        if data.isfollower then
             inst:AddTag("notraptrigger")
             inst:RemoveTag("canbetrapped")
             inst:RemoveTag("hostile")
+        end
+        if data.iswinkyfollower then
             inst:AddTag("companion")
             inst:AddTag("winky_rat")
         end

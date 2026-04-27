@@ -20,6 +20,7 @@ local ia_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1467214795")
 -- IsModEnabled is host only. This will work on clients connected to another player or a dedicated server
 local ia_check_client = GLOBAL.AllRecipes["obsidianmachete"] and GLOBAL.AllRecipes["boat_encrusted"]
 local tfw_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-1171138081")
+local bcr_check = GLOBAL.KnownModIndex:IsModEnabled("workshop-3667524475")
 
 --day/month > month/day
 local function Date(day, month)
@@ -144,7 +145,7 @@ TUNING.DSTU = {
     RECIPE_MOONROCK_IDOL_MOONSTONE_COST = 5,
     RECIPE_CELESTIAL_UPGRADE_GLASS_COST = 20,
 
-    DART_YIELD = 4,
+    DART_YIELD = 1,
     ----------------------------------------------------------------------------
     -- Food Changes Config
     ----------------------------------------------------------------------------
@@ -347,6 +348,7 @@ TUNING.DSTU = {
     MUSHROOM_CHANGES = GetModConfigData("mushroom_changes"),
     ALL_MUST_BE_GATHERED = false,
     WATERING_TEMPERATURE = GetModConfigData("watering_thermal"),
+    KLAUS_AMULET_SECOND_HIT_DAMAGE_MULT = 0.75,
     KLAUS_AMULET_ABSORPTION = 0.3,
     ORANGESTAFF_COOLDOWN_1 = 5,
     ORANGESTAFF_COOLDOWN_2 = 10,
@@ -448,6 +450,7 @@ TUNING.DSTU = {
     ISLAND_ADVENTURES = ia_check,
     ISLAND_ADVENTURES_CLIENT = ia_check_client,
     TREATS_FOR_WEBBER = tfw_check,
+    ADM_CLOCKWORK_REWORK = bcr_check,
 
     --MEME CONFIG
     ADVERTISEMENTS = GetModConfigData("um_advertisements"),
@@ -500,6 +503,10 @@ if GetModConfigData("beebox_nerf") then
     TUNING.BEEBOX_BEES = 1.5
     TUNING.BEEBOX_RELEASE_TIME = day_time * 1.5
 end
+
+-- Boulderbough
+    TUNING.TREE_ROCK.BURN_TIME = 30
+    TUNING.TREE_ROCK.SAPLING_GROW_TIME = {base=6.5*day_time, random=1*day_time}
 
 -- Glass Cutter
 if GetModConfigData("celestialitems_revert") then
@@ -636,6 +643,8 @@ TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE = TUNING.BOAT.BOAT_MAGNET.MAGNET_FORCE * 2
 -- TUNING.CRABKING_HEALTH = TUNING.CRABKING_HEALTH * 0.66
 -- TUNING.CRABKING_HEALTH_BONUS = TUNING.CRABKING_HEALTH_BONUS * 0.66
 -- TUNING.CRABKING_REGEN_BUFF = TUNING.CRABKING_REGEN * 0.33
+
+TUNING.DEERCLOPS_HEALTH = 6000 -- harder for uncompromising mode
 
 -- Wortox
 --if GetModConfigData("wortox") then

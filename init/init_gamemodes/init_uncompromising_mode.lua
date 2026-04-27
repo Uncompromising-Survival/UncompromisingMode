@@ -102,6 +102,7 @@ modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
 modimport("init/init_vetcurse")
 modimport("init/init_bosshealth")
+modimport("init/init_freeze")
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
 --modimport("init/init_recipes") -- Deprecated, keeping the file just to prevent any merge conflicts.

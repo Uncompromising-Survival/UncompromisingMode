@@ -64,3 +64,100 @@ for i, v in ipairs(clockworks) do
 		inst:ListenForEvent("death", LookNearby)
 	end)
 end
+
+
+---------------------------------------------------------------------------------------------------------
+--- Clockwork follower regen removal and repair
+---------------------------------------------------------------------------------------------------------
+if not TUNING.DSTU.ADM_CLOCKWORK_REWORK then
+
+TUNING.CLOCKWORK_HEALTH_REGEN_PERIOD = 60
+TUNING.CLOCKWORK_HEALTH_REGEN = 0
+TUNING.DSTU.CHESS_HEAL_PREFABS = {
+"gears",
+"wagpunk_bits",
+"trinket_6"
+}
+
+local function IsRepairItemValid(item)
+	for _, prefab in pairs(TUNING.DSTU.CHESS_HEAL_PREFABS) do
+        if item.prefab == prefab then
+            return true
+        end
+    end
+
+	return false
+end
+
+local HEALCHESS = Action({ priority = 1 })
+HEALCHESS.id = "HEALCHESS"
+HEALCHESS.str = STRINGS.ACTIONS.HEALCHESS
+HEALCHESS.fn = function(act)
+    local target = act.target
+    local item = act.invobject
+
+    if target ~= nil and item ~= nil and IsRepairItemValid(item) then
+
+		target.components.health:DoDelta(1000)
+
+		target.SoundEmitter:PlaySound("dontstarve/common/telebase_gemplace")
+
+                -- Handle stack properly
+        if item.components.stackable ~= nil then
+            local single = item.components.stackable:Get(1)
+            if single ~= nil then
+                single:Remove()
+            end
+        else
+            item:Remove()
+        end
+        return true
+    end
+
+    return false
+end
+
+env.AddAction(HEALCHESS)
+
+env.AddComponentAction("USEITEM", "inventoryitem", function(inst, doer, target, actions, right)	
+    if target ~= nil
+        and IsRepairItemValid(inst)
+		and target:HasTag("chessfriend") then
+		--and target._hasleader ~= nil
+        --and target._hasleader:value()  then
+		--and target.replica.health ~= nil then
+		--and target.replica.health:IsHurt() then
+
+        table.insert(actions, ACTIONS.HEALCHESS)
+    end
+end)
+
+env.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
+env.AddStategraphActionHandler("wilson_client", ActionHandler(ACTIONS.HEALCHESS, "doshortaction"))
+
+env.AddComponentAction("SCENE", "inspectable", function() end)
+
+for i, v in ipairs(clockworks) do
+	env.AddPrefabPostInit(v, function(inst)
+		if inst.TryBefriendChess ~= nil then
+			local oldTryBefriendChess = inst.TryBefriendChess
+
+			local newTryBefriendChess = function(inst, doer)
+				local success = oldTryBefriendChess(inst, doer)
+				if success then inst:AddTag("chessfriend") end
+
+				return success
+			end
+
+			inst.TryBefriendChess = newTryBefriendChess
+			inst.components.followermemory:SetOnReuniteLeaderFn(newTryBefriendChess)
+		end	
+
+	end)
+end
+
+end
+
+---------------------------------------------------------------------------------------------------------
+--- Clockwork follower regen removal and repair / End
+---------------------------------------------------------------------------------------------------------

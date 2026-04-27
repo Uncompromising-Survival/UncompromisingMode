@@ -6,8 +6,9 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
     local _onenter = inst.states["attack"].onenter
     inst.states["attack"].onenter = function(inst, pushanim, ...)
         _onenter(inst, pushanim, ...)
+        local buffaction = inst:GetBufferedAction()
         local neurotic_item_mult = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).um_neurotic_mod
-        if not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
+        if not (buffaction and buffaction.mockattack) and not (inst.components.rider and inst.components.rider:IsRiding()) and neurotic_item_mult then
             inst.AnimState:SetDeltaTimeMultiplier(neurotic_item_mult)
             if inst.sg.timeout then inst.sg:SetTimeout(inst.sg.timeout / neurotic_item_mult) end
             -- Incase we want to add other sources of speed buff
@@ -46,7 +47,7 @@ env.AddStategraphPostInit("wilson", function(inst) -- Plan on moving this to the
         inst.states[state].onenter = function(inst, pushanim, ...)
             _onenter(inst, pushanim, ...)
             local tool = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            local comfy_bonus = tool.structurebonus --TODO: port this change to the onupdatefn of the new gem defs
+            local comfy_bonus = tool and tool.structurebonus --TODO: port this change to the onupdatefn of the new gem defs
             if not (inst.components.rider and inst.components.rider:IsRiding()) and comfy_bonus then
                 comfy_bonus = comfy_bonus + 1
                 inst.AnimState:SetDeltaTimeMultiplier(comfy_bonus)

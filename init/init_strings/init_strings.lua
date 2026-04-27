@@ -226,6 +226,7 @@ STRINGS.ACTIONS.ACTIVATE.RECRUITRAT = "Recruit A Rat"
 STRINGS.ACTIONS.RUMMAGE.GEM_FORGE = "Use"
 STRINGS.ACTIONS.RUMMAGE.CLOSE_GEM_FORGE = "Stop using"
 STRINGS.ACTIONS.STORE.GEM_FORGE = "Forge"
+STRINGS.ACTIONS.HEALCHESS = "Heal"
 
 STRINGS.ACTIONS.UM_ACTIVATABLE_ITEM = {
     GENERIC = "Use",
@@ -278,10 +279,10 @@ STRINGS.UI.HUD.UM_VETSKULL = {
     WALTER = "Veteran's Curse:\n - Damage taken also applies a maximum Sanity penalty.\n - The penalty heals itself after a while without getting hurt.",
     WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.",
     WINKY = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
-    WATHOM = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
+    WATHOM = "Veteran's Curse:\n - When above 50% Sanity, becomes enlighted.",
     WIXIE = STRINGS.UI.HUD.UM_VETSKULL_GENERIC, --WIP
 }
-STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - Be able to wield cursed items, dropped by certain bosses."
+STRINGS.UI.HUD.UM_VETSKULL_VETSITEMS = "\n - You're able to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET_WES = "Veteran's Curse:\n - Wes Must Die."
 STRINGS.VETS_WIDGET_WANDA = "Veteran's Curse:\n - Age faster when damaged.\n - Hunger drains faster.\n - Sanity from foods is applied *slowly* over time.\n - Gain the ability to wield cursed items, dropped by certain bosses."
 STRINGS.VETS_WIDGET = "You've been afflicted by the Veteran's Curse.\nPress \"I\" or the icon next to your equipment slots\nto see the effects in your \"Inspect Self\" menu.\nClick this to hide this icon."

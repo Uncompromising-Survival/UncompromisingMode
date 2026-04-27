@@ -7,7 +7,7 @@ end
 
 --RELEASE.MAJOR.MINOR.FIX
 --axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "3.0.2"
+local _version = "3.0.5"
 
 description = [[
     󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
@@ -592,7 +592,8 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
 
-    BinaryConfig("infinite_blueprints", "Infinite Blueprints", "Blueprints are no longer consumed when reading.", true),
+	BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
+    BinaryConfig("infinite_blueprints", "Blueprints", "Blueprints are no longer consumed when reading.", true),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
     --BinaryConfig("ac_does_ac", "Air Conditioning Air Conditioner", "Air Conditioner works as a reverse furnace, cooling in a small area, and removes smog around it.", false),
@@ -604,7 +605,7 @@ configuration_options = {
 	true),--false),
 		
     BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
-	BinaryConfig("inventory_backpacks", "Inventory Backpacks", "When empty, backpacks can be stored in chests and inventories.", true),
+
 	
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",

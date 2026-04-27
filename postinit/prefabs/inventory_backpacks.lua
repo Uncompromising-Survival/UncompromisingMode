@@ -39,7 +39,7 @@ env.AddPrefabPostInitAny(function(inst)
 		inst:AddTag("pocketbackpack")
 		if inst.components.burnable ~= nil and inst.components.fuel == nil then
 			inst:AddComponent("fuel")
-			inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+			inst.components.fuel.fuelvalue = TUNING.MED_LARGE_FUEL
 		end
 	end
 end)

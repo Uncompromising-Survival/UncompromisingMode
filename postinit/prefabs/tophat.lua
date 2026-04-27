@@ -23,3 +23,11 @@ env.AddPrefabPostInit("tophat", function(inst)
 		owner:RemoveTag("Funny_Words_Magic_Man")
 	end
 end)
+
+env.AddPrefabPostInit("flowerhat", function(inst) -- Wow! Don't look at mee!
+	if not TheWorld.ismastersim then
+		return
+	end
+	inst:AddComponent("fuel")
+	inst.components.fuel.fuelvalue = TUNING.MED_LARGE_FUEL
+end)

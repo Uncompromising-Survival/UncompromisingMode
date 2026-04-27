@@ -163,7 +163,7 @@ local loot_table = {
             um_gemologyorangegem1 = 1,
             orangegem = 0.1,
             greengem = 0.05,
-            yellowgemgem = 0.05,
+            yellowgem = 0.05,
         },
     },
     ["um_gemology_geode_vent"] =
@@ -307,7 +307,9 @@ local function lobster()
 end
 
 local function glass()
-    return geodemain("um_geode_glass")
+    local inst = geodemain("um_geode_glass")
+    inst:AddTag("quakedebris")
+    return inst
 end
 
 local function slime()
