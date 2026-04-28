@@ -1643,8 +1643,8 @@ local function TimeForACheckUp(inst, dev)
 	
     local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
     for a, b in ipairs(players) do
-		if FindEntity(b, 40, nil, {"rat_sniffer"}) then
-			Sniffertime(b)
+		if b:IsNear(inst, 40) then
+			Sniffertime(b, inst)
 		end
 	end
 
@@ -1978,17 +1978,21 @@ local function FoodScoreCalculations(container, v, owner)
     TrySpawnIcon(v, owner, intensity)
 end
 
-Sniffertime = function(owner)
-    local x, y, z = owner.Transform:GetWorldPosition()
+Sniffertime = function(owner, sniffer)
+    if owner == nil or sniffer == nil or not sniffer:IsValid() then
+        return
+    end
+
+    local x, y, z = sniffer.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+
     if ents then
         for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+            local container = v.components.inventoryitem:IsHeld()
+                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+
             if IsProperContainer(container) then
                 FoodScoreCalculations(container, v, owner)
-                --if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
-                    --TrySpawnIcon(v, owner, .5)
-                --end
             end
         end
     end
@@ -2005,9 +2009,10 @@ local function CheckTargetPiece(inst)
 
         inst.SoundEmitter:KillSound("ratping")
         inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
-        if FindEntity(owner, 40, nil, {"rat_sniffer"}) then
-            Sniffertime(owner)
-        end
+		local sniffer = FindEntity(owner, 40, nil, {"rat_sniffer"})
+		if sniffer ~= nil then
+			Sniffertime(owner, sniffer)
+		end
     end
     --inst.components.rechargeable:Discharge(8)
 end
