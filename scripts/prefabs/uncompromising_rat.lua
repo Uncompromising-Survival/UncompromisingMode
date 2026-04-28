@@ -1656,6 +1656,7 @@ local function FoodScoreCalculations(container, v, owner)
     TrySpawnIcon(v, owner, intensity)
 end
 
+local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function Sniffertime(owner, sniffer)
     if not owner or not sniffer or not sniffer:IsValid() then
         return
@@ -1675,7 +1676,6 @@ local function Sniffertime(owner, sniffer)
     end
 end
 
-local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
 	
