@@ -1636,7 +1636,45 @@ local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
 
-local Sniffertime
+local function TrySpawnIcon(v, owner, intensity)
+    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    if nearbyicon then
+        nearbyicon:Resize(intensity)
+    else
+        local icon = SpawnPrefab("ratmask_stinklines")
+        local x, y, z = v.Transform:GetWorldPosition()
+        icon.Network:SetClassifiedTarget(owner)
+        icon.Transform:SetPosition(x, y, z)
+        icon:Resize(intensity)
+    end
+end
+
+local function FoodScoreCalculations(container, v, owner)
+    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
+    if not intensity then return end
+    TrySpawnIcon(v, owner, intensity)
+end
+
+local function Sniffertime(owner, sniffer)
+    if not owner or not sniffer or not sniffer:IsValid() then
+        return
+    end
+
+    local x, y, z = sniffer.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+
+    if ents then
+        for i, v in ipairs(ents) do
+            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+
+            if IsProperContainer(container) then
+                FoodScoreCalculations(container, v, owner)
+            end
+        end
+    end
+end
+
 local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -1956,45 +1994,6 @@ end
 
 local function OnCooldown(inst)
     inst.components.useableitem.inuse = false
-end
-
-local function TrySpawnIcon(v, owner, intensity)
-    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
-    if nearbyicon then
-        nearbyicon:Resize(intensity)
-    else
-        local icon = SpawnPrefab("ratmask_stinklines")
-        local x, y, z = v.Transform:GetWorldPosition()
-        icon.Network:SetClassifiedTarget(owner)
-        icon.Transform:SetPosition(x, y, z)
-        icon:Resize(intensity)
-    end
-end
-
-local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
-        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
-    if not intensity then return end
-    TrySpawnIcon(v, owner, intensity)
-end
-
-Sniffertime = function(owner, sniffer)
-    if owner == nil or sniffer == nil or not sniffer:IsValid() then
-        return
-    end
-
-    local x, y, z = sniffer.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
-
-    if ents then
-        for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
-
-            if IsProperContainer(container) then
-                FoodScoreCalculations(container, v, owner)
-            end
-        end
-    end
 end
 
 local function CheckTargetPiece(inst)
