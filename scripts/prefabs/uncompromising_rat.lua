@@ -1664,7 +1664,7 @@ local function TimeForACheckUp(inst, dev)
 
     if ents then
         for i, v in ipairs(ents) do
-            if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
+            if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 300 then
                 local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
                 if IsProperContainer(container) then
                     if container then
@@ -1695,7 +1695,7 @@ local function TimeForACheckUp(inst, dev)
         TheNet:SystemMessage("Burrowbonus = "..inst.burrowbonus)
         TheNet:SystemMessage("Ratscore = "..inst.ratscore)
     end
-    if inst.ratscore > 240 then inst.ratscore = 240 end
+    if inst.ratscore > 300 then inst.ratscore = 300 end
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
         TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
         TheNet:SystemMessage("Timer = "..(TheWorld.components.ratcheck:GetRatTimer() and TheWorld.components.ratcheck:GetRatTimer() or "... not available? timer is 0 second").."s")
