@@ -1988,8 +1988,7 @@ Sniffertime = function(owner, sniffer)
 
     if ents then
         for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld()
-                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
 
             if IsProperContainer(container) then
                 FoodScoreCalculations(container, v, owner)
