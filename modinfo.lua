@@ -7,7 +7,7 @@ end
 
 --RELEASE.MAJOR.MINOR.FIX
 --axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "3.0.5"
+local _version = "3.1.0"
 
 description = [[
     󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
