@@ -1658,16 +1658,17 @@ end
 
 local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
 local function Sniffertime(owner, sniffer)
-    if not owner or not sniffer or not sniffer:IsValid() then
+    if not owner or not owner:IsValid() or not sniffer or not sniffer:IsValid() then
         return
     end
 
     local x, y, z = sniffer.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
 
-    if ents then
-        for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+    for i, v in ipairs(ents) do
+        if v:IsValid() and v.components.inventoryitem ~= nil then
+            local container = v.components.inventoryitem:IsHeld()
+                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
 
             if IsProperContainer(container) then
                 FoodScoreCalculations(container, v, owner)
@@ -1679,14 +1680,14 @@ end
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
 	
-    local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
+    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER, {"player"}, {"playerghost"})
     for a, b in ipairs(players) do
-		if b:IsNear(inst, 40) then
+        if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER) then
 			Sniffertime(b, inst)
 		end
 	end
 
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
     print("                o")
     print("    =========B  *sniff* *sniff*")
