@@ -592,3 +592,10 @@ DESCRIBE.UM_TORNADO = "Stupid wind has come back for revenge!"
 DESCRIBE.UM_WATERFALL = "I shower regularly."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No dumb tornadoes to steal my things."
 DESCRIBE.UM_THULECITE_RAZOR= "What kind of razor is this."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Mmmm, succulent smell."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I miss the smell, I should have kept it with me.",
+    SUMMER = "It was too melted. I hate this stupid heat.",
+    AUTUMN = "I need more! Where are more Durians. Now!",
+    WINTER = "It is delicious, why won't more of these stupid fruits grow now.",
+}

@@ -601,3 +601,10 @@ DESCRIBE.UM_BOATBOTTLE = {
     EMPTY = "How am I supposed to play with the boat if it's stuck in this stupid bottle?"
 }
 DESCRIBE.UM_THULECITE_RAZOR= "I don't care about this!!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Not quite my favorite, but I wouldn't pass a pancake!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Yeah... when's the blueberry flavored one, though?",
+    SUMMER = "A little more sticky than I'm used to, but tastes fine otherwise.",
+    AUTUMN = "Mum would be proud of me eating my greens, heh.",
+    WINTER = "And they told me we'd go a whole season without pancakes! Guess who was wrong?",
+}

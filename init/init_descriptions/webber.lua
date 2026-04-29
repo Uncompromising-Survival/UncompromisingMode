@@ -556,3 +556,10 @@ DESCRIBE.UM_TORNADO = "I hate tornadoes..."
 DESCRIBE.UM_WATERFALL = "Splishy splash!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Thankfully there are no tornadoes around!"
 DESCRIBE.UM_THULECITE_RAZOR= "I watched my grand-grand-grand-grand-grand-grandfather use one of these."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Our nose doesn't like it, but our tummy does."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It tasted like the wet ground.",
+    SUMMER = "It was okay, but we'd rather have a cold popsicle.",
+    AUTUMN = "Yum! It's all fluffy and weird.",
+    WINTER = "We've never felt so fancy in the snow!",
+}

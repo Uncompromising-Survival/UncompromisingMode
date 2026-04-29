@@ -598,19 +598,25 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE,
         card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
                 if TheWorld then
-                    if TheWorld.state.isssummer then
+                    if TheWorld.state.issummer then
                         eater.components.health:DoDelta(6, true)
                         eater.components.sanity:DoDelta(20, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "SUMMER"))
                     elseif TheWorld.state.isautumn then
                         eater.components.health:DoDelta(12, true)
                         eater.components.sanity:DoDelta(40, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "AUTUMN"))
                     elseif TheWorld.state.iswinter then
                         eater.components.health:DoDelta(18, true)
                         eater.components.sanity:DoDelta(60, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "WINTER"))
+                    elseif TheWorld.state.isspring then
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "SPRING"))
                     end
                 end
             end
@@ -659,6 +665,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE,
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
         oneatenfn = BoomPieGo,
     },

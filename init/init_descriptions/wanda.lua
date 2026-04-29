@@ -574,3 +574,10 @@ DESCRIBE.UM_TORNADO = "A wibbly wobbly... windy... thing!"
 DESCRIBE.UM_WATERFALL = "Time washes away everything."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes yet, at least in this timeline..."
 DESCRIBE.UM_THULECITE_RAZOR= "I don't need to shave off any more time."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "I hope we didn't take too much time preparing for this."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Distinct flavor of time being wasted on the mundane.",
+    SUMMER = "The taste was good enough.",
+    AUTUMN = "Its complexity reminds me of better years.",
+    WINTER = "A taste of future treats, quite remarkable!",
+}

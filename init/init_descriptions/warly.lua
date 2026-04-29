@@ -569,3 +569,10 @@ DESCRIBE.UM_TORNADO = "The storm has been brewed!"
 DESCRIBE.UM_WATERFALL = "A salty brine has entered the cavern!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes are brewing."
 DESCRIBE.UM_THULECITE_RAZOR= "If this was food I would eat it."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Not often do I get to make dishes with such exotic fruits!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It's their season yes, but my palate yearns for something else.",
+    SUMMER = "Some much needed refreshment in this harsh heat.",
+    AUTUMN = "I can almost feel the gentle drizzle of spring.",
+    WINTER = "The aftertaste is simply delightful.",
+}

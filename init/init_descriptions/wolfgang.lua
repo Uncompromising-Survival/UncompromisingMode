@@ -551,3 +551,10 @@ DESCRIBE.UM_TORNADO = "Wolfgang would punch wind away! If Wolfgang wasn't scared
 DESCRIBE.UM_WATERFALL = "Wolfgang prefer bathes over showers."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No scary tornadoes."
 DESCRIBE.UM_THULECITE_RAZOR= "Is for shaving orange rock beard."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Is spiky cake-thing for throwing?"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Tasted like swamp, had many sad rain drops...",
+    SUMMER = "So sticky, makes Wolfgang's hands a mess.",
+    AUTUMN = "Better than old berries from ground.",
+    WINTER = "Makes Wolfgang feel very fancy and MIGHTY!",
+}

@@ -580,3 +580,10 @@ DESCRIBE.UM_TORNADO = "It's going to put out all my fires!"
 DESCRIBE.UM_WATERFALL = "Ugh! I came down here to ESCAPE all the water."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "There's no tornadoes around."
 DESCRIBE.UM_THULECITE_RAZOR= "This is stupid!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "It smells like something I'd want to set on fire."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Meh. I've had better things out of a trash can.",
+    SUMMER = "The heat makes everything smell bad anyways.",
+    AUTUMN = "Not bad! It's a nice change of pace.",
+    WINTER = "The taste almost made me forget that I'm freezing!",
+}

@@ -551,4 +551,11 @@ DESCRIBE.ALPHA_LIGHTNINGGOAT = "Hmm. No relation."
 DESCRIBE.UM_TORNADO = "Hyuyu, this looks like fun!"
 DESCRIBE.UM_WATERFALL = "Swimming gives me the wet imp smell." -- rewrite this later. -- never mind, good enough for now.
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "The fun's over!" 
-DESCRIBE.UM_THULECITE_RAZOR= "I saw this on Steam Workshop once!"
+DESCRIBE.UM_THULECITE_RAZOR= "I saw this on Steam Workshop once!" -- April Fools
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "A green brick with a prick! Hyuyu!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Common as the rain and twice as soggy...",
+    SUMMER = "A bit sticky from the heat, still a sweet treat!",
+    AUTUMN = "It had good cream, a delightful little dream!",
+    WINTER = "A feast for a cold beast! My soul feels spiffy, hyuyu!",
+}

@@ -583,3 +583,10 @@ DESCRIBE.UM_TORNADO = "The seal was an accident, I swear!"
 DESCRIBE.UM_WATERFALL = "No reprieve from the downpour."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "We're free from any tornadoes, for now."
 DESCRIBE.UM_THULECITE_RAZOR= "I mined a whole statue just for that?"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Spiky, yet delightful. Reminds me of someone."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I hope the smell doesn't stick to me.",
+    SUMMER = "Better than my time at the throne, that's for sure.",
+    AUTUMN = "I guess some things do get better with time.",
+    WINTER = "Durians at this time of the year? Such a luxury.",
+}

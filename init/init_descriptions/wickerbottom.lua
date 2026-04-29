@@ -692,3 +692,10 @@ DESCRIBE.UM_TORNADO = "A natural phenomenon, or supernatural?"
 DESCRIBE.UM_WATERFALL = "The tornado appears to have punctured some resivoirs."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes are being picked up by the machine."
 DESCRIBE.UM_THULECITE_RAZOR= "I'm going to pretend I didn't spend valuable resources for that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The sulfurous compounds are tempered by the calcium."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It was just a common spring confection.",
+    SUMMER = "Eating is hardly a scholarly achievement.",
+    AUTUMN = "It was a fine use of our stored provisions.",
+    WINTER = "Its flavor against the frost is stimulating for the mind.",
+}

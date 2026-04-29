@@ -561,3 +561,10 @@ DESCRIBE.UM_TORNADO = "There's no place like home..."
 DESCRIBE.UM_WATERFALL = "Wash our tears away."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes to cause us misery."
 DESCRIBE.UM_THULECITE_RAZOR= "Why did I make this?"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Reeks of rot masked by sweetness..."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It offered me no comfort against the endless rain.",
+    SUMMER = "That pancake was cloying in this heat.",
+    AUTUMN = "A strange comfort while everything rots around.",
+    WINTER = "I liked it... yet nothing truly special ever lasts.",
+}

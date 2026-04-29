@@ -581,3 +581,10 @@ DESCRIBE.UM_TORNADO = "High winds, senses... confused."
 DESCRIBE.UM_WATERFALL = "Above, damage. Cracks in shell."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "High winds, nowhere near."
 DESCRIBE.UM_THULECITE_RAZOR= "Cuts deep. Double harvest."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Unable to digest. Undesireable to digest."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Experience, unpleasent. Senses, unimpressed.",
+    SUMMER = "Texture, ruined by heat. Meat, not just preferred, needed.",
+    AUTUMN = "Impressive hunt, not quite. Impressive harvest, perhaps.",
+    WINTER = "Rare flavor for season. Senses, surprised. Taste, \"Exotic\".",
+}

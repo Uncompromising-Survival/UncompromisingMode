@@ -646,3 +646,10 @@ DESCRIBE.GARBAGEPATCHFLOTSAM = "It must've been dragged here by that tornado!"
 
 DESCRIBE.UM_RICE_PUDDING = "Some plain old rice pudding."
 DESCRIBE.UM_THULECITE_RAZOR = "Thulecite razor! A classic!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The scent is... statistically significant."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "The novelty has certainly washed away by the rain.",
+    SUMMER = "It was good, but I could have saved it for later.",
+    AUTUMN = "A sophisticated flavor for this time of the year.",
+    WINTER = "A tropical anomaly in the dead of winter!",
+}

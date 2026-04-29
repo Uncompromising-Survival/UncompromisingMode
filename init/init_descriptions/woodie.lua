@@ -565,3 +565,10 @@ DESCRIBE.UM_TORNADO = "Mother nature is a cruel mistress."
 DESCRIBE.UM_WATERFALL = "What a disaster."
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes around, but I coulda told you that."
 DESCRIBE.UM_THULECITE_RAZOR= "Maybe if you got a Lucy razor I'd shave."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "It smells like rotten nuggets."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was aboot to save it for later.",
+    SUMMER = "It was alright, eh?",
+    AUTUMN = "Not bad at all. Felt a little more special.",
+    WINTER = "Like a bit of sunshine right in the middle of a blizzard.",
+}

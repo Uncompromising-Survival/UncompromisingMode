@@ -548,3 +548,10 @@ DESCRIBE.UM_TORNADO = "Glurp, that look bad..."
 DESCRIBE.UM_WATERFALL = "Yay! Splashy comes to us!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No windy things."
 DESCRIBE.UM_THULECITE_RAZOR= "Yucky mucky gooey ooey razor... florp."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Best snack! Stinks like swamp!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Glorp, me wanted to save for later...",
+    SUMMER = "Too hot for stinky pancake... but very yummy!",
+    AUTUMN = "Mmm... pokey. Better than crunchy leaves, florp!",
+    WINTER = "Oooh, tastes best cold!",
+}

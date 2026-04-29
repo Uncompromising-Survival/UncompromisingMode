@@ -592,3 +592,10 @@ DESCRIBE.UM_TORNADO = "Nail down our gear! Duck and cover! RUN FOR YOUR LIVES!!"
 DESCRIBE.UM_WATERFALL = "I love a good waterfall!"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No tornadoes around, I can tell!"
 DESCRIBE.UM_THULECITE_RAZOR = "It's an ancient razor. It's what old people use!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Er, maybe Woby wants it?"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was hoping for something a bit more exciting...",
+    SUMMER = "It's better than eating bugs, I guess!",
+    AUTUMN = "It's got a much more interesting kick than the usual.",
+    WINTER = "Eating this in the snow is like a tropical expedition!",
+}

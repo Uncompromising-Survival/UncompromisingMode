@@ -529,3 +529,10 @@ DESCRIBE.UM_TORNADO = "Scary whooshy"
 DESCRIBE.UM_WATERFALL = "Falling splashy"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "No scary whooshies."
 DESCRIBE.UM_THULECITE_RAZOR= "Orange sharp"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Flat belly stuff"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Smelly!",
+    SUMMER = "Still Smelly!",
+    AUTUMN = "Yummy!",
+    WINTER = "Very Yummy! ",
+}

@@ -581,3 +581,10 @@ DESCRIBE.UM_TORNADO = "My buildings aren't high wind certified!"
 DESCRIBE.UM_WATERFALL = "Where's some sandbags when you need them?"
 ANNOUNCE.ANNOUNCE_UM_NO_TORNADO = "Seems like we're clear from any tornadoes."
 DESCRIBE.UM_THULECITE_RAZOR= "It's more durable, I'll give it that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Built tough and smells rough. Just how I like 'em."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It's standard fare dish during this season.",
+    SUMMER = "It's a bit rich for this heat.",
+    AUTUMN = "Not a bad piece of work.",
+    WINTER = "Feels like a vacation in the middle of a shift.",
+}
