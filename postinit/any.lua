@@ -57,7 +57,7 @@ if TUNING.DSTU.IMPASSBLES then
             return
         end
         return _ChangeToObstaclePhysics(inst, rad, height, ...)
-    end]]
+    end
 end
 
 if TUNING.DSTU.SHAVE_MODE then
