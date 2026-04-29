@@ -1695,7 +1695,7 @@ local function TimeForACheckUp(inst, dev)
     print("   ========")
     print("    V V    V V")]]
     inst.ratscore = -60
-    inst.itemscore = 0
+    --inst.itemscore = 0
     inst.foodscore = 0
 
     inst.ratburrows = TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() or 0
@@ -1703,7 +1703,7 @@ local function TimeForACheckUp(inst, dev)
 
     if ents then
         for i, v in ipairs(ents) do
-            if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 300 then
+            if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
                 local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
                 if IsProperContainer(container) then
                     if container then
@@ -1719,7 +1719,7 @@ local function TimeForACheckUp(inst, dev)
         end
     end
 
-    inst.ratscore = inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus
+    inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
     -- print("Foodscore = "..inst.foodscore)
@@ -1729,14 +1729,14 @@ local function TimeForACheckUp(inst, dev)
     -- just use the command if you wanna see i guess.
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
         TheNet:SystemMessage("-------------------------")
-        TheNet:SystemMessage("Itemscore = "..inst.itemscore)
+        --TheNet:SystemMessage("Itemscore = "..inst.itemscore)
         TheNet:SystemMessage("Foodscore = "..inst.foodscore)
         TheNet:SystemMessage("Burrowbonus = "..inst.burrowbonus)
         TheNet:SystemMessage("Ratscore = "..inst.ratscore)
     end
     if inst.ratscore > 300 then inst.ratscore = 300 end
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
-        TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
+        --TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
         TheNet:SystemMessage("Timer = "..(TheWorld.components.ratcheck:GetRatTimer() and TheWorld.components.ratcheck:GetRatTimer() or "... not available? timer is 0 second").."s")
         TheNet:SystemMessage("-------------------------")
     end
@@ -1774,9 +1774,7 @@ local function TimeForACheckUp(inst, dev)
                 local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
                 for a, b in ipairs(players) do
                     if math.random() > .5 then
-                        local str = inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore and "BURROWS"
-                            or inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore and "ITEMS"
-                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD" or nil
+                        local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
                         if str then
                             b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
                         end
