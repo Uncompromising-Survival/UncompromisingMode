@@ -1744,7 +1744,7 @@ local function TimeForACheckUp(inst, dev)
     if not dev then
         TheWorld:PushEvent("reducerattimer", { value = inst.ratscore })
 
-        inst.ratwarning = inst.ratscore / 48
+        inst.ratwarning = inst.ratscore
 
         --[[
             for c = 1, (inst.ratwarning) do
@@ -1757,31 +1757,34 @@ local function TimeForACheckUp(inst, dev)
                 end)
             end
         end]]
-        if inst.ratscore >= 60 then
-            if math.random() > .85 then
-                if inst.ratwarning > 5 then inst.ratwarning = 5 end
 
-                for c = 1, (inst.ratwarning) do
-                    inst:DoTaskInTime((c / 5), function(inst)
-                        local warning = SpawnPrefab("uncompromising_ratwarning")
-                        warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                        -- warning.entity:SetParent(b)
-                        -- b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
-                        -- warning.entity:SetParent(TheFocalPoint.b.entity)
-                    end)
-                end
+		local rattimer = TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetRatTimer() or nil
+		local warn = GetTime()
 
-                local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
-                for a, b in ipairs(players) do
-                    if math.random() > .5 then
-                        local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
-                        if str then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
-                        end
-                    end
-                end
-            end
-        end
+		if rattimer ~= nil and rattimer < 3000 and inst.ratscore ~= nil and inst.ratscore > 0 and (inst.last_ratwarning_time == nil or warn - inst.last_ratwarning_time >= 600) then
+			inst.last_ratwarning_time = warn
+
+			if inst.ratwarning > 5 then
+				inst.ratwarning = 5
+			end
+
+			for c = 1, inst.ratwarning do
+				inst:DoTaskInTime(c / 5, function(inst)
+					local warning = SpawnPrefab("uncompromising_ratwarning")
+					warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				end)
+			end
+
+			local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
+			for a, b in ipairs(players) do
+				local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
+				if str ~= nil then
+					b:DoTaskInTime(2 + math.random(), function(b)
+						b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
+					end)
+				end
+			end
+		end
     end
 end
 
