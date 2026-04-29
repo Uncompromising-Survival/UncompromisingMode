@@ -376,6 +376,7 @@ local um_preparedfoods =
         end,
         floater = { "med", nil, .65 },
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
+        warly_only = true,
     },
 
     um_sponge_cake =
