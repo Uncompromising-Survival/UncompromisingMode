@@ -67,7 +67,7 @@ local function BoomPieGo(inst, eater)
                         if eater.components.drownable and eater.components.drownable:ShouldDrown() then
                             eater.sg:GoToState("sink_fast")
                             eater.AnimState:SetFrame(70)
-                            SpawnPrefab("um_ocean_splash").Transform:SetPosition(eater.Transform:GetWorldPosition())
+                            --SpawnPrefab("um_ocean_splash").Transform:SetPosition(eater.Transform:GetWorldPosition()) -- Beta Only
                         end
                     end)
                 end
