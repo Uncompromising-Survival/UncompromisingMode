@@ -392,6 +392,9 @@ if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
 
+AddRecipeToFilter("trunkvest_summer", "RAIN")
+ChangeSortKey("trunkvest_summer", "armor_sharksuit_um", "RAIN", false)
+
 if TUNING.DSTU.SHAVE_MODE then
     AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
 end

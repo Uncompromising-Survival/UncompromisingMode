@@ -374,7 +374,10 @@ local function frockfn()
 
     inst:AddComponent("useableitem")
     inst.components.useableitem:SetOnUseFn(OnUse)
-    
+
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_HUGE)
+
     inst:ListenForEvent("itemget", OnAmmoLoaded)
     inst:ListenForEvent("itemlose", OnAmmoUnloaded)
 

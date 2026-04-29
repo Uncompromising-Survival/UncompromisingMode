@@ -551,8 +551,8 @@ configuration_options = {
     ------------------------------
     Header("Rats"),
     ------------------------------
-    BinaryConfig("itemcheck", "Item Score", "Equippable items and mole bait items increase the \'rat score\' value.",
-        true),
+    --BinaryConfig("itemcheck", "Item Score", "Equippable items and mole bait items increase the \'rat score\' value.",
+        --true),
     {
         name = "rattimer",
         label = "Rat Raid Cooldown",

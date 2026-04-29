@@ -6,36 +6,58 @@ local UpvalueHacker = require("tools/upvaluehacker")
 -----------------------------------------------------------------
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
-local IMPASSABLES = {    
-    ["fossil_stalker"] = true,    
-    ["endtable"] = true,
-    ["lureplant"] = true,
-    ["klaus_sack"] = true,
-    ["spiderden"] = true,
-    ["spiderden_2"] = true,
-    ["spiderden_3"] = true,    
-    ["skeleton"] = true,
-    ["skeleton_player"] = true,
-    ["wood_table_round"] = true,
-    ["wood_table_square"] = true,
-    ["stone_table_round"] = true,
-    ["stone_table_square"] = true,
-}
 
 if TUNING.DSTU.IMPASSBLES then
-    env.AddPrefabPostInitAny(function(inst)
-        if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
-        or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized"))
-        and inst.Physics ~= nil then
-            RemovePhysicsColliders(inst)
-        end
-        if (IMPASSABLES[inst.prefab] --or string.find(inst.prefab, "chesspiece_")
-        or inst:HasTag("heavy")) --or string.find(inst.prefab, "oversized")) 
-        and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
+    local function RemoveCollisionFromTreeRock(inst)
+        return inst:HasAllTags("rock_tree", "boulder")
+    end
+
+    local function BlockAddCollisionToTreeRock(inst)
+        return inst:HasTag("boulder") or not inst.components.workable
+    end
+
+    local IMPASSABLES = {
+        ["fossil_stalker"] = true,
+        ["endtable"] = true,
+        ["lureplant"] = true,
+        ["klaus_sack"] = true,
+        ["spiderden"] = true,
+        ["spiderden_2"] = true,
+        ["spiderden_3"] = true,
+        ["skeleton"] = true,
+        ["skeleton_player"] = true,
+        ["wood_table_round"] = true,
+        ["wood_table_square"] = true,
+        ["stone_table_round"] = true,
+        ["tree_rock1"] = {removefn = RemoveCollisionFromTreeRock, blockfn = BlockAddCollisionToTreeRock},
+        ["tree_rock2"] = {removefn = RemoveCollisionFromTreeRock, blockfn = BlockAddCollisionToTreeRock}
+    }
+
+    local function ShouldRemovePhysicsFrom(inst)
+        return (IMPASSABLES[inst.prefab] and (type(IMPASSABLES[inst.prefab]) ~= "table" or IMPASSABLES[inst.prefab].removefn(inst)) or inst:HasTag("heavy")) and inst.Physics
+    end
+
+    local function ShouldNotAddPhysicsTo(inst)
+        if not inst.prefab then return end
+        return IMPASSABLES[inst.prefab] and (type(IMPASSABLES[inst.prefab]) ~= "table" or IMPASSABLES[inst.prefab].blockfn(inst))
+    end
+
+    env.AddPrefabPostInitAny(function(inst) --or string.find(inst.prefab, "chesspiece_") --or string.find(inst.prefab, "oversized"))
+        if ShouldRemovePhysicsFrom(inst) then RemovePhysicsColliders(inst) end
+        if ShouldRemovePhysicsFrom(inst) and inst.components.heavyobstaclephysics then
             RemovePhysicsColliders(inst)
             inst.components.heavyobstaclephysics:SetRadius(0)
         end
     end)
+
+    local _ChangeToObstaclePhysics = ChangeToObstaclePhysics
+    function ChangeToObstaclePhysics(inst, rad, height, ...)
+        if ShouldNotAddPhysicsTo(inst) then 
+            if inst.Physics:GetCollisionMask() ~= 0 then RemovePhysicsColliders(inst) end
+            return
+        end
+        return _ChangeToObstaclePhysics(inst, rad, height, ...)
+    end
 end
 
 if TUNING.DSTU.SHAVE_MODE then

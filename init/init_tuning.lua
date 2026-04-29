@@ -296,6 +296,9 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
+	SNIFFER_ITEM = 40,
+	SNIFFER_PLAYER = 120,			
+	
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
@@ -407,7 +410,7 @@ TUNING.DSTU = {
     NEWRECIPES = GetModConfigData("newrecipes"),
     CAVECLOPS = GetModConfigData("cave_clops"),
     HOTCAVES = GetModConfigData("hotcaves"),
-    ITEMCHECK = GetModConfigData("itemcheck"),
+    --ITEMCHECK = GetModConfigData("itemcheck"),
     SEEDS = GetModConfigData("seeds"),
     MAXHPDEATH = GetModConfigData("maxhpdeath"),
     MAXHPHITTERS = GetModConfigData("maxhphitters"),

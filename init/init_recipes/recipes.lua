@@ -45,7 +45,7 @@ ChangeSortKey("diseasecurebomb", "lifeinjector", "RESTORATION", true)
 
 AddRecipe2("gasmask", { Ingredient("goose_feather", 10), Ingredient("red_cap", 2), Ingredient("pigskin", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
 ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
-ChangeSortKey("gasmask", "beehat", "RAIN", true)
+ChangeSortKey("gasmask", "balloonhat", "RAIN", true)
 
 AddRecipe2("plaguemask", { Ingredient("gasmask", 1), Ingredient("red_cap", 2), Ingredient("rat_tail", 4) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
 ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
@@ -321,7 +321,7 @@ ChangeSortKey("sludge_oil", "coldfirepit", "LIGHT", true)
 
 AddRecipe2("armor_reed_um", { Ingredient("cutreeds", 8), Ingredient("twigs", 3) }, TECH.NONE, nil, { "ARMOUR", "RAIN" })
 ChangeSortKey("armor_reed_um", "armorgrass", "ARMOUR", true)
-ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
+ChangeSortKey("armor_reed_um", "winona_telebrella", "RAIN", true)
 
 -- ChangeSortKey("PREFAB_NAME_OF_ITEM_THAT_YOURE_SORTING","PREFAB_NAME_OF_ITEM_YOU_WANT_IT_TO_GO_AFTER","THE_TAB",true) you need to do this for each tab that you want it to be sorted in -AXE
 -- need to add the inv atlases
@@ -329,7 +329,7 @@ ChangeSortKey("armor_reed_um", "raincoat", "RAIN", true)
 AddRecipe2("armor_sharksuit_um", { Ingredient("armorwood", 1), Ingredient("rockjawleather", 1), Ingredient("sludge", 4) }, TECH.SCIENCE_TWO, nil, { "SEAFARING", "ARMOUR", "RAIN" })
 ChangeSortKey("armor_sharksuit_um", "armordragonfly", "ARMOUR", true)
 ChangeSortKey("armor_sharksuit_um", "balloonvest", "SEAFARING", true)
-ChangeSortKey("armor_sharksuit_um", "armor_reed_um", "RAIN", true)
+ChangeSortKey("armor_sharksuit_um", "raincoat", "RAIN", false)
 
 AddRecipe2("brine_balm", { Ingredient("saltrock", 2), Ingredient("kelp", 1) }, TECH.SCIENCE_ONE, nil, { "RESTORATION" })
 ChangeSortKey("brine_balm", "floral_bandage", "RESTORATION", true)
@@ -541,7 +541,7 @@ AddRecipe2("um_record_winky", { Ingredient("batwing", 1), Ingredient("charcoal",
 AddRecipe2("um_record_hooded_widow", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_hooded_widow.xml" }, { "DECOR" })
 AddRecipe2("um_record_stranger", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_stranger.xml" }, { "DECOR" })
 AddRecipe2("um_record_tot", { Ingredient("batwing", 1), Ingredient("charcoal", 1) }, TECH.SCIENCE_TWO, { atlas = "images/inventoryimages/um_record_tot.xml" }, { "DECOR" })
-AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, { atlas = "images/inventoryimages/um_record_moonmaw.xml" }, { "DECOR", "CRAFTING_STATION" })
+AddRecipe2("um_record_moonmaw", { Ingredient("batwing", 1), Ingredient("moonglass", 1) }, TECH.CELESTIAL_ONE, {station_tag = "celestial_station", atlas = "images/inventoryimages/um_record_moonmaw.xml" }, { "DECOR", "CRAFTING_STATION" })
 
 ChangeSortKey("um_record_menu", "record", "DECOR", true)
 ChangeSortKey("um_record_winky", "um_record_menu", "DECOR", true)

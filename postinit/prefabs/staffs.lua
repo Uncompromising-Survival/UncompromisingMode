@@ -655,17 +655,7 @@ do
         return ret
     end
 
-    local WathomBSStaffStuff
-
-    local _OnRepaired
-    local function OnRepaired(inst, ...)
-        local isbroken = inst.isbroken and inst.isbroken:value()
-        local ret = _OnRepaired and _OnRepaired(inst, ...)
-        if isbroken then WathomBSStaffStuff(inst) end
-        return ret
-    end
-
-    WathomBSStaffStuff = function(inst) -- Upvalue into OnRepaired.
+    local function WathomBSStaffStuff(inst)
         local equippable = inst.components.equippable
         if equippable then
             if not _OnEquip then
@@ -684,6 +674,14 @@ do
             end
             weapon:SetOnAttack(OnAttack)
         end
+    end
+
+    local _OnRepaired
+    local function OnRepaired(inst, ...)
+        local isbroken = inst.isbroken and inst.isbroken:value()
+        local ret = _OnRepaired and _OnRepaired(inst, ...)
+        if isbroken then WathomBSStaffStuff(inst) end
+        return ret
     end
 
     env.AddPrefabPostInit("staff_lunarplant", function(inst)

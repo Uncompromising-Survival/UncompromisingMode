@@ -1626,8 +1626,8 @@ end
 local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
-    local delta = not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
-        or (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5) or 0
+    local delta = not container and (v:HasTag("fresh") and 10 or v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
+        or (v:HasTag("stale") and 5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
@@ -1636,11 +1636,58 @@ local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
 
+local function TrySpawnIcon(v, owner, intensity)
+    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    if nearbyicon then
+        nearbyicon:Resize(intensity)
+    else
+        local icon = SpawnPrefab("ratmask_stinklines")
+        local x, y, z = v.Transform:GetWorldPosition()
+        icon.Network:SetClassifiedTarget(owner)
+        icon.Transform:SetPosition(x, y, z)
+        icon:Resize(intensity)
+    end
+end
+
+local function FoodScoreCalculations(container, v, owner)
+    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
+    if not intensity then return end
+    TrySpawnIcon(v, owner, intensity)
+end
+
 local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
+local function Sniffertime(owner, sniffer)
+    if not owner or not owner:IsValid() or not sniffer or not sniffer:IsValid() then
+        return
+    end
+
+    local x, y, z = sniffer.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
+
+    for i, v in ipairs(ents) do
+        if v:IsValid() and v.components.inventoryitem ~= nil then
+            local container = v.components.inventoryitem:IsHeld()
+                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+
+            if IsProperContainer(container) then
+                FoodScoreCalculations(container, v, owner)
+            end
+        end
+    end
+end
+
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
+	
+    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER, {"player"}, {"playerghost"})
+    for a, b in ipairs(players) do
+        if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER) then
+			Sniffertime(b, inst)
+		end
+	end
 
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
     print("                o")
     print("    =========B  *sniff* *sniff*")
@@ -1648,7 +1695,7 @@ local function TimeForACheckUp(inst, dev)
     print("   ========")
     print("    V V    V V")]]
     inst.ratscore = -60
-    inst.itemscore = 0
+    --inst.itemscore = 0
     inst.foodscore = 0
 
     inst.ratburrows = TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() or 0
@@ -1656,23 +1703,23 @@ local function TimeForACheckUp(inst, dev)
 
     if ents then
         for i, v in ipairs(ents) do
-            if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
+            if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
                 local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
                 if IsProperContainer(container) then
                     if container then
                         SnifferFoodScoreCalculations(inst, true, v)
                     else
                         SnifferFoodScoreCalculations(inst, false, v)
-                        if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
-                            inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-                        end
+                        --if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+                            --inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+                        --end
                     end
                 end
             end
         end
     end
 
-    inst.ratscore = inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus
+    inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
     -- print("Foodscore = "..inst.foodscore)
@@ -1682,14 +1729,14 @@ local function TimeForACheckUp(inst, dev)
     -- just use the command if you wanna see i guess.
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
         TheNet:SystemMessage("-------------------------")
-        TheNet:SystemMessage("Itemscore = "..inst.itemscore)
+        --TheNet:SystemMessage("Itemscore = "..inst.itemscore)
         TheNet:SystemMessage("Foodscore = "..inst.foodscore)
         TheNet:SystemMessage("Burrowbonus = "..inst.burrowbonus)
         TheNet:SystemMessage("Ratscore = "..inst.ratscore)
     end
-    if inst.ratscore > 240 then inst.ratscore = 240 end
+    if inst.ratscore > 300 then inst.ratscore = 300 end
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
-        TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
+        --TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
         TheNet:SystemMessage("Timer = "..(TheWorld.components.ratcheck:GetRatTimer() and TheWorld.components.ratcheck:GetRatTimer() or "... not available? timer is 0 second").."s")
         TheNet:SystemMessage("-------------------------")
     end
@@ -1697,7 +1744,7 @@ local function TimeForACheckUp(inst, dev)
     if not dev then
         TheWorld:PushEvent("reducerattimer", { value = inst.ratscore })
 
-        inst.ratwarning = inst.ratscore / 48
+        inst.ratwarning = inst.ratscore
 
         --[[
             for c = 1, (inst.ratwarning) do
@@ -1710,33 +1757,34 @@ local function TimeForACheckUp(inst, dev)
                 end)
             end
         end]]
-        if inst.ratscore >= 60 then
-            if math.random() > .85 then
-                if inst.ratwarning > 5 then inst.ratwarning = 5 end
 
-                for c = 1, (inst.ratwarning) do
-                    inst:DoTaskInTime((c / 5), function(inst)
-                        local warning = SpawnPrefab("uncompromising_ratwarning")
-                        warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                        -- warning.entity:SetParent(b)
-                        -- b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
-                        -- warning.entity:SetParent(TheFocalPoint.b.entity)
-                    end)
-                end
+		local rattimer = TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetRatTimer() or nil
+		local warn = GetTime()
 
-                local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
-                for a, b in ipairs(players) do
-                    if math.random() > .5 then
-                        local str = inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore and "BURROWS"
-                            or inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore and "ITEMS"
-                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD" or nil
-                        if str then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
-                        end
-                    end
-                end
-            end
-        end
+		if rattimer ~= nil and rattimer < 3000 and inst.ratscore ~= nil and inst.ratscore > 0 and (inst.last_ratwarning_time == nil or warn - inst.last_ratwarning_time >= 600) then
+			inst.last_ratwarning_time = warn
+
+			if inst.ratwarning > 5 then
+				inst.ratwarning = 5
+			end
+
+			for c = 1, inst.ratwarning do
+				inst:DoTaskInTime(c / 5, function(inst)
+					local warning = SpawnPrefab("uncompromising_ratwarning")
+					warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				end)
+			end
+
+			local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
+			for a, b in ipairs(players) do
+				local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
+				if str ~= nil then
+					b:DoTaskInTime(2 + math.random(), function(b)
+						b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
+					end)
+				end
+			end
+		end
     end
 end
 
@@ -1950,42 +1998,6 @@ local function OnCooldown(inst)
     inst.components.useableitem.inuse = false
 end
 
-local function TrySpawnIcon(v, owner, intensity)
-    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
-    if nearbyicon then
-        nearbyicon:Resize(intensity)
-    else
-        local icon = SpawnPrefab("ratmask_stinklines")
-        local x, y, z = v.Transform:GetWorldPosition()
-        icon.Network:SetClassifiedTarget(owner)
-        icon.Transform:SetPosition(x, y, z)
-        icon:Resize(intensity)
-    end
-end
-
-local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
-        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
-    if not intensity then return end
-    TrySpawnIcon(v, owner, intensity)
-end
-
-local function Sniffertime(owner)
-    local x, y, z = owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
-    if ents then
-        for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
-            if IsProperContainer(container) then
-                FoodScoreCalculations(container, v, owner)
-                if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
-                    TrySpawnIcon(v, owner, .5)
-                end
-            end
-        end
-    end
-end
-
 local function CheckTargetPiece(inst)
     local owner = inst.components.inventoryitem.owner
     if owner then
@@ -1997,9 +2009,10 @@ local function CheckTargetPiece(inst)
 
         inst.SoundEmitter:KillSound("ratping")
         inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
-        if FindEntity(owner, 40, nil, {"rat_sniffer"}) then
-            Sniffertime(owner)
-        end
+		local sniffer = FindEntity(owner, 40, nil, {"rat_sniffer"})
+		if sniffer ~= nil then
+			Sniffertime(owner, sniffer)
+		end
     end
     --inst.components.rechargeable:Discharge(8)
 end
