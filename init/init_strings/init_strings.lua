@@ -1176,7 +1176,9 @@ STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                = "Fertiliza
 
 STRINGS.UM_DESCRIPTOR = {
     --this is for the gem items, with "when applied to an item:" prefix.
+    GEM_TIER_PREFIX = "Quality:",
     GEMOLOGY_GEM = {
+        PREFIX = "When applied:",
         BLUE1 = {
             "Gives summer insulation when held and freezes enemies on hit.",
             "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1219,8 +1221,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Increases attack and working speed.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
@@ -1250,6 +1252,8 @@ STRINGS.UM_DESCRIPTOR = {
     },
     --this is for the items with a minerology effect, with the prefix "gemology effects:"
     GEM_ENCHANTABLE = {
+        PREFIX = "Gemology Effects:",
+        SLOTS_PREFIX = "Gem slots:",
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
             "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1293,8 +1297,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Attacks and works faster.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
