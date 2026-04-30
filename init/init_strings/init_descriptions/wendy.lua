@@ -626,3 +626,10 @@ DESCRIBE.WATHOM_CORPSE = "Rise again, so you may feel the tinge of death once mo
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Rigid and cold, like this world."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "Why did I make this?"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Reeks of rot masked by sweetness..."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It offered me no comfort against the endless rain.",
+    SUMMER = "That pancake was cloying in this heat.",
+    AUTUMN = "A strange comfort while everything rots around.",
+    WINTER = "I liked it... yet nothing truly special ever lasts.",
+}

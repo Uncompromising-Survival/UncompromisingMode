@@ -751,3 +751,10 @@ DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is s
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Curious, it appears its frozen exterior keeps it protected."
 DESCRIBE.UM_THULECITE_RAZOR= "I'm going to pretend I didn't spend valuable resources for that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The sulfurous compounds are tempered by the calcium."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It was just a common spring confection.",
+    SUMMER = "Eating is hardly a scholarly achievement.",
+    AUTUMN = "It was a fine use of our stored provisions.",
+    WINTER = "Its flavor against the frost is stimulating for the mind.",
+}

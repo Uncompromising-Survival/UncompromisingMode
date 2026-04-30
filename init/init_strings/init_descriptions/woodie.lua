@@ -626,3 +626,10 @@ DESCRIBE.WATHOM_CORPSE = "Come on, buddy! I'm rooting for you!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I dont think I'd feel safe holding that."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Colder than Lucy's silent treatment."
 DESCRIBE.UM_THULECITE_RAZOR= "Maybe if you got a Lucy razor I'd shave."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "It smells like rotten nuggets."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was aboot to save it for later.",
+    SUMMER = "It was alright, eh?",
+    AUTUMN = "Not bad at all. Felt a little more special.",
+    WINTER = "Like a bit of sunshine right in the middle of a blizzard.",
+}
