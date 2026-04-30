@@ -94,40 +94,49 @@ local function getframesymbol(durability)
     end
 end
 
-local function HasEnchantment(_table)
-    for k, v in pairs(_table) do
-        if v ~= nil then
-            return true
-        end
+local function getframebuild(tier)
+    if tier > 2 then
+        return "gem_meter_flawless"
+    elseif tier < 2 then
+        return "gem_meter_cracked"
+    else
+        return "gem_meter_rough"
     end
-    return false
 end
 
 local __ctor = ItemTile._ctor
 
 function ItemTile._ctor(self, invitem, ...)
     __ctor(self, invitem, ...)
-    if invitem.replica.gem_enchantable ~= nil and HasEnchantment(invitem.replica.gem_enchantable.enchant_durabilty) then
+    if invitem.replica.gem_enchantable ~= nil and invitem.replica.gem_enchantable:IsEnchanted() then
+        local enchant, durability, tier = invitem.replica.gem_enchantable:GetLowestGemDurability()
+        print("lowest gem durability")
+        print("enchant", enchant)
+        print("durability", durability)
+        print("tier", tier)
+        print("build", getframebuild(tier))
+
         self.gem_border = self:AddChild(UIAnim())
         self.gem_border:GetAnimState():SetBank("gem_meter")
-        self.gem_border:GetAnimState():SetBuild("gem_meter")
+        self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
         self.gem_border:GetAnimState():PlayAnimation("idle")
         self.gem_border:GetAnimState():AnimateWhilePaused(false)
         self.gem_border:SetClickable(false)
 
-        if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
+        if not self.dragging then
             self.gem_border:Show()
         else
             self.gem_border:Hide()
         end
 
-        local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-        if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil then
+        if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil and tier ~= nil then
             self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
+            self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
         end
+
         self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
             if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
                 self.gem_border:Show()
@@ -135,12 +144,13 @@ function ItemTile._ctor(self, invitem, ...)
                 self.gem_border:Hide()
             end
 
-            local enchant, durability = invitem.replica.gem_enchantable:GetLowestGemDurability()
-            if durability == nil or enchant == nil or GEM_DEFS[enchant] == nil then
+            local enchant, durability, tier = invitem.replica.gem_enchantable:GetLowestGemDurability()
+            if durability == nil or enchant == nil or GEM_DEFS[enchant] == nil or tier == nil then
                 return
             end
 
             self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+            self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)

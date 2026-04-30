@@ -1902,6 +1902,10 @@ Assets = {
     Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
     Asset("ANIM", "anim/ui_forge_1x2.zip"),
     Asset("ANIM", "anim/gem_meter.zip"),
+    Asset("ANIM", "anim/gem_meter_cracked.zip"),
+    Asset("ANIM", "anim/gem_meter_rough.zip"),
+    Asset("ANIM", "anim/gem_meter_flawless.zip"),
+
 }
 
 for _, asset in pairs(inventoryitems) do

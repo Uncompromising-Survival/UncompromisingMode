@@ -7,21 +7,16 @@ local function on_enchants(self, flag)
     if self.dirty then
         local enchants = self.enchants
 
-        local names = {}
+        local enchant_data = {}
 
         for k, v in pairs(enchants) do
-            if not table.contains(self.hidden_enchants, k) then --only sync non-hidden names.
-                table.insert(names, k)
+            if not table.contains(self.hidden_enchants, k) then --only sync non-hidden gems.
+                enchant_data[k] = {t = v, d = self.enchant_durabilty[k]}
             end
         end
 
-
-        self.inst.replica.gem_enchantable:SetEnchantmentsFromNames(names)
+        self.inst.replica.gem_enchantable._enchant_data:set(json.encode(enchant_data))
         self.inst.replica.gem_enchantable._slots:set(self.slots)
-
-
-
-        self.inst.replica.gem_enchantable._enchant_durabilty:set(json.encode(self.enchant_durabilty))
 
         self.dirty = false
     end
