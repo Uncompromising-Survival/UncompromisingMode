@@ -108,6 +108,9 @@ AddUMGemDef("redgem2", {
                 end
                 DamageInfiniteItemGem("redgem2", inst, 0.01)
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
         end
     },
 })
@@ -137,6 +140,9 @@ AddUMGemDef("redgem1", {
 
             DamageInfiniteItemGem("redgem1", inst, 0.01)
         end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
+        end
     },
 })
 
@@ -254,6 +260,9 @@ AddUMGemDef("greengem1", {
             if tool and tool.actions then
                 tool.actions = item.volatile_gemology_data.um_gemologygreengem1.tool_actions
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.tool ~= nil or item.components.weapon ~= nil
         end
     }
 })
@@ -281,9 +290,9 @@ local function addRandomGemEffects(inst)
 
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
-        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) then --don't add already existing other enchants.
+        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1)                                              --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                      --don't consume a slot when adding extra enchant.
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
@@ -451,6 +460,9 @@ AddUMGemDef("yellowgem2", {
             if item.components.weapon then
                 item.components.weapon.stimuli = item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
         end
     }
 })
@@ -466,7 +478,7 @@ AddUMGemDef("palegem1", {
             -- see init/init_gemology/special.lua
         end,
         onattack = function(item, attacker, target, tier)
-            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) then
+            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) and item.components.weapon ~= nil then
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
@@ -555,6 +567,9 @@ AddUMGemDef("palegem2", {
                     item.components.perishable:SetPercent(pct)
                 end
             end)
+        end,
+        canapply = function(item, tier)
+            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.components.perishable ~= nil
         end
     }
 })
@@ -584,7 +599,7 @@ AddUMGemDef("purplegem1", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            if item.tier ~= 1 then
+            if item.tier ~= 1 and item.components.weapon ~= nil then
                 local damage = item.components.weapon.damage
                 if damage < 50 and item.prefab ~= "hambat" then
                     damage = damage * tier * 0.25

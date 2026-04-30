@@ -30,16 +30,23 @@ end
 local function ForgeGem(inst)
     local tool = inst.components.container:GetItemInSlot(1)
     local gem = inst.components.container:GetItemInSlot(2)
-
-    if tool.components.gem_enchantable ~= nil and tool.components.gem_enchantable:HasSlots() and tool.components.gem_enchantable.enchants[gem.prefab] == nil and GEM_DEFS[gem.prefab] ~= nil and CanApplyGem(gem.prefab, tool) then
+    local can_apply = CanApplyGem(gem.prefab, tool)
+    if tool.components.gem_enchantable ~= nil and GEM_DEFS[gem.prefab] ~= nil and can_apply then
         inst.components.container:Close()
         inst.AnimState:PlayAnimation("smith", false)
         inst.AnimState:PushAnimation("idle", false)
         inst.components.container.canbeopened = false
         inst:DoTaskInTime(.8, function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
+            --remove enchants if you're at max slots.
+            if not tool.components.gem_enchantable:HasSlots() then
+                for enchant, tier in pairs(tool.components.gem_enchantable.enchants) do
+                    tool.components.gem_enchantable:RemoveEnchantment(enchant)
+                end
+            end
             tool.components.gem_enchantable:AddEnchantment(gem.prefab, gem:GetTier())
-            tool.components.gem_enchantable:SetDurability(gem.prefab, 1) --forge defaults to enabling durability.
+            tool.components.gem_enchantable:SetDurability(gem.prefab, 1)
+
             LearnGem(inst, gem.prefab)
             gem:Remove()
             inst.components.container.canbeopened = true
@@ -48,7 +55,7 @@ local function ForgeGem(inst)
         return true
     end
 
-    return false
+    return false, (not can_apply) and "NOT_COMPATIBLE" or nil
 end
 
 --{ slot = in_slot, item = item, src_pos = src_pos, }
@@ -122,7 +129,7 @@ local function fn()
 
     inst:AddTag("structure")
     inst:AddTag("gem_forge")
-
+    
     MakeSnowCoveredPristine(inst)
 
     inst.entity:SetPristine()
@@ -132,6 +139,7 @@ local function fn()
     end
 
     inst:AddComponent("inspectable")
+    inst:AddComponent("gem_forge")
 
     inst.ForgeGem = ForgeGem
 

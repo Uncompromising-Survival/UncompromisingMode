@@ -712,15 +712,41 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
     end
 end)
 
+
 ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
 
 local um_forge_gem = Action({ priority = 1, mount_valid = true })
 um_forge_gem.id = "UM_FORGE_GEM"
 um_forge_gem.str = STRINGS.UI.APPLY_GEM
+um_forge_gem.rmb = true
 um_forge_gem.fn = function(act)
     if act.target.ForgeGem ~= nil then
-        return act.target:ForgeGem()
+        local success, reason = act.target:ForgeGem()
+        print("success?", success)
+        print("reason?", reason)
+        if not success then
+            --we need to run the talker code here because we're not in the stategraph
+            --when called by the SG action handler it does actually give the action fail string, but when
+            --sent from the RPC in the widget button, it does not.
+            if act.doer ~= nil and act.doer.components.talker ~= nil then
+                act.doer.components.talker:Say(GetActionFailString(act.doer, um_forge_gem.id, reason))
+            end
+            return false, reason
+        end
+
+        return success
     end
 end
 
 ENV.AddAction(um_forge_gem)
+
+ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
+    if right and (inst.replica.container ~= nil and
+            inst.replica.container:IsFull() and
+            inst.replica.container:IsOpenedBy(doer)
+        ) then
+        table.insert(actions, ACTIONS.UM_FORGE_GEM)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))

@@ -307,6 +307,9 @@ ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
 ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
     GEM_ALREADY_KNOWN = "I already know that one.",
 }
+ACTIONFAIL.UM_FORGE_GEM = {
+    NOT_COMPATIBLE = "It's not the right gem for this."
+}
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
 DESCRIBE.LIGHTNINGHOUND = "Watch it, that one stings!"

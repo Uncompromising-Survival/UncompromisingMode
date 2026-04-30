@@ -978,7 +978,7 @@ end
 function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
     local tool = inst.replica.container:GetItemInSlot(1)
     local gem = inst.replica.container:GetItemInSlot(2)
-    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and tool.replica.gem_enchantable._slots:value() > 0 and gem ~= nil and not table.contains(tool.replica.gem_enchantable:GetEnchantmentNames(), gem.prefab)
+    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and gem ~= nil
 end
 
 if TUNING.DSTU.ICEBOX_TWEAKS then
