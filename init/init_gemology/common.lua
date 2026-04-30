@@ -82,25 +82,30 @@ function ItemTile:UpdateTooltip(...)
     return ret
 end
 
-local function getframesymbol(durability)
-    if durability > .75 then
-        return "frame"
-    elseif durability <= .75 and durability > .5 then
-        return "frame-0"
-    elseif durability <= .5 and durability > .25 then
-        return "frame-1"
+
+
+local function getframebuild(tier)
+    if tier == nil then return "cracked" end
+    if tier > 2 then
+        return "flawless"
+    elseif tier < 2 then
+        return "cracked"
     else
-        return "frame-2"
+        return "rough"
     end
 end
 
-local function getframebuild(tier)
-    if tier > 2 then
-        return "gem_meter_flawless"
-    elseif tier < 2 then
-        return "gem_meter_cracked"
+local function getframesymbol(durability, tier)
+    local tier_name = getframebuild(tier)
+    print("tier name", tier_name)
+    if durability > .75 then
+        return "frame-"..tier_name
+    elseif durability <= .75 and durability > .5 then
+        return "frame-"..tier_name.."-0"
+    elseif durability <= .5 and durability > .25 then
+        return "frame-"..tier_name.."-1"
     else
-        return "gem_meter_rough"
+        return "frame-"..tier_name.."-2"
     end
 end
 
@@ -114,11 +119,11 @@ function ItemTile._ctor(self, invitem, ...)
         print("enchant", enchant)
         print("durability", durability)
         print("tier", tier)
-        print("build", getframebuild(tier))
+        print("symbol", tier ~= nil and getframesymbol(durability, tier) or "No tier")
 
         self.gem_border = self:AddChild(UIAnim())
         self.gem_border:GetAnimState():SetBank("gem_meter")
-        self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
+        self.gem_border:GetAnimState():SetBuild("gem_meter")
         self.gem_border:GetAnimState():PlayAnimation("idle")
         self.gem_border:GetAnimState():AnimateWhilePaused(false)
         self.gem_border:SetClickable(false)
@@ -130,14 +135,13 @@ function ItemTile._ctor(self, invitem, ...)
         end
 
         if durability ~= nil and enchant ~= nil and GEM_DEFS[enchant] ~= nil and tier ~= nil then
-            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability, tier))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
-            self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
         end
 
-        self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
+        self.inst:ListenForEvent("gemology.enchant_datadirty", function(inst)
             if invitem.replica.gem_enchantable:IsEnchanted() and not self.dragging then
                 self.gem_border:Show()
             else
@@ -149,8 +153,7 @@ function ItemTile._ctor(self, invitem, ...)
                 return
             end
 
-            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability))
-            self.gem_border:GetAnimState():SetBuild(getframebuild(tier))
+            self.gem_border:GetAnimState():OverrideSymbol("frame", "gem_meter", getframesymbol(durability, tier))
 
             local color = GEM_DEFS[enchant].color
             self.gem_border:GetAnimState():SetMultColour(color[1], color[2], color[3], 1)
