@@ -587,3 +587,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Not bad! It's a nice change of pace.",
     WINTER = "The taste almost made me forget that I'm freezing!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Oh, the fire did a great job cooking this monstrosity up."
+DESCRIBE.UM_CHILES_EN_NOGADA = "Gotta love that spicy aftertaste it leaves."

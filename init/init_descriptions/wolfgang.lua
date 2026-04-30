@@ -558,3 +558,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Better than old berries from ground.",
     WINTER = "Makes Wolfgang feel very fancy and MIGHTY!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Is food for cowards... Wolfgang take just in case."

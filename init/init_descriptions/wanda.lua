@@ -581,3 +581,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Its complexity reminds me of better years.",
     WINTER = "A taste of future treats, quite remarkable!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "In another timeline not too far from ours, this exploded in my face."

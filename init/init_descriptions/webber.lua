@@ -563,3 +563,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Yum! It's all fluffy and weird.",
     WINTER = "We've never felt so fancy in the snow!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "I don't think that's our tummy rumbling."

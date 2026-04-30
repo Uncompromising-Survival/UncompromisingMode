@@ -588,3 +588,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Impressive hunt, not quite. Impressive harvest, perhaps.",
     WINTER = "Rare flavor for season. Senses, surprised. Taste, \"Exotic\".",
 }
+DESCRIBE.UM_RICE_PUDDING = "And yet, no."
+DESCRIBE.UM_BOOMBERRYPIE = "Writhing, suspicious..."

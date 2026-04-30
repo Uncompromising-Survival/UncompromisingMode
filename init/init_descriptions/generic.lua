@@ -653,3 +653,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "A sophisticated flavor for this time of the year.",
     WINTER = "A tropical anomaly in the dead of winter!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "I'm over the moon for this pie."
+DESCRIBE.UM_CHILES_EN_NOGADA = "My mouth waters just looking at it!"

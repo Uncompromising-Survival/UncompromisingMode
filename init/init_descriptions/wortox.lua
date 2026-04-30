@@ -559,3 +559,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "It had good cream, a delightful little dream!",
     WINTER = "A feast for a cold beast! My soul feels spiffy, hyuyu!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Oh! What a delightful prank indeed!"

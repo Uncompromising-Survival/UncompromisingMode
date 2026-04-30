@@ -576,3 +576,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "I can almost feel the gentle drizzle of spring.",
     WINTER = "The aftertaste is simply delightful.",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "This would go great with some milk."
