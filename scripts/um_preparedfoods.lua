@@ -596,7 +596,7 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        perishtime = TUNING.PERISH_PRESERVED, --20 Days
         floater = { "med", .05, .65 },
         oneat_desc = STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE,
         card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
