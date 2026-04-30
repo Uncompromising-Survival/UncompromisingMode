@@ -97,7 +97,6 @@ end
 
 local function getframesymbol(durability, tier)
     local tier_name = getframebuild(tier)
-    print("tier name", tier_name)
     if durability > .75 then
         return "frame-"..tier_name
     elseif durability <= .75 and durability > .5 then
@@ -115,11 +114,6 @@ function ItemTile._ctor(self, invitem, ...)
     __ctor(self, invitem, ...)
     if invitem.replica.gem_enchantable ~= nil and invitem.replica.gem_enchantable:IsEnchanted() then
         local enchant, durability, tier = invitem.replica.gem_enchantable:GetLowestGemDurability()
-        print("lowest gem durability")
-        print("enchant", enchant)
-        print("durability", durability)
-        print("tier", tier)
-        print("symbol", tier ~= nil and getframesymbol(durability, tier) or "No tier")
 
         self.gem_border = self:AddChild(UIAnim())
         self.gem_border:GetAnimState():SetBank("gem_meter")
