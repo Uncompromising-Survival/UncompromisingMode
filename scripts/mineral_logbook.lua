@@ -39,7 +39,7 @@ function MineralLogbook:ValidateData(data)
             corrected = true
         elseif (v < MIN_GEM_TIER or v > MAX_GEM_TIER) then
             print("WARNING: Found gem with invalid tier, correcting to default...")
-            print("Tiers should be 0-3, was " .. v)
+            print("Tiers should be "..MIN_GEM_TIER.."-"..MAX_GEM_TIER..", was " .. v)
             data[k] = 0
             corrected = true
         end
@@ -77,8 +77,6 @@ end
 
 --learns a gem at a certain tier
 function MineralLogbook:AddNewGem(gem, tier)
-    
-
     assert(type(tier) == "number", "Attempted to add non-number value as mineral logbook data tier value.")
     assert(type(gem) == "string", "Attempted to add a non-string value as mineral logbook data key.")
 
