@@ -633,3 +633,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "A strange comfort while everything rots around.",
     WINTER = "I liked it... yet nothing truly special ever lasts.",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "The pie cries out in pain. Its creation was a mistake."

@@ -599,3 +599,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Yummy!",
     WINTER = "Very Yummy! ",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Funny boom belly stuff"

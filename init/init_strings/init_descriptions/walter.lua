@@ -657,3 +657,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "It's got a much more interesting kick than the usual.",
     WINTER = "Eating this in the snow is like a tropical expedition!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Y'know, I got fourth place in a pie eating contest. This'll be easy as pie!"

@@ -618,3 +618,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = { --Vegan Wigfrid real?
     AUTUMN = "I was left craving true nourishment.",
     WINTER = "It was... almost worthy.",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "I wouldn't even if I could!"

@@ -612,3 +612,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "I guess some things do get better with time.",
     WINTER = "Durians at this time of the year? Such a luxury.",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Ugh, next time go easy on the berries."

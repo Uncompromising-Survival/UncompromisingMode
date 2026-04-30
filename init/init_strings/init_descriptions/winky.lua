@@ -702,3 +702,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "I need more! Where are more Durians. Now!",
     WINTER = "It is delicious, why won't more of these stupid fruits grow now.",
 }
+DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."
+DESCRIBE.UM_BOOMBERRYPIE = "The slime will make my claws sticky forever."

@@ -676,3 +676,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Mum would be proud of me eating my greens, heh.",
     WINTER = "And they told me we'd go a whole season without pancakes! Guess who was wrong?",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "Makes a mess, but that's half the fun!"

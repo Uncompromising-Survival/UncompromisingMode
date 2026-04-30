@@ -622,3 +622,4 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "Mmm... pokey. Better than crunchy leaves, florp!",
     WINTER = "Oooh, tastes best cold!",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "This yummy, but... looks kinda scary, glurp."

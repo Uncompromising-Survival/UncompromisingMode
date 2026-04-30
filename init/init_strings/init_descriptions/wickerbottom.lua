@@ -758,3 +758,5 @@ ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
     AUTUMN = "It was a fine use of our stored provisions.",
     WINTER = "Its flavor against the frost is stimulating for the mind.",
 }
+DESCRIBE.UM_BOOMBERRYPIE = "So many Boomberries in such a small space makes quite a violent reaction."
+DESCRIBE.UM_CHILES_EN_NOGADA = "A traditional Mexican delight."
