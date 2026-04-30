@@ -232,7 +232,7 @@ env.AddComponentPostInit("finiteuses", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
@@ -252,7 +252,7 @@ env.AddComponentPostInit("fueled", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
@@ -272,7 +272,7 @@ env.AddComponentPostInit("armor", function(self)
 
         if delta < 0 and self.inst.components.gem_enchantable ~= nil then
             for gem, tier in pairs(self.inst.components.gem_enchantable.enchants) do
-                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) then
+                if self.inst.components.gem_enchantable:HasDurabilityEnabled(gem) and not self.inst.components.gem_enchantable.loading then
                     self.inst.components.gem_enchantable:DoDurabilityDelta(gem, delta)
                 end
             end
