@@ -39,11 +39,14 @@ local function ForgeGem(inst)
         inst:DoTaskInTime(.8, function(inst)
             inst.SoundEmitter:PlaySound("dontstarve/wilson/rock_break")
             --remove enchants if you're at max slots.
-            if not tool.components.gem_enchantable:HasSlots() then
+            if tool.components.gem_enchantable:HasEnchantment(gem.prefab) then
+                tool.components.gem_enchantable:RemoveEnchantment(gem.prefab)
+            elseif not tool.components.gem_enchantable:HasSlots() then
                 for enchant, tier in pairs(tool.components.gem_enchantable.enchants) do
                     tool.components.gem_enchantable:RemoveEnchantment(enchant)
                 end
             end
+
             tool.components.gem_enchantable:AddEnchantment(gem.prefab, gem:GetTier())
             tool.components.gem_enchantable:SetDurability(gem.prefab, 1)
 

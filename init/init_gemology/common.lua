@@ -94,7 +94,7 @@ local function getframesymbol(durability)
     end
 end
 
-local function HasEnchant(_table)
+local function HasEnchantment(_table)
     for k, v in pairs(_table) do
         if v ~= nil then
             return true
@@ -107,7 +107,7 @@ local __ctor = ItemTile._ctor
 
 function ItemTile._ctor(self, invitem, ...)
     __ctor(self, invitem, ...)
-    if invitem.replica.gem_enchantable ~= nil and HasEnchant(invitem.replica.gem_enchantable.enchant_durabilty) then
+    if invitem.replica.gem_enchantable ~= nil and HasEnchantment(invitem.replica.gem_enchantable.enchant_durabilty) then
         self.gem_border = self:AddChild(UIAnim())
         self.gem_border:GetAnimState():SetBank("gem_meter")
         self.gem_border:GetAnimState():SetBuild("gem_meter")

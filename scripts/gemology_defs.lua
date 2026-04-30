@@ -290,7 +290,7 @@ local function addRandomGemEffects(inst)
 
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
-        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
+        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
             inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                      --don't consume a slot when adding extra enchant.
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
@@ -581,7 +581,7 @@ local function HambatUpdateDamage(inst)
         local dmg = TUNING.HAMBAT_DAMAGE * inst.components.perishable:GetPercent()
         dmg = Remap(dmg, 0, inst.new_max_damage and inst.new_max_damage or TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
             TUNING.HAMBAT_DAMAGE)
-        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchant("um_gemologypurplegem1") then
+        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchantment("um_gemologypurplegem1") then
             dmg = dmg + dmg * inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem1") * 0.25
         end
         inst.components.weapon:SetDamage(dmg)

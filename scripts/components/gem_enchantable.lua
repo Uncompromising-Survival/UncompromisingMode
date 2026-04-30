@@ -89,7 +89,7 @@ end, nil, {
     slots = on_enchants,
 })
 
-function GemEnchantable:HasEnchant(enchant, tier)
+function GemEnchantable:HasEnchantment(enchant, tier)
     assert(GEM_DEFS[enchant] ~= nil, "Attempted to check unknown enchantment: " .. enchant)
     if tier ~= nil then
         assert(tier <= MAX_GEM_TIER and tier >= MIN_GEM_TIER, "Attempted to check gem enchantment with invalid tier: \"" .. tier .. "\" Gem tiers are " .. MIN_GEM_TIER .. " to " .. MAX_GEM_TIER .. ".")
