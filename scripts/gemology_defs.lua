@@ -40,28 +40,10 @@ This is so we can save some gem-specific data so it can probably revert when rem
 
 
 local GEM_DEFS = {}
-
---For clients.
---Gem enchants from gem_enchantable component are saved as a net_smallbytearray (8-bit unsigned ints, 31 max size)
---each gem gets assigned an int value here to be able to get a gem's name from the number on the client
-local INVERTED_GEM_LOOKUP = {}
 local GEM_LOOKUP = {}
-
-
---This means, in order to prevent some possibly not good consequences with clients, we limit gems to 31.
---UM uses 14/31 gems, so there`s probably enough room for IA + HAM compat + whatever else addons feel like adding.
-setmetatable(GEM_DEFS, {
-    __newindex = function(t, k, v)
-        assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")
-        rawset(t, k, v)
-    end
-})
-
 
 function AddGemDef(name, def)
     GEM_LOOKUP[#GEM_LOOKUP + 1] = name
-    INVERTED_GEM_LOOKUP[name] = #GEM_LOOKUP
-
     GEM_DEFS[name] = def
 end
 
@@ -948,4 +930,4 @@ AddUMGemDef("bluegem2", {
     }
 })
 
-return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }
+return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP}

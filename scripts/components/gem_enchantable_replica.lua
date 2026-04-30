@@ -1,7 +1,3 @@
-local DEFS = require("gemology_defs")
-local GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
-
-
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
 

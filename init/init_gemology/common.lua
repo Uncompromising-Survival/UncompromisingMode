@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local DEFS = require("gemology_defs")
-local GEM_DEFS, GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_DEFS, DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKUP
+local GEM_DEFS = DEFS.GEM_DEFS
 local UpvalueHacker = require("tools/upvaluehacker")
 local UIAnim = require "widgets/uianim"
 
