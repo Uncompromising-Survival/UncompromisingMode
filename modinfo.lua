@@ -6,14 +6,21 @@ if not folder_name:find("workshop-") then
 end
 
 --RELEASE.MAJOR.MINOR.FIX
-local _version = "1.5.3.1"
+local _version = "1.5.4.0"
 description = [[
 󰀔 [ Version: ]] .. _version .. [[ - "Wixie, Walter, Woby and Winky!" ]
 
 Uncompromising Mode increases the risk and reward for those who have mastered Don't Starve Together.
 
-Latest update features:
-- "Winky" is back!
+Latest update main features:
+- Added 4 new dishes previously exclusive to UM's "On the Rocks!" Beta update.
+> Boomberry Pie
+> Durian Cream Marshcake
+> Chiles en Nogada
+> Rice Pudding
+- Dried tea materials have varying "Foliage" value, making it harder to cook with them.
+- Winky's Rats won't explode when picking up explosives.
+
 
 󰀏 NEXT UPDATE: On the Rocks! (Accessible as a Beta in our Discord server!)]]
 
