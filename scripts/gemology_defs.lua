@@ -63,11 +63,11 @@ function IsEnchantValid(gem)
 end
 
 function DamageInfiniteItemGem(enchant, item, value)
-    if not item.components.finiteuses
+    if --[[not item.components.finiteuses
         and not item.components.fueled
         and not item.components.armor
         and not item.components.perishable
-        and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
@@ -88,7 +88,7 @@ AddUMGemDef("redgem2", {
                     target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
-                DamageInfiniteItemGem("redgem2", inst, 0.01)
+                DamageInfiniteItemGem("redgem2", inst, 0.005)
             end
         end,
         canapply = function(item, tier)
@@ -120,7 +120,7 @@ AddUMGemDef("redgem1", {
                 attacker.components.sanity:DoDelta(recover)
             end
 
-            DamageInfiniteItemGem("redgem1", inst, 0.01)
+            DamageInfiniteItemGem("redgem1", inst, 0.005)
         end,
         canapply = function(item, tier)
             return item.components.weapon ~= nil
@@ -195,7 +195,7 @@ local function SendShadowClone(item, owner, target, tier)
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
         if newtarget ~= nil then
-            DamageInfiniteItemGem("greengem1", item, 0.01)
+            DamageInfiniteItemGem("greengem1", item, 0.005)
 
             local x, y, z = newtarget.Transform:GetWorldPosition()
             swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
@@ -322,10 +322,10 @@ AddUMGemDef("greengem2", {
             item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.01)
+            DamageInfiniteItemGem("greengem2", item, 0.005)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.01)
+            DamageInfiniteItemGem("greengem2", item, 0.005)
         end
 
     }
@@ -403,7 +403,7 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     if tier ~= 1 then
         if target:IsValid() then
-            DamageInfiniteItemGem("yellowgem2", inst, 0.01)
+            DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 
             FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
         end
@@ -413,7 +413,7 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
-        DamageInfiniteItemGem("yellowgem2", inst, 0.01)
+        DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
@@ -465,7 +465,7 @@ AddUMGemDef("palegem1", {
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
 
-            DamageInfiniteItemGem("palegem1", item, 0.01)
+            DamageInfiniteItemGem("palegem1", item, 0.005)
         end
     }
 })
@@ -514,7 +514,7 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.01)
+            DamageInfiniteItemGem("palegem2", item, 0.005)
         end,
         onremove = function(item, tier)
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
@@ -587,7 +587,7 @@ AddUMGemDef("purplegem1", {
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageInfiniteItemGem("purplegem1", item, 0.01)
+                    DamageInfiniteItemGem("purplegem1", item, 0.005)
                 end
             end
         end,
@@ -662,7 +662,7 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
-    DamageInfiniteItemGem("orangegem1", item, 0.01)
+    DamageInfiniteItemGem("orangegem1", item, 0.005)
 
     if tier ~= 1 then
         local damage = item.components.weapon.damage
@@ -682,7 +682,7 @@ AddUMGemDef("orangegem1", {
             item.structure_bonus = nil
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem1", item, 0.01)
+            DamageInfiniteItemGem("orangegem1", item, 0.005)
         end,
         onupdate = FindUniqueBaseStructures
     }
@@ -750,10 +750,10 @@ AddUMGemDef("orangegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.01)
+            DamageInfiniteItemGem("orangegem2", item, 0.005)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.01)
+            DamageInfiniteItemGem("orangegem2", item, 0.005)
         end,
         onremove = function(item, tier)
             if item.HarvestPickable then
@@ -805,7 +805,7 @@ AddUMGemDef("bluegem1", {
                     local iceShield = SpawnPrefab("um_ice_shield")
                     iceShield:Init(attacker, "swap_body", .5 + (tier * 0.25))
                 end
-                DamageInfiniteItemGem("bluegem1", item, 0.01)
+                DamageInfiniteItemGem("bluegem1", item, 0.005)
             end
         end
     }

@@ -232,6 +232,8 @@ end)
 --gem durability
 
 --gem durability
+--experimenting with something...
+--[[
 env.AddComponentPostInit("finiteuses", function(self)
     local _SetUses = self.SetUses
 
@@ -291,3 +293,4 @@ env.AddComponentPostInit("armor", function(self)
         _SetCondition(self, amount, ...)
     end
 end)
+]]
