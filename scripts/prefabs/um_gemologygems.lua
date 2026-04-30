@@ -11,15 +11,12 @@ end
 
 local function OnLoad(inst, data)
     if data and data.tier then
-        --wait for netvar to init, just in case
-        inst:DoTaskInTime(0, function(inst)
-            if data.tier ~= nil then
-                inst:SetTier(data.tier)
-            end
-            if data.revealed ~= nil then
-                inst:SetRevealed(data.revealed)
-            end
-        end)
+        if data.tier ~= nil then
+            inst:SetTier(data.tier)
+        end
+        if data.revealed ~= nil then
+            inst:SetRevealed(data.revealed)
+        end
     end
 end
 
