@@ -644,3 +644,11 @@ DESCRIBE.WATHOM_CORPSE = "He's still got fight left in 'em! Up and at'em, lets g
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "An impenetrable shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "It's more durable, I'll give it that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Built tough and smells rough. Just how I like 'em."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It's standard fare dish during this season.",
+    SUMMER = "It's a bit rich for this heat.",
+    AUTUMN = "Not a bad piece of work.",
+    WINTER = "Feels like a vacation in the middle of a shift.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Was this pie made in a bomb factory?"

@@ -641,3 +641,11 @@ DESCRIBE.WATHOM_CORPSE = "Time, Wathom? Is it really that time again?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "It protects well for the time being."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Oh botheration, someone ought to warm you up!"
 DESCRIBE.UM_THULECITE_RAZOR= "I don't need to shave off any more time."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "I hope we didn't take too much time preparing for this."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Distinct flavor of time being wasted on the mundane.",
+    SUMMER = "The taste was good enough.",
+    AUTUMN = "Its complexity reminds me of better years.",
+    WINTER = "A taste of future treats, quite remarkable!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "In another timeline not too far from ours, this exploded in my face."

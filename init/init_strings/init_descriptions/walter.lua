@@ -650,3 +650,11 @@ DESCRIBE.WATHOM_CORPSE = "Woby, look! He's still breathing!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Nothing dreadful about a shield!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "It's an ancient razor. It's what old people use!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Er, maybe Woby wants it?"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I was hoping for something a bit more exciting...",
+    SUMMER = "It's better than eating bugs, I guess!",
+    AUTUMN = "It's got a much more interesting kick than the usual.",
+    WINTER = "Eating this in the snow is like a tropical expedition!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Y'know, I got fourth place in a pie eating contest. This'll be easy as pie!"

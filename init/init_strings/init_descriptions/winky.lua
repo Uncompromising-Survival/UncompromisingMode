@@ -695,3 +695,12 @@ DESCRIBE.WATHOM_CORPSE = "How. You died. You can't just... get back up?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Thouching it makes me shiver."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "What kind of razor is this."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Mmmm, succulent smell."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I miss the smell, I should have kept it with me.",
+    SUMMER = "It was too melted. I hate this stupid heat.",
+    AUTUMN = "I need more! Where are more Durians. Now!",
+    WINTER = "It is delicious, why won't more of these stupid fruits grow now.",
+}
+DESCRIBE.UM_RICE_PUDDING = "I kind of liked the crunch it used to have."
+DESCRIBE.UM_BOOMBERRYPIE = "The slime will make my claws sticky forever."

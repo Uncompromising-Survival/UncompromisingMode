@@ -605,3 +605,11 @@ DESCRIBE.WATHOM_CORPSE = "Still clinging to life are we?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "She has clouded her mind with protection by any means necessary."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "I mined a whole statue just for that?"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Spiky, yet delightful. Reminds me of someone."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "I hope the smell doesn't stick to me.",
+    SUMMER = "Better than my time at the throne, that's for sure.",
+    AUTUMN = "I guess some things do get better with time.",
+    WINTER = "Durians at this time of the year? Such a luxury.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Ugh, next time go easy on the berries."

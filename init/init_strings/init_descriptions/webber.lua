@@ -620,3 +620,11 @@ DESCRIBE.WATHOM_CORPSE = "Uhh... Where's the skeleton?"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Doesnt shield me from getting shivers."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Writers, please write something clever here.\nMention the fact you need fire or something idk"
 DESCRIBE.UM_THULECITE_RAZOR= "I watched my grand-grand-grand-grand-grand-grandfather use one of these."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Our nose doesn't like it, but our tummy does."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It tasted like the wet ground.",
+    SUMMER = "It was okay, but we'd rather have a cold popsicle.",
+    AUTUMN = "Yum! It's all fluffy and weird.",
+    WINTER = "We've never felt so fancy in the snow!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I don't think that's our tummy rumbling."

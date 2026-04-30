@@ -592,3 +592,11 @@ DESCRIBE.WATHOM_CORPSE = "Not done yet"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Pretty hard shell"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Too cold!"
 DESCRIBE.UM_THULECITE_RAZOR= "Orange sharp"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Flat belly stuff"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Smelly!",
+    SUMMER = "Still Smelly!",
+    AUTUMN = "Yummy!",
+    WINTER = "Very Yummy! ",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Funny boom belly stuff"

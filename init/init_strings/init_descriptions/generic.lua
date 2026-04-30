@@ -714,3 +714,12 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
 DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The scent is... statistically significant."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "The novelty has certainly washed away by the rain.",
+    SUMMER = "It was good, but I could have saved it for later.",
+    AUTUMN = "A sophisticated flavor for this time of the year.",
+    WINTER = "A tropical anomaly in the dead of winter!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I'm over the moon for this pie."
+DESCRIBE.UM_CHILES_EN_NOGADA = "My mouth waters just looking at it!"

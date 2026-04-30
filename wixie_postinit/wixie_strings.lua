@@ -669,3 +669,11 @@ DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "You didn't have anything better than a rock?"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Hey! Using ice as a shield's not fair!"
 DESCRIBE.UM_THULECITE_RAZOR= "I don't care about this!!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Not quite my favorite, but I wouldn't pass a pancake!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Yeah... when's the blueberry flavored one, though?",
+    SUMMER = "A little more sticky than I'm used to, but tastes fine otherwise.",
+    AUTUMN = "Mum would be proud of me eating my greens, heh.",
+    WINTER = "And they told me we'd go a whole season without pancakes! Guess who was wrong?",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Makes a mess, but that's half the fun!"

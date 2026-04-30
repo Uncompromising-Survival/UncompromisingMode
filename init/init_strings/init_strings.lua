@@ -388,18 +388,20 @@ STRINGS.STANTON_POET3 = { "If you draw against his hand, you can never win." }
 STRINGS.STANTON_POET4 = { "Go ahead... drink with the living dead." }
 STRINGS.STANTON_POET5 = { "Drink with the living dead." }
 
-
 STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS = "Prevents Knockback"
 STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING = "Immunity to Hayfever"
-STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces Hunger Drain"
-STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns Friendly Al-'eyes'"
-STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Sanity For Spectacle"
-STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns Friendly Vipers"
-STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
+STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces hunger drain"
+STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns friendly al-'eyes'"
+STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Entertaining with a spectacle"
+STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns friendly Vipers"
+STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks your attackers"
+STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE = "Exotic out of season"
+STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE = "Will blow you away!"
+STRINGS.UI.COOKBOOK.UM_BOOM_TART = "Will blow others away!"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing"
 
 STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy

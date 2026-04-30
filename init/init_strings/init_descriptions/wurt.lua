@@ -615,3 +615,11 @@ ANNOUNCE.ANNOUNCE_BUTTERFLY_SLIP = {"Hee-hee, chasing is fun.",
 DESCRIBE.WATHOM_CORPSE = "Florp! He bubbling!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Ghrr! Why it so hard!?"
 DESCRIBE.UM_THULECITE_RAZOR= "Yucky mucky gooey ooey razor... florp."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Best snack! Stinks like swamp!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Glorp, me wanted to save for later...",
+    SUMMER = "Too hot for stinky pancake... but very yummy!",
+    AUTUMN = "Mmm... pokey. Better than crunchy leaves, florp!",
+    WINTER = "Oooh, tastes best cold!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "This yummy, but... looks kinda scary, glurp."

@@ -714,3 +714,12 @@ DESCRIBE.WATHOM_CORPSE = "Rise! Rise again!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "Held prison. Restores integrity. Deadly and efficient."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Elemental counter, required."
 DESCRIBE.UM_THULECITE_RAZOR= "Cuts deep. Double harvest."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Unable to digest. Undesireable to digest."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Experience, unpleasent. Senses, unimpressed.",
+    SUMMER = "Texture, ruined by heat. Meat, not just preferred, needed.",
+    AUTUMN = "Impressive hunt, not quite. Impressive harvest, perhaps.",
+    WINTER = "Rare flavor for season. Senses, surprised. Taste, \"Exotic\".",
+}
+DESCRIBE.UM_RICE_PUDDING = "And yet, no."
+DESCRIBE.UM_BOOMBERRYPIE = "Writhing, suspicious..."
