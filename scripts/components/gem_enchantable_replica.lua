@@ -4,20 +4,40 @@ local GEM_LOOKUP, INVERTED_GEM_LOOKUP = DEFS.GEM_LOOKUP, DEFS.INVERTED_GEM_LOOKU
 
 local GemEnchantable = Class(function(self, inst)
     self.inst = inst
-    self._enchants = net_smallbytearray(inst.GUID, "gemology.enchants", "gemology.onenchantsdirty")
-    self._enchant_durabilty = net_string(inst.GUID, "gemology.enchant_durability", "gemology.enchant_durabilitydirty") --I'm not too fond of this approach.
+
+    self._enchant_data = net_string(inst.GUID, "gemology.enchant_data", "gemology.enchant_datadirty")
+    self.enchant_data = {}
+    --[enchantment name] = {t(ier), d(urability)}
+
+    self.inst:ListenForEvent("gemology.enchant_datadirty", function(inst)
+        self.enchant_data = json.decode(self._enchant_data:value())
+    end)
 
     self._slots = net_int(inst.GUID, "gemology.slots", "gemology.onslotsdirty")
-
-    self.enchant_durabilty = {}
-
-    self.inst:ListenForEvent("gemology.enchant_durabilitydirty", function(inst)
-        self.enchant_durabilty = json.decode(self._enchant_durabilty:value())
-    end)
 end)
 
-function GemEnchantable:SetEnchantments(enchants)
-    self._enchants:set(enchants)
+function GemEnchantable:GetEnchantments()
+    return self.enchant_data
+end
+
+function GemEnchantable:GetEnchantmentTier(enchantment)
+    return self.enchant_data[enchantment].t
+end
+
+function GemEnchantable:GetEnchantmentDurability(enchantment)
+    return self.enchant_data[enchantment].d
+end
+
+function GemEnchantable:HasEnchantment(enchantment)
+    return self.enchant_data[enchantment] ~= nil
+end
+
+function GemEnchantable:GetEnchantmentNames()
+    local names = {}
+    for name, data in pairs(self.enchant_data) do
+        table.insert(names, name)
+    end
+    return names
 end
 
 function GemEnchantable:GetSlots()
@@ -27,40 +47,21 @@ end
 function GemEnchantable:GetLowestGemDurability()
     local lowest = nil
     local enchant = nil
-    for _enchant, durability in pairs(self.enchant_durabilty) do
-        if lowest == nil or durability < lowest then
-            lowest = durability
-            enchant = _enchant
+    local tier = nil
+
+    for name, data in pairs(self.enchant_data) do
+        if lowest == nil or data.d ~= nil and data.d < lowest then
+            lowest = data.d
+            enchant = name
+            tier = data.t
         end
     end
-    return enchant, lowest
+
+    return enchant, lowest, tier
 end
 
 function GemEnchantable:IsEnchanted()
     return next(self:GetEnchantments()) ~= nil
-end
-
-function GemEnchantable:SetEnchantmentsFromNames(enchant_names)
-    local _enchants = {}
-    for _, enchant in ipairs(enchant_names) do
-        table.insert(_enchants, INVERTED_GEM_LOOKUP[enchant])
-    end
-    self:SetEnchantments(_enchants)
-end
-
-function GemEnchantable:GetEnchantments()
-    return self._enchants:value()
-end
-
-function GemEnchantable:GetEnchantmentNames()
-    local enchants = self:GetEnchantments()
-    local names = {}
-
-    for k, v in pairs(enchants) do
-        table.insert(names, GEM_LOOKUP[v])
-    end
-
-    return names
 end
 
 return GemEnchantable
