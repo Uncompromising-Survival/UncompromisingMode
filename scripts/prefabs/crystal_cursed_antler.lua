@@ -62,6 +62,7 @@ local function onattack(inst, attacker, target)
         inst.components.rechargeable:IsCharged() then
         local x1, y1, z1 = inst.Transform:GetWorldPosition()
 
+
         local owner = inst.components.inventoryitem:GetGrandOwner()
 
         for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "cursedantler" })) do
@@ -76,6 +77,9 @@ local function onattack(inst, attacker, target)
         inst.components.rechargeable:Discharge(5)
 
         local x, y, z = target.Transform:GetWorldPosition()
+        local ice_circle = SpawnPrefab("antler_ice_circle")
+        ice_circle.Transform:SetPosition(x, y, z)
+
         for i = 1, 4 do
             local icefx = SpawnPrefab("icespike_fx_" .. i)
             icefx.Transform:SetPosition(x + math.random(-1.5, 1.5), 0, z + math.random(-1.5, 1.5))
@@ -83,8 +87,7 @@ local function onattack(inst, attacker, target)
 
         local follower = target.components.follower and target.components.follower:GetLeader() and target.components.follower:GetLeader():HasTag("player")
         if target.components.health and not target.components.health:IsDead() and target.components.combat and not (target:HasAnyTag("companion", "abigail") or follower) then
-            --target.components.health:DoDelta(-66 * 200, false, attacker, false, attacker)
-            target.components.combat:GetAttacked(attacker, 66, nil)
+            target.components.combat:GetAttacked(attacker, 0, inst, nil, {planar = 99})
         end
 
         if target.components.freezable and not target.components.freezable:IsFrozen() and target.components.health and not target.components.health:IsDead() and not
@@ -98,7 +101,7 @@ local function onattack(inst, attacker, target)
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                 if v.components.combat and not (v.components.health and v.components.health:IsDead()) and not
                     (v.components.follower and v.components.follower:GetLeader() and v.components.follower:GetLeader():HasTag("player")) then
-                    v.components.combat:GetAttacked(attacker, 34, nil)
+                    v.components.combat:GetAttacked(attacker, 34, inst, nil, {planar = 17})
 
                     if v.components.freezable and not v.components.freezable:IsFrozen() and v.components.health and not v.components.health:IsDead() then
                         v.components.freezable:AddColdness(0.5)
@@ -143,6 +146,10 @@ local function fn()
     inst.components.weapon:SetDamage(34)
     inst.components.weapon:SetOnAttack(onattack)
 
+    inst:AddComponent("planardamage")
+    inst.components.planardamage:SetBaseDamage(17)
+
+
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("shadowlevel")
@@ -160,4 +167,73 @@ local function fn()
     return inst
 end
 
-return Prefab("crystal_cursed_antler", fn, assets)
+local no_slow = { "INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player" }
+
+local function OnUpdateIceCircle(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, 3, { "_combat" }, no_slow)
+    for i, v in ipairs(ents) do
+        local debuffkey = inst.prefab
+        if v.components.locomotor then
+            v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
+            v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
+                if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
+                    guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                    if guy.um_ice_circle then
+                        guy.um_ice_circle:Cancel()
+                        guy.um_ice_circle = nil
+                    end
+                end
+            end)
+        end
+
+        if v.components.freezable ~= nil and
+            not v.components.freezable:IsFrozen() and
+            v.components.freezable.coldness < v.components.freezable:ResolveResistance() * (inst.freezelimit or 1)
+        then
+            v.components.freezable:AddColdness(.1, 1, inst.freezelimit ~= nil)
+        end
+    end
+end
+
+local function antler_ice_circle_fn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddSoundEmitter()
+    inst.entity:AddNetwork()
+    inst:AddTag("FX")
+    inst:AddTag("NOCLICK")
+
+    inst.AnimState:SetBank("deer_ice_circle")
+    inst.AnimState:SetBuild("deer_ice_circle")
+    inst.AnimState:PlayAnimation("impact")
+    inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    inst.AnimState:SetSortOrder(3)
+    inst.AnimState:SetScale(1.0, 1.0)
+    inst.persists = false
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.freezelimit = 0.7
+
+    inst.Transform:SetRotation(math.random() * 360)
+
+    inst:DoTaskInTime(8, function(inst)
+        inst.AnimState:PlayAnimation("pst")
+        inst:ListenForEvent("animover", inst.Remove)
+    end)
+
+    inst:AddComponent("updatelooper")
+    inst.components.updatelooper:AddOnUpdateFn(OnUpdateIceCircle)
+
+    return inst
+end
+
+return Prefab("crystal_cursed_antler", fn, assets),
+    Prefab("antler_ice_circle", antler_ice_circle_fn, assets)

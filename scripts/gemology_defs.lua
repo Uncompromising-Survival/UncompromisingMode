@@ -274,7 +274,7 @@ local function addRandomGemEffects(inst)
         local enchant = valid_enchants[math.random(#valid_enchants)]
         if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                      --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                          --don't consume a slot when adding extra enchant.
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
@@ -930,4 +930,4 @@ AddUMGemDef("bluegem2", {
     }
 })
 
-return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP}
+return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP }
