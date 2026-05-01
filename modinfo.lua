@@ -97,10 +97,10 @@ configuration_options = {
     ------------------------------
     -- Beta Compatibility --
     ------------------------------
-    --	Header("DST Beta Compatibility"),
+    --    Header("DST Beta Compatibility"),
     ------------------------------
-    --	BinaryConfig("beta_compatibility", "March QoL Beta", "This will enable proper compatibility for the beta Crafting, Ancient Guardian, and Varg Waves features.", false),|
-    --	SkipSpace(),
+    --    BinaryConfig("beta_compatibility", "March QoL Beta", "This will enable proper compatibility for the beta Crafting, Ancient Guardian, and Varg Waves features.", false),|
+    --    SkipSpace(),
 
     ------------------------------
     -- Core Gameplay --
@@ -250,7 +250,7 @@ configuration_options = {
     BinaryConfig("woby_hunger_classic", "Classic Woby Hunger Meter",
         "Enables the classic Uncompromising Mode version of Woby's hunger meter.",
         true),
-    --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),			
+    --BinaryConfig("wixie_birds", "Wixie: Slingshot Nerfs", "Slingshots can't hit birds & rabbits.", true),            
     BinaryConfig("funny rat", "Winky", "Enable Uncompromising Mode's Winky, the Vile Vermin.", true),
     BinaryConfig("holy fucking shit it's wathom", "Wathom", "Enable Uncompromising Mode's Wathom, the Forgotten Parody.",
         true),
@@ -291,6 +291,7 @@ configuration_options = {
         "Holding Bernie prevents shadows from aggroing.", true),
     BinaryConfig("wendy", "Wendy", "Petals inside Sisturn decay into Mourning Glory.", true),
     BinaryConfig("wx78", "WX-78", "No longer heals from lightning.", true),
+    BinaryConfig("wx78_backupbody", "WX-78 - Backup Chassis", "Stats are no longer saved per Backup Chassis, except Shield.", true),
     --BinaryConfig("wxless", "WX-78 - Rework",
     --    "Changes the way WX's charge and circuit systems works, alongside the effects of circuits", true),
     --BinaryConfig("wxlessspeedbump", "WX Speed circuit collision",
@@ -505,20 +506,20 @@ configuration_options = {
 ------------------------------
 -- Gamemode --
 ------------------------------
-	Header("Gamemode"),
+    Header("Gamemode"),
 ------------------------------
-	{
-		name = "gamemode",
-		label = "Mode",
-		hover = "Currently, there are no other modes.", --"Choose gamemode. 1) Original Uncompromising version (default settings). 2) Mod is enabled after first Fuelweaver is defeated. 3) Choose custom settings.",
-		options =
-		{
-			{description = "Uncompromising", data = 0}, -- TODO: When this is selected, disable the below ones (gray them out)
-			--{description = "Custom", data = 2}, --TODO: On custom, enable editing the below settings
-		},
-		default = 0,
-	},
-	SkipSpace(),
+    {
+        name = "gamemode",
+        label = "Mode",
+        hover = "Currently, there are no other modes.", --"Choose gamemode. 1) Original Uncompromising version (default settings). 2) Mod is enabled after first Fuelweaver is defeated. 3) Choose custom settings.",
+        options =
+        {
+            {description = "Uncompromising", data = 0}, -- TODO: When this is selected, disable the below ones (gray them out)
+            --{description = "Custom", data = 2}, --TODO: On custom, enable editing the below settings
+        },
+        default = 0,
+    },
+    SkipSpace(),
 ]]
 
     ------------------------------
@@ -592,7 +593,7 @@ configuration_options = {
     Header("Items and Structures"),
     -----------------------------
 
-	BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
+    BinaryConfig("inventory_backpacks", "Backpacks and Alikes", "When empty, backpacks can be stored in chests and inventories.", true),
     BinaryConfig("infinite_blueprints", "Blueprints", "Blueprints are no longer consumed when reading.", true),
     BinaryConfig("funcap_fun", "Funcap Rework", "Changes Funcaps to have a bone crushing surprise, aside from Lunar Funcap.", true),
     BinaryConfig("celestialitems_revert", "Celestial Altar Item Changes", "Glass tools can not be prototyped. Recipes are more expensive.", true),
@@ -602,11 +603,11 @@ configuration_options = {
     true),--false),
     BinaryConfig("cooldown_orangestaff_", "Cooldown Based Lazy Explorer",
         "Lazy Explorer no longer has durabilty, but instead has cooldown, like Wanda's watches.\nSuggested by Lux.",
-	true),--false),
-		
+    true),--false),
+        
     BinaryConfig("pocket_powertrip_", "Clothing Pockets", "Gives some underused dress items pockets.", true),
 
-	
+    
     BinaryConfig("compostoverrot", "Compost Replaces Rot", "Compost replaces Rot in most recipes. Keep in mind the Composting Bin is buffed.\nBooster Shots take Red Caps instead.", true),
     BinaryConfig("cookiecutterhat", "Cookie Cutter Hat",
         "Cookie Cutter Caps now reflects some damage back at the attacker.", true),
@@ -793,44 +794,44 @@ configuration_options = {
     Header("Wave Changes"),
 
     --[[ This section has overlap with a vanilla update.
-	BinaryConfig("vargwaves", "Vargs in Hound Waves", "In the lategame, vargs will accompany hounds in houndwaves.", true),
-	{
-		name = "vargwaves grace",
-		label = "Varg Grace Period.",
-		hover = "Vargs cannot spawn in hound waves until this amount of days have passed.",
-		options =
-		{
-			{description = "No grace period.", data = 0},
-			{description = "20 days", data = 20},
-			{description = "40 days", data = 40},
-			{description = "60 days", data = 60},
-			{description = "70 days", data = 70},
-			{description = "80 days", data = 80},
-			{description = "100 days", data = 100},
-			{description = "120 days", data = 120},
-			{description = "140 days", data = 140},
-			{description = "160 days", data = 160},
-			{description = "180 days", data = 180},
-			{description = "200 days", data = 200},
-		},
-		default = 100,
-	},
-	{
-		name = "vargwaves delay",
-		label = "Delay Between Varg Spawns.",
-		hover = "Vargs cannot spawn before this amount days have passed since the last Varg spawn.",
-		options =
-		{
-			{description = "No grace period.", data = 0},
-			{description = "5 days", data = 5},
-			{description = "10 days", data = 10},
-			{description = "15 days", data = 15},
-			{description = "20 days", data = 20},
-			{description = "25 days", data = 25},
-			{description = "30 days", data = 30},
-		},
-		default = 15,
-	},
+    BinaryConfig("vargwaves", "Vargs in Hound Waves", "In the lategame, vargs will accompany hounds in houndwaves.", true),
+    {
+        name = "vargwaves grace",
+        label = "Varg Grace Period.",
+        hover = "Vargs cannot spawn in hound waves until this amount of days have passed.",
+        options =
+        {
+            {description = "No grace period.", data = 0},
+            {description = "20 days", data = 20},
+            {description = "40 days", data = 40},
+            {description = "60 days", data = 60},
+            {description = "70 days", data = 70},
+            {description = "80 days", data = 80},
+            {description = "100 days", data = 100},
+            {description = "120 days", data = 120},
+            {description = "140 days", data = 140},
+            {description = "160 days", data = 160},
+            {description = "180 days", data = 180},
+            {description = "200 days", data = 200},
+        },
+        default = 100,
+    },
+    {
+        name = "vargwaves delay",
+        label = "Delay Between Varg Spawns.",
+        hover = "Vargs cannot spawn before this amount days have passed since the last Varg spawn.",
+        options =
+        {
+            {description = "No grace period.", data = 0},
+            {description = "5 days", data = 5},
+            {description = "10 days", data = 10},
+            {description = "15 days", data = 15},
+            {description = "20 days", data = 20},
+            {description = "25 days", data = 25},
+            {description = "30 days", data = 30},
+        },
+        default = 15,
+    },
 ]]
     SkipSpace(),
 
@@ -841,7 +842,7 @@ configuration_options = {
     SkipSpace(),
 
     Header("Bats"),
-    --	BinaryConfig("hardbatilisks", "Harder Batilisks", "Batilisk's health is increased from 50 to 75, drops Wings less often than vanilla, and drops Monster Morsels.", true),
+    --    BinaryConfig("hardbatilisks", "Harder Batilisks", "Batilisk's health is increased from 50 to 75, drops Wings less often than vanilla, and drops Monster Morsels.", true),
     BinaryConfig("adultbatilisks", "Adult Batilisks",
         "Adult Batilisks spawn under certain conditions instead of regular ones. They are harder, but have better loot on average.",
         true),
@@ -990,7 +991,7 @@ configuration_options = {
         -- "Daywalker can be customized to spawn on the surface or in the caves.",
         -- options = {
             -- { description = "Random", data = "random" }, 
-			-- { description = "Caves", data = "caves" },
+            -- { description = "Caves", data = "caves" },
             -- { description = "Surface", data = "surface" } },
         -- default = "random"
     -- },
@@ -1123,7 +1124,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },	
+    },    
     {
         name = "deerclops_health_",
         label = "Deerclops's Health",
@@ -1193,7 +1194,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },	
+    },    
     {
         name = "hoodedwidow_health_",
         label = "Hooded Widow's Health",
@@ -1305,7 +1306,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },	
+    },    
     {
         name = "shadowpieces_health_",
         label = "Shadow Pieces's Health",
@@ -1361,7 +1362,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },	
+    },    
     {
         name = "mock_dragonfly_health_",
         label = "Wilting Dragonfly's Health",
@@ -1375,7 +1376,7 @@ configuration_options = {
             { description = "Uncomp. (x3)",   data = 3, hover = "All drops are doubled!" },
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
-    },	
+    },    
     --{
         --name = "mothergoose_health_",
         --label = "ROG Goose's Health",
@@ -1391,7 +1392,7 @@ configuration_options = {
         --default = 1
     --},
 
-    --	BinaryConfig("crabking_claws", "Crabking Fight Adjustment", "The Crabkings imposing claws now deal 500 damage to the king when killed.", false),
+    --    BinaryConfig("crabking_claws", "Crabking Fight Adjustment", "The Crabkings imposing claws now deal 500 damage to the king when killed.", false),
     SkipSpace(),
     Header("Small Giants' Adjustments"),
     {
@@ -1436,10 +1437,10 @@ configuration_options = {
             { description = "Unrelent. (x4)", data = 4, hover = "All drops are doubled! 50% chance for each drop to be tripled." } },
         default = 1
     },
-	
+    
     SkipSpace(),
     SkipSpace(),
-	SkipSpace(),	
+    SkipSpace(),    
 
     -----------------------------
     -- Experimental --
@@ -1456,15 +1457,15 @@ configuration_options = {
     BinaryConfig("eyebrellarework", "Eyebrella Rework",
         "Eyebrella stats restored to Vanilla value, must be repaired with Milky Whites, 12 day durability. Isn't affected by clothing degradation.",
         false),
-    --	BinaryConfig("MutExt_beta", "Mutation Extrapolation", "Eyes to lie, mouthes to blind, skin to shed.", false),
-    --	BinaryConfig("shiversprites_enabled", "Shiversprites", "Something new waits out in the frozen tundra.", false),
+    --    BinaryConfig("MutExt_beta", "Mutation Extrapolation", "Eyes to lie, mouthes to blind, skin to shed.", false),
+    --    BinaryConfig("shiversprites_enabled", "Shiversprites", "Something new waits out in the frozen tundra.", false),
     SkipSpace(),
 
     -----------------------------
     -- Legacy Options --
     -----------------------------
     Header("> Legacy Options <"),
-    -----------------------------	
+    -----------------------------    
     BinaryConfig("durability", "Clothing Degradation",
         "Winter and Rain protection clothing items become less effective when their durability drops.", false),
     BinaryConfig("pinelings", "Pinelings",
@@ -1513,7 +1514,7 @@ configuration_options = {
         "[Developer Tool] Prints the exact rat sniff values to chat to be viewed in real time.", false),
     BinaryConfig("_uncompromising_spawnprotection", "Improved Spawnprotection",
         "Spawnprotection triggers more often and for longer, more likely to save laggy players in transition.", true),
-    --	BinaryConfig("chartest_tools", "[DEV] Character Tools","[Developer Tool] Certain characters spawn with items that help test their mechanics.",false),
+    --    BinaryConfig("chartest_tools", "[DEV] Character Tools","[Developer Tool] Certain characters spawn with items that help test their mechanics.",false),
     SkipSpace(),
 
     -----------------------------
@@ -1528,33 +1529,33 @@ configuration_options = {
     -- I will not explain what's going on below!
     -- Mara =)
 
-    --	Header("General"),
+    --    Header("General"),
     --  BinaryConfig("all_must_be_gathered", "All must be gathered", "Before you can proceed...", true),
     BinaryConfig("um_shave_mode", "Shave Together Mode", "Tired of the normal gameplay loop? Enable for a more razorful experience!", false),
     BinaryConfig("um_shrink", "Don't Shrink", "Shrink when losing Health / Hunger, become flat when insane.", false),
     BinaryConfig("um_advertisements", "Fun Mode", "Enables FUN new messages for an enhanced experience!", false),
     BinaryConfig("maraboss_bottomtext", "JUDGEMENT", "Enables a particular lunar mutation. Yup!", false),
     BinaryConfig("uncompromising_1hp", "MLG 1 HKO", "Canis has wrought your Doom.", false),
-    --	BinaryConfig("boat_go_vroom", "Boat Tweak", "Allows greater player agency in directing boats.", false),
-    --	BinaryConfig("self_combusting_traps", "Burningable Traps", "Back by unpopular demand! Conceptually expanded.", false),
-    --	BinaryConfig("rat_arson", "Illegalize Rats", "Rats are now illegal. Please inform them of this.", false),
+    --    BinaryConfig("boat_go_vroom", "Boat Tweak", "Allows greater player agency in directing boats.", false),
+    --    BinaryConfig("self_combusting_traps", "Burningable Traps", "Back by unpopular demand! Conceptually expanded.", false),
+    --    BinaryConfig("rat_arson", "Illegalize Rats", "Rats are now illegal. Please inform them of this.", false),
     SkipSpace()
 
-    --	Header("Character Additions"),
-    --	BinaryConfig("wigfrid_peak_performance", "Wigfrid Performance Buff", "Buffs Wigfrid's performance in general.", false),
-    --	BinaryConfig("winky_eat_books", "Winky Books", "Winky can now eat books to obtain their(?) knowledge.", false),
-    --	BinaryConfig("wathom_inhaler_real", "Wathom UnNerf", "Fixed Wathom's inhaler.", false),
-    --	BinaryConfig("postthefunnytombstone", "Wathom Death Mode", "Made Wathom's death more impactful.", false),
-    --	BinaryConfig("wixiegun_uno_reverse", "Wixie Gun", "For her neutral special...", false),
-    --	BinaryConfig("hyuyu_that", "HyuYIRP", "Hyuyu is over. We finally did it.", false),
-    --	BinaryConfig("wolfgang_commits_golf_emoji", "Golfwang", "SWOOSH", false),
-    --	BinaryConfig("addedsupremecalamitas", "Added Supreme Calamitas", "Added Supreme Calamitas.", false),
-    --	SkipSpace(),
+    --    Header("Character Additions"),
+    --    BinaryConfig("wigfrid_peak_performance", "Wigfrid Performance Buff", "Buffs Wigfrid's performance in general.", false),
+    --    BinaryConfig("winky_eat_books", "Winky Books", "Winky can now eat books to obtain their(?) knowledge.", false),
+    --    BinaryConfig("wathom_inhaler_real", "Wathom UnNerf", "Fixed Wathom's inhaler.", false),
+    --    BinaryConfig("postthefunnytombstone", "Wathom Death Mode", "Made Wathom's death more impactful.", false),
+    --    BinaryConfig("wixiegun_uno_reverse", "Wixie Gun", "For her neutral special...", false),
+    --    BinaryConfig("hyuyu_that", "HyuYIRP", "Hyuyu is over. We finally did it.", false),
+    --    BinaryConfig("wolfgang_commits_golf_emoji", "Golfwang", "SWOOSH", false),
+    --    BinaryConfig("addedsupremecalamitas", "Added Supreme Calamitas", "Added Supreme Calamitas.", false),
+    --    SkipSpace(),
 
     -----------------------------
     -- Secret Secret --
     -----------------------------
-    --	Header("Secret Secret"),
-    --	BinaryConfig("its_getting_hot_in_here", "The Hot Wind Blowing", " https://www.youtube.com/watch?v=fq3abPnEEGE ", false),
-    --	SkipSpace(),
+    --    Header("Secret Secret"),
+    --    BinaryConfig("its_getting_hot_in_here", "The Hot Wind Blowing", " https://www.youtube.com/watch?v=fq3abPnEEGE ", false),
+    --    SkipSpace(),
 }

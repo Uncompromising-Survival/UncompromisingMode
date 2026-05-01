@@ -240,6 +240,7 @@ TUNING.DSTU = {
     -- WX78
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
     WX78_CONFIG = GetModConfigData("wx78"),
+    WX78_BACKUPBODY = GetModConfigData("wx78_backupbody"),
     WXLESS = false, --GetModConfigData("wxless"),
     WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
@@ -296,9 +297,9 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
-	SNIFFER_ITEM = 40,
-	SNIFFER_PLAYER = 120,			
-	
+    SNIFFER_ITEM = 40,
+    SNIFFER_PLAYER = 120,            
+    
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
