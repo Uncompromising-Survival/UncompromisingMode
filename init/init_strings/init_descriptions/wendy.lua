@@ -181,6 +181,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Actual demons wrought to topple me!"
 DESCRIBE.MARSH_GRASS = "I have nothing to say about this."
 DESCRIBE.CURSED_ANTLER = "Life doesn't wear it down. I envy it."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Its shine won't reach the grave like it."
 DESCRIBE.BERNIEBOX = "Toys are for kids."
 DESCRIBE.HOODED_FERN = "Green and boring, like most plants."
 DESCRIBE.HOODEDWIDOW = "She could eat me in a single bite."

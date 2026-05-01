@@ -189,6 +189,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Infestation, unknown?"
 DESCRIBE.MARSH_GRASS = "Grass. Too thin, too brittle."
 DESCRIBE.CURSED_ANTLER = "Winter's King, wrath weaponized."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Lunar chill, sharpened wrath."
 DESCRIBE.BERNIEBOX = "Box."
 DESCRIBE.HOODED_FERN = "Vegetation."
 DESCRIBE.HOODEDWIDOW = "Apex Arachnid!"

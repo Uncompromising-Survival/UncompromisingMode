@@ -180,6 +180,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I preferred you when you had fewer eyes!"
 DESCRIBE.MARSH_GRASS = "Look, a bush!"
 DESCRIBE.CURSED_ANTLER = "It'll never punch out on 'ya."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "This'll put 'em on ice for sure!"
 DESCRIBE.BERNIEBOX = "If it ain't tools, I ain't interested."
 DESCRIBE.HOODED_FERN = "Did something rustle in that roughage? "
 DESCRIBE.HOODEDWIDOW = "I'll, uh, stay over here."

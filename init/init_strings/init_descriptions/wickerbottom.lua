@@ -275,6 +275,7 @@ DESCRIBE.LUREPLAGUE_RAT =
 "It appears the lureplant is acting as a parasite to the rodentia kleptomanis, is it still alive?"
 DESCRIBE.MARSH_GRASS = "A nondescript bush."
 DESCRIBE.CURSED_ANTLER = "It seems to be extraordinarily durable as a weapon."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Its form goes through a rapid recrystallization."
 DESCRIBE.BERNIEBOX = "Toys never came in packaging like this when I was a kid."
 DESCRIBE.HOODED_FERN = "Shade is its prefect environment for ferns to prosper."
 DESCRIBE.HOODEDWIDOW =

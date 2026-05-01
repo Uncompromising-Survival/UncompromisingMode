@@ -221,6 +221,8 @@ NAMES.CURSED_ANTLER = "Cursed Antler"
 SKINS.ms_twisted_antler = "Twisted Antler"
 SKINSDESC.ms_twisted_antler = "A twisted antler for a twisted person."
 
+NAMES.CRYSTAL_CURSED_ANTLER = "Crystal Cursed Antler"
+
 NAMES.UM_EXHUMER = "Exhumer"
 NAMES.UM_WINGSUIT = "Wingsuit"
 NAMES.UM_MOONFLY_LANTERN = "Moonfly Lantern"

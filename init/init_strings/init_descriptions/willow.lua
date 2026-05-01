@@ -183,6 +183,7 @@ DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.MARSH_GRASS = "Will it burn?"
 DESCRIBE.CURSED_ANTLER = "It will never leave me, unless I leave it behind."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Eww, it's going to burn my hand in a bad way!"
 DESCRIBE.BERNIEBOX = "I like to keep the packaging."
 DESCRIBE.HOODED_FERN = "I don't really see why I shouldn't burn it?"
 DESCRIBE.HOODEDWIDOW = "I am NOT getting near that!"

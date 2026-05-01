@@ -172,6 +172,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "GAH! Hairpuff scare wolfgang!"
 DESCRIBE.MARSH_GRASS = "Is mighty bush!"
 DESCRIBE.CURSED_ANTLER = "Ha! Stick is MIGHTY!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Mighty stick is bright now!"
 DESCRIBE.BERNIEBOX = "Wolfgang get turnip as child."
 DESCRIBE.HOODED_FERN = "They are different in cave."
 DESCRIBE.HOODEDWIDOW = "AAAAH! AAAAAAAAAAHH!!"

@@ -197,6 +197,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey! what is going on with you?"
 DESCRIBE.MARSH_GRASS = "Shushhshhh, be quiet..."
 DESCRIBE.CURSED_ANTLER = "Bash heads ahahaha."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Crystal is better!"
 DESCRIBE.BERNIEBOX = "Box I can open with my teeth."
 DESCRIBE.HOODED_FERN = "It is green."
 DESCRIBE.HOODEDWIDOW = "Ah! Who invited you!"
