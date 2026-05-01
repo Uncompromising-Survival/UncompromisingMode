@@ -3,6 +3,34 @@ local assets =
     Asset("ANIM", "anim/um_thicket.zip"),
 }
 
+local PF_DIMS = 4 --equal to 4x4 grid of walls
+
+local function UnregisterPathFinding(inst)
+    print("UNREGISTRING WALLS")
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:RemoveWall(x + i, 0, z + j)
+        end
+    end
+end
+
+local function RegisterPathFinding(inst)
+    print("REGISTERING WALLS")
+    inst._pfpos = inst:GetPosition()
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:AddWall(x + i, 0, z + j)
+        end
+    end
+    inst.OnRemoveEntity = UnregisterPathFinding
+end
+
 local function OnBurnt(inst)
     local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
 
@@ -26,11 +54,15 @@ local function onregenfn(inst)
         inst.components.burnable:SetBurnTime(0.75)
         inst.components.burnable:SetOnBurntFn(OnBurnt)
     end
+    print("regen, registering")
+    inst:DoTaskInTime(0, RegisterPathFinding)
 end
 
 local function makeemptyfn(inst)
     inst.AnimState:PlayAnimation("pick")
     inst.AnimState:PushAnimation("empty")
+    print("empty, unregistering")
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local function makebarrenfn(inst, wasempty)
@@ -43,6 +75,9 @@ local function makebarrenfn(inst, wasempty)
     else
         inst.AnimState:PlayAnimation("empty")
     end
+
+    print("barren,, unregistering")
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local function ToggleBusyAnimation(inst)
@@ -138,6 +173,8 @@ local function onpickedfn(inst, picker)
     inst.AnimState:PushAnimation("empty", false)
     inst:RemoveTag("briar_plants")
     inst:RemoveComponent("burnable")
+    print("picked, unregistering")
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local thicket_equipment = { "um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk" }
@@ -233,6 +270,8 @@ local function grass(name, stage)
         -- local colour = multcolour + math.random() * (1.0 - multcolour)
         -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
         -- end
+        print("startup, registering")
+        inst:DoTaskInTime(0, RegisterPathFinding)
 
         inst.entity:SetPristine()
         inst.AnimState:SetTime(math.random() * 2)
