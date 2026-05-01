@@ -174,6 +174,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Look at that! It's a rat."
 DESCRIBE.MARSH_GRASS = "It's just a bush."
 DESCRIBE.CURSED_ANTLER = "I wonder where that beast got its chilling curse."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Ooooh, even the souls are shivering around this one!"
 DESCRIBE.BERNIEBOX = "Whatever could possibly be inside?"
 DESCRIBE.HOODED_FERN = "A green bush, ripe and lush."
 DESCRIBE.HOODEDWIDOW = "Methinks we'd best be on our way!"

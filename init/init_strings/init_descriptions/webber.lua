@@ -176,6 +176,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Hey there buddy, nice eyes!"
 DESCRIBE.MARSH_GRASS = "A bush."
 DESCRIBE.CURSED_ANTLER = "Woah, look at how big it is!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "It's too big and bright for our eyes!"
 DESCRIBE.BERNIEBOX = "I want to open it, but it doesn't belong to us."
 DESCRIBE.HOODED_FERN = "Mossy and Leafy."
 DESCRIBE.HOODEDWIDOW = "We're a spider too!! Why are you attacking us?!"

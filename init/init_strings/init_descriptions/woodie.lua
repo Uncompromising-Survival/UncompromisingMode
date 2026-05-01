@@ -176,6 +176,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Not comin' for kit this time, eh?"
 DESCRIBE.MARSH_GRASS = "That's an awfully tall bush, eh?"
 DESCRIBE.CURSED_ANTLER = "This'll last us forever!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Makes me remember of the coldest of winters back home."
 DESCRIBE.BERNIEBOX = "I'm not one for stuffed things."
 DESCRIBE.HOODED_FERN = "I love the outdoors."
 DESCRIBE.HOODEDWIDOW = "That ain't no normal spider."

@@ -20,7 +20,7 @@ local NUM_DROP_SMALL_ITEMS_MAX_LIGHTNING = 5
 
 local DROPPED_ITEMS_SPAWN_HEIGHT = 10
 
-local function removecanopyshadow(inst)
+local function RemoveCanopyShadow(inst)
     if inst.canopy_data ~= nil then
         for _, shadetile_key in ipairs(inst.canopy_data.shadetile_keys) do
             if TheWorld.hooded_forest_shadetiles[shadetile_key] ~= nil then
@@ -549,7 +549,7 @@ end
 -----------------------------
 
 ---------------------------------- Saving and loading
-local function onsave(inst, data)
+local function OnSave(inst, data)
     data.previouschops = inst.previouschops
     data.chopped = inst.chopped
     data.bankType = inst.bankType
@@ -559,7 +559,7 @@ local function onsave(inst, data)
     data.reverse = inst.reverse
 end
 
-local function onload(inst, data)
+local function OnLoad(inst, data)
     if data then
         inst.previouschops = data.previouschops
         if data.chopped then
@@ -587,6 +587,33 @@ end
 --Glorious Tree Main Function GTMF
 ----------------------------------
 
+local PF_DIMS = 4 --equal to 4x4 grid of walls
+
+local function UnregisterPathFinding(inst)
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:RemoveWall(x + i, 0, z + j)
+        end
+    end
+end
+
+local function RegisterPathFinding(inst)
+    inst._pfpos = inst:GetPosition()
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:AddWall(x + i, 0, z + j)
+        end
+    end
+end
+
+
+
 local function giant_treefn()
     local inst = CreateEntity()
     inst.entity:AddTransform()
@@ -606,6 +633,8 @@ local function giant_treefn()
     inst:AddTag("shadecanopysmall")
     inst:AddTag("antlion_sinkhole_blocker")
 
+    inst:DoTaskInTime(0, RegisterPathFinding)
+
     if not TheNet:IsDedicated() then
         inst:AddComponent("distancefade")
         inst.components.distancefade:Setup(15, 25)
@@ -619,7 +648,7 @@ local function giant_treefn()
 
     inst:ListenForEvent("hascanopydirty", function()
         if not inst._hascanopy:value() then
-            removecanopyshadow(inst)
+            RemoveCanopyShadow(inst)
         end
     end)
 
@@ -648,8 +677,8 @@ local function giant_treefn()
     inst.previouschops = nil
 
     inst.partchops = 0
-    inst.OnSave = onsave
-    inst.OnLoad = onload
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
     inst:AddComponent("lightningblocker")
     inst.components.lightningblocker:SetBlockRange(TUNING.SHADE_CANOPY_RANGE_SMALL)
     inst.components.lightningblocker:SetOnLightningStrike(OnLightningStrike)
@@ -676,7 +705,8 @@ local function giant_treefn()
     inst:ListenForEvent("animover", AnimNext)
 
     inst.OnRemoveEntity = function(inst)
-        removecanopyshadow(inst)
+        RemoveCanopyShadow(inst)
+        UnregisterPathFinding(inst)
     end
 
     inst.SpawnDebris = SpawnDebris

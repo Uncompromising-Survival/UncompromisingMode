@@ -421,6 +421,7 @@ AddDeconstructRecipe("um_beegun", { Ingredient("honeycomb", 6), Ingredient("roya
 AddDeconstructRecipe("um_beegun_cherry", { Ingredient("cherry_honeycomb", 6), Ingredient("royal_jelly", 4) })
 AddDeconstructRecipe("silksack", { Ingredient("silk", 6), Ingredient("monstermeat", 2), Ingredient("spidergland", 2) })
 AddDeconstructRecipe("um_moonfly_lantern", { Ingredient("moonglass", 3), Ingredient("moonglass_charged", 3), Ingredient("moonrocknugget", 4) }) --temp moon rocks.
+AddDeconstructRecipe("crystal_cursed_antler", { Ingredient("boneshard", 4), Ingredient("purebrilliance", 4) })
 AddDeconstructRecipe("um_wingsuit", { Ingredient("malbatross_feather", 6) })
 AddDeconstructRecipe("um_exhumer", { Ingredient("boneshard", 9), Ingredient("fossil_piece", 1), Ingredient("nightmarefuel", 2) })
 
