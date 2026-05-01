@@ -150,9 +150,7 @@ end
 --end
 
 local function onequip(inst, owner)
-	inst:DoTaskInTime(0, function(inst)
-		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-	end)
+	if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
     owner.AnimState:OverrideSymbol("swap_object", "swap_beargerclaw", "swap_shovel")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")

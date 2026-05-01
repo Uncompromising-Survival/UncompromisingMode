@@ -41,9 +41,7 @@ local function OnCharged(inst)
 end
 
 local function onequip(inst, owner)
-	inst:DoTaskInTime(0, function(inst)
-		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-	end)
+	if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
 	local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())

@@ -6,9 +6,7 @@ local function AddSilk(inst)
 end
 
 local function onequip(inst, owner)
-	inst:DoTaskInTime(0, function(inst)
-		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.BODY) then return end
-	end)
+	if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.BODY) then return end
     owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "backpack")
     owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
     inst.components.container:Open(owner)
