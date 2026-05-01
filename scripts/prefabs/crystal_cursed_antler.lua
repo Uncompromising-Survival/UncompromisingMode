@@ -69,7 +69,7 @@ local function onattack(inst, attacker, target)
                 local vowner = v.components.inventoryitem:GetGrandOwner()
                 if vowner and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
                     v.components.rechargeable:Discharge(5)
-                    end
+                end
             end
         end
 
@@ -88,7 +88,7 @@ local function onattack(inst, attacker, target)
         end
 
         if target.components.freezable and not target.components.freezable:IsFrozen() and target.components.health and not target.components.health:IsDead() and not
-         (target:HasAnyTag("companion", "abigail") or follower) then
+            (target:HasAnyTag("companion", "abigail") or follower) then
             target.components.freezable:AddColdness(1)
             target.components.freezable:SpawnShatterFX()
         end
@@ -97,7 +97,7 @@ local function onattack(inst, attacker, target)
         for i, v in ipairs(ents) do
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
                 if v.components.combat and not (v.components.health and v.components.health:IsDead()) and not
-                 (v.components.follower and v.components.follower:GetLeader() and v.components.follower:GetLeader():HasTag("player")) then
+                    (v.components.follower and v.components.follower:GetLeader() and v.components.follower:GetLeader():HasTag("player")) then
                     v.components.combat:GetAttacked(attacker, 34, nil)
 
                     if v.components.freezable and not v.components.freezable:IsFrozen() and v.components.health and not v.components.health:IsDead() then
@@ -127,7 +127,7 @@ local function fn()
     inst:AddTag("cursedantler")
     inst:AddTag("vetcurse_item")
     inst:AddTag("donotautopick")
-    
+
     MakeInventoryFloatable(inst, "med", 0.2, 0.65)
 
     inst.entity:SetPristine()
