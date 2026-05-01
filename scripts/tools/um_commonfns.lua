@@ -1,7 +1,7 @@
 local UMCommonFns = {}
 
 UMCommonFns.VetcurseUnequip = function(inst, owner, slot)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
+    if not owner:HasTag("vetcurse") and owner:HasTag("player") and not owner.components.inventory.isloading then
         inst:DoTaskInTime(0, function(inst)
             --local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
             local tool = owner and owner.components.inventory:GetEquippedItem(slot)

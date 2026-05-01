@@ -314,7 +314,7 @@ local function UnequipRemoveGem(inst)
 end
 
 local function onequip(inst, owner)
-	if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
     AddGem(inst)
 
     owner.AnimState:OverrideSymbol("swap_object", "swap_crabclaw", "swap_crabclaw")

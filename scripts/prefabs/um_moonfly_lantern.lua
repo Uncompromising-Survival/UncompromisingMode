@@ -112,7 +112,7 @@ local function CheckForLight(owner)
 end
 
 local function onequip(inst, owner)
-	if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 
