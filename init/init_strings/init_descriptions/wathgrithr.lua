@@ -174,6 +174,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "A new plague arrives!"
 DESCRIBE.MARSH_GRASS = "It's a bush!"
 DESCRIBE.CURSED_ANTLER = "A magnificent weapon!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "A blade öf ice förged in the blöod öf battle!"
 DESCRIBE.BERNIEBOX = "I've no need for toys!"
 DESCRIBE.HOODED_FERN = "A beast could be lurking in the underbrush!"
 DESCRIBE.HOODEDWIDOW = "I... I am not fearful!"

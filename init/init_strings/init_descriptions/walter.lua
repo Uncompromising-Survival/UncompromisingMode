@@ -191,6 +191,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're kinda cute when you get over the extra eyes."
 DESCRIBE.MARSH_GRASS = "We could hide behind it, I guess?"
 DESCRIBE.CURSED_ANTLER = "A memento of a story-worthy fight!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "This could freeze a whole pack in their tracks!"
 DESCRIBE.BERNIEBOX =
 "That belongs to Willow, I fear what would happen if I touch it..."
 DESCRIBE.HOODED_FERN = "Leaves so big, we could use it to collect rainwater."

@@ -81,6 +81,7 @@ function c_um_vetcurseitems()
         --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
+		"crystal_cursed_antler",
     }
     for k, v in ipairs(items) do
         c_give(v)

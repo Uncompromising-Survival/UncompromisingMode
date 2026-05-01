@@ -232,6 +232,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're rat..tal... Oh no."
 DESCRIBE.MARSH_GRASS = "It's all bushy."
 DESCRIBE.CURSED_ANTLER = "Strong AND reliable!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "The antler has reached peak frigidity!"
 DESCRIBE.BERNIEBOX = "What could be inside? If only I could open it..."
 DESCRIBE.HOODED_FERN = "That fern is pretty big."
 DESCRIBE.HOODEDWIDOW = "That thing could eat a giant!!"

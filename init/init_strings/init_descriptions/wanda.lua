@@ -183,6 +183,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Oh botheration, what happened to you?"
 DESCRIBE.MARSH_GRASS = "I thought these things were lost to time."
 DESCRIBE.CURSED_ANTLER = "Quite the crude tool for my tastes."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "This will freeze them in time when I want them to."
 DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow." -- unused, unedited
 DESCRIBE.HOODED_FERN = "A new take on ferns."
 DESCRIBE.HOODEDWIDOW = "Botheration, she's huge!"

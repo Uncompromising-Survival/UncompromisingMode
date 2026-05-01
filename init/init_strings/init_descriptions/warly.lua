@@ -179,6 +179,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "I'm not on the menu!"
 DESCRIBE.MARSH_GRASS = "It provides scenery."
 DESCRIBE.CURSED_ANTLER = "I know a thing or two about bones."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Careful, the crust on this is incredibly sharp."
 DESCRIBE.BERNIEBOX = "That's one mystery I'll leave to Willow."
 DESCRIBE.HOODED_FERN = "Well, it's there."
 DESCRIBE.HOODEDWIDOW = "I don't think I'm getting any monster meat from it."

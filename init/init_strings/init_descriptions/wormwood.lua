@@ -164,6 +164,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "Friend grow in hairy stuff stealer"
 DESCRIBE.MARSH_GRASS = "Nice hair, friend!"
 DESCRIBE.CURSED_ANTLER = "Big bash stick"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Chilly head branch"
 DESCRIBE.BERNIEBOX = "Trapped inside"
 DESCRIBE.HOODED_FERN = "Big friend has good hair"
 DESCRIBE.HOODEDWIDOW = "Very big leggy bug mommy!"
