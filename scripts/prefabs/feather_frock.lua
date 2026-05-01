@@ -239,7 +239,9 @@ local function OnUse(inst)
 end
 
 local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.BODY) then return end
+	inst:DoTaskInTime(0, function(inst)
+		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.BODY) then return end
+	end)
     if inst.components.container ~= nil then
         inst.components.container:Open(owner)
     end

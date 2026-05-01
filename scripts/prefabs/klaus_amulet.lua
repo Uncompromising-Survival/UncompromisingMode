@@ -35,7 +35,9 @@ local function AddRemoveDebuff(owner)
 end
 
 local function onequip_blue(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.NECK or EQUIPSLOTS.BODY) then return end
+	inst:DoTaskInTime(0, function(inst)
+		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.NECK or EQUIPSLOTS.BODY) then return end
+	end)
     owner.AnimState:OverrideSymbol("swap_body", "torso_amulets_klaus", "redamulet")
     owner:ListenForEvent("onattackother", DoubleSlap)
     owner:ListenForEvent("newstate", AddRemoveDebuff)

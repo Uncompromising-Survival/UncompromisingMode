@@ -41,8 +41,10 @@ local function OnCharged(inst)
 end
 
 local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
-    local skin_build = inst:GetSkinBuild()
+	inst:DoTaskInTime(0, function(inst)
+		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+	end)
+	local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
         owner.AnimState:OverrideItemSkinSymbol("swap_object", "swap_" .. skin_build, "swap_twisted_antler", inst.GUID, "swap_cursed_antler")

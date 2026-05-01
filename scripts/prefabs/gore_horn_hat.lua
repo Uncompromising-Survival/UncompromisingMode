@@ -158,7 +158,9 @@ local function speedcheck(inst)
 end
 
 local function onequip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HEAD) then return end
+	inst:DoTaskInTime(0, function(inst)
+		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HEAD) then return end
+	end)
     owner.AnimState:OverrideSymbol("swap_hat", "hat_gore_horn_swap_off", "swap_hat")
 
     owner.AnimState:Show("HAT")

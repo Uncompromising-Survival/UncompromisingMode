@@ -11,7 +11,9 @@ local prefabs =
 local PROJECTILE_DELAY = 2 * FRAMES
 
 local function OnEquip(inst, owner)
-    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+	inst:DoTaskInTime(0, function(inst)
+		if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.HANDS) then return end
+	end)
     owner.AnimState:OverrideSymbol("swap_object", inst.swap, inst.swap)
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
