@@ -228,7 +228,6 @@ local prefab_post = {
     "stash_map",
     "monkeyhut",
     "lava_pond",
-    "cookiecutter",
     "junk_pile_big",
     "seastack", -- loot changes
     "ruins_bat",
@@ -534,6 +533,7 @@ end
 
 if GetModConfigData("monstersmallmeat") then
     table.insert(prefab_post, "bat")
+    table.insert(prefab_post, "cookiecutter")
 end
 
 if GetModConfigData("cookiecutterhat") then
