@@ -9,8 +9,8 @@ env.AddComponentPostInit("teacher", function (self)
             _Remove = self.inst.Remove
             self.inst.Remove = function() end
         end
-        local ret = _Teach(self, target, ...)
+        local ret = {_Teach(self, target, ...)}
         if _Remove then self.inst.Remove = _Remove end
-        return ret
+        return unpack(ret)
     end
 end)
