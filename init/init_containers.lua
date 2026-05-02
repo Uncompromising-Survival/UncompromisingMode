@@ -52,6 +52,7 @@ local wardrobe_prefabs = {
     "saddle_war",
     "saddle_wathgrithr",
     "saddle_shadow",
+    "wx78_moduleremover",
 }
 
 function CheckWardrobeItem(container, item, slot)
