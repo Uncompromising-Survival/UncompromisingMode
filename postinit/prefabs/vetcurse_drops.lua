@@ -15,9 +15,10 @@ env.AddPrefabPostInit("cherry_beequeen", function(inst) VetCurseItem(inst, "um_b
 env.AddPrefabPostInit("beequeen", function(inst) VetCurseItem(inst, "um_beegun") end)
 env.AddPrefabPostInit("bearger", function(inst) VetCurseItem(inst, "beargerclaw") end)
 env.AddPrefabPostInit("deerclops", function(inst) VetCurseItem(inst, "cursed_antler") end)
+--env.AddPrefabPostInit("mutateddeerclops", function(inst) VetCurseItem(inst, "crystal_cursed_antler") end)
 env.AddPrefabPostInit("crabking", function(inst) VetCurseItem(inst, "crabclaw") end)
 env.AddPrefabPostInit("minotaur", function(inst) VetCurseItem(inst, "gore_horn_hat") end)
-for _, dfly in pairs({"dragonfly", "mock_dragonfly"}) do
+for _, dfly in pairs({ "dragonfly", "mock_dragonfly" }) do
     env.AddPrefabPostInit(dfly, function(inst) VetCurseItem(inst, "slobberlobber") end)
 end
 env.AddPrefabPostInit("moonmaw_dragonfly", function(inst) VetCurseItem(inst, "um_moonfly_lantern") end)
@@ -29,4 +30,21 @@ env.AddPrefabPostInit("moose", function(inst) VetCurseItem(inst, "feather_frock"
 env.AddPrefabPostInit("hoodedwidow", function(inst) VetCurseItem(inst, "silksack") end)
 
 -- Not a vetcurse drop, but adding dormant conch back to crabking here since it was missing since ck rework disabled entire crabking.lua
-env.AddPrefabPostInit("crabking", function(inst) if not TheWorld.ismastersim then return end inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1) end)	
+env.AddPrefabPostInit("crabking", function(inst)
+    if not TheWorld.ismastersim then return end
+    inst.components.lootdropper:AddChanceLoot("dormant_rain_horn", 1)
+end)
+
+--trying something because the other one didn't
+env.AddPrefabPostInit("mutateddeerclops", function(inst)
+    if not TheWorld.ismastersim or inst.components.lootdropper == nil then return end
+
+    local _LootSetupFn_mutated = inst.components.lootdropper.lootsetupfn
+
+    local function LootSetupFn_mutated(lootdropper)
+        _LootSetupFn_mutated(lootdropper)
+        lootdropper:AddChanceLoot("crystal_cursed_antler", 1)
+    end
+
+    inst.components.lootdropper:SetLootSetupFn(LootSetupFn_mutated)
+end)

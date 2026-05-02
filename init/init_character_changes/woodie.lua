@@ -73,14 +73,40 @@ local function WoodieMaxHealth(inst)
 	--end)
 end
 
+local function TrueWaterproofness(inst)
+    if inst ~= nil and inst:IsValid()
+    and inst.components.moisture ~= nil
+    and inst:HasTag("weregoose")
+    and inst.components.skilltreeupdater:IsActivated("woodie_curse_goose_2") then
+        inst.components.moisture:SetInherentWaterproofness(2.0)
+    end
+end
+
+local function OnStartWerePlayer(inst)
+    inst:DoTaskInTime(1, TrueWaterproofness)
+end
+
+local function OnSkillActivated(inst, data)
+    if data and data.skill == "woodie_curse_goose_2" then
+        inst:DoTaskInTime(1, TrueWaterproofness)
+    end
+end
+
 AddPrefabPostInit("woodie", function(inst)
     if not GLOBAL.TheWorld.ismastersim then
         return
     end
+    
     if TUNING.DSTU.WOODIE_WET_GOOSE then
         inst:DoTaskInTime(GLOBAL.TUNING.WEREGOOSE_RUN_DRAIN_TIME_DURATION, OnGooseOverWater)
     end
 
+    -- Rejoin/load check delay so ProcessConfiguration loads skills first
+    inst:DoTaskInTime(2, TrueWaterproofness)
+
+    inst:ListenForEvent("startwereplayer", OnStartWerePlayer)
+    inst:ListenForEvent("skilltree_activated", OnSkillActivated)
+    
     --if config_skilltrees then
         --inst:DoPeriodicTask(TUNING.ORANGEAMULET_ICD, pickup_UM_Beaver) --, nil, inst)
 		--inst:DoPeriodicTask(0, WoodieMaxHealth)

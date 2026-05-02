@@ -60,6 +60,7 @@ local wardrobe_prefabs = {
     "saddle_shadow",
     "bedroll_straw",
     "bedroll_furry",
+    "wx78_moduleremover",
 }
 
 local wardrobe_noprefabs = {
@@ -996,7 +997,7 @@ end
 function containers.params.um_gemologyforge.widget.buttoninfo.validfn(inst)
     local tool = inst.replica.container:GetItemInSlot(1)
     local gem = inst.replica.container:GetItemInSlot(2)
-    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and tool.replica.gem_enchantable._slots:value() > 0 and gem ~= nil and not table.contains(tool.replica.gem_enchantable:GetEnchantmentNames(), gem.prefab)
+    return inst.replica.container ~= nil and inst.replica.container:IsFull() and tool ~= nil and gem ~= nil
 end
 
 if TUNING.DSTU.ICEBOX_TWEAKS then
@@ -1004,7 +1005,7 @@ if TUNING.DSTU.ICEBOX_TWEAKS then
     containers.params.icebox.lowpriorityselection = true
     local oldicebox = containers.params.icebox.itemtestfn
     function containers.params.icebox.itemtestfn(container, item, slot, ...)
-        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and table.contains(item.replica.gem_enchantable:GetEnchantmentNames(), "um_gemologybluegem2") then
+        if cooking.IsCookingIngredient(item.prefab) and not item:HasTag("smallcreature") or item.replica.gem_enchantable ~= nil and item.replica.gem_enchantable:HasEnchantment("um_gemologybluegem2") then
             return true
         end
 

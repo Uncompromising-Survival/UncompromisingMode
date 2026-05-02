@@ -81,6 +81,7 @@ function c_um_vetcurseitems()
         --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
+		"crystal_cursed_antler",
     }
     for k, v in ipairs(items) do
         c_give(v)
@@ -163,14 +164,14 @@ function c_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
-    TheNet:SystemMessage("Itemscore = " .. inst.itemscore)
+    --TheNet:SystemMessage("Itemscore = " .. inst.itemscore)
     TheNet:SystemMessage("Foodscore = " .. inst.foodscore)
     TheNet:SystemMessage("Burrowbonus = " .. inst.burrowbonus)
     TheNet:SystemMessage("Ratscore = " .. inst.ratscore)
-    if inst.ratscore > 240 then
-        inst.ratscore = 240
+    if inst.ratscore > 300 then
+        inst.ratscore = 300
     end
-    TheNet:SystemMessage("True Ratscore = " .. inst.ratscore)
+    --TheNet:SystemMessage("True Ratscore = " .. inst.ratscore)
     TheNet:SystemMessage("Timer = " .. TheWorld.components.ratcheck:GetRatTimer() .. "s")
     TheNet:SystemMessage("-------------------------")
 end

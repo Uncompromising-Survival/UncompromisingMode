@@ -240,6 +240,7 @@ TUNING.DSTU = {
     -- WX78
     WX78_MOISTURE_DAMAGE_INCREASE = 3,
     WX78_CONFIG = GetModConfigData("wx78"),
+    WX78_BACKUPBODY = GetModConfigData("wx78_backupbody"),
     WXLESS = false, --GetModConfigData("wxless"),
     WXLESSSPEEDBUMP = false, --GetModConfigData("wxlessspeedbump"),
 
@@ -296,6 +297,9 @@ TUNING.DSTU = {
     RAIDRAT_BUFFED_WALKSPEED = 6,
     RAIDRAT_SPAWNRATE = seg_time / 5,
     RAIDRAT_SPAWNRATE_VARIANCE = (seg_time / 5) * 0.5,
+    SNIFFER_ITEM = 40,
+    SNIFFER_PLAYER = 120,            
+    
     PIEDPIPER_TOOT_RANGE = 25,
     -- Weather Start Date
     WEATHERHAZARD_START_DATE_AUTUMN = GetModConfigData("weatherhazard_autumn"),
@@ -348,6 +352,8 @@ TUNING.DSTU = {
     ORANGESTAFF_COOLDOWN_3 = 15,
     ORANGESTAFF_DISTANCE_1 = 8,
     ORANGESTAFF_DISTANCE_2 = 16,
+    KOALEFANT_HEALTH = 2000,
+    KOALEFANT_STOMP_COUNTERATTACK = {MIN = 8, MAX = 12},
 
     ----------------------------------------------------------------------------
     -- Dynamic Boss Resistance
@@ -400,7 +406,7 @@ TUNING.DSTU = {
     NEWRECIPES = GetModConfigData("newrecipes"),
     CAVECLOPS = GetModConfigData("cave_clops"),
     HOTCAVES = GetModConfigData("hotcaves"),
-    ITEMCHECK = GetModConfigData("itemcheck"),
+    --ITEMCHECK = GetModConfigData("itemcheck"),
     SEEDS = GetModConfigData("seeds"),
     MAXHPDEATH = GetModConfigData("maxhpdeath"),
     MAXHPHITTERS = GetModConfigData("maxhphitters"),
@@ -559,9 +565,9 @@ TUNING.DISEASE_WARNING_TIME = total_day_time * 5
 TUNING.SANITY_BECOME_INSANE_THRESH = 40 / 200 -- 20%
 TUNING.SANITY_BECOME_SANE_THRESH = 45 / 200   -- 22.5%
 
-TUNING.WORMWOOD_BURN_TIME = TUNING.DSTU.WORMWOOD_BURN_TIME
 
 if GetModConfigData("wormwood_extrafiredmg") then
+    TUNING.WORMWOOD_BURN_TIME = TUNING.DSTU.WORMWOOD_BURN_TIME
     TUNING.WORMWOOD_FIRE_DAMAGE = TUNING.DSTU.WORMWOOD_FIRE_DAMAGE
 end
 

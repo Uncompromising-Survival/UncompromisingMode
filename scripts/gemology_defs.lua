@@ -40,28 +40,10 @@ This is so we can save some gem-specific data so it can probably revert when rem
 
 
 local GEM_DEFS = {}
-
---For clients.
---Gem enchants from gem_enchantable component are saved as a net_smallbytearray (8-bit unsigned ints, 31 max size)
---each gem gets assigned an int value here to be able to get a gem's name from the number on the client
-local INVERTED_GEM_LOOKUP = {}
 local GEM_LOOKUP = {}
-
-
---This means, in order to prevent some possibly not good consequences with clients, we limit gems to 31.
---UM uses 14/31 gems, so there`s probably enough room for IA + HAM compat + whatever else addons feel like adding.
-setmetatable(GEM_DEFS, {
-    __newindex = function(t, k, v)
-        assert(#GEM_LOOKUP < 32, "Too many gems! Max is 31 gems")
-        rawset(t, k, v)
-    end
-})
-
 
 function AddGemDef(name, def)
     GEM_LOOKUP[#GEM_LOOKUP + 1] = name
-    INVERTED_GEM_LOOKUP[name] = #GEM_LOOKUP
-
     GEM_DEFS[name] = def
 end
 
@@ -81,11 +63,11 @@ function IsEnchantValid(gem)
 end
 
 function DamageInfiniteItemGem(enchant, item, value)
-    if not item.components.finiteuses
+    if --[[not item.components.finiteuses
         and not item.components.fueled
         and not item.components.armor
         and not item.components.perishable
-        and item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
+        and]] item.components.gem_enchantable:HasDurabilityEnabled("um_gemology" .. enchant) then
         item.components.gem_enchantable:DoDurabilityDelta("um_gemology" .. enchant, -value)
     end
 end
@@ -106,8 +88,11 @@ AddUMGemDef("redgem2", {
                     target.components.health:DoFireDamage(inst.components.weapon.damage * burn_portion[tier - 1], attacker, true)
                     target.components.burnable:ExtendBurning()
                 end
-                DamageInfiniteItemGem("redgem2", inst, 0.01)
+                DamageInfiniteItemGem("redgem2", inst, 0.005)
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
         end
     },
 })
@@ -135,8 +120,11 @@ AddUMGemDef("redgem1", {
                 attacker.components.sanity:DoDelta(recover)
             end
 
-            DamageInfiniteItemGem("redgem1", inst, 0.01)
+            DamageInfiniteItemGem("redgem1", inst, 0.005)
         end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
+        end
     },
 })
 
@@ -207,7 +195,7 @@ local function SendShadowClone(item, owner, target, tier)
         local newtarget = GetRandomTargetOfSameType(owner, target)
         local angle = math.random(0, 614) / 200
         if newtarget ~= nil then
-            DamageInfiniteItemGem("greengem1", item, 0.01)
+            DamageInfiniteItemGem("greengem1", item, 0.005)
 
             local x, y, z = newtarget.Transform:GetWorldPosition()
             swilson.Transform:SetPosition(x + 1.5 * math.cos(angle), y, z + 1.5 * math.sin(angle))
@@ -254,6 +242,9 @@ AddUMGemDef("greengem1", {
             if tool and tool.actions then
                 tool.actions = item.volatile_gemology_data.um_gemologygreengem1.tool_actions
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.tool ~= nil or item.components.weapon ~= nil
         end
     }
 })
@@ -281,9 +272,9 @@ local function addRandomGemEffects(inst)
 
     while enchant_nums < max_enchants and tries > 0 do
         local enchant = valid_enchants[math.random(#valid_enchants)]
-        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchant(enchant) then --don't add already existing other enchants.
+        if IsEnchantValid(enchant) and not inst.components.gem_enchantable:HasEnchantment(enchant) and (GEM_DEFS[enchant].canapply ~= nil and GEM_DEFS[enchant].canapply(inst, tier) or GEM_DEFS[enchant].canapply == nil) then --don't add already existing other enchants.
             inst.components.gem_enchantable:AddEnchantment(enchant, tier)
-            inst.components.gem_enchantable:AddSlot(1)                                              --don't consume a slot when adding extra enchant.
+            inst.components.gem_enchantable:AddSlot(1)                                                                                                                                                                          --don't consume a slot when adding extra enchant.
             inst.persistent_gemology_data.um_gemologygreengem2.gem_effects[enchant] = tier
             enchant_nums = enchant_nums + 1
         end
@@ -331,10 +322,10 @@ AddUMGemDef("greengem2", {
             item:StopWatchingWorldState("startday", addRandomGemEffects)
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.01)
+            DamageInfiniteItemGem("greengem2", item, 0.005)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("greengem2", item, 0.01)
+            DamageInfiniteItemGem("greengem2", item, 0.005)
         end
 
     }
@@ -412,8 +403,6 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     if tier ~= 1 then
         if target:IsValid() then
-            DamageInfiniteItemGem("yellowgem2", inst, 0.01)
-
             FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
         end
         -- Dont allow arcing back upon oneself
@@ -422,7 +411,6 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
-        DamageInfiniteItemGem("yellowgem2", inst, 0.01)
 
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
@@ -430,6 +418,8 @@ local function ElectricAttack(inst, attacker, target, tier)
     if inst.components.weapon.stimuli ~= "electric" then
         inst.components.weapon:SetElectric(1, 1.75)
     end
+
+    DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 end
 
 
@@ -451,6 +441,9 @@ AddUMGemDef("yellowgem2", {
             if item.components.weapon then
                 item.components.weapon.stimuli = item.volatile_gemology_data.um_gemologyyellowgem2.old_stimuli
             end
+        end,
+        canapply = function(item, tier)
+            return item.components.weapon ~= nil
         end
     }
 })
@@ -466,12 +459,12 @@ AddUMGemDef("palegem1", {
             -- see init/init_gemology/special.lua
         end,
         onattack = function(item, attacker, target, tier)
-            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) then
+            if tier ~= 1 and AllRecipes ~= nil and (AllRecipes[item.prefab] == nil or AllRecipes[item.prefab] ~= nil and AllRecipes[item.prefab].is_deconstruction_recipe) and item.components.weapon ~= nil then
                 local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                 target.components.combat:GetAttacked(attacker, 34 / 2 * (tier - 1), nil, stimuli)
             end
 
-            DamageInfiniteItemGem("palegem1", item, 0.01)
+            DamageInfiniteItemGem("palegem1", item, 0.005)
         end
     }
 })
@@ -520,7 +513,7 @@ AddUMGemDef("palegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("palegem2", item, 0.01)
+            DamageInfiniteItemGem("palegem2", item, 0.005)
         end,
         onremove = function(item, tier)
             local old_finite = item.volatile_gemology_data.um_gemologypalegem2.old_finite
@@ -555,6 +548,9 @@ AddUMGemDef("palegem2", {
                     item.components.perishable:SetPercent(pct)
                 end
             end)
+        end,
+        canapply = function(item, tier)
+            return item.components.fueled ~= nil or item.components.finiteuses ~= nil or item.components.perishable ~= nil
         end
     }
 })
@@ -566,7 +562,7 @@ local function HambatUpdateDamage(inst)
         local dmg = TUNING.HAMBAT_DAMAGE * inst.components.perishable:GetPercent()
         dmg = Remap(dmg, 0, inst.new_max_damage and inst.new_max_damage or TUNING.HAMBAT_DAMAGE, TUNING.HAMBAT_MIN_DAMAGE_MODIFIER / 2 * TUNING.HAMBAT_DAMAGE,
             TUNING.HAMBAT_DAMAGE)
-        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchant("um_gemologypurplegem1") then
+        if dmg < 50 and inst.components.gem_enchantable ~= nil and inst.components.gem_enchantable:HasEnchantment("um_gemologypurplegem1") then
             dmg = dmg + dmg * inst.components.gem_enchantable:GetEnchantmentTier("um_gemologypurplegem1") * 0.25
         end
         inst.components.weapon:SetDamage(dmg)
@@ -584,13 +580,13 @@ AddUMGemDef("purplegem1", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            if item.tier ~= 1 then
+            if item.tier ~= 1 and item.components.weapon ~= nil then
                 local damage = item.components.weapon.damage
                 if damage < 50 and item.prefab ~= "hambat" then
                     damage = damage * tier * 0.25
                     local stimuli = item.components.weapon.stimuli and item.components.weapon.stimuli or nil
                     target.components.combat:GetAttacked(attacker, damage, nil, stimuli)
-                    DamageInfiniteItemGem("purplegem1", item, 0.01)
+                    DamageInfiniteItemGem("purplegem1", item, 0.005)
                 end
             end
         end,
@@ -665,7 +661,7 @@ local function FindUniqueBaseStructures(inst, tier)
 end
 
 local function BaseSitterAttack(item, attacker, target, tier)
-    DamageInfiniteItemGem("orangegem1", item, 0.01)
+    DamageInfiniteItemGem("orangegem1", item, 0.005)
 
     if tier ~= 1 then
         local damage = item.components.weapon.damage
@@ -685,7 +681,7 @@ AddUMGemDef("orangegem1", {
             item.structure_bonus = nil
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem1", item, 0.01)
+            DamageInfiniteItemGem("orangegem1", item, 0.005)
         end,
         onupdate = FindUniqueBaseStructures
     }
@@ -753,10 +749,10 @@ AddUMGemDef("orangegem2", {
             end
         end,
         onattack = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.01)
+            DamageInfiniteItemGem("orangegem2", item, 0.005)
         end,
         onwork = function(item, attacker, target, tier)
-            DamageInfiniteItemGem("orangegem2", item, 0.01)
+            DamageInfiniteItemGem("orangegem2", item, 0.005)
         end,
         onremove = function(item, tier)
             if item.HarvestPickable then
@@ -808,7 +804,7 @@ AddUMGemDef("bluegem1", {
                     local iceShield = SpawnPrefab("um_ice_shield")
                     iceShield:Init(attacker, "swap_body", .5 + (tier * 0.25))
                 end
-                DamageInfiniteItemGem("bluegem1", item, 0.01)
+                DamageInfiniteItemGem("bluegem1", item, 0.005)
             end
         end
     }
@@ -933,4 +929,4 @@ AddUMGemDef("bluegem2", {
     }
 })
 
-return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP, INVERTED_GEM_LOOKUP = INVERTED_GEM_LOOKUP }
+return { GEM_DEFS = GEM_DEFS, GEM_LOOKUP = GEM_LOOKUP }

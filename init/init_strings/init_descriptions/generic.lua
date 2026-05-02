@@ -232,6 +232,7 @@ DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.LUREPLAGUE_RAT = "They're rat..tal... Oh no."
 DESCRIBE.MARSH_GRASS = "It's all bushy."
 DESCRIBE.CURSED_ANTLER = "Strong AND reliable!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "The antler has reached peak frigidity!"
 DESCRIBE.HOODED_FERN = "That fern is pretty big."
 DESCRIBE.HOODEDWIDOW = "That thing could eat a giant!!"
 DESCRIBE.GIANT_TREE = "It totally blocks out the sun."
@@ -297,6 +298,9 @@ ACTIONFAIL.READ.GENERIC = "It seems the magic is inert in this state."
 ACTIONFAIL.GIVE.NOTNIGHT = "I should wait until the moon is out."
 ACTIONFAIL.SCAN_GEMOLOGY_GEM = {
     GEM_ALREADY_KNOWN = "I already know that one.",
+}
+ACTIONFAIL.UM_FORGE_GEM = {
+    NOT_COMPATIBLE = "It's not the right gem for this."
 }
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Hot dog!"
@@ -685,3 +689,12 @@ DESCRIBE.WATHOM_CORPSE = "I think he's still breathing!"
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I have nothing to fear standing behind it!"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "I should break this ice with some hot topics!"
 DESCRIBE.UM_THULECITE_RAZOR= "Thulecite razor! A classic!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The scent is... statistically significant."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "The novelty has certainly washed away by the rain.",
+    SUMMER = "It was good, but I could have saved it for later.",
+    AUTUMN = "A sophisticated flavor for this time of the year.",
+    WINTER = "A tropical anomaly in the dead of winter!",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "I'm over the moon for this pie."
+DESCRIBE.UM_CHILES_EN_NOGADA = "My mouth waters just looking at it!"

@@ -76,13 +76,10 @@ end
 
 local function OnHitOtherBurn(inst, data)
     local other = data.target
-    if other ~= nil then
-        if not (other.components.health ~= nil and other.components.health:IsDead()) then
-            if other.components.burnable ~= nil and not (other.components.rider and other.components.rider:IsRiding()) then
-                other.components.burnable:Ignite(true, inst, inst)
-				FirePoof(inst)
-			end
-        end
+    local burntarget = other.components.rideable and other.components.rideable:GetRider() or other
+    if burntarget and not (burntarget.components.health and burntarget.components.health:IsDead()) and burntarget.components.burnable then
+        burntarget.components.burnable:Ignite(true, inst, inst)
+		FirePoof(burntarget)
     end
 end
 

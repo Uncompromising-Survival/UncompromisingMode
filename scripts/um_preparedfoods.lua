@@ -119,7 +119,7 @@ local function BoomPieGo(inst, eater)
         local casualties = TheSim:FindEntities(x, y, z, 2, nil, pie_shouldnt_hit)
         if #casualties > 0 then
             for i, v in pairs(casualties) do
-                if v.components.combat and eater.components.combat:CanTarget(v) then
+                if v.components.combat and eater.components.combat:CanTarget(v) and not eater.components.combat:IsAlly(v) then
                     v.components.combat:GetAttacked(eater, 68)
                 end
             end
@@ -375,6 +375,7 @@ local um_preparedfoods =
             eater:AddDebuff("buff_boomberryattacks", "buff_boomberryattacks")
         end,
         floater = { "med", nil, .65 },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_BOOM_TART,
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "honey", 1 } } },
         warly_only = true,
     },
@@ -736,21 +737,27 @@ local um_preparedfoods =
         weight = 1,
         cooktime = 2,
         foodtype = FOODTYPE.VEGGIE,
-        perishtime = 5 * TUNING.PERISH_TWO_DAY,
+        perishtime = TUNING.PERISH_PRESERVED, --20 Days
         floater = { "med", .05, .65 },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE,
         card_def = { ingredients = { { "durian", 1 }, { "goatmilk", 1 }, { "bird_egg", 1 } } },
         oneatenfn = function(inst, eater)
             if eater and eater.components.health and eater.components.sanity then
                 if TheWorld then
-                    if TheWorld.state.isssummer then
+                    if TheWorld.state.issummer then
                         eater.components.health:DoDelta(6, true)
                         eater.components.sanity:DoDelta(20, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "SUMMER"))
                     elseif TheWorld.state.isautumn then
                         eater.components.health:DoDelta(12, true)
                         eater.components.sanity:DoDelta(40, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "AUTUMN"))
                     elseif TheWorld.state.iswinter then
                         eater.components.health:DoDelta(18, true)
                         eater.components.sanity:DoDelta(60, true)
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "WINTER"))
+                    elseif TheWorld.state.isspring then
+                        eater.components.talker:Say(GetString(eater, "ANNOUNCE_MARSHCAKE_BONUS", "SPRING"))
                     end
                 end
             end
@@ -796,6 +803,7 @@ local um_preparedfoods =
         foodtype = FOODTYPE.VEGGIE,
         perishtime = 7.5 * TUNING.PERISH_TWO_DAY,
         floater = { "med", .05, .65 },
+        oneat_desc = STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE,
         card_def = { ingredients = { { "giant_blueberry", 1 }, { "giant_blueberry", 1 }, { "giant_blueberry", 1 } } },
         oneatenfn = BoomPieGo,
     },

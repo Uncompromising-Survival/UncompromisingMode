@@ -43,6 +43,7 @@ local inventoryitems =
     "crabclaw",
     "critterlab_real",
     "cursed_antler",
+    "crystal_cursed_antler",
     "um_exhumer",
     "um_exhumer_powered",
     "um_wingsuit",
@@ -1500,6 +1501,8 @@ Assets = {
     Asset("ANIM", "anim/cursed_antler.zip"),
     Asset("ANIM", "anim/twisted_antler.zip"),
 
+    Asset("ANIM", "anim/crystal_cursed_antler.zip"),
+
     Asset("ANIM", "anim/swap_exhumer.zip"),
     Asset("ANIM", "anim/swap_exhumer_powered.zip"),
 
@@ -1674,6 +1677,8 @@ Assets = {
     Asset("ANIM", "anim/swap_crabclaw.zip"),
 
     Asset("ANIM", "anim/swap_cursed_antler.zip"),
+
+    Asset("ANIM", "anim/swap_crystal_cursed_antler.zip"),
 
     Asset("ANIM", "anim/swap_exhumer.zip"),
 

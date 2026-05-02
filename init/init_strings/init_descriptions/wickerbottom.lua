@@ -275,6 +275,7 @@ DESCRIBE.LUREPLAGUE_RAT =
 "It appears the lureplant is acting as a parasite to the rodentia kleptomanis, is it still alive?"
 DESCRIBE.MARSH_GRASS = "A nondescript bush."
 DESCRIBE.CURSED_ANTLER = "It seems to be extraordinarily durable as a weapon."
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Its form goes through a rapid recrystallization."
 DESCRIBE.HOODED_FERN = "Shade is its prefect environment for ferns to prosper."
 DESCRIBE.HOODEDWIDOW =
 "A solidary predator. It appears to be near the top of the food chain."
@@ -727,3 +728,12 @@ DESCRIBE.WATHOM_CORPSE = "The corpse appears to have expired, yet the heart is s
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "I cant complain about the results."
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Curious, it appears its frozen exterior keeps it protected."
 DESCRIBE.UM_THULECITE_RAZOR= "I'm going to pretend I didn't spend valuable resources for that."
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "The sulfurous compounds are tempered by the calcium."
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "It was just a common spring confection.",
+    SUMMER = "Eating is hardly a scholarly achievement.",
+    AUTUMN = "It was a fine use of our stored provisions.",
+    WINTER = "Its flavor against the frost is stimulating for the mind.",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "So many Boomberries in such a small space makes quite a violent reaction."
+DESCRIBE.UM_CHILES_EN_NOGADA = "A traditional Mexican delight."

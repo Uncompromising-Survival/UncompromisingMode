@@ -493,6 +493,7 @@ local prefabs = {
 
     --The Cursed!
     "cursed_antler",
+	"crystal_cursed_antler",
     "feather_frock",
     "slobberlobber",
     "beargerclaw",

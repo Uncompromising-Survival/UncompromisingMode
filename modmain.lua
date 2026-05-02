@@ -477,7 +477,11 @@ GLOBAL.feather_frock_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "feat
 
 GLOBAL.cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "cursed_antler") end
 
+GLOBAL.crystal_cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "crystal_cursed_antler") end
+
 GLOBAL.cursed_antler_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "cursed_antler") end
+
+GLOBAL.crystal_cursed_antler_init_fn = function(inst) GLOBAL.basic_clear_fn(inst, "crystal_cursed_antler") end
 
 GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "amulet_red_ground") end
 

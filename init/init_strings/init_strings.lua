@@ -391,18 +391,20 @@ STRINGS.STANTON_POET3 = { "If you draw against his hand, you can never win." }
 STRINGS.STANTON_POET4 = { "Go ahead... drink with the living dead." }
 STRINGS.STANTON_POET5 = { "Drink with the living dead." }
 
-
 STRINGS.UI.COOKBOOK.UM_BEEFALOWINGS = "Prevents Knockback"
 STRINGS.UI.COOKBOOK.UM_CALIFORNIAKING = "Immunity to Hayfever"
-STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever Relief"
-STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces Hunger Drain"
-STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns Friendly Al-'eyes'"
-STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Sanity For Spectacle"
-STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns Friendly Vipers"
-STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks Your Attackers"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Immediately Freezes Your Surroundings"
-STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases Resistance to Freezing"
+STRINGS.UI.COOKBOOK.UM_LICELOAF = "Moderate Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SEAFOODPAELLA = "Huge Hayfever relief"
+STRINGS.UI.COOKBOOK.UM_SNOTROAST = "Reduces hunger drain"
+STRINGS.UI.COOKBOOK.UM_STUFFED_PEEPER_POPPERS = "Spawns friendly al-'eyes'"
+STRINGS.UI.COOKBOOK.UM_THEATERCORN = "Entertaining with a spectacle"
+STRINGS.UI.COOKBOOK.UM_VIPERJAM = "Spawns friendly Vipers"
+STRINGS.UI.COOKBOOK.UM_ZASPBERRYPARFAIT = "Shocks your attackers"
+STRINGS.UI.COOKBOOK.UM_DURIAN_CREAM_MARSHCAKE = "Exotic out of season"
+STRINGS.UI.COOKBOOK.UM_BOOMBERRYPIE = "Will blow you away!"
+STRINGS.UI.COOKBOOK.UM_BOOM_TART = "Will blow others away!"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_SPAGETT = "Freezes your surroundings"
+STRINGS.UI.COOKBOOK.UM_RIMEWEED_TEQUILA = "Increases resistance to freezing"
 
 STRINGS.NAMES.UM_VARGLET_PET_NAMES = {
 "Cupcake", --Shy
@@ -1187,7 +1189,9 @@ STRINGS.SKILLTREE.WORMWOOD.BLOOMING_MAX_UPGRADE_DESC                = "Fertiliza
 
 STRINGS.UM_DESCRIPTOR = {
     --this is for the gem items, with "when applied to an item:" prefix.
+    GEM_TIER_PREFIX = "Quality:",
     GEMOLOGY_GEM = {
+        PREFIX = "When applied:",
         BLUE1 = {
             "Gives summer insulation when held and freezes enemies on hit.",
             "Gives summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1230,8 +1234,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Increases attack and working speed.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
-            "Increases attack and working speed.\nA shadow clone may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Increases attack and working speed.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",
@@ -1261,6 +1265,8 @@ STRINGS.UM_DESCRIPTOR = {
     },
     --this is for the items with a minerology effect, with the prefix "gemology effects:"
     GEM_ENCHANTABLE = {
+        PREFIX = "Gemology Effects:",
+        SLOTS_PREFIX = "Gem slots:",
         BLUE1 = {
             "Has summer insulation when held and freezes enemies on hit.",
             "Has summer insulation when held and freezes enemies on hit.\nHitting frozen enemies grants you an ice shield.",
@@ -1304,8 +1310,8 @@ STRINGS.UM_DESCRIPTOR = {
         },
         GREEN1 = {
             "Attacks and works faster.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
-            "Attacks and works faster.\nA shadow clone may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
+            "Attacks and works faster.\nA shadow weapon/tool may appear to assist you when attacking or working.",
         },
         GREEN2 = {
             "Copies 3 random gems of the same tier.\nGems are randomized every day.",

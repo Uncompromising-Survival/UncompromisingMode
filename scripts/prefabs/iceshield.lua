@@ -9,7 +9,7 @@ end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
     return attacker and attacker:HasTag("pierces_ice_shield")
-        or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchant("um_gemologyredgem2")
+        or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
             or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
             or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
