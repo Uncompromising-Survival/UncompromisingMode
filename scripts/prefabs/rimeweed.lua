@@ -199,6 +199,26 @@ local function Retaliate(inst)
     end
 end
 
+local function BarrierRemove(inst)
+    if not inst.nospread then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local ents = TheSim:FindEntities(x, y, z, 5, {"rimeweed"})
+        for i = 1, #ents do
+            local v = ents[i]
+            if v and v:IsValid() and v ~= inst and v.prefab == "rimeweed_barrier" then
+                v.nospread = true
+                v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
+                    if v.components.health and not v.components.health:IsDead() then
+                        v.components.health:Kill()
+                    else
+                        v:Remove()
+                    end
+                end)
+            end
+        end
+    end
+end
+
 local function BarrierDie(inst)
     --TheNet:Announce("DODEATH")
     RemovePhysicsColliders(inst)
@@ -212,7 +232,7 @@ local function BarrierDie(inst)
     if not inst.nospread then
         local x, y, z = inst.Transform:GetWorldPosition()
         for i, v in ipairs(TheSim:FindEntities(x, y, z, 5, {"rimeweed"})) do
-            if v.prefab == "rimeweed_barrier" then
+            if v ~= inst and v.prefab == "rimeweed_barrier" then
                 v.nospread = true
                 v:DoTaskInTime(.5 * inst:GetDistanceSqToInst(v) ^ .5, function(v)
                     if v.components.health and not v.components.health:IsDead() then
@@ -224,6 +244,7 @@ local function BarrierDie(inst)
             end
         end
     end
+    inst:RemoveEventCallback("onremove", BarrierRemove)
 end
 
 local function BarrierSave(inst, data)
@@ -354,6 +375,7 @@ local function barrierweed()
     inst.Transform:SetScale(multsize, multsize, multsize)
     ---------------------
     inst:ListenForEvent("attacked", Retaliate)
+    inst:ListenForEvent("onremove", BarrierRemove)
     inst:ListenForEvent("death", BarrierDie)
 
     --MakeSmallBurnableCharacter(inst, "catcoon_torso")
@@ -411,6 +433,25 @@ local function OnLoadPostPassMain(inst, newents, data)
     end
 end
 
+local function MainRemove(inst)
+    if inst.fx and inst.fx:IsValid() then
+        inst.fx:Remove()
+        inst.fx = nil
+    end
+    if #inst.bramble > 0 and not inst.nospread then
+        for i, v in ipairs(inst.bramble) do
+            if v:IsValid() then
+                if v.components.health and not v.components.health:IsDead() then
+                    v.noloot = true
+                    v.components.health:Kill()
+                else
+                    v:Remove()
+                end
+            end
+        end
+    end
+end
+
 local function MainDie(inst)
     inst:AddTag("dead")
     if inst.fx then inst.fx:Remove() end
@@ -432,19 +473,20 @@ local function MainDie(inst)
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage == 2 and not inst.noloot then
-        if math.random() < 0.25 then
+        if math.random() < .25 then
             inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
         end
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
     end
     if inst.stage >= 3 and not inst.noloot then
         inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemvine")
-        if math.random() > 0.5 then
+        if math.random() > .5 then
             inst.components.lootdropper:SpawnLootPrefab("um_rimeweed_itemflower")
         else
             inst.components.lootdropper:SpawnLootPrefab("rimeweed_whip")
         end
     end
+    inst:RemoveEventCallback("onremove", MainRemove)
 end
 
 local function PlayStagedAnim(inst)
@@ -643,6 +685,7 @@ local function mainweed()
 
     inst:AddComponent("timer")
     inst:ListenForEvent("timerdone", TimerDone)
+    inst:ListenForEvent("onremove", MainRemove)
     inst:ListenForEvent("death", MainDie)
 
     inst:AddComponent("inspectable")
