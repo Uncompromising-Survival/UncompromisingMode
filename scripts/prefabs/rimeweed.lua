@@ -42,12 +42,6 @@ local assets =
 --/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- Retaliation Spikes
 
---DSV uses 4 but ignores physics radius
-local MAXRANGE = 4
-local NO_TAGS_NO_PLAYERS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
-local NO_TAGS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed" }
-local COMBAT_TARGET_TAGS = { "_combat" }
-
 local function Freeze(v)
     -- Freeze
     --TheNet:Announce("freeze code ran")
@@ -74,12 +68,17 @@ local function TellToBuzzOff(v) -- Tell hounds and deerclops they should probabl
     end
 end
 
+local MAXRANGE = 4
+local NO_TAGS_NO_PLAYERS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "player", "companion" }
+local NO_TAGS = { "bramble_resistant", "INLIMBO", "notarget", "noattack", "flight", "invisible", "wall", "playerghost", "rimeweed" }
+local COMBAT_TARGET_TAGS = { "_combat" }
+
 local function OnUpdateThorns(inst)
     inst.range = inst.range + 1
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 2, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
-        if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat and not (v.components.inventory
-                and v.components.inventory:EquipHasTag("bramble_resistant")) then
+        if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat
+            and not (v.components.inventory and v.components.inventory:EquipHasTag("bramble_resistant")) then
             local range = inst.range + v:GetPhysicsRadius(0)
             if v:GetDistanceSqToPoint(x, y, z) < range * range then
                 if inst.owner and not inst.owner:IsValid() then
@@ -91,8 +90,6 @@ local function OnUpdateThorns(inst)
                         v.components.combat:GetAttacked(v.components.follower and v.components.follower:GetLeader() == inst.owner and inst or inst.owner, inst.damage)
                         Freeze(v)
                         TellToBuzzOff(v)
-                        --V2C: wisecracks make more sense for being pricked by picking
-                        --v:PushEvent("thorns")
                     end
                 elseif v.components.combat:CanBeAttacked() then
                     local isally = false
@@ -106,7 +103,6 @@ local function OnUpdateThorns(inst)
                         v.components.combat:GetAttacked(inst, inst.damage)
                         TellToBuzzOff(v)
                         Freeze(v)
-                        --v:PushEvent("thorns")
                     end
                 end
             end
@@ -725,9 +721,9 @@ local function onattackwhip(inst, attacker, target, naughtlock)
 
         target.components.combat:GetAttacked(attacker, bonusdamage) -- Frost-type damage, which is based on how close to freezing the enemy is
         target.components.freezable:SpawnShatterFX()
-		
-        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))		
-		
+        
+        target.components.freezable:AddColdness(coldval / (resistance > coldness + 2 and 1 or resistance > coldness + 1 and 4 or 8))        
+        
         -- Lavae Vanilla bug fix
         --if target.components.freezable.coldness >= resistance then
             --target:DoTaskInTime(0, function(target) target.components.freezable:AddColdness(20) end)

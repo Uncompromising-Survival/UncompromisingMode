@@ -17,7 +17,6 @@ local COMBAT_TARGET_TAGS = {"_combat"}
 
 local function OnUpdateThorns(inst)
     inst.range = inst.range + .75
-
     local x, y, z = inst.Transform:GetWorldPosition()
     for i, v in ipairs(TheSim:FindEntities(x, y, z, inst.range + 3, COMBAT_TARGET_TAGS, inst.canhitplayers and NO_TAGS or NO_TAGS_NO_PLAYERS)) do
         if not inst.ignore[v] and v:IsValid() and v.entity:IsVisible() and v.components.combat
@@ -37,9 +36,7 @@ local function OnUpdateThorns(inst)
                     if not inst.canhitplayers then
                         --non-pvp, so don't hit any player followers (unless they are targeting a player!)
                         local leader = v.components.follower and v.components.follower:GetLeader() or nil
-                        isally = leader and leader:HasTag("player")
-                            and not (v.components.combat and v.components.combat.target
-                            and v.components.combat.target:HasTag("player"))
+                        isally = leader and leader:HasTag("player") and not (v.components.combat and v.components.combat.target and v.components.combat.target:HasTag("player"))
                     end
                     if not isally then
                         inst.ignore[v] = true
