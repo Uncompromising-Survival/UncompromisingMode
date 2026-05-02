@@ -37,8 +37,9 @@ local function OnCreateLabyrinth(inst, scenariorunner)
 			initfn = function(item) 
 				item.components.finiteuses:SetUses(math.random(item.components.finiteuses.total * 0.33, item.components.finiteuses.total * 0.8)) 
 				if math.random () > 0.25 then --AXE 75% chance for spears to be gemology enhanced
-					item.components.gem_enchantable:AddEnchantment(spear_enchants[math.random(1,#spear_enchants)],1) -- only allow T1 magic for such a basic item	
-					item.components.gem_enchantable:SetDurability(spear_enchants[math.random(1,#spear_enchants)],1) -- only allow T1 magic for such a basic item	
+					local enchant = spear_enchants[math.random(1,#spear_enchants)]
+					item.components.gem_enchantable:AddEnchantment(enchant,1) -- only allow T1 magic for such a basic item	
+					item.components.gem_enchantable:SetDurability(enchant,1) -- only allow T1 magic for such a basic item	
 				end
 			end,
 		},
@@ -76,8 +77,9 @@ local function OnCreateLabyrinth(inst, scenariorunner)
 					item.components.finiteuses:SetUses(math.random(item.components.finiteuses.total * 0.3, item.components.finiteuses.total * 0.5)) 
 				end
 				if math.random () > 0.5 then --AXE 50% chance for batbat to be gemology enhanced
-					item.components.gem_enchantable:AddEnchantment(bat_bat_enchants[math.random(1,#bat_bat_enchants)],1)
-					item.components.gem_enchantable:SetDurability(bat_bat_enchants[math.random(1,#bat_bat_enchants)],1) 
+					local enchant = bat_bat_enchants[math.random(1,#bat_bat_enchants)]
+					item.components.gem_enchantable:AddEnchantment(enchant,1)
+					item.components.gem_enchantable:SetDurability(enchant,1) 
 				end				
 			end,
 		},
@@ -88,8 +90,9 @@ local function OnCreateLabyrinth(inst, scenariorunner)
 			initfn = function(item) 
 				item.components.finiteuses:SetUses(math.random(item.components.finiteuses.total * 0.3, item.components.finiteuses.total * 0.5)) 
 				if math.random() > 0.75 then
-					item.components.gem_enchantable:AddEnchantment(staff_pickaxeaxe_enchants[math.random(1,#staff_pickaxeaxe_enchants)],1) 
-					item.components.gem_enchantable:SetDurability(staff_pickaxeaxe_enchants[math.random(1,#staff_pickaxeaxe_enchants)],1) 
+					local enchant = staff_pickaxeaxe_enchants[math.random(1,#staff_pickaxeaxe_enchants)]
+					item.components.gem_enchantable:AddEnchantment(enchant,1) 
+					item.components.gem_enchantable:SetDurability(enchant,1) 
 				end
 			end,
 		},
@@ -136,20 +139,24 @@ local function dospawnchest(inst, loading)
 			if item.components.gem_enchantable then
 				if item.prefab == "firestaff" or item.prefab == "icestaff" or item.prefab == "telestaff" or item.prefab == "multitool_axe_pickaxe" then
 					if item.prefab == "telestaff" then
-            			item.components.gem_enchantable:AddEnchantment(magic_staff_enchants[math.random(1,#magic_staff_enchants)], 2)
-            			item.components.gem_enchantable:SetDurability(magic_staff_enchants[math.random(1,#magic_staff_enchants)], 1)
+						local enchant = magic_staff_enchants[math.random(1,#magic_staff_enchants)]
+            			item.components.gem_enchantable:AddEnchantment(enchant, 2)
+            			item.components.gem_enchantable:SetDurability(enchant, 1)
 					else
-						item.components.gem_enchantable:AddEnchantment(staff_pickaxeaxe_enchants[math.random(1,#staff_pickaxeaxe_enchants)],2) -- higher enchant on the magic items				
-            			item.components.gem_enchantable:SetDurability(staff_pickaxeaxe_enchants[math.random(1,#magic_staff_enchants)], 1)
+						local enchant = staff_pickaxeaxe_enchants[math.random(1,#staff_pickaxeaxe_enchants)]
+						item.components.gem_enchantable:AddEnchantment(enchant,2) -- higher enchant on the magic items				
+            			item.components.gem_enchantable:SetDurability(enchant,1)
 					end
 				end
 				if item.prefab == "ruins_bat" or item.prefab == "orangestaff" or item.prefab == "yellowstaff" then
 					if item.prefab == "ruins_bat" then --AXE For the AG loot drops, the tools will always be enchanted, unlike the lab chests, which are only enchanted with some chance.
-						item.components.gem_enchantable:AddEnchantment(spear_enchants[math.random(1,#spear_enchants)],2) -- higher enchant on the magic items
-						item.components.gem_enchantable:SetDurability(spear_enchants[math.random(1,#spear_enchants)],1) 
+						local enchant = spear_enchants[math.random(1,#spear_enchants)]
+						item.components.gem_enchantable:AddEnchantment(enchant,2) -- higher enchant on the magic items
+						item.components.gem_enchantable:SetDurability(enchant,1) 
 					else
-						item.components.gem_enchantable:AddEnchantment(magic_staff_enchants[math.random(1,#magic_staff_enchants)],2) -- higher enchant on the magic items
-						item.components.gem_enchantable:SetDurability(spear_enchants[math.random(1,#spear_enchants)],1) 
+						local enchant = magic_staff_enchants[math.random(1,#magic_staff_enchants)]
+						item.components.gem_enchantable:AddEnchantment(enchant,2) -- higher enchant on the magic items
+						item.components.gem_enchantable:SetDurability(enchant,1) 
 					end			
 				end
 			end

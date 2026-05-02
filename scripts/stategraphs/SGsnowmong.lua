@@ -2,6 +2,9 @@ require("stategraphs/commonstates")
 
 local actionhandlers =
 {
+    ActionHandler(ACTIONS.STEALMOLEBAIT, function(inst)
+        return inst.State and "steal_pre_under" or "steal"
+    end),
 }
 
 local events =
@@ -97,10 +100,10 @@ local states =
             TimeEvent(1* FRAMES, function(inst) inst.SoundEmitter:PlaySound("UCSounds/Grub/jump") end),
             TimeEvent(22*FRAMES, function(inst) 
 				local x, y, z = inst:GetPosition():Get()
-				local ents = TheSim:FindEntities(x, y, z, 3, nil, {"snowish", "ghost", "playerghost", "shadow", "INLIMBO","structure","wall","companion"})
+				local ents = TheSim:FindEntities(x, y, z, inst.components.combat.hitrange, nil, {"snowish", "ghost", "playerghost", "shadow", "INLIMBO","structure","wall","companion"})
 				for i, v in ipairs(ents) do
 					if v.components.combat ~= nil then
-					v.components.combat:GetAttacked(inst, TUNING.METEOR_DAMAGE, nil)
+					v.components.combat:GetAttacked(inst, inst.components.combat.defaultdamage, nil)
 					end
 				end 
 			end),
@@ -316,6 +319,7 @@ local states =
 				inst.components.lootdropper:SpawnLootPrefab("smallmeat")
 			end
 			
+            inst.TryGemologyLoot(inst)
 			RemovePhysicsColliders(inst)
 		end,
 
@@ -325,6 +329,57 @@ local states =
         }
 
 	},
+    State{
+        name = "steal_pre_under",
+        tags = { "busy" },
+        onenter = function(inst, data)
+            inst.Physics:Stop()
+            --inst:SetAbovePhysics()
+            inst.SoundEmitter:KillSound("walkloop")
+            inst.AnimState:PlayAnimation("enter")
+        end,
+
+        timeline =
+        {
+            TimeEvent(1*FRAMES, function(inst)
+                inst.SoundEmitter:PlaySound("UCSounds/Grub/emerge")
+            end),
+        },
+
+        events =
+        {
+            EventHandler("animqueueover", function(inst)
+                inst.sg:GoToState("steal")
+            end),
+        },
+    },
+
+    State{
+        name = "steal",
+        tags = { "busy", "canrotate" },
+        onenter = function(inst, playanim)
+            inst.Physics:Stop()
+            --inst:SetAbovePhysics()
+            inst.AnimState:PlayAnimation("action")
+        end,
+
+        timeline =
+        {
+            TimeEvent(9*FRAMES, function(inst)
+                inst.SoundEmitter:PlaySound("UCSounds/Grub/attack")
+            end),
+            TimeEvent(12*FRAMES, function(inst)
+                inst:IntegrateSnowStuff()
+            end),
+        },
+
+        events =
+        {
+            EventHandler("animqueueover", function(inst)
+                inst.sg:GoToState("exit")
+            end),
+        },
+    },
 }
 
 return StateGraph("snowmong", states, events, "idle", actionhandlers)

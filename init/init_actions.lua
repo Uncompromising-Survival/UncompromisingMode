@@ -729,7 +729,7 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
 
 local um_forge_gem = Action({ priority = 1, mount_valid = true })
 um_forge_gem.id = "UM_FORGE_GEM"

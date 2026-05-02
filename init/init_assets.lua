@@ -403,7 +403,8 @@ local inventoryitems =
     "um_tentaclespike_moon",
     "um_tentaclespot_moon",
     "um_bomb_moon",
-    
+    "um_backpack_amuletuse",
+
     "um_ribopod",
     "um_ribopodden",
     "um_spongeplant_item",
@@ -738,6 +739,9 @@ Assets = {
     Asset("ANIM", "anim/deerclops_barrier.zip"),
     Asset("ANIM", "anim/laserclops_anims.zip"),
     Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE), do not delete otherwise
+
+    Asset("ANIM","anim/um_slurtle_spit.zip"),
+
 
     Asset("ANIM", "anim/nymph.zip"),
 
@@ -1508,6 +1512,7 @@ Assets = {
     Asset("ANIM", "anim/widowsgrasp.zip"),
     Asset("ANIM", "anim/silksack.zip"),
     Asset("ANIM", "anim/swap_silksack.zip"),
+
     Asset("ANIM", "anim/hat_widowshead.zip"),
 
     Asset("ANIM", "anim/greenfoliage.zip"),

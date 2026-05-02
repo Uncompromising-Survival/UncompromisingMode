@@ -66,3 +66,30 @@ AddPrefabPostInit("player_classified", function(inst)
 	inst.snowoveron = GLOBAL.net_bool(inst.GUID, "snow.snowover", "snowdirty")
 	inst:ListenForEvent("snowdirty", OnSpy)
 end)--]]
+--[[
+local function OnNtModeDirty(inst)
+    if inst._parent ~= nil then
+        inst._parent.components.playervision:SetGhostVision(inst.isntmode:value())
+        if inst._parent.HUD ~= nil then
+            inst._parent:SetGhostMode(inst.isntmode:value())
+        end
+    end
+end
+
+AddPrefabPostInit("player_classified", function(inst)
+	local fns = {}
+	fns.SetNTMode = function(inst, isntmode)
+		inst.isntmode:set(isntmode)
+		OnNtModeDirty(inst)
+	end
+
+	inst.SetNTMode = fns.SetNTMode
+
+	if TheWorld.ismastersim then
+        inst._parent = inst.entity:GetParent()
+        RegisterNetListeners_mastersim(inst)
+    else
+        inst:ListenForEvent("isntmodedirty", OnNtModeDirty)
+    end
+
+end)]]

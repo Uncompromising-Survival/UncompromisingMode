@@ -89,15 +89,66 @@ local function OnAttacked(inst, data)
     end
 end
 
-local function SetTier(inst,tier)
-	if tier == 1 then
+local function SetLevel(inst,level)
+	level = math.clamp(level,1,30)
+	inst.components.health:SetMaxHealth(50*(level-1)+250)
+	inst.components.health:SetPercent(1)
+	inst.Transform:SetScale(2*(level)^0.1, 2*(level)^0.1, 2*math.sqrt(level)^0.1)
+	inst.components.combat:SetDefaultDamage(30*(level)^0.25)
+	local range = 2 + (level-1)/29*2
+	inst.components.combat:SetRange(range, range)
+end
 
+local function IntegrateSnowStuff(inst) --AXE I'm using the mole's steal action as a psuedo eat action so I don't need to assign a food type for specifically 3 items
+	local buffaction = inst:GetBufferedAction()
+	local item = buffaction and buffaction.target and buffaction.target or nil
+	if item then
+		local level = 0
+		if item.prefab == "um_gemologybluegem1" or item.prefab == "um_gemologybluegem2" then
+			local tier = item:GetTier()
+			inst.gem_level = math.clamp(tier,inst.gem_level and inst.gem_level or 0,3)
+			inst.gem_chance = (inst.gem_chance and inst.gem_chance or 0) + tier
+
+			inst.upgrade_level = inst.upgrade_level + 10
+		end
+		if item.prefab == "bluegem" then
+			inst.upgrade_level = inst.upgrade_level + 10	
+		end
+		if item.prefab == "ice" then
+			inst.upgrade_level = inst.upgrade_level + 3	
+		end
+		if item.prefab == "snowball_item" then
+			inst.upgrade_level = inst.upgrade_level + 1
+		end
+		SetLevel(inst,inst.upgrade_level)
+		SpawnPrefab("splash_snow_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		item:Remove() -- Mong ate the item, it's part of 'em now
+		inst:ClearBufferedAction()
 	end
-	if tier == 2 then
-	
+end
+
+local function OnSave(inst)
+	local data = {}
+	if inst.gem_level then
+		data.gem_level = inst.gem_level
+		data.gem_chance = inst.gem_chance
 	end
-	if tier == 3 then
-	
+	if inst.upgrade_level then
+		data.upgrade_level = inst.upgrade_level
+	end
+	return data
+end
+
+local function OnLoad(inst,data)
+	if data then
+		if data.gem_level then
+			inst.gem_level = data.gem_level
+			inst.gem_chance = data.gem_chance
+		end
+		if data.upgrade_level then
+			inst.upgrade_level = data.upgrade_level
+			SetLevel(inst,inst.upgrade_level)
+		end
 	end
 end
 
@@ -112,7 +163,7 @@ local function fn(Sim)
 
     inst.Transform:SetFourFaced()
 
-	inst.Transform:SetScale(2, 2, 2)
+
 
 	MakeCharacterPhysics(inst, 99999, 0.5)
 	inst.entity:SetPristine()
@@ -158,7 +209,7 @@ local function fn(Sim)
     inst:AddComponent("hauntable")
 		
 	inst:AddComponent("combat")
-	inst.components.combat:SetDefaultDamage(50)
+
 	inst.components.combat:SetAttackPeriod(3)
 	inst.components.combat:SetRange(3, 3)
 	inst.components.combat:SetRetargetFunction(3, Retarget)
@@ -181,12 +232,22 @@ local function fn(Sim)
 	
     inst.SetUnder = SetUnder
 	inst.SetAbove = SetAbove
-	
-	inst.SetTier = SetTier
+
     
 	inst:ListenForEvent("attacked", OnAttacked) 
 
-	return inst
+	inst.OnSave = OnSave
+	inst.OnLoad = OnLoad
+
+	inst.IntegrateSnowStuff = IntegrateSnowStuff
+
+	inst:DoTaskInTime(0,function(inst)
+		if not inst.upgrade_level then
+			inst.upgrade_level = 1
+			SetLevel(inst,inst.upgrade_level)
+		end
+	end)
+	return inst	
 end
 
 local function fntail()

@@ -301,6 +301,9 @@ local function common_fn(bank, build, tag)
     inst.components.burnable:SetOnExtinguishFn(OnExtinguishFn)
     inst.components.burnable:SetBurnTime(TUNING.SNAILDRAKE_BURN_TIME) -- 4; default is 8
 
+    inst:AddComponent("heater")
+    inst.components.heater.heat = 100
+
     MakeHauntablePanic(inst)
     AddHauntableCustomReaction(inst, CustomOnHaunt, true, false, true)
 

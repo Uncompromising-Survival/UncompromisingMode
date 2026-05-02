@@ -173,7 +173,13 @@ local function MakeGem(gem, bank, build, anim)
         inst:AddComponent("inventoryitem")
 
         inst:AddComponent("tradable")
+        inst.components.tradable.rocktribute = 8
 
+        inst:AddComponent("edible")
+        inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
+        inst.components.edible.hungervalue = 10
+        
+        
         MakeHauntableLaunch(inst)
 
         inst.OnSave = OnSave
