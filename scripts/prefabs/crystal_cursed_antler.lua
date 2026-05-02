@@ -172,7 +172,7 @@ local function fn()
     return inst
 end
 
-local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player", "flight"}
+local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player", "flying", "flight"}
 
 local function OnUpdateIceCircle(inst)
     local debuffkey = inst.prefab
