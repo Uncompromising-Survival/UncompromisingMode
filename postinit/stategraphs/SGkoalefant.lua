@@ -5,15 +5,47 @@ local function isplayer(ent)
     return ent and ent:HasTag("player") -- fix to friendly AOE: refer for later AOE mobs -Axe
 end
 
+local function DisarmTarget(inst, target)
+    local item = nil
+    if target and target.components.inventory and not target:HasTag("stronggrip") then
+        item = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    end
+    if item and not item:HasTag("nosteal") and item.Physics then
+        target.components.inventory:DropItem(item)
+        local x, y, z = item:GetPosition():Get()
+        y = .1
+        item.Physics:Teleport(x, y, z)
+        local hp = target:GetPosition()
+        local pt = inst:GetPosition()
+        local vel = (hp - pt):GetNormalized()
+        local speed = 5 + (math.random() * 2)
+        local angle = math.atan2(vel.z, vel.x) + (math.random() * 20 - 10) * DEGREES
+        item.Physics:SetVel(math.cos(angle) * speed, 10, math.sin(angle) * speed)
+    end
+    inst.CanDisarm = false
+end
+
 env.AddStategraphPostInit("koalefant", function(inst)
+    local events =
+    {
+        EventHandler("um_counterattack", function(inst, data)
+            if inst.components.health and not inst.components.health:IsDead()
+                and not (inst.sg:HasAnyStateTag("attack", "electrocute", "charging") or inst.sg:HasStateTag("busy")
+                and not inst.sg:HasStateTag("hit")) and data.target and data.target:IsValid() and inst:IsNear(data.target, 4) then
+                if inst.um_counterattack then
+                    local counterrate = TUNING.DSTU.KOALEFANT_STOMP_COUNTERATTACK
+                    inst.um_counterattack = math.random(counterrate.MIN, counterrate.MAX)
+                end
+                inst.sg:GoToState("stomp", data.target)
+            end
+        end)
+    }
+
     local doattackeventhandler = inst.events["doattack"]
     if doattackeventhandler then
         local doattackeventhandler_fn = doattackeventhandler.fn
         doattackeventhandler.fn = function(inst, data, ...)
-            if inst.sg.mem.wantstostomp then
-                inst.sg.mem.wantstostomp = nil
-                inst.sg:GoToState("stomp")
-            elseif not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and (inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed")) then
+            if not (inst.components.health and inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute")) and (inst.sg:HasStateTag("charging") or inst:HasTag("chargespeed")) then
                 inst.sg:GoToState("chargeattack", data.target)
             else
                 doattackeventhandler_fn(inst, data, ...)
@@ -26,8 +58,8 @@ env.AddStategraphPostInit("koalefant", function(inst)
         local attackstate_onenter = attackstate.onenter
         attackstate.onenter = function(inst, target, ...)
             if target and target:IsValid() then inst.sg.statemem.target = target end
-            inst.counterattack = false
-            inst:DoTaskInTime(1.5, function(inst) inst.counterattack = true end)
+            --inst.counterattack = false
+            --inst:DoTaskInTime(1.5, function(inst) inst.counterattack = true end)
             if inst:HasTag("chargespeed") then
                 inst.components.locomotor.runspeed = TUNING.BEEFALO_RUN_SPEED.DEFAULT
                 inst:RemoveTag("chargespeed")
@@ -59,7 +91,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
         end
     end
 
-    local attackedeventhandler = inst.events["attacked"]
+    --[[local attackedeventhandler = inst.events["attacked"]
     if attackedeventhandler then
         local attackedeventhandler_fn = attackedeventhandler.fn
         attackedeventhandler.fn = function(inst, data, ...)
@@ -75,27 +107,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
             end
             return attackedeventhandler_fn(inst, data, ...)
         end
-    end
-
-    local function DisarmTarget(inst, target)
-        local item = nil
-        if target and target.components.inventory and not target:HasTag("stronggrip") then
-            item = target.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        end
-        if item and not item:HasTag("nosteal") and item.Physics then
-            target.components.inventory:DropItem(item)
-            local x, y, z = item:GetPosition():Get()
-            y = .1
-            item.Physics:Teleport(x, y, z)
-            local hp = target:GetPosition()
-            local pt = inst:GetPosition()
-            local vel = (hp - pt):GetNormalized()
-            local speed = 5 + (math.random() * 2)
-            local angle = math.atan2(vel.z, vel.x) + (math.random() * 20 - 10) * DEGREES
-            item.Physics:SetVel(math.cos(angle) * speed, 10, math.sin(angle) * speed)
-        end
-        inst.CanDisarm = false
-    end
+    end]]
 
     local states =
     {
@@ -247,7 +259,7 @@ env.AddStategraphPostInit("koalefant", function(inst)
         },]]
         State{
             name = "stomp",
-            tags = {"attack", "busy"},
+            tags = {"attack", "busy", "noelectrocute"},
 
             onenter = function(inst, target)
                 inst.sg.statemem.target = target
@@ -287,10 +299,10 @@ env.AddStategraphPostInit("koalefant", function(inst)
         },
     }
 
-    --[[for k, v in pairs(events) do
+    for k, v in pairs(events) do
         assert(v:is_a(EventHandler), "Non-event added in mod events table!")
         inst.events[v.name] = v
-    end]]
+    end
 
     for k, v in pairs(states) do
         assert(v:is_a(State), "Non-state added in mod state table!")

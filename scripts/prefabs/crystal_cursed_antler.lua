@@ -58,14 +58,13 @@ local function onunequip(inst, owner)
 end
 
 local function onattack(inst, attacker, target)
-    if target and target:IsValid() and attacker and attacker:IsValid() and attacker:HasTag("vetcurse") and
-        inst.components.rechargeable:IsCharged() then
+    if target and target:IsValid() and attacker and attacker:IsValid() and inst.components.rechargeable:IsCharged() then
         local x1, y1, z1 = inst.Transform:GetWorldPosition()
 
 
         local owner = inst.components.inventoryitem:GetGrandOwner()
 
-        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, { "cursedantler" })) do
+        for i, v in pairs(TheSim:FindEntities(x1, y1, z1, 8, {"cursedantler"})) do
             if v ~= inst then
                 local vowner = v.components.inventoryitem:GetGrandOwner()
                 if vowner and (vowner == owner or not vowner:HasTag("player")) or vowner == nil then
@@ -76,41 +75,47 @@ local function onattack(inst, attacker, target)
 
         inst.components.rechargeable:Discharge(5)
 
+        if inst.components.planardamage then
+            inst.components.planardamage:SetBaseDamage(17)
+        end
+
         local x, y, z = target.Transform:GetWorldPosition()
         local ice_circle = SpawnPrefab("antler_ice_circle")
         ice_circle.Transform:SetPosition(x, y, z)
+        ice_circle.caster = attacker
 
         for i = 1, 4 do
             local icefx = SpawnPrefab("icespike_fx_" .. i)
             icefx.Transform:SetPosition(x + math.random(-1.5, 1.5), 0, z + math.random(-1.5, 1.5))
         end
 
-        local follower = target.components.follower and target.components.follower:GetLeader() and target.components.follower:GetLeader():HasTag("player")
-        if target.components.health and not target.components.health:IsDead() and target.components.combat and not (target:HasAnyTag("companion", "abigail") or follower) then
-            target.components.combat:GetAttacked(attacker, 0, inst, nil, {planar = 99})
-        end
-
-        if target.components.freezable and not target.components.freezable:IsFrozen() and target.components.health and not target.components.health:IsDead() and not
-            (target:HasAnyTag("companion", "abigail") or follower) then
+        if target.components.freezable and not target.components.freezable:IsFrozen() then
             target.components.freezable:AddColdness(1)
             target.components.freezable:SpawnShatterFX()
         end
 
-        local ents = TheSim:FindEntities(x, y, z, 2.5, nil, { "INLIMBO", "player", "companion", "abigail", "shadowcreature" })
+        local ents = TheSim:FindEntities(x, y, z, 2.5, nil, {"INLIMBO", "player", "companion", "abigail", "shadowminion"})
         for i, v in ipairs(ents) do
             if v ~= inst and v ~= target and v:IsValid() and not v:IsInLimbo() then
-                if v.components.combat and not (v.components.health and v.components.health:IsDead()) and not
-                    (v.components.follower and v.components.follower:GetLeader() and v.components.follower:GetLeader():HasTag("player")) then
+                if v.components.combat and not (v.components.health and v.components.health:IsDead())
+                    and attacker.components.combat:CanTarget(v) and not attacker.components.combat:IsAlly(v) then
                     v.components.combat:GetAttacked(attacker, 34, inst, nil, {planar = 17})
 
-                    if v.components.freezable and not v.components.freezable:IsFrozen() and v.components.health and not v.components.health:IsDead() then
-                        v.components.freezable:AddColdness(0.5)
+                    if v.components.freezable and not v.components.freezable:IsFrozen() then
+                        v.components.freezable:AddColdness(.5)
                         v.components.freezable:SpawnShatterFX()
                     end
                 end
             end
         end
     end
+end
+
+local function GetAntlerDamage(inst, attacker, target)
+    if inst.components.planardamage and inst.components.rechargeable and inst.components.rechargeable:IsCharged() then
+        inst.components.planardamage:SetBaseDamage(116)
+    end
+    return 34
 end
 
 local function fn()
@@ -143,7 +148,7 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetDamage(GetAntlerDamage)
     inst.components.weapon:SetOnAttack(onattack)
 
     inst:AddComponent("planardamage")
@@ -167,31 +172,35 @@ local function fn()
     return inst
 end
 
-local no_slow = { "INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player" }
+local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player", "flying", "flight"}
 
 local function OnUpdateIceCircle(inst)
+    local debuffkey = inst.prefab
+    local caster = inst.caster and inst.caster:IsValid() and inst.caster or nil
+    local castercombat = caster ~= nil and caster.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3, { "_combat" }, no_slow)
     for i, v in ipairs(ents) do
-        local debuffkey = inst.prefab
-        if v.components.locomotor then
-            v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
-            v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
-                if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
-                    guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
-                    if guy.um_ice_circle then
-                        guy.um_ice_circle:Cancel()
-                        guy.um_ice_circle = nil
+        if v ~= caster and v.entity:IsVisible()
+            and not (v.components.health and v.components.health:IsDead())
+            and not (castercombat and castercombat:IsAlly(v)) then
+            if v.components.locomotor then
+                v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
+                v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
+                    if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
+                        guy.components.locomotor:RemoveExternalSpeedMultiplier(guy, debuffkey)
+                        if guy.um_ice_circle then
+                            guy.um_ice_circle:Cancel()
+                            guy.um_ice_circle = nil
+                        end
                     end
-                end
-            end)
-        end
+                end)
+            end
 
-        if v.components.freezable ~= nil and
-            not v.components.freezable:IsFrozen() and
-            v.components.freezable.coldness < v.components.freezable:ResolveResistance() * (inst.freezelimit or 1)
-        then
-            v.components.freezable:AddColdness(.1, 1, inst.freezelimit ~= nil)
+            if v.components.freezable ~= nil and not v.components.freezable:IsFrozen()
+                and v.components.freezable.coldness < v.components.freezable:ResolveResistance() * (inst.freezelimit or 1) then
+                v.components.freezable:AddColdness(.1, 1, inst.freezelimit ~= nil)
+            end
         end
     end
 end
