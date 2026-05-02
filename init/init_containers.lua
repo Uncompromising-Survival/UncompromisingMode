@@ -60,6 +60,7 @@ local wardrobe_prefabs = {
     "saddle_shadow",
     "bedroll_straw",
     "bedroll_furry",
+    "wx78_moduleremover",
 }
 
 local wardrobe_noprefabs = {
