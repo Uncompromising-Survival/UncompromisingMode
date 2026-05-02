@@ -10,6 +10,7 @@ SetSharedLootTable( 'um_reeds_lunar',
     {'cutreeds',           1.0},
     {'cutreeds',           1.0},
     {'cutgrass',           1.0},
+    {'cutgrass',           1.0},
 })
 
 local function on_chop(inst, chopper, remaining_chops)
