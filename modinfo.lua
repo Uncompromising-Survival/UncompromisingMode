@@ -5,12 +5,12 @@ if not folder_name:find("workshop-") then
     name = "[LOCAL] - " .. name
 end
 
---RELEASE.MAJOR.MINOR.FIX
---axe, remove/add a comma VVV when you do this patch to keep the version number for playtester versions. Also, increase the beta version number, NOT the main one.
-local _version = "3.1.0"
+--MAJOR.MINOR.FIX
+--INCREASE THIS VERSION
+local _version = "3.2.0"
 
 description = [[
-    󰀔 [ "On The Rocks!"  (Beta ver: v]] .. _version .. [[)]
+    󰀔 [ "On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
 Uncompromising Mode is like a potluck.
 
 Latest update features:
