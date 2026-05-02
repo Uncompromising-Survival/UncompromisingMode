@@ -720,14 +720,14 @@ return Class(function(self, inst)
 		SpawnSkitts = { name = SpawnSkitts, weight = .3, },
 		Nothing = {name = Nothing, weight = 3},
 		SpawnStanton = { name = SpawnStanton, weight = .1, tag = "skeleton"},
-		SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .05},
+		--SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .05},
 	}
 	local HIGHMEDSANITY = 
 	{	
 		SpawnHand = { name = SpawnHand, weight = .3, },
 		SpawnHaunt = { name = SpawnHaunt, weight = .5, },
 		SpawnStanton = { name = SpawnStanton, weight = .2, tag = "skeleton"},
-		SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .1},
+		--SpawnGhostOfStalker = { name = SpawnLightFlowersNFerns, weight = .1},
 	}
 	local MEDSANITY = 
 	{	
@@ -785,7 +785,7 @@ return Class(function(self, inst)
 			end
 		end
 		local choice = bank[weighted_random_choice(bank)].name
-		TheNet:Announce(level)
+		--TheNet:Announce(level)
 		choice(player)
 	end
 	

@@ -155,18 +155,14 @@ local function RemoveAgony(v)
 	end
 end
 
-local TARGET_PVP_ONEOF_TAGS = { "_combat", "player" }
-local TARGET_PVP_CANT_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO" }
 local TARGET_MUST_TAGS = { "_combat" }
-local TARGET_CANT_TAGS = { "player", "FX", "DECOR", "INLIMBO","agony_gas" }
-local function DoAreaVulnerability(inst, sleeptimecache, sleepdelaycache)
+local TARGET_CANT_TAGS = {"FX", "DECOR", "INLIMBO","agony_gas" }
+local function DoAreaVulnerability(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
     local range = 3.5
     local t = GetTime()
-    local ents =
-        TheNet:GetPVPEnabled() and
-        TheSim:FindEntities(x, y, z, range, nil, TARGET_PVP_CANT_TAGS, TARGET_PVP_ONEOF_TAGS) or
-        TheSim:FindEntities(x, y, z, range, TARGET_MUST_TAGS, TARGET_CANT_TAGS)
+    local ents = TheSim:FindEntities(x, y, z, range, TARGET_MUST_TAGS, TARGET_CANT_TAGS)
+        
 	if ents and #ents > 0 then
 		for i,v in ipairs(ents) do
 			v:AddTag("agony_gas")
