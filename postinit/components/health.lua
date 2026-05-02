@@ -47,7 +47,7 @@ local function TriggerPocketResurrection(self, item)
         end
     end
 
-    if item.prefab == "amulet" then
+    if item.prefab == "amulet" then    
         FindSleepable(self.inst)
         if self.inst.components.grogginess then
             self.inst.components.grogginess:ResetGrogginess()
@@ -129,6 +129,12 @@ local function HasPocketResurrection(self)
             local bodyslot = inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             item = bodyslot ~= nil and (bodyslot.prefab == "amulet" or bodyslot:HasTag("resurrector")) and bodyslot
                 or inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
+            
+            item = bodyslot ~= nil and (bodyslot.prefab == "um_backpack_amuletuse" and bodyslot.components.container and 
+                bodyslot.components.container:GetItemInSlot(9) and bodyslot.components.container:GetItemInSlot(9).prefab == "amulet"
+                and bodyslot.components.container:GetItemInSlot(9)) or item 
+                -- AXE If wearing the amusement pack, see if the amulet is in there... if it is... then swap the item of 
+                -- interest.
         end
         if self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             if item then

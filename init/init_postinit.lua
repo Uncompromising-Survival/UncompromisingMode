@@ -269,7 +269,8 @@ local stategraph_post = {
     "mossling",
     "hound",
     "bigshadowtentacle",
-    "worm"
+    "worm",
+    "slurtle"
 }
 
 local class_post = {

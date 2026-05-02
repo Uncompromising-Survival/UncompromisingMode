@@ -324,6 +324,40 @@ function modparams.silksack.widget.buttoninfo.validfn(inst)
     end
 end
 
+modparams.um_backpack_amuletuse =
+{
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_piggyback_2x6",
+        animbuild = "ui_piggyback_2x6",
+        --pos = Vector3(-5, -70, 0),
+        pos = Vector3(-5, -90, 0),
+        slotbg =
+        {
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",   atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",   atlas = "images/hud.xml" },
+            { image = "silk_slot.tex",   atlas = "images/silk_slot.xml" },
+        },
+    },
+    issidewidget = true,
+    type = "pack",
+    openlimit = 1,
+
+}
+for y = 0, 3 do
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162, -75 * y + 170, 0))
+    table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 75, -75 * y + 170, 0))
+end
+
+table.insert(modparams.um_backpack_amuletuse.widget.slotpos, Vector3(-162 + 37.5, -60 * 4.5 + 135, 0))
+
 modparams.crabclaw =
 {
     widget =

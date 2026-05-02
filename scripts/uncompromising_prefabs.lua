@@ -622,6 +622,7 @@ local prefabs = {
 	"um_reeds_lunar",
     "um_tentacle_moon",
     "um_tentacle_moon_projectile",
+    "um_backpack_amuletuse",
 	"um_strange_rabbit_rock",
 	"um_agonycloud",
 	"um_hat_nettlemask",
