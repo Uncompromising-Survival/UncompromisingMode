@@ -180,8 +180,8 @@ local function fn()
     end
 
     TheNet:Announce("AXE - WARNING")
-    TheNet:Announce("This item - "..inst.prefab.." - is not complete yet. Interaction will likely result in crash.")
-    TheNet:Announce("c_removeall('"..inst.prefab.."') to prevent crashing.")
+    TheNet:Announce("This item is not complete yet. Interaction will likely result in crash.")
+    TheNet:Announce("Execute ''c_removeall('um_backpack_amuletuse')'' to prevent crashing.")
     return inst
 end
 
