@@ -7,10 +7,10 @@ end
 
 --MAJOR.MINOR.FIX
 --INCREASE THIS VERSION
-local _version = "4.0.0"
+local _version = "4.1.0"
 
 description = [[
-    󰀔 [ "On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
+    󰀔 ["On The Rocks!" v1.6  (Beta ver: v]] .. _version .. [[)]
 Uncompromising Mode is like a potluck.
 
 Latest update features:
