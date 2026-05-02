@@ -403,8 +403,6 @@ local function ElectricAttack(inst, attacker, target, tier)
 
     if tier ~= 1 then
         if target:IsValid() then
-            DamageInfiniteItemGem("yellowgem2", inst, 0.005)
-
             FindEnemiesNearbyAndShockThem(inst, attacker, target, ElectricAttack, tier)
         end
         -- Dont allow arcing back upon oneself
@@ -413,7 +411,6 @@ local function ElectricAttack(inst, attacker, target, tier)
     end
 
     if target.components.combat then
-        DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 
         target.components.combat:GetAttacked(attacker, static_mods[tier], nil, "electric")
     end
@@ -421,6 +418,8 @@ local function ElectricAttack(inst, attacker, target, tier)
     if inst.components.weapon.stimuli ~= "electric" then
         inst.components.weapon:SetElectric(1, 1.75)
     end
+
+    DamageInfiniteItemGem("yellowgem2", inst, 0.005)
 end
 
 
