@@ -26,13 +26,23 @@ local AURA_EXCLUDE_TAGS = { "shadow", "shadowminion", "INLIMBO", "notarget", "no
 
 
 local function SpawnHecklerGooTrail(inst,despawn_on_day)
-    local fx = SpawnPrefab("shadow_goo_trail")
-    fx.AnimState:SetMultColour(0,0,0,0.8)
-
     local x,y,z = inst.Transform:GetWorldPosition()
-    fx.Transform:SetPosition(x,0,z)
- 
-    fx.angle = 0
+    local ents = TheSim:FindEntities(x,0,z,2)
+    local goo_near
+    for i,v in ipairs(ents) do
+        if v.prefab == "shadow_goo_trail" then
+            goo_near = true
+        end
+    end
+    if not goo_near then
+        local fx = SpawnPrefab("shadow_goo_trail")
+        fx.AnimState:SetMultColour(0,0,0,0.8)
+
+        local x,y,z = inst.Transform:GetWorldPosition()
+        fx.Transform:SetPosition(x,0,z)
+    
+        fx.angle = 0
+    end
 end
 
 local function GooNear(inst)
@@ -44,7 +54,7 @@ local function DoSplatFx(inst)
     local goo
     if inst.prefab == "shadow_goo" then -- A special different ground anim for our fancy goo
         goo = SpawnPrefab("shadow_puff")
-    elseif inst.prefab == "heckler_goo" and not GooNear(inst) then
+    elseif inst.prefab == "heckler_goo" then
         
         --SpawnPrefab("um_shadow_miasma_cloud").Transform:SetPosition(tx, 0, ty)
         SpawnHecklerGooTrail(inst,true)
@@ -265,9 +275,9 @@ local function RainedOnParade(inst)
 end
 
 
-local function OnUpdate(inst, x, y, z, rad)
+local function OnUpdate(inst)
     local should_tentacle
-    for i, v in ipairs(TheSim:FindEntities(x, y, z, rad, { "locomotor" }, { "flying", "playerghost", "INLIMBO","shadow"})) do
+    if FindEntity(inst, 3, nil,{"locomotor" },{"flying", "playerghost", "INLIMBO","shadow"}) then
         should_tentacle = true
     end
     if should_tentacle and not FindEntity(inst, 3, function(ent) return ent.prefab == "bigshadowtentacle" end) then
@@ -376,9 +386,9 @@ local function fngoo()
 	
 	inst.FadeAway = FadeAway
 	inst:WatchWorldState("startrain", RainedOnParade) -- Make it go away quicker...
-    inst.SetVariation = SetVariation    
+  
     inst.persists = true
-    inst.OnStartFade = OnStartFade
+    inst.OnStartFade = FadeAway
     
     inst.task = inst:DoTaskInTime(0, function(inst)
         if inst.trailname ~= nil then
