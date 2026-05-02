@@ -64,10 +64,10 @@ local component_post = {
     "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
     "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
-	"locomotor",
-	"beargerspawner",
-	"floater",
-	"temperature",
+    "locomotor",
+    "beargerspawner",
+    "floater",
+    "temperature",
     "playercontroller",
 	"possessedaxe",
 	"inventoryitem",
@@ -236,19 +236,19 @@ local prefab_post = {
     "spiderqueen",
     "snowman",
     "lighter",
-	"molebat",
+    "molebat",
     "lightning_rod",
     "antlionhat",
     "ice_shield_piercing",
-	"bullkelp_root",
-	--"balatro_machine", -- Keeping this here for Later.
-	"walrus_camp",
+    "bullkelp_root",
+    --"balatro_machine", -- Keeping this here for Later.
+    "walrus_camp",
     "firestaff",
 	"worms",
 	"rabbitking",
     "cave_vents",
     "cave_vent_mite",
-	"bananabush"
+    "bananabush"
 }
 
 local stategraph_post = {
@@ -269,7 +269,8 @@ local stategraph_post = {
     "hound",
     "bigshadowtentacle",
     "worm",
-    "slurtle"
+    "slurtle",
+    "lavae"
 }
 
 local class_post = {
