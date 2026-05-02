@@ -184,7 +184,7 @@ local function OnUpdateIceCircle(inst)
         if v ~= caster and v.entity:IsVisible()
             and not (v.components.health and v.components.health:IsDead())
             and not (castercombat and castercombat:IsAlly(v)) then
-            if v.components.locomotor then
+            if v.components.locomotor and not v:HasTag("flying") and not v:HasTag("flight") then
                 v.components.locomotor:SetExternalSpeedMultiplier(v, debuffkey, 0.5)
                 v.um_ice_circle = v:DoPeriodicTask(1, function(guy)
                     if not FindEntity(guy, 3, function(ent) return ent.prefab == "antler_ice_circle" end) then
