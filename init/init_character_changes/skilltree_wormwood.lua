@@ -173,7 +173,7 @@ local skills =
 	},
 	wormwood_resilient_crops2 = {
 		title = "Resilient Crops II", --"Mushroom multiplier" -> Resilient Crops II - Wild crops automatically tend themselves.
-		desc = "Wild crops you plant do not to be tended.",
+		desc = "Wild crops you plant do not need to be tended.",
 		icon = "wormwood_resilient_crops2",
 		pos = {UI_VERTICAL_MIDDLE - 90, UI_BOTTOM + 145},
 
