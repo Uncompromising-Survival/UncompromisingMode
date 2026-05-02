@@ -406,7 +406,7 @@ configuration_options = {
     --"UMNERF"
     --},
     BinaryConfig("wormwood_extrafiredmg", "Wormwood - Extra Fire Damage",
-        "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x.", true),
+        "Increases Wormwood's fire damage multiplier to 1.75x, from 1.25x and burn time from 4.3s to 6.6s", true),
     BinaryConfig("wormwood_plants", "Wormwood - Planting Sanity", "Increases the sanity loss from digging plants by 5.",
         true),
     BinaryConfig("wormwood_trapbuffs", "Wormwood - Trap Buffs",
@@ -1464,7 +1464,7 @@ configuration_options = {
     -----------------------------
     -- Legacy Options --
     -----------------------------
-    Header("> Legacy Options <"),
+    --[[Header("> Legacy Options <"),
     -----------------------------    
     BinaryConfig("durability", "Clothing Degradation",
         "Winter and Rain protection clothing items become less effective when their durability drops.", false),
@@ -1504,7 +1504,7 @@ configuration_options = {
         false),
     BinaryConfig("moon_transformations", "[BROKEN] Moon Transfor.",
         "Certain things transform under the dim light of the full \"Moon\".", false),
-    SkipSpace(),
+    SkipSpace(),]]
     -----------------------------
     -- Dev Tools --
     -----------------------------
