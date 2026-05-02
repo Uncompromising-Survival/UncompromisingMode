@@ -172,7 +172,7 @@ local function fn()
     return inst
 end
 
-local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player", "flying", "flight"}
+local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadowchesspiece", "trap", "companion", "abigail", "shadowminion", "player", "flying", "flight", "invisible"}
 
 local function OnUpdateIceCircle(inst)
     local debuffkey = inst.prefab
@@ -197,7 +197,7 @@ local function OnUpdateIceCircle(inst)
                 end)
             end
 
-            if v.components.freezable ~= nil and not v.components.freezable:IsFrozen()
+            if v.components.freezable and not v.components.freezable:IsFrozen()
                 and v.components.freezable.coldness < v.components.freezable:ResolveResistance() * (inst.freezelimit or 1) then
                 v.components.freezable:AddColdness(.1, 1, inst.freezelimit ~= nil)
             end
