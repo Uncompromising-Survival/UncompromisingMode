@@ -692,40 +692,42 @@ env.AddComponentPostInit("farmplantstress", function(self)
     end
 end)
 
-env.AddPrefabPostInit("cactus",function(inst)
-    if not TheWorld.ismastersim then 
-        return inst
-    end
-    local _onpickedfn = inst.components.pickable.onpickedfn
+local cactii = {"cactus","oasis_cactus"}
+for i,v in ipairs(cactii) do
+    env.AddPrefabPostInit(v,function(inst)
+        if not TheWorld.ismastersim then 
+            return inst
+        end
+        local _onpickedfn = inst.components.pickable.onpickedfn
 
-    local function onpickedfn(inst, picker)
-        if picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept") then
-            inst.Physics:SetActive(false)
-            inst.AnimState:PlayAnimation(inst.has_flower and "picked_flower" or "picked")
-            inst.AnimState:PushAnimation("empty", true)
+        local function onpickedfn(inst, picker)
+            if picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept") then
+                inst.Physics:SetActive(false)
+                inst.AnimState:PlayAnimation(inst.has_flower and "picked_flower" or "picked")
+                inst.AnimState:PushAnimation("empty", true)
 
-            if picker ~= nil then
-                if inst.has_flower then
-                    -- You get a cactus flower, yay.
-                    local loot = SpawnPrefab("cactus_flower")
-                    loot.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
-                    if picker.components.inventory ~= nil then
-                        picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
-                    else
-                        local x, y, z = inst.Transform:GetWorldPosition()
-                        loot.components.inventoryitem:DoDropPhysics(x, y, z, true)
+                if picker ~= nil then
+                    if inst.has_flower then
+                        -- You get a cactus flower, yay.
+                        local loot = SpawnPrefab("cactus_flower")
+                        loot.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                        if picker.components.inventory ~= nil then
+                            picker.components.inventory:GiveItem(loot, nil, inst:GetPosition())
+                        else
+                            local x, y, z = inst.Transform:GetWorldPosition()
+                            loot.components.inventoryitem:DoDropPhysics(x, y, z, true)
+                        end
                     end
                 end
+
+                inst.has_flower = false
+            else
+                _onpickedfn(inst, picker)
             end
-
-            inst.has_flower = false
-        else
-            _onpickedfn(inst, picker)
         end
-    end
-    inst.components.pickable.onpickedfn = onpickedfn
-end)
-
+        inst.components.pickable.onpickedfn = onpickedfn
+    end)
+end
 
 env.AddPrefabPostInit("marsh_bush",function(inst)
     if not TheWorld.ismastersim then
