@@ -4,10 +4,14 @@ local assets = {
 }
 
 local function onequip(inst, owner)
+    inst.owner = owner
     if inst.AmusementEquipFn and inst.amuseitem then
         TheNet:Announce("equip")
-        inst.AmusementEquipFn(inst.amuseitem,owner)
 
+        inst.AmusementEquipFn(inst.amuseitem,inst.owner)
+        if inst.AmusementEquipFn2 then -- AXE Modded amulets can also define these if they so choose.
+            inst.AmusementEquipFn2(inst,inst.owner,inst.amuseitem) -- Triggered for things relevent to the amusement pack
+        end
         --AXE Undo anything that visually changed
         if owner.sg == nil or owner.sg.currentstate.name ~= "amulet_rebirth" then
             owner.AnimState:ClearOverrideSymbol("swap_body")
@@ -23,13 +27,16 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse", "backpack")
     owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse", "swap_body")
     inst.components.container:Open(owner)
-    inst.owner = owner
+    
 end
 
 local function onunequip(inst, owner)
     if inst.AmusementUnequipFn and inst.amuseitem then
         TheNet:Announce("unequip")
-        inst.AmusementUnequipFn(inst.amuseitem,owner)
+        inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
+        if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
+            inst.AmusementUnequipFn2(inst,inst.owner,inst.amuseitem)
+        end
     end
     -- Last step.
     owner.AnimState:ClearOverrideSymbol("swap_body")
@@ -43,17 +50,21 @@ local function ClearAmusementIfAny(inst)
     if inst.AmusementUnequipFn and inst.amuseitem and inst.owner then
         TheNet:Announce("unequip")
         inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
-        onequip(inst, inst.owner)
+        if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
+            inst.AmusementUnequipFn2(inst,inst.owner,inst.amuseitem)
+        end       
     end
     
     inst.components.equippable.dapperness = 0
     inst.AmusementEquipFn = nil
     inst.AmusementUnequipFn = nil
+    inst.AmusementEquipFn2 = nil
+    inst.AmusementUnequipFn2 = nil  
+    inst.amuseitem = nil
 
     if inst.owner then
-
+        onequip(inst, inst.owner)
     end
-    inst.amuseitem = nil
 end
 
 local function SetupAmusement(inst,item,index)  
@@ -82,17 +93,29 @@ local function CheckToSeeIfAmuletChanged(inst)
     local index
     if item then
         for i,v in pairs(inst.supported_amulets) do
-            print(v)
-            print(i)
-            print(v.name)
             if v.name == item.prefab then
                 index = i
+                if v.onequipfn then
+                    inst.AmusementEquipFn2 = v.onequipfn
+                end
+                if v.onunequipfn then
+                    inst.AmusementUnequipFn2 = v.onunequipfn       
+                end
+                
+                -- AXE Also allow modded definition of function calls for the amusement pack
+                if item.UM_AmusementEquipFn then
+                    inst.AmusementEquipFn2 = item.UM_AmusementEquipFn
+                end
+                if item.UM_AmusementUnequipFn then
+                    inst.AmusementUnequipFn2 = item.UM_AmusementUnequipFn
+                end                
+                
                 break
             end
         end
     end
     if index then
-        SetupAmusement(inst,item,index)
+        SetupAmusement(inst,item)
     else
         ClearAmusementIfAny(inst)
     end
@@ -107,9 +130,33 @@ local function OnContainerChanged(inst)
     CheckToSeeIfAmuletChanged(inst)
 end
 
+-- AXE These functions are for additional things that may not be triggered by calling the amulet's onequip function, like heater
+local function BlueEquip(inst,owner)
+    inst:AddComponent("heater")
+    inst.components.heater:SetThermics(false, true)
+    inst.components.heater.equippedheat = TUNING.BLUEGEM_COOLER * 1.5
+end
+
+local function BlueUnEquip(inst,owner)
+    inst:RemoveComponent("heater")
+end
+
+local function YellowEquip(inst,owner)
+    inst.components.equippable.walkspeedmult = 1.3
+end
+
+local function YellowUnEquip(inst,owner)
+    inst.components.equippable.walkspeedmult = 1
+end
+
 local supportedAmulets = {
     ["amulet"] = {name = "amulet"},
-    ["blueamulet"] = {name = "blueamulet"}
+    ["blueamulet"] = {name = "blueamulet",onequipfn = BlueEquip, onunequipfn = BlueUnEquip},
+    ["purpleamulet"] = {name = "purpleamulet"},
+    ["yellowamulet"] = {name = "yellowamulet",onequipfn = YellowEquip, onunequipfn = YellowUnEquip},
+    ["orangeamulet"] = {name = "orangeamulet"},
+    ["greenamulet"] = {name = "greenamulet"},
+    ["ancient_amulet_red"] = {name = "ancient_amulet_red"}
 }
 
 

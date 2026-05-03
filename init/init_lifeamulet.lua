@@ -32,6 +32,12 @@ local function AmuletPostInit(inst)
     local function healowner(inst, owner)
         local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
 
+        local amusement
+        if owner.prefab == "um_backpack_amuletuse" then -- AXE Need to redirect!
+            amusement = true
+            owner = owner.components.inventoryitem and owner.components.inventoryitem.owner and owner.components.inventoryitem.owner or owner
+        end 
+
         if inst.components.fueled and inst.components.fueled:IsEmpty() then
             if inst.task then
                 inst.task:Cancel()
@@ -42,14 +48,14 @@ local function AmuletPostInit(inst)
 
         if (owner.components.health and owner.components.health:IsHurt())
             and (owner.components.hunger and owner.components.hunger.current > 5) and not owner:HasTag("deathamp") and not owner.components.oldager then
-            owner.components.health:DoDelta(TUNING.REDAMULET_CONVERSION, false, "redamulet")
+            owner.components.health:DoDelta((amusement and 1.5 or 1) * TUNING.REDAMULET_CONVERSION, false, "redamulet")
             owner.components.hunger:DoDelta(-TUNING.REDAMULET_CONVERSION)
             inst.components.fueled:DoDelta(-18)
 
             local healtime = 10
 
             if owner.components.health and owner.components.health:GetPercent() <= 0.5 then
-                healtime = 1 + (8 * owner.components.health:GetPercent())
+                healtime = 0.33 + (8 * owner.components.health:GetPercent())
             end
 
             inst.task = inst:DoTaskInTime(healtime, healowner, owner)
@@ -57,7 +63,6 @@ local function AmuletPostInit(inst)
     end
 
     local function onequip_red(inst, owner)
-        TheNet:Announce("equip red")
         local skin_build = inst:GetSkinBuild()
         if skin_build then
             owner:PushEvent("equipskinneditem", inst:GetSkinName())
@@ -71,7 +76,6 @@ local function AmuletPostInit(inst)
         if owner.components.health and owner.components.health:GetPercent() <= 0.5 then
             healtime = 1 + (8 * owner.components.health:GetPercent())
         end
-        TheNet:Announce("settask")
         inst.task = inst:DoTaskInTime(healtime, healowner, nil, owner)
         --inst.task = inst:DoPeriodicTask(10, healowner, nil, owner)
     end
