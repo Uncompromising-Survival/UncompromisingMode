@@ -203,6 +203,12 @@ end
 
 modimport("init/init_skilltreeimports")
 
+
+
+if GetModConfigData("lifeamulet") then
+    modimport("init/init_lifeamulet")
+end
+
 --if GetModConfigData("caved") == false and GetModConfigData("acidrain") then
 --modimport("init/init_weather/init_overworld_toadstool")
 --end
