@@ -163,8 +163,6 @@ local function fn(Sim)
 
     inst.Transform:SetFourFaced()
 
-
-
 	MakeCharacterPhysics(inst, 99999, 0.5)
 	inst.entity:SetPristine()
 
@@ -233,7 +231,6 @@ local function fn(Sim)
     inst.SetUnder = SetUnder
 	inst.SetAbove = SetAbove
 
-    
 	inst:ListenForEvent("attacked", OnAttacked) 
 
 	inst.OnSave = OnSave
@@ -275,8 +272,6 @@ local function fntail()
         return inst
     end
 
-	
-	
     inst:AddComponent("stackable")
 
     inst:AddComponent("perishable")
@@ -295,4 +290,4 @@ local function fntail()
 end
 
 return Prefab("snowmong", fn, assets),
-Prefab("um_ice_tail",fntail)
+    Prefab("um_ice_tail",fntail)
