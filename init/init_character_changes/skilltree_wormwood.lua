@@ -82,7 +82,7 @@ local skills =
 		pos = {UI_VERTICAL_MIDDLE - 105, UI_BOTTOM + 10},
 
 		group = "gathering",
-		tags = {"blooming"},
+		tags = {"crafting"},
 		onactivate = function(owner)
 			owner:AddTag("farmplantfastpicker")
 		end,
@@ -101,7 +101,7 @@ local skills =
 		
 		pos = {UI_VERTICAL_MIDDLE - 105 - 50, UI_BOTTOM + 10},
 		group = "gathering",
-		tags = {"blooming"},
+		tags = {"crafting"},
 		connects = {
 			"wormwood_sympathetic_blooming",
 			"wormwood_originator",
@@ -428,7 +428,7 @@ local skills =
 		pos = {UI_VERTICAL_MIDDLE + 43, UI_BOTTOM + 150},
 
 		group = "crafting",
-		tags = {"crafting"},
+		tags = {"blooming"},
 
 	},
 
