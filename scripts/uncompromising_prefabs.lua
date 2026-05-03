@@ -78,6 +78,7 @@ local prefabs = {
     "air_conditioner",
     "air_conditioner_smoke",
     --"mothergoose",
+    "mothergoose_tornado",
     --"mothergooseegg",
     "shadow_goo",
     "mini_dreadeye",
