@@ -5,6 +5,7 @@ local assets = {
 
 local function onequip(inst, owner)
     if inst.AmusementEquipFn and inst.amuseitem then
+        TheNet:Announce("equip")
         inst.AmusementEquipFn(inst.amuseitem,owner)
 
         --AXE Undo anything that visually changed
@@ -27,6 +28,7 @@ end
 
 local function onunequip(inst, owner)
     if inst.AmusementUnequipFn and inst.amuseitem then
+        TheNet:Announce("unequip")
         inst.AmusementUnequipFn(inst.amuseitem,owner)
     end
     -- Last step.
@@ -38,7 +40,11 @@ end
 
 local function ClearAmusementIfAny(inst)
     TheNet:Announce("clear amusement")
-    inst.item = nil
+    if inst.AmusementUnequipFn and inst.amuseitem and inst.owner then
+        TheNet:Announce("unequip")
+        inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
+    end
+    
     inst.components.equippable.dapperness = 0
     inst.AmusementEquipFn = nil
     inst.AmusementUnequipFn = nil
@@ -49,27 +55,19 @@ local function ClearAmusementIfAny(inst)
     inst.amuseitem = nil
 end
 
-local function SetupAmusement(inst,item)  
-    local index
+local function SetupAmusement(inst,item,index)  
     TheNet:Announce("setup amusement")
     if inst.amuseitem then
         ClearAmusementIfAny(inst)
     end
     inst.amuseitem = item
-
-    for i, v in ipairs(inst.supported_amulets_names) do
-        if v == item.prefab then
-            index = i
-            break
-        end
-    end
     inst.components.equippable.dapperness = item.components.equippable.dapperness*1.5 -- AXE make the dapperness more efficient if implemented through the amusement pack
 
     inst.AmusementEquipFn = item.components.equippable.onequipfn
     inst.AmusementUnequipFn = item.components.equippable.onunequipfn
     if inst.owner then -- I'm being worn, I should activate the effects
         TheNet:Announce("re-equip")
-        onequip(inst, owner)
+        onequip(inst, inst.owner)
     end
 end
 
@@ -79,8 +77,21 @@ local function CheckToSeeIfAmuletChanged(inst)
     if item then
         TheNet:Announce("found item "..item.prefab)
     end
-    if item and table.contains(inst.supported_amulets_names,item.prefab) then
-        SetupAmusement(inst,item)
+
+    local index
+    if item then
+        for i,v in pairs(inst.supported_amulets) do
+            print(v)
+            print(i)
+            print(v.name)
+            if v.name == item.prefab then
+                index = i
+                break
+            end
+        end
+    end
+    if index then
+        SetupAmusement(inst,item,index)
     else
         ClearAmusementIfAny(inst)
     end
@@ -90,9 +101,9 @@ local function OnContainerChanged(inst)
     if inst.components.container:IsEmpty() then
         inst.components.inventoryitem.cangoincontainer = true
     else
-        inst.components.inventoryitem.cangoincontainer = false
-        CheckToSeeIfAmuletChanged(inst)
+        inst.components.inventoryitem.cangoincontainer = false 
     end
+    CheckToSeeIfAmuletChanged(inst)
 end
 
 local supportedAmulets = {
@@ -171,13 +182,6 @@ local function fn()
 
     inst.supported_amulets = supportedAmulets
 
-
-    inst.supported_amulets_names = {}
-    for i,v in ipairs(inst.supported_amulets) do
-        TheNet:Announce(v.name)
-        TheNet:Announce(i)
-        table.insert(inst.supported_amulets_names,v.name)
-    end
 
     TheNet:Announce("AXE - WARNING")
     TheNet:Announce("This item is not complete yet. Interaction will likely result in crash.")
