@@ -73,8 +73,21 @@ local function StopSpores(inst)
 	end
 end
 
+local function PlayerImmunity(inst)
+    if inst.prefab == "wormwood" then
+        return true
+    end
+    if inst.components.debuffable and inst.components.debuffable:HasDebuff("um_firecream_buff") then
+        return true
+    end
+    if inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY) 
+        and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY).prefab == "um_armor_pyre_nettles" then
+        return true
+    end
+end
+
 local function pyrenettle_bumped(inst,nextvictim)
-    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") then
+    if nextvictim:IsValid() and not nextvictim:HasTag("shadow") and not PlayerImmunity(nextvictim) then
         inst.AnimState:PlayAnimation("pn" .. inst.stage .. "_bump", false)
         inst.AnimState:PushAnimation("pn" .. inst.stage .. "_idle", true)
 		if inst.stage ~= 1 then

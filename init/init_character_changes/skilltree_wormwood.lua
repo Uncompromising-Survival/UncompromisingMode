@@ -450,7 +450,7 @@ local skills =
 	},
 	wormwood_allegiance_lunar_eqex = {
 		title = "Equivalent Exchange",
-		desc = "Transmute seeds directly into crops.",
+		desc = "Transmute seeds into other seeds.",
 		icon = "wormwood_eqex",
 		pos = {UI_LEFT + 13, UI_BOTTOM + 175},
 		locks = {"wormwood_allegiance_lock_lunar_1", "wormwood_allegiance_count_lock_1"},
