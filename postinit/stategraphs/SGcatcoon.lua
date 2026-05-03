@@ -15,7 +15,7 @@ env.AddStategraphPostInit("catcoon", function(inst)
                     else
                         inst.sg:GoToState("pounceplay", data.target)
                     end
-                elseif data.target and data.target:IsValid() and (inst:GetDistanceSqToInst(data.target) > TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5) or math.random() > .5) then
+                elseif data.target and data.target:IsValid() and (inst:GetDistanceSqToInst(data.target) > TUNING.CATCOON_MELEE_RANGE * TUNING.CATCOON_MELEE_RANGE / (1.5 * 1.5) or math.random() > .25) then
                     inst.sg:GoToState("pounce_pre", data.target)
                 else
                     inst.sg:GoToState("attack", data.target)
