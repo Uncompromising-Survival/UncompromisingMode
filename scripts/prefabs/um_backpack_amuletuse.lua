@@ -43,6 +43,7 @@ local function ClearAmusementIfAny(inst)
     if inst.AmusementUnequipFn and inst.amuseitem and inst.owner then
         TheNet:Announce("unequip")
         inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
+        onequip(inst, inst.owner)
     end
     
     inst.components.equippable.dapperness = 0

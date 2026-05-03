@@ -11,8 +11,6 @@ local UpvalueHacker = require("tools/upvaluehacker")
 --Try to initialise all functions locally outside of the post-init so they exist in RAM only once
 -----------------------------------------------------------------
 
--------Red Amulet changes are hosted in init_lifeamulet
-
 local function YellowAmuletPostInit(inst)
     local function onremovelight(light)
         light._yellowamulet._light = nil

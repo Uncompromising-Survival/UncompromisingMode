@@ -16,8 +16,15 @@ local function OnLoad(inst,data)
 	end
 end
 
+
+local colors = {"r","g","b"}
 local function Init(inst)
-	if not 
+	if not inst.color then
+		inst.color = colors[math.random(1,#colors)]
+	end
+	if not inst.variant then
+		inst.variant = math.random(1,11)
+	end
 
 end
 

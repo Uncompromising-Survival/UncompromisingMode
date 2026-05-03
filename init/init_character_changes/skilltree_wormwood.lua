@@ -152,7 +152,7 @@ local skills =
 		pos = {UI_VERTICAL_MIDDLE - 35, UI_BOTTOM + 65},
 
 		group = "gathering",
-		tags = {"blooming"},
+		tags = {"crafting"},
 		connects = {
 			"wormwood_resilient_crops1",
 		},
