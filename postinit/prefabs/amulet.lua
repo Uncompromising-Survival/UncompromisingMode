@@ -28,7 +28,7 @@ local function YellowAmuletPostInit(inst)
             local amusement
             if owner.prefab == "um_backpack_amuletuse" then -- AXE Need to redirect!
                 amusement = true
-                owner = owner.components.inventoryitem and owner.components.inventoryitem.owner and owner.components.inventoryitem.owner or owner
+                owner = owner.components.inventoryitem and owner.components.inventoryitem.owner or owner
             end 
 
             if not inst._light or not inst._light:IsValid() then
