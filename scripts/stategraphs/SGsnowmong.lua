@@ -52,7 +52,7 @@ local states =
         	inst.attackUponSurfacing = (nextState == "attack")
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("enter")
-            inst:SetAbove(inst)
+            inst:SetAbove()
             inst.SoundEmitter:KillSound("walkloop")
         end,
 
@@ -89,7 +89,7 @@ local states =
         events =
         {
             EventHandler("animover", function(inst)
-                inst:SetUnder(inst)
+                inst:SetUnder()
                 inst.sg:GoToState("idle") 
             end)
         },
@@ -247,7 +247,7 @@ local states =
         timeline =
         {
             TimeEvent(FRAMES, function(inst)
-                inst:SetAbove(inst)
+                inst:SetAbove()
                 inst.SoundEmitter:KillSound("sniff")
                 inst.SoundEmitter:KillSound("stunned")
             end)
@@ -334,9 +334,9 @@ local states =
         tags = { "busy" },
         onenter = function(inst, data)
             inst.Physics:Stop()
-            --inst:SetAbovePhysics()
-            inst.SoundEmitter:KillSound("walkloop")
             inst.AnimState:PlayAnimation("enter")
+            inst:SetAbove()
+            inst.SoundEmitter:KillSound("walkloop")
         end,
 
         timeline =
@@ -359,7 +359,6 @@ local states =
         tags = { "busy", "canrotate" },
         onenter = function(inst, playanim)
             inst.Physics:Stop()
-            --inst:SetAbovePhysics()
             inst.AnimState:PlayAnimation("action")
         end,
 
