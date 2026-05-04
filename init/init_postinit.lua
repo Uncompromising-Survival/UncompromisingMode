@@ -249,7 +249,8 @@ local prefab_post = {
     "cave_vents",
     "cave_vent_mite",
     "bananabush",
-    "tillweedsalve"
+    "tillweedsalve",
+    "ancienttree_fruits"
 }
 
 local stategraph_post = {
