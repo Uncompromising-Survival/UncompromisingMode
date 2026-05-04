@@ -110,9 +110,8 @@ function CheckBee(container, item, slot)
     return item:HasTag("bee")
 end
 
-
-function CheckNettle(container,item,slot)
-	return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
+function CheckNettle(container, item, slot)
+    return item.prefab == "firenettles" or item.prefab == "firenettles_dried" or item.prefab == "pepper" or item.prefab == "spice_chili" or item.prefab == "um_rimeweed_itemvine" or item.prefab == "um_rimeweed_itemflower" or item.prefab == "um_ghost_pepper_item" or item.prefab == "um_ghost_fajita"
 end
 
 function CheckGem(container, item, slot)
@@ -342,9 +341,9 @@ modparams.um_backpack_amuletuse =
             { image = "inv_slot.tex",    atlas = "images/hud.xml" },
             { image = "inv_slot.tex",    atlas = "images/hud.xml" },
             { image = "inv_slot.tex",    atlas = "images/hud.xml" },
-            { image = "inv_slot.tex",   atlas = "images/hud.xml" },
-            { image = "inv_slot.tex",   atlas = "images/hud.xml" },
-            { image = "amulet_slot.tex",   atlas = "images/amulet_slot.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "inv_slot.tex",    atlas = "images/hud.xml" },
+            { image = "amulet_slot.tex", atlas = "images/amulet_slot.xml" },
         },
     },
     issidewidget = true,
@@ -650,6 +649,10 @@ for y = 2.5, -1.5, -1 do
         table.insert(modparams.um_gemology_pouch.widget.slotpos, Vector3(80 * x - 80 * 2, 80 * y - 80 * 2 + 120
         , 0))
     end
+end
+
+for i = 0, 25, 1 do
+    table.insert(modparams.um_gemology_pouch.widget.slotbg, { image = "gem_slot.tex", atlas = "images/gem_slot.xml" })
 end
 
 for y = 0, 3 do
