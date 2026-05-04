@@ -10,7 +10,7 @@ local easing = require("easing")
 local _storming = false
 local _spawninterval = TUNING.TOTAL_DAY_TIME * 3
 local _despawninterval = TUNING.TOTAL_DAY_TIME / 2
-local _rimebasetime =  TUNING.TOTAL_DAY_TIME / 24 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
+local _rimebasetime = TUNING.TOTAL_DAY_TIME / 24 -- Enough to trigger at least 4 times during a snowstorm, more likely 5 times
 local _worldsettingstimer = TheWorld.components.worldsettingstimer
 local UM_SNOWSTORM_TIMERNAME = "um_snowstorm_timer"
 local UM_STOPSNOWSTORM_TIMERNAME = "um_stopsnowstorm_timer"
@@ -19,22 +19,26 @@ local UM_RIMEWEED_TIMERNAME = "um_rimeweed_timer"
 local _stormtask = nil
 
 local function SpawnRimeweed(plant)
-    local offset = FindWalkableOffset(Vector3(plant.Transform:GetWorldPosition()), math.random()*2*PI, 4, 12)
+    local offset = FindWalkableOffset(Vector3(plant.Transform:GetWorldPosition()), math.random() * 2 * PI, 4, 12)
     if offset then
         local rimeweed = SpawnPrefab("rimeweed_main")
-        local x,y,z = plant.Transform:GetWorldPosition()
-        rimeweed.Transform:SetPosition(x+offset.x,0,z+offset.z)
+        local x, y, z = plant.Transform:GetWorldPosition()
+        rimeweed.Transform:SetPosition(x + offset.x, 0, z + offset.z)
     end
 end
 
 local function SpawnRimeweeds()
+    if TheWorld.state.cycles <= TUNING.DSTU.WEATHERHAZARD_START_DATE_WINTER then
+        return
+    end
+
     --TheNet:Announce("trying to spawn rimeweeds")
     local harvestible_plants = {}
     local rimeweeds = 0
-    local allplants -- should target *all* plants
-    local chance = math.random() -- Chance to target specific plants
+    local allplants                            -- should target *all* plants
+    local chance = math.random()               -- Chance to target specific plants
     local specificplant
-    if chance > 0.9 then -- Wide Grass
+    if chance > 0.9 then                       -- Wide Grass
         specificplant = "trapdoorgrass"
     elseif chance <= 0.9 and chance > 0.8 then -- Reeds
         specificplant = "reeds"
@@ -43,27 +47,27 @@ local function SpawnRimeweeds()
     else
         allplants = true
     end
-    for i,ent in pairs(Ents) do
+    for i, ent in pairs(Ents) do
         if ent.components.pickable and ent.components.pickable:CanBePicked() and ent:HasTag("plant") and not ent:HasTag("briar_plants") and ((specificplant and specificplant == ent.prefab) or allplants) then --  and not FindEntity(ent,60^2,nil,{"rimeweed"}) then
-            table.insert(harvestible_plants,ent)
+            table.insert(harvestible_plants, ent)
         end
         if ent.prefab == "rimeweed_main" then
             rimeweeds = rimeweeds + 1
         end
     end
-    
+
     if harvestible_plants and #harvestible_plants > 1 then
         --TheNet:Announce("Rimeweeds = ")
         --TheNet:Announce(rimeweeds)
         if rimeweeds < 10 then
-            local rnd = math.random(1,#harvestible_plants)
+            local rnd = math.random(1, #harvestible_plants)
             SpawnRimeweed(harvestible_plants[rnd])
-            table.remove(harvestible_plants,rnd)
+            table.remove(harvestible_plants, rnd)
         end
         if rimeweeds < 20 then
-            local rnd = math.random(1,#harvestible_plants) --crash point
+            local rnd = math.random(1, #harvestible_plants) --crash point
             SpawnRimeweed(harvestible_plants[rnd])
-            table.remove(harvestible_plants,rnd)
+            table.remove(harvestible_plants, rnd)
         end
     end
     if _worldsettingstimer:GetTimeLeft(UM_STOPSNOWSTORM_TIMERNAME) then
@@ -117,7 +121,7 @@ local function StartStorming()
 
         _worldsettingstimer:StartTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120))
 
-        _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30))
+        _worldsettingstimer:StartTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30))
     end)
 end
 
@@ -167,7 +171,6 @@ end)
 
 
 function SnowstormInitiator:OnPostInit()
-
     -- Snowstorm
     if not _worldsettingstimer:ActiveTimerExists(UM_SNOWSTORM_TIMERNAME) then
         _worldsettingstimer:AddTimer(UM_SNOWSTORM_TIMERNAME, _spawninterval + math.random(0, 120), true, StartStorming)
@@ -176,13 +179,13 @@ function SnowstormInitiator:OnPostInit()
         _worldsettingstimer:AddTimer(UM_STOPSNOWSTORM_TIMERNAME, _despawninterval + math.random(80, 120), true,
             StopSnowstorm)
     end
-    
+
     -- Rimeweed
     if not _worldsettingstimer:ActiveTimerExists(UM_RIMEWEED_TIMERNAME) then
-        _worldsettingstimer:AddTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime+math.random(0,30), true, SpawnRimeweeds)
+        _worldsettingstimer:AddTimer(UM_RIMEWEED_TIMERNAME, _rimebasetime + math.random(0, 30), true, SpawnRimeweeds)
     end
-    
-    
+
+
     OnSeasonChange()
 end
 
