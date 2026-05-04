@@ -736,7 +736,17 @@ NAMES.UM_BOOM_TART = "Boomberry Tart"
 NAMES.UM_RIBOPOD = "Ribopod"
 NAMES.UM_RIBOPODDEN = "Bone Mound"
 
-NAMES.UM_GEMOLOGYGEM_UNKNOWN = "Strange Gem"
+NAMES.UM_GEMOLOGYGEM_UNKNOWN = {
+    DEFAULT = "Strange Gem",
+    RED = "Strange Red Gem",
+    ORANGE = "Strange Orange Gem",
+    YELLOW = "Strange Yellow Gem",
+    GREEN = "Strange Green Gem",
+    BLUE = "Strange Blue Gem",
+    PURPLE = "Strange Purple Gem",
+    PALE = "Strange Pale Gem"
+}
+
 
 NAMES.UM_GEMOLOGYGEM_PREFIX = {
     "Cracked",
@@ -827,7 +837,8 @@ NAMES.GLACIALHOUND_ICESPIKE = "Ice Spike"
 
 NAMES.UM_FEATHER_TOTEM = "Feather Idol"
 NAMES.UM_GEMOLOGY_POUCH = "Gemology Pouch"
-NAMES.UM_MAGNIFIER = "Gem Magnifier"
+NAMES.UM_MAGNIFIER = "Ancient Gem Magnifier"
+NAMES.UM_MAGNIFIER_PURPLEGEM = "Gem Magnifier"
 NAMES.UM_MAGNIFIER_OBSIDIAN = "Gem Magmafier"
 NAMES.UM_REEDS_LUNAR = "Maned Reeds"
 NAMES.UM_STRANGE_RABBIT_ROCK = "Strange Rock"

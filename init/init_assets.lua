@@ -418,7 +418,7 @@ local inventoryitems =
     "um_spongeplant_item",
     "um_sponge_cake",
     "um_moss",
-    
+
 
     "um_gemologybluegem1",
     "um_gemologybluegem2",
@@ -445,7 +445,7 @@ local inventoryitems =
     "um_gemology_geode_ruins",
     "um_gemology_geode_sink",
     "um_gemology_geode_vent",
-    
+
     "um_flamethrower",
     "um_firecream",
     "um_pepperdragon_bladder",
@@ -454,6 +454,8 @@ local inventoryitems =
     "um_boomberrypie",
     "um_magnifier",
     "um_magnifier_obsidian",
+    "um_magnifier_purplegem",
+
     "um_gemology_pouch",
     --"um_gemology_pouch_open",
     "um_hat_nettlemask",
@@ -748,7 +750,7 @@ Assets = {
     Asset("ANIM", "anim/laserclops_anims.zip"),
     Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE), do not delete otherwise
 
-    Asset("ANIM","anim/um_slurtle_spit.zip"),
+    Asset("ANIM", "anim/um_slurtle_spit.zip"),
 
 
     Asset("ANIM", "anim/nymph.zip"),
