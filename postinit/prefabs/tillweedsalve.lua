@@ -15,7 +15,7 @@ env.AddPrefabPostInit("tillweedsalve", function(inst)
     local function OnHeal(inst, target)
         _OnHeal(inst, target)
         if target.components.health ~= nil then
-            target.components.health:DeltaPenalty(-0.25)
+            target.components.health:DeltaPenalty(-.125)
         end
     end
 
