@@ -215,7 +215,6 @@ local ONACTIVATE_FNS = {
 
     AllegianceLunar = function(inst)
         inst:AddTag("player_lunar_aligned")
-        print("adding tag lunarmelodist")
         inst:AddTag("lunarmelodist")
 
         
