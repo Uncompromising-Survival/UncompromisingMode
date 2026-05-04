@@ -177,7 +177,7 @@ local no_slow = {"INLIMBO", "notarget", "playerghost", "wall", "shadow", "shadow
 local function OnUpdateIceCircle(inst)
     local debuffkey = inst.prefab
     local caster = inst.caster and inst.caster:IsValid() and inst.caster or nil
-    local castercombat = caster ~= nil and caster.components.combat or nil
+    local castercombat = caster and caster.components.combat or nil
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, 3, { "_combat" }, no_slow)
     for i, v in ipairs(ents) do

@@ -904,6 +904,7 @@ STRINGS.SKILLTREE.WATHOM = {
     RAMPAGE_1_DESC = "Creatures you crash into at the end of your leaping strikes will be knocked back a little.",
     RAMPAGE_2_TITLE = "Lethal Rampage",
     RAMPAGE_2_DESC = "Damage enemies you crash into. Scales with your Adrenaline.",
+    AMP_1_TITLE = "Amp Up I",
     AMP_1_DESC = "The nightmare within you festers during combat. Your speed and power rises as you gain Adrenaline, at the cost of sustaining more damage when hit.",
     AMP_2_TITLE = "Amp Up II",
     AMP_2_DESC = "Your combat abilities as well as damage vulnerability are increased at high Adrenaline levels.",

@@ -163,6 +163,7 @@ local function DoWork(worker, target)
 
     return false
 end
+
 local function DoDamage(inst)
     inst.dmgtask = nil
     local attacker = inst.owner and inst.owner:IsValid() and inst.owner or inst
