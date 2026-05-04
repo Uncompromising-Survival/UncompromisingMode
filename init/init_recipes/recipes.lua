@@ -614,9 +614,12 @@ ChangeSortKey("um_feather_totem", "lifeinjector", "RESTORATION", false)
 ChangeSortKey("um_feather_totem", "resurrectionstatue", "MAGIC", false)
 
 
-AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_magnifier"}}, {"CRAFTING_STATION", "TOOLS"})
+AddRecipe2("um_magnifier", {Ingredient("um_gemologypurplegem2", 1), Ingredient("fossil_piece", 1), Ingredient("thulecite", 1)}, TECH.ANCIENT_THREE, {nounlock = true, no_builder_skill="wathom_allegiance_neutral", forward_ingredients={"wathom_um_magnifier"}}, {"CRAFTING_STATION"})
 ChangeSortKey("um_magnifier", "multitool_axe_pickaxe", "CRAFTING_STATION", false)
-ChangeSortKey("um_magnifier", "sentryward", "TOOLS", false)
+
+AddRecipe2("um_magnifier_purplegem", {Ingredient("purplegem", 1), Ingredient("boneshard", 2), Ingredient("livinglog", 1)}, TECH.MAGIC_THREE, {}, {"MAGIC", "TOOLS"})
+ChangeSortKey("um_magnifier_purplegem", "batbat", "MAGIC", false)
+ChangeSortKey("um_magnifier_purplegem", "sentryward", "TOOLS", false)
 
 AddRecipe2("um_gemology_pouch", {Ingredient("um_gemologyorangegem2", 1), Ingredient("pigskin", 4), Ingredient("nightmarefuel", 2)}, TECH.MAGIC_TWO, {}, {"MAGIC", "CONTAINERS" })
 ChangeSortKey("um_gemology_pouch", "skullchest_child", "MAGIC", false)

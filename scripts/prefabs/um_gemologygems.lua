@@ -47,7 +47,13 @@ end
 local function GetMainName(inst)
     local known, tier = IsGemKnown(inst)
     --only reveal name
-    return (tier ~= nil and tier > 0 or not known) and STRINGS.NAMES[string.upper(inst.prefab)] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN
+
+    local color = "DEFAULT"
+    if string.find(inst.prefab, "um_gemology") ~= nil then     --just UM has the color stuff idk if any addons will apply, so we'll use the default.
+        color = string.upper(string.gsub(string.gsub(inst.prefab, "um_gemology", ""), "gem%d", ""))
+    end
+
+    return (tier ~= nil and tier > 0 or not known) and STRINGS.NAMES[string.upper(inst.prefab)] or STRINGS.NAMES.UM_GEMOLOGYGEM_UNKNOWN[color]
 end
 
 local function Shine(inst)
@@ -175,8 +181,8 @@ local function MakeGem(gem, bank, build, anim)
         inst:AddComponent("edible")
         inst.components.edible.foodtype = FOODTYPE.ELEMENTAL
         inst.components.edible.hungervalue = 10
-        
-        
+
+
         MakeHauntableLaunch(inst)
 
         inst.OnSave = OnSave

@@ -68,10 +68,6 @@ env.AddPrefabPostInit("cave", function(inst)
 
     -- inst:AddComponent("um_stormspawner")
 
-    if TUNING.DSTU.PYRENETTLES then
-        --inst:AddComponent("um_pyre_nettles_summer_spawner")
-    end
-
     -- inst:DoTaskInTime(0, function(inst)
         -- if TestForIA() then
             -- inst:RemoveComponent("cavedeerclopsspawner")

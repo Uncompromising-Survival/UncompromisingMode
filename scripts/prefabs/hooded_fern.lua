@@ -216,7 +216,7 @@ end
 
 local function CheckToSeeIfTargetsMoving(inst)
     for i, v in ipairs(inst.playertracking) do
-        if v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5 ^ 2 then
+        if v.sg ~= nil and v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5 ^ 2 then
             if v.sg:HasStateTag("moving") and inst.busyanimation == false then
                 inst.AnimState:PlayAnimation("bounce", false)
                 inst.busyanimation = true

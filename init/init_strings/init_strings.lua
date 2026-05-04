@@ -183,9 +183,10 @@ RECIPE_DESC.UM_HAT_PEPPERDRAGON = "Invert temperature rules."
 RECIPE_DESC.UM_BOOMBERRY_BOMB = "Fruit-mine on a stick."
 
 RECIPE_DESC.UM_FEATHER_TOTEM = "Three feathers in the hand are worth more to those who can't escape death."
-RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems."
-RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = RECIPE_DESC.UM_MAGNIFIER
-RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds gemology gems and geodes. Bigger on the inside."
+RECIPE_DESC.UM_MAGNIFIER = "Discover the hidden properties of Strange Gems the Ancient way."
+RECIPE_DESC.UM_MAGNIFIER_PURPLEGEM = "Discover the hidden properties of Strange Gems."
+RECIPE_DESC.UM_MAGNIFIER_OBSIDIAN = "Discover the hidden properties of Strange Gems the fiery way."
+RECIPE_DESC.UM_GEMOLOGY_POUCH = "Holds Strange Gems and geodes. Bigger on the inside."
 RECIPE_DESC.WORMWOOD_MUSHTREE = "Create your very own fungus among us."
 RECIPE_DESC.WORMWOOD_EQEX = "Friends come and go."
 

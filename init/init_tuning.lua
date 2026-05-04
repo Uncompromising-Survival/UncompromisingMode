@@ -430,7 +430,6 @@ TUNING.DSTU = {
     BOSS_RESISTANCE = GetModConfigData("boss_resistance_"),
     STORMS = GetModConfigData("um_storms"),
     STORMS_PERFORMANCE = GetModConfigData("um_storms_performance"),
-    PYRENETTLES = GetModConfigData("pyrenettles"),
     HEATWAVES = GetModConfigData("heatwaves"),
     SMOG = GetModConfigData("smog"),
     MAXTEMPDAMAGE = GetModConfigData("maxtempdamage"),
