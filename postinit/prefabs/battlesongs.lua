@@ -4,6 +4,7 @@ GLOBAL.setfenv(1, GLOBAL)
 --------------------------------------------------------------------------
 -- FUNCTIONS
 --------------------------------------------------------------------------
+local skill_load_buffer = 5
 local melodist_must_tags = {"player", "lunarmelodist"}
 local melodist_no_tags = { "ghost", "playerghost", "INLIMBO" }
 
@@ -150,8 +151,24 @@ local function battlesong_durability_ondetach(inst, target)
     end
 end
 
+local function TryStartHealthRegen(inst, target) 
+    --print("Applying battlesong healthgain")
+    --print("Is near lunar melodist: " ..tostring(IsNearLunarMelodist(target)))
+    --print("Is task nil: ".. tostring(inst.battlesong_healthgain_task == nil))
+
+    if IsNearLunarMelodist(target) and inst.battlesong_healthgain_task == nil then
+        inst.battlesong_healthgain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
+            target.components.health:DoDelta(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH)
+        end)
+        return true
+    end
+
+    return false
+end
+
 local function battlesong_healthgain_onapply(inst, target)
     if target.components.health then
+
         inst:ListenForEvent("onattackother", function(attacker, data)
             if CheckValidAttackData(attacker, data) then
                 --[[
@@ -163,17 +180,20 @@ local function battlesong_healthgain_onapply(inst, target)
                     target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA )
                 end
                 target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA )]]
-                if target:HasTag("battlesinger") then
-                    target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA_SINGER)
-                else
+                --if target:HasTag("battlesinger") then
+                    --target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA_SINGER)
+                --else
                     target.components.health:DoDelta(TUNING.BATTLESONG_HEALTHGAIN_DELTA)
-                end
+                --end
             end
         end, target)
-
-        if IsNearLunarMelodist(target) and inst.battlesong_healthgain_task == nil then
-            inst.battlesong_healthgain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
-                target.components.health:DoDelta(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH)
+        
+        --Notes: Songs are loaded before skill tree tags on shard change so it fails to recognize tags.
+        --Try once instantly for combat activations
+        if not TryStartHealthRegen(inst, target) then
+            --then try again after a couple seconds as backup in case the lunar melodist check failed due to shard change
+            inst:DoTaskInTime(skill_load_buffer, function(inst) 
+                TryStartHealthRegen(inst,target)
             end)
         end
     end
@@ -187,6 +207,16 @@ local function battlesong_healthgain_ondetach(inst, target)
     end
 end
 
+local function TryStartSanityRegen(inst, target) 
+    if IsNearLunarMelodist(target) and inst.battlesong_sanitygain_task == nil then
+            inst.battlesong_sanitygain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
+            target.components.sanity:DoDelta(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_SANITY)
+        end)
+        return true
+    end
+
+    return false
+end
 
 local function battlesong_sanitygain_onapply(inst, target)
     if target.components.sanity then
@@ -203,10 +233,10 @@ local function battlesong_sanitygain_onapply(inst, target)
                 target.components.sanity:DoDelta(TUNING.BATTLESONG_SANITYGAIN_DELTA)
             end
         end, target)
-
-        if IsNearLunarMelodist(target) and inst.battlesong_sanitygain_task == nil then
-            inst.battlesong_sanitygain_task = inst:DoPeriodicTask(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD, function()
-                target.components.sanity:DoDelta(TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_SANITY)
+        
+        if not TryStartSanityRegen(inst, target) then
+            inst:DoTaskInTime(skill_load_buffer, function(inst) 
+                TryStartSanityRegen(inst,target)
             end)
         end
     end
@@ -224,6 +254,15 @@ local function battlesong_sanityaura_onapply(inst, target)
         local lunarMult = 1
         if IsNearLunarMelodist(target) then lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER end
         target.components.sanity.neg_aura_modifiers:SetModifier(inst, TUNING.BATTLESONG_NEG_SANITY_AURA_MOD * lunarMult)
+
+        if lunarMult == 1 then
+            inst:DoTaskInTime(skill_load_buffer, function(inst) 
+                if IsNearLunarMelodist(target) then lunarMult = TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER end
+                target.components.sanity.neg_aura_modifiers:RemoveModifier(inst)
+                target.components.sanity.neg_aura_modifiers:SetModifier(inst, TUNING.BATTLESONG_NEG_SANITY_AURA_MOD * lunarMult)
+            end)
+
+        end
     end
 end
 
