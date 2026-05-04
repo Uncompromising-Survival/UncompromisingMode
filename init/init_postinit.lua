@@ -61,17 +61,17 @@ local component_post = {
     "boatmagnet",
     "moosespawner",
     "wateryprotection",
-    "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
-    "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
+    "placer",     --handles hiding the placer for the boat bottle when no boat is present in the bottle
+    "mast",       --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
     "locomotor",
     "beargerspawner",
     "floater",
     "temperature",
     "playercontroller",
-	"possessedaxe",
-	"inventoryitem",
-	"retrofitcavemap_anr",
+    "possessedaxe",
+    "inventoryitem",
+    "retrofitcavemap_anr",
     "fumarolelocaltemperature",
     "pickable",
     "actionqueuer"
@@ -177,7 +177,7 @@ local prefab_post = {
     "minotaur_drops",
     "frog",
     "klaus_sack",
-	"klaus",
+    "klaus",
     "krampus",
     "krampus_sack",
     "waterplant",
@@ -244,11 +244,12 @@ local prefab_post = {
     --"balatro_machine", -- Keeping this here for Later.
     "walrus_camp",
     "firestaff",
-	"worms",
-	"rabbitking",
+    "worms",
+    "rabbitking",
     "cave_vents",
     "cave_vent_mite",
-    "bananabush"
+    "bananabush",
+    "tillweedsalve"
 }
 
 local stategraph_post = {
@@ -333,13 +334,13 @@ if GetModConfigData("wixie_walter") then
         "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
-        "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
-        "bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
-        "wobypicking",    -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
+        "healer",          -- Walter gets a 50% bonus from healing items, over time. works on companions too.
+        "bufferedaction",  -- This handles wixie sending an rpc with the mouse pointer click location
+        "wobypicking",     -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
         "dryer",           -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
         "channelcastable", -- Just a dirty wrap of the component to stop it from removing the channelcastable component from her weapon when unequipped
-        "combat", -- Avoid using the weapon when shoving.
-        "weapon" -- Avoid using the weapon when shoving.
+        "combat",          -- Avoid using the weapon when shoving.
+        "weapon"           -- Avoid using the weapon when shoving.
     }
 
     for k, v in ipairs(wixie_prefabs) do
@@ -523,7 +524,7 @@ if GetModConfigData("changed_shadow_pieces") then
     --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
     --table.insert(stategraph_post, "shadow_knight")
-    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)    
+    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)
 end
 
 if GetModConfigData("hambatnerf") then

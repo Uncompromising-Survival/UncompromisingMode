@@ -45,6 +45,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
     COMPASS = "- Now works while on the inventory.\n- Increased durability.",
     SCRAP_MONOCLEHAT = "- Increases map reveal range.",
+    TILLWEEDSALVE = "- Restores lost maximum health.",
     __BREAK = "BREAK HERE",
     --uncomp content
     RAT_WHIP = "- Stronger when well fed.",
@@ -86,7 +87,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     --PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
     UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
     UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
-    BRINE_BALM = "- Hurts you a little, heals you over time.\n- Restores lost maximum health.",
+    BRINE_BALM = "- Hurts you a little, heals you a lot over time.\n- Restores lost maximum health.",
     BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
     UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
     UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
