@@ -1,13 +1,29 @@
 local assets = {
     Asset("ANIM", "anim/um_backpack_amuletuse.zip"),
     Asset("ANIM", "anim/swap_um_backpack_amuletuse.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_red.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_red.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_blue.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_blue.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_purple.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_purple.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_green.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_green.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_orange.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_orange.zip"),
+
+    Asset("ANIM", "anim/um_backpack_amuletuse_yellow.zip"),
+    Asset("ANIM", "anim/swap_um_backpack_amuletuse_yellow.zip"),
 }
 
 local function onequip(inst, owner)
     inst.owner = owner
     if inst.AmusementEquipFn and inst.amuseitem then
-        TheNet:Announce("equip")
-
         inst.AmusementEquipFn(inst.amuseitem,inst.owner)
         if inst.AmusementEquipFn2 then -- AXE Modded amulets can also define these if they so choose.
             inst.AmusementEquipFn2(inst,inst.owner,inst.amuseitem) -- Triggered for things relevent to the amusement pack
@@ -24,15 +40,18 @@ local function onequip(inst, owner)
     end
     
     -- At last step, change the symbols to be the amusementpack
-    owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse", "backpack")
-    owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse", "swap_body")
+    local extension = ""
+    if inst.color then
+        extension = "_"..inst.color
+    end
+    owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse"..extension, "backpack")
+    owner.AnimState:OverrideSymbol("swap_body", "swap_um_backpack_amuletuse"..extension, "swap_body")
     inst.components.container:Open(owner)
     
 end
 
 local function onunequip(inst, owner)
     if inst.AmusementUnequipFn and inst.amuseitem then
-        TheNet:Announce("unequip")
         inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
         if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
             inst.AmusementUnequipFn2(inst,inst.owner,inst.amuseitem)
@@ -46,9 +65,7 @@ local function onunequip(inst, owner)
 end
 
 local function ClearAmusementIfAny(inst)
-    TheNet:Announce("clear amusement")
     if inst.AmusementUnequipFn and inst.amuseitem and inst.owner then
-        TheNet:Announce("unequip")
         inst.AmusementUnequipFn(inst.amuseitem,inst.owner)
         if inst.AmusementUnequipFn2 then -- AXE Modded amulets can also define these if they so choose.
             inst.AmusementUnequipFn2(inst,inst.owner,inst.amuseitem)
@@ -61,14 +78,17 @@ local function ClearAmusementIfAny(inst)
     inst.AmusementEquipFn2 = nil
     inst.AmusementUnequipFn2 = nil  
     inst.amuseitem = nil
+    inst.color = nil
 
     if inst.owner then
         onequip(inst, inst.owner)
     end
+    inst.AnimState:SetBuild("um_backpack_amuletuse")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_backpack_amuletuse.xml"
+    inst.components.inventoryitem:ChangeImageName("um_backpack_amuletuse")
 end
 
-local function SetupAmusement(inst,item,index)  
-    TheNet:Announce("setup amusement")
+local function SetupAmusement(inst,item,index) 
     if inst.amuseitem then
         ClearAmusementIfAny(inst)
     end
@@ -77,19 +97,18 @@ local function SetupAmusement(inst,item,index)
 
     inst.AmusementEquipFn = item.components.equippable.onequipfn
     inst.AmusementUnequipFn = item.components.equippable.onunequipfn
+    
+    inst.AnimState:SetBuild(inst.color and "um_backpack_amuletuse_"..inst.color or "um_backpack_amuletuse")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/"..(inst.color and ("um_backpack_amuletuse_"..inst.color) or "um_backpack_amuletuse")..".xml"
+    inst.components.inventoryitem:ChangeImageName(inst.color and ("um_backpack_amuletuse_"..inst.color) or "um_backpack_amuletuse")
+
     if inst.owner then -- I'm being worn, I should activate the effects
-        TheNet:Announce("re-equip")
         onequip(inst, inst.owner)
     end
 end
 
 local function CheckToSeeIfAmuletChanged(inst)
     local item = inst.components.container:GetItemInSlot(9)
-    TheNet:Announce("moved")
-    if item then
-        TheNet:Announce("found item "..item.prefab)
-    end
-
     local index
     if item then
         for i,v in pairs(inst.supported_amulets) do
@@ -101,15 +120,21 @@ local function CheckToSeeIfAmuletChanged(inst)
                 if v.onunequipfn then
                     inst.AmusementUnequipFn2 = v.onunequipfn       
                 end
-                
-                -- AXE Also allow modded definition of function calls for the amusement pack
+                if v.color then
+                    inst.color = v.color
+                end
+
+
+                -- AXE Also allow modded definition of function calls for the amusement pack from within modded prefabs
                 if item.UM_AmusementEquipFn then
                     inst.AmusementEquipFn2 = item.UM_AmusementEquipFn
                 end
                 if item.UM_AmusementUnequipFn then
                     inst.AmusementUnequipFn2 = item.UM_AmusementUnequipFn
                 end                
-                
+                if item.UM_AmusementColor then
+                    inst.color = item.UM_AmusementColor
+                end                
                 break
             end
         end
@@ -150,13 +175,13 @@ local function YellowUnEquip(inst,owner)
 end
 
 local supportedAmulets = {
-    ["amulet"] = {name = "amulet"},
-    ["blueamulet"] = {name = "blueamulet",onequipfn = BlueEquip, onunequipfn = BlueUnEquip},
-    ["purpleamulet"] = {name = "purpleamulet"},
-    ["yellowamulet"] = {name = "yellowamulet",onequipfn = YellowEquip, onunequipfn = YellowUnEquip},
-    ["orangeamulet"] = {name = "orangeamulet"},
-    ["greenamulet"] = {name = "greenamulet"},
-    ["ancient_amulet_red"] = {name = "ancient_amulet_red"}
+    ["amulet"] = {name = "amulet",color = "red"},
+    ["blueamulet"] = {name = "blueamulet",onequipfn = BlueEquip, onunequipfn = BlueUnEquip, color = "blue"},
+    ["purpleamulet"] = {name = "purpleamulet", color = "purple"},
+    ["yellowamulet"] = {name = "yellowamulet",onequipfn = YellowEquip, onunequipfn = YellowUnEquip, color = "yellow"},
+    ["orangeamulet"] = {name = "orangeamulet", color = "orange"},
+    ["greenamulet"] = {name = "greenamulet", color = "green"},
+    ["ancient_amulet_red"] = {name = "ancient_amulet_red", color = "red"}
 }
 
 
@@ -171,7 +196,7 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.MiniMapEntity:SetIcon("sporepack_map.tex")
+    inst.MiniMapEntity:SetIcon("um_backpack_amuletuse.tex")
 
     inst.AnimState:SetBank("um_backpack_amuletuse")
     inst.AnimState:SetBuild("um_backpack_amuletuse")
@@ -201,7 +226,8 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/um_backpack_amuletuse.xml"
+    inst.components.inventoryitem:ChangeImageName("um_backpack_amuletuse")
     inst:ListenForEvent("itemlose", OnContainerChanged)
     inst:ListenForEvent("itemget", OnContainerChanged)
 
@@ -229,11 +255,6 @@ local function fn()
 
 
     inst.supported_amulets = supportedAmulets
-
-
-    TheNet:Announce("AXE - WARNING")
-    TheNet:Announce("This item is not complete yet. Interaction will likely result in crash.")
-    TheNet:Announce("Execute ''c_removeall('um_backpack_amuletuse')'' to prevent crashing.")
     return inst
 end
 

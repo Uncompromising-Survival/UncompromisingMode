@@ -19,6 +19,7 @@ RECIPE_DESC.SALTPACK = "Spice up the world."
 RECIPE_DESC.RATPOISON = "A most deadly feast."
 RECIPE_DESC.SHROOM_SKIN = "Stitched skins."
 RECIPE_DESC.SPOREPACK = "Unhygenic storage."
+RECIPE_DESC.UM_BACKPACK_AMULETUSE = "Empowers most amulets AND carries your things."
 RECIPE_DESC.AIR_CONDITIONER = "Condition the air."
 if GetModConfigData("longpig") then
     RECIPE_DESC.REVIVER = "Dead flesh revived to revive a dead friend."

@@ -404,7 +404,14 @@ local inventoryitems =
     "um_tentaclespike_moon",
     "um_tentaclespot_moon",
     "um_bomb_moon",
+
     "um_backpack_amuletuse",
+    "um_backpack_amuletuse_red",
+    "um_backpack_amuletuse_blue",
+    "um_backpack_amuletuse_purple",
+    "um_backpack_amuletuse_yellow",
+    "um_backpack_amuletuse_orange",
+    "um_backpack_amuletuse_green",
 
     "um_ribopod",
     "um_ribopodden",
@@ -1715,6 +1722,8 @@ Assets = {
     --Silk Sack
     Asset("ATLAS", "images/silk_slot.xml"),
     Asset("IMAGE", "images/silk_slot.tex"),
+    Asset("ATLAS", "images/amulet_slot.xml"),
+    Asset("IMAGE", "images/amulet_slot.tex"),
     Asset("ATLAS", "images/um_nettleslot.xml"),
     Asset("IMAGE", "images/um_nettleslot.tex"),
     Asset("ATLAS", "images/general_slot.xml"),
@@ -1854,6 +1863,9 @@ Assets = {
 
     Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
     Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
+
+    Asset("IMAGE", "images/map_icons/um_backpack_amuletuse.tex"),
+    Asset("ATLAS", "images/map_icons/um_backpack_amuletuse.xml"),
 
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),

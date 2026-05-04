@@ -163,7 +163,13 @@ local function DefinePrey(inst)
     else
         if not (inst.components.health and inst.components.health:IsDead()) and inst.components.knownlocations:GetLocation("home") then
             local home = inst.components.knownlocations:GetLocation("home")
-            local preys = TheSim:FindEntities(home.x, home.y, home.z, 16, {"webbedcreature"})
+            local ents = TheSim:FindEntities(home.x, home.y, home.z, 16)
+            local preys = {}
+            for i,v in ipairs(ents) do
+                if v.prefab == "webbedcreature" then -- AXE did this when trying to fix a bug... this isn't what the fix was but we may as well get ready to not have as many tags.
+                    table.insert(preys,v)
+                end
+            end
             local mindist = 9999
             local xnew,ynew,znew = inst.Transform:GetWorldPosition()
             for i,prey in ipairs(preys) do
@@ -173,8 +179,7 @@ local function DefinePrey(inst)
                     inst.prey = prey
                 end
             end
-            --TheNet:Announce("we did a prey")
-            return inst.sg:GoToState("leaptoprey_pre") and inst.prey or inst.sg:GoToState("jumphome")
+            return inst.sg:GoToState("leaptoprey_pre")
         end
     end
 end

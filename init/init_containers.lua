@@ -344,7 +344,7 @@ modparams.um_backpack_amuletuse =
             { image = "inv_slot.tex",    atlas = "images/hud.xml" },
             { image = "inv_slot.tex",   atlas = "images/hud.xml" },
             { image = "inv_slot.tex",   atlas = "images/hud.xml" },
-            { image = "silk_slot.tex",   atlas = "images/silk_slot.xml" },
+            { image = "amulet_slot.tex",   atlas = "images/amulet_slot.xml" },
         },
     },
     issidewidget = true,

@@ -352,7 +352,7 @@ local skills =
 	},
 
 	wormwood_blooming_photosynthesis = {
-		title = SKILLTREESTRINGS.BLOOMING_PHOTOSYNTHESIS_TITLE,
+		title = "Improved Photosynthesis",
 		desc = SKILLTREESTRINGS.BLOOMING_PHOTOSYNTHESIS_DESC,
 		icon = "wormwood_blooming_photosynthesis",
 		pos = {UI_VERTICAL_MIDDLE + 165 + 55, UI_BOTTOM + 60},

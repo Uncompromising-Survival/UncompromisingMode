@@ -151,6 +151,7 @@ NAMES.DECIDUOUS_ROOT = "Living Tree Root"
 NAMES.LAVAESLIME = "Lavae Slime"
 NAMES.SALTPACK = "Salt Shaker 3000"
 NAMES.SPOREPACK = "Spore Pack"
+NAMES.UM_BACKPACK_AMULETUSE = "Amusement Pack"
 NAMES.RAT_TAIL = "Rat Tail"
 NAMES.SHROOM_SKIN_FRAGMENT = "Shroom Skin Scrap"
 NAMES.AIR_CONDITIONER = "Air Conditioner" --<--

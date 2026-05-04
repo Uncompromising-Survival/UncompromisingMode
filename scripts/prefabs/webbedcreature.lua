@@ -98,9 +98,12 @@ local function SetUpCocoon(inst)
             inst.cocoon_data = COCOON_DEFS.DEFAULT[inst.cocoon_creature]
         end
     end
-
-    inst.components.named:SetName(inst.cocoon_data.name .. " Cocoon")
-    SetCocoonSize(inst, inst.cocoon_data.size)
+    if not (inst.cocoon_data and inst.cocoon_creature) then
+        inst:Remove()
+    else
+        inst.components.named:SetName(inst.cocoon_data.name .. " Cocoon")
+        SetCocoonSize(inst, inst.cocoon_data.size)
+    end
 end
 
 local function OnKilled(inst)
