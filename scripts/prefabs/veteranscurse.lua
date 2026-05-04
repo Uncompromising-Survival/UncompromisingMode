@@ -128,7 +128,7 @@ local function oneat(inst, data)
     sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
     if health_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_healthregen")) then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = maxhp_heal})
+        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
     else
         inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
     end
