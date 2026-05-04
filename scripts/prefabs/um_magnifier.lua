@@ -56,5 +56,5 @@ end
 
 return CreateManifier("um_magnifier", 100),
         CreateManifier("um_magnifier_obsidian", 100, "um_magnifier", "um_magnifier"), --TODO: Obsidian art
-        CreateManifier("um_magnifier_purplegem", 50, "um_magnifier", "um_magnifier") --TODO: Purplegem art
+        CreateManifier("um_magnifier_purplegem", 25, "um_magnifier", "um_magnifier") --TODO: Purplegem art
 
