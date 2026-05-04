@@ -22,6 +22,13 @@ env.AddComponentPostInit("weapon", function(self)
         return _OnAttack(self, attacker, target, projectile, ...)
     end
 
+    local _CanRangedAttack = self.CanRangedAttack
+    function self:CanRangedAttack(...)
+        local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
+        if TUNING.DSTU.WIXIE and owner and owner.sg and owner.sg.mem.um_dontuseweaponinstate then return false end
+        return _CanRangedAttack(self, ...)
+    end
+
     function self:OnAttack_NoDurabilityLoss(attacker, target, projectile)
         if self.onattack ~= nil then
             self.onattack(self.inst, attacker, target, 2)

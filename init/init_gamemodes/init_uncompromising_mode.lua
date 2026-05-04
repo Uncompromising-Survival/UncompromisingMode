@@ -20,7 +20,6 @@ modimport("init/init_weather/init_dragonfly_bait")
 -- Needs to go up here, other files will try to reference it
 modimport("init/init_tuning")
 
-
 --	[ 	Import Names and Descriptions	]	--
 modimport("init/init_strings/init_strings")
 modimport("init/init_strings/init_names")
@@ -83,8 +82,6 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 --end
 
 --	[ 				Features			]	--
-
-
 
 --if GetModConfigData("harder_monsters") then4
 if GetModConfigData("horriblefood") then
@@ -203,8 +200,6 @@ end
 
 modimport("init/init_skilltreeimports")
 
-
-
 if GetModConfigData("lifeamulet") then
     modimport("init/init_lifeamulet")
 end
@@ -255,8 +250,6 @@ if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
 
-
-
 modimport("init/init_weather/init_ripples")
 modimport("init/init_weather/init_thicket")
 modimport("init/init_insightcompat")
@@ -264,4 +257,3 @@ modimport("init/init_insightcompat")
 --need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
 GLOBAL.TheMineralLogbook = require("mineral_logbook")()
 GLOBAL.TheMineralLogbook:Load()
-

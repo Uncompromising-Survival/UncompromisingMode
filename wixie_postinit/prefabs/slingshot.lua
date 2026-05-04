@@ -42,6 +42,7 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
     end
     reticule.Transform:SetRotation(rot)
 end
+
 --[[
 local function createlight(staff, target, pos)
     local ammo = staff.components.weapon.projectile.."_secondary"
@@ -63,8 +64,6 @@ local function createlight(staff, target, pos)
         end
     end
 end]]
-
-
 
 local function LaunchSpit(inst, caster, target, shadow)
     if caster ~= nil then
