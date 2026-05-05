@@ -12,7 +12,7 @@ local function ThicketCheck(inst)
 end
 
 
-local ignore_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost"}
+local ignore_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost","bat"}
 env.AddComponentPostInit("locomotor", function(self)
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, arrive_check_only)
