@@ -176,3 +176,11 @@ AddTaskSetPreInitAny(function(tasksetdata)
 	end
 end)
 
+
+-- AXE Add lunar mushrooms
+AddRoomPreInit("MoonMushForest", function(room) -- red
+	room.contents.distributeprefabs["um_mushroom_moon"] = 0.03
+end)
+
+	
+

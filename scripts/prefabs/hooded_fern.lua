@@ -245,6 +245,9 @@ local function AphidStorm(inst,num,unfortunate_soul)
         
         if num > 0 then
             num = num - 1
+            if not unfortunate_soul:HasTag("player") then
+                num = num - 1
+            end
             thicket.cant_aphid = true
             thicket:DoTaskInTime(3,function(thicket) thicket.cant_aphid = nil end)
             inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)

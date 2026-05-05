@@ -189,6 +189,7 @@ AddRoom("GrottoLightFloodNoise", {
             twigs = 0.005,
             sapling_moon = 0.0025,
             flint = 0.0025,
+            um_mushroom_moon = 0.02,
 			--shockworm = 0.005,
         },
     }
@@ -215,7 +216,7 @@ AddRoom("GrottoLightFlood", {
         distributeprefabs =
         {
             mushtree_moon = 0.075,
-
+            um_mushroom_moon = 0.02,
             lightflier_flower = 0.02,
 
             moonglass_stalactite1 = 0.007,

@@ -345,7 +345,7 @@ end
 env.AllRecipes["wormwood_tomato_eqex"].image = "wormwood_tomato.tex"
 env.AllRecipes["wormwood_onion_eqex"].image = "wormwood_onion.tex"]]
 
-local plants_1 = {"potato","asparagus","garlic","pumpkin","pomegranate","watermelon"}
+local plants_1 = {"potato","asparagus","garlic","pumpkin","pomegranate","dragonfruit","watermelon"}
 local plants_2 = {"eggplant","corn","durian","carrot","onion","pepper","tomato"}
 for i,v in ipairs(plants_1) do
     env.AddRecipe2("wormwood_"..v.."_eqex", {Ingredient(plants_2[i].."_seeds", 5),Ingredient(CHARACTER_INGREDIENT.HEALTH, 5   )}, TECH.NONE, {  numtogive = 4,  builder_skill = "wormwood_allegiance_lunar_eqex", product = v.."_seeds", nounlock = true,no_deconstruction=true, description="wormwood_eqex"}, {"CHARACTER"})

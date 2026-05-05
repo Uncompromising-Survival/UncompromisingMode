@@ -604,6 +604,7 @@ local filters = {
     ["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["um_reeds_lunar"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["um_tentacle_moon"] = {WORLD_TILES.FUNGUSMOON },
+    ["um_mushroom_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO },
 }
 
 for k, v in pairs(filters) do

@@ -851,6 +851,7 @@ NAMES.UM_TENTACLESPIKE_MOON = "Tentacle Dart"
 NAMES.UM_TENTACLESPOT_MOON = "Gros Peel"
 NAMES.UM_BOMB_MOON = "Transgrosgas Bomb"
 NAMES.UM_BACKPACK_AMULETUSE = "Amusement Pack"
+NAMES.UM_MUSHROOM_MOON = "Moon Mushroom"
 
 
 

@@ -51,7 +51,7 @@ local function OnHitMutate(inst, attacker, target)
     fx.SoundEmitter:PlaySound("meta4/winona_catapult/lunar_projectile_explode")
     fx:ListenForEvent("animover", fx.Remove)
     
-    local ents = TheSim:FindEntities(x, y, z, 5, nil, shouldnt_hit)
+    local ents = TheSim:FindEntities(x, y, z, 5)
     local mutation_count = 0
     local mutation_limit = 12
     if #ents > 0 then
@@ -64,7 +64,7 @@ local function OnHitMutate(inst, attacker, target)
                     mutation_count = mutation_count + 1
                     v.components.halloweenmoonmutable:Mutate()
                 end
-                if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated then
+                if v.components.combat and v.components.health and not v.components.health:IsDead() and not mutated and not inst:HasAnyTag(shouldnt_hit) then
                     local mult = 1
                     if v:HasAnyTag("shadow","shadowcreature","nightmarecreature","shadow_aligned") then
                         mult = mult * 3 -- AXE Lunar bomb is exceptionally effective against shadow creatures

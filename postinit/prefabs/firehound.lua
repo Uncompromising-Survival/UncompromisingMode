@@ -54,14 +54,14 @@ end
 local function ShootFireMagmaHound(inst,total_flame) --AXE obviously called by magmahound to perform its continuous fire breath attack
 	for i = 1,total_flame do
 		inst:DoTaskInTime(0+math.random(1,15)*FRAMES,function(inst)
-			SetUpFire(inst,5,20,1 + math.random(0,10)/100,5)
+			SetUpFire(inst,5,20,1 + math.random(0,10)/100,2)
 			PoofNearby(inst)
 		end)
 	end
 end
 
 local function ShootFire(inst) --AXE this one is called by fire hound for its short-range spitfire attack
-	SetUpFire(inst,0,16,1 + math.random(0,10)/100,6)
+	SetUpFire(inst,0,16,1 + math.random(0,10)/100,2)
 end
 
 local function FirePoof(inst) --AXE Visual support for when the fire hound is briefly charging the spitfire attack
