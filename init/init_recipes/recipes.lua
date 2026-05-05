@@ -42,7 +42,7 @@ AddRecipe2("gasmask", { Ingredient("goose_feather", 10), Ingredient("red_cap", 2
 ChangeSortKey("gasmask", "beehat", "CLOTHING", true)
 ChangeSortKey("gasmask", "balloonhat", "RAIN", true)
 
-AddRecipe2("plaguemask", { Ingredient("gasmask", 1), Ingredient("red_cap", 2), Ingredient("rat_tail", 4) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
+AddRecipe2("plaguemask", { Ingredient("gasmask", 1), Ingredient("um_spongeplant_item", 6), Ingredient("um_tentaclespot_moon", 2) }, TECH.SCIENCE_TWO, nil, { "CLOTHING", "RAIN", "SUMMER" })
 ChangeSortKey("plaguemask", "gasmask", "CLOTHING", true)
 ChangeSortKey("plaguemask", "gasmask", "RAIN", true)
 ChangeSortKey("plaguemask", "gasmask", "SUMMER", true)
