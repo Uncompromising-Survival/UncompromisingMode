@@ -282,6 +282,28 @@ local function OnAttackOther(inst, data)
     end
 end
 
+local function ShouldNotRangeAttack(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if inst.sg.mem.um_dontuseweaponinstate and weaponcomp and weaponcomp.projectile then
+        if not weapon.um_projectiletorestore then
+            weapon.um_projectiletorestore = weaponcomp.projectile
+            weaponcomp:SetProjectile(nil)
+        end
+        return true
+    end
+    return false
+end
+
+local function OnAttackerAttackedPost(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if weapon and weapon.um_projectiletorestore and weaponcomp and not weaponcomp.projectile then
+        weaponcomp:SetProjectile(weapon.um_projectiletorestore)
+        weapon.um_projectiletorestore = nil
+    end
+end
+
 local function common_postinit(inst)
     inst:ListenForEvent("setowner", OnSetOwner)
 
@@ -328,6 +350,8 @@ local function master_postinit(inst)
     inst.components.foodaffinity:AddPrefabAffinity("blueberrypancakes", 1.2)
 
     inst:ListenForEvent("onattackother", OnAttackOther)
+    inst.UMShouldNotRangeAttack = ShouldNotRangeAttack
+    inst:ListenForEvent("um_attacker_attacked_pst", OnAttackerAttackedPost)
     --inst:ListenForEvent("killed", OnKilledOther)
 
     inst.soundsname = "wixie"

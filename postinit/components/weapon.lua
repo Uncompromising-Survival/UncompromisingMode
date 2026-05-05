@@ -25,7 +25,7 @@ env.AddComponentPostInit("weapon", function(self)
     local _CanRangedAttack = self.CanRangedAttack
     function self:CanRangedAttack(...)
         local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
-        if TUNING.DSTU.WIXIE and owner and owner.sg and owner.sg.mem.um_dontuseweaponinstate then return false end
+        if owner and owner.UMShouldNotRangeAttack and owner:UMShouldNotRangeAttack({weapon = self.inst}) then return false end
         return _CanRangedAttack(self, ...)
     end
 
