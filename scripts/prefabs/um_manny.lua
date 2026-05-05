@@ -22,8 +22,10 @@ local function fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
-
+    inst.entity:AddMiniMapEntity()
+    inst.MiniMapEntity:SetIcon("um_manny.tex")
     MakeInventoryPhysics(inst)
+
 
     inst.AnimState:SetBank("um_manny")
     inst.AnimState:SetBuild("um_manny")

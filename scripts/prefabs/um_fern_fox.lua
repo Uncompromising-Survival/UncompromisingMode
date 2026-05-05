@@ -164,12 +164,12 @@ local function fnden()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    --inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
     MakeSmallObstaclePhysics(inst, .5)
 
-    --inst.MiniMapEntity:SetIcon("catcoonden.png")
+    inst.MiniMapEntity:SetIcon("um_fern_fox_den.tex")
 
     inst.AnimState:SetBank("um_fox_den")
     inst.AnimState:SetBuild("um_fox_den")
