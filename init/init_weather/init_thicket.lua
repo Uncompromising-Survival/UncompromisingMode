@@ -14,18 +14,11 @@ end
 
 local ignore_thicket = {"smallcreature","bird","shadowcreature","ghost","playerghost"}
 env.AddComponentPostInit("locomotor", function(self)
-
-    self.thickets = {}
     local _OnUpdate = self.OnUpdate
     function self:OnUpdate(dt, arrive_check_only)
         local inst = self.inst
         if not inst:HasAnyTag(ignore_thicket) then
-            
-        --frame = frame + 1
-        --if frame > frame_to_check then
             ThicketCheck(inst)
-            --frame = 0
-        --end
         end
         return _OnUpdate(self,dt,arrive_check_only)
     end
