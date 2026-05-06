@@ -125,8 +125,8 @@ AddTile("UM_FLOODWATER_GROTTO",
     {
         ground_name = "um_floodwater",
     }, {
-        name = "um_floodwater",
-        noise_texture = "Ground_noise_moon_fungus_flooded",
+        name = "tile_invisible",
+        noise_texture = "ground_invisible",
         runsound = "dontstarve/movement/run_marsh",
         walksound = "dontstarve/movement/walk_marsh",
         snowsound = "dontstarve/movement/run_marsh",
@@ -696,6 +696,8 @@ end
 GLOBAL.UM_LAVA_TILES = {}
 GLOBAL.UM_LAVA_TILES[GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = true
 GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "levels/particle_tiles/lavamolten.tex", "shaders/tilelavamoltenstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
+GLOBAL.UM_RegisterParticleWorldTileState(GLOBAL.WORLD_TILES.UM_FLOODWATER_GROTTO, "levels/particle_tiles/um_floodwater_grotto.tex", "shaders/tilefloodwaterstate.ksh", {has_variant = true, layer = GLOBAL.LAYER_GROUND, sort = -1})
+
 
 --
 

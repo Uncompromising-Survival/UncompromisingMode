@@ -229,6 +229,8 @@ local prefabs = {
     "hoodedturfchanger",
     "wargwarning",
     "waterfall_lavamolten",
+    "waterfall_um_floodwater",
+
     "deerclops_easyspawners",
     "armorlavae",
     "marshmist",

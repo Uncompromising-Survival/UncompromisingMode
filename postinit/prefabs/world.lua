@@ -34,6 +34,7 @@ env.AddPrefabPostInit("world", function(inst)
 
         inst:AddComponent("um_waterfallmanager")
         inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_MAGMA_LAVAMOLTEN, "waterfall_lavamolten")
+        inst.components.um_waterfallmanager:RegisterWaterfallTile(WORLD_TILES.UM_FLOODWATER_GROTTO, "waterfall_um_floodwater")
     end
 
     inst.UM_tile_physics_init = inst.tile_physics_init
