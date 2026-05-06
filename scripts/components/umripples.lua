@@ -204,7 +204,7 @@ function Umripples:OnLandedServer(forced)
         end
 
         if self.splash and (not self.inst.components.inventoryitem or not self.inst.components.inventoryitem:IsHeld()) then
-            local splash = SpawnPrefab("splash_ocean")
+            local splash = SpawnPrefab("splash_green")
             splash.Transform:SetPosition(self.inst.Transform:GetWorldPosition())
         end
 
