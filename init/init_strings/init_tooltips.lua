@@ -66,7 +66,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
-	UM_HAT_NETTLEMASK = "- Provides protection against spore clouds.\n- Stings user when worn.\n-Protects against blizzards.\n-Spoils.",
+	UM_HAT_NETTLEMASK = "- Provides protection against spore clouds.\n- Stings user when worn.",
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
 	UM_RIMEWEED_ICEPACK = "- Cools the player.",
@@ -264,6 +264,7 @@ if TUNING.DSTU.SNOWSTORMS then
     TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_SCRAP_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from snowstorms when built."
@@ -277,6 +278,7 @@ else
 end
 
 if TUNING.DSTU.HAYFEVER then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Prevents Hayfever while worn... If that's coded in."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.BEEHAT = "- Stings won't cause allergic reactions."
@@ -286,8 +288,9 @@ if TUNING.DSTU.HAYFEVER then
 end
 
 if TUNING.DSTU.SMOG then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Protects against smog while worn."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Protects against smog while worn."
-    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn"
+    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn."
 	TOOLTIPS.SMOGEATER = "- Sucks up smog."
     if TOOLTIPS.MINIFAN ~= nil then
         TOOLTIPS.MINIFAN = string.gsub(TOOLTIPS.MINIFAN, ".", "") .. " and helps against smog."

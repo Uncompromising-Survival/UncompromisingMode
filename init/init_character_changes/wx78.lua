@@ -95,6 +95,15 @@ env.AddPrefabPostInit("wx78", function(inst)
     end
 end)
 
+env.AddPrefabPostInit("wx78_moduleremover", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    inst:AddComponent("fuel")
+    inst.components.fuel.fuelvalue = TUNING.SMALL_FUEL
+end)
+
 if TUNING.DSTU.WX78_BACKUPBODY then
     local _GetDoerSavedStats
     local function GetDoerSavedStats(inst, doer, ...)

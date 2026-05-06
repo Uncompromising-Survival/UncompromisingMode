@@ -263,6 +263,7 @@ ACTIONFAIL.READ.GENERIC = "Of course I know what I'm doing."
 ACTIONFAIL.GIVE.NOTNIGHT = "Maybe if I hit it hard, it will work?"
 ACTIONFAIL.TOUCH_BURROW_RAT_LIMIT = "There are too many of them."
 ACTIONFAIL.TOUCH_BURROW_NO_HUNGER = "Where is all my food."
+--ACTIONFAIL.TOUCH_BURROW_RATLESS = "No more in this tunnel. I will dig another."
 
 -- Xmas Update
 DESCRIBE.MAGMAHOUND = "Bumpy rocky thing."

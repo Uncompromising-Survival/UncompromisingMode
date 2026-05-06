@@ -341,7 +341,7 @@ local function closetoleader(inst)
 end
 
 local function IsItemNono(inst, item)
-    return not item:HasAnyTag("animal", "small_livestock", "trap")
+    return not item:HasAnyTag("animal", "small_livestock", "trap", "playingcard", "deck_of_cards", "deckcontainer") --and item.components.stackable
 end
 
 local function PickUpFilter(inst, target, leader)
