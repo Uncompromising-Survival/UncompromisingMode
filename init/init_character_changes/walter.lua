@@ -31,10 +31,19 @@ local function OnPenaltyTimerDone(inst)
     end
 end
 
+local function ToggleUniqueVetCurse(inst, toggle)
+    if toggle then
+        inst:ListenForEvent("healthdelta", VetCurseMaxSanityLoss)
+        --inst:ListenForEvent("attacked", VetCurseMaxSanityLoss)
+        --UpvalueHacker.SetUpvalue(Prefabs.walter.master_postinit, OnHealthDelta, "OnHealthDelta")
+        inst:ListenForEvent("timerdone", OnPenaltyTimerDone)
+    else
+        inst:RemoveEventCallback("healthdelta", VetCurseMaxSanityLoss)
+        inst:RemoveEventCallback("timerdone", OnPenaltyTimerDone)
+    end
+end
+
 env.AddPrefabPostInit("walter", function(inst)
     if not TheWorld.ismastersim then return end
-    inst:ListenForEvent("healthdelta", VetCurseMaxSanityLoss)
-    --inst:ListenForEvent("attacked", VetCurseMaxSanityLoss)
-    --UpvalueHacker.SetUpvalue(Prefabs.walter.master_postinit, OnHealthDelta, "OnHealthDelta")
-    inst:ListenForEvent("timerdone", OnPenaltyTimerDone)
+    inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 end)

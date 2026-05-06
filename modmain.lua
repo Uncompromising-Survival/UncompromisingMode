@@ -70,7 +70,7 @@ AddPrefabPostInit("world", function(inst)
             end
         end
     end)
-	GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
+    GLOBAL.TheWorld:AddTag("um_beta") -- Added so it's easy to tell if the um beta is active
     if not inst.ismastersim then
         return
     end
@@ -115,13 +115,13 @@ GLOBAL.MATERIALS.COPPER = "copper"
 
 if GetModConfigData("um_music", true) then
     AddPrefabPostInit("eyeofterror", function(inst)
-	    RemoveRemapSoundEvent("terraria1/common/music_epicfight_eot")
+        RemoveRemapSoundEvent("terraria1/common/music_epicfight_eot")
     end)
     AddPrefabPostInit("twinofterror1", function(inst)
-	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+        RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
     end)
     AddPrefabPostInit("twinofterror2", function(inst)
-	    RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
+        RemapSoundEvent("terraria1/common/music_epicfight_eot", "UMMusic2/music/um_epicfight_tot")
     end)
     local track = math.random() > .01 and "UMMusic2/music/uncomp_char_select2" or "UMMusic/music/uncomp_char_select" -- Change chances to 50/50 later.
     RemapSoundEvent("dontstarve/together_FE/DST_theme_portaled", track)
@@ -427,17 +427,17 @@ end
 -- local skilltree_defs = require("prefabs/skilltree_defs")
 -- local BuildSkillsData = require("prefabs/skilltree_wathom")
 -- if BuildSkillsData then
-	-- local data = BuildSkillsData(skilltree_defs.FN)
+    -- local data = BuildSkillsData(skilltree_defs.FN)
 
-	-- skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
-	-- skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
+    -- skilltree_defs.CreateSkillTreeFor("wathom", data.SKILLS)
+    -- skilltree_defs.SKILLTREE_ORDERS["wathom"] = data.ORDERS
 
-	-- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
-	-- for k, v in pairs(data.SKILLS) do
-		-- if v.icon then
-			-- RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
-		-- end
-	-- end
+    -- RegisterSkilltreeBGForCharacter(GLOBAL.resolvefilepath("images/wixie_skilltree.xml"), "wixie")
+    -- for k, v in pairs(data.SKILLS) do
+        -- if v.icon then
+            -- RegisterSkilltreeIconsAtlas("images/wixie_skilltree.xml", v.icon .. ".tex")
+        -- end
+    -- end
 -- end
 
 

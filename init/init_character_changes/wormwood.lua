@@ -187,11 +187,33 @@ end
 
 if env.GetModConfigData("wormwood_photosynthesis") then
 
-	--------------------------------------------------------------------------------------------------------------------------------
-	-- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
-	--------------------------------------------------------------------------------------------------------------------------------
-	
-	env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
+    --------------------------------------------------------------------------------------------------------------------------------
+    -- [ Final Built Skilltree ] ---------------------------------------------------------------------------------------------------
+    --------------------------------------------------------------------------------------------------------------------------------
+    
+    env.modimport("init/init_character_changes/skilltree_wormwood") -- Import New Wormwood Tree
+
+    local function VetCurseCancelHealing(data)
+        local debuffable = inst.components.debuffable
+        if inst:HasTag("vetcurse") and debuffable then
+            local debuffs = debuffable.debuffs
+            for i, v in pairs(debuffs) do
+                if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
+                    debuffable:RemoveDebuff(i)
+                end
+            end
+        end
+    end
+
+    local function ToggleUniqueVetCurse(inst, toggle)
+        if toggle then
+            inst:ListenForEvent("attacked", VetCurseCancelHealing)
+            inst:ListenForEvent("firedamage", VetCurseCancelHealing)
+        else
+            inst:RemoveEventCallback("attacked", VetCurseCancelHealing)
+            inst:RemoveEventCallback("firedamage", VetCurseCancelHealing)
+        end
+    end
 
     env.AddPrefabPostInit("wormwood", function(inst)
         if not TheWorld.ismastersim then return end
@@ -232,18 +254,6 @@ if env.GetModConfigData("wormwood_photosynthesis") then
             end
         end
 
-        local function VetCurseCancelHealing(data)
-            local debuffable = inst.components.debuffable
-            if inst:HasTag("vetcurse_wormwood") and debuffable then
-                local debuffs = debuffable.debuffs
-                for i, v in pairs(debuffs) do
-                    if string.sub(i, 1, 24) == "healthregenbuff_vetcurse" or i == "confighealbuff" or i == "compostheal_buff" or i == "tillweedsalve_buff" then
-                        debuffable:RemoveDebuff(i)
-                    end
-                end
-            end
-        end
-
         local _UpdateBloomStage = inst.components.bloomness.onlevelchangedfn
 
         inst.components.bloomness.onlevelchangedfn = function(inst, stage) --in case you enter the 3rd stage with enough hp required or you go back to 2nd
@@ -258,38 +268,32 @@ if env.GetModConfigData("wormwood_photosynthesis") then
             skilltreemovespeed(inst)
         end)
 
-		inst:ListenForEvent("attacked", VetCurseCancelHealing)
-        inst:ListenForEvent("firedamage", VetCurseCancelHealing)
+        inst.UMToggleUniqueVetCurse = ToggleUniqueVetCurse
 
-		local function OnFertilizedWithCompost(inst, value)
-			if value > 0 and inst.components.health and not inst.components.health:IsDead() then
-				local healing = TUNING.WORMWOOD_COMPOST_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_COMPOST_HEAL_VALUES[1]
-				if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
-					healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
-				end
-				
-				inst:AddDebuff("compostheal_buff", "compostheal_buff", {duration = healing * (TUNING.WORMWOOD_COMPOST_HEALOVERTIME_TICK/TUNING.WORMWOOD_COMPOST_HEALOVERTIME_HEALTH)})
-			end
-		end
-		inst.OnFertilizedWithCompost = OnFertilizedWithCompost
-		
-		local function OnFertilizedWithManure(inst, value, src)
-			if value > 0 and inst.components.bloomness then
-				local healing = TUNING.WORMWOOD_MANURE_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_MANURE_HEAL_VALUES[1]
-				if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
-					healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
-				end				
-				inst.components.health:DoDelta(healing, false, src.prefab)
-			end
-		end
-		inst.OnFertilizedWithManure = OnFertilizedWithManure
-		
+        local function OnFertilizedWithCompost(inst, value)
+            if value > 0 and inst.components.health and not inst.components.health:IsDead() then
+                local healing = TUNING.WORMWOOD_COMPOST_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_COMPOST_HEAL_VALUES[1]
+                if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
+                    healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
+                end
+                
+                inst:AddDebuff("compostheal_buff", "compostheal_buff", {duration = healing * (TUNING.WORMWOOD_COMPOST_HEALOVERTIME_TICK/TUNING.WORMWOOD_COMPOST_HEALOVERTIME_HEALTH)})
+            end
+        end
+        inst.OnFertilizedWithCompost = OnFertilizedWithCompost
+        
+        local function OnFertilizedWithManure(inst, value, src)
+            if value > 0 and inst.components.bloomness then
+                local healing = TUNING.WORMWOOD_MANURE_HEAL_VALUES[math.ceil(value / 8)] or TUNING.WORMWOOD_MANURE_HEAL_VALUES[1]
+                if inst.components.skilltreeupdater:IsActivated("wormwood_blooming_max_upgrade") then
+                    healing = healing * TUNING.WORMWOOD_BLOOM_MAX_UPGRADE_MULT
+                end                
+                inst.components.health:DoDelta(healing, false, src.prefab)
+            end
+        end
+        inst.OnFertilizedWithManure = OnFertilizedWithManure
     end)
 end
-
-
-
-
 
 -- AXE This is required for compatibility with Wormwood's new skilltree
 
@@ -302,8 +306,6 @@ for i,v in ipairs(creatures_to_grab) do
         inst.components.inventoryitem.grabbableoverridetag = "wormwood_grabby"
     end)
 end
-
-
 
 -- Change Wormwood Crafts
 local require = env.require
@@ -441,8 +443,7 @@ end
 
 local function DoSympatheticBlooming(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
-    
- 
+
     -- Cactus
     local cacti = TheSim:FindEntities(x,y,z,TUNING.WORMWOOD_BLOOM_FARM_PLANT_INTERACT_RANGE*TUNING.WORMWOOD_TENDRANGE_MULT,{"plant","thorny"})
     for i,v in ipairs(cacti) do
@@ -463,14 +464,12 @@ local function DoSympatheticBlooming(inst)
             SpawnPrefab("wormwood_lunar_transformation_finish").Transform:SetPosition(v.Transform:GetWorldPosition())
         end
     end
-
 end
 
 local PLANT_DEFS = require("prefabs/farm_plant_defs").PLANT_DEFS
 
 env.AddPrefabPostInit("world", function(inst) 
     if not _G.TheWorld.ismastersim then return end
-
     
     local _DoAOEeffect = UpvalueHacker.GetUpvalue(_G.Prefabs.wormwood.fn,"master_postinit","UpdateBloomStage","EnableFullBloom","DoAOEeffect")
     local function DoAOEeffect(inst,enable)
@@ -559,9 +558,6 @@ env.AddPrefabPostInit("world", function(inst)
 
     UpvalueHacker.SetUpvalue(_G.Prefabs.armor_lunarplant_husk.fn, OnHuskBlocked,"husk_master_postinit","OnHuskBlocked")
 
-
-
-
     local function DoThornsTrap(inst, pos)
         local thorns = SpawnPrefab("bramblefx_trap")
         thorns.Transform:SetPosition(pos:Get())
@@ -573,10 +569,7 @@ env.AddPrefabPostInit("world", function(inst)
     end
 
     UpvalueHacker.SetUpvalue(_G.Prefabs.trap_bramble.fn, DoThornsTrap,"OnExplode","DoThorns")
-
 end)
-
-
 
 local function on_planted(inst, data)
     if data and data.doer then

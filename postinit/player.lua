@@ -166,7 +166,7 @@ local function OnSetOwner(inst)
 end
 local SCRAPBOOK_CANT_TAGS = { "FX", "INLIMBO" }
 local function UpdateMineralLog(inst)
-	--assert(inst = ThePlayer)
+    --assert(inst = ThePlayer)
     local x, y, z = inst.Transform:GetWorldPosition()
     local ents = TheSim:FindEntities(x, y, z, TUNING.SCRAPBOOK_UPDATERADIUS, {"gemology_gem"}, SCRAPBOOK_CANT_TAGS) 
     for _, ent in ipairs(ents) do

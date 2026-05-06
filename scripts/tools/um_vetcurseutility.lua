@@ -4,7 +4,7 @@ local UMVetCurse = {}
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
-local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
+--local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
@@ -14,7 +14,7 @@ local function ForceToTakeMoreDamage(inst)
     end
     self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
         if attacker and damage then
-            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
+            if not inst.UMToggleUniqueVetCurse then
                 -- Take extra damage
                 damage = damage * (1 + (2 / 10))
             end
@@ -31,7 +31,7 @@ local function ForceToTakeMoreHunger(inst)
     end
     self.DoDelta = function(self, delta, overtime, ignore_invincible)
         if delta and overtime and delta < 0 then
-            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
+            if not inst.UMToggleUniqueVetCurse then
                 -- Take extra hunger
                 delta = delta * (1 + (2 / 10))
             end
@@ -48,7 +48,7 @@ local function ForceToTakeMoreTime(inst)
     end
     self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
         if amount and overtime and amount < 0 then
-            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
+            if not inst.UMToggleUniqueVetCurse then
                 -- Take extra time
                 amount = amount * (1 + (2 / 10))
             end
@@ -214,7 +214,7 @@ UMVetCurse.ToggleVetCurse = function(inst, toggle)
     else
         DetachCurse(inst)
     end
-    if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle)end
+    if inst.UMToggleUniqueVetCurse then inst:UMToggleUniqueVetCurse(toggle) end
 end
 
 return UMVetCurse

@@ -24,8 +24,10 @@ local function VetCurseCheck(inst)
 end
 
 local function ToggleUniqueVetCurse(inst, toggle)
-    if toggle and not inst.um_wathom_vetcurse then
-        inst.um_wathom_vetcurse = inst:DoPeriodicTask(0, VetCurseCheck)
+    if toggle then
+        if not inst.um_wathom_vetcurse then
+            inst.um_wathom_vetcurse = inst:DoPeriodicTask(0, VetCurseCheck)
+        end
     else
         if inst.um_wathom_vetcurse then
             inst.um_wathom_vetcurse:Cancel()
