@@ -57,12 +57,12 @@ function c_um_vetcurse()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
             --player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
-            if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
+            if player.UMToggleVetCurse then player:UMToggleVetCurse(true) end
             player:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             print("added vetcurse")
         elseif player:HasTag("vetcurse") then
             --player.components.debuffable:RemoveDebuff("buff_vetcurse")
-            if doer.UMToggleVetCurse then doer:UMToggleVetCurse() end
+            if player.UMToggleVetCurse then player:UMToggleVetCurse() end
             print("removed vetcurse")
         end
     end
