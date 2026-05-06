@@ -227,7 +227,7 @@ env.AddComponentPostInit("health", function(self)
     local _OnSave = self.OnSave
     function self:OnSave(...)
         local ret = _OnSave(self, ...)
-        if ret and ret.penalty and self.inst.prefab == "waxwell" and self.inst:HasTag("vetcurse") then
+        if ret and ret.penalty and ret.penalty > TUNING.MAXIMUM_HEALTH_PENALTY and self.inst.prefab == "waxwell" and self.inst:HasTag("vetcurse") then
             ret.um_vetcursed = true
         end
         return ret
