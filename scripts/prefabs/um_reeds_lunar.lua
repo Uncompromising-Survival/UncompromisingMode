@@ -77,12 +77,10 @@ local function fn()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    --inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    -- All driftwood trees are sharing a single minimap icon, since they're functionally the same.
-    -- inst.MiniMapEntity:SetIcon("driftwood_small1.png")
-    -- inst.MiniMapEntity:SetPriority(-1)
+    inst.MiniMapEntity:SetIcon("um_reeds_lunar.tex")
 
     inst:AddTag("plant")
 

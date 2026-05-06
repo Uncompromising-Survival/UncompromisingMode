@@ -463,6 +463,81 @@ local inventoryitems =
     "uncompromising_winkyhomeburrow",
 }
 
+local minimap_icons = {
+    "riceplant",
+    "sporepack_map",
+    "air_conditioner_map",
+    "um_hoodedtree",
+    "pitcher",
+    "veteranshrine_map",
+    "lazychester_minimap",
+    "webbedcreature_small_minimap",
+    "webbedcreature_medium_minimap",
+    "webbedcreature_large_minimap",
+    "pollenmiteden_map",
+    "um_pawn",
+    "um_pawn_nightmare",
+    "uncompromising_ratburrow",
+    "uncompromising_winkyhomeburrow",
+    "winky",
+    "telebase_active",
+    "wixie",
+    "um_pyre_nettles_map",
+    "um_tornado_map",
+    "rock_lichen",
+    "houndious_observious_map",
+    "springrock1",
+    "springrock2",
+    "springrock3",
+    "snaildrake_hole",
+    "magmarock1",
+    "gloomcap",
+    "um_rimeweed_tree",
+    "um_rimeweed_flower",
+    "um_rimeweed_plant",
+    "um_pepperdragon_nest",
+    "um_fyriterock",
+    "um_pyrite_ceiling",
+    "um_ribopodden",
+    "um_beehive_moon",
+    "um_beemine_moon",
+    "um_ghost_pepper",
+    "um_bluemushtree_mapicon",
+    "um_redmushtree_mapicon",
+    "um_greenmushtree_mapicon",
+    "um_grotto_glass_icon",
+    "um_guano_rock_icon",
+    "um_lobster_rock_icon",
+    "um_sinkmound_rock_icon",
+    "um_slimestone_rock_icon",
+    "plaunt_manny",
+    "um_gemology_pouch",
+    "um_gemologyforge",
+    "um_backpack_amuletuse",
+    "armor_lifejacket",
+    "armor_snakeskin",
+    "armor_snakeskin_scaly",
+    "armor_windbreaker",
+    "blubbersuit",
+    "raincoat",
+    "reflectivevest",
+    "silksack",
+    "tarsuit",
+    "trunkvest_winter",
+    "trunkvest_summer",
+    "sludge_sack",
+    "hawaiianshirt",
+    "skullchest",
+    "winona_toolbox",
+    "rimeweed",
+    "um_reeds_lunar",
+    "um_fern_fox_den",
+    "um_manny",
+    "cave_entrance_magmabiome",
+    "cave_entrance_moon",
+    "um_spongeplant",
+    "blueberryplant"
+}
 
 for _, item in ipairs(inventoryitems) do
     RegisterInventoryItemAtlas(GLOBAL.resolvefilepath("images/inventoryimages/" .. item .. ".xml"), item .. ".tex")
@@ -563,9 +638,6 @@ Assets = {
     Asset("IMAGE", "bigportraits/winky_none.tex"),
     Asset("ATLAS", "bigportraits/winky_none.xml"),
 
-    Asset("IMAGE", "images/map_icons/winky.tex"),
-    Asset("ATLAS", "images/map_icons/winky.xml"),
-
     Asset("IMAGE", "images/avatars/avatar_winky.tex"),
     Asset("ATLAS", "images/avatars/avatar_winky.xml"),
 
@@ -603,9 +675,6 @@ Assets = {
     Asset("ATLAS", "bigportraits/wathom.xml"),
     Asset("IMAGE", "bigportraits/wathom_none.tex"),
     Asset("ATLAS", "bigportraits/wathom_none.xml"),
-
-    Asset("IMAGE", "images/map_icons/wathom.tex"),
-    Asset("ATLAS", "images/map_icons/wathom.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wathom.tex"),
     Asset("ATLAS", "images/avatars/avatar_wathom.xml"),
@@ -707,9 +776,6 @@ Assets = {
 
     Asset("IMAGE", "images/names_gold_wixie.tex"),
     Asset("ATLAS", "images/names_gold_wixie.xml"),
-
-    Asset("IMAGE", "images/map_icons/wixie.tex"),
-    Asset("ATLAS", "images/map_icons/wixie.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wixie.tex"),
     Asset("ATLAS", "images/avatars/avatar_wixie.xml"),
@@ -763,9 +829,6 @@ Assets = {
     Asset("IMAGE", "bigportraits/wathom_none.tex"),
     Asset("ATLAS", "bigportraits/wathom_none.xml"),
 
-    Asset("IMAGE", "images/map_icons/wathom.tex"),
-    Asset("ATLAS", "images/map_icons/wathom.xml"),
-
     Asset("IMAGE", "images/avatars/avatar_wathom.tex"),
     Asset("ATLAS", "images/avatars/avatar_wathom.xml"),
 
@@ -866,9 +929,6 @@ Assets = {
 
     Asset("IMAGE", "images/names_gold_wixie.tex"),
     Asset("ATLAS", "images/names_gold_wixie.xml"),
-
-    Asset("IMAGE", "images/map_icons/wixie.tex"),
-    Asset("ATLAS", "images/map_icons/wixie.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wixie.tex"),
     Asset("ATLAS", "images/avatars/avatar_wixie.xml"),
@@ -1800,74 +1860,8 @@ Assets = {
     --Asset("SOUND", "sound/um_detonator_bank00.fsb"),
     Asset("SOUND", "sound/um_detonator_bank01.fsb"),
 
-    --MAP ICONS
-    Asset("IMAGE", "images/map_icons/rock_lichen.tex"),
-    Asset("ATLAS", "images/map_icons/rock_lichen.xml"),
-
-    Asset("IMAGE", "images/map_icons/riceplant.tex"),
-    Asset("ATLAS", "images/map_icons/riceplant.xml"),
-
-    Asset("IMAGE", "images/map_icons/sporepack_map.tex"),
-    Asset("ATLAS", "images/map_icons/sporepack_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/air_conditioner_map.tex"),
-    Asset("ATLAS", "images/map_icons/air_conditioner_map.xml"),
-    Asset("IMAGE", "images/map_icons/blueberryplant_map.tex"),
-    Asset("ATLAS", "images/map_icons/blueberryplant_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/giant_tree.tex"),
-    Asset("ATLAS", "images/map_icons/giant_tree.xml"),
-
-    Asset("IMAGE", "images/map_icons/pitcher.tex"),
-    Asset("ATLAS", "images/map_icons/pitcher.xml"),
-
-    Asset("IMAGE", "images/map_icons/veteranshrine_map.tex"),
-    Asset("ATLAS", "images/map_icons/veteranshrine_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/lazychester_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/lazychester_minimap.xml"),
 
 
-
-    Asset("IMAGE", "images/map_icons/webbedcreature_small_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_small_minimap.xml"),
-    Asset("IMAGE", "images/map_icons/webbedcreature_medium_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_medium_minimap.xml"),
-    Asset("IMAGE", "images/map_icons/webbedcreature_large_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_large_minimap.xml"),
-
-    Asset("IMAGE", "images/map_icons/pollenmiteden_map.tex"),
-    Asset("ATLAS", "images/map_icons/pollenmiteden_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pawn.tex"),
-    Asset("ATLAS", "images/map_icons/um_pawn.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pawn_nightmare.tex"),
-    Asset("ATLAS", "images/map_icons/um_pawn_nightmare.xml"),
-    Asset("IMAGE", "images/map_icons/uncompromising_ratburrow.tex"),
-    Asset("ATLAS", "images/map_icons/uncompromising_ratburrow.xml"),
-    Asset("IMAGE", "images/map_icons/uncompromising_winkyhomeburrow.tex"),
-    Asset("ATLAS", "images/map_icons/uncompromising_winkyhomeburrow.xml"),
-    Asset("IMAGE", "images/map_icons/sludge_sack.tex"),
-    Asset("ATLAS", "images/map_icons/sludge_sack.xml"),
-
-    Asset("IMAGE", "images/map_icons/telebase_active.tex"),
-    Asset("ATLAS", "images/map_icons/telebase_active.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pyre_nettles_map.tex"),
-    Asset("ATLAS", "images/map_icons/um_pyre_nettles_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_tornado_map.tex"),
-    Asset("ATLAS", "images/map_icons/um_tornado_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_gemology_pouch.tex"),
-    Asset("ATLAS", "images/map_icons/um_gemology_pouch.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_gemologyforge.tex"),
-    Asset("ATLAS", "images/map_icons/um_gemologyforge.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_backpack_amuletuse.tex"),
-    Asset("ATLAS", "images/map_icons/um_backpack_amuletuse.xml"),
 
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),
@@ -1905,4 +1899,10 @@ for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("IMAGE", "images/inventoryimages/" .. asset .. ".tex"))
     table.insert(Assets, Asset("ATLAS", "images/inventoryimages/" .. asset .. ".xml"))
     table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
+end
+
+for _, asset in pairs(minimap_icons) do
+    table.insert(Assets, Asset("IMAGE", "images/map_icons/" .. asset .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/map_icons/" .. asset .. ".xml"))
+    AddMinimapAtlas("images/map_icons/" .. asset .. ".xml")
 end

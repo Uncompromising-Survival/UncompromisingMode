@@ -368,9 +368,11 @@ end)
 -- [ Flooded Tile Handling] -- AXE
 ---------------------------
 
-local flood_equipment_verylow = {"trunkvest_summer","reflectivevest"}
-local flood_equipment_low = {"armor_reed_um"}
-local flood_equipment_med = {"raincoat"}
+--(Atoba): This should really just do something with the waterproofness of the body slot + exception for shark vest for mod compat...
+--TODO: That ^
+local flood_equipment_verylow = {"trunkvest_summer", "reflectivevest"}
+local flood_equipment_low = {"armor_reed_um", "armor_windbreaker", "armor_snakeskin"}
+local flood_equipment_med = {"raincoat", "blubbersuit", "tarsuit"}
 local flood_equipment_high = {"armor_sharksuit_um"}
 
 local function CheckClothing(inst,table_check)

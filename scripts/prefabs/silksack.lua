@@ -109,7 +109,7 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.MiniMapEntity:SetIcon("sporepack_map.tex")
+    inst.MiniMapEntity:SetIcon("silksack.tex")
 
     inst.AnimState:SetBank("silksack")
     inst.AnimState:SetBuild("silksack")

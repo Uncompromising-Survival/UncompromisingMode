@@ -4,7 +4,6 @@ local require = GLOBAL.require
 modimport("init/init_util")
 modimport("init/init_assets")
 modimport("init/init_widgets")
-modimport("init/minimap_icons")
 modimport("init/init_compat")
 
 --  [   Import customized shard RPC module ]    --

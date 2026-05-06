@@ -123,7 +123,7 @@ local function fn(bank, build, anim, minimap, isbackground)
 end
 
 local function closed_fn()
-    local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_closed.png", false)
+    local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_entrance_moon.tex", false)
 
     if not TheWorld.ismastersim then
         return inst
