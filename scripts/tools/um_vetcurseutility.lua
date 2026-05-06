@@ -4,7 +4,7 @@ local UMVetCurse = {}
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
-local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic"}
+local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic", "winky"}
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat

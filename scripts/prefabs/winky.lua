@@ -163,6 +163,37 @@ local function WinkyDespawn(inst)
     inst.no_sanity_drop = true
 end
 
+local CURSED_SLOTS = {11, 12, 13, 14, 15}
+
+local function CursedSlots(inst, slot)
+	if not inst:HasTag("vetcurse") then
+		return false
+	end
+
+	for _, blockedslot in ipairs(CURSED_SLOTS) do
+		if blockedslot == slot then
+			return true
+		end
+	end
+
+	return false
+end
+
+local function CursedInventory(inst)
+	if inst.components.inventory == nil then
+		return
+	end
+
+	if inst:HasTag("vetcurse") then
+		for slot = 11, 15 do
+			local item = inst.components.inventory:GetItemInSlot(slot)
+			if item ~= nil then
+				inst.components.inventory:DropItem(item, true, true)
+			end
+		end
+	end
+end
+
 local function master_postinit(inst)
     inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
@@ -219,6 +250,21 @@ local function master_postinit(inst)
     inst:ListenForEvent("um_combinestack", OnDropItem)
     inst:ListenForEvent("player_despawn", WinkyDespawn)
     --inst:ListenForEvent("itemlose", OnDropItem)
+	inst:DoPeriodicTask(0, CursedInventory)
+
+	if inst.components.inventory ~= nil then
+
+		local old_giveitem = inst.components.inventory.GiveItem
+
+		inst.components.inventory.GiveItem = function(self, item, slot, src_pos, ...)
+			if slot ~= nil and CursedSlots(self.inst, slot) then
+				self:DropItem(item, true, true)
+				return false
+			end
+
+			return old_giveitem(self, item, slot, src_pos, ...)
+		end
+	end
 end
 
 return MakePlayerCharacter("winky", prefabs, assets, common_postinit, master_postinit)
