@@ -14,11 +14,8 @@ local SEE_PLAYER_STOP_DIST = 12
 local SEE_BAIT_DIST = 20
 local MAX_WANDER_DIST = 30
 
-
-
-
 local Uncompromising_PawnBrain = Class(Brain, function(self, inst)
-	self.trytohide = false
+    self.trytohide = false
 
     Brain._ctor(self, inst)
 end)
@@ -36,39 +33,19 @@ local function KeepFaceTargetFn(inst, target)
 end
 
 local function IsDangerClose(inst)
-	if inst:HasTag("landmine") then
-		return false
-	end
-	
-	if inst.keeptryingtohide ~= nil and inst.keeptryingtohide then
-		return true
-	end
+    if inst:HasTag("landmine") then return false end
+    
+    if inst.keeptryingtohide then return true end
 
-	if inst:HasTag("landmine") then
-		return FindEntity(
-		inst, 
-		SEE_PLAYER_DIST_NIGHTMARE, 
-		function(guy)
-			return guy ~= nil and (guy.sg == nil or guy.sg ~= nil and not guy.sg:HasStateTag("hiding"))
-		end, 
-		{"player"}, {"playerghost"})
-	else
-		return FindEntity(
-		inst, 
-		SEE_PLAYER_DIST, 
-		function(guy)
-			return guy ~= nil and (guy.sg == nil or guy.sg ~= nil and not guy.sg:HasStateTag("hiding"))
-		end, 
-		{"player"}, {"playerghost"})
-	end
+    return FindEntity(inst, --[[inst:HasTag("landmine") and SEE_PLAYER_DIST_NIGHTMARE or]] SEE_PLAYER_DIST, function(guy)
+            return guy ~= nil and (guy.sg == nil or guy.sg ~= nil and not guy.sg:HasStateTag("hiding"))
+        end, {"player"}, {"playerghost"})
 end
 
 local function TryHide(inst)
-	inst.keeptryingtohide = true
+    inst.keeptryingtohide = true
 
-    if not inst.sg:HasStateTag("busy") then
-        return BufferedAction(inst, inst, ACTIONS.UNCOMPROMISING_PAWN_HIDE)
-    end
+    inst:PushEvent("umhideaway")
 end
 
 function Uncompromising_PawnBrain:OnStart()
@@ -76,13 +53,13 @@ function Uncompromising_PawnBrain:OnStart()
     local root = PriorityNode(
     {
         WhileNode( function() return self.inst.components.health.takingfiredamage end, "OnFire", Panic(self.inst)),
-		--RunAway(self.inst, "scarytopr1ey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
-        
-		IfNode(function() return IsDangerClose(self.inst) and not self.inst.components.freezable:IsFrozen() end, "DangerClose", DoAction(self.inst, TryHide, "Hide")),
-		
+        --RunAway(self.inst, "scarytopr1ey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
+
+        IfNode(function() return IsDangerClose(self.inst) and not self.inst.components.freezable:IsFrozen() end, "DangerClose", ActionNode(function() TryHide(self.inst) end), "Hide"),
+
         ChaseAndAttack(self.inst, 10),
-		
-		--FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
+
+        --FaceEntity(self.inst, GetFaceTargetFn, KeepFaceTargetFn),
         Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, MAX_WANDER_DIST)
     }, .25)
     self.bt = BT(self.inst, root)

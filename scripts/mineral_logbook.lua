@@ -1,8 +1,4 @@
---[[
-TODO:
--- automatically fix broken saved data, prevent broken data from being loaded.
--- try to prevent brokens save data from being saved to begin with
-]]
+local GEM_DEFS = require("gemology_defs").GEM_DEFS
 
 local MineralLogbook = Class(function(self)
     self.known_gems = {}
@@ -22,9 +18,6 @@ function MineralLogbook:Save()
     local str = json.encode(data)
     TheSim:SetPersistentString("gemology_data", str, false)
 end
-
-local MAX_GEM_TIER = 3
-local MIN_GEM_TIER = 0
 
 function MineralLogbook:ValidateData(data)
     local old_data = data
@@ -46,7 +39,7 @@ function MineralLogbook:ValidateData(data)
             corrected = true
         elseif (v < MIN_GEM_TIER or v > MAX_GEM_TIER) then
             print("WARNING: Found gem with invalid tier, correcting to default...")
-            print("Tiers should be 0-3, was " .. v)
+            print("Tiers should be "..MIN_GEM_TIER.."-"..MAX_GEM_TIER..", was " .. v)
             data[k] = 0
             corrected = true
         end
@@ -84,8 +77,8 @@ end
 
 --learns a gem at a certain tier
 function MineralLogbook:AddNewGem(gem, tier)
-    assert(type(tier) == "number", "Attempted to add a non-string value as mineral logbook data key.")
-    assert(type(gem) == "string", "Attempted to add non-number value as mineral logbook data tier value.")
+    assert(type(tier) == "number", "Attempted to add non-number value as mineral logbook data tier value.")
+    assert(type(gem) == "string", "Attempted to add a non-string value as mineral logbook data key.")
 
     if tier > MAX_GEM_TIER then
         print("WARNING: Attempted to add gem with higher tier than allowed, correcting to highest allowed.")
@@ -145,25 +138,8 @@ function MineralLogbook:IsGemKnown(gem)
     return self.known_gems[gem] ~= nil, self.known_gems[gem]
 end
 
-local all_default_gems = {
-    "um_gemologybluegem1",
-    "um_gemologybluegem2",
-    "um_gemologyredgem1",
-    "um_gemologyredgem2",
-    "um_gemologypurplegem1",
-    "um_gemologypurplegem2",
-    "um_gemologyyellowgem1",
-    "um_gemologyyellowgem2",
-    "um_gemologygreengem1",
-    "um_gemologygreengem2",
-    "um_gemologyorangegem1",
-    "um_gemologyorangegem2",
-    "um_gemologypalegem1",
-    "um_gemologypalegem2",
-}
-
 function MineralLogbook:DebugUnlockAllGems()
-    for _, gem in ipairs(all_default_gems) do
+    for gem, _ in ipairs(GEM_DEFS) do
         self:AddNewGem(gem, MAX_GEM_TIER)
     end
 end

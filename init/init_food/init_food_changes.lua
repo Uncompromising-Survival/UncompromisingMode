@@ -319,7 +319,6 @@ AddPrefabPostInit("honey", function(inst)
     end
 end)
 AddPrefabPostInit("butterflywings", function(inst)
-    inst:AddTag("snapdragons_cant_eat")
 
     if inst.components.edible and TUNING.DSTU.BUTTERFLYWINGS_NERF == "stat_nerf" then
         inst.components.edible.healthvalue = GLOBAL.TUNING.DSTU.FOOD_BUTTERFLY_WING_HEALTH

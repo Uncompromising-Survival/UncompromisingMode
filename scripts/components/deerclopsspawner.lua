@@ -36,13 +36,12 @@ local _announcewarningsoundinterval = 4
 
 local _worldsettingstimer = TheWorld.components.worldsettingstimer
 
-local _attackdelay = nil
 local _attacksperseason = TUNING.DEERCLOPS_ATTACKS_PER_SEASON
 local _attackoffseason = TUNING.DEERCLOPS_ATTACKS_OFF_SEASON
 local _targetplayer = nil
 local _activehassler = nil
 local _storedhassler = nil
-
+local _attackdelay = ((TheWorld.state.winterlength - 1) * TUNING.TOTAL_DAY_TIME / (_attacksperseason + 1))
 local _timetoattack
 
 local _activeplayers = {}
@@ -54,7 +53,6 @@ local um_overridespawn = false
 local function AllowedToAttack(data)
 	--print("Deerclopsspawner allowed to attack?", #_activeplayers, TheWorld.state.cycles, _attackoffseason, TheWorld.state.season)
     return  #_activeplayers > 0 and
-            ((data and data.skipcycles) or TheWorld.state.cycles > TUNING.NO_BOSS_TIME or um_overridespawn) and
                 (_attackoffseason or
                 TheWorld.state.season == "winter")
 end
@@ -117,18 +115,18 @@ local function TryStartAttacks(killed)
     if AllowedToAttack() then
         if _activehassler == nil and _attacksperseason > 0 and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) == nil then
             local attackdelay = killed == true and _attackdelay * HASSLER_KILLED_DELAY_MULT or _attackdelay
-            _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, attackdelay)
+            _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, attackdelay*math.random(20,40)/10)
         end
 
         _worldsettingstimer:ResumeTimer(DEERCLOPS_TIMERNAME)
         self.inst:StartUpdatingComponent(self)
         self:StopWatchingWorldState("cycles", TryStartAttacks)
-        self.inst.watchingcycles = nil
+        self.watchingcycles = nil
     else
-        PauseAttacks()
-        if not self.inst.watchingcycles then
+        PauseAttacks() 
+        if not self.watchingcycles then -- This is the problem.
             self:WatchWorldState("cycles", TryStartAttacks)  -- keep checking every day until NO_BOSS_TIME is up
-            self.inst.watchingcycles = true
+            self.watchingcycles = true
         end
     end
 end
@@ -198,7 +196,9 @@ end
 --------------------------------------------------------------------------
 
 local function OnSeasonChange(self, season)
-    TryStartAttacks()
+    self.inst:DoTaskInTime(0,function(inst)
+        TryStartAttacks()
+    end)
 end
 
 local function OnPlayerJoined(src,player)
@@ -262,6 +262,9 @@ local function OnMegaFlare(src, data)
 	if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) and TheWorld.state.iswinter then
 		um_overridespawn = true
 		if not _activehassler then
+            if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+                TheNet:Announce(_worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME))
+            end
 			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) and _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME) > 480*1.8 then -- Cannot advance any more if it's within two days
 				local time = _worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME)
 				if time > 480*8 then
@@ -300,11 +303,11 @@ end
 function self:OnPostInit()
     -- Shorten the time used for winter to account for the time deerclops spends stomping around
     -- Then add one to _attacksperseason to shift the attacks so the last attack isn't right when the season changes to spring
-    _attackdelay = (TheWorld.state.winterlength - 1) * TUNING.TOTAL_DAY_TIME / (_attacksperseason + 1)
-    _worldsettingstimer:AddTimer(DEERCLOPS_TIMERNAME, _attackdelay, TUNING.SPAWN_DEERCLOPS, OnDeerclopsTimerDone)
-
+    local time = _attackdelay*math.random(20,40)/10
+    _worldsettingstimer:AddTimer(DEERCLOPS_TIMERNAME, time, TUNING.SPAWN_DEERCLOPS, OnDeerclopsTimerDone)
+    
     if _timetoattack then
-        _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, math.min(_timetoattack, _attackdelay))
+        _worldsettingstimer:StartTimer(DEERCLOPS_TIMERNAME, math.min(_timetoattack, time))
     end
     TryStartAttacks()
 end
@@ -384,6 +387,7 @@ function self:OnSave()
 	{
 		warning = _warning,
 		storedhassler = _storedhassler,
+		watchingcycles = self.watchingcycles
 	}
 
 	local ents = {}
@@ -403,6 +407,9 @@ function self:OnLoad(data)
     if data.timetoattack then
         _timetoattack = data.timetoattack
     end
+	if data.watchingcycles then
+		self.watchingcycles = true
+	end
 end
 
 function self:LoadPostPass(newents, savedata)

@@ -90,7 +90,7 @@ local states=
         onenter = function(inst)
 			inst.Physics:Stop()
             inst.AnimState:PlayAnimation("death")
-			if (inst.prefab == "swilson" and AmLast(inst)) and TUNING.DSTU.SHADOW_ITEMS then --If Shadow Items from Characters are Enabled.
+			if (inst.prefab == "swilson" and AmLast(inst)) then --If Shadow Items from Characters are Enabled.
 				inst.components.lootdropper:DropLoot(Vector3(inst.Transform:GetWorldPosition()))
 			end
         end,

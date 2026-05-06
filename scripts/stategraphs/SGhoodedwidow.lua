@@ -79,6 +79,9 @@ local events =
                 return
             elseif inst.components.sleeper and inst.components.sleeper:IsAsleep() then
                 inst.components.sleeper:WakeUp()
+			elseif inst.should_taunt_health_thresh then
+				inst.should_taunt_health_thresh = nil
+				inst.sg:GoToState("taunt")
             elseif inst.sg:HasStateTag("charge") and (inst._bear_trap_speedmulttask or inst.components.sleeper.sleepiness > 0) then
                 inst.sg:GoToState("chargeover")
             elseif not inst.sg:HasStateTag("electrocute") then
@@ -137,12 +140,20 @@ local function WebMortar(inst, angle)
         if not angle then
             angle = 0
         end
+		
+		local range = math.sqrt(inst:GetDistanceSqToInst(target)) or 15
+		local speed = math.sqrt(inst:GetDistanceSqToInst(target))
+		if angle ~= 0 then
+			range = range + math.random(-10,15)
+			speed = math.clamp(range,10,35)
+		end
         local theta = inst.Transform:GetRotation() + angle
         theta = theta * DEGREES
         targetpos.x = targetpos.x + 15 * math.cos(theta)
         targetpos.z = targetpos.z - 15 * math.sin(theta)
 
-        projectile.components.complexprojectile:SetHorizontalSpeed(20)
+        projectile.components.complexprojectile:SetHorizontalSpeed(speed)
+		projectile.components.complexprojectile:SetGravity(-35)
         projectile.components.complexprojectile:Launch(targetpos, inst, inst)
     end
 end
@@ -154,7 +165,6 @@ local function Watercheck(inst)
     z = z + 4 * math.sin(angle)
     return not TheWorld.Map:IsVisualGroundAtPoint(x, y, z)
 end
-
 
 local function Charge_ReAssess(inst)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -198,13 +208,13 @@ local function Charge_ReAssess(inst)
     end
 
     -- Decide what to do
-    inst.sg:GoToState(should_exit and "chargeover" or should_turnaround and not inst.treetarget and "chargeturnaround"
-        or should_attack and not inst.treetarget and "chargeattack" or "charge")
+    inst.sg:GoToState(should_exit and "chargeover" or should_turnaround and (not inst.treetarget or not inst.treetarget:IsValid()) and "chargeturnaround"
+        or should_attack and (not inst.treetarget or not inst.treetarget:IsValid()) and "chargeattack" or "charge")
 end
 
 local function ChargeTurn(inst)
     inst.Physics:SetMotorVelOverride(inst.chargespeed * inst.components.locomotor.walkspeed * inst.components.locomotor:GetSpeedMultiplier(), 0, 0) -- Bear traps work...
-    if inst.treetarget then
+    if inst.treetarget and inst.treetarget:IsValid() then
         inst:ForceFacePoint(inst.treetarget:GetPosition())
     else
         if inst.components.combat and inst.components.combat.target and inst.components.combat.target:IsValid() then
@@ -452,7 +462,7 @@ local states =
 
     State {
         name = "tired",
-        tags = { "busy", "ability" },
+        tags = {"busy", "ability", "noelectrocute"},
 
         onenter = function(inst, cb)
             inst.Physics:Stop()
@@ -490,7 +500,7 @@ local states =
             inst.Physics:Stop()
             inst.AnimState:PlayAnimation("eat_pre")
             inst.SoundEmitter:PlaySound("dontstarve/creatures/spiderqueen/scream")
-            if inst.prey then --If we have prey, face it.
+            if inst.prey and inst.prey:IsValid() then --If we have prey, face it.
                 inst:ForceFacePoint(inst.prey:GetPosition())
             end
         end,
@@ -609,7 +619,7 @@ local states =
 
     State {
         name = "lobprojectile",
-        tags = { "attack", "busy", "ability" },
+        tags = {"attack", "busy", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -677,7 +687,7 @@ local states =
 
     State {
         name = "fall",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             if inst:HasTag("notarget") then
@@ -704,7 +714,7 @@ local states =
 
     State {
         name = "preleapattack",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
@@ -729,7 +739,7 @@ local states =
 
     State {
         name = "leapattack",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -784,11 +794,11 @@ local states =
 
     State {
         name = "leaptoprey_pre",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
-            if inst.prey then
+            if inst.prey and inst.prey:IsValid() then
                 inst:ForceFacePoint(inst.prey:GetPosition())
             end
             inst.components.locomotor:Stop()
@@ -809,21 +819,22 @@ local states =
 
     State {
         name = "leaptoprey",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
             inst.physicschanged = true
-            local speed = inst:GetDistanceSqToInst(inst.prey) ^ 0.5 / (FRAMES * 20)
-            if speed > 15 then
-                speed = 15
-            end
-            if inst.components.combat.target then
+            --[[if inst.components.combat.target then
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
-            end
+            end]]
             inst.components.locomotor:Stop()
-            if inst.prey then
+            local speed = 15
+            if inst.prey and inst.prey:IsValid() then
+                speed = inst:GetDistanceSqToInst(inst.prey) ^ .5 / (FRAMES * 20)
+                if speed > 15 then
+                    speed = 15
+                end
                 inst:ForceFacePoint(inst.prey:GetPosition())
             end
             if inst.brain then
@@ -851,20 +862,17 @@ local states =
                 if FindEntity(inst, 2, nil, { "webbedcreature" }) then
                     Eat(inst)
                 else
-                    inst.sg:GoToState(inst.prey and "leaptoprey_pre" or "idle")
+                    inst.sg:GoToState(inst.prey and inst.prey:IsValid() and "leaptoprey_pre" or "idle")
                 end
             end),
         },
 
         onupdate = function(inst)
-            if inst:IsValid() and inst.prey and inst.prey:IsValid() and inst:GetDistanceSqToInst(inst.prey) < 2 ^ 2 then
-                inst.Physics:SetMotorVelOverride(0, 0, 0)
-            elseif inst.prey and not inst.prey:IsValid() then
-                --[[print("found prey")
-                print(inst.prey)
-                print(inst.prey.prefab)]]
-                local x, y, z = inst.prey.Transform:GetWorldPosition()
-                inst.Transform:SetPosition(x, y, z)
+            if inst.prey and inst.prey:IsValid() then
+                if inst:GetDistanceSqToInst(inst.prey) < 2 ^ 2 then
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                end
+            else
                 inst.Physics:SetMotorVelOverride(0, 0, 0)
             end
         end,
@@ -885,15 +893,16 @@ local states =
     -- [Charge -> Treeleap]
     State {
         name = "leaptotree",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
             inst.physicschanged = true
-            local speed = inst:GetDistanceSqToInst(inst.treetarget) ^ 0.5 / (FRAMES * 20)
+            local speed = 15
             inst.components.locomotor:Stop()
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
+                speed = inst:GetDistanceSqToInst(inst.treetarget) ^ .5 / (FRAMES * 20)
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
             if inst.brain then
@@ -921,11 +930,11 @@ local states =
         },
 
         onupdate = function(inst)
-            if inst:IsValid() and inst.treetarget and inst.treetarget:IsValid() and inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
-                inst.Physics:SetMotorVelOverride(0, 0, 0)
-            elseif inst.treetarget and not inst.treetarget:IsValid() then
-                local x, y, z = inst.treetarget.Transform:GetWorldPosition()
-                inst.Transform:SetPosition(x, y, z)
+            if inst.treetarget and inst.treetarget:IsValid() then
+                if inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                end
+            else
                 inst.Physics:SetMotorVelOverride(0, 0, 0)
             end
         end,
@@ -946,7 +955,7 @@ local states =
 
     State {
         name = "leaptotree_shake_pre",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.AnimState:SetBank("widow")
@@ -971,15 +980,16 @@ local states =
 
     State {
         name = "leaptotree_shake_jump",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
             inst.Physics:CollidesWith(COLLISION.WORLD)
             inst.physicschanged = true
-            local speed = inst:GetDistanceSqToInst(inst.treetarget) ^ 0.5 / (FRAMES * 20)
+            local speed = 15
             inst.components.locomotor:Stop()
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
+                speed = inst:GetDistanceSqToInst(inst.treetarget) ^ .5 / (FRAMES * 20)
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
             if inst.brain then
@@ -1009,11 +1019,11 @@ local states =
         },
 
         onupdate = function(inst)
-            if inst:IsValid() and inst.treetarget and inst.treetarget:IsValid() and inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
-                inst.Physics:SetMotorVelOverride(0, 0, 0)
-            elseif inst.treetarget and not inst.treetarget:IsValid() then
-                local x, y, z = inst.treetarget.Transform:GetWorldPosition()
-                inst.Transform:SetPosition(x, y, z)
+            if inst.treetarget and inst.treetarget:IsValid() then
+                if inst:GetDistanceSqToInst(inst.treetarget) < 2 ^ 2 then
+                    inst.Physics:SetMotorVelOverride(0, 0, 0)
+                end
+            else
                 inst.Physics:SetMotorVelOverride(0, 0, 0)
             end
         end,
@@ -1034,10 +1044,10 @@ local states =
 
     State {
         name = "leaptotree_shake_loop",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
             inst.count = inst.count + 1
@@ -1086,9 +1096,9 @@ local states =
 
     State {
         name = "leaptotree_shake_pst",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
         onenter = function(inst)
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
             inst.AnimState:PlayAnimation("shaketree_pst", false)
@@ -1113,11 +1123,11 @@ local states =
 
     State {
         name = "tree_rebound",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor.walkspeed = 3 --Reset the running speed back to normal
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
             inst.components.locomotor:Stop()
@@ -1148,7 +1158,7 @@ local states =
 
     State {
         name = "tree_leapattack",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.Physics:ClearCollisionMask()
@@ -1209,7 +1219,7 @@ local states =
     -- [Leap Home Related] (Like fleeing combat)
     State {
         name = "jumphome",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst, data)
             inst:AddTag("notarget")
@@ -1292,7 +1302,7 @@ local states =
     -- [Charge Attack Related]
     State {
         name = "prechargeattack",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -1330,7 +1340,7 @@ local states =
 
     State {
         name = "charge",
-        tags = { "busy", "noweb", "ability", "charge" },
+        tags = {"busy", "noweb", "ability", "charge", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1370,7 +1380,7 @@ local states =
 
     State {
         name = "chargeattack",
-        tags = { "busy", "noweb", "ability", "charge" },
+        tags = {"busy", "noweb", "ability", "charge", "noelectrocute"},
 
         onenter = function(inst, data)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1424,7 +1434,7 @@ local states =
 
     State {
         name = "chargeturnaround",
-        tags = { "busy", "noweb", "ability", "charge" },
+        tags = {"busy", "noweb", "ability", "charge", "noelectrocute"},
 
         onenter = function(inst)
             inst.components.locomotor:EnableGroundSpeedMultiplier(false)
@@ -1434,13 +1444,13 @@ local states =
             inst.turn_speed = 0
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("charge_turn")
-            if inst.treetarget then
+            if inst.treetarget and inst.treetarget:IsValid() then
                 inst:ForceFacePoint(inst.treetarget:GetPosition())
             end
         end,
 
         onupdate = function(inst)
-            if inst.components.combat and inst.components.combat.target and not inst.treetarget then
+            if inst.components.combat and inst.components.combat.target and (not inst.treetarget or not inst.treetarget:IsValid()) then
                 inst:ForceFacePoint(inst.components.combat.target:GetPosition())
             end
         end,
@@ -1454,7 +1464,7 @@ local states =
         events =
         {
             EventHandler("animqueueover", function(inst)
-                inst.sg:GoToState(inst.treetarget and "leaptotree" or "charge")
+                inst.sg:GoToState(inst.treetarget and inst.treetarget:IsValid() and "leaptotree" or "charge")
             end),
         },
 
@@ -1468,7 +1478,7 @@ local states =
 
     State {
         name = "chargeover",
-        tags = { "busy", "noweb", "ability" },
+        tags = {"busy", "noweb", "ability", "noelectrocute"},
 
         onenter = function(inst)
             --TheNet:Announce("ToldToStop")

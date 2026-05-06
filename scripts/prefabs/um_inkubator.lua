@@ -236,14 +236,6 @@ local EXPERIMENTS =
 		timer = 60,
 	},
     {
-		result = "snapdragon",
-		fuel = "nightmarefuel",
-		fuel_2 = "moonglass",
-		flesh = "plantmeat",
-		binding = "Pale_vomit",
-		timer = 60,
-	},
-    {
 		result = "smallbird",
 		fuel = "moonglass",
 		flesh = "smallmeat",

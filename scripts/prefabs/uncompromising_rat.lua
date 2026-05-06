@@ -30,7 +30,7 @@ local function on_burnt(inst)
 end
 
 local function OnAttackOther(inst, data)
-    if data.target ~= nil and data.target:HasTag("player") and not data.target:HasTag("hasplaguemask") and not data.target:HasTag("ratfriend") and not data.target:HasTag("automaton") and TUNING.DSTU.MAXHPHITTERS then data.target.components.health:DeltaPenalty(.01) end
+    if data.target ~= nil and data.target:HasTag("player") and not data.target:HasAnyTag("hasplaguemask", "ratfriend", "automaton", "ratwhisperer") and TUNING.DSTU.MAXHPHITTERS then data.target.components.health:DeltaPenalty(.01) end
 
     --[[if data.target ~= nil and data.target:HasTag("player") and inst.components.thief ~= nil then
         inst.components.thief:StealItem(data.target)
@@ -45,58 +45,58 @@ local function OnAttacked(inst, data)
         inst:RemoveTag("companion")
         inst:RemoveTag("notraptrigger")
         inst:AddTag("canbetrapped")
+        inst:AddTag("hostile")
         inst.components.follower.leader = nil
     end
 
     inst.components.combat:ShareTarget(data.attacker, 30, function(dude) return dude:HasTag("raidrat") and not dude.components.health:IsDead() and not dude:HasTag("packrat") end, 10)
 end
 
-local function OnDeath(inst) if inst._item ~= nil then inst._item:Remove() end end
+local function OnDeath(inst) if inst._item and inst._item:IsValid() then inst._item:Remove() end end
 
 local function OnPickup(inst, data)
-    if inst._item ~= nil then inst._item:Remove() end
+    if inst._item and inst._item:IsValid() then inst._item:Remove() end
+    if data.item.components.explosive and inst:HasTag("hostile") then data.item.components.explosive:OnBurnt() return end
+    inst:AddTag("carrying")
+    data.item:AddTag("raided")
+    local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
+    local skin_build = data.item:GetSkinBuild()
+    inst._item = SpawnPrefab(item)
 
-    if data.item.components.explosive == nil then
-        inst:AddTag("carrying")
-        data.item:AddTag("raided")
-        local item = string.lower(data.item.prefab) ~= nil and string.lower(data.item.prefab)
-        local skin_build = data.item:GetSkinBuild()
-        inst._item = SpawnPrefab(item)
-
-        if inst._item ~= nil then
+    if inst._item ~= nil then
+        --if not inst:HasTag("winky_rat") then
             inst._item.components.inventoryitem.canbepickedup = false
-            inst._item.entity:SetParent(inst.entity)
-            inst._item.entity:AddFollower()
-            inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
-            inst._item.Transform:SetScale(.8, .8, .8)
-            if skin_build ~= nil then
-                -- TODO : Need to match the item skin here
-            end
-            inst._item:AddComponent("pickable")
-            inst._item.components.pickable.quickpick = true
-            inst._item.components.pickable.canbepicked = true
-            inst._item.components.pickable.onpickedfn = function()
-                inst.components.inventory:DropEverything()
-                inst:RemoveTag("carrying")
-                inst._item:Remove()
-            end
+        --end
+        inst._item.entity:SetParent(inst.entity)
+        inst._item.entity:AddFollower()
+        inst._item.Follower:FollowSymbol(inst.GUID, "carrat_body", 0, -60, 0)
+        inst._item.Transform:SetScale(.8, .8, .8)
+        if skin_build ~= nil then
+            -- TODO : Need to match the item skin here
+        end
+        inst._item:AddComponent("pickable")
+        inst._item.components.pickable.quickpick = true
+        inst._item.components.pickable.canbepicked = true
+        inst._item.components.pickable.onpickedfn = function()
+            inst.components.inventory:DropEverything()
+            inst:RemoveTag("carrying")
+            inst._item:Remove()
+            inst._item = nil
+        end
 
-            local function DeleteBackItem(inst)
-                if inst._item ~= nil then
-                    for i = 1, inst.components.inventory.maxslots do
-                        local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
-                        if v ~= nil then
-                            inst.components.inventory:DropItem(v, true, true)
-                            v:Remove()
-                        end
+        --[[local function DeleteBackItem(inst)
+            if inst._item then
+                for i = 1, inst.components.inventory.maxslots do
+                    local v = inst.components.inventory:FindItem(function(item) return not item:HasTag("nosteal") end)
+                    if v ~= nil then
+                        inst.components.inventory:DropItem(v, true, true)
+                        v:Remove()
                     end
                 end
             end
-
-            inst:ListenForEvent("onremove", DeleteBackItem, inst._item)
         end
-    else
-        data.item.components.explosive:OnBurnt()
+
+        inst:ListenForEvent("onremove", DeleteBackItem, inst._item)]]
     end
 end
 
@@ -108,15 +108,20 @@ local function onsave_rat(inst, data)
     if inst:HasTag("carrying") then data.carrying = true end
     if inst:HasTag("ratscout") then data.scouting = true end
     if inst:HasTag("winky_rat") then data.iswinkyfollower = true end
+    if not inst:HasTag("hostile") then data.isfollower = true end
+    --or inst.components.follower and inst.components.follower.leader and inst.components.follower.leader.prefab == "winky"
 end
 
 local function onload_rat(inst, data)
     if data ~= nil then
         if data.carrying ~= nil then inst.components.inventory:DropEverything() end
         if data.scouting ~= nil and data.scouting then inst:AddTag("ratscout") end
-        if data.iswinkyfollower then
+        if data.isfollower then
             inst:AddTag("notraptrigger")
             inst:RemoveTag("canbetrapped")
+            inst:RemoveTag("hostile")
+        end
+        if data.iswinkyfollower then
             inst:AddTag("companion")
             inst:AddTag("winky_rat")
         end
@@ -193,9 +198,27 @@ end
 
 local function ShouldAcceptItem_Winky(inst, item, giver) return giver:HasTag("ratwhisperer") and inst.components.eater:CanEat(item) end
 
+local RAT_TAGS = { "raidrat" }
+local RAT_IGNORE_TAGS = { "FX", "NOCLICK", "DECOR", "INLIMBO", "creaturecorpse", "winky_rat" }
+local function GetOtherRats(inst, radius, tags)
+    tags = tags or RAT_TAGS
+    local x, y, z = inst.Transform:GetWorldPosition()
+
+    local rats = TheSim:FindEntities(x, y, z, radius, nil, RAT_IGNORE_TAGS, tags)
+    local valid_rats = {}
+
+    for _, rat in ipairs(rats) do
+        if rat:IsValid() and not rat.components.health:IsDead() and not rat:HasTag("playerghost") then
+            table.insert(valid_rats, rat)
+        end
+    end
+
+    return valid_rats
+end
+
 local function OnGetItemFromPlayer_Winky(inst, giver, item)
     if inst.components.eater:CanEat(item) then
-        if inst._item ~= nil then inst._item:Remove() end
+        if inst._item and inst._item:IsValid() then inst._item:Remove() end
 
         for k, v in pairs(inst.components.inventory.itemslots) do giver.components.inventory:GiveItem(inst.components.inventory:RemoveItemBySlot(k)) end
 
@@ -210,6 +233,44 @@ local function OnGetItemFromPlayer_Winky(inst, giver, item)
                 giver:PushEvent("makefriend")
                 giver.components.leader:AddFollower(inst)
                 playedfriendsfx = true
+                inst:RemoveTag("hostile")
+            end
+        end
+
+        if giver.components.leader ~= nil then
+            local rats = GetOtherRats(inst, 15) --note: also returns the calling instance of the spider in the list
+            local maxRats = TUNING.SPIDER_FOLLOWER_COUNT
+
+            for i, v in ipairs(rats) do
+                if v ~= inst then
+                    if maxRats <= 0 then
+                        break
+                    end
+
+                    local effectdone = true
+
+                    if v.components.combat.target == giver then
+                        v.components.combat:SetTarget(nil)
+                    elseif giver.components.leader ~= nil and
+                        v.components.follower ~= nil and
+                        v.components.follower.leader == nil then
+                        if not playedfriendsfx then
+                            giver:PushEvent("makefriend")
+                            playedfriendsfx = true
+                        end
+                        giver.components.leader:AddFollower(v)
+                    else
+                        effectdone = false
+                    end
+
+                    if effectdone then
+                        maxRats = maxRats - 1
+
+                        if v.components.sleeper:IsAsleep() then
+                            v.components.sleeper:WakeUp()
+                        end
+                    end
+                end
             end
         end
     end
@@ -226,7 +287,12 @@ local function CalcSanityAura(inst, observer)
     return inst.components.sanityaura.aura
 end
 
-local function onnear(inst, target) if inst:HasTag("winky_rat") and inst.components.follower.leader == nil and target:HasTag("ratwhisperer") and target.components.leader ~= nil then target.components.leader:AddFollower(inst) end end
+local function onnear(inst, target)
+    if inst:HasTag("winky_rat") and inst.components.follower.leader == nil and target:HasTag("ratwhisperer") and target.components.leader ~= nil then
+        target.components.leader:AddFollower(inst)
+        inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
+    end
+end
 
 local function OnEntitySleep(inst)
     local herdmemb = inst.components.herdmember
@@ -278,7 +344,7 @@ local function fn()
     if inst.gooserippletask == nil then inst.gooserippletask = inst:DoPeriodicTask(.25, DoRipple, FRAMES) end
 
     inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(4, 6) -- set specific values
+    inst.components.playerprox:SetDist(6, 8) -- set specific values
     inst.components.playerprox:SetOnPlayerNear(onnear)
     inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
 
@@ -1254,10 +1320,40 @@ local function fn_burrow()
 end
 
 local function WinkyInteract(inst, doer)
-    if inst.ratcount < 3 then
-        if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 20 then
-            doer.components.hunger:DoDelta(-20)
-            inst.ratcount = inst.ratcount + 1
+	if doer.components.leader:CountFollowers("winky_rat") < 12 then
+		if inst.ratcount < 3 then
+			if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 20 then
+				doer.components.hunger:DoDelta(-20)
+				inst.ratcount = inst.ratcount + 1
+
+				local newrat = SpawnPrefab("uncompromising_rat")
+
+				newrat.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				doer.components.leader:AddFollower(newrat)
+
+				newrat:AddTag("notraptrigger")
+				newrat:RemoveTag("canbetrapped")
+				newrat:AddTag("companion")
+				newrat:AddTag("winky_rat")
+                newrat:RemoveTag("hostile")
+
+				inst.AnimState:PlayAnimation("dig")
+				inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+			else
+				doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
+			end
+		else
+			inst:winkyburrowremove()
+		end
+	else
+		doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
+	end
+end
+
+local function WinkyHomeInteract(inst, doer)
+    if doer.components.leader:CountFollowers("winky_rat") < 12 then
+        if doer:HasTag("ratwhisperer") and doer.components.hunger and doer.components.hunger.current >= 15 then
+            doer.components.hunger:DoDelta(-15)
 
             local newrat = SpawnPrefab("uncompromising_rat")
 
@@ -1268,12 +1364,15 @@ local function WinkyInteract(inst, doer)
             newrat:RemoveTag("canbetrapped")
             newrat:AddTag("companion")
             newrat:AddTag("winky_rat")
+            newrat:RemoveTag("hostile")
 
             inst.AnimState:PlayAnimation("dig")
             inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+		else
+			doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
         end
     else
-        inst:winkyburrowremove()
+        doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
     end
 end
 
@@ -1294,6 +1393,11 @@ local function winkyburrowremove(inst)
     inst.components.container_proxy:Close()
     inst.components.container_proxy.canbeopened = false
     inst.components.sizetweener:StartTween(.05, 1, inst.Remove)
+end
+
+local function winkyhomeburrowremove(inst)
+	winkyburrowremove(inst)
+	TheWorld.winkyburrowhome = false
 end
 
 local function WinkyBurrowDespawn(inst)
@@ -1423,9 +1527,17 @@ local function fn_winkyhomeburrow()
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)
 
-    inst:DoTaskInTime(1, BurrowAnim)
+    inst:AddComponent("channelable")
+    inst.components.channelable:SetChannelingFn(WinkyHomeInteract, OnStopChanneling)
+    inst.components.channelable.use_channel_longaction_noloop = true
+    -- inst.components.channelable.skip_state_stopchanneling = true
+    inst.components.channelable.skip_state_channeling = true
+    -- inst.components.channelable.ignore_prechannel = true
 
-    inst.winkyburrowremove = winkyburrowremove
+    inst:DoTaskInTime(1, BurrowAnim)
+	inst:DoTaskInTime(0, function() TheWorld.winkyburrowhome = true end)
+
+    inst.winkyburrowremove = winkyhomeburrowremove
     inst.OnSave = onsave_winkyburrow
     inst.OnLoad = onload_winkyburrow
     inst.OnLoadPostPass = AttachShadowContainer
@@ -1514,8 +1626,8 @@ end
 local function SnifferFoodScoreCalculations(inst, container, v)
     local stackmult = v.components.stackable and v.components.stackable:StackSize() or 1
     local preparedmult = v:HasTag("preparedfood") and 2 or 1
-    local delta = not container and (v:HasTag("fresh") and 5 or v:HasTag("stale") and 10 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 15)
-        or (v:HasTag("stale") and 2.5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 5) or 0
+    local delta = not container and (v:HasTag("fresh") and 10 or v:HasTag("stale") and 20 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 30)
+        or (v:HasTag("stale") and 5 or (v:HasTag("spoiled") or IsAVersionOfRot(v)) and 10) or 0
     inst.foodscore = inst.foodscore + (delta > 0 and ((delta * preparedmult) * stackmult) or delta)
 end
 
@@ -1524,11 +1636,58 @@ local function IsProperContainer(owner)
     return not owner or owner and not (table.contains(NO_CONTAINER_PREFABS, owner.prefab) or owner:HasAnyTag("lamp", "yots_post", "krampus_middleman", "pocketdimension_container", "buried"))
 end
 
+local function TrySpawnIcon(v, owner, intensity)
+    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
+    if nearbyicon then
+        nearbyicon:Resize(intensity)
+    else
+        local icon = SpawnPrefab("ratmask_stinklines")
+        local x, y, z = v.Transform:GetWorldPosition()
+        icon.Network:SetClassifiedTarget(owner)
+        icon.Transform:SetPosition(x, y, z)
+        icon:Resize(intensity)
+    end
+end
+
+local function FoodScoreCalculations(container, v, owner)
+    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
+        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
+    if not intensity then return end
+    TrySpawnIcon(v, owner, intensity)
+end
+
 local NOTAGS = {"engineeringbatterypowered", "smallcreature", "_container", "spore", "NORATCHECK", "_combat", "_health", "balloon", "heavy", "projectile", "frozen", "deployedfarmplant", "outofreach"}
+local function Sniffertime(owner, sniffer)
+    if not owner or not owner:IsValid() or not sniffer or not sniffer:IsValid() then
+        return
+    end
+
+    local x, y, z = sniffer.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
+
+    for i, v in ipairs(ents) do
+        if v:IsValid() and v.components.inventoryitem ~= nil then
+            local container = v.components.inventoryitem:IsHeld()
+                and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
+
+            if IsProperContainer(container) then
+                FoodScoreCalculations(container, v, owner)
+            end
+        end
+    end
+end
+
 local function TimeForACheckUp(inst, dev)
     local x, y, z = inst.Transform:GetWorldPosition()
+	
+    local players = TheSim:FindEntities(x, y, z, TUNING.DSTU.SNIFFER_PLAYER, {"player"}, {"playerghost"})
+    for a, b in ipairs(players) do
+        if b:IsValid() and b:IsNear(inst, TUNING.DSTU.SNIFFER_PLAYER) then
+			Sniffertime(b, inst)
+		end
+	end
 
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
+    local ents = TheSim:FindEntities(x, 0, z, TUNING.DSTU.SNIFFER_ITEM, {"_inventoryitem"}, NOTAGS)
     --[[print("THE RAT SNIFFS")
     print("                o")
     print("    =========B  *sniff* *sniff*")
@@ -1536,7 +1695,7 @@ local function TimeForACheckUp(inst, dev)
     print("   ========")
     print("    V V    V V")]]
     inst.ratscore = -60
-    inst.itemscore = 0
+    --inst.itemscore = 0
     inst.foodscore = 0
 
     inst.ratburrows = TheWorld.components.ratcheck and TheWorld.components.ratcheck:GetBurrows() or 0
@@ -1544,23 +1703,23 @@ local function TimeForACheckUp(inst, dev)
 
     if ents then
         for i, v in ipairs(ents) do
-            if (inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus) < 240 then
+            if (inst.ratscore + inst.foodscore + inst.burrowbonus) < 300 then
                 local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
                 if IsProperContainer(container) then
                     if container then
                         SnifferFoodScoreCalculations(inst, true, v)
                     else
                         SnifferFoodScoreCalculations(inst, false, v)
-                        if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
-                            inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
-                        end
+                        --if TUNING.DSTU.ITEMCHECK and v:HasAnyTag("_equippable", "tool", "gem") then
+                            --inst.itemscore = inst.itemscore + 30 -- Oooh, wants wants! We steal!
+                        --end
                     end
                 end
             end
         end
     end
 
-    inst.ratscore = inst.ratscore + inst.itemscore + inst.foodscore + inst.burrowbonus
+    inst.ratscore = inst.ratscore + inst.foodscore + inst.burrowbonus
     -- print("------------------------")
     -- print("Itemscore = "..inst.itemscore)
     -- print("Foodscore = "..inst.foodscore)
@@ -1570,14 +1729,14 @@ local function TimeForACheckUp(inst, dev)
     -- just use the command if you wanna see i guess.
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
         TheNet:SystemMessage("-------------------------")
-        TheNet:SystemMessage("Itemscore = "..inst.itemscore)
+        --TheNet:SystemMessage("Itemscore = "..inst.itemscore)
         TheNet:SystemMessage("Foodscore = "..inst.foodscore)
         TheNet:SystemMessage("Burrowbonus = "..inst.burrowbonus)
         TheNet:SystemMessage("Ratscore = "..inst.ratscore)
     end
-    if inst.ratscore > 240 then inst.ratscore = 240 end
+    if inst.ratscore > 300 then inst.ratscore = 300 end
     if TUNING.DSTU.ANNOUNCE_BASESTATUS then
-        TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
+        --TheNet:SystemMessage("True Ratscore = "..inst.ratscore)
         TheNet:SystemMessage("Timer = "..(TheWorld.components.ratcheck:GetRatTimer() and TheWorld.components.ratcheck:GetRatTimer() or "... not available? timer is 0 second").."s")
         TheNet:SystemMessage("-------------------------")
     end
@@ -1585,7 +1744,7 @@ local function TimeForACheckUp(inst, dev)
     if not dev then
         TheWorld:PushEvent("reducerattimer", { value = inst.ratscore })
 
-        inst.ratwarning = inst.ratscore / 48
+        inst.ratwarning = inst.ratscore
 
         --[[
             for c = 1, (inst.ratwarning) do
@@ -1598,33 +1757,34 @@ local function TimeForACheckUp(inst, dev)
                 end)
             end
         end]]
-        if inst.ratscore >= 60 then
-            if math.random() > .85 then
-                if inst.ratwarning > 5 then inst.ratwarning = 5 end
 
-                for c = 1, (inst.ratwarning) do
-                    inst:DoTaskInTime((c / 5), function(inst)
-                        local warning = SpawnPrefab("uncompromising_ratwarning")
-                        warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
-                        -- warning.entity:SetParent(b)
-                        -- b.SoundEmitter:PlaySound("UCSounds/ratsniffer/warning")
-                        -- warning.entity:SetParent(TheFocalPoint.b.entity)
-                    end)
-                end
+		local rattimer = TheWorld.components.ratcheck ~= nil and TheWorld.components.ratcheck:GetRatTimer() or nil
+		local warn = GetTime()
 
-                local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
-                for a, b in ipairs(players) do
-                    if math.random() > .5 then
-                        local str = inst.burrowbonus > inst.itemscore and inst.burrowbonus > inst.foodscore and "BURROWS"
-                            or inst.itemscore > inst.burrowbonus and inst.itemscore > inst.foodscore and "ITEMS"
-                            or inst.foodscore > inst.burrowbonus and inst.foodscore > inst.itemscore and "FOOD" or nil
-                        if str then
-                            b:DoTaskInTime(2 + math.random(), function(b) b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1")) end)
-                        end
-                    end
-                end
-            end
-        end
+		if rattimer ~= nil and rattimer < 3000 and inst.ratscore ~= nil and inst.ratscore > 0 and (inst.last_ratwarning_time == nil or warn - inst.last_ratwarning_time >= 600) then
+			inst.last_ratwarning_time = warn
+
+			if inst.ratwarning > 5 then
+				inst.ratwarning = 5
+			end
+
+			for c = 1, inst.ratwarning do
+				inst:DoTaskInTime(c / 5, function(inst)
+					local warning = SpawnPrefab("uncompromising_ratwarning")
+					warning.Transform:SetPosition(inst.Transform:GetWorldPosition())
+				end)
+			end
+
+			local players = TheSim:FindEntities(x, y, z, 40, {"player"}, {"playerghost"})
+			for a, b in ipairs(players) do
+				local str = inst.burrowbonus > inst.foodscore and "BURROWS" or inst.foodscore > inst.burrowbonus and "FOOD" or nil
+				if str ~= nil then
+					b:DoTaskInTime(2 + math.random(), function(b)
+						b.components.talker:Say(GetString(b, "ANNOUNCE_RATSNIFFER_"..str, "LEVEL_1"))
+					end)
+				end
+			end
+		end
     end
 end
 
@@ -1663,7 +1823,7 @@ local function fn_droppings()
     MakeInventoryPhysics(inst)
 
     -- inst:AddTag("fx")
-    inst:AddTag("raidrat")
+    --inst:AddTag("raidrat") -- Why would THIS be a raidrat?? What???
 
     MakeInventoryFloatable(inst)
 
@@ -1838,42 +1998,6 @@ local function OnCooldown(inst)
     inst.components.useableitem.inuse = false
 end
 
-local function TrySpawnIcon(v, owner, intensity)
-    local nearbyicon = FindEntity(v, 2, nil, {"ratmask_stinklines"})
-    if nearbyicon then
-        nearbyicon:Resize(intensity)
-    else
-        local icon = SpawnPrefab("ratmask_stinklines")
-        local x, y, z = v.Transform:GetWorldPosition()
-        icon.Network:SetClassifiedTarget(owner)
-        icon.Transform:SetPosition(x, y, z)
-        icon:Resize(intensity)
-    end
-end
-
-local function FoodScoreCalculations(container, v, owner)
-    local intensity = not container and (v:HasTag("fresh") and .5 or v:HasTag("stale") and .75 or v:HasTag("spoiled") and .8)
-        or (v:HasTag("stale") and .5 or v:HasTag("spoiled") and .75) or IsAVersionOfRot(v) and 1
-    if not intensity then return end
-    TrySpawnIcon(v, owner, intensity)
-end
-
-local function Sniffertime(owner)
-    local x, y, z = owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, 0, z, 40, {"_inventoryitem"}, NOTAGS)
-    if ents then
-        for i, v in ipairs(ents) do
-            local container = v.components.inventoryitem:IsHeld() and (v.components.inventoryitem:GetGrandOwner() or v.components.inventoryitem.owner)
-            if IsProperContainer(container) then
-                FoodScoreCalculations(container, v, owner)
-                if TUNING.DSTU.ITEMCHECK and not container and v:HasAnyTag("_equippable", "tool") then
-                    TrySpawnIcon(v, owner, .5)
-                end
-            end
-        end
-    end
-end
-
 local function CheckTargetPiece(inst)
     local owner = inst.components.inventoryitem.owner
     if owner then
@@ -1885,9 +2009,10 @@ local function CheckTargetPiece(inst)
 
         inst.SoundEmitter:KillSound("ratping")
         inst.SoundEmitter:PlaySound("UCSounds/ratping/ping_hotter", "ratping")
-        if FindEntity(owner, 40, nil, {"rat_sniffer"}) then
-            Sniffertime(owner)
-        end
+		local sniffer = FindEntity(owner, 40, nil, {"rat_sniffer"})
+		if sniffer ~= nil then
+			Sniffertime(owner, sniffer)
+		end
     end
     --inst.components.rechargeable:Discharge(8)
 end
@@ -2041,7 +2166,9 @@ return Prefab("uncompromising_rat", fn, assets, prefabs),
     Prefab("uncompromising_ratherd", fn_herd, assets, prefabs),
     Prefab("uncompromising_ratburrow", fn_burrow, assets, prefabs),
     Prefab("uncompromising_winkyburrow", fn_winkyburrow, assets, prefabs),
+    MakePlacer("uncompromising_winkyburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
     Prefab("uncompromising_winkyhomeburrow", fn_winkyhomeburrow, assets, prefabs),
+    MakePlacer("uncompromising_winkyhomeburrow_placer", "uncompromising_rat_burrow", "uncompromising_rat_burrow", "idle"),
     Prefab("uncompromising_scoutburrow", fn_scoutburrow, assets, prefabs),
     Prefab("uncompromising_ratsniffer", fn_sniffer, assets, prefabs),
     Prefab("ratdroppings", fn_droppings, assets),

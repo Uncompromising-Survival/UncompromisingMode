@@ -244,6 +244,25 @@ local function IsBoatEdgeOverLand(inst, override_position_pt)
     return false
 end
 
+local function InstantlyBreakBoat(inst)
+    -- This is not for SGboat but is for safety on physics.
+    if inst.components.boatphysics then
+        inst.components.boatphysics:SetHalting(true)
+    end
+    --Keep this in sync with SGboat.
+    for entity_on_platform in pairs(inst.components.walkableplatform:GetEntitiesOnPlatform()) do
+        entity_on_platform:PushEvent("abandon_ship")
+    end
+    for player_on_platform in pairs(inst.components.walkableplatform:GetPlayersOnPlatform()) do
+        player_on_platform:PushEvent("onpresink")
+    end
+    inst:sinkloot()
+    if inst.postsinkfn then
+        inst:postsinkfn()
+    end
+    inst:Remove()
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -375,7 +394,8 @@ local function fn()
     inst.StartBoatPhysics = StartBoatPhysics
     inst.GetSafePhysicsRadius = GetSafePhysicsRadius
     inst.IsBoatEdgeOverLand = IsBoatEdgeOverLand
-
+	inst.InstantlyBreakBoat = InstantlyBreakBoat
+	
     inst.OnPhysicsWake = OnPhysicsWake
     inst.OnPhysicsSleep = OnPhysicsSleep
 

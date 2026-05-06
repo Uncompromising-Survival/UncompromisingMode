@@ -2,6 +2,8 @@ require "behaviours/standstill"
 require "behaviours/wander"
 require "behaviours/chaseandattack"
 require "behaviours/leash"
+require "behaviours/runaway"
+local BrainCommon = require("brains/braincommon")
 
 local ViperWormBrain = Class(Brain, function(self, inst)
     Brain._ctor(self, inst)
@@ -92,18 +94,18 @@ function ViperWormBrain:OnStart()
     {
 
         WhileNode(function() return self.inst.sg:HasStateTag("lure") end, "Lure", StandStill(self.inst)),
-
+        RunAway(self.inst, "PyreNettle", 4, 6), -- Avoid pyre nettles
         WhileNode(function() return self.inst.components.knownlocations:GetLocation("home") ~= nil end, "Has Home",
+            --Worm has found hunting grounds at this point.
             PriorityNode{
-
-                WhileNode( function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
+				BrainCommon.PanicTrigger(self.inst),
+                BrainCommon.ElectricFencePanicTrigger(self.inst),
                 Leash(self.inst, self.inst.components.knownlocations:GetLocation("home"), TUNING.WORM_CHASE_DIST, TUNING.WORM_CHASE_DIST - 15), -- Don't go too far from your hunting grounds.
                 ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),
                 DoAction(self.inst, GoHomeAction), --Go home and set up your lure if conditions are met.
                 DoAction(self.inst, EatFoodAction), --Eat food if conditions are met.
                 Wander(self.inst, function() return self.inst.components.knownlocations:GetLocation("home") end, TUNING.WORM_WANDER_DIST),
                 StandStill(self.inst),
-
             }),
 
         ChaseAndAttack(self.inst, TUNING.WORM_CHASE_TIME, TUNING.WORM_CHASE_DIST),

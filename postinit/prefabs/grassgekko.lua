@@ -18,43 +18,43 @@ local function PlayGrowTailSound(inst)
     end
 end
 
-local function GrassGekkoFunctions(inst)
-    local function OnInventory(inst, owner)
-        if inst.components.herdmember and inst.components.herdmember.enabled then
-            inst.components.herdmember:Enable(false)
-        end
+local function OnInventory(inst, owner)
+    if inst.components.herdmember and inst.components.herdmember.enabled then
+        inst.components.herdmember:Enable(false)
     end
+end
 
-    local function OnDropped(inst)
-        if inst.components.herdmember and not inst.components.herdmember.enabled then
-            inst.components.herdmember:Enable(true)
-        end
-        if inst.tailGrowthPending then
-            inst.tailGrowthPending = nil
-            inst.AnimState:Show("tail")
-            inst.hasTail = true
-        end
+local function OnDropped(inst)
+    if inst.components.herdmember and not inst.components.herdmember.enabled then
+        inst.components.herdmember:Enable(true)
     end
+    if inst.tailGrowthPending then
+        inst.tailGrowthPending = nil
+        inst.AnimState:Show("tail")
+        inst.hasTail = true
+    end
+end
 
-    local function SetGekkoTrapData(inst)
+local function SetGekkoTrapData(inst)
+    local t = inst.components.timer:GetTimeLeft("growTail")
+    return t and {growTail = t} or nil
+end
+
+local function RestoreGekkoFromTrap(inst, data)
+    if data and data.growTail then
+        if inst.components.health and inst.components.health:IsDead() then return end
+        inst.AnimState:Hide("tail")
+        inst.hasTail = false
         local t = inst.components.timer:GetTimeLeft("growTail")
-        return t and {growTail = t} or nil
-    end
-
-    local function RestoreGekkoFromTrap(inst, data)
-        if data and data.growTail then
-            if inst.components.health and inst.components.health:IsDead() then return end
-            inst.AnimState:Hide("tail")
-            inst.hasTail = false
-            local t = inst.components.timer:GetTimeLeft("growTail")
-            if t and t < data.growTail then
-                inst.components.timer:SetTimeLeft("growTail", data.growTail)
-                return
-            end
-            inst.components.timer:StartTimer("growTail", data.growTail, inst:IsInLimbo())
+        if t and t < data.growTail then
+            inst.components.timer:SetTimeLeft("growTail", data.growTail)
+            return
         end
+        inst.components.timer:StartTimer("growTail", data.growTail, inst:IsInLimbo())
     end
+end
 
+local function GrassGekkoFunctions(inst)
     local lootdropper = inst.components.lootdropper
     if lootdropper then
         lootdropper:AddChanceLoot("dug_grass", 1.00)

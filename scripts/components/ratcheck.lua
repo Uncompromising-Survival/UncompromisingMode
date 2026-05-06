@@ -248,7 +248,7 @@ return Class(function(self, inst)
 				else
 
 					if #ents <= 20 then
-						print("CAN'T SPAWN RATS! There aren't enough items around!")
+						--print("CAN'T SPAWN RATS! There aren't enough items around!")
 					else
 						if #TheSim:FindEntities(x, y, z, 30, { "structure" }) > 3 then
 							local ratchecker = TheSim:FindFirstEntityWithTag("rat_sniffer")
@@ -262,15 +262,15 @@ return Class(function(self, inst)
 
 
 					if data.container.components.container:IsEmpty() then
-						print("CAN'T SPAWN RATS! This container is empty!")
+						--print("CAN'T SPAWN RATS! This container is empty!")
 					end
 
 					if not IsEligible(data.doer) then
-						print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
+						--print("CAN'T SPAWN RATS! Player is in a 'safe' zone!")
 					end
 
 					if (_raided ~= nil and _raided) then
-						print("CAN'T SPAWN RATS! They are on break!")
+						--print("CAN'T SPAWN RATS! They are on break!")
 					end
 				end
 			end
@@ -280,12 +280,12 @@ return Class(function(self, inst)
 
 	local function IncreaseDens(data)
 		_ratburrows = _ratburrows + 1
-		print("INCREASED RAT BURROWS TO " .. _ratburrows)
+		--print("INCREASED RAT BURROWS TO " .. _ratburrows)
 	end
 
 	local function DecreaseDens(data)
 		_ratburrows = _ratburrows - 1
-		print("DECREASED RAT BURROWS TO " .. _ratburrows)
+		--print("DECREASED RAT BURROWS TO " .. _ratburrows)
 	end
 
 	function self:GetBurrows()

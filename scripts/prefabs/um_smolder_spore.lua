@@ -13,12 +13,12 @@ local function FieryAftermath(inst)
 end
 
 -- This prefab just isn't complicated enough to need seperate files for movement. One block of code suffices.
-local dont_target = {"PyreToxinImmune","wall","chess"}
+local dont_target = {"pyre_toxin_immune","wall","chess"}
 local function SimpleWander(inst)
 	if not inst:HasTag("BUSYSMOLDERSPORE") then
 		inst.randdir = math.random(1, 359)
 		inst:DoPeriodicTask(10*FRAMES,function(inst)
-			local ent = FindEntity(inst,16,nil,{"_health"},dont_target)
+			local ent = FindEntity(inst,4,nil,{"_health"},dont_target)
 			if ent then
 				inst:ForceFacePoint(ent:GetPosition())
 			else
@@ -251,7 +251,7 @@ local function fn()
 	inst.AnimState:PlayAnimation("spawn", false)
 	inst.AnimState:PushAnimation("idle", true)
 
-	inst:AddTag("PyreToxinImmune")
+	inst:AddTag("pyre_toxin_immune")
 	inst:AddTag("soulless") -- Prefab shouldn't die via health loss, but...just in case.
     inst:AddTag("noember")
 	inst:AddTag("scarytoprey")
@@ -325,12 +325,6 @@ local function fn()
 	inst:AddComponent("fuel")
 	inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
 
-	-- Let Wormwood plant it.
-	inst:AddComponent("deployable")
-	inst.components.deployable:SetDeployMode(DEPLOYMODE.CUSTOM) -- use inst._custom_candeploy_fn
-	inst.components.deployable.ondeploy = OnDeploy
-	inst.components.deployable.restrictedtag = "plantkin"
-
 	-- Eating explosives goes about as well as you'd think.
 	inst:AddComponent("edible")
 	inst.components.edible.healthvalue = -10
@@ -372,7 +366,7 @@ local function pop_fn()
 	inst.Transform:SetScale(1.25, 1.25, 1.25)
 	inst.AnimState:PlayAnimation("explode", false)
 
-	inst:AddTag("PyreToxinImmune")
+	inst:AddTag("pyre_toxin_immune")
 	inst:AddTag("flying")
 	inst:AddTag("thorny")
 

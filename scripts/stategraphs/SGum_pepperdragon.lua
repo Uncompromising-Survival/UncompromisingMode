@@ -53,11 +53,12 @@ end
 -- BounceStuff used when he counters and dies
 
 local function PoofMouthFire(inst)
-	local fx = SpawnPrefab("deer_fire_burst")
+	local fx = SpawnPrefab(inst.coldfire and "deer_ice_burst" or "deer_fire_burst")
 	fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
 	fx.entity:AddFollower()
 	fx.Follower:FollowSymbol(inst.GUID, "mouth_fire")
 end
+
 local ARC = 90 * DEGREES --degrees to each side
 local AOE_TARGET_CANT_TAGS = { "INLIMBO", "invisible", "notarget", "noattack"}
 local function PoofNearby(inst)
@@ -91,6 +92,9 @@ local function ShootFire(inst,total_flame)
 			
 			local x,y,z = inst.Transform:GetWorldPosition()
 			local projectile = SpawnPrefab("um_fire_projectile")
+			if inst.coldfire then
+				projectile.chilly = true
+			end
 			local rot = inst.Transform:GetRotation() 
 			local degrand = 5
 			local dx = 4*math.sin((rot+ 90+degrand) * DEGREES)
@@ -101,31 +105,13 @@ local function ShootFire(inst,total_flame)
 			projectile.speed = 15
 			projectile.scale = 1 + math.random(0,10)/100 -- scale up sometimes.
 			projectile.damage = 3
-			PoofNearby(inst)
+			projectile.damager = inst
+			if not inst.coldfire then
+				PoofNearby(inst)
+			end
+			
 		end)
 	end
-end
-
-local function GetPissy(inst)
-	if not inst.components.timer:TimerExists("pissedoff") then
-		inst.components.timer:StopTimer("pissedoff")
-	end
-	inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
-	inst.check_ready_flame = inst:DoPeriodicTask(5,function(inst) -- see if we happen to be in a good position for lots of fire.
-		if not inst.components.timer:TimerExists("pissedoff") then
-			if inst.check_ready_flame then
-				inst.check_ready_flame:Cancel()
-				inst.check_ready_flame = nil
-			end
-		else
-			if not inst.components.timer:TimerExists("flame_cd") then
-				local target = inst.components.combat and inst.components.combat.target or nil
-				if not inst.sg:HasStateTag("busy") and (target and inst:GetDistanceSqToInst(target) < 30) then
-					inst.sg:GoToState("flame_pre")
-				end
-			end
-		end
-	end)
 end
 
 local actionhandlers =
@@ -140,7 +126,10 @@ local events=
     CommonHandlers.OnAttacked(),
     EventHandler("doattack", function(inst)
 		if not (inst.components.health:IsDead() or inst.sg:HasStateTag("electrocute") or inst.sg:HasStateTag("busy")) then
-			if (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
+            if inst.sg.mem.wantstostomp then
+                inst.sg.mem.wantstostomp = nil
+                inst.sg:GoToState("stomp")
+			elseif (inst.components.timer:TimerExists("pissedoff") and not inst.components.timer:TimerExists("flame_cd")) or inst.flamecount > 0 then
 				inst.sg:GoToState("flame_pre")
 			else
 				inst.sg:GoToState("attack")
@@ -193,10 +182,6 @@ local states=
                 inst.AnimState:PushAnimation("idle1", true)
             else
                 inst.AnimState:PlayAnimation("idle1", true)
-            end
-
-            if inst:HasTag("teenbird") then
-                inst.sg:SetTimeout(4 + 4*math.random())
             end
         end,
 
@@ -258,6 +243,10 @@ local states=
             inst.AnimState:PlayAnimation("flame_pre", false)
 			inst.flamecount = 0
 			inst.flamecount_total = math.random(7,9) -- Can retune this...
+			if inst.bellyfullness > 0 then
+				inst.bellyfullness = 0
+				inst.coldfire = true
+			end
         end,
 
         timeline=
@@ -324,6 +313,7 @@ local states=
 			inst.flamecount = 0
             inst.AnimState:PlayAnimation("flame_pst", false)
 			inst.components.timer:StartTimer("flame_cd",20)
+			inst.components.combat:SetRange(3)
         end,
 
         timeline=
@@ -339,6 +329,11 @@ local states=
 				PoofMouthFire(inst)
 			end),
         },
+		onexit = function(inst)
+			if inst.coldfire then
+				inst.coldfire = false
+			end
+		end,
 		onupdate = function(inst)
 			if inst.components.combat and inst.components.combat.target then
 				inst:ForceFacePoint(inst.components.combat.target:GetPosition())
@@ -354,23 +349,31 @@ local states=
         tags = {"hit"},
 
         onenter = function(inst)
-			inst.tolerance = inst.tolerance + 0.1+math.random(1,20)*0.1
+            if not inst.sg.mem.wantstostomp then
+			    inst.tolerance = inst.tolerance + 0.3 + (math.random() * 0.2)
+            end
             inst.SoundEmitter:PlaySound("dontstarve/creatures/together/toad_stool/hit")
             inst.AnimState:PlayAnimation("hit")
             inst.Physics:Stop()
 			CommonHandlers.UpdateHitRecoveryDelay(inst)
-			GetPissy(inst)
+            if inst.components.timer:TimerExists("pissedoff") then
+                inst.components.timer:StopTimer("pissedoff")
+            end
+            inst.components.timer:StartTimer("pissedoff",60) -- 1 minute of piss off time.
+			if not inst.components.timer:TimerExists("flame_cd") then
+				inst.components.combat:SetRange(8,3) --AXE He should be ready to breath fire, set his range to be longer than usual so he doesn't walk up to the player to start the attack
+			end
         end,
 
         events=
         {
-            EventHandler("animover", function(inst) 
-				if inst.tolerance > 1 then
-					inst.tolerance = 0
-					inst.sg:GoToState("stomp")				
-				else
-					inst.sg:GoToState("idle") 
-				end 
+            EventHandler("animover", function(inst)
+                if inst.tolerance > 1 then
+                    inst.tolerance = 0
+                    inst.sg.mem.wantstostomp = true
+                    inst.components.combat:ResetCooldown()
+                end
+				inst.sg:GoToState("idle")
 			end),
         },
     },
@@ -430,6 +433,7 @@ local states=
 			inst.components.locomotor:StopMoving()
 			inst.AnimState:PlayAnimation("pound", false)
 			inst.components.combat:SetAreaDamage(4, 1)
+            inst.components.combat:SetDefaultDamage(225) -- AXE He's being killed by worms AAAA
 		end,
 
 		timeline=
@@ -454,6 +458,7 @@ local states=
 		{
 			EventHandler("animqueueover", function(inst)
 				inst.components.combat:SetAreaDamage()
+                inst.components.combat:SetDefaultDamage(75)
 				inst.sg:GoToState("idle")
 			end),
 		},

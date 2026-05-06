@@ -95,7 +95,7 @@ local function fn()
 
 	--MakeObstaclePhysics(inst, .4)
 
-	inst.MiniMapEntity:SetIcon("skull_chest.png")
+	inst.MiniMapEntity:SetIcon("skullchest.tex")
 
 	inst:AddTag("structure")
 	--inst:AddTag("chest")

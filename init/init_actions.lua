@@ -29,14 +29,6 @@ AddAction("UM_SILKWRAP", "UM_SILKWRAP", function(act)
     return act.target:WrapStuff(act.target)
 end)
 
-AddAction("UNCOMPROMISING_PAWN_HIDE", "UNCOMPROMISING_PAWN_HIDE", function(act)
-    -- Dummy action for pawn.
-end)
-
-AddAction("UNCOMPROMISING_PAWN_SHAKE", "UNCOMPROMISING_PAWN_SHAKE", function(act)
-    -- Dummy action for pawn.
-end)
-
 AddAction("RAT_STEAL_EQUIPPABLE", "RAT_STEAL_EQUIPPABLE", function(act)
     if act.target.components.container then
         act.target.components.container:DropOneItemWithTag("_equippable")
@@ -74,25 +66,83 @@ wingsuit.rmb = true
 wingsuit.distance = 20
 wingsuit.mount_valid = false
 
+
+-- AXE Allow weapons with complexprojectile to override their toss range - the distance in which wilson will begin the toss action
+local _extra_toss_dist = GLOBAL.ACTIONS.TOSS.extra_arrive_dist
+local function ExtraTossDist(doer, dest, bufferedaction)
+    local invobject = bufferedaction and bufferedaction.invobject or nil
+    if invobject and invobject.components.weapon and invobject.components.weapon.toss_range_override then
+        return invobject.components.weapon.toss_range_override
+    end
+
+    if _extra_toss_dist then
+        return _extra_toss_dist
+    end
+    return 0
+end
+
+GLOBAL.ACTIONS.TOSS.extra_arrive_dist = ExtraTossDist
+
+local ratorder = AddAction("RAT_ORDER", GLOBAL.STRINGS.ACTIONS.RAT_ORDER, function(act)
+    local doer = act.doer
+    if doer --[[and act.target]] and doer:HasTag("ratwhisperer") --[[and act.target:HasTag("winky_rat")]] then
+        --[[local MUST_TAGS = {"raidrat"}
+        local CANT_TAGS = {}
+        local x, y, z = doer.Transform:GetWorldPosition()
+        local ratlings = TheSim:FindEntities(x,y,z,10,MUST_TAGS)]]
+        local ratminions = doer.components.leader and doer.components.leader:GetFollowersByTag("raidrat")
+        local str
+        if doer.readytogather and ratminions and #ratminions > 0 then
+            if doer.readytogather:value() then
+                doer.readytogather:set(false)
+                str = "STOP_RAT_ORDER"
+                for i, v in ipairs(ratminions) do
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
+                    if v.components.inventory and v._item and v._item:IsValid() and v._item.components.pickable then
+                        v._item.components.pickable:Pick(TheWorld)
+                    end
+                end
+            else
+                doer.readytogather:set(true)
+                str = "START_RAT_ORDER"
+                for i, v in ipairs(ratminions) do
+                    if v.sg:HasStateTag("idle") and not v.sg:HasStateTag("busy") then
+                        v.AnimState:PlayAnimation("idle2")
+                    end
+                    v.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/reaction")
+                    if v.components.combat then
+                        v.components.combat:SetTarget(nil)
+                    end
+                end
+            end
+        end
+        if doer.um_winkyordertask then doer.um_winkyordertask:Cancel() end
+        doer.um_winkyordertask = doer:DoTaskInTime(.7, function(inst)
+            if inst.components.talker and not inst.sg:HasStateTag("talking") then
+                local response = str or "FAIL_RAT_ORDER"
+                inst.components.talker:Say(GetString(inst, response))
+            end
+            inst.um_winkyordertask = nil
+        end)
+        --act.target:PushEvent("onstolen", { thief = doer })
+        return true
+    end
+end)
+
+ratorder.distance = 10
+
 local createburrow = AddAction("CREATE_BURROW", GLOBAL.STRINGS.ACTIONS.CREATE_BURROW, function(act)
     local act_pos = act:GetActionPoint()
     if act.doer.components.hunger.current > 15 and not GLOBAL.TheWorld.Map:GetPlatformAtPoint(act_pos.x, act_pos.z) then
-        local burrows = GLOBAL.TheSim:FindEntities(act_pos.x, 0, act_pos.z, 10000, { "winkyburrow" })
-        local home = false
-
-        for i, v in pairs(burrows) do if v.myowner == act.doer.userid then home = true end end
-
-        if home then
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            act.doer.components.hunger:DoDelta(-15)
-        else
-            local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyhomeburrow")
-            burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
-            burrow.myowner = act.doer.userid
-
-            act.doer.components.hunger:DoDelta(-20)
-        end
+        local burrow = GLOBAL.SpawnPrefab("uncompromising_winkyburrow")
+        burrow.Transform:SetPosition(act_pos.x, 0, act_pos.z)
+        act.doer.components.hunger:DoDelta(-15)
 
         return true
     end
@@ -126,19 +176,49 @@ GLOBAL.ACTIONS.RUMMAGE.fn = function(act)
     if target == nil then
         return
     end
-    if target.prefab == "portablecookpot" and target ~= nil and target.components.container ~= nil
-        and target.components.container.canbeopened and GLOBAL.CanEntitySeeTarget(act.doer, target) then
-        if target.components.container:IsOpenedBy(act.doer) then
-            target.components.container:Close(act.doer)
-            act.doer:PushEvent("closecontainer", { container = target })
+    if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+        if target.prefab == "portablecookpot" and target ~= nil and target.components.container ~= nil
+            and target.components.container.canbeopened and GLOBAL.CanEntitySeeTarget(act.doer, target) then
+            if target.components.container:IsOpenedBy(act.doer) then
+                target.components.container:Close(act.doer)
+                act.doer:PushEvent("closecontainer", { container = target })
+                return true
+            end
+            act.doer:PushEvent("opencontainer", { container = target })
+            target.components.container:Open(act.doer)
             return true
         end
-        act.doer:PushEvent("opencontainer", { container = target })
-        target.components.container:Open(act.doer)
-        return true
     end
     return _RummageFn(act)
 end
+
+local _RummageStrFn = GLOBAL.ACTIONS.RUMMAGE.strfn
+GLOBAL.ACTIONS.RUMMAGE.strfn = function(act, ...)
+    local str = _RummageStrFn(act, ...)
+    local targ = act.target or act.invobject
+    if targ ~= nil then
+        local container = targ.replica.container
+
+        if targ:HasTag("gem_forge") then
+            if container and container:IsOpenedBy(act.doer) then
+                return "CLOSE_GEM_FORGE"
+            else
+                return "GEM_FORGE"
+            end
+        end
+    end
+
+    return str
+end
+
+local _combinestackfn = GLOBAL.ACTIONS.COMBINESTACK.fn
+GLOBAL.ACTIONS.COMBINESTACK.fn = function(act)
+    --local target = act.target
+    local invobj = act.invobject
+    act.doer:PushEvent("um_combinestack", { item = invobj })
+    return _combinestackfn(act)
+end
+
 
 local _ChopFn = GLOBAL.ACTIONS.CHOP.fn
 
@@ -162,13 +242,13 @@ end
 
 --[[local _lookatstrfn = GLOBAL.ACTIONS.LOOKAT.strfn
 GLOBAL.ACTIONS.LOOKAT.strfn = function(act)
-	if act.target and act.target:HasTag("ancient_text") then
-		if act.doer and act.doer.components.skilltreeupdater and act.doer.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") then
-			return "READ"
-		end
-	else
-		return _lookatstrfn(act)
-	end
+    if act.target and act.target:HasTag("ancient_text") then
+        if act.doer and act.doer.components.skilltreeupdater and act.doer.components.skilltreeupdater:IsActivated("wathom_allegiance_neutral") then
+            return "READ"
+        end
+    else
+        return _lookatstrfn(act)
+    end
 end]]
 
 --if TUNING.DSTU.WICKERNERF then
@@ -190,7 +270,7 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
 
     if target:HasTag("pocketbackpack") and not target.components.equippable.isequipped and act.target.components.inventoryitem.owner ~= nil then
         return false
-    elseif target.prefab == "portablecookpot" and target.components.container ~= nil and act.invobject.components.inventoryitem ~= nil
+    elseif TUNING.DSTU.WARLY_CHANGES ~= 0 and target.prefab == "portablecookpot" and target.components.container ~= nil and act.invobject.components.inventoryitem ~= nil
         and act.doer.components.inventory ~= nil and target.components.container:CanTakeItemInSlot(act.invobject) then
         local item = act.invobject.components.inventoryitem:RemoveFromOwner(target.components.container.acceptsstacks)
         if item ~= nil then
@@ -209,14 +289,22 @@ GLOBAL.ACTIONS.STORE.fn = function(act)
     return _StoreFn(act)
 end
 
+local _StoreStrFn = GLOBAL.ACTIONS.STORE.strfn
+GLOBAL.ACTIONS.STORE.strfn = function(act)
+    local target = act.target
+    if target ~= nil and target.prefab == "um_gemologyforge" then return "GEM_FORGE" end
+    return _StoreStrFn(act)
+end
+
 local _UpgradeStrFn = GLOBAL.ACTIONS.UPGRADE.strfn
 
 GLOBAL.ACTIONS.UPGRADE.strfn = function(act)
-    if act.target ~= nil and act.target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
-    if act.target ~= nil and act.target.prefab == "nightmarefuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "horrorfuel" then return "SOUL" end
-    if act.target ~= nil and act.target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
-    if act.target ~= nil and act.target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
+    local target = act.target
+    if target ~= nil and target:HasTag(GLOBAL.UPGRADETYPES.SLUDGE_CORK .. "_upgradeable") then return "SLUDGE_CORK" end
+    if target ~= nil and target.prefab == "nightmarefuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "horrorfuel" then return "SOUL" end
+    if target ~= nil and target.prefab == "moon_tree_blossom" then return "SOUL_LUNAR" end
+    if target ~= nil and target.prefab == "purebrilliance" then return "SOUL_LUNAR" end
     return _UpgradeStrFn(act)
 end
 
@@ -260,7 +348,8 @@ GLOBAL.ACTIONS.USESPELLBOOK.strfn = function(act)
     return target:HasTag("telestaff") and "TELESTAFF" or _UseSpellBookStrFn ~= nil and _UseSpellBookStrFn(act) or "BOOK"
 end
 
-local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true })
+--give priority is 0 (default) so we need to be above it so we can do this action on the pocket watches
+local SET_CUSTOM_NAME = GLOBAL.Action({ distance = 2, mount_valid = true, priority = 1 })
 SET_CUSTOM_NAME.id = "SET_CUSTOM_NAME"
 SET_CUSTOM_NAME.str = STRINGS.ACTIONS.SET_CUSTOM_NAME
 AddAction(SET_CUSTOM_NAME)
@@ -419,7 +508,7 @@ if TUNING.DSTU.WXLESS then
     AddStategraphActionHandler("wilson_client", GLOBAL.ActionHandler(GLOBAL.ACTIONS.BREAK_DOWN_MODULE, "dolongaction"))
 end
 
-GLOBAL.STRINGS.ACTIONS.START_CHANNELCAST.MOONFALL = "Start Casting"
+
 
 local _Start_ChannelCastStrFn = GLOBAL.ACTIONS.START_CHANNELCAST.strfn
 GLOBAL.ACTIONS.START_CHANNELCAST.strfn = function(act)
@@ -501,7 +590,6 @@ GLOBAL.ACTIONS.COOK.fn = function(act)
     end
 end
 
-GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY = "Shoot"
 local um_gunshooty = GLOBAL.Action({ priority = -1, rmb = true, distance = 40, mount_valid = true })
 um_gunshooty.id = "UM_GUNSHOOTY"
 um_gunshooty.str = GLOBAL.STRINGS.ACTIONS.UM_GUNSHOOTY
@@ -582,19 +670,16 @@ GLOBAL.ACTIONS.HARVEST.fn = function(act)
     end
 end
 
-local _PICKUP = _G.ACTIONS.PICKUP.fn
-_G.ACTIONS.PICKUP.fn = function(act, ...)
-    if act.doer:HasTag("player") and act.doer.components.inventory and act.target and act.target.components.inventoryitem and act.target.um_no_pickup then return false end
-    return _PICKUP(act, ...)
-end
-
 -- Scythes can reach into the thicket without needing to be on top of them
 GLOBAL.ACTIONS.SCYTHE.distance = 2.5
 
 -- Card actions are instant for now.
 GLOBAL.ACTIONS.DRAW_FROM_DECK.instant = true
+GLOBAL.ACTIONS.DRAW_FROM_DECK.distance = nil
 GLOBAL.ACTIONS.FLIP_DECK.instant = true
 GLOBAL.ACTIONS.ADD_CARD_TO_DECK.instant = true
+GLOBAL.ACTIONS.ADD_CARD_TO_DECK._oldrangecheckfn = GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn -- Storing this here just in case someone wants it.
+GLOBAL.ACTIONS.ADD_CARD_TO_DECK.rangecheckfn = nil
 
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)
@@ -644,4 +729,40 @@ ENV.AddComponentAction("USEITEM", "gemologyscanner", function(inst, doer, target
     end
 end)
 
-ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "dolongaction"))
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.SCAN_GEMOLOGY_GEM, "doshortaction"))
+
+local um_forge_gem = Action({ priority = 1, mount_valid = true })
+um_forge_gem.id = "UM_FORGE_GEM"
+um_forge_gem.str = STRINGS.UI.APPLY_GEM
+um_forge_gem.rmb = true
+um_forge_gem.fn = function(act)
+    if act.target.ForgeGem ~= nil then
+        local success, reason = act.target:ForgeGem()
+        print("success?", success)
+        print("reason?", reason)
+        if not success then
+            --we need to run the talker code here because we're not in the stategraph
+            --when called by the SG action handler it does actually give the action fail string, but when
+            --sent from the RPC in the widget button, it does not.
+            if act.doer ~= nil and act.doer.components.talker ~= nil then
+                act.doer.components.talker:Say(GetActionFailString(act.doer, um_forge_gem.id, reason))
+            end
+            return false, reason
+        end
+
+        return success
+    end
+end
+
+ENV.AddAction(um_forge_gem)
+
+ENV.AddComponentAction("SCENE", "gem_forge", function(inst, doer, actions, right)
+    if right and (inst.replica.container ~= nil and
+            inst.replica.container:IsFull() and
+            inst.replica.container:IsOpenedBy(doer)
+        ) then
+        table.insert(actions, ACTIONS.UM_FORGE_GEM)
+    end
+end)
+
+ENV.AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.UM_FORGE_GEM, "doshortaction"))

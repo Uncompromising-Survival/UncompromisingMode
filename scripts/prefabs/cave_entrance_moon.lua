@@ -42,8 +42,8 @@ local function OnWork(inst, worker, workleft)
         inst.components.lootdropper:DropLoot(pt)
         ProfileStatsSet("cave_entrance_opened", true)
         if worker ~= nil then
-	        AwardPlayerAchievement("cave_entrance_opened", worker)
-	    end
+            AwardPlayerAchievement("cave_entrance_opened", worker)
+        end
         local openinst = SpawnPrefab("cave_entrance_open_moon")
         openinst.Transform:SetPosition(pt:Get())
         openinst.components.worldmigrator.id = inst.components.worldmigrator.id
@@ -67,6 +67,10 @@ end
 
 local function canspawn(inst)
     return inst.components.worldmigrator:IsActive() or inst.components.worldmigrator:IsFull()
+end
+
+local function OnSpawned(inst, child)
+    if child.prefab == "molebat" then child.um_cantsummonallies = true end
 end
 
 local function activatebyother(inst)
@@ -119,7 +123,7 @@ local function fn(bank, build, anim, minimap, isbackground)
 end
 
 local function closed_fn()
-    local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_closed.png", false)
+    local inst = fn("cave_entrance_moon", "cave_entrance_moon", "full", "cave_entrance_moon.tex", false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -131,7 +135,7 @@ local function closed_fn()
     inst.components.workable:SetOnWorkCallback(OnWork)
 
     inst.components.worldmigrator:SetEnabled(false)
-	inst.components.worldmigrator:SetID(798)
+    inst.components.worldmigrator:SetID(798)
     inst:ListenForEvent("migration_activate_other", activatebyother)
 
     inst:AddComponent("lootdropper")
@@ -152,6 +156,7 @@ local function open_fn()
     inst.components.childspawner:SetSpawnPeriod(.1)
     inst.components.childspawner:SetMaxChildren(6)
     inst.components.childspawner.canspawnfn = canspawn
+    inst.components.childspawner:SetSpawnedFn(OnSpawned)
     inst.components.childspawner.childname = "molebat"
 
     inst.components.inspectable.getstatus = GetStatus
@@ -168,7 +173,7 @@ local function open_fn()
     --             -watch iscaveday world state
     OnIsDay(inst, TheWorld.state.isday)
     inst:WatchWorldState("isday", OnIsDay)
-	inst.AnimState:SetMultColour(0.6,0.8,1,1)
+    inst.AnimState:SetMultColour(0.6,0.8,1,1)
     return inst
 end
 

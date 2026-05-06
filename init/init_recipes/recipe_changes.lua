@@ -21,10 +21,10 @@ if GetModConfigData("longpig") then
         Ingredient("skeletonmeat", 1),
         Ingredient("spidergland", 1)
     }
-    AllRecipes["ghostlyelixir_fastregen"].ingredients = {
-        Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 50),
-        Ingredient("ghostflower", 4)
-    }
+
+    local ghostlyelixir_fastregen = AllRecipes["ghostlyelixir_fastregen"]
+    ghostlyelixir_fastregen.ingredients = {Ingredient("ghostflower", 3)}
+    ghostlyelixir_fastregen.character_ingredients = {Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 40)}
 end
 
 if GetModConfigData("compostoverrot") then
@@ -129,11 +129,6 @@ AllRecipes["moonrockidol"].ingredients = {
     Ingredient("purplegem", 1)
 }
 
-AllRecipes["icehat"].ingredients = {
-    Ingredient("rope", 2),
-    Ingredient("ice", 15)
-}
-
 AllRecipes["minifan"].ingredients = {
     Ingredient("twigs", 3),
     Ingredient("petals", 4)
@@ -156,7 +151,6 @@ AllRecipes["goggleshat"].ingredients = {
     Ingredient("houndstooth", 2)
 }
 
-AllRecipes["deserthat"].level = TechTree.Create(TECH.SCIENCE_TWO)
 AllRecipes["lantern"].level = TechTree.Create(TECH.SCIENCE_ONE)
 
 AllRecipes["saddle_race"].ingredients = {
@@ -165,11 +159,7 @@ AllRecipes["saddle_race"].ingredients = {
     Ingredient("glommerwings", 1)
 }
 
-AllRecipes["battlesong_fireresistance"].ingredients = {
-    Ingredient("papyrus", 1),
-    Ingredient("featherpencil", 1),
-    Ingredient("dragon_scales", 1)
-}
+
 
 AllRecipes["walterhat"].ingredients = {
     Ingredient("silk", 4),
@@ -280,11 +270,21 @@ if TUNING.DSTU.WOLFGANG_HUNGERMIGHTY then
     }
 end
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
-    --AllRecipes["battlesong_shadowaligned"] = nil
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    AllRecipes["battlesong_shadowaligned"] = nil
     --AllRecipes["battlesong_lunaraligned"] = nil
-    AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    --AllRecipes["battlesong_shadowaligned"].builder_skill ="wathgrithr_allegiance_lunar"  
     AllRecipes["battlesong_lunaraligned"].builder_skill ="wathgrithr_allegiance_lunar"  
+    AllRecipes["battlesong_container"].ingredients = { 
+        Ingredient("boards", 2), 
+        Ingredient("goldnugget", 4), 
+        Ingredient("beeswax", 2) 
+    }
+    AllRecipes["battlesong_fireresistance"].ingredients = {
+        Ingredient("papyrus", 1),
+        Ingredient("featherpencil", 1),
+        Ingredient("dragon_scales", 1)
+    }
 end
 
 if GetModConfigData("telestaff_rework") then
@@ -390,3 +390,53 @@ AllRecipes["woby_treat"].numtogive = 1
 if not TUNING.DSTU.EYEBRELLAREWORK then
     ChangeSortKey("eyebrellahat", "strawhat", "SUMMER", true)
 end
+
+AddRecipeToFilter("trunkvest_summer", "RAIN")
+ChangeSortKey("trunkvest_summer", "armor_sharksuit_um", "RAIN", false)
+
+if TUNING.DSTU.SHAVE_MODE then
+    AllRecipes["razor"].level = TechTree.Create(TECH.NONE)
+end
+
+AllRecipes["blowdart_pipe"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_fire"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_sleep"].numtogive = TUNING.DSTU.DART_YIELD
+AllRecipes["blowdart_yellow"].numtogive = TUNING.DSTU.DART_YIELD
+
+----BIG WATHOM ANCIENT KINSHIP I SECTION----
+AllRecipes["thulecite"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["thulecite"].forward_ingredients = {"wathom_thulecite"}
+AllRecipes["nightmare_timepiece"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["nightmare_timepiece"].forward_ingredients = {"wathom_nightmare_timepiece"}
+AllRecipes["wall_ruins_item"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["wall_ruins_item"].forward_ingredients = {"wathom_wall_ruins_item"}
+AllRecipes["orangeamulet"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["orangeamulet"].forward_ingredients = {"wathom_orangeamulet"}
+AllRecipes["yellowamulet"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["yellowamulet"].forward_ingredients = {"wathom_yellowamulet"}
+AllRecipes["greenamulet"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["greenamulet"].forward_ingredients = {"wathom_greenamulet"}
+AllRecipes["orangestaff"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["orangestaff"].forward_ingredients = {"wathom_orangestaff"}
+AllRecipes["yellowstaff"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["yellowstaff"].forward_ingredients = {"wathom_yellowstaff"}
+AllRecipes["greenstaff"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["greenstaff"].forward_ingredients = {"wathom_greenstaff"}
+AllRecipes["multitool_axe_pickaxe"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["multitool_axe_pickaxe"].forward_ingredients = {"wathom_multitool_axe_pickaxe"}
+AllRecipes["nutrientsgoggleshat"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["nutrientsgoggleshat"].forward_ingredients = {"wathom_nutrientsgoggleshat"}
+AllRecipes["ruinshat"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["ruinshat"].forward_ingredients = {"wathom_ruinshat"}
+AllRecipes["armorruins"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["armorruins"].forward_ingredients = {"wathom_armorruins"}
+AllRecipes["ruins_bat"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["ruins_bat"].forward_ingredients = {"wathom_ruins_bat"}
+AllRecipes["eyeturret_item"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["eyeturret_item"].forward_ingredients = {"wathom_eyeturret_item"}
+AllRecipes["shadow_forge_kit"].no_builder_skill = "wathom_allegiance_neutral"
+AllRecipes["shadow_forge_kit"].forward_ingredients = {"wathom_shadow_forge_kit"}
+AllRecipes["blueprint_craftingset_ruins_builder"].no_builder_skill = "wathom_allegiance_neutral"
+--AllRecipes["blueprint_craftingset_ruins_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruins_builder"}
+AllRecipes["blueprint_craftingset_ruinsglow_builder"].no_builder_skill = "wathom_allegiance_neutral"
+--AllRecipes["blueprint_craftingset_ruinsglow_builder"].forward_ingredients = {"wathom_blueprint_craftingset_ruinsglow_builder"}

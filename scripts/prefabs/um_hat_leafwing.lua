@@ -83,12 +83,15 @@ local function fn()
 	inst.components.equippable.walkspeedmult = 1.15
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime((2 * TUNING.PERISH_TWO_DAY))
+    inst.components.perishable:SetPerishTime((3 * TUNING.PERISH_TWO_DAY))
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
     inst:AddComponent("fuel")
     inst.components.fuel.fuelvalue = TUNING.LARGE_FUEL
+
+    MakeSmallBurnable(inst, TUNING.SMALL_BURNTIME)
+    MakeSmallPropagator(inst)
 
     inst:AddComponent("waterproofer")
     inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)

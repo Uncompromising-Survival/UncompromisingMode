@@ -114,15 +114,34 @@ local function CreateRemoveTagFn(tag)
     return function(inst) inst:RemoveTag(tag) end
 end
 
-local function UpdateInspirationBadge(inst)
-    local userid = TheNet:GetUserID()
+local function GetShadowEquippableDapperness(owner, equippable)
+    local dapperness = equippable:GetDapperness(owner, owner.components.sanity.no_moisture_penalty)
+    if equippable.inst:HasTag("shadow_item") then
+        return dapperness * TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT
+    end
 
-    --[[if inst:HasTag("player_shadow_aligned") == true and inst:HasTag("beefaloinspiration") == false then
-        SendModRPCToClient(GetClientModRPC("InspirationBadgeRPC", "HideBadge"),userid)
-    else
-        SendModRPCToClient(GetClientModRPC("InspirationBadgeRPC", "ShowBadge"),userid)
-    end]]
+    for k, v in pairs(TUNING.DSTU.DREADSTONE_PREFABS) do
+        if equippable.prefab == v then
+            return dapperness * TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT
+        end
+    end 
+
+    return dapperness
 end
+
+--[[
+local function UpdateInspirationBadge(inst)
+
+    --SendModRPCToClient(inst.userid, MOD_RPC["UncompromisingSurvival"]["HideBadge"], inst:HasTag("player_shadow_aligned"))
+    local displayBadge = inst:HasTag("player_shadow_aligned") ~= true and true or false
+    SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), inst.userid, inst, displayBadge)
+    --print("badgeRPC sent")
+    if displayBadge then 
+        --SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), { inst.userid, }, displayBadge)
+    else
+        --SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ToggleInspirationBadge"), { inst.userid, }, displayBadge)
+    end
+end]]
 
 local SkillTreeDefs = require("prefabs/skilltree_defs")
 
@@ -144,14 +163,14 @@ local ONACTIVATE_FNS = {
 
     BeefaloInspiration = function(inst)
         inst:AddTag("beefaloinspiration")
-        UpdateInspirationBadge(inst)
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceShadow = function(inst)
         inst:AddTag("player_shadow_aligned")
         inst:RemoveTag("battlesinger")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_SHADOW_RESIST, "allegiance_shadow")
         end
@@ -159,12 +178,14 @@ local ONACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_VS_LUNAR_BONUS, "allegiance_shadow")
         end
-        ]]
+        
 
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_GAIN_MULT, "allegiance_shadow")
             inst.components.singinginspiration.buffertimemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_BUFFER_MULT, "allegiance_shadow")
             inst.components.singinginspiration.drainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_DRAIN_MULT, "allegiance_shadow")
+            local displayBadge = false
+            SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "HideInspirationBadge"), inst.userid, inst, false)
         end
 
         if inst.components.battleborn ~= nil then
@@ -182,17 +203,21 @@ local ONACTIVATE_FNS = {
         --end
 		
 		if inst.components.health ~= nil then
-			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION * TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
+			inst.components.health:SetAbsorptionAmount(TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION)
 		end
 
-        UpdateInspirationBadge(inst)
+        if inst.components.sanity ~= nil then
+			inst.components.sanity.get_equippable_dappernessfn = GetShadowEquippableDapperness
+		end
+
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceLunar = function(inst)
         inst:AddTag("player_lunar_aligned")
-        inst:AddTag("lunar_improved_songs")
+        inst:AddTag("lunarmelodist")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:AddResist("lunar_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_LUNAR_RESIST, "allegiance_lunar")
         end
@@ -200,13 +225,14 @@ local ONACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.SKILLS.WATHGRITHR.ALLEGIANCE_VS_SHADOW_BONUS, "allegiance_lunar")
         end
-        ]]
+        
 
+        --[[
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT, "allegiance_lunar")
             inst.components.singinginspiration.buffertimemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT, "allegiance_lunar")
             inst.components.singinginspiration.drainratemultipliers:SetModifier(inst, TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT, "allegiance_lunar")
-        end
+        end]]
 
         if inst.components.battleborn ~= nil then
             --inst.components.battleborn:SetClampMin(0.33 * TUNING.WATHGRITHR_LUNAR_BATTLEBORN_MULT)
@@ -246,7 +272,7 @@ local ONDEACTIVATE_FNS = {
         inst:RemoveTag("player_shadow_aligned")
         inst:AddTag("battlesinger")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:RemoveResist("shadow_aligned", inst, "allegiance_shadow")
         end
@@ -254,12 +280,14 @@ local ONDEACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:RemoveBonus("lunar_aligned", inst, "allegiance_shadow")
         end
-        ]]
+        
 
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:RemoveModifier(inst, "allegiance_shadow")
             inst.components.singinginspiration.buffertimemultipliers:RemoveModifier(inst, "allegiance_shadow")
             inst.components.singinginspiration.drainratemultipliers:RemoveModifier(inst, "allegiance_shadow")
+            local displayBadge = true
+            SendModRPCToClient(GetClientModRPC("UncompromisingSurvival", "ShowInspirationBadge"), inst.userid, inst, true)
         end
 
         if inst.components.battleborn ~= nil then
@@ -267,6 +295,14 @@ local ONDEACTIVATE_FNS = {
             inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
             inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
         end
+
+        if inst.components.health ~= nil then
+			inst.components.health:SetAbsorptionAmount(TUNING.WATHGRITHR_ABSORPTION)
+		end
+
+        if inst.components.sanity ~= nil then
+			inst.components.sanity.get_equippable_dappernessfn = GetShadowEquippableDapperness
+		end
 
         --if inst.components.hunger ~= nil then
             --inst.components.hunger:SetRate(TUNING.WILSON_HUNGER_RATE)
@@ -276,14 +312,14 @@ local ONDEACTIVATE_FNS = {
             --inst.components.health:SetMaxHealth(TUNING.WATHGRITHR_HEALTH)
         --end
 
-        UpdateInspirationBadge()
+        --UpdateInspirationBadge(inst)
     end,
 
     AllegianceLunar = function(inst)
         inst:RemoveTag("player_lunar_aligned")
-        inst:RemoveTag("lunar_improved_songs")
+        inst:RemoveTag("lunarmelodist")
 
-        --[[
+        
         if inst.components.damagetyperesist ~= nil then
             inst.components.damagetyperesist:RemoveResist("lunar_aligned", inst, "allegiance_lunar")
         end
@@ -291,13 +327,14 @@ local ONDEACTIVATE_FNS = {
         if inst.components.damagetypebonus ~= nil then
             inst.components.damagetypebonus:RemoveBonus("shadow_aligned", inst, "allegiance_lunar")
         end
-        ]]
+        
 
+        --[[
         if inst.components.singinginspiration ~= nil then
             inst.components.singinginspiration.gainratemultipliers:RemoveModifier(inst, "allegiance_lunar")
             inst.components.singinginspiration.buffertimemultipliers:RemoveModifier(inst, "allegiance_lunar")
             inst.components.singinginspiration.drainratemultipliers:RemoveModifier(inst, "allegiance_lunar")
-        end
+        end]]
 
         if inst.components.battleborn ~= nil then
             --inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
@@ -500,6 +537,7 @@ local skills =
 
     wathgrithr_beefalo_lock = {
         group = "beefalo",
+        root = true,
 
         connects = { "wathgrithr_beefalo_2" },
 

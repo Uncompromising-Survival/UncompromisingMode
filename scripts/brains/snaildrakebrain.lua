@@ -1,9 +1,10 @@
-require "behaviours/standstill"
-require "behaviours/runaway"
-require "behaviours/doaction"
-require "behaviours/useshield"
-require "behaviours/wander"
-require "behaviours/chaseandattack"
+require("behaviours/standstill")
+require("behaviours/runaway")
+require("behaviours/doaction")
+require("behaviours/useshield")
+require("behaviours/wander")
+require("behaviours/chaseandattack")
+require("behaviours/panic")
 local BrainCommon = require("brains/braincommon")
 
 TUNING.SNAILDRAKE_RANGED_ATTACK_MIN_RANGE = 8
@@ -90,6 +91,8 @@ function SnaildrakeBrain:OnStart()
     local root = PriorityNode(
     {
         UseShield(self.inst, DAMAGE_UNTIL_SHIELD, SHIELD_TIME, AVOID_PROJECTILE_ATTACKS, HIDE_WHEN_SCARED, {dontshieldforfire = true}),
+        WhileNode(function() return (not self.inst.components.health or not self.inst.components.health.takingfiredamage) and BrainCommon.ShouldTriggerPanic(self.inst) end, "PanicTrigger", Panic(self.inst)),
+        BrainCommon.ElectricFencePanicTrigger(self.inst),
         WhileNode(function()
             return ShouldUseRangedAttack(self)
         end, "RangedAttack", ActionNode(function(inst)

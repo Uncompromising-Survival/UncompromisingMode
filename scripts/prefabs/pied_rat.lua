@@ -47,15 +47,22 @@ end
 
 local TARGETS_MUST_TAGS = {"player"}
 local TARGETS_CANT_TAGS = {"playerghost"}
+local RAT_MUST_TAGS = {"raidrat"}
+local RAT_CANT_TAGS = {"packrat", "winky_rat", "pied_rat"}
 local function NumHoundsToSpawn(inst)
     local numHounds = TUNING.WARG_BASE_HOUND_AMOUNT
 
     local pt = Vector3(inst.Transform:GetWorldPosition())
     local ents = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.WARG_NEARBY_PLAYERS_DIST, TARGETS_MUST_TAGS, TARGETS_CANT_TAGS)
-    for i,player in ipairs(ents) do
-        local playerAge = player.components.age:GetAgeInDays()
-        local addHounds = math.clamp(Lerp(1, 4, playerAge/100), 1, 4)
-        numHounds = numHounds + addHounds
+    local rats = TheSim:FindEntities(pt.x, pt.y, pt.z, TUNING.WARG_NEARBY_PLAYERS_DIST*2, RAT_MUST_TAGS, RAT_CANT_TAGS)
+    if #rats <= 12 then
+        for i,player in ipairs(ents) do
+            local playerAge = player.components.age:GetAgeInDays()
+            local addHounds = math.clamp(Lerp(1, 4, playerAge/100), 1, 4)
+            numHounds = numHounds + addHounds
+        end
+    else
+        return 0
     end
     local numFollowers = inst.components.leader:CountFollowers()
     local num = math.min(numFollowers+numHounds/2, numHounds) -- only spawn half the hounds per howl
@@ -70,7 +77,7 @@ local function OnAttackOther(inst, data)
 	if not inst:HasTag("packrat") then
 		inst.components.combat:SetTarget(data.target)
 	end
-	
+
 	inst.components.combat:ShareTarget(data.target, 25, function(dude)
 		return dude:HasTag("raidrat")
 			and not dude.components.health:IsDead()
@@ -98,6 +105,7 @@ local function fn()
     inst.AnimState:PlayAnimation("idle_loop")
 
 	inst:AddTag("raidrat")
+    inst:AddTag("pied_rat")
 	inst:AddTag("animal")
 	inst:AddTag("hostile")
 	inst:AddTag("herdmember")

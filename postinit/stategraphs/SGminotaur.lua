@@ -128,8 +128,6 @@ env.AddStategraphPostInit("minotaur", function(inst)
 
     inst.states["leap_attack"].events["animover"].fn = function(inst) --Less intrusive than redoing the whole leap_attack state
         inst.forceleap = false
-        inst.components.groundpounder:GroundPound()
-        BounceStuff(inst)
         ----------------------------------------------- Break any organ shields.
         local x,y,z = inst.Transform:GetWorldPosition()
         if inst.components.combat and inst.components.combat.target and ((inst.combo < math.random(2, 3) and (inst.components.health:GetPercent() > 0.3 and inst.components.health:GetPercent() < 0.6)) or (inst.combo < math.random(4, 5) and inst.components.health:GetPercent() < 0.3)) then

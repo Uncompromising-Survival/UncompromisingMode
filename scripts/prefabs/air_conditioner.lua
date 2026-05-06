@@ -374,6 +374,8 @@ local function perishfn(inst)
     inst:Remove()
 end
 
+
+-- AXE Mushed Rooms need new visuals. It's probably better to just prevent you from being able to take things out of the air conditioner.
 local function MakeMushy(name, color)
     local function shrumfn()
         local inst = CreateEntity()
@@ -391,10 +393,8 @@ local function MakeMushy(name, color)
         inst:AddTag(truecolor .. "_mushroom_fuel")
         inst:AddTag("show_spoilage")
 
-        inst.AnimState:SetBank("snapdragon_fertilizer")
-        inst.AnimState:SetBuild("snapdragon_fertilizer")
 
-        inst.AnimState:PlayAnimation("idle_" .. truecolor)
+
 
         MakeInventoryFloatable(inst)
         inst.entity:SetPristine()
@@ -405,7 +405,6 @@ local function MakeMushy(name, color)
 
         inst:AddComponent("inspectable")
         inst:AddComponent("inventoryitem")
-        inst.components.inventoryitem.atlasname = "images/inventoryimages/" .. truecolor .. "_mushed_room.xml"
 
         inst:AddComponent("perishable")
         inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)

@@ -10,13 +10,12 @@ local component_post = {
     --"hunter",
     "kramped",
     "explosiveresist",
-    "crop",
     "workable",
     "sleepingbaguser",
     "hounded",
     "sleeper",
     "fueled",
-    "perishable",
+    --"perishable",
     --"carnivalevent",
     "lootdropper",
     "ambientsound",
@@ -61,23 +60,26 @@ local component_post = {
     "boatmagnet",
     "moosespawner",
     "wateryprotection",
-    "placer", --handles hiding the placer for the boat bottle when no boat is present in the bottle
-    "mast", --handles not spawning the mast sink fx when despawning a boat with the boat bottle
+    "placer",     --handles hiding the placer for the boat bottle when no boat is present in the bottle
+    "mast",       --handles not spawning the mast sink fx when despawning a boat with the boat bottle
     "moonstorms", -- Handles lunar bee respawns,
-	"locomotor",
-	"beargerspawner",
-	"floater",
-	"temperature",
+    "locomotor",
+    "beargerspawner",
+    "floater",
+    "temperature",
     "playercontroller",
-	"possessedaxe",
-	"inventoryitem"
+    "possessedaxe",
+    "inventoryitem",
+    "retrofitcavemap_anr",
+    "fumarolelocaltemperature",
+    "pickable",
+    "actionqueuer"
 }
 
 local prefab_post = {
     "butterfly",
     "ressurectionstone",
     "sewing_mannequin",
-    "bathbomb",
     "atrium_gate",
     "dragonfly",
     "wardrobe",
@@ -92,7 +94,6 @@ local prefab_post = {
     "catcoon",
     "icehound",
     "firehound",
-    "fishmeats", -- fish meat now dries into fish jerky
     "forest",
     "cave",
     "world",
@@ -132,7 +133,6 @@ local prefab_post = {
     "batcave",
     "rain",
     "molehat",
-    "mosquito",
     "armor_bramble",
     --"woby",
     "cave_network",
@@ -176,6 +176,7 @@ local prefab_post = {
     "minotaur_drops",
     "frog",
     "klaus_sack",
+    "klaus",
     "krampus",
     "krampus_sack",
     "waterplant",
@@ -227,7 +228,6 @@ local prefab_post = {
     "stash_map",
     "monkeyhut",
     "lava_pond",
-    "cookiecutter",
     "junk_pile_big",
     "seastack", -- loot changes
     "ruins_bat",
@@ -235,13 +235,22 @@ local prefab_post = {
     "spiderqueen",
     "snowman",
     "lighter",
-	"molebat",
+    "molebat",
     "lightning_rod",
     "antlionhat",
     "ice_shield_piercing",
-	"bullkelp_root",
-	--"balatro_machine", -- Keeping this here for Later.
-	"walrus_camp",
+    "bullkelp_root",
+    --"balatro_machine", -- Keeping this here for Later.
+    "walrus_camp",
+    "firestaff",
+    "worms",
+    "rabbitking",
+    "cave_vents",
+    "cave_vent_mite",
+    "bananabush",
+    "tillweedsalve",
+    "ancienttree_fruits",
+    "um_moonmutables"
 }
 
 local stategraph_post = {
@@ -260,7 +269,10 @@ local stategraph_post = {
     "moose",
     "mossling",
     "hound",
-    "bigshadowtentacle"
+    "bigshadowtentacle",
+    "worm",
+    "slurtle",
+    "lavae"
 }
 
 local class_post = {
@@ -274,6 +286,7 @@ local class_post = {
     "widgets/bloodover",
     --"widgets/inventorybar",
     --"widgets/containerwidget"
+    "widgets/statusdisplays"
 }
 
 local brain_post = {
@@ -284,7 +297,7 @@ local brain_post = {
     "chester",
     "mossling",
     "perd",
-    "catcoon",
+    --"catcoon",
     "deer",
     "shadowwaxwell",
     "hound",
@@ -323,13 +336,11 @@ if GetModConfigData("wixie_walter") then
         "sculptingtable" -- Sculpting table crashes if picker inventory is nil
     }
     local wixie_components = {
-        "healer",         -- Walter gets a 50% bonus from healing items, over time. works on companions too.
-        "bufferedaction", -- This handles wixie sending an rpc with the mouse pointer click location
-        "wobypicking",    -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
+        "healer",          -- Walter gets a 50% bonus from healing items, over time. works on companions too.
+        "bufferedaction",  -- This handles wixie sending an rpc with the mouse pointer click location
+        "wobypicking",     -- This reroutes the pickup action and pickable component to add items to wobys container instead of a nil inventory
         "dryer",           -- This reroutes the dryer harvest action to add items to a container instead of a nil inventory
         "channelcastable", -- Just a dirty wrap of the component to stop it from removing the channelcastable component from her weapon when unequipped
-        "combat", -- Avoid using the weapon when shoving.
-        "weapon" -- Avoid using the weapon when shoving.
     }
 
     for k, v in ipairs(wixie_prefabs) do
@@ -364,6 +375,7 @@ if GetModConfigData("wixie_walter") then
     RemapSoundEvent("dontstarve/characters/wixie/carol", "wixie/characters/wixie/carol")
     RemapSoundEvent("dontstarve/characters/wixie/sinking", "wixie/characters/wixie/sinking")
 end
+
 
 if GetModConfigData("hangyperds") then
     table.insert(stategraph_post, "perd")
@@ -512,7 +524,7 @@ if GetModConfigData("changed_shadow_pieces") then
     --table.insert(prefab_post, "shadow_knight")
     table.insert(stategraph_post, "shadow_bishop")
     --table.insert(stategraph_post, "shadow_knight")
-    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)    
+    table.insert(prefab_post, "shadowchesspieces") --changes to  all 3 pieces. (no collision and shadowcrown loot)
 end
 
 if GetModConfigData("hambatnerf") then
@@ -529,6 +541,7 @@ end
 
 if GetModConfigData("monstersmallmeat") then
     table.insert(prefab_post, "bat")
+    table.insert(prefab_post, "cookiecutter")
 end
 
 if GetModConfigData("cookiecutterhat") then

@@ -120,7 +120,9 @@ local function ExplodeSpellFn(inst, doer, pos)
 				v.components.mine:Explode(target)
 			end
 		end
-		inst.ModdedExplodeFn(inst,v) -- If there is a modded prefab, let them postinit this function and add their own handling! 
+		if v.ModdedExplodeFn then
+			v.ModdedExplodeFn(v,inst,doer,pos) -- If there is a modded prefab, let them postinit this function and add their own handling! 
+		end
 	end
 end
 
@@ -469,6 +471,7 @@ local function fn()
 	--inst.AnimState:OverrideSymbol("wire", "winona_remote", "dummy")
 
 	inst:AddTag("remotecontrol")
+	inst:AddTag("wardrobe_item")
 	--inst:AddTag("engineering")
 	--inst:AddTag("engineeringbatterypowered")
 

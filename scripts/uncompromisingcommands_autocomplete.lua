@@ -7,6 +7,7 @@ AddClassPostConstruct("screens/consolescreen", function(self, inst)
     local prediction_command = {
         "findents()",
         "forcetornado()",
+        "givefoods()",
         "giverecords()",
         "givevetskulls()",
         "heatwave()",

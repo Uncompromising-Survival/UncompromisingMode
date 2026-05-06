@@ -11,8 +11,6 @@ local UpvalueHacker = require("tools/upvaluehacker")
 --Try to initialise all functions locally outside of the post-init so they exist in RAM only once
 -----------------------------------------------------------------
 
--------Red Amulet changes are hosted in init_lifeamulet
-
 local function YellowAmuletPostInit(inst)
     local function onremovelight(light)
         light._yellowamulet._light = nil
@@ -27,10 +25,18 @@ local function YellowAmuletPostInit(inst)
             inst.components.equippable.dapperness = TUNING.DAPPERNESS_SMALL
 
             local owner = inst.components.inventoryitem.owner
+            local amusement
+            if owner.prefab == "um_backpack_amuletuse" then -- AXE Need to redirect!
+                amusement = true
+                owner = owner.components.inventoryitem and owner.components.inventoryitem.owner or owner
+            end 
 
             if not inst._light or not inst._light:IsValid() then
                 inst._light = SpawnPrefab("yellowamuletlight")
                 inst._light._yellowamulet = inst
+                if amusement then
+                    inst._light.Light:SetRadius(2*1.5)
+                end
                 inst:ListenForEvent("onremove", onremovelight, inst._light)
             end
             inst._light.entity:SetParent((owner or inst).entity)
@@ -117,14 +123,12 @@ local function YellowAmuletPostInit(inst)
 
     local fueled = inst.components.fueled
     if fueled then
-        local OldOnTakeFuelFn = fueled.ontakefuelfn
-        local function ontakefuel(inst)
+        local _OnTakeFuelFn = fueled.ontakefuelfn
+        local function ontakefuel(inst, ...)
             if inst.components.equippable:IsEquipped() then
                 turnon(inst, inst._owner)
             end
-            if OldOnTakeFuelFn then
-                return OldOnTakeFuelFn(inst)
-            end
+            if _OnTakeFuelFn then return _OnTakeFuelFn(inst, ...) end
         end
 
         fueled:SetDepletedFn(nofuel)

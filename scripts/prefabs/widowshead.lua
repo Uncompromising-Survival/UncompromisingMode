@@ -94,6 +94,9 @@ local function fn()
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
+    inst:AddComponent("waterproofer")
+    inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALL)
+
     MakeHauntableLaunch(inst)
     --------------------------------------------------------------
 

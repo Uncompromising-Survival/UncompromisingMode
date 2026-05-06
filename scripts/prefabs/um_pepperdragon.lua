@@ -10,6 +10,18 @@ local assetsbladder =
     Asset("ANIM", "anim/um_pepperdragon_bladder.zip"),
 }
 
+
+local function ShouldResetRange(inst,data)
+	if data then
+		if data.name == "pissedoff" then
+			inst.components.combat:SetRange(3) --AXE Capsidragon calmed down, reset his range to melee just incase
+		end
+		if data.name == "flame_cd" and inst.components.timer:TimerExists("pissedoff") then 
+			inst.components.combat:SetRange(8,3) --AXE Capsidragon just went off cooldown, breathe fire at range again
+		end
+	end
+end
+
 local loot = { "meat", "meat", "meat", "meat", "um_pepperdragon_bladder" }
 local MAX_CHASEAWAY_DIST = 32
 local MAX_CHASE_DIST = 256
@@ -123,9 +135,11 @@ local function fn()
     inst.Transform:SetSixFaced()
 
     ----------
+    inst:AddTag("epic")
+    inst:AddTag("smallepic")
     inst:AddTag("animal")
     inst:AddTag("largecreature")
-    inst:AddTag("PyreToxinImmune")
+    inst:AddTag("pyre_toxin_immune")
 
     inst.AnimState:SetBank("um_pepperdragon")
     inst.AnimState:SetBuild("um_pepperdragon")
@@ -153,6 +167,8 @@ local function fn()
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(2000)
     inst.components.health.fire_damage_scale = 0
+    inst.components.health:StartRegen(TUNING.BUNNYMAN_HEALTH_REGEN_AMOUNT, TUNING.BUNNYMAN_HEALTH_REGEN_PERIOD)
+
     ------------------
 
     inst:AddComponent("combat")
@@ -203,6 +219,9 @@ local function fn()
 
 
     inst.Transform:SetScale(1.5, 1.5, 1.5)
+
+    inst:ListenForEvent("timerdone",ShouldResetRange)
+    
     return inst
 end
 

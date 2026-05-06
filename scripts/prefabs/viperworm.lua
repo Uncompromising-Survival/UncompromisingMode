@@ -27,16 +27,6 @@ local prefabs =
 local brain = require("brains/viperwormbrain")
 local viperlingbrain = require("brains/viperlingbrain")
 local MAX_LIGHT_FRAME = 20
----Added Stuff
-
-
-
-
-
-
-
-
-
 
 -- Depth worm stuff
 local function OnUpdateLight(inst, dframes)
@@ -407,9 +397,9 @@ local function fnviperlingfriend()
     inst:SetStateGraph("SGviperworm")
     inst:SetBrain(viperlingbrain)
     inst.ShadowDespawn = ShadowDespawn
-	inst:AddComponent("timer")
-	inst:ListenForEvent("timerover",ShadowDespawn)
-	inst.components.timer:StartTimer("despawn",60)
+    inst:AddComponent("timer")
+    inst:ListenForEvent("timerover",ShadowDespawn)
+    inst.components.timer:StartTimer("despawn",60)
 
     inst:DoTaskInTime(0, FindPerson)
     inst.persists = false
@@ -418,7 +408,7 @@ local function fnviperlingfriend()
 end
 
 local function ViperlingBelch(inst, target)
-    if target ~= nil then
+    if target and target:IsValid() then
         local x, y, z = inst.Transform:GetWorldPosition()
         local projectile = SpawnPrefab("viperprojectile")
         projectile.Transform:SetPosition(x, y, z)
@@ -463,7 +453,9 @@ local function fn()
     inst:AddTag("hostile")
     inst:AddTag("wet")
     inst:AddTag("worm")
+    inst:AddTag("viperworm")
     inst:AddTag("cavedweller")
+
     inst.Light:SetRadius(0)
     inst.Light:SetIntensity(.8)
     inst.Light:SetFalloff(.5)
@@ -543,16 +535,10 @@ local function fn()
     inst.turnonlight = turnonlight
     inst.turnofflight = turnofflight
 
-    inst:SetStateGraph("SGviperworm")
+    inst:SetStateGraph("SGworm")
     inst:SetBrain(brain)
     inst.ViperlingBelch = ViperlingBelch
-    inst:ListenForEvent("freeze", function()
-        inst:turnonlight()
-    end)
 
-    inst:ListenForEvent("unfreeze", function()
-        inst:turnofflight()
-    end)
     return inst
 end
 

@@ -93,21 +93,30 @@ local function Lightning_OnLunged(inst, doer, startingpos, targetpos)
 
     inst._lunge_hit_count = nil
 
-    if inst.components.finiteuses ~= nil then
-        inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES)
+    local efficientuser = doer.components.efficientuser and doer.components.efficientuser:GetMultiplier(ACTIONS.ATTACK) or 1
+    local durabilitymult = inst.components.weapon.attackwearmultipliers:Get() * efficientuser
+
+    
+    if TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR and inst.components.upgradeable ~= nil then --if it can be upgraded (so not the charged one)
+        if inst.components.finiteuses ~= nil then
+            inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES * durabilitymult)
+        end
     end
 end
 
 local function Lightning_OnLungedHit(inst, doer, target)
-    inst._lunge_hit_count = inst._lunge_hit_count or 0
+    if TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR then
+        inst._lunge_hit_count = inst._lunge_hit_count or 0
 
-    --if inst._lunge_hit_count < TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_MAX_HITS and
-        --doer.IsValidVictim ~= nil and
-        --doer.IsValidVictim(target)
-    --then
-        --inst.components.finiteuses:Use(TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES)
-        --inst._lunge_hit_count = inst._lunge_hit_count + 1
-    --end
+        if inst._lunge_hit_count < TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_MAX_REPAIRS_PER_LUNGE and
+            inst.components.upgradeable == nil and
+            doer.IsValidVictim ~= nil and
+            doer.IsValidVictim(target)
+        then
+            inst.components.finiteuses:Repair(TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LUNGE_REPAIR_AMOUNT)
+            inst._lunge_hit_count = inst._lunge_hit_count + 1
+        end
+    end
 end
 
 env.AddPrefabPostInit("spear_wathgrithr_lightning", function(inst)

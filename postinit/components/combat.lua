@@ -105,7 +105,12 @@ env.AddComponentPostInit("combat", function(self)
 
     local _GetAttacked = self.GetAttacked
     function self:GetAttacked(attacker, damage, weapon, stimuli, spdamage, ...)
-        if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}, true) then return true end
+        if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and self.inst.UMSlipAway and self.inst:UMSlipAway({attacker = attacker, weapon = weapon, stimuli = stimuli}, true) then
+            if attacker and weapon and weapon:IsValid() then
+                attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
+            end
+            return true
+        end
         if self.inst:HasTag("take_extra_spdamage") and attacker and not attacker:HasTag("player") and attacker.components.health and attacker.components.combat then
             --type check to not crash mods that pass spdamage as something other than actual spdamage.
             if spdamage and type(spdamage) == "table" and spdamage.planar then
@@ -176,7 +181,10 @@ env.AddComponentPostInit("combat", function(self)
         elseif self.inst:HasTag("ratwhisperer") and attacker and attacker.prefab == "catcoon" and self.inst.components.health then
             self.inst.components.health:DoDelta(-10, false, attacker.prefab)
         end
-
-        return _GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)
+        local ret = {_GetAttacked(self, attacker, damage, weapon, stimuli, spdamage, ...)}
+        if attacker and attacker:IsValid() and weapon and weapon:IsValid() then
+            attacker:PushEvent("um_attacker_attacked_pst", {weapon = weapon})
+        end
+        return unpack(ret)
     end
 end)

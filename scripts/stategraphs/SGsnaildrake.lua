@@ -16,8 +16,8 @@ local events=
     CommonHandlers.OnAttack(),
     CommonHandlers.OnAttacked(),
     CommonHandlers.OnDeath(),
-    EventHandler("entershield", function(inst) inst.sg:GoToState("shield") end),
-    EventHandler("exitshield", function(inst) inst.sg:GoToState("shield_end") end),
+    EventHandler("entershield", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("shield") end end),
+    EventHandler("exitshield", function(inst) if not (inst.components.health and inst.components.health:IsDead()) then inst.sg:GoToState("shield_end") end end),
     --EventHandler("onignite", function(inst) inst:PushEvent("entershield") end), -- Will not hide when ignited
     EventHandler("rangedattack", function(inst, data)
         if not (inst.sg:HasStateTag("busy") or inst.components.health:IsDead()) then
@@ -138,7 +138,7 @@ local states =
     },
 
     State{
-        name = "rangedattack",
+        name = "rangedattack", -- AXE This state is reused for trading too...
         tags = {"busy"},
 
         onenter = function(inst)
@@ -153,12 +153,23 @@ local states =
             TimeEvent(14*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
             TimeEvent(21*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
             TimeEvent(26*FRAMES, function(inst) inst.SoundEmitter:PlaySound("dontstarve/creatures/slurtle/taunt") end ),
-            TimeEvent(26*FRAMES, function(inst) inst:DoRangedAttack() end ),
+            TimeEvent(26*FRAMES, function(inst) 
+                if not inst.trader then
+                    inst:DoRangedAttack()
+                else
+                    inst.GemologyEatFn(inst) 
+                end 
+            end),
         },
 
         events=
         {
-            EventHandler("animover", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animover", function(inst) 
+                if inst.trader then
+                    inst.trader = nil
+                end
+                inst.sg:GoToState("idle") 
+            end),
         },
     },
 
@@ -207,6 +218,12 @@ local states =
         ontimeout= function(inst)
             inst.lastmeal = GetTime()
             inst:PerformBufferedAction()
+            if inst.GemologyEatFn then
+                inst.GemologyEatFn(inst)
+            end
+            if inst.components.trader.enabled == false then
+                inst.components.trader.enabled = true
+            end
             inst.sg:GoToState("idle", "eat_pst")
         end,
     },

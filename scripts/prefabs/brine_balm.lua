@@ -5,14 +5,10 @@ local assets =
 
 local function OnUse(inst, target)
     local health = target.components.health
-    if not (health and health:IsDead()) then
-        local _minhealth = health.minhealth
-        if not TUNING.DSTU.DATES.APRIL_FOOLS then
-            health:SetMinHealth(_minhealth and _minhealth > 0 and _minhealth or 1)
-        end
-        health:DoDelta(-TUNING.HEALING_MED, false, inst.prefab)
-        if not TUNING.DSTU.DATES.APRIL_FOOLS then
-            health:SetMinHealth(_minhealth)
+    if health and not health:IsDead() then
+        local healamount = (TUNING.DSTU.DATES.APRIL_FOOLS or health.currenthealth - TUNING.HEALING_MED > 0) and TUNING.HEALING_MED or health.currenthealth - 1
+        if healamount then
+            health:DoDelta(-healamount, false, inst.prefab, nil, nil, true)
         end
         health:DeltaPenalty(-.125)
         target:AddDebuff("confighealbuff_"..inst.prefab, "confighealbuff", {time = 70})
@@ -36,9 +32,7 @@ local function fn()
 
     inst.entity:SetPristine()
 
-    if not TheWorld.ismastersim then
-        return inst
-    end
+    if not TheWorld.ismastersim then return inst end
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM

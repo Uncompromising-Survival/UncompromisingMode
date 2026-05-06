@@ -26,24 +26,19 @@ end
 
 
 local function DamageTarget(inst, target)
-	if target.components.health.currenthealth > 15 then
-		target.components.health:DoDelta(-15, false, "umdebuff_pyre_toxin")
+	if target.components.health.currenthealth > 8.5 then
+		target.components.health:DoDelta(-8.5, false, "umdebuff_pyre_toxin")
 	end
 end
 
 local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 	if target ~= nil
 	and (target.components.temperature ~= nil or target.components.health ~= nil)
-	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasTag("PyreToxinImmune"))
-	and not target:HasTag("plantkin")
-	and not target:HasTag("shadowcreature")
-	and not target:HasTag("dragonfly")
-	and not target:HasTag("lavae")
-	and not target:HasTag("butterfly")
+	and (inst.components.debuff.name == "umdebuff_pyre_toxin_armor_wearer" or not target:HasAnyTag("pyre_toxin_immune", "plantkin", "shadowcreature", "shadow", "dragonfly",
+	 "lavae", "butterfly","wall", "structure"))
 	and not (target:HasTag("bee") and not target:HasTag("monster"))
-	and not target:HasTag("wall")
-	and not target:HasTag("structure")
 	and target.prefab ~= "firehound"
+	and target.prefab ~= "lavae_pet"
 	then
 		-- Basic debuff stuff.
 		inst.entity:SetParent(target.entity)
@@ -62,8 +57,8 @@ local function debuff_OnAttached(inst, target, followsymbol, followoffset, data)
 		and target.components.temperature ~= nil
 		then
 			-- Heat.
-			if target.components.temperature:GetCurrent() < 65 then
-				target.components.temperature:SetTemperature(64)
+			if target.components.temperature:GetCurrent() < 80 then
+				target.components.temperature:DoDelta(20)
 			end
 			
 			target.components.temperature:SetModifier("umdebuff_pyre_toxin", TUNING.FIRE_NETTLE_TOXIN_TEMP_MODIFIER)

@@ -100,10 +100,8 @@ local function WalterFunctions(inst)
     if inst.components.foodaffinity then
         local foodaffinities = {
             ["meat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
-            ["fishmeat_dried"] = TUNING.AFFINITY_15_CALORIES_MED,
             ["jellyjerky"] = TUNING.AFFINITY_15_CALORIES_MED,
             ["smallmeat_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
-            ["smallfishmeat_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
             ["seaweed_dried"] = TUNING.AFFINITY_15_CALORIES_SMALL,
             ["kelp_dried"] = TUNING.AFFINITY_15_CALORIES_TINY
         }
@@ -178,9 +176,18 @@ for _, bee in pairs(bonus_dmg_via_allergy_prefablist) do
     end)
 end
 
-env.AddPrefabPostInit("bandage_butterflywings", function(inst)    
+--[[env.AddPrefabPostInit("bandage_butterflywings", function(inst)
+    local _OnHealFn = inst.components.healer.onhealfn
+    local function OnHealFn(inst, target, doer, ...)
+	    if target.components.debuffable and target.components.health and not target.components.health:IsDead() then
+		    target:AddDebuff("confighealbuff_"..inst.prefab, "confighealbuff", {time = 17})
+	    end
+        _OnHealFn(inst, target, doer, ...)
+    end
+
     if inst.components.healer ~= nil and inst.components.healer.health ~= nil then
         local old_health = inst.components.healer.health
         inst.components.healer:SetHealthAmount(old_health / 3)
+        inst.components.healer.onhealfn = OnHealFn
     end
-end)
+end)]]

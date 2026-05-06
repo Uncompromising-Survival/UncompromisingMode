@@ -147,8 +147,6 @@ AddPrefabPostInit("walter", function(inst)
 	    ["smallmeat_dried"] = 15,
         ["meat_dried"] = 15,
         ["kelp_dried"] = 15,
-		["smallfishmeat_dried"] = 15,
-		["fishmeat_dried"] = 15,
 		["trailmix"] = 15,
     }
 end)

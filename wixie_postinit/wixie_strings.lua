@@ -219,7 +219,7 @@ DESCRIBE.RNEGHOST = DESCRIBE.GHOST
 DESCRIBE.TRAPDOORGRASS = DESCRIBE.GRASS
 DESCRIBE.MARSH_GRASS = "You're useless!"
 DESCRIBE.CURSED_ANTLER = "A trophy of my conquest!"
-DESCRIBE.BERNIEBOX = "The writing is all gibberish!"
+DESCRIBE.CRYSTAL_CURSED_ANTLER = "Way shinier than my last trophy!"
 DESCRIBE.HOODED_FERN = "That's horse food, not people food!"
 DESCRIBE.HOODEDWIDOW = "Nope! Nope! Definetly not!"
 DESCRIBE.GIANT_TREE =
@@ -229,14 +229,7 @@ DESCRIBE.HOODEDMOSS = DESCRIBE.TURF_FOREST
 DESCRIBE.WIDOWSGRASP = "Just seven more and I could pretend to be a spider!"
 DESCRIBE.WEBBEDCREATURE = "Gross, I'd hate to get trapped in there..."
 ANNOUNCE.WEBBEDCREATURE = "I could break it if I was trying!"
-DESCRIBE.SNAPDRAGON_BUDDY = "Don't start getting friendly!"
-DESCRIBE.SNAPDRAGON = "I doubt it has a brain."
-DESCRIBE.SNAPPLANT = "Those big plants love it for some dumb reason."
-DESCRIBE.WHISPERPOD = "I ain't letting a plant tell me what to do!"
-DESCRIBE.WHISPERPOD_NORMAL_GROUND = {
-    GENERIC = "What? You want more?",
-    GROWING = "Hurry up! Ugh!"
-}
+
 DESCRIBE.FRUITBAT = "I'd like to take a bite out of it."
 DESCRIBE.PITCHERPLANT = "We want a pitcher, not a belly itcher!"
 DESCRIBE.APHID = "Don't go biting holes in my clothes, you dork!"
@@ -283,14 +276,6 @@ DESCRIBE.KLAUS_AMULET = "I think... this is useless to me."
 DESCRIBE.CRABCLAW = "The more gems you put, the heavier the 'clonk'!"
 DESCRIBE.HAT_RATMASK = "Think like a rat, smell like a rat, BE the rat!"
 
-DESCRIBE.ORANGE_VOMIT = "Don't make me touch it!"
-DESCRIBE.GREEN_VOMIT = "Don't make me touch it!"
-DESCRIBE.RED_VOMIT = "Don't make me touch it!"
-DESCRIBE.PINK_VOMIT = "Don't make me touch it!"
-DESCRIBE.YELLOW_VOMIT = "Don't make me touch it!"
-DESCRIBE.PURPLE_VOMIT = "Don't make me touch it!"
-DESCRIBE.PALE_VOMIT = "Don't make me touch it!"
-
 DESCRIBE.WALRUS_CAMP_EMPTY = DESCRIBE.WALRUS_CAMP.EMPTY
 DESCRIBE.PIGKING_PIGGUARD = {
     GUARD = DESCRIBE.PIGMAN.GUARD,
@@ -309,12 +294,7 @@ DESCRIBE.CAVE_ENTRANCE_OPEN_SUNKDECID = DESCRIBE.CAVE_ENTRANCE_OPEN
 DESCRIBE.CAVE_EXIT_SUNKDECID = DESCRIBE.CAVE_EXIT
 
 DESCRIBE.PIGKING_PIGTORCH = DESCRIBE.PIGTORCH
--- Blowgun stuff
-DESCRIBE.UNCOMPROMISING_BLOWGUN = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_TOOTH = DESCRIBE.BLOWDART_PIPE
-DESCRIBE.BLOWGUNAMMO_FIRE = DESCRIBE.BLOWDART_FIRE
-DESCRIBE.BLOWGUNAMMO_SLEEP = DESCRIBE.BLOWDART_SLEEP
-DESCRIBE.BLOWGUNAMMO_ELECTRIC = DESCRIBE.BLOWDART_YELLOW
+
 DESCRIBE.CORNCAN = "Kick the can!"
 DESCRIBE.SKULLCHEST_CHILD = "I think there is supposed to be another one."
 
@@ -668,3 +648,12 @@ DESCRIBE.WATHOM_CORPSE = "If you get back up, I'll give you treats!"
 
 DESCRIBE.WATHGRITHR_SHIELD_DREADSTONE = "You didn't have anything better than a rock?"
 ANNOUNCE.ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD = "Hey! Using ice as a shield's not fair!"
+DESCRIBE.UM_THULECITE_RAZOR= "I don't care about this!!"
+DESCRIBE.UM_DURIAN_CREAM_MARSHCAKE = "Not quite my favorite, but I wouldn't pass a pancake!"
+ANNOUNCE.ANNOUNCE_MARSHCAKE_BONUS = {
+    SPRING = "Yeah... when's the blueberry flavored one, though?",
+    SUMMER = "A little more sticky than I'm used to, but tastes fine otherwise.",
+    AUTUMN = "Mum would be proud of me eating my greens, heh.",
+    WINTER = "And they told me we'd go a whole season without pancakes! Guess who was wrong?",
+}
+DESCRIBE.UM_BOOMBERRYPIE = "Makes a mess, but that's half the fun!"

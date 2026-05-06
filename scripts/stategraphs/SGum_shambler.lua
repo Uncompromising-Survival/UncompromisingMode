@@ -24,9 +24,13 @@ local events =
 local function getidleanim(inst)
 	local leader = inst.components.follower.leader
 
-    return leader ~= nil and (inst:GetDistanceSqToInst(leader) < 20 and "angry"
-        or inst:GetDistanceSqToInst(leader) > 300 and "shy")
-        or "idle"
+    return leader ~= nil and (inst:GetDistanceSqToInst(leader) < 20 and "aggroidle"
+        or inst:GetDistanceSqToInst(leader) > 300 and "groanidle")
+        or "groanidle"
+end
+
+local function go_to_idle(inst)
+    inst.sg:GoToState("idle")
 end
 
 local states =
@@ -36,7 +40,9 @@ local states =
         tags = { "idle", "canrotate", "canslide" },
 
         onenter = function(inst)
-			inst.AnimState:PlayAnimation("idleloop", true)
+			--inst.AnimState:PlayAnimation("idleloop", true)
+            local hastarget = inst.components.combat ~= nil and inst.components.combat:HasTarget()
+            inst.AnimState:PlayAnimation(hastarget and "aggroidle" or "groanidle")
         end,
     },
 
@@ -63,6 +69,56 @@ local states =
             EventHandler("animqueueover", function(inst)
 				inst.sg:GoToState("idle")
 			end),
+        },
+    },
+
+    State{
+        name = "run_start",
+        tags = { "moving", "running", "canrotate" },
+
+        onenter = function(inst)
+            --inst.components.locomotor:RunForward()
+            local hastarget = inst.components.combat ~= nil and inst.components.combat:HasTarget()
+            inst.AnimState:PlayAnimation(hastarget and "aggrowalk_pre" or "groanwalk_pre")
+        end,
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                inst.sg:GoToState("run")
+            end),
+        },
+    },
+
+    State{
+        name = "run",
+        tags = { "moving", "running", "canrotate" },
+
+        onenter = function(inst)
+            --inst.components.locomotor:RunForward()
+            local hastarget = inst.components.combat ~= nil and inst.components.combat:HasTarget()
+            inst.AnimState:PlayAnimation(hastarget and "aggrowalk_loop" or "groanwalk_loop", true)
+            inst.sg:SetTimeout(inst.AnimState:GetCurrentAnimationLength())
+        end,
+
+        ontimeout = function(inst)
+            inst.sg:GoToState("run")
+        end,
+    },
+
+    State{
+        name = "run_stop",
+        tags = { "idle" },
+
+        onenter = function(inst)
+            --inst.components.locomotor:StopMoving()
+            local hastarget = inst.components.combat ~= nil and inst.components.combat:HasTarget()
+            inst.AnimState:PlayAnimation(hastarget and "aggrowalk_pst" or "groanwalk_pst")
+        end,
+
+        events =
+        {
+            EventHandler("animover", go_to_idle),
         },
     },
 

@@ -1,0 +1,467 @@
+--moved into seperate file, was getting a bit too big.
+local STRINGS = GLOBAL.STRINGS
+
+STRINGS.UNCOMP_TOOLTIP = {
+    AMULET =
+    "- Only revives the player upon death while worn.\n- Increased heal rate at lower health.\n- Never breaks, can be refueled with Nightmare Fuel.",
+    ARMORRUINS = "- Prevents knockback effects.\n- Reduces insanity aura effects by 30%.",
+    SWEATERVEST = "- Reduces insanity aura effects by 60%.",
+    SKELETONHAT = "- Will not spawn the Creeping Fear when worn.",
+    ICEPACK = "- Will not burn.",
+    COOKIECUTTERHAT = "- Reflects 75% of damage taken back at attacker.",
+    HAMBAT = "- Rots faster.\n- Can be eaten by certain mobs.",
+    TOWNPORTAL = "- Gathers nearby items when channeling.",
+    PUMPKIN_LANTERN = "- Has a positive sanity aura.",
+    NIGHTLIGHT = "- Fuels itself at night by taking nearby players sanity.",
+    ARMOR_SANITY = "- Reduced sanity drain on damage taken.",
+    TOPHAT = "- Reduces sanity loss from various magic items.",
+    MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
+    ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
+    FEATHERHAT = "- Provides safety from territorial Pengulls.",
+    YELLOWAMULET = "- No longer breaks when empty.",
+    ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
+    PURPLEAMULET = "- Grants bonus Nightmare Fuel from slain Shadows.",
+    PIGGYBACK = "- No Passive -10% movement speed while worn.\n- Decreases Player speed by 1% per item held.",
+    PREMIUMWATERINGCAN = "- Can contain and preserve ocean fish.",
+    RAINHAT = "- Slightly increased rain protection.",
+    ARMORMARBLE = "- Prevents knockback effects.",
+    TURF_DRAGONFLY = "- Speeds up player movement.",
+    BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
+    DRAGONFLYCHEST = "- Has even more item slots.",
+    WARDROBE = "- Can store a lot of equipment.",
+    WINONA_SPOTLIGHT = "- Significantly increased range.\n- Doubled radius.",
+    LIGHTNING_ROD = "- Can charge electrical equipment.",
+    BANDAGE = "- Restores a bit of extra health over time.",
+    SISTURN = "- Petals inside decay into Mourning Glory.",
+    MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
+    FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
+    BOAT_ROTATOR_KIT = "- Increases boat steering speed.\n- Helps doing sharp turns.",
+    WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
+    BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
+    BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
+    COMPOSTINGBIN = "- Can hold up to 24 items.",
+    FIRESUPRESSOR = "- Reacts faster to nearby fires in Emergency Mode.\n- Ignores campfires and firepits.",
+    BOAT_CANNON_KIT = "- Increased firepower.\n- Can fire Seedshells.",
+    TRIDENT = "- Altered, more powerful spell.\n- More uses and damage.\n- May multi-hit.",
+    COMPASS = "- Now works while on the inventory.\n- Increased durability.",
+    SCRAP_MONOCLEHAT = "- Increases map reveal range.",
+    TILLWEEDSALVE = "- Restores lost maximum health.",
+    __BREAK = "BREAK HERE",
+    --uncomp content
+    RAT_WHIP = "- Stronger when well fed.",
+    AIR_CONDITIONER = "- Can crush up Mushrooms for helpful stat clouds.\n- Provides cold in a small radius.\n- Removes smog in a large area.",
+    ANCIENT_AMULET_RED =
+    "- Drops soul orbs when attacked, which will replenish lost health when picked up.\n- Revives players when haunted.",
+    ARMOR_GLASSMAIL = "- Summons spinning Glass Shards when attacking enemies.\n- Loses shards when damage is taken.",
+    HONEY_LOG = "- Provides protection from Hayfever. Mostly useful for other allies.",
+    SALTPACK = "- Drops piles of salt, preventing buildup of Snow Piles.",
+    SPOREPACK = "- Items inside spoil twice as fast.",
+    SLUDGE_SACK = "- It's always wet.",
+    UM_BEAR_TRAP_EQUIPPABLE_TOOTH =
+    "- Slows down anything it's attached to.\n- Deployable and throwable.",
+    UM_BEAR_TRAP_EQUIPPABLE_GOLD =
+    "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
+    WATERMELON_LANTERN = "- Has a positive sanity aura.",
+    HAT_RATMASK = "- Finds Rat Burrows\n- Shows sources of unwanted attention.",
+    SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
+    SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
+    GASMASK = "- Provides protection against spore clouds.",
+	UM_HAT_NETTLEMASK = "- Provides protection against spore clouds.\n- Stings user when worn.\n-Protects against blizzards.\n-Spoils.",
+    PLAGUEMASK = "- Provides protection against spore clouds.",
+    FLORAL_BANDAGE = "- Restores extra health over time.",
+	UM_RIMEWEED_ICEPACK = "- Cools the player.",
+    DISEASECUREBOMB = "- Fertilizes plants and gets them ready for harvest.",
+    SLUDGE_OIL = "- Multi-use fuel for fires and lanterns alike.",
+    ARMOR_SHARKSUIT_UM =
+    "- High wetness protection. \n- Works as electrical insulation.\n- Wearer will wash ashore with no penalties.",
+    HAT_CRAB = "- Repairs & sewing are twice as effective when worn.",
+    HAT_CRAB_ICE = "- Absorbs wetness to increase resistance.\n- Prevents the wearer from drying up.",
+    KALEIDOSCOPE = "- Hitting enemies allows allies to deal Planar damage against it for a short time",
+    ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
+    ARMOR_CRAB_REGEN = "- Self-healing.",
+    UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.",
+    WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
+    WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
+    CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
+    --PACT_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when unequipped.",
+    --PACT_SWORD_SANITY = "- Creates a temporary Dark Sword.\n- Disappears when unequipped.",
+    UM_MAXWELL_ARMOR_SANITY = "- Creates temporary Night Armor.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
+    UM_MAXWELL_NIGHTSWORD = "- Creates a temporary Dark Sword.\n- Disappears when dropped.\n- Is kept upon death or drowning.",
+    BRINE_BALM = "- Hurts you a little, heals you a lot over time.\n- Restores lost maximum health.",
+    BATHBOMB = "- Restores lost maximum health, if tossed in a certain larger spring in mainland.",
+    UM_EYEBALM = "- Grants protection against snowstorms/sandstorms when used.",
+    UM_HAT_RIME = "- Protection depends on how low the user's temperature is.\n- Melts overtime instead of breaking on hit.",
+    RUINS_BAT = "- Spawns Shadow Tentacles every 4 hits.\n- Consumes less durability and deals more damage \nagainst lunar-aligned creatures.",
+    UM_ICE_SICLE = "- Reaps plants and freezes enemies.\n- Lowers temperature on reaping and even more on attacking.\n- Clothing helps resist the cold.",
+    JAWED_SCYTHE = "- Reaps plants.",
+    HOUNDIOUS_OBSERVIOUS = "- Warns of incoming giants or hounds.",
+    BEAKBASHER = "- Is a darn good hammer.",
+    UM_HAT_LEAFWING = "- Speedier when worn.\n- Can breeze through Thickets.",
+    UM_FEATHER_TOTEM = "- Stays with you post-mortem.\n- Consumes feathers inside on revival for maximum\nhealth loss prevention and other special effects.",
+    SEEDPOUCH = "- Halts seed spoilage inside it.\n- Can be upgraded with an Elastispacer.",
+    ANTLIONHAT = "- Has infinite stack size inside.\n- Picks up nearby Turf on the ground."
+}
+local TOOLTIPS = STRINGS.UNCOMP_TOOLTIP
+
+local statues = {
+    "HORNUCOPIA",
+    "PIPE",
+    "ANCHOR",
+    "PAWN",
+    "ROOK",
+    "KNIGHT",
+    "BISHOP",
+    "MUSE",
+    "FORMAL",
+    "DEERCLOPS",
+    "BEARGER",
+    "MOOSEGOOSE",
+    "DRAGONFLY",
+    "MINOTAUR",
+    "TOADSTOOL",
+    "BEEQUEEN",
+    "KLAUS",
+    "ANTLION",
+    "STALKER",
+    "MALBATROSS",
+    "CRABKING",
+    "BUTTERFLY",
+    "MOON",
+    "GUARDIANPHASE3",
+    "EYEOFTERROR",
+    "TWINSOFTERROR",
+    "CLAYHOUND",
+    "CLAYWARG",
+    "CARRAT",
+    "BEEFALO",
+    "KITCOON",
+    "CATCOON",
+    "MANRABBIT",
+    "DAYWALKER",
+}
+
+for k, v in pairs(statues) do
+    TOOLTIPS["CHESSPIECE_" .. v .. "_BUILDER"] = "- No longer has collision."
+end
+
+STRINGS.PINETREE_TOOLTIP = {
+    WALTERHAT = "- Wearing it makes scrapes and bruises feel less scary!",
+    BEDROLL_STRAW = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    BEDROLL_FURRY = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    TENT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    SIESTAHUT = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    PORTABLETENT_ITEM = "- A pine tree pioneer knows how to conserve energy when relaxing!",
+    MEATRACK_HAT = "- If I go fast enough, it will dry even faster!",
+	BEEHAT = "- Wearing it should help me deal with my allergy!",
+}
+
+STRINGS.WIXIE_TOOLTIP = {
+    SLINGSHOTAMMO_ROCK = "- Plain and simple.",
+    SLINGSHOTAMMO_MARBLE = "- Knocks back enemies.",
+    SLINGSHOTAMMO_THULECITE = "- Curses targets, increasing damage taken, \nand boosting slingshot ammo effects.",
+    SLINGSHOTAMMO_GOLD = "- Shatters on impact, dealing damage in an area.",
+    SLINGSHOTAMMO_SLOW = "- Creates a vortex that pulls enemies in.",
+    SLINGSHOTAMMO_FREEZE = "- Freezes enemies in an area.",
+    SLINGSHOTAMMO_POOP = "- Panics targets.",
+    SLINGSHOTAMMO_FIRECRACKERS = "- Bounces multiple times, dealing damage in an area.",
+    SLINGSHOTAMMO_HONEY = "- Makes enemies leave a slowing trail of honey.",
+    SLINGSHOTAMMO_RUBBER = "- Bounces between enemies, dealing damage \nand knocking them back",
+    SLINGSHOTAMMO_TREMOR = "- Creates multiple tremors, damaging and knocking back\nenemies in an area.",
+    SLINGSHOTAMMO_MOONROCK = "- Able to hit shadows.",
+    SLINGSHOTAMMO_MOONGLASS = "- Passes through enemies, dealing rapid damage.\n- Able to hit shadows.",
+    SLINGSHOTAMMO_SALT = "- Deals up to triple damage based on enemies missing health.\n- Deals double damage to salt susceptible enemies.",
+    SLINGSHOTAMMO_TAR = "- Makes enemies leave a slowing, flamable tar trail.",
+    SLINGSHOTAMMO_OBSIDIAN = "- Rapidly deals bursts of fire damage in an area.",
+    SLINGSHOTAMMO_GOOP = "- Bounces between allies, healing them.",
+    SLINGSHOTAMMO_SLIME = "- Builds up a slowing slime on enemies.\n- Explodes when ignited.",
+    SLINGSHOTAMMO_LAZY = "- Launches an arcing projectile, teleporting Wixie to its landing spot.\n- Creates a shadow clone that distracts enemies.",
+    SLINGSHOTAMMO_SHADOW = "- Launches multiple projectiles in a wide cone.",
+    SLINGSHOTAMMO_FLARE = "- Bounces into the air, exploding upon landing.\n- Burning targets take more damage from the explosion.\n- Ignites enemies.",
+	SLINGSHOTAMMO_STINGER = "- Gets stuck on the target, hurts more with every stinger hit.",
+	SLINGSHOTAMMO_SCRAPFEATHER = "- Periodically shocks the target and all nearby enemies.",
+	SLINGSHOTAMMO_GUNPOWDER = "- Knocks back all enemies around the target.",
+	SLINGSHOTAMMO_DREADSTONE = "- Knocks back enemies.\n- Has a chance to not break on impact.",
+	SLINGSHOTAMMO_HORRORFUEL = "- Periodically deals Planar damage on the target.",
+	SLINGSHOTAMMO_GELBLOB = "- Summons 1-3 Shadow Tentacles on hit.",
+	SLINGSHOTAMMO_LUNARPLANTHUSK = "- Summons 1-3 Brightshade Vines on hit.",
+	SLINGSHOTAMMO_PUREBRILLIANCE = "- Enemies take extra Planar damage from\nPlanar weapons for a bit.",
+
+    SLINGSHOTAMMO_INSANITY = "...?",
+    SLINGSHOTAMMO_LUNARVINE = "Creates a leeching vine that holds targets in place.",
+
+    SLINGSHOT = "- Charge to increase damage and ammo effects.",
+    SLINGSHOT_MATILDA = "- Charge to fire up to 3 low effect shots.",
+    SLINGSHOT_GNASHER = "- Charges faster, but falls off if not released on time.",
+    SLINGSHOT_CLAIRE = "- Charge while moving.\n- Ammo ignores planar defense.",
+    SLINGSHOT_JESSIE = "- Can swap firing modes.\n- Holds 6 shots, which must be filled before firing.\n- Ammo ignores planar defense.",
+    BAGOFMARBLES = "- Scatters slippery marbles upon impact.",
+	SLINGSHOTAMMO_CONTAINER = "- Has 6 slots for ammo.",
+}
+
+STRINGS.ENGINEERING_TOOLTIP = {
+    MINERHAT = " - May be upgraded.\n- Can be overcharged, if upgraded.",
+    LANTERN = "- May be upgraded.\n- Can be overcharged, if upgraded.",
+    NIGHTSTICK = "- Can be overcharged.",
+    BUGZAPPER = "- Can be overcharged.",
+    WINONA_TOOLBOX = "", --putting these here for the icon
+    WINONA_UPGRADEKIT_ELECTRICAL = ""
+}
+
+
+if TUNING.DSTU.TELESTAFF_REWORK then
+    TOOLTIPS.TELESTAFF = "- Can select its destination.\n- Increased uses for items and objects.\n- Can teleport other players without PVP enabled."
+    TOOLTIPS.TELEBASE = "- No longer requires gems per teleport."
+end
+
+if TUNING.DSTU.BEEBOX_NERF then
+    TOOLTIPS.BEEBOX = "- Reduced maximum amount of Bees.\n- Will deal damage to unprepared players."
+    TOOLTIPS.BEEHAT = "- Will protect players from Bee Box damage."	
+end
+if TUNING.DSTU.GLASSCUTTER_REVERT then
+    TOOLTIPS.GLASSCUTTER = "- Consumes less durability and deals more damage\n against shadow-aligned creatures."
+end
+if TUNING.DSTU.FUNCAP_REWORK then
+    TOOLTIPS.RED_MUSHROOMHAT = "- Makes you crave Red Caps.\n- Each bite increases your damage.\n- Holds on tightly."
+    TOOLTIPS.GREEN_MUSHROOMHAT = "- Makes you crave Green Caps.\n- Each bite makes you speedier.\n- Holds on tightly."
+    TOOLTIPS.BLUE_MUSHROOMHAT = "- Makes you crave Blue Caps.\n- Each bite makes you work harder.\n- Holds on tightly."
+end
+if not TUNING.DSTU.ELECTRICALMISHAP then
+    TOOLTIPS.NIGHTSTICK =
+    "- No longer breaks when empty.\n- Can be fueled by various electrical items, generators, and potatoes."
+    TOOLTIPS.BUGZAPPER =
+    "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n- Can be fueled by various electrical items, generators, and potatoes."
+else
+    TOOLTIPS.NIGHTSTICK =
+    "- No longer breaks when empty.\n- Functions as a portable lightning rod.\n- Regains fuel when struck by lightning or when charged at generators."
+    TOOLTIPS.BUGZAPPER =
+    "- Deals bonus damage, and area damage to Insects.\n- Deals electrical damage.\n - Can be charged at generators."
+end
+
+if TUNING.DSTU.SEWING_KIT then
+    TOOLTIPS.SEWING_KIT = "- Doubled uses, but repairs less per use."
+end
+
+if TUNING.DSTU.FLINGO_SETTING == "Fuelmuncher" then
+    TOOLTIPS.FIRESUPPRESSOR = "- Drains fuel on each throw.\n- Increased maximum fuel."
+elseif TUNING.DSTU.FLINGO_SETTING == "Waterballs" then
+    TOOLTIPS.FIRESUPPRESSOR = "- No longer freezes on hit."
+end
+
+if TUNING.DSTU.LONGPIG then
+    TOOLTIPS.REVIVER = "- Requires flesh from a dead survivor."
+end
+
+if TUNING.DSTU.EYEBRELLAREWORK == false then
+    TOOLTIPS.EYEBRELLAHAT = "- Reduced heat protection."
+else
+    TOOLTIPS.EYEBRELLAHAT = "- Reduced heat protection.\n- Can't be sewn, but may be repaired."
+end
+
+if TUNING.DSTU.SNOWSTORMS then
+    TOOLTIPS.CAMPFIRE = "- Provides protection from snowstorms."
+    TOOLTIPS.TORCH = "- Provides protection from snowstorms."
+    TOOLTIPS.FIREPIT = "- Provides protection from snowstorms."
+    TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from snowstorms when built."
+    TOOLTIPS.TURF_DRAGONFLY = TOOLTIPS.TURF_DRAGONFLY .. "\n- Prevents Snow Pile build-up."
+    TOOLTIPS.YELLOWSTAFF = "- Dwarf Stars provide protection from snowstorms."
+    TOOLTIPS.MOLEHAT = "- Grants protection against snowstorms/sandstorms when worn."
+    TOOLTIPS.DESERTHAT = "- Also works as protection against snowstorms."
+    TOOLTIPS.BEARGERVEST = "- Provides protection from snowstorms' slowdown."
+else
+    TOOLTIPS.MOLEHAT = "- Grants protection against sandstorms and moonstorms when worn."
+end
+
+if TUNING.DSTU.HAYFEVER then
+    TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Prevents Hayfever while worn."
+    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Prevents Hayfever while worn."
+    TOOLTIPS.BEEHAT = "- Stings won't cause allergic reactions."
+    TOOLTIPS.MINIFAN = "- Staves off hayfever."
+    TOOLTIPS.FEATHERFAN = "- Grants large amounts of Hayfever protection when blown."
+    TOOLTIPS.PERDFAN = "- Grants large amounts of Hayfever protection when blown."
+end
+
+if TUNING.DSTU.SMOG then
+    TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Protects against smog while worn."
+    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn"
+	TOOLTIPS.SMOGEATER = "- Sucks up smog."
+    if TOOLTIPS.MINIFAN ~= nil then
+        TOOLTIPS.MINIFAN = string.gsub(TOOLTIPS.MINIFAN, ".", "") .. " and helps against smog."
+    else
+        TOOLTIPS.MINIFAN = "- Helps against smog."
+    end
+
+    if TOOLTIPS.FEATHERFAN ~= nil then
+        TOOLTIPS.FEATHERFAN = TOOLTIPS.FEATHERFAN .. "\n- Blows away smog."
+    else
+        TOOLTIPS.FEATHERFAN = "- Blows away smog."
+    end
+
+    if TOOLTIPS.PERDFAN ~= nil then
+        TOOLTIPS.PERDFAN = TOOLTIPS.PERDFAN .. "\n- Blows away smog."
+    else
+        TOOLTIPS.PERDFAN = "- Blows away smog."
+    end
+end
+
+if TUNING.DSTU.HEATWAVES then
+    TOOLTIPS.WINTEROMETER = "- Can predict heatwaves before they occur."
+end
+
+if TUNING.DSTU.STORMS then
+    TOOLTIPS.RAINOMETER = "- Can track a Tornado's location."
+end
+
+if TUNING.DSTU.GOTOBED == "default" then
+    TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health, if penalty isn't severe."
+
+    TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health, if penalty isn't severe."
+
+    TOOLTIPS.TENT = "- Restores maximum health, if penalty isn't severe."
+
+    TOOLTIPS.PORTABLETENT_ITEM = "- Restores maximum health, if penalty isn't severe."
+
+    TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health, if penalty isn't severe."
+	
+elseif TUNING.DSTU.GOTOBED == "legacy" then
+
+	TOOLTIPS.BEDROLL_STRAW = "- Restores maximum health."
+
+    TOOLTIPS.BEDROLL_FURRY = "- A bit more efficient.\n- Restores maximum health."
+
+    TOOLTIPS.TENT = "- Restores maximum health."
+
+    TOOLTIPS.PORTABLETENT_ITEM = "- Restores maximum health."
+
+    TOOLTIPS.SIESTAHUT = "- A bit less efficient.\n- Restores maximum health."
+end
+
+if TUNING.DSTU.SLEEPINGBUFF > 1 then
+    if TUNING.DSTU.GOTOBED then
+        TOOLTIPS.BEDROLL_STRAW = TOOLTIPS.BEDROLL_STRAW .. "\n- Faster healing rate."
+
+        TOOLTIPS.BEDROLL_FURRY = TOOLTIPS.BEDROLL_FURRY .. "\n- Faster healing rate."
+
+        TOOLTIPS.TENT = TOOLTIPS.TENT .. "\n- Faster healing rate."
+
+        TOOLTIPS.SIESTAHUT = TOOLTIPS.SIESTAHUT .. "\n- Faster healing rate."
+
+        TOOLTIPS.PORTABLETENT_ITEM = TOOLTIPS.PORTABLETENT_ITEM .. "\n- Faster healing rate."
+    else
+        TOOLTIPS.BEDROLL_STRAW = "- Faster healing rate."
+
+        TOOLTIPS.BEDROLL_FURRY = "- Faster healing rate."
+
+        TOOLTIPS.TENT = "- Faster healing rate."
+
+        TOOLTIPS.SIESTAHUT = "- Faster healing rate."
+
+        TOOLTIPS.PORTABLETENT_ITEM = "- Faster healing rate."
+    end
+end
+
+if TUNING.DSTU.POCKET_POWERTRIP ~= 0 then
+    TOOLTIPS.TRUNKVEST_SUMMER = "- Now has pockets!\n- Slightly increased rain protection."
+    TOOLTIPS.TRUNKVEST_WINTER = "- Now has pockets!"
+    TOOLTIPS.REFLECTIVEVEST = "- Now has pockets!"
+    TOOLTIPS.RAINCOAT = "- Now has pockets!"
+    TOOLTIPS.HAWAIIANSHIRT = "- Increased durability.\n- Now has pockets!"
+    TOOLTIPS.ARMOR_SNAKESKIN = "- Now has pockets!"
+    TOOLTIPS.ARMOR_WINDBREAKER = "- Now has pockets!"
+    TOOLTIPS.ARMOR_LIFEJACKET = "- Now has pockets!"
+    TOOLTIPS.BLUBBERSUIT = "- Now has pockets!"
+    TOOLTIPS.TARSUIT = "- Now has pockets!"
+end
+
+if TUNING.DSTU.CANEDURABILITY then
+    TOOLTIPS.CANE = "- Has durability, only drains when walking."
+end
+
+if TUNING.DSTU.WANDA_NERF then
+    TOOLTIPS.POCKETWATCH_REVIVE = "- Increased cooldown.\n- Gives health penalty."
+end
+
+if TUNING.DSTU.INSUL_THERMALSTONE then
+    TOOLTIPS.HEATROCK = "- Reduced inherent insulation.\n- Inherits part of players insulation."
+end
+
+--if TUNING.DSTU.WICKERNERF_TENTACLES then
+    --TOOLTIPS.BOOK_TENTACLES =
+    --"- Summons Sickly Tentacles\n- Sickly Tentacles die over time, drop no loot but don't attack players."
+--end
+
+if TUNING.DSTU.WOODIE_WET_GOOSE then
+    TOOLTIPS.WEREITEM_GOOSE = "- Walking on water makes you wet."
+end
+
+if TUNING.DSTU.WICKERCHANGES == 2 then
+    TOOLTIPS.BOOK_MOON = "- Now mutates everything around on use."
+end
+
+--if TUNING.DSTU.WICKERNERF_BEEBOOK then
+    --TOOLTIPS.BOOK_BEES = "- Now adds Honey to 10 nearby Bee Boxes.\n- Doesn't work during Dusk, Night and/or Winter."
+--end
+
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+    TOOLTIPS.SPEAR_WATHGRITHR_LIGHTNING = "- Regains durability when struck by lightning or when charged at generators."
+    TOOLTIPS.WATHGRITHR_SHIELD = "- Blocking attacks will consume durability by 10% of the damage taken.\n - The time penalty for a failed parry is reduced to half.\n -Parry duration has been incorportated into the item by default."
+    TOOLTIPS.WATHGRITHR_SHIELD_DREADSTONE = "- Scares attackers.\n - Effects stack with dreadstone armor."
+    TOOLTIPS.SADDLE_WATHGRITHR = "- Increased damage."
+    TOOLTIPS.BATTLESONG_DURABILITY = "- Now works on shields."
+end
+
+if TUNING.DSTU.DISABLE_MEGAFLARE then
+    TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
+end
+
+
+if TUNING.DSTU.STORMS then
+    TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
+    TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
+end
+
+if TUNING.DSTU.SHAVE_MODE then
+    TOOLTIPS.UM_THULECITE_RAZOR = "- Can occasionally give an extra resouce."
+end
+
+if TUNING.DSTU.WARLY_CHANGES == 1 then
+    TOOLTIPS.SPICEPACK = "- No longer a backpack.\n- Can only store ingredients and perishables."
+end
+
+if TUNING.DSTU.WARLY_CHANGES ~= 0 then
+	TOOLTIPS.SPICE_SALT = "- Makes dishes restore lost maximum health."
+	TOOLTIPS.PORTABLECOOKPOT_ITEM = "- Fellow survivors can now use it."	
+end
+
+if TUNING.DSTU.WXLESS then
+    local CircuitDefs = {
+        HEAT = "- Now provides heat when working or attacking.\n- No longer changes max and min temperature.\n- Provides insulation.\n- Increases work and row efficiency the hotter you are.",
+        MOVESPEED = "- Increases run speed over time the longer you run.",
+        MOVESPEED2 = "- Increases run speed over time the longer you run.\n- When fast enough, you begin a charge, hitting creatures in your way.",
+        BEE = "- Now regenerates 1 health every 5 seconds.",
+        LIGHT = "- Increased light radius.",
+        MUSIC = "- Provides more sanity.\n- Attracts birds.",
+        MAXHEALTH = "- Provides a bit of static damage reduction.\n- Now increases health by 30.",
+        MAXHEALTH2 = "- Provides static damage reduction.\n- Now increases health by 75.",
+        MAXSANITY = "- Provides a bit more sanity over time.\n- Reduces insanity aura effects.\n- Now increases sanity by 75.",
+        MAXSANITY1 = "- Provides a bit of sanity over time.\n- Slighly reduces insanity aura effects.\n- Now increases sanity by 30.",
+        TASER = "- Getting hit stuns the attacker.\n- Gives you charge when you attack a shocked target enough times.",
+        COLD = "- Now decreases temperature when working or attacking.\n- No longer changes max and min temperature.\n- Periodically produces ice.\n- Decreases food spoilage rate.\n- Structures worked on get more brittle with each work.\n- Applies a weak freezing effect to enemies.",
+        MAXHUNGER = "- Slows down charge drain.\n- Now increases hunger by 75.", --WHOEVER AT KLEI WHO DECIDED THEY'D MAKE THE MAXHUNGER1 THE WEAK VERSION AND MAXHUNGER THE STRONG VERSION SHOULD HAVE THEIR FINGERS BOILED.
+        MAXHUNGER1 = "- Slightly slows down hunger drain.\n- Now increases hunger by 30.",
+    }
+    for k, v in pairs(CircuitDefs) do
+        TOOLTIPS["WX78MODULE_" .. k] = v
+    end
+end
+
+if GetModConfigData("toolbox_tools") then
+    TOOLTIPS.WINONA_TOOLBOX = "- Portable storage for dismantled structures, tools and all things engineering."
+end
+
+modimport("init/init_scrapbook")
+--modimport("init/init_scrapbook_um") 

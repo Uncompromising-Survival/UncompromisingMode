@@ -32,7 +32,7 @@ for i,v in ipairs(canes) do
 		
 
 		inst:AddComponent("fueled")
-		inst.components.fueled:InitializeFuelLevel(TUNING.TOPHAT_PERISHTIME*1.5)
+		inst.components.fueled:InitializeFuelLevel(TUNING.RAINHAT_PERISHTIME)
 		inst.components.fueled:SetDepletedFn(--[[generic_perish]]inst.Remove)
 		inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FULL_FUELED_CONSUMPTION)
 		inst.components.fueled.no_sewing = true
@@ -68,6 +68,7 @@ for i,v in ipairs(canes) do
 		inst.components.equippable:SetOnUnequip(onunequip)
 		
 		inst._onlocomote = function(owner)
+			if owner.components.rider and owner.components.rider:IsRiding() then return end
 			if owner.components.locomotor.wantstomoveforward then
 				if not inst.components.fueled.consuming then
 					inst.components.fueled:StartConsuming()

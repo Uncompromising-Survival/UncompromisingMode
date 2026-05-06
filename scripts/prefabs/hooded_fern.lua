@@ -3,6 +3,37 @@ local assets =
     Asset("ANIM", "anim/um_thicket.zip"),
 }
 
+local function PrickAdept(picker)
+    return picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept")
+end
+local PF_DIMS = 4 --equal to 4x4 grid of walls
+
+local function UnregisterPathFinding(inst)
+    if inst._pfpos == nil then return end
+
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:RemoveWall(x + i, 0, z + j)
+        end
+    end
+end
+
+local function RegisterPathFinding(inst)
+    inst._pfpos = inst:GetPosition()
+    local x = inst._pfpos.x - (PF_DIMS - 1) / 2
+    local z = inst._pfpos.z - (PF_DIMS - 1) / 2
+    local pathfinder = TheWorld.Pathfinder
+    for i = 0, PF_DIMS - 1 do
+        for j = 0, PF_DIMS - 1 do
+            pathfinder:AddWall(x + i, 0, z + j)
+        end
+    end
+    inst.OnRemoveEntity = UnregisterPathFinding
+end
+
 local function OnBurnt(inst)
     local node = TheWorld.Map:FindNodeAtPoint(inst.Transform:GetWorldPosition())
 
@@ -21,14 +52,18 @@ local function onregenfn(inst)
     inst.AnimState:PushAnimation("idle", true)
     inst:AddTag("briar_plants")
 
-    MakeMediumBurnable(inst)
-    inst.components.burnable:SetBurnTime(0.75)
-    inst.components.burnable:SetOnBurntFn(OnBurnt)
+    if not inst.components.burnable then
+        MakeMediumBurnable(inst)
+        inst.components.burnable:SetBurnTime(0.75)
+        inst.components.burnable:SetOnBurntFn(OnBurnt)
+    end
+    inst:DoTaskInTime(0, RegisterPathFinding)
 end
 
 local function makeemptyfn(inst)
     inst.AnimState:PlayAnimation("pick")
     inst.AnimState:PushAnimation("empty")
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local function makebarrenfn(inst, wasempty)
@@ -41,6 +76,8 @@ local function makebarrenfn(inst, wasempty)
     else
         inst.AnimState:PlayAnimation("empty")
     end
+
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local function ToggleBusyAnimation(inst)
@@ -119,7 +156,9 @@ local function onpickedfn(inst, picker)
         inst.BrushingTest:Cancel()
         inst.BrushingTest = nil
     end
-    if picker and picker.components.combat and not (picker.components.inventory and (picker.components.inventory:EquipHasTag("bramble_resistant") or picker.components.inventory:EquipHasTag("lazy_forager"))) and not picker:HasAnyTag("shadowminion", "aphid", "channelingpicker") then
+    if picker and picker.components.combat and not (picker.components.inventory and 
+    (picker.components.inventory:EquipHasTag("bramble_resistant") or picker.components.inventory:EquipHasTag("lazy_forager"))) and not picker:HasAnyTag("shadowminion", "aphid", "channelingpicker") 
+    and not (picker.components.skilltreeupdater and picker.components.skilltreeupdater:IsActivated("wormwood_prick_adept")) then
         picker.components.combat:GetAttacked(inst, TUNING.CACTUS_DAMAGE)
         picker:PushEvent("thorns")
     end
@@ -136,6 +175,14 @@ local function onpickedfn(inst, picker)
     inst.AnimState:PushAnimation("empty", false)
     inst:RemoveTag("briar_plants")
     inst:RemoveComponent("burnable")
+    if picker and picker.prefab == "aphid" then
+        picker.full_belly = true
+        picker:DoTaskInTime(60,function(picker)
+            picker.full_belly = nil
+        end)
+    end
+
+    inst:DoTaskInTime(0, UnregisterPathFinding)
 end
 
 local thicket_equipment = { "um_hat_leafwing", "armor_bramble", "um_armor_bramble_rimeweed", "armor_lunarplant_husk" }
@@ -152,8 +199,15 @@ local function WearingThicketResist(inst)
 end
 
 local function OutOfTheWoodsYet(target)
-    local the_bush = FindEntity(target, 1.75, nil, { "briar_plants" })
-    if not the_bush or WearingThicketResist(target) then
+	local x,y,z = target.Transform:GetWorldPosition()
+	local bushes = TheSim:FindEntities(x,y,z, 1.75, { "briar_plants" })
+	local out_of_woods = true
+	for i,v in ipairs(bushes) do
+		if v.components.pickable and v.components.pickable.canbepicked then
+			out_of_woods = false
+		end	
+	end
+	if out_of_woods or WearingThicketResist(target) or PrickAdept(target) then
         target.components.locomotor:RemoveExternalSpeedMultiplier(target, "thicket")
         target.thicketcheck:Cancel()
         target.thicketcheck = nil
@@ -162,7 +216,7 @@ end
 
 local function CheckToSeeIfTargetsMoving(inst)
     for i, v in ipairs(inst.playertracking) do
-        if v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5 ^ 2 then
+        if v.sg ~= nil and v:IsValid() and inst:GetDistanceSqToInst(v) <= 1.5 ^ 2 then
             if v.sg:HasStateTag("moving") and inst.busyanimation == false then
                 inst.AnimState:PlayAnimation("bounce", false)
                 inst.busyanimation = true
@@ -180,21 +234,51 @@ local function CheckToSeeIfTargetsMoving(inst)
     end
 end
 
+local function AphidStorm(inst,num,unfortunate_soul)
+    if unfortunate_soul then
+        local thicket = FindEntity(inst,12,function(ent) return
+            ent.prefab == "hooded_fern" and not ent.cant_aphid and inst:GetDistanceSqToInst(ent) > 4^2
+        end)
+        local aphid = SpawnPrefab("aphid")
+        aphid.Transform:SetPosition(thicket.Transform:GetWorldPosition())
+        aphid.components.combat:SuggestTarget(unfortunate_soul)
+        
+        if num > 0 then
+            num = num - 1
+            if not unfortunate_soul:HasTag("player") then
+                num = num - 1
+            end
+            thicket.cant_aphid = true
+            thicket:DoTaskInTime(3,function(thicket) thicket.cant_aphid = nil end)
+            inst:DoTaskInTime(0.2,function(inst) AphidStorm(thicket,num,unfortunate_soul) end)
+        end
+    end
+end
+
+local function GetNumAphidsWithWorldAge(age)
+    return math.clamp(math.random(age/8,age/4),4,21) -- min 4, max 21 guaranteed around 168 days in
+end
+
 local function onnear(inst, target)
-    if inst.components.pickable and inst.components.pickable:CanBePicked() then
-        if not WearingThicketResist(target) then
-            if math.random() > 0.8 then
+    if inst.components.pickable and inst.components.pickable:CanBePicked() and not inst.BrushingTest and target then
+        if not (WearingThicketResist(target) or PrickAdept(target) or target.prefab == "fruitbat") then
+            if math.random() > 0.95 then
                 if not IsIslandWorld() then
-                    SpawnPrefab("aphid").Transform:SetPosition(inst.Transform:GetWorldPosition())
+                    local total_aphids = GetNumAphidsWithWorldAge(TheWorld.state.cycles)
+                    AphidStorm(inst,total_aphids,target)
+                    inst.cant_aphid = true
+                    inst:DoTaskInTime(3,function(inst) inst.cant_aphid = nil end)
                 else
                     SpawnPrefab("snake").Transform:SetPosition(inst.Transform:GetWorldPosition())
                 end
             end
-
-            target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
-            if not target.thicketcheck then
-                target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)
+            if not target:HasTag("EPIC") then
+                target.components.locomotor:SetExternalSpeedMultiplier(target, "thicket", 0.3)
+                if not target.thicketcheck then
+                    target.thicketcheck = target:DoPeriodicTask(0.1, OutOfTheWoodsYet)
+                end
             end
+
         end
         table.insert(inst.playertracking, target)
 
@@ -231,6 +315,7 @@ local function grass(name, stage)
         -- local colour = multcolour + math.random() * (1.0 - multcolour)
         -- inst.AnimState:SetMultColour(colour, colour, colour, 1)
         -- end
+        inst:DoTaskInTime(0, RegisterPathFinding)
 
         inst.entity:SetPristine()
         inst.AnimState:SetTime(math.random() * 2)
@@ -261,10 +346,15 @@ local function grass(name, stage)
         inst:AddComponent("inspectable")
 
         ---------------------
-        inst:AddComponent("playerprox")
-        inst.components.playerprox:SetDist(1.75, 3) --set specific values
-        inst.components.playerprox:SetOnPlayerNear(onnear)
-        inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
+        --inst:AddComponent("playerprox")
+        --inst.components.playerprox:SetDist(1.75, 3) --set specific values
+        --inst.components.playerprox:SetOnPlayerNear(onnear)
+        --inst.components.playerprox:SetPlayerAliveMode(inst.components.playerprox.AliveModes.AliveOnly)
+
+
+
+        inst.um_thicketnear = onnear
+
         MakeNoGrowInWinter(inst)
         MakeHauntableIgnite(inst)
         MakeMediumBurnable(inst)

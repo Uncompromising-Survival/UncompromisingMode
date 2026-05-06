@@ -2,6 +2,16 @@ local FeatsOfStrength = Class(function(self, inst)
     self.inst = inst
 end)
 
+local function FreezeImmunityBypass(target, coldness)
+    if target == nil or target.components.freezable == nil then
+        return
+    end
+
+    target.IgnoreImmunity = true
+    target.components.freezable:AddColdness(coldness)
+    target.IgnoreImmunity = nil
+end
+
 function FeatsOfStrength:CanAfford(cost)
 	if self.inst == nil or cost == nil then
 		return
@@ -56,8 +66,8 @@ function FeatsOfStrength:MightySwing(target)
 			if self.inst:HasTag("shadow_strikes") then
 				self.inst:IncreaseCombo(1, target)
 			end
-			if self.inst:HasTag("mighty_hunger") and target.components.freezable ~= nil then
-				target.components.freezable:AddColdness(2)
+			if self.inst:HasTag("mighty_hunger") then
+				FreezeImmunityBypass(target, 2)
 			end
 			if doubledplanar then
 				weapon.components.planardamage:RemoveMultiplier(self.inst, "mighty_strikes")
@@ -226,9 +236,7 @@ function FeatsOfStrength:MightyLeapLanding()
 				if CanDamage(inst, ent) then
 					ent.components.combat:GetAttacked(inst, damage)
 					if canfreeze then
-						if ent.components.freezable ~= nil then
-							ent.components.freezable:AddColdness(1)
-						end
+						FreezeImmunityBypass(ent, 1)
 					end
 				end
 			end

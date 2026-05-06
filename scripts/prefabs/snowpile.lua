@@ -6,7 +6,6 @@ local function DoColdMenace(inst)
     local snowattack = SpawnPrefab("snowmong")
     snowattack.Transform:SetPosition(inst.Transform:GetWorldPosition())
     snowattack.sg:GoToState("enter")
-    snowattack.SetTier(snowattack)
     local x, y, z = inst.Transform:GetWorldPosition()
     inst:DoTaskInTime(0.1, function() SpawnPrefab("splash_snow_fx").Transform:SetPosition(x, 0, z) end)
     inst:DoTaskInTime(0.2, inst.Remove)
@@ -210,10 +209,10 @@ local function workcallback(inst, worker, workleft)
         inst:Remove()
     end
     if inst.components.workable.workleft <= 0 then
-		inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-		if math.random() > 0.5 then
-			inst.components.lootdropper:SpawnLootPrefab("snowball_item")
-		end
+        inst.components.lootdropper:SpawnLootPrefab("snowball_item")
+        if math.random() > 0.5 then
+            inst.components.lootdropper:SpawnLootPrefab("snowball_item")
+        end
         inst:Remove()
     else
         startregen(inst)
@@ -338,23 +337,7 @@ local function makebarrenfn(inst) inst:Remove() end
 
 local function on_anim_over(inst)
     if inst.components.workable ~= nil then
-        if inst.components.workable.workleft ~= 3 then
-            inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
-        else
-            if math.random() < 0.95 or inst.mongproof then
-                inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
-            else
-                if math.random() > 0.33 then
-                    inst.AnimState:PushAnimation('teeth')
-                else
-                    if math.random() > 0.5 then
-                        inst.AnimState:PushAnimation('eyes')
-                    else
-                        inst.AnimState:PushAnimation('teyes')
-                    end
-                end
-            end
-        end
+        inst.AnimState:PushAnimation(anims[inst.components.workable.workleft])
     end
 end
 
@@ -383,10 +366,20 @@ local function Init(inst)
 end
 
 local function OnSeasonChange(inst)
-    if not TheWorld.state.iswinter then
-        inst.persists = false
-        inst:Remove()
-    end
+    if TheWorld.state.iswinter then return end
+    inst.persists = false
+    if inst.removesnowpile then return end
+    inst.removesnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+        if not TheWorld.state.iswinter then inst:Remove() end
+    end)
+end
+
+local function SlowlyPickAway(inst)
+    if TheWorld.state.iswinter or not TheWorld.state.israining or inst.slowlypicksnowpile then return end
+    inst.slowlypicksnowpile = inst:DoTaskInTime(math.min(math.random() * .5, .5), function(inst)
+        if TheWorld.state.israining and not TheWorld.state.iswinter then inst.components.pickable:Pick() end
+        inst.slowlypicksnowpile = nil
+    end)
 end
 
 local function onwake(inst)
@@ -402,6 +395,65 @@ local function onsleep(inst)
     end
 end
 
+local function createFx(inst)
+    local sizes = {
+        0.65,
+        0.6,
+        0.5
+    }
+
+    for k, v in pairs(sizes) do
+        inst["fx_" .. k] = CreateEntity()
+        inst["fx_" .. k].entity:AddTransform()
+        inst["fx_" .. k].entity:AddAnimState()
+
+        --[[non networked entity]]
+        inst["fx_" .. k].AnimState:SetBuild("marsh_tile")
+        inst["fx_" .. k].AnimState:SetBank("marsh_tile")
+        inst["fx_" .. k].AnimState:PlayAnimation("frozen")
+        inst["fx_" .. k].AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+        inst["fx_" .. k].AnimState:SetLayer(LAYER_BACKGROUND)
+        inst["fx_" .. k].AnimState:SetSortOrder(3)
+
+        local symbols_to_hide = {
+            "wave_still2",
+            "wave_still",
+            "innerbubble",
+            "splash",
+            "bursrt_bubble", --no this is not a typo on my end.
+            "pt_0",
+            "pt_1",
+            "pt_2",
+            "pt_3",
+            "pt_4",
+            "pt_5",
+            "pt_6",
+            "pt_7",
+            "pt_8",
+            "pt_9",
+            "pt_10",
+            "marsh",
+            "line",
+        }
+
+        for _, v in pairs(symbols_to_hide) do
+            inst["fx_" .. k].AnimState:HideSymbol(v)
+        end
+
+        inst["fx_" .. k].Transform:SetScale(v, v, v)
+        inst["fx_" .. k].Transform:SetPosition(inst.Transform:GetWorldPosition())
+        inst["fx_" .. k].Transform:SetRotation(math.random(360))
+
+        inst["fx_" .. k].entity:SetParent(inst.entity)
+        inst["fx_" .. k].persists = false
+        inst:ListenForEvent("onremove", function(inst)
+            if inst["fx_" .. k] ~= nil then
+                inst["fx_" .. k]:Remove()
+                inst["fx_" .. k] = nil
+            end
+        end)
+    end
+end
 
 local function snowpilefn(Sim)
     -- print ('sandhillfn')
@@ -429,6 +481,10 @@ local function snowpilefn(Sim)
     inst:AddTag("snowpile")
     inst:AddTag("salt_workable")
 
+    if not TheNet:IsDedicated() then
+        --spawn fx only on client
+        createFx(inst)
+    end
     if not TheWorld.ismastersim then
         return inst
     end
@@ -455,7 +511,6 @@ local function snowpilefn(Sim)
     inst.components.workable:SetWorkAction(ACTIONS.DIG)
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnWorkCallback(workcallback)
-
 
     local balls_count = 1
     inst:AddComponent("pickable")
@@ -495,11 +550,7 @@ local function snowpilefn(Sim)
     inst.OnEntityWake = onwake
     inst.OnEntitySleep = onsleep
 
-    inst:DoPeriodicTask(10, function(inst)
-        if TheWorld.state.israining and not TheWorld.state.iswinter then
-            inst.components.pickable:Pick()
-        end
-    end)
+    inst:DoPeriodicTask(10, SlowlyPickAway, 0)
 
     return inst
 end

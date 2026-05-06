@@ -12,7 +12,7 @@ TUNING.SNAILDRAKE_SLIME_SPLAT_RADIUS = 1
 TUNING.SNAILDRAKE_MAGMA_SLUDGE_DURATION = 15
 TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION = 15
 
-local AURA_EXCLUDE_TAGS = { "playerghost", "ghost", "shadow", "shadowminion", "noauradamage", "INLIMBO",
+local AURA_EXCLUDE_TAGS = { "playerghost", "ghost", "shadow", "shadowminion", "INLIMBO",
     "notarget", "noattack", "flight", "flying", "dragonfly", "lavae", "invisible", "snaildrake" }
 
 -- Apply AoE slow and damage to a target.
@@ -286,17 +286,18 @@ local function slime_sludge_fn()
     end
 	
     inst:AddComponent("aura")
-    inst.components.aura.radius = 3
+    inst.components.aura.radius = 2
     inst.components.aura.tickperiod = 0.6
     inst.components.aura.auraexcludetags = AURA_EXCLUDE_TAGS
     inst.components.aura:Enable(true)
 	
-
+    inst:AddComponent("heater")
+    inst.components.heater.heat = 250
 
     inst._spoiltask = inst:DoPeriodicTask(inst.components.aura.tickperiod, DoAreaEffectSlime, inst.components.aura.tickperiod * .5)
 
 	
-    inst:DoTaskInTime(TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove)
+    inst.removetask = inst:DoTaskInTime(TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove)
 
     return inst
 end

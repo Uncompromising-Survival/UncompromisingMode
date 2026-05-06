@@ -25,20 +25,20 @@ local function LookForCooker(inst)
 	end
 end
 
-local NEW_FENCE_BLUEPRINT_LOOT = "wagpunkbits_kit_blueprint"
+--local NEW_FENCE_BLUEPRINT_LOOT = "wagpunkbits_kit_blueprint"
 
-local LAUNCHSPEED = 3
-local STARTHEIGHT = 7
-local VERTICALSPEED = 2
-local function SpawnBlueprintLoot(inst)
-	local x, y, z = inst.Transform:GetWorldPosition()
-	local bp = SpawnPrefab(NEW_FENCE_BLUEPRINT_LOOT)
+--local LAUNCHSPEED = 3
+--local STARTHEIGHT = 7
+--local VERTICALSPEED = 2
+--local function SpawnBlueprintLoot(inst)
+	--local x, y, z = inst.Transform:GetWorldPosition()
+	--local bp = SpawnPrefab(NEW_FENCE_BLUEPRINT_LOOT)
 
-	bp.Transform:SetPosition(x, y, z)
+	--bp.Transform:SetPosition(x, y, z)
 
 	--FIXME (Omar): junk pile is very tall so this is a lil awkward looking
-	Launch2(bp, inst, LAUNCHSPEED, 1, STARTHEIGHT, 0, VERTICALSPEED)
-end
+	--Launch2(bp, inst, LAUNCHSPEED, 1, STARTHEIGHT, 0, VERTICALSPEED)
+--end
 
 env.AddPrefabPostInit("junk_pile_big", function(inst)
 	if not TheWorld.ismastersim then
@@ -46,17 +46,17 @@ env.AddPrefabPostInit("junk_pile_big", function(inst)
 	end
 	
 	inst:DoTaskInTime(0,LookForCooker)
-	inst.SpawnBlueprintLoot = SpawnBlueprintLoot
+	--inst.SpawnBlueprintLoot = SpawnBlueprintLoot
 end)
 
 
-env.AddPrefabPostInit("world", function(inst)
-    local NEW_WAGPUNK_ITEMS = 
-    { -- These are prefab names not their blueprints.
-        "wagpunkhat",
-        "armorwagpunk",
-        "chestupgrade_stacksize",
-        "fence_electric_item",
-    }
-    UpvalueHacker.SetUpvalue(Prefabs.wagstaff_machinery.fn, NEW_WAGPUNK_ITEMS, "lootsetfn", "WAGPUNK_ITEMS")
-end)
+--env.AddPrefabPostInit("world", function(inst)
+    --local NEW_WAGPUNK_ITEMS = 
+    --{ These are prefab names not their blueprints.
+        --"wagpunkhat",
+        --"armorwagpunk",
+        --"chestupgrade_stacksize",
+        --"fence_electric_item",
+    --}
+    --UpvalueHacker.SetUpvalue(Prefabs.wagstaff_machinery.fn, NEW_WAGPUNK_ITEMS, "lootsetfn", "WAGPUNK_ITEMS")
+--end)

@@ -210,6 +210,7 @@ AllRecipes["slingshotammo_horrorfuel"].override_numtogive_fn = calc_slingshotamm
 AddRecipe2("meatrack_hat", { Ingredient("twigs", 2), Ingredient("rope", 1), Ingredient("charcoal", 1) }, TECH.NONE, { builder_tag = "pinetreepioneer" }, { "CHARACTER", "COOKING", "CLOTHING" })
 ChangeSortKey("meatrack_hat", "walterhat", "CLOTHING", true)
 ChangeSortKey("meatrack_hat", "walterhat", "CHARACTER", true)
+ChangeSortKey("meatrack_hat", "meatrack", "COOKING", true)
 
 AllRecipes["bandage_butterflywings"].ingredients = { Ingredient("butterflywings", 3), Ingredient("petals", 1) }
 ChangeSortKey("woby_treat", "portabletent_item", "CHARACTER", false) --Get it farther away from unused slingshot upgrades

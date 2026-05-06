@@ -1,40 +1,293 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
+local LEADER_MUST_TAGS = {"walrus", "houndfriend"}
+
+local function TheVarglet(guard, camp)
+    if not guard or not camp then
+        return
+    end
+
+    local function GetLeader()
+        if camp and camp.data and camp.data.children then
+            local walrus
+
+            for ent in pairs(camp.data.children) do
+                if ent:IsValid() then
+                    if ent.prefab == "little_walrus" then
+                        return ent
+                    elseif ent.prefab == "walrus" then
+                        walrus = ent
+                    end
+                end
+            end
+
+            return walrus
+        end
+
+        return nil
+    end
+
+    guard:AddTag("flare_summoned")
+
+    local named = guard.components.named or guard:AddComponent("named")
+    if not guard._varglet_name then
+        local pet_names = STRINGS.NAMES.UM_VARGLET_PET_NAMES
+        guard._varglet_name = pet_names[math.random(#pet_names)]
+    end
+    named:SetName(guard._varglet_name)
+
+    if guard.components.combat then
+        guard.components.combat:SetKeepTargetFunction(function(inst, target)
+            if not (target and target:IsValid()) then
+                return false
+            end
+
+            local leader = GetLeader()
+            if not leader or not leader:IsValid() then
+                return true
+            end
+
+            if inst:GetDistanceSqToInst(leader) > 40 * 40 then
+                return false
+            end
+
+            return true
+        end)
+    end
+
+    guard:DoPeriodicTask(.5, function()
+        if not guard.components.combat then
+            return
+        end
+
+        local leader = GetLeader()
+        if not leader or not leader:IsValid() then
+            return
+        end
+
+        local follower = guard.components.follower
+        local currentleader = follower:GetLeader()
+        if currentleader and not currentleader:HasAllTags(LEADER_MUST_TAGS) then -- TODO: Turn some of this stuff into brain behaviors.
+            return
+        end
+
+        if currentleader ~= leader then
+            follower:SetLeader(leader)
+        end
+        follower.leashmaxdist = 10
+        follower.leashmindist = 5
+
+        if guard:GetDistanceSqToInst(leader) > 40 * 40 then
+            guard.components.combat:SetTarget(nil)
+            return
+        end
+
+        if leader.components.combat then
+            local target = leader.components.combat.target
+            if target and target:IsValid() and guard:GetDistanceSqToInst(leader) <= 20 * 20 then
+                if guard.components.combat.target ~= target then
+                    guard.components.combat:SetTarget(target)
+                end
+            end
+        end
+    end)
+end
+
+local function Stay(hound)
+    if not (hound and hound:IsValid()) then
+        return
+    end
+
+    hound._flare_hidden = true
+    hound:AddTag("NOCLICK")
+    --hound.persists = true
+
+    if hound.components.combat then
+        hound.components.combat:SetTarget(nil)
+    end
+
+    if hound.Physics then
+        hound.Physics:Stop()
+    end
+
+    hound:Hide()
+    hound.entity:SetInLimbo(true)
+end
+
+local function GoodHounds(hound, x, y, z)
+    if not (hound and hound:IsValid()) then
+        return
+    end
+
+    if not hound._flare_hidden then
+        return
+    end
+
+    hound._flare_hidden = nil
+    hound:RemoveTag("NOCLICK")
+    --hound.persists = true
+
+    hound.entity:SetInLimbo(false)
+    hound:Show()
+
+    if x and y and z then
+        hound.Transform:SetPosition(x, y, z)
+    end
+end
+
+local function Replacement(inst)
+    if inst._flare_return_task then
+        inst._flare_return_task:Cancel()
+        inst._flare_return_task = nil
+    end
+
+    if inst._flare_state_task then
+        inst._flare_state_task:Cancel()
+        inst._flare_state_task = nil
+    end
+    
+    inst._flare_returning = nil    
+
+    if inst._flare_glacial and inst._flare_glacial:IsValid() then
+        if inst._flare_glacial.ice_shield and inst._flare_glacial.ice_shield:IsValid() then
+            inst._flare_glacial.ice_shield._silent_remove = true
+            inst._flare_glacial.ice_shield:Remove()
+        end
+
+        if inst._flare_glacial.shield_fx and inst._flare_glacial.shield_fx:IsValid() then
+            inst._flare_glacial.shield_fx:Remove()
+        end
+
+        inst._flare_glacial:Remove()
+    end
+    
+    inst._flare_glacial = nil
+
+    if inst._hidden_hounds then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        for _, hound in ipairs(inst._hidden_hounds) do
+            GoodHounds(hound, x, y, z)
+        end
+    end
+
+    inst._hidden_hounds = nil
+end
+
+local function Offscreen(guard)
+    if not guard then
+        return false
+    end
+
+    if not guard:IsValid() then
+        return true
+    end
+
+    local x, y, z = guard.Transform:GetWorldPosition()
+    local players = FindPlayersInRange(x, y, z, 35)
+
+    return #players == 0
+end
+
+local function PartyCheck(inst)
+    if not (inst and inst.data and inst.data.children) then
+        return false
+    end
+
+    local has_walrus = false
+    local has_little = false
+
+    for ent in pairs(inst.data.children) do
+        if ent:IsValid() then
+            if ent.prefab == "walrus" then
+                has_walrus = true
+            elseif ent.prefab == "little_walrus" then
+                has_little = true
+            end
+        end
+    end
+
+    return not has_walrus and not has_little
+end
+
+local function AllHoundsGoToHeaven(inst)
+    if not (inst and inst:IsValid() and inst._flare_glacial) then
+        return
+    end
+
+    if inst._flare_return_task then
+        return
+    end
+    
+    inst._flare_returning = true    
+
+    inst._flare_return_task = inst:DoPeriodicTask(.5, function()
+        if not inst:IsValid() then
+            return
+        end
+
+        if Offscreen(inst._flare_glacial) then
+            Replacement(inst)
+        end
+    end)
+end
+
+local function HowIsTheHuntGoing(inst)
+    if inst._flare_state_task then
+        inst._flare_state_task:Cancel()
+        inst._flare_state_task = nil
+    end
+
+    inst._flare_state_task = inst:DoPeriodicTask(.5, function()
+        if not inst:IsValid() then
+            return
+        end
+
+        if PartyCheck(inst) then
+            AllHoundsGoToHeaven(inst)
+            return
+        end
+
+        if inst._flare_glacial and not inst._flare_glacial:IsValid() then
+            Replacement(inst)
+            return
+        end
+    end)
+end
+
 local WALRUS_MUST = {"walrus"}
+
 local function OnMegaFlare(inst, data)
-    inst:DoTaskInTime(5 + (math.random() * 20), function()
-        if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x,data.sourcept.y,data.sourcept.z) then
-            
+    inst:DoTaskInTime(5, function()
+        if data.sourcept and TheWorld.Map:IsVisualGroundAtPoint(data.sourcept.x, data.sourcept.y, data.sourcept.z) then
+
             local party_active = nil
             local engaged = nil
             local spawnpoint = nil
 
-            -- ARE THE HUNTERS ENGAGED ALREADY?
             if inst.data.children then
                 for k in pairs(inst.data.children) do
                     if k:IsValid() then
                         party_active = true
 
-                        local x,y,z = k.Transform:GetWorldPosition()
-                        local players = FindPlayersInRange(x,y,z, 35)
+                        local x, y, z = k.Transform:GetWorldPosition()
+                        local players = FindPlayersInRange(x, y, z, 35)
                         if #players > 0 then
                             engaged = true
                         end
 
-                        if k.components.combat.target then
+                        if k.components.combat and k.components.combat.target then
                             engaged = true
                         end
                     end
                 end
             end
-            -- GET A PLAYER NEAR THE BURST
+
             if not engaged and party_active then
                 local players = FindPlayersInRange(data.sourcept.x, data.sourcept.y, data.sourcept.z, 35)
 
-                --find a spot outside player vision of that player 
                 if #players > 0 then
-                    local offset = FindValidPositionByFan(math.random()*TWOPI, 40, 32, function(testoffset)
+                    local offset = FindValidPositionByFan(math.random() * TWOPI, 40, 32, function(testoffset)
                         local newpt = data.sourcept + testoffset
 
                         if TheWorld.Map:IsAboveGroundAtPoint(newpt.x, newpt.y, newpt.z) then
@@ -51,31 +304,165 @@ local function OnMegaFlare(inst, data)
                 end
             end
 
-            --ARE THERE OTHER WALRUS NEARBY ALREADY?
             if spawnpoint then
-                local ents = TheSim:FindEntities(data.sourcept.x,0,data.sourcept.z, 70, WALRUS_MUST)
+                local ents = TheSim:FindEntities(data.sourcept.x, 0, data.sourcept.z, 70, WALRUS_MUST)
                 if #ents > 0 then
                     spawnpoint = nil
                 end
             end
 
-            -- SPAWN THEM IN
             if party_active and spawnpoint and not engaged then
+                Replacement(inst)
+
+                inst._hidden_hounds = {}
+                local spawned_replacement = false
+                local flare_guard = nil
+
                 for k in pairs(inst.data.children) do
-                    local players = FindPlayersInRange(spawnpoint.x,spawnpoint.y,spawnpoint.z, 40)
-                    k.Transform:SetPosition(spawnpoint.x,spawnpoint.y,spawnpoint.z)
-                    k.components.combat:SuggestTarget(players[1])
-                    k:AddTag("flare_summoned")
+                    if k:IsValid() and k:HasTag("hound") then
+                        local x, y, z = k.Transform:GetWorldPosition()
+
+                        table.insert(inst._hidden_hounds, k)
+                        Stay(k)
+
+                        if not spawned_replacement then
+                            local danger = SpawnPrefab("glacialhound")
+                            if danger then
+                                danger.Transform:SetPosition(x, y, z)
+
+                                TheVarglet(danger, inst)
+                                flare_guard = danger
+                                spawned_replacement = true
+                            end
+                        end
+                    end
                 end
+
+                inst._flare_glacial = flare_guard
+
+                for k in pairs(inst.data.children) do
+                    if k:IsValid() and not k._flare_hidden then
+                        k.Transform:SetPosition(spawnpoint.x, spawnpoint.y, spawnpoint.z)
+                        k:AddTag("flare_summoned")
+                    end
+                end
+
+                if inst._flare_glacial and inst._flare_glacial:IsValid() then
+                    inst._flare_glacial.Transform:SetPosition(spawnpoint.x, spawnpoint.y, spawnpoint.z)
+                end
+
+                HowIsTheHuntGoing(inst)
             end
         end
     end)
 end
 
+local function Remember(inst)
+    if inst._flare_glacial and inst._flare_glacial:IsValid() then
+        TheVarglet(inst._flare_glacial, inst)
+    end
+    
+    if inst._hidden_hounds then
+        for _, hound in ipairs(inst._hidden_hounds) do
+            if hound and hound:IsValid() then
+                Stay(hound)
+            end
+        end
+    end
+
+    if inst._flare_returning then
+        AllHoundsGoToHeaven(inst)
+    elseif inst._flare_glacial ~= nil then
+        HowIsTheHuntGoing(inst)
+    end
+end
+
 env.AddPrefabPostInit("walrus_camp", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	
-    inst:ListenForEvent("megaflare_detonated", function(src,data) OnMegaFlare(inst,data) end, TheWorld)	
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    local _OnSave = inst.OnSave
+    inst.OnSave = function(inst, data, ...)
+        local refs = {}
+
+        local oldrefs = _OnSave and _OnSave(inst, data, ...)
+        if oldrefs then
+            for _, v in ipairs(oldrefs) do
+                table.insert(refs, v)
+            end
+        end
+
+        data.um_flare_state = nil
+
+        if (inst._flare_glacial and inst._flare_glacial:IsValid()) or (inst._hidden_hounds and #inst._hidden_hounds > 0) then
+            data.um_flare_state = {
+                returning = inst._flare_return_task ~= nil,
+                flare_glacial = nil,
+                flare_name = nil,                
+                hidden_hounds = {},
+            }
+
+            if inst._flare_glacial and inst._flare_glacial:IsValid() then
+                data.um_flare_state.flare_glacial = inst._flare_glacial.GUID
+                data.um_flare_state.flare_name = inst._flare_glacial._varglet_name                
+                table.insert(refs, inst._flare_glacial.GUID)
+            end
+
+            if inst._hidden_hounds then
+                for _, hound in ipairs(inst._hidden_hounds) do
+                    if hound and hound:IsValid() then
+                        table.insert(data.um_flare_state.hidden_hounds, hound.GUID)
+                        table.insert(refs, hound.GUID)
+                    end
+                end
+            end
+        end
+
+        return #refs > 0 and refs or nil
+    end
+
+    local _OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data, ...)
+        local ret = _OnLoad and _OnLoad(inst, data, ...)
+
+        inst._saved_um_flare_state = data and data.um_flare_state or nil
+
+        return ret
+    end
+
+    local _OnLoadPostPass = inst.OnLoadPostPass
+    inst.OnLoadPostPass = function(inst, newents, data, ...)
+        local ret = _OnLoadPostPass and _OnLoadPostPass(inst, newents, data, ...)
+
+        local flare = inst._saved_um_flare_state
+        inst._saved_um_flare_state = nil
+
+        if flare == nil then
+            return
+        end
+
+        inst._flare_glacial = nil
+        inst._hidden_hounds = {}
+        inst._flare_returning = flare.returning or false
+
+        if flare.flare_glacial and newents[flare.flare_glacial] and newents[flare.flare_glacial].entity then
+            inst._flare_glacial = newents[flare.flare_glacial].entity
+            inst._flare_glacial._varglet_name = flare.flare_name
+        end
+
+        if flare.hidden_hounds then
+            for _, guid in ipairs(flare.hidden_hounds) do
+                if newents[guid] and newents[guid].entity then
+                    table.insert(inst._hidden_hounds, newents[guid].entity)
+                end
+            end
+        end
+
+        Remember(inst)
+        return ret
+    end
+
+    inst:ListenForEvent("megaflare_detonated", function(src, data) OnMegaFlare(inst, data) end, TheWorld)
+    inst:ListenForEvent("onwenthome", function() AllHoundsGoToHeaven(inst) end)
 end)

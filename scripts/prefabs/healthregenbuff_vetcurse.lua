@@ -1,81 +1,51 @@
-local function OnTick(inst, target, data)
-    local duration, maxhp_percent
-    if data ~= nil then
-        duration = data.duration or 1
-        -- sync the buff tick rate with the game's tick rate
-        duration = math.floor(duration / FRAMES) * FRAMES
-        maxhp_percent = type(data.maxhp_percent) == "number" and data.maxhp_percent or 0
-    end
-    --[[local warlybuff = target:HasTag("warlybuffed") and 2 or 1
-	duration = duration / warlybuff]]
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
-        not target:HasTag("playerghost") then
-        if data ~= nil and data.negative_value ~= nil and data.negative_value then
-            if maxhp_percent ~= nil then
-                target.components.health:DeltaPenalty(maxhp_percent)
-            end
-            target.components.health:DoDelta(data ~= nil and -duration or -1, nil, inst.prefab)
-        else
-            if maxhp_percent ~= nil then
-                target.components.health:DeltaPenalty(-maxhp_percent)
-            end
-            target.components.health:DoDelta(data ~= nil and duration or 1, nil, inst.prefab)
+local function GetDuration(duration)
+    -- Sync the buff tick rate with the game's tick rate.
+    return math.floor(duration / FRAMES) * FRAMES
+end
+
+local function IsWarlyBuffed(target)
+    return target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2) or target:HasTag("vetcurse_wormwood") and .6 or target:HasTag("vetcurse") and .8 or 1
+end
+
+local function HealthOnTick(inst, target, data)
+    local duration = GetDuration(data and data.duration or 1)
+    if target.components.health and not target.components.health:IsDead() and not target:HasTag("playerghost") then
+        local delta = duration or 1
+        if data and data.negative_value then
+            delta = -duration or -1
         end
+        target.components.health:DoDelta(delta, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
     end
 end
 
-local function OnAttached(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-	
-	
-    local dohealmaxhealth = data ~= nil and data.max_hp
-    if dohealmaxhealth then
-        local health = (duration * 2) * 10
-        local totalhealth = target.components.health.maxhealth
-        data.maxhp_percent = (health / totalhealth) * 0.1
-    end
-    local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-
-    duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
+local function HealthOnAttached(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
-    inst.task = inst:DoPeriodicTask(data ~= nil and duration or 1, OnTick, nil, target, data)
+    inst.task = inst:DoPeriodicTask(duration or 1, HealthOnTick, nil, target, data)
 
-    local newduration = ((duration * 10) + 0.01)
+    local newduration = ((duration * 10) + .01)
     inst.components.timer:StartTimer("regenover", newduration or 1)
 
-    inst:ListenForEvent("death", function()
-        inst.components.debuff:Stop()
-    end, target)
+    inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
-local function OnTimerDone(inst, data)
-    if data.name == "regenover" then
-        inst.components.debuff:Stop()
-    end
+local function HealthOnTimerDone(inst, data)
+    if data.name == "regenover" then inst.components.debuff:Stop() end
 end
 
-local function OnExtended(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-    --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-    local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-
-    duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
+local function HealthOnExtended(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
     local time_remaining = inst.components.timer:GetTimeLeft("regenover")
-    if time_remaining ~= nil then
-        local oldduration = (duration * 10)
+    if time_remaining then
+        local oldduration = duration * 10
         local newduration = time_remaining + oldduration
-
-        if newduration < oldduration * 4 or data ~= nil and data.negative_value ~= nil and data.negative_value then
+        if newduration < oldduration * 4 or data and data.negative_value then
             local finalduration = time_remaining + oldduration
             inst.components.timer:SetTimeLeft("regenover", finalduration)
         else
@@ -106,76 +76,51 @@ local function fn_health()
     inst:AddTag("CLASSIFIED")
 
     inst:AddComponent("debuff")
-    inst.components.debuff:SetAttachedFn(OnAttached)
+    inst.components.debuff:SetAttachedFn(HealthOnAttached)
     inst.components.debuff:SetDetachedFn(inst.Remove)
-    inst.components.debuff:SetExtendedFn(OnExtended)
+    inst.components.debuff:SetExtendedFn(HealthOnExtended)
     inst.components.debuff.keepondespawn = false
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", OnTimerDone)
+    inst:ListenForEvent("timerdone", HealthOnTimerDone)
 
     return inst
 end
 
-local function OnTick2(inst, target, data)
-    local duration = data ~= nil and data.duration or 1
-
-    --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-    --local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8) or 2) or target:HasTag("vetcurse") and 0.8 or 1
-    --duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
-        target.components.sanity ~= nil and
-        not target:HasTag("playerghost") then
-        target.components.sanity:DoDelta(data ~= nil and duration or 1, nil, inst.prefab)
+local function SanityOnTick(inst, target, data)
+    local duration = GetDuration(data and data.duration or 1)
+    if target.components.health and not target.components.health:IsDead() and target.components.sanity and not target:HasTag("playerghost") then
+        target.components.sanity:DoDelta(duration or 1, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
     end
 end
 
-local function OnAttached2(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration and (data.duration / 2) or 1
+local function SanityOnAttached(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
 
-    --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-    local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-    duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-    
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
-    inst.task = inst:DoPeriodicTask(data ~= nil and duration or 1, OnTick2, nil, target, data)
+    inst.task = inst:DoPeriodicTask(duration or 1, SanityOnTick, nil, target, data)
 
-    local newduration = ((duration * 10) + 0.01)
+    local newduration = ((duration * 10) + .01)
     inst.components.timer:StartTimer("regenover", newduration or 1)
 
-    inst:ListenForEvent("death", function()
-        inst.components.debuff:Stop()
-    end, target)
+    inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
-local function OnTimerDone2(inst, data)
-    if data.name == "regenover" then
-        inst.components.debuff:Stop()
-    end
+local function SanityOnTimerDone(inst, data)
+    if data.name == "regenover" then inst.components.debuff:Stop() end
 end
 
-local function OnExtended2(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-    --local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-    local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-    duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
+local function SanityOnExtended(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
     local time_remaining = inst.components.timer:GetTimeLeft("regenover")
-    if time_remaining ~= nil then
-        local oldduration = (duration * 10)
+    if time_remaining then
+        local oldduration = duration * 10
         local newduration = time_remaining + oldduration
-
         if newduration < oldduration * 4 then
             local finalduration = time_remaining + oldduration
             inst.components.timer:SetTimeLeft("regenover", finalduration)
@@ -207,88 +152,60 @@ local function fn_sanity()
     inst:AddTag("CLASSIFIED")
 
     inst:AddComponent("debuff")
-    inst.components.debuff:SetAttachedFn(OnAttached2)
+    inst.components.debuff:SetAttachedFn(SanityOnAttached)
     inst.components.debuff:SetDetachedFn(inst.Remove)
-    inst.components.debuff:SetExtendedFn(OnExtended2)
+    inst.components.debuff:SetExtendedFn(SanityOnExtended)
     inst.components.debuff.keepondespawn = true
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", OnTimerDone2)
+    inst:ListenForEvent("timerdone", SanityOnTimerDone)
 
     return inst
 end
 
-local function OnTick3(inst, target, data)
-	local duration = data ~= nil and data.duration or 1
-	
-	--local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-	--local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8) or 2) or target:HasTag("vetcurse") and 0.8 or 1
-	--duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
-		target.components.hunger ~= nil and
-        not target:HasTag("playerghost") then
-        target.components.hunger:DoDelta(data ~= nil and duration or 1, nil, inst.prefab)
+local function HungerOnTick(inst, target, data)
+    local duration = GetDuration(data and data.duration or 1)
+    if target.components.health and not target.components.health:IsDead() and target.components.hunger and not target:HasTag("playerghost") then
+        target.components.hunger:DoDelta(duration or 1, nil, inst.prefab)
     else
         inst.components.debuff:Stop()
     end
 end
 
-local function OnAttached3(inst, target, followsymbol, followoffset, data)
-	
-	local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-	
-	--local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-	local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-	
-	duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
+local function HungerOnAttached(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
-    inst.task = inst:DoPeriodicTask(data ~= nil and duration or 1, OnTick3, nil, target, data)
-	
-	local newduration = ((duration * 10) + 0.01)
-	inst.components.timer:StartTimer("regenover", newduration or 1)
-	
-    inst:ListenForEvent("death", function()
-        inst.components.debuff:Stop()
-    end, target)
+    inst.task = inst:DoPeriodicTask(duration or 1, HungerOnTick, nil, target, data)
+
+    local newduration = ((duration * 10) + .01)
+    inst.components.timer:StartTimer("regenover", newduration or 1)
+
+    inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
-local function OnTimerDone3(inst, data)
-    if data.name == "regenover" then
-        inst.components.debuff:Stop()
-    end
+local function HungerOnTimerDone(inst, data)
+    if data.name == "regenover" then inst.components.debuff:Stop() end
 end
 
-local function OnExtended3(inst, target, followsymbol, followoffset, data)
-	local duration = data ~= nil and data.duration and (data.duration / 2) or 1
-	
-	--local warlybuff = target:HasTag("warlybuffed") and 2 or target:HasTag("vetcurse") and 0.5 or 1
-	local warlybuff = (target:HasTag("warlybuffed") and (target:HasTag("vetcurse") and 1.8 or 2)) or target:HasTag("vetcurse_wormwood") and 0.6 or target:HasTag("vetcurse") and 0.8 or 1
-	duration = duration / warlybuff
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
+local function HungerOnExtended(inst, target, followsymbol, followoffset, data)
+    local warlybuff = IsWarlyBuffed(target)
+    local duration = GetDuration((data and data.duration and data.duration / 2 or 1) / warlybuff)
     local time_remaining = inst.components.timer:GetTimeLeft("regenover")
-	if time_remaining ~= nil then
-		local oldduration = (duration * 10)
-		local newduration = time_remaining + oldduration
-			
-		if newduration < oldduration * 4 then
-			local finalduration = time_remaining + oldduration
-			inst.components.timer:SetTimeLeft("regenover", finalduration)
-		else
-			inst.components.timer:SetTimeLeft("regenover", oldduration * 4)
-		end
-	else
-		inst.components.timer:StartTimer("regenover", duration * 10)
-	end
+    if time_remaining then
+        local oldduration = duration * 10
+        local newduration = time_remaining + oldduration
+        if newduration < oldduration * 4 then
+            local finalduration = time_remaining + oldduration
+            inst.components.timer:SetTimeLeft("regenover", finalduration)
+        else
+            inst.components.timer:SetTimeLeft("regenover", oldduration * 4)
+        end
+    else
+        inst.components.timer:StartTimer("regenover", duration * 10)
+    end
 end
 
 local function fn_hunger()
@@ -311,63 +228,49 @@ local function fn_hunger()
     inst:AddTag("CLASSIFIED")
 
     inst:AddComponent("debuff")
-    inst.components.debuff:SetAttachedFn(OnAttached3)
+    inst.components.debuff:SetAttachedFn(HungerOnAttached)
     inst.components.debuff:SetDetachedFn(inst.Remove)
-    inst.components.debuff:SetExtendedFn(OnExtended3)
+    inst.components.debuff:SetExtendedFn(HungerOnExtended)
     inst.components.debuff.keepondespawn = true
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", OnTimerDone3)
+    inst:ListenForEvent("timerdone", HungerOnTimerDone)
 
     return inst
 end
 
-local function OnTick4(inst, target, data)
-	local intensity = data ~= nil and data.intensity or -1
-
-    if target.components.health ~= nil and
-        not target.components.health:IsDead() and
-        target.components.UM_hayfever ~= nil and target.components.UM_hayfever.enabled and
-        not target:HasTag("playerghost") then
+local function HayfeverOnTick(inst, target, data)
+    local intensity = data and data.intensity or -1
+    if target.components.health and not target.components.health:IsDead()
+        and target.components.UM_hayfever and target.components.UM_hayfever.enabled and not target:HasTag("playerghost") then
         target.components.UM_hayfever:DoDelta(intensity)
     else
         inst.components.debuff:Stop()
     end
 end
 
-local function OnAttached4(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration or 1
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
+local function HayfeverOnAttached(inst, target, followsymbol, followoffset, data)
+    local duration = GetDuration(data and data.duration or 1)
 
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
-    inst.task = inst:DoPeriodicTask(1, OnTick4, nil, target, data)
+    inst.task = inst:DoPeriodicTask(1, HayfeverOnTick, nil, target, data)
 
     inst.components.timer:StartTimer("regenover", duration or 1)
 
-    inst:ListenForEvent("death", function()
-        inst.components.debuff:Stop()
-    end, target)
+    inst:ListenForEvent("death", function() inst.components.debuff:Stop() end, target)
 end
 
-
-local function OnTimerDone4(inst, data)
-    if data.name == "regenover" then
-        inst.components.debuff:Stop()
-    end
+local function HayfeverOnTimerDone(inst, data)
+    if data.name == "regenover" then inst.components.debuff:Stop() end
 end
 
-local function OnExtended4(inst, target, followsymbol, followoffset, data)
-    local duration = data ~= nil and data.duration or 1
-    -- sync the buff tick rate with the game's tick rate
-    duration = math.floor(duration / FRAMES) * FRAMES
-
+local function HayfeverOnExtended(inst, target, followsymbol, followoffset, data)
+    local duration = GetDuration(data and data.duration or 1)
     local time_remaining = inst.components.timer:GetTimeLeft("regenover")
-    if time_remaining ~= nil then
+    if time_remaining then
         local oldduration = duration
         local newduration = time_remaining + oldduration
-
         if newduration < oldduration * 4 then
             local finalduration = time_remaining + oldduration
             inst.components.timer:SetTimeLeft("regenover", finalduration)
@@ -399,19 +302,20 @@ local function fn_hayfever()
     inst:AddTag("CLASSIFIED")
 
     inst:AddComponent("debuff")
-    inst.components.debuff:SetAttachedFn(OnAttached4)
+    inst.components.debuff:SetAttachedFn(HayfeverOnAttached)
     inst.components.debuff:SetDetachedFn(inst.Remove)
-    inst.components.debuff:SetExtendedFn(OnExtended4)
+    inst.components.debuff:SetExtendedFn(HayfeverOnExtended)
     inst.components.debuff.keepondespawn = true
 
     inst:AddComponent("timer")
-    inst:ListenForEvent("timerdone", OnTimerDone4)
+    inst:ListenForEvent("timerdone", HayfeverOnTimerDone)
 
     return inst
 end
 
 return Prefab("healthregenbuff_vetcurse", fn_health),
-		Prefab("healthregenbuff_vetcurse_walter_curse", fn_health),
-		Prefab("sanityregenbuff_vetcurse", fn_sanity),
-		Prefab("hungerregenbuff_vetcurse", fn_hunger),
-		Prefab("hayfeverbuff", fn_hayfever)
+    Prefab("healthregenbuff_vetcurse_soul", fn_health),
+    Prefab("healthregenbuff_vetcurse_walter_curse", fn_health),
+    Prefab("sanityregenbuff_vetcurse", fn_sanity),
+    Prefab("hungerregenbuff_vetcurse", fn_hunger),
+    Prefab("hayfeverbuff", fn_hayfever)

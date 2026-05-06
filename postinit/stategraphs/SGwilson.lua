@@ -272,7 +272,7 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldDeathEvent = inst.events["death"].fn
     inst.events["death"].fn = function(inst, data)
         if TUNING.DSTU.MAXHPDEATH then
-            inst.components.health:DeltaPenalty(0.25) -- ALL deaths cause 25% penalty....
+            inst.components.health:DeltaPenalty(.25) -- ALL deaths cause 25% penalty....
         end
         if data ~= nil and data.cause == "shadowvortex" and not inst:HasTag("wereplayer") then
             inst.components.rider:ActualDismount()
@@ -518,13 +518,13 @@ env.AddStategraphPostInit("wilson", function(inst)
     local _OldHeal                                           = inst.actionhandlers[ACTIONS.HEAL].deststate
     inst.actionhandlers[ACTIONS.HEAL].deststate              = function(inst, action, ...)
         local funcap = FindBlueFuncap(inst)
-		
-		-- Drinking/Rubbing new healing items (Not yet...)
-		
-		-- local new_item = action.invobject and action.inveobject.prefab
-		-- if new_item == "um_firecream" then
-			
-		-- end
+        
+        -- Drinking/Rubbing new healing items (Not yet...)
+        
+        -- local new_item = action.invobject and action.inveobject.prefab
+        -- if new_item == "um_firecream" then
+            
+        -- end
         if funcap and funcap.charge > 0 then
             return "bluecap_general_action"
         end
@@ -641,6 +641,10 @@ env.AddStategraphPostInit("wilson", function(inst)
                     and "wingsuit_pre_quick"
                     or "wingsuit_pre"
             end),
+        ActionHandler(ACTIONS.RAT_ORDER,
+            function(inst, action)
+                return "fingerwhistle"
+            end),
         ActionHandler(ACTIONS.CREATE_BURROW,
             function(inst, action)
                 return "dolongaction"
@@ -658,15 +662,6 @@ env.AddStategraphPostInit("wilson", function(inst)
             return "um_gunshooty"
         end)
     }
-
-    local attackactionhandler                      = inst.actionhandlers[ACTIONS.ATTACK]
-    if attackactionhandler then
-        local attackactionhandler_deststate = inst.actionhandlers[ACTIONS.ATTACK].deststate
-        attackactionhandler.deststate = function(inst, action, ...)
-            inst.sg.mem.mockattack = action.mockattack or nil
-            return attackactionhandler_deststate(inst, action, ...)
-        end
-    end
 
     local _OldIdleState = inst.states["idle"].onenter
     inst.states["idle"].onenter = function(inst, pushanim)
@@ -837,16 +832,8 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.sg:SetTimeout(2)
             end,
 
-            events =
-            {
-                EventHandler("mindcontrolled", function(inst)
-                    inst.sg.statemem.mindcontrolled = true
-                    inst.sg:GoToState("mindcontrolled_loop")
-                end),
-            },
-
             ontimeout = function(inst)
-                inst.sg:GoToState("mindcontrolled_pst")
+                inst.sg:GoToState("curse_controlled_pst")
             end,
 
             onexit = function(inst)
@@ -856,6 +843,20 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                     inst.components.inventory:Show()
                 end
+            end,
+        },
+
+        State{
+            name = "curse_controlled_pst",
+            tags = { "busy", "pausepredict", "nomorph", "nodangle" },
+
+            onenter = function(inst)
+                inst.AnimState:PlayAnimation("mindcontrol_pst")
+                inst.sg:SetTimeout(6 * FRAMES)
+            end,
+
+            ontimeout = function(inst)
+                inst.sg:GoToState("idle", true)
             end,
         },
 
@@ -1362,23 +1363,23 @@ env.AddStategraphPostInit("wilson", function(inst)
                     inst.SoundEmitter:PlaySound("dontstarve/common/together/skin_change")
                 end),
                 TimeEvent(41 * FRAMES, function(inst)
-                    if inst.components.inventory ~= nil then
+                    if inst.components.inventory then
                         local hand = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-                        if hand ~= nil then
+                        if hand and not hand:HasTag("nosteal") then
                             inst.components.inventory:DropItem(hand)
                         end
 
                         local body = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-                        if body ~= nil and body._light ~= nil then
+                        if body and body._light and not body:HasTag("nosteal") then
                             inst.components.inventory:DropItem(body)
                         end
 
                         local hat = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
-                        if hat ~= nil and (hat:HasTag("nightvision") or hat._light) then
+                        if hat and (hat:HasTag("nightvision") or hat._light) and not hat:HasTag("nosteal") then
                             inst.components.inventory:DropItem(hat)
                         end
 
-                        if inst.components.sanity ~= nil then
+                        if inst.components.sanity then
                             inst.components.sanity:DoDelta(-15)
                         end
                     end
@@ -2436,43 +2437,51 @@ env.AddStategraphPostInit("wilson", function(inst)
             end,
         },]]
 
-        State {
+        State{
             name = "um_usewaxwelljournal_pre",
-            tags = { "doing", "busy", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "busy", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, repeatcast)
                 inst.components.locomotor:Stop()
                 inst.AnimState:SetDeltaTimeMultiplier(2)
                 inst.AnimState:PlayAnimation("action_uniqueitem_pre")
-                local fxname = "waxwell_book_fx"
-                if inst.components.rider:IsRiding() then
-                    fxname = fxname .. "_mount"
-                end
-                inst.sg.statemem.book_fx = SpawnPrefab(fxname)
+                local suffix = inst.components.rider:IsRiding() and "_mount" or ""
+                inst.sg.statemem.book_fx = SpawnPrefab("waxwell_book_fx"..suffix)
                 inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(2)
                 inst.sg.statemem.book_fx.entity:SetParent(inst.entity)
             end,
 
             events =
             {
-                EventHandler("animover", function(inst) if inst.AnimState:AnimDone() then inst.sg:GoToState("um_usewaxwelljournal", { book_fx = inst.sg.statemem.book_fx }) end end),
+                EventHandler("animover", function(inst)
+                    if inst.AnimState:AnimDone() then
+                        inst.sg.statemem.not_interrupted = true
+                        inst.sg:GoToState("um_usewaxwelljournal", {book_fx = inst.sg.statemem.book_fx})
+                    end
+                end),
             },
 
             onexit = function(inst)
                 inst.AnimState:SetDeltaTimeMultiplier(1)
-                inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(1)
+                if inst.sg.statemem.book_fx and inst.sg.statemem.book_fx:IsValid() then
+                    if not inst.sg.statemem.not_interrupted then
+                        inst.sg.statemem.book_fx:Remove()
+                    else
+                        inst.sg.statemem.book_fx.AnimState:SetDeltaTimeMultiplier(1)
+                    end
+                end
             end,
         },
 
-        State {
+        State{
             name = "um_usewaxwelljournal",
-            tags = { "doing", "nocraftinginterrupt", "nomorph" },
+            tags = {"doing", "nocraftinginterrupt", "nomorph"},
 
             onenter = function(inst, data)
                 inst.AnimState:PlayAnimation("book")
                 if data then inst.sg.statemem.book_fx = data.book_fx end
                 local suffix = inst.components.rider:IsRiding() and "_mount" or ""
-                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx" .. suffix)
+                inst.sg.statemem.fx_shadow = SpawnPrefab("waxwell_shadow_book_fx"..suffix)
                 inst.sg.statemem.fx_shadow.entity:SetParent(inst.entity)
                 inst.AnimState:OverrideSymbol("book_open", "book_maxwell", "book_open")
                 inst.AnimState:OverrideSymbol("book_closed", "book_maxwell", "book_closed")
@@ -2568,17 +2577,6 @@ env.AddStategraphPostInit("wilson", function(inst)
                 end
                 if inst.sg.statemem.fx_shadow and inst.sg.statemem.fx_shadow:IsValid() then
                     inst.sg.statemem.fx_shadow:Remove()
-                end
-                if inst.sg.statemem.fx_over and inst.sg.statemem.fx_over:IsValid() then
-                    inst.sg.statemem.fx_over:Remove()
-                end
-                if inst.sg.statemem.fx_under and inst.sg.statemem.fx_under:IsValid() then
-                    inst.sg.statemem.fx_under:Remove()
-                end
-                if inst.sg.statemem.soundtask then
-                    inst.sg.statemem.soundtask:Cancel()
-                elseif inst.SoundEmitter:PlayingSound("book_layer_sound") then
-                    inst.SoundEmitter:SetVolume("book_layer_sound", .5)
                 end
             end,
         },
@@ -4991,13 +4989,13 @@ env.AddStategraphPostInit("wilson", function(inst)
                     end
                 end),
             },
-			onupdate = function(inst)
-				if inst.tornadopointx then
-					inst:ForceFacePoint(Vector3(inst.tornadopointx,inst.tornadopointy,inst.tornadopointz)) -- allow mouse control while aiming
-				end
-			end,
+            onupdate = function(inst)
+                if inst.tornadopointx then
+                    inst:ForceFacePoint(Vector3(inst.tornadopointx,inst.tornadopointy,inst.tornadopointz)) -- allow mouse control while aiming
+                end
+            end,
         },
-		
+        
         State{
             name = "detonator_remotecast_trigger",
             tags = { "doing", "busy" },
@@ -5121,60 +5119,60 @@ env.AddStategraphPostInit("wilson", function(inst)
                 inst.AnimState:ClearOverrideSymbol("swap_remote")
             end,
         },
-		State{
-			name = "um_drinkpotion", -- inspired by wendy drinking state... make it not be forced into a single swap bank, we can't use that without rebuilding it, let it be generalized.
-			tags = { "doing", "busy" },
+        State{
+            name = "um_drinkpotion", -- inspired by wendy drinking state... make it not be forced into a single swap bank, we can't use that without rebuilding it, let it be generalized.
+            tags = { "doing", "busy" },
 
-			onenter = function(inst)
-				inst.components.locomotor:Stop()
+            onenter = function(inst)
+                inst.components.locomotor:Stop()
 
-				inst.AnimState:PlayAnimation("drink_pre")
-				inst.AnimState:PushAnimation("drink_lag",false)
-				inst.AnimState:PushAnimation("drink",false)
-				
-				inst.SoundEmitter:PlaySound("meta5/wendy/player_drink", "drink")
+                inst.AnimState:PlayAnimation("drink_pre")
+                inst.AnimState:PushAnimation("drink_lag",false)
+                inst.AnimState:PushAnimation("drink",false)
+                
+                inst.SoundEmitter:PlaySound("meta5/wendy/player_drink", "drink")
 
-				inst.sg.statemem.action = inst:GetBufferedAction()
+                inst.sg.statemem.action = inst:GetBufferedAction()
 
-				if inst.sg.statemem.action ~= nil then
-					local invobject = inst.sg.statemem.action.invobject
-					local elixir_type = invobject.elixir_buff_type
+                if inst.sg.statemem.action ~= nil then
+                    local invobject = inst.sg.statemem.action.invobject
+                    local elixir_type = invobject.elixir_buff_type
 
-					inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_".. elixir_type .."_swap")              
-				end
+                    inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_".. elixir_type .."_swap")              
+                end
 
-				inst.sg:SetTimeout(33 * FRAMES)
-			end,
+                inst.sg:SetTimeout(33 * FRAMES)
+            end,
 
-			timeline =
-			{
-				FrameEvent(4, function(inst)
-					inst.sg:RemoveStateTag("busy")
-				end),
-				FrameEvent(18, function(inst)
-					inst:PerformBufferedAction()
-				end),
-			},
+            timeline =
+            {
+                FrameEvent(4, function(inst)
+                    inst.sg:RemoveStateTag("busy")
+                end),
+                FrameEvent(18, function(inst)
+                    inst:PerformBufferedAction()
+                end),
+            },
 
-			events =
-			{
-				EventHandler("actionfailed", function(inst, data)
-					inst.SoundEmitter:KillSound("drink")
-					inst.sg:GoToState("idle", false)
-				end),
-			},
+            events =
+            {
+                EventHandler("actionfailed", function(inst, data)
+                    inst.SoundEmitter:KillSound("drink")
+                    inst.sg:GoToState("idle", false)
+                end),
+            },
 
-			ontimeout = function(inst)
-				inst.sg:GoToState("idle", true)
-			end,
+            ontimeout = function(inst)
+                inst.sg:GoToState("idle", true)
+            end,
 
-			onexit = function(inst)
-				if inst.bufferedaction == inst.sg.statemem.action and
-				(inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
-					inst:ClearBufferedAction()
-				end
-			end,
-		},		
+            onexit = function(inst)
+                if inst.bufferedaction == inst.sg.statemem.action and
+                (inst.components.playercontroller == nil or inst.components.playercontroller.lastheldaction ~= inst.bufferedaction) then
+                    inst:ClearBufferedAction()
+                end
+            end,
+        },        
 
     }
 

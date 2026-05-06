@@ -1,20 +1,35 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
-if TUNING.DSTU.WATHGIRHTR_REWORK ~= 0 then
-	env.AddPrefabPostInit("wathgrithr", function(inst)
-		
-		if not TheWorld.ismastersim then
-			return
-		end
 
+env.AddPrefabPostInit("wathgrithr", function(inst)
+
+	if not TheWorld.ismastersim then
+		return
+	end
+
+	if TUNING.DSTU.WATHGRITHR_REWORK.BATTLEBORN_NERF then
 		if inst.components.battleborn ~= nil then
 			inst.components.battleborn:SetClampMin(0.33 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
 			inst.components.battleborn:SetClampMax(2 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT)
 			inst.components.battleborn:SetBattlebornBonus(0.25 * TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT)
 		end
+	end
 
-		if TUNING.DSTU.WATHGIRHTR_REWORK == 1 then inst:AddComponent("efficientuser") end
+	if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+		if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then inst:AddComponent("efficientuser") end
+	end
+end)
+
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
+	env.AddPrefabPostInit("battlesong_container", function(inst)
+
+		if not TheWorld.ismastersim then
+			return
+		end
+
+		inst:RemoveComponent("burnable")
+		inst:RemoveComponent("propagator")
 	end)
 end
 
@@ -31,7 +46,7 @@ end
 TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_CLAMP_MULT = 0.33 -- This has an effect on small creatures only
 TUNING.DSTU.WATHGRITHR_BASE_BATTLEBORN_BONUS_MULT = 0.66 -- This affects mainly big creatures
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then -- Enabled only
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Enabled only
 TUNING.WATHGRITHR_BASE_INSPIRATION_GAIN_MULT = 1 
 
 --------------------------------------------------------------------------
@@ -44,26 +59,38 @@ TUNING.DSTU.WATHGRITHR_SHADOW_INSPIRATION_DRAIN_MULT = 1 -- How fast it ticks do
 
 TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_CLAMP_MULT = 1.15 -- This has an effect on small creatures only
 TUNING.DSTU.WATHGRITHR_SHADOW_BATTLEBORN_BONUS_MULT = 1.15 -- This affects mainly big creatures
-TUNING.DSTU.WATHGRITHR_SHADOW_HUNGER_MULT = 1.2
-TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT = 1.25 -- 200 * value
-TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION = 1.4 -- 1.4 * 0.25 = 0.35
+--TUNING.DSTU.WATHGRITHR_SHADOW_HUNGER_MULT = 1.2
+--TUNING.DSTU.WATHGRITHR_MAXHEALTH_MULT = 1.25 -- 200 * value
+TUNING.DSTU.WATHGRITHR_SHADOW_ABSORPTION = 0.35 -- Vanilla 0.25
+TUNING.DSTU.WATHGRITHR_SHADOW_DAPPERNESS_MULT = 0.5 --How much sanity shadow items drain. 0-1
+TUNING.DSTU.DREADSTONE_PREFABS = {"armordreadstone", "dreadstonehat"}
 
 --------------------------------------------------------------------------
 -- LUNAR MELODIST
 --------------------------------------------------------------------------
 
-TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT = 1.5
-TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT = 5
-TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT = 0.2
+--TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_GAIN_MULT = 1.5
+--TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_BUFFER_MULT = 5
+--TUNING.DSTU.WATHGRITHR_LUNAR_INSPIRATION_DRAIN_MULT = 0.2
 
-TUNING.DSTU.WATHGRITHR_LUNAR_BATTLEBORN_MULT = 0 -- Currently not in use
+--TUNING.DSTU.WATHGRITHR_LUNAR_BATTLEBORN_MULT = 0 -- Currently not in use
 
 -- Songs
 --TUNING.BATTLESONG_LUNAR_DURABILITY_ARMOR_MULT_SINGER = 0.15
-TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER = 0.9  -- We are multiplying 0.75 by this number
-TUNING.DSTU.BATTLESONG_LUNAR_HEALTHGAIN_MULT_SINGER = 2.5  -- We are multiplying 0.5 by this number 
-TUNING.DSTU.BATTLESONG_LUNAR_SANITYGAIN_MULT_SINGER = 1.25 -- We are multiplying 1 by this number
-TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER = 0.7  -- We are multiplying 0.5 by this number
+--TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MULT_SINGER = 0.9  -- We are multiplying 0.75 by this number
+--TUNING.DSTU.BATTLESONG_LUNAR_HEALTHGAIN_MULT_SINGER = 2.5  -- We are multiplying 0.5 by this number 
+--TUNING.DSTU.BATTLESONG_LUNAR_SANITYGAIN_MULT_SINGER = 1.25 -- We are multiplying 1 by this number
+TUNING.DSTU.BATTLESONG_LUNAR_SANITYAURA_MULT_SINGER = 0.8  -- We are multiplying 0.5 by this number
+
+TUNING.DSTU.BATTLESONG_LUNAR_REGEN_PERIOD = 5 -- Every X Seconds
+TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_HEALTH = 1
+TUNING.DSTU.BATTLESONG_LUNAR_REGEN_AMOUNT_SANITY = 1
+TUNING.DSTU.BATTLESONG_LUNAR_DURABILITY_MOD_ARMOR = 0.85 -- 1 does nothing, 0 armor takes no damage
+
+TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_LUNAR_RESIST = 0.85 -- Vanilla 0.9
+TUNING.DSTU.BATTLESONG_LUNAR_LUNARALIGNED_VS_SHADOW_BONUS = 1.1 -- Vanilla 1.05
+TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_SHADOW_RESIST0 = 0.85 -- Vanilla 0.9
+TUNING.DSTU.BATTLESONG_LUNAR_SHADOWALIGNED_VS_LUNAR_BONUS = 1.1 -- Vanilla 1.05
 end
 
 
@@ -71,14 +98,16 @@ end
 -- EQUIPMENT PERKS
 --------------------------------------------------------------------------
 
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then -- Only with rework enabled
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then -- Only with rework enabled
 	-- Spear
 	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_USES = 2 -- Base cost of lunge
 	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_ONHIT_USES = 0.5 -- Durability lost per mob hit
 	--TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_LUNGE_MAX_HITS = 8 -- After this number of hits it will no longer drain durability
 
-	TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
-	TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
+	if not TUNING.DSTU.WATHGRITHR_REWORK.SPEAR_LUNGE_REPAIR then
+		TUNING.SPEAR_WATHGRITHR_LIGHTNING_USES = 200 ---150 base
+		TUNING.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_USES = 200 -- 200 base
+	end
 	TUNING.DSTU.SPEAR_WATHGRITHR_LIGHTNING_CHARGED_LIGHTNINGREPAIR = 25 -- Uses
 
 	-- Shield

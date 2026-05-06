@@ -17,6 +17,16 @@ local function TrySpawnCocoon(x, z, type)
     if type ~= nil then
         type = string.upper(type)
     end
+    if not type then
+        local is_character = math.random() > .95 --roughly same chance as before.
+        if is_character then
+            type = COCOON_CHARACTERS[math.random(#COCOON_CHARACTERS)]
+        elseif IsIslandWorld() then
+            type = COCOON_CREATURES_SHIPWRECKED[math.random(#COCOON_CREATURES_SHIPWRECKED)]
+        else
+            type = COCOON_CREATURES_DEFAULT[math.random(#COCOON_CREATURES_DEFAULT)]
+        end
+    end
     local xi = x + math.random(-8, 8)
     local zi = z + math.random(-8, 8)
     if #TheSim:FindEntities(xi, 0, zi, 1.5, {"webbedcreature"}) == 0 and
@@ -24,9 +34,11 @@ local function TrySpawnCocoon(x, z, type)
         #TheSim:FindEntities(xi, 0, zi, 8, {"webbedcreature"}) < 6 then
         local cocoon = SpawnPrefab("webbedcreature")
         cocoon.Transform:SetPosition(xi, 0, zi)
-        if type ~= nil then
+        if type ~= nil then -- if cocoon nil, remove
             cocoon.cocoon_creature = type
             cocoon.cocoon_data = COCOON_DEFS.DEFAULT[type]
+		else
+			cocoon:Remove()
         end
     else
         TrySpawnCocoon(x, z, type)
@@ -44,7 +56,8 @@ local function SpawnCocoon(inst)
     TrySpawnCocoon(x, z, "krampus")
     if not IsIslandWorld() then
         TrySpawnCocoon(x, z, "walrus")
-        TrySpawnCocoon(x, z, "grassgator")
+        TrySpawnCocoon(x, z, "leif_sparse")
+		TrySpawnCocoon(x, z, "otter")
     end
 end
 

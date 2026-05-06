@@ -22,9 +22,13 @@ if TUNING.DSTU.WORTOXCHANGES then
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Soul Healing Changes ] ----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------    
+
+    local function ShouldHeal(inst, target)
+        if target.um_should_soul_heal_fn then return target:um_should_soul_heal_fn(inst) end
+        return target.components.health:IsHurt() and not target:HasTag("health_as_oldage") -- Wanda tag. --or (inst.soul_heal_player_efficient and target.components.health.penalty and target.components.health.penalty > 0)
+    end
     
-    local SOULPROTECTOR_TICK_TIME = 0.1
-        
+    local SOULPROTECTOR_TICK_TIME = .1
     local function UncompromisingSoulHeal(inst)
         local healtargets = {}
         local healtargetscount = 0
@@ -34,11 +38,10 @@ if TUNING.DSTU.WORTOXCHANGES then
         local rangesq = TUNING.WORTOX_SOULHEAL_RANGE + (inst.soul_heal_range_modifier or 0)
         rangesq = rangesq * rangesq
         for i, v in ipairs(GLOBAL.AllPlayers) do
-            if not (v.components.health:IsDead() or v:HasTag("playerghost")) and
-                v.entity:IsVisible() and
-                v:GetDistanceSqToPoint(x, y, z) < rangesq then
+            if not (v.components.health:IsDead() or v:HasTag("playerghost"))
+                and v.entity:IsVisible() and v:GetDistanceSqToPoint(x, y, z) < rangesq then
                 -- NOTES(JBK): If the target is hurt put them on the list to do heals.
-                if v.components.health:IsHurt() and not v:HasTag("health_as_oldage") or (inst.soul_heal_player_efficient and v.components.health.penalty and v.components.health.penalty > 0) then -- Wanda tag.
+                if ShouldHeal(inst, v) then
                     table.insert(healtargets, v)
                     healtargetscount = healtargetscount + 1
                 end
@@ -56,20 +59,19 @@ if TUNING.DSTU.WORTOXCHANGES then
                 loss_per_player = loss_per_player * TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_4_LOSS_PER_PLAYER_MULT
             end
             local amt = math.max(TUNING.WORTOX_SOULHEAL_MINIMUM_HEAL, (TUNING.HEALING_MED * (inst.soul_heal_premult or 1) - loss_per_player * (healtargetscount - 1)) * (inst.soul_heal_mult or 1))
-            local amt_naughty = amt * 0.5
+            local amt_naughty = amt * .5
             local cooldowntime = inst.um_soul_echo_cooldown_time
 
             for i = 1, healtargetscount do
                 local v = healtargets[i]
                 local adjusted_amt = v.wortox_inclination == "naughty" and amt_naughty or amt
                 
-                adjusted_amt = adjusted_amt/2
+                adjusted_amt = adjusted_amt / 2
                 
                 if inst.soul_doburst then -- Soul bastion 1 allows you to bypass SHOT
                     v.components.health:DoDelta(adjusted_amt, nil, inst.prefab)
                 else
-                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse",
-                            { duration = (adjusted_amt * 0.1) })
+                    v.components.debuffable:AddDebuff("healthregenbuff_vetcurse_soul", "healthregenbuff_vetcurse_soul", {duration = (adjusted_amt * .1)})
                 end        
                 if cooldowntime and not v:HasDebuff("wortox_soulecho_buff") then -- Soul Bastion 2 applies Lifted Spirits I buff for others.
                     v:AddDebuff("wortox_soulecho_buff", "wortox_soulecho_buff", {duration = cooldowntime})
@@ -84,7 +86,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
         if sanitytargetscount > 0 then
             -- Sanity adjustments are relative to who sees it.
-            local amt = TUNING.SANITY_TINY * 0.5
+            local amt = TUNING.SANITY_TINY * .5
             local amt_nice = amt * TUNING.SKILLS.WORTOX.NICE_SANITY_MULT
             local amt_naughty = amt * TUNING.SKILLS.WORTOX.NAUGHTY_SANITY_MULT
             for i = 1, sanitytargetscount do
@@ -126,7 +128,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                 if skilltreeupdater:IsActivated("wortox_soulprotector_1") then
                     inst.soul_heal_range_modifier = (inst.soul_heal_range_modifier or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_RANGE
                     inst.soul_follow_speed = (inst.soul_follow_speed or 0) + TUNING.SKILLS.WORTOX.WORTOX_SOULPROTECTOR_2_SPEED
-                    inst.soulprotector_task = inst:DoPeriodicTask(SOULPROTECTOR_TICK_TIME, inst.SoulProtectorTick, 0.3)
+                    inst.soulprotector_task = inst:DoPeriodicTask(SOULPROTECTOR_TICK_TIME, inst.SoulProtectorTick, .3)
                 end
                 if skilltreeupdater:IsActivated("wortox_soulprotector_3") then
                     inst.soul_doburst = true
@@ -163,8 +165,8 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
         
         local function OnConsume(inst, owner)
-            if inst.components.perishable and inst.components.perishable:GetPercent() > 0.5 then
-                inst.components.perishable:SetPercent(inst.components.perishable:GetPercent()-0.5) -- take 1/2 freshhness
+            if inst.components.perishable and inst.components.perishable:GetPercent() > .5 then
+                inst.components.perishable:SetPercent(inst.components.perishable:GetPercent()-.5) -- take 1/2 freshhness
             else    
                 inst:Remove()
             end
@@ -274,7 +276,7 @@ if TUNING.DSTU.WORTOXCHANGES then
     -- [ Soul Pierce Changes ] -----------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------        
 
-    local SOUL_SPEAR_TICK_TIME = 0.1
+    local SOUL_SPEAR_TICK_TIME = .1
     local COMBAT_MUSTHAVE_TAGS = { "_combat", "_health" }
     local COMBAT_CANTHAVE_TAGS = { "INLIMBO", "soul", "noauradamage", "companion" }
     local function SoulSpearTick(inst, owner)
@@ -300,7 +302,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
 
         local hitsomething = false
-        local r = inst:GetPhysicsRadius(0) + 0.5 -- Extra padding for visual ambiguity.
+        local r = inst:GetPhysicsRadius(0) + .5 -- Extra padding for visual ambiguity.
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, GLOBAL.MAX_PHYSICS_RADIUS, COMBAT_MUSTHAVE_TAGS, COMBAT_CANTHAVE_TAGS)
         for _, ent in ipairs(ents) do
@@ -407,7 +409,7 @@ if TUNING.DSTU.WORTOXCHANGES then
 
         soul.Transform:SetPosition(x,0,z)
         
-        soul.soul_spear_task = soul:DoPeriodicTask(0.1, soul.SoulSpearTick, 0, inst)
+        soul.soul_spear_task = soul:DoPeriodicTask(.1, soul.SoulSpearTick, 0, inst)
         soul:Setup(inst)
         local speed = TUNING.WORTOX_SOUL_PROJECTILE_SPEED
         soul.components.projectile:SetSpeed(-speed)
@@ -488,7 +490,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                         shadow:Remove()
                     end
                 end
-                return 0.05
+                return .05
             else
                 return 0
             end
@@ -497,8 +499,6 @@ if TUNING.DSTU.WORTOXCHANGES then
     end
     
     local function SpawnWovenShadow(inst, upgrade_performer, obj)
-        
-        
         if inst.components.stackable then
             inst.components.stackable:Get(1):Remove()
             inst:RemoveComponent("upgradeable") -- reset the component, it sometimes loses the ability to be used when you take from stack
@@ -508,31 +508,31 @@ if TUNING.DSTU.WORTOXCHANGES then
         else
             inst:Remove()
         end
-        
+
         local rnd = math.random()
-        
+
         local crechure = "stalker_minion"
         local skilltreeupdater = upgrade_performer.components.skilltreeupdater
         local mod = CheckToRemoveFollower(upgrade_performer)
-        
+
         rnd = rnd - mod
         if (inst.prefab == "horrorfuel") then
             if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-                if rnd < 0.05 then -- If Pure Horro then crawlingnightmare, nightmarebeak, ruinsnightmare, shadowthrall_mouth (rictus)
+                if rnd < .05 then -- If Pure Horror then crawlingnightmare, nightmarebeak, ruinsnightmare, shadowthrall_mouth (rictus)
                     crechure = "shadowthrall_mouth"
-                elseif rnd < 0.2 then
+                elseif rnd < .2 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.6 then
+                elseif rnd < .6 then
                     crechure = "nightmarebeak"
                 else
                     crechure = "crawlingnightmare"
                 end
             else
-                if rnd < 0.025 then
+                if rnd < .025 then
                     crechure = "shadowthrall_mouth"
-                elseif rnd < 0.15 then
+                elseif rnd < .15 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.4 then
+                elseif rnd < .4 then
                     crechure = "nightmarebeak"
                 else
                     crechure = "crawlingnightmare"
@@ -540,19 +540,19 @@ if TUNING.DSTU.WORTOXCHANGES then
             end        
         else
             if skilltreeupdater and skilltreeupdater:IsActivated("wortox_allegiance_shadow") then -- 2x likelyhood for second shadow skill
-                if rnd < 0.02 then -- If Nightmarefuel then woven shadow, crawling nightmare, nightmarebeak, lurking nightmare
+                if rnd < .02 then -- If Nightmarefuel then woven shadow, crawling nightmare, nightmarebeak, lurking nightmare
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.12 then
+                elseif rnd < .12 then
                     crechure = "nightmarebeak"
-                elseif rnd < 0.4 then
+                elseif rnd < .4 then
                     crechure = "crawlingnightmare"
                 end
             else
-                if rnd < 0.01 then
+                if rnd < .01 then
                     crechure = "ruinsnightmare"
-                elseif rnd < 0.06 then
+                elseif rnd < .06 then
                     crechure = "nightmarebeak"
-                elseif rnd < 0.2 then
+                elseif rnd < .2 then
                     crechure = "crawlingnightmare"
                 end
             end
@@ -570,8 +570,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             
         local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
         despawn.Transform:SetPosition(x, y, z)
-    
-        
+
         shadow:AddComponent("follower")
         upgrade_performer.components.leader:AddFollower(shadow)
         
@@ -781,9 +780,9 @@ if TUNING.DSTU.WORTOXCHANGES then
                     local souls_clamped = math.min(souls, souls_max)
                     if souls_clamped == souls_max then -- NOTES(JBK): This is done like this to keep floating point precision out of the equation.
                         vfx_level = 3
-                    elseif souls_clamped >= souls_max * 0.50 then
+                    elseif souls_clamped >= souls_max * .50 then
                         vfx_level = 2
-                    elseif souls_clamped >= souls_max * 0.25 then
+                    elseif souls_clamped >= souls_max * .25 then
                         vfx_level = 1
                     end
                     local damage_percent = souls_clamped / souls_max
@@ -817,8 +816,9 @@ if TUNING.DSTU.WORTOXCHANGES then
     -- [ Lunar I Stuff ] --=--------------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------
     local function DeleteBackItem(inst)
-        if inst._item ~= nil then
+        if inst._item and inst._item:IsValid() then
             inst._item:Remove()
+            inst._item = nil
         end
         inst.components.inventory:DropEverything()
     end
@@ -840,7 +840,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             inst._item = nil
             inst.components.inventory:DropEverything()
             inst.components.trader.enabled = true
-            inst.AnimState:SetMultColour(1,1,1,0.6)
+            inst.AnimState:SetMultColour(1,1,1,.6)
         end
         inst._item.AnimState:SetHaunted(true)        
     end
@@ -853,15 +853,15 @@ if TUNING.DSTU.WORTOXCHANGES then
     
     local function Floattask(inst)
         local x,y,z = inst.Transform:GetWorldPosition()
-        inst.Transform:SetPosition(x,y+0.5/FRAMES,z)    
+        inst.Transform:SetPosition(x,y+.5/FRAMES,z)    
     end
     
     local function GestaltGotItem(inst, giver, item, count, name)
         inst.components.trader.enabled = false
         local item = string.lower(item.prefab) ~= nil and string.lower(item.prefab) or name ~= nil and name
-        
+
         inst._item = GLOBAL.SpawnPrefab(item)
-        if inst._item ~= nil then
+        if inst._item then
             inst._item.Transform:SetPosition(inst.Transform:GetWorldPosition())
             inst._item.components.inventoryitem.canbepickedup = false
             inst.components.locomotor:Stop()
@@ -882,12 +882,14 @@ if TUNING.DSTU.WORTOXCHANGES then
             inst:DoTaskInTime(0,function(inst)
                 inst.AnimState:PlayAnimation("infest")
                 inst:ListenForEvent("animover",StartBrain)
-                
             end)
-                
         end        
     end
-    
+
+    local function GestaltAcceptTest(inst, item, giver)
+        return not item:HasTag("irreplaceable") and giver == inst.wortox
+    end
+
     local function SpawnGestalt(inst, upgrade_performer, obj,time_left,inventory)
         if inst and inst.components.stackable then
             inst.components.stackable:Get(1):Remove()
@@ -906,39 +908,36 @@ if TUNING.DSTU.WORTOXCHANGES then
 
         GLOBAL.MakeFlyingCharacterPhysics(gestalt, 1, .5)
         gestalt:AddTag("flying")
-        
+
         local x,y,z = upgrade_performer.Transform:GetWorldPosition()
         local offset = GLOBAL.FindWalkableOffset(upgrade_performer:GetPosition(),math.random() * 2 * GLOBAL.PI, 4, 5)
         if offset then -- So it doesn't crash if the player is godmode on the ocean and tries to weave a gestalt
             x = x + offset.x
             z = z + offset.z
         end
-        gestalt.Transform:SetPosition(x,y,z)
-        gestalt.Transform:SetScale(0.75,0.75,0.75)
-        --local despawn = GLOBAL.SpawnPrefab("shadow_despawn")
-        --despawn.Transform:SetPosition(x, y, z)
     
-        
+        gestalt.Transform:SetPosition(x,y,z)
+        gestalt.Transform:SetScale(.75, .75, .75)
+
         gestalt:AddComponent("follower")
         upgrade_performer.components.leader:AddFollower(gestalt)
-        
-        gestalt:AddComponent("timer")
-        
+
+        local timer = gestalt.components.timer or gestalt:AddComponent("timer")
+
         if (inst.prefab == "purebrilliance") then
-            time_left = 60*8*8
+            time_left = 60 * 8 * 8
         end
-        gestalt.components.timer:StartTimer("despawn",time_left ~= nil and time_left or 60*8*2)
+
+        timer:StartTimer("despawn",time_left ~= nil and time_left or 60 * 8 * 2)
         gestalt:ListenForEvent("timerdone",function(gestalt)
             DeleteBackItem(gestalt)
             gestalt:Remove()    
-        
         end)
 
-        --shadow.persists = false
         local fx = GLOBAL.SpawnPrefab("wortox_soulecho_buff_fx")
         gestalt.bufffx = fx
         fx.entity:SetParent(gestalt.entity)
-        fx.Transform:SetScale(2,2,2)
+        fx.Transform:SetScale(2, 2, 2)
         gestalt:ListenForEvent("onremoved",function(gestalt)
             if gestalt.bufffx and gestalt.bufffx:IsValid() then
                 gestalt.bufffx:Remove()
@@ -957,7 +956,8 @@ if TUNING.DSTU.WORTOXCHANGES then
             end
         end
         gestalt.components.trader.enabled = true
-        gestalt.components.trader.test = function(inst, item, giver, count) return giver == gestalt.wortox end
+        gestalt.components.trader:SetAcceptTest(GestaltAcceptTest)
+        gestalt.components.trader.acceptnontradable = true
         gestalt.components.trader.onaccept = GestaltGotItem
         gestalt.components.trader:SetAcceptStacks()
         gestalt.components.trader.deleteitemonaccept = false
@@ -1045,7 +1045,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                 onenter = function(inst)
                     inst.Physics:Stop()
                     inst.AnimState:PlayAnimation("idle", true)
-                    inst:DoTaskInTime(0.25,function(inst) 
+                    inst:DoTaskInTime(.25,function(inst) 
                         inst:PerformBufferedAction()
                         inst:DoTaskInTime(0,function(inst) 
                             if inst:GetBufferedAction() then
@@ -1065,20 +1065,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         --inst.states["idle"].onexit = function(inst) inst:ClearBufferedAction() end -- can sometimes get stuck in the idle animation (no way to clear the buffered action for picking)
     end)
     AddStategraphActionHandler("lunarthrall_plant_gestalt", GLOBAL.ActionHandler(GLOBAL.ACTIONS.PICKUP, "steal"))
-    
-    --------------------------------------------------------------------------------------------------------------------------------
-    -- [ Make all inventoryitems tradeable, what could possibly go wrong? ] --=-----------------------------------------------------
-    --------------------------------------------------------------------------------------------------------------------------------
-    
-    AddPrefabPostInitAny(function(inst)
-        if not GLOBAL.TheWorld.ismastersim then
-            return
-        end
-        if inst.components.tradable == nil and inst.components.inventoryitem and not inst:HasTag("irreplaceable") then
-            inst:AddComponent("tradable")
-        end
-    end)    
-    
+
     --------------------------------------------------------------------------------------------------------------------------------
     -- [ Lunar II Stuff ] --=-------------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------------------
@@ -1135,7 +1122,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             -- FX
             local fx = GLOBAL.SpawnPrefab("abigail_gestalt_hit_fx")
             fx.Transform:SetPosition(target.Transform:GetWorldPosition())
-            fx.Transform:SetScale(0.75,0.75,0.75)        
+            fx.Transform:SetScale(.75,.75,.75)        
             
             local item
             local count
@@ -1242,7 +1229,7 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
 
-	local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
+    local NOT_LUNARTARGET_TAGS = {"structure", "wall"}
     local function DoLunarAttack(inst, owner, target)
         if owner ~= nil and (owner.components.health == nil or not owner.components.health:IsDead()) then
             if target and target ~= owner and target:IsValid() and (target.components.health == nil or not target.components.health:IsDead() and not target:HasAnyTag(NOT_LUNARTARGET_TAGS)) then
@@ -1257,11 +1244,11 @@ if TUNING.DSTU.WORTOXCHANGES then
     end
 
     local function WortoxLunarStuff(inst)
-		local weapon = inst.components.weapon
+        local weapon = inst.components.weapon
         if weapon then
             local _OnAttack = weapon.onattack
             local function OnAttack(inst, attacker, target, ...)
-                local ret = _OnAttack(inst, attacker, target, ...)
+                local ret = _OnAttack and _OnAttack(inst, attacker, target, ...) or nil
                 if attacker.components.skilltreeupdater and attacker.components.skilltreeupdater:IsActivated("wortox_allegiance_lunar") then
                     if attacker.finishportalhoptask and attacker:TryToPortalHop(1, false) then
                         DoLunarAttack(inst, attacker, target)
@@ -1273,12 +1260,10 @@ if TUNING.DSTU.WORTOXCHANGES then
         end
     end
 
-    local moon_weapons = {"glasscutter","moonglassaxe","sword_lunarplant"}
+    local moon_weapons = {"glasscutter", "moonglassaxe", "sword_lunarplant", "pickaxe_lunarplant"}
     for i, v in ipairs(moon_weapons) do
         AddPrefabPostInit(v, function(inst)
-            if not GLOBAL.TheWorld.ismastersim then
-                return
-            end
+            if not GLOBAL.TheWorld.ismastersim then return end
 
             WortoxLunarStuff(inst)
 
@@ -1345,7 +1330,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                     -- if k.components.health then
                         -- k.components.health:SetInvincible(true)
                     -- end
-                    -- k:DoTaskInTime(math.random()*0.2, function(k)
+                    -- k:DoTaskInTime(math.random()*.2, function(k)
                         -- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
                         -- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
                         -- if not k.components.colourtweener then
@@ -1372,7 +1357,7 @@ if TUNING.DSTU.WORTOXCHANGES then
                         -- if k.components.health then
                             -- k.components.health:SetInvincible(true)
                         -- end
-                        -- k:DoTaskInTime(math.random()*0.2, function(k)
+                        -- k:DoTaskInTime(math.random()*.2, function(k)
                             -- local fx = GLOBAL.SpawnPrefab("spawn_fx_medium")
                             -- fx.Transform:SetPosition(k.Transform:GetWorldPosition())
                             -- if not k.components.colourtweener then
@@ -1396,7 +1381,7 @@ if TUNING.DSTU.WORTOXCHANGES then
             -- if data and data.follower_table then
                 -- for k, v in pairs(data.follower_table) do
                     -- print("loading shadow")
-                    -- inst:DoTaskInTime(0.1, function(inst)
+                    -- inst:DoTaskInTime(.1, function(inst)
                         -- local follower = GLOBAL.SpawnSaveRecord(v)
                         -- inst.components.leader:AddFollower(follower)
                         -- follower:DoTaskInTime(0, function(follower)

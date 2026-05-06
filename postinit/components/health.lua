@@ -2,7 +2,7 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 
 local function HasSkill(inst,name)
-	return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
+    return inst.components.skilltreeupdater and inst.components.skilltreeupdater:IsActivated(name)
 end
 
 local function DoSleep(inst, revived)
@@ -47,7 +47,7 @@ local function TriggerPocketResurrection(self, item)
         end
     end
 
-    if item.prefab == "amulet" then
+    if item.prefab == "amulet" then    
         FindSleepable(self.inst)
         if self.inst.components.grogginess then
             self.inst.components.grogginess:ResetGrogginess()
@@ -85,7 +85,16 @@ local function TriggerPocketResurrection(self, item)
         local linkeditem = item.components.linkeditem
         local owner = linkeditem and linkeditem:GetOwnerInst() or nil
         if owner and owner.components.skilltreeupdater and owner.components.skilltreeupdater:IsActivated("wortox_lifebringer_2") then
-            item.components.spellcaster.spell(item, nil, nil, owner)
+            linkeditem.owner_inst = self.inst
+            self.inst.um_blockgotostate = true -- Blocking the heart's GoToState here to avoid state cancelling issues.
+            item.components.spellcaster.spell(item, nil, nil, self.inst)
+            if item:IsValid() then -- Blocking it also means we have to break the heart here.
+                if item.components.perishable then item.components.perishable:StartPerishing() end
+                if item.OnStopBody then item:OnStopBody(self.inst) end
+                if item.OnConsume then item:OnConsume(self.inst) end
+            end
+            self.inst.um_blockgotostate = nil
+            linkeditem.owner_inst = owner
         end
         self.inst.components.health:DeltaPenalty(.25)
     end
@@ -102,6 +111,7 @@ local function TriggerPocketResurrection(self, item)
         self.inst.AnimState:SetBuild("wathom")
     end
 
+    self.inst:PushEvent("PocketResurrection")
     self:SetInvincible(true)
     self.inst:DoTaskInTime(.2, function(inst) 
         if inst.components.health then 
@@ -119,6 +129,12 @@ local function HasPocketResurrection(self)
             local bodyslot = inventory:GetEquippedItem(EQUIPSLOTS.BODY)
             item = bodyslot ~= nil and (bodyslot.prefab == "amulet" or bodyslot:HasTag("resurrector")) and bodyslot
                 or inventory:FindItem(function(item) return item.prefab == "wortox_reviver" end)
+            
+            item = bodyslot ~= nil and (bodyslot.prefab == "um_backpack_amuletuse" and bodyslot.components.container and 
+                bodyslot.components.container:GetItemInSlot(9) and bodyslot.components.container:GetItemInSlot(9).prefab == "amulet"
+                and bodyslot.components.container:GetItemInSlot(9)) or item 
+                -- AXE If wearing the amusement pack, see if the amulet is in there... if it is... then swap the item of 
+                -- interest.
         end
         if self.inst.components.timer and not self.inst.components.timer:TimerExists("shadowwathomcooldown") then
             if item then
@@ -152,6 +168,7 @@ local function TriggerRose(self)
     self.inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
     self:DeltaPenalty(.25)
     self:SetPercent(.5)
+    self.inst:PushEvent("PocketResurrection")
 
     for i = 0, 3 do
         self.inst:DoTaskInTime(math.random(), function(inst)
@@ -198,26 +215,25 @@ local function StopDeathStuffHere(self, amount, cause, afflicter, ...)
     return false
 end
 
-
 env.AddComponentPostInit("health", function(self)
     local _SetVal = self.SetVal
     function self:SetVal(val, cause, afflicter, ...)
         if StopDeathStuffHere(self, val, cause, afflicter, ...) then
             return
         end
-        return  _SetVal(self, val, cause, afflicter, ...)
+        return _SetVal(self, val, cause, afflicter, ...)
     end
-	
-	if TUNING.DSTU.ONEHP == true then-- All this code is here
-	    TUNING.WX78_MAXHEALTH_BOOST = 0
-		TUNING.WX78_MAXHEALTH2_MULT = 0
-		local _SetMaxHealth = self.SetMaxHealth
-		function self:SetMaxHealth(amount)
-			if self.inst:HasTag("player") then
-				return _SetMaxHealth(self, 1)
-			else
-				return _SetMaxHealth(self, amount)
-			end
-		end	
-	end
+    
+    if TUNING.DSTU.ONEHP == true then-- All this code is here
+        TUNING.WX78_MAXHEALTH_BOOST = 0
+        TUNING.WX78_MAXHEALTH2_MULT = 0
+        local _SetMaxHealth = self.SetMaxHealth
+        function self:SetMaxHealth(amount)
+            if self.inst:HasTag("player") then
+                return _SetMaxHealth(self, 1)
+            else
+                return _SetMaxHealth(self, amount)
+            end
+        end    
+    end
 end)

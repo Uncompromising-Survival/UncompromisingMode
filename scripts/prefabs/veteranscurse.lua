@@ -2,6 +2,8 @@
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
+local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom"}
+
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat
     local _GetAttacked = self.GetAttacked
@@ -10,7 +12,7 @@ local function ForceToTakeMoreDamage(inst)
     end
     self.GetAttacked = function(self, attacker, damage, weapon, stimuli, ...)
         if attacker and damage then
-            if not inst:HasAnyTag("mime", "pinetreepioneer", "plantkin") then
+            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra damage
                 damage = damage * (1 + ((inst.um_deathcount + 1) / 10))
             end
@@ -27,7 +29,7 @@ local function ForceToTakeMoreHunger(inst)
     end
     self.DoDelta = function(self, delta, overtime, ignore_invincible)
         if delta and overtime and delta < 0 then
-            if not inst:HasAnyTag("mime", "pinetreepioneer", "plantkin") then
+            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra hunger
                 delta = delta * (1 + ((inst.um_deathcount + 1) / 10))
             end
@@ -44,7 +46,7 @@ local function ForceToTakeMoreTime(inst)
     end
     self.OnTakeDamage = function(self, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb)
         if amount and overtime and amount < 0 then
-            if not inst:HasAnyTag("mime", "pinetreepioneer", "plantkin") then
+            if not inst:HasAnyTag(TARGET_MUST_TAGS) then
                 -- Take extra time
                 amount = amount * (1 + ((inst.um_deathcount + 1) / 10))
             end
@@ -126,7 +128,7 @@ local function oneat(inst, data)
     sanity_delta = sanity_delta + foodaffinitysanitybuff]]
 
     if health_delta > 3 and not (inst:HasTag("ignores_foodregen") or inst:HasTag("ignores_healthregen")) then
-        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1), max_hp = maxhp_heal})
+        inst.components.debuffable:AddDebuff("healthregenbuff_vetcurse_" .. data.food.prefab, "healthregenbuff_vetcurse", {duration = (health_delta * 0.1)})
     else
         inst.components.health:DoDelta(health_delta, nil, data.food.prefab)
     end

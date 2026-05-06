@@ -3,6 +3,8 @@ require "behaviours/runaway"
 require "behaviours/doaction"
 require "behaviours/panic"
 
+local BrainCommon = require("brains/braincommon")
+
 local SEE_PLAYER_DIST = 8
 local SEE_FOOD_DIST = 20
 
@@ -319,7 +321,7 @@ local FARMPLANT_NOTAGS = {"farm_plant_killjoy"}
 
 local function ShouldTargetPlant(inst, plant)
     local target = FindEntity(inst, SEE_DIST, function(plant)
-        if (plant.components.growable == nil or plant.components.growable:GetCurrentStageData().tendable) and plant.components.workable then
+        if (plant.components.growable == nil or plant.components.growable:GetCurrentStageData().tendable) and plant.components.workable and not inst:HasTag("winky_rat") then
             return plant.components.farmplantstress
                 and not GetClosestInstWithTag("scarytoprey", plant, TOOCLOSE) -- ~= nil
         end
@@ -328,7 +330,51 @@ local function ShouldTargetPlant(inst, plant)
     return target ~= nil and BufferedAction(inst, target, ACTIONS.DIG) or nil
 end
 
+local function closetoleader(inst)
+    if inst.sg:HasStateTag("busy") then
+        return nil
+    end
+    local leader = inst.components.follower and inst.components.follower.leader or nil
+    if leader and leader:GetDistanceSqToInst(inst) < TUNING.POLLY_ROGERS_RANGE * TUNING.POLLY_ROGERS_RANGE then
+        return true
+    end
+end
+
+local function IsItemNono(inst, item)
+    return not item:HasAnyTag("animal", "small_livestock", "trap")
+end
+
+local function PickUpFilter(inst, target, leader)
+    return IsItemNono(leader, target)
+end
+
+local function LeaderHasWorkToggleOn(inst)
+    local leader = GetLeader(inst)
+    if not leader then return false end
+    local toggle = leader.readytogather
+    return toggle and toggle:value()
+end
+
 function Uncompromising_RatBrain:OnStart()
+    --[[local leader = GetLeader(self.inst)
+    local ignorethese = nil
+    if leader then
+        ignorethese = leader._brain_pickup_ignorethese or {}
+        leader._brain_pickup_ignorethese = ignorethese
+    end]]
+    local function ShouldPickup() return LeaderHasWorkToggleOn(self.inst) end
+    local function ShouldDeliver()
+        local leader = GetLeader(self.inst)
+        return leader and leader:HasTag("ratwhisperer")
+    end
+    local pickupparams = {
+        cond = ShouldPickup,
+        range = TUNING.POLLY_ROGERS_RANGE,
+        furthestfirst = false,
+        custom_pickup_filter = PickUpFilter,
+        --ignorethese = ignorethese,
+        give_cond = ShouldDeliver,
+    }
     local neutralbehaviour = PriorityNode({
         WhileNode(function() return not self.inst.sg:HasStateTag("jumping") and self.inst.prefab ~= "uncompromising_caverat" end, "NotJumpingBehaviour",
             PriorityNode({
@@ -349,13 +395,15 @@ function Uncompromising_RatBrain:OnStart()
     local root = PriorityNode({
         WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "NotJumpingBehaviour",
             PriorityNode({
-                WhileNode(function() return self.inst.components.hauntable and self.inst.components.hauntable.panic end, "PanicHaunted", Panic(self.inst)),
-                WhileNode(function() return self.inst.components.health.takingfiredamage or self.inst.components.burnable:IsBurning() end, "OnFire", Panic(self.inst)),
+                BrainCommon.PanicWhenScared(self.inst, .3),
+                BrainCommon.PanicTrigger(self.inst),
+                BrainCommon.ElectricFencePanicTrigger(self.inst),
                 WhileNode(function() return not self.inst:HasTag("packrat") and (self.inst.components.combat.target == nil or not self.inst.components.combat:InCooldown()) end, "AttackMomentarily",
                     ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
-                RunAway(self.inst, "ghost", 8, 12),
+                --RunAway(self.inst, "ghost", 8, 12),
                 RunAway(self.inst, { tags = { "scarytoprey" }, notags = { "ratwhisperer" } }, AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
                 --RunAway(self.inst, "scarytoprey", AVOID_PLAYER_DIST, AVOID_PLAYER_STOP),
+                WhileNode(function() return closetoleader(self.inst) end, "Stayclose", BrainCommon.NodeAssistLeaderPickUps(self, pickupparams)),
                 Follow(self.inst, GetLeader, MIN_FOLLOW_LEADER, TARGET_FOLLOW_LEADER, MAX_FOLLOW_LEADER),
                 FaceEntity(self.inst, GetLeader, GetLeader),
                 MinPeriod(self.inst, 2, true, neutralbehaviour),

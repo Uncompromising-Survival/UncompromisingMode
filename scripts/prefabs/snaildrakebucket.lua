@@ -192,7 +192,9 @@ local function ExplodeContents(inst)
         if inst.contains == "water" and TheWorld.state.iswinter then
             SpawnPrefab("ice").Transform:SetPosition(inst.Transform:GetWorldPosition())
         elseif inst.contains == "lava" then
-            SpawnPrefab("snaildrake_magma_sludge").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            local sludge = SpawnPrefab("snaildrake_magma_sludge").Transform:SetPosition(inst.Transform:GetWorldPosition())
+            sludge.removetask:Cancel()
+            sludge.removetask = sludge:DoTaskInTime(4*TUNING.SNAILDRAKE_SLIME_SLUDGE_DURATION, inst.Remove) -- LONGER
         end
     end
     inst.components.lootdropper:DropLoot()
@@ -240,6 +242,7 @@ local function fn()
 
     inst:AddTag("usedeploystring")
     inst:AddTag("um_bucket")
+    inst:AddTag("wardrobe_item")
     
     MakeInventoryFloatable(inst, "small", 0.2, 0.80)
 

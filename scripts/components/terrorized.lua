@@ -80,7 +80,7 @@ function Terrorized:SetNewClothingResistance() -- Will need to change this call 
 	local resistance = 0
 	local hat = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab
 	if hat then
-		if hat == "gasmask" or hat == "plaguemask" or hat == "pyremask" then
+		if hat == "gasmask" or hat == "plaguemask" or hat == "um_hat_nettlemask" then
 			resistance = 0.9
 		end
 	end

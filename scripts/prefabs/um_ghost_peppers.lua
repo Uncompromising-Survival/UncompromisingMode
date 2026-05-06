@@ -374,7 +374,7 @@ local function oneatenfn(inst, eater)
 	if  not (eater.components.health ~= nil and eater.components.health:IsDead()) and not eater:HasTag("playerghost") then
 		Ghost(eater)
 		if eater.components.temperature then
-			eater.components.temperature:DoDelta(-20)
+			eater.components.temperature:DoDelta(-30)
 		end
 	end
 end

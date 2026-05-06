@@ -6,26 +6,10 @@ local function AddSilk(inst)
 end
 
 local function onequip(inst, owner)
-    if not owner:HasTag("vetcurse") and owner:HasTag("player") then
-        inst:DoTaskInTime(0, function(inst, owner)
-            local owner = inst.components.inventoryitem and inst.components.inventoryitem.owner
-            local tool = owner and owner.components.inventory:GetEquippedItem(EQUIPSLOTS.BODY)
-            if tool and owner then
-                owner.components.inventory:Unequip(EQUIPSLOTS.BODY)
-                owner.components.inventory:DropItem(tool)
-                owner.components.inventory:GiveItem(inst)
-                if owner.components.talker then
-                    owner.components.talker:Say(GetString(owner, "CURSED_ITEM_EQUIP"))
-                end
-                inst.SoundEmitter:PlaySound("dontstarve_DLC001/common/HUD_hot_level1")
-                if owner.sg then owner.sg:GoToState("hit") end
-            end
-        end)
-    else
-        owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "backpack")
-        owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
-        inst.components.container:Open(owner)
-    end
+    if UMCommonFns.VetcurseUnequip(inst, owner, EQUIPSLOTS.BODY) then return end
+    owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "backpack")
+    owner.AnimState:OverrideSymbol("swap_body", "swap_silksack", "swap_body")
+    inst.components.container:Open(owner)
 
     if not inst.components.timer:TimerExists("webby") then
         inst.components.timer:StartTimer("webby", 480)
@@ -125,7 +109,7 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.MiniMapEntity:SetIcon("sporepack_map.tex")
+    inst.MiniMapEntity:SetIcon("silksack.tex")
 
     inst.AnimState:SetBank("silksack")
     inst.AnimState:SetBuild("silksack")

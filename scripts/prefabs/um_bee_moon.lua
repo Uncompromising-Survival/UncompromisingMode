@@ -32,21 +32,22 @@ local function OnDropped(inst)
         inst.SoundEmitter:PlaySound(inst.sounds.buzz, "buzz")
     end
     inst.sg:GoToState("catchbreath")
-    if inst.components.workable ~= nil then
+    if inst.components.workable then
         inst.components.workable:SetWorkLeft(1)
     end
-    if inst.brain ~= nil then
+    if inst.brain then
         inst.brain:Start()
     end
-    if inst.sg ~= nil then
+    if inst.sg then
         inst.sg:Start()
     end
-    if inst.components.stackable ~= nil and inst.components.stackable:IsStack() then
+    local stackable = inst.components.stackable
+    if stackable and stackable:IsStack() then
         local x, y, z = inst.Transform:GetWorldPosition()
-        while inst.components.stackable:IsStack() do
-            local item = inst.components.stackable:Get()
-            if item ~= nil then
-                if item.components.inventoryitem ~= nil then
+        while stackable:IsStack() do
+            local item = stackable:Get()
+            if item then
+                if item.components.inventoryitem then
                     item.components.inventoryitem:OnDropped()
                 end
                 item.Physics:Teleport(x, y, z)
@@ -106,36 +107,31 @@ local function SpringBeeRetarget(inst)
                 return inst.components.combat:CanTarget(guy) and
                     not (guy.components.skilltreeupdater and guy.components.skilltreeupdater:IsActivated("wormwood_bugs"))
             end,
-			RETARGET_MUST_TAGS,
-			RETARGET_CANT_TAGS,
-			RETARGET_ONEOF_TAGS)
+            RETARGET_MUST_TAGS,
+            RETARGET_CANT_TAGS,
+            RETARGET_ONEOF_TAGS)
         or nil
 end
 
-	
-local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection","bee","beehive"}
+local AREAATTACK_EXCLUDETAGS = { "spore", "INLIMBO", "notarget", "noattack", "flight", "invisible", "playerghost", "shadow", "brightmare", "moon_spore_protection", "bee", "beehive"}
 local function Explode(inst)
-	local spore = SpawnPrefab("spore_moon")
-	spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
-	
-	spore.AnimState:PlayAnimation("explode")
+    local spore = SpawnPrefab("spore_moon")
+    spore.Transform:SetPosition(inst.Transform:GetWorldPosition())
+    spore.AnimState:PlayAnimation("explode")
     spore.SoundEmitter:PlaySound("dontstarve/common/balloon_pop")
-	local x,y,z = inst.Transform:GetWorldPosition()
-	local ents = TheSim:FindEntities(x,y,z, TUNING.MOONSPORE_ATTACK_RANGE,{"_combat","_health"},AREAATTACK_EXCLUDETAGS)
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local ents = TheSim:FindEntities(x, y, z, TUNING.MOONSPORE_ATTACK_RANGE, {"_combat","_health"}, AREAATTACK_EXCLUDETAGS)
     for i,v in ipairs(ents) do
-		if not v.components.health:IsDead() then
-			local value = 50
-			if v.components.inventory and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD) and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD).prefab == "um_hat_bee_moon" then 
-				value = value * 0.25
-			end
-			v.components.combat:GetAttacked(inst,value)
-		end
-	end
-	spore:ListenForEvent("animover",function(spore) spore:Remove() end)
+        local beeret = v.components.inventory and v.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
+        if not v.components.health:IsDead() and not (beeret and beeret.prefab == "um_hat_bee_moon") then
+            v.components.combat:GetAttacked(inst, 50 / (v.isplayer and 2 or 1))
+        end
+    end
+    spore:ListenForEvent("animover",function(spore) spore:Remove() end)
 end
 
 local function OnDeath(inst)
-	inst:ListenForEvent("animover",Explode)
+    inst:ListenForEvent("animover", Explode)
 end
 
 local killerbrain = require("brains/um_bee_moonbrain")
@@ -152,36 +148,31 @@ local SHARE_TARGET_DIST = 30
 local MAX_TARGET_SHARES = 10
 
 local function OnAttacked(inst, data)
-	if data and data.stimuli == "electric" and inst.components.health and not inst.components.health:IsDead() then
-		inst.components.health:Kill()
-	end
+    if data and data.stimuli == "electric" and inst.components.health and not inst.components.health:IsDead() then
+        inst.components.health:Kill()
+    end
     local attacker = data and data.attacker
     inst.components.combat:SetTarget(attacker)
     local targetshares = MAX_TARGET_SHARES
+    local home = inst.components.homeseeker and inst.components.homeseeker.home
     if inst.components.combat:HasTarget() then
-        if inst.components.homeseeker and inst.components.homeseeker.home then
-            local home = inst.components.homeseeker.home
-            if home and home.components.childspawner then
-                targetshares = targetshares - home.components.childspawner.childreninside
-                home.components.childspawner:ReleaseAllChildren(attacker, "um_bee_moon")
-            end
+        if home and home.components.childspawner then
+            targetshares = targetshares - home.components.childspawner.childreninside
+            home.components.childspawner:ReleaseAllChildren(attacker, "um_bee_moon")
         end
     end
     local iscompanion = inst:HasTag("companion")
     inst.components.combat:ShareTarget(attacker, SHARE_TARGET_DIST, function(dude)
-        if inst.components.homeseeker and dude.components.homeseeker then  --don't bring bees from other hives
-            if dude.components.homeseeker.home and dude.components.homeseeker.home ~= inst.components.homeseeker.home then
-                return false
-            end
-        end
-        return dude:HasTag("bee") and (iscompanion == dude:HasTag("companion")) and not (dude:IsInLimbo() or (dude.components.health and dude.components.health:IsDead()) or dude:HasTag("epic"))
+        local dudehome = dude.components.homeseeker and dude.components.homeseeker.home
+        if home and dudehome and dudehome ~= home then return false end -- Don't bring bees from other hives.
+        return dude:HasTag("bee") and iscompanion == dude:HasTag("companion") and not (dude:IsInLimbo() or (dude.components.health and dude.components.health:IsDead()) or dude:HasTag("epic"))
     end, targetshares)
 end
 
 local function OnWorked(inst, worker)
     inst:PushEvent("detachchild")
 
-    if worker.components.inventory ~= nil then
+    if worker.components.inventory then
         inst.SoundEmitter:KillAllSounds()
 
         worker.components.inventory:GiveItem(inst, nil, inst:GetPosition())
@@ -207,9 +198,9 @@ local function fn()
     inst:AddTag("cattoyairborne")
     inst:AddTag("flying")
     inst:AddTag("ignorewalkableplatformdrowning")
-	inst:AddTag("killer")
-	inst:AddTag("scarytoprey")
-	inst:AddTag("mutant")
+    inst:AddTag("killer")
+    inst:AddTag("scarytoprey")
+    inst:AddTag("mutant")
     inst.AnimState:SetBank("um_bee_moon")
     inst.AnimState:SetBuild("um_bee_moon")
     inst.AnimState:PlayAnimation("idle", true)
@@ -226,8 +217,8 @@ local function fn()
     end
 
     inst:AddComponent("locomotor") -- locomotor must be constructed before the stategraph
-	inst.components.locomotor.runspeed = 7
-	inst.components.locomotor.walkspeed = 7 
+    inst.components.locomotor.runspeed = 7
+    inst.components.locomotor.walkspeed = 7 
     inst.components.locomotor:EnableGroundSpeedMultiplier(false)
     inst.components.locomotor:SetTriggersCreep(false)
     inst:SetStateGraph("SGbee")
@@ -254,15 +245,15 @@ local function fn()
     inst.components.workable:SetWorkLeft(1)
     inst.components.workable:SetOnFinishCallback(OnWorked)
 
-    MakeSmallBurnableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
-    MakeTinyFreezableCharacter(inst, "moonbee_torso-0", Vector3(0, -1, 1))
+    MakeSmallBurnableCharacter(inst, "moonbee_torso", Vector3(0, -1, 1))
+    MakeTinyFreezableCharacter(inst, "moonbee_torso", Vector3(0, -1, 1))
 
     ------------------
 
     inst:AddComponent("health")
     inst:AddComponent("combat")
     inst.components.combat:SetRange(TUNING.BEE_ATTACK_RANGE)
-    inst.components.combat.hiteffectsymbol = "moonbee_torso-0"
+    inst.components.combat.hiteffectsymbol = "moonbee_torso"
     inst.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.RARELY)
     inst.components.combat.bonusdamagefn = bonus_damage_via_allergy
 
@@ -271,7 +262,7 @@ local function fn()
     inst.components.combat:SetAttackPeriod(TUNING.BEE_ATTACK_PERIOD)
     inst.components.combat:SetRetargetFunction(2, KillerRetarget)
     
-	
+    
     ------------------
 
     inst:AddComponent("sleeper")
@@ -290,18 +281,18 @@ local function fn()
 
     inst:ListenForEvent("attacked", OnAttacked)
 
-    MakeFeedableSmallLivestock(inst, TUNING.TOTAL_DAY_TIME*2, OnPickedUp, OnDropped)
+    MakeFeedableSmallLivestock(inst, TUNING.TOTAL_DAY_TIME * 2, OnPickedUp, OnDropped)
 
-	inst.sounds = killersounds
+    inst.sounds = killersounds
     inst.buzzing = true
     inst.EnableBuzz = EnableBuzz
     inst.OnEntityWake = OnWake
     inst.OnEntitySleep = OnSleep
-	inst.incineratesound = inst.sounds.death
-	inst:SetBrain(killerbrain)
-	MakeHauntablePanic(inst)
-	
-	inst:ListenForEvent("death",OnDeath)
+    inst.incineratesound = inst.sounds.death
+    inst:SetBrain(killerbrain)
+    MakeHauntablePanic(inst)
+    
+    inst:ListenForEvent("death",OnDeath)
     return inst
 end
 

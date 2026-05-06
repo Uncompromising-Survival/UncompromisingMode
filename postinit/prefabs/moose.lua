@@ -226,11 +226,11 @@ env.AddPrefabPostInit("mothergoose", function(inst)
 end)
 
 -- If ROG goose only, then hide the ground nest, don't DELETE, the ground nest incase they change their mind
-env.AddPrefabPostInit("moose_nesting_ground", function(inst)
-	if not TheWorld.ismastersim then
-		return
-	end
-	if TUNING.DSTU.GOOSE_SETTING == "ROG" then -- If ROG only goose, hide and deactivate these
-		inst.AnimState:SetMultColour(0,0,0,0)
-	end
-end)
+--env.AddPrefabPostInit("moose_nesting_ground", function(inst)
+	--if not TheWorld.ismastersim then
+		--return
+	--end
+	--if TUNING.DSTU.GOOSE_SETTING == "ROG" then -- If ROG only goose, hide and deactivate these
+		--inst.AnimState:SetMultColour(0,0,0,0)
+	--end
+--end)

@@ -32,13 +32,13 @@ SetSharedLootTable('snaildrake_slime',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakebucket', 0.75},
+    {'snaildrakebucket', 0.5},
 })
 SetSharedLootTable('snaildrake_magma',
 {
     {'snapalm',      1.0},
     {'snapalm',      1.0},
-    {'snaildrakehat', 0.75},
+    {'snaildrakehat', 0.50},
 })
 
 local snaildrake_brain = require("brains/snaildrakebrain")
@@ -81,8 +81,7 @@ end
 -- Kaboom!
 local function DoExplosion(inst)
     local explosion = SpawnPrefab("snaildrake_explosion")
-    explosion.Transform:SetPosition(
-        inst.Transform:GetWorldPosition())
+    explosion.Transform:SetPosition(inst.Transform:GetWorldPosition())
     explosion.snaildrake = inst
 end
 
@@ -158,7 +157,7 @@ end
 -- When Snaildrakes are set on fire, they will spawn an explosion.
 -- Snaildrakes should not be harmed by their own explosions.
 local function CanDodgeFn(inst, attacker)
-    return attacker.snaildrake and attacker.snaildrake == inst
+    return attacker and attacker.snaildrake and attacker.snaildrake == inst
 end
 
 -- Snaildrakes will eat minerals off the ground.
@@ -229,9 +228,9 @@ local function common_fn(bank, build, tag)
     inst.DynamicShadow:SetSize(2, 1.5)
 
     inst.Transform:SetFourFaced()
+    inst.Transform:SetScale(1.2,1.2,1.2)
 
     MakeCharacterPhysics(inst, 50, .5)
-
 
     inst:AddTag("animal")
     inst:AddTag("snaildrake")
@@ -268,8 +267,8 @@ local function common_fn(bank, build, tag)
 
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(450)
-	inst.components.health.fire_damage_scale = 0
-	
+    inst.components.health.fire_damage_scale = 0
+    
     inst:AddComponent("attackdodger")
     inst.components.attackdodger:SetCanDodgeFn(CanDodgeFn)
 
@@ -291,16 +290,19 @@ local function common_fn(bank, build, tag)
     inst:ListenForEvent("ifnotchanceloot", OnNotChanceLoot)
 
     inst:ListenForEvent("entershield", OnEnterShield)
-	
-	inst:AddComponent("explosiveresist")
-	inst.components.explosiveresist:SetResistance(1)
-	inst.components.explosiveresist.decaytime = 9999
-	
+    
+    inst:AddComponent("explosiveresist")
+    inst.components.explosiveresist:SetResistance(1)
+    inst.components.explosiveresist.decaytime = 9999
+    
     MakeMediumFreezableCharacter(inst, "shell")
     MakeMediumBurnableCharacter(inst, "shell")
     inst.components.burnable:SetOnIgniteFn(OnIgniteFn)
     inst.components.burnable:SetOnExtinguishFn(OnExtinguishFn)
     inst.components.burnable:SetBurnTime(TUNING.SNAILDRAKE_BURN_TIME) -- 4; default is 8
+
+    inst:AddComponent("heater")
+    inst.components.heater.heat = 100
 
     MakeHauntablePanic(inst)
     AddHauntableCustomReaction(inst, CustomOnHaunt, true, false, true)
@@ -310,8 +312,7 @@ local function common_fn(bank, build, tag)
     inst.partner = nil
     inst.DoExplosion = DoExplosion
     inst.DoRangedAttack = DoRangedAttack
-	
-	inst.Transform:SetScale(1.2,1.2,1.2)
+
     return inst
 end
 
@@ -322,8 +323,8 @@ local function magma_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.AnimState:SetBank("snaildrake_spikeshell")
-	inst.AnimState:SetBuild("snaildrake_spikeshell")
+    inst.AnimState:SetBank("snaildrake_spikeshell")
+    inst.AnimState:SetBuild("snaildrake_spikeshell")
     inst.components.combat.onhitotherfn = OnHitOtherMagma
 
     inst.components.eater:SetOnEatFn(OnEatElementMagma)
@@ -341,8 +342,8 @@ local function slime_fn()
     if not TheWorld.ismastersim then
         return inst
     end
-	inst.AnimState:SetBank("snaildrake_holeshell")
-	inst.AnimState:SetBuild("snaildrake_holeshell")
+    inst.AnimState:SetBank("snaildrake_holeshell")
+    inst.AnimState:SetBuild("snaildrake_holeshell")
     inst.components.eater:SetOnEatFn(OnEatElementSlime)
 
     inst.projectile_prefab = "snaildrake_slime_projectile"

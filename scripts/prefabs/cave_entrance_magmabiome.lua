@@ -43,8 +43,8 @@ local function OnWork(inst, worker, workleft)
         inst.components.lootdropper:DropLoot(pt)
         ProfileStatsSet("cave_entrance_opened", true)
         if worker ~= nil then
-	        AwardPlayerAchievement("cave_entrance_opened", worker)
-	    end
+            AwardPlayerAchievement("cave_entrance_opened", worker)
+        end
         local openinst = SpawnPrefab("cave_entrance_open_magmabiome")
         openinst.Transform:SetPosition(pt:Get())
         openinst.components.worldmigrator.id = inst.components.worldmigrator.id
@@ -107,7 +107,7 @@ local function fn(bank, build, anim, minimap, isbackground)
         --On non-sharded servers we'll make these vanish for now, but still generate them
         --into the world so that they can magically appear in existing saves when sharded
         RemovePhysicsColliders(inst)
-        inst.AnimState:SetScale(0,0)
+        inst.AnimState:SetScale(0, 0)
         inst.MiniMapEntity:SetEnabled(false)
         inst:AddTag("NOCLICK")
         inst:AddTag("CLASSIFIED")
@@ -120,7 +120,7 @@ local function fn(bank, build, anim, minimap, isbackground)
 end
 
 local function closed_fn()
-    local inst = fn("cave_entrance_magmabiome", "cave_entrance_magmabiome", "full", "springrock1.png", false)
+    local inst = fn("cave_entrance_magmabiome", "cave_entrance_magmabiome", "full", "cave_entrance_magmabiome.tex", false)
 
     if not TheWorld.ismastersim then
         return inst
@@ -132,13 +132,13 @@ local function closed_fn()
     inst.components.workable:SetOnWorkCallback(OnWork)
 
     inst.components.worldmigrator:SetEnabled(false)
-	inst.components.worldmigrator:SetID(26)
+    inst.components.worldmigrator:SetID(26)
     inst:ListenForEvent("migration_activate_other", activatebyother)
 
     inst:AddComponent("lootdropper")
     inst.components.lootdropper:SetLoot({ "rocks", "rocks", "flint", "flint", "flint" })
-	
-	inst.components.inspectable.nameoverride = "CAVE_ENTRANCE"
+
+    inst.components.inspectable.nameoverride = "CAVE_ENTRANCE"
 
     return inst
 end
@@ -171,11 +171,11 @@ local function open_fn()
     --             -watch iscaveday world state
     OnIsDay(inst, TheWorld.state.isday)
     inst:WatchWorldState("isday", OnIsDay)
-	
-	inst.components.inspectable.nameoverride = "CAVE_ENTRANCE_OPEN"
-	inst.AnimState:SetMultColour(0.8,0.35,0.25,1)
+
+    inst.components.inspectable.nameoverride = "CAVE_ENTRANCE_OPEN"
+    inst.AnimState:SetMultColour(0.8, 0.35, 0.25, 1)
     return inst
 end
 
-return Prefab("cave_entrance_magmabiome", closed_fn,assets),
+return Prefab("cave_entrance_magmabiome", closed_fn, assets),
     Prefab("cave_entrance_open_magmabiome", open_fn)

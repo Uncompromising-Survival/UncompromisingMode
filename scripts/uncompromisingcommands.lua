@@ -11,6 +11,46 @@ function c_um_snowstorm()
     end
 end
 
+local DEERCLOPS_TIMERNAME = "deerclops_timetoattack"
+local MOTHERGOOSE_TIMERNAME = "mothergoose_timetoattack"
+local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
+local BEARGER_TIMERNAME = "bearger_timetospawn"
+
+function c_um_bosstimers()
+	if TheWorld.ismastersim then
+		TheNet:Announce("Checking Spawners...")
+		local _worldsettingstimer = TheWorld.components.worldsettingstimer
+		if TheWorld.state.iswinter then
+			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+				TheNet:Announce("Found Deerclops timer, it has ".._worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Deerclops spawning timer doesn't exist.")
+			end
+		elseif TheWorld.state.isspring then
+			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
+				TheNet:Announce("Found Mother Goose timer, it has ".._worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Mother Goose spawning timer doesn't exist.")
+			end		
+		elseif TheWorld.state.issummer then
+			if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+				TheNet:Announce("Found Wilting Dragonfly timer, it has ".._worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Wilting Dragonfly spawning timer doesn't exist.")
+			end			
+		else
+			if _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) then
+				TheNet:Announce("Found Bearger timer, it has ".._worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME).." seconds left till attacking.")
+			else
+				TheNet:Announce("Bearger spawning timer doesn't exist.")
+			end				
+		end
+	else
+		print("c_um_debug_bosstimers only works as the host")
+	end
+end
+
+
 -- toggles vetcurse
 function c_um_vetcurse()
     local player = ConsoleCommandPlayer()
@@ -37,10 +77,11 @@ function c_um_vetcurseitems()
         "klaus_amulet",
         "crabclaw",
         "um_beegun",
-        "um_wingsuit",
-        "um_exhumer",
+        --"um_wingsuit",
+        --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
+		"crystal_cursed_antler",
     }
     for k, v in ipairs(items) do
         c_give(v)
@@ -123,14 +164,14 @@ function c_um_ratcheck()
     local inst = TheSim:FindFirstEntityWithTag("rat_sniffer")
     inst:PushEvent("rat_sniffer")
     TheNet:SystemMessage("-------------------------")
-    TheNet:SystemMessage("Itemscore = " .. inst.itemscore)
+    --TheNet:SystemMessage("Itemscore = " .. inst.itemscore)
     TheNet:SystemMessage("Foodscore = " .. inst.foodscore)
     TheNet:SystemMessage("Burrowbonus = " .. inst.burrowbonus)
     TheNet:SystemMessage("Ratscore = " .. inst.ratscore)
-    if inst.ratscore > 240 then
-        inst.ratscore = 240
+    if inst.ratscore > 300 then
+        inst.ratscore = 300
     end
-    TheNet:SystemMessage("True Ratscore = " .. inst.ratscore)
+    --TheNet:SystemMessage("True Ratscore = " .. inst.ratscore)
     TheNet:SystemMessage("Timer = " .. TheWorld.components.ratcheck:GetRatTimer() .. "s")
     TheNet:SystemMessage("-------------------------")
 end
@@ -284,10 +325,23 @@ local uncompfoods = {
     "snowcone",
     "stuffed_peeper_poppers",
     "theatercorn",
+    "um_boomberrypie",
+    "um_boom_tart",
+    "um_chiles_en_nogada",
     "um_deviled_eggs",
+    "um_durian_cream_marshcake",
+    "um_ghost_fajita",
+    "um_rice_pudding",
+    "um_rimeweed_spagett",
+    "um_rimeweed_tequila",
+    "um_sponge_cake",
     "viperjam",
     "zaspberryparfait",
 }
+
+if TUNING.DSTU.BONESTEW == "bone_appetit" then
+    table.insert(uncompfoods, "um_kebab")
+end
 
 function c_um_givefoods()
     if ThePlayer ~= nil then

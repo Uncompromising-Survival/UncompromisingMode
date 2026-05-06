@@ -2,41 +2,48 @@ local MakePlayerCharacter = require("prefabs/player_common")
 local SourceModifierList = require("util/sourcemodifierlist")
 
 local assets = {
-        Asset( "ANIM", "anim/player_basic.zip" ),
-        Asset( "ANIM", "anim/player_idles_shiver.zip" ),
-        Asset( "ANIM", "anim/player_actions.zip" ),
-        Asset( "ANIM", "anim/player_actions_axe.zip" ),
-        Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
-        Asset( "ANIM", "anim/player_actions_shovel.zip" ),
-        Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
-        Asset( "ANIM", "anim/player_actions_eat.zip" ),
-        Asset( "ANIM", "anim/player_actions_item.zip" ),
-        Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
-        Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
-        Asset( "ANIM", "anim/player_actions_fishing.zip" ),
-        Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
-        Asset( "ANIM", "anim/player_bush_hat.zip" ),
-        Asset( "ANIM", "anim/player_attacks.zip" ),
-        Asset( "ANIM", "anim/player_idles.zip" ),
-        Asset( "ANIM", "anim/player_rebirth.zip" ),
-        Asset( "ANIM", "anim/player_jump.zip" ),
-        Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
-        Asset( "ANIM", "anim/player_teleport.zip" ),
-        Asset( "ANIM", "anim/wilson_fx.zip" ),
-        Asset( "ANIM", "anim/player_one_man_band.zip" ),
-        Asset( "ANIM", "anim/shadow_hands.zip" ),
-        Asset( "SOUND", "sound/sfx.fsb" ),
-        Asset( "SOUND", "sound/wixie.fsb" ),
-        Asset( "ANIM", "anim/beard.zip" ),
+    Asset( "ANIM", "anim/player_basic.zip" ),
+    Asset( "ANIM", "anim/player_idles_shiver.zip" ),
+    Asset( "ANIM", "anim/player_actions.zip" ),
+    Asset( "ANIM", "anim/player_actions_axe.zip" ),
+    Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
+    Asset( "ANIM", "anim/player_actions_shovel.zip" ),
+    Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
+    Asset( "ANIM", "anim/player_actions_eat.zip" ),
+    Asset( "ANIM", "anim/player_actions_item.zip" ),
+    Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
+    Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
+    Asset( "ANIM", "anim/player_actions_fishing.zip" ),
+    Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
+    Asset( "ANIM", "anim/player_bush_hat.zip" ),
+    Asset( "ANIM", "anim/player_attacks.zip" ),
+    Asset( "ANIM", "anim/player_idles.zip" ),
+    Asset( "ANIM", "anim/player_rebirth.zip" ),
+    Asset( "ANIM", "anim/player_jump.zip" ),
+    Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
+    Asset( "ANIM", "anim/player_teleport.zip" ),
+    Asset( "ANIM", "anim/wilson_fx.zip" ),
+    Asset( "ANIM", "anim/player_one_man_band.zip" ),
+    Asset( "ANIM", "anim/shadow_hands.zip" ),
+    Asset( "SOUND", "sound/sfx.fsb" ),
+    Asset( "SOUND", "sound/wixie.fsb" ),
+    Asset( "ANIM", "anim/beard.zip" ),
 
-        -- Don't forget to include your character's custom assets!
-        Asset( "ANIM", "anim/wixie.zip" ),
-        Asset( "ANIM", "anim/ghost_wixie_build.zip" ),
+    -- Don't forget to include your character's custom assets!
+    Asset( "ANIM", "anim/wixie.zip" ),
+    Asset( "ANIM", "anim/ghost_wixie_build.zip" ),
 }
 
 local prefabs = {
     "slingshot",
 }
+
+local start_inv = {}
+for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
+    start_inv[string.lower(k)] = v.WIXIE
+end
+
+prefabs = FlattenTree({prefabs, start_inv}, true)
 
 local function customidleanimfn(inst)
     local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -257,21 +264,43 @@ local function OnBuildAmmo(inst, data)
 end
 
 local function OnAttackOther(inst, data)
-    local target, weapon = data and data.target, data and data.weapon
+    local target, weapon = data.target, data.weapon
     local isriding = inst.components.rider and inst.components.rider:IsRiding()
     local shouldshove = target and (not weapon or weapon:HasTag("wixie_weapon"))
     if inst.sg then
         local shouldextinguish = weapon and not (weapon:HasTag("extinguisher") and target and target.components.burnable and target.components.burnable:IsBurning())
         local shovefrozen = not isriding and shouldshove and target and target.components.freezable and target.components.freezable:IsFrozen()
-        if shouldshove and shouldextinguish or inst.sg.mem.dontuseweaponinstate then
-            inst.sg.mem.dontuseweaponinstate = shouldshove and shouldextinguish or nil
+        if shouldshove and shouldextinguish or inst.sg.mem.um_dontuseweaponinstate then
+            inst.sg.mem.um_dontuseweaponinstate = shouldshove and shouldextinguish or nil
         end
-        if shovefrozen or inst.sg.mem.wixiefrozentargetshove then
-            inst.sg.mem.wixiefrozentargetshove = shovefrozen or nil
+        if shovefrozen or inst.sg.mem.um_wixiefrozentargetshove then
+            inst.sg.mem.um_wixiefrozentargetshove = shovefrozen or nil
         end
     end
     if not isriding and shouldshove then
         WixieShove(inst, target, inst.powerlevel, true, nil, nil, true)
+    end
+end
+
+local function ShouldNotRangeAttack(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if inst.sg.mem.um_dontuseweaponinstate and weaponcomp and weaponcomp.projectile then
+        if not weapon.um_projectiletorestore then
+            weapon.um_projectiletorestore = weaponcomp.projectile
+            weaponcomp:SetProjectile(nil)
+        end
+        return true
+    end
+    return false
+end
+
+local function OnAttackerAttackedPost(inst, data)
+    local weapon = data.weapon
+    local weaponcomp = weapon and weapon.components.weapon
+    if weapon and weapon.um_projectiletorestore and weaponcomp and not weaponcomp.projectile then
+        weaponcomp:SetProjectile(weapon.um_projectiletorestore)
+        weapon.um_projectiletorestore = nil
     end
 end
 
@@ -307,11 +336,11 @@ local function common_postinit(inst)
 end
 
 local function master_postinit(inst)
-    inst.starting_inventory = {"slingshot", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock", "slingshotammo_rock"}
+    inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
     inst.MiniMapEntity:SetIcon("wixie.tex")
     --inst:AddComponent("claustrophobia")
-	
+    
     inst.customidleanim = customidleanimfn
 
     inst.components.health:SetMaxHealth(TUNING.WALTER_HEALTH)
@@ -321,6 +350,8 @@ local function master_postinit(inst)
     inst.components.foodaffinity:AddPrefabAffinity("blueberrypancakes", 1.2)
 
     inst:ListenForEvent("onattackother", OnAttackOther)
+    inst.UMShouldNotRangeAttack = ShouldNotRangeAttack
+    inst:ListenForEvent("um_attacker_attacked_pst", OnAttackerAttackedPost)
     --inst:ListenForEvent("killed", OnKilledOther)
 
     inst.soundsname = "wixie"
@@ -329,7 +360,5 @@ local function master_postinit(inst)
 
     inst.OnNewSpawn = OnNewSpawn
 end
-
-STRINGS.CHARACTERS.WIXIE = require"speech_wixie"
 
 return MakePlayerCharacter("wixie", prefabs, assets, common_postinit, master_postinit)

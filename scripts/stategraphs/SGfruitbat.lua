@@ -8,7 +8,7 @@ end
 
 local mine_test_tags = { "monster", "character", "animal" }
 local mine_must_tags = { "_combat" }
-local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost", "snapdragon" }
+local mine_no_tags = { "notraptrigger", "flying", "ghost", "playerghost"}
 
 local function FxAppear(inst)
     SpawnPrefab("blueberryexplosion").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -39,7 +39,7 @@ local function Explode(inst)
 end
 
 local function FoodBabyAnimation(inst)
-    if inst.food_baby and inst.food_baby.AnimState then
+    if inst.food_baby and inst.food_baby:IsValid() then
         if inst.food_baby:HasTag("butterfly") then
             inst.food_baby.AnimState:PlayAnimation("idle", false)
         end
@@ -72,13 +72,12 @@ local events =
     CommonHandlers.OnSleep(),
 }
 
-
 local states =
 {
     State {
-
         name = "idle",
-        tags = { "idle", "canrotate" },
+        tags = {"idle", "canrotate"},
+
         onenter = function(inst, playanim)
             inst.Physics:Stop()
             if playanim then
@@ -103,7 +102,6 @@ local states =
     },
 
     State {
-
         name = "action",
         onenter = function(inst, playanim)
             inst.Physics:Stop()
@@ -120,7 +118,8 @@ local states =
 
     State {
         name = "flyback",
-        tags = { "flight", "busy" },
+        tags = {"flight", "busy"},
+
         onenter = function(inst)
             inst.Physics:Stop()
 
@@ -159,7 +158,8 @@ local states =
 
     State {
         name = "flybackup",
-        tags = { "flight", "busy" },
+        tags = {"flight", "busy"},
+
         onenter = function(inst)
             inst.Physics:Stop()
             inst.DynamicShadow:Enable(false)
@@ -197,7 +197,7 @@ local states =
 
     State {
         name = "eat",
-        tags = { "busy", "attack" },
+        tags = {"busy", "attack"},
 
         onenter = function(inst)
             --inst.Physics:Stop()
@@ -217,17 +217,17 @@ local states =
 
         events =
         {
-            EventHandler("animqueueover", function(inst) if not inst.food_baby then inst.sg:GoToState("idle") end end)
+            EventHandler("animqueueover", function(inst) if not inst.food_baby or not inst.food_baby:IsValid() then inst.sg:GoToState("idle") end end)
         },
     },
 
     State {
         name = "eat_loop",
-        tags = { "busy", "noattack", "nosleep", "flying" },
+        tags = {"busy", "noattack", "nosleep", "flying"},
 
         onenter = function(inst)
             inst.DynamicShadow:Enable(false)
-            if inst.food_baby then
+            if inst.food_baby and inst.food_baby:IsValid() then
                 inst.food_baby.entity:AddFollower():FollowSymbol(inst.GUID, "food_baby", 0, 7, 0)
             end
             FoodBabyAnimation(inst)
@@ -237,36 +237,32 @@ local states =
 
         timeline =
         {
-            TimeEvent(7 * FRAMES,
-                function(inst)
-                    inst:PushEvent("wingdown")
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew")
-                end),
-            TimeEvent(17 * FRAMES,
-                function(inst)
-                    inst:PushEvent("wingdown")
-                    inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew")
-                end),
+            TimeEvent(7 * FRAMES, function(inst)
+                inst:PushEvent("wingdown")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew")
+            end),
+            TimeEvent(17 * FRAMES, function(inst)
+                inst:PushEvent("wingdown")
+                inst.SoundEmitter:PlaySound("dontstarve/creatures/bat/chew")
+            end),
         },
+
         onupdate = function(inst)
             inst.Physics:SetMotorVelOverride(0, 25, 0)
             local x, y, z = inst.Transform:GetWorldPosition()
             if y > 50 then
-				if inst.food_baby then
-					inst.food_baby:Remove()
-					inst.food_baby = nil
-					inst.sg:GoToState("digest")
-				end
+                if inst.food_baby and inst.food_baby:IsValid() then
+                    inst.food_baby:Remove()
+                    inst.food_baby = nil
+                    inst.sg:GoToState("digest")
+                end
             end
         end,
-        events =
-        {
-        },
     },
 
     State {
         name = "digest",
-        tags = { "busy", "noattack", "nosleep", "flying" },
+        tags = {"busy", "noattack", "nosleep", "flying"},
 
         onenter = function(inst)
             inst.Physics:Stop()
@@ -289,13 +285,11 @@ local states =
                 inst.sg:GoToState("glide")
             end)
         },
-        events =
-        {
-        },
     },
     State {
         name = "glide",
-        tags = { "idle", "flying", "busy", "noattack" },
+        tags = {"idle", "flying", "busy", "noattack"},
+
         onenter = function(inst)
             inst.DynamicShadow:Enable(false)
             inst.AnimState:PlayAnimation("glide", true)
@@ -333,7 +327,7 @@ local states =
 
     State {
         name = "land",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.AnimState:PlayAnimation("land", false)
@@ -348,7 +342,7 @@ local states =
 
     State {
         name = "boop",
-        tags = { "busy" },
+        tags = {"busy"},
 
         onenter = function(inst)
             inst.AnimState:PlayAnimation("boop", false)
@@ -428,6 +422,5 @@ CommonStates.AddCombatStates(states,
     })
 
 CommonStates.AddFrozenStates(states)
-
 
 return StateGraph("fruitbat", states, events, "boop", actionhandlers)

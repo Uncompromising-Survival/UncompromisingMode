@@ -1,36 +1,25 @@
-local function OnHealthDelta(inst, oldpercent, newpercent)
-    if oldpercent > newpercent then
+local function OnHealthDelta(inst, oldpercent, newpercent, overtime, cause, afflicter, amount)
+    local t = GetTime()
+    if amount < 0 and (not overtime or cause == "fire") and (t - inst.lasthitfxtime) >= .1 then
+        inst.lasthitfxtime = t
         inst._parent.SoundEmitter:PlaySound("meta4/mortars/cannonball_hit_ice")
         SpawnPrefab("mining_ice_fx").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
     end
 end
 
 local function ShouldWeaponPierce(inst, weapon, attacker)
-    --minerology
-    if weapon ~= nil and weapon.components.minerologyable ~= nil and weapon.components.minerologyable.passionate then
-        return true
-    end
-
-    if weapon ~= nil and (weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool ~= nil) --IA compat
-        or attacker ~= nil and attacker:HasTag("pierces_ice_shield") then
-        return true
-    end
-
-    if weapon ~= nil then
-        if weapon.components.weapon ~= nil then
-            return weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0
-        end
-    end
-
-    return false
+    return attacker and attacker:HasTag("pierces_ice_shield")
+        or weapon and (weapon.components.gem_enchantable and weapon.components.gem_enchantable:HasEnchantment("um_gemologyredgem2")
+            or weapon:HasTag("pierces_ice_shield") or weapon.components.obsidiantool
+            or weapon.components.weapon and (weapon.components.weapon.stimuli == "fire" or weapon.components.weapon:GetDamage(attacker, inst) == 0))
 end
+
 local function ShouldRecoilIceShield(inst, attacker, weapon, damage)
-    if inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker) then
-        if attacker ~= nil and attacker.components.talker ~= nil then
-            attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
-        end
+    local shouldrecoil = inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker)
+    if shouldrecoil and attacker and attacker.components.talker then
+        attacker.components.talker:Say(GetString(inst, "ANNOUNCE_WEAPON_TOOWEAK_ICESHIELD"))
     end
-    return inst:HasTag("ice_shielded") and not ShouldWeaponPierce(inst, weapon, attacker), (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage ~= nil and damage / 2 or nil
+    return shouldrecoil, (ShouldWeaponPierce(inst, weapon, attacker) or not inst:HasTag("ice_shielded")) and damage or damage and damage / 2 or nil
 end
 
 local function Init(inst, parent, fx_symbol, tier)
@@ -47,7 +36,7 @@ local function Init(inst, parent, fx_symbol, tier)
     fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
 
 
-    if parent.ice_shield ~= nil then
+    if parent.ice_shield then
         parent.ice_shield:Remove()
     end
 
@@ -55,31 +44,51 @@ local function Init(inst, parent, fx_symbol, tier)
     inst.entity:SetParent(parent.entity)
     inst.Transform:SetPosition(parent.Transform:GetWorldPosition())
 
-    if parent.components.health ~= nil then
-        parent.components.health.redirect = function(target, amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
-            if inst.components.health ~= nil and inst:IsValid() then
+    if parent.components.health then
+        if parent.components.health.redirect then
+            inst.um_redirect_old = parent.components.health.redirect
+        end
+        parent.components.health.redirect = function(self, amount, overtime, cause, ...)
+            if amount >= 0 then
+                return inst.um_redirect_old and inst.um_redirect_old(self, amount, overtime, cause, ...) or false
+            end
+
+            if inst.components.health and inst:IsValid() then
                 if cause == "fire" then
                     amount = amount * 10
                     SpawnPrefab("washashore_puddle_fx").Transform:SetPosition(parent.Transform:GetWorldPosition())
                 end
 
-                return inst.components.health:DoDelta(amount, overtime, cause, ignore_invincible, afflicter, ignore_absorb, ...)
+                inst.components.health:DoDelta(amount, overtime, cause, ...)
+
+                return true
             end
         end
     end
 
-    if parent.components.combat ~= nil then
+    if parent.components.combat then
         parent.components.combat:SetShouldRecoilFn(ShouldRecoilIceShield)
     end
 
-    if parent.shield_fx ~= nil then
+    if parent.shield_fx2 then
+        parent.shield_fx2:Remove()
+    end
+
+    if parent.shield_fx then
         parent.shield_fx:Remove()
     end
+
 
     parent.shield_fx = SpawnPrefab("deer_ice_flakes")
     parent.shield_fx.Transform:SetPosition(parent.Transform:GetWorldPosition())
     parent.shield_fx.entity:AddFollower()
     parent.shield_fx.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, 0, 0)
+
+
+    parent.shield_fx2 = SpawnPrefab("um_ice_shield_fx")
+    parent.shield_fx2.Transform:SetPosition(parent.Transform:GetWorldPosition())
+    parent.shield_fx2.entity:AddFollower()
+    parent.shield_fx2.Follower:FollowSymbol(parent.GUID, fx_symbol, 0, -150, 0)
 end
 
 local function fn()
@@ -90,11 +99,10 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:SetPristine()
 
-    if not TheWorld.ismastersim then
-        return inst
-    end
+    if not TheWorld.ismastersim then return inst end
 
     inst.tier = 1
+    inst.lasthitfxtime = 0
 
     inst:AddComponent("health")
     inst.components.health.nofadeout = true
@@ -114,17 +122,23 @@ local function fn()
     inst.Init = Init
 
     inst:ListenForEvent("death", function(inst)
-        SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
+        if not inst._silent_remove and inst._parent and inst._parent:IsValid() then
+            SpawnPrefab("fx_ice_pop").Transform:SetPosition(inst._parent.Transform:GetWorldPosition())
+        end
 
-        if inst._parent ~= nil then
-            inst._parent:RemoveTag("ice_shielded") --damn you!! GET RID OF IT!
+        if inst._parent then
+            inst._parent:RemoveTag("ice_shielded")
             inst._parent:PushEvent("ice_shield_death")
 
-            if inst._parent.shield_fx ~= nil then
+            if inst._parent.shield_fx then
                 inst._parent.shield_fx:Remove()
             end
 
-            if inst._parent.components.burnable ~= nil then
+            if inst._parent.shield_fx2 then
+                inst._parent.shield_fx2:Remove()
+            end
+
+            if inst._parent.components.burnable then
                 inst._parent.components.burnable:Extinguish()
             end
         end
@@ -132,14 +146,36 @@ local function fn()
         inst:Remove()
     end)
 
-    inst:ListenForEvent("removed", function(inst)
-        if inst._parent ~= nil then
+    inst:ListenForEvent("onremove", function(inst)
+        if inst._parent then
             inst._parent:RemoveTag("ice_shielded")
-            inst._parent.components.health.redirect = nil
+            inst._parent.components.health.redirect = inst.redirect_old and inst.redirect_old or nil
         end
     end)
 
     return inst
 end
 
-return Prefab("um_ice_shield", fn)
+local function fx_fn()
+    local inst = CreateEntity()
+    inst.entity:AddTransform()
+    inst.entity:AddNetwork()
+    inst.entity:AddAnimState()
+
+    inst:AddTag("FX")
+
+    inst.entity:SetPristine()
+
+    inst.Transform:SetScale(2, 2, 2)
+    inst.AnimState:SetBank("deer_ice_charge")
+    inst.AnimState:SetBuild("deer_ice_charge")
+    inst.AnimState:PlayAnimation("pre")
+    inst.AnimState:HideSymbol("line")
+    inst.AnimState:SetSortOrder(0)
+    inst.AnimState:PushAnimation("loop", true)
+
+    return inst
+end
+
+return Prefab("um_ice_shield", fn),
+    Prefab("um_ice_shield_fx", fx_fn)

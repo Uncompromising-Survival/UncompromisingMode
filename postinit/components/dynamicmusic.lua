@@ -100,10 +100,21 @@ end
 
     BUSYTHEMES["HOODEDFOREST"] = 1337
     BUSYTHEMES["PINETREE_PIONEER"] = 1338
+    BUSYTHEMES["MAGMACAVES"] = 1339
 	
     local function IsInHoodedForest(player)
         return player.components.areaaware ~= nil
             and player.components.areaaware:CurrentlyInTag("hoodedcanopy")
+    end
+
+    local function IsInMagmaCaves(player)
+        return player.components.areaaware ~= nil
+            and (player.components.areaaware:CurrentlyInTag("magmacaves") or player.components.areaaware:CurrentlyInTag("fumarolearea"))
+    end
+
+    local function IsOnLunarIsland(player)
+    return player.components.areaaware ~= nil
+        and player.components.areaaware:CurrentlyInTag("lunacyarea")
     end
 
     local function StartBusy(player, ...)
@@ -118,6 +129,14 @@ end
                 -- use startbusytheme to reduce upvalue usage and increase compatibility with game updates
                 _StartBusyTheme(player, BUSYTHEMES.HOODEDFOREST, "UMMusic/music/hoodedforest_work", 15)
             end
+        elseif IsInMagmaCaves(player) then
+            if not (_iscave or _isday) then
+                return
+            elseif get_busytask() ~= nil then
+                set_extendtime(GLOBAL.GetTime() + 15)
+            else
+                _StartBusyTheme(player, BUSYTHEMES.MAGMACAVES, "UMMusic2/music/um_magmacaves_work", 15)
+            end
         else
             return _StartBusy(player, ...)
         end
@@ -125,6 +144,8 @@ end
 
     local EPIC_TAGS = { "epic" }
     local NO_EPIC_TAGS = { "noepicmusic" }
+    local ANY_TAGS = { "_combat" }
+    local NO_TAGS = {}
     local function StartDanger(player, ...)
         if _soundemitter:PlayingSound("fogfear") or _soundemitter:PlayingSound("tiddlestranger") then
             return
@@ -135,6 +156,9 @@ end
         local x, y, z = player.Transform:GetWorldPosition()
         local uncomp_boss_check = TheSim ~= nil and 
             (IsInHoodedForest(player) and #TheSim:FindEntities(x, y, z, 30, EPIC_TAGS, NO_EPIC_TAGS) > 0 and "UMMusic/music/hoodedforest_efs") or
+            nil
+        local uncomp_magmacaves_check = TheSim ~= nil and 
+            (IsInMagmaCaves(player) and #TheSim:FindEntities(x, y, z, 30, ANY_TAGS, NO_TAGS) > 0 and "UMMusic2/music/um_magmacaves_fight") or
             nil
         
         if uncomp_boss_check ~= nil then
@@ -149,6 +173,20 @@ end
                 set_extendtime(0)
 
                 -- does um efs music even have "wathgrithr_intensity"?
+                if _hasinspirationbuff then
+                    _soundemitter:SetParameter("danger", "wathgrithr_intensity", _hasinspirationbuff)
+                end
+            end
+        elseif uncomp_magmacaves_check then
+            if get_dangertask() ~= nil then
+                set_extendtime(GLOBAL.GetTime() + 10)
+            elseif _isenabled then
+                _StopBusy()
+                _soundemitter:PlaySound(uncomp_magmacaves_check, "danger")
+                set_dangertask(inst:DoTaskInTime(10, _StopDanger, true))
+                set_triggeredlevel(nil)
+                set_extendtime(0)
+
                 if _hasinspirationbuff then
                     _soundemitter:SetParameter("danger", "wathgrithr_intensity", _hasinspirationbuff)
                 end

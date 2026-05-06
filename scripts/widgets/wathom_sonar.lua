@@ -93,21 +93,30 @@ function Wathom_Sonar:UpdateAlpha(dt)
 				ring.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
 				
 				self.owner:DoTaskInTime(0.1, function()
-						if self.active then
-							local ring2 = SpawnPrefab("wathom_heartbeat_ringfx")
-							ring2.Transform:SetScale(2,2,2)
-							ring2.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
-						end
-					end)
+					if self.active then
+						local ring2 = SpawnPrefab("wathom_heartbeat_ringfx")
+						ring2.Transform:SetScale(2,2,2)
+						ring2.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
+					end
+				end)
+
+                self.owner:DoTaskInTime(0.2, function()
+					if self.active and self.owner:HasTag("echolocation") then
+						local ring3 = SpawnPrefab("wathom_heartbeat_ringfx")
+						ring3.Transform:SetScale(2,2,2)
+						ring3.Transform:SetPosition(self.owner.Transform:GetWorldPosition())
+					end
+				end)
 			end
 
             self.currentstate = "in"
             self.alphagoal = 0
             self.time = self.transitiontimeIN
         elseif self.currentstate == "in" and self.owner:HasTag("WathomInDark") then
+            local echo1_vision = self.owner:HasTag("echolocation") and 1.9 or 1.1
             self.currentstate = "out"
             self.alphagoal = 1
-            self.time = (self.transitiontimeOUT - (self.current_adrenaline / 25))
+            self.time = ((self.transitiontimeOUT - (self.current_adrenaline / 25)) * echo1_vision)
         end                
     end
 
@@ -133,8 +142,8 @@ function Wathom_Sonar:OnUpdate(dt)
         local b1 = math.min(b * 1.5, 1)
 		
 		local alpha_bonus = TheWorld.state.isday and .5 or TheWorld.state.isdusk and .25 or 0
-
-        self.bg2:SetTint(0, 0, 0, (self.alpha - (self.current_adrenaline / 200)) - alpha_bonus)
+        local echo_bonus = self.owner:HasTag("echolocation") and .33 or .25
+        self.bg2:SetTint(0, 0, 0, (self.alpha - (self.current_adrenaline / 200)) - alpha_bonus - echo_bonus)
     end
 end
 

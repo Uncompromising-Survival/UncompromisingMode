@@ -100,10 +100,19 @@ local function OnActivate(inst, doer)
         if not doer:HasTag("vetcurse") then
             doer.sg:GoToState("curse_controlled")
             ToggleCurse(inst, doer)
+			
+			-- Watermelon lantern easter egg
+			if doer.components.inventory:HasItemThatMatches(function(item) return item.prefab == "watermelon" end,2) then
+				doer.components.builder:UnlockRecipe("watermelon_lantern")
+				doer:PushEvent("learnrecipe", {teacher = inst, recipe = "watermelon_lantern"})
+				inst.components.talker:Say("Nice melons. Have some forbidden knowledge.")
+			end
         end
         doer:RemoveTag("vetcurse_warning")
     end
     inst.components.activatable.inactive = true
+	
+
 end
 
 local function ToggleCursee(inst)

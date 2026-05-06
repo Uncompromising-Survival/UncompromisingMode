@@ -274,7 +274,7 @@ local characters = {
     },
     WALTER = {
         loot = {
-            Item(function() return RandomItem("smallfishmeat_dried", "smallmeat_dried") end, 4, 1, true),
+            Item(function() return RandomItem("fishmeat_small_dried", "smallmeat_dried") end, 4, 1, true),
             Item(function() return RandomItem("monstermeat_dried", "monstersmallmeat_dried") end, 5, .5, true),
             Item("kelp_dried", 4),
             Item("kelp_dried", 2, .5),
@@ -422,13 +422,13 @@ local default = {
             Item("lightninggoathorn")
         }
     },
-    BISHOP = {
-        size = COCOON_SIZE.SMALL,
-        name = "Hardened",
-        loot = {
-            Item("trinket_6", 2),
-        }
-    },
+    -- BISHOP = {
+        -- size = COCOON_SIZE.SMALL,
+        -- name = "Hardened",
+        -- loot = {
+            -- Item("trinket_6", 2),
+        -- }
+    -- },
     MERM = {
         size = COCOON_SIZE.SMALL,
         name = "Scaly",
@@ -511,7 +511,7 @@ local default = {
                     TheWorld.state.isspring and "oceanfish_small_7_inv" or
                     TheWorld.state.issummer and "oceanfish_small_8_inv" or
                     "wobster_sheller_land"
-            end, 1, .5)
+            end, 1, 1)
         }
     },
     WALRUS = {

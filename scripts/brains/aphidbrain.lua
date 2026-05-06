@@ -7,7 +7,7 @@ require "behaviours/panic"
 require "behaviours/attackwall"
 require "behaviours/useshield"
 
---local BrainCommon = require "brains/braincommon"
+local BrainCommon = require "brains/braincommon"
 
 local RETURN_HOME_DELAY_MIN = 15
 local RETURN_HOME_DELAY_MAX = 25
@@ -52,6 +52,9 @@ local function GoHomeAction(inst)
     end
 end
 
+local function CanReach(item, inst)
+    return item:IsOnPassablePoint() and item:GetCurrentPlatform() == inst:GetCurrentPlatform()
+end
 
 local function EatFoodAction(inst)
     local EAT_CANT_TAGS = { "outofreach" }
@@ -72,8 +75,7 @@ local function EatFoodAction(inst)
         return
     elseif inst.components.inventory ~= nil then
         if inst.components.eater ~= nil then
-            local target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) or
-                    (inst.components.eater:CanEat(item) and item:IsOnValidGround()) end)
+            local target = inst.components.inventory:FindItem(function(item) return inst.components.eater:CanEat(item) end)
             if target ~= nil then
                 return BufferedAction(inst, target, ACTIONS.EAT)
             end
@@ -92,28 +94,24 @@ local function EatFoodAction(inst)
 
     --Look for food on the ground, pick it up
     for i, item in ipairs(ents) do
-        if item:GetTimeAlive() > 8 and
-            item.components.inventoryitem ~= nil and
-            item.components.inventoryitem.canbepickedup and
-            not item.components.inventoryitem:IsHeld() and
-            item:IsOnValidGround() and
-            inst.components.eater:CanEat(item) and TheWorld.Map:IsPassableAtPoint(x, y, z) then
+        if item:GetTimeAlive() > 8 and inst.components.eater and inst.components.eater:CanEat(item)
+            and not (item.components.inventoryitem and item.components.inventoryitem:IsHeld())
+            and CanReach(item, inst) then
             return BufferedAction(inst, item, ACTIONS.PICKUP)
         end
     end
 
     for i, item in ipairs(ents) do
-        if item.prefab ~= inst.prefab and
-            item.components.pickable ~= nil and
-            item.components.pickable.caninteractwith and
-            item.components.pickable:CanBePicked() and TheWorld.Map:IsPassableAtPoint(x, y, z) then
+        if item.prefab ~= inst.prefab
+            and item.components.pickable ~= nil
+            and item.components.pickable.caninteractwith
+            and item.components.pickable:CanBePicked() and CanReach(item, inst) then
             return BufferedAction(inst, item, ACTIONS.PICK)
         end
     end
 
     for i, item in ipairs(ents) do
-        if item.components.crop ~= nil and
-            item.components.crop:IsReadyForHarvest() and TheWorld.Map:IsPassableAtPoint(x, y, z) then
+        if item.components.crop ~= nil and item.components.crop:IsReadyForHarvest() and CanReach(item, inst) then
             return BufferedAction(inst, item, ACTIONS.HARVEST)
         end
     end
@@ -146,13 +144,16 @@ function AphidBrain:OnStart()
             WhileNode(function() return not self.inst.sg:HasStateTag("jumping") end, "AttackAndWander",
                 PriorityNode(
                     {
-                        Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),						
+                        BrainCommon.PanicTrigger(self.inst),
+                        BrainCommon.ElectricFencePanicTrigger(self.inst),
+                        Follow(self.inst, GetLeader, MIN_FOLLOW_DIST, TARGET_FOLLOW_DIST, MAX_FOLLOW_DIST),                        
                         WhileNode(function() return self.inst.components.combat.target == nil or
                                 not self.inst.components.combat:InCooldown() end, "AttackMomentarily", ChaseAndAttack(self.inst, MAX_CHASE_TIME, MAX_CHASE_DIST)),
                         WhileNode(function() return self.inst.components.combat.target and
                                 self.inst.components.combat:InCooldown() end, "Dodge", RunAway(self.inst, function() return
                             self.inst.components.combat.target end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST)),
-                        DoAction(self.inst, function() return EatFoodAction(self.inst) end),
+                        WhileNode(function() return not self.inst.full_belly end, "JustEaten", DoAction(self.inst, function() return EatFoodAction(self.inst) end)),
+                        
 
                         WhileNode(function() return TheWorld.state.isnight end, "IsNight",
                             DoAction(self.inst, GoHomeAction, "go home", true)),

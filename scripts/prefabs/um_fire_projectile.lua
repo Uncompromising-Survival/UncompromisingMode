@@ -1,12 +1,3 @@
-local LIGHT_COLOUR = RGB(255, 255, 192)
-local firelevels =
-{
-	{anim="level1", sound="dontstarve/common/campfire", radius=2, intensity=.8, falloff=.33, colour=LIGHT_COLOUR, soundintensity=.1},
-	{anim="level2", sound="dontstarve/common/campfire", radius=3, intensity=.8, falloff=.33, colour=LIGHT_COLOUR, soundintensity=.3},
-	{anim="level3", sound="dontstarve/common/campfire", radius=4, intensity=.8, falloff=.33, colour=LIGHT_COLOUR, soundintensity=.6},
-	{anim="level4", sound="dontstarve/common/campfire", radius=5, intensity=.8, falloff=.33, colour=LIGHT_COLOUR, soundintensity=1},
-}
-
 local function Shrink(inst)
 	inst.scale = inst.scale - .015
 	inst.components.propagator.heatoutput = 12 - (6 - 6 * inst.scale)
@@ -14,6 +5,29 @@ local function Shrink(inst)
 	inst.Transform:SetScale(inst.scale, inst.scale, inst.scale)
 	if inst.scale < 0 then
 		inst:Remove()
+	end
+end
+
+local function ChillSurroundings(inst)
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local burnables = TheSim:FindEntities(x, 0, z, inst.scale * 2, nil, inst.dont_hit_tags) -- There isn't a way to search for entities tagged as burnable.... (there is no burnable tag)
+	local damage = inst.damage or 1
+	for i,v in ipairs(burnables) do
+		if v.components.burnable and not (v.prefab == "um_fire_projectile" and v.chilly) then
+			v.components.burnable:Extinguish(true)
+		end
+		if v.components.health and v:IsValid() then
+			v.components.health:DoDelta(-1,false,inst.damager)
+		end
+		if v.components.combat and inst.damager then
+			v.components.combat:SuggestTarget(inst.damager)
+		end
+		if v.components.freezable then
+			v.components.freezable:AddColdness(0.15, 3)
+		end
+		if v.components.temperature and v.components.temperature.current > -15 then
+			v.components.temperature:DoDelta(-1)
+		end
 	end
 end
 
@@ -25,11 +39,14 @@ local function BurnSurroundings(inst)
 		if v.components.burnable then
 			v.components.burnable:Ignite(true, inst, inst.damager)
 		end
-		if v.components.health then
+		if v.components.health and v:IsValid() then
 			v.components.health:DoFireDamage(inst.damage, inst.damager, true)
 		end
 		if v.components.combat and inst.damager then
 			v.components.combat:SuggestTarget(inst.damager)
+		end
+		if v.components.temperature and v.components.temperature.current < 90 then
+			v.components.temperature:DoDelta(1)
 		end
 		if v.prefab == "snowpile" then
 			SpawnPrefab("splash_snow_fx").Transform:SetPosition(v.Transform:GetWorldPosition())
@@ -76,16 +93,42 @@ local function Shoot(inst)
 	inst.components.propagator.heatoutput = 12
 	inst.proprange = inst.components.propagator.propagaterange
     MakeLargeBurnable(inst, time_to_extinguish)
-	inst.components.burnable:SetOnIgniteFn(nil)
-    inst.components.burnable:SetOnExtinguishFn(inst.Remove)
-	inst.components.burnable.fxdata[1].prefab = "character_fire"
-    inst.components.burnable:Ignite()
+	local burnable = inst.components.burnable
+	burnable:SetOnIgniteFn(nil)
+    burnable:SetOnExtinguishFn(inst.Remove)
+	burnable.fxdata[1].prefab = "character_fire"
+	
+    
+	
+	if inst.chilly then
+		burnable.fxdata[1].prefab = "warg_mutated_breath_fx"
+		burnable:Ignite()
+		for i, fx in ipairs(burnable.fxchildren) do
+
+			-- fx.AnimState:SetMultColour(0.1,0.2,.8,1)
+			fx.kill_fx_task:Cancel()
+			fx.kill_fx_task = nil
+			fx.SoundEmitter:PlaySound("lunarhail_event/creatures/lunar_buzzard/fire_ground_LP", "fire_loop")
+			fx.spawn_embers_task:Cancel()
+			fx.spawn_embers_task = nil
+		end
+		inst.components.propagator:StopSpreading(true)
+	else
+		burnable:Ignite()
+	end
+	
 	if not inst.scale then
 		inst.scale = 1
 	end
 	inst.scalemax = inst.scale
 	BeginScaleUp(inst)
-	inst:DoPeriodicTask(FRAMES, BurnSurroundings)
+	if inst.chilly then
+		inst:DoPeriodicTask(FRAMES, ChillSurroundings)
+	elseif inst.cursed then
+		-- ADD CURSED
+	else
+		inst:DoPeriodicTask(FRAMES, BurnSurroundings)
+	end
 end
 
 local function fn()

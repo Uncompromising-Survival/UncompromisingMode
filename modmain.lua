@@ -2,8 +2,9 @@ local require = GLOBAL.require
 
 require "um_pocketdimensioncontainers"
 
-GLOBAL.TheMineralLogbook = require("mineral_logbook")()
-GLOBAL.TheMineralLogbook:Load()
+GLOBAL.UMCommonFns = require("tools/um_commonfns")
+GLOBAL.MAX_GEM_TIER = 3
+GLOBAL.MIN_GEM_TIER = 0
 
 GLOBAL.UM_DEV = GetModConfigData("devmode")
 if GLOBAL.UM_DEV then
@@ -77,7 +78,6 @@ end)
 
 modimport("init/init_gamemodes/init_uncompromising_mode")
 modimport("init/init_wathom")
-modimport("init/um_tree_rock_data")
 modimport("init/init_magmatiles")
 
 local skilltree_defs = require("prefabs/skilltree_defs")
@@ -97,9 +97,8 @@ if GetModConfigData("funny rat") then
     AddModCharacter("winky", "FEMALE")
 
     GLOBAL.TUNING.WINKY_HEALTH = 175
-    GLOBAL.TUNING.WINKY_HUNGER = 150
+    GLOBAL.TUNING.WINKY_HUNGER = 175
     GLOBAL.TUNING.WINKY_SANITY = 125
-    GLOBAL.STRINGS.CHARACTER_SURVIVABILITY.winky = "Stinky"
 end
 
 GLOBAL.FUELTYPE.BATTERYPOWER = "BATTERYPOWER"
@@ -401,7 +400,6 @@ if GetModConfigData("wixie_walter") then
     GLOBAL.TUNING.WIXIE_HEALTH = 130
     GLOBAL.TUNING.WIXIE_HUNGER = 150
     GLOBAL.TUNING.WIXIE_SANITY = 200
-    GLOBAL.STRINGS.CHARACTER_SURVIVABILITY.wixie = "Grim"
 
     for k, v in pairs(GLOBAL.CLOTHING) do
         if v and v.symbol_overrides_by_character and v.symbol_overrides_by_character.walter then
@@ -453,6 +451,33 @@ AddShardModRPCHandler("UncompromisingSurvival", "AcidMushroomsTargetFinished", f
 end)]]
 -- since ChangeImageName just does that, we need to assign the new atlas as well. I don't want to pack 2 images in the same atlas (mostly because idk how)
 
+--Checks for projectinator/receptionator, basically blocking both the lazy deserter and desert stones
+local _OldStartChannelingFn = GLOBAL.ACTIONS.STARTCHANNELING.fn
+GLOBAL.ACTIONS.STARTCHANNELING.fn = function(act)
+    local target = act.target
+    local doer = act.doer
+    if target ~= nil and doer ~= nil and doer:HasTag("um_astral_projected") then
+        if target:HasTag("um_astral_projector") then
+            return false
+        end
+        if target:HasTag("um_astral_projector_target") and doer.um_astral_target ~= target then
+            return false
+        end
+        if target:HasTag("townportal") then
+            return false
+        end
+    end
+    return _OldStartChannelingFn(act)
+end
+
+local _OldTeleportFn = GLOBAL.ACTIONS.TELEPORT.fn
+GLOBAL.ACTIONS.TELEPORT.fn = function(act)
+    if act.doer ~= nil and act.doer:HasTag("um_astral_projected") then
+        return false
+    end
+    return _OldTeleportFn(act)
+end
+
 GLOBAL.plaguemask_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "hat_plaguemask") end
 
 GLOBAL.plaguemask_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "hat_plaguemask") end
@@ -463,14 +488,18 @@ GLOBAL.feather_frock_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "feat
 
 GLOBAL.cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "cursed_antler") end
 
+GLOBAL.crystal_cursed_antler_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "crystal_cursed_antler") end
+
 GLOBAL.cursed_antler_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "cursed_antler") end
+
+GLOBAL.crystal_cursed_antler_init_fn = function(inst) GLOBAL.basic_clear_fn(inst, "crystal_cursed_antler") end
 
 GLOBAL.ancient_amulet_red_init_fn = function(inst, build_name) GLOBAL.basic_init_fn(inst, build_name, "amulet_red_ground") end
 
 GLOBAL.ancient_amulet_red_clear_fn = function(inst) GLOBAL.basic_clear_fn(inst, "amulet_red_ground") end
 
 GLOBAL.TUNING.DSTU.MODROOT = MODROOT
-modimport("init/init_insightcompat")
+
 modimport("init/init_statusannouncements")
 
 AddSimPostInit(function()
@@ -478,3 +507,5 @@ AddSimPostInit(function()
         GLOBAL.ShadeRenderer:SetShadeTexture(GLOBAL.ShadeTypes.HoodedForestCanopy, GLOBAL.resolvefilepath("images/giant_tree.tex"))
     end
 end)
+
+modimport("init/um_tree_rock_data")

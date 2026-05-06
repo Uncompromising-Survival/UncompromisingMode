@@ -5,6 +5,7 @@ local StaticLayout = require("map/static_layout")
 Layouts["cave_exit_magmabiome"] = StaticLayout.Get("map/static_layouts/cave_exit_magmabiome")
 Layouts["gemforge1"] = StaticLayout.Get("map/static_layouts/gemforge1")
 Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
+Layouts["ia_gem_forge"] = StaticLayout.Get("map/static_layouts/ia_gem_forge")
 
 Layouts["um_pepperdragon_nest"] = StaticLayout.Get("map/static_layouts/um_pepperdragon_nest")
 Layouts["um_pepperdragon_nest"].ground_types = PYRE_THICKET_GROUND_TYPES
@@ -16,13 +17,13 @@ Layouts["um_pepperdragon_nest"].ground_types = PYRE_THICKET_GROUND_TYPES
 AddRoom("BGMagma", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-    random_node_entrance_weight = 0,
+    --random_node_entrance_weight = 0,
     contents = {
-        distributepercent = .08,
+        distributepercent = .1,
         distributeprefabs =
         {
             lava_pond_cave = 0.05,
-            um_magmarock1 = 0.1,
+            magmarock1 = 0.1,
 
             --um_pyre_nettles_stage_4 = 0.1,
             --um_pyre_nettles_stage_5 = 0.1,
@@ -83,7 +84,7 @@ AddRoom("MagmaRole", {
             tree_rock1     = 0.12,
             tree_rock2     = 0.12,
             lava_pond_cave = 0.05,
-            um_magmarock1  = 0.1,
+            magmarock1     = 0.1,
         },
         prefabdata = {
             cave_vent_rock = RandomVentRockState,
@@ -101,13 +102,13 @@ AddRoom("GrassMagma", {
         distributeprefabs =
         {
             lava_pond_cave = 0.1,
-            um_magmarock1 = 0.025,
+            magmarock1 = 0.025,
             mushtree_shadow = 0.025,
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
             --um_pyre_nettles_stage_2 = 0.1,
             --um_pyre_nettles_stage_5 = 0.1,
-            um_pyrite_ceiling = 0.025,
+            um_pyrite_ceiling = 0.01,
         },
         countstaticlayouts = {
             ["um_pepperdragon_nest"] = 1,
@@ -128,11 +129,11 @@ AddRoom("GrassMagmaCliffs", {
         distributeprefabs =
         {
             lava_pond_cave = 0.1,
-            um_magmarock1 = 0.025,
+            magmarock1 = 0.025,
             mushtree_shadow = 0.025,
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
-            um_pyrite_ceiling = 0.025,
+            um_pyrite_ceiling = 0.01,
         },
     }
 })
@@ -146,11 +147,11 @@ AddRoom("GrassMagmaCliffsDragon", {
         distributeprefabs =
         {
             lava_pond_cave = 0.1,
-            um_magmarock1 = 0.025,
+            magmarock1 = 0.025,
             mushtree_shadow = 0.025,
             pyrethicket_builder = 0.5,
             fyriterock = 0.05,
-            um_pyrite_ceiling = 0.025,
+            um_pyrite_ceiling = 0.01,
         },
         countstaticlayouts = {
             ["um_pepperdragon_nest"] = 1,
@@ -161,14 +162,13 @@ AddRoom("GrassMagmaCliffsDragon", {
 AddRoom("ShroomyMagma", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-    random_node_entrance_weight = 0,
     contents = {
         distributepercent = .5,
         distributeprefabs =
         {
             fissure = 0.125,
             lava_pond_cave = 0.05,
-            um_magmarock1 = 0.05,
+            magmarock1 = 0.05,
             mushtree_shadow = 0.9,
             viperfruit_plant = 0.1,
         },
@@ -178,22 +178,22 @@ AddRoom("ShroomyMagma", {
 AddRoom("FossilMagma", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-    random_node_entrance_weight = 0,
     contents = {
-        distributepercent = .15,
+        distributepercent = .12,
         distributeprefabs =
         {
-            lava_pond_cave = 0.025,
-            um_magmarock1 = 0.025,
-            magmabone = 0.05,
-            um_pyrite_ceiling = 0.0025,
-            um_ribopodden = 0.0025,
+            lava_pond_cave = 0.01,
+            magmarock1 = 0.01,
+            magmabone = 0.025,
+            fyriterock = 0.007,
+            um_pyrite_ceiling = 0.005,
+            um_ribopodden = 0.007,
             --um_pyre_nettles_stage_2 = 0.025,
             --um_pyre_nettles_stage_5 = 0.025,
         },
         countprefabs =
         {
-            um_ghost_pepper = function() return math.random(4, 7) end,
+            um_ghost_pepper = function() return math.random(1, 3) end,
         },
     }
 
@@ -202,17 +202,17 @@ AddRoom("FossilMagma", {
 AddRoom("GloomyMagma", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-    random_node_entrance_weight = 0,
     contents = {
         distributepercent = .15,
         distributeprefabs =
         {
             fissure = 0.15,
             lava_pond_cave = 0.1,
-            um_magmarock1 = 0.15,
+            magmarock1 = 0.15,
             viperfruit_plant = 0.25,
             viperworm = 0.25,
-            um_pyrite_ceiling = 0.025,
+            fyriterock = 0.01,
+            um_pyrite_ceiling = 0.0025,
             --um_pyre_nettles_stage_2 = 0.05,
             --um_pyre_nettles_stage_5 = 0.05,
         },
@@ -226,73 +226,39 @@ AddRoom("GloomyMagma", {
 AddRoom("Shroomy", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
     value = WORLD_TILES.UM_MAGMA,
-    random_node_entrance_weight = 0,
-    contents = {
-        distributepercent = .5,
-        distributeprefabs =
+	random_node_entrance_weight = 0,
+    contents =  {
+        distributepercent = .3,
+        distributeprefabs=
         {
-            um_magmarock1 = 0.1,
+            magmarock1 = 0.1,
             mushtree_shadow = 0.9,
             cave_fern_withered = 0.05,
         },
+		countprefabs = 
+		{
+			viperfruit_plant = 1,
+		}
     }
 })
 
 AddRoom("GemForge1", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
-    value = WORLD_TILES.UM_MAGMA,
-    contents = {
-        distributepercent = .08,
-        distributeprefabs =
+    colour={r=0.3,g=0.2,b=0.1,a=0.3},
+    value = WORLD_TILES.UM_MAGMA_MIX,
+    random_node_entrance_weight = 0,
+    contents =  {
+        distributepercent = .4,
+        distributeprefabs=
         {
-            lava_pond_cave = 0.05,
-            um_magmarock1 = 0.1,
-
+			magmarock1 = 0.1,
+			mushtree_shadow = 0.40,
+            pyrethicket_builder = 0.45,
+            viperfruit_plant = 0.05,
+			
         },
-        countprefabs = { um_gemologyforge_umss = 1 },
+		countstaticlayouts={["gemforge1"]=1},
     }
 })
-
-AddRoom("MagmaOcean", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
-    value = WORLD_TILES.UM_MAGMA_LAVAMOLTEN_NOISE,
-    contents = {
-        distributepercent = .08,
-        distributeprefabs = {},
-        countprefabs = {
-            um_pyrite_ceiling = math.random(5, 10),
-        },
-    }
-})
-
-AddRoom("MagmaOceanExit", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
-    value = WORLD_TILES.UM_MAGMA_LAVAMOLTEN_NOISE,
-    tags = { "ExitPiece" },
-    contents = {
-        distributepercent = .08,
-        distributeprefabs = {},
-        countprefabs = {
-            um_pyrite_ceiling = math.random(5, 10),
-        },
-    }
-})
-
-
-AddRoom("BGMagmaOcean", {
-    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
-    value = WORLD_TILES.UM_MAGMA_LAVAMOLTEN_NOISE,
-    contents = {
-        distributepercent = .08,
-        distributeprefabs =
-        {
-
-        },
-        countprefabs = {},
-    }
-})
-
-
 
 AddRoom("BGMagmaNoLava", {
     colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
@@ -302,11 +268,11 @@ AddRoom("BGMagmaNoLava", {
         distributepercent = .08,
         distributeprefabs =
         {
-            um_magmarock1 = 0.1,
+            magmarock1 = 0.1,
             cave_fern_withered = 0.2,
             flower_cave_withered = 0.2,
             magmabone = 0.05,
-            um_ribopodden = 0.01,
+            um_ribopodden = 0.007,
         },
     }
 })
@@ -329,9 +295,49 @@ AddRoom("MagmaStairs", {
             cavelight = 0.25,
             cavelight_small = 0.1,
             cavelight_tiny = 0.1,
-            um_magmarock1 = 0.2,
+            magmarock1 = 0.2,
         },
     }
+})
 
+AddRoom("MagmaVolcano_IA", {
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    value = WORLD_TILES.UM_MAGMAVOLCANO_IA,
+    random_node_entrance_weight = 0,
+    contents = {
+        distributepercent = .08,
+        distributeprefabs =
+        {
+            magmarock1 = 0.1,
+            magmabone = 0.05,
+            um_ribopodden = 0.01,
+            volcano_shrub = 0.05,
+            lava_pond_cave = 0.05,
+            fyriterock_spawner = 0.1,
+            pyrethicket_builder = 0.25,
+        }
+    }
+})
 
+AddRoom("MagmaVolcanoNest_IA", {
+    colour = { r = 0.3, g = 0.2, b = 0.1, a = 0.3 },
+    value = WORLD_TILES.UM_MAGMAVOLCANO_IA,
+    random_node_entrance_weight = 0,
+    contents = {
+        distributepercent = .08,
+        distributeprefabs =
+        {
+            magmarock1 = 0.1,
+            magmabone = 0.05,
+            um_ribopodden = 0.01,
+            volcano_shrub = 0.05,
+            lava_pond_cave = 0.05,
+            fyriterock_spawner = 0.05,
+            pyrethicket_builder = 0.5,
+        },
+        countstaticlayouts = {
+            ["ia_gem_forge"] = 1,
+            ["um_pepperdragon_nest"] = 1,
+        },
+    }
 })

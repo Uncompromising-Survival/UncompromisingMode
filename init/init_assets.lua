@@ -24,11 +24,6 @@ local inventoryitems =
     "armor_glassmail",
     "beargerclaw",
     "beefalowings",
-    "berniebox",
-    "blowgunammo_electric",
-    "blowgunammo_fire",
-    "blowgunammo_sleep",
-    "blowgunammo_tooth",
     "blue_mushed_room",
     "blueberrypancakes",
     "bluegem_cracked",
@@ -48,6 +43,7 @@ local inventoryitems =
     "crabclaw",
     "critterlab_real",
     "cursed_antler",
+    "crystal_cursed_antler",
     "um_exhumer",
     "um_exhumer_powered",
     "um_wingsuit",
@@ -63,7 +59,6 @@ local inventoryitems =
     "dormant_rain_horn",
     "driftwoodfishingrod",
     "feather_frock",
-    "fishmeat_dried",
     "floral_bandage",
     "um_rimeweed_icepack",
     "gasmask",
@@ -72,7 +67,6 @@ local inventoryitems =
     "gore_horn_hat",
     "grassgekko",
     "green_mushed_room",
-    "green_vomit",
     "greenfoliage",
     "greengem_cracked",
     "hat_bagmask",
@@ -123,13 +117,9 @@ local inventoryitems =
     "um_bland_cube",
     "oculet",
     "opalpreciousgem_cracked",
-    "orange_vomit",
     "orangegem_cracked",
-    "pale_vomit",
     "pied_piper_flute",
-    "pink_vomit",
     "plaguemask",
-    "purple_vomit",
     "purplegem_cracked",
     "rain_horn",
     "rat_fur",
@@ -137,7 +127,6 @@ local inventoryitems =
     "rat_whip",
     "ratpoisonbottle",
     "red_mushed_room",
-    "red_vomit",
     "redgem_cracked",
     "rice",
     "rice_cooked",
@@ -154,8 +143,6 @@ local inventoryitems =
     "skullflask",
     "skullflask_empty",
     "slobberlobber",
-    "smallfishmeat_dried",
-    "snapplant",
     "snotroast",
     "um_ghost_fajita",
     "um_boom_tart",
@@ -185,18 +172,15 @@ local inventoryitems =
     "um_magnerang",
     "um_monsteregg",
     "um_monsteregg_cooked",
-    "uncompromising_blowgun",
     "uncompromising_fishingnet",
     "uncompromising_harpoon",
     "viperfruit",
     "viperfruit_lesser",
     "viperjam",
     "watermelon_lantern",
-    "whisperpod",
     "widowsgrasp",
     "widowshead",
     "woodpecker",
-    "yellow_vomit",
     "yellowgem_cracked",
     "zaspberry",
     "zaspberry_lesser",
@@ -228,6 +212,10 @@ local inventoryitems =
     "ocupus_beak",
     "beakbasher",
     "plaunt_manny",
+    "wormwood_mushtree_tall",
+    "wormwood_mushtree_medium",
+    "wormwood_mushtree_small",
+    "wormwood_mushtree_lunar",
     "um_brineishmoss",
     "brine_balm",
     "sludge_oil",
@@ -283,6 +271,8 @@ local inventoryitems =
     "um_record_wathom",
     "um_record_stranger",
     "um_record_winky",
+    "um_record_moonmaw",
+    "um_record_tot",
 
     --Wixie related inventory icons
 
@@ -371,6 +361,7 @@ local inventoryitems =
     "um_hat_rime",
     "um_ice_tail",
 
+    "um_strange_rabbit_rock",
     -- Snaildrake related
     "snaildrakehat",
     "snaildrakebucket_empty",
@@ -410,6 +401,18 @@ local inventoryitems =
     "um_hat_bee_moon",
     "um_eyebalm",
     "um_beemine_moon_item",
+    "um_tentaclespike_moon",
+    "um_tentaclespot_moon",
+    "um_bomb_moon",
+
+    "um_backpack_amuletuse",
+    "um_backpack_amuletuse_red",
+    "um_backpack_amuletuse_blue",
+    "um_backpack_amuletuse_purple",
+    "um_backpack_amuletuse_yellow",
+    "um_backpack_amuletuse_orange",
+    "um_backpack_amuletuse_green",
+
     "um_ribopod",
     "um_ribopodden",
     "um_spongeplant_item",
@@ -440,6 +443,8 @@ local inventoryitems =
     "um_gemology_geode_glass",
     "um_gemology_geode_slime",
     "um_gemology_geode_ruins",
+    "um_gemology_geode_sink",
+    "um_gemology_geode_vent",
 
     "um_flamethrower",
     "um_firecream",
@@ -447,8 +452,91 @@ local inventoryitems =
     "um_hat_pepperdragon",
     "um_boomberry_bomb",
     "um_boomberrypie",
+    "um_magnifier",
+    "um_magnifier_obsidian",
+    "um_magnifier_purplegem",
 
-    "um_magnifier"
+    "um_gemology_pouch",
+    --"um_gemology_pouch_open",
+    "um_hat_nettlemask",
+    "um_thulecite_razor",
+    "uncompromising_winkyhomeburrow",
+}
+
+local minimap_icons = {
+    "riceplant",
+    "sporepack_map",
+    "air_conditioner_map",
+    "um_hoodedtree",
+    "pitcher",
+    "veteranshrine_map",
+    "lazychester_minimap",
+    "webbedcreature_small_minimap",
+    "webbedcreature_medium_minimap",
+    "webbedcreature_large_minimap",
+    "pollenmiteden_map",
+    "um_pawn",
+    "um_pawn_nightmare",
+    "uncompromising_ratburrow",
+    "uncompromising_winkyhomeburrow",
+    "winky",
+    "telebase_active",
+    "wixie",
+    "um_pyre_nettles_map",
+    "um_tornado_map",
+    "rock_lichen",
+    "houndious_observious_map",
+    "springrock1",
+    "springrock2",
+    "springrock3",
+    "snaildrake_hole",
+    "magmarock1",
+    "gloomcap",
+    "um_rimeweed_tree",
+    "um_rimeweed_flower",
+    "um_rimeweed_plant",
+    "um_pepperdragon_nest",
+    "um_fyriterock",
+    "um_pyrite_ceiling",
+    "um_ribopodden",
+    "um_beehive_moon",
+    "um_beemine_moon",
+    "um_ghost_pepper",
+    "um_bluemushtree_mapicon",
+    "um_redmushtree_mapicon",
+    "um_greenmushtree_mapicon",
+    "um_grotto_glass_icon",
+    "um_guano_rock_icon",
+    "um_lobster_rock_icon",
+    "um_sinkmound_rock_icon",
+    "um_slimestone_rock_icon",
+    "plaunt_manny",
+    "um_gemology_pouch",
+    "um_gemologyforge",
+    "um_backpack_amuletuse",
+    "armor_lifejacket",
+    "armor_snakeskin",
+    "armor_snakeskin_scaly",
+    "armor_windbreaker",
+    "blubbersuit",
+    "raincoat",
+    "reflectivevest",
+    "silksack",
+    "tarsuit",
+    "trunkvest_winter",
+    "trunkvest_summer",
+    "sludge_sack",
+    "hawaiianshirt",
+    "skullchest",
+    "winona_toolbox",
+    "rimeweed",
+    "um_reeds_lunar",
+    "um_fern_fox_den",
+    "um_manny",
+    "cave_entrance_magmabiome",
+    "cave_entrance_moon",
+    "um_spongeplant",
+    "blueberryplant"
 }
 
 for _, item in ipairs(inventoryitems) do
@@ -550,9 +638,6 @@ Assets = {
     Asset("IMAGE", "bigportraits/winky_none.tex"),
     Asset("ATLAS", "bigportraits/winky_none.xml"),
 
-    Asset("IMAGE", "images/map_icons/winky.tex"),
-    Asset("ATLAS", "images/map_icons/winky.xml"),
-
     Asset("IMAGE", "images/avatars/avatar_winky.tex"),
     Asset("ATLAS", "images/avatars/avatar_winky.xml"),
 
@@ -591,9 +676,6 @@ Assets = {
     Asset("IMAGE", "bigportraits/wathom_none.tex"),
     Asset("ATLAS", "bigportraits/wathom_none.xml"),
 
-    Asset("IMAGE", "images/map_icons/wathom.tex"),
-    Asset("ATLAS", "images/map_icons/wathom.xml"),
-
     Asset("IMAGE", "images/avatars/avatar_wathom.tex"),
     Asset("ATLAS", "images/avatars/avatar_wathom.xml"),
 
@@ -651,8 +733,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -696,9 +776,6 @@ Assets = {
 
     Asset("IMAGE", "images/names_gold_wixie.tex"),
     Asset("ATLAS", "images/names_gold_wixie.xml"),
-
-    Asset("IMAGE", "images/map_icons/wixie.tex"),
-    Asset("ATLAS", "images/map_icons/wixie.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wixie.tex"),
     Asset("ATLAS", "images/avatars/avatar_wixie.xml"),
@@ -737,11 +814,12 @@ Assets = {
     Asset("ANIM", "anim/deerclops_mutation_anims.zip"),
     Asset("ANIM", "anim/deerclops_barrier.zip"),
     Asset("ANIM", "anim/laserclops_anims.zip"),
-    Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE)
+    Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE), do not delete otherwise
+
+    Asset("ANIM", "anim/um_slurtle_spit.zip"),
+
 
     Asset("ANIM", "anim/nymph.zip"),
-
-    Asset("ANIM", "anim/carnival_host_death.zip"),
 
     Asset("ANIM", "anim/wilton.zip"),
 
@@ -750,9 +828,6 @@ Assets = {
     Asset("ATLAS", "bigportraits/wathom.xml"),
     Asset("IMAGE", "bigportraits/wathom_none.tex"),
     Asset("ATLAS", "bigportraits/wathom_none.xml"),
-
-    Asset("IMAGE", "images/map_icons/wathom.tex"),
-    Asset("ATLAS", "images/map_icons/wathom.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wathom.tex"),
     Asset("ATLAS", "images/avatars/avatar_wathom.xml"),
@@ -811,8 +886,6 @@ Assets = {
     Asset("ANIM", "anim/slingshot_gnasher.zip"),
     Asset("ANIM", "anim/swap_slingshot_gnasher.zip"),
 
-    Asset("ANIM", "anim/fishmeats.zip"),
-    Asset("ANIM", "anim/driedfishmeat.zip"),
 
     Asset("ANIM", "anim/meatrack_hat_swap.zip"),
     Asset("ANIM", "anim/meatrack_hat_swap_batnose.zip"),
@@ -856,9 +929,6 @@ Assets = {
 
     Asset("IMAGE", "images/names_gold_wixie.tex"),
     Asset("ATLAS", "images/names_gold_wixie.xml"),
-
-    Asset("IMAGE", "images/map_icons/wixie.tex"),
-    Asset("ATLAS", "images/map_icons/wixie.xml"),
 
     Asset("IMAGE", "images/avatars/avatar_wixie.tex"),
     Asset("ATLAS", "images/avatars/avatar_wixie.xml"),
@@ -900,8 +970,6 @@ Assets = {
     Asset("ANIM", "anim/deerclops_build_old.zip"), --Until I fix the anims, this'll be the solution (AXE), considering just redoing the entire UM deerclops.
 
     Asset("ANIM", "anim/nymph.zip"),
-
-    Asset("ANIM", "anim/carnival_host_death.zip"), -- This is an actual animation XD?
 
     Asset("ANIM", "anim/wilton.zip"),
 
@@ -967,8 +1035,6 @@ Assets = {
     Asset("ANIM", "anim/snapperturtle.zip"),
     Asset("ANIM", "anim/snapperturtlebaby.zip"),
 
-    Asset("ANIM", "anim/chomper.zip"),
-
     Asset("ANIM", "anim/widow1.zip"),
     Asset("ANIM", "anim/widow2.zip"),
     Asset("ANIM", "anim/widow1_backup.zip"),
@@ -1003,8 +1069,6 @@ Assets = {
 
     Asset("ANIM", "anim/deerclops_ground_fx.zip"),
 
-    Asset("ANIM", "anim/deerclopsfalling.zip"),
-
     Asset("ANIM", "anim/player_sneeze.zip"),
 
     Asset("ANIM", "anim/rhino_stun.zip"),
@@ -1030,7 +1094,6 @@ Assets = {
     Asset("ANIM", "anim/uncompromising_packrat_water.zip"),
     Asset("ANIM", "anim/uncompromising_packrat.zip"),
 
-    Asset("ANIM", "anim/mosquito_yellow_build.zip"),
 
     Asset("ANIM", "anim/walrus_build_summer.zip"),
     Asset("ANIM", "anim/walrus_baby_build_summer.zip"),
@@ -1040,19 +1103,6 @@ Assets = {
     Asset("ANIM", "anim/acsporecloud.zip"),
 
     Asset("ANIM", "anim/shadow_teleporter.zip"),
-
-    Asset("ANIM", "anim/snapdragon.zip"),
-    Asset("ANIM", "anim/snapdragon_build.zip"),
-    Asset("ANIM", "anim/snapdragon_build_pale.zip"),
-    Asset("ANIM", "anim/snapdragon_build_pink.zip"),
-    Asset("ANIM", "anim/snapdragon_build_yellow.zip"),
-    Asset("ANIM", "anim/snapdragon_build_purple.zip"),
-    Asset("ANIM", "anim/snapdragon_build_red.zip"),
-    Asset("ANIM", "anim/snapdragon_build_orange.zip"),
-    Asset("ANIM", "anim/snapdragon_build_green.zip"),
-    Asset("ANIM", "anim/snapdragon_build_neck.zip"),
-    Asset("ANIM", "anim/snapdragon_build_frozen.zip"),
-    Asset("ANIM", "anim/snapplant.zip"), --if it is what I remember it being, this goes here.
 
     Asset("ANIM", "anim/hound_lightning.zip"),
     Asset("ANIM", "anim/hound_lightning_ocean.zip"),
@@ -1070,7 +1120,7 @@ Assets = {
     --Asset("ANIM", "anim/yuleclops_actions_UM.zip"),
     Asset("ANIM", "anim/deerclops_laser_hit_sparks_fx_blue.zip"),
     Asset("ANIM", "anim/bearger_rockthrow.zip"),
-    Asset("ANIM", "anim/bearger_build_old.zip"),
+    Asset("ANIM", "anim/bearger_build_old.zip"), -- AXE Do not delete this until we have rebuilt Bearger's rock toss animations using his new bank/build
 
     Asset("ANIM", "anim/sea_shadow.zip"),
 
@@ -1097,7 +1147,7 @@ Assets = {
 
     Asset("ANIM", "anim/sorrel.zip"),
 
-    Asset("ANIM", "anim/Bigspin.zip"),
+    Asset("ANIM", "anim/um_giant_tornado.zip"),
 
     Asset("ANIM", "anim/um_whirlpool.zip"),
 
@@ -1217,6 +1267,10 @@ Assets = {
     Asset("ANIM", "anim/airconditioner.zip"),
     Asset("ANIM", "anim/air_conditioner_cloud.zip"),
 
+    --Archives UM stuff
+    Asset("ANIM", "anim/um_archives_projectinator.zip"),
+    Asset("ANIM", "anim/um_archives_receptionator.zip"),
+
     Asset("ANIM", "anim/veteranshrine.zip"),
     Asset("ANIM", "anim/um_vetskull.zip"),
     Asset("ANIM", "anim/um_soul_ball.zip"),
@@ -1229,8 +1283,6 @@ Assets = {
     Asset("ANIM", "anim/walrus_house_summer.zip"),
 
     Asset("ANIM", "anim/critterlab_broken.zip"),
-
-    Asset("ANIM", "anim/whisperpod_normal_ground.zip"),
 
     Asset("ANIM", "anim/nightmaregrowth_shrink.zip"),
 
@@ -1410,9 +1462,6 @@ Assets = {
     Asset("ANIM", "anim/skullflask.zip"),
     Asset("ANIM", "anim/skullflask_empty.zip"),
 
-    Asset("ANIM", "anim/um_blowguns.zip"),
-    Asset("ANIM", "anim/um_darts.zip"),
-
     Asset("ANIM", "anim/glass_scales.zip"),
     Asset("ANIM", "anim/moonglass_geode.zip"),
     Asset("ANIM", "anim/armor_glassmail.zip"),
@@ -1422,7 +1471,6 @@ Assets = {
 
     Asset("ANIM", "anim/hat_corvus.zip"),
 
-    Asset("ANIM", "anim/armor_steelsweater.zip"),
     Asset("ANIM", "anim/steelsweater.zip"),
 
     Asset("ANIM", "anim/amulets_ancient.zip"),
@@ -1522,6 +1570,8 @@ Assets = {
     Asset("ANIM", "anim/cursed_antler.zip"),
     Asset("ANIM", "anim/twisted_antler.zip"),
 
+    Asset("ANIM", "anim/crystal_cursed_antler.zip"),
+
     Asset("ANIM", "anim/swap_exhumer.zip"),
     Asset("ANIM", "anim/swap_exhumer_powered.zip"),
 
@@ -1534,6 +1584,7 @@ Assets = {
     Asset("ANIM", "anim/widowsgrasp.zip"),
     Asset("ANIM", "anim/silksack.zip"),
     Asset("ANIM", "anim/swap_silksack.zip"),
+
     Asset("ANIM", "anim/hat_widowshead.zip"),
 
     Asset("ANIM", "anim/greenfoliage.zip"),
@@ -1558,8 +1609,6 @@ Assets = {
     Asset("ANIM", "anim/um_kebab.zip"),
 
     Asset("ANIM", "anim/cctrinkets.zip"),
-
-    Asset("ANIM", "anim/berniebox.zip"),
 
     Asset("ANIM", "anim/screecher_trinket.zip"),
 
@@ -1598,8 +1647,6 @@ Assets = {
 
     Asset("ANIM", "anim/hat_shadowcrown.zip"),
 
-    Asset("ANIM", "anim/whisperpod.zip"),
-
     Asset("ANIM", "anim/watermelon_lantern.zip"),
 
     Asset("ANIM", "anim/rat_whip.zip"),
@@ -1611,8 +1658,6 @@ Assets = {
     --monster morsels from waffles, thanks
     Asset("ANIM", "anim/extra_monsterfoods.zip"),
     Asset("ANIM", "anim/extra_monsterfoods_dried.zip"),
-
-    Asset("ANIM", "anim/snapdragon_fertilizer.zip"),
 
     Asset("ANIM", "anim/theatercorn.zip"),
 
@@ -1643,6 +1688,26 @@ Assets = {
 
     Asset("IMAGE", "images/um_lava_wave.tex"),
 
+    Asset("ATLAS", "images/wormwood_flytrap.xml"),
+    Asset("IMAGE", "images/wormwood_flytrap.tex"),
+    Asset("ATLAS", "images/wormwood_originator.xml"),
+    Asset("IMAGE", "images/wormwood_originator.tex"),
+    Asset("ATLAS", "images/wormwood_sympathetic_blooming.xml"),
+    Asset("IMAGE", "images/wormwood_sympathetic_blooming.tex"),
+    Asset("ATLAS", "images/wormwood_resilient_crops1.xml"),
+    Asset("IMAGE", "images/wormwood_resilient_crops1.tex"),
+    Asset("ATLAS", "images/wormwood_resilient_crops2.xml"),
+    Asset("IMAGE", "images/wormwood_resilient_crops2.tex"),
+    Asset("ATLAS", "images/wormwood_resilient_crops3.xml"),
+    Asset("IMAGE", "images/wormwood_resilient_crops3.tex"),
+    Asset("ATLAS", "images/wormwood_prick_adept.xml"),
+    Asset("IMAGE", "images/wormwood_prick_adept.tex"),
+    Asset("ATLAS", "images/wormwood_armor_bramble2.xml"),
+    Asset("IMAGE", "images/wormwood_armor_bramble2.tex"),
+    Asset("ATLAS", "images/wormwood_eqex.xml"),
+    Asset("IMAGE", "images/wormwood_eqex.tex"),
+    Asset("ATLAS", "images/wormwood_mutations.xml"),
+    Asset("IMAGE", "images/wormwood_mutations.tex"),
 
     --SWAPS
     Asset("ANIM", "anim/swap_driftwood_fishingrod.zip"),
@@ -1684,6 +1749,8 @@ Assets = {
 
     Asset("ANIM", "anim/swap_cursed_antler.zip"),
 
+    Asset("ANIM", "anim/swap_crystal_cursed_antler.zip"),
+
     Asset("ANIM", "anim/swap_exhumer.zip"),
 
     Asset("ANIM", "anim/swap_twisted_antler.zip"),
@@ -1712,7 +1779,6 @@ Assets = {
     Asset("IMAGE", "images/dragonflycontainerborder.tex"),
     Asset("ATLAS", "images/dragonflycontainerborder.xml"),
 
-    Asset("ANIM", "anim/acid_meter.zip"),
 
     Asset("ATLAS", "images/mushroom_slot.xml"),
     Asset("IMAGE", "images/mushroom_slot.tex"),
@@ -1720,6 +1786,8 @@ Assets = {
     --Silk Sack
     Asset("ATLAS", "images/silk_slot.xml"),
     Asset("IMAGE", "images/silk_slot.tex"),
+    Asset("ATLAS", "images/amulet_slot.xml"),
+    Asset("IMAGE", "images/amulet_slot.tex"),
     Asset("ATLAS", "images/um_nettleslot.xml"),
     Asset("IMAGE", "images/um_nettleslot.tex"),
     Asset("ATLAS", "images/general_slot.xml"),
@@ -1794,68 +1862,8 @@ Assets = {
     --Asset("SOUND", "sound/um_detonator_bank00.fsb"),
     Asset("SOUND", "sound/um_detonator_bank01.fsb"),
 
-    --MAP ICONS
-    Asset("IMAGE", "images/map_icons/rock_lichen.tex"),
-    Asset("ATLAS", "images/map_icons/rock_lichen.xml"),
-
-    Asset("IMAGE", "images/map_icons/riceplant.tex"),
-    Asset("ATLAS", "images/map_icons/riceplant.xml"),
-
-    Asset("IMAGE", "images/map_icons/sporepack_map.tex"),
-    Asset("ATLAS", "images/map_icons/sporepack_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/air_conditioner_map.tex"),
-    Asset("ATLAS", "images/map_icons/air_conditioner_map.xml"),
-    Asset("IMAGE", "images/map_icons/blueberryplant_map.tex"),
-    Asset("ATLAS", "images/map_icons/blueberryplant_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/giant_tree.tex"),
-    Asset("ATLAS", "images/map_icons/giant_tree.xml"),
-
-    Asset("IMAGE", "images/map_icons/pitcher.tex"),
-    Asset("ATLAS", "images/map_icons/pitcher.xml"),
-
-    Asset("IMAGE", "images/map_icons/snapplant_map.tex"),
-    Asset("ATLAS", "images/map_icons/snapplant_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/veteranshrine_map.tex"),
-    Asset("ATLAS", "images/map_icons/veteranshrine_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/lazychester_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/lazychester_minimap.xml"),
 
 
-
-    Asset("IMAGE", "images/map_icons/webbedcreature_small_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_small_minimap.xml"),
-    Asset("IMAGE", "images/map_icons/webbedcreature_medium_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_medium_minimap.xml"),
-    Asset("IMAGE", "images/map_icons/webbedcreature_large_minimap.tex"),
-    Asset("ATLAS", "images/map_icons/webbedcreature_large_minimap.xml"),
-
-    Asset("IMAGE", "images/map_icons/pollenmiteden_map.tex"),
-    Asset("ATLAS", "images/map_icons/pollenmiteden_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pawn.tex"),
-    Asset("ATLAS", "images/map_icons/um_pawn.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pawn_nightmare.tex"),
-    Asset("ATLAS", "images/map_icons/um_pawn_nightmare.xml"),
-    Asset("IMAGE", "images/map_icons/uncompromising_ratburrow.tex"),
-    Asset("ATLAS", "images/map_icons/uncompromising_ratburrow.xml"),
-    Asset("IMAGE", "images/map_icons/uncompromising_winkyhomeburrow.tex"),
-    Asset("ATLAS", "images/map_icons/uncompromising_winkyhomeburrow.xml"),
-    Asset("IMAGE", "images/map_icons/sludge_sack.tex"),
-    Asset("ATLAS", "images/map_icons/sludge_sack.xml"),
-
-    Asset("IMAGE", "images/map_icons/telebase_active.tex"),
-    Asset("ATLAS", "images/map_icons/telebase_active.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_pyre_nettles_map.tex"),
-    Asset("ATLAS", "images/map_icons/um_pyre_nettles_map.xml"),
-
-    Asset("IMAGE", "images/map_icons/um_tornado_map.tex"),
-    Asset("ATLAS", "images/map_icons/um_tornado_map.xml"),
 
     --BIGPORTRAITS
     Asset("IMAGE", "bigportraits/willow.tex"),
@@ -1882,12 +1890,23 @@ Assets = {
 
     Asset("IMAGE", "images/wolfgang_rework_skilltree.tex"),
     Asset("ATLAS", "images/wolfgang_rework_skilltree.xml"),
+    Asset("ANIM", "anim/um_mite_cave.zip"),
+
+    Asset("ANIM", "anim/um_tree_rock_swaps.zip"),
+    Asset("ANIM", "anim/ui_forge_1x2.zip"),
+    Asset("ANIM", "anim/gem_meter.zip"),
 }
 
 for _, asset in pairs(inventoryitems) do
     table.insert(Assets, Asset("IMAGE", "images/inventoryimages/" .. asset .. ".tex"))
     table.insert(Assets, Asset("ATLAS", "images/inventoryimages/" .. asset .. ".xml"))
     table.insert(Assets, Asset("ATLAS_BUILD", "images/inventoryimages/" .. asset .. ".xml", 256))
+end
+
+for _, asset in pairs(minimap_icons) do
+    table.insert(Assets, Asset("IMAGE", "images/map_icons/" .. asset .. ".tex"))
+    table.insert(Assets, Asset("ATLAS", "images/map_icons/" .. asset .. ".xml"))
+    AddMinimapAtlas("images/map_icons/" .. asset .. ".xml")
 end
 
 GLOBAL.UM_AddAssetsParticleWorldTileState(Assets)

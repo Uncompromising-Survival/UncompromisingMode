@@ -3,44 +3,10 @@ local assets =
     Asset("ANIM", "anim/backpack.zip"),
     Asset("ANIM", "anim/swap_piggyback.zip"),
 }
-
-local function TryPerish(item)
-    if item:IsInLimbo() then
-        local owner = item.components.inventoryitem ~= nil and item.components.inventoryitem.owner or nil
-        if owner == nil or
-            (owner.components.container ~= nil and
-                (owner:HasTag("chest") or owner:HasTag("structure"))) then
-            --in limbo but not inventory or container?
-            --or in a closed chest
-            return
-        end
-    end
-    item.components.perishable:ReducePercent(0.005)
-end
-
-local function TryRefresh(item)
-    if item:IsInLimbo() then
-        local owner = item.components.inventoryitem ~= nil and item.components.inventoryitem.owner or nil
-        if owner == nil or
-            (owner.components.container ~= nil and
-                (owner:HasTag("chest") or owner:HasTag("structure"))) then
-            --in limbo but not inventory or container?
-            --or in a closed chest
-            return
-        end
-    end
-    item.components.perishable:ReducePercent(-0.005)
-end
-
-local function DoAreaSpoil(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
-
-    local ents = TheSim:FindEntities(x, y, z, 3, nil, { "small_livestock" }, { "fresh", "stale", "spoiled", "spore", "spore_special" })
-    for i, v in ipairs(ents) do
-        if v:HasTag("spore") or v:HasTag("spore_special") then
-            TryRefresh(v)
-        else
-            TryPerish(v)
+local function DoSporeRefresh(inst)
+    for k, v in pairs(inst.components.container.slots) do
+        if v.components.perishable ~= nil and (v:HasTag("spore") or v:HasTag("spore_special")) then
+            v.components.perishable:ReducePercent(-0.005)
         end
     end
 end
@@ -103,7 +69,7 @@ local function onequip(inst, owner)
     end
 
     --owner.sporepack_task = owner:DoPeriodicTask(3, InitFX)
-    --owner.sporespoil_task = owner:DoPeriodicTask(3, DoAreaSpoil)
+    owner.sporespoil_task = owner:DoPeriodicTask(3, DoSporeRefresh)
 end
 
 local function onunequip(inst, owner)
@@ -145,7 +111,7 @@ local function fn()
     inst:AddTag("backpack")
     inst:AddTag("sporepack")
     inst:AddTag("donotautopick")
-    
+
     MakeInventoryFloatable(inst, "med", 0.1, 0.65)
 
     inst.entity:SetPristine()

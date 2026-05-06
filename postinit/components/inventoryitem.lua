@@ -5,7 +5,7 @@ GLOBAL.setfenv(1, GLOBAL)
 -- scrimbles
 
 env.AddComponentPostInit("inventoryitem", function(self)
-	local _trytosink = self.TryToSink
+	--[[local _trytosink = self.TryToSink
 	
 	local function ShouldEntitySink(inst)
 		local x,y,z = inst.Transform:GetWorldPosition()
@@ -19,5 +19,5 @@ env.AddComponentPostInit("inventoryitem", function(self)
 		if ShouldEntitySink(self.inst) and self.sinks then
 			self.inst:DoTaskInTime(0, SinkEntity)
 		end
-	end
+	end]]
 end)

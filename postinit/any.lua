@@ -1,44 +1,142 @@
 local env = env
 GLOBAL.setfenv(1, GLOBAL)
+local UpvalueHacker = require("tools/upvaluehacker")
 -----------------------------------------------------------------
 
 -----------------------------------------------------------------
 -- Remove pathing collision exploit by making objects noclip
 -----------------------------------------------------------------
-local IMPASSABLES = {
-    ["sunkenchest"] = true,
-    ["oceantreenut"] = true,
-    ["shell_cluster"] = true,
-    ["cavein_boulder"] = true,
-    ["glassspike_short"] = true,
-    ["glassspike_med"] = true,
-    ["glassspike_tall"] = true,
-    ["potatosack"] = true,
-    ["endtable"] = true,
-    ["fossil_stalker"] = true, -- Hornet: Why are we making the stalkers passable nocliped?
-    ["homesign"] = true,
-    ["statueharp"] = true,
-    ["statue_marble"] = true,
-    ["gravestone"] = true,
-    ["arrowsign_post"] = true,
-    ["lureplant"] = true,
-    ["spiderden"] = true,
-    ["spiderden_2"] = true,
-    ["spiderden_3"] = true,
-    ["klaus_sack"] = true,
-    ["skeleton"] = true,
-    ["skeleton_player"] = true,
-}
 
 if TUNING.DSTU.IMPASSBLES then
-    env.AddPrefabPostInitAny(function(inst)
-        if (IMPASSABLES[inst.prefab] or string.find(inst.prefab, "chesspiece_") or string.find(inst.prefab, "oversized")) and inst.Physics ~= nil then
-            RemovePhysicsColliders(inst)
-        end
-        if (IMPASSABLES[inst.prefab] or string.find(inst.prefab, "chesspiece_") or string.find(inst.prefab, "oversized")) and inst.Physics ~= nil and inst.components.heavyobstaclephysics ~= nil then
+    local function RemoveCollisionFromTreeRock(inst)
+        return inst:HasAllTags("rock_tree", "boulder")
+    end
+
+    local function BlockAddCollisionToTreeRock(inst)
+        return inst:HasTag("boulder") or not inst.components.workable
+    end
+
+    local IMPASSABLES = {
+        ["fossil_stalker"] = true,
+        ["endtable"] = true,
+        ["lureplant"] = true,
+        ["klaus_sack"] = true,
+        ["spiderden"] = true,
+        ["spiderden_2"] = true,
+        ["spiderden_3"] = true,
+        ["skeleton"] = true,
+        ["skeleton_player"] = true,
+        ["wood_table_round"] = true,
+        ["wood_table_square"] = true,
+        ["stone_table_round"] = true,
+        ["tree_rock1"] = {removefn = RemoveCollisionFromTreeRock, blockfn = BlockAddCollisionToTreeRock},
+        ["tree_rock2"] = {removefn = RemoveCollisionFromTreeRock, blockfn = BlockAddCollisionToTreeRock}
+    }
+
+    local function ShouldRemovePhysicsFrom(inst)
+        return (IMPASSABLES[inst.prefab] and (type(IMPASSABLES[inst.prefab]) ~= "table" or IMPASSABLES[inst.prefab].removefn(inst)) or inst:HasTag("heavy")) and inst.Physics
+    end
+
+    local function ShouldNotAddPhysicsTo(inst)
+        if not inst.prefab then return end
+        return IMPASSABLES[inst.prefab] and (type(IMPASSABLES[inst.prefab]) ~= "table" or IMPASSABLES[inst.prefab].blockfn(inst))
+    end
+
+    env.AddPrefabPostInitAny(function(inst) --or string.find(inst.prefab, "chesspiece_") --or string.find(inst.prefab, "oversized"))
+        if ShouldRemovePhysicsFrom(inst) then RemovePhysicsColliders(inst) end
+        if ShouldRemovePhysicsFrom(inst) and inst.components.heavyobstaclephysics then
             RemovePhysicsColliders(inst)
             inst.components.heavyobstaclephysics:SetRadius(0)
         end
+    end)
+
+    local _ChangeToObstaclePhysics = ChangeToObstaclePhysics
+    function ChangeToObstaclePhysics(inst, rad, height, ...)
+        if ShouldNotAddPhysicsTo(inst) then 
+            if inst.Physics:GetCollisionMask() ~= 0 then RemovePhysicsColliders(inst) end
+            return
+        end
+        return _ChangeToObstaclePhysics(inst, rad, height, ...)
+    end
+end
+
+if TUNING.DSTU.SHAVE_MODE then
+    env.AddPrefabPostInitAny(function(inst)
+        if not TheWorld.ismastersim then return end
+        
+        if inst.components.shaveable and inst.components.shaveable.prize_prefab then
+            local _OnShaved = inst.components.shaveable.on_shaved
+            local function OnShaved(inst, shaver, shave_item, ...)
+                if shave_item:HasTag("extra_shaver") and shaver and shaver.components.inventory and math.random() > .5 then
+                    local prize = SpawnPrefab(inst.components.shaveable.prize_prefab)
+                    local position = inst:GetPosition()
+                    local x, y, z = shaver.Transform:GetWorldPosition()
+                    if prize.components.inventoryitem then
+                        prize.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                    end
+                    if shaver and shaver.components.inventory then
+                        shaver.components.inventory:GiveItem(prize, nil, position)
+                        SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                    else
+                        LaunchAt(prize, inst, nil, 1, 1)
+                        SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                    end
+                end
+                _OnShaved(inst, shaver, shave_item, ...)
+            end
+            inst.components.shaveable.on_shaved = OnShaved
+        end
+
+        if inst.components.pickable and not inst.components.shaveable then
+            local function CanShave(inst, shaver, shave_item)
+                return inst.components.pickable and inst.components.pickable:CanBePicked()
+            end
+
+            local _onpickedfn = inst.components.pickable.onpickedfn
+
+            local function OnShaved(inst, picker, shaver, shave_item, ...)
+                if inst.prefab ~= "mandrake_planted" then
+                    if shaver:HasTag("extra_shaver") and picker and picker.components.inventory and math.random() > .5 then
+                        local product = inst.components.pickable and inst.components.pickable.product or nil
+                        local prize = SpawnPrefab(product)
+                        local position = inst:GetPosition()
+                        local x, y, z = picker.Transform:GetWorldPosition()
+                        if prize.components.inventoryitem then
+                            prize.components.inventoryitem:InheritWorldWetnessAtTarget(inst)
+                        end
+                        picker.components.inventory:GiveItem(prize, nil, position)
+                        if product then
+                            SpawnPrefab("shadow_despawn").Transform:SetPosition(x, y, z)
+                        end
+                    end
+                    inst.components.pickable:UMForcePick(picker)
+                end
+                if inst.components.pickable.remove_when_picked == true then
+                    inst:Remove()
+                end
+                if inst.components.pickable.onpickedfn then
+                    _onpickedfn(inst, picker, ...)
+                end
+            end
+
+
+            --local prize = inst.components.pickable and inst.components.pickable.product
+            local shaveable = inst:AddComponent("shaveable")
+            shaveable:SetPrize(nil, 1)
+            shaveable.can_shave_test = CanShave
+            shaveable.on_shaved = OnShaved
+            inst.components.pickable:SetStuck(true)
+        end
+    end)
+
+    env.AddPrefabPostInit("razor", function(inst)
+        if not TheWorld.ismastersim then return end
+
+        local finiteuses = inst:AddComponent("finiteuses")
+        finiteuses:SetMaxUses(25)
+        finiteuses:SetUses(25)
+        finiteuses:SetConsumption(ACTIONS.SHAVE, 1)
+        finiteuses:SetOnFinished(inst.Remove)
     end)
 end
 
@@ -228,6 +326,49 @@ function EntityScript:SpawnChild(name, ...)
     return _SpawnChild(self, name, ...)
 end
 
+local _PushEvent = EntityScript.PushEvent
+function EntityScript:PushEvent(event, data, ...)
+    if TUNING.DSTU.BUTTERFLYWINGS_NERF == "slippery" and event == "onattackother" and data and data.target and data.target.UMSlipAway
+        and data.target:UMSlipAway({attacker = self, weapon = data.weapon, stimuli = data.stimuli}) then return end
+    return _PushEvent(self, event, data, ...)
+end
+
+local UM_BLOCKED_STATES = {"wortox_teleport_reviver_selfuse"}
+local _GoToState = StateGraphInstance.GoToState
+function StateGraphInstance:GoToState(statename, ...)
+    if self.inst.um_blockgotostate and table.contains(UM_BLOCKED_STATES, statename) then return end
+    return _GoToState(self, statename, ...)
+end
+
+local hermitcrabtea_defs = require("prefabs/hermitcrabtea_defs")
+for _, data in ipairs(hermitcrabtea_defs.buffs) do
+    if data.name == "moon_tree_blossom" then
+        local _MoonBlossom_OnAttacked = UpvalueHacker.GetUpvalue(data.onattachedfn, "MoonBlossom_OnAttacked")
+        if _MoonBlossom_OnAttacked then
+            local hitsparks_fx_colouroverride = { 0, 0, 1 }
+            local function SparkLunarOnShadow(inst, attacker)
+                local spark = SpawnPrefab("hitsparks_fx")
+                spark:Setup(attacker, inst, nil, hitsparks_fx_colouroverride)
+            end
+            local function AttackShadow(inst, attacker)
+                if inst.components.combat:CanTarget(attacker) then
+                    if not (attacker.components.health and attacker.components.health:IsDead()) and attacker.sg:HasStateTag("attack") and attacker.sg:HasState("hit") then
+                        attacker.sg:GoToState("hit")
+                    end
+                    attacker.components.combat:GetAttacked(inst, TUNING.DSTU.HERMITCRAB_MOONTREEBLOSSOMTEA_SHADOWCREATURE_DAMAGE)
+                end
+            end
+            local function MoonBlossom_OnAttacked(inst, data)
+                local attacker, damage = data and data.attacker, data and data.original_damage
+                if attacker and attacker:IsValid() and attacker:HasTag("shadowsubmissive") then
+                    SparkLunarOnShadow(inst, attacker)
+                    AttackShadow(inst, attacker)
+                end
+            end
+            UpvalueHacker.SetUpvalue(data.onattachedfn, MoonBlossom_OnAttacked, "MoonBlossom_OnAttacked")
+        end
+    end
+end
 
 --[[local NO_UM_SPIRITBUFF_TAGS = {"companion", "abigail", "shadowminion"}
 env.AddPrefabPostInitAny(function(inst)

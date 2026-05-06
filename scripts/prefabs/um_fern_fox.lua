@@ -1,6 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/fern_fox.zip"),
+    Asset("ANIM", "anim/um_fox_den.zip"),	
 }
 
 
@@ -10,56 +11,53 @@ SetSharedLootTable('fern_fox',
 {
     {'plantmeat',              1.00},
     {'um_moss',              1},
-	{'um_moss',              1},
-	{'um_moss',              0.5},
+    {'um_moss',              1},
+    {'um_moss',              0.5},
 })
 require("constants")
 NAUGHTY_VALUE["um_fern_fox"] = 25
 --------------------------------------------------------------------------
 
-local function onsave(inst, data)
+--[[local function onsave(inst, data)
 
 end
 
 local function onload(inst, data)
 
-end
+end]]
 
 local function MakeGrowFast(plant)
-	if plant.entity:IsAwake() then
-		local x,y,z = plant.Transform:GetWorldPosition()
-		SpawnPrefab("spider_heal_target_fx").Transform:SetPosition(x,y,z)
-	end
-	if plant.components.pickable then
-		plant.components.pickable:LongUpdate(10)
-	end
-	if plant.components.growable then
-		plant.components.growable:LongUpdate(10)
-	end
+    if plant.entity:IsAwake() then
+        local x,y,z = plant.Transform:GetWorldPosition()
+        SpawnPrefab("spider_heal_target_fx").Transform:SetPosition(x,y,z)
+    end
+    if plant.components.pickable then
+        plant.components.pickable:LongUpdate(10)
+    end
+    if plant.components.growable then
+        plant.components.growable:LongUpdate(10)
+    end
 end
 
-local plant_tags_must = {"plant"} 
-local plant_tags_one = {"growable","pickable","bush"}
+local plant_tags_oneof_tags = {"plant", "farm_plant", "bush", "pickable"}
 local function MakePlantsGrowFast(inst)
-	local x,y,z = inst.Transform:GetWorldPosition()
-
-	local plants = TheSim:FindEntities(x,y,z,4,plant_tags_must,nil,plant_tags_one)
-	local found = nil
-	for i,plant in ipairs(plants) do
-		if not plant.growbuff and not found then
-			local x,y,z = plant.Transform:GetWorldPosition()
-			SpawnPrefab("farm_plant_happy").Transform:SetPosition(x,y,z)
-			plant.growbuff = plant:DoPeriodicTask(5,MakeGrowFast)
-			plant:DoTaskInTime(3*480,function(plant) 
-				if plant.growbuff then 
-					plant.growbuff:Cancel() 
-					plant.growbuff = nil
-				end
-			end)
-			found = true
-		end
-	end
-
+    local x,y,z = inst.Transform:GetWorldPosition()
+    local plants = TheSim:FindEntities(x, y, z, 4, nil, nil, plant_tags_oneof_tags)
+    local found = nil
+    for i, plant in ipairs(plants) do
+        if not plant.growbuff and not found then
+            local x,y,z = plant.Transform:GetWorldPosition()
+            SpawnPrefab("farm_plant_happy").Transform:SetPosition(x,y,z)
+            plant.growbuff = plant:DoPeriodicTask(5, MakeGrowFast)
+            plant:DoTaskInTime(3 * 480,function(plant) 
+                if plant.growbuff then 
+                    plant.growbuff:Cancel() 
+                    plant.growbuff = nil
+                end
+            end)
+            found = true
+        end
+    end
 end
 
 local function fn()
@@ -81,12 +79,11 @@ local function fn()
     inst.AnimState:SetBuild("fern_fox")
     inst.AnimState:PlayAnimation("idle", true)
 
-
     ------------------------------------------
 
     inst:AddTag("animal")
 	inst:AddTag("plantkin")
-
+    inst:AddTag("smallcreature")
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -108,7 +105,6 @@ local function fn()
     inst.components.combat:SetDefaultDamage(TUNING.DEER_DAMAGE)
     inst.components.combat.hiteffectsymbol = "fire"
     inst.components.combat:SetHurtSound("dontstarve/creatures/together/deer/hit")
-        
 
     inst:AddComponent("sleeper")
     inst.components.sleeper:SetResistance(4)
@@ -132,29 +128,35 @@ local function fn()
     MakeSmallBurnableCharacter(inst, "fire")
     MakeSmallFreezableCharacter(inst, "fire")
 
-	inst.OnSave = onsave
-	inst.OnLoad = onload
-
+    --inst.OnSave = onsave
+    --inst.OnLoad = onload
 
     inst.OnEntityWake  = function(inst)
-		if not inst.plants_will_grow then
-			inst.plants_will_grow = inst:DoPeriodicTask(3,MakePlantsGrowFast)
-		end
-	end
+        if not inst.plants_will_grow then
+            inst.plants_will_grow = inst:DoPeriodicTask(3,MakePlantsGrowFast)
+        end
+    end
+
     inst.OnEntitySleep = function(inst)
-		if inst.plants_will_grow then
-			inst.plants_will_grow:Cancel()
-			inst.plants_will_grow = nil
-		end
-	end
-	
+        if inst.plants_will_grow then
+            inst.plants_will_grow:Cancel()
+            inst.plants_will_grow = nil
+        end
+    end
 
     return inst
 end
 
--- local function canspawn(inst)
-    -- return inst:IsAsleep() -- no art, only spawn when players aren't near
--- end
+local function dig_up(inst)
+	inst.components.lootdropper:SpawnLootPrefab("rocks")
+	inst.components.lootdropper:SpawnLootPrefab("um_moss")
+	for i = 1,2 do
+		inst.components.lootdropper:SpawnLootPrefab("rocks")
+		inst.components.lootdropper:SpawnLootPrefab("twigs")
+	end
+	inst:Remove()
+end
+
 
 local function fnden()
     local inst = CreateEntity()
@@ -162,18 +164,16 @@ local function fnden()
     inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
-    --inst.entity:AddMiniMapEntity()
+    inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    --MakeSmallObstaclePhysics(inst, .5)
+    MakeSmallObstaclePhysics(inst, .5)
 
-    --inst.MiniMapEntity:SetIcon("catcoonden.png")
+    inst.MiniMapEntity:SetIcon("um_fern_fox_den.tex")
 
-    inst.AnimState:SetBank("catcoon_den")
-    inst.AnimState:SetBuild("catcoon_den")
+    inst.AnimState:SetBank("um_fox_den")
+    inst.AnimState:SetBuild("um_fox_den")
     inst.AnimState:PlayAnimation("idle")
-	
-	
 
     MakeSnowCoveredPristine(inst)
 
@@ -183,17 +183,20 @@ local function fnden()
         return inst
     end
 
-
     -------------------
     inst:AddComponent("childspawner")
     inst.components.childspawner.childname = "um_fern_fox"
     inst.components.childspawner:SetRegenPeriod(480*3) -- 3 days
     inst.components.childspawner:SetSpawnPeriod(TUNING.CATCOONDEN_RELEASE_TIME)
     inst.components.childspawner:SetMaxChildren(TUNING.CATCOONDEN_MAXCHILDREN)
-    --inst.components.childspawner.canspawnfn = canspawn
     inst.components.childspawner:StartSpawning()
 
     ---------------------
+    inst:AddComponent("lootdropper")
+    inst:AddComponent("workable")
+    inst.components.workable:SetWorkAction(ACTIONS.DIG)
+    inst.components.workable:SetOnFinishCallback(dig_up)
+    inst.components.workable:SetWorkLeft(1)
 	
 
     MakeMediumBurnable(inst)
@@ -206,12 +209,11 @@ local function fnden()
     MakeSnowCovered(inst)
     SetLunarHailBuildupAmountSmall(inst)
 
-
     MakeHauntableIgnite(inst)
 
-	inst:Hide()
+	
     return inst
 end
 
 return Prefab("um_fern_fox", fn, assets),
-Prefab("um_fern_fox_den", fnden)
+    Prefab("um_fern_fox_den", fnden)

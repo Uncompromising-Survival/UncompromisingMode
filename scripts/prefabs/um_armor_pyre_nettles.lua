@@ -51,7 +51,7 @@ local function OnAttackOther(owner, data, inst)
     if checknumber(inst._hitcount) then
         inst._hitcount = inst._hitcount + 1
 
-        if inst._hitcount >= TUNING.WORMWOOD_ARMOR_BRAMBLE_RELEASE_SPIKES_HITCOUNT then
+        if inst._hitcount >= TUNING.WORMWOOD_ARMOR_BRAMBLE_RELEASE_SPIKES_HITCOUNT * 2 then
             if inst._hitcount then
 		        inst._hitcount = 0
 	        end
@@ -80,7 +80,7 @@ end
 local function bumpcheck(owner, inst)
     local bumpradius = 2
     local x, y, z = owner.Transform:GetWorldPosition()
-    local ents = TheSim:FindEntities(x, y, z, bumpradius, nil, { "PyreToxinImmune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost" }, { "_combat", "_health" })
+    local ents = TheSim:FindEntities(x, y, z, bumpradius, nil, { "pyre_toxin_immune", "companion", "FX", "INLIMBO", "invisible", "notarget", "noattack", "player", "playerghost" }, { "_combat", "_health" })
 
     if #ents > 0 then
         for i, v in pairs(ents) do
@@ -97,7 +97,7 @@ local function bumpcheck(owner, inst)
     end
 
     if TheNet:GetPVPEnabled() then
-        local ents = TheSim:FindEntities(x, y, z, bumpradius, { "player" }, { "PyreToxinImmune", "plantkin", "INLIMBO", "noattack", "spawnprotection", "playerghost" })
+        local ents = TheSim:FindEntities(x, y, z, bumpradius, { "player" }, { "pyre_toxin_immune", "plantkin", "INLIMBO", "noattack", "spawnprotection", "playerghost" })
 
         if #ents > 0 then
             for i, v in pairs(ents) do
@@ -117,7 +117,7 @@ end
 
 
 local function OnEquip(inst, owner)
-    owner:AddTag("PyreToxinImmune")
+    owner:AddTag("pyre_toxin_immune")
     owner:AddTag("SmolderSporeAvoid")
     owner:AddTag("MagmaCaveFriend")
 
@@ -161,7 +161,7 @@ local function OnEquip(inst, owner)
 end
 
 local function OnUnequip(inst, owner)
-    owner:RemoveTag("PyreToxinImmune")
+    owner:RemoveTag("pyre_toxin_immune")
     owner:RemoveTag("SmolderSporeAvoid")
     owner:RemoveTag("MagmaCaveFriend")
 

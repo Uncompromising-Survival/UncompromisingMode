@@ -2,21 +2,18 @@ local env = env
 GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 env.AddComponentPostInit("fueled", function(self)
-    local _CanAcceptFuelItem = self.CanAcceptFuelItem
-
-
     local sludge_valid_fuels = {
         FUELTYPE.BURNABLE,
         FUELTYPE.CAVE,
         FUELTYPE.CHEMICAL
     }
+
+    local _CanAcceptFuelItem = self.CanAcceptFuelItem
     function self:CanAcceptFuelItem(item)
         if self.accepting and item then
             local fuel = item.components.fuel or item.components.fueler
-            return ((table.contains(sludge_valid_fuels, self.fueltype) or
-                        table.contains(sludge_valid_fuels, self.secondaryfueltype)) and
-                    fuel.fueltype == FUELTYPE.SLUDGE) or
-                _CanAcceptFuelItem(self, item)
+            return ((table.contains(sludge_valid_fuels, self.fueltype) or table.contains(sludge_valid_fuels, self.secondaryfueltype))
+                and fuel.fueltype == FUELTYPE.SLUDGE) or _CanAcceptFuelItem(self, item)
         end
         return _CanAcceptFuelItem(self, item)
     end
@@ -72,8 +69,15 @@ env.AddComponentPostInit("fueled", function(self)
         return _TakeFuelItem(self, item, doer)
     end
 
-    local _DoDelta = self.DoDelta
+    --[[local _InitializeFuelLevel = self.InitializeFuelLevel -- Test this at some point!
+    function self:InitializeFuelLevel(fuel, ...)
+        if self.inst:HasTag("overchargeable") and fuel then
+            fuel = fuel * 2
+        end
+        return _InitializeFuelLevel(self, fuel, ...)
+    end]]
 
+    local _DoDelta = self.DoDelta
     function self:DoDelta(amount, doer)
         if self.inst:HasTag("overchargeable") then
             local oldsection = self:GetCurrentSection()
@@ -86,9 +90,7 @@ env.AddComponentPostInit("fueled", function(self)
                 if self.sectionfn then
                     self.sectionfn(newsection, oldsection, self.inst, doer)
                 end
-
-                self.inst:PushEvent("onfueldsectionchanged",
-                    { newsection = newsection, oldsection = oldsection, doer = doer })
+                self.inst:PushEvent("onfueldsectionchanged", { newsection = newsection, oldsection = oldsection, doer = doer })
                 if self.currentfuel <= 0 and self.depleted then
                     self.depleted(self.inst)
                 end
@@ -96,18 +98,13 @@ env.AddComponentPostInit("fueled", function(self)
 
             self.inst:PushEvent("percentusedchange", { percent = self:GetPercent() })
 
-            if self.currentfuel > self.maxfuel then
-                self.inst:PushEvent("overcharged", true)
-            else
-                self.inst:PushEvent("overcharged", false)
-            end
+            self.inst:PushEvent("overcharged", self.currentfuel > self.maxfuel)
         else
             _DoDelta(self, amount, doer)
         end
     end
 
     local _GetPercent = self.GetPercent
-
     function self:GetPercent()
         if self.inst:HasTag("overchargeable") then
             return self.maxfuel > 0 and math.max(0, math.min(2, self.currentfuel / self.maxfuel)) or 0

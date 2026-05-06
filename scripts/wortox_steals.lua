@@ -175,14 +175,14 @@ stealtable= {
 		},
 	},    krampus = {
 		name = "krampus",
-		weight = {
-			charcoal = 25,
-			amulet = 25,
-			krampus_sack = 5,
-		    goldnugget = 25,
-			dug_trap_starfish = 10,
-			panflute = 10,
-		},
+        weight = {
+            charcoal = 40,
+            amulet = 8,
+            krampus_sack = 2,
+            goldnugget = 40,
+            dug_trap_starfish = 8,
+            panflute = 2,
+        },
 		instakill = {
 			krampus_sack = true
 		},
@@ -351,11 +351,6 @@ stealtable= {
 		bonus_pool = {
 			"giftwrap",
 			"sewing_kit",
-			"purplegem",
-			"greengem",
-			"yellowgem",
-			"orangegem",
-			"thulecite",
 			"winter_food8",
 			"amulet",
 		},

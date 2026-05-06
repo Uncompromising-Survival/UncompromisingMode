@@ -28,7 +28,7 @@ local function SpreadGoo(inst,number)
     for i = 1,circle do
         local x1 = x+radius*math.cos(2*3.14*i/circle)
         local z1 = z+radius*math.sin(2*3.14*i/circle)
-        local puddle =     GLOBAL.SpawnPrefab("wathom_puddle")
+        local puddle = GLOBAL.SpawnPrefab("wathom_puddle")
         puddle.Transform:SetPosition(x1,y,z1)
         puddle.wathom = inst
     end
@@ -54,10 +54,11 @@ local function SurvivorBarkEffect(inst)
     end
 end
 
+
+local caneprefabs = {"cane", "orangestaff", "walking_stick"}
 local function HoldingCane(inst)
-    return inst:HasTag("wathom") and inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) and 
-    (inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "cane" or inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "orangestaff" or
-    inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS).prefab == "walking_stick") and true
+    local cane = inst.components.inventory and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    return inst:HasTag("wathom") and cane and table.contains(caneprefabs, cane.prefab) or false
 end
 
 local function OnCooldownBark(inst)
@@ -96,7 +97,7 @@ local function Attack_New(inst, action, ...)
     inst.sg.mem.localchainattack = not action.forced or nil
     local weapon = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
     if weapon and not ((weapon:HasTag("blowdart") or weapon:HasTag("thrown") or (weapon:HasTag("rangedweapon") and not table.contains(special_staff, weapon.prefab)))) and inst:HasTag("wathom") and
-        not inst.sg:HasStateTag("attack") and (inst.components.rider ~= nil and not inst.components.rider:IsRiding()) then
+        not inst.sg:HasStateTag("attack") and not (inst.components.rider and inst.components.rider:IsRiding()) then
         return ("wathomleap")
     elseif not weapon and HasSkill(inst,"bite_1") then
         return ("wathombite")
@@ -205,19 +206,17 @@ local function GetAdrenalShove(inst)
     end
 end
     
--- This is Scrimble's Shove Code, it's used for both Charles T Horse and Wixie, be appreciative, swine.
-local SLEEPREPEL_MUST_TAGS = { "_combat" }
-local SLEEPREPEL_CANT_TAGS = { "player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
-    "hiding", "notarget", "noattack", "flight", "wall" }
+-- This is Scrimble's Shove Code, it's used for both Charles T. Horse and Wixie, be appreciative, swine.
+local SLEEPREPEL_MUST_TAGS = {"_combat"}
+local SLEEPREPEL_CANT_TAGS = {"player", "companion", "abigail", "shadowminion", "playerghost", "INLIMBO", "wixieshoved", "invisible",
+    "hiding", "notarget", "noattack", "flight", "wall"}
 local NO_SHOVE_TAGS = {"stageusher", "toadstool"}
-local NO_SHOVE_ATTACK_LEADER_TAGS = {"player", "irreplaceable"}
 local function Check_Bowling(inst, target)
     if inst ~= nil then
         local x, y, z = inst.Transform:GetWorldPosition()
         local ents = TheSim:FindEntities(x, y, z, 2, SLEEPREPEL_MUST_TAGS, SLEEPREPEL_CANT_TAGS)
         for i, v in ipairs(ents) do
-            if inst.components.combat:CanTarget(v) and not (v.components.follower and v.components.follower:GetLeader()
-                and v.components.follower:GetLeader():HasAnyTag(NO_SHOVE_ATTACK_LEADER_TAGS)) then --(not target) or (target and v ~= target)
+            if inst.components.combat:CanTarget(v) and not inst.components.combat:IsAlly(v) then --(not target) or (target and v ~= target)
                 v:AddTag("wixieshoved")
                 SpawnPrefab("round_puff_fx_sm").Transform:SetPosition(v.Transform:GetWorldPosition())
 
@@ -363,31 +362,38 @@ AddStategraphPostInit("wilsonghost", function(inst)
         end 
     end
 end)
-    
+
+local function IsImportantLoot(v)
+    local bossmeats = {"deerclops_eyeball", "minotaurhorn"}
+    for _, bossmeat in pairs(bossmeats) do
+        if v.prefab == bossmeat then return true end
+    end
+end
+
 local function MarkDontEatFoods(inst,target)
     local x,y,z = target.Transform:GetWorldPosition()
-    local loot = TheSim:FindEntities(x,y,z,4,{"_inventoryitem"})
+    local loot = TheSim:FindEntities(x, y, z, 4, {"_inventoryitem"}, {"INLIMBO"})
     for i,v in ipairs(loot) do
-        if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not v:HasTag("badfood") then
+        if v:HasAnyTag("meat", "smallmeat", "rawmeat") and v.components.edible and not IsImportantLoot(v) then
             v.wathom_dont_eat = true
             v:DoTaskInTime(3,function(v) v.wathom_dont_eat = nil end)
         end
     end
 end
-    
-    
-local bite2MustTags = { "_inventoryitem" }
-local bite2MustOneOfTags = { "meat", "smallmeat", "rawmeat" }
 
+local bite2MustTags = {"_inventoryitem"}
+local bite2CantTags = {"INLIMBO"}
+local bite2MustOneOfTags = {"meat", "smallmeat", "rawmeat"}
 local function CheckIfDead(inst, target)
-    if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasTag("shadow") or target:HasTag("chess")) then
+    if (target and target.components.health and target.components.health:IsDead() and target:IsValid()) and not (target:HasAnyTag("soulless", "wall")) then
+        local bite_heal_mod = target:HasTag("epic") and 10 or 1
         if HasSkill(inst,"bite_mastery") and inst.components.health then
-            inst.components.health:DeltaPenalty(-.01)
+            inst.components.health:DeltaPenalty(-.01 * bite_heal_mod)
         end
-        inst.components.health:DoDelta(4)
+        inst.components.health:DoDelta(4 * bite_heal_mod)
         if HasSkill(inst,"bite_2") then
             local x,y,z = target.Transform:GetWorldPosition()
-            local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, nil, bite2MustOneOfTags)
+            local loot = TheSim:FindEntities(x, y, z, 4, bite2MustTags, bite2CantTags, bite2MustOneOfTags)
             for i,v in ipairs(loot) do
                 if v.components.edible and not v.wathom_dont_eat and v.components.edible.healthvalue >= 0 and not v.components.inventoryitem:IsHeld() then
                     local health_restore = v.components.edible.healthvalue*1.1
@@ -632,7 +638,7 @@ AddStategraphPostInit("wilson", function(inst)
 
         GLOBAL.State {
             name = "cantbark",
-            tags = { busy },
+            --tags = { "busy" },
 
             onenter = function(inst)
                 inst:ClearBufferedAction()
@@ -699,11 +705,6 @@ AddStategraphPostInit("wilson", function(inst)
                 inst.Transform:SetFourFaced()
                 inst.components.locomotor:Stop()
                 inst.Physics:ClearMotorVelOverride()
-                inst:DoTaskInTime(0, function(inst)
-                    if inst.components.playercontroller then
-                        inst.components.playercontroller:Enable(true)
-                    end
-                end)
                 inst.components.locomotor:EnableGroundSpeedMultiplier(true)
                 inst.AnimState:AddOverrideBuild("player_lunge")
                 inst.AnimState:AddOverrideBuild("player_attack_leap")
@@ -717,11 +718,13 @@ AddStategraphPostInit("wilson", function(inst)
                     --                     inst.components.hunger:DoDelta(-1, 2)
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.WORLD)
                     local buffaction = inst:GetBufferedAction()
-                    local target = buffaction ~= nil and buffaction.target or nil
-                    if target ~= nil then
-                        inst.sg.statemem.startingpos = inst:GetPosition()
-                        inst.sg.statemem.targetpos = target:GetPosition()
-                        if target ~= nil then
+                    local target = buffaction and buffaction.target or nil
+                    if target then
+                        local pos = inst:GetPosition()
+                        local targetpos = target:GetPosition()
+                        if distsq(targetpos, pos) <= inst.components.combat:CalcAttackRangeSq(target) then
+                            inst.sg.statemem.startingpos = pos
+                            inst.sg.statemem.targetpos = targetpos
                             if inst.sg.statemem.startingpos.x ~= inst.sg.statemem.targetpos.x or
                                 inst.sg.statemem.startingpos.z ~= inst.sg.statemem.targetpos.z then
                                 inst.leapvelocity = math.sqrt(GLOBAL.distsq(inst.sg.statemem.startingpos.x, inst.sg.statemem.startingpos.z,
@@ -742,25 +745,24 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.components.locomotor:Stop()
                     inst.Physics:ClearMotorVelOverride()
                     inst:PerformBufferedAction()
-                    inst.components.playercontroller:Enable(false)
                     inst.components.locomotor:EnableGroundSpeedMultiplier(true)
-                    inst.sg:RemoveStateTag("busy")
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.OBSTACLES)
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.SMALLOBSTACLES)
                 end),
 
                 TimeEvent(14 * FRAMES, function(inst) -- this is when the target gets hit
+                    local adrenaline_percent = inst.components.adrenaline:GetPercent()
                     if inst:HasTag("amped") and not inst:HasTag("wearingheavyarmor") then
                         inst.leapvelocity = 15
-                    elseif inst.components.adrenaline:GetPercent() > .24 and inst.components.adrenaline:GetPercent() < .51 and not inst:HasTag("wearingheavyarmor") then
+                    elseif adrenaline_percent > .24 and adrenaline_percent < .51 and not inst:HasTag("wearingheavyarmor") then
                         inst.leapvelocity = 7.5 -- originally 10, lets see how this goes.
-                    elseif inst.components.adrenaline:GetPercent() > .50 and inst.components.adrenaline:GetPercent() < .75 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
-                        inst.leapvelocity = 10 -- * (inst.components.adrenaline:GetPercent() + .5)
-                    elseif inst.components.adrenaline:GetPercent() > .74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_2") then
+                    elseif adrenaline_percent > .50 and adrenaline_percent < .75 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
+                        inst.leapvelocity = 10 -- * (adrenaline_percent + .5)
+                    elseif adrenaline_percent > .74 and adrenaline_percent < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_2") then
                         inst.leapvelocity = 12.5 -- this is used in between 75 and 100 (Amped).
-                    elseif inst.components.adrenaline:GetPercent() > .74 and inst.components.adrenaline:GetPercent() < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
+                    elseif adrenaline_percent > .74 and adrenaline_percent < 1 and not inst:HasTag("wearingheavyarmor") and HasSkill(inst,"amp_1") then
                         inst.leapvelocity = 10
-                    elseif inst.components.adrenaline:GetPercent() > .24 then
+                    elseif adrenaline_percent > .24 then
                         inst.leapvelocity = 7.5
                     else
                         inst.leapvelocity = 0 --Either Wathom has the "wearingheavyarmor" tag, is under 25 adrenaline (ie fatigued) or the game is somehow not reading the Adrenaline meter.
@@ -793,7 +795,6 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.leapvelocity = 0                   -- Stops Wathom's sliding.
                     inst.Physics:Stop()
                     inst.Physics:CollidesWith(GLOBAL.COLLISION.CHARACTERS) -- Re-enabling Wathom's normal collision.
-                    inst.components.playercontroller:Enable(true)
                     if HasSkill(inst,"rampage_1") then
                         local buffaction = inst:GetBufferedAction()
                         local target = buffaction ~= nil and buffaction.target or nil
@@ -813,37 +814,6 @@ AddStategraphPostInit("wilson", function(inst)
                     inst.sg:GoToState("idle")
                 end),
             },
-        },
-        
-        GLOBAL.State {
-            name = "cantbark",
-            tags = { busy },
-
-            onenter = function(inst)
-                inst:ClearBufferedAction()
-
-                --                inst.components.talker:Say("Can't... Breathe...", nil, true) -- I can't think of something cool for Wathom to say, so away this goes.
-
-                inst.AnimState:PlayAnimation("sing_fail", false)
-
-                inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") -- maybe make something new later?
-            end,
-            timeline =
-            {
-                TimeEvent(12 * FRAMES, function(inst)
-                    inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/leap") --place your funky sounds here
-                end),                                                       --bark twice.
-            },
-            events =
-            {
-                EventHandler("animover", function(inst)
-                    if inst.AnimState:AnimDone() then
-                        inst.sg:GoToState("idle")
-                        inst.sg:RemoveStateTag("busy")
-                        inst:ClearBufferedAction()
-                    end
-                end),
-            }
         },
 
         GLOBAL.State {
@@ -1128,65 +1098,54 @@ local wathombark = AddAction(
     "WATHOMBARK",
     STRINGS.ACTIONS.WATHOMBARK,
     function(act)
-        local inst = act.doer
-        if HasSkill(inst,"wathom_friends_2") then
-            SurvivorBarkEffect(inst)
+        local doer = act.doer
+        if HasSkill(doer, "wathom_friends_2") then
+            SurvivorBarkEffect(doer)
         end
-        if HasSkill(inst,"bark_mastery") then
-            SpreadGoo(inst,1)
+        if HasSkill(doer, "bark_mastery") then
+            SpreadGoo(doer, 1)
         end
-        if act.doer ~= nil and act.doer.components.adrenaline ~= nil then -- previously act.target
-            local inst = act.doer
-            inst.AnimState:AddOverrideBuild("emote_angry")
-            inst.components.adrenaline:DoDelta(inst:HasTag("amped") and 8 or -25, 2)
-            --        inst.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
+        if doer and doer.components.adrenaline then -- previously act.target
+            doer.AnimState:AddOverrideBuild("emote_angry")
+            doer.components.adrenaline:DoDelta(doer:HasTag("amped") and 8 or -25, 2)
+            --        doer.SoundEmitter:PlaySound("wathomcustomvoice/wathomvoiceevent/bark") Commented out for now since it already plays the sound before this code is performed
 
-            local act_pos = act:GetActionPoint()
-            local ents = GLOBAL.TheSim:FindEntities(act_pos.x, act_pos.y, act_pos.z, 10, { "_combat" },
-                { "companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadow", "shadowminion"}) --added playertags because of the taunt.
+            local pos = act:GetActionPoint()
+            local ents = GLOBAL.TheSim:FindEntities(pos.x, pos.y, pos.z, 10, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
-                    (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
-                    if HasSkill(inst,"wathom_friends_1") then
-                        v:AddTag("wathom_really_spooking_me")
-                        v:DoTaskInTime(10,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                if v ~= doer and v.entity:IsVisible()
+                    and not (v.components.health and v.components.health:IsDead())
+                    and not (doer.components.combat and doer.components.combat:IsAlly(v)) then
+                    if v.components.hauntable and v.components.hauntable.panicable then
+                        v.components.hauntable:Panic(10) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+                        if HasSkill(doer,"wathom_friends_1") then
+                            v:AddTag("wathom_really_spooking_me")
+                            v:DoTaskInTime(10,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                        end
+                        AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
                     end
-                    AddEnemyDebuffFx("battlesong_instant_panic_fx", v)
-                end
-                if v.components.hauntable == nil or
-                    v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    if not v:HasTag("bird") and v.components.combat then
-                        v.components.combat:SetTarget(act.doer)
+                    if not v:HasTag("bird") and v.components.combat and (not v.components.hauntable or v.components.hauntable and not v.components.hauntable.panicable) then
+                        v.components.combat:SetTarget(doer)
                         AddEnemyDebuffFx("battlesong_instant_taunt_fx", v)
                     end
                 end
             end
             --also scare enemies near wathom, at a smaller radius
-            local x, y, z = act.doer.Transform:GetWorldPosition()
-            ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, { "_combat" },
-                { "companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadow", "shadowminion", "trap" }) --added playertags because of the taunt.
+            local x, y, z = doer.Transform:GetWorldPosition()
+            ents = GLOBAL.TheSim:FindEntities(x, y, z, 4, {"_combat"}, {"companion", "INLIMBO", "notarget", "noattack", "player", "playerghost", "wall", "abigail", "shadowminion", "shadow", "trap"}) --added playertags because of the taunt.
             for i, v in ipairs(ents) do
-                if v.components.hauntable ~= nil and v.components.hauntable.panicable and not
-                    (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) then
-                    v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
-                    if HasSkill(inst,"wathom_friends_1") then
-                        v:AddTag("wathom_really_spooking_me")
-                        v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                if v ~= doer and v.entity:IsVisible()
+                    and not (v.components.health and v.components.health:IsDead())
+                    and not (doer.components.combat and doer.components.combat:IsAlly(v)) then
+                    if v.components.hauntable and v.components.hauntable.panicable then
+                        v.components.hauntable:Panic(8) -- Fallback to TUNING.BATTLESONG_PANIC_TIME (6 seconds) if needed
+                        if HasSkill(doer, "wathom_friends_1") then
+                            v:AddTag("wathom_really_spooking_me")
+                            v:DoTaskInTime(8,function(v) v:RemoveTag("wathom_really_spooking_me") end)
+                        end
                     end
-                end
-                if v.components.hauntable == nil or
-                    v.components.hauntable ~= nil and not v.components.hauntable.panicable and not (
-                        v.components.follower ~= nil and v.components.follower:GetLeader() and
-                        v.components.follower:GetLeader():HasTag("player")) and not v:HasTag("player") then
-                    if not v:HasTag("bird") and v.components.combat then
-                        v.components.combat:SetTarget(act.doer)
+                    if not v:HasTag("bird") and v.components.combat and (not v.components.hauntable or v.components.hauntable and not v.components.hauntable.panicable) then
+                        v.components.combat:SetTarget(doer)
                     end
                 end
             end
@@ -1510,7 +1469,7 @@ AddPrefabPostInit("ruins_bat", function(inst)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 end)
 
-AddPrefabPostInit("ancient_altar", function(inst)
+--[[AddPrefabPostInit("ancient_altar", function(inst)
     if not _G.TheWorld.ismastersim then return end
     
     local _complete_onturnon = inst.components.prototyper.onturnon
@@ -1531,7 +1490,7 @@ AddPrefabPostInit("ancient_altar", function(inst)
     end
 
     inst.components.prototyper.onturnon = TurnOn 
-end)
+end)]]
 
 -- AddPrefabPostInit("shadow_battleaxe", function(inst)
     -- if not _G.TheWorld.ismastersim then return end

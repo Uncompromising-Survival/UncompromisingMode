@@ -1,7 +1,7 @@
 if not GLOBAL.TheNet:GetIsServer() then return end
 
 AddComponentPostInit("floater", function(self)
-	local _ShouldShowEffect = self.ShouldShowEffect
+	--[[local _ShouldShowEffect = self.ShouldShowEffect
 	
 	function self:ShouldShowEffect()
 		local pos_x, pos_y, pos_z = self.inst.Transform:GetWorldPosition()
@@ -12,5 +12,5 @@ AddComponentPostInit("floater", function(self)
 			return _ShouldShowEffect(self)
 		end
 		return
-	end
+	end]]
 end)

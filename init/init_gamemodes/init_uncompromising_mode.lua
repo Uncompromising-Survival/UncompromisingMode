@@ -4,7 +4,6 @@ local require = GLOBAL.require
 modimport("init/init_util")
 modimport("init/init_assets")
 modimport("init/init_widgets")
-modimport("init/minimap_icons")
 modimport("init/init_compat")
 
 --  [   Import customized shard RPC module ]    --
@@ -17,41 +16,41 @@ modimport("init/init_weather/init_dragonfly_bait")
 --modimport("init/init_food/init_stuffed")
 --Currently shelved due to hunger upvalue return error
 
+-- Needs to go up here, other files will try to reference it
+modimport("init/init_tuning")
+
 --	[ 	Import Names and Descriptions	]	--
-modimport("init/init_names")
-modimport("init/init_bonusdescriptors")
-modimport("init/init_descriptions/generic")
-modimport("init/init_descriptions/willow")
-modimport("init/init_descriptions/wolfgang")
-modimport("init/init_descriptions/wendy")
-modimport("init/init_descriptions/wx78")
-modimport("init/init_descriptions/wickerbottom")
-modimport("init/init_descriptions/woodie")
-modimport("init/init_descriptions/wes")
-modimport("init/init_descriptions/waxwell")
-modimport("init/init_descriptions/wathgrithr")
-modimport("init/init_descriptions/webber")
-modimport("init/init_descriptions/winona")
-modimport("init/init_descriptions/wortox")
-modimport("init/init_descriptions/wormwood")
-modimport("init/init_descriptions/warly")
-modimport("init/init_descriptions/wurt")
-modimport("init/init_descriptions/walter")
-modimport("init/init_descriptions/wanda")
-modimport("init/init_descriptions/winky")
-modimport("init/init_descriptions/wathom")
-modimport("init/init_descriptions/skilltreestrings.lua")
-modimport("init/init_descriptions/announcestrings.lua")
-modimport("init/init_descriptions/descriptorstrings.lua")
+modimport("init/init_strings/init_strings")
+modimport("init/init_strings/init_names")
+modimport("init/init_strings/init_tooltips")--load before postinit please!
+modimport("init/init_bonusdescriptors") -- doesn't contain strings
+
+-- Character descriptions
+modimport("init/init_strings/init_descriptions/generic")
+modimport("init/init_strings/init_descriptions/willow")
+modimport("init/init_strings/init_descriptions/wolfgang")
+modimport("init/init_strings/init_descriptions/wendy")
+modimport("init/init_strings/init_descriptions/wx78")
+modimport("init/init_strings/init_descriptions/wickerbottom")
+modimport("init/init_strings/init_descriptions/woodie")
+modimport("init/init_strings/init_descriptions/wes")
+modimport("init/init_strings/init_descriptions/waxwell")
+modimport("init/init_strings/init_descriptions/wathgrithr")
+modimport("init/init_strings/init_descriptions/webber")
+modimport("init/init_strings/init_descriptions/winona")
+modimport("init/init_strings/init_descriptions/wortox")
+modimport("init/init_strings/init_descriptions/wormwood")
+modimport("init/init_strings/init_descriptions/warly")
+modimport("init/init_strings/init_descriptions/wurt")
+modimport("init/init_strings/init_descriptions/walter")
+modimport("init/init_strings/init_descriptions/wanda")
+modimport("init/init_strings/init_descriptions/winky")
+modimport("init/init_strings/init_descriptions/wathom")
 
 
 
 --	[ 		Number Tuning and PostInits		]	--
-
-modimport("init/init_tuning")
-modimport("init/init_tooltips")--load before postinit please!
 modimport("init/init_postinit")
-modimport("init/init_strings")
 modimport("init/init_actions")
 modimport("init/init_containers")
 modimport("init/init_batterypower")
@@ -83,15 +82,24 @@ local GAMEMODE_CUSTOM_SETTINGS = 2;
 
 --	[ 				Features			]	--
 
+--if GetModConfigData("harder_monsters") then4
+if GetModConfigData("horriblefood") then
+    modimport("init/init_horriblefood")
+end
 
-modimport("init/init_gemology")
+
+modimport("init/init_gemology/common")
+modimport("init/init_gemology/special")
+modimport("init/init_gemology/misc") -- AXE Monkeys angering when you mine slimestone with geodes, lab and AG loot
+modimport("init/init_gemology/trades")
+
 --if GetModConfigData("harder_monsters") then
 modimport("init/init_creatures/init_treebuffs")
 modimport("init/init_creatures/init_harder_monsters")
 --end
 
-if GetModConfigData("horriblefood") then
-    modimport("init/init_horriblefood")
+if GetModConfigData("livingtree_legacy") then
+    modimport("init/init_creatures/init_treebuffs")
 end
 
 modimport("init/init_food/init_food_changes")
@@ -99,6 +107,8 @@ modimport("init/init_food/init_bird_changes")
 modimport("init/init_food/init_rare_foods")
 modimport("init/init_vetcurse")
 modimport("init/init_bosshealth")
+modimport("init/init_freezeimmunity")
+modimport("init/init_electricimmunity")
 
 --if  GetModConfigData("harder_recipes") then <-- This isn't even a config change, yet.
 --modimport("init/init_recipes") -- Deprecated, keeping the file just to prevent any merge conflicts.
@@ -176,7 +186,7 @@ modimport("init/init_character_changes/wormwood")
 --end
 
 -- All of these are wathgrightr changes
-if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
+if TUNING.DSTU.WATHGRITHR_REWORK.ENABLED then
 	modimport("postinit/prefabs/skilltree_wathgrithr")
 	modimport("postinit/prefabs/beefalo") -- Yes, even this one
 	modimport("postinit/prefabs/battlesongs")
@@ -188,8 +198,6 @@ if TUNING.DSTU.WATHGRITHR_REWORK == 1 then
 end
 
 modimport("init/init_skilltreeimports")
-
-
 
 if GetModConfigData("lifeamulet") then
     modimport("init/init_lifeamulet")
@@ -207,7 +215,9 @@ end
 --if GetModConfigData("character_changes") then <-- This isn't even a config option.
 modimport("init/init_character_changes/generic")
 modimport("init/init_character_changes/wendy")
+--if not TUNING.DSTU.UPDATE_CHECK then
 modimport("init/init_character_changes/wx78")
+--end
 modimport("init/init_character_changes/wickerbottom")
 modimport("init/init_character_changes/woodie")
 modimport("init/init_character_changes/wes")
@@ -228,7 +238,7 @@ if GetModConfigData("hardcore") then
     modimport("init/init_gamemodes/init_hardcore")
 end
 
-modimport("init/init_loadingtips")
+--modimport("init/init_loadingtips")
 
 --food stats!
 if GetModConfigData("food_stats") then
@@ -238,3 +248,11 @@ end
 if GetModConfigData("armorrework") then
     modimport("postinit/armor_rework")
 end
+
+modimport("init/init_weather/init_ripples")
+modimport("init/init_weather/init_thicket")
+modimport("init/init_insightcompat")
+
+--need too load this AFTER strings, because scripts/gemology_defs needs to and (same with above)
+GLOBAL.TheMineralLogbook = require("mineral_logbook")()
+GLOBAL.TheMineralLogbook:Load()

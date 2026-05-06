@@ -28,6 +28,9 @@ local function DoPockets(inst, widget)
     inst:AddTag("backpack")
     inst:AddTag("pocketbackpack")
 
+    inst.entity:AddMiniMapEntity()
+    inst.MiniMapEntity:SetIcon(inst.prefab .. ".tex")
+
     if not TheWorld.ismastersim then
         inst.OnEntityReplicated = function(inst)
             inst.replica.container:WidgetSetup(widget)
@@ -206,25 +209,28 @@ env.AddPrefabPostInit("premiumwateringcan", function(inst)
     inst.OnLoad = OnLoad
 end)
 
--- A check doesn't seem to be needed. It will not run the postinit if it doesn't find the prefab
---if TUNING.DSTU.ISLAND_ADVENTURES then
-    env.AddPrefabPostInit("armor_snakeskin", function(inst)
-        DoPockets(inst, "puffvest_big")
+env.AddPrefabPostInit("armor_snakeskin", function(inst)
+    DoPockets(inst, "puffvest_big")
+    inst:DoTaskInTime(0, function(inst)
+        --YES I KNOW THERES THE VISUAL VARIANT STUFF BUT IDK HOW TO USE IT HERE AND I DON'T CARE RN!!!
+        if TheWorld:HasTag("porkland") then
+            inst.MiniMapEntity:SetIcon("armor_snakeskin_scaly.tex")
+        end
     end)
+end)
 
-    env.AddPrefabPostInit("armor_windbreaker", function(inst)
-        DoPockets(inst, "puffvest_big")
-    end)
+env.AddPrefabPostInit("armor_windbreaker", function(inst)
+    DoPockets(inst, "puffvest_big")
+end)
 
-    env.AddPrefabPostInit("armor_lifejacket", function(inst)
-        DoPockets(inst, "puffvest_big")
-    end)
+env.AddPrefabPostInit("armor_lifejacket", function(inst)
+    DoPockets(inst, "puffvest_big")
+end)
 
-    env.AddPrefabPostInit("blubbersuit", function(inst)
-        DoPockets(inst, "puffvest")
-    end)
+env.AddPrefabPostInit("blubbersuit", function(inst)
+    DoPockets(inst, "puffvest")
+end)
 
-    env.AddPrefabPostInit("tarsuit", function(inst)
-        DoPockets(inst, "puffvest")
-    end)
---end
+env.AddPrefabPostInit("tarsuit", function(inst)
+    DoPockets(inst, "puffvest")
+end)

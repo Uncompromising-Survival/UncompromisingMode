@@ -19,7 +19,7 @@ env.AddPrefabPostInit("kris_m", function(inst)
 
     if inst.components.foodaffinity then
         inst.components.foodaffinity.favorite_foods = {
-	        ["um_moss"] = 4,
+            ["um_moss"] = 4,
         }
     end
 end)
@@ -32,7 +32,6 @@ env.AddPrefabPostInit("susie_m", function(inst)
     inst.components.eater:SetCanEatVeggieHorrible()
 end)
 
--- I don't know where else to put this
 env.AddPrefabPostInit("aphid", function(inst)
     if IsIslandOrVolcanoWorld() then
         inst:AddComponent("appeasement")
@@ -63,7 +62,6 @@ env.AddPrefabPostInit("volcanoworld", function(inst)
         return
     end
 end)
-
 
 --Scythe hacking. CBA to actually do this on the prefab, I'm just copying this from IA.
 local HARVEST_AFTERFINDINGONEOFTAGS = { "pickable", "HACK_workable" }
@@ -105,14 +103,16 @@ local function DoScythe(inst, target, doer, ...)
     return DoScythe_old(inst, target, doer, ...)
 end
 
-env.AddPrefabPostInit("jawed_scythe", function(inst)
+env.AddPrefabPostInitAny(function(inst)
     if not TheWorld.ismastersim then
         return
     end
-    if not DoScythe_old then
-        DoScythe_old = inst.DoScythe
+    if inst.DoScythe then
+        if not DoScythe_old then
+            DoScythe_old = inst.DoScythe
+        end
+        inst.DoScythe = DoScythe
     end
-    inst.DoScythe = DoScythe
 end)
 
 
@@ -197,4 +197,207 @@ end)
 
 if IsSWEnabled() or IsHAMEnabled() then
     ACTIONS.HACK.mindistance = 2
+end
+
+env.AddPrefabPostInit("dragoon", function(inst)
+    inst:AddTag("pyre_toxin_immune")
+end)
+
+
+--VERY WIP NO GOOD.
+--WE HAVE PLANS FOR PROPER INTEGRATION, BUT THIS'LL DO FOR NOW
+--These would run before its set on the prefabs, so we'll just do it on the respective prefabs
+
+env.AddPrefabPostInit("rock_obsidian", function(inst)
+    SetSharedLootTable("rock_obsidian", {
+        { "obsidian",              1.0 },
+        { "obsidian",              1.0 },
+        { "obsidian",              0.5 },
+        { "obsidian",              0.25 },
+        { "obsidian",              0.25 },
+        { "um_gemologyredgem1",    0.005 },
+        { "um_gemologyredgem2",    0.005 },
+        { "um_gemologybluegem1",   0.005 },
+        { "um_gemologybluegem2",   0.005 },
+        { "um_gemologygreengem1",  0.005 },
+        { "um_gemologygreengem2",  0.005 },
+        { "um_gemologyorangegem1", 0.005 },
+        { "um_gemologyorangegem2", 0.005 },
+        { "um_gemologypalegem1",   0.005 },
+        { "um_gemologypalegem2",   0.005 },
+    })
+end)
+
+env.AddPrefabPostInit("rock_charcoal", function(inst)
+    SetSharedLootTable("rock_charcoal", {
+        { "charcoal",              1.0 },
+        { "charcoal",              1.0 },
+        { "charcoal",              0.5 },
+        { "charcoal",              0.25 },
+        { "charcoal",              0.25 },
+        { "flint",                 0.5 },
+        { "um_gemologyredgem1",    0.005 },
+        { "um_gemologyredgem2",    0.005 },
+        { "um_gemologybluegem1",   0.005 },
+        { "um_gemologybluegem2",   0.005 },
+        { "um_gemologypurplegem1", 0.005 },
+        { "um_gemologypurplegem2", 0.005 },
+        { "um_gemologygreengem1",  0.005 },
+        { "um_gemologygreengem2",  0.005 },
+        { "um_gemologyorangegem1", 0.005 },
+        { "um_gemologyorangegem2", 0.005 },
+        { "um_gemologyyellowgem1", 0.005 },
+        { "um_gemologyyellowgem2", 0.005 },
+        { "um_gemologypalegem1",   0.005 },
+        { "um_gemologypalegem2",   0.005 },
+    })
+end)
+
+
+env.AddPrefabPostInit("dragoonegg", function(inst)
+    SetSharedLootTable('dragoonegg',
+        {
+            { 'flint',                 1.0 },
+            { 'flint',                 0.5 },
+            { 'rocks',                 1.0 },
+            { 'rocks',                 0.5 },
+            { 'rocks',                 0.3 },
+            { 'obsidian',              0.5 },
+            { 'obsidian',              0.5 },
+            { "um_gemologyredgem1",    0.005 },
+            { "um_gemologyredgem2",    0.005 },
+            { "um_gemologybluegem1",   0.005 },
+            { "um_gemologybluegem2",   0.005 },
+            { "um_gemologygreengem1",  0.005 },
+            { "um_gemologygreengem2",  0.005 },
+            { "um_gemologyorangegem1", 0.005 },
+            { "um_gemologyorangegem2", 0.005 },
+            { "um_gemologypurplegem1", 0.005 },
+            { "um_gemologypurplegem2", 0.005 },
+            { "um_gemologyyellowgem1", 0.005 },
+            { "um_gemologyyellowgem2", 0.005 },
+            { "um_gemologypalegem1",   0.005 },
+            { "um_gemologypalegem2",   0.005 },
+        })
+end)
+
+local magma_gem_loot = {
+    ["um_gemologyredgem1"] = 0.005,
+    ["um_gemologyredgem2"] = 0.005,
+
+    ["um_gemologybluegem1"] = 0.005,
+    ["um_gemologybluegem2"] = 0.005,
+
+    ["um_gemologypurplegem1"] = 0.005,
+    ["um_gemologypurplegem2"] = 0.005,
+
+    ["um_gemologyorangegem1"] = 0.005,
+    ["um_gemologyorangegem2"] = 0.005,
+
+    ["um_gemologygreengem1"] = 0.005,
+    ["um_gemologygreengem2"] = 0.005,
+
+    ["um_gemologyyellowgem1"] = 0.005,
+    ["um_gemologyyellowgem2"] = 0.005,
+
+    ["um_gemologypalegem1"] = 0.005,
+    ["um_gemologypalegem2"] = 0.005,
+}
+
+local magma_rocks = {
+    "magmarock_gold",
+    "magmarock"
+}
+
+for k, v in pairs(magma_rocks) do
+    env.AddPrefabPostInit(v, function(inst)
+        if not TheWorld.ismastersim then
+            return
+        end
+
+        inst.loot = MergeMaps(inst.loot, magma_gem_loot)
+    end)
+end
+
+if IsSWEnabled() or IsHAMEnabled() then
+    local TreasureLootList = GetTreasureLootDefinitionTable()
+    --respect IA's config
+    if IA_CONFIG ~= nil and IA_CONFIG.slotmachineloot and SLOTMACHINE_LOOT ~= nil and TreasureLootList ~= nil then
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_mushroom"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_mushroom"] = { treasure = "slot_gemology_mushroom", }
+        TreasureLootList["slot_gemology_mushroom"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                um_gemology_geode_red = 1,
+                um_gemology_geode_green = 1,
+                um_gemology_geode_blue = 1,
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                blue_cap = 1,
+                red_cap = 1,
+                green_cap = 1,
+                spore_small = 1,
+                spore_medium = 1,
+                spore_tall = 1,
+            },
+        }
+
+        TreasureLootList["slot_mooncaps"].loot.um_gemology_geode_glass = 2
+
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_lobster"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_lobster"] = { treasure = "slot_gemology_lobster", }
+        TreasureLootList["slot_gemology_lobster"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                um_gemology_geode_lobster = 2,
+                rocks = 5,
+                goldnugget = 3,
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                rocks = 1,
+                flint = 1,
+                goldnugget = 1,
+                guano = 1,
+                slurtle_shellpieces = 1,
+                um_gemology_geode_lobster = 0.5,
+            },
+        }
+
+        SLOTMACHINE_LOOT.goodspawns["slot_gemology_guano"] = 1
+        SLOTMACHINE_LOOT.actions["slot_gemology_guano"] = { treasure = "slot_gemology_guano", }
+        TreasureLootList["slot_gemology_guano"] =
+        {
+            slot_loot_quality = "good",
+            loot =
+            {
+                rocks = 2,
+                flint = 2,
+                goldnugget = 1,
+                guano = 3,
+                um_gemology_geode_guano = 2
+            },
+            num_random_loot = 3,
+            random_loot =
+            {
+                rocks = 1,
+                flint = 1,
+                goldnugget = 1,
+                guano = 1,
+                um_gemology_geode_guano = 0.5,
+            },
+        }
+
+        TreasureLootList["gears"].loot.um_gemology_geode_ruins = 2
+
+        TreasureLootList["slot_obsidian"].loot.um_gemology_geode_vent = 1
+        TreasureLootList["slot_obsidian"].loot.um_fyrite = 3
+    end
 end

@@ -108,6 +108,8 @@ AddTile("UM_FLOODWATER",
         snowsound = "dontstarve/movement/run_marsh",
         mudsound = "dontstarve/movement/run_marsh",
         colors = GROUND_OCEAN_COLOR,
+        nogroundoverlays = true,
+        ocean_depth = "SHALLOW",
         cannotbedug = true
     }, {
         name = "map_edge",
@@ -130,6 +132,8 @@ AddTile("UM_FLOODWATER_GROTTO",
         snowsound = "dontstarve/movement/run_marsh",
         mudsound = "dontstarve/movement/run_marsh",
         colors = GROUND_OCEAN_COLOR,
+        nogroundoverlays = true,
+        ocean_depth = "SHALLOW",
         cannotbedug = true
     }, {
         name = "map_edge",
@@ -139,6 +143,31 @@ AddTile("UM_FLOODWATER_GROTTO",
         anim = "ancienthoodedturf",
         bank_build = "hfturf"
     })
+
+AddTile("UM_FLOODWATER_MARSH",
+    "LAND",
+    {
+        ground_name = "um_floodwater",
+    }, {
+        name = "um_floodwater",
+        noise_texture = "Ground_noise_moon_fungus_flooded",
+        runsound = "dontstarve/movement/run_marsh",
+        walksound = "dontstarve/movement/walk_marsh",
+        snowsound = "dontstarve/movement/run_marsh",
+        mudsound = "dontstarve/movement/run_marsh",
+        colors = GROUND_OCEAN_COLOR,
+        nogroundoverlays = true,
+        ocean_depth = "SHALLOW",
+        cannotbedug = true
+    }, {
+        name = "map_edge",
+        noise_texture = "Ground_noise_moon_fungus_flooded_mini"
+    }, {
+        name = "ancienthoodedturf",
+        anim = "ancienthoodedturf",
+        bank_build = "hfturf"
+    })
+
 
 AddTile("UM_FLOODWATER_BROILING",
     "LAND",
@@ -152,6 +181,8 @@ AddTile("UM_FLOODWATER_BROILING",
         snowsound = "dontstarve/movement/run_marsh",
         mudsound = "dontstarve/movement/run_marsh",
         colors = GROUND_OCEAN_COLOR,
+        ocean_depth = "SHALLOW",
+        nogroundoverlays = true,
         cannotbedug = true
     }, {
         name = "map_edge",
@@ -493,6 +524,16 @@ local function GetTileForLushMagma(noise)
     return WORLD_TILES.UM_MAGMA
 end
 
+local function GetTileForVolcanoMagma(noise)
+    if noise < 0.5 then
+        return WORLD_TILES.UM_GRASSMAGMA
+    elseif noise < 0.25 then
+        return math.random() > 0.5 and WORLD_TILES.VOLCANO or WORLD_TILES.VOLCANO_ROCK
+    end
+
+    return WORLD_TILES.UM_MAGMA
+end
+
 local function GetTileForMagmaRole(noise)
     if noise < 0.5 then
         return WORLD_TILES.VENT
@@ -501,10 +542,26 @@ local function GetTileForMagmaRole(noise)
     return WORLD_TILES.UM_MAGMA
 end
 
-local function GetTileForGrottoFloodLight(noise)
+
+local function GetTileForMagmaMix(noise)
+    if noise < 0.5 then
+        return WORLD_TILES.UM_GRASSMAGMA
+	end
+	
+    return WORLD_TILES.UM_MAGMA
+end
+
+local function GetTileForGrottoPatchy(noise)
     if noise < 0.4 then
         return WORLD_TILES.UM_FLOODWATER_GROTTO
-    elseif noise < 0.5 then
+	end
+    return WORLD_TILES.PEBBLEBEACH
+end
+
+local function GetTileForGrottoFloodLight(noise)
+    if noise < 0.5 then
+        return WORLD_TILES.UM_FLOODWATER_GROTTO
+    elseif noise < 0.6 then
         return WORLD_TILES.PEBBLEBEACH
     end
 
@@ -519,12 +576,14 @@ local function GetTileForGrottoFloodHeavy(noise)
     return WORLD_TILES.FUNGUSMOON
 end
 
-local function GetTileForMoltenMagma(noise)
-    if noise > 0.1 and noise < 0.6 then
-        return WORLD_TILES.UM_MAGMA_LAVATEMP
+local function GetTileForGrottoFloodHeavySandy(noise)
+    if noise < 0.6 then
+        return WORLD_TILES.UM_FLOODWATER_GROTTO
     end
-    return WORLD_TILES.UM_MAGMA_LAVABORDER
+
+    return WORLD_TILES.PEBBLEBEACH
 end
+
 
 AddTile("UM_HOTSPRING", "NOISE")
 AddTile("UM_HOTSPRING_IA", "NOISE")
@@ -534,10 +593,13 @@ AddTile("UM_HOODED_FOREST_SPARSE", "NOISE")
 AddTile("UM_HOODED_ROCKY", "NOISE")
 AddTile("UM_MAGMA_JUNGLY", "NOISE")
 AddTile("UM_MAGMA_FUMAROLE", "NOISE")
+AddTile("UM_MAGMA_MIX", "NOISE")
+AddTile("UM_MAGMAVOLCANO_IA", "NOISE")
 
+AddTile("UM_GROTTO_PATCHY", "NOISE")
 AddTile("UM_GROTTO_LIGHTFLOODED", "NOISE")
 AddTile("UM_GROTTO_HEAVYFLOODED", "NOISE")
-AddTile("UM_MAGMA_LAVAMOLTEN_NOISE", "NOISE")
+AddTile("UM_GROTTO_HEAVYFLOODED_SANDY", "NOISE")
 
 local NoiseTileFunctions = require("noisetilefunctions")
 
@@ -553,12 +615,16 @@ NoiseTileFunctions[WORLD_TILES.UM_HOODED_ROCKY] = GetTileForRockyHoodedForest
 
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_JUNGLY] = GetTileForLushMagma
 NoiseTileFunctions[WORLD_TILES.UM_MAGMA_FUMAROLE] = GetTileForMagmaRole
+NoiseTileFunctions[WORLD_TILES.UM_MAGMA_MIX] = GetTileForMagmaMix
 
---NoiseTileFunctions[WORLD_TILES.UM_MAGMA_LAVAMOLTEN] = GetTileForMoltenMagma
-NoiseTileFunctions[WORLD_TILES.UM_MAGMA_LAVAMOLTEN_NOISE] = GetTileForMoltenMagma
+NoiseTileFunctions[WORLD_TILES.UM_MAGMAVOLCANO_IA] = GetTileForVolcanoMagma
 
+
+
+NoiseTileFunctions[WORLD_TILES.UM_GROTTO_PATCHY] = GetTileForGrottoPatchy
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_LIGHTFLOODED] = GetTileForGrottoFloodLight
 NoiseTileFunctions[WORLD_TILES.UM_GROTTO_HEAVYFLOODED] = GetTileForGrottoFloodHeavy
+NoiseTileFunctions[WORLD_TILES.UM_GROTTO_HEAVYFLOODED_SANDY] = GetTileForGrottoFloodHeavySandy
 
 require("map/terrain")
 --require("map/torreniv_terrain")
@@ -585,7 +651,6 @@ local filters = {
     ["fyriterock"] = { WORLD_TILES.UM_GRASSMAGMA },
     ["um_pepperdragon_nest"] = { WORLD_TILES.UM_MAGMA },
 
-
     -- Moon Grotto Stuff
     ["molebat"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO },
     ["molebathill"] = { WORLD_TILES.FUNGUSMOON, WORLD_TILES.UM_FLOODWATER_GROTTO },
@@ -594,6 +659,9 @@ local filters = {
 
     ["shockworm"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
     ["zaspberry_plant"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
+    ["um_reeds_lunar"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.FUNGUSMOON },
+    ["um_tentacle_moon"] = {WORLD_TILES.FUNGUSMOON },
+    ["um_mushroom_moon"] = { WORLD_TILES.PEBBLEBEACH, WORLD_TILES.UM_FLOODWATER_GROTTO },
 }
 
 for k, v in pairs(filters) do

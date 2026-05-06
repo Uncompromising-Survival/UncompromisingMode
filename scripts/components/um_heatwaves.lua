@@ -62,7 +62,7 @@ return Class(function(self, inst)
         -- end
 
         TheWorld:PushEvent("ms_forceprecipitation", false)
-
+		
         TheWorld:DoTaskInTime(5, function()
             TheWorld:AddTag("heatwavestart")
             if TheWorld.net ~= nil then
@@ -95,16 +95,19 @@ return Class(function(self, inst)
     --------------------------------------------------------------------------
 
     local function OnSeasonChange(self)
-        if TheWorld.state.issummer or TheWorld.state.isdry then
-            if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
-                --if not _storming then
-                StartHeatWaves()
-                --end
-            end
-        else
-            StopHeatwave()
-            StopHeatWaves()
-        end
+		local inst = self.inst
+		inst:DoTaskInTime(0,function(inst) -- need to delay for a second, TheWorld.state.season hasn't been updated when OnSeasonChange is pushed
+			if TheWorld.state.issummer or TheWorld.state.isdry then
+				if TheWorld.state.cycles >= TUNING.DSTU.WEATHERHAZARD_START_DATE_SUMMER then
+					--if not _storming then
+					StartHeatWaves()
+					--end
+				end
+			else
+				StopHeatwave()
+				StopHeatWaves()
+			end
+		end)
     end
 
     function self:OnSave()
@@ -150,7 +153,7 @@ return Class(function(self, inst)
         _worldsettingstimer:AddTimer(UM_STOPHEATWAVE_TIMERNAME, _despawninterval + math.random(80, 120), true,
             StopHeatwave)
 
-        OnSeasonChange()
+        OnSeasonChange(self)
     end
 
     function self:OnUpdate(dt)
@@ -167,11 +170,7 @@ return Class(function(self, inst)
     function self:LongUpdate(dt) self:OnUpdate(dt) end
 
     self:WatchWorldState("season", OnSeasonChange)
-    self:WatchWorldState("cycles", function(inst)
-        if not TheWorld.state.season == "summer" then
-            OnSeasonChange()
-        end
-    end)
+
 
 
     self.inst:StartUpdatingComponent(self)

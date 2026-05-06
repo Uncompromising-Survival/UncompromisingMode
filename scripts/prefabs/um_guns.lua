@@ -40,6 +40,7 @@ end
 local pepper_pattern = {-20,-10,0,10,20}
 local pepperflake_pattern = {-30,-20,-10,0,10,20,30} -- Not sure if I should make it really that much better, warly is already making hte ammo nonperishable and multiplied
 local nettle_pattern = {-10,0,10}
+local twig_pattern = {0}
 
 local function Flamethrower(inst,caster, target)
 	local ammo = ConsumeAmmo(inst)
@@ -48,12 +49,18 @@ local function Flamethrower(inst,caster, target)
 			inst.components.finiteuses:Use(1)
 		end
 		local pattern
-		if ammo == "pepper" then
+		if ammo == "pepper" or ammo == "um_ghost_fajita" then
 			pattern = pepper_pattern
-		elseif ammo == "spice_chili" then
+		elseif ammo == "spice_chili" or ammo == "um_rimeweed_itemflower" then
 			pattern = pepperflake_pattern
+		elseif ammo == "um_rimeweed_itemvine" then
+			pattern = twig_pattern
 		else
 			pattern = nettle_pattern
+		end
+		local chilled
+		if ammo == "um_ghost_pepper_item" or ammo == "um_rimeweed_itemvine" or ammo == "um_rimeweed_itemflower" or ammo == "um_ghost_fajita" then
+			chilled = true
 		end
 		local targetpos = target:GetPosition()
 		local rot = caster.Transform:GetRotation() 
@@ -65,13 +72,16 @@ local function Flamethrower(inst,caster, target)
 		local dz = 1.5*math.cos((rot+ 90) * DEGREES)
 		fx.Transform:SetPosition(x + dx,0,z+dz)
 		fx.Transform:SetScale(0.5,0.5,0.5)
-			
+		
 		for i = 1,#pattern do
 			local interval_rot = pattern[i]
 			local random_rotation = math.random(-1,1)
 			local projectile = SpawnPrefab("um_fire_projectile")
 			local dx = 2.1*math.sin((rot+ 90+interval_rot+random_rotation) * DEGREES)
 			local dz = 2.1*math.cos((rot+ 90+interval_rot+random_rotation) * DEGREES)
+			if chilled then
+				projectile.chilly = true
+			end
 			projectile.Transform:SetPosition(x + dx,2,z+dz)
 			projectile.Transform:SetRotation(rot+interval_rot+random_rotation)
 			projectile.speed = 15
