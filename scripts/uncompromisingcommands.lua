@@ -17,37 +17,37 @@ local MOCKFLY_TIMERNAME = "mockfly_timetoattack"
 local BEARGER_TIMERNAME = "bearger_timetospawn"
 
 function c_um_bosstimers()
-	if TheWorld.ismastersim then
-		TheNet:Announce("Checking Spawners...")
-		local _worldsettingstimer = TheWorld.components.worldsettingstimer
-		if TheWorld.state.iswinter then
-			if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
-				TheNet:Announce("Found Deerclops timer, it has ".._worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME).." seconds left till attacking.")
-			else
-				TheNet:Announce("Deerclops spawning timer doesn't exist.")
-			end
-		elseif TheWorld.state.isspring then
-			if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
-				TheNet:Announce("Found Mother Goose timer, it has ".._worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME).." seconds left till attacking.")
-			else
-				TheNet:Announce("Mother Goose spawning timer doesn't exist.")
-			end		
-		elseif TheWorld.state.issummer then
-			if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
-				TheNet:Announce("Found Wilting Dragonfly timer, it has ".._worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME).." seconds left till attacking.")
-			else
-				TheNet:Announce("Wilting Dragonfly spawning timer doesn't exist.")
-			end			
-		else
-			if _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) then
-				TheNet:Announce("Found Bearger timer, it has ".._worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME).." seconds left till attacking.")
-			else
-				TheNet:Announce("Bearger spawning timer doesn't exist.")
-			end				
-		end
-	else
-		print("c_um_debug_bosstimers only works as the host")
-	end
+    if TheWorld.ismastersim then
+        TheNet:Announce("Checking Spawners...")
+        local _worldsettingstimer = TheWorld.components.worldsettingstimer
+        if TheWorld.state.iswinter then
+            if _worldsettingstimer:ActiveTimerExists(DEERCLOPS_TIMERNAME) then
+                TheNet:Announce("Found Deerclops timer, it has ".._worldsettingstimer:GetTimeLeft(DEERCLOPS_TIMERNAME).." seconds left till attacking.")
+            else
+                TheNet:Announce("Deerclops spawning timer doesn't exist.")
+            end
+        elseif TheWorld.state.isspring then
+            if _worldsettingstimer:ActiveTimerExists(MOTHERGOOSE_TIMERNAME) then
+                TheNet:Announce("Found Mother Goose timer, it has ".._worldsettingstimer:GetTimeLeft(MOTHERGOOSE_TIMERNAME).." seconds left till attacking.")
+            else
+                TheNet:Announce("Mother Goose spawning timer doesn't exist.")
+            end        
+        elseif TheWorld.state.issummer then
+            if _worldsettingstimer:ActiveTimerExists(MOCKFLY_TIMERNAME) then
+                TheNet:Announce("Found Wilting Dragonfly timer, it has ".._worldsettingstimer:GetTimeLeft(MOCKFLY_TIMERNAME).." seconds left till attacking.")
+            else
+                TheNet:Announce("Wilting Dragonfly spawning timer doesn't exist.")
+            end            
+        else
+            if _worldsettingstimer:ActiveTimerExists(BEARGER_TIMERNAME) then
+                TheNet:Announce("Found Bearger timer, it has ".._worldsettingstimer:GetTimeLeft(BEARGER_TIMERNAME).." seconds left till attacking.")
+            else
+                TheNet:Announce("Bearger spawning timer doesn't exist.")
+            end                
+        end
+    else
+        print("c_um_debug_bosstimers only works as the host")
+    end
 end
 
 
@@ -56,11 +56,13 @@ function c_um_vetcurse()
     local player = ConsoleCommandPlayer()
     if player ~= nil and player.components.health ~= nil and not player:HasTag("playerghost") then
         if not player:HasTag("vetcurse") then
-            player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+            --player.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+            if doer.UMToggleVetCurse then doer:UMToggleVetCurse(true) end
             player:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             print("added vetcurse")
         elseif player:HasTag("vetcurse") then
-            player.components.debuffable:RemoveDebuff("buff_vetcurse")
+            --player.components.debuffable:RemoveDebuff("buff_vetcurse")
+            if doer.UMToggleVetCurse then doer:UMToggleVetCurse() end
             print("removed vetcurse")
         end
     end
@@ -81,7 +83,7 @@ function c_um_vetcurseitems()
         --"um_exhumer",
         "um_moonfly_lantern",
         "silksack",
-		"crystal_cursed_antler",
+        "crystal_cursed_antler",
     }
     for k, v in ipairs(items) do
         c_give(v)
@@ -447,14 +449,14 @@ end
 --This is for all players. If you don't care for entities, consider using
 -- TheWorld.minimap.MiniMap:EnableFogOfWar(false)
 function c_revealmap()
-	local size = 2 * TheWorld.Map:GetSize()
-	for _, player in pairs(AllPlayers) do
-		for x = -size, size, 32 do
-			for z = -size, size, 32 do
-				player.player_classified.MapExplorer:RevealArea(x, 0, z)
-			end
-		end
-	end
+    local size = 2 * TheWorld.Map:GetSize()
+    for _, player in pairs(AllPlayers) do
+        for x = -size, size, 32 do
+            for z = -size, size, 32 do
+                player.player_classified.MapExplorer:RevealArea(x, 0, z)
+            end
+        end
+    end
 
-	print(TheWorld.Map:GetSize())
+    print(TheWorld.Map:GetSize())
 end
