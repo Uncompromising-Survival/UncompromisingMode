@@ -2,7 +2,7 @@
 ---------------------- Attach and dettach functions ---------------------
 -------------------------------------------------------------------------
 ----------------------------------ATTACH---------------------------------
-local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom"}
+local TARGET_MUST_TAGS = {"mime", "pinetreepioneer", "plantkin", "wathom", "shadowmagic"}
 
 local function ForceToTakeMoreDamage(inst)
     local self = inst.components.combat

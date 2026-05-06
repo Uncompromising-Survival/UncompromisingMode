@@ -76,8 +76,8 @@ env.AddPrefabPostInit("waxwelljournal", function(inst)
 end)]]
 
 local function CalculateMaxHealthLoss(inst, data)
-    if not (inst.components.health and inst.components.health:IsDead()) then
-        local healthloss = ((data.damageresolved or data.damage) * 0.2) / 75
+    if inst:HasTag("vetcurse") and inst.components.health and not inst.components.health:IsDead() then
+        local healthloss = ((data.damageresolved or data.damage) * 0.5) / 75
         inst.components.health:DeltaPenalty(healthloss)
     end
 end
@@ -197,14 +197,14 @@ local function OnLoseItem(inst, data)
     end
 end
 
-local shadowgearlist = {["armor_sanity"] = "um_maxwell_armor_sanity", ["nightsword"] = "um_maxwell_nightsword"}
+local shadowgearlist = { ["armor_sanity"] = "um_maxwell_armor_sanity", ["nightsword"] = "um_maxwell_nightsword" }
 local function UnlockShadowGear(inst, data)
     local shadowgear = data and data.item and shadowgearlist[data.item.prefab]
     if not shadowgear then return end
     local builder = inst.components.builder
     if builder and not builder:KnowsRecipe(shadowgear, true) then
         builder:UnlockRecipe(shadowgear)
-        inst:PushEvent("learnrecipe", {teacher = inst, recipe = shadowgear})
+        inst:PushEvent("learnrecipe", { teacher = inst, recipe = shadowgear })
     end
 end
 
@@ -288,9 +288,7 @@ local function WaxwellUMStuff(inst)
         petleash:SetOnDespawnFn(OnDespawnPet)
     end]]
 
-    if TUNING.DSTU.MAX_HEALTH_WELL then
-        inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
-    end
+    inst:ListenForEvent("attacked", CalculateMaxHealthLoss)
 end
 
 env.AddPrefabPostInit("waxwell", function(inst)
@@ -336,7 +334,7 @@ end)
 do
     local _displaynamefn
     local function ShadowGearDisplayNameFn(inst, ...)
-        return inst:HasTag("um_maxwellsummon") and STRINGS.NAMES[string.upper("um_maxwell_"..inst.prefab)] or _displaynamefn and _displaynamefn(inst, ...) or nil
+        return inst:HasTag("um_maxwellsummon") and STRINGS.NAMES[string.upper("um_maxwell_" .. inst.prefab)] or _displaynamefn and _displaynamefn(inst, ...) or nil
     end
 
     local function ShadowGearClientFunctions(inst)
@@ -417,7 +415,7 @@ do
 
     local _onPreBuilt
     local function ShadowGearOnPreBuilt(inst, builder, materials, recipe, ...)
-        if recipe.name == "um_maxwell_"..inst.prefab then inst:UMConvertToMaxwellSummon() end
+        if recipe.name == "um_maxwell_" .. inst.prefab then inst:UMConvertToMaxwellSummon() end
         return _onPreBuilt and _onPreBuilt(inst, builder, materials, recipe, ...)
     end
 
@@ -437,7 +435,7 @@ do
         inst.onPreBuilt = ShadowGearOnPreBuilt
     end
 
-    local shadowgear = {"nightsword", "armor_sanity"}
+    local shadowgear = { "nightsword", "armor_sanity" }
     for _, prefab in pairs(shadowgear) do
         env.AddPrefabPostInit(prefab, function(inst)
             ShadowGearClientFunctions(inst)
