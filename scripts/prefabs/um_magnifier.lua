@@ -3,7 +3,11 @@ local assets = {
 }
 
 local function OnScanned(inst, target, doer)
-    inst.components.finiteuses:Use(1)
+    local cost = 1
+    if target.components.stackable ~= nil then
+        cost = target.components.stackable:StackSize()
+    end
+    inst.components.finiteuses:Use(cost)
 end
 
 
