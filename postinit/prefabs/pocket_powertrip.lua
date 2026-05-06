@@ -104,7 +104,7 @@ end
 env.AddPrefabPostInit("trunkvest_summer", function(inst)
     DoPockets(inst, "puffvest_big")
     if inst.components.waterproofer ~= nil then
-        inst.components.waterproofer:SetEffectiveness(0.3)
+        inst.components.waterproofer:SetEffectiveness(0.35)
     end
 
     if inst.components.insulator ~= nil then

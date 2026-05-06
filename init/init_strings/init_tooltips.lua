@@ -62,11 +62,11 @@ STRINGS.UNCOMP_TOOLTIP = {
     UM_BEAR_TRAP_EQUIPPABLE_GOLD =
     "- Slows down anything it's attached to.\n- Deployable and throwable.\n- Has multiple uses.",
     WATERMELON_LANTERN = "- Has a positive sanity aura.",
-    HAT_RATMASK = "- Finds Rat Burrows\n- Shows sources of unwanted attention.",
+    HAT_RATMASK = "- Finds Rat Burrows.\n- Shows sources of unwanted attention.",
     SKULLCHEST_CHILD = "- Shares its contents with other Skull Chests.",
     SNOWGOGGLES = "- Grants protection against snowstorms/sandstorms when worn.",
     GASMASK = "- Provides protection against spore clouds.",
-	UM_HAT_NETTLEMASK = "- Provides protection against spore clouds.\n- Stings user when worn.\n-Protects against blizzards.\n-Spoils.",
+	UM_HAT_NETTLEMASK = "- Stings user when worn.\n- Provides protection against spore clouds.",
     PLAGUEMASK = "- Provides protection against spore clouds.",
     FLORAL_BANDAGE = "- Restores extra health over time.",
 	UM_RIMEWEED_ICEPACK = "- Cools the player.",
@@ -79,7 +79,7 @@ STRINGS.UNCOMP_TOOLTIP = {
     KALEIDOSCOPE = "- Hitting enemies allows allies to deal Planar damage against it for a short time",
     ARMOR_CRAB_MAXHP = "- Increases maximum health when worn.",
     ARMOR_CRAB_REGEN = "- Self-healing.",
-    UM_ARMOR_PYRE_NETTLES = "- Panics and damages nearby miscreants.",
+    UM_ARMOR_PYRE_NETTLES = "- Stings user when worn.\n- Panics and damages nearby miscreants.",
     WINONA_TOOLBOX = "- Portable storage for dismantled structures and all things engineering.",
     WINONA_UPGRADEKIT_ELECTRICAL = "- Upgrades a Miner Hat or Latern to use electricity.\n- Increases max fuel.",
     CODEX_MANTRA = "- Will spawn Classic Shadows when read.\n- Acts as a Prestihatitator (Tier 1 Magic) when dropped.",
@@ -264,6 +264,7 @@ if TUNING.DSTU.SNOWSTORMS then
     TOOLTIPS.WALL_HAY_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_WOOD_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_STONE_ITEM = "- Provides protection from snowstorms when built."
+    TOOLTIPS.WALL_SCRAP_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_RUINS_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_MOONROCK_ITEM = "- Provides protection from snowstorms when built."
     TOOLTIPS.WALL_DREADSTONE_ITEM = TOOLTIPS.WALL_DREADSTONE_ITEM .. "\n- Provides protection from snowstorms when built."
@@ -277,6 +278,7 @@ else
 end
 
 if TUNING.DSTU.HAYFEVER then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Prevents Hayfever while worn... If that's coded in."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Prevents Hayfever while worn."
     TOOLTIPS.BEEHAT = "- Stings won't cause allergic reactions."
@@ -286,8 +288,9 @@ if TUNING.DSTU.HAYFEVER then
 end
 
 if TUNING.DSTU.SMOG then
+    TOOLTIPS.UM_HAT_NETTLEMASK = TOOLTIPS.UM_HAT_NETTLEMASK .. "\n- Protects against smog while worn."
     TOOLTIPS.GASMASK = TOOLTIPS.GASMASK .. "\n- Protects against smog while worn."
-    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn"
+    TOOLTIPS.PLAGUEMASK = TOOLTIPS.PLAGUEMASK .. "\n- Protects against smog while worn."
 	TOOLTIPS.SMOGEATER = "- Sucks up smog."
     if TOOLTIPS.MINIFAN ~= nil then
         TOOLTIPS.MINIFAN = string.gsub(TOOLTIPS.MINIFAN, ".", "") .. " and helps against smog."

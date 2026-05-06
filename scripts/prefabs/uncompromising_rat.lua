@@ -1339,11 +1339,14 @@ local function WinkyInteract(inst, doer)
 
 				inst.AnimState:PlayAnimation("dig")
 				inst.SoundEmitter:PlaySound("turnoftides/creatures/together/carrat/submerge")
+                --[[if inst.ratcount == 3 then
+                    doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RATLESS")) --"No more in this tunnel? I will dig another."
+                end]]
 			else
 				doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_NO_HUNGER")) --"Broke."
 			end
-		else
-			inst:winkyburrowremove()
+        else
+            inst:winkyburrowremove()
 		end
 	else
 		doer.components.talker:Say(GetActionFailString(doer, "TOUCH_BURROW_RAT_LIMIT")) --"There are too many of them."
@@ -1478,7 +1481,7 @@ local function fn_winkyburrow()
 
     if not POPULATING then AttachShadowContainer(inst) end
 
-    inst:DoTaskInTime(60, WinkyBurrowDespawn)
+    inst:DoTaskInTime(90, WinkyBurrowDespawn)
 
     return inst
 end
