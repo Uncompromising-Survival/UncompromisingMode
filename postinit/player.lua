@@ -272,16 +272,16 @@ env.AddPlayerPostInit(function(inst)
         if inst ~= nil and inst.components.health ~= nil and
             not inst:HasTag("playerghost") then
             if not inst:HasTag("vetcurse") then
-                inst.components.debuffable:AddDebuff("buff_vetcurse",
-                    "buff_vetcurse")
-                inst:PushEvent("foodbuffattached",
-                    { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
+                --inst.components.debuffable:AddDebuff("buff_vetcurse", "buff_vetcurse")
+                if inst.UMToggleVetCurse then inst:UMToggleVetCurse(true) end
+                inst:PushEvent("foodbuffattached", { buff = "ANNOUNCE_ATTACH_BUFF_VETCURSE", 1 })
             end
         end
     elseif TUNING.DSTU.VETCURSE == "off" and inst:HasTag("vetcurse") then
-        if inst ~= nil and inst.components.debuffable ~= nil then
+        --[[if inst ~= nil and inst.components.debuffable ~= nil then
             inst.components.debuffable:RemoveDebuff("buff_vetcurse")
-        end -- help I can't get this stupid thing to work!!
+        end -- help I can't get this stupid thing to work!!]]
+        if inst.UMToggleVetCurse then inst:UMToggleVetCurse() end
     end
 
     inst:AddTag("SLUDGE_CORK_upgradeuser")

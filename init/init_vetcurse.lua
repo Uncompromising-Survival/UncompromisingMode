@@ -124,7 +124,7 @@ env.AddPlayerPostInit(function(inst)
 
     local _OnLoad = inst.OnLoad
     local function OnLoad(inst, data, ...)
-        if data and data.vetscurse then
+        if data and data.vetscurse and inst.UMToggleVetCurse then
             inst:UMToggleVetCurse(true)
         end
         return _OnLoad(inst, data, ...)

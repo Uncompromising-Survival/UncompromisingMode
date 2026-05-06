@@ -125,7 +125,7 @@ local prefabs = {
     "skeletonmeat",
     "um_shadow_characters",
     "um_shadow_characters_temp",
-    "veteranscurse",
+    --"veteranscurse",
     "healthregenbuff_vetcurse",
     "antlion_sinkhole_boat",
     "riceplantspawner",
