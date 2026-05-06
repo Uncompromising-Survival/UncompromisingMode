@@ -95,5 +95,5 @@ end
 
 
 env.AddComponentPostInit("wavemanager", function(self)
-    self.shimmer[WORLD_TILES.UM_FLOODWATER_GROTTO] = { per_sec = 80, spawn_rate = 0, tryspawn = TrySpawnWavesOrShore }
+    self.shimmer[WORLD_TILES.UM_FLOODWATER_GROTTO] = { per_sec = 160, spawn_rate = 0, tryspawn = TrySpawnWavesOrShore }
 end)
